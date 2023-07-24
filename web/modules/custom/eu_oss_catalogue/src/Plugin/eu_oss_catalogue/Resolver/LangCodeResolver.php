@@ -59,15 +59,15 @@ class LangCodeResolver extends DefaultResolver implements ContainerFactoryPlugin
    * {@inheritdoc}
    */
   public function resolve(EuOssCatalogueFetchedSolution $fetchedSolution, string $fieldName): mixed {
-    if (!str_contains($this->configuration['path'], '[lang]')) {
+    if (!str_contains($this->getConfiguration()['path'], '[lang]')) {
       return parent::resolve($fetchedSolution, $fieldName);
     }
 
     $field = [];
     foreach ($this->languageManger->getLanguages() as $language) {
-      $path = explode('/', str_replace('[lang]', $language->getId(), $this->configuration['path']));
-      if (NestedArray::keyExists($fetchedSolution->data, $path)) {
-        $data = $fetchedSolution->data;
+      $path = explode('/', str_replace('[lang]', $language->getId(), $this->getConfiguration()['path']));
+      if (NestedArray::keyExists($fetchedSolution->getData(), $path)) {
+        $data = $fetchedSolution->getData();
         $field[$language->getId()] = [NestedArray::getValue($data, $path)];
       }
     }

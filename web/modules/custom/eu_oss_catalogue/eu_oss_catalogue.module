@@ -1,0 +1,19 @@
+<?php
+
+/**
+ * @file
+ * Hook implementations for EU OSS Catalogue module.
+ */
+
+declare(strict_types = 1);
+
+use Drupal\eu_oss_catalogue\Entity\OssSolution;
+
+/**
+ * Implements hook_entity_bundle_info_alter().
+ */
+function eu_oss_catalogue_entity_bundle_info_alter(array &$bundles): void {
+  if (!empty($bundles['node']['oss_solution'])) {
+    $bundles['node']['oss_solution']['class'] = OssSolution::class;
+  }
+}

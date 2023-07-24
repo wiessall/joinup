@@ -12,9 +12,10 @@ third_party_settings:
   eu_oss_catalogue:
     publiccode_yml:
       resolver: taxonomy_term
-      path: platforms
-      vid: oss_platform
-      controlled: false
+      config:
+        path: platforms
+        vid: oss_platform
+        controlled: false
 id: node.oss_solution.oss_platforms
 field_name: oss_platforms
 entity_type: node

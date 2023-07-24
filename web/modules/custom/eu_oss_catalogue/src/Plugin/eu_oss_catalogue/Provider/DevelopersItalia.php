@@ -81,23 +81,25 @@ class DevelopersItalia extends EuOssCatalogueProviderPluginBase implements Conta
     $next = '';
 
     do {
-      $url = self::ENDPOINT . $next . ($next ? '&' : '?') . 'all=true&page[size]=500';
+      $url = self::ENDPOINT . $next . ($next ? '&' : '?') . 'page[size]=500';
       $response = $this->httpClient->get($url);
       $read = Json::decode($response->getBody()->getContents());
 
       $next = $read['links']['next'];
 
       foreach ($read['data'] as $newItem) {
-        $decoded = Yaml::decode($newItem['publiccodeYml']);
-
-        // Only fetch data that adhere to their schema.
-        if ($this->checkSchema($decoded, $newItem['id'])) {
-          $data[] = new EuOssCatalogueFetchedSolution(
-            $decoded['url'],
-            $decoded['name'],
-            $decoded,
-            $newItem['id'],
-          );
+        $active = $newItem['active'] ?? FALSE;
+        if ($active) {
+          $decoded = Yaml::decode($newItem['publiccodeYml']);
+          // Only fetch data that adhere to their schema.
+          if ($this->checkSchema($decoded, $newItem['id'])) {
+            $data[] = new EuOssCatalogueFetchedSolution(
+              $decoded['url'],
+              $decoded['name'],
+              $decoded,
+              $newItem['id'],
+            );
+          }
         }
       }
     } while (!is_null($next));

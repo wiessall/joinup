@@ -1,0 +1,14 @@
+<?php
+
+declare(strict_types = 1);
+
+namespace Drupal\eu_oss_catalogue\Entity;
+
+use Drupal\node\Entity\Node;
+
+/**
+ * Bundle class for 'oss_solution' nodes.
+ */
+class OssSolution extends Node implements OssSolutionInterface {
+
+}

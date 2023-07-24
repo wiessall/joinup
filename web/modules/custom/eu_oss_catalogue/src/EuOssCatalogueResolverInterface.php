@@ -4,12 +4,13 @@ declare(strict_types = 1);
 
 namespace Drupal\eu_oss_catalogue;
 
+use Drupal\Component\Plugin\ConfigurableInterface;
 use Drupal\Component\Plugin\PluginInspectionInterface;
 
 /**
  * Provides an interface for value resolver plugins.
  */
-interface EuOssCatalogueResolverInterface extends PluginInspectionInterface {
+interface EuOssCatalogueResolverInterface extends PluginInspectionInterface, ConfigurableInterface {
 
   /**
    * Resolves a value imported by a provider.

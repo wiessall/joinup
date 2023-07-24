@@ -12,6 +12,7 @@ dependencies:
     - field.field.node.oss_solution.oss_main_copyright_owner
     - field.field.node.oss_solution.oss_platforms
     - field.field.node.oss_solution.oss_publiccode_yml_content
+    - field.field.node.oss_solution.oss_publiccode_yml_version
     - field.field.node.oss_solution.oss_release_date
     - field.field.node.oss_solution.oss_short_description
     - field.field.node.oss_solution.oss_software_type
@@ -118,6 +119,14 @@ content:
     region: content
     settings:
       rows: 5
+      placeholder: ''
+    third_party_settings: {  }
+  oss_publiccode_yml_version:
+    type: string_textfield
+    weight: 136
+    region: content
+    settings:
+      size: 60
       placeholder: ''
     third_party_settings: {  }
   oss_release_date:

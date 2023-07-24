@@ -1,15 +1,42 @@
 field.field.*.*.*.third_party.eu_oss_catalogue:
-  type: mapping
+  type: sequence
   label: EU OSS Catalogue 3rd-party settings
+  sequence:
+    type: mapping
+    label: Parsers
+    # TODO: Validate that keys of this sequence are all parser plugin IDs.
+    # constraints:
+    mapping:
+      resolver:
+        type: string
+        label: The resolver plugin IDx
+        constraints:
+          PluginExists:
+            manager: plugin.manager.eu_oss_catalogue.resolver
+            interface: \Drupal\eu_oss_catalogue\EuOssCatalogueResolverInterface
+      config:
+        type: eu_oss_catalogue.resolver_schema.[%parent.resolver]
+        label: Resolver plugin config
+
+eu_oss_catalogue.resolver_config_base:
+  type: mapping
+  label: Resolver schema
   mapping:
-    publiccode_yml:
-      type: mapping
-      label: publiccode.yml info
-      mapping:
-        resolver:
-          type: string
-          nullable: true
-          label: The resolver plugin ID.
-        path:
-          type: string
-          label: Path to the publiccode.yml value
+    path:
+      type: string
+      label: Path to data nested value
+
+eu_oss_catalogue.resolver_schema.*:
+  type: eu_oss_catalogue.resolver_config_base
+  label: Default resolver config
+
+eu_oss_catalogue.resolver_schema.taxonomy_term:
+  type: eu_oss_catalogue.resolver_config_base
+  label: Language code resolver config
+  mapping:
+    vid:
+      type: string
+      label: Vocabulary
+    controlled:
+      type: boolean
+      label: Whether is a controlled vocabulary

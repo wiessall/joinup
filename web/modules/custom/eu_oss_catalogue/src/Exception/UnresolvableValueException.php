@@ -14,6 +14,8 @@ class UnresolvableValueException extends \Exception {
    *
    * @param string $fieldName
    *   The field name.
+   * @param string $path
+   *   The nested array path to the value.
    * @param mixed $value
    *   The value.
    * @param array $data

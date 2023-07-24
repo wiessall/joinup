@@ -5,13 +5,13 @@
     "homepage": "https://www.drupal.org/sandbox/itamair/3372413",
     "authors": [
         {
-            "name": "Italo Mairo",
-            "homepage": "https://www.drupal.org/u/itamair",
+            "name": "Claudiu Cristea",
+            "homepage": "https://www.drupal.org/u/claudiucristea",
             "role": "Maintainer"
         },
         {
-            "name": "Claudiu Cristea",
-            "homepage": "https://www.drupal.org/u/claudiucristea",
+            "name": "Italo Mairo",
+            "homepage": "https://www.drupal.org/u/itamair",
             "role": "Maintainer"
         }
     ],
@@ -23,6 +23,10 @@
     "minimum-stability": "dev",
     "require": {
         "spdx/license-list-data": "*"
+    },
+    "require-dev": {
+        "drupal/http_request_mock": "^1.1",
+        "drush/drush": "^12.1"
     },
     "repositories": [
         {
