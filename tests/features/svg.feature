@@ -28,8 +28,8 @@ Feature: Test SVG attachments.
     But I attach the file "simple.svg" to "Add file"
     And I wait for AJAX to finish
     Then I should not see the error message "Invalid or unsafe SVG file."
-
     When I fill in "Alternative text" with "Example SVG"
+    And I select "Half width" from "Use image style"
     And I press "Save" in the "Modal buttons" region
     And I wait for AJAX to finish
 

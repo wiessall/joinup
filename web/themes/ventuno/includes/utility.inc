@@ -211,7 +211,6 @@ function _ventuno_preprocess_tile(array &$variables, string $entity_type_id): vo
       break;
 
     case 'solution':
-      $variables['image'] = $variables['content']['field_is_logo'];
       // Add attributes that will allow JS to mark this tile as "Shared from".
       $rdf_entity = $variables['rdf_entity'];
       if (!$rdf_entity->get('collection')->isEmpty()) {
