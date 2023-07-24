@@ -882,6 +882,15 @@ module.exports = {
     },
     // Pages
     {
+      entry: path.resolve(outputFolder, `${iop}src/scss/pages/landing.scss`),
+      dest: path.resolve(outputFolder, `${iop}assets/css/landing.min.css`),
+      options: {
+        minify: true,
+        includePaths,
+        sourceMap: "file",
+      },
+    },
+    {
       entry: path.resolve(outputFolder, `${iop}src/scss/pages/listing.scss`),
       dest: path.resolve(outputFolder, `${iop}assets/css/listing.min.css`),
       options: {
@@ -942,48 +951,6 @@ module.exports = {
     {
       entry: path.resolve(
         outputFolder,
-        `${iop}src/scss/components/paragraphs/paragraph.scss`
-      ),
-      dest: path.resolve(outputFolder, `${iop}assets/css/paragraph.min.css`),
-      options: {
-        minify: true,
-        includePaths,
-        sourceMap: "file",
-      },
-    },
-    {
-      entry: path.resolve(
-        outputFolder,
-        `${iop}src/scss/components/paragraphs/paragraph--2-column-featured-left.scss`
-      ),
-      dest: path.resolve(
-        outputFolder,
-        `${iop}assets/css/paragraph--2-column-featured-left.min.css`
-      ),
-      options: {
-        minify: true,
-        includePaths,
-        sourceMap: "file",
-      },
-    },
-    {
-      entry: path.resolve(
-        outputFolder,
-        `${iop}src/scss/components/paragraphs/paragraph--2-column-featured-right.scss`
-      ),
-      dest: path.resolve(
-        outputFolder,
-        `${iop}assets/css/paragraph--2-column-featured-right.min.css`
-      ),
-      options: {
-        minify: true,
-        includePaths,
-        sourceMap: "file",
-      },
-    },
-    {
-      entry: path.resolve(
-        outputFolder,
         `${iop}src/scss/components/paragraphs/paragraph--call-to-action.scss`
       ),
       dest: path.resolve(
@@ -1029,11 +996,11 @@ module.exports = {
     {
       entry: path.resolve(
         outputFolder,
-        `${iop}src/scss/components/paragraphs/paragraph--row.scss`
+        `${iop}src/scss/components/paragraphs/paragraph--layout.scss`
       ),
       dest: path.resolve(
         outputFolder,
-        `${iop}assets/css/paragraph--row.min.css`
+        `${iop}assets/css/paragraph--layout.min.css`
       ),
       options: {
         minify: true,
