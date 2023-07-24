@@ -7,17 +7,21 @@
 /**
  * Template implementation to display the content of the modal dialog for users who are not logged in.
  *
- * @see \Drupal\joinup_like\Controller\ModalDialogController::render()
+ * Available variables:
+ * - title: Modal title.
+ * - description: Modal description.
+ *
+ * @see \Drupal\joinup_modal\Controller\JoinupModalAnonymousController::render()
  *
  * @ingroup themeable
  */
 #}
 <div>
-  <h2>{{ 'Login or register to like this content'|t }}</h2>
-  <p>{{ 'Like this content will help other people find reliable information about what they search!'|t }}</p>
+  <h2>{{ title }}</h2>
+  <p>{{ description }}</p>
   <div>
     <p>{{ 'Already have an account?'|t }}</p>
-    <div><a href="{{  path('user.login') }}">{{ 'Log in'|t }}</a></div>
+    <div><a href="{{ path('user.login') }}">{{ 'Log in'|t }}</a></div>
     <p>{{ 'New member?'|t }}</p>
     <div><a href="{{ path('user.register') }}">{{ 'Register'|t }}</a></div>
   </div>
