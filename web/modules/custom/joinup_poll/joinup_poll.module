@@ -51,6 +51,18 @@ function joinup_poll_preprocess_poll_meter(array &$variables): void {
 }
 
 /**
+ * Implements hook_theme_suggestions_HOOK().
+ */
+function joinup_poll_theme_suggestions_poll_meter(array $variables): array {
+  $user = \Drupal::currentUser();
+  $userType = $user->isAnonymous() ? 'anonymous' : 'authenticated';
+
+  return [
+    'poll_meter__' . $userType,
+  ];
+}
+
+/**
  * It adds the summary element.
  *
  * @param \Drupal\poll\PollInterface $poll
