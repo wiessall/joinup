@@ -10,6 +10,8 @@
  * Available variables:
  * - title: Modal title.
  * - description: Modal description.
+ * - login: Login link.
+ * - register: Register link.
  *
  * @see \Drupal\joinup_modal\Controller\JoinupModalAnonymousController::render()
  *
@@ -21,8 +23,8 @@
   <p>{{ description }}</p>
   <div>
     <p>{{ 'Already have an account?'|t }}</p>
-    <div><a href="{{ path('user.login') }}">{{ 'Log in'|t }}</a></div>
+    <div>{{ login }}</div>
     <p>{{ 'New member?'|t }}</p>
-    <div><a href="{{ path('user.register') }}">{{ 'Register'|t }}</a></div>
+    <div>{{ register }}</div>
   </div>
 </div>

@@ -17,6 +17,8 @@ function joinup_modal_theme(): array {
         'type' => NULL,
         'title' => NULL,
         'description' => NULL,
+        'login' => NULL,
+        'register' => NULL,
       ],
     ],
   ];
