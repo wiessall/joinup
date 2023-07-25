@@ -14,6 +14,7 @@
 
 declare(strict_types = 1);
 
+use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\interoperable_europe\InteroperableEuropeCollectionInterface;
 use Drupal\meta_entity\Entity\MetaEntity;
@@ -53,7 +54,7 @@ function joinup_core_deploy_109502(): string {
     }
 
     $new_paragraphs = [];
-    foreach ($node->field_paragraphs_body as $paragraph_row_item) {
+    foreach ($node->get('field_paragraphs_body') as $paragraph_row_item) {
       // The $paragraph_row_item is a field item that holds a row. If it is not
       // a row paragraph, ignore it.
       $paragraph_row_item = $paragraph_row_item->entity;
@@ -68,7 +69,7 @@ function joinup_core_deploy_109502(): string {
       continue;
     }
 
-    $node->get('field_paragraphs_body')->setValue(array_values($new_paragraphs));
+    $node->set('field_paragraphs_body', array_values($new_paragraphs));
     $node->save();
   }
   return "Migrated all custom pages row paragraphs of IOP collection to layout paragraphs.";
@@ -115,7 +116,7 @@ function joinup_core_deploy_109503(array &$sandbox): string {
  *
  * @param \Drupal\paragraphs\ParagraphInterface $paragraph_row_item
  *   The row paragraph.
- * @param \Drupal\Core\Entity\EntityInterface $parent_entity
+ * @param \Drupal\Core\Entity\ContentEntityInterface $parent_entity
  *   The entity to use as parent.
  * @param string $parent_entity_field
  *   The field name of the parent entity.
@@ -123,17 +124,21 @@ function joinup_core_deploy_109503(array &$sandbox): string {
  * @return \Drupal\paragraphs\ParagraphInterface[]
  *   A list of created paragraphs.
  */
-function _joinup_core_row_to_layout(ParagraphInterface $paragraph_row_item, EntityInterface $parent_entity, string $parent_entity_field): array {
+function _joinup_core_row_to_layout(ParagraphInterface $paragraph_row_item, ContentEntityInterface $parent_entity, string $parent_entity_field): array {
   // The returned paragraphs will be assigned to the entity.
   $return = [];
-  if (!empty($paragraph_row_item->paragraph_heading->value) || !empty($paragraph_row_item->paragraph_row_subheading->value)) {
+  $heading = $paragraph_row_item->paragraph_heading->value ?? '';
+  $subheading = $paragraph_row_item->paragraph_row_subheading->value ?? '';
+
+  // Exclude the "Did you know?" paragraph because it needs some special care.
+  if ($heading !== 'Did you know?' && (!empty($heading) || !empty($subheading))) {
     $new_layout_paragraph = _joinup_core_get_new_layout_paragraph($parent_entity, $parent_entity_field, 'layout_onecol', NULL, $paragraph_row_item->get('row_theme')->value);
     $return[$new_layout_paragraph->id()] = $new_layout_paragraph;
-    if ($heading = $paragraph_row_item->paragraph_heading->value) {
+    if ($heading) {
       $child_paragraph = _joinup_core_create_heading_paragraph($new_layout_paragraph, $heading, 'h2');
       $return[$child_paragraph->id()] = $child_paragraph;
     }
-    if ($subheading = $paragraph_row_item->paragraph_row_subheading->value) {
+    if ($subheading) {
       $child_paragraph = _joinup_core_create_heading_paragraph($new_layout_paragraph, $subheading, 'h3');
       $return[$child_paragraph->id()] = $child_paragraph;
     }
@@ -180,6 +185,15 @@ function _joinup_core_row_to_layout(ParagraphInterface $paragraph_row_item, Enti
       case '1_column_layout':
         $new_layout_paragraph = _joinup_core_get_new_layout_paragraph($parent_entity, $parent_entity_field, 'layout_onecol', NULL, $paragraph_row_item->row_theme->value);
         $return[$new_layout_paragraph->id()] = $new_layout_paragraph;
+        if ($heading === 'Did you know?') {
+          // Handle the special case of the 'Did you know?' row.
+          $child_paragraph = _joinup_core_create_heading_paragraph($new_layout_paragraph, $heading, 'h2');
+          $return[$child_paragraph->id()] = $child_paragraph;
+          $child_paragraph = _joinup_core_create_heading_paragraph($new_layout_paragraph, $subheading, 'h3');
+          $return[$child_paragraph->id()] = $child_paragraph;
+          $new_layout_paragraph->setBehaviorSettings('extra_class', ['extra_class' => 'facts']);
+          $new_layout_paragraph->save();
+        }
         $return += _joinup_core_column_to_layout($column_paragraph, $new_layout_paragraph, $parent_entity, $parent_entity_field, 'paragraph_column_center', 'content');
         break;
 
