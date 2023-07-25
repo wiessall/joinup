@@ -15,6 +15,6 @@ plugin: sitewide_alert_block
 settings:
   id: sitewide_alert_block
   label: 'Site wide alerts'
-  label_display: visible
+  label_display: '0'
   provider: sitewide_alert_block
 visibility: {  }
