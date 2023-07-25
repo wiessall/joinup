@@ -48,6 +48,8 @@ Feature: Site alerts
     Given I am not logged in
     And I am on the homepage
     Then I should see the text "Between 18:00 and 20:00 the site will be temporarily unavailable due to scheduled maintenance"
+    And I go to "/interoperable-europe"
+    And I should see the text "Between 18:00 and 20:00 the site will be temporarily unavailable due to scheduled maintenance"
 
     # An alert can also be removed entirely, if it does not need to be reused.
     Given I am logged in as a moderator
@@ -59,4 +61,6 @@ Feature: Site alerts
 
     Given I am not logged in
     And I am on the homepage
+    Then I should not see the text "Between 18:00 and 20:00 the site will be temporarily unavailable due to scheduled maintenance"
+    And I go to "/interoperable-europe"
     Then I should not see the text "Between 18:00 and 20:00 the site will be temporarily unavailable due to scheduled maintenance"
