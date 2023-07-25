@@ -71,6 +71,7 @@ permissions:
   - 'edit own comments'
   - 'edit own contact_information rdf entity'
   - 'edit own owner rdf entity'
+  - 'edit own polls'
   - 'edit own tallinn_report content'
   - 'export rdf metadata'
   - 'flag like_node'
