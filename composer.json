@@ -253,7 +253,7 @@
                 "More details when registration is denied by a subscriber @see https://www.drupal.org/project/cas/issues/3325353": "https://git.drupalcode.org/project/cas/-/merge_requests/20.diff"
             },
             "drupal/core": {
-                "Allow image style to be selected in text editor @see https://www.drupal.org/node/2061377": "https://www.drupal.org/files/issues/2023-01-30/drupal-2061377-437.patch",
+                "Allow image style to be selected in text editor @see https://www.drupal.org/node/2061377": "https://www.drupal.org/files/issues/2023-07-18/2061377-441.patch",
                 "Allow making the file description a required field @see https://www.drupal.org/node/2320877": "https://git.drupalcode.org/project/drupal/-/merge_requests/4255.diff",
                 "Delete should not be the default action on /admin/content @see https://www.drupal.org/project/drupal/issues/2381293": "https://git.drupalcode.org/project/drupal/-/merge_requests/4251.diff",
                 "Regression: Do not bypass route access with 'link to any page' permissions for menu links @see https://www.drupal.org/project/drupal/issues/2463753": "https://git.drupalcode.org/project/drupal/-/merge_requests/3118.diff",
