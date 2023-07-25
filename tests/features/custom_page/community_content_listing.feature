@@ -500,11 +500,11 @@ Feature:
     When I press "List additional actions"
     And I click "Add Content listing" in the "Custom page body" paragraphs field
 
-    And I select "Solution" from "Available filters"
+    And I select "Solution" from latest "Available filters"
     And I press latest "Add and configure filter"
     And I fill in the latest "Solution" field with "Fight Global Warming"
 
-    And I select "Solution" from "Available filters"
+    And I select "Solution" from latest "Available filters"
     And I press latest "Add and configure filter"
     And I fill in the latest "Solution" field with "The Green Alliance"
 
@@ -538,11 +538,11 @@ Feature:
     And I press "Add and configure filter"
     And I fill in "Solution" with "Save gasoline"
 
-    And I select "Solution" from "Available filters"
+    And I select "Solution" from latest "Available filters"
     And I press latest "Add and configure filter"
     And I fill in the latest "Solution" field with "Fight battery mode"
 
-    And I select "Solution" from "Available filters"
+    And I select "Solution" from latest "Available filters"
     And I press latest "Add and configure filter"
     And I fill in the latest "Solution" field with "Black Noise"
 
@@ -550,11 +550,11 @@ Feature:
     When I press "List additional actions"
     And I click "Add Content listing" in the "Custom page body" paragraphs field
 
-    And I select "Solution" from "Available filters"
+    And I select "Solution" from latest "Available filters"
     And I press latest "Add and configure filter"
     And I fill in the latest "Solution" field with "Black Noise"
 
-    And I select "Solution" from "Available filters"
+    And I select "Solution" from latest "Available filters"
     And I press latest "Add and configure filter"
     And I fill in the latest "Solution" field with "Fight battery mode"
     Then I press "Update"
