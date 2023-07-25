@@ -57,6 +57,19 @@ class VocabularyFixturesHelper implements VocabularyFixturesHelperInterface {
         'filename' => 'eif_solution_type.rdf',
         'extra queries' => [],
       ],
+      'eira_skos' => [
+        'graph' => 'http://eira_skos',
+        'filename' => 'EIRA_SKOS.rdf',
+        'extra queries' => [
+          'DELETE { GRAPH <http://eira_skos> { ?subject ?predicate ?object } } INSERT { GRAPH <http://eira_skos_properties> { ?subject ?predicate ?object } } WHERE { GRAPH <http://eira_skos> { ?subject ?predicate ?object . FILTER (regex(str(?subject), "_Properties$")) } }',
+          'DELETE {GRAPH <http://eira_skos> { ?subject ?predicate ?object } } INSERT { GRAPH <http://eira_skos_properties> { ?subject ?predicate ?object } } WHERE { GRAPH <http://eira_skos> { ?subject ?predicate ?object . FILTER (regex(str(?object), "_Properties$")) } }',
+          'WITH <http://eira_skos_properties> DELETE { ?subject skos:topConceptOf <http://data.europa.eu/dr8> } WHERE { ?subject a skos:Concept . }',
+          'WITH <http://eira_skos> INSERT { ?subject a skos:Concept } WHERE { ?subject a skos:Collection . }',
+          'WITH <http://eira_skos> INSERT { ?subject skos:topConceptOf <http://data.europa.eu/dr8> } WHERE { ?subject a skos:Concept .}',
+          'WITH <http://eira_skos> INSERT { ?member skos:broaderTransitive ?collection } WHERE { ?collection a skos:Collection . ?collection skos:member ?member }',
+          'WITH <http://countries-skos> DELETE { ?entity ?field ?value. } WHERE { ?entity ?field ?value . ?entity <http://publications.europa.eu/ontology/authority/end.use> ?date . FILTER ( bound(?date) ) }',
+        ],
+      ],
     ];
   }
 

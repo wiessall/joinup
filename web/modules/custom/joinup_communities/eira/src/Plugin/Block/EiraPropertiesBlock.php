@@ -77,7 +77,7 @@ class EiraPropertiesBlock extends BlockBase implements ContainerFactoryPluginInt
           'namespace' => $this->t('Namespace'),
           'uri' => $this->t('URI'),
         ],
-        '#rows' => $rows,
+        '#rows' => array_values($namespaces),
       ],
       'properties_table' => [
         '#theme' => 'table',
@@ -85,7 +85,7 @@ class EiraPropertiesBlock extends BlockBase implements ContainerFactoryPluginInt
           'property' => $this->t('Property'),
           'value' => $this->t('Value'),
         ],
-        '#rows' => array_values($namespaces),
+        '#rows' => $rows,
       ],
     ];
   }
