@@ -167,7 +167,6 @@ class SolutionContext extends RawDrupalContext {
    * Table format:
    * | title               | Sample solution                                                |
    * | description         | A sample solution                                              |
-   * | banner              | banner.png                                                     |
    * | logo                | logo.jpg                                                       |
    * | moderation          | no|yes                                                         |
    * | closed              | no|yes                                                         |

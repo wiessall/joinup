@@ -4,7 +4,7 @@ Feature: Creation of owners through UI
   As a user
   I need to be able to create owners, or add existing, through the UI when proposing a collection.
 
-  @terms @uploadFiles:logo.png,banner.jpg
+  @terms @uploadFiles:logo.png
   Scenario: Propose a collection
     Given the following owner:
       | name                                                                                                                                                                                                                                                           | type    |
@@ -20,7 +20,6 @@ Feature: Creation of owners through UI
       | E-mail      | larry.joe@example.com                                                                                |
     When I select "EU and European Policies" from "Topic"
     And I attach the file "logo.png" to "Logo"
-    And I attach the file "banner.jpg" to "Banner"
 
     # Click the button to create an organisation owner.
     And I press "Add new" at the "Owner" field

@@ -9,8 +9,8 @@ Feature: Test SVG attachments.
       | name  | SVG             |
       | email | svg@example.com |
     And collections:
-      | title | logo     | banner     | abstract | description | content creation         | moderation | topic             | owner | contact information | state     |
-      | SVG   | logo.png | banner.jpg | Test     | Test        | facilitators and authors | yes        | Supplier exchange | SVG   | SVG                 | validated |
+      | title | logo     | abstract | description | content creation         | moderation | topic             | owner | contact information | state     |
+      | SVG   | logo.png | Test     | Test        | facilitators and authors | yes        | Supplier exchange | SVG   | SVG                 | validated |
 
   @terms @javascript @uploadFiles:error.svg,simple.svg
   Scenario: Edit a collection wysiwyg modal should close.
