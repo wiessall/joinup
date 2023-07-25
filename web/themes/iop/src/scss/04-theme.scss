@@ -56,10 +56,10 @@ a.call-to-action {
     }
   }
   &.listing {
-    .page-header {
-      margin-bottom: $spacer * -1; // -16px
+    .page-header + .content {
+      margin-top: $spacer * -1; // -16px
       @include media-breakpoint-up(md) {
-        margin-bottom: $spacer * -2; // -32px
+        margin-top: $spacer * -2; // -32px
       }
     }
   }
