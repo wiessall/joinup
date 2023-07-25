@@ -57,9 +57,12 @@ class EuOssCatalogueUpdateBackend extends QueueWorkerBase implements ContainerFa
    * {@inheritdoc}
    */
   public function processItem($data): void {
-    $method = $data['method'] ?? NULL;
-    if ($method === 'create_solution') {
+    $operation = $data['operation'] ?? NULL;
+    if ($operation === 'solution:create') {
       $this->catalogueService->createOrUpdateSolution($data['provider'], $data['solution']);
+    }
+    else {
+      throw new \InvalidArgumentException('Operation not set or invalid');
     }
   }
 

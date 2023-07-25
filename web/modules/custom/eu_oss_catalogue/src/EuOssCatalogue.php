@@ -59,7 +59,7 @@ class EuOssCatalogue implements EuOssCatalogueInterface {
       // @todo Move the process of queueing to a separate method for the sake of
       //   making the whole API more clear?
       $queue->createItem([
-        'method' => 'create_solution',
+        'operation' => 'solution:create',
         'provider' => $provider,
         'solution' => $fetchedSolution,
       ]);
