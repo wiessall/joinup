@@ -4,6 +4,8 @@ declare(strict_types = 1);
 
 namespace Drupal\eu_oss_catalogue\Exception;
 
+use Drupal\Core\Serialization\Yaml;
+
 /**
  * Exception to be thrown when a value cannot be resolved.
  */
@@ -33,7 +35,22 @@ class UnresolvableValueException extends \Exception {
     int $code = 0,
     ?\Throwable $previous = NULL
   ) {
-    $message = "Cannot resolve the field $this->fieldName (path $this->path) value " . trim(var_export($this->value, TRUE)) . " with data\n" . trim(var_export($this->data, TRUE));
+    $printedValue = trim(var_export($this->value, TRUE));
+    $printedData = Yaml::encode($this->data);
+
+    $message = <<<MESSAGE
+      <p>Cannot resolve field: <code>$this->fieldName</code></p>
+      <p>Path: <code>$this->path</code></p>
+      <p>Value:</p>
+      <pre>
+      $printedValue
+      </pre>
+      <p>Full data:</p>
+      <pre>
+      $printedData
+      </pre>
+      MESSAGE;
+
     parent::__construct($message, $code, $previous);
   }
 
