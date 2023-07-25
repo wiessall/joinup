@@ -68,7 +68,7 @@ content:
     type: responsive_image
     label: hidden
     settings:
-      responsive_image_style: iop_carousel
+      responsive_image_style: tile
       image_link: ''
     third_party_settings:
       template_suggestion:
