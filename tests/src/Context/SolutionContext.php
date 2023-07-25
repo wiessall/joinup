@@ -337,7 +337,6 @@ class SolutionContext extends RawDrupalContext {
   protected function createSolution(array $values) {
     $file_fields = [
       'field_is_documentation',
-      'field_is_banner',
       'field_is_logo',
     ];
 
@@ -509,7 +508,6 @@ class SolutionContext extends RawDrupalContext {
       'title' => 'label',
       'short ID' => 'field_short_id',
       'affiliations requests' => 'field_is_affiliations_requests',
-      'banner' => 'field_is_banner',
       'contact information' => 'field_is_contact_information',
       'content creation' => 'field_is_content_creation',
       'creation date' => 'created',
