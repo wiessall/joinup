@@ -37,3 +37,62 @@ function joinup_core_deploy_109500(): void {
     }
   }
 }
+
+/**
+ * Clean up banner files.
+ */
+function joinup_core_deploy_109501(array &$sandbox): string {
+  if (empty($sandbox['fids'])) {
+    $query = <<<SPARQL
+select ?o
+from <http://joinup.eu/collection/published>
+from <http://joinup.eu/collection/draft>
+from <http://joinup.eu/solution/published>
+from <http://joinup.eu/solution/draft>
+from <http://joinup.eu/asset_release/published>
+from <http://joinup.eu/asset_release/draft>
+where { ?s <http://xmlns.com/foaf/0.1/Image> ?o }
+SPARQL;
+
+    $sparql = \Drupal::getContainer()->get('sparql.endpoint');
+    $results = $sparql->query($query);
+    foreach ($results as $result) {
+      $sandbox['fids'][] = $result->o->getValue();
+    }
+    $sandbox['total'] = count($sandbox['fids']);
+    $sandbox['current'] = 0;
+  }
+
+  $file_system = \Drupal::getContainer()->get('file_system');
+  $file_storage = \Drupal::entityTypeManager()->getStorage('file');
+
+  $fids = array_splice($sandbox['fids'], $sandbox['current'], 100);
+  foreach ($file_storage->loadMultiple($fids) as $file) {
+    $uri = $file->getFileUri();
+    if ($file_path = $file_system->realpath($uri)) {
+      $file_system->delete($file_path);
+    }
+    $file->delete();
+  }
+
+  $sandbox['current'] += count($fids);
+  $sandbox['#finished'] = $sandbox['current'] / $sandbox['total'];
+  return 'Processed ' . $sandbox['current'] . ' of ' . $sandbox['total'] . ' files.';
+}
+
+/**
+ * Clean up banner database entries.
+ */
+function joinup_core_deploy_109502(): void {
+  $sparql_endpoint = \Drupal::getContainer()->get('sparql.endpoint');
+  $query = <<<SPARQL
+DELETE { GRAPH ?g { ?s <http://xmlns.com/foaf/0.1/Image> ?o } }
+WHERE {
+  GRAPH ?g { ?s <http://xmlns.com/foaf/0.1/Image> ?o } .
+  VALUES ?g { <http://joinup.eu/collection/published>  <http://joinup.eu/collection/draft> <http://joinup.eu/solution/published> <http://joinup.eu/solution/draft> <http://joinup.eu/asset_release/published> <http://joinup.eu/asset_release/draft> }
+}
+SPARQL;
+
+  $sparql_endpoint->update($query);
+}
+
