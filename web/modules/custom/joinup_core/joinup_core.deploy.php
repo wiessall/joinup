@@ -66,7 +66,7 @@ SPARQL;
   $file_system = \Drupal::getContainer()->get('file_system');
   $file_storage = \Drupal::entityTypeManager()->getStorage('file');
 
-  $fids = array_splice($sandbox['fids'], $sandbox['current'], 100);
+  $fids = array_splice($sandbox['fids'], 0, 100);
   foreach ($file_storage->loadMultiple($fids) as $file) {
     $uri = $file->getFileUri();
     if ($file_path = $file_system->realpath($uri)) {
@@ -95,4 +95,3 @@ SPARQL;
 
   $sparql_endpoint->update($query);
 }
-
