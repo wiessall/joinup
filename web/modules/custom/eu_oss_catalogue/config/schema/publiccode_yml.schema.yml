@@ -261,7 +261,7 @@ eu_oss_catalogue.publiccode_yml_maintenance.contractor:
       type: string
       required: true
       # Validate YYYY-MM-DD format
-      # constraint:
+      # constraints:
     website:
       type: uri
 
