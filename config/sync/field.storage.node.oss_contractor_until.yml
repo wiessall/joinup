@@ -1,0 +1,24 @@
+uuid: ccb9026e-fb3d-4aad-923b-db2b5fa2f13f
+langcode: en
+status: true
+dependencies:
+  module:
+    - datetime
+    - field_permissions
+    - node
+third_party_settings:
+  field_permissions:
+    permission_type: public
+id: node.oss_contractor_until
+field_name: oss_contractor_until
+entity_type: node
+type: datetime
+settings:
+  datetime_type: datetime
+module: datetime
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

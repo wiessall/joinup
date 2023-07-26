@@ -54,9 +54,14 @@ data:
       maintenance:
           type: contract
           contractors:
-              - name: Engineering S.p.A.
-                website: https://www.eng.it
+              - name: ACME Ltd
                 until: "2023-12-31"
+                email: acme@example.com
+                website: http://www.example.com/acme
+              - name: Das Auto GmbH
+                until: "2023-11-12"
+                email: das-auto@example.com
+                website: http://www.example.com/auto
           contacts:
               - name: Giovanna Favero
                 email: giovanna.favero@regione.emilia-romagna.it

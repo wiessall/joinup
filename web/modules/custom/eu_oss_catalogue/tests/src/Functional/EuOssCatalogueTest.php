@@ -111,6 +111,18 @@ class EuOssCatalogueTest extends BrowserTestBase {
     $this->assertReferences(['AGPL-3.0-or-later'], $node1->get('oss_license'));
     $this->assertSame('Sin City', $node1->get('oss_main_copyright_owner')->value);
     $this->assertTrue($node1->get('oss_landing_url')->isEmpty());
+    /** @var \Drupal\node\NodeInterface $contractor1 */
+    $contractor1 = $node1->get('oss_maintenance_contractors')->get(0)->entity;
+    $this->assertSame('ACME Ltd', $contractor1->label());
+    $this->assertSame('2023-12-31', $contractor1->get('oss_contractor_until')->value);
+    $this->assertSame('acme@example.com', $contractor1->get('oss_contractor_email')->value);
+    $this->assertSame('http://www.example.com/acme', $contractor1->get('oss_contractor_website')->uri);
+    /** @var \Drupal\node\NodeInterface $contractor2 */
+    $contractor2 = $node1->get('oss_maintenance_contractors')->get(1)->entity;
+    $this->assertSame('Das Auto GmbH', $contractor2->label());
+    $this->assertSame('2023-11-12', $contractor2->get('oss_contractor_until')->value);
+    $this->assertSame('das-auto@example.com', $contractor2->get('oss_contractor_email')->value);
+    $this->assertSame('http://www.example.com/auto', $contractor2->get('oss_contractor_website')->uri);
 
     /** @var \Drupal\eu_oss_catalogue\Entity\OssSolutionInterface $node1 */
     $node2 = $this->getNodeByTitle('Solution 2');
