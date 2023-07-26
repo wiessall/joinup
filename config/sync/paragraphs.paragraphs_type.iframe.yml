@@ -1,10 +1,12 @@
 uuid: 80a0ae9e-1d57-46d9-a848-ea6d99405c25
 langcode: en
 status: true
-dependencies: {  }
+dependencies:
+  content:
+    - 'file:file:3b91284c-5467-45ce-b65c-6f102edecba1'
 id: iframe
 label: IFrame
-icon_uuid: null
-icon_default: null
+icon_uuid: 3b91284c-5467-45ce-b65c-6f102edecba1
+icon_default: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNiIgaGVpZ2h0PSIxNiIgZmlsbD0iY3VycmVudENvbG9yIiBjbGFzcz0iYmkgYmktbGF5b3V0LXRleHQtd2luZG93LXJldmVyc2UiIHZpZXdCb3g9IjAgMCAxNiAxNiI+CiAgPHBhdGggZD0iTTEzIDYuNWEuNS41IDAgMCAwLS41LS41aC01YS41LjUgMCAwIDAgMCAxaDVhLjUuNSAwIDAgMCAuNS0uNXptMCAzYS41LjUgMCAwIDAtLjUtLjVoLTVhLjUuNSAwIDAgMCAwIDFoNWEuNS41IDAgMCAwIC41LS41em0tLjUgMi41YS41LjUgMCAwIDEgMCAxaC01YS41LjUgMCAwIDEgMC0xaDV6Ii8+CiAgPHBhdGggZD0iTTE0IDBhMiAyIDAgMCAxIDIgMnYxMmEyIDIgMCAwIDEtMiAySDJhMiAyIDAgMCAxLTItMlYyYTIgMiAwIDAgMSAyLTJoMTJ6TTIgMWExIDEgMCAwIDAtMSAxdjFoMTRWMmExIDEgMCAwIDAtMS0xSDJ6TTEgNHYxMGExIDEgMCAwIDAgMSAxaDJWNEgxem00IDB2MTFoOWExIDEgMCAwIDAgMS0xVjRINXoiLz4KPC9zdmc+'
 description: 'Provides an iframe field.'
 behavior_plugins: {  }

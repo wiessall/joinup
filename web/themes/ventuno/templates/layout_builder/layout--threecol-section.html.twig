@@ -1,0 +1,30 @@
+{#
+/**
+ * @file
+ * Default theme implementation for a three-column layout.
+ *
+ * Available variables:
+ * - in_preview: Whether the plugin is being rendered in preview mode.
+ * - content: The content for this layout.
+ * - attributes: HTML attributes for the layout <div>.
+ *
+ * @ingroup themeable
+ */
+#}
+{% if content %}
+  <div{{ attributes.addClass(classes).removeClass('layout--threecol-section').addClass('row')  }}>
+
+    <div {{ region_attributes.first.addClass('layout__region', 'layout__region--first', 'col-md-4') }}>
+      {{ content.first }}
+    </div>
+
+    <div {{ region_attributes.second.addClass('layout__region', 'layout__region--second', 'col-md-4') }}>
+      {{ content.second }}
+    </div>
+
+    <div {{ region_attributes.third.addClass('layout__region', 'layout__region--third', 'col-md-4') }}>
+      {{ content.third }}
+    </div>
+
+  </div>
+{% endif %}

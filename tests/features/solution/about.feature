@@ -371,14 +371,18 @@ Feature: About this solution
     # Testing add contact us in existing content.
     Given I am logged in as a moderator
     When I go to the about page of "Six exclusion advantages"
-    Then I open the plus button menu
-    And I click "Add custom page"
+    And I click "Add custom page" in the plus button menu
     And I fill in "Title" with "Some custom contact test"
+    And I click "Choose component"
+    And I click "Text"
+    And the "Body" wysiwyg editor should have the buttons "Bold, Italic, Link, Unlink, Insert/Remove Bulleted List, Insert/Remove Numbered List, Contact us, Source"
     And I press the button "Contact us" in the "Body" wysiwyg editor
-    And I press "Publish"
+    And I press "Save" in the "Modal buttons" region
+    And I press "Save"
     And I should see the heading "Some custom contact test"
 
     When I go to the edit form of the "Some custom contact test" "custom page"
+    And I click "Edit" in the "Custom page body" for paragraph layout 1
     Then I should see the button "Contact us"
 
     Then I go to the about page of "Six exclusion advantages"
@@ -392,6 +396,31 @@ Feature: About this solution
 
     When I go to the edit form of the "Some discussion contact test" discussion
     Then I should see the button "Contact us"
+
+    # HTML tags to be tested.
+
+    Given custom_page content:
+      | title                 | solution                 | state     |
+      | Some custom HTML test | Six exclusion advantages | published |
+    And I append "text" to "field_paragraphs_body" field in "node" entity with following "Some custom HTML test" title:
+      | field_body:value  | <p><strong>Lorem Ipsum</strong> is simply dummy text of the printing and typesetting industry.<br />Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</p><p>It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>      |
+      | field_body:format | text_html                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
+
+    Then I am logged in as a moderator
+    When I go to the "Six exclusion advantages" solution
+    And I should see the link "Some custom HTML test"
+    Then I click "Some custom HTML test"
+    And I should see the heading "Some custom HTML test"
+    And the page should contain the html text "<p><strong>Lorem Ipsum</strong> is simply dummy text of the printing and typesetting industry.<br>Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</p>"
+    And the page should contain the html text "<p>It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>"
+
+    Given I am an anonymous user
+    When I go to the "Six exclusion advantages" solution
+    And I should see the link "Some custom HTML test"
+    Then I click "Some custom HTML test"
+    And I should see the heading "Some custom HTML test"
+    And the page should contain the html text "<p><strong>Lorem Ipsum</strong> is simply dummy text of the printing and typesetting industry.<br>Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</p>"
+    And the page should contain the html text "<p>It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>"
 
     # These contact information have been created via UI.
     But I delete the "Invisible Cat" contact information

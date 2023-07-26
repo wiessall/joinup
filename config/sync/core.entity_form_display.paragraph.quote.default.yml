@@ -1,0 +1,23 @@
+uuid: a6f6339b-77c8-4ee7-83de-99f1f1db4360
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.quote.paragraph_quote
+    - paragraphs.paragraphs_type.quote
+id: paragraph.quote.default
+targetEntityType: paragraph
+bundle: quote
+mode: default
+content:
+  paragraph_quote:
+    type: string_textarea
+    weight: 0
+    region: content
+    settings:
+      rows: 3
+      placeholder: ''
+    third_party_settings: {  }
+hidden:
+  created: true
+  status: true

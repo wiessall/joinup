@@ -15,6 +15,7 @@ dependencies:
     - entity_reference_revisions
     - field_group
     - layout_builder
+    - layout_paragraphs
     - responsive_image
     - template_suggestion
     - user
@@ -59,7 +60,7 @@ content:
     weight: 0
     region: content
   field_paragraphs_body:
-    type: entity_reference_revisions_entity_view
+    type: layout_paragraphs
     label: hidden
     settings:
       view_mode: default

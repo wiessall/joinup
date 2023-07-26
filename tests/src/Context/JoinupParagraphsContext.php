@@ -4,15 +4,21 @@ declare(strict_types = 1);
 
 namespace Drupal\joinup\Context;
 
+use Behat\Gherkin\Node\PyStringNode;
 use Behat\Gherkin\Node\TableNode;
 use Behat\Mink\Driver\Selenium2Driver;
 use Behat\Mink\Element\TraversableElement;
 use Behat\Mink\Exception\ElementNotFoundException;
+use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\joinup\Exception\WysiwygEditorNotFoundException;
+use Drupal\joinup\Traits\EntityTrait;
 use Drupal\joinup\Traits\JavascriptTrait;
+use Drupal\joinup\Traits\TestingEntitiesTrait;
 use Drupal\joinup\Traits\UtilityTrait;
 use Drupal\joinup\Traits\WysiwygTrait;
+use Drupal\paragraphs\Entity\Paragraph;
+use Drupal\paragraphs\ParagraphInterface;
 use PHPUnit\Framework\Assert;
 
 /**
@@ -23,6 +29,8 @@ class JoinupParagraphsContext extends RawDrupalContext {
   use JavascriptTrait;
   use WysiwygTrait;
   use UtilityTrait;
+  use EntityTrait;
+  use TestingEntitiesTrait;
 
   /**
    * A copycat of Behat's internal region mapping.
@@ -37,6 +45,7 @@ class JoinupParagraphsContext extends RawDrupalContext {
   const FIELD_MAP = [
     'Custom page body' => 'field-paragraphs-body',
     'Custom content listing' => 'content-listing',
+    'Accordion item' => 'field-accordion-item',
   ];
 
   /**
@@ -425,6 +434,149 @@ class JoinupParagraphsContext extends RawDrupalContext {
     if (empty($elements)) {
       throw new ElementNotFoundException($this->getSession()->getDriver(), 'paragraph', 'glide__slide', $heading);
     }
+  }
+
+  /**
+   * Appends paragraph to entity.
+   *
+   * @param string $paragraph_type
+   *   Paragraph type.
+   * @param string $parent_field
+   *   Parent field name.
+   * @param string $parent_type_id
+   *   Parent type id.
+   * @param string $parent_name
+   *   Parent name.
+   * @param \Behat\Gherkin\Node\TableNode $table
+   *   Paragraph's fields.
+   *
+   * @Given I append :paragraph_type to :parent_field field in :parent_type_id entity with following :parent_name title:
+   *
+   * @throws \Drupal\Core\Entity\EntityStorageException
+   */
+  public function iAppendParagraphToFieldInEntityWithFollowingTitle(
+    string $paragraph_type,
+    string $parent_field,
+    string $parent_type_id,
+    string $parent_name,
+    TableNode $table
+  ): void {
+    $entity = $this->getEntityByLabel($parent_type_id, $parent_name);
+
+    $values = [
+      'type' => $paragraph_type,
+    ];
+    foreach ($table->getRowsHash() as $field => $value) {
+      $values = array_replace_recursive($values, $this->transformParagraphField($field, $value));
+    }
+
+    $paragraph = Paragraph::create($values);
+    $paragraph->save();
+
+    $this->entities['paragraph'][$paragraph->id()] = $paragraph;
+    $this->appendParagraphToEntity($entity, $paragraph, $parent_field);
+  }
+
+  /**
+   * Appends a content listing paragraph.
+   *
+   * @param string $parent_field
+   *   Parent field name.
+   * @param string $parent_type_id
+   *   Parent type id.
+   * @param string $parent_name
+   *   Parent name.
+   * @param \Behat\Gherkin\Node\PyStringNode $value
+   *   Serialized value.
+   *
+   * @Given I append content listing to :parent_field field in :parent_type_id entity with following :parent_name title with:
+   *
+   * @throws \Drupal\Core\Entity\EntityStorageException
+   */
+  public function iAppendContentListingToFieldInEntityWithFollowingTitleWith(
+    string $parent_field,
+    string $parent_type_id,
+    string $parent_name,
+    PyStringNode $value): void {
+    $entity = $this->getEntityByLabel($parent_type_id, $parent_name);
+
+    $values = [
+      'type' => 'content_listing',
+      'content_listing' => [
+        'value' => unserialize($value->getRaw(), ['allowed_classes' => FALSE]),
+      ],
+    ];
+    $paragraph = Paragraph::create($values);
+    $paragraph->save();
+
+    $this->entities['paragraph'][$paragraph->id()] = $paragraph;
+    $this->appendParagraphToEntity($entity, $paragraph, $parent_field);
+  }
+
+  /**
+   * Helper method to transform table data into the correct field array.
+   *
+   * @param string $field
+   *   Field name.
+   * @param string $value
+   *   Field value.
+   *
+   * @return array
+   *   Transformed data.
+   */
+  protected function transformParagraphField(string $field, string $value): array {
+    $data = $this->transformParagraphValue($field, $value);
+
+    $keys = explode(':', $field);
+    foreach (array_reverse($keys) as $key) {
+      $data = [$key => $data];
+    }
+
+    return $data;
+  }
+
+  /**
+   * Helper method to transform table field values.
+   *
+   * @param string $field
+   *   Field name.
+   * @param string $value
+   *   Field value.
+   *
+   * @return array
+   *   Transformed value.
+   */
+  protected function transformParagraphValue(string $field, string $value): mixed {
+    return match ($field) {
+      'content_listing:value' => unserialize($value, ['allowed_classes' => FALSE]),
+      default => $value,
+    };
+  }
+
+  /**
+   * Append paragraph to entity.
+   *
+   * @param \Drupal\Core\Entity\ContentEntityInterface $entity
+   *   Content entity.
+   * @param \Drupal\paragraphs\ParagraphInterface $paragraph
+   *   Paragraph entity.
+   * @param string $field_name
+   *   Field name.
+   *
+   * @throws \Drupal\Core\Entity\EntityStorageException
+   */
+  public function appendParagraphToEntity(ContentEntityInterface $entity, ParagraphInterface $paragraph, string $field_name): void {
+    if (!$entity->hasField($field_name)) {
+      throw new \Exception(sprintf("Field not found: %s", $field_name));
+    }
+
+    $entity->get($field_name)->appendItem(
+      [
+        'target_id' => $paragraph->id(),
+        'target_revision_id' => $paragraph->getRevisionId(),
+      ]
+    );
+    $entity->save();
   }
 
 }

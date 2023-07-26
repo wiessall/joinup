@@ -2043,18 +2043,9 @@ class JoinupContext extends RawDrupalContext {
 
     $result = $this->getSession()->getPage()->waitFor(5, function (): bool {
       // Retrieve again a fresh copy of the page element at each cycle.
-      $modal = $this->getSession()->getPage()->find('css', '.modal-body');
+      $modal = $this->getSession()->getPage()->find('css', '.ui-dialog-content');
       return $modal && $modal->isVisible();
     });
-
-    if (!$result) {
-      $result = $this->getSession()->getPage()->waitFor(5, function () {
-        // Retrieve again a fresh copy of the page element at each cycle.
-        $modal = $this->getSession()->getPage()->find('css', '#drupal-bootstrap4-modal');
-
-        return $modal && $modal->isVisible();
-      });
-    }
 
     if (!$result) {
       throw new \Exception('The modal did not open.');
@@ -2078,7 +2069,7 @@ class JoinupContext extends RawDrupalContext {
         // Normally the modal should be completely removed from the DOM,
         // but sometimes the markup is kept in the DOM as hidden.
         // @see Drupal.AjaxCommands.prototype.closeDialog()
-        return !$this->getSession()->getDriver()->isVisible('//*[@id = "drupal-modal"] | //*[@id = "drupal-bootstrap4-modal"]');
+        return !$this->getSession()->getDriver()->isVisible('//*[@id = "drupal-modal"]');
       }
       catch (NoSuchElement $e) {
         // The modal has been completely removed from the DOM.

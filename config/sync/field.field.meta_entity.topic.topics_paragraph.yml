@@ -5,7 +5,15 @@ dependencies:
   config:
     - field.storage.meta_entity.topics_paragraph
     - meta_entity.type.topic
-    - paragraphs.paragraphs_type.row
+    - paragraphs.paragraphs_type.call_to_action
+    - paragraphs.paragraphs_type.configurable_listing
+    - paragraphs.paragraphs_type.image
+    - paragraphs.paragraphs_type.json_map
+    - paragraphs.paragraphs_type.layout
+    - paragraphs.paragraphs_type.simple_paragraph
+    - paragraphs.paragraphs_type.testimony
+    - paragraphs.paragraphs_type.text
+    - paragraphs.paragraphs_type.video
   module:
     - entity_reference_revisions
 id: meta_entity.topic.topics_paragraph
@@ -22,7 +30,15 @@ settings:
   handler: 'default:paragraph'
   handler_settings:
     target_bundles:
-      row: row
+      call_to_action: call_to_action
+      configurable_listing: configurable_listing
+      image: image
+      json_map: json_map
+      simple_paragraph: simple_paragraph
+      testimony: testimony
+      video: video
+      layout: layout
+      text: text
     negate: 0
     target_bundles_drag_drop:
       1_column_layout:
@@ -48,38 +64,47 @@ settings:
         enabled: false
       call_to_action:
         weight: 27
-        enabled: false
+        enabled: true
       carousel:
         weight: 28
         enabled: false
       configurable_listing:
         weight: 29
-        enabled: false
+        enabled: true
       content_listing:
         weight: 30
         enabled: false
       entity_reference:
         weight: 31
         enabled: false
+      github_feed:
+        weight: 35
+        enabled: false
       iframe:
         weight: 32
         enabled: false
       image:
         weight: 33
-        enabled: false
+        enabled: true
       json_map:
         weight: 34
-        enabled: false
+        enabled: true
+      layout:
+        weight: 39
+        enabled: true
       row:
         weight: 35
-        enabled: true
+        enabled: false
       simple_paragraph:
         weight: 36
-        enabled: false
+        enabled: true
       testimony:
         weight: 37
-        enabled: false
+        enabled: true
+      text:
+        weight: 43
+        enabled: true
       video:
         weight: 38
-        enabled: false
+        enabled: true
 field_type: entity_reference_revisions
