@@ -13,7 +13,7 @@ mode: default
 content:
   cancel_vote_allow:
     type: boolean_checkbox
-    weight: 4
+    weight: 3
     region: content
     settings:
       display_label: true
@@ -34,20 +34,20 @@ content:
     third_party_settings: {  }
   runtime:
     type: options_select
-    weight: 3
+    weight: 2
     region: content
     settings: {  }
     third_party_settings: {  }
   show_number_of_results:
     type: boolean_checkbox
-    weight: 5
+    weight: 4
     region: content
     settings:
       display_label: true
     third_party_settings: {  }
   status:
     type: boolean_checkbox
-    weight: 2
+    weight: 5
     region: content
     settings:
       display_label: true
