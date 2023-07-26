@@ -2,3 +2,8 @@ import RDF vocabularies:
   title: 'Import RDF vocabularies'
   description: 'Allows access to /joinup-rdf/vocabulary-importer.'
   restrict access: true
+
+run direct SPARQL queries:
+  title: 'Run direct SPARQL queries'
+  description: 'Allows access to /joinup-rdf/sparql-query.'
+  restrict access: true
