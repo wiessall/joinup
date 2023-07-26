@@ -187,6 +187,7 @@ permissions:
   - 'execute spain pipeline'
   - 'feature entity'
   - 'filter membership overview'
+  - 'import RDF vocabularies'
   - 'manage group announcements'
   - 'manage newsroom newsletter subscriptions'
   - 'manage site auto-registration'

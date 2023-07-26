@@ -31,17 +31,9 @@ class VocabularyFixturesHelper implements VocabularyFixturesHelperInterface {
   }
 
   /**
-   * Returns an array of allowed values and data related to the imports.
-   *
-   * @return array
-   *   An array of allowed values where each entry is a an array containing the
-   *   following data:
-   *   - graph: The graph uri of the vocabulary.
-   *   - filename: The filename of the vocabulary.
-   *   - extra queries: Extra queries that should run after each import of the
-   *   file.
+   * {@inheritdoc}
    */
-  protected function getFixturesData(): array {
+  public function getFixturesData(): array {
     return [
       'licence-legal-type' => [
         'graph' => 'http://licence-legal-type',
