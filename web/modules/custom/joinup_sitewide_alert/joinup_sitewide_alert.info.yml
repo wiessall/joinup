@@ -1,0 +1,8 @@
+name: Joinup Sitewide alerts
+description: Contains customisation for sitewide_alert module.
+type: module
+package: Joinup
+core_version_requirement: ">= 9.4"
+
+dependencies:
+  - sitewide_alert:sitewide_alert
