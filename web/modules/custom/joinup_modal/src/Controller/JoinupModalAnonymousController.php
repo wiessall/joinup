@@ -29,7 +29,7 @@ class JoinupModalAnonymousController extends ControllerBase {
     return [
       '#theme' => 'joinup_modal_anonymous',
       '#type' => $type,
-      '#title' => $this->t('Login or register'),
+      '#title' => $this->t('You are not logged in'),
       '#login' => new Link('Log in', $login),
       '#register' => new Link('Register', $register),
     ];
