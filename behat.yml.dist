@@ -56,6 +56,7 @@
   - Drupal\joinup\Context\ModerationContext
   - Drupal\joinup\Context\OeNewsroomNewsletterContext
   - Drupal\joinup\Context\OwnerContext
+  - Drupal\joinup\Context\PollContext
   - Drupal\joinup\Context\RdfEntityProvenanceContext
   - Drupal\joinup\Context\RdfGraphContext
   - Drupal\joinup\Context\RssContext
