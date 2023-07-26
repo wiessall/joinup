@@ -198,8 +198,8 @@ Feature: Like/unlike feature.
 
     And I fill in "Title" with "Carousel of likes"
 
-    And I press "List additional actions"
-    And I press "Add Carousel"
+    And I click "Choose component"
+    And I click "Carousel"
 
     Then I select "Solution" from "Available filters"
     And I press "Add and configure filter"
@@ -225,6 +225,8 @@ Feature: Like/unlike feature.
     And I press "Add and configure filter"
     And I fill in "News" with "Likeable news"
 
+    # Save the paragraph through the dialog.
+    And I press "Save" in the "Layout paragraphs dialog buttons" region
     When I press "Publish"
 
     And I should see the "Very liked solution" tile

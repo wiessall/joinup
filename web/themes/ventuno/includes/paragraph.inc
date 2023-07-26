@@ -14,6 +14,17 @@ use Drupal\Core\Cache\CacheableMetadata;
  */
 function ventuno_preprocess_paragraph(array &$variables): void {
   $variables['#attached']['library'][] = 'ventuno/paragraph';
+  $variables['#attached']['library'][] = 'ventuno/paragraph__' . $variables['paragraph']->bundle();
+  $variables['attributes']['class'][] = 'paragraph--' . str_replace('_', '-', $variables['paragraph']->bundle());
+}
+
+/**
+ * Implements hook_preprocess_paragraph().
+ */
+function ventuno_preprocess_paragraph__accordion(array &$variables): void {
+  $entity = $variables['paragraph'];
+  $variables['attributes']['id'] = 'accordion' . $entity->id();
+  $variables['attributes']['class'] = ['accordion', 'mb-4'];
 }
 
 /**
@@ -51,7 +62,7 @@ function ventuno_preprocess_paragraph__accordion_item(array &$variables): void {
     return;
   }
   $parent = $entity->getParentEntity();
-  if ($parent->bundle() !== 'accordion') {
+  if (!$parent || $parent->bundle() !== 'accordion') {
     return;
   }
   $variables['parent_id'] = $parent->id();

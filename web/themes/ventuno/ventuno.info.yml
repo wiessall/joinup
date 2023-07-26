@@ -37,6 +37,11 @@ libraries-override:
   core/drupal.checkbox:
     js:
       misc/checkbox.js: assets/js/checkbox.min.js
+  layout_discovery/onecol: false
+  layout_discovery/twocol: false
+  layout_builder/twocol_section: false
+  layout_builder/threecol_section: false
+  layout_builder/fourcol_section: false
 
 regions:
   search_bar: 'Search bar'
