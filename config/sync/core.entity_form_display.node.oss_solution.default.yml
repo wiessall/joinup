@@ -5,6 +5,7 @@ dependencies:
   config:
     - field.field.node.oss_solution.oss_categories
     - field.field.node.oss_solution.oss_development_status
+    - field.field.node.oss_solution.oss_features
     - field.field.node.oss_solution.oss_landing_url
     - field.field.node.oss_solution.oss_license
     - field.field.node.oss_solution.oss_logo
@@ -16,6 +17,7 @@ dependencies:
     - field.field.node.oss_solution.oss_release_date
     - field.field.node.oss_solution.oss_short_description
     - field.field.node.oss_solution.oss_software_type
+    - field.field.node.oss_solution.oss_software_version
     - field.field.node.oss_solution.oss_source
     - field.field.node.oss_solution.oss_url
     - field.field.node.oss_solution.oss_used_by
@@ -60,6 +62,14 @@ content:
     weight: 130
     region: content
     settings: {  }
+    third_party_settings: {  }
+  oss_features:
+    type: string_textfield
+    weight: 137
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
     third_party_settings: {  }
   oss_landing_url:
     type: link_default
@@ -238,3 +248,4 @@ content:
     third_party_settings: {  }
 hidden:
   current_workflow_state: true
+  oss_software_version: true

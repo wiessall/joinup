@@ -80,6 +80,7 @@ class EuOssCatalogueTest extends BrowserTestBase {
     // Check queue processing. Use Drush to run the queue.
     $this->drush('queue:run', ['eu_oss_catalogue']);
 
+    /** @var \Drupal\eu_oss_catalogue\Entity\OssSolutionInterface $node1 */
     $node1 = $this->getNodeByTitle('Solution 1');
     $this->assertSame('oss_solution', $node1->bundle());
     $this->assertSame('http://example.com/vendor/solution1', $node1->get('oss_url')->uri);
@@ -97,10 +98,21 @@ class EuOssCatalogueTest extends BrowserTestBase {
     $this->assertStringContainsString('[EN] Solution 1: Short description', $node1->get('oss_short_description')->value);
     $this->assertStringContainsString('[DE] Solution 1: Long description', $node1->getTranslation('de')->get('oss_long_description')->value);
     $this->assertStringContainsString('[DE] Solution 1: Short description', $node1->getTranslation('de')->get('oss_short_description')->value);
+    $this->assertFieldValues([
+      '[IT] Solution 1: Feature 1',
+      '[IT] Solution 1: Feature 2',
+    ], $node1->getTranslation('it')->get('oss_features'));
+    $this->assertFieldValues([
+      '[EN] Solution 1: Feature 1',
+      '[EN] Solution 1: Feature 2',
+      '[EN] Solution 1: Feature 3',
+    ], $node1->get('oss_features'));
+    $this->assertFieldValues(['[DE] Solution 1: Feature 1'], $node1->getTranslation('de')->get('oss_features'));
     $this->assertReferences(['AGPL-3.0-or-later'], $node1->get('oss_license'));
     $this->assertSame('Sin City', $node1->get('oss_main_copyright_owner')->value);
     $this->assertTrue($node1->get('oss_landing_url')->isEmpty());
 
+    /** @var \Drupal\eu_oss_catalogue\Entity\OssSolutionInterface $node1 */
     $node2 = $this->getNodeByTitle('Solution 2');
     $this->assertSame('oss_solution', $node2->bundle());
     $this->assertSame('http://example.com/vendor/solution2.git', $node2->getTranslation('it')->get('oss_url')->uri);
@@ -115,6 +127,12 @@ class EuOssCatalogueTest extends BrowserTestBase {
     $this->assertStringContainsString('[IT] Solution 2: Long description', $node2->getTranslation('it')->get('oss_long_description')->value);
     $this->assertStringContainsString('[IT] Solution 2: Short description', $node2->getTranslation('it')->get('oss_short_description')->value);
     $this->assertReferences(['BSD-3-Clause'], $node2->get('oss_license'));
+    $this->assertFieldValues([
+      '[IT] Solution 2: Feature 1',
+      '[IT] Solution 2: Feature 2',
+      '[IT] Solution 2: Feature 3',
+      '[IT] Solution 2: Feature 4',
+    ], $node2->getTranslation('it')->get('oss_features'));
     $this->assertSame('Narnia', $node2->get('oss_main_copyright_owner')->value);
     $this->assertTrue($node2->get('oss_logo')->isEmpty());
   }
@@ -130,6 +148,19 @@ class EuOssCatalogueTest extends BrowserTestBase {
   protected function assertReferences(array $expectedLabels, FieldItemListInterface $field): void {
     $actualLabels = array_values(array_map(fn (EntityInterface $entity): string => $entity->label(), $field->referencedEntities()));
     $this->assertEqualsCanonicalizing($expectedLabels, $actualLabels);
+  }
+
+  /**
+   * Asserts that a field has a list of expected values.
+   *
+   * @param array $expectedValues
+   *   Expected labels.
+   * @param \Drupal\Core\Field\FieldItemListInterface $fieldItemList
+   *   The entity reference field item list.
+   */
+  protected function assertFieldValues(array $expectedValues, FieldItemListInterface $fieldItemList): void {
+    $actualValues = array_values(array_map(fn (array $item) => $item['value'], $fieldItemList->getValue()));
+    $this->assertSame($expectedValues, $actualValues);
   }
 
   /**

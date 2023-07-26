@@ -26,6 +26,7 @@ data:
               longDescription: '[IT] Solution 1: Long description'
               features:
                   - '[IT] Solution 1: Feature 1'
+                  - '[IT] Solution 1: Feature 2'
               screenshots:
                   - 'Solution_1_IT_Screenshot1.jpg'
           en:
@@ -34,6 +35,8 @@ data:
               longDescription: '[EN] Solution 1: Long description'
               features:
                   - '[EN] Solution 1: Feature 1'
+                  - '[EN] Solution 1: Feature 2'
+                  - '[EN] Solution 1: Feature 3'
               screenshots:
                   - 'Solution_1_EN_Screenshot1.jpg'
           de:
@@ -125,14 +128,10 @@ data:
                   id est laborum.
               documentation: http://it.docs.example.com/vendor/solution2
               features:
-                  - responsive
-                  - accessibility
-                  - inclusion
-                  - web development
-                  - PNRR
-                  - PNRR/Misura/1.4.1
-                  - PNRR/Beneficiari/Comuni
-                  - PNRR/Beneficiari/Scuole
+                  - '[IT] Solution 2: Feature 1'
+                  - '[IT] Solution 2: Feature 2'
+                  - '[IT] Solution 2: Feature 3'
+                  - '[IT] Solution 2: Feature 4'
       legal:
           license: BSD-3-Clause
           mainCopyrightOwner: Narnia
