@@ -63,9 +63,10 @@ data:
                 email: das-auto@example.com
                 website: http://www.example.com/auto
           contacts:
-              - name: Giovanna Favero
-                email: giovanna.favero@regione.emilia-romagna.it
-                affiliation: Regione Emilia-Romagna
+              - name: Peter Gregory
+                email: pieter@raviga.com
+                phone: RESERVED@
+                affiliation: Pied Piper
       localisation:
           localisationReady: false
           availableLanguages:
@@ -144,7 +145,14 @@ data:
       maintenance:
           type: community
           contacts:
-              - name: Designers Italia
+              - name: FOSS Conference
+                email: foss@example.com
+                phone: '0040675555453'
+                affiliation: OSS Affiliation
+              - name: Pirate Initiative
+                email: pirate@example.com
+                phone: '0049689887764'
+                affiliation: On The Sea
       localisation:
           localisationReady: false
           availableLanguages:

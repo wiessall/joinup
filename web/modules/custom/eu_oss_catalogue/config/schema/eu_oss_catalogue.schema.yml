@@ -40,3 +40,11 @@ eu_oss_catalogue.resolver_schema.taxonomy_term:
     controlled:
       type: boolean
       label: Whether is a controlled vocabulary
+
+eu_oss_catalogue.resolver_schema.contact:
+  type: eu_oss_catalogue.resolver_config_base
+  label: Contact resolver config
+  mapping:
+    node_type:
+      type: string
+      label: Node type

@@ -58,24 +58,25 @@ class ContactResolver extends DefaultResolver implements ContainerFactoryPluginI
    */
   public function resolve(FieldItemListInterface $fieldItemList, EuOssCatalogueFetchedSolution $fetchedSolution): mixed {
     $storage = $this->entityTypeManager->getStorage('node');
+    $nodeType = $this->getConfiguration()['node_type'];
 
     $targets = [];
     foreach (parent::resolve($fieldItemList, $fetchedSolution) as $contact) {
       $nids = array_values($storage->getQuery()->accessCheck(FALSE)
-        ->condition('type', 'oss_contractor')
+        ->condition('type', $nodeType)
         ->condition('title', $contact['name'])
         ->execute());
       if ($nids) {
         $targets[] = reset($nids);
         continue;
       }
-      $targets[] = $storage->create([
-        'type' => 'oss_contractor',
-        'title' => $contact['name'],
-        'oss_contractor_until' => $contact['until'] ?? NULL,
-        'oss_contractor_email' => $contact['email'] ?? NULL,
-        'oss_contractor_website' => $contact['website'] ?? NULL,
-      ]);
+      $values = ['type' => $nodeType, 'title' => $contact['name']];
+      foreach ($contact as $key => $value) {
+        if ($key !== 'name') {
+          $values["{$nodeType}_$key"] = $value;
+        }
+      }
+      $targets[] = $storage->create($values);
     }
 
     $fieldItemList->setValue($targets);

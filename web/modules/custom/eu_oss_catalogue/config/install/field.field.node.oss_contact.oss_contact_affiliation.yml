@@ -1,0 +1,18 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.oss_contact_affiliation
+    - node.type.oss_contact
+id: node.oss_contact.oss_contact_affiliation
+field_name: oss_contact_affiliation
+entity_type: node
+bundle: oss_contact
+label: Affiliation
+description: 'An explicit affiliation information for the technical contact. In case of multiple maintainers, this can be used to create a relation between each technical contact and each maintainer entity. It can contain for instance a company name, an association name'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string
