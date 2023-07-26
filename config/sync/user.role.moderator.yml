@@ -200,6 +200,7 @@ permissions:
   - 'reset nio pipeline'
   - 'reset spain pipeline'
   - 'revert all sitewide alert revisions'
+  - 'run direct SPARQL queries'
   - 'transition any message announcement from rejected to sent using the announcement - announcement workflow'
   - 'transition any message announcement from sent to delivered using the announcement - announcement workflow'
   - 'transition any message announcement from sent to rejected using the announcement - announcement workflow'
