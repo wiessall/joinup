@@ -81,6 +81,8 @@ class DevelopersItalia extends EuOssCatalogueProviderPluginBase implements Conta
     $next = '';
 
     do {
+      // @todo Fetch per set of pages and don't return all. For performance reasons.
+      // @todo Consider yield (Zoltan).
       $url = self::ENDPOINT . $next . ($next ? '&' : '?') . 'page[size]=500';
       $response = $this->httpClient->get($url);
       $read = Json::decode($response->getBody()->getContents());
