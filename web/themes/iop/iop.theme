@@ -55,7 +55,7 @@ function iop_preprocess_paragraph__image(array &$variables): void {
 /**
  * Implements hook_preprocess_HOOK().
  */
-function iop_preprocess_page(&$variables) {
+function iop_preprocess_page(array &$variables): void {
   $route_name = \Drupal::routeMatch()->getRouteName();
   $node = \Drupal::routeMatch()->getParameter('node');
   if ($node instanceof NodeInterface) {
@@ -103,7 +103,18 @@ function iop_preprocess_page(&$variables) {
 /**
  * Implements hook_preprocess_HOOK().
  */
-function iop_preprocess_node(&$variables) {
+function iop_preprocess_node(array &$variables): void {
+  if ($variables['view_mode'] === 'carousel' && !empty($variables['image'])) {
+    $variables['image'] = $variables['node']->getLogoAsRenderArray([
+      'label' => 'hidden',
+      'type' => 'responsive_image',
+      'settings' => [
+        'responsive_image_style' => 'iop_carousel',
+        'image_link' => 'none',
+      ],
+    ]);
+  }
+
   // Disables the "Report" link for IOP except news and events.
   $node = \Drupal::routeMatch()->getParameter('node');
   if (!$node instanceof NodeInterface ||
@@ -125,7 +136,7 @@ function iop_preprocess_node(&$variables) {
 /**
  * Implements hook_preprocess_HOOK().
  */
-function iop_preprocess_node__custom_page__full(&$variables) {
+function iop_preprocess_node__custom_page__full(array &$variables): void {
   $node = $variables['node'];
   if (($node instanceof CustomPageInterface)
     && ($group = $node->getGroup())
@@ -241,5 +252,21 @@ function iop_preprocess_page_title(array &$variables): void {
         break;
     }
     $variables['url_more'] = $link;
+  }
+}
+
+/**
+ * Implements hook_preprocess_HOOK().
+ */
+function iop_preprocess_rdf_entity(array &$variables): void {
+  if ($variables['view_mode'] === 'carousel' && !empty($variables['image'])) {
+    $variables['image'] = $variables['rdf_entity']->getLogoAsRenderArray([
+      'label' => 'hidden',
+      'type' => 'responsive_image',
+      'settings' => [
+        'responsive_image_style' => 'iop_carousel',
+        'image_link' => 'none',
+      ],
+    ]);
   }
 }
