@@ -12,6 +12,7 @@ dependencies:
     - field.field.node.oss_solution.oss_long_description
     - field.field.node.oss_solution.oss_main_copyright_owner
     - field.field.node.oss_solution.oss_maintenance_contractors
+    - field.field.node.oss_solution.oss_maintenance_type
     - field.field.node.oss_solution.oss_platforms
     - field.field.node.oss_solution.oss_publiccode_yml_content
     - field.field.node.oss_solution.oss_publiccode_yml_version
@@ -123,6 +124,12 @@ content:
       match_limit: 10
       size: 60
       placeholder: ''
+    third_party_settings: {  }
+  oss_maintenance_type:
+    type: options_select
+    weight: 139
+    region: content
+    settings: {  }
     third_party_settings: {  }
   oss_platforms:
     type: dynamic_entity_reference_default
