@@ -14,11 +14,37 @@
 
 declare(strict_types = 1);
 
+use Drupal\Core\File\Exception\FileException;
+
+/**
+ * Removal of spam content files.
+ */
+function joinup_core_deploy_109500(): void {
+  /** @var \Drupal\Core\File\FileSystemInterface $fileSystem */
+  $fileSystem = \Drupal::service('file_system');
+
+  $files = [
+    'public://document/2022-12/black-panther-2-wakanda-forever-free-w2tk.pdf',
+    'public://document/2022-12/fury-vs-chisora-live-wise.pdf',
+    'public://document/2022-12/2021-Crack-Adobe-Illustrator-CC-2018-2521-64Bit-2021-Crack.pdf',
+  ];
+
+  foreach ($files as $file) {
+    try {
+      $fileSystem->delete($file);
+    }
+    catch (FileException $e) {
+    }
+  }
+}
+
 /**
  * Import the new version of EIRA.
  */
-function joinup_core_deploy_109500(): string {
-  $fixtures_helper = \Drupal::getContainer()->get('joinup_rdf.vocabulary_fixtures.helper');
+function joinup_core_deploy_109501(): string {
+  $fixtures_helper = \Drupal::getContainer()->get(
+    'joinup_rdf.vocabulary_fixtures.helper'
+  );
   $fixtures_helper->importFixtures('eira_skos');
 
   return 'Imported eira_skos and ran after import queries.';
