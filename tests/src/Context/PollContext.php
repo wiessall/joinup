@@ -45,7 +45,7 @@ class PollContext extends RawDrupalContext {
    * Converts string into list of choices.
    *
    * @param string $choiceValues
-   *  Choices, split choice by comma.
+   *   Choices, split choice by comma.
    *
    * @return array
    *   List of poll id choices.
