@@ -11,6 +11,7 @@ third_party_settings:
       resolver: contact
       config:
         path: maintenance/contractors
+        node_type: oss_contractor
 id: node.oss_solution.oss_maintenance_contractors
 field_name: oss_maintenance_contractors
 entity_type: node

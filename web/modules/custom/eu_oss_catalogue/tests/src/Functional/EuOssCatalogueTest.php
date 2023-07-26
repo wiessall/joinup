@@ -124,6 +124,12 @@ class EuOssCatalogueTest extends BrowserTestBase {
     $this->assertSame('2023-11-12', $contractor2->get('oss_contractor_until')->value);
     $this->assertSame('das-auto@example.com', $contractor2->get('oss_contractor_email')->value);
     $this->assertSame('http://www.example.com/auto', $contractor2->get('oss_contractor_website')->uri);
+    /** @var \Drupal\node\NodeInterface $contact1 */
+    $contact1 = $node1->get('oss_maintenance_contacts')->get(0)->entity;
+    $this->assertSame('Peter Gregory', $contact1->label());
+    $this->assertSame('pieter@raviga.com', $contact1->get('oss_contact_email')->value);
+    $this->assertSame('RESERVED@', $contact1->get('oss_contact_phone')->value);
+    $this->assertSame('Pied Piper', $contact1->get('oss_contact_affiliation')->value);
 
     /** @var \Drupal\eu_oss_catalogue\Entity\OssSolutionInterface $node1 */
     $node2 = $this->getNodeByTitle('Solution 2');
@@ -149,6 +155,18 @@ class EuOssCatalogueTest extends BrowserTestBase {
     $this->assertSame('Narnia', $node2->get('oss_main_copyright_owner')->value);
     $this->assertTrue($node2->get('oss_logo')->isEmpty());
     $this->assertSame('community', $node2->get('oss_maintenance_type')->value);
+    /** @var \Drupal\node\NodeInterface $contact1 */
+    $contact1 = $node2->get('oss_maintenance_contacts')->get(0)->entity;
+    $this->assertSame('FOSS Conference', $contact1->label());
+    $this->assertSame('foss@example.com', $contact1->get('oss_contact_email')->value);
+    $this->assertSame('0040675555453', $contact1->get('oss_contact_phone')->value);
+    $this->assertSame('OSS Affiliation', $contact1->get('oss_contact_affiliation')->value);
+    /** @var \Drupal\node\NodeInterface $contact2 */
+    $contact2 = $node2->get('oss_maintenance_contacts')->get(1)->entity;
+    $this->assertSame('Pirate Initiative', $contact2->label());
+    $this->assertSame('pirate@example.com', $contact2->get('oss_contact_email')->value);
+    $this->assertSame('0049689887764', $contact2->get('oss_contact_phone')->value);
+    $this->assertSame('On The Sea', $contact2->get('oss_contact_affiliation')->value);
   }
 
   /**
