@@ -5,6 +5,7 @@ declare(strict_types = 1);
 namespace Drupal\eu_oss_catalogue\Plugin\eu_oss_catalogue\Resolver;
 
 use Drupal\Component\Utility\NestedArray;
+use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\eu_oss_catalogue\EuOssCatalogueFetchedSolution;
@@ -58,20 +59,29 @@ class LangCodeResolver extends DefaultResolver implements ContainerFactoryPlugin
   /**
    * {@inheritdoc}
    */
-  public function resolve(EuOssCatalogueFetchedSolution $fetchedSolution, string $fieldName): mixed {
+  public function resolve(FieldItemListInterface $fieldItemList, EuOssCatalogueFetchedSolution $fetchedSolution): mixed {
     if (!str_contains($this->getConfiguration()['path'], '[lang]')) {
-      return parent::resolve($fetchedSolution, $fieldName);
+      return parent::resolve($fieldItemList, $fetchedSolution);
     }
+    $fieldName = $fieldItemList->getName();
 
-    $field = [];
-    foreach ($this->languageManger->getLanguages() as $language) {
-      $path = explode('/', str_replace('[lang]', $language->getId(), $this->getConfiguration()['path']));
-      if (NestedArray::keyExists($fetchedSolution->getData(), $path)) {
-        $data = $fetchedSolution->getData();
-        $field[$language->getId()] = [NestedArray::getValue($data, $path)];
+    /** @var \Drupal\eu_oss_catalogue\Entity\OssSolutionInterface $solution */
+    $solution = $fieldItemList->getEntity();
+    $values = [];
+    foreach ($this->languageManger->getLanguages() as $langcode => $language) {
+      $path = explode('/', str_replace('[lang]', $langcode, $this->getConfiguration()['path']));
+      $data = $fetchedSolution->getData();
+      if (NestedArray::keyExists($data, $path)) {
+        $value = NestedArray::getValue($data, $path);
+        if (!$solution->hasTranslation($langcode)) {
+          $solution->addTranslation($langcode, $solution->toArray());
+        }
+        $solution->getTranslation($langcode)->set($fieldName, $value);
+        $values[$langcode] = $value;
       }
     }
-    return $field;
+
+    return $values;
   }
 
 }

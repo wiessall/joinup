@@ -5,6 +5,7 @@ declare(strict_types = 1);
 namespace Drupal\eu_oss_catalogue\Plugin\eu_oss_catalogue\Resolver;
 
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\eu_oss_catalogue\EuOssCatalogueFetchedSolution;
 use Drupal\eu_oss_catalogue\Exception\UnresolvableValueException;
@@ -66,8 +67,9 @@ class TaxonomyTermResolver extends DefaultResolver implements ContainerFactoryPl
   /**
    * {@inheritdoc}
    */
-  public function resolve(EuOssCatalogueFetchedSolution $fetchedSolution, string $fieldName): mixed {
-    $originalValue = parent::resolve($fetchedSolution, $fieldName);
+  public function resolve(FieldItemListInterface $fieldItemList, EuOssCatalogueFetchedSolution $fetchedSolution): mixed {
+    $originalValue = parent::resolve($fieldItemList, $fetchedSolution);
+
     // Convert to array to handle also the multiple terms case.
     $names = (array) $originalValue;
 
@@ -90,7 +92,7 @@ class TaxonomyTermResolver extends DefaultResolver implements ContainerFactoryPl
 
     if ($controlled && !empty($missingTermNames)) {
       // Some terms don't exist in this controlled vocabulary.
-      throw new UnresolvableValueException($fieldName, $this->getConfiguration()['path'], $originalValue, $fetchedSolution->getData());
+      throw new UnresolvableValueException($fieldItemList->getName(), $this->getConfiguration()['path'], $originalValue, $fetchedSolution->getData());
     }
 
     foreach ($missingTermNames as $name) {
@@ -103,9 +105,11 @@ class TaxonomyTermResolver extends DefaultResolver implements ContainerFactoryPl
     }
 
     // Preserve the original order.
-    $tids = array_merge(array_flip($names), $tids);
+    $tids = array_values(array_merge(array_flip($names), $tids));
 
-    return array_values($tids);
+    $fieldItemList->setValue($tids);
+
+    return $tids;
   }
 
 }

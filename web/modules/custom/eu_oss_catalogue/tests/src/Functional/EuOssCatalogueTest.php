@@ -9,6 +9,7 @@ use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\Tests\BrowserTestBase;
 use Drupal\Tests\node\Traits\NodeCreationTrait;
+use Drupal\language\Entity\ConfigurableLanguage;
 use Drush\TestTraits\DrushTestTrait;
 
 /**
@@ -32,6 +33,7 @@ class EuOssCatalogueTest extends BrowserTestBase {
   protected static $modules = [
     'dblog',
     'eu_oss_catalogue_test',
+    'language',
   ];
 
   /**
@@ -39,9 +41,13 @@ class EuOssCatalogueTest extends BrowserTestBase {
    */
   protected function setUp(): void {
     parent::setUp();
+
     // On install, eu_oss_catalogue is creating the controlled vocabularies. We
     // create only few testing terms.
     $this->createTestingTerms();
+    // Add Italian and German languages.
+    ConfigurableLanguage::createFromLangcode('it')->save();
+    ConfigurableLanguage::createFromLangcode('de')->save();
   }
 
   /**
@@ -74,34 +80,40 @@ class EuOssCatalogueTest extends BrowserTestBase {
     // Check queue processing. Use Drush to run the queue.
     $this->drush('queue:run', ['eu_oss_catalogue']);
 
-    $node1 = $this->getNodeByTitle('Verifica firme');
+    $node1 = $this->getNodeByTitle('Solution 1');
     $this->assertSame('oss_solution', $node1->bundle());
-    $this->assertSame('https://github.com/RegioneER/al.verificafirme', $node1->get('oss_url')->uri);
+    $this->assertSame('http://example.com/vendor/solution1', $node1->get('oss_url')->uri);
     $this->assertSame('0.2', $node1->get('oss_publiccode_yml_version')->value);
     $this->assertSame('2023-07-07', $node1->get('oss_release_date')->value);
-    $this->assertSame('https://github.com/RegioneER/al.verificafirme/images/the-logo.svg', $node1->get('oss_logo')->uri);
+    $this->assertSame('http://example.com/vendor/solution1/images/the-logo.svg', $node1->get('oss_logo')->uri);
     $this->assertReferences(['web'], $node1->get('oss_platforms'));
     $this->assertReferences(['data-collection', 'digital-citizenship'], $node1->get('oss_categories'));
     $this->assertSame('stable', $node1->get('oss_development_status')->value);
     $this->assertSame('standalone/web', $node1->get('oss_software_type')->value);
-    // @todo Description here
+    $this->assertStringContainsString('[IT] Solution 1: Long description', $node1->getTranslation('it')->get('oss_long_description')->value);
+    $this->assertStringContainsString('[IT] Solution 1: Short description', $node1->getTranslation('it')->get('oss_short_description')->value);
+    $this->assertStringContainsString('[EN] Solution 1: Long description', $node1->get('oss_long_description')->value);
+    $this->assertStringContainsString('[EN] Solution 1: Short description', $node1->get('oss_short_description')->value);
+    $this->assertStringContainsString('[DE] Solution 1: Long description', $node1->getTranslation('de')->get('oss_long_description')->value);
+    $this->assertStringContainsString('[DE] Solution 1: Short description', $node1->getTranslation('de')->get('oss_short_description')->value);
     $this->assertReferences(['AGPL-3.0-or-later'], $node1->get('oss_license'));
-    $this->assertSame('Regione Emilia-Romagna', $node1->get('oss_main_copyright_owner')->value);
+    $this->assertSame('Sin City', $node1->get('oss_main_copyright_owner')->value);
     $this->assertTrue($node1->get('oss_landing_url')->isEmpty());
 
-    $node2 = $this->getNodeByTitle('Bootstrap Italia');
+    $node2 = $this->getNodeByTitle('Solution 2');
     $this->assertSame('oss_solution', $node2->bundle());
-    $this->assertSame('https://github.com/italia/bootstrap-italia', $node2->get('oss_url')->uri);
-    $this->assertSame('https://italia.github.io/bootstrap-italia', $node2->get('oss_landing_url')->uri);
+    $this->assertSame('http://example.com/vendor/solution2.git', $node2->getTranslation('it')->get('oss_url')->uri);
+    $this->assertSame('http://landing.example.com/vendor/solution2', $node2->getTranslation('it')->get('oss_landing_url')->uri);
     $this->assertSame('0.2', $node2->get('oss_publiccode_yml_version')->value);
     $this->assertSame('2023-02-09', $node2->get('oss_release_date')->value);
     $this->assertReferences(['web'], $node2->get('oss_platforms'));
     $this->assertReferences(['website-builder'], $node2->get('oss_categories'));
-    $this->assertSame('stable', $node2->get('oss_development_status')->value);
+    $this->assertSame('development', $node2->get('oss_development_status')->value);
     $this->assertSame('library', $node2->get('oss_software_type')->value);
-    // @todo Description here
+    $this->assertStringContainsString('[IT] Solution 2: Long description', $node2->getTranslation('it')->get('oss_long_description')->value);
+    $this->assertStringContainsString('[IT] Solution 2: Short description', $node2->getTranslation('it')->get('oss_short_description')->value);
     $this->assertReferences(['BSD-3-Clause'], $node2->get('oss_license'));
-    $this->assertSame('Presidenza del Consiglio dei Ministri', $node2->get('oss_main_copyright_owner')->value);
+    $this->assertSame('Narnia', $node2->get('oss_main_copyright_owner')->value);
     $this->assertTrue($node2->get('oss_logo')->isEmpty());
   }
 

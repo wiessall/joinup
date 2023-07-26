@@ -74,6 +74,7 @@ class EuOssCatalogue implements EuOssCatalogueInterface {
    */
   public function createOrUpdateSolution(string $providerPluginId, EuOssCatalogueFetchedSolution $fetchedSolution): OssSolutionInterface {
     $this->checkProvider($providerPluginId);
+
     /** @var \Drupal\eu_oss_catalogue\EuOssCatalogueProviderInterface $provider */
     $provider = $this->providerManager->createInstance($providerPluginId);
     /** @var \Drupal\eu_oss_catalogue\EuOssCatalogueParserInterface $parser */

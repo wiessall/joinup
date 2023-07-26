@@ -6,6 +6,7 @@ namespace Drupal\eu_oss_catalogue;
 
 use Drupal\Component\Plugin\PluginBase;
 use Drupal\Component\Plugin\PluginManagerInterface;
+use Drupal\Core\Config\Entity\ThirdPartySettingsInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
@@ -71,7 +72,6 @@ abstract class EuOssCatalogueParserPluginBase extends PluginBase implements EuOs
    */
   public function parse(EuOssCatalogueFetchedSolution $fetchedSolution, EuOssCatalogueProviderInterface $provider): OssSolutionInterface {
     $nodeStorage = $this->entityTypeManager->getStorage('node');
-    $fieldConfigStorage = $this->entityTypeManager->getStorage('field_config');
 
     // For now, we're using the solution URL as UUID.
     $solutions = $nodeStorage->loadByProperties(['oss_url' => $fetchedSolution->getUrl()]);
@@ -81,9 +81,9 @@ abstract class EuOssCatalogueParserPluginBase extends PluginBase implements EuOs
       throw new \RuntimeException("Expected 'oss_solution' node, got {$solution->bundle()}");
     }
 
-    $solution->set('title', $fetchedSolution->getName());
-
-    $this->appendProvider($solution, $provider);
+    $solution
+      ->set('title', $fetchedSolution->getName())
+      ->addProvider($provider);
 
     foreach ($solution->getFields(FALSE) as $fieldName => $fieldItemList) {
       // It's a convention that all fields are prefixed with oss_*.
@@ -91,21 +91,18 @@ abstract class EuOssCatalogueParserPluginBase extends PluginBase implements EuOs
         continue;
       }
 
-      /** @var \Drupal\field\FieldConfigInterface&\Drupal\Core\Config\Entity\ThirdPartySettingsInterface $fieldConfig */
-      if ($fieldConfig = $fieldConfigStorage->load("node.oss_solution.$fieldName")) {
-        if ($settings = $fieldConfig->getThirdPartySetting('eu_oss_catalogue', $this->getPluginId())) {
+      $fieldDefinition = $solution->getFieldDefinition($fieldName);
+      if ($fieldDefinition instanceof ThirdPartySettingsInterface) {
+        if ($settings = $fieldDefinition->getThirdPartySetting('eu_oss_catalogue', $this->getPluginId())) {
           $resolver = $this->getResolver($settings['resolver'], $settings['config']);
           try {
-            $resolvedValue = $resolver->resolve($fetchedSolution, $fieldName);
+            $resolver->resolve($fieldItemList, $fetchedSolution);
           }
           catch (UnresolvableValueException $exception) {
             watchdog_exception('eu_oss_catalogue', $exception, $exception->getMessage());
             // Fail softly, don't set this field.
             continue;
           }
-
-          // @todo Handle translations. How?
-          $solution->set($fieldName, $resolvedValue);
         }
       }
     }
@@ -114,26 +111,7 @@ abstract class EuOssCatalogueParserPluginBase extends PluginBase implements EuOs
   }
 
   /**
-   * Adds a provider plugin ID when the field doesn't yes contain it.
-   *
-   * @param \Drupal\eu_oss_catalogue\Entity\OssSolutionInterface $solution
-   *   The OSS Solution node entity.
-   * @param \Drupal\eu_oss_catalogue\EuOssCatalogueProviderInterface $provider
-   *   The provider plugin instance.
-   */
-  protected function appendProvider(OssSolutionInterface $solution, EuOssCatalogueProviderInterface $provider): void {
-    /** @var \Drupal\pluginreference\Plugin\Field\FieldType\PluginReferenceFieldItemListInterface $source */
-    $source = $solution->get('oss_source');
-    foreach ($source->getValue() as $value) {
-      if ($value['plugin_id'] === $provider->getPluginId()) {
-        return;
-      }
-    }
-    $source->appendItem($provider->getPluginId());
-  }
-
-  /**
-   * Returns a resolver given its plugin ID and configuration.
+   * Configures and returns a resolver given its plugin ID and configuration.
    *
    * @param string $resolverPluginId
    *   The resolver plugin ID.
