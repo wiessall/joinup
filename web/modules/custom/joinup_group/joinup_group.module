@@ -1129,3 +1129,17 @@ function joinup_group_menu_local_tasks_alter(array &$data, string $route_name, R
     ];
   }
 }
+
+/**
+ * Implements hook_preprocess_HOOK().
+ */
+function joinup_group_preprocess_rdf_entity(array &$variables): void {
+  if ($variables['view_mode'] === 'group_header') {
+    $group = $variables['rdf_entity'];
+    if ($group instanceof GroupInterface) {
+      $bundle = "{$group->bundle()}_settings";
+      $meta_entity = MetaEntity::loadOrCreate($bundle, $group);
+      $variables['meta_banner_disabled'] = (bool) $meta_entity->get('metadata_banner_disabled')->value;
+    }
+  }
+}
