@@ -127,11 +127,11 @@ class PublicCodeYml extends EuOssCatalogueParserPluginBase implements ContainerF
     /** @var \Drupal\Core\Config\Entity\ThirdPartySettingsInterface $definition */
     $definition = $solution->getFieldDefinition('oss_publiccode_yml_version');
     $settings = $definition->getThirdPartySetting('eu_oss_catalogue', $this->getPluginId());
-    $version = $this->getResolver($settings['resolver'], $settings['config'])
-      ->resolve($fetchedSolution, 'oss_publiccode_yml_version');
-    $solution
-      ->set('oss_publiccode_yml_version', $version)
-      ->set('oss_publiccode_yml_content', Yaml::encode($fetchedSolution->getData()));
+    $this->getResolver($settings['resolver'], $settings['config'])
+      ->resolve($solution->get('oss_publiccode_yml_version'), $fetchedSolution);
+
+    // Add also the publiccode.yml content.
+    $solution->set('oss_publiccode_yml_content', Yaml::encode($fetchedSolution->getData()));
 
     return $solution;
   }
