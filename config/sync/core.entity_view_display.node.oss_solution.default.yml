@@ -11,6 +11,7 @@ dependencies:
     - field.field.node.oss_solution.oss_logo
     - field.field.node.oss_solution.oss_long_description
     - field.field.node.oss_solution.oss_main_copyright_owner
+    - field.field.node.oss_solution.oss_maintenance_contractors
     - field.field.node.oss_solution.oss_platforms
     - field.field.node.oss_solution.oss_publiccode_yml_content
     - field.field.node.oss_solution.oss_publiccode_yml_version
@@ -103,6 +104,14 @@ content:
       link_to_entity: false
     third_party_settings: {  }
     weight: 16
+    region: content
+  oss_maintenance_contractors:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 17
     region: content
   oss_platforms:
     type: entity_reference_custom_link
