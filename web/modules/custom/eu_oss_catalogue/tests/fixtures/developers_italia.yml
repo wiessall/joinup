@@ -9,7 +9,7 @@ data:
       publiccodeYmlVersion: "0.2"
       name: Solution 1
       url: http://example.com/vendor/solution1
-      softwareVersion: 1.0.0.0
+      softwareVersion: '1.0.0.0'
       releaseDate: "2023-07-07"
       logo: images/the-logo.svg
       platforms:
@@ -102,7 +102,7 @@ data:
       landingURL: http://landing.example.com/vendor/solution2
       isBasedOn:
           - Bootstrap
-      softwareVersion: v2.3.4
+      softwareVersion: 'v2.3.4'
       releaseDate: "2023-02-09"
       platforms:
           - web
