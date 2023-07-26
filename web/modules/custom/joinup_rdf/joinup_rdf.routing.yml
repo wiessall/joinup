@@ -1,0 +1,7 @@
+joinup_rdf.vocabulary_importer:
+  path: '/joinup-rdf/vocabulary-importer'
+  defaults:
+    _title: 'Vocabulary Importer'
+    _form: 'Drupal\joinup_rdf\Form\VocabularyImporterForm'
+  requirements:
+    _permission: 'import RDF vocabularies'

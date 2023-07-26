@@ -10,6 +10,19 @@ namespace Drupal\joinup_rdf;
 interface VocabularyFixturesHelperInterface {
 
   /**
+   * Returns an array of allowed values and data related to the imports.
+   *
+   * @return array
+   *   An array of allowed values where each entry is a an array containing the
+   *   following data:
+   *   - graph: The graph uri of the vocabulary.
+   *   - filename: The filename of the vocabulary.
+   *   - extra queries: Extra queries that should run after each import of the
+   *   file.
+   */
+  public function getFixturesData(): array;
+
+  /**
    * Clears the given graph URI.
    *
    * @param string $graph_uri

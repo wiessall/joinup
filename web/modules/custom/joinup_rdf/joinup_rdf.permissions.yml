@@ -1,0 +1,4 @@
+import RDF vocabularies:
+  title: 'Import RDF vocabularies'
+  description: 'Allows access to /joinup-rdf/vocabulary-importer.'
+  restrict access: true
