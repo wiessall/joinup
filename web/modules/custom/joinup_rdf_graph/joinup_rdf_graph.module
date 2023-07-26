@@ -13,6 +13,7 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Site\Settings;
 use Drupal\joinup_rdf_graph\Entity\RdfGraph;
 use Drupal\joinup_rdf_graph\Entity\RdfGraphInterface;
+use Drupal\rdf_taxonomy\Entity\RdfTerm;
 
 /**
  * Implements hook_entity_bundle_info_alter().
@@ -27,7 +28,7 @@ function joinup_rdf_graph_entity_bundle_info_alter(array &$bundles): void {
  * Implements hook_entity_operation_alter().
  */
 function joinup_rdf_graph_entity_operation_alter(array &$operations, EntityInterface $rdf_graph): void {
-  if ($rdf_graph instanceof RdfGraphInterface) {
+  if ($rdf_graph instanceof RdfGraphInterface || $rdf_graph instanceof RdfTerm) {
     // RDF graph bundle doesn't support drafts.
     unset($operations['draft']);
   }
