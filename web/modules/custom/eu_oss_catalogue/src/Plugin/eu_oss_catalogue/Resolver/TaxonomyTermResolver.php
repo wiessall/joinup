@@ -96,12 +96,10 @@ class TaxonomyTermResolver extends DefaultResolver implements ContainerFactoryPl
     }
 
     foreach ($missingTermNames as $name) {
-      $term = $storage->create([
+      $tids[$name] = $storage->create([
         'vid' => $this->getConfiguration()['vid'],
         'name' => $name,
       ]);
-      $term->save();
-      $tids[$name] = $term->id();
     }
 
     // Preserve the original order.
