@@ -7,6 +7,8 @@
 
 declare(strict_types = 1);
 
+use Drupal\eu_oss_catalogue\Entity\OssContact;
+use Drupal\eu_oss_catalogue\Entity\OssContractor;
 use Drupal\eu_oss_catalogue\Entity\OssSolution;
 
 /**
@@ -15,5 +17,11 @@ use Drupal\eu_oss_catalogue\Entity\OssSolution;
 function eu_oss_catalogue_entity_bundle_info_alter(array &$bundles): void {
   if (!empty($bundles['node']['oss_solution'])) {
     $bundles['node']['oss_solution']['class'] = OssSolution::class;
+  }
+  if (!empty($bundles['node']['oss_contact'])) {
+    $bundles['node']['oss_contact']['class'] = OssContact::class;
+  }
+  if (!empty($bundles['node']['oss_contractor'])) {
+    $bundles['node']['oss_contractor']['class'] = OssContractor::class;
   }
 }
