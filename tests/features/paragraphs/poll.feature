@@ -73,3 +73,31 @@ Feature: Pool paragraph tests.
     When the following fields should not be present "Pepperoni,Pineapple,Just cheese,Mushrooms"
     And I press "Cancel vote"
     And the following fields should be present "Pepperoni,Pineapple,Just cheese,Mushrooms"
+
+  @javascript
+  Scenario: Poll paragraph can be added
+    Given custom_page content:
+      | title           | collection      | state     |
+      | Scariest things | Poll collection | published |
+
+    Then I am logged in as a moderator
+    And I go to the edit form of the "Scariest things" "custom page"
+    And I click "Choose component"
+    And I click "Poll"
+    When the following fields should be present "Question,Choice,Poll Duration,Allow cancel votes,Show number of results,Active"
+
+    Then I press "Save" in the "Modal buttons" region
+    When I should see the error message "Question field is required."
+    And I should see the error message "This value should not be null."
+
+    Then I fill in "Question" with "What do you find scariest?"
+    And I fill in "Choice" with "Heights"
+    And I press "Add another item" at the "Choice" field
+    And I fill in the latest "Choice" field with "Flying"
+    And I press "Add another item" at the "Choice" field
+    And I fill in the latest "Choice" field with "Small spaces"
+    And I press "Add another item" at the "Choice" field
+    And I fill in the latest "Choice" field with "Work"
+    And I press "Save" in the "Modal buttons" region
+    And I press "Update"
+    When the following fields should be present "Heights,Flying,Small spaces,Work"
