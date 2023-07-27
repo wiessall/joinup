@@ -55,33 +55,62 @@ final class VocabularyImporterForm extends FormBase {
     ];
 
     $form['actions'] = [
-      '#type' => 'actions',
-      'submit' => [
-        '#type' => 'submit',
-        '#value' => $this->t('Import'),
+      '#type' => 'submit',
+      '#value' => $this->t('Import'),
+      '#ajax' => [
+        'callback' => '::ajaxSubmit',
+        'wrapper' => 'results-container',
       ],
+    ];
+
+    // A markup element to display the results.
+    $form['results_container'] = [
+      '#type' => 'details',
+      '#title' => $this->t('Results'),
+      '#open' => TRUE,
+      '#attributes' => [
+        'id' => 'results-container',
+      ],
+    ];
+    $form['results_container']['results'] = [
+      '#type' => 'markup',
+      '#markup' => '<pre>' . $form_state->getValue('results') . '</pre>',
     ];
 
     return $form;
   }
 
   /**
-   * {@inheritdoc}
+   * Ajax callback for the form.
+   *
+   * @param array $form
+   *   The form array.
+   * @param \Drupal\Core\Form\FormStateInterface $form_state
+   *   The form state.
+   *
+   * @return array
+   *   The form array.
    */
-  public function submitForm(array &$form, FormStateInterface $form_state): void {
+  public function ajaxSubmit(array &$form, FormStateInterface $form_state): array {
     $vocabulary = $form_state->getValue('vocabulary');
 
     try {
-      $this->vocabularyFixturesHelper->importFixtures($vocabulary);
+      $messages = $this->vocabularyFixturesHelper->importFixtures($vocabulary);
     }
     catch (\Exception $e) {
       $this->messenger()->addError($this->t('An error occurred while importing the vocabulary: @error', [
         '@error' => $e->getMessage(),
       ]));
-      return;
     }
 
     $this->messenger()->addStatus($this->t('Import was completed with no errors.'));
+    $form['results_container']['results']['#markup'] = '<pre>' . implode(PHP_EOL, $messages) . '</pre>';
+    return $form['results_container'];
   }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function submitForm(array &$form, FormStateInterface $form_state): void {}
 
 }
