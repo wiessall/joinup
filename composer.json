@@ -70,6 +70,7 @@
         "drupal/paragraphs": "^1.12",
         "drupal/pathauto": "~1.8",
         "drupal/pipeline": "^1.0",
+        "drupal/pluginreference": "^3.0",
         "drupal/publication_date": "^2.0",
         "drupal/rdf_entity": "^2.0",
         "drupal/rdf_meta_entity": "^1.0",
@@ -119,6 +120,7 @@
         "ext-fileinfo": "*",
         "ext-iconv": "*",
         "ext-libxml": "*",
+        "claudiu-cristea/drupal-dependencies": "1.x-dev",
         "drupal/admin_toolbar": "^3.4",
         "drupal/cas_mock_server": "^2.0",
         "drupal/coder": "*",
@@ -402,6 +404,10 @@
                     "reference": "main"
                 }
             }
+        },
+        {
+            "type": "vcs",
+            "url": "git@git.drupal.org:sandbox/itamair-3372413.git"
         },
         {
             "type": "vcs",

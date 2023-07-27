@@ -1,0 +1,13 @@
+services:
+
+  eu_oss_catalogue:
+    class: Drupal\eu_oss_catalogue\EuOssCatalogue
+    arguments: ['@plugin.manager.eu_oss_catalogue.provider', '@queue']
+
+  plugin.manager.eu_oss_catalogue.provider:
+    class: Drupal\eu_oss_catalogue\EuOssCatalogueProviderPluginManager
+    parent: default_plugin_manager
+
+  plugin.manager.eu_oss_catalogue.resolver:
+    class: Drupal\eu_oss_catalogue\EuOssCatalogueResolverPluginManager
+    parent: default_plugin_manager

@@ -1,0 +1,38 @@
+<?php
+
+declare(strict_types = 1);
+
+namespace Drupal\eu_oss_catalogue\Exception;
+
+/**
+ * Exception to be thrown when a value cannot be resolved.
+ */
+class UnresolvableValueException extends \Exception {
+
+  /**
+   * Constructs a new exception instance.
+   *
+   * @param string $fieldName
+   *   The field name.
+   * @param mixed $value
+   *   The value.
+   * @param array $data
+   *   Fetched data.
+   * @param int $code
+   *   (optional) The Exception code.
+   * @param \Throwable|null $previous
+   *   (optional) The previous throwable used for the exception chaining.
+   */
+  public function __construct(
+    public readonly string $fieldName,
+    public readonly string $path,
+    public readonly mixed $value,
+    public readonly array $data,
+    int $code = 0,
+    ?\Throwable $previous = NULL
+  ) {
+    $message = "Cannot resolve the field $this->fieldName (path $this->path) value " . trim(var_export($this->value, TRUE)) . " with data\n" . trim(var_export($this->data, TRUE));
+    parent::__construct($message, $code, $previous);
+  }
+
+}

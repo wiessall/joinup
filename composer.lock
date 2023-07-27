@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "19f7bc68018dc7a647c89ab8e24d9bf4",
+    "content-hash": "fbaa4317c09565a2d4a68fc463403e31",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -5669,6 +5669,57 @@
             "support": {
                 "source": "https://git.drupalcode.org/project/pipeline",
                 "issues": "https://www.drupal.org/project/issues/pipeline"
+            }
+        },
+        {
+            "name": "drupal/pluginreference",
+            "version": "3.0.2",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/pluginreference.git",
+                "reference": "3.0.2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/pluginreference-3.0.2.zip",
+                "reference": "3.0.2",
+                "shasum": "6c73f53b9b176cb33b48ec2462ae7797df0f63c0"
+            },
+            "require": {
+                "drupal/core": "^9 || ^10"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "3.0.2",
+                    "datestamp": "1660829901",
+                    "security-coverage": {
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "Pablo López",
+                    "homepage": "https://www.drupal.org/u/plopesc",
+                    "role": "Maintainer"
+                },
+                {
+                    "name": "plopesc",
+                    "homepage": "https://www.drupal.org/user/282415"
+                }
+            ],
+            "description": "Provides a field that stores a soft reference to a plugin.",
+            "homepage": "https://www.drupal.org/project/pluginreference",
+            "support": {
+                "source": "http://git.drupal.org/project/pluginreference.git",
+                "issues": "https://www.drupal.org/project/issues/pluginreference",
+                "irc": "irc://irc.freenode.org/drupal-contribute"
             }
         },
         {
@@ -15309,6 +15360,71 @@
             "time": "2022-03-30T09:27:43+00:00"
         },
         {
+            "name": "claudiu-cristea/drupal-dependencies",
+            "version": "1.x-dev",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/claudiu-cristea/drupal-dependencies.git",
+                "reference": "5509743e531b547aaad63bafa8efe8e1deb8276b"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/claudiu-cristea/drupal-dependencies/zipball/5509743e531b547aaad63bafa8efe8e1deb8276b",
+                "reference": "5509743e531b547aaad63bafa8efe8e1deb8276b",
+                "shasum": ""
+            },
+            "require": {
+                "drush/drush": "^11.0 || ^12.0"
+            },
+            "require-dev": {
+                "composer/installers": "^2",
+                "drupal/core-composer-scaffold": ">=10.0",
+                "drupal/core-recommended": ">=10.0",
+                "phpunit/phpunit": "^9.6",
+                "squizlabs/php_codesniffer": "^3.7"
+            },
+            "default-branch": true,
+            "type": "library",
+            "extra": {
+                "installer-paths": {
+                    "build/core": [
+                        "type:drupal-core"
+                    ]
+                },
+                "drupal-scaffold": {
+                    "locations": {
+                        "web-root": "build/"
+                    },
+                    "file-mapping": {
+                        "[project-root]/.gitattributes": false,
+                        "[project-root]/.editorconfig": false,
+                        "[project-root]/.gitignore": false
+                    }
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Drupal\\Dependencies\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "Claudiu Cristea",
+                    "email": "clau.cristea@gmail.com"
+                }
+            ],
+            "description": "Drush commands to list Drupal dependencies",
+            "support": {
+                "issues": "https://github.com/claudiu-cristea/drupal-dependencies/issues",
+                "source": "https://github.com/claudiu-cristea/drupal-dependencies/tree/1.x"
+            },
+            "time": "2023-07-17T08:45:30+00:00"
+        },
+        {
             "name": "composer/pcre",
             "version": "3.1.0",
             "source": {
@@ -21927,6 +22043,7 @@
         "drupal/facets_date_range": 10,
         "drupal/page_manager": 10,
         "drupal/views_block_area": 10,
+        "claudiu-cristea/drupal-dependencies": 20,
         "php-task-runner/composer": 20,
         "php-task-runner/sparql": 20,
         "weitzman/drupal-test-traits": 20

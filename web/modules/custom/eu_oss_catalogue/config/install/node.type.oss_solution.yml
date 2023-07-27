@@ -1,0 +1,13 @@
+langcode: en
+status: true
+label_singular: opensource software solution
+label_plural: opensource software solutions
+label_count:
+  - 1 opensource software solution\x03@count opensource software solutions
+name: Open Source Software Solution
+type: oss_solution
+description: An opensource software business solution
+help: ''
+new_revision: true
+preview_mode: 0
+display_submitted: false
