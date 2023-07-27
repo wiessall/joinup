@@ -1,0 +1,40 @@
+<?php
+
+/**
+ * @file
+ * Hook implementations for the Joinup Sitewide Alert module.
+ */
+
+declare(strict_types = 1);
+
+use Drupal\Component\Utility\Html;
+
+/**
+ * Set dynamic allowed values for the icon field.
+ *
+ * @return array
+ *   An array of possible key and value options.
+ *
+ * @see options_allowed_values()
+ */
+function joinup_sitewide_alert_allowed_values(): array {
+  $themeHandler = \Drupal::service('theme_handler');
+  $spritePath = $themeHandler->getTheme(
+      $themeHandler->getDefault()
+    )->getPath() . '/assets/icons/icons.svg';
+  if (!file_exists($spritePath)) {
+    return [];
+  }
+
+  $content = file_get_contents($spritePath);
+  $icons = [];
+
+  $dom = Html::load($content);
+  $xp = new DOMXPath($dom);
+  $ids = $xp->query("//@id");
+  foreach ($ids as $id) {
+    $icons[$id->nodeValue] = $id->nodeValue;
+  }
+
+  return $icons;
+}

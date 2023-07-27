@@ -244,8 +244,8 @@ settings:
   paragraphs_type:
     handler: 'default:paragraphs_type'
     handler_settings: {  }
-  site_alert:
-    handler: 'default:site_alert'
+  sitewide_alert:
+    handler: 'default:sitewide_alert'
     handler_settings: {  }
   simple_block:
     handler: 'default:simple_block'
