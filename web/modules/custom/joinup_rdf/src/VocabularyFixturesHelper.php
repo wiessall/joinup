@@ -7,6 +7,8 @@ namespace Drupal\joinup_rdf;
 use Drupal\sparql_entity_storage\Driver\Database\sparql\ConnectionInterface;
 use EasyRdf\Graph;
 use EasyRdf\GraphStore;
+use EasyRdf\Http\Response;
+use EasyRdf\Sparql\Result;
 
 /**
  * Contains helper methods to handle and import vocabularies from fixtures.
@@ -68,21 +70,21 @@ class VocabularyFixturesHelper implements VocabularyFixturesHelperInterface {
   /**
    * {@inheritdoc}
    */
-  public function clearFixturesGraph(string $graph_uri): void {
-    $this->connection->getSparqlClient()->clear($graph_uri);
+  public function clearFixturesGraph(string $graph_uri): Response|Result {
+    return $this->connection->getSparqlClient()->clear($graph_uri);
   }
 
   /**
    * {@inheritdoc}
    */
-  public function importFixtures(string $fixture_key, bool $clear_graph = TRUE): void {
+  public function importFixtures(string $fixture_key, bool $clear_graph = TRUE): array {
     $fixtures_data = $this->getFixturesData();
     if (!isset($fixtures_data[$fixture_key])) {
       throw new \Exception("Invalid option '{$fixture_key}' supply'.");
     }
 
     $filename = DRUPAL_ROOT . '/../resources/fixtures/' . $fixtures_data[$fixture_key]['filename'];
-    $this->importFixtureToGraph(
+    return $this->importFixtureToGraph(
       $filename,
       $fixtures_data[$fixture_key]['graph'],
       $clear_graph,
@@ -93,20 +95,39 @@ class VocabularyFixturesHelper implements VocabularyFixturesHelperInterface {
   /**
    * {@inheritdoc}
    */
-  public function importFixtureToGraph(string $filename, string $graph_uri, bool $clear_graph = TRUE, array $extra_queries = []): void {
+  public function importFixtureToGraph(string $filename, string $graph_uri, bool $clear_graph = TRUE, array $extra_queries = []): array {
+    $messages = [];
+    $messages[] = "======== File path: {$filename} ========\n";
+    $messages[] = "File exists: " . (file_exists($filename) ? 'yes' : 'no') . "\n";
+    $messages[] = "File readable: " . (is_readable($filename) ? 'yes' : 'no') . "\n";
+    $messages[] = "File size: " . filesize($filename) . " bytes.\n";
+    $messages[] = "======== End file path ========\n";
     if ($clear_graph) {
-      $this->clearFixturesGraph($graph_uri);
+      $results = $this->clearFixturesGraph($graph_uri);
+      $messages[] = $results->dump() . "\n";
     }
 
     $graph = new Graph($graph_uri);
-    $graph->parseFile($filename);
+    $triples_added = $graph->parseFile($filename);
+    $messages[] = "======== Adding triples to the graph ========\n";
+    $messages[] = "Added {$triples_added} triples to graph store object {$graph_uri}.\n";
+    $messages[] = "======== End adding triples to the graph ========\n";
 
     $graph_store = $this->getDefaultGraphStore();
-    $graph_store->insert($graph);
+    $response = $graph_store->insert($graph);
+    $messages[] = "======== Inserting graph into the store ========\n";
+    $messages[] = "Response: {$response->asString()}\n";
+    $messages[] = "======== End inserting graph into the store ========\n";
 
     foreach ($extra_queries as $query) {
-      $this->connection->query($query);
+      $results = $this->connection->query($query);
+      $messages[] = "======== Running extra query ========\n";
+      $messages[] = "Query: {$query}\n";
+      $messages[] = $results->dump() . "\n";
+      $messages[] = "======== End running extra query ========\n";
     }
+
+    return $messages;
   }
 
   /**

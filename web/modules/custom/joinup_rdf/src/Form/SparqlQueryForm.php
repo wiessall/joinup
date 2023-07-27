@@ -4,6 +4,7 @@ declare(strict_types = 1);
 
 namespace Drupal\joinup_rdf\Form;
 
+use Drupal\Component\Utility\Random;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\sparql_entity_storage\Driver\Database\sparql\ConnectionInterface;
@@ -58,21 +59,18 @@ final class SparqlQueryForm extends FormBase {
     ];
 
     $form['actions'] = [
-      '#type' => 'actions',
-      'submit' => [
-        '#type' => 'submit',
-        '#value' => $this->t('Send'),
-        '#ajax' => [
-          'callback' => '::ajaxSubmit',
-          'wrapper' => 'results-container',
-        ],
+      '#type' => 'submit',
+      '#value' => $this->t('Send'),
+      '#ajax' => [
+        'callback' => '::ajaxSubmit',
+        'wrapper' => 'results-container',
       ],
     ];
 
     // A markup element to display the results.
     $form['results_container'] = [
       '#type' => 'details',
-      '#title' => $form_state->getValue('results') ? $this->t('Results') : NULL,
+      '#title' => $this->t('Results'),
       '#open' => TRUE,
       '#attributes' => [
         'id' => 'results-container',
@@ -93,6 +91,18 @@ final class SparqlQueryForm extends FormBase {
    *   The form.
    */
   protected function addAdditionalQuickActionQueries(array &$form): void {
+    // Add an AJAX button that checks the write permission by inserting and
+    // deleting a triple.
+    $form['check-write-permission'] = [
+      '#type' => 'button',
+      '#value' => $this->t('Check write permission'),
+      '#ajax' => [
+        'callback' => '::ajaxCheckWritePermission',
+        'wrapper' => 'results-container',
+      ],
+      '#limit_validation_errors' => [],
+    ];
+
     foreach ($this->getQuickActionQueries() as $buttonName => $query) {
       $form[$buttonName] = [
         '#type' => 'button',
@@ -119,6 +129,35 @@ final class SparqlQueryForm extends FormBase {
     $query = $this->getQuickActionQueries()[$buttonName];
     $form['query']['#value'] = $query;
     return $form['query'];
+  }
+
+  /**
+   * Ajax callback to test write permissions.
+   */
+  public function ajaxCheckWritePermission(array &$form, FormStateInterface $form_state): array {
+    $random = new Random();
+    $graph = 'http://example.com/' . $random->name(10, TRUE);
+    $query = "WITH <$graph> INSERT DATA { <http://example.com> <http://example.com> <http://example.com> }";
+    try {
+      $results = $this->endpoint->query($query);
+      $value = $results->dump();
+    }
+    catch (\Exception $e) {
+      $value = $e->getMessage();
+    }
+
+    // Delete the triple.
+    $query = "CLEAR GRAPH <$graph>";
+    try {
+      $results = $this->endpoint->query($query);
+      $value .= "\n" . $results->dump();
+    }
+    catch (\Exception $e) {
+      $value .= "\n" . $e->getMessage();
+    }
+
+    $form['results_container']['results']['#markup'] = '<pre>' . $value . '</pre>';
+    return $form['results_container'];
   }
 
   /**

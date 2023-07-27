@@ -4,6 +4,9 @@ declare(strict_types = 1);
 
 namespace Drupal\joinup_rdf;
 
+use EasyRdf\Http\Response;
+use EasyRdf\Sparql\Result;
+
 /**
  * Interface for services that provide fixtures import related helper methods.
  */
@@ -28,7 +31,7 @@ interface VocabularyFixturesHelperInterface {
    * @param string $graph_uri
    *   The graph URI to clear.
    */
-  public function clearFixturesGraph(string $graph_uri): void;
+  public function clearFixturesGraph(string $graph_uri): Response|Result;
 
   /**
    * Imports a single file fixture into the SPARQL endpoint.
@@ -38,8 +41,11 @@ interface VocabularyFixturesHelperInterface {
    *   without the extension.
    * @param bool $clear_graph
    *   Whether to clear the graph before importing. Defaults to TRUE.
+   *
+   * @return array
+   *   An array of log messages.
    */
-  public function importFixtures(string $fixture_key, bool $clear_graph = TRUE): void;
+  public function importFixtures(string $fixture_key, bool $clear_graph = TRUE): array;
 
   /**
    * Imports a single file into the SPARQL endpoint.
@@ -52,7 +58,10 @@ interface VocabularyFixturesHelperInterface {
    *   Whether to clear the graph before importing. Defaults to TRUE.
    * @param array $extra_queries
    *   An array of extra queries to run after the import.
+   *
+   * @return array
+   *   An array of log messages.
    */
-  public function importFixtureToGraph(string $filename, string $graph_uri, bool $clear_graph = TRUE, array $extra_queries = []): void;
+  public function importFixtureToGraph(string $filename, string $graph_uri, bool $clear_graph = TRUE, array $extra_queries = []): array;
 
 }
