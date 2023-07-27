@@ -12,8 +12,9 @@ dependencies:
     - node.type.custom_page
   module:
     - file
-    - joinup_workflow
     - layout_paragraphs
+    - joinup_workflow
+    - paragraphs
     - path
     - svg_image
 id: node.custom_page.default
@@ -41,7 +42,7 @@ content:
     weight: 2
     region: content
     settings:
-      preview_view_mode: preview
+      preview_view_mode: default
       nesting_depth: 0
       require_layouts: 0
       empty_message: ''
