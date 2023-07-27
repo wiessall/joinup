@@ -562,7 +562,97 @@ Feature:
     And I click "Remove filter" at 1st filter of the 1st content listing paragraph
     And I press "Cancel" in the "Modal buttons" region
     And I wait for AJAX to finish
+    Then the 1st filter of the 2nd content listing paragraph value is "Black Noise"
 
     When I click "Edit" in the "Custom page body" for paragraph layout 2
     And the 1st filter of the 1st content listing paragraph value is "Black Noise"
     And the 2nd filter of the 1st content listing paragraph value is "Fight battery mode"
+
+  @javascript
+  Scenario: Regression test for ISAICP-7819
+  See https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7819
+
+    Given event content:
+      | title              | collection | state     | created           | start date  | end date   |
+      | Event pagination 1 | Nintendo64 | validated | 2016-10-09 4:29am | now +8 day  | now +9 day |
+      | Event pagination 2 | Nintendo64 | validated | 2016-10-08 4:29am | now +7 day  | now +8 day |
+      | Event pagination 3 | Nintendo64 | validated | 2015-10-07 4:29am | now +6 day  | now +7 day |
+      | Event pagination 4 | Nintendo64 | validated | 2014-10-06 4:29am | now +5 day  | now +6 day |
+      | Event pagination 5 | Nintendo64 | validated | 2014-10-05 4:29am | now +4 day  | now +5 day |
+      | Event pagination 6 | Nintendo64 | validated | 2013-10-04 4:29am | now +3 day  | now +4 day |
+      | Event pagination 7 | Nintendo64 | validated | 2012-10-03 4:29am | now +2 day  | now +3 day |
+      | Event pagination 8 | Nintendo64 | validated | 2011-10-02 4:29am | now +1 day  | now +2 day |
+      | Event pagination 9 | Nintendo64 | validated | 2010-10-01 4:29am | now         | now +1 day |
+    And news content:
+      | title             | collection | state     |
+      | News pagination 1 | Nintendo64 | validated |
+      | News pagination 2 | Nintendo64 | validated |
+      | News pagination 3 | Nintendo64 | validated |
+      | News pagination 4 | Nintendo64 | validated |
+      | News pagination 5 | Nintendo64 | validated |
+      | News pagination 6 | Nintendo64 | validated |
+      | News pagination 7 | Nintendo64 | validated |
+      | News pagination 8 | Nintendo64 | validated |
+      | News pagination 9 | Nintendo64 | validated |
+      | News pagination 10 | Nintendo64 | validated |
+      | News pagination 11 | Nintendo64 | validated |
+      | News pagination 12 | Nintendo64 | validated |
+      | News pagination 13 | Nintendo64 | validated |
+      | News pagination 14 | Nintendo64 | validated |
+      | News pagination 15 | Nintendo64 | validated |
+      | News pagination 16 | Nintendo64 | validated |
+      | News pagination 17 | Nintendo64 | validated |
+      | News pagination 18 | Nintendo64 | validated |
+      | News pagination 19 | Nintendo64 | validated |
+      | News pagination 20 | Nintendo64 | validated |
+      | News pagination 21 | Nintendo64 | validated |
+      | News pagination 22 | Nintendo64 | validated |
+      | News pagination 23 | Nintendo64 | validated |
+
+    And custom_page content:
+      | title          | collection | state     |
+      | Pagination bug | Nintendo64 | published |
+
+    Given I am logged in as a moderator
+    And I go to the edit form of the "Pagination bug" "custom page"
+
+     # Paragraph #1.
+    Given I press "List additional actions"
+    Then I click "Add Content listing" in the "Custom page body" paragraphs field
+    And I fill in the 1st "Query presets" with "entity_bundle|news" in the "Custom page body" field
+    And I fill in the 1st "Limit" with "2" in the "Custom page body" field
+
+    # Paragraph #2.
+    Then I press "List additional actions"
+    Then I click "Add Content listing" in the "Custom page body" paragraphs field
+    And I fill in the 2nd "Query presets" with "entity_bundle|event" in the "Custom page body" field
+    And I fill in the 2nd "Limit" with "2" in the "Custom page body" field
+    Then I press "Update"
+    And I should see the heading "Pagination bug"
+    Then I should see the tiles in the correct order:
+      | News pagination 1   |
+      | News pagination 2   |
+      | 30 year anniversary |
+      | Event pagination 1  |
+
+    When I click "Go to page 2"
+    Then I should see the tiles in the correct order:
+      | News pagination 3   |
+      | News pagination 4   |
+      | 30 year anniversary |
+      | Event pagination 1  |
+
+    When I click "Last page"
+    Then I should see the tiles in the correct order:
+      | News pagination 23                    |
+      | Rare Nintendo64 disk drive discovered |
+      | 30 year anniversary                   |
+      | Event pagination 1                    |
+
+    # Check second paragraph pagination.
+    When I click "Go to page 2"
+    Then I should see the tiles in the correct order:
+      | News pagination 23                    |
+      | Rare Nintendo64 disk drive discovered |
+      | Event pagination 2                    |
+      | Event pagination 3                    |

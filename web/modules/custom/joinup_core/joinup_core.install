@@ -97,7 +97,7 @@ function joinup_core_requirements($phase): array {
 /**
  * Update length and set back primary key in search_api_item.
  */
-function joinup_core_update_109500() {
+function joinup_core_update_109500(): void {
   $schema = Database::getConnection()->schema();
 
   $schema->changeField('search_api_item', 'item_id', 'item_id', [
@@ -109,5 +109,23 @@ function joinup_core_update_109500() {
 
   if (!$schema->indexExists('search_api_item', 'PRIMARY')) {
     $schema->addPrimaryKey('search_api_item', ['index_id', 'item_id']);
+  }
+}
+
+/**
+ * Remove all site alert entities.
+ */
+function joinup_core_update_109501(): void {
+  $ids = \Drupal::entityQuery('site_alert')
+    ->accessCheck(FALSE)
+    ->execute();
+  if (empty($ids)) {
+    return;
+  }
+
+  $items = \Drupal::entityTypeManager()->getStorage('site_alert')
+    ->loadMultiple($ids);
+  foreach ($items as $item) {
+    $item->delete();
   }
 }
