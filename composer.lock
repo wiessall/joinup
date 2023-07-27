@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "b48341d4a2253a51503c5e015d99125e",
+    "content-hash": "de1f79197f69cd05bb1d4addbb9d9311",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -6891,6 +6891,57 @@
             }
         },
         {
+            "name": "drupal/sitewide_alert",
+            "version": "2.1.1",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/sitewide_alert.git",
+                "reference": "2.1.1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/sitewide_alert-2.1.1.zip",
+                "reference": "2.1.1",
+                "shasum": "f701fb86c702cb2c64fb39744b3e8bb64dd45018"
+            },
+            "require": {
+                "drupal/core": "^9.2 || ^10",
+                "php": ">=7.4"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "2.1.1",
+                    "datestamp": "1686841073",
+                    "security-coverage": {
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "Chris Snyder",
+                    "homepage": "https://www.drupal.org/user/1988434",
+                    "email": "chris@chrissnyder.org",
+                    "role": "Maintainer"
+                }
+            ],
+            "description": "Provides ability to display an alert message at the top of all pages.",
+            "homepage": "https://www.drupal.org/project/sitewide_alert",
+            "keywords": [
+                "Drupal"
+            ],
+            "support": {
+                "source": "http://cgit.drupalcode.org/sitewide_alert",
+                "issues": "https://www.drupal.org/project/issues/sitewide_alert"
+            }
+        },
+        {
             "name": "drupal/smart_trim",
             "version": "1.3.0",
             "source": {
@@ -6997,28 +7048,28 @@
         },
         {
             "name": "drupal/sparql_entity_storage",
-            "version": "2.0.0-alpha13",
+            "version": "2.0.0-alpha14",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/sparql_entity_storage.git",
-                "reference": "2.0.0-alpha13"
+                "reference": "2.0.0-alpha14"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/sparql_entity_storage-2.0.0-alpha13.zip",
-                "reference": "2.0.0-alpha13",
-                "shasum": "e6e6e52aeb5c01e8e4bd07630ea6985085d69563"
+                "url": "https://ftp.drupal.org/files/projects/sparql_entity_storage-2.0.0-alpha14.zip",
+                "reference": "2.0.0-alpha14",
+                "shasum": "dc16826b6e5ce5a893983005b83033ceb9ff9ea1"
             },
             "require": {
                 "drupal/core": "^9.3 || ^10",
                 "ml/json-ld": "^1.0",
-                "sweetrdf/easyrdf": "^1.8"
+                "sweetrdf/easyrdf": "^1.9"
             },
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "2.0.0-alpha13",
-                    "datestamp": "1679560412",
+                    "version": "2.0.0-alpha14",
+                    "datestamp": "1690400095",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "Project has not opted into security advisory coverage!"
@@ -11770,21 +11821,21 @@
         },
         {
             "name": "sweetrdf/rdf-helpers",
-            "version": "1.1.0",
+            "version": "1.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sweetrdf/rdfHelpers.git",
-                "reference": "4e5f0249fce3704ea7f25884cea6b3306b6f3921"
+                "reference": "b1d1b6084a10815bfdbc7afecaa6d5c2d0f0b4f7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sweetrdf/rdfHelpers/zipball/4e5f0249fce3704ea7f25884cea6b3306b6f3921",
-                "reference": "4e5f0249fce3704ea7f25884cea6b3306b6f3921",
+                "url": "https://api.github.com/repos/sweetrdf/rdfHelpers/zipball/b1d1b6084a10815bfdbc7afecaa6d5c2d0f0b4f7",
+                "reference": "b1d1b6084a10815bfdbc7afecaa6d5c2d0f0b4f7",
                 "shasum": ""
             },
             "require": {
                 "php": ">=8.0",
-                "sweetrdf/rdf-interface": "^1.1.0-RC4",
+                "sweetrdf/rdf-interface": "^1 | ^2.0.0-RC1",
                 "zozlak/rdf-constants": "^1.1"
             },
             "require-dev": {
@@ -11814,27 +11865,27 @@
             "homepage": "https://github.com/sweetrdf/rdfHelpers",
             "support": {
                 "issues": "https://github.com/sweetrdf/rdfHelpers/issues",
-                "source": "https://github.com/sweetrdf/rdfHelpers/tree/1.1.0"
+                "source": "https://github.com/sweetrdf/rdfHelpers/tree/1.0.2"
             },
-            "time": "2023-05-11T17:37:49+00:00"
+            "time": "2023-07-26T13:41:01+00:00"
         },
         {
             "name": "sweetrdf/rdf-interface",
-            "version": "1.1.0-RC4",
+            "version": "1.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sweetrdf/rdfInterface.git",
-                "reference": "8fcef9615a3a2146cee77f680ccb96e423154aaa"
+                "reference": "b0c930b7bd7a80e63f77510d0dcb261aead4f0a3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sweetrdf/rdfInterface/zipball/8fcef9615a3a2146cee77f680ccb96e423154aaa",
-                "reference": "8fcef9615a3a2146cee77f680ccb96e423154aaa",
+                "url": "https://api.github.com/repos/sweetrdf/rdfInterface/zipball/b0c930b7bd7a80e63f77510d0dcb261aead4f0a3",
+                "reference": "b0c930b7bd7a80e63f77510d0dcb261aead4f0a3",
                 "shasum": ""
             },
             "require": {
                 "php": ">=8.0",
-                "psr/http-message": "^1.0",
+                "psr/http-message": "^1.0 || ^2.0",
                 "zozlak/rdf-constants": "*"
             },
             "require-dev": {
@@ -11862,9 +11913,9 @@
             "homepage": "https://github.com/sweetrdf/rdfInterface",
             "support": {
                 "issues": "https://github.com/sweetrdf/rdfInterface/issues",
-                "source": "https://github.com/sweetrdf/rdfInterface/tree/1.1.0-RC4"
+                "source": "https://github.com/sweetrdf/rdfInterface/tree/1.0.1"
             },
-            "time": "2023-01-05T07:44:34+00:00"
+            "time": "2023-07-21T08:26:06+00:00"
         },
         {
             "name": "swiftmailer/swiftmailer",

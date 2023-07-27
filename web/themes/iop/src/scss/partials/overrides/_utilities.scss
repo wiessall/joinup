@@ -15,6 +15,14 @@ $utilities: map-merge(
     "border-width": null,
     "viewport-width": null,
     "min-viewport-width": null,
+    "height": (
+      responsive: true,
+      property: height,
+      class: h,
+      values: (
+        0: 0,
+      )
+    ),
     "max-height": null,
     "viewport-height": null,
     "min-viewport-height": null,

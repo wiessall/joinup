@@ -1,0 +1,20 @@
+uuid: 56b654b3-a72d-471d-87b2-daa5c2d09a73
+langcode: en
+status: true
+dependencies:
+  module:
+    - sitewide_alert_block
+  theme:
+    - iop
+id: iop_site_wide_alerts
+theme: iop
+region: messages
+weight: -20
+provider: null
+plugin: sitewide_alert_block
+settings:
+  id: sitewide_alert_block
+  label: 'Site wide alerts'
+  label_display: '0'
+  provider: sitewide_alert_block
+visibility: {  }
