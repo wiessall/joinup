@@ -1,0 +1,15 @@
+field.field.*.*.*.third_party.eu_oss_catalogue:
+  type: mapping
+  label: EU OSS Catalogue 3rd-party settings
+  mapping:
+    publiccode_yml:
+      type: mapping
+      label: publiccode.yml info
+      mapping:
+        resolver:
+          type: string
+          nullable: true
+          label: The resolver plugin ID.
+        path:
+          type: string
+          label: Path to the publiccode.yml value

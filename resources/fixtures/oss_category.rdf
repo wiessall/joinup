@@ -1,0 +1,513 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+         xmlns:skos="http://www.w3.org/2004/02/skos/core#">
+
+  <skos:ConceptScheme rdf:about="http://joinup.eu/eu-oss/rdf-type/category">
+  </skos:ConceptScheme>
+
+  <skos:Concept rdf:about="http://joinup.eu/eu-oss/term/category/accounting">
+    <skos:prefLabel xml:lang="en">accounting</skos:prefLabel>
+    <skos:inScheme rdf:resource="http://joinup.eu/eu-oss/rdf-type/category"/>
+  </skos:Concept>
+
+  <skos:Concept rdf:about="http://joinup.eu/eu-oss/term/category/agile-project-management">
+    <skos:prefLabel xml:lang="en">agile-project-management</skos:prefLabel>
+    <skos:inScheme rdf:resource="http://joinup.eu/eu-oss/rdf-type/category"/>
+  </skos:Concept>
+
+  <skos:Concept rdf:about="http://joinup.eu/eu-oss/term/category/applicant-tracking">
+    <skos:prefLabel xml:lang="en">applicant-tracking</skos:prefLabel>
+    <skos:inScheme rdf:resource="http://joinup.eu/eu-oss/rdf-type/category"/>
+  </skos:Concept>
+
+  <skos:Concept rdf:about="http://joinup.eu/eu-oss/term/category/application-development">
+    <skos:prefLabel xml:lang="en">application-development</skos:prefLabel>
+    <skos:inScheme rdf:resource="http://joinup.eu/eu-oss/rdf-type/category"/>
+  </skos:Concept>
+
+  <skos:Concept rdf:about="http://joinup.eu/eu-oss/term/category/appointment-scheduling">
+    <skos:prefLabel xml:lang="en">appointment-scheduling</skos:prefLabel>
+    <skos:inScheme rdf:resource="http://joinup.eu/eu-oss/rdf-type/category"/>
+  </skos:Concept>
+
+  <skos:Concept rdf:about="http://joinup.eu/eu-oss/term/category/backup">
+    <skos:prefLabel xml:lang="en">backup</skos:prefLabel>
+    <skos:inScheme rdf:resource="http://joinup.eu/eu-oss/rdf-type/category"/>
+  </skos:Concept>
+
+  <skos:Concept rdf:about="http://joinup.eu/eu-oss/term/category/billing-and-invoicing">
+    <skos:prefLabel xml:lang="en">billing-and-invoicing</skos:prefLabel>
+    <skos:inScheme rdf:resource="http://joinup.eu/eu-oss/rdf-type/category"/>
+  </skos:Concept>
+
+  <skos:Concept rdf:about="http://joinup.eu/eu-oss/term/category/blog">
+    <skos:prefLabel xml:lang="en">blog</skos:prefLabel>
+    <skos:inScheme rdf:resource="http://joinup.eu/eu-oss/rdf-type/category"/>
+  </skos:Concept>
+
+  <skos:Concept rdf:about="http://joinup.eu/eu-oss/term/category/budgeting">
+    <skos:prefLabel xml:lang="en">budgeting</skos:prefLabel>
+    <skos:inScheme rdf:resource="http://joinup.eu/eu-oss/rdf-type/category"/>
+  </skos:Concept>
+
+  <skos:Concept rdf:about="http://joinup.eu/eu-oss/term/category/business-intelligence">
+    <skos:prefLabel xml:lang="en">business-intelligence</skos:prefLabel>
+    <skos:inScheme rdf:resource="http://joinup.eu/eu-oss/rdf-type/category"/>
+  </skos:Concept>
+
+  <skos:Concept rdf:about="http://joinup.eu/eu-oss/term/category/business-process-management">
+    <skos:prefLabel xml:lang="en">business-process-management</skos:prefLabel>
+    <skos:inScheme rdf:resource="http://joinup.eu/eu-oss/rdf-type/category"/>
+  </skos:Concept>
+
+  <skos:Concept rdf:about="http://joinup.eu/eu-oss/term/category/cad">
+    <skos:prefLabel xml:lang="en">cad</skos:prefLabel>
+    <skos:inScheme rdf:resource="http://joinup.eu/eu-oss/rdf-type/category"/>
+  </skos:Concept>
+
+  <skos:Concept rdf:about="http://joinup.eu/eu-oss/term/category/call-center-management">
+    <skos:prefLabel xml:lang="en">call-center-management</skos:prefLabel>
+    <skos:inScheme rdf:resource="http://joinup.eu/eu-oss/rdf-type/category"/>
+  </skos:Concept>
+
+  <skos:Concept rdf:about="http://joinup.eu/eu-oss/term/category/cloud-management">
+    <skos:prefLabel xml:lang="en">cloud-management</skos:prefLabel>
+    <skos:inScheme rdf:resource="http://joinup.eu/eu-oss/rdf-type/category"/>
+  </skos:Concept>
+
+  <skos:Concept rdf:about="http://joinup.eu/eu-oss/term/category/collaboration">
+    <skos:prefLabel xml:lang="en">collaboration</skos:prefLabel>
+    <skos:inScheme rdf:resource="http://joinup.eu/eu-oss/rdf-type/category"/>
+  </skos:Concept>
+
+  <skos:Concept rdf:about="http://joinup.eu/eu-oss/term/category/communications">
+    <skos:prefLabel xml:lang="en">communications</skos:prefLabel>
+    <skos:inScheme rdf:resource="http://joinup.eu/eu-oss/rdf-type/category"/>
+  </skos:Concept>
+
+  <skos:Concept rdf:about="http://joinup.eu/eu-oss/term/category/compliance-management">
+    <skos:prefLabel xml:lang="en">compliance-management</skos:prefLabel>
+    <skos:inScheme rdf:resource="http://joinup.eu/eu-oss/rdf-type/category"/>
+  </skos:Concept>
+
+  <skos:Concept rdf:about="http://joinup.eu/eu-oss/term/category/contact-management">
+    <skos:prefLabel xml:lang="en">contact-management</skos:prefLabel>
+    <skos:inScheme rdf:resource="http://joinup.eu/eu-oss/rdf-type/category"/>
+  </skos:Concept>
+
+  <skos:Concept rdf:about="http://joinup.eu/eu-oss/term/category/content-management">
+    <skos:prefLabel xml:lang="en">content-management</skos:prefLabel>
+    <skos:inScheme rdf:resource="http://joinup.eu/eu-oss/rdf-type/category"/>
+  </skos:Concept>
+
+  <skos:Concept rdf:about="http://joinup.eu/eu-oss/term/category/crm">
+    <skos:prefLabel xml:lang="en">crm</skos:prefLabel>
+    <skos:inScheme rdf:resource="http://joinup.eu/eu-oss/rdf-type/category"/>
+  </skos:Concept>
+
+  <skos:Concept rdf:about="http://joinup.eu/eu-oss/term/category/customer-service-and-support">
+    <skos:prefLabel xml:lang="en">customer-service-and-support</skos:prefLabel>
+    <skos:inScheme rdf:resource="http://joinup.eu/eu-oss/rdf-type/category"/>
+  </skos:Concept>
+
+  <skos:Concept rdf:about="http://joinup.eu/eu-oss/term/category/data-analytics">
+    <skos:prefLabel xml:lang="en">data-analytics</skos:prefLabel>
+    <skos:inScheme rdf:resource="http://joinup.eu/eu-oss/rdf-type/category"/>
+  </skos:Concept>
+
+  <skos:Concept rdf:about="http://joinup.eu/eu-oss/term/category/data-collection">
+    <skos:prefLabel xml:lang="en">data-collection</skos:prefLabel>
+    <skos:inScheme rdf:resource="http://joinup.eu/eu-oss/rdf-type/category"/>
+  </skos:Concept>
+
+  <skos:Concept rdf:about="http://joinup.eu/eu-oss/term/category/data-visualization">
+    <skos:prefLabel xml:lang="en">data-visualization</skos:prefLabel>
+    <skos:inScheme rdf:resource="http://joinup.eu/eu-oss/rdf-type/category"/>
+  </skos:Concept>
+
+  <skos:Concept rdf:about="http://joinup.eu/eu-oss/term/category/digital-asset-management">
+    <skos:prefLabel xml:lang="en">digital-asset-management</skos:prefLabel>
+    <skos:inScheme rdf:resource="http://joinup.eu/eu-oss/rdf-type/category"/>
+  </skos:Concept>
+
+  <skos:Concept rdf:about="http://joinup.eu/eu-oss/term/category/digital-citizenship">
+    <skos:prefLabel xml:lang="en">digital-citizenship</skos:prefLabel>
+    <skos:inScheme rdf:resource="http://joinup.eu/eu-oss/rdf-type/category"/>
+  </skos:Concept>
+
+  <skos:Concept rdf:about="http://joinup.eu/eu-oss/term/category/document-management">
+    <skos:prefLabel xml:lang="en">document-management</skos:prefLabel>
+    <skos:inScheme rdf:resource="http://joinup.eu/eu-oss/rdf-type/category"/>
+  </skos:Concept>
+
+  <skos:Concept rdf:about="http://joinup.eu/eu-oss/term/category/donor-management">
+    <skos:prefLabel xml:lang="en">donor-management</skos:prefLabel>
+    <skos:inScheme rdf:resource="http://joinup.eu/eu-oss/rdf-type/category"/>
+  </skos:Concept>
+
+  <skos:Concept rdf:about="http://joinup.eu/eu-oss/term/category/e-commerce">
+    <skos:prefLabel xml:lang="en">e-commerce</skos:prefLabel>
+    <skos:inScheme rdf:resource="http://joinup.eu/eu-oss/rdf-type/category"/>
+  </skos:Concept>
+
+  <skos:Concept rdf:about="http://joinup.eu/eu-oss/term/category/e-signature">
+    <skos:prefLabel xml:lang="en">e-signature</skos:prefLabel>
+    <skos:inScheme rdf:resource="http://joinup.eu/eu-oss/rdf-type/category"/>
+  </skos:Concept>
+
+  <skos:Concept rdf:about="http://joinup.eu/eu-oss/term/category/educational-content">
+    <skos:prefLabel xml:lang="en">educational-content</skos:prefLabel>
+    <skos:inScheme rdf:resource="http://joinup.eu/eu-oss/rdf-type/category"/>
+  </skos:Concept>
+
+  <skos:Concept rdf:about="http://joinup.eu/eu-oss/term/category/email-management">
+    <skos:prefLabel xml:lang="en">email-management</skos:prefLabel>
+    <skos:inScheme rdf:resource="http://joinup.eu/eu-oss/rdf-type/category"/>
+  </skos:Concept>
+
+  <skos:Concept rdf:about="http://joinup.eu/eu-oss/term/category/email-marketing">
+    <skos:prefLabel xml:lang="en">email-marketing</skos:prefLabel>
+    <skos:inScheme rdf:resource="http://joinup.eu/eu-oss/rdf-type/category"/>
+  </skos:Concept>
+
+  <skos:Concept rdf:about="http://joinup.eu/eu-oss/term/category/employee-management">
+    <skos:prefLabel xml:lang="en">employee-management</skos:prefLabel>
+    <skos:inScheme rdf:resource="http://joinup.eu/eu-oss/rdf-type/category"/>
+  </skos:Concept>
+
+  <skos:Concept rdf:about="http://joinup.eu/eu-oss/term/category/enterprise-project-management">
+    <skos:prefLabel xml:lang="en">enterprise-project-management</skos:prefLabel>
+    <skos:inScheme rdf:resource="http://joinup.eu/eu-oss/rdf-type/category"/>
+  </skos:Concept>
+
+  <skos:Concept rdf:about="http://joinup.eu/eu-oss/term/category/enterprise-social-networking">
+    <skos:prefLabel xml:lang="en">enterprise-social-networking</skos:prefLabel>
+    <skos:inScheme rdf:resource="http://joinup.eu/eu-oss/rdf-type/category"/>
+  </skos:Concept>
+
+  <skos:Concept rdf:about="http://joinup.eu/eu-oss/term/category/erp">
+    <skos:prefLabel xml:lang="en">erp</skos:prefLabel>
+    <skos:inScheme rdf:resource="http://joinup.eu/eu-oss/rdf-type/category"/>
+  </skos:Concept>
+
+  <skos:Concept rdf:about="http://joinup.eu/eu-oss/term/category/event-management">
+    <skos:prefLabel xml:lang="en">event-management</skos:prefLabel>
+    <skos:inScheme rdf:resource="http://joinup.eu/eu-oss/rdf-type/category"/>
+  </skos:Concept>
+
+  <skos:Concept rdf:about="http://joinup.eu/eu-oss/term/category/facility-management">
+    <skos:prefLabel xml:lang="en">facility-management</skos:prefLabel>
+    <skos:inScheme rdf:resource="http://joinup.eu/eu-oss/rdf-type/category"/>
+  </skos:Concept>
+
+  <skos:Concept rdf:about="http://joinup.eu/eu-oss/term/category/feedback-and-reviews-management">
+    <skos:prefLabel xml:lang="en">feedback-and-reviews-management</skos:prefLabel>
+    <skos:inScheme rdf:resource="http://joinup.eu/eu-oss/rdf-type/category"/>
+  </skos:Concept>
+
+  <skos:Concept rdf:about="http://joinup.eu/eu-oss/term/category/financial-reporting">
+    <skos:prefLabel xml:lang="en">financial-reporting</skos:prefLabel>
+    <skos:inScheme rdf:resource="http://joinup.eu/eu-oss/rdf-type/category"/>
+  </skos:Concept>
+
+  <skos:Concept rdf:about="http://joinup.eu/eu-oss/term/category/fleet-management">
+    <skos:prefLabel xml:lang="en">fleet-management</skos:prefLabel>
+    <skos:inScheme rdf:resource="http://joinup.eu/eu-oss/rdf-type/category"/>
+  </skos:Concept>
+
+  <skos:Concept rdf:about="http://joinup.eu/eu-oss/term/category/fundraising">
+    <skos:prefLabel xml:lang="en">fundraising</skos:prefLabel>
+    <skos:inScheme rdf:resource="http://joinup.eu/eu-oss/rdf-type/category"/>
+  </skos:Concept>
+
+  <skos:Concept rdf:about="http://joinup.eu/eu-oss/term/category/gamification">
+    <skos:prefLabel xml:lang="en">gamification</skos:prefLabel>
+    <skos:inScheme rdf:resource="http://joinup.eu/eu-oss/rdf-type/category"/>
+  </skos:Concept>
+
+  <skos:Concept rdf:about="http://joinup.eu/eu-oss/term/category/geographic-information-systems">
+    <skos:prefLabel xml:lang="en">geographic-information-systems</skos:prefLabel>
+    <skos:inScheme rdf:resource="http://joinup.eu/eu-oss/rdf-type/category"/>
+  </skos:Concept>
+
+  <skos:Concept rdf:about="http://joinup.eu/eu-oss/term/category/grant-management">
+    <skos:prefLabel xml:lang="en">grant-management</skos:prefLabel>
+    <skos:inScheme rdf:resource="http://joinup.eu/eu-oss/rdf-type/category"/>
+  </skos:Concept>
+
+  <skos:Concept rdf:about="http://joinup.eu/eu-oss/term/category/graphic-design">
+    <skos:prefLabel xml:lang="en">graphic-design</skos:prefLabel>
+    <skos:inScheme rdf:resource="http://joinup.eu/eu-oss/rdf-type/category"/>
+  </skos:Concept>
+
+  <skos:Concept rdf:about="http://joinup.eu/eu-oss/term/category/help-desk">
+    <skos:prefLabel xml:lang="en">help-desk</skos:prefLabel>
+    <skos:inScheme rdf:resource="http://joinup.eu/eu-oss/rdf-type/category"/>
+  </skos:Concept>
+
+  <skos:Concept rdf:about="http://joinup.eu/eu-oss/term/category/hr">
+    <skos:prefLabel xml:lang="en">hr</skos:prefLabel>
+    <skos:inScheme rdf:resource="http://joinup.eu/eu-oss/rdf-type/category"/>
+  </skos:Concept>
+
+  <skos:Concept rdf:about="http://joinup.eu/eu-oss/term/category/ide">
+    <skos:prefLabel xml:lang="en">ide</skos:prefLabel>
+    <skos:inScheme rdf:resource="http://joinup.eu/eu-oss/rdf-type/category"/>
+  </skos:Concept>
+
+  <skos:Concept rdf:about="http://joinup.eu/eu-oss/term/category/identity-management">
+    <skos:prefLabel xml:lang="en">identity-management</skos:prefLabel>
+    <skos:inScheme rdf:resource="http://joinup.eu/eu-oss/rdf-type/category"/>
+  </skos:Concept>
+
+  <skos:Concept rdf:about="http://joinup.eu/eu-oss/term/category/instant-messaging">
+    <skos:prefLabel xml:lang="en">instant-messaging</skos:prefLabel>
+    <skos:inScheme rdf:resource="http://joinup.eu/eu-oss/rdf-type/category"/>
+  </skos:Concept>
+
+  <skos:Concept rdf:about="http://joinup.eu/eu-oss/term/category/inventory-management">
+    <skos:prefLabel xml:lang="en">inventory-management</skos:prefLabel>
+    <skos:inScheme rdf:resource="http://joinup.eu/eu-oss/rdf-type/category"/>
+  </skos:Concept>
+
+  <skos:Concept rdf:about="http://joinup.eu/eu-oss/term/category/it-asset-management">
+    <skos:prefLabel xml:lang="en">it-asset-management</skos:prefLabel>
+    <skos:inScheme rdf:resource="http://joinup.eu/eu-oss/rdf-type/category"/>
+  </skos:Concept>
+
+  <skos:Concept rdf:about="http://joinup.eu/eu-oss/term/category/it-development">
+    <skos:prefLabel xml:lang="en">it-development</skos:prefLabel>
+    <skos:inScheme rdf:resource="http://joinup.eu/eu-oss/rdf-type/category"/>
+  </skos:Concept>
+
+  <skos:Concept rdf:about="http://joinup.eu/eu-oss/term/category/it-management">
+    <skos:prefLabel xml:lang="en">it-management</skos:prefLabel>
+    <skos:inScheme rdf:resource="http://joinup.eu/eu-oss/rdf-type/category"/>
+  </skos:Concept>
+
+  <skos:Concept rdf:about="http://joinup.eu/eu-oss/term/category/it-security">
+    <skos:prefLabel xml:lang="en">it-security</skos:prefLabel>
+    <skos:inScheme rdf:resource="http://joinup.eu/eu-oss/rdf-type/category"/>
+  </skos:Concept>
+
+  <skos:Concept rdf:about="http://joinup.eu/eu-oss/term/category/it-service-management">
+    <skos:prefLabel xml:lang="en">it-service-management</skos:prefLabel>
+    <skos:inScheme rdf:resource="http://joinup.eu/eu-oss/rdf-type/category"/>
+  </skos:Concept>
+
+  <skos:Concept rdf:about="http://joinup.eu/eu-oss/term/category/knowledge-management">
+    <skos:prefLabel xml:lang="en">knowledge-management</skos:prefLabel>
+    <skos:inScheme rdf:resource="http://joinup.eu/eu-oss/rdf-type/category"/>
+  </skos:Concept>
+
+  <skos:Concept rdf:about="http://joinup.eu/eu-oss/term/category/learning-management-system">
+    <skos:prefLabel xml:lang="en">learning-management-system</skos:prefLabel>
+    <skos:inScheme rdf:resource="http://joinup.eu/eu-oss/rdf-type/category"/>
+  </skos:Concept>
+
+  <skos:Concept rdf:about="http://joinup.eu/eu-oss/term/category/marketing">
+    <skos:prefLabel xml:lang="en">marketing</skos:prefLabel>
+    <skos:inScheme rdf:resource="http://joinup.eu/eu-oss/rdf-type/category"/>
+  </skos:Concept>
+
+  <skos:Concept rdf:about="http://joinup.eu/eu-oss/term/category/mind-mapping">
+    <skos:prefLabel xml:lang="en">mind-mapping</skos:prefLabel>
+    <skos:inScheme rdf:resource="http://joinup.eu/eu-oss/rdf-type/category"/>
+  </skos:Concept>
+
+  <skos:Concept rdf:about="http://joinup.eu/eu-oss/term/category/mobile-marketing">
+    <skos:prefLabel xml:lang="en">mobile-marketing</skos:prefLabel>
+    <skos:inScheme rdf:resource="http://joinup.eu/eu-oss/rdf-type/category"/>
+  </skos:Concept>
+
+  <skos:Concept rdf:about="http://joinup.eu/eu-oss/term/category/mobile-payment">
+    <skos:prefLabel xml:lang="en">mobile-payment</skos:prefLabel>
+    <skos:inScheme rdf:resource="http://joinup.eu/eu-oss/rdf-type/category"/>
+  </skos:Concept>
+
+  <skos:Concept rdf:about="http://joinup.eu/eu-oss/term/category/network-management">
+    <skos:prefLabel xml:lang="en">network-management</skos:prefLabel>
+    <skos:inScheme rdf:resource="http://joinup.eu/eu-oss/rdf-type/category"/>
+  </skos:Concept>
+
+  <skos:Concept rdf:about="http://joinup.eu/eu-oss/term/category/office">
+    <skos:prefLabel xml:lang="en">office</skos:prefLabel>
+    <skos:inScheme rdf:resource="http://joinup.eu/eu-oss/rdf-type/category"/>
+  </skos:Concept>
+
+  <skos:Concept rdf:about="http://joinup.eu/eu-oss/term/category/online-booking">
+    <skos:prefLabel xml:lang="en">online-booking</skos:prefLabel>
+    <skos:inScheme rdf:resource="http://joinup.eu/eu-oss/rdf-type/category"/>
+  </skos:Concept>
+
+  <skos:Concept rdf:about="http://joinup.eu/eu-oss/term/category/online-community">
+    <skos:prefLabel xml:lang="en">online-community</skos:prefLabel>
+    <skos:inScheme rdf:resource="http://joinup.eu/eu-oss/rdf-type/category"/>
+  </skos:Concept>
+
+  <skos:Concept rdf:about="http://joinup.eu/eu-oss/term/category/payment-gateway">
+    <skos:prefLabel xml:lang="en">payment-gateway</skos:prefLabel>
+    <skos:inScheme rdf:resource="http://joinup.eu/eu-oss/rdf-type/category"/>
+  </skos:Concept>
+
+  <skos:Concept rdf:about="http://joinup.eu/eu-oss/term/category/payroll">
+    <skos:prefLabel xml:lang="en">payroll</skos:prefLabel>
+    <skos:inScheme rdf:resource="http://joinup.eu/eu-oss/rdf-type/category"/>
+  </skos:Concept>
+
+  <skos:Concept rdf:about="http://joinup.eu/eu-oss/term/category/predictive-analysis">
+    <skos:prefLabel xml:lang="en">predictive-analysis</skos:prefLabel>
+    <skos:inScheme rdf:resource="http://joinup.eu/eu-oss/rdf-type/category"/>
+  </skos:Concept>
+
+  <skos:Concept rdf:about="http://joinup.eu/eu-oss/term/category/procurement">
+    <skos:prefLabel xml:lang="en">procurement</skos:prefLabel>
+    <skos:inScheme rdf:resource="http://joinup.eu/eu-oss/rdf-type/category"/>
+  </skos:Concept>
+
+  <skos:Concept rdf:about="http://joinup.eu/eu-oss/term/category/productivity-suite">
+    <skos:prefLabel xml:lang="en">productivity-suite</skos:prefLabel>
+    <skos:inScheme rdf:resource="http://joinup.eu/eu-oss/rdf-type/category"/>
+  </skos:Concept>
+
+  <skos:Concept rdf:about="http://joinup.eu/eu-oss/term/category/project-collaboration">
+    <skos:prefLabel xml:lang="en">project-collaboration</skos:prefLabel>
+    <skos:inScheme rdf:resource="http://joinup.eu/eu-oss/rdf-type/category"/>
+  </skos:Concept>
+
+  <skos:Concept rdf:about="http://joinup.eu/eu-oss/term/category/project-management">
+    <skos:prefLabel xml:lang="en">project-management</skos:prefLabel>
+    <skos:inScheme rdf:resource="http://joinup.eu/eu-oss/rdf-type/category"/>
+  </skos:Concept>
+
+  <skos:Concept rdf:about="http://joinup.eu/eu-oss/term/category/property-management">
+    <skos:prefLabel xml:lang="en">property-management</skos:prefLabel>
+    <skos:inScheme rdf:resource="http://joinup.eu/eu-oss/rdf-type/category"/>
+  </skos:Concept>
+
+  <skos:Concept rdf:about="http://joinup.eu/eu-oss/term/category/real-estate-management">
+    <skos:prefLabel xml:lang="en">real-estate-management</skos:prefLabel>
+    <skos:inScheme rdf:resource="http://joinup.eu/eu-oss/rdf-type/category"/>
+  </skos:Concept>
+
+  <skos:Concept rdf:about="http://joinup.eu/eu-oss/term/category/remote-support">
+    <skos:prefLabel xml:lang="en">remote-support</skos:prefLabel>
+    <skos:inScheme rdf:resource="http://joinup.eu/eu-oss/rdf-type/category"/>
+  </skos:Concept>
+
+  <skos:Concept rdf:about="http://joinup.eu/eu-oss/term/category/resource-management">
+    <skos:prefLabel xml:lang="en">resource-management</skos:prefLabel>
+    <skos:inScheme rdf:resource="http://joinup.eu/eu-oss/rdf-type/category"/>
+  </skos:Concept>
+
+  <skos:Concept rdf:about="http://joinup.eu/eu-oss/term/category/sales-management">
+    <skos:prefLabel xml:lang="en">sales-management</skos:prefLabel>
+    <skos:inScheme rdf:resource="http://joinup.eu/eu-oss/rdf-type/category"/>
+  </skos:Concept>
+
+  <skos:Concept rdf:about="http://joinup.eu/eu-oss/term/category/seo">
+    <skos:prefLabel xml:lang="en">seo</skos:prefLabel>
+    <skos:inScheme rdf:resource="http://joinup.eu/eu-oss/rdf-type/category"/>
+  </skos:Concept>
+
+  <skos:Concept rdf:about="http://joinup.eu/eu-oss/term/category/service-desk">
+    <skos:prefLabel xml:lang="en">service-desk</skos:prefLabel>
+    <skos:inScheme rdf:resource="http://joinup.eu/eu-oss/rdf-type/category"/>
+  </skos:Concept>
+
+  <skos:Concept rdf:about="http://joinup.eu/eu-oss/term/category/social-media-management">
+    <skos:prefLabel xml:lang="en">social-media-management</skos:prefLabel>
+    <skos:inScheme rdf:resource="http://joinup.eu/eu-oss/rdf-type/category"/>
+  </skos:Concept>
+
+  <skos:Concept rdf:about="http://joinup.eu/eu-oss/term/category/survey">
+    <skos:prefLabel xml:lang="en">survey</skos:prefLabel>
+    <skos:inScheme rdf:resource="http://joinup.eu/eu-oss/rdf-type/category"/>
+  </skos:Concept>
+
+  <skos:Concept rdf:about="http://joinup.eu/eu-oss/term/category/talent-management">
+    <skos:prefLabel xml:lang="en">talent-management</skos:prefLabel>
+    <skos:inScheme rdf:resource="http://joinup.eu/eu-oss/rdf-type/category"/>
+  </skos:Concept>
+
+  <skos:Concept rdf:about="http://joinup.eu/eu-oss/term/category/task-management">
+    <skos:prefLabel xml:lang="en">task-management</skos:prefLabel>
+    <skos:inScheme rdf:resource="http://joinup.eu/eu-oss/rdf-type/category"/>
+  </skos:Concept>
+
+  <skos:Concept rdf:about="http://joinup.eu/eu-oss/term/category/taxes-management">
+    <skos:prefLabel xml:lang="en">taxes-management</skos:prefLabel>
+    <skos:inScheme rdf:resource="http://joinup.eu/eu-oss/rdf-type/category"/>
+  </skos:Concept>
+
+  <skos:Concept rdf:about="http://joinup.eu/eu-oss/term/category/test-management">
+    <skos:prefLabel xml:lang="en">test-management</skos:prefLabel>
+    <skos:inScheme rdf:resource="http://joinup.eu/eu-oss/rdf-type/category"/>
+  </skos:Concept>
+
+  <skos:Concept rdf:about="http://joinup.eu/eu-oss/term/category/time-management">
+    <skos:prefLabel xml:lang="en">time-management</skos:prefLabel>
+    <skos:inScheme rdf:resource="http://joinup.eu/eu-oss/rdf-type/category"/>
+  </skos:Concept>
+
+  <skos:Concept rdf:about="http://joinup.eu/eu-oss/term/category/time-tracking">
+    <skos:prefLabel xml:lang="en">time-tracking</skos:prefLabel>
+    <skos:inScheme rdf:resource="http://joinup.eu/eu-oss/rdf-type/category"/>
+  </skos:Concept>
+
+  <skos:Concept rdf:about="http://joinup.eu/eu-oss/term/category/translation">
+    <skos:prefLabel xml:lang="en">translation</skos:prefLabel>
+    <skos:inScheme rdf:resource="http://joinup.eu/eu-oss/rdf-type/category"/>
+  </skos:Concept>
+
+  <skos:Concept rdf:about="http://joinup.eu/eu-oss/term/category/video-conferencing">
+    <skos:prefLabel xml:lang="en">video-conferencing</skos:prefLabel>
+    <skos:inScheme rdf:resource="http://joinup.eu/eu-oss/rdf-type/category"/>
+  </skos:Concept>
+
+  <skos:Concept rdf:about="http://joinup.eu/eu-oss/term/category/video-editing">
+    <skos:prefLabel xml:lang="en">video-editing</skos:prefLabel>
+    <skos:inScheme rdf:resource="http://joinup.eu/eu-oss/rdf-type/category"/>
+  </skos:Concept>
+
+  <skos:Concept rdf:about="http://joinup.eu/eu-oss/term/category/visitor-management">
+    <skos:prefLabel xml:lang="en">visitor-management</skos:prefLabel>
+    <skos:inScheme rdf:resource="http://joinup.eu/eu-oss/rdf-type/category"/>
+  </skos:Concept>
+
+  <skos:Concept rdf:about="http://joinup.eu/eu-oss/term/category/voip">
+    <skos:prefLabel xml:lang="en">voip</skos:prefLabel>
+    <skos:inScheme rdf:resource="http://joinup.eu/eu-oss/rdf-type/category"/>
+  </skos:Concept>
+
+  <skos:Concept rdf:about="http://joinup.eu/eu-oss/term/category/warehouse-management">
+    <skos:prefLabel xml:lang="en">warehouse-management</skos:prefLabel>
+    <skos:inScheme rdf:resource="http://joinup.eu/eu-oss/rdf-type/category"/>
+  </skos:Concept>
+
+  <skos:Concept rdf:about="http://joinup.eu/eu-oss/term/category/web-collaboration">
+    <skos:prefLabel xml:lang="en">web-collaboration</skos:prefLabel>
+    <skos:inScheme rdf:resource="http://joinup.eu/eu-oss/rdf-type/category"/>
+  </skos:Concept>
+
+  <skos:Concept rdf:about="http://joinup.eu/eu-oss/term/category/web-conferencing">
+    <skos:prefLabel xml:lang="en">web-conferencing</skos:prefLabel>
+    <skos:inScheme rdf:resource="http://joinup.eu/eu-oss/rdf-type/category"/>
+  </skos:Concept>
+
+  <skos:Concept rdf:about="http://joinup.eu/eu-oss/term/category/website-builder">
+    <skos:prefLabel xml:lang="en">website-builder</skos:prefLabel>
+    <skos:inScheme rdf:resource="http://joinup.eu/eu-oss/rdf-type/category"/>
+  </skos:Concept>
+
+  <skos:Concept rdf:about="http://joinup.eu/eu-oss/term/category/whistleblowing">
+    <skos:prefLabel xml:lang="en">whistleblowing</skos:prefLabel>
+    <skos:inScheme rdf:resource="http://joinup.eu/eu-oss/rdf-type/category"/>
+  </skos:Concept>
+
+  <skos:Concept rdf:about="http://joinup.eu/eu-oss/term/category/workflow-management">
+    <skos:prefLabel xml:lang="en">workflow-management</skos:prefLabel>
+    <skos:inScheme rdf:resource="http://joinup.eu/eu-oss/rdf-type/category"/>
+  </skos:Concept>
+
+</rdf:RDF>

@@ -1,0 +1,7 @@
+langcode: en
+status: true
+dependencies: {  }
+name: 'OSS Platform'
+vid: oss_platform
+description: 'Opensource Software Solution Platform'
+weight: 0

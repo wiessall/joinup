@@ -1,0 +1,41 @@
+{
+    "name": "drupal/eu_oss_catalogue",
+    "description": "EU OSS Solutions Catalogue, with federated sources & repositories",
+    "type": "drupal-module",
+    "homepage": "https://www.drupal.org/sandbox/itamair/3372413",
+    "authors": [
+        {
+            "name": "Italo Mairo",
+            "homepage": "https://www.drupal.org/u/itamair",
+            "role": "Maintainer"
+        },
+        {
+            "name": "Claudiu Cristea",
+            "homepage": "https://www.drupal.org/u/claudiucristea",
+            "role": "Maintainer"
+        }
+    ],
+    "support": {
+        "source": "https://git.drupalcode.org/sandbox/itamair-3372413.git",
+        "merges_requests": "https://git.drupalcode.org/sandbox/itamair-3372413/-/merge_requests"
+    },
+    "license": "GPL-2.0+",
+    "minimum-stability": "dev",
+    "require": {
+        "spdx/license-list-data": "*"
+    },
+    "repositories": [
+        {
+            "type": "package",
+            "package": {
+                "name": "spdx/license-list-data",
+                "version": "main",
+                "source": {
+                    "url": "https://github.com/spdx/license-list-data",
+                    "type": "git",
+                    "reference": "main"
+                }
+            }
+        }
+    ]
+}

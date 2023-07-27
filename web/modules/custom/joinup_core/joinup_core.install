@@ -9,7 +9,9 @@ declare(strict_types = 1);
 
 use Drupal\Core\Database\Database;
 use Drupal\Core\Site\Settings;
+use Drupal\joinup_sparql\JoinupSparqlGraphStoreHelper;
 use Drupal\user\Entity\User;
+use EasyRdf\Graph;
 
 /**
  * Implements hook_requirements().
@@ -128,4 +130,14 @@ function joinup_core_update_109501(): void {
   foreach ($items as $item) {
     $item->delete();
   }
+}
+
+/**
+ * Import oss_category vocabulary.
+ */
+function joinup_core_update_109502(): void {
+  $graph = new Graph('http://oss_category');
+  $graph->parseFile(DRUPAL_ROOT . '/../resources/fixtures/oss_category.rdf');
+  $graph_store_helper = new JoinupSparqlGraphStoreHelper();
+  $graph_store_helper->createGraphStore()->insert($graph);
 }

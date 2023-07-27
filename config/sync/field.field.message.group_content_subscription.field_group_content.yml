@@ -307,4 +307,10 @@ settings:
   simple_sitemap:
     handler: 'default:simple_sitemap'
     handler_settings: {  }
+  migration_group:
+    handler: 'default:migration_group'
+    handler_settings: {  }
+  migration:
+    handler: 'default:migration'
+    handler_settings: {  }
 field_type: dynamic_entity_reference
