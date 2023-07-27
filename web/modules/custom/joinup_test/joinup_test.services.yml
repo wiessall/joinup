@@ -1,9 +1,4 @@
 services:
-  joinup_test.event_subscriber:
-    class: Drupal\joinup_test\EventSubscriber\JoinupTestSubscriber
-    arguments: ['@path.matcher', '@state', '@messenger']
-    tags:
-      - { name: event_subscriber }
   joinup_test.config_overrider:
     class: Drupal\joinup_test\Config\JoinupTestConfigOverrider
     arguments: ['@state', '@config.factory']

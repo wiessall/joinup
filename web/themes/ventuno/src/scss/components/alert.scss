@@ -3,6 +3,7 @@
 @import "@openeuropa/bcl-theme-default/src/scss/alert";
 
 .alert {
+  margin-top: $spacer;
   p:last-of-type {
     margin-bottom: 0;
   }
