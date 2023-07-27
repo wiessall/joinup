@@ -16,6 +16,8 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\custom_page\Entity\CustomPage;
 use Drupal\custom_page\Entity\CustomPageInterface;
+use Drupal\eu_oss_catalogue\Entity\OssContactInterface;
+use Drupal\eu_oss_catalogue\Entity\OssContractorInterface;
 use Drupal\eu_oss_catalogue\Entity\OssSolutionInterface;
 use Drupal\joinup_group\Exception\MissingGroupException;
 use Drupal\menu_link_content\MenuLinkContentInterface;
@@ -75,7 +77,11 @@ function custom_page_node_insert(EntityInterface $entity) {
   // ISAICP-7129, we have to bail out early if the $entity is not a custom page
   // node-type.
   // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7129
-  if ($entity instanceof OssSolutionInterface) {
+  if (
+    $entity instanceof OssSolutionInterface
+    || $entity instanceof OssContactInterface
+    || $entity instanceof OssContractorInterface
+  ) {
     return;
   }
 
