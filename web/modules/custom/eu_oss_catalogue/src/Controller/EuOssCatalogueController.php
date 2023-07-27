@@ -37,20 +37,20 @@ class EuOssCatalogueController extends ControllerBase {
    *
    * @return array
    *   The response as render array.
+   *
+   * @todo For now, this is only a placeholder controller. We, probably, need to
+   *   add provider operations, such as 'Fetch', allowing fetching and queueing
+   *   in batch operations. Other interactions to be decided. Also, we can add
+   *   statistics per-provider and totals.
+   * @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7947
    */
   public function collection(): array {
     $rows = [];
     foreach ($this->providerPluginManager->getDefinitions() as $pluginId => $definition) {
-      /** @var \Drupal\eu_oss_catalogue\EuOssCatalogueProviderInterface $provider */
-      $provider = $this->providerPluginManager->createInstance($pluginId);
       $row = [
         $pluginId,
         $definition['label'],
-        [
-          'data' => [
-            '#markup' => '<code><pre>' . $provider->getDrushCommandHelp() . '</pre></code>',
-          ],
-        ],
+        [],
       ];
       $rows[] = $row;
     }
@@ -59,7 +59,6 @@ class EuOssCatalogueController extends ControllerBase {
       '#header' => [
         $this->t('ID'),
         $this->t('Name'),
-        $this->t('CLI command'),
         $this->t('Operations'),
       ],
       '#rows' => $rows,
