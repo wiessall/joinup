@@ -26,6 +26,7 @@ Feature: Test SVG attachments.
     And I attach the file "simple.svg" to "Image"
     And I wait for AJAX to finish
     Then I should not see the error message "Invalid or unsafe SVG file."
+    And I select "Half width" from "Use image style"
     And I press "Save" in the "Modal buttons" region
     Then the modal should be closed
 

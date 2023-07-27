@@ -20,12 +20,12 @@
  * - dismissible: Boolean indicating if the alert is dismissible or not.
  */
 #}
+
 {{ attach_library('ventuno/alert') }}
-<div data-drupal-messages class="mt-4">
+
+<div data-drupal-messages class="mt-3">
   {% block messages %}
     {% for type, messages in message_list %}
-      {# To be potentially implemented with dismissible site alerts #}
-      {% set dismissible = false %}
       {% if type is same as 'status' %}
         {% set variant = 'success' %}
         {% set icon = 'info-circle-fill' %}
@@ -42,17 +42,13 @@
           'alert-' ~ variant,
           'd-flex',
           'align-items-center',
-          'text-dark',
-          dismissible ? 'alert-dismissible',
-          dismissible ? 'fade',
-          dismissible ? 'show',
         ]
       %}
       <div aria-label="{{ status_headings[type] }}"{{ attributes.addClass(classes)|without('role', 'aria-label') }} role="{{ type == 'error' ? 'alert' : 'contentinfo' }}">
-        <svg class="flex-shrink-0 me-3 mt-1 align-self-start text-{{ variant }} bi icon--s">
+        <svg class="flex-shrink-0 me-3 mt-1 align-self-start bi icon--s">
           <use xlink:href="{{ bcl_icon_path }}#{{ icon }}"></use>
         </svg>
-        <div class="alert-content flex-grow-1">
+        <div class="alert-content flex-grow-1 text-dark">
           {% if status_headings[type] %}
             <p class="visually-hidden">{{ status_headings[type] }}</p>
           {% endif %}
@@ -68,10 +64,6 @@
             {{ messages|first }}
           {% endif %}
         </div>
-        {% if dismissible %}
-          {{ attach_library('ventuno/close') }}
-          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        {% endif %}
       </div>
       {# Remove type specific classes. #}
       {% set attributes = attributes.removeClass(classes) %}
