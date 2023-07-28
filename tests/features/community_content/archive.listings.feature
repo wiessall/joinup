@@ -189,3 +189,31 @@ Feature: Archived content on content listings - groups and paragraphs.
     Then I should see the "Published news" tile
     But I should not see the "Archived news" tile
     And I should see the "collection content archived toggle" facet
+
+  @javascript
+  Scenario: "Show archived" facet on Discussions page content listing.
+    Given collections:
+      | title                      | description | topic             | owner      | contact information | state     |
+      | Some discussion collection | Test        | Supplier exchange | Some owner | Some contact        | validated |
+    And discussion content:
+      | title           | collection                 | state     |
+      | Rand discussion | Some discussion collection | validated |
+      | Pest discussion | Some discussion collection | archived  |
+      | Poll discussion | Some discussion collection | validated |
+      | Moon discussion | Some discussion collection | archived  |
+      | Ruin discussion | Some discussion collection | validated |
+
+    When I go to the homepage of the "Some discussion collection" collection
+    Then I should not see the text "Discussions" in the "Navigation menu"
+    And I should see the "Rand discussion" tile
+    And I should see the "Poll discussion" tile
+    And I should see the "Moon discussion" tile
+    And I should not see the "Pest discussion" tile
+    And I should not see the "Ruin discussion" tile
+
+    Then I check the "Show only Archived items" checkbox from the "Status" facet
+    And I should see the "Pest discussion" tile
+    And I should see the "Ruin discussion" tile
+    And I should not see the "Rand discussion" tile
+    And I should not see the "Poll discussion" tile
+    And I should not see the "Moon discussion" tile
