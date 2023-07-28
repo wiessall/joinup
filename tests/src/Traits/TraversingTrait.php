@@ -378,7 +378,6 @@ trait TraversingTrait {
       'Collection event date' => 'collection_event_type',
       'Content listing types' => 'content_listing_type',
       'Content types' => 'type',
-      'Discussion status' => 'entity_status',
       'EIF recommendations' => 'category',
       'Event date' => 'event_date',
       'My collections content' => 'collection_my_content',
