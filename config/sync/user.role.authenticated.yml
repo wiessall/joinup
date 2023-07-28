@@ -33,6 +33,7 @@ dependencies:
     - rdf_export
     - rdf_meta_entity
     - search_api_autocomplete
+    - sitewide_alert
     - state_machine_permissions
     - system
     - tour
@@ -212,5 +213,6 @@ permissions:
   - 'view paragraph content testimony'
   - 'view paragraph content text'
   - 'view paragraph content video'
+  - 'view published sitewide alert entities'
   - 'view rdf entity'
   - 'view topic meta-entity'

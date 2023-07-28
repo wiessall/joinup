@@ -1,0 +1,31 @@
+uuid: d787c98b-dd5c-4000-a9be-43ad52ccaaa0
+langcode: en
+status: true
+dependencies:
+  module:
+    - field_permissions
+    - options
+    - sitewide_alert
+third_party_settings:
+  field_permissions:
+    permission_type: public
+id: sitewide_alert.category
+field_name: category
+entity_type: sitewide_alert
+type: list_string
+settings:
+  allowed_values:
+    -
+      value: release
+      label: Release
+    -
+      value: other
+      label: Other
+  allowed_values_function: ''
+module: options
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false
