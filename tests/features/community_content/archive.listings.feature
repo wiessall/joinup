@@ -190,7 +190,6 @@ Feature: Archived content on content listings - groups and paragraphs.
     But I should not see the "Archived news" tile
     And I should see the "collection content archived toggle" facet
 
-  @javascript
   Scenario: "Show archived" facet on Discussions page content listing.
     Given collections:
       | title                      | description | topic             | owner      | contact information | state     |
