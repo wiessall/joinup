@@ -47,7 +47,7 @@ dependencies:
     - rdf_draft
     - rdf_entity
     - rdf_meta_entity
-    - site_alert
+    - sitewide_alert
     - solution
     - state_machine_permissions
     - tallinn
@@ -74,7 +74,7 @@ permissions:
   - 'access taxonomy overview'
   - 'access toolbar'
   - 'access uri converter'
-  - 'add site alerts'
+  - 'add sitewide alert entities'
   - 'administer collection ownership'
   - 'administer comments'
   - 'administer entity legal'
@@ -88,7 +88,7 @@ permissions:
   - 'administer outdated content threshold'
   - 'administer search fields'
   - 'administer shared entities'
-  - 'administer site alert'
+  - 'administer sitewide alert entities'
   - 'administer solution ownership'
   - 'administer support menu items'
   - 'administer tallinn settings'
@@ -129,6 +129,7 @@ permissions:
   - 'create rdf entity news'
   - 'create solution_banner media'
   - 'create solution_logo media'
+  - 'delete all sitewide alert revisions'
   - 'delete any collection_banner media'
   - 'delete any collection_logo media'
   - 'delete any discussion_logo media'
@@ -161,7 +162,7 @@ permissions:
   - 'delete paragraph content row'
   - 'delete paragraph content testimony'
   - 'delete paragraph content video'
-  - 'delete site alerts'
+  - 'delete sitewide alert entities'
   - 'download subscribers report'
   - 'edit any collection_banner media'
   - 'edit any collection_logo media'
@@ -182,6 +183,7 @@ permissions:
   - 'edit own field_is_eif_recommendation'
   - 'edit owner rdf entity'
   - 'edit short id after publication'
+  - 'edit sitewide alert entities'
   - 'edit terms in legal_type'
   - 'execute developers_italia pipeline'
   - 'execute dpsi pipeline'
@@ -202,6 +204,7 @@ permissions:
   - 'reset joinup_collection pipeline'
   - 'reset nio pipeline'
   - 'reset spain pipeline'
+  - 'revert all sitewide alert revisions'
   - 'transition any message announcement from rejected to sent using the announcement - announcement workflow'
   - 'transition any message announcement from sent to delivered using the announcement - announcement workflow'
   - 'transition any message announcement from sent to rejected using the announcement - announcement workflow'
@@ -402,10 +405,10 @@ permissions:
   - 'update paragraph content row'
   - 'update paragraph content testimony'
   - 'update paragraph content video'
-  - 'update site alerts'
   - 'update solution_settings meta-entity'
   - 'update spotlight entityqueue'
   - 'update topic meta-entity'
+  - 'view all sitewide alert revisions'
   - 'view any unpublished content'
   - 'view eif wrapper entity'
   - 'view field_is_eif_category'
@@ -416,3 +419,4 @@ permissions:
   - 'view rdf entity overview'
   - 'view rdf_entity draft graph'
   - 'view unpublished rdf entity'
+  - 'view unpublished sitewide alert entities'
