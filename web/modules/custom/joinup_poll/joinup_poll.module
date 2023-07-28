@@ -67,7 +67,7 @@ function joinup_poll_theme_suggestions_poll_meter(array $variables): array {
  * Implements hook_preprocess_HOOK().
  */
 function joinup_poll_preprocess_joinup_modal_anonymous__vote(&$variables): void {
-  $variables['title'] = t('Only logged in n users can vote.');
+  $variables['title'] = t('Only logged in users can vote.');
   $variables['description'] = t('Please log in if you already have an account or register a new account on EU Login to proceed voting!');
 }
 
