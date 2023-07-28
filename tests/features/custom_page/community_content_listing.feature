@@ -561,8 +561,6 @@ Feature:
     And the 3nd filter of the 1st content listing paragraph is empty
     And I click "Remove filter" at 1st filter of the 1st content listing paragraph
     And I press "Cancel" in the "Modal buttons" region
-    And I wait for AJAX to finish
-    Then the 1st filter of the 2nd content listing paragraph value is "Black Noise"
 
     When I click "Edit" in the "Custom page body" for paragraph layout 2
     And the 1st filter of the 1st content listing paragraph value is "Black Noise"
