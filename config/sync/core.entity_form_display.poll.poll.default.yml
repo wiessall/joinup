@@ -32,6 +32,13 @@ content:
       size: 60
       placeholder: ''
     third_party_settings: {  }
+  result_vote_allow:
+    type: boolean_checkbox
+    weight: 5
+    region: content
+    settings:
+      display_label: true
+    third_party_settings: {  }
   runtime:
     type: options_select
     weight: 2
@@ -47,12 +54,11 @@ content:
     third_party_settings: {  }
   status:
     type: boolean_checkbox
-    weight: 5
+    weight: 6
     region: content
     settings:
       display_label: true
     third_party_settings: {  }
 hidden:
   anonymous_vote_allow: true
-  result_vote_allow: true
   uid: true

@@ -88,6 +88,7 @@ permissions:
   - 'delete paragraph content testimony'
   - 'delete paragraph content text'
   - 'delete paragraph content video'
+  - 'edit any pools'
   - 'edit behavior plugin settings'
   - 'edit own comments'
   - 'edit own contact_information rdf entity'
