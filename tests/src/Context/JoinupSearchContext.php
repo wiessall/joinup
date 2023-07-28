@@ -31,6 +31,11 @@ class JoinupSearchContext extends RawDrupalContext {
   use UtilityTrait;
 
   /**
+   * locator to the search box dropdown element.
+   */
+  protected const SEARCH_BOX_DROPDOWN = '.joinup-navbar button#search-box-dropdown.dropdown-toggle';
+
+  /**
    * Navigates to the search page.
    *
    * @Given I am on the search( results)( page)
@@ -939,7 +944,7 @@ class JoinupSearchContext extends RawDrupalContext {
    * @Then I should see search bar icon in navbar
    */
   public function assertSearchIconNavbar(): void {
-    $getAllInput = $this->getSession()->getPage()->findAll('css', '.joinup-navbar button#search-box.dropdown-toggle');
+    $getAllInput = $this->getSession()->getPage()->findAll('css', self::SEARCH_BOX_DROPDOWN);
     if (count($getAllInput) < 1) {
       throw new \Exception('Search bar icon not found in navbar.');
     }
@@ -954,7 +959,7 @@ class JoinupSearchContext extends RawDrupalContext {
    * @Then I should not see search bar icon in navbar
    */
   public function failSearchIconNavbar(): void {
-    $getAllInput = $this->getSession()->getPage()->findAll('css', 'nav.joinup-navbar button#search-box.dropdown-toggle');
+    $getAllInput = $this->getSession()->getPage()->findAll('css', self::SEARCH_BOX_DROPDOWN);
 
     if (count($getAllInput) > 0) {
       throw new \Exception('Search bar icon found in navbar.');
