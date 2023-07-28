@@ -31,7 +31,7 @@ class JoinupSearchContext extends RawDrupalContext {
   use UtilityTrait;
 
   /**
-   * locator to the search box dropdown element.
+   * Path to the search box dropdown element.
    */
   protected const SEARCH_BOX_DROPDOWN = '.joinup-navbar button#search-box-dropdown.dropdown-toggle';
 
