@@ -204,16 +204,18 @@ Feature: Archived content on content listings - groups and paragraphs.
       | Ruin discussion | Some discussion collection | validated |
 
     When I go to the homepage of the "Some discussion collection" collection
-    Then I should not see the text "Discussions" in the "Navigation menu"
-    And I should see the "Rand discussion" tile
-    And I should see the "Poll discussion" tile
-    And I should see the "Moon discussion" tile
-    And I should not see the "Pest discussion" tile
-    And I should not see the "Ruin discussion" tile
+    And I should see the text "Discussions" in the "Navigation menu"
 
-    Then I check the "Show only Archived items" checkbox from the "Status" facet
-    And I should see the "Pest discussion" tile
+    When I click "Discussions"
+    Then I should see the "Rand discussion" tile
+    And I should see the "Poll discussion" tile
     And I should see the "Ruin discussion" tile
+    And I should not see the "Moon discussion" tile
+    And I should not see the "Pest discussion" tile
+
+    Then I check the "Show only Archived items" checkbox from the "Discussion status" facet
+    And I should see the "Pest discussion" tile
+    And I should see the "Moon discussion" tile
     And I should not see the "Rand discussion" tile
     And I should not see the "Poll discussion" tile
-    And I should not see the "Moon discussion" tile
+    And I should not see the "Ruin discussion" tile
