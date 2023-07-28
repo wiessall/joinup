@@ -23,7 +23,7 @@ Feature: Pool paragraph tests.
     Then I click "Game of Thrones"
     When a modal should open
     And I should see the text "You are not logged in" in the "Modal title"
-    And I should see the heading "Only logged in n users can vote." in the "Modal content"
+    And I should see the heading "Only logged in users can vote." in the "Modal content"
     And I should see the text "Please log in if you already have an account or register a new account on EU Login to proceed voting!" in the "Modal content"
 
     Then I click "Log in" in the "Modal content"
