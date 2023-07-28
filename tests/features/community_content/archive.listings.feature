@@ -213,7 +213,7 @@ Feature: Archived content on content listings - groups and paragraphs.
     And I should not see the "Moon discussion" tile
     And I should not see the "Pest discussion" tile
 
-    Then I check the "Show only Archived items" checkbox from the "Discussion status" facet
+    When I click "Show archived"
     And I should see the "Pest discussion" tile
     And I should see the "Moon discussion" tile
     And I should not see the "Rand discussion" tile
