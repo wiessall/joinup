@@ -24,6 +24,7 @@ function joinup_poll_preprocess_poll_vote(array &$variables): void {
  * Implements hook_form_alter().
  */
 function joinup_poll_form_alter(array &$form, FormStateInterface $form_state, string $form_id): void {
+  // Add auto submission on radio button too.
   if (str_contains($form_id, 'poll_view_form') && isset($form['actions']['vote'])) {
     $form['choice']['#ajax'] = $form['actions']['vote']['#ajax'];
     $form['choice']['#ajax']['trigger_as'] = ['name' => 'vote'];
