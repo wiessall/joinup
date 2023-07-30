@@ -39,6 +39,7 @@ use Joinup\Traits\DigitQaPipelineAwareTrait;
 use LoversOfBehat\TableExtension\Hook\Scope\AfterTableFetchScope;
 use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\ExpectationFailedException;
+use Symfony\Component\Process\Process;
 use WebDriver\Exception;
 use WebDriver\Key;
 
@@ -2499,6 +2500,79 @@ class FeatureContext extends RawDrupalContext {
     $column = $definition->getFieldStorageDefinition()->getMainPropertyName();
     $value = (string) $entity->get($field_name)->{$column};
     return (bool) preg_match($pattern, $value);
+  }
+
+  /**
+   * Process a queue worker.
+   *
+   * @param string $queue_name
+   *   The queue name.
+   *
+   * @When /^I run the "([^"]*)" queue worker$/
+   */
+  public function iRunTheQueueWorker(string $queue_name): void {
+    $drushCommand = sprintf('drush queue:run %s', $queue_name);
+
+    // Create a new Process instance to run the Drush command.
+    $process = new Process(explode(' ', $drushCommand));
+    $process->setTimeout(1800);
+    $process->run();
+
+    if (!$process->isSuccessful()) {
+      throw new \RuntimeException(sprintf('Failed to execute the queue worker: %s', $process->getErrorOutput()));
+    }
+
+    sleep(1);
+  }
+
+  /**
+   * Wait until a listed items in queue has finished.
+   *
+   * Table format:
+   *
+   * @codingStandardsIgnoreStart
+   * | type       |  id                                                             |
+   * | node       |  706407                                                         |
+   * | rdf_entity |  http://data.europa.eu/w21/0aa21349-959b-4114-b16f-bb88facd324f |
+   * @codingStandardsIgnoreEnd
+   *
+   * @param \Behat\Gherkin\Node\TableNode $table
+   *   The table data.
+   * @param string $queue_name
+   *   The queue name.
+   *
+   * @Given wait until the :queue_name processes the queue items:
+   */
+  public function iWaitUntilQueueIsEmpty(TableNode $table, string $queue_name): void {
+    $database = \Drupal::database();
+    $queue_items = [];
+    foreach ($table->getColumnsHash() as $row) {
+      switch ($row['type']) {
+        case 'node':
+          $revision_id = $database->query('SELECT vid FROM {node} WHERE nid = :nid', [':nid' => $row['id']])->fetchField();
+          break;
+
+        case 'paragraph':
+          $revision_id = $database->query('SELECT revision_id FROM {paragraphs_item} WHERE id = :pid', [':pid' => $row['id']])->fetchField();
+          break;
+
+        default:
+          $revision_id = $row['id'];
+          break;
+      }
+
+      $query = $database->select('queue', 'queue');
+      $query->fields('queue', ['item_id', 'data']);
+      $query->condition('queue.data', '%' . $revision_id . '%', 'LIKE');
+      $query->condition('queue.name', $queue_name);
+      $queue_results = $query->execute();
+      foreach ($queue_results as $result) {
+        $queue_items[] = $result->item_id;
+      }
+    }
+    $database->delete('queue')
+      ->condition('item_id', $queue_items, 'NOT IN')
+      ->execute();
   }
 
 }
