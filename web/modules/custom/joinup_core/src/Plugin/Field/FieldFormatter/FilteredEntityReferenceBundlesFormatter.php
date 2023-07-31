@@ -56,9 +56,9 @@ class FilteredEntityReferenceBundlesFormatter extends EntityReferenceRevisionsEn
    * {@inheritdoc}
    */
   public static function defaultSettings(): array {
-    return array(
+    return [
         'filtered_entity_bundles' => [],
-      ) + parent::defaultSettings();
+      ] + parent::defaultSettings();
   }
 
   /**

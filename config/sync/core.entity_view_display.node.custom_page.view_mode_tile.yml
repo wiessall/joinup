@@ -40,11 +40,10 @@ content:
     type: filtered_entity_reference_bundles
     label: hidden
     settings:
-      filtered_entity_bundles:
-        - row
-        - simple_paragraph
       view_mode: default
-      link: false
+      link: ''
+      filtered_entity_bundles:
+        - simple_paragraph
     third_party_settings:
       field_delimiter:
         delimiter: ''
