@@ -37,6 +37,13 @@ class DevelopersItalia extends EuOssCatalogueProviderPluginBase implements Conta
   protected const ENDPOINT = 'https://api.developers.italia.it/v1/software';
 
   /**
+   * The query string to be used by the next call.
+   *
+   * @var string|null
+   */
+  protected ?string $next = '';
+
+  /**
    * Constructs a new plugin instance.
    *
    * @param array $configuration
@@ -76,37 +83,32 @@ class DevelopersItalia extends EuOssCatalogueProviderPluginBase implements Conta
   /**
    * {@inheritdoc}
    */
-  public function fetch(): array {
-    $data = [];
-    $next = '';
+  public function fetch(): iterable {
+    if ($this->next === NULL) {
+      return;
+    }
 
-    do {
-      // @todo In order to improve performance, consider ISAICP-7946.
-      // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7946
-      $url = self::ENDPOINT . $next . ($next ? '&' : '?') . 'page[size]=500';
-      $response = $this->httpClient->get($url);
-      $read = Json::decode($response->getBody()->getContents());
+    $url = self::ENDPOINT . $this->next . ($this->next ? '&' : '?') . 'page[size]=100';
+    $response = $this->httpClient->get($url);
+    $read = Json::decode($response->getBody()->getContents());
 
-      $next = $read['links']['next'];
-
-      foreach ($read['data'] as $newItem) {
-        $active = $newItem['active'] ?? FALSE;
-        if ($active) {
-          $decoded = Yaml::decode($newItem['publiccodeYml']);
-          // Only fetch data that adhere to their schema.
-          if ($this->checkSchema($decoded, $newItem['id'])) {
-            $data[] = new EuOssCatalogueFetchedSolution(
-              $decoded['url'],
-              $decoded['name'],
-              $decoded,
-              $newItem['id'],
-            );
-          }
+    foreach ($read['data'] as $newItem) {
+      $active = $newItem['active'] ?? FALSE;
+      if ($active) {
+        $decoded = Yaml::decode($newItem['publiccodeYml']);
+        // Only fetch data that adhere to their schema.
+        if ($this->checkSchema($decoded, $newItem['id'])) {
+          yield new EuOssCatalogueFetchedSolution(
+            $decoded['url'],
+            $decoded['name'],
+            $decoded,
+            $newItem['id'],
+          );
         }
       }
-    } while (!is_null($next));
+    }
 
-    return $data;
+    $this->next = $read['links']['next'];
   }
 
   /**

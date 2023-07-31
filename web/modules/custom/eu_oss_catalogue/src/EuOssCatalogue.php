@@ -48,22 +48,24 @@ class EuOssCatalogue implements EuOssCatalogueInterface {
     $queue->createQueue();
 
     $fetched = 0;
-    foreach ($plugin->fetch() as $fetchedSolution) {
-      if (!$fetchedSolution instanceof EuOssCatalogueFetchedSolution) {
-        throw new \Exception("Invalid data received from '$provider' plugin");
+    while (($fetchedSolutions = $plugin->fetch())->valid()) {
+      foreach ($fetchedSolutions as $fetchedSolution) {
+        if (!$fetchedSolution instanceof EuOssCatalogueFetchedSolution) {
+          throw new \Exception("Invalid data received from '$provider' plugin");
+        }
+
+        // Allow 3rd-party to modify the fetched solution.
+        $this->eventDispatcher->dispatch(new EuOssPostFetchEvent($fetchedSolution));
+
+        // @todo Move the process of queueing to a separate method for the sake of
+        //   making the whole API more clear?
+        $queue->createItem([
+          'operation' => 'solution:create',
+          'provider' => $provider,
+          'solution' => $fetchedSolution,
+        ]);
+        $fetched++;
       }
-
-      // Allow 3rd-party to modify the fetched solution.
-      $this->eventDispatcher->dispatch(new EuOssPostFetchEvent($fetchedSolution));
-
-      // @todo Move the process of queueing to a separate method for the sake of
-      //   making the whole API more clear?
-      $queue->createItem([
-        'operation' => 'solution:create',
-        'provider' => $provider,
-        'solution' => $fetchedSolution,
-      ]);
-      $fetched++;
     }
 
     return $fetched;
