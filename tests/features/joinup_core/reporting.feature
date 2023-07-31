@@ -49,8 +49,8 @@ Feature:
     And solutions:
       | title           | collection          | state     | creation date    | modification date | solution type                                      |
       | Worthy Puppet   | Monday's Artificial | validated | 2003-01-31T23:00 | 2015-12-07T13:57  | Interoperability Specification, Networking Service |
-      | Long Artificial | Restless Burst      | validated | 2012-09-14T00:00 | 2012-12-04T16:19  | Data Set Catalogue                                 |
-      | Beta Frozen     | Restless Burst      | validated | 2017-10-15T14:54 | 2017-11-24T12:43  | e-Signature Creation Service                       |
+      | Long Artificial | Restless Burst      | validated | 2012-09-14T00:00 | 2012-12-04T16:19  | Networking Infrastructure Enablers                 |
+      | Beta Frozen     | Restless Burst      | validated | 2017-10-15T14:54 | 2017-11-24T12:43  | Data Owner                                         |
 
     Given I am logged in as a moderator
     And I click "Reporting" in the "Administration toolbar" region
@@ -79,8 +79,8 @@ Feature:
     # Same for the "Solution type" facet.
     And I should see the link "Interoperability Specification" in the "Left sidebar" region
     And I should see the link "Networking Service" in the "Left sidebar" region
-    And I should see the link "Data Set Catalogue" in the "Left sidebar" region
-    And I should see the link "e-Signature Creation Service" in the "Left sidebar" region
+    And I should see the link "Networking Infrastructure Enablers" in the "Left sidebar" region
+    And I should see the link "Data Owner" in the "Left sidebar" region
     # Verify that only solutions are shown.
     But I should not see the text "Monday's Artificial"
     And I should not see the text "Restless Burst"

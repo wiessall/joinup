@@ -87,13 +87,10 @@
 %}
 {% if node.bundle is same as 'news' %}
   {% set icon = 'newspaper' %}
-  {% set logo = content.field_news_logo %}
 {% elseif node.bundle is same as 'event' %}
   {% set icon = 'calendar3' %}
-  {% set logo = content.field_event_logo %}
 {% elseif node.bundle is same as 'custom_page' %}
   {% set icon = 'file-earmark-richtext' %}
-  {% set logo = content.field_custom_page_logo %}
 {% endif %}
 <article{{ attributes.addClass(classes) }}>
   {{ title_prefix }}
@@ -101,9 +98,9 @@
 
   {% block content %}
     <a href="{{ url }}" rel="bookmark" title="{{ 'Read'|t }}: {{ label|render|striptags|trim }}" tabindex="-1">
-      {% if logo["#items"] is not empty %}
+      {% if image %}
         <figure class="slide__figure">
-          {{ logo }}
+          {{ image }}
         </figure>
       {% else %}
         <figure class="slide__figure">

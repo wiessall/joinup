@@ -3,7 +3,7 @@ langcode: en
 status: true
 dependencies:
   config:
-    - core.entity_view_mode.node.view_mode_tile
+    - core.entity_view_mode.node.view_mode_tile_horizontal
     - node.type.news
   module:
     - node
@@ -221,7 +221,7 @@ display:
         type: 'entity:node'
         options:
           relationship: none
-          view_mode: view_mode_tile
+          view_mode: view_mode_tile_horizontal
       query:
         type: views_query
         options:

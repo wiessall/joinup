@@ -5,6 +5,7 @@ declare(strict_types = 1);
 namespace Drupal\trr\Plugin\Validation\Constraint;
 
 use Drupal\joinup_core\Traits\FieldItemsTrait;
+use Drupal\trr\TrrConstants;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 
@@ -32,20 +33,16 @@ class SolutionTestResourceTypeConstraintValidator extends ConstraintValidator {
     $solution_types = $this->getFieldItemListMainPropertyValues($solution_type_field);
     $current_values = $this->getFieldItemListMainPropertyValues($items);
 
-    if (in_array('http://data.europa.eu/dr8/ConformanceTestScenario', $solution_types)) {
-      if (array_diff($current_values, $this->allowedTestScenarioTypes())) {
-        $this->context->addViolation($constraint->invalidTestScenarioMessage);
-      }
+    if (in_array(TrrConstants::BUSINESS_OBJECT, $solution_types) && array_diff($current_values, $this->allowedTestScenarioTypes())) {
+      $this->context->addViolation($constraint->invalidTestScenarioMessage);
     }
 
     $service_or_component = [
-      'http://data.europa.eu/dr8/ConformanceTestingComponent',
-      'http://data.europa.eu/dr8/ConformanceTestingService',
+      TrrConstants::APPLICATION_COMPONENT,
+      TrrConstants::APPLICATION_SERVICE,
     ];
-    if (array_intersect($service_or_component, $solution_types)) {
-      if (array_diff($current_values, $this->allowedServiceAndComponentTypes())) {
-        $this->context->addViolation($constraint->invalidTestServiceOrComponentMessage);
-      }
+    if (array_intersect($service_or_component, $solution_types) && array_diff($current_values, $this->allowedServiceAndComponentTypes())) {
+      $this->context->addViolation($constraint->invalidTestServiceOrComponentMessage);
     }
   }
 

@@ -86,7 +86,7 @@ content:
     type: responsive_image
     label: hidden
     settings:
-      responsive_image_style: iop_carousel
+      responsive_image_style: tile
       image_link: ''
     third_party_settings:
       template_suggestion:
@@ -103,6 +103,11 @@ content:
         template_suggestion: no_wrappers
     weight: 0
     region: content
+  flag_like_node:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 3
+    region: content
 hidden:
   featured: true
   field_comments: true
@@ -116,7 +121,6 @@ hidden:
   field_state: true
   field_topic: true
   field_type: true
-  flag_like_node: true
   langcode: true
   links: true
   og_audience: true

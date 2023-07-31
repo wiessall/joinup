@@ -213,8 +213,8 @@ QUERY;
       $context['results']['compare']['new'][$row->term->getUri()] = [
         'id' => $row->term->getUri(),
         'label' => $row->label->getValue(),
-        'category_id' => $row->category->getUri(),
-        'category_label' => $row->category_label->getValue(),
+        'category_id' => isset($row->category) ? $row->category->getUri() : '',
+        'category_label' => isset($row->category_label) ? $row->category_label->getValue() : '',
       ];
     }
 
@@ -439,6 +439,10 @@ QUERY;
 
     $rows = [];
     foreach ($removed_terms as $term) {
+      if (empty($term['siblings'])) {
+        continue;
+      }
+
       $first_row = array_slice($term['siblings'], 0, 1);
       $first_row = reset($first_row);
       $rows[] = [

@@ -12,8 +12,6 @@ dependencies:
     - field.field.node.video.og_audience
     - node.type.video
   module:
-    - smart_trim
-    - template_suggestion
     - user
 _core:
   default_config_hash: j2iR4eXV75uz-doFkOpOx-0WyW9XG1ARPalUKIiKk6s
@@ -21,28 +19,9 @@ id: node.video.view_mode_tile
 targetEntityType: node
 bundle: video
 mode: view_mode_tile
-content:
-  body:
-    type: smart_trim
-    label: hidden
-    settings:
-      trim_length: 200
-      trim_type: chars
-      trim_suffix: …
-      wrap_output: false
-      wrap_class: trimmed
-      more_link: false
-      more_class: more-link
-      more_text: More
-      summary_handler: trim
-      trim_options:
-        text: false
-    third_party_settings:
-      template_suggestion:
-        template_suggestion: ''
-    weight: 0
-    region: content
+content: {  }
 hidden:
+  body: true
   field_comments: true
   field_keywords: true
   field_video: true
