@@ -15,6 +15,10 @@ interface EuOssCatalogueProviderInterface extends PluginInspectionInterface {
   /**
    * Fetches solutions from provider.
    *
+   * For performance reasons, when dealing with large sets of data, this method
+   * should return a limited subset. The caller is responsible to run this
+   * method as many times is needed as long as the iterable return is valid.
+   *
    * @return \Drupal\eu_oss_catalogue\EuOssCatalogueFetchedSolution[]
    *   Indexed array of fetched solution objects.
    */
