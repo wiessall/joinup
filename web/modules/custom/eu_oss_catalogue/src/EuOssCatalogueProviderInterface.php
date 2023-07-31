@@ -18,7 +18,7 @@ interface EuOssCatalogueProviderInterface extends PluginInspectionInterface {
    * @return \Drupal\eu_oss_catalogue\EuOssCatalogueFetchedSolution[]
    *   Indexed array of fetched solution objects.
    */
-  public function fetch(): array;
+  public function fetch(): iterable;
 
   /**
    * Alters the solution created by the parser before is saved.
