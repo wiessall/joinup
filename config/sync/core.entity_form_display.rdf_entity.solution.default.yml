@@ -106,7 +106,6 @@ third_party_settings:
     group_management:
       children:
         - field_is_logo
-        - field_is_banner
         - field_is_documentation
         - field_spatial_coverage
         - field_keywords
