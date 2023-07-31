@@ -2066,7 +2066,7 @@ class FeatureContext extends RawDrupalContext {
    * @throws \InvalidArgumentException
    *   When the offset is invalid or the field doesn't exist.
    *
-   * @When I select image #:offset as :content_type :image_type
+   * @When I select image #:offset as :content_type logo
    */
   public function selectImageFromTheFieldImageLibraryBrowser(string $offset, string $content_type): void {
     $this->validateImageLibraryBrowserStepDefinitionParams($content_type, $offset);
@@ -2139,7 +2139,7 @@ class FeatureContext extends RawDrupalContext {
       throw new \Exception("The logo images should have been clicked but it was not.");
     }
     if ($clicks[$content_type]['logo'][$offset] !== $image_field->target_id) {
-      throw new ExpectationFailedException("The {$title} logo should contain the image #{$offset} but it doesn't.");
+      throw new ExpectationFailedException("The $title logo should contain the image #$offset but it doesn't.");
     }
   }
 
