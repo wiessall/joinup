@@ -66,8 +66,8 @@ field.formatter.settings.addtocall_daterange_condensed:
       type: date_format
       label: 'Different years format'
 
-field.formatter.settings.filtered_entity_reference:
-  type: field.formatter.settings.filtered_entity_reference_bundles
+field.formatter.settings.filtered_entity_reference_bundles:
+  type: field.formatter.settings.entity_reference_revisions_entity_view
   label: 'Add filtered entity reference types formatter settings'
   mapping:
     filtered_entity_bundles:
