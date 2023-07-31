@@ -3,12 +3,10 @@ langcode: en
 status: true
 dependencies:
   config:
-    - media.type.collection_banner
     - media.type.collection_logo
     - media.type.discussion_logo
     - media.type.event_logo
     - media.type.news_logo
-    - media.type.solution_banner
     - media.type.solution_logo
     - node.type.custom_page
     - node.type.discussion
