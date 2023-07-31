@@ -1,0 +1,20 @@
+uuid: d355c65c-66d7-4437-8a11-1ed1057fb04c
+langcode: en
+status: true
+dependencies:
+  module:
+    - sitewide_alert_block
+  theme:
+    - ventuno
+id: ventuno_site_wide_alerts
+theme: ventuno
+region: messages
+weight: -26
+provider: null
+plugin: sitewide_alert_block
+settings:
+  id: sitewide_alert_block
+  label: 'Site wide alerts'
+  label_display: '0'
+  provider: sitewide_alert_block
+visibility: {  }

@@ -105,12 +105,17 @@ content:
     type: responsive_image
     label: hidden
     settings:
-      responsive_image_style: iop_carousel
+      responsive_image_style: tile
       image_link: ''
     third_party_settings:
       template_suggestion:
         template_suggestion: ''
     weight: 1
+    region: content
+  flag_like_rdf_entity:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 4
     region: content
   label:
     type: string
@@ -171,7 +176,6 @@ hidden:
   field_spatial_coverage: true
   field_status: true
   field_topic: true
-  flag_like_rdf_entity: true
   langcode: true
   og_group: true
   pinned_in: true
