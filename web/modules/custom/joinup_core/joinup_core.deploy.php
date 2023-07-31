@@ -67,13 +67,7 @@ SPARQL;
   $file_storage = \Drupal::entityTypeManager()->getStorage('file');
 
   $fids = array_splice($sandbox['fids'], 0, 100);
-  foreach ($file_storage->loadMultiple($fids) as $file) {
-    $uri = $file->getFileUri();
-    if ($file_path = $file_system->realpath($uri)) {
-      $file_system->delete($file_path);
-    }
-    $file->delete();
-  }
+  $file_storage->delete($file_storage->loadMultiple($fids));
 
   $sandbox['current'] += count($fids);
   $sandbox['#finished'] = $sandbox['current'] / $sandbox['total'];
