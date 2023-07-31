@@ -75,7 +75,6 @@ third_party_settings:
         - field_ar_abstract
         - field_ar_access_url
         - field_ar_logo
-        - field_ar_banner
         - field_keywords
         - field_spatial_coverage
         - field_ar_moderation
@@ -141,6 +140,7 @@ content:
       collapsible: false
       collapsed: false
       revision: false
+      removed_reference: optional
     third_party_settings: {  }
   field_ar_content_creation:
     type: options_buttons
@@ -192,6 +192,7 @@ content:
       collapsible: false
       collapsed: false
       revision: false
+      removed_reference: optional
     third_party_settings: {  }
   field_ar_state:
     type: state_machine_buttons
