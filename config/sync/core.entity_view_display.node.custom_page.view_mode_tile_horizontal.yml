@@ -14,6 +14,7 @@ dependencies:
   module:
     - entity_reference_revisions
     - field_group
+    - joinup_core
     - layout_builder
     - responsive_image
     - template_suggestion
@@ -59,11 +60,14 @@ content:
     weight: 0
     region: content
   field_paragraphs_body:
-    type: entity_reference_revisions_entity_view
+    type: filtered_entity_reference_bundles
     label: hidden
     settings:
+      filtered_entity_bundles:
+        - row
+        - simple_paragraph
       view_mode: default
-      link: ''
+      link: false
     third_party_settings: {  }
     weight: 1
     region: content
