@@ -95,7 +95,7 @@ final class MigrateMedia extends QueueWorkerBase implements ContainerFactoryPlug
         $text = $entity->get($field_name)->value;
         if (!empty($text)) {
           $group_id = $entity instanceof CollectionInterface ? $entity_id : $entity->getGroupId();
-          $processed_text = $this->joinupMediaProcessText($text, $group_id, (int) $entity->getOwnerId(), $fids);
+          $processed_text = $this->processText($text, $group_id, (int) $entity->getOwnerId(), $fids);
           if ($processed_text !== $text) {
             $bundle = $entity->bundle();
             $predicate = $this->sparqlFieldHandler->getFieldPredicates($type, $field_name, NULL, $bundle)[$bundle];
@@ -120,7 +120,7 @@ final class MigrateMedia extends QueueWorkerBase implements ContainerFactoryPlug
       $revision_table = "{$type}_revision__$fields[$type]";
       $table = "{$type}__$fields[$type]";
       $text = $this->db->query("SELECT $field FROM {{$revision_table}} WHERE revision_id = $revision_id")->fetchField();
-      $processed_text = $this->joinupMediaProcessText($text, $group_id, $uid, $fids);
+      $processed_text = $this->processText($text, $group_id, $uid, $fids);
       if ($processed_text !== $text) {
         $this->db->update($revision_table)->fields([$field => $processed_text])
           ->condition('revision_id', $revision_id)
@@ -149,7 +149,7 @@ final class MigrateMedia extends QueueWorkerBase implements ContainerFactoryPlug
    * @return string
    *   Text after has been processed.
    */
-  private function joinupMediaProcessText(string $text, string $group_id, int $uid, array $fids): string {
+  private function processText(string $text, string $group_id, int $uid, array $fids): string {
     $search = $replace = [];
 
     // Convert embed videos.
@@ -160,7 +160,7 @@ final class MigrateMedia extends QueueWorkerBase implements ContainerFactoryPlug
           $search[] = $videos_embed[0][$delta];
           $attributes = new Attribute([
             'data-entity-type' => 'media',
-            'data-entity-uuid' => $this->joinupGetMedia('video', $embed_data['video_url'], $uid, $group_id)->uuid(),
+            'data-entity-uuid' => $this->getMedia('video', $embed_data['video_url'], $uid, $group_id)->uuid(),
           ]);
           $replace[] = "<drupal-media$attributes />";
         }
@@ -204,7 +204,7 @@ final class MigrateMedia extends QueueWorkerBase implements ContainerFactoryPlug
         $media->setAttribute('alt', $node->getAttribute('alt'));
       }
       $media->setAttribute('data-entity-type', 'media');
-      $media->setAttribute('data-entity-uuid', $this->joinupGetMedia($type[$node->tagName], $fids[$uuid], $uid, $group_id)->uuid());
+      $media->setAttribute('data-entity-uuid', $this->getMedia($type[$node->tagName], $fids[$uuid], $uid, $group_id)->uuid());
 
       if ($imageStyle = $node->getAttribute('data-image-style')) {
         $media->setAttribute('data-view-mode', 'media_library' . substr($imageStyle, 7));
@@ -244,7 +244,7 @@ final class MigrateMedia extends QueueWorkerBase implements ContainerFactoryPlug
    * @return \Drupal\media\MediaInterface
    *   The loaded or created media entity.
    */
-  private function joinupGetMedia(string $media_type, mixed $value, int $uid, string $group_id): MediaInterface {
+  private function getMedia(string $media_type, mixed $value, int $uid, string $group_id): MediaInterface {
     $media_storage = $this->entityTypeManager->getStorage('media');
 
     $media_ids = $media_storage->getQuery()->accessCheck(FALSE)
