@@ -2508,7 +2508,7 @@ class FeatureContext extends RawDrupalContext {
    * @param string $queue_name
    *   The queue name.
    *
-   * @When /^I run the "([^"]*)" queue worker$/
+   * @When I run the :queue_name queue worker
    */
   public function iRunTheQueueWorker(string $queue_name): void {
     $drushCommand = sprintf('drush queue:run %s', $queue_name);
