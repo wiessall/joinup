@@ -11,7 +11,6 @@
 /drush/Commands/ export-ignore
 /drush/sites/ export-ignore
 /resources/docker/ export-ignore
-/resources/fixtures/ export-ignore
 /resources/mac/ export-ignore
 /resources/runner/ export-ignore
 /scripts/composer/post_update export-ignore
