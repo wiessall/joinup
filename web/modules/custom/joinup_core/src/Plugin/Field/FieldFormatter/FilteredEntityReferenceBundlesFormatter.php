@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace Drupal\joinup_core\Plugin\Field\FieldFormatter;
 
 use Drupal\Core\Entity\ContentEntityInterface;
@@ -40,6 +42,12 @@ class FilteredEntityReferenceBundlesFormatter extends EntityReferenceRevisionsEn
     return $formatter;
   }
 
+  /**
+   * Sets entity type bundle info.
+   *
+   * @param \Drupal\Core\Entity\EntityTypeBundleInfoInterface $bundleInfo
+   *   Entity type bundle info.
+   */
   public function setEntityTypeBundleInfo(EntityTypeBundleInfoInterface $bundleInfo): void {
     $this->entityTypeBundleInfo = $bundleInfo;
   }
@@ -48,9 +56,9 @@ class FilteredEntityReferenceBundlesFormatter extends EntityReferenceRevisionsEn
    * {@inheritdoc}
    */
   public static function defaultSettings(): array {
-    return [
+    return array(
         'filtered_entity_bundles' => [],
-      ] + parent::defaultSettings();
+      ) + parent::defaultSettings();
   }
 
   /**
