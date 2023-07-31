@@ -6,14 +6,8 @@
 /**
  * Hides/shows fields on the solution form for the TRR community.
  */
-(() => {
+((drupalSettings) => {
   Drupal.trrSolution = {
-    solutionTerms: [
-      "http://data.europa.eu/dr8/ConformanceTestingComponent",
-      "http://data.europa.eu/dr8/ConformanceTestingService",
-      "http://data.europa.eu/dr8/ConformanceTestScenario",
-    ],
-
     fieldsSelector:
       "#edit-field-is-test-resource-type-wrapper,#edit-field-is-actor-wrapper,#edit-field-is-business-process-wrapper,#edit-field-is-product-type-wrapper,#edit-field-is-standardization-level-wrapper",
 
@@ -30,7 +24,7 @@
       });
 
       const selectedTrrTerms = solutionTypes.filter((item) =>
-        Drupal.trrSolution.solutionTerms.includes(item)
+        drupalSettings.trrTestValues.includes(item)
       );
       document
         .querySelectorAll(Drupal.trrSolution.fieldsSelector)
@@ -58,4 +52,4 @@
       });
     },
   };
-})();
+})(drupalSettings);

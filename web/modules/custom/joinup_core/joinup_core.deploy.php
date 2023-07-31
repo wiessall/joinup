@@ -37,3 +37,15 @@ function joinup_core_deploy_109500(): void {
     }
   }
 }
+
+/**
+ * Import the new version of EIRA.
+ */
+function joinup_core_deploy_109501(): string {
+  $fixtures_helper = \Drupal::getContainer()->get(
+    'joinup_rdf.vocabulary_fixtures.helper'
+  );
+  $fixtures_helper->importFixtures('eira_skos');
+
+  return 'Imported eira_skos and ran after import queries.';
+}
