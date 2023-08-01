@@ -35,6 +35,11 @@ toolkit:
         - task: remove
           file: ${toolkit.build.dist.root}/node_modules
 
+  test:
+    phpstan:
+      memory_limit: '1G'
+      options: 'debug -vvv no-progress'
+
 commands:
 
   # Overrides the toolkit:build-dev command.
