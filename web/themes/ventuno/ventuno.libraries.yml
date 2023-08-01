@@ -280,10 +280,30 @@ paragraph__carousel.js:
   dependencies:
     - ventuno/glide
 
+paragraph__layout:
+  css:
+    theme:
+      assets/css/paragraph--layout.min.css: { minified: true }
+
+paragraph__heading:
+  css:
+    theme:
+      assets/css/paragraph--heading.min.css: { minified: true }
+
+paragraph__quote:
+  css:
+    theme:
+      assets/css/paragraph--quote.min.css: { minified: true }
+
 paragraph__poll:
   css:
     theme:
       assets/css/paragraph--poll.min.css: { minified: true }
+
+paragraph__testimony:
+  css:
+    theme:
+      assets/css/paragraph--testimony.min.css: { minified: true }
 
 releases:
   css:
