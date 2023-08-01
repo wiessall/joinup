@@ -412,3 +412,15 @@ function _joinup_core_create_heading_paragraph(ParagraphInterface $new_layout_pa
   $child_paragraph->save();
   return $child_paragraph;
 }
+
+/**
+ * Import the new version of EIRA.
+ */
+function joinup_core_deploy_109505(): string {
+  $fixtures_helper = \Drupal::getContainer()->get(
+    'joinup_rdf.vocabulary_fixtures.helper'
+  );
+  $fixtures_helper->importFixtures('eira_skos');
+
+  return 'Imported eira_skos and ran after import queries.';
+}

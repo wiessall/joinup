@@ -1,4 +1,4 @@
-@import "../partials/core";
+@import "../../partials/core";
 
 .paragraph,
 .fieldset--textarea {
@@ -57,11 +57,5 @@
   h5,
   h6 {
     margin-top: 1em;
-  }
-}
-
-.paragraph.paragraph--carousel {
-  img {
-    margin-bottom: 0;
   }
 }

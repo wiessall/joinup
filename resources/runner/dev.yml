@@ -226,12 +226,21 @@ commands:
         # the supported languages should be extended (the "en" below). This
         # needs to repeat multiple times as the terms might.
         - DELETE { GRAPH ?g { ?entity ?field ?value } } WHERE { GRAPH ?g { ?entity ?field ?value . FILTER (LANG(?value) != "" && LANG(?value) != "en") } };
+        # For EIRA_SKOS, after version 6, they have added all extra properties
+        # of the EIRA terms as separate terms in the graph. In order to properly
+        # handle these secondary terms in the website, we need to add them to
+        # a separate graph with a delete-insert statement for each of them.
+        # Move all terms from the <http://eira_skos> graph that their ID ends
+        # with _Properties to the <http://eira_skos_properties> graph.
+        - DELETE { GRAPH <http://eira_skos> { ?subject ?predicate ?object } } INSERT { GRAPH <http://eira_skos_properties> { ?subject ?predicate ?object } } WHERE { GRAPH <http://eira_skos> { ?subject ?predicate ?object . FILTER (regex(str(?subject), "_Properties$")) } };
+        - DELETE {GRAPH <http://eira_skos> { ?subject ?predicate ?object } } INSERT { GRAPH <http://eira_skos_properties> { ?subject ?predicate ?object } } WHERE { GRAPH <http://eira_skos> { ?subject ?predicate ?object . FILTER (regex(str(?object), "_Properties$")) } };
+        - WITH <http://eira_skos_properties> DELETE { ?subject skos:topConceptOf <http://data.europa.eu/dr8> } WHERE { ?subject a skos:Concept . };
         # See ISAICP-3216. Add the "Concept" type to all collection elements so
         # that they are listed as Parent terms.
         - WITH <http://eira_skos> INSERT { ?subject a skos:Concept } WHERE { ?subject a skos:Collection . };
         # Add the link to all "Concept" type elements so that they are all
         # considered as children of the EIRA vocabulary regardless of the depth.
-        - WITH <http://eira_skos> INSERT INTO <http://eira_skos> { ?subject skos:topConceptOf <http://data.europa.eu/dr8> } WHERE { ?subject a skos:Concept .};
+        - WITH <http://eira_skos> INSERT { ?subject skos:topConceptOf <http://data.europa.eu/dr8> } WHERE { ?subject a skos:Concept .};
         # Create a backwards connection from the children to the parent.
         - WITH <http://eira_skos> INSERT { ?member skos:broaderTransitive ?collection } WHERE { ?collection a skos:Collection . ?collection skos:member ?member };
         # Remove deprecated countries from the country list. See ISAICP-3442.
