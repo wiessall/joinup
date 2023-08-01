@@ -86,6 +86,7 @@ Feature:
       | Follow us on Youtube                             |
       | Subscribe to the interoperable europe newsletter |
 
+  @javascript
   Scenario: User should see error message if he does not fill out all required fields.
     Given custom_page content:
       | title               | collection           | state     |
