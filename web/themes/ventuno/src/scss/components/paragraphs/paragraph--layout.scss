@@ -59,3 +59,10 @@
     }
   }
 }
+// Make Layout Paragraph limits more evident to the user
+.lp-builder:not(.is-navigating) .paragraph--layout.js-lpb-component:hover,
+.lp-builder:not(.is-navigating) .paragraph--layout.js-lpb-component:focus-within {
+  outline: 5px solid $warning;
+}
+
+
