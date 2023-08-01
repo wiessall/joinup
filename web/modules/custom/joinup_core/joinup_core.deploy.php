@@ -166,8 +166,7 @@ function joinup_core_deploy_109503(array &$sandbox): string {
   }
 
   $type = array_key_first($sandbox['tasks']);
-  $size = $type === 'rdf_entity' ? 25 : 50;
-  $tasks = array_splice($sandbox['tasks'][$type], 0, $size);
+  $tasks = array_splice($sandbox['tasks'][$type], 0, 100);
   if (empty($sandbox['tasks'][$type])) {
     unset($sandbox['tasks'][$type]);
   }
