@@ -31,7 +31,8 @@ function ventuno_preprocess_paragraph__accordion(array &$variables): void {
  * Implements hook_preprocess_paragraph().
  */
 function ventuno_preprocess_paragraph__call_to_action(array &$variables): void {
-  $variables['attributes']['class'] = ['d-flex', 'justify-content-center'];
+  $variables['attributes']['class'][] = 'd-flex';
+  $variables['attributes']['class'][] =  'justify-content-center';
 }
 
 /**
@@ -73,4 +74,12 @@ function ventuno_preprocess_paragraph__accordion_item(array &$variables): void {
     return;
   }
   $variables['parent_id'] = $parent->id();
+}
+
+/**
+ * Implements hook_preprocess_HOOK().
+ */
+function ventuno_preprocess_paragraph__poll(array &$variables): void {
+  $variables['attributes']['class'][] = 'bg-light';
+  $variables['attributes']['class'][] = 'p-3';
 }
