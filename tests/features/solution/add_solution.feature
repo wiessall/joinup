@@ -84,7 +84,7 @@ Feature: "Add solution" visibility options.
     # Regression test to endure that the language terms "Multilingual Code" are not present.
     And the available options in the "Language" select should not include the "Multilingual Code"
     And I should see the description "For best result the image must be larger than 2400x345 pixels." for the "Banner" field
-    And the "Solution type" field should contain the "IOP specification underpinning View, Legal View, Organisational View, deprecated" option groups
+    And the "Solution type" field should contain the "EIRA Ontology Viewpoint, Legal View, Deprecated" option groups
     When I fill in the following:
       | Title                 | Espresso is the solution                                      |
       | Description           | This is a test text                                           |
@@ -92,7 +92,7 @@ Feature: "Add solution" visibility options.
       | Language              | http://publications.europa.eu/resource/authority/language/VLS |
       | Name                  | Ernst Brice                                                   |
       | E-mail address        | ernsy1999@gmail.com                                           |
-    Then I select "http://data.europa.eu/dr8/DataExchangeService" from "Solution type"
+    Then I select "Data Owner" from "Solution type"
     And I select "Demography" from "Topic"
     # Attach a PDF to the documentation.
     And I upload the file "text.pdf" to "Upload a new file or enter a URL"
@@ -150,7 +150,7 @@ Feature: "Add solution" visibility options.
       | Language              | http://publications.europa.eu/resource/authority/language/VLS          |
       | Name                  | Ajit Tamboli                                                           |
       | E-mail address        | tambotamboli@gocloud.in                                                |
-    Then I select "http://data.europa.eu/dr8/DataExchangeService" from "Solution type"
+    Then I select "Data Owner" from "Solution type"
     And I select "E-inclusion" from "Topic"
     # Attach a PDF to the documentation.
     And I upload the file "text.pdf" to "Upload a new file or enter a URL"
