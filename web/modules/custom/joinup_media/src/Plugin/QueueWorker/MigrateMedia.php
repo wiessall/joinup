@@ -24,7 +24,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * @QueueWorker(
  *   id = "joinup_media_migrate",
  *   title = @Translation("Migrate videos and images embed markup into media"),
- *   cron = {"time" = 120},
+ *   cron = {"time" = 30},
  * )
  */
 final class MigrateMedia extends QueueWorkerBase implements ContainerFactoryPluginInterface {
