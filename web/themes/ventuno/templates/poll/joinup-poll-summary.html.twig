@@ -16,7 +16,7 @@
 #}
 <div class="d-flex justify-content-end fs-sm text-black-50 mt-3 px-3">
   <span class="me-4">
-    {% if time_left is same as '0 seconds' %}
+    {% if is_closed %}
       {{ 'Poll closed'|t }}
     {% elseif time_left %}
       {{ '@left left to vote'|t({'@left': time_left}) }}
