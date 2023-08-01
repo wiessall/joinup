@@ -1099,21 +1099,6 @@ module.exports = {
       },
     },
     {
-      entry: path.resolve(
-        outputFolder,
-        `${iop}src/scss/components/paragraphs/paragraph--video.scss`
-      ),
-      dest: path.resolve(
-        outputFolder,
-        `${iop}assets/css/paragraph--video.min.css`
-      ),
-      options: {
-        minify: true,
-        includePaths,
-        sourceMap: "file",
-      },
-    },
-    {
       entry: path.resolve(outputFolder, `${iop}src/scss/components/tile.scss`),
       dest: path.resolve(outputFolder, `${iop}assets/css/tile.min.css`),
       options: {
