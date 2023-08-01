@@ -280,6 +280,11 @@ paragraph__carousel.js:
   dependencies:
     - ventuno/glide
 
+paragraph__poll:
+  css:
+    theme:
+      assets/css/paragraph--poll.min.css: { minified: true }
+
 releases:
   css:
     theme:
