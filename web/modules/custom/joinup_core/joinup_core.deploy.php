@@ -181,7 +181,7 @@ function joinup_core_deploy_109503(array &$sandbox): string {
   }
 
   $sandbox['#finished'] = $sandbox['count'] === $sandbox['max'];
-  return "Added in queue {$sandbox['count']} out of {$sandbox['max']} text blobs.";
+  return "Queued {$sandbox['count']} out of {$sandbox['max']} text blobs.";
 }
 
 /**
