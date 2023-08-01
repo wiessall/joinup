@@ -15,7 +15,7 @@
 declare(strict_types = 1);
 
 use Drupal\Core\File\Exception\FileException;
-use Drupal\media\MediaInterface;
+use Drupal\joinup_media\Plugin\QueueWorker\MigrateMedia;
 
 /**
  * Removal of spam content files.
@@ -72,7 +72,7 @@ function joinup_core_deploy_109502(array &$sandbox): string {
   /** @var \Drupal\joinup_video\Entity\VideoInterface $video */
   foreach ($node_storage->loadMultiple($nids) as $video) {
     if ($url = $video->get('field_video')->value) {
-      $media = _joinup_core_get_media('video', $url, (int) $video->getOwnerId(), $video->get('og_audience')->target_id);
+      $media = MigrateMedia::getMedia('video', $url, (int) $video->getOwnerId(), $video->get('og_audience')->target_id);
       $options = [
         'bundle' => 'video',
         'entity_id' => $video->id(),
@@ -182,43 +182,4 @@ function joinup_core_deploy_109503(array &$sandbox): string {
 
   $sandbox['#finished'] = $sandbox['count'] === $sandbox['max'];
   return "Queued {$sandbox['count']} out of {$sandbox['max']} text blobs.";
-}
-
-/**
- * Returns a loaded or created media entity.
- *
- * @param string $media_type
- *   The media bundle.
- * @param mixed $value
- *   The field value.
- * @param int $uid
- *   The entity owner ID.
- * @param string $group_id
- *   The group ID.
- *
- * @return \Drupal\media\MediaInterface
- *   The loaded or created media entity.
- */
-function _joinup_core_get_media(string $media_type, mixed $value, int $uid, string $group_id): MediaInterface {
-  $media_storage = \Drupal::entityTypeManager()->getStorage('media');
-
-  $media_ids = $media_storage->getQuery()->accessCheck(FALSE)
-    ->condition('bundle', $media_type)
-    ->condition($media_type, $value)
-    ->condition('og_audience', $group_id)
-    ->execute();
-  if ($media_ids) {
-    $media = $media_storage->load(reset($media_ids));
-  }
-  else {
-    $media = $media_storage
-      ->create(['bundle' => $media_type, $media_type => $value])
-      ->set('og_audience', $group_id);
-    if ($uid) {
-      $media->setOwnerId($uid);
-    }
-    $media->save();
-  }
-
-  return $media;
 }

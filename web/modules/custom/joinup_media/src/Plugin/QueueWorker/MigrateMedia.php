@@ -244,8 +244,8 @@ final class MigrateMedia extends QueueWorkerBase implements ContainerFactoryPlug
    * @return \Drupal\media\MediaInterface
    *   The loaded or created media entity.
    */
-  private function getMedia(string $media_type, mixed $value, int $uid, string $group_id): MediaInterface {
-    $media_storage = $this->entityTypeManager->getStorage('media');
+  public static function getMedia(string $media_type, mixed $value, int $uid, string $group_id): MediaInterface {
+    $media_storage = \Drupal::entityTypeManager()->getStorage('media');
 
     $media_ids = $media_storage->getQuery()->accessCheck(FALSE)
       ->condition('bundle', $media_type)
