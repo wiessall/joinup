@@ -74,7 +74,7 @@ then
       FILE=$($DOCKER_EXEC_PREFIX realpath "$FILE")
       for ALLOWED_FILE in $ALLOWED_PATHS
       do
-        if [[ $FILE =~ ^${ALLOWED_FILE} ]]
+        if [[ $FILE =~ ^${ALLOWED_FILE} ]] && [ -f $FILE ]
         then
           FILES="$FILES $FILE"
           # Don't check the rest of allowed files.
@@ -119,6 +119,7 @@ then
 fi
 
 # Run ESLint and save the exit code.
+# TODO: Need a way to check only changed files, similar to PHP.
 echo "Running ESLint on all files...";
 $DOCKER_EXEC_PREFIX ./node_modules/.bin/eslint --config .eslintrc.json --format compact --ext yml --ext js .
 ESLINT=$?

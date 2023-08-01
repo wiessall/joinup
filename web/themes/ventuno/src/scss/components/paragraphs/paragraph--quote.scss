@@ -1,0 +1,12 @@
+@import "../../partials/core";
+
+.paragraph--quote {
+  overflow: hidden;
+  border-left: $spacer * 1.25 solid $brand;
+  padding: $spacer * 1.5 0 $spacer * 1.5 $spacer * 1.5;
+  margin-right: 0;
+  margin-left: 0;
+  @include media-breakpoint-up(md) {
+    margin-left: 100px;
+  }
+}
