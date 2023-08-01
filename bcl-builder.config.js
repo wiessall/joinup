@@ -751,7 +751,7 @@ module.exports = {
     {
       entry: path.resolve(
         outputFolder,
-        `${ventuno}src/scss/components/paragraph--poll.scss`
+        `${ventuno}src/scss/components/paragraphs/paragraph--poll.scss`
       ),
       dest: path.resolve(
         outputFolder,
