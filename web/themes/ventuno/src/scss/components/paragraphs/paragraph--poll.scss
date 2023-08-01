@@ -1,4 +1,4 @@
-@import "../partials/core";
+@import "../../partials/core";
 
 .paragraph--poll {
   // Form overrides
@@ -7,7 +7,7 @@
     padding-bottom: 0;
   }
   .form-item.form-item-choice.form-check {
-    padding: 0 $spacer;
+    padding: 0;
     &:not(:last-of-type) {
       border-bottom: 1px solid $gray-300;
     }
@@ -40,7 +40,7 @@
     }
     .bar {
       position: absolute;
-      width: calc(100% - $spacer * 2);
+      width: 100%;
       top: $spacer * .6;
       height: $spacer * 2;
       background-color: transparent;
