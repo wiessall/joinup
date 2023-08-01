@@ -1,0 +1,59 @@
+@import "../partials/core";
+
+.paragraph--poll {
+  // Form overrides
+  .col-form-label {
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+  .form-item.form-item-choice.form-check {
+    padding: 0 $spacer;
+    &:not(:last-of-type) {
+      border-bottom: 1px solid $gray-300;
+    }
+  }
+  .form-radio.form-check-input {
+    display: none;
+  }
+  .form-check-label.option.form-label {
+    cursor: pointer;
+    padding: $spacer 0;
+    margin: 0;
+  }
+  //
+  .poll {
+    .choice-item {
+      &:not(:last-of-type) {
+        border-bottom: 1px solid $gray-300;
+      }
+    }
+    .choice-title,
+    .choice-result {
+      &.selected {
+        color: darken($success, 15);
+        margin-inline: $spacer;
+      }
+      &.not-selected {
+        color: $primary;
+        margin-inline: $spacer;
+      }
+    }
+    .bar {
+      position: absolute;
+      width: calc(100% - $spacer * 2);
+      top: $spacer * .6;
+      height: $spacer * 2;
+      background-color: transparent;
+      .foreground {
+        border-radius: $border-radius-pill;
+        height: $spacer * 2;
+        &.selected {
+          background-color: rgba($success, .1);
+        }
+        &.not-selected {
+          background-color: rgba($brand, .1);
+        }
+      }
+    }
+  }
+}
