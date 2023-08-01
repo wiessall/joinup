@@ -24,7 +24,7 @@
  */
 #}
 {% set is_current_selection_class = is_current_selection ? 'selected' : 'not-selected' %}
-<div class="choice-item position-relative px-3">
+<div class="choice-item position-relative">
   <div class="d-flex justify-content-between">
     <dt class="choice-title h4 fw-normal py-3 mb-0 {{ is_current_selection_class }}">{{ choice }}</dt>
     <dd class="choice-result h4 py-3 mb-0 {{ is_current_selection_class }}">

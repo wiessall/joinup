@@ -1,8 +1,8 @@
-{{ form.messages }}
-<div class="poll bg-light py-3">
+<div class="poll">
+  {{ form.messages }}
   <div class="vote-form">
     {% if show_question %}
-      <div class="d-flex align-items-end justify-content-between px-3 pb-3">
+      <div class="d-flex align-items-end justify-content-between pb-3">
         <h2 class="poll-question fs-6 fw-bold text-dark m-0">{{ question }}</h2>
         {{ form.actions.result }}
       </div>
@@ -14,9 +14,6 @@
   </div>
 
   {{ form|without('actions', 'choice', 'messages', 'question') }}
-
-  <div class="px-3">
-    {{ summary }}
-  </div>
+  {{ summary }}
 </div>
 
