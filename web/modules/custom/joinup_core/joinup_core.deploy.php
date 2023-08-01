@@ -40,9 +40,21 @@ function joinup_core_deploy_109500(): void {
 }
 
 /**
+ * Import the new version of EIRA.
+ */
+function joinup_core_deploy_109501(): string {
+  $fixtures_helper = \Drupal::getContainer()->get(
+    'joinup_rdf.vocabulary_fixtures.helper'
+  );
+  $fixtures_helper->importFixtures('eira_skos');
+
+  return 'Imported eira_skos and ran after import queries.';
+}
+
+/**
  * Migrate Video content into new Media field.
  */
-function joinup_core_deploy_109501(array &$sandbox): string {
+function joinup_core_deploy_109502(array &$sandbox): string {
   $entity_type_manager = \Drupal::entityTypeManager();
   $node_storage = $entity_type_manager->getStorage('node');
   $db = \Drupal::database();
@@ -82,7 +94,7 @@ function joinup_core_deploy_109501(array &$sandbox): string {
 /**
  * Migrate videos and images embed markup into media.
  */
-function joinup_core_deploy_109502(array &$sandbox): string {
+function joinup_core_deploy_109503(array &$sandbox): string {
   $sparql = \Drupal::getContainer()->get('sparql.endpoint');
   $db = \Drupal::database();
   $queue = \Drupal::queue('joinup_media_migrate');
