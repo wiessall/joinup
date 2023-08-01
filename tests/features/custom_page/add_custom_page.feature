@@ -186,6 +186,9 @@ Feature: "Add custom page" visibility options.
     And I enter "We love mud!" in the "Body" wysiwyg editor
     And I press "Publish"
     Then I should see the error message "The Custom page title value (Rubber boots) is already taken by Rubber boots."
+    And I fill in "Title" with ""
+    And I press "Publish"
+    Then I should see the error message "Title field is required."
 
     # It should still be possible to create a custom page with the existing
     # title in a different group.
