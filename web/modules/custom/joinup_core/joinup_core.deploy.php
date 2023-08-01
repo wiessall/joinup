@@ -63,10 +63,8 @@ SPARQL;
     $sandbox['current'] = 0;
   }
 
-  $file_system = \Drupal::getContainer()->get('file_system');
-  $file_storage = \Drupal::entityTypeManager()->getStorage('file');
-
   $fids = array_splice($sandbox['fids'], 0, 100);
+  $file_storage = \Drupal::entityTypeManager()->getStorage('file');
   $file_storage->delete($file_storage->loadMultiple($fids));
 
   $sandbox['current'] += count($fids);
