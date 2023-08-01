@@ -84,7 +84,6 @@ final class MigrateMedia extends QueueWorkerBase implements ContainerFactoryPlug
   public function processItem($data): void {
     $type = $data['type'];
     $task = $data['task'];
-    $fids = $this->db->query("SELECT uuid, fid FROM {file_managed}")->fetchAllKeyed();
     $fields = ['node' => 'body', 'paragraph' => 'field_body'];
     if ($type === 'rdf_entity') {
       $rdf_storage = $this->entityTypeManager->getStorage('rdf_entity');
@@ -95,7 +94,7 @@ final class MigrateMedia extends QueueWorkerBase implements ContainerFactoryPlug
         $text = $entity->get($field_name)->value;
         if (!empty($text)) {
           $group_id = $entity instanceof CollectionInterface ? $entity_id : $entity->getGroupId();
-          $processed_text = $this->processText($text, $group_id, (int) $entity->getOwnerId(), $fids);
+          $processed_text = $this->processText($text, $group_id, (int) $entity->getOwnerId());
           if ($processed_text !== $text) {
             $bundle = $entity->bundle();
             $predicate = $this->sparqlFieldHandler->getFieldPredicates($type, $field_name, NULL, $bundle)[$bundle];
@@ -120,7 +119,7 @@ final class MigrateMedia extends QueueWorkerBase implements ContainerFactoryPlug
       $revision_table = "{$type}_revision__$fields[$type]";
       $table = "{$type}__$fields[$type]";
       $text = $this->db->query("SELECT $field FROM {{$revision_table}} WHERE revision_id = $revision_id")->fetchField();
-      $processed_text = $this->processText($text, $group_id, $uid, $fids);
+      $processed_text = $this->processText($text, $group_id, $uid);
       if ($processed_text !== $text) {
         $this->db->update($revision_table)->fields([$field => $processed_text])
           ->condition('revision_id', $revision_id)
@@ -143,13 +142,11 @@ final class MigrateMedia extends QueueWorkerBase implements ContainerFactoryPlug
    *   The group ID.
    * @param int $uid
    *   The entity owner.
-   * @param array $fids
-   *   File entity uuids in system.
    *
    * @return string
    *   Text after has been processed.
    */
-  private function processText(string $text, string $group_id, int $uid, array $fids): string {
+  private function processText(string $text, string $group_id, int $uid): string {
     $search = $replace = [];
 
     // Convert embed videos.
@@ -193,7 +190,13 @@ final class MigrateMedia extends QueueWorkerBase implements ContainerFactoryPlug
         continue;
       }
       $uuid = $node->getAttribute('data-entity-uuid');
-      if (!isset($fids[$uuid])) {
+      $fid = $this->db->select('file_managed', 'f')
+        ->fields('f', ['fid'])
+        ->condition('uuid', $uuid)
+        ->execute()
+        ->fetchField();
+
+      if (!$fid) {
         // There's no file entity with this UUID.
         continue;
       }
@@ -204,7 +207,7 @@ final class MigrateMedia extends QueueWorkerBase implements ContainerFactoryPlug
         $media->setAttribute('alt', $node->getAttribute('alt'));
       }
       $media->setAttribute('data-entity-type', 'media');
-      $media->setAttribute('data-entity-uuid', $this->getMedia($type[$node->tagName], $fids[$uuid], $uid, $group_id)->uuid());
+      $media->setAttribute('data-entity-uuid', $this->getMedia($type[$node->tagName], $fid, $uid, $group_id)->uuid());
 
       if ($imageStyle = $node->getAttribute('data-image-style')) {
         $media->setAttribute('data-view-mode', 'media_library' . substr($imageStyle, 7));
