@@ -1,0 +1,83 @@
+diff --git a/facets.api.php b/facets.api.php
+index 1877085..d8d6c27 100644
+--- a/facets.api.php
++++ b/facets.api.php
+@@ -26,3 +26,19 @@ function hook_facets_search_api_query_type_mapping_alter($backend_plugin_id, arr
+     $query_types['string'] = 'search_api_solr_string';
+   }
+ }
++
++/**
++ * Alter the Facets Query.
++ *
++ * @param \Drupal\search_api\Query\QueryInterface $query
++ * Represents a search query on a Search API index.
++ * @param \Drupal\facets\FacetInterface $facet
++ * The facet entity.
++ *
++ * @return void
++ */
++function hook_facets_query_alter(\Drupal\search_api\Query\QueryInterface &$query, \Drupal\facets\FacetInterface $facet) {
++  if ($facet->id() == 'owl') {
++    $query->addCondition('animal', 'owl');
++  }
++}
+diff --git a/facets.services.yml b/facets.services.yml
+index ba34b70..718b954 100644
+--- a/facets.services.yml
++++ b/facets.services.yml
+@@ -25,6 +25,7 @@ services:
+       - '@plugin.manager.facets.processor'
+       - '@entity_type.manager'
+       - '@current_route_match'
++      - '@module_handler'
+   facets.utility.date_handler:
+     class: Drupal\facets\Utility\FacetsDateHandler
+     arguments:
+diff --git a/src/FacetManager/DefaultFacetManager.php b/src/FacetManager/DefaultFacetManager.php
+index 4282368..9a609d5 100644
+--- a/src/FacetManager/DefaultFacetManager.php
++++ b/src/FacetManager/DefaultFacetManager.php
+@@ -90,6 +90,13 @@ class DefaultFacetManager {
+    */
+   private $routeMatch;
+ 
++  /**
++  * The module handler.
++  *
++  * @var \Drupal\Core\Extension\ModuleHandlerInterface
++  */
++  protected $moduleHandler;
++
+   /**
+    * Constructs a new instance of the DefaultFacetManager.
+    *
+@@ -103,16 +110,19 @@ class DefaultFacetManager {
+    *   The entity type plugin manager.
+    * @param \Drupal\Core\Routing\CurrentRouteMatch $route_match
+    *   The current route match.
++   * @param \Drupal\Core\Extension\ModuleHandlerInterface $moduleHandler
++   *   The module handler.
+    *
+    * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
+    * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
+    */
+-  public function __construct(QueryTypePluginManager $query_type_plugin_manager, FacetSourcePluginManager $facet_source_manager, ProcessorPluginManager $processor_plugin_manager, EntityTypeManagerInterface $entity_type_manager, CurrentRouteMatch $route_match) {
++  public function __construct(QueryTypePluginManager $query_type_plugin_manager, FacetSourcePluginManager $facet_source_manager, ProcessorPluginManager $processor_plugin_manager, EntityTypeManagerInterface $entity_type_manager, CurrentRouteMatch $route_match, ModuleHandlerInterface $moduleHandler) {
+     $this->queryTypePluginManager = $query_type_plugin_manager;
+     $this->facetSourcePluginManager = $facet_source_manager;
+     $this->processorPluginManager = $processor_plugin_manager;
+     $this->facetStorage = $entity_type_manager->getStorage('facets_facet');
+     $this->routeMatch = $route_match;
++    $this->moduleHandler = $moduleHandler;
+   }
+ 
+   /**
+@@ -182,6 +192,7 @@ class DefaultFacetManager {
+         ]
+       );
+       $query_type_plugin->execute();
++      $this->moduleHandler->alter('facets_query', $query, $facet);
+       // Merge cache metadata that gathered from facet and its processors.
+       if ($query_is_cacheable) {
+         if ($query->hasTag('alter_cache_metadata')) {

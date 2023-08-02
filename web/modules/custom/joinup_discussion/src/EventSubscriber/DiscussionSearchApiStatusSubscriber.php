@@ -5,9 +5,9 @@ declare(strict_types = 1);
 namespace Drupal\joinup_discussion\EventSubscriber;
 
 use Drupal\facets\FacetManager\DefaultFacetManager;
+use Drupal\joinup_search\EventSubscriber\SearchApiStatusSubscriber;
 use Drupal\search_api\Event\QueryPreExecuteEvent;
 use Drupal\search_api\Event\SearchApiEvents;
-use Drupal\search_api\Query\ConditionGroupInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
@@ -28,9 +28,7 @@ class DiscussionSearchApiStatusSubscriber implements EventSubscriberInterface {
    */
   public static function getSubscribedEvents(): array {
     return [
-      SearchApiEvents::QUERY_PRE_EXECUTE => [
-        ['searchStatusQueryAlter', -100],
-      ],
+      SearchApiEvents::QUERY_PRE_EXECUTE => 'searchStatusQueryAlter',
     ];
   }
 
@@ -46,22 +44,7 @@ class DiscussionSearchApiStatusSubscriber implements EventSubscriberInterface {
     if ($query->getSearchId() !== 'views_page:discussions__overview') {
       return;
     }
-
-    $hasStatus = FALSE;
-    $conditions = &$query->getConditionGroup()->getConditions();
-    foreach ($conditions as $key => $condition) {
-      if (($condition instanceof ConditionGroupInterface) && $condition->hasTag('facet:entity_status')) {
-        unset($conditions[$key]);
-        $hasStatus = TRUE;
-      }
-    }
-
-    if ($hasStatus) {
-      $query->addCondition('entity_status', 'archived');
-    }
-    else {
-      $query->addCondition('entity_status', 'archived', '<>');
-    }
+    SearchApiStatusSubscriber::searchQueryAlter($query);
   }
 
 }

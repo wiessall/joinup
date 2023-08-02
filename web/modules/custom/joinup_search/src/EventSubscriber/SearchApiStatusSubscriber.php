@@ -56,21 +56,7 @@ class SearchApiStatusSubscriber implements EventSubscriberInterface {
       return;
     }
 
-    $hasStatus = FALSE;
-    $conditions = &$query->getConditionGroup()->getConditions();
-    foreach ($conditions as $key => $condition) {
-      if (($condition instanceof ConditionGroupInterface) && $condition->hasTag('facet:entity_status')) {
-        unset($conditions[$key]);
-        $hasStatus = TRUE;
-      }
-    }
-
-    if ($hasStatus) {
-      $query->addCondition('entity_status', 'archived');
-    }
-    else {
-      $query->addCondition('entity_status', 'archived', '<>');
-    }
+    $this->searchQueryAlter($query);
   }
 
   /**
@@ -233,6 +219,30 @@ class SearchApiStatusSubscriber implements EventSubscriberInterface {
       }
     }
     $query->addCondition('entity_status', 'archived', '<>');
+  }
+
+  /**
+   * Alter queries with 'entity_status' field.
+   *
+   * @param \Drupal\search_api\Query\QueryInterface $query
+   *   The search_api_field query.
+   */
+  public static function searchQueryAlter(QueryInterface $query): void {
+    $hasStatus = FALSE;
+    $conditions = &$query->getConditionGroup()->getConditions();
+    foreach ($conditions as $key => $condition) {
+      if (($condition instanceof ConditionGroupInterface) && $condition->hasTag('facet:entity_status')) {
+        unset($conditions[$key]);
+        $hasStatus = TRUE;
+      }
+    }
+
+    if ($hasStatus) {
+      $query->addCondition('entity_status', 'archived');
+    }
+    else {
+      $query->addCondition('entity_status', 'archived', '<>');
+    }
   }
 
 }
