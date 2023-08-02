@@ -70,6 +70,7 @@
         "drupal/paragraphs": "^1.12",
         "drupal/pathauto": "~1.8",
         "drupal/pipeline": "^1.0",
+        "drupal/pluginreference": "^3.0",
         "drupal/publication_date": "^2.0",
         "drupal/rdf_entity": "^2.0",
         "drupal/rdf_meta_entity": "^1.0",
@@ -366,6 +367,9 @@
             "drupal/views_autosubmit": {
                 "Diff from 8.1.x.5 with dev version" : "resources/patch/php/drupal/views_autosubmit/views_autosubmit_once.patch",
                 "Stop auto submitting first character entered in an Autocomplete Filter field. @see https://www.drupal.org/project/views_autosubmit/issues/3160600" : "https://git.drupalcode.org/project/views_autosubmit/-/merge_requests/10.patch"
+            },
+            "drush/drush": {
+                "Run batch process when (un)installing modules via config:import @see https://github.com/drush-ops/drush/pull/5714": "resources/patch/php/drush/drush/5714.diff"
             }
         },
         "drupal-lenient": {

@@ -1,0 +1,45 @@
+<?php
+
+/**
+ * @file
+ * Install, update, install functionality for EU OSS Catalogue module.
+ */
+
+declare(strict_types = 1);
+
+use Drupal\Component\Serialization\Json;
+use Drupal\Core\Batch\BatchBuilder;
+use Drupal\Core\Serialization\Yaml;
+use Drupal\eu_oss_catalogue\EuOssCatalogueInstallHelper;
+
+/**
+ * Implements hook_install().
+ */
+function eu_oss_catalogue_install(): void {
+  $terms = [];
+
+  // @todo Add oss_scope when will be created.
+  foreach (['category'] as $vocab) {
+    $names = Yaml::decode(file_get_contents(__DIR__ . "/fixtures/controlled_vocabs/$vocab.yml"))['terms'];
+    foreach ($names as $name) {
+      $terms[] = "oss_$vocab:$name";
+    }
+  }
+
+  $licencesJsonFile = DRUPAL_ROOT . "/../vendor/spdx/license-list-data/json/licenses.json";
+  $licences = Json::decode(file_get_contents($licencesJsonFile))['licenses'];
+  foreach ($licences as $licence) {
+    $terms[] = "oss_licence:{$licence['licenseId']}";
+  }
+
+  $path_resolver = \Drupal::getContainer()->get('extension.path.resolver');
+  $batchBuilder = (new BatchBuilder())
+    ->setFile($path_resolver->getPath('module', 'eu_oss_catalogue') . '/eu_oss_catalogue.install')
+    ->setProgressive(FALSE);
+
+  foreach (array_chunk($terms, 50) as $chunk) {
+    $batchBuilder->addOperation(EuOssCatalogueInstallHelper::class . '::createTerms', [$chunk]);
+  }
+
+  batch_set($batchBuilder->toArray());
+}

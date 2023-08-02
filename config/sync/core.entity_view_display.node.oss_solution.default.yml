@@ -1,0 +1,217 @@
+uuid: 3ae085bd-ee07-4324-a671-2ef7e039dd57
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.node.oss_solution.oss_categories
+    - field.field.node.oss_solution.oss_development_status
+    - field.field.node.oss_solution.oss_features
+    - field.field.node.oss_solution.oss_landing_url
+    - field.field.node.oss_solution.oss_license
+    - field.field.node.oss_solution.oss_logo
+    - field.field.node.oss_solution.oss_long_description
+    - field.field.node.oss_solution.oss_main_copyright_owner
+    - field.field.node.oss_solution.oss_maintenance_contacts
+    - field.field.node.oss_solution.oss_maintenance_contractors
+    - field.field.node.oss_solution.oss_maintenance_type
+    - field.field.node.oss_solution.oss_platforms
+    - field.field.node.oss_solution.oss_publiccode_yml_content
+    - field.field.node.oss_solution.oss_publiccode_yml_version
+    - field.field.node.oss_solution.oss_release_date
+    - field.field.node.oss_solution.oss_short_description
+    - field.field.node.oss_solution.oss_software_type
+    - field.field.node.oss_solution.oss_software_version
+    - field.field.node.oss_solution.oss_source
+    - field.field.node.oss_solution.oss_url
+    - field.field.node.oss_solution.oss_used_by
+    - node.type.oss_solution
+  module:
+    - datetime
+    - joinup_core
+    - link
+    - options
+    - pluginreference
+    - user
+id: node.oss_solution.default
+targetEntityType: node
+bundle: oss_solution
+mode: default
+content:
+  oss_categories:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 13
+    region: content
+  oss_development_status:
+    type: list_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 11
+    region: content
+  oss_features:
+    type: string
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 10
+    region: content
+  oss_landing_url:
+    type: link
+    label: above
+    settings:
+      trim_length: 80
+      url_only: false
+      url_plain: false
+      rel: ''
+      target: ''
+    third_party_settings: {  }
+    weight: 3
+    region: content
+  oss_license:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 15
+    region: content
+  oss_logo:
+    type: link
+    label: above
+    settings:
+      trim_length: 80
+      url_only: false
+      url_plain: false
+      rel: ''
+      target: ''
+    third_party_settings: {  }
+    weight: 6
+    region: content
+  oss_long_description:
+    type: basic_string
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 9
+    region: content
+  oss_main_copyright_owner:
+    type: string
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 16
+    region: content
+  oss_maintenance_contacts:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 19
+    region: content
+  oss_maintenance_contractors:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 18
+    region: content
+  oss_maintenance_type:
+    type: list_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 17
+    region: content
+  oss_platforms:
+    type: entity_reference_custom_link
+    label: above
+    settings:
+      path: '[term:url]'
+      label: '[term:label]'
+      query_parameters: ''
+      limit: -1
+    third_party_settings: {  }
+    weight: 7
+    region: content
+  oss_publiccode_yml_version:
+    type: string
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 0
+    region: content
+  oss_release_date:
+    type: datetime_default
+    label: above
+    settings:
+      timezone_override: ''
+      format_type: medium
+    third_party_settings: {  }
+    weight: 4
+    region: content
+  oss_short_description:
+    type: string
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 8
+    region: content
+  oss_software_type:
+    type: list_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 12
+    region: content
+  oss_software_version:
+    type: string
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 5
+    region: content
+  oss_source:
+    type: plugin_reference_id
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 1
+    region: content
+  oss_url:
+    type: link
+    label: above
+    settings:
+      trim_length: 80
+      url_only: false
+      url_plain: false
+      rel: ''
+      target: ''
+    third_party_settings: {  }
+    weight: 2
+    region: content
+  oss_used_by:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 14
+    region: content
+hidden:
+  langcode: true
+  links: true
+  oss_publiccode_yml_content: true
+  published_at: true
+  report: true
+  search_api_excerpt: true

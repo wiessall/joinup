@@ -16,6 +16,9 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\custom_page\Entity\CustomPage;
 use Drupal\custom_page\Entity\CustomPageInterface;
+use Drupal\eu_oss_catalogue\Entity\OssContactInterface;
+use Drupal\eu_oss_catalogue\Entity\OssContractorInterface;
+use Drupal\eu_oss_catalogue\Entity\OssSolutionInterface;
 use Drupal\joinup_group\Exception\MissingGroupException;
 use Drupal\menu_link_content\MenuLinkContentInterface;
 use Drupal\node\NodeInterface;
@@ -68,6 +71,18 @@ function custom_page_entity_bundle_field_info_alter(&$fields, EntityTypeInterfac
 function custom_page_node_insert(EntityInterface $entity) {
   if ($entity instanceof CustomPageInterface) {
     \Drupal::service('custom_page.og_menu_links_manager')->addLink($entity);
+  }
+
+  // This is a temporary solution until ISAICP-7129 is fixed. As a final fix, in
+  // ISAICP-7129, we have to bail out early if the $entity is not a custom page
+  // node-type.
+  // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7129
+  if (
+    $entity instanceof OssSolutionInterface
+    || $entity instanceof OssContactInterface
+    || $entity instanceof OssContractorInterface
+  ) {
+    return;
   }
 
   // The content of custom pages is included in the search index of their

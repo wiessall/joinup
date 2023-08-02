@@ -1,0 +1,29 @@
+uuid: 3b9b6fc9-09b7-4984-bb07-e98308eaf6f8
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.oss_url
+    - node.type.oss_solution
+  module:
+    - link
+third_party_settings:
+  eu_oss_catalogue:
+    publiccode_yml:
+      resolver: default
+      config:
+        path: url
+id: node.oss_solution.oss_url
+field_name: oss_url
+entity_type: node
+bundle: oss_solution
+label: URL
+description: 'This string must be a URL to the source code repository (git, svn, …) in which the software is published. Temporarily, plays also as an unique identifier for this software'
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  title: 0
+  link_type: 16
+field_type: link
