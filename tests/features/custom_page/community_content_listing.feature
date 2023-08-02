@@ -155,6 +155,16 @@ Feature:
     When I fill in "Title" with "Chosen content"
     And I click "Choose component"
     And I click "Content listing"
+    And I enter "Shows a specific set of tiles." in the "Body" wysiwyg editor
+
+    # The "List additional actions" is the button arrow that shows the full list of paragraphs to add.
+    Given I press "List additional actions"
+    Then I click "Add Content listing" in the "Custom page body" paragraphs field
+    And I uncheck "Show related content"
+    When the following fields should not be visible "Global search, Allow shared content"
+    And I check "Show related content"
+    And I check "Global search"
+    And the following fields should be visible "Global search, Allow shared content"
     And I select "Discussion" from "Available filters"
     And I press "Add and configure filter"
     And I fill in "Discussion" with "Searching for green pad."
@@ -167,6 +177,9 @@ Feature:
     And I select "Event" from "Available filters"
     And I press "Add and configure filter"
     And I fill in "Event" with "20 year anniversary"
+    And I select "Collection" from "Available filters"
+    And I press "Add and configure filter"
+    And I fill in "Collection" with "Emulators"
     Then I drag the table row in the "Content listing field filter form" region at position 4 up
     And I press "Save" in the "Modal buttons" region
     And I press "Save"
@@ -176,12 +189,15 @@ Feature:
       | What's your favourite N64 game?       |
       | 20 year anniversary                   |
       | Rare Nintendo64 disk drive discovered |
+      | Emulators                             |
 
     When I open the header local tasks menu
     And I click "Edit" in the "Entity actions" region
     And I click "Edit" in the "Custom page body" for paragraph layout 1
     And I drag the table row in the "Content listing field filter form" region at position 3 up
     And I drag the table row in the "Content listing field filter form" region at position 2 up
+    And I click "Remove filter" at 5th filter of the 1st content listing paragraph
+    And I uncheck "Global search"
     And I press "Save" in the "Modal buttons" region
     And I press "Save"
     And I should see the following tiles in the correct order:
@@ -483,6 +499,7 @@ Feature:
     When I click "Choose component"
     And I click "Content listing"
 
+    And I select "Solution" from "Available filters"
     And I press "Add and configure filter"
     And I fill in "Solution" with "Save the Planet"
     And I press "Save" in the "Modal buttons" region
@@ -491,9 +508,11 @@ Feature:
     When I click the last "Choose component" link
     And I click "Content listing"
 
+    And I select "Solution" from latest "Available filters"
     And I press latest "Add and configure filter"
     And I fill in the latest "Solution" field with "Fight Global Warming"
 
+    And I select "Solution" from latest "Available filters"
     And I press latest "Add and configure filter"
     And I fill in the latest "Solution" field with "The Green Alliance"
     And I press "Save" in the "Modal buttons" region
@@ -526,12 +545,15 @@ Feature:
     When I click "Choose component"
     And I click "Content listing"
 
+    And I select "Solution" from "Available filters"
     And I press "Add and configure filter"
     And I fill in "Solution" with "Save gasoline"
 
+    And I select "Solution" from latest "Available filters"
     And I press latest "Add and configure filter"
     And I fill in the latest "Solution" field with "Fight battery mode"
 
+    And I select "Solution" from latest "Available filters"
     And I press latest "Add and configure filter"
     And I fill in the latest "Solution" field with "Black Noise"
     And I press "Save" in the "Modal buttons" region
@@ -540,9 +562,11 @@ Feature:
     When I click the last "Choose component" link
     And I click "Content listing"
 
+    And I select "Solution" from latest "Available filters"
     And I press latest "Add and configure filter"
     And I fill in the latest "Solution" field with "Black Noise"
 
+    And I select "Solution" from latest "Available filters"
     And I press latest "Add and configure filter"
     And I fill in the latest "Solution" field with "Fight battery mode"
     And I press "Save" in the "Modal buttons" region
