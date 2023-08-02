@@ -4,14 +4,28 @@ declare(strict_types = 1);
 
 namespace Drupal\eu_oss_catalogue;
 
+use Drupal\Component\Render\MarkupInterface;
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Plugin\DefaultPluginManager;
+use Symfony\Component\DependencyInjection\Container;
 
 /**
  * Provides the plugin manager for EU OSS Catalogue plugins types.
  */
 class EuOssCataloguePluginManager extends DefaultPluginManager implements EuOssCataloguePluginManagerInterface {
+
+  /**
+   * Plugin type IDs.
+   *
+   * @var string[]
+   */
+  private const PLUGIN_TYPES = [
+    'provider',
+    'resolver',
+    'parser',
+    'hosting_platform',
+  ];
 
   /**
    * Constructs a new plugin manager instance.
@@ -27,15 +41,26 @@ class EuOssCataloguePluginManager extends DefaultPluginManager implements EuOssC
    *   The type of plugins: provider, parser, resolver.
    */
   public function __construct(\Traversable $namespaces, CacheBackendInterface $cache_backend, ModuleHandlerInterface $module_handler, string $type) {
-    \assert(in_array($type, ['provider', 'resolver', 'parser'], TRUE));
-    $typeCapitalized = ucfirst($type);
-    $interfaceClass = 'Drupal\eu_oss_catalogue\EuOssCatalogue' . $typeCapitalized . 'Interface';
-    $annotationClass = 'Drupal\eu_oss_catalogue\Annotation\EuOssCatalogue' . $typeCapitalized;
+    \assert(in_array($type, static::PLUGIN_TYPES, TRUE));
 
-    parent::__construct('Plugin/eu_oss_catalogue/' . $typeCapitalized, $namespaces, $module_handler, $interfaceClass, $annotationClass);
+    $typeCamelized = Container::camelize($type);
+    $interfaceClass = 'Drupal\eu_oss_catalogue\EuOssCatalogue' . $typeCamelized . 'Interface';
+    $annotationClass = 'Drupal\eu_oss_catalogue\Annotation\EuOssCatalogue' . $typeCamelized;
+
+    parent::__construct('Plugin/eu_oss_catalogue/' . $typeCamelized, $namespaces, $module_handler, $interfaceClass, $annotationClass);
 
     $this->alterInfo("eu_oss_catalogue_{$type}_info");
     $this->setCacheBackend($cache_backend, "eu_oss_catalogue_{$type}_plugins");
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getDefinitionsAsOptions(): array {
+    return array_map(
+      fn (array $definition): MarkupInterface|string => $definition['label'],
+      $this->getDefinitions(),
+    );
   }
 
 }

@@ -53,6 +53,7 @@ drupal:
         - Memcache
         - Custom queue services
         - Monolog
+        - EU OSS Catalogue
       site-clean:
         - Main settings
         - Databases
@@ -71,6 +72,7 @@ drupal:
         - Memcache
         - Custom queue services
         - Monolog
+        - EU OSS Catalogue
       behat:
         - Main settings
         - Databases
@@ -140,6 +142,7 @@ drupal:
         - Dashboard agent
         - Varnish purge
         - Reverse proxy
+        - EU OSS Catalogue
     header: |
       <?php
 
@@ -353,3 +356,5 @@ drupal:
       Reverse proxy: |
         $settings['reverse_proxy'] = (bool) getenv('DRUPAL_REVERSE_PROXY_ENABLE');
         $settings['reverse_proxy_addresses'] = array_filter(explode(',', (string) getenv('DRUPAL_REVERSE_PROXY_ADDRESSES')));
+      EU OSS Catalogue: |
+        $settings['eu_oss_catalogue']['platform_github']['access_token'] = getenv('JOINUP_GITHUB_TOKEN');

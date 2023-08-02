@@ -50,6 +50,8 @@ module:
   entityqueue_block: 0
   error_page: 0
   eu_oss_catalogue: 0
+  eu_oss_catalogue_platform_github: 0
+  eu_oss_catalogue_platform_gitlab: 0
   eu_sic: 0
   eupl: 0
   facets: 0
@@ -147,6 +149,7 @@ module:
   metatag_views: 0
   moderation: 0
   monolog: 0
+  multivalue_form_element: 0
   mysql: 0
   nio: 0
   node: 0
