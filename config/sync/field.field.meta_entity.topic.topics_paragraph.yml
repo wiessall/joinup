@@ -80,6 +80,9 @@ settings:
       github_feed:
         weight: 35
         enabled: false
+      heading:
+        weight: 38
+        enabled: false
       iframe:
         weight: 32
         enabled: false
@@ -92,6 +95,9 @@ settings:
       layout:
         weight: 39
         enabled: true
+      quote:
+        weight: 43
+        enabled: false
       row:
         weight: 35
         enabled: false
