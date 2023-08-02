@@ -155,11 +155,6 @@ Feature:
     When I fill in "Title" with "Chosen content"
     And I click "Choose component"
     And I click "Content listing"
-    And I enter "Shows a specific set of tiles." in the "Body" wysiwyg editor
-
-    # The "List additional actions" is the button arrow that shows the full list of paragraphs to add.
-    Given I press "List additional actions"
-    Then I click "Add Content listing" in the "Custom page body" paragraphs field
     And I uncheck "Show related content"
     When the following fields should not be visible "Global search, Allow shared content"
     And I check "Show related content"
