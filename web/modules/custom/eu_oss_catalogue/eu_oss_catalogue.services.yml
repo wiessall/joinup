@@ -1,0 +1,24 @@
+services:
+
+  eu_oss_catalogue:
+    class: Drupal\eu_oss_catalogue\EuOssCatalogue
+    arguments:
+      - '@plugin.manager.eu_oss_catalogue.provider'
+      - '@plugin.manager.eu_oss_catalogue.parser'
+      - '@queue'
+      - '@event_dispatcher'
+
+  plugin.manager.eu_oss_catalogue.provider:
+    class: Drupal\eu_oss_catalogue\EuOssCataloguePluginManager
+    parent: default_plugin_manager
+    arguments: [provider]
+
+  plugin.manager.eu_oss_catalogue.parser:
+    class: Drupal\eu_oss_catalogue\EuOssCataloguePluginManager
+    parent: default_plugin_manager
+    arguments: [parser]
+
+  plugin.manager.eu_oss_catalogue.resolver:
+    class: Drupal\eu_oss_catalogue\EuOssCataloguePluginManager
+    parent: default_plugin_manager
+    arguments: [resolver]

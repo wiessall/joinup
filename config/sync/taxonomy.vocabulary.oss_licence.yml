@@ -1,0 +1,8 @@
+uuid: 9fcf8856-39bc-4dce-abe2-1d040b8457ea
+langcode: en
+status: true
+dependencies: {  }
+name: 'OSS Licence'
+vid: oss_licence
+description: 'Opensource Software Solution Licence'
+weight: 0
