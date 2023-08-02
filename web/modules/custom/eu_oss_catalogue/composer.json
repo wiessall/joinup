@@ -22,6 +22,8 @@
     "license": "GPL-2.0+",
     "minimum-stability": "dev",
     "require": {
+        "drupal/multivalue_form_element": "^1.0",
+        "knplabs/github-api": "^3.0",
         "spdx/license-list-data": "*"
     },
     "require-dev": {

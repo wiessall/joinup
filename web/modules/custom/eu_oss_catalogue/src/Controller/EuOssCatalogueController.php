@@ -55,17 +55,16 @@ class EuOssCatalogueController extends ControllerBase {
       ];
       $rows[] = $row;
     }
+
     return [
       '#theme' => 'table',
       '#header' => [
         $this->t('ID'),
         $this->t('Name'),
-        $this->t('Description'),
         $this->t('Operations'),
       ],
       '#rows' => $rows,
     ];
-
   }
 
 }

@@ -5,3 +5,11 @@ eu_oss_catalogue.provider.collection:
     _title: OSS Catalog
   requirements:
     _permission: administer eu oss catalogue
+
+eu_oss_catalogue.hosting_platform_add:
+  path: '/admin/content/eu-oss-catalogue/hosting-platform/add'
+  defaults:
+    _entity_form: 'hosting_platform.edit'
+    _title: 'Add configuration'
+  requirements:
+    _permission: 'administer eu oss catalogue'
