@@ -16,7 +16,6 @@ declare(strict_types = 1);
 
 use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\Core\Entity\EntityInterface;
-use Drupal\Core\File\Exception\FileException;
 use Drupal\interoperable_europe\InteroperableEuropeCollectionInterface;
 use Drupal\meta_entity\Entity\MetaEntity;
 use Drupal\node\Entity\Node;
@@ -25,31 +24,9 @@ use Drupal\paragraphs\ParagraphInterface;
 use Drupal\rdf_entity\Entity\Rdf;
 
 /**
- * Removal of spam content files.
- */
-function joinup_core_deploy_109500(): void {
-  /** @var \Drupal\Core\File\FileSystemInterface $fileSystem */
-  $fileSystem = \Drupal::service('file_system');
-
-  $files = [
-    'public://document/2022-12/black-panther-2-wakanda-forever-free-w2tk.pdf',
-    'public://document/2022-12/fury-vs-chisora-live-wise.pdf',
-    'public://document/2022-12/2021-Crack-Adobe-Illustrator-CC-2018-2521-64Bit-2021-Crack.pdf',
-  ];
-
-  foreach ($files as $file) {
-    try {
-      $fileSystem->delete($file);
-    }
-    catch (FileException $e) {
-    }
-  }
-}
-
-/**
  * Change 'culture' to 'culture and environment'.
  */
-function joinup_core_deploy_109501(): string {
+function joinup_core_deploy_109600(): string {
   // Update the references.
   $vocab_manager = \Drupal::getContainer()->get('topic.vocabulary_manager');
   $vocab_manager->updateDbReference('http://joinup.eu/ontology/topic#culture', 'http://joinup.eu/ontology/topic#culture-and-education');
@@ -59,14 +36,14 @@ function joinup_core_deploy_109501(): string {
 /**
  * Clean up cached_computed_field_expired_fields queue.
  */
-function joinup_core_deploy_109502(): void {
+function joinup_core_deploy_109601(): void {
   \Drupal::queue('cached_computed_field_expired_fields')->deleteQueue();
 }
 
 /**
  * Migrate IOP custom pages row paragraphs to layout paragraphs.
  */
-function joinup_core_deploy_109503(): string {
+function joinup_core_deploy_109602(): string {
   $collection = Rdf::load(InteroperableEuropeCollectionInterface::COLLECTION_ENTITY_ID);
   $group_helper = \Drupal::getContainer()->get('og.membership_manager');
   $node_ids = $group_helper->getGroupContentIds($collection, ['node']);
@@ -101,7 +78,7 @@ function joinup_core_deploy_109503(): string {
 /**
  * Migrate Topic meta entity row paragraphs to layout paragraphs.
  */
-function joinup_core_deploy_109504(array &$sandbox): string {
+function joinup_core_deploy_109603(array &$sandbox): string {
   if (empty($sandbox['meta_ids'])) {
     $sandbox['meta_ids'] = \Drupal::entityQuery('meta_entity')
       ->accessCheck(FALSE)
@@ -411,16 +388,4 @@ function _joinup_core_create_heading_paragraph(ParagraphInterface $new_layout_pa
   ]);
   $child_paragraph->save();
   return $child_paragraph;
-}
-
-/**
- * Import the new version of EIRA.
- */
-function joinup_core_deploy_109505(): string {
-  $fixtures_helper = \Drupal::getContainer()->get(
-    'joinup_rdf.vocabulary_fixtures.helper'
-  );
-  $fixtures_helper->importFixtures('eira_skos');
-
-  return 'Imported eira_skos and ran after import queries.';
 }

@@ -75,16 +75,6 @@ commands:
     - task: exec
       command: (test "${phpcs.run_on_push}" = "1" && ln -s ../../scripts/git/pre_push ${joinup.dir}/.git/hooks/pre-push) || true
 
-  # Scans the code base for deprecated code.
-  testing:check-deprecated-code:
-    - task: exec
-      command: ${phpstan.bin} --memory-limit=1G --debug -vvv --no-progress analyse src tests/src web/modules/custom web/profiles web/themes/ventuno web/themes/iop
-
-  testing:check-deprecated-code-contrib:
-    - task: exec
-      # Mute the returning error code as is used only for reporting.
-      command: ${phpstan.bin} --memory-limit=2G --no-progress analyse web/modules/contrib web/themes/contrib || true
-
   testing:install-modules:
     - task: run
       command: drush:module-install
