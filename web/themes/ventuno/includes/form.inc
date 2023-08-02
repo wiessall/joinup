@@ -175,3 +175,12 @@ function ventuno_form_poll_view_form_alter(array &$form, FormStateInterface $for
     $form['actions'][$element]['#attributes']['class'][] = 'p-0';
   }
 }
+
+/**
+ * Implements hook_preprocess_input__submit().
+ */
+function ventuno_preprocess_input__submit(array &$variables): void {
+  if (!isset($variables['element']['#button_type'])) {
+    $variables['attributes']['class'][] = 'btn-primary';
+  }
+}
