@@ -35,13 +35,21 @@ index ba34b70..718b954 100644
      class: Drupal\facets\Utility\FacetsDateHandler
      arguments:
 diff --git a/src/FacetManager/DefaultFacetManager.php b/src/FacetManager/DefaultFacetManager.php
-index 4282368..9a609d5 100644
+index 4282368..18bd99f 100644
 --- a/src/FacetManager/DefaultFacetManager.php
 +++ b/src/FacetManager/DefaultFacetManager.php
-@@ -90,6 +90,13 @@ class DefaultFacetManager {
+@@ -5,6 +5,7 @@ namespace Drupal\facets\FacetManager;
+ use Drupal\Core\Cache\CacheableMetadata;
+ use Drupal\Core\Cache\RefinableCacheableDependencyInterface;
+ use Drupal\Core\Entity\EntityTypeManagerInterface;
++use Drupal\Core\Extension\ModuleHandlerInterface;
+ use Drupal\Core\Routing\CurrentRouteMatch;
+ use Drupal\Core\StringTranslation\StringTranslationTrait;
+ use Drupal\facets\Event\PostBuildFacet;
+@@ -90,6 +91,13 @@ class DefaultFacetManager {
     */
    private $routeMatch;
- 
+
 +  /**
 +  * The module handler.
 +  *
@@ -52,7 +60,7 @@ index 4282368..9a609d5 100644
    /**
     * Constructs a new instance of the DefaultFacetManager.
     *
-@@ -103,16 +110,19 @@ class DefaultFacetManager {
+@@ -103,16 +111,19 @@ class DefaultFacetManager {
     *   The entity type plugin manager.
     * @param \Drupal\Core\Routing\CurrentRouteMatch $route_match
     *   The current route match.
@@ -71,9 +79,9 @@ index 4282368..9a609d5 100644
      $this->routeMatch = $route_match;
 +    $this->moduleHandler = $moduleHandler;
    }
- 
+
    /**
-@@ -182,6 +192,7 @@ class DefaultFacetManager {
+@@ -182,6 +193,7 @@ class DefaultFacetManager {
          ]
        );
        $query_type_plugin->execute();
