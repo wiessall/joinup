@@ -12,9 +12,8 @@ dependencies:
     - node.type.custom_page
   module:
     - file
-    - layout_paragraphs
     - joinup_workflow
-    - paragraphs
+    - layout_paragraphs
     - path
     - svg_image
 id: node.custom_page.default
@@ -44,7 +43,7 @@ content:
     settings:
       preview_view_mode: default
       nesting_depth: 0
-      require_layouts: 0
+      require_layouts: 1
       empty_message: ''
     third_party_settings: {  }
   field_state:
