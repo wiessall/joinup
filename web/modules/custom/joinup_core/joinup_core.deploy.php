@@ -14,6 +14,8 @@
 
 declare(strict_types = 1);
 
+use Drupal\search_api\Entity\Index;
+
 /**
  * Update the topics list.
  */
@@ -56,7 +58,7 @@ function joinup_core_deploy_109600(): string {
   // * Indoor position systems
   // * Internet of Things
   // * Optical Character Recognition
-  // * Robotic Process Automation
+  // * Robotic Process Automation.
   $labels = [
     'Advanced data analytics',
     'AI Chatbot',
@@ -80,4 +82,47 @@ function joinup_core_deploy_109600(): string {
   }
 
   return implode(PHP_EOL, $messages);
+}
+
+/**
+ * Re-indexes items related to the affected changed terms.
+ */
+function joinup_core_deploy_109602(): string {
+  $affected_terms = [
+    'http://joinup.eu/ontology/topic/category#innovation',
+    'http://joinup.eu/ontology/topic#innovation',
+    'http://joinup.eu/ontology/topic#artificial-intelligence',
+    'http://joinup.eu/ontology/topic#blockchain',
+    'http://joinup.eu/ontology/topic#digital-innovation',
+  ];
+
+  $node_ids = \Drupal::entityQuery('node')
+    ->condition('field_topic', $affected_terms, 'IN')
+    ->accessCheck(FALSE)
+    ->execute();
+  $search_ids = array_map(function (string $id): string {
+    return "entity:node/$id:en";
+  }, $node_ids);
+
+  $rdf_entity_ids = \Drupal::entityQuery('rdf_entity')
+    ->condition('field_topic', $affected_terms, 'IN')
+    ->accessCheck(FALSE)
+    ->execute();
+  $search_ids = array_merge($search_ids, array_map(function (string $id): string {
+    return "entity:rdf_entity/$id:en";
+  }, $rdf_entity_ids));
+
+  $topic_ids = \Drupal::entityQuery('taxonomy_term')
+    ->condition('vid', 'topic')
+    ->accessCheck(FALSE)
+    ->execute();
+  $search_ids = array_merge($search_ids, array_map(function (string $id): string {
+    return "entity:taxonomy_term/$id:en";
+  }, $topic_ids));
+
+  $index = Index::load('published');
+  $items = $index->loadItemsMultiple($search_ids);
+  $index->indexSpecificItems($items);
+
+  return 'Items re-indexed.';
 }
