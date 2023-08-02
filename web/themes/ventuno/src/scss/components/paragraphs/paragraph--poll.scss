@@ -1,6 +1,7 @@
 @import "../../partials/core";
 
 .paragraph--poll {
+  position: relative;
   // Form overrides
   .col-form-label {
     padding-top: 0;
@@ -20,7 +21,6 @@
     padding: $spacer 0;
     margin: 0;
   }
-  //
   .poll {
     .choice-item {
       &:not(:last-of-type) {
@@ -54,6 +54,19 @@
           background-color: rgba($brand, .1);
         }
       }
+    }
+  }
+  .form-actions {
+    margin-top: $spacer;
+    margin-bottom: 0;
+    @include media-breakpoint-up(sm) {
+      margin-top: 0;
+    }
+  }
+  [data-drupal-selector="edit-cancel"] {
+    @include media-breakpoint-up(sm) {
+      position: absolute;
+      bottom: $spacer * -.1; // Align with poll details
     }
   }
 }
