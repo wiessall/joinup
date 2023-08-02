@@ -45,6 +45,7 @@
     }
     // Before pseudo-element contains top and bottom waves.
     &::before {
+      background-color: unset;
       bottom: 0;
       background-position: top, bottom;
     }
