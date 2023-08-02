@@ -26,10 +26,10 @@ dependencies:
     - responsive_image.styles.tile
   module:
     - field_group
+    - joinup_html_stripper
     - layout_builder
     - responsive_image
     - template_suggestion
-    - text
     - user
 third_party_settings:
   field_group:
@@ -60,9 +60,10 @@ bundle: collection
 mode: view_mode_tile_horizontal
 content:
   field_ar_description:
-    type: text_default
+    type: joinup_html_stripper_stripped
     label: hidden
-    settings: {  }
+    settings:
+      trim_length: 600
     third_party_settings:
       template_suggestion:
         template_suggestion: bare
