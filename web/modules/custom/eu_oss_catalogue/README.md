@@ -1,4 +1,4 @@
-# EU OSS Catalogue
+# European OpenSource Software Catalogue
 
 ## Description
 
@@ -14,7 +14,6 @@ module.
 
 ## Install & configure
 
-TBD...
 
 ## Usage
 

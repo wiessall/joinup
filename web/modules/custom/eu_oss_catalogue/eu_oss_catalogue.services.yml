@@ -28,3 +28,8 @@ services:
     class: Drupal\eu_oss_catalogue\EuOssCataloguePluginManager
     parent: default_plugin_manager
     arguments: [resolver]
+
+  plugin.manager.eu_oss_catalogue.hosting_platform:
+    class: Drupal\eu_oss_catalogue\EuOssCataloguePluginManager
+    parent: default_plugin_manager
+    arguments: [hosting_platform]
