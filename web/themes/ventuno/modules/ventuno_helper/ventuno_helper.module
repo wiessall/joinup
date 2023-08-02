@@ -47,7 +47,14 @@ function ventuno_helper_link_alter(array &$variables): void {
  * Implements hook_theme_suggestions_HOOK_alter() for facets.
  */
 function ventuno_helper_theme_suggestions_facets_item_list_alter(array &$suggestions, array $variables): void {
-  if (isset($variables["attributes"]["data-drupal-facet-alias"]) && $variables["attributes"]["data-drupal-facet-alias"] === 'status') {
+  $archived_facets = [
+    'content_listing_status',
+    'entity_status',
+    'field_is_content_status',
+    'field_collection_content_status',
+    'user_status',
+  ];
+  if (isset($variables["attributes"]["data-drupal-facet-alias"]) && in_array($variables["attributes"]["data-drupal-facet-id"], $archived_facets)) {
     $suggestions[] = 'facets_item_list__archived__status';
   }
 }
