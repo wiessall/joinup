@@ -155,6 +155,7 @@ Feature:
     And I uncheck "Show related content"
     When the following fields should not be visible "Global search, Allow shared content"
     And I check "Show related content"
+    And I check "Global search"
     And the following fields should be visible "Global search, Allow shared content"
     And I select "Discussion" from "Available filters"
     And I press "Add and configure filter"
@@ -168,6 +169,9 @@ Feature:
     And I select "Event" from "Available filters"
     And I press "Add and configure filter"
     And I fill in "Event" with "20 year anniversary"
+    And I select "Collection" from "Available filters"
+    And I press "Add and configure filter"
+    And I fill in "Collection" with "Emulators"
     Then I drag the table row in the "Content listing field filter form" region at position 4 up
     And I press "Publish"
     Then I should see the heading "Chosen content"
@@ -176,11 +180,14 @@ Feature:
       | What's your favourite N64 game?       |
       | 20 year anniversary                   |
       | Rare Nintendo64 disk drive discovered |
+      | Emulators                             |
 
     When I open the header local tasks menu
     And I click "Edit" in the "Entity actions" region
     And I drag the table row in the "Content listing field filter form" region at position 3 up
     And I drag the table row in the "Content listing field filter form" region at position 2 up
+    And I click "Remove filter" at 5th filter of the 1st content listing paragraph
+    And I uncheck "Global search"
     And I press "Update"
     And I should see the following tiles in the correct order:
       | 20 year anniversary                   |
@@ -485,6 +492,7 @@ Feature:
     When I press "List additional actions"
     And I click "Add Content listing" in the "Custom page body" paragraphs field
 
+    And I select "Solution" from "Available filters"
     And I press "Add and configure filter"
     And I fill in "Solution" with "Save the Planet"
 
@@ -492,9 +500,11 @@ Feature:
     When I press "List additional actions"
     And I click "Add Content listing" in the "Custom page body" paragraphs field
 
+    And I select "Solution" from latest "Available filters"
     And I press latest "Add and configure filter"
     And I fill in the latest "Solution" field with "Fight Global Warming"
 
+    And I select "Solution" from latest "Available filters"
     And I press latest "Add and configure filter"
     And I fill in the latest "Solution" field with "The Green Alliance"
 
@@ -524,12 +534,15 @@ Feature:
     When I press "List additional actions"
     And I click "Add Content listing" in the "Custom page body" paragraphs field
 
+    And I select "Solution" from "Available filters"
     And I press "Add and configure filter"
     And I fill in "Solution" with "Save gasoline"
 
+    And I select "Solution" from latest "Available filters"
     And I press latest "Add and configure filter"
     And I fill in the latest "Solution" field with "Fight battery mode"
 
+    And I select "Solution" from latest "Available filters"
     And I press latest "Add and configure filter"
     And I fill in the latest "Solution" field with "Black Noise"
 
@@ -537,9 +550,11 @@ Feature:
     When I press "List additional actions"
     And I click "Add Content listing" in the "Custom page body" paragraphs field
 
+    And I select "Solution" from latest "Available filters"
     And I press latest "Add and configure filter"
     And I fill in the latest "Solution" field with "Black Noise"
 
+    And I select "Solution" from latest "Available filters"
     And I press latest "Add and configure filter"
     And I fill in the latest "Solution" field with "Fight battery mode"
     Then I press "Update"
