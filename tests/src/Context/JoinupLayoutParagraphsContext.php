@@ -403,30 +403,6 @@ class JoinupLayoutParagraphsContext extends RawDrupalContext {
   }
 
   /**
-   * Returns a layout paragraph element by uuid.
-   *
-   * @param string $field_alias
-   *   The field designator as defined in
-   *   \Drupal\joinup\Context\JoinupLayoutParagraphsContext::FIELD_MAP.
-   * @param string $uuid
-   *   The uuid of the paragraph.
-   *
-   * @return \Behat\Mink\Element\TraversableElement|null
-   *   The layout paragraph element or null if not found.
-   */
-  protected function findLayoutParagraphByUuid(string $field_alias, string $uuid): ?TraversableElement {
-    $paragraphs = $this->getFormFieldLayoutParagraphs($field_alias);
-    $element = NULL;
-    foreach ($paragraphs as $paragraph) {
-      if ($paragraph->hasAttribute('data-uuid') && $paragraph->getAttribute('data-uuid') === $uuid) {
-        $element = $paragraph;
-        break;
-      }
-    }
-    return $element;
-  }
-
-  /**
    * Returns a layout paragraph element by position.
    *
    * @param string $field_alias
