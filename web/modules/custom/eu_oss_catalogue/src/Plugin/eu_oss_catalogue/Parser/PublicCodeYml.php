@@ -47,7 +47,7 @@ class PublicCodeYml extends EuOssCatalogueParserPluginBase implements ContainerF
    * @param \Drupal\eu_oss_catalogue\EuOssCataloguePluginManagerInterface $resolverManager
    *   The EU OSS Catalogue resolver plugin manager service.
    * @param \Drupal\Core\Logger\LoggerChannelInterface $logger
-   *   The logger channel service.
+   *   The EU catalogue logger channel.
    * @param \Drupal\Core\Config\TypedConfigManagerInterface $typedConfigManager
    *   The typed config manager interface.
    */
