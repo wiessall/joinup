@@ -12,9 +12,9 @@ dependencies:
     - rdf_entity.rdfentity.licence
   module:
     - field_group
+    - joinup_html_stripper
     - layout_builder
     - template_suggestion
-    - text
     - user
 third_party_settings:
   field_group:
@@ -47,9 +47,10 @@ bundle: licence
 mode: view_mode_tile_horizontal
 content:
   field_licence_description:
-    type: text_default
+    type: joinup_html_stripper_stripped
     label: hidden
-    settings: {  }
+    settings:
+      trim_length: 600
     third_party_settings:
       template_suggestion:
         template_suggestion: bare
