@@ -391,27 +391,6 @@ class JoinupLayoutParagraphsContext extends RawDrupalContext {
   }
 
   /**
-   * Clicks on link inside paragraph.
-   *
-   * @param string $label
-   *   The label of the field.
-   * @param string $field
-   *   The field in which to take action.
-   * @param int $position
-   *   The ordinal position of the field.
-   *
-   * @When I click :label in the :field for paragraph layout :position
-   *
-   * @throws \Behat\Mink\Exception\ElementNotFoundException
-   */
-  public function iClickInTheFieldForParagraphLayout(string $label, string $field, int $position): void {
-    // TODO: Can we remove?
-    $paragraphItem = $this->getParagraphsElementItem($field, $position);
-    $this->scrollElementIntoView($paragraphItem);
-    $paragraphItem->clickLink($label);
-  }
-
-  /**
    * Returns the paragraph field element item.
    *
    * @param string $field
