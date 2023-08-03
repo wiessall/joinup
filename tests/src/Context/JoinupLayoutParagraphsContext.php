@@ -82,8 +82,8 @@ class JoinupLayoutParagraphsContext extends RawDrupalContext {
     $this->assertJavaScriptEnabledBrowser();
 
     $field = $this->getParagraphsElement($field_alias);
-    $link = $field->find('named', ['link', 'Add layout']);
-    $link->click();
+    $links = $field->findAll('named', ['link', 'Add layout']);
+    end($links)->click();
 
     // Get the 'layout' property from the table.
     $layout = $layout_properties->getRowsHash()['layout'];
