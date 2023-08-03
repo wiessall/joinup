@@ -14,35 +14,12 @@
 
 declare(strict_types = 1);
 
-use Drupal\Core\File\Exception\FileException;
 use Drupal\joinup_media\Plugin\QueueWorker\MigrateMedia;
-
-/**
- * Removal of spam content files.
- */
-function joinup_core_deploy_109500(): void {
-  /** @var \Drupal\Core\File\FileSystemInterface $fileSystem */
-  $fileSystem = \Drupal::service('file_system');
-
-  $files = [
-    'public://document/2022-12/black-panther-2-wakanda-forever-free-w2tk.pdf',
-    'public://document/2022-12/fury-vs-chisora-live-wise.pdf',
-    'public://document/2022-12/2021-Crack-Adobe-Illustrator-CC-2018-2521-64Bit-2021-Crack.pdf',
-  ];
-
-  foreach ($files as $file) {
-    try {
-      $fileSystem->delete($file);
-    }
-    catch (FileException $e) {
-    }
-  }
-}
 
 /**
  * Import the new version of EIRA.
  */
-function joinup_core_deploy_109501(): string {
+function joinup_core_deploy_109600(): string {
   $fixtures_helper = \Drupal::getContainer()->get(
     'joinup_rdf.vocabulary_fixtures.helper'
   );
@@ -94,7 +71,7 @@ function joinup_core_deploy_109502(array &$sandbox): string {
 /**
  * Migrate videos and images embed markup into media.
  */
-function joinup_core_deploy_109503(array &$sandbox): string {
+function joinup_core_deploy_109601(array &$sandbox): string {
   $sparql = \Drupal::getContainer()->get('sparql.endpoint');
   $db = \Drupal::database();
   $queue = \Drupal::queue('joinup_media_migrate');

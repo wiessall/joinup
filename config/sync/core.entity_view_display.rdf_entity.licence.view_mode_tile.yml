@@ -11,8 +11,8 @@ dependencies:
     - field.field.rdf_entity.licence.field_licence_type
     - rdf_entity.rdfentity.licence
   module:
+    - joinup_html_stripper
     - template_suggestion
-    - text
     - user
 _core:
   default_config_hash: dUUds8JuHKNe_Ty02jUEcyT-VjmQGe9ddodFFQ2wp0Q
@@ -22,9 +22,10 @@ bundle: licence
 mode: view_mode_tile
 content:
   field_licence_description:
-    type: text_default
+    type: joinup_html_stripper_stripped
     label: hidden
-    settings: {  }
+    settings:
+      trim_length: 600
     third_party_settings:
       template_suggestion:
         template_suggestion: bare
