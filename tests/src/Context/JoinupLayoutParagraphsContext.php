@@ -259,8 +259,6 @@ class JoinupLayoutParagraphsContext extends RawDrupalContext {
    *   Link element.
    * @param string $action
    *   Action name.
-   *
-   * @return void
    */
   protected function performAction(TraversableElement $link, string $action): void {
     $actions = ['delete', 'edit', 'move up', 'move down', 'duplicate'];
