@@ -49,13 +49,6 @@ class JoinupParagraphsContext extends RawDrupalContext {
   ];
 
   /**
-   * Reusable xpath pattern.
-   *
-   * @var string
-   */
-  const PARAGRAPH_ITEM_XPATH = "//div[contains(concat(' ', @class, ' '), ' paragraph ')]";
-
-  /**
    * Enters the given text in the given WYSIWYG editor.
    *
    * If this is running on a JavaScript enabled browser it will first click the
@@ -234,36 +227,6 @@ class JoinupParagraphsContext extends RawDrupalContext {
   public function assertRowsInParagraphsField(int $expected_rows, string $field): void {
     $field = $this->getParagraphsElement($field);
     Assert::assertCount($expected_rows, $field->findAll('xpath', "//tr[contains(concat(' ', @class, ' '), 'draggable')]"));
-  }
-
-  /**
-   * Asserts the number of paragraphs in the page.
-   *
-   * @param int $expected_rows
-   *   (optional) The expected number of paragraphs. Defaults to 0.
-   *
-   * @Then there should be :expected_rows paragraph(s) in the page
-   * @Then the page should contain no paragraphs
-   */
-  public function assertParagraphsCountInPage(int $expected_rows = 0): void {
-    Assert::assertCount($expected_rows, $this->getSession()->getPage()->findAll('xpath', static::PARAGRAPH_ITEM_XPATH));
-  }
-
-  /**
-   * Asserts the exact text content of the paragraphs in the page.
-   *
-   * @param \Behat\Gherkin\Node\TableNode $table
-   *   The table of expected paragraph texts.
-   *
-   * @Given I should see the following paragraphs in the given order:
-   */
-  public function assertExactParagraphsContentInPage(TableNode $table): void {
-    $expected = $table->getColumn(0);
-    $paragraphs = $this->getSession()->getPage()->findAll('xpath', static::PARAGRAPH_ITEM_XPATH);
-    $actual = array_map(function (TraversableElement $paragraph): string {
-      return $paragraph->getText();
-    }, $paragraphs);
-    Assert::assertSame($expected, $actual);
   }
 
   /**
