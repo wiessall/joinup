@@ -9,6 +9,7 @@ use Behat\Mink\Element\TraversableElement;
 use Behat\Mink\Exception\ElementNotFoundException;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\joinup\Traits\JavascriptTrait;
+use PHPUnit\Framework\Assert;
 use function PHPUnit\Framework\assertSame;
 use function PHPUnit\Framework\assertTrue;
 
@@ -53,6 +54,13 @@ class JoinupLayoutParagraphsContext extends RawDrupalContext {
     'background theme' => 'select',
     'extra classes' => 'textfield',
   ];
+
+  /**
+   * Reusable xpath pattern.
+   *
+   * @var string
+   */
+  const PARAGRAPH_ITEM_XPATH = "//div[contains(concat(' ', @class, ' '), ' layout ')]//div[contains(concat(' ', @class, ' '), ' paragraph ')]";
 
   /**
    * Adds a layout paragraph in the last position in the given field.
@@ -190,7 +198,7 @@ class JoinupLayoutParagraphsContext extends RawDrupalContext {
       elseif ($field_type === 'ckeditor') {
         // Wait for the CKEditor to load.
         $this->getSession()->wait(5000, "document.querySelector('.lpb-dialog .cke_wysiwyg_frame') !== null");
-        $this->getSession()->executeScript("document.querySelector(\".lpb-dialog .cke_wysiwyg_frame\").contentWindow.document.body.innerHTML = '\"{$field_value}\"';");
+        $this->getSession()->executeScript("document.querySelector(\".lpb-dialog .cke_wysiwyg_frame\").contentWindow.document.body.innerHTML = '{$field_value}';");
       }
       else {
         $this->getSession()->getPage()->fillField($property, $field_value);
@@ -309,6 +317,36 @@ class JoinupLayoutParagraphsContext extends RawDrupalContext {
     }, $layout_list->getColumn(0));
 
     assertSame($expected, $actual);
+  }
+
+  /**
+   * Asserts the number of paragraphs in the page.
+   *
+   * @param int $expected_rows
+   *   (optional) The expected number of paragraphs. Defaults to 0.
+   *
+   * @Then there should be :expected_rows paragraph(s) in the page
+   * @Then the page should contain no paragraphs
+   */
+  public function assertParagraphsCountInPage(int $expected_rows = 0): void {
+    Assert::assertCount($expected_rows, $this->getSession()->getPage()->findAll('xpath', static::PARAGRAPH_ITEM_XPATH));
+  }
+
+  /**
+   * Asserts the exact text content of the paragraphs in the page.
+   *
+   * @param \Behat\Gherkin\Node\TableNode $table
+   *   The table of expected paragraph texts.
+   *
+   * @Given I should see the following paragraphs in the given order:
+   */
+  public function assertExactParagraphsContentInPage(TableNode $table): void {
+    $expected = $table->getColumn(0);
+    $paragraphs = $this->getSession()->getPage()->findAll('xpath', static::PARAGRAPH_ITEM_XPATH);
+    $actual = array_map(function (TraversableElement $paragraph): string {
+      return $paragraph->getText();
+    }, $paragraphs);
+    Assert::assertSame($expected, $actual);
   }
 
   /**

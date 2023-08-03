@@ -37,6 +37,8 @@ Feature:
     Given custom_page content:
       | title                  | collection            | state     |
       | Behaviour example page | Paragraphs collection | published |
+    And I append "layout" to "field_paragraphs_body" field in "node" entity with following "Behaviour example page" title:
+      | behavior_settings | a:3:{s:17:"layout_paragraphs";a:4:{s:6:"layout";s:13:"layout_onecol";s:6:"config";a:1:{s:5:"label";s:0:"";}s:11:"parent_uuid";N;s:6:"region";N;}s:16:"background_theme";a:0:{}s:11:"extra_class";a:0:{}} |
 
     When I am logged in as a moderator
     And I go to the edit form of the "Behaviour example page" "custom page"
@@ -55,13 +57,17 @@ Feature:
     Given custom_page content:
       | title           | collection            | state     |
       | Paragraphs page | Paragraphs collection | published |
-    And I append "simple_paragraph" to "field_paragraphs_body" field in "node" entity with following "Paragraphs page" title:
-      | field_body:value  | AAAAAAAAAA      |
-      | field_body:format | content_editor  |
-    And I append "simple_paragraph" to "field_paragraphs_body" field in "node" entity with following "Paragraphs page" title:
-      | field_body:value  | BBBBBBBBBB      |
-      | field_body:format | content_editor  |
+    And I append "layout" to "field_paragraphs_body" field in "node" entity with following "Paragraphs page" title:
+      | behavior_settings | a:3:{s:17:"layout_paragraphs";a:4:{s:6:"layout";s:13:"layout_onecol";s:6:"config";a:1:{s:5:"label";s:0:"";}s:11:"parent_uuid";N;s:6:"region";N;}s:16:"background_theme";a:0:{}s:11:"extra_class";a:0:{}} |
+
     Then I am logged in as a facilitator of the "Paragraphs collection" collection
+    And I go to the edit form of the "Paragraphs page" "custom page"
+    When I add a "Text" paragraph in the "Custom page body" form field:
+      | Body | type: ckeditor - value: AAAAAAAAAA |
+    When I add a "Text" paragraph in the "Custom page body" form field:
+      | Body | type: ckeditor - value: BBBBBBBBBB |
+    And I press "Update"
+
     And I go to the "Paragraphs page" custom page
     And I should see the following paragraphs in the given order:
       | AAAAAAAAAA |
@@ -69,7 +75,7 @@ Feature:
 
     Then I open the header local tasks menu
     And I click "Edit"
-    And I click "Move down" in the "Custom page body" for paragraph layout 1
+    Then I "move down" from the "Custom page body" field the child 1 paragraph of 1 layout
     And I press "Update"
     Then there should be 2 paragraphs in the page
     And I should see the following paragraphs in the given order:
