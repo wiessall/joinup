@@ -72,13 +72,10 @@ class JoinupLayoutParagraphsContext extends RawDrupalContext {
    */
   public function addLayoutParagraphInFormFieldOnTopLevel(string $field_alias, TableNode $layout_properties): void {
     $this->assertJavaScriptEnabledBrowser();
-    $this->getChooseComponentLink($field_alias)->click();
 
-    // An overlay has opened, and we need to select "Layout".
-    $xpath = '//div[contains(concat(" ", @class, " "), " lpb-component-list__group--layout ")]';
-    $this->getSession()->wait(5000, "document.querySelector('div.lpb-component-list__group--layout') !== null");
-    $layouts_container = $this->getSession()->getPage()->find('xpath', $xpath);
-    $layouts_container->clickLink('Layout');
+    $field = $this->getParagraphsElement($field_alias);
+    $link = $field->find('named', ['link', 'Add layout']);
+    $link->click();
 
     // Get the 'layout' property from the table.
     $layout = $layout_properties->getRowsHash()['layout'];
@@ -264,6 +261,7 @@ class JoinupLayoutParagraphsContext extends RawDrupalContext {
     $actions = ['delete', 'edit', 'move up', 'move down', 'duplicate'];
     assertTrue(in_array($action, $actions), "The action '$action' is not defined in the context. Available actions are ", implode(', ', $actions));
 
+    $this->scrollElementIntoView($link);
     $link->clickLink(ucfirst($action));
     if ($action === 'delete') {
       $this->getSession()
@@ -369,6 +367,7 @@ class JoinupLayoutParagraphsContext extends RawDrupalContext {
    * @throws \Behat\Mink\Exception\ElementNotFoundException
    */
   public function iClickInTheFieldForParagraphLayout(string $label, string $field, int $position): void {
+    // TODO: Can we remove?
     $paragraphItem = $this->getParagraphsElementItem($field, $position);
     $this->scrollElementIntoView($paragraphItem);
     $paragraphItem->clickLink($label);
