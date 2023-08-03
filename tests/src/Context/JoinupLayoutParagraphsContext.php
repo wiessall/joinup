@@ -221,17 +221,61 @@ class JoinupLayoutParagraphsContext extends RawDrupalContext {
    * @When I :action from the :field_alias form field the layout paragraph in position :position
    */
   public function actionOnTopLevelLayoutParagraph(string $action, string $field_alias, string $position): void {
-    $actions = ['delete', 'edit', 'move up', 'move down', 'duplicate'];
-    assertTrue(in_array($action, $actions), "The action '$action' is not defined in the context. Available actions are ", implode(', ', $actions));
-
     $this->assertJavaScriptEnabledBrowser();
     // The ".is-layout" class is the difference between the actions for layouts
     // and the actions for paragraphs.
-    $this->getFormFieldLayoutParagraphs($field_alias)[$position - 1]->find('css', '.lpb-controls.is-layout')->clickLink(ucfirst($action));
+    $link = $this->getFormFieldLayoutParagraphs($field_alias)[$position - 1]->find('css', '.lpb-controls.is-layout');
+
+    $this->performAction($link, $action);
+  }
+
+  /**
+   * Performs an action on the child paragraph in the given layout.
+   *
+   * @param string $action
+   *   The action to perform.
+   * @param string $fieldAlias
+   *   The field alias as defined in
+   *   \Drupal\joinup\Context\JoinupLayoutParagraphsContext::FIELD_MAP.
+   * @param string $pPosition
+   *   The position of the child paragraph.
+   * @param string $lPosition
+   *   The position of the layout paragraph.
+   *
+   * @When I :action from the :fieldAlias field the child :pPosition paragraph of :lPosition layout
+   */
+  public function actionOnChildLayoutParagraph(string $action, string $fieldAlias, string $pPosition, string $lPosition): void {
+    $this->assertJavaScriptEnabledBrowser();
+    $layoutParagraph = $this->getFormFieldLayoutParagraphs($fieldAlias)[$lPosition - 1];
+    $link = $this->getAllSubParagraphsForLayout($layoutParagraph)[$pPosition - 1]->find('css', '.lpb-controls');
+
+    $this->performAction($link, $action);
+  }
+
+  /**
+   * Perform an action on link.
+   *
+   * @param \Behat\Mink\Element\TraversableElement $link
+   *   Link element.
+   * @param string $action
+   *   Action name.
+   *
+   * @return void
+   */
+  protected function performAction(TraversableElement $link, string $action): void {
+    $actions = ['delete', 'edit', 'move up', 'move down', 'duplicate'];
+    assertTrue(in_array($action, $actions), "The action '$action' is not defined in the context. Available actions are ", implode(', ', $actions));
+
+    $link->clickLink(ucfirst($action));
     if ($action === 'delete') {
-      $this->getSession()->wait(5000, "document.querySelector('.lpb-dialog') !== null");
-      $this->getSession()->getPage()->find('css', '.ui-dialog-buttonpane')->pressButton('Delete');
-      $this->getSession()->wait(5000, "document.querySelector('.lpb-dialog') === null");
+      $this->getSession()
+        ->wait(5000, "document.querySelector('.lpb-dialog') !== null");
+      $this->getSession()
+        ->getPage()
+        ->find('css', '.ui-dialog-buttonpane')
+        ->pressButton('Delete');
+      $this->getSession()
+        ->wait(5000, "document.querySelector('.lpb-dialog') === null");
     }
 
     if (in_array($action, ['move up', 'move down'])) {
@@ -400,6 +444,20 @@ class JoinupLayoutParagraphsContext extends RawDrupalContext {
     $xpath = '//div[contains(concat(" ", @class, " "), " lpb-layout ") and contains(concat(" ", @class, " "), " paragraph--layout ")]';
     $elements = $field->findAll('xpath', $xpath);
     return $elements ?? [];
+  }
+
+  /**
+   * Returns a list of paragraphs elements inside provided layout.
+   *
+   * @param \Behat\Mink\Element\TraversableElement $layout
+   *   Layout paragraph.
+   *
+   * @return \Behat\Mink\Element\TraversableElement[]
+   *   The layout paragraphs elements.
+   */
+  protected function getAllSubParagraphsForLayout(TraversableElement $layout): array {
+    $xpath = '//div[contains(concat(" ", @class, " "), " js-lpb-component ") and not (contains(concat(" ", @class, " "), " lpb-layout "))]';
+    return $layout->findAll('xpath', $xpath) ?? [];
   }
 
   /**
