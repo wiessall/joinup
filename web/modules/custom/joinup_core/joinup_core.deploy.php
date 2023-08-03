@@ -15,38 +15,15 @@
 declare(strict_types = 1);
 
 use Drupal\Component\Utility\Html;
-use Drupal\Core\File\Exception\FileException;
 use Drupal\Core\Template\Attribute;
 use Drupal\collection\Entity\CollectionInterface;
 use Drupal\media\MediaInterface;
 use EasyRdf\Graph;
 
 /**
- * Removal of spam content files.
- */
-function joinup_core_deploy_109500(): void {
-  /** @var \Drupal\Core\File\FileSystemInterface $fileSystem */
-  $fileSystem = \Drupal::service('file_system');
-
-  $files = [
-    'public://document/2022-12/black-panther-2-wakanda-forever-free-w2tk.pdf',
-    'public://document/2022-12/fury-vs-chisora-live-wise.pdf',
-    'public://document/2022-12/2021-Crack-Adobe-Illustrator-CC-2018-2521-64Bit-2021-Crack.pdf',
-  ];
-
-  foreach ($files as $file) {
-    try {
-      $fileSystem->delete($file);
-    }
-    catch (FileException $e) {
-    }
-  }
-}
-
-/**
  * Migrate Video content into new Media field.
  */
-function joinup_core_deploy_109501(array &$sandbox): string {
+function joinup_core_deploy_109600(array &$sandbox): string {
   $entity_type_manager = \Drupal::entityTypeManager();
   $node_storage = $entity_type_manager->getStorage('node');
 
@@ -76,7 +53,7 @@ function joinup_core_deploy_109501(array &$sandbox): string {
 /**
  * Migrate videos and images embed markup into media.
  */
-function joinup_core_deploy_109502(array &$sandbox): string {
+function joinup_core_deploy_109601(array &$sandbox): string {
   $sparql = \Drupal::getContainer()->get('sparql.endpoint');
   $sparql_field_handler = \Drupal::getContainer()->get('sparql.field_handler');
   $sparql_graph_handler = \Drupal::getContainer()->get('sparql.graph_handler');
