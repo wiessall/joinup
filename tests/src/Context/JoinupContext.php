@@ -2783,6 +2783,29 @@ class JoinupContext extends RawDrupalContext {
   }
 
   /**
+   * Selects option in the latest select field with specified named value.
+   *
+   * @param string $select
+   *   Select field.
+   * @param string $option
+   *   Option name.
+   *
+   * @When I select :option from latest :select
+   */
+  public function selectOptionForLatestSelect(string $select, string $option): void {
+    $page = $this->getSession()->getPage();
+
+    $selects = $page->findAll('named', ['select', $select]);
+    if (empty($selects)) {
+      throw new ElementNotFoundException($this->getSession()
+        ->getDriver(), 'select', 'label', $select);
+    }
+
+    $field = array_pop($selects);
+    $field->selectOption($option);
+  }
+
+  /**
    * Presses the latest button with a given label.
    *
    * Used for dynamic forms where a button can be added multiple times.

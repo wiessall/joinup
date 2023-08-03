@@ -395,4 +395,50 @@ class JoinupCoreContext extends RawDrupalContext {
     $entity->save();
   }
 
+  /**
+   * Checks if page elements have unique id elements.
+   *
+   * @throws \Exception
+   *   Thrown when element's id is not unique.
+   *
+   * @Then page elements must have unique id attributes
+   */
+  public function pageElementsMustHaveUniqueIdAttributes(): void {
+    $elementIds = [];
+
+    $elementsWithIdAttribute = $this->getSession()
+      ->getPage()
+      ->findAll('css', '[id]');
+    foreach ($elementsWithIdAttribute as $elementWithIdAttribute) {
+      $elementId = $elementWithIdAttribute->getAttribute('id');
+
+      if (in_array($elementId, $elementIds)) {
+        throw new \Exception("'$elementId' id attribute is used by more than one element");
+      }
+
+      $elementIds[] = $elementId;
+    }
+  }
+
+  /**
+   * Asserts that the given HTML list of rows exists in the page.
+   *
+   * @param \Behat\Gherkin\Node\TableNode $table
+   *   The table node.
+   *
+   * @Given /^I should see the following table rows:$/
+   */
+  public function iShouldSeeTheFollowingTableRows(TableNode $table): void {
+    $rows = $table->getRows();
+    // Get all table rows/headers in the page regardless of the table.
+    $table_rows = $this->getSession()->getPage()->findAll('css', 'table tr');
+    $table_rows = array_map(function ($row) {
+      return $row->getText();
+    }, $table_rows);
+
+    foreach ($rows as $row) {
+      Assert::assertContains(implode(' ', $row), $table_rows);
+    }
+  }
+
 }

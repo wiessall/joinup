@@ -1,0 +1,7 @@
+# Add handy links to configuration forms to the administration menu.
+joinup_sitewide_alert.site_alerts:
+  title: 'Site alerts'
+  route_name: entity.sitewide_alert.collection
+  description: 'Manage site wide alerts.'
+  parent: system.admin
+  weight: 3
