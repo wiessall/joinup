@@ -103,12 +103,14 @@ Feature:
     And custom_page content:
       | title                     | body        | <group type>          | author | state     |
       | Don't Mess with the Zohan | Wanna mess? | Paragraphs group type | Zohan  | published |
+    And I append "layout" to "field_paragraphs_body" field in "node" entity with following "Don't Mess with the Zohan" title:
+      | behavior_settings | a:3:{s:17:"layout_paragraphs";a:4:{s:6:"layout";s:13:"layout_onecol";s:6:"config";a:1:{s:5:"label";s:0:"";}s:11:"parent_uuid";N;s:6:"region";N;}s:16:"background_theme";a:0:{}s:11:"extra_class";a:0:{}} |
 
     # Author.
     When I am logged in as "Zohan"
     And I go to the edit form of the "Don't Mess with the Zohan" "custom page"
     And I click "Choose component"
-    Then I should see the link "Layout"
+    Then I should not see the link "Layout"
     And I should see the link "Accordion"
     And I should see the link "Call to action"
     And I should see the link "Carousel"
@@ -130,7 +132,7 @@ Feature:
     When I am logged in as "Gilfoyle"
     And I go to the edit form of the "Don't Mess with the Zohan" "custom page"
     And I click "Choose component"
-    Then I should see the link "Layout"
+    Then I should not see the link "Layout"
     And I should see the link "Accordion"
     And I should see the link "Call to action"
     And I should see the link "Carousel"
@@ -152,7 +154,7 @@ Feature:
     Given I am logged in as a moderator
     And I go to the edit form of the "Don't Mess with the Zohan" "custom page"
     And I click "Choose component"
-    Then I should see the link "Layout"
+    Then I should not see the link "Layout"
     And I should see the link "Accordion"
     And I should see the link "Call to action"
     And I should see the link "Carousel"
@@ -194,6 +196,8 @@ Feature:
     And custom_page content:
       | title                     | body        | collection            | author | state     |
       | Don't Mess with the Zohan | Wanna mess? | Paragraphs collection | Zohan  | published |
+    And I append "layout" to "field_paragraphs_body" field in "node" entity with following "Don't Mess with the Zohan" title:
+      | behavior_settings | a:3:{s:17:"layout_paragraphs";a:4:{s:6:"layout";s:13:"layout_onecol";s:6:"config";a:1:{s:5:"label";s:0:"";}s:11:"parent_uuid";N;s:6:"region";N;}s:16:"background_theme";a:0:{}s:11:"extra_class";a:0:{}} |
 
     Given I am logged in as a moderator
     And I go to the edit form of the "Don't Mess with the Zohan" "custom page"
@@ -225,9 +229,11 @@ Feature:
     And I open the plus button menu
     And I click "Add custom page"
     And I fill in "Title" with "Paragraphs accordion page"
-    Then the page should contain no paragraphs
-
-    Given I click "Choose component"
+    Given I add a layout paragraph in the "Custom page body" form field with the following properties:
+      | layout           | one column |
+      | Background theme | light      |
+      | Extra classes    | test-class |
+    And I click "Choose component"
     Then I click "Accordion"
     And press "Add Accordion item"
     And I wait for AJAX to finish
