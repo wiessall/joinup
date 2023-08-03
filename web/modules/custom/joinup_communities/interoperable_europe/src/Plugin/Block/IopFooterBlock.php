@@ -80,8 +80,6 @@ class IopFooterBlock extends BlockBase implements ContainerFactoryPluginInterfac
       ],
     ];
 
-    $icon_uri = base_path() . $this->themeExtensionList->getPath('ventuno') . '/assets/icons/icons.svg#';
-
     foreach ($icons as $class => $data) {
       $build[$class] = [
         '#type' => 'inline_template',
