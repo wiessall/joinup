@@ -30,9 +30,9 @@ dependencies:
     - responsive_image.styles.tile
   module:
     - datetime_range
+    - joinup_html_stripper
     - responsive_image
     - template_suggestion
-    - text
     - user
 id: node.event.view_mode_tile
 targetEntityType: node
@@ -40,9 +40,10 @@ bundle: event
 mode: view_mode_tile
 content:
   body:
-    type: text_default
+    type: joinup_html_stripper_stripped
     label: hidden
-    settings: {  }
+    settings:
+      trim_length: 600
     third_party_settings:
       template_suggestion:
         template_suggestion: bare
