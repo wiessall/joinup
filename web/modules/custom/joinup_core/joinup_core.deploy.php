@@ -17,21 +17,9 @@ declare(strict_types = 1);
 use Drupal\joinup_media\Plugin\QueueWorker\MigrateMedia;
 
 /**
- * Import the new version of EIRA.
- */
-function joinup_core_deploy_109600(): string {
-  $fixtures_helper = \Drupal::getContainer()->get(
-    'joinup_rdf.vocabulary_fixtures.helper'
-  );
-  $fixtures_helper->importFixtures('eira_skos');
-
-  return 'Imported eira_skos and ran after import queries.';
-}
-
-/**
  * Migrate Video content into new Media field.
  */
-function joinup_core_deploy_109502(array &$sandbox): string {
+function joinup_core_deploy_109600(array &$sandbox): string {
   $entity_type_manager = \Drupal::entityTypeManager();
   $node_storage = $entity_type_manager->getStorage('node');
   $db = \Drupal::database();
