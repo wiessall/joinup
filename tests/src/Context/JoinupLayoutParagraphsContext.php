@@ -475,23 +475,6 @@ class JoinupLayoutParagraphsContext extends RawDrupalContext {
   }
 
   /**
-   * Returns a layout paragraph element by position.
-   *
-   * @param string $field_alias
-   *   The field designator as defined in
-   *   \Drupal\joinup\Context\JoinupLayoutParagraphsContext::FIELD_MAP.
-   * @param int $position
-   *   The position of the paragraph.
-   *
-   * @return \Behat\Mink\Element\TraversableElement|null
-   *   The layout paragraph element or null if not found.
-   */
-  protected function findLayoutParagraphByPosition(string $field_alias, int $position): ?TraversableElement {
-    $paragraphs = $this->getFormFieldLayoutParagraphs($field_alias);
-    return $paragraphs[$position] ?? NULL;
-  }
-
-  /**
    * Returns the add component button.
    *
    * @param string $field_alias
