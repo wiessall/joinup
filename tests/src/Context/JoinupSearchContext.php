@@ -31,6 +31,11 @@ class JoinupSearchContext extends RawDrupalContext {
   use UtilityTrait;
 
   /**
+   * Path to the search box dropdown element.
+   */
+  protected const SEARCH_BOX_DROPDOWN = '.joinup-navbar button#search-box-dropdown.dropdown-toggle';
+
+  /**
    * Navigates to the search page.
    *
    * @Given I am on the search( results)( page)
@@ -939,7 +944,7 @@ class JoinupSearchContext extends RawDrupalContext {
    * @Then I should see search bar icon in navbar
    */
   public function assertSearchIconNavbar(): void {
-    $getAllInput = $this->getSession()->getPage()->findAll('css', '.joinup-navbar button#search-box.dropdown-toggle');
+    $getAllInput = $this->getSession()->getPage()->findAll('css', self::SEARCH_BOX_DROPDOWN);
     if (count($getAllInput) < 1) {
       throw new \Exception('Search bar icon not found in navbar.');
     }
@@ -954,7 +959,7 @@ class JoinupSearchContext extends RawDrupalContext {
    * @Then I should not see search bar icon in navbar
    */
   public function failSearchIconNavbar(): void {
-    $getAllInput = $this->getSession()->getPage()->findAll('css', 'nav.joinup-navbar button#search-box.dropdown-toggle');
+    $getAllInput = $this->getSession()->getPage()->findAll('css', self::SEARCH_BOX_DROPDOWN);
 
     if (count($getAllInput) > 0) {
       throw new \Exception('Search bar icon found in navbar.');
@@ -1024,26 +1029,6 @@ class JoinupSearchContext extends RawDrupalContext {
     }
 
     $link->click();
-  }
-
-  /**
-   * Checks if search inputs have different ids.
-   *
-   * @throws \Exception
-   *   Thrown when search inputs have the same id.
-   *
-   * @Then the two search inputs should have different ids
-   */
-  public function assertDifferentIdsInSearchInputs(): void {
-    $navigation = $this->getRegion('Navigation bar');
-    $featured = $this->getRegion('Featured');
-
-    $getNavbarInputId = $navigation->find('css', '.search-bar__input')
-      ->getAttribute('id');
-    $getHeaderInputId = $featured->find('css', '.search-bar__input')
-      ->getAttribute('id');
-
-    Assert::assertNotEquals($getNavbarInputId, $getHeaderInputId, 'The two search inputs have the same id.');
   }
 
   /**

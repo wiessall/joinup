@@ -30,7 +30,9 @@
     }
     .paragraph--video {
       border-radius: $spacer; // 16px
-      overflow: hidden;
+      &:not(.js-lpb-component) {
+        overflow: hidden;
+      }
     }
   }
   &.why {
