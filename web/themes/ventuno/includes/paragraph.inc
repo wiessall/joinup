@@ -28,13 +28,6 @@ function ventuno_preprocess_paragraph__accordion(array &$variables): void {
 }
 
 /**
- * Implements hook_preprocess_paragraph().
- */
-function ventuno_preprocess_paragraph__call_to_action(array &$variables): void {
-  $variables['attributes']['class'] = ['d-flex', 'justify-content-center'];
-}
-
-/**
  * Implements hook_preprocess_HOOK().
  */
 function ventuno_preprocess_paragraph__configurable_listing(&$variables) {

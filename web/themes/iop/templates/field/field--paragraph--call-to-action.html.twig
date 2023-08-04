@@ -7,5 +7,5 @@
  */
 #}
 {% for item in items %}
-  {{ item.content }}
+  <a href="{{ item.content['#url'] }}" class="cta">{{ item.content['#title'] }}</a>
 {% endfor %}

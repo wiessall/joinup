@@ -766,6 +766,21 @@ module.exports = {
     {
       entry: path.resolve(
         outputFolder,
+        `${ventuno}src/scss/components/paragraphs/paragraph--video.scss`
+      ),
+      dest: path.resolve(
+        outputFolder,
+        `${ventuno}assets/css/paragraph--video.min.css`
+      ),
+      options: {
+        includePaths,
+        minify: true,
+        sourceMap: "file",
+      },
+    },
+    {
+      entry: path.resolve(
+        outputFolder,
         `${ventuno}src/scss/components/releases.scss`
       ),
       dest: path.resolve(outputFolder, `${ventuno}assets/css/releases.min.css`),
@@ -1076,21 +1091,6 @@ module.exports = {
       dest: path.resolve(
         outputFolder,
         `${iop}assets/css/paragraph--testimony.min.css`
-      ),
-      options: {
-        minify: true,
-        includePaths,
-        sourceMap: "file",
-      },
-    },
-    {
-      entry: path.resolve(
-        outputFolder,
-        `${iop}src/scss/components/paragraphs/paragraph--video.scss`
-      ),
-      dest: path.resolve(
-        outputFolder,
-        `${iop}assets/css/paragraph--video.min.css`
       ),
       options: {
         minify: true,
