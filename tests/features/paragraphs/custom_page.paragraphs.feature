@@ -201,16 +201,6 @@ Feature:
 
     Given I am logged in as a moderator
     And I go to the edit form of the "Don't Mess with the Zohan" "custom page"
-    And I click "Choose component"
-    And I click "Map"
-    # As the Webtools Map a webservice, we only test a fake JSON.
-    And I fill in "JSON" with "{\"foo\":\"bar\"}"
-    And I press "Save" in the "Modal buttons" region
-    And I press "Update"
-    Then I should see the success message "Custom page Don't Mess with the Zohan has been updated."
-    And the response should contain "{\"foo\":\"bar\"}"
-
-    When I go to the edit form of the "Don't Mess with the Zohan" "custom page"
     And I click the last "Choose component" link
     And I click "IFrame"
     And I fill in "Iframe URL" with "http://example.com"
@@ -221,6 +211,16 @@ Feature:
     # existence of the iframe and its URL.
     Then I should see 1 "iframe" elements
     And the response should contain "src=\"http://example.com\""
+
+    And I go to the edit form of the "Don't Mess with the Zohan" "custom page"
+    And I click "Choose component"
+    And I click "Map"
+    # As the Webtools Map a webservice, we only test a fake JSON.
+    And I fill in "JSON" with "{\"foo\":\"bar\"}"
+    And I press "Save" in the "Modal buttons" region
+    And I press "Update"
+    Then I should see the success message "Custom page Don't Mess with the Zohan has been updated."
+    And the response should contain "{\"foo\":\"bar\"}"
 
   @javascript
   Scenario Outline: Add an accordion to the custom page.
