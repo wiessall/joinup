@@ -231,13 +231,15 @@ Feature:
     And the url should match "/topic/law-and-justice/e-justice"
 
     When I go to the edit form of the topic meta entity of the "E-justice" topic "taxonomy term"
-    When I delete from the "Topic meta entity body" form field the layout paragraph in position 1
+    And I "delete" from the "Topic meta entity body" field the child 1 paragraph of 1 layout
     And I add a "Configurable listing" paragraph in the "Topic meta entity body" form field:
-      | Heading       | type: text - value: E-justice heading   |
-      | URL           | type: text - value: http://example.com  |
-      | Link text     | type: text - value: E-justice link text |
-      | List style    | type: select - value: Grid              |
-      | Query presets | type: text - value: entity_bundle\|news |
+      | layout position | 1                                       |
+      | region          | content                                 |
+      | Heading         | type: text - value: E-justice heading   |
+      | URL             | type: text - value: http://example.com  |
+      | Link text       | type: text - value: E-justice link text |
+      | List style      | type: select - value: Grid              |
+      | Query presets   | type: text - value: entity_bundle\|news |
 
     And I press "Save"
     And I should see the "News 1" tile
@@ -432,12 +434,18 @@ Feature:
       | E-justice |
     And I am logged in as a moderator
     And I go to the edit form of the topic meta entity of the "E-justice" topic "taxonomy term"
+    And I add a layout paragraph in the "Topic meta entity body" form field with the following properties:
+      | layout           | one column |
+      | Background theme | light      |
+      | Extra classes    | test-class |
     And I add a "Configurable listing" paragraph in the "Topic meta entity body" form field:
-      | Heading       | type: text - value: E-justice heading     |
-      | URL           | type: text - value: http://example.com    |
-      | Link text     | type: text - value: E-justice link text   |
-      | List style    | type: select - value: <list style>        |
-      | Query presets | type: text - value: entity_bundle\|<type> |
+      | layout position | 1                                         |
+      | region          | content                                   |
+      | Heading         | type: text - value: E-justice heading     |
+      | URL             | type: text - value: http://example.com    |
+      | Link text       | type: text - value: E-justice link text   |
+      | List style      | type: select - value: <list style>        |
+      | Query presets   | type: text - value: entity_bundle\|<type> |
     And I press "Save"
     Then I <should> see the image "linus.jpeg" in the "Custom tile" tile
 
@@ -466,12 +474,18 @@ Feature:
 
     When I am logged in as a moderator
     And I go to the edit form of the topic meta entity of the "E-justice" topic "taxonomy term"
+    And I add a layout paragraph in the "Topic meta entity body" form field with the following properties:
+      | layout           | one column |
+      | Background theme | light      |
+      | Extra classes    | test-class |
     And I add a "Configurable listing" paragraph in the "Topic meta entity body" form field:
-      | Heading       | type: text - value: E-justice heading   |
-      | URL           | type: text - value: http://example.com  |
-      | Link text     | type: text - value: E-justice link text |
-      | List style    | type: select - value: List              |
-      | Query presets | type: text - value: entity_bundle\|news |
+      | layout position | 1                                       |
+      | region          | content                                 |
+      | Heading         | type: text - value: E-justice heading   |
+      | URL             | type: text - value: http://example.com  |
+      | Link text       | type: text - value: E-justice link text |
+      | List style      | type: select - value: List              |
+      | Query presets   | type: text - value: entity_bundle\|news |
     And I press "Save"
 
     When I go to the homepage
@@ -500,12 +514,18 @@ Feature:
       | E-justice |
     And I am logged in as a moderator
     And I go to the edit form of the topic meta entity of the "E-justice" topic "taxonomy term"
+    And I add a layout paragraph in the "Topic meta entity body" form field with the following properties:
+      | layout           | one column |
+      | Background theme | light      |
+      | Extra classes    | test-class |
     And I add a "Configurable listing" paragraph in the "Topic meta entity body" form field:
-      | Heading       | type: text - value: E-justice heading             |
-      | URL           | type: text - value: http://example.com            |
-      | Link text     | type: text - value: E-justice link text           |
-      | List style    | type: select - value: List                        |
-      | Query presets | type: text - value: entity_bundle\|Nebuchadnezzar |
+      | layout position | 1                                                 |
+      | region          | content                                           |
+      | Heading         | type: text - value: E-justice heading             |
+      | URL             | type: text - value: http://example.com            |
+      | Link text       | type: text - value: E-justice link text           |
+      | List style      | type: select - value: List                        |
+      | Query presets   | type: text - value: entity_bundle\|Nebuchadnezzar |
     And I press "Save"
     And the url should match "/topic/law-and-justice/e-justice"
     Then I should not see the "News 1" tile
@@ -520,12 +540,18 @@ Feature:
       | E-justice |
     And I am logged in as a moderator
     And I go to the edit form of the topic meta entity of the "E-justice" topic "taxonomy term"
+    And I add a layout paragraph in the "Topic meta entity body" form field with the following properties:
+      | layout           | one column |
+      | Background theme | light      |
+      | Extra classes    | test-class |
     And I add a "Configurable listing" paragraph in the "Topic meta entity body" form field:
-      | Heading       | type: text - value: E-justice heading          |
-      | URL           | type: text - value: http://example.com         |
-      | Link text     | type: text - value: E-justice link text        |
-      | List style    | type: select - value: List                     |
-      | Query presets | type: text - value: entity_bundle\|custom_page |
+      | layout position | 1                                              |
+      | region          | content                                        |
+      | Heading         | type: text - value: E-justice heading          |
+      | URL             | type: text - value: http://example.com         |
+      | Link text       | type: text - value: E-justice link text        |
+      | List style      | type: select - value: List                     |
+      | Query presets   | type: text - value: entity_bundle\|custom_page |
     And I press "Save"
     And the url should match "/topic/law-and-justice/e-justice"
     And I should see the text "What do we mean by Legislation & Technology?" in the "Legislation & Technology" tile
