@@ -305,6 +305,11 @@ paragraph__testimony:
     theme:
       assets/css/paragraph--testimony.min.css: { minified: true }
 
+paragraph__video:
+  css:
+    theme:
+      assets/css/paragraph--video.min.css: { minified: true }
+
 releases:
   css:
     theme:

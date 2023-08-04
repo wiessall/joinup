@@ -1,9 +1,12 @@
 @import "../../partials/core";
 
 .paragraph--layout {
+  &.lpb-layout {
+    padding: $spacer;
+  }
   padding-top: $spacer * 1.125; // 18px
   padding-bottom: $spacer * 1.125; // 18px
-  &:first-of-type:not(.paragraph--layout--light):not(.paragraph--layout--secondary) {
+  &:first-of-type:not(.paragraph--layout--light):not(.paragraph--layout--secondary):not(.lpb-layout) {
     padding-top: 0;
     @include media-breakpoint-up(lg) {
       padding-top: 0;
@@ -58,4 +61,9 @@
       background-color: $secondary;
     }
   }
+}
+// Make Layout Paragraph limits more evident to the user
+.lp-builder:not(.is-navigating) .paragraph--layout.js-lpb-component:hover,
+.lp-builder:not(.is-navigating) .paragraph--layout.js-lpb-component:focus-within {
+  outline: 5px solid $warning;
 }
