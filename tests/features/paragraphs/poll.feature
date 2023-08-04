@@ -47,7 +47,7 @@ Feature: Pool paragraph tests.
     And I should see "0 votes"
     And I should see "1 week 6 days left to vote"
 
-    Then I select the radio button "Game of Thrones"
+    Then I click on label "Game of Thrones"
     And I wait for AJAX to finish
     When I should see "1 vote"
 
@@ -68,7 +68,7 @@ Feature: Pool paragraph tests.
     And I should not see "0 votes"
     And I should see "4 days 23 hours left to vote"
 
-    Then I select the radio button "Just cheese"
+    Then I click on label "Just cheese"
     And I wait for AJAX to finish
     When the following fields should not be present "Pepperoni,Pineapple,Just cheese,Mushrooms"
     And I press "Cancel vote"
