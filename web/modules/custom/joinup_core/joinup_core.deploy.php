@@ -66,7 +66,7 @@ function joinup_core_deploy_109601(array &$sandbox): string {
 
   if (empty($sandbox['tasks'])) {
     $sql = <<<QUERY
-      SELECT b.revision_id, g.og_audience_target_id, IF(b.revision_id = n.vid, 1, 0) AS current_revision, n.uid
+      SELECT b.revision_id, g.og_audience_target_id, n.uid
       FROM {node_revision__body} b
       INNER JOIN {node__og_audience} g ON b.entity_id = g.entity_id
       INNER JOIN {node_field_data} n ON b.entity_id = n.nid
@@ -74,7 +74,7 @@ function joinup_core_deploy_109601(array &$sandbox): string {
       AND (b.body_value LIKE '%preview_thumbnail%' OR b.body_value LIKE '%<img%data-entity-type="file"%')
       QUERY;
     $sandbox['tasks']['node'] = array_map(function (array $item): array {
-      return [(int) $item[0], $item[1], (bool) $item[2], (int) $item[3]];
+      return [(int) $item[0], $item[1], (int) $item[3]];
     }, $db->query($sql)->fetchAll(\PDO::FETCH_NUM));
 
     // The most relevant part in this query is getting the topmost node ID as we
@@ -90,7 +90,7 @@ function joinup_core_deploy_109601(array &$sandbox): string {
           FROM {paragraphs_item_field_data} t
           INNER JOIN cte ON t.parent_id = cte.id
       )
-      SELECT r.revision_id, o.og_audience_target_id, IF(cte.revision_id = r.revision_id, 1, 0) AS current_revision, n.uid
+      SELECT r.revision_id, o.og_audience_target_id, n.uid
         FROM cte
         INNER JOIN {node__og_audience} o ON cte.topmost_nid = o.entity_id
         INNER JOIN {node_field_data} n ON cte.topmost_nid = n.nid
@@ -100,7 +100,7 @@ function joinup_core_deploy_109601(array &$sandbox): string {
         AND (b.field_body_value LIKE '%preview_thumbnail%' OR b.field_body_value LIKE '%<img%data-entity-type="file"%')
       QUERY;
     $sandbox['tasks']['paragraph'] = array_map(function (array $item): array {
-      return [(int) $item[0], $item[1], (bool) $item[2], (int) $item[3]];
+      return [(int) $item[0], $item[1], (int) $item[3]];
     }, $db->query($sql)->fetchAll(\PDO::FETCH_NUM));
 
     $sparql_query = <<<QUERY

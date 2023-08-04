@@ -10,6 +10,9 @@ Feature: Covers EPIC-7409.
     # RDF entity ID: http://data.europa.eu/w21/0aa21349-959b-4114-b16f-bb88facd324f
     And the "Description" field of "Interoperability Test Bed Repository" collection should match '@<img alt="Test Bed and validators" data-align="center" data-entity-type="file" data-entity-uuid="4b35b673-9e43-4b9b-907b-7615962d4c6a" src="/sites/default/files/inline-images/itb_and_validator.png"@'
     But the "Description" field of "Interoperability Test Bed Repository" collection should not match '@<drupal-media alt="Test Bed and validators" data-entity-type="media" data-entity-uuid="[^"]*"@'
+    When I go to the about page of "Interoperability Test Bed Repository"
+    Then the page should contain the html text '<img alt="Test Bed and validators" data-entity-type="file" data-entity-uuid="4b35b673-9e43-4b9b-907b-7615962d4c6a"'
+    Then the page should contain the html text 'inline-images/itb_and_validator.png" class="align-center">'
 
     # Node ID: 706407
     And the "Content" field of "Obtain certified interoperability skills with our Academy!" news should match '@\/sites/default/files/styles/video_embed_wysiwyg_preview/public/video_thumbnails/4N-_UkN5RY0.jpg@'
