@@ -28,7 +28,6 @@ Feature: Contact information access
       | title               | Ausy software solutions |
       | description         | A software company      |
       | logo                | logo.png                |
-      | banner              | banner.jpg              |
       | owner               | Ausy BENELUX            |
       | contact information | info                    |
       | state               | validated               |

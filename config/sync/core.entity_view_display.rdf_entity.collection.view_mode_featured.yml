@@ -7,7 +7,6 @@ dependencies:
     - field.field.rdf_entity.collection.field_ar_abstract
     - field.field.rdf_entity.collection.field_ar_access_url
     - field.field.rdf_entity.collection.field_ar_affiliates
-    - field.field.rdf_entity.collection.field_ar_banner
     - field.field.rdf_entity.collection.field_ar_closed
     - field.field.rdf_entity.collection.field_ar_contact_information
     - field.field.rdf_entity.collection.field_ar_content_creation
@@ -26,8 +25,8 @@ dependencies:
     - image.style.vertical_medium_image
     - rdf_entity.rdfentity.collection
   module:
-    - image
     - smart_trim
+    - svg_image
     - template_suggestion
     - user
 id: rdf_entity.collection.view_mode_featured
@@ -85,7 +84,6 @@ hidden:
   featured: true
   field_ar_access_url: true
   field_ar_affiliates: true
-  field_ar_banner: true
   field_ar_closed: true
   field_ar_contact_information: true
   field_ar_content_creation: true
