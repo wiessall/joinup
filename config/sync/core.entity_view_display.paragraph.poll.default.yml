@@ -1,0 +1,27 @@
+uuid: 6c99edb2-df71-47c1-b691-ae44a365fafd
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.poll.field_paragraphs_poll
+    - paragraphs.paragraphs_type.poll
+  module:
+    - template_suggestion
+id: paragraph.poll.default
+targetEntityType: paragraph
+bundle: poll
+mode: default
+content:
+  field_paragraphs_poll:
+    type: entity_reference_entity_view
+    label: hidden
+    settings:
+      view_mode: default
+      link: false
+    third_party_settings:
+      template_suggestion:
+        template_suggestion: ''
+    weight: 0
+    region: content
+hidden:
+  search_api_excerpt: true
