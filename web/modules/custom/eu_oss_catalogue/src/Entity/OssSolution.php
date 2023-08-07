@@ -4,13 +4,38 @@ declare(strict_types = 1);
 
 namespace Drupal\eu_oss_catalogue\Entity;
 
+use Drupal\Core\Entity\EntityTypeInterface;
+use Drupal\Core\Field\BaseFieldDefinition;
 use Drupal\eu_oss_catalogue\EuOssCatalogueProviderInterface;
+use Drupal\eu_oss_catalogue\Plugin\Field\OssGitFullNameItemList;
+use Drupal\eu_oss_catalogue\Plugin\Field\OssGitNameItemList;
 use Drupal\node\Entity\Node;
 
 /**
  * Bundle class for 'oss_solution' nodes.
  */
 class OssSolution extends Node implements OssSolutionInterface {
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function baseFieldDefinitions(EntityTypeInterface $entity_type): array {
+    $fields = parent::baseFieldDefinitions($entity_type);
+
+    $fields['oss_git_name'] = BaseFieldDefinition::create('string')
+      ->setLabel(t('GIT name'))
+      ->setDescription(t('This is the Name of the GIT Project, NOT namespaced.'))
+      ->setComputed(TRUE)
+      ->setClass(OssGitNameItemList::class);
+
+    $fields['oss_git_full_name'] = BaseFieldDefinition::create('string')
+      ->setLabel(t('GIT full name'))
+      ->setDescription(t('This is the Name of the GIT Project, full Name spaced.'))
+      ->setComputed(TRUE)
+      ->setClass(OssGitFullNameItemList::class);
+
+    return $fields;
+  }
 
   /**
    * {@inheritdoc}
