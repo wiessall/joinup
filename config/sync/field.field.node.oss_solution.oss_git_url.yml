@@ -1,11 +1,12 @@
-uuid: 3b9b6fc9-09b7-4984-bb07-e98308eaf6f8
+uuid: 5cc164c5-6928-48e1-9c4f-ca50482384f0
 langcode: en
 status: true
 dependencies:
   config:
-    - field.storage.node.oss_url
+    - field.storage.node.oss_git_url
     - node.type.oss_solution
   module:
+    - eu_oss_catalogue
     - link
 third_party_settings:
   eu_oss_catalogue:
@@ -13,8 +14,8 @@ third_party_settings:
       resolver: default
       config:
         path: url
-id: node.oss_solution.oss_url
-field_name: oss_url
+id: node.oss_solution.oss_git_url
+field_name: oss_git_url
 entity_type: node
 bundle: oss_solution
 label: URL
