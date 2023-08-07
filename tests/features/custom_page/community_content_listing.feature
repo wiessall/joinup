@@ -6,9 +6,9 @@ Feature:
 
   Background:
     Given the following collections:
-      | title      | logo     | banner     | state     |
-      | Nintendo64 | logo.png | banner.jpg | validated |
-      | Emulators  | logo.png | banner.jpg | validated |
+      | title      | logo     | state     |
+      | Nintendo64 | logo.png | validated |
+      | Emulators  | logo.png | validated |
     And custom_page content:
       | title               | collection | created           | body                               | state     | pinned |
       | Latest news listing | Nintendo64 | 2019-10-01 4:26am | You can find the latest news here. | published | no     |

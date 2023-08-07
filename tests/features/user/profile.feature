@@ -106,13 +106,13 @@ Feature: User profile
       | Jayson Granger    | jayson.granger@example.com    |            |             |
       | Clarette Fairburn | clarette.fairburn@example.com | Clarette   | Fairburn    |
     And the following collections:
-      | title                 | description                           | logo     | banner     | state     | creation date    |
-      | Botanic E.D.E.N.      | European Deep Earth Nurturing project | logo.png | banner.jpg | validated | 2017-02-23 10:00 |
-      | Ethic flower handling | Because even flowers have feelings.   | logo.png | banner.jpg | validated | 2017-02-23 12:00 |
+      | title                 | description                           | logo     | state     | creation date    |
+      | Botanic E.D.E.N.      | European Deep Earth Nurturing project | logo.png | validated | 2017-02-23 10:00 |
+      | Ethic flower handling | Because even flowers have feelings.   | logo.png | validated | 2017-02-23 12:00 |
     And the following solutions:
-      | title              | collection            | description                                     | logo     | banner     | state     | creation date    |
-      | E.C.O. fertilizers | Botanic E.D.E.N.      | Ecologic cool organic fertilizers production.   | logo.png | banner.jpg | validated | 2017-02-23 13:00 |
-      | SOUND project      | Ethic flower handling | Music playlist for growing flowers with rhythm. | logo.png | banner.jpg | validated | 2017-02-23 14:01 |
+      | title              | collection            | description                                     | logo     | state     | creation date    |
+      | E.C.O. fertilizers | Botanic E.D.E.N.      | Ecologic cool organic fertilizers production.   | logo.png | validated | 2017-02-23 13:00 |
+      | SOUND project      | Ethic flower handling | Music playlist for growing flowers with rhythm. | logo.png | validated | 2017-02-23 14:01 |
     And discussion content:
       | title                          | author          | collection            | state     | created          |
       | Repopulating blue iris         | Corwin Robert   | Botanic E.D.E.N.      | validated | 2018-06-15 16:00 |
@@ -252,10 +252,10 @@ Feature: User profile
       | Janny Robert      | janny.robert@example.com      |
       | Clarise Edwardson | clarise.edwardson@example.com |
     And the following collections:
-      | title            | description                           | logo     | banner     | state     | creation date    | author             |
-      | Lake E.D.E.N.    | European Deep Earth Nurturing project | logo.png | banner.jpg | validated | 2017-02-23 10:00 | Janny Robert       |
-      | Rose is red      | Better descriptions ever              | logo.png | banner.jpg | validated | 2017-02-23 10:00 | Clarise Edwardson  |
-      | Lone handling    | Because even flowers have feelings.   | logo.png | banner.jpg | archived  | 2017-02-23 12:00 | Janny Robert       |
+      | title            | description                           | logo     | state     | creation date    | author             |
+      | Lake E.D.E.N.    | European Deep Earth Nurturing project | logo.png | validated | 2017-02-23 10:00 | Janny Robert       |
+      | Rose is red      | Better descriptions ever              | logo.png | validated | 2017-02-23 10:00 | Clarise Edwardson  |
+      | Lone handling    | Because even flowers have feelings.   | logo.png | archived  | 2017-02-23 12:00 | Janny Robert       |
     And discussion content:
       | title                   | author          | collection    | state     | created         |
       | Repopulating green iris | Janny Robert   | Lake E.D.E.N. | validated | 2018-06-15 16:00 |
