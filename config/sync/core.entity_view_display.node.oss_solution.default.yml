@@ -6,6 +6,7 @@ dependencies:
     - field.field.node.oss_solution.oss_categories
     - field.field.node.oss_solution.oss_development_status
     - field.field.node.oss_solution.oss_features
+    - field.field.node.oss_solution.oss_git_description
     - field.field.node.oss_solution.oss_git_url
     - field.field.node.oss_solution.oss_landing_url
     - field.field.node.oss_solution.oss_license
@@ -43,14 +44,14 @@ content:
     settings:
       link: true
     third_party_settings: {  }
-    weight: 13
+    weight: 14
     region: content
   oss_development_status:
     type: list_default
     label: above
     settings: {  }
     third_party_settings: {  }
-    weight: 11
+    weight: 12
     region: content
   oss_features:
     type: string
@@ -58,7 +59,14 @@ content:
     settings:
       link_to_entity: false
     third_party_settings: {  }
-    weight: 10
+    weight: 11
+    region: content
+  oss_git_description:
+    type: basic_string
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 3
     region: content
   oss_git_url:
     type: link
@@ -82,7 +90,7 @@ content:
       rel: ''
       target: ''
     third_party_settings: {  }
-    weight: 3
+    weight: 4
     region: content
   oss_license:
     type: entity_reference_label
@@ -90,7 +98,7 @@ content:
     settings:
       link: true
     third_party_settings: {  }
-    weight: 15
+    weight: 16
     region: content
   oss_logo:
     type: link
@@ -102,14 +110,14 @@ content:
       rel: ''
       target: ''
     third_party_settings: {  }
-    weight: 6
+    weight: 7
     region: content
   oss_long_description:
     type: basic_string
     label: above
     settings: {  }
     third_party_settings: {  }
-    weight: 9
+    weight: 10
     region: content
   oss_main_copyright_owner:
     type: string
@@ -117,7 +125,7 @@ content:
     settings:
       link_to_entity: false
     third_party_settings: {  }
-    weight: 16
+    weight: 17
     region: content
   oss_maintenance_contacts:
     type: entity_reference_label
@@ -125,7 +133,7 @@ content:
     settings:
       link: true
     third_party_settings: {  }
-    weight: 19
+    weight: 20
     region: content
   oss_maintenance_contractors:
     type: entity_reference_label
@@ -133,14 +141,14 @@ content:
     settings:
       link: true
     third_party_settings: {  }
-    weight: 18
+    weight: 19
     region: content
   oss_maintenance_type:
     type: list_default
     label: above
     settings: {  }
     third_party_settings: {  }
-    weight: 17
+    weight: 18
     region: content
   oss_platforms:
     type: entity_reference_custom_link
@@ -151,7 +159,7 @@ content:
       query_parameters: ''
       limit: -1
     third_party_settings: {  }
-    weight: 7
+    weight: 8
     region: content
   oss_publiccode_yml_version:
     type: string
@@ -168,7 +176,7 @@ content:
       timezone_override: ''
       format_type: medium
     third_party_settings: {  }
-    weight: 4
+    weight: 5
     region: content
   oss_short_description:
     type: string
@@ -176,14 +184,14 @@ content:
     settings:
       link_to_entity: false
     third_party_settings: {  }
-    weight: 8
+    weight: 9
     region: content
   oss_software_type:
     type: list_default
     label: above
     settings: {  }
     third_party_settings: {  }
-    weight: 12
+    weight: 13
     region: content
   oss_software_version:
     type: string
@@ -191,7 +199,7 @@ content:
     settings:
       link_to_entity: false
     third_party_settings: {  }
-    weight: 5
+    weight: 6
     region: content
   oss_source:
     type: plugin_reference_id
@@ -206,7 +214,7 @@ content:
     settings:
       link: true
     third_party_settings: {  }
-    weight: 14
+    weight: 15
     region: content
 hidden:
   langcode: true
