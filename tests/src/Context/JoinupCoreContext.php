@@ -270,7 +270,7 @@ class JoinupCoreContext extends RawDrupalContext {
    */
   public function assertRepeatedElementContainsText(TableNode $table): void {
     $navigation_menu_selector = $this->getRegionSelector('Navigation menu');
-    $parent = $this->getSession()->getPage()->findAll('css', "$navigation_menu_selector nav a");
+    $parent = $this->getSession()->getPage()->findAll('css', "$navigation_menu_selector .nav a");
     $table_hash = $table->getHash();
     Assert::assertSameSize($table_hash, $parent);
     $i = 0;
