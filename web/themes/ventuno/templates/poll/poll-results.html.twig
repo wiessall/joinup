@@ -19,14 +19,18 @@
  */
 #}
 <div class="poll">
-  {% if show_question %}
-    <h3 class="poll-question">{{ question }}</h3>
-  {% else %}
-    <h3 class="poll-results-title">{{ results_title }}</h3>
-  {% endif %}
+  <div class="d-flex align-items-end justify-content-between pb-3">
+    {% if show_question %}
+      <h2 class="poll-question fs-6 fw-bold text-dark m-0">{{ question }}</h2>
+    {% else %}
+      <h2 class="poll-results-title fs-6 fw-bold text-dark m-0">{{ results_title }}</h2>
+    {% endif %}
+  </div>
   <dl>
     {{ results }}
   </dl>
 
   {{ summary }}
 </div>
+
+  {{ cancel_form }}
