@@ -31,28 +31,35 @@
     width: 2.5rem;
     height: 2.5rem;
     margin: $spacer $spacer * .5;
-    border: 2px solid transparent;
-    padding: $spacer * .25; // 4px
-    border-radius: $border-radius-pill;
-    background:
-      linear-gradient($white, $white) padding-box,
-      linear-gradient(to right, $blue, $turquoise) border-box;
-      color: $brand;
-      @include media-breakpoint-up(sm) {
+    background-repeat: no-repeat;
+    background-size: cover;
+    @include media-breakpoint-up(sm) {
       margin: $spacer;
       width: 3rem;
       height: 3rem;
     }
-    svg {
-      fill: url('#join-gradient');
+    &--linkedin {
+      background-image: url("#{$theme-images-path}/icons/icon-linkedin.png");
+      &:hover {
+        background-image: url("#{$theme-images-path}/icons/icon-linkedin-hover.png");
+      }
     }
-    &:hover {
-      color: $primary;
-      background:
-        linear-gradient($white, $white) padding-box,
-        $primary border-box!important;
-      svg {
-        fill: $primary;;
+    &--twitter {
+      background-image: url("#{$theme-images-path}/icons/icon-twitter.png");
+      &:hover {
+        background-image: url("#{$theme-images-path}/icons/icon-twitter-hover.png");
+      }
+    }
+    &--youtube {
+      background-image: url("#{$theme-images-path}/icons/icon-youtube.png");
+      &:hover {
+        background-image: url("#{$theme-images-path}/icons/icon-youtube-hover.png");
+      }
+    }
+    &--newsletter {
+      background-image: url("#{$theme-images-path}/icons/icon-newsletter.png");
+      &:hover {
+        background-image: url("#{$theme-images-path}/icons/icon-newsletter-hover.png");
       }
     }
   }

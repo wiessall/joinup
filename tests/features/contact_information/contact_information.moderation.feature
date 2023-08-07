@@ -16,7 +16,6 @@ Feature: Contact Information moderation
       | title       | Games of the Anglo-Saxon age                  |
       | description | There were many different board games played. |
       | logo        | logo.png                                      |
-      | banner      | banner.jpg                                    |
       | owner       | Anglo-Saxon Museum                            |
       | topic       | E-inclusion                                   |
       | state       | draft                                         |
@@ -126,7 +125,6 @@ Feature: Contact Information moderation
       | title               | Saint Louis solutions |
       | description         | A software company    |
       | logo                | logo.png              |
-      | banner              | banner.jpg            |
       | owner               | Saint Louis           |
       | contact information | Secreteriat           |
       | state               | validated             |

@@ -48,11 +48,9 @@ Feature: User authentication
       | licence                                             |
       | licence/add                                         |
       | media/add                                           |
-      | media/add/collection_banner                         |
       | media/add/collection_logo                           |
       | media/add/event_logo                                |
       | media/add/news_logo                                 |
-      | media/add/solution_banner                           |
       | media/add/solution_logo                             |
       | node/add                                            |
       | node/add/custom_page                                |
@@ -132,11 +130,9 @@ Feature: User authentication
       | licence                                             |
       | licence/add                                         |
       | media/add                                           |
-      | media/add/collection_banner                         |
       | media/add/collection_logo                           |
       | media/add/event_logo                                |
       | media/add/news_logo                                 |
-      | media/add/solution_banner                           |
       | media/add/solution_logo                             |
       | node/add                                            |
       | node/add/custom_page                                |
@@ -196,11 +192,9 @@ Feature: User authentication
       | licence                                     |
       | licence/add                                 |
       | media/add                                   |
-      | media/add/collection_banner                 |
       | media/add/collection_logo                   |
       | media/add/event_logo                        |
       | media/add/news_logo                         |
-      | media/add/solution_banner                   |
       | media/add/solution_logo                     |
       | outdated-content-threshold                  |
       | propose/collection                          |
