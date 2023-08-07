@@ -1,4 +1,4 @@
-@api @group-a
+@api @terms @group-a
 Feature: Navigation menu for custom pages
   In order to determine the order and visibility of custom pages in the navigation menu
   As a facilitator
@@ -31,7 +31,8 @@ Feature: Navigation menu for custom pages
     When I click the contextual link "Add new page" in the "Header bottom" region
     Then I should see the heading "Add custom page"
     When I fill in the following:
-      | Title | About us |
+      | Title  | About us    |
+      | Topic | E-inclusion |
     And I enter "A short introduction." in the "Body" wysiwyg editor
     And I press "Publish"
     Then I should see the success message "Custom page About us has been created."
@@ -196,8 +197,8 @@ Feature: Navigation menu for custom pages
       | title | Ravenous wood-munching alphabeavers |
       | state | validated                           |
     And custom_page content:
-      | title       | body                                                                | <group>                             | state     |
-      | Tree eaters | Given time, they will most likely strip the entire region of trees. | Ravenous wood-munching alphabeavers | published |
+      | title       | body                                                                | <group>                             | Topics | state     |
+      | Tree eaters | Given time, they will most likely strip the entire region of trees. | Ravenous wood-munching alphabeavers | HR     | published |
     When I am logged in as a facilitator of the "Ravenous wood-munching alphabeavers" "<group>"
     And I go to the homepage of the "Ravenous wood-munching alphabeavers" <group>
     Then I should see the link "Tree eaters" in the "Navigation menu"
@@ -221,16 +222,16 @@ Feature: Navigation menu for custom pages
       | title                   | state     |
       | Table of contents group | validated |
     And custom_page content:
-      | title         | <group>                 | state     |
-      | Page 1        | Table of contents group | published |
-      | Page 2        | Table of contents group | published |
-      | Page 3        | Table of contents group | published |
-      | Subpage 1-1   | Table of contents group | published |
-      | Subpage 1-1-1 | Table of contents group | published |
-      | Subpage 1-2   | Table of contents group | published |
-      | Subpage 1-2-1 | Table of contents group | published |
-      | Subpage 1-2-2 | Table of contents group | published |
-      | Subpage 2-1   | Table of contents group | published |
+      | title         | <group>                 | Topics | state     |
+      | Page 1        | Table of contents group | HR     | published |
+      | Page 2        | Table of contents group | HR     | published |
+      | Page 3        | Table of contents group | HR     | published |
+      | Subpage 1-1   | Table of contents group | HR     | published |
+      | Subpage 1-1-1 | Table of contents group | HR     | published |
+      | Subpage 1-2   | Table of contents group | HR     | published |
+      | Subpage 1-2-1 | Table of contents group | HR     | published |
+      | Subpage 1-2-2 | Table of contents group | HR     | published |
+      | Subpage 2-1   | Table of contents group | HR     | published |
     And the following custom page menu structure:
       | title         | parent      | weight |
       | Page 1        |             | 1      |
