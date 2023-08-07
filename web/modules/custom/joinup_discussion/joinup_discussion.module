@@ -191,4 +191,3 @@ function joinup_discussion_views_pre_render(ViewExecutable $view): void {
     $view->result = $results;
   }
 }
-
