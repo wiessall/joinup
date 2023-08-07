@@ -1,16 +1,19 @@
-{{ form.messages }}
 <div class="poll">
+  {{ form.messages }}
   <div class="vote-form">
     {% if show_question %}
-      <h3 class="poll-question">{{ question }}</h3>
-      {{ form.actions.result }}
+      <div class="d-flex align-items-baseline justify-content-between pb-3">
+        <h2 class="poll-question fs-6 fw-bold text-dark m-0">{{ question }}</h2>
+        {{ form.actions.result }}
+      </div>
     {% endif %}
 
     {{ form.choice }}
 
-    {{ form.actions|without('result') }}
+    <div class="js-hide">{{ form.actions|without('result') }}</div>
   </div>
-  {{ form|without('actions', 'choice', 'messages', 'question') }}
 
+  {{ form|without('actions', 'choice', 'messages', 'question') }}
   {{ summary }}
 </div>
+

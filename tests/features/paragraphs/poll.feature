@@ -44,12 +44,12 @@ Feature: Pool paragraph tests.
     When I should see the heading "What was the best series?"
     And I should not see the button "View results"
     And the following fields should be present "Game of Thrones,Breaking Bad,The Wire,The Sopranos,Mad Men"
-    And I should see "Currently 0 votes"
+    And I should see "0 votes"
     And I should see "1 week 6 days left to vote"
 
-    Then I select the radio button "Game of Thrones"
+    Then I click on label "Game of Thrones"
     And I wait for AJAX to finish
-    When I should see "Currently 1 vote"
+    When I should see "1 vote"
 
   @javascript
   Scenario: Use who voted can cancel own vote
@@ -65,10 +65,10 @@ Feature: Pool paragraph tests.
     And I go to the "Pizza types" custom page
     When I should see the heading "Whats the best pizza topping?"
     And the following fields should be present "Pepperoni,Pineapple,Just cheese,Mushrooms"
-    And I should not see "Currently 0 votes"
+    And I should not see "0 votes"
     And I should see "4 days 23 hours left to vote"
 
-    Then I select the radio button "Just cheese"
+    Then I click on label "Just cheese"
     And I wait for AJAX to finish
     When the following fields should not be present "Pepperoni,Pineapple,Just cheese,Mushrooms"
     And I press "Cancel vote"

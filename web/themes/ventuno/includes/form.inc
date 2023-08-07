@@ -162,3 +162,26 @@ function ventuno_preprocess_radios(array &$variables): void {
     $variables['attributes']['class'][] = 'd-flex col-gap-3';
   }
 }
+
+/**
+ * Implements hook_form_BASE_FORM_ID_alter().
+ */
+function ventuno_form_poll_view_form_alter(array &$form, FormStateInterface $form_state, string $form_id): void {
+  foreach (['result', 'cancel'] as $element) {
+    if (!isset($form['actions'][$element])) {
+      continue;
+    }
+
+    $form['actions'][$element]['#button_type'] = 'link';
+    $form['actions'][$element]['#attributes']['class'][] = 'p-0';
+  }
+}
+
+/**
+ * Implements hook_preprocess_input__submit().
+ */
+function ventuno_preprocess_input__submit(array &$variables): void {
+  if (!isset($variables['element']['#button_type'])) {
+    $variables['attributes']['class'][] = 'btn-primary';
+  }
+}
