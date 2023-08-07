@@ -23,6 +23,7 @@ use Drupal\joinup_discussion\Event\DiscussionDeleteEvent;
 use Drupal\joinup_discussion\Event\DiscussionEvents;
 use Drupal\joinup_discussion\LatestUpdateTimeFieldItemList;
 use Drupal\node\NodeInterface;
+use Drupal\views\ViewExecutable;
 
 /**
  * Implements hook_ENTITY_TYPE_presave().
@@ -166,23 +167,28 @@ function joinup_discussion_preprocess_node__view_mode_tile(array &$variables): v
 }
 
 /**
- * Implements hook_preprocess_block().
+ * Implements hook_views_pre_render().
  */
-function joinup_discussion_preprocess_block(array &$variables): void {
-  if ($variables["plugin_id"] !== 'facet_block:entity_status') {
-    return;
-  }
-  $route_entity = \Drupal::routeMatch()->getParameter('rdf_entity');
-  $count = \Drupal::entityTypeManager()->getStorage('node')
-    ->getQuery()
-    ->accessCheck(FALSE)
-    ->condition('type', 'discussion')
-    ->condition('og_audience', $route_entity->id())
-    ->condition('field_state', 'archived')
-    ->condition('status', TRUE)
-    ->count()
-    ->execute();
-  if (!$count) {
-    unset($variables["content"]);
+function joinup_discussion_views_pre_render(ViewExecutable $view): void {
+  if ($view->id() === 'discussions') {
+    $results = $view->result;
+
+    // Return if the facet "archived" is active.
+    $query_parameters = \Drupal::request()->query->all();
+    if (!empty($query_parameters) && in_array('status:archived', $query_parameters['f'])) {
+      return;
+    }
+    // Loop through the results and filter out items with the "archived" status.
+    foreach ($results as $index => $result) {
+      $state = $result->_entity->get('field_state')->getString();
+      // If the status is "archived," remove the item from the results.
+      if ($state === 'archived') {
+        unset($results[$index]);
+      }
+    }
+
+    // Assign the modified results back to the view.
+    $view->result = $results;
   }
 }
+
