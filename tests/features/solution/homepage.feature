@@ -9,7 +9,6 @@ Feature: Solution homepage
       | title       | Petri net                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
       | description | "<p>A <b>Petri net</b>, also known as a <b>place/transition (PT) net</b>, is one of several <a href=\"#mathematical\">mathematical</a> modeling languages for the description of distributed systems. It is a class of discrete event dynamic system. A Petri net is a directed bipartite graph, in which the nodes represent transitions (i.e. events that may occur, represented by bars) and places (i.e. conditions, represented by circles). The directed arcs describe which places are pre- and/or postconditions for which transitions (signified by arrows). Some sources state that Petri nets were invented in August 1939 by Carl Adam Petri — at the age of 13 — for the purpose of describing chemical processes.</p>" |
       | logo        | logo.png                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
-      | banner      | banner.jpg                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
       | state       | validated                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
     When I go to the homepage of the "Petri net" solution
     # Checking for HTML text ensures that any HTML elements in the abstract are correctly stripped.
@@ -34,7 +33,6 @@ Feature: Solution homepage
       | title       | Information sharing protocols         |
       | description | Handling information sharing securely |
       | logo        | logo.png                              |
-      | banner      | banner.jpg                            |
       | state       | validated                             |
     When I go to the homepage of the "Information sharing protocols" solution
     Then I should see the heading "Information sharing protocols"
@@ -89,8 +87,8 @@ Feature: Solution homepage
       | name  | Geronimo             |
       | email | geronimo@example.com |
     And the following solutions:
-      | title             | description     | logo     | banner     | state     | owner                 | contact information | solution type | topic       |
-      | Chiricahua Server | Serving the web | logo.png | banner.jpg | validated | Chiricahua Foundation | Geronimo            | Business      | E-inclusion |
+      | title             | description     | logo     | state     | owner                 | contact information | solution type | topic       |
+      | Chiricahua Server | Serving the web | logo.png | validated | Chiricahua Foundation | Geronimo            | Business      | E-inclusion |
     # There should not be a pager when the solution is empty.
     When I go to the homepage of the "Chiricahua Server" solution
     Then I should not see the "Pager" region
@@ -221,8 +219,8 @@ Feature: Solution homepage
   @terms @javascript
   Scenario: Test that up to 7 topic terms are visible in the solution overview header.
     Given the following solutions:
-      | title      | description        | logo     | banner     | state     | topic                                                                                                                              |
-      | All topics | Bring in EVERYONE! | logo.png | banner.jpg | validated | Finance in EU, Supplier exchange, E-health, HR, Employment and Support Allowance, Statistics and Analysis, E-inclusion, Demography |
+      | title      | description        | logo     | state     | topic                                                                                                                              |
+      | All topics | Bring in EVERYONE! | logo.png | validated | Finance in EU, Supplier exchange, E-health, HR, Employment and Support Allowance, Statistics and Analysis, E-inclusion, Demography |
 
     When I go to the "All topics" solution
     Then I should see the text "Topic" in the "Header"

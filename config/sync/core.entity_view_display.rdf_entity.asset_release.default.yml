@@ -3,7 +3,6 @@ langcode: en
 status: true
 dependencies:
   config:
-    - field.field.rdf_entity.asset_release.field_isr_banner
     - field.field.rdf_entity.asset_release.field_isr_contact_information
     - field.field.rdf_entity.asset_release.field_isr_description
     - field.field.rdf_entity.asset_release.field_isr_distribution
@@ -224,7 +223,6 @@ content:
     region: content
 hidden:
   changed: true
-  field_isr_banner: true
   field_isr_contact_information: true
   field_isr_description: true
   field_isr_included_asset: true
