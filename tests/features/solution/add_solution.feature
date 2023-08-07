@@ -52,7 +52,7 @@ Feature: "Add solution" visibility options.
     And I go to the homepage of the "Collection solution test" collection
     Then I should not see the link "Add solution"
 
-  @terms @uploadFiles:logo.png,banner.jpg
+  @terms @uploadFiles:logo.png
   Scenario: Add solution as a collection facilitator.
     Given the following collection:
       | title | Belgian barista's |
@@ -75,7 +75,7 @@ Feature: "Add solution" visibility options.
     And I check "I have read and accept the legal notice and I commit to manage my solution on a regular basis."
     And I press "Yes"
     Then I should see the heading "Add Solution"
-    And the following fields should be present "Title, Description, Upload a new file or enter a URL, Logo, Banner, Name, E-mail address, Website URL"
+    And the following fields should be present "Title, Description, Upload a new file or enter a URL, Logo, Name, E-mail address, Website URL"
     And the following fields should not be present "Groups audience, Other groups, Current workflow state, Langcode, Translation, Motivation"
     # Regression test for ensuring that obsolete content creation value is removed.
     # @see: https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-3567
@@ -83,7 +83,6 @@ Feature: "Add solution" visibility options.
     And I should see the text "Only facilitators and authors can create content"
     # Regression test to endure that the language terms "Multilingual Code" are not present.
     And the available options in the "Language" select should not include the "Multilingual Code"
-    And I should see the description "For best result the image must be larger than 2400x345 pixels." for the "Banner" field
     And the "Solution type" field should contain the "EIRA Ontology Viewpoint, Legal View, Deprecated" option groups
     When I fill in the following:
       | Title                 | Espresso is the solution                                      |
@@ -111,14 +110,12 @@ Feature: "Add solution" visibility options.
       | If you think this action is not clear or not due, please contact Joinup Support at                |
     And I should see "Thank you for proposing a solution. Your request is currently pending approval by the site administrator."
 
-    # Regression test for non required fields 'Banner' and 'Logo'.
+    # Regression test for the non required field, 'Logo'.
     # @see: https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-3328
     And I should not see the following error messages:
       | error messages            |
-      | Banner field is required. |
       | Logo field is required.   |
     But I should see a logo on the header
-    And I should see a banner on the header
     And I should see the heading "Espresso is the solution"
     When I am logged in as "Ruth Lee"
     And I go to the edit form of the "Espresso is the solution" solution
@@ -155,7 +152,6 @@ Feature: "Add solution" visibility options.
     # Attach a PDF to the documentation.
     And I upload the file "text.pdf" to "Upload a new file or enter a URL"
     And I attach the file "logo.png" to "Logo"
-    And I attach the file "banner.jpg" to "Banner"
     # Click the button to select an existing owner.
     And I press "Add existing" at the "Owner" field
     And I fill in "Owner" with "Organisation example"
@@ -279,7 +275,7 @@ Feature: "Add solution" visibility options.
     And I delete the "Climate change tracker" solution
     And I delete the "Angela Crespi" contact information
 
-  @javascript @terms @generateMedia @generateMediaTypes:solution_banner,solution_logo
+  @javascript @terms @generateMedia @generateMediaTypes:solution_logo
   Scenario: Tests the image library widget.
     Given the following owner:
       | name                 | type    |
@@ -301,13 +297,8 @@ Feature: "Add solution" visibility options.
     When I expand the "Additional fields" accordion section
     And  I remove the first file from "Logo"
     And I wait for AJAX to finish
-    Then  I remove the first file from "Banner"
-    And I wait for AJAX to finish
 
     When I select image #2 as solution logo
     And I wait for AJAX to finish
-    And I select image #9 as solution banner
-    And I wait for AJAX to finish
     And I press "Publish"
     And the "Cleaning solution" solution logo is image #2
-    And the "Cleaning solution" solution banner is image #9

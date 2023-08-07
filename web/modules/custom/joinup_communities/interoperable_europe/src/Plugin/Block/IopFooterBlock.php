@@ -80,13 +80,10 @@ class IopFooterBlock extends BlockBase implements ContainerFactoryPluginInterfac
       ],
     ];
 
-    $icon_uri = base_path() . $this->themeExtensionList->getPath('ventuno') . '/assets/icons/icons.svg#';
-    $svg_gradient = '<linearGradient id="join-gradient"><stop offset="0%" stop-color="#0047ba" /><stop offset="100%" stop-color="#19d3c5" /></linearGradient>';
-
     foreach ($icons as $class => $data) {
       $build[$class] = [
         '#type' => 'inline_template',
-        '#template' => '<a class="btn btn-sm rounded-circle join__btn" href="{{ url }}" target="_blank" rel="noopener" title="{{ title }}"><svg class="icon--m">' . $svg_gradient . '<use xlink:href="' . $icon_uri . '{{ icon }}"></use></svg></a>',
+        '#template' => '<a class="btn btn-sm rounded-circle join__btn join__btn--' . $class . '" href="{{ url }}" target="_blank" rel="noopener" title="{{ title }}"></a>',
         '#context' => [
           'icon' => $class,
           'title' => $this->t('Follow us on @media', ['@media' => $data['title']]),
@@ -97,7 +94,7 @@ class IopFooterBlock extends BlockBase implements ContainerFactoryPluginInterfac
 
     $build['newsletter'] = [
       '#type' => 'inline_template',
-      '#template' => '<a class="btn btn-sm rounded-circle join__btn" href="{{ url }}" target="_blank" rel="noopener" title="{{ title }}"><svg class="icon--m">' . $svg_gradient . '<use xlink:href="' . $icon_uri . 'envelope-fill"></use></svg></a>',
+      '#template' => '<a class="btn btn-sm rounded-circle join__btn join__btn--newsletter" href="{{ url }}" target="_blank" rel="noopener" title="{{ title }}"></a>',
       '#context' => [
         'title' => $this->t('Subscribe to the interoperable europe newsletter'),
         'url' => Url::fromUri('https://ec.europa.eu/newsroom/informatics/user-subscriptions/1115/create'),
