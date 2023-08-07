@@ -16,6 +16,23 @@ function ventuno_preprocess_rdf_entity(array &$variables): void {
   // Workaround for incorrect rendering of RDF entity label.
   // @see https://www.drupal.org/project/rdf_entity/issues/3209500
   $variables['label'] = $variables['rdf_entity']->label();
+
+  // Provide variable to know whether the page has been set as the landing page
+  // of a group, so we can add a <h1> title in the group header.
+  $route_match = \Drupal::routeMatch();
+  $route_name = $route_match->getRouteName();
+  if ($route_name === 'entity.rdf_entity.canonical' && $entity = $route_match->getParameter('rdf_entity')) {
+    if (in_array($entity->getType(), ['collection', 'solution'])) {
+      $variables['is_canonical'] = TRUE;
+    }
+  }
+
+  // View modes where tiles are expected.
+  $tile_view_modes = ['view_mode_tile', 'view_mode_tile_horizontal', 'carousel'];
+  // Prepare data for the tiles.
+  if (in_array($variables['view_mode'], $tile_view_modes)) {
+    _ventuno_preprocess_tile($variables, 'rdf_entity');
+  }
 }
 
 /**
@@ -30,20 +47,6 @@ function ventuno_preprocess_rdf_entity__explore_item(array &$variables): void {
 }
 
 /**
- * Implements hook_preprocess_HOOK().
- */
-function ventuno_preprocess_rdf_entity__search_result_featured(array &$variables): void {
-  _ventuno_preprocess_search_result($variables, 'rdf_entity');
-}
-
-/**
- * Implements hook_preprocess_HOOK().
- */
-function ventuno_preprocess_rdf_entity__search_result(array &$variables): void {
-  _ventuno_preprocess_search_result($variables, 'rdf_entity');
-}
-
-/**
  * Implements hook_preprocess_HOOK() for rdf_entity__solution__group-header.
  */
 function ventuno_preprocess_rdf_entity__solution__group_header(array &$variables): void {
@@ -51,30 +54,9 @@ function ventuno_preprocess_rdf_entity__solution__group_header(array &$variables
     $variables['content']['releases_overview']['#attributes'] = [
       'class' => [
         'btn',
-        'btn-outline-secondary',
-        'ms-sm-3',
+        'btn-secondary',
       ],
     ];
-  }
-}
-
-/**
- * Implements hook_preprocess_HOOK() for rdf-entity--solution--view-mode-tile.html.twig.
- *
- * - Add a flag that indicates whether to show the download counter.
- */
-function ventuno_preprocess_rdf_entity__solution__view_mode_tile(array &$variables): void {
-  // Add a flag to indicate if the download counter is visible.
-  if (isset($variables['elements']['downloads']['count']['#access'])) {
-    $variables['show_download_counter'] = $variables['elements']['downloads']['count']['#access'];
-  }
-
-  $rdf_entity = $variables['rdf_entity'];
-  if (!$rdf_entity->get('collection')->isEmpty()) {
-    /** @var \Drupal\rdf_entity\RdfInterface|null $parent */
-    $parent = $rdf_entity->get('collection')->first()->entity;
-    $variables['attributes']['data-joinup-parent-id'] = $parent->id();
-    $variables['attributes']['data-joinup-parent-label'] = $parent->label();
   }
 }
 

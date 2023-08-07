@@ -14,7 +14,7 @@ dependencies:
     - field.field.user.user.field_user_organisation
     - field.field.user.user.field_user_photo
     - field.field.user.user.field_user_professional_domain
-    - image.style.logo
+    - image.style.profile_icon_big
   module:
     - image
     - social_media_links_field
@@ -91,12 +91,12 @@ content:
     label: hidden
     settings:
       image_link: ''
-      image_style: logo
+      image_style: profile_icon_big
       image_loading:
         attribute: lazy
     third_party_settings:
       template_suggestion:
-        template_suggestion: ''
+        template_suggestion: bare
     weight: 2
     region: content
   field_user_professional_domain:
@@ -119,4 +119,4 @@ hidden:
   field_user_frequency: true
   langcode: true
   search_api_excerpt: true
-  user_field_user_content_top: true
+  user_user_field_user_content_top: true

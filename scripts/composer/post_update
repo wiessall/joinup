@@ -1,0 +1,16 @@
+#!/bin/bash
+
+# Build the codebase.
+test ! -f vendor/bin/run || vendor/bin/run toolkit:build-dev
+
+# Task Runner has been moved in Toolkit. However, the Toolkit's runner is
+# simplified and not ready to be used by Joinup because of DQA-5962. Ensure that
+# the standalone Task Runner is used.
+# @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/DQA-5962
+perl -i -pe 's/\/ec\-europa\/toolkit\/run/\/openeuropa\/task\-runner\/bin\/run/g' vendor/bin/run
+
+# Run NPM install only if it's not bypassed.
+if [ ! -f .env ] || [ "$(grep 'COMPOSER_DISABLE_NODE_DEPENDENCIES=1' .env)" = "" ]
+then
+  npm ci --no-progress
+fi

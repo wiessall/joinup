@@ -52,7 +52,7 @@ class JoinupDiscussionSubscription implements JoinupDiscussionSubscriptionInterf
     }
 
     $flagging_storage = $this->entityTypeManager->getStorage('flagging');
-    $flaggings = $flagging_storage->getQuery()
+    $flaggings = $flagging_storage->getQuery()->accessCheck(FALSE)
       ->condition('flag_id', $flag_id)
       ->condition('entity_type', $entity->getEntityTypeId())
       ->condition('entity_id', $entity->id())

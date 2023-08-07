@@ -51,47 +51,65 @@
     hide_searchbar: hide_searchbar,
     searchbar: page.search_bar,
   } %}
-  {{ page.header }}
+  {% block page_header %}
+    {{ page.header }}
+  {% endblock %}
 
-  {% if page.header_bottom %}
-    {{ page.header_bottom }}
-  {% endif %}
-
-  {% if page.featured %}
-    <div class="region-featured py-5">
-      <div class="container">
-        {{ page.featured }}
+  {% block page_header_bottom %}
+    {% if page.header_bottom %}
+      <div class="region-header-bottom">
+        {{ page.header_bottom }}
       </div>
-    </div>
-  {% endif %}
+    {% endif %}
+  {% endblock %}
 
-  {% if page.messages %}
-    <div class="container mt-3">
-      {{ page.messages }}
-    </div>
-  {% endif %}
-
-  {% if page.content_top %}
-    <div class="container">
-      {{ page.content_top }}
-    </div>
-  {% endif %}
-
-  <div class="content container mb-5">
-    <div class="row">
-      <main role="main" class="col-12 col-lg-10 col-xl-9 col-xxl-8{% if page.sidebar %} col-lg-9 order-1{% endif %}">
-        <div id="main-content" tabindex="-1"></div>{# link is in html.html.twig #}
-        <div class="layout-content">
-          {{ page.content }}
+  <div class="container">
+    {% block page_featured %}
+      {% if page.featured %}
+        <div class="region-featured">
+          {{ page.featured }}
         </div>
-        {% if page.content_bottom %}
-          {{ page.content_bottom }}
-        {% endif %}
+      {% endif %}
+    {% endblock %}
+
+    {% block page_messages %}
+      {% if page.messages %}
+        <div{% if page.messages|render|striptags|trim %} class="mt-3"{% endif %}>
+          {{ page.messages }}
+        </div>
+      {% endif %}
+    {% endblock %}
+
+    {% block page_content_top %}
+      {% if page.content_top %}
+        <div class="region-content-top float-lg-end zi-1 position-relative d-flex col-gap-2 mt-3 ms-lg-3">
+          {{ page.content_top }}
+        </div>
+      {% endif %}
+    {% endblock %}
+
+    <div class="content mb-5">
+      {% if page.sidebar %}
+        <div class="row">
+      {% endif %}
+      <main role="main"{% if page.sidebar %} class="col-12 col-lg-9 order-1"{% endif %}>
+        <div id="main-content" tabindex="-1"></div>
+        {% block page_content %}
+          <div class="layout-content">
+            {{ page.content }}
+          </div>
+        {% endblock %}
+        {% block page_content_bottom %}
+          {% if page.content_bottom %}
+            {{ page.content_bottom }}
+          {% endif %}
+        {% endblock %}
       </main>
       {% if page.sidebar %}
-        <aside class="layout-sidebar col-12 col-lg-3">
-          {{ page.sidebar }}
-        </aside>
+          <aside class="layout-sidebar col-12 col-lg-3">
+            {{ page.sidebar }}
+          </aside>
+        </div>
       {% endif %}
     </div>
   </div>

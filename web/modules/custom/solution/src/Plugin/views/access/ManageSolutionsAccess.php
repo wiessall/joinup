@@ -92,7 +92,9 @@ class ManageSolutionsAccess extends AccessPluginBase implements CacheableDepende
     }
 
     if ($id = $this->routeMatch->getRawParameter('rdf_entity')) {
-      $ids = $this->entityTypeManager->getStorage('rdf_entity')->getQuery()
+      $ids = $this->entityTypeManager->getStorage('rdf_entity')
+        ->getQuery()
+        ->accessCheck(FALSE)
         ->condition('rid', 'collection')
         ->condition('id', UriEncoder::decodeUrl($id))
         ->execute();

@@ -29,6 +29,7 @@ dependencies:
     - node.type.event
     - responsive_image.styles.highlighted_content
   module:
+    - datetime_range
     - field_delimiter
     - field_formatter_range
     - joinup_html_stripper
@@ -54,6 +55,19 @@ content:
       template_suggestion:
         template_suggestion: ''
     weight: 2
+    region: content
+  field_event_date:
+    type: daterange_custom
+    label: hidden
+    settings:
+      timezone_override: ''
+      date_format: d-m-Y
+      fromto: start_date
+      separator: '-'
+    third_party_settings:
+      template_suggestion:
+        template_suggestion: bare
+    weight: 3
     region: content
   field_event_logo:
     type: responsive_image
@@ -82,6 +96,11 @@ content:
         template_suggestion: ''
     weight: 1
     region: content
+  flag_like_node:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 4
+    region: content
 hidden:
   featured: true
   field_attachment: true
@@ -89,7 +108,6 @@ hidden:
   field_event_agenda: true
   field_event_contact_email: true
   field_event_coordinates: true
-  field_event_date: true
   field_event_online_location: true
   field_event_spatial_coverage: true
   field_event_web_url: true

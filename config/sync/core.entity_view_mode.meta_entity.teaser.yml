@@ -1,0 +1,10 @@
+uuid: 140bf09b-7bc1-4d17-ab24-e0ea6e08a4d9
+langcode: en
+status: true
+dependencies:
+  module:
+    - meta_entity
+id: meta_entity.teaser
+label: Teaser
+targetEntityType: meta_entity
+cache: true

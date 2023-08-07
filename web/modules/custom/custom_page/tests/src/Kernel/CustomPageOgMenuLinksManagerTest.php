@@ -33,10 +33,15 @@ class CustomPageOgMenuLinksManagerTest extends KernelTestBase {
   protected static $modules = [
     'custom_page',
     'field',
+    'joinup_group',
+    'joinup_notification',
+    'joinup_workflow',
     'language',
     'link',
     'menu_link_content',
     'menu_ui',
+    'message',
+    'message_notify',
     'node',
     'og',
     'og_menu',
@@ -46,7 +51,10 @@ class CustomPageOgMenuLinksManagerTest extends KernelTestBase {
     'rdf_schema_field_validation',
     'search_api',
     'sparql_entity_storage',
+    'state_machine',
+    'state_machine_revisions',
     'system',
+    'workflow_state_permission',
     'user',
   ];
 
@@ -119,6 +127,32 @@ class CustomPageOgMenuLinksManagerTest extends KernelTestBase {
     $mocked_custom_page_type->og_target_type = 'rdf_entity';
     $mocked_custom_page_type->og_target_bundles = ['collection'];
     $mocked_custom_page_type->save();
+
+    // The state field plays a big part of the project so we cannot go around
+    // that much without it. We create it here manually.
+    FieldStorageConfig::create([
+      'type' => 'state',
+      'entity_type' => 'node',
+      'field_name' => 'field_state',
+      'settings' => [
+        'workflow' => 'custom_page_workflow',
+      ],
+    ])->save();
+
+    $field = [
+      'field_name' => 'field_state',
+      'entity_type' => 'node',
+      'bundle' => 'custom_page',
+      'label' => 'State',
+      'required' => TRUE,
+      'settings' => [
+        'workflow' => 'custom_page_workflow',
+      ],
+    ];
+    $instance = \Drupal::service('entity_type.manager')
+      ->getStorage('field_config')
+      ->create($field);
+    $instance->save();
   }
 
   /**

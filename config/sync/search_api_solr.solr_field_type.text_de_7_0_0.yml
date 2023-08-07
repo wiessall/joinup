@@ -40,6 +40,8 @@ field_type:
           catenateWords: 1
           stemEnglishPossessive: 0
         -
+          class: solr.FlattenGraphFilterFactory
+        -
           class: solr.LengthFilterFactory
           min: 2
           max: 100
@@ -128,6 +130,8 @@ unstemmed_field_type:
           catenateAll: 0
           catenateWords: 1
           stemEnglishPossessive: 0
+        -
+          class: solr.FlattenGraphFilterFactory
         -
           class: solr.LengthFilterFactory
           min: 2

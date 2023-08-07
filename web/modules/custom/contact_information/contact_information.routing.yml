@@ -1,0 +1,14 @@
+entity.rdf_entity.contact:
+  path: '/rdf_entity/{rdf_entity}/contact'
+  defaults:
+    _form: \Drupal\contact_information\Form\ContactForm
+    _title: 'Contact us'
+  requirements:
+    _custom_access: \Drupal\contact_information\Form\ContactForm::access
+  options:
+    parameters:
+      rdf_entity:
+        type: entity:rdf_entity
+        bundle:
+          - collection
+          - solution

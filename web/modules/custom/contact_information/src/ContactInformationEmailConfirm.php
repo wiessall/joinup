@@ -18,47 +18,18 @@ use Drupal\sparql_entity_storage\SparqlGraphInterface;
 class ContactInformationEmailConfirm implements ContactInformationEmailConfirmInterface {
 
   /**
-   * The entity type manager service.
-   */
-  protected EntityTypeManagerInterface $entityTypeManager;
-
-  /**
-   * The renderer service.
-   */
-  protected RendererInterface $renderer;
-
-  /**
-   * The email confirmer service.
-   */
-  protected EmailConfirmerManagerInterface $emailConfirmer;
-
-  /**
    * Constructs a new service instance.
    *
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
    *   The entity type manager service.
    * @param \Drupal\Core\Render\RendererInterface $renderer
    *   The renderer service.
-   * @param \Drupal\email_confirmer\EmailConfirmerManagerInterface|null $email_confirmer
-   *   The email confirmer service. The $email_confirmer argument is set as
-   *   nullable to avoid the non-existent service "email_confirmer" error during
-   *   the deployment. This should be reverted after deploying this change.
+   * @param \Drupal\email_confirmer\EmailConfirmerManagerInterface $emailConfirmer
+   *   The email confirmer service.
    *
    * @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7300
-   * @todo Make $email_confirmer non-nullable in ISAICP-7300.
    */
-  public function __construct(EntityTypeManagerInterface $entity_type_manager, RendererInterface $renderer, ?EmailConfirmerManagerInterface $email_confirmer) {
-    $this->entityTypeManager = $entity_type_manager;
-    $this->renderer = $renderer;
-    // @todo Remove this in ISAICP-7300.
-    // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7300
-    // @codingStandardsIgnoreStart
-    if (!$email_confirmer) {
-      $email_confirmer = \Drupal::service('email_confirmer');
-    }
-    // @codingStandardsIgnoreEnd
-    $this->emailConfirmer = $email_confirmer;
-  }
+  public function __construct(protected EntityTypeManagerInterface $entityTypeManager, protected RendererInterface $renderer, protected EmailConfirmerManagerInterface $emailConfirmer) {}
 
   /**
    * {@inheritdoc}

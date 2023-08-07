@@ -1,6 +1,6 @@
 uuid: 89b1c244-485f-49c7-8da3-3e8d3a652538
 langcode: en
-status: true
+status: false
 dependencies:
   module:
     - joinup_user
@@ -11,7 +11,7 @@ _core:
 id: iop_userheader
 theme: iop
 region: featured
-weight: -20
+weight: -16
 provider: null
 plugin: user_header_block
 settings:

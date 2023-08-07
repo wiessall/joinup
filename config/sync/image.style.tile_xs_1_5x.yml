@@ -1,0 +1,21 @@
+uuid: ca660a54-3bc0-4c85-aa45-6d226cb87854
+langcode: en
+status: true
+dependencies: {  }
+name: tile_xs_1_5x
+label: 'Tile XS 1.5x'
+effects:
+  ab266e4b-9afa-4ac4-9134-e4d4eaa71c27:
+    uuid: ab266e4b-9afa-4ac4-9134-e4d4eaa71c27
+    id: image_scale
+    weight: 2
+    data:
+      width: 828
+      height: 464
+      upscale: true
+  02b7112f-5c6b-4a7b-a676-38ebcf865fd5:
+    uuid: 02b7112f-5c6b-4a7b-a676-38ebcf865fd5
+    id: image_convert
+    weight: 2
+    data:
+      extension: webp

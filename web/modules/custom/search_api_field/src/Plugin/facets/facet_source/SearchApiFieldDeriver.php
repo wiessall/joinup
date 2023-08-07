@@ -9,7 +9,7 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Plugin\PluginBase;
 use Drupal\Core\StringTranslation\TranslationInterface;
 use Drupal\facets\FacetSource\FacetSourceDeriverBase;
-use Drupal\field\Entity\FieldStorageConfig;
+use Drupal\field\Entity\FieldConfig;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -69,12 +69,14 @@ class SearchApiFieldDeriver extends FacetSourceDeriverBase {
       $ids = [];
       foreach ($map as $type => $info) {
         foreach ($info as $name => $data) {
-          $ids[] = "$type.$name";
+          foreach ($data['bundles'] as $bundle_name) {
+            $ids[] = "$type.$bundle_name.$name";
+          }
         }
       }
 
       $plugin_derivatives = [];
-      $fs = FieldStorageConfig::loadMultiple($ids);
+      $fs = FieldConfig::loadMultiple($ids);
       /** @var \Drupal\field\Entity\FieldStorageConfig $field_config */
       foreach ($fs as $id => $field_config) {
         // Add plugin derivatives, they have 'search_api_field' as a special key

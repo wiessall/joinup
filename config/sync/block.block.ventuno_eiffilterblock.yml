@@ -10,7 +10,7 @@ dependencies:
 id: ventuno_eiffilterblock
 theme: ventuno
 region: content
-weight: 0
+weight: -3
 provider: null
 plugin: eif_filter_block
 settings:

@@ -39,38 +39,32 @@ class JoinupLocalTasksBlock extends LocalTasksBlock {
       '#theme' => 'menu_local_tasks',
     ];
 
-    // Add only selected levels for the printed output.
-    if ($config['primary']) {
-      $links = $this->localTaskManager->getLocalTasks($this->routeMatch->getRouteName(), 0);
-      $cacheability = $cacheability->merge($links['cacheability']);
+    foreach (['primary', 'secondary'] as $level) {
+      $route_name = $this->routeMatch->getRouteName();
+      // Add only selected levels for the printed output.
+      if ($config[$level]) {
+        $links = $this->localTaskManager->getLocalTasks($route_name, (int) ($level === 'secondary'));
 
-      // Do not display single tabs if the only tab points to the same page.
-      $visible_children = Element::getVisibleChildren($links['tabs']);
-      $cacheability = $cacheability->merge($links['cacheability']);
-      $count = count($visible_children);
-      $tabs += [
-        '#primary' => ($count === 0 || ($count === 1 && key($visible_children) === $this->routeMatch->getRouteName())) ? [] : $links['tabs'],
-      ];
-    }
-    if ($config['secondary']) {
-      $links = $this->localTaskManager->getLocalTasks($this->routeMatch->getRouteName(), 1);
-      // Do not display single tabs if the only tab points to the same page.
-      $visible_children = Element::getVisibleChildren($links['tabs']);
-      $cacheability = $cacheability->merge($links['cacheability']);
-      $count = count($visible_children);
-      // Do not display single tabs if the only tab points to the same page.
-      $tabs += [
-        '#secondary' => ($count === 0 || ($count === 1 && key($visible_children) === $this->routeMatch->getRouteName())) ? [] : $links['tabs'],
-      ];
+        // Do not display single tabs if the only tab points to the same page.
+        $visible_children = Element::getVisibleChildren($links['tabs']);
+        $cacheability->addCacheableDependency($links['cacheability']);
+        $count = count($visible_children);
+
+        // Do not display single tabs if the only tab points to the same page.
+        if ($count > 1 || ($count === 1 && $visible_children[0] !== $route_name)) {
+          $tabs += ["#$level" => $links['tabs']];
+        }
+      }
     }
 
     $build = [];
     $cacheability->applyTo($build);
-    if (empty($tabs['#primary']) && empty($tabs['#secondary'])) {
-      return $build;
+
+    if (!empty($tabs['#primary']) || !empty($tabs['#secondary'])) {
+      $build += $tabs;
     }
 
-    return $build + $tabs;
+    return $build;
   }
 
 }

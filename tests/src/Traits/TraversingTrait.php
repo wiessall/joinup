@@ -15,8 +15,6 @@ use PHPUnit\Framework\Assert;
  */
 trait TraversingTrait {
 
-  use MaterialDesignTrait;
-
   /**
    * Searches for any kind of field in a form by label.
    *
@@ -100,7 +98,8 @@ trait TraversingTrait {
     $expected = preg_replace("/\s{2,}/", " ", $expected);
 
     if (trim($actual) !== $expected) {
-      throw new \Exception(sprintf('The option "%s" was not selected in the page %s, %s was selected', $expected, $this->getSession()->getCurrentUrl(), $option_element->getHtml()));
+      throw new \Exception(sprintf('The option "%s" was not selected in the page %s, %s was selected', $expected, $this->getSession()
+        ->getCurrentUrl(), $option_element->getHtml()));
     }
   }
 
@@ -238,7 +237,7 @@ trait TraversingTrait {
    * @return \Behat\Mink\Element\NodeElement[]
    *   An array of tiles elements, keyed by tile title.
    */
-  protected function getTiles($region = NULL): array {
+  protected function getTiles(?string $region = NULL): array {
     /** @var \Behat\Mink\Element\DocumentElement $regionObj */
     if ($region === NULL) {
       $regionObj = $this->getSession()->getPage();
@@ -247,16 +246,16 @@ trait TraversingTrait {
       $regionObj = $this->getRegion($region);
     }
 
+    $title_selector = implode(', ', [
+      '.card-title',
+      '.card-title > h1 a',
+      'h2 a',
+      'h1.tile__title',
+      '.slide__title',
+    ]);
+
     $result = [];
     foreach ($regionObj->findAll('css', $this->getTileCssSelector()) as $element) {
-      $title_selector = implode(', ', [
-        '.card-title',
-        '.card-title > h1 a',
-        'h2 a',
-        // @todo Legacy selectors to be removed in ISAICP-7138.
-        // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7138
-        '.listing__title',
-      ]);
       $title_element = $element->find('css', $title_selector);
       // Some tiles don't have a title, like the one to create a new collection
       // in the collections page.
@@ -281,17 +280,22 @@ trait TraversingTrait {
    *   Thrown when the element is not found.
    */
   protected function getTileByHeading(string $heading): NodeElement {
-    $class = 'card--tile';
-    // @todo Remove the if (...) block in ISAICP-7138.
-    // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7138
-    if ($this->usesMaterialDesignLite()) {
-      $class = 'listing__item--tile';
-    }
-    try {
-      return $this->getListingByHeading($class, $heading);
-    }
-    catch (ElementNotFoundException $e) {
-      return $this->getListingByHeading('tile', $heading);
+    $selectors = [
+      'tile',
+    ];
+
+    foreach ($selectors as $selector) {
+      try {
+        $element = $this->getListingByHeading($selector, $heading);
+      }
+      catch (\Exception $e) {
+        // The selector is not present on the page.
+        continue;
+      }
+
+      if ($element) {
+        return $element;
+      }
     }
   }
 
@@ -310,31 +314,12 @@ trait TraversingTrait {
    *   Thrown when the element is not found.
    */
   protected function getListingByHeading(string $type, string $heading): NodeElement {
-    // Locate all the items in the old theme.
-    // @todo This can be removed once we are fully migrated to the new theme.
-    // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7138
-    $xpath = '//*[@class and contains(concat(" ", normalize-space(@class), " "), " ' . $type . ' ")]';
-    // That have a heading with the specified text.
-    $xpath .= '[.//*[@class and contains(concat(" ", normalize-space(@class), " "), " listing__title ") or contains(concat(" ", normalize-space(@class), " "), " card-title ")][normalize-space()="' . $heading . '"]]';
-
-    $item = $this->getSession()->getPage()->find('xpath', $xpath);
-
-    if (!$item) {
-      // Locate all the items.
-      $xpath = '//*[@class and contains(concat(" ", normalize-space(@class), " "), " ' . $type . ' ")]';
-      // That have a heading with the specified text.
-      $xpath .= '[.//h2/a[normalize-space()="' . $heading . '"]]';
-
-      $item = $this->getSession()->getPage()->find('xpath', $xpath);
-    }
-
-    if (!$item) {
-      // Throw a specific exception, so it can be catched by steps that need to
-      // assert that a tile is not present.
+    // @todo Keep only h1 selector when tiles refactor.
+    $xpath = '//*[@class and contains(concat(" ", normalize-space(@class), " "), " ' . $type . ' ")][.//h1[normalize-space()="' . $heading . '"]]';
+    if (!$element = $this->getSession()->getPage()->find('xpath', $xpath)) {
       throw new ElementNotFoundException($this->getSession()->getDriver(), "'$heading' $type item.");
     }
-
-    return $item;
+    return $element;
   }
 
   /**
@@ -349,22 +334,25 @@ trait TraversingTrait {
    *   (optional) Limit to a specific html tag when searching for an element.
    *   This can be useful in cases where the data drupal facet id is placed in
    *   more than one html tag e.g. the dropdown has the id placed in both the
-   *   <li> tag of links as well as the <select> element.
+   *   <li> tag of links and the <select> element.
+   * @param bool $throw_exception
+   *   (optional) Whether to throw an exception if the facet is not found.
+   *   Defaults to TRUE.
    *
-   * @return \Behat\Mink\Element\NodeElement
+   * @return \Behat\Mink\Element\NodeElement|null
    *   The facet node element.
    *
    * @throws \Exception
    *   Thrown when the facet is not found in the designated area.
    */
-  protected function findFacetByAlias(string $alias, ?NodeElement $region = NULL, string $html_tag = '*'): NodeElement {
+  protected function findFacetByAlias(string $alias, ?NodeElement $region = NULL, string $html_tag = '*', bool $throw_exception = TRUE): ?NodeElement {
     if ($region === NULL) {
       $region = $this->getSession()->getPage();
     }
     $facet_id = self::getFacetIdFromAlias($alias);
     $element = $region->find('xpath', "//{$html_tag}[@data-drupal-facet-id='{$facet_id}']");
 
-    if (!$element) {
+    if (!$element && $throw_exception) {
       throw new \Exception("The facet '$alias' was not found in the page.");
     }
 
@@ -387,23 +375,28 @@ trait TraversingTrait {
    */
   protected static function getFacetIdFromAlias(string $alias): string {
     $mappings = [
-      'collection type' => 'collection_type',
-      'collection topic' => 'collection_topic',
-      'collection/solution' => 'group',
-      'topic' => 'topic',
-      'solution topic' => 'solution_topic',
-      'solution spatial coverage' => 'solution_spatial_coverage',
-      'spatial coverage' => 'spatial_coverage',
-      'My solutions content' => 'solution_my_content',
+      'Collection event date' => 'collection_event_type',
+      'Content listing types' => 'content_listing_type',
+      'Content types' => 'type',
+      'EIF recommendations' => 'category',
+      'Event date' => 'event_date',
       'My collections content' => 'collection_my_content',
       'My content' => 'content_my_content',
-      'Event date' => 'event_date',
-      'EIF recommendations' => 'category',
-      'Collection event date' => 'collection_event_type',
-      'Content types' => 'type',
-      'eif principle' => 'principle',
-      'eif interoperability layer' => 'interoperability_layer',
+      'My solutions content' => 'solution_my_content',
+      'Status' => 'status',
+      'User content' => 'user_content_bundle',
+      'collection content archived toggle' => 'field_collection_content_status',
+      'collection topic' => 'collection_topic',
+      'collection type' => 'collection_type',
+      'collection/solution' => 'group',
       'eif conceptual model' => 'conceptual_model',
+      'eif interoperability layer' => 'interoperability_layer',
+      'eif principle' => 'principle',
+      'solution content archived toggle' => 'field_is_content_status',
+      'solution spatial coverage' => 'solution_spatial_coverage',
+      'solution topic' => 'solution_topic',
+      'spatial coverage' => 'spatial_coverage',
+      'topic' => 'topic',
     ];
 
     if (!isset($mappings[$alias])) {
@@ -445,7 +438,7 @@ trait TraversingTrait {
     if ($date !== NULL) {
       $date = ucfirst($date) . ' date';
       /** @var \Behat\Mink\Element\NodeElement $element */
-      $element = $fieldset->find('xpath', '//h4[text()="' . $date . '"]//following-sibling::div[1]');
+      $element = $fieldset->find('xpath', '//label[text()="' . $date . '"]//following-sibling::div[1]');
       if (!$element) {
         throw new \Exception("The '$date' sub-field of the '$field' field was not found.");
       }
@@ -580,13 +573,7 @@ trait TraversingTrait {
           'search fields',
         ],
         'selectors' => [
-          // The site-wide search field in the top right corner.
-          ['css', 'input#search-bar__input'],
-          // The search field on the search result pages.
-          [
-            'css',
-            '*[data-drupal-selector="views-exposed-form-search-page-1"] input[data-drupal-selector="edit-keys"]',
-          ],
+          ['css', 'input[name="keys"]'],
         ],
       ],
     ];
@@ -604,7 +591,7 @@ trait TraversingTrait {
    * Returns elements that match the given human readable identifier.
    *
    * @param string $alias
-   *   A human readable element identifier.
+   *   A human-readable element identifier.
    *
    * @return \Behat\Mink\Element\NodeElement[]
    *   The elements matching the identifier.
@@ -617,7 +604,9 @@ trait TraversingTrait {
 
     foreach ($this->getSelectorsMatchingElementAlias($alias) as $selector_tuple) {
       [$selector, $locator] = $selector_tuple;
-      $elements = array_merge($elements, $this->getSession()->getPage()->findAll($selector, $locator));
+      $elements = array_merge($elements, $this->getSession()
+        ->getPage()
+        ->findAll($selector, $locator));
     }
 
     // Do not include hidden elements (e.g. elements that exist in the page but
@@ -657,7 +646,9 @@ trait TraversingTrait {
     $image_elements = $element->findAll('xpath', "//img");
     foreach ($image_elements as $image_element) {
       $html = $image_element->getOuterHtml();
-      if (preg_match($expression, $html)) {
+      // The styles directory contains responsive images which are printed using
+      // a random string in the name.
+      if (preg_match($expression, $html) || preg_match('/.*\/sites\/default\/files\/styles.*/', $html)) {
         return TRUE;
       }
     }
@@ -712,10 +703,8 @@ trait TraversingTrait {
   protected function getTileCssSelector(): string {
     return implode(', ', [
       '.card .card-title',
-      'article.card--tile h2',
-      // @todo Legacy selectors to be removed in ISAICP-7138.
-      // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7138
-      '.listing__item--tile .listing__title',
+      'article.tile h1',
+      'article.slide',
     ]);
   }
 

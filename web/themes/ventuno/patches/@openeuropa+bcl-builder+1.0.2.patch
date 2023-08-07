@@ -1,0 +1,19 @@
+diff --git a/node_modules/@openeuropa/bcl-builder/scripts/scripts.js b/node_modules/@openeuropa/bcl-builder/scripts/scripts.js
+index 2a154bd..f7c015c 100644
+--- a/node_modules/@openeuropa/bcl-builder/scripts/scripts.js
++++ b/node_modules/@openeuropa/bcl-builder/scripts/scripts.js
+@@ -74,10 +74,13 @@ module.exports = (input, dest, options) => {
+ 
+   async function build() {
+     const bundle = await rollup.rollup(inputOptions);
+-    await bundle.write(outputOptions);
++    // await bundle.write(outputOptions);
+     if (options.minify) {
+       await bundle.write(minifiedOptions);
+     }
++    else {
++      await bundle.write(outputOptions);
++    }
+     await bundle.close();
+   }
+ 

@@ -103,7 +103,7 @@ class CollectionContext extends RawDrupalContext {
    */
   public function visitCollection(string $collection): void {
     /** @var \Drupal\rdf_entity\Entity\Rdf $entity */
-    $entity = $this->getEntityByLabel('rdf_entity', $collection);
+    $entity = $this->getEntityByLabel('rdf_entity', $collection, 'collection');
     $this->visitPath($entity->toUrl()->toString());
   }
 
@@ -505,17 +505,12 @@ class CollectionContext extends RawDrupalContext {
       return;
     }
 
-    // Since we might be cleaning up many collections, temporarily disable the
-    // feature to commit the index after every query.
-    $this->disableCommitOnUpdate();
-
     // Remove any collections that were created.
     foreach ($this->collections as $collection) {
       $collection->skip_notification = TRUE;
       $collection->delete();
     }
     $this->collections = [];
-    $this->enableCommitOnUpdate();
   }
 
   /**

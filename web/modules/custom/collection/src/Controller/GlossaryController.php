@@ -125,7 +125,7 @@ class GlossaryController extends ControllerBase {
     if (!isset($this->letters)) {
       $this->letters = [];
       $storage = $this->entityTypeManager()->getStorage('node');
-      $nids = $storage->getQuery()
+      $nids = $storage->getQuery()->accessCheck(FALSE)
         ->condition('type', 'glossary')
         ->condition('og_audience', $rdf_entity->id())
         ->condition('status', TRUE)

@@ -63,7 +63,7 @@ class ClearFiltersSearchBlock extends BlockBase implements ContainerFactoryPlugi
    * {@inheritdoc}
    */
   public function build() {
-    $request = $this->requestStack->getMasterRequest();
+    $request = $this->requestStack->getMainRequest();
     $query_params = $request->query->all();
     $arr = array_diff_key($query_params, array_flip(['keys', 'sort_by']));
     foreach (array_keys($arr) as $key) {

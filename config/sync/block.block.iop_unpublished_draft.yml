@@ -1,0 +1,31 @@
+uuid: 5ce496f0-a1ee-4c6a-be12-b91d8f49093a
+langcode: en
+status: true
+dependencies:
+  module:
+    - joinup_core
+    - joinup_group
+  theme:
+    - iop
+id: iop_unpublished_draft
+theme: iop
+region: content_bottom
+weight: -16
+provider: null
+plugin: entity_unpublished
+settings:
+  id: entity_unpublished
+  label: 'Draft content'
+  label_display: visible
+  provider: joinup_group
+  context_mapping:
+    og: '@rdf_entity.rdf_entity_route_context:rdf_entity'
+  states_filter:
+    - draft
+  negate_states_filter: false
+visibility:
+  request_route:
+    id: request_route
+    negate: false
+    routes:
+      - entity.rdf_entity.unpublished_content

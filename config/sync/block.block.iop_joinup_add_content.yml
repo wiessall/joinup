@@ -12,7 +12,7 @@ _core:
 id: iop_joinup_add_content
 theme: iop
 region: featured
-weight: -19
+weight: -14
 provider: null
 plugin: add_content_block
 settings:

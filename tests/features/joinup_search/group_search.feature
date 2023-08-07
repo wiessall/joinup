@@ -5,13 +5,22 @@ Feature: Search inside groups
   I want to be able to launch a search limited to my current collection or solution
 
   Background:
-    Given collection:
-      | title            | Chalet construction |
-      | logo             | logo.png            |
-      | moderation       | no                  |
-      | topic            | Demography          |
-      | spatial coverage | Switzerland         |
-      | state            | validated           |
+    Given the following contact:
+      | email | charalambos.katsumi@example.com |
+      | name  | Charalambos Katsumi             |
+    And the following owner:
+      | name              |
+      | Antonios Katsumi |
+    And collection:
+      | title               | Chalet construction |
+      | description         | Lorem Ipsum ipsum   |
+      | logo                | logo.png            |
+      | moderation          | no                  |
+      | topic               | Demography          |
+      | spatial coverage    | Switzerland         |
+      | state               | validated           |
+      | owner               | Antonios Katsumi    |
+      | contact information | Charalambos Katsumi |
     And solution:
       | title       | Inclined foundations                                  |
       | description | Ways to construct foundations on hills and mountains. |
@@ -36,9 +45,9 @@ Feature: Search inside groups
       | Natural materials | Materials natural | Ground feel     | Chalet construction |                      | Statistics and Analysis | Switzerland      | validated |
       | Still frozen      | Frozen still      | Maybe next week |                     | Inclined foundations |                         | Austria          | validated |
     And custom_page content:
-      | title     | body                             | collection          | solution             |
-      | Resources | Here are some interesting links. | Chalet construction |                      |
-      | Geography | A collection of height maps.     |                     | Inclined foundations |
+      | title     | body                             | collection          | solution             | state     |
+      | Resources | Here are some interesting links. | Chalet construction |                      | published |
+      | Geography | A collection of height maps.     |                     | Inclined foundations | published |
     And releases:
       | title     | release number | release notes              | is version of        | state     |
       | Pre-alpha | 0.0-alpha0     | Only works on flat ground. | Inclined foundations | validated |
@@ -72,7 +81,7 @@ Feature: Search inside groups
     # only show the content of the collection.
     When I submit the search by pressing enter
     And I should see the following facet summary "Chalet construction"
-    And the page should show the tiles "Room sizes, Ground plan, Opening of the winter season, Materials natural, Resources, Inclined foundations"
+    And the page should show the tiles "Room sizes, Ground plan, Opening of the winter season, Natural materials, Resources, Inclined foundations"
 
     # Check that other types of pages in the collection also show the collection
     # as a chip.
@@ -114,7 +123,7 @@ Feature: Search inside groups
     # only show the content of the solution.
     When I submit the search by pressing enter
     And I should see the following facet summary "Inclined foundations"
-    Then the page should show the tiles "Pre-alpha | 0.0-alpha0, Presenting DrillMaster X88, Rock types, Frozen still, Geography, Terrace?"
+    Then the page should show the tiles "Pre-alpha, Presenting DrillMaster X88, Rock types, Still frozen, Geography, Terrace?"
 
     # Do a search with a keyword. The chip for the solution should be present
     # so the results are filtered by keyword and solution.
@@ -124,7 +133,7 @@ Feature: Search inside groups
       | Inclined foundations |
     When I enter "ground" in the search bar and press enter
     And I should see the following facet summary "Inclined foundations"
-    And the page should show the tiles "Pre-alpha | 0.0-alpha0, Presenting DrillMaster X88"
+    And the page should show the tiles "Pre-alpha, Presenting DrillMaster X88"
 
     # Do a search with a keyword after removing the chip for the solution. The
     # results should only be filtered by keyword, not by solution.
@@ -132,7 +141,7 @@ Feature: Search inside groups
     When I should toggle search bar in navbar
     And I press the remove button on the chip "Inclined foundations"
     And I enter "ground" in the search bar and press enter
-    Then the page should show the tiles "Ground plan, Pre-alpha | 0.0-alpha0, Materials natural, Presenting DrillMaster X88"
+    Then the page should show the tiles "Ground plan, Pre-alpha, Natural materials, Presenting DrillMaster X88"
 
     # Do a search with a keyword and removing the chip for the solution after
     # the keywords have been typed in. This should have the same result.
@@ -141,7 +150,7 @@ Feature: Search inside groups
     And I enter "ground" in the search bar
     And I press the remove button on the chip "Inclined foundations"
     And I submit the search by pressing enter
-    Then the page should show the tiles "Ground plan, Pre-alpha | 0.0-alpha0, Materials natural, Presenting DrillMaster X88"
+    Then the page should show the tiles "Ground plan, Pre-alpha, Natural materials, Presenting DrillMaster X88"
 
     # Check that other types of pages in the solution also show the collection
     # as a chip.
@@ -180,8 +189,6 @@ Feature: Search inside groups
     Then the page should show the following chip:
       | Inclined foundations |
 
-  # This is disabled because the search bar is currently not shown in the header
-  # but this functionality will probably be restored in the future.
   Scenario: Group search caching
     # Initially the cache is cold.
     When I go to the homepage of the "Chalet construction" collection
@@ -206,19 +213,20 @@ Feature: Search inside groups
     And the page should be cached
 
   @javascript
-  # This is disabled because the search bar is currently not shown in the header
-  # but this functionality will probably be restored in the future.
   Scenario: Group filters remain active in the search bar when viewing search results
     When I go to the homepage of the "Chalet construction" collection
-    And I should toggle search bar in navbar
+    And the cache has been cleared
+    Then I reload the page
+    And I should see the text "Chalet construction" in the "Header" region
+    Then I should toggle search bar in navbar
     Then the page should show the following chip:
       | Chalet construction |
     When I enter "ground" in the search bar and press enter
     And I should see the following facet summary "Chalet construction"
-    And the page should show the tiles "Ground plan, Materials natural"
+    And the page should show the tiles "Ground plan, Natural materials"
     When I remove the following facet summary "Chalet construction"
     Then the page should not contain any facet summary
-    And the page should show the tiles "Ground plan, Pre-alpha | 0.0-alpha0, Materials natural, Presenting DrillMaster X88"
+    And the page should show the tiles "Ground plan, Pre-alpha, Natural materials, Presenting DrillMaster X88"
 
   @javascript
   Scenario: Group filter chips appear in search bar after selecting them in facets

@@ -1,11 +1,11 @@
 services:
   custom_page.og_menu_links_manager:
     class: Drupal\custom_page\CustomPageOgMenuLinksManager
-    arguments: ['@entity_type.manager', '@plugin.manager.menu.link']
+    arguments: ['@entity_type.manager', '@plugin.manager.menu.link', '@joinup_group.group_menu_manager']
     lazy: true
   custom_page.provider:
     class: Drupal\custom_page\CustomPageProvider
-    arguments: ['@entity_type.manager', '@plugin.manager.menu.link', '@custom_page.og_menu_links_manager']
+    arguments: ['@entity_type.manager', '@plugin.manager.menu.link', '@custom_page.og_menu_links_manager', '@joinup_group.group_menu_manager']
   custom_page.route_subscriber:
     class: Drupal\custom_page\Routing\RouteSubscriber
     tags:
@@ -15,3 +15,17 @@ services:
     arguments: ['@entity_type.manager']
     tags:
       - { name: event_subscriber }
+  custom_page.unchanged_workflow_state:
+    class: Drupal\custom_page\EventSubscriber\CustomPageUnchangedWorkflowState
+    arguments: ['@entity_type.manager']
+    tags:
+      - { name: event_subscriber }
+  custom_page.workflow_transition:
+    class: Drupal\custom_page\EventSubscriber\CustomPageWorkflowTransition
+    tags:
+      - { name: event_subscriber }
+  custom_page.custom_page_guard:
+    class: Drupal\custom_page\Guard\CustomPageGuard
+    arguments: ['@plugin.manager.workflow']
+    tags:
+      - { name: state_machine.guard, group: custom_page }

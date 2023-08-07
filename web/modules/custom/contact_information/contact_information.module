@@ -16,7 +16,6 @@ use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
-use Drupal\Core\EventSubscriber\MainContentViewSubscriber;
 use Drupal\Core\Field\BaseFieldDefinition;
 use Drupal\Core\Field\FieldDefinitionInterface;
 use Drupal\Core\Field\FieldItemListInterface;
@@ -196,7 +195,7 @@ function contact_information_rdf_entity_access(EntityInterface $entity, $operati
  */
 function contact_information_entity_field_access(string $operation, FieldDefinitionInterface $field_definition, AccountInterface $account, ?FieldItemListInterface $items = NULL): AccessResultInterface {
   if ($operation === 'view' && $field_definition->getName() === 'field_ci_email') {
-    $confirmation = \Drupal::service('email_confirmer')->getConfirmation($items->value);
+    $confirmation = \Drupal::getContainer()->get('email_confirmer')->getConfirmation($items->value, 'confirmed', ContactInformationEmailConfirmInterface::REALM);
     $access = $confirmation && $confirmation->get('confirmed')->value == EmailConfirmationInterface::CONFIRMED ? AccessResult::allowed() : AccessResult::forbidden();
     /** @var \Drupal\contact_information\Entity\ContactInformationInterface $contact_info */
     $contact_info = $items->getEntity();
@@ -326,65 +325,6 @@ function _contact_information_hash_expiration_validate(array &$form, FormStateIn
 }
 
 /**
- * Implements hook_form_FORM_ID_alter().
- */
-function contact_information_form_email_contact_mail_form_alter(array &$form, FormStateInterface $form_state, string $form_id): void {
-  $form['actions'] = ['#type' => 'actions'];
-  if (\Drupal::currentUser()->isAnonymous()) {
-    // For anonymous users, we change the form to enforce them to login.
-    unset($form['#submit'][array_search('::submitForm', $form['#submit'], TRUE)]);
-    unset($form['#validate'][array_search('::validateForm', $form['#validate'], TRUE)]);
-
-    // Remove standard form elements from Drupal\email_contact\Form\ContactForm.
-    // @see \Drupal\email_contact\Form\ContactForm::buildForm()
-    unset($form['name'], $form['mail'], $form['subject'], $form['message']);
-
-    $form['description'] = [
-      '#type' => 'html_tag',
-      '#tag' => 'p',
-      '#value' => t('Only signed in users can send a message. Please sign in or register an account on EU Login.'),
-    ];
-    $form['actions'] = [
-      '#type' => 'actions',
-      'submit' => [
-        '#type' => 'submit',
-        '#value' => t('Sign in / Register'),
-        '#button_type' => 'primary',
-        '#ajax' => [
-          'callback' => 'contact_information_require_login',
-          'event' => 'click',
-        ],
-      ],
-    ];
-  }
-  else {
-    // Move 'submit' under 'actions'.
-    $form['actions']['submit'] = $form['submit'];
-    // We only protect the authenticated user version of the form.
-    \Drupal::service('honeypot')->addFormProtection($form, $form_state);
-  }
-  unset($form['submit']);
-
-  // @todo Replace this check with ::isModal() when issue #2661046 is in.
-  // @see https://www.drupal.org/node/2661046
-  if (\Drupal::request()->query->get(MainContentViewSubscriber::WRAPPER_FORMAT) === 'drupal_ajax') {
-    $form['actions']['cancel'] = [
-      '#type' => 'button',
-      '#value' => t('Cancel'),
-      '#attributes' => ['class' => ['dialog-cancel']],
-      // Put the cancel button to the left of the confirmation button, so it is
-      // consistent with the dialog shown when joining the group.
-      '#weight' => -1,
-    ];
-  }
-
-  // Vary the form's cache by whether the user is logged in or not.
-  (new CacheableMetadata())
-    ->setCacheContexts(['user.roles:authenticated'])
-    ->applyTo($form);
-}
-
-/**
  * Provides an Ajax form submit callback for anonymous authentication.
  *
  * This callback replaces the original \Drupal\email_contact\Form\ContactForm
@@ -431,7 +371,7 @@ function contact_information_rdf_entity_view(array &$build, RdfInterface $contac
   if ($contact_information instanceof ContactInformationInterface && $view_mode === 'about') {
     if (\Drupal::currentUser()->isAuthenticated()) {
       // If an anonymous user clicks on the contact information 'Contact us'
-      // link, they are redirected to login or register with the EU Login
+      // link, they are redirected to log in or register with the EU Login
       // service. After successfully completing the authentication, they are
       // redirected back to the group about-page where the link is placed. We
       // attach a Javascript snippet that automatically opens the 'Contact us'
@@ -442,9 +382,52 @@ function contact_information_rdf_entity_view(array &$build, RdfInterface $contac
       $build += ['#attributes' => []];
       $build['#attributes']['data-joinup-contact-info-id'] = $contact_information->id();
     }
+
+    $resend_access = \Drupal::getContainer()->get('joinup_group.group_manager')->access($contact_information->getRelatedGroup(), 'resend email confirmation request');
+    $cacheable_metadata = CacheableMetadata::createFromRenderArray($build);
+    $email_confirmer = \Drupal::getContainer()->get('email_confirmer');
+    $confirmation = $email_confirmer->getConfirmation($contact_information->get('field_ci_email')->value, 'confirmed', ContactInformationEmailConfirmInterface::REALM);
+    if ($confirmation) {
+      $cacheable_metadata->addCacheableDependency($confirmation);
+    }
+    elseif ($resend_access->isAllowed()) {
+      $confirmation = $email_confirmer->getConfirmation($contact_information->get('field_ci_email')->value, 'pending', ContactInformationEmailConfirmInterface::REALM);
+      // If no confirmation is created yet, create one before adding the link
+      // to the form. Normally, we would have a controller to create the
+      // confirmation instead of sending the existing one but the confirmation
+      // is a standard procedure that all contact information entities should
+      // follow, so it is ok to have it created here by default since the user
+      // is already has access.
+      if (!$confirmation) {
+        $confirmation = $email_confirmer->createConfirmation($contact_information->get('field_ci_email')->value);
+        $confirmation
+          ->setRealm(ContactInformationEmailConfirmInterface::REALM)
+          ->save();
+      }
+
+      if (!$confirmation->isConfirmed()) {
+        $confirmation_url = Url::fromRoute('entity.email_confirmer_confirmation.resend', [
+          'confirmation' => $confirmation->id(),
+        ], [
+          'query' => \Drupal::destination()->getAsArray(),
+        ])->toString();
+
+        $build['email_confirm'] = [
+          '#markup' => t('Please <a href=":resend_url">confirm</a> your contact information to enable users to contact you.', [
+            ':resend_url' => $confirmation_url,
+          ]),
+          // Pretend that it's a normal field to ensure the same spacing.
+          '#prefix' => '<div class="fieldset__field">',
+          '#suffix' => '</div>',
+        ];
+      }
+      $cacheable_metadata->addCacheableDependency($confirmation);
+    }
+
     // Vary the field's cache by whether the user is logged in or not.
-    (new CacheableMetadata())
-      ->setCacheContexts(['user.roles:authenticated'])
+    $cacheable_metadata
+      ->addCacheContexts(['og_role', 'user.roles:authenticated'])
+      ->addCacheableDependency($contact_information)
       ->applyTo($build);
   }
 }

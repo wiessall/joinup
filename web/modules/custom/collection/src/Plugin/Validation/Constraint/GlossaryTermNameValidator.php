@@ -57,7 +57,7 @@ class GlossaryTermNameValidator extends ConstraintValidator implements Container
 
     $storage = $this->entityTypeManager->getStorage('node');
 
-    $query = $storage->getQuery()
+    $query = $storage->getQuery()->accessCheck(FALSE)
       ->condition('type', 'glossary')
       ->condition('og_audience', $glossary_term->get('og_audience')->target_id);
     if ($glossary_term_id = $glossary_term->id()) {

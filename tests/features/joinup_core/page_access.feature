@@ -17,3 +17,8 @@ Feature:
     And I should see the text "The page you are looking for does not exist; it may have been moved, or removed altogether. You might want to try the"
     And I should see the link "search function"
     And I should see the link "home page"
+
+  @api
+  Scenario: Accessing the external URL as path should raise a 404.
+    When I go to "/https://joinup.ec.europa.eu/security.txt"
+    Then I should see the heading "Not Found"

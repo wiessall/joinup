@@ -1,0 +1,25 @@
+uuid: 52b5b4fa-b00c-4de1-af71-2c1f754986d3
+langcode: en
+status: true
+dependencies:
+  module:
+    - entityqueue
+    - field_permissions
+third_party_settings:
+  field_permissions:
+    permission_type: public
+id: entity_subqueue.block_label
+field_name: block_label
+entity_type: entity_subqueue
+type: string
+settings:
+  max_length: 255
+  case_sensitive: false
+  is_ascii: false
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

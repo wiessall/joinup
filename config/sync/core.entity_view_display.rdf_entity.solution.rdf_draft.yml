@@ -40,11 +40,11 @@ dependencies:
     - field.field.rdf_entity.solution.field_is_webdav_url
     - field.field.rdf_entity.solution.field_is_wiki
     - field.field.rdf_entity.solution.field_keywords
-    - field.field.rdf_entity.solution.field_topic
     - field.field.rdf_entity.solution.field_short_id
     - field.field.rdf_entity.solution.field_site_featured
     - field.field.rdf_entity.solution.field_spatial_coverage
     - field.field.rdf_entity.solution.field_status
+    - field.field.rdf_entity.solution.field_topic
     - rdf_entity.rdfentity.solution
   module:
     - file_url
@@ -328,11 +328,12 @@ hidden:
   field_is_state: true
   field_short_id: true
   field_site_featured: true
+  flag_like_rdf_entity: true
   langcode: true
   og_group: true
   pinned_in: true
-  rdf_entity_field_is_content_inline_facets: true
-  rdf_entity_field_is_content_top: true
+  rdf_entity_solution_field_is_content_inline_facets: true
+  rdf_entity_solution_field_is_content_top: true
   read_more: true
   related_solution: true
   related_solutions: true

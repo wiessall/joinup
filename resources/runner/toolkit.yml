@@ -4,8 +4,15 @@ toolkit:
   project_id: digit-joinup
   tmp_folder: ${joinup.dir}/tmp
   clone:
-    asda_url: ${env.ASDA_URL}
-    dumpfile: ${mysql.dump_dir}/mysql.sql
+    asda_services:
+      - mysql
+      - solr
+      - virtuoso
+  components:
+    # Disable 'toolkit-components' job check for outdated packages. The Joinup
+    # dependencies policy is to update all dependencies after each release.
+    outdated:
+      check: false
 
   build:
     dist:
@@ -20,29 +27,18 @@ toolkit:
             - ${toolkit.build.dist.root}/.editorconfig
             - ${toolkit.build.dist.root}/.gitattributes
             - ${toolkit.build.dist.root}/.gitignore
+            - ${toolkit.build.dist.root}/package.json
+            - ${toolkit.build.dist.root}/package-lock.json
             # Drupal Finder, and consequently Drush, are still needing
             # composer.json to locate the root dir. Remove only composer.lock.
             - ${toolkit.build.dist.root}/composer.lock
-        # Build theme assets.
-        - task: exec
-          command: cd ${toolkit.build.dist.root}/web/themes/ventuno && npm ci
-        # Remove theme development dependencies.
         - task: remove
-          file: ${toolkit.build.dist.root}/web/themes/ventuno/node_modules
-        - task: remove
-          file: ${toolkit.build.dist.root}/web/themes/ventuno/package.json
-        - task: remove
-          file: ${toolkit.build.dist.root}/web/themes/ventuno/package-lock.json
+          file: ${toolkit.build.dist.root}/node_modules
 
-command:
-  toolkit:
-    download-dump:
-      options:
-        asda-url: https://asda.fpfis.tech.ec.europa.eu/ec-europa/digit-joinup-reference/dumps
-        dumpfile: ${mysql.dump_dir}/mysql.sql
-    install-dump:
-      options:
-        dumpfile: ${mysql.dump_dir}/mysql.sql
+  test:
+    phpstan:
+      memory_limit: '1G'
+      options: 'debug -vvv no-progress'
 
 commands:
 
@@ -65,8 +61,6 @@ commands:
       dir: ${joinup.files_private_dir}
     - task: mkdir
       dir: ${env.DRUPAL_FILE_TEMP_PATH}
-    - task: run
-      command: joinup:build-assets
 
   # Overrides toolkit:install-clean.
   toolkit:install-clean:
@@ -76,8 +70,8 @@ commands:
       command: sparql:empty
     - task: run
       command: solr:empty
-    - task: run
-      command: redis:flush-all
+    - task: exec
+      command: ${drush.bin} memcache:flush-all
     - task: run
       command: drupal:settings
       arguments:
@@ -128,8 +122,8 @@ commands:
   toolkit:install-clone:
     - task: run
       command: joinup:environment
-    - task: run
-      command: redis:flush-all
+    - task: exec
+      command: ${drush.bin} memcache:flush-all
     - task: run
       command: drupal:settings
       arguments:
@@ -187,15 +181,6 @@ commands:
       command: testing:phpcs-setup
     - task: exec
       command: ${phpcs.file.bin}
-    # This is a temporary solution as the Digit QA pipeline doesn't run JS lint.
-    # Todo: Remove this task in DROPSEC-2040.
-    # See: https://citnet.tech.ec.europa.eu/CITnet/jira/browse/DROPSEC-2040.
-    - task: run
-      command: toolkit:lint-js
-    - task: run
-      command: testing:check-deprecated-code
-    # - task: run
-    #   command: testing:check-deprecated-code-contrib
 
   # Lints JS files  using ESLint.
   toolkit:lint-js:

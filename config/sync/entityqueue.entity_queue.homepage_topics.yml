@@ -1,0 +1,23 @@
+uuid: 644a5009-d99e-4fa3-9d6c-586c05ec19bf
+langcode: en
+status: true
+dependencies:
+  module:
+    - meta_entity
+id: homepage_topics
+label: 'Homepage topics'
+handler: simple
+handler_configuration: {  }
+entity_settings:
+  target_type: meta_entity
+  handler: views
+  handler_settings:
+    view:
+      view_name: topic_meta_entity
+      display_name: entity_reference_1
+      arguments: {  }
+queue_settings:
+  min_size: 0
+  max_size: 8
+  act_as_queue: false
+  reverse: false

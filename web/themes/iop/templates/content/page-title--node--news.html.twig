@@ -1,0 +1,51 @@
+{#
+/**
+ * @file
+ * Theme override for page titles.
+ *
+ * Available variables:
+ * - title_attributes: HTML attributes for the page title element.
+ * - title_prefix: Additional output populated by modules, intended to be
+ *   displayed in front of the main title tag that appears in the template.
+ * - title: The page title, for use in the actual content.
+ * - title_suffix: Additional output populated by modules, intended to be
+ *   displayed after the main title tag that appears in the template.
+ */
+#}
+{% extends '@iop/content/page-title.html.twig' %}
+{% block url_more %}
+  {% set url_more = url_more|merge({'#attributes': {'class': [
+    'call-to-action',
+    'flex-shrink-0',
+    'h3',
+    'ms-3',
+  ]}}) %}
+  {{ url_more }}
+{% endblock %}
+{% block metadata %}
+  <div class="d-flex mt-3 mb-4">
+    <div class="page-title__details">
+      <span class="page-title__detail">{{ additional_content.author }}</span>
+      <span class="page-title__detail">{{ 'Published on'|t }}: {{ additional_content.published }}</span>
+      {% if additional_content.published != additional_content.updated %}
+        <span class="page-title__detail">{{ 'Last update'|t }}: {{ additional_content.updated }}</span>
+      {% endif %}
+      {% if additional_content.is_archived %}
+        <span class="page-title__detail">
+          <span class="me-2">
+            {{ 'Archived'|t }}
+          </span>
+          {{ pattern('icon', {
+            name: 'archive-fill',
+            size: 's'
+          }) }}
+        </span>
+      {% endif %}
+    </div>
+  </div>
+{% endblock %}
+{% block logo %}
+  <div class="rounded-5 my-4 overflow-hidden">
+    {{ logo }}
+  </div>
+{% endblock %}

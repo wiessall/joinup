@@ -291,7 +291,7 @@ class ContentModerationOverviewForm extends FormBase {
    *   The related entities.
    */
   protected function getModerationItems(RdfInterface $rdf_entity): array {
-    $entities = $this->nodeStorage->getQuery()
+    $entities = $this->nodeStorage->getQuery()->accessCheck(FALSE)
       ->condition('og_audience.target_id', $rdf_entity->id())
       ->condition('field_state', CommunityContentHelper::getModeratorAttentionNeededStates(), 'IN')
       ->condition('type', CommunityContentHelper::BUNDLES, 'IN')
@@ -320,7 +320,7 @@ class ContentModerationOverviewForm extends FormBase {
    */
   public function getLatestRevisionId(string $entity_id): ?int {
     if ($storage = $this->entityTypeManager->getStorage('node')) {
-      $revision_ids = $storage->getQuery()
+      $revision_ids = $storage->getQuery()->accessCheck(FALSE)
         ->allRevisions()
         ->condition('nid', $entity_id)
         ->sort('vid', 'DESC')

@@ -91,6 +91,7 @@ class SolutionAffiliationFieldItemList extends EntityReferenceFieldItemList {
     return array_values(\Drupal::getContainer()->get('entity_type.manager')
       ->getStorage('rdf_entity')
       ->getQuery()
+      ->accessCheck(FALSE)
       ->condition('rid', 'collection')
       ->condition('field_ar_affiliates', $this->getEntity()->id())
       ->execute());

@@ -80,9 +80,6 @@ Feature: "Add document" visibility options.
     # Check that the full author name is shown instead of the username.
     And I should see the link "Eirik Andries" in the "Content" region
     But I should not see the link "napcheese" in the "Content" region
-    # Check that the link to the document is visible on the collection page.
-    When I go to the homepage of the "Hunter in the Swords" collection
-    Then I should see the link "An amazing document"
 
     # Check that the publication date field is prefilled with the current time.
     When I go to the homepage of the "Hunter in the Swords" collection

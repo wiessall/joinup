@@ -18,21 +18,13 @@ use Symfony\Component\Console\Input\InputInterface;
 class JoinupDataSanitizationCommands extends DrushCommands implements SanitizePluginInterface {
 
   /**
-   * The database connection.
-   *
-   * @var \Drupal\Core\Database\Connection
-   */
-  protected Connection $db;
-
-  /**
    * Constructs a new Drush commands class instance.
    *
    * @param \Drupal\Core\Database\Connection $db
    *   The database connection.
    */
-  public function __construct(Connection $db) {
+  public function __construct(protected Connection $db) {
     parent::__construct();
-    $this->db = $db;
   }
 
   /**
@@ -42,6 +34,7 @@ class JoinupDataSanitizationCommands extends DrushCommands implements SanitizePl
    */
   public function sanitize($result, CommandData $commandData): void {
     $this->sanitizeUserSocialMedia();
+    $this->sanitizeLogAlertsSettings();
   }
 
   /**
@@ -51,6 +44,7 @@ class JoinupDataSanitizationCommands extends DrushCommands implements SanitizePl
    */
   public function messages(&$messages, InputInterface $input): void {
     $messages[] = dt('Sanitize user social media data.');
+    $messages[] = dt('Sanitize log alerts settings.');
   }
 
   /**
@@ -59,6 +53,17 @@ class JoinupDataSanitizationCommands extends DrushCommands implements SanitizePl
   protected function sanitizeUserSocialMedia(): void {
     $this->db->truncate('user__field_social_media')->execute();
     $this->logger()->success(dt('user__field_social_media table sanitized.'));
+  }
+
+  /**
+   * Sanitizes the log alerts settings.
+   */
+  protected function sanitizeLogAlertsSettings(): void {
+    $this->db->delete('key_value')
+      ->condition('collection', 'state')
+      ->condition('name', 'joinup.log_alerts')
+      ->execute();
+    $this->logger()->success(dt('joinup.log_alerts state var sanitized.'));
   }
 
 }

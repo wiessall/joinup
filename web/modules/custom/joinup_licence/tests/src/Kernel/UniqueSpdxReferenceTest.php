@@ -21,7 +21,7 @@ class UniqueSpdxReferenceTest extends JoinupKernelTestBase {
   /**
    * {@inheritdoc}
    */
-  public static $modules = [
+  protected static $modules = [
     'joinup_licence',
     'joinup_validation',
     'rdf_schema_field_validation',

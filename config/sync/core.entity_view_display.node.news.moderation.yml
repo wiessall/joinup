@@ -13,10 +13,10 @@ dependencies:
     - field.field.node.news.field_news_referenced_solution
     - field.field.node.news.field_news_source_url
     - field.field.node.news.field_news_spatial_coverage
-    - field.field.node.news.field_topic
     - field.field.node.news.field_shared_in
     - field.field.node.news.field_site_featured
     - field.field.node.news.field_state
+    - field.field.node.news.field_topic
     - field.field.node.news.og_audience
     - node.type.news
   module:
@@ -49,14 +49,14 @@ content:
     third_party_settings:
       template_suggestion:
         template_suggestion: ''
-    weight: 2
+    weight: 1
     region: content
   field_state:
     type: list_default
     label: inline
     settings: {  }
     third_party_settings: {  }
-    weight: 1
+    weight: 0
     region: content
 hidden:
   featured: true
@@ -71,6 +71,7 @@ hidden:
   field_shared_in: true
   field_site_featured: true
   field_topic: true
+  flag_like_node: true
   langcode: true
   links: true
   og_audience: true

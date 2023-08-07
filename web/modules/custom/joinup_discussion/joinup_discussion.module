@@ -11,6 +11,8 @@ use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Entity\EntityTypeInterface;
+use Drupal\Core\Field\BaseFieldDefinition;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Url;
 use Drupal\changed_fields\EntitySubject;
@@ -19,6 +21,7 @@ use Drupal\joinup_discussion\Entity\Discussion;
 use Drupal\joinup_discussion\Entity\DiscussionInterface;
 use Drupal\joinup_discussion\Event\DiscussionDeleteEvent;
 use Drupal\joinup_discussion\Event\DiscussionEvents;
+use Drupal\joinup_discussion\LatestUpdateTimeFieldItemList;
 use Drupal\node\NodeInterface;
 
 /**
@@ -27,7 +30,7 @@ use Drupal\node\NodeInterface;
  * We use an observer to detect changes to the relevant fields of the discussion
  * nodes. Then we call the observer update method to take action.
  */
-function joinup_discussion_node_presave(NodeInterface $discussion) {
+function joinup_discussion_node_presave(NodeInterface $discussion): void {
   if ($discussion->bundle() === 'discussion') {
     // Create a node subject object, add the observer and notify about changes.
     $node_subject = new EntitySubject($discussion, 'default_field_comparator');
@@ -37,9 +40,26 @@ function joinup_discussion_node_presave(NodeInterface $discussion) {
 }
 
 /**
+ * Implements hook_entity_bundle_field_info().
+ */
+function joinup_discussion_entity_bundle_field_info(EntityTypeInterface $entity_type, string $bundle) {
+
+  if ($entity_type->id() === 'node' && $bundle === 'discussion') {
+    $fields['latest_update_time'] = BaseFieldDefinition::create('datetime')
+      ->setName('latest_update_time_field')
+      ->setLabel(t('Last activity'))
+      ->setComputed(TRUE)
+      ->setClass(LatestUpdateTimeFieldItemList::class)
+      ->setDisplayConfigurable('view', TRUE);
+
+    return $fields;
+  }
+}
+
+/**
  * Implements hook_entity_extra_field_info().
  */
-function joinup_discussion_entity_extra_field_info() {
+function joinup_discussion_entity_extra_field_info(): array {
   $fields = [];
 
   $fields['node']['discussion']['display']['invite_link'] = [
@@ -56,7 +76,7 @@ function joinup_discussion_entity_extra_field_info() {
  *
  * Adds an invite link to discussions.
  */
-function joinup_discussion_node_view(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display, $view_mode) {
+function joinup_discussion_node_view(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display, string $view_mode): void {
   if (!$display->getComponent('invite_link')) {
     return;
   }
@@ -101,14 +121,15 @@ function joinup_discussion_node_predelete(EntityInterface $entity): void {
   // Send a message to subscribed users to inform that the discussion was
   // deleted.
   $event = new DiscussionDeleteEvent($entity);
+  /** @var \Symfony\Component\EventDispatcher\EventDispatcherInterface $event_dispatcher */
   $event_dispatcher = \Drupal::service('event_dispatcher');
-  $event_dispatcher->dispatch(DiscussionEvents::DELETE, $event);
+  $event_dispatcher->dispatch($event, DiscussionEvents::DELETE);
 }
 
 /**
  * Implements hook_entity_bundle_info_alter().
  */
-function joinup_discussion_entity_bundle_info_alter(&$bundles) {
+function joinup_discussion_entity_bundle_info_alter(array &$bundles): void {
   if (!empty($bundles['node']['discussion'])) {
     $bundles['node']['discussion']['class'] = Discussion::class;
   }

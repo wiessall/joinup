@@ -1,0 +1,21 @@
+uuid: 76e96a0a-aa22-44b2-9e1d-6304f727ebe6
+langcode: en
+status: true
+dependencies:
+  config:
+    - entityqueue.entity_queue.homepage_topics
+    - field.storage.entity_subqueue.block_label
+id: entity_subqueue.homepage_topics.block_label
+field_name: block_label
+entity_type: entity_subqueue
+bundle: homepage_topics
+label: 'Block label'
+description: ''
+required: false
+translatable: false
+default_value:
+  -
+    value: 'Main topics'
+default_value_callback: ''
+settings: {  }
+field_type: string

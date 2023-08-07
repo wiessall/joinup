@@ -70,6 +70,3 @@ Feature: "Add document" visibility options.
     And I should see the success message 'Document The Sparks of the Butterfly has been created as draft. You can find it in the section "My unpublished content" located in your My account page, or in the aforementioned section under the Solution it was created in.'
     And I should see the link "test1.zip"
     And the "Winter of Beginning" solution has a document titled "The Sparks of the Butterfly"
-    # Check that the link to the document is visible on the solution page.
-    When I go to the homepage of the "Winter of Beginning" solution
-    Then I should see the link "The Sparks of the Butterfly"
