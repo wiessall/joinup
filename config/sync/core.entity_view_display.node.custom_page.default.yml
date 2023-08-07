@@ -7,6 +7,7 @@ dependencies:
     - field.field.node.custom_page.field_custom_page_logo
     - field.field.node.custom_page.field_paragraphs_body
     - field.field.node.custom_page.field_state
+    - field.field.node.custom_page.field_topic
     - field.field.node.custom_page.og_audience
     - node.type.custom_page
   module:
@@ -60,6 +61,14 @@ content:
       link: ''
     third_party_settings: {  }
     weight: 1
+    region: content
+  field_topic:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 52
     region: content
   links:
     settings: {  }
