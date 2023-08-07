@@ -1,0 +1,28 @@
+{#
+/**
+ * @file
+ * Themeing override for the teaser view mode of the topic meta entity.
+ */
+#}
+{% set classes = [
+  'position-relative',
+  'h-100',
+  'rounded',
+  'overflow-hidden',
+  'shadow-hover',
+] %}
+{% set read_more = 'Read more about @title'|t({'@title': content.label|render|striptags|trim}) %}
+<div class="col">
+  <article{{ attributes.addClass(classes) }}>
+    <a href="{{ url }}" class="position-absolute top-0 end-0 bottom-0 start-0" title="{{ read_more }}">
+      <span class="visually-hidden">{{ read_more }}</span>
+    </a>
+    {{ title_prefix }}
+    {{ content.image }}
+    <div class="p-3">
+      <h1{{ title_attributes.addClass(['h5', 'text-primary', 'fw-bold']) }}>{{ content.label }}</h1>
+      <p class="mb-0 text-dark fs-sm">{{ content.description|render|striptags }}</p>
+    </div>
+    {{ title_suffix }}
+  </article>
+</div>

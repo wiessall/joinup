@@ -3,9 +3,13 @@ langcode: en
 status: true
 dependencies:
   module:
+    - field_permissions
     - file
     - image
     - node
+third_party_settings:
+  field_permissions:
+    permission_type: public
 _core:
   default_config_hash: MkD4ZPozKB7iU5P_SHjYyDMkW9cTfrB4opDe4CSoSHY
 id: node.field_event_logo

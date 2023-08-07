@@ -9,8 +9,10 @@ dependencies:
     - search_api
 id: type
 name: 'Content types'
-weight: -2
+weight: -3
 min_count: 1
+missing: false
+missing_label: others
 url_alias: type
 facet_source_id: 'search_api:views_page__search__page_1'
 field_identifier: entity_bundle
@@ -57,6 +59,11 @@ processor_configs:
     settings:
       minimum_items: 1
       maximum_items: null
+  hierarchy_processor:
+    processor_id: hierarchy_processor
+    weights:
+      build: 100
+    settings: {  }
   joinup_search_content_type_fixed_order:
     processor_id: joinup_search_content_type_fixed_order
     weights:

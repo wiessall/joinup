@@ -1,5 +1,5 @@
 {% set button_attributes = create_attribute()
-  .addClass(['dropdown-toggle', 'btn', 'btn-link', 'rounded-pill', 'p-0'])
+  .addClass(['dropdown-toggle', 'btn', 'btn-link', 'rounded-pill', 'p-0', 'ms-2'])
   .setAttribute('id', 'collapseTerms')
   .setAttribute('type', 'button')
   .setAttribute('data-bs-toggle', 'dropdown')
@@ -8,7 +8,7 @@
 %}
 
 {% if items or active %}
-  <div{{ attributes.addClass('my-3 dropdown') }}>
+  <div{{ attributes.addClass(['my-3', 'dropdown', 'd-flex', 'align-items-center']) }}>
     {%- if prefix_text -%}
       <span>{{ prefix_text }}</span>
     {% endif -%}
@@ -18,6 +18,10 @@
     </div>
     <button{{ button_attributes }}>
       <span class="visually-hidden">{{ 'See more topics'|t }}</span>
+      {{ pattern('icon', {
+        name: 'chevron-down',
+        size: 's',
+      }) }}
     </button>
     {%- if items -%}
     <ul class="dropdown-menu px-3 py-2">

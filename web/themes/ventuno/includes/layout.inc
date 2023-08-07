@@ -9,6 +9,7 @@ declare(strict_types = 1);
 
 use Drupal\interoperable_europe\InteroperableEuropeCollectionInterface;
 use Drupal\rdf_entity\RdfInterface;
+use Drupal\topic\Entity\TopicMetaEntityInterface;
 
 /**
  * Implements hook_preprocess_page().
@@ -45,24 +46,24 @@ function ventuno_preprocess_page(array &$variables): void {
   $variables['#cache']['tags'][] = 'joinup_collection:exists';
 
   $variables['hide_searchbar'] = FALSE;
-  $route_name = \Drupal::routeMatch()->getRouteName();
+  $route_match = \Drupal::routeMatch();
+  $route_name = $route_match->getRouteName();
   if ($route_name == 'view.search.page_1') {
     $variables['hide_searchbar'] = TRUE;
   }
-}
 
-/**
- * Implements hook_preprocess_HOOK().
- *
- * Exposes the About section which is defined as a variant of the homepage in
- * Page Manager as a variable. This section is using a Layout but needs to be
- * rendered outside the main content region which is controlled by Page Manager.
- */
-function ventuno_preprocess_page__home(array &$variables): void {
-  /** @var \Drupal\page_manager\Entity\PageVariant $about_section_variant */
-  $about_section_variant = \Drupal::entityTypeManager()->getStorage('page_variant')->load('homepage-layout_builder-1');
-  $view_builder = \Drupal::entityTypeManager()->getViewBuilder('page_variant');
-  $variables['about'] = $view_builder->view($about_section_variant);
+  $meta_entity = \Drupal::routeMatch()->getParameter('meta_entity');
+  if ($route_name == 'entity.meta_entity.canonical' && isset($meta_entity) && $meta_entity instanceof TopicMetaEntityInterface) {
+    $variables['meta_title'] = $meta_entity->label();
+    $variables['meta_description']['#markup'] = $meta_entity->get('description')->value;
+  }
+
+  // Remove title on collection/solution canonical pages.
+  if ($route_name === 'entity.rdf_entity.canonical' && $entity = $route_match->getParameter('rdf_entity')) {
+    if (in_array($entity->getType(), ['collection', 'solution']) && $entity->getSetting('landing_page')->count() === 0) {
+      unset($variables['page']['content']['ventuno_pagetitle']);
+    }
+  }
 }
 
 /**
@@ -106,6 +107,16 @@ function ventuno_preprocess_container__text_format_filter_help(array &$variables
 }
 
 /**
+ * Implements hook_theme_suggestions_HOOK_alter() for page.html.twig.
+ */
+function ventuno_theme_suggestions_page_alter(array &$suggestions, array $variables): void {
+  if ($node = \Drupal::routeMatch()->getParameter('node')) {
+    $content_type = $node->bundle();
+    $suggestions[] = 'page__' . $content_type;
+  }
+}
+
+/**
  * Implements hook_preprocess_container().
  */
 function ventuno_preprocess_container(array &$variables): void {
@@ -115,20 +126,30 @@ function ventuno_preprocess_container(array &$variables): void {
       'collection_type',
       'solution_content_bundle',
       'field_content_listing_type',
+      'user_content_bundle',
+      'content_listing_type',
+      'content_bundle',
     ];
     if (in_array($facet_id, $valid_facet_ids)) {
-      $classes = [
-        'tabs--content-type',
-        'g-2',
-        'my-4',
-        'justify-content-center',
-        'row',
-        'row-cols-2',
-        'row-cols-md-4',
-        'row-cols-xl-6',
-        'row-cols-xxl-8',
-      ];
+      $classes = ['tabs--content-type'];
       $variables['attributes']['class'] = $classes;
     }
   }
+  if (isset($variables['attributes']['data-drupal-selector']) && $variables['attributes']['data-drupal-selector'] === 'edit-og-membership-bulk-form') {
+    $variables['attributes']['class'] = 'row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-xl-4 g-3 align-items-end';
+  }
+  if (isset($variables['attributes']['data-drupal-selector']) && $variables['attributes']['data-drupal-selector'] === 'edit-actions') {
+    // Target only the submit input of the collections members overview page.
+    if (isset($variables['element']['submit']['#id']) && $variables['element']['submit']['#id'] === 'edit-submit-og-members-overview') {
+      $variables['attributes']['class'] = 'd-flex flex-column d-md-block my-3';
+    }
+  }
+}
+
+/**
+ * Implements hook_preprocess_container__facet_region__top().
+ */
+function ventuno_preprocess_container__facet_region__top(array &$variables): void {
+  $classes = 'd-flex align-items-baseline border-bottom my-5 flex-wrap justify-content-between';
+  $variables['attributes']['class'][] = $classes;
 }

@@ -36,8 +36,17 @@ Feature: "Add release" visibility options.
       | title          | Chasing shadows     |
       | is version of  | Release Test 1      |
       | release number | 1.0                 |
+      | status         | Deprecated          |
       | state          | validated           |
       | creation date  | 2014-08-30 23:59:00 |
+
+    # Assert that the "Release" tiles are present and contain version, release date, label and bundle type.
+    When I go to the homepage of the "Release Test 1" solution
+    Then I should see the "Chasing shadows" tile
+    And I should see the text "v1.0" in the "Chasing shadows" tile
+    And I should see the text "Release date: 30/08/2014" in the "Chasing shadows" tile
+    And I should see the statistics "Deprecated" in the "Chasing shadows" tile
+    And I should see the text "Release" in the "Chasing shadows" tile
 
     # Check that the release should have a unique combination of title and
     # version number.

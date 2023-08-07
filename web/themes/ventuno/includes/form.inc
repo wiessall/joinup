@@ -7,6 +7,7 @@
 
 declare(strict_types = 1);
 
+use Drupal\Component\Utility\Html;
 use Drupal\Core\Form\FormStateInterface;
 
 /**
@@ -33,7 +34,7 @@ function ventuno_form_join_group_form_alter(array &$form, FormStateInterface $fo
   // Make the 'Join' modal link for anonymous users appear as a button.
   if (isset($form['authenticate'])) {
     $form['authenticate']['#attributes']['class'][] = 'btn';
-    $form['authenticate']['#attributes']['class'][] = 'btn-secondary';
+    $form['authenticate']['#attributes']['class'][] = 'btn-brand';
   }
 
   if (isset($form['pending'])) {
@@ -45,7 +46,13 @@ function ventuno_form_join_group_form_alter(array &$form, FormStateInterface $fo
   if (isset($form['leave'])) {
     // Add classes for leave membership link.
     $form['leave']['#confirm']['#attributes']['class'][] = 'btn';
-    $form['leave']['#confirm']['#attributes']['class'][] = 'btn-warning';
+    $form['leave']['#confirm']['#attributes']['class'][] = 'btn-secondary';
+  }
+
+  // Make the 'Join' button for logged-in users appear as button brand.
+  if (isset($form['join'])) {
+    $form['join']['#attributes']['class'][] = 'btn';
+    $form['join']['#attributes']['class'][] = 'btn-brand';
   }
 }
 
@@ -60,6 +67,9 @@ function ventuno_form_views_exposed_form_alter(array &$form, FormStateInterface 
     $form['keys']['#title_display'] = 'invisible';
     $form['keys']['#attributes']['placeholder'] = t('Start typing to search…');
     $form['keys']['#joinup_parent'] = $form_id . '_' . $view->id();
+    // Ensure the ID is unique, using "search-box" as base.
+    $form['keys']['#id'] = Html::getUniqueId('search-box');
+    $form['#id'] = Html::getUniqueId($form['#id']);
   }
 
   if ($route_name != 'view.search.page_1' && $view->id() === 'search') {
@@ -67,6 +77,14 @@ function ventuno_form_views_exposed_form_alter(array &$form, FormStateInterface 
     // page, hide the "Sort by" select.
     $form['sort_by']['#type'] = 'hidden';
   }
+}
+
+/**
+ * Implements hook_theme_suggestions_HOOK_alter().
+ */
+function ventuno_theme_suggestions_form_alter(array &$suggestions, array $variables): void {
+  $id = $variables['element']['#id'];
+  $suggestions[] = $id;
 }
 
 /**
@@ -81,6 +99,7 @@ function ventuno_preprocess_form_element(array &$variables): void {
  */
 function ventuno_preprocess_form_element_label(array &$variables): void {
   $variables['#attached']['library'][] = 'ventuno/form-checkboxes';
+  $variables['attributes']['class'][] = 'h4';
 }
 
 /**
@@ -92,15 +111,40 @@ function ventuno_form_alter(array &$form, FormStateInterface $form_state, string
     $classes = $form['actions']['delete']['#attributes']['class'] ?? [];
     $form['actions']['delete']['#attributes']['class'] = array_merge(
       $classes,
-      ['btn', 'btn-md', 'btn-outline-danger'],
+      ['btn', 'btn-outline-danger'],
     );
   }
-  // Add classes to the cancel action in any kind of form.
-  if (isset($form['actions']['cancel'])) {
-    $classes = $form['actions']['cancel']['#attributes']['class'] ?? [];
-    $form['actions']['cancel']['#attributes']['class'] = array_merge(
-      $classes,
-      ['btn', 'btn-md', 'btn-outline-warning'],
-    );
+
+  switch ($form_id) {
+    case 'joinup_subscription_my_subscriptions':
+      // Add classes for unsubscribe all link.
+      if (isset($form['edit-actions']['unsubscribe_all'])) {
+        $form['edit-actions']['#attributes']['class'] = [
+          'd-flex',
+          'justify-content-end',
+        ];
+        $form['edit-actions']['unsubscribe_all']['#attributes']['class'] = [
+          'btn',
+          'btn-brand',
+        ];
+      }
+      break;
   }
+}
+
+/**
+ * Implements hook_theme_suggestions_HOOK_alter().
+ */
+function ventuno_theme_suggestions_input_alter(array &$suggestions, array $variables): void {
+  // Suggestion based on data twig suggestion created in form alter.
+  if (isset($variables['element']['#extra_suggestion'])) {
+    $suggestions[] = 'input__' . $variables['element']['#type'] . '__' . $variables['element']['#extra_suggestion'];
+  }
+}
+
+/**
+ * Implements hook_theme_suggestions_HOOK_alter().
+ */
+function ventuno_theme_suggestions_select_alter(array &$suggestions, array $variables): void {
+  $suggestions[] = 'select__' . $variables['element']['#name'];
 }

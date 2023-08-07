@@ -162,12 +162,19 @@ class SearchFormatter extends FormatterBase implements ContainerFactoryPluginInt
       return [];
     }
 
+    // Build the pager. The $element will ensure that a unique identifier is
+    // assigned to each pager. This is required because the search_api_field
+    // is a field that can appear anywhere it can be attached. For example, a
+    // search_api_field might be directly attached to an entity but also as a
+    // paragraph. Without this, all pagers would change all fields.
+    static $element = 0;
+
     try {
-      $query = $this->getSearchQuery($settings, $item);
+      $query = $this->getSearchQuery($settings, $item, $element);
       $result = $query->execute();
       // Extract the limit value from the query as it might have been altered
       // doing execution.
-      $render = $this->renderSearchResults($result, (int) $query->getOption('limit'));
+      $render = $this->renderSearchResults($result, (int) $query->getOption('limit'), $element);
     }
     catch (SearchApiException $exception) {
       $this->logger->log(RfcLogLevel::ERROR, 'Failed to execute query with error "@message".', Error::decodeException($exception));
@@ -183,6 +190,8 @@ class SearchFormatter extends FormatterBase implements ContainerFactoryPluginInt
 
     $this->mergeQueryCacheMetadata($render, $query);
 
+    $archived_items = $this->getArchivedQuery($settings, $item);
+
     // Add some information about the field.
     // @see \Drupal\Core\Field\FormatterBase::view()
     $entity = $items->getEntity();
@@ -192,7 +201,12 @@ class SearchFormatter extends FormatterBase implements ContainerFactoryPluginInt
       '#field_name' => $this->fieldDefinition->getName(),
       '#entity' => $entity,
       '#view_mode' => $this->viewMode,
+      '#archived_items' => $archived_items->execute()->getResultCount(),
     ];
+
+    $this->mergeQueryCacheMetadata($render, $archived_items);
+
+    $element++;
 
     return $render;
   }
@@ -204,21 +218,23 @@ class SearchFormatter extends FormatterBase implements ContainerFactoryPluginInt
    *   The settings configured in the field.
    * @param \Drupal\search_api_field\Plugin\Field\FieldType\SearchItemInterface $item
    *   The field item.
+   * @param int $element
+   *   The page element number.
    *
    * @return \Drupal\search_api\Query\QueryInterface
    *   The prepared query.
    */
-  protected function getSearchQuery(array $settings, SearchItemInterface $item): QueryInterface {
+  protected function getSearchQuery(array $settings, SearchItemInterface $item, int $element): QueryInterface {
     $field_definition = $this->fieldDefinition;
 
     $options = [
       'limit' => !empty($settings['limit']) ? $settings['limit'] : 10,
-      'offset' => !is_null($this->request->get('page')) ? $this->request->get('page') * $settings['limit'] : 0,
+      'offset' => !is_null($this->request->get('page')) ? $this->pagerManager->findPage($element) * (int) $settings['limit'] : 0,
       'search_api_field entity' => $item->getEntity(),
       'search_api_field item' => $item,
     ];
     $query = $this->getSearchApiIndex()->query($options);
-    $query->setSearchId($field_definition->getTargetEntityTypeId() . '.' . $field_definition->getName());
+    $query->setSearchId($field_definition->id());
     $query->setParseMode($this->parseModeManager->createInstance('direct'));
 
     if (!empty($settings['query_presets'])) {
@@ -241,17 +257,60 @@ class SearchFormatter extends FormatterBase implements ContainerFactoryPluginInt
   }
 
   /**
+   * Generates the search query to get number of archived content.
+   *
+   * @param array $settings
+   *   The settings configured in the field.
+   * @param \Drupal\search_api_field\Plugin\Field\FieldType\SearchItemInterface $item
+   *   The field item.
+   *
+   * @return \Drupal\search_api\Query\QueryInterface
+   *   The prepared query.
+   */
+  protected function getArchivedQuery(array $settings, SearchItemInterface $item): QueryInterface {
+    $field_definition = $this->fieldDefinition;
+
+    $options = [
+      'search_api_field entity' => $item->getEntity(),
+      'search_api_field item' => $item,
+      'search_api_field archived' => TRUE,
+    ];
+    $query = $this->getSearchApiIndex()->query($options);
+    $query->setSearchId($field_definition->id() . '.archived');
+    $query->setParseMode($this->parseModeManager->createInstance('direct'));
+
+    if (!empty($settings['query_presets'])) {
+      $this->applyPresets($query, $settings['query_presets']);
+    }
+
+    if (!empty($settings['query_builder'])) {
+      $this->applyQueryBuilderConfiguration($query, $settings['query_builder']);
+    }
+    $hooks = [
+      'search_api_field',
+      'search_api_field_' . $field_definition->getName(),
+      'search_api_field_' . $field_definition->getName() . '_archived',
+    ];
+    foreach ($hooks as $hook) {
+      $query->addTag($hook);
+    }
+    return $query;
+  }
+
+  /**
    * Builds a renderable array for the search results.
    *
    * @param \Drupal\search_api\Query\ResultSetInterface $result
    *   The query results object.
    * @param int $limit
    *   The number of results to show for each page.
+   * @param int $element
+   *   The page element number.
    *
    * @return array
    *   The render array for the search results.
    */
-  protected function renderSearchResults(ResultSetInterface $result, int $limit): array {
+  protected function renderSearchResults(ResultSetInterface $result, int $limit, int $element): array {
     $view_mode_settings = $this->fieldDefinition->getSetting('view_modes');
 
     $results = [];
@@ -310,12 +369,6 @@ class SearchFormatter extends FormatterBase implements ContainerFactoryPluginInt
         '#results' => $results,
       ];
 
-      // Build the pager. The $element will ensure that a unique identifier is
-      // assigned to each pager. This is required because the search_api_field
-      // is a field that can appear anywhere it can be attached. For example, a
-      // search_api_field might be directly attached to an entity but also as a
-      // paragraph. Without this, all pagers would change all fields.
-      static $element = 0;
       $build['#pager'] = [
         '#type' => 'pager',
         '#element' => $element,
@@ -416,7 +469,8 @@ class SearchFormatter extends FormatterBase implements ContainerFactoryPluginInt
         'tags' => Cache::mergeTags(
           Cache::mergeTags(
             $build['#cache']['tags'],
-            ["search_api_list:{$query->getIndex()->id()}"]
+            ["search_api_list:{$query->getIndex()->id()}"],
+            ["search_api_list:{$query->getSearchId()}"]
           ),
           $query->getCacheTags()
         ),

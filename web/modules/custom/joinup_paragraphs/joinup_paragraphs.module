@@ -93,6 +93,12 @@ function joinup_paragraphs_get_access(AccessResultInterface $access_result, stri
     /** @var \Drupal\og\OgContextInterface $og_context */
     $og_context = \Drupal::service('og.context');
     $group = $og_context->getGroup();
+
+    // If there is no group in the OG context, we cannot determine the access.
+    // This can happen for example when editing a topic.
+    if (!$group) {
+      return AccessResult::neutral();
+    }
   }
 
   if ($group->hasGroupPermission((int) $account->id(), $permission)) {

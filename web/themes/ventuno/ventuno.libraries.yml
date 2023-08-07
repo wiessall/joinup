@@ -1,26 +1,26 @@
-# Main
-main:
+# SMACSS (http://smacss.com/)
+base:
   version: VERSION
   css:
     base:
-      assets/css/base.css: {}
+      assets/css/base.min.css: { minified: true }
 
 layout:
   version: VERSION
   css:
     layout:
-      assets/css/layout.css: {}
+      assets/css/layout.min.css: { minified: true }
 
 components:
   version: VERSION
   css:
     component:
-      assets/css/components.css: {}
+      assets/css/components.min.css: { minified: true }
   dependencies:
     - ventuno/components.js
 
 components.js:
-  version: VERSION
+  header: true
   js:
     assets/js/oe-bcl-joinup.bundle.min.js: { minified: true, attributes: { defer: true } }
   dependencies:
@@ -30,7 +30,7 @@ theme:
   version: VERSION
   css:
     theme:
-      assets/css/theme.css: {}
+      assets/css/theme.min.css: { minified: true }
 
 # Pages
 homepage:
@@ -39,6 +39,11 @@ homepage:
       assets/css/homepage.min.css: { minified: true }
   dependencies:
     - ventuno/tour-first-balloon
+
+glossary:
+  css:
+    theme:
+      assets/css/glossary.min.css: { minified: true }
 
 licence-comparer:
   css:
@@ -52,83 +57,91 @@ searchpage:
   dependencies:
     - ventuno/close
 
-# Pure BCL components
+# Components
+abstract:
+  css:
+    theme:
+      assets/css/abstract.min.css: { minified: true }
+
 accordion:
   css:
     theme:
       assets/css/accordion.min.css: { minified: true }
 
-badge:
+actions-menu:
   css:
     theme:
-      assets/css/badge.min.css: { minified: true }
-
-card:
-  css:
-    theme:
-      assets/css/card.min.css: { minified: true }
-
-close:
-  css:
-    theme:
-      assets/css/close.min.css: { minified: true }
-
-modals:
-  css:
-    theme:
-      assets/css/modals.min.css: { minified: true }
-  dependencies:
-    - ventuno/close
-
-spinners:
-  css:
-    theme:
-      assets/css/spinners.min.css: { minified: true }
-
-tables:
-  css:
-    theme:
-      assets/css/tables.min.css: { minified: true }
-
-# Custom components
-abstract:
-  css:
-    theme:
-      assets/css/abstract.css: {}
-
-add-content:
-  css:
-    theme:
-      assets/css/add-content.min.css: { minified: true }
+      assets/css/actions-menu.min.css: { minified: true }
 
 ajax-throbber:
+  header: true
   js:
     assets/js/ajax-throbber.min.js: { minified: true, attributes: { defer: true } }
   dependencies:
     - core/drupal
     - ventuno/spinners
 
+alert:
+  css:
+    theme:
+      assets/css/alert.min.css: { minified: true }
+  dependencies:
+    - ventuno/close
+
+badge:
+  css:
+    theme:
+      assets/css/badge.min.css: { minified: true }
+
+button-group:
+  css:
+    theme:
+      assets/css/button-group.min.css: { minified: true }
+
+close:
+  css:
+    theme:
+      assets/css/close.min.css: { minified: true }
+
+comments:
+  css:
+    theme:
+      assets/css/comments.min.css: { minified: true }
+
+eif-filter:
+  css:
+    theme:
+      assets/css/eif-filter.min.css: { minified: true }
+  dependencies:
+    - ventuno/badge
+
+etrans:
+  css:
+    theme:
+      assets/css/etrans.min.css: { minified: true }
+
+explore-block:
+  header: true
+  js:
+    assets/js/explore-block.min.js: { minified: true, attributes: { defer: true } }
+  dependencies:
+    - ventuno/glide
+
 fieldset-show-more:
   css:
     theme:
       assets/css/fieldset-show-more.min.css: { minified: true }
+  dependencies:
+    - ventuno/fieldset-show-more.js
+
+fieldset-show-more.js:
+  header: true
   js:
     assets/js/fieldset-show-more.min.js: { minified: true, attributes: { defer: true } }
   dependencies:
     - core/drupal
     - core/once
 
-menu--og--navigation:
-  css:
-    theme:
-      assets/css/menu--og--navigation.min.css: { minified: true }
-
-tabs:
-  css:
-    theme:
-      assets/css/tabs.min.css: { minified: true }
-
-# Custom and hybrid (BCL + custom) components
 footer:
   css:
     theme:
@@ -137,33 +150,46 @@ footer:
 form-checkboxes:
   css:
     theme:
-      assets/css/form-checkboxes.css: {}
+      assets/css/form-checkboxes.min.css: { minified: true }
 
 forms:
   css:
     theme:
       assets/css/forms.min.css: { minified: true }
+  dependencies:
+    - ventuno/highlight-invalid-fields.js
+
+highlight-invalid-fields.js:
+  header: true
   js:
     assets/js/highlight-invalid-fields.min.js: { minified: true, attributes: { defer: true } }
 
-glossary:
-  css:
-    theme:
-      assets/css/glossary.min.css: { minified: true }
-
 glide:
-  js:
-    assets/js/glide.min.js: { minified: true, attributes: { defer: true } }
   css:
     theme:
       assets/css/glide.core.min.css: { minified: true }
 
-eif-filter:
+group-banner:
   css:
     theme:
-      assets/css/eif-filter.min.css: { minified: true }
-  dependencies:
-    - ventuno/badge
+      assets/css/group-banner.min.css: { minified: true }
+
+header-topic:
+  js:
+    assets/js/toggle-text-seemore-btn.min.js: { minified: true }
+  css:
+    theme:
+      assets/css/header-topic.min.css: { minified: true }
+
+ief-entity-table:
+  css:
+    theme:
+      assets/css/ief-entity-table.min.css: { minified: true }
+
+layout-block:
+  css:
+    theme:
+      assets/css/layout-block.min.css: { minified: true }
 
 licence-filter:
   css:
@@ -177,49 +203,78 @@ listing-grid:
     theme:
       assets/css/listing-grid.min.css: { minified: true }
 
-members-overview-exposed-form:
+menu--og--navigation:
   css:
     theme:
-      assets/css/members-overview-exposed-form.min.css: { minified: true }
+      assets/css/menu--og--navigation.min.css: { minified: true }
+
+modals:
+  css:
+    theme:
+      assets/css/modals.min.css: { minified: true }
+  dependencies:
+    - ventuno/close
 
 nav:
   css:
     theme:
       assets/css/nav.min.css: { minified: true }
 
-ief-entity-table:
-  css:
-    theme:
-      assets/css/ief-entity-table.min.css: { minified: true }
-
-iop-header:
-  css:
-    theme:
-      assets/css/iop-header.min.css: { minified: true }
-
 navbar:
   css:
     theme:
       assets/css/navbar.min.css: { minified: true }
-  js:
-    assets/js/sticky-menu.min.js: { minified: true, attributes: { defer: true } }
 
 navbar-search:
   css:
     theme:
       assets/css/navbar-search.min.css: { minified: true }
+  dependencies:
+    - ventuno/searchbox-focus.js
+
+searchbox-focus.js:
+  header: true
   js:
     assets/js/searchbox-focus.min.js: { minified: true, attributes: { defer: true } }
+
+navigation-bottom:
+  css:
+    theme:
+      assets/css/navigation-bottom.min.css: { minified: true }
+
+outdated-content-notice:
+  header: true
+  js:
+    assets/js/outdated-content-notice.min.js: { minified: true, attributes: { defer: true } }
 
 page-title:
   css:
     theme:
       assets/css/page-title.min.css: { minified: true }
 
-pager:
+pagination:
   css:
     theme:
-      assets/css/pager.min.css: { minified: true }
+      assets/css/pagination.min.css: { minified: true }
+
+paragraph:
+  css:
+    theme:
+      assets/css/paragraph.min.css: { minified: true }
+
+paragraph--carousel:
+  css:
+    theme:
+      assets/css/paragraph--carousel.min.css: { minified: true }
+  dependencies:
+    - ventuno/paragraph--carousel.js
+
+paragraph--carousel.js:
+  header: true
+  js:
+    assets/js/paragraph--carousel.min.js: { minified: true, attributes: { defer: true } }
+  dependencies:
+    - ventuno/glide
 
 releases:
   css:
@@ -232,66 +287,72 @@ share-content-form:
       assets/css/share-content-form.min.css: { minified: true }
 
 shared-entity:
+  header: true
   js:
-    assets/js/shared-entity.js: { minified: true, attributes: { defer: true } }
+    assets/js/shared-entity.min.js: { minified: true, attributes: { defer: true } }
   dependencies:
     - core/drupalSettings
 
-alert:
-  css:
-    theme:
-      assets/css/alert.min.css: { minified: true }
-
 show-accordion-invalid-fields:
+  header: true
   js:
     assets/js/show-accordion-invalid-fields.min.js: { minified: true, attributes: { defer: true } }
+
+spinners:
+  css:
+    theme:
+      assets/css/spinners.min.css: { minified: true }
+
+table-files:
+  css:
+    theme:
+      assets/css/table-files.min.css: { minified: true }
 
 tabledrag:
   css:
     theme:
       assets/css/tabledrag.min.css: { minified: true }
 
-three-dots-menu:
+tables:
   css:
     theme:
-      assets/css/three-dots-menu.css: {}
+      assets/css/tables.min.css: { minified: true }
+  dependencies:
+    - ventuno/responsive-tables.js
+
+responsive-tables.js:
+  header: true
+  js:
+    assets/js/responsive-tables.min.js: { minified: true, attributes: { defer: true } }
+
+tabs:
+  css:
+    theme:
+      assets/css/tabs.min.css: { minified: true }
+
+tile:
+  css:
+    theme:
+      assets/css/tile.min.css: { minified: true }
 
 timeline:
   css:
     theme:
-      assets/css/timeline.min.css: {}
+      assets/css/timeline.min.css: { minified: true }
 
 toolbar:
   css:
     theme:
-      assets/css/toolbar.min.css: {}
+      assets/css/toolbar.min.css: { minified: true }
   js:
     assets/js/sticky-menu-logged-in.min.js: { minified: true }
 
 tour-first-balloon:
+  header: true
   js:
     assets/js/tour-first-balloon.min.js: { minified: true, attributes: { defer: true } }
-
-content-tables:
-  js:
-    assets/js/content-tables.min.js: { minified: true, attributes: { defer: true } }
-  dependencies:
-    - ventuno/tables
 
 user--group-header:
   css:
     theme:
-      assets/css/user--group-header.min.css: {}
-
-# @todo ISAICP-7138 remove following library when switch to Ventuno theme is complete
-bootstrap-base:
-  css:
-    component:
-      assets/css/bootstrap-base.min.css: { minified: true }
-  js:
-    assets/js/oe-bcl-joinup.bundle.min.js: { minified: true, attributes: { defer: true } }
-
-# @todo ISAICP-7138 remove following library when switch to Ventuno theme is complete
-navbar--sticky:
-  js:
-    assets/js/sticky-menu.js: { minified: true, attributes: { defer: true } }
+      assets/css/user--group-header.min.css: { minified: true }

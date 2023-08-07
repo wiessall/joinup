@@ -41,17 +41,14 @@
  * @ingroup themeable
  */
 #}
-
-{{ attach_library('ventuno/tables') }}
-
 {%
   set classes = [
     'table',
     'table-bordered',
   ]
 %}
-<div class="table-responsive mb-3">
-  <table{{ attributes.addClass(classes) }}>
+<div class="table-responsive">
+  <table{{ attributes.addClass(classes).setAttribute('data-once', 'responsive-tables') }}>
     {% if caption %}
       <caption>{{ caption }}</caption>
     {% endif %}

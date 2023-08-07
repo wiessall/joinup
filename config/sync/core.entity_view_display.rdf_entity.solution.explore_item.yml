@@ -206,6 +206,11 @@ content:
         template_suggestion: p_wrapper
     weight: 1
     region: content
+  flag_like_rdf_entity:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 10
+    region: content
   label:
     type: string
     label: hidden
@@ -269,8 +274,8 @@ hidden:
   langcode: true
   og_group: true
   pinned_in: true
-  rdf_entity_field_is_content_inline_facets: true
-  rdf_entity_field_is_content_top: true
+  rdf_entity_solution_field_is_content_inline_facets: true
+  rdf_entity_solution_field_is_content_top: true
   related_solution: true
   related_solutions: true
   releases_overview: true

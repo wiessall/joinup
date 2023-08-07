@@ -254,7 +254,7 @@ class SolutionContext extends RawDrupalContext {
       // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-5597
       $entity_type_manager = \Drupal::entityTypeManager();
       $storage = $entity_type_manager->getStorage('ogmenu_instance');
-      $og_menu_instance_ids = $storage->getQuery()
+      $og_menu_instance_ids = $storage->getQuery()->accessCheck(FALSE)
         ->condition('type', 'navigation')
         ->condition(OgGroupAudienceHelperInterface::DEFAULT_FIELD, $collection->id())
         ->execute();
@@ -407,7 +407,7 @@ class SolutionContext extends RawDrupalContext {
    *   Thrown when a release with the given name does not exist.
    */
   public static function getReleaseByName($title) {
-    $query = \Drupal::entityQuery('rdf_entity')
+    $query = \Drupal::entityQuery('rdf_entity')->accessCheck(FALSE)
       ->condition('rid', 'solution')
       ->exists('field_is_is_version_of')
       ->condition('label', $title)
@@ -480,10 +480,6 @@ class SolutionContext extends RawDrupalContext {
       return;
     }
 
-    // Since we might be cleaning up many solutions, temporarily disable the
-    // feature to commit the index after every query.
-    $this->disableCommitOnUpdate();
-
     // Remove any solutions that were created.
     foreach ($this->rdfEntities as $entity) {
       $name = $entity->label();
@@ -497,7 +493,6 @@ class SolutionContext extends RawDrupalContext {
       }
     }
     $this->rdfEntities = [];
-    $this->enableCommitOnUpdate();
   }
 
   /**
@@ -741,7 +736,7 @@ class SolutionContext extends RawDrupalContext {
    */
   public function assertCollectionAffiliation($collection_label, $solution_label) {
     $solution = $this->getEntityByLabel('rdf_entity', $solution_label, 'solution');
-    $ids = \Drupal::entityQuery('rdf_entity')
+    $ids = \Drupal::entityQuery('rdf_entity')->accessCheck(FALSE)
       ->condition('rid', 'collection')
       ->condition('label', $collection_label)
       ->condition('field_ar_affiliates', $solution->id())
@@ -766,7 +761,7 @@ class SolutionContext extends RawDrupalContext {
    */
   public function assertTileContainsDownloadCount(string $heading, int $count): void {
     $tile = $this->getTileByHeading($heading);
-    $elements = $tile->findAll('xpath', '//span[contains(concat(" ", normalize-space(@class), " "), " stats__text ") and text() = "' . $count . '"]');
+    $elements = $tile->findAll('xpath', "//span[contains(text(), '$count')]");
     Assert::assertCount(1, $elements);
   }
 

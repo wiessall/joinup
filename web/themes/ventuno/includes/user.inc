@@ -12,6 +12,56 @@ declare(strict_types = 1);
  */
 function ventuno_preprocess_user(array &$variables): void {
   $variables['full_name'] = $variables['user']->getDisplayName();
+
+  // View modes where tiles are expected.
+  $tile_view_modes = [
+    'view_mode_tile',
+    'view_mode_tile_horizontal',
+  ];
+  // Prepare data for the tiles.
+  if (in_array($variables['view_mode'], $tile_view_modes)) {
+    $user = $variables['elements']['#user'];
+    // Text.
+    $nationality = $business_title = NULL;
+    if (!$user->get('field_user_business_title')->isEmpty()) {
+      $business_title = $user->get('field_user_business_title')->value;
+    }
+    if (!$user->get('field_user_nationality')->isEmpty()) {
+      $nationality = t('Country of origin: @country', ['@country' => $user->get('field_user_nationality')->entity->label()]);
+    }
+
+    if ($business_title && $nationality) {
+      $variables['text'] = $business_title . '. ' . $nationality;
+    }
+    elseif ($business_title) {
+      $variables['text'] = $business_title;
+    }
+    elseif ($nationality) {
+      $variables['text'] = $nationality;
+    }
+
+    // Badges.
+    if (!$user->get('field_user_professional_domain')->isEmpty()) {
+      $domains = $user->get('field_user_professional_domain');
+      $variables['badges'] = [];
+      $max_domains = 2;
+      if (is_iterable($domains)) {
+        foreach ($domains as $domain) {
+          $variables['badges'][]['label'] = $domain->entity ? $domain->entity->label() : NULL;
+        }
+        $num_of_items = count($domains);
+        // Display the actual domain instead of "+ 1 domain".
+        if ($num_of_items > $max_domains + 1) {
+          $extra_items = $num_of_items - $max_domains;
+          $variables['badges'] = array_splice($variables['badges'], 0, $max_domains);
+          $variables['badges'][] = [
+            'label' => '+' . $extra_items . ' ' . t('domains'),
+            'overflow' => TRUE,
+          ];
+        }
+      }
+    }
+  }
 }
 
 /**
@@ -34,9 +84,6 @@ function ventuno_preprocess_user__group_header(array &$variables): void {
   // It creates a timespan without label and with lower granularity.
   $variables['member_for'] = \Drupal::service('date.formatter')->formatTimeDiffSince($variables['user']->getCreatedTime(), ['granularity' => 1]);
   $variables['full_name'] = $variables['user']->getDisplayName();
-  $variables['field_user_photo_url'] = !empty($variables['content']['field_user_photo'][0]['#item']->entity->uri->value) ?
-    \Drupal::service('file_url_generator')->generateAbsoluteString($variables['content']['field_user_photo'][0]['#item']->entity->uri->value)
-    : '';
 }
 
 /**
@@ -59,4 +106,26 @@ function ventuno_preprocess_search_api_field__user__field_user_content(array &$v
   $variables['no_results_found'] = [
     '#markup' => $markup,
   ];
+}
+
+/**
+ * Implements hook_preprocess_user__inline().
+ */
+function ventuno_preprocess_user__inline(array &$variables): void {
+  $variables['full_name'] = [
+    '#theme' => 'username',
+    '#account' => $variables['user'],
+    '#attributes' => [
+      'class' => [],
+    ],
+  ];
+}
+
+/**
+ * Implements hook_preprocess_username().
+ */
+function ventuno_preprocess_username(array &$variables): void {
+  // Variable name_full is set in joinup_user.module to make the full name
+  // visible on hover.
+  $variables['attributes']['title'] = $variables['name_full'];
 }

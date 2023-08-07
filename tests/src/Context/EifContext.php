@@ -145,7 +145,7 @@ class EifContext extends RawDrupalContext {
 
     $entity_type_manager = \Drupal::entityTypeManager();
     $storage = $entity_type_manager->getStorage('taxonomy_term');
-    $tids = $storage->getQuery()->condition('vid', $vids, 'IN')->execute();
+    $tids = $storage->getQuery()->accessCheck(FALSE)->condition('vid', $vids, 'IN')->execute();
     /** @var \Drupal\search_api\Plugin\search_api\datasource\ContentEntityTrackingManager $content_tracking_manager */
     $content_tracking_manager = \Drupal::service('search_api.entity_datasource.tracking_manager');
     foreach ($storage->loadMultiple($tids) as $term) {
@@ -164,9 +164,6 @@ class EifContext extends RawDrupalContext {
    * @AfterScenario @eif_community&&@api
    */
   public function cleanEifData(AfterScenarioScope $scope): void {
-    // Temporarily disable the feature to commit the index after every query.
-    $this->disableCommitOnUpdate();
-
     $rdf_ids = [
       EifInterface::EIF_ID,
       'http://nifo.collection',
@@ -180,7 +177,6 @@ class EifContext extends RawDrupalContext {
     }
 
     Term::load('http://example.com/term/1')->delete();
-    $this->enableCommitOnUpdate();
   }
 
   /**

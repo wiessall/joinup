@@ -55,7 +55,7 @@ class LastUpdatedFieldItemList extends FieldItemList {
 
     // Check for a higher community content or custom page changed timestamp.
     $node_storage = \Drupal::entityTypeManager()->getStorage('node');
-    $nids = $node_storage->getQuery()
+    $nids = $node_storage->getQuery()->accessCheck(FALSE)
       ->condition('og_audience', $collection->id())
       ->condition('status', TRUE)
       ->sort('changed', 'DESC')

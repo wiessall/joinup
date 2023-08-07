@@ -19,13 +19,11 @@ dependencies:
     - field.field.node.document.field_topic
     - field.field.node.document.field_type
     - field.field.node.document.og_audience
-    - image.style.horizontal_medium_image
     - node.type.document
+    - responsive_image.styles.tile
   module:
-    - file_url
-    - image
-    - options
-    - smart_trim
+    - joinup_html_stripper
+    - responsive_image
     - template_suggestion
     - user
 _core:
@@ -36,77 +34,45 @@ bundle: document
 mode: view_mode_tile
 content:
   body:
-    type: smart_trim
+    type: joinup_html_stripper_stripped
     label: hidden
     settings:
-      trim_length: 200
-      trim_type: chars
-      trim_suffix: …
-      wrap_output: false
-      wrap_class: trimmed
-      more_link: false
-      more_class: more-link
-      more_text: More
-      summary_handler: trim
-      trim_options:
-        text: true
-        trim_zero: false
+      trim_length: 600
     third_party_settings:
       template_suggestion:
-        template_suggestion: no_wrappers
-    weight: 0
+        template_suggestion: bare
+    weight: 1
     region: content
   field_document_logo:
-    type: image
+    type: responsive_image
     label: hidden
     settings:
-      image_link: content
-      image_style: horizontal_medium_image
-      image_loading:
-        attribute: lazy
+      responsive_image_style: tile
+      image_link: ''
     third_party_settings:
       template_suggestion:
         template_suggestion: ''
-    weight: 4
+    weight: 0
     region: content
-  field_file:
-    type: file_url_default
-    label: hidden
-    settings:
-      mode: link
-    third_party_settings: {  }
-    weight: 2
-    region: content
-  field_keywords:
-    type: string
-    label: hidden
-    settings:
-      link_to_entity: false
-    third_party_settings:
-      template_suggestion:
-        template_suggestion: comma_separated
-    weight: 3
-    region: content
-  field_type:
-    type: list_default
-    label: hidden
+  flag_like_node:
     settings: {  }
-    third_party_settings:
-      template_suggestion:
-        template_suggestion: no_wrappers
-    weight: 1
+    third_party_settings: {  }
+    weight: 10
     region: content
 hidden:
   featured: true
   field_comments: true
   field_document_publication_date: true
   field_document_spatial_coverage: true
+  field_file: true
+  field_keywords: true
   field_licence: true
   field_shared_in: true
   field_short_title: true
   field_site_featured: true
   field_state: true
   field_topic: true
+  field_type: true
   langcode: true
   links: true
   og_audience: true

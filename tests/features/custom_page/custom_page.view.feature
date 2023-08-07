@@ -10,9 +10,9 @@ Feature:
       | Drafty things   | draft     |
       | Validated tools | validated |
     And custom_page content:
-      | title        | body         | collection      | logo     |
-      | About means  | Sample text. | Drafty things   | logo.png |
-      | About places | Sample text. | Validated tools | logo.png |
+      | title        | body         | collection      | logo     | state     |
+      | About means  | Sample text. | Drafty things   | logo.png | published |
+      | About places | Sample text. | Validated tools | logo.png | published |
 
     # An anonymous user can see only the custom pages of the published
     # groups.
@@ -29,6 +29,8 @@ Feature:
     And I should not see the "About means" tile
 
     When I go to the homepage of the "Drafty things" <group>
+    Then I should not see the "About means" tile
+    And I click "Unpublished content" in the "Entity actions" region
     Then I should see the "About means" tile
     And the logo should be shown in the "About means" custom page tile
 

@@ -1,12 +1,12 @@
 _core:
   default_config_hash: R4IF-ClDHXxblLcG0L7MgsLvfBIMAvi_skumNFQwkDc
 module:
+  addtocal: 0
   adms_validator: 0
   allowed_formats: 0
   antibot: 0
   asset_distribution: 0
   asset_release: 0
-  auditfiles: 0
   block: 0
   bootstrap4_modal: 0
   breakpoint: 0
@@ -66,10 +66,12 @@ module:
   file_url: 0
   filter: 0
   flag: 0
+  flag_count: 0
   geocoder: 0
   geocoder_field: 0
   geocoder_geofield: 0
   geofield: 0
+  github_feed: 0
   help: 0
   honeypot: 0
   iframe: 0
@@ -96,6 +98,7 @@ module:
   joinup_layout: 0
   joinup_legal: 0
   joinup_licence: 0
+  joinup_like: 0
   joinup_material_design: 0
   joinup_menu: 0
   joinup_news: 0
@@ -109,6 +112,7 @@ module:
   joinup_rss: 0
   joinup_search: 0
   joinup_seo: 0
+  joinup_sitewide_alert: 0
   joinup_sparql: 0
   joinup_stats: 0
   joinup_subscription: 0
@@ -117,7 +121,6 @@ module:
   joinup_validation: 0
   joinup_video: 0
   joinup_workflow: 0
-  jquery_ui: 0
   json_field: 0
   language: 0
   layout_builder: 0
@@ -127,6 +130,7 @@ module:
   linkit: 0
   mailsystem: 0
   media: 0
+  memcache: 0
   menu_link_destination: 0
   menu_ui: 0
   message: 0
@@ -174,7 +178,6 @@ module:
   rdf_schema_field_validation: 0
   rdf_taxonomy: 0
   redirect: 0
-  redis: 0
   responsive_image: 0
   rest: 0
   schema_article: 0
@@ -194,7 +197,8 @@ module:
   serialization: 0
   simple_block: 0
   simple_sitemap: 0
-  site_alert: 0
+  sitewide_alert: 0
+  sitewide_alert_block: 0
   smart_trim: 0
   social_media_links: 0
   social_media_links_field: 0
@@ -206,6 +210,7 @@ module:
   state_machine_permissions: 0
   state_machine_revisions: 0
   subpathauto: 0
+  svg_image: 0
   swiftmailer: 0
   system: 0
   tallinn: 0
@@ -244,8 +249,6 @@ module:
   joinup: 1000
   joinup_debug: 1001
 theme:
-  stable: 0
-  joinup_theme: 0
   ventuno: 0
   oe_bootstrap_theme: 0
   claro: 0

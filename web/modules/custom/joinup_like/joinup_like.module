@@ -1,0 +1,65 @@
+<?php
+
+/**
+ * @file
+ * Main functions and hook implementations of the joinup_like module.
+ */
+
+declare(strict_types = 1);
+
+/**
+ * Implements hook_theme().
+ */
+function joinup_like_theme(array $existing, string $type, string $theme, string $path): array {
+  return [
+    'joinup_like_anonymous' => [
+      'variables' => [],
+    ],
+    'flag_count_archived' => [
+      'variables' => [
+        'flag' => NULL,
+        'flaggable' => NULL,
+        'view_mode' => NULL,
+      ],
+    ],
+  ];
+}
+
+/**
+ * Implements hook_theme_suggestions_alter().
+ */
+function joinup_like_theme_suggestions_flag_count_alter(&$suggestions, array $variables): void {
+  _joinup_like_flag_suggestions_alter($suggestions, $variables, 'flag_count__');
+}
+
+/**
+ * Implements hook_theme_suggestions_alter().
+ */
+function joinup_like_theme_suggestions_flag_count_archived_alter(&$suggestions, array $variables): void {
+  _joinup_like_flag_suggestions_alter($suggestions, $variables, 'flag_count_archived__');
+}
+
+/**
+ * Implements hook_theme_suggestions_alter().
+ */
+function joinup_like_theme_suggestions_flag_count_text_alter(&$suggestions, array $variables): void {
+  _joinup_like_flag_suggestions_alter($suggestions, $variables, 'flag_count_text__');
+}
+
+/**
+ * Implements hook_theme_suggestions_alter().
+ */
+function _joinup_like_flag_suggestions_alter(&$suggestions, array $variables, string $original_suggestion): void {
+  $tiles_view_modes = [
+    'view_mode_tile',
+    'view_mode_tile_horizontal',
+    'highlighted',
+    'carousel',
+  ];
+  if (in_array($variables['view_mode'], $tiles_view_modes)) {
+    $suggestions[] = $original_suggestion . 'mini';
+  }
+  else {
+    $suggestions[] = $original_suggestion . 'button';
+  }
+}

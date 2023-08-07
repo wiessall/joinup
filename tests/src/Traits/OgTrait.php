@@ -153,6 +153,7 @@ trait OgTrait {
       $result = $entity_type_manager
         ->getStorage($group_content_entity_type_id)
         ->getQuery()
+        ->accessCheck(FALSE)
         ->condition($entity_type->getKey('bundle'), $group_content_bundle_id)
         ->condition($entity_type->getKey('id'), $ids, 'IN')
         ->execute();

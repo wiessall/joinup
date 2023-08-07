@@ -4,6 +4,7 @@ declare(strict_types = 1);
 
 namespace Drupal\joinup_user\Entity;
 
+use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Field\BaseFieldDefinition;
 use Drupal\joinup_user\Event\JoinupUserCancelEvent;
@@ -13,6 +14,29 @@ use Drupal\user\Entity\User;
  * Wraps the Drupal core user entity class.
  */
 class JoinupUser extends User implements JoinupUserInterface {
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function preCreate(EntityStorageInterface $storage, array &$values): void {
+    if (array_key_exists('status', $values)) {
+      if (is_bool($values['status'])) {
+        $values['status'] = (int) $values['status'];
+      }
+    }
+    parent::preCreate($storage, $values);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function preSave(EntityStorageInterface $storage): void {
+    $status = $this->get('status')->value;
+    if (is_bool($status)) {
+      $this->set('status', (int) $status);
+    }
+    parent::preSave($storage);
+  }
 
   /**
    * {@inheritdoc}

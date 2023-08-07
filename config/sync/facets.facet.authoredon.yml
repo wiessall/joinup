@@ -11,6 +11,8 @@ id: authoredon
 name: 'Authored on'
 weight: 0
 min_count: 1
+missing: false
+missing_label: others
 url_alias: authoredon
 facet_source_id: 'search_api:views_page__moderator_solutions_by_type__page_1'
 field_identifier: entity_created
@@ -30,6 +32,9 @@ widget:
     show_numbers: false
     arbitrary_facet_plugin: _none
     soft_limit: 15
+    show_reset_link: false
+    reset_text: 'Show all'
+    hide_reset_when_no_selection: false
     soft_limit_settings:
       show_less_label: 'Show less'
       show_more_label: 'Show more'
@@ -47,6 +52,12 @@ processor_configs:
       date_display: actual_date
       granularity: 5
       date_format: ''
+      hierarchy: false
+  hierarchy_processor:
+    processor_id: hierarchy_processor
+    weights:
+      build: 100
+    settings: {  }
   raw_value_widget_order:
     processor_id: raw_value_widget_order
     weights:

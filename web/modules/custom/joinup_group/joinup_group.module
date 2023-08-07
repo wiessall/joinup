@@ -13,6 +13,7 @@ use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Block\BlockPluginInterface;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Cache\CacheableMetadata;
+use Drupal\Core\Cache\RefinableCacheableDependencyInterface;
 use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
@@ -32,6 +33,7 @@ use Drupal\joinup_group\Form\RdfDeleteForm;
 use Drupal\joinup_group\Form\UserCancelForm;
 use Drupal\joinup_group\JoinupGroupHelper;
 use Drupal\joinup_workflow\EntityWorkflowStateInterface;
+use Drupal\meta_entity\Entity\MetaEntity;
 use Drupal\meta_entity\Entity\MetaEntityInterface;
 use Drupal\node\NodeInterface;
 use Drupal\og\OgAccess;
@@ -183,6 +185,7 @@ function joinup_group_entity_type_alter(array &$entity_types): void {
       'announcement-edit' => '/rdf_entity/{rdf_entity}/announcements/edit/{message}',
       'announcement-view' => '/rdf_entity/{rdf_entity}/announcements/view/{message}',
       'member-overview' => '/rdf_entity/{rdf_entity}/members',
+      'discussion-overview' => '/rdf_entity/{rdf_entity}/discussions',
       'member-add' => '/rdf_entity/{rdf_entity}/members/add',
       'member-invite' => '/rdf_entity/{rdf_entity}/members/invite',
     ];
@@ -220,6 +223,23 @@ function joinup_group_form_rdf_entity_form_alter(&$form, FormStateInterface $for
       $form['field_short_id']['widget'][0]['value']['#attributes']['disabled'] = 'disabled';
     }
   }
+}
+
+/**
+ * Implements hook_form_alter().
+ */
+function joinup_group_form_alter(array &$form, FormStateInterface $form_state, string $form_id): void {
+  $group_forms = [
+    'meta_entity_solution_settings_form',
+    'meta_entity_collection_settings_form',
+  ];
+  if (!in_array($form_id, $group_forms)) {
+    return;
+  }
+
+  /** @var \Drupal\joinup_group\GroupSettingsFormAlterInterface $setting_alter */
+  $setting_alter = \Drupal::service('joinup_group.group_settings_form_alter');
+  $setting_alter->alterForm($form, $form_state);
 }
 
 /**
@@ -783,7 +803,6 @@ function joinup_group_generate_share_link(EntityInterface $entity, string $route
   return [
     '#theme' => 'link_icon',
     '#title' => t('Share'),
-    '#icon' => 'arrow-right',
     '#url' => $url,
     '#attributes' => [
       'class' => ['use-ajax'],
@@ -966,16 +985,28 @@ function joinup_group_rdf_entity_view_alter(array &$build, EntityInterface $enti
  * Implements hook_entity_view().
  */
 function joinup_group_entity_view(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display, string $view_mode): void {
-  if (!$entity instanceof PinnableGroupContentInterface || $view_mode !== 'view_mode_tile') {
-    return;
+  if ($entity instanceof PinnableGroupContentInterface && $view_mode === 'view_mode_tile') {
+    $group = \Drupal::service('joinup_group.group_manager')
+      ->getGroupFromContext();
+    if ($entity->isPinned($group)) {
+      $build['#attributes']['class'][] = 'is-pinned';
+      $build['#attributes']['data-joinup-pinned-in'] = implode(',', $entity->getPinnedGroupIds());
+      $build['#attached']['library'][] = 'joinup_group/pinned_entities';
+    }
   }
-
-  $group = \Drupal::service('joinup_group.group_manager')
-    ->getGroupFromContext();
-  if ($entity->isPinned($group)) {
-    $build['#attributes']['class'][] = 'is-pinned';
-    $build['#attributes']['data-joinup-pinned-in'] = implode(',', $entity->getPinnedGroupIds());
-    $build['#attached']['library'][] = 'joinup_group/pinned_entities';
+  elseif ($entity instanceof GroupInterface && $view_mode === 'group_header') {
+    // The group header featured stats visibility is controlled by the group
+    // settings. Add the relevant cache tags.
+    $bundle = "{$entity->bundle()}_settings";
+    $meta_entity = MetaEntity::loadOrCreate($bundle, $entity);
+    $cache_metadata = CacheableMetadata::createFromRenderArray($build);
+    if (!$meta_entity->isNew()) {
+      $cache_metadata->addCacheableDependency($meta_entity);
+    }
+    else {
+      $cache_metadata->addCacheTags(["meta_entity_list:{$entity->bundle()}_settings"]);
+    }
+    $cache_metadata->applyTo($build);
   }
 }
 
@@ -1066,5 +1097,50 @@ function joinup_group_mail_alter(array &$message): void {
     $message += array_combine(array_map(function (string $key): string {
       return ltrim($key, '@');
     }, array_keys($arguments)), $arguments);
+  }
+}
+
+/**
+ * Implements hook_menu_local_tasks_alter().
+ */
+function joinup_group_menu_local_tasks_alter(array &$data, string $route_name, RefinableCacheableDependencyInterface &$cacheability): void {
+  if ($route_name != 'entity.rdf_entity.canonical') {
+    return;
+  }
+
+  $entity = \Drupal::service('joinup_group.group_manager')
+    ->getGroupFromContext();
+  if (!$entity instanceof GroupInterface ||
+    $entity->getSetting('landing_page')->count() !== 1) {
+    return;
+  }
+
+  /** @var \Drupal\custom_page\Entity\CustomPageInterface $custom_page */
+  $custom_page = $entity->getSetting('landing_page')->entity;
+  if ($custom_page) {
+    $data['tabs'][0]['joinup_group.landing_page'] = [
+      '#theme' => 'menu_local_task',
+      '#link' => [
+        'title' => t('Edit landing page'),
+        'url' => Url::fromRoute('entity.node.edit_form', ['node' => $custom_page->id()]),
+      ],
+      '#active' => FALSE,
+      '#weight' => 10,
+      '#access' => AccessResult::allowedIf($custom_page->access('update')),
+    ];
+  }
+}
+
+/**
+ * Implements hook_preprocess_HOOK().
+ */
+function joinup_group_preprocess_rdf_entity(array &$variables): void {
+  if ($variables['view_mode'] === 'group_header') {
+    $group = $variables['rdf_entity'];
+    if ($group instanceof GroupInterface) {
+      $bundle = "{$group->bundle()}_settings";
+      $meta_entity = MetaEntity::loadOrCreate($bundle, $group);
+      $variables['meta_banner_disabled'] = (bool) $meta_entity->get('metadata_banner_disabled')->value;
+    }
   }
 }

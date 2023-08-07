@@ -8,7 +8,9 @@ dependencies:
     - paragraphs.paragraphs_type.accordion
     - paragraphs.paragraphs_type.call_to_action
     - paragraphs.paragraphs_type.carousel
+    - paragraphs.paragraphs_type.configurable_listing
     - paragraphs.paragraphs_type.content_listing
+    - paragraphs.paragraphs_type.github_feed
     - paragraphs.paragraphs_type.iframe
     - paragraphs.paragraphs_type.image
     - paragraphs.paragraphs_type.json_map
@@ -39,10 +41,18 @@ settings:
       testimony: testimony
       json_map: json_map
       call_to_action: call_to_action
+      configurable_listing: configurable_listing
+      github_feed: github_feed
     negate: 0
     target_bundles_drag_drop:
       1_column_layout:
         weight: -31
+        enabled: false
+      2_column_featured_left:
+        weight: 21
+        enabled: false
+      2_column_featured_right:
+        weight: 22
         enabled: false
       2_column_layout:
         weight: -20
@@ -62,12 +72,18 @@ settings:
       carousel:
         weight: -26
         enabled: true
+      configurable_listing:
+        weight: 29
+        enabled: true
       content_listing:
         weight: -27
         enabled: true
       entity_reference:
         weight: -17
         enabled: false
+      github_feed:
+        weight: 33
+        enabled: true
       iframe:
         weight: -24
         enabled: true
@@ -86,4 +102,7 @@ settings:
       testimony:
         weight: -23
         enabled: true
+      video:
+        weight: 38
+        enabled: false
 field_type: entity_reference_revisions

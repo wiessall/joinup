@@ -48,8 +48,8 @@ dependencies:
     - image.style.vertical_medium_image
     - rdf_entity.rdfentity.solution
   module:
-    - image
     - smart_trim
+    - svg_image
     - template_suggestion
     - user
 id: rdf_entity.solution.view_mode_featured
@@ -60,7 +60,7 @@ content:
   download_total:
     settings: {  }
     third_party_settings: {  }
-    weight: 4
+    weight: 3
     region: content
   field_is_description:
     type: smart_trim
@@ -80,7 +80,7 @@ content:
     third_party_settings:
       template_suggestion:
         template_suggestion: ''
-    weight: 3
+    weight: 2
     region: content
   field_is_logo:
     type: image
@@ -90,8 +90,12 @@ content:
       image_style: vertical_medium_image
       image_loading:
         attribute: lazy
+      svg_attributes:
+        width: null
+        height: null
+      svg_render_as_image: true
     third_party_settings: {  }
-    weight: 2
+    weight: 1
     region: content
   label:
     type: string
@@ -99,7 +103,7 @@ content:
     settings:
       link_to_entity: true
     third_party_settings: {  }
-    weight: 1
+    weight: 0
     region: content
 hidden:
   changed: true
@@ -146,11 +150,12 @@ hidden:
   field_spatial_coverage: true
   field_status: true
   field_topic: true
+  flag_like_rdf_entity: true
   langcode: true
   og_group: true
   pinned_in: true
-  rdf_entity_field_is_content_inline_facets: true
-  rdf_entity_field_is_content_top: true
+  rdf_entity_solution_field_is_content_inline_facets: true
+  rdf_entity_solution_field_is_content_top: true
   read_more: true
   related_solution: true
   related_solutions: true

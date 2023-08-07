@@ -10,6 +10,8 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Render\Element;
 use Drupal\Core\State\StateInterface;
 use Drupal\Core\Url;
+use Drupal\joinup_core\Logger\Handler\MailHandler;
+use Drupal\joinup_core\Logger\Handler\TelegramHandler;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -51,13 +53,63 @@ class DashboardForm extends FormBase {
         '#type' => 'checkbox',
         '#title' => $this->t('Disable new accounts registration'),
         '#default_value' => $this->state->get('joinup_eulogin.registration_disabled', FALSE),
-        '#access' => $this->currentUser()->hasPermission('disable site auto-registration'),
+        '#access' => $this->currentUser()->hasPermission('manage site auto-registration'),
+      ],
+      'accounts_approve' => [
+        '#type' => 'checkbox',
+        '#title' => $this->t('New accounts need approval'),
+        '#default_value' => $this->state->get('joinup_eulogin.accounts_approve', FALSE),
+        '#access' => $this->currentUser()->hasPermission('manage site auto-registration'),
       ],
       'debug' => [
         '#type' => 'checkbox',
         '#title' => $this->t('CAS debug mode'),
         '#default_value' => $this->state->get('joinup_eulogin.cas_debug', FALSE),
         '#access' => $this->currentUser()->hasPermission('cas debug mode'),
+      ],
+    ];
+
+    $log_alerts = $this->state->get('joinup.log_alerts', $this->getLogAlertsDefaultSettings());
+
+    // Builds a level form element.
+    $level = function (string $key) use ($log_alerts): array {
+      return [
+        '#type' => 'select',
+        '#title' => $this->t('Minimum level to be logged'),
+        '#options' => [0 => $this->t('- Select -')] + MailHandler::getSeverityLevels(),
+        '#default_value' => $log_alerts[$key]['level'],
+      ];
+    };
+
+    $form['log_alerts'] = [
+      '#type' => 'details',
+      '#title' => $this->t('Log alerts'),
+      '#tree' => TRUE,
+      '#access' => $this->currentUser()->hasPermission('administer log alerts'),
+      'mail' => [
+        '#type' => 'details',
+        '#title' => $this->t('Email'),
+        'recipients' => [
+          '#type' => 'textfield',
+          '#title' => $this->t('Recipients (comma separated)'),
+          '#default_value' => $log_alerts['mail']['recipients'] ?? '',
+        ],
+        'level' => $level('mail'),
+      ],
+      'telegram' => [
+        '#type' => 'details',
+        '#title' => $this->t('Telegram'),
+        'api_key' => [
+          '#type' => 'textfield',
+          '#title' => $this->t('JoinupDevBot API key'),
+          '#default_value' => $log_alerts['telegram']['api_key'] ?? '',
+        ],
+        'chat_id' => [
+          '#type' => 'textfield',
+          '#title' => $this->t('Chat ID'),
+          '#default_value' => $log_alerts['telegram']['chat_id'] ?? '',
+        ],
+        'level' => $level('telegram'),
       ],
     ];
 
@@ -88,6 +140,17 @@ class DashboardForm extends FormBase {
         $this->messenger()->addStatus($this->t('Registering new users to Joinup is enabled'));
       }
     }
+    $accounts_approve = (bool) $form_state->getValue(['accounts_approve']);
+    if ($accounts_approve !== $form['cas']['accounts_approve']['#default_value']) {
+      if ($accounts_approve) {
+        $this->state->set('joinup_eulogin.accounts_approve', TRUE);
+        $this->messenger()->addWarning($this->t('Registering new users to Joinup requires approval is enabled'));
+      }
+      else {
+        $this->state->delete('joinup_eulogin.accounts_approve');
+        $this->messenger()->addStatus($this->t('Registering new users to Joinup requires approval is disabled'));
+      }
+    }
     $cas_debug = (bool) $form_state->getValue(['debug']);
     if ($cas_debug !== $form['cas']['debug']['#default_value']) {
       if ($cas_debug) {
@@ -99,6 +162,12 @@ class DashboardForm extends FormBase {
         $this->messenger()->addStatus($this->t('CAS debug mode disabled'));
       }
       $this->configFactory()->reset('cas.settings');
+    }
+
+    $log_alerts = $form_state->getValue('log_alerts');
+    if ($log_alerts !== $this->state->get('log_alerts', $this->getLogAlertsDefaultSettings())) {
+      $this->state->set('joinup.log_alerts', $log_alerts);
+      $this->messenger()->addStatus($this->t('Log alerts changes were saved'));
     }
   }
 
@@ -167,6 +236,14 @@ class DashboardForm extends FormBase {
         '#title' => $this->t('Curated content listings'),
         '#url' => Url::fromRoute('view.curated_content_listings.page'),
       ],
+      [
+        '#title' => $this->t('Topics'),
+        '#url' => Url::fromRoute('view.topic_meta_entity.page'),
+      ],
+      [
+        '#title' => $this->t('Files'),
+        '#url' => Url::fromRoute('view.files.page_1'),
+      ],
     ];
 
     $links = array_map(function (array $link): array {
@@ -176,6 +253,19 @@ class DashboardForm extends FormBase {
     return array_filter($links, function (array $link): bool {
       return $link['#url']->access();
     });
+  }
+
+  /**
+   * Returns the log alerts default settings.
+   *
+   * @return array
+   *   The log alerts default settings.
+   */
+  protected function getLogAlertsDefaultSettings(): array {
+    return [
+      'mail' => MailHandler::getDefaultSettings(),
+      'telegram' => TelegramHandler::getDefaultSettings(),
+    ];
   }
 
 }

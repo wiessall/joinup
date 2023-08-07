@@ -1,0 +1,14 @@
+diff --git a/src/Controller/FileUrlRedirect.php b/src/Controller/FileUrlRedirect.php
+index 76ba8a71cfe2dc8a89e5ba3962d6bf92da9b77c6..1b750179fb60f16126aad148b88860c6b6fba201 100644
+--- a/src/Controller/FileUrlRedirect.php
++++ b/src/Controller/FileUrlRedirect.php
+@@ -24,7 +24,8 @@ class FileUrlRedirect extends ControllerBase {
+    *   The redirect object.
+    */
+   public function redirectToFile(FileInterface $file) {
+-    $url = $file->toUrl()->toString();
++    $url = $file->createFileUrl();
++
+     return new RedirectResponse($url);
+   }
+ 

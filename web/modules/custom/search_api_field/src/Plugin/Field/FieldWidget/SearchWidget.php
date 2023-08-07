@@ -14,9 +14,12 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Form\SubformState;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\facets\Entity\Facet;
+use Drupal\facets\FacetInterface;
+use Drupal\search_api_field\Event\AlterQueryPresetsDescriptionEvent;
 use Drupal\search_api_field\Plugin\Field\FieldType\SearchItem;
 use Drupal\search_api_field\Plugin\FilterPluginManagerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * Plugin implementation of the 'search_api_field_default' widget.
@@ -46,6 +49,13 @@ class SearchWidget extends WidgetBase implements ContainerFactoryPluginInterface
   protected $filterPluginManager;
 
   /**
+   * The event dispatcher service.
+   *
+   * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
+   */
+  protected $eventDispatcher;
+
+  /**
    * Constructs a SearchWidget object.
    *
    * @param string $plugin_id
@@ -62,12 +72,15 @@ class SearchWidget extends WidgetBase implements ContainerFactoryPluginInterface
    *   The entity type manager service.
    * @param \Drupal\search_api_field\Plugin\FilterPluginManagerInterface $filter_plugin_manager
    *   The filter plugin manager service.
+   * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $event_dispatcher
+   *   The event dispatcher service.
    */
-  public function __construct($plugin_id, $plugin_definition, FieldDefinitionInterface $field_definition, array $settings, array $third_party_settings, EntityTypeManagerInterface $entity_type_manager, FilterPluginManagerInterface $filter_plugin_manager) {
+  public function __construct($plugin_id, $plugin_definition, FieldDefinitionInterface $field_definition, array $settings, array $third_party_settings, EntityTypeManagerInterface $entity_type_manager, FilterPluginManagerInterface $filter_plugin_manager, EventDispatcherInterface $event_dispatcher) {
     parent::__construct($plugin_id, $plugin_definition, $field_definition, $settings, $third_party_settings);
 
     $this->entityTypeManager = $entity_type_manager;
     $this->filterPluginManager = $filter_plugin_manager;
+    $this->eventDispatcher = $event_dispatcher;
   }
 
   /**
@@ -81,7 +94,8 @@ class SearchWidget extends WidgetBase implements ContainerFactoryPluginInterface
       $configuration['settings'],
       $configuration['third_party_settings'],
       $container->get('entity_type.manager'),
-      $container->get('plugin.manager.search_api_field.filter')
+      $container->get('plugin.manager.search_api_field.filter'),
+      $container->get('event_dispatcher')
     );
   }
 
@@ -139,16 +153,13 @@ class SearchWidget extends WidgetBase implements ContainerFactoryPluginInterface
       '#default_value' => $default_values['enabled'] ?? TRUE,
     ];
 
-    // Construct a string that represents the name of the enabled field.
-    $field_name = $this->fieldDefinition->getName();
-    $enabled_field_path = "{$field_name}[{$delta}][enabled]";
     // Wrap all the remaining elements so they can be hidden when the above
     // checkbox is unchecked.
     $element['wrapper'] = [
       '#type' => 'container',
       '#states' => [
         'visible' => [
-          ':input[name="' . $enabled_field_path . '"]' => ['checked' => TRUE],
+          ':input[name="' . $this->getNameOfEnabledField($delta, $element) . '"]' => ['checked' => TRUE],
         ],
       ],
     ];
@@ -157,35 +168,45 @@ class SearchWidget extends WidgetBase implements ContainerFactoryPluginInterface
       '#extra' => array_keys($facets),
     ];
 
-    $table = [
-      '#type' => 'field_ui_table',
-      '#header' => $this->getTableHeader(),
-      '#regions' => $this->getRegions(),
-      '#attributes' => [
-        'class' => ['field-ui-overview'],
-        'id' => 'field-display-overview',
-      ],
-      '#tabledrag' => [
-        [
-          'action' => 'order',
-          'relationship' => 'sibling',
-          'group' => 'field-weight',
+    if (!empty($facets)) {
+      $table = [
+        '#type' => 'field_ui_table',
+        '#header' => $this->getTableHeader(),
+        '#regions' => $this->getRegions(),
+        '#attributes' => [
+          'class' => ['field-ui-overview'],
+          'id' => 'field-display-overview',
         ],
-        [
-          'action' => 'match',
-          'relationship' => 'parent',
-          'group' => 'field-parent',
-          'subgroup' => 'field-parent',
-          'source' => 'field-name',
+        '#tabledrag' => [
+          [
+            'action' => 'order',
+            'relationship' => 'sibling',
+            'group' => 'field-weight',
+          ],
+          [
+            'action' => 'match',
+            'relationship' => 'parent',
+            'group' => 'field-parent',
+            'subgroup' => 'field-parent',
+            'source' => 'field-name',
+          ],
         ],
-      ],
-    ];
+      ];
 
-    $form['#attached']['library'][] = 'search_api_field/drupal.search_api_field';
-    foreach ($facets as $facet_id => $facet) {
-      $table[$facet_id] = $this->buildFacetRow($facet, $item);
+      $form['#attached']['library'][] = 'search_api_field/drupal.search_api_field';
+
+      // Order facets because ['#access'] = FALSE drops weight values,
+      // does not update correctly.
+      uasort($facets, function (FacetInterface $a, FacetInterface $b) {
+        return $a->getWeight() <=> $b->getWeight();
+      });
+
+      foreach ($facets as $facet_id => $facet) {
+        $table[$facet_id] = $this->buildFacetRow($facet, $item);
+      }
+      $element['wrapper']['fields'] = $table;
     }
-    $element['wrapper']['fields'] = $table;
+
     $element['wrapper']['refresh_rows'] = ['#type' => 'hidden'];
     $element['wrapper']['refresh'] = [
       '#type' => 'submit',
@@ -208,6 +229,20 @@ class SearchWidget extends WidgetBase implements ContainerFactoryPluginInterface
       ],
     ];
 
+    // Show a select that allows users to choose whether to include all content
+    // items, show only unarchived content or show only archived content.
+    $element['wrapper']['show_archived'] = [
+      '#type' => 'select',
+      '#title' => $this->t('Show archived content'),
+      '#options' => [
+        'all' => $this->t('All'),
+        'archived' => $this->t('Archived'),
+        'unarchived' => $this->t('Unarchived'),
+      ],
+      '#default_value' => $default_values['show_archived'] ?? 'unarchived',
+      '#weight' => -12,
+    ];
+
     if (!empty($this->getSetting('query_builder'))) {
       $element['wrapper']['query_builder'] = $this->buildQueryBuilder($item, $delta, $form, $form_state);
     }
@@ -215,11 +250,7 @@ class SearchWidget extends WidgetBase implements ContainerFactoryPluginInterface
     $element['wrapper']['query_presets'] = [
       '#type' => 'textarea',
       '#title' => $this->t('Query presets'),
-      '#description' => $this->t('Presets to apply to the query when it is executed. Syntax is %syntax1 or %syntax2, where %field is the field name as configured in the index.', [
-        '%syntax1' => 'field|value',
-        '%syntax2' => 'field|value|operator',
-        '%field' => 'field',
-      ]),
+      '#description' => $this->getQueryPresetsDescription(),
       '#default_value' => $default_values['query_presets'] ?? '',
       '#element_validate' => [[$this, 'validateQueryPresets']],
     ];
@@ -233,6 +264,27 @@ class SearchWidget extends WidgetBase implements ContainerFactoryPluginInterface
     ];
 
     return $element;
+  }
+
+  /**
+   * Gets name of the enabled field.
+   *
+   * @param int $delta
+   *   Delta.
+   * @param array $element
+   *   Element.
+   *
+   * @return string
+   *   Name of enabled field
+   */
+  protected function getNameOfEnabledField(int $delta, array $element): string {
+    $parents = array_merge($element['#field_parents'], [
+      $this->fieldDefinition->getName(),
+      $delta,
+      'enabled',
+    ]);
+
+    return array_shift($parents) . '[' . implode('][', $parents) . ']';
   }
 
   /**
@@ -348,8 +400,7 @@ class SearchWidget extends WidgetBase implements ContainerFactoryPluginInterface
    *   List of facet regions.
    */
   protected function getRegions() {
-    $storage = $this->fieldDefinition->getFieldStorageDefinition();
-    $facet_regions = $storage->getSetting('facet_regions');
+    $facet_regions = $this->fieldDefinition->getSetting('facet_regions');
     $regions = [];
     foreach ($facet_regions as $id => $label) {
       $regions[$id] = [
@@ -386,7 +437,6 @@ class SearchWidget extends WidgetBase implements ContainerFactoryPluginInterface
         }
       }
     }
-    $display_options = NULL;
     $regions = array_keys($this->getRegions());
     $extra_field_row = [
       '#attributes' => ['class' => ['draggable', 'tabledrag-leaf']],
@@ -400,7 +450,7 @@ class SearchWidget extends WidgetBase implements ContainerFactoryPluginInterface
         '#type' => 'textfield',
         '#title' => $this->t('Weight for @title', ['@title' => $facet->getName()]),
         '#title_display' => 'invisible',
-        '#default_value' => $display_options ? $display_options['weight'] : 0,
+        '#default_value' => $facet->getWeight(),
         '#size' => 3,
         '#attributes' => ['class' => ['field-weight']],
       ],
@@ -448,9 +498,10 @@ class SearchWidget extends WidgetBase implements ContainerFactoryPluginInterface
    *   List of facets.
    */
   protected function getFacets() {
-    $storage = $this->fieldDefinition->getFieldStorageDefinition();
     $facet_storage = $this->entityTypeManager->getStorage('facets_facet');
-    $facets = $facet_storage->loadByProperties(['facet_source_id' => 'search_api_field:' . $storage->id()]);
+    $facets = $facet_storage->loadByProperties([
+      'facet_source_id' => 'search_api_field:' . $this->fieldDefinition->id(),
+    ]);
     return $facets;
   }
 
@@ -747,6 +798,7 @@ class SearchWidget extends WidgetBase implements ContainerFactoryPluginInterface
 
       $cleaned_values[$delta]['value']['enabled'] = $values[$delta]['enabled'];
       $cleaned_values[$delta]['value']['query_presets'] = $values[$delta]['wrapper']['query_presets'];
+      $cleaned_values[$delta]['value']['show_archived'] = $values[$delta]['wrapper']['show_archived'];
       $cleaned_values[$delta]['value']['limit'] = $values[$delta]['wrapper']['limit'];
 
       if (!empty($values[$delta]['wrapper']['query_builder']['filters'])) {
@@ -773,6 +825,34 @@ class SearchWidget extends WidgetBase implements ContainerFactoryPluginInterface
     }
 
     return $cleaned_values;
+  }
+
+  /**
+   * Gets the default query presets description.
+   */
+  protected function getQueryPresetsDescription(): array {
+    $description = [
+      '#type' => 'details',
+      '#title' => $this->t('Help'),
+      '#open' => FALSE,
+      'help' => [
+        '#theme' => 'item_list',
+        '#items' => [
+          $this->t('Presets to apply to the query when it is executed. Syntax is %syntax1 or %syntax2, where %field is the field name as configured in the index.', [
+            '%syntax1' => 'field|value',
+            '%syntax2' => 'field|value|operator',
+            '%field' => 'field',
+          ]),
+        ],
+      ],
+    ];
+
+    // The description for the presets can vary a lot depending on where the
+    // widget is shown. Allow other modules to interact with the description.
+    // Dispatch an event to allow other modules to alter the description.
+    $event = new AlterQueryPresetsDescriptionEvent($description, $this->getSearchApiIndex());
+    $this->eventDispatcher->dispatch($event);
+    return $event->getDescription();
   }
 
 }

@@ -6,8 +6,10 @@ id: collection_event_type
 name: 'Event date'
 weight: 0
 min_count: 1
+missing: false
+missing_label: others
 url_alias: event_type
-facet_source_id: 'search_api_field:rdf_entity.field_collection_content'
+facet_source_id: 'search_api_field:rdf_entity.collection.field_collection_content'
 field_identifier: field_event_date
 query_operator: or
 hard_limit: 0
@@ -33,7 +35,7 @@ empty_behavior:
   behavior: none
 only_visible_when_facet_source_is_visible: true
 show_only_one_result: true
-show_title: null
+show_title: false
 processor_configs:
   active_widget_order:
     processor_id: active_widget_order
@@ -68,6 +70,11 @@ processor_configs:
       sort: -8
     settings:
       sort: ASC
+  hierarchy_processor:
+    processor_id: hierarchy_processor
+    weights:
+      build: 100
+    settings: {  }
   url_processor_handler:
     processor_id: url_processor_handler
     weights:

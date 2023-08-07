@@ -226,6 +226,34 @@ class JoinupNotificationContext extends RawDrupalContext {
   }
 
   /**
+   * Asserts that an email contains attachment.
+   *
+   * @param string $email
+   *   Email address.
+   * @param string $subject
+   *   The subject of the email.
+   * @param string $file
+   *   File name.
+   *
+   * @throws \Exception
+   *   Throws an exception when a parameter is not the expected one.
+   *
+   * @Given /^the email sent to "([^"]*)" with subject "([^"]*)" contains "([^"]*)" attachment$/
+   */
+  public function theEmailSentToWithSubjectContainsAttachment(string $email, string $subject, string $file): void {
+    $mails = $this->getEmailsBySubjectAndMail($subject, $email);
+    foreach ($mails as $mail) {
+      foreach ($mail['params']['attachments'] ?? [] as $attachment) {
+        if ($attachment['filename'] === $file) {
+          return;
+        }
+      }
+    }
+
+    throw new \InvalidArgumentException("Attachment $file has not been found.");
+  }
+
+  /**
    * Asserts that no email of the relevant criteria have been sent.
    *
    * @param string $username_or_email

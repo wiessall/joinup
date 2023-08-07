@@ -171,15 +171,17 @@ class JoinupCoreContext extends RawDrupalContext {
    *
    * @param string $name
    *   The taxonomy term name.
+   * @param string|null $bundle
+   *   (optional) Filter by bundle.
    *
-   * @Given I go to the :name (taxonomy )term( page)
+   * @Given I go to the :name :bundle term page
    *
    * @throws \Drupal\Core\Entity\EntityMalformedException
    *   Thrown when the taxonomy term does not have a URL to go to.
    */
-  public function visitTaxonomyTermPage(string $name): void {
+  public function visitTaxonomyTermPage(string $name, ?string $bundle = NULL): void {
     /** @var \Drupal\taxonomy\TermInterface $term */
-    $term = static::getEntityByLabel('taxonomy_term', $name);
+    $term = static::getEntityByLabel('taxonomy_term', $name, $bundle);
     $this->visitPath($term->toUrl()->toString());
   }
 
@@ -348,6 +350,95 @@ class JoinupCoreContext extends RawDrupalContext {
    */
   public static function setDefaultTimezone(BeforeSuiteScope $before_suite): void {
     date_default_timezone_set('UTC');
+  }
+
+  /**
+   * Assert the default cache backend service.
+   *
+   * @param string $expected
+   *   The expected cache backend service.
+   *
+   * @Given /^the default cache backend is set to "([^"]*)"$/
+   */
+  public function theDefaultCacheBackendIsSetTo(string $expected): void {
+    $container = \Drupal::getContainer();
+    $factory = $container->get($expected);
+    Assert::assertNotNull($factory, "The service $expected does not exist. Note, that you need to pass a service ID, not a class name.");
+
+    $actual = get_class(\Drupal::cache());
+    $expected = get_class($factory->get('default'));
+    Assert::assertSame($expected, $actual);
+  }
+
+  /**
+   * Alters the state of an entity programmatically.
+   *
+   * @param string $label
+   *   The label of the entity.
+   * @param string $entity_type_id
+   *   The entity type ID of the entity.
+   * @param string $state
+   *   The state to set.
+   *
+   * @Given the workflow state of the :label :entity_type_id is set to :state
+   */
+  public function changeEntityWorkflowState(string $label, string $entity_type_id, string $state): void {
+    $mapping = [
+      'content' => 'node',
+      'rdf entity' => 'rdf_entity',
+    ];
+    Assert::assertArrayHasKey($entity_type_id, $mapping, "The entity type $entity_type_id is not supported. Use one of " . implode(', ', array_keys($mapping)));
+
+    $entity = $this->getEntityByLabel($mapping[$entity_type_id], $label);
+    $entity->setNewRevision();
+    $entity->set('field_state', $state);
+    $entity->save();
+  }
+
+  /**
+   * Checks if page elements have unique id elements.
+   *
+   * @throws \Exception
+   *   Thrown when element's id is not unique.
+   *
+   * @Then page elements must have unique id attributes
+   */
+  public function pageElementsMustHaveUniqueIdAttributes(): void {
+    $elementIds = [];
+
+    $elementsWithIdAttribute = $this->getSession()
+      ->getPage()
+      ->findAll('css', '[id]');
+    foreach ($elementsWithIdAttribute as $elementWithIdAttribute) {
+      $elementId = $elementWithIdAttribute->getAttribute('id');
+
+      if (in_array($elementId, $elementIds)) {
+        throw new \Exception("'$elementId' id attribute is used by more than one element");
+      }
+
+      $elementIds[] = $elementId;
+    }
+  }
+
+  /**
+   * Asserts that the given HTML list of rows exists in the page.
+   *
+   * @param \Behat\Gherkin\Node\TableNode $table
+   *   The table node.
+   *
+   * @Given /^I should see the following table rows:$/
+   */
+  public function iShouldSeeTheFollowingTableRows(TableNode $table): void {
+    $rows = $table->getRows();
+    // Get all table rows/headers in the page regardless of the table.
+    $table_rows = $this->getSession()->getPage()->findAll('css', 'table tr');
+    $table_rows = array_map(function ($row) {
+      return $row->getText();
+    }, $table_rows);
+
+    foreach ($rows as $row) {
+      Assert::assertContains(implode(' ', $row), $table_rows);
+    }
   }
 
 }

@@ -2,5 +2,6 @@
 
 <http://example.com/citrus-fruits>
   a skos:Concept ;
+  skos:broaderTransitive <http://example.com/fruit-type> ;
   skos:inScheme <http://example.com/fruit-type> ;
   skos:prefLabel "Citrus fruits"@en .

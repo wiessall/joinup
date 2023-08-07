@@ -16,7 +16,7 @@ Feature:
       | Tile solution | Meh...      | Some fancy named owner | Some fancy named contact | validated |
     And the following releases:
       | title        | release number | release notes | is version of | owner                  | contact information      | state     |
-      | Tile release | 1              | Meh...        | Tile solution | Some fancy named owner | Some fancy named contact | validated |
+      | Tile release | 0.1            | Meh...        | Tile solution | Some fancy named owner | Some fancy named contact | validated |
     And the following distributions:
       | title       | description | parent       | access url |
       | Tile distro | meh...      | Tile release | test.zip   |
@@ -48,9 +48,10 @@ Feature:
         """
         entity_bundle|asset_distribution,asset_release,discussion,document,event,news|IN
         """
-    When I press "Save"
+    When I press "Publish"
 
     Then I should see the "Tile release" tile
+    And I should see the text "v0.1" in the "Tile release" tile
     And I should see the "Tile distro" tile
     And I should see the "Tile news" tile
     And I should see the "Tile event" tile
@@ -93,7 +94,7 @@ Feature:
         """
         entity_bundle|discussion,document,event,news|IN
         """
-    When I press "Save"
+    When I press "Publish"
 
     And I should see the "Tile news" tile
     And I should see the "Tile event" tile

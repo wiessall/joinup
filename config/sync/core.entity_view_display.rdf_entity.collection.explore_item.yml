@@ -223,8 +223,8 @@ hidden:
   last_update: true
   members: true
   og_group: true
-  rdf_entity_field_collection_content_inline_facets: true
-  rdf_entity_field_collection_content_top: true
+  rdf_entity_collection_field_collection_content_inline_facets: true
+  rdf_entity_collection_field_collection_content_top: true
   search_api_excerpt: true
   settings: true
   solutions: true

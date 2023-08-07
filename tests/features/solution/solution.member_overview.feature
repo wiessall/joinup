@@ -55,7 +55,7 @@ Feature: Solution membership overview
     # The membership overview should be accessible for anonymous users.
     When I am not logged in
     And I go to the "Growing zone" solution
-    Then I should see the link "Members" in the "Left sidebar"
+    Then I should see the link "Members" in the "Header bottom"
 
     # The first 12 active members should be shown, ordered by first name - last name.
     When I click "Members"

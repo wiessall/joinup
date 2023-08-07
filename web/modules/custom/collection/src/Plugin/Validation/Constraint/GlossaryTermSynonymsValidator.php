@@ -75,7 +75,7 @@ class GlossaryTermSynonymsValidator extends ConstraintValidator implements Conta
     }
 
     $storage = $this->entityTypeManager->getStorage('node');
-    $query = $storage->getQuery()
+    $query = $storage->getQuery()->accessCheck(FALSE)
       ->condition('type', 'glossary')
       ->condition('og_audience', $glossary_term->get('og_audience')->target_id);
     if ($glossary_term_id = $glossary_term->id()) {
@@ -87,7 +87,7 @@ class GlossaryTermSynonymsValidator extends ConstraintValidator implements Conta
     $other_glossary_term_synonyms = [];
     foreach ($storage->loadMultiple($nids) as $other_glossary_term) {
       foreach ($other_glossary_term->get('field_glossary_synonyms') as $item) {
-        // We do a case insensitive match.
+        // We do a case-insensitive match.
         $other_glossary_term_synonyms[\mb_strtolower($item->value)] = $other_glossary_term;
       }
     }

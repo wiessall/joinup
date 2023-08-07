@@ -8,34 +8,15 @@
 declare(strict_types = 1);
 
 use Drupal\Core\Field\BaseFieldDefinition;
-use Drupal\Core\File\FileSystemInterface;
-use Drupal\file\Entity\File;
 use Drupal\joinup_user\Entity\JoinupUser;
+use Drupal\joinup_user\JoinupUserDefaultAvatarImageHelper;
 use Drupal\joinup_user\JoinupUserViewsData;
 
 /**
  * Implements hook_install().
  */
-function joinup_user_install() {
-  // Set a default image for the users avatar.
-  $directory = \Drupal::service('file_system')
-    ->realpath(\Drupal::service('extension.list.module')->getPath('joinup_user') . '/includes');
-  $file_name = 'user_icon.png';
-  $file_path = $directory . '/' . $file_name;
-  $internal_path = "public://default_images";
-  if (is_file($file_path) && \Drupal::service('file_system')->prepareDirectory($internal_path, FileSystemInterface::CREATE_DIRECTORY | FileSystemInterface::MODIFY_PERMISSIONS)) {
-    $file_system = \Drupal::service('file_system');
-    $destination = \Drupal::service('stream_wrapper_manager')->normalizeUri(\Drupal::config('system.file')->get('default_scheme') . ('://' . $file_system->basename($file_path)));
-    $file_path = $file_system->copy($file_path, $destination, FileSystemInterface::EXISTS_REPLACE);
-  }
-  /** @var \Drupal\file\FileInterface $file */
-  $file = File::create(['uri' => $file_path]);
-
-  // The UUID is the one assigned to the user photo field so there is no need
-  // to manually edit and assign the file.
-  $file->set('uuid', '2e24bbc5-dedf-42b0-85cf-35940274c2f8');
-  $file->setPermanent();
-  $file->save();
+function joinup_user_install(): void {
+  \Drupal::classResolver(JoinupUserDefaultAvatarImageHelper::class)->createOrUpdate();
 
   // Update some classes for the 'user' entity type.
   $manager = \Drupal::entityDefinitionUpdateManager();

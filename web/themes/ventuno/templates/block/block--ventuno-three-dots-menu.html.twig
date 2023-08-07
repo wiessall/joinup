@@ -25,13 +25,14 @@
  * @see template_preprocess_block()
  */
 #}
+{{ attach_library('ventuno/actions-menu') }}
 {%
   set classes = [
     'block',
     'block-' ~ configuration.provider|clean_class,
     'block-' ~ plugin_id|clean_class,
-    'position-relative',
-    'container',
+    'actions-menu',
+    'actions-menu--three-dots',
   ]
 %}
 <div{{ attributes.addClass(classes) }}>

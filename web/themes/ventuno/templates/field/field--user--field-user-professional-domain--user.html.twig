@@ -5,12 +5,6 @@
  */
 #}
 {%
-  set classes = [
-    'field--name-' ~ field_name|clean_class,
-    bundle|clean_class ~ '__' ~ field_name_clean|clean_class,
-  ]
-%}
-{%
   set item_classes = [
     'badge',
     'rounded-pill',
@@ -20,8 +14,6 @@
   ]
 %}
 {{ attach_library('ventuno/badge') }}
-<div{{ attributes.addClass(classes) }}>
-  {% for item in items %}
-    <span{{ item.attributes.addClass(item_classes) }}>{{ item.content }}</span>
-  {% endfor %}
-</div>
+{% for item in items %}
+  <span{{ item.attributes.addClass(item_classes) }}>{{ item.content }}</span>
+{% endfor %}

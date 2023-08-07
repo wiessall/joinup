@@ -30,7 +30,7 @@ Feature: Pinning entities inside collections
       | Green Wrench  | Tyron Ingram    |             |
 
   Scenario Outline: Facilitators can pin and unpin community content inside their collections.
-    Given discussion content:
+    Given news content:
       | title                       | collection    | state     |
       | What is the HEX for orange? | Orange Wrench | validated |
     And <content type> content:
@@ -109,10 +109,9 @@ Feature: Pinning entities inside collections
       | content type | label      |
       | event        | Event      |
       | document     | Document   |
-      | discussion   | Discussion |
 
   Scenario: Facilitators can pin and unpin community news content inside their collections.
-    Given discussion content:
+    Given news content:
       | title                      | collection   | state     |
       | What is the HEX for green? | Green Wrench | validated |
     And news content:
@@ -170,8 +169,8 @@ Feature: Pinning entities inside collections
 
     # When we are not in a collection page, the pin/unpin links should not be visible.
     When I am at "/search"
-    Then I should not see the contextual links "Pin, Unpin" in the "Important very" tile
-    And I should not see the contextual links "Pin, Unpin" in the "Information useful" tile
+    Then I should not see the contextual links "Pin, Unpin" in the "Very important" tile
+    And I should not see the contextual links "Pin, Unpin" in the "Useful information" tile
 
   # This scenario will be re-enabled in ISAICP-6771.
   # See https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-6771
@@ -361,7 +360,6 @@ Feature: Pinning entities inside collections
       | content type |
       | event        |
       | document     |
-      | discussion   |
       | news         |
 
   @javascript

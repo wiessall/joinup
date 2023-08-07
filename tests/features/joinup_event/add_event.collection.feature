@@ -89,7 +89,7 @@ Feature: "Add event" visibility options.
     And I should not see the text "Regional"
     And I should see the text "Rue Belliard 28, Brussels, Belgium"
     But I should see the success message 'Event An amazing event has been created as draft. You can find it in the section "My unpublished content" located in your My account page, or in the aforementioned section under the Collection it was created in.'
-    And I should see the text "Event date:"
+    And I should not see the text "Event date:"
     And I should see the text "29 to 30/08/2018"
     And I should see a map centered on latitude 4.370476 and longitude 50.842291
     And I should see the following marker on the map:
@@ -101,9 +101,6 @@ Feature: "Add event" visibility options.
     And I should see the link "https://drupal.org"
     And the "Stream of Dreams" collection has a event titled "An amazing event"
     And I should not see the text "France"
-    # Check that the link to the event is visible on the collection page.
-    When I go to the homepage of the "Stream of Dreams" collection
-    Then I should see the link "An amazing event"
 
     # Check if the event date range is shown in an understandable format if the
     # event spans a month or year boundary.
@@ -117,7 +114,7 @@ Feature: "Add event" visibility options.
     And I press "Save as draft"
     Then I should see the text "29/08/2018 to 02/01/2019"
 
-  @javascript @generateMedia @uploadFiles:logo.png
+  @javascript @generateMedia @generateMediaTypes:event_logo @uploadFiles:logo.png
   Scenario: Test the image library widget.
     Given the following collection:
       | title | Stream of Dreams |

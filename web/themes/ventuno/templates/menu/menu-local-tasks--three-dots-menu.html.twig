@@ -15,38 +15,37 @@
  * @ingroup themeable
  */
 #}
-{{ attach_library('ventuno/three-dots-menu') }}
 {% if primary %}
-  <div class="three-dots-menu three-dots-menu--primary dropdown">
-    <button aria-label="{{ 'Show primary options'|t }}" id="local-tasks-primary" class="btn text-light p-0 rounded-pill three-dots-menu__button dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-      <svg class="bi icon--m">
-        <use xlink:href="{{ bcl_icon_path }}#three-dots"></use>
-      </svg>
-    </button>
-    <div class="dropdown-menu dropdown-menu-end px-3" aria-labelledby="local-tasks-primary">
+  <button type="button" id="local-tasks-primary" data-bs-toggle="dropdown" aria-expanded="false" class="dropdown-toggle btn btn-outline-warning btn-lg rounded-circle p-0 actions-menu__btn" title="{{ 'Show primary options'|t }}">
+    <svg class="bi icon--m">
+      <use xlink:href="{{ bcl_icon_path }}#three-dots"></use>
+    </svg>
+  </button>
+  <div class="dropdown-menu dropdown-menu-end">
+    <nav class="nav nav-pills flex-column" aria-labelledby="local-tasks-primary" class="dropdown-menu">
       <h2 class="visually-hidden">{{ 'Primary tabs'|t }}</h2>
       {{ pattern('navigation', {
         'variant': 'pills',
         'orientation': 'vertical',
         'items': primary,
       }) }}
-    </div>
+    </nav>
   </div>
 {% endif %}
 {% if secondary %}
-  <div class="three-dots-menu three-dots-menu--secondary dropdown">
-    <button aria-label="{{ 'Show secondary options'|t }}" id="local-tasks-secondary" class="btn btn-light p-0 rounded-pill three-dots-menu__button dropdown-toggle">
-      <svg class="bi icon--m">
-        <use xlink:href="{{ bcl_icon_path }}#three-dots"></use>
-      </svg>
-    </button>
-    <div class="dropdown-menu dropdown-menu-end px-3" aria-labelledby="local-tasks-secondary">
+  <button type="button" id="local-tasks-secondary" data-bs-toggle="dropdown" aria-expanded="false" class="dropdown-toggle btn btn-outline-warning btn-lg rounded-circle p-0 actions-menu__btn" title="{{ 'Show secondary options'|t }}">
+    <svg class="bi icon--m">
+      <use xlink:href="{{ bcl_icon_path }}#three-dots"></use>
+    </svg>
+  </button>
+  <div class="dropdown-menu dropdown-menu-end">
+    <nav class="nav nav-pills flex-column" aria-labelledby="local-tasks-secondary" class="dropdown-menu">
       <h2 class="visually-hidden">{{ 'Secondary tabs'|t }}</h2>
       {{ pattern('navigation', {
         'variant': 'pills',
         'orientation': 'vertical',
         'items': secondary,
       }) }}
-    </div>
+    </nav>
   </div>
 {% endif %}

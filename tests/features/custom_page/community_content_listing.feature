@@ -10,19 +10,20 @@ Feature:
       | Nintendo64 | logo.png | banner.jpg | validated |
       | Emulators  | logo.png | banner.jpg | validated |
     And custom_page content:
-      | title               | collection | created           | body                               | state     |
-      | Latest news listing | Nintendo64 | 2019-10-01 4:26am | You can find the latest news here. | validated |
+      | title               | collection | created           | body                               | state     | pinned |
+      | Latest news listing | Nintendo64 | 2019-10-01 4:26am | You can find the latest news here. | published | no     |
     And news content:
-      | title                                 | collection | created           | content                          | state     |
-      | Rare Nintendo64 disk drive discovered | Nintendo64 | 2018-10-01 4:26am | Magnetic drive called 64DD.      | validated |
-      | NEC VR4300 CPU                        | Emulators  | 2018-10-03 4:27am | Update of the emulation library. | validated |
+      | title                                 | collection | created           | content                          | state     | pinned |
+      | Rare Nintendo64 disk drive discovered | Nintendo64 | 2018-10-01 4:26am | Magnetic drive called 64DD.      | validated | no     |
+      | NEC VR4300 CPU                        | Emulators  | 2018-10-03 4:27am | Update of the emulation library. | validated | no     |
     And event content:
-      | title               | collection | created           | body                                        | state     |
-      | 20 year anniversary | Nintendo64 | 2018-10-01 4:29am | The console was released in September 1996. | validated |
+      | title               | collection | created           | body                                        | state     | pinned |
+      | 20 year anniversary | Nintendo64 | 2018-10-01 4:29am | The console was released in September 1996. | validated | no     |
+      | 30 year anniversary | Nintendo64 | 2017-10-01 4:29am | 30 year anniversary of Nintendo64.          | validated | yes    |
     And discussion content:
-      | title                           | collection | content                 | created          | state     |
-      | What's your favourite N64 game? | Nintendo64 | Post title and reasons. | 2018-11-17 10:17 | validated |
-      | Searching for green pad.        | Nintendo64 | Looking for a used one. | 2018-11-17 10:18 | validated |
+      | title                           | collection | content                 | created          | state     | pinned |
+      | What's your favourite N64 game? | Nintendo64 | Post title and reasons. | 2018-11-17 10:17 | validated | no     |
+      | Searching for green pad.        | Nintendo64 | Looking for a used one. | 2018-11-17 10:18 | validated | no     |
 
   Scenario: Community content listing widget should be shown to facilitators and moderators.
     Given I am logged in as a facilitator of the "Nintendo64" collection
@@ -76,7 +77,7 @@ Feature:
     And I should see the text "Display content shared from other communities."
     And I should see the text "Note: the content shown is dynamic, filtered live each time users will visualise the page. As a result, new content might be shown and old content can be altered or deleted."
 
-    When I press "Save"
+    When I press "Publish"
     Then I should see the heading "Latest content"
     And I should see the "Rare Nintendo64 disk drive discovered" tile
     And I should see the "20 year anniversary" tile
@@ -92,7 +93,7 @@ Feature:
       | Title | Latest news                        |
       | Body  | Shows all news for this collection |
     And I fill in "Query presets" with "entity_bundle|news"
-    And I press "Save"
+    And I press "Update"
     Then I should see the heading "Latest news"
     And I should see the "Rare Nintendo64 disk drive discovered" tile
     But I should not see the "20 year anniversary" tile
@@ -102,7 +103,7 @@ Feature:
     And I go to the "Latest news" custom page
     When I click "Edit" in the "Entity actions" region
     And I check "Allow shared content"
-    And I press "Save"
+    And I press "Update"
     # Only news are displayed.
     Then I should see the "Rare Nintendo64 disk drive discovered" tile
     But I should not see the "20 year anniversary" tile
@@ -134,7 +135,7 @@ Feature:
 
     When I click "Edit" in the "Entity actions" region
     And I uncheck "Show related content"
-    And I press "Save"
+    And I press "Update"
     Then I should not see the "Rare Nintendo64 disk drive discovered" tile
     And I should not see the "20 year anniversary" tile
     And I should not see the "NEC VR4300 CPU" tile
@@ -150,7 +151,12 @@ Feature:
 
     # The "List additional actions" is the button arrow that shows the full list of paragraphs to add.
     Given I press "List additional actions"
-    Then I press "Add Content listing" in the "Custom page body" paragraphs field
+    Then I click "Add Content listing" in the "Custom page body" paragraphs field
+    And I uncheck "Show related content"
+    When the following fields should not be visible "Global search, Allow shared content"
+    And I check "Show related content"
+    And I check "Global search"
+    And the following fields should be visible "Global search, Allow shared content"
     And I select "Discussion" from "Available filters"
     And I press "Add and configure filter"
     And I fill in "Discussion" with "Searching for green pad."
@@ -163,20 +169,26 @@ Feature:
     And I select "Event" from "Available filters"
     And I press "Add and configure filter"
     And I fill in "Event" with "20 year anniversary"
+    And I select "Collection" from "Available filters"
+    And I press "Add and configure filter"
+    And I fill in "Collection" with "Emulators"
     Then I drag the table row in the "Content listing field filter form" region at position 4 up
-    And I press "Save"
+    And I press "Publish"
     Then I should see the heading "Chosen content"
     And I should see the following tiles in the correct order:
       | Searching for green pad.              |
       | What's your favourite N64 game?       |
       | 20 year anniversary                   |
       | Rare Nintendo64 disk drive discovered |
+      | Emulators                             |
 
     When I open the header local tasks menu
     And I click "Edit" in the "Entity actions" region
     And I drag the table row in the "Content listing field filter form" region at position 3 up
     And I drag the table row in the "Content listing field filter form" region at position 2 up
-    And I press "Save"
+    And I click "Remove filter" at 5th filter of the 1st content listing paragraph
+    And I uncheck "Global search"
+    And I press "Update"
     And I should see the following tiles in the correct order:
       | 20 year anniversary                   |
       | Searching for green pad.              |
@@ -190,7 +202,7 @@ Feature:
     And I press "Add and configure filter"
     And I fill in the 2nd "News" with "NEC VR4300 CPU" in the "Custom content listing" field
     And I check "Allow shared content"
-    And I press "Save"
+    And I press "Update"
     Then I should see the following tiles in the correct order:
       | 20 year anniversary                   |
       | Searching for green pad.              |
@@ -215,7 +227,7 @@ Feature:
     When I open the header local tasks menu
     And I click "Edit" in the "Entity actions" region
     And I uncheck "Allow shared content"
-    And I press "Save"
+    And I press "Update"
     Then I should see the following tiles in the correct order:
       | 20 year anniversary                   |
       | Searching for green pad.              |
@@ -241,11 +253,13 @@ Feature:
     And I select "Solution" from "Available filters"
     And I press "Add and configure filter"
     And I fill in "Solution" with "N64 cartridge cleaner"
-    And I press "Save"
+    And I drag the table row in the "Content listing field filter form" region at position 4 up
+    And I drag the table row in the "Content listing field filter form" region at position 3 up
+    And I press "Update"
     Then I should see the following tiles in the correct order:
       | Searching for green pad.        |
-      | What's your favourite N64 game? |
       | N64 cartridge cleaner           |
+      | What's your favourite N64 game? |
 
     # Query presets should still apply when available.
     When I am logged in as a moderator
@@ -253,7 +267,7 @@ Feature:
     And I open the header local tasks menu
     And I click "Edit" in the "Entity actions" region
     And I fill in "Query presets" with "entity_bundle|solution"
-    And I press "Save"
+    And I press "Update"
     Then I should see the following tiles in the correct order:
       | N64 cartridge cleaner |
 
@@ -293,7 +307,7 @@ Feature:
     And I select "News" from "Available filters"
     And I press "Add and configure filter"
     And I fill in "News" with "Rare Nintendo64 disk drive discovered"
-    And I press "Save"
+    And I press "Publish"
     Then I should see the heading "Collection content"
     # Verify that unwanted facets are not shown in the page.
     And I should see the following facet items "Discussion, Event, News" in this order
@@ -332,7 +346,7 @@ Feature:
         entity_bundle|document
         keywords|"nintendo64 manuals"
         """
-    When I press "Save"
+    When I press "Publish"
 
     Then I should see the "User's Guide" tile
     But I should not see the "Licence" tile
@@ -349,7 +363,7 @@ Feature:
         entity_bundle|document
         keywords|"nintendo64 licences"
         """
-    When I press "Save"
+    When I press "Publish"
 
     Then I should see the "Licence" tile
     But I should not see the "User's Guide" tile
@@ -362,13 +376,13 @@ Feature:
     When I fill in "Title" with "Query presets validation"
     And I press "Add Content listing"
     And I fill in "Query presets" with "wrongvalue"
-    And I press "Save"
+    And I press "Publish"
     Then I should see the error message "Invalid query preset line added: wrongvalue."
     When I fill in "Query presets" with "unknown_field|news"
-    And I press "Save"
+    And I press "Publish"
     Then I should see the error message "Invalid search field specified: unknown_field."
     When I fill in "Query presets" with "entity_bundle|news|equal"
-    And I press "Save"
+    And I press "Publish"
     Then I should see the error message "Invalid operator specified: equal. Allowed operators are '=', '<>', 'IN', 'NOT IN'."
     # Verify that errors are reported when multiline values are added.
     When I fill in "Query presets" with:
@@ -376,7 +390,7 @@ Feature:
         entity_bundle|news
         unknown_field|test
         """
-    And I press "Save"
+    And I press "Publish"
     Then I should see the error message "Invalid search field specified: unknown_field."
 
   Scenario: Empty query presets and query builder field show a validation error.
@@ -386,7 +400,7 @@ Feature:
     Then I should see the heading "Add custom page"
     When I fill in "Title" with "Empty queries"
     And I press "Add Content listing"
-    And I press "Save"
+    And I press "Publish"
     Then I should see the error message "You need to add a filter in the Content listing block"
 
   @terms
@@ -404,10 +418,11 @@ Feature:
         entity_bundle|discussion,event,news|IN
         """
     And I check "Global search"
-    And I press "Save"
+    And I press "Publish"
     Then I should see the heading "All content"
     # All tiles are available.
     And I should see the following tiles in the correct order:
+      | 30 year anniversary                   |
       | Searching for green pad.              |
       | What's your favourite N64 game?       |
       | NEC VR4300 CPU                        |
@@ -424,11 +439,12 @@ Feature:
       | Content     | A new movie is coming out. |
     And I select "Statistics and Analysis" from "Topic"
     And I press "Publish"
-    Then I should see the heading "Current wars"
+    Then I should see the text "Current wars"
 
     When I go to the homepage of the "Nintendo64" collection
-    And I click "All content" in the "Left sidebar" region
+    And I click "All content" in the "Header bottom" region
     And I should see the following tiles in the correct order:
+      | 30 year anniversary                   |
       | Current wars                          |
       | Searching for green pad.              |
       | What's your favourite N64 game?       |
@@ -439,11 +455,12 @@ Feature:
     When I go to the edit form of the "Current wars" news
     And I fill in "Short title" with "Current wars is over"
     And I press "Update"
-    Then I should see the heading "Current wars is over"
+    Then I should see the text "Current wars is over"
 
     When I go to the homepage of the "Nintendo64" collection
-    And I click "All content" in the "Left sidebar" region
+    And I click "All content" in the "Header bottom" region
     And I should see the following tiles in the correct order:
+      | 30 year anniversary                   |
       | Current wars is over                  |
       | Searching for green pad.              |
       | What's your favourite N64 game?       |
@@ -465,26 +482,29 @@ Feature:
       | The Green Alliance   | Nintendo64 | validated |
 
     And custom_page content:
-      | title   | collection |
-      | Forests | Nintendo64 |
+      | title   | collection | state     |
+      | Forests | Nintendo64 | published |
 
     Given I am logged in as a facilitator of the "Nintendo64" collection
     And I go to the edit form of the "Forests" "custom page"
 
     # Paragraph #1.
     When I press "List additional actions"
-    And I press "Add Content listing" in the "Custom page body" paragraphs field
+    And I click "Add Content listing" in the "Custom page body" paragraphs field
 
+    And I select "Solution" from "Available filters"
     And I press "Add and configure filter"
     And I fill in "Solution" with "Save the Planet"
 
     # Paragraph #2.
     When I press "List additional actions"
-    And I press "Add Content listing" in the "Custom page body" paragraphs field
+    And I click "Add Content listing" in the "Custom page body" paragraphs field
 
+    And I select "Solution" from latest "Available filters"
     And I press latest "Add and configure filter"
     And I fill in the latest "Solution" field with "Fight Global Warming"
 
+    And I select "Solution" from latest "Available filters"
     And I press latest "Add and configure filter"
     And I fill in the latest "Solution" field with "The Green Alliance"
 
@@ -504,35 +524,40 @@ Feature:
       | Black Noise        | Nintendo64 | validated |
 
     And custom_page content:
-      | title | collection |
-      | Bikes | Nintendo64 |
+      | title | collection | state     |
+      | Bikes | Nintendo64 | published |
 
     Given I am logged in as a facilitator of the "Nintendo64" collection
     And I go to the edit form of the "Bikes" "custom page"
 
     # Paragraph #1.
     When I press "List additional actions"
-    And I press "Add Content listing" in the "Custom page body" paragraphs field
+    And I click "Add Content listing" in the "Custom page body" paragraphs field
 
+    And I select "Solution" from "Available filters"
     And I press "Add and configure filter"
     And I fill in "Solution" with "Save gasoline"
 
+    And I select "Solution" from latest "Available filters"
     And I press latest "Add and configure filter"
     And I fill in the latest "Solution" field with "Fight battery mode"
 
+    And I select "Solution" from latest "Available filters"
     And I press latest "Add and configure filter"
     And I fill in the latest "Solution" field with "Black Noise"
 
     # Paragraph #2.
     When I press "List additional actions"
-    And I press "Add Content listing" in the "Custom page body" paragraphs field
+    And I click "Add Content listing" in the "Custom page body" paragraphs field
 
+    And I select "Solution" from latest "Available filters"
     And I press latest "Add and configure filter"
     And I fill in the latest "Solution" field with "Black Noise"
 
+    And I select "Solution" from latest "Available filters"
     And I press latest "Add and configure filter"
     And I fill in the latest "Solution" field with "Fight battery mode"
-    Then I press "Save"
+    Then I press "Update"
     And I should see the heading "Bikes"
 
     When I go to the edit form of the "Bikes" "custom page"
@@ -548,3 +573,92 @@ Feature:
     And I click "Remove filter" at 2nd filter of the 2nd content listing paragraph
     And I wait for AJAX to finish
     Then the 1st filter of the 2nd content listing paragraph value is "Black Noise"
+
+  @javascript
+  Scenario: Regression test for ISAICP-7819
+  See https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7819
+
+    Given event content:
+      | title              | collection | state     | created           | start date  | end date   |
+      | Event pagination 1 | Nintendo64 | validated | 2016-10-09 4:29am | now +8 day  | now +9 day |
+      | Event pagination 2 | Nintendo64 | validated | 2016-10-08 4:29am | now +7 day  | now +8 day |
+      | Event pagination 3 | Nintendo64 | validated | 2015-10-07 4:29am | now +6 day  | now +7 day |
+      | Event pagination 4 | Nintendo64 | validated | 2014-10-06 4:29am | now +5 day  | now +6 day |
+      | Event pagination 5 | Nintendo64 | validated | 2014-10-05 4:29am | now +4 day  | now +5 day |
+      | Event pagination 6 | Nintendo64 | validated | 2013-10-04 4:29am | now +3 day  | now +4 day |
+      | Event pagination 7 | Nintendo64 | validated | 2012-10-03 4:29am | now +2 day  | now +3 day |
+      | Event pagination 8 | Nintendo64 | validated | 2011-10-02 4:29am | now +1 day  | now +2 day |
+      | Event pagination 9 | Nintendo64 | validated | 2010-10-01 4:29am | now         | now +1 day |
+    And news content:
+      | title             | collection | state     |
+      | News pagination 1 | Nintendo64 | validated |
+      | News pagination 2 | Nintendo64 | validated |
+      | News pagination 3 | Nintendo64 | validated |
+      | News pagination 4 | Nintendo64 | validated |
+      | News pagination 5 | Nintendo64 | validated |
+      | News pagination 6 | Nintendo64 | validated |
+      | News pagination 7 | Nintendo64 | validated |
+      | News pagination 8 | Nintendo64 | validated |
+      | News pagination 9 | Nintendo64 | validated |
+      | News pagination 10 | Nintendo64 | validated |
+      | News pagination 11 | Nintendo64 | validated |
+      | News pagination 12 | Nintendo64 | validated |
+      | News pagination 13 | Nintendo64 | validated |
+      | News pagination 14 | Nintendo64 | validated |
+      | News pagination 15 | Nintendo64 | validated |
+      | News pagination 16 | Nintendo64 | validated |
+      | News pagination 17 | Nintendo64 | validated |
+      | News pagination 18 | Nintendo64 | validated |
+      | News pagination 19 | Nintendo64 | validated |
+      | News pagination 20 | Nintendo64 | validated |
+      | News pagination 21 | Nintendo64 | validated |
+      | News pagination 22 | Nintendo64 | validated |
+      | News pagination 23 | Nintendo64 | validated |
+
+    And custom_page content:
+      | title          | collection | state     |
+      | Pagination bug | Nintendo64 | published |
+
+    Given I am logged in as a moderator
+    And I go to the edit form of the "Pagination bug" "custom page"
+
+     # Paragraph #1.
+    Given I press "List additional actions"
+    Then I click "Add Content listing" in the "Custom page body" paragraphs field
+    And I fill in the 1st "Query presets" with "entity_bundle|news" in the "Custom page body" field
+    And I fill in the 1st "Limit" with "2" in the "Custom page body" field
+
+    # Paragraph #2.
+    Then I press "List additional actions"
+    Then I click "Add Content listing" in the "Custom page body" paragraphs field
+    And I fill in the 2nd "Query presets" with "entity_bundle|event" in the "Custom page body" field
+    And I fill in the 2nd "Limit" with "2" in the "Custom page body" field
+    Then I press "Update"
+    And I should see the heading "Pagination bug"
+    Then I should see the tiles in the correct order:
+      | News pagination 1   |
+      | News pagination 2   |
+      | 30 year anniversary |
+      | Event pagination 1  |
+
+    When I click "Go to page 2"
+    Then I should see the tiles in the correct order:
+      | News pagination 3   |
+      | News pagination 4   |
+      | 30 year anniversary |
+      | Event pagination 1  |
+
+    When I click "Last page"
+    Then I should see the tiles in the correct order:
+      | News pagination 23                    |
+      | Rare Nintendo64 disk drive discovered |
+      | 30 year anniversary                   |
+      | Event pagination 1                    |
+
+    # Check second paragraph pagination.
+    When I click "Go to page 2"
+    Then I should see the tiles in the correct order:
+      | News pagination 23                    |
+      | Rare Nintendo64 disk drive discovered |
+      | Event pagination 2                    |
+      | Event pagination 3                    |

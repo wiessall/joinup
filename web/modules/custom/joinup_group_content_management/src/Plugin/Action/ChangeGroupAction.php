@@ -355,7 +355,7 @@ class ChangeGroupAction extends ViewsBulkOperationsActionBase implements Contain
     }
     $menu_link_storage = $this->entityTypeManager->getStorage('menu_link_content');
     $uri = 'entity:node/' . $custom_page->id();
-    $mids = $menu_link_storage->getQuery()
+    $mids = $menu_link_storage->getQuery()->accessCheck(FALSE)
       ->condition('bundle', 'menu_link_content')
       ->condition('menu_name', "ogmenu-{$menu_instance->id()}")
       ->condition('link.uri', $uri)

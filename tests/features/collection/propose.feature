@@ -89,12 +89,12 @@ Feature: Proposing a collection
       | Overview |
       | Members  |
       | About    |
-    When I click the contextual link "Add new page" in the "Left sidebar" region
+    When I click the contextual link "Add new page" in the "Header bottom" region
     Then I should see the heading "Add custom page"
     When I fill in the following:
       | Title | About this group                                               |
       | Body  | <p>Some more<em>information</em><br />about the collection.<p> |
-    And I press "Save"
+    And I press "Publish"
     Then I should see the success message "Custom page About this group has been created."
     And the page should contain the html text "<p>Some more<em>information</em><br>about the collection.</p>"
 
@@ -125,14 +125,14 @@ Feature: Proposing a collection
   Scenario: Content creation options should not vanish after AJAX request.
     Given I am logged in as a user with the "authenticated" role
     When I go to the propose collection form
-    And I press "Additional fields"
+    And I expand the "Additional fields" accordion section
     And I attach the file "banner.jpg" to "Banner"
     And I wait for AJAX to finish
     Then I should see the link "banner.jpg"
     And I should see the text "Only members can create content."
     And I should see the text "Any user can create content."
 
-  @javascript @generateMedia @terms @uploadFiles:logo.png
+  @javascript @generateMedia @generateMediaTypes:collection_banner,collection_logo @terms @uploadFiles:logo.png
   Scenario: Propose collection form fields should be organized in tabs.
     Given the following owner:
       | name                 | type    |
@@ -159,7 +159,7 @@ Feature: Proposing a collection
     And I press "Create contact information"
 
     # Close "Main fields" to check its fields visibility.
-    When I press "Additional fields"
+    When I expand the "Additional fields" accordion section
     And I collapse the "Main fields" accordion section
     Then the following fields should not be visible "Title, Description, Topic"
     And the following field widgets should not be visible "Owner"
@@ -180,7 +180,7 @@ Feature: Proposing a collection
     And the "Just a proposal" collection banner is image #8
 
     Given I go to the edit form of the "Just a proposal" collection
-    And I press "Additional fields"
+    And I expand the "Additional fields" accordion section
     And I remove the file from the "Logo" field
     But I wait for AJAX to finish
 
@@ -190,7 +190,7 @@ Feature: Proposing a collection
     And I press "Propose"
 
     When I go to the edit form of the "Just a proposal" collection
-    And I press "Additional fields"
+    And I expand the "Additional fields" accordion section
     Then I should see the link "logo.png"
 
     # As some entities were created via UI, we should explicitly delete them.
@@ -209,7 +209,7 @@ Feature: Proposing a collection
     Then the "Main fields" accordion section should be active
     # This form has two elements only that have browser-side validation.
     When I fill in "Title" with "Constraint validation API"
-    And I press "Additional fields"
+    And I expand the "Additional fields" accordion section
     And I press "Propose"
     # Our code should have changed the active accordion item now. A browser message will
     # be shown to the user.
@@ -295,8 +295,52 @@ Feature: Proposing a collection
       | signature_required | no                                                                                                                            |
       | html               | no                                                                                                                            |
 
+    # Contact us page should return access denied,
+    # because contact info emails are not validated.
+    When I go to "/collection/some-email-validation/contact"
+    Then I should get an access denied error
+
     # As some entities were created via UI, we should explicitly delete them.
     And I delete the "Contact person" contact information
     And I delete the "Contact Rapazoglou" contact information
     And I delete the "Some email validation" collection
     And I delete the "Rolly email validation" solution
+
+  @javascript @terms @uploadFiles:error.svg,simple.svg
+  Scenario: Allowing users to upload SVGs.
+    Given the following owner:
+      | name    | type                  |
+      | Svinish | Private Individual(s) |
+    And I am logged in as an "authenticated user"
+    When I go to the propose collection form
+    Then I should see the heading "Propose collection"
+    When I fill in "Title" with "SVG API example"
+    And I enter "We do not care that much about descriptions." in the "Description" wysiwyg editor
+    And I select "Employment and Support Allowance" from "Topic"
+    And I press "Add existing" at the "Owner" field
+    And I fill in "Owner" with "Svinish"
+    And I press "Add owner"
+    And I fill in the following:
+      | E-mail | basic.svg.api@example.com |
+      | Name   | BasicSvgAPI Contact       |
+    And I press "Create contact information"
+    When I select "Data gathering, data processing" from "Topic"
+
+    When I expand the "Additional fields" accordion section
+    # Shows error when svg is invalid or unsafe and fails to upload.
+    And I attach the file "error.svg" to "Logo"
+    And I wait for AJAX to finish
+    Then I should see the error message "Invalid or unsafe SVG file."
+    And I attach the file "simple.svg" to "Logo"
+    And I wait for AJAX to finish
+    Then I should not see the error message "Invalid or unsafe SVG file."
+    And I attach the file "simple.svg" to "Banner"
+    And I wait for AJAX to finish
+    Then I should not see the error message "Invalid or unsafe SVG file."
+    And I check "Moderated"
+    And I press "Propose"
+    Then I should see the heading "SVG API example"
+    And I should own the "SVG API example" collection
+    # Cleanup step.
+    Then I delete the "SVG API example" collection
+    And I delete the "BasicSvgAPI Contact" contact information

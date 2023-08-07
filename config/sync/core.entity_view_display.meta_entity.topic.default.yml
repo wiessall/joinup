@@ -1,0 +1,49 @@
+uuid: 9f37fe65-7d7b-4370-adb0-3ed7a920e9b6
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.meta_entity.topic.description
+    - field.field.meta_entity.topic.image
+    - field.field.meta_entity.topic.published
+    - field.field.meta_entity.topic.topics_paragraph
+    - meta_entity.type.topic
+  module:
+    - entity_reference_revisions
+    - text
+id: meta_entity.topic.default
+targetEntityType: meta_entity
+bundle: topic
+mode: default
+content:
+  description:
+    type: text_default
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 1
+    region: content
+  label:
+    type: string
+    label: hidden
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 0
+    region: content
+  topics_paragraph:
+    type: entity_reference_revisions_entity_view
+    label: hidden
+    settings:
+      view_mode: default
+      link: ''
+    third_party_settings: {  }
+    weight: 2
+    region: content
+hidden:
+  changed: true
+  created: true
+  image: true
+  published: true
+  search_api_excerpt: true
+  target: true

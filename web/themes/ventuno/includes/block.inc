@@ -12,6 +12,73 @@ use Drupal\topic\Entity\TopicInterface;
 use Drupal\topic\Entity\TopicReferencingEntityInterface;
 
 /**
+ * Implements hook_preprocess_block().
+ */
+function ventuno_preprocess_block(array &$variables): void {
+  $plugin_id = $variables['elements']['#plugin_id'] ?? NULL;
+  switch ($plugin_id) {
+    case 'local_actions_block':
+      $variables['attributes']['class'][] = 'my-3';
+      break;
+
+    case 'entity_unpublished':
+      $variables['attributes']['class'][] = 'my-5';
+      break;
+
+    case 'sitewide_alert_block':
+      $variables['#attached']['library'][] = 'ventuno/alert';
+      break;
+  }
+
+  // List of the "layout-blocks" (mainly in the Home page) that share common
+  // styles.
+  $layout_blocks = [
+    'homepage_topics-block_1',
+    'in_the_spotlight-block',
+    'highlighted_content',
+    'latest_news-block',
+    'highlighted_event',
+  ];
+  $derivative_plugin_id = $variables['elements']['#derivative_plugin_id'];
+  if (in_array($derivative_plugin_id, $layout_blocks)) {
+    // Add library and according selectors.
+    $variables['#attached']['library'][] = 'ventuno/layout-block';
+    $variables['attributes']['class'][] = 'layout-block';
+    $variables['title_attributes']['class'][] = 'layout-block__title';
+    $variables['title_attributes']['class'][] = 'layout-block__title--' . $derivative_plugin_id;
+  }
+
+  $block_id = $variables['elements']['#id'] ?? NULL;
+  switch ($block_id) {
+    // Add class to navigation bottom links on custom pages.
+    case 'ventuno_toc_outline':
+      if (isset($variables['attributes']['data-joinup-block-id'])) {
+        // Transfer the block plugin ID to the links template.
+        $variables['content']['#attributes']['data-joinup-block-id'] = $variables['attributes']['data-joinup-block-id'];
+      }
+      $variables['#attached']['library'][] = 'ventuno/navigation-bottom';
+      $variables['attributes']['class'][] = 'navigation-bottom';
+      break;
+
+    case 'ventuno_webtools_etrans':
+      $variables['#attached']['library'][] = 'ventuno/etrans';
+      $variables['attributes']['class'][] = 'block-oe-webtools-etrans--ventuno';
+      break;
+
+    case 'ventuno_like':
+      // Add z-index to Like button in order to avoid ajax throbber being
+      // hidden under eTrans button.
+      $variables['attributes']['class'][] = 'zi-1';
+      break;
+  }
+
+  // When rendering some entity within a block, e.g. a menu, in cases such as a
+  // preprocess hook of the entity, there is no information about the block
+  // that the entity is displayed in. This will allow us to identify such cases.
+  $variables['content']['#attributes']['data-joinup-block-id'] = $block_id;
+}
+
+/**
  * Implements hook_theme_suggestions_HOOK_alter() for the block hook.
  */
 function ventuno_theme_suggestions_block_alter(array &$suggestions, array $variables): void {
