@@ -1,37 +1,29 @@
-uuid: 44e36701-c54e-4731-a8bb-fd94bcda0785
+uuid: 58313396-5aa0-4c7a-b525-7658bb13cd1e
 langcode: en
 status: true
 dependencies:
   config:
     - core.entity_view_mode.paragraph.preview
-    - field.field.paragraph.accordion.field_accordion_item
-    - paragraphs.paragraphs_type.accordion
+    - field.field.paragraph.poll.field_paragraphs_poll
+    - paragraphs.paragraphs_type.poll
   module:
-    - field_delimiter
-    - field_formatter_range
     - layout_builder
-    - paragraphs
     - template_suggestion
 third_party_settings:
   layout_builder:
     enabled: false
     allow_custom: false
-id: paragraph.accordion.preview
+id: paragraph.poll.preview
 targetEntityType: paragraph
-bundle: accordion
+bundle: poll
 mode: preview
 content:
-  field_accordion_item:
-    type: paragraph_summary
+  field_paragraphs_poll:
+    type: entity_reference_label
     label: hidden
-    settings: {  }
+    settings:
+      link: false
     third_party_settings:
-      field_delimiter:
-        delimiter: ''
-      field_formatter_range:
-        order: 0
-        limit: 3
-        offset: 0
       template_suggestion:
         template_suggestion: ''
     weight: 0
