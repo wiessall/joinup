@@ -6,6 +6,7 @@ dependencies:
     - field.storage.node.oss_git_url
     - node.type.oss_solution
   module:
+    - eu_oss_catalogue
     - link
 third_party_settings:
   eu_oss_catalogue:

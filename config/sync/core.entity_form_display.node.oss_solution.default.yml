@@ -6,6 +6,7 @@ dependencies:
     - field.field.node.oss_solution.oss_categories
     - field.field.node.oss_solution.oss_development_status
     - field.field.node.oss_solution.oss_features
+    - field.field.node.oss_solution.oss_git_url
     - field.field.node.oss_solution.oss_landing_url
     - field.field.node.oss_solution.oss_license
     - field.field.node.oss_solution.oss_logo
@@ -22,7 +23,6 @@ dependencies:
     - field.field.node.oss_solution.oss_software_type
     - field.field.node.oss_solution.oss_software_version
     - field.field.node.oss_solution.oss_source
-    - field.field.node.oss_solution.oss_git_url
     - field.field.node.oss_solution.oss_used_by
     - node.type.oss_solution
   module:
@@ -73,6 +73,14 @@ content:
     settings:
       size: 60
       placeholder: ''
+    third_party_settings: {  }
+  oss_git_url:
+    type: link_default
+    weight: 123
+    region: content
+    settings:
+      placeholder_url: ''
+      placeholder_title: ''
     third_party_settings: {  }
   oss_landing_url:
     type: link_default
@@ -195,14 +203,6 @@ content:
     settings:
       provider_grouping: true
       configuration_form: full
-    third_party_settings: {  }
-  oss_git_url:
-    type: link_default
-    weight: 123
-    region: content
-    settings:
-      placeholder_url: ''
-      placeholder_title: ''
     third_party_settings: {  }
   oss_used_by:
     type: entity_reference_autocomplete
