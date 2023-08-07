@@ -22,7 +22,7 @@ dependencies:
     - field.field.node.oss_solution.oss_software_type
     - field.field.node.oss_solution.oss_software_version
     - field.field.node.oss_solution.oss_source
-    - field.field.node.oss_solution.oss_url
+    - field.field.node.oss_solution.oss_git_url
     - field.field.node.oss_solution.oss_used_by
     - node.type.oss_solution
   module:
@@ -196,7 +196,7 @@ content:
       provider_grouping: true
       configuration_form: full
     third_party_settings: {  }
-  oss_url:
+  oss_git_url:
     type: link_default
     weight: 123
     region: content

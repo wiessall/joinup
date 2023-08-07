@@ -83,7 +83,7 @@ class EuOssCatalogueTest extends BrowserTestBase {
     /** @var \Drupal\eu_oss_catalogue\Entity\OssSolutionInterface $node1 */
     $node1 = $this->getNodeByTitle('Solution 1');
     $this->assertSame('oss_solution', $node1->bundle());
-    $this->assertSame('http://example.com/vendor/solution1', $node1->get('oss_url')->uri);
+    $this->assertSame('http://example.com/vendor/solution1', $node1->get('oss_git_url')->uri);
     $this->assertSame('1.0.0.0', $node1->get('oss_software_version')->value);
     $this->assertSame('0.2', $node1->get('oss_publiccode_yml_version')->value);
     $this->assertSame('2023-07-07', $node1->get('oss_release_date')->value);
@@ -134,7 +134,7 @@ class EuOssCatalogueTest extends BrowserTestBase {
     /** @var \Drupal\eu_oss_catalogue\Entity\OssSolutionInterface $node1 */
     $node2 = $this->getNodeByTitle('Solution 2');
     $this->assertSame('oss_solution', $node2->bundle());
-    $this->assertSame('http://example.com/vendor/solution2.git', $node2->getTranslation('it')->get('oss_url')->uri);
+    $this->assertSame('http://example.com/vendor/solution2.git', $node2->getTranslation('it')->get('oss_git_url')->uri);
     $this->assertSame('http://landing.example.com/vendor/solution2', $node2->getTranslation('it')->get('oss_landing_url')->uri);
     $this->assertSame('v2.3.4', $node2->get('oss_software_version')->value);
     $this->assertSame('0.2', $node2->get('oss_publiccode_yml_version')->value);
