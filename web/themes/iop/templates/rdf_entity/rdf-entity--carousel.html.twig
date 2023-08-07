@@ -8,46 +8,12 @@
  */
 #}
 
-{%
-  set classes = [
-  node.bundle|clean_class,
-  node.bundle|clean_class ~ '--' ~ view_mode|clean_class,
-  'glide__slide',
-  'slide',
-]
-%}
-{%
-  set title_classes = [
-  'h6',
-  'text-center',
-  'slide__title',
-]
-%}
-{% if rdf_entity.bundle is same as 'collection' %}
-  {% set icon = 'folder2-open' %}
-{% else %}
-  {% set icon = 'clipboard2-check' %}
-{% endif %}
-<article{{ attributes.addClass(classes) }}>
-  {{ title_prefix }}
-  {{ title_suffix }}
-
-  {% block content %}
-    <a href="{{ url }}" rel="bookmark" title="{{ 'Read'|t }}: {{ label|render|striptags|trim }}" tabindex="-1">
-      {% if image %}
-        <figure class="slide__figure">
-          {{ image }}
-        </figure>
-      {% else %}
-        <figure class="slide__figure">
-          <svg class="slide__svg">
-            <use xlink:href="{{ bcl_icon_path }}#{{ icon }}"></use>
-          </svg>
-        </figure>
-      {% endif %}
-    </a>
-      <h1{{ title_attributes.addClass(title_classes) }}>
-        <a class="slide__title-link" href="{{ url }}" rel="bookmark">{{ label }}</a>
-      </h1>
-  {% endblock %}
-</article>
+{% include '@iop/carousel/carousel-item.html.twig' with {
+  attributes,
+  title_prefix,
+  title_suffix,
+  label,
+  title_attributes,
+  image,
+  icon: rdf_entity.bundle is same as 'collection' ? 'folder2-open' : 'clipboard2-check',
+} only %}
