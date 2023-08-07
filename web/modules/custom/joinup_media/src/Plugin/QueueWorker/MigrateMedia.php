@@ -114,21 +114,31 @@ final class MigrateMedia extends QueueWorkerBase implements ContainerFactoryPlug
       }
     }
     elseif ($type === 'node' || $type === 'paragraph') {
-      [$revision_id, $group_id, $uid] = $task;
+      [$revision_id, $group_id, $is_current_revision, $uid] = $task;
       $field = "$fields[$type]_value";
       $revision_table = "{$type}_revision__$fields[$type]";
       $table = "{$type}__$fields[$type]";
       $text = $this->db->query("SELECT $field FROM {{$revision_table}} WHERE revision_id = $revision_id")->fetchField();
       $entity_id = $this->db->query("SELECT entity_id FROM {{$revision_table}} WHERE revision_id = $revision_id")->fetchField();
       $current_revision = $this->db->query("SELECT revision_id FROM {{$table}} WHERE entity_id = $entity_id")->fetchField();
-      if ($current_revision === $revision_id) {
-        $processed_text = $this->processText($text, $group_id, $uid);
-        if ($processed_text !== $text) {
-          $this->db->update($revision_table)->fields([$field => $processed_text])
-            ->condition('revision_id', $revision_id)
-            ->execute();
+      $processed_text = $this->processText($text, $group_id, $uid);
+      if ($processed_text !== $text) {
+        $this->db->update($revision_table)->fields([$field => $processed_text])
+          ->condition('revision_id', $revision_id)
+          ->execute();
+        if ($is_current_revision && $current_revision === $revision_id) {
           $this->db->update($table)->fields([$field => $processed_text])
             ->condition('revision_id', $revision_id)
+            ->execute();
+        }
+        elseif ($is_current_revision) {
+          $text = $this->db->query("SELECT $field FROM {{$revision_table}} WHERE revision_id = $current_revision")->fetchField();
+          $processed_text = $this->processText($text, $group_id, $uid);
+          $this->db->update($revision_table)->fields([$field => $processed_text])
+            ->condition('revision_id', $current_revision)
+            ->execute();
+          $this->db->update($table)->fields([$field => $processed_text])
+            ->condition('revision_id', $current_revision)
             ->execute();
         }
       }
