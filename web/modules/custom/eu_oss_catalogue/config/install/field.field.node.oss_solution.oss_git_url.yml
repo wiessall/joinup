@@ -2,7 +2,7 @@ langcode: en
 status: true
 dependencies:
   config:
-    - field.storage.node.oss_url
+    - field.storage.node.oss_git_url
     - node.type.oss_solution
   module:
     - link
@@ -12,8 +12,8 @@ third_party_settings:
       resolver: default
       config:
         path: url
-id: node.oss_solution.oss_url
-field_name: oss_url
+id: node.oss_solution.oss_git_url
+field_name: oss_git_url
 entity_type: node
 bundle: oss_solution
 label: URL

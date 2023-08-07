@@ -2,15 +2,15 @@ langcode: en
 status: true
 dependencies:
   module:
-    - link
     - node
 third_party_settings: {  }
-id: node.oss_url
-field_name: oss_url
+id: node.oss_git_description
+field_name: oss_git_description
 entity_type: node
-type: link
-settings: {  }
-module: link
+type: string_long
+settings:
+  case_sensitive: false
+module: core
 locked: false
 cardinality: 1
 translatable: true
