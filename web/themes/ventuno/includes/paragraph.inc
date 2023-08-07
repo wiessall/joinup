@@ -67,3 +67,11 @@ function ventuno_preprocess_paragraph__accordion_item(array &$variables): void {
   }
   $variables['parent_id'] = $parent->id();
 }
+
+/**
+ * Implements hook_preprocess_HOOK().
+ */
+function ventuno_preprocess_paragraph__poll(array &$variables): void {
+  $variables['attributes']['class'][] = 'bg-light';
+  $variables['attributes']['class'][] = 'p-3';
+}
