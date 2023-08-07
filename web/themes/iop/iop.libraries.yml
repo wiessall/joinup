@@ -35,7 +35,7 @@ accordion-faq:
 join:
   css:
     theme:
-      assets/css/join.min.css: { minified: true, preprocess: false }
+      assets/css/join.min.css: { minified: true }
 
 navbar:
   css:
