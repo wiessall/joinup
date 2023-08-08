@@ -736,21 +736,6 @@ module.exports = {
     {
       entry: path.resolve(
         outputFolder,
-        `${ventuno}src/scss/components/paragraphs/paragraph--quote.scss`
-      ),
-      dest: path.resolve(
-        outputFolder,
-        `${ventuno}assets/css/paragraph--quote.min.css`
-      ),
-      options: {
-        includePaths,
-        minify: true,
-        sourceMap: "file",
-      },
-    },
-    {
-      entry: path.resolve(
-        outputFolder,
         `${ventuno}src/scss/components/paragraphs/paragraph--poll.scss`
       ),
       dest: path.resolve(
