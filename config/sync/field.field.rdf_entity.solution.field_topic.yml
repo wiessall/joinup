@@ -11,18 +11,19 @@ field_name: field_topic
 entity_type: rdf_entity
 bundle: solution
 label: Topic
-description: ''
+description: 'You can select multiple topics using the "ctrl" key on your keyboard.'
 required: true
 translatable: false
 default_value: {  }
 default_value_callback: ''
 settings:
-  handler: 'grouped_rdf_taxonomy_term_selection:default'
+  handler: 'default:taxonomy_term'
   handler_settings:
     target_bundles:
       topic: topic
     sort:
       field: _none
+      direction: asc
     auto_create: false
     auto_create_bundle: ''
 field_type: entity_reference
