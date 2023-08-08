@@ -1,0 +1,5 @@
+ckeditor5-disable:
+  js:
+    js/ckeditor5-disable.js: {}
+  dependencies:
+    - core/drupal
