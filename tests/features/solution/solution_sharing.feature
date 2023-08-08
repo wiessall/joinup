@@ -16,8 +16,8 @@ Feature: As a privileged user
       | Collection share candidate 1 | logo.png | validated |
       | Collection share candidate 2 | logo.png | validated |
     And the following solutions:
-      | title                 | description         | logo     | banner     | state     | collection                |
-      | Solution to be shared | Doesn't affect test | logo.png | banner.jpg | validated | Collection share original |
+      | title                 | description         | logo     | state     | collection                |
+      | Solution to be shared | Doesn't affect test | logo.png | validated | Collection share original |
     And the following solution user memberships:
       | solution              | user        | roles       |
       | Solution to be shared | joe_dare    | owner       |

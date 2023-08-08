@@ -37,7 +37,6 @@ Feature: Proposing a collection
     # @see: https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-3196
     And I should see the description "Web page for the external Repository." for the "Access URL" field
     And I should see the description "This must be an external URL such as http://example.com." for the "Access URL" field
-    And I should see the description "For best result the image must be larger than 2400x345 pixels." for the "Banner" field
 
     # Check that validations errors are shown for required fields.
     When I press "Propose"
@@ -67,18 +66,14 @@ Feature: Proposing a collection
     And I press "Add existing" at the "Owner" field
     And I fill in "Owner" with "Organisation example"
     And I press "Propose"
-    # Regression test for setting the Logo and Banner fields as optional.
-    # @see: https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-3215
     Then I should not see the following error messages:
       | error messages           |
       | Field Logo is required   |
-      | Field Banner is required |
     And I should see the heading "Ancient and Classical Mythology"
     # Regression test for the keywords field in the about page.
     And I should not see the text "Keywords" in the "Content" region
     And I should not see the text "Some keyword" in the "Content" region
     And I should see a logo on the header
-    And I should see a banner on the header
     And I should see "Thank you for proposing a collection. Your request is currently pending approval by the site administrator."
 
     # The user that proposed the collection should be auto-subscribed.
@@ -115,7 +110,7 @@ Feature: Proposing a collection
     And I press "Save as draft"
     Then I should see the error message "Content with title The Ratcatcher's Guild already exists. Please choose a different title."
 
-  @javascript @uploadFiles:banner.jpg
+  @javascript
   # This is a regression test for a bug in which the label texts of the options
   # vanished after performing an AJAX request in a different element on the
   # page.
@@ -124,13 +119,10 @@ Feature: Proposing a collection
     Given I am logged in as a user with the "authenticated" role
     When I go to the propose collection form
     And I expand the "Additional fields" accordion section
-    And I attach the file "banner.jpg" to "Banner"
-    And I wait for AJAX to finish
-    Then I should see the link "banner.jpg"
     And I should see the text "Only members can create content."
     And I should see the text "Any user can create content."
 
-  @javascript @generateMedia @generateMediaTypes:collection_banner,collection_logo @terms @uploadFiles:logo.png
+  @javascript @generateMedia @generateMediaTypes:collection_logo @terms @uploadFiles:logo.png
   Scenario: Propose collection form fields should be organized in tabs.
     Given the following owner:
       | name                 | type    |
@@ -166,16 +158,13 @@ Feature: Proposing a collection
     And the following field widgets should not be visible "Contact information"
 
     # As a user, editing a collection, solution, event or news item, I want to
-    # be able to pick-up a pre-uploaded image when editing the logo or the
-    # banner, as an alternative to the image upload.
+    # be able to pick-up a pre-uploaded image when editing the logo as an
+    # alternative to the image upload.
     And I select image #3 as collection logo
-    And I wait for AJAX to finish
-    And I select image #8 as collection banner
     And I wait for AJAX to finish
     And I press "Propose"
     Then I should see the success message "Thank you for proposing a collection. Your request is currently pending approval by the site administrator."
     And the "Just a proposal" collection logo is image #3
-    And the "Just a proposal" collection banner is image #8
 
     Given I go to the edit form of the "Just a proposal" collection
     And I expand the "Additional fields" accordion section
@@ -330,9 +319,6 @@ Feature: Proposing a collection
     And I wait for AJAX to finish
     Then I should see the error message "Invalid or unsafe SVG file."
     And I attach the file "simple.svg" to "Logo"
-    And I wait for AJAX to finish
-    Then I should not see the error message "Invalid or unsafe SVG file."
-    And I attach the file "simple.svg" to "Banner"
     And I wait for AJAX to finish
     Then I should not see the error message "Invalid or unsafe SVG file."
     And I check "Moderated"

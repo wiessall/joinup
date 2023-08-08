@@ -3144,7 +3144,7 @@ class JoinupContext extends RawDrupalContext {
 
     // Remove the leading '#'.
     $navigation_menu_selector = substr($this->getRegionSelector('Navigation menu'), 1);
-    $xpath = "//*[@id='$navigation_menu_selector']//nav//a[text()='$link_label' and contains(concat(' ', normalize-space(@class), ' '), ' is-active ')]";
+    $xpath = "//*[@id='$navigation_menu_selector']//ul[contains(concat(' ', normalize-space(@class), ' '), ' nav ')]//a[text()='$link_label' and contains(concat(' ', normalize-space(@class), ' '), ' is-active ')]";
     if (!$page->find('xpath', $xpath)) {
       throw new ExpectationFailedException("The '$link_label' link is not in the active trail but it should.");
     }
