@@ -72,6 +72,7 @@ Feature:
     And I should see the button "Add 2 column with featured media on the right"
     And I should see the button "Add 3 column layout"
 
+  @terms
   Scenario: Test that carousels content listing options are working correctly.
     Given the following collections:
       | title       | state     |
@@ -89,6 +90,7 @@ Feature:
     When I fill in the following:
       | Title | News carousel        |
       | Body  | A carousel with news |
+    And I select "Law and Justice" from "Topic"
     And I press "Add Row"
     And I press "Add 1 column layout"
     And I press "Add Carousel"
@@ -102,6 +104,7 @@ Feature:
     Then I should see the "Some news 1" tile
     But I should not see the "Some news 2" tile
 
+  @terms
   Scenario: Test that carousels with specific content is working correctly.
     Given the following collections:
       | title       | state     |
@@ -120,6 +123,7 @@ Feature:
     When I fill in the following:
       | Title | Pages carousel               |
       | Body  | A carousel with custom pages |
+    And I select "Law and Justice" from "Topic"
     And I press "Add Row"
     And I press "Add 1 column layout"
     And I press "Add Carousel"
