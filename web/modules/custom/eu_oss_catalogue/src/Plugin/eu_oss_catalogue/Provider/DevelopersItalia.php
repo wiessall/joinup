@@ -89,7 +89,7 @@ class DevelopersItalia extends EuOssCatalogueProviderPluginBase implements Conta
       return;
     }
 
-    $url = self::ENDPOINT . $this->next . ($this->next ? '&' : '?') . 'page[size]=100';
+    $url = static::ENDPOINT . $this->next . ($this->next ? '&' : '?') . 'page[size]=100';
     $response = $this->httpClient->get($url);
     $read = Json::decode($response->getBody()->getContents());
 
