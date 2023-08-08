@@ -7,8 +7,8 @@ Feature: "Event page" editing.
   @terms
   Scenario: Add and remove map
     Given collections:
-      | title  | logo     | banner     | state     |
-      | Heroes | logo.png | banner.jpg | validated |
+      | title  | logo     | state     |
+      | Heroes | logo.png | validated |
     And I am logged in as a facilitator of the "Heroes" collection
     When I go to the homepage of the "Heroes" collection
     And I click "Add event" in the plus button menu

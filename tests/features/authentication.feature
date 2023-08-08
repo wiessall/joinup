@@ -48,13 +48,11 @@ Feature: User authentication
       | licence                                             |
       | licence/add                                         |
       | media/add                                           |
-      | media/add/collection_banner                         |
       | media/add/collection_logo                           |
       | media/add/event_logo                                |
       | media/add/file                                     |
       | media/add/image                                     |
       | media/add/news_logo                                 |
-      | media/add/solution_banner                           |
       | media/add/solution_logo                             |
       | media/add/video                                    |
       | node/add                                            |
@@ -135,13 +133,11 @@ Feature: User authentication
       | licence                                             |
       | licence/add                                         |
       | media/add                                           |
-      | media/add/collection_banner                         |
       | media/add/collection_logo                           |
       | media/add/event_logo                                |
       | media/add/file                                     |
       | media/add/image                                     |
       | media/add/news_logo                                 |
-      | media/add/solution_banner                           |
       | media/add/solution_logo                             |
       | media/add/video                                    |
       | node/add                                            |
@@ -202,13 +198,11 @@ Feature: User authentication
       | licence                                     |
       | licence/add                                 |
       | media/add                                   |
-      | media/add/collection_banner                 |
       | media/add/collection_logo                   |
       | media/add/event_logo                        |
       | media/add/file                             |
       | media/add/image                             |
       | media/add/news_logo                         |
-      | media/add/solution_banner                   |
       | media/add/solution_logo                     |
       | media/add/video                            |
       | outdated-content-threshold                  |
