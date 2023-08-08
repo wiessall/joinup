@@ -120,6 +120,9 @@ function ventuno_preprocess_form_element_label(array &$variables): void {
  * Implements hook_form_alter().
  */
 function ventuno_form_alter(array &$form, FormStateInterface $form_state, string $form_id): void {
+  // Disable client side HTML5 validation @see https://html.spec.whatwg.org/multipage/form-control-infrastructure.html#attr-fs-novalidate
+  $form['#attributes']['novalidate'] = 'novalidate';
+
   // Add classes to the delete action in any kind of form.
   if (isset($form['actions']['delete'])) {
     $classes = $form['actions']['delete']['#attributes']['class'] ?? [];

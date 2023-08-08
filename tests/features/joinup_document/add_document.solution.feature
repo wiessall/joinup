@@ -8,12 +8,11 @@ Feature: "Add document" visibility options.
     Given the following collection:
       | title  | Collective Seventh Name |
       | logo   | logo.png                |
-      | banner | banner.jpg              |
       | state  | validated               |
     And the following solutions:
-      | title               | collection              | logo     | banner     | state     |
-      | Seventh Name        | Collective Seventh Name | logo.png | banner.jpg | validated |
-      | The Obsessed Stream | Collective Seventh Name | logo.png | banner.jpg | validated |
+      | title               | collection              | logo     | state     |
+      | Seventh Name        | Collective Seventh Name | logo.png | validated |
+      | The Obsessed Stream | Collective Seventh Name | logo.png | validated |
 
     When I am logged in as an "authenticated user"
     And I go to the homepage of the "Seventh Name" solution
@@ -39,11 +38,10 @@ Feature: "Add document" visibility options.
     Given the following collection:
       | title  | Collective Winter of Beginning |
       | logo   | logo.png                       |
-      | banner | banner.jpg                     |
       | state  | validated                      |
     And the following solutions:
-      | title               | collection                     | logo     | banner     | state     |
-      | Winter of Beginning | Collective Winter of Beginning | logo.png | banner.jpg | validated |
+      | title               | collection                     | logo     | state     |
+      | Winter of Beginning | Collective Winter of Beginning | logo.png | validated |
     And I am logged in as a facilitator of the "Winter of Beginning" solution
 
     When I go to the homepage of the "Winter of Beginning" solution
