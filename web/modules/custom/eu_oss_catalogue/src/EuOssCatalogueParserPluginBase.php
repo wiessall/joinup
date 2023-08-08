@@ -74,7 +74,7 @@ abstract class EuOssCatalogueParserPluginBase extends PluginBase implements EuOs
     $nodeStorage = $this->entityTypeManager->getStorage('node');
 
     // For now, we're using the solution URL as UUID.
-    $solutions = $nodeStorage->loadByProperties(['oss_url' => $fetchedSolution->getUrl()]);
+    $solutions = $nodeStorage->loadByProperties(['oss_git_url' => $fetchedSolution->getUrl()]);
 
     $solution = $solutions ? reset($solutions) : $nodeStorage->create(['type' => 'oss_solution']);
     if (!$solution instanceof OssSolutionInterface) {

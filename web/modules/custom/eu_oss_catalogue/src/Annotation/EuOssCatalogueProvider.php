@@ -29,8 +29,17 @@ class EuOssCatalogueProvider extends Plugin {
   public Translation $label;
 
   /**
-   * The parser used to conver data.
+   * The parser used to convert data.
    */
   public string $parser;
+
+  /**
+   * A short description of the provider plugin.
+   *
+   * @var \Drupal\Core\Annotation\Translation
+   *
+   * @ingroup plugin_translatable
+   */
+  public Translation $description;
 
 }

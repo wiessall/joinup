@@ -50,6 +50,7 @@ class EuOssCatalogueController extends ControllerBase {
       $row = [
         $pluginId,
         $definition['label'],
+        $definition['description'],
         [],
       ];
       $rows[] = $row;
@@ -59,6 +60,7 @@ class EuOssCatalogueController extends ControllerBase {
       '#header' => [
         $this->t('ID'),
         $this->t('Name'),
+        $this->t('Description'),
         $this->t('Operations'),
       ],
       '#rows' => $rows,
