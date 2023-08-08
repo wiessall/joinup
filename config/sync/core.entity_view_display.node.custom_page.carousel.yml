@@ -17,6 +17,7 @@ dependencies:
     - field_group
     - joinup_core
     - layout_builder
+    - layout_paragraphs
     - link
     - responsive_image
     - template_suggestion
