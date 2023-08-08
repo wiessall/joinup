@@ -19,6 +19,8 @@ theme:
   css:
     theme:
       assets/css/theme.min.css: { minified: true }
+  dependencies:
+    - iop/call-to-action
 
 # Pages
 listing:
@@ -31,6 +33,11 @@ accordion-faq:
   css:
     theme:
       assets/css/accordion-faq.min.css: { minified: true, preprocess: false }
+
+call-to-action:
+  css:
+    theme:
+      assets/css/call-to-action.min.css: { minified: true, preprocess: false }
 
 join:
   css:
