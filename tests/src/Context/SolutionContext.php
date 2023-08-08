@@ -335,6 +335,9 @@ class SolutionContext extends RawDrupalContext {
    *   pinned in a non-existing group.
    */
   protected function createSolution(array $values) {
+    /** @var \Drupal\file_url\FileUrlHandler $fileHandler */
+    $fileHandler = \Drupal::service('file_url.handler');
+
     $file_fields = [
       'field_is_documentation',
       'field_is_banner',
@@ -344,7 +347,15 @@ class SolutionContext extends RawDrupalContext {
     foreach ($file_fields as $field_name) {
       if (!empty($values[$field_name])) {
         foreach ($values[$field_name] as &$filename) {
-          $filename = [$this->createFile($filename)->id()];
+          $file = $this->createFile($filename);
+          if ($field_name === 'field_is_documentation') {
+            $filename = [
+              'target_id' => $fileHandler::fileToUrl($file),
+            ];
+          }
+          else {
+            $filename = [$file->id()];
+          }
         }
       }
     }
@@ -390,6 +401,31 @@ class SolutionContext extends RawDrupalContext {
     $solution = $this->getEntityByLabel('rdf_entity', $solution);
     $solution->skip_notification = TRUE;
     $solution->delete();
+  }
+
+  /**
+   * Deletes a solution document's files.
+   *
+   * @param string $solution
+   *   The name of the solution.
+   *
+   * @When I delete documents from :solution solution
+   */
+  public function deleteDocumentsFromSolution($solution): void {
+    $solution = $this->getEntityByLabel('rdf_entity', $solution);
+
+    /** @var \Drupal\file_url\FileUrlHandler $fileHandler */
+    $fileHandler = \Drupal::service('file_url.handler');
+
+    $values = $solution->get('field_is_documentation')->getValue();
+    foreach ($values as $value) {
+      $file = $fileHandler::urlToFile($value['target_id']);
+      if (!$file || $fileHandler::isRemote($file)) {
+        continue;
+      }
+
+      $file->delete();
+    }
   }
 
   /**
