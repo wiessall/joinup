@@ -3,19 +3,25 @@
     attach(context, settings) {
       // Wait for CKEditor to be ready.
       window.onload = function () {
-        // Find all button elements with the specified attribute
-        const buttonElements = document.querySelectorAll(
-          'button[data-cke-tooltip-text="Insert image"]'
+        // Find all textareas with attribute data-editor-active-text-format="content_editor"
+        const textareas = document.querySelectorAll(
+          'textarea[data-editor-active-text-format="content_editor"]'
         );
 
-        // Loop through each button element
-        buttonElements.forEach(function (buttonElement) {
-          // Find the parent element with the specified class
-          const parentElement = buttonElement.closest(".ck-file-dialog-button");
+        textareas.forEach(function (textarea) {
+          // Find the next sibling element which should be the div containing the buttons
+          const divElement = textarea.nextElementSibling;
 
-          if (parentElement) {
-            // Remove the parent element
-            parentElement.parentNode.removeChild(parentElement);
+          if (divElement) {
+            // Find all buttons with attribute data-cke-tooltip-text="Insert image" within the div
+            const buttons = divElement.querySelectorAll(
+              'button[data-cke-tooltip-text="Insert image"]'
+            );
+
+            buttons.forEach(function (button) {
+              // Remove the button
+              button.parentNode.removeChild(button);
+            });
           }
         });
       };
