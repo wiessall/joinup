@@ -26,7 +26,6 @@ Feature: About this solution
       | title               | Size exclusion chromatography                     |
       | description         | Separating molecules by size.                     |
       | logo                | logo.png                                          |
-      | banner              | banner.jpg                                        |
       | contact information | Ariel Lucile, "Maiken Bine, Peer Milla"           |
       | owner               | Nova Pharmaceuticals, Senatier                    |
       | state               | validated                                         |
