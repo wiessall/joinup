@@ -145,7 +145,7 @@ function iop_preprocess_node__custom_page__full(array &$variables): void {
 
     // For the custom page that is set as landing page, do not display the title
     // or the report link.
-    $variables['label']['#access'] = FALSE;
+    unset($variables['label']);
   }
 }
 

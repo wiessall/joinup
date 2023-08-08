@@ -1,7 +1,7 @@
 @api @group-d
 Feature: Collections Overview
 
-  @terms @uploadFiles:logo.png,banner.jpg
+  @terms @uploadFiles:logo.png
   Scenario: View collection overview as an anonymous user
     Given users:
       | Username      | E-mail                       |
@@ -57,7 +57,6 @@ Feature: Collections Overview
       | E-mail      | overviewer@example.com              |
     And I select "Employment and Support Allowance" from "Topic"
     And I attach the file "logo.png" to "Logo"
-    And I attach the file "banner.jpg" to "Banner"
     # Click the button to select an existing owner.
     And I press "Add existing" at the "Owner" field
     And I fill in "Owner" with "Organisation example"

@@ -24,9 +24,59 @@ use Drupal\paragraphs\ParagraphInterface;
 use Drupal\rdf_entity\Entity\Rdf;
 
 /**
+ * Clean up banner files.
+ */
+function joinup_core_deploy_109600(array &$sandbox): string {
+  if (empty($sandbox['fids'])) {
+    $query = <<<SPARQL
+select ?o
+from <http://joinup.eu/collection/published>
+from <http://joinup.eu/collection/draft>
+from <http://joinup.eu/solution/published>
+from <http://joinup.eu/solution/draft>
+from <http://joinup.eu/asset_release/published>
+from <http://joinup.eu/asset_release/draft>
+where { ?s <http://xmlns.com/foaf/0.1/Image> ?o }
+SPARQL;
+
+    $sparql = \Drupal::getContainer()->get('sparql.endpoint');
+    $results = $sparql->query($query);
+    foreach ($results as $result) {
+      $sandbox['fids'][] = $result->o->getValue();
+    }
+    $sandbox['total'] = count($sandbox['fids']);
+    $sandbox['current'] = 0;
+  }
+
+  $fids = array_splice($sandbox['fids'], 0, 100);
+  $file_storage = \Drupal::entityTypeManager()->getStorage('file');
+  $file_storage->delete($file_storage->loadMultiple($fids));
+
+  $sandbox['current'] += count($fids);
+  $sandbox['#finished'] = $sandbox['current'] / $sandbox['total'];
+  return 'Processed ' . $sandbox['current'] . ' of ' . $sandbox['total'] . ' files.';
+}
+
+/**
+ * Clean up banner database entries.
+ */
+function joinup_core_deploy_109601(): void {
+  $sparql_endpoint = \Drupal::getContainer()->get('sparql.endpoint');
+  $query = <<<SPARQL
+DELETE { GRAPH ?g { ?s <http://xmlns.com/foaf/0.1/Image> ?o } }
+WHERE {
+  GRAPH ?g { ?s <http://xmlns.com/foaf/0.1/Image> ?o } .
+  VALUES ?g { <http://joinup.eu/collection/published>  <http://joinup.eu/collection/draft> <http://joinup.eu/solution/published> <http://joinup.eu/solution/draft> <http://joinup.eu/asset_release/published> <http://joinup.eu/asset_release/draft> }
+}
+SPARQL;
+
+  $sparql_endpoint->update($query);
+}
+
+/**
  * Change 'culture' to 'culture and environment'.
  */
-function joinup_core_deploy_109600(): string {
+function joinup_core_deploy_109602(): string {
   // Update the references.
   $vocab_manager = \Drupal::getContainer()->get('topic.vocabulary_manager');
   $vocab_manager->updateDbReference('http://joinup.eu/ontology/topic#culture', 'http://joinup.eu/ontology/topic#culture-and-education');
@@ -36,14 +86,14 @@ function joinup_core_deploy_109600(): string {
 /**
  * Clean up cached_computed_field_expired_fields queue.
  */
-function joinup_core_deploy_109601(): void {
+function joinup_core_deploy_109603(): void {
   \Drupal::queue('cached_computed_field_expired_fields')->deleteQueue();
 }
 
 /**
  * Migrate IOP custom pages row paragraphs to layout paragraphs.
  */
-function joinup_core_deploy_109602(): string {
+function joinup_core_deploy_109604(): string {
   $collection = Rdf::load(InteroperableEuropeCollectionInterface::COLLECTION_ENTITY_ID);
   $group_helper = \Drupal::getContainer()->get('og.membership_manager');
   $node_ids = $group_helper->getGroupContentIds($collection, ['node']);
@@ -78,7 +128,7 @@ function joinup_core_deploy_109602(): string {
 /**
  * Migrate Topic meta entity row paragraphs to layout paragraphs.
  */
-function joinup_core_deploy_109603(array &$sandbox): string {
+function joinup_core_deploy_109605(array &$sandbox): string {
   if (empty($sandbox['meta_ids'])) {
     $sandbox['meta_ids'] = \Drupal::entityQuery('meta_entity')
       ->accessCheck(FALSE)
