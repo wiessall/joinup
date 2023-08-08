@@ -109,3 +109,17 @@ function joinup_paragraphs_get_access(AccessResultInterface $access_result, stri
 
   return $access_result;
 }
+
+/**
+ * Implements hook_theme().
+ */
+function joinup_paragraphs_theme(): array {
+  return [
+    'joinup_paragraphs_heading' => [
+      'variables' => [
+        'level' => NULL,
+        'text' => NULL,
+      ],
+    ],
+  ];
+}

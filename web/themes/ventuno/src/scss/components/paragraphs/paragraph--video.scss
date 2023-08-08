@@ -1,0 +1,7 @@
+.paragraph--video {
+  &.js-lpb-component {
+    .video-embed-field-responsive-video iframe {
+      pointer-events: none; // Allow Drag&Drop in edit form.
+    }
+  }
+}

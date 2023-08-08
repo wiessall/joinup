@@ -52,7 +52,6 @@ Feature: Like/unlike feature.
     And I should see the text "Like (0)" in the "Like block" region
     When I click "Like" in the "Like block" region
     Then a modal should open
-    And I should see the heading "You are not logged in"
     And I should see the text "You are not logged in" in the "Modal title"
     And I should see the heading "Login or register to like this content" in the "Modal content"
     And I should see the text "Like this content will help other people find reliable information about what they search!" in the "Modal content"
@@ -199,8 +198,8 @@ Feature: Like/unlike feature.
 
     And I fill in "Title" with "Carousel of likes"
 
-    And I press "List additional actions"
-    And I press "Add Carousel"
+    And I click "Choose component"
+    And I click "Carousel"
 
     Then I select "Solution" from "Available filters"
     And I press "Add and configure filter"
@@ -226,6 +225,8 @@ Feature: Like/unlike feature.
     And I press "Add and configure filter"
     And I fill in "News" with "Likeable news"
 
+    # Save the paragraph through the dialog.
+    And I press "Save" in the "Layout paragraphs dialog buttons" region
     When I press "Publish"
 
     And I should see the "Very liked solution" tile

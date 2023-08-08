@@ -44,6 +44,7 @@ content:
       link: ''
       filtered_entity_bundles:
         - simple_paragraph
+        - text
     third_party_settings:
       field_delimiter:
         delimiter: ''
