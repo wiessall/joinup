@@ -74,26 +74,9 @@ SPARQL;
 }
 
 /**
- * Change 'culture' to 'culture and environment'.
- */
-function joinup_core_deploy_109602(): string {
-  // Update the references.
-  $vocab_manager = \Drupal::getContainer()->get('topic.vocabulary_manager');
-  $vocab_manager->updateDbReference('http://joinup.eu/ontology/topic#culture', 'http://joinup.eu/ontology/topic#culture-and-education');
-  return 'Updated the topic vocabulary.';
-}
-
-/**
- * Clean up cached_computed_field_expired_fields queue.
- */
-function joinup_core_deploy_109603(): void {
-  \Drupal::queue('cached_computed_field_expired_fields')->deleteQueue();
-}
-
-/**
  * Migrate IOP custom pages row paragraphs to layout paragraphs.
  */
-function joinup_core_deploy_109604(): string {
+function joinup_core_deploy_109602(): string {
   $collection = Rdf::load(InteroperableEuropeCollectionInterface::COLLECTION_ENTITY_ID);
   $group_helper = \Drupal::getContainer()->get('og.membership_manager');
   $node_ids = $group_helper->getGroupContentIds($collection, ['node']);
@@ -128,7 +111,7 @@ function joinup_core_deploy_109604(): string {
 /**
  * Migrate Topic meta entity row paragraphs to layout paragraphs.
  */
-function joinup_core_deploy_109605(array &$sandbox): string {
+function joinup_core_deploy_109603(array &$sandbox): string {
   if (empty($sandbox['meta_ids'])) {
     $sandbox['meta_ids'] = \Drupal::entityQuery('meta_entity')
       ->accessCheck(FALSE)
