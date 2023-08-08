@@ -42,22 +42,24 @@
   'paragraph--' ~ paragraph.bundle|clean_class,
 ] %}
 
-<blockquote {{ attributes.addClass(classes) }}>
-  <div class="testimony__quote">
-    {{ content.paragraph_testimony_text }}
-  </div>
-  <figure class="testimony__fig">
-    <div class="testimony__img">
-      {{ content.paragraph_testimony_image }}
+<div {{ attributes.addClass(classes) }}>
+  <blockquote{% if content.paragraph_testimony_source|render|striptags|trim is not empty %} cite="{{ content.paragraph_testimony_source }}"{% endif %}>
+    <div class="testimony__quote">
+      {{ content.paragraph_testimony_text }}
     </div>
-    <figcaption class="testimony__figcaption">
-      <p class="testimony__author"><strong>{{ content.paragraph_testimony_author }}</strong></p>
-      {% if content.paragraph_testimony_bio|render|striptags|trim is not empty %}
-        <p class="testimony__bio">{{ content.paragraph_testimony_bio }}</p>
-      {% endif %}
-      {% if content.paragraph_testimony_source|render|striptags|trim is not empty %}
-        <cite class="testimony__cite">{{ content.paragraph_testimony_source }}</cite>
-      {% endif %}
-    </figcaption>
-  </figure>
-</blockquote>
+    <figure class="testimony__fig">
+      <div class="testimony__img">
+        {{ content.paragraph_testimony_image }}
+      </div>
+      <figcaption class="testimony__figcaption">
+        <p class="testimony__author"><strong>{{ content.paragraph_testimony_author }}</strong></p>
+        {% if content.paragraph_testimony_bio|render|striptags|trim is not empty %}
+          <p class="testimony__bio">{{ content.paragraph_testimony_bio }}</p>
+        {% endif %}
+        {% if content.paragraph_testimony_source|render|striptags|trim is not empty %}
+          <cite class="testimony__cite">{{ content.paragraph_testimony_source }}</cite>
+        {% endif %}
+      </figcaption>
+    </figure>
+  </blockquote>
+</div>

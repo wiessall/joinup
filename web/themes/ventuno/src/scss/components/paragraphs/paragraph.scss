@@ -39,7 +39,7 @@
     }
   }
 
-  blockquote:not(.paragraph--testimony) {
+  blockquote {
     overflow: hidden;
     border-left: $spacer * 1.25 solid $brand;
     padding: $spacer * 1.5 0 $spacer * 1.5 $spacer * 1.5;
