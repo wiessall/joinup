@@ -6,9 +6,9 @@ Feature: Discussions added to collections
 
   Scenario: "Add discussion" button should not be shown to normal members, authenticated users and anonymous users.
     Given the following collections:
-      | title              | logo     | banner     | state     |
-      | The Fallen History | logo.png | banner.jpg | validated |
-      | White Sons         | logo.png | banner.jpg | validated |
+      | title              | logo     | state     |
+      | The Fallen History | logo.png | validated |
+      | White Sons         | logo.png | validated |
 
     When I am logged in as an "authenticated user"
     And I go to the homepage of the "The Fallen History" collection
@@ -41,8 +41,8 @@ Feature: Discussions added to collections
       | Family name | Pontecorvo                            |
       | E-mail      | kesha.pontecorvo@ec-europa.example.eu |
     And collections:
-      | title                  | logo     | banner     | state     |
-      | The World of the Waves | logo.png | banner.jpg | validated |
+      | title                  | logo     | state     |
+      | The World of the Waves | logo.png | validated |
     And the following collection user membership:
       | collection             | user      | roles       |
       | The World of the Waves | kesha1988 | facilitator |
