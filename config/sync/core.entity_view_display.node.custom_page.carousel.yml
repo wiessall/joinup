@@ -15,7 +15,6 @@ dependencies:
     - field_delimiter
     - field_formatter_range
     - field_group
-    - joinup_core
     - layout_builder
     - layout_paragraphs
     - link
@@ -68,8 +67,6 @@ content:
     settings:
       view_mode: tile
       link: ''
-      filtered_entity_bundles:
-        - simple_paragraph
     third_party_settings:
       field_delimiter:
         delimiter: ''
