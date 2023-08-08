@@ -36,12 +36,12 @@ Feature: Collection moderation
       # Facilitator of all the collections.
       | Carole James    |           |
     And the following collections:
-      | title               | description         | logo     | banner     | owner          | contact information | state            |
-      | Deep Past           | Azure ship          | logo.png | banner.jpg | Simon Sandoval | Francis             | draft            |
-      | The Licking Silence | The Licking Silence | logo.png | banner.jpg | Simon Sandoval | Francis             | proposed         |
-      | Person of Wizards   | Person of Wizards   | logo.png | banner.jpg | Simon Sandoval | Francis             | validated        |
-      | The Shard's Hunter  | The Shard's Hunter  | logo.png | banner.jpg | Simon Sandoval | Francis             | archival request |
-      | Luck in the Abyss   | Luck in the Abyss   | logo.png | banner.jpg | Simon Sandoval | Francis             | archived         |
+      | title               | description         | logo     | owner          | contact information | state            |
+      | Deep Past           | Azure ship          | logo.png | Simon Sandoval | Francis             | draft            |
+      | The Licking Silence | The Licking Silence | logo.png | Simon Sandoval | Francis             | proposed         |
+      | Person of Wizards   | Person of Wizards   | logo.png | Simon Sandoval | Francis             | validated        |
+      | The Shard's Hunter  | The Shard's Hunter  | logo.png | Simon Sandoval | Francis             | archival request |
+      | Luck in the Abyss   | Luck in the Abyss   | logo.png | Simon Sandoval | Francis             | archived         |
     And the following collection user memberships:
       | collection          | user         | roles       |
       | Deep Past           | Erika Reid   | owner       |
@@ -179,7 +179,6 @@ Feature: Collection moderation
       | title               | Some berry pie     |
       | description         | Berries are tasty. |
       | logo                | logo.png           |
-      | banner              | banner.jpg         |
       | owner               | Carpet Sandation   |
       | contact information | Partyanimal        |
       | topic               | Supplier exchange  |
@@ -202,7 +201,7 @@ Feature: Collection moderation
     Then I should see the text "No berry pie"
     And I should not see the text "Some berry pie"
 
-  @javascript @terms @uploadFiles:logo.png,banner.jpg
+  @javascript @terms @uploadFiles:logo.png
   Scenario: Moderate an open collection
     # Regression test for a bug that caused the slider that controls the
     # content creation setting to revert to default state when the form is
@@ -228,8 +227,6 @@ Feature: Collection moderation
     And I expand the "Additional fields" accordion section
     Then the "Additional fields" accordion section should be active
     And I attach the file "logo.png" to "Logo"
-    And I wait for AJAX to finish
-    And I attach the file "banner.jpg" to "Banner"
     And I wait for AJAX to finish
     And I select the radio button "Any user can create content."
 
@@ -265,7 +262,7 @@ Feature: Collection moderation
     And I delete the "Katsumoto" owner
     And I delete the "A secretary in the fog" contact information
 
-  @javascript @terms @uploadFiles:logo.png,banner.jpg
+  @javascript @terms @uploadFiles:logo.png
   Scenario: Changing Content creation value - regression #1
     # Regression test for a bug that happens when a change on the content
     # creation setting happens after an ajax callback.
@@ -289,8 +286,6 @@ Feature: Collection moderation
     And I expand the "Additional fields" accordion section
     And I attach the file "logo.png" to "Logo"
     And I wait for AJAX to finish
-    And I attach the file "banner.jpg" to "Banner"
-    And I wait for AJAX to finish
     And I select the radio button "Any user can create content."
 
     # Save the collection.
@@ -307,7 +302,7 @@ Feature: Collection moderation
     And I delete the "Garnett Clifton" owner
     And I delete the "Domestic secretary" contact information
 
-  @javascript @terms @uploadFiles:logo.png,banner.jpg
+  @javascript @terms @uploadFiles:logo.png
   Scenario: Changing Content creation value - regression #2
     # Regression test for a bug that causes the wrong content creation value
     # to be saved after the "Closed collection" checkbox is checked.
@@ -331,8 +326,6 @@ Feature: Collection moderation
     And I expand the "Additional fields" accordion section
     And I attach the file "logo.png" to "Logo"
     And I wait for AJAX to finish
-    And I attach the file "banner.jpg" to "Banner"
-    And I wait for AJAX to finish
     And I select the radio button "Only facilitators and authors can create content."
 
     # Save the collection.
@@ -349,7 +342,7 @@ Feature: Collection moderation
     And I delete the "Coretta Simonson" owner
     And I delete the "Secretary of thieves" contact information
 
-  @javascript @terms @uploadFiles:logo.png,banner.jpg
+  @javascript @terms @uploadFiles:logo.png
   Scenario: Changing Content creation value - regression #3
     # Regression test for a bug that happens when an "Add more" button on a
     # multi-value widget is clicked and then the "Closed collection" checkbox
@@ -374,8 +367,6 @@ Feature: Collection moderation
     And I expand the "Additional fields" accordion section
     And I attach the file "logo.png" to "Logo"
     And I wait for AJAX to finish
-    And I attach the file "banner.jpg" to "Banner"
-    And I wait for AJAX to finish
     When I press "Add another item" at the "Geographical coverage" field
     And I wait for AJAX to finish
     And I select the radio button "Only facilitators and authors can create content."
@@ -394,7 +385,7 @@ Feature: Collection moderation
     And I delete the "Terrance Nash" owner
     And I delete the "Secretary of Silk" contact information
 
-  @javascript @terms @uploadFiles:logo.png,banner.jpg
+  @javascript @terms @uploadFiles:logo.png
   Scenario: Changing Content creation value - regression #4
     # Regression test for a bug that happens when the "Closed collection" checkbox
     # is checked and then an "Add more" button on a multi-value widget is clicked.
@@ -417,8 +408,6 @@ Feature: Collection moderation
     And I check the box "National authority"
     And I expand the "Additional fields" accordion section
     And I attach the file "logo.png" to "Logo"
-    And I wait for AJAX to finish
-    And I attach the file "banner.jpg" to "Banner"
     And I wait for AJAX to finish
     And I select the radio button "Only facilitators and authors can create content."
 

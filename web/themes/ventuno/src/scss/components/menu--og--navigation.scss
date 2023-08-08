@@ -30,18 +30,11 @@
         display: none;
       }
     }
-    .nav-tabs {
+    .nav:not(.nav-pills) {
       display: inline-flex;
       flex-wrap: nowrap;
       border: none;
-      .nav-link {
-        height: 28px;
-        white-space: nowrap;
-        color: $primary;
-        padding: 0 $spacer * .25;
-        border: none;
-        border-radius: 0%;
-        box-shadow: 0 4px 0 0 transparent;
+      .nav-item {
         margin: $spacer * .25;
         margin-right: $spacer * .75;
         &:first-of-type {
@@ -50,6 +43,15 @@
         &:not(:first-of-type) {
           margin-left: $spacer * .75;
         }
+      }
+      .nav-link {
+        height: 28px;
+        white-space: nowrap;
+        color: $primary;
+        padding: 0 $spacer * .25;
+        border: none;
+        border-radius: 0%;
+        box-shadow: 0 4px 0 0 transparent;
         &:hover {
           box-shadow: 0 4px 0 0 $primary;
         }
