@@ -167,6 +167,26 @@ class EuOssCatalogueTest extends BrowserTestBase {
     $this->assertSame('pirate@example.com', $contact2->get('oss_contact_email')->value);
     $this->assertSame('0049689887764', $contact2->get('oss_contact_phone')->value);
     $this->assertSame('On The Sea', $contact2->get('oss_contact_affiliation')->value);
+
+    // Re-run the process and update one solution from a new source-provider.
+    $service = \Drupal::getContainer()->get('eu_oss_catalogue');
+    $service->fetch('testing_provider');
+
+    $queue = \Drupal::queue('eu_oss_catalogue');
+    $this->assertSame(2, $queue->numberOfItems());
+
+    // Process the queue again.
+    $this->drush('queue:run', ['eu_oss_catalogue']);
+
+    /** @var \Drupal\eu_oss_catalogue\Entity\OssSolutionInterface $node1 */
+    $this->assertEmpty($this->getNodeByTitle('Solution 1'));
+
+    $updated_solution = $this->getNodeByTitle('Solution 1 (updated)', TRUE);
+    $this->assertSame('1.0.0.1', $updated_solution->get('oss_software_version')->value);
+    // Assert that the provider has been added to the list of providers.
+    $this->assertSame(2, $updated_solution->get('oss_source')->count());
+    $expected_providers = ['developers_italia', 'testing_provider'];
+    $this->assertSame($expected_providers, array_map(fn (array $item): string => $item['plugin_id'], $updated_solution->get('oss_source')->getValue()));
   }
 
   /**
