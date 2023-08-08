@@ -56,7 +56,6 @@ class CollectionContext extends RawDrupalContext {
     'short ID' => 'field_short_id',
     'abstract' => 'field_ar_abstract',
     'access url' => 'field_ar_access_url',
-    'banner' => 'field_ar_banner',
     'closed' => 'field_ar_closed',
     'contact information' => 'field_ar_contact_information',
     'content creation' => 'field_ar_content_creation',
@@ -257,13 +256,10 @@ class CollectionContext extends RawDrupalContext {
    *   Thrown when a given image is not found.
    */
   protected function createCollection(array $values): CollectionInterface {
-    // Add images.
-    $image_fields = ['field_ar_banner', 'field_ar_logo'];
-    foreach ($image_fields as $field_name) {
-      if (!empty($values[$field_name])) {
-        foreach ($values[$field_name] as &$filename) {
-          $filename = [$this->createFile($filename)->id()];
-        }
+    // Add logo image.
+    if (!empty($values['field_ar_logo'])) {
+      foreach ($values['field_ar_logo'] as &$filename) {
+        $filename = [$this->createFile($filename)->id()];
       }
     }
 
