@@ -3,12 +3,10 @@ langcode: en
 status: true
 dependencies:
   config:
-    - media.type.collection_banner
     - media.type.collection_logo
     - media.type.discussion_logo
     - media.type.event_logo
     - media.type.news_logo
-    - media.type.solution_banner
     - media.type.solution_logo
     - node.type.custom_page
     - node.type.discussion
@@ -96,7 +94,6 @@ permissions:
   - 'change tallinn report author'
   - 'create asset_distribution rdf entity'
   - 'create asset_release rdf entity'
-  - 'create collection_banner media'
   - 'create collection_logo media'
   - 'create discussion content'
   - 'create discussion_logo media'
@@ -125,17 +122,14 @@ permissions:
   - 'create paragraph content testimony'
   - 'create paragraph content video'
   - 'create rdf entity news'
-  - 'create solution_banner media'
   - 'create solution_logo media'
   - 'delete all sitewide alert revisions'
-  - 'delete any collection_banner media'
   - 'delete any collection_logo media'
   - 'delete any discussion_logo media'
   - 'delete any document content'
   - 'delete any event_logo media'
   - 'delete any file'
   - 'delete any news_logo media'
-  - 'delete any solution_banner media'
   - 'delete any solution_logo media'
   - 'delete asset_release rdf entity'
   - 'delete contact_information rdf entity'
@@ -158,7 +152,6 @@ permissions:
   - 'delete paragraph content video'
   - 'delete sitewide alert entities'
   - 'download subscribers report'
-  - 'edit any collection_banner media'
   - 'edit any collection_logo media'
   - 'edit any custom_page content'
   - 'edit any discussion content'
@@ -166,7 +159,6 @@ permissions:
   - 'edit any event_logo media'
   - 'edit any glossary content'
   - 'edit any news_logo media'
-  - 'edit any solution_banner media'
   - 'edit any solution_logo media'
   - 'edit contact_information rdf entity'
   - 'edit field_is_eif_category'

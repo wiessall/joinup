@@ -1996,7 +1996,7 @@ class FeatureContext extends RawDrupalContext {
    * @code
    * @uploadFiles:<filename1.ext>,<filename2.ext>,...
    * @endcode
-   * For instance, a scenario tagged with @uploadFiles:logo.png,banner.jpg will
+   * For instance, a scenario tagged with @uploadFiles:logo.png will
    * clear the 2 file entities (together with the files from files system) after
    * the scenario completes.
    *
@@ -2062,21 +2062,19 @@ class FeatureContext extends RawDrupalContext {
    *   An "1 based" offset of the image.
    * @param string $content_type
    *   The type of content: collection, solution, event, news.
-   * @param string $image_type
-   *   The field label.
    *
    * @throws \InvalidArgumentException
    *   When the offset is invalid or the field doesn't exist.
    *
-   * @When I select image #:offset as :content_type :image_type
+   * @When I select image #:offset as :content_type logo
    */
-  public function selectImageFromTheFieldImageLibraryBrowser(string $offset, string $content_type, string $image_type): void {
-    $this->validateImageLibraryBrowserStepDefinitionParams($content_type, $image_type, $offset);
+  public function selectImageFromTheFieldImageLibraryBrowser(string $offset, string $content_type): void {
+    $this->validateImageLibraryBrowserStepDefinitionParams($content_type, $offset);
     $map = $this->getImageLibraryBrowserMapping();
 
     $page = $this->getSession()->getPage();
-    if (!$field = $page->findField("files[{$map[$content_type]['fields'][$image_type]}_0]")) {
-      throw new \InvalidArgumentException("Invalid field ($image_type).");
+    if (!$field = $page->findField("files[{$map[$content_type]['fields']['logo']}_0]")) {
+      throw new \InvalidArgumentException("Invalid field (logo).");
     }
 
     // Get the field wrapper.
@@ -2086,7 +2084,7 @@ class FeatureContext extends RawDrupalContext {
     // Convert to zero-based index.
     $delta = $offset - 1;
     if (!isset($images[$delta])) {
-      throw new \InvalidArgumentException("No image at position #$offset in $image_type field.");
+      throw new \InvalidArgumentException("No image at position #$offset in logo field.");
     }
 
     $this->scrollElementIntoView($images[$delta]);
@@ -2105,7 +2103,7 @@ class FeatureContext extends RawDrupalContext {
     $state = \Drupal::state();
     // Save the clicked image file ID for this field for later checks.
     $clicks = $state->get('image_library_widget.clicks', []);
-    $clicks[$content_type][$image_type][$offset] = $image_fid;
+    $clicks[$content_type]['logo'][$offset] = $image_fid;
     $state->set('image_library_widget.clicks', $clicks);
   }
 
@@ -2116,8 +2114,6 @@ class FeatureContext extends RawDrupalContext {
    *   The type of content: collection, solution, event, news.
    * @param string $title
    *   The content title.
-   * @param string $image_type
-   *   The type of image; logo, banner.
    * @param string $offset
    *   The "1 based" position of the image from the image library broeser.
    *
@@ -2126,29 +2122,29 @@ class FeatureContext extends RawDrupalContext {
    * @throws \Exception
    *   When no image of type $type has been clicked.
    *
-   * @Then the :title :content_type :image_type is image #:offset
+   * @Then the :title :content_type logo is image #:offset
    */
-  public function assertImageFromTheFieldImageLibraryBrowser(string $content_type, string $title, string $image_type, string $offset): void {
-    $this->validateImageLibraryBrowserStepDefinitionParams($content_type, $image_type, $offset);
+  public function assertLogoFromTheFieldImageLibraryBrowser(string $content_type, string $title, string $offset): void {
+    $this->validateImageLibraryBrowserStepDefinitionParams($content_type, $offset);
     $map = $this->getImageLibraryBrowserMapping();
     $entity = $this->getEntityByLabel($map[$content_type]['type'], $title, $content_type);
-    $image_field = $entity->get($map[$content_type]['fields'][$image_type]);
+    $image_field = $entity->get($map[$content_type]['fields']['logo']);
     if ($image_field->isEmpty()) {
-      throw new ExpectationFailedException("The {$title} {$image_type} field is empty but it should point to the image at position #{$offset}.");
+      throw new ExpectationFailedException("The {$title} logo field is empty but it should point to the image at position #{$offset}.");
     }
 
     $state = \Drupal::state();
     $clicks = $state->get('image_library_widget.clicks', []);
-    if (!isset($clicks[$content_type][$image_type][$offset])) {
-      throw new \Exception("The {$image_type} images should have been clicked but it was not.");
+    if (!isset($clicks[$content_type]['logo'][$offset])) {
+      throw new \Exception("The logo images should have been clicked but it was not.");
     }
-    if ($clicks[$content_type][$image_type][$offset] !== $image_field->target_id) {
-      throw new ExpectationFailedException("The {$title} {$image_type} should contain the image #{$offset} but it doesn't.");
+    if ($clicks[$content_type]['logo'][$offset] !== $image_field->target_id) {
+      throw new ExpectationFailedException("The $title logo should contain the image #$offset but it doesn't.");
     }
   }
 
   /**
-   * Returns the mapping of logo and banner fields to their content type.
+   * Returns the mapping of logo field to their content type.
    *
    * @return array
    *   Mapping.
@@ -2159,14 +2155,12 @@ class FeatureContext extends RawDrupalContext {
         'type' => 'rdf_entity',
         'fields' => [
           'logo' => 'field_ar_logo',
-          'banner' => 'field_ar_banner',
         ],
       ],
       'solution' => [
         'type' => 'rdf_entity',
         'fields' => [
           'logo' => 'field_is_logo',
-          'banner' => 'field_is_banner',
         ],
       ],
       'event' => [
@@ -2195,24 +2189,19 @@ class FeatureContext extends RawDrupalContext {
    *
    * @param string $content_type
    *   The type of content: collection, solution, event, news.
-   * @param string $image_type
-   *   The type of image; logo, banner.
    * @param string $offset
    *   The "1 based" position of the image from the image library browser.
    *
    * @throws \InvalidArgumentException
    *   When a passed parameters is invalid.
    */
-  protected function validateImageLibraryBrowserStepDefinitionParams(string $content_type, string $image_type, string $offset): void {
+  protected function validateImageLibraryBrowserStepDefinitionParams(string $content_type, string $offset): void {
     if (!ctype_digit($offset) || $offset < 1) {
       throw new \InvalidArgumentException("Invalid image position ($offset).");
     }
     $map = $this->getImageLibraryBrowserMapping();
     if (!isset($map[$content_type])) {
       throw new \InvalidArgumentException("Invalid content type '{$content_type}'. Allowed: " . implode(', ', array_keys($map)) . '.');
-    }
-    if (!isset($map[$content_type]['fields'][$image_type])) {
-      throw new \InvalidArgumentException("Invalid image type '{$image_type}' for content type '{$content_type}'. Allowed: " . implode(', ', array_keys($map[$content_type]['fields'][$image_type])) . '.');
     }
   }
 
