@@ -12,13 +12,12 @@ use Drupal\joinup_publication_date\Entity\EntityPublicationTimeTrait;
 use Drupal\joinup_workflow\ArchivableEntityTrait;
 use Drupal\joinup_workflow\EntityWorkflowStateTrait;
 use Drupal\node\Entity\Node;
-use Drupal\topic\Entity\TopicReferencingEntityInterface;
 use Drupal\topic\Entity\TopicReferencingEntityTrait;
 
 /**
  * Entity class for custom page node entities.
  */
-class CustomPage extends Node implements CustomPageInterface, TopicReferencingEntityInterface {
+class CustomPage extends Node implements CustomPageInterface {
 
   use ArchivableEntityTrait;
   use DescriptionTrait;
