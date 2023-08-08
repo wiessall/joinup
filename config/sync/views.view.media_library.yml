@@ -495,8 +495,6 @@ display:
         - user
         - user.permissions
       tags:
-        - 'config:core.entity_view_display.media.collection_banner.default'
-        - 'config:core.entity_view_display.media.collection_banner.media_library'
         - 'config:core.entity_view_display.media.collection_logo.default'
         - 'config:core.entity_view_display.media.collection_logo.media_library'
         - 'config:core.entity_view_display.media.discussion_logo.default'
@@ -511,8 +509,6 @@ display:
         - 'config:core.entity_view_display.media.image.media_library_one_third_width'
         - 'config:core.entity_view_display.media.news_logo.default'
         - 'config:core.entity_view_display.media.news_logo.media_library'
-        - 'config:core.entity_view_display.media.solution_banner.default'
-        - 'config:core.entity_view_display.media.solution_banner.media_library'
         - 'config:core.entity_view_display.media.solution_logo.default'
         - 'config:core.entity_view_display.media.solution_logo.media_library'
         - 'config:core.entity_view_display.media.video.default'
@@ -822,8 +818,6 @@ display:
         - user
         - user.permissions
       tags:
-        - 'config:core.entity_view_display.media.collection_banner.default'
-        - 'config:core.entity_view_display.media.collection_banner.media_library'
         - 'config:core.entity_view_display.media.collection_logo.default'
         - 'config:core.entity_view_display.media.collection_logo.media_library'
         - 'config:core.entity_view_display.media.discussion_logo.default'
@@ -838,8 +832,6 @@ display:
         - 'config:core.entity_view_display.media.image.media_library_one_third_width'
         - 'config:core.entity_view_display.media.news_logo.default'
         - 'config:core.entity_view_display.media.news_logo.media_library'
-        - 'config:core.entity_view_display.media.solution_banner.default'
-        - 'config:core.entity_view_display.media.solution_banner.media_library'
         - 'config:core.entity_view_display.media.solution_logo.default'
         - 'config:core.entity_view_display.media.solution_logo.media_library'
         - 'config:core.entity_view_display.media.video.default'
