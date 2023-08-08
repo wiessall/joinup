@@ -32,7 +32,7 @@ Feature: Navigation menu for custom pages
     Then I should see the heading "Add custom page"
     When I fill in the following:
       | Title  | About us    |
-      | Topic  | HR          |
+    And I select "HR" from "Topic"
     And I enter "A short introduction." in the "Body" wysiwyg editor
     And I press "Publish"
     Then I should see the success message "Custom page About us has been created."
@@ -222,16 +222,16 @@ Feature: Navigation menu for custom pages
       | title                   | state     |
       | Table of contents group | validated |
     And custom_page content:
-      | title         | <group>                 | topic  | state     | topic |
-      | Page 1        | Table of contents group | HR     | published | HR    |
-      | Page 2        | Table of contents group | HR     | published | HR    |
-      | Page 3        | Table of contents group | HR     | published | HR    |
-      | Subpage 1-1   | Table of contents group | HR     | published | HR    |
-      | Subpage 1-1-1 | Table of contents group | HR     | published | HR    |
-      | Subpage 1-2   | Table of contents group | HR     | published | HR    |
-      | Subpage 1-2-1 | Table of contents group | HR     | published | HR    |
-      | Subpage 1-2-2 | Table of contents group | HR     | published | HR    |
-      | Subpage 2-1   | Table of contents group | HR     | published | HR    |
+      | title         | <group>                 | state     | topic |
+      | Page 1        | Table of contents group | published | HR    |
+      | Page 2        | Table of contents group | published | HR    |
+      | Page 3        | Table of contents group | published | HR    |
+      | Subpage 1-1   | Table of contents group | published | HR    |
+      | Subpage 1-1-1 | Table of contents group | published | HR    |
+      | Subpage 1-2   | Table of contents group | published | HR    |
+      | Subpage 1-2-1 | Table of contents group | published | HR    |
+      | Subpage 1-2-2 | Table of contents group | published | HR    |
+      | Subpage 2-1   | Table of contents group | published | HR    |
     And the following custom page menu structure:
       | title         | parent      | weight |
       | Page 1        |             | 1      |
