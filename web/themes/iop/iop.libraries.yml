@@ -19,8 +19,6 @@ theme:
   css:
     theme:
       assets/css/theme.min.css: { minified: true }
-  dependencies:
-    - iop/call-to-action
 
 # Pages
 listing:
