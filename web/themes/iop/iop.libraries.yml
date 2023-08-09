@@ -74,11 +74,6 @@ paragraph--2-column-featured-right:
     theme:
       assets/css/paragraph--2-column-featured-right.min.css: { minified: true }
 
-paragraph--call-to-action:
-  css:
-    theme:
-      assets/css/paragraph--call-to-action.min.css: { minified: true, preprocess: false }
-
 paragraph--carousel:
   css:
     theme:
