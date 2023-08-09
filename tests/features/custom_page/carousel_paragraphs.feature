@@ -1,4 +1,4 @@
-@api @terms @debug
+@api @terms
 Feature:
   Access and functionality checks for carousel paragraphs in custom pages.
 
