@@ -1,0 +1,69 @@
+uuid: fb81cd46-cc7a-45a0-8968-c6ef1627353c
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.view_mode_tile
+    - field.field.node.oss_solution.oss_categories
+    - field.field.node.oss_solution.oss_development_status
+    - field.field.node.oss_solution.oss_features
+    - field.field.node.oss_solution.oss_git_description
+    - field.field.node.oss_solution.oss_git_url
+    - field.field.node.oss_solution.oss_landing_url
+    - field.field.node.oss_solution.oss_license
+    - field.field.node.oss_solution.oss_logo
+    - field.field.node.oss_solution.oss_long_description
+    - field.field.node.oss_solution.oss_main_copyright_owner
+    - field.field.node.oss_solution.oss_maintenance_contacts
+    - field.field.node.oss_solution.oss_maintenance_contractors
+    - field.field.node.oss_solution.oss_maintenance_type
+    - field.field.node.oss_solution.oss_platforms
+    - field.field.node.oss_solution.oss_publiccode_yml_content
+    - field.field.node.oss_solution.oss_publiccode_yml_version
+    - field.field.node.oss_solution.oss_release_date
+    - field.field.node.oss_solution.oss_short_description
+    - field.field.node.oss_solution.oss_software_type
+    - field.field.node.oss_solution.oss_software_version
+    - field.field.node.oss_solution.oss_source
+    - field.field.node.oss_solution.oss_used_by
+    - node.type.oss_solution
+  module:
+    - layout_builder
+    - user
+third_party_settings:
+  layout_builder:
+    enabled: false
+    allow_custom: false
+id: node.oss_solution.view_mode_tile
+targetEntityType: node
+bundle: oss_solution
+mode: view_mode_tile
+content: {  }
+hidden:
+  langcode: true
+  links: true
+  oss_categories: true
+  oss_development_status: true
+  oss_features: true
+  oss_git_description: true
+  oss_git_url: true
+  oss_landing_url: true
+  oss_license: true
+  oss_logo: true
+  oss_long_description: true
+  oss_main_copyright_owner: true
+  oss_maintenance_contacts: true
+  oss_maintenance_contractors: true
+  oss_maintenance_type: true
+  oss_platforms: true
+  oss_publiccode_yml_content: true
+  oss_publiccode_yml_version: true
+  oss_release_date: true
+  oss_short_description: true
+  oss_software_type: true
+  oss_software_version: true
+  oss_source: true
+  oss_used_by: true
+  published_at: true
+  report: true
+  search_api_excerpt: true
