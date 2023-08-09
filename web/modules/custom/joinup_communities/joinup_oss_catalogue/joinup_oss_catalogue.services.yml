@@ -1,0 +1,5 @@
+services:
+  joinup_oss_catalogue.page_display_variant.subscriber:
+    class: Drupal\joinup_oss_catalogue\EventSubscriber\JoinupOssCataloguePageDisplayVariant
+    tags:
+      - { name: event_subscriber }
