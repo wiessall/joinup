@@ -56,7 +56,7 @@ Feature: "Add custom page" visibility options.
       | Code Camp | collection |
       | Parachute | solution   |
 
-  @uploadFiles:test.zip,alan.jpg
+  @uploadFiles:test.zip,alan.jpg @terms
   Scenario Outline: Add custom page as a facilitator.
     And I am logged in as a facilitator of the "<second title>" <group>
 
@@ -75,6 +75,7 @@ Feature: "Add custom page" visibility options.
 
     When I fill in the following:
       | Title | About us |
+    And I select "E-health" from "Topic"
     And I enter "We are open about everything!" in the "Body" wysiwyg editor
     And I attach the file "test.zip" to "Add a new file"
     And I press "Upload"
