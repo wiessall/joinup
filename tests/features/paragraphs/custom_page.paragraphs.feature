@@ -1,4 +1,4 @@
-@api @group-d
+@api @terms @group-d
 Feature:
   As a site builder of the site
   In order to be able to better control the structure of my content
@@ -8,6 +8,7 @@ Feature:
     Given the following collection:
       | title | Paragraphs collection |
       | state | validated             |
+      | topic | HR                    |
 
   @javascript
   Scenario: Paragraph sections are multivalue and sort-able.
@@ -16,6 +17,7 @@ Feature:
     And I open the plus button menu
     And I click "Add custom page"
     And I fill in "Title" with "Paragraphs page"
+    And I select "HR" from "Topic"
     And I press "Publish"
     Then I should see the heading "Paragraphs page"
 
@@ -51,9 +53,10 @@ Feature:
     And the following collection user membership:
       | collection            | user  |
       | Paragraphs collection | Zohan |
+      | topic                 | HR    |
     And custom_page content:
-      | title                     | body        | collection            | author | state     |
-      | Don't Mess with the Zohan | Wanna mess? | Paragraphs collection | Zohan  | published |
+      | title                     | body        | collection            | author | state     | topic |
+      | Don't Mess with the Zohan | Wanna mess? | Paragraphs collection | Zohan  | published | HR    |
 
     # Normal members cannot add maps.
     When I am logged in as "Zohan"
@@ -106,6 +109,7 @@ Feature:
     And I open the plus button menu
     And I click "Add custom page"
     And I fill in "Title" with "Paragraphs accordion page"
+    And I select "HR" from "Topic"
     Given I click "Remove" in the "Custom page body" field for paragraph 1
     Then the page should contain no paragraphs
 
