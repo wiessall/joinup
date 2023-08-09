@@ -939,6 +939,7 @@ datasource_settings:
         - document
         - event
         - news
+        - oss_solution
         - tallinn_report
         - video
     languages:
