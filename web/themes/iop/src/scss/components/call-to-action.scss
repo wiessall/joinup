@@ -1,6 +1,7 @@
 @import "../partials/core";
 
-a.call-to-action {
+a.call-to-action,
+.paragraph--call-to-action:not([class^="lpb"]) > a {
   color: $primary;
   display: inline-block;
   background-repeat: no-repeat;
