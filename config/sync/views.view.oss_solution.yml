@@ -1,26 +1,18 @@
-uuid: 7e842031-3cca-4130-837e-294dab384745
+uuid: 39942eb8-b907-44a4-8ec0-cb634b1b238f
 langcode: en
 status: true
 dependencies:
   config:
-    - field.storage.node.oss_git_url
-    - field.storage.node.oss_source
-    - node.type.oss_solution
-    - taxonomy.vocabulary.oss_category
-    - taxonomy.vocabulary.oss_licence
+    - search_api.index.published
   module:
-    - link
-    - node
-    - pluginreference
-    - taxonomy
-    - user
+    - search_api
 id: oss_solution
-label: 'OSS Solution'
+label: 'OSS solution'
 module: views
 description: ''
 tag: ''
-base_table: node_field_data
-base_field: nid
+base_table: search_api_index_published
+base_field: search_api_id
 display:
   default:
     id: default
@@ -28,17 +20,19 @@ display:
     display_plugin: default
     position: 0
     display_options:
-      title: 'OSS Solutions'
+      title: 'OSS solution'
       fields:
-        oss_source:
-          id: oss_source
-          table: node__oss_source
-          field: oss_source
+        body:
+          id: body
+          table: search_api_index_published
+          field: body
           relationship: none
           group_type: group
           admin_label: ''
-          plugin_id: field
-          label: Source
+          entity_type: null
+          entity_field: null
+          plugin_id: search_api
+          label: ''
           exclude: false
           alter:
             alter_text: false
@@ -79,163 +73,20 @@ display:
           hide_empty: false
           empty_zero: false
           hide_alter_empty: true
-          click_sort_column: plugin_id
-          type: plugin_reference_id
-          settings: {  }
-          group_column: ''
-          group_columns: {  }
-          group_rows: true
-          delta_limit: 0
-          delta_offset: 0
-          delta_reversed: false
-          delta_first_last: false
+          link_to_item: false
+          use_highlighting: false
           multi_type: separator
-          separator: ', '
-          field_api_classes: false
-        title:
-          id: title
-          table: node_field_data
-          field: title
-          relationship: none
-          group_type: group
-          admin_label: ''
-          entity_type: node
-          entity_field: title
-          plugin_id: field
-          label: 'OSS Solution title'
-          exclude: false
-          alter:
-            alter_text: false
-            text: ''
-            make_link: false
-            path: ''
-            absolute: false
-            external: false
-            replace_spaces: false
-            path_case: none
-            trim_whitespace: false
-            alt: ''
-            rel: ''
-            link_class: ''
-            prefix: ''
-            suffix: ''
-            target: ''
-            nl2br: false
-            max_length: 0
-            word_boundary: false
-            ellipsis: false
-            more_link: false
-            more_link_text: ''
-            more_link_path: ''
-            strip_tags: false
-            trim: false
-            preserve_tags: ''
-            html: false
-          element_type: ''
-          element_class: ''
-          element_label_type: ''
-          element_label_class: ''
-          element_label_colon: true
-          element_wrapper_type: ''
-          element_wrapper_class: ''
-          element_default_classes: true
-          empty: ''
-          hide_empty: false
-          empty_zero: false
-          hide_alter_empty: true
-          click_sort_column: value
-          type: string
-          settings:
-            link_to_entity: true
-          group_column: value
-          group_columns: {  }
-          group_rows: true
-          delta_limit: 0
-          delta_offset: 0
-          delta_reversed: false
-          delta_first_last: false
-          multi_type: separator
-          separator: ', '
-          field_api_classes: false
-        oss_git_url:
-          id: oss_git_url
-          table: node__oss_git_url
-          field: oss_git_url
-          relationship: none
-          group_type: group
-          admin_label: ''
-          plugin_id: field
-          label: URL
-          exclude: false
-          alter:
-            alter_text: false
-            text: ''
-            make_link: false
-            path: ''
-            absolute: false
-            external: false
-            replace_spaces: false
-            path_case: none
-            trim_whitespace: false
-            alt: ''
-            rel: ''
-            link_class: ''
-            prefix: ''
-            suffix: ''
-            target: ''
-            nl2br: false
-            max_length: 0
-            word_boundary: true
-            ellipsis: true
-            more_link: false
-            more_link_text: ''
-            more_link_path: ''
-            strip_tags: false
-            trim: false
-            preserve_tags: ''
-            html: false
-          element_type: ''
-          element_class: ''
-          element_label_type: ''
-          element_label_class: ''
-          element_label_colon: false
-          element_wrapper_type: ''
-          element_wrapper_class: ''
-          element_default_classes: true
-          empty: ''
-          hide_empty: false
-          empty_zero: false
-          hide_alter_empty: true
-          click_sort_column: uri
-          type: link
-          settings:
-            trim_length: 80
-            url_only: false
-            url_plain: false
-            rel: '0'
-            target: '0'
-          group_column: ''
-          group_columns: {  }
-          group_rows: true
-          delta_limit: 0
-          delta_offset: 0
-          delta_reversed: false
-          delta_first_last: false
-          multi_type: separator
-          separator: ', '
-          field_api_classes: false
+          multi_separator: ', '
       pager:
-        type: full
+        type: mini
         options:
           offset: 0
-          items_per_page: 50
+          items_per_page: 12
           total_pages: null
           id: 0
           tags:
-            next: 'Next ›'
-            previous: '‹ Previous'
-            first: '« First'
-            last: 'Last »'
+            next: ››
+            previous: ‹‹
           expose:
             items_per_page: false
             items_per_page_label: 'Items per page'
@@ -244,23 +95,21 @@ display:
             items_per_page_options_all_label: '- All -'
             offset: false
             offset_label: Offset
-          quantity: 9
       exposed_form:
         type: basic
         options:
-          submit_button: Filter
-          reset_button: true
+          submit_button: Apply
+          reset_button: false
           reset_button_label: Reset
           exposed_sorts_label: 'Sort by'
           expose_sort_order: true
           sort_asc_label: Asc
           sort_desc_label: Desc
       access:
-        type: perm
-        options:
-          perm: 'administer eu oss catalogue'
+        type: none
+        options: {  }
       cache:
-        type: tag
+        type: none
         options: {  }
       empty:
         area_text_custom:
@@ -272,49 +121,50 @@ display:
           admin_label: ''
           plugin_id: text_custom
           empty: true
-          content: 'No content available.'
+          content: '<div class="page__content">No content found for your search.</div>'
           tokenize: false
       sorts:
-        created:
-          id: created
-          table: node_field_data
-          field: created
+        search_api_relevance:
+          id: search_api_relevance
+          table: search_api_index_published
+          field: search_api_relevance
           relationship: none
           group_type: group
           admin_label: ''
-          entity_type: node
-          entity_field: created
-          plugin_id: date
+          plugin_id: search_api
           order: DESC
           expose:
             label: ''
             field_identifier: ''
           exposed: false
-          granularity: second
-      arguments: {  }
-      filters:
-        type:
-          id: type
-          table: node_field_data
-          field: type
-          entity_type: node
-          entity_field: type
-          plugin_id: bundle
-          value:
-            oss_solution: oss_solution
-        langcode:
-          id: langcode
-          table: node_field_data
-          field: langcode
+        entity_changed:
+          id: entity_changed
+          table: search_api_index_published
+          field: entity_changed
           relationship: none
           group_type: group
           admin_label: ''
-          entity_type: node
-          entity_field: langcode
-          plugin_id: language
-          operator: in
+          plugin_id: search_api
+          order: DESC
+          expose:
+            label: ''
+            field_identifier: ''
+          exposed: false
+      arguments: {  }
+      filters:
+        entity_bundle:
+          id: entity_bundle
+          table: search_api_index_published
+          field: entity_bundle
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: search_api_string
+          operator: '='
           value:
-            '***LANGUAGE_language_interface***': '***LANGUAGE_language_interface***'
+            min: ''
+            max: ''
+            value: oss_solution
           group: 1
           exposed: false
           expose:
@@ -331,50 +181,8 @@ display:
             multiple: false
             remember_roles:
               authenticated: authenticated
-            reduce: false
-          is_grouped: false
-          group_info:
-            label: ''
-            description: ''
-            identifier: ''
-            optional: true
-            widget: select
-            multiple: false
-            remember: false
-            default_group: All
-            default_group_multiple: {  }
-            group_items: {  }
-        oss_source_plugin_id:
-          id: oss_source_plugin_id
-          table: node__oss_source
-          field: oss_source_plugin_id
-          relationship: none
-          group_type: group
-          admin_label: ''
-          plugin_id: string
-          operator: contains
-          value: ''
-          group: 1
-          exposed: true
-          expose:
-            operator_id: oss_source_plugin_id_op
-            label: Source
-            description: ''
-            use_operator: false
-            operator: oss_source_plugin_id_op
-            operator_limit_selection: false
-            operator_list: {  }
-            identifier: oss_source
-            required: false
-            remember: false
-            multiple: false
-            remember_roles:
-              authenticated: authenticated
-              licence_manager: '0'
-              anonymous: '0'
-              moderator: '0'
-              administrator: '0'
-              rdf_graph_manager: '0'
+            min_placeholder: ''
+            max_placeholder: ''
             placeholder: ''
           is_grouped: false
           group_info:
@@ -388,27 +196,27 @@ display:
             default_group: All
             default_group_multiple: {  }
             group_items: {  }
-        oss_categories_target_id:
-          id: oss_categories_target_id
-          table: node__oss_categories
-          field: oss_categories_target_id
+        search_api_fulltext:
+          id: search_api_fulltext
+          table: search_api_index_published
+          field: search_api_fulltext
           relationship: none
           group_type: group
           admin_label: ''
-          plugin_id: taxonomy_index_tid
-          operator: or
-          value: {  }
+          plugin_id: search_api_fulltext
+          operator: and
+          value: ''
           group: 1
           exposed: true
           expose:
-            operator_id: oss_categories_target_id_op
-            label: Category
+            operator_id: search_api_fulltext_op
+            label: Search
             description: ''
             use_operator: false
-            operator: oss_categories_target_id_op
+            operator: search_api_fulltext_op
             operator_limit_selection: false
             operator_list: {  }
-            identifier: oss_categories
+            identifier: keys
             required: false
             remember: false
             multiple: false
@@ -419,7 +227,9 @@ display:
               moderator: '0'
               administrator: '0'
               rdf_graph_manager: '0'
-            reduce: false
+            expose_fields: false
+            placeholder: 'Start typing to search…'
+            searched_fields_id: search_api_fulltext_searched_fields
           is_grouped: false
           group_info:
             label: ''
@@ -432,106 +242,49 @@ display:
             default_group: All
             default_group_multiple: {  }
             group_items: {  }
-          reduce_duplicates: false
-          vid: oss_category
-          type: textfield
-          hierarchy: false
-          limit: true
-          error_message: true
-        oss_license_target_id:
-          id: oss_license_target_id
-          table: node__oss_license
-          field: oss_license_target_id
-          relationship: none
-          group_type: group
-          admin_label: ''
-          plugin_id: taxonomy_index_tid
-          operator: or
-          value: {  }
-          group: 1
-          exposed: true
-          expose:
-            operator_id: oss_license_target_id_op
-            label: License
-            description: ''
-            use_operator: false
-            operator: oss_license_target_id_op
-            operator_limit_selection: false
-            operator_list: {  }
-            identifier: oss_license
-            required: false
-            remember: false
-            multiple: false
-            remember_roles:
-              authenticated: authenticated
-              licence_manager: '0'
-              anonymous: '0'
-              moderator: '0'
-              administrator: '0'
-              rdf_graph_manager: '0'
-            reduce: false
-          is_grouped: false
-          group_info:
-            label: ''
-            description: ''
-            identifier: ''
-            optional: true
-            widget: select
-            multiple: false
-            remember: false
-            default_group: All
-            default_group_multiple: {  }
-            group_items: {  }
-          reduce_duplicates: false
-          vid: oss_licence
-          type: textfield
-          hierarchy: false
-          limit: true
-          error_message: true
+          parse_mode: terms
+          min_length: 3
+          fields: {  }
       style:
-        type: table
+        type: default
         options:
-          grouping: {  }
           row_class: ''
-          default_row_class: true
-          columns:
-            title: title
-            oss_git_url: oss_git_url
-            oss_source: oss_source
-          default: '-1'
-          info:
-            title:
-              sortable: false
-              default_sort_order: asc
-              align: ''
-              separator: ''
-              empty_column: false
-              responsive: ''
-            oss_git_url:
-              align: ''
-              separator: ''
-              empty_column: false
-              responsive: ''
-            oss_source:
-              align: ''
-              separator: ''
-              empty_column: false
-              responsive: ''
-          override: true
-          sticky: false
-          summary: ''
-          empty_table: false
-          caption: ''
-          description: ''
+          default_row_class: false
+          uses_fields: false
       row:
-        type: fields
-      query:
-        type: views_query
+        type: search_api
         options:
-          query_comment: ''
-          disable_sql_rewrite: false
-          distinct: false
-          replica: false
+          view_modes:
+            'entity:node':
+              custom_page: default
+              discussion: default
+              document: default
+              event: default
+              news: default
+              oss_solution: view_mode_tile_horizontal
+              tallinn_report: default
+              video: default
+            'entity:rdf_entity':
+              asset_distribution: default
+              asset_release: default
+              collection: default
+              licence: default
+              solution: default
+              spdx_licence: default
+            'entity:taxonomy_term':
+              eif_conceptual_model: default
+              eif_interoperability_layer: default
+              eif_principle: default
+              eif_recommendation: default
+              topic: default
+            'entity:user':
+              user: default
+      query:
+        type: search_api_query
+        options:
+          bypass_access: false
+          skip_access: false
+          preserve_facet_query_args: false
           query_tags: {  }
       relationships: {  }
       header: {  }
@@ -540,18 +293,15 @@ display:
     cache_metadata:
       max-age: -1
       contexts:
-        - 'languages:language_content'
         - 'languages:language_interface'
         - url
         - url.query_args
-        - user
         - 'user.node_grants:view'
-        - user.permissions
       tags:
-        - 'config:field.storage.node.oss_git_url'
-        - 'config:field.storage.node.oss_source'
-  page:
-    id: page
+        - 'config:search_api.index.published'
+        - 'search_api_list:published'
+  page_1:
+    id: page_1
     display_title: Page
     display_plugin: page
     position: 1
@@ -560,17 +310,14 @@ display:
         metatag_display_extender:
           metatags: {  }
           tokenize: false
-      path: oss-solutions
+      path: oss-solution
     cache_metadata:
       max-age: -1
       contexts:
-        - 'languages:language_content'
         - 'languages:language_interface'
         - url
         - url.query_args
-        - user
         - 'user.node_grants:view'
-        - user.permissions
       tags:
-        - 'config:field.storage.node.oss_git_url'
-        - 'config:field.storage.node.oss_source'
+        - 'config:search_api.index.published'
+        - 'search_api_list:published'
