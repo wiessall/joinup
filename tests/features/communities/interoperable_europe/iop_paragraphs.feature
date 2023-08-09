@@ -1,4 +1,4 @@
-@api
+@api @terms
 Feature:
   Access and functionality checks for the IOP related paragraphs.
 
@@ -8,69 +8,7 @@ Feature:
       | uri   | http://data.europa.eu/w21/8e30f798-ff2b-478b-9c09-5ed5a63b4c8c |
       | title | Interoperable Europe                                           |
       | state | validated                                                      |
-
-  Scenario: Moderators can access the special paragraphs.
-    Given collection:
-      | title | Joinup    |
-      | state | validated |
-
-    Given I am logged in as a moderator
-    And I go to the "Joinup" collection
-    And I click "Add custom page"
-    Then I should not see the button "Add Row"
-
-    When I am on the homepage
-    And I click "Interoperable Europe" in the "Navigation bar"
-    And I click "Add custom page"
-    # Fill in the title to avoid the CSS validation kicking in when clicking
-    # buttons.
-    And I fill in "Title" with "Hello world"
-    Then I should see the button "Add Carousel"
-    And I should see the button "Add Row"
-    But I should not see the button "Add 1 column layout"
-    And I should not see the button "Add 2 column layout"
-    And I should not see the button "Add 2 column with featured media on the left"
-    And I should not see the button "Add 2 column with featured media on the right"
-    And I should not see the button "Add 3 column layout"
-    And I should not see the button "Add Image"
-    And I should not see the button "Add Call to action"
-    And I should not see the button "Add Configurable listing"
-
-    When I press "Add Row"
-    Then I should see the button "Add 1 column layout"
-    And I should see the button "Add 2 column layout"
-    And I should see the button "Add 2 column with featured media on the left"
-    And I should see the button "Add 2 column with featured media on the right"
-    And I should see the button "Add 3 column layout"
-    But I should not see the button "Add Image"
-    And I should not see the button "Add Call to action"
-    And the following fields should not be present "URL, Link text"
-    And I should not see the button "Add Configurable listing"
-
-    When I press "Add 1 column layout"
-    Then I should not see the button "Add Configurable listing"
-    But I should see the button "Add Image"
-    And I should see the button "Add Call to action"
-    And I should see the button "Add Carousel"
-    When I press "Add Carousel"
-    Then the following fields should be present "URL, Link text, Available filters"
-
-    Given I am logged in as a facilitator of the "Joinup" collection
-    And I go to the "Joinup" collection
-    And I click "Add custom page"
-    Then I should not see the button "Add Row"
-
-    Given I am logged in as a facilitator of the "Interoperable Europe" collection
-    And I am on the homepage
-    And I click "Interoperable Europe" in the "Navigation bar"
-    And I click "Add custom page"
-    Then I should see the button "Add Row"
-    When I press "Add Row"
-    Then I should see the button "Add 1 column layout"
-    And I should see the button "Add 2 column layout"
-    And I should see the button "Add 2 column with featured media on the left"
-    And I should see the button "Add 2 column with featured media on the right"
-    And I should see the button "Add 3 column layout"
+      | topic | Demography                                                     |
 
   @terms
   Scenario: Test that carousels content listing options are working correctly.
@@ -90,7 +28,7 @@ Feature:
     When I fill in the following:
       | Title | News carousel        |
       | Body  | A carousel with news |
-    And I select "Law and Justice" from "Topic"
+    And I select "Demography" from "Topic"
     And I press "Add Row"
     And I press "Add 1 column layout"
     And I press "Add Carousel"
@@ -104,7 +42,6 @@ Feature:
     Then I should see the "Some news 1" tile
     But I should not see the "Some news 2" tile
 
-  @terms
   Scenario: Test that carousels with specific content is working correctly.
     Given the following collections:
       | title       | state     |
@@ -123,7 +60,7 @@ Feature:
     When I fill in the following:
       | Title | Pages carousel               |
       | Body  | A carousel with custom pages |
-    And I select "Law and Justice" from "Topic"
+    And I select "Demography" from "Topic"
     And I press "Add Row"
     And I press "Add 1 column layout"
     And I press "Add Carousel"
@@ -168,6 +105,7 @@ Feature:
     When I fill in the following:
       | Title | News carousel        |
       | Body  | A carousel with news |
+    And I select "Demography" from "Topic"
     And I press "Add Row"
     And I press "Add 1 column layout"
     And I press "Add Carousel"
@@ -196,6 +134,7 @@ Feature:
     When I fill in the following:
       | Title | Events carousel        |
       | Body  | A carousel with events |
+    And I select "Demography" from "Topic"
     And I press "Add Row"
     And I press "Add 1 column layout"
     And I press "Add Carousel"

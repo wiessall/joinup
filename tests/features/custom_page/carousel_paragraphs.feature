@@ -1,4 +1,4 @@
-@api
+@api @terms @debug
 Feature:
   Access and functionality checks for carousel paragraphs in custom pages.
 
@@ -6,6 +6,7 @@ Feature:
     Given collection:
       | title | Roman ruins |
       | state | validated   |
+      | topic | HR          |
 
   Scenario: Moderators can access paragraph.
     Given collection:
@@ -27,7 +28,6 @@ Feature:
     And I click "Add custom page"
     Then I should see the button "Add Carousel"
 
-  @terms
   Scenario: Test that carousels content listing options are working correctly.
     Given the following collections:
       | title       | state     |
@@ -45,19 +45,18 @@ Feature:
     When I fill in the following:
       | Title | News carousel        |
       | Body  | A carousel with news |
+    And I select "HR" from "Topic"
     And I press "Add Carousel"
     And I fill in "Query presets" with:
         """
         entity_bundle|news
         """
-    And I select "Law and Justice" from "Topic"
     When I press "Save"
 
     # Ensure that listings are restricted only for group content by default.
     Then I should see the "Some news 1" tile
     But I should not see the "Some news 2" tile
 
-  @terms
   Scenario: Test that carousels with specific content is working correctly.
     Given the following collections:
       | title       | state     |
@@ -76,7 +75,7 @@ Feature:
     When I fill in the following:
       | Title | Pages carousel               |
       | Body  | A carousel with custom pages |
-    And I select "Law and Justice" from "Topic"
+    And I select "HR" from "Topic"
     And I press "Add Carousel"
 
     And I select "Custom page" from "Available filters"
@@ -119,6 +118,7 @@ Feature:
     When I fill in the following:
       | Title | News carousel        |
       | Body  | A carousel with news |
+    And I select "HR" from "Topic"
     And I press "Add Carousel"
     And I fill in "Query presets" with:
         """
@@ -145,6 +145,7 @@ Feature:
     When I fill in the following:
       | Title | Events carousel        |
       | Body  | A carousel with events |
+    And I select "HR" from "Topic"
     And I press "Add Carousel"
     And I fill in "Query presets" with:
         """
