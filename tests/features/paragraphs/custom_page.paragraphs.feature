@@ -136,7 +136,7 @@ Feature:
     But I should not see the link "IFrame"
     And I should see the link "Image"
     And I should see the link "Poll"
-    And I should not see the link "Map"
+    And I should see the link "Map"
     And I should see the link "Quote"
     But I should not see the link "Row"
     But I should not see the link "Simple paragraph"
