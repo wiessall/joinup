@@ -412,6 +412,8 @@ Feature:
     When I fill in the following:
       | Title | All content     |
       | Body  | Show EVERYTHING |
+    And I select "E-health" from "Topic"
+    And I additionally select "Data gathering, data processing" from "Topic"
     And I press "Add Content listing"
     And I fill in "Query presets" with:
         """
