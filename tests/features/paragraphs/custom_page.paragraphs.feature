@@ -53,7 +53,6 @@ Feature:
     And the following collection user membership:
       | collection            | user  |
       | Paragraphs collection | Zohan |
-      | topic                 | HR    |
     And custom_page content:
       | title                     | body        | collection            | author | state     | topic |
       | Don't Mess with the Zohan | Wanna mess? | Paragraphs collection | Zohan  | published | HR    |
