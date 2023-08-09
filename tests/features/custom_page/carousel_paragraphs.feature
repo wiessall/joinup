@@ -12,6 +12,7 @@ Feature:
     Given collection:
       | title | Ronup     |
       | state | validated |
+      | topic | HR        |
 
     Given I am logged in as a moderator
     Then I am on the homepage
