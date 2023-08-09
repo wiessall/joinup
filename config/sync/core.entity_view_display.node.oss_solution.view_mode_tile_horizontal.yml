@@ -1,9 +1,9 @@
-uuid: fb81cd46-cc7a-45a0-8968-c6ef1627353c
+uuid: 30daa84a-30e3-4ae6-92e3-d9809b42ed8b
 langcode: en
 status: true
 dependencies:
   config:
-    - core.entity_view_mode.node.view_mode_tile
+    - core.entity_view_mode.node.view_mode_tile_horizontal
     - field.field.node.oss_solution.oss_categories
     - field.field.node.oss_solution.oss_development_status
     - field.field.node.oss_solution.oss_features
@@ -34,10 +34,10 @@ third_party_settings:
   layout_builder:
     enabled: false
     allow_custom: false
-id: node.oss_solution.view_mode_tile
+id: node.oss_solution.view_mode_tile_horizontal
 targetEntityType: node
 bundle: oss_solution
-mode: view_mode_tile
+mode: view_mode_tile_horizontal
 content: {  }
 hidden:
   langcode: true
