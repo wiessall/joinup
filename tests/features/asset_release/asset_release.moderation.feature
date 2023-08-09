@@ -21,7 +21,6 @@ Feature: Asset release moderation
       | title               | Dark Ship   |
       | description         | Dark ship   |
       | logo                | logo.png    |
-      | banner              | banner.jpg  |
       | owner               | Kenny Logan |
       | contact information | SheriMoore  |
       | state               | validated   |
