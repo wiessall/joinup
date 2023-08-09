@@ -135,3 +135,8 @@ Example:
 This command queries the Developers Italia provider endpoint, fetches the data
 and populates the queue. Later, the cronjob is triggering the queue worker which
 is gradually creating or updating the OSS Solutions.
+
+You can trigger manually OSS catalogue queue worker:
+```bash
+./vendor/bin/drush queue:run eu_oss_catalogue
+```
