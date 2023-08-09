@@ -146,13 +146,21 @@ function joinup_core_deploy_109603(): string {
     'http://joinup.eu/ontology/topic#digital-innovation',
   ];
 
+  $topic_ids = \Drupal::entityQuery('taxonomy_term')
+    ->condition('vid', 'topic')
+    ->accessCheck(FALSE)
+    ->execute();
+  $search_ids = array_map(function (string $id): string {
+    return "entity:taxonomy_term/$id:en";
+  }, $topic_ids);
+
   $node_ids = \Drupal::entityQuery('node')
     ->condition('field_topic', $affected_terms, 'IN')
     ->accessCheck(FALSE)
     ->execute();
-  $search_ids = array_map(function (string $id): string {
+  $search_ids = array_merge($search_ids, array_map(function (string $id): string {
     return "entity:node/$id:en";
-  }, $node_ids);
+  }, $node_ids));
 
   $rdf_entity_ids = \Drupal::entityQuery('rdf_entity')
     ->condition('field_topic', $affected_terms, 'IN')
@@ -161,14 +169,6 @@ function joinup_core_deploy_109603(): string {
   $search_ids = array_merge($search_ids, array_map(function (string $id): string {
     return "entity:rdf_entity/$id:en";
   }, $rdf_entity_ids));
-
-  $topic_ids = \Drupal::entityQuery('taxonomy_term')
-    ->condition('vid', 'topic')
-    ->accessCheck(FALSE)
-    ->execute();
-  $search_ids = array_merge($search_ids, array_map(function (string $id): string {
-    return "entity:taxonomy_term/$id:en";
-  }, $topic_ids));
 
   $index = Index::load('published');
   $items = $index->loadItemsMultiple($search_ids);
