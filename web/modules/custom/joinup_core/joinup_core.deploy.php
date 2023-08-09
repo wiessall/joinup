@@ -75,8 +75,8 @@ function joinup_core_deploy_109602(): string {
 
   // The former Innovation must be renamed to 'Digital Innovation' and keep the
   // linked content items.
-  $vocabulary_manager->renameTopic('http://joinup.eu/ontology/topic#innovation', 'Digital Innovation');
-  $messages[] = 'Topic "Innovation" renamed to "Digital Innovation".';
+  $vocabulary_manager->renameTopic('http://joinup.eu/ontology/topic#innovation', 'Digital innovation');
+  $messages[] = 'Topic "Innovation" renamed to "Digital innovation".';
   $vocabulary_manager->changeTopicId('http://joinup.eu/ontology/topic#innovation', 'http://joinup.eu/ontology/topic#digital-innovation');
   $vocabulary_manager->updateDbReference('http://joinup.eu/ontology/topic#innovation', 'http://joinup.eu/ontology/topic#digital-innovation');
   $messages[] = 'Topic ID "http://joinup.eu/ontology/topic#innovation" changed to "http://joinup.eu/ontology/topic#digital-innovation".';
