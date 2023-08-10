@@ -4,10 +4,11 @@ declare(strict_types = 1);
 
 namespace Drupal\eu_oss_catalogue_platform_github\Plugin\eu_oss_catalogue\HostingPlatform;
 
+use Drupal\Cache\Adapter\DrupalAdapter;
+use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Plugin\PluginFormInterface;
-use Drupal\Core\Serialization\Yaml;
 use Drupal\Core\Site\Settings;
 use Drupal\eu_oss_catalogue\EuOssCatalogueHostingPlatformPluginBase;
 use Drupal\eu_oss_catalogue\HostingPlatformResultInterface;
@@ -46,6 +47,8 @@ class GitHub extends EuOssCatalogueHostingPlatformPluginBase implements PluginFo
    *   The HTTP client.
    * @param \Drupal\Core\Site\Settings $settings
    *   The Drupal settings.
+   * @param \Drupal\Core\Cache\CacheBackendInterface $cache
+   *   The cache backend.
    */
   public function __construct(
     array $configuration,
@@ -53,6 +56,7 @@ class GitHub extends EuOssCatalogueHostingPlatformPluginBase implements PluginFo
     $pluginDefinition,
     protected ClientInterface $httpClient,
     protected Settings $settings,
+    protected CacheBackendInterface $cache,
   ) {
     parent::__construct($configuration, $pluginId, $pluginDefinition);
   }
@@ -67,6 +71,7 @@ class GitHub extends EuOssCatalogueHostingPlatformPluginBase implements PluginFo
       $pluginFefinition,
       $container->get('http_client'),
       $container->get('settings'),
+      $container->get('cache.eu_oss_catalogue')
     );
   }
 
@@ -181,9 +186,15 @@ class GitHub extends EuOssCatalogueHostingPlatformPluginBase implements PluginFo
       $this->client = Client::createWithHttpClient($this->httpClient);
       $token = Settings::get('eu_oss_catalogue', [])['platform_github']['access_token'] ?? NULL;
       if (!$token) {
+        // @todo Should we show a message to user or it's only developer stuff?
         throw new \InvalidArgumentException('GitHub access token is not set');
       }
       $this->client->authenticate($token, NULL, AuthMethod::ACCESS_TOKEN);
+
+      // Cache requests to GitHub in 'cache.eu_oss_catalogue' bin.
+      $adapter = new DrupalAdapter($this->cache, 'github');
+      // Results are cached for 1 day (60 x 60 x 24 = 86400).
+      $this->client->addCache($adapter, ['default_ttl' => 86400]);
     }
     return $this->client;
   }
