@@ -301,6 +301,7 @@ display:
           facets:
             oss_categories_taxonomy_term_name: oss_categories_taxonomy_term_name
             oss_development_status: oss_development_status
+            oss_source: oss_source
           label_display: visible
       footer: {  }
       display_extenders: {  }
