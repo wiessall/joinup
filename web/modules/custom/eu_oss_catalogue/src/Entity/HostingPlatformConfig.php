@@ -32,7 +32,6 @@ use Drupal\Core\Plugin\DefaultSingleLazyPluginCollection;
  *   links = {
  *     "edit-form" = "/admin/content/eu-oss-catalogue/hosting-platform/manage/{hosting_platform}",
  *     "delete-form" = "/admin/content/eu-oss-catalogue/hosting-platform/manage/{hosting_platform}/delete",
- *     "collection" = "/admin/content/eu-oss-catalogue/hosting-platform",
  *   },
  *   config_export = {
  *     "id",

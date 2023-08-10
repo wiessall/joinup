@@ -1,7 +1,7 @@
 # GitLab Platform Support
 
-Allows the `git_hosting_platform` provider plugin to federate data from GitHub
-repositories
+Allows the `hosting_platform` provider plugin to federate data from GitLab
+repositories.
 
 ## Configuration
 
