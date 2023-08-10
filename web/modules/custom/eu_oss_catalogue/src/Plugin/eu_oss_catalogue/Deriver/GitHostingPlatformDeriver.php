@@ -50,10 +50,7 @@ class GitHostingPlatformDeriver extends DeriverBase implements ContainerDeriverI
         ]);
       }
       $this->derivatives[$hostingPlatform->id()] = [
-        'label' => $this->t('@base: @derivative', [
-          '@base' => $base_plugin_definition['label'],
-          '@derivative' => $hostingPlatform->label(),
-        ]),
+        'label' => $hostingPlatform->label(),
         'description' => $description,
         'platformId' => $hostingPlatform->getPlatformPluginId(),
         'platformSettings' => $hostingPlatform->getPlatformSettings(),
