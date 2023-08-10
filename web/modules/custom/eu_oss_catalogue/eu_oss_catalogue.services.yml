@@ -33,3 +33,10 @@ services:
     class: Drupal\eu_oss_catalogue\EuOssCataloguePluginManager
     parent: default_plugin_manager
     arguments: [hosting_platform]
+
+  cache.eu_oss_catalogue:
+    class: Drupal\Core\Cache\CacheBackendInterface
+    tags:
+      - { name: cache.bin }
+    factory: ['@cache_factory', 'get']
+    arguments: [eu_oss_catalogue]
