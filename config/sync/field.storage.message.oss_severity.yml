@@ -1,0 +1,49 @@
+uuid: 06a3716c-f35d-4819-abc9-c548996dabf8
+langcode: en
+status: true
+dependencies:
+  module:
+    - field_permissions
+    - message
+    - options
+third_party_settings:
+  field_permissions:
+    permission_type: public
+id: message.oss_severity
+field_name: oss_severity
+entity_type: message
+type: list_string
+settings:
+  allowed_values:
+    -
+      value: '0'
+      label: Emergency
+    -
+      value: '1'
+      label: Alert
+    -
+      value: '2'
+      label: Critical
+    -
+      value: '3'
+      label: Error
+    -
+      value: '4'
+      label: Warning
+    -
+      value: '5'
+      label: Notice
+    -
+      value: '6'
+      label: Info
+    -
+      value: '7'
+      label: Debug
+  allowed_values_function: ''
+module: options
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

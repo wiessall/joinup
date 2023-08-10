@@ -1,0 +1,55 @@
+uuid: 76a4569f-ef94-4535-8559-23e0a8fd73da
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.message.eu_oss_catalogue_log.oss_landing_url
+    - field.field.message.eu_oss_catalogue_log.oss_severity
+    - field.field.message.eu_oss_catalogue_log.oss_solution
+    - field.field.message.eu_oss_catalogue_log.oss_source
+    - message.template.eu_oss_catalogue_log
+  module:
+    - link
+    - options
+    - pluginreference
+id: message.eu_oss_catalogue_log.default
+targetEntityType: message
+bundle: eu_oss_catalogue_log
+mode: default
+content:
+  oss_landing_url:
+    type: link
+    label: above
+    settings:
+      trim_length: 80
+      url_only: false
+      url_plain: false
+      rel: ''
+      target: ''
+    third_party_settings: {  }
+    weight: 3
+    region: content
+  oss_severity:
+    type: list_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 4
+    region: content
+  oss_solution:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 1
+    region: content
+  oss_source:
+    type: plugin_reference_id
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 2
+    region: content
+hidden:
+  search_api_excerpt: true
