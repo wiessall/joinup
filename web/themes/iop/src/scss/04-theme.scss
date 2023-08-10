@@ -53,7 +53,7 @@ a.call-to-action {
     }
   }
   &.listing {
-    .page-header + .content {
+    .page-header + .content .paragraph--type--content-listing {
       margin-top: $spacer * -1; // -16px
       @include media-breakpoint-up(md) {
         margin-top: $spacer * -2; // -32px
