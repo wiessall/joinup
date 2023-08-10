@@ -8,7 +8,7 @@ dependencies:
     - facets
     - search_api
 id: joinup_oss_catalogue
-label: 'Joinup oss catalogue'
+label: 'Joinup OSS catalogue'
 module: views
 description: ''
 tag: ''
@@ -299,8 +299,8 @@ display:
           plugin_id: facets_area
           empty: true
           facets:
-            categories_taxonomy_term_name: categories_taxonomy_term_name
-            development_status: development_status
+            oss_categories_taxonomy_term_name: oss_categories_taxonomy_term_name
+            oss_development_status: oss_development_status
           label_display: visible
       footer: {  }
       display_extenders: {  }
