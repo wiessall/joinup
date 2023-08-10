@@ -22,8 +22,8 @@ class JoinupOssCataloguePageDisplayVariant extends BlockPageVariant {
    */
   public function defaultConfiguration(): array {
     return [
-        'group' => NULL,
-      ] + parent::defaultConfiguration();
+      'group' => NULL,
+    ] + parent::defaultConfiguration();
   }
 
   /**

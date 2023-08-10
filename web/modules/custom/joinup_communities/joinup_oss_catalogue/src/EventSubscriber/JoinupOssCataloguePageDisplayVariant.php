@@ -11,8 +11,7 @@ use Drupal\joinup_oss_catalogue\OssCatalogueCollectionInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
- * Selects a page display variant to OSS catalogue view as the main landing
- * page.
+ * Selects a page display variant for OSS catalogue landing page.
  */
 class JoinupOssCataloguePageDisplayVariant implements EventSubscriberInterface {
 
