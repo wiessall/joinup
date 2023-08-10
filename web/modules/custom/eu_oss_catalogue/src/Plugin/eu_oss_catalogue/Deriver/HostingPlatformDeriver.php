@@ -11,9 +11,9 @@ use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Deriver for the 'git_hosting_platform' provider plugin.
+ * Deriver for the 'hosting_platform' provider plugin.
  */
-class GitHostingPlatformDeriver extends DeriverBase implements ContainerDeriverInterface {
+class HostingPlatformDeriver extends DeriverBase implements ContainerDeriverInterface {
 
   use StringTranslationTrait;
 

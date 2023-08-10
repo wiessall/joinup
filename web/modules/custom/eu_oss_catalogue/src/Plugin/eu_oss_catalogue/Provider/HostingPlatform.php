@@ -17,16 +17,17 @@ use Drupal\eu_oss_catalogue\EuOssCatalogueProviderPluginBase;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Git-based code hosting platform provider plugin.
+ * Code hosting platform provider plugin.
  *
  * @EuOssCatalogueProvider(
- *   id = "git_hosting_platform",
- *   label = @Translation("Git-based code hosting platform"),
+ *   id = "hosting_platform",
+ *   label = @Translation("Code hosting platform"),
  *   parser = "publiccode_yml",
- *   deriver = "\Drupal\eu_oss_catalogue\Plugin\eu_oss_catalogue\Deriver\GitHostingPlatformDeriver",
+ *   deriver = "\Drupal\eu_oss_catalogue\Plugin\eu_oss_catalogue\Deriver\HostingPlatformDeriver",
+ *   configuredBy = "hosting_platform",
  * )
  */
-class GitHostingPlatform extends EuOssCatalogueProviderPluginBase implements ContainerFactoryPluginInterface, ConfigurableInterface {
+class HostingPlatform extends EuOssCatalogueProviderPluginBase implements ContainerFactoryPluginInterface, ConfigurableInterface {
 
   use SchemaCheckTrait {
     checkValue as traitCheckValue;

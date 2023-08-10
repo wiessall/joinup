@@ -36,10 +36,13 @@ class EuOssCatalogueProvider extends Plugin {
   /**
    * A short description of the provider plugin.
    *
-   * @var \Drupal\Core\Annotation\Translation
-   *
    * @ingroup plugin_translatable
    */
-  public Translation $description;
+  public ?Translation $description = NULL;
+
+  /**
+   * The config entity type ID that configures this plugin, if any.
+   */
+  public ?string $configuredBy = NULL;
 
 }
