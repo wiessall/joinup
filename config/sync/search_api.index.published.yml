@@ -15,6 +15,9 @@ dependencies:
     - field.storage.meta_entity.field_pinned_in
     - field.storage.node.field_scope
     - field.storage.node.field_short_title
+    - field.storage.node.oss_categories
+    - field.storage.node.oss_development_status
+    - field.storage.node.oss_source
     - field.storage.meta_entity.count
     - field.storage.rdf_entity.field_ar_abstract
     - field.storage.rdf_entity.field_ci_name
@@ -130,6 +133,16 @@ field_settings:
     dependencies:
       config:
         - field.storage.node.body
+  category:
+    label: 'Categories » Taxonomy term » Name'
+    datasource_id: 'entity:node'
+    property_path: 'oss_categories:entity:name'
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.oss_categories
+      module:
+        - taxonomy
   created:
     label: 'Authored on'
     datasource_id: 'entity:node'
@@ -730,6 +743,22 @@ field_settings:
       module:
         - meta_entity
         - rdf_entity
+  oss_development_status:
+    label: 'Development status'
+    datasource_id: 'entity:node'
+    property_path: oss_development_status
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.oss_development_status
+  oss_source:
+    label: Source
+    datasource_id: 'entity:node'
+    property_path: oss_source
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.oss_source
   parent:
     label: 'Term Parents'
     datasource_id: 'entity:taxonomy_term'
