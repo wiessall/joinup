@@ -12,14 +12,22 @@ versions](https://getgrav.org/blog/macos-catalina-apache-multiple-php-versions)
 & Dnsmasq](https://getgrav.org/blog/macos-catalina-apache-mysql-vhost-apc)
 
   If you want to modify Percona's data-dir:
-  - Edit the `datadir` option in `/opt/homebrew/opt/percona-server/homebrew.mxcl.percona-server.plist` and in `/opt/homebrew/opt/percona-server/homebrew.percona-server.service`
-  - Inititalize the new data directory: `mysqld --initialize-insecure --datadir <yourcustom-data-dir>`
+  - Edit the `datadir` option in
+    `/opt/homebrew/opt/percona-server/homebrew.mxcl.percona-server.plist` and in
+    `/opt/homebrew/opt/percona-server/homebrew.percona-server.service`
+  - Inititalize the new data directory:
+    `mysqld --initialize-insecure --datadir <yourcustom-data-dir>`
 
 - Memcached: [Install with Brew](https://formulae.brew.sh/formula/memcached)
 
-  To install memcached extension for the current PHP version execute `pecl install memcached`. To get `libmemcached` and `zlib` paths: `brew --prefix libmemcached` (installer will ask these paths).
+  To install memcached extension for the current PHP version execute
+  `pecl install memcached`.
 
-- Virtuoso: Use [version 7.2.6](https://github.com/openlink/virtuoso-opensource/releases/tag/v7.2.6.1). The macOS binary works well both on Intel/Silicon + Ventura.
+  To get `libmemcached` and `zlib` paths:
+  `brew --prefix [libmemcached|zlib]` (installer will ask these paths).
+
+- Virtuoso: Use [version 7.2.6](https://github.com/openlink/virtuoso-opensource/releases/tag/v7.2.6.1). The macOS binary works
+  well both on Intel/Silicon + Ventura.
 
 - [Wget](https://formulae.brew.sh/formula/wget)
 
@@ -91,7 +99,8 @@ there any default runner configuration, or any other declared in
 `./resources/runner` files or in `runner.yml.dist`. Note that the `runner.yml`
 file is not under VCS control.
 
-Override path to Virtuoso and ISQL binaries. Note: whitespaces and special chars must be escaped!
+Override path to Virtuoso and ISQL binaries. Note: whitespaces and special chars
+must be escaped!
 ```yaml
 virtuoso:
   bin: /Applications/Virtuoso\ Open\ Source\ Edition\ v7.2.app/Contents/virtuoso-opensource/bin/virtuoso-t
@@ -167,7 +176,8 @@ $ ./vendor/bin/run virtuoso:start
 
 ### Setup Solr and check if it's running
 
-Ensure Java SDK is available and whether the right JAVA_HOME env var is set up properly.
+Ensure Java SDK is available and whether the right JAVA_HOME env var is set up
+properly.
 
 ```bash
 ./vendor/bin/run solr:download-bin
@@ -177,6 +187,30 @@ Ensure Java SDK is available and whether the right JAVA_HOME env var is set up p
 (Latter command will also start the Solr server.)
 
 [Check Solr](http://localhost:8983/solr/#/)
+
+
+### Selenium server (for Javascript tests)
+
+1. Assuming that Java is already available (because of Solr), download the most
+   recent Selenium Server 4.5.x release at
+   https://github.com/SeleniumHQ/selenium/releases/tag/selenium-4.5.0.
+   (I tried 4.5.10 and 4.5.11 too, but they didn't work for me.)
+2. Make sure your local chromedriver binary matches the actual Google Chrome
+   version. If you don't have Google Chrome, install it too.
+3. Start the Selenium server:
+   ```
+   java -Dwebdriver.chrome.driver=`which chromedriver` \
+     -jar <path-to-selenium-server-4.5.*.jar> \
+     standalone
+   ```
+
+The recommended Selenium setup ("using Docker") in
+[the root README file](./README.md#initial-setup) only works on Linux. On other
+systems like macOS or Windows, Docker uses a virtual network inside its virtual
+machine, which makes the Selenium container unable to access the web server on
+your local environment.
+
+[Check Selenium](http://localhost:4444/ui#/sessions)
 
 
 ## Basic commands
