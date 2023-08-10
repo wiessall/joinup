@@ -43,6 +43,13 @@ class GitHostingPlatform extends EuOssCatalogueProviderPluginBase implements Con
   protected EuOssCatalogueHostingPlatformInterface $platform;
 
   /**
+   * Whether fetching repositories is over.
+   *
+   * @todo Implement pagination.
+   */
+  protected bool $done = FALSE;
+
+  /**
    * Constructs a new plugin instance.
    *
    * @param array $configuration
@@ -88,6 +95,11 @@ class GitHostingPlatform extends EuOssCatalogueProviderPluginBase implements Con
    */
   public function fetch(): iterable {
     // @todo This is a PoC basic approach. Performance should be considered.
+    // @todo Implement pagination.
+    if ($this->done) {
+      return;
+    }
+
     $platform = $this->getPlatform();
     foreach ($platform->getRepositories() as $repository) {
       $publicCodeYml = $platform->downloadFile('publiccode.yml', $repository);
@@ -100,6 +112,8 @@ class GitHostingPlatform extends EuOssCatalogueProviderPluginBase implements Con
         );
       }
     }
+
+    $this->done = TRUE;
   }
 
   /**
