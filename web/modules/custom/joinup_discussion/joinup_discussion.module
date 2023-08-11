@@ -165,29 +165,3 @@ function joinup_discussion_preprocess_node__view_mode_tile(array &$variables): v
     $variables['comment_count'] = $discussion->get('field_replies')->comment_count;
   }
 }
-
-/**
- * Implements hook_views_pre_render().
- */
-function joinup_discussion_views_pre_render(ViewExecutable $view): void {
-  if ($view->id() === 'discussions') {
-    $results = $view->result;
-
-    // Return if the facet "archived" is active.
-    $query_parameters = \Drupal::request()->query->all();
-    if (!empty($query_parameters) && in_array('status:archived', $query_parameters['f'])) {
-      return;
-    }
-    // Loop through the results and filter out items with the "archived" status.
-    foreach ($results as $index => $result) {
-      $state = $result->_entity->get('field_state')->getString();
-      // If the status is "archived," remove the item from the results.
-      if ($state === 'archived') {
-        unset($results[$index]);
-      }
-    }
-
-    // Assign the modified results back to the view.
-    $view->result = $results;
-  }
-}
