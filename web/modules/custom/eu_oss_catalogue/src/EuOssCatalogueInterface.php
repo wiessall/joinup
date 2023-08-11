@@ -26,6 +26,17 @@ interface EuOssCatalogueInterface {
   public function fetch(string $provider): int;
 
   /**
+   * Returns a solution by its URL.
+   *
+   * @param string $solutionUrl
+   *   The solution URL.
+   *
+   * @return \Drupal\eu_oss_catalogue\Entity\OssSolutionInterface|null
+   *   The OSS Solution node, or NULL if not found.
+   */
+  public function loadBySolutionUrl(string $solutionUrl): ?OssSolutionInterface;
+
+  /**
    * Creates or updates an OSS Solution.
    *
    * @param string $providerPluginId
@@ -37,5 +48,26 @@ interface EuOssCatalogueInterface {
    *   The OSS Solution node.
    */
   public function createOrUpdateSolution(string $providerPluginId, EuOssCatalogueFetchedSolution $fetchedSolution): OssSolutionInterface;
+
+  /**
+   * Prepares the entities removed from the source in a queue to be processed.
+   *
+   * @param string $providerPluginId
+   *   The provider plugin ID.
+   * @param array $solutionUrls
+   *   The list of solution URLs to cleanup.
+   */
+  public function cleanupSetup(string $providerPluginId, array $solutionUrls): void;
+
+  /**
+   * Cleans up a solution or updates the list of providers.
+   *
+   * @param string $providerPluginId
+   *   The provider plugin ID.
+   * @param array $solutionIds
+   *   The solution IDs to cleanup.
+   */
+  public function cleanupOrUpdate(string $providerPluginId, string $solutionIds): void;
+
 
 }

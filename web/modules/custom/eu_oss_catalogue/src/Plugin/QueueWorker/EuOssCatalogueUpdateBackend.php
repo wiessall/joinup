@@ -61,6 +61,13 @@ class EuOssCatalogueUpdateBackend extends QueueWorkerBase implements ContainerFa
     if ($operation === 'solution:create') {
       $this->catalogueService->createOrUpdateSolution($data['provider'], $data['solution']);
     }
+    elseif ($operation === 'solution:create:cleanup') {
+      $this->catalogueService->cleanupSetup($data['provider'], $data['solution_urls']);
+    }
+    elseif ($operation === 'solution:provider_remove') {
+      $this->catalogueService->cleanupOrUpdate($data['provider'], $data['solution_url']);
+    }
+
     else {
       throw new \InvalidArgumentException('Operation not set or invalid');
     }
