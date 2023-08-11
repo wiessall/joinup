@@ -52,4 +52,18 @@ class OssSolution extends Node implements OssSolutionInterface {
     return $this;
   }
 
+  /**
+   * {@inheritdoc}
+   */
+  public function removeProvider(EuOssCatalogueProviderInterface $provider): OssSolutionInterface {
+    /** @var \Drupal\pluginreference\Plugin\Field\FieldType\PluginReferenceFieldItemListInterface $source */
+    $source = $this->get('oss_source');
+    foreach ($source->getValue() as $index => $value) {
+      if ($value['plugin_id'] === $provider->getPluginId()) {
+        $source->removeItem($index);
+      }
+    }
+    return $this;
+  }
+
 }

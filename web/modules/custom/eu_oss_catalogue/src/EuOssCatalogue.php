@@ -5,6 +5,7 @@ declare(strict_types = 1);
 namespace Drupal\eu_oss_catalogue;
 
 use Drupal\Component\Plugin\PluginManagerInterface;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Queue\QueueFactory;
 use Drupal\eu_oss_catalogue\Entity\OssSolutionInterface;
 use Drupal\eu_oss_catalogue\Event\EuOssPostFetchEvent;
@@ -27,12 +28,15 @@ class EuOssCatalogue implements EuOssCatalogueInterface {
    *   The queue factory service.
    * @param \Symfony\Contracts\EventDispatcher\EventDispatcherInterface $eventDispatcher
    *   The event dispatcher service.
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
+   *   The entity type manager service.
    */
   public function __construct(
     protected PluginManagerInterface $providerManager,
     protected PluginManagerInterface $parserManager,
     protected QueueFactory $queueFactory,
     protected EventDispatcherInterface $eventDispatcher,
+    protected EntityTypeManagerInterface $entityTypeManager,
   ) {}
 
   /**
@@ -48,6 +52,7 @@ class EuOssCatalogue implements EuOssCatalogueInterface {
     $queue->createQueue();
 
     $fetched = 0;
+    $solutionUrls = [];
     while (($fetchedSolutions = $plugin->fetch())->valid()) {
       foreach ($fetchedSolutions as $fetchedSolution) {
         if (!$fetchedSolution instanceof EuOssCatalogueFetchedSolution) {
@@ -66,7 +71,16 @@ class EuOssCatalogue implements EuOssCatalogueInterface {
         ]);
         $fetched++;
       }
+
+      $solutionUrls[] = $fetchedSolution->getUrl();
     }
+
+    // @todo Maybe this should be a flag that enables cleanup deletion?
+    $queue->createItem([
+      'operation' => 'solution:create:cleanup',
+      'provider' => $provider,
+      'solution_urls' => $solutionUrls,
+    ]);
 
     return $fetched;
   }
@@ -94,6 +108,61 @@ class EuOssCatalogue implements EuOssCatalogueInterface {
     $solution->save();
 
     return $solution;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function cleanupSetup(string $providerPluginId, array $solutionUrls): void {
+    $this->checkProvider($providerPluginId);
+
+    $nodeStorage = $this->entityTypeManager->getStorage('node');
+
+    // The parser is responsible to create the solution node entity.
+    $removedSolutionIds = $nodeStorage
+      ->getQuery()
+      ->condition('oss_git_url', $solutionUrls, 'NOT IN')
+      ->execute();
+
+    $queue = $this->queueFactory->get('eu_oss_catalogue');
+    $queue->createQueue();
+
+    // Use a queue as - though improbable - the list might be too long.
+    while ($chunk = array_splice($removedSolutionIds, 0, 10)) {
+      $queue->createItem([
+        'operation' => 'solution:provider_remove',
+        'provider' => $providerPluginId,
+        'solution_ids' => $chunk,
+      ]);
+    }
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function cleanupOrUpdate(string $providerPluginId, string $solutionIds): void {
+    $this->checkProvider($providerPluginId);
+
+    /** @var \Drupal\eu_oss_catalogue\EuOssCatalogueProviderInterface $provider */
+    $provider = $this->providerManager->createInstance($providerPluginId);
+
+    /** @var \Drupal\eu_oss_catalogue\Entity\OssSolutionInterface $solution */
+    foreach ($this->entityTypeManager->getStorage('node')->loadMultiple($solutionIds) as $solution) {
+      if ($solution->removeProvider($provider) === 0) {
+        $solution->delete();
+      }
+      else {
+        $solution->save();
+      }
+    }
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function loadBySolutionUrl(string $solutionUrl): ?OssSolutionInterface {
+    $entities = $this->entityTypeManager->getStorage('node')->loadByProperties(['oss_git_url' => $solutionUrl]);
+    return reset($entities) ?: NULL;
   }
 
   /**

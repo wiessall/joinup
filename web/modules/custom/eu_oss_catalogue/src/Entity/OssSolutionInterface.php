@@ -22,4 +22,14 @@ interface OssSolutionInterface extends NodeInterface {
    */
   public function addProvider(EuOssCatalogueProviderInterface $provider): OssSolutionInterface;
 
+  /**
+   * Removes a provider from the list of sources.
+   *
+   * @param \Drupal\eu_oss_catalogue\EuOssCatalogueProviderInterface $provider
+   *   The provider plugin instance.
+   *
+   * @return $this
+   */
+  public function removeProvider(EuOssCatalogueProviderInterface $provider): OssSolutionInterface;
+
 }
