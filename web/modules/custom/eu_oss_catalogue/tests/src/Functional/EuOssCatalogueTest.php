@@ -182,7 +182,6 @@ class EuOssCatalogueTest extends BrowserTestBase {
     $this->assertSame('On The Sea', $contact2->get('oss_contact_affiliation')->value);
 
     // Re-run the process and update one solution from a new source-provider.
-    $service = \Drupal::getContainer()->get('eu_oss_catalogue');
     $service->fetch('testing_provider');
 
     $queue = \Drupal::queue('eu_oss_catalogue');
@@ -231,6 +230,29 @@ class EuOssCatalogueTest extends BrowserTestBase {
     /** @var \Drupal\eu_oss_catalogue\Entity\OssSolutionInterface $node1 */
     $this->assertNotEmpty($this->getNodeByTitle('Solution 1'));
     $this->assertEmpty($this->getNodeByTitle('Solution 2'));
+
+    // Test that if the solution has more than one provider it is not removed
+    // due to a single provider removal.
+    $service->fetch('removing_solution_provider');
+    $this->drush('queue:run', ['eu_oss_catalogue']);
+    $solution2 = $this->getNodeByTitle('Solution 2');
+    $this->assertNotEmpty($solution2);
+    $this->assertSame(1, $solution2->get('oss_source')->count());
+
+    // Import the solutions from developers_italia plugin so that the solution
+    // 2 has 2 sources.
+    $service->fetch('developers_italia');
+    $this->drush('queue:run', ['eu_oss_catalogue']);
+    $solution2 = $this->getNodeByTitle('Solution 2', TRUE);
+    $this->assertSame(2, $solution2->get('oss_source')->count());
+
+    // Run the removal of the solution again. The solution should not be removed
+    // but the source should be removed.
+    $service->fetch('removing_solution_provider');
+    $this->drush('queue:run', ['eu_oss_catalogue']);
+    $solution2 = $this->getNodeByTitle('Solution 2', TRUE);
+    $this->assertNotEmpty($solution2);
+    $this->assertSame(1, $solution2->get('oss_source')->count());
   }
 
   /**
