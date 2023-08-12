@@ -65,7 +65,7 @@ class EuOssCatalogueUpdateBackend extends QueueWorkerBase implements ContainerFa
       $this->catalogueService->cleanupSetup($data['provider'], $data['solution_urls']);
     }
     elseif ($operation === 'solution:provider_remove') {
-      $this->catalogueService->cleanupOrUpdate($data['provider'], $data['solution_url']);
+      $this->catalogueService->cleanupOrUpdate($data['provider'], $data['solution_ids']);
     }
 
     else {
