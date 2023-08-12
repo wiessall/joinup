@@ -154,7 +154,7 @@ class EuOssCatalogue implements EuOssCatalogueInterface {
   /**
    * {@inheritdoc}
    */
-  public function cleanupOrUpdate(string $providerPluginId, string $solutionIds): void {
+  public function cleanupOrUpdate(string $providerPluginId, array $solutionIds): void {
     $this->checkProvider($providerPluginId);
 
     /** @var \Drupal\eu_oss_catalogue\EuOssCatalogueProviderInterface $provider */
