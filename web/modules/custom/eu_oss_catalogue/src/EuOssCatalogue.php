@@ -70,9 +70,8 @@ class EuOssCatalogue implements EuOssCatalogueInterface {
           'solution' => $fetchedSolution,
         ]);
         $fetched++;
+        $solutionUrls[] = $fetchedSolution->getUrl();
       }
-
-      $solutionUrls[] = $fetchedSolution->getUrl();
     }
 
     // @todo Maybe this should be a flag that enables cleanup deletion?
@@ -121,8 +120,15 @@ class EuOssCatalogue implements EuOssCatalogueInterface {
     // The parser is responsible to create the solution node entity.
     $removedSolutionIds = $nodeStorage
       ->getQuery()
+      ->accessCheck(FALSE)
       ->condition('oss_git_url', $solutionUrls, 'NOT IN')
+      ->condition('oss_source', $providerPluginId)
+      ->condition('type', 'oss_solution')
       ->execute();
+
+    if (empty($removedSolutionIds)) {
+      return;
+    }
 
     $queue = $this->queueFactory->get('eu_oss_catalogue');
     $queue->createQueue();

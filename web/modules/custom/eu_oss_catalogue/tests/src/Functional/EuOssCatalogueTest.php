@@ -59,7 +59,8 @@ class EuOssCatalogueTest extends BrowserTestBase {
 
     // Check how incoming data has been queued. Only one item is active.
     $queue = \Drupal::queue('eu_oss_catalogue');
-    $this->assertSame(2, $queue->numberOfItems());
+    // The queue contains the 2 solutions and the cleanup step.
+    $this->assertSame(3, $queue->numberOfItems());
 
     // Check failed imports.
     $logs = \Drupal::database()->query("SELECT message, variables FROM {watchdog} WHERE type = 'eu_oss_catalogue'")->fetchAll();
@@ -173,7 +174,7 @@ class EuOssCatalogueTest extends BrowserTestBase {
     $service->fetch('testing_provider');
 
     $queue = \Drupal::queue('eu_oss_catalogue');
-    $this->assertSame(2, $queue->numberOfItems());
+    $this->assertSame(3, $queue->numberOfItems());
 
     // Process the queue again.
     $this->drush('queue:run', ['eu_oss_catalogue']);
