@@ -154,7 +154,7 @@ class EuOssCatalogue implements EuOssCatalogueInterface {
   /**
    * {@inheritdoc}
    */
-  public function cleanupOrUpdate(string $providerPluginId, array $solutionIds): void {
+  public function cleanupOrUpdate(string $providerPluginId, array $solutionIds = []): void {
     $this->checkProvider($providerPluginId);
 
     /** @var \Drupal\eu_oss_catalogue\EuOssCatalogueProviderInterface $provider */
@@ -162,7 +162,8 @@ class EuOssCatalogue implements EuOssCatalogueInterface {
 
     /** @var \Drupal\eu_oss_catalogue\Entity\OssSolutionInterface $solution */
     foreach ($this->entityTypeManager->getStorage('node')->loadMultiple($solutionIds) as $solution) {
-      if ($solution->removeProvider($provider) === 0) {
+      $solution->removeProvider($provider);
+      if ($solution->get('oss_source')->count() === 0) {
         $solution->delete();
       }
       else {
