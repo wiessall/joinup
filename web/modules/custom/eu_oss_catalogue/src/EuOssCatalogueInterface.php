@@ -67,7 +67,6 @@ interface EuOssCatalogueInterface {
    * @param array $solutionIds
    *   The solution IDs to cleanup.
    */
-  public function cleanupOrUpdate(string $providerPluginId, string $solutionIds): void;
-
+  public function cleanupOrUpdate(string $providerPluginId, array $solutionIds): void;
 
 }

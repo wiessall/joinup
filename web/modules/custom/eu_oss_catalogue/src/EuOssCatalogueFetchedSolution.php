@@ -21,6 +21,10 @@ class EuOssCatalogueFetchedSolution {
    *   The OSS project name.
    * @param array $data
    *   Data containing OSS solution.
+   * @param bool $hasValidSchema
+   *   Whether the entity passed validation. This is needed for deleting the
+   *   entities that are removed upstream. Entities that became invalid do not
+   *   need to be removed.
    * @param string|null $providerReference
    *   (optional) Some providers are assigning a proprietary ID to the solution.
    */
@@ -28,6 +32,7 @@ class EuOssCatalogueFetchedSolution {
     protected string $url,
     protected string $name,
     protected array $data,
+    protected bool $hasValidSchema,
     protected ?string $providerReference = NULL,
   ) {}
 
@@ -85,6 +90,16 @@ class EuOssCatalogueFetchedSolution {
    */
   public function getData(): array {
     return $this->data;
+  }
+
+  /**
+   * Returns whether the solution is valid.
+   *
+   * @return bool
+   *   Whether the solution is valid.
+   */
+  public function hasValidSchema(): bool {
+    return $this->hasValidSchema;
   }
 
   /**
