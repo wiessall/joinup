@@ -58,6 +58,15 @@ class EuOssCatalogue implements EuOssCatalogueInterface {
         if (!$fetchedSolution instanceof EuOssCatalogueFetchedSolution) {
           throw new \Exception("Invalid data received from '$provider' plugin");
         }
+        $solutionUrls[] = $fetchedSolution->getUrl();
+
+        // Do not import solutions without a valid schema. However, we still add
+        // them to the list of solutions above, before the check, so that we can
+        // prevent deleting an entity that was updated upstream and is no longer
+        // valid to us.
+        if (!$fetchedSolution->hasValidSchema()) {
+          continue;
+        }
 
         // Allow 3rd-party to modify the fetched solution.
         $this->eventDispatcher->dispatch(new EuOssPostFetchEvent($fetchedSolution));
@@ -70,7 +79,6 @@ class EuOssCatalogue implements EuOssCatalogueInterface {
           'solution' => $fetchedSolution,
         ]);
         $fetched++;
-        $solutionUrls[] = $fetchedSolution->getUrl();
       }
     }
 

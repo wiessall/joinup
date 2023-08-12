@@ -97,15 +97,20 @@ class DevelopersItalia extends EuOssCatalogueProviderPluginBase implements Conta
       $active = $newItem['active'] ?? FALSE;
       if ($active) {
         $decoded = Yaml::decode($newItem['publiccodeYml']);
-        // Only fetch data that adhere to their schema.
-        if ($this->checkSchema($decoded, $newItem['id'])) {
-          yield new EuOssCatalogueFetchedSolution(
-            $decoded['url'],
-            $decoded['name'],
-            $decoded,
-            $newItem['id'],
-          );
+        $hasValidSchema = $this->checkSchema($decoded, $newItem['id']);
+
+        // A solution source URL is necessary to fetch the data.
+        if (!isset($decoded['url'])) {
+          continue;
         }
+
+        yield new EuOssCatalogueFetchedSolution(
+          $decoded['url'],
+          $decoded['name'],
+          $decoded,
+          $hasValidSchema,
+          $newItem['id'],
+        );
       }
     }
 
