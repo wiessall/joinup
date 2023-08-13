@@ -103,14 +103,16 @@ class HostingPlatform extends EuOssCatalogueProviderPluginBase implements Contai
 
     $platform = $this->getPlatform();
     foreach ($platform->getRepositories() as $repository) {
-      $publicCodeYml = $platform->downloadFile('publiccode.yml', $repository);
-      if (is_string($publicCodeYml) && ($data = Yaml::decode($publicCodeYml))) {
-        yield new EuOssCatalogueFetchedSolution(
-          $data['url'],
-          $data['name'],
-          $data,
-          (string) $repository->platformReference,
-        );
+      if (isset($repository->metaData['publiccode_yml'])) {
+        $publicCodeYml = $repository->metaData['publiccode_yml'];
+        if (is_string($publicCodeYml) && ($data = Yaml::decode($publicCodeYml))) {
+          yield new EuOssCatalogueFetchedSolution(
+            $data['url'],
+            $data['name'],
+            $data,
+            (string) $repository->platformReference,
+          );
+        }
       }
     }
 
