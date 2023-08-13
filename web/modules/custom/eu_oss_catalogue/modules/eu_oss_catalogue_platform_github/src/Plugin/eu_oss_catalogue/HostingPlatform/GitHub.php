@@ -6,14 +6,11 @@ namespace Drupal\eu_oss_catalogue_platform_github\Plugin\eu_oss_catalogue\Hostin
 
 use Drupal\Cache\Adapter\DrupalAdapter;
 use Drupal\Core\Cache\CacheBackendInterface;
-use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
-use Drupal\Core\Plugin\PluginFormInterface;
 use Drupal\Core\Site\Settings;
-use Drupal\eu_oss_catalogue\EuOssCatalogueHostingPlatformPluginBase;
+use Drupal\eu_oss_catalogue\EuOssCatalogueGitHostingPlatformPluginBase;
 use Drupal\eu_oss_catalogue\HostingPlatformResultInterface;
 use Drupal\eu_oss_catalogue_platform_github\GitHubResult;
-use Drupal\multivalue_form_element\Element\MultiValue;
+use Github\Api\GraphQL;
 use Github\AuthMethod;
 use Github\Client;
 use Psr\Http\Client\ClientInterface;
@@ -27,7 +24,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  *   label = @Translation("GitHub"),
  * )
  */
-class GitHub extends EuOssCatalogueHostingPlatformPluginBase implements PluginFormInterface, ContainerFactoryPluginInterface {
+class GitHub extends EuOssCatalogueGitHostingPlatformPluginBase {
 
   /**
    * Static cache for the GitHub client.
@@ -58,7 +55,7 @@ class GitHub extends EuOssCatalogueHostingPlatformPluginBase implements PluginFo
     protected Settings $settings,
     protected CacheBackendInterface $cache,
   ) {
-    parent::__construct($configuration, $pluginId, $pluginDefinition);
+    parent::__construct($configuration, $pluginId, $pluginDefinition, $httpClient, $settings);
   }
 
   /**
@@ -71,90 +68,18 @@ class GitHub extends EuOssCatalogueHostingPlatformPluginBase implements PluginFo
       $pluginFefinition,
       $container->get('http_client'),
       $container->get('settings'),
-      $container->get('cache.eu_oss_catalogue')
+      $container->get('cache.eu_oss_catalogue'),
     );
   }
 
   /**
    * {@inheritdoc}
    */
-  public function defaultConfiguration(): array {
-    return [
-      'projects' => [],
-    ] + parent::defaultConfiguration();
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function buildConfigurationForm(array $form, FormStateInterface $formState): array {
-    $form['projects'] = [
-      '#type' => 'multivalue',
-      '#title' => $this->t('Projects'),
-      '#description' => $this->t('If name is omitted, all projects from that vendor are eligible.'),
-      '#default_value' => $this->getConfiguration()['projects'],
-      '#cardinality' => MultiValue::CARDINALITY_UNLIMITED,
-      '#required' => TRUE,
-      'vendor' => [
-        '#type' => 'textfield',
-        '#title' => $this->t('Vendor'),
-        '#required' => TRUE,
-      ],
-      'name' => [
-        '#type' => 'textfield',
-        '#title' => $this->t('Name'),
-      ],
-    ];
-    return $form;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function validateConfigurationForm(array &$form, FormStateInterface $formState): void {
-    $projects = [];
-    foreach ($formState->getValue('projects') as $delta => $project) {
-      $vendor = trim($project['vendor']);
-      $name = trim($project['name']);
-
-      try {
-        if (empty($name)) {
-          $this->getClient()->api('user')->show($vendor);
-        }
-        else {
-          $this->getClient()->api('repository')->show($vendor, $name);
-        }
-      }
-      catch (\RuntimeException $exception) {
-        if ($exception->getCode() === 404) {
-          $formState->setErrorByName("projects][$delta", $this->t("Vendor or repository %ref doesn't exist on GitHub platform", [
-            '%ref' => rtrim("$vendor/$name", '/'),
-          ]));
-        }
-        else {
-          throw $exception;
-        }
-      }
-      $projects[] = ['vendor' => $vendor, 'name' => $name];
-    }
-    $formState->setValue('projects', $projects);
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function submitConfigurationForm(array &$form, FormStateInterface $formState): void {
-    $this->configuration['projects'] = $formState->getValue('projects');
-  }
-
-  /**
-   * {@inheritdoc}
-   */
   public function getRepositories(): iterable {
-    $repositories = $this->expandRepositories($this->getConfiguration()['projects']);
-    foreach ($repositories as $fullName => $data) {
-      [$vendor, $name] = explode('/', $fullName);
-      yield new GitHubResult($vendor, $name, $data['branch'], $data['reference']);
+    foreach ($this->getProjects($this->getConfiguration()['projects']) as $projects) {
+      foreach ($projects as $result) {
+        yield $result;
+      }
     }
   }
 
@@ -163,16 +88,7 @@ class GitHub extends EuOssCatalogueHostingPlatformPluginBase implements PluginFo
    */
   public function downloadFile(string $filePath, HostingPlatformResultInterface $result): ?string {
     \assert($result instanceof GitHubResult);
-    try {
-      return $this->getClient()->api('repo')->contents()->download($result->vendor, $result->name, $filePath, $result->defaultBranch);
-    }
-    catch (\RuntimeException $exception) {
-      if ($exception->getCode() === 404) {
-        // No file.
-        return NULL;
-      }
-      throw $exception;
-    }
+    return $result->metaData['publiccode_yml'];
   }
 
   /**
@@ -200,38 +116,67 @@ class GitHub extends EuOssCatalogueHostingPlatformPluginBase implements PluginFo
   }
 
   /**
-   * Expands the project where only the vendor is specified.
-   *
-   * @param array[] $projects
-   *   Associative array of projects, keyed by $vendor/$name and having the
-   *   default branch as values.
+   * {@inheritdoc}
    */
-  protected function expandRepositories(array $projects): array {
-    $repositories = [];
-
-    try {
-      foreach ($projects as $project) {
-        if (empty($project['name'])) {
-          foreach ($this->getClient()->api('user')->repositories($project['vendor']) as $repository) {
-            $repositories[$repository['full_name']] = [
-              'branch' => $repository['default_branch'],
-              'reference' => $repository['id'],
-            ];
-          }
-          continue;
+  protected function getProjects(array $candidates): array {
+    if (!isset($this->projects)) {
+      $this->projects = [];
+      // Build a search query string.
+      // @see https://docs.github.com/search-github
+      $search = ['is:public', 'archived:false'];
+      foreach ($candidates as $candidate) {
+        if ($candidate['name']) {
+          $search[] = "repo:{$candidate['vendor']}/{$candidate['name']}";
         }
-        $repository = $this->getClient()->api('repository')->show($project['vendor'], $project['name']);
-        $repositories[$repository['full_name']] = [
-          'branch' => $repository['default_branch'],
-          'reference' => $repository['id'],
-        ];
+        else {
+          $search[] = "owner:{$candidate['vendor']}";
+        }
+      }
+      $search = implode(' ', $search);
+      // @todo Should we implement pagination or we limit to 100 and show a
+      //   warning message on save (I prefer the 2nd option)?
+      $query = <<<GraphQL
+        {
+          search(type: REPOSITORY, query: "{$search}", first: 100) {
+            nodes {
+              ... on Repository {
+                id
+                description
+                name
+                owner {
+                  login
+                }
+                defaultBranchRef {
+                  name
+                }
+                # How to decouple this? We need a way to make this hookable.
+                # Consider using a GraphQL query builder library.
+                publiccode_yml: object(expression: "HEAD:publiccode.yml") {
+                  ... on Blob {
+                    content: text
+                  }
+                }
+              }
+            }
+          }
+        }
+        GraphQL;
+      $graphQL = new GraphQL($this->getClient());
+      foreach ($graphQL->execute($query)['data']['search']['nodes'] as $node) {
+        // Repositories without code don't have a default branch.
+        if (!empty($node['defaultBranchRef'])) {
+          $this->projects[$node['owner']['login']][$node['name']] = new GitHubResult(
+            $node['owner']['login'],
+            $node['name'],
+            $node['defaultBranchRef']['name'],
+            $node['id'],
+            $node['description'],
+            ['publiccode_yml' => $node['publiccode_yml']['content']],
+          );
+        }
       }
     }
-    catch (\Throwable $exception) {
-      // Fail silently.
-    }
-
-    return $repositories;
+    return $this->projects;
   }
 
 }

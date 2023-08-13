@@ -20,14 +20,20 @@ class GitHubResult implements HostingPlatformResultInterface {
    *   The repository name.
    * @param string $defaultBranch
    *   The repository default branch.
-   * @param int $platformReference
+   * @param string $platformReference
    *   The GitHub internal unique ID.
+   * @param string|null $description
+   *   The repository description if any.
+   * @param array $metaData
+   *   Act like a sandbox to store arbitrary data.
    */
   public function __construct(
     public readonly string $vendor,
     public readonly string $name,
     public readonly string $defaultBranch,
-    public readonly int $platformReference,
+    public readonly string $platformReference,
+    public readonly ?string $description,
+    public readonly array $metaData = [],
   ) {}
 
   /**
