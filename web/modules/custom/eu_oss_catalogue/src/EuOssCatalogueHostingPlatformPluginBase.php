@@ -7,7 +7,7 @@ namespace Drupal\eu_oss_catalogue;
 use Drupal\Core\Plugin\PluginBase;
 
 /**
- * Interface for code hosting platform plugins.
+ * Base class for code hosting platform plugins.
  */
 abstract class EuOssCatalogueHostingPlatformPluginBase extends PluginBase implements EuOssCatalogueHostingPlatformInterface {
 
