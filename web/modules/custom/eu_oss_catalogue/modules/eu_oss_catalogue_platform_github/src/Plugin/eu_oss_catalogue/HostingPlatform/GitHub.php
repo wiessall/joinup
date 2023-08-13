@@ -8,7 +8,7 @@ use Drupal\Cache\Adapter\DrupalAdapter;
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Site\Settings;
 use Drupal\eu_oss_catalogue\EuOssCatalogueGitHostingPlatformPluginBase;
-use Drupal\eu_oss_catalogue_platform_github\GitHubResult;
+use Drupal\eu_oss_catalogue\Model\HostingPlatformResult;
 use Drupal\eu_oss_catalogue_platform_github\GraphQL\DataModel\SearchType;
 use Github\Api\GraphQL;
 use Github\AuthMethod;
@@ -75,17 +75,6 @@ class GitHub extends EuOssCatalogueGitHostingPlatformPluginBase {
   }
 
   /**
-   * {@inheritdoc}
-   */
-  public function getRepositories(): iterable {
-    foreach ($this->getProjects() as $projects) {
-      foreach ($projects as $result) {
-        yield $result;
-      }
-    }
-  }
-
-  /**
    * Returns the GitHub client.
    *
    * @return \Github\Client
@@ -112,55 +101,54 @@ class GitHub extends EuOssCatalogueGitHostingPlatformPluginBase {
   /**
    * {@inheritdoc}
    */
-  protected function getProjects(): array {
-    if (!isset($this->projects)) {
-      $this->projects = [];
-      // Build a search query string.
-      // @see https://docs.github.com/search-github
-      $search = ['is:public', 'archived:false'];
-      foreach ($this->getConfiguration()['projects'] as $candidate) {
-        if ($candidate['name']) {
-          $search[] = "repo:{$candidate['vendor']}/{$candidate['name']}";
-        }
-        else {
-          $search[] = "owner:{$candidate['vendor']}";
-        }
+  protected function getProjects(?string $filePath = NULL): array {
+    $projects = [];
+    // Build a search query string.
+    // @see https://docs.github.com/search-github
+    $search = ['is:public', 'archived:false'];
+    foreach ($this->getConfiguration()['projects'] as $candidate) {
+      if ($candidate['name']) {
+        $search[] = "repo:{$candidate['vendor']}/{$candidate['name']}";
       }
-
-      $publicCodeYml = (new Node('object', ['expression' => 'HEAD:publiccode.yml']))
-        ->alias('publiccode_yml');
-      $publicCodeYml->on('Blob')->use('text');
-
-      $query = new Query('search', [
-        'type' => SearchType::REPOSITORY,
-        'query' => implode(' ', $search),
-        'first' => 100,
-      ]);
-      $query->nodes([])
-        ->on('Repository')
-        ->use('id', 'description', 'name')
-        ->use((new Node('owner'))->use('login'))
-        ->use((new Node('defaultBranchRef'))->use('name'))
-        ->use($publicCodeYml);
-
-      $graphQL = new GraphQL($this->getClient());
-      foreach ($graphQL->execute($query->toString())['data']['search']['nodes'] as $node) {
-        // Repositories without code don't have a default branch.
-        if (!empty($node['defaultBranchRef'])) {
-          $this->projects[$node['owner']['login']][$node['name']] = new GitHubResult(
-            $node['owner']['login'],
-            $node['name'],
-            $node['defaultBranchRef']['name'],
-            $node['id'],
-            $node['description'],
-            [
-              'publiccode_yml' => $node['publiccode_yml']['text'],
-            ],
-          );
-        }
+      else {
+        $search[] = "owner:{$candidate['vendor']}";
       }
     }
-    return $this->projects;
+
+    $query = new Query('search', [
+      'type' => SearchType::REPOSITORY,
+      'query' => implode(' ', $search),
+      'first' => 100,
+    ]);
+    $fragment = $query->nodes([])
+      ->on('Repository')
+      ->use('id', 'description', 'name')
+      ->use((new Node('owner'))->use('login'))
+      ->use((new Node('defaultBranchRef'))->use('name'));
+
+    if ($filePath) {
+      $file = (new Node('object', [
+        'expression' => "HEAD:$filePath",
+      ]))->alias('file');
+      $file->on('Blob')->use('text');
+      $fragment->use($file);
+    }
+
+    $graphQL = new GraphQL($this->getClient());
+    foreach ($graphQL->execute($query->toString())['data']['search']['nodes'] as $node) {
+      // Repositories without code don't have a default branch.
+      if (!empty($node['defaultBranchRef'])) {
+        $projects[$node['owner']['login']][$node['name']] = new HostingPlatformResult(
+          $node['owner']['login'],
+          $node['name'],
+          $node['defaultBranchRef']['name'],
+          $node['id'],
+          $node['description'],
+          $node['file']['text'] ?? NULL,
+        );
+      }
+    }
+    return $projects;
   }
 
 }
