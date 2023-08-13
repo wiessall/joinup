@@ -14,6 +14,7 @@ use Drupal\eu_oss_catalogue\Model\EuOssCatalogueFetchedSolution;
 use Drupal\eu_oss_catalogue\EuOssCatalogueHostingPlatformInterface;
 use Drupal\eu_oss_catalogue\EuOssCataloguePluginManagerInterface;
 use Drupal\eu_oss_catalogue\EuOssCatalogueProviderPluginBase;
+use Drupal\eu_oss_catalogue\Model\HostingPlatformResult;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -102,10 +103,10 @@ class HostingPlatform extends EuOssCatalogueProviderPluginBase implements Contai
     }
 
     $platform = $this->getPlatform();
-    foreach ($platform->getRepositories() as $repository) {
-      if (isset($repository->metaData['publiccode_yml'])) {
-        $publicCodeYml = $repository->metaData['publiccode_yml'];
-        if (is_string($publicCodeYml) && ($data = Yaml::decode($publicCodeYml))) {
+    foreach ($platform->getRepositories('publiccode.yml') as $repository) {
+      \assert($repository instanceof HostingPlatformResult);
+      if ($repository->file) {
+        if (is_string($repository->file) && ($data = Yaml::decode($repository->file))) {
           yield new EuOssCatalogueFetchedSolution(
             $data['url'],
             $data['name'],
