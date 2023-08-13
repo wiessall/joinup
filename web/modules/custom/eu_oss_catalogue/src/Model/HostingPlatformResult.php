@@ -2,17 +2,15 @@
 
 declare(strict_types = 1);
 
-namespace Drupal\eu_oss_catalogue_platform_github;
-
-use Drupal\eu_oss_catalogue\HostingPlatformResultInterface;
+namespace Drupal\eu_oss_catalogue\Model;
 
 /**
- * Data model for GitHub repository fetch results.
+ * Data model for code platforms repository results.
  */
-class GitHubResult implements HostingPlatformResultInterface {
+class HostingPlatformResult {
 
   /**
-   * Creates a nes result object.
+   * Creates a new result object.
    *
    * @param string $vendor
    *   The vendor ID.
@@ -20,24 +18,24 @@ class GitHubResult implements HostingPlatformResultInterface {
    *   The repository name.
    * @param string $defaultBranch
    *   The repository default branch.
-   * @param string $platformReference
-   *   The GitHub internal unique ID.
+   * @param string|null $platformReference
+   *   The code platform internal unique ID.
    * @param string|null $description
    *   The repository description if any.
-   * @param array $metaData
-   *   Act like a sandbox to store arbitrary data.
+   * @param string|null $file
+   *   The content of a file if it has been requested.
    */
   public function __construct(
     public readonly string $vendor,
     public readonly string $name,
     public readonly string $defaultBranch,
-    public readonly string $platformReference,
-    public readonly ?string $description,
-    public readonly array $metaData = [],
+    public readonly ?string $platformReference = NULL,
+    public readonly ?string $description = NULL,
+    public readonly ?string $file = NULL,
   ) {}
 
   /**
-   * Get repository full-name.
+   * Gets the repository full-name.
    *
    * @return string
    *   Repository full name.

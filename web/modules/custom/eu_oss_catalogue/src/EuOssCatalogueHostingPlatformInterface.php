@@ -18,6 +18,6 @@ interface EuOssCatalogueHostingPlatformInterface extends ConfigurableInterface {
    *   Associative array of repositories, keyed by $vendor/$name and having the
    *   default branch as values.
    */
-  public function getRepositories(): iterable;
+  public function getRepositories(?string $filePath = NULL): iterable;
 
 }

@@ -18,15 +18,6 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 abstract class EuOssCatalogueGitHostingPlatformPluginBase extends EuOssCatalogueHostingPlatformPluginBase implements PluginFormInterface, ContainerFactoryPluginInterface {
 
   /**
-   * Static cache of projects handled by this code platform plugin.
-   *
-   * @var string[]
-   *
-   * @see \Drupal\eu_oss_catalogue\EuOssCatalogueGitHostingPlatformPluginBase::getProjects()
-   */
-  protected array $projects;
-
-  /**
    * Constructs a new plugin instance.
    *
    * @param array $configuration
@@ -118,18 +109,18 @@ abstract class EuOssCatalogueGitHostingPlatformPluginBase extends EuOssCatalogue
       }
     });
     $candidates = array_filter($candidates);
-    $projects = $this->getProjects($candidates);
+    $existingProjects = $this->getProjects();
 
     // The values might have been trimmed earlier.
     $formState->setValue('projects', $candidates);
 
     foreach ($candidates as $delta => $candidate) {
-      if (!isset($projects[$candidate['vendor']])) {
+      if (!isset($existingProjects[$candidate['vendor']])) {
         $formState->setErrorByName("projects][$delta][vendor", $this->t("Vendor %vendor doesn't exist on the platform", [
           '%vendor' => $candidate['vendor'],
         ]));
       }
-      if ($candidate['name'] && !isset($projects[$candidate['vendor']][$candidate['name']])) {
+      elseif ($candidate['name'] && !isset($existingProjects[$candidate['vendor']][$candidate['name']])) {
         $formState->setErrorByName("projects][$delta][name", $this->t("Project %project doesn't exist on the platform or it's not public", [
           '%project' => $candidate['vendor'] . '/' . $candidate['name'],
         ]));
@@ -145,17 +136,34 @@ abstract class EuOssCatalogueGitHostingPlatformPluginBase extends EuOssCatalogue
   }
 
   /**
-   * Return a full list of projects given the passed candidates.
+   * {@inheritdoc}
+   */
+  public function getRepositories(?string $filePath = NULL): iterable {
+    foreach ($this->getProjects($filePath) as $projects) {
+      foreach ($projects as $result) {
+        yield $result;
+      }
+    }
+  }
+
+  /**
+   * Returns a full list of projects.
    *
    * This method expands a project candidate when only the vendor has been
-   * specified by querying the code platform API.
+   * specified by querying the code platform API. By passing a relevant file
+   * path, relative to repository root, as parameter, the results will contain
+   * also the file content. This is useful when that file contains metadata
+   * about the project.
+   *
+   * @param string|null $filePath
+   *   (optional) A file path relative to repository root.
    *
    * @return array
    *   Associative array:
    *   - First level keys are vendor
-   *   - Second level keys are vendor repositories and values are data objects,
-   *     implementing \Drupal\eu_oss_catalogue\HostingPlatformResultInterface
+   *   - Second level keys are vendor repository project names and values are
+   *     objects of type \Drupal\eu_oss_catalogue\Model\GitPlatformResult.
    */
-  abstract protected function getProjects(): array;
+  abstract protected function getProjects(?string $filePath = NULL): array;
 
 }
