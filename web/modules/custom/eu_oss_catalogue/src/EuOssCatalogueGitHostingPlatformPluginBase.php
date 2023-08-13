@@ -150,18 +150,12 @@ abstract class EuOssCatalogueGitHostingPlatformPluginBase extends EuOssCatalogue
    * This method expands a project candidate when only the vendor has been
    * specified by querying the code platform API.
    *
-   * @param array $candidates
-   *   A list of project candidates. Each item os an array having the structure:
-   *   - vendor: The project vendor.
-   *   - name: (optional) The project name. If missed, all projects of this
-   *     vendor are evaluated.
-   *
    * @return array
    *   Associative array:
    *   - First level keys are vendor
    *   - Second level keys are vendor repositories and values are data objects,
    *     implementing \Drupal\eu_oss_catalogue\HostingPlatformResultInterface
    */
-  abstract protected function getProjects(array $candidates): array;
+  abstract protected function getProjects(): array;
 
 }

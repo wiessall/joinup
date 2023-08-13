@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "2a7bdcd96362fba8e05089d2b84d7819",
+    "content-hash": "0cc936eaf438eeb2e42e5c0cd8732e3c",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -122,6 +122,59 @@
                 "source": "https://github.com/caxy/php-htmldiff/tree/v0.1.14"
             },
             "time": "2022-01-19T11:09:59+00:00"
+        },
+        {
+            "name": "cfpinto/graphql",
+            "version": "v2.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/cfpinto/graphql.git",
+                "reference": "94691ee8238c80c243dcf3636efb4546df5b86f4"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/cfpinto/graphql/zipball/94691ee8238c80c243dcf3636efb4546df5b86f4",
+                "reference": "94691ee8238c80c243dcf3636efb4546df5b86f4",
+                "shasum": ""
+            },
+            "require": {
+                "ext-json": "*",
+                "php": "8.*"
+            },
+            "require-dev": {
+                "phpmd/phpmd": "^2.13",
+                "phpunit/phpunit": "^9.5",
+                "spatie/phpunit-watcher": "^1.23",
+                "squizlabs/php_codesniffer": "^3.7",
+                "symfony/var-dumper": "^6.2"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "GraphQL\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Claudio Pinto",
+                    "email": "me@cfpinto.com"
+                }
+            ],
+            "description": "A GraphQL query builder class",
+            "homepage": "https://github.com/cfpinto/graphql",
+            "keywords": [
+                "graphql",
+                "query builder"
+            ],
+            "support": {
+                "issues": "https://github.com/cfpinto/graphql/issues",
+                "source": "https://github.com/cfpinto/graphql/tree/v2.0.0"
+            },
+            "time": "2023-01-20T17:13:41+00:00"
         },
         {
             "name": "chi-teck/drupal-code-generator",
