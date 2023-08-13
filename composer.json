@@ -10,6 +10,7 @@
         "ext-memcached": "*",
         "ext-pdo": "*",
         "ext-simplexml": "*",
+        "cfpinto/graphql": "^2.0",
         "claudiu-cristea/drupal-cache-adapter": "^1.0",
         "composer/installers": "^2",
         "cweagans/composer-patches": "^1.7",
@@ -249,6 +250,9 @@
             "drupal/core": "-p2"
         },
         "patches": {
+            "cfpinto/graphql": {
+                "Enum argument https://github.com/cfpinto/graphql/issues/24": "https://patch-diff.githubusercontent.com/raw/cfpinto/graphql/pull/25.diff"
+            },
             "drupal/bootstrap4_modal": {
               "Expected a scalar value as a 2nd argument to InputBag::get(), array given. @see https://www.drupal.org/i/3350657": "https://git.drupalcode.org/project/bootstrap4_modal/-/merge_requests/7.patch"
             },

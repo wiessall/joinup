@@ -8,11 +8,13 @@ use Drupal\Cache\Adapter\DrupalAdapter;
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Site\Settings;
 use Drupal\eu_oss_catalogue\EuOssCatalogueGitHostingPlatformPluginBase;
-use Drupal\eu_oss_catalogue\HostingPlatformResultInterface;
 use Drupal\eu_oss_catalogue_platform_github\GitHubResult;
+use Drupal\eu_oss_catalogue_platform_github\GraphQL\DataModel\SearchType;
 use Github\Api\GraphQL;
 use Github\AuthMethod;
 use Github\Client;
+use GraphQL\Actions\Query;
+use GraphQL\Entities\Node;
 use Psr\Http\Client\ClientInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -76,19 +78,11 @@ class GitHub extends EuOssCatalogueGitHostingPlatformPluginBase {
    * {@inheritdoc}
    */
   public function getRepositories(): iterable {
-    foreach ($this->getProjects($this->getConfiguration()['projects']) as $projects) {
+    foreach ($this->getProjects() as $projects) {
       foreach ($projects as $result) {
         yield $result;
       }
     }
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function downloadFile(string $filePath, HostingPlatformResultInterface $result): ?string {
-    \assert($result instanceof GitHubResult);
-    return $result->metaData['publiccode_yml'];
   }
 
   /**
@@ -118,13 +112,13 @@ class GitHub extends EuOssCatalogueGitHostingPlatformPluginBase {
   /**
    * {@inheritdoc}
    */
-  protected function getProjects(array $candidates): array {
+  protected function getProjects(): array {
     if (!isset($this->projects)) {
       $this->projects = [];
       // Build a search query string.
       // @see https://docs.github.com/search-github
       $search = ['is:public', 'archived:false'];
-      foreach ($candidates as $candidate) {
+      foreach ($this->getConfiguration()['projects'] as $candidate) {
         if ($candidate['name']) {
           $search[] = "repo:{$candidate['vendor']}/{$candidate['name']}";
         }
@@ -132,37 +126,25 @@ class GitHub extends EuOssCatalogueGitHostingPlatformPluginBase {
           $search[] = "owner:{$candidate['vendor']}";
         }
       }
-      $search = implode(' ', $search);
-      // @todo Should we implement pagination or we limit to 100 and show a
-      //   warning message on save (I prefer the 2nd option)?
-      $query = <<<GraphQL
-        {
-          search(type: REPOSITORY, query: "{$search}", first: 100) {
-            nodes {
-              ... on Repository {
-                id
-                description
-                name
-                owner {
-                  login
-                }
-                defaultBranchRef {
-                  name
-                }
-                # How to decouple this? We need a way to make this hookable.
-                # Consider using a GraphQL query builder library.
-                publiccode_yml: object(expression: "HEAD:publiccode.yml") {
-                  ... on Blob {
-                    content: text
-                  }
-                }
-              }
-            }
-          }
-        }
-        GraphQL;
+
+      $publicCodeYml = (new Node('object', ['expression' => 'HEAD:publiccode.yml']))
+        ->alias('publiccode_yml');
+      $publicCodeYml->on('Blob')->use('text');
+
+      $query = new Query('search', [
+        'type' => SearchType::REPOSITORY,
+        'query' => implode(' ', $search),
+        'first' => 100,
+      ]);
+      $query->nodes([])
+        ->on('Repository')
+        ->use('id', 'description', 'name')
+        ->use((new Node('owner'))->use('login'))
+        ->use((new Node('defaultBranchRef'))->use('name'))
+        ->use($publicCodeYml);
+
       $graphQL = new GraphQL($this->getClient());
-      foreach ($graphQL->execute($query)['data']['search']['nodes'] as $node) {
+      foreach ($graphQL->execute($query->toString())['data']['search']['nodes'] as $node) {
         // Repositories without code don't have a default branch.
         if (!empty($node['defaultBranchRef'])) {
           $this->projects[$node['owner']['login']][$node['name']] = new GitHubResult(
@@ -171,7 +153,9 @@ class GitHub extends EuOssCatalogueGitHostingPlatformPluginBase {
             $node['defaultBranchRef']['name'],
             $node['id'],
             $node['description'],
-            ['publiccode_yml' => $node['publiccode_yml']['content']],
+            [
+              'publiccode_yml' => $node['publiccode_yml']['text'],
+            ],
           );
         }
       }
