@@ -79,13 +79,8 @@ Feature: Tests the collection last update time.
     # The updated time has changed to the current time but we cannot catch the
     # time we ran the update.
     Then the response should not contain "2016-05-06T05:29"
-    And I should see "few seconds ago"
-
-    # Let's see how the timeago jquery widget changes.
-    # Note for QA: If the reviewer decide that we cannot afford to sleep 1 min
-    # while running the tests, we can remove this part.
-    Given I wait until the page contains the text "about a minute ago"
-    Then I should see "about a minute ago"
+    And I wait until the page contains the text "seconds ago"
+    And I wait until the page contains the text "1 minute ago"
 
     # Delete a community content node.
     Given I go to the content page of the type document with the title "Get Rid of Rats"
@@ -95,10 +90,9 @@ Feature: Tests the collection last update time.
     When I press "Delete"
     And I go to the homepage of the "Household Wizard" collection
     # The deletion of community content node changes the last updated time.
-    Then I should see "few seconds ago"
+    Then I wait until the page contains the text "seconds ago"
 
-    Given I wait until the page contains the text "about a minute ago"
-    Then I should see "about a minute ago"
+    And I wait until the page contains the text "1 minute ago"
 
     # Editing the solution changes the last updated time.
     Given I go to the edit form of the "Roof Hole Cover" solution
@@ -107,15 +101,15 @@ Feature: Tests the collection last update time.
     And I press "Publish"
 
     When I go to the homepage of the "Household Wizard" collection
-    Then I should see "few seconds ago"
-
-    Given I wait until the page contains the text "about a minute ago"
-    Then I should see "about a minute ago"
+    Then I wait until the page contains the text "seconds ago"
+    And I wait until the page contains the text "1 minute ago"
 
     # Deleting the solution changes the last updated time.
     Given I go to the edit form of the "Roof Hole Cover" solution
     And I click "Delete"
-    When I press "Delete"
-    And I go to the homepage of the "Household Wizard" collection
+    And a modal should open
+    When I press "Delete" in the "Modal buttons" region
+    Then the modal should be closed
+    When I go to the homepage of the "Household Wizard" collection
     # The deletion of community content node refreshes the last updated time.
-    Then I should see "few seconds ago"
+    Then I wait until the page contains the text "seconds ago"
