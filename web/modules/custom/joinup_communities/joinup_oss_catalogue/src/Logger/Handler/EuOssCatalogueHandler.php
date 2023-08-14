@@ -22,10 +22,19 @@ class EuOssCatalogueHandler extends AbstractProcessingHandler {
    */
   public function write(array $record): void {
     $message = Message::create(['template' => 'eu_oss_catalogue_log']);
-    $message->set('oss_severity', $record['level']);
+    $message->set('log_message', $record['message']);
+    $message->set('log_severity', $record['level']);
 
-    if (isset($record['oss_solution']) && $record['oss_solution'] instanceof OssSolutionInterface) {
-      $message->set('oss_solution', [$record['oss_solution']->id()]);
+    if (isset($record['context']['oss_solution']) && $record['context']['oss_solution'] instanceof OssSolutionInterface) {
+      $message->set('oss_solution', [$record['context']['oss_solution']->id()]);
+    }
+
+    foreach (['oss_landing_url', 'oss_source'] as $item) {
+      if (!isset($record['context'][$item])) {
+        continue;
+      }
+
+      $message->set($item, $record['context'][$item]);
     }
 
     $message->save();
