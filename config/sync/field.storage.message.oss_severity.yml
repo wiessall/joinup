@@ -16,29 +16,29 @@ type: list_string
 settings:
   allowed_values:
     -
-      value: '0'
-      label: Emergency
+      value: '100'
+      label: Debug
     -
-      value: '1'
-      label: Alert
-    -
-      value: '2'
-      label: Critical
-    -
-      value: '3'
-      label: Error
-    -
-      value: '4'
-      label: Warning
-    -
-      value: '5'
-      label: Notice
-    -
-      value: '6'
+      value: '200'
       label: Info
     -
-      value: '7'
-      label: Debug
+      value: '250'
+      label: Notice
+    -
+      value: '300'
+      label: Warning
+    -
+      value: '400'
+      label: Error
+    -
+      value: '500'
+      label: Critical
+    -
+      value: '550'
+      label: Alert
+    -
+      value: '600'
+      label: Emergency
   allowed_values_function: ''
 module: options
 locked: false
