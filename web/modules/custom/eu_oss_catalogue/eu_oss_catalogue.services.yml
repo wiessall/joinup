@@ -40,3 +40,8 @@ services:
       - { name: cache.bin }
     factory: ['@cache_factory', 'get']
     arguments: [eu_oss_catalogue]
+
+  eu_oss_catalogue.git_remote.api_guesser:
+    class: Drupal\eu_oss_catalogue\ApiGuesser
+    arguments:
+      - '@http_client_factory'
