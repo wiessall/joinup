@@ -4,8 +4,9 @@ status: true
 dependencies:
   config:
     - core.entity_view_mode.message.mail_body
+    - field.field.message.eu_oss_catalogue_log.log_message
+    - field.field.message.eu_oss_catalogue_log.log_severity
     - field.field.message.eu_oss_catalogue_log.oss_landing_url
-    - field.field.message.eu_oss_catalogue_log.oss_severity
     - field.field.message.eu_oss_catalogue_log.oss_solution
     - field.field.message.eu_oss_catalogue_log.oss_source
     - message.template.eu_oss_catalogue_log
@@ -21,11 +22,14 @@ bundle: eu_oss_catalogue_log
 mode: mail_body
 content:
   partial_1:
+    settings: {  }
+    third_party_settings: {  }
     weight: 0
     region: content
 hidden:
+  log_message: true
+  log_severity: true
   oss_landing_url: true
-  oss_severity: true
   oss_solution: true
   oss_source: true
   partial_0: true

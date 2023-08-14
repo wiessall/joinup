@@ -1,4 +1,4 @@
-uuid: 06a3716c-f35d-4819-abc9-c548996dabf8
+uuid: b24ecea6-0a85-45fd-9339-58197e0feeb9
 langcode: en
 status: true
 dependencies:
@@ -9,8 +9,8 @@ dependencies:
 third_party_settings:
   field_permissions:
     permission_type: public
-id: message.oss_severity
-field_name: oss_severity
+id: message.log_severity
+field_name: log_severity
 entity_type: message
 type: list_string
 settings:
