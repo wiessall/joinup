@@ -155,14 +155,14 @@ class AcceptanceTasksForm extends FormBase {
       catch (SuspendQueueException $e) {
         // The worker indicates there is a problem with the whole queue. Exit.
         $queue->releaseItem($item);
-        Error::logException(\Drupal::logger('message_digest'), $e);
+        Error::logException($this->logger('message_digest'), $e);
         $this->messenger()->addError($error_status_message);
         return FALSE;
       }
       catch (\Exception $e) {
         // In case of any other kind of exception, log it and leave the item
         // in the queue to be processed again later.
-        Error::logException(\Drupal::logger('message_digest'), $e);
+        Error::logException($this->logger('message_digest'), $e);
         $this->messenger()->addError($error_status_message);
         return FALSE;
       }
