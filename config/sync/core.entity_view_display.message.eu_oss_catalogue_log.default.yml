@@ -3,53 +3,31 @@ langcode: en
 status: true
 dependencies:
   config:
+    - field.field.message.eu_oss_catalogue_log.log_message
+    - field.field.message.eu_oss_catalogue_log.log_severity
     - field.field.message.eu_oss_catalogue_log.oss_landing_url
-    - field.field.message.eu_oss_catalogue_log.oss_severity
     - field.field.message.eu_oss_catalogue_log.oss_solution
     - field.field.message.eu_oss_catalogue_log.oss_source
     - message.template.eu_oss_catalogue_log
-  module:
-    - link
-    - options
-    - pluginreference
 id: message.eu_oss_catalogue_log.default
 targetEntityType: message
 bundle: eu_oss_catalogue_log
 mode: default
 content:
-  oss_landing_url:
-    type: link
-    label: above
-    settings:
-      trim_length: 80
-      url_only: false
-      url_plain: false
-      rel: ''
-      target: ''
-    third_party_settings: {  }
-    weight: 3
-    region: content
-  oss_severity:
-    type: list_default
-    label: above
+  partial_0:
     settings: {  }
     third_party_settings: {  }
-    weight: 4
+    weight: 0
     region: content
-  oss_solution:
-    type: entity_reference_label
-    label: above
-    settings:
-      link: true
+  partial_1:
+    settings: {  }
     third_party_settings: {  }
     weight: 1
     region: content
-  oss_source:
-    type: plugin_reference_id
-    label: above
-    settings: {  }
-    third_party_settings: {  }
-    weight: 2
-    region: content
 hidden:
+  log_message: true
+  log_severity: true
+  oss_landing_url: true
+  oss_solution: true
+  oss_source: true
   search_api_excerpt: true
