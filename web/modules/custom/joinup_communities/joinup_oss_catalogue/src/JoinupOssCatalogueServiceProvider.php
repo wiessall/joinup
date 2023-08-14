@@ -16,17 +16,15 @@ class JoinupOssCatalogueServiceProvider implements ServiceModifierInterface {
    * {@inheritdoc}
    */
   public function alter(ContainerBuilder $container): void {
-    if ($container->hasParameter('monolog.channel_handlers')) {
-      $monologChannelHandlers = $container->getParameter('monolog.channel_handlers');
-      $monologChannelHandlers['eu_oss_catalogue'] = [
-        // 'default_handler',
-        // 'mail',
-        // 'telegram',
-        'eu_oss_catalogue',
-      ];
-
-      $container->setParameter('monolog.channel_handlers', $monologChannelHandlers);
+    if (!$container->hasParameter('monolog.channel_handlers')) {
+      return;
     }
+
+    $monologChannelHandlers = $container->getParameter('monolog.channel_handlers');
+    $monologChannelHandlers['eu_oss_catalogue'] = $monologChannelHandlers['default'];
+    $monologChannelHandlers['eu_oss_catalogue'][] = 'eu_oss_catalogue';
+
+    $container->setParameter('monolog.channel_handlers', $monologChannelHandlers);
   }
 
 }
