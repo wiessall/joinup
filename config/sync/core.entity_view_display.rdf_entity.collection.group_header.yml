@@ -67,26 +67,21 @@ content:
     weight: 1
     region: content
   last_update:
-    type: joinup_timestamp_timeago
+    type: timestamp
     label: hidden
     settings:
       date_format: medium
       custom_date_format: ''
       timezone: ''
       tooltip:
-        date_format: ''
+        date_format: 'long'
         custom_date_format: ''
       time_diff:
-        enabled: false
+        enabled: true
         future_format: '@interval hence'
         past_format: '@interval ago'
-        granularity: 2
+        granularity: 1
         refresh: 60
-      tooltip_format: long
-      tooltip_format_custom: ''
-      timeago_settings:
-        strings:
-          seconds: 'few seconds'
     third_party_settings: {  }
     weight: 3
     region: content
