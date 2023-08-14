@@ -17,6 +17,7 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Installer\InstallerKernel;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\collection\Entity\CollectionInterface;
+use Drupal\Core\Site\SettingsEditor;
 use Drupal\joinup_community_content\Entity\CommunityContentInterface;
 use Drupal\joinup_featured\FeaturedContentInterface;
 use Drupal\joinup_group\Entity\PinnableGroupContentInterface;
@@ -97,7 +98,7 @@ function joinup_form_install_settings_form_save($form, FormStateInterface $form_
     'value' => $database,
     'required' => TRUE,
   ];
-  drupal_rewrite_settings($settings);
+  SettingsEditor::rewrite(\Drupal::getContainer()->getParameter('site.path') . '/settings.php', $settings);
   // Load the database connection to make it available in the current request.
   Database::addConnectionInfo($key, $target, $database);
 }
