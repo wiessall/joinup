@@ -1,6 +1,6 @@
 @api @group-g @uploadFiles:logo.png
 Feature: As a moderator I want to be able to maintain sets of images to be
-  reused as logo or banner images for collections, solutions, events and news.
+  reused as logo images for collections, solutions, events and news.
 
   Scenario Outline: Moderator tasks.
 
@@ -32,9 +32,7 @@ Feature: As a moderator I want to be able to maintain sets of images to be
 
     Examples:
       | media type        |
-      | Collection banner |
       | Collection logo   |
-      | Solution banner   |
       | Solution logo     |
       | Event logo        |
       | News logo         |

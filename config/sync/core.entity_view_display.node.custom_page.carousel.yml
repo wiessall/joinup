@@ -10,7 +10,7 @@ dependencies:
     - field.field.node.custom_page.field_state
     - field.field.node.custom_page.og_audience
     - node.type.custom_page
-    - responsive_image.styles.iop_carousel
+    - responsive_image.styles.tile
   module:
     - field_delimiter
     - field_formatter_range
@@ -65,7 +65,7 @@ content:
     type: layout_paragraphs
     label: hidden
     settings:
-      view_mode: default
+      view_mode: tile
       link: ''
     third_party_settings:
       field_delimiter:

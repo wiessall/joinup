@@ -111,6 +111,9 @@ function ventuno_preprocess_form_element_label(array &$variables): void {
  * Implements hook_form_alter().
  */
 function ventuno_form_alter(array &$form, FormStateInterface $form_state, string $form_id): void {
+  // Disable client side HTML5 validation @see https://html.spec.whatwg.org/multipage/form-control-infrastructure.html#attr-fs-novalidate
+  $form['#attributes']['novalidate'] = 'novalidate';
+
   // Add classes to the delete action in any kind of form.
   if (isset($form['actions']['delete'])) {
     $classes = $form['actions']['delete']['#attributes']['class'] ?? [];
@@ -160,5 +163,28 @@ function ventuno_theme_suggestions_select_alter(array &$suggestions, array $vari
 function ventuno_preprocess_radios(array &$variables): void {
   if (isset($variables['element']['#name']) && $variables['element']['#name'] === 'layout_paragraphs[layout]') {
     $variables['attributes']['class'][] = 'd-flex col-gap-3';
+  }
+}
+
+/**
+ * Implements hook_form_BASE_FORM_ID_alter().
+ */
+function ventuno_form_poll_view_form_alter(array &$form, FormStateInterface $form_state, string $form_id): void {
+  foreach (['result', 'cancel'] as $element) {
+    if (!isset($form['actions'][$element])) {
+      continue;
+    }
+
+    $form['actions'][$element]['#button_type'] = 'link';
+    $form['actions'][$element]['#attributes']['class'][] = 'p-0';
+  }
+}
+
+/**
+ * Implements hook_preprocess_input__submit().
+ */
+function ventuno_preprocess_input__submit(array &$variables): void {
+  if (!isset($variables['element']['#button_type'])) {
+    $variables['attributes']['class'][] = 'btn-primary';
   }
 }

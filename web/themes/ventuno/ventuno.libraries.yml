@@ -295,6 +295,11 @@ paragraph__quote:
     theme:
       assets/css/paragraph--quote.min.css: { minified: true }
 
+paragraph__poll:
+  css:
+    theme:
+      assets/css/paragraph--poll.min.css: { minified: true }
+
 paragraph__testimony:
   css:
     theme:

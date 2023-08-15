@@ -441,6 +441,41 @@ class JoinupParagraphsContext extends RawDrupalContext {
   }
 
   /**
+   * Appends a poll paragraph.
+   *
+   * @param string $poll
+   *   Poll name.
+   * @param string $parent_field
+   *   Parent field name.
+   * @param string $parent_type_id
+   *   Parent type id.
+   * @param string $parent_name
+   *   Parent name.
+   *
+   * @Given I append poll :poll to :parent_field field in :parent_type_id entity with following :parent_name title
+   *
+   * @throws \Drupal\Core\Entity\EntityStorageException
+   */
+  public function iAppendPollToFieldInEntityWithFollowingTitle(
+    string $poll,
+    string $parent_field,
+    string $parent_type_id,
+    string $parent_name): void {
+    $poll = $this->getEntityByLabel('poll', $poll);
+    $parentEntity = $this->getEntityByLabel($parent_type_id, $parent_name);
+
+    $values = [
+      'type' => 'poll',
+      'field_paragraphs_poll' => [$poll->id()],
+    ];
+    $paragraph = Paragraph::create($values);
+    $paragraph->save();
+
+    $this->entities['paragraph'][$paragraph->id()] = $paragraph;
+    $this->appendParagraphToEntity($parentEntity, $paragraph, $parent_field);
+  }
+
+  /**
    * Appends a content listing paragraph.
    *
    * @param string $parent_field
