@@ -9,7 +9,6 @@ testing:
     - http_request_mock
     - joinup_cas_mock_server
     - joinup_test
-#    - upgrade_status
 
 behat:
   screenshots:
