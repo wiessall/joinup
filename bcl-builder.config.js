@@ -736,11 +736,11 @@ module.exports = {
     {
       entry: path.resolve(
         outputFolder,
-        `${ventuno}src/scss/components/paragraphs/paragraph--quote.scss`
+        `${ventuno}src/scss/components/paragraphs/paragraph--poll.scss`
       ),
       dest: path.resolve(
         outputFolder,
-        `${ventuno}assets/css/paragraph--quote.min.css`
+        `${ventuno}assets/css/paragraph--poll.min.css`
       ),
       options: {
         includePaths,

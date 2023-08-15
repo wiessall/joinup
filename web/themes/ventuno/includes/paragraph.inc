@@ -44,12 +44,13 @@ function ventuno_preprocess_paragraph__configurable_listing(&$variables) {
     'list' => 'view_mode_tile_horizontal',
   ];
 
-  $results = &$variables['content']['content_listing']['#results'];
-  foreach ($results as &$result) {
-    $result['#item']['#view_mode'] = $view_mode_mapping[$style];
-    $cache_tags = CacheableMetadata::createFromRenderArray($result['#item']);
-    $cache_tags->addCacheTags($paragraph->getCacheTags());
-    $cache_tags->applyTo($result['#item']);
+  if ($results = &$variables['content']['content_listing']['#results']) {
+    foreach ($results as &$result) {
+      $result['#item']['#view_mode'] = $view_mode_mapping[$style];
+      $cache_tags = CacheableMetadata::createFromRenderArray($result['#item']);
+      $cache_tags->addCacheTags($paragraph->getCacheTags());
+      $cache_tags->applyTo($result['#item']);
+    }
   }
 
   $variables['style'] = $paragraph->get('list_style')->value;
@@ -68,4 +69,12 @@ function ventuno_preprocess_paragraph__accordion_item(array &$variables): void {
     return;
   }
   $variables['parent_id'] = $parent->id();
+}
+
+/**
+ * Implements hook_preprocess_HOOK().
+ */
+function ventuno_preprocess_paragraph__poll(array &$variables): void {
+  $variables['attributes']['class'][] = 'bg-light';
+  $variables['attributes']['class'][] = 'p-3';
 }

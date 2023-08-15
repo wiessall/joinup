@@ -10,10 +10,10 @@ Feature:
       | First name  | Jimmy                           |
       | Family name | Nine                            |
       | E-mail      | jimmy.nine@ec-europa.example.eu |
-    And the following collections:
-      | title      | logo     | banner     | state     |
-      | Nintendo64 | logo.png | banner.jpg | validated |
-      | Emulators  | logo.png | banner.jpg | validated |
+    Given the following collections:
+      | title      | logo     | state     |
+      | Nintendo64 | logo.png | validated |
+      | Emulators  | logo.png | validated |
     And custom_page content:
       | title               | collection | created           | body                               | state     | pinned |
       | Latest news listing | Nintendo64 | 2019-10-01 4:26am | You can find the latest news here. | published | no     |
@@ -448,8 +448,8 @@ Feature:
   Scenario: Global search setting allows for site-wide content in the content listing.
     Given I am logged in as a moderator
     And custom_page content:
-      | title       | collection   | state     |
-      | All content | Nintendo64   | published |
+      | title       | collection | state     |
+      | All content | Nintendo64 | published |
     And I append "content_listing" to "field_paragraphs_body" field in "node" entity with following "All content" title:
       | content_listing:value | a:6:{s:6:"fields";a:1:{s:20:"content_listing_type";a:2:{s:6:"weight";i:0;s:6:"region";s:3:"top";}}s:7:"enabled";i:1;s:13:"query_presets";s:38:"entity_bundle\|discussion,event,news\|IN";s:5:"limit";s:2:"12";s:11:"show_shared";i:0;s:13:"global_search";i:1;} |
 

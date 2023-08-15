@@ -12,9 +12,6 @@ declare(strict_types = 1);
  */
 function joinup_like_theme(array $existing, string $type, string $theme, string $path): array {
   return [
-    'joinup_like_anonymous' => [
-      'variables' => [],
-    ],
     'flag_count_archived' => [
       'variables' => [
         'flag' => NULL,
@@ -23,6 +20,14 @@ function joinup_like_theme(array $existing, string $type, string $theme, string 
       ],
     ],
   ];
+}
+
+/**
+ * Implements hook_preprocess_HOOK().
+ */
+function joinup_like_preprocess_joinup_modal_anonymous__like(&$variables): void {
+  $variables['title'] = t('Login or register to like this content');
+  $variables['description'] = t('Like this content will help other people find reliable information about what they search!');
 }
 
 /**

@@ -45,11 +45,11 @@
   ]
 %}
 {% block paragraph %}
-  <blockquote{{ attributes.addClass(classes) }}>
+  <div{{ attributes.addClass(classes) }}>
     {% block content %}
-      <p>
+      <blockquote>
         {{ content }}
-      </p>
+      </blockquote>
     {% endblock %}
-  </blockquote>
+  </div>
 {% endblock paragraph %}
