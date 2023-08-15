@@ -348,7 +348,8 @@
             },
             "drupal/smart_trim": {
                 "D10 compatibility": "resources/patch/php/drupal/smart_trim/d10.diff",
-                "Avoid max nesting level during development @see https://www.drupal.org/project/smart_trim/issues/3013628": "https://www.drupal.org/files/issues/2020-05-28/maximum_function_nesting-3013628-D8-7.patch"
+                "Avoid max nesting level during development @see https://www.drupal.org/project/smart_trim/issues/3013628": "https://www.drupal.org/files/issues/2020-05-28/maximum_function_nesting-3013628-D8-7.patch",
+                "Deprecated function: mb_convert_encoding() @see https://www.drupal.org/project/smart_trim/issues/3342481": "resources/patch/php/drupal/smart_trim/3342481.diff"
             },
             "drupal/social_media_links": {
                 "Missing config schema for field, widget and formatter @see https://www.drupal.org/node/2898680": "https://git.drupalcode.org/project/social_media_links/-/merge_requests/4.diff",
