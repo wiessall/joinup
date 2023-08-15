@@ -6,7 +6,6 @@ namespace Drupal\eu_oss_catalogue;
 
 use Drupal\Component\Render\MarkupInterface;
 use Drupal\Core\Cache\CacheBackendInterface;
-use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Plugin\DefaultPluginManager;
 use Symfony\Component\DependencyInjection\Container;
@@ -40,15 +39,12 @@ class EuOssCataloguePluginManager extends DefaultPluginManager implements EuOssC
    *   The module handler to invoke the alter hook with.
    * @param string $type
    *   The type of plugins: provider, parser, resolver.
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface|null $entityTypeManager
-   *   The entity type manager service.
    */
   public function __construct(
     \Traversable $namespaces,
     CacheBackendInterface $cacheBackend,
     ModuleHandlerInterface $moduleHandler,
     string $type,
-    ?EntityTypeManagerInterface $entityTypeManager = NULL,
   ) {
     \assert(in_array($type, static::PLUGIN_TYPES, TRUE));
 
@@ -59,7 +55,7 @@ class EuOssCataloguePluginManager extends DefaultPluginManager implements EuOssC
     parent::__construct('Plugin/eu_oss_catalogue/' . $typeCamelized, $namespaces, $moduleHandler, $interfaceClass, $annotationClass);
 
     $this->alterInfo("eu_oss_catalogue_{$type}_info");
-    $tags = $type === 'provider' ? $entityTypeManager->getDefinition('hosting_platform')->getListCacheTags() : [];
+    $tags = $type === 'provider' ? ['config:hosting_platform_list'] : [];
     $this->setCacheBackend($cacheBackend, "eu_oss_catalogue_{$type}_plugins", $tags);
   }
 
