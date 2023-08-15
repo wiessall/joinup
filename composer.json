@@ -324,6 +324,9 @@
             "drupal/message_notify": {
                 "Allow 3rd-party to act before delivery @see https://www.drupal.org/project/message_notify/issues/3314370": "resources/patch/php/drupal/message_notify/3314370.diff"
             },
+            "drupal/pathauto": {
+                "PHP 8.2 compatibility @see https://www.drupal.org/project/pathauto/issues/3328670": "https://www.drupal.org/files/issues/2022-12-21/php8.2notice-pathauto-3328670.patch"
+            },
             "drupal/publication_date": {
                 "Fix PHP 8.2 deprecation issue with PublishedAtOrNowComputed class @see https://www.drupal.org/project/publication_date/issues/3328575": "https://www.drupal.org/files/issues/2023-05-31/3328575-5-fix-bux-publicate-date.patch"
             },
