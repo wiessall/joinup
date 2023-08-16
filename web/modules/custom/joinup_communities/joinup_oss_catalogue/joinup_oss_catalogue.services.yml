@@ -1,4 +1,4 @@
 services:
   monolog.handler.eu_oss_catalogue:
     class: Drupal\joinup_oss_catalogue\Logger\Handler\EuOssCatalogueHandler
-    arguments: [100, TRUE]
+    arguments: ['@entity_type.manager', 100, TRUE]
