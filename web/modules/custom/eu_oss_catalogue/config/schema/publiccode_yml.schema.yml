@@ -301,7 +301,7 @@ eu_oss_catalogue.publiccode_yml.country.it:
           type: boolean
           label: Compliance with the Italian laws (L. 4/2004)
           required: false
-        lineeGuidaAccessibilita:
+        modelloInteroperabilita:
           type: boolean
           label: 'Compliance with the "linee guida sull’interoperabilità".'
           required: false
