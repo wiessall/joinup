@@ -32,6 +32,11 @@ accordion-faq:
     theme:
       assets/css/accordion-faq.min.css: { minified: true, preprocess: false }
 
+call-to-action:
+  css:
+    theme:
+      assets/css/call-to-action.min.css: { minified: true, preprocess: false }
+
 join:
   css:
     theme:
@@ -66,11 +71,6 @@ paragraph--2-column-featured-right:
   css:
     theme:
       assets/css/paragraph--2-column-featured-right.min.css: { minified: true }
-
-paragraph--call-to-action:
-  css:
-    theme:
-      assets/css/paragraph--call-to-action.min.css: { minified: true, preprocess: false }
 
 paragraph--carousel:
   css:
