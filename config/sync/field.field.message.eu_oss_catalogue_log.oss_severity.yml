@@ -1,14 +1,14 @@
-uuid: 47f8aef1-6787-47ab-9150-54b6718c1422
+uuid: 5ce8536f-61a3-47ba-bee6-db0e105c5bcf
 langcode: en
 status: true
 dependencies:
   config:
-    - field.storage.message.log_severity
+    - field.storage.message.oss_severity
     - message.template.eu_oss_catalogue_log
   module:
     - options
-id: message.eu_oss_catalogue_log.log_severity
-field_name: log_severity
+id: message.eu_oss_catalogue_log.oss_severity
+field_name: oss_severity
 entity_type: message
 bundle: eu_oss_catalogue_log
 label: 'Log severity'
