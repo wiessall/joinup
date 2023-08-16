@@ -4,11 +4,11 @@ declare(strict_types = 1);
 
 namespace Drupal\eu_oss_catalogue_test\Plugin\eu_oss_catalogue\Provider;
 
-use Drupal\Component\Plugin\PluginManagerInterface;
 use Drupal\Component\Serialization\Json;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Serialization\Yaml;
-use Drupal\eu_oss_catalogue\EuOssCatalogueFetchedSolution;
+use Drupal\eu_oss_catalogue\EuOssCataloguePluginManagerInterface;
+use Drupal\eu_oss_catalogue\Model\EuOssCatalogueFetchedSolution;
 use Drupal\eu_oss_catalogue\Plugin\eu_oss_catalogue\Provider\DevelopersItalia;
 use GuzzleHttp\Client;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -37,7 +37,7 @@ class RemovingSolutionProvider extends DevelopersItalia {
    *   The plugin implementation definition.
    * @param \GuzzleHttp\Client $httpClient
    *   The HTTP client.
-   * @param \Drupal\Component\Plugin\PluginManagerInterface $parserManager
+   * @param \Drupal\eu_oss_catalogue\EuOssCataloguePluginManagerInterface $parserManager
    *   The EU OSS parser plugin manager service.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
    *   The entity type manager.
@@ -47,10 +47,10 @@ class RemovingSolutionProvider extends DevelopersItalia {
     $pluginId,
     $pluginDefinition,
     protected Client $httpClient,
-    protected PluginManagerInterface $parserManager,
+    protected EuOssCataloguePluginManagerInterface $parserManager,
     protected EntityTypeManagerInterface $entityTypeManager,
   ) {
-    parent::__construct($configuration, $pluginId, $pluginDefinition, $httpClient, $parserManager);
+    parent::__construct($configuration, $pluginId, $pluginDefinition, $parserManager, $httpClient);
   }
 
   /**
@@ -82,12 +82,6 @@ class RemovingSolutionProvider extends DevelopersItalia {
       $active = $newItem['active'] ?? FALSE;
       if ($active) {
         $decoded = Yaml::decode($newItem['publiccodeYml']);
-        $hasValidSchema = $this->checkSchema($decoded, $newItem['id']);
-
-        // A solution source URL is necessary to fetch the data.
-        if (!isset($decoded['url'])) {
-          continue;
-        }
 
         // If the title is "Solution 2" and the solution exists, skip it so that
         // we simulate a solution that has been removed.
@@ -106,7 +100,6 @@ class RemovingSolutionProvider extends DevelopersItalia {
           $decoded['url'],
           $decoded['name'],
           $decoded,
-          $hasValidSchema,
           $newItem['id'],
         );
       }

@@ -5,6 +5,7 @@ declare(strict_types = 1);
 namespace Drupal\eu_oss_catalogue;
 
 use Drupal\eu_oss_catalogue\Entity\OssSolutionInterface;
+use Drupal\eu_oss_catalogue\Model\EuOssCatalogueFetchedSolution;
 
 /**
  * Interface for 'eu_oss_catalogue' service.
@@ -41,7 +42,7 @@ interface EuOssCatalogueInterface {
    *
    * @param string $providerPluginId
    *   The provider plugin ID.
-   * @param \Drupal\eu_oss_catalogue\EuOssCatalogueFetchedSolution $fetchedSolution
+   * @param \Drupal\eu_oss_catalogue\Model\EuOssCatalogueFetchedSolution $fetchedSolution
    *   The fetched solution object.
    *
    * @return \Drupal\eu_oss_catalogue\Entity\OssSolutionInterface
