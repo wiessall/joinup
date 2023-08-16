@@ -18,9 +18,9 @@ function ventuno_preprocess_paragraph(array &$variables): void {
   $variables['#attached']['library'][] = 'ventuno/paragraph__' . $variables['paragraph']->bundle();
   $variables['attributes']['class'][] = 'paragraph--' . str_replace('_', '-', $variables['paragraph']->bundle());
 
-  if (isset($variables['elements']['#paragraph_alignment'])) {
+  if (isset($variables['elements']['#joinup_paragraph_alignment'])) {
     $variables['attributes']['class'][] = 'd-flex';
-    $variables['attributes']['class'][] = match ($variables['elements']['#paragraph_alignment']) {
+    $variables['attributes']['class'][] = match ($variables['elements']['#joinup_paragraph_alignment']) {
       'center' => 'justify-content-center',
       'right' => 'justify-content-end',
       default => 'justify-content-start',

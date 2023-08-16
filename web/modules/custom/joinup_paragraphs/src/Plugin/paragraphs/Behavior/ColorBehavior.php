@@ -49,7 +49,7 @@ class ColorBehavior extends ParagraphsBehaviorBase {
    * {@inheritdoc}
    */
   public function view(array &$build, Paragraph $paragraph, EntityViewDisplayInterface $display, $view_mode): void {
-    $build['#paragraph_color'] = $paragraph->getBehaviorSetting($this->getPluginId(), 'color', self::DEFAULT_COLOR);
+    $build['#joinup_paragraph_color'] = $paragraph->getBehaviorSetting($this->getPluginId(), 'color', self::DEFAULT_COLOR);
   }
 
   /**
