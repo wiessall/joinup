@@ -4,7 +4,7 @@
     "type": "project",
     "license": "EUPL-1.2",
     "require": {
-        "php": ">=8.1.3",
+        "php": ">=8.2",
         "ext-dom": "*",
         "ext-json": "*",
         "ext-memcached": "*",
@@ -131,7 +131,6 @@
         "drupal/http_request_mock": "^1.1",
         "drupal/masquerade": "^2.0@RC",
         "drupal/renderviz": "^1.0",
-        "drupal/upgrade_status": "^4.0",
         "drupaltest/behat-one-time-login": "^1.0",
         "ec-europa/toolkit": "^9.10",
         "enlightn/security-checker": "^1",
@@ -159,7 +158,7 @@
     "config": {
         "sort-packages": true,
         "platform": {
-            "php": "8.1.3"
+            "php": "8.2"
         },
         "allow-plugins": {
             "dealerdirect/phpcodesniffer-composer-installer": true,
@@ -300,7 +299,8 @@
             },
             "drupal/facets": {
                 "Facet Summary for Facet Items with a set dependency. @see https://www.drupal.org/i/2873480": "https://git.drupalcode.org/project/facets/-/merge_requests/128.diff",
-                "Add 0 option in 'Soft limit' and apply soft limit to facet root li tags and add. @see https://www.drupal.org/i/3208580 and https://www.drupal.org/i/3307082": "resources/patch/php/drupal/facets/3208580-and-3307082.patch"
+                "Add 0 option in 'Soft limit' and apply soft limit to facet root li tags and add. @see https://www.drupal.org/i/3208580 and https://www.drupal.org/i/3307082": "resources/patch/php/drupal/facets/3208580-and-3307082.patch",
+                "Creation of dynamic property is deprecated @see https://www.drupal.org/project/facets/issues/3336646": "resources/patch/php/drupal/facets/3336646.diff"
             },
             "drupal/field_delimiter": {
                 "Doesn't work in layout builder. @see https://www.drupal.org/i/3099580": "https://www.drupal.org/files/issues/2020-04-08/field_delimiter-3099580-7.patch",
@@ -328,8 +328,14 @@
             "drupal/message_notify": {
                 "Allow 3rd-party to act before delivery @see https://www.drupal.org/project/message_notify/issues/3314370": "resources/patch/php/drupal/message_notify/3314370.diff"
             },
+            "drupal/pathauto": {
+                "PHP 8.2 compatibility @see https://www.drupal.org/project/pathauto/issues/3328670": "https://www.drupal.org/files/issues/2022-12-21/php8.2notice-pathauto-3328670.patch"
+            },
             "drupal/poll": {
                 "Add permissions to edit all polls @see https://www.drupal.org/project/poll/issues/3274724": "resources/patch/php/drupal/poll/3274724-4.patch"
+            },
+            "drupal/publication_date": {
+                "Fix PHP 8.2 deprecation issue with PublishedAtOrNowComputed class @see https://www.drupal.org/project/publication_date/issues/3328575": "https://www.drupal.org/files/issues/2023-05-31/3328575-5-fix-bux-publicate-date.patch"
             },
             "drupal/rdf_entity": {
                 "Allow bundle label plural variants @see https://github.com/ec-europa/rdf_entity/pull/12": "https://github.com/ec-europa/rdf_entity/compare/8.x-1.x...ea8f6af001fca732e89a4be0e29643953f49a88f.diff"
@@ -348,7 +354,8 @@
             },
             "drupal/smart_trim": {
                 "D10 compatibility": "resources/patch/php/drupal/smart_trim/d10.diff",
-                "Avoid max nesting level during development @see https://www.drupal.org/project/smart_trim/issues/3013628": "https://www.drupal.org/files/issues/2020-05-28/maximum_function_nesting-3013628-D8-7.patch"
+                "Avoid max nesting level during development @see https://www.drupal.org/project/smart_trim/issues/3013628": "https://www.drupal.org/files/issues/2020-05-28/maximum_function_nesting-3013628-D8-7.patch",
+                "Deprecated function: mb_convert_encoding() @see https://www.drupal.org/project/smart_trim/issues/3342481": "resources/patch/php/drupal/smart_trim/3342481.diff"
             },
             "drupal/social_media_links": {
                 "Missing config schema for field, widget and formatter @see https://www.drupal.org/node/2898680": "https://git.drupalcode.org/project/social_media_links/-/merge_requests/4.diff",
