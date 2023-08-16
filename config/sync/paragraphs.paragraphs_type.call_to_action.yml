@@ -14,3 +14,5 @@ description: 'Contains a link with custom text.'
 behavior_plugins:
   alignment:
     enabled: true
+  color:
+    enabled: true
