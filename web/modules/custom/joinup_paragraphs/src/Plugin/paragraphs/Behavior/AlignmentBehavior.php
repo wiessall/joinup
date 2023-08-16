@@ -30,7 +30,7 @@ class AlignmentBehavior extends ParagraphsBehaviorBase {
    * {@inheritdoc}
    */
   public function view(array &$build, Paragraph $paragraph, EntityViewDisplayInterface $display, $view_mode): void {
-    $build['#paragraph_alignment'] = $paragraph->getBehaviorSetting($this->getPluginId(), 'alignment', self::DEFAULT_ALIGNMENT);
+    $build['#joinup_paragraph_alignment'] = $paragraph->getBehaviorSetting($this->getPluginId(), 'alignment', self::DEFAULT_ALIGNMENT);
   }
 
   /**
