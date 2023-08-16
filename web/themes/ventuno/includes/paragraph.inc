@@ -29,7 +29,7 @@ function ventuno_preprocess_paragraph(array &$variables): void {
 }
 
 /**
- * Implements hook_paragraphs_behavior_options_HOOK().
+ * Implements hook_preprocess_HOOK().
  */
 function ventuno_preprocess_field__paragraph__call_to_action(&$variables): void {
   $paragraph = $variables['element']['#object'];
