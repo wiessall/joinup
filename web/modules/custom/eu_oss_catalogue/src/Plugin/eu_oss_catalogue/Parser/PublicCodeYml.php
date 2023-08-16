@@ -8,7 +8,7 @@ use Drupal\Component\Plugin\PluginManagerInterface;
 use Drupal\Core\Config\Schema\SchemaCheckTrait;
 use Drupal\Core\Config\TypedConfigManagerInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
-use Drupal\Core\Logger\LoggerChannelFactoryInterface;
+use Drupal\Core\Logger\LoggerChannelInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Serialization\Yaml;
 use Drupal\eu_oss_catalogue\Entity\OssSolutionInterface;
@@ -46,8 +46,8 @@ class PublicCodeYml extends EuOssCatalogueParserPluginBase implements ContainerF
    *   The entity type manager service.
    * @param \Drupal\Component\Plugin\PluginManagerInterface $resolverManager
    *   The EU OSS Catalogue resolver plugin manager service.
-   * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $logger
-   *   The logger channel factory service.
+   * @param \Drupal\Core\Logger\LoggerChannelInterface $loggerChannel
+   *   The EU catalogue logger channel.
    * @param \Drupal\Core\Config\TypedConfigManagerInterface $typedConfigManager
    *   The typed config manager interface.
    */
@@ -57,10 +57,10 @@ class PublicCodeYml extends EuOssCatalogueParserPluginBase implements ContainerF
     $pluginDefinition,
     protected EntityTypeManagerInterface $entityTypeManager,
     protected PluginManagerInterface $resolverManager,
-    protected LoggerChannelFactoryInterface $logger,
+    protected LoggerChannelInterface $loggerChannel,
     protected TypedConfigManagerInterface $typedConfigManager,
   ) {
-    parent::__construct($configuration, $pluginId, $pluginDefinition, $this->entityTypeManager, $this->resolverManager, $this->logger);
+    parent::__construct($configuration, $pluginId, $pluginDefinition, $this->entityTypeManager, $this->resolverManager, $this->loggerChannel);
   }
 
   /**
@@ -73,7 +73,7 @@ class PublicCodeYml extends EuOssCatalogueParserPluginBase implements ContainerF
       $pluginDefinition,
       $container->get('entity_type.manager'),
       $container->get('plugin.manager.eu_oss_catalogue.resolver'),
-      $container->get('logger.factory'),
+      $container->get('logger.channel.eu_oss_catalogue'),
       $container->get('config.typed'),
     );
   }
@@ -113,7 +113,7 @@ class PublicCodeYml extends EuOssCatalogueParserPluginBase implements ContainerF
       '@provider_id' => $providerReference ?? '[not provided]',
       '@data' => Yaml::encode($data),
     ];
-    $this->logger->get('eu_oss_catalogue')->error($message, $arguments);
+    $this->loggerChannel->error($message, $arguments);
 
     return FALSE;
   }
