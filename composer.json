@@ -14,7 +14,7 @@
         "cweagans/composer-patches": "^1.7",
         "drupal/addtocal": "^3.0",
         "drupal/allowed_formats": "^2.0",
-        "drupal/antibot": "^1.5@stable",
+        "drupal/antibot": "^2.0",
         "drupal/bootstrap4_modal": "^2.1",
         "drupal/cached_computed_field": "^1.0",
         "drupal/cas": "^2.0",
@@ -240,9 +240,6 @@
             "drupal/core": "-p2"
         },
         "patches": {
-            "drupal/antibot": {
-                "D10 compatibility @see https://www.drupal.org/project/antibot/issues/3258107": "https://git.drupalcode.org/project/antibot/-/commit/05427aa.diff"
-            },
             "drupal/bootstrap4_modal": {
               "Expected a scalar value as a 2nd argument to InputBag::get(), array given. @see https://www.drupal.org/i/3350657": "https://git.drupalcode.org/project/bootstrap4_modal/-/merge_requests/7.patch"
             },
@@ -376,7 +373,6 @@
         },
         "drupal-lenient": {
             "allowed-list": [
-                "drupal/antibot",
                 "drupal/email_confirmer",
                 "drupal/smart_trim"
             ]
