@@ -412,7 +412,8 @@ class JoinupCommunityContentContext extends RawDrupalContext {
       ['custom_page']
     );
 
-    // Only deal with community content.
+    // Only deal with community content + custom pages (which have topic field
+    // set as required).
     if (!in_array($node->type, $bundles_with_topics, TRUE)) {
       return;
     }
