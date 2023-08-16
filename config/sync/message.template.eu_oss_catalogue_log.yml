@@ -12,7 +12,7 @@ text:
     value: 'EU OSS catalogue log'
     format: full_html
   -
-    value: '<p>Severity: [message:log_severity],&nbsp;Message: [message:log_message:value]</p>'
+    value: '<p>Severity: [message:oss_severity],&nbsp;Message: [message:oss_message:value]</p>'
     format: full_html
 settings:
   'token options':
