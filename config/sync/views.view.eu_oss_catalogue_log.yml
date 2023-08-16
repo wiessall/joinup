@@ -4,9 +4,11 @@ status: true
 dependencies:
   config:
     - field.storage.message.oss_landing_url
+    - field.storage.message.oss_severity
     - field.storage.message.oss_solution
     - field.storage.message.oss_source
     - message.template.eu_oss_catalogue_log
+    - system.menu.admin
   module:
     - link
     - message
@@ -85,6 +87,68 @@ display:
           settings:
             thousand_separator: ''
             prefix_suffix: true
+          group_column: value
+          group_columns: {  }
+          group_rows: true
+          delta_limit: 0
+          delta_offset: 0
+          delta_reversed: false
+          delta_first_last: false
+          multi_type: separator
+          separator: ', '
+          field_api_classes: false
+        oss_severity:
+          id: oss_severity
+          table: message__oss_severity
+          field: oss_severity
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: field
+          label: Severity
+          exclude: false
+          alter:
+            alter_text: false
+            text: ''
+            make_link: false
+            path: ''
+            absolute: false
+            external: false
+            replace_spaces: false
+            path_case: none
+            trim_whitespace: false
+            alt: ''
+            rel: ''
+            link_class: ''
+            prefix: ''
+            suffix: ''
+            target: ''
+            nl2br: false
+            max_length: 0
+            word_boundary: true
+            ellipsis: true
+            more_link: false
+            more_link_text: ''
+            more_link_path: ''
+            strip_tags: false
+            trim: false
+            preserve_tags: ''
+            html: false
+          element_type: ''
+          element_class: ''
+          element_label_type: ''
+          element_label_class: ''
+          element_label_colon: true
+          element_wrapper_type: ''
+          element_wrapper_class: ''
+          element_default_classes: true
+          empty: ''
+          hide_empty: false
+          empty_zero: false
+          hide_alter_empty: true
+          click_sort_column: value
+          type: list_default
+          settings: {  }
           group_column: value
           group_columns: {  }
           group_rows: true
@@ -400,51 +464,6 @@ display:
           plugin_id: bundle
           value:
             eu_oss_catalogue_log: eu_oss_catalogue_log
-        log_severity_value:
-          id: log_severity_value
-          table: message__log_severity
-          field: log_severity_value
-          relationship: none
-          group_type: group
-          admin_label: ''
-          plugin_id: list_field
-          operator: or
-          value: {  }
-          group: 1
-          exposed: true
-          expose:
-            operator_id: log_severity_value_op
-            label: Severity
-            description: ''
-            use_operator: false
-            operator: log_severity_value_op
-            operator_limit_selection: false
-            operator_list: {  }
-            identifier: log_severity
-            required: false
-            remember: false
-            multiple: false
-            remember_roles:
-              authenticated: authenticated
-              licence_manager: '0'
-              anonymous: '0'
-              moderator: '0'
-              administrator: '0'
-              rdf_graph_manager: '0'
-            reduce: false
-          is_grouped: false
-          group_info:
-            label: ''
-            description: ''
-            identifier: ''
-            optional: true
-            widget: select
-            multiple: false
-            remember: false
-            default_group: All
-            default_group_multiple: {  }
-            group_items: {  }
-          reduce_duplicates: false
         oss_solution_target_id:
           id: oss_solution_target_id
           table: message__oss_solution
@@ -494,6 +513,51 @@ display:
             default_group: All
             default_group_multiple: {  }
             group_items: {  }
+        oss_severity_value:
+          id: oss_severity_value
+          table: message__oss_severity
+          field: oss_severity_value
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: list_field
+          operator: or
+          value: {  }
+          group: 1
+          exposed: true
+          expose:
+            operator_id: oss_severity_value_op
+            label: Severity
+            description: ''
+            use_operator: false
+            operator: oss_severity_value_op
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: oss_severity
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+              licence_manager: '0'
+              anonymous: '0'
+              moderator: '0'
+              administrator: '0'
+              rdf_graph_manager: '0'
+            reduce: false
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
+          reduce_duplicates: false
       style:
         type: table
         options:
@@ -502,7 +566,7 @@ display:
           default_row_class: true
           columns:
             mid: mid
-            log_severity: log_severity
+            oss_severity: oss_severity
             get_text: get_text
             oss_solution: oss_solution
             oss_landing_url: oss_landing_url
@@ -516,7 +580,7 @@ display:
               separator: ''
               empty_column: false
               responsive: ''
-            log_severity:
+            oss_severity:
               sortable: true
               default_sort_order: asc
               align: ''
@@ -577,6 +641,7 @@ display:
         - user.permissions
       tags:
         - 'config:field.storage.message.oss_landing_url'
+        - 'config:field.storage.message.oss_severity'
         - 'config:field.storage.message.oss_solution'
         - 'config:field.storage.message.oss_source'
   page:
@@ -589,7 +654,16 @@ display:
         metatag_display_extender:
           metatags: {  }
           tokenize: false
-      path: eu-oss-catalogue-log
+      path: admin/reporting/eu-oss-catalogue-log
+      menu:
+        type: normal
+        title: 'EU OSS Catalogue log'
+        description: ''
+        weight: 0
+        expanded: false
+        menu_name: admin
+        parent: joinup.admin_reporting
+        context: '0'
     cache_metadata:
       max-age: -1
       contexts:
@@ -600,5 +674,6 @@ display:
         - user.permissions
       tags:
         - 'config:field.storage.message.oss_landing_url'
+        - 'config:field.storage.message.oss_severity'
         - 'config:field.storage.message.oss_solution'
         - 'config:field.storage.message.oss_source'
