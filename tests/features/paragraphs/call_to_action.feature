@@ -24,4 +24,4 @@ Feature:
     And I select "Right" from "Alignment" in the "Modal content" region
     And I press "Save" in the "Modal buttons" region
     And I press "Update"
-    When the page should contain the html text '<div class="d-flex justify-content-end paragraph--call-to-action paragraph">'
+    When the page should contain the html text '<div class="paragraph--call-to-action d-flex justify-content-end paragraph">'
