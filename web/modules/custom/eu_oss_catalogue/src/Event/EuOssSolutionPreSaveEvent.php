@@ -5,7 +5,7 @@ declare(strict_types = 1);
 namespace Drupal\eu_oss_catalogue\Event;
 
 use Drupal\eu_oss_catalogue\Entity\OssSolutionInterface;
-use Drupal\eu_oss_catalogue\EuOssCatalogueFetchedSolution;
+use Drupal\eu_oss_catalogue\Model\EuOssCatalogueFetchedSolution;
 use Symfony\Contracts\EventDispatcher\Event;
 
 /**
@@ -18,7 +18,7 @@ class EuOssSolutionPreSaveEvent extends Event {
    *
    * @param \Drupal\eu_oss_catalogue\Entity\OssSolutionInterface $solution
    *   The OSS Solution node entity.
-   * @param \Drupal\eu_oss_catalogue\EuOssCatalogueFetchedSolution $fetchedSolution
+   * @param \Drupal\eu_oss_catalogue\Model\EuOssCatalogueFetchedSolution $fetchedSolution
    *   The fetched solution object.
    */
   public function __construct(
