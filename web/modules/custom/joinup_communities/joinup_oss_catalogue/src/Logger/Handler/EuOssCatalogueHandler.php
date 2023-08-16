@@ -46,7 +46,10 @@ class EuOssCatalogueHandler extends AbstractProcessingHandler {
     $message = $this->entityTypeManager->getStorage('message')->create([
       'template' => 'eu_oss_catalogue_log',
     ]);
-    $message->set('oss_message', $record['message']);
+    $message->set('oss_message', [
+      'value' => $record['message'],
+      'format' => 'content_editor',
+    ]);
     $message->set('oss_severity', $record['level']);
 
     if (isset($record['context']['oss_solution']) && $record['context']['oss_solution'] instanceof OssSolutionInterface) {
