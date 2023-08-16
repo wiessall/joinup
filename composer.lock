@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "2cef8c254185bd3e165313723f0062df",
+    "content-hash": "400520e5795322b2dd106ee6f4158f13",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -1463,26 +1463,26 @@
         },
         {
             "name": "drupal/antibot",
-            "version": "1.5.0",
+            "version": "2.0.2",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/antibot.git",
-                "reference": "8.x-1.5"
+                "reference": "2.0.2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/antibot-8.x-1.5.zip",
-                "reference": "8.x-1.5",
-                "shasum": "f3597cde2903c979042bf8c1b25a9d3694159e43"
+                "url": "https://ftp.drupal.org/files/projects/antibot-2.0.2.zip",
+                "reference": "2.0.2",
+                "shasum": "e5866fbe1d8e5ff2811ff77efee754d26c313efb"
             },
             "require": {
-                "drupal/core": "^8 || ^9 || ^10"
+                "drupal/core": "^8.8 || ^9 || ^10"
             },
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "8.x-1.5",
-                    "datestamp": "1637670654",
+                    "version": "2.0.2",
+                    "datestamp": "1666001671",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -21599,7 +21599,6 @@
     "aliases": [],
     "minimum-stability": "dev",
     "stability-flags": {
-        "drupal/antibot": 0,
         "drupal/dropsolid_purge": 10,
         "drupal/facets_block": 10,
         "drupal/facets_date_range": 10,
