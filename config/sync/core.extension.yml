@@ -164,7 +164,6 @@ module:
   paragraphs_type_permissions: 0
   path: 0
   path_alias: 0
-  phpass: 0
   pipeline: 0
   purge: 0
   purge_drush: 0
