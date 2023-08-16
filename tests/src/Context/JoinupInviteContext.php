@@ -55,7 +55,7 @@ class JoinupInviteContext extends RawDrupalContext {
     $invitation = Invitation::loadByEntityAndUser($entity, $user, $invitation_info['invitation_bundle']);
     $arguments = $this->getInvitationMessageHelper()->getMessage($invitation, $invitation_info['message_template'])->getArguments();
 
-    $this->visitPath($arguments["@invitation:${action}_url"]);
+    $this->visitPath($arguments["@invitation:{$action}_url"]);
   }
 
   /**
