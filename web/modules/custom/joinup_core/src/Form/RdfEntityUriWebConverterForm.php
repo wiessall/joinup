@@ -94,7 +94,7 @@ class RdfEntityUriWebConverterForm extends FormBase {
     $id = trim($form_state->getValue('entity_id'), " ");
     $entity_type = $form_state->get('entity_type');
     if ($passed_as === 'id') {
-      $form_state->setRedirect("entity.${entity_type}.canonical", [$entity_type => $id]);
+      $form_state->setRedirect("entity.{$entity_type}.canonical", [$entity_type => $id]);
     }
     elseif ($passed_as === 'url') {
       // We display only the ID, so it can be easily selected with a mouse
