@@ -81,7 +81,7 @@ data:
                 optional: false
                 version: "4.8"
       it:
-          countryExtensionVersion: "0.2"
+          countryExtensionVersion: "1.0"
           conforme:
               lineeGuidaDesign: true
               modelloInteroperabilita: false
@@ -158,7 +158,7 @@ data:
           availableLanguages:
               - it
       it:
-          countryExtensionVersion: "0.2"
+          countryExtensionVersion: "1.0"
           conforme:
               modelloInteroperabilita: false
               misureMinimeSicurezza: false
@@ -222,7 +222,7 @@ data:
           localisationReady: true
           availableLanguages: [  ]
       it:
-          countryExtensionVersion: "0.2"
+          countryExtensionVersion: "1.0"
           conforme:
               modelloInteroperabilita: false
               misureMinimeSicurezza: false
