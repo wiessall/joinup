@@ -22,30 +22,15 @@ use Drupal\paragraphs\ParagraphsBehaviorBase;
 class AlignmentBehavior extends ParagraphsBehaviorBase {
 
   /**
+   * Default alignment.
+   */
+  const DEFAULT_ALIGNMENT = 'left';
+
+  /**
    * {@inheritdoc}
    */
   public function view(array &$build, Paragraph $paragraph, EntityViewDisplayInterface $display, $view_mode): void {
-    $alignment = $paragraph->getBehaviorSetting($this->getPluginId(), 'alignment');
-
-    $build['#attributes']['class'][] = 'd-flex';
-    $build['#attributes']['class'][] = $this->getAlignmentClass($alignment);
-  }
-
-  /**
-   * Gets alignment class.
-   *
-   * @param string|null $alignment
-   *   Alignment value.
-   *
-   * @return string
-   *   Alignment class
-   */
-  protected function getAlignmentClass(?string $alignment): string {
-    return match ($alignment) {
-      'center' => 'justify-content-center',
-      'right' => 'justify-content-end',
-      default => 'justify-content-start',
-    };
+    $build['#paragraph_alignment'] = $paragraph->getBehaviorSetting($this->getPluginId(), 'alignment', self::DEFAULT_ALIGNMENT);
   }
 
   /**
@@ -60,7 +45,7 @@ class AlignmentBehavior extends ParagraphsBehaviorBase {
         'center' => $this->t('Center'),
         'right' => $this->t('Right'),
       ],
-      '#default_value' => $paragraph->getBehaviorSetting($this->getPluginId(), 'alignment') ?? 'left',
+      '#default_value' => $paragraph->getBehaviorSetting($this->getPluginId(), 'alignment', self::DEFAULT_ALIGNMENT),
     ];
   }
 
