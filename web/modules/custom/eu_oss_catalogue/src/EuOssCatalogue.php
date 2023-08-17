@@ -197,7 +197,7 @@ class EuOssCatalogue implements EuOssCatalogueInterface {
         $solution->save();
         $this->logger->info("Solution '@solution' (@url) had the following provider removed from its sources: @provider.", [
           '@solution' => $solution->label(),
-          '@url' =>  $solution->get('oss_git_url')->value,
+          '@url' => $solution->get('oss_git_url')->value,
           '@provider' => $provider->getPluginDefinition()['label'],
         ]);
       }
