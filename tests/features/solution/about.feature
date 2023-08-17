@@ -372,6 +372,10 @@ Feature: About this solution
     When I go to the about page of "Six exclusion advantages"
     And I click "Add custom page" in the plus button menu
     And I fill in "Title" with "Some custom contact test"
+    And I add a layout paragraph in the "Custom page body" form field with the following properties:
+      | layout           | one column |
+      | Background theme | light      |
+      | Extra classes    | test-class |
     And I click "Choose component"
     And I click "Text"
     And the "Body" wysiwyg editor should have the buttons "Bold, Italic, Link, Unlink, Insert/Remove Bulleted List, Insert/Remove Numbered List, Contact us, Source"
@@ -381,7 +385,7 @@ Feature: About this solution
     And I should see the heading "Some custom contact test"
 
     When I go to the edit form of the "Some custom contact test" "custom page"
-    And I click "Edit" in the "Custom page body" for paragraph layout 1
+    And I "edit" from the "Custom page body" field the child 1 paragraph of 1 layout
     Then I should see the button "Contact us"
 
     Then I go to the about page of "Six exclusion advantages"

@@ -197,6 +197,10 @@ Feature: Like/unlike feature.
     And I click "Add custom page"
 
     And I fill in "Title" with "Carousel of likes"
+    And I add a layout paragraph in the "Custom page body" form field with the following properties:
+      | layout           | one column |
+      | Background theme | light      |
+      | Extra classes    | test-class |
 
     And I click "Choose component"
     And I click "Carousel"

@@ -58,8 +58,10 @@ function ventuno_paragraphs_behavior_color_options_alter(array &$options): void 
  */
 function ventuno_preprocess_paragraph__accordion(array &$variables): void {
   $entity = $variables['paragraph'];
-  $variables['attributes']['id'] = 'accordion' . $entity->id();
-  $variables['attributes']['class'] = ['accordion', 'mb-4'];
+
+  $variables['attributes']['class'][] = 'accordion';
+  $variables['attributes']['class'][] = 'accordion' . $entity->id();
+  $variables['attributes']['class'][] = 'mb-4';
 }
 
 /**

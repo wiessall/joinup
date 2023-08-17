@@ -81,8 +81,6 @@ Feature:
       | two columns   |
       | three columns |
 
-    When I add a "Text" paragraph in the "Custom page body" form field:
-      | Body | type: ckeditor - value: This is added in the field without a layout parent |
     And I add a "Text" paragraph in the "Custom page body" form field:
       | layout position | 1                                                |
       | region          | content                                          |
