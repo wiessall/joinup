@@ -231,9 +231,6 @@ display:
             trim_options:
               text: false
               trim_zero: false
-            more_link: true
-            more_class: more-link
-            more_text: More
           group_column: value
           group_columns: {  }
           group_rows: true
