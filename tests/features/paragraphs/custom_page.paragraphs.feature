@@ -37,6 +37,8 @@ Feature:
     Given custom_page content:
       | title                  | collection            | state     |
       | Behaviour example page | Paragraphs collection | published |
+    And I append "layout" to "field_paragraphs_body" field in "node" entity with following "Behaviour example page" title:
+      | behavior_settings | a:3:{s:17:"layout_paragraphs";a:4:{s:6:"layout";s:13:"layout_onecol";s:6:"config";a:1:{s:5:"label";s:0:"";}s:11:"parent_uuid";N;s:6:"region";N;}s:16:"background_theme";a:0:{}s:11:"extra_class";a:0:{}} |
 
     When I am logged in as a moderator
     And I go to the edit form of the "Behaviour example page" "custom page"
@@ -55,13 +57,17 @@ Feature:
     Given custom_page content:
       | title           | collection            | state     |
       | Paragraphs page | Paragraphs collection | published |
-    And I append "simple_paragraph" to "field_paragraphs_body" field in "node" entity with following "Paragraphs page" title:
-      | field_body:value  | AAAAAAAAAA      |
-      | field_body:format | content_editor  |
-    And I append "simple_paragraph" to "field_paragraphs_body" field in "node" entity with following "Paragraphs page" title:
-      | field_body:value  | BBBBBBBBBB      |
-      | field_body:format | content_editor  |
+    And I append "layout" to "field_paragraphs_body" field in "node" entity with following "Paragraphs page" title:
+      | behavior_settings | a:3:{s:17:"layout_paragraphs";a:4:{s:6:"layout";s:13:"layout_onecol";s:6:"config";a:1:{s:5:"label";s:0:"";}s:11:"parent_uuid";N;s:6:"region";N;}s:16:"background_theme";a:0:{}s:11:"extra_class";a:0:{}} |
+
     Then I am logged in as a facilitator of the "Paragraphs collection" collection
+    And I go to the edit form of the "Paragraphs page" "custom page"
+    When I add a "Text" paragraph in the "Custom page body" form field:
+      | Body | type: ckeditor - value: AAAAAAAAAA |
+    When I add a "Text" paragraph in the "Custom page body" form field:
+      | Body | type: ckeditor - value: BBBBBBBBBB |
+    And I press "Update"
+
     And I go to the "Paragraphs page" custom page
     And I should see the following paragraphs in the given order:
       | AAAAAAAAAA |
@@ -69,7 +75,7 @@ Feature:
 
     Then I open the header local tasks menu
     And I click "Edit"
-    And I click "Move down" in the "Custom page body" for paragraph layout 1
+    Then I "move down" from the "Custom page body" field the child 1 paragraph of 1 layout
     And I press "Update"
     Then there should be 2 paragraphs in the page
     And I should see the following paragraphs in the given order:
@@ -97,12 +103,14 @@ Feature:
     And custom_page content:
       | title                     | body        | <group type>          | author | state     |
       | Don't Mess with the Zohan | Wanna mess? | Paragraphs group type | Zohan  | published |
+    And I append "layout" to "field_paragraphs_body" field in "node" entity with following "Don't Mess with the Zohan" title:
+      | behavior_settings | a:3:{s:17:"layout_paragraphs";a:4:{s:6:"layout";s:13:"layout_onecol";s:6:"config";a:1:{s:5:"label";s:0:"";}s:11:"parent_uuid";N;s:6:"region";N;}s:16:"background_theme";a:0:{}s:11:"extra_class";a:0:{}} |
 
     # Author.
     When I am logged in as "Zohan"
     And I go to the edit form of the "Don't Mess with the Zohan" "custom page"
     And I click "Choose component"
-    Then I should see the link "Layout"
+    Then I should not see the link "Layout"
     And I should see the link "Accordion"
     And I should see the link "Call to action"
     And I should see the link "Carousel"
@@ -125,7 +133,7 @@ Feature:
     When I am logged in as "Gilfoyle"
     And I go to the edit form of the "Don't Mess with the Zohan" "custom page"
     And I click "Choose component"
-    Then I should see the link "Layout"
+    Then I should not see the link "Layout"
     And I should see the link "Accordion"
     And I should see the link "Call to action"
     And I should see the link "Carousel"
@@ -148,7 +156,7 @@ Feature:
     Given I am logged in as a moderator
     And I go to the edit form of the "Don't Mess with the Zohan" "custom page"
     And I click "Choose component"
-    Then I should see the link "Layout"
+    Then I should not see the link "Layout"
     And I should see the link "Accordion"
     And I should see the link "Call to action"
     And I should see the link "Carousel"
@@ -191,19 +199,11 @@ Feature:
     And custom_page content:
       | title                     | body        | collection            | author | state     |
       | Don't Mess with the Zohan | Wanna mess? | Paragraphs collection | Zohan  | published |
+    And I append "layout" to "field_paragraphs_body" field in "node" entity with following "Don't Mess with the Zohan" title:
+      | behavior_settings | a:3:{s:17:"layout_paragraphs";a:4:{s:6:"layout";s:13:"layout_onecol";s:6:"config";a:1:{s:5:"label";s:0:"";}s:11:"parent_uuid";N;s:6:"region";N;}s:16:"background_theme";a:0:{}s:11:"extra_class";a:0:{}} |
 
     Given I am logged in as a moderator
     And I go to the edit form of the "Don't Mess with the Zohan" "custom page"
-    And I click "Choose component"
-    And I click "Map"
-    # As the Webtools Map a webservice, we only test a fake JSON.
-    And I fill in "JSON" with "{\"foo\":\"bar\"}"
-    And I press "Save" in the "Modal buttons" region
-    And I press "Update"
-    Then I should see the success message "Custom page Don't Mess with the Zohan has been updated."
-    And the response should contain "{\"foo\":\"bar\"}"
-
-    When I go to the edit form of the "Don't Mess with the Zohan" "custom page"
     And I click the last "Choose component" link
     And I click "IFrame"
     And I fill in "Iframe URL" with "http://example.com"
@@ -215,6 +215,16 @@ Feature:
     Then I should see 1 "iframe" elements
     And the response should contain "src=\"http://example.com\""
 
+    And I go to the edit form of the "Don't Mess with the Zohan" "custom page"
+    And I click "Choose component"
+    And I click "Map"
+    # As the Webtools Map a webservice, we only test a fake JSON.
+    And I fill in "JSON" with "{\"foo\":\"bar\"}"
+    And I press "Save" in the "Modal buttons" region
+    And I press "Update"
+    Then I should see the success message "Custom page Don't Mess with the Zohan has been updated."
+    And the response should contain "{\"foo\":\"bar\"}"
+
   @javascript
   Scenario Outline: Add an accordion to the custom page.
     Given I am logged in as a <role>
@@ -222,9 +232,11 @@ Feature:
     And I open the plus button menu
     And I click "Add custom page"
     And I fill in "Title" with "Paragraphs accordion page"
-    Then the page should contain no paragraphs
-
-    Given I click "Choose component"
+    Given I add a layout paragraph in the "Custom page body" form field with the following properties:
+      | layout           | one column |
+      | Background theme | light      |
+      | Extra classes    | test-class |
+    And I click "Choose component"
     Then I click "Accordion"
     And press "Add Accordion item"
     And I wait for AJAX to finish

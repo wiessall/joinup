@@ -17,7 +17,11 @@ Feature:
     And I go to the "Roman ruins" collection
     And I click "Add custom page" in the plus button menu
     And I fill in "Title" with "Hello life"
-    Then I should see the link "Choose component"
+    Then I should see the link "Add layout"
+    And I add a layout paragraph in the "Custom page body" form field with the following properties:
+      | layout           | one column |
+      | Background theme | light      |
+      | Extra classes    | test-class |
     And I click "Choose component"
 
     When I click "Carousel"
@@ -26,7 +30,11 @@ Feature:
     Given I am logged in as a facilitator of the "Ronup" collection
     And I go to the "Ronup" collection
     And I click "Add custom page" in the plus button menu
-    Then I should see the link "Choose component"
+    Then I should see the link "Add layout"
+    And I add a layout paragraph in the "Custom page body" form field with the following properties:
+      | layout           | one column |
+      | Background theme | light      |
+      | Extra classes    | test-class |
     And I click "Choose component"
     Then I should see the link "Carousel"
 
@@ -69,6 +77,10 @@ Feature:
 
     When I fill in the following:
       | Title | Pages carousel |
+    And I add a layout paragraph in the "Custom page body" form field with the following properties:
+      | layout           | one column |
+      | Background theme | light      |
+      | Extra classes    | test-class |
     And I click "Choose component"
     And I click "Carousel"
     And I select "Custom page" from "Available filters"
@@ -83,7 +95,7 @@ Feature:
 
     When I open the header local tasks menu
     And I click "Edit" in the "Entity actions" region
-    And I click "Edit" in the "Custom page body" for paragraph layout 1
+    And I "edit" from the "Custom page body" field the child 1 paragraph of 1 layout
     And I fill in "Custom page" with "Some page 3"
     And I press "Save" in the "Modal buttons" region
     And I press "Save"
@@ -95,7 +107,7 @@ Feature:
 
     When I open the header local tasks menu
     And I click "Edit" in the "Entity actions" region
-    And I click "Edit" in the "Custom page body" for paragraph layout 1
+    And I "edit" from the "Custom page body" field the child 1 paragraph of 1 layout
     And I check "Global search"
     And I press "Save" in the "Modal buttons" region
     And I press "Save"
