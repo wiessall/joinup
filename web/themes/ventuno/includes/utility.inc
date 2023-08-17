@@ -149,7 +149,7 @@ function _ventuno_preprocess_tile(array &$variables, string $entity_type_id): vo
 
     case 'tallinn_report':
       $variables['info']['icon'] = 'calendar-event';
-      if ($entity->getCreatedTime() === $entity->getChangedTime()) {
+      if ($entity->getCreatedTime() == $entity->getChangedTime()) {
         $variables['info']['label'] = new TranslatableMarkup('@label: -', [
           '@label' => 'Last update',
         ]);
