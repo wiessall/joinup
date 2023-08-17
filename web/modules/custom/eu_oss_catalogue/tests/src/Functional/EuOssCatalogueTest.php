@@ -51,18 +51,6 @@ class EuOssCatalogueTest extends BrowserTestBase {
   }
 
   /**
-   * Parse the queue.
-   */
-  protected function processQueue(): void {
-    $queue = \Drupal::queue('eu_oss_catalogue');
-    $queue_worker = \Drupal::getContainer()->get('plugin.manager.queue_worker')->createInstance('eu_oss_catalogue');
-    while ($item = $queue->claimItem()) {
-      $queue_worker->processItem($item->data);
-      $queue->deleteItem($item);
-    }
-  }
-
-  /**
    * @covers
    */
   public function testDevelopersItalia(): void {
