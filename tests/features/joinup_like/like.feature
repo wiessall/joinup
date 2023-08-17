@@ -45,18 +45,18 @@ Feature: Like/unlike feature.
     When I click the "Remove like from this content" in the "Very liked solution" tile
     Then I should see the statistics "1" in the "Very liked solution" tile
 
-  Scenario: Anonymous user is asked to log in if they attempt to Like
+  Scenario: Anonymous user is asked to sign in if they attempt to Like
     Given I am an anonymous user
     When I go to the homepage of the "Very liked solution" solution
     Then I should see the link "Like" in the "Like block"
     And I should see the text "Like (0)" in the "Like block" region
     When I click "Like" in the "Like block" region
     Then a modal should open
-    And I should see the heading "You are not logged in"
-    And I should see the text "You are not logged in" in the "Modal title"
-    And I should see the heading "Login or register to like this content" in the "Modal content"
-    And I should see the text "Like this content will help other people find reliable information about what they search!" in the "Modal content"
-    When I click "Log in" in the "Modal content"
+    And I should see the heading "You are not signed in"
+    And I should see the text "You are not signed in" in the "Modal title"
+    And I should see the heading "Sign in or register to like this content" in the "Modal content"
+    And I should see the text "Liking content shows your appreciation to content creators and helps other users find good content" in the "Modal content"
+    When I click "Sign in" in the "Modal content"
     Then I should see the heading "Sign in to continue"
 
   Scenario Outline: User can like/unlike solution's content
