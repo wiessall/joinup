@@ -1,4 +1,4 @@
-@api
+@api @terms
 Feature:
   Access and functionality checks for the IOP related paragraphs.
 
@@ -8,6 +8,7 @@ Feature:
       | uri   | http://data.europa.eu/w21/8e30f798-ff2b-478b-9c09-5ed5a63b4c8c |
       | title | Interoperable Europe                                           |
       | state | validated                                                      |
+      | topic | Demography                                                     |
 
   Scenario: Moderators can access the special paragraphs.
     Given collection:
@@ -72,6 +73,7 @@ Feature:
     And I should see the button "Add 2 column with featured media on the right"
     And I should see the button "Add 3 column layout"
 
+  @terms
   Scenario: Test that carousels content listing options are working correctly.
     Given the following collections:
       | title       | state     |
@@ -89,6 +91,7 @@ Feature:
     When I fill in the following:
       | Title | News carousel        |
       | Body  | A carousel with news |
+    And I select "Demography" from "Topic"
     And I press "Add Row"
     And I press "Add 1 column layout"
     And I press "Add Carousel"
@@ -120,6 +123,7 @@ Feature:
     When I fill in the following:
       | Title | Pages carousel               |
       | Body  | A carousel with custom pages |
+    And I select "Demography" from "Topic"
     And I press "Add Row"
     And I press "Add 1 column layout"
     And I press "Add Carousel"
@@ -164,6 +168,7 @@ Feature:
     When I fill in the following:
       | Title | News carousel        |
       | Body  | A carousel with news |
+    And I select "Demography" from "Topic"
     And I press "Add Row"
     And I press "Add 1 column layout"
     And I press "Add Carousel"
@@ -192,6 +197,7 @@ Feature:
     When I fill in the following:
       | Title | Events carousel        |
       | Body  | A carousel with events |
+    And I select "Demography" from "Topic"
     And I press "Add Row"
     And I press "Add 1 column layout"
     And I press "Add Carousel"

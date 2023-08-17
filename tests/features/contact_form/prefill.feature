@@ -4,10 +4,12 @@ Feature: Prefill contact form fields
   As a moderator
   I want to be able to prefill some fields of the contact form
 
+  @terms
   Scenario: The subject field can be prefilled through links.
     Given collection:
       | title | CAMSS test community |
       | state | validated            |
+      | topic | HR                   |
 
     When I am logged in as a facilitator of the "CAMSS test community" collection
     When I go to the homepage of the "CAMSS test community" collection
@@ -19,6 +21,7 @@ Feature: Prefill contact form fields
     When I fill in the following:
       | Title | Change management                                                                    |
       | Body  | <p>Follow this <a href="../../contact?subject=CAMSS%20Change%20Request">link</a></p> |
+    And I select "HR" from "Topic"
     And I press "Publish"
     Then I should see the heading "Change management"
 

@@ -1,4 +1,4 @@
-@api
+@api @terms
 Feature:
   Access and functionality checks for carousel paragraphs in custom pages.
 
@@ -6,11 +6,13 @@ Feature:
     Given collection:
       | title | Roman ruins |
       | state | validated   |
+      | topic | HR          |
 
   Scenario: Moderators can access paragraph.
     Given collection:
       | title | Ronup     |
       | state | validated |
+      | topic | HR        |
 
     Given I am logged in as a moderator
     Then I am on the homepage
@@ -44,6 +46,7 @@ Feature:
     When I fill in the following:
       | Title | News carousel        |
       | Body  | A carousel with news |
+    And I select "HR" from "Topic"
     And I press "Add Carousel"
     And I fill in "Query presets" with:
         """
@@ -73,6 +76,7 @@ Feature:
     When I fill in the following:
       | Title | Pages carousel               |
       | Body  | A carousel with custom pages |
+    And I select "HR" from "Topic"
     And I press "Add Carousel"
 
     And I select "Custom page" from "Available filters"
@@ -115,6 +119,7 @@ Feature:
     When I fill in the following:
       | Title | News carousel        |
       | Body  | A carousel with news |
+    And I select "HR" from "Topic"
     And I press "Add Carousel"
     And I fill in "Query presets" with:
         """
@@ -141,6 +146,7 @@ Feature:
     When I fill in the following:
       | Title | Events carousel        |
       | Body  | A carousel with events |
+    And I select "HR" from "Topic"
     And I press "Add Carousel"
     And I fill in "Query presets" with:
         """
