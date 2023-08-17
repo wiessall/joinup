@@ -991,6 +991,21 @@ module.exports = {
       },
     },
     {
+      entry: path.resolve(
+        outputFolder,
+        `${iop}src/scss/components/call-to-action.scss`
+      ),
+      dest: path.resolve(
+        outputFolder,
+        `${iop}assets/css/call-to-action.min.css`
+      ),
+      options: {
+        minify: true,
+        includePaths,
+        sourceMap: "file",
+      },
+    },
+    {
       entry: path.resolve(outputFolder, `${iop}src/scss/components/join.scss`),
       dest: path.resolve(outputFolder, `${iop}assets/css/join.min.css`),
       options: {

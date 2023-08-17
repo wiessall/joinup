@@ -13,8 +13,8 @@
         "composer/installers": "^2",
         "cweagans/composer-patches": "^1.7",
         "drupal/addtocal": "^3.0",
-        "drupal/allowed_formats": "^2.0",
-        "drupal/antibot": "^1.5@stable",
+        "drupal/allowed_formats": "^3.0",
+        "drupal/antibot": "^2.0",
         "drupal/bootstrap4_modal": "^2.1",
         "drupal/cached_computed_field": "^1.0",
         "drupal/cas": "^2.0",
@@ -23,8 +23,8 @@
         "drupal/ckeditor": "^1.0",
         "drupal/config_ignore": "^3.0",
         "drupal/config_readonly": "^1.0",
-        "drupal/core-composer-scaffold": "~10.0",
-        "drupal/core-recommended": "~10.0",
+        "drupal/core": "~10.1",
+        "drupal/core-composer-scaffold": "~10.1",
         "drupal/custom_markup_block": "^1.2",
         "drupal/default_content": "^2.0",
         "drupal/diff": "~1.0",
@@ -56,7 +56,7 @@
         "drupal/json_field": "^1.0",
         "drupal/layout_builder_component_attributes": "^2.1",
         "drupal/layout_paragraphs": "^2.0",
-        "drupal/linkit": "^6.0",
+        "drupal/linkit": "^6.1",
         "drupal/memcache": "^2.5",
         "drupal/menu_admin_per_menu": "^1.3",
         "drupal/menu_link_destination": "^1.0",
@@ -131,6 +131,7 @@
         "drupal/http_request_mock": "^1.1",
         "drupal/masquerade": "^2.0@RC",
         "drupal/renderviz": "^1.0",
+        "drupal/upgrade_status": "^4.0",
         "drupaltest/behat-one-time-login": "^1.0",
         "ec-europa/toolkit": "^9.10",
         "enlightn/security-checker": "^1",
@@ -243,9 +244,6 @@
             "drupal/core": "-p2"
         },
         "patches": {
-            "drupal/antibot": {
-                "D10 compatibility @see https://www.drupal.org/project/antibot/issues/3258107": "https://git.drupalcode.org/project/antibot/-/commit/05427aa.diff"
-            },
             "drupal/bootstrap4_modal": {
               "Expected a scalar value as a 2nd argument to InputBag::get(), array given. @see https://www.drupal.org/i/3350657": "https://git.drupalcode.org/project/bootstrap4_modal/-/merge_requests/7.patch"
             },
@@ -254,27 +252,24 @@
                 "More details when registration is denied by a subscriber @see https://www.drupal.org/project/cas/issues/3325353": "https://git.drupalcode.org/project/cas/-/merge_requests/20.diff"
             },
             "drupal/core": {
-                "Allow image style to be selected in text editor @see https://www.drupal.org/node/2061377": "https://www.drupal.org/files/issues/2023-07-18/2061377-441.patch",
-                "Allow making the file description a required field @see https://www.drupal.org/node/2320877": "https://git.drupalcode.org/project/drupal/-/merge_requests/4255.diff",
-                "Delete should not be the default action on /admin/content @see https://www.drupal.org/project/drupal/issues/2381293": "https://git.drupalcode.org/project/drupal/-/merge_requests/4251.diff",
+                "Allow image style to be selected in text editor @see https://www.drupal.org/node/2061377": "https://www.drupal.org/files/issues/2023-07-25/2061377-442.patch",
+                "Allow making the file description a required field @see https://www.drupal.org/node/2320877": "https://git.drupalcode.org/project/drupal/-/merge_requests/3915.diff",
+                "Delete should not be the default action on /admin/content @see https://www.drupal.org/project/drupal/issues/2381293": "https://git.drupalcode.org/project/drupal/-/merge_requests/2931.diff",
                 "Regression: Do not bypass route access with 'link to any page' permissions for menu links @see https://www.drupal.org/project/drupal/issues/2463753": "https://git.drupalcode.org/project/drupal/-/merge_requests/3118.diff",
                 "Upcast named arguments/named parameters in views @see https://www.drupal.org/project/drupal/issues/2528166": "https://git.drupalcode.org/project/drupal/-/merge_requests/1323.diff",
                 "Confirmation cancel links are incorrect if installed in a subdirectory @see https://www.drupal.org/project/drupal/issues/2582295": "https://www.drupal.org/files/issues/2021-08-23/2582295-52.patch",
                 "Allow plurals on bundle labels @see https://www.drupal.org/node/2765065": "https://git.drupalcode.org/project/drupal/-/merge_requests/4252.diff",
                 "Enlarge file_usage entity ID length. @see https://www.drupal.org/node/2675600": "resources/patch/php/drupal/core/2675600.diff",
                 "Menu link plugins should provide a way for the link to be conditionally hidden @see https://www.drupal.org/project/drupal/issues/2719609": "https://www.drupal.org/files/issues/2719609-2.patch",
-                "New option for Views page displays to use the admin theme @see https://www.drupal.org/node/2719797": "https://www.drupal.org/files/issues/2022-09-20/2719797-144.patch",
-                "Add thread depth configuration to comments. Includes patch for parent issue #2879087. @see https://www.drupal.org/project/drupal/issues/2786587 @see https://www.drupal.org/project/drupal/issues/2879087": "https://git.drupalcode.org/project/drupal/-/merge_requests/3124.diff",
+                "Add thread depth configuration to comments. Includes patch for parent issue #2879087. @see https://www.drupal.org/project/drupal/issues/2786587 @see https://www.drupal.org/project/drupal/issues/2879087": "https://git.drupalcode.org/project/drupal/-/merge_requests/4584.diff",
                 "Set fixed depth for comment threads.": "resources/patch/php/drupal/core/2786587-thread-depth-fixed-limit.patch",
                 "Add option to show only start or end date in the DateTime Range custom formatter @see https://www.drupal.org/project/drupal/issues/2827055": "https://www.drupal.org/files/issues/2022-06-16/2827055-69.patch",
                 "Views with a different query plugin created via the UI do not have the correct query plugin ID in the view config @see https://www.drupal.org/project/drupal/issues/2836237": "https://www.drupal.org/files/issues/2022-01-17/2836237-49-9.3.x.patch",
-                "Pass current route parameters to the confirmation form route @see https://www.drupal.org/project/drupal/issues/2901412": "resources/patch/php/drupal/core/2901412-25.diff",
+                "Pass current route parameters to the confirmation form route @see https://www.drupal.org/project/drupal/issues/2901412": "https://git.drupalcode.org/project/drupal/-/merge_requests/4586.diff",
                 "Cache tags are not invalidated on revision delete @see https://www.drupal.org/project/drupal/issues/2945928": "https://www.drupal.org/files/issues/entity-cache_revision_deletion-2945928-2.patch",
-                "There is no way to delete file entities of other users @see https://www.drupal.org/project/drupal/issues/2949017": "https://www.drupal.org/files/issues/2023-02-01/2949017-9.5.x-153.patch",
                 "Have responsive image module ignore svg @see https://www.drupal.org/project/drupal/issues/2957924": "https://www.drupal.org/files/issues/2022-06-23/drupal-responsive_image_svg_support-2957924-11.patch",
                 "Restrict images to this site\" restricts images that, by definition, *are* on this site @see https://www.drupal.org/project/drupal/issues/2998318": "https://git.drupalcode.org/project/drupal/-/merge_requests/3810.diff",
                 "Make it easier to trigger a tour @see https://www.drupal.org/project/drupal/issues/3012027": "https://www.drupal.org/files/issues/2023-02-08/3012027-63.patch",
-                "EntityConstraintValidationList::findByCode is inconsistent @see https://www.drupal.org/project/drupal/issues/3126654": "https://www.drupal.org/files/issues/2023-03-14/3126654-17.patch",
                 "Cannot implement a custom user cancellation method @see https://www.drupal.org/project/drupal/issues/3135592": "https://git.drupalcode.org/project/drupal/-/merge_requests/1675.diff",
                 "If you don't set the \"version\" of a profile, the report/status displays an empty dash @see https://www.drupal.org/project/drupal/issues/3270892": "https://git.drupalcode.org/project/drupal/-/merge_requests/2003.diff"
             },
@@ -289,7 +284,8 @@
             },
             "drupal/email_confirmer": {
                 "Support for HTML mails @see https://www.drupal.org/i/3047124": "https://git.drupalcode.org/project/email_confirmer/-/merge_requests/3.diff",
-                "D10 compatibility @see https://www.drupal.org/project/email_confirmer/issues/3322626": "resources/patch/php/drupal/email_confirmer/3322626.diff"
+                "D10 compatibility @see https://www.drupal.org/project/email_confirmer/issues/3322626": "resources/patch/php/drupal/email_confirmer/3322626.diff",
+                "The email_confirmer_requests queue worker plugin is not constructed correctly @see https://www.drupal.org/project/email_confirmer/issues/3381039": "resources/patch/php/drupal/email_confirmer/3381039.diff"
             },
             "drupal/email_contact": {
                 "Move form creation in a protected method from ContactController::content() to ContactController::getForm() @see https://www.drupal.org/project/email_contact/issues/3346470": "https://git.drupalcode.org/project/email_contact/-/merge_requests/12.diff"
@@ -316,6 +312,7 @@
                 "Disclose flagging view mode in flag theming @see https://www.drupal.org/project/flag/issues/3049155": "resources/patch/php/drupal/flag/3049155-16.patch"
             },
             "drupal/honeypot": {
+                "Missing primary key in table `honeypot_user` @see https://www.drupal.org/project/honeypot/issues/2943526": "resources/patch/php/drupal/honeypot/2943526.diff",
                 "Behat integration. @see https://www.drupal.org/project/honeypot/issues/3059040": "https://www.drupal.org/files/issues/2020-09-09/3059040-31.patch",
                 "Provide ways to clean up old honeypot_time_restriction values @see https://www.drupal.org/project/honeypot/issues/2997609": "https://git.drupalcode.org/project/honeypot/-/merge_requests/2.diff"
             },
@@ -382,7 +379,6 @@
         },
         "drupal-lenient": {
             "allowed-list": [
-                "drupal/antibot",
                 "drupal/email_confirmer",
                 "drupal/smart_trim"
             ]
