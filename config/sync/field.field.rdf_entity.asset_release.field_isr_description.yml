@@ -4,18 +4,10 @@ status: true
 dependencies:
   config:
     - field.storage.rdf_entity.field_isr_description
+    - filter.format.content_editor
     - rdf_entity.rdfentity.asset_release
   module:
-    - allowed_formats
     - text
-third_party_settings:
-  allowed_formats:
-    allowed_formats:
-      content_editor: content_editor
-      basic_html: '0'
-      simple_html: '0'
-      simple_text: '0'
-      plain_text: '0'
 _core:
   default_config_hash: LYjA_d5rh_7SOFsC1M3HCIDwLb11TGcgd-EgsniFEXg
 id: rdf_entity.asset_release.field_isr_description
@@ -28,5 +20,7 @@ required: true
 translatable: true
 default_value: {  }
 default_value_callback: ''
-settings: {  }
+settings:
+  allowed_formats:
+    - content_editor
 field_type: text_long

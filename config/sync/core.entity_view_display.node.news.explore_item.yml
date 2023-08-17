@@ -70,6 +70,15 @@ third_party_settings:
                   date_format: custom
                   custom_date_format: d/m/Y
                   timezone: ''
+                  tooltip:
+                    date_format: ''
+                    custom_date_format: ''
+                  time_diff:
+                    enabled: false
+                    future_format: '@interval hence'
+                    past_format: '@interval ago'
+                    granularity: 2
+                    refresh: 60
                 third_party_settings:
                   template_suggestion:
                     template_suggestion: ''
@@ -140,6 +149,64 @@ third_party_settings:
                 entity: layout_builder.entity
             weight: -7
             additional: {  }
+          664f0bbb-10fc-46de-8880-23aa0efcc377:
+            uuid: 664f0bbb-10fc-46de-8880-23aa0efcc377
+            region: content
+            configuration:
+              id: 'field_block:node:news:published_at'
+              label_display: '0'
+              context_mapping:
+                entity: layout_builder.entity
+              formatter:
+                type: timestamp
+                label: hidden
+                settings:
+                  date_format: custom
+                  custom_date_format: m/d/y
+                  timezone: ''
+                  tooltip:
+                    date_format: long
+                    custom_date_format: ''
+                  time_diff:
+                    enabled: false
+                    future_format: '@interval hence'
+                    past_format: '@interval ago'
+                    granularity: 2
+                    refresh: 60
+                third_party_settings:
+                  template_suggestion:
+                    template_suggestion: ''
+            weight: -6
+            additional: {  }
+          65701e0d-0604-48d0-84f0-6cc725697589:
+            uuid: 65701e0d-0604-48d0-84f0-6cc725697589
+            region: content
+            configuration:
+              id: 'field_block:node:news:published_at'
+              label_display: '0'
+              context_mapping:
+                entity: layout_builder.entity
+              formatter:
+                type: timestamp
+                label: hidden
+                settings:
+                  date_format: custom
+                  custom_date_format: m/d/y
+                  timezone: ''
+                  tooltip:
+                    date_format: ''
+                    custom_date_format: ''
+                  time_diff:
+                    enabled: false
+                    future_format: '@interval hence'
+                    past_format: '@interval ago'
+                    granularity: 2
+                    refresh: 60
+                third_party_settings:
+                  template_suggestion:
+                    template_suggestion: ''
+            weight: -5
+            additional: {  }
         third_party_settings: {  }
 id: node.news.explore_item
 targetEntityType: node
@@ -165,6 +232,15 @@ content:
       date_format: custom
       custom_date_format: m/d/y
       timezone: ''
+      tooltip:
+        date_format: ''
+        custom_date_format: ''
+      time_diff:
+        enabled: false
+        future_format: '@interval hence'
+        past_format: '@interval ago'
+        granularity: 2
+        refresh: 60
     third_party_settings:
       template_suggestion:
         template_suggestion: ''

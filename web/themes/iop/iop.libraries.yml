@@ -39,6 +39,11 @@ accordion-faq:
     theme:
       assets/css/accordion-faq.min.css: { minified: true, preprocess: false }
 
+call-to-action:
+  css:
+    theme:
+      assets/css/call-to-action.min.css: { minified: true, preprocess: false }
+
 join:
   css:
     theme:

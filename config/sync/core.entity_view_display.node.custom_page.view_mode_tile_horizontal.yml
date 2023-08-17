@@ -12,8 +12,6 @@ dependencies:
     - node.type.custom_page
     - responsive_image.styles.tile
   module:
-    - field_delimiter
-    - field_formatter_range
     - field_group
     - joinup_core
     - layout_builder
@@ -55,6 +53,8 @@ content:
     settings:
       responsive_image_style: tile
       image_link: ''
+      image_loading:
+        attribute: eager
     third_party_settings:
       template_suggestion:
         template_suggestion: bare
