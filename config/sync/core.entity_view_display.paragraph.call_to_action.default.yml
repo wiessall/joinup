@@ -14,7 +14,7 @@ mode: default
 content:
   paragraph_action_link:
     type: link
-    label: above
+    label: hidden
     settings:
       trim_length: 80
       url_only: false
