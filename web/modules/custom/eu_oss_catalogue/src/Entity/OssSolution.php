@@ -10,6 +10,7 @@ use Drupal\eu_oss_catalogue\EuOssCatalogueProviderInterface;
 use Drupal\eu_oss_catalogue\Plugin\Field\OssGitFullNameItemList;
 use Drupal\eu_oss_catalogue\Plugin\Field\OssGitNameItemList;
 use Drupal\node\Entity\Node;
+use Drupal\pluginreference\Plugin\Field\FieldType\PluginReferenceItem;
 
 /**
  * Bundle class for 'oss_solution' nodes.
@@ -56,8 +57,8 @@ class OssSolution extends Node implements OssSolutionInterface {
    * {@inheritdoc}
    */
   public function removeProvider(EuOssCatalogueProviderInterface $provider): OssSolutionInterface {
-    $this->get('oss_source')->filter(function ($value) use ($provider) {
-      return $value['plugin_id'] !== $provider->getPluginId();
+    $this->get('oss_source')->filter(function (PluginReferenceItem $value) use ($provider): bool {
+      return $value->plugin_id !== $provider->getPluginId();
     });
     return $this;
   }
