@@ -5,8 +5,8 @@ dependencies:
   config:
     - image.style.thumbnail
   module:
-    - image
     - media
+    - svg_image
     - user
 _core:
   default_config_hash: UZP23LgBdE1XbvscbLCdd9uTk5t4qqA1Z56koqbvYP0
@@ -457,6 +457,15 @@ display:
             date_format: short
             custom_date_format: ''
             timezone: ''
+            tooltip:
+              date_format: ''
+              custom_date_format: ''
+            time_diff:
+              enabled: false
+              future_format: '@interval hence'
+              past_format: '@interval ago'
+              granularity: 2
+              refresh: 60
           group_column: value
           group_columns: {  }
           group_rows: true

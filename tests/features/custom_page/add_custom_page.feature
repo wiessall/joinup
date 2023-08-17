@@ -56,7 +56,7 @@ Feature: "Add custom page" visibility options.
       | Code Camp | collection |
       | Parachute | solution   |
 
-  @uploadFiles:test.zip,alan.jpg
+  @uploadFiles:test.zip,alan.jpg @terms
   Scenario Outline: Add custom page as a facilitator.
     And I am logged in as a facilitator of the "<second title>" <group>
 
@@ -88,12 +88,21 @@ Feature: "Add custom page" visibility options.
     And I should not see the button "Delete"
 
     And I press "Save as draft"
+    Then I should see the error message "Topic field is required."
+
+    When I select "E-health" from "Topic"
+    And I additionally select "EU and European Policies" from "Topic"
+    And I additionally select "HR" from "Topic"
+    And I press "Save as draft"
     Then I should see the heading "About us"
     And I should see the success message "Custom page About us has been created."
     And I should see the text "Attachments"
     # The description of the file is set as the text to display.
     And I should see the link "Test file"
     But I should not see the link "Alan"
+    And I should not see the link "E-health"
+    And I should not see the link "EU and European Policies"
+    And I should not see the link "HR"
     And the "<second title>" <group> should have a custom page titled "About us"
     # Check that the link to the custom page is visible on the group page.
     When I go to the homepage of the "<second title>" <group>

@@ -10,6 +10,7 @@ use Behat\Mink\Element\NodeElement;
 use Behat\Mink\Exception\ElementNotFoundException;
 use Drupal\Component\Utility\UrlHelper;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
+use Drupal\Core\Utility\Error;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\DrupalExtension\Hook\Scope\BeforeNodeCreateScope;
 use Drupal\User\Entity\User;
@@ -2179,7 +2180,7 @@ class JoinupContext extends RawDrupalContext {
         $queue->deleteItem($item);
       }
       catch (\Exception $e) {
-        watchdog_exception('cron', $e);
+        Error::logException(\Drupal::logger('cron'), $e);
       }
     }
   }
