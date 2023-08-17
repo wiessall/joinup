@@ -107,21 +107,6 @@ condition.plugin.joinup_content:
       sequence:
         type: string
 
-# Schema for 'joinup_timestamp_timeago' formatter settings.
-field.formatter.settings.joinup_timestamp_timeago:
-  type: field.formatter.settings.timestamp
-  label: 'Joinup Timestamp Timeago display format settings'
-  mapping:
-    tooltip_format:
-      type: string
-      label: 'Tooltip date format'
-    tooltip_format_custom:
-      type: string
-      label: 'Tooltip custom date format'
-    timeago_settings:
-      type: ignore
-      label: 'Timeago plugin settings'
-
 field.formatter.settings.entity_reference_custom_link:
   type: mapping
   label: 'Entity reference custom link display format settings'
