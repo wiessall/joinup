@@ -180,19 +180,26 @@ class EuOssCatalogue implements EuOssCatalogueInterface {
    * {@inheritdoc}
    */
   public function cleanupOrUpdate(string $providerPluginId, array $solutionIds = []): void {
-    $this->checkProvider($providerPluginId);
-
     /** @var \Drupal\eu_oss_catalogue\EuOssCatalogueProviderInterface $provider */
     $provider = $this->providerManager->createInstance($providerPluginId);
 
     /** @var \Drupal\eu_oss_catalogue\Entity\OssSolutionInterface $solution */
     foreach ($this->entityTypeManager->getStorage('node')->loadMultiple($solutionIds) as $solution) {
       $solution->removeProvider($provider);
-      if ($solution->get('oss_source')->count() === 0) {
+      if ($solution->get('oss_source')->isEmpty()) {
         $solution->delete();
+        $this->logger->info("Solution '@solution' (@url) was removed due to having no active providers", [
+          '@solution' => $solution->label(),
+          '@url' => $solution->get('oss_git_url')->value,
+        ]);
       }
       else {
         $solution->save();
+        $this->logger->info("Solution '@solution' (@url) had the following provider removed from its sources: @provider.", [
+          '@solution' => $solution->label(),
+          '@url' =>  $solution->get('oss_git_url')->value,
+          '@provider' => $provider->getPluginDefinition()['label'],
+        ]);
       }
     }
   }
