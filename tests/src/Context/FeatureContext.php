@@ -1876,7 +1876,7 @@ class FeatureContext extends RawDrupalContext {
       throw new ElementNotFoundException($this->getSession()->getDriver(), 'Link', NULL, $link_label);
     }
     if (!$url = $link->getAttribute('href')) {
-      throw new \Exception("The link '${link_label}' misses an 'href' attribute.");
+      throw new \Exception("The link '{$link_label}' misses an 'href' attribute.");
     }
 
     // Get the path part from the URL.
