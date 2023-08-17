@@ -60,6 +60,9 @@ display:
             max_length: 0
             word_boundary: true
             ellipsis: true
+            more_link: false
+            more_link_text: ''
+            more_link_path: ''
             strip_tags: false
             trim: false
             preserve_tags: ''
@@ -128,6 +131,9 @@ display:
             max_length: 0
             word_boundary: true
             ellipsis: true
+            more_link: false
+            more_link_text: ''
+            more_link_path: ''
             strip_tags: false
             trim: false
             preserve_tags: ''
@@ -196,6 +202,9 @@ display:
             max_length: 0
             word_boundary: true
             ellipsis: true
+            more_link: false
+            more_link_text: ''
+            more_link_path: ''
             strip_tags: false
             trim: false
             preserve_tags: ''
@@ -266,6 +275,9 @@ display:
             max_length: 0
             word_boundary: true
             ellipsis: true
+            more_link: false
+            more_link_text: ''
+            more_link_path: ''
             strip_tags: false
             trim: false
             preserve_tags: ''
@@ -313,6 +325,9 @@ display:
             max_length: 0
             word_boundary: true
             ellipsis: true
+            more_link: false
+            more_link_text: ''
+            more_link_path: ''
             strip_tags: false
             trim: false
             preserve_tags: ''
@@ -337,6 +352,9 @@ display:
             trim_suffix: ''
             wrap_output: false
             wrap_class: trimmed
+            more_link: false
+            more_class: more-link
+            more_text: More
             trim_options:
               text: true
               trim_zero: false
@@ -387,6 +405,9 @@ display:
             max_length: 200
             word_boundary: false
             ellipsis: false
+            more_link: false
+            more_link_text: ''
+            more_link_path: ''
             strip_tags: true
             trim: true
             preserve_tags: '<p>'
@@ -438,6 +459,9 @@ display:
             max_length: 0
             word_boundary: true
             ellipsis: true
+            more_link: false
+            more_link_text: ''
+            more_link_path: ''
             strip_tags: false
             trim: false
             preserve_tags: ''
@@ -462,6 +486,9 @@ display:
             trim_suffix: ''
             wrap_output: false
             wrap_class: trimmed
+            more_link: false
+            more_class: more-link
+            more_text: More
             summary_handler: trim
             trim_options:
               text: true
@@ -513,6 +540,9 @@ display:
             max_length: 0
             word_boundary: true
             ellipsis: true
+            more_link: false
+            more_link_text: ''
+            more_link_path: ''
             strip_tags: false
             trim: false
             preserve_tags: ''
@@ -560,6 +590,9 @@ display:
             max_length: 0
             word_boundary: true
             ellipsis: true
+            more_link: false
+            more_link_text: ''
+            more_link_path: ''
             strip_tags: false
             trim: false
             preserve_tags: ''
@@ -632,6 +665,9 @@ display:
             max_length: 0
             word_boundary: true
             ellipsis: true
+            more_link: false
+            more_link_text: ''
+            more_link_path: ''
             strip_tags: false
             trim: false
             preserve_tags: ''
@@ -703,6 +739,9 @@ display:
             max_length: 0
             word_boundary: true
             ellipsis: true
+            more_link: false
+            more_link_text: ''
+            more_link_path: ''
             strip_tags: false
             trim: false
             preserve_tags: ''
@@ -750,6 +789,9 @@ display:
             max_length: 0
             word_boundary: true
             ellipsis: true
+            more_link: false
+            more_link_text: ''
+            more_link_path: ''
             strip_tags: false
             trim: false
             preserve_tags: ''
@@ -823,6 +865,9 @@ display:
             max_length: 0
             word_boundary: true
             ellipsis: true
+            more_link: false
+            more_link_text: ''
+            more_link_path: ''
             strip_tags: false
             trim: false
             preserve_tags: ''
@@ -895,6 +940,9 @@ display:
             max_length: 0
             word_boundary: true
             ellipsis: true
+            more_link: false
+            more_link_text: ''
+            more_link_path: ''
             strip_tags: false
             trim: false
             preserve_tags: ''
@@ -942,6 +990,9 @@ display:
             max_length: 0
             word_boundary: true
             ellipsis: true
+            more_link: false
+            more_link_text: ''
+            more_link_path: ''
             strip_tags: false
             trim: false
             preserve_tags: ''
@@ -994,6 +1045,9 @@ display:
             max_length: 0
             word_boundary: true
             ellipsis: true
+            more_link: false
+            more_link_text: ''
+            more_link_path: ''
             strip_tags: false
             trim: false
             preserve_tags: ''
@@ -1045,6 +1099,9 @@ display:
             max_length: 0
             word_boundary: true
             ellipsis: true
+            more_link: false
+            more_link_text: ''
+            more_link_path: ''
             strip_tags: false
             trim: false
             preserve_tags: ''
@@ -1092,6 +1149,9 @@ display:
             max_length: 0
             word_boundary: true
             ellipsis: true
+            more_link: false
+            more_link_text: ''
+            more_link_path: ''
             strip_tags: false
             trim: false
             preserve_tags: ''
@@ -1172,6 +1232,9 @@ display:
             max_length: 0
             word_boundary: true
             ellipsis: true
+            more_link: false
+            more_link_text: ''
+            more_link_path: ''
             strip_tags: false
             trim: false
             preserve_tags: ''
@@ -1239,6 +1302,9 @@ display:
             max_length: 0
             word_boundary: true
             ellipsis: true
+            more_link: false
+            more_link_text: ''
+            more_link_path: ''
             strip_tags: false
             trim: false
             preserve_tags: ''
