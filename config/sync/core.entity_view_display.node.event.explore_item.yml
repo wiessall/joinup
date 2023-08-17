@@ -133,6 +133,35 @@ third_party_settings:
                   class: ''
                   style: ''
                   data: ''
+          b14af129-e1f7-4f46-ad21-62e47f8fa2f9:
+            uuid: b14af129-e1f7-4f46-ad21-62e47f8fa2f9
+            region: content
+            configuration:
+              id: 'field_block:node:event:published_at'
+              label_display: '0'
+              context_mapping:
+                entity: layout_builder.entity
+              formatter:
+                type: timestamp
+                label: hidden
+                settings:
+                  date_format: custom
+                  custom_date_format: m/d/y
+                  timezone: ''
+                  tooltip:
+                    date_format: ''
+                    custom_date_format: ''
+                  time_diff:
+                    enabled: false
+                    future_format: '@interval hence'
+                    past_format: '@interval ago'
+                    granularity: 2
+                    refresh: 60
+                third_party_settings:
+                  template_suggestion:
+                    template_suggestion: ''
+            weight: -6
+            additional: {  }
         third_party_settings: {  }
 id: node.event.explore_item
 targetEntityType: node
@@ -163,6 +192,15 @@ content:
       date_format: custom
       custom_date_format: m/d/y
       timezone: ''
+      tooltip:
+        date_format: ''
+        custom_date_format: ''
+      time_diff:
+        enabled: false
+        future_format: '@interval hence'
+        past_format: '@interval ago'
+        granularity: 2
+        refresh: 60
     third_party_settings:
       template_suggestion:
         template_suggestion: ''
