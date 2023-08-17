@@ -18,11 +18,9 @@
       star.classList.add("mark");
       star.classList.add("star");
 
-      once("featured", "[data-joinup-featured]", context).forEach(
-        (element) => {
-          element.prepend(star.cloneNode(true));
-        }
-      );
+      once("featured", "[data-joinup-featured]", context).forEach((element) => {
+        element.prepend(star.cloneNode(true));
+      });
     },
   };
 })(Drupal, once);
