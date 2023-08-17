@@ -74,7 +74,7 @@ content:
       custom_date_format: ''
       timezone: ''
       tooltip:
-        date_format: 'long'
+        date_format: long
         custom_date_format: ''
       time_diff:
         enabled: true
