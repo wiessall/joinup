@@ -31,7 +31,7 @@ function ventuno_preprocess_paragraph(array &$variables): void {
 /**
  * Implements hook_preprocess_HOOK().
  */
-function ventuno_preprocess_field__paragraph__call_to_action(&$variables): void {
+function ventuno_preprocess_field__paragraph__call_to_action(array &$variables): void {
   $paragraph = $variables['element']['#object'];
   if ($paragraph instanceof ParagraphInterface) {
     $color = $paragraph->getBehaviorSetting('color', 'color', 'primary');
