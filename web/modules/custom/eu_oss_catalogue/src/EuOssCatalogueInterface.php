@@ -15,7 +15,7 @@ interface EuOssCatalogueInterface {
   /**
    * Fetches and queues a list of business solutions from a provider.
    *
-   * @param string $provider
+   * @param string $providerId
    *   The provider plugin ID.
    *
    * @return int
@@ -24,7 +24,7 @@ interface EuOssCatalogueInterface {
    * @throws \InvalidArgumentException
    *   If the passed plugin ID is invalid.
    */
-  public function fetch(string $provider): int;
+  public function fetch(string $providerId): int;
 
   /**
    * Returns a solution by its URL.
