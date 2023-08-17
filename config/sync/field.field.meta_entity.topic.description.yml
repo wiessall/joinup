@@ -4,14 +4,10 @@ status: true
 dependencies:
   config:
     - field.storage.meta_entity.description
+    - filter.format.basic_html
     - meta_entity.type.topic
   module:
-    - allowed_formats
     - text
-third_party_settings:
-  allowed_formats:
-    allowed_formats:
-      - basic_html
 id: meta_entity.topic.description
 field_name: description
 entity_type: meta_entity
@@ -25,4 +21,6 @@ default_value_callback: ''
 settings:
   display_summary: true
   required_summary: false
+  allowed_formats:
+    - basic_html
 field_type: text_with_summary
