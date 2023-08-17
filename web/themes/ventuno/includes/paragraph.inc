@@ -8,6 +8,7 @@
 declare(strict_types = 1);
 
 use Drupal\Core\Cache\CacheableMetadata;
+use Drupal\paragraphs\ParagraphInterface;
 
 /**
  * Implements hook_preprocess_paragraph().
@@ -17,14 +18,39 @@ function ventuno_preprocess_paragraph(array &$variables): void {
   $variables['#attached']['library'][] = 'ventuno/paragraph__' . $variables['paragraph']->bundle();
   $variables['attributes']['class'][] = 'paragraph--' . str_replace('_', '-', $variables['paragraph']->bundle());
 
-  if (isset($variables['elements']['#paragraph_alignment'])) {
+  if (isset($variables['elements']['#joinup_paragraph_alignment'])) {
     $variables['attributes']['class'][] = 'd-flex';
-    $variables['attributes']['class'][] = match ($variables['elements']['#paragraph_alignment']) {
+    $variables['attributes']['class'][] = match ($variables['elements']['#joinup_paragraph_alignment']) {
       'center' => 'justify-content-center',
       'right' => 'justify-content-end',
       default => 'justify-content-start',
     };
   }
+}
+
+/**
+ * Implements hook_preprocess_HOOK().
+ */
+function ventuno_preprocess_field__paragraph__call_to_action(array &$variables): void {
+  $paragraph = $variables['element']['#object'];
+  if ($paragraph instanceof ParagraphInterface) {
+    $color = $paragraph->getBehaviorSetting('color', 'color', 'primary');
+    $variables['attributes']['class'][] = 'btn';
+    $variables['attributes']['class'][] = match ($color) {
+      'brand' => 'btn-brand',
+      'secondary' => 'btn-secondary',
+      default => 'btn-primary',
+    };
+  }
+}
+
+/**
+ * Implements hook_paragraphs_behavior_color_options_alter().
+ */
+function ventuno_paragraphs_behavior_color_options_alter(array &$options): void {
+  $options['primary'] = t('Dark blue');
+  $options['brand'] = t('Middle blue');
+  $options['secondary'] = t('Light blue');
 }
 
 /**

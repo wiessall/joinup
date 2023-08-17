@@ -7,5 +7,5 @@
  */
 #}
 {% for item in items %}
-  <a href="{{ item.content['#url'] }}" class="btn btn-primary">{{ item.content['#title'] }}</a>
+  <a href="{{ item.content['#url'] }}" {{ attributes }}>{{ item.content['#title'] }}</a>
 {% endfor %}
