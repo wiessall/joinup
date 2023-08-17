@@ -5,6 +5,7 @@ declare(strict_types = 1);
 namespace Drupal\joinup_paragraphs\Plugin\paragraphs\Behavior;
 
 use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
+use Drupal\Core\Entity\EntityFieldManagerInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Theme\ThemeManagerInterface;
 use Drupal\paragraphs\Entity\Paragraph;
@@ -26,23 +27,43 @@ class ColorBehavior extends ParagraphsBehaviorBase {
   /**
    * Default alignment.
    */
-  const DEFAULT_COLOR = 'primary';
+  private const DEFAULT_COLOR = 'primary';
 
   /**
-   * The module handler.
+   * Constructs a new behaviour plugin instance.
    *
-   * @var \Drupal\Core\Theme\ThemeManagerInterface
+   * @param array $configuration
+   *   A configuration array containing information about the plugin instance.
+   * @param string $pluginId
+   *   The plugin_id for the plugin instance.
+   * @param mixed $pluginDefinition
+   *   The plugin implementation definition.
+   * @param \Drupal\Core\Entity\EntityFieldManagerInterface $entityFieldManager
+   *   The entity field manager.
+   * @param \Drupal\Core\Theme\ThemeManagerInterface $themeManager
+   *   The theme manager service.
    */
-  protected ThemeManagerInterface $themeManager;
+  public function __construct(
+    array $configuration,
+    $pluginId,
+    $pluginDefinition,
+    EntityFieldManagerInterface $entityFieldManager,
+    protected ThemeManagerInterface $themeManager,
+  ) {
+    parent::__construct($configuration, $pluginId, $pluginDefinition, $entityFieldManager);
+  }
 
   /**
    * {@inheritdoc}
    */
-  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition): self {
-    $instance = parent::create($container, $configuration, $plugin_id, $plugin_definition);
-    $instance->themeManager = $container->get('theme.manager');
-
-    return $instance;
+  public static function create(ContainerInterface $container, array $configuration, $pluginId, $pluginDefinition): self {
+    return new static(
+      $configuration,
+      $pluginId,
+      $pluginDefinition,
+      $container->get('entity_field.manager'),
+      $container->get('theme.manager'),
+    );
   }
 
   /**
