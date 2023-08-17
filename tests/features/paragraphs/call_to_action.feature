@@ -24,6 +24,8 @@ Feature:
     And I fill in "Link text" with "european-union.europa.eu" in the "Modal content" region
     And I press "Settings" in the "Modal content" region
     And I select "Right" from "Alignment" in the "Modal content" region
+    And I select "Light blue" from "Color" in the "Modal content" region
     And I press "Save" in the "Modal buttons" region
     And I press "Update"
     When the page should contain the html text '<div class="paragraph--call-to-action d-flex justify-content-end paragraph">'
+    When the page should contain the html text '<a href="https://european-union.europa.eu" class="btn btn-secondary">european-union.europa.eu</a>'
