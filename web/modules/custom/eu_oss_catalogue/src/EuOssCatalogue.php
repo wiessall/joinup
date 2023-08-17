@@ -151,7 +151,7 @@ class EuOssCatalogue implements EuOssCatalogueInterface {
   /**
    * {@inheritdoc}
    */
-  public function cleanupSetup(string $providerPluginId, array $solutionUrls): void {
+  public function prepareCleanup(string $providerPluginId, array $solutionUrls): void {
     $this->checkProvider($providerPluginId);
 
     $nodeStorage = $this->entityTypeManager->getStorage('node');
