@@ -58,7 +58,7 @@ interface EuOssCatalogueInterface {
    * @param array $solutionUrls
    *   The list of solution URLs to cleanup.
    */
-  public function cleanupSetup(string $providerPluginId, array $solutionUrls): void;
+  public function prepareCleanup(string $providerPluginId, array $solutionUrls): void;
 
   /**
    * Cleans up a solution or updates the list of providers.
