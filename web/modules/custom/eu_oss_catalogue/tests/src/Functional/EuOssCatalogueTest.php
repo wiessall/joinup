@@ -84,8 +84,9 @@ class EuOssCatalogueTest extends BrowserTestBase {
       ],
     ]);
     $this->assertEquals('Developers Italia', $variables['@provider']);
-    $this->assertSame('invalid1-0000-0000-0000-000000000000', $variables['@provider_id']);
-    $this->assertStringContainsString('publiccode.yml schema errors:', $message);
+    $this->assertSame('developers_italia', $variables['@provider_id']);
+    $this->assertSame('invalid1-0000-0000-0000-000000000000', $variables['@reference']);
+    $this->assertStringContainsString('Schema errors:', $message);
     $this->assertStringContainsString('name: required but empty', $message);
     $this->assertStringContainsString('url: required but empty', $message);
     $this->assertStringContainsString('localisation/availableLanguages: required but empty', $message);
