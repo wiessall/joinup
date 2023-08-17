@@ -52,6 +52,13 @@ function iop_preprocess_paragraph__image(array &$variables): void {
 }
 
 /**
+ * Implements hook_preprocess_HOOK() for paragraph__content_listing.html.twig.
+ */
+function iop_preprocess_paragraph__content_listing(array &$variables): void {
+  unset($variables['content']['paragraph_content_listing_content_listing_top']);
+}
+
+/**
  * Implements hook_preprocess_HOOK().
  */
 function iop_preprocess_page(array &$variables): void {
@@ -263,5 +270,18 @@ function iop_preprocess_rdf_entity(array &$variables): void {
         'image_link' => 'none',
       ],
     ]);
+  }
+}
+
+/**
+ * Implements hook_preprocess_select().
+ */
+function iop_preprocess_select(array &$variables): void {
+  $field_name = $variables['element']['#name'];
+  switch ($field_name) {
+    case 'field_topic':
+    case 'field_is_solution_type':
+      $variables['attributes']['class'][] = 'h-50vh';
+      break;
   }
 }
