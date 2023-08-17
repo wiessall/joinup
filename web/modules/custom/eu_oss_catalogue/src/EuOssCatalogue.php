@@ -48,8 +48,6 @@ class EuOssCatalogue implements EuOssCatalogueInterface {
    * {@inheritdoc}
    */
   public function fetch(string $providerId): int {
-    $this->checkProvider($providerId);
-
     /** @var \Drupal\eu_oss_catalogue\EuOssCatalogueProviderInterface $provider */
     $provider = $this->providerManager->createInstance($providerId);
 
@@ -127,8 +125,6 @@ class EuOssCatalogue implements EuOssCatalogueInterface {
    * {@inheritdoc}
    */
   public function createOrUpdateSolution(string $providerPluginId, EuOssCatalogueFetchedSolution $fetchedSolution): OssSolutionInterface {
-    $this->checkProvider($providerPluginId);
-
     /** @var \Drupal\eu_oss_catalogue\EuOssCatalogueProviderInterface $provider */
     $provider = $this->providerManager->createInstance($providerPluginId);
     /** @var \Drupal\eu_oss_catalogue\EuOssCatalogueParserInterface $parser */
@@ -152,8 +148,6 @@ class EuOssCatalogue implements EuOssCatalogueInterface {
    * {@inheritdoc}
    */
   public function prepareCleanup(string $providerPluginId, array $solutionUrls): void {
-    $this->checkProvider($providerPluginId);
-
     $nodeStorage = $this->entityTypeManager->getStorage('node');
 
     // The parser is responsible to create the solution node entity.
@@ -209,21 +203,6 @@ class EuOssCatalogue implements EuOssCatalogueInterface {
   public function loadBySolutionUrl(string $solutionUrl): ?OssSolutionInterface {
     $entities = $this->entityTypeManager->getStorage('node')->loadByProperties(['oss_git_url' => $solutionUrl]);
     return reset($entities) ?: NULL;
-  }
-
-  /**
-   * Checks whether a provider plugin ID is valid.
-   *
-   * @param string $provider
-   *   The provider plugin ID.
-   *
-   * @throws \InvalidArgumentException
-   *   When the provider is not a valid plugin ID.
-   */
-  protected function checkProvider(string $provider): void {
-    if (!$this->providerManager->hasDefinition($provider)) {
-      throw new \InvalidArgumentException("The '$provider' provider plugin doesn't exist");
-    }
   }
 
 }
