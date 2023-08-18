@@ -64,7 +64,7 @@ class EuOssCatalogueTest extends BrowserTestBase {
 
     // Check failed imports.
     $logs = \Drupal::database()->query("SELECT message, variables FROM {watchdog} WHERE type = 'eu_oss_catalogue'")->fetchAll();
-    $this->assertCount(1, $logs);
+    $this->assertCount(2, $logs);
     $message = strip_tags($logs[0]->message);
     $variables = unserialize($logs[0]->variables, [
       'allowed_classes' => [
@@ -242,6 +242,34 @@ class EuOssCatalogueTest extends BrowserTestBase {
     $solution2 = $this->getNodeByTitle('Solution 2', TRUE);
     $this->assertNotEmpty($solution2);
     $this->assertSame(1, $solution2->get('oss_source')->count());
+  }
+
+  /**
+   * Tests the country specific values for Italy.
+   */
+  public function testItCountrySpecificValues(): void {
+    $service = \Drupal::getContainer()->get('eu_oss_catalogue');
+    $service->fetch('developers_italia');
+
+    // Check failed imports.
+    $logs = \Drupal::database()->query("SELECT message, variables FROM {watchdog} WHERE type = 'eu_oss_catalogue'")->fetchAll();
+    $this->assertCount(2, $logs);
+    $message = strip_tags($logs[1]->message);
+    $variables = unserialize($logs[1]->variables, [
+      'allowed_classes' => [
+        TranslatableMarkup::class,
+      ],
+    ]);
+    $this->assertEquals('Developers Italia', $variables['@provider']);
+    $this->assertSame('developers_italia', $variables['@provider_id']);
+    $this->assertSame('invalid2-0000-0000-0000-000000000000', $variables['@reference']);
+    $this->assertStringContainsString('it/conforme/modelloInteroperabilita: variable type is string but applied schema class is Drupal\Core\TypedData\Plugin\DataType\BooleanData', $message);
+    $this->assertStringContainsString('it/conforme/misureMinimeSicurezza: variable type is string but applied schema class is Drupal\Core\TypedData\Plugin\DataType\BooleanData', $message);
+    $this->assertStringContainsString('it/conforme/gdpr: variable type is string but applied schema class is Drupal\Core\TypedData\Plugin\DataType\BooleanData', $message);
+    $this->assertStringContainsString('it/conforme/some_random_key: missing schema', $message);
+    // Assert that missing keys from the mapping are not logging errors as they
+    // are not required.
+    $this->assertStringNotContainsString('it/piattaforme/pagopa', $message);
   }
 
   /**
