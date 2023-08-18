@@ -7,8 +7,8 @@ namespace Drupal\eu_oss_catalogue\Commands;
 use Consolidation\AnnotatedCommand\CommandData;
 use Consolidation\AnnotatedCommand\CommandError;
 use Consolidation\AnnotatedCommand\Hooks\HookManager;
-use Drupal\Component\Plugin\PluginManagerInterface;
 use Drupal\eu_oss_catalogue\EuOssCatalogueInterface;
+use Drupal\eu_oss_catalogue\EuOssCataloguePluginManagerInterface;
 use Drush\Attributes as CLI;
 use Drush\Commands\DrushCommands;
 
@@ -22,12 +22,12 @@ class EuOssCatalogueCommands extends DrushCommands {
    *
    * @param \Drupal\eu_oss_catalogue\EuOssCatalogueInterface $euOssCatalogueService
    *   The EU OSS Catalog service.
-   * @param \Drupal\Component\Plugin\PluginManagerInterface $providerPluginManager
+   * @param \Drupal\eu_oss_catalogue\EuOssCataloguePluginManagerInterface $providerPluginManager
    *   The EU OSS provider plugin manager service.
    */
   public function __construct(
     protected EuOssCatalogueInterface $euOssCatalogueService,
-    protected PluginManagerInterface $providerPluginManager,
+    protected EuOssCataloguePluginManagerInterface $providerPluginManager,
   ) {
     parent::__construct();
   }

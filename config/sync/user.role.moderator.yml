@@ -31,6 +31,7 @@ dependencies:
     - joinup_licence
     - joinup_news
     - joinup_newsletter
+    - joinup_oss_catalogue
     - joinup_pipeline_log
     - joinup_search
     - joinup_subscription
@@ -171,6 +172,7 @@ permissions:
   - 'edit short id after publication'
   - 'edit sitewide alert entities'
   - 'edit terms in legal_type'
+  - 'eu oss catalogue log'
   - 'execute developers_italia pipeline'
   - 'execute dpsi pipeline'
   - 'execute eu_sic pipeline'

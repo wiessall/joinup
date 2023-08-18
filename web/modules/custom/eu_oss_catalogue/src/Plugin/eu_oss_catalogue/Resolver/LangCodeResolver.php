@@ -8,7 +8,7 @@ use Drupal\Component\Utility\NestedArray;
 use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
-use Drupal\eu_oss_catalogue\EuOssCatalogueFetchedSolution;
+use Drupal\eu_oss_catalogue\Model\EuOssCatalogueFetchedSolution;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -70,7 +70,7 @@ class LangCodeResolver extends DefaultResolver implements ContainerFactoryPlugin
     $values = [];
     foreach ($this->languageManger->getLanguages() as $langcode => $language) {
       $path = explode('/', str_replace('[lang]', $langcode, $this->getConfiguration()['path']));
-      $data = $fetchedSolution->getData();
+      $data = $fetchedSolution->data;
       if (NestedArray::keyExists($data, $path)) {
         $value = NestedArray::getValue($data, $path);
         if (!$solution->hasTranslation($langcode)) {
