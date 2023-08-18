@@ -186,7 +186,7 @@ eu_oss_catalogue.publiccode_yml:
     # This added automatically by Drupal. We ignore it.
     langcode:
       type: ignore
-    # Entry without schema added by Developers Italia.
+    # Country specific: IT.
     it:
       type: eu_oss_catalogue.publiccode_yml.country.[%key]
       label: Country specific schema for Italy
