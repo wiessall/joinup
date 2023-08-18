@@ -1,4 +1,4 @@
-@api
+@api @terms
 Feature:
   Access and functionality checks for carousel paragraphs in custom pages.
 
@@ -6,12 +6,14 @@ Feature:
     Given collection:
       | title | Roman ruins |
       | state | validated   |
+      | topic | HR          |
 
   @javascript
   Scenario: Moderators can access paragraph.
     Given collection:
       | title | Ronup     |
       | state | validated |
+      | topic | HR        |
 
     Given I am logged in as a moderator
     And I go to the "Roman ruins" collection
@@ -77,6 +79,7 @@ Feature:
 
     When I fill in the following:
       | Title | Pages carousel |
+    And I select "HR" from "Topic"
     And I add a layout paragraph in the "Custom page body" form field with the following properties:
       | layout           | one column |
       | Background theme | light      |

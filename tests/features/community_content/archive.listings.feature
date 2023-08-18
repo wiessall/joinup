@@ -62,7 +62,9 @@ Feature: Archived content on content listings - groups and paragraphs.
 
     When I am logged in as a moderator
     And I go to the edit form of the "Some page" "custom page"
-    Then I click "Choose component"
+    And I select "HR" from "Topic"
+    And I additionally select "Supplier exchange" from "Topic"
+    And I click "Choose component"
     And I click "Content listing"
     And I fill in "Query presets" with "entity_bundle|news"
     And I press "Save" in the "Modal buttons" region
@@ -73,7 +75,8 @@ Feature: Archived content on content listings - groups and paragraphs.
     But I should not see the "Archived news" tile
 
     When I go to the edit form of the "Poly page" "custom page"
-    Then I click "Choose component"
+    And I select "Supplier exchange" from "Topic"
+    And I click "Choose component"
     And I click "Content listing"
     And I select "All" from "Show archived content" in the "Modal content" region
     And I fill in "Query presets" with "entity_bundle|news"
@@ -145,8 +148,9 @@ Feature: Archived content on content listings - groups and paragraphs.
       | behavior_settings | a:3:{s:17:"layout_paragraphs";a:4:{s:6:"layout";s:13:"layout_onecol";s:6:"config";a:1:{s:5:"label";s:0:"";}s:11:"parent_uuid";N;s:6:"region";N;}s:16:"background_theme";a:0:{}s:11:"extra_class";a:0:{}} |
 
     When I am logged in as a moderator
-    When I go to the edit form of the "IOP page" "custom page"
-    Then I click "Choose component"
+    And I go to the edit form of the "IOP page" "custom page"
+    And I select "HR" from "Topic"
+    And I click "Choose component"
     And I click "Carousel"
     And I fill in "Query presets" with "entity_bundle|news" in the "Modal content" region
     And I press "Save" in the "Modal buttons" region

@@ -1,4 +1,4 @@
-@api @group-f
+@api @terms @group-f
 Feature: Github feed paragraph tests.
   The scenarios are split into 4 tests because re-saving the entity would
   invalidate the file cache and the tests would require connecting to Github.
@@ -9,8 +9,8 @@ Feature: Github feed paragraph tests.
       | title | Paragraphs <group> |
       | state | validated          |
     And custom_page content:
-      | title                   | <group>            | state     |
-      | Catalogue of paragraphs | Paragraphs <group> | published |
+      | title                   | <group>            | state     | topic                   |
+      | Catalogue of paragraphs | Paragraphs <group> | published | Statistics and Analysis |
     And I append "layout" to "field_paragraphs_body" field in "node" entity with following "Catalogue of paragraphs" title:
       | behavior_settings | a:3:{s:17:"layout_paragraphs";a:4:{s:6:"layout";s:13:"layout_onecol";s:6:"config";a:1:{s:5:"label";s:0:"";}s:11:"parent_uuid";N;s:6:"region";N;}s:16:"background_theme";a:0:{}s:11:"extra_class";a:0:{}} |
 
@@ -78,8 +78,8 @@ Feature: Github feed paragraph tests.
       | title | Paragraphs <group> |
       | state | validated          |
     And custom_page content:
-      | title                   | <group>            | state     |
-      | Catalogue of paragraphs | Paragraphs <group> | published |
+      | title                   | <group>            | state     | topic                   |
+      | Catalogue of paragraphs | Paragraphs <group> | published | Statistics and Analysis |
     And I append "layout" to "field_paragraphs_body" field in "node" entity with following "Catalogue of paragraphs" title:
       | behavior_settings | a:3:{s:17:"layout_paragraphs";a:4:{s:6:"layout";s:13:"layout_onecol";s:6:"config";a:1:{s:5:"label";s:0:"";}s:11:"parent_uuid";N;s:6:"region";N;}s:16:"background_theme";a:0:{}s:11:"extra_class";a:0:{}} |
 
