@@ -1,0 +1,39 @@
+Index: src/Plugin/QueueWorker/DelayedRequestDispatcher.php
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/Plugin/QueueWorker/DelayedRequestDispatcher.php b/src/Plugin/QueueWorker/DelayedRequestDispatcher.php
+--- a/src/Plugin/QueueWorker/DelayedRequestDispatcher.php	
++++ b/src/Plugin/QueueWorker/DelayedRequestDispatcher.php	(date 1692028862825)
+@@ -37,10 +37,17 @@
+   /**
+    * Creates a new DelayedRequestDispatcher object.
+    *
++   * @param array $configuration
++   *   A configuration array containing information about the plugin instance.
++   * @param string $plugin_id
++   *   The plugin_id for the plugin instance.
++   * @param mixed $plugin_definition
++   *   The plugin implementation definition.
+    * @param EntityTypeManagerInterface $entity_type_manager
+    *   The entity type manager.
+    */
+-  public function __construct(EntityTypeManagerInterface $entity_type_manager) {
++  public function __construct(array $configuration, $plugin_id, $plugin_definition, EntityTypeManagerInterface $entity_type_manager) {
++    parent::__construct($configuration, $plugin_id, $plugin_definition);
+     $this->already = [];
+     $this->entityTypeManager = $entity_type_manager;
+   }
+@@ -50,7 +57,10 @@
+    */
+   public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
+     return new static(
+-      $container->get('entity_type.manager')
++      $configuration,
++      $plugin_id,
++      $plugin_definition,
++      $container->get('entity_type.manager'),
+     );
+   }
+ 
