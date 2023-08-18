@@ -934,6 +934,22 @@ module.exports = {
         sourceMap: "file",
       },
     },
+    // Layout Paragraphs - buidler UI.
+    {
+      entry: path.resolve(
+        outputFolder,
+        `${ventuno}src/scss/components/layout-paragraphs--builder.scss`
+      ),
+      dest: path.resolve(
+        outputFolder,
+        `${ventuno}assets/css/layout-paragraphs--builder.min.css`
+      ),
+      options: {
+        includePaths,
+        minify: true,
+        sourceMap: "file",
+      },
+    },
     // IOP
     // Components (SMACSS)
     {

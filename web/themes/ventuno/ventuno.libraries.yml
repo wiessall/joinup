@@ -390,3 +390,8 @@ user--group-header:
   css:
     theme:
       assets/css/user--group-header.min.css: { minified: true }
+
+layout-paragraphs--builder:
+  css:
+    theme:
+      assets/css/layout-paragraphs--builder.min.css: { minified: true }
