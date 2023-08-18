@@ -62,23 +62,6 @@ class EuOssCatalogueTest extends BrowserTestBase {
     // The queue contains the 2 solutions and the cleanup step.
     $this->assertSame(3, $queue->numberOfItems());
 
-    // Check failed imports.
-    $logs = \Drupal::database()->query("SELECT message, variables FROM {watchdog} WHERE type = 'eu_oss_catalogue'")->fetchAll();
-    $this->assertCount(1, $logs);
-    $message = strip_tags($logs[0]->message);
-    $variables = unserialize($logs[0]->variables, [
-      'allowed_classes' => [
-        TranslatableMarkup::class,
-      ],
-    ]);
-    $this->assertEquals('Developers Italia', $variables['@provider']);
-    $this->assertSame('developers_italia', $variables['@provider_id']);
-    $this->assertSame('invalid1-0000-0000-0000-000000000000', $variables['@reference']);
-    $this->assertStringContainsString('Schema errors:', $message);
-    $this->assertStringContainsString('name: required but empty', $message);
-    $this->assertStringContainsString('url: required but empty', $message);
-    $this->assertStringContainsString('localisation/availableLanguages: required but empty', $message);
-
     // Check queue processing. Use Drush to run the queue.
     $this->drush('queue:run', ['eu_oss_catalogue']);
 
@@ -242,6 +225,56 @@ class EuOssCatalogueTest extends BrowserTestBase {
     $solution2 = $this->getNodeByTitle('Solution 2', TRUE);
     $this->assertNotEmpty($solution2);
     $this->assertSame(1, $solution2->get('oss_source')->count());
+  }
+
+  /**
+   * Tests that solutions without mandatory values are logged as errors.
+   */
+  public function testMissingMandatoryValues(): void {
+    $service = \Drupal::getContainer()->get('eu_oss_catalogue');
+    $service->fetch('developers_italia');
+
+    $logs = \Drupal::database()->query("SELECT message, variables FROM {watchdog} WHERE type = 'eu_oss_catalogue'")->fetchAll();
+    $message = strip_tags($logs[0]->message);
+    $variables = unserialize($logs[0]->variables, [
+      'allowed_classes' => [
+        TranslatableMarkup::class,
+      ],
+    ]);
+    $this->assertEquals('Developers Italia', $variables['@provider']);
+    $this->assertSame('developers_italia', $variables['@provider_id']);
+    $this->assertSame('invalid1-0000-0000-0000-000000000000', $variables['@reference']);
+    $this->assertStringContainsString('Schema errors:', $message);
+    $this->assertStringContainsString('name: required but empty', $message);
+    $this->assertStringContainsString('url: required but empty', $message);
+    $this->assertStringContainsString('localisation/availableLanguages: required but empty', $message);
+  }
+
+  /**
+   * Tests the country specific values for Italy.
+   */
+  public function testItCountrySpecificValues(): void {
+    $service = \Drupal::getContainer()->get('eu_oss_catalogue');
+    $service->fetch('developers_italia');
+
+    // Check failed imports.
+    $logs = \Drupal::database()->query("SELECT message, variables FROM {watchdog} WHERE type = 'eu_oss_catalogue'")->fetchAll();
+    $message = strip_tags($logs[1]->message);
+    $variables = unserialize($logs[1]->variables, [
+      'allowed_classes' => [
+        TranslatableMarkup::class,
+      ],
+    ]);
+    $this->assertEquals('Developers Italia', $variables['@provider']);
+    $this->assertSame('developers_italia', $variables['@provider_id']);
+    $this->assertSame('invalid2-0000-0000-0000-000000000000', $variables['@reference']);
+    $this->assertStringContainsString('it/conforme/modelloInteroperabilita: variable type is string but applied schema class is Drupal\Core\TypedData\Plugin\DataType\BooleanData', $message);
+    $this->assertStringContainsString('it/conforme/misureMinimeSicurezza: variable type is string but applied schema class is Drupal\Core\TypedData\Plugin\DataType\BooleanData', $message);
+    $this->assertStringContainsString('it/conforme/gdpr: variable type is string but applied schema class is Drupal\Core\TypedData\Plugin\DataType\BooleanData', $message);
+    $this->assertStringContainsString('it/conforme/some_random_key: missing schema', $message);
+    // Assert that missing keys from the mapping are not logging errors as they
+    // are not required.
+    $this->assertStringNotContainsString('it/piattaforme/pagopa', $message);
   }
 
   /**

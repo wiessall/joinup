@@ -186,9 +186,10 @@ eu_oss_catalogue.publiccode_yml:
     # This added automatically by Drupal. We ignore it.
     langcode:
       type: ignore
-    # Entry without schema added by Developers Italia.
+    # Country specific: IT.
     it:
-      type: ignore
+      type: eu_oss_catalogue.publiccode_yml.country.[%key]
+      label: Country specific schema for Italy
 
 # https://yml.publiccode.tools/schema.core.html#section-description
 eu_oss_catalogue.publiccode_yml_description:
@@ -280,3 +281,67 @@ eu_oss_catalogue.publiccode_yml_dependency:
       type: string
     optional:
       type: boolean
+
+# @see https://yml.publiccode.tools/country.html#country-specific-sections
+eu_oss_catalogue.publiccode_yml.country.it:
+  type: mapping
+  mapping:
+    countryExtensionVersion:
+      type: string
+      label: Version of the country extension
+      required: true
+      constraints:
+        - regex: '/^1\.0\.0$/'
+    conforme:
+      type: mapping
+      label: Conformity to Italian law
+      required: false
+      mapping:
+        lineeGuidaDesign:
+          type: boolean
+          label: Compliance with the Italian laws (L. 4/2004)
+          required: false
+        modelloInteroperabilita:
+          type: boolean
+          label: 'Compliance with the "linee guida sull’interoperabilità".'
+          required: false
+        misureMinimeSicurezza:
+          type: boolean
+          label: 'Compliance with the "Misure minime di sicurezza ICT per le Pubbliche amministrazioni".'
+          required: false
+        gdpr:
+          type: boolean
+          label: 'Whether the software respects GDPR.'
+          required: false
+    piattaforme:
+      type: mapping
+      required: false
+      mapping:
+        spid:
+          type: boolean
+          label: 'Whether the software interfaces with "SPID - il Sistema Pubblico di Identità Digitale".'
+          required: false
+        cie:
+          type: boolean
+          label: 'Whether the software interfaces with "Carta di Identità Elettronica".'
+          required: false
+        anpr:
+          type: boolean
+          label: 'Whether the software interfaces with "ANPR".'
+          required: false
+        pagopa:
+          type: boolean
+          label: 'Whether the software interfaces with "PagoPA".'
+          required: false
+        io:
+          type: boolean
+          label: 'Whether the software interfaces with "IO - public services app".'
+          required: false
+    riuso:
+      type: mapping
+      required: false
+      mapping:
+        codiceIPA:
+          type: string
+          label: 'mandatory if repoOwner is a Public Administration'
+          required: false
