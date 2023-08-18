@@ -22,7 +22,7 @@
     "license": "GPL-2.0+",
     "minimum-stability": "dev",
     "require": {
-        "cfpinto/graphql": "dev-master"
+        "cfpinto/graphql": "dev-master",
         "claudiu-cristea/drupal-cache-adapter": "^1.0",
         "cweagans/composer-patches": "^1.7",
         "drupal/multivalue_form_element": "^1.0",

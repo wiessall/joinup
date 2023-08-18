@@ -1,8 +1,0 @@
-name: GitLab Platform
-type: module
-description: Offers a GitLab provider plugin for EU OSS Solutions Catalogue
-package: EU OSS Catalogue
-core_version_requirement: ">=10.0"
-dependencies:
-  - eu_oss_catalogue:eu_oss_catalogue
-  - multivalue_form_element:multivalue_form_element
