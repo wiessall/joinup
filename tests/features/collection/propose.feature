@@ -88,7 +88,9 @@ Feature: Proposing a collection
     Then I should see the heading "Add custom page"
     When I fill in the following:
       | Title | About this group                                               |
-    And I press "Save"
+      | Body  | <p>Some more<em>information</em><br />about the collection.<p> |
+    And I select "HR" from "Topic"
+    And I press "Publish"
     Then I should see the success message "Custom page About this group has been created."
 
     # Clean up the collection that was created.

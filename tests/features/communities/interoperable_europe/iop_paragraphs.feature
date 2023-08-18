@@ -1,4 +1,4 @@
-@api
+@api @terms
 Feature:
   Access and functionality checks for the IOP related paragraphs.
 
@@ -8,6 +8,7 @@ Feature:
       | uri   | http://data.europa.eu/w21/8e30f798-ff2b-478b-9c09-5ed5a63b4c8c |
       | title | Interoperable Europe                                           |
       | state | validated                                                      |
+      | topic | Demography                                                     |
 
   Scenario: Test that carousels content listing options are working correctly.
     Given the following collections:
@@ -45,6 +46,7 @@ Feature:
 
     When I fill in the following:
       | Title | Pages carousel |
+    And I select "Demography" from "Topic"
     And I add a layout paragraph in the "Custom page body" form field with the following properties:
       | layout           | one column |
       | Background theme | light      |

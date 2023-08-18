@@ -372,6 +372,7 @@ Feature: About this solution
     When I go to the about page of "Six exclusion advantages"
     And I click "Add custom page" in the plus button menu
     And I fill in "Title" with "Some custom contact test"
+    And I select "Supplier exchange" from "Topic"
     And I add a layout paragraph in the "Custom page body" form field with the following properties:
       | layout           | one column |
       | Background theme | light      |

@@ -1,4 +1,4 @@
-@api @group-d
+@api @terms @group-d
 Feature:
   As a site builder of the site
   In order to be able to better control the structure of my content
@@ -8,6 +8,7 @@ Feature:
     Given the following collection:
       | title | Paragraphs collection |
       | state | validated             |
+      | topic | HR                    |
 
   Scenario: Heading paragraph is displayed as heading element.
     Given custom_page content:
@@ -55,8 +56,8 @@ Feature:
   @javascript
   Scenario: Paragraph sections are multivalue and sort-able.
     Given custom_page content:
-      | title           | collection            | state     |
-      | Paragraphs page | Paragraphs collection | published |
+      | title           | collection            | state     | topic |
+      | Paragraphs page | Paragraphs collection | published | HR    |
     And I append "layout" to "field_paragraphs_body" field in "node" entity with following "Paragraphs page" title:
       | behavior_settings | a:3:{s:17:"layout_paragraphs";a:4:{s:6:"layout";s:13:"layout_onecol";s:6:"config";a:1:{s:5:"label";s:0:"";}s:11:"parent_uuid";N;s:6:"region";N;}s:16:"background_theme";a:0:{}s:11:"extra_class";a:0:{}} |
 
@@ -197,8 +198,8 @@ Feature:
       | collection            | user  |
       | Paragraphs collection | Zohan |
     And custom_page content:
-      | title                     | body        | collection            | author | state     |
-      | Don't Mess with the Zohan | Wanna mess? | Paragraphs collection | Zohan  | published |
+      | title                     | body        | collection            | author | state     | topic |
+      | Don't Mess with the Zohan | Wanna mess? | Paragraphs collection | Zohan  | published | HR    |
     And I append "layout" to "field_paragraphs_body" field in "node" entity with following "Don't Mess with the Zohan" title:
       | behavior_settings | a:3:{s:17:"layout_paragraphs";a:4:{s:6:"layout";s:13:"layout_onecol";s:6:"config";a:1:{s:5:"label";s:0:"";}s:11:"parent_uuid";N;s:6:"region";N;}s:16:"background_theme";a:0:{}s:11:"extra_class";a:0:{}} |
 
@@ -232,6 +233,8 @@ Feature:
     And I open the plus button menu
     And I click "Add custom page"
     And I fill in "Title" with "Paragraphs accordion page"
+    And I select "HR" from "Topic"
+
     Given I add a layout paragraph in the "Custom page body" form field with the following properties:
       | layout           | one column |
       | Background theme | light      |
