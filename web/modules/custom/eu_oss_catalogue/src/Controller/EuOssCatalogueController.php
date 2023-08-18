@@ -4,8 +4,8 @@ declare(strict_types = 1);
 
 namespace Drupal\eu_oss_catalogue\Controller;
 
-use Drupal\Component\Plugin\PluginManagerInterface;
 use Drupal\Core\Controller\ControllerBase;
+use Drupal\eu_oss_catalogue\EuOssCataloguePluginManagerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -16,11 +16,11 @@ class EuOssCatalogueController extends ControllerBase {
   /**
    * Constructs a new controller class instance.
    *
-   * @param \Drupal\Component\Plugin\PluginManagerInterface $providerPluginManager
+   * @param \Drupal\eu_oss_catalogue\EuOssCataloguePluginManagerInterface $providerPluginManager
    *   The EU OSS Catalogue providers plugin manager.
    */
   public function __construct(
-    protected PluginManagerInterface $providerPluginManager,
+    protected EuOssCataloguePluginManagerInterface $providerPluginManager,
   ) {}
 
   /**

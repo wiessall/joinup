@@ -5,7 +5,6 @@ declare(strict_types = 1);
 namespace Drupal\eu_oss_catalogue;
 
 use Drupal\Component\Plugin\PluginBase;
-use Drupal\Component\Plugin\PluginManagerInterface;
 use Drupal\Core\Config\Entity\ThirdPartySettingsInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Logger\LoggerChannelInterface;
@@ -13,6 +12,7 @@ use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Utility\Error;
 use Drupal\eu_oss_catalogue\Entity\OssSolutionInterface;
 use Drupal\eu_oss_catalogue\Exception\UnresolvableValueException;
+use Drupal\eu_oss_catalogue\Model\EuOssCatalogueFetchedSolution;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -38,9 +38,9 @@ abstract class EuOssCatalogueParserPluginBase extends PluginBase implements EuOs
    *   The plugin implementation definition.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
    *   The entity type manager service.
-   * @param \Drupal\Component\Plugin\PluginManagerInterface $resolverManager
+   * @param \Drupal\eu_oss_catalogue\EuOssCataloguePluginManagerInterface $resolverManager
    *   The EU OSS Catalogue resolver plugin manager service.
-   * @param \Drupal\Core\Logger\LoggerChannelInterface $loggerChannel
+   * @param \Drupal\Core\Logger\LoggerChannelInterface $logger
    *   The EU catalogue logger channel.
    */
   public function __construct(
@@ -48,8 +48,8 @@ abstract class EuOssCatalogueParserPluginBase extends PluginBase implements EuOs
     $pluginId,
     $pluginDefinition,
     protected EntityTypeManagerInterface $entityTypeManager,
-    protected PluginManagerInterface $resolverManager,
-    protected LoggerChannelInterface $loggerChannel,
+    protected EuOssCataloguePluginManagerInterface $resolverManager,
+    protected LoggerChannelInterface $logger,
   ) {
     parent::__construct($configuration, $pluginId, $pluginDefinition);
   }
@@ -75,7 +75,7 @@ abstract class EuOssCatalogueParserPluginBase extends PluginBase implements EuOs
     $nodeStorage = $this->entityTypeManager->getStorage('node');
 
     // For now, we're using the solution URL as UUID.
-    $solutions = $nodeStorage->loadByProperties(['oss_git_url' => $fetchedSolution->getUrl()]);
+    $solutions = $nodeStorage->loadByProperties(['oss_git_url' => $fetchedSolution->url]);
 
     $solution = $solutions ? reset($solutions) : $nodeStorage->create(['type' => 'oss_solution']);
     if (!$solution instanceof OssSolutionInterface) {
@@ -83,7 +83,7 @@ abstract class EuOssCatalogueParserPluginBase extends PluginBase implements EuOs
     }
 
     $solution
-      ->set('title', $fetchedSolution->getName())
+      ->set('title', $fetchedSolution->name)
       ->addProvider($provider);
 
     foreach ($solution->getFields(FALSE) as $fieldName => $fieldItemList) {
@@ -100,7 +100,7 @@ abstract class EuOssCatalogueParserPluginBase extends PluginBase implements EuOs
             $resolver->resolve($fieldItemList, $fetchedSolution);
           }
           catch (UnresolvableValueException $exception) {
-            $this->loggerChannel->error($exception->getMessage(), Error::decodeException($exception));
+            $this->logger->error($exception->getMessage(), Error::decodeException($exception));
             // Fail softly, don't set this field.
             continue;
           }
