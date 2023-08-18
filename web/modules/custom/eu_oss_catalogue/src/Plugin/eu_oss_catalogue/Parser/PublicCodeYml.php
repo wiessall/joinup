@@ -4,7 +4,6 @@ declare(strict_types = 1);
 
 namespace Drupal\eu_oss_catalogue\Plugin\eu_oss_catalogue\Parser;
 
-use Drupal\Component\Plugin\PluginManagerInterface;
 use Drupal\Core\Config\Schema\SchemaCheckTrait;
 use Drupal\Core\Config\TypedConfigManagerInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
@@ -12,9 +11,10 @@ use Drupal\Core\Logger\LoggerChannelInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Serialization\Yaml;
 use Drupal\eu_oss_catalogue\Entity\OssSolutionInterface;
-use Drupal\eu_oss_catalogue\EuOssCatalogueFetchedSolution;
 use Drupal\eu_oss_catalogue\EuOssCatalogueParserPluginBase;
+use Drupal\eu_oss_catalogue\EuOssCataloguePluginManagerInterface;
 use Drupal\eu_oss_catalogue\EuOssCatalogueProviderInterface;
+use Drupal\eu_oss_catalogue\Model\EuOssCatalogueFetchedSolution;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -44,10 +44,10 @@ class PublicCodeYml extends EuOssCatalogueParserPluginBase implements ContainerF
    *   The plugin implementation definition.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
    *   The entity type manager service.
-   * @param \Drupal\Component\Plugin\PluginManagerInterface $resolverManager
+   * @param \Drupal\eu_oss_catalogue\EuOssCataloguePluginManagerInterface $resolverManager
    *   The EU OSS Catalogue resolver plugin manager service.
-   * @param \Drupal\Core\Logger\LoggerChannelInterface $loggerChannel
-   *   The EU catalogue logger channel.
+   * @param \Drupal\Core\Logger\LoggerChannelInterface $logger
+   *   The logger channel service.
    * @param \Drupal\Core\Config\TypedConfigManagerInterface $typedConfigManager
    *   The typed config manager interface.
    */
@@ -56,11 +56,11 @@ class PublicCodeYml extends EuOssCatalogueParserPluginBase implements ContainerF
     $pluginId,
     $pluginDefinition,
     protected EntityTypeManagerInterface $entityTypeManager,
-    protected PluginManagerInterface $resolverManager,
-    protected LoggerChannelInterface $loggerChannel,
+    protected EuOssCataloguePluginManagerInterface $resolverManager,
+    protected LoggerChannelInterface $logger,
     protected TypedConfigManagerInterface $typedConfigManager,
   ) {
-    parent::__construct($configuration, $pluginId, $pluginDefinition, $this->entityTypeManager, $this->resolverManager, $this->loggerChannel);
+    parent::__construct($configuration, $pluginId, $pluginDefinition, $this->entityTypeManager, $this->resolverManager, $logger);
   }
 
   /**
@@ -81,15 +81,15 @@ class PublicCodeYml extends EuOssCatalogueParserPluginBase implements ContainerF
   /**
    * {@inheritdoc}
    */
-  public function checkSchema(array $data, EuOssCatalogueProviderInterface $provider, ?string $providerReference = NULL): bool {
-    // Using the config schema checker. And it works!
-    $schemaErrors = $this->checkConfigSchema($this->typedConfigManager, 'eu_oss_catalogue.publiccode_yml', $data);
+  public function checkSchema(EuOssCatalogueFetchedSolution $fetchedSolution): array {
+    $errorList = [];
 
+    // Using the config schema checker. And it works!
+    $schemaErrors = $this->checkConfigSchema($this->typedConfigManager, 'eu_oss_catalogue.publiccode_yml', $fetchedSolution->data);
     if (!is_array($schemaErrors) || !$schemaErrors) {
-      return TRUE;
+      return $errorList;
     }
 
-    $errorList = [];
     foreach ($schemaErrors as $key => $error) {
       if (str_contains($key, ':')) {
         // The config name is not relevant, this is not a config.
@@ -97,25 +97,7 @@ class PublicCodeYml extends EuOssCatalogueParserPluginBase implements ContainerF
       }
       $errorList[] = '<code>' . str_replace('.', '/', $key) . "</code>: $error";
     }
-    $errorListMarkup = "<ul><li>" . implode('</li><li>', $errorList) . "</li></ul>";
-
-    $message = <<<MESSAGE
-      <p>@provider ID: <code>@provider_id</code></p>
-      <p><code>publiccode.yml</code> schema errors:</p>
-      $errorListMarkup
-      <p>Full data:</p>
-      <pre>
-      @data
-      </pre>
-      MESSAGE;
-    $arguments = [
-      '@provider' => $provider->getPluginDefinition()['label'],
-      '@provider_id' => $providerReference ?? '[not provided]',
-      '@data' => Yaml::encode($data),
-    ];
-    $this->loggerChannel->error($message, $arguments);
-
-    return FALSE;
+    return $errorList;
   }
 
   /**
@@ -131,7 +113,7 @@ class PublicCodeYml extends EuOssCatalogueParserPluginBase implements ContainerF
       ->resolve($solution->get('oss_publiccode_yml_version'), $fetchedSolution);
 
     // Add also the publiccode.yml content.
-    $solution->set('oss_publiccode_yml_content', Yaml::encode($fetchedSolution->getData()));
+    $solution->set('oss_publiccode_yml_content', Yaml::encode($fetchedSolution->data));
 
     return $solution;
   }
