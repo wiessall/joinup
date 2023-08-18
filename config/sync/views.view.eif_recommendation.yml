@@ -4,6 +4,7 @@ status: true
 dependencies:
   config:
     - field.storage.taxonomy_term.field_eif_identifier
+    - rdf_entity.rdfentity.solution
     - search_api.index.published
   module:
     - joinup_group
