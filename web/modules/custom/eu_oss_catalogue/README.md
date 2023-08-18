@@ -71,6 +71,24 @@ fetched data as it is to the Drupal node field.
 A node field might define several resolvers depending on the _parser_ plugin
 that is calling it.
 
+#### The Code Hosting Platform
+
+These are plugins in charge with making API calls against a code hosting
+platform, such as GitHub, GitLab, BitBucket, etc.
+
+##### GitHub
+
+GitHub API calls are authenticated. You should obtain an access token and store
+it in the `settings.php` file:
+
+```php
+$settings['eu_oss_catalogue']['platform_github']['access_token'] = '...';
+```
+
+##### GitLab
+
+TBD
+
 ### The process
 
 In order to manage the performance aspects the fetching process is following

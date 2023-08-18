@@ -1,13 +1,14 @@
 <?php
 
-namespace Drupal\eu_oss_catalogue_platform_github\GraphQL\DataModel;
+namespace Drupal\eu_oss_catalogue\Model;
 
 /**
  * GitHub search types.
  *
  * @see https://docs.github.com/en/graphql/reference/enums#searchtype
  */
-enum SearchType {
+enum GitHubSearchType {
+
   case DISCUSSION;
   case ISSUE;
   case REPOSITORY;
