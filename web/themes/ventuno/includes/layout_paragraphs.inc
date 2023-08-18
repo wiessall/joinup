@@ -22,3 +22,11 @@ function ventuno_preprocess_layout_paragraphs_builder_component_menu(array &$var
     $attributes->addClass(['d-inline-flex', 'w-auto', 'my-2']);
   }
 }
+
+/**
+ * Implements hook_preprocess_HOOK() for layout_paragraphs_builder.
+ */
+function ventuno_preprocess_layout_paragraphs_builder(array &$variables): void {
+  $variables['attributes']['class'][] = 'form-control';
+  $variables['attributes']['class'][] = 'py-3';
+}

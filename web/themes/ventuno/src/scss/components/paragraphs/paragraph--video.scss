@@ -1,7 +1,16 @@
+@import "../../partials/core";
+
 .paragraph--video {
   &.js-lpb-component {
     .video-embed-field-responsive-video iframe {
       pointer-events: none; // Allow Drag&Drop in edit form.
     }
+  }
+
+  // Temporary workaround: if video is not the last child of its parent, apply
+  // one unit bottom spacing. Using margin because it collapses with the top
+  // margin of the next element.
+  &:not(:last-child) {
+    margin-bottom: $spacer;
   }
 }
