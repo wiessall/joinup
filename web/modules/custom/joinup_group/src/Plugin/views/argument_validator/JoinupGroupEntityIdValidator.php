@@ -22,12 +22,12 @@ class JoinupGroupEntityIdValidator extends Entity {
   /**
    * {@inheritdoc}
    */
-  public function buildOptionsForm(&$form, FormStateInterface $form_state) {
+  public function buildOptionsForm(&$form, FormStateInterface $form_state): void {
     parent::buildOptionsForm($form, $form_state);
 
     $form['rdf_entity_id'] = [
       '#type' => 'textfield',
-      '#title' => $this->t('Entity id'),
+      '#title' => $this->t('Entity ID'),
       '#default_value' => $this->options['rdf_entity_id'],
     ];
   }
@@ -35,14 +35,14 @@ class JoinupGroupEntityIdValidator extends Entity {
   /**
    * {@inheritdoc}
    */
-  protected function validateEntity(EntityInterface $entity) {
+  protected function validateEntity(EntityInterface $entity): bool {
     return ($entity->id() === $this->options['rdf_entity_id']) && parent::validateEntity($entity);
   }
 
   /**
    * {@inheritdoc}
    */
-  protected function defineOptions() {
+  protected function defineOptions(): array {
     $options = parent::defineOptions();
     $options['rdf_entity_id'] = ['default' => FALSE];
 
