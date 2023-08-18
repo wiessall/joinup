@@ -109,7 +109,7 @@ abstract class EuOssCatalogueGitHostingPlatformPluginBase extends EuOssCatalogue
       }
     });
     $candidates = array_filter($candidates);
-    $existingProjects = $this->getProjects();
+    $existingProjects = $this->getProjects($candidates);
 
     // The values might have been trimmed earlier.
     $formState->setValue('projects', $candidates);
@@ -139,7 +139,7 @@ abstract class EuOssCatalogueGitHostingPlatformPluginBase extends EuOssCatalogue
    * {@inheritdoc}
    */
   public function getRepositories(?string $filePath = NULL): iterable {
-    foreach ($this->getProjects($filePath) as $projects) {
+    foreach ($this->getProjects($this->getConfiguration()['projects'], $filePath) as $projects) {
       foreach ($projects as $result) {
         yield $result;
       }
@@ -155,6 +155,11 @@ abstract class EuOssCatalogueGitHostingPlatformPluginBase extends EuOssCatalogue
    * also the file content. This is useful when that file contains metadata
    * about the project.
    *
+   * @param array[] $candidates
+   *   A list of candidates to filter on. Each item is an associative array:
+   *   - vendor: Mandatory vendor name.
+   *   - name: Optional project name. If omitted all public projects from the
+   *     vendor will be considered.
    * @param string|null $filePath
    *   (optional) A file path relative to repository root.
    *
@@ -162,8 +167,8 @@ abstract class EuOssCatalogueGitHostingPlatformPluginBase extends EuOssCatalogue
    *   Associative array:
    *   - First level keys are vendor
    *   - Second level keys are vendor repository project names and values are
-   *     objects of type \Drupal\eu_oss_catalogue\Model\GitPlatformResult.
+   *     objects of type \Drupal\eu_oss_catalogue\Model\HostingPlatformResult.
    */
-  abstract protected function getProjects(?string $filePath = NULL): array;
+  abstract protected function getProjects(array $candidates, ?string $filePath = NULL): array;
 
 }

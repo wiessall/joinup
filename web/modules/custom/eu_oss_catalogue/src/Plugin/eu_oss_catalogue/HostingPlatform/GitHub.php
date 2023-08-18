@@ -2,14 +2,14 @@
 
 declare(strict_types = 1);
 
-namespace Drupal\eu_oss_catalogue_platform_github\Plugin\eu_oss_catalogue\HostingPlatform;
+namespace Drupal\eu_oss_catalogue\Plugin\eu_oss_catalogue\HostingPlatform;
 
 use Drupal\Cache\Adapter\DrupalAdapter;
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Site\Settings;
 use Drupal\eu_oss_catalogue\EuOssCatalogueGitHostingPlatformPluginBase;
+use Drupal\eu_oss_catalogue\Model\GitHubSearchType;
 use Drupal\eu_oss_catalogue\Model\HostingPlatformResult;
-use Drupal\eu_oss_catalogue_platform_github\GraphQL\DataModel\SearchType;
 use Github\Api\GraphQL;
 use Github\AuthMethod;
 use Github\Client;
@@ -101,12 +101,12 @@ class GitHub extends EuOssCatalogueGitHostingPlatformPluginBase {
   /**
    * {@inheritdoc}
    */
-  protected function getProjects(?string $filePath = NULL): array {
+  protected function getProjects(array $candidates, ?string $filePath = NULL): array {
     $projects = [];
     // Build a search query string.
     // @see https://docs.github.com/search-github
     $search = ['is:public', 'archived:false'];
-    foreach ($this->getConfiguration()['projects'] as $candidate) {
+    foreach ($candidates as $candidate) {
       if ($candidate['name']) {
         $search[] = "repo:{$candidate['vendor']}/{$candidate['name']}";
       }
@@ -116,7 +116,7 @@ class GitHub extends EuOssCatalogueGitHostingPlatformPluginBase {
     }
 
     $query = new Query('search', [
-      'type' => SearchType::REPOSITORY,
+      'type' => GitHubSearchType::REPOSITORY,
       'query' => implode(' ', $search),
       'first' => 100,
     ]);
