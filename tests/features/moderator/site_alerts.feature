@@ -21,10 +21,10 @@ Feature: Site alerts
     # Anonymous users should see the alert.
     Given I am not logged in
     And I am on the homepage
-    Then I should see the text "Between 18:00 and 20:00 the site will be temporarily unavailable due to scheduled maintenance"
+    Then I wait until the page contains the text "Between 18:00 and 20:00 the site will be temporarily unavailable due to scheduled maintenance"
     Then I click "advanced search"
     Then I should be on the advanced search page
-    Then I should see the text "Between 18:00 and 20:00 the site will be temporarily unavailable due to scheduled maintenance"
+    And I wait until the page contains the text "Between 18:00 and 20:00 the site will be temporarily unavailable due to scheduled maintenance"
 
     # Deactivate the alert without deleting it, so it can be used again later.
     Given I am logged in as a moderator
@@ -47,17 +47,21 @@ Feature: Site alerts
 
     Given I am not logged in
     And I am on the homepage
-    Then I should see the text "Between 18:00 and 20:00 the site will be temporarily unavailable due to scheduled maintenance"
+    And I wait until the page contains the text "Between 18:00 and 20:00 the site will be temporarily unavailable due to scheduled maintenance"
     And I go to "/interoperable-europe"
-    And I should see the text "Between 18:00 and 20:00 the site will be temporarily unavailable due to scheduled maintenance"
+    And I wait until the page contains the text "Between 18:00 and 20:00 the site will be temporarily unavailable due to scheduled maintenance"
 
     # An alert can also be removed entirely, if it does not need to be reused.
     Given I am logged in as a moderator
     When I click "Site alerts" in the "Administration toolbar" region
     And I click "Edit"
-    And I click "edit-delete"
-    And I press "Delete"
-    Then I should see the message " The Sitewide Alert Site maintenance 18:00-20:00 has been deleted."
+
+    When I click "edit-delete"
+    And a modal should open
+    Then I press "Delete" in the "Modal buttons" region
+    And the modal should be closed
+
+    Then I should see the message "The Sitewide Alert Site maintenance 18:00-20:00 has been deleted."
 
     Given I am not logged in
     And I am on the homepage

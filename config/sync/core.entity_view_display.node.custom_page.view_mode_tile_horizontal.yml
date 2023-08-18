@@ -8,12 +8,11 @@ dependencies:
     - field.field.node.custom_page.field_custom_page_logo
     - field.field.node.custom_page.field_paragraphs_body
     - field.field.node.custom_page.field_state
+    - field.field.node.custom_page.field_topic
     - field.field.node.custom_page.og_audience
     - node.type.custom_page
     - responsive_image.styles.tile
   module:
-    - field_delimiter
-    - field_formatter_range
     - field_group
     - joinup_core
     - layout_builder
@@ -55,6 +54,8 @@ content:
     settings:
       responsive_image_style: tile
       image_link: ''
+      image_loading:
+        attribute: eager
     third_party_settings:
       template_suggestion:
         template_suggestion: bare
@@ -79,6 +80,7 @@ content:
 hidden:
   field_attachment: true
   field_state: true
+  field_topic: true
   langcode: true
   links: true
   og_audience: true
