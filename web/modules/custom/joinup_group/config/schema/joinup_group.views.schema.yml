@@ -2,8 +2,8 @@
 
 views.argument_validator.joinup_group_entity_id:
   type: views.argument_validator_entity
-  label: 'Joinup group entity id'
+  label: 'Joinup group entity ID'
   mapping:
     rdf_entity_id:
       type: string
-      label: 'RDF entity id'
+      label: 'RDF entity ID'
