@@ -5,7 +5,7 @@ declare(strict_types = 1);
 namespace Drupal\eu_oss_catalogue_test\Plugin\eu_oss_catalogue\Provider;
 
 use Drupal\eu_oss_catalogue\Entity\OssSolutionInterface;
-use Drupal\eu_oss_catalogue\EuOssCatalogueFetchedSolution;
+use Drupal\eu_oss_catalogue\Model\EuOssCatalogueFetchedSolution;
 use Drupal\eu_oss_catalogue\Plugin\eu_oss_catalogue\Provider\DevelopersItalia;
 
 /**

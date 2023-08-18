@@ -7,7 +7,7 @@ namespace Drupal\eu_oss_catalogue\Plugin\eu_oss_catalogue\Resolver;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
-use Drupal\eu_oss_catalogue\EuOssCatalogueFetchedSolution;
+use Drupal\eu_oss_catalogue\Model\EuOssCatalogueFetchedSolution;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**

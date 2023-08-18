@@ -4,13 +4,13 @@ declare(strict_types = 1);
 
 namespace Drupal\eu_oss_catalogue\Plugin\eu_oss_catalogue\Provider;
 
-use Drupal\Component\Plugin\PluginManagerInterface;
 use Drupal\Component\Serialization\Json;
 use Drupal\Core\Config\Schema\SchemaCheckTrait;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Serialization\Yaml;
-use Drupal\eu_oss_catalogue\EuOssCatalogueFetchedSolution;
+use Drupal\eu_oss_catalogue\EuOssCataloguePluginManagerInterface;
 use Drupal\eu_oss_catalogue\EuOssCatalogueProviderPluginBase;
+use Drupal\eu_oss_catalogue\Model\EuOssCatalogueFetchedSolution;
 use GuzzleHttp\Client;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -53,19 +53,19 @@ class DevelopersItalia extends EuOssCatalogueProviderPluginBase implements Conta
    *   The plugin_id for the plugin instance.
    * @param mixed $pluginDefinition
    *   The plugin implementation definition.
+   * @param \Drupal\eu_oss_catalogue\EuOssCataloguePluginManagerInterface $parserManager
+   *   The EU OSS parser plugin manager service.
    * @param \GuzzleHttp\Client $httpClient
    *   The HTTP client.
-   * @param \Drupal\Component\Plugin\PluginManagerInterface $parserManager
-   *   The EU OSS parser plugin manager service.
    */
   public function __construct(
     array $configuration,
     $pluginId,
     $pluginDefinition,
+    protected EuOssCataloguePluginManagerInterface $parserManager,
     protected Client $httpClient,
-    protected PluginManagerInterface $parserManager,
   ) {
-    parent::__construct($configuration, $pluginId, $pluginDefinition);
+    parent::__construct($configuration, $pluginId, $pluginDefinition, $parserManager);
   }
 
   /**
@@ -76,8 +76,8 @@ class DevelopersItalia extends EuOssCatalogueProviderPluginBase implements Conta
       $configuration,
       $pluginId,
       $pluginDefinition,
-      $container->get('http_client'),
       $container->get('plugin.manager.eu_oss_catalogue.parser'),
+      $container->get('http_client'),
     );
   }
 
@@ -97,36 +97,16 @@ class DevelopersItalia extends EuOssCatalogueProviderPluginBase implements Conta
       $active = $newItem['active'] ?? FALSE;
       if ($active) {
         $decoded = Yaml::decode($newItem['publiccodeYml']);
-        // Only fetch data that adhere to their schema.
-        if ($this->checkSchema($decoded, $newItem['id'])) {
-          yield new EuOssCatalogueFetchedSolution(
-            $decoded['url'],
-            $decoded['name'],
-            $decoded,
-            $newItem['id'],
-          );
-        }
+        yield new EuOssCatalogueFetchedSolution(
+          $decoded['url'],
+          $decoded['name'],
+          $decoded,
+          $newItem['id'],
+        );
       }
     }
 
     $this->next = $read['links']['next'];
-  }
-
-  /**
-   * Checks whether the schema is valid.
-   *
-   * @param array $data
-   *   Data to be checked.
-   * @param string|null $providerAssignedId
-   *   Some providers are assigning a proprietary ID to the solution.
-   *
-   * @return bool
-   *   Whether the schema is valid.
-   */
-  protected function checkSchema(array $data, ?string $providerAssignedId): bool {
-    /** @var \Drupal\eu_oss_catalogue\EuOssCatalogueParserInterface $parser */
-    $parser = $this->parserManager->createInstance($this->getPluginDefinition()['parser']);
-    return $parser->checkSchema($data, $this, $providerAssignedId);
   }
 
 }
