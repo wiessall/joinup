@@ -54,6 +54,8 @@ Feature: Archived content on content listings - groups and paragraphs.
     And I go to the "Some collection" collection
     And I click "Add custom page"
     And I fill in "Title" with "Some page"
+    And I select "HR" from "Topic"
+    And I additionally select "Supplier exchange" from "Topic"
     And I press "Add Content listing"
     And I fill in "Query presets" with "entity_bundle|news"
     And I press "Save"
@@ -65,6 +67,7 @@ Feature: Archived content on content listings - groups and paragraphs.
     And I go to the "Poly screens" collection
     And I click "Add custom page"
     And I fill in "Title" with "Poly page"
+    And I select "Supplier exchange" from "Topic"
     And I press "Add Content listing"
     And I select "All" from "Show archived content"
     And I fill in "Query presets" with "entity_bundle|news"
@@ -140,6 +143,7 @@ Feature: Archived content on content listings - groups and paragraphs.
     And I go to the "Interoperable Europe" collection
     And I click "Add custom page"
     And I fill in "Title" with "IOP page"
+    And I select "HR" from "Topic"
     And I press "Add Row"
     And I press "Add 1 column layout"
     And I press "Add Carousel"

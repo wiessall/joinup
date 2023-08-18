@@ -20,7 +20,7 @@ dependencies:
     - field.field.node.document.field_type
     - field.field.node.document.og_audience
     - node.type.document
-    - responsive_image.styles.iop_carousel
+    - responsive_image.styles.tile
   module:
     - field_group
     - layout_builder
@@ -88,6 +88,8 @@ content:
     settings:
       responsive_image_style: tile
       image_link: ''
+      image_loading:
+        attribute: eager
     third_party_settings:
       template_suggestion:
         template_suggestion: bare

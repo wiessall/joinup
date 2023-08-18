@@ -373,6 +373,7 @@ Feature: About this solution
     Then I open the plus button menu
     And I click "Add custom page"
     And I fill in "Title" with "Some custom contact test"
+    And I select "Supplier exchange" from "Topic"
     And I press the button "Contact us" in the "Body" wysiwyg editor
     And I press "Publish"
     And I should see the heading "Some custom contact test"

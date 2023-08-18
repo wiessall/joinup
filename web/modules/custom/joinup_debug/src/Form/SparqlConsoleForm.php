@@ -2,7 +2,7 @@
 
 declare(strict_types = 1);
 
-namespace Drupal\joinup_rdf\Form;
+namespace Drupal\joinup_debug\Form;
 
 use Drupal\Component\Utility\Random;
 use Drupal\Core\Form\FormBase;
@@ -13,7 +13,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 /**
  * Provides a Joinup RDF form.
  */
-final class SparqlQueryForm extends FormBase {
+final class SparqlConsoleForm extends FormBase {
 
   /**
    * The SPARQL endpoint.
