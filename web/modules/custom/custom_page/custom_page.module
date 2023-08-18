@@ -16,9 +16,6 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\custom_page\Entity\CustomPage;
 use Drupal\custom_page\Entity\CustomPageInterface;
-use Drupal\eu_oss_catalogue\Entity\OssContactInterface;
-use Drupal\eu_oss_catalogue\Entity\OssContractorInterface;
-use Drupal\eu_oss_catalogue\Entity\OssSolutionInterface;
 use Drupal\joinup_group\Exception\MissingGroupException;
 use Drupal\menu_link_content\MenuLinkContentInterface;
 use Drupal\node\NodeInterface;
@@ -68,22 +65,12 @@ function custom_page_entity_bundle_field_info_alter(&$fields, EntityTypeInterfac
  * - Reindexes the parent collection/solution so that they are searchable using
  *   the content of the new custom page.
  */
-function custom_page_node_insert(EntityInterface $entity) {
-  if ($entity instanceof CustomPageInterface) {
-    \Drupal::service('custom_page.og_menu_links_manager')->addLink($entity);
-  }
-
-  // This is a temporary solution until ISAICP-7129 is fixed. As a final fix, in
-  // ISAICP-7129, we have to bail out early if the $entity is not a custom page
-  // node-type.
-  // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7129
-  if (
-    $entity instanceof OssSolutionInterface
-    || $entity instanceof OssContactInterface
-    || $entity instanceof OssContractorInterface
-  ) {
+function custom_page_node_insert(EntityInterface $entity): void {
+  if (!$entity instanceof CustomPageInterface) {
     return;
   }
+
+  \Drupal::service('custom_page.og_menu_links_manager')->addLink($entity);
 
   // The content of custom pages is included in the search index of their
   // collections and solutions, so that the parent group can be found when
