@@ -11,7 +11,7 @@ use Drupal\Core\Plugin\DefaultPluginManager;
 /**
  * Provides the plugin manager for EU OSS Catalogue plugins types.
  */
-class EuOssCataloguePluginManager extends DefaultPluginManager {
+class EuOssCataloguePluginManager extends DefaultPluginManager implements EuOssCataloguePluginManagerInterface {
 
   /**
    * Constructs a new plugin manager instance.

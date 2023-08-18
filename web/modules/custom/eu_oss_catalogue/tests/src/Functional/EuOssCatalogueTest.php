@@ -59,7 +59,8 @@ class EuOssCatalogueTest extends BrowserTestBase {
 
     // Check how incoming data has been queued. Only one item is active.
     $queue = \Drupal::queue('eu_oss_catalogue');
-    $this->assertSame(2, $queue->numberOfItems());
+    // The queue contains the 2 solutions and the cleanup step.
+    $this->assertSame(3, $queue->numberOfItems());
 
     // Check failed imports.
     $logs = \Drupal::database()->query("SELECT message, variables FROM {watchdog} WHERE type = 'eu_oss_catalogue'")->fetchAll();
@@ -71,8 +72,9 @@ class EuOssCatalogueTest extends BrowserTestBase {
       ],
     ]);
     $this->assertEquals('Developers Italia', $variables['@provider']);
-    $this->assertSame('invalid1-0000-0000-0000-000000000000', $variables['@provider_id']);
-    $this->assertStringContainsString('publiccode.yml schema errors:', $message);
+    $this->assertSame('developers_italia', $variables['@provider_id']);
+    $this->assertSame('invalid1-0000-0000-0000-000000000000', $variables['@reference']);
+    $this->assertStringContainsString('Schema errors:', $message);
     $this->assertStringContainsString('name: required but empty', $message);
     $this->assertStringContainsString('url: required but empty', $message);
     $this->assertStringContainsString('localisation/availableLanguages: required but empty', $message);
@@ -131,7 +133,7 @@ class EuOssCatalogueTest extends BrowserTestBase {
     $this->assertSame('RESERVED@', $contact1->get('oss_contact_phone')->value);
     $this->assertSame('Pied Piper', $contact1->get('oss_contact_affiliation')->value);
 
-    /** @var \Drupal\eu_oss_catalogue\Entity\OssSolutionInterface $node1 */
+    /** @var \Drupal\eu_oss_catalogue\Entity\OssSolutionInterface $node2 */
     $node2 = $this->getNodeByTitle('Solution 2');
     $this->assertSame('oss_solution', $node2->bundle());
     $this->assertSame('http://example.com/vendor/solution2.git', $node2->getTranslation('it')->get('oss_git_url')->uri);
@@ -169,11 +171,10 @@ class EuOssCatalogueTest extends BrowserTestBase {
     $this->assertSame('On The Sea', $contact2->get('oss_contact_affiliation')->value);
 
     // Re-run the process and update one solution from a new source-provider.
-    $service = \Drupal::getContainer()->get('eu_oss_catalogue');
     $service->fetch('testing_provider');
 
     $queue = \Drupal::queue('eu_oss_catalogue');
-    $this->assertSame(2, $queue->numberOfItems());
+    $this->assertSame(3, $queue->numberOfItems());
 
     // Process the queue again.
     $this->drush('queue:run', ['eu_oss_catalogue']);
@@ -187,6 +188,60 @@ class EuOssCatalogueTest extends BrowserTestBase {
     $this->assertSame(2, $updated_solution->get('oss_source')->count());
     $expected_providers = ['developers_italia', 'testing_provider'];
     $this->assertSame($expected_providers, array_map(fn (array $item): string => $item['plugin_id'], $updated_solution->get('oss_source')->getValue()));
+  }
+
+  /**
+   * Tests that when a solution is removed upstream, is removed also locally.
+   */
+  public function testRemovedSolution(): void {
+    $service = \Drupal::getContainer()->get('eu_oss_catalogue');
+    $service->fetch('removing_solution_provider');
+
+    // Check how incoming data has been queued. Only one item is active.
+    $queue = \Drupal::queue('eu_oss_catalogue');
+    // The queue contains the 2 solutions and the cleanup step.
+    $this->assertSame(3, $queue->numberOfItems());
+
+    // Check queue processing. Use Drush to run the queue.
+    $this->drush('queue:run', ['eu_oss_catalogue']);
+
+    $this->assertNotEmpty($this->getNodeByTitle('Solution 1'));
+    $this->assertNotEmpty($this->getNodeByTitle('Solution 2'));
+
+    // Re-run the process and update one solution from a new source-provider.
+    $service->fetch('removing_solution_provider');
+    $queue = \Drupal::queue('eu_oss_catalogue');
+    $this->assertSame(2, $queue->numberOfItems());
+
+    // Process the queue again.
+    $this->drush('queue:run', ['eu_oss_catalogue']);
+
+    /** @var \Drupal\eu_oss_catalogue\Entity\OssSolutionInterface $node1 */
+    $this->assertNotEmpty($this->getNodeByTitle('Solution 1'));
+    $this->assertEmpty($this->getNodeByTitle('Solution 2'));
+
+    // Test that if the solution has more than one provider it is not removed
+    // due to a single provider removal.
+    $service->fetch('removing_solution_provider');
+    $this->drush('queue:run', ['eu_oss_catalogue']);
+    $solution2 = $this->getNodeByTitle('Solution 2');
+    $this->assertNotEmpty($solution2);
+    $this->assertSame(1, $solution2->get('oss_source')->count());
+
+    // Import the solutions from developers_italia plugin so that the solution
+    // 2 has 2 sources.
+    $service->fetch('developers_italia');
+    $this->drush('queue:run', ['eu_oss_catalogue']);
+    $solution2 = $this->getNodeByTitle('Solution 2', TRUE);
+    $this->assertSame(2, $solution2->get('oss_source')->count());
+
+    // Run the removal of the solution again. The solution should not be removed
+    // but the source should be removed.
+    $service->fetch('removing_solution_provider');
+    $this->drush('queue:run', ['eu_oss_catalogue']);
+    $solution2 = $this->getNodeByTitle('Solution 2', TRUE);
+    $this->assertNotEmpty($solution2);
+    $this->assertSame(1, $solution2->get('oss_source')->count());
   }
 
   /**

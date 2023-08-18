@@ -11,6 +11,8 @@ services:
       - '@plugin.manager.eu_oss_catalogue.parser'
       - '@queue'
       - '@event_dispatcher'
+      - '@entity_type.manager'
+      - '@logger.channel.eu_oss_catalogue'
 
   plugin.manager.eu_oss_catalogue.provider:
     class: Drupal\eu_oss_catalogue\EuOssCataloguePluginManager
