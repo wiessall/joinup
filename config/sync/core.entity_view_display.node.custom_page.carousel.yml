@@ -16,8 +16,8 @@ dependencies:
     - field_delimiter
     - field_formatter_range
     - field_group
-    - joinup_core
     - layout_builder
+    - layout_paragraphs
     - link
     - responsive_image
     - template_suggestion
@@ -65,13 +65,11 @@ content:
     weight: 0
     region: content
   field_paragraphs_body:
-    type: filtered_entity_reference_bundles
+    type: layout_paragraphs
     label: hidden
     settings:
       view_mode: tile
       link: ''
-      filtered_entity_bundles:
-        - simple_paragraph
     third_party_settings:
       field_delimiter:
         delimiter: ''

@@ -8,6 +8,7 @@ use Behat\Gherkin\Node\TableNode;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\joinup\Traits\EntityTrait;
 use Drupal\meta_entity\Entity\MetaEntityInterface;
+use function PHPUnit\Framework\assertArrayHasKey;
 
 /**
  * Behat step definitions for testing meta entities.
@@ -39,6 +40,8 @@ class MetaEntityContext extends RawDrupalContext {
   /**
    * Navigates to the canonical page display of a meta entity.
    *
+   * @param string $type
+   *   The type of the path to visit. One of 'canonical' or 'edit'.
    * @param string $bundle
    *   The bundle of the meta entity.
    * @param string $related_entity
@@ -46,9 +49,16 @@ class MetaEntityContext extends RawDrupalContext {
    * @param string $related_entity_type
    *   The type of the related entity.
    *
-   * @When I go to the :bundle meta entity of the :related_entity :related_bundle :related_entity_type
+   * @When I go to the :type form of the :bundle meta entity of the :related_entity :related_bundle :related_entity_type
+   * @When I go to the :type path of the :bundle meta entity of the :related_entity :related_bundle :related_entity_type
    */
-  public function visitMetaEntityCanonicalPath(string $bundle, string $related_entity, string $related_entity_type): void {
+  public function visitMetaEntityCanonicalPath(string $type, string $bundle, string $related_entity, string $related_entity_type): void {
+    $path_types = [
+      'canonical' => 'canonical',
+      'edit' => 'edit-form',
+    ];
+    assertArrayHasKey($type, $path_types, "The path type '$type' is not supported. One of 'canonical' or 'edit' is expected.");
+
     $entity_type_mapping = [
       'content' => 'node',
       'RDF entity' => 'rdf_entity',
@@ -59,7 +69,7 @@ class MetaEntityContext extends RawDrupalContext {
     }
 
     $meta_entity = $this->getMetaEntityForEntity($entity_type_mapping[$related_entity_type], $related_entity, $bundle);
-    $this->visitPath($meta_entity->toUrl()->toString());
+    $this->visitPath($meta_entity->toUrl($path_types[$type])->toString());
   }
 
   /**
