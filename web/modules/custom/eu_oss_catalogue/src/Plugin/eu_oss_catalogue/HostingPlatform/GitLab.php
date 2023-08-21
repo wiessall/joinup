@@ -64,7 +64,9 @@ class GitLab extends EuOssCatalogueGitHostingPlatformPluginBase {
   public function validateConfigurationForm(array &$form, FormStateInterface $formState): void {
     parent::validateConfigurationForm($form, $formState);
     if (empty($formState->getValue('self_hosted'))) {
+      // Properly cast to NULL.
       $formState->setValue('url', NULL);
+      $formState->setValue('projects', []);
     }
     $formState->unsetValue('self_hosted');
   }
@@ -103,53 +105,9 @@ class GitLab extends EuOssCatalogueGitHostingPlatformPluginBase {
   /**
    * {@inheritdoc}
    */
-  protected function getProjects(?string $filePath = NULL): array {
+  protected function getProjects(array $candidates, ?string $filePath = NULL): array {
     $projects = [];
-//    // Build a search query string.
-//    // @see https://docs.github.com/search-github
-//    $search = ['is:public', 'archived:false'];
-//    foreach ($this->getConfiguration()['projects'] as $candidate) {
-//      if ($candidate['name']) {
-//        $search[] = "repo:{$candidate['vendor']}/{$candidate['name']}";
-//      }
-//      else {
-//        $search[] = "owner:{$candidate['vendor']}";
-//      }
-//    }
-//
-//    $query = new Query('search', [
-//      'type' => SearchType::REPOSITORY,
-//      'query' => implode(' ', $search),
-//      'first' => 100,
-//    ]);
-//    $fragment = $query->nodes([])
-//      ->on('Repository')
-//      ->use('id', 'description', 'name')
-//      ->use((new Node('owner'))->use('login'))
-//      ->use((new Node('defaultBranchRef'))->use('name'));
-//
-//    if ($filePath) {
-//      $file = (new Node('object', [
-//        'expression' => "HEAD:$filePath",
-//      ]))->alias('file');
-//      $file->on('Blob')->use('text');
-//      $fragment->use($file);
-//    }
-//
-//    $graphQL = new GraphQL($this->getClient());
-//    foreach ($graphQL->execute($query->toString())['data']['search']['nodes'] as $node) {
-//      // Repositories without code don't have a default branch.
-//      if (!empty($node['defaultBranchRef'])) {
-//        $projects[$node['owner']['login']][$node['name']] = new HostingPlatformResult(
-//          $node['owner']['login'],
-//          $node['name'],
-//          $node['defaultBranchRef']['name'],
-//          $node['id'],
-//          $node['description'],
-//          $node['file']['text'] ?? NULL,
-//        );
-//      }
-//    }
+    // @todo Implement.
     return $projects;
   }
 

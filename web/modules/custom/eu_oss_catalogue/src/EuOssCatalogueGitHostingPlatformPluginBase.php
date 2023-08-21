@@ -70,13 +70,13 @@ abstract class EuOssCatalogueGitHostingPlatformPluginBase extends EuOssCatalogue
     $form['projects'] = [
       '#type' => 'multivalue',
       '#title' => $this->t('Projects'),
-      '#description' => $this->t('If name is omitted, all projects from that vendor are eligible.'),
+      '#description' => $this->t('If name is omitted, all projects from that namespace are eligible.'),
       '#default_value' => $this->getConfiguration()['projects'],
       '#cardinality' => MultiValue::CARDINALITY_UNLIMITED,
       '#required' => TRUE,
-      'vendor' => [
+      'namespace' => [
         '#type' => 'textfield',
-        '#title' => $this->t('Vendor'),
+        '#title' => $this->t('Namespace'),
         '#required' => TRUE,
       ],
       'name' => [
@@ -97,13 +97,13 @@ abstract class EuOssCatalogueGitHostingPlatformPluginBase extends EuOssCatalogue
       return;
     }
 
-    $candidates = $formState->getValue('projects');
+    $candidates = $formState->getValue('projects', []);
     array_walk($candidates, function (array &$candidate) {
-      if (empty($candidate['vendor'])) {
+      if (empty($candidate['namespace'])) {
         $candidate = [];
         return;
       }
-      $candidate['vendor'] = trim($candidate['vendor']);
+      $candidate['namespace'] = trim($candidate['namespace']);
       if ($candidate['name']) {
         $candidate['name'] = trim($candidate['name']);
       }
@@ -115,14 +115,14 @@ abstract class EuOssCatalogueGitHostingPlatformPluginBase extends EuOssCatalogue
     $formState->setValue('projects', $candidates);
 
     foreach ($candidates as $delta => $candidate) {
-      if (!isset($existingProjects[$candidate['vendor']])) {
-        $formState->setErrorByName("projects][$delta][vendor", $this->t("Vendor %vendor doesn't exist on the platform", [
-          '%vendor' => $candidate['vendor'],
+      if (!isset($existingProjects[$candidate['namespace']])) {
+        $formState->setErrorByName("projects][$delta][namespace", $this->t("Namespace %namespace doesn't exist on the platform", [
+          '%namespace' => $candidate['namespace'],
         ]));
       }
-      elseif ($candidate['name'] && !isset($existingProjects[$candidate['vendor']][$candidate['name']])) {
+      elseif ($candidate['name'] && !isset($existingProjects[$candidate['namespace']][$candidate['name']])) {
         $formState->setErrorByName("projects][$delta][name", $this->t("Project %project doesn't exist on the platform or it's not public", [
-          '%project' => $candidate['vendor'] . '/' . $candidate['name'],
+          '%project' => $candidate['namespace'] . '/' . $candidate['name'],
         ]));
       }
     }
@@ -157,16 +157,16 @@ abstract class EuOssCatalogueGitHostingPlatformPluginBase extends EuOssCatalogue
    *
    * @param array[] $candidates
    *   A list of candidates to filter on. Each item is an associative array:
-   *   - vendor: Mandatory vendor name.
+   *   - namespace: Mandatory namespace.
    *   - name: Optional project name. If omitted all public projects from the
-   *     vendor will be considered.
+   *     namespace will be considered.
    * @param string|null $filePath
    *   (optional) A file path relative to repository root.
    *
    * @return array
    *   Associative array:
-   *   - First level keys are vendor
-   *   - Second level keys are vendor repository project names and values are
+   *   - First level keys are namespaces.
+   *   - Second level keys are namespace repository project names and values are
    *     objects of type \Drupal\eu_oss_catalogue\Model\HostingPlatformResult.
    */
   abstract protected function getProjects(array $candidates, ?string $filePath = NULL): array;
