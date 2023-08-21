@@ -14,6 +14,9 @@
 
 declare(strict_types = 1);
 
+use Drupal\joinup_oss_catalogue\OssCatalogueCollectionInterface;
+use Drupal\search_api\Entity\Index;
+
 /**
  * Clean up banner files.
  */
@@ -63,8 +66,6 @@ SPARQL;
 
   $sparql_endpoint->update($query);
 }
-
-use Drupal\search_api\Entity\Index;
 
 /**
  * Update the topics list.
@@ -175,4 +176,18 @@ function joinup_core_deploy_109603(): string {
   $index->indexSpecificItems($items);
 
   return 'Items re-indexed.';
+}
+
+/**
+ * Update path alias for EU OSS catalogue.
+ */
+function joinup_core_deploy_109604(): void {
+  /** @var \Drupal\collection\Entity\CollectionInterface $collection */
+  $collection = \Drupal::entityTypeManager()->getStorage('rdf_entity')
+    ->load(OssCatalogueCollectionInterface::COLLECTION_ENTITY_ID);
+
+  if ($collection) {
+    $collection->set('path', ['alias' => '/eu-oss-catalogue', 'pathauto' => 0]);
+    $collection->save();
+  }
 }
