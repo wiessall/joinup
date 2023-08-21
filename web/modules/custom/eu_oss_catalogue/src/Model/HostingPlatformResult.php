@@ -12,8 +12,8 @@ class HostingPlatformResult {
   /**
    * Creates a new result object.
    *
-   * @param string $vendor
-   *   The vendor ID.
+   * @param string $namespace
+   *   The namespace.
    * @param string $name
    *   The repository name.
    * @param string $defaultBranch
@@ -26,7 +26,7 @@ class HostingPlatformResult {
    *   The content of a file if it has been requested.
    */
   public function __construct(
-    public readonly string $vendor,
+    public readonly string $namespace,
     public readonly string $name,
     public readonly string $defaultBranch,
     public readonly ?string $platformReference = NULL,
@@ -41,7 +41,7 @@ class HostingPlatformResult {
    *   Repository full name.
    */
   public function getFullName(): string {
-    return $this->vendor . '/' . $this->name;
+    return $this->namespace . '/' . $this->name;
   }
 
 }

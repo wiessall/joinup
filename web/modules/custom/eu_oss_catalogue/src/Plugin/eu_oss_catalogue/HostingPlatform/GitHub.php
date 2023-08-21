@@ -108,10 +108,10 @@ class GitHub extends EuOssCatalogueGitHostingPlatformPluginBase {
     $search = ['is:public', 'archived:false'];
     foreach ($candidates as $candidate) {
       if ($candidate['name']) {
-        $search[] = "repo:{$candidate['vendor']}/{$candidate['name']}";
+        $search[] = "repo:{$candidate['namespace']}/{$candidate['name']}";
       }
       else {
-        $search[] = "owner:{$candidate['vendor']}";
+        $search[] = "owner:{$candidate['namespace']}";
       }
     }
 
