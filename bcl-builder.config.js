@@ -646,21 +646,6 @@ module.exports = {
     {
       entry: path.resolve(
         outputFolder,
-        `${ventuno}src/scss/components/paragraph--carousel.scss`
-      ),
-      dest: path.resolve(
-        outputFolder,
-        `${ventuno}assets/css/paragraph--carousel.min.css`
-      ),
-      options: {
-        includePaths,
-        minify: true,
-        sourceMap: "file",
-      },
-    },
-    {
-      entry: path.resolve(
-        outputFolder,
         `${ventuno}src/scss/components/page-title.scss`
       ),
       dest: path.resolve(
@@ -691,11 +676,101 @@ module.exports = {
     {
       entry: path.resolve(
         outputFolder,
-        `${ventuno}src/scss/components/paragraph.scss`
+        `${ventuno}src/scss/components/paragraphs/paragraph.scss`
       ),
       dest: path.resolve(
         outputFolder,
         `${ventuno}assets/css/paragraph.min.css`
+      ),
+      options: {
+        includePaths,
+        minify: true,
+        sourceMap: "file",
+      },
+    },
+    {
+      entry: path.resolve(
+        outputFolder,
+        `${ventuno}src/scss/components/paragraphs/paragraph--carousel.scss`
+      ),
+      dest: path.resolve(
+        outputFolder,
+        `${ventuno}assets/css/paragraph--carousel.min.css`
+      ),
+      options: {
+        includePaths,
+        minify: true,
+        sourceMap: "file",
+      },
+    },
+    {
+      entry: path.resolve(
+        outputFolder,
+        `${ventuno}src/scss/components/paragraphs/paragraph--heading.scss`
+      ),
+      dest: path.resolve(
+        outputFolder,
+        `${ventuno}assets/css/paragraph--heading.min.css`
+      ),
+      options: {
+        includePaths,
+        minify: true,
+        sourceMap: "file",
+      },
+    },
+    {
+      entry: path.resolve(
+        outputFolder,
+        `${ventuno}src/scss/components/paragraphs/paragraph--layout.scss`
+      ),
+      dest: path.resolve(
+        outputFolder,
+        `${ventuno}assets/css/paragraph--layout.min.css`
+      ),
+      options: {
+        includePaths,
+        minify: true,
+        sourceMap: "file",
+      },
+    },
+    {
+      entry: path.resolve(
+        outputFolder,
+        `${ventuno}src/scss/components/paragraphs/paragraph--poll.scss`
+      ),
+      dest: path.resolve(
+        outputFolder,
+        `${ventuno}assets/css/paragraph--poll.min.css`
+      ),
+      options: {
+        includePaths,
+        minify: true,
+        sourceMap: "file",
+      },
+    },
+    {
+      entry: path.resolve(
+        outputFolder,
+        `${ventuno}src/scss/components/paragraphs/paragraph--testimony.scss`
+      ),
+      dest: path.resolve(
+        outputFolder,
+        `${ventuno}assets/css/paragraph--testimony.min.css`
+      ),
+      options: {
+        includePaths,
+        minify: true,
+        sourceMap: "file",
+      },
+    },
+    {
+      entry: path.resolve(
+        outputFolder,
+        `${ventuno}src/scss/components/paragraphs/paragraph--video.scss`
+      ),
+      dest: path.resolve(
+        outputFolder,
+        `${ventuno}assets/css/paragraph--video.min.css`
       ),
       options: {
         includePaths,
@@ -859,6 +934,22 @@ module.exports = {
         sourceMap: "file",
       },
     },
+    // Layout Paragraphs - buidler UI.
+    {
+      entry: path.resolve(
+        outputFolder,
+        `${ventuno}src/scss/components/layout-paragraphs--builder.scss`
+      ),
+      dest: path.resolve(
+        outputFolder,
+        `${ventuno}assets/css/layout-paragraphs--builder.min.css`
+      ),
+      options: {
+        includePaths,
+        minify: true,
+        sourceMap: "file",
+      },
+    },
     // IOP
     // Components (SMACSS)
     {
@@ -881,6 +972,15 @@ module.exports = {
       },
     },
     // Pages
+    {
+      entry: path.resolve(outputFolder, `${iop}src/scss/pages/landing.scss`),
+      dest: path.resolve(outputFolder, `${iop}assets/css/landing.min.css`),
+      options: {
+        minify: true,
+        includePaths,
+        sourceMap: "file",
+      },
+    },
     {
       entry: path.resolve(outputFolder, `${iop}src/scss/pages/listing.scss`),
       dest: path.resolve(outputFolder, `${iop}assets/css/listing.min.css`),
@@ -957,38 +1057,11 @@ module.exports = {
     {
       entry: path.resolve(
         outputFolder,
-        `${iop}src/scss/components/paragraphs/paragraph.scss`
-      ),
-      dest: path.resolve(outputFolder, `${iop}assets/css/paragraph.min.css`),
-      options: {
-        minify: true,
-        includePaths,
-        sourceMap: "file",
-      },
-    },
-    {
-      entry: path.resolve(
-        outputFolder,
-        `${iop}src/scss/components/paragraphs/paragraph--2-column-featured-left.scss`
+        `${iop}src/scss/components/paragraphs/paragraph--call-to-action.scss`
       ),
       dest: path.resolve(
         outputFolder,
-        `${iop}assets/css/paragraph--2-column-featured-left.min.css`
-      ),
-      options: {
-        minify: true,
-        includePaths,
-        sourceMap: "file",
-      },
-    },
-    {
-      entry: path.resolve(
-        outputFolder,
-        `${iop}src/scss/components/paragraphs/paragraph--2-column-featured-right.scss`
-      ),
-      dest: path.resolve(
-        outputFolder,
-        `${iop}assets/css/paragraph--2-column-featured-right.min.css`
+        `${iop}assets/css/paragraph--call-to-action.min.css`
       ),
       options: {
         minify: true,
@@ -1029,11 +1102,11 @@ module.exports = {
     {
       entry: path.resolve(
         outputFolder,
-        `${iop}src/scss/components/paragraphs/paragraph--row.scss`
+        `${iop}src/scss/components/paragraphs/paragraph--layout.scss`
       ),
       dest: path.resolve(
         outputFolder,
-        `${iop}assets/css/paragraph--row.min.css`
+        `${iop}assets/css/paragraph--layout.min.css`
       ),
       options: {
         minify: true,
@@ -1049,21 +1122,6 @@ module.exports = {
       dest: path.resolve(
         outputFolder,
         `${iop}assets/css/paragraph--testimony.min.css`
-      ),
-      options: {
-        minify: true,
-        includePaths,
-        sourceMap: "file",
-      },
-    },
-    {
-      entry: path.resolve(
-        outputFolder,
-        `${iop}src/scss/components/paragraphs/paragraph--video.scss`
-      ),
-      dest: path.resolve(
-        outputFolder,
-        `${iop}assets/css/paragraph--video.min.css`
       ),
       options: {
         minify: true,
