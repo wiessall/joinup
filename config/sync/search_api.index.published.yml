@@ -15,7 +15,6 @@ dependencies:
     - field.storage.meta_entity.field_pinned_in
     - field.storage.node.field_scope
     - field.storage.node.field_short_title
-    - field.storage.node.oss_categories
     - field.storage.node.oss_development_status
     - field.storage.node.oss_source
     - field.storage.meta_entity.count
