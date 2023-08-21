@@ -15,12 +15,8 @@ if (PHP_SAPI !== 'cli') {
 
 $autoloader = require __DIR__ . '/../vendor/autoload.php';
 
-$ignored_requirements = getenv('DRUPAL_STATUS_REPORT_IGNORE') ?: 'update status,joinup_core_root_user_blocked,search_api_solr_schema_joinup_modifications,deprecated_modules,deprecated_themes,metatag_maintenance_mode,search_api_pending_tasks';
-$ignored_option = "--ignore='$ignored_requirements'";
-
 function run_status_report(bool $title_only, bool $display_command = FALSE): ?string {
-  global $ignored_option;
-  $command = __DIR__ . "/../vendor/bin/drush core:requirements --severity=1 $ignored_option ";
+  $command = __DIR__ . "/../vendor/bin/drush core:requirements --severity=1";
   $command .= $title_only ? '--field=title' : '--fields=title,severity,value,description --format=sections';
   if ($display_command) {
     print $command . "\n";
