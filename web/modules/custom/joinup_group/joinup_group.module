@@ -328,7 +328,6 @@ function joinup_group_rdf_entity_presave(EntityInterface $entity) {
 
   $field_data = [
     'logo' => ['field_ar_logo', 'field_is_logo'],
-    'banner' => ['field_ar_banner', 'field_is_banner'],
   ];
 
   $file_system = \Drupal::service('file_system');

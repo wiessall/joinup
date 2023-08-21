@@ -192,4 +192,19 @@ class MinkContext extends DrupalExtensionMinkContext {
     $link_obj->click();
   }
 
+  /**
+   * Change the option of a select in the specified region.
+   *
+   * @Given I select :value from :field in the :region( region)
+   *
+   * @throws \Exception
+   *   If region cannot be found.
+   */
+  public function selectRegionFillField(string $field, string $value, string $region): void {
+    $select = $this->fixStepArgument($field);
+    $option = $this->fixStepArgument($value);
+    $regionObj = $this->getRegion($region);
+    $regionObj->selectFieldOption($select, $option);
+  }
+
 }

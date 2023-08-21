@@ -6,7 +6,6 @@ dependencies:
     - core.entity_view_mode.rdf_entity.view_mode_tile
     - field.field.rdf_entity.solution.field_is_actor
     - field.field.rdf_entity.solution.field_is_affiliations_requests
-    - field.field.rdf_entity.solution.field_is_banner
     - field.field.rdf_entity.solution.field_is_business_process
     - field.field.rdf_entity.solution.field_is_contact_information
     - field.field.rdf_entity.solution.field_is_content
@@ -48,9 +47,9 @@ dependencies:
     - rdf_entity.rdfentity.solution
     - responsive_image.styles.tile
   module:
+    - joinup_html_stripper
     - responsive_image
     - template_suggestion
-    - text
     - user
 id: rdf_entity.solution.view_mode_tile
 targetEntityType: rdf_entity
@@ -63,9 +62,10 @@ content:
     weight: 2
     region: content
   field_is_description:
-    type: text_default
+    type: joinup_html_stripper_stripped
     label: hidden
-    settings: {  }
+    settings:
+      trim_length: 600
     third_party_settings:
       template_suggestion:
         template_suggestion: bare
@@ -77,6 +77,8 @@ content:
     settings:
       responsive_image_style: tile
       image_link: ''
+      image_loading:
+        attribute: eager
     third_party_settings:
       template_suggestion:
         template_suggestion: bare
@@ -95,7 +97,6 @@ hidden:
   featured: true
   field_is_actor: true
   field_is_affiliations_requests: true
-  field_is_banner: true
   field_is_business_process: true
   field_is_contact_information: true
   field_is_content: true

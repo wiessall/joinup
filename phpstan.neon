@@ -10,12 +10,21 @@ parameters:
             rdf_entity:
                 class: Drupal\rdf_entity\Entity\Rdf
                 storage: Drupal\sparql_entity_storage\SparqlEntityStorage
+    paths:
+      - src
+      - tests/src
+      - web/modules/custom
+      - web/profiles
+      - web/themes/ventuno
+      - web/themes/iop
     ignoreErrors:
         # We're not prepared yet for this.
         - '#\Drupal calls should be avoided in classes, use dependency injection instead#'
         # As an exception, we allow extending these two classes.
         - '#Class Drupal\\joinup_group\\Form\\UserCancelForm extends @internal class Drupal\\user\\Form\\UserCancelForm.#'
         - '#Class Drupal\\joinup_group\\Form\\UserMultipleCancelConfirm extends @internal class Drupal\\user\\Form\\UserMultipleCancelConfirm.#'
+        # See https://github.com/mglaman/phpstan-drupal/issues/586.
+        - '#Call to deprecated method loadRevision\(\) of class Drupal\\Core\\Entity\\(ContentEntityStorageBase|EntityStorageInterface)\:\nin drupal\:10\.1\.0 and is removed from drupal\:11\.0\.0\. Use\n\\Drupal\\Core\\Entity\\RevisionableStorageInterface\:\:loadRevision instead\.#'
     excludePaths:
         - src/CodingStandards/Sniffs/NamingConventions/ValidUpdateNameSniff.php
     scanFiles:

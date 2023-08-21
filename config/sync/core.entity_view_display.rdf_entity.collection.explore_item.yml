@@ -7,7 +7,6 @@ dependencies:
     - field.field.rdf_entity.collection.field_ar_abstract
     - field.field.rdf_entity.collection.field_ar_access_url
     - field.field.rdf_entity.collection.field_ar_affiliates
-    - field.field.rdf_entity.collection.field_ar_banner
     - field.field.rdf_entity.collection.field_ar_closed
     - field.field.rdf_entity.collection.field_ar_contact_information
     - field.field.rdf_entity.collection.field_ar_content_creation
@@ -116,6 +115,15 @@ third_party_settings:
                   date_format: custom
                   custom_date_format: d/m/Y
                   timezone: ''
+                  tooltip:
+                    date_format: ''
+                    custom_date_format: ''
+                  time_diff:
+                    enabled: false
+                    future_format: '@interval hence'
+                    past_format: '@interval ago'
+                    granularity: 2
+                    refresh: 60
                 third_party_settings:
                   template_suggestion:
                     template_suggestion: ''
@@ -160,6 +168,15 @@ content:
       date_format: medium
       custom_date_format: ''
       timezone: ''
+      tooltip:
+        date_format: ''
+        custom_date_format: ''
+      time_diff:
+        enabled: false
+        future_format: '@interval hence'
+        past_format: '@interval ago'
+        granularity: 2
+        refresh: 60
     third_party_settings: {  }
     weight: 2
     region: content
@@ -172,9 +189,13 @@ content:
       trim_suffix: …
       wrap_output: false
       wrap_class: trimmed
-      more_link: false
-      more_class: more-link
-      more_text: More
+      more:
+        display_link: false
+        target_blank: false
+        link_trim_only: false
+        class: more-link
+        text: More
+        aria_label: 'Read more about [node:title]'
       summary_handler: full
       trim_options:
         text: true
@@ -203,7 +224,6 @@ hidden:
   field_ar_abstract: true
   field_ar_access_url: true
   field_ar_affiliates: true
-  field_ar_banner: true
   field_ar_closed: true
   field_ar_contact_information: true
   field_ar_content_creation: true

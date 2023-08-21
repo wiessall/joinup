@@ -20,7 +20,6 @@ Feature: Document moderation
       | title               | The Naked Ashes                 |
       | description         | The wolverine is a Marvel hero. |
       | logo                | logo.png                        |
-      | banner              | banner.jpg                      |
       | content creation    | registered users                |
       | moderation          | no                              |
       | state               | validated                       |

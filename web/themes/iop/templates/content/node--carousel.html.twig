@@ -70,60 +70,15 @@
  *   in different view modes.
  */
 #}
-{%
-  set classes = [
-  node.bundle|clean_class,
-  node.bundle|clean_class ~ '--' ~ view_mode|clean_class,
-  'glide__slide',
-  'slide',
-]
-%}
-{%
-  set title_classes = [
-  'h6',
-  'text-center',
-  'slide__title',
-]
-%}
-{% if node.bundle is same as 'news' %}
-  {% set icon = 'newspaper' %}
-{% elseif node.bundle is same as 'event' %}
-  {% set icon = 'calendar3' %}
-{% elseif node.bundle is same as 'custom_page' %}
-  {% set icon = 'file-earmark-richtext' %}
-{% endif %}
-<article{{ attributes.addClass(classes) }}>
-  {{ title_prefix }}
-  {{ title_suffix }}
 
-  {% block content %}
-    <a href="{{ url }}" rel="bookmark" title="{{ 'Read'|t }}: {{ label|render|striptags|trim }}" tabindex="-1">
-      {% if image %}
-        <figure class="slide__figure">
-          {{ image }}
-        </figure>
-      {% else %}
-        <figure class="slide__figure">
-          <svg class="slide__svg">
-            <use xlink:href="{{ bcl_icon_path }}#{{ icon }}"></use>
-          </svg>
-        </figure>
-      {% endif %}
-    </a>
-    {% if node.bundle in ['news', 'event'] %}
-      <h1{{ title_attributes.addClass(title_classes) }}>
-        <a class="slide__title-link" href="{{ url }}" rel="bookmark">{{ label }}</a>
-      </h1>
-    {% elseif node.bundle is same as 'custom_page' %}
-      <div class="slide__body">
-        <div class="slide__text">
-          {{ content.field_paragraphs_body }}
-        </div>
-        {# Slide's Call To Action will be enabled later #}
-        {# <div>
-          <a class="slide__cta" href="{{ url }}">{{ 'Learn more'|t }}</a>
-        </div> #}
-      </div>
-    {% endif %}
-  {% endblock %}
-</article>
+{% include '@iop/carousel/carousel-item.html.twig' with {
+  attributes,
+  url,
+  title_prefix,
+  title_suffix,
+  label,
+  text: node.bundle is same as 'custom_page' ? content.field_paragraphs_body,
+  title_attributes,
+  image,
+  icon: node.bundle is same as 'collection' ? 'folder2-open' : 'clipboard2-check',
+} only %}

@@ -24,7 +24,6 @@ Feature: Search inside groups
     And solution:
       | title       | Inclined foundations                                  |
       | description | Ways to construct foundations on hills and mountains. |
-      | banner      | banner.jpg                                            |
       | logo        | logo.png                                              |
       | collection  | Chalet construction                                   |
       | state       | validated                                             |

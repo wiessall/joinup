@@ -66,6 +66,18 @@ field.formatter.settings.addtocall_daterange_condensed:
       type: date_format
       label: 'Different years format'
 
+field.formatter.settings.filtered_entity_reference_bundles:
+  type: field.formatter.settings.entity_reference_revisions_entity_view
+  label: 'Add filtered entity reference types formatter settings'
+  mapping:
+    filtered_entity_bundles:
+      type: sequence
+      label: 'Bundles'
+      nullable: true
+      sequence:
+        type: string
+        label: 'Bundle'
+
 field.widget.settings.email_legacy_multicardinality:
   type: field.widget.settings.email_default
 
@@ -94,21 +106,6 @@ condition.plugin.joinup_content:
       type: sequence
       sequence:
         type: string
-
-# Schema for 'joinup_timestamp_timeago' formatter settings.
-field.formatter.settings.joinup_timestamp_timeago:
-  type: field.formatter.settings.timestamp
-  label: 'Joinup Timestamp Timeago display format settings'
-  mapping:
-    tooltip_format:
-      type: string
-      label: 'Tooltip date format'
-    tooltip_format_custom:
-      type: string
-      label: 'Tooltip custom date format'
-    timeago_settings:
-      type: ignore
-      label: 'Timeago plugin settings'
 
 field.formatter.settings.entity_reference_custom_link:
   type: mapping
