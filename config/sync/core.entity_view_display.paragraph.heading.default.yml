@@ -1,0 +1,26 @@
+uuid: 47e37d07-dea8-4bce-87e2-4b35e488ad71
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.heading.paragraph_heading
+    - paragraphs.paragraphs_type.heading
+  module:
+    - template_suggestion
+id: paragraph.heading.default
+targetEntityType: paragraph
+bundle: heading
+mode: default
+content:
+  paragraph_heading:
+    type: string
+    label: hidden
+    settings:
+      link_to_entity: false
+    third_party_settings:
+      template_suggestion:
+        template_suggestion: ''
+    weight: 0
+    region: content
+hidden:
+  search_api_excerpt: true

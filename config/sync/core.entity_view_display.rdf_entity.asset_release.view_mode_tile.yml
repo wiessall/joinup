@@ -4,7 +4,6 @@ status: true
 dependencies:
   config:
     - core.entity_view_mode.rdf_entity.view_mode_tile
-    - field.field.rdf_entity.asset_release.field_isr_banner
     - field.field.rdf_entity.asset_release.field_isr_contact_information
     - field.field.rdf_entity.asset_release.field_isr_description
     - field.field.rdf_entity.asset_release.field_isr_distribution
@@ -26,8 +25,8 @@ dependencies:
     - field.field.rdf_entity.asset_release.field_topic
     - rdf_entity.rdfentity.asset_release
   module:
+    - joinup_html_stripper
     - template_suggestion
-    - text
     - user
 _core:
   default_config_hash: woWqefcHqVQ29NS3Vdac5roSq8uEXNbtNmgY9FJij_s
@@ -115,9 +114,10 @@ content:
     weight: 2
     region: content
   field_isr_release_notes:
-    type: text_default
+    type: joinup_html_stripper_stripped
     label: hidden
-    settings: {  }
+    settings:
+      trim_length: 600
     third_party_settings:
       template_suggestion:
         template_suggestion: bare
@@ -190,7 +190,6 @@ content:
 hidden:
   changed: true
   created: true
-  field_isr_banner: true
   field_isr_contact_information: true
   field_isr_description: true
   field_isr_distribution: true

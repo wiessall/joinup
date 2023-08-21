@@ -31,4 +31,9 @@
     -webkit-line-clamp: 5;
     overflow: hidden;
   }
+  mark,
+  .mark {
+    padding: unset;
+    background-color: unset;
+  }
 }

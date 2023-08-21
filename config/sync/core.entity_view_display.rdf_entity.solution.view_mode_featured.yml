@@ -6,7 +6,6 @@ dependencies:
     - core.entity_view_mode.rdf_entity.view_mode_featured
     - field.field.rdf_entity.solution.field_is_actor
     - field.field.rdf_entity.solution.field_is_affiliations_requests
-    - field.field.rdf_entity.solution.field_is_banner
     - field.field.rdf_entity.solution.field_is_business_process
     - field.field.rdf_entity.solution.field_is_contact_information
     - field.field.rdf_entity.solution.field_is_content
@@ -71,9 +70,13 @@ content:
       trim_suffix: …
       wrap_output: false
       wrap_class: trimmed
-      more_link: false
-      more_class: more-link
-      more_text: More
+      more:
+        display_link: false
+        target_blank: false
+        link_trim_only: false
+        class: more-link
+        text: More
+        aria_label: 'Read more about [node:title]'
       summary_handler: full
       trim_options:
         text: false
@@ -113,7 +116,6 @@ hidden:
   featured: true
   field_is_actor: true
   field_is_affiliations_requests: true
-  field_is_banner: true
   field_is_business_process: true
   field_is_contact_information: true
   field_is_content: true

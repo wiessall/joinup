@@ -49,13 +49,11 @@ class JoinupValidation extends JoinupFederationStepPluginBase implements Pipelin
   protected static $nonCriticalViolationWhitelist = [
     'NotNull' => [
       'solution' => [
-        'field_is_banner',
         'field_is_logo',
         'field_is_solution_type',
         'field_topic',
       ],
       'asset_release' => [
-        'field_isr_banner',
         'field_isr_logo',
         'field_topic',
       ],

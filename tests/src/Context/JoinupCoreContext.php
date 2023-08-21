@@ -270,7 +270,7 @@ class JoinupCoreContext extends RawDrupalContext {
    */
   public function assertRepeatedElementContainsText(TableNode $table): void {
     $navigation_menu_selector = $this->getRegionSelector('Navigation menu');
-    $parent = $this->getSession()->getPage()->findAll('css', "$navigation_menu_selector nav a");
+    $parent = $this->getSession()->getPage()->findAll('css', "$navigation_menu_selector .nav a");
     $table_hash = $table->getHash();
     Assert::assertSameSize($table_hash, $parent);
     $i = 0;
@@ -393,6 +393,31 @@ class JoinupCoreContext extends RawDrupalContext {
     $entity->setNewRevision();
     $entity->set('field_state', $state);
     $entity->save();
+  }
+
+  /**
+   * Checks if page elements have unique id elements.
+   *
+   * @throws \Exception
+   *   Thrown when element's id is not unique.
+   *
+   * @Then page elements must have unique id attributes
+   */
+  public function pageElementsMustHaveUniqueIdAttributes(): void {
+    $elementIds = [];
+
+    $elementsWithIdAttribute = $this->getSession()
+      ->getPage()
+      ->findAll('css', '[id]');
+    foreach ($elementsWithIdAttribute as $elementWithIdAttribute) {
+      $elementId = $elementWithIdAttribute->getAttribute('id');
+
+      if (in_array($elementId, $elementIds)) {
+        throw new \Exception("'$elementId' id attribute is used by more than one element");
+      }
+
+      $elementIds[] = $elementId;
+    }
   }
 
   /**

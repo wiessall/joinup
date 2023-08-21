@@ -1,0 +1,45 @@
+{%
+  set classes = [
+  'glide__slide',
+  'slide',
+]
+%}
+{%
+  set title_classes = [
+  'h6',
+  'text-center',
+  'slide__title',
+]
+%}
+<article{{ attributes.addClass(classes) }}>
+  {{ title_prefix }}
+  {{ title_suffix }}
+
+  {% block content %}
+    <a href="{{ url }}" rel="bookmark" title="{{ 'Read'|t }}: {{ label|render|striptags|trim }}" tabindex="-1">
+      {% if image %}
+        <figure class="slide__figure">
+          {{ image }}
+        </figure>
+      {% else %}
+        <figure class="slide__figure">
+          <svg class="slide__svg">
+            <use xlink:href="{{ bcl_icon_path }}#{{ icon }}"></use>
+          </svg>
+        </figure>
+      {% endif %}
+    </a>
+    {# 'text' is only present in custom page carousel items which don't display a label #}
+    {% if text %}
+      <div class="slide__body">
+        <div class="slide__text">
+          {{ text }}
+        </div>
+      </div>
+    {% elseif label %}
+      <h1{{ title_attributes.addClass(title_classes) }}>
+        <a class="slide__title-link" href="{{ url }}" rel="bookmark">{{ label }}</a>
+      </h1>
+    {% endif %}
+  {% endblock %}
+</article>

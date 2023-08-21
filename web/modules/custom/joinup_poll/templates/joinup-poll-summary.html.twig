@@ -1,0 +1,29 @@
+{#
+/**
+ * @file
+ * Default theme implementation to display the poll summary.
+ *
+ * Variables available:
+ * - show_number_of_votes: True is we want to show the number of votes.
+ * - number_of_votes: Number of votes.
+ * - is_closed: True if the poll is closed.
+ * - time_left: Time left to vote.
+ *
+ * @see template_preprocess_joinup_poll_summary()
+ *
+ * @ingroup themeable
+ */
+#}
+
+{% if show_number_of_votes %}
+  {% trans %}
+    Currently {{ number_of_votes }} vote
+  {% plural number_of_votes %}
+    Currently {{ number_of_votes }} votes
+  {% endtrans %}
+  <br/>
+{% endif %}
+
+{% if time_left %}
+  {{ '@left left to vote'|t({'@left': time_left}) }}
+{% endif %}
