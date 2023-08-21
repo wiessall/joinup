@@ -1,4 +1,4 @@
-@api @group_b
+@api @group_b @javascript
 Feature: Pool paragraph tests.
 
   Background:
@@ -6,7 +6,6 @@ Feature: Pool paragraph tests.
       | title           | state     |
       | Poll collection | validated |
 
-  @javascript
   Scenario: Anonymous user is asked to log in if they attempt to vote
     Given the following polls:
       | question                  | runtime | cancel_vote_allow | show_number_of_results | choice                                                     | state     |
@@ -22,14 +21,13 @@ Feature: Pool paragraph tests.
 
     Then I click "Game of Thrones"
     When a modal should open
-    And I should see the text "You are not logged in" in the "Modal title"
-    And I should see the heading "Only logged in users can vote." in the "Modal content"
-    And I should see the text "Please log in if you already have an account or register a new account on EU Login to proceed voting!" in the "Modal content"
+    And I should see the text "You are not signed in" in the "Modal title"
+    And I should see the heading "Only signed in users can vote." in the "Modal content"
+    And I should see the text "Please sign in if you already have an account or register a new account on EU Login to proceed voting!" in the "Modal content"
 
-    Then I click "Log in" in the "Modal content"
+    Then I click "Sign in" in the "Modal content"
     When I should see the heading "Sign in to continue"
 
-  @javascript
   Scenario: Authenticated user can vote
     Given the following polls:
       | question                  | runtime | cancel_vote_allow | show_number_of_results | choice                                                     | state     |
@@ -51,7 +49,6 @@ Feature: Pool paragraph tests.
     And I wait for AJAX to finish
     When I should see "1 vote"
 
-  @javascript
   Scenario: Use who voted can cancel own vote
     Given the following polls:
       | question                      | runtime | cancel_vote_allow | show_number_of_results | choice                                    | state     |
@@ -74,7 +71,6 @@ Feature: Pool paragraph tests.
     And I press "Cancel vote"
     And the following fields should be present "Pepperoni,Pineapple,Just cheese,Mushrooms"
 
-  @javascript
   Scenario: Poll paragraph can be added
     Given custom_page content:
       | title           | collection      | state     |

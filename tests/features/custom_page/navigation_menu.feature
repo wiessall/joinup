@@ -33,7 +33,6 @@ Feature: Navigation menu for custom pages
     When I fill in the following:
       | Title  | About us    |
     And I select "HR" from "Topic"
-    And I enter "A short introduction." in the "Body" wysiwyg editor
     And I press "Publish"
     Then I should see the success message "Custom page About us has been created."
     And the navigation menu of the "Rainbow tables" <group> should have <visible items 2> visible items
