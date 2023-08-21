@@ -15,6 +15,8 @@ dependencies:
     - field.storage.meta_entity.field_pinned_in
     - field.storage.node.field_scope
     - field.storage.node.field_short_title
+    - field.storage.node.oss_development_status
+    - field.storage.node.oss_source
     - field.storage.meta_entity.count
     - field.storage.rdf_entity.field_ar_abstract
     - field.storage.rdf_entity.field_ci_name
@@ -730,6 +732,22 @@ field_settings:
       module:
         - meta_entity
         - rdf_entity
+  oss_development_status:
+    label: 'Development status'
+    datasource_id: 'entity:node'
+    property_path: oss_development_status
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.oss_development_status
+  oss_source:
+    label: Source
+    datasource_id: 'entity:node'
+    property_path: oss_source
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.oss_source
   parent:
     label: 'Term Parents'
     datasource_id: 'entity:taxonomy_term'
@@ -939,6 +957,7 @@ datasource_settings:
         - document
         - event
         - news
+        - oss_solution
         - tallinn_report
         - video
     languages:
