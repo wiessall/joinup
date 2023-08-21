@@ -30,7 +30,7 @@ class JoinupOssCataloguePageDisplayVariant extends BlockPageVariant {
    * {@inheritdoc}
    */
   public function setMainContent(array $main_content): PageVariantInterface {
-    $this->mainContent = views_embed_view('joinup_oss_catalogue');
+    $this->mainContent =  ['#markup' => $this->t('Dummy markup')];
 
     return $this;
   }
