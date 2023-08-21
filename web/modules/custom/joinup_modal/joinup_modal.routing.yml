@@ -2,7 +2,7 @@ joinup_modal.anonymous:
   path: '/modal/anonymous/{type}'
   defaults:
     _controller: '\Drupal\joinup_modal\Controller\JoinupModalAnonymousController::render'
-    _title: 'You are not logged in'
+    _title: 'You are not signed in'
   requirements:
     _access: 'TRUE'
     type: '[a-z]+'

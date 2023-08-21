@@ -52,7 +52,7 @@ Feature: Like/unlike feature.
     And I should see the text "Like (0)" in the "Like block" region
     When I click "Like" in the "Like block" region
     Then a modal should open
-    And I should see the heading "You are not signed in"
+    And I should see the text "You are not signed in"
     And I should see the text "You are not signed in" in the "Modal title"
     And I should see the heading "Sign in or register to like this content" in the "Modal content"
     And I should see the text "Liking content shows your appreciation to content creators and helps other users find good content" in the "Modal content"
