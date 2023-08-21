@@ -26,11 +26,11 @@ eu_oss_catalogue.hosting_platform_plugin_default_settings_git:
   mapping:
     projects:
       type: sequence
-      label: List of repositoriy IDs or vendors
+      label: List of repository IDs or namespaces
       sequence:
         type: mapping
         mapping:
-          vendor:
+          namespace:
             type: string
           name:
             type: string
