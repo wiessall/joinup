@@ -133,16 +133,6 @@ field_settings:
     dependencies:
       config:
         - field.storage.node.body
-  category:
-    label: 'Categories » Taxonomy term » Name'
-    datasource_id: 'entity:node'
-    property_path: 'oss_categories:entity:name'
-    type: string
-    dependencies:
-      config:
-        - field.storage.node.oss_categories
-      module:
-        - taxonomy
   created:
     label: 'Authored on'
     datasource_id: 'entity:node'
