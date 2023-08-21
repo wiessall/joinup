@@ -111,7 +111,7 @@ class JoinupEntityStatus extends ProcessorPluginBase implements PluginFormInterf
       $object = $item->getOriginalObject()->getValue();
       $inverse = $this->getConfiguration()['inverse'];
       $enabled = TRUE;
-      if ($object instanceof NodeInterface) {
+      if ($object instanceof NodeInterface && $object instanceof GroupContentInterface) {
         $enabled = $object->isPublished();
 
         if ($enabled) {
