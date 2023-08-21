@@ -175,64 +175,6 @@ third_party_settings:
                 entity: layout_builder.entity
             weight: 3
             additional: {  }
-          f9051774-026a-4d67-b9fc-9fcb2ca6946b:
-            uuid: f9051774-026a-4d67-b9fc-9fcb2ca6946b
-            region: content
-            configuration:
-              id: 'field_block:rdf_entity:solution:created'
-              label_display: '0'
-              context_mapping:
-                entity: layout_builder.entity
-              formatter:
-                type: timestamp
-                label: hidden
-                settings:
-                  date_format: custom
-                  custom_date_format: m/d/y
-                  timezone: ''
-                  tooltip:
-                    date_format: long
-                    custom_date_format: ''
-                  time_diff:
-                    enabled: false
-                    future_format: '@interval hence'
-                    past_format: '@interval ago'
-                    granularity: 2
-                    refresh: 60
-                third_party_settings:
-                  template_suggestion:
-                    template_suggestion: ''
-            weight: 4
-            additional: {  }
-          2ed420fd-89b0-4b3b-b180-6508b5e7d188:
-            uuid: 2ed420fd-89b0-4b3b-b180-6508b5e7d188
-            region: content
-            configuration:
-              id: 'field_block:rdf_entity:solution:created'
-              label_display: '0'
-              context_mapping:
-                entity: layout_builder.entity
-              formatter:
-                type: timestamp
-                label: hidden
-                settings:
-                  date_format: custom
-                  custom_date_format: m/d/y
-                  timezone: ''
-                  tooltip:
-                    date_format: ''
-                    custom_date_format: ''
-                  time_diff:
-                    enabled: false
-                    future_format: '@interval hence'
-                    past_format: '@interval ago'
-                    granularity: 2
-                    refresh: 60
-                third_party_settings:
-                  template_suggestion:
-                    template_suggestion: ''
-            weight: 5
-            additional: {  }
         third_party_settings: {  }
 id: rdf_entity.solution.explore_item
 targetEntityType: rdf_entity
