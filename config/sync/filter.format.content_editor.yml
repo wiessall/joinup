@@ -140,6 +140,12 @@ filters:
     status: true
     weight: 9
     settings: {  }
+  filter_image_lazy_load:
+    id: filter_image_lazy_load
+    provider: filter
+    status: true
+    weight: -41
+    settings: {  }
   media_embed:
     id: media_embed
     provider: media

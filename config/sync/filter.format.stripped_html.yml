@@ -129,6 +129,12 @@ filters:
     status: false
     weight: -40
     settings: {  }
+  filter_image_lazy_load:
+    id: filter_image_lazy_load
+    provider: filter
+    status: true
+    weight: -44
+    settings: {  }
   filter_iframe_cck:
     id: filter_iframe_cck
     provider: oe_webtools_cookie_consent

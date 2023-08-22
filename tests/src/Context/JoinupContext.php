@@ -10,6 +10,7 @@ use Behat\Mink\Element\NodeElement;
 use Behat\Mink\Exception\ElementNotFoundException;
 use Drupal\Component\Utility\UrlHelper;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
+use Drupal\Core\Utility\Error;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\DrupalExtension\Hook\Scope\BeforeNodeCreateScope;
 use Drupal\User\Entity\User;
@@ -2043,18 +2044,9 @@ class JoinupContext extends RawDrupalContext {
 
     $result = $this->getSession()->getPage()->waitFor(5, function (): bool {
       // Retrieve again a fresh copy of the page element at each cycle.
-      $modal = $this->getSession()->getPage()->find('css', '.modal-body');
+      $modal = $this->getSession()->getPage()->find('css', '.ui-dialog-content');
       return $modal && $modal->isVisible();
     });
-
-    if (!$result) {
-      $result = $this->getSession()->getPage()->waitFor(5, function () {
-        // Retrieve again a fresh copy of the page element at each cycle.
-        $modal = $this->getSession()->getPage()->find('css', '#drupal-bootstrap4-modal');
-
-        return $modal && $modal->isVisible();
-      });
-    }
 
     if (!$result) {
       throw new \Exception('The modal did not open.');
@@ -2078,7 +2070,7 @@ class JoinupContext extends RawDrupalContext {
         // Normally the modal should be completely removed from the DOM,
         // but sometimes the markup is kept in the DOM as hidden.
         // @see Drupal.AjaxCommands.prototype.closeDialog()
-        return !$this->getSession()->getDriver()->isVisible('//*[@id = "drupal-modal"] | //*[@id = "drupal-bootstrap4-modal"]');
+        return !$this->getSession()->getDriver()->isVisible('//*[@id = "drupal-modal"]');
       }
       catch (NoSuchElement $e) {
         // The modal has been completely removed from the DOM.
@@ -2179,7 +2171,7 @@ class JoinupContext extends RawDrupalContext {
         $queue->deleteItem($item);
       }
       catch (\Exception $e) {
-        watchdog_exception('cron', $e);
+        Error::logException(\Drupal::logger('cron'), $e);
       }
     }
   }
