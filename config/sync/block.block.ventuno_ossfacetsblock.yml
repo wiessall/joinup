@@ -23,6 +23,7 @@ settings:
   hide_empty_block: false
   facets_to_include:
     - 'facet_block:oss_development_status'
+    - 'facet_block:oss_source'
   add_js_classes: true
 visibility:
   request_route:
