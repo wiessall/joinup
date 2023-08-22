@@ -21,6 +21,7 @@ $utilities: map-merge(
       class: h,
       values: (
         0: 0,
+        50vh: 50vh,
       )
     ),
     "max-height": null,
@@ -49,6 +50,12 @@ $utilities: map-merge(
     "gradient": null,
     "user-select": null,
     "pointer-events": null,
+    "column-gap": (
+      responsive: false,
+      property: column-gap,
+      class: col-gap,
+      values: $spacers
+    ),
     "link": null,
     "font-weight":
       map-merge(

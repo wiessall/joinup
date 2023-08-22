@@ -7,13 +7,14 @@ dependencies:
     - field.field.node.custom_page.field_custom_page_logo
     - field.field.node.custom_page.field_paragraphs_body
     - field.field.node.custom_page.field_state
+    - field.field.node.custom_page.field_topic
     - field.field.node.custom_page.og_audience
     - image.style.thumbnail
     - node.type.custom_page
   module:
     - file
     - joinup_workflow
-    - paragraphs
+    - layout_paragraphs
     - path
     - svg_image
 id: node.custom_page.default
@@ -37,23 +38,14 @@ content:
       preview_image_style: thumbnail
     third_party_settings: {  }
   field_paragraphs_body:
-    type: paragraphs
+    type: layout_paragraphs
     weight: 2
     region: content
     settings:
-      title: Paragraph
-      title_plural: Paragraphs
-      edit_mode: open
-      closed_mode: summary
-      autocollapse: none
-      closed_mode_threshold: 0
-      add_mode: dropdown
-      form_display_mode: default
-      default_paragraph_type: simple_paragraph
-      features:
-        add_above: '0'
-        collapse_edit_all: collapse_edit_all
-        duplicate: '0'
+      preview_view_mode: preview
+      nesting_depth: 0
+      require_layouts: 1
+      empty_message: ''
     third_party_settings: {  }
   field_state:
     type: state_machine_buttons
@@ -61,6 +53,12 @@ content:
     region: content
     settings:
       use_transition_label: 1
+    third_party_settings: {  }
+  field_topic:
+    type: options_select
+    weight: 2
+    region: content
+    settings: {  }
     third_party_settings: {  }
   langcode:
     type: language_select

@@ -10,11 +10,6 @@
  * @see template_preprocess_input()
  */
 #}
-{% if attributes.hasClass('button--primary') or (attributes['data-drupal-selector'] == 'edit-submit') %}
-  {% set attributes = attributes.addClass(['btn-primary']) %}
-{% elseif not attributes.hasClass('btn-brand') %}
-  {% set attributes = attributes.addClass(['btn-secondary']) %}
-{% endif %}
 {% if attributes.disabled == 'disabled' %}
   {% set attributes = attributes.addClass(['disabled']) %}
 {% endif %}

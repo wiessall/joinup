@@ -6,6 +6,7 @@ namespace Drupal\topic;
 
 use Drupal\Core\Database\Connection;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\meta_entity\MetaEntityRepositoryInterface;
 use Drupal\sparql_entity_storage\Driver\Database\sparql\ConnectionInterface;
 
 /**
@@ -24,11 +25,14 @@ class VocabularyManager {
    *   The database connection.
    * @param \Drupal\sparql_entity_storage\Driver\Database\sparql\ConnectionInterface $sparqlEndpoint
    *   The sparql.endpoint service.
+   * @param \Drupal\meta_entity\MetaEntityRepositoryInterface $metaEntityRepository
+   *   The meta_entity.repository service.
    */
   public function __construct(
     protected EntityTypeManagerInterface $entityTypeManager,
     protected Connection $database,
     protected ConnectionInterface $sparqlEndpoint,
+    protected MetaEntityRepositoryInterface $metaEntityRepository
   ) {
   }
 
@@ -92,6 +96,9 @@ class VocabularyManager {
    *   The new ID of the term.
    */
   public function changeTopicId(string $oldId, string $newId): void {
+    $oldTerm = $this->entityTypeManager->getStorage('taxonomy_term')->load($oldId);
+    $meta_entity = $this->metaEntityRepository->getMetaEntityForEntity($oldTerm, 'topic');
+
     $oldPath = $this->getPath($oldId);
     $query = <<<QUERY
     WITH <http://topic>
@@ -103,6 +110,12 @@ class VocabularyManager {
 
     $newPath = $this->getPath($newId);
     $this->createRedirect($oldPath, $newPath);
+    $newTerm = $this->entityTypeManager->getStorage('taxonomy_term')->load($newId);
+
+    // Also, set the meta entity relation ID.
+    /** @var \Drupal\meta_entity\Entity\MetaEntityInterface $meta_entity */
+    $meta_entity->set('target', $newTerm);
+    $meta_entity->save();
   }
 
   /**
