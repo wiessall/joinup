@@ -26,8 +26,8 @@ function joinup_like_theme(array $existing, string $type, string $theme, string 
  * Implements hook_preprocess_HOOK().
  */
 function joinup_like_preprocess_joinup_modal_anonymous__like(&$variables): void {
-  $variables['title'] = t('Login or register to like this content');
-  $variables['description'] = t('Like this content will help other people find reliable information about what they search!');
+  $variables['title'] = t('Sign in or register to like this content');
+  $variables['description'] = t('Liking content shows your appreciation to content creators and helps other users find good content');
 }
 
 /**

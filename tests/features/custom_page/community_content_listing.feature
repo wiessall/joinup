@@ -17,6 +17,8 @@ Feature:
     And custom_page content:
       | title               | collection | created           | body                               | state     | pinned |
       | Latest news listing | Nintendo64 | 2019-10-01 4:26am | You can find the latest news here. | published | no     |
+    And I append "layout" to "field_paragraphs_body" field in "node" entity with following "Latest news listing" title:
+      | behavior_settings | a:3:{s:17:"layout_paragraphs";a:4:{s:6:"layout";s:13:"layout_onecol";s:6:"config";a:1:{s:5:"label";s:0:"";}s:11:"parent_uuid";N;s:6:"region";N;}s:16:"background_theme";a:0:{}s:11:"extra_class";a:0:{}} |
     And news content:
       | title                                 | collection | created           | content                          | state     | pinned |
       | Rare Nintendo64 disk drive discovered | Nintendo64 | 2018-10-01 4:26am | Magnetic drive called 64DD.      | validated | no     |
@@ -40,7 +42,11 @@ Feature:
     And I click "Add custom page" in the plus button menu
     Then I should see the heading "Add custom page"
     And the following fields should not be present "Show related content, Allow shared content"
-    When I click "Choose component"
+    When I add a layout paragraph in the "Custom page body" form field with the following properties:
+      | layout           | one column |
+      | Background theme | light      |
+      | Extra classes    | test-class |
+    And I click "Choose component"
     And I click "Content listing"
     Then the following fields should be present "Show related content, Allow shared content"
     And the following fields should not be present "Query presets, Limit"
@@ -50,6 +56,10 @@ Feature:
     And I click "Add custom page" in the plus button menu
     Then I should see the heading "Add custom page"
     And the following fields should not be present "Show related content, Allow shared content"
+    When I add a layout paragraph in the "Custom page body" form field with the following properties:
+      | layout           | one column |
+      | Background theme | light      |
+      | Extra classes    | test-class |
     When I click "Choose component"
     And I click "Content listing"
     And the following fields should be present "Show related content, Allow shared content, Query presets, Limit"
@@ -63,6 +73,10 @@ Feature:
     Then I should see the heading "Add custom page"
     When I fill in the following:
       | Title | Latest content |
+    And I add a layout paragraph in the "Custom page body" form field with the following properties:
+      | layout           | one column |
+      | Background theme | light      |
+      | Extra classes    | test-class |
     When I click "Choose component"
     And I click "Content listing"
     And I select "News" from "Available filters"
@@ -93,7 +107,7 @@ Feature:
     And I go to the edit form of the "Latest content" "custom page"
     And I fill in the following:
       | Title | Latest news |
-    And I click "Edit" in the "Custom page body" for paragraph layout 1
+    And I "edit" from the "Custom page body" field the child 1 paragraph of 1 layout
     And I fill in "Query presets" with "entity_bundle|news"
     When I press "Save" in the "Modal buttons" region
     And I press "Update"
@@ -104,7 +118,7 @@ Feature:
 
     Given I am logged in as a facilitator of the "Nintendo64" collection
     And I go to the edit form of the "Latest news" "custom page"
-    And I click "Edit" in the "Custom page body" for paragraph layout 1
+    And I "edit" from the "Custom page body" field the child 1 paragraph of 1 layout
     And I check "Allow shared content"
     And I press "Save" in the "Modal buttons" region
     And I press "Update"
@@ -138,7 +152,7 @@ Feature:
     And I should not see the "NEC VR4300 CPU" tile
 
     When I go to the edit form of the "Latest news" "custom page"
-    And I click "Edit" in the "Custom page body" for paragraph layout 1
+    And I "edit" from the "Custom page body" field the child 1 paragraph of 1 layout
     And I uncheck "Show related content"
     And I press "Save" in the "Modal buttons" region
     And I press "Update"
@@ -153,6 +167,10 @@ Feature:
     And I click "Add custom page" in the plus button menu
     Then I should see the heading "Add custom page"
     When I fill in "Title" with "Chosen content"
+    And I add a layout paragraph in the "Custom page body" form field with the following properties:
+      | layout           | one column |
+      | Background theme | light      |
+      | Extra classes    | test-class |
     And I click "Choose component"
     And I click "Content listing"
     And I uncheck "Show related content"
@@ -188,7 +206,7 @@ Feature:
 
     When I open the header local tasks menu
     And I click "Edit" in the "Entity actions" region
-    And I click "Edit" in the "Custom page body" for paragraph layout 1
+    And I "edit" from the "Custom page body" field the child 1 paragraph of 1 layout
     And I drag the table row in the "Content listing field filter form" region at position 3 up
     And I drag the table row in the "Content listing field filter form" region at position 2 up
     And I click "Remove filter" at 5th filter of the 1st content listing paragraph
@@ -204,7 +222,7 @@ Feature:
     # Content that doesn't belong to the collection won't show up, even when selected.
     When I open the header local tasks menu
     And I click "Edit" in the "Entity actions" region
-    And I click "Edit" in the "Custom page body" for paragraph layout 1
+    And I "edit" from the "Custom page body" field the child 1 paragraph of 1 layout
     And I select "News" from "Available filters"
     And I press "Add and configure filter"
     And I fill in the 2nd "News" with "NEC VR4300 CPU" in the "Custom content listing" field
@@ -234,7 +252,7 @@ Feature:
     # Disabling inclusion of shared content will remove it from the list, even if still referenced.
     When I open the header local tasks menu
     And I click "Edit" in the "Entity actions" region
-    And I click "Edit" in the "Custom page body" for paragraph layout 1
+    And I "edit" from the "Custom page body" field the child 1 paragraph of 1 layout
     And I uncheck "Allow shared content"
     And I press "Save" in the "Modal buttons" region
     And I press "Save"
@@ -251,7 +269,7 @@ Feature:
       | collection | Nintendo64            |
     When I open the header local tasks menu
     And I click "Edit" in the "Entity actions" region
-    And I click "Edit" in the "Custom page body" for paragraph layout 1
+    And I "edit" from the "Custom page body" field the child 1 paragraph of 1 layout
     # Simulate reordering and removal of rows.
     And I drag the table row in the "Content listing field filter form" region at position 4 up
     And I drag the table row in the "Content listing field filter form" region at position 3 up
@@ -276,7 +294,7 @@ Feature:
     And I go to the "Chosen content" custom page
     And I open the header local tasks menu
     And I click "Edit" in the "Entity actions" region
-    And I click "Edit" in the "Custom page body" for paragraph layout 1
+    And I "edit" from the "Custom page body" field the child 1 paragraph of 1 layout
     And I fill in "Query presets" with "entity_bundle|solution"
     And I press "Save" in the "Modal buttons" region
     And I press "Save"
@@ -289,7 +307,7 @@ Feature:
     And I go to the "Chosen content" custom page
     And I open the header local tasks menu
     And I click "Edit" in the "Entity actions" region
-    And I click "Edit" in the "Custom page body" for paragraph layout 1
+    And I "edit" from the "Custom page body" field the child 1 paragraph of 1 layout
     Then the following field should not be present "Available filters"
 
     # Moderators should still have access to the query builder.
@@ -297,7 +315,7 @@ Feature:
     And I go to the "Chosen content" custom page
     And I open the header local tasks menu
     And I click "Edit" in the "Entity actions" region
-    And I click "Edit" in the "Custom page body" for paragraph layout 1
+    And I "edit" from the "Custom page body" field the child 1 paragraph of 1 layout
     Then the following field should be present "Available filters"
 
   @javascript
@@ -309,6 +327,10 @@ Feature:
     Then I should see the heading "Add custom page"
     When I fill in the following:
       | Title | Collection content |
+    And I add a layout paragraph in the "Custom page body" form field with the following properties:
+      | layout           | one column |
+      | Background theme | light      |
+      | Extra classes    | test-class |
     And I click "Choose component"
     And I click "Content listing"
     And I select "Discussion" from "Available filters"
@@ -382,6 +404,10 @@ Feature:
     And I click "Add custom page" in the plus button menu
     Then I should see the heading "Add custom page"
     When I fill in "Title" with "Query presets validation"
+    And I add a layout paragraph in the "Custom page body" form field with the following properties:
+      | layout           | one column |
+      | Background theme | light      |
+      | Extra classes    | test-class |
     And I click "Choose component"
     And I click "Content listing"
     And I fill in "Query presets" with "wrongvalue"
@@ -409,6 +435,10 @@ Feature:
     And I click "Add custom page" in the plus button menu
     Then I should see the heading "Add custom page"
     When I fill in "Title" with "Empty queries"
+    And I add a layout paragraph in the "Custom page body" form field with the following properties:
+      | layout           | one column |
+      | Background theme | light      |
+      | Extra classes    | test-class |
     When I click "Choose component"
     And I click "Content listing"
     And I press "Save" in the "Modal buttons" region
@@ -491,6 +521,10 @@ Feature:
     And I go to the edit form of the "Forests" "custom page"
 
     # Paragraph #1.
+    And I add a layout paragraph in the "Custom page body" form field with the following properties:
+      | layout           | one column |
+      | Background theme | light      |
+      | Extra classes    | test-class |
     When I click "Choose component"
     And I click "Content listing"
 
@@ -500,7 +534,7 @@ Feature:
     And I press "Save" in the "Modal buttons" region
 
     # Paragraph #2.
-    When I click the last "Choose component" link
+    When I click "Choose component"
     And I click "Content listing"
 
     And I select "Solution" from latest "Available filters"
@@ -513,7 +547,7 @@ Feature:
     And I press "Save" in the "Modal buttons" region
 
     # Back to paragraph #1.
-    And I click "Edit" in the "Custom page body" for paragraph layout 1
+    And I "edit" from the "Custom page body" field the child 2 paragraph of 1 layout
     Then the 1st filter of the 1st content listing paragraph value is "Save the Planet"
     And I press "Save" in the "Modal buttons" region
     And I press "Update"
@@ -537,7 +571,11 @@ Feature:
     And I go to the edit form of the "Bikes" "custom page"
 
     # Paragraph #1.
-    When I click "Choose component"
+    When I add a layout paragraph in the "Custom page body" form field with the following properties:
+      | layout           | one column |
+      | Background theme | light      |
+      | Extra classes    | test-class |
+    And I click "Choose component"
     And I click "Content listing"
 
     And I select "Solution" from "Available filters"
@@ -554,7 +592,7 @@ Feature:
     And I press "Save" in the "Modal buttons" region
 
     # Paragraph #2.
-    When I click the last "Choose component" link
+    When I click "Choose component"
     And I click "Content listing"
 
     And I select "Solution" from latest "Available filters"
@@ -570,7 +608,7 @@ Feature:
     And I should see the heading "Bikes"
 
     When I go to the edit form of the "Bikes" "custom page"
-    And I click "Edit" in the "Custom page body" for paragraph layout 1
+    And I "edit" from the "Custom page body" field the child 2 paragraph of 1 layout
     And I click "Remove filter" at 1st filter of the 1st content listing paragraph
 
     Then the 1st filter of the 1st content listing paragraph value is "Fight battery mode"
@@ -581,7 +619,7 @@ Feature:
     And I click "Remove filter" at 1st filter of the 1st content listing paragraph
     And I press "Cancel" in the "Modal buttons" region
 
-    When I click "Edit" in the "Custom page body" for paragraph layout 2
+    When I "edit" from the "Custom page body" field the child 1 paragraph of 1 layout
     And the 1st filter of the 1st content listing paragraph value is "Black Noise"
     And the 2nd filter of the 1st content listing paragraph value is "Fight battery mode"
 

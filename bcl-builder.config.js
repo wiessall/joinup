@@ -934,6 +934,22 @@ module.exports = {
         sourceMap: "file",
       },
     },
+    // Layout Paragraphs - buidler UI.
+    {
+      entry: path.resolve(
+        outputFolder,
+        `${ventuno}src/scss/components/layout-paragraphs--builder.scss`
+      ),
+      dest: path.resolve(
+        outputFolder,
+        `${ventuno}assets/css/layout-paragraphs--builder.min.css`
+      ),
+      options: {
+        includePaths,
+        minify: true,
+        sourceMap: "file",
+      },
+    },
     // IOP
     // Components (SMACSS)
     {
@@ -983,6 +999,21 @@ module.exports = {
       dest: path.resolve(
         outputFolder,
         `${iop}assets/css/accordion-faq.min.css`
+      ),
+      options: {
+        minify: true,
+        includePaths,
+        sourceMap: "file",
+      },
+    },
+    {
+      entry: path.resolve(
+        outputFolder,
+        `${iop}src/scss/components/call-to-action.scss`
+      ),
+      dest: path.resolve(
+        outputFolder,
+        `${iop}assets/css/call-to-action.min.css`
       ),
       options: {
         minify: true,

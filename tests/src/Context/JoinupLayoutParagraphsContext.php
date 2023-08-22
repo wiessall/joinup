@@ -9,6 +9,7 @@ use Behat\Mink\Element\TraversableElement;
 use Behat\Mink\Exception\ElementNotFoundException;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\joinup\Traits\JavascriptTrait;
+use PHPUnit\Framework\Assert;
 use function PHPUnit\Framework\assertSame;
 use function PHPUnit\Framework\assertTrue;
 
@@ -55,6 +56,13 @@ class JoinupLayoutParagraphsContext extends RawDrupalContext {
   ];
 
   /**
+   * Reusable xpath pattern.
+   *
+   * @var string
+   */
+  const PARAGRAPH_ITEM_XPATH = "//div[contains(concat(' ', @class, ' '), ' layout ')]//div[contains(concat(' ', @class, ' '), ' paragraph ')]";
+
+  /**
    * Adds a layout paragraph in the last position in the given field.
    *
    * @param string $field_alias
@@ -72,13 +80,10 @@ class JoinupLayoutParagraphsContext extends RawDrupalContext {
    */
   public function addLayoutParagraphInFormFieldOnTopLevel(string $field_alias, TableNode $layout_properties): void {
     $this->assertJavaScriptEnabledBrowser();
-    $this->getChooseComponentLink($field_alias)->click();
 
-    // An overlay has opened, and we need to select "Layout".
-    $xpath = '//div[contains(concat(" ", @class, " "), " lpb-component-list__group--layout ")]';
-    $this->getSession()->wait(5000, "document.querySelector('div.lpb-component-list__group--layout') !== null");
-    $layouts_container = $this->getSession()->getPage()->find('xpath', $xpath);
-    $layouts_container->clickLink('Layout');
+    $field = $this->getParagraphsElement($field_alias);
+    $links = $field->findAll('named', ['link', 'Add layout']);
+    end($links)->click();
 
     // Get the 'layout' property from the table.
     $layout = $layout_properties->getRowsHash()['layout'];
@@ -193,7 +198,7 @@ class JoinupLayoutParagraphsContext extends RawDrupalContext {
       elseif ($field_type === 'ckeditor') {
         // Wait for the CKEditor to load.
         $this->getSession()->wait(5000, "document.querySelector('.lpb-dialog .cke_wysiwyg_frame') !== null");
-        $this->getSession()->executeScript("document.querySelector(\".lpb-dialog .cke_wysiwyg_frame\").contentWindow.document.body.innerHTML = '\"{$field_value}\"';");
+        $this->getSession()->executeScript("document.querySelector(\".lpb-dialog .cke_wysiwyg_frame\").contentWindow.document.body.innerHTML = '{$field_value}';");
       }
       else {
         $this->getSession()->getPage()->fillField($property, $field_value);
@@ -221,17 +226,60 @@ class JoinupLayoutParagraphsContext extends RawDrupalContext {
    * @When I :action from the :field_alias form field the layout paragraph in position :position
    */
   public function actionOnTopLevelLayoutParagraph(string $action, string $field_alias, string $position): void {
-    $actions = ['delete', 'edit', 'move up', 'move down', 'duplicate'];
-    assertTrue(in_array($action, $actions), "The action '$action' is not defined in the context. Available actions are ", implode(', ', $actions));
-
     $this->assertJavaScriptEnabledBrowser();
     // The ".is-layout" class is the difference between the actions for layouts
     // and the actions for paragraphs.
-    $this->getFormFieldLayoutParagraphs($field_alias)[$position - 1]->find('css', '.lpb-controls.is-layout')->clickLink(ucfirst($action));
+    $link = $this->getFormFieldLayoutParagraphs($field_alias)[$position - 1]->find('css', '.lpb-controls.is-layout');
+
+    $this->performAction($link, $action);
+  }
+
+  /**
+   * Performs an action on the child paragraph in the given layout.
+   *
+   * @param string $action
+   *   The action to perform.
+   * @param string $fieldAlias
+   *   The field alias as defined in
+   *   \Drupal\joinup\Context\JoinupLayoutParagraphsContext::FIELD_MAP.
+   * @param string $pPosition
+   *   The position of the child paragraph.
+   * @param string $lPosition
+   *   The position of the layout paragraph.
+   *
+   * @When I :action from the :fieldAlias field the child :pPosition paragraph of :lPosition layout
+   */
+  public function actionOnChildLayoutParagraph(string $action, string $fieldAlias, string $pPosition, string $lPosition): void {
+    $this->assertJavaScriptEnabledBrowser();
+    $layoutParagraph = $this->getFormFieldLayoutParagraphs($fieldAlias)[$lPosition - 1];
+    $link = $this->getAllSubParagraphsForLayout($layoutParagraph)[$pPosition - 1]->find('css', '.lpb-controls');
+
+    $this->performAction($link, $action);
+  }
+
+  /**
+   * Perform an action on link.
+   *
+   * @param \Behat\Mink\Element\TraversableElement $link
+   *   Link element.
+   * @param string $action
+   *   Action name.
+   */
+  protected function performAction(TraversableElement $link, string $action): void {
+    $actions = ['delete', 'edit', 'move up', 'move down', 'duplicate'];
+    assertTrue(in_array($action, $actions), "The action '$action' is not defined in the context. Available actions are ", implode(', ', $actions));
+
+    $this->scrollElementIntoView($link);
+    $link->clickLink(ucfirst($action));
     if ($action === 'delete') {
-      $this->getSession()->wait(5000, "document.querySelector('.lpb-dialog') !== null");
-      $this->getSession()->getPage()->find('css', '.ui-dialog-buttonpane')->pressButton('Delete');
-      $this->getSession()->wait(5000, "document.querySelector('.lpb-dialog') === null");
+      $this->getSession()
+        ->wait(5000, "document.querySelector('.lpb-dialog') !== null");
+      $this->getSession()
+        ->getPage()
+        ->find('css', '.ui-dialog-buttonpane')
+        ->pressButton('Delete');
+      $this->getSession()
+        ->wait(5000, "document.querySelector('.lpb-dialog') === null");
     }
 
     if (in_array($action, ['move up', 'move down'])) {
@@ -269,6 +317,36 @@ class JoinupLayoutParagraphsContext extends RawDrupalContext {
     }, $layout_list->getColumn(0));
 
     assertSame($expected, $actual);
+  }
+
+  /**
+   * Asserts the number of paragraphs in the page.
+   *
+   * @param int $expected_rows
+   *   (optional) The expected number of paragraphs. Defaults to 0.
+   *
+   * @Then there should be :expected_rows paragraph(s) in the page
+   * @Then the page should contain no paragraphs
+   */
+  public function assertParagraphsCountInPage(int $expected_rows = 0): void {
+    Assert::assertCount($expected_rows, $this->getSession()->getPage()->findAll('xpath', static::PARAGRAPH_ITEM_XPATH));
+  }
+
+  /**
+   * Asserts the exact text content of the paragraphs in the page.
+   *
+   * @param \Behat\Gherkin\Node\TableNode $table
+   *   The table of expected paragraph texts.
+   *
+   * @Given I should see the following paragraphs in the given order:
+   */
+  public function assertExactParagraphsContentInPage(TableNode $table): void {
+    $expected = $table->getColumn(0);
+    $paragraphs = $this->getSession()->getPage()->findAll('xpath', static::PARAGRAPH_ITEM_XPATH);
+    $actual = array_map(function (TraversableElement $paragraph): string {
+      return $paragraph->getText();
+    }, $paragraphs);
+    Assert::assertSame($expected, $actual);
   }
 
   /**
@@ -310,26 +388,6 @@ class JoinupLayoutParagraphsContext extends RawDrupalContext {
     }
 
     assertSame($expected, $actual);
-  }
-
-  /**
-   * Clicks on link inside paragraph.
-   *
-   * @param string $label
-   *   The label of the field.
-   * @param string $field
-   *   The field in which to take action.
-   * @param int $position
-   *   The ordinal position of the field.
-   *
-   * @When I click :label in the :field for paragraph layout :position
-   *
-   * @throws \Behat\Mink\Exception\ElementNotFoundException
-   */
-  public function iClickInTheFieldForParagraphLayout(string $label, string $field, int $position): void {
-    $paragraphItem = $this->getParagraphsElementItem($field, $position);
-    $this->scrollElementIntoView($paragraphItem);
-    $paragraphItem->clickLink($label);
   }
 
   /**
@@ -403,44 +461,17 @@ class JoinupLayoutParagraphsContext extends RawDrupalContext {
   }
 
   /**
-   * Returns a layout paragraph element by uuid.
+   * Returns a list of paragraphs elements inside provided layout.
    *
-   * @param string $field_alias
-   *   The field designator as defined in
-   *   \Drupal\joinup\Context\JoinupLayoutParagraphsContext::FIELD_MAP.
-   * @param string $uuid
-   *   The uuid of the paragraph.
+   * @param \Behat\Mink\Element\TraversableElement $layout
+   *   Layout paragraph.
    *
-   * @return \Behat\Mink\Element\TraversableElement|null
-   *   The layout paragraph element or null if not found.
+   * @return \Behat\Mink\Element\TraversableElement[]
+   *   The layout paragraphs elements.
    */
-  protected function findLayoutParagraphByUuid(string $field_alias, string $uuid): ?TraversableElement {
-    $paragraphs = $this->getFormFieldLayoutParagraphs($field_alias);
-    $element = NULL;
-    foreach ($paragraphs as $paragraph) {
-      if ($paragraph->hasAttribute('data-uuid') && $paragraph->getAttribute('data-uuid') === $uuid) {
-        $element = $paragraph;
-        break;
-      }
-    }
-    return $element;
-  }
-
-  /**
-   * Returns a layout paragraph element by position.
-   *
-   * @param string $field_alias
-   *   The field designator as defined in
-   *   \Drupal\joinup\Context\JoinupLayoutParagraphsContext::FIELD_MAP.
-   * @param int $position
-   *   The position of the paragraph.
-   *
-   * @return \Behat\Mink\Element\TraversableElement|null
-   *   The layout paragraph element or null if not found.
-   */
-  protected function findLayoutParagraphByPosition(string $field_alias, int $position): ?TraversableElement {
-    $paragraphs = $this->getFormFieldLayoutParagraphs($field_alias);
-    return $paragraphs[$position] ?? NULL;
+  protected function getAllSubParagraphsForLayout(TraversableElement $layout): array {
+    $xpath = '//div[contains(concat(" ", @class, " "), " js-lpb-component ") and not (contains(concat(" ", @class, " "), " lpb-layout "))]';
+    return $layout->findAll('xpath', $xpath) ?? [];
   }
 
   /**

@@ -1,4 +1,4 @@
-@api @group-f
+@api @terms @group-f
 Feature: Github feed paragraph tests.
   The scenarios are split into 4 tests because re-saving the entity would
   invalidate the file cache and the tests would require connecting to Github.
@@ -9,8 +9,11 @@ Feature: Github feed paragraph tests.
       | title | Paragraphs <group> |
       | state | validated          |
     And custom_page content:
-      | title                   | <group>            | state     |
-      | Catalogue of paragraphs | Paragraphs <group> | published |
+      | title                   | <group>            | state     | topic                   |
+      | Catalogue of paragraphs | Paragraphs <group> | published | Statistics and Analysis |
+    And I append "layout" to "field_paragraphs_body" field in "node" entity with following "Catalogue of paragraphs" title:
+      | behavior_settings | a:3:{s:17:"layout_paragraphs";a:4:{s:6:"layout";s:13:"layout_onecol";s:6:"config";a:1:{s:5:"label";s:0:"";}s:11:"parent_uuid";N;s:6:"region";N;}s:16:"background_theme";a:0:{}s:11:"extra_class";a:0:{}} |
+
     When I am logged in as a moderator
     And I go to the edit form of the "Catalogue of paragraphs" "custom page"
     Then I click "Choose component"
@@ -23,18 +26,16 @@ Feature: Github feed paragraph tests.
     And I should see the heading "Pull requests (5)"
     And I should not see the heading "Comments"
 
-    When I open the header local tasks menu
-    And I click "Edit" in the "Entity actions" region
-    Then I click "Edit" in the "Custom page body" for paragraph layout 1
+    When I go to the edit form of the "Catalogue of paragraphs" "custom page"
+    Then I "edit" from the "Custom page body" field the child 1 paragraph of 1 layout
     And I fill in "Type" with "events" in the "Modal content" region
     And I fill in "Number of items" with "5" in the "Modal content" region
     And I press "Save" in the "Modal buttons" region
     And I press "Update"
     And I should see the heading "Activity feed (5)"
 
-    When I open the header local tasks menu
-    And I click "Edit" in the "Entity actions" region
-    Then I click "Edit" in the "Custom page body" for paragraph layout 1
+    When I go to the edit form of the "Catalogue of paragraphs" "custom page"
+    Then I "edit" from the "Custom page body" field the child 1 paragraph of 1 layout
     And I fill in "Type" with "issue" in the "Modal content" region
     And I fill in "Number of items" with "5" in the "Modal content" region
     And I press "Save" in the "Modal buttons" region
@@ -43,9 +44,8 @@ Feature: Github feed paragraph tests.
     And I should see the heading "Issues (5)"
     And I should not see the heading "Comments (5)"
 
-    When I open the header local tasks menu
-    And I click "Edit" in the "Entity actions" region
-    Then I click "Edit" in the "Custom page body" for paragraph layout 1
+    When I go to the edit form of the "Catalogue of paragraphs" "custom page"
+    Then I "edit" from the "Custom page body" field the child 1 paragraph of 1 layout
     And I fill in "Number of items" with "5" in the "Modal content" region
     And I fill in "Number of comments" with "5" in the "Modal content" region
     And I press "Save" in the "Modal buttons" region
@@ -55,9 +55,8 @@ Feature: Github feed paragraph tests.
     And I should see the heading "Comments (1)"
 
     # Test the error message when the repository is invalid.
-    When I open the header local tasks menu
-    And I click "Edit" in the "Entity actions" region
-    Then I click "Edit" in the "Custom page body" for paragraph layout 1
+    When I go to the edit form of the "Catalogue of paragraphs" "custom page"
+    Then I "edit" from the "Custom page body" field the child 1 paragraph of 1 layout
     And I fill in "Repository" with "https://some_invalid_repository.com/nothing" in the "Modal content" region
     And I press "Save" in the "Modal buttons" region
     Then I should see the text "The repository must be a valid GitHub repository."
@@ -79,8 +78,11 @@ Feature: Github feed paragraph tests.
       | title | Paragraphs <group> |
       | state | validated          |
     And custom_page content:
-      | title                   | <group>            | state     |
-      | Catalogue of paragraphs | Paragraphs <group> | published |
+      | title                   | <group>            | state     | topic                   |
+      | Catalogue of paragraphs | Paragraphs <group> | published | Statistics and Analysis |
+    And I append "layout" to "field_paragraphs_body" field in "node" entity with following "Catalogue of paragraphs" title:
+      | behavior_settings | a:3:{s:17:"layout_paragraphs";a:4:{s:6:"layout";s:13:"layout_onecol";s:6:"config";a:1:{s:5:"label";s:0:"";}s:11:"parent_uuid";N;s:6:"region";N;}s:16:"background_theme";a:0:{}s:11:"extra_class";a:0:{}} |
+
     When I am logged in as a facilitator of the "Paragraphs <group>" <group>
     And I go to the edit form of the "Catalogue of paragraphs" "custom page"
     And I click "Choose component"
