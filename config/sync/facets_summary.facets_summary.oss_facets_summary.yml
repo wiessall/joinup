@@ -19,3 +19,9 @@ facets:
     separator: ', '
     show_count: false
     weight: 0
+  oss_source:
+    checked: true
+    label: Source
+    separator: ', '
+    show_count: false
+    weight: 0
