@@ -17,6 +17,8 @@ use Behat\Mink\Exception\ResponseTextException;
 use Drupal\Component\Serialization\Json;
 use Drupal\Component\Serialization\Yaml;
 use Drupal\Core\Cache\Cache;
+use Drupal\Core\Datetime\DrupalDateTime;
+use Drupal\Core\Entity\EntityChangedInterface;
 use Drupal\Core\Site\Settings;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\DrupalExtension\TagTrait;
@@ -689,6 +691,26 @@ class FeatureContext extends RawDrupalContext {
       throw new \Exception($element . " could not be found");
     }
     $findName->click();
+  }
+
+  /**
+   * Clicks on label by text.
+   *
+   * @param string $element
+   *   The label to click.
+   *
+   * @Then I click on label :element
+   *
+   * @throws \Exception
+   */
+  public function iClickOnLabel(string $element): void {
+    $page = $this->getSession()->getPage();
+    $labelElement = $page->find('xpath', "//label[text()='$element']");
+    if (!$labelElement) {
+      throw new \Exception($element . " could not be found");
+    }
+
+    $labelElement->click();
   }
 
   /**
@@ -1878,7 +1900,7 @@ class FeatureContext extends RawDrupalContext {
       throw new ElementNotFoundException($this->getSession()->getDriver(), 'Link', NULL, $link_label);
     }
     if (!$url = $link->getAttribute('href')) {
-      throw new \Exception("The link '${link_label}' misses an 'href' attribute.");
+      throw new \Exception("The link '{$link_label}' misses an 'href' attribute.");
     }
 
     // Get the path part from the URL.
@@ -2379,6 +2401,64 @@ class FeatureContext extends RawDrupalContext {
     static::bypassReadOnlyConfig();
     \Drupal::service('module_installer')->$method($module_name);
     static::restoreReadOnlyConfig();
+  }
+
+  /**
+   * Updates an entity changed time.
+   *
+   * @param string $label
+   *   The entity label.
+   * @param string $bundle
+   *   The entity bundle.
+   * @param string $time
+   *   The time as string.
+   *
+   * @When I update the :label :bundle at :time
+   */
+  public function updateEntityAtDateTime(string $label, string $bundle, string $time): void {
+    $entity_type_id = static::entityTypeAliases()[$bundle];
+    $entity = $this->getEntityByLabel($entity_type_id, $label);
+    if (!$entity instanceof EntityChangedInterface) {
+      throw new \InvalidArgumentException("The $entity_type_id entity type is doesn't have a changed time");
+    }
+
+    $date_time = new DrupalDateTime($time);
+    $entity->setChangedTime($date_time->getTimestamp())->save();
+  }
+
+  /**
+   * Asserts that an entity timestamp field was just updated to current time.
+   *
+   * @param string $label
+   *   The entity label.
+   * @param string $bundle
+   *   The entity bundle.
+   * @param string $field_label
+   *   The field label.
+   *
+   * @Then the :label :bundle :field_label time has just been updated
+   */
+  public function assertTimestampFieldUpdatedToNow(string $label, string $bundle, string $field_label): void {
+    $entity_type_id = static::entityTypeAliases()[$bundle];
+    $entity = $this->getEntityByLabel($entity_type_id, $label);
+    $found = FALSE;
+    foreach (\Drupal::service('entity_field.manager')->getFieldDefinitions($entity_type_id, $entity->bundle()) as $field_name => $definition) {
+      if ($definition->getLabel() == $field_label && $definition->getType() === 'timestamp') {
+        $found = TRUE;
+        break;
+      }
+    }
+    if (!$found) {
+      throw new \InvalidArgumentException("Entity type $entity_type_id doesn't have a '$field_label' field or field is not a timestamp.");
+    }
+    $value = (int) $entity->get($field_name)->value;
+
+    // We accept a fuzziness of 3 seconds because of the latency of tests. It's
+    // the test responsibility to set other fixed timestamps with values not
+    // very close to NOW, in order to avoid collision.
+    if (\Drupal::time()->getRequestTime() - $value > 3) {
+      throw new ExpectationFailedException("The entity wasn't updated recently");
+    }
   }
 
   /**

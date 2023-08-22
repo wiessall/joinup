@@ -1,7 +1,7 @@
 @import "../partials/core";
 
 .abstract {
-  .read-more {
+  .btn.read-more {
     margin-top: $spacer;
     color: darken($brand, 15); // Override button properties
     padding: 0; // Override button properties
