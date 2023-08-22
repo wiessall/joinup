@@ -8,7 +8,6 @@ module:
   asset_distribution: 0
   asset_release: 0
   block: 0
-  bootstrap4_modal: 0
   breakpoint: 0
   cached_computed_field: 0
   cas: 0
@@ -102,12 +101,14 @@ module:
   joinup_like: 0
   joinup_material_design: 0
   joinup_menu: 0
+  joinup_modal: 0
   joinup_news: 0
   joinup_newsletter: 0
   joinup_notification: 0
   joinup_oss_catalogue: 0
   joinup_paragraphs: 0
   joinup_pipeline_log: 0
+  joinup_poll: 0
   joinup_publication_date: 0
   joinup_rdf: 0
   joinup_rdf_graph: 0
@@ -128,6 +129,7 @@ module:
   layout_builder: 0
   layout_builder_component_attributes: 0
   layout_discovery: 0
+  layout_paragraphs: 0
   link: 0
   linkit: 0
   mailsystem: 0
@@ -167,7 +169,11 @@ module:
   path: 0
   path_alias: 0
   pipeline: 0
+<<<<<<< HEAD
   pluginreference: 0
+=======
+  poll: 0
+>>>>>>> origin/develop
   purge: 0
   purge_drush: 0
   purge_processor_cron: 0

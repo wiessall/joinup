@@ -99,6 +99,19 @@ Feature: Collections Overview
     Then I should see the "Jira will be down for maintenance" tile
     And I should not see the "Maintenance page" tile
 
+  @javascript
+  Scenario: Feature icon should be visible for collection's content.
+    Given the following collection:
+      | title | Service Management apps |
+      | state | validated               |
+    And news content:
+      | title  | collection              | state     | featured |
+      | Jira   | Service Management apps | validated | yes      |
+      | Trello | Service Management apps | validated | no       |
+    When I go to the homepage of the "Service Management apps" collection
+    Then the "Jira" tile should be marked as featured
+    But the "Trello" "news" tile should not be marked as featured
+
   Scenario: Users are able to filter collections they have created or that are featured site-wide.
     Given users:
       | Username          |

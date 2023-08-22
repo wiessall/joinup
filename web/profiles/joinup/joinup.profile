@@ -340,7 +340,14 @@ function joinup_preprocess_node(&$variables) {
  *   The variables array.
  */
 function _joinup_preprocess_entity_tiles(array &$variables) {
-  if ($variables['view_mode'] !== 'view_mode_tile') {
+  // View modes where tiles are expected.
+  $tile_view_modes = [
+    'highlighted',
+    'view_mode_tile',
+    'view_mode_tile_horizontal',
+    'carousel',
+  ];
+  if (!in_array($variables['view_mode'], $tile_view_modes)) {
     return;
   }
 

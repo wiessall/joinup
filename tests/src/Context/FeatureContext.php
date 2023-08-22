@@ -692,6 +692,26 @@ class FeatureContext extends RawDrupalContext {
   }
 
   /**
+   * Clicks on label by text.
+   *
+   * @param string $element
+   *   The label to click.
+   *
+   * @Then I click on label :element
+   *
+   * @throws \Exception
+   */
+  public function iClickOnLabel(string $element): void {
+    $page = $this->getSession()->getPage();
+    $labelElement = $page->find('xpath', "//label[text()='$element']");
+    if (!$labelElement) {
+      throw new \Exception($element . " could not be found");
+    }
+
+    $labelElement->click();
+  }
+
+  /**
    * Clicks a contextual link directly, without the need for javascript.
    *
    * @param string $text
