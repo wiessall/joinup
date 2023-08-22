@@ -234,6 +234,7 @@ class SearchApiStatusSubscriber implements EventSubscriberInterface {
       if (($condition instanceof ConditionGroupInterface) && $condition->hasTag('facet:entity_status')) {
         unset($conditions[$key]);
         $hasStatus = TRUE;
+        break;
       }
     }
 
