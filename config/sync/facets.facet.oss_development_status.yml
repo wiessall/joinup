@@ -9,7 +9,7 @@ dependencies:
     - search_api
 id: oss_development_status
 name: 'Development status'
-weight: 0
+weight: -1
 min_count: 1
 missing: false
 missing_label: others
@@ -29,9 +29,9 @@ enable_parent_when_child_gets_disabled: true
 widget:
   type: checkbox
   config:
-    show_numbers: false
+    show_numbers: true
     arbitrary_facet_plugin: _none
-    soft_limit: -1
+    soft_limit: 5
     show_reset_link: false
     reset_text: 'Show all'
     hide_reset_when_no_selection: false
@@ -42,8 +42,15 @@ empty_behavior:
   behavior: none
 only_visible_when_facet_source_is_visible: true
 show_only_one_result: false
-show_title: false
+show_title: true
 processor_configs:
+  count_limit:
+    processor_id: count_limit
+    weights:
+      build: 50
+    settings:
+      minimum_items: 1
+      maximum_items: null
   display_value_widget_order:
     processor_id: display_value_widget_order
     weights:
@@ -54,6 +61,11 @@ processor_configs:
     processor_id: hierarchy_processor
     weights:
       build: 100
+    settings: {  }
+  list_item:
+    processor_id: list_item
+    weights:
+      build: 5
     settings: {  }
   url_processor_handler:
     processor_id: url_processor_handler

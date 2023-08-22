@@ -24,6 +24,7 @@ settings:
   facets_to_include:
     - 'facet_block:oss_development_status'
     - 'facet_block:oss_source'
+    - 'facet_block:oss_category'
   add_js_classes: true
 visibility:
   request_route:

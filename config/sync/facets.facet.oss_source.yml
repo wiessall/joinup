@@ -8,7 +8,7 @@ dependencies:
   module:
     - search_api
 id: oss_source
-name: Source
+name: Catalog
 weight: 0
 min_count: 1
 missing: false
@@ -31,7 +31,7 @@ widget:
   config:
     show_numbers: false
     arbitrary_facet_plugin: _none
-    soft_limit: -1
+    soft_limit: 5
     show_reset_link: false
     reset_text: 'Show all'
     hide_reset_when_no_selection: false
@@ -40,10 +40,17 @@ widget:
       show_more_label: 'Show more'
 empty_behavior:
   behavior: none
-only_visible_when_facet_source_is_visible: true
+only_visible_when_facet_source_is_visible: false
 show_only_one_result: false
-show_title: false
+show_title: true
 processor_configs:
+  count_limit:
+    processor_id: count_limit
+    weights:
+      build: 50
+    settings:
+      minimum_items: 1
+      maximum_items: null
   display_value_widget_order:
     processor_id: display_value_widget_order
     weights:
