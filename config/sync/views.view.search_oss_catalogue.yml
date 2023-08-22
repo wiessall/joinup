@@ -8,6 +8,7 @@ dependencies:
   module:
     - joinup_group
     - search_api
+    - views_block_area
 id: search_oss_catalogue
 label: 'Search oss catalogue'
 module: views
@@ -207,6 +208,55 @@ display:
           break_phrase: false
           not: false
       filters:
+        search_api_fulltext:
+          id: search_api_fulltext
+          table: search_api_index_published
+          field: search_api_fulltext
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: search_api_fulltext
+          operator: and
+          value: ''
+          group: 1
+          exposed: true
+          expose:
+            operator_id: search_api_fulltext_op
+            label: Search
+            description: ''
+            use_operator: false
+            operator: search_api_fulltext_op
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: keys
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+              licence_manager: '0'
+              anonymous: '0'
+              moderator: '0'
+              administrator: '0'
+              rdf_graph_manager: '0'
+            expose_fields: false
+            placeholder: 'Start typing to search…'
+            searched_fields_id: search_api_fulltext_searched_fields
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
+          parse_mode: terms
+          min_length: 3
+          fields: {  }
         entity_bundle:
           id: entity_bundle
           table: search_api_index_published
@@ -251,6 +301,10 @@ display:
             default_group: All
             default_group_multiple: {  }
             group_items: {  }
+      filter_groups:
+        operator: AND
+        groups:
+          1: AND
       style:
         type: default
         options:
@@ -293,7 +347,27 @@ display:
           preserve_facet_query_args: false
           query_tags: {  }
       relationships: {  }
-      header: {  }
+      header:
+        result:
+          id: result
+          table: views
+          field: result
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: result
+          empty: false
+          content: 'SEARCH RESULTS (@total)'
+        views_block_area:
+          id: views_block_area
+          table: views
+          field: views_block_area
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: views_block_area
+          block_id: 'facets_summary_block:oss_facets_summary'
+          empty: false
       footer: {  }
       display_extenders: {  }
     cache_metadata:
@@ -314,6 +388,11 @@ display:
     display_plugin: page
     position: 1
     display_options:
+      cache:
+        type: search_api_tag
+        options: {  }
+      defaults:
+        cache: false
       display_extenders:
         metatag_display_extender:
           metatags: {  }
@@ -336,12 +415,14 @@ display:
     cache_metadata:
       max-age: -1
       contexts:
+        - 'facets_filter:f'
         - 'languages:language_interface'
         - url
         - url.query_args
         - 'url.query_args:sort_by'
         - 'user.node_grants:view'
       tags:
+        - 'config:facets.facet.oss_development_status'
         - 'config:search_api.index.published'
         - 'config:views.view.search_oss_catalogue'
         - 'search_api_list:published'
