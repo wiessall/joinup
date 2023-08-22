@@ -7,6 +7,7 @@ dependencies:
     - field.field.node.custom_page.field_custom_page_logo
     - field.field.node.custom_page.field_paragraphs_body
     - field.field.node.custom_page.field_state
+    - field.field.node.custom_page.field_topic
     - field.field.node.custom_page.og_audience
     - image.style.thumbnail
     - node.type.custom_page
@@ -43,7 +44,7 @@ content:
     settings:
       preview_view_mode: preview
       nesting_depth: 0
-      require_layouts: 0
+      require_layouts: 1
       empty_message: ''
     third_party_settings: {  }
   field_state:
@@ -52,6 +53,12 @@ content:
     region: content
     settings:
       use_transition_label: 1
+    third_party_settings: {  }
+  field_topic:
+    type: options_select
+    weight: 2
+    region: content
+    settings: {  }
     third_party_settings: {  }
   langcode:
     type: language_select

@@ -10,6 +10,7 @@ declare(strict_types = 1);
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Session\AccountInterface;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\joinup_group\Entity\GroupContentInterface;
 use Drupal\paragraphs\ParagraphInterface;
 
@@ -108,6 +109,17 @@ function joinup_paragraphs_get_access(AccessResultInterface $access_result, stri
   }
 
   return $access_result;
+}
+
+/**
+ * Implements hook_preprocess_HOOK().
+ */
+function joinup_paragraphs_preprocess_layout_paragraphs_insert_component_btn(&$variables) {
+  if (isset($variables['title']) &&
+    $variables['title'] instanceof TranslatableMarkup &&
+    $variables['title']->getUntranslatedString() === 'Add section') {
+    $variables['title'] = t('Add layout');
+  }
 }
 
 /**

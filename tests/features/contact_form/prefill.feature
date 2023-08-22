@@ -4,10 +4,12 @@ Feature: Prefill contact form fields
   As a moderator
   I want to be able to prefill some fields of the contact form
 
+  @terms
   Scenario: The subject field can be prefilled through links.
     Given collection:
       | title | CAMSS test community |
       | state | validated            |
+      | topic | HR                   |
     And custom_page content:
       | title                | collection           | state     |
       | IOP page custom page | CAMSS test community | published |
