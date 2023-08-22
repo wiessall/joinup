@@ -52,7 +52,7 @@ Feature: Like/unlike feature.
     And I should see the text "Like (0)" in the "Like block" region
     When I click "Like" in the "Like block" region
     Then a modal should open
-    And I should see the heading "You are not signed in"
+    And I should see the text "You are not signed in"
     And I should see the text "You are not signed in" in the "Modal title"
     And I should see the heading "Sign in or register to like this content" in the "Modal content"
     And I should see the text "Liking content shows your appreciation to content creators and helps other users find good content" in the "Modal content"
@@ -198,9 +198,13 @@ Feature: Like/unlike feature.
     And I click "Add custom page"
 
     And I fill in "Title" with "Carousel of likes"
+    And I add a layout paragraph in the "Custom page body" form field with the following properties:
+      | layout           | one column |
+      | Background theme | light      |
+      | Extra classes    | test-class |
 
-    And I press "List additional actions"
-    And I press "Add Carousel"
+    And I click "Choose component"
+    And I click "Carousel"
 
     Then I select "Solution" from "Available filters"
     And I press "Add and configure filter"
@@ -226,6 +230,8 @@ Feature: Like/unlike feature.
     And I press "Add and configure filter"
     And I fill in "News" with "Likeable news"
 
+    # Save the paragraph through the dialog.
+    And I press "Save" in the "Layout paragraphs dialog buttons" region
     When I press "Publish"
 
     And I should see the "Very liked solution" tile

@@ -16,6 +16,7 @@ dependencies:
     - media
     - meta_entity
     - paragraphs_type_permissions
+    - poll
     - rdf_entity
     - rdf_export
     - rdf_meta_entity
@@ -32,6 +33,7 @@ permissions:
   - 'access comments'
   - 'access content'
   - 'access email confirmation'
+  - 'access polls'
   - 'access tour'
   - 'access user profiles'
   - 'export rdf metadata'
@@ -56,14 +58,21 @@ permissions:
   - 'view paragraph content accordion_item'
   - 'view paragraph content call_to_action'
   - 'view paragraph content carousel'
+  - 'view paragraph content configurable_listing'
   - 'view paragraph content content_listing'
+  - 'view paragraph content entity_reference'
   - 'view paragraph content github_feed'
+  - 'view paragraph content heading'
   - 'view paragraph content iframe'
   - 'view paragraph content image'
   - 'view paragraph content json_map'
+  - 'view paragraph content layout'
+  - 'view paragraph content poll'
+  - 'view paragraph content quote'
   - 'view paragraph content row'
   - 'view paragraph content simple_paragraph'
   - 'view paragraph content testimony'
+  - 'view paragraph content text'
   - 'view paragraph content video'
   - 'view published sitewide alert entities'
   - 'view rdf entity'
