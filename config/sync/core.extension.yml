@@ -169,11 +169,8 @@ module:
   path: 0
   path_alias: 0
   pipeline: 0
-<<<<<<< HEAD
   pluginreference: 0
-=======
   poll: 0
->>>>>>> origin/develop
   purge: 0
   purge_drush: 0
   purge_processor_cron: 0
