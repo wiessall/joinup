@@ -5,6 +5,8 @@
  * Main file of Joinup OSS Catalogue module.
  */
 
+declare(strict_types = 1);
+
 /**
  * Implements hook_views_plugins_argument_alter().
  */
