@@ -108,7 +108,7 @@ display:
           submit_button: 'Search site-wide'
           reset_button: false
           reset_button_label: Reset
-          exposed_sorts_label: 'Sort by'
+          exposed_sorts_label: 'Sort by:'
           expose_sort_order: false
           sort_asc_label: Asc
           sort_desc_label: Desc
@@ -410,7 +410,7 @@ display:
         metatag_display_extender:
           metatags: {  }
           tokenize: false
-      path: rdf_entity/%rdf_entity/search
+      path: eu-oss-catalogue/search
       menu:
         type: 'default tab'
         title: All
