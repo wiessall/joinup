@@ -2616,23 +2616,9 @@ class FeatureContext extends RawDrupalContext {
     $database = \Drupal::database();
     $queue_items = [];
     foreach ($table->getColumnsHash() as $row) {
-      switch ($row['type']) {
-        case 'node':
-          $revision_id = $database->query('SELECT vid FROM {node} WHERE nid = :nid', [':nid' => $row['id']])->fetchField();
-          break;
-
-        case 'paragraph':
-          $revision_id = $database->query('SELECT revision_id FROM {paragraphs_item} WHERE id = :pid', [':pid' => $row['id']])->fetchField();
-          break;
-
-        default:
-          $revision_id = $row['id'];
-          break;
-      }
-
       $query = $database->select('queue', 'queue');
       $query->fields('queue', ['item_id', 'data']);
-      $query->condition('queue.data', '%' . $revision_id . '%', 'LIKE');
+      $query->condition('queue.data', '%' . $row['id'] . '%', 'LIKE');
       $query->condition('queue.name', $queue_name);
       $queue_results = $query->execute();
       foreach ($queue_results as $result) {

@@ -139,7 +139,7 @@ final class MigrateMedia extends QueueWorkerBase implements ContainerFactoryPlug
               ->condition('revision_id', $revision_id)
               ->execute();
           }
-      }
+        }
       }
     }
   }
