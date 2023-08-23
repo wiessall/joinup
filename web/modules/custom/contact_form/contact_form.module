@@ -17,8 +17,6 @@ use Drupal\Core\Url;
 use Drupal\contact_form\ContactFormEvents;
 use Drupal\joinup_notification\Event\NotificationEvent;
 use Drupal\user\Entity\User;
-use Symfony\Component\Mime\Address;
-use Symfony\Component\Mime\Header\MailboxHeader;
 
 /**
  * Implements hook_preprocess_HOOK() for html.html.twig.
@@ -162,22 +160,9 @@ function contact_form_mail_alter(&$message) {
     return;
   }
 
-  $config_factory = \Drupal::service('config.factory');
-  $from = $config_factory->get('contact_form.settings')->get('contact_form_from');
+  $from = \Drupal::service('config.factory')->get('contact_form.settings')->get('contact_form_from');
   if (!empty($from) && \Drupal::service('email.validator')->isValid($from)) {
-    // We have to properly set "from" metadata in mail and mail alter hook.
-    // @see MailManager::doMail().
-    // To prevent email from looking like spam, the addresses in the Sender and
-    // Return-Path headers should have a domain authorized to use the
-    // originating SMTP server.
-    $headers['Sender'] = $headers['Return-Path'] = $from;
-    $mailbox = new MailboxHeader('From', new Address($from, $config_factory->get('system.site')->get('name') ?: ''));
-    $headers['From'] = $mailbox->getBodyAsString();
-    // @todo Decide if we want to change "reply-to" too.
     $message['from'] = $from;
-    foreach ($headers as $name => $value) {
-      $message['headers'][$name] = $value;
-    }
   }
 }
 
