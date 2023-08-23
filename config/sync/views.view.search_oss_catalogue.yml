@@ -8,6 +8,7 @@ dependencies:
   module:
     - joinup_group
     - search_api
+    - search_api_spellcheck
     - views_autosubmit
     - views_block_area
 id: search_oss_catalogue
@@ -24,7 +25,7 @@ display:
     display_plugin: default
     position: 0
     display_options:
-      title: 'Advanced search'
+      title: 'Search in European Open-source Software Solutions Catalogue'
       fields:
         body:
           id: body
@@ -85,7 +86,7 @@ display:
         type: full
         options:
           offset: 0
-          items_per_page: 12
+          items_per_page: 20
           total_pages: null
           id: 0
           tags:
@@ -155,21 +156,8 @@ display:
           plugin_id: search_api
           order: DESC
           expose:
-            label: 'Last Updated Date'
+            label: 'Last update'
             field_identifier: changed
-          exposed: true
-        entity_created:
-          id: entity_created
-          table: search_api_index_published
-          field: entity_created
-          relationship: none
-          group_type: group
-          admin_label: ''
-          plugin_id: search_api
-          order: DESC
-          expose:
-            label: 'Creation Date'
-            field_identifier: created
           exposed: true
       arguments:
         entity_groups:
