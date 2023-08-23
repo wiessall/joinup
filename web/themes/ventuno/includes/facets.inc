@@ -28,10 +28,12 @@ function ventuno_preprocess_facets_item_list__archived__status(array &$variables
  */
 function ventuno_theme_suggestions_facets_item_list_alter(array &$suggestions, array $variables): void {
   $facet = $variables['facet'];
-  if ($facet instanceof FacetInterface) {
-    // Adds a new template in all 'entity_status' except search page.
-    if ($facet->getFieldIdentifier() === 'entity_status' && $facet->id() !== 'status') {
-      $suggestions[] = 'facets_item_list__archived__status';
-    }
+  // Adds a new template in all 'entity_status' except search page.
+  if (
+    $facet instanceof FacetInterface &&
+    $facet->getFieldIdentifier() === 'entity_status' &&
+    $facet->id() !== 'status'
+  ) {
+    $suggestions[] = 'facets_item_list__archived__status';
   }
 }
