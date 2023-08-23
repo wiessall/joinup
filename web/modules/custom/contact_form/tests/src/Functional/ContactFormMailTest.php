@@ -86,10 +86,10 @@ class ContactFormMailTest extends JoinupMailFunctionalTestBase {
           'headers' => [
             'content-transfer-encoding' => '8Bit',
             'content-type' => 'text/html',
-            'from' => 'Joinup <digit-joinup@ec.europa.eu>',
+            'from' => 'Joinup <joinup@example.com>',
             'mime-version' => '1.0',
-            'return-path' => 'digit-joinup@ec.europa.eu',
-            'sender' => 'digit-joinup@ec.europa.eu',
+            'return-path' => 'joinup@example.com',
+            'sender' => 'joinup@example.com',
             'x-mailer' => 'Drupal',
           ],
           'plain' => self::NOTIFICATION_PLAIN,
