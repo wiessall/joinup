@@ -8,6 +8,7 @@ dependencies:
   module:
     - joinup_group
     - search_api
+    - views_autosubmit
     - views_block_area
 id: search_oss_catalogue
 label: 'Search oss catalogue'
@@ -23,7 +24,7 @@ display:
     display_plugin: default
     position: 0
     display_options:
-      title: 'Search OSS catalogue'
+      title: 'Advanced search'
       fields:
         body:
           id: body
@@ -102,15 +103,16 @@ display:
             offset_label: Offset
           quantity: 9
       exposed_form:
-        type: basic
+        type: autosubmit
         options:
-          submit_button: Apply
+          submit_button: 'Search site-wide'
           reset_button: false
           reset_button_label: Reset
           exposed_sorts_label: 'Sort by'
           expose_sort_order: false
           sort_asc_label: Asc
           sort_desc_label: Desc
+          autosubmit_hide: true
       access:
         type: none
         options: {  }
@@ -344,10 +346,20 @@ display:
         options:
           bypass_access: false
           skip_access: false
-          preserve_facet_query_args: false
+          preserve_facet_query_args: true
           query_tags: {  }
       relationships: {  }
       header:
+        views_block_area_1:
+          id: views_block_area_1
+          table: views
+          field: views_block_area
+          relationship: none
+          group_type: group
+          admin_label: 'Exposed search form'
+          plugin_id: views_block_area
+          block_id: 'views_exposed_filter_block:search_oss_catalogue-search'
+          empty: true
         result:
           id: result
           table: views
@@ -364,7 +376,7 @@ display:
           field: views_block_area
           relationship: none
           group_type: group
-          admin_label: ''
+          admin_label: 'OSS facets summary'
           plugin_id: views_block_area
           block_id: 'facets_summary_block:oss_facets_summary'
           empty: false
@@ -393,6 +405,7 @@ display:
         options: {  }
       defaults:
         cache: false
+      exposed_block: true
       display_extenders:
         metatag_display_extender:
           metatags: {  }
