@@ -1,3 +1,4 @@
+# todo: Remove this code in ISAICP-8015.
 ckeditor5-disable:
   js:
     js/ckeditor5-disable.js: {}
