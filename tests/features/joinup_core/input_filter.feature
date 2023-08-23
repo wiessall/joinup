@@ -82,7 +82,7 @@ Feature: Input filter
     And I click "Edit" in the "Entity actions" region
     Then the paragraph formats in the "Content" field should not contain the "h1, h5, h6" formats
 
-  # Restore this test after CK5 deploy.
+  # todo: Restore this test in ISAICP-8015.
   @wip @backtrackLimit
   Scenario: Ensure really long HTML tag (e.g. < img > with src:data/image...) does not generate a fatal error.
     Given news content:
