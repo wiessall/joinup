@@ -62,7 +62,8 @@ function ventuno_form_join_group_form_alter(array &$form, FormStateInterface $fo
 function ventuno_form_views_exposed_form_alter(array &$form, FormStateInterface $form_state, string $form_id): void {
   $route_name = \Drupal::routeMatch()->getRouteName();
   $view = $form_state->get('view');
-  if ($view->id() === 'search') {
+
+  if (in_array($view->id(), ['search', 'search_oss_catalogue'], TRUE)) {
     $form['keys']['#theme'] = 'input__search_expose_form';
     $form['keys']['#title_display'] = 'invisible';
     $form['keys']['#attributes']['placeholder'] = t('Start typing to search…');
