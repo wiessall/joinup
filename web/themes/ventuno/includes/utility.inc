@@ -149,7 +149,6 @@ function _ventuno_preprocess_tile(array &$variables, string $entity_type_id): vo
       break;
 
     case 'oss_solution':
-      $variables['text'] = $variables['content']['oss_short_description'] ?? NULL;
       unset($variables['info']);
       break;
 
