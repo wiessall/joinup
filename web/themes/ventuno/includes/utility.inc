@@ -43,6 +43,7 @@ function _ventuno_smart_trim(string $string, int $length, bool $ellipsis = TRUE)
  *   The entity type ID.
  */
 function _ventuno_preprocess_tile(array &$variables, string $entity_type_id): void {
+  /** @var \Drupal\Core\Entity\EntityInterface $entity */
   $entity = $variables[$entity_type_id];
   /** @var \Drupal\Core\Datetime\DateFormatterInterface $date_formatter */
   $date_formatter = Drupal::service('date.formatter');
@@ -145,6 +146,11 @@ function _ventuno_preprocess_tile(array &$variables, string $entity_type_id): vo
       else {
         $variables['info']['label'] = t('Physical event');
       }
+      break;
+
+    case 'oss_solution':
+      $variables['text'] = $variables['content']['oss_short_description'] ?? NULL;
+      unset($variables['info']);
       break;
 
     case 'tallinn_report':
