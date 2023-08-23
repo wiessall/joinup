@@ -73,6 +73,15 @@ function ventuno_form_views_exposed_form_alter(array &$form, FormStateInterface 
     $form['#id'] = Html::getUniqueId($form['#id']);
   }
 
+  if ($view->id() === 'search_oss_catalogue') {
+    $form['results_count'] = [
+      '#type' => 'item',
+      '#weight' => 0,
+      '#markup' => '',
+    ];
+    $form['#attributes']['class'][] = 'view-search';
+  }
+
   if ($route_name != 'view.search.page_1' && $view->id() === 'search') {
     // When re-using the exposed search form anywhere other than the search
     // page, hide the "Sort by" select.
