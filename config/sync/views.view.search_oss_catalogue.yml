@@ -106,7 +106,7 @@ display:
       exposed_form:
         type: autosubmit
         options:
-          submit_button: 'Search site-wide'
+          submit_button: 'Search OSS catalogue'
           reset_button: false
           reset_button_label: Reset
           exposed_sorts_label: 'Sort by:'
@@ -212,7 +212,7 @@ display:
           exposed: true
           expose:
             operator_id: search_api_fulltext_op
-            label: Search
+            label: Search catalogue
             description: ''
             use_operator: false
             operator: search_api_fulltext_op
