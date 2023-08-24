@@ -17,7 +17,6 @@ use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Url;
 use Drupal\eif\EifInterface;
 use Drupal\eif\Form\EifWrapperInlineForm;
-use Drupal\eif\Plugin\views\argument\EifGroupArgument;
 use Drupal\field\FieldConfigInterface;
 use Drupal\og\OgGroupAudienceHelperInterface;
 use Drupal\rdf_meta_entity\Entity\RdfMetaEntityInterface;
@@ -77,12 +76,10 @@ function template_preprocess_eif_wrapper(array &$variables): void {
  */
 function eif_views_plugins_argument_alter(array &$plugins): void {
   // We don't want to apply a group contextual filter for eif_recommendation
-  // view. The contextual filter is added only for validation. Swapping the
-  // class to treat this exception.
+  // view. The contextual filter is added only for validation.
   // @see joinup_group_views_data_alter()
   // @see \Drupal\joinup_group\Plugin\views\argument\SearchApiGroupArgument
-  // @see \Drupal\eif\Plugin\views\argument\EifGroupArgument
-  $plugins['search_api_group']['class'] = EifGroupArgument::class;
+  $plugins['search_api_group']['exceptions'][] = 'eif_recommendation';
 }
 
 /**

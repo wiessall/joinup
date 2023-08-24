@@ -1,0 +1,34 @@
+uuid: ee0fc817-24a3-42e2-8c21-e254a2807658
+langcode: en
+status: true
+dependencies:
+  module:
+    - facets_block
+    - joinup_core
+  theme:
+    - ventuno
+id: ventuno_ossfacetsblock
+theme: ventuno
+region: sidebar
+weight: 0
+provider: null
+plugin: facets_block
+settings:
+  id: facets_block
+  label: 'Facets block for OSS search page'
+  label_display: '0'
+  provider: facets_block
+  show_title: false
+  exclude_empty_facets: true
+  hide_empty_block: false
+  facets_to_include:
+    - 'facet_block:oss_development_status'
+    - 'facet_block:oss_source'
+    - 'facet_block:oss_category'
+  add_js_classes: true
+visibility:
+  request_route:
+    id: request_route
+    negate: false
+    routes:
+      - view.search_oss_catalogue.search
