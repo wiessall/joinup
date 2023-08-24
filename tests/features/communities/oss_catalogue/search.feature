@@ -1,4 +1,4 @@
-@api @terms @group_e
+@api @group_e
 Feature: OSS catalogue search
   As a user of the site I can find solutions through the OSS catalogue search.
 
