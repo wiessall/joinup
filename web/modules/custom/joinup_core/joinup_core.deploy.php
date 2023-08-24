@@ -586,7 +586,7 @@ function joinup_core_deploy_109607(array &$sandbox): string {
 
   if (empty($sandbox['tasks'])) {
     $sql = <<<QUERY
-      SELECT DISTINCT n.vid, g.og_audience_target_id, n.uid
+      SELECT DISTINCT b.entity_id, g.og_audience_target_id, n.uid
       FROM {node_revision__body} b
       INNER JOIN {node__og_audience} g ON b.entity_id = g.entity_id
       INNER JOIN {node_field_data} n ON b.entity_id = n.nid
