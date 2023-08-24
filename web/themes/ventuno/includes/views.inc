@@ -24,6 +24,12 @@ function ventuno_theme_suggestions_views_view_grid_alter(array &$suggestions, ar
 function ventuno_theme_suggestions_views_view_alter(array &$suggestions, array $variables): void {
   $view = $variables['view'];
   $id = $view->storage->id();
+
+  // Reuse search template for OSS catalogue search page.
+  if ($id === 'search_oss_catalogue') {
+    $suggestions[] = 'views_view__search__page';
+  }
+
   $suggestions[] = 'views_view__' . $id;
 }
 
@@ -34,4 +40,12 @@ function ventuno_theme_suggestions_views_view_unformatted_alter(array &$suggesti
   $view = $variables['view'];
   $id = $view->storage->id();
   $suggestions[] = 'views_view_unformatted__' . $id;
+}
+
+/**
+ * Implements hook_preprocess_HOOK().
+ */
+function ventuno_preprocess_views_view__search__page(&$variables) {
+  // Add necessary class for OSS search page.
+  $variables['attributes']['class'][] = 'view-search';
 }
