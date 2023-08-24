@@ -11,6 +11,9 @@ use Drupal\DrupalExtension\Context\RawDrupalContext;
  */
 class JoinupOSSSolutionContext extends RawDrupalContext {
 
+  /**
+   * OSS search page path.
+   */
   protected const SEARCH_PATH = 'eu-oss-catalogue/search';
 
   /**
