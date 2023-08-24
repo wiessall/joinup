@@ -397,6 +397,9 @@ trait TraversingTrait {
       'solution topic' => 'solution_topic',
       'spatial coverage' => 'spatial_coverage',
       'topic' => 'topic',
+      'OSS category' => 'oss_category',
+      'OSS development status' => 'oss_development_status',
+      'OSS catalog' => 'oss_source',
     ];
 
     if (!isset($mappings[$alias])) {

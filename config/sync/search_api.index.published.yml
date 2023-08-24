@@ -15,6 +15,7 @@ dependencies:
     - field.storage.meta_entity.field_pinned_in
     - field.storage.node.field_scope
     - field.storage.node.field_short_title
+    - field.storage.node.oss_categories
     - field.storage.node.oss_development_status
     - field.storage.node.oss_source
     - field.storage.meta_entity.count
@@ -732,6 +733,17 @@ field_settings:
       module:
         - meta_entity
         - rdf_entity
+  oss_category:
+    label: Category
+    datasource_id: 'entity:node'
+    property_path: 'oss_categories:entity:name'
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.oss_categories
+      module:
+        - rdf_taxonomy
+        - taxonomy
   oss_development_status:
     label: 'Development status'
     datasource_id: 'entity:node'
@@ -984,6 +996,7 @@ datasource_settings:
         - eif_interoperability_layer
         - eif_principle
         - eif_recommendation
+        - oss_category
         - topic
     languages:
       default: true

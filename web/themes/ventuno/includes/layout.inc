@@ -114,6 +114,12 @@ function ventuno_theme_suggestions_page_alter(array &$suggestions, array $variab
     $content_type = $node->bundle();
     $suggestions[] = 'page__' . $content_type;
   }
+
+  // Reuse search template for OSS catalogue search page.
+  if (($view_id = \Drupal::routeMatch()->getParameter('view_id'))
+    && $view_id === 'search_oss_catalogue') {
+    $suggestions[] = 'page__search';
+  }
 }
 
 /**
