@@ -367,21 +367,18 @@ function _ventuno_get_author(CommunityContentInterface $node): array {
 function _ventuno_terms_to_badges(array $terms, TranslatableMarkup $extraLabel, int $maxNumberOfBadges = 2): array {
   $badges = [];
 
-  $numOfItems = count($terms);
-  $extraItems = $numOfItems - $maxNumberOfBadges;
-
   foreach ($terms as $term) {
-    if (count($badges) === $maxNumberOfBadges) {
-      break;
-    }
-
     $badges[] = [
       'label' => $term->label(),
       'topic_id' => $term->id(),
     ];
   }
 
-  if ($extraItems > 0) {
+  $numOfItems = count($terms);
+  // Display the actual topic instead of "+ 1 topic".
+  if ($numOfItems > $maxNumberOfBadges + 1) {
+    $extraItems = $numOfItems - $maxNumberOfBadges;
+    $badges = array_splice($badges, 0, $maxNumberOfBadges);
     $badges[] = [
       'label' => '+' . $extraItems . ' ' . $extraLabel,
       'overflow' => TRUE,
