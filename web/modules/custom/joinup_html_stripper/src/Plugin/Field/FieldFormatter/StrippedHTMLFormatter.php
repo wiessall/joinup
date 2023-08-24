@@ -105,7 +105,7 @@ class StrippedHTMLFormatter extends FormatterBase {
       }
 
       $element[$delta] = [
-        '#markup' => $output,
+        '#markup' => htmlspecialchars_decode($output),
       ];
     }
 

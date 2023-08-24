@@ -610,7 +610,7 @@ function joinup_core_deploy_109607(array &$sandbox): string {
           FROM {paragraphs_item_field_data} t
           INNER JOIN cte ON t.parent_id = cte.id
       )
-      SELECT DISTINCT r.parent_id, o.og_audience_target_id, n.uid
+      SELECT DISTINCT b.entity_id, o.og_audience_target_id, n.uid
         FROM cte
         INNER JOIN {node__og_audience} o ON cte.topmost_nid = o.entity_id
         INNER JOIN {node_field_data} n ON cte.topmost_nid = n.nid
