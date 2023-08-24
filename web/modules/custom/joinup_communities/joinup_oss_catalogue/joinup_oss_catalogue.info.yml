@@ -6,4 +6,5 @@ package: Joinup communities
 
 dependencies:
   - eu_oss_catalogue:eu_oss_catalogue
+  - joinup_bundle_class:joinup_bundle_class
   - message:message

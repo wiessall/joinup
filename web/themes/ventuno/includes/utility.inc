@@ -72,27 +72,9 @@ function _ventuno_preprocess_tile(array &$variables, string $entity_type_id): vo
     : [];
 
   // Topics.
-  // Max number of topics displayed.
-  $max_topics = 2;
   $topics = ($entity instanceof TopicReferencingEntityInterface) ? $entity->getTopics() : NULL;
   if ($topics) {
-    $variables['badges'] = [];
-    foreach ($topics as $topic) {
-      $variables['badges'][] = [
-        'label' => $topic->label(),
-        'topic_id' => $topic->id(),
-      ];
-    }
-    $num_of_items = count($topics);
-    // Display the actual topic instead of "+ 1 topic".
-    if ($num_of_items > $max_topics + 1) {
-      $extra_items = $num_of_items - $max_topics;
-      $variables['badges'] = array_splice($variables['badges'], 0, $max_topics);
-      $variables['badges'][] = [
-        'label' => '+' . $extra_items . ' ' . t('topics'),
-        'overflow' => TRUE,
-      ];
-    }
+    $variables['badges'] = _ventuno_terms_to_badges($topics, t('topics'));
   }
 
   // Bundle label and icon.
@@ -150,6 +132,8 @@ function _ventuno_preprocess_tile(array &$variables, string $entity_type_id): vo
 
     case 'oss_solution':
       unset($variables['info']);
+      $variables['badges'] = _ventuno_terms_to_badges($entity->getCategories(), t('categories'));
+
       break;
 
     case 'tallinn_report':
@@ -365,4 +349,44 @@ function _ventuno_get_author(CommunityContentInterface $node): array {
   $view_builder = \Drupal::entityTypeManager()->getViewBuilder('user');
   $author = $node->get('uid')->entity;
   return $view_builder->view($author, 'inline');
+}
+
+/**
+ * Converts terms to badges.
+ *
+ * @param \Drupal\taxonomy\TermInterface[] $terms
+ *   Entity terms.
+ * @param \Drupal\Core\StringTranslation\TranslatableMarkup $extraLabel
+ *   Extra label.
+ * @param int $maxNumberOfBadges
+ *  Max number of badges.
+ *
+ * @return array
+ *   Render array.
+ */
+function _ventuno_terms_to_badges(array $terms, TranslatableMarkup $extraLabel, int $maxNumberOfBadges = 2): array {
+  $badges = [];
+
+  $numOfItems = count($terms);
+  $extraItems = $numOfItems - $maxNumberOfBadges;
+
+  foreach ($terms as $term) {
+    if (count($badges) === $maxNumberOfBadges) {
+      break;
+    }
+
+    $badges[] = [
+      'label' => $term->label(),
+      'topic_id' => $term->id(),
+    ];
+  }
+
+  if ($extraItems > 0) {
+    $badges[] = [
+      'label' => '+' . $extraItems . ' ' . $extraLabel,
+      'overflow' => TRUE,
+    ];
+  }
+
+  return $badges;
 }
