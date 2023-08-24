@@ -359,7 +359,7 @@ function _ventuno_get_author(CommunityContentInterface $node): array {
  * @param \Drupal\Core\StringTranslation\TranslatableMarkup $extraLabel
  *   Extra label.
  * @param int $maxNumberOfBadges
- *  Max number of badges.
+ *   Max number of badges.
  *
  * @return array
  *   Render array.
