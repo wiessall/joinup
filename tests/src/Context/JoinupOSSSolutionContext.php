@@ -7,9 +7,9 @@ namespace Drupal\joinup\Context;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 
 /**
- * Behat step definitions for testing OSS searches.
+ * Behat step definitions for testing OSS solution.
  */
-class JoinupOSSCatalogueContext extends RawDrupalContext {
+class JoinupOSSSolutionContext extends RawDrupalContext {
 
   protected const SEARCH_PATH = 'eu-oss-catalogue/search';
 
