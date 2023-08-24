@@ -28,7 +28,9 @@ dependencies:
     - field.field.node.oss_solution.oss_used_by
     - node.type.oss_solution
   module:
+    - joinup_html_stripper
     - layout_builder
+    - template_suggestion
     - user
 third_party_settings:
   layout_builder:
@@ -38,7 +40,17 @@ id: node.oss_solution.view_mode_tile_horizontal
 targetEntityType: node
 bundle: oss_solution
 mode: view_mode_tile_horizontal
-content: {  }
+content:
+  oss_short_description:
+    type: joinup_html_stripper_stripped
+    label: hidden
+    settings:
+      trim_length: 600
+    third_party_settings:
+      template_suggestion:
+        template_suggestion: ''
+    weight: 0
+    region: content
 hidden:
   langcode: true
   links: true
@@ -59,7 +71,6 @@ hidden:
   oss_publiccode_yml_content: true
   oss_publiccode_yml_version: true
   oss_release_date: true
-  oss_short_description: true
   oss_software_type: true
   oss_software_version: true
   oss_source: true
