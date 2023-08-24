@@ -47,6 +47,7 @@
   - Drupal\joinup\Context\JoinupNewsContext
   - Drupal\joinup\Context\JoinupNewsletterContext
   - Drupal\joinup\Context\JoinupNotificationContext
+  - Drupal\joinup\Context\JoinupOSSCatalogueContext
   - Drupal\joinup\Context\JoinupParagraphsContext
   - Drupal\joinup\Context\JoinupSearchContext
   - Drupal\joinup\Context\JoinupSeoContext
