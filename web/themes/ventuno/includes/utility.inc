@@ -67,7 +67,7 @@ function _ventuno_preprocess_tile(array &$variables, string $entity_type_id): vo
   }
 
   // Image.
-  $variables['image'] = ($entity instanceof LogoInterface) && $entity->getLogoAsFile()
+  $variables['image'] = $entity instanceof LogoInterface
     ? $entity->getLogoAsRenderArray($variables['view_mode'])
     : [];
 
