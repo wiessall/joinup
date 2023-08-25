@@ -139,7 +139,18 @@ class EuOssCatalogue implements EuOssCatalogueInterface {
     // Finally, allow 3rd-party to add their alters.
     $this->eventDispatcher->dispatch(new EuOssSolutionPreSaveEvent($solution, $fetchedSolution));
 
-    $solution->save();
+    $operationResult = $solution->save();
+
+    $loggerArguments = [
+      '@solution' => $solution->label(),
+    ];
+    switch ($operationResult) {
+      case SAVED_NEW:
+        $this->logger->info('Solution @solution was created.', $loggerArguments);
+        break;
+      default:
+        $this->logger->info('Solution @solution was updated.', $loggerArguments);
+    }
 
     return $solution;
   }
