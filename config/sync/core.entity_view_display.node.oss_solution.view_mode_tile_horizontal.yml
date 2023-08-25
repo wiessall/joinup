@@ -27,7 +27,9 @@ dependencies:
     - field.field.node.oss_solution.oss_source
     - field.field.node.oss_solution.oss_used_by
     - node.type.oss_solution
+    - responsive_image.styles.tile
   module:
+    - imagecache_external
     - joinup_html_stripper
     - layout_builder
     - template_suggestion
@@ -41,6 +43,17 @@ targetEntityType: node
 bundle: oss_solution
 mode: view_mode_tile_horizontal
 content:
+  oss_logo:
+    type: imagecache_external_responsive_image
+    label: hidden
+    settings:
+      imagecache_external_link: ''
+      imagecache_external_responsive_style: tile
+    third_party_settings:
+      template_suggestion:
+        template_suggestion: ''
+    weight: 1
+    region: content
   oss_short_description:
     type: joinup_html_stripper_stripped
     label: hidden
@@ -61,7 +74,6 @@ hidden:
   oss_git_url: true
   oss_landing_url: true
   oss_license: true
-  oss_logo: true
   oss_long_description: true
   oss_main_copyright_owner: true
   oss_maintenance_contacts: true

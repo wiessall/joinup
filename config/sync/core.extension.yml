@@ -77,6 +77,7 @@ module:
   iframe: 0
   image: 0
   image_library_widget: 0
+  imagecache_external: 0
   inline_entity_form: 0
   interoperable_europe: 0
   isa2_analytics: 0

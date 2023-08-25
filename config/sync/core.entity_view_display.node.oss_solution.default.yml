@@ -25,13 +25,16 @@ dependencies:
     - field.field.node.oss_solution.oss_software_version
     - field.field.node.oss_solution.oss_source
     - field.field.node.oss_solution.oss_used_by
+    - image.style.logo
     - node.type.oss_solution
   module:
     - datetime
+    - imagecache_external
     - joinup_core
     - link
     - options
     - pluginreference
+    - template_suggestion
     - user
 id: node.oss_solution.default
 targetEntityType: node
@@ -101,15 +104,14 @@ content:
     weight: 16
     region: content
   oss_logo:
-    type: link
+    type: imagecache_external_responsive_image
     label: above
     settings:
-      trim_length: 80
-      url_only: false
-      url_plain: false
-      rel: ''
-      target: ''
-    third_party_settings: {  }
+      imagecache_external_link: ''
+      imagecache_external_responsive_style: ''
+    third_party_settings:
+      template_suggestion:
+        template_suggestion: ''
     weight: 7
     region: content
   oss_long_description:
@@ -194,11 +196,14 @@ content:
     weight: 13
     region: content
   oss_software_version:
-    type: string
+    type: imagecache_external_image
     label: above
     settings:
-      link_to_entity: false
-    third_party_settings: {  }
+      imagecache_external_link: ''
+      imagecache_external_style: logo
+    third_party_settings:
+      template_suggestion:
+        template_suggestion: ''
     weight: 6
     region: content
   oss_source:
