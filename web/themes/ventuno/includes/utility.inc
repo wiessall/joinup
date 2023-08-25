@@ -67,7 +67,7 @@ function _ventuno_preprocess_tile(array &$variables, string $entity_type_id): vo
   }
 
   // Image.
-  $variables['image'] = $entity instanceof LogoInterface
+  $variables['image'] = ($entity instanceof LogoInterface) && !$entity->get($entity->getLogoFieldName())->isEmpty()
     ? $entity->getLogoAsRenderArray($variables['view_mode'])
     : [];
 
@@ -133,6 +133,10 @@ function _ventuno_preprocess_tile(array &$variables, string $entity_type_id): vo
     case 'oss_solution':
       unset($variables['info']);
       $variables['badges'] = _ventuno_terms_to_badges($entity->getCategories(), t('categories'));
+      // Logo URL is invalid, lets use default image provided by theme.
+      if (!isset($variables['image']['0'])) {
+        unset($variables['image']);
+      }
 
       break;
 
