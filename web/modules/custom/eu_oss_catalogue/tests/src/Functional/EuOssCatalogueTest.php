@@ -154,8 +154,8 @@ class EuOssCatalogueTest extends BrowserTestBase {
     $this->assertSame('0049689887764', $contact2->get('oss_contact_phone')->value);
     $this->assertSame('On The Sea', $contact2->get('oss_contact_affiliation')->value);
 
-    $this->assertEquals(1, $this->countLogMessages('Solution @solution was created.', 'a:1:{s:9:"@solution";s:10:"Solution 1";}'),  'Creation log entry for Solution 1');
-    $this->assertEquals(1, $this->countLogMessages('Solution @solution was created.', 'a:1:{s:9:"@solution";s:10:"Solution 2";}'),  'Creation log entry for Solution 2');
+    $this->assertEquals(1, $this->countLogMessages('Solution @solution was created.', 'a:1:{s:9:"@solution";s:10:"Solution 1";}'), 'Creation log entry for Solution 1');
+    $this->assertEquals(1, $this->countLogMessages('Solution @solution was created.', 'a:1:{s:9:"@solution";s:10:"Solution 2";}'), 'Creation log entry for Solution 2');
 
     // Re-run the process and update one solution from a new source-provider.
     $service->fetch('testing_provider');
@@ -336,6 +336,8 @@ class EuOssCatalogueTest extends BrowserTestBase {
    *
    * @param string $message
    *   Searched message.
+   * @param string $variables
+   *   Searched variables.
    *
    * @return int
    *   Number of logged messaged.

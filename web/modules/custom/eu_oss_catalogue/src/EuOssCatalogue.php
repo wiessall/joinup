@@ -148,6 +148,7 @@ class EuOssCatalogue implements EuOssCatalogueInterface {
       case SAVED_NEW:
         $this->logger->info('Solution @solution was created.', $loggerArguments);
         break;
+
       default:
         $this->logger->info('Solution @solution was updated.', $loggerArguments);
     }
