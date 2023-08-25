@@ -16,10 +16,6 @@ trait LogoTrait {
    * {@inheritdoc}
    */
   public function getLogoAsRenderArray($display_options = []): array {
-    if ($this->get($this->getLogoFieldName())->isEmpty()) {
-      return [];
-    }
-
     return $this->get($this->getLogoFieldName())->view($display_options);
   }
 
