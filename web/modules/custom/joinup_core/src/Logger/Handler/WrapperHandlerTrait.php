@@ -29,7 +29,7 @@ trait WrapperHandlerTrait {
    */
   public function __construct(string $type, StateInterface $state) {
     $this->settings = $state->get('joinup.log_alerts', [$type => []])[$type] + static::getDefaultSettings();
-    parent::__construct(...array_values($this->settings));
+    parent::__construct(...$this->settings);
   }
 
   /**

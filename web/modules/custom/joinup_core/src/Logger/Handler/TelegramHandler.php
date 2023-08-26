@@ -21,9 +21,9 @@ class TelegramHandler extends TelegramBotHandler {
    */
   public static function getDefaultSettings(): array {
     return [
-      'api_key' => '',
-      'chat_id' => '',
-      'level' => Logger::WARNING,
+      'apiKey' => '',
+      'channel' => '',
+      'level' => Logger::ERROR,
     ];
   }
 
@@ -31,7 +31,10 @@ class TelegramHandler extends TelegramBotHandler {
    * {@inheritdoc}
    */
   public function isHandling(array $record): bool {
-    return parent::isHandling($record) && !empty($this->settings['api_key']) && !empty($this->settings['chat_id']) && isset(static::getSeverityLevels()[$this->settings['level']]);
+    return parent::isHandling($record)
+      && !empty($this->settings['apiKey'])
+      && !empty($this->settings['channel'])
+      && isset(static::getSeverityLevels()[$this->settings['level']]);
   }
 
 }
