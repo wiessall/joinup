@@ -1,7 +1,7 @@
 parameters:
 
   monolog.channel_handlers:
-    default: ['default_handler', 'mail', 'telegram']
+    default: ['default_handler']
     php: ['php_handler', 'mail', 'telegram']
 
   monolog.processors:
