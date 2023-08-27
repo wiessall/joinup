@@ -77,13 +77,15 @@ class TelegramHandler extends TelegramBotHandler implements DestructableInterfac
     // Try to acquire a lock as other requests might have also started to send
     // messages to Telegram. Twenty seconds might look too much but, in fact,
     // it's the penalty time that Telegram sets when the limits are offended.
+    $wait = FALSE;
     while (!$this->lockBackend->acquire(self::LOCK_NAME, 20.0)) {
       $this->lockBackend->wait(self::LOCK_NAME, 20);
+      $wait = TRUE;
     }
     foreach ($this->records as $delta => $record) {
       // Cannot send more than one message per second inside a particular chat.
       // @see https://core.telegram.org/bots/faq#my-bot-is-hitting-limits-how-do-i-avoid-this
-      if ($delta > 0) {
+      if ($delta > 0 || $wait) {
         sleep(1);
       }
       parent::write($record);
