@@ -1,0 +1,36 @@
+/**
+ * @file
+ * Layout styles for OSS Header layout.
+ */
+
+.l-oss-header {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.l-oss-header__column,
+.l-oss-header__row {
+  flex: 0 1 auto;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.l-oss-header__row {
+  flex: 0 0 100%;
+  flex-wrap: nowrap;
+}
+
+.l-oss-header__column--last {
+  flex: 1 0;
+}
+
+.l-oss-header__region {
+  flex: 5 0 10%;
+  padding-inline-start: 0.5rem;
+  padding-inline-end: 0.5rem;
+}
+
+.l-oss-header__region--content,
+.l-oss-header__region--content-secondary {
+  flex: 1 0 0;
+}
