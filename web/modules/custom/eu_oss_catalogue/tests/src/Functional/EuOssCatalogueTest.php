@@ -78,6 +78,10 @@ class EuOssCatalogueTest extends BrowserTestBase {
     $this->assertReferences(['data-collection', 'digital-citizenship'], $node1->get('oss_categories'));
     $this->assertSame('stable', $node1->get('oss_development_status')->value);
     $this->assertSame('standalone/web', $node1->get('oss_software_type')->value);
+    $this->assertSame(
+      '09a3S4w6u61HZh5hldwk7RVXGmkTEpgqBJQiIDtKjzE',
+      $node1->get('oss_source_hash')->value
+    );
     $this->assertStringContainsString('[IT] Solution 1: Long description', $node1->getTranslation('it')->get('oss_long_description')->value);
     $this->assertStringContainsString('[IT] Solution 1: Short description', $node1->getTranslation('it')->get('oss_short_description')->value);
     $this->assertStringContainsString('[EN] Solution 1: Long description', $node1->get('oss_long_description')->value);
@@ -129,6 +133,10 @@ class EuOssCatalogueTest extends BrowserTestBase {
     $this->assertReferences(['website-builder'], $node2->get('oss_categories'));
     $this->assertSame('development', $node2->get('oss_development_status')->value);
     $this->assertSame('library', $node2->get('oss_software_type')->value);
+    $this->assertSame(
+      'hQuCpTFLBeeOcz0U1i9JuBSiwplY_0JC8QFZ5usZOxU',
+      $node2->get('oss_source_hash')->value
+    );
     $this->assertStringContainsString('[IT] Solution 2: Long description', $node2->getTranslation('it')->get('oss_long_description')->value);
     $this->assertStringContainsString('[IT] Solution 2: Short description', $node2->getTranslation('it')->get('oss_short_description')->value);
     $this->assertReferences(['BSD-3-Clause'], $node2->get('oss_license'));
@@ -165,12 +173,14 @@ class EuOssCatalogueTest extends BrowserTestBase {
 
     // Process the queue again.
     $this->drush('queue:run', ['eu_oss_catalogue']);
-
     /** @var \Drupal\eu_oss_catalogue\Entity\OssSolutionInterface $node1 */
     $this->assertEmpty($this->getNodeByTitle('Solution 1'));
-
     $updated_solution = $this->getNodeByTitle('Solution 1 (updated)', TRUE);
     $this->assertSame('1.0.0.1', $updated_solution->get('oss_software_version')->value);
+    $this->assertSame(
+      'ZyLKKSPLDPgnEVPUPNF3m0dRw8o74nJn2MSC97TSDeo',
+      $updated_solution->get('oss_source_hash')->value
+    );
     // Assert that the provider has been added to the list of providers.
     $this->assertSame(2, $updated_solution->get('oss_source')->count());
     $expected_providers = ['developers_italia', 'testing_provider'];
@@ -201,7 +211,8 @@ class EuOssCatalogueTest extends BrowserTestBase {
     // Re-run the process and update one solution from a new source-provider.
     $service->fetch('removing_solution_provider');
     $queue = \Drupal::queue('eu_oss_catalogue');
-    $this->assertSame(2, $queue->numberOfItems());
+    // No changes, we only have the cleanup operation.
+    $this->assertSame(1, $queue->numberOfItems());
 
     // Process the queue again.
     $this->drush('queue:run', ['eu_oss_catalogue']);
