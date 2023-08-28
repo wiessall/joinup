@@ -483,7 +483,22 @@ display:
           empty: true
           content: 'No messages'
           tokenize: false
-      sorts: {  }
+      sorts:
+        mid:
+          id: mid
+          table: message_field_data
+          field: mid
+          relationship: none
+          group_type: group
+          admin_label: ''
+          entity_type: message
+          entity_field: mid
+          plugin_id: standard
+          order: DESC
+          expose:
+            label: ''
+            field_identifier: ''
+          exposed: false
       arguments: {  }
       filters:
         template:
