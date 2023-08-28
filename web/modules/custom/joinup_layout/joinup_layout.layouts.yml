@@ -38,3 +38,24 @@ joinup_layout_twocolfooter_onecol_67_33:
       label: Third
     two_col_footer:
       label: Two column footer
+
+joinup_layout_oss_header:
+  label: 'Joinup OSS Header'
+  path: layouts/oss-header
+  template: joinup-layout--oss-header
+  library: joinup_layout/oss_header
+  default_region: first
+  icon_map:
+    - [first, content, content_secondary, last]
+    - [first, content_bottom]
+  regions:
+    first:
+      label: Logo
+    content:
+      label: Software name
+    content_secondary:
+      label: Version
+    content_bottom:
+      label: Categories
+    last:
+      label: Solution Type

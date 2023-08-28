@@ -4,6 +4,7 @@ status: true
 dependencies:
   module:
     - joinup_core
+    - node
     - system
   theme:
     - ventuno
@@ -34,3 +35,10 @@ visibility:
     negate: true
     context_mapping: {  }
     pages: "<front>\r\n/eu-oss-catalogue"
+  joinup_optional_node_type:
+    id: joinup_optional_node_type
+    negate: true
+    context_mapping:
+      node: '@node.node_route_context:node'
+    bundles:
+      oss_solution: oss_solution

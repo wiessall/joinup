@@ -9,3 +9,8 @@ twocolfooter_onecol_67_33:
   css:
     theme:
       layouts/twocolfooter-onecol-67-33/twocolfooter_onecol_67_33.css: {}
+
+oss_header:
+  css:
+    layout:
+      layouts/oss-header/oss-header.layout.css: {}

@@ -1,0 +1,43 @@
+{% if content %}
+  <div{{ attributes.addClass('l-oss-header') }}>
+    {% if content.first %}
+      <div class="l-oss-header__column l-oss-header__column--first">
+        <div {{ region_attributes.first.addClass('l-oss-header__region', 'l-oss-header__region--first') }}>
+          {{ content.first }}
+        </div>
+      </div>
+    {% endif %}
+
+    <div class="l-oss-header__column l-oss-header__column--last">
+      {% if content.content or content.content_secondary or content.last or content.content_bottom %}
+        {% if content.content or content.content_secondary or content.last %}
+          <div class="l-oss-header__row">
+            {% if content.content %}
+              <div {{ region_attributes.content.addClass('l-oss-header__region', 'l-oss-header__region--content') }}>
+                {{ content.content }}
+              </div>
+            {% endif %}
+
+            {% if content.content_secondary %}
+              <div {{ region_attributes.content_secondary.addClass('l-oss-header__region', 'l-oss-header__region--content-secondary') }}>
+                {{ content.content_secondary }}
+              </div>
+            {% endif %}
+
+            {% if content.last %}
+              <div {{ region_attributes.last.addClass('l-oss-header__region', 'l-oss-header__region--last') }}>
+                {{ content.last }}
+              </div>
+            {% endif %}
+          </div>
+        {% endif %}
+
+        {% if content.content_bottom %}
+          <div {{ region_attributes.content_bottom.addClass('l-oss-header__region', 'l-oss-header__region-bottom') }}>
+            {{ content.content_bottom }}
+          </div>
+        {% endif %}
+      {% endif %}
+    </div>
+  </div>
+{% endif %}
