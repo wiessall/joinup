@@ -77,27 +77,35 @@ class TelegramHandler extends TelegramBotHandler implements DestructableInterfac
     // Try to acquire a lock as other requests might have also started to send
     // messages to Telegram. Twenty seconds might look too much but, in fact,
     // it's the penalty time that Telegram sets when the limits are offended.
-    $wait = FALSE;
-    while (!$this->lockBackend->acquire(self::LOCK_NAME, 20.0)) {
-      $wait = TRUE;
-      if (!$this->lockBackend->wait(self::LOCK_NAME, 20)) {
-        // The lock may be available. Try to acquire it again.
-        if (!$this->lockBackend->acquire(self::LOCK_NAME, 20.0)) {
-          // Cannot acquire a lock. Fail silently as we don't want to throw a
-          // new exception in this request.
-          return;
-        }
-        break;
+    if (!$this->lockBackend->acquire(self::LOCK_NAME, 20.0)) {
+      $waited = $this->lockBackend->wait(self::LOCK_NAME);
+      // The lock may be available. Try again to acquire.
+      if (!$this->lockBackend->acquire(self::LOCK_NAME, 20.0)) {
+        // Cannot acquire a lock. Fail silently, we don't want to throw a new
+        // exception in this request as it can lead to an infinite recursion.
+        return;
       }
     }
 
     foreach ($this->records as $delta => $record) {
       // Cannot send more than one message per second inside a particular chat.
       // @see https://core.telegram.org/bots/faq#my-bot-is-hitting-limits-how-do-i-avoid-this
-      if ($delta > 0 || $wait) {
+      if ($delta > 0 || isset($waited)) {
         sleep(1);
       }
-      parent::write($record);
+
+      try {
+        parent::write($record);
+      }
+      catch (\RuntimeException $exception) {
+        // This is an extra precaution. In the case we still receive the
+        // Telegram API call exception, we fail silently because throwing the
+        // exception could lead to an infinite recursion.
+        // @see \Monolog\Handler\TelegramBotHandler::sendCurl()
+        if (!str_starts_with($exception->getMessage(), 'Telegram API error. Description: ')) {
+          throw $exception;
+        }
+      }
     }
 
     $this->lockBackend->release(self::LOCK_NAME);
