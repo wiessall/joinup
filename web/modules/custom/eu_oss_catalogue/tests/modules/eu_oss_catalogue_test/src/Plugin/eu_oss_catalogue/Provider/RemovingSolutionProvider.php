@@ -4,11 +4,8 @@ declare(strict_types = 1);
 
 namespace Drupal\eu_oss_catalogue_test\Plugin\eu_oss_catalogue\Provider;
 
-use Drupal\Component\Serialization\Json;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
-use Drupal\Core\Serialization\Yaml;
 use Drupal\eu_oss_catalogue\EuOssCataloguePluginManagerInterface;
-use Drupal\eu_oss_catalogue\Model\EuOssCatalogueFetchedSolution;
 use Drupal\eu_oss_catalogue\Plugin\eu_oss_catalogue\Provider\DevelopersItalia;
 use GuzzleHttp\Client;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -35,10 +32,10 @@ class RemovingSolutionProvider extends DevelopersItalia {
    *   The plugin_id for the plugin instance.
    * @param mixed $pluginDefinition
    *   The plugin implementation definition.
-   * @param \GuzzleHttp\Client $httpClient
-   *   The HTTP client.
    * @param \Drupal\eu_oss_catalogue\EuOssCataloguePluginManagerInterface $parserManager
    *   The EU OSS parser plugin manager service.
+   * @param \GuzzleHttp\Client $httpClient
+   *   The HTTP client.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
    *   The entity type manager.
    */
@@ -46,8 +43,8 @@ class RemovingSolutionProvider extends DevelopersItalia {
     array $configuration,
     $pluginId,
     $pluginDefinition,
-    protected Client $httpClient,
-    protected EuOssCataloguePluginManagerInterface $parserManager,
+    EuOssCataloguePluginManagerInterface $parserManager,
+    Client $httpClient,
     protected EntityTypeManagerInterface $entityTypeManager,
   ) {
     parent::__construct($configuration, $pluginId, $pluginDefinition, $parserManager, $httpClient);
@@ -61,8 +58,8 @@ class RemovingSolutionProvider extends DevelopersItalia {
       $configuration,
       $pluginId,
       $pluginDefinition,
-      $container->get('http_client'),
       $container->get('plugin.manager.eu_oss_catalogue.parser'),
+      $container->get('http_client'),
       $container->get('entity_type.manager')
     );
   }
@@ -71,41 +68,22 @@ class RemovingSolutionProvider extends DevelopersItalia {
    * {@inheritdoc}
    */
   public function fetch(): iterable {
-    if ($this->next === NULL) {
-      return;
-    }
-    $url = static::ENDPOINT . $this->next . ($this->next ? '&' : '?') . 'page[size]=100';
-    $response = $this->httpClient->get($url);
-    $read = Json::decode($response->getBody()->getContents());
+    foreach (parent::fetch() as $fetchedSolution) {
+      // If the title is "Solution 2" and the solution exists, skip it so that
+      // we simulate a solution that has been removed.
+      if ($fetchedSolution->name === 'Solution 2') {
+        $ids = $this->entityTypeManager->getStorage('node')->getQuery()
+          ->accessCheck(FALSE)
+          ->condition('title', 'Solution 2')
+          ->execute();
 
-    foreach ($read['data'] as $newItem) {
-      $active = $newItem['active'] ?? FALSE;
-      if ($active) {
-        $decoded = Yaml::decode($newItem['publiccodeYml']);
-
-        // If the title is "Solution 2" and the solution exists, skip it so that
-        // we simulate a solution that has been removed.
-        if ($decoded['name'] === 'Solution 2') {
-          $ids = $this->entityTypeManager->getStorage('node')->getQuery()
-            ->accessCheck(FALSE)
-            ->condition('title', 'Solution 2')
-            ->execute();
-
-          if (!empty($ids)) {
-            continue;
-          }
+        if (!empty($ids)) {
+          continue;
         }
-
-        yield new EuOssCatalogueFetchedSolution(
-          $decoded['url'],
-          $decoded['name'],
-          $decoded,
-          $newItem['id'],
-        );
       }
-    }
 
-    $this->next = NULL;
+      yield $fetchedSolution;
+    }
   }
 
 }
