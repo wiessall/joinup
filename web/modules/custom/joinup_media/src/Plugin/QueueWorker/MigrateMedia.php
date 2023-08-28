@@ -21,6 +21,8 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 /**
  * Defines 'joinup_media_migrate' queue worker.
  *
+ * @todo Remove this plugin is ISAICP-8015.
+ *
  * @QueueWorker(
  *   id = "joinup_media_migrate",
  *   title = @Translation("Migrate videos and images embed markup into media"),
