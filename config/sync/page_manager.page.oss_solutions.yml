@@ -1,0 +1,12 @@
+uuid: ad2d25e4-3607-41c3-9574-dd82b087d65c
+langcode: en
+status: false
+dependencies: {  }
+id: oss_solutions
+label: 'OSS Solutions landing page'
+description: 'The OSS Solutions landing page.'
+use_admin_theme: false
+path: /eu-oss-catalogue-dummy
+access_logic: and
+access_conditions: {  }
+parameters: {  }

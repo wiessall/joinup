@@ -24,8 +24,8 @@ function joinup_core_deploy_109700(): void {
   $collection = \Drupal::entityTypeManager()->getStorage('rdf_entity')
     ->load(OssCatalogueCollectionInterface::COLLECTION_ENTITY_ID);
 
-  if ($collection) {
-    $collection->set('path', ['alias' => '/eu-oss-catalogue', 'pathauto' => 0]);
-    $collection->save();
-  }
+  $collection
+    ?->set('field_ar_state', 'validated')
+      ->set('path', ['alias' => '/eu-oss-catalogue', 'pathauto' => 0])
+      ->save();
 }
