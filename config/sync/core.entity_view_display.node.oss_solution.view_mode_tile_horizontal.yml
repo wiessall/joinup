@@ -86,6 +86,7 @@ hidden:
   oss_software_type: true
   oss_software_version: true
   oss_source: true
+  oss_source_hash: true
   oss_used_by: true
   published_at: true
   report: true

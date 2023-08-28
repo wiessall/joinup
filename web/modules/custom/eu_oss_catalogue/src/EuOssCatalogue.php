@@ -54,8 +54,8 @@ class EuOssCatalogue implements EuOssCatalogueInterface {
     $queue = $this->queueFactory->get('eu_oss_catalogue');
     $queue->createQueue();
 
-    $fetched = 0;
-    $solutionUrls = [];
+    $solutionUrlsToProcess = [];
+    $solutionUrlsDiscovered = [];
     while (($fetchedSolutions = $provider->fetch())->valid()) {
       foreach ($fetchedSolutions as $fetchedSolution) {
         if (!$fetchedSolution instanceof EuOssCatalogueFetchedSolution) {
@@ -85,6 +85,13 @@ class EuOssCatalogue implements EuOssCatalogueInterface {
           continue;
         }
 
+        // Cancellation should also cause removing this provider from the
+        // preexisting OSS Solution entity.
+        $solutionUrlsDiscovered[] = $fetchedSolution->url;
+        if (!$this->fetchedSolutionNeedsUpdate($fetchedSolution, $provider)) {
+          continue;
+        }
+
         // Allow 3rd-party to modify or cancel the fetched solution.
         $event = new EuOssPostFetchEvent($fetchedSolution);
         $this->eventDispatcher->dispatch($event);
@@ -98,6 +105,22 @@ class EuOssCatalogue implements EuOssCatalogueInterface {
           continue;
         }
 
+        // Providers might provide the same solution (with the same URL) more
+        // than once; e.g. Developers Italia has a package three times with
+        // slightly different data. So if we already queued on item, we won't
+        // queue its second occurrence one more time, but instead, at the end of
+        // this method, we log a message about the duplicated URLs.
+        if (in_array($fetchedSolution->url, $solutionUrlsToProcess, TRUE)) {
+          $this->logger->warning(
+            "Solution '@solution' (@url) import skipped: URL already seen in the same provider.",
+            [
+              '@solution' => $fetchedSolution->name,
+              '@url' => $fetchedSolution->url,
+            ]
+          );
+          continue;
+        }
+
         // @todo Move the process of queueing to a separate method for the sake
         //   of making the whole API more clear?
         $queue->createItem([
@@ -105,20 +128,39 @@ class EuOssCatalogue implements EuOssCatalogueInterface {
           'provider' => $providerId,
           'solution' => $fetchedSolution,
         ]);
-        $fetched++;
-
-        $solutionUrls[] = $fetchedSolution->url;
+        // Keep track of solutions been queued already.
+        $solutionUrlsToProcess[] = $fetchedSolution->url;
       }
     }
 
+    // Check duplicate URLs and log if there are any.
+    $urlCounts = array_count_values($solutionUrlsDiscovered);
+    $nonUniqueUrls = array_filter(
+      $urlCounts,
+      fn (int $count) => $count > 1
+    );
+    $this->logger->warning(
+      "Non-unique solution URLs from provider '@provider': @non-unique-urls.",
+      [
+        '@provider' => $provider->getPluginId(),
+        '@non-unique-urls' => implode(
+          ', ',
+          array_map(
+            fn (string $url, int $count) => "$url ($count)",
+            array_keys($nonUniqueUrls),
+            $nonUniqueUrls
+          )
+        ),
+      ]
+    );
     // @todo Maybe this should be a flag that enables cleanup deletion?
     $queue->createItem([
       'operation' => 'solution:create:cleanup',
       'provider' => $providerId,
-      'solution_urls' => $solutionUrls,
+      'solution_urls' => array_keys($urlCounts),
     ]);
 
-    return $fetched;
+    return count($urlCounts);
   }
 
   /**
@@ -139,6 +181,9 @@ class EuOssCatalogue implements EuOssCatalogueInterface {
     // Finally, allow 3rd-party to add their alters.
     $this->eventDispatcher->dispatch(new EuOssSolutionPreSaveEvent($solution, $fetchedSolution));
 
+    // Set source hash.
+    $solution->set('oss_source_hash', $fetchedSolution->getHash());
+
     $solution->save();
 
     return $solution;
@@ -151,13 +196,15 @@ class EuOssCatalogue implements EuOssCatalogueInterface {
     $nodeStorage = $this->entityTypeManager->getStorage('node');
 
     // The parser is responsible to create the solution node entity.
-    $removedSolutionIds = $nodeStorage
+    $query = $nodeStorage
       ->getQuery()
       ->accessCheck(FALSE)
-      ->condition('oss_git_url', $solutionUrls, 'NOT IN')
       ->condition('oss_source', $providerPluginId)
-      ->condition('type', 'oss_solution')
-      ->execute();
+      ->condition('type', 'oss_solution');
+    if ($solutionUrls) {
+      $query->condition('oss_git_url', $solutionUrls, 'NOT IN');
+    }
+    $removedSolutionIds = $query->execute();
 
     if (empty($removedSolutionIds)) {
       return;
@@ -210,6 +257,36 @@ class EuOssCatalogue implements EuOssCatalogueInterface {
   public function loadBySolutionUrl(string $solutionUrl): ?OssSolutionInterface {
     $entities = $this->entityTypeManager->getStorage('node')->loadByProperties(['oss_git_url' => $solutionUrl]);
     return reset($entities) ?: NULL;
+  }
+
+  /**
+   * Determines whether solution node needs to be created/updated.
+   *
+   * @param \Drupal\eu_oss_catalogue\Model\EuOssCatalogueFetchedSolution $fetchedSolution
+   *   The fetched solution.
+   * @param \Drupal\eu_oss_catalogue\EuOssCatalogueProviderInterface $provider
+   *   The provider plugin instance which fetched the solution.
+   *
+   * @return bool
+   *   Whether solution node needs to be created/updated.
+   */
+  protected function fetchedSolutionNeedsUpdate(
+    EuOssCatalogueFetchedSolution $fetchedSolution,
+    EuOssCatalogueProviderInterface $provider
+  ): bool {
+    $hash = $fetchedSolution->getHash();
+    assert(strlen($hash) === 43);
+
+    // Try to get solution node by the hash.
+    $solution_nodes = $this->entityTypeManager->getStorage('node')
+      ->loadByProperties([
+        'type' => 'oss_solution',
+        'oss_source_hash' => $hash,
+        // Also have to take the provider reference into consideration.
+        'oss_source' => $provider->getPluginId(),
+      ]);
+
+    return empty($solution_nodes);
   }
 
 }
