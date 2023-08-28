@@ -5,6 +5,8 @@ declare(strict_types = 1);
 namespace Drupal\joinup_core\Logger\Handler;
 
 use Drupal\Core\DestructableInterface;
+use Drupal\joinup_core\Logger\Formatter\TelegramFormatter;
+use Monolog\Formatter\FormatterInterface;
 use Monolog\Handler\TelegramBotHandler;
 use Monolog\Logger;
 
@@ -109,6 +111,16 @@ class TelegramHandler extends TelegramBotHandler implements DestructableInterfac
     }
 
     $this->lockBackend->release(self::LOCK_NAME);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getFormatter(): FormatterInterface {
+    if (!isset($this->formatter)) {
+      $this->setFormatter(new TelegramFormatter());
+    }
+    return $this->formatter;
   }
 
 }
