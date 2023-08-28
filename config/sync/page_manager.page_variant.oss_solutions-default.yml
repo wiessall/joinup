@@ -1,0 +1,96 @@
+uuid: 2a7becdd-fe31-49bd-9ee5-30dacefe9bfa
+langcode: en
+status: true
+dependencies:
+  config:
+    - page_manager.page.oss_solutions
+  module:
+    - custom_markup_block
+    - layout_builder
+    - layout_discovery
+id: oss_solutions-default
+label: Default
+weight: 0
+variant: layout_builder
+variant_settings:
+  id: layout_builder
+  label: null
+  weight: 0
+  uuid: 02169457-e2d7-4c87-87ef-7bf2297bbd0b
+  sections:
+    -
+      layout_id: layout_twocol_section
+      layout_settings:
+        label: Discover
+        context_mapping: {  }
+        column_widths: 67-33
+      components:
+        aa9eaca5-fde3-4e9a-855e-debe250f2861:
+          uuid: aa9eaca5-fde3-4e9a-855e-debe250f2861
+          region: first
+          configuration:
+            id: custom_markup
+            label: 'Discover our initiative'
+            label_display: visible
+            provider: custom_markup_block
+            context_mapping: {  }
+            markup:
+              value: "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus lobortis pellentesque nulla vel sollicitudin. Maecenas tellus tortor, tristique at aliquam et, luctus vitae nisi. Fusce elementum lobortis odio, quis interdum quam tristique ut. Morbi ac lacus ligula. Quisque ut odio condimentum, ultricies erat sit amet, condimentum lectus. In faucibus augue vitae condimentum faucibus. Nunc quis arcu massa.</p>"
+              format: content_editor
+          weight: 0
+          additional: {  }
+        6222b223-2f1e-4719-aefc-96cf33aa5da6:
+          uuid: 6222b223-2f1e-4719-aefc-96cf33aa5da6
+          region: second
+          configuration:
+            id: custom_markup
+            label: 'Discover our initiative image'
+            label_display: '0'
+            provider: custom_markup_block
+            context_mapping: {  }
+            markup:
+              value: '<p><img src="/modules/custom/joinup_communities/joinup_oss_catalogue/assets/image/discover.png"/></p>'
+              format: content_editor
+          weight: 0
+          additional: {  }
+      third_party_settings: {  }
+    -
+      layout_id: layout_onecol
+      layout_settings:
+        label: 'Most recent solutions'
+        context_mapping: {  }
+      components: {  }
+      third_party_settings: {  }
+    -
+      layout_id: layout_onecol
+      layout_settings:
+        label: 'Most active solutions'
+        context_mapping: {  }
+      components: {  }
+      third_party_settings: {  }
+    -
+      layout_id: layout_twocol_section
+      layout_settings:
+        label: 'Publish your open source solution'
+        context_mapping: {  }
+        column_widths: 50-50
+      components: {  }
+      third_party_settings: {  }
+    -
+      layout_id: layout_onecol
+      layout_settings:
+        label: FAQ
+        context_mapping: {  }
+      components: {  }
+      third_party_settings: {  }
+    -
+      layout_id: layout_onecol
+      layout_settings:
+        label: 'Social links'
+        context_mapping: {  }
+      components: {  }
+      third_party_settings: {  }
+page: oss_solutions
+selection_criteria: {  }
+selection_logic: and
+static_context: {  }
