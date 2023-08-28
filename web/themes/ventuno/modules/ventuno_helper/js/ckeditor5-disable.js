@@ -1,3 +1,7 @@
+/*
+ * @file
+ * Remove in ISAICP-8015.
+ */
 (function (Drupal) {
   Drupal.behaviors.disableCKEditorButton = {
     attach(context, settings) {
