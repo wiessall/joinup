@@ -184,7 +184,19 @@ class EuOssCatalogue implements EuOssCatalogueInterface {
     // Set source hash.
     $solution->set('oss_source_hash', $fetchedSolution->getHash());
 
-    $solution->save();
+    $operationResult = $solution->save();
+
+    $loggerArguments = [
+      '@solution' => $solution->label(),
+    ];
+    switch ($operationResult) {
+      case SAVED_NEW:
+        $this->logger->info('Solution @solution was created.', $loggerArguments);
+        break;
+
+      default:
+        $this->logger->info('Solution @solution was updated.', $loggerArguments);
+    }
 
     return $solution;
   }
