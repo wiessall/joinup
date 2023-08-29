@@ -13,6 +13,13 @@ use Drupal\Core\TypedData\TypedData;
 class PublishedAtOrUpdatedComputed extends TypedData {
 
   /**
+   * The data value.
+   *
+   * @var mixed
+   */
+  protected $value;
+
+  /**
    * {@inheritdoc}
    */
   public function getValue(): int {

@@ -12,11 +12,12 @@ use Drupal\joinup_publication_date\Entity\EntityPublicationTimeInterface;
 use Drupal\joinup_workflow\ArchivableEntityInterface;
 use Drupal\joinup_workflow\EntityWorkflowStateInterface;
 use Drupal\node\NodeInterface;
+use Drupal\topic\Entity\TopicReferencingEntityInterface;
 
 /**
  * Interface for content page node entities.
  */
-interface CustomPageInterface extends NodeInterface, GroupContentInterface, CollectionContentInterface, EntityPublicationTimeInterface, LogoInterface, DescriptionInterface, EntityWorkflowStateInterface, ArchivableEntityInterface {
+interface CustomPageInterface extends NodeInterface, GroupContentInterface, CollectionContentInterface, EntityPublicationTimeInterface, LogoInterface, DescriptionInterface, EntityWorkflowStateInterface, ArchivableEntityInterface, TopicReferencingEntityInterface {
 
   /**
    * Checks if this custom page is set as a landing page of the group.
