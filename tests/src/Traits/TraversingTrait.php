@@ -570,6 +570,7 @@ trait TraversingTrait {
       // The various search input fields.
       [
         'names' => [
+          'search',
           'search bar',
           'search bars',
           'search field',
@@ -577,6 +578,15 @@ trait TraversingTrait {
         ],
         'selectors' => [
           ['css', 'input[name="keys"]'],
+        ],
+      ],
+      [
+        'names' => [
+          'oss search',
+          'oss search bar',
+        ],
+        'selectors' => [
+          ['css', 'input[name="oss_keys"]'],
         ],
       ],
     ];
