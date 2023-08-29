@@ -14,6 +14,9 @@ Feature:
 
   @javascript
   Scenario: User sees the right content
+    When I run drush "eu-oss:fetch" developers_italia
+    Then I run drush "queue:run" eu_oss_catalogue
+
     When I visit "/eu-oss-catalogue"
     And I should see the following headings:
       | Discover our initiative |
@@ -25,5 +28,5 @@ Feature:
     Then I enter "Sistema" in the "oss search bar"
     And I wait for AJAX to finish
     Then I should see the following "oss search" suggestions:
-      | Sistema Informativo Contabile         |
-      | Sistema Informatico di Consolidamento |
+      | Sistema Informativo Tassa Auto Piemonte                                                  |
+      | Sistema Informativo Agricolo della Regione Basilicata (SIA-RB) - ModuloAnagrafe Agricola |
