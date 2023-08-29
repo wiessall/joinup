@@ -82,7 +82,7 @@ function ventuno_form_views_exposed_form_alter(array &$form, FormStateInterface 
     $form['#attributes']['class'][] = 'view-search';
   }
 
-  if ($route_name != 'view.search.page_1' && $view->id() === 'search') {
+  if ($route_name != 'view.search.page_1' && $view->id() === 'search' || $route_name != 'view.search_oss_catalogue.search' && $view->id() === 'search_oss_catalogue') {
     // When re-using the exposed search form anywhere other than the search
     // page, hide the "Sort by" select.
     $form['sort_by']['#type'] = 'hidden';
