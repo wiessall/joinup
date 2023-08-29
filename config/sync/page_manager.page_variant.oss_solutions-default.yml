@@ -4,10 +4,12 @@ status: true
 dependencies:
   config:
     - page_manager.page.oss_solutions
+    - views.view.search_oss_catalogue
   module:
     - custom_markup_block
     - layout_builder
     - layout_discovery
+    - views
 id: oss_solutions-default
 label: Default
 weight: 0
@@ -18,6 +20,25 @@ variant_settings:
   weight: 0
   uuid: 02169457-e2d7-4c87-87ef-7bf2297bbd0b
   sections:
+    -
+      layout_id: layout_onecol
+      layout_settings:
+        label: Search
+        context_mapping: {  }
+      components:
+        31430ecd-b2e1-4485-99ce-210bf4e563d8:
+          uuid: 31430ecd-b2e1-4485-99ce-210bf4e563d8
+          region: content
+          configuration:
+            id: 'views_exposed_filter_block:search_oss_catalogue-search'
+            label: ''
+            label_display: '0'
+            provider: views
+            context_mapping: {  }
+            views_label: ''
+          weight: 0
+          additional: {  }
+      third_party_settings: {  }
     -
       layout_id: layout_twocol_section
       layout_settings:
@@ -35,7 +56,7 @@ variant_settings:
             provider: custom_markup_block
             context_mapping: {  }
             markup:
-              value: "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus lobortis pellentesque nulla vel sollicitudin. Maecenas tellus tortor, tristique at aliquam et, luctus vitae nisi. Fusce elementum lobortis odio, quis interdum quam tristique ut. Morbi ac lacus ligula. Quisque ut odio condimentum, ultricies erat sit amet, condimentum lectus. In faucibus augue vitae condimentum faucibus. Nunc quis arcu massa.</p>"
+              value: '<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus lobortis pellentesque nulla vel sollicitudin. Maecenas tellus tortor, tristique at aliquam et, luctus vitae nisi. Fusce elementum lobortis odio, quis interdum quam tristique ut. Morbi ac lacus ligula. Quisque ut odio condimentum, ultricies erat sit amet, condimentum lectus. In faucibus augue vitae condimentum faucibus. Nunc quis arcu massa.</p>'
               format: content_editor
           weight: 0
           additional: {  }

@@ -16,3 +16,7 @@ Feature:
     When I visit "/eu-oss-catalogue"
     And I should see the following headings:
       | Discover our initiative |
+    And I should see the text "European Open-Source Software Solutions Catalogue"
+
+    When I click "advanced search"
+    Then I should see the heading "Search in European Open-source Software Solutions Catalogue"
