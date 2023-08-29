@@ -654,13 +654,13 @@ Feature: Global search
     Given I am logged in as a user with the "authenticated" role
     When I visit the search page
     And I should not see search bar icon in navbar
-    And I enter "fu" in the search bar
+    And I enter "fu" in the "search bar"
     And I wait for AJAX to finish
     Then I should see the following search suggestions:
       | Radio cooking collection |
       | Spheres                  |
 
-    When I enter "cook" in the search bar
+    When I enter "cook" in the "search bar"
     And I wait for AJAX to finish
     Then I should see the following search suggestions:
       | Movistar                 |

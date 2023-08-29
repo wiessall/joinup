@@ -12,6 +12,7 @@ Feature:
     When I go to "/eu-oss-catalogue-dummy"
     Then the response status code should be 404
 
+  @javascript
   Scenario: User sees the right content
     When I visit "/eu-oss-catalogue"
     And I should see the following headings:
@@ -19,4 +20,10 @@ Feature:
     And I should see the text "European Open-Source Software Solutions Catalogue"
 
     When I click "advanced search"
-    Then I should see the heading "Search in European Open-source Software Solutions Catalogue"
+    And I should see the heading "Search in European Open-source Software Solutions Catalogue"
+
+    Then I enter "Sistema" in the "oss search bar"
+    And I wait for AJAX to finish
+    Then I should see the following "oss search" suggestions:
+      | Sistema Informativo Contabile         |
+      | Sistema Informatico di Consolidamento |
