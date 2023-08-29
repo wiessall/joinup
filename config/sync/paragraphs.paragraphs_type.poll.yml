@@ -1,0 +1,12 @@
+uuid: ac5dd4ed-8c51-47a9-a49a-6b053a0057d6
+langcode: en
+status: true
+dependencies:
+  content:
+    - 'file:file:85a9c01e-d315-4322-9515-eb6fa61dce17'
+id: poll
+label: Poll
+icon_uuid: 85a9c01e-d315-4322-9515-eb6fa61dce17
+icon_default: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNiIgaGVpZ2h0PSIxNiIgZmlsbD0iY3VycmVudENvbG9yIiBjbGFzcz0iYmkgYmktYmFyLWNoYXJ0IiB2aWV3Qm94PSIwIDAgMTYgMTYiPgogIDxwYXRoIGQ9Ik00IDExSDJ2M2gydi0zem01LTRIN3Y3aDJWN3ptNS01djEyaC0yVjJoMnptLTItMWExIDEgMCAwIDAtMSAxdjEyYTEgMSAwIDAgMCAxIDFoMmExIDEgMCAwIDAgMS0xVjJhMSAxIDAgMCAwLTEtMWgtMnpNNiA3YTEgMSAwIDAgMSAxLTFoMmExIDEgMCAwIDEgMSAxdjdhMSAxIDAgMCAxLTEgMUg3YTEgMSAwIDAgMS0xLTFWN3ptLTUgNGExIDEgMCAwIDEgMS0xaDJhMSAxIDAgMCAxIDEgMXYzYTEgMSAwIDAgMS0xIDFIMmExIDEgMCAwIDEtMS0xdi0zeiIvPgo8L3N2Zz4='
+description: 'It allows capture votes on different topics in the form of multiple choice questions.'
+behavior_plugins: {  }

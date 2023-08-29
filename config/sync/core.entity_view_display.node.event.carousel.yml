@@ -27,7 +27,7 @@ dependencies:
     - field.field.node.event.field_topic
     - field.field.node.event.og_audience
     - node.type.event
-    - responsive_image.styles.iop_carousel
+    - responsive_image.styles.tile
   module:
     - datetime_range
     - layout_builder
@@ -70,6 +70,8 @@ content:
     settings:
       responsive_image_style: tile
       image_link: ''
+      image_loading:
+        attribute: eager
     third_party_settings:
       template_suggestion:
         template_suggestion: ''

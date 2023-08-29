@@ -45,18 +45,18 @@ Feature: Like/unlike feature.
     When I click the "Remove like from this content" in the "Very liked solution" tile
     Then I should see the statistics "1" in the "Very liked solution" tile
 
-  Scenario: Anonymous user is asked to log in if they attempt to Like
+  Scenario: Anonymous user is asked to sign in if they attempt to Like
     Given I am an anonymous user
     When I go to the homepage of the "Very liked solution" solution
     Then I should see the link "Like" in the "Like block"
     And I should see the text "Like (0)" in the "Like block" region
     When I click "Like" in the "Like block" region
     Then a modal should open
-    And I should see the heading "You are not logged in"
-    And I should see the text "You are not logged in" in the "Modal title"
-    And I should see the heading "Login or register to like this content" in the "Modal content"
-    And I should see the text "Like this content will help other people find reliable information about what they search!" in the "Modal content"
-    When I click "Log in" in the "Modal content"
+    And I should see the text "You are not signed in"
+    And I should see the text "You are not signed in" in the "Modal title"
+    And I should see the heading "Sign in or register to like this content" in the "Modal content"
+    And I should see the text "Liking content shows your appreciation to content creators and helps other users find good content" in the "Modal content"
+    When I click "Sign in" in the "Modal content"
     Then I should see the heading "Sign in to continue"
 
   Scenario Outline: User can like/unlike solution's content
@@ -198,9 +198,13 @@ Feature: Like/unlike feature.
     And I click "Add custom page"
 
     And I fill in "Title" with "Carousel of likes"
+    And I add a layout paragraph in the "Custom page body" form field with the following properties:
+      | layout           | one column |
+      | Background theme | light      |
+      | Extra classes    | test-class |
 
-    And I press "List additional actions"
-    And I press "Add Carousel"
+    And I click "Choose component"
+    And I click "Carousel"
 
     Then I select "Solution" from "Available filters"
     And I press "Add and configure filter"
@@ -226,6 +230,8 @@ Feature: Like/unlike feature.
     And I press "Add and configure filter"
     And I fill in "News" with "Likeable news"
 
+    # Save the paragraph through the dialog.
+    And I press "Save" in the "Layout paragraphs dialog buttons" region
     When I press "Publish"
 
     And I should see the "Very liked solution" tile
