@@ -189,6 +189,8 @@ default:
         Other unpublished block: '#block-ventuno-unpublished-other'
       drupal:
         drupal_root: ${joinup.site_dir}
+      drush:
+        root: ${joinup.site_dir}
       selectors:
         message_selector: '.alert, .messages'
         error_message_selector: '.alert.alert--error, .messages.messages--error, .alert.alert-danger'

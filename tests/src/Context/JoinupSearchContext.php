@@ -447,7 +447,7 @@ class JoinupSearchContext extends RawDrupalContext {
    * This function asserts also the order of the items.
    *
    * @param string $input
-   *     Search bar name.
+   *   Search bar name.
    * @param \Behat\Gherkin\Node\TableNode $table
    *   A list of items to be present.
    *
@@ -682,7 +682,7 @@ class JoinupSearchContext extends RawDrupalContext {
    * @param string $keywords
    *   A list of words to search.
    * @param string $input
-   *    Search bar name.
+   *   Search bar name.
    *
    * @throws \Exception
    *   Thrown when the header search bar is not found.
@@ -807,7 +807,7 @@ class JoinupSearchContext extends RawDrupalContext {
    * Returns the search bar as a Mink page element.
    *
    * @param string|null $input
-   *  Search bar name.
+   *   Search bar name.
    *
    * @return \Behat\Mink\Element\NodeElement
    *   The search bar.
