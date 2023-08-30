@@ -103,8 +103,9 @@ class StrippedHTMLFormatter extends FormatterBase {
         $truncate = new TruncateHTML();
         $output = $truncate->truncateChars($output, $this->getSetting('trim_length'), '…');
       }
+
       $element[$delta] = [
-        '#markup' => $output,
+        '#markup' => htmlspecialchars_decode($output),
       ];
     }
 
