@@ -7,6 +7,7 @@ dependencies:
     - views.view.search_oss_catalogue
   module:
     - custom_markup_block
+    - joinup_oss_catalogue
     - layout_builder
     - layout_discovery
     - views
@@ -95,21 +96,65 @@ variant_settings:
         label: 'Publish your open source solution'
         context_mapping: {  }
         column_widths: 50-50
-      components: {  }
+      components:
+        b1993c2a-0f67-41a3-bc65-674214e287dc:
+          uuid: b1993c2a-0f67-41a3-bc65-674214e287dc
+          region: first
+          configuration:
+            id: joinup_oss_guide
+            label: 'Publish your OSS'
+            label_display: '0'
+            provider: joinup_oss_catalogue
+            context_mapping: {  }
+          weight: 0
+          additional: {  }
+        67351ee4-415e-4923-b340-2bb795872225:
+          uuid: 67351ee4-415e-4923-b340-2bb795872225
+          region: second
+          configuration:
+            id: joinup_oss_software_name
+            label: 'Let’s start with your software name'
+            label_display: visible
+            provider: joinup_oss_catalogue
+            context_mapping: {  }
+          weight: 0
+          additional: {  }
       third_party_settings: {  }
     -
       layout_id: layout_onecol
       layout_settings:
         label: FAQ
         context_mapping: {  }
-      components: {  }
+      components:
+        d0c5b76f-e916-4f49-a36a-ecfc82a78f1b:
+          uuid: d0c5b76f-e916-4f49-a36a-ecfc82a78f1b
+          region: content
+          configuration:
+            id: joinup_oss_faq
+            label: 'OSS FAQ'
+            label_display: '0'
+            provider: joinup_oss_catalogue
+            context_mapping: {  }
+          weight: 0
+          additional: {  }
       third_party_settings: {  }
     -
       layout_id: layout_onecol
       layout_settings:
         label: 'Social links'
         context_mapping: {  }
-      components: {  }
+      components:
+        dbd6fae5-1f94-4933-8a8e-33aa3f92a307:
+          uuid: dbd6fae5-1f94-4933-8a8e-33aa3f92a307
+          region: content
+          configuration:
+            id: joinup_oss_footer
+            label: 'Follow our journey on the social media!'
+            label_display: visible
+            provider: joinup_oss_catalogue
+            context_mapping: {  }
+          weight: 0
+          additional: {  }
       third_party_settings: {  }
 page: oss_solutions
 selection_criteria: {  }
