@@ -12,15 +12,9 @@ Feature: Administer media.
       | title | state     |
       | Mars  | validated |
       | Venus | validated |
-    And the following "Collection banner" media:
-      | name                  | owner | image                         |
-      | The Collection Banner | joe   | library/collection-banner.jpg |
     And the following "Collection logo" media:
       | name                | owner | image                       |
       | The Collection Logo | joe   | library/collection-logo.png |
-    And the following "Solution banner" media:
-      | name                | owner | image                       |
-      | The Solution Banner | joe   | library/solution-banner.jpg |
     And the following "Solution logo" media:
       | name              | owner | image                     |
       | The Solution Logo | joe   | library/solution-logo.png |
@@ -47,9 +41,7 @@ Feature: Administer media.
     When I click "Library"
     Then the "media admin" table should contain the following columns:
       | Media name            | Type              | Status      | Group | Author |
-      | The Collection Banner | Collection banner | Published   |       | joe    |
       | The Collection Logo   | Collection logo   | Published   |       | joe    |
-      | The Solution Banner   | Solution banner   | Published   |       | joe    |
       | The Solution Logo     | Solution logo     | Published   |       | joe    |
       | The Event Logo        | Event logo        | Published   |       | joe    |
       | The News Logo         | News logo         | Published   |       | joe    |
@@ -71,9 +63,7 @@ Feature: Administer media.
     When I press "Reset"
     Then the "media admin" table should contain the following columns:
       | Media name            | Type              | Status      | Group | Author |
-      | The Collection Banner | Collection banner | Published   |       | joe    |
       | The Collection Logo   | Collection logo   | Published   |       | joe    |
-      | The Solution Banner   | Solution banner   | Published   |       | joe    |
       | The Solution Logo     | Solution logo     | Published   |       | joe    |
       | The Event Logo        | Event logo        | Published   |       | joe    |
       | The News Logo         | News logo         | Published   |       | joe    |
@@ -90,11 +80,9 @@ Feature: Administer media.
       | The Video  | Video | Unpublished | Mars  | joe    |
 
     When I click "Add media"
-    Then I should see the link "Collection banner"
     And I should see the link "Collection logo"
     And I should see the link "Event logo"
     And I should see the link "News logo"
-    And I should see the link "Solution banner"
     And I should see the link "Solution logo"
     But I should see the link "Image"
     But I should see the link "File"
@@ -108,9 +96,7 @@ Feature: Administer media.
     Then the "media admin" table should contain the following columns:
       | Media name            | Type              | Status      | Group | Author |
       | Just a doc            | File              | Published   | Mars  | theOne |
-      | The Collection Banner | Collection banner | Published   |       | joe    |
       | The Collection Logo   | Collection logo   | Published   |       | joe    |
-      | The Solution Banner   | Solution banner   | Published   |       | joe    |
       | The Solution Logo     | Solution logo     | Published   |       | joe    |
       | The Event Logo        | Event logo        | Published   |       | joe    |
       | The News Logo         | News logo         | Published   |       | joe    |
