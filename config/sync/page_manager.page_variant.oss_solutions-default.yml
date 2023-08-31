@@ -97,17 +97,6 @@ variant_settings:
         context_mapping: {  }
         column_widths: 50-50
       components:
-        b1993c2a-0f67-41a3-bc65-674214e287dc:
-          uuid: b1993c2a-0f67-41a3-bc65-674214e287dc
-          region: first
-          configuration:
-            id: joinup_oss_guide
-            label: 'Publish your OSS'
-            label_display: '0'
-            provider: joinup_oss_catalogue
-            context_mapping: {  }
-          weight: 0
-          additional: {  }
         67351ee4-415e-4923-b340-2bb795872225:
           uuid: 67351ee4-415e-4923-b340-2bb795872225
           region: second
@@ -119,6 +108,20 @@ variant_settings:
             context_mapping: {  }
           weight: 0
           additional: {  }
+        ba5b79c4-696d-41db-9ed9-a56360b72e6e:
+          uuid: ba5b79c4-696d-41db-9ed9-a56360b72e6e
+          region: first
+          configuration:
+            id: custom_markup
+            label: 'Do you want to publish your open souce solution?'
+            label_display: visible
+            provider: custom_markup_block
+            context_mapping: {  }
+            markup:
+              value: '<p>Just follow the guide!</p><div> Make sure you have a git repository In order to publish your software to this catalogue, you need to include a YAML file generated with some information inside yourgit repository</div><div> Fill the information form First, you will have to fill some information like the supported languages, the name of your software, the release date,…</div><div> Generate the YAML file Once the form is filled, you will be able to generate the YAML with the button dedicated to it on the page</div><div> Include your YAML file inside your git! You must include this generated YAML file at the rooth of your git and the information will automaticly be retrieved in our platform. Your solution is now published!</div>'
+              format: full_html
+          weight: 1
+          additional: {  }
       third_party_settings: {  }
     -
       layout_id: layout_onecol
@@ -126,16 +129,19 @@ variant_settings:
         label: FAQ
         context_mapping: {  }
       components:
-        d0c5b76f-e916-4f49-a36a-ecfc82a78f1b:
-          uuid: d0c5b76f-e916-4f49-a36a-ecfc82a78f1b
+        0afa7310-a6f7-4153-8385-f871576cc070:
+          uuid: 0afa7310-a6f7-4153-8385-f871576cc070
           region: content
           configuration:
-            id: joinup_oss_faq
-            label: 'OSS FAQ'
-            label_display: '0'
-            provider: joinup_oss_catalogue
+            id: custom_markup
+            label: 'Frequently Asked Questions (FAQ)'
+            label_display: visible
+            provider: custom_markup_block
             context_mapping: {  }
-          weight: 0
+            markup:
+              value: "<div class=\"accordion\">\t\r\n\t<div class=\"accordion-item\">\r\n\t  <h2 class=\"accordion-header\" id=\"heading-1-1\">\r\n\t    <button class=\"accordion-button collapsed\" data-bs-toggle=\"collapse\" autocomplete=\"off\" data-bs-target=\"#collapse-1-1\" aria-controls=\"collapse-1-1\" aria-expanded=\"false\" type=\"button\">Lorem ipsum dolor sit amet ?</button>\r\n\t  </h2>\r\n\t  <div id=\"collapse-1-1\" class=\"accordion-collapse collapse\" aria-labelledby=\"heading-1-1\" role=\"region\" data-bs-parent=\"#accordion-1\" style=\"\">\r\n\t    <div class=\"accordion-body\">Lorem ipsum dolor sit amet......</div>\r\n\t  </div>\r\n\t</div>\r\n\t<div class=\"accordion-item\">\r\n\t  <h2 class=\"accordion-header\" id=\"heading-1-2\">\r\n\t    <button class=\"accordion-button collapsed\" data-bs-toggle=\"collapse\" autocomplete=\"off\" data-bs-target=\"#collapse-1-2\" aria-controls=\"collapse-1-2\" aria-expanded=\"false\" type=\"button\">Lorem ipsum dolor sit amet ?</button>\r\n\t  </h2>\r\n\t  <div id=\"collapse-1-2\" class=\"accordion-collapse collapse\" aria-labelledby=\"heading-1-2\" role=\"region\" data-bs-parent=\"#accordion-1\">\r\n\t    <div class=\"accordion-body\">Lorem ipsum dolor sit amet......</div>\r\n\t  </div>\r\n\t</div>\r\n\t<div class=\"accordion-item\">\r\n\t  <h2 class=\"accordion-header\" id=\"heading-1-3\">\r\n\t    <button class=\"accordion-button collapsed\" data-bs-toggle=\"collapse\" autocomplete=\"off\" data-bs-target=\"#collapse-1-3\" aria-controls=\"collapse-1-3\" aria-expanded=\"false\" type=\"button\">Lorem ipsum dolor sit amet ?</button>\r\n\t  </h2>\r\n\t  <div id=\"collapse-1-3\" class=\"accordion-collapse collapse\" aria-labelledby=\"heading-1-3\" role=\"region\" data-bs-parent=\"#accordion-1\">\r\n\t    <div class=\"accordion-body\">Lorem ipsum dolor sit amet......</div>\r\n\t  </div>\r\n\t</div>\r\n</div>"
+              format: full_html
+          weight: 1
           additional: {  }
       third_party_settings: {  }
     -
@@ -144,16 +150,19 @@ variant_settings:
         label: 'Social links'
         context_mapping: {  }
       components:
-        dbd6fae5-1f94-4933-8a8e-33aa3f92a307:
-          uuid: dbd6fae5-1f94-4933-8a8e-33aa3f92a307
+        30e94575-3bc8-482d-9f55-76b0427c348b:
+          uuid: 30e94575-3bc8-482d-9f55-76b0427c348b
           region: content
           configuration:
-            id: joinup_oss_footer
+            id: custom_markup
             label: 'Follow our journey on the social media!'
             label_display: visible
-            provider: joinup_oss_catalogue
+            provider: custom_markup_block
             context_mapping: {  }
-          weight: 0
+            markup:
+              value: '<a class="btn btn-sm rounded-circle join__btn join__btn--linkedin" href="" target="_blank" rel="noopener" title="Follow us on LinkedIn"></a><a class="btn btn-sm rounded-circle join__btn join__btn--twitter" href="" target="_blank" rel="noopener" title="Follow us on Twitter"></a>'
+              format: full_html
+          weight: 1
           additional: {  }
       third_party_settings: {  }
 page: oss_solutions
