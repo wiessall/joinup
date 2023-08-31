@@ -12,7 +12,12 @@ Feature:
     When I go to "/eu-oss-catalogue-dummy"
     Then the response status code should be 404
 
+  @javascript
   Scenario: User sees the right content
     When I visit "/eu-oss-catalogue"
     And I should see the following headings:
       | Discover our initiative |
+    And I should see the text "European Open-Source Software Solutions Catalogue"
+
+    When I click "advanced search"
+    And I should see the heading "Search in European Open-source Software Solutions Catalogue"

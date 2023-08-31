@@ -146,7 +146,7 @@ Feature: Search inside groups
     # the keywords have been typed in. This should have the same result.
     Given I am on the homepage of the "Inclined foundations" solution
     When I should toggle search bar in navbar
-    And I enter "ground" in the search bar
+    And I enter "ground" in the "search bar"
     And I press the remove button on the chip "Inclined foundations"
     And I submit the search by pressing enter
     Then the page should show the tiles "Ground plan, Pre-alpha, Natural materials, Presenting DrillMaster X88"

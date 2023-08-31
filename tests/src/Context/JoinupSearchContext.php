@@ -446,17 +446,19 @@ class JoinupSearchContext extends RawDrupalContext {
    *
    * This function asserts also the order of the items.
    *
+   * @param string $input
+   *   Search bar name.
    * @param \Behat\Gherkin\Node\TableNode $table
    *   A list of items to be present.
    *
    * @throws \Exception
    *    Thrown when the suggestions are not present in the page.
    *
-   * @Then I should see the (following )search suggestion(s):
+   * @Then I should see the (following ) :input suggestion(s):
    */
-  public function iShouldSeeTheSuggestions(TableNode $table): void {
+  public function iShouldSeeTheSuggestions(string $input, TableNode $table): void {
     $session = $this->getSession();
-    $element = $this->getSearchBarElement();
+    $element = $this->getSearchBarElement($input);
     $session->getDriver()->keyDown($element->getXpath(), '', NULL);
     $session->wait(1000);
     $allResults = $this->getSession()->getPage()->findAll('css', 'ul.ui-autocomplete a');
@@ -679,14 +681,16 @@ class JoinupSearchContext extends RawDrupalContext {
    *
    * @param string $keywords
    *   A list of words to search.
+   * @param string $input
+   *   Search bar name.
    *
    * @throws \Exception
    *   Thrown when the header search bar is not found.
    *
-   * @When I enter :keywords in the search bar
+   * @When I enter :keywords in the :input
    */
-  public function enterSearchKeywords(string $keywords): void {
-    $element = $this->getSearchBarElement();
+  public function enterSearchKeywords(string $keywords, string $input): void {
+    $element = $this->getSearchBarElement($input);
     $element->setValue($keywords);
   }
 
@@ -802,11 +806,14 @@ class JoinupSearchContext extends RawDrupalContext {
   /**
    * Returns the search bar as a Mink page element.
    *
+   * @param string|null $input
+   *   Search bar name.
+   *
    * @return \Behat\Mink\Element\NodeElement
    *   The search bar.
    */
-  protected function getSearchBarElement(): NodeElement {
-    $elements = $this->getElementsMatchingElementAlias('search bar');
+  protected function getSearchBarElement(?string $input = 'search bar'): NodeElement {
+    $elements = $this->getElementsMatchingElementAlias($input);
 
     Assert::assertNotEmpty($elements, 'Could not find the search field in the page.');
     Assert::assertCount(1, $elements, 'There are multiple search fields on the page.');
