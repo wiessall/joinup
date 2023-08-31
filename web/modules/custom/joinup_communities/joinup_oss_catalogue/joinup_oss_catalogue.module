@@ -28,19 +28,3 @@ function joinup_oss_catalogue_entity_bundle_info_alter(array &$bundles): void {
     $bundles['node']['oss_solution']['class'] = JoinupOssSolution::class;
   }
 }
-
-/**
- * Implements hook_theme().
- */
-function joinup_oss_catalogue_theme(array $existing, string $type, string $theme, string $path): array {
-  return [
-    'oss_faqs' => [
-      'variables' => [
-        'title' => NULL,
-        'items' => [],
-        'help_text' => NULL,
-        'contact_us' => NULL,
-      ],
-    ],
-  ];
-}
