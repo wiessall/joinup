@@ -16,6 +16,9 @@
   overflow: hidden;
   box-shadow: $modal-content-box-shadow-sm-up;
   padding: 0!important;
+  &.ui-widget-content a.btn-link {
+    color: $brand
+  }
   .ui-widget-header {
     border-top: 0;
     border-right: 0;
