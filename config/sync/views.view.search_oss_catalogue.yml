@@ -218,7 +218,7 @@ display:
             operator: search_api_fulltext_op
             operator_limit_selection: false
             operator_list: {  }
-            identifier: keys
+            identifier: oss_keys
             required: false
             remember: false
             multiple: false

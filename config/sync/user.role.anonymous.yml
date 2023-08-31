@@ -40,6 +40,7 @@ permissions:
   - 'legal view legal_notice'
   - 'never autoplay videos'
   - 'use search_api_autocomplete for search'
+  - 'use search_api_autocomplete for search_oss_catalogue'
   - 'use text format basic_html'
   - 'use text format simple_text'
   - 'view compatibility documents'

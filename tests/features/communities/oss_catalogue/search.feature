@@ -51,3 +51,31 @@ Feature: OSS catalogue search
     And I should not see the "NDC Semantic frontend" tile
     And I should not see the "Software Registry" tile
     And I should see the "Immuni" tile
+
+  @javascript
+  Scenario: User is able to use autocomplete.
+    Given oss_solution content:
+      | title                     | oss_development_status | oss_source        | oss_categories                                                  | oss_short_description                                                                                                                         | status    |
+      | Trembling Mage            | stable                 | developers_italia | content-management                                              | A lightweight SAML2 MDQ server that implements draft-young-md-query implementation.                                                           | published |
+      | The Missing Secrets       | stable                 | developers_italia | data-analytics,data-collection                                  | Docker image to convert QuakeML format to NonLinLoc PHS format.                                                                               | published |
+      | Light of Person           | beta                   | developers_italia | digital-asset-management                                        |                                                                                                                                               | published |
+      | The Word's Game           | development            | developers_italia | application-development,it-development,digital-asset-management | Software Registry makes software development phase simplier by showing extended information about projects and allowing source code searches. | published |
+      | The Snake of the Servant  | obsolete               | developers_italia | data-collection                                                 | Immuni is a mobile app that helps us to fight the COVID-19 pandemic by notifying users at risk of carrying the virus as early as possible     | published |
+
+    When I visit the OSS search page
+
+    Then I enter "nd" in the "oss search bar"
+    And I wait for AJAX to finish
+    Then I should see the following "oss search" suggestions:
+      | Trembling Mage      |
+      | The Missing Secrets |
+
+    Then I enter "Mage" in the "oss search bar"
+    And I wait for AJAX to finish
+    Then I should see the following "oss search" suggestions:
+      | Trembling Mage |
+
+    Then I enter "Game" in the "oss search bar"
+    And I wait for AJAX to finish
+    Then I should see the following "oss search" suggestions:
+      | The Word's Game |
