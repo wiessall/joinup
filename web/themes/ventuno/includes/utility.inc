@@ -137,7 +137,10 @@ function _ventuno_preprocess_tile(array &$variables, string $entity_type_id): vo
       if (!isset($variables['image']['0'])) {
         unset($variables['image']);
       }
-
+      if (isset($variables['content']['oss_short_description'])) {
+        $variables['text'] = $variables['content']['oss_short_description'];
+      }
+      $variables['bundle']['label'] = 'Solution';
       break;
 
     case 'tallinn_report':
@@ -254,6 +257,7 @@ function _ventuno_get_default_icon(string $entity_type_id, string $bundle): stri
       'document' => 'file-earmark-text',
       'event' => 'calendar-event',
       'news' => 'newspaper',
+      'oss_solution' => 'clipboard2-check',
       'tallinn_report' => 'journal-text',
       'video' => 'file-earmark-play',
     ],
