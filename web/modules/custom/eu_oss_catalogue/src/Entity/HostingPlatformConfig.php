@@ -16,7 +16,7 @@ use Drupal\Core\Plugin\DefaultSingleLazyPluginCollection;
  *   handlers = {
  *     "form" = {
  *       "edit" = "Drupal\eu_oss_catalogue\Form\HostingPlatformConfigForm",
- *       "delete" = "Drupal\eu_oss_catalogue\Form\HostingPlatformConfigConfigDeleteConfirmForm"
+ *       "delete" = "Drupal\eu_oss_catalogue\Form\HostingPlatformConfigDeleteForm"
  *     },
  *     "route_provider" = {
  *       "html" = "Drupal\Core\Entity\Routing\AdminHtmlRouteProvider",
