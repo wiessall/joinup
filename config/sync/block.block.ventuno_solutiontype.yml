@@ -11,7 +11,7 @@ dependencies:
     - ventuno
 id: ventuno_solutiontype
 theme: ventuno
-region: sidebar
+region: content
 weight: -24
 provider: null
 plugin: 'facet_block:solution_type'
