@@ -16,7 +16,12 @@ Feature:
   Scenario: User sees the right content
     When I visit "/eu-oss-catalogue"
     And I should see the following headings:
-      | Discover our initiative |
+      | Discover our initiative                          |
+      | Do you want to publish your open souce solution? |
+      | Let’s start with your software name               |
+      | Frequently Asked Questions (FAQ)                 |
+      | Follow our journey on the social media!          |
+    And I should see the text "Just follow the guide!"
     And I should see the text "European Open-Source Software Solutions Catalogue"
 
     When I click "advanced search"
