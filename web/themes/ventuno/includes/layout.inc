@@ -190,3 +190,42 @@ function ventuno_preprocess_layout__twocol_section(array &$variables): void {
   $variables['first_col_class'] = $first_col_class;
   $variables['second_col_class'] = $second_col_class;
 }
+
+/**
+ * Implements hook_preprocess_layout__threecol_section().
+ */
+function ventuno_preprocess_layout__threecol_section(array &$variables): void {
+  $first_col_class = ['layout__region', 'layout__region--first'];
+  $second_col_class = ['layout__region', 'layout__region--second'];
+  $third_col_class = ['layout__region', 'layout__region--third'];
+  switch ($variables['settings']['column_widths']) {
+    case '25-50-25':
+      $first_col_class[] = 'col-md-3';
+      $second_col_class[] = 'col-md-6';
+      $third_col_class[] = 'col-md-3';
+      break;
+
+    case '33-34-33':
+      $first_col_class[] = 'col-md-4';
+      $second_col_class[] = 'col-md-4';
+      $third_col_class[] = 'col-md-4';
+      break;
+
+    case '25-25-50':
+      $first_col_class[] = 'col-md-3';
+      $second_col_class[] = 'col-md-3';
+      $third_col_class[] = 'col-md-6';
+      break;
+
+    case '50-25-25':
+      $first_col_class[] = 'col-md-6';
+      $second_col_class[] = 'col-md-3';
+      $third_col_class[] = 'col-md-3';
+      break;
+  }
+
+  $variables['first_col_class'] = $first_col_class;
+  $variables['second_col_class'] = $second_col_class;
+  $variables['third_col_class'] = $third_col_class;
+}
+
