@@ -140,7 +140,7 @@ function _ventuno_preprocess_tile(array &$variables, string $entity_type_id): vo
       if (empty($variables['text'])) {
         $variables['text'] = $variables['content']['oss_git_description'];
       }
-      $variables['bundle']['label'] = 'Solution';
+      $variables['bundle']['label'] = t('Solution');
       break;
 
     case 'tallinn_report':
