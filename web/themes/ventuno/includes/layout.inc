@@ -158,8 +158,6 @@ function ventuno_preprocess_container__facet_region__top(array &$variables): voi
  * Implements hook_preprocess_layout__twocol_section().
  */
 function ventuno_preprocess_layout__twocol_section(array &$variables): void {
-  $first_col_class = ['layout__region', 'layout__region--first'];
-  $second_col_class = ['layout__region', 'layout__region--second'];
   switch ($variables['settings']['column_widths']) {
     case '50-50':
       $first_col_class[] = 'col-md-6';
@@ -195,9 +193,6 @@ function ventuno_preprocess_layout__twocol_section(array &$variables): void {
  * Implements hook_preprocess_layout__threecol_section().
  */
 function ventuno_preprocess_layout__threecol_section(array &$variables): void {
-  $first_col_class = ['layout__region', 'layout__region--first'];
-  $second_col_class = ['layout__region', 'layout__region--second'];
-  $third_col_class = ['layout__region', 'layout__region--third'];
   switch ($variables['settings']['column_widths']) {
     case '25-50-25':
       $first_col_class[] = 'col-md-3';
