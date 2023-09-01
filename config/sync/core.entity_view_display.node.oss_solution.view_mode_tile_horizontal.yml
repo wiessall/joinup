@@ -25,6 +25,7 @@ dependencies:
     - field.field.node.oss_solution.oss_software_type
     - field.field.node.oss_solution.oss_software_version
     - field.field.node.oss_solution.oss_source
+    - field.field.node.oss_solution.oss_source_hash
     - field.field.node.oss_solution.oss_used_by
     - node.type.oss_solution
     - responsive_image.styles.tile
@@ -43,6 +44,16 @@ targetEntityType: node
 bundle: oss_solution
 mode: view_mode_tile_horizontal
 content:
+  oss_git_description:
+    type: joinup_html_stripper_stripped
+    label: hidden
+    settings:
+      trim_length: 600
+    third_party_settings:
+      template_suggestion:
+        template_suggestion: bare
+    weight: 2
+    region: content
   oss_logo:
     type: imagecache_external_responsive_image
     label: hidden
@@ -52,7 +63,7 @@ content:
     third_party_settings:
       template_suggestion:
         template_suggestion: ''
-    weight: 1
+    weight: 0
     region: content
   oss_short_description:
     type: joinup_html_stripper_stripped
@@ -61,8 +72,8 @@ content:
       trim_length: 600
     third_party_settings:
       template_suggestion:
-        template_suggestion: ''
-    weight: 0
+        template_suggestion: bare
+    weight: 1
     region: content
 hidden:
   langcode: true
@@ -70,7 +81,6 @@ hidden:
   oss_categories: true
   oss_development_status: true
   oss_features: true
-  oss_git_description: true
   oss_git_url: true
   oss_landing_url: true
   oss_license: true
