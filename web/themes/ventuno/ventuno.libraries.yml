@@ -395,3 +395,10 @@ layout-paragraphs--builder:
   css:
     theme:
       assets/css/layout-paragraphs--builder.min.css: { minified: true }
+
+oss-carousel-most-recent-block:
+  header: true
+  js:
+    assets/js/oss-carousel-most-recent-block.min.js: { minified: true, attributes: { defer: true } }
+  dependencies:
+    - ventuno/glide
