@@ -9,7 +9,7 @@
   color: $white;
 }
 .ui-dialog {
-  z-index: $zindex-modal;
+  z-index: $zindex-modal!important;
   overflow-wrap: break-word;
   border: 1px solid $gray-200;
   border-radius: $border-radius-lg!important;
