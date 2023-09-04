@@ -28,7 +28,7 @@ Feature: "Add custom page" visibility options.
     Given my role in the "<title>" "<group>" changes to facilitator
     And I reload the page
     Then I should see the link "Add custom page" in the "Plus button menu"
-    And I should see the contextual link "Add new page" in the "Header bottom" region
+    And I should see the contextual link "Add new page" in the "Header" region
 
     # An authenticated user which is not a member should also not see the links
     # and help text.
@@ -49,7 +49,7 @@ Feature: "Add custom page" visibility options.
     When I am logged in as a facilitator of the "<title>" <group>
     And I go to the homepage of the "<title>" <group>
     Then I should see the link "Add custom page" in the "Plus button menu"
-    And I should see the contextual link "Add new page" in the "Header bottom" region
+    And I should see the contextual link "Add new page" in the "Header" region
 
     Examples:
       | title     | group      |
@@ -64,8 +64,8 @@ Feature: "Add custom page" visibility options.
     # that it is possible to add custom pages.
     When I go to the homepage of the "<second title>" <group>
     Then the "<second title>" <group> should have 0 custom pages
-    And I should see the contextual link "Add new page" in the "Header bottom" region
-    When I click the contextual link "Add new page" in the "Header bottom" region
+    And I should see the contextual link "Add new page" in the "Header" region
+    When I click the contextual link "Add new page" in the "Header" region
     Then I should see the heading "Add custom page"
     And the following fields should be present "Title, Body"
 
@@ -186,7 +186,7 @@ Feature: "Add custom page" visibility options.
     # It should not be possible to create a custom page with a duplicate title.
     Given I am logged in as a facilitator of the "<first title>" <group>
     When I go to the homepage of the "<first title>" <group>
-    And I click the contextual link "Add new page" in the "Header bottom" region
+    And I click the contextual link "Add new page" in the "Header" region
     Then I should see the heading "Add custom page"
 
     When I fill in the following:
@@ -198,7 +198,7 @@ Feature: "Add custom page" visibility options.
     # title in a different group.
     Given I am logged in as a facilitator of the "<second title>" <group>
     When I go to the homepage of the "<second title>" <group>
-    And I click the contextual link "Add new page" in the "Header bottom" region
+    And I click the contextual link "Add new page" in the "Header" region
     Then I should see the heading "Add custom page"
 
     When I fill in the following:

@@ -84,7 +84,7 @@ Feature: Proposing a collection
       | Overview |
       | Members  |
       | About    |
-    When I click the contextual link "Add new page" in the "Header bottom" region
+    When I click the contextual link "Add new page" in the "Header" region
     Then I should see the heading "Add custom page"
     When I fill in the following:
       | Title | About this group                                               |
