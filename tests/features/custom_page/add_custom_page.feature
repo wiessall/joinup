@@ -21,7 +21,7 @@ Feature: "Add custom page" visibility options.
     When I am logged in as a member of the "<title>" <group>
     And I go to the homepage of the "<title>" <group>
     Then I should not see the link "Add custom page"
-    And I should not see the link "Add a new page" in the "Header bottom"
+    And I should not see the link "Add a new page" in the "Header"
     And I should not see the text "There are no pages yet. Why don't you start by creating an About page?"
     # If the normal member is promoted to facilitator, the links and help text
     # should become visible.
@@ -35,14 +35,14 @@ Feature: "Add custom page" visibility options.
     When I am logged in as an "authenticated user"
     And I go to the homepage of the "<title>" <group>
     Then I should not see the plus button menu
-    And I should not see the link "Add a new page" in the "Header bottom"
+    And I should not see the link "Add a new page" in the "Header"
     And I should not see the text "There are no pages yet. Why don't you start by creating an About page?"
 
     # An anonymous user should also not see the links and help text.
     When I am an anonymous user
     And I go to the homepage of the "<title>" <group>
     Then I should not see the plus button menu
-    And I should not see the link "Add a new page" in the "Header bottom"
+    And I should not see the link "Add a new page" in the "Header"
     And I should not see the text "There are no pages yet. Why don't you start by creating an About page?"
 
     # A facilitator should see it.
@@ -105,7 +105,7 @@ Feature: "Add custom page" visibility options.
     And the "<second title>" <group> should have a custom page titled "About us"
     # Check that the link to the custom page is visible on the group page.
     When I go to the homepage of the "<second title>" <group>
-    And I click "About us" in the "Header bottom"
+    And I click "About us" in the "Header"
 
     # I should not be able to add a custom page to a different <group>
     When I go to the homepage of the "<first title>" <group>
@@ -113,7 +113,7 @@ Feature: "Add custom page" visibility options.
 
     When I am an anonymous user
     And I go to the homepage of the "<second title>" <group>
-    Then I should not see the link "About us" in the "Header bottom"
+    Then I should not see the link "About us" in the "Header"
 
     Examples:
       | first title | second title    | group      |
