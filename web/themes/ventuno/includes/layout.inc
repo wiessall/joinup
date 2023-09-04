@@ -223,4 +223,3 @@ function ventuno_preprocess_layout__threecol_section(array &$variables): void {
   $variables['second_col_class'] = $second_col_class;
   $variables['third_col_class'] = $third_col_class;
 }
-
