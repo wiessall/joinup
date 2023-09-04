@@ -9,7 +9,7 @@ dependencies:
 id: iop_eifrecomendationsselector
 theme: iop
 region: content
-weight: -3
+weight: -4
 provider: null
 plugin: eif_recommendation_selector
 settings:

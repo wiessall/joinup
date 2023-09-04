@@ -9,7 +9,7 @@ dependencies:
 id: iopfooter
 theme: iop
 region: content
-weight: -2
+weight: -3
 provider: null
 plugin: interoperable_europe_iop_footer
 settings:

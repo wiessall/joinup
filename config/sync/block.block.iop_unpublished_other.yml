@@ -9,8 +9,8 @@ dependencies:
     - iop
 id: iop_unpublished_other
 theme: iop
-region: content_bottom
-weight: -14
+region: content
+weight: 4
 provider: null
 plugin: entity_unpublished
 settings:

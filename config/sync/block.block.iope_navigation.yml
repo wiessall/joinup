@@ -10,8 +10,8 @@ dependencies:
     - iop
 id: iope_navigation
 theme: iop
-region: header_bottom
-weight: 0
+region: header
+weight: -20
 provider: null
 plugin: 'group_menu_block:navigation'
 settings:
