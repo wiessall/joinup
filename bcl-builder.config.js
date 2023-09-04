@@ -41,6 +41,14 @@ module.exports = {
       },
     },
     {
+      entry: path.resolve(outputFolder, `${ventuno}src/js/oss-carousel-most-recent-block.js`),
+      dest: path.resolve(outputFolder, `${ventuno}assets/js/oss-carousel-most-recent-block.js`),
+      options: {
+        minify: true,
+        sourceMap: true,
+      },
+    },
+    {
       entry: path.resolve(
         outputFolder,
         `${ventuno}src/js/fieldset-show-more.js`
