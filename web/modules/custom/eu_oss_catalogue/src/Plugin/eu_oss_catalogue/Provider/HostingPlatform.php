@@ -10,10 +10,10 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Serialization\Yaml;
 use Drupal\eu_oss_catalogue\Entity\HostingPlatformConfigInterface;
-use Drupal\eu_oss_catalogue\Model\EuOssCatalogueFetchedSolution;
 use Drupal\eu_oss_catalogue\EuOssCatalogueHostingPlatformInterface;
 use Drupal\eu_oss_catalogue\EuOssCataloguePluginManagerInterface;
 use Drupal\eu_oss_catalogue\EuOssCatalogueProviderPluginBase;
+use Drupal\eu_oss_catalogue\Model\EuOssCatalogueFetchedSolution;
 use Drupal\eu_oss_catalogue\Model\HostingPlatformResult;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
