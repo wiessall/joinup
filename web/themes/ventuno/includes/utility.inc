@@ -137,7 +137,7 @@ function _ventuno_preprocess_tile(array &$variables, string $entity_type_id): vo
       if (!isset($variables['image']['0'])) {
         unset($variables['image']);
       }
-      if (empty($variables['text'])) {
+      if (!isset($variables['text'][0])) {
         $variables['text'] = $variables['content']['oss_git_description'];
       }
       $variables['bundle']['label'] = t('Solution');
