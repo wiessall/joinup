@@ -11,8 +11,8 @@ dependencies:
     - iop
 id: iop_table_of_contents
 theme: iop
-region: content_bottom
-weight: -19
+region: content
+weight: -1
 provider: null
 plugin: 'custom_page_toc:navigation'
 settings:

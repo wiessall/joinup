@@ -12,7 +12,7 @@ dependencies:
 id: iop_toc_outline
 theme: iop
 region: content
-weight: -5
+weight: -6
 provider: null
 plugin: toc_outline
 settings:
