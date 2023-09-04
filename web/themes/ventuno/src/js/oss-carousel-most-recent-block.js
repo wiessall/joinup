@@ -14,7 +14,9 @@ import ControlsDisabler from "./helpers/glide.controlsDisabler.esm";
   Drupal.behaviors.ossGlide = {
     attach() {
       function mountSlide() {
-        const slides = document.querySelectorAll(".block-views-blockoss-solution-oss-most-recent-solutions .glide");
+        const slides = document.querySelectorAll(
+          ".block-views-blockoss-solution-oss-most-recent-solutions .glide"
+        );
         slides.forEach((slide) => {
           const glide = new Glide(slide, {
             rewind: false,
