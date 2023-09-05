@@ -13,7 +13,7 @@ dependencies:
 id: ventuno_navigation
 theme: ventuno
 region: header
-weight: -24
+weight: -25
 provider: null
 plugin: 'group_menu_block:navigation'
 settings:
