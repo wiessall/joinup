@@ -22,4 +22,15 @@ function ventuno_preprocess_links__media_library_menu(array &$variables): void {
  */
 function ventuno_preprocess_links__dropbutton__operations(array &$variables): void {
   $variables['#attached']['library'][] = 'ventuno/button-group';
+  // Ensure button-links in paragraphs has the right appearance.
+  if ($variables['theme_hook_original'] === 'links__dropbutton__operations__paragraphs') {
+    $variables['split'] = TRUE;
+  };
+  // Override with medium secondary classes.
+  if (isset($variables['button']['#options']['attributes']['class'])) {
+    $variables['button']['#options']['attributes']['class'] = [
+      'btn',
+      'btn-secondary',
+    ];
+  }
 }
