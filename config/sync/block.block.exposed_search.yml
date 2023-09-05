@@ -12,7 +12,7 @@ dependencies:
 id: exposed_search
 theme: ventuno
 region: featured
-weight: -27
+weight: -26
 provider: null
 plugin: 'views_exposed_filter_block:search-page_1'
 settings:
