@@ -40,11 +40,12 @@ class GitLab extends EuOssCatalogueGitHostingPlatformPluginBase {
     $state = [
       ':input[name="platformSettings[self_hosted]"]' => ['checked' => TRUE],
     ];
-    return [
+    $form = [
       'self_hosted' => [
         '#type' => 'checkbox',
         '#title' => $this->t('Self-hosted GitLab'),
         '#default_value' => !empty($this->getConfiguration()['url']),
+        '#disabled' => !$this->getConfiguration()['hosting_platform']->isNew(),
       ],
       'url' => [
         '#type' => 'url',
@@ -54,8 +55,11 @@ class GitLab extends EuOssCatalogueGitHostingPlatformPluginBase {
           'required' => $state,
           'visible' => $state,
         ],
+        '#disabled' => !$this->getConfiguration()['hosting_platform']->isNew(),
       ],
     ] + parent::buildConfigurationForm($form, $formState);
+
+    return $form;
   }
 
   /**
@@ -66,7 +70,6 @@ class GitLab extends EuOssCatalogueGitHostingPlatformPluginBase {
     if (empty($formState->getValue('self_hosted'))) {
       // Properly cast to NULL.
       $formState->setValue('url', NULL);
-      $formState->setValue('projects', []);
     }
     $formState->unsetValue('self_hosted');
   }
