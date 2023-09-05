@@ -39,4 +39,3 @@ eu_oss_catalogue.hosting_platform_plugin_default_settings_git:
 eu_oss_catalogue.hosting_platform_plugin.github:
   type: eu_oss_catalogue.hosting_platform_plugin_default_settings_git
   label: GitHub platform settings
-
