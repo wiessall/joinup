@@ -5,9 +5,10 @@ declare(strict_types = 1);
 namespace Drupal\eu_oss_catalogue\Plugin\eu_oss_catalogue\HostingPlatform;
 
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Site\Settings;
-use Drupal\eu_oss_catalogue\EuOssCatalogueGitHostingPlatformPluginBase;
+use Drupal\eu_oss_catalogue\Model\HostingPlatformResult;
 use Gitlab\Client;
+use Gitlab\Exception\RuntimeException;
+use Gitlab\ResultPager;
 
 /**
  * Git code hosting platform for GitLab repositories.
@@ -51,6 +52,16 @@ class GitLabSelfHosted extends GitLabBase {
   /**
    * {@inheritdoc}
    */
+  public function validateConfigurationForm(array &$form, FormStateInterface $formState): void {
+    if ($formState->getValue('projects')) {
+      // Only need validation if there are projects.
+      parent::validateConfigurationForm($form, $formState);
+    }
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function submitConfigurationForm(array &$form, FormStateInterface $formState): void {
     parent::submitConfigurationForm($form, $formState);
     $this->configuration['url'] = $formState->getValue('url');
@@ -74,9 +85,38 @@ class GitLabSelfHosted extends GitLabBase {
    * {@inheritdoc}
    */
   protected function getProjects(array $candidates, ?string $filePath = NULL): array {
-    $projects = [];
-    // @todo Implement.
-    return $projects;
+    // Self-hosted GitLab instances allows to crawl the whole platform.
+    if (empty($candidates)) {
+      $projects = [];
+      $pager = new ResultPager($this->getClient());
+      foreach ($pager->fetchAll($this->getClient()->projects(), 'all') as $repo) {
+        $fileContent = NULL;
+        if (!empty($repo['default_branch'])) {
+          if ($filePath) {
+            try {
+              $fileContent = $this->getClient()->repositoryFiles()->getRawFile($repo['id'], $filePath, $repo['default_branch']);
+            }
+            catch (RuntimeException $exception) {
+              if ($exception->getCode() !== 404 || $exception->getMessage() !== '404 File Not Found') {
+                throw $exception;
+              }
+              // Nothing to do, $fileContent is already NULL.
+            }
+          }
+
+          $projects[$repo['namespace']['full_path']][$repo['path']] = new HostingPlatformResult(
+            $repo['namespace']['full_path'],
+            $repo['path'],
+            $repo['default_branch'],
+            (string) $repo['id'],
+            $repo['description'],
+            $fileContent,
+          );
+        }
+      }
+      return $projects;
+    }
+    return parent::getProjects($candidates, $filePath);
   }
 
 }

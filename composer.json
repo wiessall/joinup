@@ -112,6 +112,7 @@
         "ec-europa/spdx": "^1.0",
         "ec-europa/virtuoso": "^2.1",
         "knplabs/github-api": "^3.0",
+        "m4tthumphrey/php-gitlab-api": "^11.11",
         "mglaman/composer-drupal-lenient": "^1.0",
         "openeuropa/composer-artifacts": "^1.0",
         "openeuropa/gisco-geocoding-provider": "^1.0",
@@ -394,6 +395,9 @@
             "drupal/views_autosubmit": {
                 "Diff from 8.1.x.5 with dev version" : "resources/patch/php/drupal/views_autosubmit/views_autosubmit_once.patch",
                 "Stop auto submitting first character entered in an Autocomplete Filter field. @see https://www.drupal.org/project/views_autosubmit/issues/3160600" : "https://git.drupalcode.org/project/views_autosubmit/-/merge_requests/10.patch"
+            },
+            "m4tthumphrey/php-gitlab-api": {
+                "GraphQL API @see https://github.com/GitLabPHP/Client/issues/766": "https://patch-diff.githubusercontent.com/raw/GitLabPHP/Client/pull/772.diff"
             }
         },
         "drupal-lenient": {

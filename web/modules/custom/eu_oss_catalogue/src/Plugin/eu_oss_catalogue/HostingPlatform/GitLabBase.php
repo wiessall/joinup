@@ -4,8 +4,6 @@ declare(strict_types = 1);
 
 namespace Drupal\eu_oss_catalogue\Plugin\eu_oss_catalogue\HostingPlatform;
 
-use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Site\Settings;
 use Drupal\eu_oss_catalogue\EuOssCatalogueGitHostingPlatformPluginBase;
 use Gitlab\Client;
 
@@ -28,18 +26,17 @@ abstract class GitLabBase extends EuOssCatalogueGitHostingPlatformPluginBase {
   protected function getClient(): Client {
     if (!isset($this->client)) {
       $this->client = new Client();
-      $token = Settings::get('eu_oss_catalogue', [])['platform_gitlab']['access_token'][$this->getDerivativeId()] ?? NULL;
-      if (!$token) {
-        // @todo Should we show a message to user or it's only developer stuff?
-        throw new \InvalidArgumentException('GitLab access token is not set');
-      }
-      $this->client->authenticate($token, Client::AUTH_HTTP_TOKEN);
     }
     return $this->client;
   }
 
-  public function validateConfigurationForm(array &$form, FormStateInterface $formState): void {
-    // @todo Temporarily, disable validation.
+  /**
+   * {@inheritdoc}
+   */
+  protected function getProjects(array $candidates, ?string $filePath = NULL): array {
+    $projects = [];
+    // @todo Implement.
+    return $projects;
   }
 
 }
