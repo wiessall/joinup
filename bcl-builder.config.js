@@ -1333,6 +1333,7 @@ module.exports = {
           "type.svg",
           "twitter.svg",
           "vimeo.svg",
+          "x-circle-fill.svg",
           "x-lg.svg",
           "x-square-fill.svg",
           "x.svg",
