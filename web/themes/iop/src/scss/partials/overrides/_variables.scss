@@ -25,6 +25,7 @@ $btn-hover-bg-shade-amount: 10%;
 $btn-hover-bg-tint-amount: 10%;
 $btn-active-bg-shade-amount: 20%;
 $btn-active-bg-tint-amount: 20%;
+$btn-font-weight: 500;
 
 // Extra font variables
 $display-font-weight: normal;
@@ -57,6 +58,8 @@ $link-decoration: none;
 $link-hover-decoration: underline;
 
 // Modal
+$modal-header-border-color: $gray-300;
+$modal-header-border-width: 1px;
 $zindex-modal-backdrop: 502;
 $zindex-modal: 512;
 
