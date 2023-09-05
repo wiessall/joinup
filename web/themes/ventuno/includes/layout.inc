@@ -185,6 +185,10 @@ function ventuno_preprocess_layout__twocol_section(array &$variables): void {
       break;
   }
 
+  $first_col_class[] = 'layout__region';
+  $first_col_class[] = 'layout__region--first';
+  $second_col_class[] = 'layout__region';
+  $second_col_class[] = 'layout__region--second';
   $variables['first_col_class'] = $first_col_class;
   $variables['second_col_class'] = $second_col_class;
 }
@@ -219,6 +223,12 @@ function ventuno_preprocess_layout__threecol_section(array &$variables): void {
       break;
   }
 
+  $first_col_class[] = 'layout__region';
+  $first_col_class[] = 'layout__region--first';
+  $second_col_class[] = 'layout__region';
+  $second_col_class[] = 'layout__region--second';
+  $third_col_class[] = 'layout__region';
+  $third_col_class[] = 'layout__region--third';
   $variables['first_col_class'] = $first_col_class;
   $variables['second_col_class'] = $second_col_class;
   $variables['third_col_class'] = $third_col_class;
