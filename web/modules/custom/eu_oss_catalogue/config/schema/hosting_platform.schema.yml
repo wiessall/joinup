@@ -41,12 +41,16 @@ eu_oss_catalogue.hosting_platform_plugin.github:
   type: eu_oss_catalogue.hosting_platform_plugin_default_settings_git
   label: GitHub platform settings
 
-# GitLab
-eu_oss_catalogue.hosting_platform_plugin.gitlab:
+# GitLab (gitlab.com).
+eu_oss_catalogue.hosting_platform_plugin.gitlab_com:
   type: eu_oss_catalogue.hosting_platform_plugin_default_settings_git
-  label: GitLab platform settings
+  label: GitLab as service platform settings
+
+# GitLab (self-hosted).
+eu_oss_catalogue.hosting_platform_plugin.gitlab_self_hosted:
+  type: eu_oss_catalogue.hosting_platform_plugin_default_settings_git
+  label: GitLab self-hosted platform settings
   mapping:
     url:
       type: uri
       label: GitLab platform URL
-      nullable: true
