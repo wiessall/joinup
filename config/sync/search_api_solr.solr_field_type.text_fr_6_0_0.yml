@@ -231,7 +231,7 @@ solr_configs:
               VALUE: sm_context_tags
             -
               name: buildOnCommit
-              VALUE: 'true'
+              VALUE: 'false'
             -
               name: buildOnStartup
               VALUE: 'false'
