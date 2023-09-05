@@ -77,10 +77,10 @@ Feature:
     And I should see the link "December 2015"
     And I should see the link "November 2017"
     # Same for the "Solution type" facet.
-    And I should see the link "Interoperability Specification" in the "Left sidebar" region
-    And I should see the link "Networking Service" in the "Left sidebar" region
-    And I should see the link "Networking Infrastructure Enablers" in the "Left sidebar" region
-    And I should see the link "Data Owner" in the "Left sidebar" region
+    And I should see the link "Interoperability Specification" in the "Content" region
+    And I should see the link "Networking Service" in the "Content" region
+    And I should see the link "Networking Infrastructure Enablers" in the "Content" region
+    And I should see the link "Data Owner" in the "Content" region
     # Verify that only solutions are shown.
     But I should not see the text "Monday's Artificial"
     And I should not see the text "Restless Burst"
