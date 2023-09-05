@@ -1,0 +1,4 @@
+services:
+  datetime.time:
+    class: Drupal\joinup_test_time\Datetime\TestTime
+    arguments: ['@request_stack', '@state']
