@@ -78,6 +78,26 @@ field.formatter.settings.filtered_entity_reference_bundles:
         type: string
         label: 'Bundle'
 
+field.formatter.settings.joinup_core_formatter_fallback_field:
+  type: mapping
+  label: 'Formatter with fallback field settings'
+  mapping:
+    main_field_formatter_id:
+      type: string
+      label: 'Formatter plugin ID of the original field'
+    main_field_formatter_settings:
+      type: field.formatter.settings.[%parent.host_field_formatter_id]
+      label: 'Formatter settings of the original field'
+    fallback_field_id:
+      type: string
+      label: 'Machine name of the fallback field'
+    fallback_field_formatter_id:
+      type: string
+      label: 'Formatter plugin ID of the fallback field'
+    fallback_field_formatter_settings:
+      type: field.formatter.settings.[%parent.fallback_field_formatter_id]
+      label: 'Formatter settings of the original field'
+
 field.widget.settings.email_legacy_multicardinality:
   type: field.widget.settings.email_default
 

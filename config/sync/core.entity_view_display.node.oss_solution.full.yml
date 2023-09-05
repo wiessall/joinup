@@ -25,6 +25,7 @@ dependencies:
     - field.field.node.oss_solution.oss_software_type
     - field.field.node.oss_solution.oss_software_version
     - field.field.node.oss_solution.oss_source
+    - field.field.node.oss_solution.oss_source_hash
     - field.field.node.oss_solution.oss_used_by
     - node.type.oss_solution
   module:
@@ -125,9 +126,11 @@ third_party_settings:
                 entity: layout_builder.entity
                 view_mode: view_mode
               formatter:
-                type: tmp_link_to_image
+                type: imagecache_external_image
                 label: visually_hidden
-                settings: {  }
+                settings:
+                  imagecache_external_link: ''
+                  imagecache_external_style: logo
                 third_party_settings:
                   template_suggestion:
                     template_suggestion: ''
@@ -153,10 +156,14 @@ third_party_settings:
                 entity: layout_builder.entity
                 view_mode: view_mode
               formatter:
-                type: string
+                type: joinup_core_formatter_fallback_field
                 label: visually_hidden
                 settings:
-                  link_to_entity: false
+                  main_field_formatter_id: string
+                  main_field_formatter_settings:
+                    link_to_entity: 0
+                  fallback_field_id: oss_git_description
+                  fallback_field_formatter_id: basic_string
                 third_party_settings:
                   template_suggestion:
                     template_suggestion: ''
@@ -499,6 +506,7 @@ bundle: oss_solution
 mode: full
 content: {  }
 hidden:
+  joinup_oss_catalogue_short_desctiption_w_fallback: true
   langcode: true
   links: true
   oss_categories: true
@@ -522,6 +530,7 @@ hidden:
   oss_software_type: true
   oss_software_version: true
   oss_source: true
+  oss_source_hash: true
   oss_used_by: true
   published_at: true
   report: true
