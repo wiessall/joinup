@@ -5,18 +5,23 @@ declare(strict_types = 1);
 namespace Drupal\joinup_core;
 
 use Drupal\Core\DependencyInjection\ContainerBuilder;
-use Drupal\Core\DependencyInjection\ServiceModifierInterface;
+use Drupal\Core\DependencyInjection\ServiceProviderBase;
+use Drupal\joinup_core\EventSubscriber\LayoutBuilderBuildSubscriber;
 use Joinup\Traits\DigitQaPipelineAwareTrait;
+use Symfony\Component\DependencyInjection\Reference;
 
 /**
- * Sets Monolog handler paths from DRUPAL_MONOLOG_PATHS and adds dblog logging.
+ * Alters and registers services for Joinup Core.
  */
-class JoinupCoreServiceProvider implements ServiceModifierInterface {
+class JoinupCoreServiceProvider extends ServiceProviderBase {
 
   use DigitQaPipelineAwareTrait;
 
   /**
-   * {@inheritdoc}
+   * Sets Monolog handler paths from DRUPAL_MONOLOG_PATHS and adds dblog.
+   *
+   * @param ContainerBuilder $container
+   *   The ContainerBuilder whose service definitions can be altered.
    */
   public function alter(ContainerBuilder $container): void {
     // Workaround FPFISSUPP-15044.
@@ -50,6 +55,25 @@ class JoinupCoreServiceProvider implements ServiceModifierInterface {
         }
       }
     }
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function register(ContainerBuilder $container): void {
+    // Goal here is to prevent making Layout Builder a hard dependency.
+    $modules = $container->getParameter('container.modules');
+    if (!isset($modules['layout_builder'])) {
+      return;
+    }
+
+    $container
+      ->register(
+      'joinup_core.layout_builder.view_subscriber',
+      LayoutBuilderBuildSubscriber::class
+      )
+      ->addArgument(new Reference('current_user'))
+      ->addTag('event_subscriber');
   }
 
 }
