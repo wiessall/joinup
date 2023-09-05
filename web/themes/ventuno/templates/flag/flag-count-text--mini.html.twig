@@ -24,6 +24,7 @@
 
   <a{{ attributes.addClass(classes)
     .setAttribute('data-dialog-type', 'modal')
+    .setAttribute('data-dialog-options', '{"width": "auto","height":"auto"}')
     .setAttribute('href', path('joinup_modal.anonymous', {'type': 'like'}, {'query':{'destination': path('<current>') }}))
     .setAttribute('title', 'Sign in or register to like this content'|t)
   }}>
