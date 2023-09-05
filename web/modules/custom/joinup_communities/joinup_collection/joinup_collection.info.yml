@@ -6,3 +6,4 @@ package: Joinup communities
 
 dependencies:
   - og:og
+  - drupal:filter
