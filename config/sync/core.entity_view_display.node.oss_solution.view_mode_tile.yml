@@ -44,6 +44,14 @@ targetEntityType: node
 bundle: oss_solution
 mode: view_mode_tile
 content:
+  oss_git_description:
+    type: joinup_html_stripper_stripped
+    label: hidden
+    settings:
+      trim_length: 600
+    third_party_settings: {  }
+    weight: 0
+    region: content
   oss_logo:
     type: imagecache_external_responsive_image
     label: hidden
@@ -55,21 +63,12 @@ content:
         template_suggestion: ''
     weight: 1
     region: content
-  oss_short_description:
-    type: joinup_html_stripper_stripped
-    label: hidden
-    settings:
-      trim_length: 600
-    third_party_settings: {  }
-    weight: 0
-    region: content
 hidden:
   langcode: true
   links: true
   oss_categories: true
   oss_development_status: true
   oss_features: true
-  oss_git_description: true
   oss_git_url: true
   oss_landing_url: true
   oss_license: true
@@ -82,6 +81,7 @@ hidden:
   oss_publiccode_yml_content: true
   oss_publiccode_yml_version: true
   oss_release_date: true
+  oss_short_description: true
   oss_software_type: true
   oss_software_version: true
   oss_source: true
