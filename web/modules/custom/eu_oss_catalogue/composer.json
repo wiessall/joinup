@@ -27,7 +27,7 @@
         "cweagans/composer-patches": "^1.7",
         "drupal/multivalue_form_element": "^1.0",
         "knplabs/github-api": "^3.0",
-        "spdx/license-list-data": "1.0.0",
+        "spdx/license-list-data": "1.0.0"
     },
     "require-dev": {
         "drupal/http_request_mock": "^1.1",
