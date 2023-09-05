@@ -13,3 +13,18 @@
  */
 
 declare(strict_types = 1);
+
+/**
+ * Remove leftover row paragraphs.
+ */
+function joinup_core_deploy_109700(): string {
+  $paragraphs = \Drupal::entityTypeManager()
+    ->getStorage('paragraph')
+    ->loadByProperties(['type' => 'row']);
+
+  foreach ($paragraphs as $paragraph) {
+    $paragraph->delete();
+  }
+
+  return 'Removed ' . count($paragraphs) . ' paragraphs.';
+}
