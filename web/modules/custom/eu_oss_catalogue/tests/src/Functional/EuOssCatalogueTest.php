@@ -109,7 +109,7 @@ class EuOssCatalogueTest extends BrowserTestBase {
     ], $node1->get('oss_features'));
     $this->assertFieldValues(['[DE] Solution 1: Feature 1'], $node1->getTranslation('de')->get('oss_features'));
     $this->assertReferences(['AGPL-3.0-or-later'], $node1->get('oss_license'));
-    $this->assertSame('Sin City', $node1->get('oss_main_copyright_owner')->value);
+    $this->assertSame('Sin City', $node1->get('oss_owner')->value);
     $this->assertTrue($node1->get('oss_landing_url')->isEmpty());
     $this->assertSame('contract', $node1->get('oss_maintenance_type')->value);
     /** @var \Drupal\node\NodeInterface $contractor1 */
@@ -156,7 +156,7 @@ class EuOssCatalogueTest extends BrowserTestBase {
       '[IT] Solution 2: Feature 3',
       '[IT] Solution 2: Feature 4',
     ], $node2->getTranslation('it')->get('oss_features'));
-    $this->assertSame('Narnia', $node2->get('oss_main_copyright_owner')->value);
+    $this->assertSame('Narnia', $node2->get('oss_owner')->value);
     $this->assertTrue($node2->get('oss_logo')->isEmpty());
     $this->assertSame('community', $node2->get('oss_maintenance_type')->value);
     /** @var \Drupal\node\NodeInterface $contact1 */
