@@ -67,13 +67,17 @@ class HostingPlatformUITest extends BrowserTestBase {
     $this->submitForm($data, 'Save');
 
     $assertSession->pageTextContains('hosting_platform:test_hosting_platform');
+    $assertSession->pageTextContains('Test hosting platform');
 
-    $this->drupalGet('admin/content/eu-oss-catalogue/hosting-platform/manage/test_hosting_platform');
+    $this->clickLink('Edit');
     $data = [
+      'label' => 'Test hosting platform updated',
       'platformSettings[projects][0][namespace]' => 'dummy-namespace',
       'platformSettings[projects][0][name]' => 'dummy-name',
     ];
     $this->submitForm($data, 'Save');
+
+    $assertSession->pageTextContains('Test hosting platform updated');
   }
 
   /**

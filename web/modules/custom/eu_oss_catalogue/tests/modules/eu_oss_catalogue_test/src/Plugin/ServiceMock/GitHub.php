@@ -44,9 +44,9 @@ class GitHub extends PluginBase implements ServiceMockPluginInterface {
               0 => [
                 'id' => 'OYWYKQvqtguoqeWoQ9j7SwXj6Fekpt0t',
                 'description' => NULL,
-                'name' => 'say-hello',
+                'name' => 'dummy-name',
                 'owner' => [
-                  'login' => 'dummy-owner',
+                  'login' => 'dummy-namespace',
                 ],
                 'defaultBranchRef' => [
                   'name' => 'develop',
