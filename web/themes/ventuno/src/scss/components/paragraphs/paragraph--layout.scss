@@ -18,13 +18,6 @@
   }
   &--light,
   &--secondary {
-    padding: $spacer * 2 0; // 32px
-    @include media-breakpoint-up(sm) {
-      padding: $spacer * 4 0; // 64px
-    }
-    @include media-breakpoint-up(lg) {
-      padding: $spacer * 5 0; // 80px
-    }
     position: relative;
     &::before {
       content: "";

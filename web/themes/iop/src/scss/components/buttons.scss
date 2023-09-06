@@ -31,3 +31,15 @@
     color: $primary;
   }
 }
+
+.button--primary {
+  @extend .btn-primary;
+}
+
+.button--secondary {
+  @extend .btn-secondary;
+}
+
+.button--link {
+  @extend .btn-link;
+}

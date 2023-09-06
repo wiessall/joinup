@@ -8,6 +8,7 @@ use Drupal\Cache\Adapter\DrupalAdapter;
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Site\Settings;
 use Drupal\eu_oss_catalogue\EuOssCatalogueGitHostingPlatformPluginBase;
+use Drupal\eu_oss_catalogue\Exception\MissingAccessTokenException;
 use Drupal\eu_oss_catalogue\Model\GitHubSearchType;
 use Drupal\eu_oss_catalogue\Model\HostingPlatformResult;
 use Github\Api\GraphQL;
@@ -85,8 +86,7 @@ class GitHub extends EuOssCatalogueGitHostingPlatformPluginBase {
       $this->client = Client::createWithHttpClient($this->httpClient);
       $token = Settings::get('eu_oss_catalogue', [])['platform_github']['access_token'] ?? NULL;
       if (!$token) {
-        // @todo Should we show a message to user or it's only developer stuff?
-        throw new \InvalidArgumentException('GitHub access token is not set');
+        throw new MissingAccessTokenException('GitHub access token is not set');
       }
       $this->client->authenticate($token, NULL, AuthMethod::ACCESS_TOKEN);
 

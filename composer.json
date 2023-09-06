@@ -370,6 +370,9 @@
                 "Missing config schema for field, widget and formatter @see https://www.drupal.org/node/2898680": "https://git.drupalcode.org/project/social_media_links/-/merge_requests/4.diff",
                 "Mastodon should not have a fixed URL prefix. @see https://www.drupal.org/project/social_media_links/issues/3319694": "https://git.drupalcode.org/project/social_media_links/-/merge_requests/28.diff"
             },
+            "drupal/sparql_entity_storage": {
+                "Interface contract violation @see https://drupal.org/i/3379328": "https://www.drupal.org/files/issues/2023-08-04/sparql_entity_storage-3379328-2-complete.patch"
+            },
             "drupal/svg_image": {
                 "SVG is not valid or cannot be sanitized, return an error. @see https://www.drupal.org/i/3350696": "https://git.drupalcode.org/project/svg_image/-/merge_requests/20.patch",
                 "Upload a SVG from CKEditor (image inline). @see https://www.drupal.org/i/3093972": "https://git.drupalcode.org/project/svg_image/-/merge_requests/21.patch"
