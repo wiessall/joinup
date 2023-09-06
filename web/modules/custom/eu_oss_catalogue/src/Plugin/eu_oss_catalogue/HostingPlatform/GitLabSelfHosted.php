@@ -89,7 +89,7 @@ class GitLabSelfHosted extends GitLabBase {
     if (empty($candidates)) {
       $projects = [];
       $pager = new ResultPager($this->getClient());
-      foreach ($pager->fetchAll($this->getClient()->projects(), 'all') as $repo) {
+      foreach ($pager->fetchAll($this->getClient()->projects(), 'all', ['archived' => FALSE]) as $repo) {
         $fileContent = NULL;
         if (!empty($repo['default_branch'])) {
           if ($filePath) {
