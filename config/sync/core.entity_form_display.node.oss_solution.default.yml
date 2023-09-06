@@ -12,10 +12,10 @@ dependencies:
     - field.field.node.oss_solution.oss_license
     - field.field.node.oss_solution.oss_logo
     - field.field.node.oss_solution.oss_long_description
-    - field.field.node.oss_solution.oss_main_copyright_owner
     - field.field.node.oss_solution.oss_maintenance_contacts
     - field.field.node.oss_solution.oss_maintenance_contractors
     - field.field.node.oss_solution.oss_maintenance_type
+    - field.field.node.oss_solution.oss_owner
     - field.field.node.oss_solution.oss_platforms
     - field.field.node.oss_solution.oss_publiccode_yml_content
     - field.field.node.oss_solution.oss_publiccode_yml_version
@@ -126,14 +126,6 @@ content:
       rows: 5
       placeholder: ''
     third_party_settings: {  }
-  oss_main_copyright_owner:
-    type: string_textfield
-    weight: 26
-    region: content
-    settings:
-      size: 60
-      placeholder: ''
-    third_party_settings: {  }
   oss_maintenance_contacts:
     type: entity_reference_autocomplete
     weight: 31
@@ -159,6 +151,14 @@ content:
     weight: 30
     region: content
     settings: {  }
+    third_party_settings: {  }
+  oss_owner:
+    type: string_textfield
+    weight: 26
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
     third_party_settings: {  }
   oss_platforms:
     type: entityqueue_dragtable
