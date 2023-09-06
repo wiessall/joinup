@@ -4,10 +4,10 @@ declare(strict_types = 1);
 
 namespace Drupal\eu_oss_catalogue;
 
-use Drupal\Component\DependencyInjection\ContainerInterface;
 use Drupal\Component\Plugin\PluginBase;
 use Drupal\eu_oss_catalogue\Entity\OssSolutionInterface;
 use Drupal\eu_oss_catalogue\Model\EuOssCatalogueFetchedSolution;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Base plugin for EU OSS Catalogue provider plugins.
