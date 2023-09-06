@@ -50,7 +50,7 @@ class HostingPlatformUITest extends BrowserTestBase {
   /**
    * Tests hosting provider creation.
    */
-  public function testCreate(): void {
+  public function testCRUDOperations(): void {
     $assertSession = $this->assertSession();
 
     $this->drupalLogin($this->adminUser);
@@ -88,6 +88,14 @@ class HostingPlatformUITest extends BrowserTestBase {
     $this->submitForm($data, 'Save');
 
     $assertSession->pageTextContains('Test hosting platform updated');
+
+    // Check deletion.
+    $this->clickLink('Delete');
+    $assertSession->pageTextContains('This action cannot be undone.');
+
+    $this->submitForm([], 'Delete');
+
+    $assertSession->pageTextContains('The code hosting platform config Test hosting platform updated has been deleted.');
   }
 
   /**
