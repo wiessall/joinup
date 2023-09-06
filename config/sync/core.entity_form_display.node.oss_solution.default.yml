@@ -24,11 +24,12 @@ dependencies:
     - field.field.node.oss_solution.oss_software_type
     - field.field.node.oss_solution.oss_software_version
     - field.field.node.oss_solution.oss_source
+    - field.field.node.oss_solution.oss_source_hash
     - field.field.node.oss_solution.oss_used_by
     - node.type.oss_solution
   module:
     - datetime
-    - dynamic_entity_reference
+    - entityqueue
     - link
     - path
     - pluginreference
@@ -160,7 +161,7 @@ content:
     settings: {  }
     third_party_settings: {  }
   oss_platforms:
-    type: dynamic_entity_reference_default
+    type: entityqueue_dragtable
     weight: 18
     region: content
     settings:
@@ -168,6 +169,8 @@ content:
       match_limit: 10
       size: 40
       placeholder: ''
+      link_to_entity: false
+      link_to_edit_form: true
     third_party_settings: {  }
   oss_publiccode_yml_content:
     type: string_textarea
