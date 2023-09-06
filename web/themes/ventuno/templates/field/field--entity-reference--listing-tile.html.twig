@@ -9,12 +9,16 @@
   'field--name-' ~ field_name|clean_class,
   bundle|clean_class ~ '__' ~ field_name_clean|clean_class,
   label_display == 'inline' ? 'd-flex',
+  'mt-4',
+  'pt-4',
+  'border-top',
 ]
 %}
 {%
   set title_classes = [
   'field__label',
   'fw-bold',
+  'mb-3',
   label_display == 'visually_hidden' ? 'visually-hidden',
 ]
 %}
