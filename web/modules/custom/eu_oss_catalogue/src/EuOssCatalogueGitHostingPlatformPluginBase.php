@@ -108,6 +108,8 @@ abstract class EuOssCatalogueGitHostingPlatformPluginBase extends EuOssCatalogue
       if ($candidate['name']) {
         $candidate['name'] = trim($candidate['name']);
       }
+      // @todo Validate $candidate['namespace'] & $candidate['name'] for naming
+      //   conventions.
     });
     $candidates = array_filter($candidates);
     $existingProjects = $this->getProjects($candidates);
