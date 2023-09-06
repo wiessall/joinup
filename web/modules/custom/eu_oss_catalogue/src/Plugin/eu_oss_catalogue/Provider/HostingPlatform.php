@@ -22,7 +22,8 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  *
  * @EuOssCatalogueProvider(
  *   id = "hosting_platform",
- *   label = @Translation("Code hosting platform"),
+ *   label = @Translation("Hosting platform"),
+ *   description = @Translation("Code hosting platform"),
  *   parser = "publiccode_yml",
  *   deriver = "\Drupal\eu_oss_catalogue\Plugin\eu_oss_catalogue\Deriver\HostingPlatformDeriver",
  *   configuredBy = "hosting_platform",
