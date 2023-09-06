@@ -1,0 +1,11 @@
+uuid: 8b5364de-3837-4582-adde-addd4938002f
+langcode: en
+status: true
+dependencies:
+  enforced:
+    module:
+      - eu_oss_catalogue
+name: 'OSS Intended Audience'
+vid: oss_intended_audience_scope
+description: 'Intended Audience of Opensource Software Solutions'
+weight: 0
