@@ -22,6 +22,7 @@ dependencies:
     - field.field.node.oss_solution.oss_publiccode_yml_content
     - field.field.node.oss_solution.oss_publiccode_yml_version
     - field.field.node.oss_solution.oss_release_date
+    - field.field.node.oss_solution.oss_scope
     - field.field.node.oss_solution.oss_short_description
     - field.field.node.oss_solution.oss_software_type
     - field.field.node.oss_solution.oss_software_version
@@ -95,6 +96,7 @@ hidden:
   oss_publiccode_yml_content: true
   oss_publiccode_yml_version: true
   oss_release_date: true
+  oss_scope: true
   oss_software_type: true
   oss_software_version: true
   oss_source: true
