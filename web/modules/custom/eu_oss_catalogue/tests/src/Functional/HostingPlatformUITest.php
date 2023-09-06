@@ -48,9 +48,9 @@ class HostingPlatformUITest extends BrowserTestBase {
   }
 
   /**
-   * Tests hosting provider creation.
+   * Tests hosting provider operations.
    */
-  public function testCRUDOperations(): void {
+  public function testHostingProviderOperations(): void {
     $assertSession = $this->assertSession();
 
     $this->drupalLogin($this->adminUser);
@@ -82,8 +82,8 @@ class HostingPlatformUITest extends BrowserTestBase {
     // Type correct namespace and name.
     $data = [
       'label' => 'Test hosting platform updated',
-      'platformSettings[projects][0][namespace]' => 'dummy-namespace',
-      'platformSettings[projects][0][name]' => 'dummy-name',
+      'platformSettings[projects][0][namespace]' => 'dummy-namespace-1',
+      'platformSettings[projects][0][name]' => 'dummy-name-1',
     ];
     $this->submitForm($data, 'Save');
 

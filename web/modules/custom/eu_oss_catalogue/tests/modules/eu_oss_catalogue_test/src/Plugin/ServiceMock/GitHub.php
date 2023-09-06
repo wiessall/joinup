@@ -6,6 +6,7 @@ namespace Drupal\eu_oss_catalogue_test\Plugin\ServiceMock;
 
 use Drupal\Component\Serialization\Json;
 use Drupal\Core\Plugin\PluginBase;
+use Drupal\Core\Serialization\Yaml;
 use Drupal\eu_oss_catalogue_test\IntegrationTestTrait;
 use Drupal\http_request_mock\ServiceMockPluginInterface;
 use GuzzleHttp\Psr7\Response;
@@ -36,27 +37,8 @@ class GitHub extends PluginBase implements ServiceMockPluginInterface {
    * {@inheritdoc}
    */
   public function getResponse(RequestInterface $request, array $options): ResponseInterface {
-    $response = Json::encode(
-      [
-        'data' => [
-          'search' => [
-            'nodes' => [
-              0 => [
-                'id' => 'OYWYKQvqtguoqeWoQ9j7SwXj6Fekpt0t',
-                'description' => NULL,
-                'name' => 'dummy-name',
-                'owner' => [
-                  'login' => 'dummy-namespace',
-                ],
-                'defaultBranchRef' => [
-                  'name' => 'develop',
-                ],
-              ],
-            ],
-          ],
-        ],
-      ]
-    );
+    $response = Json::encode(Yaml::decode(file_get_contents(__DIR__ . '/../../../../../fixtures/github.yml')));
+
     return new Response(200, [
       'Content-Type' => 'application/json',
       'Content-Length' => strlen($response),
