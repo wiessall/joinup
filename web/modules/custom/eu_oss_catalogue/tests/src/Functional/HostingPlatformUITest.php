@@ -70,6 +70,16 @@ class HostingPlatformUITest extends BrowserTestBase {
     $assertSession->pageTextContains('Test hosting platform');
 
     $this->clickLink('Edit');
+
+    // Check error message.
+    $data = [
+      'platformSettings[projects][0][namespace]' => 'dummy-namespace-error',
+      'platformSettings[projects][0][name]' => 'dummy-name-error',
+    ];
+    $this->submitForm($data, 'Save');
+    $assertSession->pageTextContains('Namespace dummy-namespace-error doesn\'t exist on the platform');
+
+    // Type correct namespace and name.
     $data = [
       'label' => 'Test hosting platform updated',
       'platformSettings[projects][0][namespace]' => 'dummy-namespace',
