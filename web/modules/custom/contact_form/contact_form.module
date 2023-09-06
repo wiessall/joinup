@@ -187,9 +187,11 @@ function contact_form_mail($key, &$message, $params) {
 
   if ($entity->field_contact_copy->value) {
     $message['body'][] = t('This is the message you submitted through the online form:');
-    $subject = check_markup($entity->field_contact_subject->value, $entity->field_contact_subject->format);
-    $subject = PlainTextOutput::renderFromHtml($subject);
-    $message['body'][] = t('Subject: %subject', ['%subject' => $subject]);
+    $message['body'][] = t(
+      'Subject: %subject', [
+        '%subject' => PlainTextOutput::renderFromHtml($entity->field_contact_subject->value),
+      ]
+    );
     $message['body'][] = t('Content:');
     $message['body'][] = '<blockquote>';
     $message['body'][] = check_markup($entity->field_contact_message->value, $entity->field_contact_message->format);

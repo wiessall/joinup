@@ -6,6 +6,7 @@ joinup_community_content.share:
     attributes:
       class: ['use-ajax']
       data-dialog-type: 'modal'
+      data-dialog-options: '{"width":"auto","height":"auto"}'
 
 joinup_community_content.unshare:
   route_name: joinup_community_content.unshare_content_form
@@ -15,3 +16,4 @@ joinup_community_content.unshare:
     attributes:
       class: ['use-ajax']
       data-dialog-type: 'modal'
+      data-dialog-options: '{"width":"auto","height":"auto"}'
