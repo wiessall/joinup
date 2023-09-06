@@ -97,7 +97,7 @@ class GitLabSelfHosted extends GitLabBase {
               $fileContent = $this->getClient()->repositoryFiles()->getRawFile($repo['id'], $filePath, $repo['default_branch']);
             }
             catch (RuntimeException $exception) {
-              if ($exception->getCode() !== 404 || $exception->getMessage() !== '404 File Not Found') {
+              if ($exception->getCode() !== 404) {
                 throw $exception;
               }
               // Nothing to do, $fileContent is already NULL.
