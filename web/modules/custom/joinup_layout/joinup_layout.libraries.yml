@@ -14,3 +14,13 @@ oss_header:
   css:
     layout:
       layouts/oss-header/oss-header.layout.css: {}
+
+oss_details:
+  css:
+    layout:
+      layouts/oss-details/oss-details.layout.css: {}
+
+four_column_grid:
+  css:
+    layout:
+      layouts/four-column-grid/four-column-grid.layout.css: {}
