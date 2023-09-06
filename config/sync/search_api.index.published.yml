@@ -7,16 +7,17 @@ dependencies:
     - field.storage.node.field_paragraphs_body
     - field.storage.paragraph.field_body
     - field.storage.node.body
+    - field.storage.node.oss_categories
+    - field.storage.node.oss_development_status
     - field.storage.node.field_event_date
     - field.storage.meta_entity.field_featured
     - field.storage.node.field_news_headline
+    - field.storage.node.oss_scope
     - field.storage.node.field_location
     - field.storage.node.field_organisation
     - field.storage.meta_entity.field_pinned_in
     - field.storage.node.field_scope
     - field.storage.node.field_short_title
-    - field.storage.node.oss_categories
-    - field.storage.node.oss_development_status
     - field.storage.node.oss_source
     - field.storage.meta_entity.count
     - field.storage.rdf_entity.field_ar_abstract
@@ -46,10 +47,10 @@ dependencies:
     - search_api_solr
     - node
     - paragraphs
+    - taxonomy
     - meta_entity
     - rdf_entity
     - publication_date
-    - taxonomy
     - rdf_taxonomy
     - user
     - search_api
@@ -752,6 +753,16 @@ field_settings:
     dependencies:
       config:
         - field.storage.node.oss_development_status
+  oss_scope:
+    label: 'Intended audience'
+    datasource_id: 'entity:node'
+    property_path: 'oss_scope:entity:name'
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.oss_scope
+      module:
+        - taxonomy
   oss_source:
     label: Source
     datasource_id: 'entity:node'
