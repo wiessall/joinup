@@ -1,0 +1,45 @@
+# This repository adheres to the publiccode.yml standard by including this
+# metadata file that makes public software easily discoverable.
+# More info at https://github.com/italia/publiccode.yml
+
+publiccodeYmlVersion: '0.2'
+name: EU OSS Catalogue - Drupal module
+softwareVersion: '0.1'
+releaseDate: '2023-10-01'
+developmentStatus: development
+platforms:
+  - web
+softwareType: addon
+url: 'https://code.europa.eu/digit-b2/eu_oss_catalogue_drupal_module'
+localisation:
+  localisationReady: false
+  availableLanguages:
+    - en
+description:
+  en:
+    genericName: EU OSS Catalogue - Drupal module
+    longDescription: |
+      This is a Drupal module for generating the first MVP (minimum viable
+      product) version of a EU OpenSource Software Solutions, produced or used
+      by Public Administrations. Mainly, the module federates data from national
+      OSS catalogues but also from any other arbitrary source and allows
+      exposing such data via Drupal API, using Drupal Views, controllers or,
+      even, JSON:API/GraphQL endpoints. It started as a Proof-Of-Concept based
+      on the[ publiccode.ym)]((https://yml.publiccode.tools/) schema
+      specifications but lately evolved as a full pluggable system that accepts
+      any kind of federation source, called \_solution provider\_ in the realm
+      of this module.
+    shortDescription: Drupal module for EU OpenSource Software Solutions Catalogue
+categories:
+  - web-collaboration
+maintenance:
+  type: internal
+  contacts:
+    - name: Bernard Claes
+      email: bernard.claes@ec.europa.eu
+    - name: Miguel Diez Blanco
+      email: Miguel.DIEZ-BLANCO@ec.europa.eu
+legal:
+  license: EUPL-1.2
+  mainCopyrightOwner: European Commission - Digit B2
+  repoOwner: European Commission - Digit B2
