@@ -10,14 +10,14 @@ data:
           name: master
         file:
           text: |
-            publiccodeYmlVersion: "0.2"
-            name: Solution 2
+            publiccodeYmlVersion: "0.4"
+            name: GitHub solution 2
             url: http://example.com/vendor/solution2.git
             landingURL: http://landing.example.com/vendor/solution2
             isBasedOn:
               - Bootstrap
-            softwareVersion: 'v2.3.4'
-            releaseDate: "2023-02-09"
+            softwareVersion: 'v2.4'
+            releaseDate: "2016-02-09"
             platforms:
               - web
             categories:
