@@ -8,7 +8,7 @@ Feature:
     Given the following <group>s:
       | title           | state     |
       | Drafty things   | draft     |
-      | Validated tools | validated |
+      | Validated tools | published |
     And custom_page content:
       | title        | body         | collection      | logo     | state     |
       | About means  | Sample text. | Drafty things   | logo.png | published |

@@ -7,8 +7,8 @@ Feature: Discussions added to collections
   Scenario: "Add discussion" button should not be shown to normal members, authenticated users and anonymous users.
     Given the following collections:
       | title              | logo     | state     |
-      | The Fallen History | logo.png | validated |
-      | White Sons         | logo.png | validated |
+      | The Fallen History | logo.png | published |
+      | White Sons         | logo.png | published |
 
     When I am logged in as an "authenticated user"
     And I go to the homepage of the "The Fallen History" collection
@@ -42,7 +42,7 @@ Feature: Discussions added to collections
       | E-mail      | kesha.pontecorvo@ec-europa.example.eu |
     And collections:
       | title                  | logo     | state     |
-      | The World of the Waves | logo.png | validated |
+      | The World of the Waves | logo.png | published |
     And the following collection user membership:
       | collection             | user      | roles       |
       | The World of the Waves | kesha1988 | facilitator |
@@ -125,10 +125,10 @@ Feature: Discussions added to collections
   Scenario: Test the image library widget.
     Given the following collection:
       | title | Stream of Dreams |
-      | state | validated        |
+      | state | published        |
     And discussion content:
       | title       | collection       | state     | created   | content         |
-      | Yellow Zeus | Stream of Dreams | validated | yesterday | Sample content. |
+      | Yellow Zeus | Stream of Dreams | published | yesterday | Sample content. |
 
     Given I am logged in as a moderator
 

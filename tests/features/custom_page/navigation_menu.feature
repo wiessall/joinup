@@ -7,8 +7,8 @@ Feature: Navigation menu for custom pages
   Scenario Outline: Access the navigation menu through the contextual link
     Given the following <group>s:
       | title            | logo     | state     |
-      | Rainbow tables   | logo.png | validated |
-      | Cripple Mr Onion | logo.png | validated |
+      | Rainbow tables   | logo.png | published |
+      | Cripple Mr Onion | logo.png | published |
 
     # By default, a link to the collection canonical page and a link to the
     # about page are added to the menu.
@@ -135,7 +135,7 @@ Feature: Navigation menu for custom pages
   Scenario: For menus with more than 6 items, the 6th and beyond should be wrapped in a dropdown
     Given collection:
       | title | Plaster molds |
-      | state | validated     |
+      | state | published     |
     And custom_page content:
       | title             | body                   | collection    | state     | topic |
       | Molds for walls   | This is a sample body. | Plaster molds | published | HR    |
@@ -167,7 +167,7 @@ Feature: Navigation menu for custom pages
     Given the following <group>:
       | title | Prism Gazers |
       | logo  | logo.png     |
-      | state | validated    |
+      | state | published    |
     And custom_page content:
       | title           | body                   | <group>      | state     | topic |
       | Mists of dreams | This is a sample body. | Prism Gazers | published | HR    |
@@ -194,7 +194,7 @@ Feature: Navigation menu for custom pages
   Scenario Outline: Synchronize titles of custom pages and menu links
     Given the following <group>:
       | title | Ravenous wood-munching alphabeavers |
-      | state | validated                           |
+      | state | published                           |
     And custom_page content:
       | title       | body                                                                | <group>                             | topic | state     |
       | Tree eaters | Given time, they will most likely strip the entire region of trees. | Ravenous wood-munching alphabeavers | HR    | published |
@@ -219,7 +219,7 @@ Feature: Navigation menu for custom pages
   Scenario Outline: Only the links below the topmost page are rendered in TOC.
     Given the following <group>s:
       | title                   | state     |
-      | Table of contents group | validated |
+      | Table of contents group | published |
     And custom_page content:
       | title         | <group>                 | state     | topic |
       | Page 1        | Table of contents group | published | HR    |
@@ -318,7 +318,7 @@ Feature: Navigation menu for custom pages
   Scenario Outline: Only custom page entries can be nested in the navigation menu.
     Given the following <group>:
       | title | Ergonomic backpacks |
-      | state | validated           |
+      | state | published           |
     And custom_page content:
       | title              | <group>             | state     | topic |
       | Types of backpacks | Ergonomic backpacks | published | HR    |
@@ -464,7 +464,7 @@ Feature: Navigation menu for custom pages
   Scenario Outline: Show appropriate menu entries in the table of contents outline.
     Given the following <group>s:
       | title                     | state     |
-      | Table of contents outline | validated |
+      | Table of contents outline | published |
     And custom_page content:
       | title      | <group>                   | state       | topic |
       | TOCO 1     | Table of contents outline | published   | HR    |
@@ -551,7 +551,7 @@ Feature: Navigation menu for custom pages
   Scenario Outline: Assert cache invalidation of the TOC outline.
     Given the following <group>s:
       | title                            | state     |
-      | Table of contents outline cached | validated |
+      | Table of contents outline cached | published |
     And custom_page content:
       | title           | <group>                          | state     | topic |
       | TOCO cached 1   | Table of contents outline cached | published | HR    |
@@ -588,7 +588,7 @@ Feature: Navigation menu for custom pages
   Scenario Outline: Test that the edit link appears next to the "About" page.
     Given the following <group>s:
       | title           | state     |
-      | About edit link | validated |
+      | About edit link | published |
 
     When I am logged in as a moderator
     And I go to the "About edit link" <group>

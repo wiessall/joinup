@@ -282,7 +282,7 @@ class JoinupGroupContext extends RawDrupalContext {
    * @code
    * | group             | subject                          | body       | state    | author | created   |
    * | Art Collection    | Come and see what we've achieved | Content... | draft    | user1  | 25/2/2014 |
-   * | The Only Solution | Heavy Metal Treatment            | Text...    | approved | user3  | 1/4/2020  |                | http://mashable.com/category/cats/     | yes|no | 28-01-1995 12:06 | The domestic cat (Felis catus or Felis silvestris catus) is a small usually furry domesticated carnivorous mammal. | facilitators and authors|members|registered users | no       |      | no         |                   |       | draft|proposed|validated|archival request|archived |
+   * | The Only Solution | Heavy Metal Treatment            | Text...    | approved | user3  | 1/4/2020  |                | http://mashable.com/category/cats/     | yes|no | 28-01-1995 12:06 | The domestic cat (Felis catus or Felis silvestris catus) is a small usually furry domesticated carnivorous mammal. | facilitators and authors|members|registered users | no       |      | no         |                   |       | draft|proposed|published|archival request|archived |
    * @encode
    * The group and subject fields are required. If omitted, the state field
    * defaults to draft and the body will be composed of the subject value. The

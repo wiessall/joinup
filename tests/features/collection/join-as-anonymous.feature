@@ -7,8 +7,8 @@ Feature: Joining a collection as an anonymous user
   Background:
     Given collections:
       | title           | abstract                          | closed | state     |
-      | Reannual plants | Harvested before they are planted | no     | validated |
-      | Vul nuts        | Used to brew Ghlen Livid          | yes    | validated |
+      | Reannual plants | Harvested before they are planted | no     | published |
+      | Vul nuts        | Used to brew Ghlen Livid          | yes    | published |
 
   @javascript
   Scenario: Anonymous users can join a collection after creating an account

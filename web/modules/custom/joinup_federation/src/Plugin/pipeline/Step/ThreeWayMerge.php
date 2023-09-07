@@ -256,9 +256,9 @@ class ThreeWayMerge extends JoinupFederationStepPluginBase implements PipelineSt
       }
     }
 
-    // Set the state of new entities to 'validated'.
+    // Set the state of new entities to 'published'.
     if ($state_field_name) {
-      $incoming_entity->set($state_field_name, 'validated');
+      $incoming_entity->set($state_field_name, 'published');
     }
 
     /** @var \Drupal\Core\Field\FieldItemListInterface $field */

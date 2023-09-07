@@ -26,7 +26,7 @@ class InternalPathTest extends JoinupExistingSiteTestBase {
     $collection = $this->createRdfEntity([
       'rid' => 'collection',
       'label' => "Sample Collection ",
-      'field_ar_state' => 'validated',
+      'field_ar_state' => 'published',
       'field_ar_description' => [
         // Covering the case when the base URL has been entered twice.
         'value' => ' <iframe src="' . $base_url . $base_url . '" width="640" height="360" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>',

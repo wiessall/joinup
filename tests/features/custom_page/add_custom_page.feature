@@ -7,12 +7,12 @@ Feature: "Add custom page" visibility options.
   Background:
     Given collections:
       | title           | logo     | state     |
-      | Open Collective | logo.png | validated |
-      | Code Camp       | logo.png | validated |
+      | Open Collective | logo.png | published |
+      | Code Camp       | logo.png | published |
     And solutions:
       | title     | logo     | state     |
-      | Parachute | logo.png | validated |
-      | Skydiving | logo.png | validated |
+      | Parachute | logo.png | published |
+      | Skydiving | logo.png | published |
 
   Scenario Outline: Links and help text for adding custom pages should should only be shown to privileged users
     # Custom pages cannot be added by normal members. Custom pages are
@@ -139,7 +139,7 @@ Feature: "Add custom page" visibility options.
   Scenario: Long list of attachments should be collapsed.
     Given the following collection:
       | title | Aggressive Rubber |
-      | state | validated         |
+      | state | published         |
     # Create custom pages with 5 and 6 attachments.
     # 5 is the limit before adding the "Show more" functionality.
     And custom_page content:

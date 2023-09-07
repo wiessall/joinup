@@ -13,7 +13,7 @@ use Drupal\joinup_group\Entity\GroupInterface;
 trait ContactInformationTrait {
 
   /**
-   * Returns validated emails from collection/solution.
+   * Returns published emails from collection/solution.
    */
   public function getValidatedContactInformation(): array {
     assert(is_subclass_of($this, GroupInterface::class), __TRAIT__ . ' is intended to be used in bundle classes for group entities.');

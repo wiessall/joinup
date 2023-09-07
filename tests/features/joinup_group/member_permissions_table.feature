@@ -16,18 +16,18 @@ Feature: Group member permissions table
       | Mustrum Ridcully |
     Given the following collections:
       | title                                       | state     | content creation         | moderation |
-      | Applied astrology                           | validated | facilitators and authors | yes        |
-      | Illiberal studies                           | validated | facilitators and authors | no         |
-      | Approximate accuracy                        | validated | members                  | yes        |
-      | Dust, miscellaneous particles and filaments | validated | members                  | no         |
-      | Creative uncertainty                        | validated | registered users         | yes        |
-      | Woolly thinking                             | validated | registered users         | no         |
+      | Applied astrology                           | published | facilitators and authors | yes        |
+      | Illiberal studies                           | published | facilitators and authors | no         |
+      | Approximate accuracy                        | published | members                  | yes        |
+      | Dust, miscellaneous particles and filaments | published | members                  | no         |
+      | Creative uncertainty                        | published | registered users         | yes        |
+      | Woolly thinking                             | published | registered users         | no         |
     And the following solutions:
       | title                         | state     | content creation         | moderation |
-      | Applied anthropics            | validated | facilitators and authors | yes        |
-      | Extreme horticulture          | validated | facilitators and authors | no         |
-      | Prehumous morbid bibliomancy  | validated | registered users         | yes        |
-      | Posthumous morbid bibliomancy | validated | registered users         | no         |
+      | Applied anthropics            | published | facilitators and authors | yes        |
+      | Extreme horticulture          | published | facilitators and authors | no         |
+      | Prehumous morbid bibliomancy  | published | registered users         | yes        |
+      | Posthumous morbid bibliomancy | published | registered users         | no         |
     And the following collection user memberships:
       | collection                                  | user             | roles       |
       | Approximate accuracy                        | Horace Worblehat |             |
@@ -154,7 +154,7 @@ Feature: Group member permissions table
     But I should not see the button "Publish"
     Given event content:
       | title                          | state     | collection           | author           |
-      | Election of Boy Archchancellor | validated | Approximate accuracy | Horace Worblehat |
+      | Election of Boy Archchancellor | published | Approximate accuracy | Horace Worblehat |
       | The Wizards' Excuse Me         | draft     | Approximate accuracy | Mustrum Ridcully |
     When I go to the edit form of the "Election of Boy Archchancellor" event
     Then I should see the button "Request deletion"
@@ -198,7 +198,7 @@ Feature: Group member permissions table
     But I should not see the button "Propose"
     Given event content:
       | title                                               | state     | collection                                  | author           |
-      | Beating the bounds                                  | validated | Dust, miscellaneous particles and filaments | Ponder Stibbons  |
+      | Beating the bounds                                  | published | Dust, miscellaneous particles and filaments | Ponder Stibbons  |
       | Archchancellor Bowell's Remembrance's Bun and Penny | draft     | Dust, miscellaneous particles and filaments | Mustrum Ridcully |
     When I go to the edit form of the "Beating the bounds" event
     Then I should see the link "Delete"
@@ -248,7 +248,7 @@ Feature: Group member permissions table
     But I should not see the button "Publish"
     Given event content:
       | title                       | state     | collection           | author           |
-      | The Convivium               | validated | Creative uncertainty | Henry Porter     |
+      | The Convivium               | published | Creative uncertainty | Henry Porter     |
       | The Hunting of the Megapode | draft     | Creative uncertainty | Mustrum Ridcully |
     When I go to the edit form of the "The Convivium" event
     Then I should see the button "Request deletion"
@@ -292,7 +292,7 @@ Feature: Group member permissions table
     But I should not see the button "Propose"
     Given event content:
       | title                                     | state     | collection      | author           |
-      | Gaudy night                               | validated | Woolly thinking | Rincewind        |
+      | Gaudy night                               | published | Woolly thinking | Rincewind        |
       | Archchancellor Preserved Bigger's Bequest | draft     | Woolly thinking | Mustrum Ridcully |
     When I go to the edit form of the "Gaudy night" event
     Then I should see the link "Delete"
@@ -404,7 +404,7 @@ Feature: Group member permissions table
     But I should not see the button "Publish"
     Given event content:
       | title             | state     | solution                     | author           |
-      | Head of the River | validated | Prehumous morbid bibliomancy | Dr. John Hicks   |
+      | Head of the River | published | Prehumous morbid bibliomancy | Dr. John Hicks   |
       | Poore Boys Funne  | draft     | Prehumous morbid bibliomancy | Mustrum Ridcully |
     When I go to the edit form of the "Head of the River" event
     Then I should see the button "Request deletion"
@@ -448,7 +448,7 @@ Feature: Group member permissions table
     But I should not see the button "Propose"
     Given event content:
       | title                         | state     | collection                    | author           |
-      | May Morning                   | validated | Posthumous morbid bibliomancy | Hex              |
+      | May Morning                   | published | Posthumous morbid bibliomancy | Hex              |
       | A veritable heyhoe-rumbledown | draft     | Posthumous morbid bibliomancy | Mustrum Ridcully |
     When I go to the edit form of the "May Morning" event
     Then I should see the link "Delete"
@@ -462,12 +462,12 @@ Feature: Group member permissions table
   Scenario: Access the membership permissions information table
     Given the following collections:
       | title                | state     |
-      | Valid Bibliomancy    | validated |
+      | Valid Bibliomancy    | published |
       | Draft Bibliomancy    | draft     |
       | Proposed Bibliomancy | proposed  |
     And the following solutions:
       | title             | state       |
-      | Valid Dynamics    | validated   |
+      | Valid Dynamics    | published   |
       | Draft Dynamics    | draft       |
       | Proposed Dynamics | proposed    |
       | Dark Dynamics     | blacklisted |

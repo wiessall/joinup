@@ -229,7 +229,7 @@ function collection_rdf_entity_presave(RdfInterface $entity) {
     $entity->set('graph', 'draft');
   }
   elseif (in_array($state, [
-    'validated',
+    'published',
     'archival_request',
     'archived',
   ])) {
@@ -254,7 +254,7 @@ function collection_rdf_entity_update(EntityInterface $entity) {
     return;
   }
 
-  if ($entity->getWorkflowState() === 'validated') {
+  if ($entity->getWorkflowState() === 'published') {
     \Drupal::entityTypeManager()->getStorage('rdf_entity')->deleteFromGraph([$entity], 'draft');
   }
 }

@@ -22,7 +22,7 @@ Feature: Collection membership administration
       | Cam Bridge        |       | cambridge@example.com         | Cam        | Bridge      |
     And the following collections:
       | title             | description               | logo     | owner        | contact information                    | closed | state     |
-      | Medical diagnosis | 10 patients in 10 minutes | logo.png | James Wilson | Princeton-Plainsboro Teaching Hospital | yes    | validated |
+      | Medical diagnosis | 10 patients in 10 minutes | logo.png | James Wilson | Princeton-Plainsboro Teaching Hospital | yes    | published |
     And the following collection user memberships:
       | collection        | user              | roles                      | state   |
       | Medical diagnosis | Lisa Cuddy        | administrator, facilitator | active  |

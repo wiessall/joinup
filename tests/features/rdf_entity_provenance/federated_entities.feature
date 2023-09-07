@@ -21,7 +21,7 @@ Feature: In order to avoid users changing federated values
       | owner               | John Federator           |
       | contact information | John Federator's contact |
       | content creation    | facilitators and authors |
-      | state               | validated                |
+      | state               | published                |
     And the following solution:
       | title               | A federated solution                 |
       | collection          | A federated collection               |
@@ -34,7 +34,7 @@ Feature: In order to avoid users changing federated values
       | webdav creation     | no                                   |
       | webdav url          | http://joinup.eu/solution/foo/webdav |
       | wiki                | http://example.wiki/foobar/wiki      |
-      | state               | validated                            |
+      | state               | published                            |
     And the following release:
       | title          | A federated release         |
       | description    | This is a federated release |
@@ -42,7 +42,7 @@ Feature: In order to avoid users changing federated values
       | release number | 1                           |
       | release notes  | Changed release             |
       | is version of  | A federated solution        |
-      | state          | validated                   |
+      | state          | published                   |
     And the following distribution:
       | title       | A federated distribution         |
       | description | This is a federated distribution |

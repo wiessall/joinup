@@ -9,7 +9,7 @@ Feature:
       | title       | Hellow world                              |
       | description | Because I do not know how to spell Hello. |
       | moderation  | <moderation>                              |
-      | state       | validated                                 |
+      | state       | published                                 |
     And users:
       | Username           | E-mail                    | Roles     |
       | Clumsy Bounce      | clumsy.bounce@example.com |           |
@@ -24,8 +24,8 @@ Feature:
       | Hellow world | Jelly Facilitator | facilitator |
     And <content type> content:
       | title                | body                                   | state     | author        | <group type> |
-      | Goodbi world         | Because I cannot spell Goodbye either. | validated | Clumsy Bounce | Hellow world |
-      | Careful with that ax | Someone needs to ax these questions.   | validated | Grumpy Author | Hellow world |
+      | Goodbi world         | Because I cannot spell Goodbye either. | published | Clumsy Bounce | Hellow world |
+      | Careful with that ax | Someone needs to ax these questions.   | published | Grumpy Author | Hellow world |
     And <content type> revisions:
       | current title        | title                 |
       | Careful with that ax | Careful with that axe |

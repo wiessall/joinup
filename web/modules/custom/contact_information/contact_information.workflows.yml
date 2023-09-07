@@ -7,8 +7,8 @@ contact_information_workflow:
     # The first state is used as the initial state when creating a new entity.
     __new__:
       label: "- New -"
-    validated:
-      label: Validated
+    published:
+      label: Published
     # State used to flag content that is being reviewed.
     needs_update:
       label: Needs update
@@ -18,16 +18,16 @@ contact_information_workflow:
     validate:
       label: Publish
       from: [__new__, deletion_request]
-      to: validated
+      to: published
     request_changes:
       label: Request changes
-      from: [validated]
+      from: [published]
       to: needs_update
     approve_changes:
       label: Approve changes
       from: [needs_update]
-      to: validated
+      to: published
     request_deletion:
       label: Request deletion
-      from: [validated]
+      from: [published]
       to: deletion_request

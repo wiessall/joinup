@@ -23,7 +23,7 @@ Feature: Asset release moderation
       | logo                | logo.png    |
       | owner               | Kenny Logan |
       | contact information | SheriMoore  |
-      | state               | validated   |
+      | state               | published   |
     And the following solution user membership:
       | solution  | user            | roles       |
       | Dark Ship | Bonnie Holloway | owner       |
@@ -144,7 +144,7 @@ Feature: Asset release moderation
     And the following email should have been sent:
       | recipient | Bonnie Holloway                                                                                    |
       | subject   | Joinup: Your release was accepted                                                                  |
-      | body      | Your proposed Release fix, v1 for the solution "Dark Ship" has been validated as per your request. |
+      | body      | Your proposed Release fix, v1 for the solution "Dark Ship" has been published as per your request. |
 
     # Delete a release as a moderator.
     When I click "Edit" in the "Entity actions" region
