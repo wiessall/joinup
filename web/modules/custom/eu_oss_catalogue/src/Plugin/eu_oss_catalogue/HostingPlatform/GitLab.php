@@ -2,7 +2,7 @@
 
 declare(strict_types = 1);
 
-namespace Drupal\eu_oss_catalogue_platform_gitlab\Plugin\eu_oss_catalogue\HostingPlatform;
+namespace Drupal\eu_oss_catalogue\Plugin\eu_oss_catalogue\HostingPlatform;
 
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Site\Settings;
