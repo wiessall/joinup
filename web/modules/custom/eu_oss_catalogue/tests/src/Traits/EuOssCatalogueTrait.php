@@ -11,6 +11,9 @@ trait EuOssCatalogueTrait {
 
   /**
    * Creates testing terms.
+   *
+   * @param array $data
+   *   Terms to create.
    */
   protected function createTestingTerms(array $data): void {
     $storage = \Drupal::entityTypeManager()->getStorage('taxonomy_term');
