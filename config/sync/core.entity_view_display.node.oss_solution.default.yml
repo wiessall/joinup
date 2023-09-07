@@ -6,6 +6,7 @@ dependencies:
     - field.field.node.oss_solution.oss_available_languages
     - field.field.node.oss_solution.oss_categories
     - field.field.node.oss_solution.oss_development_status
+    - field.field.node.oss_solution.oss_documentation
     - field.field.node.oss_solution.oss_features
     - field.field.node.oss_solution.oss_git_description
     - field.field.node.oss_solution.oss_git_url
@@ -66,6 +67,18 @@ content:
     settings: {  }
     third_party_settings: {  }
     weight: 12
+    region: content
+  oss_documentation:
+    type: link
+    label: above
+    settings:
+      trim_length: 80
+      url_only: false
+      url_plain: false
+      rel: ''
+      target: ''
+    third_party_settings: {  }
+    weight: 23
     region: content
   oss_features:
     type: string
