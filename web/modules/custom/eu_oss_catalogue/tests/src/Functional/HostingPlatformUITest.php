@@ -19,8 +19,7 @@ class HostingPlatformUITest extends BrowserTestBase {
    */
   protected static $modules = [
     'block',
-    'eu_oss_catalogue_test',
-    'multivalue_form_element',
+    'eu_oss_catalogue_test'
   ];
 
   /**
