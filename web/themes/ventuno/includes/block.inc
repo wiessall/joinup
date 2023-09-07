@@ -73,7 +73,6 @@ function ventuno_preprocess_block(array &$variables): void {
 
   // List of the blocks to render without contextual links.
   $no_contextual_links_blocks = [
-    'ventuno_navigation',
     'add_content',
   ];
   if (in_array($block_id, $no_contextual_links_blocks)
