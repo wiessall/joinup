@@ -9,6 +9,7 @@ use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\Tests\BrowserTestBase;
+use Drupal\Tests\eu_oss_catalogue\Traits\EuOssCatalogueTrait;
 use Drupal\Tests\node\Traits\NodeCreationTrait;
 use Drupal\language\Entity\ConfigurableLanguage;
 use Drush\TestTraits\DrushTestTrait;
@@ -22,6 +23,7 @@ class EuOssCatalogueTest extends BrowserTestBase {
 
   use DrushTestTrait;
   use NodeCreationTrait;
+  use EuOssCatalogueTrait;
 
   /**
    * {@inheritdoc}
@@ -45,7 +47,15 @@ class EuOssCatalogueTest extends BrowserTestBase {
 
     // On install, eu_oss_catalogue is creating the controlled vocabularies. We
     // create only few testing terms.
-    $this->createTestingTerms();
+    $this->createTestingTerms([
+      'oss_licence' => ['AGPL-3.0-or-later', 'BSD-3-Clause', 'EUPL-1.2'],
+      'oss_category' => [
+        'data-collection',
+        'website-builder',
+        'business-process-management',
+        'digital-citizenship',
+      ],
+    ]);
     // Add Italian and German languages.
     ConfigurableLanguage::createFromLangcode('it')->save();
     ConfigurableLanguage::createFromLangcode('de')->save();
@@ -319,27 +329,6 @@ class EuOssCatalogueTest extends BrowserTestBase {
   protected function assertFieldValues(array $expectedValues, FieldItemListInterface $fieldItemList): void {
     $actualValues = array_values(array_map(fn (array $item) => $item['value'], $fieldItemList->getValue()));
     $this->assertSame($expectedValues, $actualValues);
-  }
-
-  /**
-   * Creates testing terms.
-   */
-  protected function createTestingTerms(): void {
-    $storage = \Drupal::entityTypeManager()->getStorage('taxonomy_term');
-    $data = [
-      'oss_licence' => ['AGPL-3.0-or-later', 'BSD-3-Clause', 'EUPL-1.2'],
-      'oss_category' => [
-        'data-collection',
-        'website-builder',
-        'business-process-management',
-        'digital-citizenship',
-      ],
-    ];
-    foreach ($data as $vid => $terms) {
-      foreach ($terms as $term) {
-        $storage->create(['vid' => $vid, 'name' => $term])->save();
-      }
-    }
   }
 
   /**
