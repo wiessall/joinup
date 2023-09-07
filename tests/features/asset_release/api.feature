@@ -10,7 +10,7 @@ Feature: Release API
       | logo             | logo.png                 |
       | moderation       | yes                      |
       | content creation | facilitators and authors |
-      | state            | validated                |
+      | state            | published                |
     And the following solution:
       | title            | My first solution                    |
       | collection       | Solution API foo                     |
@@ -21,7 +21,7 @@ Feature: Release API
       | webdav creation  | no                                   |
       | webdav url       | http://joinup.eu/solution/foo/webdav |
       | wiki             | http://example.wiki/foobar/wiki      |
-      | state            | validated                            |
+      | state            | published                            |
     And the following release:
       | title          | My first release  |
       | description    | A sample release  |
@@ -37,13 +37,13 @@ Feature: Release API
       | logo             | logo.png                 |
       | moderation       | yes                      |
       | content creation | facilitators and authors |
-      | state            | validated                |
+      | state            | published                |
     And the following solution:
       | title            | My first solution mandatory |
       | collection       | Solution API bar            |
       | description      | Another sample solution     |
       | content creation | registered users            |
-      | state            | validated                   |
+      | state            | published                   |
     And the following release:
       | title          | My first mandatory release  |
       | description    | A sample release            |

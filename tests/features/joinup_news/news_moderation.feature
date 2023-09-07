@@ -31,8 +31,8 @@ Feature: News moderation.
       | Metallo       | kryptoniteEverywhere@example.com  |           |
     Given collections:
       | title          | moderation | state     | content creation |
-      | Justice League | no         | validated | members          |
-      | Legion of Doom | yes        | validated | members          |
+      | Justice League | no         | published | members          |
+      | Legion of Doom | yes        | published | members          |
     And the following collection user memberships:
       | collection     | user          | roles       |
       | Justice League | Superman      | owner       |
@@ -47,12 +47,12 @@ Feature: News moderation.
       | title                         | headline                                    | body                                                                    | state            | author        | collection     |
       | Creating Justice League       | 6 Members to start with                     | TBD                                                                     | draft            | Eagle         | Justice League |
       | Hawkgirl is a spy             | Her race lies in another part of the galaxy | Hawkgirl has been giving information about Earth to Thanagarians.       | proposed         | Eagle         | Justice League |
-      | Hawkgirl helped Green Lantern | Hawkgirl went against Thanagarians?         | It was all of a sudden when Hawkgirl turned her back to her own people. | validated        | Eagle         | Justice League |
+      | Hawkgirl helped Green Lantern | Hawkgirl went against Thanagarians?         | It was all of a sudden when Hawkgirl turned her back to her own people. | published        | Eagle         | Justice League |
       | Space cannon fired            | Justice League fired at army facilities     | Justice league is now the enemy                                         | needs_update     | Eagle         | Justice League |
       | Eagle to join in season 4     | Will not start before S04E05                | The offer came when I helped defeating Iphestus armor.                  | proposed         | Eagle         | Justice League |
       | Question joined JL            | Justice league took in Question             | The famous detective is now part of JL.                                 | draft            | Question      | Justice League |
       | Creating Legion of Doom       | 7 Members to start with                     | We need equal number of members with the JL.                            | draft            | Mirror Master | Legion of Doom |
-      | Stealing from Batman          | Hide in his car's mirror                    | I need to steal from Batman.                                            | validated        | Mirror Master | Legion of Doom |
+      | Stealing from Batman          | Hide in his car's mirror                    | I need to steal from Batman.                                            | published        | Mirror Master | Legion of Doom |
       | Learn batman's secret         | Can I find batman's secret identity         | I have the opportunity to find out his identity.                        | proposed         | Mirror Master | Legion of Doom |
       | Stealing complete             | All data were copied                        | Now someone has to decrypt the data.                                    | needs_update     | Mirror Master | Legion of Doom |
       | Kill the sun                  | Savages plan                                | As it turns out Savage's plan is to cause a solar storm.                | deletion_request | Mirror Master | Legion of Doom |
@@ -175,7 +175,7 @@ Feature: News moderation.
     Then I should see the link "Eagle joins the JL"
 
   @terms
-  Scenario: Add news as a member to a pre-moderated collection and get it validated by a facilitator.
+  Scenario: Add news as a member to a pre-moderated collection and get it published by a facilitator.
     # Add news as a member.
     When I am logged in as "Cheetah"
     And I go to the homepage of the "Legion of Doom" collection
@@ -224,9 +224,9 @@ Feature: News moderation.
       | Eagle         | Creating Justice League       | Save as draft, Publish          | Propose, Request changes, Preview                   |
       # Pre-moderated. State: draft, can propose
       | Mirror Master | Creating Legion of Doom       | Save as draft, Propose          | Publish, Request changes, Request deletion, Preview |
-      # Post-moderated. State: validated, owned by Eagle who is a normal member. Should only be able to create a new draft.
+      # Post-moderated. State: published, owned by Eagle who is a normal member. Should only be able to create a new draft.
       | Eagle         | Hawkgirl helped Green Lantern | Save new draft, Update          | Publish, Request changes, Preview                   |
-      # Pre-moderated. State: validated, owned by Mirror Master who is a normal member. Should only be able to create a new draft and propose changes.
+      # Pre-moderated. State: published, owned by Mirror Master who is a normal member. Should only be able to create a new draft and propose changes.
       | Mirror Master | Stealing from Batman          | Save new draft, Propose changes | Update, Publish, Preview                            |
 
   Scenario Outline: Members cannot edit news they own for specific states.
@@ -317,7 +317,7 @@ Feature: News moderation.
     And I fill in "Motivation" with "Let's change the short title."
     And I press "Request changes"
     Then I should see the success message "News Hawkgirl saves the planet has been updated."
-    # A new draft has been created with a new title. The previously validated
+    # A new draft has been created with a new title. The previously published
     # revision (with the original title) should still be published.
     But I should see the heading "Hawkgirl is a spy"
     And the "Hawkgirl is a spy" "news" content should have 3 revisions

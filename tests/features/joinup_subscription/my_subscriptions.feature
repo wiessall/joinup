@@ -58,7 +58,7 @@ Feature: My subscriptions
   Scenario: Manage my subscriptions
     Given collections:
       | title          | state     | abstract                                                       |
-      | Alpha Centauri | validated | A triple star system at a distance of 4.3 light years.         |
+      | Alpha Centauri | published | A triple star system at a distance of 4.3 light years.         |
       | Barnard's Star | draft     | A low mass red dwarf at around 6 light years distance.         |
       | Wolf 359       | proposed  | Wolf 359 is a red dwarf star located in the constellation Leo. |
     And the following collection user memberships:
@@ -191,7 +191,7 @@ Feature: My subscriptions
   Scenario Outline: Change the notification frequency of my digests
     Given collection:
       | title | Malicious plans |
-      | state | validated       |
+      | state | published       |
     And the following collection user memberships:
       | collection      | user             |
       | Malicious plans | Auric Goldfinger |
@@ -245,8 +245,8 @@ Feature: My subscriptions
 
     Given the following collections:
       | title     | state     |
-      | Fireblade | validated |
-      | Lopitopes | validated |
+      | Fireblade | published |
+      | Lopitopes | published |
     And user:
       | Username | Blade One           |
       | E-mail   | blade.1@example.com |

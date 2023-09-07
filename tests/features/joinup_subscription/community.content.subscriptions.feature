@@ -7,11 +7,11 @@ Feature: Subscribing to community content in collections and solutions
   Background:
     Given the following collections:
       | title              | state     |
-      | Black hole imaging | validated |
+      | Black hole imaging | published |
     And the following solutions:
       | title                 | state     | collection         |
-      | Null geodesics        | validated | Black hole imaging |
-      | Bolometric appearance | validated | Black hole imaging |
+      | Null geodesics        | published | Black hole imaging |
+      | Bolometric appearance | published | Black hole imaging |
     And users:
       | Username  | E-mail               | First name  | Family name | Notification frequency |
       | jpluminet | jpluminet@example.fr | Jean-Pierre | Luminet     | daily                  |
@@ -36,19 +36,19 @@ Feature: Subscribing to community content in collections and solutions
   Scenario: Receive a digest of community content that is published
     Given discussion content:
       | title                  | body                               | collection         | solution       | state     | author   |
-      | Active galactic nuclei | A thin relativistic accretion disk | Black hole imaging |                | validated | junfukue |
+      | Active galactic nuclei | A thin relativistic accretion disk | Black hole imaging |                | published | junfukue |
       | Light diffusion        | Photons emitted at constant radius |                    | Null geodesics | archived  | junfukue |
     And document content:
       | title             | body                            | collection         | solution              | state     | author   |
-      | Doppler effect    | Caused by disk rotation         | Black hole imaging |                       | validated | junfukue |
-      | Distant observers | Distribution of bolometric flux |                    | Bolometric appearance | validated | junfukue |
+      | Doppler effect    | Caused by disk rotation         | Black hole imaging |                       | published | junfukue |
+      | Distant observers | Distribution of bolometric flux |                    | Bolometric appearance | published | junfukue |
     And event content:
       | title               | body                 | collection         | solution       | state     | author   | start date          | end date            |
-      | Effective potential | Schwarzschild metric | Black hole imaging |                | validated | junfukue | 2019-11-28T11:12:13 | 2019-11-28T11:12:13 |
-      | Deflected rays      | Marginally trapped   |                    | Null geodesics | validated | junfukue | 2019-12-05T12:00:00 | 2019-12-15T12:00:00 |
+      | Effective potential | Schwarzschild metric | Black hole imaging |                | published | junfukue | 2019-11-28T11:12:13 | 2019-11-28T11:12:13 |
+      | Deflected rays      | Marginally trapped   |                    | Null geodesics | published | junfukue | 2019-12-05T12:00:00 | 2019-12-15T12:00:00 |
     And news content:
       | title             | body                       | collection         | solution              | state     | author |
-      | The periastron    | Jacobian elliptic integral | Black hole imaging |                       | validated | bisera |
+      | The periastron    | Jacobian elliptic integral | Black hole imaging |                       | published | bisera |
       | Newtonian context | Projecting ellipses        |                    | Bolometric appearance | archived  | hristo |
 
     # The group content digest should contain the content posted in the

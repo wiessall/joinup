@@ -14,7 +14,7 @@ Feature: News API
       | logo             | logo.png                 |
       | moderation       | yes                      |
       | content creation | facilitators and authors |
-      | state            | validated                |
+      | state            | published                |
     And news content:
       | title      | body                                     | collection      |
       | Dummy News | This is some dummy content like foo:bar. | Le Foie Heureux |

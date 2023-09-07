@@ -8,7 +8,7 @@ Feature: Plus button
     Given the following solution:
       | title       | Simple solutions                         |
       | description | Conplex problems call for easy solutions |
-      | state       | validated                                |
+      | state       | published                                |
 
     When I am logged in as a facilitator of the "Simple solutions" solution
     And I go to the homepage of the "Simple solutions" solution

@@ -127,7 +127,7 @@ Feature: Contact Information moderation
       | logo                | logo.png              |
       | owner               | Saint Louis           |
       | contact information | Secreteriat           |
-      | state               | validated             |
+      | state               | published             |
     And the following collection user memberships:
       | collection            | user            | roles       |
       | Saint Louis solutions | Sown Carnberry  |             |

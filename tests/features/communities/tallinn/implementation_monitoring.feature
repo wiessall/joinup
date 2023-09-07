@@ -13,10 +13,10 @@ Feature: Display of reports for the Tallinn initiative.
       | Tallinn Ministerial Declaration | Jayda Ingham | facilitator |
     Given news content:
       | title           | collection                      | state     |
-      | Results are out | Tallinn Ministerial Declaration | validated |
+      | Results are out | Tallinn Ministerial Declaration | published |
     And document content:
       | title                                  | collection                      | state     |
-      | Ministerial Declaration on eGovernment | Tallinn Ministerial Declaration | validated |
+      | Ministerial Declaration on eGovernment | Tallinn Ministerial Declaration | published |
     And tallinn_report content:
       | title        | author       | collection                      |
       | Italy report | Jayda Ingham | Tallinn Ministerial Declaration |

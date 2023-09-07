@@ -35,13 +35,13 @@ class UserCancelTest extends JoinupExistingSiteTestBase {
     $collection = $this->createRdfEntity([
       'rid' => 'collection',
       'label' => 'Collection',
-      'field_ar_state' => 'validated',
+      'field_ar_state' => 'published',
     ]);
     $solution = $this->createRdfEntity([
       'rid' => 'solution',
       'label' => 'Solution',
       'collection' => $collection,
-      'field_is_state' => 'validated',
+      'field_is_state' => 'published',
     ]);
 
     $photo_field_definition = $this->container->get('entity_field.manager')->getFieldDefinitions('user', 'user')['field_user_photo'];

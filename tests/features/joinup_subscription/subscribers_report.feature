@@ -17,12 +17,12 @@ Feature: Subscribers report
       | lil      |       | Lil        | Mama        |
     And collections:
       | title             | state     |
-      | Marine ecosystems | validated |
-      | Plant science     | validated |
+      | Marine ecosystems | published |
+      | Plant science     | published |
     And solutions:
       | title                 | state     | collection        |
-      | Seagrass meadows      | validated | Marine ecosystems |
-      | Intertidal seagrasses | validated | Plant science     |
+      | Seagrass meadows      | published | Marine ecosystems |
+      | Intertidal seagrasses | published | Plant science     |
     And collection user memberships:
       | collection        | user    | roles       |
       | Marine ecosystems | busta   | facilitator |

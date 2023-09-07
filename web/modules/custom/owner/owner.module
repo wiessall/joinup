@@ -29,21 +29,21 @@ function owner_entity_bundle_info_alter(&$bundles) {
 /**
  * Implements hook_ENTITY_TYPE_create().
  *
- * Sets the initial workflow state of an owner to 'validated'.
+ * Sets the initial workflow state of an owner to 'published'.
  */
 function owner_rdf_entity_create(RdfInterface $entity) {
   if ($entity->bundle() !== 'owner') {
     return;
   }
 
-  // The initial state of an owner is validated. The owner is created as part of
+  // The initial state of an owner is published. The owner is created as part of
   // proposing a collection, and in the collection propose form the workflow
   // state is hidden from the user, so it would remain in the "__new__" state
   // after submission.
-  // We can safely set the initial state to "validated" because a newly created
-  // owner doesn't need to be validated by a third party.
+  // We can safely set the initial state to "published" because a newly created
+  // owner doesn't need to be published by a third party.
   if ($entity->field_owner_state->value === '__new__') {
-    $entity->set('field_owner_state', 'validated');
+    $entity->set('field_owner_state', 'published');
   }
 }
 

@@ -55,7 +55,7 @@ SELECT n.nid AS nid,
     SELECT max(vid)
     FROM node_revision
     LEFT JOIN node_revision__field_state ON node_revision.vid = node_revision__field_state.revision_id
-    WHERE nid = n.nid AND field_state_value = 'validated'
+    WHERE nid = n.nid AND field_state_value = 'published'
     AND revision_default = 1
   ) as latest_vid
 FROM node as n
@@ -66,7 +66,7 @@ AND n.vid < (
   SELECT max(vid)
   FROM node_revision
   LEFT JOIN node_revision__field_state ON node_revision.vid = node_revision__field_state.revision_id
-  WHERE nid = n.nid AND field_state_value = 'validated'
+  WHERE nid = n.nid AND field_state_value = 'published'
   AND revision_default = 1
 )
 LEFT JOIN node_field_data AS nfd

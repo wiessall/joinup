@@ -7,13 +7,13 @@ Feature: SEO for news articles.
   Scenario: Basic metatags are attached as JSON schema on the page.
     Given collections:
       | title                      | state     |
-      | Joinup SEO news collection | validated |
+      | Joinup SEO news collection | published |
     And users:
       | Username          | E-mail                 | First name | Family name |
       | Joinup SEO author | joinup.seo@example.com | Kurk       | Smith       |
     And "news" content:
       | title           | headline                    | logo     | body          | created                   | publication date          | changed                   | state     | author            | collection                 |
-      | Joinup SEO news | Headline of Joinup SEO news | logo.png | Body of news. | Sun, 01 Dec 2019 13:00:00 | Wed, 25 Dec 2019 13:00:00 | Wed, 01 Jan 2020 13:00:00 | validated | Joinup SEO author | Joinup SEO news collection |
+      | Joinup SEO news | Headline of Joinup SEO news | logo.png | Body of news. | Sun, 01 Dec 2019 13:00:00 | Wed, 25 Dec 2019 13:00:00 | Wed, 01 Jan 2020 13:00:00 | published | Joinup SEO author | Joinup SEO news collection |
 
     When I visit the "Joinup SEO news" news
     Then the metatag JSON should be attached in the page

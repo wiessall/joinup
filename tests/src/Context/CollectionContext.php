@@ -128,7 +128,7 @@ class CollectionContext extends RawDrupalContext {
    * @codingStandardsIgnoreStart
    * | title                   | abstract                                   | access url                             | closed | creation date    | description                                                                                                        | content creation                                  | featured | logo | moderation | modification date | owner | state                                              |
    * | Dog owner collection    | Read up on all about <strong>dogs</strong> | http://dogtime.com/dog-breeds/profiles | yes|no | 28-01-1995 12:05 | The Afghan Hound is elegance personified.                                                                          | facilitators and authors|members|registered users | yes      |      | yes        |                   |       |                                                    |
-   * | Cats collection 4 ever! | Cats are cool!                             | http://mashable.com/category/cats/     | yes|no | 28-01-1995 12:06 | The domestic cat (Felis catus or Felis silvestris catus) is a small usually furry domesticated carnivorous mammal. | facilitators and authors|members|registered users | no       |      | no         |                   |       | draft|proposed|validated|archival request|archived |
+   * | Cats collection 4 ever! | Cats are cool!                             | http://mashable.com/category/cats/     | yes|no | 28-01-1995 12:06 | The domestic cat (Felis catus or Felis silvestris catus) is a small usually furry domesticated carnivorous mammal. | facilitators and authors|members|registered users | no       |      | no         |                   |       | draft|proposed|published|archival request|archived |
    * @codingStandardsIgnoreEnd
    *
    * Only the title field is required.
@@ -221,7 +221,7 @@ class CollectionContext extends RawDrupalContext {
       'field_ar_state' => [
         'draft' => 'draft',
         'proposed' => 'proposed',
-        'validated' => 'validated',
+        'published' => 'published',
         'archival request' => 'archival_request',
         'archived' => 'archived',
       ],
@@ -305,7 +305,7 @@ class CollectionContext extends RawDrupalContext {
    * | closed           | yes|no                                             |
    * | content creation | facilitators and authors|members|registered users  |
    * | metadata url     | https://ec.europa.eu/my/url                        |
-   * | state            | draft|proposed|validated|archival request|archived |
+   * | state            | draft|proposed|published|archival request|archived |
    * @codingStandardsIgnoreEnd
    *
    * Only the title field is required.
@@ -664,7 +664,7 @@ class CollectionContext extends RawDrupalContext {
     return $this->createCollection([
       'id' => JoinupCollectionHelper::getCollectionId(),
       'label' => 'Joinup',
-      'field_ar_state' => 'validated',
+      'field_ar_state' => 'published',
     ]);
   }
 

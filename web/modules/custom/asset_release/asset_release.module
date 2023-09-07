@@ -254,7 +254,7 @@ function asset_release_rdf_entity_presave(EntityInterface $entity) {
   if (in_array($state, ['draft', 'needs_update'])) {
     $entity->set('graph', 'draft');
   }
-  elseif (in_array($state, ['validated'])) {
+  elseif (in_array($state, ['published'])) {
     $entity->set('graph', SparqlGraphInterface::DEFAULT);
   }
   elseif (empty($state)) {
@@ -277,7 +277,7 @@ function asset_release_entity_update(EntityInterface $entity) {
     return;
   }
 
-  if ($entity->field_isr_state->value === 'validated') {
+  if ($entity->field_isr_state->value === 'published') {
     \Drupal::entityTypeManager()->getStorage('rdf_entity')->deleteFromGraph([$entity], 'draft');
   }
 }

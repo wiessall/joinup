@@ -9,11 +9,11 @@ Feature:
       | Amelia Barker |       | AmeliaBarker@example.com | Amelia     | Barker      |
     And collections:
       | title                   | state     |
-      | Lugia was just released | validated |
-      | Articuno is hunted      | validated |
+      | Lugia was just released | published |
+      | Articuno is hunted      | published |
     And solutions:
       | title                        | state     |
-      | Random chat machine learning | validated |
+      | Random chat machine learning | published |
     # Assign facilitator role in order to allow creation of a solution.
     # In UAT this can be done by creating the collection through the UI
     # with the related user.

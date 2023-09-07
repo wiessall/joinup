@@ -8,7 +8,7 @@ Feature:
     Given collection:
       | uri   | http://data.europa.eu/w21/8e30f798-ff2b-478b-9c09-5ed5a63b4c8c |
       | title | Interoperable Europe                                           |
-      | state | validated                                                      |
+      | state | published                                                      |
     And news content:
       | title      | collection           | state    |
       | IOP news 1 | Interoperable Europe | draft    |
@@ -45,7 +45,7 @@ Feature:
   Scenario: Unpublished content are visible in the "Unpublished content" tab for any group.
     Given collection:
       | title | Some group |
-      | state | validated  |
+      | state | published  |
     And news content:
       | title             | collection | state    |
       | Some group news 1 | Some group | draft    |

@@ -12,12 +12,12 @@ Feature: As a privileged user
       | sand_beach  | sand_beach@example.com  | Sand       | Beach       | moderator |
     And collections:
       | title                        | logo     | state     |
-      | Collection share original    | logo.png | validated |
-      | Collection share candidate 1 | logo.png | validated |
-      | Collection share candidate 2 | logo.png | validated |
+      | Collection share original    | logo.png | published |
+      | Collection share candidate 1 | logo.png | published |
+      | Collection share candidate 2 | logo.png | published |
     And the following solutions:
       | title                 | description         | logo     | state     | collection                |
-      | Solution to be shared | Doesn't affect test | logo.png | validated | Collection share original |
+      | Solution to be shared | Doesn't affect test | logo.png | published | Collection share original |
     And the following solution user memberships:
       | solution              | user        | roles       |
       | Solution to be shared | joe_dare    | owner       |

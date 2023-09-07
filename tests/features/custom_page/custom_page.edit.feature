@@ -11,7 +11,7 @@ Feature: "Custom page" editing.
       | Pluto        | pluto@example.com        |
     And the following <group>:
       | title | Dumbo Collective |
-      | state | validated        |
+      | state | published        |
     And the following <group> user memberships:
       | <group>          | user         | roles       |
       | Dumbo Collective | Mickey Mouse | facilitator |

@@ -12,13 +12,13 @@ Feature: Submit the contact form
       | Report owner     |           | report_owner@test.com     | Clark      | The machine |
     And collections:
       | title                                 | state     | abstract     | description   |
-      | Collection with inappropriate content | validated | No one cares | No one cares. |
+      | Collection with inappropriate content | published | No one cares | No one cares. |
     And the following collection user memberships:
       | collection                            | user         | roles              |
       | Collection with inappropriate content | Report owner | owner, facilitator |
     And event content:
       | title           | author      | body | location  | collection                            | field_state |
-      | Event to report | Report user | body | Somewhere | Collection with inappropriate content | validated   |
+      | Event to report | Report user | body | Somewhere | Collection with inappropriate content | published   |
 
     # There should be a link to the contact form in the footer.
     Given I am not logged in

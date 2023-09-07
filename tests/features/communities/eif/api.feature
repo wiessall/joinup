@@ -5,8 +5,8 @@ Feature:
   Scenario: Create an EIF perspective and view the data.
     Given the following solutions:
       | title         | description                                      | state     |
-      | EIF solution  | Some description not to be shown in the EIF page | validated |
-      | EIF only type | Some description not to be shown in the EIF page | validated |
+      | EIF solution  | Some description not to be shown in the EIF page | published |
+      | EIF only type | Some description not to be shown in the EIF page | published |
     Given the following EIF perspective data for the "EIF solution" solution:
       | Description    | This should be in the description field.                                                       |
       | Solution type  | Common frameworks                                                                              |

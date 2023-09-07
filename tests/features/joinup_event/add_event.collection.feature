@@ -7,8 +7,8 @@ Feature: "Add event" visibility options.
   Scenario: "Add event" button should not be shown to normal members, authenticated users and anonymous users.
     Given the following collections:
       | title               | logo     | state     |
-      | The Stripped Stream | logo.png | validated |
-      | Years in the Nobody | logo.png | validated |
+      | The Stripped Stream | logo.png | published |
+      | Years in the Nobody | logo.png | published |
 
     When I am logged in as an "authenticated user"
     And I go to the homepage of the "The Stripped Stream" collection
@@ -37,7 +37,7 @@ Feature: "Add event" visibility options.
   Scenario: Add event as a facilitator.
     Given collections:
       | title            | logo     | state     |
-      | Stream of Dreams | logo.png | validated |
+      | Stream of Dreams | logo.png | published |
     And I am logged in as a facilitator of the "Stream of Dreams" collection
 
     When I go to the homepage of the "Stream of Dreams" collection
@@ -118,10 +118,10 @@ Feature: "Add event" visibility options.
   Scenario: Test the image library widget.
     Given the following collection:
       | title | Stream of Dreams |
-      | state | validated        |
+      | state | published        |
     And event content:
       | title             | collection       | body      | online location              | state     |
-      | The Great Opening | Stream of Dreams | It opens! | webinar - http://example.com | validated |
+      | The Great Opening | Stream of Dreams | It opens! | webinar - http://example.com | published |
 
     And I am logged in as a moderator
 

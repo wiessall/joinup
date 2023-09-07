@@ -71,7 +71,7 @@ class ProfileOverviewTest extends JoinupExistingSiteTestBase {
       $collection = $this->createRdfEntity([
         'rid' => 'collection',
         'label' => 'Collection ' . $count,
-        'field_ar_state' => 'validated',
+        'field_ar_state' => 'published',
         'uid' => $this->owner->id(),
       ]);
 
@@ -80,7 +80,7 @@ class ProfileOverviewTest extends JoinupExistingSiteTestBase {
         'rid' => 'solution',
         'label' => 'Solution ' . $count,
         'collection' => $collection,
-        'field_is_state' => 'validated',
+        'field_is_state' => 'published',
         'uid' => $this->owner->id(),
       ]);
       $og_membership_manager->createMembership($solution, $this->member)->save();

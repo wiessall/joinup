@@ -17,12 +17,12 @@ Feature:
       | takehiko |           | Takehiko   | Moto        |
     And collections:
       | title                    | state     |
-      | Muscle tissue formation  | validated |
-      | Cultured meat technology | validated |
+      | Muscle tissue formation  | published |
+      | Cultured meat technology | published |
     And solutions:
       | title                         | state     | collection               |
-      | Aligning myotubes             | validated | Muscle tissue formation  |
-      | Increasing global meat demand | validated | Cultured meat technology |
+      | Aligning myotubes             | published | Muscle tissue formation  |
+      | Increasing global meat demand | published | Cultured meat technology |
     And collection user memberships:
       | collection                  | user   | roles       |
       | Muscle tissue formation     | keiko  | facilitator |

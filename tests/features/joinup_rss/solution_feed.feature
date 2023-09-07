@@ -10,10 +10,10 @@ Feature: Solution RSS feed.
       | scorlan  | Sartin     | Corlan      |
     And collection:
       | title | Unrandomed collection |
-      | state | validated             |
+      | state | published             |
     And solutions:
       | title             | state     | author  | creation date    | collection            |
-      | Lantern Domestic  | validated | scorlan | 2018-12-18 08:00 | Unrandomed collection |
+      | Lantern Domestic  | published | scorlan | 2018-12-18 08:00 | Unrandomed collection |
       | Deuteron Lonesome | draft     | scorlan | 2019-01-05 10:00 | Unrandomed collection |
     And solution user memberships:
       | solution          | user    | role        |
@@ -21,15 +21,15 @@ Feature: Solution RSS feed.
       | Deuteron Lonesome | scorlan | facilitator |
     And news content:
       | title                                  | body                                                     | state     | author  | created          | solution          |
-      | Monkeys worst indigo amongst colors    | Research results are out.                                | validated | scorlan | 2019-01-21 12:36 | Lantern Domestic  |
-      | Proton lonesomeness doesn't reach peak | More than 200 thousand protons were interviewed.         | validated | scorlan | 2019-01-07 12:00 | Deuteron Lonesome |
-      | Old metal alloy improves scissors      | It improves sharpness but they are more subject to rust. | validated | scorlan | 2018-04-11 09:00 | Lantern Domestic  |
+      | Monkeys worst indigo amongst colors    | Research results are out.                                | published | scorlan | 2019-01-21 12:36 | Lantern Domestic  |
+      | Proton lonesomeness doesn't reach peak | More than 200 thousand protons were interviewed.         | published | scorlan | 2019-01-07 12:00 | Deuteron Lonesome |
+      | Old metal alloy improves scissors      | It improves sharpness but they are more subject to rust. | published | scorlan | 2018-04-11 09:00 | Lantern Domestic  |
     And event content:
       | title                      | body                                                                                                                                                                                                                                                                                                                                                            | state     | author  | created          | solution         |
-      | Scissor sharpening funeral | <p>The place where to be if you want to keep <strong>cutting</strong> the paper at the best of your scissors <a href="http://www.example.com/">possibilities</a>.</p> <table><tr><td>Lorem ipsum dolor sit amet consectetur adipiscing elit. Etiam sed consectetur turpis. In porta lectus sit amet nulla feugiat et viverra massa fringilla.</td></tr></table> | validated | scorlan | 2017-11-26 14:18 | Lantern Domestic |
+      | Scissor sharpening funeral | <p>The place where to be if you want to keep <strong>cutting</strong> the paper at the best of your scissors <a href="http://www.example.com/">possibilities</a>.</p> <table><tr><td>Lorem ipsum dolor sit amet consectetur adipiscing elit. Etiam sed consectetur turpis. In porta lectus sit amet nulla feugiat et viverra massa fringilla.</td></tr></table> | published | scorlan | 2017-11-26 14:18 | Lantern Domestic |
     And discussion content:
       | title                                           | body                                                                                   | state     | author  | created          | solution          |
-      | Is the indigo coloration caused by their smile? | I was reading the technical paper and it seems their main food is the indigo cherries. | validated | scorlan | 2019-01-21 13:00 | Deuteron Lonesome |
+      | Is the indigo coloration caused by their smile? | I was reading the technical paper and it seems their main food is the indigo cherries. | published | scorlan | 2019-01-21 13:00 | Deuteron Lonesome |
     And custom_page content:
       | title             | body                                            | state     | author  | created          | solution          |
       | Indigo variations | The four major tones of indigo are listed here. | published | scorlan | 2017-10-15 19:30 | Lantern Domestic  |

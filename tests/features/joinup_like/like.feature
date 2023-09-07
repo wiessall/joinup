@@ -11,10 +11,10 @@ Feature: Like/unlike feature.
       | Gregory Like |       | gregory@like.com | Gregory    | Like        |
     Given the following collections:
       | title    | state     |
-      | Bulgaria | validated |
+      | Bulgaria | published |
     Given the following solutions:
       | title               | state     | collection |
-      | Very liked solution | validated | Bulgaria   |
+      | Very liked solution | published | Bulgaria   |
 
   Scenario: User can like/unlike solution
     Given I am logged in as "Gregory Like"
@@ -78,16 +78,16 @@ Feature: Like/unlike feature.
 
     Examples:
       | content type | state     |
-      | news         | validated |
-      | event        | validated |
-      | discussion   | validated |
-      | document     | validated |
+      | news         | published |
+      | event        | published |
+      | discussion   | published |
+      | document     | published |
       | custom_page  | published |
 
   Scenario Outline: Logged-in user can see and hit like button in document, discussion, events and news tiles
     Given <content type> content:
       | title                   | collection | state     | author    |
-      | Likeable <content type> | Bulgaria   | validated | lisa Like |
+      | Likeable <content type> | Bulgaria   | published | lisa Like |
 
     Given I am logged in as "Gregory Like"
 
@@ -107,20 +107,20 @@ Feature: Like/unlike feature.
 
     Examples:
       | content type | state     | headline      |
-      | document     | validated |               |
-      | event        | validated |               |
-      | news         | validated | Likeable news |
+      | document     | published |               |
+      | event        | published |               |
+      | news         | published | Likeable news |
 
   Scenario: Logged-in user can see and hit like button in custom page, discussion and solution tiles
     Given the following solutions:
       | title             | state     | collection |
-      | Likeable solution | validated | Bulgaria   |
+      | Likeable solution | published | Bulgaria   |
     And "custom_page" content:
       | title                | collection | author    |
       | Likeable custom page | Bulgaria   | Lisa Like |
     And "discussion" content:
       | title               | collection | state     |
-      | Likeable discussion | Bulgaria   | validated |
+      | Likeable discussion | Bulgaria   | published |
 
     When I am logged in as "Gregory Like"
     And I go to the homepage of the "Bulgaria" collection
@@ -177,16 +177,16 @@ Feature: Like/unlike feature.
       | Likeable custom page | Bulgaria   | Lisa Like | published |
     And document content:
       | title             | collection | state     |
-      | Likeable document | Bulgaria   | validated |
+      | Likeable document | Bulgaria   | published |
     And discussion content:
       | title               | collection | state     |
-      | Likeable discussion | Bulgaria   | validated |
+      | Likeable discussion | Bulgaria   | published |
     And news content:
       | title         | headline      | collection | state     |
-      | Likeable news | Likeable news | Bulgaria   | validated |
+      | Likeable news | Likeable news | Bulgaria   | published |
     And event content:
       | title          | collection | state     |
-      | Likeable event | Bulgaria   | validated |
+      | Likeable event | Bulgaria   | published |
     And the following collection user memberships:
       | collection | user      | roles                      | state  |
       | Bulgaria   | Lisa Like | administrator, facilitator | active |

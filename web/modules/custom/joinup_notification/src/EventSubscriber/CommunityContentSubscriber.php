@@ -177,7 +177,7 @@ class CommunityContentSubscriber extends NotificationSubscriberBase {
       return;
     }
 
-    // If we are sending notifications regarding the transition from validated
+    // If we are sending notifications regarding the transition from published
     // to proposed, the users that need to receive the notifications depend on
     // who performed the transition:
     // - A facilitator or moderator might "Request changes" if they see that an
@@ -190,9 +190,9 @@ class CommunityContentSubscriber extends NotificationSubscriberBase {
     //   for publication.
     if ($transition_id === 'propose_new_revision') {
       // Determine if we are a privileged user such as a facilitator or
-      // moderator. Only privileged users can update content in validated state
+      // moderator. Only privileged users can update content in published state
       // directly, all other users first need to pass through proposed state.
-      $is_privileged = $entity->isTargetWorkflowStateAllowed('validated', 'validated');
+      $is_privileged = $entity->isTargetWorkflowStateAllowed('published', 'published');
       if ($is_privileged) {
         // We are a facilitator or moderator and are requesting changes. Ensure
         // the notifications are only sent to the content owner.

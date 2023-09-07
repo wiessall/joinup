@@ -7,7 +7,7 @@ Feature: Asset distribution deleting.
   Scenario: "Delete" button should be shown to facilitators of the related solution.
     Given the following solutions:
       | title                 | description        | state     |
-      | Rough valentine's day | Sample description | validated |
+      | Rough valentine's day | Sample description | published |
     And users:
       | Username   | E-mail                |
       | Papa Roach | paparoach@example.com |

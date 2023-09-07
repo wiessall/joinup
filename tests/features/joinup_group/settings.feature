@@ -19,7 +19,7 @@ Feature: Collections/Solutions settings
       | email | chico.editorial@example.com |
     And collections:
       | title             | logo     | abstract                                    | access url        | closed | creation date    | description                     | content creation         | moderation | topic             | owner         | contact information  | state     |
-      | Jillian Land Eels | logo.png | Read up on all about <strong>spice</strong> | http://spice.com/ | yes    | 28-01-1995 12:05 | The spice elegance personified. | facilitators and authors | yes        | Supplier exchange | Chico example | Chico editorial      | validated |
+      | Jillian Land Eels | logo.png | Read up on all about <strong>spice</strong> | http://spice.com/ | yes    | 28-01-1995 12:05 | The spice elegance personified. | facilitators and authors | yes        | Supplier exchange | Chico example | Chico editorial      | published |
     When I am logged in as a owner of the "Jillian Land Eels" collection
     And I go to the homepage of the "Jillian Land Eels" collection
     And I should not see the link "Settings" in the "Entity actions" region
@@ -78,10 +78,10 @@ Feature: Collections/Solutions settings
     Given the following collection:
       | title | Rally fanatics |
       | logo  | logo.png       |
-      | state | validated      |
+      | state | published      |
     And the following solution:
       | title      | Klop mirubes   |
-      | state      | validated      |
+      | state      | published      |
       | collection | Rally fanatics |
     And users:
       | Username         | E-mail                     | First name  | Family name |

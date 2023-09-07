@@ -10,17 +10,17 @@ Feature: Global search with archive content
       | email | some-contact@example.com |
     And the following <group type>s:
       | title             | description | state     |
-      | Some <group type> | Description | validated |
-      | Rare <group type> | Description | validated |
+      | Some <group type> | Description | published |
+      | Rare <group type> | Description | published |
     And event content:
       | title   | short title | body      | spatial coverage | agenda      | location   | organisation        | scope         | <group type>      | state     |
-      | Event 1 | Event 1     | Some body | Greece           | Some agenta | Some place | European Commission | International | Some <group type> | validated |
-      | Event 2 | Event 2     | Some body | Greece           | Some agenta | Some place | European Commission | International | Rare <group type> | validated |
-      | Event 3 | Event 3     | Some body | Greece           | Some agenta | Some place | European Commission | International | Rare <group type> | validated |
-      | Event 4 | Event 4     | Some body | Greece           | Some agenta | Some place | European Commission | International | Rare <group type> | validated |
+      | Event 1 | Event 1     | Some body | Greece           | Some agenta | Some place | European Commission | International | Some <group type> | published |
+      | Event 2 | Event 2     | Some body | Greece           | Some agenta | Some place | European Commission | International | Rare <group type> | published |
+      | Event 3 | Event 3     | Some body | Greece           | Some agenta | Some place | European Commission | International | Rare <group type> | published |
+      | Event 4 | Event 4     | Some body | Greece           | Some agenta | Some place | European Commission | International | Rare <group type> | published |
     And document content:
       | title           | document type | short title     | body      | spatial coverage | <group type>      | state     |
-      | Some document 1 | Document      | Some document 1 | Some body | Luxembourg       | Some <group type> | validated |
+      | Some document 1 | Document      | Some document 1 | Some body | Luxembourg       | Some <group type> | published |
 
     When the "Some <group type>" <group type> is configured to show "All" community content in the overview
     And the "Some <group type>" <group type> is configured to show the "<bundle label> content archived toggle" facet in the "Top" region

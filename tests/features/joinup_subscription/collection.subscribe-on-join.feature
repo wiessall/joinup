@@ -8,10 +8,10 @@ Feature: Subscribing to a collection after joining
   Scenario: Show a modal dialog asking a user to subscribe after joining
     Given collections:
       | title            | abstract                       | closed | description                          | state     |
-      | Sapient Pearwood | Grows in magic-polluted areas  | no     | This tree is impervious to magic.    | validated |
-      | Drop bears       | Predator from the koala family | no     | Drops from a tree onto its prey.     | validated |
-      | Troll ducks      | Stone ducks don't float        | yes    | They sink to the bottom and walk.    | validated |
-      | Swamp dragons    | Explode when overexcited       | yes    | Bred for the hotness of their flame. | validated |
+      | Sapient Pearwood | Grows in magic-polluted areas  | no     | This tree is impervious to magic.    | published |
+      | Drop bears       | Predator from the koala family | no     | Drops from a tree onto its prey.     | published |
+      | Troll ducks      | Stone ducks don't float        | yes    | They sink to the bottom and walk.    | published |
+      | Swamp dragons    | Explode when overexcited       | yes    | Bred for the hotness of their flame. | published |
     And users:
       | Username          |
       | Echinoid Blacksly |

@@ -9,7 +9,7 @@ Feature:
       | title            | Author collection  |
       | moderation       | <moderation>       |
       | content creation | <content creation> |
-      | state            | validated          |
+      | state            | published          |
 
     When I am logged in as an "author" of the "Author collection" collection
     And I go to the "Author collection" collection

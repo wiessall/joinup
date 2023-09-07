@@ -100,7 +100,7 @@ class JoinupGroupOgSubscriber implements EventSubscriberInterface {
 
     // If a published collection is updated, set the label to "Publish" and move
     // it to the start of the row of buttons.
-    if ($state === 'validated') {
+    if ($state === 'published') {
       $event->setLabel($this->t('Publish'));
       $event->setWeight(-20);
     }

@@ -8,7 +8,7 @@ Feature: Custom pages enhance search results for their collections/solutions
     Given the following <group>s:
       | title           | state     |
       | Buddy system    | draft     |
-      | Slab allocation | validated |
+      | Slab allocation | published |
 
     # Initially I get no results. This is intended to warm up any caches.
     When I go to the homepage
@@ -31,7 +31,7 @@ Feature: Custom pages enhance search results for their collections/solutions
 
     # When I search for a keyword that is present in all 4 custom pages, I will
     # only get a single result back. Of the 4 custom pages, two are currently
-    # published, but only "Alleviates fragmentation" is from a validated group,
+    # published, but only "Alleviates fragmentation" is from a published group,
     # so this should be the only result.
     When I enter "memory" in the search bar and press enter
     Then the page should show only the tiles "Alleviates fragmentation"
@@ -63,7 +63,7 @@ Feature: Custom pages enhance search results for their collections/solutions
 
     # Publish the group which is in draft. When searching I should now also get
     # this group and its enabled custom page back.
-    When the workflow state of the "Buddy system" group is changed to "validated"
+    When the workflow state of the "Buddy system" group is changed to "published"
     Then I enter "memory" in the search bar and press enter
     Then the page should show only the tiles "Alleviates fragmentation, Memory initialization overhead, Slab allocation, Splitting and coalescing, Buddy system"
 

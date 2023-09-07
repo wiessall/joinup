@@ -6,7 +6,7 @@ Feature: Delete comments
     Given the following collection:
       | title | Semantic web fanatics |
       | logo  | logo.png              |
-      | state | validated             |
+      | state | published             |
     And users:
       | Username             | E-mail                        | First name  | Family name |
       | Tim Berners Lee      | tim.berners-lee@example.com   | Tim Berners | Lee         |
@@ -14,7 +14,7 @@ Feature: Delete comments
       | Do Re Mi Facilitator | doremifacilitator@example.com | Do Re Mi    | Facilitator |
     And news content:
       | title                          | body                              | collection            | state     |
-      | RDF Schemas for government use | Home for DCAT, ADMS, and the like | Semantic web fanatics | validated |
+      | RDF Schemas for government use | Home for DCAT, ADMS, and the like | Semantic web fanatics | published |
     And comments:
       | subject         | field_body       | author          | parent                         |
       | ADMS is awesome | Let's all use it | Tim Berners Lee | RDF Schemas for government use |

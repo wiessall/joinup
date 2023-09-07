@@ -13,7 +13,7 @@ Feature: Notification test for the document transitions on a pre moderated paren
       | CC member        |           | notify_member@test.com      | CC         | Member      |
     And collections:
       | title             | state     | content creation | moderation |
-      | CC pre collection | validated | members          | yes        |
+      | CC pre collection | published | members          | yes        |
     And the following collection user memberships:
       | collection        | user           | roles       |
       | CC pre collection | CC owner       | owner       |
@@ -25,15 +25,15 @@ Feature: Notification test for the document transitions on a pre moderated paren
       # the facilitator would not have access to the entity.
       | CC notify pre publish               | CC facilitator | body | Document      | CC pre collection | draft            |
       | CC notify pre propose               | CC member      | body | Document      | CC pre collection | draft            |
-      | CC notify pre request changes       | CC member      | body | Document      | CC pre collection | validated        |
-      | CC notify pre report                | CC member      | body | Document      | CC pre collection | validated        |
-      | CC notify pre request deletion      | CC member      | body | Document      | CC pre collection | validated        |
+      | CC notify pre request changes       | CC member      | body | Document      | CC pre collection | published        |
+      | CC notify pre report                | CC member      | body | Document      | CC pre collection | published        |
+      | CC notify pre request deletion      | CC member      | body | Document      | CC pre collection | published        |
       | CC notify pre propose from reported | CC member      | body | Document      | CC pre collection | needs_update     |
       | CC notify pre approve proposed      | CC member      | body | Document      | CC pre collection | proposed         |
       | CC notify pre reject deletion       | CC member      | body | Document      | CC pre collection | deletion_request |
       | CC notify pre delete                | CC member      | body | Document      | CC pre collection | deletion_request |
-      | CC notify validated to delete       | CC member      | body | Document      | CC pre collection | validated        |
-      | CC notify validated to revise       | CC member      | body | Document      | CC pre collection | validated        |
+      | CC notify published to delete       | CC member      | body | Document      | CC pre collection | published        |
+      | CC notify published to revise       | CC member      | body | Document      | CC pre collection | published        |
 
     # Test 'create' operation.
     When I am logged in as "CC member"
@@ -91,13 +91,13 @@ Feature: Notification test for the document transitions on a pre moderated paren
       | subject   | Joinup: Content has been updated                                                                                                                                                      |
       | body      | CC Member has requested to delete the document - "CC notify pre request deletion" in the collection: "CC pre collection", with the following motivation: "I just want to delete it.". |
 
-    When I go to the "CC notify validated to revise" document
+    When I go to the "CC notify published to revise" document
     And I click "Edit" in the "Entity actions" region
     And I press "Propose changes"
     Then the following email should have been sent:
       | recipient | CC owner                                                                                                                                    |
       | subject   | Joinup: Content has been proposed                                                                                                           |
-      | body      | CC Member has submitted an update of the document - "CC notify validated to revise" for publication in the collection: "CC pre collection". |
+      | body      | CC Member has submitted an update of the document - "CC notify published to revise" for publication in the collection: "CC pre collection". |
 
     When I am logged in as "CC facilitator"
     And I go to the "CC notify pre publish" document
@@ -178,13 +178,13 @@ Feature: Notification test for the document transitions on a pre moderated paren
       | subject   | Joinup: Content has been deleted                                                                                                                             |
       | body      | Facilitator CC Facilitator has approved your request of deletion for the document - "CC notify pre request deletion" in the collection: "CC pre collection". |
 
-    # Test 'delete' operation on an entity in 'validated' state.
+    # Test 'delete' operation on an entity in 'published' state.
     When I am logged in as "CC facilitator"
-    And I go to the "CC notify validated to delete" document
+    And I go to the "CC notify published to delete" document
     And I click "Edit" in the "Entity actions" region
     And I click "Delete"
     And I press "Delete"
     Then the following email should have been sent:
       | recipient | CC member                                                                                                                     |
       | subject   | Joinup: Content has been deleted                                                                                              |
-      | body      | Facilitator CC Facilitator has deleted the document - "CC notify validated to delete" in the collection: "CC pre collection". |
+      | body      | Facilitator CC Facilitator has deleted the document - "CC notify published to delete" in the collection: "CC pre collection". |

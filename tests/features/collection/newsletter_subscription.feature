@@ -18,10 +18,10 @@ Feature: Subscribing to collection newsletters
       | Antonios Katsaros |
     And the following collections:
       | title    | description             | logo     | owner             | contact information   | state     | topic                   |
-      | Volkor X | We do not come in peace | logo.png | Antonios Katsaros | Charalambos Demetriou | validated | Statistics and Analysis |
+      | Volkor X | We do not come in peace | logo.png | Antonios Katsaros | Charalambos Demetriou | published | Statistics and Analysis |
     And "news" content:
       | title      | collection | state     | author          |
-      | Hypersleep | Volkor X   | validated | Tatiana Andreas |
+      | Hypersleep | Volkor X   | published | Tatiana Andreas |
     And the following collection user memberships:
       | collection | user               | roles       |
       | Volkor X   | Filippos Demetriou | owner       |

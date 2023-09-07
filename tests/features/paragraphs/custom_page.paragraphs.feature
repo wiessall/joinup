@@ -7,7 +7,7 @@ Feature:
   Background:
     Given the following collection:
       | title | Paragraphs collection |
-      | state | validated             |
+      | state | published             |
       | topic | HR                    |
 
   Scenario: Heading paragraph is displayed as heading element.
@@ -92,7 +92,7 @@ Feature:
   Scenario Outline: Privileged users can add paragraphs.
     Given the following <group type>:
       | title | Paragraphs group type |
-      | state | validated             |
+      | state | published             |
     And users:
       | Username |
       | Zohan    |

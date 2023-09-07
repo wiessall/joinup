@@ -7,7 +7,7 @@ Feature: Github feed paragraph tests.
   Scenario Outline: Test the Github feed paragraph.
     Given the following <group>:
       | title | Paragraphs <group> |
-      | state | validated          |
+      | state | published          |
     And custom_page content:
       | title                   | <group>            | state     | topic                   |
       | Catalogue of paragraphs | Paragraphs <group> | published | Statistics and Analysis |
@@ -76,7 +76,7 @@ Feature: Github feed paragraph tests.
   Scenario Outline: Facilitators can also access paragraphs.
     Given the following <group>:
       | title | Paragraphs <group> |
-      | state | validated          |
+      | state | published          |
     And custom_page content:
       | title                   | <group>            | state     | topic                   |
       | Catalogue of paragraphs | Paragraphs <group> | published | Statistics and Analysis |

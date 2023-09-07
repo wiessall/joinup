@@ -7,20 +7,20 @@ Feature: Solutions Overview
   Scenario: Solution overview paging
     Given solutions:
       | title      | creation date     | state     |
-      | Arctic fox | 2018-10-04 8:21am | validated |
-      | Alpaca     | 2018-10-04 8:31am | validated |
-      | Boomalope  | 2018-10-04 8:28am | validated |
-      | Boomrat    | 2018-10-04 8:35am | validated |
-      | Megasloth  | 2018-10-04 8:01am | validated |
-      | Thrumbo    | 2018-10-04 8:07am | validated |
-      | Spelopede  | 2018-10-04 8:18am | validated |
-      | Muffalo    | 2018-10-04 8:59am | validated |
-      | Husky      | 2018-10-04 8:00am | validated |
-      | Gazelle    | 2018-10-04 8:43am | validated |
-      | Cow        | 2018-10-04 8:27am | validated |
-      | Panther    | 2018-10-04 8:22am | validated |
-      | Tortoise   | 2018-10-04 8:34am | validated |
-      | Warg       | 2018-10-04 8:39am | validated |
+      | Arctic fox | 2018-10-04 8:21am | published |
+      | Alpaca     | 2018-10-04 8:31am | published |
+      | Boomalope  | 2018-10-04 8:28am | published |
+      | Boomrat    | 2018-10-04 8:35am | published |
+      | Megasloth  | 2018-10-04 8:01am | published |
+      | Thrumbo    | 2018-10-04 8:07am | published |
+      | Spelopede  | 2018-10-04 8:18am | published |
+      | Muffalo    | 2018-10-04 8:59am | published |
+      | Husky      | 2018-10-04 8:00am | published |
+      | Gazelle    | 2018-10-04 8:43am | published |
+      | Cow        | 2018-10-04 8:27am | published |
+      | Panther    | 2018-10-04 8:22am | published |
+      | Tortoise   | 2018-10-04 8:34am | published |
+      | Warg       | 2018-10-04 8:39am | published |
     And I am an anonymous user
     When I visit the solution overview
     Then I should see the following tiles in the correct order:
@@ -61,13 +61,13 @@ Feature: Solutions Overview
     And the following collection:
       | title | Pikachu, I choose you |
       | logo  | logo.png              |
-      | state | validated             |
+      | state | published             |
     And solutions:
     # As of ISAICP-3618 descriptions should not be visible in regular tiles.
       | title                 | description                    | state     |
-      | Non electronic health | Supports health-related fields | validated |
-      | Closed data           | Facilitate access to data sets | validated |
-      | Isolating Europe      | Reusable tools and services    | validated |
+      | Non electronic health | Supports health-related fields | published |
+      | Closed data           | Facilitate access to data sets | published |
+      | Isolating Europe      | Reusable tools and services    | published |
       | Uniting Europe        | Unusable tools and services    | draft     |
     And the following owner:
       | name              | type                    |
@@ -162,20 +162,20 @@ Feature: Solutions Overview
       | Joann Womack    | joann.womack@example.com    |
     And the following collections:
       | title                 | state     |
-      | Insane Wooden Crystal | validated |
+      | Insane Wooden Crystal | published |
     And the following solutions:
       | title                        | collection            | state     | featured | author          |
-      | Subdivision Morbid           | Insane Wooden Crystal | validated | yes      | Marjorie Parker |
-      | Long Tungsten                | Insane Wooden Crystal | validated | no       | Ryker Brandon   |
-      | Hungry Disappointed Tungsten | Insane Wooden Crystal | validated | yes      | Marjorie Parker |
-      | Lost Yard                    | Insane Wooden Crystal | validated | no       | Joann Womack    |
-      | Lost Scattered Fish          | Insane Wooden Crystal | validated | no       | Joann Womack    |
-      | Silver Gravel                | Insane Wooden Crystal | validated | no       | Joann Womack    |
+      | Subdivision Morbid           | Insane Wooden Crystal | published | yes      | Marjorie Parker |
+      | Long Tungsten                | Insane Wooden Crystal | published | no       | Ryker Brandon   |
+      | Hungry Disappointed Tungsten | Insane Wooden Crystal | published | yes      | Marjorie Parker |
+      | Lost Yard                    | Insane Wooden Crystal | published | no       | Joann Womack    |
+      | Lost Scattered Fish          | Insane Wooden Crystal | published | no       | Joann Womack    |
+      | Silver Gravel                | Insane Wooden Crystal | published | no       | Joann Womack    |
     # Technical: use a separate step to create a collection associated to the anonymous user.
     And the following solution:
       | title      | Flag Rough            |
       | collection | Insane Wooden Crystal |
-      | state      | validated             |
+      | state      | published             |
       | featured   | no                    |
 
     When I am logged in as "Joann Womack"

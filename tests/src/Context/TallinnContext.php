@@ -65,7 +65,7 @@ class TallinnContext extends RawDrupalContext {
       'rid' => 'collection',
       'id' => Tallinn::TALLINN_COMMUNITY_ID,
       'label' => 'Tallinn Ministerial Declaration',
-      'field_ar_state' => 'validated',
+      'field_ar_state' => 'published',
       'field_topic' => 'http://example.com/term/2',
       'field_ar_owner' => 'http://example.com/owner',
       'field_ar_contact_information' => 'http://example.com/contact',

@@ -8,12 +8,12 @@ Feature: Add distribution through the UI
     Given the following collection:
       | title      | Asset Distribution Test |
       | logo       | logo.png                |
-      | state      | validated               |
+      | state      | published               |
      And the following solution:
       | title       | Solution random x name           |
       | collection  | Asset Distribution Test          |
       | description | Some reusable random description |
-      | state       | validated                        |
+      | state       | published                        |
     And the following release:
       | title          | Authoritarian Alpaca   |
       | description    | First public release.  |
@@ -21,7 +21,7 @@ Feature: Add distribution through the UI
       | creation date  | 2019-11-19 20:45       |
       | is version of  | Solution random x name |
       | status         | Completed              |
-      | state          | validated              |
+      | state          | published              |
     And the following licences:
       | title              | description                                              | deprecated |
       | WTFPL              | The WTFPL is a rather permissive licence                 | no         |
@@ -149,7 +149,7 @@ Feature: Add distribution through the UI
     Given the following solution:
       | title       | Solubility of gases     |
       | description | Affected by temperature |
-      | state       | validated               |
+      | state       | published               |
     And the following release:
       | title         | 1.0.0 Adolf Sieverts |
       | description   | First public release |

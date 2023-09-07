@@ -9,7 +9,7 @@ Feature: "Add release" visibility options.
       | title         | Release solution test |
       | description   | My awesome solution   |
       | documentation | text.pdf              |
-      | state         | validated             |
+      | state         | published             |
 
     When I am logged in as a "facilitator" of the "Release solution test" solution
     And I go to the homepage of the "Release solution test" solution
@@ -31,13 +31,13 @@ Feature: "Add release" visibility options.
       | Organisation example | Company |
     And the following solutions:
       | title          | description        | documentation | owner                | state     |
-      | Release Test 1 | test description 1 | text.pdf      | Organisation example | validated |
+      | Release Test 1 | test description 1 | text.pdf      | Organisation example | published |
     And the following release:
       | title          | Chasing shadows     |
       | is version of  | Release Test 1      |
       | release number | 1.0                 |
       | status         | Deprecated          |
-      | state          | validated           |
+      | state          | published           |
       | creation date  | 2014-08-30 23:59:00 |
 
     # Assert that the "Release" tiles are present and contain version, release date, label and bundle type.
@@ -104,7 +104,7 @@ Feature: "Add release" visibility options.
     Given the following collection:
       | uri   | http://example1regression |
       | title | The Stripped Stream       |
-      | state | validated                 |
+      | state | published                 |
 
     When I am not logged in
     And I go to "/rdf_entity/http_e_f_fexample1regression/asset_release/add"
@@ -120,7 +120,7 @@ Feature: "Add release" visibility options.
       | Organisation example two | Company |
     And the following solutions:
       | title          | description        | documentation | owner                    | state     |
-      | Release Test 2 | test description 2 | text.pdf      | Organisation example two | validated |
+      | Release Test 2 | test description 2 | text.pdf      | Organisation example two | published |
     When I am logged in as a "facilitator" of the "Release Test 2" solution
     And I go to the homepage of the "Release Test 2" solution
     And I click "Add release" in the plus button menu

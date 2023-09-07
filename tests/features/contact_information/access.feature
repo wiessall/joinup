@@ -30,7 +30,7 @@ Feature: Contact information access
       | logo                | logo.png                |
       | owner               | Ausy BENELUX            |
       | contact information | info                    |
-      | state               | validated               |
+      | state               | published               |
     And the following collection user memberships:
       | collection              | user          | roles       |
       | Ausy software solutions | Michiel Lucas | facilitator |

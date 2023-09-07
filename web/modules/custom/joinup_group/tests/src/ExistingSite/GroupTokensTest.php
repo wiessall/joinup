@@ -21,12 +21,12 @@ class GroupTokensTest extends JoinupExistingSiteTestBase {
     $collection = $this->createRdfEntity([
       'rid' => 'collection',
       'label' => $this->randomString(),
-      'field_ar_state' => 'validated',
+      'field_ar_state' => 'published',
     ]);
 
     $solution = $this->createRdfEntity([
       'rid' => 'solution',
-      'field_is_state' => 'validated',
+      'field_is_state' => 'published',
       'label' => $this->randomString(),
       'collection' => $collection->id(),
     ]);

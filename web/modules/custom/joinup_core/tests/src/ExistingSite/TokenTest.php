@@ -24,21 +24,21 @@ class TokenTest extends JoinupExistingSiteTestBase {
     $collection = $this->createRdfEntity([
       'rid' => 'collection',
       'title' => $this->randomMachineName(),
-      'field_ar_state' => 'validated',
+      'field_ar_state' => 'published',
     ]);
 
     $solution = $this->createRdfEntity([
       'rid' => 'solution',
       'title' => $this->randomMachineName(),
       'collection' => $collection,
-      'field_is_state' => 'validated',
+      'field_is_state' => 'published',
     ]);
 
     $asset_release = $this->createRdfEntity([
       'rid' => 'asset_release',
       'title' => $this->randomMachineName(),
       'field_isr_is_version_of' => $solution,
-      'field_isr_state' => 'validated',
+      'field_isr_state' => 'published',
     ]);
 
     $asset_distribution = $this->createRdfEntity([

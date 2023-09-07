@@ -7,11 +7,11 @@ Feature: Subscribing to community content in solutions
   Background:
     Given the following collections:
       | title    | state     |
-      | Bulgaria | validated |
+      | Bulgaria | published |
     Given the following solutions:
       | title                | state     | collection |
-      | Products of Bulgaria | validated | Bulgaria   |
-      | Cities of Bulgaria   | validated | Bulgaria   |
+      | Products of Bulgaria | published | Bulgaria   |
+      | Cities of Bulgaria   | published | Bulgaria   |
     And users:
       | Username | E-mail            | First name | Family name  | Notification frequency |
       | hristo   | hristo@example.bg | Hristo     | Draganov     | daily                  |
@@ -38,25 +38,25 @@ Feature: Subscribing to community content in solutions
   Scenario: Receive a digest of content that is published in my solutions
     Given discussion content:
       | title      | body                      | solution             | state     | author |
-      | Duck liver | Rich buttery and delicate | Products of Bulgaria | validated | hristo |
-      | Sofia      | Grows without aging       | Cities of Bulgaria   | validated | kalin  |
+      | Duck liver | Rich buttery and delicate | Products of Bulgaria | published | hristo |
+      | Sofia      | Grows without aging       | Cities of Bulgaria   | published | kalin  |
       | Ruse       | Little Vienna             | Cities of Bulgaria   | proposed  | kalin  |
     And document content:
       | title           | body                   | solution             | state     | author |
-      | Canned cherries | Sour cherries for pies | Products of Bulgaria | validated | bisera |
-      | Plovdiv         | Seven hills            | Cities of Bulgaria   | validated | hristo |
+      | Canned cherries | Sour cherries for pies | Products of Bulgaria | published | bisera |
+      | Plovdiv         | Seven hills            | Cities of Bulgaria   | published | hristo |
     And event content:
       | title           | body           | solution             | state     | author | start date          | end date            |
-      | Sunflower seeds | A tasty snack  | Products of Bulgaria | validated | bisera | 2019-11-28T11:12:13 | 2019-11-28T11:12:13 |
+      | Sunflower seeds | A tasty snack  | Products of Bulgaria | published | bisera | 2019-11-28T11:12:13 | 2019-11-28T11:12:13 |
       | Varna           | Summer capital | Cities of Bulgaria   | draft     | kalin  | 2019-12-05T12:00:00 | 2019-12-15T12:00:00 |
-      | Stara Zagora    | Historic       | Cities of Bulgaria   | validated | hristo | 2020-01-18T18:30:00 | 2020-01-19T00:00:00 |
+      | Stara Zagora    | Historic       | Cities of Bulgaria   | published | hristo | 2020-01-18T18:30:00 | 2020-01-19T00:00:00 |
     And news content:
       | title    | body                        | solution             | state     | author |
-      | Rose oil | A widely used essential oil | Products of Bulgaria | validated | bisera |
-      | Burgas   | City of dreams              | Cities of Bulgaria   | validated | hristo |
+      | Rose oil | A widely used essential oil | Products of Bulgaria | published | bisera |
+      | Burgas   | City of dreams              | Cities of Bulgaria   | published | hristo |
     And releases:
       | title       | release number | release notes   | is version of        | state     |
-      | Spring 2021 | 2021/03        | Blooming pears. | Products of Bulgaria | validated |
+      | Spring 2021 | 2021/03        | Blooming pears. | Products of Bulgaria | published |
     And distributions:
       | title                 | description    | parent               |
       # A distribution linked directly to the solution.
@@ -109,7 +109,7 @@ Feature: Subscribing to community content in solutions
 
     # Publish an existing unpublished community content. It should be included
     # in the next digest.
-    When the workflow state of the "Ruse" content is changed to "validated"
+    When the workflow state of the "Ruse" content is changed to "published"
 
     Then the weekly group content subscription digest for bisera should include the following message:
       | Ruse |
@@ -167,7 +167,7 @@ Feature: Subscribing to community content in solutions
       | Ruse |
     And the monthly group content subscription digest for kalin should not contain the following message:
       | Ruse |
-    When the workflow state of the "Ruse" content is changed to "validated"
+    When the workflow state of the "Ruse" content is changed to "published"
     Then the weekly group content subscription digest for bisera should not contain the following message:
       | Ruse |
     And the monthly group content subscription digest for kalin should not contain the following message:

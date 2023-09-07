@@ -9,7 +9,7 @@ Feature: Collection TCA agreement
     Given the following collection:
       | title | TCA Agreement collection |
       | logo  | logo.png                 |
-      | state | validated                |
+      | state | published                |
 
   Scenario: TCA agreement page is not accessible by anonymous users.
     When I am not logged in

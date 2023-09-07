@@ -8,11 +8,11 @@ Feature: "Add event" visibility options.
     Given the following collection:
       | title  | Collective Ragged tower |
       | logo   | logo.png                |
-      | state  | validated               |
+      | state  | published               |
     And the following solutions:
       | title           | collection              | logo     | state     |
-      | Ragged Tower    | Collective Ragged tower | logo.png | validated |
-      | Prince of Magic | Collective Ragged tower | logo.png | validated |
+      | Ragged Tower    | Collective Ragged tower | logo.png | published |
+      | Prince of Magic | Collective Ragged tower | logo.png | published |
 
     When I am logged in as an "authenticated user"
     And I go to the homepage of the "Ragged Tower" solution
@@ -38,10 +38,10 @@ Feature: "Add event" visibility options.
     Given the following collection:
       | title  | Collective The Luscious Bridges |
       | logo   | logo.png                        |
-      | state  | validated                       |
+      | state  | published                       |
     And the following solutions:
       | title                | collection                      | logo     | state     |
-      | The Luscious Bridges | Collective The Luscious Bridges | logo.png | validated |
+      | The Luscious Bridges | Collective The Luscious Bridges | logo.png | published |
     And I am logged in as a facilitator of the "The Luscious Bridges" solution
     When I go to the homepage of the "The Luscious Bridges" solution
     And I click "Add event" in the plus button menu

@@ -7,8 +7,8 @@ Feature: Joining and leaving collections through the web interface
   Scenario: Joining and leaving a collection
     Given collections:
       | title                       | abstract                                   | access url                             | closed | creation date    | description                                                                                                        | content creation         | moderation | state     |
-      | Überwaldean Land Eels       | Read up on all about <strong>dogs</strong> | http://dogtime.com/dog-breeds/profiles | no     | 28-01-1995 12:05 | The Afghan Hound is elegance personified.                                                                          | facilitators and authors | yes        | validated |
-      | Folk Dance and Song Society | Cats are cool!                             | http://mashable.com/category/cats/     | yes    | 28-01-1995 12:06 | The domestic cat (Felis catus or Felis silvestris catus) is a small usually furry domesticated carnivorous mammal. | members                  | no         | validated |
+      | Überwaldean Land Eels       | Read up on all about <strong>dogs</strong> | http://dogtime.com/dog-breeds/profiles | no     | 28-01-1995 12:05 | The Afghan Hound is elegance personified.                                                                          | facilitators and authors | yes        | published |
+      | Folk Dance and Song Society | Cats are cool!                             | http://mashable.com/category/cats/     | yes    | 28-01-1995 12:06 | The domestic cat (Felis catus or Felis silvestris catus) is a small usually furry domesticated carnivorous mammal. | members                  | no         | published |
     And users:
       | Username       |
       | Madame Sharn   |
@@ -98,7 +98,7 @@ Feature: Joining and leaving collections through the web interface
       | newcomer researcher |
     And the following collection:
       | title  | Insectarium       |
-      | state  | validated         |
+      | state  | published         |
       | author | insect researcher |
     And the following collection user memberships:
       | collection  | user                | roles |
@@ -130,7 +130,7 @@ Feature: Joining and leaving collections through the web interface
   Scenario: Close the modal dialogs with the cancel button.
     Given collections:
       | title            | abstract                      | closed | description                       | state     |
-      | Sapient Pearwood | Grows in magic-polluted areas | no     | This tree is impervious to magic. | validated |
+      | Sapient Pearwood | Grows in magic-polluted areas | no     | This tree is impervious to magic. | published |
     And users:
       | Username      |
       | Stewe Griffin |

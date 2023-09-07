@@ -180,7 +180,7 @@ Feature:
       | Sergeant Pepper | pepper@royalnavy.mod.uk | p3pp3r   | Sergeant Pepper |
     And collections:
       | title              | state     |
-      | Land of submarines | validated |
+      | Land of submarines | published |
 
     Given I am an anonymous user
     When I go to the homepage of the "Land of submarines" collection

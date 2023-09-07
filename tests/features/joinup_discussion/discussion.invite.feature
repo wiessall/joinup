@@ -15,7 +15,7 @@ Feature: Invite members to subscribe to discussions
     And the following solution:
       | title       | Stainless Steel Siphons |
       | description | Will last forever       |
-      | state       | validated               |
+      | state       | published               |
     And the following solution user membership:
       | solution                | user         | roles       |
       | Stainless Steel Siphons | theacuteone  | member      |
@@ -23,7 +23,7 @@ Feature: Invite members to subscribe to discussions
     And the following collection:
       | title       | The Siphon Community |
       | description | We just love siphons |
-      | state       | validated            |
+      | state       | published            |
     And the following collection user membership:
       | collection           | user             | roles       |
       | The Siphon Community | Lynwood Crawford | member      |
@@ -31,8 +31,8 @@ Feature: Invite members to subscribe to discussions
       | The Siphon Community | Glory Ruskin     | facilitator |
     And discussion content:
       | title                            | content                            | author           | state     | collection           | solution                |
-      | For your lifetime                | Are you kidding?                   | Lynwood Crawford | validated |                      | Stainless Steel Siphons |
-      | Concerned about dissolved gases? | Gas might get trapped in a siphon. | Lynwood Crawford | validated | The Siphon Community |                         |
+      | For your lifetime                | Are you kidding?                   | Lynwood Crawford | published |                      | Stainless Steel Siphons |
+      | Concerned about dissolved gases? | Gas might get trapped in a siphon. | Lynwood Crawford | published | The Siphon Community |                         |
       | The flying droplet siphon        | Liquid tensile strength.           | Lynwood Crawford | draft     | The Siphon Community |                         |
 
     # Check that only moderators and the discussion owner can invite members.

@@ -10,8 +10,8 @@ owner_workflow:
     # State used to flag content that is being reviewed.
     needs_update:
       label: Needs update
-    validated:
-      label: Validated
+    published:
+      label: Published
       published: true
     deletion_request:
       label: Deletion request
@@ -19,16 +19,16 @@ owner_workflow:
     validate:
       label: Publish
       from: [__new__, deletion_request]
-      to: validated
+      to: published
     request_changes:
       label: Request changes
-      from: [validated]
+      from: [published]
       to: needs_update
     approve_changes:
       label: Approve changes
       from: [needs_update]
-      to: validated
+      to: published
     request_deletion:
       label: Request deletion
-      from: [validated]
+      from: [published]
       to: deletion_request

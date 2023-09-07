@@ -10,18 +10,18 @@ Feature: As a user of the website
       | trustysidekick | trusty.sidekick@example.com |
     And collection:
       | title | Fairy Tail |
-      | state | validated  |
+      | state | published  |
     And event content:
       | title                     | collection | start date   | end date            | created    | state     | author         | pinned |
-      | Sweet Palm                | Fairy Tail | now -1 years | now -1 years +1 day | now -5 day | validated | katerpillar    | yes    |
-      | Melted Hairdresser        | Fairy Tail | now -2 day   | now +2 day          | now -4 day | validated | katerpillar    | yes    |
-      | Hot Air                   | Fairy Tail | now +3 day   | now +5 day          | now -3 day | validated | katerpillar    | no     |
-      | Walking Unofficial Humans | Fairy Tail | now -4 day   | now -2 day          | now        | validated | trustysidekick | no     |
+      | Sweet Palm                | Fairy Tail | now -1 years | now -1 years +1 day | now -5 day | published | katerpillar    | yes    |
+      | Melted Hairdresser        | Fairy Tail | now -2 day   | now +2 day          | now -4 day | published | katerpillar    | yes    |
+      | Hot Air                   | Fairy Tail | now +3 day   | now +5 day          | now -3 day | published | katerpillar    | no     |
+      | Walking Unofficial Humans | Fairy Tail | now -4 day   | now -2 day          | now        | published | trustysidekick | no     |
       # The "Spring Freezing" event is associated with the anonymous user.
-      | Spring Freezing           | Fairy Tail | now +1 week  | now +1 week         | now -6 day | validated |                | no     |
+      | Spring Freezing           | Fairy Tail | now +1 week  | now +1 week         | now -6 day | published |                | no     |
     And document content:
       | title       | collection | state     | created   |
-      | Yellow Zeus | Fairy Tail | validated | yesterday |
+      | Yellow Zeus | Fairy Tail | published | yesterday |
 
     When I am logged in as "katerpillar"
     And I go to the homepage of the "Fairy Tail" collection

@@ -1,6 +1,6 @@
 @api @group-e
 Feature: Resend validation email from collection/solution about page
-  If the email address of a Collection/Solution has not been validated yet,
+  If the email address of a Collection/Solution has not been published yet,
   then a message must be displayed under the about page
 
   @terms
@@ -10,13 +10,13 @@ Feature: Resend validation email from collection/solution about page
       | Rotterdam | National authority |
     And the following collection:
       | title       | Rally fanatics          |
-      | state       | validated               |
+      | state       | published               |
       | description | Rally fanatics desc     |
       | topic       | Demography, E-inclusion |
       | owner       | Rotterdam               |
     And the following solution:
       | title            | Klop mirubes                                      |
-      | state            | validated                                         |
+      | state            | published                                         |
       | description      | Klop mirubes desc                                 |
       | topic            | Demography, E-inclusion                           |
       | owner            | Rotterdam                                         |
@@ -131,7 +131,7 @@ Feature: Resend validation email from collection/solution about page
       | name  | Existing to resend  |
     And solutions:
       | title                       | description          | state     | contact information |
-      | Existing to resend solution | Default description. | validated | Existing to resend  |
+      | Existing to resend solution | Default description. | published | Existing to resend  |
 
     When I am logged in as a user with the authenticated role
     And I go to the about page of "Existing to resend solution"
@@ -166,7 +166,7 @@ Feature: Resend validation email from collection/solution about page
       | name  | Some Resend             |
     And solutions:
       | title                       | description          | state     | contact information |
-      | Existing to resend solution | Default description. | validated | Some Resend         |
+      | Existing to resend solution | Default description. | published | Some Resend         |
     And the following email confirmation requests:
       | email                   | status    |
       | some.resend@example.com | pending   |

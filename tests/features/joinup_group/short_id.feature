@@ -7,7 +7,7 @@ Feature:
   Scenario: Short IDs are unique in collections.
     Given the following collections:
       | title              | short ID | state     |
-      | Scientific Studies | sst-2020 | validated |
+      | Scientific Studies | sst-2020 | published |
     And owner:
       | name                 | type    |
       | Organisation example | Company |
@@ -68,10 +68,10 @@ Feature:
   Scenario: Short IDs are unique in solutions.
     Given the following collections:
       | title              | short ID | state     |
-      | Scientific Studies | sst-2020 | validated |
+      | Scientific Studies | sst-2020 | published |
     And solutions:
       | title                         | short ID | state     | collection         |
-      | Who knows what a solution is? | wkwasi   | validated | Scientific Studies |
+      | Who knows what a solution is? | wkwasi   | published | Scientific Studies |
     And owner:
       | name                 | type    |
       | Organisation example | Company |

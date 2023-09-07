@@ -281,7 +281,7 @@ Feature:
     And compatibility documents:
       | id           | description                                                                                                                                                                    |
       | T01          | Freedom for using and re-distributing is a basic common characteristic of all open licences.                                                                                   |
-      | T10          | The hypothetical risk of 'viral effect' from @outbound-licence to the code covered by @inbound-licence in the case of dynamic or even static linking will not be validated. |
+      | T10          | The hypothetical risk of 'viral effect' from @outbound-licence to the code covered by @inbound-licence in the case of dynamic or even static linking will not be published. |
       | T16          | You have to check if the text of @inbound-licence has expressly mentioned @outbound-licence as compatible.                                                                  |
       | INCOMPATIBLE | @inbound-licence is not compatible with @outbound-licence.                                                                                                                  |
 
@@ -301,7 +301,7 @@ Feature:
 
     When I visit "licence/compatibility-check/EUPL-1.2/LGPL-2.1"
     Then I should see the heading "Compatibility between the European Union Public Licence 1.2 (inbound licence) and the GNU Lesser General Public License 2.1 (outbound licence)."
-    And I should see the text "The hypothetical risk of 'viral effect' from LGPL-2.1 to the code covered by EUPL-1.2 in the case of dynamic or even static linking will not be validated."
+    And I should see the text "The hypothetical risk of 'viral effect' from LGPL-2.1 to the code covered by EUPL-1.2 in the case of dynamic or even static linking will not be published."
     And the page should be cacheable
     When I reload the page
     Then the page should be cached
@@ -363,7 +363,7 @@ Feature:
     And compatibility documents:
       | id           | description                                                                                                                                                                    |
       | T01          | Freedom for using and re-distributing is a basic common characteristic of all open licences.                                                                                   |
-      | T10          | The hypothetical risk of 'viral effect' from @outbound-licence to the code covered by @inbound-licence in the case of dynamic or even static linking will not be validated. |
+      | T10          | The hypothetical risk of 'viral effect' from @outbound-licence to the code covered by @inbound-licence in the case of dynamic or even static linking will not be published. |
       | T16          | You have to check if the text of @inbound-licence has expressly mentioned @outbound-licence as compatible.                                                                  |
       | INCOMPATIBLE | @inbound-licence is not compatible with @outbound-licence.                                                                                                                  |
 
@@ -404,7 +404,7 @@ Feature:
     When I click "Check compatibility"
     Then the url should match "licence/compatibility-check/EUPL-1.2/LGPL-2.1"
     And I should see the heading "Compatibility between the European Union Public Licence 1.2 (inbound licence) and the GNU Lesser General Public License 2.1 (outbound licence)."
-    And I should see the text "The hypothetical risk of 'viral effect' from LGPL-2.1 to the code covered by EUPL-1.2 in the case of dynamic or even static linking will not be validated."
+    And I should see the text "The hypothetical risk of 'viral effect' from LGPL-2.1 to the code covered by EUPL-1.2 in the case of dynamic or even static linking will not be published."
 
     When I visit the "JLC" custom page
     Then the "Check compatibility" buttons should be disabled

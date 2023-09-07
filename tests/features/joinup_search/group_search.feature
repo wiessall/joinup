@@ -18,7 +18,7 @@ Feature: Search inside groups
       | moderation          | no                  |
       | topic               | Demography          |
       | spatial coverage    | Switzerland         |
-      | state               | validated           |
+      | state               | published           |
       | owner               | Antonios Katsumi    |
       | contact information | Charalambos Katsumi |
     And solution:
@@ -26,30 +26,30 @@ Feature: Search inside groups
       | description | Ways to construct foundations on hills and mountains. |
       | logo        | logo.png                                              |
       | collection  | Chalet construction                                   |
-      | state       | validated                                             |
+      | state       | published                                             |
     And discussion content:
       | title      | body                           | state     | collection          | solution             |
-      | Room sizes | What are the ideal dimensions? | validated | Chalet construction |                      |
-      | Terrace?   | Want a decent sized terrace    | validated |                     | Inclined foundations |
+      | Room sizes | What are the ideal dimensions? | published | Chalet construction |                      |
+      | Terrace?   | Want a decent sized terrace    | published |                     | Inclined foundations |
     And document content:
       | title       | body               | state     | collection          | solution             |
-      | Ground plan | A classic design   | validated | Chalet construction |                      |
-      | Rock types  | Ranked by hardness | validated |                     | Inclined foundations |
+      | Ground plan | A classic design   | published | Chalet construction |                      |
+      | Rock types  | Ranked by hardness | published |                     | Inclined foundations |
     And event content:
       | title                        | body                              | state     | collection          | solution             |
-      | Opening of the winter season | Ski resorts will open in December | validated | Chalet construction |                      |
-      | Presenting DrillMaster X88   | Our most finely ground drill bit  | validated |                     | Inclined foundations |
+      | Opening of the winter season | Ski resorts will open in December | published | Chalet construction |                      |
+      | Presenting DrillMaster X88   | Our most finely ground drill bit  | published |                     | Inclined foundations |
     And news content:
       | title             | headline          | body            | collection          | solution             | topic                   | spatial coverage | state     |
-      | Natural materials | Materials natural | Ground feel     | Chalet construction |                      | Statistics and Analysis | Switzerland      | validated |
-      | Still frozen      | Frozen still      | Maybe next week |                     | Inclined foundations |                         | Austria          | validated |
+      | Natural materials | Materials natural | Ground feel     | Chalet construction |                      | Statistics and Analysis | Switzerland      | published |
+      | Still frozen      | Frozen still      | Maybe next week |                     | Inclined foundations |                         | Austria          | published |
     And custom_page content:
       | title     | body                             | collection          | solution             | state     |
       | Resources | Here are some interesting links. | Chalet construction |                      | published |
       | Geography | A collection of height maps.     |                     | Inclined foundations | published |
     And releases:
       | title     | release number | release notes              | is version of        | state     |
-      | Pre-alpha | 0.0-alpha0     | Only works on flat ground. | Inclined foundations | validated |
+      | Pre-alpha | 0.0-alpha0     | Only works on flat ground. | Inclined foundations | published |
     And distributions:
       | title       | description          | parent    | access url |
       | Zip archive | It has files inside. | Pre-alpha | test.zip   |

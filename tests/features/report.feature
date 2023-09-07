@@ -7,7 +7,7 @@ Feature: Report inappropriate content
   Scenario Outline: Report inappropriate community content
     Given collection:
       | title | Deployment tools |
-      | state | validated        |
+      | state | published        |
     And "<type>" content:
       | title   | body   | collection       | state   |
       | <title> | <body> | Deployment tools | <state> |
@@ -31,8 +31,8 @@ Feature: Report inappropriate content
 
     Examples:
       | type        | title                        | body                    | state     |
-      | discussion  | Git is not a deployment tool | Use tarballs to deploy. | validated |
+      | discussion  | Git is not a deployment tool | Use tarballs to deploy. | published |
       | custom_page | The best tools               | Current best-in-class.  | published |
-      | news        | Now deploying to containers  | Long awaited feature.   | validated |
-      | document    | Deployment strategies        | Deploy faster.          | validated |
-      | event       | GovDeploy Bootcamp 2017      | Submit your session.    | validated |
+      | news        | Now deploying to containers  | Long awaited feature.   | published |
+      | document    | Deployment strategies        | Deploy faster.          | published |
+      | event       | GovDeploy Bootcamp 2017      | Submit your session.    | published |

@@ -13,14 +13,14 @@ Feature: Creation of news through the UI.
       | E-mail      | milana@example.com |
     And the following collections:
       | title            | description                                 | logo     | state     |
-      | Metal fans       | "Share the love for nickel, tungsten & co." | logo.png | validated |
-      | Hardcore diggers | We dig up stuff hidden beneath the earth.   | logo.png | validated |
-      | Cool blacksmiths | Keeping it cool while working on hot stuff. | logo.png | validated |
+      | Metal fans       | "Share the love for nickel, tungsten & co." | logo.png | published |
+      | Hardcore diggers | We dig up stuff hidden beneath the earth.   | logo.png | published |
+      | Cool blacksmiths | Keeping it cool while working on hot stuff. | logo.png | published |
     And solutions:
       | title                     | description                               | logo     | state     |
-      | Density catalogue project | Catalog density on metals with ease.      | logo.png | validated |
-      | Dig do's and don'ts       | How to dig up stuff with style.           | logo.png | validated |
-      | Anvil test routines       | How to determine reliability of the tool. | logo.png | validated |
+      | Density catalogue project | Catalog density on metals with ease.      | logo.png | published |
+      | Dig do's and don'ts       | How to dig up stuff with style.           | logo.png | published |
+      | Anvil test routines       | How to determine reliability of the tool. | logo.png | published |
     And the following solution user membership:
       | solution                  | user          | roles       |
       | Density catalogue project | isotopedancer | facilitator |
@@ -95,10 +95,10 @@ Feature: Creation of news through the UI.
   Scenario: Test the image library widget.
     Given the following collection:
       | title | Stream of Dreams |
-      | state | validated        |
+      | state | published        |
     And news content:
       | title             | collection       | headline      | body      | state     |
-      | The Great Opening | Stream of Dreams | Here we go... | It opens! | validated |
+      | The Great Opening | Stream of Dreams | Here we go... | It opens! | published |
 
     Given I am logged in as a moderator
 

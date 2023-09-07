@@ -17,7 +17,7 @@ Feature: Type something to filter the listing the member list
     And the following collection:
       | title         | Coffee makers                  |
       | description   | Coffee is needed for survival. |
-      | state         | validated                      |
+      | state         | published                      |
       | creation date | 01-01-2018                     |
     And the following collection user memberships:
       | collection    | user       | roles       | created          | state   |

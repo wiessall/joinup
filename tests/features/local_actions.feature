@@ -9,7 +9,7 @@ Feature:
 
     Given collection:
       | title | Test collection |
-      | state | validated       |
+      | state | published       |
     When I go to the "Test collection" collection
     Then I should not see the link "View" in the "Entity actions" region
     When I click "Metadata" in the "Entity actions" region
@@ -18,7 +18,7 @@ Feature:
     Given solution:
       | title      | Test solution   |
       | collection | Test collection |
-      | state      | validated       |
+      | state      | published       |
     When I go to the "Test solution" solution
     Then I should not see the link "View" in the "Entity actions" region
     When I click "Metadata" in the "Entity actions" region
@@ -27,7 +27,7 @@ Feature:
     Given release:
       | title         | Test release  |
       | is version of | Test solution |
-      | state         | validated     |
+      | state         | published     |
     When I go to the "Test release" release
     Then I should not see the link "View" in the "Entity actions" region
     And I should not see the link "Manage content"
@@ -54,7 +54,7 @@ Feature:
 
     Given discussion content:
       | title           | collection      | state     |
-      | Test discussion | Test collection | validated |
+      | Test discussion | Test collection | published |
     When I go to the "Test discussion" discussion
     Then I should not see the link "View" in the "Entity actions" region
     When I click "Delete" in the "Entity actions" region
@@ -62,7 +62,7 @@ Feature:
 
     Given document content:
       | title         | collection      | state     |
-      | Test document | Test collection | validated |
+      | Test document | Test collection | published |
     When I go to the "Test document" document
     Then I should not see the link "View" in the "Entity actions" region
     When I click "Delete" in the "Entity actions" region
@@ -70,7 +70,7 @@ Feature:
 
     Given event content:
       | title      | collection      | state     |
-      | Test event | Test collection | validated |
+      | Test event | Test collection | published |
     When I go to the "Test event" event
     Then I should not see the link "View" in the "Entity actions" region
     When I click "Delete" in the "Entity actions" region
@@ -78,7 +78,7 @@ Feature:
 
     Given news content:
       | title     | collection      | state     |
-      | Test news | Test collection | validated |
+      | Test news | Test collection | published |
     When I go to the "Test news" news
     Then I should not see the link "View" in the "Entity actions" region
     When I click "Delete" in the "Entity actions" region

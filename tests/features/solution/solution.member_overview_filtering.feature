@@ -16,11 +16,11 @@ Feature: Type something to filter the listing the member list
       | scanner      | Pucky      | Muck        |           |
     And the following collection:
       | title | Coffee lovers |
-      | state | validated     |
+      | state | published     |
     And the following solution:
       | title       | Coffee grinders                      |
       | description | Grind more coffee, make more coffee. |
-      | state       | validated                            |
+      | state       | published                            |
       | collection  | Coffee lovers                        |
     And the following solution user memberships:
       | solution        | user         | roles       |

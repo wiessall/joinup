@@ -6,14 +6,14 @@ Feature: Edit a comment
   Scenario: Edit a comment.
     Given the following collections:
       | title              | state     | closed |
-      | Structural pension | validated | no     |
+      | Structural pension | published | no     |
     And users:
       | Username               | E-mail                             | Roles     | First name | Family name |
       | Sons of anarchy        | sonsofanarchy@example.com          |           | Sons       | Anarchy     |
       | Comment edit moderator | comment.edit.moderator@example.com | moderator | Steeve     | Roberts     |
     And news content:
       | title            | body                                                | collection         | state     |
-      | Paying with cash | How could this ever happen? Moral panic on its way! | Structural pension | validated |
+      | Paying with cash | How could this ever happen? Moral panic on its way! | Structural pension | published |
     And comments:
       | subject                       | field_body       | author          | parent           |
       | This comment should be edited | Let's all use it | Sons of anarchy | Paying with cash |

@@ -5,7 +5,7 @@ Feature: As a site moderator I am able to import RDF files.
     Given collection:
       | uri   | http://administracionelectronica.gob.es/ctt |
       | title | Spain                                       |
-      | state | validated                                   |
+      | state | published                                   |
     And users:
       | Username        | Roles     |
       | Antoine Batiste | moderator |
@@ -124,10 +124,10 @@ Feature: As a site moderator I am able to import RDF files.
     And collection:
       | uri   | http://nio.gov.si/nio/ |
       | title | NIO                    |
-      | state | validated              |
+      | state | published              |
     And solutions:
       | uri                           | title                       | collection | description         | state     | modification date |
-      | http://example.com/solution/2 | Local version of Solution 2 | NIO        | Initial description | validated | 15-07-2018        |
+      | http://example.com/solution/2 | Local version of Solution 2 | NIO        | Initial description | published | 15-07-2018        |
     And the following solution user membership:
       | solution                    | user     | roles                      | state  |
       | Local version of Solution 2 | CS Owner | facilitator, administrator | active |

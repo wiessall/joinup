@@ -10,7 +10,7 @@ Feature:
       | title       | Climate change tracker                            |
       | description | Atlantic salmon arrived after the Little Ice Age. |
       | collection  | Ocean studies                                     |
-      | state       | validated                                         |
+      | state       | published                                         |
     Given the following distributions:
       | title                 | description          | parent                 | downloads |
       | Sample distribution   | Sample description   | Climate change tracker | 10        |

@@ -7,10 +7,10 @@ Feature: Asset distribution overview on solution.
   Scenario: Releases should be available in the overview page.
     Given the following collection:
       | title | End of Past |
-      | state | validated   |
+      | state | published   |
     And the following solutions:
       | title            | collection  | description        | state     |
-      | Lovely Butterfly | End of Past | Sample description | validated |
+      | Lovely Butterfly | End of Past | Sample description | published |
 
     # A solution with no releases or standalone distributions has no button.
     When I go to the homepage of the "Lovely Butterfly" solution
@@ -25,8 +25,8 @@ Feature: Asset distribution overview on solution.
     And the following releases:
       | title                 | documentation | release number | release notes | creation date    | is version of    | state     |
       | Hidden spies          | text.pdf      | 3              | Notes 3       | 28-01-1995 12:05 | Lovely Butterfly | draft     |
-      | Thief in the Angels   | text.pdf      | 2              | Notes 2       | 28-01-1995 12:06 | Lovely Butterfly | validated |
-      | The Child of the Past | text.pdf      | 1              | Notes 1       | 28-01-1996 12:05 | Lovely Butterfly | validated |
+      | Thief in the Angels   | text.pdf      | 2              | Notes 2       | 28-01-1995 12:06 | Lovely Butterfly | published |
+      | The Child of the Past | text.pdf      | 1              | Notes 1       | 28-01-1996 12:05 | Lovely Butterfly | published |
     And the following asset distributions:
       | title       | access url                          | creation date    | parent                |
       | Linux       | test.zip                            | 28-01-1995 12:05 | Thief in the Angels   |

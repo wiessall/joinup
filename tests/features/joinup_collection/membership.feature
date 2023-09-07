@@ -4,7 +4,7 @@ Feature: Tests membership to Joinup collection.
   Background:
     Given the following collections:
       | title                   | state     |
-      | An arbitrary collection | validated |
+      | An arbitrary collection | published |
 
   Scenario: As a newly registered user I'm automatically member of the 'Joinup'
     collection and I cannot leave.

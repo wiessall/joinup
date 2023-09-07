@@ -11,11 +11,11 @@ Feature: Asset distribution editing.
       | Pedro Torres | Pedro.Torres@example.com | Pedro      | Torres      |       |
     And the following collection:
       | title | Collection example |
-      | state | validated          |
+      | state | published          |
     And the following solutions:
       | title      | collection         | description        | state     |
-      | Solution A | Collection example | Sample description | validated |
-      | Solution B | Collection example | Sample description | validated |
+      | Solution A | Collection example | Sample description | published |
+      | Solution B | Collection example | Sample description | published |
     And the following licence:
       | title       | LGPL                                |
       | description | The LGPL more permisssive than GPL. |
