@@ -95,9 +95,22 @@ function joinup_core_requirements($phase): array {
 }
 
 /**
- * Pre-create oss_category and oss_licence vocabularies.
+ * Remove leftover row paragraphs.
  */
 function joinup_core_update_109700(): void {
+  $paragraphs = \Drupal::entityTypeManager()
+    ->getStorage('paragraph')
+    ->loadByProperties(['type' => 'row']);
+
+  foreach ($paragraphs as $paragraph) {
+    $paragraph->delete();
+  }
+}
+
+/**
+ * Pre-create oss_category and oss_licence vocabularies.
+ */
+function joinup_core_update_109701(): void {
   // Pre-create the new controlled vocabularies provided by eu_oss_catalogue
   // module. Normally, these are imported as config but eu_oss_catalogue install
   // goes first and its install process is also populating them with terms, so
