@@ -1,0 +1,16 @@
+uuid: 932c2b71-30e4-4bf8-81c9-b357ed4b368e
+langcode: en
+status: true
+dependencies: {  }
+id: github_mockup
+label: 'Github mockup'
+description: 'Test GitHub hosting provider'
+platformId: github
+platformSettings:
+  projects:
+    -
+      namespace: dummy-namespace-1
+      name: dummy-name-1
+    -
+      namespace: dummy-namespace-2
+
