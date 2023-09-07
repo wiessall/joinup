@@ -6,6 +6,7 @@ namespace Drupal\Tests\eu_oss_catalogue\Functional;
 
 use Drupal\Core\Serialization\Yaml;
 use Drupal\Tests\BrowserTestBase;
+use Drupal\Tests\eu_oss_catalogue\Traits\EuOssCatalogueTrait;
 use Drupal\Tests\node\Traits\NodeCreationTrait;
 use Drush\TestTraits\DrushTestTrait;
 
@@ -18,6 +19,7 @@ class FetchGitHubTest extends BrowserTestBase {
 
   use DrushTestTrait;
   use NodeCreationTrait;
+  use EuOssCatalogueTrait;
 
   /**
    * {@inheritdoc}
@@ -46,6 +48,19 @@ class FetchGitHubTest extends BrowserTestBase {
 
     // Check queue processing. Use Drush to run the queue.
     $this->drush('queue:run', ['eu_oss_catalogue']);
+
+    // Queue items have been released.
+    $this->assertSame(0, $queue->numberOfItems());
+
+    /** @var \Drupal\eu_oss_catalogue\Entity\OssSolutionInterface $solution1 */
+    $solution1 = $this->getNodeByTitle('GitHub solution 1');
+    $this->assertNotFalse($solution1);
+    $this->assertSame('oss_solution', $solution1->bundle());
+    $this->assertSame('http://example.com/vendor/solution1', $solution1->get('oss_git_url')->uri);
+    $this->assertSame('1.4', $solution1->get('oss_software_version')->value);
+    $this->assertSame('0.2', $solution1->get('oss_publiccode_yml_version')->value);
+    $this->assertSame('2017-05-01', $solution1->get('oss_release_date')->value);
+    $this->assertSame('http://example.com/vendor/solution1/images/logo-solution-1.png', $solution1->get('oss_logo')->uri);
 
     /** @var \Drupal\eu_oss_catalogue\Entity\OssSolutionInterface $solution2 */
     $solution2 = $this->getNodeByTitle('GitHub solution 2');
@@ -79,6 +94,14 @@ class FetchGitHubTest extends BrowserTestBase {
       'required' => TRUE,
     ];
     $this->writeSettings($settings);
+
+    $this->createTestingTerms([
+      'oss_licence' => ['AGPL-3.0-or-later', 'BSD-3-Clause'],
+      'oss_category' => [
+        'website-builder',
+        'digital-citizenship',
+      ],
+    ]);
   }
 
 }

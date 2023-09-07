@@ -86,15 +86,14 @@ data:
         file:
           text: |
             publiccodeYmlVersion: "0.2"
-            name: Solution 1
+            name: GitHub solution 1
             url: http://example.com/vendor/solution1
-            softwareVersion: '1.0.0.0'
-            releaseDate: "2023-07-07"
-            logo: images/the-logo.svg
+            softwareVersion: '1.4'
+            releaseDate: "2017-05-01"
+            logo: images/logo-solution-1.png
             platforms:
               - web
             categories:
-              - data-collection
               - digital-citizenship
             developmentStatus: stable
             softwareType: standalone/web
