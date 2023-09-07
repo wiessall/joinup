@@ -148,7 +148,7 @@ default:
         Content: 'main .layout-content'
         Cookie consent banner: '#cookie-consent-banner'
         Choose component: '.lp-builder lpb-btn--add'
-        Entity actions: '#block-ventuno-three-dots-menu'
+        Entity actions: '.block-joinup-local-tasks-block,#block-ventuno-three-dots-menu'
         Explore block: '.block-joinup-front-page-explore-block'
         Featured: '.region-featured'
         Footer: 'footer.page__footer'
