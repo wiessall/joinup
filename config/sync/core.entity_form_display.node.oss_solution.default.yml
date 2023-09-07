@@ -23,6 +23,7 @@ dependencies:
     - field.field.node.oss_solution.oss_publiccode_yml_version
     - field.field.node.oss_solution.oss_release_date
     - field.field.node.oss_solution.oss_scope
+    - field.field.node.oss_solution.oss_screenshots
     - field.field.node.oss_solution.oss_short_description
     - field.field.node.oss_solution.oss_software_type
     - field.field.node.oss_solution.oss_software_version
@@ -222,6 +223,14 @@ content:
       match_limit: 10
       size: 60
       placeholder: ''
+    third_party_settings: {  }
+  oss_screenshots:
+    type: link_default
+    weight: 35
+    region: content
+    settings:
+      placeholder_url: ''
+      placeholder_title: ''
     third_party_settings: {  }
   oss_short_description:
     type: string_textfield
