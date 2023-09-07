@@ -38,6 +38,12 @@
  * @ingroup themeable
  */
 #}
+{%
+  set classes = [
+    'paragraph',
+    'paragraph--' ~ paragraph.bundle|clean_class,
+  ]
+%}
 
 <div{{ attributes.addClass(classes) }}>
   <div class="poll">
