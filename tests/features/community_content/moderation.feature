@@ -21,11 +21,8 @@ Feature: Moderate community content
     # content moderation overview.
     When I am logged in as a facilitator of the "Black hole research" collection
     And I go to the homepage of the "Black hole research" collection
-    # Contextual links should not be shown in the group header. All contextual
-    # actions are instead handled through the "Entity actions". Since both are
-    # themed similarly (as a "three dot menu") it is too confusing to have both
-    # visible in the same area.
-    Then I should not see any contextual links in the "Header" region
+    Then I should see the contextual link "Edit menu" in the "Header" region
+    And I should see the contextual link "Add new page" in the "Header" region
     And I click "Moderate content" in the "Entity actions" region
     Then I should see the heading "Content moderation"
     And I should see the text "Nothing to moderate. Enjoy your day!"
