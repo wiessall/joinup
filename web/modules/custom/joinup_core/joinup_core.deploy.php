@@ -13,3 +13,110 @@
  */
 
 declare(strict_types = 1);
+use Drupal\search_api\Entity\Index;
+
+/**
+ * Change the state name of all RDF entities from 'validated' to 'published'.
+ */
+function joinup_core_deploy_109700(): string {
+  $entity_ids = [];
+  $database = \Drupal::getContainer()->get('sparql.endpoint');
+
+  $workflow_urls = [
+    'http://joinup.eu/ar/workflow_status' => [
+      'http://joinup.eu/collection/published',
+      'http://joinup.eu/collection/draft',
+    ],
+    'http://joinup.eu/contact_information/workflow_status' => [
+      'http://joinup.eu/contact-information/published',
+    ],
+    'http://joinup.eu/is/workflow_status' => [
+      'http://joinup.eu/solution/published',
+      'http://joinup.eu/solution/draft',
+    ],
+    'http://joinup.eu/isr/workflow_status' => [
+      'http://joinup.eu/asset_distribution/published',
+      'http://joinup.eu/asset_distribution/draft',
+    ],
+    'http://joinup.eu/owner/workflow_status' => [
+      'http://joinup.eu/owner/published',
+    ],
+  ];
+
+  foreach ($workflow_urls as $predicate => $graphs) {
+    foreach ($graphs as $graph) {
+      $select_query = <<<SPARQL
+SELECT ?s
+WHERE {
+  GRAPH <{$graph}> {
+    ?s <{$predicate}> "validated" .
+  }
+}
+SPARQL;
+
+      $results = array_map(function(\stdClass $result): string {
+        return $result->s->getUri();
+      }, $database->query($select_query)->getArrayCopy());
+      $entity_ids = array_merge($entity_ids, $results);
+
+      // @todo check if the state is a plain string.
+      $query = <<<SPARQL
+WITH <{$graph}>
+DELETE { ?s <{$predicate}> "validated" }
+INSERT { ?s <{$predicate}> "published" }
+WHERE { ?s <{$predicate}> "validated" }
+SPARQL;
+    }
+  }
+
+  $entity_ids = array_unique($entity_ids);
+  $entity_ids = array_map(function(string $entity_id): string {
+    // Return the search api item id.
+    return 'entity:rdf_entity:' . $entity_id . ':en';
+  }, $entity_ids);
+
+  foreach (['published', 'unpublished'] as $index_id) {
+    $index = Index::load($index_id);
+    $index->trackItemsDeleted('entity:rdf_entity', $entity_ids);
+    $index->trackItemsUpdated('entity:rdf_entity', $entity_ids);
+  }
+
+  return 'Changed the state name of all RDF entities from "validated" to "published".';
+}
+
+/**
+ * Update the node's field_state value from 'validated' to 'published'.
+ */
+function joinup_core_deploy_109701(): string {
+  // Get the IDs of nodes that have the field_state set to 'validated'.
+  $query = \Drupal::getContainer()->get('database')->select('node__field_state', 'nfs');
+  $query->addField('nfs', 'entity_id');
+  $query->condition('nfs.field_state_value', 'validated');
+  $nids = $query->execute()->fetchCol();
+
+  \Drupal::getContainer()->get('database')->update('node__field_state')
+    ->fields(['field_state_value' => 'published'])
+    ->condition('field_state_value', 'validated')
+    ->execute();
+
+  // Take care of the revisions.
+  \Drupal::getContainer()->get('database')->update('node_revision__field_state')
+    ->fields(['field_state_value' => 'published'])
+    ->condition('field_state_value', 'validated')
+    ->execute();
+
+
+
+  $nids = array_map(function(string $entity_id): string {
+    // Return the search api item id.
+    return 'entity:node:' . $entity_id . ':en';
+  }, $nids);
+
+  foreach (['published', 'unpublished'] as $index_id) {
+    $index = Index::load($index_id);
+    $index->trackItemsDeleted('entity:rdf_entity', $nids);
+    $index->trackItemsUpdated('entity:rdf_entity', $nids);
+  }
+
+  return 'Changed the state name of all nodes from "validated" to "published".';
+}
