@@ -50,7 +50,7 @@ content:
     settings:
       trim_length: 600
     third_party_settings: {  }
-    weight: 0
+    weight: 2
     region: content
   oss_logo:
     type: imagecache_external_responsive_image
@@ -61,6 +61,14 @@ content:
     third_party_settings:
       template_suggestion:
         template_suggestion: ''
+    weight: 0
+    region: content
+  oss_short_description:
+    type: joinup_html_stripper_stripped
+    label: hidden
+    settings:
+      trim_length: 600
+    third_party_settings: {  }
     weight: 1
     region: content
 hidden:
@@ -81,7 +89,6 @@ hidden:
   oss_publiccode_yml_content: true
   oss_publiccode_yml_version: true
   oss_release_date: true
-  oss_short_description: true
   oss_software_type: true
   oss_software_version: true
   oss_source: true

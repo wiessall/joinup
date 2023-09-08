@@ -37,11 +37,11 @@
     'view-id-' ~ id,
     'view-display-id-' ~ display_id,
     dom_id ? 'js-view-dom-id-' ~ dom_id,
-    'paragraph--carousel',
+    'carousel',
   ]
 %}
 
-{{ attach_library('ventuno/paragraph__carousel') }}
+{{ attach_library('ventuno/carousel') }}
 
 <div{{ attributes.addClass(classes) }}>
   {{ title_prefix }}
