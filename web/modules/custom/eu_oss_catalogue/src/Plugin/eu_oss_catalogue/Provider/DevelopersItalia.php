@@ -6,6 +6,7 @@ namespace Drupal\eu_oss_catalogue\Plugin\eu_oss_catalogue\Provider;
 
 use Drupal\Component\Serialization\Json;
 use Drupal\Core\Config\Schema\SchemaCheckTrait;
+use Drupal\Core\Logger\LoggerChannelInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Serialization\Yaml;
 use Drupal\eu_oss_catalogue\EuOssCataloguePluginManagerInterface;
@@ -55,6 +56,8 @@ class DevelopersItalia extends EuOssCatalogueProviderPluginBase implements Conta
    *   The plugin implementation definition.
    * @param \Drupal\eu_oss_catalogue\EuOssCataloguePluginManagerInterface $parserManager
    *   The EU OSS Catalogue parser plugin manager service.
+   * @param \Drupal\Core\Logger\LoggerChannelInterface $logger
+   *   The EU OSS Catalogue logger.
    * @param \GuzzleHttp\Client $httpClient
    *   The HTTP client.
    */
@@ -63,9 +66,10 @@ class DevelopersItalia extends EuOssCatalogueProviderPluginBase implements Conta
     $pluginId,
     $pluginDefinition,
     protected EuOssCataloguePluginManagerInterface $parserManager,
+    protected LoggerChannelInterface $logger,
     protected Client $httpClient,
   ) {
-    parent::__construct($configuration, $pluginId, $pluginDefinition, $parserManager);
+    parent::__construct($configuration, $pluginId, $pluginDefinition, $parserManager, $this->logger);
   }
 
   /**
@@ -77,6 +81,7 @@ class DevelopersItalia extends EuOssCatalogueProviderPluginBase implements Conta
       $pluginId,
       $pluginDefinition,
       $container->get('plugin.manager.eu_oss_catalogue.parser'),
+      $container->get('logger.channel.eu_oss_catalogue'),
       $container->get('http_client'),
     );
   }

@@ -5,6 +5,7 @@ declare(strict_types = 1);
 namespace Drupal\eu_oss_catalogue;
 
 use Drupal\Component\Plugin\PluginBase;
+use Drupal\Core\Logger\LoggerChannelInterface;
 use Drupal\eu_oss_catalogue\Entity\OssSolutionInterface;
 use Drupal\eu_oss_catalogue\Model\EuOssCatalogueFetchedSolution;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -29,12 +30,15 @@ abstract class EuOssCatalogueProviderPluginBase extends PluginBase implements Eu
    *   The plugin implementation definition.
    * @param \Drupal\eu_oss_catalogue\EuOssCataloguePluginManagerInterface $parserManager
    *   The EU OSS Catalogue parser plugin manager service.
+   * @param \Drupal\Core\Logger\LoggerChannelInterface $logger
+   *   The EU OSS Catalogue logger.
    */
   public function __construct(
     array $configuration,
     $pluginId,
     $pluginDefinition,
     protected EuOssCataloguePluginManagerInterface $parserManager,
+    protected LoggerChannelInterface $logger,
   ) {
     parent::__construct($configuration, $pluginId, $pluginDefinition);
   }
@@ -48,6 +52,7 @@ abstract class EuOssCatalogueProviderPluginBase extends PluginBase implements Eu
       $pluginId,
       $pluginDefinition,
       $container->get('plugin.manager.eu_oss_catalogue.parser'),
+      $container->get('logger.channel.eu_oss_catalogue'),
     );
   }
 
