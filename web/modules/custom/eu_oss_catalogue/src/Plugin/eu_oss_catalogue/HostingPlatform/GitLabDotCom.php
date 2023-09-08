@@ -14,13 +14,4 @@ namespace Drupal\eu_oss_catalogue\Plugin\eu_oss_catalogue\HostingPlatform;
  */
 class GitLabDotCom extends GitLabBase {
 
-  /**
-   * {@inheritdoc}
-   */
-  protected function getProjects(array $candidates, ?string $filePath = NULL): array {
-    $projects = [];
-    // @todo Implement.
-    return $projects;
-  }
-
 }

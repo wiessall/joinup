@@ -98,8 +98,8 @@ abstract class EuOssCatalogueGitHostingPlatformPluginBase extends EuOssCatalogue
       return;
     }
 
-    $candidates = $formState->getValue('projects', []);
-    array_walk($candidates, function (array &$candidate) {
+    $projects = $formState->getValue('projects', []);
+    array_walk($projects, function (array &$candidate) {
       if (empty($candidate['namespace'])) {
         $candidate = [];
         return;
@@ -111,24 +111,9 @@ abstract class EuOssCatalogueGitHostingPlatformPluginBase extends EuOssCatalogue
       // @todo Validate $candidate['namespace'] & $candidate['name'] for naming
       //   conventions.
     });
-    $candidates = array_filter($candidates);
-    $existingProjects = $this->getProjects($candidates);
 
     // The values might have been trimmed earlier.
-    $formState->setValue('projects', $candidates);
-
-    foreach ($candidates as $delta => $candidate) {
-      if (!isset($existingProjects[$candidate['namespace']])) {
-        $formState->setErrorByName("projects][$delta][namespace", $this->t("Namespace %namespace doesn't exist on the platform", [
-          '%namespace' => $candidate['namespace'],
-        ]));
-      }
-      elseif ($candidate['name'] && !isset($existingProjects[$candidate['namespace']][$candidate['name']])) {
-        $formState->setErrorByName("projects][$delta][name", $this->t("Project %project doesn't exist on the platform or it's not public", [
-          '%project' => $candidate['namespace'] . '/' . $candidate['name'],
-        ]));
-      }
-    }
+    $formState->setValue('projects', array_filter($projects));
   }
 
   /**
