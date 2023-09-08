@@ -92,7 +92,7 @@ Feature: Discussions added to collections
 
     # Regression test: the workflow state should not be shown to the user.
     But I should not see the text "State" in the "Content" region
-    And I should not see the text "Validated" in the "Content" region
+    And I should not see the text "Published" in the "Content" region
 
     # Check that the tile for the discussion is visible on the collection page.
     When I go to the discussions page of "The World of the Waves"

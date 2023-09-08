@@ -53,7 +53,7 @@ Feature: As a user of the website
     # Edit as facilitator and save as draft.
     When I click "Edit"
     Then the following fields should be present "Current workflow state"
-    And the current workflow state should be "Validated"
+    And the current workflow state should be "Published"
     When I fill in "Title" with "Construction of Scent"
     And I press "Save as draft"
 
