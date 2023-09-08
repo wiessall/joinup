@@ -22,7 +22,7 @@ Feature:
       | Frequently Asked Questions (FAQ)                 |
       | Follow our journey on the social media!          |
     And I should see the text "Just follow the guide!"
-    And I should see the text "European Open-Source Software Solutions Catalogue"
+    And I should see the text "EU OpenSource Software Solutions Catalogue"
 
     When I click "advanced search"
-    And I should see the heading "Search in European Open-source Software Solutions Catalogue"
+    And I should see the heading "Search in EU OpenSource Software Solutions Catalogue"

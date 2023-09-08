@@ -4,7 +4,7 @@ Feature: OSS catalogue search
 
   Scenario: User can view the OSS catalogue search page.
     Then I visit the OSS search page
-    When I should see the heading "Search in European Open-source Software Solutions Catalogue"
+    When I should see the heading "Search in EU OpenSource Software Solutions Catalogue"
     And the following fields should be present "Sort by:,Start typing to search…"
     And I should see the text "No content found for your search."
     And I should see the button "Clear filters"

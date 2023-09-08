@@ -29,3 +29,16 @@ function joinup_core_deploy_109700(): void {
       ->set('path', ['alias' => '/eu-oss-catalogue', 'pathauto' => 0])
       ->save();
 }
+
+/**
+ * Update title of EU OSS catalogue collection.
+ */
+function joinup_core_deploy_109701(): void {
+  /** @var \Drupal\collection\Entity\CollectionInterface $collection */
+  $collection = \Drupal::entityTypeManager()->getStorage('rdf_entity')
+    ->load(OssCatalogueCollectionInterface::COLLECTION_ENTITY_ID);
+
+  $collection
+    ?->set('label', 'EU OpenSource Software Solutions Catalogue')
+      ->save();
+}
