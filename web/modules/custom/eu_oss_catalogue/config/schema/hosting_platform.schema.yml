@@ -27,6 +27,7 @@ eu_oss_catalogue.hosting_platform_plugin_default_settings_git:
     projects:
       type: sequence
       label: List of repository IDs or namespaces
+      nullable: true
       sequence:
         type: mapping
         mapping:
