@@ -82,12 +82,20 @@ class PublicCodeYml extends EuOssCatalogueParserPluginBase implements ContainerF
    * {@inheritdoc}
    */
   public function checkSchema(EuOssCatalogueFetchedSolution $fetchedSolution): array {
-    $errorList = [];
+    $errorList = $schemaErrors = [];
 
-    // Using the config schema checker. And it works!
-    $schemaErrors = $this->checkConfigSchema($this->typedConfigManager, 'eu_oss_catalogue.publiccode_yml', $fetchedSolution->data);
-    if (!is_array($schemaErrors) || !$schemaErrors) {
-      return $errorList;
+    try {
+      // Using the config schema checker. And it works!
+      $schemaErrors = $this->checkConfigSchema($this->typedConfigManager, 'eu_oss_catalogue.publiccode_yml', $fetchedSolution->data);
+      if (!is_array($schemaErrors) || !$schemaErrors) {
+        return $errorList;
+      }
+    }
+    catch (\InvalidArgumentException $exception) {
+      // @see \Drupal\Core\Config\Schema\ArrayElement::get()
+      if (preg_match("/The configuration property ([^ ].*) doesn't exist./", $exception->getMessage(), $found)) {
+        $schemaErrors[$found[1]] = "Path has no schema";
+      }
     }
 
     foreach ($schemaErrors as $key => $error) {
