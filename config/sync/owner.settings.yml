@@ -1,5 +1,5 @@
 transitions:
-  validated:
+  published:
     __new__:
       - authenticated
       - moderator
@@ -7,15 +7,15 @@ transitions:
       - moderator
     needs_update:
       - moderator
-    validated:
+    published:
       - authenticated
       - moderator
   needs_update:
     needs_update:
       - authenticated
       - moderator
-    validated:
+    published:
       - moderator
   deletion_request:
-    validated:
+    published:
       - authenticated
