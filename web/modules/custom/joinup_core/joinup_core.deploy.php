@@ -69,18 +69,7 @@ SPARQL;
     }
   }
 
-  $entity_ids = array_unique($entity_ids);
-  $entity_ids = array_map(function(string $entity_id): string {
-    // Return the search api item id.
-    return 'entity:rdf_entity:' . $entity_id . ':en';
-  }, $entity_ids);
-
-  foreach (['published', 'unpublished'] as $index_id) {
-    $index = Index::load($index_id);
-    $index->trackItemsDeleted('entity:rdf_entity', $entity_ids);
-    $index->trackItemsUpdated('entity:rdf_entity', $entity_ids);
-  }
-
+  \Drupal::getContainer()->get('joinup_search.index_helper')->reIndexItems('rdf_entity', $entity_ids);
   return 'Changed the state name of all RDF entities from "validated" to "published".';
 }
 
@@ -105,18 +94,6 @@ function joinup_core_deploy_109701(): string {
     ->condition('field_state_value', 'validated')
     ->execute();
 
-
-
-  $nids = array_map(function(string $entity_id): string {
-    // Return the search api item id.
-    return 'entity:node:' . $entity_id . ':en';
-  }, $nids);
-
-  foreach (['published', 'unpublished'] as $index_id) {
-    $index = Index::load($index_id);
-    $index->trackItemsDeleted('entity:rdf_entity', $nids);
-    $index->trackItemsUpdated('entity:rdf_entity', $nids);
-  }
-
+  \Drupal::getContainer()->get('joinup_search.index_helper')->reIndexItems('node', $nids);
   return 'Changed the state name of all nodes from "validated" to "published".';
 }
