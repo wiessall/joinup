@@ -115,6 +115,38 @@ class GitHub extends EuOssCatalogueGitHostingPlatformPluginBase {
       }
     }
 
+    // Using a query builder to build a query such as:
+    // @code
+    // {
+    //   search(
+    //     type: REPOSITORY
+    //     query: "is:public
+    //       archived:false
+    //       owner:namespace1
+    //       repo:namespace2/project2"
+    //     first: 100
+    //   ) {
+    //     nodes {
+    //       ... on Repository {
+    //         id
+    //         description
+    //         name
+    //         owner {
+    //           login
+    //         }
+    //         defaultBranchRef {
+    //           name
+    //         }
+    //         file: object(expression: "HEAD:publiccode.yml") {
+    //           ... on Blob {
+    //             text
+    //           }
+    //         }
+    //       }
+    //     }
+    //   }
+    // }
+    // @endcode
     $query = new Query('search', [
       'type' => GitHubSearchType::REPOSITORY,
       'query' => implode(' ', $search),
