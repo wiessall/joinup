@@ -5,10 +5,9 @@ declare(strict_types = 1);
 namespace Drupal\eu_oss_catalogue\Plugin\eu_oss_catalogue\HostingPlatform;
 
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\eu_oss_catalogue\Model\HostingPlatformResult;
+use Drupal\eu_oss_catalogue\Model\GitLabReleaseSort;
 use Gitlab\Client;
-use Gitlab\Exception\RuntimeException;
-use Gitlab\ResultPager;
+use GraphQL\Actions\Query;
 
 /**
  * Git code hosting platform for GitLab repositories.
@@ -74,39 +73,69 @@ class GitLabSelfHosted extends GitLabBase {
   /**
    * {@inheritdoc}
    */
-  protected function getProjects(array $candidates, ?string $filePath = NULL): array {
-    // Self-hosted GitLab instances allows to crawl the whole platform.
-    if (empty($candidates)) {
-      $projects = [];
-      $pager = new ResultPager($this->getClient());
-      foreach ($pager->fetchAll($this->getClient()->projects(), 'all', ['archived' => FALSE]) as $repo) {
-        $fileContent = NULL;
-        if (!empty($repo['default_branch'])) {
-          if ($filePath) {
-            try {
-              $fileContent = $this->getClient()->repositoryFiles()->getRawFile($repo['id'], $filePath, $repo['default_branch']);
-            }
-            catch (RuntimeException $exception) {
-              if ($exception->getCode() !== 404) {
-                throw $exception;
-              }
-              // Nothing to do, $fileContent is already NULL.
-            }
-          }
+  protected function doGetProjects(?string $filePath = NULL): iterable {
+    if (!empty($this->getConfiguration()['projects'])) {
+      foreach (parent::doGetProjects($filePath) as $project) {
+        yield $project;
+      }
+      return;
+    }
 
-          $projects[$repo['namespace']['full_path']][$repo['path']] = new HostingPlatformResult(
-            $repo['namespace']['full_path'],
-            $repo['path'],
-            $repo['default_branch'],
-            (string) $repo['id'],
-            $repo['description'],
-            $fileContent,
-          );
+    $endCursor = NULL;
+    do {
+      $query = $this->buildProjectsQuery($filePath, $endCursor);
+      $response = $this->getClient()->graphql()->execute($query->toString());
+
+      if (empty($response['data']['projects']['nodes'])) {
+        // This platform has no public projects.
+        break;
+      }
+
+      $hasNextPage = $response['data']['projects']['pageInfo']['hasNextPage'];
+      $endCursor = $response['data']['projects']['pageInfo']['endCursor'];
+      foreach ($response['data']['projects']['nodes'] as $project) {
+        // No default branch, no code.
+        if (!empty($project['repository']['rootRef'])) {
+          yield $this->createHostingPlatformResult($project['fullPath'], $project);
         }
       }
-      return $projects;
+    } while ($hasNextPage);
+  }
+
+  /**
+   * Builds a GraphQL GiyLab projects query.
+   *
+   * @param string|null $filePath
+   *   The file path, if one has been specified.
+   * @param string|null $endCursor
+   *   The end cursor, if any.
+   *
+   * @return \GraphQL\Actions\Query
+   *   A GraphQL query builder instance.
+   */
+  protected function buildProjectsQuery(?string $filePath, ?string $endCursor = NULL): Query {
+    $filters = ['first' => 50] + ($endCursor ? ['after' => $endCursor] : []);
+
+    $query = new Query('projects', $filters);
+    $query->pageInfo([])->use('hasNextPage', 'endCursor');
+
+    $fragment = $query->nodes([])
+      ->use('fullPath', 'path', 'id', 'description')
+      ->releases(['sort' => GitLabReleaseSort::CREATED_DESC, 'first' => 1])
+      ->nodes([])
+      ->use('createdAt')
+      ->prev()
+      ->prev()
+      ->repository([])
+      ->use('rootRef');
+
+    if ($filePath) {
+      $fragment->blobs(['paths' => [$filePath]])
+        ->nodes([])
+        ->use('rawBlob');
     }
-    return parent::getProjects($candidates, $filePath);
+
+    return $query;
   }
 
 }
