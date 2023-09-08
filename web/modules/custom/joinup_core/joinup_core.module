@@ -16,6 +16,7 @@ use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Field\BaseFieldDefinition;
+use Drupal\Core\Render\Markup;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\StreamWrapper\StreamWrapperManager;
 use Drupal\block\BlockInterface;
@@ -243,6 +244,13 @@ function joinup_core_module_implements_alter(array &$implementations, $hook) {
       // used very rarely but the contextual links menu causes visual clutter.
       unset($implementations['menu_ui']);
       break;
+
+    case 'mail_alter':
+      if (array_key_exists('joinup_core', $implementations)) {
+        $our = $implementations['joinup_core'];
+        unset($implementations['joinup_core']);
+        $implementations['joinup_core'] = $our;
+      }
   }
 }
 
@@ -438,4 +446,21 @@ function joinup_core_field_widget_info_alter(array &$info): void {
   if (isset($info['image_library_widget'])) {
     $info['image_library_widget']['class'] = ImageLibraryWidget::class;
   }
+}
+
+/**
+ * Implements hook_mail_alter().
+ */
+function joinup_core_mail_alter(&$message) {
+  if (
+    empty($message['headers']['Content-Type']) ||
+    $message['headers']['Content-Type'] !== SWIFTMAILER_FORMAT_HTML
+  ) {
+    return;
+  }
+
+  // Transform body lines not wrapped in block-level HTML tags to paragraphs
+  // in HTML mails.
+  $html_mail_body = implode(PHP_EOL . PHP_EOL, $message['body']);
+  $message['body'] = [Markup::create(_filter_autop($html_mail_body))];
 }

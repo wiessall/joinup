@@ -93,9 +93,6 @@ settings:
       json_map:
         weight: -22
         enabled: true
-      row:
-        weight: -18
-        enabled: false
       simple_paragraph:
         weight: -29
         enabled: true

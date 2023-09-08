@@ -1,4 +1,0 @@
-eu_oss_catalogue.provider.collection:
-  title: 'OSS Catalogue'
-  route_name: eu_oss_catalogue.provider.collection
-  base_route: system.admin_content
