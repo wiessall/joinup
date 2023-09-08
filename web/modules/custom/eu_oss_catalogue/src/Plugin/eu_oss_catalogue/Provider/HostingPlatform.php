@@ -5,6 +5,7 @@ declare(strict_types = 1);
 namespace Drupal\eu_oss_catalogue\Plugin\eu_oss_catalogue\Provider;
 
 use Drupal\Component\Plugin\ConfigurableInterface;
+use Drupal\Component\Serialization\Exception\InvalidDataTypeException;
 use Drupal\Core\Config\Schema\SchemaCheckTrait;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Logger\LoggerChannelInterface;
@@ -111,14 +112,21 @@ class HostingPlatform extends EuOssCatalogueProviderPluginBase implements Contai
     $platform = $this->getPlatform();
     foreach ($platform->getProjects('publiccode.yml') as $repository) {
       \assert($repository instanceof HostingPlatformResult);
-      if ($repository->file) {
-        if (is_string($repository->file) && ($data = Yaml::decode($repository->file))) {
+      if ($repository->file && is_string($repository->file)) {
+        try {
+          $data = Yaml::decode($repository->file);
           yield new EuOssCatalogueFetchedSolution(
             $data['url'],
             $data['name'],
             $data,
             (string) $repository->platformReference,
           );
+        }
+        catch (InvalidDataTypeException $exception) {
+          $this->logger->error('Cannot decode publiccode.yml of @url. Message: @message', [
+            '@url' => $data['url'],
+            '@message' => $exception->getMessage(),
+          ]);
         }
       }
     }
