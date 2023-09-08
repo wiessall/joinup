@@ -52,16 +52,6 @@ class GitLabSelfHosted extends GitLabBase {
   /**
    * {@inheritdoc}
    */
-  public function validateConfigurationForm(array &$form, FormStateInterface $formState): void {
-    if ($formState->getValue('projects')) {
-      // Only need validation if there are projects.
-      parent::validateConfigurationForm($form, $formState);
-    }
-  }
-
-  /**
-   * {@inheritdoc}
-   */
   public function submitConfigurationForm(array &$form, FormStateInterface $formState): void {
     parent::submitConfigurationForm($form, $formState);
     $this->configuration['url'] = $formState->getValue('url');
