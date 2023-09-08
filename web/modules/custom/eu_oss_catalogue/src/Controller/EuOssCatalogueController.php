@@ -4,6 +4,7 @@ declare(strict_types = 1);
 
 namespace Drupal\eu_oss_catalogue\Controller;
 
+use Drupal\Component\Plugin\PluginBase;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\eu_oss_catalogue\EuOssCataloguePluginManagerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -47,25 +48,60 @@ class EuOssCatalogueController extends ControllerBase {
   public function collection(): array {
     $rows = [];
     foreach ($this->providerPluginManager->getDefinitions() as $pluginId => $definition) {
+      $links = [];
+
+      // If the plugin is configured by an entity, add entity operations.
+      if (str_contains($pluginId, ':') && ($entityTypeId = $definition['configuredBy'])) {
+        $entityType = $this->entityTypeManager()->getDefinition($entityTypeId);
+        if ($entityType->hasListBuilderClass()) {
+          [, $derivativeId] = explode(PluginBase::DERIVATIVE_SEPARATOR, $pluginId, 2);
+          $storage = $this->entityTypeManager()->getStorage($entityTypeId);
+          if ($entity = $storage->load($derivativeId)) {
+            $listBuilder = $this->entityTypeManager()->getListBuilder($entityTypeId);
+            $links = $listBuilder->getOperations($entity);
+          }
+        }
+      }
+
       $row = [
-        $pluginId,
-        $definition['label'],
-        $definition['description'],
-        [],
+          [
+            'data' => [
+              '#markup' => $pluginId,
+              '#prefix' => '<code>',
+              '#sufffix' => '</code>',
+            ],
+          ],
+          [
+            'data' => [
+              [
+                '#markup' => $definition['label'],
+              ],
+              [
+                '#markup' => $definition['description'] ?? '',
+                '#prefix' => '<div><small>',
+                '#suffix' => '</small></div>',
+              ],
+            ],
+          ],
+          [
+            'data' => [
+              '#type' => 'operations',
+              '#links' => $links,
+            ],
+          ],
       ];
       $rows[] = $row;
     }
+
     return [
       '#theme' => 'table',
       '#header' => [
         $this->t('ID'),
         $this->t('Name'),
-        $this->t('Description'),
         $this->t('Operations'),
       ],
       '#rows' => $rows,
     ];
-
   }
 
 }

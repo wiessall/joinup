@@ -147,6 +147,7 @@ module:
   metatag_views: 0
   moderation: 0
   monolog: 0
+  multivalue_form_element: 0
   mysql: 0
   nio: 0
   node: 0

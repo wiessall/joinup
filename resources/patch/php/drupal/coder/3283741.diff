@@ -1,0 +1,139 @@
+diff --git a/coder_sniffer/Drupal/Sniffs/Classes/ClassDeclarationSniff.php b/coder_sniffer/Drupal/Sniffs/Classes/ClassDeclarationSniff.php
+index 50924b8a938838e3e96bc73bf123a783d35b85f9..bdf6ec99e1add786cbcd689c4a7d77f72f73f648 100644
+--- a/coder_sniffer/Drupal/Sniffs/Classes/ClassDeclarationSniff.php
++++ b/coder_sniffer/Drupal/Sniffs/Classes/ClassDeclarationSniff.php
+@@ -44,6 +44,7 @@ class ClassDeclarationSniff extends PSR2ClassDeclarationSniff
+             T_CLASS,
+             T_INTERFACE,
+             T_TRAIT,
++            T_ENUM,
+         ];
+
+     }//end register()
+@@ -157,6 +158,8 @@ class ClassDeclarationSniff extends PSR2ClassDeclarationSniff
+             && $tokens[$prevContent]['line'] !== ($tokens[$closeBrace]['line'] - 2)
+             // If the class only contains a comment no extra line is needed.
+             && isset(Tokens::$commentTokens[$tokens[$prevContent]['code']]) === false
++            // Enums are allowed to enclose the cases without an extra line.
++            && $tokens[$stackPtr]['code'] !== T_ENUM
+         ) {
+             $error = 'The closing brace for the %s must have an empty line before it';
+             $data  = [$tokens[$stackPtr]['content']];
+diff --git a/coder_sniffer/Drupal/Sniffs/Classes/ClassFileNameSniff.php b/coder_sniffer/Drupal/Sniffs/Classes/ClassFileNameSniff.php
+index 23ee75452bc316939d3c0f2421c814925e5726ee..5a3490d18821672470f0f27e1530086c0f2fab8c 100644
+--- a/coder_sniffer/Drupal/Sniffs/Classes/ClassFileNameSniff.php
++++ b/coder_sniffer/Drupal/Sniffs/Classes/ClassFileNameSniff.php
+@@ -28,6 +28,7 @@ class ClassFileNameSniff implements Sniff
+             T_CLASS,
+             T_INTERFACE,
+             T_TRAIT,
++            T_ENUM,
+         ];
+
+     }//end register()
+diff --git a/coder_sniffer/Drupal/Sniffs/Classes/UseGlobalClassSniff.php b/coder_sniffer/Drupal/Sniffs/Classes/UseGlobalClassSniff.php
+index 14505910232d7667374172ec573528d9b2047699..b9094efbf17fe6a3bf466739488a3cd826b55a84 100644
+--- a/coder_sniffer/Drupal/Sniffs/Classes/UseGlobalClassSniff.php
++++ b/coder_sniffer/Drupal/Sniffs/Classes/UseGlobalClassSniff.php
+@@ -62,7 +62,7 @@ class UseGlobalClassSniff implements Sniff
+         }
+
+         // Find the first declaration, marking the end of the use statements.
+-        $bodyStart = $phpcsFile->findNext([T_CLASS, T_INTERFACE, T_TRAIT, T_FUNCTION], 0);
++        $bodyStart = $phpcsFile->findNext([T_CLASS, T_INTERFACE, T_TRAIT, T_ENUM, T_FUNCTION], 0);
+
+         // Ensure we are in the global scope, to exclude trait use statements.
+         if (empty($tokens[$stackPtr]['conditions']) === false) {
+diff --git a/coder_sniffer/Drupal/Sniffs/Commenting/ClassCommentSniff.php b/coder_sniffer/Drupal/Sniffs/Commenting/ClassCommentSniff.php
+index 53f86e06b23f87b25489ae4cd8733a1469948d0e..37923e8c1dfe1cb4d12fe0d8e6447561ebf8c8eb 100644
+--- a/coder_sniffer/Drupal/Sniffs/Commenting/ClassCommentSniff.php
++++ b/coder_sniffer/Drupal/Sniffs/Commenting/ClassCommentSniff.php
+@@ -40,6 +40,7 @@ class ClassCommentSniff implements Sniff
+             T_CLASS,
+             T_INTERFACE,
+             T_TRAIT,
++            T_ENUM,
+         ];
+
+     }//end register()
+diff --git a/coder_sniffer/Drupal/Sniffs/Commenting/FileCommentSniff.php b/coder_sniffer/Drupal/Sniffs/Commenting/FileCommentSniff.php
+index b19ce94d6c08b5d82b7830867e11f4a5b7c15ac8..bbc6956926eb751b58232633c846a4b584752dfd 100644
+--- a/coder_sniffer/Drupal/Sniffs/Commenting/FileCommentSniff.php
++++ b/coder_sniffer/Drupal/Sniffs/Commenting/FileCommentSniff.php
+@@ -59,12 +59,12 @@ class FileCommentSniff implements Sniff
+         // Files containing exactly one class, interface or trait are allowed to
+         // ommit a file doc block. If a namespace is used then the file comment must
+         // be omitted.
+-        $oopKeyword = $phpcsFile->findNext([T_CLASS, T_INTERFACE, T_TRAIT], $stackPtr);
++        $oopKeyword = $phpcsFile->findNext([T_CLASS, T_INTERFACE, T_TRAIT, T_ENUM], $stackPtr);
+         if ($oopKeyword !== false) {
+             $namespace = $phpcsFile->findNext(T_NAMESPACE, $stackPtr);
+             // Check if the file contains multiple classes/interfaces/traits - then a
+             // file doc block is allowed.
+-            $secondOopKeyword = $phpcsFile->findNext([T_CLASS, T_INTERFACE, T_TRAIT], ($oopKeyword + 1));
++            $secondOopKeyword = $phpcsFile->findNext([T_CLASS, T_INTERFACE, T_TRAIT, T_ENUM], ($oopKeyword + 1));
+             // Namespaced classes, interfaces and traits should not have an @file doc
+             // block.
+             if (($tokens[$commentStart]['code'] === T_DOC_COMMENT_OPEN_TAG
+diff --git a/coder_sniffer/Drupal/Sniffs/Commenting/InlineCommentSniff.php b/coder_sniffer/Drupal/Sniffs/Commenting/InlineCommentSniff.php
+index dc917c37e81e452fd638539ccf1a2d178ee84771..161ee9949c98c898f96f39239e5c495d86491b08 100644
+--- a/coder_sniffer/Drupal/Sniffs/Commenting/InlineCommentSniff.php
++++ b/coder_sniffer/Drupal/Sniffs/Commenting/InlineCommentSniff.php
+@@ -73,6 +73,7 @@ class InlineCommentSniff implements Sniff
+                 T_CLASS,
+                 T_INTERFACE,
+                 T_TRAIT,
++                T_ENUM,
+                 T_FUNCTION,
+                 T_CLOSURE,
+                 T_PUBLIC,
+diff --git a/coder_sniffer/Drupal/Sniffs/Commenting/InlineVariableCommentSniff.php b/coder_sniffer/Drupal/Sniffs/Commenting/InlineVariableCommentSniff.php
+index 814b711d116c32b03e3c662507fd78031bdb374b..bc7f6250b916791505fde08d63850a645b697087 100644
+--- a/coder_sniffer/Drupal/Sniffs/Commenting/InlineVariableCommentSniff.php
++++ b/coder_sniffer/Drupal/Sniffs/Commenting/InlineVariableCommentSniff.php
+@@ -56,6 +56,7 @@ class InlineVariableCommentSniff implements Sniff
+             T_CLASS,
+             T_INTERFACE,
+             T_TRAIT,
++            T_ENUM,
+             T_FUNCTION,
+             T_CLOSURE,
+             T_PUBLIC,
+diff --git a/coder_sniffer/Drupal/Sniffs/InfoFiles/ClassFilesSniff.php b/coder_sniffer/Drupal/Sniffs/InfoFiles/ClassFilesSniff.php
+index 60c142bf9ca9638c5b2ad0422f7f21a258b6ddb4..57012d433950ff27b205ef75a9912dc00c1965df 100644
+--- a/coder_sniffer/Drupal/Sniffs/InfoFiles/ClassFilesSniff.php
++++ b/coder_sniffer/Drupal/Sniffs/InfoFiles/ClassFilesSniff.php
+@@ -72,7 +72,7 @@ class ClassFilesSniff implements Sniff
+                 $searchTokens = token_get_all(file_get_contents($fileName));
+                 foreach ($searchTokens as $token) {
+                     if (is_array($token) === true
+-                        && in_array($token[0], [T_CLASS, T_INTERFACE, T_TRAIT]) === true
++                        && in_array($token[0], [T_CLASS, T_INTERFACE, T_TRAIT, T_ENUM]) === true
+                     ) {
+                         continue 2;
+                     }
+diff --git a/coder_sniffer/Drupal/Sniffs/Methods/MethodDeclarationSniff.php b/coder_sniffer/Drupal/Sniffs/Methods/MethodDeclarationSniff.php
+index a5ebcb284faf886ed767664dfba4d09a16d5f3b7..2e023b5653a264497d93665007b4f6cc96cc7117 100644
+--- a/coder_sniffer/Drupal/Sniffs/Methods/MethodDeclarationSniff.php
++++ b/coder_sniffer/Drupal/Sniffs/Methods/MethodDeclarationSniff.php
+@@ -32,7 +32,7 @@ class MethodDeclarationSniff extends PSR2MethodDeclarationSniff
+      */
+     public function __construct()
+     {
+-        AbstractScopeSniff::__construct([T_CLASS, T_INTERFACE, T_TRAIT], [T_FUNCTION]);
++        AbstractScopeSniff::__construct([T_CLASS, T_INTERFACE, T_TRAIT, T_ENUM], [T_FUNCTION]);
+
+     }//end __construct()
+
+diff --git a/coder_sniffer/Drupal/Sniffs/Scope/MethodScopeSniff.php b/coder_sniffer/Drupal/Sniffs/Scope/MethodScopeSniff.php
+index b23f97aa671c65966344fb8c30689be7c139dc00..24ec103b84dd8ce4684ad253444f10b472216c76 100644
+--- a/coder_sniffer/Drupal/Sniffs/Scope/MethodScopeSniff.php
++++ b/coder_sniffer/Drupal/Sniffs/Scope/MethodScopeSniff.php
+@@ -34,7 +34,7 @@ class MethodScopeSniff extends AbstractScopeSniff
+      */
+     public function __construct()
+     {
+-        parent::__construct([T_CLASS, T_INTERFACE, T_TRAIT], [T_FUNCTION]);
++        parent::__construct([T_CLASS, T_INTERFACE, T_TRAIT, T_ENUM], [T_FUNCTION]);
+
+     }//end __construct()
