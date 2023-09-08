@@ -6,12 +6,15 @@ namespace Drupal\Tests\eu_oss_catalogue\Functional;
 
 use Drupal\Core\Database\Database;
 use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Entity\TranslatableInterface;
 use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\Tests\BrowserTestBase;
 use Drupal\Tests\eu_oss_catalogue\Traits\EuOssCatalogueTrait;
 use Drupal\Tests\node\Traits\NodeCreationTrait;
+use Drupal\eu_oss_catalogue\Entity\OssSolutionInterface;
 use Drupal\language\Entity\ConfigurableLanguage;
+use Drupal\node\NodeInterface;
 use Drush\TestTraits\DrushTestTrait;
 
 /**
@@ -55,6 +58,12 @@ class EuOssCatalogueTest extends BrowserTestBase {
         'business-process-management',
         'digital-citizenship',
       ],
+      'oss_intended_audience_scope' => [
+        'energy',
+        'research',
+        'science-and-technology',
+        'security',
+      ],
     ]);
     // Add Italian and German languages.
     ConfigurableLanguage::createFromLangcode('it')->save();
@@ -76,8 +85,9 @@ class EuOssCatalogueTest extends BrowserTestBase {
     // Check queue processing. Use Drush to run the queue.
     $this->drush('queue:run', ['eu_oss_catalogue']);
 
-    /** @var \Drupal\eu_oss_catalogue\Entity\OssSolutionInterface $node1 */
     $node1 = $this->getNodeByTitle('Solution 1');
+    $this->assertInstanceOf(OssSolutionInterface::class, $node1);
+    $this->assertInstanceOf(TranslatableInterface::class, $node1);
     $this->assertSame('oss_solution', $node1->bundle());
     $this->assertSame('http://example.com/vendor/solution1', $node1->get('oss_git_url')->uri);
     $this->assertSame('1.0.0.0', $node1->get('oss_software_version')->value);
@@ -110,29 +120,76 @@ class EuOssCatalogueTest extends BrowserTestBase {
     $this->assertFieldValues(['[DE] Solution 1: Feature 1'], $node1->getTranslation('de')->get('oss_features'));
     $this->assertReferences(['AGPL-3.0-or-later'], $node1->get('oss_license'));
     $this->assertSame('Sin City', $node1->get('oss_owner')->value);
+    $this->assertEquals(
+      [
+        ['value' => 'it'],
+        ['value' => 'en'],
+        ['value' => 'de'],
+      ],
+      $node1->get('oss_available_languages')->getValue()
+    );
+    $this->assertTrue($node1->get('oss_scope')->isEmpty());
+    $this->assertTrue($node1->get('oss_documentation')->isEmpty());
+    $this->assertTrue($node1->getTranslation('it')->get('oss_documentation')->isEmpty());
+    $this->assertTrue($node1->getTranslation('de')->get('oss_documentation')->isEmpty());
+    $this->assertSame(
+      [
+        [
+          'uri' => 'Solution_1_EN_Screenshot1.jpg',
+          'title' => NULL,
+          'options' => [],
+        ],
+      ],
+      $node1->get('oss_screenshots')->getValue()
+    );
+    $this->assertSame(
+      [
+        [
+          'uri' => 'Solution_1_IT_Screenshot1.jpg',
+          'title' => NULL,
+          'options' => [],
+        ],
+      ],
+      $node1->getTranslation('it')->get('oss_screenshots')->getValue()
+    );
+    $this->assertSame(
+      [
+        [
+          'uri' => 'Solution_1_DE_Screenshot1.jpg',
+          'title' => NULL,
+          'options' => [],
+        ],
+      ],
+      $node1->getTranslation('de')->get('oss_screenshots')->getValue()
+    );
     $this->assertTrue($node1->get('oss_landing_url')->isEmpty());
     $this->assertSame('contract', $node1->get('oss_maintenance_type')->value);
-    /** @var \Drupal\node\NodeInterface $contractor1 */
+
     $contractor1 = $node1->get('oss_maintenance_contractors')->get(0)->entity;
+    $this->assertInstanceOf(NodeInterface::class, $contractor1);
     $this->assertSame('ACME Ltd', $contractor1->label());
     $this->assertSame('2023-12-31', $contractor1->get('oss_contractor_until')->value);
     $this->assertSame('acme@example.com', $contractor1->get('oss_contractor_email')->value);
     $this->assertSame('http://www.example.com/acme', $contractor1->get('oss_contractor_website')->uri);
-    /** @var \Drupal\node\NodeInterface $contractor2 */
+
     $contractor2 = $node1->get('oss_maintenance_contractors')->get(1)->entity;
+    $this->assertInstanceOf(NodeInterface::class, $contractor2);
     $this->assertSame('Das Auto GmbH', $contractor2->label());
     $this->assertSame('2023-11-12', $contractor2->get('oss_contractor_until')->value);
     $this->assertSame('das-auto@example.com', $contractor2->get('oss_contractor_email')->value);
     $this->assertSame('http://www.example.com/auto', $contractor2->get('oss_contractor_website')->uri);
-    /** @var \Drupal\node\NodeInterface $contact1 */
+
     $contact1 = $node1->get('oss_maintenance_contacts')->get(0)->entity;
+    $this->assertInstanceOf(NodeInterface::class, $contact1);
     $this->assertSame('Peter Gregory', $contact1->label());
     $this->assertSame('pieter@raviga.com', $contact1->get('oss_contact_email')->value);
     $this->assertSame('RESERVED@', $contact1->get('oss_contact_phone')->value);
     $this->assertSame('Pied Piper', $contact1->get('oss_contact_affiliation')->value);
 
-    /** @var \Drupal\eu_oss_catalogue\Entity\OssSolutionInterface $node2 */
     $node2 = $this->getNodeByTitle('Solution 2');
+    $this->assertInstanceOf(OssSolutionInterface::class, $node2);
+    $this->assertInstanceOf(TranslatableInterface::class, $node2);
+    $this->assertSame('en', $node2->getUntranslated()->language()->getId());
     $this->assertSame('oss_solution', $node2->bundle());
     $this->assertSame('http://example.com/vendor/solution2.git', $node2->getTranslation('it')->get('oss_git_url')->uri);
     $this->assertSame('http://landing.example.com/vendor/solution2', $node2->getTranslation('it')->get('oss_landing_url')->uri);
@@ -144,7 +201,7 @@ class EuOssCatalogueTest extends BrowserTestBase {
     $this->assertSame('development', $node2->get('oss_development_status')->value);
     $this->assertSame('library', $node2->get('oss_software_type')->value);
     $this->assertSame(
-      'hQuCpTFLBeeOcz0U1i9JuBSiwplY_0JC8QFZ5usZOxU',
+      'p8QnKZlRwagdXkgoe5_lIDsAE9lvRhrOibFNhNrWakU',
       $node2->get('oss_source_hash')->value
     );
     $this->assertStringContainsString('[IT] Solution 2: Long description', $node2->getTranslation('it')->get('oss_long_description')->value);
@@ -157,16 +214,41 @@ class EuOssCatalogueTest extends BrowserTestBase {
       '[IT] Solution 2: Feature 4',
     ], $node2->getTranslation('it')->get('oss_features'));
     $this->assertSame('Narnia', $node2->get('oss_owner')->value);
+    $this->assertEquals([['value' => 'it']], $node2->get('oss_available_languages')->getValue());
+    $this->assertReferences(
+      [
+        'energy',
+        'research',
+        'science-and-technology',
+        'security',
+      ],
+      $node2->get('oss_scope')
+    );
+    $this->assertTrue($node2->get('oss_documentation')->isEmpty());
+    $this->assertSame(
+      [
+        [
+          'uri' => 'http://it.docs.example.com/vendor/solution2',
+          'title' => NULL,
+          'options' => [],
+        ],
+      ],
+      $node2->getTranslation('it')->get('oss_documentation')->getValue()
+    );
+    $this->assertTrue($node2->get('oss_screenshots')->isEmpty());
+    $this->assertTrue($node2->getTranslation('it')->get('oss_screenshots')->isEmpty());
     $this->assertTrue($node2->get('oss_logo')->isEmpty());
     $this->assertSame('community', $node2->get('oss_maintenance_type')->value);
-    /** @var \Drupal\node\NodeInterface $contact1 */
+
     $contact1 = $node2->get('oss_maintenance_contacts')->get(0)->entity;
+    $this->assertInstanceOf(NodeInterface::class, $contact1);
     $this->assertSame('FOSS Conference', $contact1->label());
     $this->assertSame('foss@example.com', $contact1->get('oss_contact_email')->value);
     $this->assertSame('0040675555453', $contact1->get('oss_contact_phone')->value);
     $this->assertSame('OSS Affiliation', $contact1->get('oss_contact_affiliation')->value);
-    /** @var \Drupal\node\NodeInterface $contact2 */
+
     $contact2 = $node2->get('oss_maintenance_contacts')->get(1)->entity;
+    $this->assertInstanceOf(NodeInterface::class, $contact2);
     $this->assertSame('Pirate Initiative', $contact2->label());
     $this->assertSame('pirate@example.com', $contact2->get('oss_contact_email')->value);
     $this->assertSame('0049689887764', $contact2->get('oss_contact_phone')->value);
@@ -183,7 +265,6 @@ class EuOssCatalogueTest extends BrowserTestBase {
 
     // Process the queue again.
     $this->drush('queue:run', ['eu_oss_catalogue']);
-    /** @var \Drupal\eu_oss_catalogue\Entity\OssSolutionInterface $node1 */
     $this->assertEmpty($this->getNodeByTitle('Solution 1'));
     $updated_solution = $this->getNodeByTitle('Solution 1 (updated)', TRUE);
     $this->assertSame('1.0.0.1', $updated_solution->get('oss_software_version')->value);
