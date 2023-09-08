@@ -52,7 +52,7 @@ Feature: As a user of the website
 
     # Edit as facilitator and save as draft.
     When I click "Edit"
-    Then the current workflow state should be "Validated"
+    Then the current workflow state should be "Published"
     When I fill in "Title" with "Flight of Day"
     And I press "Save as draft"
 

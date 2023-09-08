@@ -5,7 +5,7 @@ Feature: Collection moderation
   I need to be able to transit the collections from one state to another.
 
   # Access checks are not being made here. They are run in the collection add feature.
-  Scenario: 'Draft' and 'Propose' states are available but moderators should also see 'Validated' state.
+  Scenario: 'Draft' and 'Propose' states are available but moderators should also see 'Published' state.
     When I am logged in as an "authenticated user"
     And I go to the propose collection form
     Then the following buttons should be present "Save as draft, Propose"
