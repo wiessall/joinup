@@ -4,6 +4,7 @@ declare(strict_types = 1);
 
 namespace Drupal\eu_oss_catalogue\Plugin\eu_oss_catalogue\Provider;
 
+use Drupal\Component\Serialization\Exception\InvalidDataTypeException;
 use Drupal\Component\Serialization\Json;
 use Drupal\Core\Config\Schema\SchemaCheckTrait;
 use Drupal\Core\Logger\LoggerChannelInterface;
@@ -101,13 +102,21 @@ class DevelopersItalia extends EuOssCatalogueProviderPluginBase implements Conta
     foreach ($read['data'] as $newItem) {
       $active = $newItem['active'] ?? FALSE;
       if ($active) {
-        $decoded = Yaml::decode($newItem['publiccodeYml']);
-        yield new EuOssCatalogueFetchedSolution(
-          $decoded['url'],
-          $decoded['name'],
-          $decoded,
-          $newItem['id'],
-        );
+        try {
+          $decoded = Yaml::decode($newItem['publiccodeYml']);
+          yield new EuOssCatalogueFetchedSolution(
+            $decoded['url'],
+            $decoded['name'],
+            $decoded,
+            $newItem['id'],
+          );
+        }
+        catch (InvalidDataTypeException $exception) {
+          $this->logger->error('Cannot decode publiccode.yml of @url. Message: @message', [
+            '@url' => $decoded['url'],
+            '@message' => $exception->getMessage(),
+          ]);
+        }
       }
     }
 
