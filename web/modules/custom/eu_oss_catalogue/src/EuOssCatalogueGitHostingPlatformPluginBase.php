@@ -126,42 +126,6 @@ abstract class EuOssCatalogueGitHostingPlatformPluginBase extends EuOssCatalogue
   /**
    * {@inheritdoc}
    */
-  public function getRepositories(?string $filePath = NULL): iterable {
-    foreach ($this->getProjects($this->getConfiguration()['projects'], $filePath) as $projects) {
-      foreach ($projects as $result) {
-        yield $result;
-      }
-    }
-  }
-
-  /**
-   * Returns a full list of projects.
-   *
-   * This method expands a project candidate when only the vendor has been
-   * specified by querying the code platform API. By passing a relevant file
-   * path, relative to repository root, as parameter, the results will contain
-   * also the file content. This is useful when that file contains metadata
-   * about the project.
-   *
-   * @param array[] $candidates
-   *   A list of candidates to filter on. Each item is an associative array:
-   *   - namespace: Mandatory namespace.
-   *   - name: Optional project name. If omitted all public projects from the
-   *     namespace will be considered.
-   * @param string|null $filePath
-   *   (optional) A file path relative to repository root.
-   *
-   * @return array
-   *   Associative array:
-   *   - First level keys are namespaces.
-   *   - Second level keys are namespace repository project names and values are
-   *     objects of type \Drupal\eu_oss_catalogue\Model\HostingPlatformResult.
-   */
-  abstract protected function getProjects(array $candidates, ?string $filePath = NULL): array;
-
-  /**
-   * {@inheritdoc}
-   */
   public function getLabel(): TranslatableMarkup {
     return $this->pluginDefinition['label'];
   }
