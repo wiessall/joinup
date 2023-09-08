@@ -116,14 +116,14 @@ update:
           - cc_transition_propose_reported
 delete:
   'node:pre_moderated':
-    validated:
+    published:
       owner:
         - cc_delete
     deletion_request:
       owner:
         - cc_delete
   'node:post_moderated':
-    validated:
+    published:
       owner:
         - cc_delete
     needs_update:
