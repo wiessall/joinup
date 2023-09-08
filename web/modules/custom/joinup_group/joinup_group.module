@@ -145,7 +145,8 @@ function joinup_group_preprocess(array &$variables, string $hook): void {
   }
 
   // Apply the visual cue only on the tile and carousel view mode.
-  if (!isset($variables['view_mode']) || !in_array($variables['view_mode'], ['carousel', 'view_mode_tile'])) {
+  if (!isset($variables['view_mode'])
+    || !in_array($variables['view_mode'], ['carousel', 'view_mode_tile'])) {
     return;
   }
 
