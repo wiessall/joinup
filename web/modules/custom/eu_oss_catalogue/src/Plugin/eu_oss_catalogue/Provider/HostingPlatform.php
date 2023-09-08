@@ -62,7 +62,7 @@ class HostingPlatform extends EuOssCatalogueProviderPluginBase implements Contai
    * @param mixed $pluginDefinition
    *   The plugin implementation definition.
    * @param \Drupal\eu_oss_catalogue\EuOssCataloguePluginManagerInterface $parserManager
-   *   The EU OSS parser plugin manager service.
+   *   The EU OSS Catalogue parser plugin manager service.
    * @param \Drupal\eu_oss_catalogue\EuOssCataloguePluginManagerInterface $platformManager
    *   The code hosting platfom plugin manager service.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager

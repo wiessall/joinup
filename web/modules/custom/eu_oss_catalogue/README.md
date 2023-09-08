@@ -1,8 +1,8 @@
-# European OpenSource Software Catalogue
+# EU OpenSource Software Solutions Catalogue
 
 ## Description
 
-This is the European Union OpenSource Software Catalogue of business solutions.
+This is the EU OpenSource Software Solutions Catalogue of business solutions.
 Mainly, the module federates data from national OSS catalogues but also from
 any other arbitrary source and allows exposing such data via Drupal API, using
 Drupal Views, controllers or, even, JSON:API/GraphQL endpoints.

@@ -20,7 +20,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * @EuOssCatalogueProvider(
  *   id = "developers_italia",
  *   label = @Translation("Developers Italia"),
- *   description = @Translation("A community of developers who design and code Italian digital public services."),
+ *   description = @Translation("Italian National OSS Catalogue, by https://developers.italia.it website .”."),
  *   parser = "publiccode_yml",
  * )
  */
@@ -54,7 +54,7 @@ class DevelopersItalia extends EuOssCatalogueProviderPluginBase implements Conta
    * @param mixed $pluginDefinition
    *   The plugin implementation definition.
    * @param \Drupal\eu_oss_catalogue\EuOssCataloguePluginManagerInterface $parserManager
-   *   The EU OSS parser plugin manager service.
+   *   The EU OSS Catalogue parser plugin manager service.
    * @param \GuzzleHttp\Client $httpClient
    *   The HTTP client.
    */

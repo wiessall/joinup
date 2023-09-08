@@ -2,7 +2,7 @@ eu_oss_catalogue.provider.collection:
   path: /admin/content/eu-oss-catalogue
   defaults:
     _controller: Drupal\eu_oss_catalogue\Controller\EuOssCatalogueController::collection
-    _title: OSS Catalog
+    _title: EU OSS Catalog
   requirements:
     _permission: administer eu oss catalogue
 
