@@ -9,4 +9,5 @@ dependencies:
   - drupal:node
   - drupal:options
   - drupal:taxonomy
+  - multivalue_form_element:multivalue_form_element
   - pluginreference:pluginreference

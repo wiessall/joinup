@@ -71,7 +71,7 @@ abstract class EuOssCatalogueGitHostingPlatformPluginBase extends EuOssCatalogue
       '#type' => 'multivalue',
       '#title' => $this->t('Projects'),
       '#description' => $this->t('If name is omitted, all projects from that namespace are eligible.'),
-      '#default_value' => $this->getConfiguration()['projects'],
+      '#default_value' => $this->getConfiguration()['projects'] ?? [],
       '#cardinality' => MultiValue::CARDINALITY_UNLIMITED,
       '#required' => TRUE,
       'namespace' => [
