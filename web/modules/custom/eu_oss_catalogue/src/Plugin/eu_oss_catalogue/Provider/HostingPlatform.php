@@ -7,6 +7,7 @@ namespace Drupal\eu_oss_catalogue\Plugin\eu_oss_catalogue\Provider;
 use Drupal\Component\Plugin\ConfigurableInterface;
 use Drupal\Core\Config\Schema\SchemaCheckTrait;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Logger\LoggerChannelInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Serialization\Yaml;
 use Drupal\eu_oss_catalogue\Entity\HostingPlatformConfigInterface;
@@ -63,6 +64,8 @@ class HostingPlatform extends EuOssCatalogueProviderPluginBase implements Contai
    *   The plugin implementation definition.
    * @param \Drupal\eu_oss_catalogue\EuOssCataloguePluginManagerInterface $parserManager
    *   The EU OSS Catalogue parser plugin manager service.
+   * @param \Drupal\Core\Logger\LoggerChannelInterface $logger
+   *   The EU OSS Catalogue logger.
    * @param \Drupal\eu_oss_catalogue\EuOssCataloguePluginManagerInterface $platformManager
    *   The code hosting platfom plugin manager service.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
@@ -73,10 +76,11 @@ class HostingPlatform extends EuOssCatalogueProviderPluginBase implements Contai
     $pluginId,
     $pluginDefinition,
     protected EuOssCataloguePluginManagerInterface $parserManager,
+    protected LoggerChannelInterface $logger,
     protected EuOssCataloguePluginManagerInterface $platformManager,
     protected EntityTypeManagerInterface $entityTypeManager,
   ) {
-    parent::__construct($configuration, $pluginId, $pluginDefinition, $parserManager);
+    parent::__construct($configuration, $pluginId, $pluginDefinition, $parserManager, $logger);
   }
 
   /**
@@ -88,6 +92,7 @@ class HostingPlatform extends EuOssCatalogueProviderPluginBase implements Contai
       $pluginId,
       $pluginDefinition,
       $container->get('plugin.manager.eu_oss_catalogue.parser'),
+      $container->get('logger.channel.eu_oss_catalogue'),
       $container->get('plugin.manager.eu_oss_catalogue.hosting_platform'),
       $container->get('entity_type.manager'),
     );
