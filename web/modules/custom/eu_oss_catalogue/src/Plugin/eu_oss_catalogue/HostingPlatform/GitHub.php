@@ -101,17 +101,16 @@ class GitHub extends EuOssCatalogueGitHostingPlatformPluginBase {
   /**
    * {@inheritdoc}
    */
-  protected function getProjects(array $candidates, ?string $filePath = NULL): array {
-    $projects = [];
+  public function getProjects(?string $filePath = NULL): iterable {
     // Build a search query string.
     // @see https://docs.github.com/search-github
     $search = ['is:public', 'archived:false'];
-    foreach ($candidates as $candidate) {
-      if ($candidate['name']) {
-        $search[] = "repo:{$candidate['namespace']}/{$candidate['name']}";
+    foreach ($this->getConfiguration()['projects'] as $project) {
+      if ($project['name']) {
+        $search[] = "repo:{$project['namespace']}/{$project['name']}";
       }
       else {
-        $search[] = "owner:{$candidate['namespace']}";
+        $search[] = "owner:{$project['namespace']}";
       }
     }
 
@@ -170,7 +169,7 @@ class GitHub extends EuOssCatalogueGitHostingPlatformPluginBase {
     foreach ($graphQL->execute($query->toString())['data']['search']['nodes'] as $node) {
       // Repositories without code don't have a default branch.
       if (!empty($node['defaultBranchRef'])) {
-        $projects[$node['owner']['login']][$node['name']] = new HostingPlatformResult(
+        yield new HostingPlatformResult(
           $node['owner']['login'],
           $node['name'],
           $node['defaultBranchRef']['name'],
@@ -180,7 +179,6 @@ class GitHub extends EuOssCatalogueGitHostingPlatformPluginBase {
         );
       }
     }
-    return $projects;
   }
 
 }

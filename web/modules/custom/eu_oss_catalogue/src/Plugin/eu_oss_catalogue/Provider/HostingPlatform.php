@@ -104,7 +104,7 @@ class HostingPlatform extends EuOssCatalogueProviderPluginBase implements Contai
     }
 
     $platform = $this->getPlatform();
-    foreach ($platform->getRepositories('publiccode.yml') as $repository) {
+    foreach ($platform->getProjects('publiccode.yml') as $repository) {
       \assert($repository instanceof HostingPlatformResult);
       if ($repository->file) {
         if (is_string($repository->file) && ($data = Yaml::decode($repository->file))) {
