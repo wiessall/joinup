@@ -80,7 +80,7 @@ abstract class GitLabBase extends EuOssCatalogueGitHostingPlatformPluginBase {
           // No projects.
           if (empty($project['repository']['rootRef'])) {
             // Keep track of what's left.
-            unset($repos[$project['name']]);
+            unset($repos[$project['path']]);
             continue;
           }
 
