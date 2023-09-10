@@ -139,20 +139,21 @@ class EuOssCatalogue implements EuOssCatalogueInterface {
       $urlCounts,
       fn (int $count) => $count > 1
     );
-    $this->logger->warning(
-      "Non-unique solution URLs from provider '@provider': @non-unique-urls.",
-      [
-        '@provider' => $provider->getPluginId(),
-        '@non-unique-urls' => implode(
-          ', ',
-          array_map(
-            fn (string $url, int $count) => "$url ($count)",
-            array_keys($nonUniqueUrls),
-            $nonUniqueUrls
-          )
-        ),
-      ]
-    );
+    if ($nonUniqueUrls) {
+      $this->logger->warning(
+        "Non-unique solution URLs from provider '@provider': @non-unique-urls.", [
+          '@provider' => $provider->getPluginId(),
+          '@non-unique-urls' => implode(
+            ', ',
+            array_map(
+              fn(string $url, int $count) => "$url ($count)",
+              array_keys($nonUniqueUrls),
+              $nonUniqueUrls
+            )
+          ),
+        ],
+      );
+    }
     // @todo Maybe this should be a flag that enables cleanup deletion?
     $queue->createItem([
       'operation' => 'solution:create:cleanup',
