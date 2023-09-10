@@ -12,7 +12,7 @@ use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Serialization\Yaml;
 use Drupal\eu_oss_catalogue\EuOssCataloguePluginManagerInterface;
 use Drupal\eu_oss_catalogue\EuOssCatalogueProviderPluginBase;
-use Drupal\eu_oss_catalogue\Model\EuOssCatalogueFetchedSolution;
+use Drupal\eu_oss_catalogue\Model\FetchedSolution;
 use GuzzleHttp\Client;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -104,7 +104,7 @@ class DevelopersItalia extends EuOssCatalogueProviderPluginBase implements Conta
       if ($active) {
         try {
           $decoded = Yaml::decode($newItem['publiccodeYml']);
-          yield new EuOssCatalogueFetchedSolution(
+          yield new FetchedSolution(
             $decoded['url'],
             $decoded['name'],
             $decoded,

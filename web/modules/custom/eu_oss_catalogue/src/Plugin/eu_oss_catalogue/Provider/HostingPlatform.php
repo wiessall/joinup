@@ -15,7 +15,7 @@ use Drupal\eu_oss_catalogue\Entity\HostingPlatformConfigInterface;
 use Drupal\eu_oss_catalogue\EuOssCatalogueHostingPlatformInterface;
 use Drupal\eu_oss_catalogue\EuOssCataloguePluginManagerInterface;
 use Drupal\eu_oss_catalogue\EuOssCatalogueProviderPluginBase;
-use Drupal\eu_oss_catalogue\Model\EuOssCatalogueFetchedSolution;
+use Drupal\eu_oss_catalogue\Model\FetchedSolution;
 use Drupal\eu_oss_catalogue\Model\HostingPlatformResult;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -115,7 +115,7 @@ class HostingPlatform extends EuOssCatalogueProviderPluginBase implements Contai
       if ($repository->file && is_string($repository->file)) {
         try {
           $data = Yaml::decode($repository->file);
-          yield new EuOssCatalogueFetchedSolution(
+          yield new FetchedSolution(
             $data['url'],
             $data['name'],
             $data,
