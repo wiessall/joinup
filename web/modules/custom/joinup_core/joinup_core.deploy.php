@@ -18,9 +18,7 @@ declare(strict_types = 1);
  * Change the state name of all RDF entities from 'validated' to 'published'.
  */
 function joinup_core_deploy_109700(): string {
-  $entity_ids = [];
   $database = \Drupal::getContainer()->get('sparql.endpoint');
-
   $workflow_urls = [
     'http://joinup.eu/ar/workflow_status' => [
       'http://joinup.eu/collection/published',
@@ -44,36 +42,29 @@ function joinup_core_deploy_109700(): string {
 
   foreach ($workflow_urls as $predicate => $graphs) {
     foreach ($graphs as $graph) {
-      $select_query = <<<SPARQL
-SELECT ?s
+      $update_query = <<<SPARQL
+WITH <{$graph}>
+DELETE {
+  ?s <{$predicate}> "validated"^^<http://www.w3.org/2001/XMLSchema#string> .
+}
+INSERT {
+  ?s <{$predicate}> "published"^^<http://www.w3.org/2001/XMLSchema#string> .
+}
 WHERE {
-  GRAPH <{$graph}> {
-    ?s <{$predicate}> "validated" .
-  }
+  ?s <{$predicate}> "validated"^^<http://www.w3.org/2001/XMLSchema#string> .
 }
 SPARQL;
-
-      $results = array_map(function (\stdClass $result): string {
-        return $result->s->getUri();
-      }, $database->query($select_query)->getArrayCopy());
-      $entity_ids = array_merge($entity_ids, $results);
+      $database->query($update_query);
     }
   }
 
-  \Drupal::getContainer()->get('joinup_search.index_helper')->reIndexItems('rdf_entity', $entity_ids);
   return 'Changed the state name of all RDF entities from "validated" to "published".';
 }
 
 /**
- * Update the node's field_state value from 'validated' to 'published'.
+ * Change the state name of all Node entities from 'validated' to 'published'.
  */
 function joinup_core_deploy_109701(): string {
-  // Get the IDs of nodes that have the field_state set to 'validated'.
-  $query = \Drupal::getContainer()->get('database')->select('node__field_state', 'nfs');
-  $query->addField('nfs', 'entity_id');
-  $query->condition('nfs.field_state_value', 'validated');
-  $nids = $query->execute()->fetchCol();
-
   \Drupal::getContainer()->get('database')->update('node__field_state')
     ->fields(['field_state_value' => 'published'])
     ->condition('field_state_value', 'validated')
@@ -85,6 +76,5 @@ function joinup_core_deploy_109701(): string {
     ->condition('field_state_value', 'validated')
     ->execute();
 
-  \Drupal::getContainer()->get('joinup_search.index_helper')->reIndexItems('node', $nids);
   return 'Changed the state name of all nodes from "validated" to "published".';
 }
