@@ -1,4 +1,6 @@
-<?php declare(strict_types = 1);
+<?php
+
+declare(strict_types = 1);
 
 namespace Drupal\joinup_search;
 
@@ -16,7 +18,7 @@ final class IndexHelper implements IndexHelperInterface {
   /**
    * Constructs an IndexHelper object.
    */
-  public function __construct(protected readonly EntityTypeManagerInterface $entityTypeManager) {}
+  public function __construct(protected EntityTypeManagerInterface $entityTypeManager) {}
 
   /**
    * {@inheritdoc}
@@ -38,7 +40,7 @@ final class IndexHelper implements IndexHelperInterface {
    *   The entity type.
    * @param array $entityIds
    *   The entity IDs.
-   * @param $language
+   * @param string $language
    *   (optional) The language code. Defaults to 'en'.
    *
    * @return array

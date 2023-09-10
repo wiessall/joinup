@@ -13,7 +13,6 @@
  */
 
 declare(strict_types = 1);
-use Drupal\search_api\Entity\Index;
 
 /**
  * Change the state name of all RDF entities from 'validated' to 'published'.
@@ -54,18 +53,10 @@ WHERE {
 }
 SPARQL;
 
-      $results = array_map(function(\stdClass $result): string {
+      $results = array_map(function (\stdClass $result): string {
         return $result->s->getUri();
       }, $database->query($select_query)->getArrayCopy());
       $entity_ids = array_merge($entity_ids, $results);
-
-      // @todo check if the state is a plain string.
-      $query = <<<SPARQL
-WITH <{$graph}>
-DELETE { ?s <{$predicate}> "validated" }
-INSERT { ?s <{$predicate}> "published" }
-WHERE { ?s <{$predicate}> "validated" }
-SPARQL;
     }
   }
 
