@@ -77,8 +77,8 @@ abstract class GitLabBase extends EuOssCatalogueGitHostingPlatformPluginBase {
         $hasNextPage = $response['data']['group']['projects']['pageInfo']['hasNextPage'];
         $endCursor = $response['data']['group']['projects']['pageInfo']['endCursor'];
         foreach ($response['data']['group']['projects']['nodes'] as $project) {
-          // No projects.
-          if (empty($project['repository']['rootRef'])) {
+          // Ignore if there's no default branch or the project is archived.
+          if (empty($project['repository']['rootRef']) || !empty($project['archived'])) {
             // Keep track of what's left.
             unset($repos[$project['path']]);
             continue;
@@ -100,8 +100,8 @@ abstract class GitLabBase extends EuOssCatalogueGitHostingPlatformPluginBase {
       // user registration.
       foreach ($repos as $name) {
         $query = $this->buildProjectQuery($namespace, $name, $filePath);
-        $response = $this->getClient()->graphql()->execute($query->toString());
-        if (!empty($response['data']['project'])) {
+        $project = $this->getClient()->graphql()->execute($query->toString())['data']['project'] ?? NULL;
+        if ($project && !empty($project['repository']['rootRef']) && empty($project['archived'])) {
           yield $this->createHostingPlatformResult($namespace, $response['data']['project']);
         }
       }
@@ -113,7 +113,7 @@ abstract class GitLabBase extends EuOssCatalogueGitHostingPlatformPluginBase {
    *
    * This renders a query similar to:
    * @code
-   *
+   * @todo Show a sample here.
    * @endcode
    *
    * @param string $namespace
@@ -137,7 +137,7 @@ abstract class GitLabBase extends EuOssCatalogueGitHostingPlatformPluginBase {
       ->use('hasNextPage', 'endCursor')
       ->prev()
       ->nodes([])
-      ->use('path', 'id', 'description')
+      ->use('path', 'id', 'description', 'archived')
       ->releases(['sort' => GitLabReleaseSort::CREATED_DESC, 'first' => 1])
       ->nodes([])
       ->use('createdAt')
@@ -196,7 +196,7 @@ abstract class GitLabBase extends EuOssCatalogueGitHostingPlatformPluginBase {
    */
   protected function buildProjectQuery(string $namespace, string $name, ?string $filePath): Query {
     $query = new Query('project', ['fullPath' => "$namespace/$name"]);
-    $fragment = $query->use('path', 'id', 'description')
+    $fragment = $query->use('path', 'id', 'description', 'archived')
       ->releases(['sort' => GitLabReleaseSort::CREATED_DESC, 'first' => 1])
       ->nodes([])
       ->use('createdAt')

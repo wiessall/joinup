@@ -94,8 +94,8 @@ class GitLabSelfHosted extends GitLabBase {
       $hasNextPage = $response['data']['projects']['pageInfo']['hasNextPage'];
       $endCursor = $response['data']['projects']['pageInfo']['endCursor'];
       foreach ($response['data']['projects']['nodes'] as $project) {
-        // No default branch, no code.
-        if (!empty($project['repository']['rootRef'])) {
+        // Ignore if there's no default branch or the project is archived.
+        if (!empty($project['repository']['rootRef']) && empty($project['archived'])) {
           yield $this->createHostingPlatformResult($project['fullPath'], $project);
         }
       }
@@ -114,13 +114,14 @@ class GitLabSelfHosted extends GitLabBase {
    *   A GraphQL query builder instance.
    */
   protected function buildProjectsQuery(?string $filePath, ?string $endCursor = NULL): Query {
-    $filters = ['first' => 50] + ($endCursor ? ['after' => $endCursor] : []);
+    $filters = ['first' => 100] + ($endCursor ? ['after' => $endCursor] : []);
 
     $query = new Query('projects', $filters);
+    $query->use('count');
     $query->pageInfo([])->use('hasNextPage', 'endCursor');
 
     $fragment = $query->nodes([])
-      ->use('fullPath', 'path', 'id', 'description')
+      ->use('fullPath', 'path', 'id', 'description', 'archived')
       ->releases(['sort' => GitLabReleaseSort::CREATED_DESC, 'first' => 1])
       ->nodes([])
       ->use('createdAt')
