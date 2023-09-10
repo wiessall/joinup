@@ -10,6 +10,7 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Logger\LoggerChannelInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Serialization\Yaml;
+use Drupal\Core\TypedData\MapDataDefinition;
 use Drupal\eu_oss_catalogue\Entity\OssSolutionInterface;
 use Drupal\eu_oss_catalogue\EuOssCatalogueParserPluginBase;
 use Drupal\eu_oss_catalogue\EuOssCataloguePluginManagerInterface;
@@ -144,6 +145,14 @@ class PublicCodeYml extends EuOssCatalogueParserPluginBase implements ContainerF
     $valueIsProvided = !empty($value) || $value === FALSE;
     if (!$valueIsProvided && !empty($dataDefinition['required'])) {
       $errors[$key] = 'required but empty';
+    }
+    if ($dataDefinition instanceof MapDataDefinition && is_array($value)) {
+      $mapping = $element->getPluginDefinition()['mapping'] ?? [];
+      foreach ($mapping as $mapKey => $schema) {
+        if (!empty($schema['required']) && !array_key_exists($mapKey, $value)) {
+          $errors[$key] = "missing value for '$mapKey'";
+        }
+      }
     }
 
     return $errors;
