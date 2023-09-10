@@ -102,10 +102,15 @@ class DevelopersItalia extends EuOssCatalogueProviderPluginBase implements Conta
     foreach ($read['data'] as $newItem) {
       $active = $newItem['active'] ?? FALSE;
       if ($active) {
+        if (empty($newItem['url'])) {
+          $this->logger->error("Item @id lacks the mandatory URL", ['@id' => $newItem['id']]);
+          continue;
+        }
+        $url = preg_replace('/^(.*)\.git$/', '$1', $newItem['url']);
         try {
           $decoded = Yaml::decode($newItem['publiccodeYml']);
           yield new FetchedSolution(
-            $decoded['url'],
+            $url,
             $decoded['name'],
             $decoded,
             $newItem['id'],
@@ -113,7 +118,7 @@ class DevelopersItalia extends EuOssCatalogueProviderPluginBase implements Conta
         }
         catch (InvalidDataTypeException $exception) {
           $this->logger->error('Cannot decode publiccode.yml of @url. Message: @message', [
-            '@url' => $decoded['url'],
+            '@url' => $url,
             '@message' => $exception->getMessage(),
           ]);
         }

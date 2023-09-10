@@ -53,7 +53,7 @@ class GitLabSelfHosted extends GitLabBase {
    */
   public function submitConfigurationForm(array &$form, FormStateInterface $formState): void {
     parent::submitConfigurationForm($form, $formState);
-    $this->configuration['url'] = $formState->getValue('url');
+    $this->configuration['url'] = trim($formState->getValue('url'), ' /');
   }
 
   /**

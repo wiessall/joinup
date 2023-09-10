@@ -274,7 +274,7 @@ class EuOssCatalogueTest extends BrowserTestBase {
       'oss_git_description' => [],
       'oss_git_url' => [
         [
-          'uri' => 'http://example.com/vendor/solution2.git',
+          'uri' => 'http://example.com/vendor/solution2',
           'title' => NULL,
           'options' => [],
         ],

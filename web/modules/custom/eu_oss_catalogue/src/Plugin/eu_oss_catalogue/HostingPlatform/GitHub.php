@@ -172,6 +172,7 @@ class GitHub extends EuOssCatalogueGitHostingPlatformPluginBase {
         yield new HostingPlatformResult(
           $node['owner']['login'],
           $node['name'],
+          "https://github.com/{$node['owner']['login']}/{$node['name']}",
           $node['defaultBranchRef']['name'],
           $node['id'],
           $node['description'],

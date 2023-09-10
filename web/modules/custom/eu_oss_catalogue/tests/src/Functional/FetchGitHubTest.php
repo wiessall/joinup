@@ -126,14 +126,14 @@ class FetchGitHubTest extends BrowserTestBase {
     'type' => [['target_id' => 'oss_solution']],
     'oss_git_url' => [
       [
-        'uri' => 'http://example.com/vendor/solution1',
+        'uri' => 'https://github.com/dummy-namespace-1/dummy-name-1',
         'title' => NULL,
         'options' => [],
       ],
     ],
     'oss_logo' => [
       [
-        'uri' => 'http://example.com/vendor/solution1/images/logo-solution-1.png',
+        'uri' => 'https://github.com/dummy-namespace-1/dummy-name-1/images/logo-solution-1.png',
         'title' => NULL,
         'options' => [],
       ],
@@ -153,7 +153,7 @@ class FetchGitHubTest extends BrowserTestBase {
     'type' => [['target_id' => 'oss_solution']],
     'oss_git_url' => [
       [
-        'uri' => 'http://example.com/vendor/solution2.git',
+        'uri' => 'https://github.com/dummy-namespace-2/dummy-name-2',
         'title' => NULL,
         'options' => [],
       ],
