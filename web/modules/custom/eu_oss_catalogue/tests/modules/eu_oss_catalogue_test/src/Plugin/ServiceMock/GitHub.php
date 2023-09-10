@@ -17,7 +17,7 @@ use Psr\Http\Message\ResponseInterface;
  * Intercepts any HTTP requests made to GitHub API.
  *
  * @ServiceMock(
- *   id = "git_hub",
+ *   id = "github",
  *   label = @Translation("GitHub API"),
  *   weight = 0,
  * )
