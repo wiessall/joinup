@@ -141,7 +141,7 @@ Feature: Notification test for the collection transitions.
     Then the following email should have been sent:
       | recipient | NC owner                                                                          |
       | subject   | Your proposal of collection NC to publish has been approved                      |
-      | body      | Your proposed collection "NC to publish" has been published as per your request. |
+      | body      | Your proposed collection "NC to publish" has been validated as per your request. |
 
     # Test the 'approve proposed' that was proposed through the 'propose edit' operation.
     And I go to the homepage of the "NC to propose edit proposed" collection

@@ -132,7 +132,7 @@ Feature: "Add solution" visibility options.
     And the following email should have been sent:
       | recipient | Wendell Silva                                                                                               |
       | subject   | Joinup: Your solution has been accepted                                                                     |
-      | body      | Your proposed interoperability solution: "Espresso is the solution" has been published as per your request. |
+      | body      | Your proposed interoperability solution: "Espresso is the solution" has been validated as per your request. |
 
     When I am logged in as a facilitator of the "Belgian barista's" collection
     # Make sure that when another solution is added, both are affiliated.
