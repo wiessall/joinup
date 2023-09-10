@@ -116,7 +116,7 @@ class HostingPlatform extends EuOssCatalogueProviderPluginBase implements Contai
         try {
           $data = Yaml::decode($repository->file);
           yield new FetchedSolution(
-            $data['url'],
+            $repository->url,
             $data['name'],
             $data,
             (string) $repository->platformReference,

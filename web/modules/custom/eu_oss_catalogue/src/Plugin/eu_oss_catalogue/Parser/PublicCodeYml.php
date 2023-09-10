@@ -115,6 +115,8 @@ class PublicCodeYml extends EuOssCatalogueParserPluginBase implements ContainerF
   public function parse(FetchedSolution $fetchedSolution, EuOssCatalogueProviderInterface $provider): OssSolutionInterface {
     $solution = parent::parse($fetchedSolution, $provider);
 
+    $solution->set('oss_git_url', $fetchedSolution->url);
+
     /** @var \Drupal\Core\Config\Entity\ThirdPartySettingsInterface $definition */
     $definition = $solution->getFieldDefinition('oss_publiccode_yml_version');
     $settings = $definition->getThirdPartySetting('eu_oss_catalogue', $this->getPluginId());

@@ -8,12 +8,6 @@ dependencies:
   module:
     - eu_oss_catalogue
     - link
-third_party_settings:
-  eu_oss_catalogue:
-    publiccode_yml:
-      resolver: default
-      config:
-        path: url
 id: node.oss_solution.oss_git_url
 field_name: oss_git_url
 entity_type: node

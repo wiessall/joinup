@@ -217,18 +217,22 @@ abstract class GitLabBase extends EuOssCatalogueGitHostingPlatformPluginBase {
   /**
    * Creates a code hosting platform result instance.
    *
-   * @param string $namespace
-   *   The project's namespace.
+   * @param string $fullName
+   *   The project's full name.
    * @param array $project
    *   The project array, from the GraphQL results.
    *
    * @return \Drupal\eu_oss_catalogue\Model\HostingPlatformResult
    *   A code hosting platform result instance.
    */
-  protected function createHostingPlatformResult(string $namespace, array $project): HostingPlatformResult {
+  protected function createHostingPlatformResult(string $fullName, array $project): HostingPlatformResult {
+    $host = $this->getConfiguration()['url'] ?? 'https://gitlab.com';
+    $parts = explode('/', $fullName);
+    array_pop($parts);
     return new HostingPlatformResult(
-      $namespace,
+      implode('/', $parts),
       $project['path'],
+      "$host/$fullName",
       $project['repository']['rootRef'],
       $project['id'],
       $project['path'],
