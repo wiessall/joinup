@@ -7,7 +7,7 @@ namespace Drupal\eu_oss_catalogue;
 use Drupal\Component\Plugin\PluginBase;
 use Drupal\Core\Logger\LoggerChannelInterface;
 use Drupal\eu_oss_catalogue\Entity\OssSolutionInterface;
-use Drupal\eu_oss_catalogue\Model\EuOssCatalogueFetchedSolution;
+use Drupal\eu_oss_catalogue\Model\FetchedSolution;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -59,7 +59,7 @@ abstract class EuOssCatalogueProviderPluginBase extends PluginBase implements Eu
   /**
    * {@inheritdoc}
    */
-  public function alterSolution(OssSolutionInterface $solution, EuOssCatalogueFetchedSolution $fetchedSolution): void {
+  public function alterSolution(OssSolutionInterface $solution, FetchedSolution $fetchedSolution): void {
   }
 
   /**

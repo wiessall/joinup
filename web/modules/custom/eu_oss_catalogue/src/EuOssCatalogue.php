@@ -11,7 +11,7 @@ use Drupal\Core\Serialization\Yaml;
 use Drupal\eu_oss_catalogue\Entity\OssSolutionInterface;
 use Drupal\eu_oss_catalogue\Event\EuOssPostFetchEvent;
 use Drupal\eu_oss_catalogue\Event\EuOssSolutionPreSaveEvent;
-use Drupal\eu_oss_catalogue\Model\EuOssCatalogueFetchedSolution;
+use Drupal\eu_oss_catalogue\Model\FetchedSolution;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 /**
@@ -58,7 +58,7 @@ class EuOssCatalogue implements EuOssCatalogueInterface {
     $solutionUrlsDiscovered = [];
     while (($fetchedSolutions = $provider->fetch())->valid()) {
       foreach ($fetchedSolutions as $fetchedSolution) {
-        if (!$fetchedSolution instanceof EuOssCatalogueFetchedSolution) {
+        if (!$fetchedSolution instanceof FetchedSolution) {
           throw new \Exception("Invalid data received from '$providerId' plugin");
         }
 
@@ -166,7 +166,7 @@ class EuOssCatalogue implements EuOssCatalogueInterface {
   /**
    * {@inheritdoc}
    */
-  public function createOrUpdateSolution(string $providerPluginId, EuOssCatalogueFetchedSolution $fetchedSolution): OssSolutionInterface {
+  public function createOrUpdateSolution(string $providerPluginId, FetchedSolution $fetchedSolution): OssSolutionInterface {
     /** @var \Drupal\eu_oss_catalogue\EuOssCatalogueProviderInterface $provider */
     $provider = $this->providerManager->createInstance($providerPluginId);
     /** @var \Drupal\eu_oss_catalogue\EuOssCatalogueParserInterface $parser */
@@ -274,7 +274,7 @@ class EuOssCatalogue implements EuOssCatalogueInterface {
   /**
    * Determines whether solution node needs to be created/updated.
    *
-   * @param \Drupal\eu_oss_catalogue\Model\EuOssCatalogueFetchedSolution $fetchedSolution
+   * @param \Drupal\eu_oss_catalogue\Model\FetchedSolution $fetchedSolution
    *   The fetched solution.
    * @param \Drupal\eu_oss_catalogue\EuOssCatalogueProviderInterface $provider
    *   The provider plugin instance which fetched the solution.
@@ -283,7 +283,7 @@ class EuOssCatalogue implements EuOssCatalogueInterface {
    *   Whether solution node needs to be created/updated.
    */
   protected function fetchedSolutionNeedsUpdate(
-    EuOssCatalogueFetchedSolution $fetchedSolution,
+    FetchedSolution $fetchedSolution,
     EuOssCatalogueProviderInterface $provider
   ): bool {
     $hash = $fetchedSolution->getHash();
