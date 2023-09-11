@@ -76,20 +76,22 @@ class TelegramHandler extends TelegramBotHandler implements DestructableInterfac
       return;
     }
 
-    // Try to acquire a lock as other requests might have also started to send
-    // messages to Telegram. Twenty seconds might look too much but, in fact,
-    // it's the penalty time that Telegram sets when the limits are offended.
-    if (!$this->lockBackend->acquire(self::LOCK_NAME, 20.0)) {
-      $waited = $this->lockBackend->wait(self::LOCK_NAME);
-      // The lock may be available. Try again to acquire.
-      if (!$this->lockBackend->acquire(self::LOCK_NAME, 20.0)) {
-        // Cannot acquire a lock. Fail silently, we don't want to throw a new
-        // exception in this request as it can lead to an infinite recursion.
-        return;
-      }
-    }
-
     foreach ($this->records as $delta => $record) {
+      // Try to acquire a lock as other requests might have also started to send
+      // messages to Telegram. If this is not the first iteration and the lock
+      // exists, its expiry time will be extended with the time consumed since
+      // the last iteration. Twenty seconds might look too much but, in fact,
+      // it's the penalty time that Telegram sets when the limits are offended.
+      if (!$this->lockBackend->acquire(self::LOCK_NAME, 20.0)) {
+        $waited = $this->lockBackend->wait(self::LOCK_NAME);
+        // The lock may be available. Try again to acquire.
+        if (!$this->lockBackend->acquire(self::LOCK_NAME, 20.0)) {
+          // Cannot acquire a lock. Fail silently, we don't want to throw a new
+          // exception in this request as it can lead to an infinite recursion.
+          return;
+        }
+      }
+
       // Cannot send more than one message per second inside a particular chat.
       // @see https://core.telegram.org/bots/faq#my-bot-is-hitting-limits-how-do-i-avoid-this
       if ($delta > 0 || isset($waited)) {
