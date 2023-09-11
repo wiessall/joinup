@@ -27,7 +27,7 @@ class TelegramHandler extends TelegramBotHandler implements DestructableInterfac
   /**
    * Collected list of records to be logged on kernel terminate.
    */
-  protected array $records;
+  protected array $records = [];
 
   /**
    * {@inheritdoc}
