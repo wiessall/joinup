@@ -59,7 +59,7 @@ class HostingPlatformDeriver extends DeriverBase implements ContainerDeriverInte
    * Gets derivative description.
    *
    * @param array $basePluginDefinition
-   *  Plugin definition
+   *   Plugin definition.
    * @param \Drupal\eu_oss_catalogue\Entity\HostingPlatformConfigInterface $hostingPlatform
    *   Hosting platform.
    *
