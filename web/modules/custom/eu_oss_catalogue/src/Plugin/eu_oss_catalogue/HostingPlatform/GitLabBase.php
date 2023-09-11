@@ -37,7 +37,7 @@ abstract class GitLabBase extends EuOssCatalogueGitHostingPlatformPluginBase {
    */
   protected function getClient(): Client {
     if (!isset($this->client)) {
-      $this->client = new Client();
+      $this->client = Client::createWithHttpClient($this->httpClient);
     }
     return $this->client;
   }
