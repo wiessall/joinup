@@ -40,7 +40,7 @@ Feature: Contact Information moderation
     And I click "Edit" in the "Entity actions" region
     Then I should see the heading "Edit Contact information Mildþryð Mildgyð"
     And the following 1 button should be present "Update"
-    And the current workflow state should be "Published"
+    And the current workflow state should be "Validated"
     And I should see the link "Delete"
     When I fill in "Name" with "Ceolwulf II of Mercia"
     And I press "Update"
@@ -61,7 +61,7 @@ Feature: Contact Information moderation
     Then I should see the heading "Edit Contact information Ceolwulf II of Mercia"
     And the following fields should not be present "Langcode, Translation"
     And the following 2 buttons should be present "Update, Request changes"
-    And the current workflow state should be "Published"
+    And the current workflow state should be "Validated"
     # A moderator has the right to delete contact information directly, so this
     # action should be shown.
     And I should see the link "Delete"
@@ -102,7 +102,7 @@ Feature: Contact Information moderation
     And I go to the "Æthelred, Lord of the Mercians" contact information page
     And I click "Edit" in the "Entity actions" region
     And the following 1 buttons should be present "Update"
-    And the current workflow state should be "Published"
+    And the current workflow state should be "Validated"
     And I should see the link "Delete"
     When I click "Delete"
     # Confirm the deletion.
