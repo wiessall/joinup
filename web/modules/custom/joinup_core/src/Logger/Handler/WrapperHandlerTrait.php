@@ -4,7 +4,6 @@ declare(strict_types = 1);
 
 namespace Drupal\joinup_core\Logger\Handler;
 
-use Drupal\Core\Lock\LockBackendInterface;
 use Drupal\Core\State\StateInterface;
 use Monolog\Logger;
 
@@ -27,16 +26,10 @@ trait WrapperHandlerTrait {
    *   The type of handler, 'mail' or 'telegram'.
    * @param \Drupal\Core\State\StateInterface $state
    *   The state service.
-   * @param \Drupal\Core\Lock\LockBackendInterface|null $lockBackend
-   *   The lock backend service.
    */
-  public function __construct(
-    string $type,
-    StateInterface $state,
-    protected ?LockBackendInterface $lockBackend = NULL,
-  ) {
+  public function __construct(string $type, StateInterface $state) {
     $this->settings = $state->get('joinup.log_alerts', [$type => []])[$type] + static::getDefaultSettings();
-    parent::__construct(...$this->settings);
+    parent::__construct(...array_values($this->settings));
   }
 
   /**
