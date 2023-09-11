@@ -21,8 +21,8 @@ class MailHandler extends DrupalMailHandler {
    */
   public static function getDefaultSettings(): array {
     return [
-      'recipients' => '',
-      'level' => Logger::WARNING,
+      'to' => '',
+      'level' => Logger::ERROR,
     ];
   }
 
@@ -30,7 +30,9 @@ class MailHandler extends DrupalMailHandler {
    * {@inheritdoc}
    */
   public function isHandling(array $record): bool {
-    return parent::isHandling($record) && !empty($this->settings['recipients']) && isset(static::getSeverityLevels()[$this->settings['level']]);
+    return parent::isHandling($record)
+      && !empty($this->settings['to'])
+      && isset(static::getSeverityLevels()[$this->settings['level']]);
   }
 
 }

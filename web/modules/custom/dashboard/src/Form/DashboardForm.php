@@ -89,25 +89,25 @@ class DashboardForm extends FormBase {
       'mail' => [
         '#type' => 'details',
         '#title' => $this->t('Email'),
-        'recipients' => [
+        'to' => [
           '#type' => 'textfield',
           '#title' => $this->t('Recipients (comma separated)'),
-          '#default_value' => $log_alerts['mail']['recipients'] ?? '',
+          '#default_value' => $log_alerts['mail']['to'] ?? '',
         ],
         'level' => $level('mail'),
       ],
       'telegram' => [
         '#type' => 'details',
         '#title' => $this->t('Telegram'),
-        'api_key' => [
+        'apiKey' => [
           '#type' => 'textfield',
           '#title' => $this->t('JoinupDevBot API key'),
-          '#default_value' => $log_alerts['telegram']['api_key'] ?? '',
+          '#default_value' => $log_alerts['telegram']['apiKey'] ?? '',
         ],
-        'chat_id' => [
+        'channel' => [
           '#type' => 'textfield',
           '#title' => $this->t('Chat ID'),
-          '#default_value' => $log_alerts['telegram']['chat_id'] ?? '',
+          '#default_value' => $log_alerts['telegram']['channel'] ?? '',
         ],
         'level' => $level('telegram'),
       ],
