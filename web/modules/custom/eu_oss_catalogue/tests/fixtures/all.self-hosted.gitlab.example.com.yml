@@ -1,0 +1,193 @@
+data:
+  projects:
+    count: 5
+    pageInfo:
+      hasNextPage: false
+      endCursor: foo
+    nodes:
+
+      # Valid project 1.
+      - fullPath: group1/group1_2/group1_3/project1
+        path: project1
+        id: 'gid://gitlab/Project/1'
+        description: Description of Project1
+        archived: false
+        releases:
+          nodes: {  }
+        repository:
+          rootRef: main
+          blobs:
+            nodes:
+              -
+                rawBlob: |-
+                  publiccodeYmlVersion: "0.2"
+                  name: Project 1
+                  applicationSuite: Suite1
+                  url: "https://all.self-hosted.example.com/different-than-real-url"
+                  landingURL: "https://example.com/project1"
+                  softwareVersion: '1.4.5'
+                  releaseDate: "2022-10-07"
+                  platforms:
+                    - linux
+                  categories:
+                    - data-collection
+                    - data-analytics
+                  usedBy:
+                    - ACME
+                  developmentStatus: development
+                  softwareType: "standalone/backend"
+                  description:
+                    en:
+                      genericName: '[EN] ACME Solution 1'
+                      shortDescription: '[EN] Solution 1: Short description'
+                      longDescription: '[EN] Solution 1: Long description'
+                      features:
+                        - '[EN] Solution 1: Feature 1'
+                        - '[EN] Solution 1: Feature 2'
+                        - '[EN] Solution 1: Feature 3'
+                      screenshots:
+                        - 'Solution_1_EN_Screenshot1.jpg'
+                  legal:
+                    license: AGPL-3.0-or-later
+                  maintenance:
+                    type: "internal"
+                    contacts:
+                      - name: ACME Ltd
+                        email: acme@example.com
+                      - name: Das Auto GmbH
+                        email: das-auto@example.com
+                  localisation:
+                    localisationReady: true
+                    availableLanguages:
+                      - de
+
+      # Valid project 2.
+      - fullPath: group2/group2_2/group2_3/project2
+        path: project2
+        id: 'gid://gitlab/Project/2'
+        description: Description of Project2
+        archived: false
+        releases:
+          nodes: {  }
+        repository:
+          rootRef: main
+          blobs:
+            nodes:
+              -
+                rawBlob: |-
+                  publiccodeYmlVersion: "0.2"
+                  name: Project 2
+                  applicationSuite: Suite1
+                  url: "https://all.self-hosted.example.com/group2/group2_2/group2_3/project2"
+                  landingURL: "https://example.com/project2"
+                  softwareVersion: '7.0.2-alpha1'
+                  releaseDate: "2021-08-05"
+                  platforms:
+                    - linux
+                  categories:
+                    - data-collection
+                    - data-analytics
+                  usedBy:
+                    - ACME
+                    - Gotham City
+                  developmentStatus: development
+                  softwareType: "standalone/backend"
+                  description:
+                    de:
+                      genericName: '[DE] ACME Solution 2'
+                      shortDescription: '[DE] Solution 2: Short description'
+                      longDescription: '[DE] Solution 2: Long description'
+                      features:
+                        - '[DE] Solution 1: Feature 1'
+                        - '[DE] Solution 1: Feature 2'
+                        - '[DE] Solution 1: Feature 3'
+                      screenshots:
+                        - 'Solution_1_DE_Screenshot1.jpg'
+                  legal:
+                    license: AGPL-3.0-or-later
+                  maintenance:
+                    type: "internal"
+                    contacts:
+                      - name: Das Auto GmbH
+                        email: das-auto@example.com
+                  localisation:
+                    localisationReady: false
+                    availableLanguages:
+                      - de
+
+      # Valid but archived.
+      - fullPath: group3/project3
+        path: project3
+        id: 'gid://gitlab/Project/3'
+        description: Description of Project3
+        archived: true
+        releases:
+          nodes: {  }
+        repository:
+          rootRef: main
+          blobs:
+            nodes:
+              -
+                rawBlob: |-
+                  publiccodeYmlVersion: "0.2"
+                  name: Project 3
+                  applicationSuite: Suite1
+                  url: "https://all.self-hosted.example.com/group3/project3"
+                  landingURL: "https://example.com/project3"
+                  releaseDate: "2010-01-31"
+                  platforms:
+                    - linux
+                  categories:
+                    - data-analytics
+                  usedBy:
+                    - ACME
+                    - Gotham City
+                  developmentStatus: development
+                  softwareType: "standalone/backend"
+                  description:
+                    en:
+                      genericName: '[EN] ACME Solution 3'
+                      shortDescription: '[EN] Solution 3: Short description'
+                      longDescription: '[EN] Solution 3: Long description'
+                      features:
+                        - '[EN] Solution 3: Feature 1'
+                        - '[EN] Solution 3: Feature 2'
+                        - '[EN] Solution 3: Feature 3'
+                      screenshots:
+                        - 'Solution_3_EN_Screenshot1.jpg'
+                  legal:
+                    license: AGPL-3.0-or-later
+                  maintenance:
+                    type: "internal"
+                    contacts:
+                      - name: ACME Ltd
+                        email: acme@example.com
+                        website: http://www.example.com/acme
+                  localisation:
+                    localisationReady: false
+                    availableLanguages:
+                      - en
+
+      # No code yet.
+      - fullPath: group4/group_4_1/project4
+        path: project4
+        id: 'gid://gitlab/Project/4'
+        description: Description of Project4
+        archived: false
+        releases:
+          nodes: {  }
+        repository:
+          rootRef: null
+          blobs:
+            nodes: { }
+
+      # No publiccode.yml.
+      - fullPath: group5/project5
+        path: project5
+        id: 'gid://gitlab/Project/5'
+        description: Description of Project5
+        archived: false
+        releases:
+          nodes: {  }
+        repository:
+          rootRef: main
