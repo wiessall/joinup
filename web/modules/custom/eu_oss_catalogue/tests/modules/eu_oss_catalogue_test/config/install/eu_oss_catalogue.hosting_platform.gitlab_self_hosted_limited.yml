@@ -1,0 +1,9 @@
+langcode: en
+status: true
+dependencies: {  }
+id: gitlab_self_hosted_limited
+label: 'GitLab self-hosted (limited)'
+platformId: gitlab_self_hosted
+platformSettings:
+  projects: {  }
+  url: https://limited.self-hosted.gitlab.example.com
