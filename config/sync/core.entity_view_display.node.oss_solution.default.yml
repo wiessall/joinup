@@ -24,6 +24,7 @@ dependencies:
     - field.field.node.oss_solution.oss_software_type
     - field.field.node.oss_solution.oss_software_version
     - field.field.node.oss_solution.oss_source
+    - field.field.node.oss_solution.oss_source_hash
     - field.field.node.oss_solution.oss_used_by
     - image.style.logo
     - node.type.oss_solution
