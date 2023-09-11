@@ -292,6 +292,41 @@ Feature: Sharing content between collections
       | Milky Way content     |
 
   @javascript
+  Scenario: Carousel tiles should show the "Shared from" visual cue.
+    Given collections:
+      | title | state     |
+      | Earth | validated |
+      | Mars  | validated |
+      | Venus | validated |
+    And news content:
+      | title         | collection | shared on   | state     |
+      | Earth content | Earth      | Mars        | validated |
+      | Mars content  | Mars       |             | validated |
+      | Venus content | Venus      | Earth, Mars | validated |
+
+    When I am logged in as a moderator
+    And I go to the homepage of the "Earth" collection
+    And I click "Add custom page" in the plus button menu
+
+    Then I fill in the following:
+      | Title | News carousel |
+    And I add a layout paragraph in the "Custom page body" form field with the following properties:
+      | layout | one column |
+    And I click "Choose component"
+    And I click "Carousel"
+    And I check "Global search"
+    And I check "Allow shared content"
+    And I fill in "Query presets" with "entity_bundle|news"
+    And I press "Save" in the "Modal buttons" region
+    And I press "Save"
+
+    Then I should see the "Earth content" tile
+    And I should see the "Mars content" tile
+    And the "Mars content" tile should be marked as shared from "Mars"
+    And I should see the "Venus content" tile
+    And the "Venus content" tile should be marked as shared from "Venus"
+
+  @javascript
   Scenario Outline: The sharing options should be shown in a modal window.
     Given collections:
       | title   | state     |
