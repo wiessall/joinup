@@ -51,7 +51,7 @@ interface AdmsValidatorInterface {
    * Validates the triples from a blob of RDF content.
    *
    * @param string $content
-   *   The RDF content to be published.
+   *   The RDF content to be validated.
    * @param string $graph_uri
    *   The graph URI.
    *

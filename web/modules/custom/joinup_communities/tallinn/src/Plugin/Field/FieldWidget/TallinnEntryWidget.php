@@ -15,7 +15,7 @@ use Drupal\tallinn\Plugin\Field\FieldType\TallinnEntryItem;
  *
  * This field is a complex field that includes a text area field with a format,
  * a link field and an option select field. Each of them will be constructed,
- * published and contain widget similar or the same as their individual plugins.
+ * validated and contain widget similar or the same as their individual plugins.
  *
  * @see \Drupal\Core\Field\Plugin\Field\FieldWidget\StringTextareaWidget
  * @see \Drupal\Core\Field\Plugin\Field\FieldWidget\OptionsSelectWidget

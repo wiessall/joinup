@@ -201,7 +201,7 @@ class ContactInformationContext extends RawDrupalContext {
    * @param \Behat\Gherkin\Node\TableNode $contact_info_list
    *   A list of contact information labels.
    *
-   * @Given the following contact information emails are published:
+   * @Given the following contact information emails are validated:
    */
   public function validateContactInformationEmails(TableNode $contact_info_list): void {
     $email_confirmer = \Drupal::getContainer()->get('email_confirmer');
