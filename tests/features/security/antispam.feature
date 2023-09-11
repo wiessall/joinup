@@ -35,7 +35,7 @@ Feature: As a visitor or logged-in user, when I want to post content, the form
     And news content:
       | title       | collection    | state     |
       | Got married | Family photos | published |
-    And the following contact information emails are published:
+    And the following contact information emails are validated:
       | ACME Inc. |
 
     Given I am logged in as "Günther"
@@ -96,7 +96,7 @@ Feature: As a visitor or logged-in user, when I want to post content, the form
       | collection | Ware cat   |
       | state      | draft      |
       | author     | Ransomware |
-    And the following contact information emails are published:
+    And the following contact information emails are validated:
       | Anti Inc. |
 
     Given I am logged in as "Ransomware"

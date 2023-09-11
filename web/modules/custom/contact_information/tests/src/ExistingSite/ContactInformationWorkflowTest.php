@@ -76,7 +76,7 @@ class ContactInformationWorkflowTest extends JoinupWorkflowExistingSiteTestBase 
     foreach ($this->workflowTransitionsProvider() as $entity_state => $workflow_data) {
       foreach ($workflow_data as $user_var => $expected_target_states) {
         // The created entity is not saved because this will trigger the
-        // '__new__' state to be converted to 'published'.
+        // '__new__' state to be converted to 'validated'.
         // @see: contact_information_rdf_entity_presave().
         $content = Rdf::create([
           'rid' => 'contact_information',
@@ -120,19 +120,19 @@ class ContactInformationWorkflowTest extends JoinupWorkflowExistingSiteTestBase 
     return [
       '__new__' => [
         'userAuthenticated' => [
-          'published',
+          'validated',
         ],
         'userModerator' => [
-          'published',
+          'validated',
         ],
       ],
-      'published' => [
+      'validated' => [
         'userAuthenticated' => [
-          'published',
+          'validated',
           'deletion_request',
         ],
         'userModerator' => [
-          'published',
+          'validated',
           'needs_update',
         ],
       ],
@@ -142,7 +142,7 @@ class ContactInformationWorkflowTest extends JoinupWorkflowExistingSiteTestBase 
         ],
         'userModerator' => [
           'needs_update',
-          'published',
+          'validated',
         ],
       ],
     ];

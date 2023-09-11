@@ -1,5 +1,5 @@
 transitions:
-  published:
+  validated:
     __new__:
       own:
         roles:
@@ -18,7 +18,7 @@ transitions:
       any:
         roles:
           - moderator
-    published:
+    validated:
       own:
         roles:
           - authenticated
@@ -29,7 +29,7 @@ transitions:
           - rdf_entity-collection-facilitator
           - rdf_entity-solution-facilitator
   needs_update:
-    published:
+    validated:
       any:
         roles:
           - moderator
@@ -44,7 +44,7 @@ transitions:
           - rdf_entity-collection-facilitator
           - rdf_entity-solution-facilitator
   deletion_request:
-    published:
+    validated:
       own:
         roles:
           - authenticated
