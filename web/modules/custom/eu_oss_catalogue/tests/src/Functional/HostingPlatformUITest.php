@@ -4,6 +4,7 @@ declare(strict_types = 1);
 
 namespace Drupal\Tests\eu_oss_catalogue\Functional;
 
+use Drupal\Core\Serialization\Yaml;
 use Drupal\Tests\BrowserTestBase;
 use Drupal\user\UserInterface;
 
@@ -95,6 +96,30 @@ class HostingPlatformUITest extends BrowserTestBase {
     $this->submitForm([], 'Delete');
 
     $assertSession->pageTextContains('The code hosting platform config Test hosting platform updated has been deleted.');
+  }
+
+  /**
+   * Tests hosting provider description.
+   */
+  public function testDescription(): void {
+    // Load configuration.
+    $configs = [
+      'eu_oss_catalogue.hosting_platform.github_mockup',
+      'eu_oss_catalogue.hosting_platform.github_example',
+    ];
+    foreach ($configs as $config) {
+      $data = Yaml::decode(file_get_contents(__DIR__ . '/../../fixtures/' . $config . '.yml'));
+      $this->config($config)->setData($data)->save();
+    }
+
+    $this->drupalLogin($this->adminUser);
+    $this->drupalGet('admin/content/eu-oss-catalogue');
+    $assertSession = $this->assertSession();
+
+    // Description for github_example.
+    $assertSession->pageTextContains('Code hosting platform (GitHub)');
+    // Description for github_mockup.
+    $assertSession->pageTextContains('Test GitHub hosting provider (GitHub)');
   }
 
   /**
