@@ -1,0 +1,13 @@
+uuid: be84743e-506a-11ee-be56-0242ac120002
+langcode: en
+status: true
+dependencies: {  }
+id: github_example
+label: 'Github example'
+description: ''
+platformId: github
+platformSettings:
+  projects:
+    -
+      namespace: dummy-namespace-1
+      name: dummy-name-1
