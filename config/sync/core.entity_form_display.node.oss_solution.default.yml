@@ -24,6 +24,7 @@ dependencies:
     - field.field.node.oss_solution.oss_software_type
     - field.field.node.oss_solution.oss_software_version
     - field.field.node.oss_solution.oss_source
+    - field.field.node.oss_solution.oss_source_hash
     - field.field.node.oss_solution.oss_used_by
     - node.type.oss_solution
   module:
@@ -210,7 +211,7 @@ content:
     weight: 12
     region: content
     settings:
-      provider_grouping: true
+      provider_grouping: false
       configuration_form: full
     third_party_settings: {  }
   oss_used_by:
