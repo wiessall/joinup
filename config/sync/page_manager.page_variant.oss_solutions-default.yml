@@ -4,6 +4,7 @@ status: true
 dependencies:
   config:
     - page_manager.page.oss_solutions
+    - views.view.oss_solution
     - views.view.search_oss_catalogue
   module:
     - custom_markup_block
@@ -81,7 +82,20 @@ variant_settings:
       layout_settings:
         label: 'Most recent solutions'
         context_mapping: {  }
-      components: {  }
+      components:
+        696b1fce-e8d0-493d-ac52-abbe372332db:
+          uuid: 696b1fce-e8d0-493d-ac52-abbe372332db
+          region: content
+          configuration:
+            id: 'views_block:oss_solution-oss_most_recent_solutions'
+            label: ''
+            label_display: visible
+            provider: views
+            context_mapping: {  }
+            views_label: ''
+            items_per_page: none
+          weight: 0
+          additional: {  }
       third_party_settings: {  }
     -
       layout_id: layout_onecol

@@ -14,7 +14,7 @@ import ControlsDisabler from "./helpers/glide.controlsDisabler.esm";
   Drupal.behaviors.glide = {
     attach() {
       function mountSlide() {
-        const slides = document.querySelectorAll(".paragraph--carousel .glide");
+        const slides = document.querySelectorAll(".carousel .glide");
         slides.forEach((slide) => {
           const glide = new Glide(slide, {
             rewind: false,
