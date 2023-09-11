@@ -78,7 +78,7 @@ Feature: Notification test for the news transitions on a pre moderated parent.
     Then the following email should have been sent:
       | recipient | CC owner                                                                                                                                                           |
       | subject   | Joinup: Content has been published                                                                                                                                 |
-      | body      | CC Facilitator has published the new news - "CCN create publish" in the collection: "CC pre collection".You can access the new content at the following link: http |
+      | body      | CC Facilitator has published the new news - "CCN create publish" in the collection: "CC pre collection". You can access the new content at the following link: http |
 
     # Test 'update' operation.
     When I am logged in as "CC member"
