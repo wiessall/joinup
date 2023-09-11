@@ -20,6 +20,9 @@ Feature: OSS catalogue search
 
     Then I visit the OSS search page
 
+    # Check the group collection section
+    When I should see the heading "European Open-Source Software Solutions Catalogue"
+
     # Check main area
     When I should see the text "SEARCH RESULTS (5)"
 
