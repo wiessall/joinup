@@ -49,7 +49,7 @@ function joinup_core_deploy_109701(): void {
   // Disable auto-created left-side menu link.
   $landingPage = $entityRepository->loadEntityByUuid('node', '54acbd6f-47f0-4280-ad09-0a07c397318b');
   $linkPlugins = \Drupal::service('plugin.manager.menu.link')
-    ->loadLinksByRoute('entity.node.canonical', ['node' => $landingPage->id(),], 'ogmenu-3728');
+    ->loadLinksByRoute('entity.node.canonical', ['node' => $landingPage->id()], 'ogmenu-3728');
   /** @var \Drupal\menu_link_content\Plugin\Menu\MenuLinkContent $linkPlugin */
   $linkPlugin = reset($linkPlugins);
   $entityRepository
