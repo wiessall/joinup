@@ -628,7 +628,7 @@ default:
                   region: second
           paragraph_heading:
             -
-              value: 'Let’s start with you software name'
+              value: 'Let’s start with your software name'
     -
       entity:
         _meta:
