@@ -6,8 +6,11 @@ namespace Drupal\Tests\eu_oss_catalogue\Functional;
 
 use Drupal\Core\Serialization\Yaml;
 use Drupal\Tests\BrowserTestBase;
+use Drupal\Tests\eu_oss_catalogue\Traits\EntityToArrayTrait;
 use Drupal\Tests\eu_oss_catalogue\Traits\EuOssCatalogueTrait;
 use Drupal\Tests\node\Traits\NodeCreationTrait;
+use Drupal\eu_oss_catalogue\Entity\OssContactInterface;
+use Drupal\eu_oss_catalogue\Entity\OssSolutionInterface;
 use Drush\TestTraits\DrushTestTrait;
 
 /**
@@ -19,6 +22,7 @@ class FetchGitHubTest extends BrowserTestBase {
 
   use DrushTestTrait;
   use NodeCreationTrait;
+  use EntityToArrayTrait;
   use EuOssCatalogueTrait;
 
   /**
@@ -52,29 +56,22 @@ class FetchGitHubTest extends BrowserTestBase {
     // Queue items have been released.
     $this->assertSame(0, $queue->numberOfItems());
 
-    /** @var \Drupal\eu_oss_catalogue\Entity\OssSolutionInterface $solution1 */
     $solution1 = $this->getNodeByTitle('GitHub solution 1');
-    $this->assertNotFalse($solution1);
-    $this->assertSame('oss_solution', $solution1->bundle());
-    $this->assertSame('http://example.com/vendor/solution1', $solution1->get('oss_git_url')->uri);
-    $this->assertSame('1.4', $solution1->get('oss_software_version')->value);
-    $this->assertSame('0.2', $solution1->get('oss_publiccode_yml_version')->value);
-    $this->assertSame('2017-05-01', $solution1->get('oss_release_date')->value);
-    $this->assertSame('http://example.com/vendor/solution1/images/logo-solution-1.png', $solution1->get('oss_logo')->uri);
+    $this->assertInstanceOf(OssSolutionInterface::class, $solution1);
+    $this->assertEquals(
+      static::EXPECTED_SOLUTION1,
+      $this->contentEntityToArray(entity: $solution1, includedProperties: static::SOLUTION_PROPERTIES_TO_CHECK)
+    );
 
-    /** @var \Drupal\eu_oss_catalogue\Entity\OssSolutionInterface $solution2 */
     $solution2 = $this->getNodeByTitle('GitHub solution 2');
-    $this->assertNotFalse($solution2);
-    $this->assertSame('oss_solution', $solution2->bundle());
-    $this->assertSame('http://example.com/vendor/solution2.git', $solution2->get('oss_git_url')->uri);
-    $this->assertSame('v2.4', $solution2->get('oss_software_version')->value);
-    $this->assertSame('0.4', $solution2->get('oss_publiccode_yml_version')->value);
-    $this->assertSame('2016-02-09', $solution2->get('oss_release_date')->value);
-    $this->assertNull($solution2->get('oss_logo')->uri);
+    $this->assertInstanceOf(OssSolutionInterface::class, $solution2);
+    $this->assertEquals(
+      static::EXPECTED_SOLUTION2,
+      $this->contentEntityToArray(entity: $solution2, includedProperties: static::SOLUTION_PROPERTIES_TO_CHECK)
+    );
 
-    /** @var \Drupal\eu_oss_catalogue\Entity\OssContactInterface $contact */
     $contact = $this->getNodeByTitle('Pirate Initiative');
-    $this->assertNotFalse($contact);
+    $this->assertInstanceOf(OssContactInterface::class, $contact);
     $this->assertSame('oss_contact', $contact->bundle());
   }
 
@@ -103,5 +100,68 @@ class FetchGitHubTest extends BrowserTestBase {
       ],
     ]);
   }
+
+  /**
+   * Solution properties we test the values of.
+   *
+   * @const string[]
+   */
+  protected const SOLUTION_PROPERTIES_TO_CHECK = [
+    'oss_git_url',
+    'oss_logo',
+    'oss_publiccode_yml_version',
+    'oss_release_date',
+    'oss_software_version',
+    'title',
+    'type',
+  ];
+
+  /**
+   * Expected values of GitHub solution 1.
+   *
+   * @const array[]
+   */
+  protected const EXPECTED_SOLUTION1 = [
+    'title' => [['value' => 'GitHub solution 1']],
+    'type' => [['target_id' => 'oss_solution']],
+    'oss_git_url' => [
+      [
+        'uri' => 'http://example.com/vendor/solution1',
+        'title' => NULL,
+        'options' => [],
+      ],
+    ],
+    'oss_logo' => [
+      [
+        'uri' => 'http://example.com/vendor/solution1/images/logo-solution-1.png',
+        'title' => NULL,
+        'options' => [],
+      ],
+    ],
+    'oss_publiccode_yml_version' => [['value' => '0.2']],
+    'oss_release_date' => [['value' => '2017-05-01']],
+    'oss_software_version' => [['value' => '1.4']],
+  ];
+
+  /**
+   * Expected values of GitHub solution 2.
+   *
+   * @const array[]
+   */
+  protected const EXPECTED_SOLUTION2 = [
+    'title' => [['value' => 'GitHub solution 2']],
+    'type' => [['target_id' => 'oss_solution']],
+    'oss_git_url' => [
+      [
+        'uri' => 'http://example.com/vendor/solution2.git',
+        'title' => NULL,
+        'options' => [],
+      ],
+    ],
+    'oss_logo' => [],
+    'oss_publiccode_yml_version' => [['value' => '0.4']],
+    'oss_release_date' => [['value' => '2016-02-09']],
+    'oss_software_version' => [['value' => 'v2.4']],
+  ];
 
 }
