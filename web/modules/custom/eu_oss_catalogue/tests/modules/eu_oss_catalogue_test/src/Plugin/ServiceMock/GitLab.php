@@ -46,11 +46,36 @@ class GitLab extends PluginBase implements ServiceMockPluginInterface {
    */
   public function getResponse(RequestInterface $request, array $options): ResponseInterface {
     $host = $request->getUri()->getHost();
-    $response = Json::encode(Yaml::decode(file_get_contents(__DIR__ . "/../../../../../fixtures/$host.yml")));
+    $query = $request->getBody()->getContents();
+
+    $responseId = match(TRUE) {
+      $host === 'all.self-hosted.gitlab.example.com' => 'all.self-hosted.gitlab.example.com',
+      str_contains($query, 'group: group(fullPath: \"group1\")') => 'limited.self-hosted.gitlab.example.com group1',
+      str_contains($query, 'group: group(fullPath: \"group2\")') =>  'limited.self-hosted.gitlab.example.com group2',
+      str_contains($query, 'group: group(fullPath: \"user1\")') => 'limited.self-hosted.gitlab.example.com null',
+      str_contains($query, 'project(fullPath: \\"user1\\\\\\/project-1\\"') => 'limited.self-hosted.gitlab.example.com user1/project1',
+      str_contains($query, 'group: group(fullPath: \"user2\")') => 'limited.self-hosted.gitlab.example.com null',
+    };
+
+    return $this->buildResponse($responseId);
+  }
+
+  /**
+   * Builds the mocked response.
+   *
+   * @param string $responseId
+   *   The response identifier inside gitlab.yml.
+   *
+   * @return \GuzzleHttp\Psr7\Response
+   *   The HTTp response.
+   */
+  protected function buildResponse(string $responseId): Response {
+    $filePath = __DIR__ . '/../../../../../fixtures/gitlab.yml';
+    $body = Json::encode(Yaml::decode(file_get_contents($filePath))[$responseId]);
     return new Response(200, [
       'Content-Type' => 'application/json',
-      'Content-Length' => strlen($response),
-    ], $response);
+      'Content-Length' => strlen($body),
+    ], $body);
   }
 
 }
