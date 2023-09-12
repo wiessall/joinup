@@ -2,7 +2,3 @@ services:
   monolog.handler.eu_oss_catalogue:
     class: Drupal\joinup_oss_catalogue\Logger\Handler\EuOssCatalogueHandler
     arguments: ['@entity_type.manager', 100, TRUE]
-  joinup_oss_catalogue.page_display_variant.subscriber:
-    class: Drupal\joinup_oss_catalogue\EventSubscriber\JoinupOssCataloguePageDisplayVariant
-    tags:
-      - { name: event_subscriber }
