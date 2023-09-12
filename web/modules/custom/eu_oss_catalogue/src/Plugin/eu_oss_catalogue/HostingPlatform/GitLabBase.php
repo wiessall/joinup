@@ -52,18 +52,8 @@ abstract class GitLabBase extends EuOssCatalogueGitHostingPlatformPluginBase {
    *   Array \Drupal\eu_oss_catalogue\Model\HostingPlatformResult instances.
    */
   protected function doGetProjects(?string $filePath = NULL): iterable {
-    $projects = [];
-    foreach ($this->getConfiguration()['projects'] as [
-      'namespace' => $namespace,
-      'name' => $name,
-    ]) {
-      $projects[$namespace] ??= [];
-      if ($name) {
-        $projects[$namespace][$name] = $name;
-      }
-    }
-
-    foreach ($projects as $namespace => $repos) {
+    foreach ($this->getConfiguration()['projects'] as $namespace => $repos) {
+      $limitToRepos = is_array($repos);
       $endCursor = NULL;
       do {
         $query = $this->buildGroupQuery($namespace, $filePath, $endCursor);
@@ -77,19 +67,22 @@ abstract class GitLabBase extends EuOssCatalogueGitHostingPlatformPluginBase {
         $hasNextPage = $response['data']['group']['projects']['pageInfo']['hasNextPage'];
         $endCursor = $response['data']['group']['projects']['pageInfo']['endCursor'];
         foreach ($response['data']['group']['projects']['nodes'] as $project) {
-          // Ignore if there's no default branch or the project is archived.
-          if (empty($project['repository']['rootRef']) || !empty($project['archived'])) {
+          // Ignore when...
+          if (
+            // There's no default branch, thus no code, or...
+            empty($project['repository']['rootRef'])
+            // The project is archived, or...
+            || !empty($project['archived'])
+            // A set of projects were requested but this project is not in list.
+            || ($limitToRepos && !in_array($project['path'], $repos, TRUE))
+          ) {
             // Keep track of what's left.
-            unset($repos[$project['path']]);
+            if ($limitToRepos) {
+              unset($repos[array_search($project['path'], $repos)]);
+            }
             continue;
           }
-
-          // Limit to list if provided.
-          if (!$repos || isset($repos[$project['path']])) {
-            // Keep track of what's left.
-            unset($repos[$project['path']]);
-            yield $this->createHostingPlatformResult($namespace, $project);
-          }
+          yield $this->createHostingPlatformResult($namespace, $project);
         }
       } while ($hasNextPage);
 
@@ -98,11 +91,13 @@ abstract class GitLabBase extends EuOssCatalogueGitHostingPlatformPluginBase {
       // i.e. both namespace and project name were specified. Otherwise, GitLab
       // requires authentication and not all self-hosted platforms allow new
       // user registration.
-      foreach ($repos as $name) {
-        $query = $this->buildProjectQuery($namespace, $name, $filePath);
-        $project = $this->getClient()->graphql()->execute($query->toString())['data']['project'] ?? NULL;
-        if ($project && !empty($project['repository']['rootRef']) && empty($project['archived'])) {
-          yield $this->createHostingPlatformResult($namespace, $project);
+      if ($limitToRepos) {
+        foreach ($repos as $name) {
+          $query = $this->buildProjectQuery($namespace, $name, $filePath);
+          $project = $this->getClient()->graphql()->execute($query->toString())['data']['project'] ?? NULL;
+          if ($project && !empty($project['repository']['rootRef']) && empty($project['archived'])) {
+            yield $this->createHostingPlatformResult($namespace, $project);
+          }
         }
       }
     }
@@ -217,22 +212,20 @@ abstract class GitLabBase extends EuOssCatalogueGitHostingPlatformPluginBase {
   /**
    * Creates a code hosting platform result instance.
    *
-   * @param string $fullName
-   *   The project's full name.
+   * @param string $namespace
+   *   The project's namespace.
    * @param array $project
    *   The project array, from the GraphQL results.
    *
    * @return \Drupal\eu_oss_catalogue\Model\HostingPlatformResult
    *   A code hosting platform result instance.
    */
-  protected function createHostingPlatformResult(string $fullName, array $project): HostingPlatformResult {
+  protected function createHostingPlatformResult(string $namespace, array $project): HostingPlatformResult {
     $host = $this->getConfiguration()['url'] ?? 'https://gitlab.com';
-    $parts = explode('/', $fullName);
-    array_pop($parts);
     return new HostingPlatformResult(
-      implode('/', $parts),
+      $namespace,
       $project['path'],
-      "$host/$fullName",
+      "$host/$namespace/{$project['path']}",
       $project['repository']['rootRef'],
       $project['id'],
       $project['path'],

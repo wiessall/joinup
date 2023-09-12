@@ -96,7 +96,11 @@ class GitLabSelfHosted extends GitLabBase {
       foreach ($response['data']['projects']['nodes'] as $project) {
         // Ignore if there's no default branch or the project is archived.
         if (!empty($project['repository']['rootRef']) && empty($project['archived'])) {
-          yield $this->createHostingPlatformResult($project['fullPath'], $project);
+          // Extract the namespace from the full path.
+          $parts = explode('/', $project['fullPath']);
+          array_pop($parts);
+          $namespace = implode('/', $parts);
+          yield $this->createHostingPlatformResult($namespace, $project);
         }
       }
     } while ($hasNextPage);

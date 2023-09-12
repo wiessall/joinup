@@ -8,6 +8,5 @@ description: ''
 platformId: github
 platformSettings:
   projects:
-    -
-      namespace: dummy-namespace-1
-      name: dummy-name-1
+    dummy-namespace-1:
+      - dummy-name-1
