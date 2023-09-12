@@ -771,11 +771,11 @@ default:
                               value: {  }
                           field_body:
                             -
-                              value: "<p>Lorem ipsum dolor sit amet ?</p>\r\n"
+                              value: "<p>Lorem ipsum dolor sit amet?</p>\r\n"
                               format: content_editor
                   field_paragraphs_item_label:
                     -
-                      value: 'Lorem ipsum dolor sit amet ? '
+                      value: 'Lorem ipsum dolor sit amet? '
             -
               entity:
                 _meta:
@@ -815,11 +815,11 @@ default:
                               value: {  }
                           field_body:
                             -
-                              value: "<p>Lorem ipsum dolor sit amet ?</p>\r\n"
+                              value: "<p>Lorem ipsum dolor sit amet?</p>\r\n"
                               format: content_editor
                   field_paragraphs_item_label:
                     -
-                      value: 'Lorem ipsum dolor sit amet ? '
+                      value: 'Lorem ipsum dolor sit amet? '
             -
               entity:
                 _meta:
@@ -859,11 +859,11 @@ default:
                               value: {  }
                           field_body:
                             -
-                              value: "<p>Lorem ipsum dolor sit amet ?</p>\r\n"
+                              value: "<p>Lorem ipsum dolor sit amet?</p>\r\n"
                               format: content_editor
                   field_paragraphs_item_label:
                     -
-                      value: 'Lorem ipsum dolor sit amet ? '
+                      value: 'Lorem ipsum dolor sit amet? '
             -
               entity:
                 _meta:
@@ -903,11 +903,11 @@ default:
                               value: {  }
                           field_body:
                             -
-                              value: "<p>Lorem ipsum dolor sit amet ?</p>\r\n"
+                              value: "<p>Lorem ipsum dolor sit amet?</p>\r\n"
                               format: content_editor
                   field_paragraphs_item_label:
                     -
-                      value: 'Lorem ipsum dolor sit amet ? '
+                      value: 'Lorem ipsum dolor sit amet? '
     -
       entity:
         _meta:
