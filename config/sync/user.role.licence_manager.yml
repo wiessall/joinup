@@ -7,6 +7,7 @@ dependencies:
   module:
     - dashboard
     - joinup_licence
+    - paragraphs_type_permissions
     - rdf_entity
     - taxonomy
     - toolbar
@@ -24,3 +25,4 @@ permissions:
   - 'edit licence rdf entity'
   - 'edit terms in legal_type'
   - 'view licence overview page'
+  - 'view paragraph content block'
