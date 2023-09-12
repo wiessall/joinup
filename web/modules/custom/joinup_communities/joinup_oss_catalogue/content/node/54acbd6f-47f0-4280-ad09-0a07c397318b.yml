@@ -6,7 +6,6 @@ _meta:
   default_langcode: en
   depends:
     6b87df90-05f4-4eff-82c8-386846712896: file
-    '': taxonomy_term
     'http://data.europa.eu/w21/6d621a47-71ce-4f1a-90e2-8859403d3ecd': rdf_entity
 default:
   revision_uid:
@@ -42,52 +41,6 @@ default:
           category: report
           uri: /eu-oss-catalogue/eu-opensource-software-solutions-catalogue
           destination: eu-oss-catalogue/eu-opensource-software-solutions-catalogue
-  metatag:
-    -
-      tag: meta
-      attributes:
-        name: title
-        content: 'EU OpenSource Software Solutions Catalogue | Joinup'
-    -
-      tag: link
-      attributes:
-        rel: canonical
-        href: 'http://web:8080/web/eu-oss-catalogue/eu-opensource-software-solutions-catalogue'
-    -
-      tag: meta
-      attributes:
-        property: 'og:site_name'
-        content: Joinup
-    -
-      tag: meta
-      attributes:
-        property: 'og:type'
-        content: 'Custom page'
-    -
-      tag: meta
-      attributes:
-        property: 'og:url'
-        content: 'http://web:8080/web/eu-oss-catalogue/eu-opensource-software-solutions-catalogue'
-    -
-      tag: meta
-      attributes:
-        property: 'og:title'
-        content: 'EU OpenSource Software Solutions Catalogue'
-    -
-      tag: meta
-      attributes:
-        property: 'og:image'
-        content: 'http://web:8080/web/themes/ventuno/assets/images/og-image.png'
-    -
-      tag: meta
-      attributes:
-        property: 'og:image:secure_url'
-        content: 'https://web:8080/web/themes/ventuno/assets/images/og-image.png'
-    -
-      tag: meta
-      attributes:
-        property: 'og:image:type'
-        content: image/svg+xml
   path:
     -
       alias: /eu-oss-catalogue/eu-opensource-software-solutions-catalogue
@@ -95,7 +48,7 @@ default:
       pathauto: 1
   published_at:
     -
-      value: 1694498829
+      value: 1694511090
   field_paragraphs_body:
     -
       entity:
