@@ -55,3 +55,5 @@ default_content:
     - c2b9d6a9-1c9e-467a-8b7c-1efac7c0aff8
   node:
     - 54acbd6f-47f0-4280-ad09-0a07c397318b
+  meta_entity:
+    - c090df0a-4960-41bf-b5b3-138a15523164
