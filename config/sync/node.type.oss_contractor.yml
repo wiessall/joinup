@@ -12,9 +12,9 @@ label_singular: 'opensource software contractor'
 label_plural: 'opensource software contractors'
 label_count:
   - '1 opensource software contractor\x03@count opensource software contractors'
-name: 'OpenSource Software Contractor'
+name: 'Open Source Software Contractor'
 type: oss_contractor
-description: 'An opensource software contractor'
+description: 'An open source software contractor'
 help: ''
 new_revision: true
 preview_mode: 0
