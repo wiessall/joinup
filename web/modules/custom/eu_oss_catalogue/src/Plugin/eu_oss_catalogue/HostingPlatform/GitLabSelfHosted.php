@@ -75,6 +75,7 @@ class GitLabSelfHosted extends GitLabDotCom {
    */
   protected function doGetProjects(?string $filePath = NULL): iterable {
     if (!empty($this->getConfiguration()['projects'])) {
+      // A list of namespaces or projects has been specified.
       foreach (parent::doGetProjects($filePath) as $project) {
         yield $project;
       }
@@ -107,7 +108,40 @@ class GitLabSelfHosted extends GitLabDotCom {
   }
 
   /**
-   * Builds a GraphQL GiyLab projects query.
+   * Builds a GraphQL GitLab projects query.
+   *
+   * This renders a query similar to:
+   * @code
+   * {
+   *   projects(first: 100 after: "gtT54Weo") {
+   *     count
+   *     pageInfo {
+   *       hasNextPage
+   *       endCursor
+   *     }
+   *     nodes {
+   *       fullPath
+   *       path
+   *       id
+   *       description
+   *       archived
+   *       releases(sort: CREATED_DESC first: 1) {
+   *         nodes {
+   *           createdAt
+   *         }
+   *       }
+   *       repository {
+   *         rootRef
+   *         blobs(paths: ["publiccode.yml"]) {
+   *           nodes {
+   *             rawBlob
+   *           }
+   *         }
+   *       }
+   *     }
+   *   }
+   * }
+   * @endcode
    *
    * @param string|null $filePath
    *   The file path, if one has been specified.

@@ -113,7 +113,35 @@ class GitLabDotCom extends EuOssCatalogueGitHostingPlatformPluginBase {
    *
    * This renders a query similar to:
    * @code
-   * @todo Show a sample here.
+   * {
+   *   group: group(fullPath: "group1/group2") {
+   *     projects {
+   *       pageInfo {
+   *         hasNextPage
+   *         endCursor
+   *       }
+   *       nodes {
+   *         path
+   *         id
+   *         description
+   *         archived
+   *         releases(sort: CREATED_DESC first: 1) {
+   *           nodes {
+   *             createdAt
+   *           }
+   *         }
+   *         repository {
+   *           rootRef
+   *           blobs(paths: ["publiccode.yml"]) {
+   *             nodes {
+   *               rawBlob
+   *             }
+   *           }
+   *         }
+   *       }
+   *     }
+   *   }
+   * }
    * @endcode
    *
    * @param string $namespace
