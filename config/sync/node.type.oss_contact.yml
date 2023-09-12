@@ -12,9 +12,9 @@ label_singular: 'opensource software contact'
 label_plural: 'opensource software contacts'
 label_count:
   - '1 opensource software contact\x03@count opensource software contacts'
-name: 'OpenSource Software Contact'
+name: 'Open Source Software Contact'
 type: oss_contact
-description: 'An opensource software contact'
+description: 'An open source software contact'
 help: ''
 new_revision: true
 preview_mode: 0
