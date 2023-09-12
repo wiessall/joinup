@@ -19,7 +19,7 @@ default:
       target_id: 1
   title:
     -
-      value: 'EU OpenSource Software Solutions Catalogue'
+      value: 'EU Open Source Solutions Catalogue'
   created:
     -
       value: 1694498829
@@ -39,11 +39,11 @@ default:
       options:
         query:
           category: report
-          uri: /eu-oss-catalogue/eu-opensource-software-solutions-catalogue
-          destination: eu-oss-catalogue/eu-opensource-software-solutions-catalogue
+          uri: /eu-oss-catalogue/eu-open-source-solutions-catalogue
+          destination: eu-oss-catalogue/eu-open-source-solutions-catalogue
   path:
     -
-      alias: /eu-oss-catalogue/eu-opensource-software-solutions-catalogue
+      alias: /eu-oss-catalogue/eu-open-source-solutions-catalogue
       langcode: en
       pathauto: 1
   published_at:
@@ -206,9 +206,6 @@ default:
                 layout_paragraphs:
                   parent_uuid: 00b46561-49b5-4ce7-a39a-a5b6921bcfb2
                   region: second
-          revision_translation_affected:
-            -
-              value: true
           paragraph_image:
             -
               entity: 6b87df90-05f4-4eff-82c8-386846712896
