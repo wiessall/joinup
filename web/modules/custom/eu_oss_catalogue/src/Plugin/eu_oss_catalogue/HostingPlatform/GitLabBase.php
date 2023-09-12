@@ -102,7 +102,7 @@ abstract class GitLabBase extends EuOssCatalogueGitHostingPlatformPluginBase {
         $query = $this->buildProjectQuery($namespace, $name, $filePath);
         $project = $this->getClient()->graphql()->execute($query->toString())['data']['project'] ?? NULL;
         if ($project && !empty($project['repository']['rootRef']) && empty($project['archived'])) {
-          yield $this->createHostingPlatformResult($namespace, $response['data']['project']);
+          yield $this->createHostingPlatformResult($namespace, $project);
         }
       }
     }
