@@ -120,6 +120,12 @@ data:
       roadmap: http://roadmap.example.com/vendor/solution2
       developmentStatus: development
       softwareType: library
+      intendedAudience:
+          scope:
+              - energy
+              - research
+              - science-and-technology
+              - security
       description:
           it:
               genericName: '[IT] ACME Solution 2'
