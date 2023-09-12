@@ -18,7 +18,10 @@ trait EntityToArrayTrait {
    * @param \Drupal\Core\Entity\ContentEntityInterface $entity
    *   The content entity to transform to array.
    * @param string[] $excludedProperties
-   *   List of entity properties to exclude.
+   *   List of entity properties to exclude. Only has effect if
+   *   "$includedProperties" is empty.
+   * @param string[] $includedProperties
+   *   List of entity properties to include.
    *
    * @return array[]
    *   The entity converted to array. If more than one translation is present,
@@ -29,14 +32,15 @@ trait EntityToArrayTrait {
    */
   protected function contentEntityToArray(
     ContentEntityInterface $entity,
-    array $excludedProperties = []
+    array $excludedProperties = [],
+    array $includedProperties = [],
   ): array {
     $entityValues = [
-      $entity->language()->getId() => $this->convertEntityTranslationToArray($entity, $excludedProperties),
+      $entity->language()->getId() => $this->convertEntityTranslationToArray($entity, $excludedProperties, $includedProperties),
     ];
 
     foreach (array_keys($entity->getTranslationLanguages(FALSE)) as $languageCode) {
-      $entityValues[$languageCode] = $this->convertEntityTranslationToArray($entity->getTranslation($languageCode), $excludedProperties);
+      $entityValues[$languageCode] = $this->convertEntityTranslationToArray($entity->getTranslation($languageCode), $excludedProperties, $includedProperties);
     }
 
     return count($entityValues) === 1
@@ -49,8 +53,11 @@ trait EntityToArrayTrait {
    *
    * @param \Drupal\Core\Entity\ContentEntityInterface $entity
    *   The content entity translation to be transformed.
-   * @param array $excludedProperties
-   *   List of entity properties to exclude.
+   * @param string[] $excludedProperties
+   *   List of entity properties to exclude. Only has effect if
+   *   "$includedProperties" is empty.
+   * @param string[] $includedProperties
+   *   List of entity properties to include.
    *
    * @return array
    *   The entity translation converted to array. Entity reference values are
@@ -58,12 +65,13 @@ trait EntityToArrayTrait {
    */
   protected function convertEntityTranslationToArray(
     ContentEntityInterface $entity,
-    array $excludedProperties
+    array $excludedProperties,
+    array $includedProperties,
   ): array {
-    $valuesArray = array_diff_key(
-      $entity->toArray(),
-      array_combine($excludedProperties, $excludedProperties)
-    );
+    $entityAsArray = $entity->toArray();
+    $valuesArray = $excludedProperties
+      ? array_diff_key($entityAsArray, array_combine($excludedProperties, $excludedProperties))
+      : array_intersect_key($entityAsArray, array_combine($includedProperties, $includedProperties));
     $translationLangCode = $entity->language()->getId();
 
     // Gather a list of referenced entities.
