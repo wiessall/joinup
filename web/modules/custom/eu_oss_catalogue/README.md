@@ -47,7 +47,7 @@ produced by the _provider_. Then, why we need a _parser_ when we already have a
 _provider_? Well, several providers might use the same data structure, thus the
 same parser. A good example are the [Developers Italia](
 https://developers.italia.it) and ****GER**** catalogues as they share the same
-[publiccode.yml](https://yml.publiccode.tools/) schema for describing OpenSource
+[publiccode.yml](https://yml.publiccode.tools/) schema for describing Open Source
 Software Solutions.
 
 The main role of a parser plugin is to build the OSS Solution node entity, ready
