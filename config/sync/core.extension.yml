@@ -8,6 +8,7 @@ module:
   autologout: 0
   blazy: 0
   block: 0
+  block_field: 0
   breakpoint: 0
   cached_computed_field: 0
   cas: 0
