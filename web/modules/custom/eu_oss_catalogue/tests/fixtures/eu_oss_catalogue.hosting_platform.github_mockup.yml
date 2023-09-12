@@ -8,8 +8,6 @@ description: 'Test GitHub hosting provider'
 platformId: github
 platformSettings:
   projects:
-    -
-      namespace: dummy-namespace-1
-      name: dummy-name-1
-    -
-      namespace: dummy-namespace-2
+    dummy-namespace-1:
+      - dummy-name-1
+    dummy-namespace-2: null

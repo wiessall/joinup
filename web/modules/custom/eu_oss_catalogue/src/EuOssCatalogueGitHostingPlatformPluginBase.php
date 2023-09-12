@@ -72,7 +72,7 @@ abstract class EuOssCatalogueGitHostingPlatformPluginBase extends EuOssCatalogue
       '#type' => 'multivalue',
       '#title' => $this->t('Projects'),
       '#description' => $this->t('If name is omitted, all projects from that namespace are eligible.'),
-      '#default_value' => $this->getConfiguration()['projects'] ?? [],
+      '#default_value' => $this->getProjectsDefaultValue(),
       '#cardinality' => MultiValue::CARDINALITY_UNLIMITED,
       '#required' => TRUE,
       'namespace' => [
@@ -120,7 +120,32 @@ abstract class EuOssCatalogueGitHostingPlatformPluginBase extends EuOssCatalogue
    * {@inheritdoc}
    */
   public function submitConfigurationForm(array &$form, FormStateInterface $formState): void {
-    $this->configuration['projects'] = $formState->getValue('projects');
+    // Converts from:
+    // @code
+    // [
+    //   ['namespace' => 'namespace1', 'name' => 'name1'],
+    //   ['namespace' => 'namespace1', 'name' => 'name2'],
+    //   ['namespace' => 'namespace2', 'name' => ''],
+    // ]
+    // @endcode
+    // to:
+    // @code
+    // [
+    //   'namespace1' => ['name1', 'name2'],
+    //   'namespace2' => NULL,
+    // ]
+    // @endcode
+    $projects = [];
+    foreach ($formState->getValue('projects', []) as $row) {
+      $projects[$row['namespace']] ??= [];
+      if ($row['name']) {
+        $projects[$row['namespace']][] = $row['name'];
+      }
+    }
+    // NULL denotes a namespace where all projects should be fetched.
+    $projects = array_map(fn(array $names): ?array => $names ?: NULL, $projects);
+
+    $this->configuration['projects'] = $projects;
   }
 
   /**
@@ -128,6 +153,42 @@ abstract class EuOssCatalogueGitHostingPlatformPluginBase extends EuOssCatalogue
    */
   public function getLabel(): TranslatableMarkup {
     return $this->pluginDefinition['label'];
+  }
+
+  /**
+   * Prepares the projects list to be used by multivalue element.
+   *
+   * @return array
+   *   The projects list.
+   */
+  protected function getProjectsDefaultValue(): array {
+    // Converts from:
+    // @code
+    // [
+    //   'namespace1' => ['name1', 'name2'],
+    //   'namespace2' => NULL,
+    // ]
+    // @endcode
+    // to:
+    // @code
+    // [
+    //   ['namespace' => 'namespace1', 'name' => 'name1'],
+    //   ['namespace' => 'namespace1', 'name' => 'name2'],
+    //   ['namespace' => 'namespace2', 'name' => ''],
+    // ]
+    // @endcode
+    $projects = [];
+    foreach ($this->getConfiguration()['projects'] ?? [] as $namespace => $names) {
+      if ($names === NULL) {
+        $projects[] = ['namespace' => $namespace, 'name' => ''];
+        continue;
+      }
+      foreach ($names as $name) {
+        $projects[] = ['namespace' => $namespace, 'name' => $name];
+      }
+    }
+
+    return $projects;
   }
 
 }

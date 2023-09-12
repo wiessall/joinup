@@ -105,12 +105,13 @@ class GitHub extends EuOssCatalogueGitHostingPlatformPluginBase {
     // Build a search query string.
     // @see https://docs.github.com/search-github
     $search = ['is:public', 'archived:false'];
-    foreach ($this->getConfiguration()['projects'] as $project) {
-      if ($project['name']) {
-        $search[] = "repo:{$project['namespace']}/{$project['name']}";
+    foreach ($this->getConfiguration()['projects'] as $namespace => $repos) {
+      if ($repos === NULL) {
+        $search[] = "owner:$namespace";
+        continue;
       }
-      else {
-        $search[] = "owner:{$project['namespace']}";
+      foreach ($repos as $repo) {
+        $search[] = "repo:$namespace/$repo";
       }
     }
 
