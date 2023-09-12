@@ -70,7 +70,7 @@ class GitLab extends PluginBase implements ServiceMockPluginInterface {
    *   The HTTp response.
    */
   protected function buildResponse(string $responseId): Response {
-    $filePath = __DIR__ . '/../../../../../fixtures/gitlab.yml';
+    $filePath = __DIR__ . '/../../../../../fixtures/http_response/gitlab.yml';
     $body = Json::encode(Yaml::decode(file_get_contents($filePath))[$responseId]);
     return new Response(200, [
       'Content-Type' => 'application/json',
