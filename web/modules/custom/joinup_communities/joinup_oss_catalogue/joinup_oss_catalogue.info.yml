@@ -8,4 +8,3 @@ dependencies:
   - eu_oss_catalogue:eu_oss_catalogue
   - joinup_bundle_class:joinup_bundle_class
   - message:message
-  - page_manager:page_manager
