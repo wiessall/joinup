@@ -37,7 +37,7 @@ class DevelopersItalia extends PluginBase implements ServiceMockPluginInterface 
    * {@inheritdoc}
    */
   public function getResponse(RequestInterface $request, array $options): ResponseInterface {
-    $response = Json::encode(Yaml::decode(file_get_contents(__DIR__ . '/../../../../../fixtures/developers_italia.yml')));
+    $response = Json::encode(Yaml::decode(file_get_contents(__DIR__ . '/../../../../../fixtures/http_response/developers_italia.yml')));
     return new Response(200, [
       'Content-Type' => 'application/json',
       'Content-Length' => strlen($response),
