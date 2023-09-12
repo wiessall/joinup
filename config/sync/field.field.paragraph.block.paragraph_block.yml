@@ -1,0 +1,25 @@
+uuid: 1b5b4ca0-650a-41c5-9119-ac5c26a9dcb9
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.paragraph_block
+    - paragraphs.paragraphs_type.block
+  module:
+    - block_field
+id: paragraph.block.paragraph_block
+field_name: paragraph_block
+entity_type: paragraph
+bundle: block
+label: Block
+description: ''
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  selection: blocks
+  selection_settings:
+    plugin_ids:
+      joinup_oss_software_name: joinup_oss_software_name
+field_type: block_field
