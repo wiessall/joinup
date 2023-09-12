@@ -4,7 +4,7 @@ Feature: OSS catalogue search
 
   Scenario: User can view the OSS catalogue search page.
     Then I visit the OSS search page
-    When I should see the heading "Search in EU OpenSource Software Solutions Catalogue"
+    When I should see the heading "Search in EU Open Source Solutions Catalogue"
     And the following fields should be present "Sort by:,Start typing to search…"
     And I should see the text "No content found for your search."
     And I should see the button "Clear filters"
@@ -13,7 +13,7 @@ Feature: OSS catalogue search
     # Mimic the "EU OSSC" collection.
     Given collection:
       | uri   | http://data.europa.eu/w21/6d621a47-71ce-4f1a-90e2-8859403d3ecd |
-      | title | EU OpenSource Software Solutions Catalogue                     |
+      | title | EU Open Source Solutions Catalogue                     |
       | state | validated                                                      |
 
     Given oss_solution content:
@@ -27,7 +27,7 @@ Feature: OSS catalogue search
     Then I visit the OSS search page
 
     # Check the group collection header
-    When I see the text "EU OpenSource Software Solutions Catalogue" in the "Header" region
+    When I see the text "EU Open Source Solutions Catalogue" in the "Header" region
 
     # Check main area
     When I should see the text "SEARCH RESULTS (5)"
