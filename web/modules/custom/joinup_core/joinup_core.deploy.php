@@ -42,3 +42,31 @@ function joinup_core_deploy_109701(): void {
     ?->set('label', 'EU Open Source Solutions Catalogue')
       ->save();
 }
+
+/**
+ * Import content for EU OpenSource Software Solutions Catalogue.
+ */
+function joinup_core_deploy_109702(): void {
+  /** @var \Drupal\Core\Extension\ModuleInstallerInterface $moduleInstaller */
+  $moduleInstaller = \Drupal::service('module_installer');
+  /** @var \Drupal\Core\Entity\EntityRepositoryInterface $entityRepository */
+  $entityRepository = \Drupal::service('entity.repository');
+
+  // Import content.
+  $moduleInstaller->install(['default_content']);
+  /** @var \Drupal\default_content\ImporterInterface $importer */
+  \Drupal::service('default_content.importer')
+    ->importContent('joinup_oss_catalogue', TRUE);
+  $moduleInstaller->uninstall(['default_content']);
+
+  // Disable auto-created left-side menu link.
+  $landingPage = $entityRepository->loadEntityByUuid('node', '54acbd6f-47f0-4280-ad09-0a07c397318b');
+  $linkPlugins = \Drupal::service('plugin.manager.menu.link')
+    ->loadLinksByRoute('entity.node.canonical', ['node' => $landingPage->id()], 'ogmenu-3728');
+  /** @var \Drupal\menu_link_content\Plugin\Menu\MenuLinkContent $linkPlugin */
+  $linkPlugin = reset($linkPlugins);
+  $entityRepository
+    ->loadEntityByUuid('menu_link_content', $linkPlugin->getDerivativeId())
+    ->setUnpublished()
+    ->save();
+}
