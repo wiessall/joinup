@@ -5,6 +5,7 @@ declare(strict_types = 1);
 namespace Drupal\eu_oss_catalogue;
 
 use Drupal\Component\Plugin\ConfigurableInterface;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 
 /**
  * Interface for EuOssCatalogueGitHostingApi plugins.
@@ -19,5 +20,13 @@ interface EuOssCatalogueHostingPlatformInterface extends ConfigurableInterface {
    *   \Drupal\eu_oss_catalogue\Model\HostingPlatformResult instances as values.
    */
   public function getRepositories(?string $filePath = NULL): iterable;
+
+  /**
+   * Returns the label.
+   *
+   * @return \Drupal\Core\StringTranslation\TranslatableMarkup
+   *   The label.
+   */
+  public function getLabel(): TranslatableMarkup;
 
 }
