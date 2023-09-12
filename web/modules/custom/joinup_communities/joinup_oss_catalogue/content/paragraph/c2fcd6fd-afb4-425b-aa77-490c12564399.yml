@@ -19,9 +19,6 @@ default:
         layout_paragraphs:
           parent_uuid: 00b46561-49b5-4ce7-a39a-a5b6921bcfb2
           region: second
-  revision_translation_affected:
-    -
-      value: true
   paragraph_image:
     -
       entity: 6b87df90-05f4-4eff-82c8-386846712896
