@@ -1,0 +1,24 @@
+_meta:
+  version: '1.0'
+  entity_type: paragraph
+  uuid: 1d9765d5-5124-429a-8a16-9291e70fea38
+  bundle: heading
+  default_langcode: en
+default:
+  status:
+    -
+      value: true
+  created:
+    -
+      value: 1694500636
+  behavior_settings:
+    -
+      value:
+        heading_behavior:
+          level: h3
+        layout_paragraphs:
+          parent_uuid: 3a870b47-c2de-42a6-86ba-50dab1687235
+          region: content
+  paragraph_heading:
+    -
+      value: 'Follow our journey on the social media! '

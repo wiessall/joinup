@@ -1,0 +1,23 @@
+_meta:
+  version: '1.0'
+  entity_type: paragraph
+  uuid: 409a0428-3146-41fd-972b-a13c1278e0f4
+  bundle: text
+  default_langcode: en
+default:
+  status:
+    -
+      value: true
+  created:
+    -
+      value: 1694501301
+  behavior_settings:
+    -
+      value:
+        layout_paragraphs:
+          parent_uuid: f2a1d11a-9d0a-403f-b5f1-7b4f786d81c0
+          region: first
+  field_body:
+    -
+      value: "<p>In order to publish your software to this catalogue, you need to include a YAML file generated with some information inside your git repository</p>\r\n"
+      format: text_html

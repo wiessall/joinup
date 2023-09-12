@@ -1,0 +1,42 @@
+_meta:
+  version: '1.0'
+  entity_type: paragraph
+  uuid: f714a3e0-eaf4-431e-bcea-ee9a8c7093c1
+  bundle: accordion_item
+  default_langcode: en
+default:
+  status:
+    -
+      value: true
+  created:
+    -
+      value: 1694500906
+  behavior_settings:
+    -
+      value: {  }
+  field_paragraphs_item_content:
+    -
+      entity:
+        _meta:
+          version: '1.0'
+          entity_type: paragraph
+          uuid: 57a88b74-57f9-457e-8c4f-0d8329b192db
+          bundle: simple_paragraph
+          default_langcode: en
+        default:
+          status:
+            -
+              value: true
+          created:
+            -
+              value: 1694500906
+          behavior_settings:
+            -
+              value: {  }
+          field_body:
+            -
+              value: "<p>Lorem ipsum dolor sit amet ?</p>\r\n"
+              format: content_editor
+  field_paragraphs_item_label:
+    -
+      value: 'Lorem ipsum dolor sit amet ? '

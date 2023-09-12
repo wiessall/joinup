@@ -1,0 +1,23 @@
+_meta:
+  version: '1.0'
+  entity_type: paragraph
+  uuid: 3ec2f9e7-4f71-4310-8ae7-8179a86321d4
+  bundle: text
+  default_langcode: en
+default:
+  status:
+    -
+      value: true
+  created:
+    -
+      value: 1694501337
+  behavior_settings:
+    -
+      value:
+        layout_paragraphs:
+          parent_uuid: f2a1d11a-9d0a-403f-b5f1-7b4f786d81c0
+          region: first
+  field_body:
+    -
+      value: "<p>You must include this generated YAML file at the rooth of your git and the information will automaticly be retrieved in our platform. Your solution is now published !</p>\r\n"
+      format: text_html

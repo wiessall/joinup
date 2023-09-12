@@ -1,0 +1,23 @@
+_meta:
+  version: '1.0'
+  entity_type: paragraph
+  uuid: c2b9d6a9-1c9e-467a-8b7c-1efac7c0aff8
+  bundle: text
+  default_langcode: en
+default:
+  status:
+    -
+      value: true
+  created:
+    -
+      value: 1694500608
+  behavior_settings:
+    -
+      value:
+        layout_paragraphs:
+          parent_uuid: 3a870b47-c2de-42a6-86ba-50dab1687235
+          region: content
+  field_body:
+    -
+      value: "<p>twitter linkedin&nbsp;</p>\r\n"
+      format: text_html

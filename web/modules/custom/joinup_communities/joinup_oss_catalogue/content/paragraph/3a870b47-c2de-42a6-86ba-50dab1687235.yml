@@ -1,0 +1,25 @@
+_meta:
+  version: '1.0'
+  entity_type: paragraph
+  uuid: 3a870b47-c2de-42a6-86ba-50dab1687235
+  bundle: layout
+  default_langcode: en
+default:
+  status:
+    -
+      value: true
+  created:
+    -
+      value: 1694500571
+  behavior_settings:
+    -
+      value:
+        layout_paragraphs:
+          layout: layout_onecol
+          config:
+            label: ''
+          parent_uuid: null
+          region: null
+        background_theme:
+          background_theme: light
+        extra_class: {  }

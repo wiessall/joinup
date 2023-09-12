@@ -1,0 +1,23 @@
+_meta:
+  version: '1.0'
+  entity_type: paragraph
+  uuid: a0ea52df-8d42-4172-aee3-01133e94eabe
+  bundle: text
+  default_langcode: en
+default:
+  status:
+    -
+      value: true
+  created:
+    -
+      value: 1694501314
+  behavior_settings:
+    -
+      value:
+        layout_paragraphs:
+          parent_uuid: f2a1d11a-9d0a-403f-b5f1-7b4f786d81c0
+          region: first
+  field_body:
+    -
+      value: "<p>First, you will have to fill some information like the supported languages, the name of your software, the release date,…</p>\r\n"
+      format: text_html
