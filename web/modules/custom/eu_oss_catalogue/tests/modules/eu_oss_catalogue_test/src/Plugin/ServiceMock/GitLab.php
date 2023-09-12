@@ -35,7 +35,6 @@ class GitLab extends PluginBase implements ServiceMockPluginInterface {
     }
     $host = $request->getUri()->getHost();
     return in_array($host, [
-      'gitlab.com',
       'all.self-hosted.gitlab.example.com',
       'limited.self-hosted.gitlab.example.com',
     ], TRUE);

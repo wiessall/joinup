@@ -4,8 +4,14 @@ declare(strict_types = 1);
 
 namespace Drupal\eu_oss_catalogue\Plugin\eu_oss_catalogue\HostingPlatform;
 
+use Drupal\eu_oss_catalogue\EuOssCatalogueGitHostingPlatformPluginBase;
+use Drupal\eu_oss_catalogue\Model\GitLabReleaseSort;
+use Drupal\eu_oss_catalogue\Model\HostingPlatformResult;
+use Gitlab\Client;
+use GraphQL\Actions\Query;
+
 /**
- * Git code hosting platform for GitLab repositories.
+ * Git code hosting platform for gitlab.com repositories.
  *
  * @EuOssCatalogueHostingPlatform(
  *   id = "gitlab_com",

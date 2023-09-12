@@ -10,14 +10,14 @@ use Gitlab\Client;
 use GraphQL\Actions\Query;
 
 /**
- * Git code hosting platform for GitLab repositories.
+ * Git code hosting platform for self-hosted GitLab repositories.
  *
  * @EuOssCatalogueHostingPlatform(
  *   id = "gitlab_self_hosted",
  *   label = @Translation("GitLab (self hosted)"),
  * )
  */
-class GitLabSelfHosted extends GitLabBase {
+class GitLabSelfHosted extends GitLabDotCom {
 
   /**
    * {@inheritdoc}
