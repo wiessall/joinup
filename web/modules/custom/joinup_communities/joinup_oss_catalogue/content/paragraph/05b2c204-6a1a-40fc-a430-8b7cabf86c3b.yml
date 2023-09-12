@@ -1,0 +1,20 @@
+_meta:
+  version: '1.0'
+  entity_type: paragraph
+  uuid: 05b2c204-6a1a-40fc-a430-8b7cabf86c3b
+  bundle: simple_paragraph
+  default_langcode: en
+default:
+  status:
+    -
+      value: true
+  created:
+    -
+      value: 1694500906
+  behavior_settings:
+    -
+      value: {  }
+  field_body:
+    -
+      value: "<p>Lorem ipsum dolor sit amet ?</p>\r\n"
+      format: content_editor

@@ -1,0 +1,24 @@
+_meta:
+  version: '1.0'
+  entity_type: paragraph
+  uuid: b53f89fa-718b-470c-bbc1-e5439e50fc9d
+  bundle: heading
+  default_langcode: en
+default:
+  status:
+    -
+      value: true
+  created:
+    -
+      value: 1694501227
+  behavior_settings:
+    -
+      value:
+        heading_behavior:
+          level: h3
+        layout_paragraphs:
+          parent_uuid: f2a1d11a-9d0a-403f-b5f1-7b4f786d81c0
+          region: first
+  paragraph_heading:
+    -
+      value: 'Make sure you have a git repository'

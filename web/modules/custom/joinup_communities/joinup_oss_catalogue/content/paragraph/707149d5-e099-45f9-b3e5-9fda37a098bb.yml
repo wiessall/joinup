@@ -1,0 +1,23 @@
+_meta:
+  version: '1.0'
+  entity_type: paragraph
+  uuid: 707149d5-e099-45f9-b3e5-9fda37a098bb
+  bundle: text
+  default_langcode: en
+default:
+  status:
+    -
+      value: true
+  created:
+    -
+      value: 1694500505
+  behavior_settings:
+    -
+      value:
+        layout_paragraphs:
+          parent_uuid: fb279d1a-794b-4504-893d-a13af243ddfa
+          region: content
+  field_body:
+    -
+      value: "<p>Just follow the guide !</p>\r\n"
+      format: text_html

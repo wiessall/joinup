@@ -1,0 +1,23 @@
+_meta:
+  version: '1.0'
+  entity_type: paragraph
+  uuid: 33957667-93da-4344-b85f-a2b389fd5982
+  bundle: text
+  default_langcode: en
+default:
+  status:
+    -
+      value: true
+  created:
+    -
+      value: 1694500433
+  behavior_settings:
+    -
+      value:
+        layout_paragraphs:
+          parent_uuid: 00b46561-49b5-4ce7-a39a-a5b6921bcfb2
+          region: first
+  field_body:
+    -
+      value: "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus lobortis pellentesque nulla vel sollicitudin. Maecenas tellus tortor, tristique at aliquam et, luctus vitae nisi. Fusce elementum lobortis odio, quis interdum quam tristique ut. Morbi ac lacus ligula. Quisque ut odio condimentum, ultricies erat sit amet, condimentum lectus. In faucibus augue vitae condimentum faucibus. Nunc quis arcu massa.</p>\r\n"
+      format: text_html

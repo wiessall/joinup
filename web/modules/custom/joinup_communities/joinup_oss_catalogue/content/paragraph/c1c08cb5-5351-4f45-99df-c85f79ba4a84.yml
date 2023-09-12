@@ -1,0 +1,28 @@
+_meta:
+  version: '1.0'
+  entity_type: paragraph
+  uuid: c1c08cb5-5351-4f45-99df-c85f79ba4a84
+  bundle: call_to_action
+  default_langcode: en
+default:
+  status:
+    -
+      value: true
+  created:
+    -
+      value: 1694506899
+  behavior_settings:
+    -
+      value:
+        alignment:
+          alignment: center
+        color:
+          color: brand
+        layout_paragraphs:
+          parent_uuid: f66f1112-bbdb-452e-82ed-98bcb6006251
+          region: content
+  paragraph_action_link:
+    -
+      uri: 'internal:/'
+      title: 'Contact us !'
+      options: {  }
