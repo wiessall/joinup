@@ -4,11 +4,10 @@ declare(strict_types = 1);
 
 namespace Drupal\Tests\eu_oss_catalogue\Functional;
 
-use Drupal\eu_oss_catalogue\Entity\OssSolutionInterface;
 use Drupal\Tests\BrowserTestBase;
-use Drupal\Tests\eu_oss_catalogue\Traits\EntityToArrayTrait;
-use Drupal\Tests\eu_oss_catalogue\Traits\EuOssCatalogueTrait;
+use Drupal\Tests\eu_oss_catalogue\Traits\EuOssCatalogueTestTrait;
 use Drupal\Tests\node\Traits\NodeCreationTrait;
+use Drupal\eu_oss_catalogue\Entity\OssSolutionInterface;
 use Drupal\language\Entity\ConfigurableLanguage;
 use Drush\TestTraits\DrushTestTrait;
 
@@ -17,11 +16,9 @@ use Drush\TestTraits\DrushTestTrait;
  */
 class FetchCitLabTest extends BrowserTestBase {
 
-
   use DrushTestTrait;
   use NodeCreationTrait;
-  use EntityToArrayTrait;
-  use EuOssCatalogueTrait;
+  use EuOssCatalogueTestTrait;
 
   /**
    * {@inheritdoc}

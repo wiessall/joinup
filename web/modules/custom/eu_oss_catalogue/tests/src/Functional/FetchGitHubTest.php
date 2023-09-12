@@ -6,8 +6,7 @@ namespace Drupal\Tests\eu_oss_catalogue\Functional;
 
 use Drupal\Core\Serialization\Yaml;
 use Drupal\Tests\BrowserTestBase;
-use Drupal\Tests\eu_oss_catalogue\Traits\EntityToArrayTrait;
-use Drupal\Tests\eu_oss_catalogue\Traits\EuOssCatalogueTrait;
+use Drupal\Tests\eu_oss_catalogue\Traits\EuOssCatalogueTestTrait;
 use Drupal\Tests\node\Traits\NodeCreationTrait;
 use Drupal\eu_oss_catalogue\Entity\OssContactInterface;
 use Drupal\eu_oss_catalogue\Entity\OssSolutionInterface;
@@ -22,8 +21,7 @@ class FetchGitHubTest extends BrowserTestBase {
 
   use DrushTestTrait;
   use NodeCreationTrait;
-  use EntityToArrayTrait;
-  use EuOssCatalogueTrait;
+  use EuOssCatalogueTestTrait;
 
   /**
    * {@inheritdoc}
