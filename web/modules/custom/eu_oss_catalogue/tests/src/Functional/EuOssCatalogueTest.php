@@ -10,8 +10,7 @@ use Drupal\Core\Entity\TranslatableInterface;
 use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\Tests\BrowserTestBase;
-use Drupal\Tests\eu_oss_catalogue\Traits\EntityToArrayTrait;
-use Drupal\Tests\eu_oss_catalogue\Traits\EuOssCatalogueTrait;
+use Drupal\Tests\eu_oss_catalogue\Traits\EuOssCatalogueTestTrait;
 use Drupal\Tests\node\Traits\NodeCreationTrait;
 use Drupal\eu_oss_catalogue\Entity\OssSolutionInterface;
 use Drupal\language\Entity\ConfigurableLanguage;
@@ -27,8 +26,7 @@ class EuOssCatalogueTest extends BrowserTestBase {
 
   use DrushTestTrait;
   use NodeCreationTrait;
-  use EntityToArrayTrait;
-  use EuOssCatalogueTrait;
+  use EuOssCatalogueTestTrait;
 
   /**
    * Properties to exclude when checking node content.

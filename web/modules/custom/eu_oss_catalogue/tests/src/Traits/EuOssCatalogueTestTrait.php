@@ -8,9 +8,24 @@ use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\Core\Field\EntityReferenceFieldItemListInterface;
 
 /**
- * Trait for transforming entity to array.
+ * EU OSS Catalogue trait.
  */
-trait EntityToArrayTrait {
+trait EuOssCatalogueTestTrait {
+
+  /**
+   * Creates testing terms.
+   *
+   * @param array $data
+   *   Terms to create.
+   */
+  protected function createTestingTerms(array $data): void {
+    $storage = \Drupal::entityTypeManager()->getStorage('taxonomy_term');
+    foreach ($data as $vid => $terms) {
+      foreach ($terms as $term) {
+        $storage->create(['vid' => $vid, 'name' => $term])->save();
+      }
+    }
+  }
 
   /**
    * Converts the given content entity to array.
