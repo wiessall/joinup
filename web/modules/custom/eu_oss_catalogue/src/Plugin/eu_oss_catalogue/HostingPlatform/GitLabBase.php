@@ -161,6 +161,7 @@ abstract class GitLabBase extends EuOssCatalogueGitHostingPlatformPluginBase {
    *     path
    *     id
    *     description
+   *     archived
    *     releases(sort: CREATED_DESC first: 1) {
    *       nodes {
    *         createdAt
@@ -170,7 +171,6 @@ abstract class GitLabBase extends EuOssCatalogueGitHostingPlatformPluginBase {
    *       rootRef
    *       blobs(paths: ["README.md"]) {
    *         nodes {
-   *           rawPath
    *           rawBlob
    *         }
    *       }
