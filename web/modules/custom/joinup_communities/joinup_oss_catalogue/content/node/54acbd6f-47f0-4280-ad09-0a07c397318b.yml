@@ -369,7 +369,7 @@ default:
                   region: content
           field_body:
             -
-              value: "<p>Just follow the guide !</p>\r\n"
+              value: "<p>Just follow the guide!</p>\r\n"
               format: text_html
     -
       entity:
