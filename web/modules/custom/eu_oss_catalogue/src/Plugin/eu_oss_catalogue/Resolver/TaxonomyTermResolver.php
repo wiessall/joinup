@@ -74,10 +74,14 @@ class TaxonomyTermResolver extends DefaultResolver implements ContainerFactoryPl
     $names = (array) $originalValue;
 
     $storage = $this->entityTypeManager->getStorage('taxonomy_term');
-    $termIds = array_values($storage->getQuery()->accessCheck(FALSE)
-      ->condition('vid', $this->getConfiguration()['vid'])
-      ->condition('name', $names, 'IN')
-      ->execute());
+    // Variable '$names' or $originalValue might be an empty array.
+    $termIds = [];
+    if ($names) {
+      $termIds = array_values($storage->getQuery()->accessCheck(FALSE)
+        ->condition('vid', $this->getConfiguration()['vid'])
+        ->condition('name', $names, 'IN')
+        ->execute());
+    }
 
     $controlled = $this->getConfiguration()['controlled'] ?? FALSE;
 
