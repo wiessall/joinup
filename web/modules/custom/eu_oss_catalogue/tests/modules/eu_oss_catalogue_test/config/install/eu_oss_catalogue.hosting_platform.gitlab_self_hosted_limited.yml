@@ -5,5 +5,17 @@ id: gitlab_self_hosted_limited
 label: 'GitLab self-hosted (limited)'
 platformId: gitlab_self_hosted
 platformSettings:
-  projects: {  }
+  projects:
+    # Get all eligible projects from group1.
+    - namespace: group1
+      name: ''
+    # Get only project-2-1 project from group2.
+    - namespace: group2
+      name: project-2-1
+    # Get project-1 from user1.
+    - namespace: user1
+      name: project-1
+    # Fetch *all* projects from a user is not permitted by GitLab.
+    - namespace: user2
+      name: ''
   url: https://limited.self-hosted.gitlab.example.com
