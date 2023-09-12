@@ -1,15 +1,14 @@
-uuid: 00ee84d7-4d31-474c-a519-11bab78330ce
+uuid: 8e647170-c3bb-408c-ab8d-6c3ea6839c01
 langcode: en
 status: true
 dependencies:
   module:
-    - field_permissions
     - node
-third_party_settings:
-  field_permissions:
-    permission_type: public
-id: node.oss_main_copyright_owner
-field_name: oss_main_copyright_owner
+  enforced:
+    module:
+      - eu_oss_catalogue
+id: node.oss_available_languages
+field_name: oss_available_languages
 entity_type: node
 type: string
 settings:
@@ -18,7 +17,7 @@ settings:
   is_ascii: false
 module: core
 locked: false
-cardinality: 1
+cardinality: -1
 translatable: true
 indexes: {  }
 persist_with_no_fields: false

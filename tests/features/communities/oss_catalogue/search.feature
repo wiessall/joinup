@@ -10,6 +10,12 @@ Feature: OSS catalogue search
     And I should see the button "Clear filters"
 
   Scenario: User is able to search.
+    # Mimic the "EU OSSC" collection.
+    Given collection:
+      | uri   | http://data.europa.eu/w21/6d621a47-71ce-4f1a-90e2-8859403d3ecd |
+      | title | EU OpenSource Software Solutions Catalogue                     |
+      | state | validated                                                      |
+
     Given oss_solution content:
       | title                           | oss_development_status | oss_source        | oss_categories                                                  | oss_short_description                                                                                                                         | oss_git_description                                                               | status    |
       | Django-MDQ                      | stable                 | developers_italia | content-management                                              | A lightweight SAML2 MDQ server that implements draft-young-md-query implementation.                                                           |                                                                                   | published |
@@ -19,6 +25,9 @@ Feature: OSS catalogue search
       | Immuni                          | obsolete               | developers_italia | data-collection                                                 | Immuni is a mobile app that helps us to fight the COVID-19 pandemic by notifying users at risk of carrying the virus as early as possible     |                                                                                   | published |
 
     Then I visit the OSS search page
+
+    # Check the group collection header
+    When I see the text "EU OpenSource Software Solutions Catalogue" in the "Header" region
 
     # Check main area
     When I should see the text "SEARCH RESULTS (5)"

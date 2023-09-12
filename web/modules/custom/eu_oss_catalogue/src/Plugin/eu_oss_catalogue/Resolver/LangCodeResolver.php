@@ -67,10 +67,10 @@ class LangCodeResolver extends DefaultResolver implements ContainerFactoryPlugin
 
     /** @var \Drupal\eu_oss_catalogue\Entity\OssSolutionInterface $solution */
     $solution = $fieldItemList->getEntity();
+    $data = $fetchedSolution->data;
     $values = [];
     foreach ($this->languageManger->getLanguages() as $langcode => $language) {
       $path = explode('/', str_replace('[lang]', $langcode, $this->getConfiguration()['path']));
-      $data = $fetchedSolution->data;
       if (NestedArray::keyExists($data, $path)) {
         $value = NestedArray::getValue($data, $path);
         if (!$solution->hasTranslation($langcode)) {

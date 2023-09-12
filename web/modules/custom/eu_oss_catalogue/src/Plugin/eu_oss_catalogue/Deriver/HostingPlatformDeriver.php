@@ -8,6 +8,8 @@ use Drupal\Component\Plugin\Derivative\DeriverBase;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Plugin\Discovery\ContainerDeriverInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
+use Drupal\eu_oss_catalogue\Entity\HostingPlatformConfigInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -43,20 +45,50 @@ class HostingPlatformDeriver extends DeriverBase implements ContainerDeriverInte
     $hostingPlatforms = $this->entityTypeManager->getStorage('hosting_platform')->loadMultiple();
     /** @var \Drupal\eu_oss_catalogue\Entity\HostingPlatformConfigInterface $hostingPlatform */
     foreach ($hostingPlatforms as $hostingPlatform) {
-      if (!$description = $hostingPlatform->getDescription()) {
-        $description = $this->t('@base_description (@platform)', [
-          '@base_description' => $base_plugin_definition['description'] ?? '',
-          '@platform' => $hostingPlatform->label(),
-        ]);
-      }
       $this->derivatives[$hostingPlatform->id()] = [
         'label' => $hostingPlatform->label(),
-        'description' => $description,
+        'description' => $this->getDerivativeDescription($base_plugin_definition, $hostingPlatform),
         'platformId' => $hostingPlatform->getPlatformPluginId(),
         'platformSettings' => $hostingPlatform->getPlatformSettings(),
       ] + $base_plugin_definition;
     }
     return $this->derivatives;
+  }
+
+  /**
+   * Gets derivative description.
+   *
+   * @param array $basePluginDefinition
+   *   Plugin definition.
+   * @param \Drupal\eu_oss_catalogue\Entity\HostingPlatformConfigInterface $hostingPlatform
+   *   Hosting platform.
+   *
+   * @return \Drupal\Core\StringTranslation\TranslatableMarkup
+   *   Description.
+   */
+  protected function getDerivativeDescription(array $basePluginDefinition, HostingPlatformConfigInterface $hostingPlatform): TranslatableMarkup {
+    $platformId = $hostingPlatform->getPlatformPluginId();
+
+    /** @var \Drupal\Core\Plugin\DefaultSingleLazyPluginCollection $settings */
+    $settings = $hostingPlatform->getPluginCollections()['platformSettings'];
+
+    /** @var \Drupal\eu_oss_catalogue\EuOssCatalogueHostingPlatformInterface $platform */
+    $platform = $settings->get($platformId);
+
+    if ($hostingPlatform->getDescription()) {
+      $args = [
+        '@description' => $hostingPlatform->getDescription() ?? '',
+        '@platform' => $platform->getLabel(),
+      ];
+    }
+    else {
+      $args = [
+        '@description' => $basePluginDefinition['description'],
+        '@platform' => $platform->getLabel(),
+      ];
+    }
+
+    return $this->t('@description (@platform)', $args);
   }
 
 }

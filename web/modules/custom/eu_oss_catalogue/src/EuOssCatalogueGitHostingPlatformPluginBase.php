@@ -8,6 +8,7 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Plugin\PluginFormInterface;
 use Drupal\Core\Site\Settings;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\multivalue_form_element\Element\MultiValue;
 use Psr\Http\Client\ClientInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -170,5 +171,12 @@ abstract class EuOssCatalogueGitHostingPlatformPluginBase extends EuOssCatalogue
    *     objects of type \Drupal\eu_oss_catalogue\Model\HostingPlatformResult.
    */
   abstract protected function getProjects(array $candidates, ?string $filePath = NULL): array;
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getLabel(): TranslatableMarkup {
+    return $this->pluginDefinition['label'];
+  }
 
 }
