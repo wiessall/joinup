@@ -39,6 +39,6 @@ function joinup_core_deploy_109701(): void {
     ->load(OssCatalogueCollectionInterface::COLLECTION_ENTITY_ID);
 
   $collection
-    ?->set('label', 'EU OpenSource Software Solutions Catalogue')
+    ?->set('label', 'EU Open Source Solutions Catalogue')
       ->save();
 }
