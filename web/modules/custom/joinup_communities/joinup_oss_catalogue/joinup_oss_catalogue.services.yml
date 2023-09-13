@@ -5,7 +5,7 @@ services:
   joinup_oss_catalogue.access_checker:
     class: Drupal\joinup_oss_catalogue\Access\OssAccessCheck
     tags:
-      - { name: access_check }
+      - { name: access_check, applies_to: _oss_access_check }
   joinup_oss_catalogue.route_subscriber:
     class: Drupal\joinup_oss_catalogue\OssRouteSubscriber
     tags:
