@@ -25,3 +25,21 @@ function eu_oss_catalogue_entity_bundle_info_alter(array &$bundles): void {
     $bundles['node']['oss_contractor']['class'] = OssContractor::class;
   }
 }
+
+/**
+ * Implements hook_views_data_alter().
+ */
+function eu_oss_catalogue_views_data_alter(array &$data) {
+  /** @var \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager */
+  $entityTypeManager = Drupal::service('entity_type.manager');
+
+  foreach ($entityTypeManager->getDefinitions() as $entity_info) {
+    $data[$entity_info->getBaseTable()]['translation_list'] = [
+      'title' => 'Translation list',
+      'help' => t('Displays all available translations.'),
+      'field' => [
+        'id' => 'translation_list',
+      ],
+    ];
+  }
+}
