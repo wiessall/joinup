@@ -15,6 +15,7 @@ dependencies:
     - node
     - pluginreference
     - taxonomy
+    - user
 id: oss_solution
 label: 'OSS Solution'
 module: views
@@ -29,70 +30,8 @@ display:
     display_plugin: default
     position: 0
     display_options:
-      title: 'OSS Solutions'
+      title: 'Open Source Software Solutions'
       fields:
-        oss_source:
-          id: oss_source
-          table: node__oss_source
-          field: oss_source
-          relationship: none
-          group_type: group
-          admin_label: ''
-          plugin_id: field
-          label: Source
-          exclude: false
-          alter:
-            alter_text: false
-            text: ''
-            make_link: false
-            path: ''
-            absolute: false
-            external: false
-            replace_spaces: false
-            path_case: none
-            trim_whitespace: false
-            alt: ''
-            rel: ''
-            link_class: ''
-            prefix: ''
-            suffix: ''
-            target: ''
-            nl2br: false
-            max_length: 0
-            word_boundary: true
-            ellipsis: true
-            more_link: false
-            more_link_text: ''
-            more_link_path: ''
-            strip_tags: false
-            trim: false
-            preserve_tags: ''
-            html: false
-          element_type: ''
-          element_class: ''
-          element_label_type: ''
-          element_label_class: ''
-          element_label_colon: true
-          element_wrapper_type: ''
-          element_wrapper_class: ''
-          element_default_classes: true
-          empty: ''
-          hide_empty: false
-          empty_zero: false
-          hide_alter_empty: true
-          click_sort_column: plugin_id
-          type: plugin_reference_id
-          settings: {  }
-          group_column: ''
-          group_columns: {  }
-          group_rows: true
-          delta_limit: 0
-          delta_offset: 0
-          delta_reversed: false
-          delta_first_last: false
-          multi_type: separator
-          separator: ', '
-          field_api_classes: false
         title:
           id: title
           table: node_field_data
@@ -103,7 +42,7 @@ display:
           entity_type: node
           entity_field: title
           plugin_id: field
-          label: 'OSS Solution title'
+          label: Title
           exclude: false
           alter:
             alter_text: false
@@ -225,6 +164,68 @@ display:
           multi_type: separator
           separator: ', '
           field_api_classes: false
+        oss_source:
+          id: oss_source
+          table: node__oss_source
+          field: oss_source
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: field
+          label: Source
+          exclude: false
+          alter:
+            alter_text: false
+            text: ''
+            make_link: false
+            path: ''
+            absolute: false
+            external: false
+            replace_spaces: false
+            path_case: none
+            trim_whitespace: false
+            alt: ''
+            rel: ''
+            link_class: ''
+            prefix: ''
+            suffix: ''
+            target: ''
+            nl2br: false
+            max_length: 0
+            word_boundary: true
+            ellipsis: true
+            more_link: false
+            more_link_text: ''
+            more_link_path: ''
+            strip_tags: false
+            trim: false
+            preserve_tags: ''
+            html: false
+          element_type: ''
+          element_class: ''
+          element_label_type: ''
+          element_label_class: ''
+          element_label_colon: true
+          element_wrapper_type: ''
+          element_wrapper_class: ''
+          element_default_classes: true
+          empty: ''
+          hide_empty: false
+          empty_zero: false
+          hide_alter_empty: true
+          click_sort_column: plugin_id
+          type: plugin_reference_id
+          settings: {  }
+          group_column: ''
+          group_columns: {  }
+          group_rows: true
+          delta_limit: 0
+          delta_offset: 0
+          delta_reversed: false
+          delta_first_last: false
+          multi_type: separator
+          separator: ', '
+          field_api_classes: false
       pager:
         type: full
         options:
@@ -262,7 +263,18 @@ display:
       cache:
         type: tag
         options: {  }
-      empty: {  }
+      empty:
+        area_text_custom:
+          id: area_text_custom
+          table: views
+          field: area_text_custom
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: text_custom
+          empty: true
+          content: 'No content available.'
+          tokenize: false
       sorts:
         created:
           id: created
@@ -578,11 +590,56 @@ display:
       tags:
         - 'config:field.storage.node.oss_git_url'
         - 'config:field.storage.node.oss_source'
+  admin:
+    id: admin
+    display_title: Administrative
+    display_plugin: page
+    position: 2
+    display_options:
+      access:
+        type: perm
+        options:
+          perm: 'administer eu oss catalogue'
+      defaults:
+        access: false
+      display_description: ''
+      display_extenders:
+        metatag_display_extender:
+          metatags: {  }
+          tokenize: false
+      path: admin/content/eu-oss-catalogue/solutions
+      menu:
+        type: tab
+        title: List
+        description: ''
+        weight: 0
+        expanded: false
+        menu_name: admin
+        parent: eu_oss_catalogue.provider.collection
+        context: '0'
+      tab_options:
+        type: tab
+        title: dd
+        description: ''
+        weight: 0
+    cache_metadata:
+      max-age: -1
+      contexts:
+        - 'languages:language_content'
+        - 'languages:language_interface'
+        - url
+        - url.query_args
+        - user
+        - 'user.node_grants:view'
+        - user.permissions
+      tags:
+        - 'config:field.storage.node.oss_git_url'
+        - 'config:field.storage.node.oss_source'
   oss_most_recent_solutions:
     id: oss_most_recent_solutions
     display_title: Block
     display_plugin: block
-    position: 2
+    position: 3
     display_options:
       title: 'Most recent solutions'
       pager:
