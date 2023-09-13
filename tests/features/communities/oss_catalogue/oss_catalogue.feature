@@ -130,15 +130,15 @@ Feature:
     # Clicking links of Categories, Providers or Audience must navigate to
     # search.
     When I click "document-management"
-    Then I should be on "/eu-oss-catalogue/search"
+    Then I should be on "/eu-oss-catalogue/solutions"
     And I should see the following facet summary "document-management"
     When I go to the content page of the type "oss_solution" with the title "Super Awesome Software"
     And I click "Developers Italia"
-    Then I should be on "/eu-oss-catalogue/search"
+    Then I should be on "/eu-oss-catalogue/solutions"
     # @todo This must be the human-friendly plugin label "Developers Italia".
     And I should see the following facet summary "developers_italia"
     When I go to the content page of the type "oss_solution" with the title "Super Awesome Software"
     And I click "science-and-technology"
-    Then I should be on "/eu-oss-catalogue/search"
+    Then I should be on "/eu-oss-catalogue/solutions"
     And I should see the following facet summary "science-and-technology"
 

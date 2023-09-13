@@ -698,7 +698,7 @@ display:
           admin_label: ''
           plugin_id: text_custom
           empty: true
-          content: "<a href=\"[site:base-path]/eu-oss-catalogue/search\">View all</a>\r\n"
+          content: "<a href=\"[site:base-path]/eu-oss-catalogue/solutions\">View all</a>\r\n"
           tokenize: false
       display_extenders:
         metatag_display_extender:
