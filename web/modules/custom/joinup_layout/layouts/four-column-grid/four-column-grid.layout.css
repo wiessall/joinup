@@ -11,4 +11,5 @@
 
 .l-four-column-grid__region > * {
   flex: 0 0 calc(25% - (7.5rem / 4));
+  width: calc(25% - (7.5rem / 4));
 }

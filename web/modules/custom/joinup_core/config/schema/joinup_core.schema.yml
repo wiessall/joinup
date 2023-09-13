@@ -98,6 +98,17 @@ field.formatter.settings.joinup_core_formatter_fallback_field:
       type: field.formatter.settings.[%parent.fallback_field_formatter_id]
       label: 'Formatter settings of the original field'
 
+field.formatter.settings.joinup_core_item_count:
+  type: mapping
+  label: 'Formatter with item count'
+  mapping:
+    count_suffix_single:
+      type: string
+      label: 'Suffinx to use if count is 1.'
+    count_suffix_multiple:
+      type: string
+      label: 'Suffix to use if count is not 1.'
+
 field.widget.settings.email_legacy_multicardinality:
   type: field.widget.settings.email_default
 

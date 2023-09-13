@@ -5,7 +5,7 @@
 
 .l-oss-header {
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
 }
 
 .l-oss-header__column,
@@ -19,6 +19,7 @@
   flex: 0 0 100%;
   flex-wrap: nowrap;
   justify-content: flex-start;
+  gap: 1rem;
 }
 
 .l-oss-header__column--last {
@@ -27,5 +28,8 @@
 
 .l-oss-header__region {
   flex: 0 1 auto;
-  padding-inline: 0.5rem;
+}
+
+.l-oss-header__region--first:not(:empty) {
+  margin-right: 1rem;
 }

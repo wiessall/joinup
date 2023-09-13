@@ -14,10 +14,12 @@
   flex-wrap: wrap;
 }
 .l-oss-details__column--first {
-  flex: 1 0 auto;
+  flex: 0 0 calc(67% - 1rem);
+  max-width: calc(67% - 1rem);
 }
 .l-oss-details__column--last {
   flex: 0 0 33%;
+  max-width: 33%;
 }
 
 .l-oss-details__row {

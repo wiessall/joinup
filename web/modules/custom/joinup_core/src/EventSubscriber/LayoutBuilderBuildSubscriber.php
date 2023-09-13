@@ -32,6 +32,8 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 class LayoutBuilderBuildSubscriber implements EventSubscriberInterface {
 
   /**
+   * Constructs a new LayoutBuilderBuildSubscriber instance.
+   *
    * @param \Drupal\Core\Session\AccountInterface $currentUser
    *   The current user service.
    */
@@ -45,7 +47,10 @@ class LayoutBuilderBuildSubscriber implements EventSubscriberInterface {
   public static function getSubscribedEvents(): array {
     // We need higher priority than
     // \Drupal\layout_builder\EventSubscriber\BlockComponentRenderArray.
-    $events[LayoutBuilderEvents::SECTION_COMPONENT_BUILD_RENDER_ARRAY] = ['onBuildRender', 50];
+    $events[LayoutBuilderEvents::SECTION_COMPONENT_BUILD_RENDER_ARRAY] = [
+      'onBuildRender',
+      50,
+    ];
     return $events;
   }
 
