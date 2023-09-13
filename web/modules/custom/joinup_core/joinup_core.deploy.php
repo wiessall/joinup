@@ -31,9 +31,22 @@ function joinup_core_deploy_109700(): void {
 }
 
 /**
- * Import content for EU OpenSource Software Solutions Catalogue.
+ * Update title of EU OSS catalogue collection.
  */
 function joinup_core_deploy_109701(): void {
+  /** @var \Drupal\collection\Entity\CollectionInterface $collection */
+  $collection = \Drupal::entityTypeManager()->getStorage('rdf_entity')
+    ->load(OssCatalogueCollectionInterface::COLLECTION_ENTITY_ID);
+
+  $collection
+    ?->set('label', 'EU Open Source Solutions Catalogue')
+      ->save();
+}
+
+/**
+ * Import content for EU OpenSource Software Solutions Catalogue.
+ */
+function joinup_core_deploy_109702(): void {
   /** @var \Drupal\Core\Extension\ModuleInstallerInterface $moduleInstaller */
   $moduleInstaller = \Drupal::service('module_installer');
   /** @var \Drupal\Core\Entity\EntityRepositoryInterface $entityRepository */

@@ -9,5 +9,5 @@ third_party_settings:
     locked: false
 name: 'OSS Platform'
 vid: oss_platform
-description: 'Opensource Software Solution Platform'
+description: 'Open Source Software Solution Platform'
 weight: 0
