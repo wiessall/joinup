@@ -12,15 +12,15 @@
           </div>
         {% endif %}
 
-        {% if content.copyright or content.catalogue %}
+        {% if content.copyright|render|trim or content.catalogue|render|trim %}
           <div class="l-oss-details__row">
-            {% if content.copyright %}
+            {% if content.copyright|render|trim %}
               <div {{ region_attributes.copyright.addClass('l-oss-details__region', 'l-oss-details__region--copyright') }}>
                 {{- content.copyright -}}
               </div>
             {% endif %}
 
-            {% if content.catalogue %}
+            {% if content.catalogue|render|trim %}
               <div {{ region_attributes.catalogue.addClass('l-oss-details__region', 'l-oss-details__region--catalogue') }}>
                 {{- content.catalogue -}}
               </div>

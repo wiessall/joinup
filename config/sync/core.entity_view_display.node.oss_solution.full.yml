@@ -4,8 +4,10 @@ status: true
 dependencies:
   config:
     - core.entity_view_mode.node.full
+    - field.field.node.oss_solution.oss_available_languages
     - field.field.node.oss_solution.oss_categories
     - field.field.node.oss_solution.oss_development_status
+    - field.field.node.oss_solution.oss_documentation
     - field.field.node.oss_solution.oss_features
     - field.field.node.oss_solution.oss_git_description
     - field.field.node.oss_solution.oss_git_url
@@ -13,14 +15,16 @@ dependencies:
     - field.field.node.oss_solution.oss_license
     - field.field.node.oss_solution.oss_logo
     - field.field.node.oss_solution.oss_long_description
-    - field.field.node.oss_solution.oss_main_copyright_owner
     - field.field.node.oss_solution.oss_maintenance_contacts
     - field.field.node.oss_solution.oss_maintenance_contractors
     - field.field.node.oss_solution.oss_maintenance_type
+    - field.field.node.oss_solution.oss_owner
     - field.field.node.oss_solution.oss_platforms
     - field.field.node.oss_solution.oss_publiccode_yml_content
     - field.field.node.oss_solution.oss_publiccode_yml_version
     - field.field.node.oss_solution.oss_release_date
+    - field.field.node.oss_solution.oss_scope
+    - field.field.node.oss_solution.oss_screenshots
     - field.field.node.oss_solution.oss_short_description
     - field.field.node.oss_solution.oss_software_type
     - field.field.node.oss_solution.oss_software_version
@@ -99,10 +103,12 @@ third_party_settings:
                 entity: layout_builder.entity
                 view_mode: view_mode
               formatter:
-                type: entity_reference_label
+                type: joinup_oss_catalogue_link_to_solution_search
                 label: inline
                 settings:
-                  link: false
+                  facet_id: category
+                  use_label: true
+                  open_new: true
                 third_party_settings:
                   field_delimiter:
                     delimiter: ','
@@ -172,7 +178,7 @@ third_party_settings:
             uuid: f31a259b-6855-4c9e-bb7b-e6140b976366
             region: copyright
             configuration:
-              id: 'field_block:node:oss_solution:oss_main_copyright_owner'
+              id: 'field_block:node:oss_solution:oss_owner'
               label: 'Copyrights owner'
               label_display: '0'
               provider: layout_builder
@@ -201,9 +207,12 @@ third_party_settings:
                 entity: layout_builder.entity
                 view_mode: view_mode
               formatter:
-                type: plugin_reference_label
+                type: joinup_oss_catalogue_link_to_solution_search
                 label: above
-                settings: {  }
+                settings:
+                  facet_id: source
+                  use_label: false
+                  open_new: true
                 third_party_settings:
                   field_delimiter:
                     delimiter: ', '
@@ -227,14 +236,15 @@ third_party_settings:
                 entity: layout_builder.entity
                 view_mode: view_mode
               formatter:
-                type: link
+                type: joinup_core_link_custom_title
                 label: visually_hidden
                 settings:
-                  trim_length: 80
-                  url_only: false
-                  url_plain: false
-                  rel: '0'
-                  target: '0'
+                  trim_length: '80'
+                  url_only: ''
+                  url_plain: ''
+                  rel: nofollow
+                  target: _blank
+                  link_title: 'Source code repository'
                 third_party_settings:
                   template_suggestion:
                     template_suggestion: ''
@@ -252,18 +262,45 @@ third_party_settings:
                 entity: layout_builder.entity
                 view_mode: view_mode
               formatter:
-                type: link
+                type: joinup_core_link_custom_title
                 label: visually_hidden
                 settings:
-                  trim_length: 80
-                  url_only: false
-                  url_plain: false
-                  rel: '0'
-                  target: '0'
+                  trim_length: '80'
+                  url_only: ''
+                  url_plain: ''
+                  rel: nofollow
+                  target: _blank
+                  link_title: "Project's website"
                 third_party_settings:
                   template_suggestion:
                     template_suggestion: ''
             weight: 1
+            additional: {  }
+          f6501de4-478f-49fe-adbb-2e541ba9d0c3:
+            uuid: f6501de4-478f-49fe-adbb-2e541ba9d0c3
+            region: aside
+            configuration:
+              id: 'field_block:node:oss_solution:oss_documentation'
+              label: Documentation
+              label_display: '0'
+              provider: layout_builder
+              context_mapping:
+                entity: layout_builder.entity
+                view_mode: view_mode
+              formatter:
+                type: joinup_core_link_custom_title
+                label: visually_hidden
+                settings:
+                  trim_length: '80'
+                  url_only: ''
+                  url_plain: ''
+                  rel: nofollow
+                  target: _blank
+                  link_title: Documentation
+                third_party_settings:
+                  template_suggestion:
+                    template_suggestion: ''
+            weight: 2
             additional: {  }
         third_party_settings: {  }
       -
@@ -327,6 +364,35 @@ third_party_settings:
                   template_suggestion:
                     template_suggestion: ''
             weight: 0
+            additional: {  }
+          bedf9535-e494-4215-8413-ef9fa62c9367:
+            uuid: bedf9535-e494-4215-8413-ef9fa62c9367
+            region: second
+            configuration:
+              id: 'field_block:node:oss_solution:oss_scope'
+              label: 'Intended audience'
+              label_display: visible
+              provider: layout_builder
+              context_mapping:
+                entity: layout_builder.entity
+                view_mode: view_mode
+              formatter:
+                type: joinup_oss_catalogue_link_to_solution_search
+                label: hidden
+                settings:
+                  facet_id: scope
+                  use_label: true
+                  open_new: true
+                third_party_settings:
+                  field_delimiter:
+                    delimiter: ''
+                  field_formatter_range:
+                    order: 0
+                    limit: 0
+                    offset: 0
+                  template_suggestion:
+                    template_suggestion: ''
+            weight: 1
             additional: {  }
         third_party_settings: {  }
       -
@@ -396,7 +462,7 @@ third_party_settings:
                 third_party_settings:
                   template_suggestion:
                     template_suggestion: ''
-            weight: 1
+            weight: 2
             additional: {  }
           309f6ae9-ca44-497b-8bba-fe5dec465201:
             uuid: 309f6ae9-ca44-497b-8bba-fe5dec465201
@@ -417,7 +483,7 @@ third_party_settings:
                 third_party_settings:
                   template_suggestion:
                     template_suggestion: ''
-            weight: 2
+            weight: 3
             additional: {  }
           9b64ad87-97d9-45b6-8a93-3c59d8073f83:
             uuid: 9b64ad87-97d9-45b6-8a93-3c59d8073f83
@@ -444,7 +510,7 @@ third_party_settings:
                     offset: 0
                   template_suggestion:
                     template_suggestion: ''
-            weight: 3
+            weight: 4
             additional: {  }
           4ebe0f3e-b36f-49e8-9108-74f9a80e9d3f:
             uuid: 4ebe0f3e-b36f-49e8-9108-74f9a80e9d3f
@@ -464,7 +530,7 @@ third_party_settings:
                 third_party_settings:
                   template_suggestion:
                     template_suggestion: ''
-            weight: 4
+            weight: 5
             additional: {  }
           cfcba182-cfc5-4622-a513-1a13a4f0cbae:
             uuid: cfcba182-cfc5-4622-a513-1a13a4f0cbae
@@ -490,7 +556,7 @@ third_party_settings:
                     offset: 0
                   template_suggestion:
                     template_suggestion: ''
-            weight: 5
+            weight: 6
             additional: {  }
           0d2a18ed-d3bf-4cf5-bcce-bc96c04faa71:
             uuid: 0d2a18ed-d3bf-4cf5-bcce-bc96c04faa71
@@ -504,20 +570,21 @@ third_party_settings:
                 entity: layout_builder.entity
                 view_mode: view_mode
               formatter:
-                type: entity_reference_label
+                type: joinup_core_item_count
                 label: above
                 settings:
-                  link: false
+                  count_suffix_single: administration
+                  count_suffix_multiple: administrations
                 third_party_settings:
                   field_delimiter:
-                    delimiter: ''
+                    delimiter: ', '
                   field_formatter_range:
                     order: 0
                     limit: 0
                     offset: 0
                   template_suggestion:
                     template_suggestion: ''
-            weight: 6
+            weight: 7
             additional: {  }
           af8e91d0-3383-449b-be1a-91f0ba9eb394:
             uuid: af8e91d0-3383-449b-be1a-91f0ba9eb394
@@ -534,17 +601,17 @@ third_party_settings:
                 type: entity_reference_label
                 label: above
                 settings:
-                  link: false
+                  link: true
                 third_party_settings:
                   field_delimiter:
-                    delimiter: ''
+                    delimiter: ', '
                   field_formatter_range:
                     order: 0
                     limit: 0
                     offset: 0
                   template_suggestion:
                     template_suggestion: ''
-            weight: 7
+            weight: 8
             additional: {  }
           31cfd476-9b72-4c45-8678-61e6a057ec17:
             uuid: 31cfd476-9b72-4c45-8678-61e6a057ec17
@@ -561,7 +628,72 @@ third_party_settings:
                 type: entity_reference_label
                 label: above
                 settings:
-                  link: false
+                  link: true
+                third_party_settings:
+                  field_delimiter:
+                    delimiter: ', '
+                  field_formatter_range:
+                    order: 0
+                    limit: 0
+                    offset: 0
+                  template_suggestion:
+                    template_suggestion: ''
+            weight: 9
+            additional: {  }
+          d955f088-9c59-4966-97f2-99b2f1e429f5:
+            uuid: d955f088-9c59-4966-97f2-99b2f1e429f5
+            region: content
+            configuration:
+              id: 'field_block:node:oss_solution:oss_available_languages'
+              label: 'Supported languages'
+              label_display: '0'
+              provider: layout_builder
+              context_mapping:
+                entity: layout_builder.entity
+                view_mode: view_mode
+              formatter:
+                type: string
+                label: above
+                settings:
+                  link_to_entity: false
+                third_party_settings:
+                  field_delimiter:
+                    delimiter: ', '
+                  field_formatter_range:
+                    order: 0
+                    limit: 0
+                    offset: 0
+                  template_suggestion:
+                    template_suggestion: ''
+            weight: 1
+            additional: {  }
+        third_party_settings: {  }
+      -
+        layout_id: layout_onecol
+        layout_settings:
+          label: Gallery
+          context_mapping: {  }
+        components:
+          47b9fb75-bf99-42bc-b2a4-31851abf70f6:
+            uuid: 47b9fb75-bf99-42bc-b2a4-31851abf70f6
+            region: content
+            configuration:
+              id: 'field_block:node:oss_solution:oss_screenshots'
+              label: Gallery
+              label_display: visible
+              provider: layout_builder
+              context_mapping:
+                entity: layout_builder.entity
+                view_mode: view_mode
+              formatter:
+                type: link
+                label: hidden
+                settings:
+                  trim_length: null
+                  url_only: false
+                  url_plain: false
+                  rel: nofollow
+                  target: _blank
                 third_party_settings:
                   field_delimiter:
                     delimiter: ''
@@ -571,29 +703,7 @@ third_party_settings:
                     offset: 0
                   template_suggestion:
                     template_suggestion: ''
-            weight: 8
-            additional: {  }
-        third_party_settings: {  }
-      -
-        layout_id: layout_onecol
-        layout_settings:
-          label: Gallery
-          context_mapping: {  }
-        components:
-          862b1888-c441-4d92-b393-1d30ca2d0c69:
-            uuid: 862b1888-c441-4d92-b393-1d30ca2d0c69
-            region: content
-            configuration:
-              id: 'extra_field_block:node:oss_solution:links'
-              label: Links
-              label_display: '0'
-              provider: layout_builder
-              context_mapping:
-                entity: layout_builder.entity
-              formatter:
-                settings: {  }
-                third_party_settings: {  }
-            weight: 0
+            weight: 1
             additional: {  }
         third_party_settings: {  }
 id: node.oss_solution.full
@@ -605,8 +715,10 @@ hidden:
   joinup_oss_catalogue_short_desctiption_w_fallback: true
   langcode: true
   links: true
+  oss_available_languages: true
   oss_categories: true
   oss_development_status: true
+  oss_documentation: true
   oss_features: true
   oss_git_description: true
   oss_git_url: true
@@ -614,14 +726,16 @@ hidden:
   oss_license: true
   oss_logo: true
   oss_long_description: true
-  oss_main_copyright_owner: true
   oss_maintenance_contacts: true
   oss_maintenance_contractors: true
   oss_maintenance_type: true
+  oss_owner: true
   oss_platforms: true
   oss_publiccode_yml_content: true
   oss_publiccode_yml_version: true
   oss_release_date: true
+  oss_scope: true
+  oss_screenshots: true
   oss_short_description: true
   oss_software_type: true
   oss_software_version: true

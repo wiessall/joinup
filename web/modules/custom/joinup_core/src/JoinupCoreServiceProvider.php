@@ -20,7 +20,7 @@ class JoinupCoreServiceProvider extends ServiceProviderBase {
   /**
    * Sets Monolog handler paths from DRUPAL_MONOLOG_PATHS and adds dblog.
    *
-   * @param ContainerBuilder $container
+   * @param \Drupal\Core\DependencyInjection\ContainerBuilder $container
    *   The ContainerBuilder whose service definitions can be altered.
    */
   public function alter(ContainerBuilder $container): void {

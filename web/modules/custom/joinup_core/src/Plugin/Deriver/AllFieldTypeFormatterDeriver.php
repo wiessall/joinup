@@ -12,10 +12,10 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 /**
  * Deriver class for FormatterWithFallbackField.
  */
-class FormatterWithFallbackFieldDeriver extends DeriverBase implements ContainerDeriverInterface {
+class AllFieldTypeFormatterDeriver extends DeriverBase implements ContainerDeriverInterface {
 
   /**
-   * Constructs a new FormatterWithFallbackFieldDeriver instance.
+   * Constructs a new AllFieldTypeFormatterDeriver instance.
    *
    * @param \Drupal\Core\Field\FieldTypePluginManagerInterface $fieldTypePluginManager
    *   The field type plugin manager.
@@ -23,7 +23,6 @@ class FormatterWithFallbackFieldDeriver extends DeriverBase implements Container
   public function __construct(
     protected FieldTypePluginManagerInterface $fieldTypePluginManager
   ) {}
-
 
   /**
    * {@inheritdoc}
@@ -42,8 +41,8 @@ class FormatterWithFallbackFieldDeriver extends DeriverBase implements Container
     // applicable to every available field type.
     return [
       [
-        'field_types' => array_keys($this->fieldTypePluginManager->getDefinitions())
-      ] + $base_plugin_definition
+        'field_types' => array_keys($this->fieldTypePluginManager->getDefinitions()),
+      ] + $base_plugin_definition,
     ];
   }
 

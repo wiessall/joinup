@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace Drupal\joinup_core\Plugin\Field\FieldFormatter;
 
 use Drupal\Component\Plugin\Factory\DefaultFactory;
@@ -19,10 +21,12 @@ use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
+ * Plugin implementation of formatter with fallback field.
+ *
  * @FieldFormatter(
  *   id = "joinup_core_formatter_fallback_field",
  *   label = @Translation("Formatter with fallback field"),
- *   deriver = "Drupal\joinup_core\Plugin\Deriver\FormatterWithFallbackFieldDeriver"
+ *   deriver = "Drupal\joinup_core\Plugin\Deriver\AllFieldTypeFormatterDeriver"
  * )
  */
 class FormatterWithFallbackField extends FormatterBase implements ContainerFactoryPluginInterface {
@@ -66,7 +70,9 @@ class FormatterWithFallbackField extends FormatterBase implements ContainerFacto
    * @param \Drupal\Component\Plugin\PluginManagerInterface $formatterPluginManager
    *   The field formatter plugin manager.
    * @param \Drupal\Core\Field\FieldTypePluginManagerInterface $fieldTypeManager
+   *   The field type plugin manager.
    * @param \Drupal\Core\Entity\EntityFieldManagerInterface $entityFieldManager
+   *   The entity field manager.
    */
   public function __construct(
     string $pluginId,
@@ -416,7 +422,7 @@ class FormatterWithFallbackField extends FormatterBase implements ContainerFacto
       $this->fieldDefinition->getName(),
       'settings_edit_form',
       'settings',
-      ... (array) $keys
+      ... (array) $keys,
     ];
 
     if ($formState->hasValue($path)) {
