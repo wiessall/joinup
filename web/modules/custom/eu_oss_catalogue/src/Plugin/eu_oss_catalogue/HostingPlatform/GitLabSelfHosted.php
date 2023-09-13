@@ -162,6 +162,7 @@ class GitLabSelfHosted extends GitLabDotCom {
    *       archived
    *       releases(sort: CREATED_DESC first: 1) {
    *         nodes {
+   *           tagName
    *           createdAt
    *         }
    *       }
@@ -197,7 +198,7 @@ class GitLabSelfHosted extends GitLabDotCom {
       ->use('fullPath', 'path', 'id', 'description', 'archived')
       ->releases(['sort' => GitLabReleaseSort::CREATED_DESC, 'first' => 1])
       ->nodes([])
-      ->use('createdAt')
+      ->use('tagName', 'createdAt')
       ->prev()
       ->prev()
       ->repository([])

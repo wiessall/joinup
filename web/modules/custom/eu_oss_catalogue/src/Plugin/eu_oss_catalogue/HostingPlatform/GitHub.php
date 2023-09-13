@@ -123,7 +123,7 @@ class GitHub extends EuOssCatalogueGitHostingPlatformPluginBase {
       }
     }
 
-    // Using a query builder to build a query such as:
+    // Use a query builder to build a query such as:
     // @code
     // {
     //   search(
@@ -145,6 +145,10 @@ class GitHub extends EuOssCatalogueGitHostingPlatformPluginBase {
     //         defaultBranchRef {
     //           name
     //         }
+    //         latestRelease {
+    //           tagName
+    //           createdAt
+    //         }
     //         file: object(expression: "HEAD:publiccode.yml") {
     //           ... on Blob {
     //             text
@@ -164,7 +168,8 @@ class GitHub extends EuOssCatalogueGitHostingPlatformPluginBase {
       ->on('Repository')
       ->use('id', 'description', 'name')
       ->use((new Node('owner'))->use('login'))
-      ->use((new Node('defaultBranchRef'))->use('name'));
+      ->use((new Node('defaultBranchRef'))->use('name'))
+      ->use((new Node('latestRelease'))->use('tagName', 'createdAt'));
 
     if ($filePath) {
       $file = (new Node('object', [

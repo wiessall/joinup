@@ -135,6 +135,7 @@ class GitLabDotCom extends EuOssCatalogueGitHostingPlatformPluginBase {
    *         archived
    *         releases(sort: CREATED_DESC first: 1) {
    *           nodes {
+   *             tagName
    *             createdAt
    *           }
    *         }
@@ -176,7 +177,7 @@ class GitLabDotCom extends EuOssCatalogueGitHostingPlatformPluginBase {
       ->use('path', 'id', 'description', 'archived')
       ->releases(['sort' => GitLabReleaseSort::CREATED_DESC, 'first' => 1])
       ->nodes([])
-      ->use('createdAt')
+      ->use('tagName', 'createdAt')
       ->prev()
       ->prev()
       ->repository([])
@@ -205,6 +206,7 @@ class GitLabDotCom extends EuOssCatalogueGitHostingPlatformPluginBase {
    *     archived
    *     releases(sort: CREATED_DESC first: 1) {
    *       nodes {
+   *         tagName
    *         createdAt
    *       }
    *     }
@@ -235,7 +237,7 @@ class GitLabDotCom extends EuOssCatalogueGitHostingPlatformPluginBase {
     $fragment = $query->use('path', 'id', 'description', 'archived')
       ->releases(['sort' => GitLabReleaseSort::CREATED_DESC, 'first' => 1])
       ->nodes([])
-      ->use('createdAt')
+      ->use('tagName', 'createdAt')
       ->prev()
       ->prev()
       ->repository([])
