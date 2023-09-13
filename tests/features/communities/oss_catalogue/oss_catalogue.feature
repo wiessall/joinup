@@ -39,7 +39,7 @@ Feature:
       | Frequently Asked Questions (FAQ)                 |
       | Follow our journey on the social media!          |
     And I should see the text "Just follow the guide!"
-    And I should see the text "European Open-Source Software Solutions Catalogue"
+    And I should see the text "EU Open Source Solutions Catalogue"
 
     # Check carousel order.
     And I should see the following tiles in the correct order:
@@ -50,7 +50,7 @@ Feature:
       | Semantic Turkey    |
 
     When I click "advanced search"
-    And I should see the heading "Search in European Open-Source Software Solutions Catalogue"
+    And I should see the heading "Search in EU Open Source Solutions Catalogue"
 
     # Check inaccessible routes.
     When I visit "/eu-oss-catalogue/about"

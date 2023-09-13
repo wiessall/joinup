@@ -33,7 +33,7 @@ class RemovingSolutionProvider extends DevelopersItalia {
    * @param mixed $pluginDefinition
    *   The plugin implementation definition.
    * @param \Drupal\eu_oss_catalogue\EuOssCataloguePluginManagerInterface $parserManager
-   *   The EU OSS parser plugin manager service.
+   *   The EU OSS Catalogue parser plugin manager service.
    * @param \GuzzleHttp\Client $httpClient
    *   The HTTP client.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
