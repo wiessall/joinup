@@ -15,7 +15,7 @@ use Drupal\eu_oss_catalogue\EuOssCatalogueHostingPlatformInterface;
 use Drupal\eu_oss_catalogue\EuOssCataloguePluginManagerInterface;
 use Drupal\eu_oss_catalogue\EuOssCatalogueProviderPluginBase;
 use Drupal\eu_oss_catalogue\Model\FetchedSolution;
-use Drupal\eu_oss_catalogue\Model\HostingPlatformResult;
+use Drupal\eu_oss_catalogue\Model\Project;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -110,7 +110,7 @@ class HostingPlatform extends EuOssCatalogueProviderPluginBase implements Config
 
     $platform = $this->getPlatform();
     foreach ($platform->getProjects('publiccode.yml') as $repository) {
-      \assert($repository instanceof HostingPlatformResult);
+      \assert($repository instanceof Project);
       if ($repository->file && is_string($repository->file)) {
         try {
           $data = Yaml::decode($repository->file);
