@@ -25,4 +25,3 @@ visibility:
     negate: true
     routes:
       - entity.rdf_entity.edit_form
-      - view.search_oss_catalogue.search
