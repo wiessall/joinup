@@ -20,6 +20,10 @@ class HostingPlatformResult {
    *   The repository URL.
    * @param string $defaultBranch
    *   The repository default branch.
+   * @param string|null $latestReleaseTag
+   *   The latest release tag.
+   * @param string|null $latestReleaseDate
+   *   The latest release date.
    * @param string|null $platformReference
    *   The code platform internal unique ID.
    * @param string|null $description
@@ -32,6 +36,8 @@ class HostingPlatformResult {
     public readonly string $name,
     public readonly string $url,
     public readonly string $defaultBranch,
+    public readonly ?string $latestReleaseTag = NULL,
+    public readonly ?string $latestReleaseDate = NULL,
     public readonly ?string $platformReference = NULL,
     public readonly ?string $description = NULL,
     public readonly ?string $file = NULL,
