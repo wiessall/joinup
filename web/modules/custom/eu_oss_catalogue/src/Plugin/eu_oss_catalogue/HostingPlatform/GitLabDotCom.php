@@ -270,8 +270,10 @@ class GitLabDotCom extends EuOssCatalogueGitHostingPlatformPluginBase {
       $project['path'],
       "$host/$namespace/{$project['path']}",
       $project['repository']['rootRef'],
+      $project['releases']['nodes'][0]['tagName'] ?? NULL,
+      $project['releases']['nodes'][0]['createdAt'] ?? NULL,
       $project['id'],
-      $project['path'],
+      $project['description'],
       $project['repository']['blobs']['nodes'][0]['rawBlob'] ?? NULL,
     );
   }

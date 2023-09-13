@@ -188,6 +188,8 @@ class GitHub extends EuOssCatalogueGitHostingPlatformPluginBase {
           $node['name'],
           'https://' . self::GITHUB_BASE_URL . "/{$node['owner']['login']}/{$node['name']}",
           $node['defaultBranchRef']['name'],
+          $node['latestRelease']['tagName'] ?? NULL,
+          $node['latestRelease']['createdAt'] ?? NULL,
           $node['id'],
           $node['description'],
           $node['file']['text'] ?? NULL,
