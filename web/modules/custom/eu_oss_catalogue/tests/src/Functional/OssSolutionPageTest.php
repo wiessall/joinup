@@ -5,8 +5,6 @@ declare(strict_types = 1);
 namespace Drupal\Tests\eu_oss_catalogue\Functional;
 
 use Drupal\Tests\BrowserTestBase;
-use Drupal\user\Entity\Role;
-use Drupal\user\RoleInterface;
 
 /**
  * Tests the OSS solution page.
@@ -23,7 +21,7 @@ class OssSolutionPageTest extends BrowserTestBase {
     'eu_oss_catalogue_test',
     'language',
     'views',
-    'views_bulk_operations'
+    'views_bulk_operations',
   ];
 
   /**
