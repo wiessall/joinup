@@ -22,6 +22,15 @@ Feature:
       | Cristian Gagliardi | obsolete               | developers_italia | data-collection                                                 | Immuni is a mobile app that helps us to fight the COVID-19 pandemic by notifying users at risk of carrying the virus as early as possible     | published | 2020-09-13T13:00 |
 
     When I visit "/eu-oss-catalogue"
+
+    # Check menus.
+    Then I should not see the link "Overview" in the "Navigation menu"
+    And I should not see the link "Members" in the "Navigation menu"
+    And I should not see the link "About" in the "Navigation menu"
+    But I should see the link "Welcome" in the "Navigation menu"
+    And I should see the link "Search" in the "Navigation menu"
+    And I should not see the "Entity actions" region
+
     And I should see the following headings:
       | Discover our initiative                          |
       | Most recent solutions                            |
@@ -42,3 +51,9 @@ Feature:
 
     When I click "advanced search"
     And I should see the heading "Search in European Open-Source Software Solutions Catalogue"
+
+    # Check inaccessible routes.
+    When I visit "/eu-oss-catalogue/about"
+    Then I should get an access denied error
+    When I visit "/eu-oss-catalogue/members"
+    Then I should get an access denied error
