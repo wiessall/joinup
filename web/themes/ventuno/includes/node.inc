@@ -140,3 +140,10 @@ function ventuno_preprocess_node__moderation(&$variables) {
   $node = $variables['node'];
   $variables['edit_url'] = $node->toUrl('edit-form')->toString();
 }
+
+/**
+ * Implements hook_preprocess_HOOK() for node__oss_solution__full.
+ */
+function ventuno_preprocess_node__oss_solution__full(array &$variables): void {
+  $variables['#attached']['library'][] = 'ventuno/oss-solution-full';
+}
