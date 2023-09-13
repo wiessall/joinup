@@ -86,7 +86,7 @@ field.formatter.settings.joinup_core_formatter_fallback_field:
       type: string
       label: 'Formatter plugin ID of the original field'
     main_field_formatter_settings:
-      type: field.formatter.settings.[%parent.host_field_formatter_id]
+      type: field.formatter.settings.[%parent.main_field_formatter_id]
       label: 'Formatter settings of the original field'
     fallback_field_id:
       type: string
@@ -97,6 +97,13 @@ field.formatter.settings.joinup_core_formatter_fallback_field:
     fallback_field_formatter_settings:
       type: field.formatter.settings.[%parent.fallback_field_formatter_id]
       label: 'Formatter settings of the original field'
+
+field.formatter.settings.joinup_core_link_custom_title:
+  type: field.formatter.settings.link
+  mapping:
+    link_title:
+      type: string
+      label: 'Title to use to create the link'
 
 field.formatter.settings.joinup_core_item_count:
   type: mapping

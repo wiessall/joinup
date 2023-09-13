@@ -166,7 +166,7 @@ third_party_settings:
                 settings:
                   main_field_formatter_id: string
                   main_field_formatter_settings:
-                    link_to_entity: 0
+                    link_to_entity: false
                   fallback_field_id: oss_git_description
                   fallback_field_formatter_id: basic_string
                 third_party_settings:
@@ -239,9 +239,9 @@ third_party_settings:
                 type: joinup_core_link_custom_title
                 label: visually_hidden
                 settings:
-                  trim_length: '80'
-                  url_only: ''
-                  url_plain: ''
+                  trim_length: 80
+                  url_only: false
+                  url_plain: false
                   rel: nofollow
                   target: _blank
                   link_title: 'Source code repository'
@@ -265,9 +265,9 @@ third_party_settings:
                 type: joinup_core_link_custom_title
                 label: visually_hidden
                 settings:
-                  trim_length: '80'
-                  url_only: ''
-                  url_plain: ''
+                  trim_length: 80
+                  url_only: false
+                  url_plain: false
                   rel: nofollow
                   target: _blank
                   link_title: "Project's website"
@@ -291,9 +291,9 @@ third_party_settings:
                 type: joinup_core_link_custom_title
                 label: visually_hidden
                 settings:
-                  trim_length: '80'
-                  url_only: ''
-                  url_plain: ''
+                  trim_length: 80
+                  url_only: false
+                  url_plain: false
                   rel: nofollow
                   target: _blank
                   link_title: Documentation
