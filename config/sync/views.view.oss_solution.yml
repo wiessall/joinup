@@ -639,7 +639,17 @@ display:
           replica: false
           query_tags: {  }
       relationships: {  }
-      header: {  }
+      header:
+        result:
+          id: result
+          table: views
+          field: result
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: result
+          empty: false
+          content: 'Displaying @start - @end of @total'
       footer: {  }
     cache_metadata:
       max-age: -1
@@ -1498,10 +1508,6 @@ display:
         filters: false
         filter_groups: false
       display_description: ''
-      display_extenders:
-        metatag_display_extender:
-          metatags: {  }
-          tokenize: false
       path: admin/content/eu-oss-catalogue/solutions
       menu:
         type: tab
