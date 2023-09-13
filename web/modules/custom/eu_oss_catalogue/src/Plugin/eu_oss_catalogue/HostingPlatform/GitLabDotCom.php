@@ -7,7 +7,7 @@ namespace Drupal\eu_oss_catalogue\Plugin\eu_oss_catalogue\HostingPlatform;
 use Drupal\eu_oss_catalogue\EuOssCatalogueGitHostingPlatformPluginBase;
 use Drupal\eu_oss_catalogue\Model\GitLabReleaseSort;
 use Drupal\eu_oss_catalogue\Model\GitUri;
-use Drupal\eu_oss_catalogue\Model\HostingPlatformResult;
+use Drupal\eu_oss_catalogue\Model\Project;
 use Gitlab\Client;
 use GraphQL\Actions\Query;
 
@@ -62,7 +62,7 @@ class GitLabDotCom extends EuOssCatalogueGitHostingPlatformPluginBase {
    *   The file path, if one has been specified.
    *
    * @return iterable
-   *   Array \Drupal\eu_oss_catalogue\Model\HostingPlatformResult instances.
+   *   Array \Drupal\eu_oss_catalogue\Model\Project instances.
    */
   protected function doGetProjects(?string $filePath = NULL): iterable {
     foreach ($this->getConfiguration()['projects'] as $namespace => $repos) {
@@ -260,12 +260,12 @@ class GitLabDotCom extends EuOssCatalogueGitHostingPlatformPluginBase {
    * @param array $project
    *   The project array, from the GraphQL results.
    *
-   * @return \Drupal\eu_oss_catalogue\Model\HostingPlatformResult
+   * @return \Drupal\eu_oss_catalogue\Model\Project
    *   A code hosting platform result instance.
    */
-  protected function createHostingPlatformResult(string $namespace, array $project): HostingPlatformResult {
+  protected function createHostingPlatformResult(string $namespace, array $project): Project {
     $host = $this->getConfiguration()['url'] ?? ('https://' . self::GITLAB_BASE_URL);
-    return new HostingPlatformResult(
+    return new Project(
       $namespace,
       $project['path'],
       "$host/$namespace/{$project['path']}",

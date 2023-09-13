@@ -5,9 +5,9 @@ declare(strict_types = 1);
 namespace Drupal\eu_oss_catalogue\Model;
 
 /**
- * Data model for code platforms repository results.
+ * Data model for a code platform project.
  */
-class HostingPlatformResult {
+class Project {
 
   /**
    * Creates a new result object.

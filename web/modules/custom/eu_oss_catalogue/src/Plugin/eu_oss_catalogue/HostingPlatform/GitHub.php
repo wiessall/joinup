@@ -11,7 +11,7 @@ use Drupal\eu_oss_catalogue\EuOssCatalogueGitHostingPlatformPluginBase;
 use Drupal\eu_oss_catalogue\Exception\MissingAccessTokenException;
 use Drupal\eu_oss_catalogue\Model\GitHubSearchType;
 use Drupal\eu_oss_catalogue\Model\GitUri;
-use Drupal\eu_oss_catalogue\Model\HostingPlatformResult;
+use Drupal\eu_oss_catalogue\Model\Project;
 use Github\Api\GraphQL;
 use Github\AuthMethod;
 use Github\Client;
@@ -183,7 +183,7 @@ class GitHub extends EuOssCatalogueGitHostingPlatformPluginBase {
     foreach ($graphQL->execute($query->toString())['data']['search']['nodes'] as $node) {
       // Repositories without code don't have a default branch.
       if (!empty($node['defaultBranchRef'])) {
-        yield new HostingPlatformResult(
+        yield new Project(
           $node['owner']['login'],
           $node['name'],
           'https://' . self::GITHUB_BASE_URL . "/{$node['owner']['login']}/{$node['name']}",
