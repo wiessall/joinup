@@ -1558,10 +1558,10 @@ display:
           tokenize: false
       path: admin/content/eu-oss-catalogue/solutions
       menu:
-        type: none
-        title: List
+        type: tab
+        title: Solutions
         description: ''
-        weight: 0
+        weight: -1
         expanded: false
         menu_name: admin
         parent: eu_oss_catalogue.provider.collection
