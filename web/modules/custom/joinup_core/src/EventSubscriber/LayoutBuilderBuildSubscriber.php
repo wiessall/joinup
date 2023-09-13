@@ -49,7 +49,7 @@ class LayoutBuilderBuildSubscriber implements EventSubscriberInterface {
     // \Drupal\layout_builder\EventSubscriber\BlockComponentRenderArray.
     $events[LayoutBuilderEvents::SECTION_COMPONENT_BUILD_RENDER_ARRAY] = [
       'onBuildRender',
-      50,
+      150,
     ];
     return $events;
   }
