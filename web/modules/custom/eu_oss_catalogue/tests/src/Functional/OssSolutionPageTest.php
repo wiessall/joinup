@@ -23,6 +23,7 @@ class OssSolutionPageTest extends BrowserTestBase {
     'eu_oss_catalogue_test',
     'language',
     'views',
+    'views_bulk_operations'
   ];
 
   /**
