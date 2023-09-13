@@ -25,7 +25,7 @@ display:
     display_plugin: default
     position: 0
     display_options:
-      title: 'Search in European Open-Source Software Solutions Catalogue'
+      title: 'Search in EU Open Source Solutions Catalogue'
       fields:
         body:
           id: body

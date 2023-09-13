@@ -1,6 +1,6 @@
 {
     "name": "drupal/eu_oss_catalogue",
-    "description": "EU OSS Solutions Catalogue, with federated sources & repositories",
+    "description": "EU Open Source Solutions Catalogue, with federated sources & repositories",
     "type": "drupal-module",
     "homepage": "https://www.drupal.org/sandbox/itamair/3372413",
     "authors": [
