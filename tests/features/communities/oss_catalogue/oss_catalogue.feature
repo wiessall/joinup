@@ -70,9 +70,10 @@ Feature:
       | Administration 1 |
       | Administration 2 |
       | Administration 3 |
+    Given an oss_platform term with the name "macOs"
     Given oss_solution content:
-      | title                   | oss_available_languages | oss_development_status | oss_source        |  oss_categories                   | oss_long_description                                                                             | oss_short_description | oss_git_description | status    | oss_release_date | oss_documentation        | oss_features         | oss_git_url              | oss_landing_url          | oss_license      | oss_logo                              | oss_maintenance_contacts | oss_maintenance_contractors | oss_maintenance_type | oss_owner       | oss_platforms | oss_publiccode_yml_version | oss_scope                       | oss_screenshots                                                              | oss_software_type | oss_software_version | oss_used_by                                        |
-      | Super Awesome Software  | it,en,de                | stable                 | developers_italia | document-management,collaboration | The long description. A patient developer can make this long enough to be at least 5 lines long. | The short description | The GIT description | published | 2014-11-19       | https://github.com/jhedstrom/DrupalDriver/pull/137 - https://example.com | Feature A, Feature B | https://github.com/jhedstrom/DrupalDriver/pull/137 - https://example.com | https://github.com/jhedstrom/DrupalDriver/pull/137 - https://example.com | GPL-2.0-or-later | https://github.com/jhedstrom/DrupalDriver/pull/137 - https://placehold.co/200x200.png | FOSS Conference          | ACME Ltd.                   | community            | FOSS Conference | web           | 0.4                        | science-and-technology,security | https://github.com/jhedstrom/DrupalDriver/pull/137 - https://placehold.co/600x400.png, https://github.com/jhedstrom/DrupalDriver/pull/137 - https://placehold.co/400x400.png | standalone/web    | 3.17.143             | Administration 1,Administration 2,Administration 3 |
+      | title                   | oss_available_languages | oss_development_status | oss_source        |  oss_categories                   | oss_long_description                                                                             | oss_short_description | oss_git_description | status    | oss_release_date | oss_documentation   | oss_features         | oss_git_url         | oss_landing_url     | oss_license      | oss_logo                         | oss_maintenance_contacts | oss_maintenance_contractors | oss_maintenance_type | oss_owner       | oss_platforms | oss_publiccode_yml_version | oss_scope                       | oss_screenshots                                                   | oss_software_type  | oss_software_version | oss_used_by                                        |
+      | Super Awesome Software  | it,en,de                | stable                 | developers_italia | document-management,collaboration | The long description. A patient developer can make this long enough to be at least 5 lines long. | The short description | The GIT description | published | 2014-11-19       | https://example.com | Feature A, Feature B | https://example.com | https://example.com | GPL-2.0-or-later | https://placehold.co/200x200.png | FOSS Conference          | ACME Ltd.                   | community            | FOSS Conference | macOs         | 0.4                        | science-and-technology,security | https://placehold.co/600x400.png,https://placehold.co/400x400.png | standalone/desktop | 3.17.143             | Administration 1,Administration 2,Administration 3 |
     When I go to the content page of the type "oss_solution" with the title "Super Awesome Software"
     Then I should see the following headings:
       | Super Awesome Software |
@@ -99,32 +100,33 @@ Feature:
       | License                                                                                            |
       |   GPL-2.0-or-later                                                                                 |
       | Platforms                                                                                          |
-      |   web                                                                                              |
+      |   macOs                                                                                            |
       | Maintenance type                                                                                   |
       |   Maintained by people donating their time to the project                                          |
       | Software type                                                                                      |
-      |   Represents a web application usable by means of a browser                                        |
+      |   Typically installed and run in a a desktop operating system environment                          |
       | Used by                                                                                            |
       |   3 administrations                                                                                |
     And I should see the following links:
       # Categories.
-      | document-management             |
-      | collaboration                   |
+      | document-management              |
+      | collaboration                    |
       # Providers.
-      | Developers Italia               |
+      | Developers Italia                |
       # Links to resources.
-      | Source code repository          |
-      | Project’s website               |
-      | Documentation                   |
+      | Source code repository           |
+      | Project’s website                |
+      | Documentation                    |
       # Audience
-      | science-and-technology          |
-      | security                        |
+      | science-and-technology           |
+      | security                         |
       # Contractors.
-      | ACME Ltd.                       |
+      | ACME Ltd.                        |
       # Maintenance contacts.
-      | FOSS Conference                 |
+      | FOSS Conference                  |
       # Gallery.
       | https://placehold.co/600x400.png |
+      | https://placehold.co/400x400.png |
     # Clicking links of Categories, Providers or Audience must navigate to
     # search.
     When I click "document-management"
