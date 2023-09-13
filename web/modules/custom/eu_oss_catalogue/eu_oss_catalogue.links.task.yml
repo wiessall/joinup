@@ -1,0 +1,4 @@
+eu_oss_catalogue.label_settings:
+  route_name: eu_oss_catalogue.provider.collection
+  title: Platform providers
+  base_route: eu_oss_catalogue.provider.collection
