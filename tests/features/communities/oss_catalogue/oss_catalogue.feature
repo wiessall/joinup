@@ -52,8 +52,13 @@ Feature:
     When I click "advanced search"
     And I should see the heading "Search in EU Open Source Solutions Catalogue"
 
-    # Check inaccessible routes.
-    When I visit "/eu-oss-catalogue/about"
+  Scenario Outline: OSS Catalogue's inaccessible routes.
+    Given I am logged in as an "authenticated user"
+    And I accept the "Legal notice" agreement
+    When I go to "<path>"
     Then I should get an access denied error
-    When I visit "/eu-oss-catalogue/members"
-    Then I should get an access denied error
+
+    Examples:
+      | path                     |
+      | eu-oss-catalogue/about   |
+      | eu-oss-catalogue/members |
