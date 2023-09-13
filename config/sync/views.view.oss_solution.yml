@@ -4,7 +4,6 @@ status: true
 dependencies:
   config:
     - core.entity_view_mode.node.view_mode_tile
-    - field.storage.node.oss_available_languages
     - field.storage.node.oss_git_description
     - field.storage.node.oss_git_url
     - field.storage.node.oss_short_description
@@ -14,6 +13,7 @@ dependencies:
     - taxonomy.vocabulary.oss_licence
   module:
     - datetime
+    - eu_oss_catalogue
     - link
     - node
     - pluginreference
@@ -641,7 +641,6 @@ display:
       relationships: {  }
       header: {  }
       footer: {  }
-      display_extenders: {  }
     cache_metadata:
       max-age: -1
       contexts:
@@ -1046,15 +1045,16 @@ display:
           multi_type: separator
           separator: ', '
           field_api_classes: false
-        oss_available_languages:
-          id: oss_available_languages
-          table: node__oss_available_languages
-          field: oss_available_languages
+        translation_list:
+          id: translation_list
+          table: node
+          field: translation_list
           relationship: none
           group_type: group
           admin_label: ''
-          plugin_id: field
-          label: 'Supported languages'
+          entity_type: node
+          plugin_id: translation_list
+          label: Languages
           exclude: false
           alter:
             alter_text: false
@@ -1087,7 +1087,7 @@ display:
           element_class: ''
           element_label_type: ''
           element_label_class: ''
-          element_label_colon: true
+          element_label_colon: false
           element_wrapper_type: ''
           element_wrapper_class: ''
           element_default_classes: true
@@ -1095,20 +1095,6 @@ display:
           hide_empty: false
           empty_zero: false
           hide_alter_empty: true
-          click_sort_column: value
-          type: string
-          settings:
-            link_to_entity: false
-          group_column: value
-          group_columns: {  }
-          group_rows: true
-          delta_limit: 0
-          delta_offset: 0
-          delta_reversed: false
-          delta_first_last: false
-          multi_type: separator
-          separator: ', '
-          field_api_classes: false
         status:
           id: status
           table: node_field_data
@@ -1234,7 +1220,7 @@ display:
             custom_date_format: ''
             timezone: ''
             tooltip:
-              date_format: long
+              date_format: ''
               custom_date_format: ''
             time_diff:
               enabled: false
@@ -1318,48 +1304,6 @@ display:
           value:
             oss_solution: oss_solution
           group: 1
-        langcode:
-          id: langcode
-          table: node_field_data
-          field: langcode
-          relationship: none
-          group_type: group
-          admin_label: ''
-          entity_type: node
-          entity_field: langcode
-          plugin_id: language
-          operator: in
-          value:
-            '***LANGUAGE_language_interface***': '***LANGUAGE_language_interface***'
-          group: 1
-          exposed: false
-          expose:
-            operator_id: ''
-            label: ''
-            description: ''
-            use_operator: false
-            operator: ''
-            operator_limit_selection: false
-            operator_list: {  }
-            identifier: ''
-            required: false
-            remember: false
-            multiple: false
-            remember_roles:
-              authenticated: authenticated
-            reduce: false
-          is_grouped: false
-          group_info:
-            label: ''
-            description: ''
-            identifier: ''
-            optional: true
-            widget: select
-            multiple: false
-            remember: false
-            default_group: All
-            default_group_multiple: {  }
-            group_items: {  }
         combine:
           id: combine
           table: views
@@ -1452,28 +1396,31 @@ display:
             default_group: All
             default_group_multiple: {  }
             group_items: {  }
-        oss_available_languages_value:
-          id: oss_available_languages_value
-          table: node__oss_available_languages
-          field: oss_available_languages_value
+        langcode:
+          id: langcode
+          table: node_field_data
+          field: langcode
           relationship: none
           group_type: group
           admin_label: ''
-          plugin_id: string
-          operator: '='
-          value: ''
+          entity_type: node
+          entity_field: langcode
+          plugin_id: language
+          operator: in
+          value:
+            '***LANGUAGE_site_default***': '***LANGUAGE_site_default***'
           group: 1
           exposed: true
           expose:
-            operator_id: oss_available_languages_value_op
-            label: 'Supported language'
+            operator_id: langcode_op
+            label: Language
             description: ''
             use_operator: false
-            operator: oss_available_languages_value_op
+            operator: langcode_op
             operator_limit_selection: false
             operator_list: {  }
-            identifier: oss_available_languages_value
-            required: false
+            identifier: langcode
+            required: true
             remember: false
             multiple: false
             remember_roles:
@@ -1483,7 +1430,7 @@ display:
               moderator: '0'
               administrator: '0'
               rdf_graph_manager: '0'
-            placeholder: ''
+            reduce: false
           is_grouped: false
           group_info:
             label: ''
@@ -1580,7 +1527,6 @@ display:
         - 'user.node_grants:view'
         - user.permissions
       tags:
-        - 'config:field.storage.node.oss_available_languages'
         - 'config:field.storage.node.oss_git_description'
         - 'config:field.storage.node.oss_git_url'
         - 'config:field.storage.node.oss_short_description'
@@ -1744,10 +1690,6 @@ display:
           empty: true
           content: "<a href=\"[site:base-path]/eu-oss-catalogue/search\">View all</a>\r\n"
           tokenize: false
-      display_extenders:
-        metatag_display_extender:
-          metatags: {  }
-          tokenize: false
     cache_metadata:
       max-age: -1
       contexts:
@@ -1763,10 +1705,6 @@ display:
     display_plugin: page
     position: 1
     display_options:
-      display_extenders:
-        metatag_display_extender:
-          metatags: {  }
-          tokenize: false
       path: oss-solutions
     cache_metadata:
       max-age: -1
