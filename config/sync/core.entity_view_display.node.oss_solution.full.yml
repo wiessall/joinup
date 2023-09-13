@@ -690,7 +690,7 @@ third_party_settings:
                 label: hidden
                 settings:
                   trim_length: null
-                  url_only: true
+                  url_only: false
                   url_plain: false
                   rel: nofollow
                   target: _blank
