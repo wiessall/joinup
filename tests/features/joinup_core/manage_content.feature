@@ -59,7 +59,7 @@ Feature:
 
     # Download the list as CSV.
     When I click "Download CSV"
-    Then the response should contain "Type;Title;\"Created on\";\"Last update\";Published;URL"
+    Then the response should contain "Type;Title;\"Created on\";\"Last update\";State;URL"
     And the response should contain "Document;\"The Panama Papers\";"
     And the response should contain "/document/panama-papers"
     And the response should contain "Document;\"The Area 51 File\";"
