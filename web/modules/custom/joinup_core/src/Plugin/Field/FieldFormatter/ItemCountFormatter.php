@@ -37,7 +37,7 @@ class ItemCountFormatter extends FormatterBase {
       [
         '#markup' => $this->formatPlural(
           $items->count(),
-          '@count @suffix_singe',
+          '@count @suffix_single',
           '@count @suffix_multiple',
           [
             '@count' => $items->count(),
