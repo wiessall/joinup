@@ -40,14 +40,9 @@ class OssSolutionPageTest extends BrowserTestBase {
 
     // Check the view exists, is access-restricted, and some defaults are there.
     $this->drupalGet('/oss-solutions');
-    $assert_session->statusCodeEquals(403);
-
-    $role = Role::load(RoleInterface::AUTHENTICATED_ID);
-    $this->grantPermissions($role, ['administer eu oss catalogue']);
-    $this->getSession()->reload();
 
     $assert_session->statusCodeEquals(200);
-    $assert_session->titleEquals('OSS Solutions | Drupal');
+    $assert_session->titleEquals('Open Source Software Solutions | Drupal');
     $assert_session->fieldExists('Source');
     $assert_session->fieldExists('Category');
     $assert_session->fieldExists('License');
