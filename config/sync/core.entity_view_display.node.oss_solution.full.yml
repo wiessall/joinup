@@ -270,7 +270,7 @@ third_party_settings:
                   url_plain: false
                   rel: nofollow
                   target: _blank
-                  link_title: "Project's website"
+                  link_title: 'Project’s website'
                 third_party_settings:
                   template_suggestion:
                     template_suggestion: ''
