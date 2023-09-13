@@ -79,7 +79,32 @@ The release procedure is as follows:
 Post release procedure
 ======================
 
-After the release is done, the following steps should be taken:
+After the release is done, before the post upgrade update hook removals below,
+the POC environment should be updated with the release. The POC environment is
+[https://git.fpfis.tech.ec.europa.eu/ec-europa/digit-joinup-poc-reference](https://git.fpfis.tech.ec.europa.eu/ec-europa/digit-joinup-poc-reference).
+In order to trigger the release, checkout the release tag branch using the
+following command:
+```
+$ git checkout v#.##.#
+```
+where `#.##.#` is the version number of the release. Then push the branch to the
+POC reference repository using the following command:
+```
+$ git push poc-reference v#.##.#
+```
+In the above example, poc-reference is the remote name for the POC reference
+repository. If you have not added the POC reference repository as a remote, you
+can do so by running the following command:
+```
+$ git remote add poc-reference https://git.fpfis.tech.ec.europa.eu/ec-europa/digit-joinup-poc-reference.git
+```
+Pushing the tag will automatically deploy the release to the POC environment.
+
+### Post release update hook removals
+The second step after the release is done, is to remove the deployment hooks.
+Mainly, after the release is done, develop branch will start failing due to the
+restriction in the deployment hook namin convention. Thus, the following steps
+should be followed:
 
 1. Move the release ticket to 'In Progress'.
 2. Create a new branch based on the `master` branch from the reference
@@ -87,11 +112,13 @@ After the release is done, the following steps should be taken:
    the updates that were made during the release procedure.
 3. Clean any instances of the `hook_update_N`, `hook_post_update_NAME` and
    `hook_deploy_NAME` functions that were added during the release procedure.
-4. Push the branch to the development repository and create a merge request
+4. Update dependencies and check for any changes required in the used patches.
+5. Push the branch to the development repository and create a merge request
    from the branch to the `develop` branch. Move the release ticket to the QA
    column and allow it to be picked up by the team. When the ticket is approved,
    the team member should merge the merge request and move the release ticket to
    the 'Resolved' column.
+6. Mark the release ticket as 'Released' in [Jira](https://citnet.tech.ec.europa.eu/CITnet/jira/projects/ISAICP?selectedItem=com.atlassian.jira.jira-projects-plugin%3Arelease-page&status=released-unreleased)
 
 Hotfix procedure
 ================
