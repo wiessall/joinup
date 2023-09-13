@@ -834,7 +834,7 @@ class JoinupSearchContext extends RawDrupalContext {
    */
   public function assertFacetSummary(string $labels): void {
     $present_labels = $this->explodeCommaSeparatedStepArgument($labels);
-    $xpath = "//div[contains(concat(' ', normalize-space(@class), ' '), ' block-facets-summary-blocksearch-facets-summary ')]//li[contains(concat(' ', normalize-space(@class), ' '), ' facet-summary-item--facet ')]";
+    $xpath = "//div[contains(concat(' ', normalize-space(@class), ' '), ' block-facets-summary ')]//li[contains(concat(' ', normalize-space(@class), ' '), ' facet-summary-item--facet ')]";
     $elements = $this->getSession()->getPage()->findAll('xpath', $xpath);
     $present = [];
 
