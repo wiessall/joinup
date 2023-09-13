@@ -30,6 +30,11 @@ class OssAccessCheck implements AccessInterface {
    *   The access result.
    */
   public function access(Route $route, RouteMatchInterface $route_match): AccessResultInterface {
+    $requirement = $route->getRequirement('_oss_access_check');
+    if ($requirement !== 'TRUE') {
+      throw new \Exception("The '_oss_access_check' route requirement should be 'TRUE', but '$requirement' was given.");
+    }
+
     $group = $route_match->getParameter('rdf_entity');
     if ($group instanceof GroupInterface) {
       return AccessResult::allowedIf($group->id() !== OssCatalogueCollectionInterface::COLLECTION_ENTITY_ID)
