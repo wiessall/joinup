@@ -117,7 +117,7 @@ function joinup_oss_catalogue_block_access(BlockInterface $block, string $operat
 
     $group = \Drupal::service('joinup_group.group_manager')
       ->getGroupFromContext();
-    if ($group->id() === OssCatalogueCollectionInterface::COLLECTION_ENTITY_ID) {
+    if ($group && $group->id() === OssCatalogueCollectionInterface::COLLECTION_ENTITY_ID) {
       return AccessResult::forbidden();
     }
   }
