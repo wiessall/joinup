@@ -737,7 +737,7 @@ display:
             title: title
             created: created
             changed: changed
-            status: status
+            field_state: field_state
             og_audience: og_audience
           default: created
           info:
@@ -774,7 +774,7 @@ display:
               separator: ''
               empty_column: false
               responsive: ''
-            status:
+            field_state:
               sortable: true
               default_sort_order: asc
               align: ''
@@ -782,6 +782,8 @@ display:
               empty_column: false
               responsive: ''
             og_audience:
+              sortable: false
+              default_sort_order: asc
               align: ''
               separator: ''
               empty_column: false
@@ -1786,7 +1788,10 @@ display:
       defaults:
         fields: false
         arguments: true
-      display_extenders: {  }
+      display_extenders:
+        metatag_display_extender:
+          metatags: {  }
+          tokenize: false
       path: rdf_entity/%rdf_entity/manage-content
       menu:
         type: tab
