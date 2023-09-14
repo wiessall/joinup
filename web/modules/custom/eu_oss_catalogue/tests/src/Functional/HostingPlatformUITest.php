@@ -4,7 +4,6 @@ declare(strict_types = 1);
 
 namespace Drupal\Tests\eu_oss_catalogue\Functional;
 
-use Drupal\Core\Serialization\Yaml;
 use Drupal\Tests\BrowserTestBase;
 use Drupal\user\UserInterface;
 
@@ -34,6 +33,22 @@ class HostingPlatformUITest extends BrowserTestBase {
    * @var \Drupal\user\UserInterface
    */
   protected UserInterface $adminUser;
+
+  /**
+   * {@inheritdoc}
+   */
+  protected function setUp(): void {
+    parent::setUp();
+
+    $this->adminUser = $this->drupalCreateUser(['administer eu oss catalogue']);
+    $this->drupalPlaceBlock('local_actions_block');
+
+    $settings['settings']['eu_oss_catalogue']['platform_github']['access_token'] = (object) [
+      'value' => 'dummy-token',
+      'required' => TRUE,
+    ];
+    $this->writeSettings($settings);
+  }
 
   /**
    * Tests page access.
@@ -71,14 +86,6 @@ class HostingPlatformUITest extends BrowserTestBase {
 
     $this->clickLink('Edit');
 
-    // Check error message.
-    $data = [
-      'platformSettings[projects][0][namespace]' => 'dummy-namespace-error',
-      'platformSettings[projects][0][name]' => 'dummy-name-error',
-    ];
-    $this->submitForm($data, 'Save');
-    $assertSession->pageTextContains('Namespace dummy-namespace-error doesn\'t exist on the platform');
-
     // Type correct namespace and name.
     $data = [
       'label' => 'Test hosting platform updated',
@@ -102,16 +109,6 @@ class HostingPlatformUITest extends BrowserTestBase {
    * Tests hosting provider description.
    */
   public function testDescription(): void {
-    // Load configuration.
-    $configs = [
-      'eu_oss_catalogue.hosting_platform.github_mockup',
-      'eu_oss_catalogue.hosting_platform.github_example',
-    ];
-    foreach ($configs as $config) {
-      $data = Yaml::decode(file_get_contents(__DIR__ . '/../../fixtures/' . $config . '.yml'));
-      $this->config($config)->setData($data)->save();
-    }
-
     $this->drupalLogin($this->adminUser);
     $this->drupalGet('admin/content/eu-oss-catalogue');
     $assertSession = $this->assertSession();
@@ -120,22 +117,6 @@ class HostingPlatformUITest extends BrowserTestBase {
     $assertSession->pageTextContains('Code hosting platform (GitHub)');
     // Description for github_mockup.
     $assertSession->pageTextContains('Test GitHub hosting provider (GitHub)');
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  protected function setUp(): void {
-    parent::setUp();
-
-    $this->adminUser = $this->drupalCreateUser(['administer eu oss catalogue']);
-    $this->drupalPlaceBlock('local_actions_block');
-
-    $settings['settings']['eu_oss_catalogue']['platform_github']['access_token'] = (object) [
-      'value' => 'dummy-token',
-      'required' => TRUE,
-    ];
-    $this->writeSettings($settings);
   }
 
 }

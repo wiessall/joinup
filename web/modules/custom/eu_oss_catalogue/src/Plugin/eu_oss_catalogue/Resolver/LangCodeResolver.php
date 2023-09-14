@@ -8,7 +8,7 @@ use Drupal\Component\Utility\NestedArray;
 use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
-use Drupal\eu_oss_catalogue\Model\EuOssCatalogueFetchedSolution;
+use Drupal\eu_oss_catalogue\Model\FetchedSolution;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -59,7 +59,7 @@ class LangCodeResolver extends DefaultResolver implements ContainerFactoryPlugin
   /**
    * {@inheritdoc}
    */
-  public function resolve(FieldItemListInterface $fieldItemList, EuOssCatalogueFetchedSolution $fetchedSolution): mixed {
+  public function resolve(FieldItemListInterface $fieldItemList, FetchedSolution $fetchedSolution): mixed {
     if (!str_contains($this->getConfiguration()['path'], '[lang]')) {
       return parent::resolve($fieldItemList, $fetchedSolution);
     }

@@ -4,7 +4,7 @@ declare(strict_types = 1);
 
 namespace Drupal\eu_oss_catalogue\Event;
 
-use Drupal\eu_oss_catalogue\Model\EuOssCatalogueFetchedSolution;
+use Drupal\eu_oss_catalogue\Model\FetchedSolution;
 use Symfony\Contracts\EventDispatcher\Event;
 
 /**
@@ -25,20 +25,20 @@ class EuOssPostFetchEvent extends Event {
   /**
    * Constructs a new event instance.
    *
-   * @param \Drupal\eu_oss_catalogue\Model\EuOssCatalogueFetchedSolution $fetchedSolution
+   * @param \Drupal\eu_oss_catalogue\Model\FetchedSolution $fetchedSolution
    *   The fetched solution object.
    */
   public function __construct(
-    protected EuOssCatalogueFetchedSolution $fetchedSolution
+    protected FetchedSolution $fetchedSolution
   ) {}
 
   /**
    * Returns the fetched solution.
    *
-   * @return \Drupal\eu_oss_catalogue\Model\EuOssCatalogueFetchedSolution
+   * @return \Drupal\eu_oss_catalogue\Model\FetchedSolution
    *   The fetches solution object.
    */
-  public function getFetchedSolution(): EuOssCatalogueFetchedSolution {
+  public function getFetchedSolution(): FetchedSolution {
     return $this->fetchedSolution;
   }
 

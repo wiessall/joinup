@@ -5,7 +5,7 @@ declare(strict_types = 1);
 namespace Drupal\eu_oss_catalogue;
 
 use Drupal\eu_oss_catalogue\Entity\OssSolutionInterface;
-use Drupal\eu_oss_catalogue\Model\EuOssCatalogueFetchedSolution;
+use Drupal\eu_oss_catalogue\Model\FetchedSolution;
 
 /**
  * Interface for 'eu_oss_catalogue' service.
@@ -42,13 +42,13 @@ interface EuOssCatalogueInterface {
    *
    * @param string $providerPluginId
    *   The provider plugin ID.
-   * @param \Drupal\eu_oss_catalogue\Model\EuOssCatalogueFetchedSolution $fetchedSolution
+   * @param \Drupal\eu_oss_catalogue\Model\FetchedSolution $fetchedSolution
    *   The fetched solution object.
    *
    * @return \Drupal\eu_oss_catalogue\Entity\OssSolutionInterface
    *   The OSS Solution node.
    */
-  public function createOrUpdateSolution(string $providerPluginId, EuOssCatalogueFetchedSolution $fetchedSolution): OssSolutionInterface;
+  public function createOrUpdateSolution(string $providerPluginId, FetchedSolution $fetchedSolution): OssSolutionInterface;
 
   /**
    * Prepares the entities removed from the source in a queue to be processed.
