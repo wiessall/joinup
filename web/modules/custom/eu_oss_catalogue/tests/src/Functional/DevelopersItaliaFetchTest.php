@@ -67,8 +67,10 @@ class DevelopersItaliaFetchTest extends FetchTestBase {
     $this->assertNode('FOSS Conference', OssContactInterface::class);
     $this->assertNode('Pirate Initiative', OssContactInterface::class);
 
-    $this->assertEquals(1, $this->countLogMessages('Solution @solution was created.', 'a:1:{s:9:"@solution";s:10:"Solution 1";}'), 'Creation log entry for Solution 1');
-    $this->assertEquals(1, $this->countLogMessages('Solution @solution was created.', 'a:1:{s:9:"@solution";s:10:"Solution 2";}'), 'Creation log entry for Solution 2');
+    // Creation log entry for Solution 1.
+    $this->assertCount(1, $this->getLogEntries('Solution @solution was created.', 'a:1:{s:9:"@solution";s:10:"Solution 1";}'));
+    // Creation log entry for Solution 2.
+    $this->assertCount(1, $this->getLogEntries('Solution @solution was created.', 'a:1:{s:9:"@solution";s:10:"Solution 2";}'));
 
     // Re-run the process and update one solution from a new source-provider.
     $this->fetchSolutions('testing_provider', 2);
@@ -85,8 +87,10 @@ class DevelopersItaliaFetchTest extends FetchTestBase {
     $expected_providers = ['developers_italia', 'testing_provider'];
     $this->assertSame($expected_providers, array_map(fn (array $item): string => $item['plugin_id'], $updated_solution->get('oss_source')->getValue()));
 
-    $this->assertEquals(1, $this->countLogMessages('Solution @solution was updated.', 'a:1:{s:9:"@solution";s:20:"Solution 1 (updated)";}'), 'Update log entry for Solution 1');
-    $this->assertEquals(1, $this->countLogMessages('Solution @solution was updated.', 'a:1:{s:9:"@solution";s:10:"Solution 2";}'), 'Update log entry for Solution 2');
+    // Update log entry for Solution 1.
+    $this->assertCount(1, $this->getLogEntries('Solution @solution was updated.', 'a:1:{s:9:"@solution";s:20:"Solution 1 (updated)";}'));
+    // Update log entry for Solution 2.
+    $this->assertCount(1, $this->getLogEntries('Solution @solution was updated.', 'a:1:{s:9:"@solution";s:10:"Solution 2";}'));
   }
 
   /**
@@ -136,7 +140,7 @@ class DevelopersItaliaFetchTest extends FetchTestBase {
     $service = \Drupal::getContainer()->get('eu_oss_catalogue');
     $service->fetch('developers_italia');
 
-    $logs = \Drupal::database()->query("SELECT message, variables FROM {watchdog} WHERE type = 'eu_oss_catalogue'")->fetchAll();
+    $logs = $this->getLogEntries();
     $message = strip_tags($logs[0]->message);
     $variables = unserialize($logs[0]->variables, [
       'allowed_classes' => [
@@ -160,7 +164,7 @@ class DevelopersItaliaFetchTest extends FetchTestBase {
     $service->fetch('developers_italia');
 
     // Check failed imports.
-    $logs = \Drupal::database()->query("SELECT message, variables FROM {watchdog} WHERE type = 'eu_oss_catalogue'")->fetchAll();
+    $logs = $this->getLogEntries();
     $message = strip_tags($logs[1]->message);
     $variables = unserialize($logs[1]->variables, [
       'allowed_classes' => [
@@ -180,25 +184,30 @@ class DevelopersItaliaFetchTest extends FetchTestBase {
   }
 
   /**
-   * Counts log messages.
+   * Gets dblog entries.
    *
-   * @param string $message
-   *   Searched message.
-   * @param string $variables
-   *   Searched variables.
+   * @param string|null $message
+   *   (optional) Searched message.
+   * @param string|null $variables
+   *   (optional) Searched serialized variables.
    *
-   * @return int
-   *   Number of logged messaged.
+   * @return object[]
+   *   A list of dblog entries.
    */
-  protected function countLogMessages(string $message, string $variables): int {
-    return (int) Database::getConnection()
+  protected function getLogEntries(?string $message = NULL, ?string $variables = NULL): array {
+    $query = Database::getConnection()
       ->select('watchdog')
-      ->condition('type', 'eu_oss_catalogue')
-      ->condition('message', $message)
-      ->condition('variables', $variables)
-      ->countQuery()
-      ->execute()
-      ->fetchField();
+      ->fields('watchdog', ['message', 'variables'])
+      ->condition('type', 'eu_oss_catalogue');
+
+    if ($message) {
+      $query->condition('message', $message);
+    }
+    if ($variables) {
+      $query->condition('variables', $variables);
+    }
+
+    return $query->execute()->fetchAll();
   }
 
 }
