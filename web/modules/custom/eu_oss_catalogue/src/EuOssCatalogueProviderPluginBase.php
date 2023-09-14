@@ -6,6 +6,7 @@ namespace Drupal\eu_oss_catalogue;
 
 use Drupal\Component\Plugin\PluginBase;
 use Drupal\Core\Logger\LoggerChannelInterface;
+use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\eu_oss_catalogue\Entity\OssSolutionInterface;
 use Drupal\eu_oss_catalogue\Model\FetchedSolution;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -13,7 +14,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 /**
  * Base plugin for EU OSS Catalogue provider plugins.
  */
-abstract class EuOssCatalogueProviderPluginBase extends PluginBase implements EuOssCatalogueProviderInterface {
+abstract class EuOssCatalogueProviderPluginBase extends PluginBase implements EuOssCatalogueProviderInterface, ContainerFactoryPluginInterface {
   /**
    * Static cache of the parser associated with this provider.
    */

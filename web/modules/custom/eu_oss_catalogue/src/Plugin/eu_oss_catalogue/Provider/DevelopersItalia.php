@@ -8,7 +8,6 @@ use Drupal\Component\Serialization\Exception\InvalidDataTypeException;
 use Drupal\Component\Serialization\Json;
 use Drupal\Core\Config\Schema\SchemaCheckTrait;
 use Drupal\Core\Logger\LoggerChannelInterface;
-use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Serialization\Yaml;
 use Drupal\eu_oss_catalogue\EuOssCataloguePluginManagerInterface;
 use Drupal\eu_oss_catalogue\EuOssCatalogueProviderPluginBase;
@@ -26,7 +25,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  *   parser = "publiccode_yml",
  * )
  */
-class DevelopersItalia extends EuOssCatalogueProviderPluginBase implements ContainerFactoryPluginInterface {
+class DevelopersItalia extends EuOssCatalogueProviderPluginBase {
 
   use SchemaCheckTrait {
     checkValue as traitCheckValue;
