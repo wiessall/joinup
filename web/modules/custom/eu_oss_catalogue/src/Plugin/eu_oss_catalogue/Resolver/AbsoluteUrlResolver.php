@@ -20,7 +20,7 @@ class AbsoluteUrlResolver extends DefaultResolver {
   /**
    * {@inheritdoc}
    */
-  public function resolve(FieldItemListInterface $fieldItemList, FetchedSolution $fetchedSolution): mixed {
+  public function resolve(FieldItemListInterface $fieldItemList, FetchedSolution $fetchedSolution): array {
     $paths = (array) parent::resolve($fieldItemList, $fetchedSolution);
     foreach ($paths as &$path) {
       if (!preg_match('@^https?://@', $path)) {
