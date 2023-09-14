@@ -17,7 +17,7 @@ use Psr\Http\Message\ResponseInterface;
  * Intercepts any HTTP requests made to GitHub API.
  *
  * @ServiceMock(
- *   id = "git_hub",
+ *   id = "github",
  *   label = @Translation("GitHub API"),
  *   weight = 0,
  * )
@@ -37,7 +37,7 @@ class GitHub extends PluginBase implements ServiceMockPluginInterface {
    * {@inheritdoc}
    */
   public function getResponse(RequestInterface $request, array $options): ResponseInterface {
-    $response = Json::encode(Yaml::decode(file_get_contents(__DIR__ . '/../../../../../fixtures/github.yml')));
+    $response = Json::encode(Yaml::decode(file_get_contents(__DIR__ . '/../../../../../fixtures/http_response/github.yml')));
 
     return new Response(200, [
       'Content-Type' => 'application/json',

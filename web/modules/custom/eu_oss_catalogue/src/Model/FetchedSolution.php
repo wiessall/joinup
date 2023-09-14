@@ -10,7 +10,7 @@ use Drupal\Component\Utility\Crypt;
 /**
  * Data model for an OSS solution fetched from provider.
  */
-class EuOssCatalogueFetchedSolution {
+class FetchedSolution {
 
   /**
    * Creates a new fetched solution value object.
