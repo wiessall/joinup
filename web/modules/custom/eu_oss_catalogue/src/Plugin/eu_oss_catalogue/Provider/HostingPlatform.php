@@ -9,7 +9,6 @@ use Drupal\Component\Serialization\Exception\InvalidDataTypeException;
 use Drupal\Core\Config\Schema\SchemaCheckTrait;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Logger\LoggerChannelInterface;
-use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Serialization\Yaml;
 use Drupal\eu_oss_catalogue\Entity\HostingPlatformConfigInterface;
 use Drupal\eu_oss_catalogue\EuOssCatalogueHostingPlatformInterface;
@@ -31,7 +30,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  *   configuredBy = "hosting_platform",
  * )
  */
-class HostingPlatform extends EuOssCatalogueProviderPluginBase implements ContainerFactoryPluginInterface, ConfigurableInterface {
+class HostingPlatform extends EuOssCatalogueProviderPluginBase implements ConfigurableInterface {
 
   use SchemaCheckTrait {
     checkValue as traitCheckValue;
