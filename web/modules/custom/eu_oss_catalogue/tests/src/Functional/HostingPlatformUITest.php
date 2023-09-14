@@ -36,6 +36,22 @@ class HostingPlatformUITest extends BrowserTestBase {
   protected UserInterface $adminUser;
 
   /**
+   * {@inheritdoc}
+   */
+  protected function setUp(): void {
+    parent::setUp();
+
+    $this->adminUser = $this->drupalCreateUser(['administer eu oss catalogue']);
+    $this->drupalPlaceBlock('local_actions_block');
+
+    $settings['settings']['eu_oss_catalogue']['platform_github']['access_token'] = (object) [
+      'value' => 'dummy-token',
+      'required' => TRUE,
+    ];
+    $this->writeSettings($settings);
+  }
+
+  /**
    * Tests page access.
    */
   public function testPageAccess(): void {
@@ -120,22 +136,6 @@ class HostingPlatformUITest extends BrowserTestBase {
     $assertSession->pageTextContains('Code hosting platform (GitHub)');
     // Description for github_mockup.
     $assertSession->pageTextContains('Test GitHub hosting provider (GitHub)');
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  protected function setUp(): void {
-    parent::setUp();
-
-    $this->adminUser = $this->drupalCreateUser(['administer eu oss catalogue']);
-    $this->drupalPlaceBlock('local_actions_block');
-
-    $settings['settings']['eu_oss_catalogue']['platform_github']['access_token'] = (object) [
-      'value' => 'dummy-token',
-      'required' => TRUE,
-    ];
-    $this->writeSettings($settings);
   }
 
 }
