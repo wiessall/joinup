@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace Drupal\eu_oss_catalogue\Plugin\views\field;
 
 use Drupal\Core\Language\LanguageManagerInterface;
