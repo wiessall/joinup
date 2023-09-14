@@ -68,7 +68,7 @@ class HostingPlatform extends EuOssCatalogueProviderPluginBase implements Contai
    * @param \Drupal\Core\Logger\LoggerChannelInterface $logger
    *   The EU OSS Catalogue logger.
    * @param \Drupal\eu_oss_catalogue\EuOssCataloguePluginManagerInterface $platformManager
-   *   The code hosting platfom plugin manager service.
+   *   The code hosting platform plugin manager service.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
    *   The entity type manager service.
    */
@@ -163,7 +163,7 @@ class HostingPlatform extends EuOssCatalogueProviderPluginBase implements Contai
   }
 
   /**
-   * Returns the configration entity used to configure this plugin instance.
+   * Returns the configuration entity used to configure this plugin instance.
    *
    * @return \Drupal\eu_oss_catalogue\Entity\HostingPlatformConfigInterface
    *   The coe hosting platform configuration entity.
