@@ -67,7 +67,7 @@ class TaxonomyTermResolver extends DefaultResolver implements ContainerFactoryPl
   /**
    * {@inheritdoc}
    */
-  public function resolve(FieldItemListInterface $fieldItemList, FetchedSolution $fetchedSolution): mixed {
+  public function resolve(FieldItemListInterface $fieldItemList, FetchedSolution $fetchedSolution): array {
     $originalValue = parent::resolve($fieldItemList, $fetchedSolution);
 
     // Convert to array to handle also the multiple terms case.

@@ -56,7 +56,7 @@ class ContactResolver extends DefaultResolver implements ContainerFactoryPluginI
   /**
    * {@inheritdoc}
    */
-  public function resolve(FieldItemListInterface $fieldItemList, FetchedSolution $fetchedSolution): mixed {
+  public function resolve(FieldItemListInterface $fieldItemList, FetchedSolution $fetchedSolution): array {
     $storage = $this->entityTypeManager->getStorage('node');
     $nodeType = $this->getConfiguration()['node_type'];
 
