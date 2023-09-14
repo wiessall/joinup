@@ -45,11 +45,11 @@ abstract class EuOssCatalogueGitHostingPlatformPluginBase extends EuOssCatalogue
   /**
    * {@inheritdoc}
    */
-  public static function create(ContainerInterface $container, array $configuration, $pluginId, $pluginFefinition): self {
+  public static function create(ContainerInterface $container, array $configuration, $pluginId, $pluginDefinition): self {
     return new static(
       $configuration,
       $pluginId,
-      $pluginFefinition,
+      $pluginDefinition,
       $container->get('http_client'),
       $container->get('settings'),
     );
@@ -72,7 +72,7 @@ abstract class EuOssCatalogueGitHostingPlatformPluginBase extends EuOssCatalogue
       '#type' => 'multivalue',
       '#title' => $this->t('Projects'),
       '#description' => $this->t('If name is omitted, all projects from that namespace are eligible.'),
-      '#default_value' => $this->getConfiguration()['projects'] ?? [],
+      '#default_value' => $this->getProjectsDefaultValue(),
       '#cardinality' => MultiValue::CARDINALITY_UNLIMITED,
       '#required' => TRUE,
       'namespace' => [
@@ -98,8 +98,8 @@ abstract class EuOssCatalogueGitHostingPlatformPluginBase extends EuOssCatalogue
       return;
     }
 
-    $candidates = $formState->getValue('projects', []);
-    array_walk($candidates, function (array &$candidate) {
+    $projects = $formState->getValue('projects', []);
+    array_walk($projects, function (array &$candidate) {
       if (empty($candidate['namespace'])) {
         $candidate = [];
         return;
@@ -108,75 +108,87 @@ abstract class EuOssCatalogueGitHostingPlatformPluginBase extends EuOssCatalogue
       if ($candidate['name']) {
         $candidate['name'] = trim($candidate['name']);
       }
+      // @todo Validate $candidate['namespace'] & $candidate['name'] for naming
+      //   conventions.
     });
-    $candidates = array_filter($candidates);
-    $existingProjects = $this->getProjects($candidates);
 
     // The values might have been trimmed earlier.
-    $formState->setValue('projects', $candidates);
-
-    foreach ($candidates as $delta => $candidate) {
-      if (!isset($existingProjects[$candidate['namespace']])) {
-        $formState->setErrorByName("projects][$delta][namespace", $this->t("Namespace %namespace doesn't exist on the platform", [
-          '%namespace' => $candidate['namespace'],
-        ]));
-      }
-      elseif ($candidate['name'] && !isset($existingProjects[$candidate['namespace']][$candidate['name']])) {
-        $formState->setErrorByName("projects][$delta][name", $this->t("Project %project doesn't exist on the platform or it's not public", [
-          '%project' => $candidate['namespace'] . '/' . $candidate['name'],
-        ]));
-      }
-    }
+    $formState->setValue('projects', array_filter($projects));
   }
 
   /**
    * {@inheritdoc}
    */
   public function submitConfigurationForm(array &$form, FormStateInterface $formState): void {
-    $this->configuration['projects'] = $formState->getValue('projects');
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function getRepositories(?string $filePath = NULL): iterable {
-    foreach ($this->getProjects($this->getConfiguration()['projects'], $filePath) as $projects) {
-      foreach ($projects as $result) {
-        yield $result;
+    // Converts from:
+    // @code
+    // [
+    //   ['namespace' => 'namespace1', 'name' => 'name1'],
+    //   ['namespace' => 'namespace1', 'name' => 'name2'],
+    //   ['namespace' => 'namespace2', 'name' => ''],
+    // ]
+    // @endcode
+    // to:
+    // @code
+    // [
+    //   'namespace1' => ['name1', 'name2'],
+    //   'namespace2' => NULL,
+    // ]
+    // @endcode
+    $projects = [];
+    foreach ($formState->getValue('projects', []) as $row) {
+      $projects[$row['namespace']] ??= [];
+      if ($row['name']) {
+        $projects[$row['namespace']][] = $row['name'];
       }
     }
-  }
+    // NULL denotes a namespace where all projects should be fetched.
+    $projects = array_map(fn(array $names): ?array => $names ?: NULL, $projects);
 
-  /**
-   * Returns a full list of projects.
-   *
-   * This method expands a project candidate when only the vendor has been
-   * specified by querying the code platform API. By passing a relevant file
-   * path, relative to repository root, as parameter, the results will contain
-   * also the file content. This is useful when that file contains metadata
-   * about the project.
-   *
-   * @param array[] $candidates
-   *   A list of candidates to filter on. Each item is an associative array:
-   *   - namespace: Mandatory namespace.
-   *   - name: Optional project name. If omitted all public projects from the
-   *     namespace will be considered.
-   * @param string|null $filePath
-   *   (optional) A file path relative to repository root.
-   *
-   * @return array
-   *   Associative array:
-   *   - First level keys are namespaces.
-   *   - Second level keys are namespace repository project names and values are
-   *     objects of type \Drupal\eu_oss_catalogue\Model\HostingPlatformResult.
-   */
-  abstract protected function getProjects(array $candidates, ?string $filePath = NULL): array;
+    $this->configuration['projects'] = $projects;
+  }
 
   /**
    * {@inheritdoc}
    */
   public function getLabel(): TranslatableMarkup {
     return $this->pluginDefinition['label'];
+  }
+
+  /**
+   * Prepares the projects list to be used by multivalue element.
+   *
+   * @return array
+   *   The projects list.
+   */
+  protected function getProjectsDefaultValue(): array {
+    // Converts from:
+    // @code
+    // [
+    //   'namespace1' => ['name1', 'name2'],
+    //   'namespace2' => NULL,
+    // ]
+    // @endcode
+    // to:
+    // @code
+    // [
+    //   ['namespace' => 'namespace1', 'name' => 'name1'],
+    //   ['namespace' => 'namespace1', 'name' => 'name2'],
+    //   ['namespace' => 'namespace2', 'name' => ''],
+    // ]
+    // @endcode
+    $projects = [];
+    foreach ($this->getConfiguration()['projects'] ?? [] as $namespace => $names) {
+      if ($names === NULL) {
+        $projects[] = ['namespace' => $namespace, 'name' => ''];
+        continue;
+      }
+      foreach ($names as $name) {
+        $projects[] = ['namespace' => $namespace, 'name' => $name];
+      }
+    }
+
+    return $projects;
   }
 
 }

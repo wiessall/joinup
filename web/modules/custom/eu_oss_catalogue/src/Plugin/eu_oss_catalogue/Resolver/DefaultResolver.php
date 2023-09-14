@@ -8,7 +8,7 @@ use Drupal\Component\Utility\NestedArray;
 use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Plugin\PluginBase;
 use Drupal\eu_oss_catalogue\EuOssCatalogueResolverInterface;
-use Drupal\eu_oss_catalogue\Model\EuOssCatalogueFetchedSolution;
+use Drupal\eu_oss_catalogue\Model\FetchedSolution;
 
 /**
  * Default and fallback publiccode.yml value resolver.
@@ -30,7 +30,7 @@ class DefaultResolver extends PluginBase implements EuOssCatalogueResolverInterf
   /**
    * {@inheritdoc}
    */
-  public function resolve(FieldItemListInterface $fieldItemList, EuOssCatalogueFetchedSolution $fetchedSolution): mixed {
+  public function resolve(FieldItemListInterface $fieldItemList, FetchedSolution $fetchedSolution): mixed {
     $path = explode('/', $this->getConfiguration()['path']);
     $data = $fetchedSolution->data;
     $value = (array) NestedArray::getValue($data, $path);

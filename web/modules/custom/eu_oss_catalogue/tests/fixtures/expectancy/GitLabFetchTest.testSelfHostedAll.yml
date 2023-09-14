@@ -1,0 +1,13 @@
+Project 1:
+  en:
+    oss_git_url: https://all.self-hosted.gitlab.example.com/group1/group1_2/group1_3/project1
+    oss_publiccode_yml_version: '0.2'
+    oss_release_date: '2022-10-07'
+    oss_software_version: '1.4.5'
+
+Project 2:
+  en:
+    oss_git_url: https://all.self-hosted.gitlab.example.com/group2/group2_2/group2_3/project2
+    oss_publiccode_yml_version: '0.2'
+    oss_release_date: '2021-08-05'
+    oss_software_version: '7.0.2-alpha1'

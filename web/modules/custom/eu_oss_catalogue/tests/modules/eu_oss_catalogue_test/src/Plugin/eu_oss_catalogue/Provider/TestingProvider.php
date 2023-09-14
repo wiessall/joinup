@@ -4,7 +4,7 @@ declare(strict_types = 1);
 
 namespace Drupal\eu_oss_catalogue_test\Plugin\eu_oss_catalogue\Provider;
 
-use Drupal\eu_oss_catalogue\Model\EuOssCatalogueFetchedSolution;
+use Drupal\eu_oss_catalogue\Model\FetchedSolution;
 use Drupal\eu_oss_catalogue\Plugin\eu_oss_catalogue\Provider\DevelopersItalia;
 
 /**
@@ -30,7 +30,7 @@ class TestingProvider extends DevelopersItalia {
           'name' => 'Solution 1 (updated)',
           'softwareVersion' => '1.0.0.1',
         ] + $fetchedSolution->data;
-        $fetchedSolution = new EuOssCatalogueFetchedSolution(
+        $fetchedSolution = new FetchedSolution(
           $data['url'],
           $data['name'],
           $data,

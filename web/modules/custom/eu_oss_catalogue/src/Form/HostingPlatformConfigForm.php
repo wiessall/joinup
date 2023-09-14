@@ -88,6 +88,7 @@ class HostingPlatformConfigForm extends EntityForm {
       '#default_value' => $platformId,
       '#required' => TRUE,
       '#ajax' => ['callback' => '::ajaxSubmit'],
+      '#disabled' => !$this->getEntity()->isNew(),
     ];
 
     if ($this->isAjax()) {
@@ -126,7 +127,9 @@ class HostingPlatformConfigForm extends EntityForm {
   public function submitForm(array &$form, FormStateInterface $formState): void {
     parent::submitForm($form, $formState);
     if ($plugin = $this->askPluginToAct('submit', $formState->getValue('platformId'), $form, $formState)) {
-      $this->getEntity()->set('platformSettings', $plugin->getConfiguration());
+      $configuration = $plugin->getConfiguration();
+      unset($configuration['hosting_platform']);
+      $this->getEntity()->set('platformSettings', $configuration);
     }
   }
 
@@ -149,9 +152,12 @@ class HostingPlatformConfigForm extends EntityForm {
     }
     \assert(in_array($method, ['build', 'validate', 'submit'], TRUE));
 
-    $method .= 'ConfigurationForm';
     /** @var \Drupal\eu_oss_catalogue\EuOssCatalogueHostingPlatformInterface $plugin */
-    $plugin = $this->platformManager->createInstance($platformId, $this->getEntity()->getPlatformSettings());
+    $plugin = $this->platformManager->createInstance($platformId, [
+      // Pass also the entity as plugin configuration for plugins that might
+      // need it. It's removed from configuration on form submit.
+      'hosting_platform' => $this->getEntity(),
+    ] + $this->getEntity()->getPlatformSettings());
 
     // This plugin doesn't support forms.
     if (!$plugin instanceof PluginFormInterface) {
@@ -159,7 +165,9 @@ class HostingPlatformConfigForm extends EntityForm {
     }
 
     $subFormState = SubformState::createForSubform($form['platformSettings'], $form, $formState);
+
     // Casting to array, as a hack, to avoid `if ($method === 'buildConf...')`.
+    $method .= 'ConfigurationForm';
     $result = (array) $plugin->$method($form['platformSettings'], $subFormState);
     $form['platformSettings'] += $result;
 
