@@ -102,10 +102,10 @@ of solutions. Each solution is a structured array following the same schema. The
 _provider_ plugin is also responsible to provide valid data by performing schema
 validation checks.
 
-OSS Solutions are stored using the `EuOssCatalogueFetchedSolution` data model,
-which is a value class object. Third-parties are able to subscribe to the
-`EuOssPostFetchEvent` and alter the data stored in
-`EuOssCatalogueFetchedSolution` value object.
+OSS Solutions are stored using the `FetchedSolution` data model, which is a
+value class object. Third-parties are able to subscribe to the
+`EuOssPostFetchEvent` and alter the data stored in `FetchedSolution` value
+object.
 
 #### Queue fetched solutions
 
