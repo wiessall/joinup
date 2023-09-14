@@ -87,7 +87,14 @@ $settings['eu_oss_catalogue']['platform_github']['access_token'] = '...';
 
 ##### GitLab
 
-TBD
+GitLab API calls are not authenticated, thus there's no need for any
+configuration. However, some GitLab instances, including gitlab.com, are
+configured with API calls rate limits. For instance, gitlab.com rate limits are
+listed [here](https://docs.gitlab.com/ee/user/gitlab_com/#gitlabcom-specific-rate-limits).
+For self-hosted GitLab instances that doesn't publish their rate limits, you can
+find them by inspecting some specific headers, see
+[rate limits response headers](https://docs.gitlab.com/ee/administration/settings/user_and_ip_rate_limits.html#response-headers)
+for details.
 
 ### The process
 
