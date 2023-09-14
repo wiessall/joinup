@@ -22,7 +22,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * @EuOssCatalogueProvider(
  *   id = "developers_italia",
  *   label = @Translation("Developers Italia"),
- *   description = @Translation("Italian National OSS Catalogue, by https://developers.italia.it website .”."),
+ *   description = @Translation("Italian National OSS Catalogue, by https://developers.italia.it website."),
  *   parser = "publiccode_yml",
  * )
  */
