@@ -71,9 +71,9 @@ default:
                     label: ''
                   parent_uuid: null
                   region: null
-                background_theme:
-                  background_theme: secondary
-                extra_class: {  }
+                background_theme: {  }
+                extra_class:
+                  extra_class: oss__header
     -
       entity:
         _meta:
@@ -150,7 +150,7 @@ default:
             -
               value:
                 heading_behavior:
-                  level: h3
+                  level: h2
                 layout_paragraphs:
                   parent_uuid: 00b46561-49b5-4ce7-a39a-a5b6921bcfb2
                   region: first
@@ -255,7 +255,7 @@ default:
             -
               value:
                 heading_behavior:
-                  level: h3
+                  level: h2
                 layout_paragraphs:
                   parent_uuid: ff539098-171f-4c69-be93-48a87b617e7a
                   region: content
@@ -319,7 +319,8 @@ default:
                   region: null
                 background_theme:
                   background_theme: light
-                extra_class: {  }
+                extra_class:
+                  extra_class: oss__instructions-heading
     -
       entity:
         _meta:
@@ -339,7 +340,7 @@ default:
             -
               value:
                 heading_behavior:
-                  level: h3
+                  level: h2
                 layout_paragraphs:
                   parent_uuid: fb279d1a-794b-4504-893d-a13af243ddfa
                   region: content
@@ -398,7 +399,8 @@ default:
                   region: null
                 background_theme:
                   background_theme: light
-                extra_class: {  }
+                extra_class:
+                  extra_class: oss__instructions
     -
       entity:
         _meta:
@@ -683,7 +685,8 @@ default:
                   parent_uuid: null
                   region: null
                 background_theme: {  }
-                extra_class: {  }
+                extra_class:
+                  extra_class: oss__faq
     -
       entity:
         _meta:
@@ -1073,35 +1076,9 @@ default:
               uri: 'internal:/'
               title: Linkedin
               options: {  }
-    -
-      entity:
-        _meta:
-          version: '1.0'
-          entity_type: paragraph
-          uuid: d6ebb228-5b1c-459c-8c7b-6e864e0e856e
-          bundle: call_to_action
-          default_langcode: en
-        default:
-          status:
             -
-              value: true
-          created:
-            -
-              value: 1694514126
-          behavior_settings:
-            -
-              value:
-                alignment:
-                  alignment: center
-                color:
-                  color: secondary
-                layout_paragraphs:
-                  parent_uuid: 3a870b47-c2de-42a6-86ba-50dab1687235
-                  region: content
-          paragraph_action_link:
-            -
-              uri: 'internal:/'
-              title: Twitter
+              target_uuid: 0c5e377a-4ba6-4cf8-9333-6c7aad773b67
+              title: X
               options: {  }
   field_state:
     -

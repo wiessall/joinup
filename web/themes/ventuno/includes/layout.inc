@@ -64,6 +64,12 @@ function ventuno_preprocess_page(array &$variables): void {
       unset($variables['page']['content']['ventuno_pagetitle']);
     }
   }
+
+  // Add library specific to OSS Catalogue landing page
+  // $node = \Drupal::routeMatch()->getParameter('node');
+  // if ($variables['node']->uuid() === '54acbd6f-47f0-4280-ad09-0a07c397318b') {
+    $variables['#attached']['library'][] = 'ventuno/oss';
+  // }
 }
 
 /**

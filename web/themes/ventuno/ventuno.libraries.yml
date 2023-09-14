@@ -50,6 +50,11 @@ licence-comparer:
     theme:
       assets/css/licence-comparer.min.css: { minified: true }
 
+oss:
+  css:
+    theme:
+      assets/css/oss.min.css: { minified: true }
+
 searchpage:
   css:
     theme:
