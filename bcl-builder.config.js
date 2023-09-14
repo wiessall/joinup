@@ -238,6 +238,15 @@ module.exports = {
       },
     },
     {
+      entry: path.resolve(outputFolder, `${ventuno}src/scss/pages/oss.scss`),
+      dest: path.resolve(outputFolder, `${ventuno}assets/css/oss.min.css`),
+      options: {
+        includePaths,
+        minify: true,
+        sourceMap: "file",
+      },
+    },
+    {
       entry: path.resolve(
         outputFolder,
         `${ventuno}src/scss/pages/searchpage.scss`
