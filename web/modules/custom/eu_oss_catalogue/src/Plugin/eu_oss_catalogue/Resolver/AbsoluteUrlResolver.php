@@ -5,7 +5,7 @@ declare(strict_types = 1);
 namespace Drupal\eu_oss_catalogue\Plugin\eu_oss_catalogue\Resolver;
 
 use Drupal\Core\Field\FieldItemListInterface;
-use Drupal\eu_oss_catalogue\Model\EuOssCatalogueFetchedSolution;
+use Drupal\eu_oss_catalogue\Model\FetchedSolution;
 
 /**
  * Converts a path relative to solution code repository to an absolute URL.
@@ -20,7 +20,7 @@ class AbsoluteUrlResolver extends DefaultResolver {
   /**
    * {@inheritdoc}
    */
-  public function resolve(FieldItemListInterface $fieldItemList, EuOssCatalogueFetchedSolution $fetchedSolution): mixed {
+  public function resolve(FieldItemListInterface $fieldItemList, FetchedSolution $fetchedSolution): array {
     $paths = (array) parent::resolve($fieldItemList, $fetchedSolution);
     foreach ($paths as &$path) {
       if (!preg_match('@^https?://@', $path)) {

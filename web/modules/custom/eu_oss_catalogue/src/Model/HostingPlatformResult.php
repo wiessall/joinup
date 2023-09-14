@@ -16,6 +16,8 @@ class HostingPlatformResult {
    *   The namespace.
    * @param string $name
    *   The repository name.
+   * @param string $url
+   *   The repository URL.
    * @param string $defaultBranch
    *   The repository default branch.
    * @param string|null $platformReference
@@ -28,6 +30,7 @@ class HostingPlatformResult {
   public function __construct(
     public readonly string $namespace,
     public readonly string $name,
+    public readonly string $url,
     public readonly string $defaultBranch,
     public readonly ?string $platformReference = NULL,
     public readonly ?string $description = NULL,

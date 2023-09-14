@@ -19,7 +19,7 @@ interface EuOssCatalogueHostingPlatformInterface extends ConfigurableInterface {
    *   Associative array of repositories, keyed by $namespace/$name and having
    *   \Drupal\eu_oss_catalogue\Model\HostingPlatformResult instances as values.
    */
-  public function getRepositories(?string $filePath = NULL): iterable;
+  public function getProjects(?string $filePath = NULL): iterable;
 
   /**
    * Returns the label.
