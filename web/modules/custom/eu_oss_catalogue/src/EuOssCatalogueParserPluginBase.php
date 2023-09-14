@@ -12,7 +12,7 @@ use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Utility\Error;
 use Drupal\eu_oss_catalogue\Entity\OssSolutionInterface;
 use Drupal\eu_oss_catalogue\Exception\UnresolvableValueException;
-use Drupal\eu_oss_catalogue\Model\EuOssCatalogueFetchedSolution;
+use Drupal\eu_oss_catalogue\Model\FetchedSolution;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -71,7 +71,7 @@ abstract class EuOssCatalogueParserPluginBase extends PluginBase implements EuOs
   /**
    * {@inheritdoc}
    */
-  public function parse(EuOssCatalogueFetchedSolution $fetchedSolution, EuOssCatalogueProviderInterface $provider): OssSolutionInterface {
+  public function parse(FetchedSolution $fetchedSolution, EuOssCatalogueProviderInterface $provider): OssSolutionInterface {
     $nodeStorage = $this->entityTypeManager->getStorage('node');
 
     // For now, we're using the solution URL as UUID.

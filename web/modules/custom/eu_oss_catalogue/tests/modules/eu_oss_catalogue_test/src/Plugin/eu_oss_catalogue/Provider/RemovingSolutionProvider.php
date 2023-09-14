@@ -5,6 +5,7 @@ declare(strict_types = 1);
 namespace Drupal\eu_oss_catalogue_test\Plugin\eu_oss_catalogue\Provider;
 
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Logger\LoggerChannelInterface;
 use Drupal\eu_oss_catalogue\EuOssCataloguePluginManagerInterface;
 use Drupal\eu_oss_catalogue\Plugin\eu_oss_catalogue\Provider\DevelopersItalia;
 use GuzzleHttp\Client;
@@ -34,6 +35,8 @@ class RemovingSolutionProvider extends DevelopersItalia {
    *   The plugin implementation definition.
    * @param \Drupal\eu_oss_catalogue\EuOssCataloguePluginManagerInterface $parserManager
    *   The EU OSS Catalogue parser plugin manager service.
+   * @param \Drupal\Core\Logger\LoggerChannelInterface $logger
+   *   The EU OSS Catalogue logger.
    * @param \GuzzleHttp\Client $httpClient
    *   The HTTP client.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
@@ -44,10 +47,11 @@ class RemovingSolutionProvider extends DevelopersItalia {
     $pluginId,
     $pluginDefinition,
     EuOssCataloguePluginManagerInterface $parserManager,
+    protected LoggerChannelInterface $logger,
     Client $httpClient,
     protected EntityTypeManagerInterface $entityTypeManager,
   ) {
-    parent::__construct($configuration, $pluginId, $pluginDefinition, $parserManager, $httpClient);
+    parent::__construct($configuration, $pluginId, $pluginDefinition, $parserManager, $logger, $httpClient);
   }
 
   /**
@@ -59,8 +63,9 @@ class RemovingSolutionProvider extends DevelopersItalia {
       $pluginId,
       $pluginDefinition,
       $container->get('plugin.manager.eu_oss_catalogue.parser'),
+      $container->get('logger.channel.eu_oss_catalogue'),
       $container->get('http_client'),
-      $container->get('entity_type.manager')
+      $container->get('entity_type.manager'),
     );
   }
 

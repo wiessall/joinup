@@ -186,10 +186,13 @@ eu_oss_catalogue.publiccode_yml:
     # This added automatically by Drupal. We ignore it.
     langcode:
       type: ignore
-    # Country specific: IT.
+    # Country specific.
     it:
       type: eu_oss_catalogue.publiccode_yml.country.[%key]
       label: Country specific schema for Italy
+    de:
+      type: eu_oss_catalogue.publiccode_yml.country.[%key]
+      label: Country specific schema for Germany
 
 # https://yml.publiccode.tools/schema.core.html#section-description
 eu_oss_catalogue.publiccode_yml_description:
@@ -283,7 +286,7 @@ eu_oss_catalogue.publiccode_yml_dependency:
       type: boolean
 
 # @see https://yml.publiccode.tools/country.html#country-specific-sections
-eu_oss_catalogue.publiccode_yml.country.it:
+eu_oss_catalogue.publiccode_yml.country_base:
   type: mapping
   mapping:
     countryExtensionVersion:
@@ -292,6 +295,10 @@ eu_oss_catalogue.publiccode_yml.country.it:
       required: true
       constraints:
         - regex: '/^1\.0\.0$/'
+
+eu_oss_catalogue.publiccode_yml.country.it:
+  type: eu_oss_catalogue.publiccode_yml.country_base
+  mapping:
     conforme:
       type: mapping
       label: Conformity to Italian law
@@ -345,3 +352,6 @@ eu_oss_catalogue.publiccode_yml.country.it:
           type: string
           label: 'mandatory if repoOwner is a Public Administration'
           required: false
+
+eu_oss_catalogue.publiccode_yml.country.de:
+  type: eu_oss_catalogue.publiccode_yml.country_base
