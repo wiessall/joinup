@@ -64,11 +64,11 @@ class GitHub extends EuOssCatalogueGitHostingPlatformPluginBase {
   /**
    * {@inheritdoc}
    */
-  public static function create(ContainerInterface $container, array $configuration, $pluginId, $pluginFefinition): self {
+  public static function create(ContainerInterface $container, array $configuration, $pluginId, $pluginDefinition): self {
     return new static(
       $configuration,
       $pluginId,
-      $pluginFefinition,
+      $pluginDefinition,
       $container->get('http_client'),
       $container->get('settings'),
       $container->get('cache.eu_oss_catalogue'),
