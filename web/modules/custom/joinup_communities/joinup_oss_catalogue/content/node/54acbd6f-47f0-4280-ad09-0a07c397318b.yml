@@ -684,6 +684,8 @@ default:
                 layout_paragraphs:
                   parent_uuid: eedcfdad-600b-4786-8448-b883f13e7c30
                   region: content
+                alignment:
+                  alignment: center
           paragraph_heading:
             -
               value: 'Frequently Asked Questions (FAQ)'
@@ -934,6 +936,8 @@ default:
                 layout_paragraphs:
                   parent_uuid: f66f1112-bbdb-452e-82ed-98bcb6006251
                   region: content
+                alignment:
+                  alignment: center
           paragraph_heading:
             -
               value: 'Or if you need any help'
@@ -1017,6 +1021,8 @@ default:
                 layout_paragraphs:
                   parent_uuid: 3a870b47-c2de-42a6-86ba-50dab1687235
                   region: content
+                alignment:
+                  alignment: center
           paragraph_heading:
             -
               value: 'Follow our journey on the social media! '
@@ -1049,10 +1055,6 @@ default:
             -
               uri: 'internal:/'
               title: Linkedin
-              options: {  }
-            -
-              target_uuid: 0c5e377a-4ba6-4cf8-9333-6c7aad773b67
-              title: X
               options: {  }
   field_state:
     -
