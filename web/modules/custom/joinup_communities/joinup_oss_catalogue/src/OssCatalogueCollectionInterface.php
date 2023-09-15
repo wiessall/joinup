@@ -17,6 +17,6 @@ interface OssCatalogueCollectionInterface {
   /**
    * The UUID of the landing page.
    */
-  public const LANDING_PAGE = '54acbd6f-47f0-4280-ad09-0a07c397318b';
+  public const LANDING_PAGE = '622c4302-14e5-4840-8413-56e7c9ee06cb';
 
 }

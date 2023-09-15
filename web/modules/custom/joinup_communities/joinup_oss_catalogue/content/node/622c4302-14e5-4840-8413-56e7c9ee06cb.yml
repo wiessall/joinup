@@ -1,7 +1,7 @@
 _meta:
   version: '1.0'
   entity_type: node
-  uuid: 54acbd6f-47f0-4280-ad09-0a07c397318b
+  uuid: 622c4302-14e5-4840-8413-56e7c9ee06cb
   bundle: custom_page
   default_langcode: en
   depends:
