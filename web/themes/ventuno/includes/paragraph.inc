@@ -20,7 +20,6 @@ function ventuno_preprocess_paragraph(array &$variables): void {
 
   if (isset($variables['elements']['#joinup_paragraph_alignment'])) {
     $variables['attributes']['class'][] = 'd-flex';
-    $variables['attributes']['class'][] = 'col-gap-3';
     $variables['attributes']['class'][] = match ($variables['elements']['#joinup_paragraph_alignment']) {
       'center' => 'justify-content-center',
       'right' => 'justify-content-end',
