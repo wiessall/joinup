@@ -263,7 +263,7 @@ default:
               settings:
                 id: 'views_block:oss_solution-oss_most_recent_solutions'
                 label: ''
-                label_display: visible
+                label_display: false
                 provider: views
                 views_label: ''
                 items_per_page: none
@@ -602,6 +602,8 @@ default:
                 layout_paragraphs:
                   parent_uuid: f2a1d11a-9d0a-403f-b5f1-7b4f786d81c0
                   region: second
+                alignment:
+                  alignment: center
           paragraph_heading:
             -
               value: 'Let’s start with your software name'
@@ -997,7 +999,8 @@ default:
                   region: null
                 background_theme:
                   background_theme: light
-                extra_class: {  }
+                extra_class:
+                  extra_class: oss__social
     -
       entity:
         _meta:
@@ -1031,8 +1034,8 @@ default:
         _meta:
           version: '1.0'
           entity_type: paragraph
-          uuid: 81184411-08eb-47cf-bfcb-626080306d53
-          bundle: simple_paragraph
+          uuid: 3611bcd2-531b-4c78-9d72-81b9da87d45b
+          bundle: call_to_action
           default_langcode: en
         default:
           status:
@@ -1040,17 +1043,26 @@ default:
               value: true
           created:
             -
-              value: 1694514192
+              value: 1694793901
           behavior_settings:
             -
               value:
+                alignment:
+                  alignment: center
+                color:
+                  color: brand
                 layout_paragraphs:
                   parent_uuid: 3a870b47-c2de-42a6-86ba-50dab1687235
                   region: content
-          field_body:
+          paragraph_action_link:
             -
-              value: "<p><a href=\"/\" target=\"_blank\" title=\"Follow us on Twitter\">Twitter</a> <a href=\"/\" target=\"_blank\" title=\"Follow us on LinkedIn\">LinkedIn</a></p>\r\n"
-              format: content_editor
+              uri: 'https://twitter.com/'
+              title: Twitter
+              options: {  }
+            -
+              uri: 'https://www.linkedin.com/'
+              title: LinkedIn
+              options: {  }
   field_state:
     -
       value: published

@@ -48,11 +48,9 @@
     <div class="glide__outer overflow-hidden p-2">
       <div class="glide">
         <div class="d-flex flex-wrap align-items-baseline justify-content-end">
-          {# {{ title_prefix }} #}
-          {% if title %}
-            <h2 class="carousel__title mt-0 mb-3">{{ title }}</h2>
-          {% endif %}
-          {# {{ title_suffix }} #}
+          {{ title_prefix }}
+          <h2 class="carousel__title mt-0 mb-3">{{ 'Most recent solutions'|t }}</h2>
+          {{ title_suffix }}
           {% if header %}
             <div class="view-header">
               {{ header }}
