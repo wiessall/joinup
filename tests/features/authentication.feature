@@ -74,6 +74,8 @@ Feature: User authentication
       | rdf_entity/add/rdf_graph                            |
       | rdf_entity/add/solution                             |
       | user/subscriptions                                  |
+      | eu-oss-catalogue/about                              |
+      | eu-oss-catalogue/members                            |
 
   Scenario Outline: Anonymous user cannot access restricted non-HTML URLs.
     Given I am not logged in
@@ -154,6 +156,8 @@ Feature: User authentication
       | rdf_entity/add/owner                                |
       | rdf_entity/add/rdf_graph                            |
       | rdf_entity/add/solution                             |
+      | eu-oss-catalogue/about                              |
+      | eu-oss-catalogue/members                            |
 
   Scenario Outline: Authenticated user cannot access restricted non-HTML URLs.
     Given I am logged in as a user with the "authenticated" role
@@ -233,6 +237,8 @@ Feature: User authentication
       | rdf_entity/add/owner                                |
       | rdf_entity/add/rdf_graph                            |
       | rdf_entity/add/solution                             |
+      | eu-oss-catalogue/about                              |
+      | eu-oss-catalogue/members                            |
 
   Scenario Outline: Administrator can access pages they are authorized to
     Given I am logged in as a user with the "administrator" role
@@ -255,7 +261,7 @@ Feature: User authentication
       | admin                              |
       | admin/config                       |
       | admin/content                      |
-      | admin/content/files                                 |
+      | admin/content/files                |
       | admin/content/media                |
       | admin/content/rdf                  |
       | admin/legal-notice                 |
@@ -279,3 +285,5 @@ Feature: User authentication
       | rdf_entity/add/owner               |
       | rdf_entity/add/rdf_graph           |
       | rdf_entity/add/solution            |
+      | eu-oss-catalogue/about             |
+      | eu-oss-catalogue/members           |
