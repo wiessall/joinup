@@ -1,0 +1,40 @@
+From 9c28bb4c8d44f5d23d264ea5f85e486ee768441e Mon Sep 17 00:00:00 2001
+From: Alexandre Dias <alex.jm.dias@gmail.com>
+Date: Fri, 15 Sep 2023 15:41:28 +0100
+Subject: [PATCH] Invalid file name suggestions
+
+---
+ rdf_entity.module | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/rdf_entity.module b/rdf_entity.module
+index c060e42f..d67cd634 100755
+--- a/rdf_entity.module
++++ b/rdf_entity.module
+@@ -11,6 +11,7 @@ use Drupal\Core\Render\Element;
+ use Drupal\Core\Url;
+ use Drupal\rdf_entity\RdfInterface;
+ use Drupal\sparql_entity_storage\Entity\Query\Sparql\SparqlQueryInterface;
++use Drupal\sparql_entity_storage\UriEncoder;
+ 
+ /**
+  * Implements hook_theme().
+@@ -123,12 +124,13 @@ function rdf_entity_theme_suggestions_rdf_entity(array $variables) {
+   $suggestions = [];
+   $rdf_entity = $variables['elements']['#rdf_entity'];
+   $sanitized_view_mode = strtr($variables['elements']['#view_mode'], '.', '_');
++  $rdf_entity_id = UriEncoder::encodeUrl($rdf_entity->id());
+ 
+   $suggestions[] = 'rdf_entity__' . $sanitized_view_mode;
+   $suggestions[] = 'rdf_entity__' . $rdf_entity->bundle();
+   $suggestions[] = 'rdf_entity__' . $rdf_entity->bundle() . '__' . $sanitized_view_mode;
+-  $suggestions[] = 'rdf_entity__' . $rdf_entity->id();
+-  $suggestions[] = 'rdf_entity__' . $rdf_entity->id() . '__' . $sanitized_view_mode;
++  $suggestions[] = 'rdf_entity__' . $rdf_entity_id;
++  $suggestions[] = 'rdf_entity__' . $rdf_entity_id . '__' . $sanitized_view_mode;
+ 
+   return $suggestions;
+ }
+-- 
+GitLab
+

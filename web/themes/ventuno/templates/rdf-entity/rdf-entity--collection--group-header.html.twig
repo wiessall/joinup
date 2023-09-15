@@ -24,20 +24,16 @@
         {% endif %}
         {{ title_suffix }}
       </div>
-      {% if content.join_collection and not is_oss_catalogue %}
+      {% if content.join_collection %}
         <div class="group-banner__actions order-1 order-lg-0 d-flex justify-content-center align-items-start my-3 my-lg-0">
           {{ content.join_collection }}
         </div>
       {% endif %}
       {% if not meta_banner_disabled %}
         <ul class="group-banner__meta mw-100 align-self-end list-unstyled d-flex flex-wrap mt-2 mb-0 group-stats fs-6">
-          {% if not is_oss_catalogue %}
             <li class="group-banner__li text-muted">{{ 'Last update'|t }}:&nbsp;{{ content.last_update }}</li>
             <li class="group-banner__li text-muted">{{ content.members }}</li>
             <li class="group-banner__li text-muted">{{ content.solutions }}</li>
-          {% else %}
-            <li class="group-banner__li text-muted">{{ content.oss_solutions }}</li>
-          {% endif %}
         </ul>
       {% endif %}
     </div>

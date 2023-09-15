@@ -9,12 +9,12 @@ declare(strict_types = 1);
 
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Cache\Cache;
+use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\block\BlockInterface;
 use Drupal\collection\Entity\CollectionInterface;
-use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\joinup_oss_catalogue\Entity\JoinupOssSolution;
 use Drupal\joinup_oss_catalogue\OssCatalogueCollectionInterface;
 use Drupal\rdf_entity\Entity\RdfEntityType;
@@ -42,39 +42,20 @@ function joinup_oss_catalogue_entity_bundle_info_alter(array &$bundles): void {
 /**
  * Implements hook_entity_extra_field_info().
  */
-function joinup_oss_catalogue_entity_extra_field_info() {
+function joinup_oss_catalogue_entity_extra_field_info(): array {
   $fields = [];
   $collection = RdfEntityType::load('collection');
 
-  // This hook can fire before the collection bundle config is defined, in that
-  // case we have nothing meaningful to add.
-  if (empty($collection)) {
-    return [];
+  if ($collection) {
+    $display = &$fields['rdf_entity'][$collection->id()]['display'];
+    $display['oss_solutions'] = [
+      'label' => t('Amount of OpenSource Solutions'),
+      'description' => t('Amount of OpenSource Solutions.'),
+      'visible' => FALSE,
+    ];
   }
-
-  $display = &$fields['rdf_entity'][$collection->id()]['display'];
-  $display['oss_solutions'] = [
-    'label' => t('Amount of OpenSource Solutions'),
-    'description' => t('Amount of OpenSource Solutions.'),
-    'visible' => FALSE,
-  ];
 
   return $fields;
-}
-
-/**
- * Implements hook_preprocess_HOOK().
- */
-function joinup_oss_catalogue_preprocess_rdf_entity(array &$variables): void {
-  if ($variables['view_mode'] === 'group_header') {
-    $group = $variables['rdf_entity'];
-    if (
-      $group instanceof GroupInterface &&
-      $group->id() === OssCatalogueCollectionInterface::COLLECTION_ENTITY_ID
-    ) {
-      $variables['is_oss_catalogue'] = TRUE;
-    }
-  }
 }
 
 /**
@@ -89,19 +70,21 @@ function joinup_oss_catalogue_rdf_entity_view(array &$build, EntityInterface $en
 
   // OSS Solution count.
   if ($display->getComponent('oss_solutions')) {
-    $query = \Drupal::database()->select('node_field_data');
-    $query->condition('status', 1)
-      ->condition('type', 'oss_solution');
-    $oss_solution_count = (int) $query->countQuery()->execute()->fetchField();
-    $tags = Cache::buildTags('og-group-content', $entity->getCacheTagsToInvalidate());
-    $tags = Cache::mergeTags($tags, ['rdf_entity_list']);
+    $oss_solution_count = \Drupal::entityTypeManager()->getStorage('node')
+      ->getQuery()
+      ->accessCheck()
+      ->condition('status', 1)
+      ->condition('type', 'oss_solution')
+      ->count()
+      ->execute();
     $build['oss_solutions'] = [
-      '#markup' => \Drupal::translation()->formatPlural($oss_solution_count, '@oss_solution_count OpenSource Solution', '@oss_solution_count OpenSource Solutions', ['@oss_solution_count' => $oss_solution_count]),
-      '#cache' => [
-        // Invalidate when community content is saved.
-        'tags' => $tags,
-      ],
+      '#markup' => \Drupal::translation()->formatPlural($oss_solution_count, '@oss_solution_count open source software solution', '@oss_solution_count open source software solutions', ['@oss_solution_count' => $oss_solution_count]),
     ];
+    (new CacheableMetadata())
+      ->addCacheTags(Cache::buildTags('og-group-content', $entity->getCacheTagsToInvalidate()))
+      ->addCacheTags(['rdf_entity_list', 'node_list:oss_solution'])
+      ->applyTo($build['oss_solutions']);
+
   }
 }
 
