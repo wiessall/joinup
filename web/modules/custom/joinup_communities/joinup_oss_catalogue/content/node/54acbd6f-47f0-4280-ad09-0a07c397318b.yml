@@ -1031,8 +1031,8 @@ default:
         _meta:
           version: '1.0'
           entity_type: paragraph
-          uuid: 81e7dc65-5ac9-4db5-8ba5-76866205e27a
-          bundle: call_to_action
+          uuid: 81184411-08eb-47cf-bfcb-626080306d53
+          bundle: simple_paragraph
           default_langcode: en
         default:
           status:
@@ -1044,18 +1044,13 @@ default:
           behavior_settings:
             -
               value:
-                alignment:
-                  alignment: center
-                color:
-                  color: secondary
                 layout_paragraphs:
                   parent_uuid: 3a870b47-c2de-42a6-86ba-50dab1687235
                   region: content
-          paragraph_action_link:
+          field_body:
             -
-              uri: 'internal:/'
-              title: Linkedin
-              options: {  }
+              value: "<p><a href=\"/\" target=\"_blank\" title=\"Follow us on Twitter\">Twitter</a> <a href=\"/\" target=\"_blank\" title=\"Follow us on LinkedIn\">LinkedIn</a></p>\r\n"
+              format: content_editor
   field_state:
     -
       value: published
