@@ -49,8 +49,6 @@ function joinup_core_deploy_109701(): void {
 function joinup_core_deploy_109702(): void {
   /** @var \Drupal\Core\Extension\ModuleInstallerInterface $moduleInstaller */
   $moduleInstaller = \Drupal::service('module_installer');
-  /** @var \Drupal\Core\Entity\EntityRepositoryInterface $entityRepository */
-  $entityRepository = \Drupal::service('entity.repository');
 
   // Import content.
   $moduleInstaller->install(['default_content']);
