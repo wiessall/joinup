@@ -15,10 +15,16 @@ interface EuOssCatalogueHostingPlatformInterface extends ConfigurableInterface {
   /**
    * Generates a list of project objects.
    *
+   * @param string[] $requestedFiles
+   *   (optional) Associative where with keys are file identifiers and values
+   *   are file paths relative to the project's repository root. If provided,
+   *   the default branch version of such files are downloaded and stored in
+   *   each project object, if they exist. The array values should be unique.
+   *
    * @return iterable
    *   Array of \Drupal\eu_oss_catalogue\Model\Project instances.
    */
-  public function getProjects(?string $filePath = NULL): iterable;
+  public function getProjects(array $requestedFiles = []): iterable;
 
   /**
    * Returns the label.

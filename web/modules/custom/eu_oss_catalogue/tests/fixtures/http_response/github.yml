@@ -11,7 +11,7 @@ data:
         latestRelease:
           tagName: '2.3.0'
           createdAt: '2023-04-19'
-        file:
+        file__publiccodeYml:
           text: |
             publiccodeYmlVersion: "0.2"
             name: GitHub solution 1
@@ -112,7 +112,7 @@ data:
         latestRelease:
           tagName: 'v3.5.1'
           createdAt: '2022-09-09'
-        file:
+        file__publiccodeYml:
           text: |
             publiccodeYmlVersion: "0.4"
             name: GitHub solution 2

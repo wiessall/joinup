@@ -28,8 +28,8 @@ class Project {
    *   The code platform internal unique ID.
    * @param string|null $description
    *   The repository description if any.
-   * @param string|null $file
-   *   The content of a file if it has been requested.
+   * @param string[] $files
+   *   A list of file blobs keyed by a file identifier.
    */
   public function __construct(
     public readonly string $namespace,
@@ -40,7 +40,7 @@ class Project {
     public readonly ?string $latestReleaseDate = NULL,
     public readonly ?string $platformReference = NULL,
     public readonly ?string $description = NULL,
-    public readonly ?string $file = NULL,
+    public readonly array $files = [],
   ) {}
 
   /**

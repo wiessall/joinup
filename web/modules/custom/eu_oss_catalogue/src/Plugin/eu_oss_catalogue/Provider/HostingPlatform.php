@@ -109,16 +109,16 @@ class HostingPlatform extends EuOssCatalogueProviderPluginBase implements Config
     }
 
     $platform = $this->getPlatform();
-    foreach ($platform->getProjects('publiccode.yml') as $repository) {
-      \assert($repository instanceof Project);
-      if ($repository->file && is_string($repository->file)) {
+    foreach ($platform->getProjects(['publiccodeYml' => 'publiccode.yml']) as $project) {
+      \assert($project instanceof Project);
+      if ($project->files['publiccodeYml'] && is_string($project->files['publiccodeYml'])) {
         try {
-          $data = Yaml::decode($repository->file);
+          $data = Yaml::decode($project->files['publiccodeYml']);
           yield new FetchedSolution(
-            $repository->url,
+            $project->url,
             $data['name'],
             $data,
-            (string) $repository->platformReference,
+            (string) $project->platformReference,
           );
         }
         catch (InvalidDataTypeException $exception) {
