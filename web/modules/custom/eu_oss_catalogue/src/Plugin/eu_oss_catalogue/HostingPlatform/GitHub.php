@@ -109,7 +109,7 @@ class GitHub extends EuOssCatalogueGitHostingPlatformPluginBase {
   /**
    * {@inheritdoc}
    */
-  public function getProjects(?string $filePath = NULL): iterable {
+  public function doGetProjects(array $requestedFiles = []): iterable {
     // Build a search query string.
     // @see https://docs.github.com/search-github
     $search = ['is:public', 'archived:false'];
@@ -171,10 +171,9 @@ class GitHub extends EuOssCatalogueGitHostingPlatformPluginBase {
       ->use((new Node('defaultBranchRef'))->use('name'))
       ->use((new Node('latestRelease'))->use('tagName', 'createdAt'));
 
-    if ($filePath) {
-      $file = (new Node('object', [
-        'expression' => "HEAD:$filePath",
-      ]))->alias('file');
+    foreach ($requestedFiles as $fileId => $filePath) {
+      $file = (new Node('object', ['expression' => "HEAD:$filePath"]))
+        ->alias("file__$fileId");
       $file->on('Blob')->use('text');
       $fragment->use($file);
     }
@@ -183,6 +182,13 @@ class GitHub extends EuOssCatalogueGitHostingPlatformPluginBase {
     foreach ($graphQL->execute($query->toString())['data']['search']['nodes'] as $node) {
       // Repositories without code don't have a default branch.
       if (!empty($node['defaultBranchRef'])) {
+        $files = [];
+
+        foreach ($requestedFiles as $fileId => $filePath) {
+          if ($content = ($node["file__$fileId"]['text'] ?? NULL)) {
+            $files[$fileId] = $content;
+          }
+        }
         yield new Project(
           $node['owner']['login'],
           $node['name'],
@@ -192,7 +198,7 @@ class GitHub extends EuOssCatalogueGitHostingPlatformPluginBase {
           $node['latestRelease']['createdAt'] ?? NULL,
           $node['id'],
           $node['description'],
-          $node['file']['text'] ?? NULL,
+          $files,
         );
       }
     }

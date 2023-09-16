@@ -34,15 +34,6 @@ class GitLabDotCom extends EuOssCatalogueGitHostingPlatformPluginBase {
   protected Client $client;
 
   /**
-   * {@inheritdoc}
-   */
-  public function getProjects(?string $filePath = NULL): iterable {
-    foreach ($this->doGetProjects($filePath) as $project) {
-      yield $project;
-    }
-  }
-
-  /**
    * Returns the GitLab client.
    *
    * @return \Gitlab\Client
@@ -56,20 +47,20 @@ class GitLabDotCom extends EuOssCatalogueGitHostingPlatformPluginBase {
   }
 
   /**
-   * Returns the projects.
+   * Returns the list of projects.
    *
-   * @param string|null $filePath
-   *   The file path, if one has been specified.
+   * @param string[] $requestedFiles
+   *    A list of file paths keyed by a file identifier.
    *
    * @return iterable
    *   Array \Drupal\eu_oss_catalogue\Model\Project instances.
    */
-  protected function doGetProjects(?string $filePath = NULL): iterable {
+  protected function doGetProjects(array $requestedFiles = []): iterable {
     foreach ($this->getConfiguration()['projects'] as $namespace => $repos) {
       $limitToRepos = is_array($repos);
       $endCursor = NULL;
       do {
-        $query = $this->buildGroupQuery($namespace, $filePath, $endCursor);
+        $query = $this->buildGroupQuery($namespace, $requestedFiles, $endCursor);
         $response = $this->getClient()->graphql()->execute($query->toString());
 
         if (empty($response['data']['group']['projects']['nodes'])) {
@@ -95,7 +86,7 @@ class GitLabDotCom extends EuOssCatalogueGitHostingPlatformPluginBase {
             }
             continue;
           }
-          yield $this->createHostingPlatformResult($namespace, $project);
+          yield $this->createHostingPlatformResult($namespace, $project, $requestedFiles);
         }
       } while ($hasNextPage);
 
@@ -106,10 +97,10 @@ class GitLabDotCom extends EuOssCatalogueGitHostingPlatformPluginBase {
       // user registration.
       if ($limitToRepos) {
         foreach ($repos as $name) {
-          $query = $this->buildProjectQuery($namespace, $name, $filePath);
+          $query = $this->buildProjectQuery($namespace, $name, $requestedFiles);
           $project = $this->getClient()->graphql()->execute($query->toString())['data']['project'] ?? NULL;
           if ($project && !empty($project['repository']['rootRef']) && empty($project['archived'])) {
-            yield $this->createHostingPlatformResult($namespace, $project);
+            yield $this->createHostingPlatformResult($namespace, $project, $requestedFiles);
           }
         }
       }
@@ -155,15 +146,15 @@ class GitLabDotCom extends EuOssCatalogueGitHostingPlatformPluginBase {
    *
    * @param string $namespace
    *   The namespace.
-   * @param string|null $filePath
-   *   The file path, if one has been specified.
+   * @param string[] $requestedFiles
+   *     A list of file paths keyed by a file identifier.
    * @param string|null $endCursor
    *   The end cursor, if any.
    *
    * @return \GraphQL\Actions\Query
    *   A GraphQL query builder instance.
    */
-  protected function buildGroupQuery(string $namespace, ?string $filePath, ?string $endCursor = NULL): Query {
+  protected function buildGroupQuery(string $namespace, array $requestedFiles = [], ?string $endCursor = NULL): Query {
     $query = new Query('group', ['fullPath' => $namespace]);
     $query->alias('group');
 
@@ -183,10 +174,10 @@ class GitLabDotCom extends EuOssCatalogueGitHostingPlatformPluginBase {
       ->repository([])
       ->use('rootRef');
 
-    if ($filePath) {
-      $fragment->blobs(['paths' => [$filePath]])
+    if ($requestedFiles) {
+      $fragment->blobs(['paths' => array_values($requestedFiles)])
         ->nodes([])
-        ->use('rawBlob');
+        ->use('path', 'rawBlob');
     }
 
     return $query;
@@ -212,8 +203,9 @@ class GitLabDotCom extends EuOssCatalogueGitHostingPlatformPluginBase {
    *     }
    *     repository {
    *       rootRef
-   *       blobs(paths: ["README.md"]) {
+   *       blobs(paths: ["README.md", "file.txt"]) {
    *         nodes {
+   *           path
    *           rawBlob
    *         }
    *       }
@@ -226,13 +218,13 @@ class GitLabDotCom extends EuOssCatalogueGitHostingPlatformPluginBase {
    *   The namespace.
    * @param string $name
    *   The project name.
-   * @param string|null $filePath
-   *   The file path, if one has been specified.
+   * @param string[] $requestedFiles
+   *    A list of file paths keyed by a file identifier.
    *
    * @return \GraphQL\Actions\Query
    *   A GraphQL query builder instance.
    */
-  protected function buildProjectQuery(string $namespace, string $name, ?string $filePath): Query {
+  protected function buildProjectQuery(string $namespace, string $name, array $requestedFiles = []): Query {
     $query = new Query('project', ['fullPath' => "$namespace/$name"]);
     $fragment = $query->use('path', 'id', 'description', 'archived')
       ->releases(['sort' => GitLabReleaseSort::CREATED_DESC, 'first' => 1])
@@ -243,10 +235,10 @@ class GitLabDotCom extends EuOssCatalogueGitHostingPlatformPluginBase {
       ->repository([])
       ->use('rootRef');
 
-    if ($filePath) {
-      $fragment->blobs(['paths' => [$filePath]])
+    if ($requestedFiles) {
+      $fragment->blobs(['paths' => array_values($requestedFiles)])
         ->nodes([])
-        ->use('rawBlob');
+        ->use('path', 'rawBlob');
     }
 
     return $query;
@@ -263,8 +255,16 @@ class GitLabDotCom extends EuOssCatalogueGitHostingPlatformPluginBase {
    * @return \Drupal\eu_oss_catalogue\Model\Project
    *   A code hosting platform result instance.
    */
-  protected function createHostingPlatformResult(string $namespace, array $project): Project {
+  protected function createHostingPlatformResult(string $namespace, array $project, array $requestedFiles): Project {
     $host = $this->getConfiguration()['url'] ?? ('https://' . self::GITLAB_BASE_URL);
+
+    // Get files by reverse engineering from file path to file IDs.
+    $files = [];
+    $flippedFiles = array_flip($requestedFiles);
+    foreach ($project['repository']['blobs']['nodes'] as $fileData) {
+      $files[$flippedFiles[$fileData['path']]] = $fileData['rawBlob'];
+    }
+
     return new Project(
       $namespace,
       $project['path'],
@@ -274,7 +274,7 @@ class GitLabDotCom extends EuOssCatalogueGitHostingPlatformPluginBase {
       $project['releases']['nodes'][0]['createdAt'] ?? NULL,
       $project['id'],
       $project['description'],
-      $project['repository']['blobs']['nodes'][0]['rawBlob'] ?? NULL,
+      $files,
     );
   }
 

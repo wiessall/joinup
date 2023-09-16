@@ -19,7 +19,7 @@
             rootRef: main
             blobs:
               nodes:
-                -
+                - path: publiccode.yml
                   rawBlob: |-
                     publiccodeYmlVersion: "0.2"
                     name: Project 1
@@ -74,7 +74,7 @@
             rootRef: main
             blobs:
               nodes:
-                -
+                - path: publiccode.yml
                   rawBlob: |-
                     publiccodeYmlVersion: "0.2"
                     name: Project 2
@@ -128,7 +128,7 @@
             rootRef: main
             blobs:
               nodes:
-                -
+                - path: publiccode.yml
                   rawBlob: |-
                     publiccodeYmlVersion: "0.2"
                     name: Project 3
@@ -213,7 +213,8 @@
               rootRef: main
               blobs:
                 nodes:
-                  - rawBlob: |-
+                  - path: publiccode.yml
+                    rawBlob: |-
                       publiccodeYmlVersion: '0.2'
                       name: 'Project 1.1'
                       applicationSuite: Suite1
@@ -268,7 +269,8 @@
               rootRef: main
               blobs:
                 nodes:
-                  - rawBlob: |
+                  - path: publiccode.yml
+                    rawBlob: |
                       publiccodeYmlVersion: '0.2'
                       name: 'Project 1.2'
                       url: 'https://example.de/arbitrary'
@@ -326,7 +328,8 @@
               rootRef: main
               blobs:
                 nodes:
-                  - rawBlob: |
+                  - path: publiccode.yml
+                    rawBlob: |
                       publiccodeYmlVersion: '0.2'
                       name: 'Project 1.3'
                       url: 'https://example.de/arbitrary-too'
@@ -379,7 +382,8 @@
               rootRef: main
               blobs:
                 nodes:
-                  - rawBlob: |-
+                  - path: publiccode.yml
+                    rawBlob: |-
                       publiccodeYmlVersion: '0.2'
                       name: 'Project 2.1'
                       applicationSuite: Suite1
@@ -429,7 +433,8 @@
               rootRef: main
               blobs:
                 nodes:
-                  - rawBlob: |-
+                  - path: publiccode.yml
+                    rawBlob: |-
                       publiccodeYmlVersion: '0.2'
                       name: 'Project 2.2'
                       url: https://limited.self-hosted.gitlab.example.com/as-you-like-it
@@ -475,7 +480,8 @@
         rootRef: main
         blobs:
           nodes:
-            - rawBlob: |-
+            - path: publiccode.yml
+              rawBlob: |-
                 publiccodeYmlVersion: '0.2'
                 name: 'Project 1'
                 applicationSuite: Suite2

@@ -156,6 +156,30 @@ abstract class EuOssCatalogueGitHostingPlatformPluginBase extends EuOssCatalogue
   }
 
   /**
+   * {@inheritdoc}
+   */
+  public function getProjects(array $requestedFiles = []): iterable {
+    \assert($requestedFiles === array_unique($requestedFiles));
+    foreach ($this->doGetProjects($requestedFiles) as $project) {
+      yield $project;
+    }
+  }
+
+  /**
+   * Returns the list of projects.
+   *
+   * Subclasses should implement this method, instead of ::getProjects(), to
+   * build the list of projects.
+   *
+   * @param string[] $requestedFiles
+   *   A list of file paths keyed by a file identifier.
+   *
+   * @return iterable
+   *   Array \Drupal\eu_oss_catalogue\Model\Project instances.
+   */
+  abstract protected function doGetProjects(array $requestedFiles = []): iterable;
+
+  /**
    * Prepares the projects list to be used by multivalue element.
    *
    * @return array

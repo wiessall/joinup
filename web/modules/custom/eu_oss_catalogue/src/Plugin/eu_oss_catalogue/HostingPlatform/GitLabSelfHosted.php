@@ -108,10 +108,10 @@ class GitLabSelfHosted extends GitLabDotCom {
   /**
    * {@inheritdoc}
    */
-  protected function doGetProjects(?string $filePath = NULL): iterable {
+  protected function doGetProjects(array $requestedFiles = []): iterable {
     if (!empty($this->getConfiguration()['projects'])) {
       // A list of namespaces or projects has been specified.
-      foreach (parent::doGetProjects($filePath) as $project) {
+      foreach (parent::doGetProjects($requestedFiles) as $project) {
         yield $project;
       }
       return;
@@ -119,7 +119,7 @@ class GitLabSelfHosted extends GitLabDotCom {
 
     $endCursor = NULL;
     do {
-      $query = $this->buildProjectsQuery($filePath, $endCursor);
+      $query = $this->buildProjectsQuery($requestedFiles, $endCursor);
       $response = $this->getClient()->graphql()->execute($query->toString());
 
       if (empty($response['data']['projects']['nodes'])) {
@@ -136,7 +136,7 @@ class GitLabSelfHosted extends GitLabDotCom {
           $parts = explode('/', $project['fullPath']);
           array_pop($parts);
           $namespace = implode('/', $parts);
-          yield $this->createHostingPlatformResult($namespace, $project);
+          yield $this->createHostingPlatformResult($namespace, $project, $requestedFiles);
         }
       }
     } while ($hasNextPage);
@@ -179,15 +179,15 @@ class GitLabSelfHosted extends GitLabDotCom {
    * }
    * @endcode
    *
-   * @param string|null $filePath
-   *   The file path, if one has been specified.
+   * @param string[] $requestedFiles
+   *   A list of file paths keyed by a file identifier.
    * @param string|null $endCursor
    *   The end cursor, if any.
    *
    * @return \GraphQL\Actions\Query
    *   A GraphQL query builder instance.
    */
-  protected function buildProjectsQuery(?string $filePath, ?string $endCursor = NULL): Query {
+  protected function buildProjectsQuery(array $requestedFiles = [], ?string $endCursor = NULL): Query {
     $filters = ['first' => 100] + ($endCursor ? ['after' => $endCursor] : []);
 
     $query = new Query('projects', $filters);
@@ -204,10 +204,10 @@ class GitLabSelfHosted extends GitLabDotCom {
       ->repository([])
       ->use('rootRef');
 
-    if ($filePath) {
-      $fragment->blobs(['paths' => [$filePath]])
+    if ($requestedFiles) {
+      $fragment->blobs(['paths' => array_values($requestedFiles)])
         ->nodes([])
-        ->use('rawBlob');
+        ->use('path', 'rawBlob');
     }
 
     return $query;
