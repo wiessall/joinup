@@ -58,9 +58,7 @@ class EuOssCatalogue implements EuOssCatalogueInterface {
     $solutionUrlsDiscovered = [];
     while (($fetchedSolutions = $provider->fetch())->valid()) {
       foreach ($fetchedSolutions as $fetchedSolution) {
-        if (!$fetchedSolution instanceof FetchedSolution) {
-          throw new \Exception("Invalid data received from '$providerId' plugin");
-        }
+        \assert($fetchedSolution instanceof FetchedSolution);
 
         // Don't federate solutions with invalid schema but log them.
         if ($errors = $provider->getParser()->checkSchema($fetchedSolution)) {
