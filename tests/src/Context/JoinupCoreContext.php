@@ -441,4 +441,31 @@ class JoinupCoreContext extends RawDrupalContext {
     }
   }
 
+  /**
+   * Creates a path alias with data provided in a table.
+   *
+   * @codingStandardsIgnoreStart
+   * Table format:
+   * | entity_type      | rdf_entity                                                     |
+   * | entity_type_id   | http://data.europa.eu/w21/6d621a47-71ce-4f1a-90e2-8859403d3ecd |
+   * | path             | /eu-oss-catalogue                                              |
+   * @codingStandardsIgnoreEnd
+   *
+   * @param \Behat\Gherkin\Node\TableNode $path_table
+   *   The entity data.
+   *
+   * @throws \Exception
+   *   Thrown when a column name is incorrect.
+   *
+   * @Given (the following )path alias:
+   */
+  public function setCustomPath(TableNode $path_table): void {
+    $values = $path_table->getRowsHash();
+    $entity = \Drupal::entityTypeManager()->getStorage($values['entity_type'])
+      ->load($values['entity_type_id']);
+
+    $entity->set('path', ['alias' => $values['path'], 'pathauto' => 0])
+      ->save();
+  }
+
 }
