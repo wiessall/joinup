@@ -13,18 +13,18 @@ use Drupal\facets\Result\ResultInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Replaces the reference ID with its label in OSS Catalog.
+ * Replaces the reference ID with its label for Eu Oss Catalogue Provider.
  *
  * @FacetsProcessor(
  *   id = "oss_label_processor",
- *   label = @Translation("Transform OSS Catalog reference ID into labels"),
+ *   label = @Translation("Transform Eu Oss Catalogue Provider reference ID into label"),
  *   description = @Translation("Replaces reference ID with labels. Works only with OSS Catalog facet."),
  *   stages = {
  *     "build" = 50,
  *   },
  * )
  */
-class OSSLabelProcessor extends ProcessorPluginBase implements BuildProcessorInterface, ContainerFactoryPluginInterface {
+class OssLabelProcessor extends ProcessorPluginBase implements BuildProcessorInterface, ContainerFactoryPluginInterface {
 
   /**
    * Constructs a new processor plugin instance.
@@ -35,17 +35,17 @@ class OSSLabelProcessor extends ProcessorPluginBase implements BuildProcessorInt
    *   The plugin_id for the plugin instance.
    * @param mixed $plugin_definition
    *   The plugin implementation definition.
-   * @param \Drupal\eu_oss_catalogue\EuOssCataloguePluginManagerInterface $providerPluginManager
+   * @param \Drupal\eu_oss_catalogue\EuOssCataloguePluginManagerInterface $provider_plugin_manager
    *   The EU OSS Catalogue providers plugin manager.
    */
-  public function __construct(array $configuration, string $plugin_id, $plugin_definition, protected EuOssCataloguePluginManagerInterface $providerPluginManager) {
+  public function __construct(array $configuration, string $plugin_id, $plugin_definition, protected EuOssCataloguePluginManagerInterface $provider_plugin_manager) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
   }
 
   /**
    * {@inheritdoc}
    */
-  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
+  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition): self {
     return new static(
       $configuration,
       $plugin_id,
@@ -58,10 +58,10 @@ class OSSLabelProcessor extends ProcessorPluginBase implements BuildProcessorInt
    * {@inheritdoc}
    */
   public function build(FacetInterface $facet, array $results): array {
+    $labels = $this->provider_plugin_manager->getLabelDefinitionsAsOptions();
     foreach ($results as $result) {
-      if ($result instanceof ResultInterface) {
-        $plugin_manager = $this->providerPluginManager->getDefinitionsAsOptions();
-        $result->setDisplayValue($plugin_manager[$result->getDisplayValue()]);
+      if ($result instanceof ResultInterface && isset($labels[$result->getDisplayValue()])) {
+        $result->setDisplayValue($labels[$result->getDisplayValue()]);
       }
     }
 
