@@ -4,6 +4,17 @@ Feature: User authentication
   As a product owner
   I want to make sure users with various roles can only access pages they are authorized to
 
+  Background:
+    # Mimic the "EU OSSC" collection.
+    Given collection:
+      | uri   | http://data.europa.eu/w21/6d621a47-71ce-4f1a-90e2-8859403d3ecd |
+      | title | EU Open Source Solutions Catalogue                             |
+      | state | validated                                                      |
+    And path alias:
+      | entity_type    | rdf_entity                                                     |
+      | entity_type_id | http://data.europa.eu/w21/6d621a47-71ce-4f1a-90e2-8859403d3ecd |
+      | path           | /eu-oss-catalogue                                              |
+
   Scenario Outline: Anonymous user can access public pages
     Given I am not logged in
     Then I visit "<path>"
