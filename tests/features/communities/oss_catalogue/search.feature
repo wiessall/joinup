@@ -45,6 +45,7 @@ Feature: OSS catalogue search
     And the "OSS category" checkbox facet should allow selecting the following values "application-development (1),content-management (1),data-analytics (1),data-collection (2),digital-asset-management (2),it-development (1)"
     And the "OSS development status" checkbox facet should allow selecting the following values "Beta (1),Development (1),Obsolete (1),Stable (2)"
     And the "OSS catalog" checkbox facet should allow selecting the following values "Developers Italia"
+    And the page should contain the html text "Italian National OSS Catalogue, by https://developers.italia.it website."
 
     # Check facet filtering.
     Then I click "application-development (1)"

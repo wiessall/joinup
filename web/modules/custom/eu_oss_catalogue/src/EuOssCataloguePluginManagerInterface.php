@@ -12,11 +12,19 @@ use Drupal\Component\Plugin\PluginManagerInterface;
 interface EuOssCataloguePluginManagerInterface extends PluginManagerInterface {
 
   /**
-   * Returns the list of definition as options.
+   * Returns the list of definition labels as options.
    *
    * @return array
    *   An option list having the plugin ID as key and the label as value.
    */
-  public function getDefinitionsAsOptions(): array;
+  public function getLabelDefinitionsAsOptions(): array;
+
+  /**
+   * Returns the list of definition descriptions as options.
+   *
+   * @return array
+   *   An option list having the plugin ID as key and the description as value.
+   */
+  public function getDescriptionDefinitionsAsOptions(): array;
 
 }
