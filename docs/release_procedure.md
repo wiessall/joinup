@@ -1,11 +1,28 @@
 Release procedure
 =================
 
-We have 2 repositories that Joinup uses: the
+We have 3 repositories that Joinup uses: the
 [development repository](https://git.fpfis.tech.ec.europa.eu/digit/digit-joinup-dev),
-which is where the development takes place, and the
+which is where the development takes place, the
 [reference repository](https://git.fpfis.tech.ec.europa.eu/ec-europa/digit-joinup-reference),
-which is where the releases are published.
+which is where the releases are published, and the
+[POC reference repository](https://git.fpfis.tech.ec.europa.eu/ec-europa/digit-joinup-poc-reference),
+which is where the POC environment is deployed.
+
+For the following document, we will assume that the developer already has
+appointed the development repository as `origin`, the reference repository as
+`reference` and the POC reference repository as `poc-reference`.
+
+If you have not added the reference repository as a remote, you can do so by
+running the following command:
+```
+$ git remote add reference https://git.fpfis.tech.ec.europa.eu/ec-europa/digit-joinup-reference.git
+```
+If you have not added the POC reference repository as a remote, you can do so
+by running the following command:
+```
+$ git remote add poc-reference https://git.fpfis.tech.ec.europa.eu/ec-europa/digit-joinup-poc-reference.git
+```
 
 The two main branches are the `master` branch on the reference repository and
 the `develop` branch on the development repository. The master branch is the
@@ -92,18 +109,16 @@ POC reference repository using the following command:
 ```
 $ git push poc-reference v#.##.#
 ```
-In the above example, poc-reference is the remote name for the POC reference
-repository. If you have not added the POC reference repository as a remote, you
-can do so by running the following command:
-```
-$ git remote add poc-reference https://git.fpfis.tech.ec.europa.eu/ec-europa/digit-joinup-poc-reference.git
-```
+In the above example, `#.##.#` is the version number of the release. The
+`poc-reference` remote is the remote that points to the POC reference
+repository.
+
 Pushing the tag will automatically deploy the release to the POC environment.
 
 ### Post release update hook removals
 The second step after the release is done, is to remove the deployment hooks.
 Mainly, after the release is done, develop branch will start failing due to the
-restriction in the deployment hook namin convention. Thus, the following steps
+restriction in the deployment hook naming convention. Thus, the following steps
 should be followed:
 
 1. Move the release ticket to 'In Progress'.
