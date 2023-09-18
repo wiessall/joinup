@@ -153,22 +153,17 @@ third_party_settings:
             uuid: 592281dd-6140-43f3-9ec5-9c88b1db0477
             region: content
             configuration:
-              id: 'field_block:node:oss_solution:oss_short_description'
-              label: 'Short description'
+              id: 'field_block:node:oss_solution:joinup_oss_solution_short_description_with_fallback'
+              label: 'Short description (computed)'
               label_display: '0'
               provider: layout_builder
               context_mapping:
                 entity: layout_builder.entity
                 view_mode: view_mode
               formatter:
-                type: joinup_core_formatter_fallback_field
+                type: basic_string
                 label: visually_hidden
-                settings:
-                  main_field_formatter_id: string
-                  main_field_formatter_settings:
-                    link_to_entity: false
-                  fallback_field_id: oss_git_description
-                  fallback_field_formatter_id: basic_string
+                settings: {  }
                 third_party_settings:
                   template_suggestion:
                     template_suggestion: ''
