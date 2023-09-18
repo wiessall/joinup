@@ -4,10 +4,12 @@ declare(strict_types = 1);
 
 namespace Drupal\Tests\eu_oss_catalogue\Kernel;
 
-use Drupal\eu_oss_catalogue\ApiGuesser;
-use Drupal\eu_oss_catalogue_test\Plugin\ServiceMock\BitbucketServiceMock;
-use Drupal\eu_oss_catalogue_test\Plugin\ServiceMock\GitlabServiceMock;
+use Drupal\Core\Logger\LoggerChannelInterface;
 use Drupal\KernelTests\KernelTestBase;
+use Drupal\eu_oss_catalogue\ApiGuesser;
+use Drupal\eu_oss_catalogue_test\Plugin\ServiceMock\Bitbucket;
+use Prophecy\Argument;
+use Psr\Log\LogLevel;
 
 /**
  * Tests the OSS Solution API Guesser service.
@@ -25,6 +27,11 @@ class ApiGuesserTest extends KernelTestBase {
     'http_request_mock',
   ];
 
+  /**
+   * The tested API Guesser service.
+   *
+   * @var \Drupal\eu_oss_catalogue\ApiGuesser
+   */
   protected ApiGuesser $apiGuesser;
 
   /**
@@ -33,29 +40,23 @@ class ApiGuesserTest extends KernelTestBase {
   public function setUp(): void {
     parent::setUp();
 
-    $this->apiGuesser = new ApiGuesser($this->container->get('http_client_factory'));
-
     $this->container->get('state')->set(
-      GitlabServiceMock::GITLAB_MOCK_STATE_KEY,
+      Bitbucket::BITBUCKET_MOCK_STATE_KEY,
       [
-        'git.fpfis.tech.ec.europa.eu/path' => [
-          'ec-europa' => [
-            'digit-joinup-reference'
-          ],
-        ],
-      ]
-    );
-
-    $this->container->get('state')->set(
-      BitbucketServiceMock::BITBUCKET_MOCK_STATE_KEY,
-      [
-        'bitbucket.example.com' => [
+        'self-hosted.bitbucket.example.com' => [
           'atlassianlabs' => [
-            'docker-browse'
+            'docker-browse',
+          ],
+        ],
+        'bitbucket.org' => [
+          'ec-europa' => [
+            'digit-joinup-reference',
           ],
         ],
       ]
     );
+
+    $this->apiGuesser = \Drupal::service('eu_oss_catalogue.git_remote.api_guesser');
   }
 
   /**
@@ -69,8 +70,22 @@ class ApiGuesserTest extends KernelTestBase {
    * @dataProvider providerTestApiGuesser
    */
   public function testApiGuesser(string $url, ?string $expected_api): void {
+    if ($expected_api === NULL) {
+      $logger = $this->prophesize(LoggerChannelInterface::class);
+      $logger->log()->withArguments([
+        Argument::exact(LogLevel::WARNING),
+        Argument::any(),
+      ])->shouldBeCalledOnce();
+
+      $this->apiGuesser = new ApiGuesser(
+        $this->container->get('plugin.manager.eu_oss_catalogue.hosting_platform'),
+        $this->container->get('state'),
+        $logger->reveal()
+      );
+    }
+
     $this->assertEquals(
-      $this->apiGuesser->findApiPlugin($url),
+      $this->apiGuesser->getHostingPlatformPluginId($url),
       $expected_api
     );
   }
@@ -83,19 +98,44 @@ class ApiGuesserTest extends KernelTestBase {
    */
   public function providerTestApiGuesser(): array {
     return [
+      'Only Gitlab' => [
+        'URL' => 'https://gitlab.com',
+        'Expected' => 'gitlab_com',
+      ],
       'Gitlab home' => [
-        'URL' => 'https://git.fpfis.tech.ec.europa.eu/path/ec-europa/digit-joinup-reference',
-        'Expected' => 'gitlab',
+        'URL' => 'https://gitlab.com/z.a.horvath/smart_title',
+        'Expected' => 'gitlab_com',
       ],
       'Gitlab HTTP URL' => [
-        'URL' => 'https://git.fpfis.tech.ec.europa.eu/path/ec-europa/digit-joinup-reference.git',
-        'Expected' => 'gitlab',
+        'URL' => 'https://gitlab.com/z.a.horvath/smart_title.git',
+        'Expected' => 'gitlab_com',
       ],
       'Gitlab SSH URL' => [
-        'URL' => 'git@git.fpfis.tech.ec.europa.eu/path:ec-europa/digit-joinup-reference.git',
-        'Expected' => 'gitlab',
+        'URL' => 'git@gitlab.com:z.a.horvath/smart_title.git',
+        'Expected' => 'gitlab_com',
       ],
 
+      'Self-hosted Gitlab home' => [
+        'URL' => 'https://self-hosted.gitlab.example.com/subpath/ec-europa/digit-joinup-reference',
+        'Expected' => 'gitlab_self_hosted',
+      ],
+      'Self-hosted Gitlab home with trailing slash' => [
+        'URL' => 'https://self-hosted.gitlab.example.com/subpath/ec-europa/digit-joinup-reference/',
+        'Expected' => 'gitlab_self_hosted',
+      ],
+      'Self-hosted Gitlab HTTP URL' => [
+        'URL' => 'https://self-hosted.gitlab.example.com/subpath/ec-europa/digit-joinup-reference.git',
+        'Expected' => 'gitlab_self_hosted',
+      ],
+      'Self-hosted Gitlab SSH URL' => [
+        'URL' => 'git@self-hosted.gitlab.example.com/subpath:ec-europa/digit-joinup-reference.git',
+        'Expected' => 'gitlab_self_hosted',
+      ],
+
+      'Only GitHub' => [
+        'URL' => 'https://github.com',
+        'Expected' => 'github',
+      ],
       'GitHub home' => [
         'URL' => 'https://github.com/ec-europa/toolkit',
         'Expected' => 'github',
@@ -109,17 +149,18 @@ class ApiGuesserTest extends KernelTestBase {
         'Expected' => 'github',
       ],
 
+      // Bitbucket isn't yet implemented.
       'Bitbucket home' => [
         'URL' => 'https://bitbucket.example.com/atlassianlabs/docker-browse',
-        'Expected' => 'bitbucket',
+        'Expected' => NULL,
       ],
       'Bitbucket HTTP URL' => [
         'URL' => 'https://bitbucket.example.com/atlassianlabs/docker-browse.git',
-        'Expected' => 'bitbucket',
+        'Expected' => NULL,
       ],
       'Bitbucket SSH URL' => [
         'URL' => 'git@bitbucket.example.com:atlassianlabs/docker-browse.git',
-        'Expected' => 'bitbucket',
+        'Expected' => NULL,
       ],
     ];
   }
@@ -136,7 +177,7 @@ class ApiGuesserTest extends KernelTestBase {
    */
   public function testApiGuesserExceptions(string $url, string $expected_exception): void {
     $this->expectException($expected_exception);
-    $this->apiGuesser->findApiPlugin($url);
+    $this->apiGuesser->getHostingPlatformPluginIdForUri($url);
   }
 
   /**

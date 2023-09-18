@@ -6,17 +6,18 @@ namespace Drupal\eu_oss_catalogue\Plugin\eu_oss_catalogue\HostingPlatform;
 
 use Drupal\Cache\Adapter\DrupalAdapter;
 use Drupal\Core\Cache\CacheBackendInterface;
+use Drupal\Core\Http\ClientFactory;
 use Drupal\Core\Site\Settings;
 use Drupal\eu_oss_catalogue\EuOssCatalogueGitHostingPlatformPluginBase;
 use Drupal\eu_oss_catalogue\Exception\MissingAccessTokenException;
 use Drupal\eu_oss_catalogue\Model\GitHubSearchType;
+use Drupal\eu_oss_catalogue\Model\GitUri;
 use Drupal\eu_oss_catalogue\Model\HostingPlatformResult;
 use Github\Api\GraphQL;
 use Github\AuthMethod;
 use Github\Client;
 use GraphQL\Actions\Query;
 use GraphQL\Entities\Node;
-use Psr\Http\Client\ClientInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -28,6 +29,13 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * )
  */
 class GitHub extends EuOssCatalogueGitHostingPlatformPluginBase {
+
+  /**
+   * Base URL of GitHub.
+   *
+   * @const string
+   */
+  public const GITHUB_BASE_URL = 'github.com';
 
   /**
    * Static cache for the GitHub client.
@@ -43,7 +51,7 @@ class GitHub extends EuOssCatalogueGitHostingPlatformPluginBase {
    *   The plugin ID.
    * @param array $pluginDefinition
    *   The plugin definition.
-   * @param \Psr\Http\Client\ClientInterface $httpClient
+   * @param \Drupal\Core\Http\ClientFactory $clientFactory
    *   The HTTP client.
    * @param \Drupal\Core\Site\Settings $settings
    *   The Drupal settings.
@@ -54,11 +62,11 @@ class GitHub extends EuOssCatalogueGitHostingPlatformPluginBase {
     array $configuration,
     $pluginId,
     $pluginDefinition,
-    protected ClientInterface $httpClient,
-    protected Settings $settings,
+    ClientFactory $clientFactory,
+    Settings $settings,
     protected CacheBackendInterface $cache,
   ) {
-    parent::__construct($configuration, $pluginId, $pluginDefinition, $httpClient, $settings);
+    parent::__construct($configuration, $pluginId, $pluginDefinition, $clientFactory, $settings);
   }
 
   /**
@@ -69,7 +77,7 @@ class GitHub extends EuOssCatalogueGitHostingPlatformPluginBase {
       $configuration,
       $pluginId,
       $pluginDefinition,
-      $container->get('http_client'),
+      $container->get('http_client_factory'),
       $container->get('settings'),
       $container->get('cache.eu_oss_catalogue'),
     );
@@ -181,6 +189,14 @@ class GitHub extends EuOssCatalogueGitHostingPlatformPluginBase {
         );
       }
     }
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function isHostingPlatformForUrl(string $repositoryUrl): bool {
+    return ($gitUri = GitUri::fromUriString($repositoryUrl))
+      && $gitUri->host === self::GITHUB_BASE_URL;
   }
 
 }

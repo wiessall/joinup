@@ -5,11 +5,13 @@ declare(strict_types = 1);
 namespace Drupal\eu_oss_catalogue;
 
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Http\ClientFactory;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Plugin\PluginFormInterface;
 use Drupal\Core\Site\Settings;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\multivalue_form_element\Element\MultiValue;
+use GuzzleHttp\RequestOptions;
 use Psr\Http\Client\ClientInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -17,6 +19,13 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * Base class for Git code hosting plugin platforms (GitHub, GitLab, etc).
  */
 abstract class EuOssCatalogueGitHostingPlatformPluginBase extends EuOssCatalogueHostingPlatformPluginBase implements PluginFormInterface, ContainerFactoryPluginInterface {
+
+  /**
+   * The HTTP client, configured not to throw HTTP errors.
+   *
+   * @var \Psr\Http\Client\ClientInterface|\GuzzleHttp\Client
+   */
+  protected ClientInterface $httpClient;
 
   /**
    * Constructs a new plugin instance.
@@ -27,7 +36,7 @@ abstract class EuOssCatalogueGitHostingPlatformPluginBase extends EuOssCatalogue
    *   The plugin ID.
    * @param array $pluginDefinition
    *   The plugin definition.
-   * @param \Psr\Http\Client\ClientInterface $httpClient
+   * @param \Drupal\Core\Http\ClientFactory $clientFactory
    *   The HTTP client.
    * @param \Drupal\Core\Site\Settings $settings
    *   The Drupal settings.
@@ -36,10 +45,12 @@ abstract class EuOssCatalogueGitHostingPlatformPluginBase extends EuOssCatalogue
     array $configuration,
     $pluginId,
     $pluginDefinition,
-    protected ClientInterface $httpClient,
+    ClientFactory $clientFactory,
     protected Settings $settings,
   ) {
     parent::__construct($configuration, $pluginId, $pluginDefinition);
+
+    $this->httpClient = $clientFactory->fromOptions([RequestOptions::HTTP_ERRORS => FALSE]);
   }
 
   /**
@@ -50,7 +61,7 @@ abstract class EuOssCatalogueGitHostingPlatformPluginBase extends EuOssCatalogue
       $configuration,
       $pluginId,
       $pluginDefinition,
-      $container->get('http_client'),
+      $container->get('http_client_factory'),
       $container->get('settings'),
     );
   }

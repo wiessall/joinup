@@ -6,6 +6,7 @@ namespace Drupal\eu_oss_catalogue\Plugin\eu_oss_catalogue\HostingPlatform;
 
 use Drupal\eu_oss_catalogue\EuOssCatalogueGitHostingPlatformPluginBase;
 use Drupal\eu_oss_catalogue\Model\GitLabReleaseSort;
+use Drupal\eu_oss_catalogue\Model\GitUri;
 use Drupal\eu_oss_catalogue\Model\HostingPlatformResult;
 use Gitlab\Client;
 use GraphQL\Actions\Query;
@@ -19,6 +20,13 @@ use GraphQL\Actions\Query;
  * )
  */
 class GitLabDotCom extends EuOssCatalogueGitHostingPlatformPluginBase {
+
+  /**
+   * Base URL of Gitlab.
+   *
+   * @const string
+   */
+  public const GITLAB_BASE_URL = 'gitlab.com';
 
   /**
    * Static cache for GitLab client.
@@ -264,6 +272,14 @@ class GitLabDotCom extends EuOssCatalogueGitHostingPlatformPluginBase {
       $project['path'],
       $project['repository']['blobs']['nodes'][0]['rawBlob'] ?? NULL,
     );
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function isHostingPlatformForUrl(string $repositoryUrl): bool {
+    return ($gitUri = GitUri::fromUriString($repositoryUrl))
+      && $gitUri->host === self::GITLAB_BASE_URL;
   }
 
 }

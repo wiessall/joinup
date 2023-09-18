@@ -5,163 +5,143 @@ declare(strict_types = 1);
 namespace Drupal\eu_oss_catalogue;
 
 use Drupal\Component\Utility\UrlHelper;
-use Drupal\Core\Http\ClientFactory;
-use GuzzleHttp\ClientInterface;
+use Drupal\Core\Logger\LoggerChannelInterface;
+use Drupal\Core\State\StateInterface;
+use Drupal\eu_oss_catalogue\Model\GitUri;
+use Psr\Log\LogLevel;
 
 /**
  * Remote git API guesser.
  *
  * @internal
  */
-final class ApiGuesser {
+final class ApiGuesser implements ApiGuesserInterface {
 
-  protected ClientInterface $client;
+  /**
+   * Storage key in State API.
+   *
+   * @const string
+   */
+  protected const STATE_STORAGE_KEY = 'eu_oss_catalogue.api_guesser.guessed';
 
+  /**
+   * Guesser defaults.
+   *
+   * @const string[]
+   */
+  protected const GUESSED_DEFAULTS = [
+    // Bitbucket is not yet implemented.
+    // 'bitbucket.org' => 'bitbucket_org',.
+    'github.com' => 'github',
+    'gitlab.com' => 'gitlab_com',
+  ];
+
+  /**
+   * Construct a new ApiGuesser instance.
+   *
+   * @param \Drupal\eu_oss_catalogue\EuOssCataloguePluginManagerInterface $hostingPlatformManager
+   *   The hosting platform plugin manager.
+   * @param \Drupal\Core\State\StateInterface $state
+   *   The state service.
+   * @param \Drupal\Core\Logger\LoggerChannelInterface $logger
+   *   The logger channel to use.
+   */
   public function __construct(
-    ClientFactory $client_factory
-  ) {
-    $this->client = $client_factory->fromOptions(['http_errors' => FALSE]);
-  }
+    protected EuOssCataloguePluginManagerInterface $hostingPlatformManager,
+    protected StateInterface $state,
+    protected LoggerChannelInterface $logger
+  ) {}
 
-  public function findApiPlugin(string $repository_url): ?string {
-    if (!UrlHelper::isValid($repository_url)) {
+  /**
+   * {@inheritdoc}
+   */
+  public function getHostingPlatformPluginId(string $repositoryUrl, bool $useCache = TRUE): ?string {
+    if (!UrlHelper::isValid($repositoryUrl)) {
       throw new \InvalidArgumentException(
         sprintf(
           "The given repository URL parameter is not a valid URL: %s",
-          $repository_url
+          $repositoryUrl
         )
       );
     }
 
-    // @todo move logic into plugins.
-    if ($this->isGithub($repository_url)) {
-      return 'github';
-    }
+    $previouslyGuessedPluginId = NULL;
+    $guessedPluginId = NULL;
 
-    if ($this->isGitlab($repository_url)) {
-      return 'gitlab';
-    }
+    if (is_a(($gitUri = GitUri::fromUriString($repositoryUrl)), GitUri::class)) {
+      if ($useCache && ($previouslyGuessedPluginId = $this->getGuessedPluginId($gitUri->host))) {
+        return $previouslyGuessedPluginId;
+      }
 
-    if ($this->isBitbucket($repository_url)) {
-      return 'bitbucket';
-    }
+      foreach (array_keys($this->hostingPlatformManager->getDefinitions()) as $pluginId) {
+        $plugin = $this->hostingPlatformManager->createInstance($pluginId);
+        assert($plugin instanceof EuOssCatalogueHostingPlatformInterface);
 
-    return NULL;
-  }
-
-  private function isBitbucket(string $repository_url): bool {
-    $api_scheme = 'https';
-    $api_host = NULL;
-    $vendor = NULL;
-    $package = NULL;
-
-    if (UrlHelper::isExternal($repository_url)) {
-      $parsed = parse_url($repository_url);
-      $api_scheme= $parsed['scheme'] ?? NULL;
-      $api_host_base = $parsed['host'];
-      $path_parts = explode('/', $parsed['path'] ?? []);
-      $vendor_package = array_slice($path_parts, -2);
-
-      if (count($vendor_package) === 2) {
-        [$vendor, $package] = $vendor_package;
-        $api_host = $api_host_base . implode('/', array_slice($path_parts, 0, -2));
-        if (str_ends_with($package, '.git')) {
-          $package = substr($package, 0, -4);
+        if ($plugin->isHostingPlatformForUrl($repositoryUrl)) {
+          $guessedPluginId = $pluginId;
+          break;
         }
       }
     }
 
-
-    // Example: git@foo.bar:vendor/package.git.
-    // git@foo.bar.baz.eu/sub/path:ec-europa/digit-joinup-reference.git.
-    if (
-      str_starts_with($repository_url, 'git@') &&
-      preg_match('#^git@(.*):([^/]*)/(.*)\.git$#', $repository_url, $matches)
-    ) {
-      [, $api_host, $vendor, $package] = $matches;
+    if (!$guessedPluginId) {
+      $this->logger->log(
+        LogLevel::WARNING,
+        sprintf(
+          "No matching hosting platform plugin was found for URL '%s'",
+          $repositoryUrl
+        )
+      );
     }
 
-    if (!$api_scheme || !$api_host || !$vendor || !$package) {
-      return FALSE;
+    if ($guessedPluginId !== $previouslyGuessedPluginId) {
+      $this->storeGuessedPluginId($gitUri->host, $guessedPluginId);
     }
-
-    // Fetch https://git.fpfis.tech.ec.europa.eu/api/v4/projects/ec-europa%2Fdigit-joinup-reference
-    // urlencode("$vendor/$project").
-    $response = $this->client->request(
-      'GET',
-      "$api_scheme://$api_host/api/2.0/repositories/" . urlencode("$vendor/$package"),
-      ['http_errors' => FALSE]
-    );
-    return $response->getStatusCode() === 200;
+    return $guessedPluginId;
   }
 
-  private function isGitlab(string $repository_url): bool {
-    $api_scheme = 'https';
-    $api_host = NULL;
-    $vendor = NULL;
-    $package = NULL;
-
-    if (UrlHelper::isExternal($repository_url)) {
-      $api_scheme= $parsed['scheme'] ?? NULL;
-      $parsed = parse_url($repository_url);
-      $api_host_base = $parsed['host'];
-      $path_parts = explode('/', $parsed['path'] ?? []);
-      $vendor_package = array_slice($path_parts, -2);
-
-      if (count($vendor_package) === 2) {
-        [$vendor, $package] = $vendor_package;
-        $api_host = $api_host_base . implode('/', array_slice($path_parts, 0, -2));
-        if (str_ends_with($package, '.git')) {
-          $package = substr($package, 0, -4);
-        }
-      }
-    }
-
-
-    // Example: git@foo.bar:vendor/package.git.
-    // git@foo.bar.baz.eu/sub/path:ec-europa/digit-joinup-reference.git.
-    if (
-      str_starts_with($repository_url, 'git@') &&
-      preg_match('#^git@(.*):([^/]*)/(.*)\.git$#', $repository_url, $matches)
-    ) {
-      [, $api_host, $vendor, $package] = $matches;
-    }
-
-    if (!$api_scheme || !$api_host || !$vendor || !$package) {
-      return FALSE;
-    }
-
-    // Fetch https://git.fpfis.tech.ec.europa.eu/api/v4/projects/ec-europa%2Fdigit-joinup-reference
-    // urlencode("$vendor/$project").
-    $response = $this->client->request(
-      'GET',
-      "$api_scheme://$api_host/api/v4/projects/" . urlencode("$vendor/$package"),
-    );
-    return $response->getStatusCode() === 200;
+  /**
+   * Returns the previously guessed plugin IDs.
+   *
+   * @return string[]
+   *   All the previously guessed plugin IDs, keyed by host base URL.
+   */
+  protected function getGuessedPluginIds(): array {
+    return $this->state->get(self::STATE_STORAGE_KEY, self::GUESSED_DEFAULTS);
   }
 
-  private function isGithub(string $repository_url): bool {
-    // URLs like https://github.com/ec-europa/toolkit or
-    // https://github.com/ec-europa/toolkit.git.
-    $parsed = parse_url($repository_url);
-    if (
-      UrlHelper::isExternal($repository_url) &&
-      $parsed['host'] === 'github.com' &&
-      !empty($parsed['path']) &&
-      preg_match('#^/([^\/]+)\/([^\/]+)$#', $parsed['path'])
-    ) {
-      return TRUE;
-    }
+  /**
+   * Returns the previously guessed plugin ID for the specified base URL.
+   *
+   * @param string $baseUrl
+   *   The base URL.
+   *
+   * @return string|null
+   *   The previously guessed plugin ID if any, or NULL if there is no cached
+   *   result.
+   */
+  protected function getGuessedPluginId(string $baseUrl): ?string {
+    return $this->getGuessedPluginIds()[$baseUrl] ?? NULL;
+  }
 
-    // Example: git@github.com:ec-europa/toolkit.git.
-    if (
-      str_starts_with($repository_url, 'git@github.com:') &&
-      preg_match('#^git@github\.com:([^/]*)/(.*)\.git$#', $repository_url)
-    ) {
-      return TRUE;
+  /**
+   * Stores a guessed plugin ID for the specified base URL.
+   *
+   * This will override previous entry if any exists.
+   *
+   * @param string $baseUrl
+   *   The base URL.
+   * @param string|null $pluginId
+   *   The discovered plugin ID to store in cache. Not stored if value is empty.
+   */
+  protected function storeGuessedPluginId(string $baseUrl, ?string $pluginId): void {
+    if (in_array($pluginId, [NULL, ''], TRUE)) {
+      return;
     }
-
-    return FALSE;
+    $this->state->set(
+      self::STATE_STORAGE_KEY,
+      [$baseUrl => $pluginId] + $this->getGuessedPluginIds()
+    );
   }
 
 }
