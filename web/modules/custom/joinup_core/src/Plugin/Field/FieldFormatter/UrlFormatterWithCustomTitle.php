@@ -24,17 +24,25 @@ class UrlFormatterWithCustomTitle extends LinkFormatter {
   /**
    * {@inheritdoc}
    */
-  public static function defaultSettings() {
+  public static function defaultSettings(): array {
     return [
       'link_title' => '',
     ] + parent::defaultSettings();
   }
 
   /**
-   * {@inheritdoc}
+   * Returns a form to configure settings for the formatter.
+   *
+   * @param array $form
+   *   The form where the settings form is being included in.
+   * @param \Drupal\Core\Form\FormStateInterface $formState
+   *   The current state of the form.
+   *
+   * @return array
+   *   The form elements for the formatter settings.
    */
-  public function settingsForm(array $form, FormStateInterface $form_state) {
-    $elements = parent::settingsForm($form, $form_state);
+  public function settingsForm(array $form, FormStateInterface $formState): array {
+    $elements = parent::settingsForm($form, $formState);
 
     $elements['link_title'] = [
       '#type' => 'textfield',
@@ -64,7 +72,7 @@ class UrlFormatterWithCustomTitle extends LinkFormatter {
   /**
    * {@inheritdoc}
    */
-  public function viewElements(FieldItemListInterface $items, $langcode) {
+  public function viewElements(FieldItemListInterface $items, $langcode): array {
     $elements = parent::viewElements($items, $langcode);
     if (empty($label = $this->getSetting('link_title'))) {
       return $elements;
