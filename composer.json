@@ -397,7 +397,8 @@
                 "Stop auto submitting first character entered in an Autocomplete Filter field. @see https://www.drupal.org/project/views_autosubmit/issues/3160600" : "https://git.drupalcode.org/project/views_autosubmit/-/merge_requests/10.patch"
             },
             "m4tthumphrey/php-gitlab-api": {
-                "GraphQL API @see https://github.com/GitLabPHP/Client/issues/766": "resources/patch/php/drupal/m4tthumphrey/php-gitlab-api/772.diff"
+                "GraphQL API @see https://github.com/GitLabPHP/Client/issues/766": "resources/patch/php/drupal/m4tthumphrey/php-gitlab-api/772.diff",
+                "Add support for prefixed URIs on base path @see https://github.com/GitLabPHP/Client/issues/726": "resources/patch/php/drupal/m4tthumphrey/php-gitlab-api/726.diff"
             }
         },
         "drupal-lenient": {
