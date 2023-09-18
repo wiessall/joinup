@@ -81,7 +81,10 @@ class JoinupEuLoginCasEventsSubscriber implements EventSubscriberInterface {
   public static function getSubscribedEvents(): array {
     return [
       CasHelper::EVENT_PRE_VALIDATE => 'alterValidationUrl',
-      CasHelper::EVENT_POST_VALIDATE => 'prepareAttributes',
+      CasHelper::EVENT_POST_VALIDATE => [
+        ['prepareAttributes'],
+        ['blockedUsersMessage'],
+      ],
       CasHelper::EVENT_PRE_REGISTER => [
         ['disableRegistration', 1000],
         ['markAsNewAccountRegistration'],
@@ -132,6 +135,20 @@ class JoinupEuLoginCasEventsSubscriber implements EventSubscriberInterface {
     foreach ($xml->xpath('//cas:authenticationSuccess/*') as $element) {
       $event->getCasPropertyBag()->setAttribute($element->getName(), $element->__toString());
     };
+  }
+
+  /**
+   * Displays a message to blocked users.
+   *
+   * @param \Drupal\cas\Event\CasPostValidateEvent $event
+   *   The CAS post-validate event object.
+   */
+  public function blockedUsersMessage(CasPostValidateEvent $event): void {
+    $authmap = \Drupal::getContainer()->get('externalauth.authmap');
+    $uid = $authmap->getUid($event->getCasPropertyBag()->getUsername(), 'cas');
+    if ($uid && ($user = $this->entityTypeManager->getStorage('user')->load($uid)) && $user->isBlocked()) {
+      $this->messenger->addError('You cannot sign in yet. Your Joinup account is currently being verified. You will be notified by email once it is activated.');
+    }
   }
 
   /**
