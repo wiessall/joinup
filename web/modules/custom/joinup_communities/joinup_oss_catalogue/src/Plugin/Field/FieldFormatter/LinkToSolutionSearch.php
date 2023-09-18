@@ -37,7 +37,7 @@ class LinkToSolutionSearch extends FormatterBase {
   /**
    * {@inheritdoc}
    */
-  public static function defaultSettings() {
+  public static function defaultSettings(): array {
     return [
       'facet_id' => '',
       'use_label' => TRUE,
@@ -46,10 +46,18 @@ class LinkToSolutionSearch extends FormatterBase {
   }
 
   /**
-   * {@inheritdoc}
+   * Returns a form to configure settings for the formatter.
+   *
+   * @param array $form
+   *   The form where the settings form is being included in.
+   * @param \Drupal\Core\Form\FormStateInterface $formDtate
+   *   The current state of the form.
+   *
+   * @return array
+   *   The form elements for the formatter settings.
    */
-  public function settingsForm(array $form, FormStateInterface $form_state) {
-    $elements = parent::settingsForm($form, $form_state);
+  public function settingsForm(array $form, FormStateInterface $formDtate): array {
+    $elements = parent::settingsForm($form, $formDtate);
 
     $elements['facet_id'] = [
       '#type' => 'textfield',
@@ -95,7 +103,7 @@ class LinkToSolutionSearch extends FormatterBase {
   /**
    * {@inheritdoc}
    */
-  public function viewElements(FieldItemListInterface $items, $langcode) {
+  public function viewElements(FieldItemListInterface $items, $langcode): array {
     return match($this->fieldDefinition->getType()) {
       'entity_reference' => $this->viewEntityReferenceElements($items, $langcode),
       'plugin_reference' => $this->viewPluginReferenceElements($items, $langcode),
@@ -115,8 +123,9 @@ class LinkToSolutionSearch extends FormatterBase {
    *   A renderable array for $items, as an array of child elements keyed by
    *   consecutive numeric indexes starting from 0.
    */
-  protected function viewEntityReferenceElements(FieldItemListInterface $items, string $langcode) {
+  protected function viewEntityReferenceElements(FieldItemListInterface $items, string $langcode): array {
     assert($items instanceof EntityReferenceFieldItemListInterface);
+    $renderable = [];
     $facetId = $this->getFacetId();
     $openNew = $this->getSetting('open_new');
     foreach ($items as $delta => $item) {
@@ -140,7 +149,7 @@ class LinkToSolutionSearch extends FormatterBase {
       }
     }
 
-    return $renderable ?? [];
+    return $renderable;
   }
 
   /**
@@ -155,8 +164,9 @@ class LinkToSolutionSearch extends FormatterBase {
    *   A renderable array for $items, as an array of child elements keyed by
    *   consecutive numeric indexes starting from 0.
    */
-  protected function viewPluginReferenceElements(FieldItemListInterface $items, string $langcode) {
+  protected function viewPluginReferenceElements(FieldItemListInterface $items, string $langcode): array {
     assert($items instanceof PluginReferenceFieldItemListInterface);
+    $renderable = [];
     $facetId = $this->getFacetId();
     $openNew = $this->getSetting('open_new');
     foreach ($items->referencedPlugins() as $delta => $plugin) {
@@ -181,16 +191,22 @@ class LinkToSolutionSearch extends FormatterBase {
       }
     }
 
-    return $renderable ?? [];
+    return $renderable;
   }
 
   /**
-   * {@inheritdoc}
+   * Returns if the formatter can be used for the provided field.
+   *
+   * @param \Drupal\Core\Field\FieldDefinitionInterface $fieldDefinition
+   *   The field definition that should be checked.
+   *
+   * @return bool
+   *   TRUE if the formatter can be used, FALSE otherwise.
    */
-  public static function isApplicable(FieldDefinitionInterface $field_definition) {
+  public static function isApplicable(FieldDefinitionInterface $fieldDefinition): bool {
     $entityBundleInfo = \Drupal::service('entity_type.bundle.info');
-    $currentBundleInfo = $entityBundleInfo->getBundleInfo($field_definition->getTargetEntityTypeId());
-    $targetBundle = $field_definition->getTargetBundle();
+    $currentBundleInfo = $entityBundleInfo->getBundleInfo($fieldDefinition->getTargetEntityTypeId());
+    $targetBundle = $fieldDefinition->getTargetBundle();
     return array_key_exists($targetBundle, $currentBundleInfo)
       && $currentBundleInfo[$targetBundle]['class'] === JoinupOssSolution::class;
   }
