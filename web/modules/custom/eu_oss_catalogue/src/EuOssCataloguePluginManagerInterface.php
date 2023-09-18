@@ -14,17 +14,12 @@ interface EuOssCataloguePluginManagerInterface extends PluginManagerInterface {
   /**
    * Returns the list of definition labels as options.
    *
-   * @return array
-   *   An option list having the plugin ID as key and the label as value.
-   */
-  public function getLabelDefinitionsAsOptions(): array;
-
-  /**
-   * Returns the list of definition descriptions as options.
+   * @param string $type
+   *   The provider annotation type.
    *
    * @return array
-   *   An option list having the plugin ID as key and the description as value.
+   *   An option list having the plugin ID as key and annotation type as value.
    */
-  public function getDescriptionDefinitionsAsOptions(): array;
+  public function getDefinitionsAsOptions(string $type): array;
 
 }

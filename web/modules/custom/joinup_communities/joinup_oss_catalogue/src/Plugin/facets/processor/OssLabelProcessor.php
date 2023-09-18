@@ -58,7 +58,7 @@ class OssLabelProcessor extends ProcessorPluginBase implements BuildProcessorInt
    * {@inheritdoc}
    */
   public function build(FacetInterface $facet, array $results): array {
-    $labels = $this->provider_plugin_manager->getLabelDefinitionsAsOptions();
+    $labels = $this->provider_plugin_manager->getDefinitionsAsOptions('label');
     foreach ($results as $result) {
       if ($result instanceof ResultInterface && isset($labels[$result->getDisplayValue()])) {
         $result->setDisplayValue($labels[$result->getDisplayValue()]);
