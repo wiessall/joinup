@@ -20,7 +20,6 @@ class ShortDescriptionWithFallback extends FieldItemList {
    */
   protected function computeValue(): void {
     $entity = $this->getEntity();
-    $this->list = [];
     $field = [];
     foreach (['oss_short_description', 'oss_git_description'] as $fieldName) {
       if (!$entity->hasField($fieldName) || $entity->get($fieldName)->isEmpty()) {
