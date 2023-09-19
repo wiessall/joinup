@@ -6,7 +6,6 @@ namespace Drupal\joinup_group\Controller;
 
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Access\AccessResultInterface;
-use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\joinup_group\Entity\GroupInterface;
@@ -46,7 +45,7 @@ class GroupMembersController extends ControllerBase {
   /**
    * {@inheritdoc}
    */
-  public static function create(ContainerInterface $container) {
+  public static function create(ContainerInterface $container): self {
     return new static(
       $container->get('og.access')
     );
@@ -61,7 +60,7 @@ class GroupMembersController extends ControllerBase {
    * @return array
    *   The view containing the members overview, as a renderable array.
    */
-  public function membersList(RouteMatchInterface $route_match) {
+  public function membersList(RouteMatchInterface $route_match): array {
     $group_entity_type_id = $route_match->getRouteObject()->getOption('_og_entity_type_id');
     /** @var \Drupal\Core\Entity\EntityInterface $group */
     $group = $route_match->getParameter($group_entity_type_id);
@@ -79,16 +78,7 @@ class GroupMembersController extends ControllerBase {
     $view = Views::getView($view_id)
       ->addCacheContext('group_membership_manager')
       ->addCacheContext('theme');
-    $build = $view->executeDisplay('default', $arguments);
-
-    CacheableMetadata::createFromRenderArray($build)->addCacheContexts([
-      // Group membership managers are seeing a different page.
-      'group_membership_manager',
-      // This page might be displayed using different themes.
-      'theme',
-    ])->applyTo($build);
-
-    return $build;
+    return $view->executeDisplay('default', $arguments);
   }
 
   /**
