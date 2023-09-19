@@ -5,6 +5,7 @@ declare(strict_types = 1);
 namespace Drupal\eu_oss_catalogue;
 
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Logger\LoggerChannelInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Plugin\PluginFormInterface;
 use Drupal\Core\Site\Settings;
@@ -31,6 +32,8 @@ abstract class EuOssCatalogueGitHostingPlatformPluginBase extends EuOssCatalogue
    *   The HTTP client.
    * @param \Drupal\Core\Site\Settings $settings
    *   The Drupal settings.
+   * @param \Drupal\Core\Logger\LoggerChannelInterface $logger
+   *   The EU OSS Catalogue logger.
    */
   public function __construct(
     array $configuration,
@@ -38,6 +41,7 @@ abstract class EuOssCatalogueGitHostingPlatformPluginBase extends EuOssCatalogue
     $pluginDefinition,
     protected ClientInterface $httpClient,
     protected Settings $settings,
+    protected LoggerChannelInterface $logger,
   ) {
     parent::__construct($configuration, $pluginId, $pluginDefinition);
   }
@@ -52,6 +56,7 @@ abstract class EuOssCatalogueGitHostingPlatformPluginBase extends EuOssCatalogue
       $pluginDefinition,
       $container->get('http_client'),
       $container->get('settings'),
+      $container->get('logger.channel.eu_oss_catalogue'),
     );
   }
 
