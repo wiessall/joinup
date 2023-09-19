@@ -1508,7 +1508,7 @@ display:
         filters: false
         filter_groups: false
       display_description: ''
-      path: admin/content/eu-oss-catalogue/oss_solutions
+      path: admin/content/eu-oss-catalogue/oss-solutions
       menu:
         type: tab
         title: OSS Solutions

@@ -70,7 +70,7 @@ class OssSolutionListingPageTest extends BrowserTestBase {
     $assert_session = $this->assertSession();
 
     // Check the view exists, is access-restricted, and some defaults are there.
-    $this->drupalGet('/admin/content/eu-oss-catalogue/solutions');
+    $this->drupalGet('/admin/content/eu-oss-catalogue/oss-solutions');
 
     $assert_session->statusCodeEquals(200);
     $assert_session->titleEquals('Open Source Software Solutions | Drupal');
