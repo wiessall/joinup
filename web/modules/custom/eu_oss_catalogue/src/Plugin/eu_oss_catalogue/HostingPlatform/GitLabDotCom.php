@@ -4,12 +4,15 @@ declare(strict_types = 1);
 
 namespace Drupal\eu_oss_catalogue\Plugin\eu_oss_catalogue\HostingPlatform;
 
+use Drupal\Core\Utility\Error;
 use Drupal\eu_oss_catalogue\EuOssCatalogueGitHostingPlatformPluginBase;
 use Drupal\eu_oss_catalogue\Model\GitLabReleaseSort;
 use Drupal\eu_oss_catalogue\Model\GitUri;
 use Drupal\eu_oss_catalogue\Model\Project;
 use Gitlab\Client;
+use Gitlab\ResultPager;
 use GraphQL\Actions\Query;
+use Psr\Log\LogLevel;
 
 /**
  * Git code hosting platform for gitlab.com repositories.
@@ -61,7 +64,17 @@ class GitLabDotCom extends EuOssCatalogueGitHostingPlatformPluginBase {
       $endCursor = NULL;
       do {
         $query = $this->buildGroupQuery($namespace, $requestedFiles, $endCursor);
-        $response = $this->getClient()->graphql()->execute($query->toString());
+        try {
+          $response = $this->getClient()->graphql()->execute($query->toString());
+        }
+        catch (\Throwable $exception) {
+          // @todo Retry with REST API as a fallback.
+          Error::logException($this->logger, $exception, "Can't get the group '@namespace' from @url", [
+            '@namespace' => $namespace,
+            '@url' => $this->getBaseUrl(),
+          ]);
+          break;
+        }
 
         if (empty($response['data']['group']['projects']['nodes'])) {
           // This namespace has no projects, exit do {...} while (...).
@@ -98,9 +111,26 @@ class GitLabDotCom extends EuOssCatalogueGitHostingPlatformPluginBase {
       if ($limitToRepos) {
         foreach ($repos as $name) {
           $query = $this->buildProjectQuery($namespace, $name, $requestedFiles);
-          $project = $this->getClient()->graphql()->execute($query->toString())['data']['project'] ?? NULL;
-          if ($project && !empty($project['repository']['rootRef']) && empty($project['archived'])) {
-            yield $this->createHostingPlatformResult($namespace, $project, $requestedFiles);
+          try {
+            $project = $this->getClient()->graphql()->execute($query->toString())['data']['project'] ?? NULL;
+            if ($project && !empty($project['repository']['rootRef']) && empty($project['archived'])) {
+              yield $this->createHostingPlatformResult($namespace, $project, $requestedFiles);
+            }
+            return;
+          }
+          catch (\Throwable $exception) {
+            // Log only a warning as we retry later by using REST API.
+            Error::logException($this->logger, $exception, "Can't get the project '@project' from @url using GraphQL API", [
+              '@project' => "$namespace/$name",
+              '@url' => $this->getBaseUrl(),
+            ], LogLevel::WARNING);
+          }
+
+          // It wasn't possible to get the project info with GraphQL API. This
+          // could happen on old versions of GitLab installed. Give it another
+          // chance by falling back to REST API.
+          if ($project = $this->getProjectWithRestApi("$namespace/$name")) {
+            yield $this->createHostingPlatformResult($namespace, $project);
           }
         }
       }
@@ -245,30 +275,92 @@ class GitLabDotCom extends EuOssCatalogueGitHostingPlatformPluginBase {
   }
 
   /**
+   * Returns the project info, if any, by using REST API.
+   *
+   * @param string $fullPath
+   *   The project's full name/path.
+   * @return array|null
+   *   The project array having a structure similar to the one retrieved by
+   *   GraphQL response or NULL if there's no project with this name.
+   */
+  protected function getProjectWithRestApi(string $fullPath): ?array {
+    try {
+      $response = $this->getClient()->projects()->show($fullPath);
+      $project = [
+        'path' => $response['path'],
+        'repository' => ['rootRef' => $response['default_branch']],
+        'id' => (string) $response['id'],
+        'description' => $response['description'],
+      ];
+    }
+    catch (\RuntimeException $exception) {
+      if ($exception->getCode() === 404) {
+        // There's no such a project. Return silently.
+        return NULL;
+      }
+      throw $exception;
+    }
+    catch (\Throwable $exception) {
+      // Fail silently but log if the project data cannot be retrieved.
+      Error::logException($this->logger, $exception, "Can't get the project '@project' from @url using REST API", [
+        '@project' => $fullPath,
+        '@url' => $this->getBaseUrl(),
+      ]);
+      return NULL;
+    }
+
+    try {
+      $pager = new ResultPager($this->getClient(), 1);
+      $pager->fetchAll($this->getClient()->repositories(), 'releases', [$fullPath]);
+      $response = $this->getClient()->repositories()->releases($response['id']);
+      $project['releases']['nodes'][0]['tagName'] = $response[0]['tag_name'];
+      $project['releases']['nodes'][0]['createdAt'] = $response[0]['created_at'];
+    }
+    catch (\RuntimeException $exception) {
+      if ($exception->getCode() === 404) {
+        // Return silently.
+        return $project;
+      }
+    }
+    catch (\Throwable $exception) {
+      // Return silently, but log a warning.
+      Error::logException($this->logger, $exception, "Can't get the releases for project '@project' from @url using REST API", [
+        '@project' => $fullPath,
+        '@url' => $this->getBaseUrl(),
+      ], LogLevel::WARNING);
+    }
+
+    return $project;
+  }
+
+  /**
    * Creates a code hosting platform result instance.
    *
    * @param string $namespace
    *   The project's namespace.
    * @param array $project
    *   The project array, from the GraphQL results.
+   * @param string[] $requestedFiles
+   *   (optional) A list of file blobs keyed by their file identifier.
    *
    * @return \Drupal\eu_oss_catalogue\Model\Project
    *   A code hosting platform result instance.
    */
-  protected function createHostingPlatformResult(string $namespace, array $project, array $requestedFiles): Project {
-    $host = $this->getConfiguration()['url'] ?? ('https://' . self::GITLAB_BASE_URL);
-
+  protected function createHostingPlatformResult(string $namespace, array $project, array $requestedFiles = []): Project {
     // Get files by reverse engineering from file path to file IDs.
     $files = [];
-    $flippedFiles = array_flip($requestedFiles);
-    foreach ($project['repository']['blobs']['nodes'] as $fileData) {
-      $files[$flippedFiles[$fileData['path']]] = $fileData['rawBlob'];
+
+    if ($requestedFiles) {
+      $flippedFiles = array_flip($requestedFiles);
+      foreach ($project['repository']['blobs']['nodes'] as $fileData) {
+        $files[$flippedFiles[$fileData['path']]] = $fileData['rawBlob'];
+      }
     }
 
     return new Project(
       $namespace,
       $project['path'],
-      "$host/$namespace/{$project['path']}",
+      "{$this->getBaseUrl()}/$namespace/{$project['path']}",
       $project['repository']['rootRef'],
       $project['releases']['nodes'][0]['tagName'] ?? NULL,
       $project['releases']['nodes'][0]['createdAt'] ?? NULL,
@@ -284,6 +376,16 @@ class GitLabDotCom extends EuOssCatalogueGitHostingPlatformPluginBase {
   public function isHostingPlatformForUrl(string $repositoryUrl): bool {
     return ($gitUri = GitUri::fromUriString($repositoryUrl))
       && $gitUri->host === self::GITLAB_BASE_URL;
+  }
+
+  /**
+   * Returns the GitLab instance base URL.
+   *
+   * @return string
+   *   The GitLab instance base URL.
+   */
+  protected function getBaseUrl(): string {
+    return $this->getConfiguration()['url'] ?? 'https://gitlab.com';
   }
 
 }
