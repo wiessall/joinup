@@ -4,14 +4,11 @@ declare(strict_types = 1);
 
 namespace Drupal\eu_oss_catalogue\Plugin\eu_oss_catalogue\Provider;
 
-use Drupal\Component\Serialization\Exception\InvalidDataTypeException;
 use Drupal\Component\Serialization\Json;
 use Drupal\Core\Config\Schema\SchemaCheckTrait;
 use Drupal\Core\Logger\LoggerChannelInterface;
-use Drupal\Core\Serialization\Yaml;
 use Drupal\eu_oss_catalogue\EuOssCataloguePluginManagerInterface;
 use Drupal\eu_oss_catalogue\EuOssCatalogueProviderPluginBase;
-use Drupal\eu_oss_catalogue\Model\FetchedSolution;
 use GuzzleHttp\Client;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -107,6 +104,7 @@ class DevelopersItalia extends EuOssCatalogueProviderPluginBase {
         continue;
       }
 
+      // Get the list of projects to be passed to the hosting platform plugin.
       $projects = array_map(function (array $items): array {
         return array_keys($items);
       }, $namespaces);
@@ -115,26 +113,12 @@ class DevelopersItalia extends EuOssCatalogueProviderPluginBase {
       /** @var \Drupal\eu_oss_catalogue\EuOssCatalogueHostingPlatformInterface $hostingPlatform */
       $hostingPlatform = $this->platformManager->createInstance($platformId, $platformConfig);
 
+      // Remove this entry to avoid fetching again on the next iteration.
       unset($this->fetched[$baseUrl]);
 
       /** @var \Drupal\eu_oss_catalogue\Model\Project $project */
-      foreach ($hostingPlatform->getProjects() as $project) {
-        $fileBlob = $namespaces[$project->namespace][$project->name]['publiccodeYml'];
-        try {
-          $data = Yaml::decode($fileBlob);
-          yield new FetchedSolution(
-            $project->url,
-            $data['name'] ?? '',
-            $data,
-            $namespaces[$project->namespace][$project->name]['id'],
-          );
-        }
-        catch (InvalidDataTypeException $exception) {
-          $this->logger->error('Cannot decode publiccode.yml of @url. Message: @message', [
-            '@url' => $project->url,
-            '@message' => $exception->getMessage(),
-          ]);
-        }
+      foreach ($hostingPlatform->getProjects(['publiccodeYml' => 'publiccode.yml']) as $project) {
+        yield $project;
       }
     }
   }

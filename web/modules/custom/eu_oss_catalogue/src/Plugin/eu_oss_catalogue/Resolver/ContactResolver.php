@@ -7,7 +7,7 @@ namespace Drupal\eu_oss_catalogue\Plugin\eu_oss_catalogue\Resolver;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
-use Drupal\eu_oss_catalogue\Model\FetchedSolution;
+use Drupal\eu_oss_catalogue\Model\Project;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -56,12 +56,12 @@ class ContactResolver extends DefaultResolver implements ContainerFactoryPluginI
   /**
    * {@inheritdoc}
    */
-  public function resolve(FieldItemListInterface $fieldItemList, FetchedSolution $fetchedSolution): array {
+  public function resolve(FieldItemListInterface $fieldItemList, Project $project, array $metadata): array {
     $storage = $this->entityTypeManager->getStorage('node');
     $nodeType = $this->getConfiguration()['node_type'];
 
     $targets = [];
-    foreach (parent::resolve($fieldItemList, $fetchedSolution) as $contact) {
+    foreach (parent::resolve($fieldItemList, $project, $metadata) as $contact) {
       $nids = array_values($storage->getQuery()->accessCheck(FALSE)
         ->condition('type', $nodeType)
         ->condition('title', $contact['name'])

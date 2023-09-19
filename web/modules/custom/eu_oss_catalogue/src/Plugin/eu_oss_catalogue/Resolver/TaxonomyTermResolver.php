@@ -8,7 +8,7 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\eu_oss_catalogue\Exception\UnresolvableValueException;
-use Drupal\eu_oss_catalogue\Model\FetchedSolution;
+use Drupal\eu_oss_catalogue\Model\Project;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -67,8 +67,8 @@ class TaxonomyTermResolver extends DefaultResolver implements ContainerFactoryPl
   /**
    * {@inheritdoc}
    */
-  public function resolve(FieldItemListInterface $fieldItemList, FetchedSolution $fetchedSolution): array {
-    $originalValue = parent::resolve($fieldItemList, $fetchedSolution);
+  public function resolve(FieldItemListInterface $fieldItemList, Project $project, array $metadata): array {
+    $originalValue = parent::resolve($fieldItemList, $project, $metadata);
 
     // Convert to array to handle also the multiple terms case.
     $names = (array) $originalValue;
@@ -96,7 +96,7 @@ class TaxonomyTermResolver extends DefaultResolver implements ContainerFactoryPl
 
     if ($controlled && !empty($missingTermNames)) {
       // Some terms don't exist in this controlled vocabulary.
-      throw new UnresolvableValueException($fieldItemList->getName(), $this->getConfiguration()['path'], $originalValue, $fetchedSolution->data);
+      throw new UnresolvableValueException($fieldItemList->getName(), $this->getConfiguration()['path'], $originalValue, $metadata);
     }
 
     foreach ($missingTermNames as $name) {

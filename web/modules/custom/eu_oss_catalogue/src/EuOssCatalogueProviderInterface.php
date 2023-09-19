@@ -6,7 +6,7 @@ namespace Drupal\eu_oss_catalogue;
 
 use Drupal\Component\Plugin\PluginInspectionInterface;
 use Drupal\eu_oss_catalogue\Entity\OssSolutionInterface;
-use Drupal\eu_oss_catalogue\Model\FetchedSolution;
+use Drupal\eu_oss_catalogue\Model\Project;
 
 /**
  * Interface for EuOssCatalogProvider plugins.
@@ -20,8 +20,8 @@ interface EuOssCatalogueProviderInterface extends PluginInspectionInterface {
    * should return a limited subset. The caller is responsible to run this
    * method as many times is needed as long as the iterable return is valid.
    *
-   * @return \Drupal\eu_oss_catalogue\Model\FetchedSolution[]
-   *   Indexed array of fetched solution objects.
+   * @return \Drupal\eu_oss_catalogue\Model\Project[]
+   *   Indexed array of project value objects.
    */
   public function fetch(): iterable;
 
@@ -30,10 +30,10 @@ interface EuOssCatalogueProviderInterface extends PluginInspectionInterface {
    *
    * @param \Drupal\eu_oss_catalogue\Entity\OssSolutionInterface $solution
    *   The OSS Solution node entity.
-   * @param \Drupal\eu_oss_catalogue\Model\FetchedSolution $fetchedSolution
-   *   The fetched solution object.
+   * @param \Drupal\eu_oss_catalogue\Model\Project $project
+   *   The project value object.
    */
-  public function alterSolution(OssSolutionInterface $solution, FetchedSolution $fetchedSolution): void;
+  public function alterSolution(OssSolutionInterface $solution, Project $project): void;
 
   /**
    * Returns the parser associated to this provider.
