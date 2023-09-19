@@ -14,7 +14,6 @@ use Drupal\Core\Form\FormStateInterface;
  * @FieldFormatter(
  *   id = "joinup_core_item_count",
  *   label = @Translation("Item count"),
- *   deriver = "Drupal\joinup_core\Plugin\Deriver\AllFieldTypeFormatterDeriver"
  * )
  */
 class ItemCountFormatter extends FormatterBase {
