@@ -2,7 +2,7 @@
 
 declare(strict_types = 1);
 
-namespace Drupal\eu_oss_catalogue_test\Plugin\ServiceMock;
+namespace Drupal\eu_oss_catalogue_test_not_allowed_mock\Plugin\ServiceMock;
 
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Plugin\PluginBase;

@@ -24,6 +24,7 @@ class ApiGuesserTest extends KernelTestBase {
   protected static $modules = [
     'eu_oss_catalogue',
     'eu_oss_catalogue_test',
+    'eu_oss_catalogue_test_not_allowed_mock',
     'http_request_mock',
   ];
 
