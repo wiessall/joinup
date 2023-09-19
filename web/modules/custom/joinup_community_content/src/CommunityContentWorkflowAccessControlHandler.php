@@ -236,6 +236,10 @@ class CommunityContentWorkflowAccessControlHandler {
    *   The access result check.
    */
   protected function entityUpdateAccess(CommunityContentInterface $content, AccountInterface $account): AccessResultInterface {
+    if ($this->workflowHelper->accountCanNotUnarchive($content, $account)) {
+      return AccessResult::forbidden()->addCacheableDependency($content);
+    }
+
     $allowed_states = $this->workflowHelper->getAvailableTargetStates($content, $account);
     if (empty($allowed_states)) {
       return AccessResult::forbidden()->addCacheableDependency($content);

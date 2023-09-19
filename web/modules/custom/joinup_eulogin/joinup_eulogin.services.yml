@@ -1,7 +1,7 @@
 services:
   joinup_eulogin.cas.subscriber:
     class: Drupal\joinup_eulogin\Event\Subscriber\JoinupEuLoginCasEventsSubscriber
-    arguments: ['@config.factory', '@user.data', '@entity_type.manager', '@request_stack', '@messenger']
+    arguments: ['@config.factory', '@user.data', '@entity_type.manager', '@request_stack', '@messenger', '@state']
     tags:
       - { name: 'event_subscriber' }
   joinup_eulogin.route.subscriber:
@@ -18,3 +18,8 @@ services:
     arguments: ['@externalauth.authmap']
     tags:
       - { name: 'event_subscriber' }
+  joinup_eulogin.config_overrider:
+    class: Drupal\joinup_eulogin\Config\JoinupEuLoginConfigOverrider
+    arguments: ['@state']
+    tags:
+      - { name: config.factory.override }

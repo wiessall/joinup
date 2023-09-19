@@ -37,9 +37,10 @@ use PHP_CodeSniffer\Files\File;
  * digits with the following meaning:
  * - The last two digits are an integer that sets the weight within updates or
  *   post updates from the same extension (module or profile). `00` is the first
- *   (post)update that applies.
+ *   (post)update/deploy that applies.
  * - The middle three digits are the Joinup minor version.
- * - The first one or two digits are the Joinup major version.
+ * - The first one or two digits are the Joinup major version. It cannot start
+ *   with '0'.
  *
  * Given the above example:
  *
@@ -118,6 +119,10 @@ class ValidUpdateNameSniff extends ValidFunctionNameSniff {
     if (!ctype_digit($name) || !in_array(strlen($name), [6, 7])) {
       $error = "Invalid '%s' identifier. Expected 6 or 7 digits:\n- 1-2 digits: Joinup major version\n- 3 digits: Joinup minor version\n- 2 digits: The %s weight";
       $data = [$name, $updateType];
+    }
+    elseif ($name[0] === '0') {
+      $error = "The %s identifier cannot start with '0' ('%s' given)";
+      $data = [$updateType, $name];
     }
     else {
       $zero_padded_name = sprintf('%07d', (int) $name);

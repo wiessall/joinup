@@ -87,11 +87,11 @@ class TallinnContext extends RawDrupalContext {
         ]),
         Paragraph::create([
           'type' => 'content_listing',
-          'field_content_listing' => [
+          'content_listing' => [
             [
               'value' => [
                 'fields' => [
-                  'field_content_listing_type' => [
+                  'content_listing_type' => [
                     'weight' => 0,
                     'region' => 'top',
                   ],
@@ -118,9 +118,6 @@ class TallinnContext extends RawDrupalContext {
    * @AfterScenario @tallinn&&@api
    */
   public function cleanTallinnData() {
-    // Temporarily disable the feature to commit the index after every query.
-    $this->disableCommitOnUpdate();
-
     /** @var \Drupal\Core\Entity\EntityRepositoryInterface $entity_repository */
     $entity_repository = \Drupal::service('entity.repository');
     $node = $entity_repository->loadEntityByUuid('node', '9d7b6405-061a-4064-ae7e-b34c67f3afad');
@@ -140,8 +137,6 @@ class TallinnContext extends RawDrupalContext {
 
     // Clear the dashboard access policy state.
     \Drupal::state()->delete('tallinn.access_policy');
-
-    $this->enableCommitOnUpdate();
   }
 
 }

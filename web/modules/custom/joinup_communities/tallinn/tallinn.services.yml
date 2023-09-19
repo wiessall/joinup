@@ -5,4 +5,4 @@ services:
   tallinn.og_permission_subscriber:
     class: 'Drupal\tallinn\EventSubscriber\OgPermissionSubscriber'
     tags:
-    - { name: 'event_subscriber' }
+      - { name: 'event_subscriber' }

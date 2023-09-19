@@ -10,6 +10,7 @@ use Behat\Mink\Element\NodeElement;
 use Behat\Mink\Exception\ElementNotFoundException;
 use Drupal\Component\Utility\UrlHelper;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
+use Drupal\Core\Utility\Error;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\DrupalExtension\Hook\Scope\BeforeNodeCreateScope;
 use Drupal\User\Entity\User;
@@ -24,7 +25,6 @@ use Drupal\joinup\Traits\FileTrait;
 use Drupal\joinup\Traits\FormTrait;
 use Drupal\joinup\Traits\JavascriptTrait;
 use Drupal\joinup\Traits\KeyboardInteractionTrait;
-use Drupal\joinup\Traits\MaterialDesignTrait;
 use Drupal\joinup\Traits\OgTrait;
 use Drupal\joinup\Traits\TabledragTrait;
 use Drupal\joinup\Traits\TestingEntitiesTrait;
@@ -41,7 +41,6 @@ use Drupal\node\Entity\Node;
 use Drupal\og\OgGroupAudienceHelperInterface;
 use Drupal\og\OgRoleInterface;
 use Drupal\paragraphs\Entity\Paragraph;
-use Drupal\search_api\Entity\Server;
 use GuzzleHttp\Client;
 use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\ExpectationFailedException;
@@ -60,7 +59,6 @@ class JoinupContext extends RawDrupalContext {
   use FormTrait;
   use JavascriptTrait;
   use KeyboardInteractionTrait;
-  use MaterialDesignTrait;
   use OgTrait;
   use StringTranslationTrait;
   use TabledragTrait;
@@ -284,11 +282,6 @@ class JoinupContext extends RawDrupalContext {
       }
     }
 
-    // Submit form, waiting for Honeypot protection delay to pass.
-    /** @var \Drupal\Tests\honeypot\Behat\HoneypotContext $honeypot */
-    $honeypot = $this->getContext('\Drupal\Tests\honeypot\Behat\HoneypotContext');
-    $honeypot->waitForTimeLimit();
-
     $this->getSession()->getPage()->pressButton("Create new account");
 
     // Get the last registered user.
@@ -455,29 +448,6 @@ class JoinupContext extends RawDrupalContext {
 
     foreach ($options as $option) {
       Assert::assertContains($option, $available_optgroups, "The '{$select}' select doesn't contain the option '{$option}''.", TRUE);
-    }
-  }
-
-  /**
-   * Commit the solr index for testing purposes.
-   *
-   * @Then I commit the solr index
-   */
-  public function iCommitTheSolrIndex() {
-    $search_servers = Server::loadMultiple();
-    /** @var \Drupal\search_api\Entity\Server $search_server */
-    foreach ($search_servers as $search_server) {
-      $backend_id = $search_server->getBackendId();
-      if (!$backend_id == 'search_api_solr') {
-        continue;
-      }
-      /** @var \Drupal\search_api_solr\Plugin\search_api\backend\SearchApiSolrBackend $backend */
-      $backend = $search_server->getBackend();
-      /** @var \Drupal\search_api_solr\SolrConnectorInterface $connector */
-      $connector = $backend->getSolrConnector();
-      $update = $connector->getUpdateQuery();
-      $update->addCommit(TRUE, TRUE);
-      $connector->update($update);
     }
   }
 
@@ -793,6 +763,7 @@ class JoinupContext extends RawDrupalContext {
         'attachments' => 'field_attachment',
         'body' => 'field_paragraphs_body',
         'logo' => 'field_custom_page_logo',
+        'state' => 'field_state',
       ],
       'discussion' => [
         'attachments' => 'field_attachment',
@@ -1187,7 +1158,7 @@ class JoinupContext extends RawDrupalContext {
   /**
    * Count the tiles on the page.
    *
-   * @param string $number
+   * @param int $number
    *   The expected number of tiles.
    *
    * @throws \Exception
@@ -1195,7 +1166,7 @@ class JoinupContext extends RawDrupalContext {
    *
    * @Then I (should )see :number tile(s)
    */
-  public function assertTileCount(string $number): void {
+  public function assertTileCount(int $number): void {
     $results = $this->getAllCardsInPage();
     $nr_found = count($results);
     if ($nr_found != $number) {
@@ -1306,7 +1277,7 @@ class JoinupContext extends RawDrupalContext {
    *
    * @Then I( should) see the( following) tiles in the correct order:
    */
-  public function assertOrderedTilesPresent(TableNode $titles_table) {
+  public function assertOrderedTilesPresent(TableNode $titles_table): void {
     $headings_in_page = array_keys($this->getTiles());
     $headings_expected = $titles_table->getColumn(0);
     Assert::assertEquals($headings_expected, $headings_in_page, 'The expected tiles were not found or were not in the proper order.');
@@ -1330,6 +1301,31 @@ class JoinupContext extends RawDrupalContext {
     if (!$element->findLink($link)) {
       throw new \Exception("The link '$link' was not found in the tile '$heading'.");
     }
+  }
+
+  /**
+   * Clicks a specific link in a tile.
+   *
+   * @param string $link
+   *   The link.
+   * @param string $heading
+   *   The heading of the tile.
+   *
+   * @throws \Exception
+   *   Thrown when the expected link is not found in the tile.
+   *
+   * @Then I click the :link in the :heading tile
+   */
+  public function iClickLinkInTile(string $link, string $heading): void {
+    $element = $this->getTileByHeading($heading);
+    $this->scrollElementIntoView($element);
+
+    $linkElement = $element->findLink($link);
+    if (!$linkElement) {
+      throw new \Exception("The link '$link' was not found in the tile '$heading'.");
+    }
+
+    $linkElement->click();
   }
 
   /**
@@ -1374,6 +1370,64 @@ class JoinupContext extends RawDrupalContext {
     if (strpos(trim($element->getText()), $text) !== FALSE) {
       throw new \Exception("The text '$text' was found in the tile '$heading'.");
     }
+  }
+
+  /**
+   * Asserts that a certain statistics string is present in a tile.
+   *
+   * @param string $heading
+   *   The heading of the tile.
+   * @param string $text
+   *   The text to search.
+   *
+   * @throws \Exception
+   *   Thrown when the tile is not found or the text is not found in the tile.
+   *
+   * @Then I( should) see the statistics :text in the :heading tile
+   */
+  public function assertTileContainsStatistic(string $heading, string $text): void {
+    if (!$this->getTileStatisticElement($heading, $text)) {
+      throw new \Exception("The statistics '$text' was not found in the tile '$heading'.");
+    }
+  }
+
+  /**
+   * Asserts that a certain statistics string is not present in a tile.
+   *
+   * @param string $heading
+   *   The heading of the tile.
+   * @param string $text
+   *   The text to search.
+   *
+   * @throws \Exception
+   *   Thrown when the tile is not found or the text is found in the tile.
+   *
+   * @Then I( should) not see the statistics :text in the :heading tile
+   */
+  public function assertTileDoesNotContainStatistic(string $heading, string $text): void {
+    if ($this->getTileStatisticElement($heading, $text)) {
+      throw new \Exception("The statistics '$text' was found in the tile '$heading'.");
+    }
+  }
+
+  /**
+   * Gets title statistic element.
+   *
+   * @param string $heading
+   *   The heading of the tile.
+   * @param string $text
+   *   The text to search.
+   *
+   * @return \Behat\Mink\Element\NodeElement|null
+   *   Tile statistic element.
+   *
+   * @throws \Behat\Mink\Exception\ElementNotFoundException
+   */
+  protected function getTileStatisticElement(string $heading, string $text): ?NodeElement {
+    $element = $this->getTileByHeading($heading);
+    $stats = $element->find('css', "[data-joinup-card-stats]");
+
+    return $stats->find('xpath', "//*[contains(text(), $text)]");
   }
 
   /**
@@ -1507,8 +1561,8 @@ class JoinupContext extends RawDrupalContext {
    *
    * @Then I should see the plus button menu
    */
-  public function assertPlusButtonMenuPresent() {
-    $element = $this->getSession()->getPage()->find('css', 'div.add-content-menu ul');
+  public function assertPlusButtonMenuPresent(): void {
+    $element = $this->getSession()->getPage()->find('css', '#dropdown-add-content');
     Assert::assertNotEmpty($element);
   }
 
@@ -1533,7 +1587,7 @@ class JoinupContext extends RawDrupalContext {
    *
    * @When I click :link in the plus button menu
    */
-  public function clickLinkInPlusButtonMenu($link) {
+  public function clickLinkInPlusButtonMenu($link): void {
     // Check if we are running in an environment that supports JavaScript like
     // Selenium or PhantomJS. If this is the case the plus button menu will be
     // closed by default and needs to be opened first.
@@ -1546,8 +1600,15 @@ class JoinupContext extends RawDrupalContext {
    *
    * @When I open the plus button menu
    */
-  public function openPlusButtonMenu() {
-    $this->openMaterialDesignMenu($this->getSession()->getPage()->find('css', '.add-content-menu'));
+  public function openPlusButtonMenu(): void {
+    if (!$this->hasJavascriptSupport()) {
+      // Do nothing, if it's a non-Javascript browser.
+      return;
+    }
+
+    $button = $this->getSession()->getPage()->find('css', '#dropdown-add-content');
+    $this->scrollElementIntoView($button);
+    $button->press();
   }
 
   /**
@@ -1555,8 +1616,9 @@ class JoinupContext extends RawDrupalContext {
    *
    * @When I open the group sidebar menu
    */
-  public function openGroupMenu() {
-    $this->openMaterialDesignMenu($this->getSession()->getPage()->find('css', '.sidebar-menu'));
+  public function openGroupMenu(): void {
+    $region = $this->getSession()->getPage()->find('css', $this->getRegionSelector('Left sidebar'));
+    $this->getContextualLinksHelper()->openContextualLinksMenu($region);
   }
 
   /**
@@ -1564,9 +1626,11 @@ class JoinupContext extends RawDrupalContext {
    *
    * @When I open the header local tasks menu
    */
-  public function iOpenTheMdlDropdown() {
-    $element = $this->getSession()->getPage()->find('css', '.block-joinup-local-tasks-block');
-    $this->openMaterialDesignMenu($element);
+  public function iOpenTheEntityTasksMenu(): void {
+    if ($this->hasJavascriptSupport()) {
+      $entity_tasks_selector = $this->getRegionSelector('Entity actions');
+      $this->getSession()->getPage()->find('css', "$entity_tasks_selector button")->press();
+    }
   }
 
   /**
@@ -1649,6 +1713,7 @@ class JoinupContext extends RawDrupalContext {
   public function createComments(TableNode $table) {
     foreach ($table->getColumnsHash() as $comment_values) {
       $query = \Drupal::entityQuery('node')
+        ->accessCheck(FALSE)
         ->condition('title', $comment_values['parent'])
         ->range(0, 1);
       $result = $query->execute();
@@ -1671,7 +1736,7 @@ class JoinupContext extends RawDrupalContext {
         $comment_type = 'comment';
       }
 
-      $query = \Drupal::entityQuery('user')
+      $query = \Drupal::entityQuery('user')->accessCheck(FALSE)
         ->condition('name', $comment_values['author'])
         ->range(0, 1);
       $result = $query->execute();
@@ -1809,8 +1874,8 @@ class JoinupContext extends RawDrupalContext {
    *
    * @Then I should see a logo on the header
    */
-  public function assertExistingLogo() {
-    $xpath = '//div[contains(concat(" ", normalize-space(@class), " "), " featured__logo ")]//img';
+  public function assertExistingLogo(): void {
+    $xpath = '//div[@data-drupal-group-logo]//img';
     $this->assertSession()->elementsCount('xpath', $xpath, 1);
   }
 
@@ -1819,15 +1884,31 @@ class JoinupContext extends RawDrupalContext {
    *
    * @Then I should see a banner on the header
    */
-  public function assertExistingBanner() {
-    $xpath = '//div[contains(concat(" ", normalize-space(@class), " "), " featured__outer-wrapper ")]/@style';
-    $results = $this->getSession()->getPage()->find('xpath', $xpath);
-    // If the preg_match get a match, it means that the background image is
-    // empty.
-    $match = preg_match('/background-image: url\([\'"][\'"]\)/', $results->getText());
-    if ($match !== 0) {
-      throw new \Exception("The banner is empty.");
+  public function assertExistingBanner(): void {
+    $xpath = '//*[contains(concat(" ", normalize-space(@class), " "), " group-banner ")]';
+    if (!$this->getSession()->getPage()->find('xpath', $xpath)) {
+      throw new \Exception("No banner");
     }
+  }
+
+  /**
+   * Asserts that a featured stats exist in the header.
+   *
+   * @Then I should see a featured stats on the header
+   */
+  public function assertExistingFeaturedStats(): void {
+    $xpath = '//ul[contains(concat(" ", normalize-space(@class), " "), "group-stats")]/@class';
+    $this->assertSession()->elementsCount('xpath', $xpath, 1);
+  }
+
+  /**
+   * Asserts that a featured stats not exist in the header.
+   *
+   * @Then I should not see a featured stats on the header
+   */
+  public function assertNotExistingFeaturedStats(): void {
+    $xpath = '//ul[contains(concat(" ", normalize-space(@class), " "), "group-stats")]/@class';
+    $this->assertSession()->elementsCount('xpath', $xpath, 0);
   }
 
   /**
@@ -1957,25 +2038,15 @@ class JoinupContext extends RawDrupalContext {
    *
    * @Then a modal should/will open
    */
-  public function waitForDrupalModalToOpen() {
+  public function waitForDrupalModalToOpen(): void {
     // A modal can be opened only in a JavaScript-enabled browser.
     self::assertJavaScriptEnabledBrowser();
 
-    $result = $this->getSession()->getPage()->waitFor(5, function () {
+    $result = $this->getSession()->getPage()->waitFor(5, function (): bool {
       // Retrieve again a fresh copy of the page element at each cycle.
-      $modal = $this->getSession()->getPage()->find('css', '#drupal-modal');
-
+      $modal = $this->getSession()->getPage()->find('css', '.ui-dialog-content');
       return $modal && $modal->isVisible();
     });
-
-    if (!$result) {
-      $result = $this->getSession()->getPage()->waitFor(5, function () {
-        // Retrieve again a fresh copy of the page element at each cycle.
-        $modal = $this->getSession()->getPage()->find('css', '#drupal-bootstrap4-modal');
-
-        return $modal && $modal->isVisible();
-      });
-    }
 
     if (!$result) {
       throw new \Exception('The modal did not open.');
@@ -1999,7 +2070,7 @@ class JoinupContext extends RawDrupalContext {
         // Normally the modal should be completely removed from the DOM,
         // but sometimes the markup is kept in the DOM as hidden.
         // @see Drupal.AjaxCommands.prototype.closeDialog()
-        return !$this->getSession()->getDriver()->isVisible('//*[@id = "drupal-modal"] | //*[@id = "drupal-bootstrap4-modal"]');
+        return !$this->getSession()->getDriver()->isVisible('//*[@id = "drupal-modal"]');
       }
       catch (NoSuchElement $e) {
         // The modal has been completely removed from the DOM.
@@ -2090,12 +2161,18 @@ class JoinupContext extends RawDrupalContext {
    */
   public function ogCleanup(AfterScenarioScope $event) {
     /** @var \Drupal\Core\Queue\QueueWorkerInterface $worker */
-    $worker = \Drupal::service('plugin.manager.queue_worker')->createInstance('og_orphaned_group_content_cron');
+    $worker = \Drupal::service('plugin.manager.queue_worker')
+      ->createInstance('og_orphaned_group_content_cron');
     $queue = \Drupal::queue('og_orphaned_group_content');
 
     while ($item = $queue->claimItem()) {
-      $worker->processItem($item->data);
-      $queue->deleteItem($item);
+      try {
+        $worker->processItem($item->data);
+        $queue->deleteItem($item);
+      }
+      catch (\Exception $e) {
+        Error::logException(\Drupal::logger('cron'), $e);
+      }
     }
   }
 
@@ -2401,7 +2478,7 @@ class JoinupContext extends RawDrupalContext {
   public function assertTileMarkedAsFeatured($heading) {
     $element = $this->getTileByHeading($heading);
 
-    if (!$element->find('css', '.listing__card.is-featured')) {
+    if (!$element->find('css', 'div.star')) {
       throw new \Exception("The tile '$heading' is not marked as featured, but it should be.");
     }
   }
@@ -2539,16 +2616,11 @@ class JoinupContext extends RawDrupalContext {
    * @param string $heading
    *   The heading of the tile.
    *
-   * @throws \Exception
-   *   Thrown when the tile is not marked as pinned.
-   *
    * @Then the :tile tile should be marked as pinned
    */
-  public function assertTileMarkedAsPinned($heading) {
-    $element = $this->getTileByHeading($heading);
-
-    if (!$element->find('css', '.icon--pin')) {
-      throw new \Exception("The tile '$heading' is not marked as pinned, but it should be.");
+  public function assertTileMarkedAsPinned(string $heading): void {
+    if (!$this->getTileByHeading($heading)->find('css', 'div.pin')) {
+      throw new ExpectationFailedException("The tile '$heading' is not marked as pinned, but it should be.");
     }
   }
 
@@ -2558,16 +2630,11 @@ class JoinupContext extends RawDrupalContext {
    * @param string $heading
    *   The heading of the tile.
    *
-   * @throws \Exception
-   *   Thrown when the tile is marked as pinned.
-   *
    * @Then the :tile tile should not be marked as pinned
    */
-  public function assertTileNotMarkedAsPinned($heading) {
-    $element = $this->getTileByHeading($heading);
-
-    if ($element->find('css', '.icon--pin')) {
-      throw new \Exception("The tile '$heading' is marked as pinned, but it shouldn't be.");
+  public function assertTileNotMarkedAsPinned(string $heading): void {
+    if ($this->getTileByHeading($heading)->find('css', 'div.pin')) {
+      throw new ExpectationFailedException("The tile '$heading' is marked as pinned, but it shouldn't be.");
     }
   }
 
@@ -2706,6 +2773,29 @@ class JoinupContext extends RawDrupalContext {
     /** @var \Behat\Mink\Element\NodeElement $last */
     $last = array_pop($fields);
     $last->setValue($value);
+  }
+
+  /**
+   * Selects option in the latest select field with specified named value.
+   *
+   * @param string $select
+   *   Select field.
+   * @param string $option
+   *   Option name.
+   *
+   * @When I select :option from latest :select
+   */
+  public function selectOptionForLatestSelect(string $select, string $option): void {
+    $page = $this->getSession()->getPage();
+
+    $selects = $page->findAll('named', ['select', $select]);
+    if (empty($selects)) {
+      throw new ElementNotFoundException($this->getSession()
+        ->getDriver(), 'select', 'label', $select);
+    }
+
+    $field = array_pop($selects);
+    $field->selectOption($option);
   }
 
   /**
@@ -3052,10 +3142,32 @@ class JoinupContext extends RawDrupalContext {
     if (!$page->findLink($link_label)) {
       throw new ElementNotFoundException($session->getDriver(), 'Link', 'label', $link_label);
     }
-    $xpath = "//ul/li[contains(concat(' ', @class, ' '), ' menu-item--active-trail ')]/descendant::a/descendant-or-self::*[text()='{$link_label}']";
+
+    // Remove the leading '#'.
+    $navigation_menu_selector = substr($this->getRegionSelector('Navigation menu'), 1);
+    $xpath = "//*[@id='$navigation_menu_selector']//ul[contains(concat(' ', normalize-space(@class), ' '), ' nav ')]//a[text()='$link_label' and contains(concat(' ', normalize-space(@class), ' '), ' is-active ')]";
     if (!$page->find('xpath', $xpath)) {
-      throw new ExpectationFailedException("The '{$link_label}' link is not in the active trail but it should.");
+      throw new ExpectationFailedException("The '$link_label' link is not in the active trail but it should.");
     }
+  }
+
+  /**
+   * Changes the name of a term.
+   *
+   * @param string $old_name
+   *   The current name of the term.
+   * @param string $new_name
+   *   The new name for the term.
+   *
+   * @Given the name of the :old_name term is changed to :new_name
+   */
+  public function givenTermNameChanges(string $old_name, string $new_name): void {
+    $terms = \Drupal::entityTypeManager()->getStorage('taxonomy_term')->loadByProperties([
+      'name' => $old_name,
+    ]);
+    $term = reset($terms);
+    $term->setName($new_name);
+    $term->save();
   }
 
   /**
@@ -3066,12 +3178,8 @@ class JoinupContext extends RawDrupalContext {
    */
   public function getAllCardsInPage(): array {
     $locators = [
-      // Legacy tile of Joinup theme.
-      '.listing__item--tile .listing__title',
       // Card style of Ventuno theme.
-      '.card .card-title',
-      // Tiles as an article.
-      'article.tile h2',
+      '.tile .tile__title',
       // Carousel for non javascript test.
       '.glide__slides .slide span',
       // Carousel for javascript test.

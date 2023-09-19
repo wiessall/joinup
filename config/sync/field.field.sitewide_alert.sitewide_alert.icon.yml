@@ -1,0 +1,21 @@
+uuid: 0aaf02bf-0129-4928-9658-8322008ed25c
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.sitewide_alert.icon
+  module:
+    - options
+    - sitewide_alert
+id: sitewide_alert.sitewide_alert.icon
+field_name: icon
+entity_type: sitewide_alert
+bundle: sitewide_alert
+label: Icon
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: list_string

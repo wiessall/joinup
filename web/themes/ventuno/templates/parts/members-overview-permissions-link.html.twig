@@ -1,0 +1,30 @@
+{#
+/**
+ * @file
+ * Template to render the members overview permissions info link.
+ *
+ * Available variables:
+ * - url: the link URL.
+ * - text: the link text.
+ * - dialog: info to show as dialog.
+ *
+ * @ingroup themeable
+ */
+#}
+{% set attributes = attributes
+  .addClass(['mb-3', 'px-0', 'btn', 'btn-md', 'btn-link'])
+%}
+{% if dialog %}
+  {% set attributes = attributes
+    .addClass('use-ajax')
+    .setAttribute('data-dialog-type', dialog.type)
+    .setAttribute('data-dialog-options', dialog.options|json_encode)
+  %}
+{% endif %}
+
+<a href="{{ url }}"{{ attributes }}>
+  <svg class="bi icon--fluid me-2">
+    <use xlink:href="{{ bcl_icon_path }}#info-circle"></use>
+  </svg>
+  {{ text }}
+</a>

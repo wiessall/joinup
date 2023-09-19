@@ -42,7 +42,7 @@ class GroupedRdfTaxonomyTermSelection extends TermSelection {
       if ($terms) {
         $parent_name = NULL;
         foreach ($terms as $term) {
-          if ($term->parents[0] === '') {
+          if ($term->parents[0] === '0') {
             $parent_name = $term->label();
           }
           else {

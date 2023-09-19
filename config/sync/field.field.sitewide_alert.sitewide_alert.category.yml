@@ -1,0 +1,21 @@
+uuid: 157f366c-1298-4ed2-9aab-ba55893b358a
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.sitewide_alert.category
+  module:
+    - options
+    - sitewide_alert
+id: sitewide_alert.sitewide_alert.category
+field_name: category
+entity_type: sitewide_alert
+bundle: sitewide_alert
+label: Category
+description: ''
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: list_string

@@ -24,7 +24,7 @@ Feature: Pinning content entities inside solutions
       | Sunny Beam  | Melahrini Gilbert |             |
 
   Scenario Outline: Facilitators can pin and unpin community content inside their solutions.
-    Given discussion content:
+    Given news content:
       | title                      | solution    | state     | created    |
       | What is the HEX for lemon? | Blue Wrench | validated | 2018-12-13 |
     And <content type> content:
@@ -106,7 +106,6 @@ Feature: Pinning content entities inside solutions
       | content type | label      |
       | event        | Event      |
       | document     | Document   |
-      | discussion   | Discussion |
       | news         | News       |
 
   @javascript
@@ -141,5 +140,4 @@ Feature: Pinning content entities inside solutions
       | content type |
       | event        |
       | document     |
-      | discussion   |
       | news         |

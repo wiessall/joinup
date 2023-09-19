@@ -3,5 +3,6 @@ ignored_config_entities:
   - composer_deploy.settings
   - core.menu.static_menu_link_overrides
   - joinup_core.outdated_content_threshold
+  - memcache_admin.settings
   - update.settings
   - upgrade_status.settings

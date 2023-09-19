@@ -23,7 +23,7 @@ Feature: Machine translation
       | Restriction on animal-based food imports | Brexit     | validated |
     And custom_page content:
       | title                      | collection | state     |
-      | Increased credit card fees | Brexit     | validated |
+      | Increased credit card fees | Brexit     | published |
     And glossary content:
       | title               | abbreviation | summary                 | definition                | collection |
       | Digital portability | DP           | Availability of content | Across streaming services | Brexit     |

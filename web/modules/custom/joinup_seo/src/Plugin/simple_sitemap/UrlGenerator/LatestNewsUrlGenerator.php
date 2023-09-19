@@ -24,7 +24,7 @@ class LatestNewsUrlGenerator extends JoinupUrlGeneratorBase {
     // It is assumed that this is called only for news and checks of validity
     // should be performed before the query object is constructed.
     $two_days_ago = strtotime('2 days ago');
-    $query->condition('published_at', PUBLICATION_DATE_DEFAULT, '<');
+    $query->condition('published_at', NULL, 'IS NOT NULL');
     $query->condition('published_at', $two_days_ago, '>=');
   }
 

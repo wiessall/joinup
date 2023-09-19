@@ -13,8 +13,8 @@ Feature: Editing collections
       | name  | Collection editorial             |
       | email | collection.editorial@example.com |
     And collections:
-      | title                 | logo     | banner     | abstract                                   | access url                             | closed | creation date    | description                               | content creation         | moderation | topic             | owner                | contact information  | state |
-      | Überwaldean Land Eels | logo.png | banner.jpg | Read up on all about <strong>dogs</strong> | http://dogtime.com/dog-breeds/profiles | yes    | 28-01-1995 12:05 | The Afghan Hound is elegance personified. | facilitators and authors | yes        | Supplier exchange | Organisation example | Collection editorial | draft |
+      | title                 | logo     | abstract                                   | access url                             | closed | creation date    | description                               | content creation         | moderation | topic             | owner                | contact information  | state |
+      | Überwaldean Land Eels | logo.png | Read up on all about <strong>dogs</strong> | http://dogtime.com/dog-breeds/profiles | yes    | 28-01-1995 12:05 | The Afghan Hound is elegance personified. | facilitators and authors | yes        | Supplier exchange | Organisation example | Collection editorial | draft |
     When I am logged in as a facilitator of the "Überwaldean Land Eels" collection
     And I go to the homepage of the "Überwaldean Land Eels" collection
     And I click "Edit" in the "Entity actions" region
@@ -24,7 +24,7 @@ Feature: Editing collections
     And the following fields should not be present "Langcode, Translation, Affiliates, Enable the search field, Query presets, Limit"
     And I should see "Short description text of the collection. Appears on the Overview page. (Leave blank to use the trimmed value of the Description field.)"
     And I should see "Add a country name relevant to the content of this collection."
-    And the "Description" wysiwyg editor should have the buttons "HTML block format, Bold, Italic, Remove format, Link, Unlink, Bullet list, Numbered list, Outdent, Indent, Blockquote, Image, File, Table, Video Embed, Cut, Copy, Paste, Paste Text, Undo, Redo, Source code"
+    And the "Description" wysiwyg editor should have the buttons "HTML block format, Bold, Italic, Remove format, Link, Unlink, Contact us, Bullet list, Numbered list, Outdent, Indent, Blockquote, Image, File, Table, Video Embed, Cut, Copy, Paste, Paste Text, Undo, Redo, Source code"
     And the "Abstract" wysiwyg editor should have the buttons "HTML block format, Bold, Italic, Remove format, Link, Unlink, Outdent, Indent, Source code"
 
     # Query builder is disabled in collections.
@@ -34,7 +34,6 @@ Feature: Editing collections
     When I fill in "Title" with "Überwaldean Sea Eels"
     And I press "Save as draft"
     Then I should see the heading "Überwaldean Sea Eels"
-
 
   @terms @javascript
   Scenario: Edit a collection wysiwyg modal should close.
@@ -46,8 +45,8 @@ Feature: Editing collections
       | name  | wysiwyg editorial             |
       | email | wysiwyg.editorial@example.com |
     And collections:
-      | title           | logo     | banner     | abstract                                   | access url                             | closed | creation date    | description                    | content creation         | moderation | topic             | owner           | contact information  | state |
-      | Rhyme Land Eels | logo.png | banner.jpg | Read up on all about <strong>dogs</strong> | http://dogtime.com/dog-breeds/profiles | yes    | 28-01-1995 12:05 | Hound is elegance personified. | facilitators and authors | yes        | Supplier exchange | wysiwyg example | wysiwyg editorial    | draft |
+      | title           | logo     | abstract                                   | access url                             | closed | creation date    | description                    | content creation         | moderation | topic             | owner           | contact information  | state |
+      | Rhyme Land Eels | logo.png | Read up on all about <strong>dogs</strong> | http://dogtime.com/dog-breeds/profiles | yes    | 28-01-1995 12:05 | Hound is elegance personified. | facilitators and authors | yes        | Supplier exchange | wysiwyg example | wysiwyg editorial    | draft |
     When I am logged in as a facilitator of the "Rhyme Land Eels" collection
     And I go to the homepage of the "Rhyme Land Eels" collection
 
@@ -69,8 +68,8 @@ Feature: Editing collections
       | name  | bytes editorial             |
       | email | bytes.editorial@example.com |
     And collections:
-      | title           | logo     | banner     | abstract                                   | access url                             | closed | creation date    | description                    | content creation         | moderation | topic             | owner                      | contact information  | state |
-      | Rhyme Land wysiwyg Eels | logo.png | banner.jpg | Read up on all about <strong>dogs</strong> | http://dogtime.com/dog-breeds/profiles | yes    | 28-01-1995 12:05 | Hound is elegance personified. | facilitators and authors | yes        | Supplier exchange | Regression wysiwyg example | bytes editorial      | draft |
+      | title           | logo     | abstract                                   | access url                             | closed | creation date    | description                    | content creation         | moderation | topic             | owner                      | contact information  | state |
+      | Rhyme Land wysiwyg Eels | logo.png | Read up on all about <strong>dogs</strong> | http://dogtime.com/dog-breeds/profiles | yes    | 28-01-1995 12:05 | Hound is elegance personified. | facilitators and authors | yes        | Supplier exchange | Regression wysiwyg example | bytes editorial      | draft |
     When I am logged in as a facilitator of the "Rhyme Land wysiwyg Eels" collection
     And I go to the homepage of the "Rhyme Land wysiwyg Eels" collection
 

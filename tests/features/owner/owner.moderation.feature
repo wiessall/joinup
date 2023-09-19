@@ -4,7 +4,7 @@ Feature: Owner moderation
   As a user of the website
   I need to be able to transit the owners from one state to another.
 
-  @terms @uploadFiles:logo.png,banner.jpg
+  @terms @uploadFiles:logo.png
   Scenario: Publish, update, request changes, publish again and ask to delete an owner.
     Given users:
       | Username        |
@@ -22,7 +22,6 @@ Feature: Owner moderation
       | E-mail | duche.baggins@example.com         |
     And I enter "Keep Europe healthy through healthy eating." in the "Description" wysiwyg editor
     And I attach the file "logo.png" to "Logo"
-    And I attach the file "banner.jpg" to "Banner"
     And I click the 'Categorisation' tab
     And I select "EU and European Policies" from "Topic"
 

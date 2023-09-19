@@ -1,0 +1,23 @@
+a {
+  // Avoid purple underline for visited links.
+  &:hover {
+    &:visited {
+      text-decoration-color: currentColor!important;
+    }
+  }
+  // Add icon to show users the link is external.
+  &.external {
+    &::after {
+      margin: 0 0 0 $spacer * .375; // 0 0 0 6px
+      @include get-bootstrap-icon('box-arrow-up-right');
+    }
+    &:hover {
+      &::after {
+        @include get-bootstrap-icon('box-arrow-up-right');
+      }
+    }
+  }
+}
+.bg-light a:not(.btn) {
+  color: darken($brand, 15); // Ensure having enough contrast
+}

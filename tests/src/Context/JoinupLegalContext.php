@@ -173,7 +173,7 @@ class JoinupLegalContext extends RawDrupalContext {
     }
 
     $acceptance = EntityLegalDocumentAcceptance::create([
-      'document_version_name' => $published_version->id(),
+      'vid' => $published_version->id(),
       'uid' => $this->getUserManager()->getCurrentUser()->uid,
     ]);
     $acceptance->save();
@@ -213,7 +213,7 @@ class JoinupLegalContext extends RawDrupalContext {
         throw new \InvalidArgumentException("Invalid user name '$username'");
       }
       $acceptance = EntityLegalDocumentAcceptance::create([
-        'document_version_name' => $published_version->id(),
+        'vid' => $published_version->id(),
         'uid' => $account->id(),
       ]);
       $acceptance->save();

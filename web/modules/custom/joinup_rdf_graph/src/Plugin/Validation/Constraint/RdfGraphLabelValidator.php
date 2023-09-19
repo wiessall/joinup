@@ -64,6 +64,7 @@ class RdfGraphLabelValidator extends ConstraintValidator implements ContainerInj
     }
 
     $query = $this->entityTypeManager->getStorage('rdf_entity')->getQuery()
+      ->accessCheck(FALSE)
       ->condition('rid', 'rdf_graph')
       ->condition('label', $item->value);
 

@@ -42,8 +42,8 @@ Feature: Collection RSS feed.
       | Is the indigo coloration caused by their food? | I was reading the technical paper and it seems their main food is the indigo cherries. | validated | alejake | 2019-01-21 13:00 | Indigo Monkey |
     And custom_page content:
       | title             | body                                            | state     | author | created          | collection        |
-      | Indigo variations | The four major tones of indigo are listed here. | validated | forest | 2017-10-15 18:30 | Indigo Monkey     |
-      | List of devices   | Available remote electrical devices.            | validated |        | 2019-02-08 09:00 | Remote Electrical |
+      | Indigo variations | The four major tones of indigo are listed here. | published | forest | 2017-10-15 18:30 | Indigo Monkey     |
+      | List of devices   | Available remote electrical devices.            | published |        | 2019-02-08 09:00 | Remote Electrical |
 
     When I am an anonymous user
     And I go to the homepage of the "Indigo Monkey" collection

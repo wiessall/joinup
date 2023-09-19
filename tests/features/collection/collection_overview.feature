@@ -1,7 +1,7 @@
 @api @group-d
 Feature: Collections Overview
 
-  @terms @uploadFiles:logo.png,banner.jpg
+  @terms @uploadFiles:logo.png
   Scenario: View collection overview as an anonymous user
     Given users:
       | Username      | E-mail                       |
@@ -57,7 +57,6 @@ Feature: Collections Overview
       | E-mail      | overviewer@example.com              |
     And I select "Employment and Support Allowance" from "Topic"
     And I attach the file "logo.png" to "Logo"
-    And I attach the file "banner.jpg" to "Banner"
     # Click the button to select an existing owner.
     And I press "Add existing" at the "Owner" field
     And I fill in "Owner" with "Organisation example"
@@ -94,11 +93,24 @@ Feature: Collections Overview
       | title                             | body                             | collection | topic                   | spatial coverage | state     |
       | Jira will be down for maintenance | As always, during business hours | Jira       | Statistics and Analysis | Luxembourg       | validated |
     And custom_page content:
-      | title            | body                                       | collection |
-      | Maintenance page | Jira is re-indexing. Go and drink a coffee | Jira       |
+      | title            | body                                       | collection | state     |
+      | Maintenance page | Jira is re-indexing. Go and drink a coffee | Jira       | published |
     When I go to the homepage of the "Jira" collection
     Then I should see the "Jira will be down for maintenance" tile
     And I should not see the "Maintenance page" tile
+
+  @javascript
+  Scenario: Feature icon should be visible for collection's content.
+    Given the following collection:
+      | title | Service Management apps |
+      | state | validated               |
+    And news content:
+      | title  | collection              | state     | featured |
+      | Jira   | Service Management apps | validated | yes      |
+      | Trello | Service Management apps | validated | no       |
+    When I go to the homepage of the "Service Management apps" collection
+    Then the "Jira" tile should be marked as featured
+    But the "Trello" "news" tile should not be marked as featured
 
   Scenario: Users are able to filter collections they have created or that are featured site-wide.
     Given users:

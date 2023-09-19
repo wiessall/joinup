@@ -48,7 +48,7 @@ tips:
     weight: 6
     position: left-start
     selector: '#myTab'
-    body: 'Explore the platform''s published content items per type.'
+    body: "Explore the platform's published content items per type."
   about:
     id: about
     plugin: text

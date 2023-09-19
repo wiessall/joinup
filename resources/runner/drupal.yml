@@ -47,9 +47,10 @@ drupal:
         - Custom error handler
         - Permissions
         - OpenEuropa Webtools Geocoding Cache
+        - GitHub Token Setup
         - Verbose error logging
         - Development mail collector
-        - Redis
+        - Memcache
         - Custom queue services
         - Monolog
       site-clean:
@@ -64,9 +65,10 @@ drupal:
         - OpenEuropa Newsroom Newsletter Mock
         - OpenEuropa Newsroom Newsletter Settings
         - OpenEuropa Webtools Geocoding Cache
+        - GitHub Token Setup
         - Verbose error logging
         - Development mail collector
-        - Redis
+        - Memcache
         - Custom queue services
         - Monolog
       behat:
@@ -82,7 +84,8 @@ drupal:
         - OpenEuropa Newsroom Newsletter Mock
         - OpenEuropa Newsroom Newsletter Settings
         - OpenEuropa Webtools Geocoding Cache
-        - Redis
+        - GitHub Token Setup
+        - Memcache
         - Custom queue services
         - Test mail collector
         - Monolog
@@ -98,7 +101,8 @@ drupal:
         - OpenEuropa Newsroom Newsletter Mock
         - OpenEuropa Newsroom Newsletter Settings
         - OpenEuropa Webtools Geocoding Cache
-        - Redis
+        - GitHub Feed Cache
+        - Memcache
         - Pipe errors to a temporary file
         - Custom queue services
         - Test mail collector
@@ -115,6 +119,7 @@ drupal:
         - OpenEuropa Newsroom Newsletter Mock
         - OpenEuropa Newsroom Newsletter Settings
         - OpenEuropa Webtools Geocoding Cache
+        - GitHub Feed Cache
         - Verbose error logging
         - Custom queue services
         - Test mail collector
@@ -126,8 +131,9 @@ drupal:
         - Search API
         - OpenEuropa Newsroom Newsletter Settings
         - OpenEuropa Webtools Analytics
+        - GitHub Token Setup
         - Custom error handler
-        - Redis
+        - Memcache
         - Custom queue services
         - Mail transport
         - Monolog
@@ -161,6 +167,13 @@ drupal:
       Main settings: |
         if (!$hash_salt = getenv('DRUPAL_HASH_SALT')) {
           $hash_salt = \Drupal\Component\Utility\Crypt::randomBytesBase64(55);
+          $env_file = "{$app_root}/../.env";
+          $env = file_get_contents($env_file);
+          $env = preg_replace('/DRUPAL_HASH_SALT=.*/', "DRUPAL_HASH_SALT={$hash_salt}", $env);
+          file_put_contents($env_file, $env);
+
+          # Also include this to the `.env.pipeline` which is used by the
+          # pipelines.
           $env_file = "{$app_root}/../.env.pipeline";
           if (!file_exists($env_file)) {
             file_put_contents($env_file, "DRUPAL_HASH_SALT={$hash_salt}");
@@ -183,6 +196,9 @@ drupal:
           $settings['trusted_host_patterns'] = [$trusted_host_patterns];
         }
 
+        // Expiration of cached forms is 3 hours.
+        $settings['form_cache_expiration'] = 10800;
+
         // Disable Piwik API calls until ISAICP-6944.
         // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-6944
         $settings['joinup.parse_cached_computed_field'] = FALSE;
@@ -198,7 +214,11 @@ drupal:
           'default_content',
           'devel',
           'filecache',
+          'http_request_mock',
           'joinup_cas_mock_server',
+          'joinup_test',
+          'masquerade',
+          'memcache_admin',
           'og_ui',
           'page_manager_ui',
           'update',
@@ -210,7 +230,7 @@ drupal:
         $settings['config_readonly'] = !file_exists(getcwd() . '/../disable-config-readonly');
       Testing configuration alters: |
         // The video from the home page interacts with Selenium tests.
-        $config['page_manager.page_variant.homepage-layout_builder-1']['variant_settings']['sections'][0]['components']['6ab0ceea-4541-4153-8b64-227e02369d30']['configuration']['text'] = 'Some joinup video';
+        $config['page_manager.page_variant.homepage-layout_builder-0']['variant_settings']['sections'][4]['components']['6ab0ceea-4541-4153-8b64-227e02369d30']['configuration']['text'] = 'Some joinup video';
         // Almost all tests should run without the cookie consent widget.
         $oe_webtools_cck_enabled = !file_exists(getcwd() . '/../disable-cookie-consent');
         $config['oe_webtools_cookie_consent.settings']['banner_popup'] = $oe_webtools_cck_enabled;
@@ -230,6 +250,9 @@ drupal:
           'port' => getenv('DRUPAL_DATABASE_PORT'),
           'namespace' => 'Drupal\\mysql\\Driver\\Database\\mysql',
           'driver' => 'mysql',
+          'init_commands' => [
+            'isolation_level' => 'SET SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED',
+          ],
         ];
         $databases['sparql_default']['default'] = [
           'host' => getenv('DRUPAL_SPARQL_HOSTNAME'),
@@ -275,13 +298,10 @@ drupal:
         $config['oe_webtools_analytics.settings']['siteID'] = getenv('OE_WEBTOOLS_ANALYTICS_SITE_ID');
         $config['oe_webtools_analytics.settings']['sitePath'] = getenv('OE_WEBTOOLS_ANALYTICS_SITE_PATH');
         $config['oe_webtools_analytics.settings']['instance'] = getenv('OE_WEBTOOLS_ANALYTICS_SITE_INSTANCE');
-      Redis: |
-        if (empty(getenv('REDIS_DISABLED'))) {
-          $settings['redis.connection']['interface'] = 'PhpRedis';
-          $settings['redis.connection']['host'] = getenv('REDIS_HOST');
-          $settings['redis.connection']['port'] = getenv('REDIS_PORT');
-          $settings['cache']['default'] = 'cache.backend.redis';
-          $settings['container_yamls'][] = DRUPAL_ROOT . '/modules/contrib/redis/example.services.yml';
+      Memcache: |
+        if ($memcache_hosts = getenv('DRUPAL_MEMCACHE_HOSTS')) {
+          $settings['cache']['default'] = 'cache.backend.memcache';
+          $settings['memcache']['servers'] = array_fill_keys(explode(',', $memcache_hosts), 'default');
         }
       Custom error handler: |
         $settings['error_page']['uuid'] = TRUE;
@@ -297,8 +317,10 @@ drupal:
         $settings['oe_newsroom_universe_keys'] = getenv('OE_NEWSROOM_UNIVERSE_KEYS');
       OpenEuropa Webtools Geocoding Cache: |
         $settings['cache']['bins']['geocoder'] = 'cache.backend.file_system';
-        $settings['filecache']['directory']['bins']['geocoder'] = '../tests/fixtures/webtools_geocoding/cache';
+        $settings['filecache']['directory']['bins']['geocoder'] = '../tests/fixtures/geocoding/cache';
         $settings['filecache']['strategy']['bins']['geocoder'] = 'persist';
+      GitHub Token Setup: |
+        $config['github_feed.settings']['token'] = getenv('JOINUP_GITHUB_TOKEN');
       Development: |
         $settings['extension_discovery_scan_tests'] = TRUE;
       Verbose error logging: |

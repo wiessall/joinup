@@ -7,6 +7,7 @@
 
 declare(strict_types = 1);
 
+use Drupal\Component\Utility\Html;
 use Drupal\Core\Form\FormStateInterface;
 
 /**
@@ -29,6 +30,35 @@ function ventuno_theme_suggestions_form_element_alter(array &$suggestions, array
 /**
  * Implements hook_form_FORM_ID_alter().
  */
+function ventuno_form_join_group_form_alter(array &$form, FormStateInterface $form_state, string $form_id): void {
+  // Make the 'Join' modal link for anonymous users appear as a button.
+  if (isset($form['authenticate'])) {
+    $form['authenticate']['#attributes']['class'][] = 'btn';
+    $form['authenticate']['#attributes']['class'][] = 'btn-brand';
+  }
+
+  if (isset($form['pending'])) {
+    // Add classes for pending membership link.
+    $form['pending']['#attributes']['class'][] = 'btn';
+    $form['pending']['#attributes']['class'][] = 'btn-primary';
+  }
+
+  if (isset($form['leave'])) {
+    // Add classes for leave membership link.
+    $form['leave']['#confirm']['#attributes']['class'][] = 'btn';
+    $form['leave']['#confirm']['#attributes']['class'][] = 'btn-secondary';
+  }
+
+  // Make the 'Join' button for logged-in users appear as button brand.
+  if (isset($form['join'])) {
+    $form['join']['#attributes']['class'][] = 'btn';
+    $form['join']['#attributes']['class'][] = 'btn-brand';
+  }
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
 function ventuno_form_views_exposed_form_alter(array &$form, FormStateInterface $form_state, string $form_id): void {
   $route_name = \Drupal::routeMatch()->getRouteName();
   $view = $form_state->get('view');
@@ -37,6 +67,9 @@ function ventuno_form_views_exposed_form_alter(array &$form, FormStateInterface 
     $form['keys']['#title_display'] = 'invisible';
     $form['keys']['#attributes']['placeholder'] = t('Start typing to search…');
     $form['keys']['#joinup_parent'] = $form_id . '_' . $view->id();
+    // Ensure the ID is unique, using "search-box" as base.
+    $form['keys']['#id'] = Html::getUniqueId('search-box');
+    $form['#id'] = Html::getUniqueId($form['#id']);
   }
 
   if ($route_name != 'view.search.page_1' && $view->id() === 'search') {
@@ -47,10 +80,23 @@ function ventuno_form_views_exposed_form_alter(array &$form, FormStateInterface 
 }
 
 /**
+ * Implements hook_theme_suggestions_HOOK_alter().
+ */
+function ventuno_theme_suggestions_form_alter(array &$suggestions, array $variables): void {
+  $id = $variables['element']['#id'];
+  $suggestions[] = $id;
+}
+
+/**
  * Implements hook_preprocess_form_element().
  */
 function ventuno_preprocess_form_element(array &$variables): void {
   $variables['#attached']['library'][] = 'ventuno/forms';
+  if ($variables['type'] === 'radio' &&
+    isset($variables['element']['#name']) &&
+    $variables['element']['#name'] === 'layout_paragraphs[layout]') {
+    $variables['attributes']['class'][] = 'm-0 p-0';
+  }
 }
 
 /**
@@ -58,26 +104,100 @@ function ventuno_preprocess_form_element(array &$variables): void {
  */
 function ventuno_preprocess_form_element_label(array &$variables): void {
   $variables['#attached']['library'][] = 'ventuno/form-checkboxes';
+  $variables['attributes']['class'][] = 'h4';
 }
 
 /**
  * Implements hook_form_alter().
  */
 function ventuno_form_alter(array &$form, FormStateInterface $form_state, string $form_id): void {
+  // Disable client side HTML5 validation @see https://html.spec.whatwg.org/multipage/form-control-infrastructure.html#attr-fs-novalidate
+  $form['#attributes']['novalidate'] = 'novalidate';
+
   // Add classes to the delete action in any kind of form.
   if (isset($form['actions']['delete'])) {
-    $form['actions']['delete']['#attributes']['class'] = [
-      'btn',
-      'btn-md',
-      'btn-outline-danger',
-    ];
+    $classes = $form['actions']['delete']['#attributes']['class'] ?? [];
+    $form['actions']['delete']['#attributes']['class'] = array_merge(
+      $classes,
+      ['btn', 'btn-outline-danger'],
+    );
   }
-  // Add classes to the cancel action in any kind of form.
-  if (isset($form['actions']['cancel'])) {
-    $form['actions']['cancel']['#attributes']['class'] = [
-      'btn',
-      'btn-md',
-      'btn-outline-warning',
-    ];
+
+  switch ($form_id) {
+    case 'joinup_subscription_my_subscriptions':
+      // Add classes for unsubscribe all link.
+      if (isset($form['edit-actions']['unsubscribe_all'])) {
+        $form['edit-actions']['#attributes']['class'] = [
+          'd-flex',
+          'justify-content-end',
+        ];
+        $form['edit-actions']['unsubscribe_all']['#attributes']['class'] = [
+          'btn',
+          'btn-brand',
+        ];
+      }
+      break;
+  }
+}
+
+/**
+ * Implements hook_theme_suggestions_HOOK_alter().
+ */
+function ventuno_theme_suggestions_input_alter(array &$suggestions, array $variables): void {
+  // Suggestion based on data twig suggestion created in form alter.
+  if (isset($variables['element']['#extra_suggestion'])) {
+    $suggestions[] = 'input__' . $variables['element']['#type'] . '__' . $variables['element']['#extra_suggestion'];
+  }
+}
+
+/**
+ * Implements hook_theme_suggestions_HOOK_alter().
+ */
+function ventuno_theme_suggestions_select_alter(array &$suggestions, array $variables): void {
+  $suggestions[] = 'select__' . $variables['element']['#name'];
+}
+
+/**
+ * Implements hook_preprocess_radios().
+ */
+function ventuno_preprocess_radios(array &$variables): void {
+  if (isset($variables['element']['#name']) && $variables['element']['#name'] === 'layout_paragraphs[layout]') {
+    $variables['attributes']['class'][] = 'd-flex col-gap-3';
+  }
+}
+
+/**
+ * Implements hook_form_BASE_FORM_ID_alter().
+ */
+function ventuno_form_poll_view_form_alter(array &$form, FormStateInterface $form_state, string $form_id): void {
+  foreach (['result', 'cancel'] as $element) {
+    if (!isset($form['actions'][$element])) {
+      continue;
+    }
+
+    $form['actions'][$element]['#button_type'] = 'link';
+    $form['actions'][$element]['#attributes']['class'][] = 'p-0';
+  }
+}
+
+/**
+ * Implements hook_preprocess_input__submit().
+ */
+function ventuno_preprocess_input__submit(array &$variables): void {
+  if (!isset($variables['element']['#button_type'])) {
+    $variables['attributes']['class'][] = 'btn-primary';
+  }
+}
+
+/**
+ * Implements hook_preprocess_select().
+ */
+function ventuno_preprocess_select(array &$variables): void {
+  $field_name = $variables['element']['#name'];
+  switch ($field_name) {
+    case 'field_topic':
+    case 'field_is_solution_type':
+      $variables['attributes']['class'][] = 'h-50vh';
+      break;
   }
 }

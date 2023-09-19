@@ -230,6 +230,7 @@ abstract class NotificationSubscriberBase implements EventSubscriberInterface {
    */
   protected function getRecipientIdsByRole(string $role_id): array {
     return $this->entityTypeManager->getStorage('user')->getQuery()
+      ->accessCheck(FALSE)
       ->condition('status', 1)
       ->condition('roles', $role_id)
       ->execute();

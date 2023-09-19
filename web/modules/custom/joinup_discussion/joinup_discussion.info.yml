@@ -15,5 +15,6 @@ dependencies:
   - 'joinup:joinup_notification'
   - 'joinup:joinup_subscription'
   - 'joinup:joinup_user'
+  - 'joinup:joinup_search'
   - 'message:message'
   - 'smart_trim:smart_trim'

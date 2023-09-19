@@ -1,58 +1,124 @@
 Release procedure
 =================
 
-1. Create a release branch based on the current master, merge the latest develop
-   into it, and push it to GitHub.
+We have 2 repositories that Joinup uses: the
+[development repository](https://git.fpfis.tech.ec.europa.eu/digit/digit-joinup-dev),
+which is where the development takes place, and the
+[reference repository](https://git.fpfis.tech.ec.europa.eu/ec-europa/digit-joinup-reference),
+which is where the releases are published.
+
+The two main branches are the `master` branch on the reference repository and
+the `develop` branch on the development repository. The master branch is the
+reference for the production environment.
+
+For this guide, we will assume that you have cloned the development repository,
+and that you have a remote named `origin` that points to the development
+repository, and a remote named `reference` that points to the reference
+repository, but you can adopt according to your setup. After cloning the
+development repository, you can add the reference repository as a remote by
+running the following command:
+
+```
+$ git remote add reference https://git.fpfis.tech.ec.europa.eu/ec-europa/digit-joinup-reference.git
+```
+
+The release procedure is as follows:
+1. Create a release ticket in Jira. The release should be named after the
+   release number. The release ticket is a placeholder for the tasks below.
+2. Fetch the latest changes from the reference repository and checkout the
+   `master` branch. Create a new release branch from the `master` branch. Name
+   the branch `release-x.y.z`, where `x.y.z` is the version number of the
+   release. Fetch the latest changes from the development repository and merge
+   origin's `develop` branch into the release branch. Push the new branch to the
+   reference repository.
+
+   The commands for the above are the following:
+
    ```
-   $ git fetch
-   $ git checkout master
-   $ git reset --hard origin/master
-   $ git checkout -b release-1.23.4
+   $ git fetch reference
+   $ git checkout reference/master
+   $ git checkout -b release-x.y.z
+   $ git fetch origin
    $ git merge origin/develop
-   $ git push origin release-1.23.4 -u
+   $ git push reference release-x.y.z
    ```
-1. Check all resolved tickets from the previous sprint(s) and verify that they
+3. Create a merge request from the release branch to the `master` branch. When
+   the tests pass, merge the release branch into the `master` branch. This will
+   automatically run the acceptance environment build. The release ticket should
+   be moved to 'UAT' so that the functional team can test the release.
+4. If any last minute problems are discovered during acceptance testing, these
+   will be fixed in merge requests that are merged directly into the release
+   branch. Of course, the normal procedure to create Jira tickets for these
+   issues and move them in QA should be followed.
+5. Check all resolved tickets from the previous sprint(s) and verify that they
    have a version set in the "Fix Version" field. Some tickets might be resolved
    but are not part of any Joinup release (for example: analysis/investigations,
    work done upstream, infrastructure work etc.). These should get "NOVERSION".
    The tickets can be listed by browsing all tickets in Jira and using the query
    `project = ISAICP AND Sprint = "Joinup sprint N" AND status = Resolved`.
-1. List all tickets in Jira that have the "Fix Version" field set to the
+6. List all tickets in Jira that have the "Fix Version" field set to the
    upcoming release, using the query `project = ISAICP AND fixVersion = x.y.z`.
    These tickets will be used to create the changelog in the next step.
-1. Create [a new draft
-   release](https://github.com/ec-europa/joinup-dev/releases/new). Enter the tag
-   version in the format `v1.23.4` and set the target branch to the new release
-   branch that was created in step 1 above.
-1. Enter the changelog in the release description field, with headings for `New
-   features`, `Improvements`, `Bug fixes` and `Security`. Make sure to choose
-   the option *Save draft*!
-1. Build the release using the following Jenkins job:
-   https://jenkins.fpfis.eu/job/Joinup/job/acceptance/job/build-rpm-acc/
-   Make sure to enter the name of the release branch as the `RELEASE_TAG`. We
-   are actually only creating the tag _after_ the release is accepted.
-1. Deploy the release to the acceptance environment using the Jenkins job:
-   https://jenkins.fpfis.eu/job/Joinup/job/acceptance/job/Build-acceptance/
-1. Move the release ticket in UAT.
-1. If any last minute problems are discovered during acceptance testing, these
-   will be fixed in pull requests that are merged directly into the release
-   branch.
-1. After receiving approval from the functional team, merge the release branch
-   into master, then publish the new release on GitHub. This will automatically
-   create the tag. The release branch can then be deleted.
-1. In the Joinup project page in Jira, click the "Releases" icon in the left
-   sidebar. Find the release in the table, click the three-dot 'Actions' menu
-   and choose 'Release'. Set the correct date for the release.
-1. Merge back master into develop.
-1. Create a ticket on the Jira board of the devops (project FPFIS SUPP) with
-   the labels "deploy, fpfis-classified, joinup, release, upgrade" and a link to
-   the release tag on Github. Link this ticket with the release ticket on the
-   Joinup board.
-1. Communicate this ticket with the devops team and decide on a timeslot for the
-   release.
-1. Communicate the release time with the functional team so they can announce
-   this on the Joinup homepage.
-1. Create a followup PR against develop that cleans up the update and deploy
-   scripts, and a corresponding Jira ticket, and move this in QA.
-1. After the PR is merged and the release is deployed, move the release ticket
-   from 'Accepted' to 'Resolved'.
+7. Create a markdown changelog from the list of tickets. The changelog should
+   contain the following sections:
+   - New features
+   - Improvements
+   - Bug fixes
+   - Security
+
+   Do not create the changelog in a release, use the release Jira ticket
+   instead.
+8. When the release is approved in UAT, and the release ticket is moved to
+   'Accepted', create a tag based on the `master` branch. The tag should be
+   created in the reference repository. The tag should be named `vx.y.z`, where
+   `x.y.z` is the version number of the release. For example, the tag for the
+    1.0.0 release should be named `v1.0.0`. The description for the tag should
+    be the changelog that was created in the previous step. **The creation of
+    the tag will trigger the production environment build.**
+
+Post release procedure
+======================
+
+After the release is done, the following steps should be taken:
+
+1. Move the release ticket to 'In Progress'.
+2. Create a new branch based on the `master` branch from the reference
+   repository named `release-x.y.z-post`. This branch will be used to clean up
+   the updates that were made during the release procedure.
+3. Clean any instances of the `hook_update_N`, `hook_post_update_NAME` and
+   `hook_deploy_NAME` functions that were added during the release procedure.
+4. Push the branch to the development repository and create a merge request
+   from the branch to the `develop` branch. Move the release ticket to the QA
+   column and allow it to be picked up by the team. When the ticket is approved,
+   the team member should merge the merge request and move the release ticket to
+   the 'Resolved' column.
+
+Hotfix procedure
+================
+
+Hotfixes are the patch version of the project. For example, if the current
+version is `1.0.0`, the next hotfix will be `1.0.1`. If another hotfix is needed
+before the next release, the version will be `1.0.2`. The numbering of the
+update functions should be named after the next release. For example, if version
+`1.21.0` is released, consider that all updates named with `1021##` are already
+deployed and deleted. Thus, even though the hotfix release is `1.21.1`, the
+update functions should be named `1022##` and **WILL NOT** be deleted until the
+next minor release (version `1.22.0`).
+
+The hotfix procedure is as follows:
+1. Create a hotfix ticket in Jira. The hotfix should be named after the hotfix
+   number. The hotfix ticket is a placeholder for the tasks below.
+2. Create a new branch from the `master` branch. Name the branch `release-x.y.z`,
+   where `x.y.z` is the version number of the hotfix. Push the new branch to the
+   reference repository.
+3. Any ticket needed for the hotfix will checkout the hotfix release branch and
+   will have a merge request against the hotfix release branch. When the tests
+   pass, the merge request will be merged into the hotfix release branch.
+4. Repeat the normal release procedure from step 5. The hotfix ticket should be
+   moved to 'UAT' so that the functional team can test the hotfix.
+
+**Important**: The hotfix does **not** have a post release procedure. The reason
+for this is that the hotfix uses numbering for the update functions that is
+based on the next release. This means that the update functions will be deleted
+when the next release is done. It further means that the updates should not be
+removed to avoid conflicts in namings.

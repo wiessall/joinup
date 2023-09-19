@@ -1,0 +1,48 @@
+/**
+ * @file
+ * Theme styles.
+ *
+ * Look & feel of the website.
+ */
+
+ @import "partials/core"; // Functions, variables, utilities and mixins required
+ @import "partials/base/fonts";
+ @import "partials/base/typography";
+  // @import "@openeuropa/bcl-bootstrap/scss/reboot";
+ @import "partials/overrides/reboot"; // Hack to prevent build break
+ @import "@openeuropa/bcl-bootstrap/scss/type";
+ @import "@openeuropa/bcl-bootstrap/scss/transitions";
+ @import "@openeuropa/bcl-bootstrap/scss/utilities";
+ @import "@openeuropa/bcl-theme-default/src/scss/base/utilities";
+ @import "partials/overrides/utilities"; // Override with required utilities only
+ @import "@openeuropa/bcl-bootstrap/scss/helpers";
+ @import "@openeuropa/bcl-bootstrap/scss/utilities/api";
+
+// Link: avoid purple underline for visited links
+a {
+  &:hover {
+    &:visited {
+      text-decoration-color: currentColor!important;
+    }
+  }
+}
+
+// Layout
+.layout-container {
+  &:not(.listing) {
+    .page-header {
+      margin-bottom: $spacer * 1; // 16px
+      @include media-breakpoint-up(md) {
+        margin-bottom: $spacer * 2; // 32px
+      }
+    }
+  }
+  &.listing {
+    .page-header + .content .paragraph--type--content-listing {
+      margin-top: $spacer * -1; // -16px
+      @include media-breakpoint-up(md) {
+        margin-top: $spacer * -2; // -32px
+      }
+    }
+  }
+}

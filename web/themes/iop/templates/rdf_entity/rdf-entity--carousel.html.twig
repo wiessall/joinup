@@ -7,14 +7,14 @@
  * - logo_url: The absolute path to the logo URL.
  */
 #}
-<article{{ attributes.addClass('glide__slide') }}>
-  {{ title_prefix }}
-  {% if not page %}
-    <h2{{ title_attributes }}>
-      <a href="{{ url }}" rel="bookmark">{{ label }}</a>
-    </h2>
-  {% endif %}
-  {{ title_suffix }}
 
-{#    {{ content }}#}
-</article>
+{% include '@iop/carousel/carousel-item.html.twig' with {
+  attributes,
+  url,
+  title_prefix,
+  title_suffix,
+  label,
+  title_attributes,
+  image,
+  icon: rdf_entity.bundle is same as 'collection' ? 'folder2-open' : 'clipboard2-check',
+} only %}

@@ -1,0 +1,25 @@
+diff --git a/src/Result/Result.php b/src/Result/Result.php
+index 334dc68559ba310b8743a188a66a2f1075e059b1..6ae88d99d980745766da700f8e2eb5eef779ebfa 100644
+--- a/src/Result/Result.php
++++ b/src/Result/Result.php
+@@ -73,6 +73,20 @@ class Result implements ResultInterface {
+    */
+   protected $children = [];
+ 
++  /**
++   * The facet transliterate display value.
++   *
++   * @var string
++   */
++  public $transliterateDisplayValue;
++
++  /**
++   * The term weight.
++   *
++   * @var int
++   */
++  public $termWeight;
++
+   /**
+    * Constructs a new result value object.
+    *

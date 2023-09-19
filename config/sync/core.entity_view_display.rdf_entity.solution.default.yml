@@ -5,7 +5,6 @@ dependencies:
   config:
     - field.field.rdf_entity.solution.field_is_actor
     - field.field.rdf_entity.solution.field_is_affiliations_requests
-    - field.field.rdf_entity.solution.field_is_banner
     - field.field.rdf_entity.solution.field_is_business_process
     - field.field.rdf_entity.solution.field_is_contact_information
     - field.field.rdf_entity.solution.field_is_content
@@ -92,9 +91,13 @@ content:
       trim_suffix: …
       wrap_output: false
       wrap_class: trimmed
-      more_link: false
-      more_class: more-link
-      more_text: More
+      more:
+        display_link: false
+        target_blank: false
+        link_trim_only: false
+        class: more-link
+        text: More
+        aria_label: 'Read more about [node:title]'
       summary_handler: full
       trim_options:
         text: true
@@ -115,12 +118,12 @@ content:
         template_suggestion: entity_reference__listing_tile
     weight: 5
     region: content
-  rdf_entity_field_is_content_inline_facets:
+  rdf_entity_solution_field_is_content_inline_facets:
     settings: {  }
     third_party_settings: {  }
     weight: 2
     region: content
-  rdf_entity_field_is_content_top:
+  rdf_entity_solution_field_is_content_top:
     settings: {  }
     third_party_settings: {  }
     weight: 1
@@ -144,7 +147,6 @@ hidden:
   featured: true
   field_is_actor: true
   field_is_affiliations_requests: true
-  field_is_banner: true
   field_is_business_process: true
   field_is_contact_information: true
   field_is_content_creation: true
@@ -180,6 +182,7 @@ hidden:
   field_spatial_coverage: true
   field_status: true
   field_topic: true
+  flag_like_rdf_entity: true
   label: true
   langcode: true
   og_group: true

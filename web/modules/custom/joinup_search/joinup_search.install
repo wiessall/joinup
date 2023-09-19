@@ -9,7 +9,7 @@ declare(strict_types = 1);
 
 use Drupal\Component\Serialization\Json;
 use Drupal\search_api_solr\Utility\Utility;
-use Laminas\Diactoros\Uri;
+use GuzzleHttp\Psr7\Uri;
 
 /**
  * Implements hook_requirements().

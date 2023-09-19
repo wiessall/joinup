@@ -4,10 +4,11 @@ declare(strict_types = 1);
 
 namespace Drupal\search_api_field\Plugin\facets\facet_source;
 
+use Drupal\Core\Cache\Cache;
 use Drupal\Core\Path\CurrentPathStack;
 use Drupal\facets\FacetSource\SearchApiFacetSourceInterface;
 use Drupal\facets\Plugin\facets\facet_source\SearchApiBaseFacetSource;
-use Drupal\field\Entity\FieldStorageConfig;
+use Drupal\field\Entity\FieldConfig;
 use Drupal\search_api\Entity\Index;
 use Drupal\search_api\Query\ResultSetInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -172,7 +173,7 @@ class SearchApiField extends SearchApiBaseFacetSource implements SearchApiFacetS
     // Load facet plugin definition and depending on those settings; load the
     // corresponding search api page and load its index.
     $field_id = $this->pluginDefinition['search_api_field'];
-    $field = FieldStorageConfig::load($field_id);
+    $field = FieldConfig::load($field_id);
     $index = $field->getSetting('index');
     return Index::load($index);
   }
@@ -207,6 +208,14 @@ class SearchApiField extends SearchApiBaseFacetSource implements SearchApiFacetS
       return $field->getDataDefinition();
     }
     throw new Exception("Field with name {$field_name} does not have a definition");
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getCacheMaxAge(): int {
+    // Override the default cache max age of 0 to allow caching of the facets.
+    return Cache::PERMANENT;
   }
 
 }

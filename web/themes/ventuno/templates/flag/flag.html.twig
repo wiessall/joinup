@@ -1,0 +1,27 @@
+{#
+/**
+ * @file
+ * Default theme implementation for flag links.
+ *
+ * Available functions:
+ * - flagcount(flag, flaggable) gets the number of flaggings for the given flag and flaggable.
+ *
+ * Available variables:
+ * - attributes: HTML attributes for the link element.
+ * - title: The flag link title.
+ * - action: 'flag' or 'unflag'
+ * - flag: The flag object.
+ * - flaggable: The flaggable entity.
+ */
+#}
+
+{%
+  set classes = [
+    'flag',
+    'flag-' ~ flag.id()|clean_class,
+    'js-flag-' ~ flag.id()|clean_class ~ '-' ~ flaggable.id(),
+    action is same as 'unflag' ? 'action-unflag' : 'action-flag',
+  ]
+%}
+
+<div class="{{classes|join(' ')}}"><a{{ attributes.addClass(['btn', 'btn-link', 'px-3']).setAttribute('rel', 'nofollow') }}>{{ title }}</a></div>

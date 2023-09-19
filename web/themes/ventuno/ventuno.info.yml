@@ -7,9 +7,18 @@ base theme: oe_bootstrap_theme
 
 libraries:
   - ventuno/base
-  - ventuno/layout
   - ventuno/components
+  - ventuno/layout
   - ventuno/theme
+  - ventuno/tables
+
+libraries-extend:
+  core/drupal.ajax:
+    - ventuno/ajax-throbber
+  joinup_group/shared_entity:
+    - ventuno/shared-entity
+  layout_paragraphs/builder:
+    - ventuno/layout-paragraphs--builder
 
 libraries-override:
   core/jquery.once: false
@@ -26,7 +35,15 @@ libraries-override:
   tour/tour-styling:
     css:
       component:
-        css/tour.module.css: assets/css/tour.css
+        css/tour.module.css: assets/css/tour.min.css
+  core/drupal.checkbox:
+    js:
+      misc/checkbox.js: assets/js/checkbox.min.js
+  layout_discovery/onecol: false
+  layout_discovery/twocol: false
+  layout_builder/twocol_section: false
+  layout_builder/threecol_section: false
+  layout_builder/fourcol_section: false
 
 regions:
   search_bar: 'Search bar'
@@ -39,3 +56,7 @@ regions:
   content: 'Content'
   content_bottom: 'Content bottom'
   footer: 'Footer'
+
+joinup:
+  menu_local_tasks:
+    horizontal_tabs_block: ventuno_horizontal_tabs

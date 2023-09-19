@@ -17,5 +17,5 @@ dependencies:
   - 'joinup:joinup_community_content'
   - 'joinup:joinup_core'
   - 'joinup:joinup_validation'
-  - 'oe_webtools:oe_webtools_geocoding'
+  - 'joinup:oe_gisco_geocoding'
   - 'smart_trim:smart_trim'

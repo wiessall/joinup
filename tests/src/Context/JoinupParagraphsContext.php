@@ -4,14 +4,21 @@ declare(strict_types = 1);
 
 namespace Drupal\joinup\Context;
 
+use Behat\Gherkin\Node\PyStringNode;
 use Behat\Gherkin\Node\TableNode;
+use Behat\Mink\Driver\Selenium2Driver;
 use Behat\Mink\Element\TraversableElement;
 use Behat\Mink\Exception\ElementNotFoundException;
+use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\joinup\Exception\WysiwygEditorNotFoundException;
+use Drupal\joinup\Traits\EntityTrait;
 use Drupal\joinup\Traits\JavascriptTrait;
+use Drupal\joinup\Traits\TestingEntitiesTrait;
 use Drupal\joinup\Traits\UtilityTrait;
 use Drupal\joinup\Traits\WysiwygTrait;
+use Drupal\paragraphs\Entity\Paragraph;
+use Drupal\paragraphs\ParagraphInterface;
 use PHPUnit\Framework\Assert;
 
 /**
@@ -22,6 +29,8 @@ class JoinupParagraphsContext extends RawDrupalContext {
   use JavascriptTrait;
   use WysiwygTrait;
   use UtilityTrait;
+  use EntityTrait;
+  use TestingEntitiesTrait;
 
   /**
    * A copycat of Behat's internal region mapping.
@@ -35,15 +44,9 @@ class JoinupParagraphsContext extends RawDrupalContext {
    */
   const FIELD_MAP = [
     'Custom page body' => 'field-paragraphs-body',
-    'Custom content listing' => 'field-content-listing',
+    'Custom content listing' => 'content-listing',
+    'Accordion item' => 'field-accordion-item',
   ];
-
-  /**
-   * Reusable xpath pattern.
-   *
-   * @var string
-   */
-  const PARAGRAPH_ITEM_XPATH = "//div[contains(concat(' ', @class, ' '), ' paragraph ')]";
 
   /**
    * Enters the given text in the given WYSIWYG editor.
@@ -168,10 +171,10 @@ class JoinupParagraphsContext extends RawDrupalContext {
   }
 
   /**
-   * Clicks the remove button in the given paragraphs item.
+   * Clicks a link in the given paragraphs item.
    *
    * @param string $label
-   *   The button label.
+   *   The link label.
    * @param string $field
    *   The field identifier. One of the keys in the
    *   \JoinupParagraphsSubContext::fieldMapping array.
@@ -180,30 +183,35 @@ class JoinupParagraphsContext extends RawDrupalContext {
    *   readability. If left empty, the button will be searched in the entire
    *   field.
    *
-   * @Given I press :label in the :field field for paragraph :delta
-   * @Given I press :label in the :field paragraphs field
+   * @Given I click :label in the :field field for paragraph :delta
+   * @Given I click :label in the :field paragraphs field
    */
-  public function clickButtonInParagraphsField(string $label, string $field, ?int $delta = NULL): void {
-    if ($delta === NULL) {
-      // This is a field button, not linked to any paragraph item, such as the
-      // button that adds a new paragraph item.
-      $this->getParagraphsElement($field)->findButton($label)->press();
-      return;
-    }
-
-    $paragraph_item = $this->getParagraphsElementItem($field, --$delta);
-
-    if (!$button = $paragraph_item->findButton($label)) {
+  public function clickLinkInParagraphsField(string $label, string $field, ?int $delta = NULL): void {
+    $paragraph_item = ($delta === NULL) ? $this->getParagraphsElement($field) : $this->getParagraphsElementItem($field, --$delta);
+    $this->scrollElementIntoView($paragraph_item);
+    if (!$link = $paragraph_item->findButton($label)) {
       throw new ElementNotFoundException($this->getSession()->getDriver(), 'button', 'label');
     }
 
-    // It might be a button beneath the three dots dropdown.
-    if (!$button->isVisible()) {
-      $dropdown = $paragraph_item->find('css', 'button.paragraphs-dropdown-toggle');
-      $dropdown->click();
+    // It might be a button beneath the three dots dropdown. Check for the
+    // driver as well, because only Selenium2Driver supports isVisible().
+    if (($this->getSession()->getDriver() instanceof Selenium2Driver) && !$link->isVisible()) {
+      // Check first if the button is in the 3-dots dropdown which has the class
+      // "paragraphs-dropdown-actions".
+      $xpath = "//div[contains(concat(' ', @class, ' '), ' paragraphs-dropdown-actions ')]";
+      if ($paragraph_item->find('xpath', $xpath)?->findButton($label)) {
+        // Expand the dropdown.
+        $dropdown = $paragraph_item->find('css', 'button.paragraphs-dropdown-toggle');
+        $dropdown->click();
+      }
+      // Else, expand the 'add paragraph' dropdown in case the button is one of
+      // the 'add paragraph' buttons.
+      elseif ($dropdown = $paragraph_item->find('css', 'button.dropdown-toggle')) {
+        $dropdown->click();
+      }
     }
 
-    $button->click();
+    $link->click();
   }
 
   /**
@@ -218,37 +226,7 @@ class JoinupParagraphsContext extends RawDrupalContext {
    */
   public function assertRowsInParagraphsField(int $expected_rows, string $field): void {
     $field = $this->getParagraphsElement($field);
-    Assert::assertCount($expected_rows, $field->findAll('xpath', "//tr[contains(concat(' ', @class, ' '), 'form-table__row')]"));
-  }
-
-  /**
-   * Asserts the number of paragraphs in the page.
-   *
-   * @param int $expected_rows
-   *   (optional) The expected number of paragraphs. Defaults to 0.
-   *
-   * @Then there should be :expected_rows paragraph(s) in the page
-   * @Then the page should contain no paragraphs
-   */
-  public function assertParagraphsCountInPage(int $expected_rows = 0): void {
-    Assert::assertCount($expected_rows, $this->getSession()->getPage()->findAll('xpath', static::PARAGRAPH_ITEM_XPATH));
-  }
-
-  /**
-   * Asserts the exact text content of the paragraphs in the page.
-   *
-   * @param \Behat\Gherkin\Node\TableNode $table
-   *   The table of expected paragraph texts.
-   *
-   * @Given I should see the following paragraphs in the given order:
-   */
-  public function assertExactParagraphsContentInPage(TableNode $table): void {
-    $expected = $table->getColumn(0);
-    $paragraphs = $this->getSession()->getPage()->findAll('xpath', static::PARAGRAPH_ITEM_XPATH);
-    $actual = array_map(function (TraversableElement $paragraph): string {
-      return $paragraph->getText();
-    }, $paragraphs);
-    Assert::assertSame($expected, $actual);
+    Assert::assertCount($expected_rows, $field->findAll('xpath', "//tr[contains(concat(' ', @class, ' '), 'draggable')]"));
   }
 
   /**
@@ -307,6 +285,7 @@ class JoinupParagraphsContext extends RawDrupalContext {
     if (!$input) {
       throw new ElementNotFoundException($this->getSession()->getDriver(), "Button contained $filter filter from $paragraph paragraph");
     }
+    $this->scrollElementIntoView($input);
     $input->click();
   }
 
@@ -394,6 +373,208 @@ class JoinupParagraphsContext extends RawDrupalContext {
       $worker->processItem($item->data);
       $queue->deleteItem($item);
     }
+  }
+
+  /**
+   * Asserts that there are results in the carousel paragraph.
+   *
+   * @param string $heading
+   *   The heading of the carousel paragraph.
+   *
+   * @Then I should see results in the :heading carousel
+   */
+  public function iShouldResultsInTheCarousel(string $heading): void {
+    $xpath = "//div[contains(concat(' ', @class, ' '), ' paragraph--carousel ')]";
+    $xpath .= "//h2[contains(concat(' ', @class, ' '), ' paragraph__heading ')]";
+    $xpath .= "[contains(text(), '$heading')]";
+    $element = $this->getSession()->getPage()->find('xpath', $xpath);
+    if (empty($element)) {
+      throw new ElementNotFoundException($this->getSession()->getDriver(), 'paragraph', 'paragraph--carousel', $heading);
+    }
+
+    $xpath = "//article[contains(concat(' ', @class, ' '), ' glide__slide ')]";
+    $elements = $element->getParent()->findAll('xpath', $xpath);
+    if (empty($elements)) {
+      throw new ElementNotFoundException($this->getSession()->getDriver(), 'paragraph', 'glide__slide', $heading);
+    }
+  }
+
+  /**
+   * Appends paragraph to entity.
+   *
+   * @param string $paragraph_type
+   *   Paragraph type.
+   * @param string $parent_field
+   *   Parent field name.
+   * @param string $parent_type_id
+   *   Parent type id.
+   * @param string $parent_name
+   *   Parent name.
+   * @param \Behat\Gherkin\Node\TableNode $table
+   *   Paragraph's fields.
+   *
+   * @Given I append :paragraph_type to :parent_field field in :parent_type_id entity with following :parent_name title:
+   *
+   * @throws \Drupal\Core\Entity\EntityStorageException
+   */
+  public function iAppendParagraphToFieldInEntityWithFollowingTitle(
+    string $paragraph_type,
+    string $parent_field,
+    string $parent_type_id,
+    string $parent_name,
+    TableNode $table
+  ): void {
+    $entity = $this->getEntityByLabel($parent_type_id, $parent_name);
+
+    $values = [
+      'type' => $paragraph_type,
+    ];
+    foreach ($table->getRowsHash() as $field => $value) {
+      $values = array_replace_recursive($values, $this->transformParagraphField($field, $value));
+    }
+
+    $paragraph = Paragraph::create($values);
+    $paragraph->save();
+
+    $this->entities['paragraph'][$paragraph->id()] = $paragraph;
+    $this->appendParagraphToEntity($entity, $paragraph, $parent_field);
+  }
+
+  /**
+   * Appends a poll paragraph.
+   *
+   * @param string $poll
+   *   Poll name.
+   * @param string $parent_field
+   *   Parent field name.
+   * @param string $parent_type_id
+   *   Parent type id.
+   * @param string $parent_name
+   *   Parent name.
+   *
+   * @Given I append poll :poll to :parent_field field in :parent_type_id entity with following :parent_name title
+   *
+   * @throws \Drupal\Core\Entity\EntityStorageException
+   */
+  public function iAppendPollToFieldInEntityWithFollowingTitle(
+    string $poll,
+    string $parent_field,
+    string $parent_type_id,
+    string $parent_name): void {
+    $poll = $this->getEntityByLabel('poll', $poll);
+    $parentEntity = $this->getEntityByLabel($parent_type_id, $parent_name);
+
+    $values = [
+      'type' => 'poll',
+      'field_paragraphs_poll' => [$poll->id()],
+    ];
+    $paragraph = Paragraph::create($values);
+    $paragraph->save();
+
+    $this->entities['paragraph'][$paragraph->id()] = $paragraph;
+    $this->appendParagraphToEntity($parentEntity, $paragraph, $parent_field);
+  }
+
+  /**
+   * Appends a content listing paragraph.
+   *
+   * @param string $parent_field
+   *   Parent field name.
+   * @param string $parent_type_id
+   *   Parent type id.
+   * @param string $parent_name
+   *   Parent name.
+   * @param \Behat\Gherkin\Node\PyStringNode $value
+   *   Serialized value.
+   *
+   * @Given I append content listing to :parent_field field in :parent_type_id entity with following :parent_name title with:
+   *
+   * @throws \Drupal\Core\Entity\EntityStorageException
+   */
+  public function iAppendContentListingToFieldInEntityWithFollowingTitleWith(
+    string $parent_field,
+    string $parent_type_id,
+    string $parent_name,
+    PyStringNode $value): void {
+    $entity = $this->getEntityByLabel($parent_type_id, $parent_name);
+
+    $values = [
+      'type' => 'content_listing',
+      'content_listing' => [
+        'value' => unserialize($value->getRaw(), ['allowed_classes' => FALSE]),
+      ],
+    ];
+    $paragraph = Paragraph::create($values);
+    $paragraph->save();
+
+    $this->entities['paragraph'][$paragraph->id()] = $paragraph;
+    $this->appendParagraphToEntity($entity, $paragraph, $parent_field);
+  }
+
+  /**
+   * Helper method to transform table data into the correct field array.
+   *
+   * @param string $field
+   *   Field name.
+   * @param string $value
+   *   Field value.
+   *
+   * @return array
+   *   Transformed data.
+   */
+  protected function transformParagraphField(string $field, string $value): array {
+    $data = $this->transformParagraphValue($field, $value);
+
+    $keys = explode(':', $field);
+    foreach (array_reverse($keys) as $key) {
+      $data = [$key => $data];
+    }
+
+    return $data;
+  }
+
+  /**
+   * Helper method to transform table field values.
+   *
+   * @param string $field
+   *   Field name.
+   * @param string $value
+   *   Field value.
+   *
+   * @return array
+   *   Transformed value.
+   */
+  protected function transformParagraphValue(string $field, string $value): mixed {
+    return match ($field) {
+      'content_listing:value' => unserialize($value, ['allowed_classes' => FALSE]),
+      default => $value,
+    };
+  }
+
+  /**
+   * Append paragraph to entity.
+   *
+   * @param \Drupal\Core\Entity\ContentEntityInterface $entity
+   *   Content entity.
+   * @param \Drupal\paragraphs\ParagraphInterface $paragraph
+   *   Paragraph entity.
+   * @param string $field_name
+   *   Field name.
+   *
+   * @throws \Drupal\Core\Entity\EntityStorageException
+   */
+  public function appendParagraphToEntity(ContentEntityInterface $entity, ParagraphInterface $paragraph, string $field_name): void {
+    if (!$entity->hasField($field_name)) {
+      throw new \Exception(sprintf("Field not found: %s", $field_name));
+    }
+
+    $entity->get($field_name)->appendItem(
+      [
+        'target_id' => $paragraph->id(),
+        'target_revision_id' => $paragraph->getRevisionId(),
+      ]
+    );
+    $entity->save();
   }
 
 }

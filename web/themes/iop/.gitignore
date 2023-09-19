@@ -1,5 +1,4 @@
-# Ignore build artifacts.
+# Ignore dependencies.
 /node_modules/*
-/css/*
-/assets/*
+# Ignore map files.
 *.map

@@ -146,6 +146,11 @@ content:
     third_party_settings: {  }
     weight: 1
     region: content
+  flag_like_node:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 10
+    region: content
   links:
     settings: {  }
     third_party_settings: {  }
@@ -158,6 +163,15 @@ content:
       date_format: custom
       custom_date_format: m/d/y
       timezone: ''
+      tooltip:
+        date_format: ''
+        custom_date_format: ''
+      time_diff:
+        enabled: false
+        future_format: '@interval hence'
+        past_format: '@interval ago'
+        granularity: 2
+        refresh: 60
     third_party_settings:
       template_suggestion:
         template_suggestion: ''

@@ -1,105 +1,103 @@
+# SMACSS (http://smacss.com/)
 components:
   version: VERSION
   css:
     component:
-      assets/css/components.min.css: {}
+      assets/css/components.min.css: { minified: true }
   dependencies:
-    - ventuno/components.js
+    - iop/components.js
+
+components.js:
+  header: true
+  js:
+    assets/js/oe-bcl-joinup.bundle.min.js: { minified: true, attributes: { defer: true } }
+  dependencies:
+    - core/drupal
 
 theme:
   version: VERSION
   css:
     theme:
-      assets/css/theme.min.css: {}
+      assets/css/theme.min.css: { minified: true }
+  dependencies:
+    - iop/landing
 
 # Pages
+landing:
+  css:
+    theme:
+      assets/css/landing.min.css: { minified: true, preprocess: false }
+
 listing:
   css:
     theme:
-      assets/css/listing.min.css: {}
+      assets/css/listing.min.css: { minified: true }
 
 # Components
 accordion-faq:
   css:
     theme:
-      assets/css/accordion-faq.min.css: { minified: true }
+      assets/css/accordion-faq.min.css: { minified: true, preprocess: false }
 
-# @todo ISAICP-7138 delete this library when switch to Ventuno theme is complete
-add-content:
+call-to-action:
   css:
     theme:
-      assets/css/add-content.min.css: { minified: true }
+      assets/css/call-to-action.min.css: { minified: true, preprocess: false }
 
 join:
   css:
     theme:
-      assets/css/join.min.css: {}
+      assets/css/join.min.css: { minified: true }
 
 navbar:
   css:
     theme:
-      assets/css/navbar.min.css: {}
+      assets/css/navbar.min.css: { minified: true }
 
 page-header:
   css:
     theme:
-      assets/css/page-header.min.css: {}
+      assets/css/page-header.min.css: { minified: true }
 
 pager:
   css:
     theme:
-      assets/css/pager.min.css: {}
+      assets/css/pagination.min.css: { minified: true }
 
-paragraph:
+paragraph__call_to_action:
   css:
     theme:
-      assets/css/paragraph.min.css: {}
+      assets/css/paragraph--call-to-action.min.css: { minified: true, preprocess: false }
 
-paragraph--2-column-featured-left:
+paragraph__carousel:
   css:
     theme:
-      assets/css/paragraph--2-column-featured-left.min.css: {}
+      assets/css/paragraph--carousel.min.css: { minified: true, preprocess: false }
+      assets/css/glide.core.min.css: { minified: true }
+  dependencies:
+    - iop/paragraph__carousel.js
 
-paragraph--2-column-featured-right:
-  css:
-    theme:
-      assets/css/paragraph--2-column-featured-right.min.css: {}
-
-paragraph--call-to-action:
-  css:
-    theme:
-      assets/css/paragraph--call-to-action.min.css: {}
-
-paragraph--carousel:
-  css:
-    theme:
-      assets/css/paragraph--carousel.min.css: {}
-      assets/css/glide.core.min.css: {}
+paragraph__carousel.js:
+  header: true
   js:
-    assets/js/glide.min.js: {}
+    assets/js/glide.min.js: { minified: true, attributes: { defer: true }  }
 
-paragraph--image:
+paragraph__image:
   css:
     theme:
-      assets/css/paragraph--image.min.css: {}
+      assets/css/paragraph--image.min.css: { minified: true }
 
-paragraph--row:
+paragraph__layout:
   css:
     theme:
-      assets/css/paragraph--row.min.css: {}
+      assets/css/paragraph--layout.min.css: { minified: true }
 
-paragraph--testimony:
+paragraph__testimony:
   css:
     theme:
-      assets/css/paragraph--testimony.min.css: {}
+      assets/css/paragraph--testimony.min.css: { minified: true }
 
-paragraph--video:
+tile:
   css:
     theme:
-      assets/css/paragraph--video.min.css: {}
-
-# @todo ISAICP-7138 delete this library when switch to Ventuno theme is complete
-three-dots-menu:
-  css:
-    theme:
-      assets/css/three-dots-menu.min.css: { minified: true }
+      assets/css/tile.min.css: { minified: true }

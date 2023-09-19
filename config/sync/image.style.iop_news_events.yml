@@ -1,0 +1,21 @@
+uuid: ffe77de5-ba16-4566-9a9b-aececf5de712
+langcode: en
+status: true
+dependencies: {  }
+name: iop_news_events
+label: 'IOP news events'
+effects:
+  faa63501-2e01-4675-af4b-ed3f5589d7ff:
+    uuid: faa63501-2e01-4675-af4b-ed3f5589d7ff
+    id: image_scale
+    weight: 1
+    data:
+      width: 532
+      height: 264
+      upscale: true
+  aa0be0c6-6d48-4683-9f79-7c7c5815f505:
+    uuid: aa0be0c6-6d48-4683-9f79-7c7c5815f505
+    id: image_convert
+    weight: 2
+    data:
+      extension: webp

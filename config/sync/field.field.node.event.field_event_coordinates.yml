@@ -16,7 +16,7 @@ third_party_settings:
     disabled: false
     hidden: false
     providers:
-      - webtools_geocoding
+      - gisco_geocoding
     dumper: wkt
     delta_handling: default
     failure:

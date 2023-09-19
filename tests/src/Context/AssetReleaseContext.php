@@ -198,17 +198,12 @@ class AssetReleaseContext extends RawDrupalContext {
       return;
     }
 
-    // Since we might be cleaning up many releases, temporarily disable the
-    // feature to commit the index after every query.
-    $this->disableCommitOnUpdate();
-
     // Remove any asset_releases that were created.
     foreach ($this->assetReleases as $asset_release) {
       $asset_release->skip_notification = TRUE;
       $asset_release->delete();
     }
     $this->assetReleases = [];
-    $this->enableCommitOnUpdate();
   }
 
   /**
@@ -292,7 +287,7 @@ class AssetReleaseContext extends RawDrupalContext {
       $releases[] = $title['release'];
     }
 
-    $release_titles = $this->getSession()->getPage()->findAll('css', '.timeline__release > .timeline__release-content > .timeline__meta > h2.timeline__release-title');
+    $release_titles = $this->getSession()->getPage()->findAll('css', '.releases__item h2.releases__item-title > a');
     if (count($release_titles) != count($releases)) {
       throw new \Exception("Wrong number of releases found.");
     }
@@ -333,7 +328,7 @@ class AssetReleaseContext extends RawDrupalContext {
     $name_with_version = $release->label() . " " . $release_version;
 
     $latest_release = reset($latest_releases);
-    if ($latest_release->find('css', '.timeline__release-title')->getText() !== $name_with_version) {
+    if ($latest_release->find('css', '.releases__item-title')->getText() !== $name_with_version) {
       throw new \Exception("{$release->label()} is not marked as the latest release.");
     }
   }

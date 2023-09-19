@@ -26,12 +26,12 @@ dependencies:
     - field.field.node.event.field_state
     - field.field.node.event.field_topic
     - field.field.node.event.og_audience
-    - image.style.horizontal_medium_image
     - node.type.event
+    - responsive_image.styles.tile
   module:
     - datetime_range
-    - image
-    - smart_trim
+    - joinup_html_stripper
+    - responsive_image
     - template_suggestion
     - user
 id: node.event.view_mode_tile
@@ -40,23 +40,13 @@ bundle: event
 mode: view_mode_tile
 content:
   body:
-    type: smart_trim
+    type: joinup_html_stripper_stripped
     label: hidden
     settings:
-      trim_length: 50
-      trim_type: chars
-      trim_suffix: …
-      wrap_output: false
-      wrap_class: trimmed
-      more_link: false
-      more_class: more-link
-      more_text: More
-      summary_handler: trim
-      trim_options:
-        text: false
+      trim_length: 600
     third_party_settings:
       template_suggestion:
-        template_suggestion: ''
+        template_suggestion: bare
     weight: 2
     region: content
   field_event_date:
@@ -65,30 +55,30 @@ content:
     settings:
       timezone_override: ''
       format_type: date_only
+      fromto: start_date
       separator: '-'
     third_party_settings:
       template_suggestion:
         template_suggestion: ''
-    weight: 3
-    region: content
-  field_event_logo:
-    type: image
-    label: hidden
-    settings:
-      image_link: content
-      image_style: horizontal_medium_image
-      image_loading:
-        attribute: lazy
-    third_party_settings: {  }
     weight: 1
     region: content
-  field_short_title:
-    type: string
+  field_event_logo:
+    type: responsive_image
     label: hidden
     settings:
-      link_to_entity: false
-    third_party_settings: {  }
+      responsive_image_style: tile
+      image_link: ''
+      image_loading:
+        attribute: eager
+    third_party_settings:
+      template_suggestion:
+        template_suggestion: bare
     weight: 0
+    region: content
+  flag_like_node:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 10
     region: content
 hidden:
   featured: true
@@ -106,6 +96,7 @@ hidden:
   field_organisation_type: true
   field_scope: true
   field_shared_in: true
+  field_short_title: true
   field_site_featured: true
   field_state: true
   field_topic: true

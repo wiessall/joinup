@@ -1,0 +1,31 @@
+{#
+/**
+ * @file
+ * Template to render the social media icons of a user.
+ *
+ * Available variables:
+ * - url: the link URL.
+ * - name: the name of the platform.
+ * - id: the id of the icon to be used in the sprite. Except for slideshare whose id is 'person-workspace', id is expected to be the same as name
+ *
+ * @ingroup themeable
+ */
+#}
+{% set classes = [
+  'list-unstyled',
+  'd-flex',
+  'justify-content-center',
+  'mt-3'
+  ]
+%}
+<ul{{ attributes.addClass(classes) }}>
+  {% for platform in platforms %}
+    <li class="mx-2">
+      <a href="{{ platform.url }}" target="_blank" rel="noopener" class="text-light" title="{{ platform.name }}">
+        <svg class="bi icon--m">
+          <use xlink:href="{{ bcl_icon_path }}#{{ platform.id is same as 'slideshare' ? 'person-workspace' : platform.id }}"></use>
+        </svg>
+      </a>
+    </li>
+  {% endfor %}
+</ul>

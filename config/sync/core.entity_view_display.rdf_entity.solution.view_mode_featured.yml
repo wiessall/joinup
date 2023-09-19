@@ -6,7 +6,6 @@ dependencies:
     - core.entity_view_mode.rdf_entity.view_mode_featured
     - field.field.rdf_entity.solution.field_is_actor
     - field.field.rdf_entity.solution.field_is_affiliations_requests
-    - field.field.rdf_entity.solution.field_is_banner
     - field.field.rdf_entity.solution.field_is_business_process
     - field.field.rdf_entity.solution.field_is_contact_information
     - field.field.rdf_entity.solution.field_is_content
@@ -48,8 +47,8 @@ dependencies:
     - image.style.vertical_medium_image
     - rdf_entity.rdfentity.solution
   module:
-    - image
     - smart_trim
+    - svg_image
     - template_suggestion
     - user
 id: rdf_entity.solution.view_mode_featured
@@ -60,7 +59,7 @@ content:
   download_total:
     settings: {  }
     third_party_settings: {  }
-    weight: 4
+    weight: 3
     region: content
   field_is_description:
     type: smart_trim
@@ -71,16 +70,20 @@ content:
       trim_suffix: …
       wrap_output: false
       wrap_class: trimmed
-      more_link: false
-      more_class: more-link
-      more_text: More
+      more:
+        display_link: false
+        target_blank: false
+        link_trim_only: false
+        class: more-link
+        text: More
+        aria_label: 'Read more about [node:title]'
       summary_handler: full
       trim_options:
         text: false
     third_party_settings:
       template_suggestion:
         template_suggestion: ''
-    weight: 3
+    weight: 2
     region: content
   field_is_logo:
     type: image
@@ -90,8 +93,12 @@ content:
       image_style: vertical_medium_image
       image_loading:
         attribute: lazy
+      svg_attributes:
+        width: null
+        height: null
+      svg_render_as_image: true
     third_party_settings: {  }
-    weight: 2
+    weight: 1
     region: content
   label:
     type: string
@@ -99,7 +106,7 @@ content:
     settings:
       link_to_entity: true
     third_party_settings: {  }
-    weight: 1
+    weight: 0
     region: content
 hidden:
   changed: true
@@ -109,7 +116,6 @@ hidden:
   featured: true
   field_is_actor: true
   field_is_affiliations_requests: true
-  field_is_banner: true
   field_is_business_process: true
   field_is_contact_information: true
   field_is_content: true
@@ -146,11 +152,12 @@ hidden:
   field_spatial_coverage: true
   field_status: true
   field_topic: true
+  flag_like_rdf_entity: true
   langcode: true
   og_group: true
   pinned_in: true
-  rdf_entity_field_is_content_inline_facets: true
-  rdf_entity_field_is_content_top: true
+  rdf_entity_solution_field_is_content_inline_facets: true
+  rdf_entity_solution_field_is_content_top: true
   read_more: true
   related_solution: true
   related_solutions: true

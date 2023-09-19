@@ -27,8 +27,9 @@ dependencies:
     - field.field.node.event.field_topic
     - field.field.node.event.og_audience
     - node.type.event
-    - responsive_image.styles.iop_carousel
+    - responsive_image.styles.tile
   module:
+    - datetime_range
     - layout_builder
     - responsive_image
     - template_suggestion
@@ -50,16 +51,36 @@ content:
     third_party_settings: {  }
     weight: 0
     region: content
+  field_event_date:
+    type: daterange_default
+    label: hidden
+    settings:
+      timezone_override: ''
+      format_type: date_only
+      fromto: start_date
+      separator: '-'
+    third_party_settings:
+      template_suggestion:
+        template_suggestion: ''
+    weight: 2
+    region: content
   field_event_logo:
     type: responsive_image
     label: hidden
     settings:
-      responsive_image_style: iop_carousel
+      responsive_image_style: tile
       image_link: ''
+      image_loading:
+        attribute: eager
     third_party_settings:
       template_suggestion:
         template_suggestion: ''
     weight: 1
+    region: content
+  flag_like_node:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 3
     region: content
 hidden:
   featured: true
@@ -68,7 +89,6 @@ hidden:
   field_event_agenda: true
   field_event_contact_email: true
   field_event_coordinates: true
-  field_event_date: true
   field_event_online_location: true
   field_event_spatial_coverage: true
   field_event_web_url: true

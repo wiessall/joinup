@@ -2,25 +2,25 @@
 
 /**
  * @file
- * Provides functionality for the Ventuno helper module.
+ * Hook implementations for Ventuno Helper module.
  */
 
 declare(strict_types = 1);
 
-use Drupal\bootstrap4_modal\Ajax\CloseBootstrap4ModalDialogCommand;
-
 /**
- * Implements hook_ajax_render_alter().
+ * Implements hook_link_alter().
  */
-function ventuno_helper_ajax_render_alter(array &$data): void {
-  if (\Drupal::theme()->getActiveTheme()->getName() === 'ventuno') {
-    foreach ($data as $key => $command) {
-      if ($command['command'] === 'closeDialog') {
-        unset($data[$key]);
-        $bootstrap_command = new CloseBootstrap4ModalDialogCommand();
-        $data[] = $bootstrap_command->render();
-        break;
-      }
+function ventuno_helper_link_alter(array &$variables): void {
+  // @see \Drupal\asset_distribution\Plugin\Field\FieldFormatter\TrackedHostedFileDownloadFormatter::viewElements()
+  if (array_key_exists('data-joinup-tracking', $variables['options']['attributes'])) {
+    $variables['options']['attributes']['class'][] = 'btn';
+    $variables['options']['attributes']['class'][] = 'btn-outline-primary';
+  }
+  // @see collection_rdf_entity_view()
+  if (array_key_exists('data-drupal-group-view-mode', $variables['options']['attributes'])) {
+    if ($variables['options']['attributes']['data-drupal-group-view-mode'] === 'explore_item') {
+      $variables['options']['attributes']['class'][] = 'btn';
+      $variables['options']['attributes']['class'][] = 'btn-secondary';
     }
   }
 }

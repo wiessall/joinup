@@ -12,11 +12,11 @@ dependencies:
     - field.field.node.document.field_file
     - field.field.node.document.field_keywords
     - field.field.node.document.field_licence
-    - field.field.node.document.field_topic
     - field.field.node.document.field_shared_in
     - field.field.node.document.field_short_title
     - field.field.node.document.field_site_featured
     - field.field.node.document.field_state
+    - field.field.node.document.field_topic
     - field.field.node.document.field_type
     - field.field.node.document.og_audience
     - node.type.document
@@ -42,9 +42,13 @@ content:
       trim_suffix: …
       wrap_output: false
       wrap_class: trimmed
-      more_link: false
-      more_class: more-link
-      more_text: More
+      more:
+        display_link: false
+        target_blank: false
+        link_trim_only: false
+        class: more-link
+        text: More
+        aria_label: 'Read more about [node:title]'
       summary_handler: trim
       trim_options:
         text: false
@@ -92,6 +96,7 @@ hidden:
   field_site_featured: true
   field_state: true
   field_topic: true
+  flag_like_node: true
   langcode: true
   links: true
   og_audience: true

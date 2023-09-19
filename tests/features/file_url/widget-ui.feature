@@ -37,3 +37,19 @@ Feature: User interface for the File URL field
     And I should see the description "This must be an external URL such as http://example.com." for "Upload a new file or enter a URL"
     But the following field should not be visible "Choose a file"
     And I should not see the text "Allowed types: txt doc docx pdf."
+
+  Scenario: User should be able to remove entity even document's entities do not exist
+    Given the following collections:
+      | title            | state     |
+      | Regression tests | validated |
+    And the following solutions:
+      | title                      | documentation | state     | collection       |
+      | Solution without documents | text.pdf      | validated | Regression tests |
+    And I delete documents from "Solution without documents" solution
+
+    Given I am logged in as a moderator
+    When I go to the edit form of the "Solution without documents" solution
+    Then the response status code should be 200
+    When I click "Delete"
+    And I press "Delete"
+    Then the response status code should be 200

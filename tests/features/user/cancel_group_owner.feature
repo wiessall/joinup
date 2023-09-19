@@ -54,7 +54,7 @@ Feature:
     # Use the user profile.
     When I go to "/admin/people"
     And I click "Hazel Olson"
-    And I click "Edit" in the "Header" region
+    And I click "Edit" in the "Entity actions" region
     And I click "Cancel account"
     Then I should not see the following lines of text:
       | This action cannot be undone.                |
@@ -71,7 +71,7 @@ Feature:
     # User tries to delete its own account.
     Given I am logged in as "Hazel Olson"
     And I visit "/user"
-    And I click "Edit" in the "Header" region
+    And I click "Edit" in the "Entity actions" region
     And I click "Cancel account"
     Then I should see the heading "Cancel account"
     Then I should see the following lines of text:

@@ -9,7 +9,7 @@ Feature: Collections/Solutions settings
       | name       | type    |
       | Jonny inc. | Company |
 
-  @terms @uploadFiles:logo.png,banner.jpg
+  @terms @uploadFiles:logo.png
   Scenario: Edit settings in a collection
     Given the following owner:
       | name            | type                    |
@@ -18,8 +18,8 @@ Feature: Collections/Solutions settings
       | name  | Chico editorial             |
       | email | chico.editorial@example.com |
     And collections:
-      | title             | logo     | banner     | abstract                                    | access url        | closed | creation date    | description                     | content creation         | moderation | topic             | owner         | contact information  | state     |
-      | Jillian Land Eels | logo.png | banner.jpg | Read up on all about <strong>spice</strong> | http://spice.com/ | yes    | 28-01-1995 12:05 | The spice elegance personified. | facilitators and authors | yes        | Supplier exchange | Chico example | Chico editorial      | validated |
+      | title             | logo     | abstract                                    | access url        | closed | creation date    | description                     | content creation         | moderation | topic             | owner         | contact information  | state     |
+      | Jillian Land Eels | logo.png | Read up on all about <strong>spice</strong> | http://spice.com/ | yes    | 28-01-1995 12:05 | The spice elegance personified. | facilitators and authors | yes        | Supplier exchange | Chico example | Chico editorial      | validated |
     When I am logged in as a owner of the "Jillian Land Eels" collection
     And I go to the homepage of the "Jillian Land Eels" collection
     And I should not see the link "Settings" in the "Entity actions" region
@@ -53,7 +53,6 @@ Feature: Collections/Solutions settings
       | Name           | Jony Burton        |
       | E-mail address | jonb@example.com   |
     And I attach the file "logo.png" to "Logo"
-    And I attach the file "banner.jpg" to "Banner"
     And I fill in "Language" with "http://publications.europa.eu/resource/authority/language/VLS"
     And I select "EU and European Policies" from "Topic"
     And I select "Citizen" from "Solution type"
@@ -117,8 +116,6 @@ Feature: Collections/Solutions settings
     And I should see the link "Settings" in the "Entity actions" region
     And I click "Settings" in the "Entity actions" region
     But I should not see the text "Announcements enabled"
-    Then I go to the homepage of the "Klop mirubes" solution
-    And I should not see the link "Settings" in the "Entity actions" region
 
     Given I am logged in as a moderator
     When I go to the "Rally fanatics" collection

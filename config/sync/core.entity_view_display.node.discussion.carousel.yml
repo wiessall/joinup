@@ -6,6 +6,7 @@ dependencies:
     - core.entity_view_mode.node.carousel
     - field.field.node.discussion.body
     - field.field.node.discussion.field_attachment
+    - field.field.node.discussion.field_discussion_logo
     - field.field.node.discussion.field_keywords
     - field.field.node.discussion.field_replies
     - field.field.node.discussion.field_shared_in
@@ -47,9 +48,15 @@ content:
         template_suggestion: comma_separated
     weight: 1
     region: content
+  flag_like_node:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 2
+    region: content
 hidden:
   featured: true
   field_attachment: true
+  field_discussion_logo: true
   field_keywords: true
   field_replies: true
   field_shared_in: true
@@ -58,6 +65,7 @@ hidden:
   flag_subscribe_discussions: true
   invite_link: true
   langcode: true
+  latest_update_time: true
   links: true
   og_audience: true
   pinned_in: true

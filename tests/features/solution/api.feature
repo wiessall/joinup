@@ -16,7 +16,6 @@ Feature: Solution API
       | collection       | Solution API foo                     |
       | description      | A sample solution                    |
       | logo             | logo.png                             |
-      | banner           | banner.jpg                           |
       | documentation    | text.pdf                             |
       | content creation | registered users                     |
       | landing page     | http://foo-example.com/landing       |
@@ -53,7 +52,7 @@ Feature: Solution API
     Then I should have 1 solution
     And the "Inflatable rooster" solution should be affiliated with the "Inflatable mascots" collection
 
-  @terms @uploadFiles:logo.png,banner.jpg
+  @terms @uploadFiles:logo.png
   Scenario: Assign ownership during creation of solutions through UI
     Given the following owner:
       | name      | type            |
@@ -64,7 +63,6 @@ Feature: Solution API
     And the following collection:
       | title            | This is a klm collection |
       | logo             | logo.png                 |
-      | banner           | banner.jpg               |
       | moderation       | no                       |
       | closed           | no                       |
       | content creation | facilitators and authors |
@@ -85,7 +83,6 @@ Feature: Solution API
       | Name           | Gopheadow                                    |
       | E-mail address | solutionAPI@example.com                      |
     And I attach the file "logo.png" to "Logo"
-    And I attach the file "banner.jpg" to "Banner"
     And I press "Add existing" at the "Owner" field
     # Then I wait for AJAX to finish
     And I fill in "Owner" with "Leechidna"

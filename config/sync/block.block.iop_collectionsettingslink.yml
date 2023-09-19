@@ -10,7 +10,7 @@ dependencies:
 id: iop_collectionsettingslink
 theme: iop
 region: content
-weight: -21
+weight: -16
 provider: null
 plugin: collection_settings_link
 settings:
@@ -24,4 +24,4 @@ visibility:
     negate: false
     context_mapping: {  }
     routes:
-      - collection.glossary_page
+      - entity.rdf_entity.glossary

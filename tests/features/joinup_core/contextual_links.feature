@@ -34,7 +34,6 @@ Feature:
     And I go to the homepage of the "Revisions collection" collection
     Then I should not see the link "Revisions" in the "Entity actions" region
 
-  @javascript
   Scenario: Only solutions should have the share contextual link available.
     Given collection:
       | title | Share collection |
@@ -55,7 +54,7 @@ Feature:
     When I am logged in as a user with the "moderator" role
     And I go to the "Share solution" solution
     And I click "About"
-    Then I should not see the contextual link "Share"
+    Then I should see the contextual link "Share"
 
     And I visit the collection overview
     Then I should not see the contextual link "Share"

@@ -5,6 +5,8 @@ dependencies:
   config:
     - field.field.meta_entity.collection_settings.announcements_enabled
     - field.field.meta_entity.collection_settings.glossary_link_only_first
+    - field.field.meta_entity.collection_settings.landing_page
+    - field.field.meta_entity.collection_settings.metadata_banner_disabled
     - meta_entity.type.collection_settings
 id: meta_entity.collection_settings.default
 targetEntityType: meta_entity
@@ -28,6 +30,15 @@ content:
       date_format: medium
       custom_date_format: ''
       timezone: ''
+      tooltip:
+        date_format: ''
+        custom_date_format: ''
+      time_diff:
+        enabled: false
+        future_format: '@interval hence'
+        past_format: '@interval ago'
+        granularity: 2
+        refresh: 60
     third_party_settings: {  }
     weight: 22
     region: content
@@ -38,6 +49,15 @@ content:
       date_format: medium
       custom_date_format: ''
       timezone: ''
+      tooltip:
+        date_format: ''
+        custom_date_format: ''
+      time_diff:
+        enabled: false
+        future_format: '@interval hence'
+        past_format: '@interval ago'
+        granularity: 2
+        refresh: 60
     third_party_settings: {  }
     weight: 20
     region: content
@@ -58,6 +78,16 @@ content:
       link_to_entity: false
     third_party_settings: {  }
     weight: -5
+    region: content
+  metadata_banner_disabled:
+    type: boolean
+    label: above
+    settings:
+      format: default
+      format_custom_false: ''
+      format_custom_true: ''
+    third_party_settings: {  }
+    weight: 25
     region: content
 hidden:
   landing_page: true

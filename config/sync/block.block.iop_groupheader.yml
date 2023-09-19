@@ -1,6 +1,6 @@
 uuid: 827fb1fa-ed46-471b-91f7-38cd7bf59bf1
 langcode: en
-status: true
+status: false
 dependencies:
   module:
     - joinup
@@ -13,7 +13,7 @@ _core:
 id: iop_groupheader
 theme: iop
 region: featured
-weight: -21
+weight: -17
 provider: null
 plugin: group_header_block
 settings:

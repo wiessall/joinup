@@ -44,7 +44,7 @@ filters:
     status: true
     weight: -49
     settings:
-      allowed_html: '<a href hreflang> <p>'
+      allowed_html: '<a href hreflang> <p> <strong> <em> <u> <ul> <li> <ol>'
       filter_html_help: false
       filter_html_nofollow: false
   filter_autop:
@@ -94,6 +94,7 @@ filters:
         joinup_ec_video: 0
         internal_path: 0
         google_docs: 0
+        joinup_ec_webcast_video: 0
         prezi: 0
         slideshare: 0
         vimeo: 0
@@ -113,4 +114,10 @@ filters:
     provider: video_embed_wysiwyg
     status: false
     weight: -39
+    settings: {  }
+  filter_image_lazy_load:
+    id: filter_image_lazy_load
+    provider: filter
+    status: true
+    weight: -46
     settings: {  }

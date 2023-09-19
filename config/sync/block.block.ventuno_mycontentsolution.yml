@@ -6,14 +6,15 @@ dependencies:
     - facets.facet.solution_my_content
   module:
     - facets
+    - system
   theme:
     - ventuno
 _core:
   default_config_hash: 4kmIiw6gImpiApek0WfYh1_nUGT94-3fbLPXvH_ClaM
 id: ventuno_mycontentsolution
 theme: ventuno
-region: sidebar
-weight: -15
+region: content
+weight: -14
 provider: null
 plugin: 'facet_block:solution_my_content'
 settings:
@@ -21,5 +22,10 @@ settings:
   label: 'Solutions - My content'
   label_display: '0'
   provider: facets
-  block_id: mycontentsolution
-visibility: {  }
+  context_mapping: {  }
+  block_id: ventuno_mycontentsolution
+visibility:
+  request_path:
+    id: request_path
+    negate: false
+    pages: /solutions

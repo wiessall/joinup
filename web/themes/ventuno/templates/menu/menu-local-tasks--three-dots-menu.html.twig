@@ -1,0 +1,51 @@
+{#
+/**
+ * @file
+ * Theme override to display primary and secondary local tasks.
+ *
+ * Available variables:
+ * - primary: HTML list items representing primary tasks.
+ * - secondary: HTML list items representing primary tasks.
+ *
+ * Each item in these variables (primary and secondary) can be individually
+ * themed in menu-local-task.html.twig.
+ *
+ * @see joinup_core_theme_suggestions_alter()
+ *
+ * @ingroup themeable
+ */
+#}
+{% if primary %}
+  <button type="button" id="local-tasks-primary" data-bs-toggle="dropdown" aria-expanded="false" class="dropdown-toggle btn btn-outline-warning btn-lg rounded-circle p-0 actions-menu__btn" title="{{ 'Show primary options'|t }}">
+    <svg class="bi icon--m">
+      <use xlink:href="{{ bcl_icon_path }}#three-dots"></use>
+    </svg>
+  </button>
+  <div class="dropdown-menu dropdown-menu-end">
+    <nav class="nav nav-pills flex-column" aria-labelledby="local-tasks-primary" class="dropdown-menu">
+      <h2 class="visually-hidden">{{ 'Primary tabs'|t }}</h2>
+      {{ pattern('navigation', {
+        'variant': 'pills',
+        'orientation': 'vertical',
+        'items': primary,
+      }) }}
+    </nav>
+  </div>
+{% endif %}
+{% if secondary %}
+  <button type="button" id="local-tasks-secondary" data-bs-toggle="dropdown" aria-expanded="false" class="dropdown-toggle btn btn-outline-warning btn-lg rounded-circle p-0 actions-menu__btn" title="{{ 'Show secondary options'|t }}">
+    <svg class="bi icon--m">
+      <use xlink:href="{{ bcl_icon_path }}#three-dots"></use>
+    </svg>
+  </button>
+  <div class="dropdown-menu dropdown-menu-end">
+    <nav class="nav nav-pills flex-column" aria-labelledby="local-tasks-secondary" class="dropdown-menu">
+      <h2 class="visually-hidden">{{ 'Secondary tabs'|t }}</h2>
+      {{ pattern('navigation', {
+        'variant': 'pills',
+        'orientation': 'vertical',
+        'items': secondary,
+      }) }}
+    </nav>
+  </div>
+{% endif %}

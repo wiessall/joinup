@@ -6,16 +6,19 @@ dependencies:
     - core.entity_view_mode.node.view_mode_tile
     - field.field.node.discussion.body
     - field.field.node.discussion.field_attachment
+    - field.field.node.discussion.field_discussion_logo
     - field.field.node.discussion.field_keywords
-    - field.field.node.discussion.field_topic
     - field.field.node.discussion.field_replies
     - field.field.node.discussion.field_shared_in
     - field.field.node.discussion.field_site_featured
     - field.field.node.discussion.field_state
+    - field.field.node.discussion.field_topic
     - field.field.node.discussion.og_audience
     - node.type.discussion
+    - responsive_image.styles.tile
   module:
-    - smart_trim
+    - joinup_html_stripper
+    - responsive_image
     - template_suggestion
     - user
 _core:
@@ -26,56 +29,46 @@ bundle: discussion
 mode: view_mode_tile
 content:
   body:
-    type: smart_trim
+    type: joinup_html_stripper_stripped
     label: hidden
     settings:
-      trim_length: 200
-      trim_type: chars
-      trim_suffix: …
-      wrap_output: false
-      wrap_class: trimmed
-      more_link: false
-      more_class: more-link
-      more_text: More
-      summary_handler: trim
-      trim_options:
-        text: true
-        trim_zero: false
+      trim_length: 600
     third_party_settings:
       template_suggestion:
-        template_suggestion: ''
+        template_suggestion: bare
     weight: 1
     region: content
-  field_keywords:
-    type: string
+  field_discussion_logo:
+    type: responsive_image
     label: hidden
     settings:
-      link_to_entity: false
+      responsive_image_style: tile
+      image_link: ''
+      image_loading:
+        attribute: eager
     third_party_settings:
       template_suggestion:
-        template_suggestion: comma_separated
-    weight: 2
-    region: content
-  field_topic:
-    type: entity_reference_label
-    label: hidden
-    settings:
-      link: false
-    third_party_settings:
-      template_suggestion:
-        template_suggestion: comma_separated
+        template_suggestion: bare
     weight: 0
+    region: content
+  flag_like_node:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 10
     region: content
 hidden:
   featured: true
   field_attachment: true
+  field_keywords: true
   field_replies: true
   field_shared_in: true
   field_site_featured: true
   field_state: true
+  field_topic: true
   flag_subscribe_discussions: true
   invite_link: true
   langcode: true
+  latest_update_time: true
   links: true
   og_audience: true
   pinned_in: true

@@ -6,7 +6,6 @@ dependencies:
     - field.field.rdf_entity.collection.field_ar_abstract
     - field.field.rdf_entity.collection.field_ar_access_url
     - field.field.rdf_entity.collection.field_ar_affiliates
-    - field.field.rdf_entity.collection.field_ar_banner
     - field.field.rdf_entity.collection.field_ar_closed
     - field.field.rdf_entity.collection.field_ar_contact_information
     - field.field.rdf_entity.collection.field_ar_content_creation
@@ -18,10 +17,10 @@ dependencies:
     - field.field.rdf_entity.collection.field_collection_content
     - field.field.rdf_entity.collection.field_keywords
     - field.field.rdf_entity.collection.field_newsletter
-    - field.field.rdf_entity.collection.field_topic
     - field.field.rdf_entity.collection.field_short_id
     - field.field.rdf_entity.collection.field_site_featured
     - field.field.rdf_entity.collection.field_spatial_coverage
+    - field.field.rdf_entity.collection.field_topic
     - rdf_entity.rdfentity.collection
   module:
     - field_group
@@ -64,9 +63,13 @@ content:
       trim_suffix: …
       wrap_output: false
       wrap_class: trimmed
-      more_link: false
-      more_class: more-link
-      more_text: More
+      more:
+        display_link: false
+        target_blank: false
+        link_trim_only: false
+        class: more-link
+        text: More
+        aria_label: 'Read more about [node:title]'
       summary_handler: full
       trim_options:
         text: false
@@ -85,9 +88,13 @@ content:
       trim_suffix: …
       wrap_output: false
       wrap_class: trimmed
-      more_link: false
-      more_class: more-link
-      more_text: More
+      more:
+        display_link: false
+        target_blank: false
+        link_trim_only: false
+        class: more-link
+        text: More
+        aria_label: 'Read more about [node:title]'
       summary_handler: full
       trim_options:
         text: true
@@ -109,15 +116,17 @@ content:
     label: hidden
     settings:
       link_to_entity: false
-    third_party_settings: {  }
+    third_party_settings:
+      template_suggestion:
+        template_suggestion: bare
     weight: 0
     region: content
-  rdf_entity_field_collection_content_inline_facets:
+  rdf_entity_collection_field_collection_content_inline_facets:
     settings: {  }
     third_party_settings: {  }
     weight: 3
     region: content
-  rdf_entity_field_collection_content_top:
+  rdf_entity_collection_field_collection_content_top:
     settings: {  }
     third_party_settings: {  }
     weight: 2
@@ -133,7 +142,6 @@ hidden:
   featured: true
   field_ar_access_url: true
   field_ar_affiliates: true
-  field_ar_banner: true
   field_ar_closed: true
   field_ar_contact_information: true
   field_ar_content_creation: true

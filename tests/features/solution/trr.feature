@@ -77,7 +77,7 @@ Feature: Creating a test (solution) in the TRR collection.
     When I go to the homepage of the "Friends of the test repository" collection
     And I open the plus button menu
     And I click "Add solution"
-    And I check the "I have read and accept the legal notice and I commit to manage my solution on a regular basis." material checkbox
+    And I check "I have read and accept the legal notice and I commit to manage my solution on a regular basis."
     And I press "Yes"
     And I should see the text "Add solution"
 
@@ -123,7 +123,7 @@ Feature: Creating a test (solution) in the TRR collection.
     When I select "Test Suite" from "Test resource type"
     And I press "Propose"
     Then I should see the error message 'Test resource type should be either "Test Bed", "Messaging Adapter" or "Document Validator" when solution type is set to "Test service" or "Conformance Testing Component".'
-    When I select "Test Scenario" from "Solution type"
+    When I select "Conformance Test Scenario" from "Solution type"
     And I select "Messaging Adapter" from "Test resource type"
     And  I select "Agent" from "Actor"
     And I fill in "Business process" with "Notification Of Failure"

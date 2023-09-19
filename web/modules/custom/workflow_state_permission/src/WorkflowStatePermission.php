@@ -38,7 +38,10 @@ class WorkflowStatePermission implements WorkflowStatePermissionInterface {
       /** @var \Drupal\workflow_state_permission\WorkflowStatePermissionPluginInterface $plugin */
       $plugin = $this->pluginManager->createInstance($definition['id']);
       if ($plugin->applies($entity)) {
-        $result = ($to_state !== '__new__') && $plugin->isStateUpdatePermitted($account, $entity, $workflow, $from_state, $to_state);
+        // The "$form_state === 'archived'" check is to allow the transition
+        // from archived to '__new__' which is a fake transition that mainly
+        // reverts the entity to the previous revision.
+        $result = ($to_state !== '__new__' || $from_state === 'archived') && $plugin->isStateUpdatePermitted($account, $entity, $workflow, $from_state, $to_state);
         // Stop iterating as soon as any plugin denies access.
         if (!$result) {
           return FALSE;

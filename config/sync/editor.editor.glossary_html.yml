@@ -26,8 +26,16 @@ settings:
             - DrupalLink
             - DrupalUnlink
         -
+          name: Formatting
+          items:
+            - Bold
+            - Italic
+            - Underline
+        -
           name: Tools
           items:
+            - BulletedList
+            - NumberedList
             - Source
   plugins:
     drupallink:

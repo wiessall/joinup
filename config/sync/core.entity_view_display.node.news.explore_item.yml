@@ -70,6 +70,15 @@ third_party_settings:
                   date_format: custom
                   custom_date_format: d/m/Y
                   timezone: ''
+                  tooltip:
+                    date_format: ''
+                    custom_date_format: ''
+                  time_diff:
+                    enabled: false
+                    future_format: '@interval hence'
+                    past_format: '@interval ago'
+                    granularity: 2
+                    refresh: 60
                 third_party_settings:
                   template_suggestion:
                     template_suggestion: ''
@@ -153,6 +162,11 @@ content:
     third_party_settings: {  }
     weight: 0
     region: content
+  flag_like_node:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 10
+    region: content
   published_at:
     type: timestamp
     label: hidden
@@ -160,6 +174,15 @@ content:
       date_format: custom
       custom_date_format: m/d/y
       timezone: ''
+      tooltip:
+        date_format: ''
+        custom_date_format: ''
+      time_diff:
+        enabled: false
+        future_format: '@interval hence'
+        past_format: '@interval ago'
+        granularity: 2
+        refresh: 60
     third_party_settings:
       template_suggestion:
         template_suggestion: ''

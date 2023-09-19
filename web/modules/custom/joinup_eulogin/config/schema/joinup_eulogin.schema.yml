@@ -19,8 +19,8 @@ joinup_eulogin.settings:
             type: string
             label: 'Ticket type'
         user_details:
-            type: boolean
-            label: 'Provide user details'
+          type: boolean
+          label: 'Provide user details'
     register_url:
       type: uri
       label: 'EU Login registration URL'

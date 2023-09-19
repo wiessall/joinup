@@ -26,7 +26,6 @@ Feature: About this solution
       | title               | Size exclusion chromatography                     |
       | description         | Separating molecules by size.                     |
       | logo                | logo.png                                          |
-      | banner              | banner.jpg                                        |
       | contact information | Ariel Lucile, "Maiken Bine, Peer Milla"           |
       | owner               | Nova Pharmaceuticals, Senatier                    |
       | state               | validated                                         |
@@ -55,7 +54,8 @@ Feature: About this solution
     Then I should see the text "Separating molecules by size."
 
     # The grey area for owner and contact information.
-    And I should see the text "Owner/Contact Information"
+    And I should see the heading "Owner"
+    And I should see the heading "Contact information"
 
     # Multiple owners.
     And I should see the text "Owner"
@@ -118,7 +118,7 @@ Feature: About this solution
     # A related solution which is not yet approved should not be visible.
     And I should not see the text "Protein"
 
-  @terms @javascript @email
+  @terms @javascript @email @uploadFiles:logo.png
   Scenario: About page contact form
     Given owner:
       | name      | type               |
@@ -170,7 +170,8 @@ Feature: About this solution
 
     Given I am not logged in
     When I go to the about page of "Six exclusion advantages"
-    Then I should see the text "Owner/Contact Information"
+    Then I should see the heading "Owner"
+    Then I should see the heading "Contact information"
     And I should see the link "Contact us" in the "Content" region
     # The field label is hidden.
     But I should not see "E-mail" in the "Content" region
@@ -178,16 +179,16 @@ Feature: About this solution
     When I click "Contact us" in the "Content" region
     Then a modal should open
     And I should see the text "Contact us" in the "Modal title" region
-    And I should see "Only signed in users can send a message. Please sign in or register an account on EU Login." in the "Modal content" region
+    And I should see the text "Only signed in users can send a message. Please sign in or register an account on EU Login."
 
     When I press "Cancel" in the "Modal buttons" region
     Then the modal should be closed
-    And I should not see "Only signed in users can send a message. Please sign in or register an account on EU Login."
+    And I should not see "Only signed in users can send a message. Please sign in or register an account on EU Login." in the "Content" region
 
     When I click "Contact us" in the "Content" region
     Then a modal should open
     And I should see the text "Contact us" in the "Modal title" region
-    And I should see "Only signed in users can send a message. Please sign in or register an account on EU Login." in the "Modal content" region
+    And I should see the text "Only signed in users can send a message. Please sign in or register an account on EU Login."
 
     When I press "Sign in / Register" in the "Modal buttons" region
     Then the modal should be closed
@@ -204,12 +205,13 @@ Feature: About this solution
     And I fill in "Your e-mail address" with "jonnyk"
     And I fill in "Subject" with "New reclamation about Owner"
     And I fill in "Message" with "This is reclamation test."
-    And I wait for the honeypot time limit to pass
     And I press "Send e-mail" in the "Modal buttons" region
     Then I should see the error message "You must enter a valid e-mail address."
 
     When I fill in "Your e-mail address" with "example@test.test"
-    And I wait for the honeypot time limit to pass
+    And I fill in "Organization" with "My organization"
+    And I select "Technical" from "Type of support"
+    And I attach the file "logo.png" to "Attachment"
     When I press "Send e-mail" in the "Modal buttons" region
     Then the modal should be closed
     And I should see the success message "Your message has been sent."
@@ -217,12 +219,16 @@ Feature: About this solution
     And I should see the heading "About Six exclusion advantages"
     And the email sent to "invisible.cat@xpto.com" with subject "New reclamation about Owner" contains the text:
       | Name: Jonny Example                |
+      | Organization: My organization      |
       | Email: example@test.test           |
+      | Type of support: Technical         |
       | Message: This is reclamation test. |
+    And the email sent to "invisible.cat@xpto.com" with subject "New reclamation about Owner" contains "logo.png" attachment
 
     Given I am logged in as "Pally Rapamichael"
     When I go to the about page of "Six exclusion advantages"
-    Then I should see the text "Owner/Contact Information"
+    Then I should see the heading "Owner"
+    Then I should see the heading "Contact information"
     And I should see the link "Contact us" in the "Content" region
 
     When I click "Contact us" in the "Content" region
@@ -231,8 +237,8 @@ Feature: About this solution
 
     When I fill in "Subject" with "New reclamation about solution"
     And I fill in "Message" with "This is solution reclamation test."
-    And I wait for the honeypot time limit to pass
-
+    And I fill in "Organization" with "This is organization."
+    And I select "Feedback/Suggestions" from "Type of support"
     When I press "Send e-mail" in the "Modal buttons" region
     Then the modal should be closed
     And I should see the success message "Your message has been sent."
@@ -241,6 +247,8 @@ Feature: About this solution
     And the email sent to "invisible.cat@xpto.com" with subject "New reclamation about solution" contains the text:
       | Name: Pally Rapamichael                     |
       | Email: p.papamichael@pally.de               |
+      | Organization: This is organization.         |
+      | Type of support: Feedback/Suggestions       |
       | Message: This is solution reclamation test. |
 
     Given I am logged in as a moderator
@@ -313,6 +321,110 @@ Feature: About this solution
     And I press "Update contact information"
     And I press "Publish"
     Then I should not see the success message "A new confirmation message has been sent to elise@nova.com."
+
+    When I go to "/collection/antibody-development/solution/six-exclusion-advantages/contact"
+    Then I should see the heading "Contact us"
+
+    When I go to the about page of "Six exclusion advantages"
+    Then I open the plus button menu
+    And I click "Add news"
+    When I fill in the following:
+      | Headline    | Some contact test |
+      | Short title | Some contact test |
+    And I select "Supplier exchange" from "Topic"
+    And I press the button "Contact us" in the "Content" wysiwyg editor
+    Then I press "Publish"
+
+    When I go to the "Some contact test" news
+    Then I should see the heading "Some contact test"
+    When I click "Contact us"
+    Then I should see the heading "Contact us"
+    Then I fill in "Your name" with "Lina Example"
+    And I fill in "Your e-mail address" with "linak@example.pt"
+    And I select "Other" from "Type of support"
+    And I fill in "Subject" with "New reclamation about Owner"
+    And I fill in "Message" with "This is reclamation test."
+    When I press "Send e-mail"
+    And I should see the success message "Your message has been sent."
+    Then I should see the heading "About Six exclusion advantages"
+    And I should be on "/collection/antibody-development/solution/six-exclusion-advantages/about"
+
+    When I am an anonymous user
+    Then I go to the "Some contact test" news
+    And I click "Contact us"
+    And I should see the heading "Sign in to continue"
+
+    When I fill in "E-mail address" with "iodine@ankh.am"
+    And I fill in "Password" with "10d1ne"
+    And I press "Log in"
+    And I should see the heading "Contact us"
+    Then I fill in "Your name" with "V Example"
+    And I fill in "Your e-mail address" with "vnak@example.pt"
+    And I select "Informational" from "Type of support"
+    And I fill in "Subject" with "v2 New reclamation about Owner"
+    And I fill in "Message" with "This is v2 reclamation test."
+    When I press "Send e-mail"
+    Then I should see the success message "Your message has been sent."
+    And I should see the heading "About Six exclusion advantages"
+
+    # Testing add contact us in existing content.
+    Given I am logged in as a moderator
+    When I go to the about page of "Six exclusion advantages"
+    And I click "Add custom page" in the plus button menu
+    And I fill in "Title" with "Some custom contact test"
+    And I select "Supplier exchange" from "Topic"
+    And I add a layout paragraph in the "Custom page body" form field with the following properties:
+      | layout           | one column |
+      | Background theme | light      |
+      | Extra classes    | test-class |
+    And I click "Choose component"
+    And I click "Text"
+    And the "Body" wysiwyg editor should have the buttons "Bold, Italic, Link, Unlink, Insert/Remove Bulleted List, Insert/Remove Numbered List, Contact us, Source"
+    And I press the button "Contact us" in the "Body" wysiwyg editor
+    And I press "Save" in the "Modal buttons" region
+    And I press "Save"
+    And I should see the heading "Some custom contact test"
+
+    When I go to the edit form of the "Some custom contact test" "custom page"
+    And I "edit" from the "Custom page body" field the child 1 paragraph of 1 layout
+    Then I should see the button "Contact us"
+
+    Then I go to the about page of "Six exclusion advantages"
+    Then I open the plus button menu
+    And I click "Add discussion"
+    And I fill in "Title" with "Some discussion contact test"
+    And I press the button "Contact us" in the "Content" wysiwyg editor
+    And I select "Statistics and Analysis" from "Topic"
+    And I press "Publish"
+    And I should see the heading "Some discussion contact test"
+
+    When I go to the edit form of the "Some discussion contact test" discussion
+    Then I should see the button "Contact us"
+
+    # HTML tags to be tested.
+
+    Given custom_page content:
+      | title                 | solution                 | state     |
+      | Some custom HTML test | Six exclusion advantages | published |
+    And I append "text" to "field_paragraphs_body" field in "node" entity with following "Some custom HTML test" title:
+      | field_body:value  | <p><strong>Lorem Ipsum</strong> is simply dummy text of the printing and typesetting industry.<br />Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</p><p>It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>      |
+      | field_body:format | text_html                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
+
+    Then I am logged in as a moderator
+    When I go to the "Six exclusion advantages" solution
+    And I should see the link "Some custom HTML test"
+    Then I click "Some custom HTML test"
+    And I should see the heading "Some custom HTML test"
+    And the page should contain the html text "<p><strong>Lorem Ipsum</strong> is simply dummy text of the printing and typesetting industry.<br>Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</p>"
+    And the page should contain the html text "<p>It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>"
+
+    Given I am an anonymous user
+    When I go to the "Six exclusion advantages" solution
+    And I should see the link "Some custom HTML test"
+    Then I click "Some custom HTML test"
+    And I should see the heading "Some custom HTML test"
+    And the page should contain the html text "<p><strong>Lorem Ipsum</strong> is simply dummy text of the printing and typesetting industry.<br>Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</p>"
+    And the page should contain the html text "<p>It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>"
 
     # These contact information have been created via UI.
     But I delete the "Invisible Cat" contact information

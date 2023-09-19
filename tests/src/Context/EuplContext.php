@@ -13,7 +13,6 @@ use Drupal\joinup\HtmlManipulator;
 use Drupal\joinup\Traits\ConfigReadOnlyTrait;
 use Drupal\joinup\Traits\EntityTrait;
 use Drupal\joinup\Traits\JavascriptTrait;
-use Drupal\joinup\Traits\MaterialDesignTrait;
 use Drupal\joinup_licence\Entity\CompatibilityDocument;
 use Drupal\node\Entity\Node;
 use Drupal\rdf_entity\Entity\Rdf;
@@ -28,7 +27,6 @@ class EuplContext extends RawDrupalContext {
   use ConfigReadOnlyTrait;
   use EntityTrait;
   use JavascriptTrait;
-  use MaterialDesignTrait;
 
   /**
    * Creates the standard 'EUPL' collection and several dependencies.
@@ -110,7 +108,7 @@ class EuplContext extends RawDrupalContext {
     // Wait for modal dialog to be ready.
     $page->waitFor(5, function (DocumentElement $page): ?NodeElement {
       // Open modal dialog has `style="display:block"`.
-      return $page->find('xpath', '//div[@style and contains(concat(" ", normalize-space(@class), " "), " modal-content ")]//button[@aria-label="Close"]');
+      return $page->find('xpath', '//div[@style and contains(concat(" ", normalize-space(@class), " "), " modal-dialog ")]//button[@aria-label="Close"]');
     });
   }
 
@@ -123,7 +121,7 @@ class EuplContext extends RawDrupalContext {
    * @Given I close the licence modal dialog
    */
   public function closeLicenceModalDialog(): void {
-    $xpath = '//div[@class and contains(concat(" ", normalize-space(@class), " "), " modal-content ")]//button[@aria-label="Close"]';
+    $xpath = '//div[@class and contains(concat(" ", normalize-space(@class), " "), " modal-dialog ")]//button[@aria-label="Close"]';
     $button = $this->getSession()->getPage()->find('xpath', $xpath);
     if (empty($button)) {
       throw new \Exception("Either the dialog is not available or the 'Close' button could not be located.");
@@ -143,7 +141,7 @@ class EuplContext extends RawDrupalContext {
    */
   public function assertLegalTypeTagsCategoriesAndOrder(string $spdx, TableNode $table): void {
     $expected = $table->getColumn(0);
-    $xpath = '//div[@data-joinup-spdx="' . $spdx . '"]//div[contains(concat(" ", normalize-space(@class), " "), " listing__inner-tile--wider ")]//span[contains(concat(" ", normalize-space(@class), " "), " licence-tile__label ")]';
+    $xpath = '//article[@data-joinup-spdx="' . $spdx . '"]//span[contains(concat(" ", normalize-space(@class), " "), " licence-tile__label badge ")]';
     $this->assertCategoriesAndOrder($xpath, $expected);
   }
 
@@ -219,12 +217,13 @@ class EuplContext extends RawDrupalContext {
    *   When the licence is not found on the page.
    */
   protected function toggleLicenceForComparison(bool $compare, string $spdx_id): void {
-    $licence = $this->findLicenceTile($spdx_id);
+    $checkbox = $this->findLicenceTile($spdx_id)->findField('Add to compare list');
+    $this->scrollElementIntoView($checkbox);
     if ($compare) {
-      $this->checkMaterialDesignField('Add to compare list', $licence);
+      $checkbox->check();
     }
     else {
-      $this->uncheckMaterialDesignField('Add to compare list', $licence);
+      $checkbox->uncheck();
     }
   }
 
@@ -242,34 +241,29 @@ class EuplContext extends RawDrupalContext {
    * @When I choose :spdx_id as the :label licence
    */
   public function selectRadioButtonForLicenceCompatibilityCheck(string $spdx_id, string $label): void {
-    assert(in_array($label, ['Inbound', 'Outbound']), 'The purpose should be either "Use" or "Distribute".');
-    $licence = $this->findLicenceTile($spdx_id);
-    $this->selectMaterialDesignRadioButton($label, $licence);
+    \assert(in_array($label, ['Inbound', 'Outbound']), 'The purpose should be either "Use" or "Distribute".');
+    $radio = $this->findLicenceTile($spdx_id)->findField($label);
+    $this->scrollElementIntoView($radio);
+    $radio->click();
   }
 
   /**
-   * Clicks a link in a licence tile.
+   * Presses a button in a licence tile.
    *
-   * @param string $link
-   *   The title of the link to click.
+   * @param string $label
+   *   The label of the button to press.
    * @param string $spdx_id
    *   The SPDX ID of the licence tile.
    *
    * @throws \Exception
-   *   Thrown when the licence tile or link is not found in the page.
+   *   Thrown when the licence tile or button are not found in the page.
    *
-   * @When I click :link in the :spdx_id licence tile
+   * @When I press :link in the :spdx_id licence tile
    */
-  public function clickLicenceTileLink(string $link, string $spdx_id): void {
-    $licence = $this->findLicenceTile($spdx_id);
-
-    if ($this->hasJavascriptSupport()) {
-      // On JS enabled browsers, scroll to the top before clicking the link
-      // since it might be obscured by the floating header.
-      $this->scrollToTop();
-    }
-
-    $licence->clickLink($link);
+  public function clickLicenceTileLink(string $label, string $spdx_id): void {
+    $button = $this->findLicenceTile($spdx_id)->findButton($label);
+    $this->scrollElementIntoView($button);
+    $button->press();
   }
 
   /**
@@ -282,7 +276,7 @@ class EuplContext extends RawDrupalContext {
    *
    * @throws \Exception
    *   When:
-   *   - No 'Compare' buttons were found in page.
+   *   - No buttons were found in page.
    *   - The expectancy is not satisfied.
    *
    * @Then the :label buttons are :status
@@ -292,24 +286,25 @@ class EuplContext extends RawDrupalContext {
     \assert(in_array($status, ['enabled', 'disabled']), 'The $status parameter should take one of the values "enabled" or "disabled" but "' . $status . '" was given.');
 
     $mapping = [
-      'Compare' => 'licence-tile__button--compare',
-      'Check compatibility' => 'licence-tile__button--compatible',
+      'Compare' => ['tag' => 'button', 'class' => 'jla-compare'],
+      'Check compatibility' => ['tag' => 'a', 'class' => 'jla-compatible'],
     ];
-    \assert(array_key_exists($label, $mapping), 'The label should be one of ' . implode(',', array_keys($mapping)) . ' but "' . $label . '" was given.');
+    \assert(array_key_exists($label, $mapping), 'The $label parameter should take one of the values "Compare" or "Check compatibility" but "' . $label . '" was given.');
 
     $page = $this->getSession()->getPage();
-    $xpath = '//a[text()="' . $label . '" and contains(concat(" ", normalize-space(@class), " "), " ' . $mapping[$label] . ' ")]';
+    $xpath = '//' . $mapping[$label]['tag'] . '[text()="' . $label . '" and contains(concat(" ", normalize-space(@class), " "), " ' . $mapping[$label]['class'] . ' ")]';
     $buttons = $page->findAll('xpath', $xpath);
     if (empty($buttons)) {
       throw new \Exception("No '$label' buttons found in the page.");
     }
+    $method = $mapping[$label]['tag'] === 'button' ? 'hasAttribute' : 'hasClass';
 
     /** @var \Behat\Mink\Element\NodeElement[] $buttons */
     foreach ($buttons as $button) {
-      if ($status === 'disabled' && !$button->hasClass('licence-tile__button--disabled')) {
+      if ($status === 'disabled' && !$button->{$method}('disabled')) {
         throw new \Exception("'$label' buttons should be disabled but are enabled.");
       }
-      elseif ($status === 'enabled' && $button->hasClass('licence-tile__button--disabled')) {
+      elseif ($status === 'enabled' && $button->{$method}('disabled')) {
         throw new \Exception("'$label' buttons should be enabled but are disabled.");
       }
     }
@@ -331,13 +326,12 @@ class EuplContext extends RawDrupalContext {
   public function assertLicenceCanBeCompared(string $spdx_id, string $can) {
     \assert(in_array($can, ['can', 'cannot']), 'The $can parameter should take one of the values "can" or "cannot" but "' . $can . '" was given.');
 
-    $licence = $this->findLicenceTile($spdx_id);
-    $checkbox = $licence->find('xpath', '//label[text()="Add to compare list"]/../..');
+    $checkbox = $this->findLicenceTile($spdx_id)->findField('Add to compare list');
 
-    if ($can === 'can' && $checkbox->hasClass('is-disabled')) {
+    if ($can === 'can' && $checkbox->hasAttribute('disabled')) {
       throw new \Exception("The licence '$spdx_id' should be allowed to be compared but is not.");
     }
-    elseif ($can === 'cannot' && !$checkbox->hasClass('is-disabled')) {
+    elseif ($can === 'cannot' && !$checkbox->hasAttribute('disabled')) {
       throw new \Exception("The licence '$spdx_id' shouldn't be allowed to be compared but it is.");
     }
   }
@@ -358,13 +352,12 @@ class EuplContext extends RawDrupalContext {
   public function assertLicenceChecked(string $spdx_id, string $checked) {
     \assert(in_array($checked, ['checked', 'unchecked']), 'The $checked parameter should take one of the values "checked" or "unchecked" but "' . $checked . '" was given.');
 
-    $licence = $this->findLicenceTile($spdx_id);
-    $checkbox = $licence->find('xpath', '//label[text()="Add to compare list"]/../..');
+    $checkbox = $this->findLicenceTile($spdx_id)->findField('Add to compare list');
 
-    if ($checked === 'checked' && !$checkbox->hasClass('is-checked')) {
+    if ($checked === 'checked' && !$checkbox->hasAttribute('checked')) {
       throw new \Exception("The licence '$spdx_id' should be checked but is not.");
     }
-    elseif ($checked === 'unchecked' && $checkbox->hasClass('is-checked')) {
+    elseif ($checked === 'unchecked' && $checkbox->hasAttribute('checked')) {
       throw new \Exception("The licence '$spdx_id' should not be checked but it is.");
     }
   }
@@ -439,8 +432,7 @@ class EuplContext extends RawDrupalContext {
    *   When the licence tile is not found on the page.
    */
   protected function findLicenceTile(string $spdx_id): NodeElement {
-    $this->scrollNamedElementIntoView('link', 'Check compatibility');
-    if ($licence = $this->getSession()->getPage()->find('css', 'div[data-joinup-spdx="' . $spdx_id . '"]')) {
+    if ($licence = $this->getSession()->getPage()->find('css', 'article[data-joinup-spdx="' . $spdx_id . '"]')) {
       return $licence;
     }
     throw new \Exception("Can't find the '$spdx_id' licence on the page.");

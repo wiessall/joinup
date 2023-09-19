@@ -59,8 +59,8 @@ Feature: SEO for news articles.
       | property  | value          |
       | @type     | GeoCoordinates |
       # Geo coordinates are hardcoded as offered by the service.
-      | latitude  | 45.82372       |
-      | longitude | 6.55121        |
+      | latitude  | 50.842291      |
+      | longitude | 4.370476       |
     And the following meta tags should available in the html:
       | identifier      | value                                                                      |
       | description     | Body of event.                                                             |

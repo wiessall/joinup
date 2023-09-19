@@ -18,8 +18,6 @@ Feature: Solutions message overview
       | Category       | other                                   |
       | Subject        | Ran out of gas                          |
       | Message        | Do you have 1 euro to buy a cheese pie? |
-    # We need to wait 5 seconds for the spam protection time limit to pass.
-    And I wait for the spam protection time limit to pass
     And I press "Submit"
     Then I should see the success message "Your message has been submitted. Thank you for your feedback."
 

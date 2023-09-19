@@ -62,6 +62,14 @@
  *   current user is a logged-in member.
  * - is_admin: Flag for admin user status. Will be true when the current user
  *   is an administrator.
+ * - image: The logo that has been set for the node, if any.
+ * - highlighted: Optional array containing an optional icon and a string
+ *   containing an very relevant information that will stand out in the tile.
+ * - info: An array containing an icon and a string with relevant information
+ *   to be displayed right above the title.
+ * - topics: Optional array containing the topics that the node is part of.
+ * - extra_data: Optional array containing arrays of icon + string, with some
+ *   relevant data such as number of downloads, of comments, etc...
  *
  * @see template_preprocess_node()
  *
@@ -70,28 +78,18 @@
  *   in different view modes.
  */
 #}
-<article{{ attributes.addClass('tile') }}>
-
-  {{ title_prefix }}
-  {% if not page %}
-    <h2{{ title_attributes }}>
-      <a href="{{ url }}" rel="bookmark">{{ label }}</a>
-    </h2>
-  {% endif %}
-  {{ title_suffix }}
-
-  {% if display_submitted %}
-    <footer>
-      {{ author_picture }}
-      <div{{ author_attributes }}>
-        {% trans %}Submitted by {{ author_name }} on {{ date }}{% endtrans %}
-        {{ metadata }}
-      </div>
-    </footer>
-  {% endif %}
-
-  <div{{ content_attributes }}>
-    {{ content }}
-  </div>
-
-</article>
+{{ pattern('tile', {
+  attributes,
+  image,
+  url,
+  highlighted,
+  info,
+  title_prefix,
+  label,
+  title_suffix,
+  text,
+  action,
+  badges,
+  extra_data,
+  bundle,
+}) }}

@@ -39,6 +39,7 @@ class RevisionManager implements RevisionManagerInterface {
 
     if ($storage = $this->entityTypeManager->getStorage($entity_type)) {
       $revision_ids = $storage->getQuery()
+        ->accessCheck(FALSE)
         ->allRevisions()
         ->condition($this->entityTypeManager->getDefinition($entity_type)->getKey('id'), $entity->id())
         ->sort($this->entityTypeManager->getDefinition($entity_type)->getKey('revision'), 'DESC')

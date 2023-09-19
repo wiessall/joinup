@@ -59,8 +59,8 @@ backend_config:
     path: /
     core: digit-joinup
     timeout: 15
-    index_timeout: 30
-    optimize_timeout: 30
+    index_timeout: 60
+    optimize_timeout: 60
     finalize_timeout: 60
     skip_schema_check: false
     solr_version: ''

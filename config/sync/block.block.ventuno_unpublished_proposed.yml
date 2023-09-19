@@ -1,0 +1,31 @@
+uuid: a37ca384-359b-4d42-9a71-b1542fc7b1f5
+langcode: en
+status: true
+dependencies:
+  module:
+    - joinup_core
+    - joinup_group
+  theme:
+    - ventuno
+id: ventuno_unpublished_proposed
+theme: ventuno
+region: content_bottom
+weight: -21
+provider: null
+plugin: entity_unpublished
+settings:
+  id: entity_unpublished
+  label: 'Proposed content'
+  label_display: visible
+  provider: joinup_group
+  context_mapping:
+    og: '@rdf_entity.rdf_entity_route_context:rdf_entity'
+  states_filter:
+    - proposed
+  negate_states_filter: false
+visibility:
+  request_route:
+    id: request_route
+    negate: false
+    routes:
+      - entity.rdf_entity.unpublished_content

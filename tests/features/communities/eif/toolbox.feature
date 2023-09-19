@@ -22,6 +22,10 @@ Feature:
       | Jordan 4 | Recommendation 3, Recommendation 1 | Common services | Phoenix    | validated |
       | Jordan 5 | Recommendation 4                   | Common services | Killjoy    | draft     |
       | Jordan 6 | Recommendation 4                   | Common services | Killjoy    | validated |
+    And glossary content:
+      | title        | synonyms | definition  | collection      |
+      | amazing      | SMASS    | amazing def | NIFO collection |
+      | It will be   |          | survival    | Killjoy         |
 
     # Visit the toolbox page once to ensure that solutions are properly
     # re-indexed when an EIF perspective is created or deleted and that
@@ -71,7 +75,9 @@ Feature:
     And I should see the text "The online assistant helps users to find operational solutions that cover the alignment and implementation of the European Interoperability Framework and filter them by attributes."
     And I should see the text "Step 1 - Choose one or combine multiple filters to find solutions that match specifically your EIF requirements"
     And I should see the text "Step 2 - Explore operational solutions that help align to the European Interoperability Framework"
-    And the page should contain the html text "<p>This is v1.0.0 of the <strong>SMASS</strong> survey.</p>"
+    And I should see the text "This is v1.0.0 of the SMASS survey."
+    And the response should contain "/collection/nifo-collection/glossary/term/amazing\" class=\"glossary-term\" title=\"amazing def\">SMASS</a>"
+
     And I should see the following filter categories in the correct order:
       | Underlying principles  |
       | Interoperability layer |
@@ -87,7 +93,7 @@ Feature:
       | Jordan 5 |
 
     # Test the principles.
-    When I click "Transparency" in the "Content" region
+    When I press "Transparency" in the "Content" region
     Then I should see the following headings:
       | Jordan 1 |
       | Jordan 2 |
@@ -100,7 +106,7 @@ Feature:
 
     # Test multiple options. Both "Transparency" and "Security and privacy" are
     # selected.
-    When I click "Security and privacy" in the "Content" region
+    When I press "Security and privacy" in the "Content" region
     Then I should see the following headings:
       | Jordan 1 |
     And I should see the text "1 matching solutions found"
@@ -112,8 +118,8 @@ Feature:
       | Jordan 6 |
 
     # Reset the options.
-    When I click "Transparency" in the "Content" region
-    When I click "Security and privacy" in the "Content" region
+    When I press "Transparency" in the "Content" region
+    When I press "Security and privacy" in the "Content" region
     Then I should see the following headings:
       | Jordan 1 |
       | Jordan 2 |
@@ -125,7 +131,7 @@ Feature:
       | Jordan 5 |
 
     # Test the interoperability layer.
-    When I click "Legal interoperability" in the "Content" region
+    When I press "Legal interoperability" in the "Content" region
     Then I should see the following headings:
       | Jordan 1 |
       | Jordan 2 |
@@ -136,7 +142,7 @@ Feature:
       | Jordan 6 |
 
     # Test selecting terms from more than one vocabularies.
-    When I click "Openness" in the "Content" region
+    When I press "Openness" in the "Content" region
     Then I should see the following headings:
       | Jordan 1 |
     But I should not see the following headings:
@@ -147,8 +153,8 @@ Feature:
       | Jordan 6 |
 
     # Reset the options.
-    When I click "Openness" in the "Content" region
-    When I click "Legal interoperability" in the "Content" region
+    When I press "Openness" in the "Content" region
+    When I press "Legal interoperability" in the "Content" region
     Then I should see the following headings:
       | Jordan 1 |
       | Jordan 2 |
@@ -159,7 +165,7 @@ Feature:
       | Jordan 5 |
 
     # Test the conceptual model.
-    When I click "Open data" in the "Content" region
+    When I press "Open data" in the "Content" region
     Then I should see the following headings:
       | Jordan 4 |
       | Jordan 6 |
@@ -170,7 +176,7 @@ Feature:
       | Jordan 5 |
 
     # Reset the options.
-    When I click "Open data" in the "Content" region
+    When I press "Open data" in the "Content" region
     Then I should see the following headings:
       | Jordan 1 |
       | Jordan 2 |
@@ -181,7 +187,7 @@ Feature:
       | Jordan 5 |
 
     # Test the solution category.
-    When I click "Assessment tools" in the "Content" region
+    When I press "Assessment tools" in the "Content" region
     Then I should see the following headings:
       | Jordan 1 |
       | Jordan 2 |
@@ -192,7 +198,7 @@ Feature:
       | Jordan 6 |
 
     # Reset the options.
-    When I click "Assessment tools" in the "Content" region
+    When I press "Assessment tools" in the "Content" region
     Then I should see the following headings:
       | Jordan 1 |
       | Jordan 2 |
@@ -201,6 +207,26 @@ Feature:
     But I should not see the following headings:
       | Jordan 3 |
       | Jordan 5 |
+
+    # Ensure glossary words style applied
+    When I visit the "Online Assistant" custom page
+    # This glossary term doesn't show because we are in NIFO collection.
+    # When we go inside the EIF perspective page we should see the 'It will be' glossary link.
+    And I should not see the link "It will be"
+    And I should see the link "amazing"
+    And the response should contain "/collection/nifo-collection/glossary/term/amazing\" class=\"glossary-term\" title=\"amazing def\">amazing</a>"
+    And I should see the link "SMASS"
+    And the response should contain "/collection/nifo-collection/glossary/term/amazing\" class=\"glossary-term\" title=\"amazing def\">SMASS</a></strong> survey.</p>"
+
+    When I go to the EIF perspective page of the "Jordan 6" solution
+    And I should not see the link "It will be"
+    And I should not see the link "amazing"
+    And I should not see the link "SMASS"
+
+    When I go to the EIF perspective page of the "Jordan 1" solution
+    And I should see the link "It will be"
+    And I should not see the link "amazing"
+    And I should not see the link "SMASS"
 
     # Ensure that deleting an EIF perspective, the online assistant is updated
     # as well.

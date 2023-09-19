@@ -132,9 +132,9 @@ Feature: Log in through EU Login
     And I should see the following lines of text:
       | Account information                                                                                                                                                                                                       |
       | Your name and E-mail are inherited from EU Login. To update this information, you can visit your EU Login account page. Synchronisation will take a few minutes and it will be visible the next time you login on Joinup. |
-      | Your e-mail address is not made public. We will only send you necessary system notifications and you can opt in later if you wish to receive additional notifications about content you are subscribed to.                         |
-      | Your first name is publicly visible.                                                                                                                                                                                               |
-      | Your last name is publicly visible.                                                                                                                                                                                                |
+      | Your e-mail address is not made public. We will only send you necessary system notifications and you can opt in later if you wish to receive additional notifications about content you are subscribed to.                |
+      | Your first name is publicly visible.                                                                                                                                                                                      |
+      | Your last name is publicly visible.                                                                                                                                                                                       |
 
     When I press "Save"
     Then I should see the success message "The changes have been saved."
@@ -201,7 +201,7 @@ Feature: Log in through EU Login
     And the following fields should not be disabled "First name,Family name"
     And I should see "Username"
     And I should see "without_cas"
-    And I should see "A valid email address. All emails from the system will be sent to this address. The email address is not made public and will only be used if you wish to receive a new password or wish to receive certain news or notifications by email."
+    And I should see "The email address is not made public. It will only be used if you need to be contacted about your account or for opted-in notifications."
 
     When I press "Save"
     Then I should see the error message "First name field is required."
@@ -295,7 +295,7 @@ Feature: Log in through EU Login
     Then I should see the success message "You have been logged in."
     # The email ends up getting the upstream email so that correct character casing is applied.
     And the user joe should have the following data in their user profile:
-      | E-mail      | Joe_Case_Insensitive@example.com |
+      | E-mail | Joe_Case_Insensitive@example.com |
 
   Scenario: Anonymous user is asked to log in when accessing a protected page
     Given users:
@@ -328,3 +328,108 @@ Feature: Log in through EU Login
     Given I am logged in as an "authenticated user"
     When I go to "/user/password"
     Then the response status code should be 404
+
+  Scenario: As a moderator I can temporary disable the site registration.
+    Given CAS users:
+      | Username | E-mail          | Password |
+      | joe_doe  | joe@example.com | 123      |
+    And users:
+      | Username | Roles     |
+      | mod      | moderator |
+
+    Given I am logged in as mod
+    And I visit "Dashboard"
+    And I check "Disable new accounts registration"
+    And I press "Submit"
+    Then I should see the warning message "Registering new users to Joinup is disabled"
+
+    Given I am an anonymous user
+    And I am on the homepage
+    When I click "Sign in"
+    When I fill in "E-mail address" with "joe@example.com"
+    When I fill in "Password" with "123"
+    And I press "Log in"
+    Then I should see the error message "Registering new accounts to Joinup is temporarily disabled. Please come back later."
+    # Check that the user is not logged in.
+    And I should see the link "Sign in"
+
+    Given I am logged in as mod
+    And I visit "Dashboard"
+    And I uncheck "Disable new accounts registration"
+    And I press "Submit"
+    Then I should see the success message "Registering new users to Joinup is enabled"
+
+    Given I am an anonymous user
+    And I am on the homepage
+    When I click "Sign in"
+    When I fill in "E-mail address" with "joe@example.com"
+    When I fill in "Password" with "123"
+    And I press "Log in"
+    Then I should see the success message "Fill in the fields below to let the Joinup community learn more about you!"
+
+  @email
+  Scenario: As a moderator I can activate the approval of new accounts.
+    Given CAS users:
+      | Username      | E-mail            | Password |
+      | ricky_martin  | ricky@example.com | 123      |
+      | jonh_martin   | jonh@example.com  | 123      |
+
+    Given I am logged in as a user with the "moderator" role
+    And I visit "Dashboard"
+    And I check "New accounts need approval"
+    And I press "Submit"
+    Then I should see the warning message "Registering new users to Joinup requires approval is enabled"
+
+    Given I am an anonymous user
+    And I am on the homepage
+    When I click "Sign in"
+    When I fill in "E-mail address" with "ricky@example.com"
+    When I fill in "Password" with "123"
+    And I press "Log in"
+    Then I should see the success message "Thank you for applying for an account. Your account is currently pending approval by the site administrator."
+    And I should see the success message "In the meantime, a welcome message with further instructions has been sent to your email address."
+    But I should not see the error message "Your account is blocked or has not been activated. Please contact a site administrator."
+    # Check that the user is not logged in.
+    And I should see the link "Sign in"
+    And the email sent to "ricky@example.com" with subject "Your Joinup account is pending approval." contains the text:
+      | Thank you for registering at Joinup. Your application for an account is currently pending approval. Once it has been approved, you will receive another email containing information about how to sign in, and other details. |
+      | Kind regards,                                                                                                                                                                                                                 |
+      | The Joinup Support Team.                                                                                                                                                                                                      |
+
+    Given I am logged in as a user with the "moderator" role
+    Given I am on the homepage
+    When I click "People"
+    And I fill in "Name or email contains" with "ricky_martin"
+    And I press "Filter"
+    Then I should see "Blocked" in the "ricky_martin" row
+
+    # Unblock the user
+    Then I check "ricky_martin"
+    And I select "Unblock the selected user(s)" from "Action"
+    And I press "Apply to selected items"
+    Then I should see the success message "Unblock the selected user(s) was applied to 1 item."
+    And the email sent to "ricky@example.com" with subject "Your Joinup account has been activated." contains the text:
+      | You may now log in with EU Login credentials by clicking this link or copying and pasting it into your browser  |
+
+    Given I am an anonymous user
+    And I am on the homepage
+    When I click "Sign in"
+    When I fill in "E-mail address" with "ricky@example.com"
+    When I fill in "Password" with "123"
+    And I press "Log in"
+    And I should see the success message "You have been logged in."
+
+    # Restore open registration.
+    Given I am logged in as a user with the "moderator" role
+    And I visit "Dashboard"
+    And I uncheck "New accounts need approval"
+    And I press "Submit"
+    Then I should see the success message "Registering new users to Joinup requires approval is disabled"
+
+    Given I am an anonymous user
+    And I am on the homepage
+    When I click "Sign in"
+    When I fill in "E-mail address" with "jonh@example.com"
+    When I fill in "Password" with "123"
+    And I press "Log in"
+    And I should see the success message "You have been logged in."

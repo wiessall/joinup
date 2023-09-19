@@ -16,8 +16,8 @@ Feature: Custom page API
       | content creation | facilitators and authors |
       | state            | validated                |
     And custom_page content:
-      | title      | body                                     | collection      |
-      | Dummy page | This is some dummy content like foo:bar. | Le Foie Heureux |
+      | title      | body                                     | collection      | state     |
+      | Dummy page | This is some dummy content like foo:bar. | Le Foie Heureux | published |
      # @Fixme unimplemented. See ISAICP-2369
      # | Exclude from menu |                                              |
     Then I should have a "Custom page" page titled "Dummy page"

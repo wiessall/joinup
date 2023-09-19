@@ -25,14 +25,14 @@ label: 'Highlighted content'
 image_style_mappings:
   -
     image_mapping_type: image_style
-    image_mapping: xxl_col_5_1_5x
-    breakpoint_id: ventuno.xl
-    multiplier: 1.5x
-  -
-    image_mapping_type: image_style
     image_mapping: xxl_col_5_1x
     breakpoint_id: ventuno.xl
     multiplier: 1x
+  -
+    image_mapping_type: image_style
+    image_mapping: xxl_col_5_1_5x
+    breakpoint_id: ventuno.xl
+    multiplier: 1.5x
   -
     image_mapping_type: image_style
     image_mapping: xxl_col_5_2x
@@ -40,14 +40,14 @@ image_style_mappings:
     multiplier: 2x
   -
     image_mapping_type: image_style
-    image_mapping: lg_col_5_1_5x
-    breakpoint_id: ventuno.lg
-    multiplier: 1.5x
-  -
-    image_mapping_type: image_style
     image_mapping: lg_col_5_1x
     breakpoint_id: ventuno.lg
     multiplier: 1x
+  -
+    image_mapping_type: image_style
+    image_mapping: lg_col_5_1_5x
+    breakpoint_id: ventuno.lg
+    multiplier: 1.5x
   -
     image_mapping_type: image_style
     image_mapping: lg_col_5_2x
@@ -55,14 +55,14 @@ image_style_mappings:
     multiplier: 2x
   -
     image_mapping_type: image_style
-    image_mapping: md_col_12_1_5x
-    breakpoint_id: ventuno.md
-    multiplier: 1.5x
-  -
-    image_mapping_type: image_style
     image_mapping: md_col_12_1x
     breakpoint_id: ventuno.md
     multiplier: 1x
+  -
+    image_mapping_type: image_style
+    image_mapping: md_col_12_1_5x
+    breakpoint_id: ventuno.md
+    multiplier: 1.5x
   -
     image_mapping_type: image_style
     image_mapping: md_col_12_2x
@@ -70,14 +70,14 @@ image_style_mappings:
     multiplier: 2x
   -
     image_mapping_type: image_style
-    image_mapping: sm_col_12_1_5x
-    breakpoint_id: ventuno.sm
-    multiplier: 1.5x
-  -
-    image_mapping_type: image_style
     image_mapping: sm_col_12_1x
     breakpoint_id: ventuno.sm
     multiplier: 1x
+  -
+    image_mapping_type: image_style
+    image_mapping: sm_col_12_1_5x
+    breakpoint_id: ventuno.sm
+    multiplier: 1.5x
   -
     image_mapping_type: image_style
     image_mapping: sm_col_12_2x
@@ -85,14 +85,14 @@ image_style_mappings:
     multiplier: 2x
   -
     image_mapping_type: image_style
-    image_mapping: xs_col_12_1_5x
-    breakpoint_id: ventuno.xs
-    multiplier: 1.5x
-  -
-    image_mapping_type: image_style
     image_mapping: xs_col_12_1x
     breakpoint_id: ventuno.xs
     multiplier: 1x
+  -
+    image_mapping_type: image_style
+    image_mapping: xs_col_12_1_5x
+    breakpoint_id: ventuno.xs
+    multiplier: 1.5x
   -
     image_mapping_type: image_style
     image_mapping: xs_col_12_2x
