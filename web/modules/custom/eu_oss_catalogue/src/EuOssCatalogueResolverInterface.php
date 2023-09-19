@@ -7,7 +7,7 @@ namespace Drupal\eu_oss_catalogue;
 use Drupal\Component\Plugin\ConfigurableInterface;
 use Drupal\Component\Plugin\PluginInspectionInterface;
 use Drupal\Core\Field\FieldItemListInterface;
-use Drupal\eu_oss_catalogue\Model\FetchedSolution;
+use Drupal\eu_oss_catalogue\Model\Project;
 
 /**
  * Provides an interface for value resolver plugins.
@@ -19,8 +19,10 @@ interface EuOssCatalogueResolverInterface extends PluginInspectionInterface, Con
    *
    * @param \Drupal\Core\Field\FieldItemListInterface $fieldItemList
    *   The Drupal field item list instance.
-   * @param \Drupal\eu_oss_catalogue\Model\FetchedSolution $fetchedSolution
-   *   Decoded content of a single business solution.
+   * @param \Drupal\eu_oss_catalogue\Model\Project $project
+   *   The project value object.
+   * @param array $metadata
+   *   The project metadata.
    *
    * @return mixed
    *   The value that has been resolved. Note that the value is only returned
@@ -31,6 +33,6 @@ interface EuOssCatalogueResolverInterface extends PluginInspectionInterface, Con
    * @throws \Drupal\eu_oss_catalogue\Exception\UnresolvableValueException
    *   If the value cannot be resolved.
    */
-  public function resolve(FieldItemListInterface $fieldItemList, FetchedSolution $fetchedSolution): mixed;
+  public function resolve(FieldItemListInterface $fieldItemList, Project $project, array $metadata): mixed;
 
 }

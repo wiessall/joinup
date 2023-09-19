@@ -77,13 +77,13 @@ class RemovingSolutionProvider extends DevelopersItalia {
    * {@inheritdoc}
    */
   public function fetch(): iterable {
-    foreach (parent::fetch() as $fetchedSolution) {
+    foreach (parent::fetch() as $project) {
       // If the title is "Solution 2" and the solution exists, skip it so that
       // we simulate a solution that has been removed.
-      if ($fetchedSolution->name === 'Solution 2') {
+      if ($project->url === 'https://limited.self-hosted.gitlab.example.com/group1/project-1-1') {
         $ids = $this->entityTypeManager->getStorage('node')->getQuery()
           ->accessCheck(FALSE)
-          ->condition('title', 'Solution 2')
+          ->condition('oss_git_url', 'https://limited.self-hosted.gitlab.example.com/group1/project-1-1')
           ->execute();
 
         if (!empty($ids)) {
@@ -91,7 +91,7 @@ class RemovingSolutionProvider extends DevelopersItalia {
         }
       }
 
-      yield $fetchedSolution;
+      yield $project;
     }
   }
 

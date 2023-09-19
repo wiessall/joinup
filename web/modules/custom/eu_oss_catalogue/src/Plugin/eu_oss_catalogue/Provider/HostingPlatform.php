@@ -5,16 +5,13 @@ declare(strict_types = 1);
 namespace Drupal\eu_oss_catalogue\Plugin\eu_oss_catalogue\Provider;
 
 use Drupal\Component\Plugin\ConfigurableInterface;
-use Drupal\Component\Serialization\Exception\InvalidDataTypeException;
 use Drupal\Core\Config\Schema\SchemaCheckTrait;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Logger\LoggerChannelInterface;
-use Drupal\Core\Serialization\Yaml;
 use Drupal\eu_oss_catalogue\Entity\HostingPlatformConfigInterface;
 use Drupal\eu_oss_catalogue\EuOssCatalogueHostingPlatformInterface;
 use Drupal\eu_oss_catalogue\EuOssCataloguePluginManagerInterface;
 use Drupal\eu_oss_catalogue\EuOssCatalogueProviderPluginBase;
-use Drupal\eu_oss_catalogue\Model\FetchedSolution;
 use Drupal\eu_oss_catalogue\Model\Project;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -112,21 +109,7 @@ class HostingPlatform extends EuOssCatalogueProviderPluginBase implements Config
     foreach ($platform->getProjects(['publiccodeYml' => 'publiccode.yml']) as $project) {
       \assert($project instanceof Project);
       if ($project->files['publiccodeYml'] && is_string($project->files['publiccodeYml'])) {
-        try {
-          $data = Yaml::decode($project->files['publiccodeYml']);
-          yield new FetchedSolution(
-            $project->url,
-            $data['name'],
-            $data,
-            (string) $project->platformReference,
-          );
-        }
-        catch (InvalidDataTypeException $exception) {
-          $this->logger->error('Cannot decode publiccode.yml of @url. Message: @message', [
-            '@url' => $data['url'],
-            '@message' => $exception->getMessage(),
-          ]);
-        }
+        yield $project;
       }
     }
 

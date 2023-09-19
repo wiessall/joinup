@@ -4,6 +4,7 @@ declare(strict_types = 1);
 
 namespace Drupal\eu_oss_catalogue\Plugin\eu_oss_catalogue\Parser;
 
+use Drupal\Component\Serialization\Exception\InvalidDataTypeException;
 use Drupal\Core\Config\Schema\SchemaCheckTrait;
 use Drupal\Core\Config\TypedConfigManagerInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
@@ -15,7 +16,7 @@ use Drupal\eu_oss_catalogue\Entity\OssSolutionInterface;
 use Drupal\eu_oss_catalogue\EuOssCatalogueParserPluginBase;
 use Drupal\eu_oss_catalogue\EuOssCataloguePluginManagerInterface;
 use Drupal\eu_oss_catalogue\EuOssCatalogueProviderInterface;
-use Drupal\eu_oss_catalogue\Model\FetchedSolution;
+use Drupal\eu_oss_catalogue\Model\Project;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -82,15 +83,36 @@ class PublicCodeYml extends EuOssCatalogueParserPluginBase implements ContainerF
   /**
    * {@inheritdoc}
    */
-  public function checkSchema(FetchedSolution $fetchedSolution): array {
+  public function isValid(Project $project): array {
+    $errors = [];
+    try {
+      $data = Yaml::decode($project->files['publiccodeYml']);
+      if (empty($data['name'])) {
+        $errors[] = "The solution name is empty for solution $project->url";
+      }
+    }
+    catch (InvalidDataTypeException $exception) {
+      $errors[] = "Cannot decode publiccode.yml of $project->url. Message: {$exception->getMessage()}";
+    }
+    return $errors;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function checkSchema(OssSolutionInterface $solution): array {
     $errorList = $schemaErrors = [];
 
     try {
+      $metadata = Yaml::decode($solution->get('oss_publiccode_yml_content')->getValue());
       // Using the config schema checker. And it works!
-      $schemaErrors = $this->checkConfigSchema($this->typedConfigManager, 'eu_oss_catalogue.publiccode_yml', $fetchedSolution->data);
+      $schemaErrors = $this->checkConfigSchema($this->typedConfigManager, 'eu_oss_catalogue.publiccode_yml', $metadata);
       if (!is_array($schemaErrors) || !$schemaErrors) {
         return $errorList;
       }
+    }
+    catch (InvalidDataTypeException $exception) {
+      $schemaErrors[] = "Cannot decode publiccode.yml for node {$solution->id()}";
     }
     catch (\InvalidArgumentException $exception) {
       // @see \Drupal\Core\Config\Schema\ArrayElement::get()
@@ -112,21 +134,40 @@ class PublicCodeYml extends EuOssCatalogueParserPluginBase implements ContainerF
   /**
    * {@inheritdoc}
    */
-  public function parse(FetchedSolution $fetchedSolution, EuOssCatalogueProviderInterface $provider): OssSolutionInterface {
-    $solution = parent::parse($fetchedSolution, $provider);
-
-    $solution->set('oss_git_url', $fetchedSolution->url);
+  protected function doParse(OssSolutionInterface $solution, Project $project, array $metadata, EuOssCatalogueProviderInterface $provider): void {
+    parent::doParse($solution, $project, $metadata, $provider);
 
     /** @var \Drupal\Core\Config\Entity\ThirdPartySettingsInterface $definition */
     $definition = $solution->getFieldDefinition('oss_publiccode_yml_version');
     $settings = $definition->getThirdPartySetting('eu_oss_catalogue', $this->getPluginId());
     $this->getResolver($settings['resolver'], $settings['config'])
-      ->resolve($solution->get('oss_publiccode_yml_version'), $fetchedSolution);
+      ->resolve($solution->get('oss_publiccode_yml_version'), $project, $metadata);
 
     // Add also the publiccode.yml content.
-    $solution->set('oss_publiccode_yml_content', Yaml::encode($fetchedSolution->data));
+    $solution->set('oss_publiccode_yml_content', Yaml::encode($metadata));
+  }
 
-    return $solution;
+  /**
+   * {@inheritdoc}
+   */
+  protected function getMetadata(Project $project): array {
+    try {
+      return Yaml::decode($project->files['publiccodeYml']);
+    }
+    catch (InvalidDataTypeException $exception) {
+      $this->logger->error('Cannot decode publiccode.yml of @url. Message: @message', [
+        '@url' => $project->url,
+        '@message' => $exception->getMessage(),
+      ]);
+      throw $exception;
+    }
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  protected function getTitle(Project $project, array $metadata): string {
+    return $metadata['name'] ?? parent::getTitle($project, $metadata);
   }
 
   /**

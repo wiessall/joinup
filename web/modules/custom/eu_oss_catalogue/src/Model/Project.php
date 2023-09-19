@@ -4,6 +4,8 @@ declare(strict_types = 1);
 
 namespace Drupal\eu_oss_catalogue\Model;
 
+use Drupal\Component\Utility\Crypt;
+
 /**
  * Data model for a code platform project.
  */
@@ -51,6 +53,16 @@ class Project {
    */
   public function getFullName(): string {
     return $this->namespace . '/' . $this->name;
+  }
+
+  /**
+   * Computes and returns a hash from metdata.
+   *
+   * @return string
+   *   A hash from metadata.
+   */
+  public function getHash(): string {
+    return Crypt::hashBase64(serialize($this));
   }
 
 }
