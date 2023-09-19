@@ -56,7 +56,7 @@ function joinup_core_deploy_109702(): void {
   // Delete faulty meta entity.
   $entityRepository
     ->loadEntityByUuid('meta_entity', 'ad9be48e-7116-44b3-8df2-db8cb9343268')
-    ->delete();
+    ?->delete();
 
   // Import content.
   $moduleInstaller->install(['default_content']);
