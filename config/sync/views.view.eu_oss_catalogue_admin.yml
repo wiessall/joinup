@@ -20,8 +20,8 @@ dependencies:
     - taxonomy
     - user
     - views_bulk_operations
-id: oss_solution
-label: 'OSS Solution'
+id: eu_oss_catalogue_admin
+label: 'EU OSS Catalogue Administration'
 module: views
 description: ''
 tag: ''
@@ -1328,7 +1328,7 @@ display:
           exposed: true
           expose:
             operator_id: combine_op
-            label: Solution
+            label: OSS Solution
             description: ''
             use_operator: false
             operator: combine_op
@@ -1508,10 +1508,10 @@ display:
         filters: false
         filter_groups: false
       display_description: ''
-      path: admin/content/eu-oss-catalogue/solutions
+      path: admin/content/eu-oss-catalogue/oss_solutions
       menu:
         type: tab
-        title: Solutions
+        title: OSS Solutions
         description: ''
         weight: -1
         expanded: false
@@ -1543,7 +1543,7 @@ display:
     display_plugin: block
     position: 3
     display_options:
-      title: 'Most recent solutions'
+      title: 'Most Recent Solutions'
       pager:
         type: some
         options:
