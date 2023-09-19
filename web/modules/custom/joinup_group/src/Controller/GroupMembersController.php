@@ -81,12 +81,12 @@ class GroupMembersController extends ControllerBase {
       ->addCacheContext('theme');
     $build = $view->executeDisplay('default', $arguments);
 
-//    CacheableMetadata::createFromRenderArray($build)->addCacheContexts([
-//      // Group membership managers are seeing a different page.
-//      'group_membership_manager',
-//      // This page might be displayed using different themes.
-//      'theme',
-//    ])->applyTo($build);
+    CacheableMetadata::createFromRenderArray($build)->addCacheContexts([
+      // Group membership managers are seeing a different page.
+      'group_membership_manager',
+      // This page might be displayed using different themes.
+      'theme',
+    ])->applyTo($build);
 
     return $build;
   }

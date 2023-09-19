@@ -23,7 +23,7 @@ class GroupMembershipManagerContext implements CacheContextInterface {
   /**
    * Constructs a new cache context service instance.
    *
-   * @param AccountProxyInterface $currentUser
+   * @param \Drupal\Core\Session\AccountProxyInterface $currentUser
    *   The current user.
    * @param \Drupal\joinup_group\JoinupGroupManagerInterface $groupManager
    *   The group manager service.
