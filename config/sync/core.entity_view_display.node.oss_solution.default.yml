@@ -152,7 +152,7 @@ third_party_settings:
             uuid: 592281dd-6140-43f3-9ec5-9c88b1db0477
             region: content
             configuration:
-              id: 'field_block:node:oss_solution:joinup_oss_solution_short_description_with_fallback'
+              id: 'field_block:node:oss_solution:description'
               label: 'Short description (computed)'
               label_display: '0'
               provider: layout_builder
@@ -706,7 +706,7 @@ bundle: oss_solution
 mode: default
 content: {  }
 hidden:
-  joinup_oss_catalogue_short_desctiption_w_fallback: true
+  description: true
   langcode: true
   links: true
   oss_available_languages: true
