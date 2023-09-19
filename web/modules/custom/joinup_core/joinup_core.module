@@ -129,6 +129,9 @@ function joinup_core_node_links_alter(array &$links, NodeInterface $entity, arra
  */
 function joinup_core_field_formatter_info_alter(array &$info) {
   $info['link']['field_types'][] = 'report_link';
+  if (isset($info['joinup_core_item_count'])) {
+    $info['joinup_core_item_count']['field_types'] = array_keys(\Drupal::service('plugin.manager.field.field_type')->getDefinitions());
+  }
 }
 
 /**
