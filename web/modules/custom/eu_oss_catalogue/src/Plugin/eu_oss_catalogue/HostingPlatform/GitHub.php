@@ -6,6 +6,7 @@ namespace Drupal\eu_oss_catalogue\Plugin\eu_oss_catalogue\HostingPlatform;
 
 use Drupal\Cache\Adapter\DrupalAdapter;
 use Drupal\Core\Cache\CacheBackendInterface;
+use Drupal\Core\Logger\LoggerChannelInterface;
 use Drupal\Core\Site\Settings;
 use Drupal\eu_oss_catalogue\EuOssCatalogueGitHostingPlatformPluginBase;
 use Drupal\eu_oss_catalogue\Exception\MissingAccessTokenException;
@@ -55,6 +56,8 @@ class GitHub extends EuOssCatalogueGitHostingPlatformPluginBase {
    *   The HTTP client.
    * @param \Drupal\Core\Site\Settings $settings
    *   The Drupal settings.
+   * @param \Drupal\Core\Logger\LoggerChannelInterface $logger
+   *   The EU OSS Catalogue logger.
    * @param \Drupal\Core\Cache\CacheBackendInterface $cache
    *   The cache backend.
    */
@@ -64,9 +67,10 @@ class GitHub extends EuOssCatalogueGitHostingPlatformPluginBase {
     $pluginDefinition,
     protected ClientInterface $httpClient,
     protected Settings $settings,
+    protected LoggerChannelInterface $logger,
     protected CacheBackendInterface $cache,
   ) {
-    parent::__construct($configuration, $pluginId, $pluginDefinition, $httpClient, $settings);
+    parent::__construct($configuration, $pluginId, $pluginDefinition, $httpClient, $settings, $logger);
   }
 
   /**
@@ -79,6 +83,7 @@ class GitHub extends EuOssCatalogueGitHostingPlatformPluginBase {
       $pluginDefinition,
       $container->get('http_client'),
       $container->get('settings'),
+      $container->get('logger.channel.eu_oss_catalogue'),
       $container->get('cache.eu_oss_catalogue'),
     );
   }
