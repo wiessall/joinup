@@ -8,6 +8,7 @@ use Drupal\Cache\Adapter\DrupalAdapter;
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Logger\LoggerChannelInterface;
 use Drupal\Core\Site\Settings;
+use Drupal\Core\Utility\Error;
 use Drupal\eu_oss_catalogue\EuOssCatalogueGitHostingPlatformPluginBase;
 use Drupal\eu_oss_catalogue\Exception\MissingAccessTokenException;
 use Drupal\eu_oss_catalogue\Model\GitHubSearchType;
@@ -115,9 +116,9 @@ class GitHub extends EuOssCatalogueGitHostingPlatformPluginBase {
    * {@inheritdoc}
    */
   public function doGetProjects(array $requestedFiles = []): iterable {
-    // Build a search query string.
+    // Build a search query as an array.
     // @see https://docs.github.com/search-github
-    $search = ['is:public', 'archived:false'];
+    $search = [];
     foreach ($this->getConfiguration()['projects'] as $namespace => $repos) {
       if ($repos === NULL) {
         $search[] = "owner:$namespace";
@@ -128,47 +129,120 @@ class GitHub extends EuOssCatalogueGitHostingPlatformPluginBase {
       }
     }
 
-    // Use a query builder to build a query such as:
-    // @code
-    // {
-    //   search(
-    //     type: REPOSITORY
-    //     query: "is:public
-    //       archived:false
-    //       owner:namespace1
-    //       repo:namespace2/project2"
-    //     first: 100
-    //   ) {
-    //     nodes {
-    //       ... on Repository {
-    //         id
-    //         description
-    //         name
-    //         owner {
-    //           login
-    //         }
-    //         defaultBranchRef {
-    //           name
-    //         }
-    //         latestRelease {
-    //           tagName
-    //           createdAt
-    //         }
-    //         file: object(expression: "HEAD:publiccode.yml") {
-    //           ... on Blob {
-    //             text
-    //           }
-    //         }
-    //       }
-    //     }
-    //   }
-    // }
-    // @endcode
-    $query = new Query('search', [
+    $graphQL = new GraphQL($this->getClient());
+
+    while ($search) {
+      // The search query can be a very big list of search terms, thus we split
+      // in chunks, to avoid overloading the GitHub API request.
+      $searchQuery = $this->getSearchQuery($search);
+      $endCursor = NULL;
+      do {
+        $query = $this->buildProjectsQuery($searchQuery, $requestedFiles, $endCursor);
+        try {
+          $response = $graphQL->execute($query->toString());
+        }
+        catch (\Throwable $exception) {
+          Error::logException($this->logger, $exception, "Can't get GitHub projects. Query: @query", [
+            '@query' => $searchQuery,
+          ]);
+          break;
+        }
+
+        foreach ($response['data']['search']['nodes'] as $node) {
+          if (empty($node['defaultBranchRef'])) {
+            // Repositories without a default branch don't have code yet.
+            continue;
+          }
+
+          $files = [];
+          foreach ($requestedFiles as $fileId => $filePath) {
+            if ($content = ($node["file__$fileId"]['text'] ?? NULL)) {
+              $files[$fileId] = $content;
+            }
+          }
+
+          yield new Project(
+            $node['owner']['login'],
+            $node['name'],
+            "https://github.com/{$node['owner']['login']}/{$node['name']}",
+            $node['defaultBranchRef']['name'],
+            $node['latestRelease']['tagName'] ?? NULL,
+            $node['latestRelease']['createdAt'] ?? NULL,
+            $node['id'],
+            $node['description'],
+            $files,
+          );
+        }
+
+        // The GraphQL query is paginated to 100 results.
+        $hasNextPage = $response['data']['search']['pageInfo']['hasNextPage'];
+        $endCursor = $response['data']['search']['pageInfo']['endCursor'];
+      } while ($hasNextPage);
+    }
+  }
+
+  /**
+   * Builds the projects query.
+   *
+   * This renders a query similar to:
+   *
+   * @code
+   * {
+   *   search(
+   *     type: REPOSITORY
+   *     query: "is:public archived:false owner:user1 repo:org2/project2"
+   *     first: 100
+   *   ) {
+   *     pageInfo {
+   *       hasNextPage
+   *       endCursor
+   *     }
+   *     nodes {
+   *       ... on Repository {
+   *         id
+   *         description
+   *         name
+   *         owner {
+   *           login
+   *         }
+   *         defaultBranchRef {
+   *           name
+   *         }
+   *         latestRelease {
+   *           tagName
+   *           createdAt
+   *         }
+   *         file: object(expression: "HEAD:publiccode.yml") {
+   *           ... on Blob {
+   *             text
+   *           }
+   *         }
+   *       }
+   *     }
+   *   }
+   * }
+   * @endcode
+   *
+   * @param string $searchQuery
+   *   The search query. See https://docs.github.com/search-github.
+   * @param string[] $requestedFiles
+   *   A list of file paths keyed by a file identifier.
+   * @param string|null $endCursor
+   *   The end cursor, if any.
+   *
+   * @return \GraphQL\Actions\Query
+   *   A GraphQL query builder instance.
+   */
+  protected function buildProjectsQuery(string $searchQuery, array $requestedFiles = [], ?string $endCursor = NULL): Query {
+    $filters = [
       'type' => GitHubSearchType::REPOSITORY,
-      'query' => implode(' ', $search),
+      'query' => $searchQuery,
       'first' => 100,
-    ]);
+    ] + ($endCursor ? ['after' => $endCursor] : []);
+
+    $query = new Query('search', $filters);
+    $query->pageInfo([])->use('hasNextPage', 'endCursor');
+
     $fragment = $query->nodes([])
       ->on('Repository')
       ->use('id', 'description', 'name')
@@ -183,30 +257,24 @@ class GitHub extends EuOssCatalogueGitHostingPlatformPluginBase {
       $fragment->use($file);
     }
 
-    $graphQL = new GraphQL($this->getClient());
-    foreach ($graphQL->execute($query->toString())['data']['search']['nodes'] as $node) {
-      // Repositories without code don't have a default branch.
-      if (!empty($node['defaultBranchRef'])) {
-        $files = [];
+    return $query;
+  }
 
-        foreach ($requestedFiles as $fileId => $filePath) {
-          if ($content = ($node["file__$fileId"]['text'] ?? NULL)) {
-            $files[$fileId] = $content;
-          }
-        }
-        yield new Project(
-          $node['owner']['login'],
-          $node['name'],
-          'https://' . self::GITHUB_BASE_URL . "/{$node['owner']['login']}/{$node['name']}",
-          $node['defaultBranchRef']['name'],
-          $node['latestRelease']['tagName'] ?? NULL,
-          $node['latestRelease']['createdAt'] ?? NULL,
-          $node['id'],
-          $node['description'],
-          $files,
-        );
-      }
-    }
+  /**
+   * Returns the search query to be used by GraphQL.
+   *
+   * @param array $search
+   *   A list of search query terms passed by reference. As this method is
+   *   called, the list narrows by removing the already processed search terms.
+   *
+   * @return string
+   *   The search query to be passed to GraphQL query.
+   */
+  protected function getSearchQuery(array &$search): string {
+    static $defaults = ['is:public', 'archived:false'];
+    // Be kind to GitHub. Limit to 100 namespaces or projects.
+    $searchChunk = array_splice($search, 0, 100);
+    return implode(' ', [...$defaults, ...$searchChunk]);
   }
 
   /**

@@ -53,7 +53,7 @@ class GitLabDotCom extends EuOssCatalogueGitHostingPlatformPluginBase {
    * Returns the list of projects.
    *
    * @param string[] $requestedFiles
-   *    A list of file paths keyed by a file identifier.
+   *   A list of file paths keyed by a file identifier.
    *
    * @return iterable
    *   Array \Drupal\eu_oss_catalogue\Model\Project instances.
@@ -249,7 +249,7 @@ class GitLabDotCom extends EuOssCatalogueGitHostingPlatformPluginBase {
    * @param string $name
    *   The project name.
    * @param string[] $requestedFiles
-   *    A list of file paths keyed by a file identifier.
+   *   A list of file paths keyed by a file identifier.
    *
    * @return \GraphQL\Actions\Query
    *   A GraphQL query builder instance.
