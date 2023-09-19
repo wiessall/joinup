@@ -85,8 +85,8 @@ class ApiGuesserTest extends KernelTestBase {
     }
 
     $this->assertEquals(
-      $this->apiGuesser->getHostingPlatformPluginId($url),
-      $expected_api
+      $expected_api,
+      $this->apiGuesser->getHostingPlatformPluginId($url)
     );
   }
 
@@ -177,7 +177,7 @@ class ApiGuesserTest extends KernelTestBase {
    */
   public function testApiGuesserExceptions(string $url, string $expected_exception): void {
     $this->expectException($expected_exception);
-    $this->apiGuesser->getHostingPlatformPluginIdForUri($url);
+    $this->apiGuesser->getHostingPlatformPluginId($url);
   }
 
   /**
