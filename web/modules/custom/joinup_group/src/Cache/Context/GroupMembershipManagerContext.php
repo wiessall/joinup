@@ -39,7 +39,6 @@ class GroupMembershipManagerContext implements CacheContextInterface {
    */
   public static function getLabel(): MarkupInterface|string {
     return t('Group membership manager');
-
   }
 
   /**
