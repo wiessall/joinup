@@ -39,7 +39,6 @@ class GitLab extends PluginBase implements ServiceMockPluginInterface {
       'all.self-hosted.gitlab.example.com',
       'limited.self-hosted.gitlab.example.com',
       'self-hosted.gitlab.example.com/subpath',
-      'gitlab.com',
     ], TRUE);
   }
 
