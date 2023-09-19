@@ -48,6 +48,7 @@ dependencies:
     - sitewide_alert
     - solution
     - state_machine_permissions
+    - system
     - tallinn
     - taxonomy
     - toolbar
