@@ -6,11 +6,23 @@ dependencies:
     - field.storage.node.field_paragraphs_body
     - node.type.custom_page
     - paragraphs.paragraphs_type.accordion
+    - paragraphs.paragraphs_type.call_to_action
+    - paragraphs.paragraphs_type.carousel
+    - paragraphs.paragraphs_type.configurable_listing
     - paragraphs.paragraphs_type.content_listing
+    - paragraphs.paragraphs_type.entity_reference
+    - paragraphs.paragraphs_type.github_feed
+    - paragraphs.paragraphs_type.heading
     - paragraphs.paragraphs_type.iframe
+    - paragraphs.paragraphs_type.image
     - paragraphs.paragraphs_type.json_map
-    - paragraphs.paragraphs_type.row
+    - paragraphs.paragraphs_type.layout
+    - paragraphs.paragraphs_type.quote
+    - paragraphs.paragraphs_type.poll
     - paragraphs.paragraphs_type.simple_paragraph
+    - paragraphs.paragraphs_type.testimony
+    - paragraphs.paragraphs_type.text
+    - paragraphs.paragraphs_type.video
   module:
     - entity_reference_revisions
 id: node.custom_page.field_paragraphs_body
@@ -27,50 +39,96 @@ settings:
   handler: 'default:paragraph'
   handler_settings:
     target_bundles:
-      simple_paragraph: simple_paragraph
-      json_map: json_map
       accordion: accordion
+      call_to_action: call_to_action
+      carousel: carousel
+      configurable_listing: configurable_listing
       content_listing: content_listing
+      entity_reference: entity_reference
+      github_feed: github_feed
+      heading: heading
       iframe: iframe
-      row: row
-      bp_columns_three_uneven: bp_columns_three_uneven
-      bp_simple: bp_simple
+      image: image
+      layout: layout
+      json_map: json_map
+      quote: quote
+      poll: poll
+      simple_paragraph: simple_paragraph
+      testimony: testimony
+      text: text
+      video: video
     negate: 0
     target_bundles_drag_drop:
       1_column_layout:
-        weight: 14
+        weight: -30
+        enabled: false
+      2_column_featured_left:
+        weight: -27
+        enabled: false
+      2_column_featured_right:
+        weight: -26
         enabled: false
       2_column_layout:
-        weight: 15
+        weight: -29
         enabled: false
       3_column_layout:
-        weight: 16
+        weight: -28
         enabled: false
       accordion:
-        weight: 5
+        weight: -49
         enabled: true
       accordion_item:
-        weight: 7
+        weight: -48
         enabled: false
+      call_to_action:
+        weight: -47
+        enabled: true
+      carousel:
+        weight: -46
+        enabled: true
+      configurable_listing:
+        weight: -45
+        enabled: true
       content_listing:
-        weight: 8
+        weight: -44
         enabled: true
       entity_reference:
-        weight: 21
-        enabled: false
+        weight: -43
+        enabled: true
+      github_feed:
+        weight: -42
+        enabled: true
+      heading:
+        weight: -41
+        enabled: true
       iframe:
-        weight: 8
+        weight: -40
+        enabled: true
+      image:
+        weight: -39
         enabled: true
       json_map:
-        weight: 4
+        weight: -37
         enabled: true
-      row:
-        weight: 24
+      layout:
+        weight: -38
+        enabled: true
+      poll:
+        weight: -37
+        enabled: true
+      quote:
+        weight: -36
         enabled: true
       simple_paragraph:
-        weight: 2
+        weight: -34
         enabled: true
       testimony:
-        weight: 26
-        enabled: false
+        weight: -33
+        enabled: true
+      text:
+        weight: -32
+        enabled: true
+      video:
+        weight: -31
+        enabled: true
 field_type: entity_reference_revisions

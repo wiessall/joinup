@@ -6,14 +6,13 @@
 #}
 {%
   set classes = [
-    'field--name-' ~ field_name|clean_class,
-    bundle|clean_class ~ '__' ~ field_name_clean|clean_class,
-    'text-end'
+    'action-link',
+    'btn',
+    'btn-link',
+    'px-3'
   ]
 %}
 
 {% for item in items %}
-  <div{{ attributes.addClass(classes) }}>
-    {{ item.content }}
-  </div>
+  <a{{ attributes.addClass(classes) }} href="{{ item.content["#url"] }}">{{ item.content["#title"] }}</a>
 {% endfor %}

@@ -18,16 +18,23 @@ Feature: Global search
     And news content:
       | title                | headline              | body             | collection                   | topic                   | spatial coverage | state     |
       | El Tuba de Los Lobos | El Celler de Can Roca | The best in town | Molecular cooking collection | Statistics and Analysis | Luxembourg       | validated |
-      | Dummy title 1        | Dummy news 1          | Dummy body       | Molecular cooking collection | E-inclusion             | Luxembourg       | validated |
-      | Dummy title 2        | Dummy news 2          | Dummy body       | Molecular cooking collection | E-inclusion             | Luxembourg       | validated |
-      | Dummy title 3        | Dummy news 3          | Dummy body       | Molecular cooking collection | E-inclusion             | Luxembourg       | validated |
-      | Dummy title 4        | Dummy news 4          | Dummy body       | Molecular cooking collection | E-inclusion             | Luxembourg       | validated |
+      | Dummy news 1        | Dummy title 1          | Dummy body       | Molecular cooking collection | E-inclusion             | Luxembourg       | validated |
+      | Dummy news 2        | Dummy title 2          | Dummy body       | Molecular cooking collection | E-inclusion             | Luxembourg       | validated |
+      | Dummy news 3        | Dummy title 3          | Dummy body       | Molecular cooking collection | E-inclusion             | Luxembourg       | validated |
+      | Dummy news 4        | Dummy title 4          | Dummy body       | Molecular cooking collection | E-inclusion             | Luxembourg       | validated |
+    When I visit the search page
+    Then the response should not contain "data-drupal-facet-id=\"status\""
+
+    Given news content:
+      | title         | headline     | body       | collection                   | topic       | spatial coverage | state    |
+      | Rummy news 5 | Rummy title 5 | Dummy body | Molecular cooking collection | E-inclusion | Luxembourg       | archived |
+      | Rummy news 6 | Rummy title 6 | Dummy body | Molecular cooking collection | E-inclusion | Luxembourg       | archived |
 
     Given I am logged in as a user with the "authenticated" role
     Then I visit the search page
     # All content is visible.
     Then I should see the "Molecular cooking collection" tile
-    And I should see the "El Celler de Can Roca" tile
+    And I should see the "El Tuba de Los Lobos" tile
     And I should see the "Spherification" tile
     And I should see the "Foam" tile
     # Terms are sorted alphabetically
@@ -47,18 +54,26 @@ Feature: Global search
     And I should see the "Dummy news 2" tile
     And I should see the "Dummy news 3" tile
     And I should see the "Dummy news 4" tile
+    And I should not see the "Rummy news 5" tile
+    And I should not see the "Rummy news 6" tile
 
-    # Test the topic facet. The space prefixing "Demography" is due to the hierarchy.
+    # Test ability to tick many topics.
     When I check the "Demography (2)" checkbox from the "topic" facet
-    Then the "Demography" content checkbox item should be selected
-    # The selected option moves to the last position by default.
-    And the "topic" checkbox facet should allow selecting the following values "Info (1), Statistics and Analysis (1), Social and Political (6), Demography (2), E-inclusion (4)"
-    Then I click show more from the "spatial coverage" facet
-    And the "spatial coverage" checkbox facet should allow selecting the following values "Belgium (1), European Union (1)"
+    Then I should see the text "SEARCH RESULTS (2)"
+    When I check the "E-inclusion (4)" checkbox from the "topic" facet
+    Then I should see the text "SEARCH RESULTS (6)"
+    And the "Demography" content checkbox item should be selected
+    And the "E-inclusion" content checkbox item should be selected
 
+    # The selected option moves to the last position by default.
+    When I click "E-inclusion"
+    Then I should see the text "SEARCH RESULTS (2)"
+    And the "topic" checkbox facet should allow selecting the following values "Info (1), Statistics and Analysis (1), Social and Political (6), Demography (2), E-inclusion (4)"
+    When I click show more from the "spatial coverage" facet
+    Then the "spatial coverage" checkbox facet should allow selecting the following values "Belgium (1), European Union (1)"
     And I should see the "Molecular cooking collection" tile
     And I should see the "Spherification" tile
-    But I should not see the "El Celler de Can Roca" tile
+    But I should not see the "El Tuba de Los Lobos" tile
     And I should not see the "Foam" tile
 
     # Test the spatial coverage facet.
@@ -68,9 +83,18 @@ Feature: Global search
     And the "spatial coverage" checkbox facet should allow selecting the following values "Belgium (1), European Union (1)"
     And the "topic" checkbox facet should allow selecting the following values "Social and Political (1), Demography (1)"
     And I should see the "Molecular cooking collection" tile
-    But I should not see the "El Celler de Can Roca" tile
+    But I should not see the "El Tuba de Los Lobos" tile
     And I should not see the "Spherification" tile
     And I should not see the "Foam" tile
+
+    # Test ability to tick many geographical areas.
+    Given I am on the search page
+    And I click show more from the "spatial coverage" facet
+    And I check the "Belgium (1)" checkbox from the "spatial coverage" facet
+    Then I should see the text "SEARCH RESULTS (1)"
+    When I click show more from the "spatial coverage" facet
+    And I check the "European Union (1)" checkbox from the "spatial coverage" facet
+    Then I should see the text "SEARCH RESULTS (2)"
 
     Given I am on the search page
     When I check the "News (5)" checkbox from the "Content types" facet
@@ -86,18 +110,43 @@ Feature: Global search
     Then I click show more from the "spatial coverage" facet
     And the "spatial coverage" checkbox facet should allow selecting the following values "European Union (1), Luxembourg (5)"
     And I should not see the "Molecular cooking collection" tile
-    And I should see the "El Celler de Can Roca" tile
+    And I should see the "El Tuba de Los Lobos" tile
     But I should see the "Spherification" tile
     And I should see the "Foam" tile
 
     # Launch a text search.
     When I click "Clear filters"
-    Then I open the search bar by clicking on the search icon
+    Then I focus on the search input
     And I enter "Cooking" in the search bar and press enter
     Then I should see the "Molecular cooking collection" tile
     And I should see the "Foam" tile
     But I should not see the "Spherification" tile
-    And I should not see the "El Celler de Can Roca" tile
+    And I should not see the "El Tuba de Los Lobos" tile
+
+    Given I am on the search page
+    When I check the "Show only Archived items" checkbox from the "Status" facet
+    And I should not see the "Molecular cooking collection" tile
+    And I should not see the "Spherification" tile
+    And I should not see the "Foam" tile
+    And I should not see the "El Tuba de Los Lobos" tile
+    And I should not see the "Dummy news 1" tile
+    And I should not see the "Dummy news 2" tile
+    And I should not see the "Dummy news 3" tile
+    And I should not see the "Dummy news 4" tile
+    And I should see the "Rummy news 5" tile
+    And I should see the "Rummy news 6" tile
+
+    Then I check the "Show only Archived items" checkbox from the "Status" facet
+    And I should see the "Molecular cooking collection" tile
+    And I should see the "Spherification" tile
+    And I should see the "Foam" tile
+    And I should see the "El Tuba de Los Lobos" tile
+    And I should see the "Dummy news 1" tile
+    And I should see the "Dummy news 2" tile
+    And I should see the "Dummy news 3" tile
+    And I should see the "Dummy news 4" tile
+    And I should not see the "Rummy news 5" tile
+    And I should not see the "Rummy news 6" tile
 
   @javascript
   Scenario: Alphabetical order for the spatial coverage in the search page.
@@ -170,8 +219,8 @@ Feature: Global search
       | title            | body                                                              | solution       | state     |
       | Discussion omega | <p>Does anybody has idea why this <em>epsilon</em> is everywhere? | Solution alpha | validated |
     And custom_page content:
-      | title      | body                                     | collection       |
-      | Page omega | This is just an epsilon but should work. | Collection alpha |
+      | title      | body                                     | collection       | state     |
+      | Page omega | This is just an epsilon but should work. | Collection alpha | published |
     And video content:
       | title       | body          | field_video                                 | collection       |
       | Video alpha | Slap like now | https://www.youtube.com/watch?v=JhGf8ZY0tN8 | Collection alpha |
@@ -193,26 +242,26 @@ Feature: Global search
       | SEARCH RESULTS (5) |
       | Sort by:           |
     Then I should see the text "SEARCH RESULTS (5)"
-    And the page should show the tiles "Collection alpha, Solution alpha, Release Alpha | 1, Licence Alpha, Video alpha"
+    And the page should show the tiles "Collection alpha, Solution alpha, Release Alpha, Licence Alpha, Video alpha"
 
     # "Omega" is used in all the node entities titles. Since the content of
     # custom pages is added to their collection, we also match the collection.
     When I enter "omega" in the search bar and press enter
     Then I should see the text "SEARCH RESULTS (6)"
-    And the page should show the tiles "Collection alpha, News headline delta, Event Omega, Document omega, Discussion omega, Page omega"
+    And the page should show the tiles "Collection alpha, News omega, Event Omega, Document omega, Discussion omega, Page omega"
 
     # "Beta" is used in all the rdf entities body fields.
     When I enter "beta" in the search bar and press enter
     Then I should see the text "SEARCH RESULTS (4)"
-    And the page should show the tiles "Collection alpha, Solution alpha, Release Alpha | 1, Licence Alpha"
+    And the page should show the tiles "Collection alpha, Solution alpha, Release Alpha, Licence Alpha"
 
     # "Epsilon" is used in all the node entities body fields.
     When I enter "epsilon" in the search bar and press enter
-    Then the page should show the tiles "Collection alpha, News headline delta, Event Omega, Document omega, Discussion omega, Page omega"
+    Then the page should show the tiles "Collection alpha, News omega, Event Omega, Document omega, Discussion omega, Page omega"
 
     # "Alphabet" is used in all the keywords fields.
     When I enter "Alphabet" in the search bar and press enter
-    Then the page should show the tiles "Solution alpha, Release Alpha | 1, News headline delta, Event Omega, Document omega"
+    Then the page should show the tiles "Solution alpha, Release Alpha, News omega, Event Omega, Document omega"
 
     # "Gamma" is used in the collection abstract.
     When I enter "gamma" in the search bar and press enter
@@ -220,7 +269,7 @@ Feature: Global search
 
     # "Delta" is used in headline and short titles.
     When I enter "delta" in the search bar and press enter
-    Then the page should show the tiles "News headline delta, Event Omega, Document omega"
+    Then the page should show the tiles "News omega, Event Omega, Document omega"
 
     # Search for the event fields: agenda, location, address, organisation, scope.
     When I enter "agenda" in the search bar and press enter
@@ -236,11 +285,11 @@ Feature: Global search
 
     # The owner and contact information names should be indexed inside the solutions/releases they are linked to.
     When I enter "responsible" in the search bar and press enter
-    Then the page should show the tiles "Solution alpha, Release Alpha | 1"
+    Then the page should show the tiles "Solution alpha, Release Alpha"
     # Visit the homepage to be sure that the test fetches the correct updated page.
     When I go to the homepage
     And I enter "contact" in the search bar and press enter
-    Then the page should show the tiles "Solution alpha, Release Alpha | 1"
+    Then the page should show the tiles "Solution alpha, Release Alpha"
 
     # Users should be found by first name, family name and organisation.
     When I enter "Jenessa" in the search bar and press enter
@@ -280,8 +329,8 @@ Feature: Global search
       | description | Exotic wings and where to find them. |
       | state       | validated                            |
     And custom_page content:
-      | title           | body                                  | collection                      |
-      | Disturbed birds | Flocks of trained pigeons flying off. | Ornithology: the study of birds |
+      | title           | body                                  | collection                      | state     |
+      | Disturbed birds | Flocks of trained pigeons flying off. | Ornithology: the study of birds | published |
     And news content:
       | title                               | headline                            | body                            | collection                      | state     |
       | Chickens are small birds            | Chickens are small birds            | Birds domesticated in India.    | Ornithology: the study of birds | validated |
@@ -406,10 +455,10 @@ Feature: Global search
 
     # Add a new distribution, child of a release.
     Given the following release:
-      | title           | Releazz   |
-      | release number  | 1         |
-      | state           | validated |
-      | is version of   | Zzolution |
+      | title          | Releazz   |
+      | release number | 1         |
+      | state          | validated |
+      | is version of  | Zzolution |
 
     When I enter "ReleazzDistro" in the search bar and press enter
     Then I should see "No content found for your search."
@@ -424,18 +473,18 @@ Feature: Global search
       | representation technique | Datalog                           |
 
     When I enter "releazzDistro" in the search bar and press enter
-    Then the page should show only the tiles "Releazz | 1"
+    Then the page should show only the tiles "Releazz"
     When I enter "dracula" in the search bar and press enter
-    Then the page should show only the tiles "Releazz | 1"
+    Then the page should show only the tiles "Releazz"
     When I enter "releazz-distro" in the search bar and press enter
-    Then the page should show only the tiles "Releazz | 1"
+    Then the page should show only the tiles "Releazz"
     When I enter "apache" in the search bar and press enter
     # Also the licence itself is retrieved.
-    Then the page should show only the tiles "Apache-2.0,Releazz | 1"
+    Then the page should show only the tiles "Apache-2.0,Releazz"
     When I enter "HTML" in the search bar and press enter
-    Then the page should show only the tiles "Releazz | 1"
+    Then the page should show only the tiles "Releazz"
     When I enter "Datalog" in the search bar and press enter
-    Then the page should show only the tiles "Releazz | 1"
+    Then the page should show only the tiles "Releazz"
 
     Given I am logged in as a moderator
     When I go to the edit form of the "ReleazzDistro" distribution
@@ -466,18 +515,18 @@ Feature: Global search
 
     # Search now with the new keywords.
     When I enter "dIstrOreleazz" in the search bar and press enter
-    Then the page should show only the tiles "Releazz | 1"
+    Then the page should show only the tiles "Releazz"
     When I enter "zoRRo" in the search bar and press enter
-    Then the page should show only the tiles "Releazz | 1"
+    Then the page should show only the tiles "Releazz"
     When I enter "mishMash" in the search bar and press enter
-    Then the page should show only the tiles "Releazz | 1"
+    Then the page should show only the tiles "Releazz"
     When I enter "LGpl" in the search bar and press enter
     # Also the licence itself is retrieved.
-    Then the page should show only the tiles "LGPL,Releazz | 1"
+    Then the page should show only the tiles "LGPL,Releazz"
     When I enter "CSV" in the search bar and press enter
-    Then the page should show only the tiles "Releazz | 1"
+    Then the page should show only the tiles "Releazz"
     When I enter "Human Language" in the search bar and press enter
-    Then the page should show only the tiles "Releazz | 1"
+    Then the page should show only the tiles "Releazz"
 
     Given I delete the "DistroReleazz" asset distribution
 
@@ -523,23 +572,23 @@ Feature: Global search
     Then the option "Relevance" should be selected
     And I should see the text "SEARCH RESULTS (3)"
     And I should see the following tiles in the correct order:
-      | Relativity news: Relativity theory |
-      | Relativity is the word             |
-      | Absolutely nonsense                |
+      | The uneven universe |
+      | Quantum information |
+      | The earth is square |
     And I should be on "/search?keys=Relativity&sort_by=relevance"
 
     Given I select "Creation Date" from "Sort by"
     Then I should see the following tiles in the correct order:
-      | Absolutely nonsense                |
-      | Relativity news: Relativity theory |
-      | Relativity is the word             |
+      | The earth is square |
+      | The uneven universe |
+      | Quantum information |
     And I should be on "/search?keys=Relativity&sort_by=creation-date"
 
     Given I select "Last Updated Date" from "Sort by"
     Then I should see the following tiles in the correct order:
-      | Relativity is the word             |
-      | Relativity news: Relativity theory |
-      | Absolutely nonsense                |
+      | Quantum information |
+      | The uneven universe |
+      | The earth is square |
     And I should be on "/search?keys=Relativity&sort_by=last-updated-date"
 
   @javascript
@@ -605,16 +654,17 @@ Feature: Global search
     Given I am logged in as a user with the "authenticated" role
     When I visit the search page
     And I should not see search bar icon in navbar
-    And I enter "funn" in the search bar
+    And I enter "fu" in the search bar
     And I wait for AJAX to finish
     Then I should see the following search suggestions:
-      | funni |
-      | funny |
+      | Radio cooking collection |
+      | Spheres                  |
 
-    When I enter "bott" in the search bar
+    When I enter "cook" in the search bar
     And I wait for AJAX to finish
     Then I should see the following search suggestions:
-      | best |
+      | Movistar                 |
+      | Radio cooking collection |
 
     When I check the "Solutions (2)" checkbox from the "Content types" facet
     And I check the "News (5)" checkbox from the "Content types" facet
@@ -636,20 +686,20 @@ Feature: Global search
     When I visit the collection overview
     And I should see search bar icon in navbar
     Then I should toggle search bar in navbar
-    And I enter "funn" in the search bar
+    And I enter "fu" in the search bar
     And I wait for AJAX to finish
     Then I should see the following search suggestions:
-      | funni |
-      | funny |
+      | Radio cooking collection |
+      | Spheres                  |
 
     # Check if search autocomplete works in homepage's header search bar.
     Given I am on the homepage
     Then I should see the search bar in homepage's header
-    And I enter "funn" in the search bar
+    And I enter "fu" in the search bar
     And I wait for AJAX to finish
     Then I should see the following search suggestions:
-      | funni |
-      | funny |
+      | Radio cooking collection |
+      | Spheres                  |
 
     # Check if search did you mean works.
     Given I visit the search page
@@ -666,24 +716,10 @@ Feature: Global search
     Then I should see the text "SEARCH RESULTS (1)"
     And I should see the "Movistar" tile
 
-    Then I enter "sp" in the search bar
+    Then I enter "spheres" in the search bar
     And I wait for AJAX to finish
     Then I should see the following search suggestions:
-      | Radio cooking collection |
-      | spheres                  |
-      | spherification           |
-      | sphere                   |
-      | spherif                  |
-
-    Then I enter "sp" in the search bar
-    And I wait for AJAX to finish
-    Then I should see the following search suggestions:
-      | Radio cooking collection |
       | Spheres                  |
-      | spherification           |
-      | sphere                   |
-      | spherif                  |
-
 
   @terms
   Scenario: Filter on date
@@ -711,10 +747,6 @@ Feature: Global search
       | Dummy news 4    | Dummy body                                 | Mice in space | E-inclusion             | Luxembourg       | validated | charles.jpg | 09/18/2019 | 09/18/2019 |
 
     When I visit the search page
-    Then I should see the 3 tiles with image
-
-    Then I go to "/search?sort_by=relevance&page=1"
-    And I should see the 0 tiles with image
 
     # Filter content from 01-01-2020 to 30-06-2020.
     # Only "El Cabo da Roca" and "Funny news 4" should appear.
@@ -730,15 +762,15 @@ Feature: Global search
     Then I go to "/search?f[0]=creation_date:(min:,max:)"
     And I should see the text "SEARCH RESULTS (14)"
 
-  Scenario: Max 3 topic terms appear in each search result with a suffix for the rest.
+  Scenario: Max 2 topic terms appear in each search result with a suffix for the rest.
     Given the following collection:
-      | title      | Max 3 topic collection                                                             |
+      | title      | Max 2 topic collection                                                             |
       | moderation | no                                                                                 |
       | topic      | Finance in EU, Supplier exchange, Demography, E-inclusion, Statistics and Analysis |
       | state      | validated                                                                          |
     When I visit the search page
-    Then there should be 3 topics in the "Max 3 topic collection" card
-    And I should see the text "+2 topics" in the "Max 3 topic collection" card
+    Then there should be 2 topics in the "Max 2 topic collection" card
+    And I should see the text "+3 topics" in the "Max 2 topic collection" card
 
   Scenario: In search result I can see updated date label.
     Given collections:
@@ -750,45 +782,6 @@ Feature: Global search
       | The uneven universe | Relativity news: Relativity theory | I do care about the relativity keyword in the body.               | Custom collection | validated | 02/01/2019 | 02/08/2019 |
       | The earth is square | Absolutely nonsense                | Some news are not worth it but I will add relativity here anyway. | Custom collection | validated | 03/01/2019 | 01/08/2019 |
     When I visit the search page
-    Then I should see the text "Updated Date: 08/03/2019" in the "Relativity is the word" card
-    And I should see the text "Updated Date: 08/02/2019" in the "Relativity news: Relativity theory" card
-    And I should see the text "Updated Date: 08/01/2019" in the "Absolutely nonsense" card
-
-  Scenario: Regression test for ISAICP-7078
-  See https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7078
-
-    Given collections:
-      | title            | description       | state     |
-      | Asset collection | Some custom data. | validated |
-    And the following solution:
-      | title            | My asset solution                    |
-      | collection       | Asset collection                     |
-      | description      | A asset sample solution              |
-      | documentation    | text.pdf                             |
-      | content creation | registered users                     |
-      | landing page     | http://foo-example.com/landing       |
-      | webdav creation  | no                                   |
-      | webdav url       | http://joinup.eu/solution/foo/webdav |
-      | wiki             | http://example.wiki/foobar/wiki      |
-      | state            | validated                            |
-    And the following releases:
-      | title  | documentation | release number | release notes | creation date    | is version of     | state     | status    |
-      | Delta1 | text.pdf      | 1.0.0          | New 1.0       | 2017-11-11T11:11 | My asset solution | validated | Completed |
-      | Delta2 | text.pdf      | 2.0.0          | New 2.0       | 2017-12-11T11:11 | My asset solution | validated | Completed |
-      | Delta3 | text.pdf      | 3.0.0          | New 3.0       | 2018-11-11T11:11 | My asset solution | validated | Completed |
-      | Delta4 | text.pdf      | 4.0.0          | New 4.0       | 2019-11-11T11:11 | My asset solution | validated | Completed |
-      | Delta5 | text.pdf      | 5.0.0          | New 5.0       | 2020-11-11T11:11 | My asset solution | validated | Completed |
-      | Delta6 | text.pdf      | 6.0.0          | New 6.0       | 2021-11-11T11:11 | My asset solution | validated | Completed |
-      | Delta7 | text.pdf      | 7.0.0          | New 7.0       | 2021-12-11T11:11 | My asset solution | validated | Completed |
-      | Delta8 | text.pdf      | 8.0.0          | New 8.0       | 2018-10-11T11:11 | My asset solution | validated | Completed |
-
-    When I go to "/search?f[0]=type%3Aasset_release"
-    And I should see the text "SEARCH RESULTS (8)"
-    Then I should see the text "New 1.0" in the "Delta1 | 1.0.0" card
-    And I should see the text "New 2.0" in the "Delta2 | 2.0.0" card
-    And I should see the text "New 3.0" in the "Delta3 | 3.0.0" card
-    And I should see the text "New 4.0" in the "Delta4 | 4.0.0" card
-    And I should see the text "New 5.0" in the "Delta5 | 5.0.0" card
-    And I should see the text "New 6.0" in the "Delta6 | 6.0.0" card
-    And I should see the text "New 7.0" in the "Delta7 | 7.0.0" card
-    And I should see the text "New 8.0" in the "Delta8 | 8.0.0" card
+    Then I should see the text "Last update: 08/03/2019" in the "Quantum information" card
+    And I should see the text "Last update: 08/02/2019" in the "The uneven universe" card
+    And I should see the text "Last update: 08/01/2019" in the "The earth is square" card

@@ -1,0 +1,30 @@
+{#
+/**
+ * @file
+ * Default theme implementation to display a not signed in modal dialog.
+ */
+
+/**
+ * Template implementation to display the content of the modal dialog for users who are not signed in.
+ *
+ * Available variables:
+ * - title: Modal title.
+ * - description: Modal description.
+ * - login: Login link.
+ * - register: Register link.
+ *
+ * @see \Drupal\joinup_modal\Controller\JoinupModalAnonymousController::render()
+ *
+ * @ingroup themeable
+ */
+#}
+<div>
+  <h2>{{ title }}</h2>
+  <p>{{ description }}</p>
+  <div>
+    <p>{{ 'Already have an account?'|t }}</p>
+    <div>{{ login }}</div>
+    <p>{{ 'New member?'|t }}</p>
+    <div>{{ register }}</div>
+  </div>
+</div>

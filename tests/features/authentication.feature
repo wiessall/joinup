@@ -25,6 +25,7 @@ Feature: User authentication
       | admin/config                                        |
       | admin/config/search/redirect                        |
       | admin/content                                       |
+      | admin/content/files                                 |
       | admin/content/media                                 |
       | admin/content/rdf                                   |
       | admin/legal-notice                                  |
@@ -41,16 +42,15 @@ Feature: User authentication
       | admin/structure/compatibility-document/display      |
       | admin/structure/compatibility-document/form-display |
       | admin/structure/media                               |
+      | admin/homepage-topics                               |
       | announcements                                       |
       | dashboard                                           |
       | licence                                             |
       | licence/add                                         |
       | media/add                                           |
-      | media/add/collection_banner                         |
       | media/add/collection_logo                           |
       | media/add/event_logo                                |
       | media/add/news_logo                                 |
-      | media/add/solution_banner                           |
       | media/add/solution_logo                             |
       | node/add                                            |
       | node/add/custom_page                                |
@@ -106,6 +106,7 @@ Feature: User authentication
       | admin                                               |
       | admin/config                                        |
       | admin/content                                       |
+      | admin/content/files                                 |
       | admin/content/media                                 |
       | admin/content/messages                              |
       | admin/content/rdf                                   |
@@ -123,16 +124,15 @@ Feature: User authentication
       | admin/structure/compatibility-document/display      |
       | admin/structure/compatibility-document/form-display |
       | admin/structure/media                               |
+      | admin/homepage-topics                               |
       | announcements                                       |
       | dashboard                                           |
       | licence                                             |
       | licence/add                                         |
       | media/add                                           |
-      | media/add/collection_banner                         |
       | media/add/collection_logo                           |
       | media/add/event_logo                                |
       | media/add/news_logo                                 |
-      | media/add/solution_banner                           |
       | media/add/solution_logo                             |
       | node/add                                            |
       | node/add/custom_page                                |
@@ -173,6 +173,7 @@ Feature: User authentication
       | path                                        |
       | admin/content/media                         |
       | admin/content/rdf                           |
+      | admin/content/files                         |
       | admin/legal-notice                          |
       | admin/legal-notice/add                      |
       | admin/people                                |
@@ -185,16 +186,15 @@ Feature: User authentication
       | admin/reporting/solutions-by-type           |
       | admin/reporting/subscribers-report          |
       | admin/structure/compatibility-document      |
-      | announcements                                       |
+      | admin/homepage-topics                       |
+      | announcements                               |
       | dashboard                                   |
       | licence                                     |
       | licence/add                                 |
       | media/add                                   |
-      | media/add/collection_banner                 |
       | media/add/collection_logo                   |
       | media/add/event_logo                        |
       | media/add/news_logo                         |
-      | media/add/solution_banner                   |
       | media/add/solution_logo                     |
       | outdated-content-threshold                  |
       | propose/collection                          |
@@ -255,6 +255,7 @@ Feature: User authentication
       | admin                              |
       | admin/config                       |
       | admin/content                      |
+      | admin/content/files                                 |
       | admin/content/media                |
       | admin/content/rdf                  |
       | admin/legal-notice                 |

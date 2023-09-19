@@ -6,6 +6,7 @@ namespace Drupal\joinup_document\Entity;
 
 use Drupal\joinup_bundle_class\LogoTrait;
 use Drupal\joinup_community_content\Entity\CommunityContentBase;
+use Drupal\joinup_workflow\ArchivableEntityTrait;
 
 /**
  * Entity subclass for the 'document' bundle.
@@ -13,6 +14,7 @@ use Drupal\joinup_community_content\Entity\CommunityContentBase;
 class Document extends CommunityContentBase implements DocumentInterface {
 
   use LogoTrait;
+  use ArchivableEntityTrait;
 
   /**
    * {@inheritdoc}
@@ -33,7 +35,7 @@ class Document extends CommunityContentBase implements DocumentInterface {
       return \DateTimeImmutable::createFromFormat('Y-m-d\TH:i:s', $value, new \DateTimeZone('UTC'))->getTimestamp();
     }
 
-    if ($this->get('published_at')->isEmpty() || empty($this->get('published_at')->value) || $this->get('published_at')->value == PUBLICATION_DATE_DEFAULT) {
+    if ($this->get('published_at')->isEmpty() || empty($this->get('published_at')->value) || is_null($this->get('published_at')->value)) {
       return NULL;
     }
 

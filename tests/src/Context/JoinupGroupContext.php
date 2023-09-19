@@ -77,6 +77,24 @@ class JoinupGroupContext extends RawDrupalContext {
   }
 
   /**
+   * Navigates to the discussions page of a collection/solution.
+   *
+   * @param string $label
+   *   The label of the group for which to visit the about page.
+   *
+   * @Given I go to the discussions page of :label
+   */
+  public function visitDiscussionPage(string $label): void {
+    $group = $this->getEntityByLabel('rdf_entity', $label);
+
+    $url = Url::fromRoute('view.discussions.overview', [
+      'rdf_entity' => $group->id(),
+    ]);
+
+    $this->visitPath($url->toString());
+  }
+
+  /**
    * Checks if the given node belongs to the given group.
    *
    * If there are multiple nodes or groups with the same name, then only
@@ -192,6 +210,18 @@ class JoinupGroupContext extends RawDrupalContext {
   }
 
   /**
+   * Asserts that a group menu link is active.
+   *
+   * @param string $link
+   *   The group menu link text.
+   *
+   * @Then the :link group menu link should be active
+   */
+  public function assertGroupMenuLinkActive(string $link): void {
+    Assert::assertNotNull($this->getSession()->getPage()->find('xpath', "//a[text() = '$link' and contains(concat(' ', normalize-space(@class), ' '), ' active ')]"));
+  }
+
+  /**
    * Navigates to the announcements page of a given group.
    *
    * @param string $group_label
@@ -220,7 +250,7 @@ class JoinupGroupContext extends RawDrupalContext {
    * @param string $group_type
    *   The group bundle.
    *
-   * @When I go the :subject announcement of :group_label :group_type
+   * @When I go to the :subject announcement of :group_label :group_type
    */
   public function visitAnnouncementEditForm(string $subject, string $group_label, string $group_type): void {
     assert(in_array($group_type, ['collection', 'solution']));

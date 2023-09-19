@@ -18,11 +18,11 @@ dependencies:
     - field.field.node.news.field_state
     - field.field.node.news.field_topic
     - field.field.node.news.og_audience
-    - image.style.horizontal_medium_image
     - node.type.news
+    - responsive_image.styles.tile
   module:
-    - image
-    - smart_trim
+    - joinup_html_stripper
+    - responsive_image
     - template_suggestion
     - user
 id: node.news.view_mode_tile
@@ -31,53 +31,38 @@ bundle: news
 mode: view_mode_tile
 content:
   body:
-    type: smart_trim
+    type: joinup_html_stripper_stripped
     label: hidden
     settings:
-      trim_length: 200
-      trim_type: chars
-      trim_suffix: …
-      wrap_output: false
-      wrap_class: trimmed
-      more_link: false
-      more_class: more-link
-      more_text: More
-      summary_handler: trim
-      trim_options:
-        text: true
-        trim_zero: false
+      trim_length: 600
     third_party_settings:
       template_suggestion:
-        template_suggestion: ''
+        template_suggestion: bare
     weight: 1
     region: content
-  field_keywords:
-    type: string
-    label: hidden
-    settings:
-      link_to_entity: false
-    third_party_settings:
-      template_suggestion:
-        template_suggestion: comma_separated
-    weight: 2
-    region: content
   field_news_logo:
-    type: image
+    type: responsive_image
     label: hidden
     settings:
-      image_link: content
-      image_style: horizontal_medium_image
+      responsive_image_style: tile
+      image_link: ''
       image_loading:
-        attribute: lazy
+        attribute: eager
     third_party_settings:
       template_suggestion:
-        template_suggestion: ''
+        template_suggestion: bare
     weight: 0
+    region: content
+  flag_like_node:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 10
     region: content
 hidden:
   featured: true
   field_attachment: true
   field_comments: true
+  field_keywords: true
   field_news_headline: true
   field_news_referenced_solution: true
   field_news_source_url: true

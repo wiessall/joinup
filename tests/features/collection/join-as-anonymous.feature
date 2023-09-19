@@ -27,6 +27,7 @@ Feature: Joining a collection as an anonymous user
     But I should not see the link "Leave this collection"
 
     When I click "Join this collection"
+    And a modal should open
     Then I should see the text "Sign in to join"
     And I should see "Only signed in users can join this collection. Please sign in or register an account on EU Login."
     But the cookie that tracks which group I want to join should not be set
@@ -65,8 +66,9 @@ Feature: Joining a collection as an anonymous user
     Given I am an anonymous user
     When I go to the homepage of the "Reannual plants" collection
     And I click "Join this collection"
-    And I press "Sign in / Register" in the "Modal buttons" region
-    Then I should see the heading "Sign in to continue"
+    Then a modal should open
+    When I press "Sign in / Register" in the "Modal buttons" region
+    And I should see the heading "Sign in to continue"
 
     When I fill in "E-mail address" with "iodine@ankh.am"
     And I fill in "Password" with "10d1ne"
@@ -83,7 +85,8 @@ Feature: Joining a collection as an anonymous user
     But I should not see the link "Leave this collection"
 
     When I click "Join this collection"
-    Then I should see the text "Sign in to join"
+    Then a modal should open
+    And I should see the text "Sign in to join"
     And I should see "Only signed in users can join this collection. Please sign in or register an account on EU Login."
     But the cookie that tracks which group I want to join should not be set
     When I press "Sign in / Register" in the "Modal buttons" region
@@ -106,6 +109,7 @@ Feature: Joining a collection as an anonymous user
     Given I am an anonymous user
     When I go to the homepage of the "Vul nuts" collection
     And I click "Join this collection"
+    Then a modal should open
     And I press "Sign in / Register" in the "Modal buttons" region
     Then I should see the heading "Sign in to continue"
 
@@ -136,7 +140,8 @@ Feature: Joining a collection as an anonymous user
     But I should not see the link "Leave this collection"
 
     When I click "Join this collection"
-    Then I should see the text "Sign in to join"
+    Then a modal should open
+    And I should see the text "Sign in to join"
     And I should see "Only signed in users can join this collection. Please sign in or register an account on EU Login."
     But the cookie that tracks which group I want to join should not be set
     When I press "Sign in / Register" in the "Modal buttons" region
@@ -173,7 +178,8 @@ Feature: Joining a collection as an anonymous user
     But I should not see the link "Leave this collection"
 
     When I click "Join this collection"
-    Then I should see the text "Sign in to join"
+    Then a modal should open
+    And I should see the text "Sign in to join"
     And I should see "Only signed in users can join this collection. Please sign in or register an account on EU Login."
     But the cookie that tracks which group I want to join should not be set
     When I press "Sign in / Register" in the "Modal buttons" region
@@ -212,7 +218,7 @@ Feature: Joining a collection as an anonymous user
     Given I am an anonymous user
     When I go to the homepage of the "Reannual plants" collection
     And I click "Join this collection"
-    Then I should see the text "Sign in to join"
+    And I should see the text "Sign in to join"
     When I press "Sign in / Register"
     Then I should see the heading "Sign in to continue"
 

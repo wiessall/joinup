@@ -17,6 +17,7 @@ libraries-override:
   tour/tour-styling: false
   ventuno/components: false
   ventuno/theme: false
+  ventuno/paragraph__carousel: false
 
 regions:
   search_bar: 'Search bar'
@@ -29,3 +30,7 @@ regions:
   content: 'Content'
   content_bottom: 'Content bottom'
   footer: 'Footer'
+
+joinup:
+  menu_local_tasks:
+    horizontal_tabs_block: ventuno_horizontal_tabs

@@ -4,29 +4,3 @@ joinup:
   db_dir: ${joinup.dir}/db
   files_public_dir: ${joinup.site_dir}/sites/default/files
   files_private_dir: ${joinup.site_dir}/${env.DRUPAL_PRIVATE_FILE_SYSTEM}
-
-themes:
-  joinup_theme:
-    dir: ${joinup.site_dir}/themes/joinup
-    scss:
-      import_dir: ${themes.joinup_theme.dir}/scss
-      input: ${themes.joinup_theme.scss.import_dir}/app.scss
-      output_dir: ${themes.joinup_theme.dir}/css
-      output: ${themes.joinup_theme.scss.output_dir}/style.min.css
-      style: compressed
-  ventuno:
-    dir: ${joinup.site_dir}/themes/ventuno
-
-commands:
-  joinup:build-assets:
-    # Compile SCSS for the Joinup theme.
-    - task: mkdir
-      dir: ${themes.joinup_theme.scss.output_dir}
-    - task: run
-      command: assets:compile-scss
-      arguments:
-        - ${themes.joinup_theme.scss.input}
-        - ${themes.joinup_theme.scss.output}
-      options:
-        style: ${themes.joinup_theme.scss.style}
-        import-dir: ${themes.joinup_theme.scss.import_dir}

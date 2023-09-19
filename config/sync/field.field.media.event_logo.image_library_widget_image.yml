@@ -28,7 +28,7 @@ settings:
   handler: 'default:file'
   handler_settings: {  }
   file_directory: library/event/logo
-  file_extensions: 'png gif jpg jpeg'
+  file_extensions: 'png gif jpg jpeg svg'
   max_filesize: ''
   max_resolution: ''
   min_resolution: ''

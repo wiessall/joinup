@@ -8,12 +8,11 @@ Feature: "Add event" visibility options.
     Given the following collection:
       | title  | Collective Ragged tower |
       | logo   | logo.png                |
-      | banner | banner.jpg              |
       | state  | validated               |
     And the following solutions:
-      | title           | collection              | logo     | banner     | state     |
-      | Ragged Tower    | Collective Ragged tower | logo.png | banner.jpg | validated |
-      | Prince of Magic | Collective Ragged tower | logo.png | banner.jpg | validated |
+      | title           | collection              | logo     | state     |
+      | Ragged Tower    | Collective Ragged tower | logo.png | validated |
+      | Prince of Magic | Collective Ragged tower | logo.png | validated |
 
     When I am logged in as an "authenticated user"
     And I go to the homepage of the "Ragged Tower" solution
@@ -39,11 +38,10 @@ Feature: "Add event" visibility options.
     Given the following collection:
       | title  | Collective The Luscious Bridges |
       | logo   | logo.png                        |
-      | banner | banner.jpg                      |
       | state  | validated                       |
     And the following solutions:
-      | title                | collection                      | logo     | banner     | state     |
-      | The Luscious Bridges | Collective The Luscious Bridges | logo.png | banner.jpg | validated |
+      | title                | collection                      | logo     | state     |
+      | The Luscious Bridges | Collective The Luscious Bridges | logo.png | validated |
     And I am logged in as a facilitator of the "The Luscious Bridges" solution
     When I go to the homepage of the "The Luscious Bridges" solution
     And I click "Add event" in the plus button menu
@@ -86,6 +84,3 @@ Feature: "Add event" visibility options.
     And I should see the success message 'Event An amazing event has been created as draft. You can find it in the section "My unpublished content" located in your My account page, or in the aforementioned section under the Solution it was created in.'
     And I should see the text "29/08/2018"
     And the "The Luscious Bridges" solution has a event titled "An amazing event"
-    # Check that the link to the event is visible on the solution page.
-    When I go to the homepage of the "The Luscious Bridges" solution
-    Then I should see the link "An amazing event"

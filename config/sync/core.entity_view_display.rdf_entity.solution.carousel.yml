@@ -6,7 +6,6 @@ dependencies:
     - core.entity_view_mode.rdf_entity.carousel
     - field.field.rdf_entity.solution.field_is_actor
     - field.field.rdf_entity.solution.field_is_affiliations_requests
-    - field.field.rdf_entity.solution.field_is_banner
     - field.field.rdf_entity.solution.field_is_business_process
     - field.field.rdf_entity.solution.field_is_contact_information
     - field.field.rdf_entity.solution.field_is_content
@@ -46,10 +45,11 @@ dependencies:
     - field.field.rdf_entity.solution.field_status
     - field.field.rdf_entity.solution.field_topic
     - rdf_entity.rdfentity.solution
+    - responsive_image.styles.tile
   module:
     - field_group
-    - image
     - layout_builder
+    - responsive_image
     - smart_trim
     - template_suggestion
     - user
@@ -60,7 +60,7 @@ third_party_settings:
       label: 'Abstract wrapper'
       parent_name: ''
       region: hidden
-      weight: 4
+      weight: 61
       format_type: html_element
       format_settings:
         classes: ''
@@ -88,9 +88,13 @@ content:
       trim_suffix: …
       wrap_output: false
       wrap_class: trimmed
-      more_link: false
-      more_class: more-link
-      more_text: More
+      more:
+        display_link: false
+        target_blank: false
+        link_trim_only: false
+        class: more-link
+        text: More
+        aria_label: 'Read more about [node:title]'
       summary_handler: full
       trim_options:
         text: true
@@ -101,12 +105,22 @@ content:
     weight: 2
     region: content
   field_is_logo:
-    type: image_url
+    type: responsive_image
     label: hidden
     settings:
-      image_style: ''
-    third_party_settings: {  }
+      responsive_image_style: tile
+      image_link: ''
+      image_loading:
+        attribute: eager
+    third_party_settings:
+      template_suggestion:
+        template_suggestion: ''
     weight: 1
+    region: content
+  flag_like_rdf_entity:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 4
     region: content
   label:
     type: string
@@ -130,7 +144,6 @@ hidden:
   featured: true
   field_is_actor: true
   field_is_affiliations_requests: true
-  field_is_banner: true
   field_is_business_process: true
   field_is_contact_information: true
   field_is_content: true
@@ -170,8 +183,8 @@ hidden:
   langcode: true
   og_group: true
   pinned_in: true
-  rdf_entity_field_is_content_inline_facets: true
-  rdf_entity_field_is_content_top: true
+  rdf_entity_solution_field_is_content_inline_facets: true
+  rdf_entity_solution_field_is_content_top: true
   related_solution: true
   related_solutions: true
   releases_overview: true

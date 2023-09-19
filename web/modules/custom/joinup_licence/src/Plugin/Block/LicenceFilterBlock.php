@@ -103,7 +103,9 @@ class LicenceFilterBlock extends BlockBase implements ContainerFactoryPluginInte
       'path' => base_path() . 'licence/compare',
       'maxLicenceCount' => LicenceComparerHelper::MAX_LICENCE_COUNT,
     ];
-    $build['#attached']['library'][] = 'joinup_licence/licence-filter';
+    $build['#attached']['library'][] = 'joinup_licence/filter';
+    $library = $this->getConfiguration()['show_terms'] ? 'comparator' : 'compatibility-checker';
+    $build['#attached']['library'][] = "joinup_licence/$library";
 
     return $build;
   }

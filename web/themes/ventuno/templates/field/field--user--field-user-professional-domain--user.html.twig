@@ -1,0 +1,19 @@
+{#
+/**
+ * @file
+ * Default template for a field.
+ */
+#}
+{%
+  set item_classes = [
+    'badge',
+    'rounded-pill',
+    'badge-outline-light',
+    'fs-sm',
+    'mb-1'
+  ]
+%}
+{{ attach_library('ventuno/badge') }}
+{% for item in items %}
+  <span{{ item.attributes.addClass(item_classes) }}>{{ item.content }}</span>
+{% endfor %}

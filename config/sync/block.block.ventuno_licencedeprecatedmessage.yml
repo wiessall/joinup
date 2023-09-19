@@ -9,8 +9,8 @@ dependencies:
     - ventuno
 id: ventuno_licencedeprecatedmessage
 theme: ventuno
-region: content_top
-weight: -24
+region: messages
+weight: -23
 provider: null
 plugin: licence_deprecated_message_block
 settings:

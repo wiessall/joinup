@@ -26,12 +26,12 @@ display:
         document_version_name:
           id: document_version_name
           table: entity_legal_document_acceptance
-          field: document_version_name
+          field: vid
           relationship: none
           group_type: group
           admin_label: ''
           entity_type: entity_legal_document_acceptance
-          entity_field: document_version_name
+          entity_field: vid
           plugin_id: field
           label: Document_version_name
           exclude: false
@@ -210,6 +210,15 @@ display:
             date_format: medium
             custom_date_format: ''
             timezone: ''
+            tooltip:
+              date_format: ''
+              custom_date_format: ''
+            time_diff:
+              enabled: false
+              future_format: '@interval hence'
+              past_format: '@interval ago'
+              granularity: 2
+              refresh: 60
           group_column: value
           group_columns: {  }
           group_rows: true
@@ -361,12 +370,12 @@ display:
         document_version_name:
           id: document_version_name
           table: entity_legal_document_acceptance
-          field: document_version_name
+          field: vid
           relationship: none
           group_type: group
           admin_label: 'Version name'
           entity_type: entity_legal_document_acceptance
-          entity_field: document_version_name
+          entity_field: vid
           plugin_id: standard
           required: false
         uid:

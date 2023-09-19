@@ -10,17 +10,11 @@ declare(strict_types = 1);
 use Drupal\Component\Render\MarkupInterface;
 use Drupal\Component\Utility\Html;
 use Drupal\Core\Access\AccessResult;
-use Drupal\Core\Datetime\DrupalDateTime;
 use Drupal\Core\Field\FieldDefinitionInterface;
 use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Template\Attribute;
-use Drupal\custom_page\Entity\CustomPageInterface;
-use Drupal\joinup_group\Entity\GroupContentInterface;
-use Drupal\joinup_group\Entity\GroupInterface;
-use Drupal\joinup_search\Plugin\views\row\JoinupSearchApiRow;
-use Drupal\paragraphs\ParagraphInterface;
 use Drupal\search_api\IndexInterface;
 use Drupal\search_api\Query\ConditionGroupInterface;
 use Drupal\search_api\Query\QueryInterface;
@@ -69,7 +63,6 @@ function joinup_search_theme($existing, $type, $theme, $path) {
 function template_preprocess_facet_widget_links_inline(array &$variables) {
   $variables['button_attributes'] = new Attribute([
     'id' => Html::getUniqueId('filter-button'),
-    'class' => ['filter__icon', 'icon', 'icon--arrow-down'],
   ]);
 }
 
@@ -86,9 +79,7 @@ function joinup_search_entity_field_access($operation, FieldDefinitionInterface 
   }
 
   // Leave open access to the custom page search field.
-  // @todo Remove the content_listing field in ISAICP-7335.
-  $fields = ['content_listing', 'field_content_listing'];
-  if ($field_definition->getTargetEntityTypeId() === 'paragraph' && in_array($field_definition->getName(), $fields)) {
+  if ($field_definition->getTargetEntityTypeId() === 'paragraph') {
     return AccessResult::neutral();
   }
 
@@ -96,127 +87,6 @@ function joinup_search_entity_field_access($operation, FieldDefinitionInterface 
   // permission.
   return AccessResult::forbiddenIf(!$account->hasPermission('administer search fields'))
     ->addCacheContexts(['user.permissions']);
-}
-
-/**
- * Implements hook_module_implements_alter().
- */
-function joinup_search_module_implements_alter(&$implementations, $hook) {
-  if ($hook === 'search_api_query_alter') {
-    // The search_api_field_search_api_query_alter is always executed last and
-    // is responsible for converting the facets into condition groups. We need
-    // to add a sort parameter based on the content bundle on the collection
-    // content search api field. Thus, the hook invoked by the collection module
-    // should be called last.
-    // @see search_api_field_search_api_query_alter
-    // @see joinup_search_search_api_query_alter
-    $group = $implementations['joinup_search'];
-    unset($implementations['joinup_search']);
-    $implementations['joinup_search'] = $group;
-  }
-}
-
-/**
- * Implements hook_search_api_query_TAG_alter().
- */
-function joinup_search_search_api_query_search_api_field_alter(QueryInterface $query): void {
-  $entity = $query->getOption('search_api_field entity');
-  $parent_entity = $entity;
-  if ($parent_entity instanceof GroupInterface) {
-    return;
-  }
-
-  // Support nested paragraphs.
-  while ($parent_entity instanceof ParagraphInterface) {
-    $parent_entity = $parent_entity->getParentEntity();
-  }
-
-  $group = $entity;
-  if ($parent_entity instanceof GroupContentInterface) {
-    $group = $parent_entity->getGroup();
-  }
-
-  if (!($group instanceof GroupInterface)) {
-    return;
-  }
-
-  $field_value = $query->getOption('search_api_field item')->value;
-  /** @var \Drupal\search_api\Query\Query $query */
-  if (!empty($field_value['global_search'])) {
-    $query->addCondition('entity_groups', NULL, '<>');
-  }
-  elseif (!empty($field_value['show_shared'])) {
-    $or = $query
-      ->createConditionGroup('or')
-      ->addCondition('shared_in', [$group->id()], 'IN')
-      ->addCondition('entity_groups', [$group->id()], 'IN');
-    $query->addConditionGroup($or);
-  }
-  else {
-    // Show only content belonging to the same group.
-    $query->addCondition('entity_groups', [$group->id()], 'IN');
-  }
-  // Remove all results if no presets or content filter.
-  if (empty($field_value['query_presets']) && !array_key_exists('query_builder', $field_value)) {
-    $query->addCondition($parent_entity->getEntityType()->getKey('id'), $parent_entity->id());
-  }
-
-  $query->addCondition($parent_entity->getEntityType()->getKey('id'), $parent_entity->id(), '<>');
-
-}
-
-/**
- * Implements hook_search_api_query_alter().
- *
- * Sets a default search ordering for the content displayed in the collections'
- * and solutions' overview page as well as the custom pages.
- *
- * @throws \Drupal\search_api\SearchApiException
- *   Thrown when the Search API server instance could not be loaded.
- */
-function joinup_search_search_api_query_alter(QueryInterface $query) {
-  if ($query->getSearchId() === 'rdf_entity.field_collection_content') {
-    // In case the user has filtered by event, first sort by the event date.
-    // @todo This will be generic when event calendar will be implemented for
-    // the rdf_entity.field_is_content and the paragraph.field_content_listing
-    // instances of the search api field listing.
-    if (_joinup_search_search_api_has_condition($query->getConditionGroup(), 'entity_bundle', 'event')) {
-      // If the upcoming events are selected, set the order to 'ASC'.
-      // @see \Drupal\joinup\Plugin\ArbitraryFacet\EventsArbitraryFacet::getFacetDefinition
-      $value = \Drupal::service('facets.utility.date_handler')->isoDate((new DrupalDateTime('today'))->getTimestamp());
-      $order = _joinup_search_search_api_has_condition($query->getConditionGroup(), 'field_event_date', $value, '>=') ? QueryInterface::SORT_ASC : QueryInterface::SORT_DESC;
-      $query->sort('field_event_date', $order);
-    }
-  }
-
-  // Sort collection content by creation date, newest first.
-  $search_ids = [
-    'rdf_entity.field_collection_content',
-    'rdf_entity.field_is_content',
-    'paragraph.field_content_listing',
-    // This is the content listing for the carousels. We have a separate similar
-    // field because the storage saves the view modes in the field.
-    // @todo Remove this when this is united in ISAICP-7335.
-    'paragraph.content_listing',
-  ];
-
-  if (in_array($query->getSearchId(), $search_ids)) {
-    $query->sort('entity_created', 'DESC');
-  }
-
-  // Because we allow listing of custom pages, if the listing is of a custom
-  // page, ensure that the current page is excluded from the results to avoid
-  // infinite recursion.
-  if (in_array($query->getSearchId(), [
-    'paragraph.field_content_listing',
-    'paragraph.content_listing',
-  ])) {
-    $parent_entity = $query->getOption('search_api_field entity');
-    while (!($parent_entity instanceof CustomPageInterface)) {
-      $parent_entity = $parent_entity->getParentEntity();
-    }
-    $query->addCondition('id', $parent_entity->id(), '<>');
-  }
 }
 
 /**
@@ -275,12 +145,28 @@ function joinup_search_search_api_index_items_alter(IndexInterface $index, array
  * Set the "sticky" property on all documents that are missing it. The property
  * is prefixed with "bs_" because "b" stands for boolean and "s" for single
  * value, as they are used for sorting.
+ *
+ * Set the "state" property on all documents that are missing it and are stored
+ * in the unpublished index. The property is prefixed with "ss_" because the
+ * first "s" stands for 'string' and the second one stands for single value.
  */
 function joinup_search_search_api_solr_documents_alter(&$documents, IndexInterface $index, array $items) {
-  /** @var \Solarium\QueryType\Update\Query\Document\Document[] $documents */
+  /** @var \Solarium\QueryType\Update\Query\Document[] $documents */
   foreach ($documents as $document) {
     if (empty($document->getFields()['bs_sticky'])) {
       $document->setField('bs_sticky', FALSE);
+    }
+    if (empty($document->getFields()['sm_entity_status']) && $index->id() === 'unpublished') {
+      $document->setField('sm_entity_status', 'unpublished');
+    }
+    if (empty($document->getFields()['sm_entity_status']) && $index->id() === 'published') {
+      // Because of the way the search API works, when we
+      // perform a search, it only returns items *with* a value for the
+      // conditions. Thus, when we search for an item that is not archived, if
+      // items do not have a value for the state field, they will not be
+      // included in the results. This is why we set the value to a special
+      // value that will never be used for the state field.
+      $document->setField('sm_entity_status', 'published');
     }
   }
 }
@@ -311,12 +197,13 @@ function joinup_search_search_api_solr_query_alter(SolariumQueryInterface $solar
     return;
   }
 
+  // Note: the Solarium query might affect the facets shown in the page. Refrain
+  // from using these functions for configurable dynamic queries.
   _joinup_search_apply_global_search_api_solr_settings($solarium_query, $query);
-  _joinup_search_apply_listing_content_query_settings($solarium_query, $query);
 }
 
 /**
- * Apply the global settings to all solarium queries on Joinup.
+ * Apply the global settings to all search_api_field solarium queries on Joinup.
  *
  * @param \Solarium\Core\Query\QueryInterface $solarium_query
  *   The solarium query.
@@ -334,7 +221,7 @@ function _joinup_search_apply_global_search_api_solr_settings(SolariumQueryInter
   // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-4907
   $solarium_query->addParam('defType', 'edismax');
 
-  $value = $item->value;
+  $value = $item->getValue()['value'];
   if (empty($value['query_builder']['filters'])) {
     return;
   }
@@ -370,10 +257,15 @@ function _joinup_search_apply_global_search_api_solr_settings(SolariumQueryInter
       continue;
     }
 
+    $sort_value = is_numeric($plugin_config['target_id']) ?
+      $plugin_config['target_id'] :
+      $solarium_query->getHelper()
+        ->escapePhrase((string) $plugin_config['target_id']);
+
     $sort = sprintf(
       'if(eq(%s,%s),%s,%s)',
       $solr_fields[$field],
-      (int) $plugin_config['target_id'],
+      $sort_value,
       $delta,
       $sort
     );
@@ -381,78 +273,6 @@ function _joinup_search_apply_global_search_api_solr_settings(SolariumQueryInter
 
   $sorts = $solarium_query->getSorts();
   $solarium_query->setSorts([$sort => 'asc'] + $sorts);
-}
-
-/**
- * Apply solr settings related to search_api_field listings.
- *
- * @param \Solarium\Core\Query\QueryInterface $solarium_query
- *   The solarium query.
- * @param \Drupal\search_api\Query\QueryInterface $query
- *   The search api query class.
- */
-function _joinup_search_apply_listing_content_query_settings(SolariumQueryInterface $solarium_query, QueryInterface $query): void {
-  if (!$query->hasTag('search_api_field_field_collection_content') && !$query->hasTag('search_api_field_field_is_content')) {
-    return;
-  }
-
-  // This alter is aware only about group content searches except when the
-  // filter 'event' is applied. When the 'event' filter is applied, the event
-  // date is used to sort, in joinup_search_search_api_query_alter().
-  // @see joinup_search_search_api_query_alter()
-  if (_joinup_search_search_api_has_condition($query->getConditionGroup(), 'entity_bundle', 'event')) {
-    return;
-  }
-
-  /** @var \Drupal\Core\Entity\EntityInterface $entity */
-  if (!$entity = $query->getOption('search_api_field entity')) {
-    return;
-  }
-
-  // In order to sort by the pinned status of the entity, we need to create a
-  // sort function query. The values that are used for sort are evaluated at
-  // runtime instead of being retrieved from the index.
-  // An entity is pinned when:
-  // - for nodes, when they are belong to the current group and the sticky
-  //   field is set to true;
-  // - for solutions, when they are pinned inside the current collection.
-  // The query() Solr function query is a good candidate for doing custom sorts,
-  // but it will return the score of the subquery. The score can be different
-  // between single results and can range from a small fraction above zero to
-  // infinite.
-  // Example:
-  // @codingStandardsIgnoreStart
-  // "or(and(bs_sticky, query({!v='sm_entity_groups:<id>'},0)), query({!v='sm_rdf_pinned_in:<id>'},0))"
-  // "query({!v='(bs_sticky:true AND sm_entity_groups:<id>) OR (sm_rdf_pinned_in:<id>)'})"
-  // @codingStandardsIgnoreEnd
-  // The and() operator will return false when the subquery score is lower than
-  // 1, so both of the above will fail the sorting.
-  // Solr 6.x has the gt(x,y) function, that will return true if x is greater
-  // than y. By using gt(), any positive score can be transformed to true.
-  // Example:
-  // @codingStandardsIgnoreStart
-  // "or(and(bs_sticky, gt(query({!v='sm_entity_groups:<id>'},0),0)), gt(query({!v='sm_rdf_pinned_in:<id>'},0),0))"
-  // "gt(query({!v='(bs_sticky:true AND sm_entity_groups:<id>) OR (sm_rdf_pinned_in:<id>)'}),0)"
-  // @codingStandardsIgnoreEnd
-  // Unfortunately, Solr 5.x doesn't support the gt() function.
-  // Both Solr versions support the termfreq() function, which will return the
-  // number of occurrences of a term in a field of the document.
-  // Alternatively, also the exists() function could be used in conjunction with
-  // the query() function, but it looks more expensive.
-  // Example:
-  // @codingStandardsIgnoreLine
-  // "or(and(bs_sticky,exists(query({!v='sm_entity_groups:<id>'},0))),exists(query({!v='sm_rdf_pinned_in:<id>'},0)))"
-  // @see https://lucene.apache.org/solr/guide/6_6/function-queries.html#function-queries
-  // @see http://archive.apache.org/dist/lucene/solr/ref-guide/apache-solr-ref-guide-5.5.pdf
-  $computed_sort = sprintf(
-    "or(termfreq(sm_node_pinned_in,%1\$s),termfreq(sm_rdf_pinned_in,%1\$s))",
-    $solarium_query->getHelper()->escapePhrase($entity->id())
-  );
-  $solarium_query->setSorts([
-    $computed_sort => 'desc',
-    'score' => 'desc',
-    'ds_entity_created' => 'desc',
-  ]);
 }
 
 /**
@@ -482,13 +302,6 @@ function joinup_search_theme_suggestions_joinup_search_global_search(array $vari
   }
 
   return [];
-}
-
-/**
- * Implements hook_views_plugins_row_alter().
- */
-function joinup_search_views_plugins_row_alter(array &$plugins): void {
-  $plugins['search_api']['class'] = JoinupSearchApiRow::class;
 }
 
 /**
@@ -564,6 +377,48 @@ function joinup_search_views_pre_render(ViewExecutable $view): void {
           }
         }
       }
+    }
+  }
+}
+
+/**
+ * Implements hook_entity_prepare_view().
+ */
+function joinup_search_entity_prepare_view(string $entity_type_id, array $entities, array $displays, string $view_mode): void {
+  if ($entity_type_id !== 'rdf_entity') {
+    return;
+  }
+
+  $entity_fields = [
+    'collection' => [
+      'field' => 'field_collection_content',
+      'facet' => 'field_collection_content_status',
+    ],
+    'solution' => [
+      'field' => 'field_is_content',
+      'facet' => 'field_is_content_status',
+    ],
+  ];
+
+  foreach ($entities as $entity) {
+    if (!isset($entity_fields[$entity->bundle()])) {
+      continue;
+    }
+
+    $field = $entity_fields[$entity->bundle()]['field'];
+    $facet = $entity_fields[$entity->bundle()]['facet'];
+    if (!isset($entity->{$field}) || $entity->{$field}->value['enabled'] === 0 || !isset($entity->{$field}->value['fields'][$facet])) {
+      continue;
+    }
+
+    // Because we are forcing the facet to show the values even when they are
+    // not narrowing the results, and we are altering the query as well, we need
+    // to also dynamically hide the facet when the 'show_archived' option is set
+    // to anything else than 'all' - because it will not hide automatically.
+    if ($entity->{$field}->value['show_archived'] !== 'all') {
+      $value = $entity->{$field}->getValue();
+      $value[0]['value']['fields'][$facet]['region'] = 'hidden';
+      $entity->{$field}->setValue($value);
     }
   }
 }

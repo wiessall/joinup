@@ -27,6 +27,7 @@ trait RdfEntityTrait {
    */
   protected function assertRdfEntityCount(int $number, string $type): void {
     $actual = \Drupal::entityQuery('rdf_entity')
+      ->accessCheck(FALSE)
       ->condition('rid', $type)
       ->count()
       ->execute();

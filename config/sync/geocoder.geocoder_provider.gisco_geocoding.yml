@@ -1,0 +1,14 @@
+uuid: 61799df4-9561-49ed-8b9f-fd243b88c844
+langcode: en
+status: true
+dependencies:
+  module:
+    - oe_gisco_geocoding
+id: gisco_geocoding
+label: 'GISCO Geocoding'
+plugin: gisco_geocoding
+configuration:
+  throttle:
+    period: null
+    limit: null
+  referer: 'https://joinup.ec.europa.eu/'

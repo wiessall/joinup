@@ -148,10 +148,9 @@ Feature: Joining and leaving collections through the web interface
 
     When I press "Cancel" in the "Modal buttons" region
     And I wait for AJAX to finish
-    Then I should not see the text "Sign in to join"
     # Since this is a modal, the dialog simply closes instead of redirecting to
     # another page. This is why the collection title is still displayed.
-    But I should see the heading "Sapient Pearwood"
+    Then I should see the heading "Sapient Pearwood"
 
     # Members can cancel the "Leave collection" modal.
     Given I am logged in as "Stewe Griffin"
@@ -159,14 +158,11 @@ Feature: Joining and leaving collections through the web interface
     When I click "Read more"
     Then I should see the heading "About Sapient Pearwood"
 
-    When I press "You're a member"
-    And I wait for animations to finish
-    And I click "Leave this collection"
+    When I click "Leave this collection"
     Then a modal should open
 
     When I press "Cancel" in the "Modal buttons" region
     And I wait for AJAX to finish
-    Then I should not see the text "Leave collection"
     # Since this is a modal, the dialog simply closes and the user is not redirected
     # to the overview page. This is why the title from "About" is still displayed.
-    But I should see the heading "About Sapient Pearwood"
+    Then I should see the heading "About Sapient Pearwood"

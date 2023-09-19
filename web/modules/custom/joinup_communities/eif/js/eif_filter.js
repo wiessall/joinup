@@ -19,7 +19,7 @@
         // data-joinup-eif-category.
         let solutionsCount = 0;
         const eifFilterItem = document.querySelectorAll(
-          ".eif-filter__item a.is-active"
+          ".eif-filter__item button.is-active"
         );
         eifFilterItem.forEach((element) => {
           const currentEifCategory = element.getAttribute(
@@ -54,7 +54,7 @@
         counter.textContent = solutionsCount;
       }
       // Trigger if eif filter is clicked.
-      document.querySelectorAll(".eif-filter__item a").forEach((el) => {
+      document.querySelectorAll(".eif-filter__item button").forEach((el) => {
         el.addEventListener("click", (e) => {
           e.preventDefault();
           e.target.classList.toggle("is-active");
@@ -67,7 +67,7 @@
       if (eifRest) {
         eifRest.addEventListener("click", () => {
           document
-            .querySelector(".eif-filter__item a.is-active")
+            .querySelector(".eif-filter__item button.is-active")
             .classList.remove("is-active");
           checkEifCategories();
         });

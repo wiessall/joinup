@@ -4,7 +4,6 @@ status: true
 dependencies:
   config:
     - core.entity_view_mode.rdf_entity.view_mode_tile
-    - field.field.rdf_entity.asset_release.field_isr_banner
     - field.field.rdf_entity.asset_release.field_isr_contact_information
     - field.field.rdf_entity.asset_release.field_isr_description
     - field.field.rdf_entity.asset_release.field_isr_distribution
@@ -21,13 +20,13 @@ dependencies:
     - field.field.rdf_entity.asset_release.field_isr_state
     - field.field.rdf_entity.asset_release.field_isr_translation
     - field.field.rdf_entity.asset_release.field_keywords
-    - field.field.rdf_entity.asset_release.field_topic
     - field.field.rdf_entity.asset_release.field_spatial_coverage
     - field.field.rdf_entity.asset_release.field_status
+    - field.field.rdf_entity.asset_release.field_topic
     - rdf_entity.rdfentity.asset_release
   module:
+    - joinup_html_stripper
     - template_suggestion
-    - text
     - user
 _core:
   default_config_hash: woWqefcHqVQ29NS3Vdac5roSq8uEXNbtNmgY9FJij_s
@@ -36,18 +35,6 @@ targetEntityType: rdf_entity
 bundle: asset_release
 mode: view_mode_tile
 content:
-  created:
-    type: timestamp
-    label: hidden
-    settings:
-      date_format: date_only
-      custom_date_format: ''
-      timezone: ''
-    third_party_settings:
-      template_suggestion:
-        template_suggestion: ''
-    weight: 4
-    region: content
   field_isr_affiliations_requests:
     type: entity_reference_label
     label: above
@@ -127,22 +114,13 @@ content:
     weight: 2
     region: content
   field_isr_release_notes:
-    type: text_default
-    label: hidden
-    settings: {  }
-    third_party_settings:
-      template_suggestion:
-        template_suggestion: no_wrappers
-    weight: 2
-    region: content
-  field_isr_release_number:
-    type: string
+    type: joinup_html_stripper_stripped
     label: hidden
     settings:
-      link_to_entity: false
+      trim_length: 600
     third_party_settings:
       template_suggestion:
-        template_suggestion: ''
+        template_suggestion: bare
     weight: 1
     region: content
   field_isr_source_code_repository:
@@ -199,21 +177,19 @@ content:
     third_party_settings:
       template_suggestion:
         template_suggestion: ''
-    weight: 3
+    weight: 2
     region: content
   label:
     type: string
     label: hidden
     settings:
       link_to_entity: false
-    third_party_settings:
-      template_suggestion:
-        template_suggestion: ''
+    third_party_settings: {  }
     weight: 0
     region: content
 hidden:
   changed: true
-  field_isr_banner: true
+  created: true
   field_isr_contact_information: true
   field_isr_description: true
   field_isr_distribution: true
@@ -225,6 +201,7 @@ hidden:
   field_isr_logo: true
   field_isr_owner: true
   field_isr_related_solutions: true
+  field_isr_release_number: true
   field_isr_solution_type: true
   field_isr_state: true
   field_isr_translation: true

@@ -6,6 +6,7 @@ namespace Drupal\joinup\Context;
 
 use Behat\Behat\Hook\Scope\AfterScenarioScope;
 use Behat\Behat\Hook\Scope\AfterStepScope;
+use Behat\Behat\Hook\Scope\BeforeScenarioScope;
 use Behat\Gherkin\Node\TableNode;
 use Behat\Mink\Driver\Selenium2Driver;
 use Behat\Mink\Element\NodeElement;
@@ -16,16 +17,17 @@ use Behat\Mink\Exception\ResponseTextException;
 use Drupal\Component\Serialization\Json;
 use Drupal\Component\Serialization\Yaml;
 use Drupal\Core\Cache\Cache;
+use Drupal\Core\Datetime\DrupalDateTime;
+use Drupal\Core\Entity\EntityChangedInterface;
 use Drupal\Core\Site\Settings;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\DrupalExtension\TagTrait;
 use Drupal\image\Plugin\Field\FieldType\ImageItem;
 use Drupal\joinup\HtmlManipulator;
-use Drupal\joinup\Traits\AntibotTrait;
+use Drupal\joinup\Traits\AntispamTrait;
 use Drupal\joinup\Traits\ContextualLinksTrait;
 use Drupal\joinup\Traits\EntityTrait;
 use Drupal\joinup\Traits\JavascriptTrait;
-use Drupal\joinup\Traits\MaterialDesignTrait;
 use Drupal\joinup\Traits\PageCacheTrait;
 use Drupal\joinup\Traits\SearchTrait;
 use Drupal\joinup\Traits\TraversingTrait;
@@ -34,10 +36,10 @@ use Drupal\joinup\Traits\UtilityTrait;
 use Drupal\joinup_core\JoinupVersionInterface;
 use Drupal\media\Entity\Media;
 use Joinup\TaskRunner\Traits\TaskRunnerTrait;
+use Joinup\Traits\DigitQaPipelineAwareTrait;
 use LoversOfBehat\TableExtension\Hook\Scope\AfterTableFetchScope;
 use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\ExpectationFailedException;
-use SebastianBergmann\Comparator\ComparisonFailure;
 use WebDriver\Exception;
 use WebDriver\Key;
 
@@ -46,11 +48,11 @@ use WebDriver\Key;
  */
 class FeatureContext extends RawDrupalContext {
 
-  use AntibotTrait;
+  use DigitQaPipelineAwareTrait;
+  use AntispamTrait;
   use ContextualLinksTrait;
   use EntityTrait;
   use JavascriptTrait;
-  use MaterialDesignTrait;
   use PageCacheTrait;
   use SearchTrait;
   use TagTrait;
@@ -690,6 +692,26 @@ class FeatureContext extends RawDrupalContext {
   }
 
   /**
+   * Clicks on label by text.
+   *
+   * @param string $element
+   *   The label to click.
+   *
+   * @Then I click on label :element
+   *
+   * @throws \Exception
+   */
+  public function iClickOnLabel(string $element): void {
+    $page = $this->getSession()->getPage();
+    $labelElement = $page->find('xpath', "//label[text()='$element']");
+    if (!$labelElement) {
+      throw new \Exception($element . " could not be found");
+    }
+
+    $labelElement->click();
+  }
+
+  /**
    * Clicks a contextual link directly, without the need for javascript.
    *
    * @param string $text
@@ -858,6 +880,7 @@ class FeatureContext extends RawDrupalContext {
   public function assertElementNotVisibleInRegion(string $locator, string $element, string $region): void {
     $region = $this->getRegion($region);
     $element = $this->findNamedElementInRegion($locator, $element, $region);
+    $this->scrollElementIntoView($element);
     $this->assertNotVisuallyVisible($element);
   }
 
@@ -882,6 +905,9 @@ class FeatureContext extends RawDrupalContext {
   public function assertElementVisibleInRegion(string $locator, string $element, string $region): void {
     $region = $this->getRegion($region);
     $element = $this->findNamedElementInRegion($locator, $element, $region);
+    if (!$element->getParent()->getParent()->hasClass('contextual-links')) {
+      $this->scrollElementIntoView($element);
+    }
     $this->assertVisuallyVisible($element);
   }
 
@@ -1400,104 +1426,6 @@ class FeatureContext extends RawDrupalContext {
   }
 
   /**
-   * Checks a material design checkbox.
-   *
-   * To be used for Javascript based tests.
-   *
-   * @param string $text
-   *   The checkbox text.
-   *
-   * @Given I check the :text material checkbox
-   */
-  public function checkMaterialCheckbox(string $text): void {
-    $this->checkMaterialCheckboxHelper($this->getSession()->getPage(), $text);
-  }
-
-  /**
-   * Unchecks a material checkbox in a row that contains a certain text.
-   *
-   * @param string $text
-   *   Text in the row.
-   *
-   * @throws \Exception
-   *   If the page contains no rows, no row contains the text or the row
-   *   contains no checkbox or radio button.
-   * @throws \InvalidArgumentException
-   *   If this step definition was used on a radio button.
-   *
-   * @Given I check the material checkbox in the :text table row
-   */
-  public function checkMaterialCheckboxInTableRow(string $text): void {
-    $this->checkMaterialCheckboxHelper($this->getRowByRowText($text));
-  }
-
-  /**
-   * Checks a material design checkbox placed in given context.
-   *
-   * @param \Behat\Mink\Element\TraversableElement $element
-   *   The traversable element to search.
-   * @param string|null $text
-   *   (optional) The checkbox label, if any. Defaults to false.
-   *
-   * @throws \Behat\Mink\Exception\ElementNotFoundException
-   *   When the checkbox cannot be found in $context.
-   * @throws \Exception
-   *   When the checkbox is already checked.
-   */
-  protected function checkMaterialCheckboxHelper(TraversableElement $element, ?string $text = NULL): void {
-    $checkbox = $text ? $element->findField($text) : $element->find('css', 'input[type="checkbox"]');
-    if (!$checkbox) {
-      throw new ElementNotFoundException($this->getSession(), 'checkbox', NULL, $text);
-    }
-    if ($checkbox->isChecked()) {
-      throw new \Exception("Checkbox with text {$text} is already checked.");
-    }
-    $this->toggleMaterialDesignCheckbox($checkbox->getParent());
-  }
-
-  /**
-   * Unchecks a material checkbox in a row that contains a certain text.
-   *
-   * @param string $text
-   *   Text in the row.
-   *
-   * @throws \Exception
-   *   If the page contains no rows, no row contains the text or the row
-   *   contains no checkbox or radio button.
-   * @throws \InvalidArgumentException
-   *   If this step definition was used on a radio button.
-   *
-   * @Given I uncheck the material checkbox in the :text table row
-   */
-  public function uncheckMaterialCheckboxInTableRow(string $text): void {
-    $this->uncheckMaterialCheckboxHelper($this->getRowByRowText($text));
-  }
-
-  /**
-   * Unchecks a material design checkbox placed in given context.
-   *
-   * @param \Behat\Mink\Element\TraversableElement $element
-   *   The node element to search.
-   * @param string|null $text
-   *   The checkbox text.
-   *
-   * @throws \Behat\Mink\Exception\ElementNotFoundException
-   *   When the checkbox cannot be found in $context.
-   * @throws \Exception
-   *   When the checkbox is already unchecked.
-   */
-  protected function uncheckMaterialCheckboxHelper(TraversableElement $element, ?string $text = NULL): void {
-    $checkbox = $text ? $element->findField($text) : $element->find('css', 'input[type="checkbox"]');
-    if (!$checkbox) {
-      throw new ElementNotFoundException($this->getSession(), 'checkbox', NULL, $text);
-    }
-    if (!$checkbox->isChecked()) {
-      throw new \Exception("Checkbox with text {$text} is already unchecked.");
-    }
-    $this->toggleMaterialDesignCheckbox($checkbox->getParent());
-  }
-
-  /**
    * Searches the page for a row that includes the given text.
    *
    * @param string $text
@@ -1742,29 +1670,12 @@ class FeatureContext extends RawDrupalContext {
   }
 
   /**
-   * Commits the search index before starting the scenario.
-   *
-   * Use this in scenarios for which it is important that the search index is
-   * committed before any content is created in the scenario.
-   *
-   * Since most scenarios start with creating some test content and this will
-   * automatically commit the search index, this is only needed for tests that
-   * perform asserts before creating any content of their own, since the search
-   * index might still contain stale content from the previous scenario.
-   *
-   * @BeforeScenario @commitSearchIndex&&@api
-   */
-  public function commitSearchIndexBeforeScenario(): void {
-    $this->commitSearchIndex();
-  }
-
-  /**
    * Installs the testing module for scenarios tagged with @errorPage.
    *
    * @BeforeScenario @errorPage&&@api
    */
   public function beforeErrorPageTesting(): void {
-    static::toggleModule('install', 'error_page_test');
+    static::toggleModule('install', ['error_page_test']);
 
     // Pipe error log entries to a file rather than to standard PHP log.
     static::runCommand('drupal:settings error_page_test --root=' . static::getPath('web') . ' --sites-subdir=default');
@@ -1780,7 +1691,7 @@ class FeatureContext extends RawDrupalContext {
    * @AfterScenario @errorPage&&@api
    */
   public function afterErrorPageTesting(): void {
-    static::toggleModule('uninstall', 'error_page_test');
+    static::toggleModule('uninstall', ['error_page_test']);
 
     // Restore piping error log entries to the standard PHP log.
     $settings = Settings::getAll();
@@ -1841,26 +1752,31 @@ class FeatureContext extends RawDrupalContext {
   /**
    * Creates testing media items.
    *
+   * You need to provide media types which you want to create.
+   *
+   * @code
+   * @generateMediaTypes:<mediaType1>,<mediaType2>,...
+   * @endcode
+   *
    * @BeforeScenario @generateMedia
    */
-  public function generateMedia(): void {
-    $media_type_ids = [
-      'collection_banner',
-      'collection_logo',
-      'solution_banner',
-      'solution_logo',
-      'event_logo',
-      'news_logo',
-    ];
-    foreach ($media_type_ids as $media_type_id) {
-      $definition = \Drupal::service('entity_field.manager')->getFieldDefinitions('media', $media_type_id)['image_library_widget_image'];
-      for ($i = 0; $i < 15; $i++) {
+  public function generateMedia(BeforeScenarioScope $scope): void {
+    $mediaTypes = $this->getTagValues($scope, 'generateMediaTypes');
+    if (empty($mediaTypes)) {
+      throw new \Exception('Please provide media types with generateMediaTypes:.. tag');
+    }
+
+    foreach ($mediaTypes as $mediaType) {
+      $definition = \Drupal::service('entity_field.manager')
+        ->getFieldDefinitions('media', $mediaType);
+      for ($i = 0; $i < 10; $i++) {
         $media = Media::create([
-          'bundle' => $media_type_id,
+          'bundle' => $mediaType,
           'name' => $this->getRandom()->string(),
-          'image_library_widget_image' => ImageItem::generateSampleValue($definition),
+          'image_library_widget_image' => ImageItem::generateSampleValue($definition['image_library_widget_image']),
         ]);
         $media->save();
+
         $this->entities['media'][$media->id()] = $media;
       }
     }
@@ -1882,87 +1798,46 @@ class FeatureContext extends RawDrupalContext {
   }
 
   /**
-   * Disables the Antibot functionality during tests run.
+   * Get tag values.
    *
-   * Antibot module blocks all form submissions for browsers without JavaScript
-   * support or when there's no keyboard or mouse interaction before the form is
-   * submitted. This would make most of Behat tests to fail. We disable Antibot
-   * functionality during Behat tests run.
+   * @param \Behat\Behat\Hook\Scope\BeforeScenarioScope|\Behat\Behat\Hook\Scope\AfterScenarioScope $scope
+   *   Scenario scope.
+   * @param string $prefix
+   *   Tag name.
    *
-   * If a scenario wants to have Antibot functionality enabled, it should be
-   * tagged with @antibot.
-   *
-   * @BeforeScenario ~@antibot&&@api
+   * @return array
+   *   Tag values.
    */
-  public static function disableAntibotBeforeScenarioStarts(): void {
-    static::disableAntibot();
-  }
-
-  /**
-   * Restores the Antibot functionality after tests run.
-   *
-   * @AfterScenario ~@antibot&&@api
-   *
-   * @see self::disableAntibot()
-   */
-  public static function restoreAntibotAfterScenarioEnds(): void {
-    static::restoreAntibot();
-  }
-
-  /**
-   * Installs/uninstalls a module in tests.
-   *
-   * @param string $method
-   *   Either 'install' or 'uninstall'.
-   * @param string $module_name
-   *   The module to be installed/uninstalled.
-   */
-  protected static function toggleModule(string $method, string $module_name): void {
-    // Ensure that test modules are also discoverable.
-    $settings = ['extension_discovery_scan_tests' => TRUE] + Settings::getAll();
-    new Settings($settings);
-
-    static::bypassReadOnlyConfig();
-    \Drupal::service('module_installer')->$method([$module_name]);
-    static::restoreReadOnlyConfig();
-  }
-
-  /**
-   * Checks if the current form is protected by Antibot.
-   *
-   * @throws \Exception
-   *   When the expectancy is not met.
-   *
-   * @Then the form is protected by Antibot
-   */
-  public function assertFormIsProtectedByAntibot(): void {
-    $session = $this->getSession();
-
-    // Unlock the form by using the Antibot javascript API.
-    $session->executeScript('Drupal.antibot.unlockForms();');
-
-    $has_js_assigned_value = (bool) $session->getPage()->find('xpath', '//form[@data-action]//input[@data-drupal-selector="edit-antibot-key" and @name="antibot_key" and string(@value)]');
-    if (!$has_js_assigned_value) {
-      throw new \Exception("Not an Antibot protected form.");
-    }
+  protected function getTagValues(BeforeScenarioScope|AfterScenarioScope $scope, string $prefix): array {
+    return array_reduce(
+      $scope->getScenario()->getTags(),
+      function (array $values, string $tag) use ($prefix) {
+        if (preg_match('/^' . $prefix . ':(.*)$/', $tag, $found)) {
+          $values = explode(',', $found[1]);
+        }
+        return $values;
+      },
+      []
+    );
   }
 
   /**
    * Creates a backup of the `VERSION.txt` file.
    *
-   * Tests that interact with the version file should be tagged with `@version`.
+   * Tests that interact with the version file should be tagged with
+   * `@joinupVersion`.
    *
-   * @BeforeScenario @version&&@api
+   * @BeforeScenario @joinupVersion&&@api
    */
   public function backupJoinupVersion(): void {
     $filename = JoinupVersionInterface::PATH;
-    $this->version = file_exists($filename) ? $this->version = file_get_contents($filename) : FALSE;
+    $this->version = file_exists($filename) ? file_get_contents($filename) : FALSE;
   }
 
   /**
    * Restores the backup of the Joinup `VERSION` file.
    *
-   * @AfterScenario @version&&@api
+   * @AfterScenario @joinupVersion&&@api
    */
   public function restoreJoinupVersion(): void {
     if ($this->version === FALSE) {
@@ -1977,8 +1852,8 @@ class FeatureContext extends RawDrupalContext {
    * Sets the Joinup version.
    *
    * Since this overwrites the `VERSION.txt` file in the webroot directory, any
-   * scenario that includes this step should be tagged with `@version` so that
-   * the original contents of the file will be restored at the end of the
+   * scenario that includes this step should be tagged with `@joinupVersion` so
+   * that the original contents of the file will be restored at the end of the
    * scenario.
    *
    * @param string $version
@@ -1987,11 +1862,11 @@ class FeatureContext extends RawDrupalContext {
    * @When the Joinup version is set to :version
    */
   public function setJoinupVersion(string $version): void {
-    // Alert the user that the `@version` tag is required.
-    Assert::assertTrue($this->hasTag('version'), 'The `@version` tag is required for scenarios that want to change the Joinup version.');
+    // Alert the user that the `@joinupVersion` tag is required.
+    Assert::assertTrue($this->hasTag('joinupVersion'), 'The `@joinupVersion` tag is required for scenarios that want to change the Joinup version.');
 
     // We also require the Drupal API to retrieve the project root folder.
-    Assert::assertTrue($this->hasTag('api'), 'The `@api` tag is required for scenarios that use the `@version` tag.');
+    Assert::assertTrue($this->hasTag('api'), 'The `@api` tag is required for scenarios that use the `@joinupVersion` tag.');
 
     file_put_contents(JoinupVersionInterface::PATH, $version);
 
@@ -2023,7 +1898,7 @@ class FeatureContext extends RawDrupalContext {
       throw new ElementNotFoundException($this->getSession()->getDriver(), 'Link', NULL, $link_label);
     }
     if (!$url = $link->getAttribute('href')) {
-      throw new \Exception("The link '${link_label}' misses an 'href' attribute.");
+      throw new \Exception("The link '{$link_label}' misses an 'href' attribute.");
     }
 
     // Get the path part from the URL.
@@ -2090,50 +1965,6 @@ class FeatureContext extends RawDrupalContext {
   }
 
   /**
-   * Asserts that a list of horizontal tabs links exist on the page.
-   *
-   * Provide data in the following format:
-   *   | link  | active |
-   *   | Link1 | yes    |
-   *   | Link2 |        |
-   *   | Link3 |        |
-   *
-   * @param string $type
-   *   The horizontal tabs type, either 'primary' or 'secondary'.
-   * @param \Behat\Gherkin\Node\TableNode $links
-   *   The list of links. The order matters.
-   *
-   * @throws \Behat\Mink\Exception\ElementNotFoundException
-   *   If the horizontal tabs are not found in the page.
-   *
-   * @Then I should see the :type horizontal tabs:
-   */
-  public function assertHorizontalTabs(string $type, TableNode $links): void {
-    if (!in_array($type, ['primary', 'secondary'], TRUE)) {
-      throw new \InvalidArgumentException("The horizontal tabs type should be 'primary' or 'secondary'. Received '$type'.");
-    }
-    $session = $this->getSession();
-    $page = $session->getPage();
-    $tabs = $page->find('xpath', "//ul[contains(concat(' ', @class, ' '), ' tabs ') and contains(concat(' ', @class, ' '), ' {$type} ')]");
-    if (!$tabs) {
-      throw new ElementNotFoundException($session, "{$type} task list");
-    }
-
-    $actual_links = array_map(function (NodeElement $link): string {
-      return $link->getText();
-    }, $tabs->findAll('css', 'a'));
-
-    $expected_links = array_map(function (array $link): string {
-      return $link['active'] === 'yes' ? "{$link['link']}(active tab)" : $link['link'];
-    }, $links->getColumnsHash());
-
-    if ($actual_links !== $expected_links) {
-      $comparison = new ComparisonFailure($expected_links, $actual_links, print_r($expected_links, TRUE), print_r($actual_links, TRUE));
-      throw new ExpectationFailedException("The {$type} task links expectation is not met", $comparison);
-    }
-  }
-
-  /**
    * Stores the ID of the latest file entity created before the scenario.
    *
    * @BeforeScenario @api
@@ -2187,7 +2018,7 @@ class FeatureContext extends RawDrupalContext {
    * @code
    * @uploadFiles:<filename1.ext>,<filename2.ext>,...
    * @endcode
-   * For instance, a scenario tagged with @uploadFiles:logo.png,banner.jpg will
+   * For instance, a scenario tagged with @uploadFiles:logo.png will
    * clear the 2 file entities (together with the files from files system) after
    * the scenario completes.
    *
@@ -2206,16 +2037,11 @@ class FeatureContext extends RawDrupalContext {
    * @AfterScenario
    */
   public function clearFiles(AfterScenarioScope $event): void {
-    $files = array_reduce($event->getScenario()->getTags(), function (array $files, string $tag) {
-      if (preg_match('/^uploadFiles:(.*)$/', $tag, $found)) {
-        $files = explode(',', $found[1]);
-      }
-      return $files;
-    }, []);
-
+    $files = $this->getTagValues($event, 'uploadFiles');
     if ($files) {
       $file_storage = \Drupal::entityTypeManager()->getStorage('file');
       $fids = $file_storage->getQuery()
+        ->accessCheck(FALSE)
         ->condition('filename', $files, 'IN')
         ->execute();
       if ($fids) {
@@ -2258,21 +2084,19 @@ class FeatureContext extends RawDrupalContext {
    *   An "1 based" offset of the image.
    * @param string $content_type
    *   The type of content: collection, solution, event, news.
-   * @param string $image_type
-   *   The field label.
    *
    * @throws \InvalidArgumentException
    *   When the offset is invalid or the field doesn't exist.
    *
-   * @When I select image #:offset as :content_type :image_type
+   * @When I select image #:offset as :content_type logo
    */
-  public function selectImageFromTheFieldImageLibraryBrowser(string $offset, string $content_type, string $image_type): void {
-    $this->validateImageLibraryBrowserStepDefinitionParams($content_type, $image_type, $offset);
+  public function selectImageFromTheFieldImageLibraryBrowser(string $offset, string $content_type): void {
+    $this->validateImageLibraryBrowserStepDefinitionParams($content_type, $offset);
     $map = $this->getImageLibraryBrowserMapping();
 
     $page = $this->getSession()->getPage();
-    if (!$field = $page->findField("files[{$map[$content_type]['fields'][$image_type]}_0]")) {
-      throw new \InvalidArgumentException("Invalid field ($image_type).");
+    if (!$field = $page->findField("files[{$map[$content_type]['fields']['logo']}_0]")) {
+      throw new \InvalidArgumentException("Invalid field (logo).");
     }
 
     // Get the field wrapper.
@@ -2282,7 +2106,7 @@ class FeatureContext extends RawDrupalContext {
     // Convert to zero-based index.
     $delta = $offset - 1;
     if (!isset($images[$delta])) {
-      throw new \InvalidArgumentException("No image at position #$offset in $image_type field.");
+      throw new \InvalidArgumentException("No image at position #$offset in logo field.");
     }
 
     $this->scrollElementIntoView($images[$delta]);
@@ -2301,7 +2125,7 @@ class FeatureContext extends RawDrupalContext {
     $state = \Drupal::state();
     // Save the clicked image file ID for this field for later checks.
     $clicks = $state->get('image_library_widget.clicks', []);
-    $clicks[$content_type][$image_type][$offset] = $image_fid;
+    $clicks[$content_type]['logo'][$offset] = $image_fid;
     $state->set('image_library_widget.clicks', $clicks);
   }
 
@@ -2312,8 +2136,6 @@ class FeatureContext extends RawDrupalContext {
    *   The type of content: collection, solution, event, news.
    * @param string $title
    *   The content title.
-   * @param string $image_type
-   *   The type of image; logo, banner.
    * @param string $offset
    *   The "1 based" position of the image from the image library broeser.
    *
@@ -2322,29 +2144,29 @@ class FeatureContext extends RawDrupalContext {
    * @throws \Exception
    *   When no image of type $type has been clicked.
    *
-   * @Then the :title :content_type :image_type is image #:offset
+   * @Then the :title :content_type logo is image #:offset
    */
-  public function assertImageFromTheFieldImageLibraryBrowser(string $content_type, string $title, string $image_type, string $offset): void {
-    $this->validateImageLibraryBrowserStepDefinitionParams($content_type, $image_type, $offset);
+  public function assertLogoFromTheFieldImageLibraryBrowser(string $content_type, string $title, string $offset): void {
+    $this->validateImageLibraryBrowserStepDefinitionParams($content_type, $offset);
     $map = $this->getImageLibraryBrowserMapping();
     $entity = $this->getEntityByLabel($map[$content_type]['type'], $title, $content_type);
-    $image_field = $entity->get($map[$content_type]['fields'][$image_type]);
+    $image_field = $entity->get($map[$content_type]['fields']['logo']);
     if ($image_field->isEmpty()) {
-      throw new ExpectationFailedException("The {$title} {$image_type} field is empty but it should point to the image at position #{$offset}.");
+      throw new ExpectationFailedException("The {$title} logo field is empty but it should point to the image at position #{$offset}.");
     }
 
     $state = \Drupal::state();
     $clicks = $state->get('image_library_widget.clicks', []);
-    if (!isset($clicks[$content_type][$image_type][$offset])) {
-      throw new \Exception("The {$image_type} images should have been clicked but it was not.");
+    if (!isset($clicks[$content_type]['logo'][$offset])) {
+      throw new \Exception("The logo images should have been clicked but it was not.");
     }
-    if ($clicks[$content_type][$image_type][$offset] !== $image_field->target_id) {
-      throw new ExpectationFailedException("The {$title} {$image_type} should contain the image #{$offset} but it doesn't.");
+    if ($clicks[$content_type]['logo'][$offset] !== $image_field->target_id) {
+      throw new ExpectationFailedException("The $title logo should contain the image #$offset but it doesn't.");
     }
   }
 
   /**
-   * Returns the mapping of logo and banner fields to their content type.
+   * Returns the mapping of logo field to their content type.
    *
    * @return array
    *   Mapping.
@@ -2355,14 +2177,12 @@ class FeatureContext extends RawDrupalContext {
         'type' => 'rdf_entity',
         'fields' => [
           'logo' => 'field_ar_logo',
-          'banner' => 'field_ar_banner',
         ],
       ],
       'solution' => [
         'type' => 'rdf_entity',
         'fields' => [
           'logo' => 'field_is_logo',
-          'banner' => 'field_is_banner',
         ],
       ],
       'event' => [
@@ -2377,6 +2197,12 @@ class FeatureContext extends RawDrupalContext {
           'logo' => 'field_news_logo',
         ],
       ],
+      'discussion' => [
+        'type' => 'node',
+        'fields' => [
+          'logo' => 'field_discussion_logo',
+        ],
+      ],
     ];
   }
 
@@ -2385,24 +2211,19 @@ class FeatureContext extends RawDrupalContext {
    *
    * @param string $content_type
    *   The type of content: collection, solution, event, news.
-   * @param string $image_type
-   *   The type of image; logo, banner.
    * @param string $offset
    *   The "1 based" position of the image from the image library browser.
    *
    * @throws \InvalidArgumentException
    *   When a passed parameters is invalid.
    */
-  protected function validateImageLibraryBrowserStepDefinitionParams(string $content_type, string $image_type, string $offset): void {
+  protected function validateImageLibraryBrowserStepDefinitionParams(string $content_type, string $offset): void {
     if (!ctype_digit($offset) || $offset < 1) {
       throw new \InvalidArgumentException("Invalid image position ($offset).");
     }
     $map = $this->getImageLibraryBrowserMapping();
     if (!isset($map[$content_type])) {
       throw new \InvalidArgumentException("Invalid content type '{$content_type}'. Allowed: " . implode(', ', array_keys($map)) . '.');
-    }
-    if (!isset($map[$content_type]['fields'][$image_type])) {
-      throw new \InvalidArgumentException("Invalid image type '{$image_type}' for content type '{$content_type}'. Allowed: " . implode(', ', array_keys($map[$content_type]['fields'][$image_type])) . '.');
     }
   }
 
@@ -2446,6 +2267,38 @@ class FeatureContext extends RawDrupalContext {
    */
   public function givenLinkHasAttribute(string $link_text, string $attribute_name, string $attribute_value): void {
     Assert::assertNotNull($this->getSession()->getPage()->find('xpath', "//a[@$attribute_name='$attribute_value' and text()='$link_text']"));
+  }
+
+  /**
+   * Asserts that an element has an empty attribute in the specific region.
+   *
+   * @param string $tag
+   *   Tag name.
+   * @param string $atr
+   *   Attribute name.
+   * @param string $region
+   *   Region name.
+   *
+   * @Then I( should) see the :tag element with empty :atr attribute in the :region( region)
+   */
+  public function assertRegionElementEmptyAttribute(string $tag, string $atr, string $region): void {
+    $region_container = $this->getRegion($region);
+    $elements = $region_container->findAll('css', $tag);
+    if (empty($elements)) {
+      throw new \Exception(sprintf('The element "%s" was not found in the "%s" region on the page %s', $tag, $region, $this->getSession()
+        ->getCurrentUrl()));
+    }
+    $found = FALSE;
+    foreach ($elements as $element) {
+      if ($element->hasAttribute($atr) && empty($element->getAttribute($atr))) {
+        $found = TRUE;
+        break;
+      }
+    }
+    if (!$found) {
+      throw new \Exception(sprintf('The "%s" attribute is not present on the element "%s" in the "%s" region on the page %s', $atr, $tag, $region, $this->getSession()
+        ->getCurrentUrl()));
+    }
   }
 
   /**
@@ -2528,6 +2381,82 @@ class FeatureContext extends RawDrupalContext {
     $actual_theme = Json::decode($drupal_settings->getText())['theme'];
 
     Assert::assertSame($expected_theme, $actual_theme);
+  }
+
+  /**
+   * Installs/uninstalls a module in tests.
+   *
+   * @param string $method
+   *   Either 'install' or 'uninstall'.
+   * @param array $module_name
+   *   The modules to be installed/uninstalled.
+   */
+  protected static function toggleModule(string $method, array $module_name): void {
+    // Ensure that test modules are also discoverable.
+    $settings = ['extension_discovery_scan_tests' => TRUE] + Settings::getAll();
+    new Settings($settings);
+
+    static::bypassReadOnlyConfig();
+    \Drupal::service('module_installer')->$method($module_name);
+    static::restoreReadOnlyConfig();
+  }
+
+  /**
+   * Updates an entity changed time.
+   *
+   * @param string $label
+   *   The entity label.
+   * @param string $bundle
+   *   The entity bundle.
+   * @param string $time
+   *   The time as string.
+   *
+   * @When I update the :label :bundle at :time
+   */
+  public function updateEntityAtDateTime(string $label, string $bundle, string $time): void {
+    $entity_type_id = static::entityTypeAliases()[$bundle];
+    $entity = $this->getEntityByLabel($entity_type_id, $label);
+    if (!$entity instanceof EntityChangedInterface) {
+      throw new \InvalidArgumentException("The $entity_type_id entity type is doesn't have a changed time");
+    }
+
+    $date_time = new DrupalDateTime($time);
+    $entity->setChangedTime($date_time->getTimestamp())->save();
+  }
+
+  /**
+   * Asserts that an entity timestamp field was just updated to current time.
+   *
+   * @param string $label
+   *   The entity label.
+   * @param string $bundle
+   *   The entity bundle.
+   * @param string $field_label
+   *   The field label.
+   *
+   * @Then the :label :bundle :field_label time has just been updated
+   */
+  public function assertTimestampFieldUpdatedToNow(string $label, string $bundle, string $field_label): void {
+    $entity_type_id = static::entityTypeAliases()[$bundle];
+    $entity = $this->getEntityByLabel($entity_type_id, $label);
+    $found = FALSE;
+    foreach (\Drupal::service('entity_field.manager')->getFieldDefinitions($entity_type_id, $entity->bundle()) as $field_name => $definition) {
+      if ($definition->getLabel() == $field_label && $definition->getType() === 'timestamp') {
+        $found = TRUE;
+        break;
+      }
+    }
+    if (!$found) {
+      throw new \InvalidArgumentException("Entity type $entity_type_id doesn't have a '$field_label' field or field is not a timestamp.");
+    }
+    $value = (int) $entity->get($field_name)->value;
+
+    // We accept a fuzziness of 3 seconds because of the latency of tests. It's
+    // the test responsibility to set other fixed timestamps with values not
+    // very close to NOW, in order to avoid collision.
+    if (\Drupal::time()->getRequestTime() - $value > 3) {
+      throw new ExpectationFailedException("The entity wasn't updated recently");
+    }
   }
 
 }

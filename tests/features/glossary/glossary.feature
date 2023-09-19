@@ -114,7 +114,7 @@ Feature: As a moderator or group facilitator I want to be able to add, edit and
     And I should not see the link "Smells"
     And I should not see the link "XFiles"
     And I should not see the link "XRatings"
-    And I should see the glossary navigator "A C S X (all)"
+    And I should see the glossary navigator "A C S X all"
 
     # Test multi-synonyms display.
     When I click "Alphabet"
@@ -128,7 +128,7 @@ Feature: As a moderator or group facilitator I want to be able to add, edit and
       | About    |
     And I should not see the link "Glossary"
 
-    Given I <link visibility> the contextual link "Edit menu" in the "Left sidebar" region
+    Given I <link visibility> the contextual link "Edit menu" in the "Header bottom" region
     And I enable "Glossary" in the navigation menu of the "Things To Come" solution
     And I go to the "Things To Come" solution
     Then I should see the following group menu items in the specified order:
@@ -169,8 +169,8 @@ Feature: As a moderator or group facilitator I want to be able to add, edit and
       | Distro1 | Alphabet & CLR       | Under The Bridge | http://example.com |
       | Distro2 | Colors & ABC & colrs | Summer of 69     | http://example.com |
     And custom_page content:
-      | title    | body              | solution         |
-      | Schedule | Colors everywhere | Under The Bridge |
+      | title    | body              | solution         | state     |
+      | Schedule | Colors everywhere | Under The Bridge | published |
     And discussion content:
       | title        | content                   | collection               | state     |
       | The Big Talk | The Alphabet. Call it ABC | Collection With Glossary | validated |
@@ -426,4 +426,26 @@ Feature: As a moderator or group facilitator I want to be able to add, edit and
     And I fill in "Synonym" with "extraratings"
     And I press "Save"
     Then I should see the success message "Glossary term XRatings has been created."
+
+  Scenario: Allow rich text in Glossary contains bold, italic, underline and list.
+    Given users:
+      | Username | Roles     |
+      | mod      | moderator |
+    And the following collections:
+      | title                    | description                                                                                                             | state     |
+      | Collection With Glossary | The Battle of Evermore of the <strong>batTle</strong> and the BATTLE. Call it everMore or EVERmore. Also, battle again. | validated |
+    And the following collection user membership:
+      | collection               | user | roles       |
+      | Collection With Glossary | mod  | facilitator |
+    Given glossary content:
+      | title        | synonyms | definition                                                                                                | collection               |
+      | battle       | evermore | Definition <strong>bold</strong> <em>italic</em> <u>underline</u> <ul><li>list 1</li><li>list 2</li></ul> | Collection With Glossary |
+    When I am logged in as a moderator
+    And I go to the edit form of the "battle" glossary
+    Then the "Definition" wysiwyg editor should have the buttons "Link, Unlink, Bold, Italic, Underline, Bullet list, Numbered list, Source code"
+    When I press "Save"
+    When I go to the "Collection With Glossary" collection
+    When I click "Glossary"
+    Then I should see the text "Definition bold italic underline list 1list 2"
+    And the page should contain the html text "Definition <strong>bold</strong> <em>italic</em> <u>underline</u> <ul><li>list 1</li><li>list 2</li></ul>"
 

@@ -35,11 +35,12 @@ Feature: Subscribing to a solution
     And the "Some solution to subscribe" solution should have 0 active members
 
     When I click "Subscribe to this solution"
-    Then I should see the text "Sign in to subscribe"
+    Then a modal should open
+    And I should see the text "Sign in to subscribe"
     And I should see "Only signed in users can subscribe to this solution. Please sign in or register an account on EU Login."
     But the cookie that tracks which group I want to join should not be set
     When I press "Sign in / Register" in the "Modal buttons" region
-    Then I should see the heading "Sign in to continue"
+    And I should see the heading "Sign in to continue"
     And a cookie should be set that allows me to join "Some solution to subscribe" after authenticating
 
     When I fill in "E-mail address" with "jon@ankh.am"
@@ -60,6 +61,7 @@ Feature: Subscribing to a solution
     When I am not logged in
     And I go to the "Some solution to subscribe" solution
     And I click "Subscribe to this solution"
+    Then a modal should open
     And I press "Sign in / Register" in the "Modal buttons" region
     Then I should see the heading "Sign in to continue"
 
@@ -89,7 +91,8 @@ Feature: Subscribing to a solution
     And the "Some solution to subscribe" solution should have 0 active members
 
     When I click "Subscribe to this solution"
-    Then I should see the text "Sign in to subscribe"
+    Then a modal should open
+    And I should see the text "Sign in to subscribe"
     And I should see "Only signed in users can subscribe to this solution. Please sign in or register an account on EU Login."
     But the cookie that tracks which group I want to join should not be set
     When I press "Sign in / Register" in the "Modal buttons" region
@@ -167,10 +170,8 @@ Feature: Subscribing to a solution
       | Some solution to subscribe | Document, Event, News, Announcements |
 
     When I go to the "Some solution to subscribe" solution
-    And I press "You're a member"
-    And I wait for animations to finish
-    And I click "Unsubscribe from this solution"
-    And a modal should open
+    And I click "Unsubscribe"
+    Then a modal should open
 
     Then I should see the following lines of text:
       | Leave solution                                                                                                |
@@ -184,12 +185,10 @@ Feature: Subscribing to a solution
       | Some solution to subscribe | Cornilius Darcias | <role> |
     When I am logged in as "Cornilius Darcias"
     And I go to the "Some solution to subscribe" solution
-    And I press "You're a member"
-    And I wait for animations to finish
     And I click "<label>"
 
     Examples:
-      | role        | label                          |
-      |             | Unsubscribe from this solution |
-      | author      | Leave this solution            |
-      | facilitator | Leave this solution            |
+      | role        | label               |
+      |             | Unsubscribe         |
+      | author      | Leave this solution |
+      | facilitator | Leave this solution |

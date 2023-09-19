@@ -63,7 +63,8 @@ function joinup_core_requirements($phase): array {
       }
     }
 
-    $requirements_helper = \Drupal::getContainer()->get('joinup_core.requirements_helper');
+    $requirements_helper = \Drupal::getContainer()
+      ->get('joinup_core.requirements_helper');
 
     // Ensure that a cache state inconsistency will not cause also
     // inconsistencies with the published revisions of the entities.
@@ -90,4 +91,17 @@ function joinup_core_requirements($phase): array {
   }
 
   return $requirements;
+}
+
+/**
+ * Remove leftover row paragraphs.
+ */
+function joinup_core_update_109700(): void {
+  $paragraphs = \Drupal::entityTypeManager()
+    ->getStorage('paragraph')
+    ->loadByProperties(['type' => 'row']);
+
+  foreach ($paragraphs as $paragraph) {
+    $paragraph->delete();
+  }
 }

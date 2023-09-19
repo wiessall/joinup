@@ -8,9 +8,9 @@ Feature:
     When I am logged in as a moderator
     And I am on the homepage
     And I click "RDF ID converter"
-    And I fill in "RDF entity ID or a URL" with "http://data.europa.eu/dr8/PublicPolicy"
+    And I fill in "RDF entity ID or a URL" with "http://data.europa.eu/dr8/BusinessCapability"
     And I press "Go!"
-    Then I should see the heading "Public Policy"
+    Then I should see the heading "Business Capability"
     # The <br /> tags are not part of the original description.
     And the response should contain "<p>DESCRIPTION:<br />"
     And the response should contain "<p>INTEROPERABILITY SALIENCY:<br />"

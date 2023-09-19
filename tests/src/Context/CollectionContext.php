@@ -56,7 +56,6 @@ class CollectionContext extends RawDrupalContext {
     'short ID' => 'field_short_id',
     'abstract' => 'field_ar_abstract',
     'access url' => 'field_ar_access_url',
-    'banner' => 'field_ar_banner',
     'closed' => 'field_ar_closed',
     'contact information' => 'field_ar_contact_information',
     'content creation' => 'field_ar_content_creation',
@@ -103,7 +102,7 @@ class CollectionContext extends RawDrupalContext {
    */
   public function visitCollection(string $collection): void {
     /** @var \Drupal\rdf_entity\Entity\Rdf $entity */
-    $entity = $this->getEntityByLabel('rdf_entity', $collection);
+    $entity = $this->getEntityByLabel('rdf_entity', $collection, 'collection');
     $this->visitPath($entity->toUrl()->toString());
   }
 
@@ -257,13 +256,10 @@ class CollectionContext extends RawDrupalContext {
    *   Thrown when a given image is not found.
    */
   protected function createCollection(array $values): CollectionInterface {
-    // Add images.
-    $image_fields = ['field_ar_banner', 'field_ar_logo'];
-    foreach ($image_fields as $field_name) {
-      if (!empty($values[$field_name])) {
-        foreach ($values[$field_name] as &$filename) {
-          $filename = [$this->createFile($filename)->id()];
-        }
+    // Add logo image.
+    if (!empty($values['field_ar_logo'])) {
+      foreach ($values['field_ar_logo'] as &$filename) {
+        $filename = [$this->createFile($filename)->id()];
       }
     }
 
@@ -505,17 +501,12 @@ class CollectionContext extends RawDrupalContext {
       return;
     }
 
-    // Since we might be cleaning up many collections, temporarily disable the
-    // feature to commit the index after every query.
-    $this->disableCommitOnUpdate();
-
     // Remove any collections that were created.
     foreach ($this->collections as $collection) {
       $collection->skip_notification = TRUE;
       $collection->delete();
     }
     $this->collections = [];
-    $this->enableCommitOnUpdate();
   }
 
   /**

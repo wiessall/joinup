@@ -6,7 +6,6 @@
        - Title. This is a federated property but there have been cases that it is missing.
        - Content creation
        - Logo
-       - Banner
        - Moderation
        - hasVersion (for releases that refer to the solution through isVersionOf)
        - Collection (Computed field)

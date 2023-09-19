@@ -19,19 +19,38 @@ Feature:
     # The title should not be visible when the page is set as landing page.
     Then I should not see "IOP landing page"
     And the page should be rendered using the "Interoperable Europe" theme
+    And I should not see the link "Report abusive content"
 
     # Test other pages.
     When I visit "/interoperable-europe/initiatives"
     Then the page should be rendered using the "Interoperable Europe" theme
+    And I should see the heading "Initiatives"
+    And I should see the heading "Join our community!"
+    And I should not see the link "Report abusive content"
 
-    # Event and News item canonical pages are still rendered with the legacy
-    # theme until ISAICP-7253 and ISAICP-7255.
-    # See https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7253.
-    # See https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7255.
+    # Event.
     When I visit "/interoperable-europe/event/save-date-semic-coming-back-8-december-2021"
-    Then the page should be rendered using the "Joinup Theme" theme
+    Then the page should be rendered using the "Interoperable Europe" theme
+    And I should see the text "Event"
+    And I should not see the heading "Event"
+    And I should see the link "more events"
+    And I should see the link "Report abusive content"
+    And I should see the text "Published on: 19/11/2021"
+    And I should see the heading "Join our community!"
+    When I click "more events"
+    Then I should see the heading "Events"
+
+    # News.
     When I visit "/interoperable-europe/news/vocbench-semantic-technologies-data-management"
-    Then the page should be rendered using the "Joinup Theme" theme
+    Then the page should be rendered using the "Interoperable Europe" theme
+    And I should see the text "News"
+    And I should not see the heading "News"
+    And I should see the link "more news"
+    And I should see the link "Report abusive content"
+    And I should see the text "Published on: 19/11/2021"
+    And I should see the heading "Join our community!"
+    When I click "more news"
+    Then I should see the heading "News"
 
   Scenario: Authenticated user visiting the landing page.
     Given I am logged in as a user with the authenticated role
@@ -68,10 +87,22 @@ Feature:
       | Subscribe to the interoperable europe newsletter |
 
   @javascript
+  Scenario: User should see error message if he does not fill out all required fields.
+    Given custom_page content:
+      | title               | collection           | state     |
+      | IOP validation page | Interoperable Europe | published |
+
+    Then I am logged in as a moderator
+    And I go to the edit form of the "IOP validation page" "custom page"
+    And I fill in "Title" with ""
+    And I press "Update"
+    Then I should see the error message "Title field is required."
+
+  @javascript
   Scenario: Report link and eTranslate button are not available in IOP custom pages.
     Given custom_page content:
-      | title      | collection           | state     |
-      | IOP page | Interoperable Europe | validated |
+      | title    | collection           | state     |
+      | IOP page | Interoperable Europe | published |
 
     When I am logged in as a user with the authenticated role
     And I go to the "IOP page" custom page
@@ -90,8 +121,8 @@ Feature:
     And I should not see the button "Translate"
 
     Examples:
-      | type        |
-      | news        |
-      | event       |
-      | discussion  |
-      | document    |
+      | type       |
+      | news       |
+      | event      |
+      | discussion |
+      | document   |

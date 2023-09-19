@@ -10,6 +10,7 @@ declare(strict_types = 1);
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Session\AccountInterface;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\joinup_group\Entity\GroupContentInterface;
 use Drupal\paragraphs\ParagraphInterface;
 
@@ -93,6 +94,12 @@ function joinup_paragraphs_get_access(AccessResultInterface $access_result, stri
     /** @var \Drupal\og\OgContextInterface $og_context */
     $og_context = \Drupal::service('og.context');
     $group = $og_context->getGroup();
+
+    // If there is no group in the OG context, we cannot determine the access.
+    // This can happen for example when editing a topic.
+    if (!$group) {
+      return AccessResult::neutral();
+    }
   }
 
   if ($group->hasGroupPermission((int) $account->id(), $permission)) {
@@ -102,4 +109,29 @@ function joinup_paragraphs_get_access(AccessResultInterface $access_result, stri
   }
 
   return $access_result;
+}
+
+/**
+ * Implements hook_preprocess_HOOK().
+ */
+function joinup_paragraphs_preprocess_layout_paragraphs_insert_component_btn(&$variables) {
+  if (isset($variables['title']) &&
+    $variables['title'] instanceof TranslatableMarkup &&
+    $variables['title']->getUntranslatedString() === 'Add section') {
+    $variables['title'] = t('Add layout');
+  }
+}
+
+/**
+ * Implements hook_theme().
+ */
+function joinup_paragraphs_theme(): array {
+  return [
+    'joinup_paragraphs_heading' => [
+      'variables' => [
+        'level' => NULL,
+        'text' => NULL,
+      ],
+    ],
+  ];
 }

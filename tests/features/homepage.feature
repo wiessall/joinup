@@ -19,31 +19,38 @@ Feature: Homepage
       | FAQ          |
     And I should see the button "Guided tour"
 
+  Scenario: The homepage about section is not visible to authenticated users.
+    Given I am not logged in
+    # Visit once to cache the page.
+    And I am on the homepage
+    Then I should see the text "The Joinup platform is the European Commission's one-stop shop for interoperable"
+
+    Given I am logged in as a user with the "authenticated" role
+    And I am on the homepage
+    Then I should not see the text "The Joinup platform is the European Commission's one-stop shop for interoperable"
+
+    # Re check for anonymous users.
+    Given I am not logged in
+    And I am on the homepage
+    Then I should see the text "The Joinup platform is the European Commission's one-stop shop for interoperable"
+
   @terms
   Scenario: Latest news is shown on the homepage
     Given collection:
       | title | Shaping of nature |
       | state | validated         |
     And news content:
-      | title                       | headline                 | collection        | topic                                      | state     | publication date     | body                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
-      | Current biodiversity crisis | Preserve habitats        | Shaping of nature | Finance in EU, Supplier exchange, E-health | validated | 2021-04-26T19:09:00Z | Here we combine global maps of human populations and land use over the past 12000 y with current biodiversity data to show that nearly <em>three quarters of nature has long been shaped by histories of human habitation</em> and use by indigenous peoples.                                                                                                                                                                                                                                                                                                                                                       |
-      | Environmental stewardship   | Transformative practices | Shaping of nature | Employment and Support Allowance           | validated | 2021-01-27T16:12:00Z | With rare exceptions current biodiversity losses are caused not by human conversion or degradation of untouched ecosystems but rather by the appropriation colonization and intensification of use in lands inhabited and used by prior societies.                                                                                                                                                                                                                                                                                                                                                                  |
-      | Spatial reconstruction      | Loss of wildlands        | Shaping of nature | HR, Statistics and Analysis, E-justice     | validated | 2021-02-28T13:15:00Z | Global land use history confirms that empowering the environmental stewardship of Indigenous peoples and local communities will be critical to conserving biodiversity across the planet.                                                                                                                                                                                                                                                                                                                                                                                                                           |
-      | Earlier transformations     | Ecosystem management     | Shaping of nature | EU and European Policies                   | validated | 2021-03-29T10:18:00Z | "<p>{""preview_thumbnail"":""/sites/default/files/styles/video_embed_wysiwyg_preview/public/video_thumbnails/dQw4w9WgXcQ.jpg?itok=s9z0clFM"",""video_url"":""https://www.youtube.com/watch?v=dQw4w9WgXcQ"",""settings"":{""responsive"":true,""width"":""854"",""height"":""480"",""autoplay"":false},""settings_summary"":[""Embedded Video (Responsive).""]}Archaeological evidence shows that by 10000 BCE all societies employed ecologically transformative land use practices including burning hunting species propagation domestication cultivation have left long-term legacies across the biosphere.</p>" |
+      | title                       | headline                 | collection        | topic                                                 | state     | publication date     | body                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
+      | Current biodiversity crisis | Preserve habitats        | Shaping of nature | Finance in EU, Supplier exchange, E-health, E-justice | validated | 2021-04-26T19:09:00Z | Here we combine global maps of human populations and land use over the past 12000 y with current biodiversity data to show that nearly <em>three quarters of nature has long been shaped by histories of human habitation</em> and use by indigenous peoples.                                                                                                                                                                                                                                                                                                                                                       |
+      | Environmental stewardship   | Transformative practices | Shaping of nature | Employment and Support Allowance                      | validated | 2021-01-27T16:12:00Z | With rare exceptions current biodiversity losses are caused not by human conversion or degradation of untouched ecosystems but rather by the appropriation colonization and intensification of use in lands inhabited and used by prior societies.                                                                                                                                                                                                                                                                                                                                                                  |
+      | Spatial reconstruction      | Loss of wildlands        | Shaping of nature | HR, Statistics and Analysis, E-justice                | validated | 2021-02-28T13:15:00Z | Global land use history confirms that empowering the environmental stewardship of Indigenous peoples and local communities will be critical to conserving biodiversity across the planet.                                                                                                                                                                                                                                                                                                                                                                                                                           |
+      | Earlier transformations     | Ecosystem management     | Shaping of nature | EU and European Policies                              | validated | 2021-03-29T10:18:00Z | "<p>{""preview_thumbnail"":""/sites/default/files/styles/video_embed_wysiwyg_preview/public/video_thumbnails/dQw4w9WgXcQ.jpg?itok=s9z0clFM"",""video_url"":""https://www.youtube.com/watch?v=dQw4w9WgXcQ"",""settings"":{""responsive"":true,""width"":""854"",""height"":""480"",""autoplay"":false},""settings_summary"":[""Embedded Video (Responsive).""]}Archaeological evidence shows that by 10000 BCE all societies employed ecologically transformative land use practices including burning hunting species propagation domestication cultivation have left long-term legacies across the biosphere.</p>" |
     When I am on the homepage
     Then the latest news section should contain the following news articles:
-      | date   | topics                           | title                       | body                                                                                                                                                                                                     |
-      | 26 Apr | Finance in EU, Supplier exchange | Current biodiversity crisis | Here we combine global maps of human populations and land use over the past 12000 y with current biodiversity data to show that nearly three quarters of nature has long been shaped by histories of…    |
-      | 29 Mar | EU and European Policies         | Earlier transformations     | Archaeological evidence shows that by 10000 BCE all societies employed ecologically transformative land use practices including burning hunting species propagation domestication cultivation have left… |
-      | 28 Feb | HR, Statistics and Analysis      | Spatial reconstruction      | Global land use history confirms that empowering the environmental stewardship of Indigenous peoples and local communities will be critical to conserving biodiversity across the planet.                |
-
-    # The topics that are associated with the news articles should redirect to a
-    # search page which is pre-filtered on the topic.
-    # Todo: Once topics have canonical pages these should redirect to the topic
-    #   page instead.
-    When I click "Finance in EU"
-    Then I should be on the advanced search page
-    And the "Finance in EU" content checkbox item should be selected
+      | date   | topics                                      | title                       | body                                                                                                                                                                                                                                                 |
+      | 26 Apr | Finance in EU, Supplier exchange, +2 topics | Current biodiversity crisis | Here we combine global maps of human populations and land use over the past 12000 y with current biodiversity data to show that nearly three quarters of nature has long been shaped by histories of human habitation and use by indigenous peoples. |
+      | 29 Mar | EU and European Policies                    | Earlier transformations     | Archaeological evidence shows that by 10000 BCE all societies employed ecologically transformative land use practices including burning hunting species propagation domestication cultivation have left long-term legacies across the biosphere.     |
+      | 28 Feb | HR, Statistics and Analysis, E-justice      | Spatial reconstruction      | Global land use history confirms that empowering the environmental stewardship of Indigenous peoples and local communities will be critical to conserving biodiversity across the planet.                                                            |
 
     # There is a "More news" link that for the moment leads to the search page
     # pre-filtered on news articles. In the future this will become a dedicated
@@ -52,7 +59,7 @@ Feature: Homepage
     When I click "More news"
     Then I should be on the advanced search page
     And I should see the following facet summary "News"
-    And the page should show the tiles "Preserve habitats, Transformative practices, Loss of wildlands, Ecosystem management"
+    And the page should show the tiles "Current biodiversity crisis, Environmental stewardship, Spatial reconstruction, Earlier transformations"
 
   @terms
   Scenario: Community content can be placed "In the spotlight" on the homepage
@@ -60,8 +67,8 @@ Feature: Homepage
       | title | Mice in space |
       | state | validated     |
     And news content:
-      | title          | collection    | topic                                      | state     | logo       | body                                                                                                                                                                              |
-      | Muscle atrophy | Mice in space | Finance in EU, Supplier exchange, E-health | validated | blaise.jpg | Researchers from the University of Tsukuba have sent mice into space to explore effects of spaceflight and reduced gravity on muscle atrophy, or wasting, at the molecular level. |
+      | title       | headline       | collection    | topic                                                 | state     | logo       | body                                                                                                                                                                              |
+      | New muscles | Muscle atrophy | Mice in space | Finance in EU, Supplier exchange, E-health, E-justice | validated | blaise.jpg | Researchers from the University of Tsukuba have sent mice into space to explore effects of spaceflight and reduced gravity on muscle atrophy, or wasting, at the molecular level. |
     And discussion content:
       | title                | collection    | topic                            | state     | logo    | body                                                                                                                                                                                       |
       | Influence of gravity | Mice in space | Employment and Support Allowance | validated | ada.jpg | Space exploration has brought about many scientific and technological advances, yet manned spaceflights come at a cost to astronauts, including reduced skeletal muscle mass and strength. |
@@ -73,16 +80,16 @@ Feature: Homepage
       | Stay at the ISS | Mice in space | EU and European Policies | validated | charles.jpg | Two groups of mice (six per group) were housed aboard the International Space Station for 35 days. One group was subjected to artificial gravity (1 g) and the other to microgravity. |
     And the "In the spotlight" content listing contains:
       | type    | label           |
-      | content | Muscle atrophy  |
+      | content | New muscles     |
       | content | Stay at the ISS |
       | content | Microgravity    |
 
     When I am on the homepage
     Then the in the spotlight section should contain the following content:
-      | number | logo        | topics                           | title           | body                                                                                                                                                                                            |
-      | 1      | blaise.jpg  | Finance in EU, Supplier exchange | Muscle atrophy  | Researchers from the University of Tsukuba have sent mice into space to explore effects of spaceflight and reduced gravity on muscle atrophy                                                    |
-      | 2      | charles.jpg | EU and European Policies         | Stay at the ISS | Two groups of mice (six per group) were housed aboard the International Space Station for 35 days. One group was subjected to artificial gravity (1 g) and the other to microgravity.           |
-      | 3      | alan.jpg    | HR, Statistics and Analysis      | Microgravity    | Conventional studies investigating the effects of reduced gravity on muscle mass and function have used a ground control group that is not directly comparable to the space experimental group. |
+      | number | logo        | topics                                      | title           | type     | body                                                                                                                                                                                            |
+      | 1      | blaise.jpg  | Finance in EU, Supplier exchange, +2 topics | New muscles     | news     | Researchers from the University of Tsukuba have sent mice into space to explore effects of spaceflight and reduced gravity on muscle atrophy                                                    |
+      | 2      | charles.jpg | EU and European Policies                    | Stay at the ISS | event    | Two groups of mice (six per group) were housed aboard the International Space Station for 35 days. One group was subjected to artificial gravity (1 g) and the other to microgravity.           |
+      | 3      | alan.jpg    | HR, Statistics and Analysis, E-justice      | Microgravity    | document | Conventional studies investigating the effects of reduced gravity on muscle mass and function have used a ground control group that is not directly comparable to the space experimental group. |
 
   @terms
   Scenario Outline: Community content be highlighted on the homepage
@@ -112,6 +119,24 @@ Feature: Homepage
       | document |
       | news     |
       | event    |
+
+  Scenario: An event in the highlighted content on the homepage should display the start date.
+    Given event content:
+      | title            | start date       | end date         | state     | body          |
+      | Light and height | 2021-06-04T20:00 | 2021-06-05T22:00 | validated | High and lite |
+    And the "Highlighted content" content listing contains:
+      | type    | label            |
+      | content | Light and height |
+
+    When I am on the homepage
+    Then I should see "Light and height" as the Highlighted content
+    And I should see the text "04-06-2021" in the "Light and height" tile
+    And I should see the link "Sign in or register to like this content" in the "Light and height" tile
+
+    Given I am logged in as a moderator
+    When I am on the homepage
+    Then I should see the "Light and height" tile
+    And I should see the link "Like this content" in the "Light and height" tile
 
   Scenario: An event can be highlighted on the homepage
     Given event content:
@@ -158,7 +183,7 @@ Feature: Homepage
     And I should see the following facet summary "Event"
     And I should see the "Florentine steak festival" tile
 
-  @version
+  @joinupVersion
   Scenario Outline: The current version of the Joinup platform is shown in the footer.
     Given the Joinup version is set to "<version>"
     When I am on the homepage
@@ -312,6 +337,29 @@ Feature: Homepage
     Then I should be on the advanced search page
     And I should see the following facet summary "Events"
 
+    # Check archived items.
+    Given collections:
+      | title           | state    | description                                    | creation date    |
+      | Clash of lords  | archived | Supports <a href="#">health-related</a> fields | 2022-12-18 08:00 |
+      | Clash of ruins  | archived | Lorem Ipsum is simply dummy                    | 2022-11-18 08:00 |
+    And news content:
+      | title                       | headline                    | collection      | topic                                      | state            | created              | changed              | published_at        | body                                                                                                                                                                                                                                                                 |
+      | World biodiversity adapt    | World habitats              | Clash of jonnys | Finance in EU, Supplier exchange, E-health | archived        | 2022-04-30T19:09:00Z | 2022-04-30T19:09:00Z | 2022-04-30T19:09:00Z | Here we combine global <a href="#">maps</a> of human populations and land use over the past 12000 y with current biodiversity data to show that nearly three quarters of nature has long been shaped by histories of human habitation and use by indigenous peoples. |
+      | Environmental laws          | Best practices              | Nature area     | Employment and Support Allowance           | archived        | 2022-01-27T16:12:00Z | 2022-01-27T16:12:00Z | 2022-01-27T16:12:00Z | With rare exceptions current biodiversity losses are caused not by human conversion or degradation of untouched ecosystems but rather by the <em>appropriation colonization and intensification of use in lands inhabited and used by prior societies</em>.          |
+
+    When I am on the homepage
+    Then I should not see the following lines of text:
+      | Clash of lords            |
+      | Clash of ruins            |
+      | World biodiversity adapt  |
+      | Environmental laws        |
+
   Scenario: A favicon is shown in the browser tab
     Given I am on the homepage
     Then I should see a favicon
+
+  Scenario: The two search inputs in the homepage have different ids
+    Given I am on the homepage
+    Then I should see search bar in navbar
+    And I should see the search bar in homepage's header
+    And page elements must have unique id attributes

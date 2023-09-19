@@ -191,7 +191,8 @@ trait GroupTrait {
    * {@inheritdoc}
    */
   public function getMemberCount(array $states = [OgMembershipInterface::STATE_ACTIVE]): int {
-    return (int) \Drupal::entityQuery('og_membership')
+    return \Drupal::entityQuery('og_membership')
+      ->accessCheck(FALSE)
       ->condition('entity_type', 'rdf_entity')
       ->condition('entity_id', $this->id())
       ->condition('state', $states, 'IN')
@@ -290,7 +291,7 @@ trait GroupTrait {
   protected function getNodeGroupContent(): array {
     $storage = $this->entityTypeManager()->getStorage('node');
 
-    $nids = $storage->getQuery()
+    $nids = $storage->getQuery()->accessCheck(FALSE)
       ->condition(OgGroupAudienceHelperInterface::DEFAULT_FIELD, $this->id())
       ->execute();
 

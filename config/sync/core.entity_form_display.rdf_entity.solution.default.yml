@@ -6,7 +6,6 @@ dependencies:
     - core.entity_form_mode.rdf_entity.inline
     - field.field.rdf_entity.solution.field_is_actor
     - field.field.rdf_entity.solution.field_is_affiliations_requests
-    - field.field.rdf_entity.solution.field_is_banner
     - field.field.rdf_entity.solution.field_is_business_process
     - field.field.rdf_entity.solution.field_is_contact_information
     - field.field.rdf_entity.solution.field_is_content
@@ -52,10 +51,11 @@ dependencies:
     - allowed_formats
     - field_group
     - file_url
-    - image_library_widget
     - inline_entity_form
+    - joinup_core
     - joinup_workflow
     - link
+    - search_api_field
     - text
 third_party_settings:
   field_group:
@@ -106,7 +106,6 @@ third_party_settings:
     group_management:
       children:
         - field_is_logo
-        - field_is_banner
         - field_is_documentation
         - field_spatial_coverage
         - field_keywords
@@ -118,6 +117,7 @@ third_party_settings:
         - field_is_metrics_page
         - field_is_eif_recommendation
         - field_is_eif_category
+        - field_is_content
       label: 'Additional fields'
       region: content
       parent_name: group_general
@@ -149,16 +149,6 @@ content:
     region: content
     settings: {  }
     third_party_settings: {  }
-  field_is_banner:
-    type: image_library_widget
-    weight: 5
-    region: content
-    settings:
-      progress_indicator: throbber
-      preview_image_style: thumbnail
-      media_type_id: solution_banner
-      library_label: 'Alternatively, choose a pre-uploaded image'
-    third_party_settings: {  }
   field_is_business_process:
     type: entity_reference_autocomplete
     weight: 12
@@ -185,6 +175,14 @@ content:
       collapsible: false
       collapsed: false
       revision: false
+      removed_reference: optional
+    third_party_settings: {  }
+  field_is_content:
+    type: search_api_field_default
+    weight: 17
+    region: content
+    settings:
+      query_builder: true
     third_party_settings: {  }
   field_is_content_creation:
     type: options_buttons
@@ -278,6 +276,7 @@ content:
       collapsible: false
       collapsed: false
       revision: false
+      removed_reference: optional
     third_party_settings: {  }
   field_is_product_type:
     type: entity_reference_autocomplete
@@ -377,6 +376,11 @@ content:
       size: 60
       placeholder: ''
     third_party_settings: {  }
+  simple_sitemap:
+    weight: 10
+    region: content
+    settings: {  }
+    third_party_settings: {  }
   transition_motivation:
     weight: 17
     region: content
@@ -385,7 +389,6 @@ content:
 hidden:
   created: true
   field_is_affiliations_requests: true
-  field_is_content: true
   field_is_distribution: true
   field_is_has_version: true
   field_is_included_asset: true

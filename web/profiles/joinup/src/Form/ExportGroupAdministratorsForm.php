@@ -18,27 +18,19 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 class ExportGroupAdministratorsForm extends ExportBatchedDataFormBase {
 
   /**
-   * The entity type manager.
-   *
-   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
-   */
-  protected $entityTypeManager;
-
-  /**
    * Constructs an ExportUserListForm.
    *
    * @param \Drupal\Core\Cache\CacheBackendInterface $cache
    *   The default cache bin.
-   * @param \Drupal\Core\Datetime\DateFormatterInterface $date_formatter
+   * @param \Drupal\Core\Datetime\DateFormatterInterface $dateFormatter
    *   The date formatter service.
    * @param \Drupal\Component\Datetime\TimeInterface $time
    *   The time service.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
    *   The entity type manager.
    */
-  public function __construct(CacheBackendInterface $cache, DateFormatterInterface $date_formatter, TimeInterface $time, EntityTypeManagerInterface $entityTypeManager) {
-    parent::__construct($cache, $date_formatter, $time);
-    $this->entityTypeManager = $entityTypeManager;
+  public function __construct(protected CacheBackendInterface $cache, protected DateFormatterInterface $dateFormatter, protected TimeInterface $time, protected EntityTypeManagerInterface $entityTypeManager) {
+    parent::__construct($cache, $dateFormatter, $time);
   }
 
   /**
@@ -90,12 +82,15 @@ class ExportGroupAdministratorsForm extends ExportBatchedDataFormBase {
    *   The form state object.
    */
   public function generateData(array &$form, FormStateInterface $form_state): void {
-    $membership_query = $this->entityTypeManager->getStorage('og_membership')->getQuery();
+    $membership_query = $this->entityTypeManager->getStorage('og_membership')
+      ->getQuery()
+      ->accessCheck(FALSE);
     $membership_or = $membership_query->orConditionGroup()
       ->condition('roles', 'rdf_entity-collection-facilitator')
       ->condition('roles', 'rdf_entity-solution-facilitator');
     $membership_ids = $this->entityTypeManager->getStorage('og_membership')
       ->getQuery()
+      ->accessCheck(FALSE)
       // We are only exporting facilitators and administrators but all
       // administrators are also facilitators. Adding a condition that the
       // membership must have the facilitator role means that administrators are

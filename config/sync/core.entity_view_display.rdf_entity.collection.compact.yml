@@ -7,7 +7,6 @@ dependencies:
     - field.field.rdf_entity.collection.field_ar_abstract
     - field.field.rdf_entity.collection.field_ar_access_url
     - field.field.rdf_entity.collection.field_ar_affiliates
-    - field.field.rdf_entity.collection.field_ar_banner
     - field.field.rdf_entity.collection.field_ar_closed
     - field.field.rdf_entity.collection.field_ar_contact_information
     - field.field.rdf_entity.collection.field_ar_content_creation
@@ -26,7 +25,7 @@ dependencies:
     - image.style.logo
     - rdf_entity.rdfentity.collection
   module:
-    - image
+    - svg_image
     - template_suggestion
     - user
 id: rdf_entity.collection.compact
@@ -64,7 +63,6 @@ hidden:
   field_ar_abstract: true
   field_ar_access_url: true
   field_ar_affiliates: true
-  field_ar_banner: true
   field_ar_closed: true
   field_ar_contact_information: true
   field_ar_content_creation: true
@@ -84,8 +82,8 @@ hidden:
   last_update: true
   members: true
   og_group: true
-  rdf_entity_field_collection_content_inline_facets: true
-  rdf_entity_field_collection_content_top: true
+  rdf_entity_collection_field_collection_content_inline_facets: true
+  rdf_entity_collection_field_collection_content_top: true
   read_more: true
   search_api_excerpt: true
   settings: true

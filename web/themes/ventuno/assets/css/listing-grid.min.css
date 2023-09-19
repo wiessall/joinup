@@ -1,0 +1,2 @@
+.listing-grid{display:grid;gap:1rem;grid-template-columns:1fr}@media (min-width:576px){.listing-grid--licence{grid-template-columns:1fr 1fr}}@media (min-width:768px){.listing-grid--licence{grid-template-columns:1fr 1fr 1fr}}@media (min-width:1200px){.listing-grid--licence{grid-template-columns:1fr 1fr 1fr 1fr 1fr 1fr}}@media (min-width:576px){.listing-grid--eif{grid-template-columns:1fr 1fr}}@media (min-width:1200px){.listing-grid--eif{grid-template-columns:1fr 1fr 1fr 1fr}}
+/*# sourceMappingURL=listing-grid.min.css.map */

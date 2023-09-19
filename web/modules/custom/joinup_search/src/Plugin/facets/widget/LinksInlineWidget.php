@@ -195,7 +195,7 @@ class LinksInlineWidget extends WidgetPluginBase implements ContainerFactoryPlug
    *   The renderable array of the link.
    */
   protected function generateResetLink(FacetInterface $facet) {
-    $request = $this->requestStack->getMasterRequest();
+    $request = $this->requestStack->getMainRequest();
     $get_params = clone $request->query;
     if ($get_params->has('page')) {
       $get_params->remove('page');
@@ -214,7 +214,7 @@ class LinksInlineWidget extends WidgetPluginBase implements ContainerFactoryPlug
     $url_processor = $url_processor_handler->getProcessor();
     $filter_key = $url_processor->getFilterKey();
 
-    $filter_params = $get_params->get($filter_key, [], TRUE);
+    $filter_params = $get_params->all()[$filter_key] ?? [];
     foreach ($facet->getResults() as $result) {
       if ($result->isActive()) {
         $active_filter_string = $facet->getUrlAlias() . $url_processor->getSeparator() . $result->getRawValue();

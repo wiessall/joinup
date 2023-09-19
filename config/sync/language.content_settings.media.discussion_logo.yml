@@ -1,0 +1,11 @@
+uuid: 7bd77b4d-4ad3-4ad0-8380-67b89d75e544
+langcode: en
+status: true
+dependencies:
+  config:
+    - media.type.discussion_logo
+id: media.discussion_logo
+target_entity_type_id: media
+target_bundle: discussion_logo
+default_langcode: site_default
+language_alterable: false

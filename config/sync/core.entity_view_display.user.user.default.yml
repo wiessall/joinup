@@ -28,7 +28,7 @@ content:
     third_party_settings: {  }
     weight: 1
     region: content
-  user_field_user_content_top:
+  user_user_field_user_content_top:
     settings: {  }
     third_party_settings: {  }
     weight: 0

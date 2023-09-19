@@ -22,33 +22,20 @@ commands:
   # Downloads and unpacks the Virtuoso snapshot.
   virtuoso:download-snapshot:
     # Cleanup any stale data.
-    - task: remove
-      file: ${virtuoso.backup_dir}/virtuoso.tar.gz
-    - task: remove
-      file: ${virtuoso.backup_dir}/virtuoso.tar
     - task: exec
       command: rm -rf ${virtuoso.backup_dir}/digit-joinup-reference_*
     - task: remove
       file: ${virtuoso.snapshot_dir}
-    # Download and unpack the archive.
-    - task: run
-      command: toolkit:download-dump
-      options:
-        asda-url: ${env.ASDA_URL}/../virtuoso
-        dumpfile: ${virtuoso.backup_dir}/virtuoso.tar
     # Unpack and organize.
     - task: exec
       command: tar
       arguments:
         - xvf
-        - ${virtuoso.backup_dir}/virtuoso.tar
+        - ${toolkit.tmp_folder}/virtuoso.gz
       options:
         directory: ${virtuoso.backup_dir}
     - task: exec
       command: mv $(find ${virtuoso.backup_dir} -type d -name 'digit-joinup-reference_*') ${virtuoso.snapshot_dir}
-    # Cleanup.
-    - task: remove
-      file: ${virtuoso.backup_dir}/virtuoso.tar
 
   # Restores the Virtuoso database from a snapshot.
   virtuoso:restore:

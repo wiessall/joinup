@@ -10,7 +10,7 @@ use Drupal\facets\Result\ResultInterface;
 use Drupal\facets\Widget\WidgetPluginBase;
 
 /**
- * The links widget.
+ * The type widget.
  *
  * @FacetsWidget(
  *   id = "type",
@@ -21,16 +21,23 @@ use Drupal\facets\Widget\WidgetPluginBase;
 class TypeWidget extends WidgetPluginBase {
 
   /**
+   * List of result which are displayed as tab.
+   *
+   * @var \Drupal\facets\Result\ResultInterface[]
+   */
+  protected array $resultTabs = [];
+
+  /**
    * {@inheritdoc}
    */
-  public function defaultConfiguration() {
+  public function defaultConfiguration(): array {
     return ['tabs' => 0] + parent::defaultConfiguration();
   }
 
   /**
    * {@inheritdoc}
    */
-  public function buildConfigurationForm(array $form, FormStateInterface $form_state, FacetInterface $facet) {
+  public function buildConfigurationForm(array $form, FormStateInterface $form_state, FacetInterface $facet): array {
     $form = parent::buildConfigurationForm($form, $form_state, $facet);
 
     $config = $this->getConfiguration();
@@ -40,8 +47,8 @@ class TypeWidget extends WidgetPluginBase {
       '#type' => 'select',
       '#title' => $this->t('Tabs'),
       '#description' => $this->t('The number of items to show separately as tabs with icon.'),
-      '#options' => array_combine($values, $values),
-      '#default_value' => $config['tabs'] ?: 3,
+      '#options' => [0 => $this->t('- All -')] + array_combine($values, $values),
+      '#default_value' => $config['tabs'],
     ];
 
     return $form;
@@ -50,17 +57,14 @@ class TypeWidget extends WidgetPluginBase {
   /**
    * {@inheritdoc}
    */
-  public function build(FacetInterface $facet) {
+  public function build(FacetInterface $facet): array {
     $this->facet = $facet;
     $config = $this->getConfiguration();
 
-    /** @var \Drupal\facets\Result\ResultInterface[] $results */
     $results = array_values($facet->getResults());
     $big_icons = [];
-    foreach (array_splice($results, 0, $config['tabs']) as $result) {
-      // The first N elements need to be rendered as tab. Adding an object
-      // property is easier than overriding all the methods of the class.
-      $result->asTab = TRUE;
+    foreach (array_splice($results, 0, $config['tabs'] ?: NULL) as $result) {
+      $this->resultTabs[] = $result;
       $big_icons[] = $this->buildSingleResult($result);
     }
 
@@ -69,13 +73,7 @@ class TypeWidget extends WidgetPluginBase {
       $items[] = $this->buildSingleResult($result);
     }
 
-    // Check if there is more facets.
-    $is_more = FALSE;
-    if (!empty($items)) {
-      $is_more = TRUE;
-    }
-
-    $build = [
+    return [
       '#type' => 'container',
       '#attributes' => [
         'data-drupal-facet-id' => $facet->id(),
@@ -87,7 +85,7 @@ class TypeWidget extends WidgetPluginBase {
         ],
       ],
       'big_icons' => [
-        '#theme' => $is_more ? 'facets_type_wrapper__more' : 'facets_type_wrapper',
+        '#theme' => !empty($items) ? 'facets_type_wrapper__more' : 'facets_type_wrapper',
         '#items' => $big_icons,
       ],
       'others' => [
@@ -95,8 +93,6 @@ class TypeWidget extends WidgetPluginBase {
         '#items' => $items,
       ],
     ];
-
-    return $build;
   }
 
   /**
@@ -108,7 +104,7 @@ class TypeWidget extends WidgetPluginBase {
    * @return array
    *   The facet result item as a render array.
    */
-  protected function buildSingleResult(ResultInterface $result) {
+  protected function buildSingleResult(ResultInterface $result): array {
     if (empty($result->getUrl())) {
       return $this->buildResultItem($result);
     }
@@ -120,9 +116,9 @@ class TypeWidget extends WidgetPluginBase {
   /**
    * {@inheritdoc}
    */
-  protected function buildResultItem(ResultInterface $result) {
+  protected function buildResultItem(ResultInterface $result): array {
     $count = $result->getCount();
-    $theme = isset($result->asTab) ? 'facets_type_result_item' : 'facets_result_item';
+    $theme = in_array($result, $this->resultTabs) ? 'facets_type_result_item' : 'facets_result_item';
     if ($result->isActive()) {
       $theme .= '__active';
     }
@@ -140,7 +136,7 @@ class TypeWidget extends WidgetPluginBase {
   /**
    * {@inheritdoc}
    */
-  protected function buildListItems(FacetInterface $facet, ResultInterface $result) {
+  protected function buildListItems(FacetInterface $facet, ResultInterface $result): array {
     $classes = ['facet-item'];
     if ($children = $result->getChildren()) {
       $items = $this->prepareLink($result);
@@ -168,9 +164,10 @@ class TypeWidget extends WidgetPluginBase {
     $items['#wrapper_attributes'] = ['class' => $classes];
     $items['#attributes']['data-drupal-facet-item-id'] = $this->facet->getUrlAlias() . '-' . $result->getRawValue();
 
-    if (isset($result->asTab)) {
+    if (in_array($result, $this->resultTabs)) {
       $items['#attributes']['class'][] = 'tab';
       $items['#attributes']['class'][] = 'tab--content-type';
+      $items['#attributes']['role'][] = 'tab';
     }
 
     return $items;

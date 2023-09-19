@@ -6,9 +6,9 @@ Feature: "Add document" visibility options.
 
   Scenario: "Add document" button should not be shown to normal members, authenticated users and anonymous users.
     Given the following collections:
-      | title                   | logo     | banner     | state     |
-      | Ring of Truth           | logo.png | banner.jpg | validated |
-      | The Storms of the Waves | logo.png | banner.jpg | validated |
+      | title                   | logo     | state     |
+      | Ring of Truth           | logo.png | validated |
+      | The Storms of the Waves | logo.png | validated |
 
     When I am logged in as an "authenticated user"
     And I go to the homepage of the "Ring of Truth" collection
@@ -41,8 +41,8 @@ Feature: "Add document" visibility options.
       | Family name | Andries           |
       | E-mail      | eandr@example.com |
     And collections:
-      | title                | logo     | banner     | state     |
-      | Hunter in the Swords | logo.png | banner.jpg | validated |
+      | title                | logo     | state     |
+      | Hunter in the Swords | logo.png | validated |
     And the following collection user membership:
       | collection           | user      | roles       |
       | Hunter in the Swords | napcheese | facilitator |
@@ -80,9 +80,6 @@ Feature: "Add document" visibility options.
     # Check that the full author name is shown instead of the username.
     And I should see the link "Eirik Andries" in the "Content" region
     But I should not see the link "napcheese" in the "Content" region
-    # Check that the link to the document is visible on the collection page.
-    When I go to the homepage of the "Hunter in the Swords" collection
-    Then I should see the link "An amazing document"
 
     # Check that the publication date field is prefilled with the current time.
     When I go to the homepage of the "Hunter in the Swords" collection

@@ -7,10 +7,13 @@ namespace Drupal\joinup_group\Plugin\Block;
 use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Session\AccountProxyInterface;
+use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\rdf_entity\RdfInterface;
+use Drupal\search_api\Query\QueryInterface;
 use Drupal\search_api\Query\ResultSetInterface;
 use Drupal\search_api\SearchApiException;
 use Drupal\state_machine_revisions\RevisionManagerInterface;
@@ -111,6 +114,45 @@ class EntityUnpublishedBlock extends BlockBase implements ContainerFactoryPlugin
   /**
    * {@inheritdoc}
    */
+  public function defaultConfiguration() {
+    return [
+      'states_filter' => [],
+      'negate_states_filter' => FALSE,
+    ];
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function blockForm($form, FormStateInterface $form_state) {
+    $form['states_filter'] = [
+      '#type' => 'textarea',
+      '#title' => $this->t('States to show'),
+      '#description' => $this->t('Add one state per line. If empty, all states will be shown. <br />Please note, that entities without a state field will receive the "published" and "unpublished" state as a value.'),
+      '#default_value' => $this->configuration['states_filter'] ? implode(PHP_EOL, $this->configuration['states_filter']) : '',
+    ];
+
+    $form['negate_states_filter'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Negate states filter'),
+      '#description' => $this->t('If checked, the states filter will be negated.'),
+      '#default_value' => $this->configuration['negate_states_filter'],
+    ];
+
+    return $form;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function blockSubmit($form, FormStateInterface $form_state) {
+    $this->configuration['states_filter'] = array_filter(array_map('trim', explode(PHP_EOL, $form_state->getValue('states_filter'))));
+    $this->configuration['negate_states_filter'] = $form_state->getValue('negate_states_filter');
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function build(): array {
     $group = $this->getContext('og')->getContextValue();
     if (empty($group)) {
@@ -154,12 +196,7 @@ class EntityUnpublishedBlock extends BlockBase implements ContainerFactoryPlugin
    *   Thrown when a problem occurs during execution of the search query.
    */
   protected function getRows(RdfInterface $group): array {
-    $index = $this->entityTypeManager->getStorage('search_api_index')->load('unpublished');
-    /** @var \Drupal\search_api\Query\QueryInterface $query */
-    $query = $index->query();
-    $query->addCondition('entity_bundle', self::LISTED_BUNDLES, 'IN');
-    $query->addCondition('entity_groups', $group->id());
-    $query->sort('entity_created', 'DESC');
+    $query = $this->getQuery($group);
     $results = $query->execute();
     $entities = $this->getResultEntities($results);
     $rows = [];
@@ -174,6 +211,27 @@ class EntityUnpublishedBlock extends BlockBase implements ContainerFactoryPlugin
       ];
     }
     return $rows;
+  }
+
+  /**
+   * Constructs the search_api query.
+   *
+   * @param \Drupal\joinup_group\Entity\GroupInterface $group
+   *   The related group.
+   */
+  protected function getQuery(GroupInterface $group): QueryInterface {
+    $index = $this->entityTypeManager->getStorage('search_api_index')->load('unpublished');
+    /** @var \Drupal\search_api\Query\QueryInterface $query */
+    $query = $index->query()
+      ->addCondition('entity_bundle', self::LISTED_BUNDLES, 'IN')
+      ->addCondition('entity_groups', $group->id())
+      ->sort('entity_created', 'DESC');
+
+    if (!empty($this->configuration['states_filter'])) {
+      $states_filter = array_filter(array_map('trim', $this->configuration['states_filter']));
+      $query->addCondition('state', $states_filter, $this->configuration['negate_states_filter'] ? 'NOT IN' : 'IN');
+    }
+    return $query;
   }
 
   /**

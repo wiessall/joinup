@@ -41,8 +41,8 @@ class DocumentThemeTest extends JoinupExistingSiteTestBase {
     $post_request_indexing->destruct();
     $this->drupalGet($collection->toUrl());
     $assert->pageTextContains('Document title');
-    $assert->pageTextContains('Hello document body');
-    $assert->pageTextContains('keyword_sample');
+    $assert->pageTextNotContains('Hello document body');
+    $assert->pageTextNotContains('keyword_sample');
 
     $file = $this->getTestFile('text');
     $file->save();
@@ -51,7 +51,6 @@ class DocumentThemeTest extends JoinupExistingSiteTestBase {
     $post_request_indexing->destruct();
     $this->getSession()->reload();
 
-    $assert->responseContains('<div class="listing__image">');
     $assert->pageTextContains('Document title');
     $assert->pageTextNotContains('Hello document body');
     $assert->pageTextNotContains('keyword_sample');

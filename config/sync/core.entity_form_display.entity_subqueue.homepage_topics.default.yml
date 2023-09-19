@@ -1,0 +1,44 @@
+uuid: 0295590a-a39b-4848-aeea-289c43fad289
+langcode: en
+status: true
+dependencies:
+  config:
+    - entityqueue.entity_queue.homepage_topics
+    - field.field.entity_subqueue.homepage_topics.block_label
+  module:
+    - entityqueue
+id: entity_subqueue.homepage_topics.default
+targetEntityType: entity_subqueue
+bundle: homepage_topics
+mode: default
+content:
+  block_label:
+    type: string_textfield
+    weight: 2
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  items:
+    type: entityqueue_dragtable
+    weight: 1
+    region: content
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 60
+      placeholder: ''
+      link_to_entity: false
+      link_to_edit_form: true
+    third_party_settings: {  }
+  title:
+    type: string_textfield
+    weight: 0
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+hidden:
+  langcode: true

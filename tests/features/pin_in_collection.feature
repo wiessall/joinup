@@ -30,7 +30,7 @@ Feature: Pinning entities inside collections
       | Green Wrench  | Tyron Ingram    |             |
 
   Scenario Outline: Facilitators can pin and unpin community content inside their collections.
-    Given discussion content:
+    Given news content:
       | title                       | collection    | state     |
       | What is the HEX for orange? | Orange Wrench | validated |
     And <content type> content:
@@ -109,10 +109,9 @@ Feature: Pinning entities inside collections
       | content type | label      |
       | event        | Event      |
       | document     | Document   |
-      | discussion   | Discussion |
 
   Scenario: Facilitators can pin and unpin community news content inside their collections.
-    Given discussion content:
+    Given news content:
       | title                      | collection   | state     |
       | What is the HEX for green? | Green Wrench | validated |
     And news content:
@@ -170,8 +169,8 @@ Feature: Pinning entities inside collections
 
     # When we are not in a collection page, the pin/unpin links should not be visible.
     When I am at "/search"
-    Then I should not see the contextual links "Pin, Unpin" in the "Important very" tile
-    And I should not see the contextual links "Pin, Unpin" in the "Information useful" tile
+    Then I should not see the contextual links "Pin, Unpin" in the "Very important" tile
+    And I should not see the contextual links "Pin, Unpin" in the "Useful information" tile
 
   # This scenario will be re-enabled in ISAICP-6771.
   # See https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-6771
@@ -277,53 +276,61 @@ Feature: Pinning entities inside collections
 
   @javascript
   Scenario: Last update time of a solution is not affected by (un)pinning.
+    Given the following collections:
+      | title              | state     | creation date | modification date |
+      | Orange Screwdriver | validated | 2018-10-15    | 2019-10-15T23:03  |
+      | Green Screwdriver  | validated | 2018-11-05    | 2019-11-05T23:03  |
     Given discussion content:
-      | title                        | collection    | state     | pinned | created    |
-      | What kind of wrench is this? | Orange Wrench | validated | no     | 2017-11-20 |
-    And solutions:
-      | title                | collection    | state     | pinned in     | creation date |
-      | Drop forged wrenches | Orange Wrench | validated | Orange Wrench | 2017-10-12    |
-    And I am logged in as "Rozanne Minett"
+      | title                             | collection         | state     | pinned | created    | changed    |
+      | What kind of screwdriver is this? | Orange Screwdriver | validated | no     | 2017-11-20 | 2018-11-20 |
+    Given solutions:
+      | title                    | collection         | state     | pinned in          | creation date | modification date |
+      | Drop forged screwdrivers | Orange Screwdriver | validated | Orange Screwdriver | 2017-10-12    | 2018-10-12T23:03  |
+    And the following collection user memberships:
+      | collection         | user           | roles       |
+      | Orange Screwdriver | Rozanne Minett | facilitator |
+      | Green Screwdriver  | Rozanne Minett | facilitator |
+    Given I am logged in as "Rozanne Minett"
 
     # Pinning and unpinning items should not affect the "last update" timestamp.
     # Before changing the pinned status, let's check that the solution is in the
     # expected position when searching for content ordered by last updated time.
     When I visit the search page
     And I select "Last Updated Date" from "Sort by"
-    And I enter "wrench" in the search bar and press enter
+    And I enter "screwdriver" in the search bar and press enter
     Then I should see the following tiles in the correct order:
-      | Green Wrench                 |
-      | Orange Wrench                |
-      | What kind of wrench is this? |
-      | Drop forged wrenches         |
+      | Green Screwdriver                 |
+      | Orange Screwdriver                |
+      | What kind of screwdriver is this? |
+      | Drop forged screwdrivers          |
 
-    When I go to the homepage of the "Orange Wrench" collection
-    When I click the contextual link "Unpin" in the "Drop forged wrenches" tile
-    Then I should see the success message "Solution Drop forged wrenches has been unpinned in the collection Orange Wrench."
+    When I go to the homepage of the "Orange Screwdriver" collection
+    When I click the contextual link "Unpin" in the "Drop forged screwdrivers" tile
+    Then I should see the success message "Solution Drop forged screwdrivers has been unpinned in the collection Orange Screwdriver."
 
     When I visit the search page
     And I select "Last Updated Date" from "Sort by"
-    And I enter "wrench" in the search bar and press enter
+    And I enter "screwdriver" in the search bar and press enter
     Then I should see the following tiles in the correct order:
-      | Green Wrench                 |
-      | Orange Wrench                |
-      | What kind of wrench is this? |
-      | Drop forged wrenches         |
+      | Green Screwdriver                 |
+      | Orange Screwdriver                |
+      | What kind of screwdriver is this? |
+      | Drop forged screwdrivers          |
 
-    When I go to the homepage of the "Orange Wrench" collection
-    When I click the contextual link "Pin" in the "Drop forged wrenches" tile
-    Then I should see the success message "Solution Drop forged wrenches has been pinned in the collection Orange Wrench."
+    When I go to the homepage of the "Orange Screwdriver" collection
+    When I click the contextual link "Pin" in the "Drop forged screwdrivers" tile
+    Then I should see the success message "Solution Drop forged screwdrivers has been pinned in the collection Orange Screwdriver."
 
     # Check that the "last update" timestamp has not been affected. We can check
     # this in the search page.
     When I visit the search page
     And I select "Last Updated Date" from "Sort by"
-    And I enter "wrench" in the search bar and press enter
+    And I enter "screwdriver" in the search bar and press enter
     Then I should see the following tiles in the correct order:
-      | Green Wrench                 |
-      | Orange Wrench                |
-      | What kind of wrench is this? |
-      | Drop forged wrenches         |
+      | Green Screwdriver                 |
+      | Orange Screwdriver                |
+      | What kind of screwdriver is this? |
+      | Drop forged screwdrivers          |
 
   @javascript
   Scenario Outline: Pinned content tiles should show a visual cue only in their collection homepage.
@@ -361,7 +368,6 @@ Feature: Pinning entities inside collections
       | content type |
       | event        |
       | document     |
-      | discussion   |
       | news         |
 
   @javascript

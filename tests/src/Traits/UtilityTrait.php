@@ -98,26 +98,7 @@ trait UtilityTrait {
     \assert(method_exists($this, 'assertJavaScriptEnabledBrowser'), __METHOD__ . ' depends on BrowserCapabilityDetectionTrait. Please include it in your class.');
     // This only works on JS-enabled browsers.
     $this->assertJavaScriptEnabledBrowser();
-
-    /** @var \Behat\Mink\Driver\Selenium2Driver $driver */
-    $driver = $this->getMink()->getSession()->getDriver();
-
-    // First check if the browser reports this to be visible.
-    $is_visible = $driver->isVisible($element->getXpath());
-
-    // The "visually-hidden" class is used in Drupal to hide elements that
-    // should still be visible in screen readers. This tricks the browser in
-    // thinking the element is actually visible even though human eyes won't
-    // find it. This class uses the "clip" css property, that will cut down the
-    // visible portion of the element. This css property works only when the
-    // "position" property is set either to fixed or absolute.
-    $webdriver_element = $driver->getWebDriverSession()->element('xpath', $element->getXpath());
-    $is_clipped = in_array(
-      $webdriver_element->css('position'),
-      ['fixed', 'absolute']
-    );
-
-    return $is_visible && !$is_clipped;
+    return $this->getMink()->getSession()->getDriver()->isVisible($element->getXpath());
   }
 
   /**

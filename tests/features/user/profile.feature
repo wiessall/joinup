@@ -35,6 +35,7 @@ Feature: User profile
     And I fill in "Twitter" with "therealdavinci"
     And I fill in "LinkedIn" with "leonardo.davinci"
     And I fill in "GitHub" with "davinci"
+    And I fill in "Mastodon" with "myaccount.pl"
 
     # Verify that the business title is a field limited to 255 characters.
     When I fill in "Business title" with "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent sagittis justo ornare justo porta tristique vitae eu ligula. Mauris iaculis eros id nulla posuere, id luctus orci ultricies. Aenean at leo diam. Aliquam dapibus nibh et est pharetra, quis interdum"
@@ -52,6 +53,7 @@ Feature: User profile
     And the link "Twitter" in the "Header" region should point to "https://www.twitter.com/therealdavinci"
     And the link "LinkedIn" in the "Header" region should point to "https://www.linkedin.com/leonardo.davinci"
     And the link "GitHub" in the "Header" region should point to "https://github.com/davinci"
+    And the link "Mastodon" in the "Header" region should point to "https://myaccount.pl"
     And I should not see the link "SlideShare" in the "Header" region
     And I should not see the link "Youtube" in the "Header" region
     And I should not see the link "Vimeo" in the "Header" region
@@ -104,13 +106,13 @@ Feature: User profile
       | Jayson Granger    | jayson.granger@example.com    |            |             |
       | Clarette Fairburn | clarette.fairburn@example.com | Clarette   | Fairburn    |
     And the following collections:
-      | title                 | description                           | logo     | banner     | state     | creation date    |
-      | Botanic E.D.E.N.      | European Deep Earth Nurturing project | logo.png | banner.jpg | validated | 2017-02-23 10:00 |
-      | Ethic flower handling | Because even flowers have feelings.   | logo.png | banner.jpg | validated | 2017-02-23 12:00 |
+      | title                 | description                           | logo     | state     | creation date    |
+      | Botanic E.D.E.N.      | European Deep Earth Nurturing project | logo.png | validated | 2017-02-23 10:00 |
+      | Ethic flower handling | Because even flowers have feelings.   | logo.png | validated | 2017-02-23 12:00 |
     And the following solutions:
-      | title              | collection            | description                                     | logo     | banner     | state     | creation date    |
-      | E.C.O. fertilizers | Botanic E.D.E.N.      | Ecologic cool organic fertilizers production.   | logo.png | banner.jpg | validated | 2017-02-23 13:00 |
-      | SOUND project      | Ethic flower handling | Music playlist for growing flowers with rhythm. | logo.png | banner.jpg | validated | 2017-02-23 14:01 |
+      | title              | collection            | description                                     | logo     | state     | creation date    |
+      | E.C.O. fertilizers | Botanic E.D.E.N.      | Ecologic cool organic fertilizers production.   | logo.png | validated | 2017-02-23 13:00 |
+      | SOUND project      | Ethic flower handling | Music playlist for growing flowers with rhythm. | logo.png | validated | 2017-02-23 14:01 |
     And discussion content:
       | title                          | author          | collection            | state     | created          |
       | Repopulating blue iris         | Corwin Robert   | Botanic E.D.E.N.      | validated | 2018-06-15 16:00 |
@@ -155,6 +157,7 @@ Feature: User profile
       | Cherry blossoms schedule      |
       | SOUND project                 |
       | Botanic E.D.E.N.              |
+    And I should see the following facet items "Collection, Discussion, Document, Event, News, Solution, Video" in this order
 
     # A message should be shown when visiting a profile of a user without
     # content.
@@ -242,3 +245,53 @@ Feature: User profile
     And I click "My account"
     Then I should not see the link "Subscription settings"
     And I should not see the link "Persistent Logins"
+
+  Scenario: See archived content in user profile.
+    Given users:
+      | Username          | E-mail                        |
+      | Janny Robert      | janny.robert@example.com      |
+      | Clarise Edwardson | clarise.edwardson@example.com |
+    And the following collections:
+      | title            | description                           | logo     | state     | creation date    | author             |
+      | Lake E.D.E.N.    | European Deep Earth Nurturing project | logo.png | validated | 2017-02-23 10:00 | Janny Robert       |
+      | Rose is red      | Better descriptions ever              | logo.png | validated | 2017-02-23 10:00 | Clarise Edwardson  |
+      | Lone handling    | Because even flowers have feelings.   | logo.png | archived  | 2017-02-23 12:00 | Janny Robert       |
+    And discussion content:
+      | title                   | author          | collection    | state     | created         |
+      | Repopulating green iris | Janny Robert   | Lake E.D.E.N. | validated | 2018-06-15 16:00 |
+      | Best plant comfort      | Janny Robert   | Lone handling | validated | 2018-09-01 19:30 |
+    And document content:
+      | title           | author       | collection    | state     | created          |
+      | Cherry schedule | Janny Robert | Lake E.D.E.N. | validated | 2017-05-13 16:00 |
+      | Cherry arch     | Janny Robert | Lake E.D.E.N. | archived  | 2017-05-13 16:00 |
+    And news content:
+      | title             | author       | collection    | state     | created         |
+      | Discovered flower | Janny Robert | Lake E.D.E.N. | validated | 2018-11-15 9:01 |
+      | Purple flower     | Janny Robert | Lake E.D.E.N. | validated | 2018-11-15 9:01 |
+      | Blue flower       | Janny Robert | Lake E.D.E.N. | archived  | 2018-11-15 9:01 |
+
+    When I am an anonymous user
+    And I go to the public profile of "Clarise Edwardson"
+    Then I should see the heading "Clarise Edwardson"
+    And I should see the text "Show archived"
+    When I click "Show archived"
+    And I should see 0 tiles
+
+    When I am an anonymous user
+    And I go to the public profile of "Janny Robert"
+    Then I should see the heading "Janny Robert"
+    And I should see the text "Show archived"
+    Then I should see the following tiles in the correct order:
+      | Discovered flower         |
+      | Purple flower             |
+      | Best plant comfort        |
+      | Repopulating green iris   |
+      | Cherry schedule           |
+      | Lake E.D.E.N.             |
+    And I should not see the "Archive news" tile
+
+    When I click "Show archived"
+    Then I should see the following tiles in the correct order:
+      | Blue flower   |
+      | Cherry arch   |
+      | Lone handling |

@@ -75,7 +75,7 @@ class LeaveGroupConfirmForm extends ConfirmFormBase {
    * {@inheritdoc}
    */
   public function getDescription(): TranslatableMarkup {
-    return $this->t("Are you sure you want to leave the %label :type?<br />By leaving the :type you will be no longer able to publish content in it or receive notifications from it.", [
+    return $this->t("<p>Are you sure you want to leave the %label :type?</p><p>By leaving the :type you will be no longer able to publish content in it or receive notifications from it.</p>", [
       '%label' => $this->group->getName(),
       ':type' => $this->group->bundle(),
     ]);

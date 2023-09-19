@@ -6,7 +6,7 @@ namespace Drupal\Tests\joinup_test\ExistingSite;
 
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Tests\joinup_test\Traits\RdfEntityCreationTrait;
-use Drupal\joinup\Traits\AntibotTrait;
+use Drupal\joinup\Traits\ConfigReadOnlyTrait;
 use weitzman\DrupalTestTraits\ExistingSiteBase;
 
 /**
@@ -14,22 +14,8 @@ use weitzman\DrupalTestTraits\ExistingSiteBase;
  */
 abstract class JoinupExistingSiteTestBase extends ExistingSiteBase {
 
-  use AntibotTrait;
+  use ConfigReadOnlyTrait;
   use RdfEntityCreationTrait;
-
-  /**
-   * The list of Honeypot forms.
-   *
-   * @var bool[]
-   */
-  protected array $honeypotForms;
-
-  /**
-   * Whether the current test should run without Antibot & Honeypot features.
-   *
-   * @var bool
-   */
-  protected bool $disableSpamProtection = TRUE;
 
   /**
    * {@inheritdoc}
@@ -37,23 +23,18 @@ abstract class JoinupExistingSiteTestBase extends ExistingSiteBase {
   protected function setUp(): void {
     parent::setUp();
 
-    if ($this->disableSpamProtection) {
-      // As ExistingSiteBase tests are running without javascript, we disable
-      // Antibot & Honeypot during the tests run, if it has been requested.
-      $this->disableAntibot();
-      $this->disableHoneypot();
-    }
+    // Disable the spam protection functionality.
+    \Drupal::state()->delete('joinup_test.antispam.enabled');
+    $this->clearCache();
   }
 
   /**
    * {@inheritdoc}
    */
   public function tearDown(): void {
-    // Restores the spam protection functionality, if case.
-    if ($this->disableSpamProtection) {
-      $this->restoreAntibot();
-      $this->restoreHoneypot();
-    }
+    // Restores the spam protection functionality.
+    \Drupal::state()->set('joinup_test.antispam.enabled', TRUE);
+    $this->clearCache();
 
     // Avoid sending notifications during test entities cleanup. First, sort the
     // entities by moving the 'user' entities at the end, as deleting a user
@@ -89,30 +70,12 @@ abstract class JoinupExistingSiteTestBase extends ExistingSiteBase {
   }
 
   /**
-   * Disables Honeypot settings during the test run.
+   * Clear the cache bins storing cached markup.
    */
-  protected function disableHoneypot(): void {
-    static::bypassReadOnlyConfig();
-    $config_factory = $this->container->get('config.factory');
-    $config = $config_factory->getEditable('honeypot.settings');
-    if (!isset($this->honeypotForms)) {
-      $this->honeypotForms = $config->get('form_settings') ?? [];
+  protected function clearCache(): void {
+    foreach (['page', 'dynamic_page_cache', 'render'] as $bin) {
+      \Drupal::cache($bin)->deleteAll();
     }
-    $config
-      ->set('form_settings', array_fill_keys(array_keys($this->honeypotForms), FALSE))
-      ->save();
-    static::restoreReadOnlyConfig();
-  }
-
-  /**
-   * Restores Honeypot settings after test run.
-   */
-  protected function restoreHoneypot(): void {
-    static::bypassReadOnlyConfig();
-    $this->container->get('config.factory')->getEditable('honeypot.settings')
-      ->set('form_settings', $this->honeypotForms)
-      ->save();
-    static::restoreReadOnlyConfig();
   }
 
 }
