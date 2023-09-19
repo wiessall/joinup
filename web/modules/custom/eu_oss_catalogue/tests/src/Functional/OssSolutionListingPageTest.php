@@ -51,14 +51,14 @@ class OssSolutionListingPageTest extends BrowserTestBase {
   }
 
   /**
-   * Tests the administrative page (/admin/content/eu-oss-catalogue/solutions).
+   * Tests the administrative page (/admin/content/eu-oss-catalogue/oss-solutions).
    */
   public function testAdministrativeOssSolutionPage(): void {
     $this->drupalLogin($this->drupalCreateUser());
 
     $assert_session = $this->assertSession();
 
-    $this->drupalGet('/admin/content/eu-oss-catalogue/solutions');
+    $this->drupalGet('/admin/content/eu-oss-catalogue/oss-solutions');
     $assert_session->statusCodeEquals(403);
 
     $role = Role::load(RoleInterface::AUTHENTICATED_ID);
