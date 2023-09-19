@@ -84,12 +84,12 @@ class Bitbucket extends PluginBase implements ContainerFactoryPluginInterface, S
     }
 
     $root = $this->getRepoRootFromRequestUri($request_uri);
-    $vendor = $this->getVendorFromRequestUri($request_uri);
+    $namespace = $this->getNamespaceFromRequestUri($request_uri);
     $package = $this->getPackageFromRequestUri($request_uri);
 
-    return !empty($vendor) &&
+    return !empty($namespace) &&
       !empty($package) &&
-      in_array($package, $this->state->get(static::BITBUCKET_MOCK_STATE_KEY, [])[$root][$vendor] ?? []);
+      in_array($package, $this->state->get(static::BITBUCKET_MOCK_STATE_KEY, [])[$root][$namespace] ?? []);
   }
 
   /**
@@ -115,7 +115,7 @@ class Bitbucket extends PluginBase implements ContainerFactoryPluginInterface, S
    * @return string
    *   The repository namespace from the given URI.
    */
-  protected function getVendorFromRequestUri(UriInterface $uri): ?string {
+  protected function getNamespaceFromRequestUri(UriInterface $uri): ?string {
     $path_parts = explode('/api/2.0/repositories/', $uri->getPath(), 2);
     return explode('/', urldecode($path_parts[1] ?? ''))[0] ?? NULL;
   }
@@ -147,7 +147,7 @@ class Bitbucket extends PluginBase implements ContainerFactoryPluginInterface, S
    */
   public function getResponse(RequestInterface $request, array $options): ResponseInterface {
     $root = $this->getRepoRootFromRequestUri($request->getUri());
-    $vendor = $this->getVendorFromRequestUri($request->getUri());
+    $namespace = $this->getNamespaceFromRequestUri($request->getUri());
     $package = $this->getPackageFromRequestUri($request->getUri());
 
     return new Response(
@@ -155,56 +155,56 @@ class Bitbucket extends PluginBase implements ContainerFactoryPluginInterface, S
       [],
       Json::encode([
         "type" => "repository",
-        "full_name" => "$vendor/$package",
+        "full_name" => "$namespace/$package",
         "links" => [
           "self" => [
-            "href" => "https://$root/!api/2.0/repositories/$vendor/$package",
+            "href" => "https://$root/!api/2.0/repositories/$namespace/$package",
           ],
           "html" => [
-            "href" => "https://$root/$vendor/$package",
+            "href" => "https://$root/$namespace/$package",
           ],
           "avatar" => [
             "href" => "https://bytebucket.org/ravatar/%7Bdb64fe63-9c7d-4479-82e1-8add140d483a%7D?ts=nodejs",
           ],
           "pullrequests" => [
-            "href" => "https://$root/!api/2.0/repositories/$vendor/$package/pullrequests",
+            "href" => "https://$root/!api/2.0/repositories/$namespace/$package/pullrequests",
           ],
           "commits" => [
-            "href" => "https://$root/!api/2.0/repositories/$vendor/$package/commits",
+            "href" => "https://$root/!api/2.0/repositories/$namespace/$package/commits",
           ],
           "forks" => [
-            "href" => "https://$root/!api/2.0/repositories/$vendor/$package/forks",
+            "href" => "https://$root/!api/2.0/repositories/$namespace/$package/forks",
           ],
           "watchers" => [
-            "href" => "https://$root/!api/2.0/repositories/$vendor/$package/watchers",
+            "href" => "https://$root/!api/2.0/repositories/$namespace/$package/watchers",
           ],
           "branches" => [
-            "href" => "https://$root/!api/2.0/repositories/$vendor/$package/refs/branches",
+            "href" => "https://$root/!api/2.0/repositories/$namespace/$package/refs/branches",
           ],
           "tags" => [
-            "href" => "https://$root/!api/2.0/repositories/$vendor/$package/refs/tags",
+            "href" => "https://$root/!api/2.0/repositories/$namespace/$package/refs/tags",
           ],
           "downloads" => [
-            "href" => "https://$root/!api/2.0/repositories/$vendor/$package/downloads",
+            "href" => "https://$root/!api/2.0/repositories/$namespace/$package/downloads",
           ],
           "source" => [
-            "href" => "https://$root/!api/2.0/repositories/$vendor/$package/src",
+            "href" => "https://$root/!api/2.0/repositories/$namespace/$package/src",
           ],
           "clone" => [
             [
               "name" => "https",
-              "href" => "https://$root/$vendor/$package.git",
+              "href" => "https://$root/$namespace/$package.git",
             ],
             [
               "name" => "ssh",
-              "href" => "git@$root:$vendor/$package.git",
+              "href" => "git@$root:$namespace/$package.git",
             ],
           ],
           "issues" => [
-            "href" => "https://$root/!api/2.0/repositories/$vendor/$package/issues",
+            "href" => "https://$root/!api/2.0/repositories/$namespace/$package/issues",
           ],
           "hooks" => [
-            "href" => "https://$root/!api/2.0/repositories/$vendor/$package/hooks",
+            "href" => "https://$root/!api/2.0/repositories/$namespace/$package/hooks",
           ],
         ],
         "name" => "$package",
@@ -219,7 +219,7 @@ class Bitbucket extends PluginBase implements ContainerFactoryPluginInterface, S
               "href" => "https://$root/!api/2.0/workspaces/%7B6f461d1e-a3dd-433b-a0e3-7a69daf6ea47%7D",
             ],
             "avatar" => [
-              "href" => "https://$root/account/$vendor/avatar/",
+              "href" => "https://$root/account/$namespace/avatar/",
             ],
             "html" => [
               "href" => "https://$root/%7B6f461d1e-a3dd-433b-a0e3-7a69daf6ea47%7D/",
@@ -227,22 +227,22 @@ class Bitbucket extends PluginBase implements ContainerFactoryPluginInterface, S
           ],
           "type" => "team",
           "uuid" => "{6f461d1e-a3dd-433b-a0e3-7a69daf6ea47}",
-          "username" => $vendor,
+          "username" => $namespace,
         ],
         "workspace" => [
           "type" => "workspace",
           "uuid" => "{6f461d1e-a3dd-433b-a0e3-7a69daf6ea47}",
           "name" => "Atlassian Labs",
-          "slug" => $vendor,
+          "slug" => $namespace,
           "links" => [
             "avatar" => [
-              "href" => "https://$root/workspaces/$vendor/avatar/?ts=1674615417",
+              "href" => "https://$root/workspaces/$namespace/avatar/?ts=1674615417",
             ],
             "html" => [
-              "href" => "https://$root/$vendor/",
+              "href" => "https://$root/$namespace/",
             ],
             "self" => [
-              "href" => "https://$root/!api/2.0/workspaces/$vendor",
+              "href" => "https://$root/!api/2.0/workspaces/$namespace",
             ],
           ],
         ],
@@ -254,13 +254,13 @@ class Bitbucket extends PluginBase implements ContainerFactoryPluginInterface, S
           "name" => "Atlassian Labs",
           "links" => [
             "self" => [
-              "href" => "https://$root/!api/2.0/workspaces/$vendor/projects/ATL",
+              "href" => "https://$root/!api/2.0/workspaces/$namespace/projects/ATL",
             ],
             "html" => [
-              "href" => "https://$root/$vendor/workspace/projects/ATL",
+              "href" => "https://$root/$namespace/workspace/projects/ATL",
             ],
             "avatar" => [
-              "href" => "https://$root/account/user/$vendor/projects/ATL/avatar/32?ts=1448850256",
+              "href" => "https://$root/account/user/$namespace/projects/ATL/avatar/32?ts=1448850256",
             ],
           ],
         ],
