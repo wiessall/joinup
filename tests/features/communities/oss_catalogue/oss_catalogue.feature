@@ -108,6 +108,10 @@ Feature:
       |   Typically installed and run in a a desktop operating system environment                          |
       | Used by                                                                                            |
       |   3 administrations                                                                                |
+      | Maintenance contractors                                                                            |
+      |   ACME Ltd.                                                                                        |
+      | Maintenance contacts                                                                               |
+      |   FOSS Conference                                                                                  |
     And I should see the following links:
       # Categories.
       | document-management              |
@@ -121,10 +125,6 @@ Feature:
       # Audience
       | science-and-technology           |
       | security                         |
-      # Contractors.
-      | ACME Ltd.                        |
-      # Maintenance contacts.
-      | FOSS Conference                  |
       # Gallery.
       | https://placehold.co/600x400.png |
       | https://placehold.co/400x400.png |
