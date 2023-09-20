@@ -70,15 +70,9 @@ class GroupMembersController extends ControllerBase {
     // view that shows the memberships as tiles.
     $show_admin_view = $this->ogAccess->userAccess($group, 'manage members')->isAllowed();
 
-    $route_object = $route_match->getRouteObject();
-    $route_object->setOption('_admin_route', $show_admin_view);
-
     $view_id = $show_admin_view ? 'og_members_overview' : 'members_overview';
     $arguments = [$group->getEntityTypeId(), $group->id()];
-    $view = Views::getView($view_id)
-      ->addCacheContext('group_membership_manager')
-      ->addCacheContext('theme');
-    return $view->executeDisplay('default', $arguments);
+    return Views::getView($view_id)->executeDisplay('default', $arguments);
   }
 
   /**
