@@ -11,8 +11,8 @@ _core:
   default_config_hash: K15zkMgDnwRG7Pa_FNbxbX6j3w5gp2vEDtuQ0hwiRYs
 id: ventuno_unpublished_content_of_user
 theme: ventuno
-region: content_bottom
-weight: -23
+region: content
+weight: 4
 provider: null
 plugin: user_unpublished
 settings:
