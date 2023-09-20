@@ -8,21 +8,21 @@ Feature:
 
     Given the following collections:
       | title        | state     |
-      | Vintage Art  | validated |
-      | Decadent Art | validated |
+      | Vintage Art  | published |
+      | Decadent Art | published |
     And document content:
       | title             | document type | collection  | state     | changed          |
-      | The Panama Papers | Document      | Vintage Art | validated | 2019-11-19 20:00 |
+      | The Panama Papers | Document      | Vintage Art | published | 2019-11-19 20:00 |
       | The Area 51 File  | Document      | Vintage Art | draft     | 2018-11-19 21:00 |
     And discussion content:
       | title               | collection  | state     | changed          |
-      | The Ultimate Debate | Vintage Art | validated | 2017-11-19 19:00 |
+      | The Ultimate Debate | Vintage Art | published | 2017-11-19 19:00 |
     And event content:
       | title                    | collection  | state     |
-      | Version 2.0 Launch Party | Vintage Art | validated |
+      | Version 2.0 Launch Party | Vintage Art | published |
     And news content:
       | title                              | collection  | state     |
-      | Exports Leap Despite Currency Gain | Vintage Art | validated |
+      | Exports Leap Despite Currency Gain | Vintage Art | published |
     And custom_page content:
       | title                | collection  | state     | changed          |
       | HOWTOs               | Vintage Art | published | 2016-11-19 20:00 |
@@ -105,7 +105,7 @@ Feature:
     Then I should see "Proceeded updates to 2 entities"
 
     # Check published state.
-    Given I select "validated" from "State"
+    Given I select "published" from "State"
     And I press "Apply"
     Then I should see the link "The Panama Papers"
     And I should see the link "The Ultimate Debate"
@@ -203,11 +203,11 @@ Feature:
   Scenario: Able to select all items on the content management UI
     Given the following collections:
       | title       | state     |
-      | Vintage Art | validated |
+      | Vintage Art | published |
     And event content:
       | title                   | collection  | state     |
-      | The Panama Papers Party | Vintage Art | validated |
-      | The Area 51 Party       | Vintage Art | validated |
+      | The Panama Papers Party | Vintage Art | published |
+      | The Area 51 Party       | Vintage Art | published |
 
     When I am logged in as a moderator
     And I go to the "Vintage Art" collection

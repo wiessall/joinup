@@ -125,8 +125,8 @@ class SolutionContext extends RawDrupalContext {
    * Table format:
    * @codingStandardsIgnoreStart
    * | title        | description            | state                                             | collection      | documentation | closed | creation date    | content creation | featured | moderation | modification date | landing page               | webdav creation | webdav url                  | wiki                        |
-   * | Foo solution | This is a foo solution | draft|proposed|validated|needs update|blacklisted | Some collection | text.pdf      | yes    | 28-01-1995 12:05 | no               | yes      | yes        |                   | http://foo-url-example.com | yes             | http://joinup.eu/foo/webdav | http://foo-wiki-example.com |
-   * | Bar solution | This is a bar solution | validated                                         |                 | text.pdf      | no     | 28-01-1995 12:06 | yes              | no       | no         |                   | http://bar-url-example.com | no              |                             | http://bar-wiki-example.com |
+   * | Foo solution | This is a foo solution | draft|proposed|published|needs update|blacklisted | Some collection | text.pdf      | yes    | 28-01-1995 12:05 | no               | yes      | yes        |                   | http://foo-url-example.com | yes             | http://joinup.eu/foo/webdav | http://foo-wiki-example.com |
+   * | Bar solution | This is a bar solution | published                                         |                 | text.pdf      | no     | 28-01-1995 12:06 | yes              | no       | no         |                   | http://bar-url-example.com | no              |                             | http://bar-wiki-example.com |
    * @codingStandardsIgnoreEnd
    *
    * Fields title and state are mandatory.
@@ -183,7 +183,7 @@ class SolutionContext extends RawDrupalContext {
    * | related solutions   | Solution 2, Solution 3                                         |
    * | solution type       | [ABB159] Service Discovery Service, ...                        |
    * | spatial coverage    | Denmark, Serbia                                                |
-   * | state               | validated|...                                                  |
+   * | state               | published|...                                                  |
    * | status              | Under development                                              |
    * | webdav creation     | no|yes                                                         |
    * | webdav url          | http://joinup.eu/solution/foobar/webdav                        |
@@ -240,7 +240,7 @@ class SolutionContext extends RawDrupalContext {
       $collection = Rdf::create([
         'rid' => 'collection',
         'label' => $label,
-        'field_ar_state' => 'validated',
+        'field_ar_state' => 'published',
       ]);
       $collection->save();
       $values['collection'] = $label;
@@ -603,7 +603,7 @@ class SolutionContext extends RawDrupalContext {
       'field_is_state' => [
         'draft' => 'draft',
         'proposed' => 'proposed',
-        'validated' => 'validated',
+        'published' => 'published',
         'needs update' => 'needs_update',
         'blacklisted' => 'blacklisted',
       ],
@@ -736,7 +736,7 @@ class SolutionContext extends RawDrupalContext {
     $collection = $this->getEntityByLabel('rdf_entity', $collection, 'collection');
     $values = [
       'label' => $title,
-      'field_is_state' => 'validated',
+      'field_is_state' => 'published',
       'field_is_description' => "English description",
       'collection' => $collection->id(),
     ];

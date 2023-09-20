@@ -445,7 +445,7 @@ function joinup_group_og_user_access_alter(array &$permissions, CacheableMetadat
   $user = $context['user'];
 
   // Group owners are allowed to delete their own groups when they are in
-  // validated state.
+  // published state.
   // @todo Also allow groups to be deleted in any state other than 'archived'.
   // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-6088
   $permission = $context['permission'];
@@ -458,8 +458,8 @@ function joinup_group_og_user_access_alter(array &$permissions, CacheableMetadat
     return;
   }
 
-  // Skip if the group is not in validated state.
-  if ($group->getWorkflowState() !== 'validated') {
+  // Skip if the group is not in published state.
+  if ($group->getWorkflowState() !== 'published') {
     return;
   }
 

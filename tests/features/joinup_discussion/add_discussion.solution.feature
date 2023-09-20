@@ -8,11 +8,11 @@ Feature: "Add discussion" visibility options.
     Given the following collection:
       | title  | Collective Eager Sliver |
       | logo   | logo.png                |
-      | state  | validated               |
+      | state  | published               |
     And the following solutions:
       | title              | collection              | logo     | state     |
-      | Eager Sliver       | Collective Eager Sliver | logo.png | validated |
-      | The Silent Bridges | Collective Eager Sliver | logo.png | validated |
+      | Eager Sliver       | Collective Eager Sliver | logo.png | published |
+      | The Silent Bridges | Collective Eager Sliver | logo.png | published |
 
     When I am logged in as an "authenticated user"
     And I go to the homepage of the "Eager Sliver" solution
@@ -38,10 +38,10 @@ Feature: "Add discussion" visibility options.
     Given the following collection:
       | title  | Collective Emerald in the Luck |
       | logo   | logo.png                       |
-      | state  | validated                      |
+      | state  | published                      |
     And the following solutions:
       | title               | collection                     | logo     | state     |
-      | Emerald in the Luck | Collective Emerald in the Luck | logo.png | validated |
+      | Emerald in the Luck | Collective Emerald in the Luck | logo.png | published |
     And I am logged in as a facilitator of the "Emerald in the Luck" solution
 
     When I go to the homepage of the "Emerald in the Luck" solution
