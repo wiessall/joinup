@@ -26,7 +26,7 @@ Feature: Collection homepage
       | logo                | logo.png                         |
       | moderation          | yes                              |
       | content creation    | members                          |
-      | state               | validated                        |
+      | state               | published                        |
       | topic               | Employment and Support Allowance |
     And the following solution:
       | title            | Bilbo's book          |
@@ -34,7 +34,7 @@ Feature: Collection homepage
       | description      | Bilbo's autobiography |
       | content creation | registered users      |
       | creation date    | 2014-10-17 8:32am     |
-      | state            | validated             |
+      | state            | published             |
     And the following collection user memberships:
       | collection         | user    | roles       |
       | Middle earth daily | Frodo   | facilitator |
@@ -42,11 +42,11 @@ Feature: Collection homepage
       | Middle earth daily | Legolas |             |
     And news content:
       | title                                             | body                | topic             | collection         | state     | created           | changed  |
-      | Rohirrim make extraordinary deal                  | Horse prices drops  | Finance in EU     | Middle earth daily | validated | 2014-10-17 8:34am | 2017-7-5 |
-      | Breaking: Gandalf supposedly plans his retirement | A new white wizard? | Supplier exchange | Middle earth daily | validated | 2014-10-17 8:31am | 2017-7-5 |
+      | Rohirrim make extraordinary deal                  | Horse prices drops  | Finance in EU     | Middle earth daily | published | 2014-10-17 8:34am | 2017-7-5 |
+      | Breaking: Gandalf supposedly plans his retirement | A new white wizard? | Supplier exchange | Middle earth daily | published | 2014-10-17 8:31am | 2017-7-5 |
     And event content:
       | title                                    | short title      | body                                      | collection         | created           | start date          | end date            | state     | topic             | changed  |
-      | Big hobbit feast - fireworks at midnight | Big hobbit feast | Barbecue followed by dance and fireworks. | Middle earth daily | 2014-10-17 8:33am | 2016-03-15T11:12:12 | 2016-03-15T11:12:12 | validated | Supplier exchange | 2017-7-5 |
+      | Big hobbit feast - fireworks at midnight | Big hobbit feast | Barbecue followed by dance and fireworks. | Middle earth daily | 2014-10-17 8:33am | 2016-03-15T11:12:12 | 2016-03-15T11:12:12 | published | Supplier exchange | 2017-7-5 |
 
   Scenario: The collection homepage shows the collection metrics.
     When I go to the homepage of the "Middle earth daily" collection

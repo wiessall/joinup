@@ -33,7 +33,7 @@ Feature: Collection membership overview
       | Aali Dalton           | Aali       | Dalton      | richard.jpg  | Founder                         |
     And the following collections:
       | title           | description        | logo     | owner          | contact information | state     |
-      | Jubilant Robots | Fresh oil harvest! | logo.png | Ayodele Sommer | Nita Yang           | validated |
+      | Jubilant Robots | Fresh oil harvest! | logo.png | Ayodele Sommer | Nita Yang           | published |
       | Jubilant Rabits | Fresh oil harvest! | logo.png | Ayodele Sommer | Nita Yang           | draft     |
     And the following collection user memberships:
       | collection      | user                  | roles       | state   |

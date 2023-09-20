@@ -30,7 +30,7 @@ Feature:
 
     Examples:
       | collection state | solution state |
-      | validated        | validated      |
-      | validated        | draft          |
-      | draft            | validated      |
+      | published        | published      |
+      | published        | draft          |
+      | draft            | published      |
       | draft            | draft          |

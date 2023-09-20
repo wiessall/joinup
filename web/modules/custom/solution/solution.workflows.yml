@@ -20,8 +20,8 @@ solution_workflow:
       label: Draft
     proposed:
       label: Proposed
-    validated:
-      label: Validated
+    published:
+      label: Published
     needs_update:
       label: Needs update
     blacklisted:
@@ -29,21 +29,21 @@ solution_workflow:
   transitions:
     draft:
       label: Save as draft
-      from: [__new__, proposed, validated, needs_update, blacklisted]
+      from: [__new__, proposed, published, needs_update, blacklisted]
       to: draft
     propose:
       label: Propose
-      from: [__new__, draft, validated, needs_update, blacklisted]
+      from: [__new__, draft, published, needs_update, blacklisted]
       to: proposed
     validate:
       label: Publish
       from: [__new__, draft, proposed, needs_update, blacklisted]
-      to: validated
+      to: published
     needs_update:
       label: Request changes
-      from: [proposed, validated]
+      from: [proposed, published]
       to: needs_update
     blacklist:
       label: Blacklist
-      from: [validated]
+      from: [published]
       to: blacklisted

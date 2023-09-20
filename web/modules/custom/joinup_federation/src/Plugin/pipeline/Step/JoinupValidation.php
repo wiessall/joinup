@@ -202,7 +202,7 @@ class JoinupValidation extends JoinupFederationStepPluginBase implements Pipelin
    * execution.
    *
    * @param \Drupal\rdf_entity\RdfInterface $entity
-   *   The entity to be validated.
+   *   The entity to be published.
    *
    * @return array[]
    *   The constraint violation list.
@@ -255,7 +255,7 @@ class JoinupValidation extends JoinupFederationStepPluginBase implements Pipelin
    * Checks if validation violation, for given field, is critical.
    *
    * @param \Drupal\rdf_entity\RdfInterface $entity
-   *   The entity being validated.
+   *   The entity being published.
    * @param string $field_name
    *   The field name.
    * @param \Symfony\Component\Validator\ConstraintViolationInterface $violation

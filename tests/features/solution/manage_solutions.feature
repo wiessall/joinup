@@ -5,15 +5,15 @@ Feature: As a moderator I want to be able to move solutions to other collection.
 
     Given the following collections:
       | uri                            | title       | state     |
-      | http://example.com/source      | Source      | validated |
-      | http://example.com/destination | Destination | validated |
+      | http://example.com/source      | Source      | published |
+      | http://example.com/destination | Destination | published |
 
     And solutions:
       | title      | collection | state     |
-      | Solution 1 | Source     | validated |
-      | Solution 2 | Source     | validated |
-      | Solution 3 | Source     | validated |
-      | Solution 4 | Source     | validated |
+      | Solution 1 | Source     | published |
+      | Solution 2 | Source     | published |
+      | Solution 3 | Source     | published |
+      | Solution 4 | Source     | published |
 
     # Only moderators should be able to access this feature.
     Given I am an anonymous user
