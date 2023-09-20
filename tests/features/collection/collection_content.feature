@@ -132,6 +132,9 @@ Feature: Collection content
     And I should see the link "2 Solutions"
     And I should see the link "2 Videos"
 
+    Then I visit "/collection/turin-egyptian-collection?f=&page=9"
+    When the response status code should be 200
+
   @javascript
   Scenario: Links and markup should be stripped from tiles summary.
     Given I go to the homepage of the "Turin Egyptian Collection" collection
