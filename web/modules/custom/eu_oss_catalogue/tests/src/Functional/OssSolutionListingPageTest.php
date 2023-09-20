@@ -51,8 +51,9 @@ class OssSolutionListingPageTest extends BrowserTestBase {
   }
 
   /**
-   * Tests the administrative page
-   * (/admin/content/eu-oss-catalogue/oss-solutions).
+   * Tests the administrative page.
+   *
+   * It tests the following page /admin/content/eu-oss-catalogue/oss-solutions.
    */
   public function testAdministrativeOssSolutionPage(): void {
     $this->drupalLogin($this->drupalCreateUser());
