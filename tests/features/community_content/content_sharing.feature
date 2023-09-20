@@ -295,14 +295,14 @@ Feature: Sharing content between collections
   Scenario: Carousel tiles should show the "Shared from" visual cue.
     Given collections:
       | title | state     |
-      | Earth | validated |
-      | Mars  | validated |
-      | Venus | validated |
+      | Earth | published |
+      | Mars  | published |
+      | Venus | published |
     And news content:
       | title         | collection | shared on   | state     |
-      | Earth content | Earth      | Mars        | validated |
-      | Mars content  | Mars       |             | validated |
-      | Venus content | Venus      | Earth, Mars | validated |
+      | Earth content | Earth      | Mars        | published |
+      | Mars content  | Mars       |             | published |
+      | Venus content | Venus      | Earth, Mars | published |
 
     When I am logged in as a moderator
     And I go to the homepage of the "Earth" collection
