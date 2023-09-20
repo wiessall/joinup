@@ -71,6 +71,15 @@ function ventuno_preprocess_block(array &$variables): void {
       break;
   }
 
+  // List of the blocks to render without contextual links.
+  $no_contextual_links_blocks = [
+    'add_content',
+  ];
+  if (in_array($block_id, $no_contextual_links_blocks)
+    && isset($variables['title_suffix']['contextual_links'])) {
+    unset($variables['title_suffix']['contextual_links']);
+  }
+
   // When rendering some entity within a block, e.g. a menu, in cases such as a
   // preprocess hook of the entity, there is no information about the block
   // that the entity is displayed in. This will allow us to identify such cases.

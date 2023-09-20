@@ -7,11 +7,11 @@ Feature: Discussion homepage
   Scenario: The discussion homepage should show the collections where it is shared on.
     Given the following collections:
       | title                         | description       | state     |
-      | Development through bricolage | Bricolage 101.    | validated |
-      | Carrots love tomatoes         | Truth is out now. | validated |
+      | Development through bricolage | Bricolage 101.    | published |
+      | Carrots love tomatoes         | Truth is out now. | published |
     And discussion content:
       | title         | state     | collection                    | shared on             |
-      | Tools cabinet | validated | Development through bricolage | Carrots love tomatoes |
+      | Tools cabinet | published | Development through bricolage | Carrots love tomatoes |
 
     When I go to the "Tools cabinet" discussion
     Then I should see the text "Shared on"

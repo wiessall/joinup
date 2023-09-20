@@ -9,9 +9,9 @@ Feature: Collections Overview
     And collections:
     # As of ISAICP-3618 descriptions should not be visible in regular tiles.
       | title             | description                    | creation date     | state     |
-      | E-health          | Supports health-related fields | 2018-10-04 8:31am | validated |
-      | Open Data         | Facilitate access to data sets | 2018-10-04 8:33am | validated |
-      | Connecting Europe | Reusable tools and services    | 2018-10-04 8:32am | validated |
+      | E-health          | Supports health-related fields | 2018-10-04 8:31am | published |
+      | Open Data         | Facilitate access to data sets | 2018-10-04 8:33am | published |
+      | Connecting Europe | Reusable tools and services    | 2018-10-04 8:32am | published |
     And the following owner:
       | name                 | type                    |
       | Organisation example | Non-Profit Organisation |
@@ -88,10 +88,10 @@ Feature: Collections Overview
       | moderation       | no         |
       | topic            | Demography |
       | spatial coverage | Belgium    |
-      | state            | validated  |
+      | state            | published  |
     And news content:
       | title                             | body                             | collection | topic                   | spatial coverage | state     |
-      | Jira will be down for maintenance | As always, during business hours | Jira       | Statistics and Analysis | Luxembourg       | validated |
+      | Jira will be down for maintenance | As always, during business hours | Jira       | Statistics and Analysis | Luxembourg       | published |
     And custom_page content:
       | title            | body                                       | collection | state     |
       | Maintenance page | Jira is re-indexing. Go and drink a coffee | Jira       | published |
@@ -103,11 +103,11 @@ Feature: Collections Overview
   Scenario: Feature icon should be visible for collection's content.
     Given the following collection:
       | title | Service Management apps |
-      | state | validated               |
+      | state | published               |
     And news content:
       | title  | collection              | state     | featured |
-      | Jira   | Service Management apps | validated | yes      |
-      | Trello | Service Management apps | validated | no       |
+      | Jira   | Service Management apps | published | yes      |
+      | Trello | Service Management apps | published | no       |
     When I go to the homepage of the "Service Management apps" collection
     Then the "Jira" tile should be marked as featured
     But the "Trello" "news" tile should not be marked as featured
@@ -120,16 +120,16 @@ Feature: Collections Overview
       | Yiannis Parios    |
     And the following collections:
       | title                       | state     | featured | author            |
-      | Enemies of the state        | validated | yes      | Luigi Plant       |
-      | Fed up meatlovers           | validated | no       | Carolina Mercedes |
-      | Ugly farmers                | validated | yes      | Luigi Plant       |
-      | Yiannis Parios collection 1 | validated | no       | Yiannis Parios    |
-      | Yiannis Parios collection 2 | validated | no       | Yiannis Parios    |
-      | Yiannis Parios collection 3 | validated | no       | Yiannis Parios    |
+      | Enemies of the state        | published | yes      | Luigi Plant       |
+      | Fed up meatlovers           | published | no       | Carolina Mercedes |
+      | Ugly farmers                | published | yes      | Luigi Plant       |
+      | Yiannis Parios collection 1 | published | no       | Yiannis Parios    |
+      | Yiannis Parios collection 2 | published | no       | Yiannis Parios    |
+      | Yiannis Parios collection 3 | published | no       | Yiannis Parios    |
     # Technical: use a separate step to create a collection associated to the anonymous user.
     And the following collection:
       | title    | Biologic meatballs |
-      | state    | validated          |
+      | state    | published          |
       | featured | no                 |
 
     When I am logged in as "Yiannis Parios"

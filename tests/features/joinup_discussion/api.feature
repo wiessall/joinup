@@ -7,10 +7,10 @@ Feature: Discussion API
   Scenario: Programmatically create a discussion
     And the following collection:
       | title | Parallel programming |
-      | state | validated            |
+      | state | published            |
     Given discussion content:
       | title                | content                  | collection           | state     |
-      | Fearless concurrency | Let us have a discussion | Parallel programming | validated |
+      | Fearless concurrency | Let us have a discussion | Parallel programming | published |
     Then I should have a "Discussion" page titled "Fearless concurrency"
 
     # Check that the basic fields are visible.

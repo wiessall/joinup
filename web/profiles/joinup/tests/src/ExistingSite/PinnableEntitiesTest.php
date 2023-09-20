@@ -47,7 +47,7 @@ class PinnableEntitiesTest extends JoinupExistingSiteTestBase {
     $collection = Collection::create([
       'label' => $this->getRandomGenerator()->string(),
     ]);
-    $collection->setWorkflowState('validated')->save();
+    $collection->setWorkflowState('published')->save();
 
     // Create a test news article inside the collection.
     /** @var \Drupal\joinup_news\Entity\NewsInterface $news */

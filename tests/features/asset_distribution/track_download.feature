@@ -12,16 +12,16 @@ Feature: Asset distribution editing.
       | type        | Attribution                          |
     And collection:
       | title | Berkeley Software Distributions |
-      | state | validated                       |
+      | state | published                       |
     And solution:
       | title      | OpenBSD                         |
       | collection | Berkeley Software Distributions |
-      | state      | validated                       |
+      | state      | published                       |
     And release:
       | title          | Winter of 95 |
       | release number | 6.1          |
       | is version of  | OpenBSD      |
-      | state          | validated    |
+      | state          | published    |
     And distributions:
       | title          | description                 | parent       | access url                                                  | licence          |
       | i386           | The i386 version            | Winter of 95 | https://mirrors.evowise.com/pub/OpenBSD/6.1/i386/random.iso | Postcard licence |
@@ -117,11 +117,11 @@ Feature: Asset distribution editing.
       | user2    | user2@example.com |
     And the following solution:
       | title | Solution  |
-      | state | validated |
+      | state | published |
     And the following release:
       | title         | Release 1 |
       | is version of | Solution  |
-      | state         | validated |
+      | state         | published |
     And the following distributions:
       | title          | parent    | access url |
       | Distribution 1 | Release 1 | text.pdf   |
