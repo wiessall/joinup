@@ -10,8 +10,8 @@ dependencies:
     - ventuno
 id: eirapropertiesblock
 theme: ventuno
-region: content_bottom
-weight: 0
+region: content
+weight: 8
 provider: null
 plugin: eira_properties_block
 settings:
