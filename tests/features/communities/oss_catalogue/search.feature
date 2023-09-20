@@ -27,10 +27,10 @@ Feature: OSS catalogue search
     Then I visit the OSS search page
 
     # Check the group collection header
-    When I see the text "EU Open Source Solutions Catalogue" in the "Header" region
+    And I see the text "EU Open Source Solutions Catalogue" in the "Header" region
 
     # Check main area
-    When I should see the text "SEARCH RESULTS (5)"
+    And I should see the text "SEARCH RESULTS (5)"
 
     # Check tiles.
     And I should see the "Django-MDQ" tile
