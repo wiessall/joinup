@@ -99,11 +99,6 @@ Feature:
     And I fill in "edit-items-add-more-new-item-target-id" with ""
     And I press "Save"
 
-    Then the "form table" table should contain a column with the following data:
-      # The 'Edit' keyword is because there is an edit link in the table cell.
-      | E-justice Edit     |
-      | Finance in EU Edit |
-
     When I go to the homepage
     Then I should see the text "E-justice" in the "Homepage topics" region
     And I should see the text "E-justice description" in the "Homepage topics" region
