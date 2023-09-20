@@ -62,9 +62,9 @@ class EuOssCataloguePluginManager extends DefaultPluginManager implements EuOssC
   /**
    * {@inheritdoc}
    */
-  public function getDefinitionsAsOptions(): array {
+  public function getDefinitionsAsOptions(string $type): array {
     return array_map(
-      fn (array $definition): MarkupInterface|string => $definition['label'],
+      fn (array $definition): MarkupInterface|string => $definition[$type],
       $this->getDefinitions(),
     );
   }

@@ -13,7 +13,7 @@ Feature: Notification test for the news transitions on a post moderated parent.
       | CC member        |           | notify_member@test.com      | CC         | Member      |
     And collections:
       | title              | state     | content creation | moderation   |
-      | CC post collection | validated | members          | <moderation> |
+      | CC post collection | published | members          | <moderation> |
     And the following collection user memberships:
       | collection         | user           | roles       |
       | CC post collection | CC owner       | owner       |
@@ -22,11 +22,11 @@ Feature: Notification test for the news transitions on a post moderated parent.
     And news content:
       | title                          | author    | body | headline                       | collection         | field_state  |
       | CCN post publish               | CC member | body | CCN post publish               | CC post collection | draft        |
-      | CCN post request changes       | CC member | body | CCN post request changes       | CC post collection | validated    |
-      | CCN post report                | CC member | body | CCN post report                | CC post collection | validated    |
+      | CCN post request changes       | CC member | body | CCN post request changes       | CC post collection | published    |
+      | CCN post report                | CC member | body | CCN post report                | CC post collection | published    |
       | CCN post propose from reported | CC member | body | CCN post propose from reported | CC post collection | needs_update |
       | CCN post approve proposed      | CC member | body | CCN post approve proposed      | CC post collection | proposed     |
-      | CCN post delete                | CC member | body | CCN post delete                | CC post collection | validated    |
+      | CCN post delete                | CC member | body | CCN post delete                | CC post collection | published    |
 
     # Test 'create' operation.
     When I am logged in as "CC member"

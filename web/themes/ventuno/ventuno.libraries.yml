@@ -395,3 +395,8 @@ layout-paragraphs--builder:
   css:
     theme:
       assets/css/layout-paragraphs--builder.min.css: { minified: true }
+
+oss-solution-full:
+  css:
+    theme:
+      assets/css/oss-solution-full.tmp.css: { minified: true }

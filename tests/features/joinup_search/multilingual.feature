@@ -10,7 +10,7 @@ Feature: Multilingual search
       | moderation       | no                           |
       | topic            | Demography                   |
       | spatial coverage | Belgium                      |
-      | state            | validated                    |
+      | state            | published                    |
     And the multilingual "El celler de Can Roca" solution of "Molecular cooking collection" collection
     When I go to the "Molecular cooking collection" collection
     Then I should see 1 tile
