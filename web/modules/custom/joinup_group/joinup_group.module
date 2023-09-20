@@ -568,17 +568,7 @@ function joinup_group_form_views_exposed_form_alter(array &$form, FormStateInter
     'rdf_entity' => $group->id(),
   ]);
 
-  $form['permissions'] = [
-    '#type' => 'container',
-    '#weight' => 100,
-    '#attributes' => [
-      'style' => [
-        'flex-basis: 100%',
-      ],
-    ],
-  ];
-
-  $form['permissions']['link'] = [
+  $form['member_permissions_link'] = [
     '#theme' => 'members_overview_permissions_link',
     '#url' => $url,
     '#text' => t('Member permissions'),
