@@ -4,7 +4,7 @@ Feature:
 
   Scenario: Show list of topics meta entity type and check a given parent and published field.
     Given I am logged in as a moderator
-    When I click "Dashboard"
+    When I go to "/dashboard"
     Then I should see the link Topics
 
     When I click Topics
@@ -131,7 +131,7 @@ Feature:
 
   Scenario: Moderators can alter the title of the homepage topics block.
     Given I am logged in as a moderator
-    When I click "Dashboard"
+    When I go to "/dashboard"
     And I click "Topics"
     And I click "Edit" in the "E-justice" row
     And I check "Published"
@@ -261,7 +261,7 @@ Feature:
 
   Scenario: Editing from the administration page, redirect back to the administration page.
     When I am logged in as a moderator
-    And I click "Dashboard"
+    And I go to "/dashboard"
     And I click "Topics"
     And I click "Edit" in the "E-justice" row
     Then I should see the heading "Edit E-justice"
