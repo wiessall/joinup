@@ -477,7 +477,7 @@ Feature:
     Then I should see the text "Current wars"
 
     When I go to the homepage of the "Nintendo64" collection
-    And I click "All content" in the "Header bottom" region
+    And I click "All content" in the "Header" region
     And I should see the following tiles in the correct order:
       | 30 year anniversary                   |
       | Current wars                          |
@@ -493,7 +493,7 @@ Feature:
     Then I should see the text "Current wars is over"
 
     When I go to the homepage of the "Nintendo64" collection
-    And I click "All content" in the "Header bottom" region
+    And I click "All content" in the "Header" region
     And I should see the following tiles in the correct order:
       | 30 year anniversary                   |
       | Current wars is over                  |

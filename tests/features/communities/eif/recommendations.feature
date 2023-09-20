@@ -37,7 +37,7 @@ Feature:
   Scenario: The recommendations page lists the recommendations links.
     Given I am not logged in
     And I go to the "EIF Toolbox" solution
-    When I click "Recommendations" in the "Header bottom" region
+    When I click "Recommendations" in the "Header" region
     Then I should see the heading "EIF recommendations"
 
     # Assert the full table.
