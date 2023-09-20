@@ -9,7 +9,7 @@ Feature: User interface for the File URL field
     Given the following collection:
       | title | Caterpillar, use headbutt |
       | logo  | logo.png                  |
-      | state | validated                 |
+      | state | published                 |
 
     Given I am logged in as a member of the "Caterpillar, use headbutt" collection
     # An example of the File URL field is the "Documentation" field in the
@@ -41,10 +41,10 @@ Feature: User interface for the File URL field
   Scenario: User should be able to remove entity even document's entities do not exist
     Given the following collections:
       | title            | state     |
-      | Regression tests | validated |
+      | Regression tests | published |
     And the following solutions:
       | title                      | documentation | state     | collection       |
-      | Solution without documents | text.pdf      | validated | Regression tests |
+      | Solution without documents | text.pdf      | published | Regression tests |
     And I delete documents from "Solution without documents" solution
 
     Given I am logged in as a moderator

@@ -256,13 +256,14 @@ class ThreeWayMerge extends JoinupFederationStepPluginBase implements PipelineSt
       }
     }
 
-    // Set the state of new entities to 'validated'.
+    // Set the state of new entities to 'published'.
     if ($state_field_name) {
-      $incoming_entity->set($state_field_name, 'validated');
+      $state = $state_field_name === 'field_ci_state' ? 'validated' : 'published';
+      $incoming_entity->set($state_field_name, $state);
     }
 
     /** @var \Drupal\Core\Field\FieldItemListInterface $field */
-    foreach ($incoming_entity as $field_name => &$field) {
+    foreach ($incoming_entity as $field) {
       // Populate empty fields with their default value. This is a Drupal
       // content entity that was not created via Drupal API. As an effect, empty
       // fields didn't receive their default values. We have to explicitly do

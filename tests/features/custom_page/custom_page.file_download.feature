@@ -4,14 +4,14 @@ Feature: Permalinks for custom page attachments.
   Scenario: Users can download attachments using the permalinks.
     Given collection:
       | title | Predictable name |
-      | state | validated        |
+      | state | published        |
     And custom_page content:
       | title           | body        | collection       | attachments                                                          | state     |
       | Predictable CP1 | Lorem ipsum | Predictable name | empty.rdf, empty_pdf.pdf, invalid_adms.rdf, test.zip, text.pdf       | published |
       | Predictable CP2 | Lorem ipsum | Predictable name | ada.png, alan.jpg, blaise.jpg, charles.jpg, leonardo.jpg, linus.jpeg | published |
     And news content:
       | title           | headline        | collection       | state     | attachments |
-      | Predictable NC1 | Predictable NC1 | Predictable name | validated | empty.rdf   |
+      | Predictable NC1 | Predictable NC1 | Predictable name | published | empty.rdf   |
 
     When I go to "/collection/predictable-name/predictable-cp1"
     Then I should see "Predictable CP1"

@@ -38,3 +38,53 @@ joinup_layout_twocolfooter_onecol_67_33:
       label: Third
     two_col_footer:
       label: Two column footer
+
+joinup_layout_oss_header:
+  label: 'Joinup OSS Header'
+  path: layouts/oss-header
+  template: joinup-layout--oss-header
+  library: joinup_layout/oss_header
+  default_region: first
+  icon_map:
+    - [first, content, content_secondary]
+    - [first, content_bottom, content_bottom]
+  regions:
+    first:
+      label: Logo
+    content:
+      label: Software name
+    content_secondary:
+      label: Version
+    content_bottom:
+      label: Categories
+
+joinup_layout_oss_details:
+  label: 'Joinup OSS Main Details'
+  path: layouts/oss-details
+  template: joinup-layout--oss-details
+  library: joinup_layout/oss_details
+  default_region: content
+  icon_map:
+    - [content, content, aside]
+    - [copyright, catalogue, aside]
+  regions:
+    content:
+      label: Content
+    copyright:
+      label: Copyright
+    catalogue:
+      label: Catalogue
+    aside:
+      label: Aside
+
+joinup_layout_four_column_grid:
+  label: 'Joinup Four column grid'
+  path: layouts/four-column-grid
+  template: joinup-layout--four-column-grid
+  library: joinup_layout/four_column_grid
+  default_region: content
+  icon_map:
+    - [content]
+  regions:
+    content:
+      label: Content

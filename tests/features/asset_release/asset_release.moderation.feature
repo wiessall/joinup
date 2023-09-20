@@ -23,7 +23,7 @@ Feature: Asset release moderation
       | logo                | logo.png    |
       | owner               | Kenny Logan |
       | contact information | SheriMoore  |
-      | state               | validated   |
+      | state               | published   |
     And the following solution user membership:
       | solution  | user            | roles       |
       | Dark Ship | Bonnie Holloway | owner       |
@@ -81,7 +81,7 @@ Feature: Asset release moderation
 
     And I go to the "Release of the dark ship" release
     And I click "Edit" in the "Entity actions" region
-    Then the current workflow state should be "Validated"
+    Then the current workflow state should be "Published"
     And I should see the workflow buttons "Update, Save as draft, Request changes"
     # The "Delete" button is actually a link to the confirmation form, but it is
     # styled to look identical to a button.

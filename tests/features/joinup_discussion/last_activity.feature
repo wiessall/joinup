@@ -6,11 +6,11 @@ Feature: Last Activity feature
   Scenario: The discussion tile should show the last activity box.
     Given the following collections:
       | title                         | description       | state     |
-      | Development through bricolage | Bricolage 101.    | validated |
-      | Carrots love tomatoes         | Truth is out now. | validated |
+      | Development through bricolage | Bricolage 101.    | published |
+      | Carrots love tomatoes         | Truth is out now. | published |
     And discussion content:
       | title         | state     | collection                    | shared on             | created          | changed    |
-      | Tools cabinet | validated | Development through bricolage | Carrots love tomatoes | 01-01-2023       | 01-01-2023 |
+      | Tools cabinet | published | Development through bricolage | Carrots love tomatoes | 01-01-2023       | 01-01-2023 |
     And users:
       | Username      | Roles     | E-mail                   | First name | Family name |
       | alicia__1997  |           | AliciaPotter@example.com | Alicia     | Potter      |
