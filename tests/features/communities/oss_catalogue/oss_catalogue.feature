@@ -136,8 +136,7 @@ Feature:
     When I go to the content page of the type "oss_solution" with the title "Super Awesome Software"
     And I click "Developers Italia"
     Then I should be on "/eu-oss-catalogue/solutions"
-    # @todo This must be the human-friendly plugin label "Developers Italia".
-    And I should see the following facet summary "developers_italia"
+    And I should see the following facet summary "Developers Italia"
     When I go to the content page of the type "oss_solution" with the title "Super Awesome Software"
     And I click "science-and-technology"
     Then I should be on "/eu-oss-catalogue/solutions"
