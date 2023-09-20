@@ -27,11 +27,11 @@ Feature: Solution membership overview
       | Callista Wronski    | Callista   | Wronski     | richard.jpg  | Founder                         |
     And collection:
       | title | Growing collection |
-      | state | validated          |
+      | state | published          |
     And the following solution:
       | title       | Growing zone       |
       | description | Soil and gravel    |
-      | state       | validated          |
+      | state       | published          |
       | collection  | Growing collection |
     And the following solution user memberships:
       | solution     | user                | roles       | state   |

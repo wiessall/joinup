@@ -17,8 +17,8 @@ Feature: Collection homepage
       | Hobbit owner |
     And the following collections:
       | title                                   | description        | owner        | logo     | moderation | closed | state     |
-      | Under the mountain                      | Under the mountain | Hobbit owner | logo.png | yes        | no     | validated |
-      | Exactly the same collection, but closed | Under the mountain | Hobbit owner | logo.png | yes        | yes    | validated |
+      | Under the mountain                      | Under the mountain | Hobbit owner | logo.png | yes        | no     | published |
+      | Exactly the same collection, but closed | Under the mountain | Hobbit owner | logo.png | yes        | yes    | published |
     And the following collection user memberships:
       | collection                              | user   | roles       |
       | Under the mountain                      | Thorin | facilitator |

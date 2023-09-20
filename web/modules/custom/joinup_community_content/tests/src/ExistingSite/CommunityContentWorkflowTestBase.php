@@ -131,7 +131,7 @@ abstract class CommunityContentWorkflowTestBase extends JoinupWorkflowExistingSi
     foreach ($this->createAccessProvider() as $parent_bundle => $moderation_data) {
       foreach ($moderation_data as $moderation => $content_creation_data) {
         foreach ($content_creation_data as $content_creation => $allowed_roles) {
-          $parent = $this->createParent($parent_bundle, 'validated', $moderation, $content_creation);
+          $parent = $this->createParent($parent_bundle, 'published', $moderation, $content_creation);
           $content = Node::create([
             'title' => $this->randomMachineName(),
             'type' => $this->getEntityBundle(),
@@ -164,7 +164,7 @@ abstract class CommunityContentWorkflowTestBase extends JoinupWorkflowExistingSi
     $test_roles = array_diff($this->getAvailableUsers(), ['userOwner']);
     $operation = 'view';
     foreach ($this->viewAccessProvider() as $parent_bundle => $state_data) {
-      $parent = $this->createParent($parent_bundle, 'validated');
+      $parent = $this->createParent($parent_bundle, 'published');
       foreach ($state_data as $content_state => $ownership_data) {
         $content = $this->createNode([
           'title' => $this->randomMachineName(),
@@ -204,7 +204,7 @@ abstract class CommunityContentWorkflowTestBase extends JoinupWorkflowExistingSi
     $operation = 'update';
     foreach ($this->updateAccessProvider() as $parent_bundle => $moderation_data) {
       foreach ($moderation_data as $moderation => $state_data) {
-        $parent = $this->createParent($parent_bundle, 'validated', $moderation);
+        $parent = $this->createParent($parent_bundle, 'published', $moderation);
         foreach ($state_data as $content_state => $ownership_data) {
           $content = $this->createNode([
             'title' => $this->randomMachineName(),
@@ -252,7 +252,7 @@ abstract class CommunityContentWorkflowTestBase extends JoinupWorkflowExistingSi
     $operation = 'delete';
     foreach ($this->deleteAccessProvider() as $parent_bundle => $moderation_data) {
       foreach ($moderation_data as $moderation => $state_data) {
-        $parent = $this->createParent($parent_bundle, 'validated', $moderation);
+        $parent = $this->createParent($parent_bundle, 'published', $moderation);
         foreach ($state_data as $content_state => $ownership_data) {
           $content = $this->createNode([
             'title' => $this->randomMachineName(),
@@ -338,19 +338,19 @@ abstract class CommunityContentWorkflowTestBase extends JoinupWorkflowExistingSi
             'userModerator' => [
               'draft',
               'proposed',
-              'validated',
+              'published',
             ],
             'userOgFacilitator' => [
               'draft',
               'proposed',
-              'validated',
+              'published',
             ],
           ],
           ContentCreationOptions::MEMBERS => [
             'userModerator' => [
               'draft',
               'proposed',
-              'validated',
+              'published',
             ],
             'userOgMember' => [
               'draft',
@@ -359,7 +359,7 @@ abstract class CommunityContentWorkflowTestBase extends JoinupWorkflowExistingSi
             'userOgFacilitator' => [
               'draft',
               'proposed',
-              'validated',
+              'published',
             ],
             'userOgAdministrator' => [
               'draft',
@@ -374,7 +374,7 @@ abstract class CommunityContentWorkflowTestBase extends JoinupWorkflowExistingSi
             'userModerator' => [
               'draft',
               'proposed',
-              'validated',
+              'published',
             ],
             'userOgAdministrator' => [
               'draft',
@@ -387,7 +387,7 @@ abstract class CommunityContentWorkflowTestBase extends JoinupWorkflowExistingSi
             'userOgFacilitator' => [
               'draft',
               'proposed',
-              'validated',
+              'published',
             ],
           ],
         ],
@@ -395,51 +395,51 @@ abstract class CommunityContentWorkflowTestBase extends JoinupWorkflowExistingSi
           ContentCreationOptions::FACILITATORS_AND_AUTHORS => [
             'userModerator' => [
               'draft',
-              'validated',
+              'published',
             ],
             'userOgFacilitator' => [
               'draft',
-              'validated',
+              'published',
             ],
           ],
           ContentCreationOptions::MEMBERS => [
             'userModerator' => [
               'draft',
-              'validated',
+              'published',
             ],
             'userOgMember' => [
               'draft',
-              'validated',
+              'published',
             ],
             'userOgFacilitator' => [
               'draft',
-              'validated',
+              'published',
             ],
             'userOgAdministrator' => [
               'draft',
-              'validated',
+              'published',
             ],
           ],
           ContentCreationOptions::REGISTERED_USERS => [
             'userAuthenticated' => [
               'draft',
-              'validated',
+              'published',
             ],
             'userModerator' => [
               'draft',
-              'validated',
+              'published',
             ],
             'userOgAdministrator' => [
               'draft',
-              'validated',
+              'published',
             ],
             'userOgMember' => [
               'draft',
-              'validated',
+              'published',
             ],
             'userOgFacilitator' => [
               'draft',
-              'validated',
+              'published',
             ],
           ],
         ],
@@ -450,12 +450,12 @@ abstract class CommunityContentWorkflowTestBase extends JoinupWorkflowExistingSi
             'userModerator' => [
               'draft',
               'proposed',
-              'validated',
+              'published',
             ],
             'userOgFacilitator' => [
               'draft',
               'proposed',
-              'validated',
+              'published',
             ],
           ],
           ContentCreationOptions::REGISTERED_USERS => [
@@ -466,7 +466,7 @@ abstract class CommunityContentWorkflowTestBase extends JoinupWorkflowExistingSi
             'userModerator' => [
               'draft',
               'proposed',
-              'validated',
+              'published',
             ],
             'userOgAdministrator' => [
               'draft',
@@ -475,7 +475,7 @@ abstract class CommunityContentWorkflowTestBase extends JoinupWorkflowExistingSi
             'userOgFacilitator' => [
               'draft',
               'proposed',
-              'validated',
+              'published',
             ],
             'userOgMember' => [
               'draft',
@@ -487,33 +487,33 @@ abstract class CommunityContentWorkflowTestBase extends JoinupWorkflowExistingSi
           ContentCreationOptions::FACILITATORS_AND_AUTHORS => [
             'userModerator' => [
               'draft',
-              'validated',
+              'published',
             ],
             'userOgFacilitator' => [
               'draft',
-              'validated',
+              'published',
             ],
           ],
           ContentCreationOptions::REGISTERED_USERS => [
             'userAuthenticated' => [
               'draft',
-              'validated',
+              'published',
             ],
             'userModerator' => [
               'draft',
-              'validated',
+              'published',
             ],
             'userOgAdministrator' => [
               'draft',
-              'validated',
+              'published',
             ],
             'userOgFacilitator' => [
               'draft',
-              'validated',
+              'published',
             ],
             'userOgMember' => [
               'draft',
-              'validated',
+              'published',
             ],
           ],
         ],
@@ -557,7 +557,7 @@ abstract class CommunityContentWorkflowTestBase extends JoinupWorkflowExistingSi
             'userOgFacilitator',
           ],
         ],
-        'validated' => [
+        'published' => [
           'own' => TRUE,
           'any' => [
             'userAnonymous',
@@ -609,7 +609,7 @@ abstract class CommunityContentWorkflowTestBase extends JoinupWorkflowExistingSi
             'userOgFacilitator',
           ],
         ],
-        'validated' => [
+        'published' => [
           'own' => TRUE,
           'any' => [
             'userAnonymous',
@@ -701,13 +701,13 @@ abstract class CommunityContentWorkflowTestBase extends JoinupWorkflowExistingSi
             'userModerator' => [
               'draft',
               'proposed',
-              'validated',
+              'published',
               'archived',
             ],
             'userOgFacilitator' => [
               'draft',
               'proposed',
-              'validated',
+              'published',
               'archived',
             ],
           ],
@@ -719,17 +719,17 @@ abstract class CommunityContentWorkflowTestBase extends JoinupWorkflowExistingSi
           'any' => [
             'userModerator' => [
               'proposed',
-              'validated',
+              'published',
               'archived',
             ],
             'userOgFacilitator' => [
               'proposed',
-              'validated',
+              'published',
               'archived',
             ],
           ],
         ],
-        'validated' => [
+        'published' => [
           'own' => [
             'draft',
             'deletion_request',
@@ -740,14 +740,14 @@ abstract class CommunityContentWorkflowTestBase extends JoinupWorkflowExistingSi
               'draft',
               'proposed',
               'needs_update',
-              'validated',
+              'published',
               'archived',
             ],
             'userOgFacilitator' => [
               'draft',
               'proposed',
               'needs_update',
-              'validated',
+              'published',
               'archived',
             ],
           ],
@@ -770,11 +770,11 @@ abstract class CommunityContentWorkflowTestBase extends JoinupWorkflowExistingSi
         'deletion_request' => [
           'any' => [
             'userModerator' => [
-              'validated',
+              'published',
               'archived',
             ],
             'userOgFacilitator' => [
-              'validated',
+              'published',
               'archived',
             ],
           ],
@@ -784,17 +784,17 @@ abstract class CommunityContentWorkflowTestBase extends JoinupWorkflowExistingSi
         'draft' => [
           'own' => [
             'draft',
-            'validated',
+            'published',
           ],
           'any' => [
             'userModerator' => [
               'draft',
-              'validated',
+              'published',
               'archived',
             ],
             'userOgFacilitator' => [
               'draft',
-              'validated',
+              'published',
               'archived',
             ],
           ],
@@ -806,34 +806,34 @@ abstract class CommunityContentWorkflowTestBase extends JoinupWorkflowExistingSi
           'any' => [
             'userModerator' => [
               'proposed',
-              'validated',
+              'published',
               'archived',
             ],
             'userOgFacilitator' => [
               'proposed',
-              'validated',
+              'published',
               'archived',
             ],
           ],
         ],
-        'validated' => [
+        'published' => [
           'own' => [
             'draft',
-            'validated',
+            'published',
           ],
           'any' => [
             'userModerator' => [
               'draft',
               'proposed',
               'needs_update',
-              'validated',
+              'published',
               'archived',
             ],
             'userOgFacilitator' => [
               'draft',
               'proposed',
               'needs_update',
-              'validated',
+              'published',
               'archived',
             ],
           ],
@@ -921,7 +921,7 @@ abstract class CommunityContentWorkflowTestBase extends JoinupWorkflowExistingSi
               'userOgFacilitator',
             ],
           ],
-          'validated' => [
+          'published' => [
             'own' => [
               'member' => FALSE,
               'blocked' => FALSE,
@@ -989,7 +989,7 @@ abstract class CommunityContentWorkflowTestBase extends JoinupWorkflowExistingSi
               'userOgFacilitator',
             ],
           ],
-          'validated' => [
+          'published' => [
             'own' => [
               'member' => TRUE,
               'blocked' => FALSE,
@@ -1047,7 +1047,7 @@ abstract class CommunityContentWorkflowTestBase extends JoinupWorkflowExistingSi
               'userOgFacilitator',
             ],
           ],
-          'validated' => [
+          'published' => [
             'own' => [
               'member' => FALSE,
               'blocked' => FALSE,
@@ -1115,7 +1115,7 @@ abstract class CommunityContentWorkflowTestBase extends JoinupWorkflowExistingSi
               'userOgFacilitator',
             ],
           ],
-          'validated' => [
+          'published' => [
             'own' => [
               'member' => TRUE,
               'blocked' => FALSE,
@@ -1189,7 +1189,7 @@ abstract class CommunityContentWorkflowTestBase extends JoinupWorkflowExistingSi
    * @throws \Drupal\Core\Entity\EntityStorageException
    *   If entity creation fails.
    */
-  protected function createParent($bundle, $state = 'validated', $moderation = NULL, $content_creation = NULL): RdfInterface {
+  protected function createParent($bundle, $state = 'published', $moderation = NULL, $content_creation = NULL): RdfInterface {
     // Make sure the current user is set to anonymous when creating groups
     // through the API so we can assign the administrator manually. If a user is
     // logged in during creation of the group they will automatically become the
@@ -1214,7 +1214,7 @@ abstract class CommunityContentWorkflowTestBase extends JoinupWorkflowExistingSi
       $values['collection'] = $this->createRdfEntity([
         'rid' => 'collection',
         'label' => $this->randomString(),
-        'field_ar_state' => 'validated',
+        'field_ar_state' => 'published',
       ]);
     }
 
@@ -1280,7 +1280,7 @@ abstract class CommunityContentWorkflowTestBase extends JoinupWorkflowExistingSi
    *   An array of workflow states.
    */
   protected function getPublishedStates(): array {
-    return ['validated', 'archived'];
+    return ['published', 'archived'];
   }
 
 }

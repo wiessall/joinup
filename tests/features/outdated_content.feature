@@ -7,28 +7,28 @@ Feature:
 
     Given the following collections:
       | title            | state     |
-      | Outdated content | validated |
+      | Outdated content | published |
     And the following solutions:
       | title             | collection       | state     |
-      | Recent solution   | Outdated content | validated |
-      | Outdated solution | Outdated content | validated |
+      | Recent solution   | Outdated content | published |
+      | Outdated solution | Outdated content | published |
     And discussion content:
       | title                         | collection       | publication date | created   | state     |
-      | Recent published discussion   | Outdated content | -2 years         | -2 years  | validated |
-      | Outdated published discussion | Outdated content | -11 years        | -11 years | validated |
+      | Recent published discussion   | Outdated content | -2 years         | -2 years  | published |
+      | Outdated published discussion | Outdated content | -11 years        | -11 years | published |
       | Not published discussion      | Outdated content |                  | -12 years | draft     |
     And document content:
       | title             | collection       | document publication date | state     |
-      | Very old document | Outdated content | 1985-03-04                | validated |
+      | Very old document | Outdated content | 1985-03-04                | published |
     And event content:
       | title                    | collection       | publication date  | created           | state     |
-      | Recent published event   | Outdated content | -3 months         | -3 months         | validated |
-      | Outdated published event | Outdated content | -1 year -1 second | -1 year -1 second | validated |
+      | Recent published event   | Outdated content | -3 months         | -3 months         | published |
+      | Outdated published event | Outdated content | -1 year -1 second | -1 year -1 second | published |
       | Not published event      | Outdated content |                   | -31 years         | draft     |
     And news content:
       | title                            | collection       | publication date  | created           | state     |
-      | Recent published news            | Outdated content | -7 months         | -7 months         | validated |
-      | Outdated published news          | Outdated content | -3 years -1 month | -3 years -1 month | validated |
+      | Recent published news            | Outdated content | -7 months         | -7 months         | published |
+      | Outdated published news          | Outdated content | -3 years -1 month | -3 years -1 month | published |
       | Outdated archived published news | Outdated content | -3 years -1 month | -3 years -1 month | archived  |
       | Not published news               | Outdated content |                   | -40 years         | draft     |
 

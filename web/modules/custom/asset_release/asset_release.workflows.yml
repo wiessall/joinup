@@ -8,18 +8,18 @@ asset_release_workflow:
       label: Draft
     needs_update:
       label: Needs update
-    validated:
-      label: Validated
+    published:
+      label: Published
   transitions:
     draft:
       label: Save as draft
-      from: [validated]
+      from: [published]
       to: draft
     validate:
       label: Publish
       from: [draft, needs_update]
-      to: validated
+      to: published
     request_changes:
       label: Request changes
-      from: [validated]
+      from: [published]
       to: needs_update

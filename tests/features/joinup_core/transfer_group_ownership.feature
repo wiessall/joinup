@@ -14,7 +14,7 @@ Feature: As a group (collection or solution) owner or site moderator
       | frozen   |                         | Edda       | Agnarsdóttir  |
     And the following collection:
       | title | Intensive Language Learning |
-      | state | validated                   |
+      | state | published                   |
     And the following collection user memberships:
       | collection                  | user   | roles       |
       | Intensive Language Learning | loner  |             |
@@ -23,7 +23,7 @@ Feature: As a group (collection or solution) owner or site moderator
       | Intensive Language Learning | frozen | owner       |
     And the following solution:
       | title | Learn German in 1 Month |
-      | state | validated               |
+      | state | published               |
     And the following solution user memberships:
       | solution                | user   | roles       |
       | Learn German in 1 Month | loner  |             |
@@ -106,11 +106,11 @@ Feature: As a group (collection or solution) owner or site moderator
   Scenario: Collection owner cannot transfer ownership of a child solution, neither viceversa.
     Given the following collection:
       | title | Babylon   |
-      | state | validated |
+      | state | published |
     And the following solution:
       | title      | Rivers Of Babylon |
       | collection | Babylon           |
-      | state      | validated         |
+      | state      | published         |
     And collection user membership:
       | collection | user  | roles       |
       | Babylon    | shy   | owner       |

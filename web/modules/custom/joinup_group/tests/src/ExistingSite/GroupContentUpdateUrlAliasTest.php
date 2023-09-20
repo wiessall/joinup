@@ -350,7 +350,7 @@ class GroupContentUpdateUrlAliasTest extends JoinupExistingSiteTestBase {
       'id' => 'http://collection',
       'label' => 'collection',
       'field_ar_description' => $this->randomString(),
-      'field_ar_state' => 'validated',
+      'field_ar_state' => 'published',
       'field_ar_owner' => 'http://example.com/owner',
       'field_topic' => 'http://example.com/policy',
       'field_ar_contact_information' => 'http://example.com/contact',
@@ -362,7 +362,7 @@ class GroupContentUpdateUrlAliasTest extends JoinupExistingSiteTestBase {
       'label' => "solution 1",
       'collection' => 'http://collection',
       'field_is_description' => $this->randomString(),
-      'field_is_state' => 'validated',
+      'field_is_state' => 'published',
       'field_is_owner' => 'http://example.com/owner',
       'field_topic' => 'http://example.com/policy',
       'field_is_solution_type' => 'http://data.europa.eu/dr8/ArchitectureBuildingBlock',
@@ -376,7 +376,7 @@ class GroupContentUpdateUrlAliasTest extends JoinupExistingSiteTestBase {
         'label' => "release 1.{$i}",
         'field_isr_release_number' => "1.{$i}",
         'field_isr_is_version_of' => 'http://solution/1',
-        'field_isr_state' => 'validated',
+        'field_isr_state' => 'published',
       ]);
       // Release distributions.
       for ($j = 1; $j <= 2; $j++) {
@@ -404,7 +404,7 @@ class GroupContentUpdateUrlAliasTest extends JoinupExistingSiteTestBase {
           'type' => $bundle,
           'title' => "{$bundle} 1.{$i}",
           'og_audience' => 'http://solution/1',
-          'field_state' => 'validated',
+          'field_state' => 'published',
         ]);
       }
     }
@@ -415,7 +415,7 @@ class GroupContentUpdateUrlAliasTest extends JoinupExistingSiteTestBase {
           'type' => $bundle,
           'title' => "{$bundle} {$i}",
           'og_audience' => 'http://collection',
-          'field_state' => 'validated',
+          'field_state' => 'published',
         ]);
       }
     }
