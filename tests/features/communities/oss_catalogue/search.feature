@@ -13,8 +13,8 @@ Feature: OSS catalogue search
     # Mimic the "EU OSSC" collection.
     Given collection:
       | uri   | http://data.europa.eu/w21/6d621a47-71ce-4f1a-90e2-8859403d3ecd |
-      | title | EU Open Source Solutions Catalogue                     |
-      | state | validated                                                      |
+      | title | EU Open Source Solutions Catalogue                             |
+      | state | published                                                      |
 
     Given oss_solution content:
       | title                           | oss_development_status | oss_source        | oss_categories                                                  | oss_short_description                                                                                                                         | oss_git_description                                                               | status    |
