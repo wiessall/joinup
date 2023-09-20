@@ -48,7 +48,6 @@ dependencies:
     - sitewide_alert
     - solution
     - state_machine_permissions
-    - tallinn
     - taxonomy
     - toolbar
     - view_unpublished
@@ -89,9 +88,7 @@ permissions:
   - 'administer sitewide alert entities'
   - 'administer solution ownership'
   - 'administer support menu items'
-  - 'administer tallinn settings'
   - 'administer users'
-  - 'change tallinn report author'
   - 'create asset_distribution rdf entity'
   - 'create asset_release rdf entity'
   - 'create collection_logo media'
