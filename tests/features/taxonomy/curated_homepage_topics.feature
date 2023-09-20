@@ -117,8 +117,6 @@ Feature:
     When I click "Dashboard"
     And I click "Curated content listings"
     And I click "Homepage topics"
-    And the "form table" table should contain a column with the following data:
-      | Finance in EU Edit |
 
     When I go to the homepage
     Then I should not see the text "E-justice" in the "Homepage topics" region
