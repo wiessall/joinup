@@ -19,7 +19,8 @@ class RouteSubscriber extends RouteSubscriberBase {
     if ($route = $collection->get('entity.ogmenu_instance.edit_form')) {
       $route->addDefaults([
         '_title_callback' => '\Drupal\custom_page\Controller\CustomPageController::editFormTitle',
-      ]);
+      ])
+      ->setOption('_admin_route', FALSE);
     }
   }
 
