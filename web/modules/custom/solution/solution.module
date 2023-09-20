@@ -24,7 +24,6 @@ use Drupal\og\Entity\OgRole;
 use Drupal\og\Og;
 use Drupal\og\OgRoleInterface;
 use Drupal\rdf_entity\Entity\Rdf;
-use Drupal\rdf_entity\Entity\RdfEntityType;
 use Drupal\rdf_entity\RdfInterface;
 use Drupal\search_api\Query\QueryInterface;
 use Drupal\solution\Entity\Solution;
@@ -211,48 +210,45 @@ function solution_rdf_entity_access(EntityInterface $entity, $operation, Account
 function solution_entity_extra_field_info(): array {
   $fields = [];
 
-  $solution = RdfEntityType::load('solution');
-  if ($solution) {
-    $display = &$fields['rdf_entity'][$solution->id()]['display'];
-    // Append some additional fields to the solution entity display containing
-    // related information.
-    // @see solution_rdf_entity_view()
-    $display['releases_overview'] = [
-      'label' => t('Releases overview'),
-      'description' => t('A link to the releases overview page.'),
-      'visible' => FALSE,
-    ];
-    $display['related_solutions'] = [
-      'label' => t('Related solutions: explicit + EIRA'),
-      'description' => t('Solutions either explicitly or referenced through EIRA.'),
-      'visible' => FALSE,
-    ];
-    $display['download_total'] = [
-      'label' => t('Total distribution downloads'),
-      'description' => t('The total downloads of all distributions in this collection.'),
-      'visible' => FALSE,
-    ];
-    $display['collections'] = [
-      'label' => t('Collections'),
-      'description' => t('The collections this solution is affiliated to.'),
-      'visible' => FALSE,
-    ];
-    $display['read_more'] = [
-      'label' => t('Read more'),
-      'description' => t('Shows a link to the about page of the solution.'),
-      'visible' => FALSE,
-    ];
-    $display['share_link'] = [
-      'label' => t('Share'),
-      'description' => t('A link to share the content'),
-      'visible' => FALSE,
-    ];
-    $display['solution_subscribe'] = [
-      'label' => t('Subscribe to this Solution'),
-      'description' => t('Subscribes the user to the solution.'),
-      'visible' => FALSE,
-    ];
-  }
+  $display = &$fields['rdf_entity']['solution']['display'];
+  // Append some additional fields to the solution entity display containing
+  // related information.
+  // @see solution_rdf_entity_view()
+  $display['releases_overview'] = [
+    'label' => t('Releases overview'),
+    'description' => t('A link to the releases overview page.'),
+    'visible' => FALSE,
+  ];
+  $display['related_solutions'] = [
+    'label' => t('Related solutions: explicit + EIRA'),
+    'description' => t('Solutions either explicitly or referenced through EIRA.'),
+    'visible' => FALSE,
+  ];
+  $display['download_total'] = [
+    'label' => t('Total distribution downloads'),
+    'description' => t('The total downloads of all distributions in this collection.'),
+    'visible' => FALSE,
+  ];
+  $display['collections'] = [
+    'label' => t('Collections'),
+    'description' => t('The collections this solution is affiliated to.'),
+    'visible' => FALSE,
+  ];
+  $display['read_more'] = [
+    'label' => t('Read more'),
+    'description' => t('Shows a link to the about page of the solution.'),
+    'visible' => FALSE,
+  ];
+  $display['share_link'] = [
+    'label' => t('Share'),
+    'description' => t('A link to share the content'),
+    'visible' => FALSE,
+  ];
+  $display['solution_subscribe'] = [
+    'label' => t('Subscribe to this Solution'),
+    'description' => t('Subscribes the user to the solution.'),
+    'visible' => FALSE,
+  ];
 
   return $fields;
 }

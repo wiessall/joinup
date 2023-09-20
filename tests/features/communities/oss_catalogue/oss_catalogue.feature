@@ -51,3 +51,28 @@ Feature:
 
     When I click "advanced search"
     And I should see the heading "Search in EU Open Source Solutions Catalogue"
+
+  Scenario Outline: OSS Catalogue's inaccessible routes.
+    Given I am logged in as a user with the "<role>" role
+    And I accept the "Legal notice" agreement
+    When I go to "<path>"
+    Then I should get an access denied error
+
+    Examples:
+      | path                     | role          |
+      | eu-oss-catalogue/about   | administrator |
+      | eu-oss-catalogue/members | administrator |
+      | eu-oss-catalogue/about   | authenticated |
+      | eu-oss-catalogue/members | authenticated |
+      | eu-oss-catalogue/about   | moderator     |
+      | eu-oss-catalogue/members | moderator     |
+
+  Scenario Outline: Anonymous user cannot access OSS Catalogue's inaccessible routes.
+    Given I am not logged in
+    When I go to "<path>"
+    Then I should see the heading "Sign in to continue"
+
+    Examples:
+      | path                     |
+      | eu-oss-catalogue/about   |
+      | eu-oss-catalogue/members |

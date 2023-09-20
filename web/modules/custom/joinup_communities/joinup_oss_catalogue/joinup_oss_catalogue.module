@@ -75,10 +75,14 @@ function joinup_oss_catalogue_rdf_entity_view(array &$build, EntityInterface $en
       ->accessCheck()
       ->condition('status', 1)
       ->condition('type', 'oss_solution')
+      ->condition('langcode', 'en')
       ->count()
       ->execute();
+    $markup = empty($oss_solution_count) ?
+      \Drupal::translation()->translate('No Open Source Software Solutions were federated yet') :
+      \Drupal::translation()->translate('@oss_solution_count Open Source Software Solutions', ['@oss_solution_count' => $oss_solution_count]);
     $build['oss_solutions'] = [
-      '#markup' => \Drupal::translation()->formatPlural($oss_solution_count, '@oss_solution_count open source software solution', '@oss_solution_count open source software solutions', ['@oss_solution_count' => $oss_solution_count]),
+      '#markup' => $markup,
     ];
     (new CacheableMetadata())
       ->addCacheTags(Cache::buildTags('og-group-content', $entity->getCacheTagsToInvalidate()))

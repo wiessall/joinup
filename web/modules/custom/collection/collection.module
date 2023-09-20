@@ -32,7 +32,6 @@ use Drupal\og\Og;
 use Drupal\og\OgMembershipInterface;
 use Drupal\og\OgRoleInterface;
 use Drupal\rdf_entity\Entity\Rdf;
-use Drupal\rdf_entity\Entity\RdfEntityType;
 use Drupal\rdf_entity\RdfInterface;
 use Drupal\search_api\Query\QueryInterface;
 use Drupal\sparql_entity_storage\SparqlGraphInterface;
@@ -279,36 +278,32 @@ function collection_module_implements_alter(&$implementations, $hook) {
  */
 function collection_entity_extra_field_info(): array {
   $fields = [];
-  $collection = RdfEntityType::load('collection');
+  // Add the join/leave collection form as field.
+  // @todo will be removed in ISAICP-2743
+  $display = &$fields['rdf_entity']['collection']['display'];
+  $display['join_collection'] = [
+    'label' => t('Join collection'),
+    'description' => t('Shows the join/leave collection form'),
+    'visible' => FALSE,
+  ];
 
-  if ($collection) {
-    // Add the join/leave collection form as field.
-    // @todo will be removed in ISAICP-2743
-    $display = &$fields['rdf_entity'][$collection->id()]['display'];
-    $display['join_collection'] = [
-      'label' => t('Join collection'),
-      'description' => t('Shows the join/leave collection form'),
-      'visible' => FALSE,
-    ];
+  $display['members'] = [
+    'label' => t('Amount of members'),
+    'description' => t('Amount of members of the collection'),
+    'visible' => FALSE,
+  ];
 
-    $display['members'] = [
-      'label' => t('Amount of members'),
-      'description' => t('Amount of members of the collection'),
-      'visible' => FALSE,
-    ];
+  $display['solutions'] = [
+    'label' => t('Amount of solutions'),
+    'description' => t('Amount of solutions of the collection'),
+    'visible' => FALSE,
+  ];
 
-    $display['solutions'] = [
-      'label' => t('Amount of solutions'),
-      'description' => t('Amount of solutions of the collection'),
-      'visible' => FALSE,
-    ];
-
-    $display['read_more'] = [
-      'label' => t('Read more'),
-      'description' => t('Shows a link to the about page of the collection'),
-      'visible' => FALSE,
-    ];
-  }
+  $display['read_more'] = [
+    'label' => t('Read more'),
+    'description' => t('Shows a link to the about page of the collection'),
+    'visible' => FALSE,
+  ];
 
   return $fields;
 }

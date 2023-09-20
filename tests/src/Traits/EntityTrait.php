@@ -86,6 +86,7 @@ trait EntityTrait {
       'group' => 'rdf_entity',
       'news' => 'node',
       'owner' => 'rdf_entity',
+      'oss_solution' => 'node',
       'release' => 'rdf_entity',
       'solution' => 'rdf_entity',
       'spdx licence' => 'rdf_entity',
