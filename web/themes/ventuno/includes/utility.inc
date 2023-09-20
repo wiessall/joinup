@@ -147,21 +147,6 @@ function _ventuno_preprocess_tile(array &$variables, string $entity_type_id): vo
       }
       break;
 
-    case 'tallinn_report':
-      $variables['info']['icon'] = 'calendar-event';
-      if ($entity->getCreatedTime() == $entity->getChangedTime()) {
-        $variables['info']['label'] = new TranslatableMarkup('@label: -', [
-          '@label' => 'Last update',
-        ]);
-      }
-      elseif ($changed_time = $entity->getChangedTime()) {
-        $variables['info']['label'] = t('@label: @changed', [
-          '@label' => t('Last update'),
-          '@changed' => $date_formatter->format($changed_time, 'date_only'),
-        ]);
-      }
-      break;
-
     case 'asset_distribution':
       $variables['info']['icon'] = 'file-earmark-medical';
       $variables['info']['label'] = $variables['content']['field_ad_licence'];
@@ -261,7 +246,6 @@ function _ventuno_get_default_icon(string $entity_type_id, string $bundle): stri
       'document' => 'file-earmark-text',
       'event' => 'calendar-event',
       'news' => 'newspaper',
-      'tallinn_report' => 'journal-text',
       'video' => 'file-earmark-play',
     ],
     'rdf_entity' => [
