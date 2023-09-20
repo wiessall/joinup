@@ -1,11 +1,28 @@
 Release procedure
 =================
 
-We have 2 repositories that Joinup uses: the
+We have 3 repositories that Joinup uses: the
 [development repository](https://git.fpfis.tech.ec.europa.eu/digit/digit-joinup-dev),
-which is where the development takes place, and the
+which is where the development takes place, the
 [reference repository](https://git.fpfis.tech.ec.europa.eu/ec-europa/digit-joinup-reference),
-which is where the releases are published.
+which is where the releases are published, and the
+[POC reference repository](https://git.fpfis.tech.ec.europa.eu/ec-europa/digit-joinup-poc-reference),
+which is where the POC environment is deployed.
+
+For the following document, we will assume that the developer already has
+appointed the development repository as `origin`, the reference repository as
+`reference` and the POC reference repository as `poc-reference`.
+
+If you have not added the reference repository as a remote, you can do so by
+running the following command:
+```
+$ git remote add reference https://git.fpfis.tech.ec.europa.eu/ec-europa/digit-joinup-reference.git
+```
+If you have not added the POC reference repository as a remote, you can do so
+by running the following command:
+```
+$ git remote add poc-reference https://git.fpfis.tech.ec.europa.eu/ec-europa/digit-joinup-poc-reference.git
+```
 
 The two main branches are the `master` branch on the reference repository and
 the `develop` branch on the development repository. The master branch is the
@@ -79,7 +96,30 @@ The release procedure is as follows:
 Post release procedure
 ======================
 
-After the release is done, the following steps should be taken:
+After the release is done, before the post upgrade update hook removals below,
+the POC environment should be updated with the release. The POC environment is
+[https://git.fpfis.tech.ec.europa.eu/ec-europa/digit-joinup-poc-reference](https://git.fpfis.tech.ec.europa.eu/ec-europa/digit-joinup-poc-reference).
+In order to trigger the release, checkout the release tag branch using the
+following command:
+```
+$ git checkout v#.##.#
+```
+where `#.##.#` is the version number of the release. Then push the branch to the
+POC reference repository using the following command:
+```
+$ git push poc-reference v#.##.#
+```
+In the above example, `#.##.#` is the version number of the release. The
+`poc-reference` remote is the remote that points to the POC reference
+repository.
+
+Pushing the tag will automatically deploy the release to the POC environment.
+
+### Post release update hook removals
+The second step after the release is done, is to remove the deployment hooks.
+Mainly, after the release is done, develop branch will start failing due to the
+restriction in the deployment hook naming convention. Thus, the following steps
+should be followed:
 
 1. Move the release ticket to 'In Progress'.
 2. Create a new branch based on the `master` branch from the reference
@@ -87,11 +127,13 @@ After the release is done, the following steps should be taken:
    the updates that were made during the release procedure.
 3. Clean any instances of the `hook_update_N`, `hook_post_update_NAME` and
    `hook_deploy_NAME` functions that were added during the release procedure.
-4. Push the branch to the development repository and create a merge request
+4. Update dependencies and check for any changes required in the used patches.
+5. Push the branch to the development repository and create a merge request
    from the branch to the `develop` branch. Move the release ticket to the QA
    column and allow it to be picked up by the team. When the ticket is approved,
    the team member should merge the merge request and move the release ticket to
    the 'Resolved' column.
+6. Mark the release ticket as 'Released' in [Jira](https://citnet.tech.ec.europa.eu/CITnet/jira/projects/ISAICP?selectedItem=com.atlassian.jira.jira-projects-plugin%3Arelease-page&status=released-unreleased)
 
 Hotfix procedure
 ================
