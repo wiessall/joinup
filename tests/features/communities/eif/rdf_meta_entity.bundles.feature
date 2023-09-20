@@ -7,7 +7,7 @@ Feature:
   Background:
     Given solutions:
       | title             | state     |
-      | Some EIF solution | validated |
+      | Some EIF solution | published |
 
   Scenario Outline: Only moderators can access the EIF perspective page.
     Given I am <role>

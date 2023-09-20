@@ -36,8 +36,7 @@ class Anonymous403RedirectCacheTest extends JoinupExistingSiteTestBase {
         $this->assertSession()->pageTextContains('Sign in to continue');
 
         // Publish the entity.
-        $value = $entity->bundle() === 'custom_page' ? 'published' : 'validated';
-        $entity->set($field_name, $value)->save();
+        $entity->set($field_name, 'published')->save();
 
         // Revisit the entity. It should be visible.
         $this->drupalGet($entity->toUrl());
