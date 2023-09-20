@@ -17,9 +17,74 @@ declare(strict_types = 1);
 use Drupal\joinup_oss_catalogue\OssCatalogueCollectionInterface;
 
 /**
+ * Change the state name of all RDF entities from 'validated' to 'published'.
+ */
+function joinup_core_deploy_109700(): string {
+  $database = \Drupal::getContainer()->get('sparql.endpoint');
+  $workflow_urls = [
+    'http://joinup.eu/ar/workflow_status' => [
+      'http://joinup.eu/collection/published',
+      'http://joinup.eu/collection/draft',
+    ],
+    'http://joinup.eu/contact_information/workflow_status' => [
+      'http://joinup.eu/contact-information/published',
+    ],
+    'http://joinup.eu/is/workflow_status' => [
+      'http://joinup.eu/solution/published',
+      'http://joinup.eu/solution/draft',
+    ],
+    'http://joinup.eu/isr/workflow_status' => [
+      'http://joinup.eu/asset_distribution/published',
+      'http://joinup.eu/asset_distribution/draft',
+    ],
+    'http://joinup.eu/owner/workflow_status' => [
+      'http://joinup.eu/owner/published',
+    ],
+  ];
+
+  foreach ($workflow_urls as $predicate => $graphs) {
+    foreach ($graphs as $graph) {
+      $update_query = <<<SPARQL
+WITH <{$graph}>
+DELETE {
+  ?s <{$predicate}> "validated"^^<http://www.w3.org/2001/XMLSchema#string> .
+}
+INSERT {
+  ?s <{$predicate}> "published"^^<http://www.w3.org/2001/XMLSchema#string> .
+}
+WHERE {
+  ?s <{$predicate}> "validated"^^<http://www.w3.org/2001/XMLSchema#string> .
+}
+SPARQL;
+      $database->query($update_query);
+    }
+  }
+
+  return 'Changed the state name of all RDF entities from "validated" to "published".';
+}
+
+/**
+ * Change the state name of all Node entities from 'validated' to 'published'.
+ */
+function joinup_core_deploy_109701(): string {
+  \Drupal::getContainer()->get('database')->update('node__field_state')
+    ->fields(['field_state_value' => 'published'])
+    ->condition('field_state_value', 'validated')
+    ->execute();
+
+  // Take care of the revisions.
+  \Drupal::getContainer()->get('database')->update('node_revision__field_state')
+    ->fields(['field_state_value' => 'published'])
+    ->condition('field_state_value', 'validated')
+    ->execute();
+
+  return 'Changed the state name of all nodes from "validated" to "published".';
+}
+
+/**
  * Update path alias for EU OSS catalogue.
  */
-function joinup_core_deploy_109700(): void {
+function joinup_core_deploy_109702(): void {
   /** @var \Drupal\collection\Entity\CollectionInterface $collection */
   $collection = \Drupal::entityTypeManager()->getStorage('rdf_entity')
     ->load(OssCatalogueCollectionInterface::COLLECTION_ENTITY_ID);
@@ -33,7 +98,7 @@ function joinup_core_deploy_109700(): void {
 /**
  * Update title of EU OSS catalogue collection.
  */
-function joinup_core_deploy_109701(): void {
+function joinup_core_deploy_109703(): void {
   /** @var \Drupal\collection\Entity\CollectionInterface $collection */
   $collection = \Drupal::entityTypeManager()->getStorage('rdf_entity')
     ->load(OssCatalogueCollectionInterface::COLLECTION_ENTITY_ID);
@@ -46,7 +111,7 @@ function joinup_core_deploy_109701(): void {
 /**
  * Import content for EU OpenSource Software Solutions Catalogue.
  */
-function joinup_core_deploy_109702(): void {
+function joinup_core_deploy_109704(): void {
   /** @var \Drupal\Core\Extension\ModuleInstallerInterface $moduleInstaller */
   $moduleInstaller = \Drupal::service('module_installer');
   /** @var \Drupal\Core\Entity\EntityRepositoryInterface $entityRepository */

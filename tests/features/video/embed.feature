@@ -8,7 +8,7 @@ Feature: Embed of videos into the page.
     Given the following collection:
       | title       | Beer brewing corporation             |
       | description | Beer is the real nectar of the gods. |
-      | state       | validated                            |
+      | state       | published                            |
 
   Scenario: As a community content editor I can embed video iframes from allowed providers into the content field.
     Given I am logged in as a "facilitator" of the "Beer brewing corporation" collection

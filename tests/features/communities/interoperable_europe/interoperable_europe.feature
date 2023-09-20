@@ -113,7 +113,7 @@ Feature:
   Scenario Outline: Report link and eTranslate button are not available in IOP.
     Given <type> content:
       | title      | collection           | state     |
-      | IOP <type> | Interoperable Europe | validated |
+      | IOP <type> | Interoperable Europe | published |
 
     When I am logged in as a user with the authenticated role
     And I go to the "IOP <type>" <type>

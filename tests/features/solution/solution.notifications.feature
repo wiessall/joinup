@@ -10,7 +10,7 @@ Feature: Solution notifications
     Given the following collection:
       | title | Collection of random solutions |
       | logo  | logo.png                       |
-      | state | validated                      |
+      | state | published                      |
     And the following owner:
       | name               | type                  |
       | Karanikolas Kitsos | Private Individual(s) |
@@ -24,13 +24,13 @@ Feature: Solution notifications
       | Edith Poole  |           | Edith      | Poole       | edith.poole@example.com  |
     And the following solutions:
       | title                                                 | author       | description | logo     | owner              | contact information | state        | topic       | solution type | collection                     |
-      | Solution notification to propose changes              | Ramiro Myers | Sample text | logo.png | Karanikolas Kitsos | Information Desk    | validated    | E-inclusion | Business      | Collection of random solutions |
-      | Solution notification to blacklist                    | Ramiro Myers | Sample text | logo.png | Karanikolas Kitsos | Information Desk    | validated    | E-inclusion | Business      | Collection of random solutions |
+      | Solution notification to propose changes              | Ramiro Myers | Sample text | logo.png | Karanikolas Kitsos | Information Desk    | published    | E-inclusion | Business      | Collection of random solutions |
+      | Solution notification to blacklist                    | Ramiro Myers | Sample text | logo.png | Karanikolas Kitsos | Information Desk    | published    | E-inclusion | Business      | Collection of random solutions |
       | Solution notification to publish from blacklisted     | Ramiro Myers | Sample text | logo.png | Karanikolas Kitsos | Information Desk    | blacklisted  | E-inclusion | Business      | Collection of random solutions |
-      | Solution notification to request changes              | Ramiro Myers | Sample text | logo.png | Karanikolas Kitsos | Information Desk    | validated    | E-inclusion | Business      | Collection of random solutions |
+      | Solution notification to request changes              | Ramiro Myers | Sample text | logo.png | Karanikolas Kitsos | Information Desk    | published    | E-inclusion | Business      | Collection of random solutions |
       | Solution notification to propose from request changes | Ramiro Myers | Sample text | logo.png | Karanikolas Kitsos | Information Desk    | needs update | E-inclusion | Business      | Collection of random solutions |
-      | Solution notification to delete by moderator team     | Ramiro Myers | Sample text | logo.png | Karanikolas Kitsos | Information Desk    | validated    | E-inclusion | Business      | Collection of random solutions |
-      | Solution notification to delete by owner              | Ramiro Myers | Sample text | logo.png | Karanikolas Kitsos | Information Desk    | validated    | E-inclusion | Business      | Collection of random solutions |
+      | Solution notification to delete by moderator team     | Ramiro Myers | Sample text | logo.png | Karanikolas Kitsos | Information Desk    | published    | E-inclusion | Business      | Collection of random solutions |
+      | Solution notification to delete by owner              | Ramiro Myers | Sample text | logo.png | Karanikolas Kitsos | Information Desk    | published    | E-inclusion | Business      | Collection of random solutions |
 
     When I am logged in as "Pat Harper"
 

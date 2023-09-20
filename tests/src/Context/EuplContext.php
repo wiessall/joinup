@@ -50,7 +50,7 @@ class EuplContext extends RawDrupalContext {
       'rid' => 'collection',
       'id' => Eupl::EUPL_COMMUNITY_ID,
       'label' => 'EUPL',
-      'field_ar_state' => 'validated',
+      'field_ar_state' => 'published',
       'field_ar_owner' => 'http://example.com/owner',
     ])->save();
 
@@ -59,7 +59,7 @@ class EuplContext extends RawDrupalContext {
       'collection' => Eupl::EUPL_COMMUNITY_ID,
       'id' => Eupl::JLA_SOLUTION,
       'label' => 'Joinup Licensing Assistant',
-      'field_is_state' => 'validated',
+      'field_is_state' => 'published',
     ])->save();
 
     // The 'Joinup Licensing Assistant' standard custom page.

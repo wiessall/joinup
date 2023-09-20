@@ -18,7 +18,7 @@ Feature: "Edit" visibility options.
       | documentation       | text.pdf                |
       | owner               | Awesome person          |
       | contact information | Awesome contact         |
-      | state               | validated               |
+      | state               | published               |
     And the following release:
       | title               | My awesome solution abc v1 |
       | description         | A sample release           |
@@ -28,7 +28,7 @@ Feature: "Edit" visibility options.
       | is version of       | My awesome solution abc    |
       | owner               | Awesome person             |
       | contact information | Awesome contact            |
-      | state               | validated                  |
+      | state               | published                  |
 
   Scenario: "Edit" button should only be shown to solution facilitators and moderators.
     When I am logged in as a "facilitator" of the "My awesome solution abc" solution

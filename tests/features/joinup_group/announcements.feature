@@ -5,7 +5,7 @@ Feature: Messaging group announcements
 
     Given the following <group>s:
       | title        | state     |
-      | Fail pension | validated |
+      | Fail pension | published |
       | Hidden gems  | draft     |
     And users:
       | Username             | E-mail                           | Roles     |
@@ -411,13 +411,13 @@ Feature: Messaging group announcements
   Scenario: Announcement moderation
     Given the following collections:
       | title       | state     |
-      | Collection1 | validated |
-      | Collection2 | validated |
+      | Collection1 | published |
+      | Collection2 | published |
     And the following solutions:
       | title                 | collection  | state     |
-      | Collection1 Solution1 | Collection1 | validated |
-      | Collection1 Solution2 | Collection1 | validated |
-      | Collection2 Solution1 | Collection2 | validated |
+      | Collection1 Solution1 | Collection1 | published |
+      | Collection1 Solution2 | Collection1 | published |
+      | Collection2 Solution1 | Collection2 | published |
     And users:
       | Username         | E-mail                      | Roles     |
       | Rian Lee         | rian-lee@example.com        |           |

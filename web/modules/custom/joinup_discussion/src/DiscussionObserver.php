@@ -62,9 +62,9 @@ class DiscussionObserver implements ObserverInterface {
       $discussion->original->isArchived() : FALSE;
 
     // Dispatch the update event only if there are changes of relevant fields
-    // and the discussion is in the 'validated' state
+    // and the discussion is in the 'published' state
     // and previous state was not archived.
-    if ($changed_fields && $state === 'validated' && !$was_archived) {
+    if ($changed_fields && $state === 'published' && !$was_archived) {
       $event = new DiscussionUpdateEvent($discussion, $changed_fields);
       $this->eventDispatcher->dispatch($event, DiscussionEvents::UPDATE);
     }
