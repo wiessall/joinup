@@ -4,17 +4,6 @@ Feature: User authentication
   As a product owner
   I want to make sure users with various roles can only access pages they are authorized to
 
-  Background:
-    # Mimic the "EU OSSC" collection.
-    Given collection:
-      | uri   | http://data.europa.eu/w21/6d621a47-71ce-4f1a-90e2-8859403d3ecd |
-      | title | EU Open Source Solutions Catalogue                             |
-      | state | validated                                                      |
-    And path alias:
-      | entity_type    | rdf_entity                                                     |
-      | entity_type_id | http://data.europa.eu/w21/6d621a47-71ce-4f1a-90e2-8859403d3ecd |
-      | path           | /eu-oss-catalogue                                              |
-
   Scenario Outline: Anonymous user can access public pages
     Given I am not logged in
     Then I visit "<path>"
@@ -85,8 +74,6 @@ Feature: User authentication
       | rdf_entity/add/rdf_graph                            |
       | rdf_entity/add/solution                             |
       | user/subscriptions                                  |
-      | eu-oss-catalogue/about                              |
-      | eu-oss-catalogue/members                            |
 
   Scenario Outline: Anonymous user cannot access restricted non-HTML URLs.
     Given I am not logged in
@@ -167,8 +154,6 @@ Feature: User authentication
       | rdf_entity/add/owner                                |
       | rdf_entity/add/rdf_graph                            |
       | rdf_entity/add/solution                             |
-      | eu-oss-catalogue/about                              |
-      | eu-oss-catalogue/members                            |
 
   Scenario Outline: Authenticated user cannot access restricted non-HTML URLs.
     Given I am logged in as a user with the "authenticated" role
@@ -248,8 +233,6 @@ Feature: User authentication
       | rdf_entity/add/owner                                |
       | rdf_entity/add/rdf_graph                            |
       | rdf_entity/add/solution                             |
-      | eu-oss-catalogue/about                              |
-      | eu-oss-catalogue/members                            |
 
   Scenario Outline: Administrator can access pages they are authorized to
     Given I am logged in as a user with the "administrator" role
@@ -296,5 +279,3 @@ Feature: User authentication
       | rdf_entity/add/owner               |
       | rdf_entity/add/rdf_graph           |
       | rdf_entity/add/solution            |
-      | eu-oss-catalogue/about             |
-      | eu-oss-catalogue/members           |

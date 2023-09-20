@@ -569,4 +569,24 @@ class JoinupCommunityContentContext extends RawDrupalContext {
     Assert::assertNotEmpty($actual_description);
   }
 
+  /**
+   * Update field of a node.
+   *
+   * @param string $field
+   *   The field identifier.
+   * @param string $status
+   *   The status published/unpublished.
+   * @param string $title
+   *   The node label.
+   * @param string $bundle
+   *   The node label.
+   *
+   * @Given set :field with :status in :title :bundle
+   */
+  public function updateNodePublishedProperty(string $field, string $status, string $title, string $bundle): void {
+    $this->getEntityByLabel('node', $title, $bundle)
+      ->set($field, $status === 'published')
+      ->save();
+  }
+
 }
