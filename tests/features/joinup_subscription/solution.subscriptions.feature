@@ -10,10 +10,10 @@ Feature: Subscribing to a solution
       | abstract    | Abstract               |
       | description | Description            |
       | closed      | yes                    |
-      | state       | validated              |
+      | state       | published              |
     And solution:
       | title      | Some solution to subscribe |
-      | state      | validated                  |
+      | state      | published                  |
       | collection | Some parent collection     |
     And users:
       | Username          |

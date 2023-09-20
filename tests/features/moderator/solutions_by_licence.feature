@@ -24,13 +24,13 @@ Feature: Solutions by licence report
       | Not applicable |
     And the following solutions:
       | title                 | state     |
-      | Solution by licence 1 | validated |
-      | Solution by licence 2 | validated |
+      | Solution by licence 1 | published |
+      | Solution by licence 2 | published |
     And the following release:
       | title          | Solution by licence 2 release |
       | release number | 1                             |
       | is version of  | Solution by licence 2         |
-      | state          | validated                     |
+      | state          | published                     |
     # Distribution linked to the solution directly.
     And the following distributions:
       | title                     | licence      | parent                |

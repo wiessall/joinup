@@ -8,7 +8,7 @@ Feature: Prefill contact form fields
   Scenario: The subject field can be prefilled through links.
     Given collection:
       | title | CAMSS test community |
-      | state | validated            |
+      | state | published            |
       | topic | HR                   |
     And custom_page content:
       | title                | collection           | state     |

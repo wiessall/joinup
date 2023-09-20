@@ -370,9 +370,9 @@ Feature: Log in through EU Login
   @email
   Scenario: As a moderator I can activate the approval of new accounts.
     Given CAS users:
-      | Username      | E-mail            | Password |
-      | ricky_martin  | ricky@example.com | 123      |
-      | jonh_martin   | jonh@example.com  | 123      |
+      | Username     | E-mail            | Password |
+      | ricky_martin | ricky@example.com | 123      |
+      | jonh_martin  | jonh@example.com  | 123      |
 
     Given I am logged in as a user with the "moderator" role
     And I visit "Dashboard"
@@ -396,6 +396,14 @@ Feature: Log in through EU Login
       | Kind regards,                                                                                                                                                                                                                 |
       | The Joinup Support Team.                                                                                                                                                                                                      |
 
+    # Retrying login should display an error message.
+    And I am on the homepage
+    When I click "Sign in"
+    And I fill in "E-mail address" with "ricky@example.com"
+    And I fill in "Password" with "123"
+    And I press "Log in"
+    Then I should see the error message "You cannot sign in yet. Your Joinup account is currently being verified. You will be notified by email once it is activated."
+
     Given I am logged in as a user with the "moderator" role
     Given I am on the homepage
     When I click "People"
@@ -409,7 +417,7 @@ Feature: Log in through EU Login
     And I press "Apply to selected items"
     Then I should see the success message "Unblock the selected user(s) was applied to 1 item."
     And the email sent to "ricky@example.com" with subject "Your Joinup account has been activated." contains the text:
-      | You may now log in with EU Login credentials by clicking this link or copying and pasting it into your browser  |
+      | You may now log in with EU Login credentials by clicking this link or copying and pasting it into your browser |
 
     Given I am an anonymous user
     And I am on the homepage

@@ -11,12 +11,12 @@ administer outdated content threshold:
 # to roles but not defined are removed. We statically define them here, but they
 # should be fixed in ISAICP-7313.
 # See https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7313
-transition own node news from validated to validated using the community_content - node:pre_moderated workflow:
-  title: transition own node news from validated to validated using the community_content - node:pre_moderated workflow
-transition own node news from validated to validated using the community_content - node:post_moderated workflow:
-  title: transition own node news from validated to validated using the community_content - node:post_moderated workflow
-transition own node news from validated to deletion_request using the community_content - node:post_moderated workflow:
-  title: transition own node news from validated to deletion_request using the community_content - node:post_moderated workflow
+transition own node news from published to published using the community_content - node:pre_moderated workflow:
+  title: transition own node news from published to published using the community_content - node:pre_moderated workflow
+transition own node news from published to published using the community_content - node:post_moderated workflow:
+  title: transition own node news from published to published using the community_content - node:post_moderated workflow
+transition own node news from published to deletion_request using the community_content - node:post_moderated workflow:
+  title: transition own node news from published to deletion_request using the community_content - node:post_moderated workflow
 transition own node news from proposed to proposed using the community_content - node:pre_moderated workflow:
   title: transition own node news from proposed to proposed using the community_content - node:pre_moderated workflow
 transition own node news from proposed to proposed using the community_content - node:post_moderated workflow:
@@ -25,12 +25,12 @@ transition own node news from draft to draft using the community_content - node:
   title: transition own node news from draft to draft using the community_content - node:pre_moderated workflow
 transition own node news from draft to draft using the community_content - node:post_moderated workflow:
   title: transition own node news from draft to draft using the community_content - node:post_moderated workflow
-transition own node event from validated to validated using the community_content - node:pre_moderated workflow:
-  title: transition own node event from validated to validated using the community_content - node:pre_moderated workflow
-transition own node event from validated to validated using the community_content - node:post_moderated workflow:
-  title: transition own node event from validated to validated using the community_content - node:post_moderated workflow
-transition own node event from validated to deletion_request using the community_content - node:post_moderated workflow:
-  title: transition own node event from validated to deletion_request using the community_content - node:post_moderated workflow
+transition own node event from published to published using the community_content - node:pre_moderated workflow:
+  title: transition own node event from published to published using the community_content - node:pre_moderated workflow
+transition own node event from published to published using the community_content - node:post_moderated workflow:
+  title: transition own node event from published to published using the community_content - node:post_moderated workflow
+transition own node event from published to deletion_request using the community_content - node:post_moderated workflow:
+  title: transition own node event from published to deletion_request using the community_content - node:post_moderated workflow
 transition own node event from proposed to proposed using the community_content - node:pre_moderated workflow:
   title: transition own node event from proposed to proposed using the community_content - node:pre_moderated workflow
 transition own node event from proposed to proposed using the community_content - node:post_moderated workflow:
@@ -39,12 +39,12 @@ transition own node event from draft to draft using the community_content - node
   title: transition own node event from draft to draft using the community_content - node:pre_moderated workflow
 transition own node event from draft to draft using the community_content - node:post_moderated workflow:
   title: transition own node event from draft to draft using the community_content - node:post_moderated workflow
-transition own node document from validated to validated using the community_content - node:pre_moderated workflow:
-  title: transition own node document from validated to validated using the community_content - node:pre_moderated workflow
-transition own node document from validated to validated using the community_content - node:post_moderated workflow:
-  title: transition own node document from validated to validated using the community_content - node:post_moderated workflow
-transition own node document from validated to deletion_request using the community_content - node:post_moderated workflow:
-  title: transition own node document from validated to deletion_request using the community_content - node:post_moderated workflow
+transition own node document from published to published using the community_content - node:pre_moderated workflow:
+  title: transition own node document from published to published using the community_content - node:pre_moderated workflow
+transition own node document from published to published using the community_content - node:post_moderated workflow:
+  title: transition own node document from published to published using the community_content - node:post_moderated workflow
+transition own node document from published to deletion_request using the community_content - node:post_moderated workflow:
+  title: transition own node document from published to deletion_request using the community_content - node:post_moderated workflow
 transition own node document from proposed to proposed using the community_content - node:pre_moderated workflow:
   title: transition own node document from proposed to proposed using the community_content - node:pre_moderated workflow
 transition own node document from proposed to proposed using the community_content - node:post_moderated workflow:
@@ -53,12 +53,12 @@ transition own node document from draft to draft using the community_content - n
   title: transition own node document from draft to draft using the community_content - node:pre_moderated workflow
 transition own node document from draft to draft using the community_content - node:post_moderated workflow:
   title: transition own node document from draft to draft using the community_content - node:post_moderated workflow
-transition own node discussion from validated to validated using the community_content - node:pre_moderated workflow:
-  title: transition own node discussion from validated to validated using the community_content - node:pre_moderated workflow
-transition own node discussion from validated to validated using the community_content - node:post_moderated workflow:
-  title: transition own node discussion from validated to validated using the community_content - node:post_moderated workflow
-transition own node discussion from validated to deletion_request using the community_content - node:post_moderated workflow:
-  title: transition own node discussion from validated to deletion_request using the community_content - node:post_moderated workflow
+transition own node discussion from published to published using the community_content - node:pre_moderated workflow:
+  title: transition own node discussion from published to published using the community_content - node:pre_moderated workflow
+transition own node discussion from published to published using the community_content - node:post_moderated workflow:
+  title: transition own node discussion from published to published using the community_content - node:post_moderated workflow
+transition own node discussion from published to deletion_request using the community_content - node:post_moderated workflow:
+  title: transition own node discussion from published to deletion_request using the community_content - node:post_moderated workflow
 transition own node discussion from proposed to proposed using the community_content - node:pre_moderated workflow:
   title: transition own node discussion from proposed to proposed using the community_content - node:pre_moderated workflow
 transition own node discussion from proposed to proposed using the community_content - node:post_moderated workflow:
@@ -67,26 +67,26 @@ transition own node discussion from draft to draft using the community_content -
   title: transition own node discussion from draft to draft using the community_content - node:pre_moderated workflow
 transition own node discussion from draft to draft using the community_content - node:post_moderated workflow:
   title: transition own node discussion from draft to draft using the community_content - node:post_moderated workflow
-transition group from validated to validated using the solution - solution_workflow workflow:
-  title: transition group from validated to validated using the solution - solution_workflow workflow
-transition group from validated to validated using the collection - collection_workflow workflow:
-  title: transition group from validated to validated using the collection - collection_workflow workflow
-transition group from validated to proposed using the solution - solution_workflow workflow:
-  title: transition group from validated to proposed using the solution - solution_workflow workflow
-transition group from validated to proposed using the collection - collection_workflow workflow:
-  title: transition group from validated to proposed using the collection - collection_workflow workflow
-transition group from validated to needs_update using the solution - solution_workflow workflow:
-  title: transition group from validated to needs_update using the solution - solution_workflow workflow
-transition group from validated to draft using the solution - solution_workflow workflow:
-  title: transition group from validated to draft using the solution - solution_workflow workflow
-transition group from validated to draft using the collection - collection_workflow workflow:
-  title: transition group from validated to draft using the collection - collection_workflow workflow
-transition group from validated to blacklisted using the solution - solution_workflow workflow:
-  title: transition group from validated to blacklisted using the solution - solution_workflow workflow
-transition group from proposed to validated using the solution - solution_workflow workflow:
-  title: transition group from proposed to validated using the solution - solution_workflow workflow
-transition group from proposed to validated using the collection - collection_workflow workflow:
-  title: transition group from proposed to validated using the collection - collection_workflow workflow
+transition group from published to published using the solution - solution_workflow workflow:
+  title: transition group from published to published using the solution - solution_workflow workflow
+transition group from published to published using the collection - collection_workflow workflow:
+  title: transition group from published to published using the collection - collection_workflow workflow
+transition group from published to proposed using the solution - solution_workflow workflow:
+  title: transition group from published to proposed using the solution - solution_workflow workflow
+transition group from published to proposed using the collection - collection_workflow workflow:
+  title: transition group from published to proposed using the collection - collection_workflow workflow
+transition group from published to needs_update using the solution - solution_workflow workflow:
+  title: transition group from published to needs_update using the solution - solution_workflow workflow
+transition group from published to draft using the solution - solution_workflow workflow:
+  title: transition group from published to draft using the solution - solution_workflow workflow
+transition group from published to draft using the collection - collection_workflow workflow:
+  title: transition group from published to draft using the collection - collection_workflow workflow
+transition group from published to blacklisted using the solution - solution_workflow workflow:
+  title: transition group from published to blacklisted using the solution - solution_workflow workflow
+transition group from proposed to published using the solution - solution_workflow workflow:
+  title: transition group from proposed to published using the solution - solution_workflow workflow
+transition group from proposed to published using the collection - collection_workflow workflow:
+  title: transition group from proposed to published using the collection - collection_workflow workflow
 transition group from proposed to proposed using the solution - solution_workflow workflow:
   title: transition group from proposed to proposed using the solution - solution_workflow workflow
 transition group from proposed to proposed using the collection - collection_workflow workflow:
@@ -97,16 +97,16 @@ transition group from proposed to draft using the solution - solution_workflow w
   title: transition group from proposed to draft using the solution - solution_workflow workflow
 transition group from proposed to draft using the collection - collection_workflow workflow:
   title: transition group from proposed to draft using the collection - collection_workflow workflow
-transition group from needs_update to validated using the solution - solution_workflow workflow:
-  title: transition group from needs_update to validated using the solution - solution_workflow workflow
+transition group from needs_update to published using the solution - solution_workflow workflow:
+  title: transition group from needs_update to published using the solution - solution_workflow workflow
 transition group from needs_update to proposed using the solution - solution_workflow workflow:
   title: transition group from needs_update to proposed using the solution - solution_workflow workflow
 transition group from needs_update to draft using the solution - solution_workflow workflow:
   title: transition group from needs_update to draft using the solution - solution_workflow workflow
-transition group from draft to validated using the solution - solution_workflow workflow:
-  title: transition group from draft to validated using the solution - solution_workflow workflow
-transition group from draft to validated using the collection - collection_workflow workflow:
-  title: transition group from draft to validated using the collection - collection_workflow workflow
+transition group from draft to published using the solution - solution_workflow workflow:
+  title: transition group from draft to published using the solution - solution_workflow workflow
+transition group from draft to published using the collection - collection_workflow workflow:
+  title: transition group from draft to published using the collection - collection_workflow workflow
 transition group from draft to proposed using the solution - solution_workflow workflow:
   title: transition group from draft to proposed using the solution - solution_workflow workflow
 transition group from draft to proposed using the collection - collection_workflow workflow:
@@ -115,20 +115,20 @@ transition group from draft to draft using the solution - solution_workflow work
   title: transition group from draft to draft using the solution - solution_workflow workflow
 transition group from draft to draft using the collection - collection_workflow workflow:
   title: transition group from draft to draft using the collection - collection_workflow workflow
-transition group from blacklisted to validated using the solution - solution_workflow workflow:
-  title: transition group from blacklisted to validated using the solution - solution_workflow workflow
+transition group from blacklisted to published using the solution - solution_workflow workflow:
+  title: transition group from blacklisted to published using the solution - solution_workflow workflow
 transition group from blacklisted to proposed using the solution - solution_workflow workflow:
   title: transition group from blacklisted to proposed using the solution - solution_workflow workflow
 transition group from blacklisted to draft using the solution - solution_workflow workflow:
   title: transition group from blacklisted to draft using the solution - solution_workflow workflow
-transition group from archival_request to validated using the collection - collection_workflow workflow:
-  title: transition group from archival_request to validated using the collection - collection_workflow workflow
+transition group from archival_request to published using the collection - collection_workflow workflow:
+  title: transition group from archival_request to published using the collection - collection_workflow workflow
 transition group from archival_request to archived using the collection - collection_workflow workflow:
   title: transition group from archival_request to archived using the collection - collection_workflow workflow
-transition group from __new__ to validated using the solution - solution_workflow workflow:
-  title: transition group from __new__ to validated using the solution - solution_workflow workflow
-transition group from __new__ to validated using the collection - collection_workflow workflow:
-  title: transition group from __new__ to validated using the collection - collection_workflow workflow
+transition group from __new__ to published using the solution - solution_workflow workflow:
+  title: transition group from __new__ to published using the solution - solution_workflow workflow
+transition group from __new__ to published using the collection - collection_workflow workflow:
+  title: transition group from __new__ to published using the collection - collection_workflow workflow
 transition group from __new__ to proposed using the solution - solution_workflow workflow:
   title: transition group from __new__ to proposed using the solution - solution_workflow workflow
 transition group from __new__ to proposed using the collection - collection_workflow workflow:
@@ -137,10 +137,10 @@ transition group from __new__ to draft using the solution - solution_workflow wo
   title: transition group from __new__ to draft using the solution - solution_workflow workflow
 transition group from __new__ to draft using the collection - collection_workflow workflow:
   title: transition group from __new__ to draft using the collection - collection_workflow workflow
-transition any node news from validated to validated using the community_content - node:pre_moderated workflow:
-  title: transition any node news from validated to validated using the community_content - node:pre_moderated workflow
-transition any node news from validated to validated using the community_content - node:post_moderated workflow:
-  title: transition any node news from validated to validated using the community_content - node:post_moderated workflow
+transition any node news from published to published using the community_content - node:pre_moderated workflow:
+  title: transition any node news from published to published using the community_content - node:pre_moderated workflow
+transition any node news from published to published using the community_content - node:post_moderated workflow:
+  title: transition any node news from published to published using the community_content - node:post_moderated workflow
 transition any node news from proposed to proposed using the community_content - node:pre_moderated workflow:
   title: transition any node news from proposed to proposed using the community_content - node:pre_moderated workflow
 transition any node news from proposed to proposed using the community_content - node:post_moderated workflow:
@@ -149,12 +149,12 @@ transition any node news from draft to draft using the community_content - node:
   title: transition any node news from draft to draft using the community_content - node:pre_moderated workflow
 transition any node news from draft to draft using the community_content - node:post_moderated workflow:
   title: transition any node news from draft to draft using the community_content - node:post_moderated workflow
-transition any node news from deletion_request to validated using the community_content - node:post_moderated workflow:
-  title: transition any node news from deletion_request to validated using the community_content - node:post_moderated workflow
-transition any node event from validated to validated using the community_content - node:pre_moderated workflow:
-  title: transition any node event from validated to validated using the community_content - node:pre_moderated workflow
-transition any node event from validated to validated using the community_content - node:post_moderated workflow:
-  title: transition any node event from validated to validated using the community_content - node:post_moderated workflow
+transition any node news from deletion_request to published using the community_content - node:post_moderated workflow:
+  title: transition any node news from deletion_request to published using the community_content - node:post_moderated workflow
+transition any node event from published to published using the community_content - node:pre_moderated workflow:
+  title: transition any node event from published to published using the community_content - node:pre_moderated workflow
+transition any node event from published to published using the community_content - node:post_moderated workflow:
+  title: transition any node event from published to published using the community_content - node:post_moderated workflow
 transition any node event from proposed to proposed using the community_content - node:pre_moderated workflow:
   title: transition any node event from proposed to proposed using the community_content - node:pre_moderated workflow
 transition any node event from proposed to proposed using the community_content - node:post_moderated workflow:
@@ -163,12 +163,12 @@ transition any node event from draft to draft using the community_content - node
   title: transition any node event from draft to draft using the community_content - node:pre_moderated workflow
 transition any node event from draft to draft using the community_content - node:post_moderated workflow:
   title: transition any node event from draft to draft using the community_content - node:post_moderated workflow
-transition any node event from deletion_request to validated using the community_content - node:post_moderated workflow:
-  title: transition any node event from deletion_request to validated using the community_content - node:post_moderated workflow
-transition any node document from validated to validated using the community_content - node:pre_moderated workflow:
-  title: transition any node document from validated to validated using the community_content - node:pre_moderated workflow
-transition any node document from validated to validated using the community_content - node:post_moderated workflow:
-  title: transition any node document from validated to validated using the community_content - node:post_moderated workflow
+transition any node event from deletion_request to published using the community_content - node:post_moderated workflow:
+  title: transition any node event from deletion_request to published using the community_content - node:post_moderated workflow
+transition any node document from published to published using the community_content - node:pre_moderated workflow:
+  title: transition any node document from published to published using the community_content - node:pre_moderated workflow
+transition any node document from published to published using the community_content - node:post_moderated workflow:
+  title: transition any node document from published to published using the community_content - node:post_moderated workflow
 transition any node document from proposed to proposed using the community_content - node:pre_moderated workflow:
   title: transition any node document from proposed to proposed using the community_content - node:pre_moderated workflow
 transition any node document from proposed to proposed using the community_content - node:post_moderated workflow:
@@ -177,12 +177,12 @@ transition any node document from draft to draft using the community_content - n
   title: transition any node document from draft to draft using the community_content - node:pre_moderated workflow
 transition any node document from draft to draft using the community_content - node:post_moderated workflow:
   title: transition any node document from draft to draft using the community_content - node:post_moderated workflow
-transition any node document from deletion_request to validated using the community_content - node:post_moderated workflow:
-  title: transition any node document from deletion_request to validated using the community_content - node:post_moderated workflow
-transition any node discussion from validated to validated using the community_content - node:pre_moderated workflow:
-  title: transition any node discussion from validated to validated using the community_content - node:pre_moderated workflow
-transition any node discussion from validated to validated using the community_content - node:post_moderated workflow:
-  title: transition any node discussion from validated to validated using the community_content - node:post_moderated workflow
+transition any node document from deletion_request to published using the community_content - node:post_moderated workflow:
+  title: transition any node document from deletion_request to published using the community_content - node:post_moderated workflow
+transition any node discussion from published to published using the community_content - node:pre_moderated workflow:
+  title: transition any node discussion from published to published using the community_content - node:pre_moderated workflow
+transition any node discussion from published to published using the community_content - node:post_moderated workflow:
+  title: transition any node discussion from published to published using the community_content - node:post_moderated workflow
 transition any node discussion from proposed to proposed using the community_content - node:pre_moderated workflow:
   title: transition any node discussion from proposed to proposed using the community_content - node:pre_moderated workflow
 transition any node discussion from proposed to proposed using the community_content - node:post_moderated workflow:
@@ -191,5 +191,5 @@ transition any node discussion from draft to draft using the community_content -
   title: transition any node discussion from draft to draft using the community_content - node:pre_moderated workflow
 transition any node discussion from draft to draft using the community_content - node:post_moderated workflow:
   title: transition any node discussion from draft to draft using the community_content - node:post_moderated workflow
-transition any node discussion from deletion_request to validated using the community_content - node:post_moderated workflow:
-  title: transition any node discussion from deletion_request to validated using the community_content - node:post_moderated workflow
+transition any node discussion from deletion_request to published using the community_content - node:post_moderated workflow:
+  title: transition any node discussion from deletion_request to published using the community_content - node:post_moderated workflow

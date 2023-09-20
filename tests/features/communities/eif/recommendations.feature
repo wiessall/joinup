@@ -7,7 +7,7 @@ Feature:
   Scenario: Recommendations page is only accessible through the EIF Toolbox solution.
     Given the following collection:
       | title | Test collection |
-      | state | validated       |
+      | state | published       |
     Given the following solution:
       | title           | Test solution                        |
       | collection      | Test collection                      |
@@ -15,7 +15,7 @@ Feature:
       | webdav creation | no                                   |
       | webdav url      | http://joinup.eu/solution/foo/webdav |
       | wiki            | http://example.wiki/foobar/wiki      |
-      | state           | validated                            |
+      | state           | published                            |
     When I am logged in as a moderator
     And I go to "/collection/test-collection/solution/test-solution"
     Then I should see the heading "Test solution"
@@ -26,7 +26,7 @@ Feature:
     # Visibility of recommendations page depends on the view access of the
     # parent solution. In order to avoid having two distinct scenario tags for
     # published and unpublished EIF Toolbox, transit the entity to the state
-    # that deletes the validated version of the entity.
+    # that deletes the published version of the entity.
     Given the workflow state of the "EIF Toolbox" solution is changed to "blacklisted"
     And I am not logged in
     When I go to "/collection/nifo-collection/solution/eif-toolbox"
@@ -37,7 +37,7 @@ Feature:
   Scenario: The recommendations page lists the recommendations links.
     Given I am not logged in
     And I go to the "EIF Toolbox" solution
-    When I click "Recommendations" in the "Header bottom" region
+    When I click "Recommendations" in the "Header" region
     Then I should see the heading "EIF recommendations"
 
     # Assert the full table.

@@ -38,7 +38,7 @@ Feature:
 
     Given the following collections:
       | title            | state     |
-      | Hotel California | validated |
+      | Hotel California | published |
 
     Given I am <role>
 

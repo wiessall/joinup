@@ -8,11 +8,11 @@ Feature:
     Given the following <group>s:
       | title           | state     |
       | Drafty things   | draft     |
-      | Validated tools | validated |
+      | Published tools | published |
     And custom_page content:
       | title        | body         | collection      | logo     | state     |
       | About means  | Sample text. | Drafty things   | logo.png | published |
-      | About places | Sample text. | Validated tools | logo.png | published |
+      | About places | Sample text. | Published tools | logo.png | published |
 
     # An anonymous user can see only the custom pages of the published
     # groups.

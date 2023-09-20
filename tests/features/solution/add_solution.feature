@@ -7,7 +7,7 @@ Feature: "Add solution" visibility options.
   Scenario: Required fields should be filled in
     Given the following collection:
       | title | Language parsers |
-      | state | validated        |
+      | state | published        |
     And I am logged in as a facilitator of the "Language parsers" collection
     And I go to the homepage of the "Language parsers" collection
     And I click "Add solution"
@@ -31,7 +31,7 @@ Feature: "Add solution" visibility options.
     Given the following collection:
       | title | Collection solution test |
       | logo  | logo.png                 |
-      | state | validated                |
+      | state | published                |
 
     When I am logged in as a moderator
     And I go to the homepage of the "Collection solution test" collection
@@ -57,7 +57,7 @@ Feature: "Add solution" visibility options.
     Given the following collection:
       | title | Belgian barista's |
       | logo  | logo.png          |
-      | state | validated         |
+      | state | published         |
     And the following owner:
       | name                 | type                         |
       | Organisation example | Company, Industry consortium |
@@ -162,7 +162,7 @@ Feature: "Add solution" visibility options.
     When I go to the homepage of the "Belgian barista's" collection
     Then I should see the heading "Belgian barista's"
     And I should see the link "Espresso is the solution"
-    # The proposed solution should not be visible since it's not yet validated.
+    # The proposed solution should not be visible since it's not yet published.
     But I should not see the link "V60 filter coffee solution"
 
     When I visit "/user"
@@ -179,7 +179,7 @@ Feature: "Add solution" visibility options.
     # @see issue ISAICP-3209
     Given the following collection:
       | title | Language parsers |
-      | state | validated        |
+      | state | published        |
     When I am logged in as a facilitator of the "Language parsers" collection
     And I go to the homepage of the "Language parsers" collection
     And I click "Add solution"
@@ -215,13 +215,13 @@ Feature: "Add solution" visibility options.
   Scenario: Create a solution with a name that already exists
     Given the following collections:
       | title              | state     |
-      | Ocean studies      | validated |
-      | Glacier monitoring | validated |
+      | Ocean studies      | published |
+      | Glacier monitoring | published |
     And the following solution:
       | title       | Climate change tracker                            |
       | description | Atlantic salmon arrived after the Little Ice Age. |
       | collection  | Ocean studies                                     |
-      | state       | validated                                         |
+      | state       | published                                         |
     And the following owner:
       | name                | type                             |
       | University of Basel | Academia/Scientific organisation |
@@ -287,7 +287,7 @@ Feature: "Add solution" visibility options.
       | title               | Cleaning solution                                 |
       | description         | Use on metal surfaces.                            |
       | owner               | Organisation example                              |
-      | state               | validated                                         |
+      | state               | published                                         |
       | solution type       | Non-binding Instrument, Service Discovery Service |
       | topic               | Employment and Support Allowance                  |
       | contact information | Invisible Man                                     |
