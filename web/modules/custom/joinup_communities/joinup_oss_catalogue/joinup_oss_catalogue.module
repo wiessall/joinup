@@ -28,3 +28,16 @@ function joinup_oss_catalogue_entity_bundle_info_alter(array &$bundles): void {
     $bundles['node']['oss_solution']['class'] = JoinupOssSolution::class;
   }
 }
+
+/**
+ * Implements hook_preprocess_facets_item_list__checkbox__oss_source().
+ */
+function joinup_oss_catalogue_preprocess_facets_item_list__checkbox__oss_source(array &$variables): void {
+  $descriptions = \Drupal::service('plugin.manager.eu_oss_catalogue.provider')->getDefinitionsAsOptions('description');
+  foreach ($variables['items'] as &$item) {
+    $provider = $item['value']['#attributes']['data-drupal-facet-item-value'];
+    if ($provider && isset($descriptions[$provider])) {
+      $item['attributes']['title'] = $descriptions[$provider];
+    }
+  }
+}
