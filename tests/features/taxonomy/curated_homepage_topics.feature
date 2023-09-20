@@ -171,7 +171,7 @@ Feature:
   Scenario: Description and summary are displayed accordingly.
     Given news content:
       | title  | headline | state     |
-      | News 1 | News 1   | validated |
+      | News 1 | News 1   | published |
     And the following topics are enabled in the homepage:
       | Economy and Welfare     |
       | Info                    |
@@ -205,7 +205,7 @@ Feature:
   Scenario: Lists of configurable content can be added in the page of the topic meta entity.
     Given news content:
       | title  | headline | state     |
-      | News 1 | News 1   | validated |
+      | News 1 | News 1   | published |
     And the following topics are enabled in the homepage:
       | Economy and Welfare     |
       | Info                    |
@@ -272,7 +272,7 @@ Feature:
   Scenario: Long descriptions in topic inner page should be partially hidden.
     Given news content:
       | title  | headline | state     |
-      | News 1 | News 1   | validated |
+      | News 1 | News 1   | published |
     And the following topics are enabled in the homepage:
       | Economy and Welfare     |
       | Info                    |
@@ -307,15 +307,15 @@ Feature:
   Scenario: Regression test to ensure order of entities.
     Given news content:
       | title  | headline | body              | state     | created    | changed    | topic     |
-      | News 1 | News 1   | Test              | validated | 01-01-2023 | 03-02-2023 | E-justice |
-      | News 2 | News 2   | Test              | validated | 02-01-2023 | 02-02-2023 | E-justice |
-      | News 3 | News 3   | Test              | validated | 03-01-2023 | 01-02-2023 | E-justice |
-      | News 4 | News 4   | Should not appear | validated | 04-01-2023 | 01-01-2023 | E-health  |
+      | News 1 | News 1   | Test              | published | 01-01-2023 | 03-02-2023 | E-justice |
+      | News 2 | News 2   | Test              | published | 02-01-2023 | 02-02-2023 | E-justice |
+      | News 3 | News 3   | Test              | published | 03-01-2023 | 01-02-2023 | E-justice |
+      | News 4 | News 4   | Should not appear | published | 04-01-2023 | 01-01-2023 | E-health  |
     And event content:
       | title   | body | start date   | end date    | created    | state     | topic     |
-      | Event 1 | Test | now -8 days  | now -9 days | now -4 day | validated | E-justice |
-      | Event 2 | Test | now -9 days  | now -8 days | now -3 day | validated | E-justice |
-      | Event 3 | Test | now -10 days | now -7 days | now -5 day | validated | E-justice |
+      | Event 1 | Test | now -8 days  | now -9 days | now -4 day | published | E-justice |
+      | Event 2 | Test | now -9 days  | now -8 days | now -3 day | published | E-justice |
+      | Event 3 | Test | now -10 days | now -7 days | now -5 day | published | E-justice |
     And the following topics are enabled in the homepage:
       | Economy and Welfare |
       | E-justice           |
@@ -453,22 +453,22 @@ Feature:
       | type        | should     | list style | state     |
       | custom_page | should     | list       | published |
       | custom_page | should     | grid       | published |
-      | news        | should     | list       | validated |
-      | news        | should     | grid       | validated |
-      | event       | should     | list       | validated |
-      | event       | should     | grid       | validated |
-      | document    | should     | list       | validated |
-      | document    | should     | grid       | validated |
+      | news        | should     | list       | published |
+      | news        | should     | grid       | published |
+      | event       | should     | list       | published |
+      | event       | should     | grid       | published |
+      | document    | should     | list       | published |
+      | document    | should     | grid       | published |
       # Discussions don't have logos.
-      | discussion  | should not | list       | validated |
-      | discussion  | should not | grid       | validated |
+      | discussion  | should not | list       | published |
+      | discussion  | should not | grid       | published |
 
   @javascript
   Scenario: Up to 4 topics should be shown for tile-two view modes.
     Given news content:
       | title  | headline | body             | state     | created    | changed    | topic                                                                    |
-      | News 1 | News 1   | Test             | validated | 01-01-2023 | 03-02-2023 | E-justice, Finance in EU, Supplier exchange, HR, Statistics and Analysis |
-      | News 2 | News 2   | Test longer body | validated | 02-01-2023 | 03-02-2023 | E-justice, Finance in EU, Supplier exchange, Statistics and Analysis     |
+      | News 1 | News 1   | Test             | published | 01-01-2023 | 03-02-2023 | E-justice, Finance in EU, Supplier exchange, HR, Statistics and Analysis |
+      | News 2 | News 2   | Test longer body | published | 02-01-2023 | 03-02-2023 | E-justice, Finance in EU, Supplier exchange, Statistics and Analysis     |
     And the following topics are enabled in the homepage:
       | E-justice |
 
@@ -509,7 +509,7 @@ Feature:
   Scenario: A configurable listing with no results should not print its title.
     Given news content:
       | title  | headline | state     |
-      | News 1 | News 1   | validated |
+      | News 1 | News 1   | published |
     And the following topics are enabled in the homepage:
       | E-justice |
     And I am logged in as a moderator

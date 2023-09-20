@@ -7,17 +7,17 @@ Feature:
     Given collection:
       | uri   | http://data.europa.eu/w21/8e30f798-ff2b-478b-9c09-5ed5a63b4c8c |
       | title | Interoperable Europe                                           |
-      | state | validated                                                      |
+      | state | published                                                      |
       | topic | Demography                                                     |
 
   Scenario: Test that carousels content listing options are working correctly.
     Given the following collections:
       | title       | state     |
-      | Carousel c1 | validated |
+      | Carousel c1 | published |
     And news content:
       | title       | collection           | content       | state     |
-      | Some news 1 | Interoperable Europe | Some content. | validated |
-      | Some news 2 | Carousel c1          | Come content. | validated |
+      | Some news 1 | Interoperable Europe | Some content. | published |
+      | Some news 2 | Carousel c1          | Come content. | published |
     And custom_page content:
       | title         | collection  | state     |
       | News carousel | Interoperable Europe | published |
@@ -33,7 +33,7 @@ Feature:
   Scenario: Test that carousels with specific content is working correctly.
     Given the following collections:
       | title       | state     |
-      | Carousel c1 | validated |
+      | Carousel c1 | published |
     And custom_page content:
       | title       | collection           | content       | state     |
       | Some page 1 | Interoperable Europe | Some content. | published |
@@ -89,9 +89,9 @@ Feature:
   Scenario: Carousels should be ordered by creation date by default.
     Given news content:
       | title       | collection           | content       | state     | created    |
-      | Some news 1 | Interoperable Europe | Some content. | validated | 2 day ago  |
-      | Some news 2 | Interoperable Europe | Some content. | validated | 3 days ago |
-      | Some news 3 | Interoperable Europe | Some content. | validated | 1 days ago |
+      | Some news 1 | Interoperable Europe | Some content. | published | 2 day ago  |
+      | Some news 2 | Interoperable Europe | Some content. | published | 3 days ago |
+      | Some news 3 | Interoperable Europe | Some content. | published | 1 days ago |
     And custom_page content:
       | title                | collection           | state     |
       | A carousel with news | Interoperable Europe | published |
@@ -107,9 +107,9 @@ Feature:
   Scenario: Test also that events, when listed alone, are sorted by event date.
     Given event content:
       | title        | collection           | content       | state     | created    | start date | end date   |
-      | Some event 1 | Interoperable Europe | Some content. | validated | 2 day ago  | 5 day ago  | 4 day ago  |
-      | Some event 2 | Interoperable Europe | Some content. | validated | 3 days ago | 6 days ago | 5 days ago |
-      | Some event 3 | Interoperable Europe | Some content. | validated | 1 days ago | 7 days ago | 6 days ago |
+      | Some event 1 | Interoperable Europe | Some content. | published | 2 day ago  | 5 day ago  | 4 day ago  |
+      | Some event 2 | Interoperable Europe | Some content. | published | 3 days ago | 6 days ago | 5 days ago |
+      | Some event 3 | Interoperable Europe | Some content. | published | 1 days ago | 7 days ago | 6 days ago |
     And custom_page content:
       | title           | collection           | state     |
       | Events carousel | Interoperable Europe | published |

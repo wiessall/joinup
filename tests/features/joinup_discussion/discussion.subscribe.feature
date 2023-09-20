@@ -7,7 +7,7 @@ Feature: Following discussions
   Background:
     Given the following collection:
       | title | Dairy products |
-      | state | validated      |
+      | state | published      |
     And user:
       | Username | Dr. Hans Zarkov  |
       | E-mail   | hans@example.com |
@@ -16,7 +16,7 @@ Feature: Following discussions
       | Dairy products | Dr. Hans Zarkov |
     And discussion content:
       | title       | body                                                             | collection     | state     | author          |
-      | Rare Butter | I think that the rarest butter out there is the milky way butter | Dairy products | validated | Dr. Hans Zarkov |
+      | Rare Butter | I think that the rarest butter out there is the milky way butter | Dairy products | published | Dr. Hans Zarkov |
       | Rare Whey   | Whey is the liquid remaining after milk has been curdled.        | Dairy products | draft     | Dr. Hans Zarkov |
     Then the "Rare butter" discussion should have 0 subscribers
 
@@ -133,7 +133,7 @@ Feature: Following discussions
     And I press "Unarchive"
     And 0 e-mail should have been sent
 
-    # If the discussion is moved from 'validated' to any other state, no
+    # If the discussion is moved from 'published' to any other state, no
     # notification will be sent, regardless if a relevant field is changed.
     Given I mark all emails as read
     And I am logged in as a moderator
@@ -173,7 +173,7 @@ Feature: Following discussions
     # Now check the notifications sent for a published discussion.
     Given discussion content:
       | title     | body                                                   | collection     | state     | author          |
-      | Rare feta | Made from milk from the exclusive Manx Loaghtan sheep. | Dairy products | validated | Dr. Hans Zarkov |
+      | Rare feta | Made from milk from the exclusive Manx Loaghtan sheep. | Dairy products | published | Dr. Hans Zarkov |
     And discussion subscriptions:
       | username    | title     |
       | follower    | Rare feta |
