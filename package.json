@@ -10,6 +10,7 @@
     "cross-env": "7.0.3",
     "del-cli": "^4.0.1",
     "eslint-config-airbnb": "^18.2.1",
+    "eslint-config-airbnb-base": "^15.0.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-import": "^2.24.2",
     "eslint-plugin-jsdoc": "^39.3.24",
