@@ -7,6 +7,7 @@
 
 declare(strict_types = 1);
 
+use Drupal\Core\Template\Attribute;
 use Drupal\interoperable_europe\InteroperableEuropeCollectionInterface;
 use Drupal\rdf_entity\RdfInterface;
 use Drupal\topic\Entity\TopicMetaEntityInterface;
@@ -158,4 +159,39 @@ function ventuno_preprocess_container(array &$variables): void {
 function ventuno_preprocess_container__facet_region__top(array &$variables): void {
   $classes = 'd-flex align-items-baseline border-bottom my-5 flex-wrap justify-content-between';
   $variables['attributes']['class'][] = $classes;
+}
+
+/**
+ * Implements hook_preprocess_HOOK().
+ */
+/**
+ * Implements hook_theme_suggestions_HOOK_alter() for layout.
+ */
+
+/**
+ * Implements hook_preprocess().
+ */
+function ventuno_preprocess_layout(&$variables) {
+  $base = 'l-ventuno--' . $variables['layout']->id();
+  $bases[] = $base;
+  if (!empty($variables['content']['#settings']['label'])) {
+    $labelLower = mb_strtolower($variables['content']['#settings']['label']);
+    $labelVariant = preg_replace('/[\W]/', '_', $labelLower);
+    $labelVariant = preg_replace('/_+/', '-', $labelVariant);
+    $bases[] = "$base--section-label-{$labelVariant}";
+  }
+
+  $variables['attributes']['class'] = array_unique(
+    array_merge(
+      $variables['attributes']['class'] ?? [],
+      $bases,
+    )
+  );
+
+  foreach ($variables['region_attributes'] as $region_name => $attribute) {
+    assert($attribute instanceof Attribute);
+    foreach ($bases as $baseClass) {
+      $attribute->addClass("{$baseClass}__region-$region_name");
+    }
+  }
 }

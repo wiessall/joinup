@@ -7,7 +7,10 @@
 
 declare(strict_types = 1);
 
+use Drupal\Core\Entity\EntityTypeInterface;
+use Drupal\Core\Field\BaseFieldDefinition;
 use Drupal\joinup_oss_catalogue\Entity\JoinupOssSolution;
+use Drupal\joinup_oss_catalogue\Plugin\Field\ShortDescriptionWithFallback;
 
 /**
  * Implements hook_views_plugins_argument_alter().
@@ -40,4 +43,18 @@ function joinup_oss_catalogue_preprocess_facets_item_list__checkbox__oss_source(
       $item['attributes']['title'] = $descriptions[$provider];
     }
   }
+}
+
+/**
+ * Implements hook_entity_bundle_field_info().
+ */
+function joinup_oss_catalogue_entity_bundle_field_info(EntityTypeInterface $entity_type, $bundle, array $base_field_definitions): array {
+  $fields = [];
+  if ($entity_type->id() === 'node' && $bundle === 'oss_solution') {
+    $fields['description'] = BaseFieldDefinition::create('string_long')
+      ->setLabel(t('Short description'))
+      ->setComputed(TRUE)
+      ->setClass(ShortDescriptionWithFallback::class);
+  }
+  return $fields;
 }
