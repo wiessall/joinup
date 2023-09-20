@@ -54,6 +54,9 @@
       background-color: $secondary;
     }
   }
+  & > .layout > .layout__region > .paragraph + .paragraph {
+    margin-block-start: $spacer;
+  }
 }
 // Make Layout Paragraph limits more evident to the user
 .lp-builder:not(.is-navigating) .paragraph--layout.js-lpb-component:hover,
