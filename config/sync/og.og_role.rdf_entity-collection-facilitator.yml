@@ -69,6 +69,7 @@ permissions:
   - 'invite facilitators'
   - 'invite users to discussions'
   - 'manage group announcements'
+  - 'manage group content'
   - 'manage members'
   - 'pin group content'
   - 'request collection archival'
