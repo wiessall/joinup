@@ -14,7 +14,7 @@ Feature: Document API
       | logo             | logo.png                 |
       | moderation       | yes                      |
       | content creation | facilitators and authors |
-      | state            | validated                |
+      | state            | published                |
     And document content:
       | title    | document type | short title | body               | collection           |
       | JD title | Document      | Short       | Dummy description. | Joinup document name |

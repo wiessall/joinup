@@ -4,7 +4,7 @@ Feature: Pool paragraph tests.
   Background:
     Given the following collections:
       | title           | state     |
-      | Poll collection | validated |
+      | Poll collection | published |
 
   Scenario: Anonymous user is asked to log in if they attempt to vote
     Given the following polls:
