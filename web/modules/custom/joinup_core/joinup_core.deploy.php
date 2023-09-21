@@ -90,7 +90,7 @@ function joinup_core_deploy_109702(): void {
     ->load(OssCatalogueCollectionInterface::COLLECTION_ENTITY_ID);
 
   $collection
-    ?->set('field_ar_state', 'validated')
+    ?->set('field_ar_state', 'published')
       ->set('path', ['alias' => '/eu-oss-catalogue', 'pathauto' => 0])
       ->save();
 }
