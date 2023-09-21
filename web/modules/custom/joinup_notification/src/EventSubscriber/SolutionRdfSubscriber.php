@@ -52,7 +52,7 @@ use Drupal\solution\Entity\SolutionInterface;
  *   Recipients: moderator
  * Template 17: sol_deletion_by_moderator
  *   Operation: delete
- *   Source state: validated, proposed
+ *   Source state: published, proposed
  *   Actor: moderator
  *   Recipients: owner
  * @codingStandardsIgnoreEnd
@@ -275,7 +275,7 @@ class SolutionRdfSubscriber extends NotificationSubscriberBase {
    */
   protected function notificationPropose(): void {
     switch ($this->fromState) {
-      case 'validated':
+      case 'published':
         $user_data = [
           'og_roles' => [
             'rdf_entity-solution-administrator' => [

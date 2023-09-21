@@ -84,7 +84,7 @@ class SolutionAffiliationTest extends KernelTestBase {
       'rid' => 'solution',
       'id' => 'http://example.com/solution',
       'label' => 'Test solution',
-      'field_is_state' => 'validated',
+      'field_is_state' => 'published',
     ])->save();
   }
 
@@ -180,9 +180,9 @@ class SolutionAffiliationTest extends KernelTestBase {
    */
   public function affiliationProvider(): array {
     return [
-      ['validated', 'validated'],
-      ['validated', 'draft'],
-      ['draft', 'validated'],
+      ['published', 'published'],
+      ['published', 'draft'],
+      ['draft', 'published'],
       ['draft', 'draft'],
     ];
   }
@@ -195,7 +195,7 @@ class SolutionAffiliationTest extends KernelTestBase {
       'rid' => 'collection',
       'id' => "http://example.com/collection/1",
       'label' => "Collection 1",
-      'field_ar_state' => 'validated',
+      'field_ar_state' => 'published',
     ])->save();
 
     $solution = Rdf::create([

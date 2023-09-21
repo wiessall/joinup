@@ -14,7 +14,7 @@ Feature: OSS catalogue search
     Given collection:
       | uri   | http://data.europa.eu/w21/6d621a47-71ce-4f1a-90e2-8859403d3ecd |
       | title | EU Open Source Solutions Catalogue                             |
-      | state | validated                                                      |
+      | state | published                                                      |
 
     When I visit the OSS search page
     Then I see the text "EU Open Source Solutions Catalogue" in the "Header" region
@@ -31,11 +31,11 @@ Feature: OSS catalogue search
     Then I visit the OSS search page
 
     # Check the group collection header
-    When I see the text "EU Open Source Solutions Catalogue" in the "Header" region
+    And I see the text "EU Open Source Solutions Catalogue" in the "Header" region
     And I see the text "5 Open Source Software Solutions" in the "Header" region
 
     # Check main area
-    When I should see the text "SEARCH RESULTS (5)"
+    And I should see the text "SEARCH RESULTS (5)"
 
     # Check tiles.
     And I should see the "Django-MDQ" tile
@@ -49,7 +49,8 @@ Feature: OSS catalogue search
     # Check facets.
     And the "OSS category" checkbox facet should allow selecting the following values "application-development (1),content-management (1),data-analytics (1),data-collection (2),digital-asset-management (2),it-development (1)"
     And the "OSS development status" checkbox facet should allow selecting the following values "Beta (1),Development (1),Obsolete (1),Stable (2)"
-    And the "OSS catalog" checkbox facet should allow selecting the following values "developers_italia"
+    And the "OSS catalog" checkbox facet should allow selecting the following values "Developers Italia"
+    And the page should contain the html text "Italian National OSS Catalogue, by https://developers.italia.it website."
 
     # Check facet filtering.
     Then I click "application-development (1)"

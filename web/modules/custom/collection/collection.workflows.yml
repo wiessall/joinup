@@ -20,8 +20,8 @@ collection_workflow:
       label: Draft
     proposed:
       label: Proposed
-    validated:
-      label: Validated
+    published:
+      label: Published
     archival_request:
       label: Request archival
     archived:
@@ -29,19 +29,19 @@ collection_workflow:
   transitions:
     draft:
       label: Save as draft
-      from: [__new__, proposed, validated]
+      from: [__new__, proposed, published]
       to: draft
     propose:
       label: Propose
-      from: [__new__, draft, validated]
+      from: [__new__, draft, published]
       to: proposed
     validate:
       label: Publish
       from: [__new__, draft, proposed, archival_request]
-      to: validated
+      to: published
     request_archival:
       label: Request archival
-      from: [validated]
+      from: [published]
       to: archival_request
     archive:
       label: Archive
