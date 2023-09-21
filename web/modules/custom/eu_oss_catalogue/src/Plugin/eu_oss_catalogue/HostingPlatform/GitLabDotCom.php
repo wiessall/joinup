@@ -26,7 +26,7 @@ class GitLabDotCom extends EuOssCatalogueGitHostingPlatformPluginBase {
    *
    * @const string
    */
-  public const GITLAB_BASE_URL = 'gitlab.com';
+  final protected const GITLAB_BASE_URL = 'gitlab.com';
 
   /**
    * Static cache for GitLab client.
@@ -262,7 +262,7 @@ class GitLabDotCom extends EuOssCatalogueGitHostingPlatformPluginBase {
    *   A code hosting platform result instance.
    */
   protected function createHostingPlatformResult(string $namespace, array $project): HostingPlatformResult {
-    $host = $this->getConfiguration()['url'] ?? 'https://gitlab.com';
+    $host = $this->getConfiguration()['url'] ?? ('https://' . self::GITLAB_BASE_URL);
     return new HostingPlatformResult(
       $namespace,
       $project['path'],

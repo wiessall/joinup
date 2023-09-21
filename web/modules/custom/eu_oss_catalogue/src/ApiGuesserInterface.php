@@ -18,8 +18,8 @@ interface ApiGuesserInterface {
    *   Whether cache should be used or not. Defaults to TRUE.
    *
    * @return string|null
-   *   The ID of the hostign platform plugin which is probably able to handle
-   *   the given git URL, NULL otherwise.
+   *   The ID of the hosting platform plugin which is probably able to handle
+   *   the given Git URL, NULL otherwise.
    */
   public function getHostingPlatformPluginId(string $repositoryUrl, bool $useCache = TRUE): ?string;
 

@@ -22,8 +22,6 @@ abstract class EuOssCatalogueGitHostingPlatformPluginBase extends EuOssCatalogue
 
   /**
    * The HTTP client, configured not to throw HTTP errors.
-   *
-   * @var \Psr\Http\Client\ClientInterface|\GuzzleHttp\Client
    */
   protected ClientInterface $httpClient;
 
@@ -49,8 +47,9 @@ abstract class EuOssCatalogueGitHostingPlatformPluginBase extends EuOssCatalogue
     protected Settings $settings,
   ) {
     parent::__construct($configuration, $pluginId, $pluginDefinition);
-
-    $this->httpClient = $clientFactory->fromOptions([RequestOptions::HTTP_ERRORS => FALSE]);
+    $this->httpClient = $clientFactory->fromOptions([
+      RequestOptions::HTTP_ERRORS => FALSE,
+    ]);
   }
 
   /**

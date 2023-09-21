@@ -35,7 +35,7 @@ class GitHub extends EuOssCatalogueGitHostingPlatformPluginBase {
    *
    * @const string
    */
-  public const GITHUB_BASE_URL = 'github.com';
+  private const GITHUB_BASE_URL = 'github.com';
 
   /**
    * Static cache for the GitHub client.
@@ -181,7 +181,7 @@ class GitHub extends EuOssCatalogueGitHostingPlatformPluginBase {
         yield new HostingPlatformResult(
           $node['owner']['login'],
           $node['name'],
-          "https://github.com/{$node['owner']['login']}/{$node['name']}",
+          'https://' . self::GITHUB_BASE_URL . "/{$node['owner']['login']}/{$node['name']}",
           $node['defaultBranchRef']['name'],
           $node['id'],
           $node['description'],
