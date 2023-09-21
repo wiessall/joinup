@@ -77,6 +77,7 @@
   - Drupal\Tests\spdx\Behat\SpdxContext
   - Drupal\joinup\Context\FeatureContext
   - LoversOfBehat\TableExtension\Context\TableContext
+  - Drupal\joinup\Context\ContentTypeContext
 
 default:
   # Suites to run with the site installed with content.
