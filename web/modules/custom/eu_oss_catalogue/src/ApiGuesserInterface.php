@@ -20,6 +20,9 @@ interface ApiGuesserInterface {
    * @return string|null
    *   The ID of the hosting platform plugin which is probably able to handle
    *   the given Git URL, NULL otherwise.
+   *
+   * @throws \InvalidArgumentException
+   *   In case the provided URL string isn't a Git URL.
    */
   public function getHostingPlatformPluginId(string $repositoryUrl, bool $useCache = TRUE): ?string;
 
