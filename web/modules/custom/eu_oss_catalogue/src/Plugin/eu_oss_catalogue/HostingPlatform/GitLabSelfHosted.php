@@ -64,8 +64,7 @@ class GitLabSelfHosted extends GitLabDotCom {
     if (
       !($gitUri = GitUri::fromUriString($repositoryUrl)) ||
       $gitUri->host === static::GITLAB_BASE_URL ||
-      !$gitUri->namespace ||
-      !$gitUri->package
+      !$gitUri->isComplete()
     ) {
       return FALSE;
     }
