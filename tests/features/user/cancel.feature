@@ -36,10 +36,10 @@ Feature:
   Scenario: A moderator deletes a user using the administrative UI.
     Given the following collection:
       | title | Test collection      |
-      | state | validated |
+      | state | published |
     And news content:
       | title     | author       | collection      | state     |
-      | News item | alicia__1997 | Test collection | validated |
+      | News item | alicia__1997 | Test collection | published |
 
     Given I am logged in as a moderator
     And I click "People"
@@ -76,16 +76,16 @@ Feature:
   Scenario: Cancel own account.
     Given the following collection:
       | title | Test collection      |
-      | state | validated |
+      | state | published |
     And news content:
       | title     | author       | collection      | state     |
-      | News item | alicia__1997 | Test collection | validated |
+      | News item | alicia__1997 | Test collection | published |
     And document content:
       | title | author       | collection      | state     |
-      | Docky | alicia__1997 | Test collection | validated |
+      | Docky | alicia__1997 | Test collection | published |
     And discussion content:
       | title  | collection      | state     |
-      | Disqus | Test collection | validated |
+      | Disqus | Test collection | published |
     And comments:
       | subject  | field_body   | author       | parent |
       | Awesome! | Let's use it | alicia__1997 | Disqus |

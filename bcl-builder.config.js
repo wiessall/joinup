@@ -1150,6 +1150,21 @@ module.exports = {
         sourceMap: "file",
       },
     },
+    {
+      entry: path.resolve(
+        outputFolder,
+        `${ventuno}src/scss/components/oss-solution-full.tmp.scss`
+      ),
+      dest: path.resolve(
+        outputFolder,
+        `${ventuno}assets/css/oss-solution-full.tmp.css`
+      ),
+      options: {
+        includePaths,
+        minify: true,
+        sourceMap: "file",
+      },
+    },
   ],
   copy: [
     // Bootstrap: fonts

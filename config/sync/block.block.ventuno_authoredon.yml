@@ -11,8 +11,8 @@ dependencies:
     - ventuno
 id: ventuno_authoredon
 theme: ventuno
-region: sidebar
-weight: -26
+region: content
+weight: -27
 provider: null
 plugin: 'facet_block:authoredon'
 settings:

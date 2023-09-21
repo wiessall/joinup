@@ -7,10 +7,10 @@ Feature: Creating comments through the API
   Scenario Outline: Creating comments on community content
     Given collection:
       | title | Hashrate, shares & workers |
-      | state | validated                  |
+      | state | published                  |
     And <content type> content:
       | title                      | body                                  | collection                 | state     |
-      | Current effective hashrate | Ethash is the proof of work algorithm | Hashrate, shares & workers | validated |
+      | Current effective hashrate | Ethash is the proof of work algorithm | Hashrate, shares & workers | published |
     And user:
       | Username | Vasundhara Guadarrama |
     And comments:

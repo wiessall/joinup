@@ -19,7 +19,7 @@ Feature: As a user of the website
       | title                | description                | logo     | owner   | contact information | solution type | state        | topic       |
       | Professional Dreams  | Azure ship                 | logo.png | Mr Crab | Crusty crab         | Business      | draft        | E-inclusion |
       | The Falling Swords   | The Falling Swords         | logo.png | Mr Crab | Crusty crab         | Business      | proposed     | E-inclusion |
-      | Flight of Night      | Rose of Doors              | logo.png | Mr Crab | Crusty crab         | Business      | validated    | E-inclusion |
+      | Flight of Night      | Rose of Doors              | logo.png | Mr Crab | Crusty crab         | Business      | published    | E-inclusion |
       | Teacher in the Twins | The Guardian of the Stream | logo.png | Mr Crab | Crusty crab         | Business      | needs update | E-inclusion |
       | Missing Fire         | Flames in the Swords       | logo.png | Mr Crab | Crusty crab         | Business      | blacklisted  | E-inclusion |
     And the following solution user memberships:
@@ -43,7 +43,7 @@ Feature: As a user of the website
     When I am logged in as a "facilitator" of the "Flight of Night" solution
     And I go to the homepage of the "Flight of Night" solution
     Then I should see the heading "Flight of Night"
-    # Since it's validated, the normal view is the published view and the
+    # Since it's published, the normal view is the published view and the
     # "View draft" should not be shown.
     And I should not see the link "View Draft"
     And I should not see the following warning messages:
@@ -52,7 +52,7 @@ Feature: As a user of the website
 
     # Edit as facilitator and save as draft.
     When I click "Edit"
-    Then the current workflow state should be "Validated"
+    Then the current workflow state should be "Published"
     When I fill in "Title" with "Flight of Day"
     And I press "Save as draft"
 

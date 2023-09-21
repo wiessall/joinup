@@ -18,6 +18,7 @@ use Drupal\cas\Event\CasPreLoginEvent;
 use Drupal\cas\Event\CasPreRegisterEvent;
 use Drupal\cas\Event\CasPreValidateEvent;
 use Drupal\cas\Service\CasHelper;
+use Drupal\externalauth\Authmap;
 use Drupal\user\UserDataInterface;
 use Drupal\user\UserInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -61,6 +62,8 @@ class JoinupEuLoginCasEventsSubscriber implements EventSubscriberInterface {
    *   The messenger service.
    * @param \Drupal\Core\State\StateInterface $state
    *   The state service.
+   * @param \Drupal\externalauth\Authmap $authmap
+   *   The authmap service.
    */
   public function __construct(
     ConfigFactoryInterface $configFactory,
@@ -69,6 +72,7 @@ class JoinupEuLoginCasEventsSubscriber implements EventSubscriberInterface {
     RequestStack $requestStack,
     protected MessengerInterface $messenger,
     protected StateInterface $state,
+    protected Authmap $authmap
   ) {
     $this->settings = $configFactory->get('joinup_eulogin.settings');
     $this->casSettings = $configFactory->get('cas.settings');
@@ -81,7 +85,10 @@ class JoinupEuLoginCasEventsSubscriber implements EventSubscriberInterface {
   public static function getSubscribedEvents(): array {
     return [
       CasHelper::EVENT_PRE_VALIDATE => 'alterValidationUrl',
-      CasHelper::EVENT_POST_VALIDATE => 'prepareAttributes',
+      CasHelper::EVENT_POST_VALIDATE => [
+        ['prepareAttributes'],
+        ['blockedUserMessage'],
+      ],
       CasHelper::EVENT_PRE_REGISTER => [
         ['disableRegistration', 1000],
         ['markAsNewAccountRegistration'],
@@ -132,6 +139,19 @@ class JoinupEuLoginCasEventsSubscriber implements EventSubscriberInterface {
     foreach ($xml->xpath('//cas:authenticationSuccess/*') as $element) {
       $event->getCasPropertyBag()->setAttribute($element->getName(), $element->__toString());
     };
+  }
+
+  /**
+   * Displays a message to blocked users.
+   *
+   * @param \Drupal\cas\Event\CasPostValidateEvent $event
+   *   The CAS post-validate event object.
+   */
+  public function blockedUserMessage(CasPostValidateEvent $event): void {
+    $uid = $this->authmap->getUid($event->getCasPropertyBag()->getUsername(), 'cas');
+    if ($uid && ($user = $this->entityTypeManager->getStorage('user')->load($uid)) && $user->isBlocked()) {
+      $this->messenger->addError('You cannot sign in yet. Your Joinup account is currently being verified. You will be notified by email once it is activated.');
+    }
   }
 
   /**

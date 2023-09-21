@@ -84,7 +84,7 @@ class HostingPlatformConfigForm extends EntityForm {
     $form['platformId'] = [
       '#type' => 'select',
       '#title' => $this->t('Code hosting platform'),
-      '#options' => $this->platformManager->getDefinitionsAsOptions(),
+      '#options' => $this->platformManager->getDefinitionsAsOptions('label'),
       '#default_value' => $platformId,
       '#required' => TRUE,
       '#ajax' => ['callback' => '::ajaxSubmit'],
