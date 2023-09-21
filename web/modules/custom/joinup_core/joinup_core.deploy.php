@@ -114,6 +114,8 @@ function joinup_core_deploy_109703(): void {
 function joinup_core_deploy_109704(): void {
   /** @var \Drupal\Core\Extension\ModuleInstallerInterface $moduleInstaller */
   $moduleInstaller = \Drupal::service('module_installer');
+  /** @var \Drupal\Core\Entity\EntityRepositoryInterface $entityRepository */
+  $entityRepository = \Drupal::service('entity.repository');
 
   // Delete faulty meta entity.
   $entityRepository
