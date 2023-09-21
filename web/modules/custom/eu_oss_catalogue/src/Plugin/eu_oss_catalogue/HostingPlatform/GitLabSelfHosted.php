@@ -63,7 +63,7 @@ class GitLabSelfHosted extends GitLabDotCom {
   public function isHostingPlatformForUrl(string $repositoryUrl): bool {
     if (
       !($gitUri = GitUri::fromUriString($repositoryUrl)) ||
-      $gitUri->host === GitLabDotCom::GITLAB_BASE_URL ||
+      $gitUri->host === static::GITLAB_BASE_URL ||
       !$gitUri->namespace ||
       !$gitUri->package
     ) {
@@ -72,17 +72,10 @@ class GitLabSelfHosted extends GitLabDotCom {
 
     $this->configuration['url'] = "$gitUri->scheme://$gitUri->host/";
     try {
-      $response = $this->getClient()->graphql()
-        ->execute(<<<EOS
-{
-  project(fullPath: $gitUri->namespace/$gitUri->package) {
-    repository {
-     exists
-    }
-  }
-}
-EOS
-      );
+      $fullPath = "$gitUri->namespace/$gitUri->package";
+      $query = (new Query('project', ['fullPath' => $fullPath]));
+      $query->repository([])->use('exists');
+      $response = $this->getClient()->graphql()->execute($query->toString());
     }
     catch (\Exception $e) {
       return FALSE;
