@@ -5,7 +5,7 @@ Feature: Freeze comments on archived content
   Background:
     Given the following collections:
       | title             | state     |
-      | Gossip collection | validated |
+      | Gossip collection | published |
     And users:
       | Username        | E-mail                      | Roles | First name | Family name |
       | Sons of anarchy | sons-of-anarchy@example.com |       | Sons       | Anarchy     |

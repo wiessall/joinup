@@ -9,8 +9,8 @@ dependencies:
     - ventuno
 id: ventuno_unpublished_draft
 theme: ventuno
-region: content_bottom
-weight: -22
+region: content
+weight: 5
 provider: null
 plugin: entity_unpublished
 settings:
