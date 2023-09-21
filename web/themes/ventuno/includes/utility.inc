@@ -7,7 +7,6 @@
 
 declare(strict_types = 1);
 
-use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\joinup_bundle_class\DescriptionInterface;
 use Drupal\joinup_bundle_class\LogoInterface;
 use Drupal\joinup_community_content\Entity\CommunityContentInterface;
