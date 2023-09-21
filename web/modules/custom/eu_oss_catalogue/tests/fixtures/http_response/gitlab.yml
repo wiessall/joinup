@@ -516,4 +516,5 @@
 'self-hosted.gitlab.example.com/subpath ec-europa\\\/digit-joinup-reference':
   data:
     project:
-      name: 'ec-europa/digit-joinup-reference'
+      repository:
+        exists: true
