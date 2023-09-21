@@ -7,7 +7,6 @@ namespace Drupal\Tests\eu_oss_catalogue\Kernel;
 use Drupal\Core\Logger\LoggerChannelInterface;
 use Drupal\KernelTests\KernelTestBase;
 use Drupal\eu_oss_catalogue\ApiGuesser;
-use Drupal\eu_oss_catalogue_test\Plugin\ServiceMock\Bitbucket;
 use Prophecy\Argument;
 use Psr\Log\LogLevel;
 
@@ -30,8 +29,6 @@ class ApiGuesserTest extends KernelTestBase {
 
   /**
    * The tested API Guesser service.
-   *
-   * @var \Drupal\eu_oss_catalogue\ApiGuesser
    */
   protected ApiGuesser $apiGuesser;
 
@@ -40,22 +37,6 @@ class ApiGuesserTest extends KernelTestBase {
    */
   public function setUp(): void {
     parent::setUp();
-
-    $this->container->get('state')->set(
-      Bitbucket::BITBUCKET_MOCK_STATE_KEY,
-      [
-        'self-hosted.bitbucket.example.com' => [
-          'atlassianlabs' => [
-            'docker-browse',
-          ],
-        ],
-        'bitbucket.org' => [
-          'ec-europa' => [
-            'digit-joinup-reference',
-          ],
-        ],
-      ]
-    );
 
     $this->apiGuesser = $this->container->get('eu_oss_catalogue.git_remote.api_guesser');
   }
@@ -157,15 +138,15 @@ class ApiGuesserTest extends KernelTestBase {
 
       // Bitbucket isn't yet implemented.
       'Bitbucket home' => [
-        'URL' => 'https://bitbucket.example.com/atlassianlabs/docker-browse',
+        'URL' => 'https://self-hosted.bitbucket.example.com/atlassianlabs/docker-browse',
         'Expected' => NULL,
       ],
       'Bitbucket HTTP URL' => [
-        'URL' => 'https://bitbucket.example.com/atlassianlabs/docker-browse.git',
+        'URL' => 'https://self-hosted.bitbucket.example.com/atlassianlabs/docker-browse.git',
         'Expected' => NULL,
       ],
       'Bitbucket SSH URL' => [
-        'URL' => 'git@bitbucket.example.com:atlassianlabs/docker-browse.git',
+        'URL' => 'git@self-hosted.bitbucket.example.com:atlassianlabs/docker-browse.git',
         'Expected' => NULL,
       ],
     ];
