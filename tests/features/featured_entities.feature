@@ -7,12 +7,12 @@ Feature: Featuring content site-wide
   Background:
     Given the following collections:
       | title                | state     | featured |
-      | Tidy Neutron         | validated | yes      |
-      | Reborn Eternal Gamma | validated | no       |
+      | Tidy Neutron         | published | yes      |
+      | Reborn Eternal Gamma | published | no       |
     And the following solutions:
       | title                         | collection           | state     | featured |
-      | Opensource neutron generators | Tidy Neutron         | validated | yes      |
-      | Gamma-sensible spectroscopy   | Reborn Eternal Gamma | validated | no       |
+      | Opensource neutron generators | Tidy Neutron         | published | yes      |
+      | Gamma-sensible spectroscopy   | Reborn Eternal Gamma | published | no       |
     And users:
       | Username        | E-mail                   | Roles     |
       | Niles Turner    | niles.turner@example.com |           |
@@ -29,8 +29,8 @@ Feature: Featuring content site-wide
   Scenario Outline: Moderators can feature and unfeature content site-wide.
     Given <content type> content:
       | title                               | collection   | state     | featured |
-      | Ionizing radiation types            | Tidy Neutron | validated | no       |
-      | Elementary particles standard model | Tidy Neutron | validated | yes      |
+      | Ionizing radiation types            | Tidy Neutron | published | no       |
+      | Elementary particles standard model | Tidy Neutron | published | yes      |
 
     When I am an anonymous user
     And I go to the homepage of the "Tidy Neutron" collection

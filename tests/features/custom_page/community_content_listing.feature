@@ -12,8 +12,8 @@ Feature:
       | E-mail      | jimmy.nine@ec-europa.example.eu |
     Given the following collections:
       | title      | logo     | state     |
-      | Nintendo64 | logo.png | validated |
-      | Emulators  | logo.png | validated |
+      | Nintendo64 | logo.png | published |
+      | Emulators  | logo.png | published |
     And custom_page content:
       | title               | collection | created           | body                               | state     | pinned |
       | Latest news listing | Nintendo64 | 2019-10-01 4:26am | You can find the latest news here. | published | no     |
@@ -21,16 +21,16 @@ Feature:
       | behavior_settings | a:3:{s:17:"layout_paragraphs";a:4:{s:6:"layout";s:13:"layout_onecol";s:6:"config";a:1:{s:5:"label";s:0:"";}s:11:"parent_uuid";N;s:6:"region";N;}s:16:"background_theme";a:0:{}s:11:"extra_class";a:0:{}} |
     And news content:
       | title                                 | collection | created           | content                          | state     | pinned |
-      | Rare Nintendo64 disk drive discovered | Nintendo64 | 2018-10-01 4:26am | Magnetic drive called 64DD.      | validated | no     |
-      | NEC VR4300 CPU                        | Emulators  | 2018-10-03 4:27am | Update of the emulation library. | validated | no     |
+      | Rare Nintendo64 disk drive discovered | Nintendo64 | 2018-10-01 4:26am | Magnetic drive called 64DD.      | published | no     |
+      | NEC VR4300 CPU                        | Emulators  | 2018-10-03 4:27am | Update of the emulation library. | published | no     |
     And event content:
       | title               | collection | created           | body                                        | state     | pinned |
-      | 20 year anniversary | Nintendo64 | 2018-10-01 4:29am | The console was released in September 1996. | validated | no     |
-      | 30 year anniversary | Nintendo64 | 2017-10-01 4:29am | 30 year anniversary of Nintendo64.          | validated | yes    |
+      | 20 year anniversary | Nintendo64 | 2018-10-01 4:29am | The console was released in September 1996. | published | no     |
+      | 30 year anniversary | Nintendo64 | 2017-10-01 4:29am | 30 year anniversary of Nintendo64.          | published | yes    |
     And discussion content:
       | title                           | collection | content                 | created          | state     | pinned |
-      | What's your favourite N64 game? | Nintendo64 | Post title and reasons. | 2018-11-17 10:17 | validated | no     |
-      | Searching for green pad.        | Nintendo64 | Looking for a used one. | 2018-11-17 10:18 | validated | no     |
+      | What's your favourite N64 game? | Nintendo64 | Post title and reasons. | 2018-11-17 10:17 | published | no     |
+      | Searching for green pad.        | Nintendo64 | Looking for a used one. | 2018-11-17 10:18 | published | no     |
     And the following collection user membership:
       | collection | user      | roles       |
       | Nintendo64 | jimmy7892 | facilitator |
@@ -265,7 +265,7 @@ Feature:
     # Create a solution and add it to the list.
     Given the following solution:
       | title      | N64 cartridge cleaner |
-      | state      | validated             |
+      | state      | published             |
       | collection | Nintendo64            |
     When I open the header local tasks menu
     And I click "Edit" in the "Entity actions" region
@@ -369,8 +369,8 @@ Feature:
   Scenario: Test listing by keywords that contain the same word.
     Given document content:
       | title        | keywords            | content     | collection | state     |
-      | User's Guide | nintendo64 manuals  | User manual | Nintendo64 | validated |
-      | Licence      | nintendo64 licences | Licence     | Nintendo64 | validated |
+      | User's Guide | nintendo64 manuals  | User manual | Nintendo64 | published |
+      | Licence      | nintendo64 licences | Licence     | Nintendo64 | published |
     And custom_page content:
       | title   | collection | state     |
       | Manuals | Nintendo64 | published |
@@ -477,7 +477,7 @@ Feature:
     Then I should see the text "Current wars"
 
     When I go to the homepage of the "Nintendo64" collection
-    And I click "All content" in the "Header bottom" region
+    And I click "All content" in the "Header" region
     And I should see the following tiles in the correct order:
       | 30 year anniversary                   |
       | Current wars                          |
@@ -493,7 +493,7 @@ Feature:
     Then I should see the text "Current wars is over"
 
     When I go to the homepage of the "Nintendo64" collection
-    And I click "All content" in the "Header bottom" region
+    And I click "All content" in the "Header" region
     And I should see the following tiles in the correct order:
       | 30 year anniversary                   |
       | Current wars is over                  |
@@ -509,9 +509,9 @@ Feature:
 
     Given solutions:
       | title                | collection | state     |
-      | Save the Planet      | Nintendo64 | validated |
-      | Fight Global Warming | Nintendo64 | validated |
-      | The Green Alliance   | Nintendo64 | validated |
+      | Save the Planet      | Nintendo64 | published |
+      | Fight Global Warming | Nintendo64 | published |
+      | The Green Alliance   | Nintendo64 | published |
 
     And custom_page content:
       | title   | collection | state     |
@@ -559,9 +559,9 @@ Feature:
 
     Given solutions:
       | title              | collection | state     |
-      | Save gasoline      | Nintendo64 | validated |
-      | Fight battery mode | Nintendo64 | validated |
-      | Black Noise        | Nintendo64 | validated |
+      | Save gasoline      | Nintendo64 | published |
+      | Fight battery mode | Nintendo64 | published |
+      | Black Noise        | Nintendo64 | published |
 
     And custom_page content:
       | title | collection | state     |
@@ -628,40 +628,40 @@ Feature:
 
     Given event content:
       | title              | collection | state     | created           | start date | end date   |
-      | Event pagination 1 | Nintendo64 | validated | 2016-10-09 4:29am | now +8 day | now +9 day |
-      | Event pagination 2 | Nintendo64 | validated | 2016-10-08 4:29am | now +7 day | now +8 day |
-      | Event pagination 3 | Nintendo64 | validated | 2015-10-07 4:29am | now +6 day | now +7 day |
-      | Event pagination 4 | Nintendo64 | validated | 2014-10-06 4:29am | now +5 day | now +6 day |
-      | Event pagination 5 | Nintendo64 | validated | 2014-10-05 4:29am | now +4 day | now +5 day |
-      | Event pagination 6 | Nintendo64 | validated | 2013-10-04 4:29am | now +3 day | now +4 day |
-      | Event pagination 7 | Nintendo64 | validated | 2012-10-03 4:29am | now +2 day | now +3 day |
-      | Event pagination 8 | Nintendo64 | validated | 2011-10-02 4:29am | now +1 day | now +2 day |
-      | Event pagination 9 | Nintendo64 | validated | 2010-10-01 4:29am | now        | now +1 day |
+      | Event pagination 1 | Nintendo64 | published | 2016-10-09 4:29am | now +8 day | now +9 day |
+      | Event pagination 2 | Nintendo64 | published | 2016-10-08 4:29am | now +7 day | now +8 day |
+      | Event pagination 3 | Nintendo64 | published | 2015-10-07 4:29am | now +6 day | now +7 day |
+      | Event pagination 4 | Nintendo64 | published | 2014-10-06 4:29am | now +5 day | now +6 day |
+      | Event pagination 5 | Nintendo64 | published | 2014-10-05 4:29am | now +4 day | now +5 day |
+      | Event pagination 6 | Nintendo64 | published | 2013-10-04 4:29am | now +3 day | now +4 day |
+      | Event pagination 7 | Nintendo64 | published | 2012-10-03 4:29am | now +2 day | now +3 day |
+      | Event pagination 8 | Nintendo64 | published | 2011-10-02 4:29am | now +1 day | now +2 day |
+      | Event pagination 9 | Nintendo64 | published | 2010-10-01 4:29am | now        | now +1 day |
     And news content:
       | title              | collection | state     |
-      | News pagination 1  | Nintendo64 | validated |
-      | News pagination 2  | Nintendo64 | validated |
-      | News pagination 3  | Nintendo64 | validated |
-      | News pagination 4  | Nintendo64 | validated |
-      | News pagination 5  | Nintendo64 | validated |
-      | News pagination 6  | Nintendo64 | validated |
-      | News pagination 7  | Nintendo64 | validated |
-      | News pagination 8  | Nintendo64 | validated |
-      | News pagination 9  | Nintendo64 | validated |
-      | News pagination 10 | Nintendo64 | validated |
-      | News pagination 11 | Nintendo64 | validated |
-      | News pagination 12 | Nintendo64 | validated |
-      | News pagination 13 | Nintendo64 | validated |
-      | News pagination 14 | Nintendo64 | validated |
-      | News pagination 15 | Nintendo64 | validated |
-      | News pagination 16 | Nintendo64 | validated |
-      | News pagination 17 | Nintendo64 | validated |
-      | News pagination 18 | Nintendo64 | validated |
-      | News pagination 19 | Nintendo64 | validated |
-      | News pagination 20 | Nintendo64 | validated |
-      | News pagination 21 | Nintendo64 | validated |
-      | News pagination 22 | Nintendo64 | validated |
-      | News pagination 23 | Nintendo64 | validated |
+      | News pagination 1  | Nintendo64 | published |
+      | News pagination 2  | Nintendo64 | published |
+      | News pagination 3  | Nintendo64 | published |
+      | News pagination 4  | Nintendo64 | published |
+      | News pagination 5  | Nintendo64 | published |
+      | News pagination 6  | Nintendo64 | published |
+      | News pagination 7  | Nintendo64 | published |
+      | News pagination 8  | Nintendo64 | published |
+      | News pagination 9  | Nintendo64 | published |
+      | News pagination 10 | Nintendo64 | published |
+      | News pagination 11 | Nintendo64 | published |
+      | News pagination 12 | Nintendo64 | published |
+      | News pagination 13 | Nintendo64 | published |
+      | News pagination 14 | Nintendo64 | published |
+      | News pagination 15 | Nintendo64 | published |
+      | News pagination 16 | Nintendo64 | published |
+      | News pagination 17 | Nintendo64 | published |
+      | News pagination 18 | Nintendo64 | published |
+      | News pagination 19 | Nintendo64 | published |
+      | News pagination 20 | Nintendo64 | published |
+      | News pagination 21 | Nintendo64 | published |
+      | News pagination 22 | Nintendo64 | published |
+      | News pagination 23 | Nintendo64 | published |
     And custom_page content:
       | title          | collection | state     |
       | Pagination bug | Nintendo64 | published |

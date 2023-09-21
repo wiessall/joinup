@@ -13,10 +13,10 @@ Feature: Display of reports for the Tallinn initiative.
       | Tallinn Ministerial Declaration | Jayda Ingham | facilitator |
     Given news content:
       | title           | collection                      | state     |
-      | Results are out | Tallinn Ministerial Declaration | validated |
+      | Results are out | Tallinn Ministerial Declaration | published |
     And document content:
       | title                                  | collection                      | state     |
-      | Ministerial Declaration on eGovernment | Tallinn Ministerial Declaration | validated |
+      | Ministerial Declaration on eGovernment | Tallinn Ministerial Declaration | published |
     And tallinn_report content:
       | title        | author       | collection                      |
       | Italy report | Jayda Ingham | Tallinn Ministerial Declaration |
@@ -28,7 +28,7 @@ Feature: Display of reports for the Tallinn initiative.
     And I should see the "Ministerial Declaration on eGovernment" tile
 
     # Only report content should be shown in the initiative page.
-    When I click "Implementation monitoring" in the "Header bottom" region
+    When I click "Implementation monitoring" in the "Header" region
     Then I should see the text "The above-represented data are provided in tabular format."
     Then I should see the "Italy report" tile
     But I should not see the "Results are out" tile

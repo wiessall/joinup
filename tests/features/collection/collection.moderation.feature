@@ -5,7 +5,7 @@ Feature: Collection moderation
   I need to be able to transit the collections from one state to another.
 
   # Access checks are not being made here. They are run in the collection add feature.
-  Scenario: 'Draft' and 'Propose' states are available but moderators should also see 'Validated' state.
+  Scenario: 'Draft' and 'Propose' states are available but moderators should also see 'Published' state.
     When I am logged in as an "authenticated user"
     And I go to the propose collection form
     Then the following buttons should be present "Save as draft, Propose"
@@ -39,7 +39,7 @@ Feature: Collection moderation
       | title               | description         | logo     | owner          | contact information | state            |
       | Deep Past           | Azure ship          | logo.png | Simon Sandoval | Francis             | draft            |
       | The Licking Silence | The Licking Silence | logo.png | Simon Sandoval | Francis             | proposed         |
-      | Person of Wizards   | Person of Wizards   | logo.png | Simon Sandoval | Francis             | validated        |
+      | Person of Wizards   | Person of Wizards   | logo.png | Simon Sandoval | Francis             | published        |
       | The Shard's Hunter  | The Shard's Hunter  | logo.png | Simon Sandoval | Francis             | archival request |
       | Luck in the Abyss   | Luck in the Abyss   | logo.png | Simon Sandoval | Francis             | archived         |
     And the following collection user memberships:
@@ -68,7 +68,7 @@ Feature: Collection moderation
       | collection          | user            | buttons                                           |
 
       # The owner is also a facilitator so the only UATable part of the owner is that they have the ability to
-      # request archival and delete the collection when the collection is validated.
+      # request archival and delete the collection when the collection is published.
       | Deep Past           | Erika Reid      | Save as draft, Propose                            |
       | The Licking Silence | Erika Reid      | Propose, Save as draft                            |
       # Person of Wizards has a published version so the facilitator can publish directly.
@@ -98,7 +98,7 @@ Feature: Collection moderation
 
     # The 'Delete' action is not a button but a link leading to a confirmation
     # page that is styled as a button. It should only be available to the owner
-    # of a validated collection.
+    # of a published collection.
     And the visibility of the delete link should be as follows for these users in these collections:
       | collection          | user            | delete link |
       | Person of Wizards   | Erika Reid      | yes         |

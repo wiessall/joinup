@@ -16,25 +16,25 @@ Feature: Tests the collection last update time.
       | Sean | Private Individual(s) |
     And the following collection:
       | title             | Household Wizard |
-      | state             | validated        |
+      | state             | published        |
       | modification date | 2011-05-06T21:56 |
       | creation date     | 2001-01-03       |
       | author            | The Cleaner      |
     And the following solutions:
       | title           | collection       | state     | modification date | creation date | author      | contact information   | owner | description                    |
-      | Roof Hole Cover | Household Wizard | validated | 2010-07-05T23:03  | 2001-01-01    | The Cleaner | Your Cleaning Company | Sean  | Keep your roof in a good shape |
+      | Roof Hole Cover | Household Wizard | published | 2010-07-05T23:03  | 2001-01-01    | The Cleaner | Your Cleaning Company | Sean  | Keep your roof in a good shape |
       | Mosquito Killer | Household Wizard | proposed  | 2017-05-03T11:45  | 2001-01-02    | The Cleaner | Your Cleaning Company | Sean  | Quiet nights                   |
     And I am logged in as "The Cleaner"
 
     Given I go to the homepage of the "Household Wizard" collection
-    # The newest is 'Mosquito Killer' solution but because is not validated, it
+    # The newest is 'Mosquito Killer' solution but because is not published, it
     # doesn't count. The winner is 'Household Wizard' collection because is
     # newer than 'Roof Hole Cover' solution.
     Then the response should contain "2011-05-06T21:56"
 
     Given document content:
       | title           | document type | state     | changed          | created    | collection       | body               |
-      | Get Rid of Rats | Document      | validated | 2012-01-17T07:38 | 2001-01-04 | Household Wizard | Rats everywhere... |
+      | Get Rid of Rats | Document      | published | 2012-01-17T07:38 | 2001-01-04 | Household Wizard | Rats everywhere... |
 
     And I reload the page
     # The document is the newest thus will give the collection updated time.
@@ -42,7 +42,7 @@ Feature: Tests the collection last update time.
 
     Given discussion content:
       | title           | state     | changed          | created    | collection       |
-      | Household Forum | validated | 2013-04-19T15:18 | 2001-01-05 | Household Wizard |
+      | Household Forum | published | 2013-04-19T15:18 | 2001-01-05 | Household Wizard |
 
     And I reload the page
     # The discussion is the newest thus will give the collection updated time.
@@ -50,7 +50,7 @@ Feature: Tests the collection last update time.
 
     Given event content:
       | title        | state     | changed          | created    | collection       |
-      | Cleaning Day | validated | 2014-06-06T22:46 | 2001-01-06 | Household Wizard |
+      | Cleaning Day | published | 2014-06-06T22:46 | 2001-01-06 | Household Wizard |
 
     And I reload the page
     # The event is the newest thus will give the collection updated time.
@@ -61,7 +61,7 @@ Feature: Tests the collection last update time.
       | The New Grass Trimmer | draft | 2015-11-08T01:05 | 2001-01-07 | Household Wizard |
 
     And I reload the page
-    # The event is the newest but is not validated, so it doesn't influence the
+    # The event is the newest but is not published, so it doesn't influence the
     # collection updated time.
     Then the response should not contain "2015-11-08T01:05"
     But the response should contain "2014-06-06T22:46"

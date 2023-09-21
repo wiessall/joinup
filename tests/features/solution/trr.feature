@@ -7,11 +7,11 @@ Feature: Creating a test (solution) in the TRR collection.
   Scenario: Test a TRR related fields
     Given the following collection:
       | title | Friends of the test repository |
-      | state | validated                      |
+      | state | published                      |
     And the following solution:
       | title              | Linked Open Data Trr field             |
       | description        | Re-usable government data       |
-      | state              | validated                       |
+      | state              | published                       |
     And the following owner:
       | name | type                         |
       | W3C  | Company, Industry consortium |
@@ -66,7 +66,7 @@ Feature: Creating a test (solution) in the TRR collection.
       | Wobbe    |       |
     And the following collection:
       | title | Friends of the test repository |
-      | state | validated                      |
+      | state | published                      |
     And the following collection user memberships:
       | collection                     | user  | roles |
       | Friends of the test repository | Wobbe | owner |
@@ -139,12 +139,12 @@ Feature: Creating a test (solution) in the TRR collection.
     Given the following solution:
       | title         | TRR solution foo          |
       | description   | The test repository       |
-      | state         | validated                 |
+      | state         | published                 |
       | solution type | Conformance Test Scenario |
     And the following solution:
       | title       | TRR solution bar    |
       | description | The test repository |
-      | state       | validated           |
+      | state       | published           |
     And the following release:
       | title          | TRR release foo         |
       | description    | TRR release description |

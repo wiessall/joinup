@@ -8,17 +8,17 @@ Feature: Site sections
     Given the following collection:
       | uri   | http://joinup.eu/collection/the-polygone-project |
       | title | The Polygone Project                             |
-      | state | validated                                        |
+      | state | published                                        |
     And the following solution:
       | title      | Miss Fashionista     |
       | collection | The Polygone Project |
-      | state      | validated            |
+      | state      | published            |
     And discussion content:
       | title         | body       | state     | collection           |
-      | Deep Carnival | Now online | validated | The Polygone Project |
+      | Deep Carnival | Now online | published | The Polygone Project |
     And event content:
       | title                      | state     | solution         |
-      | Flat Beat 20th Anniversary | validated | Miss Fashionista |
+      | Flat Beat 20th Anniversary | published | Miss Fashionista |
 
   Scenario: Reporting of site sections to the analytics platform
     # Check a couple of pages that do not belong to a particular collection or

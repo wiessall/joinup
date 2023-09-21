@@ -7,7 +7,7 @@ Feature: SEO for RDF entities.
   Scenario Outline: Basic JSON meta information for collections and solutions.
     Given the following <type>:
       | title | SEO entity |
-      | state | validated  |
+      | state | published  |
 
     When I visit the "SEO entity" <type>
     Then the rdf metadata of the "SEO entity" rdf entity should be attached in the page
@@ -29,11 +29,11 @@ Feature: SEO for RDF entities.
   Scenario: Basic JSON meta information for releases and distributions.
     Given the following solution:
       | title | SEO solution |
-      | state | validated    |
+      | state | published    |
     And the following release:
       | title         | SEO release  |
       | is version of | SEO solution |
-      | state         | validated    |
+      | state         | published    |
     And the following distribution:
       | title  | SEO distribution |
       | parent | SEO release      |

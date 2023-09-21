@@ -21,7 +21,7 @@ class DocumentThemeTest extends JoinupExistingSiteTestBase {
     $collection = $this->createRdfEntity([
       'rid' => 'collection',
       'label' => $this->randomString(),
-      'field_ar_state' => 'validated',
+      'field_ar_state' => 'published',
     ]);
 
     $document = $this->createNode([
@@ -31,7 +31,7 @@ class DocumentThemeTest extends JoinupExistingSiteTestBase {
       'body' => 'Hello document body',
       'field_keywords' => ['keyword_sample'],
       'field_short_title' => 'DocTitle',
-      'field_state' => 'validated',
+      'field_state' => 'published',
     ]);
 
     /** @var \Drupal\Core\DestructableInterface $post_request_indexing */

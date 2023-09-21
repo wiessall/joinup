@@ -13,7 +13,7 @@ Feature: Notification test for the discussion transitions on a post moderated pa
       | CC member        |           | notify_member@test.com      | CC         | Member      | immediate              |
     And collections:
       | title              | state     | content creation | moderation   |
-      | CC post collection | validated | members          | <moderation> |
+      | CC post collection | published | members          | <moderation> |
     And the following collection user memberships:
       | collection         | user           | roles       |
       | CC post collection | CC owner       | owner       |
@@ -22,11 +22,11 @@ Feature: Notification test for the discussion transitions on a post moderated pa
     And discussion content:
       | title                                | author    | body | collection         | field_state  |
       | CC notify post publish               | CC member | body | CC post collection | draft        |
-      | CC notify post request changes       | CC member | body | CC post collection | validated    |
-      | CC notify post report                | CC member | body | CC post collection | validated    |
+      | CC notify post request changes       | CC member | body | CC post collection | published    |
+      | CC notify post report                | CC member | body | CC post collection | published    |
       | CC notify post propose from reported | CC member | body | CC post collection | needs_update |
       | CC notify post approve proposed      | CC member | body | CC post collection | proposed     |
-      | CC notify post delete                | CC member | body | CC post collection | validated    |
+      | CC notify post delete                | CC member | body | CC post collection | published    |
 
     # Test 'create' operation.
     And I am logged in as "CC member"
@@ -110,10 +110,10 @@ Feature: Notification test for the discussion transitions on a post moderated pa
   Scenario: No notifications should be sent when a discussion is orphaned
     Given collections:
       | title                   | state     |
-      | Event Horizon Telescope | validated |
+      | Event Horizon Telescope | published |
     And discussion content:
       | title                            | collection              | state     |
-      | How do the jets fire into space? | Event Horizon Telescope | validated |
+      | How do the jets fire into space? | Event Horizon Telescope | published |
     And users:
       | Username         |
       | Lindsey McCray   |
