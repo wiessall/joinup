@@ -28,6 +28,7 @@ dependencies:
     - joinup_core
     - joinup_featured
     - joinup_group
+    - joinup_group_content_management
     - joinup_licence
     - joinup_news
     - joinup_newsletter
@@ -187,6 +188,7 @@ permissions:
   - 'feature entity'
   - 'filter membership overview'
   - 'manage group announcements'
+  - 'manage group content'
   - 'manage newsroom newsletter subscriptions'
   - 'manage site auto-registration'
   - 'manage solutions'
