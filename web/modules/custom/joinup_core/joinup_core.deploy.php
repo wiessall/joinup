@@ -145,7 +145,7 @@ function joinup_core_deploy_109704(): void {
 /**
  * Rename menu items for EU OSS catalogue.
  */
-function joinup_core_deploy_109703(): void {
+function joinup_core_deploy_109705(): void {
   $entityTypeManager = \Drupal::entityTypeManager();
   /** @var  \Drupal\menu_link_content\MenuLinkContentStorageInterface $menuLinkContentStorage */
   $menuLinkContentStorage = $entityTypeManager->getStorage('menu_link_content');
