@@ -69,7 +69,9 @@
     searchbar: page.search_bar,
   } %}
   {% if page.header %}
-    {{ page.header }}
+    <div class="region-header">
+      {{ page.header }}
+    </div>
   {% endif %}
 
   {% if page.featured %}
