@@ -48,7 +48,7 @@ final class GitUri {
     // We can't get scheme from "git@..." URIs. Assume https.
     $scheme = 'https';
     $host = NULL;
-    $vendor = NULL;
+    $namespace = NULL;
     $package = NULL;
 
     // Example: https://gihub.com/drupal/drupal-driver or
@@ -58,13 +58,13 @@ final class GitUri {
       $scheme = $parsed['scheme'] ?? NULL;
       $host = $parsed['host'];
       $pathParts = explode('/', $parsed['path'] ?? '');
-      $vendorPackage = array_filter(
+      $namespacePackage = array_filter(
         array_slice($pathParts, -2),
         fn (string $part) => $part !== ''
       );
 
-      if (count($vendorPackage) === 2) {
-        [$vendor, $package] = $vendorPackage;
+      if (count($namespacePackage) === 2) {
+        [$namespace, $package] = $namespacePackage;
         $host .= implode('/', array_slice($pathParts, 0, -2));
         if (str_ends_with($package, '.git')) {
           $package = substr($package, 0, -4);
@@ -78,14 +78,14 @@ final class GitUri {
       str_starts_with($repositoryUrl, 'git@') &&
       preg_match('#^git@(.*):([^/]*)/(.*)\.git$#', $repositoryUrl, $matches)
     ) {
-      [, $host, $vendor, $package] = $matches;
+      [, $host, $namespace, $package] = $matches;
     }
 
     if (!is_string($scheme) || !is_string($host)) {
       return NULL;
     }
 
-    return new static($scheme, $host, $vendor, $package);
+    return new static($scheme, $host, $namespace, $package);
   }
 
   /**
