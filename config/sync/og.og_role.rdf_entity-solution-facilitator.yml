@@ -51,6 +51,7 @@ permissions:
   - 'invite facilitators'
   - 'invite users to discussions'
   - 'manage group announcements'
+  - 'manage group content'
   - 'manage members'
   - 'pin group content'
   - 'resend email confirmation request'
