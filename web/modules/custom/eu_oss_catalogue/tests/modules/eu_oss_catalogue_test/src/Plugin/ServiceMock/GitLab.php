@@ -40,6 +40,7 @@ class GitLab extends PluginBase implements ServiceMockPluginInterface {
       'limited.self-hosted.gitlab.example.com',
       'self-hosted.gitlab.example.com/subpath',
       'self-hosted.gitlab.example.com/bit/deeper/subpath',
+      'gitlab.opencode.de.example.com',
     ], TRUE);
   }
 
@@ -77,8 +78,9 @@ class GitLab extends PluginBase implements ServiceMockPluginInterface {
       $isSelfHostedRequest && str_contains($query, 'group: group(fullPath: \"user1\")') => 'limited.self-hosted.gitlab.example.com null',
       $isSelfHostedRequest && str_contains($query, 'project(fullPath: \\"user1\\\\\\/project-1\\"') => 'limited.self-hosted.gitlab.example.com user1/project1',
       $isSelfHostedRequest && str_contains($query, 'group: group(fullPath: \"user2\")') => 'limited.self-hosted.gitlab.example.com null',
-      $apiRoot === 'self-hosted.gitlab.example.com/subpath' => "self-hosted.gitlab.example.com/subpath $matches[1]",
-      $apiRoot === 'self-hosted.gitlab.example.com/bit/deeper/subpath' => "self-hosted.gitlab.example.com/bit/deeper/subpath $matches[1]",
+      $apiRoot === 'self-hosted.gitlab.example.com/subpath' => "self-hosted.gitlab.example.com/subpath $matches[1] exists",
+      $apiRoot === 'self-hosted.gitlab.example.com/bit/deeper/subpath' => "self-hosted.gitlab.example.com/bit/deeper/subpath $matches[1] exists",
+      $apiRoot === 'gitlab.opencode.de.example.com' => "gitlab.opencode.de.example.com $matches[1] exists",
       default => 'missing',
     };
 

@@ -119,6 +119,16 @@ class ApiGuesserTest extends KernelTestBase {
         'Expected' => 'gitlab_self_hosted',
       ],
 
+      'Self-hosted Gitlab in root, with deep namespace' => [
+        'URL' => 'https://gitlab.opencode.de.example.com/xleitstelle/xplanung/validierungsregeln/profile/berlin',
+        'Expected' => 'gitlab_self_hosted',
+      ],
+
+      'Self-hosted Gitlab in subpath, with deep namespace' => [
+        'URL' => 'https://self-hosted.gitlab.example.com/bit/deeper/subpath/deep/namespace/package',
+        'Expected' => 'gitlab_self_hosted',
+      ],
+
       'Only GitHub' => [
         'URL' => 'https://github.com',
         'Expected' => 'github',
