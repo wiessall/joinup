@@ -133,6 +133,11 @@ class ApiGuesserTest extends KernelTestBase {
         'Expected' => 'gitlab_self_hosted',
       ],
 
+      'Self-hosted Gitlab in deep subpath' => [
+        'URL' => 'https://self-hosted.gitlab.example.com/bit/deeper/subpath/ec-europa/digit-joinup-poc-reference/',
+        'Expected' => 'gitlab_self_hosted',
+      ],
+
       'Only GitHub' => [
         'URL' => 'https://github.com',
         'Expected' => 'github',

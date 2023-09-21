@@ -39,6 +39,7 @@ class GitLab extends PluginBase implements ServiceMockPluginInterface {
       'all.self-hosted.gitlab.example.com',
       'limited.self-hosted.gitlab.example.com',
       'self-hosted.gitlab.example.com/subpath',
+      'self-hosted.gitlab.example.com/bit/deeper/subpath',
     ], TRUE);
   }
 
@@ -77,6 +78,7 @@ class GitLab extends PluginBase implements ServiceMockPluginInterface {
       $isSelfHostedRequest && str_contains($query, 'project(fullPath: \\"user1\\\\\\/project-1\\"') => 'limited.self-hosted.gitlab.example.com user1/project1',
       $isSelfHostedRequest && str_contains($query, 'group: group(fullPath: \"user2\")') => 'limited.self-hosted.gitlab.example.com null',
       $apiRoot === 'self-hosted.gitlab.example.com/subpath' => "self-hosted.gitlab.example.com/subpath $matches[1]",
+      $apiRoot === 'self-hosted.gitlab.example.com/bit/deeper/subpath' => "self-hosted.gitlab.example.com/bit/deeper/subpath $matches[1]",
       default => 'missing',
     };
 
