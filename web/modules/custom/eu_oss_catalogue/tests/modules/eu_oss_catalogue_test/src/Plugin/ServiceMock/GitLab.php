@@ -67,7 +67,7 @@ class GitLab extends PluginBase implements ServiceMockPluginInterface {
     $apiRoot = $this->getApiRootFromRequestUri($request->getUri());
     $query = $request->getBody()->getContents();
     $isSelfHostedRequest = str_ends_with($apiRoot, 'self-hosted.gitlab.example.com');
-    preg_match('/project\(fullPath:\s+([\S]*)\s*\)/', $query, $matches);
+    preg_match('@project\(fullPath:\s+\x5c"([^\x5c].*)\x5c"@', $query, $matches);
 
     $responseId = match(TRUE) {
       $apiRoot === 'all.self-hosted.gitlab.example.com' => 'all.self-hosted.gitlab.example.com',
