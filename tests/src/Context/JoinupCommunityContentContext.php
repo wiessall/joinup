@@ -574,7 +574,7 @@ class JoinupCommunityContentContext extends RawDrupalContext {
    *
    * @param string $field
    *   The field identifier.
-   * @param string $value
+   * @param int|string $value
    *   The field data.
    * @param string $title
    *   The node label.
@@ -583,7 +583,7 @@ class JoinupCommunityContentContext extends RawDrupalContext {
    *
    * @Given set :field with :value in :title :bundle
    */
-  public function updateNodePublishedProperty(string $field, string $value, string $title, string $bundle): void {
+  public function updateNodePublishedProperty(string $field, int|string $value, string $title, string $bundle): void {
     $this->getEntityByLabel('node', $title, $bundle)
       ->set($field, $value)
       ->save();
