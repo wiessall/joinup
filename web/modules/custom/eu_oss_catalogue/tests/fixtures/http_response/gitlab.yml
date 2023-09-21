@@ -518,3 +518,9 @@
     project:
       repository:
         exists: true
+
+'self-hosted.gitlab.example.com/bit/deeper/subpath ec-europa\\\/digit-joinup-poc-reference':
+  data:
+    project:
+      repository:
+        exists: true
