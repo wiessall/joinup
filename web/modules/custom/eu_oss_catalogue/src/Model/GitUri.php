@@ -57,15 +57,14 @@ final class GitUri {
       $parsed = parse_url($repositoryUrl);
       $scheme = $parsed['scheme'] ?? NULL;
       $host = $parsed['host'];
-      $pathParts = explode('/', $parsed['path'] ?? '');
-      $namespacePackage = array_filter(
-        array_slice($pathParts, -2),
-        fn (string $part) => $part !== ''
+      $pathParts = array_filter(
+        explode('/', $parsed['path'] ?? ''),
+        fn (string $part): bool => $part !== ''
       );
 
-      if (count($namespacePackage) === 2) {
-        [$namespace, $package] = $namespacePackage;
-        $host .= implode('/', array_slice($pathParts, 0, -2));
+      if (count($pathParts) > 2) {
+        $package = array_pop($pathParts);
+        $namespace = implode('/', $pathParts);
         if (str_ends_with($package, '.git')) {
           $package = substr($package, 0, -4);
         }
@@ -76,7 +75,7 @@ final class GitUri {
     // git@foo.bar.baz.eu/sub/path:ec-europa/digit-joinup-reference.git.
     if (
       str_starts_with($repositoryUrl, 'git@') &&
-      preg_match('#^git@(.*):([^/]*)/(.*)\.git$#', $repositoryUrl, $matches)
+      preg_match('#^git@(.*):(.*)/([^/]*)\.git$#', $repositoryUrl, $matches)
     ) {
       [, $host, $namespace, $package] = $matches;
     }

@@ -69,17 +69,26 @@ class GitLabSelfHosted extends GitLabDotCom {
       return FALSE;
     }
 
-    $this->configuration['url'] = "$gitUri->scheme://$gitUri->host/";
-    try {
-      $fullPath = "$gitUri->namespace/$gitUri->package";
-      $query = (new Query('project', ['fullPath' => $fullPath]));
-      $query->repository([])->use('exists');
-      $response = $this->getClient()->graphql()->execute($query->toString());
-    }
-    catch (\Exception $e) {
-      return FALSE;
-    }
-    return !empty($response['data']['project']['repository']['exists']);
+    $namespaceParts = explode('/', $gitUri->namespace);
+    $this->configuration['url'] = $host = "$gitUri->scheme://$gitUri->host";
+    $client = $this->getClient();
+    do {
+      try {
+        $fullPath = implode('/', $namespaceParts) . "/$gitUri->package";
+        $query = new Query('project', ['fullPath' => $fullPath]);
+        $query->repository([])->use('exists');
+        $response = $client->graphql()->execute($query->toString());
+      }
+      catch (\Exception) {
+        $host .= '/' . array_shift($namespaceParts);
+        $client->setUrl($host);
+        continue;
+      }
+
+      return !empty($response['data']['project']['repository']['exists']);
+    } while (count($namespaceParts) > 0);
+
+    return FALSE;
   }
 
   /**
