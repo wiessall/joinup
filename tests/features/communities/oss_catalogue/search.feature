@@ -82,13 +82,13 @@ Feature: OSS catalogue search
 
     When I go to the edit form of the "Django-MDQ" oss_solution
     And the checkbox "Published" should be checked
-    And set unpublished in "Django-MDQ" oss_solution
+    And set status with FALSE in "Django-MDQ" oss_solution
     Then I visit the OSS search page
     And I see the text "3 Open Source Software Solutions" in the "Header" region
 
     When I go to the edit form of the "Django-MDQ" oss_solution
     And the checkbox "Published" should not be checked
-    And set published in "Django-MDQ" oss_solution
+    And set status with TRUE in "Django-MDQ" oss_solution
     Then I visit the OSS search page
     And I see the text "4 Open Source Software Solutions" in the "Header" region
 
