@@ -57,7 +57,7 @@ class ApiGuesserTest extends KernelTestBase {
       ]
     );
 
-    $this->apiGuesser = \Drupal::service('eu_oss_catalogue.git_remote.api_guesser');
+    $this->apiGuesser = $this->container->get('eu_oss_catalogue.git_remote.api_guesser');
   }
 
   /**

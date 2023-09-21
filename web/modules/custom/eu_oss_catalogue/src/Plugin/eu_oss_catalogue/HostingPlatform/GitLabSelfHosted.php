@@ -80,7 +80,7 @@ class GitLabSelfHosted extends GitLabDotCom {
     catch (\Exception $e) {
       return FALSE;
     }
-    return !empty($response['data']['project']['name']);
+    return !empty($response['data']['project']['repository']['exists']);
   }
 
   /**
