@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "ee9282805bf86e3f639c2a70e9e566b6",
+    "content-hash": "7765bfc3f55e3e728ca1f381f176bf42",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -2878,6 +2878,10 @@
             ],
             "authors": [
                 {
+                    "name": "Ahmad Smhan",
+                    "homepage": "https://www.drupal.org/user/3632457"
+                },
+                {
                     "name": "manuel.adan",
                     "homepage": "https://www.drupal.org/user/516420"
                 }
@@ -5406,7 +5410,7 @@
                     "datestamp": "1671210021",
                     "security-coverage": {
                         "status": "not-covered",
-                        "message": "Project has not opted into security advisory coverage!"
+                        "message": "RC releases are not covered by Drupal security advisories."
                     }
                 },
                 "branch-alias": {
@@ -5428,8 +5432,16 @@
                     "homepage": "https://www.drupal.org/user/61203"
                 },
                 {
+                    "name": "ivnish",
+                    "homepage": "https://www.drupal.org/user/3547706"
+                },
+                {
                     "name": "japerry",
                     "homepage": "https://www.drupal.org/user/45640"
+                },
+                {
+                    "name": "joelpittet",
+                    "homepage": "https://www.drupal.org/user/160302"
                 },
                 {
                     "name": "manuel.adan",
