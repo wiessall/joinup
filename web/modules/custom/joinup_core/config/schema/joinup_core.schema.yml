@@ -78,6 +78,44 @@ field.formatter.settings.filtered_entity_reference_bundles:
         type: string
         label: 'Bundle'
 
+field.formatter.settings.joinup_core_formatter_fallback_field:
+  type: mapping
+  label: 'Formatter with fallback field settings'
+  mapping:
+    main_field_formatter_id:
+      type: string
+      label: 'Formatter plugin ID of the original field'
+    main_field_formatter_settings:
+      type: field.formatter.settings.[%parent.main_field_formatter_id]
+      label: 'Formatter settings of the original field'
+    fallback_field_id:
+      type: string
+      label: 'Machine name of the fallback field'
+    fallback_field_formatter_id:
+      type: string
+      label: 'Formatter plugin ID of the fallback field'
+    fallback_field_formatter_settings:
+      type: field.formatter.settings.[%parent.fallback_field_formatter_id]
+      label: 'Formatter settings of the original field'
+
+field.formatter.settings.joinup_core_link_custom_title:
+  type: field.formatter.settings.link
+  mapping:
+    link_title:
+      type: string
+      label: 'Title to use to create the link'
+
+field.formatter.settings.joinup_core_item_count:
+  type: mapping
+  label: 'Formatter with item count'
+  mapping:
+    count_suffix_single:
+      type: string
+      label: 'Suffinx to use if count is 1.'
+    count_suffix_multiple:
+      type: string
+      label: 'Suffix to use if count is not 1.'
+
 field.widget.settings.email_legacy_multicardinality:
   type: field.widget.settings.email_default
 

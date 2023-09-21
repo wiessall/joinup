@@ -14,7 +14,7 @@ Feature: Asset release "delete" functionality.
       | Website URL | http://example.com            |
     And the following collection:
       | title | Yet another collection |
-      | state | validated              |
+      | state | published              |
     And the following solution:
       | title               | Yet another solution       |
       | description         | Bored of finding new texts |
@@ -22,12 +22,12 @@ Feature: Asset release "delete" functionality.
       | owner               | Yet another owner          |
       | contact information | Yet another contact        |
       | collection          | Yet another collection     |
-      | state               | validated                  |
+      | state               | published                  |
     And the following releases:
       | title                | description          | documentation | release number | release notes   | is version of        | owner                | contact information  | state     |
-      | Yet another release  | A sample release     | text.pdf      | 1              | Changed release | Yet another solution | Yet another owner    | Yet another contact  | validated |
-      | No release           | A sample release     | text.pdf      | 1.2            | Changed release | Yet another solution | Yet another owner    | Yet another contact  | validated |
-      | Jinks                | A sample release     | text.pdf      | 3              | Changed release | Yet another solution | Yet another owner    | Yet another contact  | validated |
+      | Yet another release  | A sample release     | text.pdf      | 1              | Changed release | Yet another solution | Yet another owner    | Yet another contact  | published |
+      | No release           | A sample release     | text.pdf      | 1.2            | Changed release | Yet another solution | Yet another owner    | Yet another contact  | published |
+      | Jinks                | A sample release     | text.pdf      | 3              | Changed release | Yet another solution | Yet another owner    | Yet another contact  | published |
     And users:
       | Username        | E-mail                      | First name | Family name |
       | Ronnie Holloway | Ronnie.holloway@example.com | Ronnie     | Holloway    |

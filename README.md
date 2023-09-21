@@ -237,3 +237,8 @@ For the above example:
   [SPARQL developer documentation](./docs/sparql.md).
 * Check the [third party services](./docs/third-party-services.md)
   documentation for additional information on the services we integrate with.
+
+### Additional information
+
+* [Joinup website](https://joinup.ec.europa.eu/)
+* [Repositories and branches](https://citnet.tech.ec.europa.eu/CITnet/confluence/display/ISAICP/Development+repositories%2C+branches%2C+Jira+tickets)

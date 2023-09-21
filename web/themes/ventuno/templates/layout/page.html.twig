@@ -30,11 +30,9 @@
  * Regions:
  * - page.search_bar: Items for the search_bar region (very custom region).
  * - page.header: Items for the header region.
- * - page.header_bottom: Items for the header_bottom region.
  * - page.featured: Items for the featured content region.
  * - page.content_top: Items for the region displayed above the main content.
  * - page.content: The main content of the current page.
- * - page.content_bottom: Items for the region displayed below the main content.
  * - page.sidebar: Items for the sidebar.
  * - page.footer: Items for the footer region.
  *
@@ -51,19 +49,16 @@
     hide_searchbar: hide_searchbar,
     searchbar: page.search_bar,
   } %}
-  {% block page_header %}
-    {{ page.header }}
-  {% endblock %}
 
-  {% block page_header_bottom %}
-    {% if page.header_bottom %}
-      <div class="region-header-bottom">
-        {{ page.header_bottom }}
+  {% block page_header %}
+    {% if page.header %}
+      <div class="region-header">
+        {{ page.header }}
       </div>
     {% endif %}
   {% endblock %}
 
-  <div class="container">
+  <div class="content container">
     {% block page_featured %}
       {% if page.featured %}
         <div class="region-featured">
@@ -88,29 +83,15 @@
       {% endif %}
     {% endblock %}
 
-    <div class="content mb-5">
-      {% if page.sidebar %}
-        <div class="row">
-      {% endif %}
-      <main role="main"{% if page.sidebar %} class="col-12 col-lg-9 order-1"{% endif %}>
+    <div class="mb-5">
+      <main>
         <div id="main-content" tabindex="-1"></div>
         {% block page_content %}
           <div class="layout-content">
             {{ page.content }}
           </div>
         {% endblock %}
-        {% block page_content_bottom %}
-          {% if page.content_bottom %}
-            {{ page.content_bottom }}
-          {% endif %}
-        {% endblock %}
       </main>
-      {% if page.sidebar %}
-          <aside class="layout-sidebar col-12 col-lg-3">
-            {{ page.sidebar }}
-          </aside>
-        </div>
-      {% endif %}
     </div>
   </div>
 

@@ -10,18 +10,18 @@ Feature: Global search
       | moderation       | no                           |
       | topic            | Demography                   |
       | spatial coverage | Belgium                      |
-      | state            | validated                    |
+      | state            | published                    |
     And the following solutions:
       | title          | collection                   | description                                                                                                                          | topic      | spatial coverage | state     |
-      | Spherification | Molecular cooking collection | Spherification is the culinary process of shaping a liquid into spheres                                                              | Demography | European Union   | validated |
-      | Foam           | Molecular cooking collection | "The use of foam in cuisine has been used in many forms in the history of cooking:whipped cream, meringue, and mousse are all foams" |            |                  | validated |
+      | Spherification | Molecular cooking collection | Spherification is the culinary process of shaping a liquid into spheres                                                              | Demography | European Union   | published |
+      | Foam           | Molecular cooking collection | "The use of foam in cuisine has been used in many forms in the history of cooking:whipped cream, meringue, and mousse are all foams" |            |                  | published |
     And news content:
       | title                | headline              | body             | collection                   | topic                   | spatial coverage | state     |
-      | El Tuba de Los Lobos | El Celler de Can Roca | The best in town | Molecular cooking collection | Statistics and Analysis | Luxembourg       | validated |
-      | Dummy news 1        | Dummy title 1          | Dummy body       | Molecular cooking collection | E-inclusion             | Luxembourg       | validated |
-      | Dummy news 2        | Dummy title 2          | Dummy body       | Molecular cooking collection | E-inclusion             | Luxembourg       | validated |
-      | Dummy news 3        | Dummy title 3          | Dummy body       | Molecular cooking collection | E-inclusion             | Luxembourg       | validated |
-      | Dummy news 4        | Dummy title 4          | Dummy body       | Molecular cooking collection | E-inclusion             | Luxembourg       | validated |
+      | El Tuba de Los Lobos | El Celler de Can Roca | The best in town | Molecular cooking collection | Statistics and Analysis | Luxembourg       | published |
+      | Dummy news 1        | Dummy title 1          | Dummy body       | Molecular cooking collection | E-inclusion             | Luxembourg       | published |
+      | Dummy news 2        | Dummy title 2          | Dummy body       | Molecular cooking collection | E-inclusion             | Luxembourg       | published |
+      | Dummy news 3        | Dummy title 3          | Dummy body       | Molecular cooking collection | E-inclusion             | Luxembourg       | published |
+      | Dummy news 4        | Dummy title 4          | Dummy body       | Molecular cooking collection | E-inclusion             | Luxembourg       | published |
     When I visit the search page
     Then the response should not contain "data-drupal-facet-id=\"status\""
 
@@ -158,15 +158,15 @@ Feature: Global search
       | email | go-to@example.com |
     And the following collections:
       | title            | description                                          | abstract                       | state     |
-      | Collection alpha | <p>collection <strong>beta</strong> description.</p> | The collection gamma abstract. | validated |
-      | Col for Sol      | <p>collection for the solution.</p>                  | The col for sol abstract.      | validated |
+      | Collection alpha | <p>collection <strong>beta</strong> description.</p> | The collection gamma abstract. | published |
+      | Col for Sol      | <p>collection for the solution.</p>                  | The col for sol abstract.      | published |
     And event content:
       | title             | short title       | body                                | spatial coverage | agenda         | location       | organisation        | scope         | keywords | collection       | state     |
-      | Event Omega       | Event short delta | The epsilon event content.          | Greece           | Event agenda.  | Some place     | European Commission | International | Alphabet | Collection alpha | validated |
-      | Alternative event | Alt event         | This event stays in the background. | Luxembourg       | To be planned. | Event location | Event organisation  |               |          | Collection alpha | validated |
+      | Event Omega       | Event short delta | The epsilon event content.          | Greece           | Event agenda.  | Some place     | European Commission | International | Alphabet | Collection alpha | published |
+      | Alternative event | Alt event         | This event stays in the background. | Luxembourg       | To be planned. | Event location | Event organisation  |               |          | Collection alpha | published |
     And document content:
       | title          | document type | short title          | body                                    | spatial coverage | keywords | collection       | state     |
-      | Document omega | Document      | Document short delta | A document consists of epsilon strings. | Luxembourg       | Alphabet | Collection alpha | validated |
+      | Document omega | Document      | Document short delta | A document consists of epsilon strings. | Luxembourg       | Alphabet | Collection alpha | published |
 
     When I visit the search page
 
@@ -191,14 +191,14 @@ Feature: Global search
       | email | go-to@example.com |
     And the following collections:
       | title            | description                                          | abstract                       | state     |
-      | Collection alpha | <p>collection <strong>beta</strong> description.</p> | The collection gamma abstract. | validated |
-      | Col for Sol      | <p>collection for the solution.</p>                  | The col for sol abstract.      | validated |
+      | Collection alpha | <p>collection <strong>beta</strong> description.</p> | The collection gamma abstract. | published |
+      | Col for Sol      | <p>collection for the solution.</p>                  | The col for sol abstract.      | published |
     And the following solutions:
       | title          | description                                                | keywords | owner             | contact information | collection  | state     |
-      | Solution alpha | <p>This is the solution <strong>beta</strong> description. | Alphabet | Responsible owner | Go-to contact       | Col for Sol | validated |
+      | Solution alpha | <p>This is the solution <strong>beta</strong> description. | Alphabet | Responsible owner | Go-to contact       | Col for Sol | published |
     And the following releases:
       | title         | release number | release notes                               | keywords | is version of  | owner             | contact information | state     |
-      | Release Alpha | 1              | <p>Release notes for <em>beta</em> changes. | Alphabet | Solution alpha | Responsible owner | Go-to contact       | validated |
+      | Release Alpha | 1              | <p>Release notes for <em>beta</em> changes. | Alphabet | Solution alpha | Responsible owner | Go-to contact       | published |
     And the following distributions:
       | title              | description                                    | parent        | access url |
       | Distribution alpha | <p>A simple beta distribution description.</p> | Release Alpha | test.zip   |
@@ -207,17 +207,17 @@ Feature: Global search
       | Licence Alpha | A beta description for the licence. |
     And news content:
       | title      | headline            | body                      | keywords | collection       | state     |
-      | News omega | News headline delta | The epsilon news content. | Alphabet | Collection alpha | validated |
+      | News omega | News headline delta | The epsilon news content. | Alphabet | Collection alpha | published |
     And event content:
       | title             | short title       | body                                | agenda         | location       | organisation        | scope         | keywords | collection       | solution       | state     |
-      | Event Omega       | Event short delta | The epsilon event content.          | Event agenda.  | Some place     | European Commission | International | Alphabet |                  | Solution alpha | validated |
-      | Alternative event | Alt event         | This event stays in the background. | To be planned. | Event location | Event organisation  |               |          | Collection alpha |                | validated |
+      | Event Omega       | Event short delta | The epsilon event content.          | Event agenda.  | Some place     | European Commission | International | Alphabet |                  | Solution alpha | published |
+      | Alternative event | Alt event         | This event stays in the background. | To be planned. | Event location | Event organisation  |               |          | Collection alpha |                | published |
     And document content:
       | title          | document type | short title          | body                                    | keywords | collection       | state     |
-      | Document omega | Document      | Document short delta | A document consists of epsilon strings. | Alphabet | Collection alpha | validated |
+      | Document omega | Document      | Document short delta | A document consists of epsilon strings. | Alphabet | Collection alpha | published |
     And discussion content:
       | title            | body                                                              | solution       | state     |
-      | Discussion omega | <p>Does anybody has idea why this <em>epsilon</em> is everywhere? | Solution alpha | validated |
+      | Discussion omega | <p>Does anybody has idea why this <em>epsilon</em> is everywhere? | Solution alpha | published |
     And custom_page content:
       | title      | body                                     | collection       | state     |
       | Page omega | This is just an epsilon but should work. | Collection alpha | published |
@@ -321,26 +321,26 @@ Feature: Global search
   Scenario: Collections and solutions are shown first in search results with the same relevance.
     Given collections:
       | title                           | description                         | state     |
-      | Ornithology: the study of birds | Ornithology is a branch of zoology. | validated |
-      | Husky Flying Xylophone          | A strange instrument.               | validated |
+      | Ornithology: the study of birds | Ornithology is a branch of zoology. | published |
+      | Husky Flying Xylophone          | A strange instrument.               | published |
     And the following solution:
       | title       | Bird outposts in the wild            |
       | collection  | Ornithology: the study of birds      |
       | description | Exotic wings and where to find them. |
-      | state       | validated                            |
+      | state       | published                            |
     And custom_page content:
       | title           | body                                  | collection                      | state     |
       | Disturbed birds | Flocks of trained pigeons flying off. | Ornithology: the study of birds | published |
     And news content:
       | title                               | headline                            | body                            | collection                      | state     |
-      | Chickens are small birds            | Chickens are small birds            | Birds domesticated in India.    | Ornithology: the study of birds | validated |
-      | Found a xylophone from 1600 in Asia | Found a xylophone from 1600 in Asia | Oldest instrument of this type. | Husky Flying Xylophone          | validated |
+      | Chickens are small birds            | Chickens are small birds            | Birds domesticated in India.    | Ornithology: the study of birds | published |
+      | Found a xylophone from 1600 in Asia | Found a xylophone from 1600 in Asia | Oldest instrument of this type. | Husky Flying Xylophone          | published |
     And event content:
       | title         | body                   | collection                      | state     |
-      | Bird spotting | Roosters crow at dawn. | Ornithology: the study of birds | validated |
+      | Bird spotting | Roosters crow at dawn. | Ornithology: the study of birds | published |
     And discussion content:
       | title                             | body                    | collection                      | state     |
-      | Best place to find an exotic bird | Somewhere exotic maybe? | Ornithology: the study of birds | validated |
+      | Best place to find an exotic bird | Somewhere exotic maybe? | Ornithology: the study of birds | published |
     And user:
       | Username    | Bird watcher |
       | First name  | Bird         |
@@ -364,7 +364,7 @@ Feature: Global search
       | LGPL       |
     And the following solution:
       | title | Zzolution |
-      | state | validated |
+      | state | published |
 
     When I enter "ZzoluDistro" in the search bar and press enter
     Then I should see "No content found for your search."
@@ -457,7 +457,7 @@ Feature: Global search
     Given the following release:
       | title          | Releazz   |
       | release number | 1         |
-      | state          | validated |
+      | state          | published |
       | is version of  | Zzolution |
 
     When I enter "ReleazzDistro" in the search bar and press enter
@@ -548,7 +548,7 @@ Feature: Global search
     Given the following collection:
       | title    | Collection sample       |
       | keywords | unique, key-definitions |
-      | state    | validated               |
+      | state    | published               |
 
     When I enter "key-definitions" in the search bar and press enter
     Then the page should show only the tiles "Collection sample"
@@ -560,12 +560,12 @@ Feature: Global search
   Scenario: Users are able to select the sort order.
     Given collections:
       | title             | description       | state     |
-      | Custom collection | Some custom data. | validated |
+      | Custom collection | Some custom data. | published |
     And news content:
       | title               | headline                           | body                                                              | collection        | state     | created    | changed    |
-      | Quantum information | Relativity is the word             | No one cares about the body.                                      | Custom collection | validated | 01/01/2019 | 03/08/2019 |
-      | The uneven universe | Relativity news: Relativity theory | I do care about the relativity keyword in the body.               | Custom collection | validated | 02/01/2019 | 02/08/2019 |
-      | The earth is square | Absolutely nonsense                | Some news are not worth it but I will add relativity here anyway. | Custom collection | validated | 03/01/2019 | 01/08/2019 |
+      | Quantum information | Relativity is the word             | No one cares about the body.                                      | Custom collection | published | 01/01/2019 | 03/08/2019 |
+      | The uneven universe | Relativity news: Relativity theory | I do care about the relativity keyword in the body.               | Custom collection | published | 02/01/2019 | 02/08/2019 |
+      | The earth is square | Absolutely nonsense                | Some news are not worth it but I will add relativity here anyway. | Custom collection | published | 03/01/2019 | 01/08/2019 |
 
     When I am on the homepage
     And I enter "Relativity" in the search bar and press enter
@@ -599,18 +599,18 @@ Feature: Global search
       | moderation       | no                       |
       | topic            | Demography               |
       | spatial coverage | Belgium                  |
-      | state            | validated                |
+      | state            | published                |
     And the following solutions:
       | title    | collection               | description                                                                                                                          | topic      | spatial coverage | state     |
-      | Spheres  | Radio cooking collection | Spherification is the culinary process of shaping a liquid into spheres                                                              | Demography | European Union   | validated |
-      | Movistar | Radio cooking collection | "The use of foam in cuisine has been used in many forms in the history of cooking:whipped cream, meringue, and mousse are all foams" |            |                  | validated |
+      | Spheres  | Radio cooking collection | Spherification is the culinary process of shaping a liquid into spheres                                                              | Demography | European Union   | published |
+      | Movistar | Radio cooking collection | "The use of foam in cuisine has been used in many forms in the history of cooking:whipped cream, meringue, and mousse are all foams" |            |                  | published |
     And news content:
       | title           | body             | collection               | topic                   | spatial coverage | state     |
-      | El Cabo da Roca | The best in town | Radio cooking collection | Statistics and Analysis | Luxembourg       | validated |
-      | Funny news 1    | Dummy body       | Radio cooking collection | E-inclusion             | Luxembourg       | validated |
-      | Funny news 2    | Dummy body       | Radio cooking collection | E-inclusion             | Luxembourg       | validated |
-      | Funny news 3    | Dummy body       | Radio cooking collection | E-inclusion             | Luxembourg       | validated |
-      | Funny news 4    | Dummy body       | Radio cooking collection | E-inclusion             | Luxembourg       | validated |
+      | El Cabo da Roca | The best in town | Radio cooking collection | Statistics and Analysis | Luxembourg       | published |
+      | Funny news 1    | Dummy body       | Radio cooking collection | E-inclusion             | Luxembourg       | published |
+      | Funny news 2    | Dummy body       | Radio cooking collection | E-inclusion             | Luxembourg       | published |
+      | Funny news 3    | Dummy body       | Radio cooking collection | E-inclusion             | Luxembourg       | published |
+      | Funny news 4    | Dummy body       | Radio cooking collection | E-inclusion             | Luxembourg       | published |
 
     Given I am logged in as a user with the "authenticated" role
     When I visit the search page
@@ -638,18 +638,18 @@ Feature: Global search
       | moderation       | no                       |
       | topic            | Demography               |
       | spatial coverage | Belgium                  |
-      | state            | validated                |
+      | state            | published                |
     And the following solutions:
       | title    | collection               | description                                                                                                                                                   | topic      | spatial coverage | state     |
-      | Spheres  | Radio cooking collection | Spherification is the culinary process of shaping a liquid into spheres. Drupal is the best digital experience platform(DXP) on the web, proudly open source. | Demography | European Union   | validated |
-      | Movistar | Radio cooking collection | "The use of foam in cuisine has been used in many forms in the history of cooking:whipped cream, meringue, and mousse are all foams", proudly open source.    |            |                  | validated |
+      | Spheres  | Radio cooking collection | Spherification is the culinary process of shaping a liquid into spheres. Drupal is the best digital experience platform(DXP) on the web, proudly open source. | Demography | European Union   | published |
+      | Movistar | Radio cooking collection | "The use of foam in cuisine has been used in many forms in the history of cooking:whipped cream, meringue, and mousse are all foams", proudly open source.    |            |                  | published |
     And news content:
       | title           | body                                                                                 | collection               | topic                   | spatial coverage | state     |
-      | El Cabo da Roca | The best in town, proudly open source.                                               | Radio cooking collection | Statistics and Analysis | Luxembourg       | validated |
-      | Funny news 1    | Drupal is the best digital experience platform(DXP) on the web, proudly open source. | Radio cooking collection | E-inclusion             | Luxembourg       | validated |
-      | Funny news 2    | Drupal is the best digital experience platform(DXP) on the web, proudly open source. | Radio cooking collection | E-inclusion             | Luxembourg       | validated |
-      | Funny news 3    | Drupal is the best digital experience platform(DXP) on the web, proudly open source. | Radio cooking collection | E-inclusion             | Luxembourg       | validated |
-      | Funny news 4    | Drupal is the best digital experience platform(DXP) on the web, proudly open source. | Radio cooking collection | E-inclusion             | Luxembourg       | validated |
+      | El Cabo da Roca | The best in town, proudly open source.                                               | Radio cooking collection | Statistics and Analysis | Luxembourg       | published |
+      | Funny news 1    | Drupal is the best digital experience platform(DXP) on the web, proudly open source. | Radio cooking collection | E-inclusion             | Luxembourg       | published |
+      | Funny news 2    | Drupal is the best digital experience platform(DXP) on the web, proudly open source. | Radio cooking collection | E-inclusion             | Luxembourg       | published |
+      | Funny news 3    | Drupal is the best digital experience platform(DXP) on the web, proudly open source. | Radio cooking collection | E-inclusion             | Luxembourg       | published |
+      | Funny news 4    | Drupal is the best digital experience platform(DXP) on the web, proudly open source. | Radio cooking collection | E-inclusion             | Luxembourg       | published |
 
     Given I am logged in as a user with the "authenticated" role
     When I visit the search page
@@ -725,26 +725,26 @@ Feature: Global search
   Scenario: Filter on date
     Given collection:
       | title | Mice in space |
-      | state | validated     |
+      | state | published     |
     And document content:
       | title        | collection    | topic                                  | state     | logo     | body                                                                                                                                                                                            |
-      | Microgravity | Mice in space | HR, Statistics and Analysis, E-justice | validated | alan.jpg | Conventional studies investigating the effects of reduced gravity on muscle mass and function have used a ground control group that is not directly comparable to the space experimental group. |
+      | Microgravity | Mice in space | HR, Statistics and Analysis, E-justice | published | alan.jpg | Conventional studies investigating the effects of reduced gravity on muscle mass and function have used a ground control group that is not directly comparable to the space experimental group. |
     And event content:
       | title           | collection    | topic                    | state     | logo        | body                                                                                                                                                                                  |
-      | Stay at the ISS | Mice in space | EU and European Policies | validated | charles.jpg | Two groups of mice (six per group) were housed aboard the International Space Station for 35 days. One group was subjected to artificial gravity (1 g) and the other to microgravity. |
+      | Stay at the ISS | Mice in space | EU and European Policies | published | charles.jpg | Two groups of mice (six per group) were housed aboard the International Space Station for 35 days. One group was subjected to artificial gravity (1 g) and the other to microgravity. |
     And news content:
       | title           | body                                       | collection    | topic                   | spatial coverage | state     | logo        | created    | changed    |
-      | Muscle atrophy  | Researchers from the University of Tsukuba | Mice in space | Finance in EU           | Luxembourg       | validated | blaise.jpg  | 01/01/2019 | 01/01/2019 |
-      | El Cabo da Roca | The best in town                           | Mice in space | Statistics and Analysis | Luxembourg       | validated | charles.jpg | 01/12/2020 | 01/12/2020 |
-      | Funny news 1    | Dummy body                                 | Mice in space | HR                      | Luxembourg       | validated | ada.png     | 05/01/2019 | 05/01/2019 |
-      | Funny news 2    | Dummy body                                 | Mice in space | E-inclusion             | Luxembourg       | validated | alan.jpg    | 06/21/2019 | 06/21/2019 |
-      | Funny news 3    | Dummy body                                 | Mice in space | E-inclusion             | Luxembourg       | validated | charles.jpg | 12/31/2021 | 12/31/2021 |
-      | Funny news 4    | Dummy body                                 | Mice in space | HR                      | Luxembourg       | validated | ada.png     | 06/25/2020 | 06/25/2020 |
-      | Funny news 5    | Dummy body                                 | Mice in space | HR                      | Luxembourg       | validated | ada.png     | 01/01/2021 | 01/01/2021 |
-      | Dummy news 1    | Dummy body                                 | Mice in space | Statistics and Analysis | Luxembourg       | validated | charles.jpg | 09/24/2019 | 09/24/2019 |
-      | Dummy news 2    | Dummy body                                 | Mice in space | E-inclusion             | Luxembourg       | validated | alan.jpg    | 01/18/2021 | 01/18/2021 |
-      | Dummy news 3    | Dummy body                                 | Mice in space | Statistics and Analysis | Luxembourg       | validated | ada.png     | 08/01/2019 | 08/01/2019 |
-      | Dummy news 4    | Dummy body                                 | Mice in space | E-inclusion             | Luxembourg       | validated | charles.jpg | 09/18/2019 | 09/18/2019 |
+      | Muscle atrophy  | Researchers from the University of Tsukuba | Mice in space | Finance in EU           | Luxembourg       | published | blaise.jpg  | 01/01/2019 | 01/01/2019 |
+      | El Cabo da Roca | The best in town                           | Mice in space | Statistics and Analysis | Luxembourg       | published | charles.jpg | 01/12/2020 | 01/12/2020 |
+      | Funny news 1    | Dummy body                                 | Mice in space | HR                      | Luxembourg       | published | ada.png     | 05/01/2019 | 05/01/2019 |
+      | Funny news 2    | Dummy body                                 | Mice in space | E-inclusion             | Luxembourg       | published | alan.jpg    | 06/21/2019 | 06/21/2019 |
+      | Funny news 3    | Dummy body                                 | Mice in space | E-inclusion             | Luxembourg       | published | charles.jpg | 12/31/2021 | 12/31/2021 |
+      | Funny news 4    | Dummy body                                 | Mice in space | HR                      | Luxembourg       | published | ada.png     | 06/25/2020 | 06/25/2020 |
+      | Funny news 5    | Dummy body                                 | Mice in space | HR                      | Luxembourg       | published | ada.png     | 01/01/2021 | 01/01/2021 |
+      | Dummy news 1    | Dummy body                                 | Mice in space | Statistics and Analysis | Luxembourg       | published | charles.jpg | 09/24/2019 | 09/24/2019 |
+      | Dummy news 2    | Dummy body                                 | Mice in space | E-inclusion             | Luxembourg       | published | alan.jpg    | 01/18/2021 | 01/18/2021 |
+      | Dummy news 3    | Dummy body                                 | Mice in space | Statistics and Analysis | Luxembourg       | published | ada.png     | 08/01/2019 | 08/01/2019 |
+      | Dummy news 4    | Dummy body                                 | Mice in space | E-inclusion             | Luxembourg       | published | charles.jpg | 09/18/2019 | 09/18/2019 |
 
     When I visit the search page
 
@@ -767,7 +767,7 @@ Feature: Global search
       | title      | Max 2 topic collection                                                             |
       | moderation | no                                                                                 |
       | topic      | Finance in EU, Supplier exchange, Demography, E-inclusion, Statistics and Analysis |
-      | state      | validated                                                                          |
+      | state      | published                                                                          |
     When I visit the search page
     Then there should be 2 topics in the "Max 2 topic collection" card
     And I should see the text "+3 topics" in the "Max 2 topic collection" card
@@ -775,12 +775,12 @@ Feature: Global search
   Scenario: In search result I can see updated date label.
     Given collections:
       | title             | description       | state     |
-      | Custom collection | Some custom data. | validated |
+      | Custom collection | Some custom data. | published |
     And news content:
       | title               | headline                           | body                                                              | collection        | state     | created    | changed    |
-      | Quantum information | Relativity is the word             | No one cares about the body.                                      | Custom collection | validated | 01/01/2019 | 03/08/2019 |
-      | The uneven universe | Relativity news: Relativity theory | I do care about the relativity keyword in the body.               | Custom collection | validated | 02/01/2019 | 02/08/2019 |
-      | The earth is square | Absolutely nonsense                | Some news are not worth it but I will add relativity here anyway. | Custom collection | validated | 03/01/2019 | 01/08/2019 |
+      | Quantum information | Relativity is the word             | No one cares about the body.                                      | Custom collection | published | 01/01/2019 | 03/08/2019 |
+      | The uneven universe | Relativity news: Relativity theory | I do care about the relativity keyword in the body.               | Custom collection | published | 02/01/2019 | 02/08/2019 |
+      | The earth is square | Absolutely nonsense                | Some news are not worth it but I will add relativity here anyway. | Custom collection | published | 03/01/2019 | 01/08/2019 |
     When I visit the search page
     Then I should see the text "Last update: 08/03/2019" in the "Quantum information" card
     And I should see the text "Last update: 08/02/2019" in the "The uneven universe" card

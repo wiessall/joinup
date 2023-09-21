@@ -156,7 +156,7 @@ class AssetReleaseWorkflowTest extends JoinupWorkflowExistingSiteTestBase {
    */
   public function testWorkflow() {
     foreach ($this->workflowTransitionsProvider() as $entity_state => $workflow_data) {
-      $parent = $this->createDefaultParent('validated');
+      $parent = $this->createDefaultParent('published');
 
       foreach ($workflow_data as $user_var => $expected_target_states) {
         $content = Rdf::create([
@@ -204,7 +204,7 @@ class AssetReleaseWorkflowTest extends JoinupWorkflowExistingSiteTestBase {
       'collection' => $this->createRdfEntity([
         'rid' => 'collection',
         'label' => $this->randomString(),
-        'field_ar_state' => 'validated',
+        'field_ar_state' => 'published',
       ]),
     ]);
     $this->assertInstanceOf(RdfInterface::class, $parent);
@@ -244,7 +244,7 @@ class AssetReleaseWorkflowTest extends JoinupWorkflowExistingSiteTestBase {
         ['userOgAdministrator', FALSE],
       ],
       // Published parent.
-      'validated' => [
+      'published' => [
         ['userAnonymous', FALSE],
         ['userAuthenticated', FALSE],
         ['userModerator', TRUE],
@@ -299,7 +299,7 @@ class AssetReleaseWorkflowTest extends JoinupWorkflowExistingSiteTestBase {
           ['delete', 'userOgFacilitator', FALSE],
           ['delete', 'userOgAdministrator', TRUE],
         ],
-        'validated' => [
+        'published' => [
           ['view', 'userAnonymous', FALSE],
           ['view', 'userAuthenticated', FALSE],
           ['view', 'userModerator', TRUE],
@@ -335,7 +335,7 @@ class AssetReleaseWorkflowTest extends JoinupWorkflowExistingSiteTestBase {
         ],
       ],
       // Published parent.
-      'validated' => [
+      'published' => [
         'draft' => [
           ['view', 'userAnonymous', FALSE],
           ['view', 'userAuthenticated', FALSE],
@@ -353,7 +353,7 @@ class AssetReleaseWorkflowTest extends JoinupWorkflowExistingSiteTestBase {
           ['delete', 'userOgFacilitator', FALSE],
           ['delete', 'userOgAdministrator', TRUE],
         ],
-        'validated' => [
+        'published' => [
           ['view', 'userAnonymous', TRUE],
           ['view', 'userAuthenticated', TRUE],
           ['view', 'userModerator', TRUE],
@@ -417,24 +417,24 @@ class AssetReleaseWorkflowTest extends JoinupWorkflowExistingSiteTestBase {
         'userAuthenticated' => [],
         'userModerator' => [
           'draft',
-          'validated',
+          'published',
         ],
         'userOgFacilitator' => [
           'draft',
-          'validated',
+          'published',
         ],
         'userOgAdministrator' => [],
       ],
-      'validated' => [
+      'published' => [
         'userAuthenticated' => [],
         'userModerator' => [
           'draft',
-          'validated',
+          'published',
           'needs_update',
         ],
         'userOgFacilitator' => [
           'draft',
-          'validated',
+          'published',
         ],
         'userOgAdministrator' => [],
       ],
@@ -442,7 +442,7 @@ class AssetReleaseWorkflowTest extends JoinupWorkflowExistingSiteTestBase {
         'userAuthenticated' => [],
         'userModerator' => [
           'needs_update',
-          'validated',
+          'published',
         ],
         'userOgFacilitator' => [
           'needs_update',
