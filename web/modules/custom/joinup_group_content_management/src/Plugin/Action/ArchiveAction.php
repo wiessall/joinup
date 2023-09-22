@@ -18,7 +18,10 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * @Action(
  *   id = "joinup_archive",
  *   label = @Translation("Archive content"),
- *   type = "node"
+ *   type = "node",
+ *   requirements = {
+ *      "_permission" = "vbo joinup archive action",
+ *   },
  * )
  */
 class ArchiveAction extends StateActionBase {
