@@ -92,3 +92,16 @@ function joinup_core_requirements($phase): array {
 
   return $requirements;
 }
+
+/**
+ * Remove leftover row paragraphs.
+ */
+function joinup_core_update_109700(): void {
+  $paragraphs = \Drupal::entityTypeManager()
+    ->getStorage('paragraph')
+    ->loadByProperties(['type' => 'row']);
+
+  foreach ($paragraphs as $paragraph) {
+    $paragraph->delete();
+  }
+}

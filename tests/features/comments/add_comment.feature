@@ -5,7 +5,7 @@ Feature: Add comments
   Background:
     Given the following collections:
       | title             | state     | closed |
-      | Gossip collection | validated | no     |
+      | Gossip collection | published | no     |
     And users:
       | Username        | E-mail                 | Roles | First name | Family name |
       | Miss tell tales | tell.tales@example.com |       | Miss       | Tales       |
@@ -18,7 +18,7 @@ Feature: Add comments
 
     Given solutions:
       | title                | collection        | state     |
-      | Gossip girl solution | Gossip collection | validated |
+      | Gossip girl solution | Gossip collection | published |
     And users:
       | Username          | E-mail                        | Roles     | First name | Family name |
       | Comment moderator | comment.moderator@example.com | moderator | Comment    | Moderator   |
@@ -93,12 +93,12 @@ Feature: Add comments
 
     Examples:
       | content type | title               | state     | parent     | parent title         |
-      | news         | Scandalous news     | validated | collection | Gossip collection    |
-      | event        | Celebrity gathering | validated | collection | Gossip collection    |
-      | discussion   | Is gossip bad?      | validated | collection | Gossip collection    |
-      | document     | Wikileaks           | validated | collection | Gossip collection    |
+      | news         | Scandalous news     | published | collection | Gossip collection    |
+      | event        | Celebrity gathering | published | collection | Gossip collection    |
+      | discussion   | Is gossip bad?      | published | collection | Gossip collection    |
+      | document     | Wikileaks           | published | collection | Gossip collection    |
       # Add an example also for solutions to ensure the variables are properly replaced.
-      | news         | Scandalous news     | validated | solution   | Gossip girl solution |
+      | news         | Scandalous news     | published | solution   | Gossip girl solution |
 
   Scenario Outline: Posting comments.
     Given <content type> content:
@@ -153,15 +153,15 @@ Feature: Add comments
 
     Examples:
       | content type | title               | state     |
-      | news         | Scandalous news     | validated |
-      | discussion   | Is gossip bad?      | validated |
-      | document     | Wikileaks           | validated |
+      | news         | Scandalous news     | published |
+      | discussion   | Is gossip bad?      | published |
+      | document     | Wikileaks           | published |
 
   Scenario Outline: Comments are disallowed for anonymous users.
 
     Given the following collections:
       | title          | state     | closed |
-      | Shy collection | validated | yes    |
+      | Shy collection | published | yes    |
     And <content type> content:
       | title   | body                                                | collection   | state   |
       | <title> | How could this ever happen? Moral panic on its way! | <collection> | <state> |
@@ -183,9 +183,9 @@ Feature: Add comments
 
     Examples:
       | collection        | content type | title                     | state     |
-      | Shy collection    | news         | Scandalous news           | validated |
-      | Shy collection    | discussion   | Is gossip bad?            | validated |
-      | Shy collection    | document     | Wikileaks                 | validated |
-      | Gossip collection | news         | Rihanna wears pope outfit | validated |
-      | Gossip collection | discussion   | Is gossip good?           | validated |
-      | Gossip collection | document     | Celebrity scandals 2019   | validated |
+      | Shy collection    | news         | Scandalous news           | published |
+      | Shy collection    | discussion   | Is gossip bad?            | published |
+      | Shy collection    | document     | Wikileaks                 | published |
+      | Gossip collection | news         | Rihanna wears pope outfit | published |
+      | Gossip collection | discussion   | Is gossip good?           | published |
+      | Gossip collection | document     | Celebrity scandals 2019   | published |

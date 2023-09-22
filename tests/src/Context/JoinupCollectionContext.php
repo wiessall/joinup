@@ -56,7 +56,7 @@ class JoinupCollectionContext extends RawDrupalContext {
       'rid' => 'collection',
       'id' => JoinupCollectionHelper::JOINUP_COLLECTION_DEFAULT_ENTITY_ID,
       'label' => 'Joinup',
-      'field_ar_state' => 'validated',
+      'field_ar_state' => 'published',
       'field_topic' => 'http://example.com/term/sna',
       'field_ar_owner' => 'http://example.com/owner/isa2',
       'field_ar_contact_information' => 'http://example.com/contact/joinup',

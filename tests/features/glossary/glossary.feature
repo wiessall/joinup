@@ -9,14 +9,14 @@ Feature: As a moderator or group facilitator I want to be able to add, edit and
       | <user>   | <role> |
     And the following collection:
       | title | A World of Things |
-      | state | validated         |
+      | state | published         |
     And the following collection user membership:
       | collection        | user   | roles     |
       | A World of Things | <user> | <og role> |
     And the following solution:
       | title      | Things To Come    |
       | collection | A World of Things |
-      | state      | validated         |
+      | state      | published         |
 
     Given I am logged in as <user>
     When I go to the "A World of Things" collection
@@ -128,7 +128,7 @@ Feature: As a moderator or group facilitator I want to be able to add, edit and
       | About    |
     And I should not see the link "Glossary"
 
-    Given I <link visibility> the contextual link "Edit menu" in the "Header bottom" region
+    Given I <link visibility> the contextual link "Edit menu" in the "Header" region
     And I enable "Glossary" in the navigation menu of the "Things To Come" solution
     And I go to the "Things To Come" solution
     Then I should see the following group menu items in the specified order:
@@ -150,20 +150,20 @@ Feature: As a moderator or group facilitator I want to be able to add, edit and
   Scenario: Glossary terms should be shown as links in collection content
     Given collection:
       | title       | Collection With Glossary                                                                             |
-      | state       | validated                                                                                            |
+      | state       | published                                                                                            |
       | description | Colors of Paradise. Abbreviated as CLR. <a href="../../contact"><strong>Colors of Dream</strong></a> |
       | abstract    | The Alphabet is back and it's s/ashy.                                                                |
     And solution:
       | title       | Under The Bridge         |
       | description | No Colors                |
-      | state       | validated                |
+      | state       | published                |
       | collection  | Collection With Glossary |
     And release:
       | title          | Summer of 69          |
       | release number | 6.22                  |
       | release notes  | Everything was Colors |
       | is version of  | Under The Bridge      |
-      | state          | validated             |
+      | state          | published             |
     And distributions:
       | title   | description          | parent           | access url         |
       | Distro1 | Alphabet & CLR       | Under The Bridge | http://example.com |
@@ -173,16 +173,16 @@ Feature: As a moderator or group facilitator I want to be able to add, edit and
       | Schedule | Colors everywhere | Under The Bridge | published |
     And discussion content:
       | title        | content                   | collection               | state     |
-      | The Big Talk | The Alphabet. Call it ABC | Collection With Glossary | validated |
+      | The Big Talk | The Alphabet. Call it ABC | Collection With Glossary | published |
     And document content:
       | title             | body             | collection               | state     |
-      | Authentic Papyrus | Alphabet is back | Collection With Glossary | validated |
+      | Authentic Papyrus | Alphabet is back | Collection With Glossary | published |
     And event content:
       | title      | body                              | solution         | state     |
-      | Soho Night | Any cOLOrs You Like. Maybe colrs? | Under The Bridge | validated |
+      | Soho Night | Any cOLOrs You Like. Maybe colrs? | Under The Bridge | published |
     And news content:
       | title         | body                                       | solution         | state     |
-      | Won at Bingo! | aBC is for ALPHABET what CLR is for Colors | Under The Bridge | validated |
+      | Won at Bingo! | aBC is for ALPHABET what CLR is for Colors | Under The Bridge | published |
     And glossary content:
       | title    | synonyms  | summary                  | definition                  | collection               |
       | Alphabet | ABC       | Summary of Alphabet      | Long, long definition field | Collection With Glossary |
@@ -259,8 +259,8 @@ Feature: As a moderator or group facilitator I want to be able to add, edit and
       | fac1     |           |
     And the following collections:
       | title                    | description                                                                                            | state     |
-      | Collection With Glossary | The Battle of Evermore of the batTle and the BATTLE. Call it everMore or EVERmore. Also, battle again. | validated |
-      | The Other Collection     | desc                                                                                                   | validated |
+      | Collection With Glossary | The Battle of Evermore of the batTle and the BATTLE. Call it everMore or EVERmore. Also, battle again. | published |
+      | The Other Collection     | desc                                                                                                   | published |
     And the following collection user membership:
       | collection               | user | roles       |
       | Collection With Glossary | fac  | facilitator |
@@ -337,8 +337,8 @@ Feature: As a moderator or group facilitator I want to be able to add, edit and
       | ben      |
     And the following collections:
       | title             | state     |
-      | A World of Things | validated |
-      | Other collection  | validated |
+      | A World of Things | published |
+      | Other collection  | published |
 
     And the following collection user membership:
       | collection        | user | roles       |
@@ -433,7 +433,7 @@ Feature: As a moderator or group facilitator I want to be able to add, edit and
       | mod      | moderator |
     And the following collections:
       | title                    | description                                                                                                             | state     |
-      | Collection With Glossary | The Battle of Evermore of the <strong>batTle</strong> and the BATTLE. Call it everMore or EVERmore. Also, battle again. | validated |
+      | Collection With Glossary | The Battle of Evermore of the <strong>batTle</strong> and the BATTLE. Call it everMore or EVERmore. Also, battle again. | published |
     And the following collection user membership:
       | collection               | user | roles       |
       | Collection With Glossary | mod  | facilitator |

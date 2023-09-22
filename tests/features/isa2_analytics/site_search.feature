@@ -13,10 +13,10 @@ Feature: Site search
   Scenario: Search results should contain a total count when results are available.
     And the following collections:
       | title                  | description               | abstract               | state     | creation date    | modification date |
-      | Collection total count | No description available. | No abstract available. | validated | 03-08-2023 12:05 | 03-04-2022 12:05  |
+      | Collection total count | No description available. | No abstract available. | published | 03-08-2023 12:05 | 03-04-2022 12:05  |
     And news content:
       | title                | headline             | body               | collection             | state     | created    | changed    |
-      | News total count     | News total count     | No body available. | Collection total count | validated | 01/01/2019 | 03/03/2022 |
+      | News total count     | News total count     | No body available. | Collection total count | published | 01/01/2019 | 03/03/2022 |
       | News total count new | News total count new | No body available. | Collection total count | draft     | 01/01/2019 | 03/02/2022 |
     When I am on the homepage
     And I enter "total count" in the search bar and press enter

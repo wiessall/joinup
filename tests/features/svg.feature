@@ -10,7 +10,7 @@ Feature: Test SVG attachments.
       | email | svg@example.com |
     And collections:
       | title | logo     | abstract | description | content creation         | moderation | topic             | owner | contact information | state     |
-      | SVG   | logo.png | Test     | Test        | facilitators and authors | yes        | Supplier exchange | SVG   | SVG                 | validated |
+      | SVG   | logo.png | Test     | Test        | facilitators and authors | yes        | Supplier exchange | SVG   | SVG                 | published |
 
   @terms @javascript @uploadFiles:error.svg,simple.svg
   Scenario: Edit a collection wysiwyg modal should close.

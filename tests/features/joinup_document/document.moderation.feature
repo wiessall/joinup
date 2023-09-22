@@ -22,7 +22,7 @@ Feature: Document moderation
       | logo                | logo.png                        |
       | content creation    | registered users                |
       | moderation          | no                              |
-      | state               | validated                       |
+      | state               | published                       |
       | owner               | thisisanowner                   |
       | contact information | Dis contact                     |
       | topic               | E-inclusion                     |

@@ -153,3 +153,83 @@ function ventuno_preprocess_container__facet_region__top(array &$variables): voi
   $classes = 'd-flex align-items-baseline border-bottom my-5 flex-wrap justify-content-between';
   $variables['attributes']['class'][] = $classes;
 }
+
+/**
+ * Implements hook_preprocess_layout__twocol_section().
+ */
+function ventuno_preprocess_layout__twocol_section(array &$variables): void {
+  switch ($variables['settings']['column_widths']) {
+    case '50-50':
+      $first_col_class[] = 'col-md-6';
+      $second_col_class[] = 'col-md-6';
+      break;
+
+    case '33-67':
+      $first_col_class[] = 'col-md-4';
+      $second_col_class[] = 'col-md-8';
+      break;
+
+    case '67-33':
+      $first_col_class[] = 'col-md-8';
+      $second_col_class[] = 'col-md-4';
+      break;
+
+    case '25-75':
+      $first_col_class[] = 'col-md-3';
+      $second_col_class[] = 'col-md-9';
+      break;
+
+    case '75-25':
+      $first_col_class[] = 'col-md-9';
+      $second_col_class[] = 'col-md-3';
+      break;
+  }
+
+  $first_col_class[] = 'layout__region';
+  $first_col_class[] = 'layout__region--first';
+  $second_col_class[] = 'layout__region';
+  $second_col_class[] = 'layout__region--second';
+  $variables['first_col_class'] = $first_col_class;
+  $variables['second_col_class'] = $second_col_class;
+}
+
+/**
+ * Implements hook_preprocess_layout__threecol_section().
+ */
+function ventuno_preprocess_layout__threecol_section(array &$variables): void {
+  switch ($variables['settings']['column_widths']) {
+    case '25-50-25':
+      $first_col_class[] = 'col-md-3';
+      $second_col_class[] = 'col-md-6';
+      $third_col_class[] = 'col-md-3';
+      break;
+
+    case '33-34-33':
+      $first_col_class[] = 'col-md-4';
+      $second_col_class[] = 'col-md-4';
+      $third_col_class[] = 'col-md-4';
+      break;
+
+    case '25-25-50':
+      $first_col_class[] = 'col-md-3';
+      $second_col_class[] = 'col-md-3';
+      $third_col_class[] = 'col-md-6';
+      break;
+
+    case '50-25-25':
+      $first_col_class[] = 'col-md-6';
+      $second_col_class[] = 'col-md-3';
+      $third_col_class[] = 'col-md-3';
+      break;
+  }
+
+  $first_col_class[] = 'layout__region';
+  $first_col_class[] = 'layout__region--first';
+  $second_col_class[] = 'layout__region';
+  $second_col_class[] = 'layout__region--second';
+  $third_col_class[] = 'layout__region';
+  $third_col_class[] = 'layout__region--third';
+  $variables['first_col_class'] = $first_col_class;
+  $variables['second_col_class'] = $second_col_class;
+  $variables['third_col_class'] = $third_col_class;
+}

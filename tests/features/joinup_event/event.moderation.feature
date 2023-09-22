@@ -22,7 +22,7 @@ Feature: Event moderation
       | logo                | logo.png              |
       | content creation    | registered users      |
       | moderation          | no                    |
-      | state               | validated             |
+      | state               | published             |
       | owner               | Alma Lee              |
       | contact information | Evs contact           |
       | topic               | E-inclusion           |

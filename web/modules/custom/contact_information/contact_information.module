@@ -34,7 +34,7 @@ use Drupal\rdf_entity\RdfInterface;
 /**
  * Implements hook_entity_bundle_info_alter().
  */
-function contact_information_entity_bundle_info_alter(&$bundles) {
+function contact_information_entity_bundle_info_alter(array &$bundles): void {
   if (!empty($bundles['rdf_entity']['contact_information'])) {
     $bundles['rdf_entity']['contact_information']['class'] = ContactInformation::class;
   }
@@ -60,7 +60,7 @@ function contact_information_entity_bundle_field_info_alter(array &$fields, Enti
 /**
  * Implements hook_ENTITY_TYPE_presave().
  */
-function contact_information_rdf_entity_presave(EntityInterface $entity) {
+function contact_information_rdf_entity_presave(EntityInterface $entity): void {
   // Handle only contact information entities.
   if ($entity->bundle() != 'contact_information') {
     return;
@@ -68,7 +68,7 @@ function contact_information_rdf_entity_presave(EntityInterface $entity) {
 
   contact_information_entity_auto_label($entity);
 
-  // The initial state of a contact information entity is validated. The contact
+  // The initial state of a contact information entity is published. The contact
   // is created as part of proposing a collection, and in the collection propose
   // form the workflow state is hidden from the user, so it would remain in the
   // "__new__" state after submission.
@@ -85,7 +85,7 @@ function contact_information_rdf_entity_presave(EntityInterface $entity) {
  * Alters the name of the header of the entity column in the inline entity form
  * table in the create form. Header label was 'title' before.
  */
-function contact_information_inline_entity_form_table_fields_alter(&$fields, $context) {
+function contact_information_inline_entity_form_table_fields_alter(array &$fields, array $context): void {
   // Replace the label in the contact information table.
   if (
     $context['entity_type'] == 'rdf_entity' &&
@@ -148,7 +148,7 @@ function contact_information_entity_auto_label(EntityInterface $entity) {
  *
  * Implements hook_ENTITY_TYPE_access().
  */
-function contact_information_rdf_entity_access(EntityInterface $entity, $operation, AccountInterface $account) {
+function contact_information_rdf_entity_access(EntityInterface $entity, string $operation, AccountInterface $account): AccessResultInterface {
   if (!$entity instanceof ContactInformationInterface) {
     return AccessResult::neutral();
   }
@@ -229,7 +229,7 @@ function contact_information_rdf_entity_update(RdfInterface $entity): void {
 /**
  * Implements hook_ENTITY_TYPE_delete().
  */
-function contact_information_rdf_entity_delete(RdfInterface $contact_information) {
+function contact_information_rdf_entity_delete(RdfInterface $contact_information): void {
   if ($contact_information instanceof ContactInformationInterface) {
     /** @var \Drupal\contact_information\ContactInformationEmailConfirmInterface $email_confirm */
     $email_confirm = \Drupal::service('contact_information.email_confirm');
