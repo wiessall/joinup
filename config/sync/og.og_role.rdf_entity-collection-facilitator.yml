@@ -228,6 +228,7 @@ permissions:
   - 'update paragraph content call_to_action'
   - 'update paragraph content github_feed'
   - 'update paragraph content json_map'
+  - 'vbo joinup archive action'
   - 'view all revisions'
   - 'view any tallinn_report content'
   - 'view any unpublished content'
