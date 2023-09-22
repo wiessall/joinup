@@ -10,6 +10,7 @@ use Drupal\Core\Session\AccountInterface;
 use Drupal\joinup_group_content_management\Exception\ActionException;
 use Drupal\joinup_workflow\EntityWorkflowStateInterface;
 use Drupal\node\NodeInterface;
+use Drupal\views\ViewExecutable;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -20,7 +21,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  *   label = @Translation("Archive content"),
  *   type = "node",
  *   requirements = {
- *      "_permission" = "vbo joinup archive action",
+ *      "_custom_access" = TRUE,
  *   },
  * )
  */
@@ -95,6 +96,24 @@ class ArchiveAction extends StateActionBase {
     if (!$node->isTargetWorkflowStateAllowed(self::ARCHIVE_STATE)) {
       throw new ActionException('It is not allowed to move ' . $actual . ' to ' . self::ARCHIVE_STATE);
     }
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function customAccess(AccountInterface $account, ViewExecutable $view): bool {
+    /** @var \Drupal\joinup_group\Entity\GroupInterface $group */
+    $group = \Drupal::service('og.context')->getGroup();
+
+    /** @var \Drupal\joinup_group\JoinupGroupManagerInterface $groupManager */
+    $groupManager = \Drupal::service('joinup_group.group_manager');
+    if (!$group) {
+      return FALSE;
+    }
+
+    $permission = 'vbo joinup archive action';
+    return $groupManager->access($group, $permission, $permission, $account)
+      ->isAllowed();
   }
 
 }

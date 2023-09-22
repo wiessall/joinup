@@ -208,6 +208,7 @@ permissions:
   - 'update own asset_release rdf_entity'
   - 'update paragraph content github_feed'
   - 'update paragraph content json_map'
+  - 'vbo joinup archive action'
   - 'view all revisions'
   - 'view any unpublished content'
   - 'view rdf entity'
