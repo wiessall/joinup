@@ -8,7 +8,7 @@ use Drupal\Component\Annotation\Plugin;
 use Drupal\Core\Annotation\Translation;
 
 /**
- * Defines a EU OSS Catalog provider.
+ * Defines a EU OSS Catalogue provider.
  *
  * @see plugin_api
  *

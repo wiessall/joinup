@@ -20,8 +20,8 @@ Feature: User management
     Then I should see the text "Newkid"
 
     # Filter on date
-    Then I fill in "Min" with "1-1-2014"
-    And I fill in "Max" with "10-1-2014"
+    Then I fill in "Created after" with "1-1-2014"
+    And I fill in "Created before" with "10-1-2014"
     And I press "Filter"
     Then I should see the text "Trusty user"
     Then I should not see the text "Newkid"
