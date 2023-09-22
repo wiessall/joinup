@@ -20,4 +20,5 @@ permissions:
   - 'administer redirects'
   - 'edit collection rdf entity'
   - 'manage group content'
+  - 'vbo joinup change group action'
   - 'view the administration theme'
