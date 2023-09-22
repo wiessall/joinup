@@ -768,48 +768,6 @@ display:
             default_group: All
             default_group_multiple: {  }
             group_items: {  }
-        permission:
-          id: permission
-          table: user__roles
-          field: permission
-          relationship: none
-          group_type: group
-          admin_label: ''
-          plugin_id: user_permissions
-          operator: or
-          value: {  }
-          group: 1
-          exposed: true
-          expose:
-            operator_id: permission_op
-            label: Permission
-            description: ''
-            use_operator: false
-            operator: permission_op
-            operator_limit_selection: false
-            operator_list: {  }
-            identifier: permission
-            required: false
-            remember: false
-            multiple: false
-            remember_roles:
-              authenticated: authenticated
-              anonymous: '0'
-              administrator: '0'
-            reduce: false
-          is_grouped: false
-          group_info:
-            label: ''
-            description: ''
-            identifier: ''
-            optional: true
-            widget: select
-            multiple: false
-            remember: false
-            default_group: All
-            default_group_multiple: {  }
-            group_items: {  }
-          reduce_duplicates: false
         default_langcode:
           id: default_langcode
           table: users_field_data
@@ -892,8 +850,8 @@ display:
             default_group: All
             default_group_multiple: {  }
             group_items: {  }
-        created:
-          id: created
+        created_1:
+          id: created_1
           table: users_field_data
           field: created
           relationship: none
@@ -902,7 +860,7 @@ display:
           entity_type: user
           entity_field: created
           plugin_id: date
-          operator: between
+          operator: '>='
           value:
             min: ''
             max: ''
@@ -911,22 +869,79 @@ display:
           group: 1
           exposed: true
           expose:
-            operator_id: created_op
-            label: 'Account created between'
-            description: 'A date in the format DD-MM-YYYY.'
+            operator_id: created_1_op
+            label: 'Created after'
+            description: ''
             use_operator: false
-            operator: created_op
+            operator: created_1_op
             operator_limit_selection: false
             operator_list: {  }
-            identifier: created
+            identifier: created_min
             required: false
             remember: false
             multiple: false
             remember_roles:
               authenticated: authenticated
+              licence_manager: '0'
               anonymous: '0'
               moderator: '0'
               administrator: '0'
+              rdf_graph_manager: '0'
+            min_placeholder: ''
+            max_placeholder: ''
+            placeholder: 'A date in the format DD-MM-YYYY.'
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
+        created_2:
+          id: created_2
+          table: users_field_data
+          field: created
+          relationship: none
+          group_type: group
+          admin_label: ''
+          entity_type: user
+          entity_field: created
+          plugin_id: date
+          operator: '<='
+          value:
+            min: ''
+            max: ''
+            value: ''
+            type: date
+          group: 1
+          exposed: true
+          expose:
+            operator_id: created_2_op
+            label: 'Created before'
+            description: ''
+            use_operator: false
+            operator: created_2_op
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: created_max
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+              licence_manager: '0'
+              anonymous: '0'
+              moderator: '0'
+              administrator: '0'
+              rdf_graph_manager: '0'
+            min_placeholder: ''
+            max_placeholder: ''
+            placeholder: 'A date in the format DD-MM-YYYY.'
           is_grouped: false
           group_info:
             label: ''

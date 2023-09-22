@@ -5,6 +5,7 @@ declare(strict_types = 1);
 namespace Drupal\joinup_federation\Plugin\DataType;
 
 use Drupal\Core\Entity\Plugin\DataType\EntityReference;
+use Drupal\Core\Entity\TypedData\EntityDataDefinition;
 use Drupal\Core\TypedData\DataDefinitionInterface;
 use Drupal\Core\TypedData\TraversableTypedDataInterface;
 use Drupal\Core\TypedData\TypedDataInterface;
@@ -70,7 +71,7 @@ class RdfEntityReference extends EntityReference {
       // Has a non-empty root.
       !$root->isEmpty()
       // And the root object is an entity adapter.
-      && $root->getPluginDefinition()['id'] === 'entity'
+      && $root->getDataDefinition() instanceof EntityDataDefinition
       // And points to a non-empty entity.
       && ($host_entity = $root->getValue())
       // And the entity type is 'rdf_entity'.
