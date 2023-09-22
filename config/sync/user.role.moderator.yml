@@ -49,6 +49,7 @@ dependencies:
     - sitewide_alert
     - solution
     - state_machine_permissions
+    - system
     - tallinn
     - taxonomy
     - toolbar
@@ -416,5 +417,6 @@ permissions:
   - 'view own field_is_eif_recommendation'
   - 'view rdf entity overview'
   - 'view rdf_entity draft graph'
+  - 'view the administration theme'
   - 'view unpublished rdf entity'
   - 'view unpublished sitewide alert entities'
