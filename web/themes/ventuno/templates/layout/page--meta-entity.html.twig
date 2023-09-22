@@ -30,11 +30,9 @@
  * Regions:
  * - page.search_bar: Items for the search_bar region (very custom region).
  * - page.header: Items for the header region.
- * - page.header_bottom: Items for the header_bottom region.
  * - page.featured: Items for the featured content region.
  * - page.content_top: Items for the region displayed above the main content.
  * - page.content: The main content of the current page.
- * - page.content_bottom: Items for the region displayed below the main content.
  * - page.sidebar: Items for the sidebar.
  * - page.footer: Items for the footer region.
  *
@@ -44,9 +42,9 @@
 #}
 {% extends '@ventuno/layout/page.html.twig' %}
 
-{% block page_header_bottom %}
+{% block page_header %}
   {{ attach_library('ventuno/header-topic') }}
-  <div class="container region-header-bottom">
+  <div class="container region-header">
     <header class="header-topic">
       {{ title_prefix }}
       <h1 class="header-topic__title">

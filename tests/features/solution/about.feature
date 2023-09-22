@@ -16,11 +16,11 @@ Feature: About this solution
       | Senatier             | National authority           |
     And collection:
       | title | Monoclonal Antibody Development |
-      | state | validated                       |
+      | state | published                       |
     And solutions:
       | title   | state     |
-      | Gel     | validated |
-      | Polymer | validated |
+      | Gel     | published |
+      | Polymer | published |
       | Protein | proposed  |
     And solution:
       | title               | Size exclusion chromatography                     |
@@ -28,7 +28,7 @@ Feature: About this solution
       | logo                | logo.png                                          |
       | contact information | Ariel Lucile, "Maiken Bine, Peer Milla"           |
       | owner               | Nova Pharmaceuticals, Senatier                    |
-      | state               | validated                                         |
+      | state               | published                                         |
       | documentation       | text.pdf                                          |
       | language            | Italian, Kallawaya                                |
       | topic               | Demography, E-inclusion                           |
@@ -130,11 +130,11 @@ Feature: About this solution
       | E-mail      | p.papamichael@pally.de |
     And collection:
       | title | Antibody development |
-      | state | validated            |
+      | state | published            |
     And solution:
       | title         | Six exclusion advantages                          |
       | description   | Separating molecules by weight.                   |
-      | state         | validated                                         |
+      | state         | published                                         |
       | topic         | Demography, E-inclusion                           |
       | owner         | Rotterdam                                         |
       | solution type | Non-binding Instrument, Service Discovery Service |

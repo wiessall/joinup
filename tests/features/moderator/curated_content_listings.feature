@@ -6,7 +6,7 @@ Feature: Curated content listings
 
   Scenario: Access the dashboard
     Given I am logged in as a "moderator"
-    When I click "Dashboard"
+    When I visit "/dashboard"
     And I click "Curated content listings"
     Then I should see the heading "Curated content listings"
     And I should see the following links:
@@ -59,19 +59,19 @@ Feature: Curated content listings
 
     Given collection:
       | title | Spacex in space |
-      | state | validated       |
+      | state | published       |
     And news content:
       | title          | collection    | topic                                      | state     |
-      | Cardio atrophy | Spacex in space | Finance in EU, Supplier exchange, E-health | validated |
+      | Cardio atrophy | Spacex in space | Finance in EU, Supplier exchange, E-health | published |
     And discussion content:
       | title                | collection      | topic                            | state     |
-      | Reference of gravity | Spacex in space | Employment and Support Allowance | validated |
+      | Reference of gravity | Spacex in space | Employment and Support Allowance | published |
     And document content:
       | title        | collection      | topic                                  | state     |
-      | Licrogravity | Spacex in space | HR, Statistics and Analysis, E-justice | validated |
+      | Licrogravity | Spacex in space | HR, Statistics and Analysis, E-justice | published |
     And event content:
       | title           | collection      | topic                    | state     |
-      | Stay at the CSS | Spacex in space | EU and European Policies | validated |
+      | Stay at the CSS | Spacex in space | EU and European Policies | published |
     And the "Highlighted event" content listing contains:
       | type    | label           |
       | content | Stay at the CSS |

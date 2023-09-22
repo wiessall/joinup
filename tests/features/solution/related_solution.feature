@@ -12,12 +12,12 @@ Feature: Related solution
       | Kalikatoures | Company, Industry consortium |
     And solutions:
       | title      | related solutions | description                         | documentation | related by type | moderation | logo     | topic      | state     | solution type | owner        | contact information |
-      | C          |                   | Blazing fast segmentation faults.   | text.pdf      | yes             | no         | logo.png | Demography | validated |               | Kalikatoures | Kalikatoura         |
-      | Java       | C                 | Because inheritance is cool.        | text.pdf      | yes             | no         | logo.png | Demography | validated | Citizen       | Kalikatoures | Kalikatoura         |
-      | PHP        |                   | Make a site.                        | text.pdf      | yes             | yes        | logo.png | Demography | validated | Citizen       | Kalikatoures | Kalikatoura         |
+      | C          |                   | Blazing fast segmentation faults.   | text.pdf      | yes             | no         | logo.png | Demography | published |               | Kalikatoures | Kalikatoura         |
+      | Java       | C                 | Because inheritance is cool.        | text.pdf      | yes             | no         | logo.png | Demography | published | Citizen       | Kalikatoures | Kalikatoura         |
+      | PHP        |                   | Make a site.                        | text.pdf      | yes             | yes        | logo.png | Demography | published | Citizen       | Kalikatoures | Kalikatoura         |
       | Golang     |                   | Concurrency for the masses          | text.pdf      | yes             | yes        | logo.png | Demography | proposed  | Citizen       | Kalikatoures | Kalikatoura         |
-      | Python     |                   | Get stuff done.                     | text.pdf      | yes             | no         | logo.png | Demography | validated |               | Kalikatoures | Kalikatoura         |
-      | Javascript | Java, PHP         | Java is related to javascript. Huh? | text.pdf      | no              | no         | logo.png | Demography | validated | Citizen       | Kalikatoures | Kalikatoura         |
+      | Python     |                   | Get stuff done.                     | text.pdf      | yes             | no         | logo.png | Demography | published |               | Kalikatoures | Kalikatoura         |
+      | Javascript | Java, PHP         | Java is related to javascript. Huh? | text.pdf      | no              | no         | logo.png | Demography | published | Citizen       | Kalikatoures | Kalikatoura         |
 
   Scenario: Related solutions
     # Scenario A. A collection owner manages his own collection.

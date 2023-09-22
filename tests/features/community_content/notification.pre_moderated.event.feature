@@ -13,7 +13,7 @@ Feature: Notification test for the event transitions on a pre moderated parent.
       | CC member        |           | notify_member@test.com      | CC         | Member      |
     And collections:
       | title             | state     | content creation | moderation |
-      | CC pre collection | validated | members          | yes        |
+      | CC pre collection | published | members          | yes        |
     And the following collection user memberships:
       | collection        | user           | roles       |
       | CC pre collection | CC owner       | owner       |
@@ -25,15 +25,15 @@ Feature: Notification test for the event transitions on a pre moderated parent.
       # the facilitator would not have access to the entity.
       | CC notify pre publish               | CC facilitator | body | Half Moon Street, London             | CC pre collection | draft            |
       | CC notify pre propose               | CC member      | body | Quai d'Orleans, Paris                | CC pre collection | draft            |
-      | CC notify pre request changes       | CC member      | body | Rue du Mont Thabor, Paris            | CC pre collection | validated        |
-      | CC notify pre report                | CC member      | body | Cort Adelers Gate, Oslo              | CC pre collection | validated        |
-      | CC notify pre request deletion      | CC member      | body | Ferdinand Bolstraat, Amsterdam       | CC pre collection | validated        |
+      | CC notify pre request changes       | CC member      | body | Rue du Mont Thabor, Paris            | CC pre collection | published        |
+      | CC notify pre report                | CC member      | body | Cort Adelers Gate, Oslo              | CC pre collection | published        |
+      | CC notify pre request deletion      | CC member      | body | Ferdinand Bolstraat, Amsterdam       | CC pre collection | published        |
       | CC notify pre propose from reported | CC member      | body | Lychener Strasse, Berlin             | CC pre collection | needs_update     |
       | CC notify pre approve proposed      | CC member      | body | Capel Street, Dublin                 | CC pre collection | proposed         |
       | CC notify pre reject deletion       | CC member      | body | Carrer dels Sagristans, Barcelona    | CC pre collection | deletion_request |
       | CC notify pre delete                | CC member      | body | 4 Chome-2-15 Ginza, Chuo City, Tokyo | CC pre collection | deletion_request |
-      | CC notify validated to delete       | CC member      | body | Malcolm X Boulevard, New York        | CC pre collection | validated        |
-      | CC notify validated to revise       | CC member      | body | Malcolm X Boulevard, New York        | CC pre collection | validated        |
+      | CC notify published to delete       | CC member      | body | Malcolm X Boulevard, New York        | CC pre collection | published        |
+      | CC notify published to revise       | CC member      | body | Malcolm X Boulevard, New York        | CC pre collection | published        |
 
     # Test 'create' operation.
     When I am logged in as "CC member"
@@ -91,13 +91,13 @@ Feature: Notification test for the event transitions on a pre moderated parent.
       | subject   | Joinup: Content has been updated                                                                                                                                                   |
       | body      | CC Member has requested to delete the event - "CC notify pre request deletion" in the collection: "CC pre collection", with the following motivation: "I just want to delete it.". |
 
-    When I go to the "CC notify validated to revise" event
+    When I go to the "CC notify published to revise" event
     And I click "Edit" in the "Entity actions" region
     And I press "Propose changes"
     Then the following email should have been sent:
       | recipient | CC owner                                                                                                                                 |
       | subject   | Joinup: Content has been proposed                                                                                                        |
-      | body      | CC Member has submitted an update of the event - "CC notify validated to revise" for publication in the collection: "CC pre collection". |
+      | body      | CC Member has submitted an update of the event - "CC notify published to revise" for publication in the collection: "CC pre collection". |
 
     When I am logged in as "CC facilitator"
     And I go to the "CC notify pre publish" event
@@ -178,13 +178,13 @@ Feature: Notification test for the event transitions on a pre moderated parent.
       | subject   | Joinup: Content has been deleted                                                                                                                          |
       | body      | Facilitator CC Facilitator has approved your request of deletion for the event - "CC notify pre request deletion" in the collection: "CC pre collection". |
 
-    # Test 'delete' operation on an entity in 'validated' state.
+    # Test 'delete' operation on an entity in 'published' state.
     When I am logged in as "CC facilitator"
-    And I go to the "CC notify validated to delete" event
+    And I go to the "CC notify published to delete" event
     And I click "Edit" in the "Entity actions" region
     And I click "Delete"
     And I press "Delete"
     Then the following email should have been sent:
       | recipient | CC member                                                                                                                  |
       | subject   | Joinup: Content has been deleted                                                                                           |
-      | body      | Facilitator CC Facilitator has deleted the event - "CC notify validated to delete" in the collection: "CC pre collection". |
+      | body      | Facilitator CC Facilitator has deleted the event - "CC notify published to delete" in the collection: "CC pre collection". |
