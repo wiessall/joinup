@@ -91,7 +91,7 @@ Feature: Administer media.
     When I click "File"
     And I fill in "Group" with "Mars"
     And I fill in "Name" with "Just a doc"
-    And I attach the file "banner.jpg" to "File"
+    And I attach the file "banner.jpg" to "Add a new file"
     When I press "Save"
     Then the "media admin" table should contain the following columns:
       | Media name            | Type              | Status      | Group | Author |
