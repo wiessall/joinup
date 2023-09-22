@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace Drupal\joinup_group\Plugin\views\access;
 
 use Drupal\Core\Cache\Cache;
@@ -49,7 +51,10 @@ class OgPermission extends AccessPluginBase implements CacheableDependencyInterf
    * @param \Drupal\joinup_group\JoinupGroupManagerInterface $groupManager
    *   The Joinup Group manager service.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition,
+  public function __construct(
+    array $configuration,
+    $plugin_id,
+    $plugin_definition,
     protected PermissionHandlerInterface $permissionHandler,
     protected ModuleHandlerInterface $moduleHandler,
     protected JoinupGroupManagerInterface $groupManager
@@ -98,7 +103,7 @@ class OgPermission extends AccessPluginBase implements CacheableDependencyInterf
       return $permissions[$this->options['og_permission']]['title'];
     }
 
-    return $this->t($this->options['og_permission']);
+    return $this->t('Permission: @perm', ['@perm' => $this->options['og_permission']]);
   }
 
   /**
@@ -112,7 +117,7 @@ class OgPermission extends AccessPluginBase implements CacheableDependencyInterf
     foreach ($permissions as $perm => $permItem) {
       $provider = $permItem['provider'];
       $display_name = $this->moduleHandler->getName($provider);
-      $options[$display_name][$perm] = strip_tags($permItem['title']);
+      $options[$display_name][$perm] = $permItem['title'];
     }
 
     $form['og_permission'] = [
