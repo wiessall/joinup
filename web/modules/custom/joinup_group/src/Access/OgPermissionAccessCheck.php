@@ -43,7 +43,7 @@ class OgPermissionAccessCheck implements AccessInterface {
 
     $group = $this->groupManager->getGroupFromContext();
     if (!$group) {
-      return AccessResult::forbidden();
+      return AccessResult::forbidden('Group is missing');
     }
 
     return $this->groupManager->access($group, $permission, $permission, $account);
