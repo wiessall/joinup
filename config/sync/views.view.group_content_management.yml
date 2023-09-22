@@ -21,7 +21,6 @@ dependencies:
     - rest
     - serialization
     - state_machine
-    - user
     - views_bulk_operations
     - views_data_export
 id: group_content_management
@@ -525,9 +524,9 @@ display:
           sort_asc_label: Asc
           sort_desc_label: Desc
       access:
-        type: perm
+        type: og_permission
         options:
-          perm: 'manage group content'
+          og_permission: 'manage group content'
       cache:
         type: tag
         options: {  }
@@ -808,6 +807,7 @@ display:
       contexts:
         - 'languages:language_content'
         - 'languages:language_interface'
+        - og_group_context
         - url
         - url.query_args
         - 'user.node_grants:view'
@@ -1306,6 +1306,7 @@ display:
       contexts:
         - 'languages:language_content'
         - 'languages:language_interface'
+        - og_group_context
         - request_format
         - url
         - 'user.node_grants:view'
@@ -1798,6 +1799,7 @@ display:
       contexts:
         - 'languages:language_content'
         - 'languages:language_interface'
+        - og_group_context
         - url
         - url.query_args
         - 'user.node_grants:view'
