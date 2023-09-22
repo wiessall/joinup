@@ -84,7 +84,7 @@ class OgPermission extends AccessPluginBase implements CacheableDependencyInterf
     $permission = $this->options['og_permission'];
 
     return $group && $this->groupManager->access($group, $permission, $permission, $account)
-        ->isAllowed();
+      ->isAllowed();
   }
 
   /**
