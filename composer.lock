@@ -10096,16 +10096,16 @@
         },
         {
             "name": "openeuropa/oe_bootstrap_theme",
-            "version": "1.5.1",
+            "version": "1.7.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/openeuropa/oe_bootstrap_theme.git",
-                "reference": "a82b425f6b89b258295a764e45882741d35285e0"
+                "reference": "341e1243d670c8feb163b37e163600b8ed81117c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/openeuropa/oe_bootstrap_theme/zipball/a82b425f6b89b258295a764e45882741d35285e0",
-                "reference": "a82b425f6b89b258295a764e45882741d35285e0",
+                "url": "https://api.github.com/repos/openeuropa/oe_bootstrap_theme/zipball/341e1243d670c8feb163b37e163600b8ed81117c",
+                "reference": "341e1243d670c8feb163b37e163600b8ed81117c",
                 "shasum": ""
             },
             "require": {
@@ -10167,9 +10167,9 @@
             "description": "OpenEuropa Bootstrap base theme.",
             "support": {
                 "issues": "https://github.com/openeuropa/oe_bootstrap_theme/issues",
-                "source": "https://github.com/openeuropa/oe_bootstrap_theme/tree/1.5.1"
+                "source": "https://github.com/openeuropa/oe_bootstrap_theme/tree/1.7.0"
             },
-            "time": "2023-08-01T10:03:18+00:00"
+            "time": "2023-09-15T13:34:39+00:00"
         },
         {
             "name": "openeuropa/oe_dashboard_agent",
