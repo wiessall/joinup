@@ -146,6 +146,7 @@ trait EntityTrait {
       'event' => 'event',
       'glossary' => 'glossary',
       'news' => 'news',
+      'oss_solution' => 'oss_solution',
       'release' => 'asset_release',
       'spdx licence' => 'spdx_licence',
       'tallinn report' => 'tallinn_report',

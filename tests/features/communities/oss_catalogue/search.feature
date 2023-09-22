@@ -73,23 +73,15 @@ Feature: OSS catalogue search
     And I should see the "Immuni" tile
 
     # Check header count of solutions.
-    Given I am logged in as a user with the "administer nodes, edit any oss_solution content, delete any oss_solution content" permissions
-    Then I go to the edit form of the "NDC Semantic frontend" oss_solution
-    And I click "Delete"
-    Then I should see the heading "Are you sure you want to delete the content item NDC Semantic frontend?"
-    And I press "Delete"
+    Given I delete the "NDC Semantic frontend" oss_solution
     When I visit the OSS search page
     And I see the text "4 Open Source Software Solutions" in the "Header" region
 
-    When I go to the edit form of the "Django-MDQ" oss_solution
-    And the checkbox "Published" should be checked
-    And set status with 0 in "Django-MDQ" oss_solution
+    When set status with 0 in "Django-MDQ" oss_solution
     Then I visit the OSS search page
     And I see the text "3 Open Source Software Solutions" in the "Header" region
 
-    When I go to the edit form of the "Django-MDQ" oss_solution
-    And the checkbox "Published" should not be checked
-    And set status with 1 in "Django-MDQ" oss_solution
+    When set status with 1 in "Django-MDQ" oss_solution
     Then I visit the OSS search page
     And I see the text "4 Open Source Software Solutions" in the "Header" region
 
