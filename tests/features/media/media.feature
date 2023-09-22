@@ -10,8 +10,8 @@ Feature: Administer media.
       | theOne   | moderator |
     And collections:
       | title | state     |
-      | Mars  | validated |
-      | Venus | validated |
+      | Mars  | published |
+      | Venus | published |
     And the following "Collection logo" media:
       | name                | owner | image                       |
       | The Collection Logo | joe   | library/collection-logo.png |
