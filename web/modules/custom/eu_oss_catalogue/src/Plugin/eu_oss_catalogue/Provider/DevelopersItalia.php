@@ -38,11 +38,15 @@ class DevelopersItalia extends EuOssCatalogueProviderPluginBase {
   protected const ENDPOINT = 'https://api.developers.italia.it/v1/software';
 
   /**
-   * The query string to be used by the next call.
+   * List of projects fetched from Developers Italia API.
    *
-   * @var string|null
+   * @var array[][]
+   *   A list of fetched projects keyed by the coding platform base URL. The
+   *   values are associative arrays keyed by the namespace and having each
+   *   value an associative array keyed by the project name and the value is the
+   *   project data.
    */
-  protected ?string $next = '';
+  protected array $fetched;
 
   /**
    * Constructs a new plugin instance.
@@ -59,6 +63,8 @@ class DevelopersItalia extends EuOssCatalogueProviderPluginBase {
    *   The EU OSS Catalogue logger.
    * @param \GuzzleHttp\Client $httpClient
    *   The HTTP client.
+   * @param \Drupal\eu_oss_catalogue\EuOssCataloguePluginManagerInterface $platformManager
+   *   The EU OSS Catalogue code hosting platform plugin manager service.
    */
   public function __construct(
     array $configuration,
@@ -67,6 +73,7 @@ class DevelopersItalia extends EuOssCatalogueProviderPluginBase {
     protected EuOssCataloguePluginManagerInterface $parserManager,
     protected LoggerChannelInterface $logger,
     protected Client $httpClient,
+    protected EuOssCataloguePluginManagerInterface $platformManager,
   ) {
     parent::__construct($configuration, $pluginId, $pluginDefinition, $parserManager, $this->logger);
   }
@@ -82,6 +89,7 @@ class DevelopersItalia extends EuOssCatalogueProviderPluginBase {
       $container->get('plugin.manager.eu_oss_catalogue.parser'),
       $container->get('logger.channel.eu_oss_catalogue'),
       $container->get('http_client'),
+      $container->get('plugin.manager.eu_oss_catalogue.hosting_platform'),
     );
   }
 
@@ -89,41 +97,88 @@ class DevelopersItalia extends EuOssCatalogueProviderPluginBase {
    * {@inheritdoc}
    */
   public function fetch(): iterable {
-    if ($this->next === NULL) {
-      return;
+    if (!isset($this->fetched)) {
+      $this->fetched = [];
+      $this->doFetch();
     }
 
-    $url = static::ENDPOINT . $this->next . ($this->next ? '&' : '?') . 'page[size]=100';
-    $response = $this->httpClient->get($url);
-    $read = Json::decode($response->getBody()->getContents());
+    foreach ($this->fetched as $baseUrl => $namespaces) {
+      if (!$platformId = $this->guessPlatformPluginId($baseUrl)) {
+        continue;
+      }
 
-    foreach ($read['data'] as $newItem) {
-      $active = $newItem['active'] ?? FALSE;
-      if ($active) {
-        if (empty($newItem['url'])) {
-          $this->logger->error("Item @id lacks the mandatory URL", ['@id' => $newItem['id']]);
-          continue;
-        }
-        $url = preg_replace('/^(.*)\.git$/', '$1', $newItem['url']);
+      $projects = array_map(function (array $items): array {
+        return array_keys($items);
+      }, $namespaces);
+
+      $platformConfig = ['projects' => $projects, 'url' => $baseUrl];
+      /** @var \Drupal\eu_oss_catalogue\EuOssCatalogueHostingPlatformInterface $hostingPlatform */
+      $hostingPlatform = $this->platformManager->createInstance($platformId, $platformConfig);
+
+      unset($this->fetched[$baseUrl]);
+
+      /** @var \Drupal\eu_oss_catalogue\Model\Project $project */
+      foreach ($hostingPlatform->getProjects() as $project) {
+        $fileBlob = $namespaces[$project->namespace][$project->name]['publiccodeYml'];
         try {
-          $decoded = Yaml::decode($newItem['publiccodeYml']);
+          $data = Yaml::decode($fileBlob);
           yield new FetchedSolution(
-            $url,
-            $decoded['name'],
-            $decoded,
-            $newItem['id'],
+            $project->url,
+            $data['name'] ?? '',
+            $data,
+            $namespaces[$project->namespace][$project->name]['id'],
           );
         }
         catch (InvalidDataTypeException $exception) {
           $this->logger->error('Cannot decode publiccode.yml of @url. Message: @message', [
-            '@url' => $url,
+            '@url' => $project->url,
             '@message' => $exception->getMessage(),
           ]);
         }
       }
     }
+  }
 
-    $this->next = $read['links']['next'];
+  /**
+   * Fetches data from Developers Italia API endpoint.
+   */
+  protected function doFetch(): void {
+    $next = '';
+
+    do {
+      $endpointUrl = static::ENDPOINT . $next . ($next ? '&' : '?') . 'page[size]=100';
+      $response = $this->httpClient->get($endpointUrl);
+      $read = Json::decode($response->getBody()->getContents());
+
+      foreach ($read['data'] as $newItem) {
+        $active = $newItem['active'] ?? FALSE;
+        if ($active) {
+          if (empty($newItem['url'])) {
+            $this->logger->error("Item @id lacks the mandatory URL", ['@id' => $newItem['id']]);
+            continue;
+          }
+
+          $url = preg_replace('/^(.*)\.git$/', '$1', $newItem['url']);
+          $urlParts = parse_url($url);
+          $baseUrl = http_build_url([
+            'scheme' => $urlParts['scheme'],
+            'host' => $urlParts['host'],
+            'port' => $urlParts['port'] ?? '',
+          ]);
+
+          // @todo Assuming that the code hosting platform is always installed
+          //   beneath the domain, not in a subdirectory.
+          // @see https://github.com/italia/developers-italia-api/issues/215
+          $pathParts = explode('/', trim($urlParts['path'], '/'));
+          $name = array_pop($pathParts);
+          $namespace = implode('/', $pathParts);
+
+          $this->fetched[$baseUrl][$namespace][$name] = $newItem;
+        }
+      }
+
+      $next = $read['links']['next'];
+    } while ($next !== NULL);
   }
 
   /**
@@ -141,6 +196,9 @@ class DevelopersItalia extends EuOssCatalogueProviderPluginBase {
    */
   private function guessPlatformPluginId(string $url): ?string {
     return match(TRUE) {
+      // -----------------
+      // Developers Italia
+      // -----------------
       $url === 'https://github.com' => 'github',
       $url === 'https://gitlab.com' => 'gitlab_com',
       // Includes some self-hosted.
