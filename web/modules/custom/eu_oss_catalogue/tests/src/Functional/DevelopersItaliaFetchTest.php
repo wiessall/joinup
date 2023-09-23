@@ -75,13 +75,10 @@ class DevelopersItaliaFetchTest extends FetchTestBase {
     // Re-run the process and update one solution from a new source-provider.
     $this->fetchSolutions('testing_provider', 2);
 
-    $this->assertEmpty($this->getNodeByTitle('Solution 1'));
+    $this->assertFalse($this->getNodeByTitle('Solution 1'));
     $updated_solution = $this->getNodeByTitle('Solution 1 (updated)', TRUE);
     $this->assertSame('1.0.0.1', $updated_solution->get('oss_software_version')->value);
-    $this->assertSame(
-      'ZyLKKSPLDPgnEVPUPNF3m0dRw8o74nJn2MSC97TSDeo',
-      $updated_solution->get('oss_source_hash')->value
-    );
+    $this->assertSame('rJFM_H6IQf8Xf9axphKm7x2H1__PZ8NiGRBk81j63dQ', $updated_solution->get('oss_source_hash')->value);
     // Assert that the provider has been added to the list of providers.
     $this->assertSame(2, $updated_solution->get('oss_source')->count());
     $expected_providers = ['developers_italia', 'testing_provider'];

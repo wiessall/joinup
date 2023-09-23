@@ -15,9 +15,9 @@ Solution 1:
       - '[EN] Solution 1: Feature 1'
       - '[EN] Solution 1: Feature 2'
       - '[EN] Solution 1: Feature 3'
-    oss_git_url: http://example.com/vendor/solution1
+    oss_git_url: https://github.com/dummy-namespace-1/dummy-name-1
     oss_license: AGPL-3.0-or-later
-    oss_logo: http://example.com/vendor/solution1/images/the-logo.svg
+    oss_logo: https://github.com/dummy-namespace-1/dummy-name-1/images/the-logo.svg
     oss_long_description: '[EN] Solution 1: Long description'
     oss_maintenance_contacts:
       - Peter Gregory
@@ -38,7 +38,7 @@ Solution 1:
     oss_software_version: '1.0.0.0'
     oss_source:
       - developers_italia
-    oss_source_hash: '09a3S4w6u61HZh5hldwk7RVXGmkTEpgqBJQiIDtKjzE'
+    oss_source_hash: '8IXnFXTZRSLTEDs6yeogrT2hjjhOsV1mMuNAN5yYnUY'
   de:
     langcode: de
     default_langcode: '0'
@@ -57,9 +57,9 @@ Solution 1:
       - data-collection
       - digital-citizenship
     oss_development_status: stable
-    oss_git_url: http://example.com/vendor/solution1
+    oss_git_url: https://github.com/dummy-namespace-1/dummy-name-1
     oss_license: AGPL-3.0-or-later
-    oss_logo: http://example.com/vendor/solution1/images/the-logo.svg
+    oss_logo: https://github.com/dummy-namespace-1/dummy-name-1/images/the-logo.svg
     oss_maintenance_contacts:
       - Peter Gregory
     oss_maintenance_contractors:
@@ -76,7 +76,7 @@ Solution 1:
     oss_software_version: '1.0.0.0'
     oss_source:
       - developers_italia
-    oss_source_hash: '09a3S4w6u61HZh5hldwk7RVXGmkTEpgqBJQiIDtKjzE'
+    oss_source_hash: '8IXnFXTZRSLTEDs6yeogrT2hjjhOsV1mMuNAN5yYnUY'
   it:
     langcode: it
     default_langcode: '0'
@@ -96,9 +96,9 @@ Solution 1:
       - data-collection
       - digital-citizenship
     oss_development_status: stable
-    oss_git_url: http://example.com/vendor/solution1
+    oss_git_url: https://github.com/dummy-namespace-1/dummy-name-1
     oss_license: AGPL-3.0-or-later
-    oss_logo: http://example.com/vendor/solution1/images/the-logo.svg
+    oss_logo: https://github.com/dummy-namespace-1/dummy-name-1/images/the-logo.svg
     oss_maintenance_contacts:
       - Peter Gregory
     oss_maintenance_contractors:
@@ -115,7 +115,7 @@ Solution 1:
     oss_software_version: '1.0.0.0'
     oss_source:
       - developers_italia
-    oss_source_hash: '09a3S4w6u61HZh5hldwk7RVXGmkTEpgqBJQiIDtKjzE'
+    oss_source_hash: '8IXnFXTZRSLTEDs6yeogrT2hjjhOsV1mMuNAN5yYnUY'
 
 ACME Ltd:
   en:
@@ -144,8 +144,8 @@ Solution 2:
     oss_categories:
       - website-builder
     oss_development_status: development
-    oss_git_url: http://example.com/vendor/solution2
-    oss_landing_url: http://landing.example.com/vendor/solution2
+    oss_git_url: https://limited.self-hosted.gitlab.example.com/group1/project-1-1
+    oss_landing_url: https://example.com/group1/project-1-1
     oss_license: BSD-3-Clause
     oss_maintenance_contacts:
       - FOSS Conference
@@ -166,7 +166,7 @@ Solution 2:
     oss_software_version: 'v2.3.4'
     oss_source:
       - developers_italia
-    oss_source_hash: 'p8QnKZlRwagdXkgoe5_lIDsAE9lvRhrOibFNhNrWakU'
+    oss_source_hash: 'WWiM57kppAUvDQdo2IiW1C9qh_Jdfzm8daYXeeS9IzU'
   it:
     langcode: it
     default_langcode: '0'
@@ -191,8 +191,8 @@ Solution 2:
     oss_categories:
       - website-builder
     oss_development_status: development
-    oss_git_url: http://example.com/vendor/solution2
-    oss_landing_url: http://landing.example.com/vendor/solution2
+    oss_git_url: https://limited.self-hosted.gitlab.example.com/group1/project-1-1
+    oss_landing_url: https://example.com/group1/project-1-1
     oss_license: BSD-3-Clause
     oss_maintenance_contacts:
       - FOSS Conference
@@ -213,7 +213,7 @@ Solution 2:
     oss_software_version: 'v2.3.4'
     oss_source:
       - developers_italia
-    oss_source_hash: 'p8QnKZlRwagdXkgoe5_lIDsAE9lvRhrOibFNhNrWakU'
+    oss_source_hash: 'WWiM57kppAUvDQdo2IiW1C9qh_Jdfzm8daYXeeS9IzU'
 
 FOSS Conference:
   en:

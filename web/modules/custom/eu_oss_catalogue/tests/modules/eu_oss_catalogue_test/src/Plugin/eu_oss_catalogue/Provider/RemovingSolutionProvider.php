@@ -39,6 +39,8 @@ class RemovingSolutionProvider extends DevelopersItalia {
    *   The EU OSS Catalogue logger.
    * @param \GuzzleHttp\Client $httpClient
    *   The HTTP client.
+   * @param \Drupal\eu_oss_catalogue\EuOssCataloguePluginManagerInterface $platformManager
+   *   The EU OSS Catalogue code hosting platform plugin manager service.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
    *   The entity type manager.
    */
@@ -49,9 +51,10 @@ class RemovingSolutionProvider extends DevelopersItalia {
     EuOssCataloguePluginManagerInterface $parserManager,
     protected LoggerChannelInterface $logger,
     Client $httpClient,
+    protected EuOssCataloguePluginManagerInterface $platformManager,
     protected EntityTypeManagerInterface $entityTypeManager,
   ) {
-    parent::__construct($configuration, $pluginId, $pluginDefinition, $parserManager, $logger, $httpClient);
+    parent::__construct($configuration, $pluginId, $pluginDefinition, $parserManager, $logger, $httpClient, $platformManager);
   }
 
   /**
@@ -65,6 +68,7 @@ class RemovingSolutionProvider extends DevelopersItalia {
       $container->get('plugin.manager.eu_oss_catalogue.parser'),
       $container->get('logger.channel.eu_oss_catalogue'),
       $container->get('http_client'),
+      $container->get('plugin.manager.eu_oss_catalogue.hosting_platform'),
       $container->get('entity_type.manager'),
     );
   }

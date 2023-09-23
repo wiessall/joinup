@@ -31,7 +31,7 @@ class TestingProvider extends DevelopersItalia {
           'softwareVersion' => '1.0.0.1',
         ] + $fetchedSolution->data;
         $fetchedSolution = new FetchedSolution(
-          $data['url'],
+          $fetchedSolution->url,
           $data['name'],
           $data,
           $fetchedSolution->providerReference,

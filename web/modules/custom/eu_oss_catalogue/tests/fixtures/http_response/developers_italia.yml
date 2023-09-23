@@ -2,13 +2,13 @@ data:
 
   # Pass schema validation.
   - id: 00valid1-0000-0000-0000-000000000000
-    url: http://example.com/vendor/solution1.git
+    url: https://github.com/dummy-namespace-1/dummy-name-1.git
     aliases:
-      - http://example.com/vendor/solution1
+      - https://github.com/dummy-namespace-1/dummy-name-1.git
     publiccodeYml: |
       publiccodeYmlVersion: "0.2"
       name: Solution 1
-      url: http://example.com/vendor/solution1
+      url: https://example.com/dummy-namespace-1/dummy-name-1
       softwareVersion: '1.0.0.0'
       releaseDate: "2023-07-07"
       logo: images/the-logo.svg
@@ -101,14 +101,14 @@ data:
 
   # Pass schema validation.
   - id: 00valid2-0000-0000-0000-000000000000
-    url: http://example.com/vendor/solution2.git
+    url: https://limited.self-hosted.gitlab.example.com/group1/project-1-1.git
     aliases:
-      - http://example.com/vendor/solution2.git
+      - https://limited.self-hosted.gitlab.example.com/group1/project-1-1.git
     publiccodeYml: |
       publiccodeYmlVersion: "0.2"
       name: Solution 2
-      url: http://example.com/vendor/solution2.git
-      landingURL: http://landing.example.com/vendor/solution2
+      url: https://example.com/group1/project-1-1
+      landingURL: https://example.com/group1/project-1-1
       isBasedOn:
           - Bootstrap
       softwareVersion: 'v2.3.4'
@@ -183,9 +183,9 @@ data:
 
   # Missing mandatory values
   - id: invalid1-0000-0000-0000-000000000000
-    url: http://example.com/vendor/solution3.git
+    url: https://limited.self-hosted.gitlab.example.com/group1/project-1-2.git
     aliases:
-      - http://example.com/vendor/solution3
+      - https://limited.self-hosted.gitlab.example.com/group1/project-1-2.git
     publiccodeYml: |
       publiccodeYmlVersion: "0.2"
       name: ''
@@ -247,13 +247,13 @@ data:
 
   # Wrong country specific values.
   - id: invalid2-0000-0000-0000-000000000000
-    url: http://example.com/vendor/solution3.git
+    url: https://limited.self-hosted.gitlab.example.com/user1/project-1.git
     aliases:
-      - http://example.com/vendor/solution3
+      - https://limited.self-hosted.gitlab.example.com/user1/project-1.git
     publiccodeYml: |
       publiccodeYmlVersion: "0.2"
       name: Solution 3
-      url: http://example.com/vendor/solution3
+      url: https://example.com/user1/project-1
       softwareVersion: '1.0.0.0'
       releaseDate: "2023-07-07"
       logo: images/the-logo.svg
