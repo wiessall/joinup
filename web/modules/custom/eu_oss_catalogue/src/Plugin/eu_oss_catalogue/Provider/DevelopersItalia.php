@@ -126,4 +126,36 @@ class DevelopersItalia extends EuOssCatalogueProviderPluginBase {
     $this->next = $read['links']['next'];
   }
 
+  /**
+   * Provides a temporary API guesser until ISAICP-7964.
+   *
+   * @param string $url
+   *   The URL.
+   *
+   * @return string|null
+   *   The guessed code hosting platform plugin ID or NULL if none.
+   *
+   * @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7964
+   *
+   * @todo Remove in ISAICP-7964.
+   */
+  private function guessPlatformPluginId(string $url): ?string {
+    return match(TRUE) {
+      $url === 'https://github.com' => 'github',
+      $url === 'https://gitlab.com' => 'gitlab_com',
+      // Includes some self-hosted.
+      str_starts_with($url, 'https://gitlab') => 'gitlab_self_hosted',
+      $url === 'https://invent.kde.org' => 'gitlab_self_hosted',
+      $url === 'https://oros-git.regione.puglia.it' => 'gitlab_self_hosted',
+      $url === 'https://riuso.comune.salerno.it' => 'gitlab_self_hosted',
+      // Not supported yet.
+      // $url === 'https://bitbucket.org' => 'bitbucket',
+      // -------------------------
+      // Developers Italia - tests
+      // -------------------------.
+      $url === 'https://limited.self-hosted.gitlab.example.com' => 'gitlab_self_hosted',
+      default => NULL,
+    };
+  }
+
 }
