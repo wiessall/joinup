@@ -411,7 +411,7 @@ class GroupContentUpdateUrlAliasTest extends JoinupExistingSiteTestBase {
     // Collection nodes.
     for ($i = 1; $i <= 2; $i++) {
       foreach ($collection_node_bundles as $bundle) {
-        $this->entity['node'][$bundle]["${i}"] = $this->createNode([
+        $this->entity['node'][$bundle]["{$i}"] = $this->createNode([
           'type' => $bundle,
           'title' => "{$bundle} {$i}",
           'og_audience' => 'http://collection',

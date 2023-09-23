@@ -85,6 +85,8 @@ alert:
   css:
     theme:
       assets/css/alert.min.css: { minified: true }
+  dependencies:
+    - ventuno/close
 
 badge:
   css:
@@ -260,19 +262,53 @@ paragraph:
     theme:
       assets/css/paragraph.min.css: { minified: true }
 
-paragraph--carousel:
+paragraph__accordion:
+  dependencies:
+    - ventuno/accordion
+
+paragraph__carousel:
   css:
     theme:
       assets/css/paragraph--carousel.min.css: { minified: true }
   dependencies:
-    - ventuno/paragraph--carousel.js
+    - ventuno/paragraph__carousel.js
 
-paragraph--carousel.js:
+paragraph__carousel.js:
   header: true
   js:
     assets/js/paragraph--carousel.min.js: { minified: true, attributes: { defer: true } }
   dependencies:
     - ventuno/glide
+
+paragraph__layout:
+  css:
+    theme:
+      assets/css/paragraph--layout.min.css: { minified: true }
+
+paragraph__heading:
+  css:
+    theme:
+      assets/css/paragraph--heading.min.css: { minified: true }
+
+paragraph__quote:
+  css:
+    theme:
+      assets/css/paragraph--quote.min.css: { minified: true }
+
+paragraph__poll:
+  css:
+    theme:
+      assets/css/paragraph--poll.min.css: { minified: true }
+
+paragraph__testimony:
+  css:
+    theme:
+      assets/css/paragraph--testimony.min.css: { minified: true }
+
+paragraph__video:
+  css:
+    theme:
+      assets/css/paragraph--video.min.css: { minified: true }
 
 releases:
   css:
@@ -354,3 +390,8 @@ user--group-header:
   css:
     theme:
       assets/css/user--group-header.min.css: { minified: true }
+
+layout-paragraphs--builder:
+  css:
+    theme:
+      assets/css/layout-paragraphs--builder.min.css: { minified: true }

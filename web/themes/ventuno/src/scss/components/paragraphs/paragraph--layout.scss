@@ -1,0 +1,65 @@
+@import "../../partials/core";
+
+.paragraph--layout {
+  &.lpb-layout {
+    padding: $spacer;
+  }
+  padding-top: $spacer * 1.125; // 18px
+  padding-bottom: $spacer * 1.125; // 18px
+  &:first-of-type:not(.paragraph--layout--light):not(.paragraph--layout--secondary):not(.lpb-layout) {
+    padding-top: 0;
+    @include media-breakpoint-up(lg) {
+      padding-top: 0;
+    }
+  }
+  @include media-breakpoint-up(lg) {
+    padding-top: $spacer * 2.25; // 36px
+    padding-bottom: $spacer * 2.25; // 36px
+  }
+  &--light,
+  &--secondary {
+    position: relative;
+    &::before {
+      content: "";
+      position: absolute;
+      z-index: -1;
+      bottom: 0;
+      width: 100vw;
+      height: 100%;
+      left: $spacer * -.75; // -12px
+      @include media-breakpoint-up(sm) {
+        left: calc(-50vw + 258px);
+      }
+      @include media-breakpoint-up(md) {
+        left: calc(-50vw + 348px);
+      }
+      @include media-breakpoint-up(lg) {
+        left: calc(-50vw + 468px);
+      }
+      @include media-breakpoint-up(xl) {
+        left: calc(-50vw + 558px);
+      }
+      @include media-breakpoint-up(xxl) {
+        left: calc(-50vw + 648px);
+      }
+    }
+  }
+  &--light {
+    &::before {
+      background-color: $light;
+    }
+  }
+  &--secondary {
+    &::before {
+      background-color: $secondary;
+    }
+  }
+  & > .layout > .layout__region > .paragraph + .paragraph {
+    margin-block-start: $spacer;
+  }
+}
+// Make Layout Paragraph limits more evident to the user
+.lp-builder:not(.is-navigating) .paragraph--layout.js-lpb-component:hover,
+.lp-builder:not(.is-navigating) .paragraph--layout.js-lpb-component:focus-within {
+  outline: 5px solid $warning;
+}

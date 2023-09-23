@@ -131,7 +131,7 @@ Feature: Homepage
     When I am on the homepage
     Then I should see "Light and height" as the Highlighted content
     And I should see the text "04-06-2021" in the "Light and height" tile
-    And I should see the link "Login or register to like this content" in the "Light and height" tile
+    And I should see the link "Sign in or register to like this content" in the "Light and height" tile
 
     Given I am logged in as a moderator
     When I am on the homepage
@@ -362,4 +362,4 @@ Feature: Homepage
     Given I am on the homepage
     Then I should see search bar in navbar
     And I should see the search bar in homepage's header
-    And the two search inputs should have different ids
+    And page elements must have unique id attributes

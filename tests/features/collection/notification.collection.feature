@@ -33,11 +33,11 @@ Feature: Notification test for the collection transitions.
       | NC to delete           | validated        | No one cares | No one cares. | Supplier exchange | NC for all | Notificationous absolutous |
       | NC to delete by mod    | validated        | No one cares | No one cares. | Supplier exchange | NC for all | Notificationous absolutous |
     And the following solutions:
-      | title        | collections                          | logo     | banner     | state     |
+      | title        | collections                          | logo     | state     |
       # Has only one affiliate.
-      | NC Solution1 | NC to archive                        | logo.png | banner.jpg | validated |
+      | NC Solution1 | NC to archive                        | logo.png | validated |
       # Has more than one affiliate.
-      | NC Solution2 | NC to request archival,NC to archive | logo.png | banner.jpg | validated |
+      | NC Solution2 | NC to request archival,NC to archive | logo.png | validated |
     And the following solution user memberships:
       | solution     | user      | roles |
       | NC Solution1 | NCS owner | owner |

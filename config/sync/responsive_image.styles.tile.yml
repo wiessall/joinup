@@ -28,14 +28,14 @@ label: Tile
 image_style_mappings:
   -
     image_mapping_type: image_style
-    image_mapping: tile_xxl_1_5
-    breakpoint_id: ventuno.xxl
-    multiplier: 1.5x
-  -
-    image_mapping_type: image_style
     image_mapping: tile_xxl_1x
     breakpoint_id: ventuno.xxl
     multiplier: 1x
+  -
+    image_mapping_type: image_style
+    image_mapping: tile_xxl_1_5
+    breakpoint_id: ventuno.xxl
+    multiplier: 1.5x
   -
     image_mapping_type: image_style
     image_mapping: tile_xxl_2x
@@ -43,14 +43,14 @@ image_style_mappings:
     multiplier: 2x
   -
     image_mapping_type: image_style
-    image_mapping: tile_xl_1_5x
-    breakpoint_id: ventuno.xl
-    multiplier: 1.5x
-  -
-    image_mapping_type: image_style
     image_mapping: tile_xl_1x
     breakpoint_id: ventuno.xl
     multiplier: 1x
+  -
+    image_mapping_type: image_style
+    image_mapping: tile_xl_1_5x
+    breakpoint_id: ventuno.xl
+    multiplier: 1.5x
   -
     image_mapping_type: image_style
     image_mapping: tile_xl_2x
@@ -58,14 +58,14 @@ image_style_mappings:
     multiplier: 2x
   -
     image_mapping_type: image_style
-    image_mapping: tile_lg_1_5x
-    breakpoint_id: ventuno.lg
-    multiplier: 1.5x
-  -
-    image_mapping_type: image_style
     image_mapping: tile_lg_1x
     breakpoint_id: ventuno.lg
     multiplier: 1x
+  -
+    image_mapping_type: image_style
+    image_mapping: tile_lg_1_5x
+    breakpoint_id: ventuno.lg
+    multiplier: 1.5x
   -
     image_mapping_type: image_style
     image_mapping: tile_lg_2x
@@ -73,14 +73,14 @@ image_style_mappings:
     multiplier: 2x
   -
     image_mapping_type: image_style
-    image_mapping: tile_md_1_5x
-    breakpoint_id: ventuno.md
-    multiplier: 1.5x
-  -
-    image_mapping_type: image_style
     image_mapping: tile_md_1x
     breakpoint_id: ventuno.md
     multiplier: 1x
+  -
+    image_mapping_type: image_style
+    image_mapping: tile_md_1_5x
+    breakpoint_id: ventuno.md
+    multiplier: 1.5x
   -
     image_mapping_type: image_style
     image_mapping: tile_md_x
@@ -88,14 +88,14 @@ image_style_mappings:
     multiplier: 2x
   -
     image_mapping_type: image_style
-    image_mapping: tile_sm_1_5x
-    breakpoint_id: ventuno.sm
-    multiplier: 1.5x
-  -
-    image_mapping_type: image_style
     image_mapping: tile_sm_1x
     breakpoint_id: ventuno.sm
     multiplier: 1x
+  -
+    image_mapping_type: image_style
+    image_mapping: tile_sm_1_5x
+    breakpoint_id: ventuno.sm
+    multiplier: 1.5x
   -
     image_mapping_type: image_style
     image_mapping: tile_sm_2x
@@ -103,14 +103,14 @@ image_style_mappings:
     multiplier: 2x
   -
     image_mapping_type: image_style
-    image_mapping: tile_xs_1_5x
-    breakpoint_id: ventuno.xs
-    multiplier: 1.5x
-  -
-    image_mapping_type: image_style
     image_mapping: tile_xs_1x
     breakpoint_id: ventuno.xs
     multiplier: 1x
+  -
+    image_mapping_type: image_style
+    image_mapping: tile_xs_1_5x
+    breakpoint_id: ventuno.xs
+    multiplier: 1.5x
   -
     image_mapping_type: image_style
     image_mapping: tile_xs_2x

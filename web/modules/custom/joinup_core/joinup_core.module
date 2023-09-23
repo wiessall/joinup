@@ -16,14 +16,13 @@ use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Field\BaseFieldDefinition;
-use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Render\Markup;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\StreamWrapper\StreamWrapperManager;
 use Drupal\block\BlockInterface;
 use Drupal\joinup_core\ETransBlockConfiguration;
 use Drupal\joinup_core\Element\Datetime;
 use Drupal\joinup_core\Entity\OutdatedContentInterface;
-use Drupal\joinup_core\JoinupSiteAlertListBuilder;
 use Drupal\joinup_core\Plugin\Field\FieldType\OutdatedContentFieldItemList;
 use Drupal\joinup_core\Plugin\Field\FieldWidget\ImageLibraryWidget;
 use Drupal\joinup_workflow\ArchivableEntityInterface;
@@ -58,22 +57,22 @@ function joinup_core_theme(array $existing, string $type, string $theme, string 
 }
 
 /**
+ * Implements hook_requirements_alter().
+ */
+function joinup_core_requirements_alter(array &$requirements): void {
+  $ignored = getenv('DRUPAL_STATUS_REPORT_IGNORE') ?: 'update status,joinup_core_root_user_blocked,search_api_solr_schema_joinup_modifications,deprecated_modules,deprecated_themes,metatag_maintenance_mode,search_api_pending_tasks';
+  $ignored = array_map('trim', explode(',', $ignored));
+
+  $requirements = array_filter($requirements, function (string $requirement) use ($ignored): bool {
+    return !in_array($requirement, $ignored, TRUE);
+  }, ARRAY_FILTER_USE_KEY);
+}
+
+/**
  * Implements hook_cron().
  */
 function joinup_core_cron(): void {
   \Drupal::getContainer()->get('batch.storage')->cleanup();
-}
-
-/**
- * Implements hook_form_BASE_FORM_ID_alter().
- *
- * Alters the Site Alert entity form to hide the scheduling of the alerts. Due
- * to a bug in the core page cache module the scheduling can only work using an
- * additional AJAX call which is undesirable in our case. By disabling the
- * scheduling the alerts are managed manually and the page cache works normally.
- */
-function joinup_core_form_site_alert_form_alter(&$form, FormStateInterface $form_state, $form_id) {
-  $form['scheduling']['#access'] = FALSE;
 }
 
 /**
@@ -108,19 +107,6 @@ function joinup_core_entity_base_field_info(EntityTypeInterface $entity_type) {
   }
 
   return $fields;
-}
-
-/**
- * Implements hook_entity_type_alter().
- */
-function joinup_core_entity_type_alter(array &$entity_types) {
-  // Check that the Site Alert entity type is defined, so we can avoid depending
-  // on the Site Alert module.
-  if (isset($entity_types['site_alert'])) {
-    // Override the list builder with a version which omits the unused 'Start
-    // time' and 'End time' columns.
-    $entity_types['site_alert']->setListBuilderClass(JoinupSiteAlertListBuilder::class);
-  }
 }
 
 /**
@@ -258,6 +244,13 @@ function joinup_core_module_implements_alter(array &$implementations, $hook) {
       // used very rarely but the contextual links menu causes visual clutter.
       unset($implementations['menu_ui']);
       break;
+
+    case 'mail_alter':
+      if (array_key_exists('joinup_core', $implementations)) {
+        $our = $implementations['joinup_core'];
+        unset($implementations['joinup_core']);
+        $implementations['joinup_core'] = $our;
+      }
   }
 }
 
@@ -453,4 +446,21 @@ function joinup_core_field_widget_info_alter(array &$info): void {
   if (isset($info['image_library_widget'])) {
     $info['image_library_widget']['class'] = ImageLibraryWidget::class;
   }
+}
+
+/**
+ * Implements hook_mail_alter().
+ */
+function joinup_core_mail_alter(&$message) {
+  if (
+    empty($message['headers']['Content-Type']) ||
+    $message['headers']['Content-Type'] !== SWIFTMAILER_FORMAT_HTML
+  ) {
+    return;
+  }
+
+  // Transform body lines not wrapped in block-level HTML tags to paragraphs
+  // in HTML mails.
+  $html_mail_body = implode(PHP_EOL . PHP_EOL, $message['body']);
+  $message['body'] = [Markup::create(_filter_autop($html_mail_body))];
 }

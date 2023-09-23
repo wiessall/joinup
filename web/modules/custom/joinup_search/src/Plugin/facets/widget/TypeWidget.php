@@ -10,7 +10,7 @@ use Drupal\facets\Result\ResultInterface;
 use Drupal\facets\Widget\WidgetPluginBase;
 
 /**
- * The links widget.
+ * The type widget.
  *
  * @FacetsWidget(
  *   id = "type",
@@ -19,6 +19,13 @@ use Drupal\facets\Widget\WidgetPluginBase;
  * )
  */
 class TypeWidget extends WidgetPluginBase {
+
+  /**
+   * List of result which are displayed as tab.
+   *
+   * @var \Drupal\facets\Result\ResultInterface[]
+   */
+  protected array $resultTabs = [];
 
   /**
    * {@inheritdoc}
@@ -57,9 +64,7 @@ class TypeWidget extends WidgetPluginBase {
     $results = array_values($facet->getResults());
     $big_icons = [];
     foreach (array_splice($results, 0, $config['tabs'] ?: NULL) as $result) {
-      // The first N elements need to be rendered as tab. Adding an object
-      // property is easier than overriding all the methods of the class.
-      $result->asTab = TRUE;
+      $this->resultTabs[] = $result;
       $big_icons[] = $this->buildSingleResult($result);
     }
 
@@ -113,7 +118,7 @@ class TypeWidget extends WidgetPluginBase {
    */
   protected function buildResultItem(ResultInterface $result): array {
     $count = $result->getCount();
-    $theme = isset($result->asTab) ? 'facets_type_result_item' : 'facets_result_item';
+    $theme = in_array($result, $this->resultTabs) ? 'facets_type_result_item' : 'facets_result_item';
     if ($result->isActive()) {
       $theme .= '__active';
     }
@@ -159,7 +164,7 @@ class TypeWidget extends WidgetPluginBase {
     $items['#wrapper_attributes'] = ['class' => $classes];
     $items['#attributes']['data-drupal-facet-item-id'] = $this->facet->getUrlAlias() . '-' . $result->getRawValue();
 
-    if (isset($result->asTab)) {
+    if (in_array($result, $this->resultTabs)) {
       $items['#attributes']['class'][] = 'tab';
       $items['#attributes']['class'][] = 'tab--content-type';
       $items['#attributes']['role'][] = 'tab';

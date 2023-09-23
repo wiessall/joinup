@@ -8,13 +8,14 @@ dependencies:
     - field.field.node.custom_page.field_custom_page_logo
     - field.field.node.custom_page.field_paragraphs_body
     - field.field.node.custom_page.field_state
+    - field.field.node.custom_page.field_topic
     - field.field.node.custom_page.og_audience
     - node.type.custom_page
     - responsive_image.styles.tile
   module:
-    - entity_reference_revisions
     - field_delimiter
     - field_formatter_range
+    - joinup_core
     - responsive_image
     - template_suggestion
     - user
@@ -31,17 +32,22 @@ content:
     settings:
       responsive_image_style: tile
       image_link: ''
+      image_loading:
+        attribute: eager
     third_party_settings:
       template_suggestion:
         template_suggestion: bare
     weight: 0
     region: content
   field_paragraphs_body:
-    type: entity_reference_revisions_entity_view
+    type: filtered_entity_reference_bundles
     label: hidden
     settings:
-      view_mode: default
+      view_mode: tile
       link: ''
+      filtered_entity_bundles:
+        - simple_paragraph
+        - text
     third_party_settings:
       field_delimiter:
         delimiter: ''
@@ -61,6 +67,7 @@ content:
 hidden:
   field_attachment: true
   field_state: true
+  field_topic: true
   langcode: true
   links: true
   og_audience: true

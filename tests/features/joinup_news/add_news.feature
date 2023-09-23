@@ -12,15 +12,15 @@ Feature: Creation of news through the UI.
       | Family name | Laninga            |
       | E-mail      | milana@example.com |
     And the following collections:
-      | title            | description                                 | logo     | banner     | state     |
-      | Metal fans       | "Share the love for nickel, tungsten & co." | logo.png | banner.jpg | validated |
-      | Hardcore diggers | We dig up stuff hidden beneath the earth.   | logo.png | banner.jpg | validated |
-      | Cool blacksmiths | Keeping it cool while working on hot stuff. | logo.png | banner.jpg | validated |
+      | title            | description                                 | logo     | state     |
+      | Metal fans       | "Share the love for nickel, tungsten & co." | logo.png | validated |
+      | Hardcore diggers | We dig up stuff hidden beneath the earth.   | logo.png | validated |
+      | Cool blacksmiths | Keeping it cool while working on hot stuff. | logo.png | validated |
     And solutions:
-      | title                     | description                               | logo     | banner     | state     |
-      | Density catalogue project | Catalog density on metals with ease.      | logo.png | banner.jpg | validated |
-      | Dig do's and don'ts       | How to dig up stuff with style.           | logo.png | banner.jpg | validated |
-      | Anvil test routines       | How to determine reliability of the tool. | logo.png | banner.jpg | validated |
+      | title                     | description                               | logo     | state     |
+      | Density catalogue project | Catalog density on metals with ease.      | logo.png | validated |
+      | Dig do's and don'ts       | How to dig up stuff with style.           | logo.png | validated |
+      | Anvil test routines       | How to determine reliability of the tool. | logo.png | validated |
     And the following solution user membership:
       | solution                  | user          | roles       |
       | Density catalogue project | isotopedancer | facilitator |

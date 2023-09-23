@@ -33,7 +33,7 @@
   @include media-breakpoint-up(md) {
     background-size: auto 100%;
     background-position: center;
-    background-image: url(../images/banner-md.svg), linear-gradient(to right, $ec-blue 0%, $ec-blue 30%, #082330 30%, #082330 100%);
+    background-image: url(../images/banner-md.svg), linear-gradient(to right, $ec-blue 0%, $ec-blue 45%, #082330 45%, #082330 100%);
   }
   .block-views-exposed-filter-blocksearch-page-1 {
     padding-bottom: $spacer * .5; // 8px

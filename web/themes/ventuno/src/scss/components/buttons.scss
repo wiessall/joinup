@@ -1,5 +1,4 @@
 .btn {
-  font-weight: 500;
   &:not(.btn-link) {
     &:hover {
       box-shadow: $box-shadow;
@@ -36,4 +35,16 @@ a.btn-link {
   &:hover {
     color: $primary;
   }
+}
+
+.button--primary {
+  @extend .btn-primary;
+}
+
+.button--secondary {
+  @extend .btn-secondary;
+}
+
+.button--link {
+  @extend .btn-link;
 }

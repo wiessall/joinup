@@ -108,7 +108,7 @@ class EuplContext extends RawDrupalContext {
     // Wait for modal dialog to be ready.
     $page->waitFor(5, function (DocumentElement $page): ?NodeElement {
       // Open modal dialog has `style="display:block"`.
-      return $page->find('xpath', '//div[@style and contains(concat(" ", normalize-space(@class), " "), " modal-content ")]//button[@aria-label="Close"]');
+      return $page->find('xpath', '//div[@style and contains(concat(" ", normalize-space(@class), " "), " modal-dialog ")]//button[@aria-label="Close"]');
     });
   }
 
@@ -121,7 +121,7 @@ class EuplContext extends RawDrupalContext {
    * @Given I close the licence modal dialog
    */
   public function closeLicenceModalDialog(): void {
-    $xpath = '//div[@class and contains(concat(" ", normalize-space(@class), " "), " modal-content ")]//button[@aria-label="Close"]';
+    $xpath = '//div[@class and contains(concat(" ", normalize-space(@class), " "), " modal-dialog ")]//button[@aria-label="Close"]';
     $button = $this->getSession()->getPage()->find('xpath', $xpath);
     if (empty($button)) {
       throw new \Exception("Either the dialog is not available or the 'Close' button could not be located.");

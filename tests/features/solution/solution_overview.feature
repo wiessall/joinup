@@ -53,7 +53,7 @@ Feature: Solutions Overview
     But I should not see the link "Next page"
     And I should not see the link "Last page"
 
-  @terms @uploadFiles:logo.png,banner.jpg
+  @terms @uploadFiles:logo.png
   Scenario: View solution overview as an anonymous user
     Given users:
       | Username      | E-mail                            |
@@ -129,10 +129,9 @@ Feature: Solutions Overview
       | Language              | http://publications.europa.eu/resource/authority/language/VLS          |
       | Name                  | Ambrosio Morison                                                       |
       | E-mail address        | ambrosio.morison@example.com                                           |
-    Then I select "http://data.europa.eu/dr8/DataExchangeService" from "Solution type"
+    Then I select "Data Owner" from "Solution type"
     And I select "Demography" from "Topic"
     And I attach the file "logo.png" to "Logo"
-    And I attach the file "banner.jpg" to "Banner"
     And I upload the file "text.pdf" to "Upload a new file or enter a URL"
     # Click the button to select an existing owner.
     And I press "Add existing" at the "Owner" field

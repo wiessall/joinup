@@ -689,7 +689,7 @@ trait TraversingTrait {
    *   The array representation of the query string.
    */
   protected function normalizeQueryString(string $url): array {
-    $query_string = utf8_decode((string) parse_url(urldecode($url), PHP_URL_QUERY));
+    $query_string = mb_convert_encoding((string) parse_url(urldecode($url), PHP_URL_QUERY), 'ISO-8859-1', 'UTF-8');
     parse_str($query_string, $query_array);
     return $query_array;
   }

@@ -20,7 +20,6 @@ Feature: Event moderation
       | title               | Wet Lords             |
       | description         | The Forgotten Female. |
       | logo                | logo.png              |
-      | banner              | banner.jpg            |
       | content creation    | registered users      |
       | moderation          | no                    |
       | state               | validated             |

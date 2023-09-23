@@ -34,7 +34,7 @@ Feature: "Custom page" editing.
     Then I should see the link "Edit"
     When I click "Edit"
     Then I should see the heading "Edit Custom page Buena Vista Distribution Company"
-    And the following fields should be present "Title, Body"
+    And the following fields should be present "Title, Body, Topic"
     And the following fields should not be present "Groups audience, Other groups, Generate automatic URL alias, URL alias, Published"
     And I should not see the following lines of text:
       | Authored on                                  |
@@ -64,7 +64,7 @@ Feature: "Custom page" editing.
     And I go to the "Buena Vista Distribution Company" custom page
     And I click "Edit"
     Then I should see the heading "Edit Custom page Buena Vista Distribution Company"
-    And the following fields should be present "Title, Body"
+    And the following fields should be present "Title, Body, Topic"
     And the following fields should not be present "Groups audience, Other groups, URL alias, Published"
     And the following fields should not be present "Groups audience, Other groups, Generate automatic URL alias, URL alias"
     And I should not see the following lines of text:

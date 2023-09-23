@@ -60,15 +60,10 @@
     <rule ref="./src/CodingStandards"/>
 
     <!-- Require the strict types declaration in every PHP file. -->
-    <rule ref="SlevomatCodingStandard.TypeHints.DeclareStrictTypes">
-        <properties>
-            <property name="newlinesCountBetweenOpenTagAndDeclare" value="2"/>
-        </properties>
-    </rule>
+    <rule ref="SlevomatCodingStandard.TypeHints.DeclareStrictTypes" />
 
     <!-- Require nullable types to be declared as such. -->
-    <rule ref="SlevomatCodingStandard.TypeHints.NullableTypeForNullDefaultValue">
-    </rule>
+    <rule ref="SlevomatCodingStandard.TypeHints.NullableTypeForNullDefaultValue" />
 
     <!-- Forbid annotations which are not included in the Drupal coding standard but are often added by IDEs. -->
     <rule ref="SlevomatCodingStandard.Commenting.ForbiddenAnnotations">

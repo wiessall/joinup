@@ -1,4 +1,4 @@
-@api @javascript @terms @group-c
+@api @terms @group-c
 Feature: Tests the collection last update time.
 
   Scenario: As a user visiting a collection, I want to see the collection last
@@ -74,48 +74,23 @@ Feature: Tests the collection last update time.
     # The custom page is the newest thus will give the collection updated time.
     Then the response should contain "2016-05-06T05:29"
 
-    When I go to the edit form of the "Get Rid of Rats" document
-    And I press "Update"
-    # The updated time has changed to the current time but we cannot catch the
-    # time we ran the update.
+    When I update the "Get Rid of Rats" document at "2016-08-28T15:01"
+    And I reload the page
     Then the response should not contain "2016-05-06T05:29"
-    And I should see "few seconds ago"
-
-    # Let's see how the timeago jquery widget changes.
-    # Note for QA: If the reviewer decide that we cannot afford to sleep 1 min
-    # while running the tests, we can remove this part.
-    Given I wait until the page contains the text "about a minute ago"
-    Then I should see "about a minute ago"
-
-    # Delete a community content node.
-    Given I go to the content page of the type document with the title "Get Rid of Rats"
-    # Open the contextual menu that contains the local primary tasks.
-    And I open the header local tasks menu
-    Given I click "Delete"
-    When I press "Delete"
-    And I go to the homepage of the "Household Wizard" collection
-    # The deletion of community content node changes the last updated time.
-    Then I should see "few seconds ago"
-
-    Given I wait until the page contains the text "about a minute ago"
-    Then I should see "about a minute ago"
+    But the response should contain "2016-08-28T15:01"
 
     # Editing the solution changes the last updated time.
-    Given I go to the edit form of the "Roof Hole Cover" solution
-    And I select "Public Policy Cycle" from "Solution type"
-    And I select "Demography" from "Topic"
-    And I press "Publish"
+    When I update the "Roof Hole Cover" solution at "2023-07-14T00:03"
+    And I reload the page
+    Then the response should not contain "2016-08-28T15:01"
+    But the response should contain "2023-07-14T00:03"
 
-    When I go to the homepage of the "Household Wizard" collection
-    Then I should see "few seconds ago"
-
-    Given I wait until the page contains the text "about a minute ago"
-    Then I should see "about a minute ago"
+    # Delete a community content node.
+    Given I go to the delete form of the "Get Rid of Rats" document
+    And I click "Delete"
+    And I press "Delete"
+    Then the "Household Wizard" collection "Last updated" time has just been updated
 
     # Deleting the solution changes the last updated time.
-    Given I go to the edit form of the "Roof Hole Cover" solution
-    And I click "Delete"
-    When I press "Delete"
-    And I go to the homepage of the "Household Wizard" collection
-    # The deletion of community content node refreshes the last updated time.
-    Then I should see "few seconds ago"
+    Given I delete the "Roof Hole Cover" solution
+    Then the "Household Wizard" collection "Last updated" time has just been updated

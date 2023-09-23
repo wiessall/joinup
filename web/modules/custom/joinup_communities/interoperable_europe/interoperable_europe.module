@@ -7,10 +7,7 @@
 
 declare(strict_types = 1);
 
-use Drupal\Core\Access\AccessResult;
-use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Session\AccountInterface;
 use Drupal\interoperable_europe\InteroperableEuropeCollectionInterface;
 use Drupal\joinup_group\Form\JoinGroupFormInterface;
 
@@ -33,24 +30,4 @@ function interoperable_europe_form_join_group_form_alter(&$form, FormStateInterf
       }
     }
   }
-}
-
-/**
- * Implements hook_ENTITY_TYPE_create_access().
- */
-function interoperable_europe_paragraph_create_access(AccountInterface $account, array $context, string $entity_bundle): AccessResultInterface {
-  if ($entity_bundle !== 'row') {
-    return AccessResult::neutral();
-  }
-
-  // Only allow rows for interoperable europe for now.
-  $group = \Drupal::getContainer()->get('og.context')->getGroup();
-  // Only allow to add rows for the Interoperable Europe group. Allow though,
-  // to create the paragraph when the context does not exist, ie. outside of a
-  // group.
-  if (empty($group) || !empty($group) && $group->id() === InteroperableEuropeCollectionInterface::COLLECTION_ENTITY_ID) {
-    return AccessResult::allowed();
-  }
-
-  return AccessResult::forbidden();
 }

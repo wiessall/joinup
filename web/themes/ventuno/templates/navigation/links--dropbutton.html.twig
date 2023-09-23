@@ -1,0 +1,37 @@
+{#
+/**
+ * @file
+ * Template for links within a dropbutton.
+ */
+#}
+<div {{ attributes.removeClass('dropbutton').addClass(split ? 'btn-group' : 'dropdown') }}>
+  {% if split %}
+    {{ button }}
+  {% endif %}
+
+  {% if links %}
+    <button type="button" class="btn btn-secondary px-2 dropdown-toggle {{ split ? 'dropdown-toggle-split' }}" data-bs-toggle="dropdown" data-boundary="window">
+      {% if split %}
+        <span class="visually-hidden">{{ 'Toggle Dropdown'|t }}</span>
+        <svg class="bi icon--xs">
+          <use xlink:href="{{ bcl_icon_path }}#caret-down-fill"></use>
+        </svg>
+      {% else %}
+        {{ button }}
+      {% endif %}
+    </button>
+    <ul class="dropdown-menu dropdown-menu-end">
+      {%- for item in links -%}
+        <li>
+          {%- if item.link -%}
+            {{ item.link }}
+          {%- elseif item.text_attributes -%}
+            <span{{ item.text_attributes }}>{{ item.text }}</span>
+          {%- else -%}
+            {{ item.text }}
+          {%- endif -%}
+        </li>
+      {%- endfor -%}
+    </ul>
+  {% endif %}
+</div>

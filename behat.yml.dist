@@ -41,6 +41,7 @@
   - Drupal\joinup\Context\JoinupFeaturedContext
   - Drupal\joinup\Context\JoinupGroupContext
   - Drupal\joinup\Context\JoinupInviteContext
+  - Drupal\joinup\Context\JoinupLayoutParagraphsContext
   - Drupal\joinup\Context\JoinupLegalContext
   - Drupal\joinup\Context\JoinupLicenceContext
   - Drupal\joinup\Context\JoinupNewsContext
@@ -56,6 +57,7 @@
   - Drupal\joinup\Context\ModerationContext
   - Drupal\joinup\Context\OeNewsroomNewsletterContext
   - Drupal\joinup\Context\OwnerContext
+  - Drupal\joinup\Context\PollContext
   - Drupal\joinup\Context\RdfEntityProvenanceContext
   - Drupal\joinup\Context\RdfGraphContext
   - Drupal\joinup\Context\RssContext
@@ -145,6 +147,7 @@ default:
         Content listing field filter form: '.field--name-content-listing'
         Content: '.section--content-middle, main .layout-content'
         Cookie consent banner: '#cookie-consent-banner'
+        Choose component: '.lp-builder lpb-btn--add'
         Entity actions: '.block-joinup-local-tasks-block,#block-ventuno-three-dots-menu'
         Explore block: '.block-joinup-front-page-explore-block'
         Featured: '.region-featured'
@@ -157,6 +160,7 @@ default:
         In the spotlight: '.block-views-blockin-the-spotlight-block'
         IOPE Menu: '#block-iope-navigation'
         Header bottom: '.region-header-bottom'
+        Layout paragraphs dialog buttons: '.ui-dialog-buttonpane'
         Left sidebar: 'aside.layout-sidebar'
         Like block: '.block-joinup-like-block'
         Main fields accordion: '#main-fields,.accordion .accordion-item #main'
@@ -164,9 +168,9 @@ default:
         Management solution vertical tab: '#edit-group-management'
         Members admin form actions: '#edit-action'
         Members admin form header: '#edit-header'
-        Modal buttons: '.modal-footer'
-        Modal content: '.modal-body'
-        Modal title: '.modal-header'
+        Modal buttons: '.ui-dialog-buttonpane'
+        Modal content: '.ui-dialog-content'
+        Modal title: '.ui-dialog-titlebar'
         My unpublished content area: '.block-user-unpublished'
         Navigation bar: '.joinup-navbar'
         Navigation menu: '#block-ventuno-navigation'

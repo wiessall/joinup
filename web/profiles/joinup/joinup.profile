@@ -16,6 +16,7 @@ use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Installer\InstallerKernel;
 use Drupal\Core\Session\AccountInterface;
+use Drupal\Core\Site\SettingsEditor;
 use Drupal\collection\Entity\CollectionInterface;
 use Drupal\joinup_community_content\Entity\CommunityContentInterface;
 use Drupal\joinup_featured\FeaturedContentInterface;
@@ -97,7 +98,7 @@ function joinup_form_install_settings_form_save($form, FormStateInterface $form_
     'value' => $database,
     'required' => TRUE,
   ];
-  drupal_rewrite_settings($settings);
+  SettingsEditor::rewrite(\Drupal::getContainer()->getParameter('site.path') . '/settings.php', $settings);
   // Load the database connection to make it available in the current request.
   Database::addConnectionInfo($key, $target, $database);
 }
@@ -339,7 +340,14 @@ function joinup_preprocess_node(&$variables) {
  *   The variables array.
  */
 function _joinup_preprocess_entity_tiles(array &$variables) {
-  if ($variables['view_mode'] !== 'view_mode_tile') {
+  // View modes where tiles are expected.
+  $tile_view_modes = [
+    'highlighted',
+    'view_mode_tile',
+    'view_mode_tile_horizontal',
+    'carousel',
+  ];
+  if (!in_array($variables['view_mode'], $tile_view_modes)) {
     return;
   }
 

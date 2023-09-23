@@ -6,7 +6,6 @@ dependencies:
     - core.entity_form_mode.rdf_entity.inline
     - field.field.rdf_entity.solution.field_is_actor
     - field.field.rdf_entity.solution.field_is_affiliations_requests
-    - field.field.rdf_entity.solution.field_is_banner
     - field.field.rdf_entity.solution.field_is_business_process
     - field.field.rdf_entity.solution.field_is_contact_information
     - field.field.rdf_entity.solution.field_is_content
@@ -107,7 +106,6 @@ third_party_settings:
     group_management:
       children:
         - field_is_logo
-        - field_is_banner
         - field_is_documentation
         - field_spatial_coverage
         - field_keywords
@@ -150,16 +148,6 @@ content:
     weight: 11
     region: content
     settings: {  }
-    third_party_settings: {  }
-  field_is_banner:
-    type: image_library_widget
-    weight: 5
-    region: content
-    settings:
-      progress_indicator: throbber
-      preview_image_style: thumbnail
-      media_type_id: solution_banner
-      library_label: 'Alternatively, choose a pre-uploaded image'
     third_party_settings: {  }
   field_is_business_process:
     type: entity_reference_autocomplete

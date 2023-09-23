@@ -87,6 +87,18 @@ Feature:
       | Subscribe to the interoperable europe newsletter |
 
   @javascript
+  Scenario: User should see error message if he does not fill out all required fields.
+    Given custom_page content:
+      | title               | collection           | state     |
+      | IOP validation page | Interoperable Europe | published |
+
+    Then I am logged in as a moderator
+    And I go to the edit form of the "IOP validation page" "custom page"
+    And I fill in "Title" with ""
+    And I press "Update"
+    Then I should see the error message "Title field is required."
+
+  @javascript
   Scenario: Report link and eTranslate button are not available in IOP custom pages.
     Given custom_page content:
       | title    | collection           | state     |

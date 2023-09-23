@@ -13,6 +13,13 @@ use Drupal\node\NodeInterface;
 class PublishedAtOrCreatedComputed extends TypedData {
 
   /**
+   * The data value.
+   *
+   * @var mixed
+   */
+  protected $value;
+
+  /**
    * {@inheritdoc}
    */
   public function getValue(): int {

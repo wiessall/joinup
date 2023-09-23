@@ -407,8 +407,14 @@ class JoinupCommunityContentContext extends RawDrupalContext {
   public function provideTopic(BeforeNodeCreateScope $scope) {
     $node = $scope->getEntity();
 
-    // Only deal with community content.
-    if (!in_array($node->type, CommunityContentHelper::BUNDLES, TRUE)) {
+    $bundles_with_topics = array_merge(
+      CommunityContentHelper::BUNDLES,
+      ['custom_page']
+    );
+
+    // Only deal with community content + custom pages (which have topic field
+    // set as required).
+    if (!in_array($node->type, $bundles_with_topics, TRUE)) {
       return;
     }
 

@@ -112,8 +112,8 @@ Feature: Add community content
   @terms
   Scenario: Directly publishing community content sets the correct publication date.
     Given the following collections:
-      | title        | description                  | logo     | banner     | state     |
-      | CC container | Community content container. | logo.png | banner.jpg | validated |
+      | title        | description                  | logo     | state     |
+      | CC container | Community content container. | logo.png | validated |
     And I am logged in as a "facilitator" of the "CC container" collection
 
     # Create a published discussion.

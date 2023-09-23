@@ -1,0 +1,9 @@
+services:
+  joinup_poll.route_subscriber:
+    class: Drupal\joinup_poll\Routing\PollRouteSubscriber
+    tags:
+      - { name: event_subscriber }
+  access_check.joinup_poll.ajax_request:
+    class: Drupal\joinup_poll\Access\AjaxRequestAccessCheck
+    tags:
+      - { name: access_check, applies_to: _ajax_request, needs_incoming_request: TRUE }

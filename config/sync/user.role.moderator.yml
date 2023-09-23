@@ -3,12 +3,10 @@ langcode: en
 status: true
 dependencies:
   config:
-    - media.type.collection_banner
     - media.type.collection_logo
     - media.type.discussion_logo
     - media.type.event_logo
     - media.type.news_logo
-    - media.type.solution_banner
     - media.type.solution_logo
     - node.type.custom_page
     - node.type.discussion
@@ -47,7 +45,7 @@ dependencies:
     - rdf_draft
     - rdf_entity
     - rdf_meta_entity
-    - site_alert
+    - sitewide_alert
     - solution
     - state_machine_permissions
     - tallinn
@@ -74,7 +72,7 @@ permissions:
   - 'access taxonomy overview'
   - 'access toolbar'
   - 'access uri converter'
-  - 'add site alerts'
+  - 'add sitewide alert entities'
   - 'administer collection ownership'
   - 'administer comments'
   - 'administer entity legal'
@@ -88,7 +86,7 @@ permissions:
   - 'administer outdated content threshold'
   - 'administer search fields'
   - 'administer shared entities'
-  - 'administer site alert'
+  - 'administer sitewide alert entities'
   - 'administer solution ownership'
   - 'administer support menu items'
   - 'administer tallinn settings'
@@ -96,7 +94,6 @@ permissions:
   - 'change tallinn report author'
   - 'create asset_distribution rdf entity'
   - 'create asset_release rdf entity'
-  - 'create collection_banner media'
   - 'create collection_logo media'
   - 'create discussion content'
   - 'create discussion_logo media'
@@ -116,25 +113,26 @@ permissions:
   - 'create paragraph content call_to_action'
   - 'create paragraph content carousel'
   - 'create paragraph content content_listing'
+  - 'create paragraph content entity_reference'
   - 'create paragraph content github_feed'
+  - 'create paragraph content heading'
   - 'create paragraph content iframe'
   - 'create paragraph content image'
   - 'create paragraph content json_map'
-  - 'create paragraph content row'
-  - 'create paragraph content simple_paragraph'
+  - 'create paragraph content layout'
+  - 'create paragraph content poll'
+  - 'create paragraph content quote'
   - 'create paragraph content testimony'
   - 'create paragraph content video'
   - 'create rdf entity news'
-  - 'create solution_banner media'
   - 'create solution_logo media'
-  - 'delete any collection_banner media'
+  - 'delete all sitewide alert revisions'
   - 'delete any collection_logo media'
   - 'delete any discussion_logo media'
   - 'delete any document content'
   - 'delete any event_logo media'
   - 'delete any file'
   - 'delete any news_logo media'
-  - 'delete any solution_banner media'
   - 'delete any solution_logo media'
   - 'delete asset_release rdf entity'
   - 'delete contact_information rdf entity'
@@ -148,16 +146,19 @@ permissions:
   - 'delete paragraph content 3_column_layout'
   - 'delete paragraph content call_to_action'
   - 'delete paragraph content carousel'
+  - 'delete paragraph content entity_reference'
   - 'delete paragraph content github_feed'
+  - 'delete paragraph content heading'
   - 'delete paragraph content iframe'
   - 'delete paragraph content image'
   - 'delete paragraph content json_map'
-  - 'delete paragraph content row'
+  - 'delete paragraph content layout'
+  - 'delete paragraph content poll'
+  - 'delete paragraph content quote'
   - 'delete paragraph content testimony'
   - 'delete paragraph content video'
-  - 'delete site alerts'
+  - 'delete sitewide alert entities'
   - 'download subscribers report'
-  - 'edit any collection_banner media'
   - 'edit any collection_logo media'
   - 'edit any custom_page content'
   - 'edit any discussion content'
@@ -165,7 +166,6 @@ permissions:
   - 'edit any event_logo media'
   - 'edit any glossary content'
   - 'edit any news_logo media'
-  - 'edit any solution_banner media'
   - 'edit any solution_logo media'
   - 'edit contact_information rdf entity'
   - 'edit field_is_eif_category'
@@ -176,6 +176,7 @@ permissions:
   - 'edit own field_is_eif_recommendation'
   - 'edit owner rdf entity'
   - 'edit short id after publication'
+  - 'edit sitewide alert entities'
   - 'edit terms in legal_type'
   - 'execute developers_italia pipeline'
   - 'execute dpsi pipeline'
@@ -196,6 +197,7 @@ permissions:
   - 'reset joinup_collection pipeline'
   - 'reset nio pipeline'
   - 'reset spain pipeline'
+  - 'revert all sitewide alert revisions'
   - 'transition any message announcement from rejected to sent using the announcement - announcement workflow'
   - 'transition any message announcement from sent to delivered using the announcement - announcement workflow'
   - 'transition any message announcement from sent to rejected using the announcement - announcement workflow'
@@ -385,17 +387,21 @@ permissions:
   - 'update paragraph content 3_column_layout'
   - 'update paragraph content call_to_action'
   - 'update paragraph content carousel'
+  - 'update paragraph content entity_reference'
   - 'update paragraph content github_feed'
+  - 'update paragraph content heading'
   - 'update paragraph content iframe'
   - 'update paragraph content image'
   - 'update paragraph content json_map'
-  - 'update paragraph content row'
+  - 'update paragraph content layout'
+  - 'update paragraph content poll'
+  - 'update paragraph content quote'
   - 'update paragraph content testimony'
   - 'update paragraph content video'
-  - 'update site alerts'
   - 'update solution_settings meta-entity'
   - 'update spotlight entityqueue'
   - 'update topic meta-entity'
+  - 'view all sitewide alert revisions'
   - 'view any unpublished content'
   - 'view eif wrapper entity'
   - 'view field_is_eif_category'
@@ -406,3 +412,4 @@ permissions:
   - 'view rdf entity overview'
   - 'view rdf_entity draft graph'
   - 'view unpublished rdf entity'
+  - 'view unpublished sitewide alert entities'

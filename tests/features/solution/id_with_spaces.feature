@@ -10,7 +10,6 @@ Feature: Solution API
       | title            | Solution with spaces                   |
       | description      | A sample solution                      |
       | logo             | logo.png                               |
-      | banner           | banner.jpg                             |
       | documentation    | text.pdf                               |
       | content creation | registered users                       |
       | landing page     | http://foo-example.com/landing         |
@@ -23,7 +22,6 @@ Feature: Solution API
       | title            | Solution with unicode                                                                                    |
       | description      | A sample solution                                                                                        |
       | logo             | logo.png                                                                                                 |
-      | banner           | banner.jpg                                                                                               |
       | documentation    | text.pdf                                                                                                 |
       | content creation | registered users                                                                                         |
       | landing page     | http://foo-example.com/landing                                                                           |

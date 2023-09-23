@@ -32,9 +32,9 @@ Feature: Collection membership overview
       | Aniruddha Kováts      | Aniruddha  | Kováts      | blaise.jpg   | Chief Communications Officer    |
       | Aali Dalton           | Aali       | Dalton      | richard.jpg  | Founder                         |
     And the following collections:
-      | title           | description        | logo     | banner     | owner          | contact information | state     |
-      | Jubilant Robots | Fresh oil harvest! | logo.png | banner.jpg | Ayodele Sommer | Nita Yang           | validated |
-      | Jubilant Rabits | Fresh oil harvest! | logo.png | banner.jpg | Ayodele Sommer | Nita Yang           | draft     |
+      | title           | description        | logo     | owner          | contact information | state     |
+      | Jubilant Robots | Fresh oil harvest! | logo.png | Ayodele Sommer | Nita Yang           | validated |
+      | Jubilant Rabits | Fresh oil harvest! | logo.png | Ayodele Sommer | Nita Yang           | draft     |
     And the following collection user memberships:
       | collection      | user                  | roles       | state   |
       | Jubilant Robots | Ruby Valenta          | owner       |         |
