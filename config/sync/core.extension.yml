@@ -8,7 +8,6 @@ module:
   asset_distribution: 0
   asset_release: 0
   block: 0
-  bootstrap4_modal: 0
   breakpoint: 0
   cached_computed_field: 0
   cas: 0
@@ -101,17 +100,20 @@ module:
   joinup_like: 0
   joinup_material_design: 0
   joinup_menu: 0
+  joinup_modal: 0
   joinup_news: 0
   joinup_newsletter: 0
   joinup_notification: 0
   joinup_paragraphs: 0
   joinup_pipeline_log: 0
+  joinup_poll: 0
   joinup_publication_date: 0
   joinup_rdf: 0
   joinup_rdf_graph: 0
   joinup_rss: 0
   joinup_search: 0
   joinup_seo: 0
+  joinup_sitewide_alert: 0
   joinup_sparql: 0
   joinup_stats: 0
   joinup_subscription: 0
@@ -125,6 +127,7 @@ module:
   layout_builder: 0
   layout_builder_component_attributes: 0
   layout_discovery: 0
+  layout_paragraphs: 0
   link: 0
   linkit: 0
   mailsystem: 0
@@ -164,6 +167,7 @@ module:
   path: 0
   path_alias: 0
   pipeline: 0
+  poll: 0
   purge: 0
   purge_drush: 0
   purge_processor_cron: 0
@@ -196,7 +200,8 @@ module:
   serialization: 0
   simple_block: 0
   simple_sitemap: 0
-  site_alert: 0
+  sitewide_alert: 0
+  sitewide_alert_block: 0
   smart_trim: 0
   social_media_links: 0
   social_media_links_field: 0

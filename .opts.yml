@@ -10,7 +10,7 @@ upgrade_commands:
     - ./vendor/bin/drush search-api:reset-tracker --yes
     - ./vendor/bin/drush joinup:node-access-rebuild
     - rm disable-config-readonly
-    - ./vendor/bin/drush site-alert:disable
+    - ./vendor/bin/drush joinup:unpublish-alert --category
     - ./scripts/check_status_report.php
   append:
     acceptance:
@@ -24,9 +24,9 @@ upgrade_commands:
       - ./vendor/bin/drush cache:rebuild
       - rm disable-config-readonly
 
-php_version: 8.1
+php_version: 8.2
 extra_pkgs:
-  - php8.1-apcu
+  - php8.2-apcu
 
 mysql_version: "8.0"
 

@@ -19,9 +19,9 @@
   ] %}
   {% set attributes = create_attribute()
     .addClass(classes)
-    .setAttribute('href', path('joinup_like.anonymous_dialog'))
+    .setAttribute('href', path('joinup_modal.anonymous', {'type': 'like'}, {'query':{'destination': path('<current>') }}))
     .setAttribute('data-dialog-type', 'modal')
-    .setAttribute('data-dialog-options', '{&quot;width&quot;:400}' )
+    .setAttribute('data-dialog-options', '{"width":"auto","height":"auto"}' )
   %}
   {% set count = flagcount(flag, flaggable) %}
 

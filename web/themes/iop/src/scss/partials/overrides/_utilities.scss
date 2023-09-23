@@ -15,6 +15,15 @@ $utilities: map-merge(
     "border-width": null,
     "viewport-width": null,
     "min-viewport-width": null,
+    "height": (
+      responsive: true,
+      property: height,
+      class: h,
+      values: (
+        0: 0,
+        50vh: 50vh,
+      )
+    ),
     "max-height": null,
     "viewport-height": null,
     "min-viewport-height": null,
@@ -41,6 +50,12 @@ $utilities: map-merge(
     "gradient": null,
     "user-select": null,
     "pointer-events": null,
+    "column-gap": (
+      responsive: false,
+      property: column-gap,
+      class: col-gap,
+      values: $spacers
+    ),
     "link": null,
     "font-weight":
       map-merge(

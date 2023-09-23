@@ -108,3 +108,10 @@ Feature: Curated content listings
     And I press "Save"
     Then I should see the message "The entity subqueue In the spotlight has been updated."
     Then I should see the heading "Curated content listings"
+
+    When I am on the homepage
+    And I click the contextual link "Feature" in the "Licrogravity" tile
+    Then the "Licrogravity" tile should be marked as featured
+
+    Then I visit the search page
+    And the "Licrogravity" tile should be marked as featured

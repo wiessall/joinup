@@ -13,7 +13,7 @@ use Drupal\joinup_bundle_class\LogoInterface;
 use Drupal\joinup_community_content\Entity\CommunityContentInterface;
 use Drupal\joinup_core\Controller\IdRedirect;
 use Drupal\joinup_workflow\ArchivableEntityInterface;
-use Drupal\smart_trim\Truncate\TruncateHTML;
+use Drupal\smart_trim\TruncateHTML;
 use Drupal\topic\Entity\TopicReferencingEntityInterface;
 
 /**
@@ -149,7 +149,7 @@ function _ventuno_preprocess_tile(array &$variables, string $entity_type_id): vo
 
     case 'tallinn_report':
       $variables['info']['icon'] = 'calendar-event';
-      if ($entity->getCreatedTime() === $entity->getChangedTime()) {
+      if ($entity->getCreatedTime() == $entity->getChangedTime()) {
         $variables['info']['label'] = new TranslatableMarkup('@label: -', [
           '@label' => 'Last update',
         ]);
@@ -211,7 +211,6 @@ function _ventuno_preprocess_tile(array &$variables, string $entity_type_id): vo
       break;
 
     case 'solution':
-      $variables['image'] = $variables['content']['field_is_logo'];
       // Add attributes that will allow JS to mark this tile as "Shared from".
       $rdf_entity = $variables['rdf_entity'];
       if (!$rdf_entity->get('collection')->isEmpty()) {

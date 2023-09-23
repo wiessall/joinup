@@ -26,6 +26,7 @@ $btn-hover-bg-shade-amount: 10%;
 $btn-hover-bg-tint-amount: 10%;
 $btn-active-bg-shade-amount: 20%;
 $btn-active-bg-tint-amount: 20%;
+$btn-font-weight: 500;
 
 // Extra font variables
 $display-font-weight: normal;
@@ -49,7 +50,7 @@ $headings-font-weight: 400;
 $h1-font-size: $font-size-base * 2; // 32px
 $h2-font-size: $font-size-base * 1.5; // 24px
 $h3-font-size: $font-size-base * 1.25; // 20px
-$h4-font-size: $font-size-base; // 16px
+$h4-font-size: $font-size-base * 1.125; // 18px
 $h5-font-size: $font-size-base; // 16px
 $h6-font-size: $font-size-base; // 16px
 
@@ -58,6 +59,8 @@ $link-decoration: none;
 $link-hover-decoration: underline;
 
 // Modal
+$modal-header-border-color: $gray-300;
+$modal-header-border-width: 1px;
 $zindex-modal-backdrop: 502;
 $zindex-modal: 512;
 

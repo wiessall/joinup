@@ -7,7 +7,6 @@
 
 declare(strict_types = 1);
 
-use Drupal\Core\Database\Database;
 use Drupal\Core\Site\Settings;
 use Drupal\user\Entity\User;
 
@@ -95,19 +94,14 @@ function joinup_core_requirements($phase): array {
 }
 
 /**
- * Update length and set back primary key in search_api_item.
+ * Remove leftover row paragraphs.
  */
-function joinup_core_update_109500() {
-  $schema = Database::getConnection()->schema();
+function joinup_core_update_109700(): void {
+  $paragraphs = \Drupal::entityTypeManager()
+    ->getStorage('paragraph')
+    ->loadByProperties(['type' => 'row']);
 
-  $schema->changeField('search_api_item', 'item_id', 'item_id', [
-    'description' => 'The unique identifier of this item',
-    'type' => 'varchar',
-    'length' => 718,
-    'not null' => TRUE,
-  ]);
-
-  if (!$schema->indexExists('search_api_item', 'PRIMARY')) {
-    $schema->addPrimaryKey('search_api_item', ['index_id', 'item_id']);
+  foreach ($paragraphs as $paragraph) {
+    $paragraph->delete();
   }
 }

@@ -6,7 +6,6 @@ dependencies:
     - core.entity_view_mode.rdf_entity.view_mode_search_list_item
     - field.field.rdf_entity.solution.field_is_actor
     - field.field.rdf_entity.solution.field_is_affiliations_requests
-    - field.field.rdf_entity.solution.field_is_banner
     - field.field.rdf_entity.solution.field_is_business_process
     - field.field.rdf_entity.solution.field_is_contact_information
     - field.field.rdf_entity.solution.field_is_content
@@ -105,6 +104,8 @@ content:
     settings:
       responsive_image_style: teaser
       image_link: ''
+      image_loading:
+        attribute: eager
     third_party_settings:
       template_suggestion:
         template_suggestion: ''
@@ -143,7 +144,6 @@ hidden:
   featured: true
   field_is_actor: true
   field_is_affiliations_requests: true
-  field_is_banner: true
   field_is_business_process: true
   field_is_contact_information: true
   field_is_content: true

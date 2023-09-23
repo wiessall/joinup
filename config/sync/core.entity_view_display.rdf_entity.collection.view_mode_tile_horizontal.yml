@@ -7,7 +7,6 @@ dependencies:
     - field.field.rdf_entity.collection.field_ar_abstract
     - field.field.rdf_entity.collection.field_ar_access_url
     - field.field.rdf_entity.collection.field_ar_affiliates
-    - field.field.rdf_entity.collection.field_ar_banner
     - field.field.rdf_entity.collection.field_ar_closed
     - field.field.rdf_entity.collection.field_ar_contact_information
     - field.field.rdf_entity.collection.field_ar_content_creation
@@ -27,10 +26,10 @@ dependencies:
     - responsive_image.styles.tile
   module:
     - field_group
+    - joinup_html_stripper
     - layout_builder
     - responsive_image
     - template_suggestion
-    - text
     - user
 third_party_settings:
   field_group:
@@ -61,9 +60,10 @@ bundle: collection
 mode: view_mode_tile_horizontal
 content:
   field_ar_description:
-    type: text_default
+    type: joinup_html_stripper_stripped
     label: hidden
-    settings: {  }
+    settings:
+      trim_length: 600
     third_party_settings:
       template_suggestion:
         template_suggestion: bare
@@ -75,6 +75,8 @@ content:
     settings:
       responsive_image_style: tile
       image_link: ''
+      image_loading:
+        attribute: eager
     third_party_settings:
       template_suggestion:
         template_suggestion: bare
@@ -92,7 +94,6 @@ hidden:
   field_ar_abstract: true
   field_ar_access_url: true
   field_ar_affiliates: true
-  field_ar_banner: true
   field_ar_closed: true
   field_ar_contact_information: true
   field_ar_content_creation: true

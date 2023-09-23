@@ -4,7 +4,6 @@ status: true
 dependencies:
   config:
     - core.entity_view_mode.rdf_entity.digest_message
-    - field.field.rdf_entity.asset_release.field_isr_banner
     - field.field.rdf_entity.asset_release.field_isr_contact_information
     - field.field.rdf_entity.asset_release.field_isr_description
     - field.field.rdf_entity.asset_release.field_isr_distribution
@@ -43,6 +42,15 @@ content:
       date_format: date_only
       custom_date_format: ''
       timezone: ''
+      tooltip:
+        date_format: ''
+        custom_date_format: ''
+      time_diff:
+        enabled: false
+        future_format: '@interval hence'
+        past_format: '@interval ago'
+        granularity: 2
+        refresh: 60
     third_party_settings:
       template_suggestion:
         template_suggestion: bare
@@ -135,9 +143,13 @@ content:
       trim_suffix: …
       wrap_output: false
       wrap_class: trimmed
-      more_link: false
-      more_class: more-link
-      more_text: More
+      more:
+        display_link: false
+        target_blank: false
+        link_trim_only: false
+        class: more-link
+        text: More
+        aria_label: 'Read more about [node:title]'
       summary_handler: full
       trim_options:
         text: true
@@ -215,7 +227,6 @@ content:
     region: content
 hidden:
   changed: true
-  field_isr_banner: true
   field_isr_contact_information: true
   field_isr_description: true
   field_isr_distribution: true
