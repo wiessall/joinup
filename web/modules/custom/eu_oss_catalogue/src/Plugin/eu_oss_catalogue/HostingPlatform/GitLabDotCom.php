@@ -60,7 +60,6 @@ class GitLabDotCom extends EuOssCatalogueGitHostingPlatformPluginBase {
    */
   protected function doGetProjects(array $requestedFiles = []): iterable {
     foreach ($this->getConfiguration()['projects'] as $namespace => $repos) {
-      $limitToRepos = is_array($repos);
       $endCursor = NULL;
       do {
         $query = $this->buildGroupQuery($namespace, $requestedFiles, $endCursor);
@@ -76,64 +75,23 @@ class GitLabDotCom extends EuOssCatalogueGitHostingPlatformPluginBase {
           break;
         }
 
-        if (empty($response['data']['group']['projects']['nodes'])) {
-          // This namespace has no projects, exit do {...} while (...).
-          break;
+        if ($response['data']['group'] === NULL) {
+          // Not a group. It might be a user namespace but let's see.
+          foreach ($this->fetchFromUserNamespaceResults($namespace, $repos, $requestedFiles) as $project) {
+            yield $project;
+          }
+          // Done with this namespace.
+          break 2;
         }
 
-        $hasNextPage = $response['data']['group']['projects']['pageInfo']['hasNextPage'];
-        $endCursor = $response['data']['group']['projects']['pageInfo']['endCursor'];
-        foreach ($response['data']['group']['projects']['nodes'] as $project) {
-          // Ignore when...
-          if (
-            // There's no default branch, thus no code, or...
-            empty($project['repository']['rootRef']) ||
-            // The project is archived, or...
-            !empty($project['archived']) ||
-            // A set of projects were requested but this project is not in list.
-            ($limitToRepos && !in_array($project['path'], $repos, TRUE))
-          ) {
-            // Keep track of what's left.
-            if ($limitToRepos) {
-              unset($repos[array_search($project['path'], $repos)]);
-            }
-            continue;
-          }
+        foreach ($this->filterGroupProjects($response, $repos) as $project) {
           yield $this->createHostingPlatformResult($namespace, $project, $requestedFiles);
         }
+
+        // Honour pagination.
+        $hasNextPage = $response['data']['group']['projects']['pageInfo']['hasNextPage'];
+        $endCursor = $response['data']['group']['projects']['pageInfo']['endCursor'];
       } while ($hasNextPage);
-
-      // Not all projects were resolved. This happens when the namespace is a
-      // user. We parse user projects only if they were explicitly designated,
-      // i.e. both namespace and project name were specified. Otherwise, GitLab
-      // requires authentication and not all self-hosted platforms allow new
-      // user registration.
-      if ($limitToRepos) {
-        foreach ($repos as $name) {
-          $query = $this->buildProjectQuery($namespace, $name, $requestedFiles);
-          try {
-            $project = $this->getClient()->graphql()->execute($query->toString())['data']['project'] ?? NULL;
-            if ($project && !empty($project['repository']['rootRef']) && empty($project['archived'])) {
-              yield $this->createHostingPlatformResult($namespace, $project, $requestedFiles);
-            }
-            return;
-          }
-          catch (\Throwable $exception) {
-            // Log only a warning as we retry later by using REST API.
-            Error::logException($this->logger, $exception, "Can't get the project '@project' from @url using GraphQL API", [
-              '@project' => "$namespace/$name",
-              '@url' => $this->getBaseUrl(),
-            ], LogLevel::WARNING);
-          }
-
-          // It wasn't possible to get the project info with GraphQL API. This
-          // could happen on old versions of GitLab installed. Give it another
-          // chance by falling back to REST API.
-          if ($project = $this->getProjectWithRestApi("$namespace/$name")) {
-            yield $this->createHostingPlatformResult($namespace, $project);
-          }
-        }
-      }
     }
   }
 
@@ -177,7 +135,7 @@ class GitLabDotCom extends EuOssCatalogueGitHostingPlatformPluginBase {
    * @param string $namespace
    *   The namespace.
    * @param string[] $requestedFiles
-   *     A list of file paths keyed by a file identifier.
+   *   A list of file paths keyed by a file identifier.
    * @param string|null $endCursor
    *   The end cursor, if any.
    *
@@ -217,7 +175,6 @@ class GitLabDotCom extends EuOssCatalogueGitHostingPlatformPluginBase {
    * Builds a specific project query.
    *
    * This renders a query similar to:
-   *
    * @code
    * {
    *   project(fullPath: "namespace/name") {
@@ -275,10 +232,122 @@ class GitLabDotCom extends EuOssCatalogueGitHostingPlatformPluginBase {
   }
 
   /**
+   * Creates a code hosting platform result instance.
+   *
+   * @param string $namespace
+   *   The project's namespace.
+   * @param array $project
+   *   The project array, from the GraphQL results.
+   * @param string[] $requestedFiles
+   *   (optional) A list of file blobs keyed by their file identifier.
+   *
+   * @return \Drupal\eu_oss_catalogue\Model\Project
+   *   A code hosting platform result instance.
+   */
+  protected function createHostingPlatformResult(string $namespace, array $project, array $requestedFiles = []): Project {
+    // Get files by reverse engineering from file path to file IDs.
+    $files = [];
+
+    if ($requestedFiles) {
+      $flippedFiles = array_flip($requestedFiles);
+      foreach ($project['repository']['blobs']['nodes'] as $fileData) {
+        $files[$flippedFiles[$fileData['path']]] = $fileData['rawBlob'];
+      }
+    }
+
+    return new Project(
+      $namespace,
+      $project['path'],
+      "{$this->getBaseUrl()}/$namespace/{$project['path']}",
+      $project['repository']['rootRef'],
+      $project['releases']['nodes'][0]['tagName'] ?? NULL,
+      $project['releases']['nodes'][0]['createdAt'] ?? NULL,
+      $project['id'],
+      $project['description'],
+      $files,
+    );
+  }
+
+  /**
+   * Narrows the list of group projects to those we're interested in.
+   *
+   * @param array $response
+   *   The response from the query prepared in ::buildGroupQuery().
+   * @param array|null $repos
+   *   A list of requested projects within the namespace to narrow on.
+   *
+   * @return array[]
+   *   A list of filtered projects.
+   */
+  protected function filterGroupProjects(array $response, ?array $repos): array {
+    $limitTo = is_array($repos) ? array_flip($repos) : NULL;
+    return array_filter(
+      $response['data']['group']['projects']['nodes'],
+      function (array $project) use ($limitTo): bool {
+        // No list has been requested OR the project is in the requested list.
+        return ($limitTo === NULL || isset($limitTo[$project['path']])) &&
+          // The project is not archived.
+          empty($project['archived']) &&
+          // There is a default branch.
+          !empty($project['repository']['rootRef']);
+      });
+  }
+
+  /**
+   * Assumes a user namespace and returns the requested projects.
+   *
+   * Fetch user projects only if they were explicitly designated, i.e. both
+   * namespace and project name were specified. Otherwise, GitLab requires
+   * authentication and we don't support that.
+   *
+   * @param string $namespace
+   *   The namespace we assume it's a user namespace.
+   * @param array|null $names
+   *   A list of project names within in the given namespace or NULL if all
+   *   projects were requested.
+   * @param string[] $requestedFiles
+   *   (optional) A list of file blobs keyed by their file identifier.   *.
+   *
+   * @return iterable
+   *   Generates a list of user orojects.
+   */
+  protected function fetchFromUserNamespaceResults(string $namespace, ?array $names, array $requestedFiles = []): iterable {
+    foreach ($names as $name) {
+      $query = $this->buildProjectQuery($namespace, $name, $requestedFiles);
+      try {
+        $project = $this->getClient()->graphql()->execute($query->toString())['data']['project'] ?? NULL;
+        if ($project && !empty($project['repository']['rootRef']) && empty($project['archived'])) {
+          yield $this->createHostingPlatformResult($namespace, $project, $requestedFiles);
+        }
+        return;
+      }
+      catch (\Throwable $exception) {
+        // Log only a warning as we retry later by using REST API.
+        Error::logException($this->logger, $exception, "Can't get the project '@project' from @url using GraphQL API", [
+          '@project' => "$namespace/$name",
+          '@url' => $this->getBaseUrl(),
+        ], LogLevel::WARNING);
+      }
+
+      // It wasn't possible to get the project info with GraphQL API. This could
+      // happen on old versions of GitLab installed. Give it another chance by
+      // falling back to REST API.
+      if ($project = $this->getProjectWithRestApi("$namespace/$name")) {
+        yield $this->createHostingPlatformResult($namespace, $project);
+      }
+    }
+  }
+
+  /**
    * Returns the project info, if any, by using REST API.
+   *
+   * This is a fallback method to get project data for GitLab code hosting
+   * platforms that doesn't support full GraphQL, most probably because of an
+   * older GitLab version.
    *
    * @param string $fullPath
    *   The project's full name/path.
+   *
    * @return array|null
    *   The project array having a structure similar to the one retrieved by
    *   GraphQL response or NULL if there's no project with this name.
@@ -331,43 +400,6 @@ class GitLabDotCom extends EuOssCatalogueGitHostingPlatformPluginBase {
     }
 
     return $project;
-  }
-
-  /**
-   * Creates a code hosting platform result instance.
-   *
-   * @param string $namespace
-   *   The project's namespace.
-   * @param array $project
-   *   The project array, from the GraphQL results.
-   * @param string[] $requestedFiles
-   *   (optional) A list of file blobs keyed by their file identifier.
-   *
-   * @return \Drupal\eu_oss_catalogue\Model\Project
-   *   A code hosting platform result instance.
-   */
-  protected function createHostingPlatformResult(string $namespace, array $project, array $requestedFiles = []): Project {
-    // Get files by reverse engineering from file path to file IDs.
-    $files = [];
-
-    if ($requestedFiles) {
-      $flippedFiles = array_flip($requestedFiles);
-      foreach ($project['repository']['blobs']['nodes'] as $fileData) {
-        $files[$flippedFiles[$fileData['path']]] = $fileData['rawBlob'];
-      }
-    }
-
-    return new Project(
-      $namespace,
-      $project['path'],
-      "{$this->getBaseUrl()}/$namespace/{$project['path']}",
-      $project['repository']['rootRef'],
-      $project['releases']['nodes'][0]['tagName'] ?? NULL,
-      $project['releases']['nodes'][0]['createdAt'] ?? NULL,
-      $project['id'],
-      $project['description'],
-      $files,
-    );
   }
 
   /**
