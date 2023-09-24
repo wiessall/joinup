@@ -82,9 +82,16 @@ function joinup_core_deploy_109701(): string {
 }
 
 /**
- * Update path alias for EU OSS catalogue.
+ * Dismantle EIF Recommendation view.
  */
 function joinup_core_deploy_109702(): void {
+  \Drupal::entityTypeManager()->getStorage('redirect')->load(125784)->delete();
+}
+
+/**
+ * Update path alias for EU OSS catalogue.
+ */
+function joinup_core_deploy_109703(): void {
   /** @var \Drupal\collection\Entity\CollectionInterface $collection */
   $collection = \Drupal::entityTypeManager()->getStorage('rdf_entity')
     ->load(OssCatalogueCollectionInterface::COLLECTION_ENTITY_ID);
@@ -98,7 +105,7 @@ function joinup_core_deploy_109702(): void {
 /**
  * Update title of EU OSS catalogue collection.
  */
-function joinup_core_deploy_109703(): void {
+function joinup_core_deploy_109704(): void {
   /** @var \Drupal\collection\Entity\CollectionInterface $collection */
   $collection = \Drupal::entityTypeManager()->getStorage('rdf_entity')
     ->load(OssCatalogueCollectionInterface::COLLECTION_ENTITY_ID);
@@ -111,7 +118,7 @@ function joinup_core_deploy_109703(): void {
 /**
  * Import content for EU OpenSource Software Solutions Catalogue.
  */
-function joinup_core_deploy_109704(): void {
+function joinup_core_deploy_109705(): void {
   /** @var \Drupal\Core\Extension\ModuleInstallerInterface $moduleInstaller */
   $moduleInstaller = \Drupal::service('module_installer');
   /** @var \Drupal\Core\Entity\EntityRepositoryInterface $entityRepository */

@@ -23,3 +23,8 @@ services:
     arguments: ['@current_route_match']
     tags:
       - { name: event_subscriber }
+
+  topic.topic_route_subscriber:
+    class: Drupal\topic\Routing\TopicRouteSubscriber
+    tags:
+      - { name: event_subscriber }

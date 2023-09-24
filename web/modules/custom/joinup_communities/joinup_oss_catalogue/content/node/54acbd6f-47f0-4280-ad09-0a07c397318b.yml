@@ -259,9 +259,9 @@ default:
                   region: content
           paragraph_block:
             -
-              plugin_id: 'views_block:oss_solution-oss_most_recent_solutions'
+              plugin_id: 'views_block:eu_oss_catalogue_admin-oss_most_recent_solutions'
               settings:
-                id: 'views_block:oss_solution-oss_most_recent_solutions'
+                id: 'views_block:eu_oss_catalogue_admin-oss_most_recent_solutions'
                 label: ''
                 label_display: false
                 provider: views
