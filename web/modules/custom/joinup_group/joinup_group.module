@@ -568,6 +568,7 @@ function joinup_group_form_views_exposed_form_alter(array &$form, FormStateInter
   $url = Url::fromRoute('joinup_group.membership_permissions_info', [
     'rdf_entity' => $group->id(),
   ]);
+
   $form['member_permissions_link'] = [
     '#theme' => 'members_overview_permissions_link',
     '#url' => $url,

@@ -12,7 +12,7 @@ Feature: As a moderator I want to be able to maintain sets of images to be
     When I click "<media type>"
     Then I should see the heading "Add <media type>"
     When I fill in "Name" with "Whatever@<media type>"
-    And I attach the file "logo.png" to "Image"
+    And I attach the file "logo.png" to "Add a new file"
     And I press "Upload"
     And I press "Save"
     Then I should see the success message "<media type> Whatever@<media type> has been created."
