@@ -1,0 +1,138 @@
+diff --git a/core/modules/comment/config/optional/views.view.comments_recent.yml b/core/modules/comment/config/optional/views.view.comments_recent.yml
+index 5e15280193..6c5a7782d3 100644
+--- a/core/modules/comment/config/optional/views.view.comments_recent.yml
++++ b/core/modules/comment/config/optional/views.view.comments_recent.yml
+@@ -232,6 +232,7 @@ display:
+           hide_empty: false
+       query:
+         type: views_query
++        options: {  }
+       relationships:
+         node:
+           id: node
+diff --git a/core/modules/jsonapi/tests/src/Functional/ViewTest.php b/core/modules/jsonapi/tests/src/Functional/ViewTest.php
+index 1e0e8bf8ff..96bb36a878 100644
+--- a/core/modules/jsonapi/tests/src/Functional/ViewTest.php
++++ b/core/modules/jsonapi/tests/src/Functional/ViewTest.php
+@@ -94,6 +94,10 @@ protected function getExpectedDocument() {
+               'position' => 0,
+               'display_options' => [
+                 'display_extenders' => [],
++                'query' => [
++                  'options' => [],
++                  'type' => 'views_query',
++                ],
+               ],
+               'cache_metadata' => [
+                 'max-age' => -1,
+diff --git a/core/modules/node/config/optional/views.view.content.yml b/core/modules/node/config/optional/views.view.content.yml
+index a784f217b3..2f6691c154 100644
+--- a/core/modules/node/config/optional/views.view.content.yml
++++ b/core/modules/node/config/optional/views.view.content.yml
+@@ -559,6 +559,7 @@ display:
+         type: fields
+       query:
+         type: views_query
++        options: {  }
+       relationships:
+         uid:
+           id: uid
+diff --git a/core/modules/views/src/Plugin/views/display/DisplayPluginBase.php b/core/modules/views/src/Plugin/views/display/DisplayPluginBase.php
+index 4a9f2fbbdd..0050831b71 100644
+--- a/core/modules/views/src/Plugin/views/display/DisplayPluginBase.php
++++ b/core/modules/views/src/Plugin/views/display/DisplayPluginBase.php
+@@ -807,6 +807,8 @@ public function getPlugin($type) {
+     if ($type == 'query') {
+       $views_data = Views::viewsData()->get($this->view->storage->get('base_table'));
+       $name = $views_data['table']['base']['query_id'] ?? 'views_query';
++      $options['type'] = $name;
++      $this->setOption($type, $options);
+     }
+     else {
+       $name = $options['type'];
+diff --git a/core/modules/views/tests/src/Functional/Rest/ViewResourceTestBase.php b/core/modules/views/tests/src/Functional/Rest/ViewResourceTestBase.php
+index 321510b054..f3569fcb83 100644
+--- a/core/modules/views/tests/src/Functional/Rest/ViewResourceTestBase.php
++++ b/core/modules/views/tests/src/Functional/Rest/ViewResourceTestBase.php
+@@ -58,6 +58,10 @@ protected function getExpectedNormalizedEntity() {
+           'position' => 0,
+           'display_options' => [
+             'display_extenders' => [],
++            'query' => [
++              'options' => [],
++              'type' => 'views_query',
++            ],
+           ],
+           'cache_metadata' => [
+             'max-age' => -1,
+diff --git a/core/modules/views/tests/src/Kernel/Plugin/DisplayKernelTest.php b/core/modules/views/tests/src/Kernel/Plugin/DisplayKernelTest.php
+index 1fe2861238..1f09e819bc 100644
+--- a/core/modules/views/tests/src/Kernel/Plugin/DisplayKernelTest.php
++++ b/core/modules/views/tests/src/Kernel/Plugin/DisplayKernelTest.php
+@@ -2,15 +2,15 @@
+ 
+ namespace Drupal\Tests\views\Kernel\Plugin;
+ 
+-use Drupal\views\Views;
+ use Drupal\Tests\views\Kernel\ViewsKernelTestBase;
+-use Drupal\views\Plugin\views\style\StylePluginBase;
+ use Drupal\views\Plugin\views\access\AccessPluginBase;
++use Drupal\views\Plugin\views\cache\CachePluginBase;
+ use Drupal\views\Plugin\views\exposed_form\ExposedFormPluginInterface;
+ use Drupal\views\Plugin\views\pager\PagerPluginBase;
+ use Drupal\views\Plugin\views\query\QueryPluginBase;
+-use Drupal\views\Plugin\views\cache\CachePluginBase;
+ use Drupal\views\Plugin\views\row\RowPluginBase;
++use Drupal\views\Plugin\views\style\StylePluginBase;
++use Drupal\views\Views;
+ 
+ /**
+  * Drupal unit tests for the DisplayPluginBase class.
+@@ -24,7 +24,13 @@ class DisplayKernelTest extends ViewsKernelTestBase {
+    *
+    * @var array
+    */
+-  protected static $modules = ['block', 'node', 'field', 'user'];
++  protected static $modules = [
++    'block',
++    'field',
++    'node',
++    'user',
++    'views_test_data',
++  ];
+ 
+   /**
+    * Views plugin types to test.
+@@ -58,6 +64,18 @@ class DisplayKernelTest extends ViewsKernelTestBase {
+    */
+   public static $testViews = ['test_display_defaults', 'test_view'];
+ 
++  /**
++   * {@inheritdoc}
++   */
++  protected function viewsData() {
++    $data = parent::viewsData();
++
++    // Use the test query plugin.
++    $data['views_test_data']['table']['base']['query_id'] = 'query_test';
++
++    return $data;
++  }
++
+   /**
+    * Tests the default display options.
+    */
+@@ -113,6 +131,13 @@ public function testGetPlugin() {
+     $first = spl_object_hash($display_handler->getPlugin('style'));
+     $second = spl_object_hash($display_handler->getPlugin('style'));
+     $this->assertSame($first, $second, 'The same plugin instance was returned.');
++
++    // Verify that the query plugin ID is properly set in the view.
++    $view = Views::getView('test_view');
++    $view->initDisplay();
++    $display_handler = $view->display_handler;
++    $query_options = $display_handler->getOption('query');
++    $this->assertSame('query_test', $query_options['type']);
+   }
+ 
+   /**
