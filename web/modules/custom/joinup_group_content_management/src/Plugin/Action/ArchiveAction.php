@@ -50,11 +50,11 @@ class ArchiveAction extends StateActionBase {
   /**
    * {@inheritdoc}
    */
-  public static function create(ContainerInterface $container, array $configuration, $pluginId, $pluginDefinition): self {
+  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition): self {
     return new static(
       $configuration,
-      $pluginId,
-      $pluginDefinition,
+      $plugin_id,
+      $plugin_definition,
       $container->get('renderer'),
       $container->get('datetime.time'),
       $container->get('current_user')
