@@ -14,9 +14,11 @@
           description: Description of Project1
           archived: false
           releases:
-            nodes: {  }
+            nodes:
+              - tagName: 'v1.1.1'
+                createdAt: '2015-06-21'
           repository:
-            rootRef: main
+            rootRef: branch-project-1
             blobs:
               nodes:
                 - path: publiccode.yml
@@ -69,9 +71,11 @@
           description: Description of Project2
           archived: false
           releases:
-            nodes: {  }
+            nodes:
+              - tagName: 'v14.0.1'
+                createdAt: '2007-01-30'
           repository:
-            rootRef: main
+            rootRef: branch-project-2
             blobs:
               nodes:
                 - path: publiccode.yml
@@ -208,9 +212,11 @@
             description: 'Group 1: Project 1: description'
             archived: false
             releases:
-              nodes: []
+              nodes:
+                - tagName: '2.0.0-alpha12'
+                  createdAt: '2010-07-08'
             repository:
-              rootRef: main
+              rootRef: branch-project-1-1
               blobs:
                 nodes:
                   - path: publiccode.yml
@@ -264,9 +270,11 @@
             description: 'Group 1: Project 2: description'
             archived: false
             releases:
-              nodes: []
+              nodes:
+                - tagName: '220.0.1'
+                  createdAt: '2013-08-19'
             repository:
-              rootRef: main
+              rootRef: branch-project-1-2
               blobs:
                 nodes:
                   - path: publiccode.yml
@@ -377,9 +385,11 @@
             description: 'Group 2: Project 1: description'
             archived: false
             releases:
-              nodes: []
+              nodes:
+                - tagName: '1.12.0-beta2'
+                  createdAt: '2011-12-31'
             repository:
-              rootRef: main
+              rootRef: branch-project-2-1
               blobs:
                 nodes:
                   - path: publiccode.yml
@@ -475,9 +485,11 @@
       description: 'User 1: Project 1: description'
       archived: false
       releases:
-        nodes: []
+        nodes:
+          - tagName: '1.0.x-dev'
+            createdAt: '2020-10-22'
       repository:
-        rootRef: main
+        rootRef: branch-project-1
         blobs:
           nodes:
             - path: publiccode.yml
