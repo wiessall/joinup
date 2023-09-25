@@ -6,7 +6,6 @@ namespace Drupal\eu_oss_catalogue\Plugin\eu_oss_catalogue\HostingPlatform;
 
 use Drupal\Cache\Adapter\DrupalAdapter;
 use Drupal\Core\Cache\CacheBackendInterface;
-use Drupal\Core\Http\ClientFactory;
 use Drupal\Core\Site\Settings;
 use Drupal\eu_oss_catalogue\EuOssCatalogueGitHostingPlatformPluginBase;
 use Drupal\eu_oss_catalogue\Exception\MissingAccessTokenException;
@@ -18,6 +17,7 @@ use Github\AuthMethod;
 use Github\Client;
 use GraphQL\Actions\Query;
 use GraphQL\Entities\Node;
+use Psr\Http\Client\ClientInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -51,7 +51,7 @@ class GitHub extends EuOssCatalogueGitHostingPlatformPluginBase {
    *   The plugin ID.
    * @param array $pluginDefinition
    *   The plugin definition.
-   * @param \Drupal\Core\Http\ClientFactory $clientFactory
+   * @param \Psr\Http\Client\ClientInterface $httpClient
    *   The HTTP client.
    * @param \Drupal\Core\Site\Settings $settings
    *   The Drupal settings.
@@ -62,11 +62,11 @@ class GitHub extends EuOssCatalogueGitHostingPlatformPluginBase {
     array $configuration,
     $pluginId,
     $pluginDefinition,
-    ClientFactory $clientFactory,
-    Settings $settings,
+    protected ClientInterface $httpClient,
+    protected Settings $settings,
     protected CacheBackendInterface $cache,
   ) {
-    parent::__construct($configuration, $pluginId, $pluginDefinition, $clientFactory, $settings);
+    parent::__construct($configuration, $pluginId, $pluginDefinition, $httpClient, $settings);
   }
 
   /**
@@ -77,7 +77,7 @@ class GitHub extends EuOssCatalogueGitHostingPlatformPluginBase {
       $configuration,
       $pluginId,
       $pluginDefinition,
-      $container->get('http_client_factory'),
+      $container->get('http_client'),
       $container->get('settings'),
       $container->get('cache.eu_oss_catalogue'),
     );
