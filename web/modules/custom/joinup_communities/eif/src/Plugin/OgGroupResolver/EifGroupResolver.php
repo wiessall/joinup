@@ -32,10 +32,6 @@ class EifGroupResolver extends RouteGroupResolver {
   protected function getContentEntityPaths(): array {
     return [
       '/rdf_entity/{rdf_entity}/eif-perspective' => 'rdf_entity',
-      '/rdf_entity/{rdf_entity}/recommendations' => 'rdf_entity',
-      '/rdf_entity/{rdf_entity}/recommendations/principle' => 'rdf_entity',
-      '/rdf_entity/{rdf_entity}/recommendations/interoperability-layer' => 'rdf_entity',
-      '/rdf_entity/{rdf_entity}/recommendations/conceptual-model' => 'rdf_entity',
       '/rdf_entity/{rdf_entity}/solutions/{arg_1}' => 'rdf_entity',
       '/taxonomy/term/{taxonomy_term}' => 'taxonomy_term',
     ];

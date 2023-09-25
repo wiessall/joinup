@@ -7,8 +7,8 @@ Feature: Navigation menu for custom pages
   Scenario Outline: Access the navigation menu through the contextual link
     Given the following <group>s:
       | title            | logo     | state     |
-      | Rainbow tables   | logo.png | validated |
-      | Cripple Mr Onion | logo.png | validated |
+      | Rainbow tables   | logo.png | published |
+      | Cripple Mr Onion | logo.png | published |
 
     # By default, a link to the collection canonical page and a link to the
     # about page are added to the menu.
@@ -21,14 +21,14 @@ Feature: Navigation menu for custom pages
       | Members  |
       | About    |
     # Check that the 'Edit menu' local action is present.
-    And I should see the contextual link "Edit menu" in the "Header bottom" region
+    And I should see the contextual link "Edit menu" in the "Header" region
     # The 'Add link' local action that is present in the default implementation
     # of OG Menu should not be visible. We are managing the menu links behind
     # the scenes. The end user should not be able to interact with these.
-    But I should not see the contextual link "Add link" in the "Header bottom" region
+    But I should not see the contextual link "Add link" in the "Header" region
 
     # When we create a custom page it should automatically show up in the menu.
-    When I click the contextual link "Add new page" in the "Header bottom" region
+    When I click the contextual link "Add new page" in the "Header" region
     Then I should see the heading "Add custom page"
     When I fill in the following:
       | Title  | About us    |
@@ -37,7 +37,7 @@ Feature: Navigation menu for custom pages
     Then I should see the success message "Custom page About us has been created."
     And the navigation menu of the "Rainbow tables" <group> should have <visible items 2> visible items
 
-    When I click the contextual link "Edit menu" in the "Header bottom" region
+    When I click the contextual link "Edit menu" in the "Header" region
     Then the navigation menu of the "Rainbow tables" <group> should have 6 items
 
     # It should be possible to hide an item from the menu by disabling it.
@@ -51,10 +51,10 @@ Feature: Navigation menu for custom pages
     And I disable "About" in the navigation menu of the "Rainbow tables" <group>
     And I go to the homepage of the "Rainbow tables" <group>
     Then I should see the text "All the pages have been disabled for this <group>. You can edit the menu configuration or add a new page."
-    And I should see the contextual link "Edit menu" in the "Header bottom" region
+    And I should see the contextual link "Edit menu" in the "Header" region
 
     # The contextual menu can be used to navigate to the menu edit page.
-    When I click the contextual link "Edit menu" in the "Header bottom" region
+    When I click the contextual link "Edit menu" in the "Header" region
     Then I should see the heading "Edit navigation menu of the Rainbow tables <group>"
 
     # The form to add a new menu link should not be accessible by anyone. This
@@ -135,7 +135,7 @@ Feature: Navigation menu for custom pages
   Scenario: For menus with more than 6 items, the 6th and beyond should be wrapped in a dropdown
     Given collection:
       | title | Plaster molds |
-      | state | validated     |
+      | state | published     |
     And custom_page content:
       | title             | body                   | collection    | state     | topic |
       | Molds for walls   | This is a sample body. | Plaster molds | published | HR    |
@@ -167,7 +167,7 @@ Feature: Navigation menu for custom pages
     Given the following <group>:
       | title | Prism Gazers |
       | logo  | logo.png     |
-      | state | validated    |
+      | state | published    |
     And custom_page content:
       | title           | body                   | <group>      | state     | topic |
       | Mists of dreams | This is a sample body. | Prism Gazers | published | HR    |
@@ -194,7 +194,7 @@ Feature: Navigation menu for custom pages
   Scenario Outline: Synchronize titles of custom pages and menu links
     Given the following <group>:
       | title | Ravenous wood-munching alphabeavers |
-      | state | validated                           |
+      | state | published                           |
     And custom_page content:
       | title       | body                                                                | <group>                             | topic | state     |
       | Tree eaters | Given time, they will most likely strip the entire region of trees. | Ravenous wood-munching alphabeavers | HR    | published |
@@ -219,7 +219,7 @@ Feature: Navigation menu for custom pages
   Scenario Outline: Only the links below the topmost page are rendered in TOC.
     Given the following <group>s:
       | title                   | state     |
-      | Table of contents group | validated |
+      | Table of contents group | published |
     And custom_page content:
       | title         | <group>                 | state     | topic |
       | Page 1        | Table of contents group | published | HR    |
@@ -318,7 +318,7 @@ Feature: Navigation menu for custom pages
   Scenario Outline: Only custom page entries can be nested in the navigation menu.
     Given the following <group>:
       | title | Ergonomic backpacks |
-      | state | validated           |
+      | state | published           |
     And custom_page content:
       | title              | <group>             | state     | topic |
       | Types of backpacks | Ergonomic backpacks | published | HR    |
@@ -336,7 +336,7 @@ Feature: Navigation menu for custom pages
       | About              | Bodypack           | 7      |
     When I am logged in as a facilitator of the "Ergonomic backpacks" <group>
     And I go to the "Ergonomic backpacks" <group>
-    And I click the contextual link "Edit menu" in the "Header bottom" region
+    And I click the contextual link "Edit menu" in the "Header" region
     # The "About" page has been moved back to first level.
     Then the draggable menu table should be:
       | title              | parent             |
@@ -464,7 +464,7 @@ Feature: Navigation menu for custom pages
   Scenario Outline: Show appropriate menu entries in the table of contents outline.
     Given the following <group>s:
       | title                     | state     |
-      | Table of contents outline | validated |
+      | Table of contents outline | published |
     And custom_page content:
       | title      | <group>                   | state       | topic |
       | TOCO 1     | Table of contents outline | published   | HR    |
@@ -551,7 +551,7 @@ Feature: Navigation menu for custom pages
   Scenario Outline: Assert cache invalidation of the TOC outline.
     Given the following <group>s:
       | title                            | state     |
-      | Table of contents outline cached | validated |
+      | Table of contents outline cached | published |
     And custom_page content:
       | title           | <group>                          | state     | topic |
       | TOCO cached 1   | Table of contents outline cached | published | HR    |
@@ -565,7 +565,7 @@ Feature: Navigation menu for custom pages
 
     When I am logged in as a facilitator of the "Table of contents outline cached" <group>
     And I go to the "Table of contents outline cached" <group>
-    And I click the contextual link "Edit menu" in the "Header bottom" region
+    And I click the contextual link "Edit menu" in the "Header" region
     When I drag the "TOCO cached 1-1" table row to the left
     Then the draggable menu table should be:
       | title           | parent |
@@ -588,11 +588,11 @@ Feature: Navigation menu for custom pages
   Scenario Outline: Test that the edit link appears next to the "About" page.
     Given the following <group>s:
       | title           | state     |
-      | About edit link | validated |
+      | About edit link | published |
 
     When I am logged in as a moderator
     And I go to the "About edit link" <group>
-    And I click the contextual link "Edit menu" in the "Header bottom" region
+    And I click the contextual link "Edit menu" in the "Header" region
 
     Then the "group menu edit table" table should contain the following columns:
       | Page        | Enabled | Operations |
