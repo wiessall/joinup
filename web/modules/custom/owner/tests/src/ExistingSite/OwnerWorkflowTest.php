@@ -143,7 +143,7 @@ class OwnerWorkflowTest extends JoinupWorkflowExistingSiteTestBase {
           'rid' => 'owner',
           'label' => $this->randomMachineName(),
         ]);
-        // Override the default state of 'validated' that is set during entity
+        // Override the default state of 'published' that is set during entity
         // creation.
         // @see owner_rdf_entity_create()
         $content->set('field_owner_state', $entity_state);
@@ -194,7 +194,7 @@ class OwnerWorkflowTest extends JoinupWorkflowExistingSiteTestBase {
    */
   public function readUpdateDeleteAccessProvider(): array {
     return [
-      'validated' => [
+      'published' => [
         'view' => [
           'userAnonymous',
           'userAuthenticated',
@@ -265,19 +265,19 @@ class OwnerWorkflowTest extends JoinupWorkflowExistingSiteTestBase {
     return [
       '__new__' => [
         'userAuthenticated' => [
-          'validated',
+          'published',
         ],
         'userModerator' => [
-          'validated',
+          'published',
         ],
       ],
-      'validated' => [
+      'published' => [
         'userAuthenticated' => [
-          'validated',
+          'published',
           'deletion_request',
         ],
         'userModerator' => [
-          'validated',
+          'published',
           'needs_update',
           'deletion_request',
         ],
@@ -288,7 +288,7 @@ class OwnerWorkflowTest extends JoinupWorkflowExistingSiteTestBase {
         ],
         'userModerator' => [
           'needs_update',
-          'validated',
+          'published',
         ],
       ],
     ];

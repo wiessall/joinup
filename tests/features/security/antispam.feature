@@ -24,17 +24,17 @@ Feature: As a visitor or logged-in user, when I want to post content, the form
       | acme.inc@example.com | confirmed |
     And the following collection:
       | title               | Family photos |
-      | state               | validated     |
+      | state               | published     |
       | contact information | ACME Inc.     |
     And discussion content:
       | title      | collection    | state     |
-      | Let's talk | Family photos | validated |
+      | Let's talk | Family photos | published |
     And event content:
       | title    | collection    | state     |
-      | Birthday | Family photos | validated |
+      | Birthday | Family photos | published |
     And news content:
       | title       | collection    | state     |
-      | Got married | Family photos | validated |
+      | Got married | Family photos | published |
     And the following contact information emails are validated:
       | ACME Inc. |
 

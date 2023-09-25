@@ -12,8 +12,8 @@ Feature: Tests the group landing page customization.
 
     Given the following <group>s:
       | title               | state     | description                         |
-      | <group> group       | validated | The <group> arbitrary description   |
-      | other <group> group | validated | Other <group> arbitrary description |
+      | <group> group       | published | The <group> arbitrary description   |
+      | other <group> group | published | Other <group> arbitrary description |
     And "custom_page" content:
       | title         | <group>       | body                      |
       | Custom Page 1 | <group> group | The custom page 1 content |
@@ -118,10 +118,10 @@ Feature: Tests the group landing page customization.
   Scenario: As a group facilitator I cannot set the landing page.
     Given the following collections:
       | title            | state     | description                          |
-      | collection group | validated | The collection arbitrary description |
+      | collection group | published | The collection arbitrary description |
     And the following solutions:
       | title          | state     | description                        |
-      | solution group | validated | The solution arbitrary description |
+      | solution group | published | The solution arbitrary description |
 
     Given I am logged in as a facilitator of the "collection group" collection
     When I go to the homepage of the "collection group" collection
@@ -135,7 +135,7 @@ Feature: Tests the group landing page customization.
   Scenario: Do not allow to unpublish or delete a custom page set as landing page
     Given collections:
       | title          | state     |
-      | Rally fanatics | validated |
+      | Rally fanatics | published |
     And "custom_page" content:
       | title         | group          | body                      | state     |
       | Custom Page 1 | Rally fanatics | The custom page 1 content | published |

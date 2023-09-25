@@ -82,7 +82,7 @@ Feature: User profile
     Then I click "Leonardo Da Vinci"
     Then I click "Edit"
     Then the following fields should be present "Email, Username"
-    And the following fields should be present "First name, Family name, Photo, Professional domain, Business title"
+    And the following fields should be present "First name, Family name, Add a new file, Professional domain, Business title"
     And the following fields should be present "Country of origin, Organisation"
     And the following fields should not be present "Time zone"
     And I should not see the text "Username: Leonardo Da Vinci"
@@ -107,28 +107,28 @@ Feature: User profile
       | Clarette Fairburn | clarette.fairburn@example.com | Clarette   | Fairburn    |
     And the following collections:
       | title                 | description                           | logo     | state     | creation date    |
-      | Botanic E.D.E.N.      | European Deep Earth Nurturing project | logo.png | validated | 2017-02-23 10:00 |
-      | Ethic flower handling | Because even flowers have feelings.   | logo.png | validated | 2017-02-23 12:00 |
+      | Botanic E.D.E.N.      | European Deep Earth Nurturing project | logo.png | published | 2017-02-23 10:00 |
+      | Ethic flower handling | Because even flowers have feelings.   | logo.png | published | 2017-02-23 12:00 |
     And the following solutions:
       | title              | collection            | description                                     | logo     | state     | creation date    |
-      | E.C.O. fertilizers | Botanic E.D.E.N.      | Ecologic cool organic fertilizers production.   | logo.png | validated | 2017-02-23 13:00 |
-      | SOUND project      | Ethic flower handling | Music playlist for growing flowers with rhythm. | logo.png | validated | 2017-02-23 14:01 |
+      | E.C.O. fertilizers | Botanic E.D.E.N.      | Ecologic cool organic fertilizers production.   | logo.png | published | 2017-02-23 13:00 |
+      | SOUND project      | Ethic flower handling | Music playlist for growing flowers with rhythm. | logo.png | published | 2017-02-23 14:01 |
     And discussion content:
       | title                          | author          | collection            | state     | created          |
-      | Repopulating blue iris         | Corwin Robert   | Botanic E.D.E.N.      | validated | 2018-06-15 16:00 |
-      | Best topsoil for plant comfort | Anise Edwardson | Ethic flower handling | validated | 2018-09-01 19:30 |
+      | Repopulating blue iris         | Corwin Robert   | Botanic E.D.E.N.      | published | 2018-06-15 16:00 |
+      | Best topsoil for plant comfort | Anise Edwardson | Ethic flower handling | published | 2018-09-01 19:30 |
     And document content:
       | title                    | author        | collection       | state     | created          |
-      | Cherry blossoms schedule | Corwin Robert | Botanic E.D.E.N. | validated | 2017-05-13 16:00 |
+      | Cherry blossoms schedule | Corwin Robert | Botanic E.D.E.N. | published | 2017-05-13 16:00 |
     And event content:
       | title                | author        | collection       | state     | created          |
-      | Spring blossom party | Corwin Robert | Botanic E.D.E.N. | validated | 2018-06-27 18:00 |
+      | Spring blossom party | Corwin Robert | Botanic E.D.E.N. | published | 2018-06-27 18:00 |
     And news content:
       | title                         | author        | collection       | state     | created         |
-      | Discovered new flower species | Corwin Robert | Botanic E.D.E.N. | validated | 2018-11-15 9:01 |
+      | Discovered new flower species | Corwin Robert | Botanic E.D.E.N. | published | 2018-11-15 9:01 |
     And video content:
       | title                 | author        | collection       | state     | created         |
-      | Planting a tree howto | Corwin Robert | Botanic E.D.E.N. | validated | 2017-10-30 9:30 |
+      | Planting a tree howto | Corwin Robert | Botanic E.D.E.N. | published | 2017-10-30 9:30 |
     # Contact information and owner tiles should never be shown.
     And the following contact:
       | name        | Wibo Verhoeven             |
@@ -195,7 +195,7 @@ Feature: User profile
       | Korben Dallas | k.dallas@cabs.services.zorg.corp |
     And collection:
       | title | Federated Army Veterans |
-      | state | validated               |
+      | state | published               |
     # Visit the user profile page for the first time. It should not yet be
     # cached and we should not see anything about the collection since we are
     # not a member.
@@ -253,21 +253,21 @@ Feature: User profile
       | Clarise Edwardson | clarise.edwardson@example.com |
     And the following collections:
       | title            | description                           | logo     | state     | creation date    | author             |
-      | Lake E.D.E.N.    | European Deep Earth Nurturing project | logo.png | validated | 2017-02-23 10:00 | Janny Robert       |
-      | Rose is red      | Better descriptions ever              | logo.png | validated | 2017-02-23 10:00 | Clarise Edwardson  |
+      | Lake E.D.E.N.    | European Deep Earth Nurturing project | logo.png | published | 2017-02-23 10:00 | Janny Robert       |
+      | Rose is red      | Better descriptions ever              | logo.png | published | 2017-02-23 10:00 | Clarise Edwardson  |
       | Lone handling    | Because even flowers have feelings.   | logo.png | archived  | 2017-02-23 12:00 | Janny Robert       |
     And discussion content:
       | title                   | author          | collection    | state     | created         |
-      | Repopulating green iris | Janny Robert   | Lake E.D.E.N. | validated | 2018-06-15 16:00 |
-      | Best plant comfort      | Janny Robert   | Lone handling | validated | 2018-09-01 19:30 |
+      | Repopulating green iris | Janny Robert   | Lake E.D.E.N. | published | 2018-06-15 16:00 |
+      | Best plant comfort      | Janny Robert   | Lone handling | published | 2018-09-01 19:30 |
     And document content:
       | title           | author       | collection    | state     | created          |
-      | Cherry schedule | Janny Robert | Lake E.D.E.N. | validated | 2017-05-13 16:00 |
+      | Cherry schedule | Janny Robert | Lake E.D.E.N. | published | 2017-05-13 16:00 |
       | Cherry arch     | Janny Robert | Lake E.D.E.N. | archived  | 2017-05-13 16:00 |
     And news content:
       | title             | author       | collection    | state     | created         |
-      | Discovered flower | Janny Robert | Lake E.D.E.N. | validated | 2018-11-15 9:01 |
-      | Purple flower     | Janny Robert | Lake E.D.E.N. | validated | 2018-11-15 9:01 |
+      | Discovered flower | Janny Robert | Lake E.D.E.N. | published | 2018-11-15 9:01 |
+      | Purple flower     | Janny Robert | Lake E.D.E.N. | published | 2018-11-15 9:01 |
       | Blue flower       | Janny Robert | Lake E.D.E.N. | archived  | 2018-11-15 9:01 |
 
     When I am an anonymous user

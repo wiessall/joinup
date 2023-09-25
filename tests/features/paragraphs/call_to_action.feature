@@ -6,7 +6,7 @@ Feature:
   Background:
     Given the following collection:
       | title | Paragraphs collection |
-      | state | validated             |
+      | state | published             |
 
   @javascript
   Scenario: Call to action has alignment setting.

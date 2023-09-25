@@ -7,12 +7,12 @@ Feature:
   Scenario Outline: Authors can add content regardless of group settings.
     Given collection:
       | title | Author collection |
-      | state | validated         |
+      | state | published         |
     And solution:
       | title            | Author solution    |
       | moderation       | <moderation>       |
       | content creation | <content creation> |
-      | state            | validated          |
+      | state            | published          |
       | collection       | Author collection  |
 
     When I am logged in as an "author" of the "Author solution" solution

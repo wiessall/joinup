@@ -10,7 +10,7 @@ Feature: Solution API
       | logo             | logo.png                 |
       | moderation       | yes                      |
       | content creation | facilitators and authors |
-      | state            | validated                |
+      | state            | published                |
     And the following solution:
       | title            | My first solution                    |
       | collection       | Solution API foo                     |
@@ -22,7 +22,7 @@ Feature: Solution API
       | webdav creation  | no                                   |
       | webdav url       | http://joinup.eu/solution/foo/webdav |
       | wiki             | http://example.wiki/foobar/wiki      |
-      | state            | validated                            |
+      | state            | published                            |
     Then I should have 1 solution
 
   Scenario: Programmatically create a solution using only the mandatory fields
@@ -31,23 +31,23 @@ Feature: Solution API
       | logo             | logo.png                 |
       | moderation       | yes                      |
       | content creation | facilitators and authors |
-      | state            | validated                |
+      | state            | published                |
     And the following solution:
       | title            | My first solution mandatory |
       | collection       | Solution API bar            |
       | description      | Another sample solution     |
       | content creation | registered users            |
-      | state            | validated                   |
+      | state            | published                   |
     Then I should have 1 solution
 
   Scenario: Programmatically create a solution that is affiliated with a collection
     Given the following collection:
       | title | Inflatable mascots |
-      | state | validated          |
+      | state | published          |
     And the following solution:
       | title       | Inflatable rooster             |
       | description | For placing near a white house |
-      | state       | validated                      |
+      | state       | published                      |
       | collection  | Inflatable mascots             |
     Then I should have 1 solution
     And the "Inflatable rooster" solution should be affiliated with the "Inflatable mascots" collection
@@ -66,7 +66,7 @@ Feature: Solution API
       | moderation       | no                       |
       | closed           | no                       |
       | content creation | facilitators and authors |
-      | state            | validated                |
+      | state            | published                |
     And the following collection user memberships:
       | user              | collection               | roles       |
       | Solution API user | This is a klm collection | facilitator |

@@ -10,7 +10,7 @@ Feature: Unsubscribe from collections
       | E-mail   | eric.cartman@example.com |
     And collections:
       | title                | state     |
-      | Southpark elementary | validated |
+      | Southpark elementary | published |
       | Kenny's house        | draft     |
     And the following collection user memberships:
       | collection           | user         | roles  |
@@ -33,7 +33,7 @@ Feature: Unsubscribe from collections
       | Koon's hideout | Eric Cartman | discussion, document, event, news |
     And solutions:
       | title              | state     |
-      | Poor man's Shelter | validated |
+      | Poor man's Shelter | published |
       | Anna's house       | draft     |
       | Greg's foxhole     | proposed  |
     And the following solution user memberships:
@@ -114,7 +114,7 @@ Feature: Unsubscribe from collections
   Scenario: Unsubscribe from a specific group.
     Given solutions:
       | title                  | state     |
-      | Not member in this one | validated |
+      | Not member in this one | published |
 
     Given I am logged in as "Eric Cartman"
 

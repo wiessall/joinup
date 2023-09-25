@@ -18,7 +18,7 @@ Feature:
   Scenario Outline: Convert a URL of an entity.
     Given collections:
       | uri   | title     | state     |
-      | <uri> | <heading> | validated |
+      | <uri> | <heading> | published |
 
     When I am logged in as a moderator
     And I am on the homepage

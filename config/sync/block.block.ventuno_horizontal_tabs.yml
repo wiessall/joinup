@@ -9,7 +9,7 @@ dependencies:
 id: ventuno_horizontal_tabs
 theme: ventuno
 region: content
-weight: -24
+weight: -22
 provider: null
 plugin: local_tasks_block
 settings:
@@ -27,7 +27,3 @@ visibility:
     routes:
       - user.login
       - user.pass
-      - view.eif_recommendation.all
-      - view.eif_recommendation.principle
-      - view.eif_recommendation.interoperability_layer
-      - view.eif_recommendation.conceptual_model
