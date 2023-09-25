@@ -2,13 +2,13 @@ default:
   data:
     search:
       nodes:
-        - id: OYWYKQvqtguoqeWoQ9j7SwXj6Fekpt0t=
-          description: null
+        - id: GitHub-solution-1-internal-ID
+          description: Description of GitHub solution 1
           name: dummy-name-1
           owner:
             login: dummy-namespace-1
           defaultBranchRef:
-            name: develop
+            name: default-branch-of-GitHub-solution-1
           latestRelease:
             tagName: '2.3.0'
             createdAt: '2023-04-19'
@@ -103,13 +103,13 @@ default:
                   anpr: false
                   io: false
 
-        - id: MDEwOsJlcs9zaXRvcnsaMzY0NTg1Dc
-          description: null
+        - id: GitHub-solution-2-internal-ID
+          description: Description of GitHub solution 2
           name: dummy-name-2
           owner:
             login: dummy-namespace-2
           defaultBranchRef:
-            name: master
+            name: default-branch-of-GitHub-solution-2
           latestRelease:
             tagName: 'v3.5.1'
             createdAt: '2022-09-09'
@@ -185,13 +185,13 @@ developers_italia:
   data:
     search:
       nodes:
-        - id: OYWYKQvqtguoqeWoQ9j7SwXj6Fekpt0t=
-          description: null
+        - id: GitHub-solution-1-internal-ID
+          description: Description of GitHub solution 1
           name: dummy-name-1
           owner:
             login: dummy-namespace-1
           defaultBranchRef:
-            name: develop
+            name: default-branch-of-GitHub-solution-1
           latestRelease:
             tagName: '2.3.0'
             createdAt: '2023-04-19'

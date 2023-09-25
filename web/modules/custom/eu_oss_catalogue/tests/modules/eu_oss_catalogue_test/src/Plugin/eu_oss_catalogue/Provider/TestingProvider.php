@@ -28,13 +28,12 @@ class TestingProvider extends DevelopersItalia {
       if ($project->getFullName() === 'dummy-namespace-1/dummy-name-1') {
         $fileBlob = $project->files['publiccodeYml'];
         $fileBlob = str_replace('name: GitHub solution 1', 'name: GitHub solution 1 (updated)', $fileBlob);
-        $fileBlob = str_replace("softwareVersion: '1.4'", "softwareVersion: '1.5'", $fileBlob);
         $project = new Project(
           $project->namespace,
           $project->name,
           $project->url,
           $project->defaultBranch,
-          $project->latestReleaseTag,
+          '3.0.0',
           $project->latestReleaseDate,
           $project->platformReference,
           $project->description,
