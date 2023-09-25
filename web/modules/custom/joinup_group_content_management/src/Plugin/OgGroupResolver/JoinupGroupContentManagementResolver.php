@@ -142,6 +142,7 @@ class JoinupGroupContentManagementResolver extends RouteGroupResolver {
   protected function getContentEntityPaths(): array {
     return [
       '/rdf_entity/{rdf_entity}/manage-content' => 'rdf_entity',
+      '/rdf_entity/{rdf_entity}/manage-content/csv' => 'rdf_entity',
     ];
   }
 
