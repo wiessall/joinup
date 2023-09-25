@@ -319,7 +319,7 @@ class GitLabDotCom extends EuOssCatalogueGitHostingPlatformPluginBase {
         if ($project && !empty($project['repository']['rootRef']) && empty($project['archived'])) {
           yield $this->createHostingPlatformResult($namespace, $project, $requestedFiles);
         }
-        return;
+        continue;
       }
       catch (\Throwable $exception) {
         // Log only a warning as we retry later by using REST API.
