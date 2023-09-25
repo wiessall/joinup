@@ -29,6 +29,9 @@
         -webkit-line-clamp: unset;
       }
     }
+    p {
+      display: inline;
+    }
     a {
       color: $white;
       text-decoration: underline;
