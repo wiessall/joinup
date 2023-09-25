@@ -78,3 +78,10 @@ function joinup_core_deploy_109701(): string {
 
   return 'Changed the state name of all nodes from "validated" to "published".';
 }
+
+/**
+ * Dismantle EIF Recommendation view.
+ */
+function joinup_core_deploy_109702(): void {
+  \Drupal::entityTypeManager()->getStorage('redirect')->load(125784)->delete();
+}
