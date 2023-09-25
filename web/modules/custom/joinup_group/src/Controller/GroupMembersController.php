@@ -45,7 +45,7 @@ class GroupMembersController extends ControllerBase {
   /**
    * {@inheritdoc}
    */
-  public static function create(ContainerInterface $container) {
+  public static function create(ContainerInterface $container): self {
     return new static(
       $container->get('og.access')
     );
@@ -60,7 +60,7 @@ class GroupMembersController extends ControllerBase {
    * @return array
    *   The view containing the members overview, as a renderable array.
    */
-  public function membersList(RouteMatchInterface $route_match) {
+  public function membersList(RouteMatchInterface $route_match): array {
     $group_entity_type_id = $route_match->getRouteObject()->getOption('_og_entity_type_id');
     /** @var \Drupal\Core\Entity\EntityInterface $group */
     $group = $route_match->getParameter($group_entity_type_id);
@@ -70,12 +70,9 @@ class GroupMembersController extends ControllerBase {
     // view that shows the memberships as tiles.
     $show_admin_view = $this->ogAccess->userAccess($group, 'manage members')->isAllowed();
 
-    $route_object = $route_match->getRouteObject();
-    $route_object->setOption('_admin_route', $show_admin_view);
-
-    $view = $show_admin_view ? 'og_members_overview' : 'members_overview';
+    $view_id = $show_admin_view ? 'og_members_overview' : 'members_overview';
     $arguments = [$group->getEntityTypeId(), $group->id()];
-    return Views::getView($view)->executeDisplay('default', $arguments);
+    return Views::getView($view_id)->executeDisplay('default', $arguments);
   }
 
   /**
