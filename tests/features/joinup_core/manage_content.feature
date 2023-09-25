@@ -1,6 +1,5 @@
 @api @group-e
 Feature:
-  As a moderator
   In order to better organize the content
   I need to be able to move content between groups
 
@@ -41,7 +40,7 @@ Feature:
 
     Given I am logged in as a facilitator of the "Vintage Art" collection
     And I go to the homepage of the "Vintage Art" collection
-    Then I should not see the link "Manage content"
+    Then I should see the link "Manage content"
 
     Given I am logged in as a moderator
 
@@ -200,7 +199,7 @@ Feature:
     Then I should not see the "Looking for Support?" tile
 
   @javascript
-  Scenario: Able to select all items on the content management UI
+  Scenario Outline: Able to select all items on the content management UI
     Given the following collections:
       | title       | state     |
       | Vintage Art | published |
@@ -209,13 +208,19 @@ Feature:
       | The Panama Papers Party | Vintage Art | published |
       | The Area 51 Party       | Vintage Art | published |
 
-    When I am logged in as a moderator
+    When I am <role>
     And I go to the "Vintage Art" collection
     And I open the header local tasks menu
     And I click "Manage content" in the "Entity actions" region
+    Then the available options in the "Action" select should be "<options>"
     Then the "The Panama Papers Party" checkbox should not be checked
     And the "The Area 51 Party" checkbox should not be checked
 
     When I select the "Title" row
     Then the "The Panama Papers Party" checkbox should be checked
     And the "The Area 51 Party" checkbox should be checked
+
+    Examples:
+      | role                                                       | options                                                                       |
+      | logged in as a facilitator of the "Vintage Art" collection | -- Select action -- , Archive content                                         |
+      | logged in as a user with the moderator role                | -- Select action -- , Move to other group, Archive content, Unarchive content |
