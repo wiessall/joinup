@@ -51,11 +51,7 @@
           {{ title_prefix }}
           <h2 class="carousel__title mt-0 mb-3">{{ 'Most recent solutions'|t }}</h2>
           {{ title_suffix }}
-          {% if header %}
-            <div class="view-header">
-              {{ header }}
-            </div>
-          {% endif %}
+          <a href="{{ url('<front>')|render }}eu-oss-catalogue/solutions" class="btn btn-secondary mb-3 ms-3">{{ 'View all'|t }}</a>
           <div class="glide__arrows mb-3 ms-3" data-glide-el="controls">
             <button class="glide__arrow glide__arrow--left btn btn-lg btn-secondary rounded-circle p-0 me-2" data-glide-dir="<" title="{{ 'Previous item'|t }}">
               <svg class="icon--m">
