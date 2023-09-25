@@ -168,6 +168,8 @@ class DevelopersItalia extends EuOssCatalogueProviderPluginBase {
 
           // @todo Assuming that the code hosting platform is always installed
           //   beneath the domain, not in a subdirectory.
+          // @todo This should be adapted after ISAICP-7964 lands.
+          // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7964
           // @see https://github.com/italia/developers-italia-api/issues/215
           $pathParts = explode('/', trim($urlParts['path'], '/'));
           $name = array_pop($pathParts);
