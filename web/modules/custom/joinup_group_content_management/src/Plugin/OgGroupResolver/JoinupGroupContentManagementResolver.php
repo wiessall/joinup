@@ -4,7 +4,7 @@ declare(strict_types = 1);
 
 namespace Drupal\joinup_group_content_management\Plugin\OgGroupResolver;
 
-use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Session\AccountInterface;
@@ -30,6 +30,9 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * )
  */
 class JoinupGroupContentManagementResolver extends RouteGroupResolver {
+      // We are on a route that matches an entity path for a group entity. We
+      // can conclude with 100% certainty that this group is relevant for the
+      // current context. There's no need to keep searching.
 
   use ViewsBulkOperationsFormTrait;
 
@@ -88,23 +91,30 @@ class JoinupGroupContentManagementResolver extends RouteGroupResolver {
   public function resolve(OgResolvedGroupCollectionInterface $collection): void {
     $entity = $this->getContentEntity();
     if ($entity && $this->groupTypeManager->isGroup($entity->getEntityTypeId(), $entity->bundle())) {
-      $collection->addGroup($entity, ['route']);
+      $collection->addGroup($entity, ['route', 'user']);
       $this->stopPropagation();
     }
+  }
 
-    $groupView = $this->getGroupForViewsBullOperations();
-    if ($groupView) {
-      $collection->addGroup($groupView, ['route', 'user']);
+  /**
+   * {@inheritdoc}
+   */
+  protected function getContentEntity(): ?ContentEntityInterface {
+    $entity = parent::getContentEntity();
+    if ($entity) {
+      return $entity;
     }
+
+    return $this->getGroupFromTempStore();
   }
 
   /**
    * Gets rdf entity from temp store for VBO route.
    *
-   * @return \Drupal\Core\Entity\EntityInterface|null
-   *  Rdf entity.
+   * @return \Drupal\Core\Entity\ContentEntityInterface|null
+   *   Rdf entity.
    */
-  protected function getGroupForViewsBullOperations(): ?EntityInterface {
+  protected function getGroupFromTempStore(): ?ContentEntityInterface {
     $vboRoutes = [
       'views_bulk_operations.execute_batch',
       'views_bulk_operations.update_selection',
@@ -135,10 +145,6 @@ class JoinupGroupContentManagementResolver extends RouteGroupResolver {
   protected function getContentEntityPaths(): array {
     return [
       '/rdf_entity/{rdf_entity}/manage-content' => 'rdf_entity',
-      '/views-bulk-operations/execute/{view_id}/{display_id}' => '',
-      '/views-bulk-operations/ajax/{view_id}/{display_id}' => '',
-      '/views-bulk-operations/configure/{view_id}/{display_id}' => '',
-      '/views-bulk-operations/confirm/{view_id}/{display_id}' => '',
     ];
   }
 
