@@ -38,9 +38,24 @@ Feature:
     And I go to the homepage of the "Vintage Art" collection
     Then I should not see the link "Manage content"
 
+    # Check if the facilitator can manage only own group.
+    Given I am logged in as a facilitator of the "Decadent Art" collection
+    And I go to the homepage of the "Vintage Art" collection
+    Then I should not see the link "Manage content"
+
     Given I am logged in as a facilitator of the "Vintage Art" collection
     And I go to the homepage of the "Vintage Art" collection
     Then I should see the link "Manage content"
+    And I click "Manage content"
+    And I should see the heading "Manage content"
+
+    # Archive as facilitator.
+    Given I select the "The Panama Papers" row
+    And I select "Archive content" from "Action"
+    And I press "Apply to selected items"
+    And I wait for the batch process to finish
+    Then I should see "Proceeded updates to 1 entities"
+    And I should see "19/11/2019 - 20:00"
 
     Given I am logged in as a moderator
 
@@ -80,13 +95,11 @@ Feature:
     Then I should see the heading "Manage content"
 
     # Archive action.
-    Given I select the "The Panama Papers" row
-    And I select the "The Ultimate Debate" row
+    Given I select the "The Ultimate Debate" row
     And I select "Archive content" from "Action"
     And I press "Apply to selected items"
     And I wait for the batch process to finish
-    Then I should see "Proceeded updates to 2 entities"
-    And I should see "19/11/2019 - 20:00"
+    Then I should see "Proceeded updates to 1 entities"
     And I should see "19/11/2017 - 19:00"
 
     # Check archived state.
