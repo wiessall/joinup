@@ -20,7 +20,6 @@ use Drupal\collection\Entity\CollectionInterface;
 use Drupal\joinup_oss_catalogue\Entity\JoinupOssSolution;
 use Drupal\joinup_oss_catalogue\OssCatalogueCollectionInterface;
 use Drupal\joinup_oss_catalogue\Plugin\Field\ShortDescriptionWithFallback;
-use Drupal\rdf_entity\Entity\RdfEntityType;
 
 /**
  * Implements hook_views_plugins_argument_alter().
@@ -47,17 +46,11 @@ function joinup_oss_catalogue_entity_bundle_info_alter(array &$bundles): void {
  */
 function joinup_oss_catalogue_entity_extra_field_info(): array {
   $fields = [];
-  $collection = RdfEntityType::load('collection');
-
-  if ($collection) {
-    $display = &$fields['rdf_entity'][$collection->id()]['display'];
-    $display['oss_solutions'] = [
-      'label' => t('Amount of OpenSource Solutions'),
-      'description' => t('Amount of OpenSource Solutions.'),
-      'visible' => FALSE,
-    ];
-  }
-
+  $fields['rdf_entity']['collection']['display']['oss_solutions'] = [
+    'label' => t('Amount of OpenSource Solutions'),
+    'description' => t('Amount of OpenSource Solutions.'),
+    'visible' => FALSE,
+  ];
   return $fields;
 }
 
