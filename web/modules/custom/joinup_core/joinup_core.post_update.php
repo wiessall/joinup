@@ -14,3 +14,22 @@
  */
 
 declare(strict_types = 1);
+
+use Drupal\file\Entity\File;
+use Drupal\rdf_entity\Entity\Rdf;
+
+/**
+ * Clean the RDF graph related entities and files.
+ */
+function joinup_core_post_update_109700(): void {
+  $rdf_ids = [
+    'http://data.europa.eu/w21/user-graph/e120079b-817b-4c4b-b27b-e97f25cc2c58',
+    'http://data.europa.eu/w21/user-graph/ef5c2894-1fa1-43b8-870e-fe55f5e019ae'
+  ];
+  foreach (Rdf::loadMultiple($rdf_ids) as $rdf) {
+    $rdf->delete();
+  }
+  foreach (File::loadMultiple([525107, 553329]) as $file) {
+    $file->delete();
+  }
+}
