@@ -51,7 +51,7 @@ class JoinupGroupContentManagementResolver extends RouteGroupResolver {
    * @param \Drupal\Core\TempStore\PrivateTempStoreFactory $tempStoreFactory
    *   User private temporary storage factory.
    * @param \Drupal\Core\Session\AccountInterface $currentUser
-   *  The current user.
+   *   The current user.
    */
   public function __construct(
     array $configuration,
