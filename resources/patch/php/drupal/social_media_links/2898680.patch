@@ -1,0 +1,330 @@
+From c51ba7987fa57ae3cf085cb67dca718e580900cd Mon Sep 17 00:00:00 2001
+From: guilhermevp <guilhermevp@ciandt.com>
+Date: Thu, 25 Mar 2021 13:51:27 -0300
+Subject: [PATCH 1/2] removed core:'8.x'
+
+---
+ .../social_media_links_field.schema.yml       |  76 ++++++++++++
+ .../field.field.node.page.social_media.yml    | 114 ++++++++++++++++++
+ .../field.storage.node.social_media.yml       |  18 +++
+ .../social_media_links_field_test.info.yml    |   8 ++
+ .../SocialMediaLinksFieldSchemaTest.php       |  36 ++++++
+ 5 files changed, 252 insertions(+)
+ create mode 100644 modules/social_media_links_field/config/schema/social_media_links_field.schema.yml
+ create mode 100644 modules/social_media_links_field/tests/modules/social_media_links_field_test/config/install/field.field.node.page.social_media.yml
+ create mode 100644 modules/social_media_links_field/tests/modules/social_media_links_field_test/config/install/field.storage.node.social_media.yml
+ create mode 100644 modules/social_media_links_field/tests/modules/social_media_links_field_test/social_media_links_field_test.info.yml
+ create mode 100644 modules/social_media_links_field/tests/src/Kernel/SocialMediaLinksFieldSchemaTest.php
+
+diff --git a/modules/social_media_links_field/config/schema/social_media_links_field.schema.yml b/modules/social_media_links_field/config/schema/social_media_links_field.schema.yml
+new file mode 100644
+index 0000000..6aca3f7
+--- /dev/null
++++ b/modules/social_media_links_field/config/schema/social_media_links_field.schema.yml
+@@ -0,0 +1,76 @@
++# Schema for the configuration files of the Social Media Links Field module.
++
++field.storage_settings.social_media_links_field:
++  type: mapping
++  label: 'Social Media Links field settings'
++
++field.field_settings.social_media_links_field:
++  label: 'Social Media Links field instance settings'
++  type: mapping
++  mapping:
++    iconset:
++      type: string
++      label: Iconset
++    platforms:
++      type: sequence
++      label: Platforms
++      sequence:
++        type: mapping
++        label: 'Platform settings'
++        mapping:
++          enabled:
++            type: boolean
++            label: 'Platform is enabled'
++          description:
++            type: label
++            label: Description
++          weight:
++            type: integer
++            label: Weight
++
++field.value.social_media_links_field:
++  type: mapping
++  label: 'Default value'
++  mapping:
++    platform:
++      type: string
++      label: 'Single platform'
++    value:
++      type: string
++      label: 'Single platform account'
++    platform_values:
++      type: ignore
++      label: 'Multiple accounts blob'
++
++field.formatter.settings.social_media_links_field_default:
++  type: mapping
++  label: 'Social Media Links Field Default formatter settings'
++  mapping:
++    appearance:
++      type: mapping
++      label: Appearance
++      mapping:
++        orientation:
++          type: string
++          label: Orientation
++        show_name:
++          type: boolean
++          label: 'Show name'
++    link_attributes:
++      type: mapping
++      label: 'Link attributes'
++      mapping:
++        target:
++          type: string
++          label: 'Target attribute'
++        rel:
++          type: string
++          label: 'Rel attribute'
++
++field.widget.settings.social_media_links_field_default:
++  type: mapping
++  label: 'Social Media Links Field Default widget settings'
++
++field.widget.settings.social_media_links_field_select:
++  type: mapping
++  label: 'Social Media Links Field Select widget settings'
+diff --git a/modules/social_media_links_field/tests/modules/social_media_links_field_test/config/install/field.field.node.page.social_media.yml b/modules/social_media_links_field/tests/modules/social_media_links_field_test/config/install/field.field.node.page.social_media.yml
+new file mode 100644
+index 0000000..5aa2b31
+--- /dev/null
++++ b/modules/social_media_links_field/tests/modules/social_media_links_field_test/config/install/field.field.node.page.social_media.yml
+@@ -0,0 +1,114 @@
++langcode: en
++status: true
++dependencies:
++  config:
++    - field.storage.node.social_media
++  module:
++    - node
++    - social_media_links_field
++id: node.page.social_media
++field_name: social_media
++entity_type: node
++bundle: page
++label: 'Social media'
++description: ''
++required: false
++translatable: false
++default_value:
++  -
++    platform: null
++    value: null
++    platform_values:
++      facebook:
++        value: ''
++      github:
++        value: ''
++      googleplus:
++        value: ''
++      linkedin:
++        value: ''
++      slideshare:
++        value: ''
++      twitter:
++        value: ''
++      vimeo:
++        value: ''
++      youtube:
++        value: ''
++default_value_callback: ''
++settings:
++  iconset: 'fontawesome:2x'
++  platforms:
++    behance:
++      description: ''
++      weight: -28
++      enabled: false
++    bitbucket:
++      description: ''
++      weight: -27
++      enabled: false
++    contact:
++      description: ''
++      weight: -26
++      enabled: false
++    drupal:
++      description: ''
++      weight: -25
++      enabled: false
++    email:
++      description: ''
++      weight: -24
++      enabled: false
++    facebook:
++      enabled: true
++      description: ''
++      weight: -23
++    twitter:
++      enabled: true
++      description: ''
++      weight: -22
++    linkedin:
++      enabled: true
++      description: ''
++      weight: -21
++    github:
++      enabled: true
++      description: ''
++      weight: -20
++    googleplus:
++      enabled: true
++      description: ''
++      weight: -19
++    slideshare:
++      enabled: true
++      description: ''
++      weight: -18
++    instagram:
++      description: ''
++      weight: -17
++      enabled: false
++    pinterest:
++      description: ''
++      weight: -16
++      enabled: false
++    rss:
++      description: ''
++      weight: -15
++      enabled: false
++    tumblr:
++      description: ''
++      weight: -14
++      enabled: false
++    youtube:
++      enabled: true
++      description: ''
++      weight: -13
++    vimeo:
++      enabled: true
++      description: ''
++      weight: -12
++    youtube_channel:
++      description: ''
++      weight: -11
++      enabled: false
++field_type: social_media_links_field
+diff --git a/modules/social_media_links_field/tests/modules/social_media_links_field_test/config/install/field.storage.node.social_media.yml b/modules/social_media_links_field/tests/modules/social_media_links_field_test/config/install/field.storage.node.social_media.yml
+new file mode 100644
+index 0000000..9a55a44
+--- /dev/null
++++ b/modules/social_media_links_field/tests/modules/social_media_links_field_test/config/install/field.storage.node.social_media.yml
+@@ -0,0 +1,18 @@
++langcode: en
++status: true
++dependencies:
++  module:
++    - node
++    - social_media_links_field
++id: node.social_media
++field_name: social_media
++entity_type: node
++type: social_media_links_field
++settings: {  }
++module: social_media_links_field
++locked: false
++cardinality: 1
++translatable: true
++indexes: {  }
++persist_with_no_fields: false
++custom_storage: false
+diff --git a/modules/social_media_links_field/tests/modules/social_media_links_field_test/social_media_links_field_test.info.yml b/modules/social_media_links_field/tests/modules/social_media_links_field_test/social_media_links_field_test.info.yml
+new file mode 100644
+index 0000000..774bc45
+--- /dev/null
++++ b/modules/social_media_links_field/tests/modules/social_media_links_field_test/social_media_links_field_test.info.yml
+@@ -0,0 +1,8 @@
++type: module
++name: 'Social Media Links Field Test'
++description: 'Testing module for Social Media Links Field.'
++package: Testing
++dependencies:
++  - entity_test
++  - field
++  - social_media_links_field
+diff --git a/modules/social_media_links_field/tests/src/Kernel/SocialMediaLinksFieldSchemaTest.php b/modules/social_media_links_field/tests/src/Kernel/SocialMediaLinksFieldSchemaTest.php
+new file mode 100644
+index 0000000..2c6977d
+--- /dev/null
++++ b/modules/social_media_links_field/tests/src/Kernel/SocialMediaLinksFieldSchemaTest.php
+@@ -0,0 +1,36 @@
++<?php
++
++namespace Drupal\Tests\social_media_links_field_test\Kernel;
++
++use Drupal\KernelTests\KernelTestBase;
++use Drupal\node\Entity\NodeType;
++
++/**
++ * Tests the social media links field schema.
++ *
++ * @group social_media_links
++ */
++class SocialMediaLinksFieldSchemaTest extends KernelTestBase {
++
++  /**
++   * {@inheritdoc}
++   */
++  protected static $modules = [
++    'field',
++    'node',
++    'social_media_links_field',
++    'social_media_links_field_test',
++    'system',
++    'user',
++  ];
++
++  /**
++   * Tests importing fields from default config.
++   */
++  public function testSchema() {
++    NodeType::create(['type' => 'page'])->save();
++    // If schema is missed, the next command will fail.
++    $this->installConfig(['social_media_links_field_test']);
++  }
++
++}
+-- 
+GitLab
+
+
+From 340da59769196cadb57204a22fffd7bb12d2c385 Mon Sep 17 00:00:00 2001
+From: Pieter Frenssen <pieter@frenssen.be>
+Date: Tue, 18 Jan 2022 17:08:29 +0200
+Subject: [PATCH 2/2] Add missing core_version_requirement identifier to info
+ file.
+
+---
+ .../social_media_links_field_test.info.yml                      | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/modules/social_media_links_field/tests/modules/social_media_links_field_test/social_media_links_field_test.info.yml b/modules/social_media_links_field/tests/modules/social_media_links_field_test/social_media_links_field_test.info.yml
+index 774bc45..5347df7 100644
+--- a/modules/social_media_links_field/tests/modules/social_media_links_field_test/social_media_links_field_test.info.yml
++++ b/modules/social_media_links_field/tests/modules/social_media_links_field_test/social_media_links_field_test.info.yml
+@@ -2,6 +2,8 @@ type: module
+ name: 'Social Media Links Field Test'
+ description: 'Testing module for Social Media Links Field.'
+ package: Testing
++core_version_requirement: ^8 || ^9
++
+ dependencies:
+   - entity_test
+   - field
+-- 
+GitLab
+

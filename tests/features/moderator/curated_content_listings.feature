@@ -6,7 +6,7 @@ Feature: Curated content listings
 
   Scenario: Access the dashboard
     Given I am logged in as a "moderator"
-    When I click "Dashboard"
+    When I visit "/dashboard"
     And I click "Curated content listings"
     Then I should see the heading "Curated content listings"
     And I should see the following links:

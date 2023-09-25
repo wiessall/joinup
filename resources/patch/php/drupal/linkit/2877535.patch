@@ -1,0 +1,13 @@
+diff --git a/src/Plugin/Linkit/Matcher/EntityMatcher.php b/src/Plugin/Linkit/Matcher/EntityMatcher.php
+index e5a9413..00f5205 100644
+--- a/src/Plugin/Linkit/Matcher/EntityMatcher.php
++++ b/src/Plugin/Linkit/Matcher/EntityMatcher.php
+@@ -502,7 +502,7 @@ class EntityMatcher extends ConfigurableMatcherBase {
+         $path = substr($path, 0, -5);
+       }
+     }
+-    return $path;
++    return \Drupal::service('path_alias.manager')->getAliasByPath($path);
+   }
+ 
+   /**
