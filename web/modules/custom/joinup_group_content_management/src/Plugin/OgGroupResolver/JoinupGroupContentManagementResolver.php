@@ -30,9 +30,6 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * )
  */
 class JoinupGroupContentManagementResolver extends RouteGroupResolver {
-      // We are on a route that matches an entity path for a group entity. We
-      // can conclude with 100% certainty that this group is relevant for the
-      // current context. There's no need to keep searching.
 
   use ViewsBulkOperationsFormTrait;
 
