@@ -40,9 +40,9 @@ class OgPermission extends AccessPluginBase implements CacheableDependencyInterf
    *
    * @param array $configuration
    *   A configuration array containing information about the plugin instance.
-   * @param string $plugin_id
+   * @param string $pluginId
    *   The plugin_id for the plugin instance.
-   * @param mixed $plugin_definition
+   * @param mixed $pluginDefinition
    *   The plugin implementation definition.
    * @param \Drupal\user\PermissionHandlerInterface $permissionHandler
    *   The permission handler.
@@ -53,13 +53,13 @@ class OgPermission extends AccessPluginBase implements CacheableDependencyInterf
    */
   public function __construct(
     array $configuration,
-    $plugin_id,
-    $plugin_definition,
+    string $pluginId,
+    mixed $pluginDefinition,
     protected PermissionHandlerInterface $permissionHandler,
     protected ModuleHandlerInterface $moduleHandler,
     protected JoinupGroupManagerInterface $groupManager
   ) {
-    parent::__construct($configuration, $plugin_id, $plugin_definition);
+    parent::__construct($configuration, $pluginId, $pluginDefinition);
   }
 
   /**
