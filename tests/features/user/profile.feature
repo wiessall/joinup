@@ -82,7 +82,7 @@ Feature: User profile
     Then I click "Leonardo Da Vinci"
     Then I click "Edit"
     Then the following fields should be present "Email, Username"
-    And the following fields should be present "First name, Family name, Photo, Professional domain, Business title"
+    And the following fields should be present "First name, Family name, Add a new file, Professional domain, Business title"
     And the following fields should be present "Country of origin, Organisation"
     And the following fields should not be present "Time zone"
     And I should not see the text "Username: Leonardo Da Vinci"
