@@ -55,7 +55,7 @@ final class ApiGuesser implements ApiGuesserInterface {
   /**
    * {@inheritdoc}
    */
-  public function getHostingPlatformPluginId(string $repositoryUrl, bool $useCache = TRUE): ?string {
+  public function getHostingPlatformPluginId(string $repositoryUrl): ?string {
     if (!UrlHelper::isValid($repositoryUrl)) {
       throw new \InvalidArgumentException(
         sprintf(
@@ -69,7 +69,7 @@ final class ApiGuesser implements ApiGuesserInterface {
     $guessedPluginId = NULL;
 
     if (is_a(($gitUri = GitUri::fromUriString($repositoryUrl)), GitUri::class)) {
-      if ($useCache && ($previouslyGuessedPluginId = $this->getGuessedPluginId($gitUri->host))) {
+      if ($previouslyGuessedPluginId = $this->getGuessedPluginId($gitUri->host)) {
         return $previouslyGuessedPluginId;
       }
 
