@@ -102,7 +102,6 @@
         "drupal/views_data_export": "^1.0",
         "drupal/views_multiple_permissions": "^2.0",
         "drush/drush": "^12.1",
-        "ec-europa/joinup-tallinn-dashboard": "1.0.0-alpha2",
         "ec-europa/spdx": "^1.0",
         "ec-europa/virtuoso": "^2.1",
         "mglaman/composer-drupal-lenient": "^1.0",
@@ -216,7 +215,6 @@
         "installer-paths": {
             "drush/Commands/{$name}": ["type:drupal-drush"],
             "drush/contrib/{$name}": ["type:drupal-drush"],
-            "web/modules/custom/joinup_communities/tallinn/lib": ["ec-europa/joinup-tallinn-dashboard"],
             "web/core": ["type:drupal-core"],
             "web/libraries/{$name}": ["type:drupal-library"],
             "web/modules/contrib/{$name}": ["type:drupal-module"],
@@ -413,10 +411,6 @@
                     "reference": "main"
                 }
             }
-        },
-        {
-            "type": "vcs",
-            "url": "https://github.com/ec-europa/joinup-tallinn-dashboard.git"
         },
         {
             "type": "vcs",
