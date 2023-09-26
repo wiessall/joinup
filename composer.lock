@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "ef351c6bf1a00dc02093ad9bff9620de",
+    "content-hash": "371a08d9b85e269de2c0b436dcc47651",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -6987,17 +6987,17 @@
         },
         {
             "name": "drupal/sparql_entity_storage",
-            "version": "2.0.0-alpha14",
+            "version": "2.0.0-alpha15",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/sparql_entity_storage.git",
-                "reference": "2.0.0-alpha14"
+                "reference": "2.0.0-alpha15"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/sparql_entity_storage-2.0.0-alpha14.zip",
-                "reference": "2.0.0-alpha14",
-                "shasum": "dc16826b6e5ce5a893983005b83033ceb9ff9ea1"
+                "url": "https://ftp.drupal.org/files/projects/sparql_entity_storage-2.0.0-alpha15.zip",
+                "reference": "2.0.0-alpha15",
+                "shasum": "755678abb3c986d3643e35bf14d77c1692af6822"
             },
             "require": {
                 "drupal/core": "^9.3 || ^10",
@@ -7007,8 +7007,8 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "2.0.0-alpha14",
-                    "datestamp": "1690400095",
+                    "version": "2.0.0-alpha15",
+                    "datestamp": "1695751337",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "Project has not opted into security advisory coverage!"
