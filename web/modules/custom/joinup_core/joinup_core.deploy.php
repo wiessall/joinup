@@ -85,3 +85,36 @@ function joinup_core_deploy_109701(): string {
 function joinup_core_deploy_109702(): void {
   \Drupal::entityTypeManager()->getStorage('redirect')->load(125784)->delete();
 }
+
+/**
+ * Change the state name of all RDF entities from 'validated' to 'published'.
+ */
+function joinup_core_deploy_109703(): string {
+  $database = \Drupal::getContainer()->get('sparql.endpoint');
+  $workflow_urls = [
+    'http://joinup.eu/isr/workflow_status' => [
+      'http://joinup.eu/asset_release/published',
+      'http://joinup.eu/asset_release/draft',
+    ],
+  ];
+
+  foreach ($workflow_urls as $predicate => $graphs) {
+    foreach ($graphs as $graph) {
+      $update_query = <<<SPARQL
+WITH <{$graph}>
+DELETE {
+  ?s <{$predicate}> "validated"^^<http://www.w3.org/2001/XMLSchema#string> .
+}
+INSERT {
+  ?s <{$predicate}> "published"^^<http://www.w3.org/2001/XMLSchema#string> .
+}
+WHERE {
+  ?s <{$predicate}> "validated"^^<http://www.w3.org/2001/XMLSchema#string> .
+}
+SPARQL;
+      $database->query($update_query);
+    }
+  }
+
+  return 'Changed the state name of all RDF entities from "validated" to "published".';
+}
