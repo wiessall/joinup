@@ -981,7 +981,6 @@ datasource_settings:
         - event
         - news
         - oss_solution
-        - tallinn_report
         - video
     languages:
       default: true
@@ -1300,7 +1299,6 @@ processor_settings:
           document: 0.0
           event: 3.0
           news: 5.0
-          tallinn_report: 0.0
           video: 0.0
       'entity:rdf_entity':
         datasource_boost: 0.0
