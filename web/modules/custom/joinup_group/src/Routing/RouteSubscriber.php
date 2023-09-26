@@ -15,13 +15,20 @@ class RouteSubscriber extends RouteSubscriberBase {
   /**
    * {@inheritdoc}
    */
-  protected function alterRoutes(RouteCollection $collection) {
+  protected function alterRoutes(RouteCollection $collection): void {
     // Override the confirmation form to delete multiple users with our version
     // that prevents deletion of users that are sole owners of collections.
     if ($route = $collection->get('user.multiple_cancel_confirm')) {
       $route->addDefaults([
         '_form' => '\Drupal\joinup_group\Form\UserMultipleCancelConfirm',
       ]);
+    }
+
+    // Fix the group route param for devel module.
+    if ($route = $collection->get('entity.og_membership.devel_load_with_references')) {
+      $options = $route->getOptions();
+      $options['parameters']['group'] = ['type' => 'entity:rdf_entity'];
+      $route->setOptions($options);
     }
   }
 
