@@ -32,7 +32,6 @@ settings:
       document: carousel
       event: carousel
       news: carousel
-      tallinn_report: carousel
       video: carousel
     'entity:rdf_entity':
       asset_distribution: carousel
