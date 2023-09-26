@@ -95,16 +95,10 @@ function joinup_core_requirements($phase): array {
 }
 
 /**
- * Remove leftover row paragraphs.
+ * Remove offending state var.
  */
-function joinup_core_update_109700(): void {
-  $paragraphs = \Drupal::entityTypeManager()
-    ->getStorage('paragraph')
-    ->loadByProperties(['type' => 'row']);
-
-  foreach ($paragraphs as $paragraph) {
-    $paragraph->delete();
-  }
+function joinup_core_update_109800(): void {
+  \Drupal::state()->delete('joinup.log_alerts');
 }
 
 /**
