@@ -258,7 +258,6 @@ function _ventuno_get_default_icon(string $entity_type_id, string $bundle): stri
       'event' => 'calendar-event',
       'news' => 'newspaper',
       'oss_solution' => 'clipboard2-check',
-      'tallinn_report' => 'journal-text',
       'video' => 'file-earmark-play',
     ],
     'rdf_entity' => [

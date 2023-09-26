@@ -283,94 +283,6 @@ display:
             default_group: All
             default_group_multiple: {  }
             group_items: {  }
-        entity_bundle_1:
-          id: entity_bundle_1
-          table: search_api_index_published
-          field: entity_bundle
-          relationship: none
-          group_type: group
-          admin_label: ''
-          plugin_id: search_api_string
-          operator: '!='
-          value:
-            min: ''
-            max: ''
-            value: tallinn_report
-          group: 1
-          exposed: false
-          expose:
-            operator_id: ''
-            label: ''
-            description: ''
-            use_operator: false
-            operator: ''
-            operator_limit_selection: false
-            operator_list: {  }
-            identifier: ''
-            required: false
-            remember: false
-            multiple: false
-            remember_roles:
-              authenticated: authenticated
-            min_placeholder: ''
-            max_placeholder: ''
-            placeholder: ''
-          is_grouped: false
-          group_info:
-            label: ''
-            description: ''
-            identifier: ''
-            optional: true
-            widget: select
-            multiple: false
-            remember: false
-            default_group: All
-            default_group_multiple: {  }
-            group_items: {  }
-        entity_bundle_2:
-          id: entity_bundle_2
-          table: search_api_index_published
-          field: entity_bundle
-          relationship: none
-          group_type: group
-          admin_label: ''
-          plugin_id: search_api_string
-          operator: '!='
-          value:
-            min: ''
-            max: ''
-            value: oss_solution
-          group: 1
-          exposed: false
-          expose:
-            operator_id: ''
-            label: ''
-            description: ''
-            use_operator: false
-            operator: ''
-            operator_limit_selection: false
-            operator_list: {  }
-            identifier: ''
-            required: false
-            remember: false
-            multiple: false
-            remember_roles:
-              authenticated: authenticated
-            min_placeholder: ''
-            max_placeholder: ''
-            placeholder: ''
-          is_grouped: false
-          group_info:
-            label: ''
-            description: ''
-            identifier: ''
-            optional: true
-            widget: select
-            multiple: false
-            remember: false
-            default_group: All
-            default_group_multiple: {  }
-            group_items: {  }
         vid:
           id: vid
           table: search_api_index_published
@@ -431,7 +343,6 @@ display:
               document: view_mode_tile_horizontal
               event: view_mode_tile_horizontal
               news: view_mode_tile_horizontal
-              tallinn_report: view_mode_tile_horizontal
               video: view_mode_tile_horizontal
             'entity:rdf_entity':
               asset_distribution: view_mode_tile_horizontal
