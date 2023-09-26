@@ -11,7 +11,6 @@ dependencies:
     - filter.format.simple_html
     - filter.format.text_html
     - node.type.document
-    - node.type.tallinn_report
   module:
     - comment
     - contextual
@@ -93,7 +92,6 @@ permissions:
   - 'edit own contact_information rdf entity'
   - 'edit own owner rdf entity'
   - 'edit own polls'
-  - 'edit own tallinn_report content'
   - 'export rdf metadata'
   - 'flag like_node'
   - 'flag like_rdf_entity'
