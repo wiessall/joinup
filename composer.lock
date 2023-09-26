@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "2fc33f36b2a49e6e38869f632ccc440b",
+    "content-hash": "ba1d4e3f6f43eb991839267e9b400bc0",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -8206,6 +8206,7 @@
                 "issues": "https://github.com/ec-europa/joinup-tallinn-dashboard/issues",
                 "source": "https://github.com/ec-europa/joinup-tallinn-dashboard"
             },
+            "abandoned": true,
             "time": "2022-06-06T09:09:16+00:00"
         },
         {
