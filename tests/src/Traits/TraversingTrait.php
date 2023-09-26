@@ -474,7 +474,7 @@ trait TraversingTrait {
       // Try again to fetch fields with textareas. These are marked as disabled
       // by setting the class 'form-disabled' to the wrapper div and not in the
       // input.
-      $element = $page->find('xpath', "//div[contains(concat(' ', normalize-space(@class), ' '), ' form-disabled ') and contains(., '{$label}')]");
+      $element = $page->find('xpath', "//div[(contains(concat(' ', normalize-space(@class), ' '), ' form-disabled ') or contains(concat(' ', normalize-space(@class), ' '), ' form-item--disabled ')) and contains(., '{$label}')]");
     }
     if (!$element) {
       // Try again to find a button.

@@ -13,3 +13,10 @@
  */
 
 declare(strict_types = 1);
+
+/**
+ * Dismantle EIF Recommendation view.
+ */
+function joinup_core_deploy_109702(): void {
+  \Drupal::entityTypeManager()->getStorage('redirect')->load(125784)->delete();
+}
