@@ -52,7 +52,6 @@ phpcs:
     - '*/iop/node_modules/*'
     - '*/ventuno/assets/*'
     - '*/ventuno/node_modules/*'
-    - ${joinup.site_dir}/modules/custom/joinup_communities/tallinn/lib
   report: full
   options:
     # Show the progress of the run.
