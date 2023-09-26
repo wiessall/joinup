@@ -6,7 +6,7 @@ Feature:
   Scenario: User is redirected from the standard collection URL.
     Given I visit "/collection/eu-oss-catalogue"
     Then I should be on "/eu-oss-catalogue"
-    And I should see the link "Report abusive content"
+    And I should not see the link "Report abusive content"
 
   Scenario: User sees the right content
     Given oss_solution content:
@@ -27,7 +27,7 @@ Feature:
       | Follow our journey on the social media!          |
     And I should see the text "Just follow the guide!"
     And I should see the text "EU Open Source Solutions Catalogue"
-    And I should see the link "Report abusive content"
+    And I should not see the link "Report abusive content"
 
     # Check carousel order.
     And I should see the following tiles in the correct order:
