@@ -104,7 +104,7 @@ function joinup_core_update_109800(): void {
 /**
  * Pre-creates oss_category, oss_licence and intended_audience_scope vocabs.
  */
-function joinup_core_update_109701(): void {
+function joinup_core_update_109801(): void {
   // Pre-create the new controlled vocabularies provided by eu_oss_catalogue
   // module. Normally, these are imported as config but eu_oss_catalogue install
   // goes first and its install process is also populating them with terms, so
