@@ -913,7 +913,8 @@ default:
                     label: ''
                   parent_uuid: null
                   region: null
-                background_theme: {  }
+                background_theme:
+                  background_theme: light
                 extra_class: {  }
     -
       entity:
@@ -997,8 +998,7 @@ default:
                     label: ''
                   parent_uuid: null
                   region: null
-                background_theme:
-                  background_theme: light
+                background_theme: {  }
                 extra_class:
                   extra_class: oss__social
     -
