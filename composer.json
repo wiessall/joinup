@@ -344,6 +344,9 @@
             "drupal/search_api_autocomplete": {
                 "Clear timeout autosubmit used in views_autosubmit. @see https://www.drupal.org/i/3314418": "resources/patch/php/drupal/search_api_autocomplete/3314418.patch"
             },
+            "drupal/search_api_solr": {
+                "Increase indexing performance by offloading suggester builds to cron. @see https://www.drupal.org/project/search_api_solr/issues/3372198": "resources/patch/php/drupal/search_api_solr/3372198.diff"
+            },
             "drupal/search_api_spellcheck": {
                 "Missing plugins config schema @see https://www.drupal.org/project/search_api_spellcheck/issues/3277693": "resources/patch/php/drupal/search_api_spellcheck/3277693.patch",
                 "URL don't include the base path @see https://www.drupal.org/project/search_api_spellcheck/issues/3280372" : "resources/patch/php/drupal/search_api_spellcheck/3280372.patch"
