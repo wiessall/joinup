@@ -14,8 +14,6 @@ interface ApiGuesserInterface {
    *
    * @param string $repositoryUrl
    *   The repository URL.
-   * @param bool $useCache
-   *   Whether cache should be used or not. Defaults to TRUE.
    *
    * @return string|null
    *   The ID of the hosting platform plugin which is probably able to handle
@@ -24,6 +22,6 @@ interface ApiGuesserInterface {
    * @throws \InvalidArgumentException
    *   In case the provided URL string isn't a Git URL.
    */
-  public function getHostingPlatformPluginId(string $repositoryUrl, bool $useCache = TRUE): ?string;
+  public function getHostingPlatformPluginId(string $repositoryUrl): ?string;
 
 }
