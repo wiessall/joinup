@@ -9,7 +9,9 @@ declare(strict_types = 1);
 
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Field\BaseFieldDefinition;
+use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\joinup_oss_catalogue\Entity\JoinupOssSolution;
+use Drupal\joinup_oss_catalogue\OssCatalogueCollectionInterface;
 use Drupal\joinup_oss_catalogue\Plugin\Field\ShortDescriptionWithFallback;
 
 /**
@@ -57,4 +59,18 @@ function joinup_oss_catalogue_entity_bundle_field_info(EntityTypeInterface $enti
       ->setClass(ShortDescriptionWithFallback::class);
   }
   return $fields;
+}
+
+/**
+ * Implements hook_preprocess_HOOK().
+ */
+function joinup_oss_catalogue_preprocess_node(array &$variables): void {
+  // Disables the "Report" link for OSS pages.
+  $group = \Drupal::routeMatch()->getParameter('rdf_entity');
+  if (
+    $group instanceof GroupInterface &&
+    $group->id() === OssCatalogueCollectionInterface::COLLECTION_ENTITY_ID
+  ) {
+    $variables['content']['report']['#access'] = FALSE;
+  }
 }
