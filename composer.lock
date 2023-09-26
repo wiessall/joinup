@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "53368eaf47263d15b0df291a4e1b04c8",
+    "content-hash": "371a08d9b85e269de2c0b436dcc47651",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -2025,16 +2025,16 @@
         },
         {
             "name": "drupal/core",
-            "version": "10.1.2",
+            "version": "10.1.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/drupal/core.git",
-                "reference": "949779f2244b955bdd6946c8af5dee8054501fe6"
+                "reference": "443b8e72b4dff11cd0d6b40de5cd887c7a9bd94d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/drupal/core/zipball/949779f2244b955bdd6946c8af5dee8054501fe6",
-                "reference": "949779f2244b955bdd6946c8af5dee8054501fe6",
+                "url": "https://api.github.com/repos/drupal/core/zipball/443b8e72b4dff11cd0d6b40de5cd887c7a9bd94d",
+                "reference": "443b8e72b4dff11cd0d6b40de5cd887c7a9bd94d",
                 "shasum": ""
             },
             "require": {
@@ -2179,13 +2179,13 @@
             ],
             "description": "Drupal is an open source content management platform powering millions of websites and applications.",
             "support": {
-                "source": "https://github.com/drupal/core/tree/10.1.2"
+                "source": "https://github.com/drupal/core/tree/10.1.4"
             },
-            "time": "2023-08-02T10:10:11+00:00"
+            "time": "2023-09-19T17:57:50+00:00"
         },
         {
             "name": "drupal/core-composer-scaffold",
-            "version": "10.1.2",
+            "version": "10.1.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/drupal/core-composer-scaffold.git",
@@ -2229,7 +2229,7 @@
                 "drupal"
             ],
             "support": {
-                "source": "https://github.com/drupal/core-composer-scaffold/tree/10.1.2"
+                "source": "https://github.com/drupal/core-composer-scaffold/tree/10.1.4"
             },
             "time": "2023-04-30T16:15:32+00:00"
         },
@@ -10070,16 +10070,16 @@
         },
         {
             "name": "openeuropa/oe_bootstrap_theme",
-            "version": "1.5.1",
+            "version": "1.7.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/openeuropa/oe_bootstrap_theme.git",
-                "reference": "a82b425f6b89b258295a764e45882741d35285e0"
+                "reference": "341e1243d670c8feb163b37e163600b8ed81117c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/openeuropa/oe_bootstrap_theme/zipball/a82b425f6b89b258295a764e45882741d35285e0",
-                "reference": "a82b425f6b89b258295a764e45882741d35285e0",
+                "url": "https://api.github.com/repos/openeuropa/oe_bootstrap_theme/zipball/341e1243d670c8feb163b37e163600b8ed81117c",
+                "reference": "341e1243d670c8feb163b37e163600b8ed81117c",
                 "shasum": ""
             },
             "require": {
@@ -10141,9 +10141,9 @@
             "description": "OpenEuropa Bootstrap base theme.",
             "support": {
                 "issues": "https://github.com/openeuropa/oe_bootstrap_theme/issues",
-                "source": "https://github.com/openeuropa/oe_bootstrap_theme/tree/1.5.1"
+                "source": "https://github.com/openeuropa/oe_bootstrap_theme/tree/1.7.0"
             },
-            "time": "2023-08-01T10:03:18+00:00"
+            "time": "2023-09-15T13:34:39+00:00"
         },
         {
             "name": "openeuropa/oe_dashboard_agent",

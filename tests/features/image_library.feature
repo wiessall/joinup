@@ -15,7 +15,7 @@ Feature:
     Then I should see the heading "Add <media type label>"
 
     When I fill in "Name" with "Name of <media type label>"
-    And I attach the file "library/<entity bundle>-logo.<extension>" to "Image"
+    And I attach the file "library/<entity bundle>-logo.<extension>" to "Add a new file"
     And I press "Save"
     Then I should see the success message "<media type label> Name of <media type label> has been created."
     And I should see the link "Name of <media type label>"

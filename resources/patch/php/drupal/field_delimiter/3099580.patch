@@ -1,0 +1,24 @@
+diff --git a/field_delimiter.module b/field_delimiter.module
+index c14ab95..beb3769 100644
+--- a/field_delimiter.module
++++ b/field_delimiter.module
+@@ -72,17 +72,8 @@ function field_delimiter_preprocess_field(&$variables) {
+     return;
+   }
+ 
+-  // Get a few convenient handles.
+-  $entity      = $variables['element']['#object'];
+-  $field_name  = $variables['element']['#field_name'];
+-  $view_mode   = $variables['element']['#view_mode'];
+-
+-  // Drill down to field formatter settings.
+-  $render_display = EntityViewDisplay::collectRenderDisplay($entity, $view_mode);
+-  $field_display = $render_display->getComponent($field_name);
+-
+-  if (!empty($field_display['third_party_settings']['field_delimiter'])
+-    && !empty($delimiter = $field_display['third_party_settings']['field_delimiter']['delimiter'])) {
++  if (isset($variables['element']['#third_party_settings']['field_delimiter'])
++  && !empty($delimiter = $variables['element']['#third_party_settings']['field_delimiter']['delimiter'])) {
+ 
+     // Sanitize the delimiter, allow a few reasonable HTML elements.
+     $safe_delimiter = Xss::filter($delimiter, array('br', 'hr', 'span', 'img', 'wbr'));
