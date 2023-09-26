@@ -323,6 +323,9 @@
             "drupal/message_notify": {
                 "Allow 3rd-party to act before delivery @see https://www.drupal.org/project/message_notify/issues/3314370": "resources/patch/php/drupal/message_notify/3314370.diff"
             },
+            "drupal/og": {
+                "The annotations for \"edit-form\" and \"delete-form\" @see https://www.drupal.org/project/og/issues/3338830": "resources/patch/php/drupal/og/3338830.diff"
+            },
             "drupal/pathauto": {
                 "PHP 8.2 compatibility @see https://www.drupal.org/project/pathauto/issues/3328670": "resources/patch/php/drupal/pathauto/3328670.patch"
             },
