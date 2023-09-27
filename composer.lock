@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "7765bfc3f55e3e728ca1f381f176bf42",
+    "content-hash": "371a08d9b85e269de2c0b436dcc47651",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -8181,32 +8181,6 @@
                 }
             ],
             "time": "2023-08-09T17:44:58+00:00"
-        },
-        {
-            "name": "ec-europa/joinup-tallinn-dashboard",
-            "version": "1.0.0-alpha2",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/ec-europa/joinup-tallinn-dashboard.git",
-                "reference": "163b8a4cab38f1e1d7133fe13a86a8712fc68ca7"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/ec-europa/joinup-tallinn-dashboard/zipball/163b8a4cab38f1e1d7133fe13a86a8712fc68ca7",
-                "reference": "163b8a4cab38f1e1d7133fe13a86a8712fc68ca7",
-                "shasum": ""
-            },
-            "type": "drupal-library",
-            "license": [
-                "GPL-2.0+"
-            ],
-            "description": "Javascript application that shows teh Tallinn Agreement dashboard.",
-            "homepage": "https://github.com/ec-europa/joinup-tallinn-dashboard",
-            "support": {
-                "issues": "https://github.com/ec-europa/joinup-tallinn-dashboard/issues",
-                "source": "https://github.com/ec-europa/joinup-tallinn-dashboard"
-            },
-            "time": "2022-06-06T09:09:16+00:00"
         },
         {
             "name": "ec-europa/spdx",
