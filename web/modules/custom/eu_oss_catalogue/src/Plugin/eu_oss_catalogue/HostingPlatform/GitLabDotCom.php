@@ -79,10 +79,10 @@ class GitLabDotCom extends EuOssCatalogueGitHostingPlatformPluginBase {
             $response['data']['group'] = $this->getGroupProjectsWithRestApi($namespace, $requestedFiles);
           }
           else {
-            Error::logException($this->logger, $exception, "Can't get the group '@namespace' from @url. Message: @message", [
-              '@namespace' => $namespace,
-              '@url' => $this->getBaseUrl(),
-              '@message' => $exception->getMessage(),
+            Error::logException($this->logger, $exception, "Can't get the group {namespace} from {url}. Message: {message}", [
+              'namespace' => $namespace,
+              'url' => $this->getBaseUrl(),
+              'message' => $exception->getMessage(),
             ]);
             // Done with this namespace.
             break;
@@ -346,9 +346,9 @@ class GitLabDotCom extends EuOssCatalogueGitHostingPlatformPluginBase {
       }
       catch (\Throwable $exception) {
         // Log only a warning as we retry later by using REST API.
-        Error::logException($this->logger, $exception, "Can't get the project '@project' from @url using GraphQL API", [
-          '@project' => "$namespace/$name",
-          '@url' => $this->getBaseUrl(),
+        Error::logException($this->logger, $exception, "Can't get the project {project} from {url} using GraphQL API", [
+          'project' => "$namespace/$name",
+          'url' => $this->getBaseUrl(),
         ], LogLevel::WARNING);
       }
 
@@ -391,9 +391,9 @@ class GitLabDotCom extends EuOssCatalogueGitHostingPlatformPluginBase {
     }
     catch (\Throwable $exception) {
       // Fail silently but log if the project data cannot be retrieved.
-      Error::logException($this->logger, $exception, "Can't get the project '@project' from @url using REST API", [
-        '@project' => $fullPath,
-        '@url' => $this->getBaseUrl(),
+      Error::logException($this->logger, $exception, "Can't get the project {project} from {url} using REST API", [
+        'project' => $fullPath,
+        'url' => $this->getBaseUrl(),
       ]);
       return NULL;
     }
@@ -450,9 +450,9 @@ class GitLabDotCom extends EuOssCatalogueGitHostingPlatformPluginBase {
     }
     catch (\Throwable $exception) {
       // Log a warning.
-      Error::logException($this->logger, $exception, "Can't get the releases for project '@project' from @url using REST API", [
-        '@project' => $fullPath,
-        '@url' => $this->getBaseUrl(),
+      Error::logException($this->logger, $exception, "Can't get the releases for project {project} from {url} using REST API", [
+        'project' => $fullPath,
+        'url' => $this->getBaseUrl(),
       ], LogLevel::WARNING);
     }
   }
@@ -479,10 +479,10 @@ class GitLabDotCom extends EuOssCatalogueGitHostingPlatformPluginBase {
       }
       catch (\Throwable $exception) {
         // Log a warning.
-        Error::logException($this->logger, $exception, "Can't get the file @file for project '@project' from @url using REST API", [
-          '@project' => $fullPath,
-          '@url' => $this->getBaseUrl(),
-          '@file' => $requestedFile,
+        Error::logException($this->logger, $exception, "Can't get the file {file} for project {project} from {url} using REST API", [
+          'project' => $fullPath,
+          'url' => $this->getBaseUrl(),
+          'file' => $requestedFile,
         ], LogLevel::WARNING);
       }
     }
