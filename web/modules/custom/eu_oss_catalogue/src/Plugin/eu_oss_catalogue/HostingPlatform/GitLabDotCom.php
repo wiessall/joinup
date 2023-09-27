@@ -37,6 +37,14 @@ class GitLabDotCom extends EuOssCatalogueGitHostingPlatformPluginBase {
   protected Client $client;
 
   /**
+   * {@inheritdoc}
+   */
+  public function isHostingPlatformForUrl(string $repositoryUrl): bool {
+    return ($gitUri = GitUri::fromUriString($repositoryUrl))
+      && $gitUri->host === self::GITLAB_BASE_URL;
+  }
+
+  /**
    * Returns the GitLab client.
    *
    * @return \Gitlab\Client
@@ -519,14 +527,6 @@ class GitLabDotCom extends EuOssCatalogueGitHostingPlatformPluginBase {
       // This group doesn't exist.
       return NULL;
     }
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function isHostingPlatformForUrl(string $repositoryUrl): bool {
-    return ($gitUri = GitUri::fromUriString($repositoryUrl))
-      && $gitUri->host === self::GITLAB_BASE_URL;
   }
 
   /**

@@ -8,7 +8,6 @@ use Drupal\Component\Utility\UrlHelper;
 use Drupal\Core\Logger\LoggerChannelInterface;
 use Drupal\Core\State\StateInterface;
 use Drupal\eu_oss_catalogue\Model\GitUri;
-use Psr\Log\LogLevel;
 
 /**
  * Remote git API guesser.
@@ -57,12 +56,7 @@ final class ApiGuesser implements ApiGuesserInterface {
    */
   public function getHostingPlatformPluginId(string $repositoryUrl): ?string {
     if (!UrlHelper::isValid($repositoryUrl)) {
-      throw new \InvalidArgumentException(
-        sprintf(
-          "The given repository URL parameter is not a valid URL: %s",
-          $repositoryUrl
-        )
-      );
+      throw new \InvalidArgumentException(sprintf("The given repository URL parameter is not a valid URL: %s", $repositoryUrl));
     }
 
     $previouslyGuessedPluginId = NULL;
@@ -85,13 +79,7 @@ final class ApiGuesser implements ApiGuesserInterface {
     }
 
     if (!$guessedPluginId) {
-      $this->logger->log(
-        LogLevel::WARNING,
-        sprintf(
-          "No matching hosting platform plugin was found for URL '%s'",
-          $repositoryUrl
-        )
-      );
+      $this->logger->warning(sprintf("No matching hosting platform plugin was found for URL '%s'", $repositoryUrl));
     }
 
     if ($guessedPluginId !== $previouslyGuessedPluginId) {
@@ -135,13 +123,9 @@ final class ApiGuesser implements ApiGuesserInterface {
    *   The discovered plugin ID to store in cache. Not stored if value is empty.
    */
   protected function storeGuessedPluginId(string $baseUrl, ?string $pluginId): void {
-    if (in_array($pluginId, [NULL, ''], TRUE)) {
-      return;
+    if (!empty($pluginId)) {
+      $this->state->set(self::STATE_STORAGE_KEY, [$baseUrl => $pluginId] + $this->getGuessedPluginIds());
     }
-    $this->state->set(
-      self::STATE_STORAGE_KEY,
-      [$baseUrl => $pluginId] + $this->getGuessedPluginIds()
-    );
   }
 
 }
