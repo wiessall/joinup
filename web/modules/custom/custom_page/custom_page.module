@@ -219,7 +219,7 @@ function custom_page_menu_local_actions_alter(&$local_actions) {
  * is not published.
  */
 function custom_page_node_access(NodeInterface $node, $op, AccountInterface $account) {
-  if ($op !== 'view' || !$node instanceof CustomPageInterface) {
+  if ($op !== 'view' || !$node instanceof CustomPageInterface || !$node->hasGroup()) {
     return AccessResult::neutral();
   }
 
