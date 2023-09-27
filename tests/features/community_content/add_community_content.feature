@@ -7,7 +7,7 @@ Feature: Add community content
   Scenario Outline: Advanced content and group administration should not be accessible for group members
     Given the following collection:
       | title | The night shift |
-      | state | validated       |
+      | state | published       |
 
     When I am logged in as a "<member type>" of the "The night shift" collection
     And I go to the homepage of the "The night shift" collection
@@ -39,7 +39,7 @@ Feature: Add community content
   Scenario Outline: Advanced content and group administration should not be accessible for moderators
     Given the following collection:
       | title | The night shift |
-      | state | validated       |
+      | state | published       |
 
     When I am logged in as a "moderator"
     And I go to the homepage of the "The night shift" collection
@@ -70,7 +70,7 @@ Feature: Add community content
       | Publisher | publisher-example@test.com | Publisher  | Georgakopoulos | moderator |
     And the following collection:
       | title | The afternoon shift |
-      | state | validated           |
+      | state | published           |
     And discussion content:
       | title             | content         | author    | state | collection          | created    |
       | Sample discussion | Sample content. | Publisher | draft | The afternoon shift | 01-01-2010 |
@@ -113,7 +113,7 @@ Feature: Add community content
   Scenario: Directly publishing community content sets the correct publication date.
     Given the following collections:
       | title        | description                  | logo     | state     |
-      | CC container | Community content container. | logo.png | validated |
+      | CC container | Community content container. | logo.png | published |
     And I am logged in as a "facilitator" of the "CC container" collection
 
     # Create a published discussion.
@@ -178,10 +178,10 @@ Feature: Add community content
   Scenario Outline: Community content type is indicated on the byline
     Given the following collection:
       | title | The night watch |
-      | state | validated       |
+      | state | published       |
     And <content type> content:
       | title                   | collection      | state     |
-      | The glorious revolution | The night watch | validated |
+      | The glorious revolution | The night watch | published |
     When I go to the content page of the type "<content type>" with the title "The glorious revolution"
     Then I should see the text <label> in the "Page title" region
 
@@ -194,11 +194,11 @@ Feature: Add community content
   Scenario: Event content type is not indicated on the byline
     Given the following collection:
       | title | The night batch |
-      | state | validated       |
+      | state | published       |
     And event content:
       | title                    | collection      | state     | start date   | end date            | state     |
-      | Red glorious revolution  | The night batch | validated | now +1 years | now +1 years +1 day | validated |
-      | Blue glorious revolution | The night batch | validated | now -1 years | now -1 years +1 day | validated |
+      | Red glorious revolution  | The night batch | published | now +1 years | now +1 years +1 day | published |
+      | Blue glorious revolution | The night batch | published | now -1 years | now -1 years +1 day | published |
     When I go to the content page of the type "event" with the title "Red glorious revolution"
     And I should see the button "Add to Calendar"
     And I should see the link "Google"

@@ -9,7 +9,7 @@ Feature:
       | title       | Hellow world                              |
       | description | Because I do not know how to spell Hello. |
       | moderation  | <moderation>                              |
-      | state       | validated                                 |
+      | state       | published                                 |
     And users:
       | Username           | E-mail                    | Roles     |
       | Clumsy Bounce      | clumsy.bounce@example.com |           |
@@ -24,8 +24,8 @@ Feature:
       | Hellow world | Jelly Facilitator | facilitator |
     And <content type> content:
       | title                | body                                   | state     | author        | <group type> |
-      | Goodbi world         | Because I cannot spell Goodbye either. | validated | Clumsy Bounce | Hellow world |
-      | Careful with that ax | Someone needs to ax these questions.   | validated | Grumpy Author | Hellow world |
+      | Goodbi world         | Because I cannot spell Goodbye either. | published | Clumsy Bounce | Hellow world |
+      | Careful with that ax | Someone needs to ax these questions.   | published | Grumpy Author | Hellow world |
     And <content type> revisions:
       | current title        | title                 |
       | Careful with that ax | Careful with that axe |
@@ -163,7 +163,7 @@ Feature:
     # When a content author is blocked from the group (e.g. because they were
     # posting spam) then they should no longer have access to the revisions.
     When I go to the "Hellow world" <group type>
-    And I click "Members" in the "Header bottom"
+    And I click "Members" in the "Header"
     And I check the box "Update the member Clumsy Bounce"
     And I select "Block the selected membership(s)" from "Action"
     And I press "Apply to selected items"

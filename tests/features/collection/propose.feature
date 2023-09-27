@@ -84,7 +84,7 @@ Feature: Proposing a collection
       | Overview |
       | Members  |
       | About    |
-    When I click the contextual link "Add new page" in the "Header bottom" region
+    When I click the contextual link "Add new page" in the "Header" region
     Then I should see the heading "Add custom page"
     When I fill in the following:
       | Title | About this group                                               |
@@ -99,7 +99,7 @@ Feature: Proposing a collection
   Scenario: Propose a collection with a duplicate name
     Given the following collection:
       | title | The Ratcatcher's Guild |
-      | state | validated              |
+      | state | published              |
     Given I am logged in as a user with the "authenticated" role
     When I go to the propose collection form
     And I fill in the following:
@@ -284,7 +284,7 @@ Feature: Proposing a collection
       | html               | no                                                                                                                            |
 
     # Contact us page should return access denied,
-    # because contact info emails are not validated.
+    # because contact info emails are not published.
     When I go to "/collection/some-email-validation/contact"
     Then I should get an access denied error
 

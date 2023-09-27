@@ -9,19 +9,19 @@ Feature: Archived content on content listings - groups and paragraphs.
       | name | Some contact |
     And collections:
       | title           | description | topic             | owner      | contact information | state     |
-      | Some collection | Test        | Supplier exchange | Some owner | Some contact        | validated |
-      | Poly screens    | Test        | Supplier exchange | Some owner | Some contact        | validated |
+      | Some collection | Test        | Supplier exchange | Some owner | Some contact        | published |
+      | Poly screens    | Test        | Supplier exchange | Some owner | Some contact        | published |
     And news content:
       | title          | headline       | state     | collection      | body | content |
-      | Archived news  | Archived news  | validated | Some collection | Test | Test    |
-      | Published news | Published news | validated | Some collection | Test | Test    |
-      | Poly news 1    | Poly news 1    | validated | Poly screens    | Test | Test    |
-      | Poly news 2    | Poly news 2    | validated | Poly screens    | Test | Test    |
-      | Poly news 3    | Poly news 3    | validated | Poly screens    | Test | Test    |
-      | Poly news 4    | Poly news 4    | validated | Poly screens    | Test | Test    |
+      | Archived news  | Archived news  | published | Some collection | Test | Test    |
+      | Published news | Published news | published | Some collection | Test | Test    |
+      | Poly news 1    | Poly news 1    | published | Poly screens    | Test | Test    |
+      | Poly news 2    | Poly news 2    | published | Poly screens    | Test | Test    |
+      | Poly news 3    | Poly news 3    | published | Poly screens    | Test | Test    |
+      | Poly news 4    | Poly news 4    | published | Poly screens    | Test | Test    |
     # We need the "Archived news" content to be archived by altering its state
     # because "Unarchiving" it restored the previous revision and thus, needs
-    # to have a previous revision (created as validated).
+    # to have a previous revision (created as published).
     And the workflow state of the "Archived news" content is set to "archived"
 
   Scenario: Collection content listing can control archived content visibility.
@@ -136,11 +136,11 @@ Feature: Archived content on content listings - groups and paragraphs.
     Given collection:
       | uri   | http://data.europa.eu/w21/8e30f798-ff2b-478b-9c09-5ed5a63b4c8c |
       | title | Interoperable Europe                                           |
-      | state | validated                                                      |
+      | state | published                                                      |
     And news content:
       | title              | headline           | state     | collection           | body | content |
       | IOP archived news  | IOP archived news  | archived  | Interoperable Europe | Test | Test    |
-      | IOP published news | IOP published news | validated | Interoperable Europe | Test | Test    |
+      | IOP published news | IOP published news | published | Interoperable Europe | Test | Test    |
     And custom_page content:
       | title    | collection           | state     |
       | IOP page | Interoperable Europe | published |
@@ -209,14 +209,14 @@ Feature: Archived content on content listings - groups and paragraphs.
   Scenario: "Show archived" facet on Discussions page content listing.
     Given collections:
       | title                      | description | topic             | owner      | contact information | state     |
-      | Some discussion collection | Test        | Supplier exchange | Some owner | Some contact        | validated |
+      | Some discussion collection | Test        | Supplier exchange | Some owner | Some contact        | published |
     And discussion content:
       | title           | collection                 | state     |
-      | Rand discussion | Some discussion collection | validated |
+      | Rand discussion | Some discussion collection | published |
       | Pest discussion | Some discussion collection | archived  |
-      | Poll discussion | Some discussion collection | validated |
+      | Poll discussion | Some discussion collection | published |
       | Moon discussion | Some discussion collection | archived  |
-      | Ruin discussion | Some discussion collection | validated |
+      | Ruin discussion | Some discussion collection | published |
 
     When I go to the homepage of the "Some discussion collection" collection
     And I should see the text "Discussions" in the "Navigation menu"

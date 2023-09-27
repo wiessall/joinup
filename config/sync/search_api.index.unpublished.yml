@@ -445,7 +445,6 @@ datasource_settings:
         - event
         - glossary
         - news
-        - tallinn_report
         - video
     languages:
       default: true
