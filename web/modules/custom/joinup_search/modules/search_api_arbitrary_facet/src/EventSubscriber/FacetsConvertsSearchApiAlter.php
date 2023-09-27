@@ -20,8 +20,6 @@ class FacetsConvertsSearchApiAlter implements EventSubscriberInterface {
    */
   public static function getSubscribedEvents(): array {
     return [
-      SearchApiSolrEvents::PRE_QUERY => 'preQuery',
-      SearchApiSolrEvents::POST_EXTRACT_RESULTS => 'postExtractResults',
     ];
   }
 

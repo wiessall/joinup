@@ -109,9 +109,10 @@ class JoinupGlobalSearchApiAlter implements EventSubscriberInterface {
 
     foreach ($mappings as $alias => $solr_field) {
       if (isset($fields[$alias])) {
-        $event->setFieldMapping([$alias, $solr_field]);
+        $fields[$alias] = $solr_field;
       }
     }
+    $event->setFieldMapping($fields);
   }
 
   /**
