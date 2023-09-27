@@ -132,61 +132,6 @@ function joinup_search_search_api_index_items_alter(IndexInterface $index, array
 }
 
 /**
- * Implements hook_search_api_solr_documents_alter().
- *
- * By default, solr server configuration has a property named sortMissingLast
- * set to true for all fields defined. This means that two different entity
- * types, one with a property set to false and one without the property, will
- * result in having the one without the property placed last.
- *
- * Set the "sticky" property on all documents that are missing it. The property
- * is prefixed with "bs_" because "b" stands for boolean and "s" for single
- * value, as they are used for sorting.
- *
- * Set the "state" property on all documents that are missing it and are stored
- * in the unpublished index. The property is prefixed with "ss_" because the
- * first "s" stands for 'string' and the second one stands for single value.
- */
-function joinup_search_search_api_solr_documents_alter(&$documents, IndexInterface $index, array $items) {
-  /** @var \Solarium\QueryType\Update\Query\Document[] $documents */
-  foreach ($documents as $document) {
-    if (empty($document->getFields()['bs_sticky'])) {
-      $document->setField('bs_sticky', FALSE);
-    }
-    if (empty($document->getFields()['sm_entity_status']) && $index->id() === 'unpublished') {
-      $document->setField('sm_entity_status', 'unpublished');
-    }
-    if (empty($document->getFields()['sm_entity_status']) && $index->id() === 'published') {
-      // Because of the way the search API works, when we
-      // perform a search, it only returns items *with* a value for the
-      // conditions. Thus, when we search for an item that is not archived, if
-      // items do not have a value for the state field, they will not be
-      // included in the results. This is why we set the value to a special
-      // value that will never be used for the state field.
-      $document->setField('sm_entity_status', 'published');
-    }
-  }
-}
-
-/**
- * Implements hook_search_api_solr_field_mapping_alter().
- *
- * Single value fields need to be used for sorting.
- */
-function joinup_search_search_api_solr_field_mapping_alter(IndexInterface $index, array &$fields) {
-  $mappings = [
-    'entity_created' => 'ds_entity_created',
-    'published_on' => 'ds_published_on',
-  ];
-
-  foreach ($mappings as $alias => $solr_field) {
-    if (isset($fields[$alias])) {
-      $fields[$alias] = $solr_field;
-    }
-  }
-}
-
-/**
  * Implements hook_views_pre_execute().
  */
 function joinup_search_views_pre_execute(ViewExecutable $view) {
