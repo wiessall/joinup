@@ -4,13 +4,14 @@ status: true
 dependencies:
   module:
     - joinup_core
+    - node
     - system
   theme:
     - ventuno
 id: ventuno_pagetitle
 theme: ventuno
 region: content
-weight: -25
+weight: -23
 provider: null
 plugin: page_title_block
 settings:
@@ -33,4 +34,4 @@ visibility:
     id: request_path
     negate: true
     context_mapping: {  }
-    pages: '<front>'
+    pages: "<front>\r\n/eu-oss-catalogue\r\n/eu-oss-catalogue/solutions/*"

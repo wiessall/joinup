@@ -13,3 +13,7 @@ services:
     arguments: ['@current_user']
     tags:
       - { name: access_check, applies_to: _uid_1_only }
+  joinup.reporting_route_subscriber:
+    class: Drupal\joinup\Routing\ReportingRouteSubscriber
+    tags:
+      - { name: event_subscriber }

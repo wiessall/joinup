@@ -11,17 +11,17 @@ Feature:
       | ACDC | Company |
     And collections:
       | title   | state     |
-      | Killjoy | validated |
-      | Sage    | validated |
+      | Killjoy | published |
+      | Sage    | published |
       | Phoenix | draft     |
     And solutions:
       | title    | eif reference                      | eif category    | collection | state     |
-      | Jordan 1 | Recommendation 1, Recommendation 2 | Common services | Killjoy    | validated |
-      | Jordan 2 | Recommendation 4                   | Common services | Sage       | validated |
+      | Jordan 1 | Recommendation 1, Recommendation 2 | Common services | Killjoy    | published |
+      | Jordan 2 | Recommendation 4                   | Common services | Sage       | published |
       | Jordan 3 | Recommendation 5, Recommendation 2 | Common services | Sage       | draft     |
-      | Jordan 4 | Recommendation 3, Recommendation 1 | Common services | Phoenix    | validated |
+      | Jordan 4 | Recommendation 3, Recommendation 1 | Common services | Phoenix    | published |
       | Jordan 5 | Recommendation 4                   | Common services | Killjoy    | draft     |
-      | Jordan 6 | Recommendation 4                   | Common services | Killjoy    | validated |
+      | Jordan 6 | Recommendation 4                   | Common services | Killjoy    | published |
     And glossary content:
       | title        | synonyms | definition  | collection      |
       | amazing      | SMASS    | amazing def | NIFO collection |

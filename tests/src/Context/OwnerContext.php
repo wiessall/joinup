@@ -38,7 +38,7 @@ class OwnerContext extends RawDrupalContext {
    * Table format:
    * @codingStandardsIgnoreStart
    * | type                        | name        | id                      | state        |
-   * | Company,Industry consortium | Acme Inc.   | http://example.com/path | validated    |
+   * | Company,Industry consortium | Acme Inc.   | http://example.com/path | published    |
    * | Local authority             | Gotham City |                         | needs_update |
    * | Private Individual(s)       | Jane Roe    |                         |              |
    * @codingStandardsIgnoreEnd

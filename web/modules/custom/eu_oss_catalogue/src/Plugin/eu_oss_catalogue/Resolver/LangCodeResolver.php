@@ -8,7 +8,7 @@ use Drupal\Component\Utility\NestedArray;
 use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
-use Drupal\eu_oss_catalogue\Model\EuOssCatalogueFetchedSolution;
+use Drupal\eu_oss_catalogue\Model\FetchedSolution;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -59,7 +59,7 @@ class LangCodeResolver extends DefaultResolver implements ContainerFactoryPlugin
   /**
    * {@inheritdoc}
    */
-  public function resolve(FieldItemListInterface $fieldItemList, EuOssCatalogueFetchedSolution $fetchedSolution): mixed {
+  public function resolve(FieldItemListInterface $fieldItemList, FetchedSolution $fetchedSolution): mixed {
     if (!str_contains($this->getConfiguration()['path'], '[lang]')) {
       return parent::resolve($fieldItemList, $fetchedSolution);
     }
@@ -67,10 +67,10 @@ class LangCodeResolver extends DefaultResolver implements ContainerFactoryPlugin
 
     /** @var \Drupal\eu_oss_catalogue\Entity\OssSolutionInterface $solution */
     $solution = $fieldItemList->getEntity();
+    $data = $fetchedSolution->data;
     $values = [];
     foreach ($this->languageManger->getLanguages() as $langcode => $language) {
       $path = explode('/', str_replace('[lang]', $langcode, $this->getConfiguration()['path']));
-      $data = $fetchedSolution->data;
       if (NestedArray::keyExists($data, $path)) {
         $value = NestedArray::getValue($data, $path);
         if (!$solution->hasTranslation($langcode)) {

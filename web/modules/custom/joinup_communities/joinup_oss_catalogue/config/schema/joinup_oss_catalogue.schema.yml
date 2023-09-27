@@ -1,0 +1,13 @@
+field.formatter.settings.joinup_oss_catalogue_link_to_solution_search:
+  type: mapping
+  label: 'Formatter linking to solution search page'
+  mapping:
+    facet_id:
+      type: string
+      label: 'ID of the facet to link to'
+    use_label:
+      type: boolean
+      label: 'Use label instead of ID in search link'
+    open_new:
+      type: boolean
+      label: 'Open search link in new tab'

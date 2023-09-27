@@ -98,9 +98,6 @@ settings:
       quote:
         weight: 43
         enabled: false
-      row:
-        weight: 35
-        enabled: false
       simple_paragraph:
         weight: 36
         enabled: true

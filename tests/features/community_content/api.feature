@@ -7,7 +7,7 @@ Feature: Create community content through the API
   Scenario Outline: Publication state of community content created through the API
     Given collection:
       | title | End user documentation |
-      | state | validated              |
+      | state | published              |
     And "<type>" content:
       | title   | body | collection             | field_state      |
       | <title> | body | End user documentation | <workflow state> |
@@ -17,21 +17,21 @@ Feature: Create community content through the API
       | type       | workflow state   | publication state | title                    |
       | discussion | needs_update     | unpublished       | discussion-needs-update  |
       | discussion | proposed         | unpublished       | discussion-proposed      |
-      | discussion | validated        | published         | discussion-validated     |
+      | discussion | published        | published         | discussion-published     |
       | discussion | archived         | published         | discussion-archived      |
       | document   | draft            | unpublished       | document-draft           |
       | document   | needs_update     | unpublished       | document-needs-update    |
       | document   | proposed         | unpublished       | document-proposed        |
-      | document   | validated        | published         | document-validated       |
+      | document   | published        | published         | document-published       |
       | document   | deletion_request | unpublished       | document-archived        |
       | event      | draft            | unpublished       | event-draft              |
       | event      | needs_update     | unpublished       | event-needs-update       |
       | event      | proposed         | unpublished       | event-proposed           |
-      | event      | validated        | published         | event-validated          |
+      | event      | published        | published         | event-published          |
       | event      | deletion_request | unpublished       | event-archived           |
       | news       | draft            | unpublished       | news-draft               |
       | news       | needs_update     | unpublished       | news-needs-update        |
       | news       | proposed         | unpublished       | news-proposed            |
-      | news       | validated        | published         | news-validated           |
+      | news       | published        | published         | news-published           |
       | news       | deletion_request | unpublished       | news-archived            |
 

@@ -17,18 +17,16 @@ libraries-override:
   tour/tour-styling: false
   ventuno/components: false
   ventuno/theme: false
-  ventuno/paragraph__carousel: false
+  ventuno/carousel: false
 
 regions:
   search_bar: 'Search bar'
   header: 'Header'
-  header_bottom: 'Header bottom'
   featured: 'Featured'
   messages: 'Messages'
   sidebar: 'Sidebar'
   content_top: 'Content top'
   content: 'Content'
-  content_bottom: 'Content bottom'
   footer: 'Footer'
 
 joinup:

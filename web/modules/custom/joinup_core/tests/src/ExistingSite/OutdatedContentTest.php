@@ -37,7 +37,7 @@ class OutdatedContentTest extends JoinupExistingSiteTestBase {
     /** @var \Drupal\collection\Entity\CollectionInterface $collection */
     $collection = $this->createRdfEntity([
       'rid' => 'collection',
-      'field_ar_state' => 'validated',
+      'field_ar_state' => 'published',
     ]);
     /** @var \Drupal\joinup_discussion\Entity\DiscussionInterface $discussion */
     $discussion = $this->createNode([

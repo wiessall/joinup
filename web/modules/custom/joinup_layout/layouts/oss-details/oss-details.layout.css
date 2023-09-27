@@ -1,0 +1,39 @@
+/**
+ * @file
+ * Layout styles for OSS Header layout.
+ */
+
+.l-oss-details {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.l-oss-details__column {
+  display: flex;
+  flex-wrap: wrap;
+}
+.l-oss-details__column--first {
+  flex: 0 0 calc(67% - 1rem);
+  max-width: calc(67% - 1rem);
+}
+.l-oss-details__column--last {
+  flex: 0 0 33%;
+  max-width: 33%;
+}
+
+.l-oss-details__row {
+  display: flex;
+  flex: 0 0 100%;
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+  gap: 1rem;
+}
+
+.l-oss-details__region {
+  flex: 0 1 auto;
+}
+
+.l-oss-details__region--aside {
+  flex: 0 0 100%;
+}
