@@ -71,6 +71,13 @@ abstract class EuOssCatalogueParserPluginBase extends PluginBase implements EuOs
   /**
    * {@inheritdoc}
    */
+  public function isValid(Project $project): array {
+    return [];
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   final public function parse(Project $project, EuOssCatalogueProviderInterface $provider): ?OssSolutionInterface {
     $nodeStorage = $this->entityTypeManager->getStorage('node');
 
