@@ -39,9 +39,8 @@ class DevelopersItalia extends EuOssCatalogueProviderPluginBase {
    *
    * @var array[][]
    *   A list of fetched projects keyed by the coding platform base URL. The
-   *   values are associative arrays keyed by the namespace and having each
-   *   value an associative array keyed by the project name and the value is the
-   *   project data.
+   *   values are associative arrays keyed by namespace and having a list of
+   *   project IDs as values.
    */
   protected array $fetched;
 
@@ -100,21 +99,16 @@ class DevelopersItalia extends EuOssCatalogueProviderPluginBase {
     }
 
     foreach ($this->fetched as $baseUrl => $namespaces) {
+      // Remove this entry to avoid fetching again on the next iteration.
+      unset($this->fetched[$baseUrl]);
+
       if (!$platformId = $this->guessPlatformPluginId($baseUrl)) {
         continue;
       }
 
-      // Get the list of projects to be passed to the hosting platform plugin.
-      $projects = array_map(function (array $items): array {
-        return array_keys($items);
-      }, $namespaces);
-
-      $platformConfig = ['projects' => $projects, 'url' => $baseUrl];
+      $platformConfig = ['projects' => $namespaces, 'url' => $baseUrl];
       /** @var \Drupal\eu_oss_catalogue\EuOssCatalogueHostingPlatformInterface $hostingPlatform */
       $hostingPlatform = $this->platformManager->createInstance($platformId, $platformConfig);
-
-      // Remove this entry to avoid fetching again on the next iteration.
-      unset($this->fetched[$baseUrl]);
 
       /** @var \Drupal\eu_oss_catalogue\Model\Project $project */
       foreach ($hostingPlatform->getProjects(['publiccodeYml' => 'publiccode.yml']) as $project) {
@@ -130,37 +124,34 @@ class DevelopersItalia extends EuOssCatalogueProviderPluginBase {
     $next = '';
 
     do {
-      $endpointUrl = static::ENDPOINT . $next . ($next ? '&' : '?') . 'page[size]=100';
+      $endpointUrl = static::ENDPOINT . $next . ($next ? '&' : '?') . 'page[size]=100&all=true';
       $response = $this->httpClient->get($endpointUrl);
       $read = Json::decode($response->getBody()->getContents());
 
       foreach ($read['data'] as $newItem) {
-        $active = $newItem['active'] ?? FALSE;
-        if ($active) {
-          if (empty($newItem['url'])) {
-            $this->logger->error("Item @id lacks the mandatory URL", ['@id' => $newItem['id']]);
-            continue;
-          }
-
-          $url = preg_replace('/^(.*)\.git$/', '$1', $newItem['url']);
-          $urlParts = parse_url($url);
-          $baseUrl = http_build_url([
-            'scheme' => $urlParts['scheme'],
-            'host' => $urlParts['host'],
-            'port' => $urlParts['port'] ?? '',
-          ]);
-
-          // @todo Assuming that the code hosting platform is always installed
-          //   beneath the domain, not in a subdirectory.
-          // @todo This should be adapted after ISAICP-7964 lands.
-          // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7964
-          // @see https://github.com/italia/developers-italia-api/issues/215
-          $pathParts = explode('/', trim($urlParts['path'], '/'));
-          $name = array_pop($pathParts);
-          $namespace = implode('/', $pathParts);
-
-          $this->fetched[$baseUrl][$namespace][$name] = $newItem;
+        if (empty($newItem['url'])) {
+          $this->logger->error("Item @id lacks the mandatory URL", ['@id' => $newItem['id']]);
+          continue;
         }
+
+        $url = preg_replace('/^(.*)\.git$/', '$1', $newItem['url']);
+        $urlParts = parse_url($url);
+        $baseUrl = http_build_url([
+          'scheme' => $urlParts['scheme'],
+          'host' => $urlParts['host'],
+          'port' => $urlParts['port'] ?? '',
+        ]);
+
+        // @todo Assuming that the code hosting platform is always installed
+        //   beneath the domain, not in a subdirectory.
+        // @todo This should be adapted after ISAICP-7964 lands.
+        // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7964
+        // @see https://github.com/italia/developers-italia-api/issues/215
+        $pathParts = explode('/', trim($urlParts['path'], '/'));
+        $name = array_pop($pathParts);
+        $namespace = implode('/', $pathParts);
+
+        $this->fetched[$baseUrl][$namespace][] = $name;
       }
 
       $next = $read['links']['next'];
