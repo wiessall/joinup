@@ -39,9 +39,10 @@ class GitLabFetchTest extends FetchTestBase {
    * Tests fetching all solutions from a GitLab self-hosting platform.
    */
   public function testSelfHostedAll(): void {
-    $this->fetchSolutions('hosting_platform:gitlab_self_hosted_all', 2);
+    $this->fetchSolutions('hosting_platform:gitlab_self_hosted_all', 3);
     $this->assertNode('Project 1', OssSolutionInterface::class);
     $this->assertNode('Project 2', OssSolutionInterface::class);
+    $this->assertNode('Project 3', OssSolutionInterface::class);
   }
 
   /**
@@ -51,9 +52,10 @@ class GitLabFetchTest extends FetchTestBase {
    * instance with limited projects.
    */
   public function testLimitedList(): void {
-    $this->fetchSolutions('hosting_platform:gitlab_self_hosted_limited', 4);
+    $this->fetchSolutions('hosting_platform:gitlab_self_hosted_limited', 5);
     $this->assertNode('Project 1.1', OssSolutionInterface::class);
     $this->assertNode('Project 1.2', OssSolutionInterface::class);
+    $this->assertNode('Project 1.3', OssSolutionInterface::class);
     $this->assertNode('Project 2.1', OssSolutionInterface::class);
     $this->assertNode('Project 1', OssSolutionInterface::class);
   }

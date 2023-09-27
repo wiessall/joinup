@@ -66,22 +66,41 @@ class GitLabDotCom extends EuOssCatalogueGitHostingPlatformPluginBase {
         try {
           $response = $this->getClient()->graphql()->execute($query->toString());
         }
-        catch (\Throwable $exception) {
-          // @todo Retry with REST API as a fallback.
-          Error::logException($this->logger, $exception, "Can't get the group '@namespace' from @url", [
-            '@namespace' => $namespace,
-            '@url' => $this->getBaseUrl(),
-          ]);
-          break;
+        catch (\RuntimeException $exception) {
+          if ($exception->getCode() === 404) {
+            // Group doesn't exist. We set the response in this way to be picked
+            // up few lines later and retry as user instead of group.
+            $response['data']['group'] = NULL;
+          }
+          elseif ($exception->getCode() === 500) {
+            // Couldn't get the group projects with GraphQL API. This could
+            // happen on old versions of GitLab installed. Give it another
+            // chance by falling back to REST API.
+            $response['data']['group'] = $this->getGroupProjectsWithRestApi($namespace, $requestedFiles);
+          }
+          else {
+            Error::logException($this->logger, $exception, "Can't get the group '@namespace' from @url. Message: @message", [
+              '@namespace' => $namespace,
+              '@url' => $this->getBaseUrl(),
+              '@message' => $exception->getMessage(),
+            ]);
+            // Done with this namespace.
+            break;
+          }
         }
 
         if ($response['data']['group'] === NULL) {
-          // Not a group. It might be a user namespace but let's see.
-          foreach ($this->fetchFromUserNamespaceResults($namespace, $repos, $requestedFiles) as $project) {
-            yield $project;
+          // Not a group. It might be a user namespace but let's see. For users,
+          // we only deal with the case where projects were explicitly passed,
+          // i.e. both namespace and project name were specified. Otherwise,
+          // GitLab requires authentication and we don't support that.
+          if ($repos !== NULL) {
+            foreach ($this->fetchIndividualProjects($namespace, $repos, $requestedFiles) as $project) {
+              yield $project;
+            }
           }
           // Done with this namespace.
-          break 2;
+          break;
         }
 
         foreach ($this->filterGroupProjects($response, $repos) as $project) {
@@ -251,7 +270,9 @@ class GitLabDotCom extends EuOssCatalogueGitHostingPlatformPluginBase {
     if ($requestedFiles) {
       $flippedFiles = array_flip($requestedFiles);
       foreach ($project['repository']['blobs']['nodes'] as $fileData) {
-        $files[$flippedFiles[$fileData['path']]] = $fileData['rawBlob'];
+        // @see self:getProjectWithRestApi()
+        $fileId = $fileData['__file_id'] ?? $flippedFiles[$fileData['path']];
+        $files[$fileId] = $fileData['rawBlob'];
       }
     }
 
@@ -286,15 +307,18 @@ class GitLabDotCom extends EuOssCatalogueGitHostingPlatformPluginBase {
       function (array $project) use ($limitTo): bool {
         // No list has been requested OR the project is in the requested list.
         return ($limitTo === NULL || isset($limitTo[$project['path']])) &&
-          // The project is not archived.
-          empty($project['archived']) &&
           // There is a default branch.
           !empty($project['repository']['rootRef']);
       });
   }
 
   /**
-   * Assumes a user namespace and returns the requested projects.
+   * Returns the results from projects where the group query failed.
+   *
+   * A group query might fail for several reasons:
+   * - It wasn't a group, but user namespace.
+   * - The GitLab code hosting platform version is too old and lack some GraphQL
+   *   featured.
    *
    * Fetch user projects only if they were explicitly designated, i.e. both
    * namespace and project name were specified. Otherwise, GitLab requires
@@ -302,16 +326,15 @@ class GitLabDotCom extends EuOssCatalogueGitHostingPlatformPluginBase {
    *
    * @param string $namespace
    *   The namespace we assume it's a user namespace.
-   * @param array|null $names
-   *   A list of project names within in the given namespace or NULL if all
-   *   projects were requested.
+   * @param array $names
+   *   A list of project names within in the given namespace.
    * @param string[] $requestedFiles
    *   (optional) A list of file blobs keyed by their file identifier.   *.
    *
    * @return iterable
-   *   Generates a list of user orojects.
+   *   Generates a list of user projects.
    */
-  protected function fetchFromUserNamespaceResults(string $namespace, ?array $names, array $requestedFiles = []): iterable {
+  protected function fetchIndividualProjects(string $namespace, array $names, array $requestedFiles = []): iterable {
     foreach ($names as $name) {
       $query = $this->buildProjectQuery($namespace, $name, $requestedFiles);
       try {
@@ -332,8 +355,8 @@ class GitLabDotCom extends EuOssCatalogueGitHostingPlatformPluginBase {
       // It wasn't possible to get the project info with GraphQL API. This could
       // happen on old versions of GitLab installed. Give it another chance by
       // falling back to REST API.
-      if ($project = $this->getProjectWithRestApi("$namespace/$name")) {
-        yield $this->createHostingPlatformResult($namespace, $project);
+      if ($project = $this->getProjectWithRestApi("$namespace/$name", $requestedFiles)) {
+        yield $this->createHostingPlatformResult($namespace, $project, $requestedFiles);
       }
     }
   }
@@ -347,20 +370,17 @@ class GitLabDotCom extends EuOssCatalogueGitHostingPlatformPluginBase {
    *
    * @param string $fullPath
    *   The project's full name/path.
+   * @param string[] $requestedFiles
+   *   (optional) A list of file blobs keyed by their file identifier.
    *
    * @return array|null
    *   The project array having a structure similar to the one retrieved by
    *   GraphQL response or NULL if there's no project with this name.
    */
-  protected function getProjectWithRestApi(string $fullPath): ?array {
+  protected function getProjectWithRestApi(string $fullPath, array $requestedFiles = []): ?array {
     try {
       $response = $this->getClient()->projects()->show($fullPath);
-      $project = [
-        'path' => $response['path'],
-        'repository' => ['rootRef' => $response['default_branch']],
-        'id' => (string) $response['id'],
-        'description' => $response['description'],
-      ];
+      $project = $this->buildProjectArray($response);
     }
     catch (\RuntimeException $exception) {
       if ($exception->getCode() === 404) {
@@ -378,28 +398,127 @@ class GitLabDotCom extends EuOssCatalogueGitHostingPlatformPluginBase {
       return NULL;
     }
 
+    $this->addProjectLastReleaseWithRestApi($project, $fullPath);
+    $this->addProjectFilesWithRestApi($project, $fullPath, $requestedFiles);
+
+    return $project;
+  }
+
+  /**
+   * Builds a project array similar to the one produced by GraphQL response.
+   *
+   * @param array $response
+   *   The GitLab REST API response.
+   *
+   * @return array
+   *   A project array.
+   */
+  protected function buildProjectArray(array $response): array {
+    return [
+      'path' => $response['path'],
+      'repository' => [
+        'rootRef' => $response['default_branch'],
+        'blobs' => ['nodes' => []],
+      ],
+      'id' => (string) $response['id'],
+      'description' => $response['description'],
+    ];
+  }
+
+  /**
+   * Appends latest release info to the project array.
+   *
+   * @param array $project
+   *   The project array.
+   * @param string $fullPath
+   *   The project full path.
+   */
+  protected function addProjectLastReleaseWithRestApi(array &$project, string $fullPath): void {
+    // Try to get latest release.
     try {
-      $pager = new ResultPager($this->getClient(), 1);
-      $pager->fetchAll($this->getClient()->repositories(), 'releases', [$fullPath]);
-      $response = $this->getClient()->repositories()->releases($response['id']);
-      $project['releases']['nodes'][0]['tagName'] = $response[0]['tag_name'];
-      $project['releases']['nodes'][0]['createdAt'] = $response[0]['created_at'];
-    }
-    catch (\RuntimeException $exception) {
-      if ($exception->getCode() === 404) {
-        // Return silently.
-        return $project;
+      $response = $this->getClient()->repositories()->releases($fullPath);
+      if ($response) {
+        $project['releases']['nodes'][0]['tagName'] = $response[0]['tag_name'];
+        $project['releases']['nodes'][0]['createdAt'] = $response[0]['created_at'];
       }
     }
+    catch (\RuntimeException $exception) {
+      if ($exception->getCode() !== 404) {
+        throw $exception;
+      }
+      // No releases, which is legit as well.
+    }
     catch (\Throwable $exception) {
-      // Return silently, but log a warning.
+      // Log a warning.
       Error::logException($this->logger, $exception, "Can't get the releases for project '@project' from @url using REST API", [
         '@project' => $fullPath,
         '@url' => $this->getBaseUrl(),
       ], LogLevel::WARNING);
     }
+  }
 
-    return $project;
+  /**
+   * Appends the file blobs to the project array.
+   *
+   * @param array $project
+   *   The project array.
+   * @param string $fullPath
+   *   The project full path.
+   * @param string[] $requestedFiles
+   *   (optional) A list of file blobs keyed by their file identifier.
+   */
+  protected function addProjectFilesWithRestApi(array &$project, string $fullPath, array $requestedFiles = []): void {
+    // Try to get raw files.
+    foreach ($requestedFiles as $fileId => $requestedFile) {
+      try {
+        $response = $this->getClient()->repositoryFiles()->getRawFile($fullPath, $requestedFile, $project['repository']['rootRef']);
+        $project['repository']['blobs']['nodes'][] = [
+          'rawBlob' => $response,
+          '__file_id' => $fileId,
+        ];
+      }
+      catch (\Throwable $exception) {
+        // Log a warning.
+        Error::logException($this->logger, $exception, "Can't get the file @file for project '@project' from @url using REST API", [
+          '@project' => $fullPath,
+          '@url' => $this->getBaseUrl(),
+          '@file' => $requestedFile,
+        ], LogLevel::WARNING);
+      }
+    }
+  }
+
+  /**
+   * Returns the group projects by using GitLab REST API.
+   *
+   * @param string $namespace
+   *   The group namespace.
+   * @param string[] $requestedFiles
+   *   (optional) A list of file blobs keyed by their file identifier.
+   *
+   * @return array[]|null
+   *   A list of projects structured in the same way as if has been returned by
+   *   the similar GraphQL query.
+   */
+  protected function getGroupProjectsWithRestApi(string $namespace, array $requestedFiles = []): ?array {
+    try {
+      $projects = [];
+      $pager = new ResultPager($this->getClient());
+      foreach ($pager->fetchAll($this->getClient()->groups(), 'projects', [$namespace]) as $row) {
+        $project = $this->buildProjectArray($row);
+        $this->addProjectLastReleaseWithRestApi($project, "$namespace/{$project['path']}");
+        $this->addProjectFilesWithRestApi($project, "$namespace/{$project['path']}", $requestedFiles);
+        $projects[] = $project;
+      };
+      return ['projects' => ['nodes' => $projects]];
+    }
+    catch (\RuntimeException $exception) {
+      if ($exception->getCode() !== 404) {
+        throw $exception;
+      }
+      // This group doesn't exist.
+      return NULL;
+    }
   }
 
   /**
