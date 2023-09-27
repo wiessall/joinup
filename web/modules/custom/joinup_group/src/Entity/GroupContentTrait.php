@@ -21,19 +21,25 @@ trait GroupContentTrait {
    */
   public function hasGroup(): bool {
     try {
-      $this->getGroup();
+      $group = $this->getGroup();
     }
     catch (MissingGroupException $e) {
       return FALSE;
     }
-    return TRUE;
+
+    return (bool) $group;
   }
 
   /**
    * {@inheritdoc}
    */
-  public function getGroup(): GroupInterface {
+  public function getGroup(): ?GroupInterface {
     $group = $this->getFirstReferencedEntity($this->getGroupFieldName());
+
+    if ($this->get($this->getGroupFieldName())->isEmpty()) {
+      return null;
+    }
+
     if (empty($group) || !$group instanceof GroupInterface) {
       throw new MissingGroupException();
     }
