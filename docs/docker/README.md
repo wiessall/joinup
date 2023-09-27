@@ -429,6 +429,24 @@ After having the `runner.yml` you will only need the commands `local-install`
 and `local-install` to install the site though it is recommended to know what
 they really do.
 
+### Mailhog
+
+The docker setup contains a Mailhog container that can be used to catch the
+emails sent by the application. However, the default configuration of the
+application is to send emails to the local tmp folder. In order to use Mailhog,
+add the following to your `settings.override.php` file:
+
+```php
+$config['system.mail']['interface']['default'] = 'swiftmailer';
+$config['mailsystem.settings']['defaults']['sender'] = 'swiftmailer';
+$config['swiftmailer.transport']['transport'] = 'smtp';
+$config['swiftmailer.transport']['smtp_host'] = 'mail';
+$config['swiftmailer.transport']['smtp_port'] = '1025';
+```
+Mailhog is available at http://mail:8025 or any port you have set in your
+`docker-compose.override.yml` file - check the
+`docker-compose.override.yml.dist` for documentation on how to set the port.
+
 ## Accessing the containers
 
 All containers are accessible through the command
