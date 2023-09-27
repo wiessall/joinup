@@ -62,6 +62,12 @@ class ContactResolver extends DefaultResolver implements ContainerFactoryPluginI
 
     $targets = [];
     foreach (parent::resolve($fieldItemList, $project, $metadata) as $contact) {
+      if (is_string($contact)) {
+        // This is a malformed contact because it should be an array, but we
+        // allow this and amend later, when we check the schema.
+        $contact = ['name' => $contact];
+      }
+
       $nids = array_values($storage->getQuery()->accessCheck(FALSE)
         ->condition('type', $nodeType)
         ->condition('title', $contact['name'])
