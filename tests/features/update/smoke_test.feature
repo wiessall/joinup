@@ -8,7 +8,7 @@ Feature: Minimal install clone testing.
     Then I should see the link "Federation of solutions"
 
     # Check that the Solr index has been restored.
-    When I visit "/search?keys=joinup&f[0]=type:collection"
+    When I visit "/search?keys=joinup&f%5B0%5D=type%3Acollection"
     Then I should see the "Joinup" tile
     Then I should see "The platform Joinup is the European Commission's one-stop shop for interoperable, open and free digital government ICT solutions"
 
