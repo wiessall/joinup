@@ -45,6 +45,16 @@ class DevelopersItalia extends EuOssCatalogueProviderPluginBase {
   protected array $fetched;
 
   /**
+   * Fetched URLs collector.
+   */
+  protected array $fetchedUrls = [];
+
+  /**
+   * Processed URLs collector.
+   */
+  protected array $processedUrls = [];
+
+  /**
    * Constructs a new plugin instance.
    *
    * @param array $configuration
@@ -112,7 +122,13 @@ class DevelopersItalia extends EuOssCatalogueProviderPluginBase {
 
       /** @var \Drupal\eu_oss_catalogue\Model\Project $project */
       foreach ($hostingPlatform->getProjects(['publiccodeYml' => 'publiccode.yml']) as $project) {
+        $this->processedUrls[] = $project->url;
         yield $project;
+      }
+
+      // Only log when all solutions were processed.
+      if (empty($this->fetched)) {
+        $this->logResults();
       }
     }
   }
@@ -152,10 +168,31 @@ class DevelopersItalia extends EuOssCatalogueProviderPluginBase {
         $namespace = implode('/', $pathParts);
 
         $this->fetched[$baseUrl][$namespace][] = $name;
+        $this->fetchedUrls[] = $url;
       }
 
       $next = $read['links']['next'];
     } while ($next !== NULL);
+  }
+
+  /**
+   * Logs statistics about fetched and processed OSS Solutions.
+   */
+  protected function logResults(): void {
+    if ($unProcessed = array_diff($this->fetchedUrls, $this->processedUrls)) {
+      $this->logger->warning('Processed {processed} out of {fetched} fetched solutions from Developers Italia. The following {unprocessed} solutions failed: ' . implode(', ', $unProcessed), [
+        'processed' => count($this->processedUrls),
+        'fetched' => count($this->fetchedUrls),
+        'unprocessed' => count($unProcessed),
+        'list' => $unProcessed,
+      ]);
+    }
+    else {
+      $this->logger->info('Processed {processed} out of {fetched} fetched solutions from Developers Italia.', [
+        'processed' => count($this->processedUrls),
+        'fetched' => count($this->fetchedUrls),
+      ]);
+    }
   }
 
   /**
