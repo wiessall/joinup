@@ -1328,7 +1328,7 @@ display:
           exposed: true
           expose:
             operator_id: combine_op
-            label: OSS Solution
+            label: 'OSS Solution'
             description: ''
             use_operator: false
             operator: combine_op
@@ -1511,7 +1511,7 @@ display:
       path: admin/content/eu-oss-catalogue/oss-solutions
       menu:
         type: tab
-        title: OSS Solutions
+        title: 'OSS Solutions'
         description: ''
         weight: -1
         expanded: false

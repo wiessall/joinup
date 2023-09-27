@@ -110,7 +110,7 @@ third_party_settings:
                   open_new: true
                 third_party_settings:
                   field_delimiter:
-                    delimiter: ','
+                    delimiter: ''
                   field_formatter_range:
                     order: 0
                     limit: 0
@@ -387,6 +387,20 @@ third_party_settings:
                   template_suggestion:
                     template_suggestion: ''
             weight: 1
+            additional: {  }
+          9568bae7-195f-4e8c-88ab-c963049f5e79:
+            uuid: 9568bae7-195f-4e8c-88ab-c963049f5e79
+            region: first
+            configuration:
+              id: custom_markup
+              label: Illustration
+              label_display: '0'
+              provider: custom_markup_block
+              context_mapping: {  }
+              markup:
+                value: '<div class="oss-solution__illustration"></div>'
+                format: full_html
+            weight: 0
             additional: {  }
         third_party_settings: {  }
       -
