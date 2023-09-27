@@ -16,7 +16,7 @@ Feature: Solution editing.
       | Yancy Burton | yancy.burton@example.com |
     And collection:
       | title | Collection example |
-      | state | validated          |
+      | state | published          |
     # Assign facilitator role in order to allow creation of a solution.
     # In UAT this can be done by creating the collection through the UI
     # with the related user.
@@ -29,7 +29,7 @@ Feature: Solution editing.
       | logo                | logo.png          |
       | contact information | Seward Shawn      |
       | owner               | Acme inc.         |
-      | state               | validated         |
+      | state               | published         |
 
   @terms @uploadFiles:logo.png
   Scenario: A solution owner can edit only its own solutions.
@@ -90,7 +90,7 @@ Feature: Solution editing.
       | logo                | logo.png      |
       | contact information | Seward Shawn  |
       | owner               | Acme inc.     |
-      | state               | validated     |
+      | state               | published     |
       | solution type       | Citizen       |
     When I am logged in as a facilitator of the "Solution B" solution
     And I go to the homepage of the "Solution B" solution

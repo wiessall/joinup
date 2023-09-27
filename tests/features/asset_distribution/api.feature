@@ -10,7 +10,7 @@ Feature: Distribution API
       | logo             | logo.png                              |
       | moderation       | yes                                   |
       | content creation | facilitators and authors              |
-      | state            | validated                             |
+      | state            | published                             |
     And the following solution:
       | title            | Asset distribution solution           |
       | collection       | Asset distribution collection API foo |
@@ -21,7 +21,7 @@ Feature: Distribution API
       | webdav creation  | no                                    |
       | webdav url       | http://joinup.eu/solution/foo/webdav  |
       | wiki             | http://example.wiki/foobar/wiki       |
-      | state            | validated                             |
+      | state            | published                             |
     And the following release:
       | title          | Asset distribution asset release   |
       | description    | Asset distribution sample solution |
@@ -44,13 +44,13 @@ Feature: Distribution API
       | logo             | logo.png                         |
       | moderation       | yes                              |
       | content creation | facilitators and authors         |
-      | state            | validated                        |
+      | state            | published                        |
     And the following solution:
       | title            | AD first solution mandatory short |
       | collection       | Asset distribution short API bar  |
       | description      | Another sample solution           |
       | content creation | registered users                  |
-      | state            | validated                         |
+      | state            | published                         |
     And the following release:
       | title          | AD first release                   |
       | description    | Asset distribution sample solution |

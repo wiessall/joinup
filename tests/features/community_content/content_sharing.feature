@@ -13,17 +13,17 @@ Feature: Sharing content between collections
       | Marjolein Rye | marjolein.rye@example.com |
     And the following <group type>s:
       | title        | state     |
-      | Classic Rock | validated |
-      | Hip-Hop      | validated |
-      | Power ballad | validated |
-      | Drum'n'Bass  | validated |
+      | Classic Rock | published |
+      | Hip-Hop      | published |
+      | Power ballad | published |
+      | Drum'n'Bass  | published |
     And news content:
       | title                          | short title                    | <group type> | state     |
-      | New D'n'B compilation released | New D'n'B compilation released | Classic Rock | validated |
-      | Old-school line-up concert     | Old-school line-up concert     | Hip-Hop      | validated |
+      | New D'n'B compilation released | New D'n'B compilation released | Classic Rock | published |
+      | Old-school line-up concert     | Old-school line-up concert     | Hip-Hop      | published |
     And document content:
       | title                       | <group type> | state     |
-      | Rockabilly is still rocking | Classic Rock | validated |
+      | Rockabilly is still rocking | Classic Rock | published |
     And the following <group type> user memberships:
       | <group type> | user          |
       | Hip-Hop      | Marjolein Rye |
@@ -32,7 +32,7 @@ Feature: Sharing content between collections
       | Drum'n'Bass  | Sara Barber   |
     And <content type> content:
       | title               | <group type> | state     |
-      | Interesting content | Hip-Hop      | validated |
+      | Interesting content | Hip-Hop      | published |
 
     # Anonymous users can share only in social networks.
     When I am an anonymous user
@@ -165,11 +165,11 @@ Feature: Sharing content between collections
   Scenario Outline: Share/Unshare should be visible according to the group permissions.
     Given <group type>s:
       | title      | state     |
-      | Westeros   | validated |
-      | Essos city | validated |
+      | Westeros   | published |
+      | Essos city | published |
     And "<content type>" content:
       | title       | <group type> | state     |
-      | Iron throne | Westeros     | validated |
+      | Iron throne | Westeros     | published |
     Given users:
       | Username       | E-mail                     | Roles     |
       | Jamie Lanister | jamie.lanister@example.com | moderator |
@@ -236,14 +236,14 @@ Feature: Sharing content between collections
   Scenario Outline: Shared content should show visual cues in the groups they are shared into.
     Given <group type>s:
       | title | state     |
-      | Earth | validated |
-      | Mars  | validated |
-      | Venus | validated |
+      | Earth | published |
+      | Mars  | published |
+      | Venus | published |
     And <content type> content:
       | title         | <group type> | shared on   | state     |
-      | Earth content | Earth        | Mars        | validated |
-      | Mars content  | Mars         |             | validated |
-      | Venus content | Venus        | Earth, Mars | validated |
+      | Earth content | Earth        | Mars        | published |
+      | Mars content  | Mars         |             | published |
+      | Venus content | Venus        | Earth, Mars | published |
 
     When I go to the homepage of the "Earth" <group type>
     Then I should see the "Earth content" tile
@@ -280,26 +280,61 @@ Feature: Sharing content between collections
   Scenario: Shared pinned content is erroneously shown first.
     Given collections:
       | title         | state     |
-      | Milky Way     | validated |
-      | Chocolate Way | validated |
+      | Milky Way     | published |
+      | Chocolate Way | published |
     And "document" content:
       | title                 | collection    | shared on     | state     | created    | pinned |
-      | Milky Way content     | Milky Way     | Chocolate Way | validated | 2017-06-04 | yes    |
-      | Chocolate Way content | Chocolate Way |               | validated | 2017-06-05 | no     |
+      | Milky Way content     | Milky Way     | Chocolate Way | published | 2017-06-04 | yes    |
+      | Chocolate Way content | Chocolate Way |               | published | 2017-06-05 | no     |
     When I go to the homepage of the "Chocolate Way" collection
     Then I should see the following tiles in the correct order:
       | Chocolate Way content |
       | Milky Way content     |
 
   @javascript
+  Scenario: Carousel tiles should show the "Shared from" visual cue.
+    Given collections:
+      | title | state     |
+      | Earth | published |
+      | Mars  | published |
+      | Venus | published |
+    And news content:
+      | title         | collection | shared on   | state     |
+      | Earth content | Earth      | Mars        | published |
+      | Mars content  | Mars       |             | published |
+      | Venus content | Venus      | Earth, Mars | published |
+
+    When I am logged in as a moderator
+    And I go to the homepage of the "Earth" collection
+    And I click "Add custom page" in the plus button menu
+
+    Then I fill in the following:
+      | Title | News carousel |
+    And I add a layout paragraph in the "Custom page body" form field with the following properties:
+      | layout | one column |
+    And I click "Choose component"
+    And I click "Carousel"
+    And I check "Global search"
+    And I check "Allow shared content"
+    And I fill in "Query presets" with "entity_bundle|news"
+    And I press "Save" in the "Modal buttons" region
+    And I press "Save"
+
+    Then I should see the "Earth content" tile
+    And I should see the "Mars content" tile
+    And the "Mars content" tile should be marked as shared from "Mars"
+    And I should see the "Venus content" tile
+    And the "Venus content" tile should be marked as shared from "Venus"
+
+  @javascript
   Scenario Outline: The sharing options should be shown in a modal window.
     Given collections:
       | title   | state     |
-      | Secrets | validated |
-      | Gossip  | validated |
+      | Secrets | published |
+      | Gossip  | published |
     And <content type> content:
       | title                 | collection | state     |
-      | An unshareable secret | Secrets    | validated |
+      | An unshareable secret | Secrets    | published |
     And users:
       | Username        | E-mail                |
       | Sanjica Sauvage | sanjisauv@example.com |

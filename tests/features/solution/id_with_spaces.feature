@@ -16,7 +16,7 @@ Feature: Solution API
       | webdav creation  | no                                     |
       | webdav url       | http://joinup.eu/solution/foo/webdav   |
       | wiki             | http://example.wiki/foobar/wiki        |
-      | state            | validated                              |
+      | state            | published                              |
     And the following solution:
       | uri              | http://www.it-planungsrat.de/DE/Projekte/Koordinierungsprojekte/OsiP/Online_Sicherheitspr%C3%BCfung.html |
       | title            | Solution with unicode                                                                                    |
@@ -28,4 +28,4 @@ Feature: Solution API
       | webdav creation  | no                                                                                                       |
       | webdav url       | http://joinup.eu/solution/foo/webdav                                                                     |
       | wiki             | http://example.wiki/foobar/wiki                                                                          |
-      | state            | validated                                                                                                |
+      | state            | published                                                                                                |

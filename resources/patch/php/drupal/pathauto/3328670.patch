@@ -1,0 +1,18 @@
+diff --git a/src/AliasCleaner.php b/src/AliasCleaner.php
+index 20cdb6d..6bb9b37 100644
+--- a/src/AliasCleaner.php
++++ b/src/AliasCleaner.php
+@@ -70,6 +70,13 @@ class AliasCleaner implements AliasCleanerInterface {
+    */
+   protected $moduleHandler;
+ 
++  /**
++   * An array of arrays for punctuation values.
++   *
++   * @var array
++   */
++  protected $punctuationCharacters;
++
+   /**
+    * Creates a new AliasCleaner.
+    *

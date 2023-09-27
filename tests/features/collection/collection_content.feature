@@ -7,29 +7,29 @@ Feature: Collection content
   Background:
     Given the following collections:
       | title                     | state     |
-      | Turin Egyptian Collection | validated |
+      | Turin Egyptian Collection | published |
     And the following solution:
       | title             | Tomb Of Unknown Restoration |
       | collection        | Turin Egyptian Collection   |
-      | state             | validated                   |
+      | state             | published                   |
       | creation date     | 2017-11-11T11:11            |
       | modification date | 2017-11-30T11:11            |
       | topic             | HR                          |
     And discussion content:
       | title                                 | body                                                                    | state     | collection                | topic                                                 | created          | changed                   |
-      | Bigger than Egyptian Museum of Cairo? | <p><a href="#link">Link to the museum</a> web<strong>site</strong>.</p> | validated | Turin Egyptian Collection | Finance in EU, Supplier exchange, E-health, E-justice | 2017-11-11T11:11 | Wed, 25 Dec 2019 15:00:00 |
+      | Bigger than Egyptian Museum of Cairo? | <p><a href="#link">Link to the museum</a> web<strong>site</strong>.</p> | published | Turin Egyptian Collection | Finance in EU, Supplier exchange, E-health, E-justice | 2017-11-11T11:11 | Wed, 25 Dec 2019 15:00:00 |
     And document content:
       | title             | body                                             | state     | collection                | creation date    | changed          | topic    |
-      | Upper Floor Map   | <p>A sample <a href="#link">map</a> example.</p> | validated | Turin Egyptian Collection | 2017-11-11T11:11 | 2017-11-30T11:11 | E-health |
+      | Upper Floor Map   | <p>A sample <a href="#link">map</a> example.</p> | published | Turin Egyptian Collection | 2017-11-11T11:11 | 2017-11-30T11:11 | E-health |
     And event content:
       | title                                     | state     | collection                | start date          | end date            | topic             |
-      | Opening of the Hellenistic Period Section | validated | Turin Egyptian Collection | 2016-03-15T11:12:12 | 2016-03-15T11:12:12 | Supplier exchange |
+      | Opening of the Hellenistic Period Section | published | Turin Egyptian Collection | 2016-03-15T11:12:12 | 2016-03-15T11:12:12 | Supplier exchange |
     And news content:
       | title                          | body                                                           | state     | collection                | changed    | topic             |
-      | Turin Egyptian Museum Reopened | <p>After <em>more than</em> <a href="#link">two years</a>.</p> | validated | Turin Egyptian Collection | 2019-11-19 | Supplier exchange |
+      | Turin Egyptian Museum Reopened | <p>After <em>more than</em> <a href="#link">two years</a>.</p> | published | Turin Egyptian Collection | 2019-11-19 | Supplier exchange |
     And video content:
       | title                                  | state     | collection                | creation date    | changed          |
-      | Watch the mummy conservation technique | validated | Turin Egyptian Collection | 2017-11-29T11:11 | 2017-11-30T17:30 |
+      | Watch the mummy conservation technique | published | Turin Egyptian Collection | 2017-11-29T11:11 | 2017-11-30T17:30 |
 
   Scenario: Publishing new solutions should result in counters being properly updated.
     Given owner:
@@ -48,7 +48,7 @@ Feature: Collection content
     And I check "I have read and accept the legal notice and I commit to manage my solution on a regular basis."
     And I press "Yes"
     And I fill in the following:
-      | Title                 | Solution from draft to validated                                    |
+      | Title                 | Solution from draft to published                                    |
       | Description           | Testing that publishing a solution, updates the collection content. |
       | Geographical coverage | Switzerland                                                         |
       | Name                  | Costas Papazoglou                                                   |
@@ -59,7 +59,7 @@ Feature: Collection content
     And I fill in "Owner" with "Particle sweeper"
     And I press "Add owner"
     And I press "Publish"
-    Then I should see the heading "Solution from draft to validated"
+    Then I should see the heading "Solution from draft to published"
 
     When I go to the homepage of the "Turin Egyptian Collection" collection
     # Since there are 2 solutions, the link moved in first since it is the type of content with most items.
@@ -70,16 +70,16 @@ Feature: Collection content
 
     # Create a draft version of the solution to verify that counters are not affected.
     # See https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-4436.
-    When I go to the homepage of the "Solution from draft to validated" solution
+    When I go to the homepage of the "Solution from draft to published" solution
     And I click "Edit" in the "Entity actions" region
-    And I fill in "Title" with "Solution from draft to validated but draft"
+    And I fill in "Title" with "Solution from draft to published but draft"
     And I press "Save as draft"
-    Then I should see the heading "Solution from draft to validated"
+    Then I should see the heading "Solution from draft to published"
 
     When I go to the homepage of the "Turin Egyptian Collection" collection
     Then I see the text "2 Solution" in the "Header" region
     And I should see the link "2 Solutions"
-    Then I delete the "Solution from draft to validated" solution
+    Then I delete the "Solution from draft to published" solution
     And I delete the "Costas Papazoglou" contact information
 
   @javascript
@@ -107,22 +107,22 @@ Feature: Collection content
     Given the following solution:
       | title      | Protecting Artifacts      |
       | collection | Turin Egyptian Collection |
-      | state      | validated                 |
+      | state      | published                 |
     And discussion content:
       | title                              | state     | collection                |
-      | Is the entrance free for children? | validated | Turin Egyptian Collection |
+      | Is the entrance free for children? | published | Turin Egyptian Collection |
     And document content:
       | title                   | state     | collection                |
-      | Fire Safety Regulations | validated | Turin Egyptian Collection |
+      | Fire Safety Regulations | published | Turin Egyptian Collection |
     And event content:
       | title                        | state     | collection                |
-      | Cleopatra Jewelry Exhibition | validated | Turin Egyptian Collection |
+      | Cleopatra Jewelry Exhibition | published | Turin Egyptian Collection |
     And news content:
       | title                                  | state     | collection                |
-      | Museum Temporary Closed Next Wednesday | validated | Turin Egyptian Collection |
+      | Museum Temporary Closed Next Wednesday | published | Turin Egyptian Collection |
     And video content:
       | title                              | state     | collection                |
-      | Understand the restoration process | validated | Turin Egyptian Collection |
+      | Understand the restoration process | published | Turin Egyptian Collection |
 
     Given I reload the page
     Then the "Discussions" content tab is not displayed
@@ -131,6 +131,9 @@ Feature: Collection content
     And I should see the link "2 News"
     And I should see the link "2 Solutions"
     And I should see the link "2 Videos"
+
+    Then I visit "/collection/turin-egyptian-collection?f=&page=9"
+    When the response status code should be 200
 
   @javascript
   Scenario: Links and markup should be stripped from tiles summary.

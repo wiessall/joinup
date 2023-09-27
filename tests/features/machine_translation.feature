@@ -8,19 +8,19 @@ Feature: Machine translation
   Scenario: Translation link is only visible on content focused pages
     Given collection:
       | title | Brexit    |
-      | state | validated |
+      | state | published |
     And event content:
       | title                      | collection | state     |
-      | Confiscating of sandwiches | Brexit     | validated |
+      | Confiscating of sandwiches | Brexit     | published |
     And news content:
       | title                   | collection | state     |
-      | Supply chain disruption | Brexit     | validated |
+      | Supply chain disruption | Brexit     | published |
     And document content:
       | title                           | collection | state     |
-      | Increased postal delivery costs | Brexit     | validated |
+      | Increased postal delivery costs | Brexit     | published |
     And discussion content:
       | title                                    | collection | state     |
-      | Restriction on animal-based food imports | Brexit     | validated |
+      | Restriction on animal-based food imports | Brexit     | published |
     And custom_page content:
       | title                      | collection | state     |
       | Increased credit card fees | Brexit     | published |
@@ -29,7 +29,7 @@ Feature: Machine translation
       | Digital portability | DP           | Availability of content | Across streaming services | Brexit     |
     And solution:
       | title      | Rejoin the EU |
-      | state      | validated     |
+      | state      | published     |
       | collection | Brexit        |
 
     When I am logged in as a moderator
