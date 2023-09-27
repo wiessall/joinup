@@ -882,7 +882,7 @@ function joinup_group_node_access_records(NodeInterface $node): array {
 
   foreach ($node->getTranslationLanguages() as $langcode => $language) {
     $translated_node = $node->getTranslation($langcode);
-    if ($translated_node instanceof GroupContentInterface && !$translated_node->isPublished()) {
+    if ($translated_node instanceof GroupContentInterface && $translated_node->hasGroup() && !$translated_node->isPublished()) {
       try {
         $group = $translated_node->getGroup();
         $grants[] = [
