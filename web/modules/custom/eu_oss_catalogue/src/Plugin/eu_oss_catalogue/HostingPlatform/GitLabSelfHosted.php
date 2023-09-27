@@ -130,8 +130,8 @@ class GitLabSelfHosted extends GitLabDotCom {
       $hasNextPage = $response['data']['projects']['pageInfo']['hasNextPage'];
       $endCursor = $response['data']['projects']['pageInfo']['endCursor'];
       foreach ($response['data']['projects']['nodes'] as $project) {
-        // Ignore if there's no default branch or the project is archived.
-        if (!empty($project['repository']['rootRef']) && empty($project['archived'])) {
+        // Ignore if there's no default branch (no default branch, no code).
+        if (!empty($project['repository']['rootRef'])) {
           // Extract the namespace from the full path.
           $parts = explode('/', $project['fullPath']);
           array_pop($parts);

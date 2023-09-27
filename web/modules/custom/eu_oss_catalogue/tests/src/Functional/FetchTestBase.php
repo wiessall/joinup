@@ -88,7 +88,6 @@ abstract class FetchTestBase extends BrowserTestBase {
       $actualTranslation = $this->normalizeActualNodeArray($actualTranslation, $actual, $langcode);
       foreach ($expectedTranslation as $field => $expectedValue) {
         $actualValue = $actualTranslation[$field] ?? NULL;
-        $this->assertNotNull($actualValue, "Expected value for $langcode.$field not found");
         $this->assertEquals($expectedValue, $actualValue);
       }
     }
