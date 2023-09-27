@@ -4,5 +4,6 @@ services:
     parent: default_plugin_manager
   search_api_arbitrary_facet.facets_converts_conditions:
     class: Drupal\search_api_arbitrary_facet\EventSubscriber\FacetsConvertsSearchApiAlter
+    arguments: ['@plugin.manager.arbitrary_facet']
     tags:
       - { name: 'event_subscriber' }

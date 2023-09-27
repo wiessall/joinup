@@ -5,6 +5,7 @@ declare(strict_types = 1);
 namespace Drupal\search_api_arbitrary_facet\EventSubscriber;
 
 use Drupal\facets\FacetInterface;
+use Drupal\search_api_arbitrary_facet\Plugin\ArbitraryFacetManager;
 use Drupal\search_api_solr\Event\PostExtractResultsEvent;
 use Drupal\search_api_solr\Event\PreQueryEvent;
 use Drupal\search_api_solr\Event\SearchApiSolrEvents;
@@ -16,10 +17,20 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 class FacetsConvertsSearchApiAlter implements EventSubscriberInterface {
 
   /**
+   * Constructs a new FacetsConvertsSearchApiAlter object.
+   *
+   * @param \Drupal\search_api_arbitrary_facet\Plugin\ArbitraryFacetManager $arbitraryFacetManager
+   *   The Arbitrary facet plugin manager.
+   */
+  public function __construct(protected ArbitraryFacetManager $arbitraryFacetManager) {}
+
+  /**
    * {@inheritdoc}
    */
   public static function getSubscribedEvents(): array {
     return [
+      SearchApiSolrEvents::PRE_QUERY => 'preQuery',
+      SearchApiSolrEvents::POST_EXTRACT_RESULTS => 'postExtractResults',
     ];
   }
 
@@ -28,10 +39,7 @@ class FacetsConvertsSearchApiAlter implements EventSubscriberInterface {
    */
   public function preQuery(PreQueryEvent $event): void {
     $query = $event->getSearchApiQuery();
-
-    /** @var \Drupal\search_api_arbitrary_facet\Plugin\ArbitraryFacetManager $arbitrary_facet_manager */
-    $arbitrary_facet_manager = \Drupal::getContainer()
-      ->get('plugin.manager.arbitrary_facet');
+    $solarium_query = $event->getSolariumQuery();
 
     /** @var \Solarium\QueryType\Select\Query\Query $solarium_query */
     $facet_set = $solarium_query->getFacetSet();
@@ -48,7 +56,7 @@ class FacetsConvertsSearchApiAlter implements EventSubscriberInterface {
       $facet = $facet_set->createFacetMultiQuery($facet_name);
 
       /** @var \Drupal\search_api_arbitrary_facet\Plugin\ArbitraryFacetInterface $plugin_id */
-      $plugin = $arbitrary_facet_manager->createInstance($options['arbitrary_facet_plugin']);
+      $plugin = $this->arbitraryFacetManager->createInstance($options['arbitrary_facet_plugin']);
       $definition = $plugin->getFacetDefinition();
       $solr_field_names = search_api_arbitrary_facet_search_fieldnames_from_index($query->getIndex());
 
@@ -73,7 +81,7 @@ class FacetsConvertsSearchApiAlter implements EventSubscriberInterface {
    *   The solr field.
    * @param mixed $value
    *   The value.
-   * @param string $operator
+   * @param string|null $operator
    *   The operator.
    *
    * @return string
@@ -81,7 +89,7 @@ class FacetsConvertsSearchApiAlter implements EventSubscriberInterface {
    *
    * @see \Drupal\search_api_solr\Plugin\search_api\backend\SearchApiSolrBackend::createFilterQuery
    */
-  private function searchApiArbitraryFacetCreateFilterQuery(string $field, mixed $value, string $operator = '='): string {
+  private function searchApiArbitraryFacetCreateFilterQuery(string $field, mixed $value, null|string $operator = '='): string {
     if (!is_array($value)) {
       $value = [$value];
     }
@@ -174,10 +182,10 @@ class FacetsConvertsSearchApiAlter implements EventSubscriberInterface {
    */
   public function postExtractResults(PostExtractResultsEvent $event): void {
     $query = $event->getSearchApiQuery();
+    $result = $event->getSolariumResult();
     $result_set = $event->getSearchApiResultSet();
-    /** @var \Solarium\QueryType\Select\Query\Query $query */
-    if ($query->getFacetSet() && $query->getFacetSet()->getFacets()) {
-      $response_facets = $query->getFacetSet()->getFacets();
+    if ($result->getFacetSet() && $result->getFacetSet()->getFacets()) {
+      $response_facets = $result->getFacetSet()->getFacets();
       $extracted_facets = [];
 
       // Our facets don't match the ones added by the facets module, that works
