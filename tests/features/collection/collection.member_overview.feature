@@ -33,7 +33,7 @@ Feature: Collection membership overview
       | Aali Dalton           | Aali       | Dalton      | richard.jpg  | Founder                         |
     And the following collections:
       | title           | description        | logo     | owner          | contact information | state     |
-      | Jubilant Robots | Fresh oil harvest! | logo.png | Ayodele Sommer | Nita Yang           | validated |
+      | Jubilant Robots | Fresh oil harvest! | logo.png | Ayodele Sommer | Nita Yang           | published |
       | Jubilant Rabits | Fresh oil harvest! | logo.png | Ayodele Sommer | Nita Yang           | draft     |
     And the following collection user memberships:
       | collection      | user                  | roles       | state   |
@@ -68,12 +68,12 @@ Feature: Collection membership overview
     # The membership overview should be accessible for owner users for draft collection.
     When I am logged in as "Ruby Valenta"
     And I go to the members page of "Jubilant Rabits"
-    Then I should see the link "Members" in the "Header bottom"
+    Then I should see the link "Members" in the "Header"
 
     # The membership overview should be accessible for anonymous users.
     When I am not logged in
     And I go to the members page of "Jubilant Robots"
-    Then I should see the link "Members" in the "Header bottom"
+    Then I should see the link "Members" in the "Header"
 
     # The first 12 active members should be shown, ordered by first name - last name.
     When I click "Members"

@@ -14,7 +14,7 @@ class JoinupOSSSolutionContext extends RawDrupalContext {
   /**
    * OSS search page path.
    */
-  protected const SEARCH_PATH = 'eu-oss-catalogue/search';
+  protected const SEARCH_PATH = 'eu-oss-catalogue/solutions';
 
   /**
    * Navigates to the OSS search page.

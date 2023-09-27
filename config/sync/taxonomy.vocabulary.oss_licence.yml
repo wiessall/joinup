@@ -4,5 +4,5 @@ status: true
 dependencies: {  }
 name: 'OSS Licence'
 vid: oss_licence
-description: 'Opensource Software Solution Licence'
+description: 'Open Source Software Solution Licence'
 weight: 0

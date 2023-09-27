@@ -95,15 +95,22 @@ function joinup_core_requirements($phase): array {
 }
 
 /**
- * Pre-create oss_category and oss_licence vocabularies.
+ * Remove offending state var.
  */
-function joinup_core_update_109700(): void {
+function joinup_core_update_109800(): void {
+  \Drupal::state()->delete('joinup.log_alerts');
+}
+
+/**
+ * Pre-creates oss_category, oss_licence and intended_audience_scope vocabs.
+ */
+function joinup_core_update_109801(): void {
   // Pre-create the new controlled vocabularies provided by eu_oss_catalogue
   // module. Normally, these are imported as config but eu_oss_catalogue install
   // goes first and its install process is also populating them with terms, so
   // they should be available at that point.
   $config_factory = \Drupal::configFactory();
-  foreach (['category', 'licence'] as $vocab) {
+  foreach (['category', 'licence', 'intended_audience_scope'] as $vocab) {
     $configs = [
       'taxonomy.vocabulary',
       'sparql_entity_storage.mapping.taxonomy_term',

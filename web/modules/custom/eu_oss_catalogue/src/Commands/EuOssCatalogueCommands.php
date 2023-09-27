@@ -21,9 +21,9 @@ class EuOssCatalogueCommands extends DrushCommands {
    * Constructs a new Drush commands class instance.
    *
    * @param \Drupal\eu_oss_catalogue\EuOssCatalogueInterface $euOssCatalogueService
-   *   The EU OSS Catalog service.
+   *   The EU OSS Catalogue service.
    * @param \Drupal\eu_oss_catalogue\EuOssCataloguePluginManagerInterface $providerPluginManager
-   *   The EU OSS provider plugin manager service.
+   *   The EU OSS Catalogue provider plugin manager service.
    */
   public function __construct(
     protected EuOssCatalogueInterface $euOssCatalogueService,

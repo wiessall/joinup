@@ -10,7 +10,7 @@ view:
         og_roles:
           - rdf_entity-collection-facilitator
           - rdf_entity-solution-facilitator
-    validated:
+    published:
       any:
         roles:
           - anonymous
@@ -61,7 +61,7 @@ view:
         og_roles:
           - rdf_entity-collection-facilitator
           - rdf_entity-solution-facilitator
-    validated:
+    published:
       any:
         roles:
           - anonymous
@@ -218,7 +218,7 @@ update:
         any:
           roles:
             - moderator
-      validated:
+      published:
         own:
           roles:
             - authenticated
@@ -256,14 +256,14 @@ update:
           og_roles:
             - rdf_entity-collection-facilitator
             - rdf_entity-solution-facilitator
-      validated:
+      published:
         any:
           roles:
             - moderator
           og_roles:
             - rdf_entity-collection-facilitator
             - rdf_entity-solution-facilitator
-    validated:
+    published:
       draft:
         own:
           og_roles:
@@ -297,7 +297,7 @@ update:
           og_roles:
             - rdf_entity-collection-facilitator
             - rdf_entity-solution-facilitator
-      validated:
+      published:
         own:
           og_roles:
             - rdf_entity-collection-author
@@ -309,7 +309,7 @@ update:
             - rdf_entity-collection-facilitator
             - rdf_entity-solution-facilitator
     needs_update:
-      validated:
+      published:
         any:
           roles:
             - moderator
@@ -317,7 +317,7 @@ update:
             - rdf_entity-collection-facilitator
             - rdf_entity-solution-facilitator
     deletion_request:
-      validated:
+      published:
         own:
           roles:
             - authenticated
@@ -336,7 +336,7 @@ update:
           og_roles:
             - rdf_entity-collection-facilitator
             - rdf_entity-solution-facilitator
-      validated:
+      published:
         any:
           roles:
             - moderator
@@ -369,7 +369,7 @@ update:
           og_roles:
             - rdf_entity-collection-facilitator
             - rdf_entity-solution-facilitator
-      validated:
+      published:
         own:
           roles:
             - authenticated
@@ -379,7 +379,7 @@ update:
           og_roles:
             - rdf_entity-collection-facilitator
             - rdf_entity-solution-facilitator
-    validated:
+    published:
       draft:
         own:
           roles:
@@ -404,7 +404,7 @@ update:
           og_roles:
             - rdf_entity-collection-facilitator
             - rdf_entity-solution-facilitator
-      validated:
+      published:
         own:
           roles:
             - authenticated
@@ -435,7 +435,7 @@ update:
           og_roles:
             - rdf_entity-collection-facilitator
             - rdf_entity-solution-facilitator
-      validated:
+      published:
         any:
           roles:
             - moderator
@@ -443,7 +443,7 @@ update:
             - rdf_entity-collection-facilitator
             - rdf_entity-solution-facilitator
     needs_update:
-      validated:
+      published:
         any:
           roles:
             - moderator
@@ -451,7 +451,7 @@ update:
             - rdf_entity-collection-facilitator
             - rdf_entity-solution-facilitator
     deletion_request:
-      validated:
+      published:
         own:
           roles:
             - authenticated
@@ -470,7 +470,7 @@ update:
           og_roles:
             - rdf_entity-collection-facilitator
             - rdf_entity-solution-facilitator
-      validated:
+      published:
         any:
           roles:
             - moderator
@@ -500,7 +500,7 @@ delete:
         og_roles:
           - rdf_entity-collection-facilitator
           - rdf_entity-solution-facilitator
-    validated:
+    published:
       any:
         roles:
           - moderator
@@ -552,7 +552,7 @@ delete:
         og_roles:
           - rdf_entity-collection-facilitator
           - rdf_entity-solution-facilitator
-    validated:
+    published:
       own:
         roles:
           - authenticated

@@ -4,5 +4,5 @@ status: true
 dependencies: {  }
 name: 'OSS Category'
 vid: oss_category
-description: 'Opensource Software Solution Category'
+description: 'Open Source Software Solution Category'
 weight: 0

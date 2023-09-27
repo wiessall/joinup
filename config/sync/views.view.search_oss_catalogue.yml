@@ -25,7 +25,7 @@ display:
     display_plugin: default
     position: 0
     display_options:
-      title: 'Search in European Open-source Software Solutions Catalogue'
+      title: 'Search in EU Open Source Solutions Catalogue'
       fields:
         body:
           id: body
@@ -410,7 +410,7 @@ display:
         metatag_display_extender:
           metatags: {  }
           tokenize: false
-      path: eu-oss-catalogue/search
+      path: eu-oss-catalogue/solutions
       menu:
         type: 'default tab'
         title: All

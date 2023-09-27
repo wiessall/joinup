@@ -17,15 +17,94 @@ declare(strict_types = 1);
 use Drupal\joinup_oss_catalogue\OssCatalogueCollectionInterface;
 
 /**
+ * Change the state name of Releases from 'validated' to 'published'.
+ */
+function joinup_core_deploy_109800(): string {
+  $database = \Drupal::getContainer()->get('sparql.endpoint');
+  $workflow_urls = [
+    'http://joinup.eu/isr/workflow_status' => [
+      'http://joinup.eu/asset_release/published',
+      'http://joinup.eu/asset_release/draft',
+    ],
+  ];
+
+  foreach ($workflow_urls as $predicate => $graphs) {
+    foreach ($graphs as $graph) {
+      $update_query = <<<SPARQL
+WITH <{$graph}>
+DELETE {
+  ?s <{$predicate}> "validated"^^<http://www.w3.org/2001/XMLSchema#string> .
+}
+INSERT {
+  ?s <{$predicate}> "published"^^<http://www.w3.org/2001/XMLSchema#string> .
+}
+WHERE {
+  ?s <{$predicate}> "validated"^^<http://www.w3.org/2001/XMLSchema#string> .
+}
+SPARQL;
+      $database->query($update_query);
+    }
+  }
+
+  return 'Changed the state name of all RDF entities from "validated" to "published".';
+}
+
+/**
  * Update path alias for EU OSS catalogue.
  */
-function joinup_core_deploy_109700(): void {
+function joinup_core_deploy_109801(): void {
   /** @var \Drupal\collection\Entity\CollectionInterface $collection */
   $collection = \Drupal::entityTypeManager()->getStorage('rdf_entity')
     ->load(OssCatalogueCollectionInterface::COLLECTION_ENTITY_ID);
 
   $collection
-    ?->set('field_ar_state', 'validated')
+    ?->set('field_ar_state', 'published')
       ->set('path', ['alias' => '/eu-oss-catalogue', 'pathauto' => 0])
       ->save();
+}
+
+/**
+ * Update title of EU OSS catalogue collection.
+ */
+function joinup_core_deploy_109802(): void {
+  /** @var \Drupal\collection\Entity\CollectionInterface $collection */
+  $collection = \Drupal::entityTypeManager()->getStorage('rdf_entity')
+    ->load(OssCatalogueCollectionInterface::COLLECTION_ENTITY_ID);
+
+  $collection
+    ?->set('label', 'EU Open Source Solutions Catalogue')
+      ->save();
+}
+
+/**
+ * Import content for EU OpenSource Software Solutions Catalogue.
+ */
+function joinup_core_deploy_109803(): void {
+  /** @var \Drupal\Core\Extension\ModuleInstallerInterface $moduleInstaller */
+  $moduleInstaller = \Drupal::service('module_installer');
+  /** @var \Drupal\Core\Entity\EntityRepositoryInterface $entityRepository */
+  $entityRepository = \Drupal::service('entity.repository');
+
+  // Delete faulty meta entity.
+  $entityRepository
+    ->loadEntityByUuid('meta_entity', 'ad9be48e-7116-44b3-8df2-db8cb9343268')
+    ?->delete();
+
+  // Import content.
+  $moduleInstaller->install(['default_content']);
+  /** @var \Drupal\default_content\ImporterInterface $importer */
+  \Drupal::service('default_content.importer')
+    ->importContent('joinup_oss_catalogue', TRUE);
+  $moduleInstaller->uninstall(['default_content']);
+
+  // Disable auto-created left-side menu link.
+  $landingPage = $entityRepository->loadEntityByUuid('node', '54acbd6f-47f0-4280-ad09-0a07c397318b');
+  $linkPlugins = \Drupal::service('plugin.manager.menu.link')
+    ->loadLinksByRoute('entity.node.canonical', ['node' => $landingPage->id()], 'ogmenu-3728');
+  /** @var \Drupal\menu_link_content\Plugin\Menu\MenuLinkContent $linkPlugin */
+  $linkPlugin = reset($linkPlugins);
+  $entityRepository
+    ->loadEntityByUuid('menu_link_content', $linkPlugin->getDerivativeId())
+    ->setUnpublished()
+    ->save();
 }

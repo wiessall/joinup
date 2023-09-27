@@ -10,6 +10,7 @@ use Drupal\Core\Site\Settings;
 use Drupal\eu_oss_catalogue\EuOssCatalogueGitHostingPlatformPluginBase;
 use Drupal\eu_oss_catalogue\Exception\MissingAccessTokenException;
 use Drupal\eu_oss_catalogue\Model\GitHubSearchType;
+use Drupal\eu_oss_catalogue\Model\GitUri;
 use Drupal\eu_oss_catalogue\Model\HostingPlatformResult;
 use Github\Api\GraphQL;
 use Github\AuthMethod;
@@ -28,6 +29,13 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * )
  */
 class GitHub extends EuOssCatalogueGitHostingPlatformPluginBase {
+
+  /**
+   * Base URL of GitHub.
+   *
+   * @const string
+   */
+  private const GITHUB_BASE_URL = 'github.com';
 
   /**
    * Static cache for the GitHub client.
@@ -64,11 +72,11 @@ class GitHub extends EuOssCatalogueGitHostingPlatformPluginBase {
   /**
    * {@inheritdoc}
    */
-  public static function create(ContainerInterface $container, array $configuration, $pluginId, $pluginFefinition): self {
+  public static function create(ContainerInterface $container, array $configuration, $pluginId, $pluginDefinition): self {
     return new static(
       $configuration,
       $pluginId,
-      $pluginFefinition,
+      $pluginDefinition,
       $container->get('http_client'),
       $container->get('settings'),
       $container->get('cache.eu_oss_catalogue'),
@@ -101,20 +109,52 @@ class GitHub extends EuOssCatalogueGitHostingPlatformPluginBase {
   /**
    * {@inheritdoc}
    */
-  protected function getProjects(array $candidates, ?string $filePath = NULL): array {
-    $projects = [];
+  public function getProjects(?string $filePath = NULL): iterable {
     // Build a search query string.
     // @see https://docs.github.com/search-github
     $search = ['is:public', 'archived:false'];
-    foreach ($candidates as $candidate) {
-      if ($candidate['name']) {
-        $search[] = "repo:{$candidate['namespace']}/{$candidate['name']}";
+    foreach ($this->getConfiguration()['projects'] as $namespace => $repos) {
+      if ($repos === NULL) {
+        $search[] = "owner:$namespace";
+        continue;
       }
-      else {
-        $search[] = "owner:{$candidate['namespace']}";
+      foreach ($repos as $repo) {
+        $search[] = "repo:$namespace/$repo";
       }
     }
 
+    // Using a query builder to build a query such as:
+    // @code
+    // {
+    //   search(
+    //     type: REPOSITORY
+    //     query: "is:public
+    //       archived:false
+    //       owner:namespace1
+    //       repo:namespace2/project2"
+    //     first: 100
+    //   ) {
+    //     nodes {
+    //       ... on Repository {
+    //         id
+    //         description
+    //         name
+    //         owner {
+    //           login
+    //         }
+    //         defaultBranchRef {
+    //           name
+    //         }
+    //         file: object(expression: "HEAD:publiccode.yml") {
+    //           ... on Blob {
+    //             text
+    //           }
+    //         }
+    //       }
+    //     }
+    //   }
+    // }
+    // @endcode
     $query = new Query('search', [
       'type' => GitHubSearchType::REPOSITORY,
       'query' => implode(' ', $search),
@@ -138,9 +178,10 @@ class GitHub extends EuOssCatalogueGitHostingPlatformPluginBase {
     foreach ($graphQL->execute($query->toString())['data']['search']['nodes'] as $node) {
       // Repositories without code don't have a default branch.
       if (!empty($node['defaultBranchRef'])) {
-        $projects[$node['owner']['login']][$node['name']] = new HostingPlatformResult(
+        yield new HostingPlatformResult(
           $node['owner']['login'],
           $node['name'],
+          'https://' . self::GITHUB_BASE_URL . "/{$node['owner']['login']}/{$node['name']}",
           $node['defaultBranchRef']['name'],
           $node['id'],
           $node['description'],
@@ -148,7 +189,14 @@ class GitHub extends EuOssCatalogueGitHostingPlatformPluginBase {
         );
       }
     }
-    return $projects;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function isHostingPlatformForUrl(string $repositoryUrl): bool {
+    return ($gitUri = GitUri::fromUriString($repositoryUrl))
+      && $gitUri->host === self::GITHUB_BASE_URL;
   }
 
 }

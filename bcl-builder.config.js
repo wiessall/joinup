@@ -69,14 +69,8 @@ module.exports = {
       },
     },
     {
-      entry: path.resolve(
-        outputFolder,
-        `${ventuno}src/js/paragraph--carousel.js`
-      ),
-      dest: path.resolve(
-        outputFolder,
-        `${ventuno}assets/js/paragraph--carousel.js`
-      ),
+      entry: path.resolve(outputFolder, `${ventuno}src/js/carousel.js`),
+      dest: path.resolve(outputFolder, `${ventuno}assets/js/carousel.js`),
       options: {
         minify: true,
         sourceMap: true,
@@ -691,12 +685,9 @@ module.exports = {
     {
       entry: path.resolve(
         outputFolder,
-        `${ventuno}src/scss/components/paragraphs/paragraph--carousel.scss`
+        `${ventuno}src/scss/components/paragraphs/carousel.scss`
       ),
-      dest: path.resolve(
-        outputFolder,
-        `${ventuno}assets/css/paragraph--carousel.min.css`
-      ),
+      dest: path.resolve(outputFolder, `${ventuno}assets/css/carousel.min.css`),
       options: {
         includePaths,
         minify: true,
@@ -1147,6 +1138,21 @@ module.exports = {
       options: {
         minify: true,
         includePaths,
+        sourceMap: "file",
+      },
+    },
+    {
+      entry: path.resolve(
+        outputFolder,
+        `${ventuno}src/scss/components/oss-solution-full.tmp.scss`
+      ),
+      dest: path.resolve(
+        outputFolder,
+        `${ventuno}assets/css/oss-solution-full.tmp.css`
+      ),
+      options: {
+        includePaths,
+        minify: true,
         sourceMap: "file",
       },
     },

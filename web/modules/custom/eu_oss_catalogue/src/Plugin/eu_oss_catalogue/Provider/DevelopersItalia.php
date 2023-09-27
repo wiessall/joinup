@@ -4,13 +4,14 @@ declare(strict_types = 1);
 
 namespace Drupal\eu_oss_catalogue\Plugin\eu_oss_catalogue\Provider;
 
+use Drupal\Component\Serialization\Exception\InvalidDataTypeException;
 use Drupal\Component\Serialization\Json;
 use Drupal\Core\Config\Schema\SchemaCheckTrait;
-use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
+use Drupal\Core\Logger\LoggerChannelInterface;
 use Drupal\Core\Serialization\Yaml;
 use Drupal\eu_oss_catalogue\EuOssCataloguePluginManagerInterface;
 use Drupal\eu_oss_catalogue\EuOssCatalogueProviderPluginBase;
-use Drupal\eu_oss_catalogue\Model\EuOssCatalogueFetchedSolution;
+use Drupal\eu_oss_catalogue\Model\FetchedSolution;
 use GuzzleHttp\Client;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -20,11 +21,11 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * @EuOssCatalogueProvider(
  *   id = "developers_italia",
  *   label = @Translation("Developers Italia"),
- *   description = @Translation("A community of developers who design and code Italian digital public services."),
+ *   description = @Translation("Italian National OSS Catalogue, by https://developers.italia.it website."),
  *   parser = "publiccode_yml",
  * )
  */
-class DevelopersItalia extends EuOssCatalogueProviderPluginBase implements ContainerFactoryPluginInterface {
+class DevelopersItalia extends EuOssCatalogueProviderPluginBase {
 
   use SchemaCheckTrait {
     checkValue as traitCheckValue;
@@ -54,7 +55,9 @@ class DevelopersItalia extends EuOssCatalogueProviderPluginBase implements Conta
    * @param mixed $pluginDefinition
    *   The plugin implementation definition.
    * @param \Drupal\eu_oss_catalogue\EuOssCataloguePluginManagerInterface $parserManager
-   *   The EU OSS parser plugin manager service.
+   *   The EU OSS Catalogue parser plugin manager service.
+   * @param \Drupal\Core\Logger\LoggerChannelInterface $logger
+   *   The EU OSS Catalogue logger.
    * @param \GuzzleHttp\Client $httpClient
    *   The HTTP client.
    */
@@ -63,9 +66,10 @@ class DevelopersItalia extends EuOssCatalogueProviderPluginBase implements Conta
     $pluginId,
     $pluginDefinition,
     protected EuOssCataloguePluginManagerInterface $parserManager,
+    protected LoggerChannelInterface $logger,
     protected Client $httpClient,
   ) {
-    parent::__construct($configuration, $pluginId, $pluginDefinition, $parserManager);
+    parent::__construct($configuration, $pluginId, $pluginDefinition, $parserManager, $this->logger);
   }
 
   /**
@@ -77,6 +81,7 @@ class DevelopersItalia extends EuOssCatalogueProviderPluginBase implements Conta
       $pluginId,
       $pluginDefinition,
       $container->get('plugin.manager.eu_oss_catalogue.parser'),
+      $container->get('logger.channel.eu_oss_catalogue'),
       $container->get('http_client'),
     );
   }
@@ -96,13 +101,26 @@ class DevelopersItalia extends EuOssCatalogueProviderPluginBase implements Conta
     foreach ($read['data'] as $newItem) {
       $active = $newItem['active'] ?? FALSE;
       if ($active) {
-        $decoded = Yaml::decode($newItem['publiccodeYml']);
-        yield new EuOssCatalogueFetchedSolution(
-          $decoded['url'],
-          $decoded['name'],
-          $decoded,
-          $newItem['id'],
-        );
+        if (empty($newItem['url'])) {
+          $this->logger->error("Item @id lacks the mandatory URL", ['@id' => $newItem['id']]);
+          continue;
+        }
+        $url = preg_replace('/^(.*)\.git$/', '$1', $newItem['url']);
+        try {
+          $decoded = Yaml::decode($newItem['publiccodeYml']);
+          yield new FetchedSolution(
+            $url,
+            $decoded['name'],
+            $decoded,
+            $newItem['id'],
+          );
+        }
+        catch (InvalidDataTypeException $exception) {
+          $this->logger->error('Cannot decode publiccode.yml of @url. Message: @message', [
+            '@url' => $url,
+            '@message' => $exception->getMessage(),
+          ]);
+        }
       }
     }
 

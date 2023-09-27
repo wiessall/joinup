@@ -8,7 +8,7 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\eu_oss_catalogue\Exception\UnresolvableValueException;
-use Drupal\eu_oss_catalogue\Model\EuOssCatalogueFetchedSolution;
+use Drupal\eu_oss_catalogue\Model\FetchedSolution;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -67,17 +67,21 @@ class TaxonomyTermResolver extends DefaultResolver implements ContainerFactoryPl
   /**
    * {@inheritdoc}
    */
-  public function resolve(FieldItemListInterface $fieldItemList, EuOssCatalogueFetchedSolution $fetchedSolution): mixed {
+  public function resolve(FieldItemListInterface $fieldItemList, FetchedSolution $fetchedSolution): array {
     $originalValue = parent::resolve($fieldItemList, $fetchedSolution);
 
     // Convert to array to handle also the multiple terms case.
     $names = (array) $originalValue;
 
     $storage = $this->entityTypeManager->getStorage('taxonomy_term');
-    $termIds = array_values($storage->getQuery()->accessCheck(FALSE)
-      ->condition('vid', $this->getConfiguration()['vid'])
-      ->condition('name', $names, 'IN')
-      ->execute());
+    // Variable '$names' or $originalValue might be an empty array.
+    $termIds = [];
+    if ($names) {
+      $termIds = array_values($storage->getQuery()->accessCheck(FALSE)
+        ->condition('vid', $this->getConfiguration()['vid'])
+        ->condition('name', $names, 'IN')
+        ->execute());
+    }
 
     $controlled = $this->getConfiguration()['controlled'] ?? FALSE;
 

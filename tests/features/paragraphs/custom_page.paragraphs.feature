@@ -7,7 +7,7 @@ Feature:
   Background:
     Given the following collection:
       | title | Paragraphs collection |
-      | state | validated             |
+      | state | published             |
       | topic | HR                    |
 
   Scenario: Heading paragraph is displayed as heading element.
@@ -92,7 +92,7 @@ Feature:
   Scenario Outline: Privileged users can add paragraphs.
     Given the following <group type>:
       | title | Paragraphs group type |
-      | state | validated             |
+      | state | published             |
     And users:
       | Username |
       | Zohan    |
@@ -113,6 +113,7 @@ Feature:
     And I click "Choose component"
     Then I should not see the link "Layout"
     And I should see the link "Accordion"
+    And I should not see the link "Block"
     And I should see the link "Call to action"
     And I should see the link "Carousel"
     And I should see the link "Content listing"
@@ -124,7 +125,6 @@ Feature:
     And I should see the link "Poll"
     And I should not see the link "Map"
     And I should see the link "Quote"
-    But I should not see the link "Row"
     But I should not see the link "Simple paragraph"
     And I should see the link "Testimony"
     And I should see the link "Text"
@@ -136,6 +136,7 @@ Feature:
     And I click "Choose component"
     Then I should not see the link "Layout"
     And I should see the link "Accordion"
+    And I should not see the link "Block"
     And I should see the link "Call to action"
     And I should see the link "Carousel"
     And I should see the link "Content listing"
@@ -147,7 +148,6 @@ Feature:
     And I should see the link "Poll"
     And I should see the link "Map"
     And I should see the link "Quote"
-    But I should not see the link "Row"
     But I should not see the link "Simple paragraph"
     And I should see the link "Testimony"
     And I should see the link "Text"
@@ -159,6 +159,7 @@ Feature:
     And I click "Choose component"
     Then I should not see the link "Layout"
     And I should see the link "Accordion"
+    And I should see the link "Block"
     And I should see the link "Call to action"
     And I should see the link "Carousel"
     And I should see the link "Content listing"
@@ -170,13 +171,11 @@ Feature:
     And I should see the link "Poll"
     And I should see the link "Map"
     And I should see the link "Quote"
-    But I should not see the link "Row"
     But I should not see the link "Simple paragraph"
     And I should see the link "Testimony"
     And I should see the link "Text"
     And I should see the link "Video"
 
-    But I should not see the link "Row"
     And I should not see the link "1 column layout"
     And I should not see the link "2 column layout"
     And I should not see the link "2 column with featured media on the left"

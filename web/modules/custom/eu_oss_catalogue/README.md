@@ -1,8 +1,8 @@
-# European OpenSource Software Catalogue
+# EU Open Source Solutions Catalogue
 
 ## Description
 
-This is the European Union OpenSource Software Catalogue of business solutions.
+This is the EU Open Source Solutions Catalogue of business solutions.
 Mainly, the module federates data from national OSS catalogues but also from
 any other arbitrary source and allows exposing such data via Drupal API, using
 Drupal Views, controllers or, even, JSON:API/GraphQL endpoints.
@@ -47,7 +47,7 @@ produced by the _provider_. Then, why we need a _parser_ when we already have a
 _provider_? Well, several providers might use the same data structure, thus the
 same parser. A good example are the [Developers Italia](
 https://developers.italia.it) and ****GER**** catalogues as they share the same
-[publiccode.yml](https://yml.publiccode.tools/) schema for describing OpenSource
+[publiccode.yml](https://yml.publiccode.tools/) schema for describing Open Source
 Software Solutions.
 
 The main role of a parser plugin is to build the OSS Solution node entity, ready
@@ -87,7 +87,14 @@ $settings['eu_oss_catalogue']['platform_github']['access_token'] = '...';
 
 ##### GitLab
 
-TBD
+GitLab API calls are not authenticated, thus there's no need for any
+configuration. However, some GitLab instances, including gitlab.com, are
+configured with API calls rate limits. For instance, gitlab.com rate limits are
+listed [here](https://docs.gitlab.com/ee/user/gitlab_com/#gitlabcom-specific-rate-limits).
+For self-hosted GitLab instances that doesn't publish their rate limits, you can
+find them by inspecting some specific headers, see
+[rate limits response headers](https://docs.gitlab.com/ee/administration/settings/user_and_ip_rate_limits.html#response-headers)
+for details.
 
 ### The process
 
@@ -102,10 +109,10 @@ of solutions. Each solution is a structured array following the same schema. The
 _provider_ plugin is also responsible to provide valid data by performing schema
 validation checks.
 
-OSS Solutions are stored using the `EuOssCatalogueFetchedSolution` data model,
-which is a value class object. Third-parties are able to subscribe to the
-`EuOssPostFetchEvent` and alter the data stored in
-`EuOssCatalogueFetchedSolution` value object.
+OSS Solutions are stored using the `FetchedSolution` data model, which is a
+value class object. Third-parties are able to subscribe to the
+`EuOssPostFetchEvent` and alter the data stored in `FetchedSolution` value
+object.
 
 #### Queue fetched solutions
 

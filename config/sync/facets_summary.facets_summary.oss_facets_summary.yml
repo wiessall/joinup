@@ -31,3 +31,9 @@ facets:
     separator: ', '
     show_count: false
     weight: 0
+  oss_scope:
+    checked: true
+    label: 'Intended audience'
+    separator: ', '
+    show_count: false
+    weight: 0

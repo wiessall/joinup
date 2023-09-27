@@ -1,0 +1,425 @@
+From 83580827c5f8f9788b5979ba34ceb6308103d32a Mon Sep 17 00:00:00 2001
+From: Pieter Frenssen <pieter@frenssen.be>
+Date: Wed, 13 Jan 2021 14:42:05 +0200
+Subject: [PATCH 1/5] 2997609: Allow to clean up stale database records through
+ the UI.
+
+---
+ honeypot.install                             |  24 ++++
+ honeypot.routing.yml                         |   7 ++
+ src/ExpiredRecordsDeleter.php                | 112 +++++++++++++++++++
+ src/Form/DeleteExpiredRecordsConfirmForm.php |  69 ++++++++++++
+ 4 files changed, 212 insertions(+)
+ create mode 100644 src/ExpiredRecordsDeleter.php
+ create mode 100644 src/Form/DeleteExpiredRecordsConfirmForm.php
+
+diff --git a/honeypot.install b/honeypot.install
+index 33ed67a..702b404 100644
+--- a/honeypot.install
++++ b/honeypot.install
+@@ -6,6 +6,30 @@
+  */
+ 
+ use Drupal\Core\Url;
++use Drupal\honeypot\ExpiredRecordsDeleter;
++
++/**
++ * Implements hook_requirements().
++ */
++function honeypot_requirements($phase) {
++  $requirements = [];
++  if ($phase === 'runtime') {
++    $expired_items_count = ExpiredRecordsDeleter::getExpiredRecordCount();
++    if ($expired_items_count) {
++      $requirements['honeypot_expired_entries'] = [
++        'title' => t('Honeypot'),
++        'value' => t(':count expired records found', [
++          ':count' => $expired_items_count,
++        ]),
++        'severity' => REQUIREMENT_WARNING,
++        'description' => t('The database contains expired records from the Honeypot module. They can be safely removed. Note that this process can take a long time to complete if there are many records. <a href=":rebuild">Remove expired records</a>', [
++          ':rebuild' => Url::fromRoute('honeypot.delete_expired_records_confirm')->toString(),
++        ]),
++      ];
++    }
++  }
++  return $requirements;
++}
+ 
+ /**
+  * Implements hook_schema().
+diff --git a/honeypot.routing.yml b/honeypot.routing.yml
+index 06c4963..a9c0c14 100644
+--- a/honeypot.routing.yml
++++ b/honeypot.routing.yml
+@@ -5,3 +5,10 @@ honeypot.config:
+     _title: 'Honeypot configuration'
+   requirements:
+     _permission: 'administer honeypot'
++honeypot.delete_expired_records_confirm:
++  path: '/admin/reports/status/honeypot/delete-expired-records'
++  defaults:
++    _form: '\Drupal\honeypot\Form\DeleteExpiredRecordsConfirmForm'
++  requirements:
++    _permission: 'access administration pages'
++    _custom_access: '\Drupal\honeypot\Form\DeleteExpiredRecordsConfirmForm::access'
+diff --git a/src/ExpiredRecordsDeleter.php b/src/ExpiredRecordsDeleter.php
+new file mode 100644
+index 0000000..1ebc1df
+--- /dev/null
++++ b/src/ExpiredRecordsDeleter.php
+@@ -0,0 +1,112 @@
++<?php
++
++declare(strict_types = 1);
++
++namespace Drupal\honeypot;
++
++use Drupal\Core\Batch\Percentage;
++
++/**
++ * Batch process for deleting expired database records.
++ *
++ * This can be used to clean up stale time restriction entries which were given
++ * an invalid expire time.
++ *
++ * @see https://www.drupal.org/project/honeypot/issues/2931611
++ */
++class ExpiredRecordsDeleter {
++
++  /**
++   * The number of records to delete in a single batch operation.
++   */
++  const BATCH_SIZE = 50000;
++
++  /**
++   * Starts a batch operation that will delete all expired database records.
++   */
++  public static function delete() {
++    $batch_definition = [
++      'operations' => [[[__CLASS__, 'process'], []]],
++      'finished' => [__CLASS__, 'finish'],
++    ];
++    batch_set($batch_definition);
++  }
++
++  /**
++   * Processes a batch delete operation.
++   *
++   * @param array|\ArrayAccess $context
++   *   The context of the current batch operation.
++   */
++  public static function process(&$context) {
++    $database = \Drupal::database();
++    $expired_record_count = static::getExpiredRecordCount();
++
++    // Initialize the sandbox and results counter on first run.
++    if (!isset($context['sandbox']['total'])) {
++      $context['sandbox']['total'] = $expired_record_count;
++    }
++    if (!isset($context['results']['deleted'])) {
++      $context['results']['deleted'] = 0;
++    }
++
++    // Exit the batch process if there are no expired records.
++    if (!$expired_record_count) {
++      $context['finished'] = 1;
++      $context['message'] = t('No deletable honeypot_time_restriction entries found.');
++    }
++    else {
++      $query = $database->select('key_value_expire', 'kve');
++      $query->fields('kve', ['name']);
++      $query->condition('collection', 'honeypot_time_restriction');
++      $query->condition('expire', 2147483647);
++      $query->range(0, self::BATCH_SIZE);
++      $result = $query->execute();
++
++      $deleted_count = $database->delete('key_value_expire')
++        ->condition('collection', 'honeypot_time_restriction')
++        ->condition('name', $result->fetchCol(), 'IN')
++        ->execute();
++
++      $context['results']['deleted'] += $deleted_count;
++      $context['finished'] = $context['results']['deleted'] / $context['sandbox']['total'];
++      $context['message'] = t('Deleted @deleted of @total records (@percentage% complete)', [
++        '@deleted' => $context['results']['deleted'],
++        '@total' => $context['sandbox']['total'],
++        '@percentage' => Percentage::format($context['sandbox']['total'], $context['results']['deleted']),
++      ]);
++    }
++  }
++
++  /**
++   * Reports status after finishing the batch deletion process.
++   */
++  public static function finish($success, $results, $operations) {
++    if ($success) {
++      $message = t('Successfully deleted @count expired records.', [
++        '@count' => $results['deleted'],
++      ]);
++      \Drupal::messenger()->addStatus($message);
++    }
++    else {
++      \Drupal::messenger()->addError(t('An error occurred while deleting expired database records.'));
++    }
++  }
++
++  /**
++   * Returns the number of expired records that are present in the database.
++   *
++   * @return int
++   *   The record count.
++   */
++  public static function getExpiredRecordCount(): int {
++    return (int) \Drupal::database()
++      ->select('key_value_expire', 'kve')
++      ->condition('collection', 'honeypot_time_restriction')
++      ->condition('expire', 2147483647)
++      ->countQuery()
++      ->execute()
++      ->fetchField(0);
++  }
++
++}
+diff --git a/src/Form/DeleteExpiredRecordsConfirmForm.php b/src/Form/DeleteExpiredRecordsConfirmForm.php
+new file mode 100644
+index 0000000..908532b
+--- /dev/null
++++ b/src/Form/DeleteExpiredRecordsConfirmForm.php
+@@ -0,0 +1,69 @@
++<?php
++
++namespace Drupal\honeypot\Form;
++
++use Drupal\Core\Access\AccessResult;
++use Drupal\Core\Form\ConfirmFormBase;
++use Drupal\Core\Form\FormStateInterface;
++use Drupal\Core\Url;
++use Drupal\honeypot\ExpiredRecordsDeleter;
++
++/**
++ * Asks confirmation before starting the removal of expired database records.
++ */
++class DeleteExpiredRecordsConfirmForm extends ConfirmFormBase {
++
++  /**
++   * {@inheritdoc}
++   */
++  public function getFormId() {
++    return 'honeypot_delete_expired_records_confirm';
++  }
++
++  /**
++   * {@inheritdoc}
++   */
++  public function getQuestion() {
++    return t('Are you sure you want to remove all expired database records?');
++  }
++
++  /**
++   * {@inheritdoc}
++   */
++  public function getCancelUrl() {
++    return new Url('system.status');
++  }
++
++  /**
++   * {@inheritdoc}
++   */
++  public function getConfirmText() {
++    return t('Remove expired records');
++  }
++
++  /**
++   * {@inheritdoc}
++   */
++  public function getDescription() {
++    return t('This will safely remove all expired database records from the Honeypot module. This may be a lengthy process.');
++  }
++
++  /**
++   * {@inheritdoc}
++   */
++  public function submitForm(array &$form, FormStateInterface $form_state) {
++    ExpiredRecordsDeleter::delete();
++    $form_state->setRedirectUrl($this->getCancelUrl());
++  }
++
++  /**
++   * Denies access to the form if there are no expired database records.
++   *
++   * @return \Drupal\Core\Access\AccessResultInterface
++   *   The access result object.
++   */
++  public function access() {
++    return AccessResult::allowedIf(ExpiredRecordsDeleter::getExpiredRecordCount() > 0);
++  }
++
++}
+-- 
+GitLab
+
+
+From 72be9b475579c7c1cbb9b31c2124090dc1ff2d00 Mon Sep 17 00:00:00 2001
+From: Pieter Frenssen <pieter@frenssen.be>
+Date: Wed, 13 Jan 2021 15:34:05 +0200
+Subject: [PATCH 2/5] 2997609: Add a drush command to clean up expired records.
+
+---
+ drush.services.yml                |  5 +++++
+ src/Commands/HoneypotCommands.php | 26 ++++++++++++++++++++++++++
+ 2 files changed, 31 insertions(+)
+ create mode 100644 drush.services.yml
+ create mode 100644 src/Commands/HoneypotCommands.php
+
+diff --git a/drush.services.yml b/drush.services.yml
+new file mode 100644
+index 0000000..aa59563
+--- /dev/null
++++ b/drush.services.yml
+@@ -0,0 +1,5 @@
++services:
++  honeypot.commands:
++    class: \Drupal\honeypot\Commands\HoneypotCommands
++    tags:
++      - { name: drush.command }
+diff --git a/src/Commands/HoneypotCommands.php b/src/Commands/HoneypotCommands.php
+new file mode 100644
+index 0000000..8fe4f02
+--- /dev/null
++++ b/src/Commands/HoneypotCommands.php
+@@ -0,0 +1,26 @@
++<?php
++
++declare(strict_types = 1);
++
++namespace Drupal\honeypot\Commands;
++
++use Drupal\honeypot\ExpiredRecordsDeleter;
++use Drush\Commands\DrushCommands;
++
++/**
++ * Drush commands to manage the CAS mock server.
++ */
++class HoneypotCommands extends DrushCommands {
++
++  /**
++   * Deletes expired database records.
++   *
++   * @command honeypot:delete-expired-records
++   */
++  public function deleteExpiredRecords(): int {
++    ExpiredRecordsDeleter::delete();
++    drush_backend_batch_process();
++    return 0;
++  }
++
++}
+-- 
+GitLab
+
+
+From 5b690029ff22d9ac4480e5af99613944ecde339e Mon Sep 17 00:00:00 2001
+From: Pieter Frenssen <pieter@frenssen.be>
+Date: Wed, 13 Jan 2021 15:36:07 +0200
+Subject: [PATCH 3/5] 2997609: Update documentation.
+
+---
+ src/Commands/HoneypotCommands.php | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/Commands/HoneypotCommands.php b/src/Commands/HoneypotCommands.php
+index 8fe4f02..c96d42c 100644
+--- a/src/Commands/HoneypotCommands.php
++++ b/src/Commands/HoneypotCommands.php
+@@ -8,7 +8,7 @@ use Drupal\honeypot\ExpiredRecordsDeleter;
+ use Drush\Commands\DrushCommands;
+ 
+ /**
+- * Drush commands to manage the CAS mock server.
++ * Drush commands for the Honeypot module.
+  */
+ class HoneypotCommands extends DrushCommands {
+ 
+-- 
+GitLab
+
+
+From 95e5a1373ab4ff0baa14e4ae237df95ec8acfe8a Mon Sep 17 00:00:00 2001
+From: Claudiu Cristea <clau.cristea@gmail.com>
+Date: Thu, 14 Jul 2022 00:28:16 +0300
+Subject: [PATCH 4/5] Prove error from #2997609-56
+
+---
+ tests/src/Functional/HoneypotFormTest.php | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
+
+diff --git a/tests/src/Functional/HoneypotFormTest.php b/tests/src/Functional/HoneypotFormTest.php
+index 0477d50..6d162f0 100644
+--- a/tests/src/Functional/HoneypotFormTest.php
++++ b/tests/src/Functional/HoneypotFormTest.php
+@@ -94,6 +94,7 @@ class HoneypotFormTest extends BrowserTestBase {
+       'post comments',
+       'skip comment approval',
+       'administer comments',
++      'administer site configuration',
+     ]);
+ 
+     // Set up web user.
+@@ -297,4 +298,14 @@ class HoneypotFormTest extends BrowserTestBase {
+     $this->assertSession()->fieldExists('url');
+   }
+ 
++  /**
++   * Tests accessing the Status Report just after install.
++   */
++  public function testStatusReport(): void {
++    $this->drupalLogin($this->adminUser);
++    $this->drupalGet('/admin/reports/status');
++    $this->assertSession()->pageTextContains('Status report');
++    $this->assertSession()->pageTextNotContains('Honeypot');
++  }
++
+ }
+-- 
+GitLab
+
+
+From d390a8ff3c7fbeac6e1fa41834517f16e798ade5 Mon Sep 17 00:00:00 2001
+From: Claudiu Cristea <clau.cristea@gmail.com>
+Date: Thu, 14 Jul 2022 00:30:54 +0300
+Subject: [PATCH 5/5] Fix #2997609-56
+
+---
+ src/ExpiredRecordsDeleter.php | 10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
+
+diff --git a/src/ExpiredRecordsDeleter.php b/src/ExpiredRecordsDeleter.php
+index 1ebc1df..bea4ee3 100644
+--- a/src/ExpiredRecordsDeleter.php
++++ b/src/ExpiredRecordsDeleter.php
+@@ -100,13 +100,19 @@ class ExpiredRecordsDeleter {
+    *   The record count.
+    */
+   public static function getExpiredRecordCount(): int {
+-    return (int) \Drupal::database()
++    $database = \Drupal::database();
++
++    if (!$database->schema()->tableExists('key_value_expire')) {
++      return 0;
++    }
++
++    return (int) $database
+       ->select('key_value_expire', 'kve')
+       ->condition('collection', 'honeypot_time_restriction')
+       ->condition('expire', 2147483647)
+       ->countQuery()
+       ->execute()
+-      ->fetchField(0);
++      ->fetchField();
+   }
+ 
+ }
+-- 
+GitLab
+

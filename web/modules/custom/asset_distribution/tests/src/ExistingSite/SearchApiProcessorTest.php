@@ -18,13 +18,13 @@ class SearchApiProcessorTest extends JoinupExistingSiteTestBase {
   public function testFtpScheme(): void {
     $solution = $this->createRdfEntity([
       'rid' => 'solution',
-      'field_is_state' => 'validated',
+      'field_is_state' => 'published',
       'label' => $this->randomMachineName(),
       // Ensure a parent collection.
       'collection' => $this->createRdfEntity([
         'rid' => 'collection',
         'label' => $this->randomString(),
-        'field_ar_state' => 'validated',
+        'field_ar_state' => 'published',
       ]),
     ]);
     $distribution = $this->createRdfEntity([

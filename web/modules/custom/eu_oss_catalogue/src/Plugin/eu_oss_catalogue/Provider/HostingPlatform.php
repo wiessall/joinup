@@ -5,15 +5,16 @@ declare(strict_types = 1);
 namespace Drupal\eu_oss_catalogue\Plugin\eu_oss_catalogue\Provider;
 
 use Drupal\Component\Plugin\ConfigurableInterface;
+use Drupal\Component\Serialization\Exception\InvalidDataTypeException;
 use Drupal\Core\Config\Schema\SchemaCheckTrait;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
-use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
+use Drupal\Core\Logger\LoggerChannelInterface;
 use Drupal\Core\Serialization\Yaml;
 use Drupal\eu_oss_catalogue\Entity\HostingPlatformConfigInterface;
 use Drupal\eu_oss_catalogue\EuOssCatalogueHostingPlatformInterface;
 use Drupal\eu_oss_catalogue\EuOssCataloguePluginManagerInterface;
 use Drupal\eu_oss_catalogue\EuOssCatalogueProviderPluginBase;
-use Drupal\eu_oss_catalogue\Model\EuOssCatalogueFetchedSolution;
+use Drupal\eu_oss_catalogue\Model\FetchedSolution;
 use Drupal\eu_oss_catalogue\Model\HostingPlatformResult;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -29,7 +30,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  *   configuredBy = "hosting_platform",
  * )
  */
-class HostingPlatform extends EuOssCatalogueProviderPluginBase implements ContainerFactoryPluginInterface, ConfigurableInterface {
+class HostingPlatform extends EuOssCatalogueProviderPluginBase implements ConfigurableInterface {
 
   use SchemaCheckTrait {
     checkValue as traitCheckValue;
@@ -62,9 +63,11 @@ class HostingPlatform extends EuOssCatalogueProviderPluginBase implements Contai
    * @param mixed $pluginDefinition
    *   The plugin implementation definition.
    * @param \Drupal\eu_oss_catalogue\EuOssCataloguePluginManagerInterface $parserManager
-   *   The EU OSS parser plugin manager service.
+   *   The EU OSS Catalogue parser plugin manager service.
+   * @param \Drupal\Core\Logger\LoggerChannelInterface $logger
+   *   The EU OSS Catalogue logger.
    * @param \Drupal\eu_oss_catalogue\EuOssCataloguePluginManagerInterface $platformManager
-   *   The code hosting platfom plugin manager service.
+   *   The code hosting platform plugin manager service.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
    *   The entity type manager service.
    */
@@ -73,10 +76,11 @@ class HostingPlatform extends EuOssCatalogueProviderPluginBase implements Contai
     $pluginId,
     $pluginDefinition,
     protected EuOssCataloguePluginManagerInterface $parserManager,
+    protected LoggerChannelInterface $logger,
     protected EuOssCataloguePluginManagerInterface $platformManager,
     protected EntityTypeManagerInterface $entityTypeManager,
   ) {
-    parent::__construct($configuration, $pluginId, $pluginDefinition, $parserManager);
+    parent::__construct($configuration, $pluginId, $pluginDefinition, $parserManager, $logger);
   }
 
   /**
@@ -88,6 +92,7 @@ class HostingPlatform extends EuOssCatalogueProviderPluginBase implements Contai
       $pluginId,
       $pluginDefinition,
       $container->get('plugin.manager.eu_oss_catalogue.parser'),
+      $container->get('logger.channel.eu_oss_catalogue'),
       $container->get('plugin.manager.eu_oss_catalogue.hosting_platform'),
       $container->get('entity_type.manager'),
     );
@@ -104,16 +109,23 @@ class HostingPlatform extends EuOssCatalogueProviderPluginBase implements Contai
     }
 
     $platform = $this->getPlatform();
-    foreach ($platform->getRepositories('publiccode.yml') as $repository) {
+    foreach ($platform->getProjects('publiccode.yml') as $repository) {
       \assert($repository instanceof HostingPlatformResult);
-      if ($repository->file) {
-        if (is_string($repository->file) && ($data = Yaml::decode($repository->file))) {
-          yield new EuOssCatalogueFetchedSolution(
-            $data['url'],
+      if ($repository->file && is_string($repository->file)) {
+        try {
+          $data = Yaml::decode($repository->file);
+          yield new FetchedSolution(
+            $repository->url,
             $data['name'],
             $data,
             (string) $repository->platformReference,
           );
+        }
+        catch (InvalidDataTypeException $exception) {
+          $this->logger->error('Cannot decode publiccode.yml of @url. Message: @message', [
+            '@url' => $data['url'],
+            '@message' => $exception->getMessage(),
+          ]);
         }
       }
     }
@@ -150,7 +162,7 @@ class HostingPlatform extends EuOssCatalogueProviderPluginBase implements Contai
   }
 
   /**
-   * Returns the configration entity used to configure this plugin instance.
+   * Returns the configuration entity used to configure this plugin instance.
    *
    * @return \Drupal\eu_oss_catalogue\Entity\HostingPlatformConfigInterface
    *   The coe hosting platform configuration entity.

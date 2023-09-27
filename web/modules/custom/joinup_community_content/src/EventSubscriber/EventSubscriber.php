@@ -258,10 +258,10 @@ class EventSubscriber implements EventSubscriberInterface {
   /**
    * Updates transition button labels depending on who performs the transition.
    *
-   * This will check if a transition from validated to proposed is being
+   * This will check if a transition from published to proposed is being
    * performed for community content and depending on the user who initiates
    * this transition the label will be:
-   * - 'Request changes': if a facilitator or moderator changes validated
+   * - 'Request changes': if a facilitator or moderator changes published
    *   content to proposed state, in order for the original author to make some
    *   requested changes.
    * - 'Propose changes': if the author of community content in a pre-moderated
@@ -278,10 +278,10 @@ class EventSubscriber implements EventSubscriberInterface {
       return;
     }
 
-    // If the content is not currently in validated state, then this is not the
+    // If the content is not currently in published state, then this is not the
     // content we are looking for.
     $state_id = $event->getStateId();
-    if ($state_id !== 'validated') {
+    if ($state_id !== 'published') {
       return;
     }
 
@@ -296,7 +296,7 @@ class EventSubscriber implements EventSubscriberInterface {
     }
 
     // Determine if we are a privileged user such as a facilitator or moderator.
-    // Only privileged users can update content in validated state directly, all
+    // Only privileged users can update content in published state directly, all
     // other users first need to pass through proposed state.
     $is_privileged = $entity->isTargetWorkflowStateAllowed($state_id, $state_id);
 
@@ -329,7 +329,7 @@ class EventSubscriber implements EventSubscriberInterface {
         break;
 
       case 'proposed':
-      case 'validated':
+      case 'published':
         $event->setLabel($this->t('Update'));
     }
   }

@@ -134,7 +134,7 @@ class ReleaseRdfSubscriber extends NotificationSubscriberBase {
     }
 
     // Send notifications when a published release is updated.
-    if ($this->fromState === $this->toState && $this->fromState === 'validated') {
+    if ($this->fromState === $this->toState && $this->fromState === 'published') {
       $user_data = [
         'roles' => [
           'moderator' => [

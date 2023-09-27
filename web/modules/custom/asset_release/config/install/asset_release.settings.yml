@@ -30,21 +30,21 @@ transitions:
     needs_update:
       - moderator
       - rdf_entity-solution-facilitator
-    validated:
+    published:
       - moderator
       - rdf_entity-solution-facilitator
   needs_update:
     needs_update:
       - moderator
       - rdf_entity-solution-facilitator
-    validated:
+    published:
       - moderator
-  validated:
+  published:
     draft:
       - moderator
       - rdf_entity-solution-facilitator
     needs_update:
       - moderator
-    validated:
+    published:
       - moderator
       - rdf_entity-solution-facilitator
