@@ -84,7 +84,7 @@ final class GitUri {
       return NULL;
     }
 
-    return new static($scheme, $host, $namespace, $package);
+    return new self($scheme, $host, $namespace, $package);
   }
 
   /**
