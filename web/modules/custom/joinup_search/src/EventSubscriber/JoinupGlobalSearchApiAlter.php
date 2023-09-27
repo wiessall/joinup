@@ -4,6 +4,8 @@ declare(strict_types = 1);
 
 namespace Drupal\joinup_search\EventSubscriber;
 
+use Drupal\search_api_solr\Event\PostCreateIndexDocumentsEvent;
+use Drupal\search_api_solr\Event\PostFieldMappingEvent;
 use Drupal\search_api_solr\Event\PreQueryEvent;
 use Drupal\search_api_solr\Event\SearchApiSolrEvents;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -19,6 +21,8 @@ class JoinupGlobalSearchApiAlter implements EventSubscriberInterface {
   public static function getSubscribedEvents(): array {
     return [
       SearchApiSolrEvents::PRE_QUERY => 'preQuery',
+      SearchApiSolrEvents::POST_FIELD_MAPPING => 'postFieldMapping',
+      SearchApiSolrEvents::POST_CREATE_INDEX_DOCUMENT => 'postCreateIndexDocument',
     ];
   }
 
@@ -91,6 +95,60 @@ class JoinupGlobalSearchApiAlter implements EventSubscriberInterface {
 
     $sorts = $solarium_query->getSorts();
     $solarium_query->setSorts([$sort => 'asc'] + $sorts);
+  }
+
+  /**
+   * Single value fields need to be used for sorting.
+   */
+  public function postFieldMapping(PostFieldMappingEvent $event): void {
+    $fields = $event->getFieldMapping();
+    $mappings = [
+      'entity_created' => 'ds_entity_created',
+      'published_on' => 'ds_published_on',
+    ];
+
+    foreach ($mappings as $alias => $solr_field) {
+      if (isset($fields[$alias])) {
+        $event->setFieldMapping([$alias, $solr_field]);
+      }
+    }
+  }
+
+  /**
+   * By default, solr server configuration has a property named sortMissingLast
+   * set to true for all fields defined. This means that two different entity
+   * types, one with a property set to false and one without the property, will
+   * result in having the one without the property placed last.
+   *
+   * Set the "sticky" property on all documents that are missing it. The property
+   * is prefixed with "bs_" because "b" stands for boolean and "s" for single
+   * value, as they are used for sorting.
+   *
+   * Set the "state" property on all documents that are missing it and are stored
+   * in the unpublished index. The property is prefixed with "ss_" because the
+   * first "s" stands for 'string' and the second one stands for single value.
+   */
+  public function postCreateIndexDocument(PostCreateIndexDocumentsEvent $event): void {
+    $documents = $event->getSolariumDocuments();
+    foreach ($documents as $document) {
+      if (empty($document->getFields()['bs_sticky'])) {
+        $document->setField('bs_sticky', FALSE);
+      }
+
+      if (empty($document->getFields()['sm_entity_status']) && $document->getFields()['index_id'] === 'unpublished') {
+        $document->setField('sm_entity_status', 'unpublished');
+      }
+      if (empty($document->getFields()['sm_entity_status']) && $document->getFields()['index_id'] === 'published') {
+        // Because of the way the search API works, when we
+        // perform a search, it only returns items *with* a value for the
+        // conditions. Thus, when we search for an item that is not archived, if
+        // items do not have a value for the state field, they will not be
+        // included in the results. This is why we set the value to a special
+        // value that will never be used for the state field.
+        $document->setField('sm_entity_status', 'published');
+      }
+    }
+    $event->setSolariumDocuments($documents);
   }
 
 }

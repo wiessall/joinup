@@ -8,9 +8,6 @@
 declare(strict_types = 1);
 
 use Drupal\search_api\IndexInterface;
-use Drupal\search_api\Query\QueryInterface as SearchApiQueryInterface;
-use Drupal\search_api\Query\ResultSetInterface;
-use Solarium\QueryType\Select\Result\Result;
 
 /**
  * Helper to translate field names to their Solr counterpart.
@@ -26,42 +23,6 @@ function search_api_arbitrary_facet_search_fieldnames_from_index(IndexInterface 
   /** @var \Drupal\search_api_solr\SolrBackendInterface $backend */
   $backend = $server->getBackend();
   return $backend->getSolrFieldNames($index);
-}
-
-/**
- * Implements hook_search_api_solr_search_results_alter().
- */
-function search_api_arbitrary_facet_search_api_solr_search_results_alter(ResultSetInterface $result_set, SearchApiQueryInterface $query, Result $result) {
-  /** @var \Solarium\QueryType\Select\Query\Query $result */
-  if ($result->getFacetSet() && $result->getFacetSet()->getFacets()) {
-    /** @var \Solarium\QueryType\Select\Result\Facet\Field[] $response_facets */
-    $response_facets = $result->getFacetSet()->getFacets();
-    $extracted_facets = [];
-
-    // Our facets don't match the ones added by the facets module, that works
-    // only on fields. Here we need to mimic the behaviour by working on our
-    // custom facets.
-    // @see \Drupal\search_api_solr\Plugin\search_api\backend\SearchApiSolrBackend::extractFacets()
-    foreach ($query->getOption('search_api_arbitrary_facet', []) as $facet_name => $options) {
-      if (!empty($response_facets[$facet_name])) {
-        $min_count = $options['min_count'];
-        foreach ($response_facets[$facet_name]->getValues() as $term => $count) {
-          if ($count >= $min_count) {
-            $extracted_facets[$facet_name][] = [
-              'filter' => $term,
-              'count' => $count,
-            ];
-          }
-        }
-      }
-    }
-
-    if (!empty($extracted_facets)) {
-      // Add the results of our arbitrary query facets back together with the
-      // other results, so the facets will be built properly.
-      $result_set->setExtraData('search_api_facets', array_merge($result_set->getExtraData('search_api_facets', []), $extracted_facets));
-    }
-  }
 }
 
 /**
