@@ -271,7 +271,7 @@ class GitHub extends EuOssCatalogueGitHostingPlatformPluginBase {
    *   The search query to be passed to GraphQL query.
    */
   protected function getSearchQuery(array &$search): string {
-    static $defaults = ['is:public', 'archived:false'];
+    static $defaults = ['is:public', 'fork:true'];
     // Be kind to GitHub. Limit to 100 namespaces or projects.
     $searchChunk = array_splice($search, 0, 100);
     return implode(' ', [...$defaults, ...$searchChunk]);
