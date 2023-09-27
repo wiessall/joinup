@@ -83,23 +83,6 @@ class PublicCodeYml extends EuOssCatalogueParserPluginBase implements ContainerF
   /**
    * {@inheritdoc}
    */
-  public function isValid(Project $project): array {
-    $errors = [];
-    try {
-      $data = Yaml::decode($project->files['publiccodeYml']);
-      if (empty($data['name'])) {
-        $errors[] = "The solution name is empty for solution $project->url";
-      }
-    }
-    catch (InvalidDataTypeException $exception) {
-      $errors[] = "Cannot decode publiccode.yml of $project->url. Message: {$exception->getMessage()}";
-    }
-    return $errors;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
   public function checkSchema(OssSolutionInterface $solution): array {
     $errorList = $schemaErrors = [];
 
@@ -155,11 +138,11 @@ class PublicCodeYml extends EuOssCatalogueParserPluginBase implements ContainerF
       return Yaml::decode($project->files['publiccodeYml']);
     }
     catch (InvalidDataTypeException $exception) {
-      $this->logger->error('Cannot decode publiccode.yml of @url. Message: @message', [
+      $this->logger->warning('Cannot decode publiccode.yml of @url. Message: @message', [
         '@url' => $project->url,
         '@message' => $exception->getMessage(),
       ]);
-      throw $exception;
+      return [];
     }
   }
 
