@@ -191,9 +191,9 @@ During development XDEBUG can be enabled or disabled by running the following:
 
 ```bash
 # Enable
-$ docker compose exec web phpenmod xdebug
+$ docker compose exec web phpdismod xdebug && docker compose exec web service php8.2-fpm reload
 # Disable
-$ docker compose exec web phpdismod xdebug
+$ docker compose exec web phpenmod xdebug && docker compose exec web service php8.2-fpm reload
 ```
 The restart is needed in order to apply the settings in the PHP-fpm pool.
 
