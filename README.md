@@ -238,6 +238,30 @@ For the above example:
 * Check the [third party services](./docs/third-party-services.md)
   documentation for additional information on the services we integrate with.
 
+### Mailhog
+
+Mailhog is a tool that allows you to catch all emails sent by the application
+during development. Mailhog is optional, as the default setup of Joinup, is to
+use the devel mail server which stores the emails as text messages in the tmp
+directory. However, Mailhog is more convenient to use, as it provides a web UI
+to view the emails. It is available as a Docker image. To start it, run the
+following command:
+
+```
+$ docker run -d -p 8025:8025 -p 1025:1025 mailhog/mailhog
+```
+Then, you can access the Mailhog UI at http://127.0.0.1:8025.
+In order to have the application send emails to Mailhog, you need to set the
+following settings in your `settings.override.php` file:
+
+```php
+$config['system.mail']['interface']['default'] = 'swiftmailer';
+$config['mailsystem.settings']['defaults']['sender'] = 'swiftmailer';
+$config['swiftmailer.transport']['transport'] = 'smtp';
+$config['swiftmailer.transport']['smtp_host'] = '127.0.0.1';
+$config['swiftmailer.transport']['smtp_port'] = '1025';
+```
+
 ### Additional information
 
 * [Joinup website](https://joinup.ec.europa.eu/)
