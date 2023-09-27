@@ -10,7 +10,7 @@ developmentStatus: development
 platforms:
   - web
 softwareType: addon
-url: 'https://code.europa.eu/digit-b2/eu_oss_catalogue_drupal_module'
+url: 'https://code.europa.eu/digit-b2/eu_oss_catalogue'
 localisation:
   localisationReady: false
   availableLanguages:
@@ -21,14 +21,22 @@ description:
     longDescription: |
       This is a Drupal module for generating the first MVP (minimum viable
       product) version of a EU OpenSource Software Solutions, produced or used
-      by Public Administrations. Mainly, the module federates data from national
-      OSS catalogues but also from any other arbitrary source and allows
-      exposing such data via Drupal API, using Drupal Views, controllers or,
-      even, JSON:API/GraphQL endpoints. It started as a Proof-Of-Concept based
-      on the[ publiccode.ym)]((https://yml.publiccode.tools/) schema
-      specifications but lately evolved as a full pluggable system that accepts
-      any kind of federation source, called \_solution provider\_ in the realm
-      of this module.
+      by Public Administrations. The purpose of the EU Applications Catalogue is
+      to act as a central directory (or else ‘index’) at European Union level,
+      where one can share, search, discover and collaborate on Open Source
+      solution software in use at European Public Services. These applications
+      would have either been built by Public Administrations themselves, or by
+      Open Source communities/ vendors and in use at the public sector.
+      In this implementation, the module approach involves federation (fetching
+      and mirroring) of data from national/local OSS catalogs (based on Git
+      repositories/sources) equipped with APIs (REST API or GraphQL), as well as
+      from any other single GIT source compliant with metadata standards and
+      quality criteria actually set for the EU OSS catalogue.
+      This ongoing MVP version is initially focusing on OSS Solutions sources
+      (Git Repositories) of interest of Public Administrations (produced by or
+      for), adopting the Publiccode.yml Metadata Standard throughout an internal
+      MIDM (Minimum Interoperability Data Model) able to map and semantically
+      align with it.
     shortDescription: Drupal module for EU OpenSource Software Solutions Catalogue
 categories:
   - web-collaboration
