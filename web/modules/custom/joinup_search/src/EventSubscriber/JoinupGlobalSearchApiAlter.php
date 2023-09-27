@@ -22,7 +22,7 @@ class JoinupGlobalSearchApiAlter implements EventSubscriberInterface {
     return [
       SearchApiSolrEvents::PRE_QUERY => 'preQuery',
       SearchApiSolrEvents::POST_FIELD_MAPPING => 'postFieldMapping',
-      SearchApiSolrEvents::POST_CREATE_INDEX_DOCUMENT => 'postCreateIndexDocument',
+      SearchApiSolrEvents::POST_CREATE_INDEX_DOCUMENTS => 'postCreateIndexDocument',
     ];
   }
 
@@ -98,9 +98,10 @@ class JoinupGlobalSearchApiAlter implements EventSubscriberInterface {
   }
 
   /**
-   * Single value fields need to be used for sorting.
+   * {@inheritdoc}
    */
   public function postFieldMapping(PostFieldMappingEvent $event): void {
+    // Single value fields need to be used for sorting.
     $fields = $event->getFieldMapping();
     $mappings = [
       'entity_created' => 'ds_entity_created',
@@ -116,20 +117,21 @@ class JoinupGlobalSearchApiAlter implements EventSubscriberInterface {
   }
 
   /**
-   * By default, solr server configuration has a property named sortMissingLast
-   * set to true for all fields defined. This means that two different entity
-   * types, one with a property set to false and one without the property, will
-   * result in having the one without the property placed last.
-   *
-   * Set the "sticky" property on all documents that are missing it. The property
-   * is prefixed with "bs_" because "b" stands for boolean and "s" for single
-   * value, as they are used for sorting.
-   *
-   * Set the "state" property on all documents that are missing it and are stored
-   * in the unpublished index. The property is prefixed with "ss_" because the
-   * first "s" stands for 'string' and the second one stands for single value.
+   * {@inheritdoc}
    */
   public function postCreateIndexDocument(PostCreateIndexDocumentsEvent $event): void {
+    // By default, solr server configuration has a property named
+    // sortMissingLast set to true for all fields defined. This means
+    // that two different entity types, one with a property set to false
+    // and one without the property, will result in having the one
+    // without the property placed last.
+    // Set the "sticky" property on all documents that are missing it. The
+    // property is prefixed with "bs_" because "b" stands for boolean
+    // and "s" for single value, as they are used for sorting.
+    // Set the "state" property on all documents that are missing it and are
+    // stored in the unpublished index. The property is prefixed with "ss_"
+    // because the first "s" stands for 'string' and the second one stands
+    // for single value.
     $documents = $event->getSolariumDocuments();
     foreach ($documents as $document) {
       if (empty($document->getFields()['bs_sticky'])) {
