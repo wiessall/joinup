@@ -8,7 +8,6 @@ use Drupal\Core\Logger\LoggerChannelInterface;
 use Drupal\KernelTests\KernelTestBase;
 use Drupal\eu_oss_catalogue\ApiGuesser;
 use Prophecy\Argument;
-use Psr\Log\LogLevel;
 
 /**
  * Tests the OSS Solution API Guesser service.
@@ -54,10 +53,7 @@ class ApiGuesserTest extends KernelTestBase {
   public function testApiGuesser(string $url, ?string $expected_api): void {
     if ($expected_api === NULL) {
       $logger = $this->prophesize(LoggerChannelInterface::class);
-      $logger->log()->withArguments([
-        Argument::exact(LogLevel::WARNING),
-        Argument::any(),
-      ])->shouldBeCalledOnce();
+      $logger->warning()->withArguments([Argument::any()])->shouldBeCalledOnce();
 
       $this->apiGuesser = new ApiGuesser(
         $this->container->get('plugin.manager.eu_oss_catalogue.hosting_platform'),

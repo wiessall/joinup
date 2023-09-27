@@ -97,6 +97,14 @@ class GitHub extends EuOssCatalogueGitHostingPlatformPluginBase {
   }
 
   /**
+   * {@inheritdoc}
+   */
+  public function isHostingPlatformForUrl(string $repositoryUrl): bool {
+    return ($gitUri = GitUri::fromUriString($repositoryUrl))
+      && $gitUri->host === self::GITHUB_BASE_URL;
+  }
+
+  /**
    * Returns the GitHub client.
    *
    * @return \Github\Client
@@ -281,14 +289,6 @@ class GitHub extends EuOssCatalogueGitHostingPlatformPluginBase {
     // Be kind to GitHub. Limit to 100 namespaces or projects.
     $searchChunk = array_splice($search, 0, 100);
     return implode(' ', [...static::DEFAULT_SEARCH_TERMS, ...$searchChunk]);
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function isHostingPlatformForUrl(string $repositoryUrl): bool {
-    return ($gitUri = GitUri::fromUriString($repositoryUrl))
-      && $gitUri->host === self::GITHUB_BASE_URL;
   }
 
 }
