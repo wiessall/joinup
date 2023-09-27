@@ -40,6 +40,13 @@ class GitHub extends EuOssCatalogueGitHostingPlatformPluginBase {
   private const GITHUB_BASE_URL = 'github.com';
 
   /**
+   * Default terms for GitHub search.
+   *
+   * @const string[]
+   */
+  protected const DEFAULT_SEARCH_TERMS = ['is:public', 'fork:true'];
+
+  /**
    * Static cache for the GitHub client.
    */
   protected Client $client;
@@ -271,10 +278,9 @@ class GitHub extends EuOssCatalogueGitHostingPlatformPluginBase {
    *   The search query to be passed to GraphQL query.
    */
   protected function getSearchQuery(array &$search): string {
-    static $defaults = ['is:public', 'fork:true'];
     // Be kind to GitHub. Limit to 100 namespaces or projects.
     $searchChunk = array_splice($search, 0, 100);
-    return implode(' ', [...$defaults, ...$searchChunk]);
+    return implode(' ', [...static::DEFAULT_SEARCH_TERMS, ...$searchChunk]);
   }
 
   /**
