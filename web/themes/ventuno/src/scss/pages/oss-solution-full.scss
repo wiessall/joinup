@@ -1,0 +1,152 @@
+@import "../partials/core";
+
+.oss-solution {
+  &__header {
+    position: relative;
+    &:before {
+      content: "";
+      display: block;
+      position: absolute;
+      top: 0;
+      inset-inline-start: 50%;
+      width: 100vw;
+      background: $light;
+      height: 100%;
+      margin-inline-start: -50vw;
+      z-index: -1;
+    }
+    &-logo {
+      width: 100px;
+      height: 100px;
+      img {
+        max-width: 100%;
+        height: auto;
+      }
+    }
+    h1 {
+      font-weight: $font-weight-bold;
+      margin-bottom: 0;
+    }
+
+  }
+  &__oss-software-version {
+    padding: $spacer * .25 $spacer * .75;
+    color: darken($warning, 30%);
+    font-weight: $font-weight-bold;
+    background-color: lighten($warning, 30%);
+    border-radius: $border-radius-pill;
+  }
+  &__oss-categories {
+    a {
+      padding: $spacer * .25 $spacer * .75;
+      color: $primary;
+      background-color: $secondary;
+      border-radius: $border-radius-pill;
+      white-space: nowrap;
+      &:hover {
+        text-decoration: none;
+      }
+    }
+  }
+
+  &__description {
+    font-size: $font-size-lg;
+    color: $gray-800;
+    margin-block-end: $spacer;
+  }
+  &__oss-git-url {
+    margin-block-end: $spacer * .5;
+    a {
+      &::before {
+        @include get-bootstrap-icon('folder2-open', $primary);
+        margin-inline-end: $spacer * .5;
+      }
+    }
+  }
+  &__oss-landing-url {
+    margin-block-end: $spacer * .5;
+    a {
+      &::before {
+        @include get-bootstrap-icon('link-45deg', $primary);
+        margin-inline-end: $spacer * .5;
+      }
+    }
+  }
+  &__oss-documentation a {
+    &::before {
+      @include get-bootstrap-icon('file-earmark-text', $primary);
+      margin-inline-end: $spacer * .5;
+    }
+  }
+  .l-ventuno--layout_twocol_section--section-label-long-description {
+    position: relative;
+    padding-block: $spacer * 3;
+    &:before {
+      content: "";
+      display: block;
+      position: absolute;
+      top: 0;
+      inset-inline-start: 50%;
+      width: 100vw;
+      background: $light;
+      height: 100%;
+      margin-inline-start: -50vw;
+      z-index: -1;
+    }
+    .oss-solution__long-description {
+      &--long {
+        display: -webkit-box!important;
+        min-height: 48px;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        &.show {
+          -webkit-line-clamp: unset;
+        }
+      }
+    }
+  }
+  &__illustration {
+    aspect-ratio: 5/4;
+    width: 100%;
+    height: auto;
+    background-image: url("#{$theme-images-path}/oss-illustration.svg");
+    background-size: cover;
+    border-radius: $border-radius;
+  }
+  &__oss-features {
+    display: flex;
+    flex-direction: column;
+    row-gap: $spacer * .5;
+  }
+  &__oss-scope {
+    display: flex;
+    flex-wrap: wrap;
+    gap: $spacer * .5;
+    a {
+      padding: $spacer * .25 $spacer * .75;
+      color: $primary;
+      background-color: $secondary;
+      border-radius: $border-radius-pill;
+      white-space: nowrap;
+      &:hover {
+        text-decoration: none;
+      }
+    }
+
+  }
+  .l-ventuno--joinup_layout_four_column_grid--section-label-detalied-information__region-content {
+    padding: $spacer;
+    background-color: $light;
+    .block-layout-builder .field__items {
+      display: flex;
+      flex-wrap: wrap;
+      gap: $spacer * .5;
+    }
+  }
+  .layout {
+    .block-layout-builder + .block-layout-builder {
+      margin-block-start: $spacer * 2;
+    }
+  }
+}

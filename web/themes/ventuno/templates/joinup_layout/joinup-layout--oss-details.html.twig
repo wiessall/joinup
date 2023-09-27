@@ -1,0 +1,45 @@
+{% if content %}
+  <div{{ attributes.addClass('row') }}>
+
+    {% if content.content or content.copyright or content.catalogue %}
+      <div class="col-9 col-lg-8">
+
+        {% if content.content %}
+          <div class="l-oss-details__row">
+            <div {{ region_attributes.content.addClass('l-oss-details__region', 'l-oss-details__region--content') }}>
+              {{- content.content -}}
+            </div>
+          </div>
+        {% endif %}
+
+        {% if content.copyright|render|trim or content.catalogue|render|trim %}
+          <div class="l-oss-details__row">
+            {% if content.copyright|render|trim %}
+              <div {{ region_attributes.copyright.addClass('l-oss-details__region', 'l-oss-details__region--copyright') }}>
+                {{- content.copyright -}}
+              </div>
+            {% endif %}
+
+            {% if content.catalogue|render|trim %}
+              <div {{ region_attributes.catalogue.addClass('l-oss-details__region', 'l-oss-details__region--catalogue') }}>
+                {{- content.catalogue -}}
+              </div>
+            {% endif %}
+          </div>
+        {% endif %}
+
+      </div>
+    {% endif %}
+
+    {% if content.aside %}
+      <div class="col-3 col-lg-4">
+        <div class="bg-light p-3 rounded">
+          <div {{ region_attributes.aside.addClass('l-oss-details__region', 'l-oss-details__region--aside') }}>
+            {{- content.aside -}}
+          </div>
+        </div>
+      </div>
+    {% endif %}
+
+  </div>
+{% endif %}
