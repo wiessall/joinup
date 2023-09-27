@@ -28,6 +28,13 @@
       &.show {
         -webkit-line-clamp: unset;
       }
+      p {
+        display: inline;
+        &:not(:last-child)::after {
+          content: " \A\A";
+          white-space: pre;
+        }
+      }
     }
     p {
       display: inline;
