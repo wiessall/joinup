@@ -73,6 +73,10 @@ class ContactResolver extends DefaultResolver implements ContainerFactoryPluginI
         $contact = ['name' => $contact];
       }
 
+      if (empty($contact['name'])) {
+        return $targets;
+      }
+
       $nids = array_values($storage->getQuery()->accessCheck(FALSE)
         ->condition('type', $nodeType)
         ->condition('title', $contact['name'])
