@@ -79,12 +79,14 @@ class GitLabSelfHosted extends GitLabDotCom {
         $query->repository([])->use('exists');
         $response = $client->graphql()->execute($query->toString());
       }
-      catch (\Exception) {
-        $host .= '/' . array_shift($namespaceParts);
-        $client->setUrl($host);
-        continue;
+      catch (\Throwable $exception) {
+        if ($exception->getCode() === 501) {
+          $host .= '/' . array_shift($namespaceParts);
+          $client->setUrl($host);
+          continue;
+        }
+        throw $exception;
       }
-
       return !empty($response['data']['project']['repository']['exists']);
     } while (count($namespaceParts) > 0);
 
