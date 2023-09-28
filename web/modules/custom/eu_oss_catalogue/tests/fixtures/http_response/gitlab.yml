@@ -531,26 +531,7 @@
   data:
     group: null
 
-'self-hosted.gitlab.example.com/subpath ec-europa\\\/digit-joinup-reference exists':
-  data:
-    project:
-      repository:
-        exists: true
-
-'self-hosted.gitlab.example.com/bit/deeper/subpath ec-europa\\\/digit-joinup-poc-reference exists':
-  data:
-    project:
-      repository:
-        exists: true
-
-'gitlab.opencode.de.example.com xleitstelle\\\/xplanung\\\/validierungsregeln\\\/profile\\\/berlin exists':
-  data:
-    project:
-      repository:
-        exists: true
-
-
-'self-hosted.gitlab.example.com/bit/deeper/subpath deep\\\/namespace\\\/package exists':
+api_detection:
   data:
     project:
       repository:
