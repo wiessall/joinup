@@ -101,11 +101,11 @@ class GitLabSelfHosted extends GitLabDotCom {
     }
 
     $namespaceParts = explode('/', $gitUri->namespace);
-    $this->configuration['url'] = $host = "$gitUri->scheme://$gitUri->host";
+    $this->configuration['url'] = $host = $gitUri->getSchemeAndHost();
     $client = $this->getClient();
     do {
       try {
-        $fullPath = implode('/', $namespaceParts) . "/$gitUri->package";
+        $fullPath = implode('/', $namespaceParts) . "/$gitUri->name";
         $query = new Query('project', ['fullPath' => $fullPath]);
         $query->repository([])->use('exists');
         $response = $client->graphql()->execute($query->toString());
