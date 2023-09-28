@@ -17,6 +17,7 @@ dependencies:
     - asset_distribution
     - comment
     - contact_form
+    - custom_page
     - dashboard
     - eif
     - entity_legal
@@ -124,6 +125,7 @@ permissions:
   - 'create paragraph content video'
   - 'create rdf entity news'
   - 'create solution_logo media'
+  - 'custom landing pages'
   - 'delete all sitewide alert revisions'
   - 'delete any collection_logo media'
   - 'delete any discussion_logo media'
