@@ -135,7 +135,7 @@ class PublicCodeYml extends EuOssCatalogueParserPluginBase implements ContainerF
    */
   protected function getMetadata(Project $project): array {
     try {
-      return Yaml::decode($project->files['publiccodeYml']);
+      return Yaml::decode($project->files['publiccodeYml']) ?? [];
     }
     catch (InvalidDataTypeException $exception) {
       $this->logger->warning('Cannot decode publiccode.yml of @url. Message: @message', [
