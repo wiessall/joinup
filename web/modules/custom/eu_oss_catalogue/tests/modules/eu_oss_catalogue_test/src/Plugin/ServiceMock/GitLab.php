@@ -45,43 +45,20 @@ class GitLab extends PluginBase implements ServiceMockPluginInterface {
   }
 
   /**
-   * Returns the Gitlab API root from the request URI.
-   *
-   * @return string
-   *   The Gitlab API root from the request URI.
-   */
-  protected function getApiRootFromRequestUri(UriInterface $uri): string {
-    $apiRoot = $uri->getHost();
-    foreach (explode('/', trim($uri->getPath(), '/')) as $pathItem) {
-      if ($pathItem === 'api') {
-        return $apiRoot;
-      }
-      $apiRoot .= "/$pathItem";
-    }
-
-    return $apiRoot;
-  }
-
-  /**
    * {@inheritdoc}
    */
   public function getResponse(RequestInterface $request, array $options): ResponseInterface {
-    $apiRoot = $this->getApiRootFromRequestUri($request->getUri());
-    $query = $request->getBody()->getContents();
-    $isSelfHostedRequest = str_ends_with($apiRoot, 'self-hosted.gitlab.example.com');
-    preg_match('@project\(fullPath:\s+\x5c"([^\x5c].*)\x5c"@', $query, $matches);
+    // Simplify by removing backslashes and spaces for an easy comparison.
+    $query = preg_replace('/\s/', '', stripcslashes($request->getBody()->getContents()));
 
     $responseId = match(TRUE) {
-      $apiRoot === 'all.self-hosted.gitlab.example.com' => 'all.self-hosted.gitlab.example.com',
-      $isSelfHostedRequest && str_contains($query, 'group: group(fullPath: \"group1\")') => 'limited.self-hosted.gitlab.example.com group1',
-      $isSelfHostedRequest && str_contains($query, 'group: group(fullPath: \"group2\")') =>  'limited.self-hosted.gitlab.example.com group2',
-      $isSelfHostedRequest && str_contains($query, 'group: group(fullPath: \"user1\")') => 'limited.self-hosted.gitlab.example.com null',
-      $isSelfHostedRequest && str_contains($query, 'project(fullPath: \\"user1\\\\\\/project-1\\"') => 'limited.self-hosted.gitlab.example.com user1/project1',
-      $isSelfHostedRequest && str_contains($query, 'group: group(fullPath: \"user2\")') => 'limited.self-hosted.gitlab.example.com null',
-      $apiRoot === 'self-hosted.gitlab.example.com/subpath' => "self-hosted.gitlab.example.com/subpath $matches[1] exists",
-      $apiRoot === 'self-hosted.gitlab.example.com/bit/deeper/subpath' => "self-hosted.gitlab.example.com/bit/deeper/subpath $matches[1] exists",
-      $apiRoot === 'gitlab.opencode.de.example.com' => "gitlab.opencode.de.example.com $matches[1] exists",
-      default => 'missing',
+      $request->getUri()->getHost() === 'all.self-hosted.gitlab.example.com' => 'all.self-hosted.gitlab.example.com',
+      str_starts_with($query, '{"query":"{group:group(fullPath:"group1")') => 'limited.self-hosted.gitlab.example.com group1',
+      str_starts_with($query, '{"query":"{group:group(fullPath:"group2")') => 'limited.self-hosted.gitlab.example.com group2',
+      str_starts_with($query, '{"query":"{group:group(fullPath:"user1")') => 'limited.self-hosted.gitlab.example.com null',
+      str_starts_with($query, '{"query":"{project(fullPath:"user1\/project-1"') => 'limited.self-hosted.gitlab.example.com user1/project1',
+      str_starts_with($query, '{"query":"{group:group(fullPath:"user2")') => 'limited.self-hosted.gitlab.example.com null',
+      (bool) preg_match('@{"query":"{project\(fullPath:"[^"].*"\){repository{exists}}}"}@', $query) => 'api_detection',
     };
 
     return $this->buildResponse($responseId);
@@ -99,15 +76,29 @@ class GitLab extends PluginBase implements ServiceMockPluginInterface {
   protected function buildResponse(string $responseId): Response {
     $filePath = __DIR__ . '/../../../../../fixtures/http_response/gitlab.yml';
     $responses = Yaml::decode(file_get_contents($filePath));
-    if (!array_key_exists($responseId, $responses)) {
-      return new Response(501);
-    }
-
     $body = Json::encode($responses[$responseId]);
     return new Response(200, [
       'Content-Type' => 'application/json',
       'Content-Length' => strlen($body),
     ], $body);
+  }
+
+  /**
+   * Returns the Gitlab API root from the request URI.
+   *
+   * @return string
+   *   The Gitlab API root from the request URI.
+   */
+  protected function getApiRootFromRequestUri(UriInterface $uri): string {
+    $apiRoot = $uri->getHost();
+    foreach (explode('/', trim($uri->getPath(), '/')) as $pathItem) {
+      if ($pathItem === 'api') {
+        return $apiRoot;
+      }
+      $apiRoot .= "/$pathItem";
+    }
+
+    return $apiRoot;
   }
 
 }
