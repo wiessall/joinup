@@ -8,8 +8,10 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Logger\LoggerChannelInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
+use Drupal\Core\Utility\Error;
 use Drupal\eu_oss_catalogue\Exception\UnresolvableValueException;
 use Drupal\eu_oss_catalogue\Model\Project;
+use Psr\Log\LogLevel;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -101,7 +103,8 @@ class TaxonomyTermResolver extends DefaultResolver implements ContainerFactoryPl
 
     if ($controlled && !empty($missingTermNames)) {
       // Some terms don't exist in this controlled vocabulary.
-      throw new UnresolvableValueException($fieldItemList->getName(), $this->getConfiguration()['path'], $originalValue, $metadata);
+      $exception = new UnresolvableValueException($fieldItemList->getName(), $this->getConfiguration()['path'], $originalValue, $metadata);
+      Error::logException($this->logger, $exception, Error::DEFAULT_ERROR_MESSAGE, [], LogLevel::WARNING);
     }
 
     foreach ($missingTermNames as $name) {
