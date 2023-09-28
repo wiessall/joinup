@@ -28,6 +28,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * @EuOssCatalogueHostingPlatform(
  *   id = "github",
  *   label = @Translation("GitHub"),
+ *   weight = -10,
  * )
  */
 class GitHub extends EuOssCatalogueGitHostingPlatformPluginBase {
