@@ -54,7 +54,7 @@ class GitUriTest extends UnitTestCaseTest {
           'scheme' => 'https',
           'host' => 'gitlab.opencode.de',
           'namespace' => 'xleitstelle/xplanung/validierungsregeln/profile',
-          'package' => 'berlin',
+          'name' => 'berlin',
         ],
       ],
       'Gitlab URL with deep namespace + .git extension' => [
@@ -63,7 +63,7 @@ class GitUriTest extends UnitTestCaseTest {
           'scheme' => 'https',
           'host' => 'gitlab.opencode.de',
           'namespace' => 'xleitstelle/xplanung/validierungsregeln/profile',
-          'package' => 'berlin',
+          'name' => 'berlin',
         ],
       ],
       'Partial URI' => [

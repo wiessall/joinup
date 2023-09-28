@@ -12,14 +12,14 @@ class ApiGuess {
   /**
    * Constructs a new value object.
    *
-   * @param string $platformPluginId
+   * @param string $pluginId
    *   The guessed code hosting platform plugin ID.
-   * @param string $platformBaseUrl
+   * @param string $baseUrl
    *   The code hosting platform base URL.
    */
   public function __construct(
-    public readonly string $platformPluginId,
-    public readonly string $platformBaseUrl,
+    public readonly string $pluginId,
+    public readonly string $baseUrl,
   ) {}
 
 }

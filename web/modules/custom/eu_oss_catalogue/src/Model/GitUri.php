@@ -21,14 +21,14 @@ final class GitUri {
    *   a path like "repository.example.com/self-hosted-gitlab".
    * @param string|null $namespace
    *   The namespace of the git package.
-   * @param string|null $package
+   * @param string|null $name
    *   The name of the package.
    */
   public function __construct(
     public readonly string $scheme,
     public readonly string $host,
     public readonly ?string $namespace = NULL,
-    public readonly ?string $package = NULL,
+    public readonly ?string $name = NULL,
   ) {}
 
   /**
@@ -73,6 +73,16 @@ final class GitUri {
     }
 
     return new self($scheme, $host, $namespace, $name);
+  }
+
+  /**
+   * Returns the "scheme and host" part of the URL.
+   *
+   * @return string
+   *   The scheme and host.
+   */
+  public function getSchemeAndHost(): string {
+    return $this->scheme . '://' . $this->host;
   }
 
 }

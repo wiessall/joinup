@@ -62,7 +62,7 @@ class ApiGuesserTest extends KernelTestBase {
       );
     }
     else {
-      $expectedApi = new ApiGuess($expectedApi['platformPluginId'], $expectedApi['platformBaseUrl']);
+      $expectedApi = new ApiGuess($expectedApi['pluginId'], $expectedApi['baseUrl']);
     }
 
     $this->assertEquals($expectedApi, $this->apiGuesser->getHostingPlatformApi($url));
@@ -79,61 +79,61 @@ class ApiGuesserTest extends KernelTestBase {
       'GitLab home' => [
         'URL' => 'https://gitlab.com/z.a.horvath/smart_title',
         'Expected' => [
-          'platformPluginId' => 'gitlab_com',
-          'platformBaseUrl' => 'https://gitlab.com',
+          'pluginId' => 'gitlab_com',
+          'baseUrl' => 'https://gitlab.com',
         ],
       ],
       'GitLab HTTP URL' => [
         'URL' => 'https://gitlab.com/z.a.horvath/smart_title.git',
         'Expected' => [
-          'platformPluginId' => 'gitlab_com',
-          'platformBaseUrl' => 'https://gitlab.com',
+          'pluginId' => 'gitlab_com',
+          'baseUrl' => 'https://gitlab.com',
         ],
       ],
 
       'Self-hosted GitLab home' => [
         'URL' => 'https://self-hosted.gitlab.example.com/subpath/ec-europa/digit-joinup-reference',
         'Expected' => [
-          'platformPluginId' => 'gitlab_self_hosted',
-          'platformBaseUrl' => 'https://self-hosted.gitlab.example.com/subpath',
+          'pluginId' => 'gitlab_self_hosted',
+          'baseUrl' => 'https://self-hosted.gitlab.example.com/subpath',
         ],
       ],
       'Self-hosted GitLab home with trailing slash' => [
         'URL' => 'https://self-hosted.gitlab.example.com/subpath/ec-europa/digit-joinup-reference/',
         'Expected' => [
-          'platformPluginId' => 'gitlab_self_hosted',
-          'platformBaseUrl' => 'https://self-hosted.gitlab.example.com/subpath',
+          'pluginId' => 'gitlab_self_hosted',
+          'baseUrl' => 'https://self-hosted.gitlab.example.com/subpath',
         ],
       ],
       'Self-hosted GitLab HTTP URL' => [
         'URL' => 'https://self-hosted.gitlab.example.com/subpath/ec-europa/digit-joinup-reference.git',
         'Expected' => [
-          'platformPluginId' => 'gitlab_self_hosted',
-          'platformBaseUrl' => 'https://self-hosted.gitlab.example.com/subpath',
+          'pluginId' => 'gitlab_self_hosted',
+          'baseUrl' => 'https://self-hosted.gitlab.example.com/subpath',
         ],
       ],
 
       'Self-hosted GitLab in deep subpath' => [
         'URL' => 'https://self-hosted.gitlab.example.com/bit/deeper/subpath/ec-europa/digit-joinup-poc-reference/',
         'Expected' => [
-          'platformPluginId' => 'gitlab_self_hosted',
-          'platformBaseUrl' => 'https://self-hosted.gitlab.example.com/bit/deeper/subpath',
+          'pluginId' => 'gitlab_self_hosted',
+          'baseUrl' => 'https://self-hosted.gitlab.example.com/bit/deeper/subpath',
         ],
       ],
 
       'Self-hosted GitLab in root, with deep namespace' => [
         'URL' => 'https://gitlab.opencode.de.example.com/xleitstelle/xplanung/validierungsregeln/profile/berlin',
         'Expected' => [
-          'platformPluginId' => 'gitlab_self_hosted',
-          'platformBaseUrl' => 'https://gitlab.opencode.de.example.com',
+          'pluginId' => 'gitlab_self_hosted',
+          'baseUrl' => 'https://gitlab.opencode.de.example.com',
         ],
       ],
 
       'Self-hosted GitLab in subpath, with deep namespace' => [
         'URL' => 'https://self-hosted.gitlab.example.com/bit/deeper/subpath/deep/namespace/package',
         'Expected' => [
-          'platformPluginId' => 'gitlab_self_hosted',
-          'platformBaseUrl' => 'https://self-hosted.gitlab.example.com/bit/deeper/subpath',
+          'pluginId' => 'gitlab_self_hosted',
+          'baseUrl' => 'https://self-hosted.gitlab.example.com/bit/deeper/subpath',
         ],
       ],
       'Self-hosted GitLab non-repository' => [
@@ -152,15 +152,15 @@ class ApiGuesserTest extends KernelTestBase {
       'GitHub home' => [
         'URL' => 'https://github.com/ec-europa/toolkit',
         'Expected' => [
-          'platformPluginId' => 'github',
-          'platformBaseUrl' => 'https://github.com',
+          'pluginId' => 'github',
+          'baseUrl' => 'https://github.com',
         ],
       ],
       'GitHub HTTP URL' => [
         'URL' => 'https://github.com/ec-europa/toolkit.git',
         'Expected' => [
-          'platformPluginId' => 'github',
-          'platformBaseUrl' => 'https://github.com',
+          'pluginId' => 'github',
+          'baseUrl' => 'https://github.com',
         ],
       ],
 
