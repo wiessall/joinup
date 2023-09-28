@@ -9,6 +9,7 @@ use Drupal\eu_oss_catalogue\Model\GitLabReleaseSort;
 use Drupal\eu_oss_catalogue\Model\GitUri;
 use Gitlab\Client;
 use GraphQL\Actions\Query;
+use Psr\Http\Message\ResponseInterface;
 
 /**
  * Git code hosting platform for self-hosted GitLab repositories.
@@ -99,26 +100,21 @@ class GitLabSelfHosted extends GitLabDotCom {
     }
 
     $namespaceParts = explode('/', $gitUri->namespace);
-    $this->configuration['url'] = $host = $gitUri->getSchemeAndHost();
-    $client = $this->getClient();
+    $host = $gitUri->getSchemeAndHost();
     do {
       try {
-        $fullPath = implode('/', $namespaceParts) . "/$gitUri->name";
-        $query = new Query('project', ['fullPath' => $fullPath]);
-        $query->repository([])->use('exists');
-        $response = $client->graphql()->execute($query->toString());
+        $response = $this->httpClient->get("$host/api");
       }
       catch (\Throwable $exception) {
         if ($exception->getCode() === 501) {
           if ($namespaceParts >= 2) {
             $host .= '/' . array_shift($namespaceParts);
-            $client->setUrl($host);
           }
           continue;
         }
         throw $exception;
       }
-      return empty($response['data']['project']['repository']['exists']) ? NULL : $host;
+      return $this->isGitLabApiResponse($response) ? $host : NULL;
     } while (count($namespaceParts) > 0);
 
     return NULL;
@@ -244,6 +240,27 @@ class GitLabSelfHosted extends GitLabDotCom {
     }
 
     return $query;
+  }
+
+  /**
+   * Checks whether the HTTP response comes from a GitLab API endpoint.
+   *
+   * @param \Psr\Http\Message\ResponseInterface $response
+   *   The HTTP response.
+   *
+   * @return bool
+   *   Whether the response comes from a GitLab API endpoint.
+   */
+  protected function isGitLabApiResponse(ResponseInterface $response): bool {
+    if (!$response->hasHeader('Set-Cookie')) {
+      return FALSE;
+    }
+    foreach ($response->getHeader('Set-Cookie') as $item) {
+      if (str_starts_with($item, '_gitlab_session=')) {
+        return TRUE;
+      }
+    }
+    return FALSE;
   }
 
 }

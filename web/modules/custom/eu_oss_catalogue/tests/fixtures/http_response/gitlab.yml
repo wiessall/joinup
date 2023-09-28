@@ -530,9 +530,3 @@
 'limited.self-hosted.gitlab.example.com null':
   data:
     group: null
-
-api_detection:
-  data:
-    project:
-      repository:
-        exists: true
