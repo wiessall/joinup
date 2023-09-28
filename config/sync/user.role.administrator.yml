@@ -4,6 +4,7 @@ status: true
 dependencies:
   module:
     - asset_distribution
+    - custom_page
     - rdf_entity
     - redirect
     - system
@@ -17,5 +18,6 @@ permissions:
   - 'access distribution reports'
   - 'administer account settings'
   - 'administer redirects'
+  - 'custom landing pages'
   - 'edit collection rdf entity'
   - 'view the administration theme'

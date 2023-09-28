@@ -12,3 +12,19 @@ custom_page.file_permalink:
         type: entity:node
         bundle:
           - custom_page
+custom_landing_page.add:
+  path: '/admin/custom-landing-pages/add'
+  defaults:
+    _entity_form: 'node'
+    _title_callback: '\Drupal\node\Controller\NodeController::addPageTitle'
+    node_type: 'custom_page'
+  requirements:
+    _entity_create_access: 'node:{node_type}'
+    _permission: 'custom landing pages'
+  options:
+    _node_operation_route: TRUE
+    _admin_route: FALSE
+    parameters:
+      node_type:
+        type: entity:node_type
+        with_config_overrides: TRUE
