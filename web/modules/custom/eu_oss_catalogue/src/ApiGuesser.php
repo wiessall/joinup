@@ -84,7 +84,7 @@ final class ApiGuesser implements ApiGuesserInterface {
    *   All the previous guesses, keyed by host base URL.
    */
   protected function getPreviousGuesses(): array {
-    return $this->state->get(self::STATE_STORAGE_KEY, $this->getPreviousGuessesDefaults());
+    return $this->state->get(self::STATE_STORAGE_KEY, []);
   }
 
   /**
@@ -114,21 +114,6 @@ final class ApiGuesser implements ApiGuesserInterface {
     if ($guess !== NULL) {
       $this->state->set(self::STATE_STORAGE_KEY, [$baseUrl => $guess] + $this->getPreviousGuesses());
     }
-  }
-
-  /**
-   * Returns the guesser defaults.
-   *
-   * @return \Drupal\eu_oss_catalogue\Model\ApiGuess[]
-   *   Default guessers.
-   */
-  protected function getPreviousGuessesDefaults(): array {
-    return [
-      // Bitbucket is not yet implemented.
-      // 'bitbucket.org' => ...
-      'github.com' => new ApiGuess('github', 'https://github.com'),
-      'gitlab.com' => new ApiGuess('gitlab_com', 'https://gitlab.com'),
-    ];
   }
 
 }
