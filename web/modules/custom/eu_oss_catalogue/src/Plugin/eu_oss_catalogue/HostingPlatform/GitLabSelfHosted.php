@@ -94,9 +94,7 @@ class GitLabSelfHosted extends GitLabDotCom {
    *   cannot be determined.
    */
   protected function doGetBaseFromRepoUrl(string $repositoryUrl): ?string {
-    if (!($gitUri = GitUri::fromUriString($repositoryUrl)) ||
-      $gitUri->host === static::GITLAB_BASE_URL
-    ) {
+    if (!$gitUri = GitUri::fromUriString($repositoryUrl)) {
       return NULL;
     }
 

@@ -117,13 +117,12 @@ class DevelopersItalia extends EuOssCatalogueProviderPluginBase {
       // Remove this entry to avoid fetching again on the next iteration.
       unset($this->fetched[$baseUrl]);
 
-      if (!$platformId = $this->guessPlatformPluginId($baseUrl)) {
-        continue;
-      }
-
-      $platformConfig = ['projects' => $namespaces, 'url' => $baseUrl];
+      $platformConfig = [
+        'projects' => $namespaces['projects'],
+        'url' => $baseUrl,
+      ];
       /** @var \Drupal\eu_oss_catalogue\EuOssCatalogueHostingPlatformInterface $hostingPlatform */
-      $hostingPlatform = $this->platformManager->createInstance($platformId, $platformConfig);
+      $hostingPlatform = $this->platformManager->createInstance($namespaces['api']->pluginId, $platformConfig);
 
       /** @var \Drupal\eu_oss_catalogue\Model\Project $project */
       foreach ($hostingPlatform->getProjects(['publiccodeYml' => 'publiccode.yml']) as $project) {
@@ -151,31 +150,25 @@ class DevelopersItalia extends EuOssCatalogueProviderPluginBase {
 
       foreach ($read['data'] as $newItem) {
         if (empty($newItem['url'])) {
-          $this->logger->error("Item @id lacks the mandatory URL", ['@id' => $newItem['id']]);
+          $this->logger->error('Item {id} lacks the mandatory URL', ['id' => $newItem['id']]);
+          continue;
+        }
+
+        if (!$api = $this->apiGuesser->getHostingPlatformApi($newItem['url'])) {
           continue;
         }
 
         $url = preg_replace('/^(.*)\.git$/', '$1', $newItem['url']);
-        $urlParts = parse_url($url);
-        $baseUrl = http_build_url([
-          'scheme' => $urlParts['scheme'],
-          'host' => $urlParts['host'],
-          'port' => $urlParts['port'] ?? '',
-        ]);
-
-        // @todo Assuming that the code hosting platform is always installed
-        //   beneath the domain, not in a subdirectory.
-        // @todo This should be adapted after ISAICP-7964 lands.
-        // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7964
-        // @see https://github.com/italia/developers-italia-api/issues/215
-        $pathParts = explode('/', trim($urlParts['path'], '/'));
+        $pathParts = explode('/', trim(substr($url, strlen($api->baseUrl)), '/'));
         $name = array_pop($pathParts);
         $namespace = implode('/', $pathParts);
 
-        $this->fetched[$baseUrl][$namespace][] = $name;
+        if (!isset($this->fetched[$api->baseUrl]['api'])) {
+          $this->fetched[$api->baseUrl]['api'] = $api;
+        }
+        $this->fetched[$api->baseUrl]['projects'][$namespace][] = $name;
         $this->fetchedUrls[] = $url;
       }
-
       $next = $read['links']['next'];
     } while ($next !== NULL);
   }

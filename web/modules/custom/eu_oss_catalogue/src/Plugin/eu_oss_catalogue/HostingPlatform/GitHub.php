@@ -94,8 +94,8 @@ class GitHub extends EuOssCatalogueGitHostingPlatformPluginBase {
    * {@inheritdoc}
    */
   public function isHostingPlatformForUrl(string $repositoryUrl): bool {
-    return ($gitUri = GitUri::fromUriString($repositoryUrl))
-      && $gitUri->host === $this->getBaseFromRepoUrl($repositoryUrl);
+    $gitUri = GitUri::fromUriString($repositoryUrl);
+    return $gitUri && $gitUri->getSchemeAndHost() === $this->getBaseFromRepoUrl($repositoryUrl);
   }
 
   /**

@@ -26,13 +26,6 @@ use Psr\Log\LogLevel;
 class GitLabDotCom extends EuOssCatalogueGitHostingPlatformPluginBase {
 
   /**
-   * Base URL of Gitlab.
-   *
-   * @const string
-   */
-  final protected const GITLAB_BASE_URL = 'gitlab.com';
-
-  /**
    * Static cache for GitLab client.
    */
   protected Client $client;
@@ -41,8 +34,8 @@ class GitLabDotCom extends EuOssCatalogueGitHostingPlatformPluginBase {
    * {@inheritdoc}
    */
   public function isHostingPlatformForUrl(string $repositoryUrl): bool {
-    return ($gitUri = GitUri::fromUriString($repositoryUrl))
-      && $gitUri->host === self::GITLAB_BASE_URL;
+    $gitUri = GitUri::fromUriString($repositoryUrl);
+    return $gitUri && $gitUri->getSchemeAndHost() === $this->getBaseFromRepoUrl($repositoryUrl);
   }
 
   /**
