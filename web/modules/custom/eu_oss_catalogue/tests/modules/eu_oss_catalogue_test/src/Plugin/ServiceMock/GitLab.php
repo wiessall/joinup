@@ -48,7 +48,7 @@ class GitLab extends PluginBase implements ServiceMockPluginInterface {
    * {@inheritdoc}
    */
   public function getResponse(RequestInterface $request, array $options): ResponseInterface {
-    // Simplify by removing backslashes and spaces for an easy comparison.
+    // Simplify by removing backslashes and spaces to facilitate comparison.
     $query = preg_replace('/\s/', '', stripcslashes($request->getBody()->getContents()));
 
     $responseId = match(TRUE) {
@@ -58,7 +58,7 @@ class GitLab extends PluginBase implements ServiceMockPluginInterface {
       str_starts_with($query, '{"query":"{group:group(fullPath:"user1")') => 'limited.self-hosted.gitlab.example.com null',
       str_starts_with($query, '{"query":"{project(fullPath:"user1\/project-1"') => 'limited.self-hosted.gitlab.example.com user1/project1',
       str_starts_with($query, '{"query":"{group:group(fullPath:"user2")') => 'limited.self-hosted.gitlab.example.com null',
-      (bool) preg_match('@{"query":"{project\(fullPath:"[^"].*"\){repository{exists}}}"}@', $query) => 'api_detection',
+      $query === '' => 'api_detection',
     };
 
     return $this->buildResponse($responseId);
@@ -74,13 +74,18 @@ class GitLab extends PluginBase implements ServiceMockPluginInterface {
    *   The HTTP response.
    */
   protected function buildResponse(string $responseId): Response {
-    $filePath = __DIR__ . '/../../../../../fixtures/http_response/gitlab.yml';
-    $responses = Yaml::decode(file_get_contents($filePath));
-    $body = Json::encode($responses[$responseId]);
-    return new Response(200, [
-      'Content-Type' => 'application/json',
-      'Content-Length' => strlen($body),
-    ], $body);
+    $headers = ['Content-Type' => 'application/json'];
+    $body = '';
+    if ($responseId === 'api_detection') {
+      $headers['Set-Cookie'] = ['_gitlab_session=dummy'];
+    }
+    else {
+      $filePath = __DIR__ . '/../../../../../fixtures/http_response/gitlab.yml';
+      $responses = Yaml::decode(file_get_contents($filePath));
+      $body = Json::encode($responses[$responseId]);
+    }
+
+    return new Response(200, ['Content-Length' => strlen($body)] + $headers, $body);
   }
 
   /**
