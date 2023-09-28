@@ -6,6 +6,7 @@ namespace Drupal\eu_oss_catalogue\Plugin\eu_oss_catalogue\Resolver;
 
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Field\FieldItemListInterface;
+use Drupal\Core\Logger\LoggerChannelInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\eu_oss_catalogue\Exception\UnresolvableValueException;
 use Drupal\eu_oss_catalogue\Model\Project;
@@ -30,6 +31,8 @@ class TaxonomyTermResolver extends DefaultResolver implements ContainerFactoryPl
    *   The plugin ID for the plugin instance.
    * @param mixed $pluginDefinition
    *   The plugin implementation definition.
+   * @param \Drupal\Core\Logger\LoggerChannelInterface $logger
+   *   The EU OSS Catalogue logger.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
    *   The entity type manager service.
    */
@@ -37,9 +40,10 @@ class TaxonomyTermResolver extends DefaultResolver implements ContainerFactoryPl
     array $configuration,
     $pluginId,
     $pluginDefinition,
+    protected LoggerChannelInterface $logger,
     protected EntityTypeManagerInterface $entityTypeManager,
   ) {
-    parent::__construct($configuration, $pluginId, $pluginDefinition);
+    parent::__construct($configuration, $pluginId, $pluginDefinition, $logger);
   }
 
   /**
@@ -50,6 +54,7 @@ class TaxonomyTermResolver extends DefaultResolver implements ContainerFactoryPl
       $configuration,
       $pluginId,
       $pluginDefinition,
+      $container->get('logger.channel.eu_oss_catalogue'),
       $container->get('entity_type.manager'),
     );
   }

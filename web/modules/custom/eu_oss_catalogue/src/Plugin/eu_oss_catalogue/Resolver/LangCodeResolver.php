@@ -7,6 +7,7 @@ namespace Drupal\eu_oss_catalogue\Plugin\eu_oss_catalogue\Resolver;
 use Drupal\Component\Utility\NestedArray;
 use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
+use Drupal\Core\Logger\LoggerChannelInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\eu_oss_catalogue\Model\Project;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -32,6 +33,8 @@ class LangCodeResolver extends DefaultResolver implements ContainerFactoryPlugin
    *   The plugin ID for the plugin instance.
    * @param mixed $pluginDefinition
    *   The plugin implementation definition.
+   * @param \Drupal\Core\Logger\LoggerChannelInterface $logger
+   *   The EU OSS Catalogue logger.
    * @param \Drupal\Core\Language\LanguageManagerInterface $languageManger
    *   The language manager service.
    */
@@ -39,9 +42,10 @@ class LangCodeResolver extends DefaultResolver implements ContainerFactoryPlugin
     array $configuration,
     $pluginId,
     $pluginDefinition,
+    protected LoggerChannelInterface $logger,
     protected LanguageManagerInterface $languageManger,
   ) {
-    parent::__construct($configuration, $pluginId, $pluginDefinition);
+    parent::__construct($configuration, $pluginId, $pluginDefinition, $logger);
   }
 
   /**
@@ -52,6 +56,7 @@ class LangCodeResolver extends DefaultResolver implements ContainerFactoryPlugin
       $configuration,
       $pluginId,
       $pluginDefinition,
+      $container->get('logger.channel.eu_oss_catalogue'),
       $container->get('language_manager'),
     );
   }

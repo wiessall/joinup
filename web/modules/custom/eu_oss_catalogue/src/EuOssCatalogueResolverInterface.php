@@ -7,12 +7,13 @@ namespace Drupal\eu_oss_catalogue;
 use Drupal\Component\Plugin\ConfigurableInterface;
 use Drupal\Component\Plugin\PluginInspectionInterface;
 use Drupal\Core\Field\FieldItemListInterface;
+use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\eu_oss_catalogue\Model\Project;
 
 /**
  * Provides an interface for value resolver plugins.
  */
-interface EuOssCatalogueResolverInterface extends PluginInspectionInterface, ConfigurableInterface {
+interface EuOssCatalogueResolverInterface extends PluginInspectionInterface, ConfigurableInterface, ContainerFactoryPluginInterface {
 
   /**
    * Resolves a value imported by a provider.
