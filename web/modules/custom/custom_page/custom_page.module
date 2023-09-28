@@ -19,6 +19,7 @@ use Drupal\custom_page\Entity\CustomPageInterface;
 use Drupal\joinup_group\Exception\MissingGroupException;
 use Drupal\menu_link_content\MenuLinkContentInterface;
 use Drupal\node\NodeInterface;
+use Drupal\Core\Access\AccessResultInterface;
 
 /**
  * Implements hook_entity_type_alter().
@@ -247,12 +248,31 @@ function custom_page_node_access(NodeInterface $node, $op, AccountInterface $acc
 /**
  * Implements hook_entity_field_access().
  */
-function custom_page_entity_field_access($operation, FieldDefinitionInterface $field_definition, AccountInterface $account, ?FieldItemListInterface $items = NULL) {
-  return AccessResult::allowedIf(
-    $operation === 'edit'
-    && $field_definition->getName() === 'status'
-    && $field_definition->getTargetEntityTypeId() === 'node'
-    && $field_definition->getTargetBundle() === 'custom_page');
+function custom_page_entity_field_access($operation, FieldDefinitionInterface $field_definition, AccountInterface $account, ?FieldItemListInterface $items = NULL): AccessResultInterface {
+  switch ($field_definition->getName()) {
+    case 'status':
+      return AccessResult::allowedIf(
+        $operation === 'edit'
+        && $field_definition->getTargetEntityTypeId() === 'node'
+        && $field_definition->getTargetBundle() === 'custom_page');
+    case 'path';
+      $accessPermission = AccessResult::allowedIfHasPermissions($account, [
+        'custom landing pages',
+        'administer url aliases',
+      ], 'OR')->cachePerPermissions();
+
+      // Check if we are in group context.
+      $group = \Drupal::service('og.context')->getGroup();
+
+      return AccessResult::allowedIf(
+        $operation === 'edit'
+        && $field_definition->getTargetEntityTypeId() === 'node'
+        && !$group)
+        ->andIf($accessPermission)
+        ->addCacheContexts(['route']);
+    default:
+      return AccessResult::neutral();
+  }
 }
 
 /**
