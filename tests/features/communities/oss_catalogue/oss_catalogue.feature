@@ -6,6 +6,7 @@ Feature:
   Scenario: User is redirected from the standard collection URL.
     Given I visit "/collection/eu-oss-catalogue"
     Then I should be on "/eu-oss-catalogue"
+    And I see the text "Open source software of interest for Public Administrations" in the "Header" region
 
   Scenario: User cannot access OSS Catalogue's Page Manager page
     # We assume page's path is '/eu-oss-catalogue-dummy'
@@ -22,6 +23,7 @@ Feature:
       | Cristian Gagliardi | obsolete               | developers_italia | data-collection                                                 | Immuni is a mobile app that helps us to fight the COVID-19 pandemic by notifying users at risk of carrying the virus as early as possible     | published | 2020-09-13 |
 
     When I visit "/eu-oss-catalogue"
+    And I see the text "Open source software of interest for Public Administrations" in the "Header" region
 
     # Check menus.
     Then I should not see the link "Overview" in the "Navigation menu"
