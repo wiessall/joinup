@@ -256,7 +256,6 @@ display:
               document: default
               event: default
               news: default
-              tallinn_report: default
               video: default
             'entity:rdf_entity':
               asset_distribution: default
