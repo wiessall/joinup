@@ -45,11 +45,11 @@ final class GitUri {
     if (!UrlHelper::isValid($repositoryUrl)) {
       return NULL;
     }
-    // We can't get scheme from "git@..." URIs. Assume https.
-    $scheme = 'https';
+
+    $scheme = NULL;
     $host = NULL;
     $namespace = NULL;
-    $package = NULL;
+    $name = NULL;
 
     // Example: https://gihub.com/drupal/drupal-driver or
     // https://bitbucket.selfhosted.com/atlassian/docker-browse.git
@@ -57,48 +57,22 @@ final class GitUri {
       $parsed = parse_url($repositoryUrl);
       $scheme = $parsed['scheme'] ?? NULL;
       $host = $parsed['host'];
-      $pathParts = array_filter(
-        explode('/', $parsed['path'] ?? ''),
-        fn (string $part): bool => $part !== ''
-      );
+      $pathParts = array_filter(explode('/', $parsed['path'] ?? ''));
 
-      if (count($pathParts) > 2) {
-        $package = array_pop($pathParts);
+      if (count($pathParts) > 1) {
+        $name = array_pop($pathParts);
         $namespace = implode('/', $pathParts);
-        if (str_ends_with($package, '.git')) {
-          $package = substr($package, 0, -4);
+        if (str_ends_with($name, '.git')) {
+          $name = substr($name, 0, -4);
         }
       }
     }
 
-    // Example: git@foo.bar:namespace/package.git.
-    // git@foo.bar.baz.eu/sub/path:ec-europa/digit-joinup-reference.git.
-    if (
-      str_starts_with($repositoryUrl, 'git@') &&
-      preg_match('#^git@(.*):(.*)/([^/]*)\.git$#', $repositoryUrl, $matches)
-    ) {
-      [, $host, $namespace, $package] = $matches;
-    }
-
-    if (!is_string($scheme) || !is_string($host)) {
+    if (!is_string($scheme) || !is_string($host) || !$name || !$namespace) {
       return NULL;
     }
 
-    return new self($scheme, $host, $namespace, $package);
-  }
-
-  /**
-   * Determines whether the git URL is complete.
-   *
-   * @return bool
-   *   Whether the current instance represents a URL to a specific package or
-   *   not.
-   */
-  public function isComplete(): bool {
-    return (bool) array_filter(
-      [$this->namespace, $this->package],
-      fn ($property): bool => !is_null($property) && $property !== ''
-    );
+    return new self($scheme, $host, $namespace, $name);
   }
 
 }
