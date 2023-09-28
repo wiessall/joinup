@@ -72,69 +72,61 @@ class ApiGuesserTest extends KernelTestBase {
    */
   public function providerTestApiGuesser(): array {
     return [
-      'Only Gitlab' => [
-        'URL' => 'https://gitlab.com',
-        'Expected' => 'gitlab_com',
-      ],
-      'Gitlab home' => [
+      'GitLab home' => [
         'URL' => 'https://gitlab.com/z.a.horvath/smart_title',
         'Expected' => 'gitlab_com',
       ],
-      'Gitlab HTTP URL' => [
+      'GitLab HTTP URL' => [
         'URL' => 'https://gitlab.com/z.a.horvath/smart_title.git',
         'Expected' => 'gitlab_com',
       ],
-      'Gitlab SSH URL' => [
-        'URL' => 'git@gitlab.com:z.a.horvath/smart_title.git',
-        'Expected' => 'gitlab_com',
-      ],
 
-      'Self-hosted Gitlab home' => [
+      'Self-hosted GitLab home' => [
         'URL' => 'https://self-hosted.gitlab.example.com/subpath/ec-europa/digit-joinup-reference',
         'Expected' => 'gitlab_self_hosted',
       ],
-      'Self-hosted Gitlab home with trailing slash' => [
+      'Self-hosted GitLab home with trailing slash' => [
         'URL' => 'https://self-hosted.gitlab.example.com/subpath/ec-europa/digit-joinup-reference/',
         'Expected' => 'gitlab_self_hosted',
       ],
-      'Self-hosted Gitlab HTTP URL' => [
+      'Self-hosted GitLab HTTP URL' => [
         'URL' => 'https://self-hosted.gitlab.example.com/subpath/ec-europa/digit-joinup-reference.git',
         'Expected' => 'gitlab_self_hosted',
       ],
-      'Self-hosted Gitlab SSH URL' => [
-        'URL' => 'git@self-hosted.gitlab.example.com/subpath:ec-europa/digit-joinup-reference.git',
-        'Expected' => 'gitlab_self_hosted',
-      ],
 
-      'Self-hosted Gitlab in deep subpath' => [
+      'Self-hosted GitLab in deep subpath' => [
         'URL' => 'https://self-hosted.gitlab.example.com/bit/deeper/subpath/ec-europa/digit-joinup-poc-reference/',
         'Expected' => 'gitlab_self_hosted',
       ],
 
-      'Self-hosted Gitlab in root, with deep namespace' => [
+      'Self-hosted GitLab in root, with deep namespace' => [
         'URL' => 'https://gitlab.opencode.de.example.com/xleitstelle/xplanung/validierungsregeln/profile/berlin',
         'Expected' => 'gitlab_self_hosted',
       ],
 
-      'Self-hosted Gitlab in subpath, with deep namespace' => [
+      'Self-hosted GitLab in subpath, with deep namespace' => [
         'URL' => 'https://self-hosted.gitlab.example.com/bit/deeper/subpath/deep/namespace/package',
         'Expected' => 'gitlab_self_hosted',
       ],
-
-      'Only GitHub' => [
-        'URL' => 'https://github.com',
-        'Expected' => 'github',
+      'Self-hosted GitLab non-repository' => [
+        'URL' => 'https://self-hosted.gitlab.example.com/bit',
+        'Expected' => NULL,
       ],
+      'Self-hosted GitLab non-repository (host only)' => [
+        'URL' => 'https://self-hosted.gitlab.example.com',
+        'Expected' => NULL,
+      ],
+      'Self-hosted GitLab non-repository (arbitrary path)' => [
+        'URL' => 'https://self-hosted.gitlab.example.com/foo/bar/baz/qux',
+        'Expected' => NULL,
+      ],
+
       'GitHub home' => [
         'URL' => 'https://github.com/ec-europa/toolkit',
         'Expected' => 'github',
       ],
       'GitHub HTTP URL' => [
         'URL' => 'https://github.com/ec-europa/toolkit.git',
-        'Expected' => 'github',
-      ],
-      'GitHub SSH URL' => [
-        'URL' => 'git@github.com:ec-europa/toolkit.git',
         'Expected' => 'github',
       ],
 
@@ -145,10 +137,6 @@ class ApiGuesserTest extends KernelTestBase {
       ],
       'Bitbucket HTTP URL' => [
         'URL' => 'https://self-hosted.bitbucket.example.com/atlassianlabs/docker-browse.git',
-        'Expected' => NULL,
-      ],
-      'Bitbucket SSH URL' => [
-        'URL' => 'git@self-hosted.bitbucket.example.com:atlassianlabs/docker-browse.git',
         'Expected' => NULL,
       ],
     ];

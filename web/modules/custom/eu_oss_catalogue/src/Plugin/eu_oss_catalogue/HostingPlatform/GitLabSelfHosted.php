@@ -61,10 +61,8 @@ class GitLabSelfHosted extends GitLabDotCom {
    * {@inheritdoc}
    */
   public function isHostingPlatformForUrl(string $repositoryUrl): bool {
-    if (
-      !($gitUri = GitUri::fromUriString($repositoryUrl)) ||
-      $gitUri->host === static::GITLAB_BASE_URL ||
-      !$gitUri->isComplete()
+    if (!($gitUri = GitUri::fromUriString($repositoryUrl)) ||
+      $gitUri->host === static::GITLAB_BASE_URL
     ) {
       return FALSE;
     }
