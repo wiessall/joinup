@@ -7,6 +7,7 @@ namespace Drupal\eu_oss_catalogue;
 use Drupal\Component\Utility\UrlHelper;
 use Drupal\Core\Logger\LoggerChannelInterface;
 use Drupal\Core\State\StateInterface;
+use Drupal\eu_oss_catalogue\Model\ApiGuess;
 use Drupal\eu_oss_catalogue\Model\GitUri;
 
 /**
@@ -22,18 +23,6 @@ final class ApiGuesser implements ApiGuesserInterface {
    * @const string
    */
   protected const STATE_STORAGE_KEY = 'eu_oss_catalogue.api_guesser.guessed';
-
-  /**
-   * Guesser defaults.
-   *
-   * @const string[]
-   */
-  protected const GUESSED_DEFAULTS = [
-    // Bitbucket is not yet implemented.
-    // 'bitbucket.org' => 'bitbucket_org',.
-    'github.com' => 'github',
-    'gitlab.com' => 'gitlab_com',
-  ];
 
   /**
    * Construct a new ApiGuesser instance.
@@ -54,62 +43,61 @@ final class ApiGuesser implements ApiGuesserInterface {
   /**
    * {@inheritdoc}
    */
-  public function getHostingPlatformPluginId(string $repositoryUrl): ?string {
+  public function getHostingPlatformApi(string $repositoryUrl): ?ApiGuess {
     if (!UrlHelper::isValid($repositoryUrl)) {
       throw new \InvalidArgumentException(sprintf("The given repository URL parameter is not a valid URL: %s", $repositoryUrl));
     }
 
-    $previouslyGuessedPluginId = NULL;
-    $guessedPluginId = NULL;
+    $previousGuess = NULL;
+    $guess = NULL;
 
-    if (is_a(($gitUri = GitUri::fromUriString($repositoryUrl)), GitUri::class)) {
-      if ($previouslyGuessedPluginId = $this->getGuessedPluginId($gitUri->host)) {
-        return $previouslyGuessedPluginId;
+    if ($gitUri = GitUri::fromUriString($repositoryUrl)) {
+      if ($previousGuess = $this->getPreviousGuess($gitUri->host)) {
+        return $previousGuess;
       }
 
       foreach (array_keys($this->hostingPlatformManager->getDefinitions()) as $pluginId) {
         $plugin = $this->hostingPlatformManager->createInstance($pluginId);
-        assert($plugin instanceof EuOssCatalogueHostingPlatformInterface);
+        \assert($plugin instanceof EuOssCatalogueHostingPlatformInterface);
 
         if ($plugin->isHostingPlatformForUrl($repositoryUrl)) {
-          $guessedPluginId = $pluginId;
+          $guess = new ApiGuess($pluginId, $plugin->getBaseFromRepoUrl($repositoryUrl));
           break;
         }
       }
     }
 
-    if (!$guessedPluginId) {
+    if (!$guess) {
       $this->logger->warning(sprintf("No matching hosting platform plugin was found for URL '%s'", $repositoryUrl));
     }
 
-    if ($guessedPluginId !== $previouslyGuessedPluginId) {
-      $this->storeGuessedPluginId($gitUri->host, $guessedPluginId);
+    if ($guess != $previousGuess) {
+      $this->storeGuess($gitUri->host, $guess);
     }
-    return $guessedPluginId;
+    return $guess;
   }
 
   /**
-   * Returns the previously guessed plugin IDs.
+   * Returns the previously guesses.
    *
-   * @return string[]
-   *   All the previously guessed plugin IDs, keyed by host base URL.
+   * @return \Drupal\eu_oss_catalogue\Model\ApiGuess[]
+   *   All the previous guesses, keyed by host base URL.
    */
-  protected function getGuessedPluginIds(): array {
-    return $this->state->get(self::STATE_STORAGE_KEY, self::GUESSED_DEFAULTS);
+  protected function getPreviousGuesses(): array {
+    return $this->state->get(self::STATE_STORAGE_KEY, $this->getPreviousGuessesDefaults());
   }
 
   /**
-   * Returns the previously guessed plugin ID for the specified base URL.
+   * Returns the previous guess for the specified base URL.
    *
    * @param string $baseUrl
    *   The base URL.
    *
-   * @return string|null
-   *   The previously guessed plugin ID if any, or NULL if there is no cached
-   *   result.
+   * @return \Drupal\eu_oss_catalogue\Model\ApiGuess|null
+   *   The previous guessed, or NULL if there is no cached result.
    */
-  protected function getGuessedPluginId(string $baseUrl): ?string {
-    return $this->getGuessedPluginIds()[$baseUrl] ?? NULL;
+  protected function getPreviousGuess(string $baseUrl): ?ApiGuess {
+    return $this->getPreviousGuesses()[$baseUrl] ?? NULL;
   }
 
   /**
@@ -119,13 +107,28 @@ final class ApiGuesser implements ApiGuesserInterface {
    *
    * @param string $baseUrl
    *   The base URL.
-   * @param string|null $pluginId
-   *   The discovered plugin ID to store in cache. Not stored if value is empty.
+   * @param \Drupal\eu_oss_catalogue\Model\ApiGuess|null $guess
+   *   The guessed value object to store in cache. Not stored if value is empty.
    */
-  protected function storeGuessedPluginId(string $baseUrl, ?string $pluginId): void {
-    if (!empty($pluginId)) {
-      $this->state->set(self::STATE_STORAGE_KEY, [$baseUrl => $pluginId] + $this->getGuessedPluginIds());
+  protected function storeGuess(string $baseUrl, ?ApiGuess $guess): void {
+    if ($guess !== NULL) {
+      $this->state->set(self::STATE_STORAGE_KEY, [$baseUrl => $guess] + $this->getPreviousGuesses());
     }
+  }
+
+  /**
+   * Returns the guesser defaults.
+   *
+   * @return \Drupal\eu_oss_catalogue\Model\ApiGuess[]
+   *   Default guessers.
+   */
+  protected function getPreviousGuessesDefaults(): array {
+    return [
+      // Bitbucket is not yet implemented.
+      // 'bitbucket.org' => ...
+      'github.com' => new ApiGuess('github', 'https://github.com'),
+      'gitlab.com' => new ApiGuess('gitlab_com', 'https://gitlab.com'),
+    ];
   }
 
 }

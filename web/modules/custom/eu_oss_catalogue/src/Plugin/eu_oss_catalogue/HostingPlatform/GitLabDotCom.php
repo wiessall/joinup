@@ -45,6 +45,13 @@ class GitLabDotCom extends EuOssCatalogueGitHostingPlatformPluginBase {
   }
 
   /**
+   * {@inheritdoc}
+   */
+  public function getBaseFromRepoUrl(string $repositoryUrl): ?string {
+    return 'https://gitlab.com';
+  }
+
+  /**
    * Returns the GitLab client.
    *
    * @return \Gitlab\Client
