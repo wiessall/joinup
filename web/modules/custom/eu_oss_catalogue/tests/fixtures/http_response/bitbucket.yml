@@ -1,0 +1,93 @@
+self-hosted.bitbucket.example.com:
+  atlassianlabs:
+    docker-browse:
+      type: repository
+      full_name: atlassianlabs/docker-browse
+      links:
+        self:
+          href: 'https://self-hosted.bitbucket.example.com/!api/2.0/repositories/atlassianlabs/docker-browse'
+        html:
+          href: 'https://self-hosted.bitbucket.example.com/atlassianlabs/docker-browse'
+        avatar:
+          href: 'https://bytebucket.org/ravatar/%7Bdb64fe63-9c7d-4479-82e1-8add140d483a%7D?ts=nodejs'
+        pullrequests:
+          href: 'https://self-hosted.bitbucket.example.com/!api/2.0/repositories/atlassianlabs/docker-browse/pullrequests'
+        commits:
+          href: 'https://self-hosted.bitbucket.example.com/!api/2.0/repositories/atlassianlabs/docker-browse/commits'
+        forks:
+          href: 'https://self-hosted.bitbucket.example.com/!api/2.0/repositories/atlassianlabs/docker-browse/forks'
+        watchers:
+          href: 'https://self-hosted.bitbucket.example.com/!api/2.0/repositories/atlassianlabs/docker-browse/watchers'
+        branches:
+          href: 'https://self-hosted.bitbucket.example.com/!api/2.0/repositories/atlassianlabs/docker-browse/refs/branches'
+        tags:
+          href: 'https://self-hosted.bitbucket.example.com/!api/2.0/repositories/atlassianlabs/docker-browse/refs/tags'
+        downloads:
+          href: 'https://self-hosted.bitbucket.example.com/!api/2.0/repositories/atlassianlabs/docker-browse/downloads'
+        source:
+          href: 'https://self-hosted.bitbucket.example.com/!api/2.0/repositories/atlassianlabs/docker-browse/src'
+        clone:
+          - name: https
+            href: 'https://self-hosted.bitbucket.example.com/atlassianlabs/docker-browse.git'
+          - name: ssh
+            href: 'git@self-hosted.bitbucket.example.com:atlassianlabs/docker-browse.git'
+        issues:
+          href: 'https://self-hosted.bitbucket.example.com/!api/2.0/repositories/atlassianlabs/docker-browse/issues'
+        hooks:
+          href: 'https://self-hosted.bitbucket.example.com/!api/2.0/repositories/atlassianlabs/docker-browse/hooks'
+      name: docker-browse
+      slug: docker-browse
+      description: 'CLI tool to browse docker registries using Docker Registry HTTP API V2: https://docs.docker.com/registry/spec/api/'
+      scm: git
+      website: ''
+      owner:
+        display_name: 'Atlassian Labs'
+        links:
+          self:
+            href: 'https://self-hosted.bitbucket.example.com/!api/2.0/workspaces/%7B6f461d1e-a3dd-433b-a0e3-7a69daf6ea47%7D'
+          avatar:
+            href: 'https://self-hosted.bitbucket.example.com/account/atlassianlabs/avatar/'
+          html:
+            href: 'https://self-hosted.bitbucket.example.com/%7B6f461d1e-a3dd-433b-a0e3-7a69daf6ea47%7D/'
+        type: team
+        uuid: '{6f461d1e-a3dd-433b-a0e3-7a69daf6ea47}'
+        username: atlassianlabs
+      workspace:
+        type: workspace
+        uuid: '{6f461d1e-a3dd-433b-a0e3-7a69daf6ea47}'
+        name: 'Atlassian Labs'
+        slug: atlassianlabs
+        links:
+          avatar:
+            href: 'https://self-hosted.bitbucket.example.com/workspaces/atlassianlabs/avatar/?ts=1674615417'
+          html:
+            href: 'https://self-hosted.bitbucket.example.com/atlassianlabs/'
+          self:
+            href: 'https://self-hosted.bitbucket.example.com/!api/2.0/workspaces/atlassianlabs'
+      is_private: false
+      project:
+        type: project
+        key: ATL
+        uuid: '{a5db4f36-0092-467f-a592-75354e2d38d2}'
+        name: 'Atlassian Labs'
+        links:
+          self:
+            href: 'https://self-hosted.bitbucket.example.com/!api/2.0/workspaces/atlassianlabs/projects/ATL'
+          html:
+            href: 'https://self-hosted.bitbucket.example.com/atlassianlabs/workspace/projects/ATL'
+          avatar:
+            href: 'https://self-hosted.bitbucket.example.com/account/user/atlassianlabs/projects/ATL/avatar/32?ts=1448850256'
+      fork_policy: allow_forks
+      created_on: '2017-06-27T10:43:55.541794+00:00'
+      updated_on: '2018-01-09T11:37:47.680057+00:00'
+      size: 1142848
+      language: nodejs
+      has_issues: true
+      has_wiki: false
+      uuid: '{db64fe63-9c7d-4479-82e1-8add140d483a}'
+      mainbranch:
+        name: main
+        type: branch
+      override_settings:
+        default_merge_strategy: false
+        branching_model: false

@@ -29,4 +29,15 @@ interface EuOssCatalogueHostingPlatformInterface extends ConfigurableInterface {
    */
   public function getLabel(): TranslatableMarkup;
 
+  /**
+   * Determines whether the plugin can parse the provided git URL.
+   *
+   * @param string $repositoryUrl
+   *   The repository URL.
+   *
+   * @return bool
+   *   Whether the plugin can parse the provided git URL.
+   */
+  public function isHostingPlatformForUrl(string $repositoryUrl): bool;
+
 }

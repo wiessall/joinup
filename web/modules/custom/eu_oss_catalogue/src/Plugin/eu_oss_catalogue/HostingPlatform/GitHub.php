@@ -10,6 +10,7 @@ use Drupal\Core\Site\Settings;
 use Drupal\eu_oss_catalogue\EuOssCatalogueGitHostingPlatformPluginBase;
 use Drupal\eu_oss_catalogue\Exception\MissingAccessTokenException;
 use Drupal\eu_oss_catalogue\Model\GitHubSearchType;
+use Drupal\eu_oss_catalogue\Model\GitUri;
 use Drupal\eu_oss_catalogue\Model\HostingPlatformResult;
 use Github\Api\GraphQL;
 use Github\AuthMethod;
@@ -28,6 +29,13 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * )
  */
 class GitHub extends EuOssCatalogueGitHostingPlatformPluginBase {
+
+  /**
+   * Base URL of GitHub.
+   *
+   * @const string
+   */
+  private const GITHUB_BASE_URL = 'github.com';
 
   /**
    * Static cache for the GitHub client.
@@ -173,7 +181,7 @@ class GitHub extends EuOssCatalogueGitHostingPlatformPluginBase {
         yield new HostingPlatformResult(
           $node['owner']['login'],
           $node['name'],
-          "https://github.com/{$node['owner']['login']}/{$node['name']}",
+          'https://' . self::GITHUB_BASE_URL . "/{$node['owner']['login']}/{$node['name']}",
           $node['defaultBranchRef']['name'],
           $node['id'],
           $node['description'],
@@ -181,6 +189,14 @@ class GitHub extends EuOssCatalogueGitHostingPlatformPluginBase {
         );
       }
     }
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function isHostingPlatformForUrl(string $repositoryUrl): bool {
+    return ($gitUri = GitUri::fromUriString($repositoryUrl))
+      && $gitUri->host === self::GITHUB_BASE_URL;
   }
 
 }
