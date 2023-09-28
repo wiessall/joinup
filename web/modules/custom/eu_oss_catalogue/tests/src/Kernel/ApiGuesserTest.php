@@ -36,7 +36,6 @@ class ApiGuesserTest extends KernelTestBase {
    */
   public function setUp(): void {
     parent::setUp();
-
     $this->apiGuesser = $this->container->get('eu_oss_catalogue.git_remote.api_guesser');
   }
 
@@ -45,13 +44,13 @@ class ApiGuesserTest extends KernelTestBase {
    *
    * @param string $url
    *   The URL of a git repository.
-   * @param string|null $expected_api
+   * @param string|null $expectedApi
    *   The expected result from the API Guesser service.
    *
    * @dataProvider providerTestApiGuesser
    */
-  public function testApiGuesser(string $url, ?string $expected_api): void {
-    if ($expected_api === NULL) {
+  public function testApiGuesser(string $url, ?string $expectedApi): void {
+    if ($expectedApi === NULL) {
       $logger = $this->prophesize(LoggerChannelInterface::class);
       $logger->warning()->withArguments([Argument::any()])->shouldBeCalledOnce();
 
@@ -62,10 +61,7 @@ class ApiGuesserTest extends KernelTestBase {
       );
     }
 
-    $this->assertEquals(
-      $expected_api,
-      $this->apiGuesser->getHostingPlatformPluginId($url)
-    );
+    $this->assertEquals($expectedApi, $this->apiGuesser->getHostingPlatformPluginId($url));
   }
 
   /**
@@ -163,14 +159,14 @@ class ApiGuesserTest extends KernelTestBase {
    *
    * @param string $url
    *   The URL of a git repository.
-   * @param string $expected_exception
+   * @param string $expectedException
    *   The expected exception.
    *
    * @dataProvider providerTestApiGuesserExceptions
    */
-  public function testApiGuesserExceptions(string $url, string $expected_exception): void {
-    $this->expectException($expected_exception);
-    $this->apiGuesser->getHostingPlatformPluginId($url);
+  public function testApiGuesserExceptions(string $url, string $expectedException): void {
+    $this->expectException($expectedException);
+    $this->apiGuesser->getHostingPlatformApi($url);
   }
 
   /**
