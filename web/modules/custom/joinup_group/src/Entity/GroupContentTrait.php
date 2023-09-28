@@ -37,7 +37,7 @@ trait GroupContentTrait {
     $group = $this->getFirstReferencedEntity($this->getGroupFieldName());
 
     if ($this->get($this->getGroupFieldName())->isEmpty()) {
-      return null;
+      return NULL;
     }
 
     if (empty($group) || !$group instanceof GroupInterface) {
