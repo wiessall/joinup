@@ -20,6 +20,7 @@ use Psr\Log\LogLevel;
  * @EuOssCatalogueHostingPlatform(
  *   id = "gitlab_com",
  *   label = @Translation("GitLab (gitlab.com)"),
+ *   weight = -10,
  * )
  */
 class GitLabDotCom extends EuOssCatalogueGitHostingPlatformPluginBase {
