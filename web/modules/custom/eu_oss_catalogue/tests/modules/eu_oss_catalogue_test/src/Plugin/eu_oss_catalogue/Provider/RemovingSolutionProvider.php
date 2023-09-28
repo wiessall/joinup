@@ -6,6 +6,7 @@ namespace Drupal\eu_oss_catalogue_test\Plugin\eu_oss_catalogue\Provider;
 
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Logger\LoggerChannelInterface;
+use Drupal\eu_oss_catalogue\ApiGuesserInterface;
 use Drupal\eu_oss_catalogue\EuOssCataloguePluginManagerInterface;
 use Drupal\eu_oss_catalogue\Plugin\eu_oss_catalogue\Provider\DevelopersItalia;
 use GuzzleHttp\Client;
@@ -41,6 +42,8 @@ class RemovingSolutionProvider extends DevelopersItalia {
    *   The HTTP client.
    * @param \Drupal\eu_oss_catalogue\EuOssCataloguePluginManagerInterface $platformManager
    *   The EU OSS Catalogue code hosting platform plugin manager service.
+   * @param \Drupal\eu_oss_catalogue\ApiGuesserInterface $apiGuesser
+   *   The API guesser service.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
    *   The entity type manager.
    */
@@ -52,9 +55,10 @@ class RemovingSolutionProvider extends DevelopersItalia {
     protected LoggerChannelInterface $logger,
     Client $httpClient,
     protected EuOssCataloguePluginManagerInterface $platformManager,
+    protected ApiGuesserInterface $apiGuesser,
     protected EntityTypeManagerInterface $entityTypeManager,
   ) {
-    parent::__construct($configuration, $pluginId, $pluginDefinition, $parserManager, $logger, $httpClient, $platformManager);
+    parent::__construct($configuration, $pluginId, $pluginDefinition, $parserManager, $logger, $httpClient, $platformManager, $apiGuesser);
   }
 
   /**
@@ -69,6 +73,7 @@ class RemovingSolutionProvider extends DevelopersItalia {
       $container->get('logger.channel.eu_oss_catalogue'),
       $container->get('http_client'),
       $container->get('plugin.manager.eu_oss_catalogue.hosting_platform'),
+      $container->get('eu_oss_catalogue.git_remote.api_guesser'),
       $container->get('entity_type.manager'),
     );
   }

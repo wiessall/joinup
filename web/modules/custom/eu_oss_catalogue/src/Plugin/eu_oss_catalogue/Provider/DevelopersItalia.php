@@ -7,6 +7,7 @@ namespace Drupal\eu_oss_catalogue\Plugin\eu_oss_catalogue\Provider;
 use Drupal\Component\Serialization\Json;
 use Drupal\Core\Config\Schema\SchemaCheckTrait;
 use Drupal\Core\Logger\LoggerChannelInterface;
+use Drupal\eu_oss_catalogue\ApiGuesserInterface;
 use Drupal\eu_oss_catalogue\EuOssCataloguePluginManagerInterface;
 use Drupal\eu_oss_catalogue\EuOssCatalogueProviderPluginBase;
 use GuzzleHttp\Client;
@@ -71,6 +72,8 @@ class DevelopersItalia extends EuOssCatalogueProviderPluginBase {
    *   The HTTP client.
    * @param \Drupal\eu_oss_catalogue\EuOssCataloguePluginManagerInterface $platformManager
    *   The EU OSS Catalogue code hosting platform plugin manager service.
+   * @param \Drupal\eu_oss_catalogue\ApiGuesserInterface $apiGuesser
+   *   The API guesser service.
    */
   public function __construct(
     array $configuration,
@@ -80,8 +83,9 @@ class DevelopersItalia extends EuOssCatalogueProviderPluginBase {
     protected LoggerChannelInterface $logger,
     protected Client $httpClient,
     protected EuOssCataloguePluginManagerInterface $platformManager,
+    protected ApiGuesserInterface $apiGuesser,
   ) {
-    parent::__construct($configuration, $pluginId, $pluginDefinition, $parserManager, $this->logger);
+    parent::__construct($configuration, $pluginId, $pluginDefinition, $parserManager, $logger);
   }
 
   /**
@@ -96,6 +100,7 @@ class DevelopersItalia extends EuOssCatalogueProviderPluginBase {
       $container->get('logger.channel.eu_oss_catalogue'),
       $container->get('http_client'),
       $container->get('plugin.manager.eu_oss_catalogue.hosting_platform'),
+      $container->get('eu_oss_catalogue.git_remote.api_guesser'),
     );
   }
 
