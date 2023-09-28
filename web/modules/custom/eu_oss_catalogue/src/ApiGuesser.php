@@ -74,6 +74,7 @@ final class ApiGuesser implements ApiGuesserInterface {
     if ($guess != $previousGuess) {
       $this->storeGuess($gitUri->host, $guess);
     }
+
     return $guess;
   }
 
