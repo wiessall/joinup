@@ -96,12 +96,20 @@ provide the module's functionality.
 #### The Provider
 
 Each provider plugin is responsible in fetching data from certain source called
-_provider_. We've started from national OSS catalogues, such as [Developers
-Italia](https://developers.italia.it), but this plugin type allows to fetch data
-from any source by defining its own logic. The only constraint is that data
-fetched by the plugin should be an array of array items. Each item is a
-structured array, following the same schema. The plugin is responsible also for
-the consistency validity of the data that is fetched.
+_provider_.
+
+At the moment the following 2 provider plugins are implemented (as wip):
+
+- Developers Italia: Italian National OSS Catalogue,
+by https://developers.italia.it website
+- Open CoDE: German National OSS Catalogue,
+by https://opencode.de website. (GitLab (self hosted))
+
+These plugin type allows to fetch data from any source by defining its own
+logic. The only constraint is that data fetched by the plugin should be an
+array of array items. Each item is a structured array, following the same
+schema. The plugin is responsible also for the consistency validity of the data
+that is fetched.
 
 Each provider plugin must designate a _parser_ plugin in their annotation block.
 
@@ -112,7 +120,7 @@ each _provider_ should designate a _parser_, the later knows how to process data
 produced by the _provider_. Then, why we need a _parser_ when we already have a
 _provider_? Well, several providers might use the same data structure, thus the
 same parser. A good example are the [Developers Italia](
-https://developers.italia.it) and ****GER**** catalogues as they share the same
+https://developers.italia.it) and [Open CoDE](https://opencode.de) catalogues as they share the same
 [publiccode.yml](https://yml.publiccode.tools/) schema for describing Open Source
 Software Solutions.
 
@@ -218,8 +226,17 @@ The module ships with a Drush command that allows to fetch and queue solutions
 from the command line.
 
 Example:
+
+Run the following, to fetch from
+[Developers Italia (Italian National OSS Catalogue)](https://developers.italia.it)
 ```bash
 ./vendor/bin/drush eu-oss:fetch developers_italia
+```
+
+Run the following, to fetch from
+[Open CoDE (German National OSS Catalogue)](https://opencode.de)
+```bash
+./vendor/bin/drush eu-oss:fetch hosting_platform:open_code
 ```
 
 This command queries the Developers Italia provider endpoint, fetches the data
