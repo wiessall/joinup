@@ -105,10 +105,7 @@ abstract class EuOssCatalogueParserPluginBase extends PluginBase implements EuOs
       $this->doParse($solution, $project, $metadata, $provider);
     }
     catch (\Throwable $exception) {
-      $this->logger->error('Cannot parse solution @title for @url', [
-        '@title' => $solution->label(),
-        '@url' => $project->url,
-      ]);
+      Error::logException($this->logger, $exception);
       return NULL;
     }
 
