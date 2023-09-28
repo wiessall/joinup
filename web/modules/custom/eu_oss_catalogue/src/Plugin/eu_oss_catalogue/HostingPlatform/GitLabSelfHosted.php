@@ -6,6 +6,7 @@ namespace Drupal\eu_oss_catalogue\Plugin\eu_oss_catalogue\HostingPlatform;
 
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\eu_oss_catalogue\Model\GitLabReleaseSort;
+use Drupal\eu_oss_catalogue\Model\GitUri;
 use Gitlab\Client;
 use GraphQL\Actions\Query;
 
@@ -54,6 +55,40 @@ class GitLabSelfHosted extends GitLabDotCom {
   public function submitConfigurationForm(array &$form, FormStateInterface $formState): void {
     parent::submitConfigurationForm($form, $formState);
     $this->configuration['url'] = trim($formState->getValue('url'), ' /');
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function isHostingPlatformForUrl(string $repositoryUrl): bool {
+    if (
+      !($gitUri = GitUri::fromUriString($repositoryUrl)) ||
+      $gitUri->host === static::GITLAB_BASE_URL ||
+      !$gitUri->isComplete()
+    ) {
+      return FALSE;
+    }
+
+    $namespaceParts = explode('/', $gitUri->namespace);
+    $this->configuration['url'] = $host = "$gitUri->scheme://$gitUri->host";
+    $client = $this->getClient();
+    do {
+      try {
+        $fullPath = implode('/', $namespaceParts) . "/$gitUri->package";
+        $query = new Query('project', ['fullPath' => $fullPath]);
+        $query->repository([])->use('exists');
+        $response = $client->graphql()->execute($query->toString());
+      }
+      catch (\Exception) {
+        $host .= '/' . array_shift($namespaceParts);
+        $client->setUrl($host);
+        continue;
+      }
+
+      return !empty($response['data']['project']['repository']['exists']);
+    } while (count($namespaceParts) > 0);
+
+    return FALSE;
   }
 
   /**
