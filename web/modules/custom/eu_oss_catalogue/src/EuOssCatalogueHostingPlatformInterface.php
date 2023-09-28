@@ -45,4 +45,16 @@ interface EuOssCatalogueHostingPlatformInterface extends ConfigurableInterface {
    */
   public function isHostingPlatformForUrl(string $repositoryUrl): bool;
 
+  /**
+   * Returns the code hosting platform URL given a project URL.
+   *
+   * @param string $repositoryUrl
+   *   The project repository URL.
+   *
+   * @return string|null
+   *   The determined base URL of the code hosting platform or NULL if it
+   *   cannot be determined.
+   */
+  public function getBaseFromRepoUrl(string $repositoryUrl): ?string;
+
 }

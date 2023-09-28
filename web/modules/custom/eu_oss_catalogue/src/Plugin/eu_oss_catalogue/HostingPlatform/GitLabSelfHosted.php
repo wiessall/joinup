@@ -21,6 +21,13 @@ use GraphQL\Actions\Query;
 class GitLabSelfHosted extends GitLabDotCom {
 
   /**
+   * Static cache for base URL detection.
+   *
+   * @var string[]
+   */
+  protected array $baseUrlCache = [];
+
+  /**
    * {@inheritdoc}
    */
   public function defaultConfiguration(): array {
@@ -61,10 +68,36 @@ class GitLabSelfHosted extends GitLabDotCom {
    * {@inheritdoc}
    */
   public function isHostingPlatformForUrl(string $repositoryUrl): bool {
+    return $this->getBaseFromRepoUrl($repositoryUrl) !== NULL;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getBaseFromRepoUrl(string $repositoryUrl): ?string {
+    if (!array_key_exists($repositoryUrl, $this->baseUrlCache)) {
+      // Statically cache the findings as this is called more than once in the
+      // same request.
+      $this->baseUrlCache[$repositoryUrl] = $this->doGetBaseFromRepoUrl($repositoryUrl);
+    }
+    return $this->baseUrlCache[$repositoryUrl];
+  }
+
+  /**
+   * Returns the self-hosted GitLab code hosting platform URL.
+   *
+   * @param string $repositoryUrl
+   *   The project repository URL.
+   *
+   * @return string|null
+   *   The determined base URL of the code hosting platform or NULL if it
+   *   cannot be determined.
+   */
+  protected function doGetBaseFromRepoUrl(string $repositoryUrl): ?string {
     if (!($gitUri = GitUri::fromUriString($repositoryUrl)) ||
       $gitUri->host === static::GITLAB_BASE_URL
     ) {
-      return FALSE;
+      return NULL;
     }
 
     $namespaceParts = explode('/', $gitUri->namespace);
@@ -79,16 +112,18 @@ class GitLabSelfHosted extends GitLabDotCom {
       }
       catch (\Throwable $exception) {
         if ($exception->getCode() === 501) {
-          $host .= '/' . array_shift($namespaceParts);
-          $client->setUrl($host);
+          if ($namespaceParts >= 2) {
+            $host .= '/' . array_shift($namespaceParts);
+            $client->setUrl($host);
+          }
           continue;
         }
         throw $exception;
       }
-      return !empty($response['data']['project']['repository']['exists']);
+      return empty($response['data']['project']['repository']['exists']) ? NULL : $host;
     } while (count($namespaceParts) > 0);
 
-    return FALSE;
+    return NULL;
   }
 
   /**

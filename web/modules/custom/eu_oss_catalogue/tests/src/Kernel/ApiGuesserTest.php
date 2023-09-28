@@ -7,6 +7,7 @@ namespace Drupal\Tests\eu_oss_catalogue\Kernel;
 use Drupal\Core\Logger\LoggerChannelInterface;
 use Drupal\KernelTests\KernelTestBase;
 use Drupal\eu_oss_catalogue\ApiGuesser;
+use Drupal\eu_oss_catalogue\Model\ApiGuess;
 use Prophecy\Argument;
 
 /**
@@ -44,12 +45,12 @@ class ApiGuesserTest extends KernelTestBase {
    *
    * @param string $url
    *   The URL of a git repository.
-   * @param string|null $expectedApi
+   * @param array|null $expectedApi
    *   The expected result from the API Guesser service.
    *
    * @dataProvider providerTestApiGuesser
    */
-  public function testApiGuesser(string $url, ?string $expectedApi): void {
+  public function testApiGuesser(string $url, ?array $expectedApi): void {
     if ($expectedApi === NULL) {
       $logger = $this->prophesize(LoggerChannelInterface::class);
       $logger->warning()->withArguments([Argument::any()])->shouldBeCalledOnce();
@@ -60,8 +61,11 @@ class ApiGuesserTest extends KernelTestBase {
         $logger->reveal()
       );
     }
+    else {
+      $expectedApi = new ApiGuess($expectedApi['platformPluginId'], $expectedApi['platformBaseUrl']);
+    }
 
-    $this->assertEquals($expectedApi, $this->apiGuesser->getHostingPlatformPluginId($url));
+    $this->assertEquals($expectedApi, $this->apiGuesser->getHostingPlatformApi($url));
   }
 
   /**
@@ -74,39 +78,63 @@ class ApiGuesserTest extends KernelTestBase {
     return [
       'GitLab home' => [
         'URL' => 'https://gitlab.com/z.a.horvath/smart_title',
-        'Expected' => 'gitlab_com',
+        'Expected' => [
+          'platformPluginId' => 'gitlab_com',
+          'platformBaseUrl' => 'https://gitlab.com',
+        ],
       ],
       'GitLab HTTP URL' => [
         'URL' => 'https://gitlab.com/z.a.horvath/smart_title.git',
-        'Expected' => 'gitlab_com',
+        'Expected' => [
+          'platformPluginId' => 'gitlab_com',
+          'platformBaseUrl' => 'https://gitlab.com',
+        ],
       ],
 
       'Self-hosted GitLab home' => [
         'URL' => 'https://self-hosted.gitlab.example.com/subpath/ec-europa/digit-joinup-reference',
-        'Expected' => 'gitlab_self_hosted',
+        'Expected' => [
+          'platformPluginId' => 'gitlab_self_hosted',
+          'platformBaseUrl' => 'https://self-hosted.gitlab.example.com/subpath',
+        ],
       ],
       'Self-hosted GitLab home with trailing slash' => [
         'URL' => 'https://self-hosted.gitlab.example.com/subpath/ec-europa/digit-joinup-reference/',
-        'Expected' => 'gitlab_self_hosted',
+        'Expected' => [
+          'platformPluginId' => 'gitlab_self_hosted',
+          'platformBaseUrl' => 'https://self-hosted.gitlab.example.com/subpath',
+        ],
       ],
       'Self-hosted GitLab HTTP URL' => [
         'URL' => 'https://self-hosted.gitlab.example.com/subpath/ec-europa/digit-joinup-reference.git',
-        'Expected' => 'gitlab_self_hosted',
+        'Expected' => [
+          'platformPluginId' => 'gitlab_self_hosted',
+          'platformBaseUrl' => 'https://self-hosted.gitlab.example.com/subpath',
+        ],
       ],
 
       'Self-hosted GitLab in deep subpath' => [
         'URL' => 'https://self-hosted.gitlab.example.com/bit/deeper/subpath/ec-europa/digit-joinup-poc-reference/',
-        'Expected' => 'gitlab_self_hosted',
+        'Expected' => [
+          'platformPluginId' => 'gitlab_self_hosted',
+          'platformBaseUrl' => 'https://self-hosted.gitlab.example.com/bit/deeper/subpath',
+        ],
       ],
 
       'Self-hosted GitLab in root, with deep namespace' => [
         'URL' => 'https://gitlab.opencode.de.example.com/xleitstelle/xplanung/validierungsregeln/profile/berlin',
-        'Expected' => 'gitlab_self_hosted',
+        'Expected' => [
+          'platformPluginId' => 'gitlab_self_hosted',
+          'platformBaseUrl' => 'https://gitlab.opencode.de.example.com',
+        ],
       ],
 
       'Self-hosted GitLab in subpath, with deep namespace' => [
         'URL' => 'https://self-hosted.gitlab.example.com/bit/deeper/subpath/deep/namespace/package',
-        'Expected' => 'gitlab_self_hosted',
+        'Expected' => [
+          'platformPluginId' => 'gitlab_self_hosted',
+          'platformBaseUrl' => 'https://self-hosted.gitlab.example.com/bit/deeper/subpath',
+        ],
       ],
       'Self-hosted GitLab non-repository' => [
         'URL' => 'https://self-hosted.gitlab.example.com/bit',
@@ -123,11 +151,17 @@ class ApiGuesserTest extends KernelTestBase {
 
       'GitHub home' => [
         'URL' => 'https://github.com/ec-europa/toolkit',
-        'Expected' => 'github',
+        'Expected' => [
+          'platformPluginId' => 'github',
+          'platformBaseUrl' => 'https://github.com',
+        ],
       ],
       'GitHub HTTP URL' => [
         'URL' => 'https://github.com/ec-europa/toolkit.git',
-        'Expected' => 'github',
+        'Expected' => [
+          'platformPluginId' => 'github',
+          'platformBaseUrl' => 'https://github.com',
+        ],
       ],
 
       // Bitbucket isn't yet implemented.

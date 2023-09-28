@@ -33,13 +33,6 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 class GitHub extends EuOssCatalogueGitHostingPlatformPluginBase {
 
   /**
-   * Base URL of GitHub.
-   *
-   * @const string
-   */
-  private const GITHUB_BASE_URL = 'github.com';
-
-  /**
    * Default terms for GitHub search.
    *
    * @const string[]
@@ -101,7 +94,14 @@ class GitHub extends EuOssCatalogueGitHostingPlatformPluginBase {
    */
   public function isHostingPlatformForUrl(string $repositoryUrl): bool {
     return ($gitUri = GitUri::fromUriString($repositoryUrl))
-      && $gitUri->host === self::GITHUB_BASE_URL;
+      && $gitUri->host === $this->getBaseFromRepoUrl($repositoryUrl);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getBaseFromRepoUrl(string $repositoryUrl): ?string {
+    return 'https://github.com';
   }
 
   /**

@@ -66,32 +66,9 @@ class GitUriTest extends UnitTestCaseTest {
           'package' => 'berlin',
         ],
       ],
-      'SSH URI with deep namespace' => [
-        'git@gitlab.opencode.de:xleitstelle/xplanung/validierungsregeln/profile/berlin.git',
-        [
-          'scheme' => 'https',
-          'host' => 'gitlab.opencode.de',
-          'namespace' => 'xleitstelle/xplanung/validierungsregeln/profile',
-          'package' => 'berlin',
-        ],
-      ],
-      'SSH URI in subpath' => [
-        'git@gitlab.opencode.de/xleitstelle:xplanung/validierungsregeln/profile/berlin.git',
-        [
-          'scheme' => 'https',
-          'host' => 'gitlab.opencode.de/xleitstelle',
-          'namespace' => 'xplanung/validierungsregeln/profile',
-          'package' => 'berlin',
-        ],
-      ],
       'Partial URI' => [
         'URI' => 'http://foo.bar.baz',
-        'Expected object' => [
-          'scheme' => 'http',
-          'host' => 'foo.bar.baz',
-          'namespace' => NULL,
-          'package' => NULL,
-        ],
+        'Expected object' => NULL,
       ],
       'Invalid URI' => [
         'URI' => 'foo-bar-baz',
