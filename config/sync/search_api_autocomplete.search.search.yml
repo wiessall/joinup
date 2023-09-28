@@ -25,7 +25,6 @@ suggester_settings:
         document: ''
         event: ''
         news: ''
-        tallinn_report: ''
         video: ''
       'entity:rdf_entity':
         asset_distribution: ''

@@ -107,7 +107,6 @@
         "drupal/views_data_export": "^1.0",
         "drupal/views_multiple_permissions": "^2.0",
         "drush/drush": "^12.1",
-        "ec-europa/joinup-tallinn-dashboard": "1.0.0-alpha2",
         "ec-europa/spdx": "^1.0",
         "ec-europa/virtuoso": "^2.1",
         "knplabs/github-api": "^3.0",
@@ -223,7 +222,6 @@
         "installer-paths": {
             "drush/Commands/{$name}": ["type:drupal-drush"],
             "drush/contrib/{$name}": ["type:drupal-drush"],
-            "web/modules/custom/joinup_communities/tallinn/lib": ["ec-europa/joinup-tallinn-dashboard"],
             "web/core": ["type:drupal-core"],
             "web/libraries/{$name}": ["type:drupal-library"],
             "web/modules/contrib/{$name}": ["type:drupal-module"],
@@ -398,7 +396,8 @@
                 "Stop auto submitting first character entered in an Autocomplete Filter field. @see https://www.drupal.org/project/views_autosubmit/issues/3160600" : "https://git.drupalcode.org/project/views_autosubmit/-/merge_requests/10.patch"
             },
             "m4tthumphrey/php-gitlab-api": {
-                "GraphQL API @see https://github.com/GitLabPHP/Client/issues/766": "resources/patch/php/drupal/m4tthumphrey/php-gitlab-api/772.diff"
+                "GraphQL API @see https://github.com/GitLabPHP/Client/issues/766": "resources/patch/php/drupal/m4tthumphrey/php-gitlab-api/772.diff",
+                "Add support for prefixed URIs on base path @see https://github.com/GitLabPHP/Client/issues/726": "resources/patch/php/drupal/m4tthumphrey/php-gitlab-api/726.diff"
             }
         },
         "drupal-lenient": {
@@ -433,10 +432,6 @@
                     "reference": "main"
                 }
             }
-        },
-        {
-            "type": "vcs",
-            "url": "https://github.com/ec-europa/joinup-tallinn-dashboard.git"
         },
         {
             "type": "vcs",
