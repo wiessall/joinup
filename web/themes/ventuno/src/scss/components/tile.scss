@@ -82,6 +82,10 @@
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 4;
     overflow: hidden;
+    & div,
+    & p {
+      display: inline; // Fix bug on Safari for clamped text.
+    }
   }
   &__bundle-icon {
     background-color: lighten($warning, 30%);
