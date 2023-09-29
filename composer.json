@@ -131,7 +131,7 @@
         "drupal/coder": "*",
         "drupal/composer_deploy": "^1.6",
         "drupal/config_update": "^2.0",
-        "drupal/devel": "5.0.2",
+        "drupal/devel": "^5.1",
         "drupal/drupal-extension": "^5.0",
         "drupal/filecache": "^1.1",
         "drupal/http_request_mock": "^1.1",
@@ -336,6 +336,9 @@
             "drupal/message_notify": {
                 "Allow 3rd-party to act before delivery @see https://www.drupal.org/project/message_notify/issues/3314370": "resources/patch/php/drupal/message_notify/3314370.diff"
             },
+            "drupal/og": {
+                "The annotations for \"edit-form\" and \"delete-form\" @see https://www.drupal.org/project/og/issues/3338830": "resources/patch/php/drupal/og/3338830.diff"
+            },
             "drupal/pathauto": {
                 "PHP 8.2 compatibility @see https://www.drupal.org/project/pathauto/issues/3328670": "resources/patch/php/drupal/pathauto/3328670.patch"
             },
@@ -349,7 +352,8 @@
                 "Fix PHP 8.2 deprecation issue with PublishedAtOrNowComputed class @see https://www.drupal.org/project/publication_date/issues/3328575": "resources/patch/php/drupal/publication_date/3328575.patch"
             },
             "drupal/rdf_entity": {
-                "Allow bundle label plural variants @see https://github.com/ec-europa/rdf_entity/pull/12": "resources/patch/php/drupal/rdf_entity/ea8f6af001fca732e89a4be0e29643953f49a88f.diff"
+                "Allow bundle label plural variants @see https://github.com/ec-europa/rdf_entity/pull/12": "resources/patch/php/drupal/rdf_entity/ea8f6af001fca732e89a4be0e29643953f49a88f.diff",
+                "rdf_taxonomy generates a fatal error on the latest devel version @see https://www.drupal.org/project/rdf_entity/issues/3389721": "resources/patch/php/drupal/rdf_entity/3389721.diff"
             },
             "drupal/search_api": {
                 "item_id column is too short @see https://www.drupal.org/node/2829696": "resources/patch/php/drupal/search_api/2829696.patch",

@@ -13,6 +13,7 @@ group_resolvers:
   - eif_group
   - joinup_route_group
   - joinup_subscription_routes
+  - joinup_group_content_management
   - route_group
   - route_group_content
   - group_from_layout_paragraphs
