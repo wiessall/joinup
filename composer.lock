@@ -11777,16 +11777,16 @@
         },
         {
             "name": "sweetrdf/easyrdf",
-            "version": "1.10.0",
+            "version": "1.11.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sweetrdf/easyrdf.git",
-                "reference": "da4d8bfe6d6eb54564869d34826a4c6f4d0a67c5"
+                "reference": "92554d04aaec5635cbd82caf428434f824298a1b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sweetrdf/easyrdf/zipball/da4d8bfe6d6eb54564869d34826a4c6f4d0a67c5",
-                "reference": "da4d8bfe6d6eb54564869d34826a4c6f4d0a67c5",
+                "url": "https://api.github.com/repos/sweetrdf/easyrdf/zipball/92554d04aaec5635cbd82caf428434f824298a1b",
+                "reference": "92554d04aaec5635cbd82caf428434f824298a1b",
                 "shasum": ""
             },
             "require": {
@@ -11808,7 +11808,7 @@
                 "phpstan/phpstan": "^1.0",
                 "phpstan/phpstan-phpunit": "^1.0",
                 "phpunit/phpunit": "^9.5.0|^10.0.0",
-                "semsol/arc2": "^2.4",
+                "semsol/arc2": "^3",
                 "zendframework/zend-http": "^2"
             },
             "type": "library",
@@ -11852,9 +11852,9 @@
             ],
             "support": {
                 "issues": "https://github.com/sweetrdf/easyrdf/issues",
-                "source": "https://github.com/sweetrdf/easyrdf/tree/1.10.0"
+                "source": "https://github.com/sweetrdf/easyrdf/tree/1.11.0"
             },
-            "time": "2023-09-13T07:00:57+00:00"
+            "time": "2023-09-14T07:31:36+00:00"
         },
         {
             "name": "sweetrdf/rdf-helpers",
@@ -17066,16 +17066,16 @@
         },
         {
             "name": "ec-europa/toolkit",
-            "version": "9.13.1",
+            "version": "9.14.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/ec-europa/toolkit.git",
-                "reference": "fe68323a4a3798133cce8cc4cd40f2afde86886c"
+                "reference": "54c1b73eff34dfc9034d413413175bc7e43ccf2e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ec-europa/toolkit/zipball/fe68323a4a3798133cce8cc4cd40f2afde86886c",
-                "reference": "fe68323a4a3798133cce8cc4cd40f2afde86886c",
+                "url": "https://api.github.com/repos/ec-europa/toolkit/zipball/54c1b73eff34dfc9034d413413175bc7e43ccf2e",
+                "reference": "54c1b73eff34dfc9034d413413175bc7e43ccf2e",
                 "shasum": ""
             },
             "require": {
@@ -17084,7 +17084,7 @@
                 "consolidation/robo": "^3.0 || ^4.0",
                 "cweagans/composer-patches": "^1.4 || ^1.7",
                 "drush/drush": "^10.0.0 || ^11.0.4 || ^12.0",
-                "ec-europa/qa-automation": "^9.0",
+                "ec-europa/qa-automation": "^9.1",
                 "ext-curl": "*",
                 "ext-dom": "*",
                 "ext-json": "*",
@@ -17099,7 +17099,7 @@
                 "phpmd/phpmd": "^2.12",
                 "phpstan/phpstan": "^1.10",
                 "phpstan/phpstan-deprecation-rules": "^1.0",
-                "phpunit/phpunit": "^9.5",
+                "phpunit/phpunit": "^9.5 || ^10.0",
                 "squizlabs/php_codesniffer": "^3.7"
             },
             "suggest": {
@@ -17128,7 +17128,7 @@
                 "email": "DIGIT-NEXTEUROPA-QA@ec.europa.eu",
                 "source": "https://github.com/ec-europa/toolkit"
             },
-            "time": "2023-09-22T10:58:56+00:00"
+            "time": "2023-09-28T14:13:36+00:00"
         },
         {
             "name": "enlightn/security-checker",
@@ -18200,16 +18200,16 @@
         },
         {
             "name": "pdepend/pdepend",
-            "version": "2.15.0",
+            "version": "2.15.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/pdepend/pdepend.git",
-                "reference": "0d4d8fb87aa74c358c1c4364514017f34b4a68b9"
+                "reference": "d12f25bcdfb7754bea458a4a5cb159d55e9950d0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/pdepend/pdepend/zipball/0d4d8fb87aa74c358c1c4364514017f34b4a68b9",
-                "reference": "0d4d8fb87aa74c358c1c4364514017f34b4a68b9",
+                "url": "https://api.github.com/repos/pdepend/pdepend/zipball/d12f25bcdfb7754bea458a4a5cb159d55e9950d0",
+                "reference": "d12f25bcdfb7754bea458a4a5cb159d55e9950d0",
                 "shasum": ""
             },
             "require": {
@@ -18251,7 +18251,7 @@
             ],
             "support": {
                 "issues": "https://github.com/pdepend/pdepend/issues",
-                "source": "https://github.com/pdepend/pdepend/tree/2.15.0"
+                "source": "https://github.com/pdepend/pdepend/tree/2.15.1"
             },
             "funding": [
                 {
@@ -18259,7 +18259,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-09-22T02:30:39+00:00"
+            "time": "2023-09-28T12:00:56+00:00"
         },
         {
             "name": "pear/http_request2",
@@ -18942,22 +18942,22 @@
         },
         {
             "name": "phpmd/phpmd",
-            "version": "2.14.0",
+            "version": "2.14.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpmd/phpmd.git",
-                "reference": "247f84ef5d87323dabe953edc48b09ebabe3a0e6"
+                "reference": "442fc2c34edcd5198b442d8647c7f0aec3afabe8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpmd/phpmd/zipball/247f84ef5d87323dabe953edc48b09ebabe3a0e6",
-                "reference": "247f84ef5d87323dabe953edc48b09ebabe3a0e6",
+                "url": "https://api.github.com/repos/phpmd/phpmd/zipball/442fc2c34edcd5198b442d8647c7f0aec3afabe8",
+                "reference": "442fc2c34edcd5198b442d8647c7f0aec3afabe8",
                 "shasum": ""
             },
             "require": {
                 "composer/xdebug-handler": "^1.0 || ^2.0 || ^3.0",
                 "ext-xml": "*",
-                "pdepend/pdepend": "^2.15.0",
+                "pdepend/pdepend": "^2.15.1",
                 "php": ">=5.3.9"
             },
             "require-dev": {
@@ -19014,7 +19014,7 @@
             "support": {
                 "irc": "irc://irc.freenode.org/phpmd",
                 "issues": "https://github.com/phpmd/phpmd/issues",
-                "source": "https://github.com/phpmd/phpmd/tree/2.14.0"
+                "source": "https://github.com/phpmd/phpmd/tree/2.14.1"
             },
             "funding": [
                 {
@@ -19022,7 +19022,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-09-26T17:42:41+00:00"
+            "time": "2023-09-28T13:07:44+00:00"
         },
         {
             "name": "phpoption/phpoption",
