@@ -1,0 +1,160 @@
+<?php
+
+declare(strict_types = 1);
+
+namespace Drupal\joinup_core\Controller;
+
+use Drupal\Core\Ajax\AjaxResponse;
+use Drupal\Core\Ajax\OpenModalDialogCommand;
+use Drupal\Core\Cache\CacheableAjaxResponse;
+use Drupal\Core\Cache\CacheableRedirectResponse;
+use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
+use Drupal\Core\Entity\ContentEntityInterface;
+use Drupal\Core\Entity\EntityDisplayRepositoryInterface;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
+use Symfony\Component\DependencyInjection\ContainerInterface;
+
+/**
+ * Controller of the route used by "joinup_core_more_in_modal" formatter.
+ *
+ * @see \Drupal\joinup_core\Plugin\Field\FieldFormatter\MoreInModalFormatter
+ */
+class ModalFormatterEntityViewController implements ContainerInjectionInterface {
+
+  /**
+   * Constructs a new ModalFormatterEntityViewController instance.
+   *
+   * @param \Drupal\Core\Entity\EntityFieldManagerInterface $displayRepository
+   *   The entity display repository.
+   */
+  public function __construct(
+    protected EntityDisplayRepositoryInterface $displayRepository
+  ) {}
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function create(ContainerInterface $container) {
+    return new static(
+      $container->get('entity_display.repository')
+    );
+  }
+
+  /**
+   * Returns the title of the modal form.
+   *
+   * @param \Drupal\Core\Entity\ContentEntityInterface $entity
+   *   The host entity of the field.
+   * @param string $field
+   *   The name of the field to render in modal.
+   *
+   * @return string|\Drupal\Core\StringTranslation\TranslatableMarkup
+   *   The label of the field, or the entity if the field label is empty.
+   */
+  public function title(ContentEntityInterface $entity, string $field): string|TranslatableMarkup {
+    $title = $field && !empty($entity->getFieldDefinitions()[$field])
+      ? $entity->getFieldDefinitions()[$field]->getLabel()
+      : $entity->label();
+
+    // FieldDefinitionInterface::getLabel() might return NULL.
+    return $title ?? $entity->label();
+  }
+
+  /**
+   * Provides the route callback for the modal route.
+   *
+   * This controller assumes that it is only invoked for users with the needed
+   * permission.
+   *
+   * @param \Drupal\Core\Entity\ContentEntityInterface $entity
+   *   The entity object.
+   * @param string $viewMode
+   *   The name of the view mode.
+   * @param string $field
+   *   The name of the field.
+   * @param string $js
+   *   Can be 'ajax' or 'nojs'.
+   *
+   * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Drupal\Core\Ajax\AjaxResponse
+   *   A redirect response to the entity canonical route or the AJAX response.
+   */
+  public function buildViewModeResponse(
+    ContentEntityInterface $entity,
+    string $viewMode,
+    string $field,
+    string $js
+  ) {
+    switch ($js) {
+      case 'ajax':
+        return $this->buildAjaxResponse($entity, $viewMode, $field);
+
+      default:
+        return (new CacheableRedirectResponse($entity->toUrl()->toString(), 307))
+          ->addCacheableDependency($entity);
+    }
+  }
+
+  /**
+   * Builds the AJAX response.
+   *
+   * @param \Drupal\Core\Entity\ContentEntityInterface $entity
+   *   The content entity to render a field from.
+   * @param string $viewMode
+   *   The view mode to use.
+   * @param string $field
+   *   The field to render.
+   *
+   * @return \Drupal\Core\Ajax\AjaxResponse
+   *   An AJAX response (this is now CacheableAjaxResponse).
+   */
+  protected function buildAjaxResponse(ContentEntityInterface $entity, string $viewMode, string $field): AjaxResponse {
+    $response = new CacheableAjaxResponse();
+    $response->addCacheableDependency($entity);
+    $response->addCommand(new OpenModalDialogCommand(
+      NULL,
+      $this->buildEntity($entity, $viewMode, $field),
+      [
+        'title' => $this->title($entity, $field),
+        'width' => 600,
+      ],
+    ));
+
+    // Source entity view display entity must also be cached.
+    $sourceViewDisplay = $this->displayRepository->getViewDisplay($entity->getEntityTypeId(), $entity->bundle(), $viewMode);
+    $response->addCacheableDependency($sourceViewDisplay);
+    if ($sourceViewDisplay->isNew() || !$sourceViewDisplay->status()) {
+      $response->addCacheableDependency(
+        $this->displayRepository->getViewDisplay($entity->getEntityTypeId(), $entity->bundle())
+      );
+    }
+
+    return $response;
+  }
+
+  /**
+   * Builds the renderable array of the field modal.
+   *
+   * @param \Drupal\Core\Entity\FieldableEntityInterface $entity
+   *   The entity object.
+   * @param string $viewMode
+   *   The name of the view mode.
+   * @param string $fieldName
+   *   The name of the field to render.
+   *
+   * @return array[]
+   *   The renderable array.
+   */
+  protected function buildEntity(ContentEntityInterface $entity, string $viewMode, string $fieldName): array {
+    // Field-only renders do not get cache tag by default. We add the entire
+    // object in ::buildAjaxResponse.
+    $build = $entity->get($fieldName)->view($viewMode);
+    // Field title might be set to be displayed. Since it is the label of the
+    // modal dialog, we set it to be hidden.
+    $build['#label_display'] = 'hidden';
+    // Change theme function.
+    $build['#theme'] = 'field__in_modal';
+
+    return $build;
+  }
+
+}
