@@ -104,7 +104,6 @@
         "drush/drush": "^12.1",
         "ec-europa/spdx": "^1.0",
         "ec-europa/virtuoso": "^2.1",
-        "mglaman/composer-drupal-lenient": "^1.0",
         "openeuropa/composer-artifacts": "^1.0",
         "openeuropa/gisco-geocoding-provider": "^1.0",
         "openeuropa/oe_bootstrap_theme": "^1.0",
@@ -243,8 +242,7 @@
         },
         "patches": {
             "drupal/cas": {
-                "Should CAS respect Drupal registration configuration @see https://www.drupal.org/project/cas/issues/3038279": "resources/patch/php/drupal/cas/3038279.patch",
-                "More details when registration is denied by a subscriber @see https://www.drupal.org/project/cas/issues/3325353": "resources/patch/php/drupal/cas/3325353.patch"
+                "Should CAS respect Drupal registration configuration @see https://www.drupal.org/project/cas/issues/3038279": "resources/patch/php/drupal/cas/3038279.patch"
             },
             "drupal/core": {
                 "Allow image style to be selected in text editor @see https://www.drupal.org/node/2061377": "resources/patch/php/drupal/core/2061377.patch",
@@ -279,9 +277,7 @@
                 "Uploaded files are not permanent @see https://www.drupal.org/i/3057895": "resources/patch/php/drupal/editor_file/3057895.patch"
             },
             "drupal/email_confirmer": {
-                "Support for HTML mails @see https://www.drupal.org/i/3047124": "resources/patch/php/drupal/email_confirmer/3047124.diff",
-                "D10 compatibility @see https://www.drupal.org/project/email_confirmer/issues/3322626": "resources/patch/php/drupal/email_confirmer/3322626.diff",
-                "The email_confirmer_requests queue worker plugin is not constructed correctly @see https://www.drupal.org/project/email_confirmer/issues/3381039": "resources/patch/php/drupal/email_confirmer/3381039.diff"
+                "Support for HTML mails @see https://www.drupal.org/i/3047124": "resources/patch/php/drupal/email_confirmer/3047124.diff"
             },
             "drupal/email_contact": {
                 "Move form creation in a protected method from ContactController::content() to ContactController::getForm() @see https://www.drupal.org/project/email_contact/issues/3346470": "resources/patch/php/drupal/email_contact/3346470.patch"
@@ -308,7 +304,6 @@
                 "Disclose flagging view mode in flag theming @see https://www.drupal.org/project/flag/issues/3049155": "resources/patch/php/drupal/flag/3049155-16.patch"
             },
             "drupal/honeypot": {
-                "Missing primary key in table `honeypot_user` @see https://www.drupal.org/project/honeypot/issues/2943526": "resources/patch/php/drupal/honeypot/2943526.diff",
                 "Behat integration. @see https://www.drupal.org/project/honeypot/issues/3059040": "resources/patch/php/drupal/honeypot/3059040.patch",
                 "Provide ways to clean up old honeypot_time_restriction values @see https://www.drupal.org/project/honeypot/issues/2997609": "resources/patch/php/drupal/honeypot/2997609.patch"
             },
@@ -343,10 +338,8 @@
                 "The search_api_list:{index} cache tag is not added to the view display @see https://www.drupal.org/project/search_api/issues/3298295": "resources/patch/php/drupal/search_api/3298295.patch"
             },
             "drupal/search_api_autocomplete": {
-                "Clear timeout autosubmit used in views_autosubmit. @see https://www.drupal.org/i/3314418": "resources/patch/php/drupal/search_api_autocomplete/3314418.patch"
-            },
-            "drupal/search_api_solr": {
-                "Increase indexing performance by offloading suggester builds to cron. @see https://www.drupal.org/project/search_api_solr/issues/3372198": "resources/patch/php/drupal/search_api_solr/3372198.diff"
+                "Clear timeout autosubmit used in views_autosubmit. @see https://www.drupal.org/i/3314418": "resources/patch/php/drupal/search_api_autocomplete/3314418.patch",
+                "Undefined constant SolrBackendInterface::SEARCH_API_SOLR_SCHEMA_VERSION @see https://www.drupal.org/i/3382226": "resources/patch/php/drupal/search_api_autocomplete/3382226.diff"
             },
             "drupal/search_api_spellcheck": {
                 "Missing plugins config schema @see https://www.drupal.org/project/search_api_spellcheck/issues/3277693": "resources/patch/php/drupal/search_api_spellcheck/3277693.patch",
@@ -378,14 +371,8 @@
                 "WYSIWYG Video URL max length limited to 128 characters @see https://www.drupal.org/project/video_embed_field/issues/2908562": "resources/patch/php/drupal/video_embed_field/2908562.patch"
             },
             "drupal/views_autosubmit": {
-                "Diff from 8.1.x.5 with dev version" : "resources/patch/php/drupal/views_autosubmit/views_autosubmit_once.patch",
                 "Stop auto submitting first character entered in an Autocomplete Filter field. @see https://www.drupal.org/project/views_autosubmit/issues/3160600" : "resources/patch/php/drupal/views_autosubmit/3160600.patch"
             }
-        },
-        "drupal-lenient": {
-            "allowed-list": [
-                "drupal/email_confirmer"
-            ]
         },
         "artifacts": {
             "openeuropa/oe_bootstrap_theme": {
