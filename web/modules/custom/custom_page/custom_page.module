@@ -8,6 +8,7 @@
 declare(strict_types = 1);
 
 use Drupal\Core\Access\AccessResult;
+use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Field\FieldDefinitionInterface;
@@ -19,7 +20,6 @@ use Drupal\custom_page\Entity\CustomPageInterface;
 use Drupal\joinup_group\Exception\MissingGroupException;
 use Drupal\menu_link_content\MenuLinkContentInterface;
 use Drupal\node\NodeInterface;
-use Drupal\Core\Access\AccessResultInterface;
 
 /**
  * Implements hook_entity_type_alter().
@@ -255,6 +255,7 @@ function custom_page_entity_field_access($operation, FieldDefinitionInterface $f
         $operation === 'edit'
         && $field_definition->getTargetEntityTypeId() === 'node'
         && $field_definition->getTargetBundle() === 'custom_page');
+
     case 'path';
       $accessPermission = AccessResult::allowedIfHasPermissions($account, [
         'custom landing pages',
@@ -270,6 +271,7 @@ function custom_page_entity_field_access($operation, FieldDefinitionInterface $f
         && !$group)
         ->andIf($accessPermission)
         ->addCacheContexts(['route']);
+
     default:
       return AccessResult::neutral();
   }
