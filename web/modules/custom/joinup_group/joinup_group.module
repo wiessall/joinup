@@ -154,6 +154,8 @@ function joinup_group_preprocess(array &$variables, string $hook): void {
   if (
     // It's group content (solution, news, discussion, etc)
     $group_content instanceof GroupContentInterface
+    // Content must have group.
+    && $group_content->hasGroup()
     // And belongs to a group.
     && ($parent = $group_content->getGroup())
     // And is shared.
