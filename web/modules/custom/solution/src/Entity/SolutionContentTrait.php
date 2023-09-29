@@ -40,6 +40,9 @@ trait SolutionContentTrait {
     catch (MissingGroupException $exception) {
       throw new MissingSolutionException($exception->getMessage(), 0, $exception);
     }
+    if (!$group) {
+      throw new MissingSolutionException();
+    }
 
     return $group;
   }
