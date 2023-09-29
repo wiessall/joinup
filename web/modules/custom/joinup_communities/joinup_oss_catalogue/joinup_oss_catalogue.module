@@ -59,3 +59,18 @@ function joinup_oss_catalogue_entity_bundle_field_info(EntityTypeInterface $enti
   }
   return $fields;
 }
+
+/**
+ * Implements hook_preprocess_HOOK().
+ */
+function joinup_oss_catalogue_preprocess_field__in_modal(&$variables) {
+  if ($variables['element']['#field_name'] !== 'oss_used_by') {
+    return;
+  }
+  $variables['label_hidden'] = FALSE;
+  $variables['label_display'] = 'above';
+  $variables['label'] = t("@count administrations are currently using the %solution-label solution", [
+    '@count' => count($variables['items']),
+    '%solution-label' => $variables['element']['#items']->getEntity()->label(),
+  ]);
+}

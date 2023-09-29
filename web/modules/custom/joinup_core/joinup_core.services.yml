@@ -25,3 +25,24 @@ services:
     class: Drupal\joinup_core\PathProcessor\IdRedirectUuidProcessor
     tags:
       - { name: path_processor_inbound, priority: 200 }
+
+  joinup_core.modal_formatter.route_subscriber:
+    class: Drupal\joinup_core\EventSubscriber\ModalFormatterRouteSubscriber
+    arguments: ['@entity_type.manager']
+    tags:
+      - { name: event_subscriber }
+
+  paramconverter.modal_formatter:
+    class: Drupal\joinup_core\ParamConverter\ModalFormatterConverter
+    arguments:
+      - '@entity_type.manager'
+      - '@entity.repository'
+    tags:
+      - { name: paramconverter }
+
+  joinup_core.modal_formatter.access_checker:
+    class: Drupal\joinup_core\Access\ModalFormatterAccessCheck
+    arguments:
+      - '@entity_display.repository'
+    tags:
+      - { name: access_check, applies_to: _modal_formatter }
