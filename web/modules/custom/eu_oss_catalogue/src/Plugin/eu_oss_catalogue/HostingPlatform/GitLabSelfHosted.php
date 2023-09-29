@@ -105,14 +105,11 @@ class GitLabSelfHosted extends GitLabDotCom {
       try {
         $response = $this->httpClient->get("$host/api");
       }
-      catch (\Throwable $exception) {
-        if ($exception->getCode() === 501) {
-          if ($namespaceParts >= 2) {
-            $host .= '/' . array_shift($namespaceParts);
-          }
-          continue;
+      catch (\Exception) {
+        if ($namespaceParts >= 2) {
+          $host .= '/' . array_shift($namespaceParts);
         }
-        throw $exception;
+        continue;
       }
       return $this->isGitLabApiResponse($response) ? $host : NULL;
     } while (count($namespaceParts) > 0);
