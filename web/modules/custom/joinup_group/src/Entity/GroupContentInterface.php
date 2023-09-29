@@ -27,13 +27,13 @@ interface GroupContentInterface extends ContentEntityInterface {
   /**
    * Returns the group to which this entity belongs.
    *
-   * @return \Drupal\joinup_group\Entity\GroupInterface|null
+   * @return \Drupal\joinup_group\Entity\GroupInterface
    *   The parent group.
    *
    * @throws \Drupal\joinup_group\Exception\MissingGroupException
    *   Thrown when the parent group is missing.
    */
-  public function getGroup(): ?GroupInterface;
+  public function getGroup(): GroupInterface;
 
   /**
    * Returns the ID of the group to which this entity belongs.
