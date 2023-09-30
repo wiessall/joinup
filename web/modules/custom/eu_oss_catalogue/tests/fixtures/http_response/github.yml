@@ -5,6 +5,7 @@ default:
         - id: GitHub-solution-1-internal-ID
           description: Description of GitHub solution 1
           name: dummy-name-1
+          isArchived: false
           owner:
             login: dummy-namespace-1
           defaultBranchRef:
@@ -106,6 +107,7 @@ default:
         - id: GitHub-solution-2-internal-ID
           description: Description of GitHub solution 2
           name: dummy-name-2
+          isArchived: true
           owner:
             login: dummy-namespace-2
           defaultBranchRef:
@@ -188,6 +190,7 @@ developers_italia:
         - id: GitHub-solution-1-internal-ID
           description: Description of GitHub solution 1
           name: dummy-name-1
+          isArchived: false
           owner:
             login: dummy-namespace-1
           defaultBranchRef:
