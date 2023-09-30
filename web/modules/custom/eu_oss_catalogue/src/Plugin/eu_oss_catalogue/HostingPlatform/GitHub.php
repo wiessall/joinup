@@ -181,6 +181,7 @@ class GitHub extends EuOssCatalogueGitHostingPlatformPluginBase {
             $node['owner']['login'],
             $node['name'],
             "https://github.com/{$node['owner']['login']}/{$node['name']}",
+            $this->getPluginId(),
             $node['defaultBranchRef']['name'],
             $node['isArchived'],
             $node['latestRelease']['tagName'] ?? NULL,

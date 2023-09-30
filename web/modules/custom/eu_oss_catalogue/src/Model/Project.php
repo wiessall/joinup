@@ -20,6 +20,8 @@ class Project {
    *   The repository name.
    * @param string $url
    *   The repository URL.
+   * @param string $platform
+   *   The code hosting platform plugin ID.
    * @param string $defaultBranch
    *   The repository default branch.
    * @param bool $isArchived
@@ -41,6 +43,7 @@ class Project {
     public readonly string $namespace,
     public readonly string $name,
     public readonly string $url,
+    public readonly string $platform,
     public readonly string $defaultBranch,
     public readonly bool $isArchived,
     public readonly ?string $latestReleaseTag = NULL,
@@ -68,7 +71,21 @@ class Project {
    *   A hash from metadata.
    */
   public function getHash(): string {
-    return Crypt::hashBase64(serialize($this));
+    return Crypt::hashBase64(serialize($this->toArray()));
+  }
+
+  /**
+   * Returns an array representation of the value object.
+   *
+   * @return array
+   *   Array representation of the value object.
+   */
+  public function toArray(): array {
+    $array = [];
+    foreach (get_object_vars($this) as $property => $value) {
+      $array[$property] = $value;
+    }
+    return $array;
   }
 
 }
