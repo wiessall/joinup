@@ -13,7 +13,7 @@
       <str name="thresholdTokenFrequency">.01</str>
       <str name="onlyMorePopular">true</str>
     </lst>
-  
+
     <lst name="spellchecker">
       <str name="name">da</str>
       <str name="field">spellcheck_da</str>
@@ -28,7 +28,7 @@
       <str name="thresholdTokenFrequency">.01</str>
       <str name="onlyMorePopular">true</str>
     </lst>
-  
+
     <lst name="spellchecker">
       <str name="name">nl</str>
       <str name="field">spellcheck_nl</str>
@@ -43,7 +43,7 @@
       <str name="thresholdTokenFrequency">.01</str>
       <str name="onlyMorePopular">true</str>
     </lst>
-  
+
     <lst name="spellchecker">
       <str name="name">en</str>
       <str name="field">spellcheck_en</str>
@@ -58,7 +58,22 @@
       <str name="thresholdTokenFrequency">.01</str>
       <str name="onlyMorePopular">true</str>
     </lst>
-  
+
+    <lst name="spellchecker">
+      <str name="name">et</str>
+      <str name="field">spellcheck_et</str>
+      <str name="classname">solr.DirectSolrSpellChecker</str>
+      <str name="distanceMeasure">internal</str>
+      <str name="accuracy">0.5</str>
+      <str name="maxEdits">2</str>
+      <str name="minPrefix">1</str>
+      <str name="maxInspections">5</str>
+      <str name="minQueryLength">4</str>
+      <str name="maxQueryFrequency">0.01</str>
+      <str name="thresholdTokenFrequency">.01</str>
+      <str name="onlyMorePopular">true</str>
+    </lst>
+
     <lst name="spellchecker">
       <str name="name">fr</str>
       <str name="field">spellcheck_fr</str>
@@ -73,7 +88,7 @@
       <str name="thresholdTokenFrequency">.01</str>
       <str name="onlyMorePopular">true</str>
     </lst>
-  
+
     <lst name="spellchecker">
       <str name="name">de</str>
       <str name="field">spellcheck_de</str>
@@ -88,7 +103,7 @@
       <str name="thresholdTokenFrequency">.01</str>
       <str name="onlyMorePopular">true</str>
     </lst>
-  
+
     <lst name="spellchecker">
       <str name="name">el</str>
       <str name="field">spellcheck_el</str>
@@ -103,7 +118,7 @@
       <str name="thresholdTokenFrequency">.01</str>
       <str name="onlyMorePopular">true</str>
     </lst>
-  
+
     <lst name="spellchecker">
       <str name="name">it</str>
       <str name="field">spellcheck_it</str>
@@ -118,7 +133,7 @@
       <str name="thresholdTokenFrequency">.01</str>
       <str name="onlyMorePopular">true</str>
     </lst>
-  
+
     <lst name="spellchecker">
       <str name="name">und</str>
       <str name="field">spellcheck_und</str>
@@ -133,7 +148,7 @@
       <str name="thresholdTokenFrequency">.01</str>
       <str name="onlyMorePopular">true</str>
     </lst>
-  
+
     <lst name="spellchecker">
       <str name="name">es</str>
       <str name="field">spellcheck_es</str>
@@ -160,7 +175,7 @@
       <str name="buildOnCommit">false</str>
       <str name="buildOnStartup">false</str>
     </lst>
-  
+
     <lst name="suggester">
       <str name="name">da</str>
       <str name="lookupImpl">AnalyzingInfixLookupFactory</str>
@@ -171,7 +186,7 @@
       <str name="buildOnCommit">false</str>
       <str name="buildOnStartup">false</str>
     </lst>
-  
+
     <lst name="suggester">
       <str name="name">nl</str>
       <str name="lookupImpl">AnalyzingInfixLookupFactory</str>
@@ -182,7 +197,7 @@
       <str name="buildOnCommit">false</str>
       <str name="buildOnStartup">false</str>
     </lst>
-  
+
     <lst name="suggester">
       <str name="name">en</str>
       <str name="lookupImpl">AnalyzingInfixLookupFactory</str>
@@ -193,7 +208,18 @@
       <str name="buildOnCommit">false</str>
       <str name="buildOnStartup">false</str>
     </lst>
-  
+
+    <lst name="suggester">
+      <str name="name">et</str>
+      <str name="lookupImpl">AnalyzingInfixLookupFactory</str>
+      <str name="dictionaryImpl">DocumentDictionaryFactory</str>
+      <str name="field">twm_suggest</str>
+      <str name="suggestAnalyzerFieldType">text_et</str>
+      <str name="contextField">sm_context_tags</str>
+      <str name="buildOnCommit">false</str>
+      <str name="buildOnStartup">false</str>
+    </lst>
+
     <lst name="suggester">
       <str name="name">fr</str>
       <str name="lookupImpl">AnalyzingInfixLookupFactory</str>
@@ -204,7 +230,7 @@
       <str name="buildOnCommit">false</str>
       <str name="buildOnStartup">false</str>
     </lst>
-  
+
     <lst name="suggester">
       <str name="name">de</str>
       <str name="lookupImpl">AnalyzingInfixLookupFactory</str>
@@ -215,7 +241,7 @@
       <str name="buildOnCommit">false</str>
       <str name="buildOnStartup">false</str>
     </lst>
-  
+
     <lst name="suggester">
       <str name="name">el</str>
       <str name="lookupImpl">AnalyzingInfixLookupFactory</str>
@@ -226,7 +252,7 @@
       <str name="buildOnCommit">false</str>
       <str name="buildOnStartup">false</str>
     </lst>
-  
+
     <lst name="suggester">
       <str name="name">it</str>
       <str name="lookupImpl">AnalyzingInfixLookupFactory</str>
@@ -237,7 +263,7 @@
       <str name="buildOnCommit">false</str>
       <str name="buildOnStartup">false</str>
     </lst>
-  
+
     <lst name="suggester">
       <str name="name">und</str>
       <str name="lookupImpl">AnalyzingInfixLookupFactory</str>
@@ -248,7 +274,7 @@
       <str name="buildOnCommit">false</str>
       <str name="buildOnStartup">false</str>
     </lst>
-  
+
     <lst name="suggester">
       <str name="name">es</str>
       <str name="lookupImpl">AnalyzingInfixLookupFactory</str>
