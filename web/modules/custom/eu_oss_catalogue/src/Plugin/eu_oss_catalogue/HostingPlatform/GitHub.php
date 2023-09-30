@@ -182,10 +182,12 @@ class GitHub extends EuOssCatalogueGitHostingPlatformPluginBase {
             $node['name'],
             "https://github.com/{$node['owner']['login']}/{$node['name']}",
             $node['defaultBranchRef']['name'],
+            $node['isArchived'],
             $node['latestRelease']['tagName'] ?? NULL,
             $node['latestRelease']['createdAt'] ?? NULL,
             $node['id'],
             $node['description'],
+            $node['openGraphImageUrl'],
             $files,
           );
         }
@@ -218,6 +220,8 @@ class GitHub extends EuOssCatalogueGitHostingPlatformPluginBase {
    *         id
    *         description
    *         name
+   *         isArchived
+   *         openGraphImageUrl
    *         owner {
    *           login
    *         }
@@ -261,7 +265,7 @@ class GitHub extends EuOssCatalogueGitHostingPlatformPluginBase {
 
     $fragment = $query->nodes([])
       ->on('Repository')
-      ->use('id', 'description', 'name')
+      ->use('id', 'description', 'name', 'isArchived', 'openGraphImageUrl')
       ->use((new Node('owner'))->use('login'))
       ->use((new Node('defaultBranchRef'))->use('name'))
       ->use((new Node('latestRelease'))->use('tagName', 'createdAt'));

@@ -140,6 +140,7 @@ class GitLabDotCom extends EuOssCatalogueGitHostingPlatformPluginBase {
    *         id
    *         description
    *         archived
+   *         avatarUrl
    *         releases(sort: CREATED_DESC first: 1) {
    *           nodes {
    *             tagName
@@ -181,7 +182,7 @@ class GitLabDotCom extends EuOssCatalogueGitHostingPlatformPluginBase {
       ->use('hasNextPage', 'endCursor')
       ->prev()
       ->nodes([])
-      ->use('path', 'id', 'description', 'archived')
+      ->use('path', 'id', 'description', 'archived', 'avatarUrl')
       ->releases(['sort' => GitLabReleaseSort::CREATED_DESC, 'first' => 1])
       ->nodes([])
       ->use('tagName', 'createdAt')
@@ -210,6 +211,7 @@ class GitLabDotCom extends EuOssCatalogueGitHostingPlatformPluginBase {
    *     id
    *     description
    *     archived
+   *     avatarUrl
    *     releases(sort: CREATED_DESC first: 1) {
    *       nodes {
    *         tagName
@@ -241,7 +243,7 @@ class GitLabDotCom extends EuOssCatalogueGitHostingPlatformPluginBase {
    */
   protected function buildProjectQuery(string $namespace, string $name, array $requestedFiles = []): Query {
     $query = new Query('project', ['fullPath' => "$namespace/$name"]);
-    $fragment = $query->use('path', 'id', 'description', 'archived')
+    $fragment = $query->use('path', 'id', 'description', 'archived', 'avatarUrl')
       ->releases(['sort' => GitLabReleaseSort::CREATED_DESC, 'first' => 1])
       ->nodes([])
       ->use('tagName', 'createdAt')
@@ -290,10 +292,12 @@ class GitLabDotCom extends EuOssCatalogueGitHostingPlatformPluginBase {
       $project['path'],
       "{$this->getBaseUrl()}/$namespace/{$project['path']}",
       $project['repository']['rootRef'],
+      $project['archived'],
       $project['releases']['nodes'][0]['tagName'] ?? NULL,
       $project['releases']['nodes'][0]['createdAt'] ?? NULL,
       $project['id'],
       $project['description'],
+      $project['avatarUrl'] ?? NULL,
       $files,
     );
   }
@@ -431,6 +435,8 @@ class GitLabDotCom extends EuOssCatalogueGitHostingPlatformPluginBase {
       ],
       'id' => (string) $response['id'],
       'description' => $response['description'],
+      'archived' => $response['archived'] ?? FALSE,
+      'avatarUrl' => $response['avatar_url'],
     ];
   }
 
