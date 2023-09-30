@@ -22,6 +22,8 @@ class Project {
    *   The repository URL.
    * @param string $defaultBranch
    *   The repository default branch.
+   * @param bool $isArchived
+   *    Whether the project is archived.
    * @param string|null $latestReleaseTag
    *   The latest release tag.
    * @param string|null $latestReleaseDate
@@ -30,6 +32,8 @@ class Project {
    *   The code platform internal unique ID.
    * @param string|null $description
    *   The repository description if any.
+   * @param string|null $logo
+   *   The URL of the project's logo/avatar.
    * @param string[] $files
    *   A list of file blobs keyed by a file identifier.
    */
@@ -38,10 +42,12 @@ class Project {
     public readonly string $name,
     public readonly string $url,
     public readonly string $defaultBranch,
+    public readonly bool $isArchived,
     public readonly ?string $latestReleaseTag = NULL,
     public readonly ?string $latestReleaseDate = NULL,
     public readonly ?string $platformReference = NULL,
     public readonly ?string $description = NULL,
+    public readonly ?string $logo = NULL,
     public readonly array $files = [],
   ) {}
 
