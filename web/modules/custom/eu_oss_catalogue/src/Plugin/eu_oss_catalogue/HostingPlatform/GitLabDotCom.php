@@ -363,7 +363,7 @@ class GitLabDotCom extends EuOssCatalogueGitHostingPlatformPluginBase {
       $query = $this->buildProjectQuery($namespace, $name, $requestedFiles);
       try {
         $project = $this->getClient()->graphql()->execute($query->toString())['data']['project'] ?? NULL;
-        if ($project && !empty($project['repository']['rootRef']) && empty($project['archived'])) {
+        if ($project && !empty($project['repository']['rootRef'])) {
           yield $this->createHostingPlatformResult($namespace, $project, $requestedFiles);
         }
         continue;
