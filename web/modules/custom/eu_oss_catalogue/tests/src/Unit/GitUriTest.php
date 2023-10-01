@@ -4,7 +4,7 @@ declare(strict_types = 1);
 
 namespace Drupal\Tests\eu_oss_catalogue\Unit;
 
-use Drupal\Tests\UnitTestCaseTest;
+use Drupal\Tests\UnitTestCase;
 use Drupal\eu_oss_catalogue\Model\GitUri;
 
 /**
@@ -13,7 +13,7 @@ use Drupal\eu_oss_catalogue\Model\GitUri;
  * @coversDefaultClass \Drupal\eu_oss_catalogue\Model\GitUri
  * @group eu_oss_catalogue
  */
-class GitUriTest extends UnitTestCaseTest {
+class GitUriTest extends UnitTestCase {
 
   /**
    * Tests how object is instantiated from a URI string.
