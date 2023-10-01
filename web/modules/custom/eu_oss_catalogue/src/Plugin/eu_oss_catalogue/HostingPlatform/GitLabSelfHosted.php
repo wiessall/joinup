@@ -31,38 +31,12 @@ class GitLabSelfHosted extends GitLabDotCom {
   /**
    * {@inheritdoc}
    */
-  public function defaultConfiguration(): array {
-    return [
-      'url' => NULL,
-    ] + parent::defaultConfiguration();
-  }
-
-  /**
-   * {@inheritdoc}
-   */
   public function buildConfigurationForm(array $form, FormStateInterface $formState): array {
     $form = parent::buildConfigurationForm($form, $formState);
-
     // The list of namespaces or projects is not mandatory for self-hosted
     // GitLab code hosting platforms.
     $form['projects']['#required'] = FALSE;
-
-    return [
-      'url' => [
-        '#type' => 'url',
-        '#title' => $this->t('URL'),
-        '#default_value' => $this->getConfiguration()['url'],
-        '#required' => TRUE,
-      ],
-    ] + $form;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function submitConfigurationForm(array &$form, FormStateInterface $formState): void {
-    parent::submitConfigurationForm($form, $formState);
-    $this->configuration['url'] = trim($formState->getValue('url'), ' /');
+    return $form;
   }
 
   /**
@@ -126,7 +100,7 @@ class GitLabSelfHosted extends GitLabDotCom {
   protected function getClient(): Client {
     if (!isset($this->client)) {
       $this->client = parent::getClient();
-      $this->client->setUrl($this->getConfiguration()['url']);
+      $this->client->setUrl($this->getConfiguration()['baseUrl']);
     }
     return $this->client;
   }

@@ -29,6 +29,14 @@ class EuOssCatalogueHostingPlatform extends Plugin {
   public Translation $label;
 
   /**
+   * The code hosting platform base URL.
+   *
+   * Some plugins have non-configurable base URL (e.g. GitHub). The can provide
+   * the base URL in the annotation.
+   */
+  public ?string $baseUrl = NULL;
+
+  /**
    * API detection weight.
    *
    * The API guesser service calls each code hosting platform plugin in order to

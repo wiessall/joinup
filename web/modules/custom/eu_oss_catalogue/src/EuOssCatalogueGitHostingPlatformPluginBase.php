@@ -66,6 +66,7 @@ abstract class EuOssCatalogueGitHostingPlatformPluginBase extends EuOssCatalogue
   public function defaultConfiguration(): array {
     return [
       'projects' => [],
+      'baseUrl' => $this->getPluginDefinition()['baseUrl'],
     ] + parent::defaultConfiguration();
   }
 
@@ -73,6 +74,13 @@ abstract class EuOssCatalogueGitHostingPlatformPluginBase extends EuOssCatalogue
    * {@inheritdoc}
    */
   public function buildConfigurationForm(array $form, FormStateInterface $formState): array {
+    $form['baseUrl'] = [
+      '#type' => 'url',
+      '#title' => $this->t('URL'),
+      '#default_value' => $this->getConfiguration()['baseUrl'],
+      '#required' => TRUE,
+    ];
+
     $form['projects'] = [
       '#type' => 'multivalue',
       '#title' => $this->t('Projects'),
@@ -124,7 +132,9 @@ abstract class EuOssCatalogueGitHostingPlatformPluginBase extends EuOssCatalogue
   /**
    * {@inheritdoc}
    */
-  public function submitConfigurationForm(array &$form, FormStateInterface $formState): void {
+  public function submitConfigurationForm(array &$form, FormStateInterface $form_state): void {
+    $this->configuration['baseUrl'] = trim($form_state->getValue('baseUrl'), ' /');
+
     // Converts from:
     // @code
     // [
@@ -141,7 +151,7 @@ abstract class EuOssCatalogueGitHostingPlatformPluginBase extends EuOssCatalogue
     // ]
     // @endcode
     $projects = [];
-    foreach ($formState->getValue('projects', []) as $row) {
+    foreach ($form_state->getValue('projects', []) as $row) {
       $projects[$row['namespace']] ??= [];
       if ($row['name']) {
         $projects[$row['namespace']][] = $row['name'];

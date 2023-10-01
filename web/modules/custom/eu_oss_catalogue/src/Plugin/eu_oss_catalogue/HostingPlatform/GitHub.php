@@ -6,6 +6,7 @@ namespace Drupal\eu_oss_catalogue\Plugin\eu_oss_catalogue\HostingPlatform;
 
 use Drupal\Cache\Adapter\DrupalAdapter;
 use Drupal\Core\Cache\CacheBackendInterface;
+use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Logger\LoggerChannelInterface;
 use Drupal\Core\Site\Settings;
 use Drupal\Core\Utility\Error;
@@ -28,6 +29,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * @EuOssCatalogueHostingPlatform(
  *   id = "github",
  *   label = @Translation("GitHub"),
+ *   baseUrl = "https://github.com",
  *   weight = -10,
  * )
  */
@@ -93,6 +95,14 @@ class GitHub extends EuOssCatalogueGitHostingPlatformPluginBase {
   /**
    * {@inheritdoc}
    */
+  public function buildConfigurationForm(array $form, FormStateInterface $formState): array {
+    $form['baseUrl']['#type'] = 'value';
+    return $form;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function isHostingPlatformForUrl(string $repositoryUrl): bool {
     $gitUri = GitUri::fromUriString($repositoryUrl);
     return $gitUri && $gitUri->getSchemeAndHost() === $this->getBaseFromRepoUrl($repositoryUrl);
@@ -101,8 +111,8 @@ class GitHub extends EuOssCatalogueGitHostingPlatformPluginBase {
   /**
    * {@inheritdoc}
    */
-  public function getBaseFromRepoUrl(string $repositoryUrl): string {
-    return 'https://github.com';
+  public function getBaseFromRepoUrl(string $repositoryUrl): ?string {
+    return $this->getConfiguration()['baseUrl'];
   }
 
   /**
@@ -180,7 +190,7 @@ class GitHub extends EuOssCatalogueGitHostingPlatformPluginBase {
           yield new Project(
             $node['owner']['login'],
             $node['name'],
-            "https://github.com/{$node['owner']['login']}/{$node['name']}",
+            "{$this->getConfiguration()['baseUrl']}/{$node['owner']['login']}/{$node['name']}",
             $this->getPluginId(),
             $node['defaultBranchRef']['name'],
             $node['isArchived'],

@@ -4,6 +4,7 @@ declare(strict_types = 1);
 
 namespace Drupal\eu_oss_catalogue\Plugin\eu_oss_catalogue\HostingPlatform;
 
+use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Utility\Error;
 use Drupal\eu_oss_catalogue\EuOssCatalogueGitHostingPlatformPluginBase;
 use Drupal\eu_oss_catalogue\Model\GitLabReleaseSort;
@@ -20,6 +21,7 @@ use Psr\Log\LogLevel;
  * @EuOssCatalogueHostingPlatform(
  *   id = "gitlab_com",
  *   label = @Translation("GitLab (gitlab.com)"),
+ *   baseUrl = "https://gitlab.com",
  *   weight = -10,
  * )
  */
@@ -33,6 +35,14 @@ class GitLabDotCom extends EuOssCatalogueGitHostingPlatformPluginBase {
   /**
    * {@inheritdoc}
    */
+  public function buildConfigurationForm(array $form, FormStateInterface $formState): array {
+    $form['baseUrl']['#type'] = 'value';
+    return $form;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function isHostingPlatformForUrl(string $repositoryUrl): bool {
     $gitUri = GitUri::fromUriString($repositoryUrl);
     return $gitUri && $gitUri->getSchemeAndHost() === $this->getBaseFromRepoUrl($repositoryUrl);
@@ -42,7 +52,7 @@ class GitLabDotCom extends EuOssCatalogueGitHostingPlatformPluginBase {
    * {@inheritdoc}
    */
   public function getBaseFromRepoUrl(string $repositoryUrl): ?string {
-    return 'https://gitlab.com';
+    return $this->getConfiguration()['baseUrl'];
   }
 
   /**
@@ -90,7 +100,7 @@ class GitLabDotCom extends EuOssCatalogueGitHostingPlatformPluginBase {
           else {
             Error::logException($this->logger, $exception, "Can't get the group {namespace} from {url}. Message: {message}", [
               'namespace' => $namespace,
-              'url' => $this->getBaseUrl(),
+              'url' => $this->getConfiguration()['baseUrl'],
               'message' => $exception->getMessage(),
             ]);
             // Done with this namespace.
@@ -290,7 +300,7 @@ class GitLabDotCom extends EuOssCatalogueGitHostingPlatformPluginBase {
     return new Project(
       $namespace,
       $project['path'],
-      "{$this->getBaseUrl()}/$namespace/{$project['path']}",
+      "{$this->getConfiguration()['baseUrl']}/$namespace/{$project['path']}",
       $this->getPluginId(),
       $project['repository']['rootRef'],
       $project['archived'],
@@ -362,7 +372,7 @@ class GitLabDotCom extends EuOssCatalogueGitHostingPlatformPluginBase {
         // Log only a warning as we retry later by using REST API.
         Error::logException($this->logger, $exception, "Can't get the project {project} from {url} using GraphQL API", [
           'project' => "$namespace/$name",
-          'url' => $this->getBaseUrl(),
+          'url' => $this->getConfiguration()['baseUrl'],
         ], LogLevel::WARNING);
       }
 
@@ -407,7 +417,7 @@ class GitLabDotCom extends EuOssCatalogueGitHostingPlatformPluginBase {
       // Fail silently but log if the project data cannot be retrieved.
       Error::logException($this->logger, $exception, "Can't get the project {project} from {url} using REST API", [
         'project' => $fullPath,
-        'url' => $this->getBaseUrl(),
+        'url' => $this->getConfiguration()['baseUrl'],
       ]);
       return NULL;
     }
@@ -468,7 +478,7 @@ class GitLabDotCom extends EuOssCatalogueGitHostingPlatformPluginBase {
       // Log a warning.
       Error::logException($this->logger, $exception, "Can't get the releases for project {project} from {url} using REST API", [
         'project' => $fullPath,
-        'url' => $this->getBaseUrl(),
+        'url' => $this->getConfiguration()['baseUrl'],
       ], LogLevel::WARNING);
     }
   }
@@ -497,7 +507,7 @@ class GitLabDotCom extends EuOssCatalogueGitHostingPlatformPluginBase {
         // Log a warning.
         Error::logException($this->logger, $exception, "Can't get the file {file} for project {project} from {url} using REST API", [
           'project' => $fullPath,
-          'url' => $this->getBaseUrl(),
+          'url' => $this->getConfiguration()['baseUrl'],
           'file' => $requestedFile,
         ], LogLevel::WARNING);
       }
@@ -535,16 +545,6 @@ class GitLabDotCom extends EuOssCatalogueGitHostingPlatformPluginBase {
       // This group doesn't exist.
       return NULL;
     }
-  }
-
-  /**
-   * Returns the GitLab instance base URL.
-   *
-   * @return string
-   *   The GitLab instance base URL.
-   */
-  protected function getBaseUrl(): string {
-    return $this->getConfiguration()['url'] ?? 'https://gitlab.com';
   }
 
 }
