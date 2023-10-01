@@ -31,7 +31,7 @@ class EuOssCatalogueHostingPlatform extends Plugin {
   /**
    * The code hosting platform base URL.
    *
-   * Some plugins have non-configurable base URL (e.g. GitHub). The can provide
+   * Some plugins have non-configurable base URL (e.g. GitHub). They can provide
    * the base URL in the annotation.
    */
   public ?string $baseUrl = NULL;

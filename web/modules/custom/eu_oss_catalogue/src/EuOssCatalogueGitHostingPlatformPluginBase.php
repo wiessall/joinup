@@ -66,14 +66,14 @@ abstract class EuOssCatalogueGitHostingPlatformPluginBase extends EuOssCatalogue
   public function defaultConfiguration(): array {
     return [
       'projects' => [],
-      'baseUrl' => $this->getPluginDefinition()['baseUrl'],
+      'baseUrl' => $this->getPluginDefinition()['baseUrl'] ?? NULL,
     ] + parent::defaultConfiguration();
   }
 
   /**
    * {@inheritdoc}
    */
-  public function buildConfigurationForm(array $form, FormStateInterface $formState): array {
+  public function buildConfigurationForm(array $form, FormStateInterface $form_state): array {
     $form['baseUrl'] = [
       '#type' => 'url',
       '#title' => $this->t('URL'),
@@ -133,7 +133,8 @@ abstract class EuOssCatalogueGitHostingPlatformPluginBase extends EuOssCatalogue
    * {@inheritdoc}
    */
   public function submitConfigurationForm(array &$form, FormStateInterface $form_state): void {
-    $this->configuration['baseUrl'] = trim($form_state->getValue('baseUrl'), ' /');
+    $baseUrl = $form_state->getValue('baseUrl');
+    $this->configuration['baseUrl'] = is_string($baseUrl) ? trim($form_state->getValue('baseUrl'), ' /') : NULL;
 
     // Converts from:
     // @code
