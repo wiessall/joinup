@@ -15,14 +15,14 @@ abstract class EuOssCatalogueHostingPlatformPluginBase extends PluginBase implem
    * {@inheritdoc}
    */
   public function getConfiguration(): array {
-    return $this->configuration;
+    return $this->configuration + $this->defaultConfiguration();
   }
 
   /**
    * {@inheritdoc}
    */
   public function setConfiguration(array $configuration): void {
-    $this->configuration = $configuration + $this->defaultConfiguration();
+    $this->configuration = $configuration;
   }
 
   /**
