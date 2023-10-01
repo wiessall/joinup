@@ -25,7 +25,7 @@ class Project {
    * @param string $defaultBranch
    *   The repository default branch.
    * @param bool $isArchived
-   *    Whether the project is archived.
+   *   Whether the project is archived.
    * @param string|null $latestReleaseTag
    *   The latest release tag.
    * @param string|null $latestReleaseDate
