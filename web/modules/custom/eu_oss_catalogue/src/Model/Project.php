@@ -65,7 +65,17 @@ class Project {
   }
 
   /**
-   * Computes and returns a hash from metadata.
+   * Returns the project platform base URL.
+   *
+   * @return string
+   *   The project platform base URL.
+   */
+  public function getHostingPlatformUrl(): string {
+    return preg_replace("@/{$this->getFullName()}$@", '', $this->url);
+  }
+
+  /**
+   * Computes and returns a hash from metdata.
    *
    * @return string
    *   A hash from metadata.
