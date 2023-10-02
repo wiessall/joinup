@@ -8,13 +8,15 @@
   set classes = [
     'field--name-' ~ field_name|clean_class,
     bundle|clean_class ~ '__' ~ field_name_clean|clean_class,
-    label_display == 'inline' ? 'd-flex',
+    label_display == 'inline' ? 'd-md-flex',
   ]
 %}
 {%
   set title_classes = [
     'field__label',
     'text-muted',
+    'mb-1',
+    'mb-md-0',
     label_display == 'visually_hidden' ? 'visually-hidden',
   ]
 %}
