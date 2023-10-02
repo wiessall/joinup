@@ -5,7 +5,7 @@ _meta:
   bundle: custom_page
   default_langcode: en
   depends:
-    6b87df90-05f4-4eff-82c8-386846712896: file
+    4b8712c1-bc69-4bb2-985d-33635e08466c: file
     'http://data.europa.eu/w21/6d621a47-71ce-4f1a-90e2-8859403d3ecd': rdf_entity
 default:
   revision_uid:
@@ -29,6 +29,9 @@ default:
   sticky:
     -
       value: false
+  revision_translation_affected:
+    -
+      value: true
   report:
     -
       uri: 'internal:/contact'
@@ -38,6 +41,52 @@ default:
           category: report
           uri: /eu-oss-catalogue/eu-open-source-solutions-catalogue
           destination: eu-oss-catalogue/eu-open-source-solutions-catalogue
+  metatag:
+    -
+      tag: meta
+      attributes:
+        name: title
+        content: 'EU Open Source Solutions Catalogue | Joinup'
+    -
+      tag: link
+      attributes:
+        rel: canonical
+        href: 'http://web:8080/web/eu-oss-catalogue/eu-open-source-solutions-catalogue'
+    -
+      tag: meta
+      attributes:
+        property: 'og:site_name'
+        content: Joinup
+    -
+      tag: meta
+      attributes:
+        property: 'og:type'
+        content: 'Custom page'
+    -
+      tag: meta
+      attributes:
+        property: 'og:url'
+        content: 'http://web:8080/web/eu-oss-catalogue/eu-open-source-solutions-catalogue'
+    -
+      tag: meta
+      attributes:
+        property: 'og:title'
+        content: 'EU Open Source Solutions Catalogue'
+    -
+      tag: meta
+      attributes:
+        property: 'og:image'
+        content: 'http://web:8080/web/themes/ventuno/assets/images/og-image.png'
+    -
+      tag: meta
+      attributes:
+        property: 'og:image:secure_url'
+        content: 'https://web:8080/web/themes/ventuno/assets/images/og-image.png'
+    -
+      tag: meta
+      attributes:
+        property: 'og:image:type'
+        content: image/svg+xml
   path:
     -
       alias: /eu-oss-catalogue/eu-open-source-solutions-catalogue
@@ -45,7 +94,7 @@ default:
       pathauto: 1
   published_at:
     -
-      value: 1694511090
+      value: 1696243186
   field_paragraphs_body:
     -
       entity:
@@ -178,10 +227,46 @@ default:
                 layout_paragraphs:
                   parent_uuid: 00b46561-49b5-4ce7-a39a-a5b6921bcfb2
                   region: first
+          revision_translation_affected:
+            -
+              value: true
           field_body:
             -
-              value: "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus lobortis pellentesque nulla vel sollicitudin. Maecenas tellus tortor, tristique at aliquam et, luctus vitae nisi. Fusce elementum lobortis odio, quis interdum quam tristique ut. Morbi ac lacus ligula. Quisque ut odio condimentum, ultricies erat sit amet, condimentum lectus. In faucibus augue vitae condimentum faucibus. Nunc quis arcu massa.</p>\r\n"
+              value: "<p>The EU Open Source Solutions Catalogue aims to provide a comprehensive and organized repository of the Open Source Software Solutions of the Public Administrations in the Member States.</p>\r\n\r\n<p>It serves as a centralized platform for users to discover, evaluate, and select suitable&nbsp;Open Source Software Solutions for their diverse needs. The catalogue covers a wide range of domains including but not limited to web development, data science, artificial intelligence, infrastructure management, and more.</p>\r\n\r\n<p>&nbsp;</p>\r\n"
               format: text_html
+    -
+      entity:
+        _meta:
+          version: '1.0'
+          entity_type: paragraph
+          uuid: b9891dbf-ecc7-45b9-bd0b-7689bfd94ae2
+          bundle: call_to_action
+          default_langcode: en
+        default:
+          status:
+            -
+              value: true
+          created:
+            -
+              value: 1696245578
+          behavior_settings:
+            -
+              value:
+                alignment:
+                  alignment: left
+                color:
+                  color: brand
+                layout_paragraphs:
+                  parent_uuid: 00b46561-49b5-4ce7-a39a-a5b6921bcfb2
+                  region: first
+          revision_translation_affected:
+            -
+              value: true
+          paragraph_action_link:
+            -
+              target_uuid: 54acbd6f-47f0-4280-ad09-0a07c397318b
+              title: 'Learn more'
+              options: {  }
     -
       entity:
         _meta:
@@ -205,11 +290,11 @@ default:
                   region: second
           paragraph_image:
             -
-              entity: 6b87df90-05f4-4eff-82c8-386846712896
+              entity: 4b8712c1-bc69-4bb2-985d-33635e08466c
               alt: 'Discover our initiative'
               title: ''
-              width: 360
-              height: 240
+              width: 673
+              height: 442
     -
       entity:
         _meta:
@@ -731,6 +816,9 @@ default:
                 layout_paragraphs:
                   parent_uuid: eedcfdad-600b-4786-8448-b883f13e7c30
                   region: content
+          revision_translation_affected:
+            -
+              value: true
           field_accordion_item:
             -
               entity:
@@ -750,6 +838,9 @@ default:
                   behavior_settings:
                     -
                       value: {  }
+                  revision_translation_affected:
+                    -
+                      value: true
                   field_paragraphs_item_content:
                     -
                       entity:
@@ -769,13 +860,16 @@ default:
                           behavior_settings:
                             -
                               value: {  }
+                          revision_translation_affected:
+                            -
+                              value: true
                           field_body:
                             -
-                              value: "<p>Lorem ipsum dolor sit amet?</p>\r\n"
+                              value: "<p>Projects are selected for inclusion in the Open Source Catalogue based on several criteria, including their relevance, popularity, community support, active development, licensing, and adherence to open source principles. The initiative aims to feature a diverse range of high-quality open source projects across different domains and technologies.</p>\r\n\r\n<h2 id=\"heading7978\">&nbsp;</h2>\r\n"
                               format: content_editor
                   field_paragraphs_item_label:
                     -
-                      value: 'Lorem ipsum dolor sit amet? '
+                      value: 'How are projects selected for inclusions in the Open Source Catalogue?'
             -
               entity:
                 _meta:
@@ -815,11 +909,11 @@ default:
                               value: {  }
                           field_body:
                             -
-                              value: "<p>Lorem ipsum dolor sit amet?</p>\r\n"
+                              value: "<p>You can contribute to the Open Source Catalogue initiative by suggesting open source projects to be included in the catalogue. Additionally, you can assist in reviewing and organizing existing projects, providing documentation, improving project descriptions, or helping maintain and update the catalogue.</p>\r\n"
                               format: content_editor
                   field_paragraphs_item_label:
                     -
-                      value: 'Lorem ipsum dolor sit amet? '
+                      value: 'How can I contribute to the Open Source Catalogue initiative?'
             -
               entity:
                 _meta:
@@ -859,11 +953,11 @@ default:
                               value: {  }
                           field_body:
                             -
-                              value: "<p>Lorem ipsum dolor sit amet?</p>\r\n"
+                              value: "<p>An Open Source Catalogue serves as a valuable resource for developers, organizations, and individuals seeking open source solutions for various purposes. It simplifies the process of discovering and evaluating open source projects, ultimately encouraging the adoption of open source software, which can lead to cost-effective, efficient, and collaborative solutions.</p>\r\n"
                               format: content_editor
                   field_paragraphs_item_label:
                     -
-                      value: 'Lorem ipsum dolor sit amet? '
+                      value: 'Why is an Open Source Catalogue important?'
             -
               entity:
                 _meta:
@@ -903,11 +997,11 @@ default:
                               value: {  }
                           field_body:
                             -
-                              value: "<p>Lorem ipsum dolor sit amet?</p>\r\n"
+                              value: "<p>Projects are selected for inclusion in the Open Source Catalogue based on several criteria, including their relevance, popularity, community support, active development, licensing, and adherence to open source principles. The initiative aims to feature a diverse range of high-quality open source projects across different domains and technologies.</p>\r\n"
                               format: content_editor
                   field_paragraphs_item_label:
                     -
-                      value: 'Lorem ipsum dolor sit amet? '
+                      value: 'How are projects selected for inclusion in the Open Source Catalogue?'
     -
       entity:
         _meta:
@@ -1106,6 +1200,8 @@ default:
   field_state:
     -
       value: published
+  field_topic:
+    - null
   og_audience:
     -
       entity: 'http://data.europa.eu/w21/6d621a47-71ce-4f1a-90e2-8859403d3ecd'
