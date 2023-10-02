@@ -19,7 +19,10 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * @Action(
  *   id = "joinup_unarchive",
  *   label = @Translation("Unarchive content"),
- *   type = "node"
+ *   type = "node",
+ *   requirements = {
+ *      "_permission" = "vbo joinup unarchive action",
+ *   },
  * )
  */
 class UnarchiveAction extends StateActionBase {
