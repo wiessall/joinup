@@ -56,6 +56,10 @@ Feature: OSS catalogue search
     And I should see the "Software Registry" tile
     And I should not see the "Immuni" tile
 
+    # Check OSS label.
+    Then I should not see the text "open source software solution" in the "Software Registry" tile
+    And I should see the text "OSS Solution" in the "Software Registry" tile
+
     # Check input filtering.
     Then I press "Clear filters"
     And I fill in "Search catalogue" with "Immuni"
