@@ -144,6 +144,18 @@
       gap: $spacer * .5;
     }
   }
+  .oss-solution__oss-screenshots {
+    padding: $spacer;
+    background-color: $light;
+    .field__item {
+      a {
+        display: block;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+    }
+  }
   .layout {
     .block-layout-builder + .block-layout-builder {
       margin-block-start: $spacer * 2;

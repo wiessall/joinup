@@ -2,7 +2,7 @@
   <div{{ attributes.addClass('row') }}>
 
     {% if content.content or content.copyright or content.catalogue %}
-      <div class="col-9 col-lg-8">
+      <div class="col-12 col-md-9 col-lg-8">
 
         {% if content.content %}
           <div class="l-oss-details__row">
@@ -32,7 +32,7 @@
     {% endif %}
 
     {% if content.aside %}
-      <div class="col-3 col-lg-4">
+      <div class="col-12 col-md-3 col-lg-4">
         <div class="bg-light p-3 rounded">
           <div {{ region_attributes.aside.addClass('l-oss-details__region', 'l-oss-details__region--aside') }}>
             {{- content.aside -}}
