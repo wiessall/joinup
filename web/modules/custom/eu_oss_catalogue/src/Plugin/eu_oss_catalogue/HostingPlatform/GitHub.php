@@ -121,14 +121,17 @@ class GitHub extends EuOssCatalogueGitHostingPlatformPluginBase {
    */
   protected function doGetFileRawUrl(string $url, string $projectUrl): ?string {
     $projectPath = substr($projectUrl, strlen($this->getConfiguration()['baseUrl']) + 1);
-    if (preg_match("@^$projectUrl/blob/(.+)$@", $url, $parts)) {
-      return "https://raw.githubusercontent.com/$projectPath/$parts[1]";
+    if (preg_match("@^$projectUrl/blob((/[^/]+){3,}.*)$@", $url, $parts)) {
+      return "https://raw.githubusercontent.com/$projectPath$parts[1]";
     }
     // Repository relative URL (e.g. https://github.com/owner/project/dir/file),
     // even this URL doesn't exist. The repository relative path has been
     // previously prefixed with the project URL, but we ignore this. The
     // reference (branch, commit, tag) is unknown, so we assume HEAD.
-    return preg_replace("@^$projectUrl/(.+)$@", "https://raw.githubusercontent.com/$projectPath/HEAD/$1", $url);
+    if (preg_match("@^$projectUrl/(.+)$@", $url, $parts)) {
+      return "https://raw.githubusercontent.com/$projectPath/HEAD/$parts[1]";
+    }
+    return NULL;
   }
 
   /**

@@ -1,5 +1,11 @@
 # GitHub
 
+GitHub - Erroneous:
+  - Drupal\eu_oss_catalogue\Plugin\eu_oss_catalogue\HostingPlatform\GitHub
+  - https://github.com
+  - /
+  - https://github.com/owner/project
+  - null
 GitHub - Raw URL:
   - Drupal\eu_oss_catalogue\Plugin\eu_oss_catalogue\HostingPlatform\GitHub
   - https://github.com
@@ -11,7 +17,7 @@ GitHub - External URL:
   - https://github.com
   - http://example.com/path/to/whatever.txt
   - https://github.com/owner/project
-  - null
+  - http://example.com/path/to/whatever.txt
 GitHub - URL from web:
   - Drupal\eu_oss_catalogue\Plugin\eu_oss_catalogue\HostingPlatform\GitHub
   - https://github.com
@@ -45,6 +51,12 @@ GitHub - Repository relative path with leading slash:
 
 # GitLab (gitlab.com)
 
+GitLabDotCom - Erroneous:
+  - Drupal\eu_oss_catalogue\Plugin\eu_oss_catalogue\HostingPlatform\GitLabDotCom
+  - https://gitlab.com
+  - /
+  - https://gitlab.com/group1/group-1-1/group-1-1-1/project
+  - null
 GitLabDotCom - Raw URL:
   - Drupal\eu_oss_catalogue\Plugin\eu_oss_catalogue\HostingPlatform\GitLabDotCom
   - https://gitlab.com
@@ -62,7 +74,7 @@ GitLabDotCom - External URL:
   - https://gitlab.com
   - http://example.com/path/to/whatever.txt
   - https://gitlab.com/group1/group-1-1/group-1-1-1/project
-  - null
+  - http://example.com/path/to/whatever.txt
 GitLabDotCom - URL from web:
   - Drupal\eu_oss_catalogue\Plugin\eu_oss_catalogue\HostingPlatform\GitLabDotCom
   - https://gitlab.com
@@ -114,6 +126,12 @@ GitLabDotCom - Repository relative path with leading slash:
 
 # GitLab (self-hosted)
 
+GitLabSelfHosted - Erroneous:
+  - Drupal\eu_oss_catalogue\Plugin\eu_oss_catalogue\HostingPlatform\GitLabDotCom
+  - https://self-hosted.gitlab.example.com
+  - /
+  - https://self-hosted.gitlab.example.com/group1/group-1-1/group-1-1-1/project
+  - null
 GitLabSelfHosted - Raw URL:
   - Drupal\eu_oss_catalogue\Plugin\eu_oss_catalogue\HostingPlatform\GitLabSelfHosted
   - https://self-hosted.gitlab.example.com
@@ -131,7 +149,7 @@ GitLabSelfHosted - External URL:
   - https://self-hosted.gitlab.example.com
   - http://example.com/path/to/whatever.txt
   - https://self-hosted.gitlab.example.com/group1/group-1-1/group-1-1-1/project
-  - null
+  - http://example.com/path/to/whatever.txt
 GitLabSelfHosted - URL from web:
   - Drupal\eu_oss_catalogue\Plugin\eu_oss_catalogue\HostingPlatform\GitLabSelfHosted
   - https://self-hosted.gitlab.example.com
