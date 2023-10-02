@@ -22,4 +22,5 @@ imagecache_external_allowed_mimetypes:
   - application/octet-stream
   - application/octet-stream;charset=utf-8
   - binary/octet-stream
+  - image/svg+xml
 imagecache_external_cron_flush_frequency: 30

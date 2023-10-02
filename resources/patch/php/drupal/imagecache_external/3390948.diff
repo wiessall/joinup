@@ -1,0 +1,160 @@
+diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
+new file mode 100644
+index 0000000000000000000000000000000000000000..71f942f0e424f0d260cdd56149ef4eeb7d6033f3
+--- /dev/null
++++ b/.gitlab-ci.yml
+@@ -0,0 +1,14 @@
++include:
++  - project: $_GITLAB_TEMPLATES_REPO
++    ref: $_GITLAB_TEMPLATES_REF
++    file:
++      - '/includes/include.drupalci.main.yml'
++      - '/includes/include.drupalci.variables.yml'
++      - '/includes/include.drupalci.workflows.yml'
++
++variables:
++  _SHOW_ENVIRONMENT_VARIABLES: 1
++  _TARGET_PHP: "$CORE_PHP_MAX"
++  _TARGET_DB_VERSION: "8"
++  # The whole module needs to adhere to coding standards.
++  SKIP_PHPCS: 1
+diff --git a/composer.json b/composer.json
+new file mode 100644
+index 0000000000000000000000000000000000000000..7f096249dab903c9b7c8d09020f1b0e8c720fc94
+--- /dev/null
++++ b/composer.json
+@@ -0,0 +1,10 @@
++{
++    "name": "drupal/imagecache_external",
++    "description": "Allows you to fetch external images and use image styles on them.",
++    "type": "drupal-module",
++    "license": "GPL-2.0+",
++    "minimum-stability": "dev",
++    "require": {
++      "enshrined/svg-sanitize": "^0.16"
++    }
++}
+diff --git a/imagecache_external.module b/imagecache_external.module
+index 851681dc3efd08b1102862768d0f4e6d34f7acb8..a6040a14f0a7aa41aeece04e1a4281d23d7d498e 100644
+--- a/imagecache_external.module
++++ b/imagecache_external.module
+@@ -9,6 +9,7 @@ use Drupal\Component\Utility\UrlHelper;
+ use Drupal\Core\StreamWrapper\StreamWrapperManager;
+ use Drupal\Core\File\FileSystemInterface;
+ use Drupal\file\Entity\File;
++use enshrined\svgSanitize\Sanitizer;
+ 
+ const IMAGECACHE_EXTERNAL_FLUSH_DIRECTORIES = '_IMAGECACHE_FLUSH_DIRECTORIES_';
+ 
+@@ -139,7 +140,7 @@ function imagecache_external_generate_path($url) {
+ 
+   // Add the extension for real images.
+   if ($extension = strtolower(pathinfo($url_parameters['path'], PATHINFO_EXTENSION))) {
+-    if (in_array($extension, ['jpg', 'png', 'gif', 'jpeg', 'webp'])) {
++    if (in_array($extension, ['jpg', 'png', 'gif', 'jpeg', 'webp', 'svg'])) {
+       $filename .= '.' . $extension;
+     }
+   }
+@@ -219,17 +220,23 @@ function imagecache_external_fetch(string $url, string $cachepath) {
+     // property (eg. image/jpeg;charset=UTF-8).
+     $content_type_array = explode(';', $response_mimetype);
+     $content_type_allowed = FALSE;
++    $is_svg = FALSE;
+     foreach ($content_type_array as $content_type) {
+-      if (in_array(strtolower($content_type), $types)) {
++      $content_type = strtolower($content_type);
++      if (in_array($content_type, $types)) {
+         $content_type_allowed = TRUE;
++        break;
+       }
+     }
+-    if (!empty($result->getBody()) && $code != 400 && $code != 500 && $content_type_allowed) {
++    // Rewind because of tests.
++    $result->getBody()->rewind();
++    $content = $result->getBody()->getContents();
++    if (!empty($content) && $code != 400 && $code != 500 && $content_type_allowed && imagecache_sanitize_svg($content, $content_type)) {
+       if ($config->get('imagecache_external_management') == 'unmanaged') {
+-        return \Drupal::service('file_system')->saveData($result->getBody(), $cachepath, FileSystemInterface::EXISTS_REPLACE);
++        return \Drupal::service('file_system')->saveData($content, $cachepath, FileSystemInterface::EXISTS_REPLACE);
+       }
+       else {
+-        $file = \Drupal::service('file.repository')->writeData($result->getBody(), $cachepath, FileSystemInterface::EXISTS_REPLACE);
++        $file = \Drupal::service('file.repository')->writeData($content, $cachepath, FileSystemInterface::EXISTS_REPLACE);
+         return $file->getFileUri();
+       }
+     }
+@@ -247,6 +254,35 @@ function imagecache_external_fetch(string $url, string $cachepath) {
+   }
+ }
+ 
++/**
++ * Sanitizes the content passed by reference.
++ *
++ * @param string $content
++ *   The potential SVG content passed by reference.
++ * @param string $content_type
++ *   The content mime type.
++ *
++ * @return bool
++ *   TRUE if not an SVG file or the sanitization succeeded. FALSE if it's an SVG
++ *   file but sanitization failed or there's no sanitization support.
++ */
++function imagecache_sanitize_svg(string &$content, string $content_type): bool {
++  if ($content_type !== 'image/svg+xml') {
++    // Not SVG. Doesn't need sanitization.
++    return TRUE;
++  }
++
++  if (!class_exists(Sanitizer::class)) {
++    // No sanitizer support.
++    return FALSE;
++  }
++
++  $sanitizer = new Sanitizer();
++  $content = $sanitizer->sanitize($content);
++  // If sanitizer returns FALSE this is not a valid SVG format.
++  return $content !== FALSE;
++}
++
+ /**
+  * Helper function to validate the image host against the whitelist.
+  *
+diff --git a/tests/assets/dangerous.svg b/tests/assets/dangerous.svg
+new file mode 100644
+index 0000000000000000000000000000000000000000..5d45c54ef1e1f24eb8ff39ef72d5bb8b0decd326
+--- /dev/null
++++ b/tests/assets/dangerous.svg
+@@ -0,0 +1,6 @@
++<svg version="1.1"
++  width="200" height="200"
++  xmlns="http://www.w3.org/2000/svg">
++  <script>alert("I'm evil");</script>
++  <rect width="50" height="50" fill="red" />
++</svg>
+diff --git a/tests/src/Functional/ImagecacheExternalTest.php b/tests/src/Functional/ImagecacheExternalTest.php
+index 62498131ca16cc0065f176f7b7dd1fe1ec48a564..342b4d80096e2861bcae24d5dc8f5356e6392deb 100644
+--- a/tests/src/Functional/ImagecacheExternalTest.php
++++ b/tests/src/Functional/ImagecacheExternalTest.php
+@@ -270,6 +270,22 @@ class ImagecacheExternalTest extends BrowserTestBase {
+     $this->assertSession()->statusCodeEquals(200);
+   }
+ 
++  /**
++   * Tests SVG images.
++   */
++  public function testSvg(): void {
++    \Drupal::configFactory()->getEditable('imagecache_external.settings')
++      ->set('imagecache_external_allowed_mimetypes', ['image/svg+xml'])
++      ->save();
++
++    $url = $this->getExternalImageUrl('dangerous.svg');
++    $hash = md5($url);
++    imagecache_external_generate_path($url);
++    $filename = 'public://externals/' . $hash . '.svg';
++    $this->assertFileExists($filename);
++    $this->assertStringNotContainsString('<script>alert("I\'m evil");</script>', file_get_contents($filename));
++  }
++
+   /**
+    * Get an external image url.
+    *
