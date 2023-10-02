@@ -66,7 +66,8 @@ interface EuOssCatalogueHostingPlatformInterface extends ConfigurableInterface {
    *   The project homepage URL.
    *
    * @return string|null
-   *   The file raw URL or NULL if it cannot be resolved.
+   *   The file raw URL or NULL if it cannot be resolved. If an arbitrary URL,
+   *   external to repository is passed, will be returned as it is.
    */
   public function getFileRawUrl(string $url, string $projectUrl): ?string;
 

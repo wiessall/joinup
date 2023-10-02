@@ -183,10 +183,9 @@ abstract class EuOssCatalogueGitHostingPlatformPluginBase extends EuOssCatalogue
     if (!preg_match('@^https?://@', $url)) {
       $url = $projectUrl . '/' . ltrim($url, '/');
     }
-
-    if (!str_starts_with($url, $this->getConfiguration()['baseUrl'])) {
+    elseif (!str_starts_with($url, $this->getConfiguration()['baseUrl'])) {
       // This file is not hosted by this platform.
-      return NULL;
+      return $url;
     }
     return $this->doGetFileRawUrl($url, $projectUrl);
   }

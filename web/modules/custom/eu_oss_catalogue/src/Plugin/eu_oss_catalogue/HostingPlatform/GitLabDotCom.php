@@ -60,14 +60,17 @@ class GitLabDotCom extends EuOssCatalogueGitHostingPlatformPluginBase {
    * {@inheritdoc}
    */
   protected function doGetFileRawUrl(string $url, string $projectUrl): ?string {
-    if (preg_match("@^$projectUrl/(?:-/)?blob/([^/]+/.+)$@", $url, $parts)) {
-      return "$projectUrl/raw/$parts[1]";
+    if (preg_match("@^$projectUrl/(?:-/)?blob/([^/]+)/(.+)$@", $url, $parts)) {
+      return "$projectUrl/raw/$parts[1]/$parts[2]";
     }
     // Repository relative URL (e.g. https://gitlab.com/owner/project/dir/file),
     // even this URL doesn't exist. The repository relative path has been
     // previously prefixed with the project URL, but we ignore this. The
     // reference (branch, commit, tag) is unknown, so we assume HEAD.
-    return preg_replace("@^$projectUrl/(.+)$@", "$projectUrl/raw/HEAD/$1", $url);
+    if (preg_match("@^$projectUrl((/[^/]+)+)$@", $url, $parts)) {
+      return "$projectUrl/raw/HEAD$parts[1]";
+    }
+    return NULL;
   }
 
   /**
