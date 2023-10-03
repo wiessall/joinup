@@ -5,6 +5,7 @@ dependencies:
   module:
     - asset_distribution
     - custom_page
+    - joinup_group_content_management
     - rdf_entity
     - redirect
     - system
@@ -20,4 +21,8 @@ permissions:
   - 'administer redirects'
   - 'custom landing pages'
   - 'edit collection rdf entity'
+  - 'manage group content'
+  - 'vbo joinup archive action'
+  - 'vbo joinup change group action'
+  - 'vbo joinup unarchive action'
   - 'view the administration theme'
