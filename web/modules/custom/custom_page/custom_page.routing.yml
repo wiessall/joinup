@@ -20,7 +20,7 @@ custom_landing_page.add:
     node_type: 'custom_page'
   requirements:
     _entity_create_access: 'node:{node_type}'
-    _permission: 'custom landing pages'
+    _permission: 'manage custom landing pages'
   options:
     _node_operation_route: TRUE
     _admin_route: FALSE

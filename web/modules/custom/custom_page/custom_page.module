@@ -258,7 +258,7 @@ function custom_page_entity_field_access($operation, FieldDefinitionInterface $f
 
     case 'path';
       $accessPermission = AccessResult::allowedIfHasPermissions($account, [
-        'custom landing pages',
+        'manage custom landing pages',
         'administer url aliases',
       ], 'OR')->cachePerPermissions();
 
