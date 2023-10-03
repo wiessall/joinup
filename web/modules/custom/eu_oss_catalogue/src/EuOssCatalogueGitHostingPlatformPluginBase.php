@@ -24,9 +24,9 @@ abstract class EuOssCatalogueGitHostingPlatformPluginBase extends EuOssCatalogue
    *
    * @param array $configuration
    *   The plugin configuration.
-   * @param string $pluginId
+   * @param string $plugin_id
    *   The plugin ID.
-   * @param array $pluginDefinition
+   * @param array $plugin_definition
    *   The plugin definition.
    * @param \Psr\Http\Client\ClientInterface $httpClient
    *   The HTTP client.
@@ -37,23 +37,23 @@ abstract class EuOssCatalogueGitHostingPlatformPluginBase extends EuOssCatalogue
    */
   public function __construct(
     array $configuration,
-    $pluginId,
-    $pluginDefinition,
+    $plugin_id,
+    $plugin_definition,
     protected ClientInterface $httpClient,
     protected Settings $settings,
     protected LoggerChannelInterface $logger,
   ) {
-    parent::__construct($configuration, $pluginId, $pluginDefinition);
+    parent::__construct($configuration, $plugin_id, $plugin_definition);
   }
 
   /**
    * {@inheritdoc}
    */
-  public static function create(ContainerInterface $container, array $configuration, $pluginId, $pluginDefinition): self {
+  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition): self {
     return new static(
       $configuration,
-      $pluginId,
-      $pluginDefinition,
+      $plugin_id,
+      $plugin_definition,
       $container->get('http_client'),
       $container->get('settings'),
       $container->get('logger.channel.eu_oss_catalogue'),
