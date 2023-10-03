@@ -253,6 +253,8 @@ class GitLabSelfHosted extends GitLabDotCom {
       return FALSE;
     }
     foreach ($response->getHeader('Set-Cookie') as $item) {
+      // GitLab API sets a session cookie.
+      // @see https://docs.gitlab.com/ee/api/rest/#session-cookie
       if (str_starts_with($item, '_gitlab_session=')) {
         return TRUE;
       }

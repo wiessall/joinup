@@ -77,6 +77,8 @@ class GitLab extends PluginBase implements ServiceMockPluginInterface {
     $headers = ['Content-Type' => 'application/json'];
     $body = '';
     if ($responseId === 'api_detection') {
+      // GitLab API sets a session cookie.
+      // @see https://docs.gitlab.com/ee/api/rest/#session-cookie
       $headers['Set-Cookie'] = ['_gitlab_session=dummy'];
     }
     else {
