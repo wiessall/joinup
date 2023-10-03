@@ -28,6 +28,8 @@ Feature: User authentication
       | admin/content/files                                 |
       | admin/content/media                                 |
       | admin/content/rdf                                   |
+      | admin/custom-landing-pages                          |
+      | admin/custom-landing-pages/add                      |
       | admin/legal-notice                                  |
       | admin/legal-notice/add                              |
       | admin/people                                        |
@@ -110,6 +112,8 @@ Feature: User authentication
       | admin/content/media                                 |
       | admin/content/messages                              |
       | admin/content/rdf                                   |
+      | admin/custom-landing-pages                          |
+      | admin/custom-landing-pages/add                      |
       | admin/legal-notice                                  |
       | admin/legal-notice/add                              |
       | admin/people                                        |
