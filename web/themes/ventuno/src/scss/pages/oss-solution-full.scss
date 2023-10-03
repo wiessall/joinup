@@ -115,9 +115,16 @@
     border-radius: $border-radius;
   }
   &__oss-features {
-    display: flex;
-    flex-direction: column;
-    row-gap: $spacer * .5;
+    list-style: none;
+    margin-left: 0;
+    li {
+      margin-bottom: $spacer * .5;
+      &::before {
+        display: inline-block;
+        content:'\2022';
+        margin-right: $spacer * .8;
+      }
+    }
   }
   &__oss-scope {
     display: flex;
