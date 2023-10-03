@@ -101,7 +101,7 @@ class GitHub extends EuOssCatalogueGitHostingPlatformPluginBase {
   /**
    * {@inheritdoc}
    */
-  public function getBaseFromRepoUrl(string $repositoryUrl): ?string {
+  public function getBaseFromRepoUrl(string $repositoryUrl): string {
     return 'https://github.com';
   }
 
