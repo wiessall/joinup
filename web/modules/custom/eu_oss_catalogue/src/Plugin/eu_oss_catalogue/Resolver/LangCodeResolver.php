@@ -29,9 +29,9 @@ class LangCodeResolver extends DefaultResolver implements ContainerFactoryPlugin
    *
    * @param array $configuration
    *   A configuration array containing information about the plugin instance.
-   * @param string $pluginId
+   * @param string $plugin_id
    *   The plugin ID for the plugin instance.
-   * @param mixed $pluginDefinition
+   * @param mixed $plugin_definition
    *   The plugin implementation definition.
    * @param \Drupal\Core\Logger\LoggerChannelInterface $logger
    *   The EU OSS Catalogue logger.
@@ -40,22 +40,22 @@ class LangCodeResolver extends DefaultResolver implements ContainerFactoryPlugin
    */
   public function __construct(
     array $configuration,
-    $pluginId,
-    $pluginDefinition,
+    $plugin_id,
+    $plugin_definition,
     protected LoggerChannelInterface $logger,
     protected LanguageManagerInterface $languageManger,
   ) {
-    parent::__construct($configuration, $pluginId, $pluginDefinition, $logger);
+    parent::__construct($configuration, $plugin_id, $plugin_definition, $logger);
   }
 
   /**
    * {@inheritdoc}
    */
-  public static function create(ContainerInterface $container, array $configuration, $pluginId, $pluginDefinition): self {
+  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition): self {
     return new static(
       $configuration,
-      $pluginId,
-      $pluginDefinition,
+      $plugin_id,
+      $plugin_definition,
       $container->get('logger.channel.eu_oss_catalogue'),
       $container->get('language_manager'),
     );
