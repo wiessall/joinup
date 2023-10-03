@@ -7,7 +7,6 @@ Feature:
     Given the following collection:
       | title | Paragraphs collection |
       | state | published             |
-      | topic | HR                    |
 
   Scenario: Heading paragraph is displayed as heading element.
     Given custom_page content:
@@ -51,4 +50,11 @@ Feature:
     And I go to the edit form of the "Behaviour example page" "custom page"
     And I click "Choose component"
     And I click "Heading"
-    And I should see the text "Settings" in the "Modal content" region
+    When I should see the text "Settings" in the "Modal content" region
+
+    Then I fill in "Heading text" with "Heading example" in the "Modal content" region
+    And I press "Settings" in the "Modal content" region
+    And I select "Right" from "Alignment" in the "Modal content" region
+    And I press "Save" in the "Modal buttons" region
+    And I press "Update"
+    When the page should contain the html text '<div class="paragraph--heading d-flex justify-content-end paragraph">'
