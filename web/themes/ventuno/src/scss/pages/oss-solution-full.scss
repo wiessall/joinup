@@ -15,9 +15,11 @@
       margin-inline-start: -50vw;
       z-index: -1;
     }
-    &-logo {
+    &-logo div:not(:empty) {
       width: 100px;
-      height: 100px;
+      @include media-breakpoint-up(lg) {
+        margin-right: $spacer;
+      }
       img {
         max-width: 100%;
         height: auto;
