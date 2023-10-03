@@ -813,7 +813,7 @@ display:
       access:
         type: perm
         options:
-          perm: 'custom landing pages'
+          perm: 'manage custom landing pages'
       filters:
         title:
           id: title
