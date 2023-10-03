@@ -1201,7 +1201,8 @@ default:
     -
       value: published
   field_topic:
-    - null
+    -
+      target_id: 'http://joinup.eu/ontology/topic#open-source-software'
   og_audience:
     -
       entity: 'http://data.europa.eu/w21/6d621a47-71ce-4f1a-90e2-8859403d3ecd'
