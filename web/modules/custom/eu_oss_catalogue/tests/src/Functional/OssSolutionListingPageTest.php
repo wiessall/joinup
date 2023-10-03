@@ -76,8 +76,8 @@ class OssSolutionListingPageTest extends BrowserTestBase {
 
     $assert_session->statusCodeEquals(200);
     $assert_session->titleEquals('Open Source Software Solutions | Drupal');
-    $assert_session->fieldExists('Solution');
-    $assert_session->fieldExists('Source');
+    $assert_session->fieldExists('OSS Solution');
+    $assert_session->fieldExists('Source Catalogue');
     $assert_session->fieldExists('Language');
     $assert_session->fieldExists('Published');
     $assert_session->buttonExists('Filter');

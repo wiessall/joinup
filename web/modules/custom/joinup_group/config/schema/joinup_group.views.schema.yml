@@ -7,3 +7,11 @@ views.argument_validator.joinup_group_entity_id:
     rdf_entity_id:
       type: string
       label: 'RDF entity ID'
+
+views.access.og_permission:
+  type: mapping
+  label: 'OG permission'
+  mapping:
+    og_permission:
+      type: string
+      label: 'Permission'
