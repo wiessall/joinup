@@ -7,17 +7,19 @@
 {% if content %}
   <header{{ attributes.addClass(['oss-solution__header', 'py-2']) }}>
     <div class="py-2 d-flex flex-column flex-lg-row align-items-center align-items-lg-start">
-      <div data-drupal-group-logo class="group-banner__logo me-lg-2">
+      <div data-drupal-group-logo class="group-banner__logo">
         <figure class="oss-solution__header-logo">
-          {{- content.first -}}
+          {% apply spaceless %}
+            {{ content.first }}
+          {% endapply %}
         </figure>
       </div>
       <div class="d-flex flex-column">
         <div class="group-banner__title my-2 mt-lg-0 mb-lg-3 d-flex align-items-center justify-content-center justify-content-lg-start col-gap-3">
-          {{- content.content -}}
-          {{- content.content_secondary -}}
+          {{ content.content -}}
+          {{- content.content_secondary }}
         </div>
-          {{- content.content_bottom -}}
+          {{ content.content_bottom }}
       </div>
     </div>
   </header>
