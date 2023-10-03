@@ -6,6 +6,8 @@ Feature:
   Scenario: User is redirected from the standard collection URL.
     Given I visit "/collection/eu-oss-catalogue"
     Then I should be on "/eu-oss-catalogue"
+    And I should see the text "Welcome to the EU Open Source Solution Catalogue."
+    And I should see the text "Frequently Asked Questions (FAQ)"
 
   Scenario: User cannot access OSS Catalogue's Page Manager page
     # We assume page's path is '/eu-oss-catalogue-dummy'
