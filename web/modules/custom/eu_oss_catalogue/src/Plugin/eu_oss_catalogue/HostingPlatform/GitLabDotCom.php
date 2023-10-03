@@ -518,7 +518,7 @@ class GitLabDotCom extends EuOssCatalogueGitHostingPlatformPluginBase {
         $this->addProjectLastReleaseWithRestApi($project, "$namespace/{$project['path']}");
         $this->addProjectFilesWithRestApi($project, "$namespace/{$project['path']}", $requestedFiles);
         $projects[] = $project;
-      };
+      }
       return ['projects' => ['nodes' => $projects]];
     }
     catch (\RuntimeException $exception) {
