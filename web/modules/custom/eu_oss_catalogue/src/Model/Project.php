@@ -56,7 +56,7 @@ class Project {
   }
 
   /**
-   * Computes and returns a hash from metdata.
+   * Computes and returns a hash from metadata.
    *
    * @return string
    *   A hash from metadata.
