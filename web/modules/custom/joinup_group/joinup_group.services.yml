@@ -79,3 +79,8 @@ services:
       - [setJoinupGroupManager, ['@joinup_group.group_manager']]
     tags:
       - { name: access_check, applies_to: _joinup_group_announcements }
+  joinup_group.og_permission:
+    class: Drupal\joinup_group\Access\OgPermissionAccessCheck
+    arguments: ['@joinup_group.group_manager']
+    tags:
+      - { name: access_check, applies_to: _og_permission }

@@ -4,6 +4,7 @@ status: true
 dependencies:
   module:
     - asset_distribution
+    - joinup_group_content_management
     - rdf_entity
     - redirect
     - system
@@ -18,4 +19,8 @@ permissions:
   - 'administer account settings'
   - 'administer redirects'
   - 'edit collection rdf entity'
+  - 'manage group content'
+  - 'vbo joinup archive action'
+  - 'vbo joinup change group action'
+  - 'vbo joinup unarchive action'
   - 'view the administration theme'
