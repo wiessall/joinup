@@ -36,7 +36,7 @@ class LandingPagePathConstraintValidator extends ConstraintValidator {
    * Checks if alias is valid.
    *
    * @param string $alias
-   *   Alias
+   *   Alias.
    *
    * @return bool
    *   True if it is allowed.
@@ -60,5 +60,5 @@ class LandingPagePathConstraintValidator extends ConstraintValidator {
 
     return TRUE;
   }
-  
+
 }
