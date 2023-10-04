@@ -142,3 +142,6 @@ Feature:
     Then I should be on "/eu-oss-catalogue/solutions"
     And I should see the following facet summary "science-and-technology"
 
+    # Check that this node type doesn't leak in search as facet.
+    When I visit "/search"
+    Then I should not see the link "Open source software solution"
