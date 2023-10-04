@@ -46,7 +46,7 @@ Feature: Landing custom page.
     And I fill in "<path>" for "URL alias"
 
     And I press "Publish"
-    Then I should see the error message "<path> can not be used for landing page"
+    Then I should see the error message "<path> can not be used for URL alias field"
 
     Examples:
       | path         |
