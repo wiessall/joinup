@@ -60,6 +60,15 @@ function custom_page_entity_bundle_field_info_alter(&$fields, EntityTypeInterfac
 }
 
 /**
+ * Implements hook_field_info_alter().
+ */
+function custom_page_field_info_alter(&$info) {
+  if (isset($info['path'])) {
+    $info['path']['constraints']['LandingPagePathConstraint'] = [];
+  }
+}
+
+/**
  * Implements hook_ENTITY_TYPE_insert().
  *
  * - Creates a menu link whenever a new custom page is created.
