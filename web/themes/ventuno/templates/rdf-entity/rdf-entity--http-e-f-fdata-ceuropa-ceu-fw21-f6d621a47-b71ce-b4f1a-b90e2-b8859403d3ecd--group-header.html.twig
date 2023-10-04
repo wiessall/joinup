@@ -24,11 +24,12 @@
         {% endif %}
         {{ title_suffix }}
       </div>
-      {% if not meta_banner_disabled %}
-        <ul class="group-banner__meta mw-100 align-self-end list-unstyled d-flex flex-wrap mt-2 mb-0 group-stats fs-6">
-            <li class="group-banner__li text-muted">{{ content.oss_solutions }}</li>
-        </ul>
-      {% endif %}
+      <div class="group-banner__meta mw-100 align-self-end list-unstyled d-flex flex-column mt-2 mb-0 group-stats fs-6">
+        <p class="text-black mb-0">{{ 'Open source software of interest for Public Administrations'|t }}</p>
+        {% if not meta_banner_disabled %}
+          <p class="text-muted">{{ content.oss_solutions }}</p>
+        {% endif %}
+      </div>
     </div>
   </div>
 </header>

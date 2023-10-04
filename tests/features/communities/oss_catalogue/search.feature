@@ -19,6 +19,7 @@ Feature: OSS catalogue search
     When I visit the OSS search page
     Then I see the text "EU Open Source Solutions Catalogue" in the "Header" region
     And I see the text "No Open Source Software Solutions were federated yet" in the "Header" region
+    And I see the text "Open source software of interest for Public Administrations" in the "Header" region
 
     Given oss_solution content:
       | title                           | oss_development_status | oss_source        | oss_categories                                                  | oss_short_description                                                                                                                         | oss_git_description                                                               | status    | oss_release_date |
@@ -33,6 +34,7 @@ Feature: OSS catalogue search
     # Check the group collection header
     And I see the text "EU Open Source Solutions Catalogue" in the "Header" region
     And I see the text "5 Open Source Software Solutions" in the "Header" region
+    And I see the text "Open source software of interest for Public Administrations" in the "Header" region
 
     # Check main area
     And I should see the text "SEARCH RESULTS (5)"
