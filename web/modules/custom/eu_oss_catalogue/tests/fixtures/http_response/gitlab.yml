@@ -14,12 +14,14 @@
           description: Description of Project1
           archived: false
           releases:
-            nodes: {  }
+            nodes:
+              - tagName: 'v1.1.1'
+                createdAt: '2015-06-21'
           repository:
-            rootRef: main
+            rootRef: branch-project-1
             blobs:
               nodes:
-                -
+                - path: publiccode.yml
                   rawBlob: |-
                     publiccodeYmlVersion: "0.2"
                     name: Project 1
@@ -69,12 +71,14 @@
           description: Description of Project2
           archived: false
           releases:
-            nodes: {  }
+            nodes:
+              - tagName: 'v14.0.1'
+                createdAt: '2007-01-30'
           repository:
-            rootRef: main
+            rootRef: branch-project-2
             blobs:
               nodes:
-                -
+                - path: publiccode.yml
                   rawBlob: |-
                     publiccodeYmlVersion: "0.2"
                     name: Project 2
@@ -116,7 +120,7 @@
                       availableLanguages:
                         - de
 
-        # Valid but archived.
+        # Valid project 3 (even is archived).
         - fullPath: group3/project3
           path: project3
           id: 'gid://gitlab/Project/3'
@@ -125,10 +129,10 @@
           releases:
             nodes: {  }
           repository:
-            rootRef: main
+            rootRef: branch-project-3
             blobs:
               nodes:
-                -
+                - path: publiccode.yml
                   rawBlob: |-
                     publiccodeYmlVersion: "0.2"
                     name: Project 3
@@ -208,12 +212,15 @@
             description: 'Group 1: Project 1: description'
             archived: false
             releases:
-              nodes: []
+              nodes:
+                - tagName: '2.0.0-alpha12'
+                  createdAt: '2010-07-08'
             repository:
-              rootRef: main
+              rootRef: branch-project-1-1
               blobs:
                 nodes:
-                  - rawBlob: |-
+                  - path: publiccode.yml
+                    rawBlob: |-
                       publiccodeYmlVersion: '0.2'
                       name: 'Project 1.1'
                       applicationSuite: Suite1
@@ -263,12 +270,15 @@
             description: 'Group 1: Project 2: description'
             archived: false
             releases:
-              nodes: []
+              nodes:
+                - tagName: '220.0.1'
+                  createdAt: '2013-08-19'
             repository:
-              rootRef: main
+              rootRef: branch-project-1-2
               blobs:
                 nodes:
-                  - rawBlob: |
+                  - path: publiccode.yml
+                    rawBlob: |
                       publiccodeYmlVersion: '0.2'
                       name: 'Project 1.2'
                       url: 'https://example.de/arbitrary'
@@ -315,7 +325,7 @@
                       usedBy:
                         - Big Orchestra
 
-          # Archived. Will not be picked up.
+          # Archived but still import
           - path: project-1-3
             id: gid://gitlab/Project/13
             description: 'Group 1: Project 3: description'
@@ -323,10 +333,11 @@
             releases:
               nodes: []
             repository:
-              rootRef: main
+              rootRef: branch-project-1-3
               blobs:
                 nodes:
-                  - rawBlob: |
+                  - path: publiccode.yml
+                    rawBlob: |
                       publiccodeYmlVersion: '0.2'
                       name: 'Project 1.3'
                       url: 'https://example.de/arbitrary-too'
@@ -374,12 +385,15 @@
             description: 'Group 2: Project 1: description'
             archived: false
             releases:
-              nodes: []
+              nodes:
+                - tagName: '1.12.0-beta2'
+                  createdAt: '2011-12-31'
             repository:
-              rootRef: main
+              rootRef: branch-project-2-1
               blobs:
                 nodes:
-                  - rawBlob: |-
+                  - path: publiccode.yml
+                    rawBlob: |-
                       publiccodeYmlVersion: '0.2'
                       name: 'Project 2.1'
                       applicationSuite: Suite1
@@ -429,7 +443,8 @@
               rootRef: main
               blobs:
                 nodes:
-                  - rawBlob: |-
+                  - path: publiccode.yml
+                    rawBlob: |-
                       publiccodeYmlVersion: '0.2'
                       name: 'Project 2.2'
                       url: https://limited.self-hosted.gitlab.example.com/as-you-like-it
@@ -470,12 +485,15 @@
       description: 'User 1: Project 1: description'
       archived: false
       releases:
-        nodes: []
+        nodes:
+          - tagName: '1.0.x-dev'
+            createdAt: '2020-10-22'
       repository:
-        rootRef: main
+        rootRef: branch-project-1
         blobs:
           nodes:
-            - rawBlob: |-
+            - path: publiccode.yml
+              rawBlob: |-
                 publiccodeYmlVersion: '0.2'
                 name: 'Project 1'
                 applicationSuite: Suite2
@@ -512,28 +530,3 @@
 'limited.self-hosted.gitlab.example.com null':
   data:
     group: null
-
-'self-hosted.gitlab.example.com/subpath ec-europa\\\/digit-joinup-reference exists':
-  data:
-    project:
-      repository:
-        exists: true
-
-'self-hosted.gitlab.example.com/bit/deeper/subpath ec-europa\\\/digit-joinup-poc-reference exists':
-  data:
-    project:
-      repository:
-        exists: true
-
-'gitlab.opencode.de.example.com xleitstelle\\\/xplanung\\\/validierungsregeln\\\/profile\\\/berlin exists':
-  data:
-    project:
-      repository:
-        exists: true
-
-
-'self-hosted.gitlab.example.com/bit/deeper/subpath deep\\\/namespace\\\/package exists':
-  data:
-    project:
-      repository:
-        exists: true

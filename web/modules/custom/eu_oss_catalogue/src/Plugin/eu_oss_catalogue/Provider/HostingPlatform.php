@@ -5,17 +5,14 @@ declare(strict_types = 1);
 namespace Drupal\eu_oss_catalogue\Plugin\eu_oss_catalogue\Provider;
 
 use Drupal\Component\Plugin\ConfigurableInterface;
-use Drupal\Component\Serialization\Exception\InvalidDataTypeException;
 use Drupal\Core\Config\Schema\SchemaCheckTrait;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Logger\LoggerChannelInterface;
-use Drupal\Core\Serialization\Yaml;
 use Drupal\eu_oss_catalogue\Entity\HostingPlatformConfigInterface;
 use Drupal\eu_oss_catalogue\EuOssCatalogueHostingPlatformInterface;
 use Drupal\eu_oss_catalogue\EuOssCataloguePluginManagerInterface;
 use Drupal\eu_oss_catalogue\EuOssCatalogueProviderPluginBase;
-use Drupal\eu_oss_catalogue\Model\FetchedSolution;
-use Drupal\eu_oss_catalogue\Model\HostingPlatformResult;
+use Drupal\eu_oss_catalogue\Model\Project;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -108,25 +105,11 @@ class HostingPlatform extends EuOssCatalogueProviderPluginBase implements Config
       return;
     }
 
-    $platform = $this->getPlatform();
-    foreach ($platform->getProjects('publiccode.yml') as $repository) {
-      \assert($repository instanceof HostingPlatformResult);
-      if ($repository->file && is_string($repository->file)) {
-        try {
-          $data = Yaml::decode($repository->file);
-          yield new FetchedSolution(
-            $repository->url,
-            $data['name'],
-            $data,
-            (string) $repository->platformReference,
-          );
-        }
-        catch (InvalidDataTypeException $exception) {
-          $this->logger->error('Cannot decode publiccode.yml of @url. Message: @message', [
-            '@url' => $data['url'],
-            '@message' => $exception->getMessage(),
-          ]);
-        }
+    $requestedFiles = ['publiccodeYml' => 'publiccode.yml'];
+    foreach ($this->getPlatform()->getProjects($requestedFiles) as $project) {
+      \assert($project instanceof Project);
+      if (array_key_exists('publiccodeYml', $project->files)) {
+        yield $project;
       }
     }
 

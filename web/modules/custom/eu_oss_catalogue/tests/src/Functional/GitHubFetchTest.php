@@ -24,19 +24,6 @@ class GitHubFetchTest extends FetchTestBase {
   ];
 
   /**
-   * {@inheritdoc}
-   */
-  protected function setUp(): void {
-    parent::setUp();
-
-    $settings['settings']['eu_oss_catalogue']['platform_github']['access_token'] = (object) [
-      'value' => 'dummy-token',
-      'required' => TRUE,
-    ];
-    $this->writeSettings($settings);
-  }
-
-  /**
    * Test GitHub hosting platform.
    */
   public function testGitHubHostingPlatform(): void {

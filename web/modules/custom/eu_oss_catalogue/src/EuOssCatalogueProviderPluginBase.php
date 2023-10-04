@@ -8,7 +8,7 @@ use Drupal\Component\Plugin\PluginBase;
 use Drupal\Core\Logger\LoggerChannelInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\eu_oss_catalogue\Entity\OssSolutionInterface;
-use Drupal\eu_oss_catalogue\Model\FetchedSolution;
+use Drupal\eu_oss_catalogue\Model\Project;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -60,8 +60,7 @@ abstract class EuOssCatalogueProviderPluginBase extends PluginBase implements Eu
   /**
    * {@inheritdoc}
    */
-  public function alterSolution(OssSolutionInterface $solution, FetchedSolution $fetchedSolution): void {
-  }
+  public function alterSolution(OssSolutionInterface $solution, Project $project): void {}
 
   /**
    * {@inheritdoc}

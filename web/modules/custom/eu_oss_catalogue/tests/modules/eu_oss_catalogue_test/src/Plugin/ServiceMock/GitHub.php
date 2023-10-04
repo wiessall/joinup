@@ -37,7 +37,16 @@ class GitHub extends PluginBase implements ServiceMockPluginInterface {
    * {@inheritdoc}
    */
   public function getResponse(RequestInterface $request, array $options): ResponseInterface {
-    $response = Json::encode(Yaml::decode(file_get_contents(__DIR__ . '/../../../../../fixtures/http_response/github.yml')));
+    $query = $request->getBody()->getContents();
+    $responseId = match(TRUE) {
+      !str_contains($query, 'owner:dummy-namespace-2') => 'developers_italia',
+      default => 'default',
+    };
+    $response = Json::encode(
+      Yaml::decode(
+        file_get_contents(__DIR__ . '/../../../../../fixtures/http_response/github.yml')
+      )[$responseId]
+    );
 
     return new Response(200, [
       'Content-Type' => 'application/json',
