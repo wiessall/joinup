@@ -263,7 +263,6 @@ drupal:
           'namespace' => 'Drupal\\joinup_sparql\\Driver\\Database\\joinup_sparql',
           'driver' => 'sparql',
         ];
-        $settings['joinup']['sparql_public_endpoint'] = getenv('DRUPAL_SPARQL_PUBLIC_ENDPOINT');
       Permissions: |
         $settings['skip_permissions_hardening'] = TRUE;
       Null mail collector: |
