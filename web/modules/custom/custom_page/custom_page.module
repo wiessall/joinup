@@ -32,6 +32,9 @@ function custom_page_entity_type_alter(array &$entity_types) {
   // Replaces the standard OG Menu Instance form with a customized one that is
   // suitable for use in the front end.
   $entity_types['ogmenu_instance']->setFormClass('edit', 'Drupal\custom_page\Form\OgMenuInstanceForm');
+
+  // Perform validation for Landing page alias.
+  $entity_types['path_alias']->addConstraint('LandingPagePathConstraint');
 }
 
 /**
@@ -56,15 +59,6 @@ function custom_page_entity_bundle_field_info_alter(&$fields, EntityTypeInterfac
     if (!empty($fields['status'])) {
       $fields['status']->addConstraint('CustomPageUnpublishedConstraint');
     }
-  }
-}
-
-/**
- * Implements hook_field_info_alter().
- */
-function custom_page_field_info_alter(&$info) {
-  if (isset($info['path'])) {
-    $info['path']['constraints']['LandingPagePathConstraint'] = [];
   }
 }
 
