@@ -45,6 +45,9 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  *   confirm = FALSE,
  *   pass_context = TRUE,
  *   pass_view = FALSE,
+ *   requirements = {
+ *      "_permission" = "vbo joinup change group action",
+ *   },
  * )
  */
 class ChangeGroupAction extends ViewsBulkOperationsActionBase implements ContainerFactoryPluginInterface {
