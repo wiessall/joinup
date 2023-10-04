@@ -2,7 +2,7 @@
 
 solr:
   local:
-    version: '8.11.1'
+    version: '8.11.2'
     vendor_dir: ${joinup.dir}/vendor/apache
     server_dir: ${solr.local.vendor_dir}/solr-${solr.local.version}
     bin: ${solr.local.server_dir}/bin/solr
