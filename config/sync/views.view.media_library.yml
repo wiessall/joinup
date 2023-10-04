@@ -1381,6 +1381,52 @@ display:
             default_group: All
             default_group_multiple: {  }
             group_items: {  }
+        thumbnail__alt:
+          id: thumbnail__alt
+          table: media_field_data
+          field: thumbnail__alt
+          relationship: none
+          group_type: group
+          admin_label: ''
+          entity_type: media
+          entity_field: thumbnail
+          plugin_id: string
+          operator: '='
+          value: ''
+          group: 1
+          exposed: true
+          expose:
+            operator_id: thumbnail__alt_op
+            label: 'Alternative text'
+            description: ''
+            use_operator: false
+            operator: thumbnail__alt_op
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: alt
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+              licence_manager: '0'
+              anonymous: '0'
+              moderator: '0'
+              administrator: '0'
+              rdf_graph_manager: '0'
+            placeholder: ''
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
       filter_groups:
         operator: AND
         groups:
@@ -1389,11 +1435,14 @@ display:
         type: table
         options:
           grouping: {  }
-          row_class: ''
+          row_class: 'media-library-item media-library-item--table js-media-library-item js-click-to-select'
           default_row_class: true
           columns:
             media_library_select_form: media_library_select_form
-            rendered_entity: rendered_entity
+            thumbnail__target_id: thumbnail__target_id
+            name: name
+            uid_1: uid_1
+            changed: changed
           default: '-1'
           info:
             media_library_select_form:
@@ -1401,7 +1450,28 @@ display:
               separator: ''
               empty_column: false
               responsive: ''
-            rendered_entity:
+            thumbnail__target_id:
+              sortable: false
+              default_sort_order: asc
+              align: ''
+              separator: ''
+              empty_column: false
+              responsive: ''
+            name:
+              sortable: false
+              default_sort_order: asc
+              align: ''
+              separator: ''
+              empty_column: false
+              responsive: ''
+            uid_1:
+              sortable: false
+              default_sort_order: asc
+              align: ''
+              separator: ''
+              empty_column: false
+              responsive: ''
+            changed:
               sortable: false
               default_sort_order: asc
               align: ''
