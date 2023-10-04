@@ -11,10 +11,10 @@
     <exclude-pattern>*.gif$</exclude-pattern>
     <exclude-pattern>*.png$</exclude-pattern>
 
-    <!-- Minified files don't have to comply with coding standards. -->
-    <exclude-pattern>*.min.css$</exclude-pattern>
-    <exclude-pattern>*.min.js$</exclude-pattern>
+    <!-- Non-PHP files don't have to comply with coding standards. -->
     <exclude-pattern>*.md$</exclude-pattern>
+    <exclude-pattern>*.css$</exclude-pattern>
+    <exclude-pattern>*.js$</exclude-pattern>
 
     <!-- Exclude frontend third-party libraries from coding standards -->
     <exclude-pattern>/web/themes/contrib/*</exclude-pattern>
