@@ -4,6 +4,8 @@ declare(strict_types = 1);
 
 namespace Drupal\eu_oss_catalogue;
 
+use Drupal\eu_oss_catalogue\Model\ApiGuess;
+
 /**
  * Interface of git API guesser service.
  */
@@ -15,13 +17,14 @@ interface ApiGuesserInterface {
    * @param string $repositoryUrl
    *   The repository URL.
    *
-   * @return string|null
-   *   The ID of the hosting platform plugin which is probably able to handle
-   *   the given Git URL, NULL otherwise.
+   * @return \Drupal\eu_oss_catalogue\Model\ApiGuess|null
+   *   A value object, storing the ID and the base URL of the code hosting
+   *   platform plugin and the which is probably able to handle the given URL,
+   *   NULL otherwise.
    *
    * @throws \InvalidArgumentException
    *   In case the provided URL string isn't a Git URL.
    */
-  public function getHostingPlatformPluginId(string $repositoryUrl): ?string;
+  public function getHostingPlatformApi(string $repositoryUrl): ?ApiGuess;
 
 }

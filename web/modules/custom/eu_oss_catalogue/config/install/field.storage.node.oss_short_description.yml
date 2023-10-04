@@ -9,7 +9,7 @@ field_name: oss_short_description
 entity_type: node
 type: string
 settings:
-  max_length: 150
+  max_length: 512
   case_sensitive: false
   is_ascii: false
 module: core

@@ -1,27 +1,49 @@
 Project 1.1:
   en:
     oss_git_url: https://limited.self-hosted.gitlab.example.com/group1/project-1-1
+    oss_git_description: 'Group 1: Project 1: description'
+    oss_default_branch: branch-project-1-1
+    oss_software_version: '2.0.0-alpha12'
+    oss_release_date: '2010-07-08'
+    oss_platform_reference: gid://gitlab/Project/11
     oss_publiccode_yml_version: '0.2'
-    oss_release_date: '2022-12-23'
-    oss_software_version: '1.0.2'
 
 Project 1.2:
   en:
     oss_git_url: https://limited.self-hosted.gitlab.example.com/group1/project-1-2
+    oss_git_description: 'Group 1: Project 2: description'
+    oss_default_branch: branch-project-1-2
+    oss_software_version: '220.0.1'
+    oss_release_date: '2013-08-19'
+    oss_platform_reference: gid://gitlab/Project/12
     oss_publiccode_yml_version: '0.2'
-    oss_release_date: '2022-12-16'
-    oss_software_version: '1.0.0'
+
+Project 1.3:
+  en:
+    oss_git_url: https://limited.self-hosted.gitlab.example.com/group1/project-1-3
+    oss_git_description: 'Group 1: Project 3: description'
+    oss_default_branch: branch-project-1-3
+    oss_software_version: null
+    oss_release_date: null
+    oss_platform_reference: gid://gitlab/Project/13
+    oss_publiccode_yml_version: '0.2'
 
 Project 2.1:
   en:
     oss_git_url: https://limited.self-hosted.gitlab.example.com/group2/project-2-1
+    oss_git_description: 'Group 2: Project 1: description'
+    oss_default_branch: branch-project-2-1
+    oss_software_version: '1.12.0-beta2'
+    oss_release_date: '2011-12-31'
+    oss_platform_reference: gid://gitlab/Project/21
     oss_publiccode_yml_version: '0.2'
-    oss_release_date: '2020-07-19'
-    oss_software_version: '7.0.1'
 
 Project 1:
   en:
     oss_git_url: https://limited.self-hosted.gitlab.example.com/user1/project-1
+    oss_git_description: 'User 1: Project 1: description'
+    oss_default_branch: branch-project-1
+    oss_software_version: '1.0.x-dev'
+    oss_release_date: '2020-10-22'
+    oss_platform_reference: gid://gitlab/Project/1
     oss_publiccode_yml_version: '0.2'
-    oss_release_date: '2010-02-18'
-    oss_software_version: '7.0.1-beta2'
