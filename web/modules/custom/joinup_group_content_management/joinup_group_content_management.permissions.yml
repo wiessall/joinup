@@ -1,0 +1,16 @@
+vbo joinup change group action:
+  title: 'Move to other group action'
+  description: 'Allow to use "Move to other group" views bulk operation action.'
+
+vbo joinup archive action:
+  title: 'Archive content action'
+  description: 'Allow to use "Archive content" views bulk operation action.'
+
+vbo joinup unarchive action:
+  title: 'Unarchive content action'
+  description: 'Allow to use "Unarchive content" views bulk operation action.'
+
+manage group content:
+  title: 'Access to group content management'
+  description: 'Access functionality related to managing group content.'
+  restrict access: true

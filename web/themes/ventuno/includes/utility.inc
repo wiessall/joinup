@@ -12,6 +12,7 @@ use Drupal\joinup_bundle_class\DescriptionInterface;
 use Drupal\joinup_bundle_class\LogoInterface;
 use Drupal\joinup_community_content\Entity\CommunityContentInterface;
 use Drupal\joinup_core\Controller\IdRedirect;
+use Drupal\joinup_oss_catalogue\Entity\JoinupOssSolution;
 use Drupal\joinup_workflow\ArchivableEntityInterface;
 use Drupal\smart_trim\TruncateHTML;
 use Drupal\topic\Entity\TopicReferencingEntityInterface;
@@ -60,7 +61,9 @@ function _ventuno_preprocess_tile(array &$variables, string $entity_type_id): vo
     'page_manager.page_view_homepage_homepage-layout_builder-0',
     'entity.meta_entity.canonical',
   ];
+  $is_oss_solution_tile = $variables['view_mode'] === 'view_mode_tile' && $entity instanceof JoinupOssSolution;
   if ((in_array($route_name, $routes_with_text) && $variables['view_mode'] === 'view_mode_tile') ||
+    $is_oss_solution_tile ||
     $variables['view_mode'] === 'view_mode_tile_horizontal' ||
     $variables['view_mode'] === 'highlighted') {
     $variables['text'] = $entity instanceof DescriptionInterface && isset($variables['content'][$entity->getDescriptionField()]) ? $variables['content'][$entity->getDescriptionField()] : NULL;
@@ -136,9 +139,6 @@ function _ventuno_preprocess_tile(array &$variables, string $entity_type_id): vo
       // Logo URL is invalid, lets use default image provided by theme.
       if (!isset($variables['image']['0'])) {
         unset($variables['image']);
-      }
-      if (!isset($variables['text'][0])) {
-        $variables['text'] = $variables['content']['oss_git_description'];
       }
       $variables['bundle']['label'] = t('Solution');
       break;

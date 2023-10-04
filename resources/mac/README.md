@@ -128,7 +128,6 @@ DRUPAL_DATABASE_NAME=joinup
 
 # SPARQL connection.
 DRUPAL_SPARQL_HOSTNAME=localhost
-DRUPAL_SPARQL_PUBLIC_ENDPOINT=http://joinup.test/sparql/
 
 DRUPAL_MEMCACHE_HOSTS=localhost:11211
 

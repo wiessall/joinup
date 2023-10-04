@@ -1001,7 +1001,7 @@ display:
           group_type: group
           admin_label: ''
           plugin_id: field
-          label: Source
+          label: 'Source Catalogue'
           exclude: false
           alter:
             alter_text: false
@@ -1043,7 +1043,7 @@ display:
           empty_zero: false
           hide_alter_empty: true
           click_sort_column: plugin_id
-          type: plugin_reference_id
+          type: plugin_reference_label
           settings: {  }
           group_column: ''
           group_columns: {  }
@@ -1328,8 +1328,8 @@ display:
           exposed: true
           expose:
             operator_id: combine_op
-            label: OSS Solution
-            description: ''
+            label: 'OSS Solution'
+            description: '(Title and Short Description contains …)'
             use_operator: false
             operator: combine_op
             operator_limit_selection: false
@@ -1376,7 +1376,7 @@ display:
           exposed: true
           expose:
             operator_id: oss_source_plugin_id_op
-            label: Source
+            label: 'Source Catalogue'
             description: ''
             use_operator: false
             operator: oss_source_plugin_id_op
@@ -1511,7 +1511,7 @@ display:
       path: admin/content/eu-oss-catalogue/oss-solutions
       menu:
         type: tab
-        title: OSS Solutions
+        title: 'OSS Solutions'
         description: ''
         weight: -1
         expanded: false
