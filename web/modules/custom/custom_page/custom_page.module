@@ -33,8 +33,17 @@ function custom_page_entity_type_alter(array &$entity_types) {
   // suitable for use in the front end.
   $entity_types['ogmenu_instance']->setFormClass('edit', 'Drupal\custom_page\Form\OgMenuInstanceForm');
 
-  // Perform validation for Landing page alias.
-  $entity_types['path_alias']->addConstraint('LandingPagePathConstraint');
+  // Perform validation for path alias entity.
+  $entity_types['path_alias']->addConstraint('LandingPagePathAliasEntityConstraint');
+}
+
+/**
+ * Implements hook_field_info_alter().
+ */
+function custom_page_field_info_alter(&$info): void {
+  if (isset($info['path'])) {
+    $info['path']['constraints']['LandingPagePathFieldConstraint'] = [];
+  }
 }
 
 /**

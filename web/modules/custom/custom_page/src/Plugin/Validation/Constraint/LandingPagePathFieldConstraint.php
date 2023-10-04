@@ -10,19 +10,21 @@ use Symfony\Component\Validator\Constraint;
  * Checks that the alias does not belong to restricted list.
  *
  * @Constraint(
- *   id = "LandingPagePathConstraint",
- *   label = @Translation("Landing page path constraint", context =
- *   "Validation"),
+ *   id = "LandingPagePathFieldConstraint",
+ *   label = @Translation(
+ *    "Landing page path constraint",
+ *    context = "Validation"
+ *   ),
  *   type = "string"
  * )
  */
-class LandingPagePathConstraint extends Constraint {
+class LandingPagePathFieldConstraint extends Constraint {
 
   /**
    * The violation message.
    *
    * @var string
    */
-  public string $message = '@alias can not be used for landing page';
+  public string $message = '@alias can not be used for URL alias field';
 
 }

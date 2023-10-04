@@ -7,30 +7,39 @@ namespace Drupal\custom_page\Plugin\Validation\Constraint;
 use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\custom_page\Entity\CustomPageInterface;
+use Drupal\custom_page\LandingPageAliasValidatorInterface;
 use Drupal\path_alias\PathAliasInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 
 /**
- * Landing page path constraint validator.
+ * Landing page path alias entity constraint validator.
  */
-class LandingPagePathConstraintValidator extends ConstraintValidator implements ContainerInjectionInterface {
+class LandingPagePathAliasEntityConstraintValidator extends ConstraintValidator implements ContainerInjectionInterface {
 
   /**
-   * Constructs an LandingPagePathConstraintValidator.
+   * Constructs an object.
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
    *   The entity type manager.
+   * @param \Drupal\custom_page\LandingPageAliasValidatorInterface $aliasValidator
+   *   Landing page alias validator.
    */
-  public function __construct(protected EntityTypeManagerInterface $entityTypeManager) {
+  public function __construct(
+    protected EntityTypeManagerInterface $entityTypeManager,
+    protected LandingPageAliasValidatorInterface $aliasValidator
+  ) {
   }
 
   /**
    * {@inheritdoc}
    */
   public static function create(ContainerInterface $container): self {
-    return new static($container->get('entity_type.manager'));
+    return new static(
+      $container->get('entity_type.manager'),
+      $container->get('custom_page.landing_page_alias_validator')
+    );
   }
 
   /**
@@ -41,7 +50,7 @@ class LandingPagePathConstraintValidator extends ConstraintValidator implements 
       return;
     }
 
-    $customPage = str_starts_with($value->getPath(), '/node/') ?
+    $customPage = $value->getPath() && str_starts_with($value->getPath(), '/node/') ?
       $this->entityTypeManager
         ->getStorage('node')
         ->load(substr($value->getPath(), 6)) : NULL;
@@ -49,38 +58,9 @@ class LandingPagePathConstraintValidator extends ConstraintValidator implements 
       return;
     }
 
-    if (!$this->isAliasValid($value->getAlias())) {
+    if (!$this->aliasValidator->isValid($value->getAlias())) {
       $this->context->addViolation($constraint->message, ['@alias' => $value->getAlias()]);
     }
-  }
-
-  /**
-   * Checks if alias is valid.
-   *
-   * @param string $alias
-   *   Alias.
-   *
-   * @return bool
-   *   True if it is allowed.
-   */
-  protected function isAliasValid(string $alias): bool {
-    $paths = [
-      '/search',
-      '/topic',
-      '/contact',
-      '/collection',
-      '/user',
-      '/dashboard',
-      '/interoperable-europe',
-    ];
-
-    foreach ($paths as $path) {
-      if ($alias === $path || str_starts_with($alias, $path . '/')) {
-        return FALSE;
-      }
-    }
-
-    return TRUE;
   }
 
 }
