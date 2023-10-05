@@ -42,6 +42,10 @@
       border-style: none;
     }
     .btn-search {
+      &::before {
+        @include get-bootstrap-icon('search', $primary);
+        font-size: 1rem;
+      }
       border-top-right-radius: 50rem;
       border-bottom-right-radius: 50rem;
       background-color: $white;

@@ -31,3 +31,6 @@
 
 # Ignore files copied as they are.
 /web/modules/custom/joinup_core/js/jquery.timeago.min.js
+
+# Temporarily ignore Tallinn library.
+/web/modules/custom/joinup_communities/tallinn/lib/

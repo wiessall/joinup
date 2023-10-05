@@ -5,6 +5,7 @@ declare(strict_types = 1);
 namespace Drupal\eu_oss_catalogue;
 
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Logger\LoggerChannelInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Plugin\PluginFormInterface;
 use Drupal\Core\Site\Settings;
@@ -23,35 +24,39 @@ abstract class EuOssCatalogueGitHostingPlatformPluginBase extends EuOssCatalogue
    *
    * @param array $configuration
    *   The plugin configuration.
-   * @param string $pluginId
+   * @param string $plugin_id
    *   The plugin ID.
-   * @param array $pluginDefinition
+   * @param array $plugin_definition
    *   The plugin definition.
    * @param \Psr\Http\Client\ClientInterface $httpClient
    *   The HTTP client.
    * @param \Drupal\Core\Site\Settings $settings
    *   The Drupal settings.
+   * @param \Drupal\Core\Logger\LoggerChannelInterface $logger
+   *   The EU OSS Catalogue logger.
    */
   public function __construct(
     array $configuration,
-    $pluginId,
-    $pluginDefinition,
+    $plugin_id,
+    $plugin_definition,
     protected ClientInterface $httpClient,
     protected Settings $settings,
+    protected LoggerChannelInterface $logger,
   ) {
-    parent::__construct($configuration, $pluginId, $pluginDefinition);
+    parent::__construct($configuration, $plugin_id, $plugin_definition);
   }
 
   /**
    * {@inheritdoc}
    */
-  public static function create(ContainerInterface $container, array $configuration, $pluginId, $pluginDefinition): self {
+  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition): self {
     return new static(
       $configuration,
-      $pluginId,
-      $pluginDefinition,
+      $plugin_id,
+      $plugin_definition,
       $container->get('http_client'),
       $container->get('settings'),
+      $container->get('logger.channel.eu_oss_catalogue'),
     );
   }
 
@@ -154,6 +159,30 @@ abstract class EuOssCatalogueGitHostingPlatformPluginBase extends EuOssCatalogue
   public function getLabel(): TranslatableMarkup {
     return $this->pluginDefinition['label'];
   }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getProjects(array $requestedFiles = []): iterable {
+    \assert($requestedFiles === array_unique($requestedFiles));
+    foreach ($this->doGetProjects($requestedFiles) as $project) {
+      yield $project;
+    }
+  }
+
+  /**
+   * Returns the list of projects.
+   *
+   * Subclasses should implement this method, instead of ::getProjects(), to
+   * build the list of projects.
+   *
+   * @param string[] $requestedFiles
+   *   A list of file paths keyed by a file identifier.
+   *
+   * @return iterable
+   *   Array \Drupal\eu_oss_catalogue\Model\Project instances.
+   */
+  abstract protected function doGetProjects(array $requestedFiles = []): iterable;
 
   /**
    * Prepares the projects list to be used by multivalue element.

@@ -13,8 +13,6 @@ dependencies:
     - node.type.video
     - rdf_entity.rdfentity.collection
     - rdf_entity.rdfentity.solution
-    - user.role.administrator
-    - user.role.moderator
   module:
     - csv_serialization
     - joinup_group
@@ -23,7 +21,6 @@ dependencies:
     - rest
     - serialization
     - state_machine
-    - user
     - views_bulk_operations
     - views_data_export
 id: group_content_management
@@ -527,11 +524,9 @@ display:
           sort_asc_label: Asc
           sort_desc_label: Desc
       access:
-        type: role
+        type: og_permission
         options:
-          role:
-            administrator: administrator
-            moderator: moderator
+          og_permission: 'manage group content'
       cache:
         type: tag
         options: {  }
@@ -813,10 +808,11 @@ display:
       contexts:
         - 'languages:language_content'
         - 'languages:language_interface'
+        - og_group_context
         - url
         - url.query_args
         - 'user.node_grants:view'
-        - user.roles
+        - user.permissions
       tags:
         - 'config:field.storage.node.og_audience'
   csv_export:
@@ -1311,10 +1307,11 @@ display:
       contexts:
         - 'languages:language_content'
         - 'languages:language_interface'
+        - og_group_context
         - request_format
         - url
         - 'user.node_grants:view'
-        - user.roles
+        - user.permissions
       tags:
         - 'config:field.storage.node.field_state'
         - 'config:field.storage.node.og_audience'
@@ -1798,16 +1795,16 @@ display:
         menu_name: main
         parent: ''
         context: '0'
-      use_admin_theme: true
     cache_metadata:
       max-age: 0
       contexts:
         - 'languages:language_content'
         - 'languages:language_interface'
+        - og_group_context
         - url
         - url.query_args
         - 'user.node_grants:view'
-        - user.roles
+        - user.permissions
       tags:
         - 'config:field.storage.node.field_state'
         - 'config:field.storage.node.og_audience'

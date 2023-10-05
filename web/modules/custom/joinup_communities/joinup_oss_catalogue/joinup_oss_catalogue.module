@@ -50,12 +50,13 @@ function joinup_oss_catalogue_preprocess_facets_item_list__checkbox__oss_source(
 /**
  * Implements hook_entity_bundle_field_info().
  */
-function joinup_oss_catalogue_entity_bundle_field_info(EntityTypeInterface $entity_type, $bundle, array $base_field_definitions): array {
+function joinup_oss_catalogue_entity_bundle_field_info(EntityTypeInterface $entity_type, $bundle): array {
   $fields = [];
   if ($entity_type->id() === 'node' && $bundle === 'oss_solution') {
     $fields['description'] = BaseFieldDefinition::create('string_long')
       ->setLabel(t('Short description'))
       ->setComputed(TRUE)
+      ->setDisplayConfigurable('view', TRUE)
       ->setClass(ShortDescriptionWithFallback::class);
   }
   return $fields;
