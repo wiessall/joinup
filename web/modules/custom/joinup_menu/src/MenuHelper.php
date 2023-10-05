@@ -15,7 +15,6 @@ use Drupal\Core\Routing\RedirectDestinationTrait;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\Url;
 use Drupal\collection\Entity\CollectionInterface;
-use Drupal\interoperable_europe\InteroperableEuropeCollectionInterface;
 use Drupal\joinup_collection\JoinupCollectionHelper;
 use Exception;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -166,7 +165,7 @@ class MenuHelper implements MenuHelperInterface {
       // collection is considered to be optional. It is for example possible for
       // a project to reuse the Joinup open source code without hosting a
       // "Joinup" collection.
-      // However in scope of the Ventuno theme the About Us link is considered
+      // However, in scope of the Ventuno theme the About Us link is considered
       // to be an important element, so we log a warning to alert the webmaster
       // that corrective action is required.
       $this->logger->get('joinup_menu')->warning('"About us" link could not be rendered because the Joinup collection is not defined or doesn\'t have an About page.');
@@ -207,7 +206,7 @@ class MenuHelper implements MenuHelperInterface {
    *   Menu machine name.
    *
    * @return \Drupal\Core\Menu\MenuLinkTreeElement[]
-   *   menu links elements.
+   *   Menu links elements.
    */
   protected function getMenuLinkElements(string $menu): array {
     $tree = $this->menuLinkTree->load($menu, new MenuTreeParameters());
