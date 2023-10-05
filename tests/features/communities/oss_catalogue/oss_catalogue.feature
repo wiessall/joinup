@@ -17,6 +17,16 @@ Feature:
       | Cristian Gagliardi | obsolete               | developers_italia | data-collection                                                 | Immuni is a mobile app that helps us to fight the COVID-19 pandemic by notifying users at risk of carrying the virus as early as possible     | published | 2020-09-13 |
 
     When I visit "/eu-oss-catalogue"
+    And I see the text "Open source software of interest for Public Administrations" in the "Header" region
+
+    # Check menus.
+    Then I should not see the link "Overview" in the "Navigation menu"
+    And I should not see the link "Members" in the "Navigation menu"
+    And I should not see the link "About" in the "Navigation menu"
+    But I should see the link "Welcome" in the "Navigation menu"
+    And I should see the link "Search" in the "Navigation menu"
+    And I should not see the "Entity actions" region
+
     And I should see the following headings:
       | Discover our initiative                          |
       | Most recent solutions                            |
@@ -143,3 +153,28 @@ Feature:
     # Check that this node type doesn't leak in search as facet.
     When I visit "/search"
     Then I should not see the link "Open source software solution"
+
+  Scenario Outline: OSS Catalogue's inaccessible routes.
+    Given I am logged in as a user with the "<role>" role
+    And I accept the "Legal notice" agreement
+    When I go to "<path>"
+    Then I should get an access denied error
+
+    Examples:
+      | path                     | role          |
+      | eu-oss-catalogue/about   | administrator |
+      | eu-oss-catalogue/members | administrator |
+      | eu-oss-catalogue/about   | authenticated |
+      | eu-oss-catalogue/members | authenticated |
+      | eu-oss-catalogue/about   | moderator     |
+      | eu-oss-catalogue/members | moderator     |
+
+  Scenario Outline: Anonymous user cannot access OSS Catalogue's inaccessible routes.
+    Given I am not logged in
+    When I go to "<path>"
+    Then I should see the heading "Sign in to continue"
+
+    Examples:
+      | path                     |
+      | eu-oss-catalogue/about   |
+      | eu-oss-catalogue/members |
