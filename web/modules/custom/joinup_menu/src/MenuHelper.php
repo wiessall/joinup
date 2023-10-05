@@ -88,7 +88,7 @@ class MenuHelper implements MenuHelperInterface {
    * {@inheritdoc}
    */
   public function getBclAccountMenu(): array {
-    $tree = $this->getMenuLinkElements( 'account');
+    $tree = $this->getMenuLinkElements('account');
 
     return array_map(function (MenuLinkTreeElement $element): array {
       return [
