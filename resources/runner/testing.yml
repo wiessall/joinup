@@ -30,15 +30,11 @@ phpcs:
       bin: ${joinup.dir}/vendor/bin/phpcbf
   check:
     extensions:
-      - css
       - inc
-      - info
       - install
-      - js
       - module
       - php
       - profile
-      - test
       - theme
     files:
       - ${joinup.dir}/tests/src
