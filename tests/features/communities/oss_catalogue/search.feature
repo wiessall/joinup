@@ -16,18 +16,25 @@ Feature: OSS catalogue search
       | title | EU Open Source Solutions Catalogue                             |
       | state | published                                                      |
 
+    When I visit the OSS search page
+    Then I see the text "EU Open Source Solutions Catalogue" in the "Header" region
+    And I see the text "No Open Source Software Solutions were federated yet" in the "Header" region
+    And I see the text "Open source software of interest for Public Administrations" in the "Header" region
+
     Given oss_solution content:
-      | title                           | oss_development_status | oss_source        | oss_categories                                                  | oss_short_description                                                                                                                         | oss_git_description                                                               | status    |
-      | Django-MDQ                      | stable                 | developers_italia | content-management                                              | A lightweight SAML2 MDQ server that implements draft-young-md-query implementation.                                                           |                                                                                   | published |
-      | INGV - QuakeML to NonLinLoc PHS | stable                 | developers_italia | data-analytics,data-collection                                  | Docker image to convert QuakeML format to NonLinLoc PHS format.                                                                               |                                                                                   | published |
-      | NDC Semantic frontend           | beta                   | developers_italia | digital-asset-management                                        |                                                                                                                                               | This is the frontend for the National Data Catalog for Semantic Interoperability. | published |
-      | Software Registry               | development            | developers_italia | application-development,it-development,digital-asset-management | Software Registry makes software development phase simplier by showing extended information about projects and allowing source code searches. |                                                                                   | published |
-      | Immuni                          | obsolete               | developers_italia | data-collection                                                 | Immuni is a mobile app that helps us to fight the COVID-19 pandemic by notifying users at risk of carrying the virus as early as possible     |                                                                                   | published |
+      | title                           | oss_development_status | oss_source        | oss_categories                                                  | oss_short_description                                                                                                                         | oss_git_description                                                               | status    | oss_release_date |
+      | Django-MDQ                      | stable                 | developers_italia | content-management                                              | A lightweight SAML2 MDQ server that implements draft-young-md-query implementation.                                                           |                                                                                   | published | 2022-04-13T13:00 |
+      | INGV - QuakeML to NonLinLoc PHS | stable                 | developers_italia | data-analytics,data-collection                                  | Docker image to convert QuakeML format to NonLinLoc PHS format.                                                                               |                                                                                   | published | 2000-07-13T13:00 |
+      | NDC Semantic frontend           | beta                   | developers_italia | digital-asset-management                                        |                                                                                                                                               | This is the frontend for the National Data Catalog for Semantic Interoperability. | published | 2023-08-13T13:00 |
+      | Software Registry               | development            | developers_italia | application-development,it-development,digital-asset-management | Software Registry makes software development phase simplier by showing extended information about projects and allowing source code searches. |                                                                                   | published | 2000-04-13T13:00 |
+      | Immuni                          | obsolete               | developers_italia | data-collection                                                 | Immuni is a mobile app that helps us to fight the COVID-19 pandemic by notifying users at risk of carrying the virus as early as possible     |                                                                                   | published | 2020-09-13T13:00 |
 
     Then I visit the OSS search page
 
     # Check the group collection header
     And I see the text "EU Open Source Solutions Catalogue" in the "Header" region
+    And I see the text "5 Open Source Software Solutions" in the "Header" region
+    And I see the text "Open source software of interest for Public Administrations" in the "Header" region
 
     # Check main area
     And I should see the text "SEARCH RESULTS (5)"
@@ -70,6 +77,19 @@ Feature: OSS catalogue search
     And I should not see the "NDC Semantic frontend" tile
     And I should not see the "Software Registry" tile
     And I should see the "Immuni" tile
+
+    # Check header count of solutions.
+    Given I delete the "NDC Semantic frontend" oss_solution
+    When I visit the OSS search page
+    And I see the text "4 Open Source Software Solutions" in the "Header" region
+
+    When set status with 0 in "Django-MDQ" oss_solution
+    Then I visit the OSS search page
+    And I see the text "3 Open Source Software Solutions" in the "Header" region
+
+    When set status with 1 in "Django-MDQ" oss_solution
+    Then I visit the OSS search page
+    And I see the text "4 Open Source Software Solutions" in the "Header" region
 
   @javascript
   Scenario: User is able to use autocomplete.
