@@ -32,9 +32,6 @@ function custom_page_entity_type_alter(array &$entity_types) {
   // Replaces the standard OG Menu Instance form with a customized one that is
   // suitable for use in the front end.
   $entity_types['ogmenu_instance']->setFormClass('edit', 'Drupal\custom_page\Form\OgMenuInstanceForm');
-
-  // Perform validation for path alias entity.
-  $entity_types['path_alias']->addConstraint('LandingPagePathAliasEntityConstraint');
 }
 
 /**
