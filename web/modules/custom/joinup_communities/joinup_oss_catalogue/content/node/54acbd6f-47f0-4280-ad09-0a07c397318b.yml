@@ -264,8 +264,8 @@ default:
               value: true
           paragraph_action_link:
             -
-              target_uuid: 54acbd6f-47f0-4280-ad09-0a07c397318b
               title: 'Learn more'
+              uri: internal:/<current>
               options: {  }
     -
       entity:
