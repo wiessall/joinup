@@ -7,11 +7,10 @@ namespace Drupal\eu_oss_catalogue;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Logger\LoggerChannelInterface;
 use Drupal\Core\Queue\QueueFactory;
-use Drupal\Core\Serialization\Yaml;
 use Drupal\eu_oss_catalogue\Entity\OssSolutionInterface;
 use Drupal\eu_oss_catalogue\Event\EuOssPostFetchEvent;
 use Drupal\eu_oss_catalogue\Event\EuOssSolutionPreSaveEvent;
-use Drupal\eu_oss_catalogue\Model\FetchedSolution;
+use Drupal\eu_oss_catalogue\Model\Project;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 /**
@@ -56,30 +55,23 @@ class EuOssCatalogue implements EuOssCatalogueInterface {
 
     $solutionUrlsToProcess = [];
     $solutionUrlsDiscovered = [];
-    while (($fetchedSolutions = $provider->fetch())->valid()) {
-      foreach ($fetchedSolutions as $fetchedSolution) {
-        if (!$fetchedSolution instanceof FetchedSolution) {
-          throw new \Exception("Invalid data received from '$providerId' plugin");
-        }
+    while (($projects = $provider->fetch())->valid()) {
+      foreach ($projects as $project) {
+        \assert($project instanceof Project);
 
-        // Don't federate solutions with invalid schema but log them.
-        if ($errors = $provider->getParser()->checkSchema($fetchedSolution)) {
+        // Give parser the chance to do the validation.
+        if ($errors = $provider->getParser()->isValid($project)) {
           $errorMarkup = '<ul><li>' . implode('</li><li>', $errors) . '</li></ul>';
           $message = <<<MESSAGE
             <p>Provider: @provider (<code>@provider_id</code>)</p>
             <p>Provider's reference: <code>@reference</code></p>
             <p>Schema errors:</p>
             $errorMarkup
-            <p>Full data:</p>
-            <pre>
-            @data
-            </pre>
             MESSAGE;
           $arguments = [
             '@provider' => $provider->getPluginDefinition()['label'],
             '@provider_id' => $providerId,
-            '@reference' => $fetchedSolution->providerReference ?? '[not provided]',
-            '@data' => Yaml::encode($fetchedSolution->data),
+            '@reference' => $project->platformReference ?? '[not provided]',
           ];
           $this->logger->error($message, $arguments);
           continue;
@@ -87,19 +79,19 @@ class EuOssCatalogue implements EuOssCatalogueInterface {
 
         // Cancellation should also cause removing this provider from the
         // preexisting OSS Solution entity.
-        $solutionUrlsDiscovered[] = $fetchedSolution->url;
-        if (!$this->fetchedSolutionNeedsUpdate($fetchedSolution, $provider)) {
+        $solutionUrlsDiscovered[] = $project->url;
+        if (!$this->fetchedSolutionNeedsUpdate($project, $provider)) {
           continue;
         }
 
         // Allow 3rd-party to modify or cancel the fetched solution.
-        $event = new EuOssPostFetchEvent($fetchedSolution);
+        $event = new EuOssPostFetchEvent($project);
         $this->eventDispatcher->dispatch($event);
         if ($event->isCancelled()) {
           // @todo Needs tests.
           $this->logger->warning("Solution '@solution' (@url) import cancelled by a subscriber. Reason: @reason", [
-            '@solution' => $fetchedSolution->name,
-            '@url' => $fetchedSolution->url,
+            '@solution' => $project->name,
+            '@url' => $project->url,
             '@reason' => $event->getCancellationReason(),
           ]);
           continue;
@@ -110,12 +102,12 @@ class EuOssCatalogue implements EuOssCatalogueInterface {
         // slightly different data. So if we already queued on item, we won't
         // queue its second occurrence one more time, but instead, at the end of
         // this method, we log a message about the duplicated URLs.
-        if (in_array($fetchedSolution->url, $solutionUrlsToProcess, TRUE)) {
+        if (in_array($project->url, $solutionUrlsToProcess, TRUE)) {
           $this->logger->warning(
             "Solution '@solution' (@url) import skipped: URL already seen in the same provider.",
             [
-              '@solution' => $fetchedSolution->name,
-              '@url' => $fetchedSolution->url,
+              '@solution' => $project->name,
+              '@url' => $project->url,
             ]
           );
           continue;
@@ -126,10 +118,10 @@ class EuOssCatalogue implements EuOssCatalogueInterface {
         $queue->createItem([
           'operation' => 'solution:create',
           'provider' => $providerId,
-          'solution' => $fetchedSolution,
+          'solution' => $project,
         ]);
         // Keep track of solutions been queued already.
-        $solutionUrlsToProcess[] = $fetchedSolution->url;
+        $solutionUrlsToProcess[] = $project->url;
       }
     }
 
@@ -167,23 +159,25 @@ class EuOssCatalogue implements EuOssCatalogueInterface {
   /**
    * {@inheritdoc}
    */
-  public function createOrUpdateSolution(string $providerPluginId, FetchedSolution $fetchedSolution): OssSolutionInterface {
+  public function createOrUpdateSolution(string $providerPluginId, Project $project): ?OssSolutionInterface {
     /** @var \Drupal\eu_oss_catalogue\EuOssCatalogueProviderInterface $provider */
     $provider = $this->providerManager->createInstance($providerPluginId);
     /** @var \Drupal\eu_oss_catalogue\EuOssCatalogueParserInterface $parser */
     $parser = $this->parserManager->createInstance($provider->getPluginDefinition()['parser']);
 
     // The parser is responsible to create the solution node entity.
-    $solution = $parser->parse($fetchedSolution, $provider);
+    if (!$solution = $parser->parse($project, $provider)) {
+      return NULL;
+    }
 
     // Let the provider make their own adjustments, if case.
-    $provider->alterSolution($solution, $fetchedSolution);
+    $provider->alterSolution($solution, $project);
 
     // Finally, allow 3rd-party to add their alters.
-    $this->eventDispatcher->dispatch(new EuOssSolutionPreSaveEvent($solution, $fetchedSolution));
+    $this->eventDispatcher->dispatch(new EuOssSolutionPreSaveEvent($solution, $project));
 
     // Set source hash.
-    $solution->set('oss_source_hash', $fetchedSolution->getHash());
+    $solution->set('oss_source_hash', $project->getHash());
 
     $operationResult = $solution->save();
 
@@ -275,23 +269,20 @@ class EuOssCatalogue implements EuOssCatalogueInterface {
   /**
    * Determines whether solution node needs to be created/updated.
    *
-   * @param \Drupal\eu_oss_catalogue\Model\FetchedSolution $fetchedSolution
-   *   The fetched solution.
+   * @param \Drupal\eu_oss_catalogue\Model\Project $project
+   *   The project value object.
    * @param \Drupal\eu_oss_catalogue\EuOssCatalogueProviderInterface $provider
    *   The provider plugin instance which fetched the solution.
    *
    * @return bool
    *   Whether solution node needs to be created/updated.
    */
-  protected function fetchedSolutionNeedsUpdate(
-    FetchedSolution $fetchedSolution,
-    EuOssCatalogueProviderInterface $provider
-  ): bool {
-    $hash = $fetchedSolution->getHash();
-    assert(strlen($hash) === 43);
+  protected function fetchedSolutionNeedsUpdate(Project $project, EuOssCatalogueProviderInterface $provider): bool {
+    $hash = $project->getHash();
+    \assert(strlen($hash) === 43);
 
     // Try to get solution node by the hash.
-    $solution_nodes = $this->entityTypeManager->getStorage('node')
+    $solutionNodes = $this->entityTypeManager->getStorage('node')
       ->loadByProperties([
         'type' => 'oss_solution',
         'oss_source_hash' => $hash,
@@ -299,7 +290,7 @@ class EuOssCatalogue implements EuOssCatalogueInterface {
         'oss_source' => $provider->getPluginId(),
       ]);
 
-    return empty($solution_nodes);
+    return empty($solutionNodes);
   }
 
 }
