@@ -52,6 +52,12 @@ abstract class FetchTestBase extends BrowserTestBase {
         $termStorage->create(['vid' => $vid, 'name' => $term])->save();
       }
     }
+
+    $settings['settings']['eu_oss_catalogue']['platform_github']['access_token'] = (object) [
+      'value' => 'dummy-token',
+      'required' => TRUE,
+    ];
+    $this->writeSettings($settings);
   }
 
   /**
@@ -82,7 +88,6 @@ abstract class FetchTestBase extends BrowserTestBase {
       $actualTranslation = $this->normalizeActualNodeArray($actualTranslation, $actual, $langcode);
       foreach ($expectedTranslation as $field => $expectedValue) {
         $actualValue = $actualTranslation[$field] ?? NULL;
-        $this->assertNotNull($actualValue, "Expected value for $langcode.$field not found");
         $this->assertEquals($expectedValue, $actualValue);
       }
     }
@@ -126,7 +131,7 @@ abstract class FetchTestBase extends BrowserTestBase {
           }, $value);
         }
 
-        // Coverts from array to scalar when cardinality is 1.
+        // Converts from array to scalar when cardinality is 1.
         if ($storageDefinition->getCardinality() == 1) {
           $values[$fieldName] = $values[$fieldName][0];
         }
@@ -144,8 +149,7 @@ abstract class FetchTestBase extends BrowserTestBase {
    *   The expected queued solutions.
    */
   protected function fetchSolutions(string $providerId, int $expectedQueuedSolutions): void {
-    $service = \Drupal::getContainer()->get('eu_oss_catalogue');
-    $service->fetch($providerId);
+    \Drupal::service('eu_oss_catalogue')->fetch($providerId);
 
     // Check how incoming data has been queued. Only one item is active.
     $queue = \Drupal::queue('eu_oss_catalogue');

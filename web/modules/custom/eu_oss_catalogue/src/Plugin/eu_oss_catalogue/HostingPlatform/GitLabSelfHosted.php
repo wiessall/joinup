@@ -6,8 +6,10 @@ namespace Drupal\eu_oss_catalogue\Plugin\eu_oss_catalogue\HostingPlatform;
 
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\eu_oss_catalogue\Model\GitLabReleaseSort;
+use Drupal\eu_oss_catalogue\Model\GitUri;
 use Gitlab\Client;
 use GraphQL\Actions\Query;
+use Psr\Http\Message\ResponseInterface;
 
 /**
  * Git code hosting platform for self-hosted GitLab repositories.
@@ -18,6 +20,13 @@ use GraphQL\Actions\Query;
  * )
  */
 class GitLabSelfHosted extends GitLabDotCom {
+
+  /**
+   * Static cache for base URL detection.
+   *
+   * @var string[]
+   */
+  protected array $baseUrlCache = [];
 
   /**
    * {@inheritdoc}
@@ -57,6 +66,58 @@ class GitLabSelfHosted extends GitLabDotCom {
   }
 
   /**
+   * {@inheritdoc}
+   */
+  public function isHostingPlatformForUrl(string $repositoryUrl): bool {
+    return $this->getBaseFromRepoUrl($repositoryUrl) !== NULL;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getBaseFromRepoUrl(string $repositoryUrl): ?string {
+    if (!array_key_exists($repositoryUrl, $this->baseUrlCache)) {
+      // Statically cache the findings as this is called more than once in the
+      // same request.
+      $this->baseUrlCache[$repositoryUrl] = $this->doGetBaseFromRepoUrl($repositoryUrl);
+    }
+    return $this->baseUrlCache[$repositoryUrl];
+  }
+
+  /**
+   * Returns the self-hosted GitLab code hosting platform URL.
+   *
+   * @param string $repositoryUrl
+   *   The project repository URL.
+   *
+   * @return string|null
+   *   The determined base URL of the code hosting platform or NULL if it
+   *   cannot be determined.
+   */
+  protected function doGetBaseFromRepoUrl(string $repositoryUrl): ?string {
+    if (!$gitUri = GitUri::fromUriString($repositoryUrl)) {
+      return NULL;
+    }
+
+    $namespaceParts = explode('/', $gitUri->namespace);
+    $host = $gitUri->getSchemeAndHost();
+    do {
+      try {
+        $response = $this->httpClient->get("$host/api");
+      }
+      catch (\Exception) {
+        if ($namespaceParts >= 2) {
+          $host .= '/' . array_shift($namespaceParts);
+        }
+        continue;
+      }
+      return $this->isGitLabApiResponse($response) ? $host : NULL;
+    } while (count($namespaceParts) > 0);
+
+    return NULL;
+  }
+
+  /**
    * Returns the GitLab client.
    *
    * @return \Gitlab\Client
@@ -73,10 +134,10 @@ class GitLabSelfHosted extends GitLabDotCom {
   /**
    * {@inheritdoc}
    */
-  protected function doGetProjects(?string $filePath = NULL): iterable {
+  protected function doGetProjects(array $requestedFiles = []): iterable {
     if (!empty($this->getConfiguration()['projects'])) {
       // A list of namespaces or projects has been specified.
-      foreach (parent::doGetProjects($filePath) as $project) {
+      foreach (parent::doGetProjects($requestedFiles) as $project) {
         yield $project;
       }
       return;
@@ -84,7 +145,7 @@ class GitLabSelfHosted extends GitLabDotCom {
 
     $endCursor = NULL;
     do {
-      $query = $this->buildProjectsQuery($filePath, $endCursor);
+      $query = $this->buildProjectsQuery($requestedFiles, $endCursor);
       $response = $this->getClient()->graphql()->execute($query->toString());
 
       if (empty($response['data']['projects']['nodes'])) {
@@ -95,13 +156,13 @@ class GitLabSelfHosted extends GitLabDotCom {
       $hasNextPage = $response['data']['projects']['pageInfo']['hasNextPage'];
       $endCursor = $response['data']['projects']['pageInfo']['endCursor'];
       foreach ($response['data']['projects']['nodes'] as $project) {
-        // Ignore if there's no default branch or the project is archived.
-        if (!empty($project['repository']['rootRef']) && empty($project['archived'])) {
+        // Ignore if there's no default branch (no default branch, no code).
+        if (!empty($project['repository']['rootRef'])) {
           // Extract the namespace from the full path.
           $parts = explode('/', $project['fullPath']);
           array_pop($parts);
           $namespace = implode('/', $parts);
-          yield $this->createHostingPlatformResult($namespace, $project);
+          yield $this->createHostingPlatformResult($namespace, $project, $requestedFiles);
         }
       }
     } while ($hasNextPage);
@@ -127,6 +188,7 @@ class GitLabSelfHosted extends GitLabDotCom {
    *       archived
    *       releases(sort: CREATED_DESC first: 1) {
    *         nodes {
+   *           tagName
    *           createdAt
    *         }
    *       }
@@ -143,15 +205,15 @@ class GitLabSelfHosted extends GitLabDotCom {
    * }
    * @endcode
    *
-   * @param string|null $filePath
-   *   The file path, if one has been specified.
+   * @param string[] $requestedFiles
+   *   A list of file paths keyed by a file identifier.
    * @param string|null $endCursor
    *   The end cursor, if any.
    *
    * @return \GraphQL\Actions\Query
    *   A GraphQL query builder instance.
    */
-  protected function buildProjectsQuery(?string $filePath, ?string $endCursor = NULL): Query {
+  protected function buildProjectsQuery(array $requestedFiles = [], ?string $endCursor = NULL): Query {
     $filters = ['first' => 100] + ($endCursor ? ['after' => $endCursor] : []);
 
     $query = new Query('projects', $filters);
@@ -162,19 +224,42 @@ class GitLabSelfHosted extends GitLabDotCom {
       ->use('fullPath', 'path', 'id', 'description', 'archived')
       ->releases(['sort' => GitLabReleaseSort::CREATED_DESC, 'first' => 1])
       ->nodes([])
-      ->use('createdAt')
+      ->use('tagName', 'createdAt')
       ->prev()
       ->prev()
       ->repository([])
       ->use('rootRef');
 
-    if ($filePath) {
-      $fragment->blobs(['paths' => [$filePath]])
+    if ($requestedFiles) {
+      $fragment->blobs(['paths' => array_values($requestedFiles)])
         ->nodes([])
-        ->use('rawBlob');
+        ->use('path', 'rawBlob');
     }
 
     return $query;
+  }
+
+  /**
+   * Checks whether the HTTP response comes from a GitLab API endpoint.
+   *
+   * @param \Psr\Http\Message\ResponseInterface $response
+   *   The HTTP response.
+   *
+   * @return bool
+   *   Whether the response comes from a GitLab API endpoint.
+   */
+  protected function isGitLabApiResponse(ResponseInterface $response): bool {
+    if (!$response->hasHeader('Set-Cookie')) {
+      return FALSE;
+    }
+    foreach ($response->getHeader('Set-Cookie') as $item) {
+      // GitLab API sets a session cookie.
+      // @see https://docs.gitlab.com/ee/api/rest/#session-cookie
+      if (str_starts_with($item, '_gitlab_session=')) {
+        return TRUE;
+      }
+    }
+    return FALSE;
   }
 
 }

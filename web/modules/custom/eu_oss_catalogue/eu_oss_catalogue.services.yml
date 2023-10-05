@@ -40,3 +40,10 @@ services:
       - { name: cache.bin }
     factory: ['@cache_factory', 'get']
     arguments: [eu_oss_catalogue]
+
+  eu_oss_catalogue.git_remote.api_guesser:
+    class: Drupal\eu_oss_catalogue\ApiGuesser
+    arguments:
+      - '@plugin.manager.eu_oss_catalogue.hosting_platform'
+      - '@state'
+      - '@logger.channel.eu_oss_catalogue'

@@ -4,14 +4,12 @@ declare(strict_types = 1);
 
 namespace Drupal\eu_oss_catalogue\Plugin\eu_oss_catalogue\Provider;
 
-use Drupal\Component\Serialization\Exception\InvalidDataTypeException;
 use Drupal\Component\Serialization\Json;
 use Drupal\Core\Config\Schema\SchemaCheckTrait;
 use Drupal\Core\Logger\LoggerChannelInterface;
-use Drupal\Core\Serialization\Yaml;
+use Drupal\eu_oss_catalogue\ApiGuesserInterface;
 use Drupal\eu_oss_catalogue\EuOssCataloguePluginManagerInterface;
 use Drupal\eu_oss_catalogue\EuOssCatalogueProviderPluginBase;
-use Drupal\eu_oss_catalogue\Model\FetchedSolution;
 use GuzzleHttp\Client;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -21,8 +19,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * @EuOssCatalogueProvider(
  *   id = "developers_italia",
  *   label = @Translation("Developers Italia"),
- *   description = @Translation("Italian National OSS Catalogue, by https://developers.italia.it website."),
- *   parser = "publiccode_yml",
+ *   description = @Translation("Italian National OSS Catalogue, by https://developers.italia.it website."), parser = "publiccode_yml",
  * )
  */
 class DevelopersItalia extends EuOssCatalogueProviderPluginBase {
@@ -39,11 +36,24 @@ class DevelopersItalia extends EuOssCatalogueProviderPluginBase {
   protected const ENDPOINT = 'https://api.developers.italia.it/v1/software';
 
   /**
-   * The query string to be used by the next call.
+   * List of projects fetched from Developers Italia API.
    *
-   * @var string|null
+   * @var array[][]
+   *   A list of fetched projects keyed by the coding platform base URL. The
+   *   values are associative arrays keyed by namespace and having a list of
+   *   project IDs as values.
    */
-  protected ?string $next = '';
+  protected array $fetched;
+
+  /**
+   * Fetched URLs collector.
+   */
+  protected array $fetchedUrls = [];
+
+  /**
+   * Processed URLs collector.
+   */
+  protected array $processedUrls = [];
 
   /**
    * Constructs a new plugin instance.
@@ -60,6 +70,10 @@ class DevelopersItalia extends EuOssCatalogueProviderPluginBase {
    *   The EU OSS Catalogue logger.
    * @param \GuzzleHttp\Client $httpClient
    *   The HTTP client.
+   * @param \Drupal\eu_oss_catalogue\EuOssCataloguePluginManagerInterface $platformManager
+   *   The EU OSS Catalogue code hosting platform plugin manager service.
+   * @param \Drupal\eu_oss_catalogue\ApiGuesserInterface $apiGuesser
+   *   The API guesser service.
    */
   public function __construct(
     array $configuration,
@@ -68,8 +82,10 @@ class DevelopersItalia extends EuOssCatalogueProviderPluginBase {
     protected EuOssCataloguePluginManagerInterface $parserManager,
     protected LoggerChannelInterface $logger,
     protected Client $httpClient,
+    protected EuOssCataloguePluginManagerInterface $platformManager,
+    protected ApiGuesserInterface $apiGuesser,
   ) {
-    parent::__construct($configuration, $pluginId, $pluginDefinition, $parserManager, $this->logger);
+    parent::__construct($configuration, $pluginId, $pluginDefinition, $parserManager, $logger);
   }
 
   /**
@@ -83,6 +99,8 @@ class DevelopersItalia extends EuOssCatalogueProviderPluginBase {
       $container->get('plugin.manager.eu_oss_catalogue.parser'),
       $container->get('logger.channel.eu_oss_catalogue'),
       $container->get('http_client'),
+      $container->get('plugin.manager.eu_oss_catalogue.hosting_platform'),
+      $container->get('eu_oss_catalogue.git_remote.api_guesser'),
     );
   }
 
@@ -90,41 +108,89 @@ class DevelopersItalia extends EuOssCatalogueProviderPluginBase {
    * {@inheritdoc}
    */
   public function fetch(): iterable {
-    if ($this->next === NULL) {
-      return;
+    if (!isset($this->fetched)) {
+      $this->fetched = [];
+      $this->doFetch();
     }
 
-    $url = static::ENDPOINT . $this->next . ($this->next ? '&' : '?') . 'page[size]=100';
-    $response = $this->httpClient->get($url);
-    $read = Json::decode($response->getBody()->getContents());
+    foreach ($this->fetched as $baseUrl => $namespaces) {
+      // Remove this entry to avoid fetching again on the next iteration.
+      unset($this->fetched[$baseUrl]);
 
-    foreach ($read['data'] as $newItem) {
-      $active = $newItem['active'] ?? FALSE;
-      if ($active) {
-        if (empty($newItem['url'])) {
-          $this->logger->error("Item @id lacks the mandatory URL", ['@id' => $newItem['id']]);
-          continue;
-        }
-        $url = preg_replace('/^(.*)\.git$/', '$1', $newItem['url']);
-        try {
-          $decoded = Yaml::decode($newItem['publiccodeYml']);
-          yield new FetchedSolution(
-            $url,
-            $decoded['name'],
-            $decoded,
-            $newItem['id'],
-          );
-        }
-        catch (InvalidDataTypeException $exception) {
-          $this->logger->error('Cannot decode publiccode.yml of @url. Message: @message', [
-            '@url' => $url,
-            '@message' => $exception->getMessage(),
-          ]);
-        }
+      $platformConfig = [
+        'projects' => $namespaces['projects'],
+        'url' => $baseUrl,
+      ];
+      /** @var \Drupal\eu_oss_catalogue\EuOssCatalogueHostingPlatformInterface $hostingPlatform */
+      $hostingPlatform = $this->platformManager->createInstance($namespaces['api']->pluginId, $platformConfig);
+
+      /** @var \Drupal\eu_oss_catalogue\Model\Project $project */
+      foreach ($hostingPlatform->getProjects(['publiccodeYml' => 'publiccode.yml']) as $project) {
+        $this->processedUrls[] = $project->url;
+        yield $project;
+      }
+
+      // Only log when all solutions were processed.
+      if (empty($this->fetched)) {
+        $this->logResults();
       }
     }
+  }
 
-    $this->next = $read['links']['next'];
+  /**
+   * Fetches data from Developers Italia API endpoint.
+   */
+  protected function doFetch(): void {
+    $next = '';
+
+    do {
+      $endpointUrl = static::ENDPOINT . $next . ($next ? '&' : '?') . 'page[size]=100&all=true';
+      $response = $this->httpClient->get($endpointUrl);
+      $read = Json::decode($response->getBody()->getContents());
+
+      foreach ($read['data'] as $newItem) {
+        if (empty($newItem['url'])) {
+          $this->logger->error('Item {id} lacks the mandatory URL', ['id' => $newItem['id']]);
+          continue;
+        }
+
+        if (!$api = $this->apiGuesser->getHostingPlatformApi($newItem['url'])) {
+          continue;
+        }
+
+        $url = preg_replace('/^(.*)\.git$/', '$1', $newItem['url']);
+        $pathParts = explode('/', trim(substr($url, strlen($api->baseUrl)), '/'));
+        $name = array_pop($pathParts);
+        $namespace = implode('/', $pathParts);
+
+        if (!isset($this->fetched[$api->baseUrl]['api'])) {
+          $this->fetched[$api->baseUrl]['api'] = $api;
+        }
+        $this->fetched[$api->baseUrl]['projects'][$namespace][] = $name;
+        $this->fetchedUrls[] = $url;
+      }
+      $next = $read['links']['next'];
+    } while ($next !== NULL);
+  }
+
+  /**
+   * Logs statistics about fetched and processed OSS Solutions.
+   */
+  protected function logResults(): void {
+    if ($unProcessed = array_diff($this->fetchedUrls, $this->processedUrls)) {
+      $this->logger->warning('Processed {processed} out of {fetched} fetched solutions from Developers Italia. The following {unprocessed} solutions failed: ' . implode(', ', $unProcessed), [
+        'processed' => count($this->processedUrls),
+        'fetched' => count($this->fetchedUrls),
+        'unprocessed' => count($unProcessed),
+        'list' => $unProcessed,
+      ]);
+    }
+    else {
+      $this->logger->info('Processed {processed} out of {fetched} fetched solutions from Developers Italia.', [
+        'processed' => count($this->processedUrls),
+        'fetched' => count($this->fetchedUrls),
+      ]);
+    }
   }
 
 }

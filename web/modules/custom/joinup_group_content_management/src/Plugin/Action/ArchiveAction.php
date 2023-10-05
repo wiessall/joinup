@@ -10,6 +10,7 @@ use Drupal\Core\Session\AccountInterface;
 use Drupal\joinup_group_content_management\Exception\ActionException;
 use Drupal\joinup_workflow\EntityWorkflowStateInterface;
 use Drupal\node\NodeInterface;
+use Drupal\views\ViewExecutable;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -18,7 +19,10 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * @Action(
  *   id = "joinup_archive",
  *   label = @Translation("Archive content"),
- *   type = "node"
+ *   type = "node",
+ *   requirements = {
+ *      "_custom_access" = TRUE,
+ *   },
  * )
  */
 class ArchiveAction extends StateActionBase {
@@ -46,11 +50,11 @@ class ArchiveAction extends StateActionBase {
   /**
    * {@inheritdoc}
    */
-  public static function create(ContainerInterface $container, array $configuration, $pluginId, $pluginDefinition): self {
+  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition): self {
     return new static(
       $configuration,
-      $pluginId,
-      $pluginDefinition,
+      $plugin_id,
+      $plugin_definition,
       $container->get('renderer'),
       $container->get('datetime.time'),
       $container->get('current_user')
@@ -92,6 +96,24 @@ class ArchiveAction extends StateActionBase {
     if (!$node->isTargetWorkflowStateAllowed(self::ARCHIVE_STATE)) {
       throw new ActionException('It is not allowed to move ' . $actual . ' to ' . self::ARCHIVE_STATE);
     }
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function customAccess(AccountInterface $account, ViewExecutable $view): bool {
+    /** @var \Drupal\joinup_group\Entity\GroupInterface $group */
+    $group = \Drupal::service('og.context')->getGroup();
+
+    /** @var \Drupal\joinup_group\JoinupGroupManagerInterface $groupManager */
+    $groupManager = \Drupal::service('joinup_group.group_manager');
+    if (!$group) {
+      return FALSE;
+    }
+
+    $permission = 'vbo joinup archive action';
+    return $groupManager->access($group, $permission, $permission, $account)
+      ->isAllowed();
   }
 
 }
