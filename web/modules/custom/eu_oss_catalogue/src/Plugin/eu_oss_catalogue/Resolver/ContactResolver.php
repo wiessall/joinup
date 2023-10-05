@@ -6,8 +6,9 @@ namespace Drupal\eu_oss_catalogue\Plugin\eu_oss_catalogue\Resolver;
 
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Field\FieldItemListInterface;
+use Drupal\Core\Logger\LoggerChannelInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
-use Drupal\eu_oss_catalogue\Model\FetchedSolution;
+use Drupal\eu_oss_catalogue\Model\Project;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -29,6 +30,8 @@ class ContactResolver extends DefaultResolver implements ContainerFactoryPluginI
    *   The plugin ID for the plugin instance.
    * @param mixed $pluginDefinition
    *   The plugin implementation definition.
+   * @param \Drupal\Core\Logger\LoggerChannelInterface $logger
+   *   The EU OSS Catalogue logger.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
    *   The entity type manager service.
    */
@@ -36,9 +39,10 @@ class ContactResolver extends DefaultResolver implements ContainerFactoryPluginI
     array $configuration,
     $pluginId,
     $pluginDefinition,
+    protected LoggerChannelInterface $logger,
     protected EntityTypeManagerInterface $entityTypeManager,
   ) {
-    parent::__construct($configuration, $pluginId, $pluginDefinition);
+    parent::__construct($configuration, $pluginId, $pluginDefinition, $logger);
   }
 
   /**
@@ -49,6 +53,7 @@ class ContactResolver extends DefaultResolver implements ContainerFactoryPluginI
       $configuration,
       $pluginId,
       $pluginDefinition,
+      $container->get('logger.channel.eu_oss_catalogue'),
       $container->get('entity_type.manager'),
     );
   }
@@ -56,12 +61,22 @@ class ContactResolver extends DefaultResolver implements ContainerFactoryPluginI
   /**
    * {@inheritdoc}
    */
-  public function resolve(FieldItemListInterface $fieldItemList, FetchedSolution $fetchedSolution): array {
+  public function resolve(FieldItemListInterface $fieldItemList, Project $project, array $metadata): array {
     $storage = $this->entityTypeManager->getStorage('node');
     $nodeType = $this->getConfiguration()['node_type'];
 
     $targets = [];
-    foreach (parent::resolve($fieldItemList, $fetchedSolution) as $contact) {
+    foreach (parent::resolve($fieldItemList, $project, $metadata) as $contact) {
+      if (is_string($contact)) {
+        // This is a malformed contact because it should be an array, but we
+        // allow this and amend later, when we check the schema.
+        $contact = ['name' => $contact];
+      }
+
+      if (empty($contact['name'])) {
+        return $targets;
+      }
+
       $nids = array_values($storage->getQuery()->accessCheck(FALSE)
         ->condition('type', $nodeType)
         ->condition('title', $contact['name'])
