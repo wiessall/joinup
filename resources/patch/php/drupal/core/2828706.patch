@@ -1,0 +1,180 @@
+diff --git a/core/lib/Drupal/Core/EventSubscriber/ExceptionLoggingSubscriber.php b/core/lib/Drupal/Core/EventSubscriber/ExceptionLoggingSubscriber.php
+index 526cb42d69..8adc67a6c9 100644
+--- a/core/lib/Drupal/Core/EventSubscriber/ExceptionLoggingSubscriber.php
++++ b/core/lib/Drupal/Core/EventSubscriber/ExceptionLoggingSubscriber.php
+@@ -75,6 +75,22 @@ public function onError(ExceptionEvent $event) {
+     }
+   }
+ 
++  /**
++   * Log 4xx errors that are not 403 or 404.
++   *
++   * @param \Symfony\Component\HttpKernel\Event\ExceptionEvent $event
++   *   The event to process.
++   */
++  public function onClientError(ExceptionEvent $event) {
++    $exception = $event->getThrowable();
++    $error = Error::decodeException($exception);
++    $error += [
++      'status_code' => $exception->getStatusCode(),
++    ];
++    $this->logger->get('client error')
++      ->log($error['severity_level'], Error::DEFAULT_ERROR_MESSAGE, $error);
++  }
++
+   /**
+    * Log all exceptions.
+    *
+@@ -88,10 +104,14 @@ public function onException(ExceptionEvent $event) {
+ 
+     // Treat any non-HTTP exception as if it were one, so we log it the same.
+     if ($exception instanceof HttpExceptionInterface) {
+-      $possible_method = 'on' . $exception->getStatusCode();
++      $status_code = $exception->getStatusCode();
++      $possible_method = 'on' . $status_code;
+       if (method_exists($this, $possible_method)) {
+         $method = $possible_method;
+       }
++      elseif ($status_code >= 400 && $status_code < 500) {
++        $method = 'onClientError';
++      }
+     }
+ 
+     $this->$method($event);
+diff --git a/core/modules/system/tests/modules/error_test/src/Controller/ErrorTestController.php b/core/modules/system/tests/modules/error_test/src/Controller/ErrorTestController.php
+index b15bb9b00c..b550b4fda4 100644
+--- a/core/modules/system/tests/modules/error_test/src/Controller/ErrorTestController.php
++++ b/core/modules/system/tests/modules/error_test/src/Controller/ErrorTestController.php
+@@ -5,6 +5,7 @@
+ use Drupal\Core\Controller\ControllerBase;
+ use Drupal\Core\Database\Connection;
+ use Symfony\Component\DependencyInjection\ContainerInterface;
++use Symfony\Component\HttpFoundation\Exception\BadRequestException;
+ 
+ /**
+  * Controller routines for error_test routes.
+@@ -98,4 +99,12 @@ function () {
+     ];
+   }
+ 
++  /**
++   * Trigger a bad request exception.
++   */
++  public function triggerBadRequestException() {
++    define('SIMPLETEST_COLLECT_ERRORS', FALSE);
++    throw new BadRequestException();
++  }
++
+ }
+diff --git a/core/tests/Drupal/FunctionalTests/Bootstrap/UncaughtExceptionTest.php b/core/tests/Drupal/FunctionalTests/Bootstrap/UncaughtExceptionTest.php
+index c85cc3c6e1..969c364890 100644
+--- a/core/tests/Drupal/FunctionalTests/Bootstrap/UncaughtExceptionTest.php
++++ b/core/tests/Drupal/FunctionalTests/Bootstrap/UncaughtExceptionTest.php
+@@ -94,7 +94,7 @@ public function testUncaughtException() {
+   public function testUncaughtFatalError() {
+     $fatal_error = [
+       '%type' => 'TypeError',
+-      '@message' => 'Drupal\error_test\Controller\ErrorTestController::Drupal\error_test\Controller\{closure}(): Argument #1 ($test) must be of type array, string given, called in ' . \Drupal::root() . '/core/modules/system/tests/modules/error_test/src/Controller/ErrorTestController.php on line 65',
++      '@message' => 'Drupal\error_test\Controller\ErrorTestController::Drupal\error_test\Controller\{closure}(): Argument #1 ($test) must be of type array, string given, called in ' . \Drupal::root() . '/core/modules/system/tests/modules/error_test/src/Controller/ErrorTestController.php on line 66',
+       '%function' => 'Drupal\error_test\Controller\ErrorTestController->Drupal\error_test\Controller\{closure}()',
+     ];
+     $this->drupalGet('error-test/generate-fatals');
+diff --git a/core/tests/Drupal/KernelTests/Core/EventSubscriber/ExceptionLoggingSubscriberTest.php b/core/tests/Drupal/KernelTests/Core/EventSubscriber/ExceptionLoggingSubscriberTest.php
+new file mode 100644
+index 0000000000..8220f1b8dc
+--- /dev/null
++++ b/core/tests/Drupal/KernelTests/Core/EventSubscriber/ExceptionLoggingSubscriberTest.php
+@@ -0,0 +1,93 @@
++<?php
++
++namespace Drupal\KernelTests\Core\EventSubscriber;
++
++use Drupal\Core\DependencyInjection\ContainerBuilder;
++use Drupal\KernelTests\KernelTestBase;
++use Symfony\Component\ErrorHandler\BufferingLogger;
++use Symfony\Component\HttpFoundation\Request;
++
++/**
++ * Tests that HTTP exceptions are logged correctly.
++ *
++ * @group system
++ */
++class ExceptionLoggingSubscriberTest extends KernelTestBase {
++
++  /**
++   * The service name for a logger implementation that collects anything logged.
++   *
++   * @var string
++   */
++  protected $testLogServiceName = 'exception_logging_subscriber_test.logger';
++
++  /**
++   * {@inheritdoc}
++   */
++  protected static $modules = ['system', 'test_page_test', 'dblog'];
++
++  /**
++   * {@inheritdoc}
++   */
++  protected function setUp(): void {
++    parent::setUp();
++    // Prepare the logger for collecting the expected critical error.
++    $this->container->get($this->testLogServiceName)->cleanLogs();
++  }
++
++  /**
++   * Tests \Drupal\Core\EventSubscriber\ExceptionLoggingSubscriber::onException().
++   */
++  public function testExceptionLogging() {
++    $http_kernel = \Drupal::service('http_kernel');
++
++    // Make sure that HTTP exceptions are logged into correct channel.
++    $this->installSchema('dblog', ['watchdog']);
++
++    $channel_map = [
++      400 => 'client error',
++      401 => 'client error',
++      403 => 'access denied',
++      404 => 'page not found',
++      405 => 'client error',
++      408 => 'client error',
++      // Do not check the 500 status code here because it would be caught by
++      // Drupal\Core\EventSubscriberExceptionTestSiteSubscriber which has lower
++      // priority.
++      501 => 'php',
++      502 => 'php',
++      503 => 'php',
++    ];
++
++    // Ensure that noting is logged.
++    $this->assertEmpty($this->container->get($this->testLogServiceName)->cleanLogs());
++
++    // Temporarily disable error log as the ExceptionLoggingSubscriber logs 5xx
++    // HTTP errors using error_log().
++    $error_log = ini_set('error_log', '/dev/null');
++    foreach ($channel_map as $code => $channel) {
++      $request = Request::create('/test-http-response-exception/' . $code);
++      $http_kernel->handle($request);
++    }
++    ini_set('error_log', $error_log);
++
++    $expected_channels = array_values($channel_map);
++
++    $logs = $this->container->get($this->testLogServiceName)->cleanLogs();
++    foreach ($expected_channels as $key => $expected_channel) {
++      $log_message = $logs[$key][2]['channel'];
++      $this->assertEquals($expected_channel, $log_message);
++    }
++  }
++
++  /**
++   * {@inheritdoc}
++   */
++  public function register(ContainerBuilder $container) {
++    parent::register($container);
++    $container
++      ->register($this->testLogServiceName, BufferingLogger::class)
++      ->addTag('logger');
++  }
++
++}
