@@ -64,8 +64,6 @@ Feature: User authentication
       | outdated-content-threshold                          |
       | propose/collection                                  |
       | propose/solution                                    |
-      | rdf-graph                                           |
-      | rdf-graph/add                                       |
       | rdf_entity/add                                      |
       | rdf_entity/add/asset_distribution                   |
       | rdf_entity/add/asset_release                        |
@@ -73,7 +71,6 @@ Feature: User authentication
       | rdf_entity/add/contact_information                  |
       | rdf_entity/add/licence                              |
       | rdf_entity/add/owner                                |
-      | rdf_entity/add/rdf_graph                            |
       | rdf_entity/add/solution                             |
       | user/subscriptions                                  |
 
@@ -147,8 +144,6 @@ Feature: User authentication
       | node/add/news                                       |
       | outdated-content-threshold                          |
       | propose/solution                                    |
-      | rdf-graph                                           |
-      | rdf-graph/add                                       |
       | rdf_entity/add                                      |
       | rdf_entity/add/asset_distribution                   |
       | rdf_entity/add/asset_release                        |
@@ -156,7 +151,6 @@ Feature: User authentication
       | rdf_entity/add/contact_information                  |
       | rdf_entity/add/licence                              |
       | rdf_entity/add/owner                                |
-      | rdf_entity/add/rdf_graph                            |
       | rdf_entity/add/solution                             |
 
   Scenario Outline: Authenticated user cannot access restricted non-HTML URLs.
@@ -226,8 +220,6 @@ Feature: User authentication
       | node/add/glossary                                   |
       | node/add/news                                       |
       | propose/solution                                    |
-      | rdf-graph                                           |
-      | rdf-graph/add                                       |
       | rdf_entity/add                                      |
       | rdf_entity/add/asset_distribution                   |
       | rdf_entity/add/asset_release                        |
@@ -235,7 +227,6 @@ Feature: User authentication
       | rdf_entity/add/contact_information                  |
       | rdf_entity/add/licence                              |
       | rdf_entity/add/owner                                |
-      | rdf_entity/add/rdf_graph                            |
       | rdf_entity/add/solution                             |
 
   Scenario Outline: Administrator can access pages they are authorized to
@@ -272,8 +263,6 @@ Feature: User authentication
       | node/add/document                  |
       | node/add/event                     |
       | node/add/news                      |
-      | rdf-graph                          |
-      | rdf-graph/add                      |
       | rdf_entity/add                     |
       | rdf_entity/add/asset_distribution  |
       | rdf_entity/add/asset_release       |
@@ -281,5 +270,4 @@ Feature: User authentication
       | rdf_entity/add/contact_information |
       | rdf_entity/add/licence             |
       | rdf_entity/add/owner               |
-      | rdf_entity/add/rdf_graph           |
       | rdf_entity/add/solution            |

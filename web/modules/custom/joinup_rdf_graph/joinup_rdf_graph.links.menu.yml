@@ -1,6 +1,0 @@
-joinup_rdf_graph.collection:
-  title: 'RDF graphs'
-  route_name: joinup_rdf_graph.collection
-  description: 'Mange RDF graphs.'
-  parent: system.admin
-  weight: 100
