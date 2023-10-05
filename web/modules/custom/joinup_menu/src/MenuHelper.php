@@ -89,21 +89,7 @@ class MenuHelper implements MenuHelperInterface {
    * {@inheritdoc}
    */
   public function getBclAccountMenu(): array {
-    $tree = $this->menuLinkTree->load('account', new MenuTreeParameters());
-    $manipulators = [
-      ['callable' => 'menu.default_tree_manipulators:checkAccess'],
-      ['callable' => 'menu.default_tree_manipulators:generateIndexAndSort'],
-    ];
-    $tree = $this->menuLinkTree->transform($tree, $manipulators);
-    $tree = array_filter($tree, function (MenuLinkTreeElement $element): bool {
-      // Hide inaccessible links, unpublished links, as well as the 'EU Login
-      // info' link. The latter is only intended for anonymous users.
-      // @see joinup_eulogin_preprocess_menu()
-      return $element->access instanceof AccessResultInterface &&
-        $element->access->isAllowed() &&
-        $element->link->isEnabled() &&
-        $element->link->getPluginId() !== 'joinup_eulogin.eu_login_info';
-    });
+    $tree = $this->getMenuLinkElements( 'account');
 
     return array_map(function (MenuLinkTreeElement $element): array {
       return [
@@ -193,20 +179,52 @@ class MenuHelper implements MenuHelperInterface {
    * {@inheritdoc}
    */
   public function getBclLandingPageLinks(): array {
-    // Include links to 'Interoperable Europe' and 'Interoperability Solutions'.
-    $landing_page_links = [];
-    foreach ([
-      InteroperableEuropeCollectionInterface::COLLECTION_ENTITY_ID => 'rdf_entity',
-      JoinupCollectionHelper::INTEROPERABILITY_SOLUTIONS_ENTITY_ID => 'node',
-    ] as $id => $entity_type_id) {
-      if ($entity = $this->entityTypeManager->getStorage($entity_type_id)->load($id)) {
-        $landing_page_links[] = [
-          'label' => $entity->label(),
-          'link' => $entity->toUrl(),
-        ];
+    $tree = $this->getMenuLinkElements('navbar');
+
+    return array_map(function (MenuLinkTreeElement $element): array {
+      $link = [
+        'link' => $element->link->getUrlObject(),
+        'label' => $element->link->getTitle(),
+        'children' => [],
+      ];
+      if ($element->hasChildren) {
+        foreach ($element->subtree as $child) {
+          $link['children'][] = [
+            'link' => $child->link->getUrlObject(),
+            'label' => $child->link->getTitle(),
+          ];
+        }
       }
-    }
-    return $landing_page_links;
+
+      return $link;
+    }, $tree);
+  }
+
+  /**
+   * Gets menu link elements.
+   *
+   * @param string $menu
+   *   Menu machine name.
+   *
+   * @return \Drupal\Core\Menu\MenuLinkTreeElement[]
+   *   menu links elements.
+   */
+  protected function getMenuLinkElements(string $menu): array {
+    $tree = $this->menuLinkTree->load($menu, new MenuTreeParameters());
+    $manipulators = [
+      ['callable' => 'menu.default_tree_manipulators:checkAccess'],
+      ['callable' => 'menu.default_tree_manipulators:generateIndexAndSort'],
+    ];
+    $tree = $this->menuLinkTree->transform($tree, $manipulators);
+    return array_filter($tree, function (MenuLinkTreeElement $element): bool {
+      // Hide inaccessible links, unpublished links, as well as the 'EU Login
+      // info' link. The latter is only intended for anonymous users.
+      // @see joinup_eulogin_preprocess_menu()
+      return $element->access instanceof AccessResultInterface &&
+        $element->access->isAllowed() &&
+        $element->link->isEnabled() &&
+        $element->link->getPluginId() !== 'joinup_eulogin.eu_login_info';
+    });
   }
 
 }

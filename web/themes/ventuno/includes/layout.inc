@@ -44,6 +44,8 @@ function ventuno_preprocess_page(array &$variables): void {
 
   // The "About us" link is only shown if the Joinup collection exists.
   $variables['#cache']['tags'][] = 'joinup_collection:exists';
+  // Moderator can change navbar links.
+  $variables['#cache']['tags'][] = 'config:system.menu.navbar';
 
   $variables['hide_searchbar'] = FALSE;
   $route_match = \Drupal::routeMatch();
