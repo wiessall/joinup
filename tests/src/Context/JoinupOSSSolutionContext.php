@@ -5,11 +5,14 @@ declare(strict_types = 1);
 namespace Drupal\joinup\Context;
 
 use Drupal\DrupalExtension\Context\RawDrupalContext;
+use Drupal\joinup\Traits\EntityTrait;
 
 /**
  * Behat step definitions for testing OSS solution.
  */
 class JoinupOSSSolutionContext extends RawDrupalContext {
+
+  use EntityTrait;
 
   /**
    * OSS search page path.
@@ -23,6 +26,18 @@ class JoinupOSSSolutionContext extends RawDrupalContext {
    */
   public function visitSearchPage(): void {
     $this->visitPath(self::SEARCH_PATH);
+  }
+
+  /**
+   * Deletes an OSS Solution.
+   *
+   * @param string $title
+   *   The entity title.
+   *
+   * @When I delete the :title oss_solution
+   */
+  public function deleteOssSolution(string $title): void {
+    $this->getEntityByLabel('node', $title, 'oss_solution')->delete();
   }
 
 }

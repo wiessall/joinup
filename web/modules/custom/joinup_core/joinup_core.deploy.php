@@ -14,6 +14,7 @@
 
 declare(strict_types = 1);
 
+use Drupal\Core\Url;
 use Drupal\joinup_oss_catalogue\OssCatalogueCollectionInterface;
 
 /**
@@ -107,4 +108,40 @@ function joinup_core_deploy_109803(): void {
     ->loadEntityByUuid('menu_link_content', $linkPlugin->getDerivativeId())
     ->setUnpublished()
     ->save();
+}
+
+/**
+ * Rename menu items for EU OSS catalogue.
+ */
+function joinup_core_deploy_109804(): void {
+  $entityTypeManager = \Drupal::entityTypeManager();
+  /** @var  \Drupal\menu_link_content\MenuLinkContentStorageInterface $menuLinkContentStorage */
+  $menuLinkContentStorage = $entityTypeManager->getStorage('menu_link_content');
+
+  $menuName = 'ogmenu-3728';
+  // Collect the IDs of links to the custom page.
+  $ids = $menuLinkContentStorage->getQuery()->accessCheck(FALSE)
+    ->condition('bundle', 'menu_link_content')
+    ->condition('menu_name', $menuName)
+    ->execute();
+
+  $links = $menuLinkContentStorage->loadMultiple($ids);
+  foreach ($links as $link) {
+    $title = $link->getTitle();
+    if ($title === 'About' || $title === 'Members') {
+      $link->setUnpublished()->save();
+    }
+    elseif ($title === 'Overview') {
+      $link->set('title', 'Welcome')->save();
+    }
+  }
+  $link = [
+    'uri' => Url::fromRoute('view.search_oss_catalogue.search')->toUriString(),
+  ];
+  $menuLinkContentStorage->create([
+    'title' => t('Search'),
+    'menu_name' => $menuName,
+    'link' => $link,
+    'weight' => -6,
+  ])->save();
 }
