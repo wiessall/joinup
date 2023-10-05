@@ -4,5 +4,5 @@ status: true
 dependencies: {  }
 id: navbar
 label: Navbar
-description: 'Main navigation menu'
+description: 'Navbar menu'
 locked: false
