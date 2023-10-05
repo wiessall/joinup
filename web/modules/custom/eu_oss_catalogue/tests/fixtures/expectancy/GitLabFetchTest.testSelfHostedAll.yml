@@ -1,13 +1,29 @@
 Project 1:
   en:
     oss_git_url: https://all.self-hosted.gitlab.example.com/group1/group1_2/group1_3/project1
+    oss_git_description: Description of Project1
+    oss_default_branch: branch-project-1
+    oss_software_version: 'v1.1.1'
+    oss_release_date: '2015-06-21'
+    oss_platform_reference: gid://gitlab/Project/1
     oss_publiccode_yml_version: '0.2'
-    oss_release_date: '2022-10-07'
-    oss_software_version: '1.4.5'
 
 Project 2:
   en:
     oss_git_url: https://all.self-hosted.gitlab.example.com/group2/group2_2/group2_3/project2
+    oss_git_description: Description of Project2
+    oss_default_branch: branch-project-2
+    oss_software_version: 'v14.0.1'
+    oss_release_date: '2007-01-30'
+    oss_platform_reference: gid://gitlab/Project/2
     oss_publiccode_yml_version: '0.2'
-    oss_release_date: '2021-08-05'
-    oss_software_version: '7.0.2-alpha1'
+
+Project 3:
+  en:
+    oss_git_url: https://all.self-hosted.gitlab.example.com/group3/project3
+    oss_git_description: Description of Project3
+    oss_default_branch: branch-project-3
+    oss_software_version: null
+    oss_release_date: null
+    oss_platform_reference: gid://gitlab/Project/3
+    oss_publiccode_yml_version: '0.2'

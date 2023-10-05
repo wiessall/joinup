@@ -9,7 +9,6 @@ dependencies:
     - field.storage.message.oss_solution
     - field.storage.message.oss_source
     - message.template.eu_oss_catalogue_log
-    - system.menu.admin
   module:
     - link
     - message
@@ -701,15 +700,15 @@ display:
         metatag_display_extender:
           metatags: {  }
           tokenize: false
-      path: admin/reporting/eu-oss-catalogue-log
+      path: admin/content/eu-oss-catalogue/log
       menu:
-        type: normal
-        title: 'EU OSS Catalogue log'
+        type: tab
+        title: Log
         description: ''
-        weight: 0
+        weight: 10
         expanded: false
         menu_name: admin
-        parent: joinup.admin_reporting
+        parent: eu_oss_catalogue.provider.collection
         context: '0'
     cache_metadata:
       max-age: -1

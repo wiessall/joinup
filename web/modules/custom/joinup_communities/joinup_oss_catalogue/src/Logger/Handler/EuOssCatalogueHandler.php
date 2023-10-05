@@ -4,6 +4,7 @@ declare(strict_types = 1);
 
 namespace Drupal\joinup_oss_catalogue\Logger\Handler;
 
+use Drupal\Core\DestructableInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\eu_oss_catalogue\Entity\OssSolutionInterface;
 use Monolog\Handler\AbstractProcessingHandler;
@@ -14,7 +15,12 @@ use Monolog\Logger;
  *
  * @see \Drupal\monolog\Logger\Handler\DrupalMailHandler
  */
-class EuOssCatalogueHandler extends AbstractProcessingHandler {
+class EuOssCatalogueHandler extends AbstractProcessingHandler implements DestructableInterface {
+
+  /**
+   * Log entries collector.
+   */
+  protected array $records = [];
 
   /**
    * Constructs EU OSS catalogue handler.
@@ -36,35 +42,44 @@ class EuOssCatalogueHandler extends AbstractProcessingHandler {
 
   /**
    * {@inheritdoc}
-   *
-   * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
-   * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
-   * @throws \Drupal\Core\Entity\EntityStorageException
    */
   public function write(array $record): void {
-    /** @var \Drupal\message\Entity\Message $message */
-    $message = $this->entityTypeManager->getStorage('message')->create([
-      'template' => 'eu_oss_catalogue_log',
-    ]);
-    $message->set('oss_message', [
-      'value' => $record['message'],
-      'format' => 'content_editor',
-    ]);
-    $message->set('oss_severity', $record['level']);
+    $this->records[] = $record;
+  }
 
-    if (isset($record['context']['oss_solution']) && $record['context']['oss_solution'] instanceof OssSolutionInterface) {
-      $message->set('oss_solution', [$record['context']['oss_solution']->id()]);
-    }
+  /**
+   * {@inheritdoc}
+   */
+  public function destruct(): void {
+    foreach ($this->records as $record) {
+      /** @var \Drupal\message\MessageInterface $message */
+      $message = $this->entityTypeManager->getStorage('message')->create([
+        'template' => 'eu_oss_catalogue_log',
+        'oss_message' => [
+          'value' => $record['message'],
+          'format' => 'content_editor',
+        ],
+        'oss_severity' => $record['level'],
+      ]);
 
-    foreach (['oss_landing_url', 'oss_source'] as $item) {
-      if (!isset($record['context'][$item])) {
-        continue;
+      if (isset($record['context']['oss_solution']) && $record['context']['oss_solution'] instanceof OssSolutionInterface) {
+        $message->set('oss_solution', [$record['context']['oss_solution']->id()]);
       }
 
-      $message->set($item, $record['context'][$item]);
-    }
+      foreach (['oss_landing_url', 'oss_source'] as $item) {
+        if (!isset($record['context'][$item])) {
+          continue;
+        }
 
-    $message->save();
+        $message->set($item, $record['context'][$item]);
+      }
+
+      // Remove backtrace and exception as they may contain unserializable vars.
+      unset($record['context']['backtrace'], $record['context']['exception']);
+      $message->setArguments($record['context']);
+
+      $message->save();
+    }
   }
 
 }
