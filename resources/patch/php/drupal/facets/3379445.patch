@@ -1,0 +1,61 @@
+diff --git a/src/Controller/FacetsViewsAjaxController.php b/src/Controller/FacetsViewsAjaxController.php
+index 157a81e..e095990 100644
+--- a/src/Controller/FacetsViewsAjaxController.php
++++ b/src/Controller/FacetsViewsAjaxController.php
+@@ -7,9 +7,11 @@ use Drupal\Core\Cache\CacheableMetadata;
+ use Drupal\Core\Cache\CacheableResponseInterface;
+ use Drupal\Core\Render\BubbleableMetadata;
+ use Drupal\Core\Render\RenderContext;
++use Drupal\views\ViewExecutable;
+ use Drupal\views\Ajax\ViewAjaxResponse;
+ use Drupal\views\Controller\ViewAjaxController;
+ use Symfony\Component\HttpFoundation\Request;
++use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+ 
+ /**
+  * Controller that allows for to replace exposed forms in blocks.
+@@ -20,7 +22,15 @@ class FacetsViewsAjaxController extends ViewAjaxController {
+    * {@inheritdoc}
+    */
+   public function ajaxView(Request $request) {
+-    $this->facetsRemoveQueryParams($request);
++    $name = $request->get('view_name');
++    if (!isset($name) || (!$entity = $this->storage->load($name))) {
++      throw new NotFoundHttpException();
++    }
++    $view = $this->executableFactory->get($entity);
++
++    if ($this->viewHasFacets($view)) {
++      $this->facetsRemoveQueryParams($request);
++    }
+     $response = parent::ajaxView($request);
+ 
+     $view = $response->getView();
+@@ -35,6 +45,27 @@ class FacetsViewsAjaxController extends ViewAjaxController {
+     return $response;
+   }
+ 
++  /**
++   * Check if a view has facets.
++   *
++   * @param \Drupal\views\ViewExecutable $view
++   *   The view to check.
++   *
++   * @return bool
++   *   TRUE if the view has facets, FALSE otherwise.
++   */
++  protected function viewHasFacets(ViewExecutable $view) {
++    // Fetch all handlers from the default display of the view.
++    $handlers = $view->getHandlers('filter', 'default');
++
++    // Check if 'facets' key is present in the handlers array.
++    if (array_key_exists('facets', $handlers)) {
++      return TRUE;
++    }
++
++    return FALSE;
++  }
++
+   /**
+    * If there's an AJAX request, remove the 'f' and 'page' key.
+    *
