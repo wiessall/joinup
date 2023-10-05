@@ -13,13 +13,18 @@ use Drupal\Core\StringTranslation\TranslatableMarkup;
 interface EuOssCatalogueHostingPlatformInterface extends ConfigurableInterface {
 
   /**
-   * Generates a list of repositories.
+   * Generates a list of project objects.
+   *
+   * @param string[] $requestedFiles
+   *   (optional) Associative where with keys are file identifiers and values
+   *   are file paths relative to the project's repository root. If provided,
+   *   the default branch version of such files are downloaded and stored in
+   *   each project object, if they exist. The array values should be unique.
    *
    * @return iterable
-   *   Associative array of repositories, keyed by $namespace/$name and having
-   *   \Drupal\eu_oss_catalogue\Model\HostingPlatformResult instances as values.
+   *   Array of \Drupal\eu_oss_catalogue\Model\Project instances.
    */
-  public function getProjects(?string $filePath = NULL): iterable;
+  public function getProjects(array $requestedFiles = []): iterable;
 
   /**
    * Returns the label.
@@ -39,5 +44,17 @@ interface EuOssCatalogueHostingPlatformInterface extends ConfigurableInterface {
    *   Whether the plugin can parse the provided git URL.
    */
   public function isHostingPlatformForUrl(string $repositoryUrl): bool;
+
+  /**
+   * Returns the code hosting platform URL given a project URL.
+   *
+   * @param string $repositoryUrl
+   *   The project repository URL.
+   *
+   * @return string|null
+   *   The determined base URL of the code hosting platform or NULL if it
+   *   cannot be determined.
+   */
+  public function getBaseFromRepoUrl(string $repositoryUrl): ?string;
 
 }

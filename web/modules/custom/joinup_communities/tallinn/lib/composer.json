@@ -1,0 +1,11 @@
+{
+  "name": "ec-europa/joinup-tallinn-dashboard",
+  "description": "Javascript application that shows teh Tallinn Agreement dashboard.",
+  "type": "drupal-library",
+  "homepage": "https://github.com/ec-europa/joinup-tallinn-dashboard",
+  "support": {
+    "issues": "https://github.com/ec-europa/joinup-tallinn-dashboard/issues",
+    "source": "https://github.com/ec-europa/joinup-tallinn-dashboard"
+  },
+  "license": "GPL-2.0+"
+}
