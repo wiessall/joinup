@@ -9,11 +9,6 @@ Feature:
     And I should see the text "Welcome to the EU Open Source Solution Catalogue."
     And I should see the text "Frequently Asked Questions (FAQ)"
 
-  Scenario: User cannot access OSS Catalogue's Page Manager page
-    # We assume page's path is '/eu-oss-catalogue-dummy'
-    When I go to "/eu-oss-catalogue-dummy"
-    Then the response status code should be 404
-
   Scenario: User sees the right content
     Given oss_solution content:
       | title              | oss_development_status | oss_source        | oss_categories                                                  | oss_short_description                                                                                                                         | status    | oss_release_date |
@@ -144,3 +139,6 @@ Feature:
     Then I should be on "/eu-oss-catalogue/solutions"
     And I should see the following facet summary "science-and-technology"
 
+    # Check that this node type doesn't leak in search as facet.
+    When I visit "/search"
+    Then I should not see the link "Open source software solution"

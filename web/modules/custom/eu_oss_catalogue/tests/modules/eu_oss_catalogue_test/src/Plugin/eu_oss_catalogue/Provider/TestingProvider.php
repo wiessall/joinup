@@ -4,7 +4,7 @@ declare(strict_types = 1);
 
 namespace Drupal\eu_oss_catalogue_test\Plugin\eu_oss_catalogue\Provider;
 
-use Drupal\eu_oss_catalogue\Model\FetchedSolution;
+use Drupal\eu_oss_catalogue\Model\Project;
 use Drupal\eu_oss_catalogue\Plugin\eu_oss_catalogue\Provider\DevelopersItalia;
 
 /**
@@ -24,21 +24,24 @@ class TestingProvider extends DevelopersItalia {
    * {@inheritdoc}
    */
   public function fetch(): iterable {
-    foreach (parent::fetch() as $fetchedSolution) {
-      if ($fetchedSolution->name === 'Solution 1') {
-        $data = [
-          'name' => 'Solution 1 (updated)',
-          'softwareVersion' => '1.0.0.1',
-        ] + $fetchedSolution->data;
-        $fetchedSolution = new FetchedSolution(
-          $data['url'],
-          $data['name'],
-          $data,
-          $fetchedSolution->providerReference,
+    foreach (parent::fetch() as $project) {
+      if ($project->getFullName() === 'dummy-namespace-1/dummy-name-1') {
+        $fileBlob = $project->files['publiccodeYml'];
+        $fileBlob = str_replace('name: GitHub solution 1', 'name: GitHub solution 1 (updated)', $fileBlob);
+        $project = new Project(
+          $project->namespace,
+          $project->name,
+          $project->url,
+          $project->defaultBranch,
+          '3.0.0',
+          $project->latestReleaseDate,
+          $project->platformReference,
+          $project->description,
+          ['publiccodeYml' => $fileBlob],
         );
       }
 
-      yield $fetchedSolution;
+      yield $project;
     }
   }
 

@@ -5,6 +5,7 @@ declare(strict_types = 1);
 namespace Drupal\eu_oss_catalogue;
 
 use Drupal\Component\Render\MarkupInterface;
+use Drupal\Component\Utility\SortArray;
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Plugin\DefaultPluginManager;
@@ -44,7 +45,7 @@ class EuOssCataloguePluginManager extends DefaultPluginManager implements EuOssC
     \Traversable $namespaces,
     CacheBackendInterface $cacheBackend,
     ModuleHandlerInterface $moduleHandler,
-    string $type,
+    protected string $type,
   ) {
     \assert(in_array($type, static::PLUGIN_TYPES, TRUE));
 
@@ -67,6 +68,22 @@ class EuOssCataloguePluginManager extends DefaultPluginManager implements EuOssC
       fn (array $definition): MarkupInterface|string => $definition[$type],
       $this->getDefinitions(),
     );
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  protected function findDefinitions(): array {
+    $definitions = parent::findDefinitions();
+    if ($this->type !== 'hosting_platform') {
+      return $definitions;
+    }
+
+    // Order definitions by `apiDetectionWeight` definition entry. Note that we
+    // use this method because this happens just before caching the definitions.
+    uasort($definitions, [SortArray::class, 'sortByWeightElement']);
+
+    return $definitions;
   }
 
 }

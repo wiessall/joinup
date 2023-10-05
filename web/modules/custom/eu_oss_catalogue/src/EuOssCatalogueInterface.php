@@ -5,7 +5,7 @@ declare(strict_types = 1);
 namespace Drupal\eu_oss_catalogue;
 
 use Drupal\eu_oss_catalogue\Entity\OssSolutionInterface;
-use Drupal\eu_oss_catalogue\Model\FetchedSolution;
+use Drupal\eu_oss_catalogue\Model\Project;
 
 /**
  * Interface for 'eu_oss_catalogue' service.
@@ -42,13 +42,13 @@ interface EuOssCatalogueInterface {
    *
    * @param string $providerPluginId
    *   The provider plugin ID.
-   * @param \Drupal\eu_oss_catalogue\Model\FetchedSolution $fetchedSolution
-   *   The fetched solution object.
+   * @param \Drupal\eu_oss_catalogue\Model\Project $project
+   *   The project object.
    *
-   * @return \Drupal\eu_oss_catalogue\Entity\OssSolutionInterface
-   *   The OSS Solution node.
+   * @return \Drupal\eu_oss_catalogue\Entity\OssSolutionInterface|null
+   *   The OSS Solution node or NULL if the node failed to create/update.
    */
-  public function createOrUpdateSolution(string $providerPluginId, FetchedSolution $fetchedSolution): OssSolutionInterface;
+  public function createOrUpdateSolution(string $providerPluginId, Project $project): ?OssSolutionInterface;
 
   /**
    * Prepares the entities removed from the source in a queue to be processed.
@@ -56,7 +56,7 @@ interface EuOssCatalogueInterface {
    * @param string $providerPluginId
    *   The provider plugin ID.
    * @param array $solutionUrls
-   *   The list of solution URLs to cleanup.
+   *   The list of solution URLs to be cleaned up.
    */
   public function prepareCleanup(string $providerPluginId, array $solutionUrls): void;
 
