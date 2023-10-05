@@ -6,8 +6,6 @@ Feature:
   Scenario: User is redirected from the standard collection URL.
     Given I visit "/collection/eu-oss-catalogue"
     Then I should be on "/eu-oss-catalogue"
-    And I should see the text "Welcome to the EU Open Source Solution Catalogue."
-    And I should see the text "Frequently Asked Questions (FAQ)"
 
   Scenario: User sees the right content
     Given oss_solution content:
@@ -26,6 +24,7 @@ Feature:
       | Let’s start with your software name              |
       | Frequently Asked Questions (FAQ)                 |
       | Follow our journey on the social media!          |
+    And I should see the text "Welcome to the EU Open Source Solution Catalogue"
     And I should see the text "The EU Open Source Solutions Catalogue aims to provide a comprehensive and organized repository of the Open Source Software Solutions of the Public Administrations in the Member States."
     And I should see the link "Learn more"
     And I should see the text "Just follow the guide!"
