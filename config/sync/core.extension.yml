@@ -109,7 +109,6 @@ module:
   joinup_poll: 0
   joinup_publication_date: 0
   joinup_rdf: 0
-  joinup_rdf_graph: 0
   joinup_rss: 0
   joinup_search: 0
   joinup_seo: 0
