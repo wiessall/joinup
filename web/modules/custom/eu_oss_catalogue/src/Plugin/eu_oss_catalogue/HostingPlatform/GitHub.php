@@ -6,12 +6,14 @@ namespace Drupal\eu_oss_catalogue\Plugin\eu_oss_catalogue\HostingPlatform;
 
 use Drupal\Cache\Adapter\DrupalAdapter;
 use Drupal\Core\Cache\CacheBackendInterface;
+use Drupal\Core\Logger\LoggerChannelInterface;
 use Drupal\Core\Site\Settings;
+use Drupal\Core\Utility\Error;
 use Drupal\eu_oss_catalogue\EuOssCatalogueGitHostingPlatformPluginBase;
 use Drupal\eu_oss_catalogue\Exception\MissingAccessTokenException;
 use Drupal\eu_oss_catalogue\Model\GitHubSearchType;
 use Drupal\eu_oss_catalogue\Model\GitUri;
-use Drupal\eu_oss_catalogue\Model\HostingPlatformResult;
+use Drupal\eu_oss_catalogue\Model\Project;
 use Github\Api\GraphQL;
 use Github\AuthMethod;
 use Github\Client;
@@ -26,16 +28,17 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * @EuOssCatalogueHostingPlatform(
  *   id = "github",
  *   label = @Translation("GitHub"),
+ *   weight = -10,
  * )
  */
 class GitHub extends EuOssCatalogueGitHostingPlatformPluginBase {
 
   /**
-   * Base URL of GitHub.
+   * Default terms for GitHub search.
    *
-   * @const string
+   * @const string[]
    */
-  private const GITHUB_BASE_URL = 'github.com';
+  protected const DEFAULT_SEARCH_TERMS = ['is:public', 'fork:true'];
 
   /**
    * Static cache for the GitHub client.
@@ -55,6 +58,8 @@ class GitHub extends EuOssCatalogueGitHostingPlatformPluginBase {
    *   The HTTP client.
    * @param \Drupal\Core\Site\Settings $settings
    *   The Drupal settings.
+   * @param \Drupal\Core\Logger\LoggerChannelInterface $logger
+   *   The EU OSS Catalogue logger.
    * @param \Drupal\Core\Cache\CacheBackendInterface $cache
    *   The cache backend.
    */
@@ -64,9 +69,10 @@ class GitHub extends EuOssCatalogueGitHostingPlatformPluginBase {
     $pluginDefinition,
     protected ClientInterface $httpClient,
     protected Settings $settings,
+    protected LoggerChannelInterface $logger,
     protected CacheBackendInterface $cache,
   ) {
-    parent::__construct($configuration, $pluginId, $pluginDefinition, $httpClient, $settings);
+    parent::__construct($configuration, $pluginId, $pluginDefinition, $httpClient, $settings, $logger);
   }
 
   /**
@@ -79,8 +85,24 @@ class GitHub extends EuOssCatalogueGitHostingPlatformPluginBase {
       $pluginDefinition,
       $container->get('http_client'),
       $container->get('settings'),
+      $container->get('logger.channel.eu_oss_catalogue'),
       $container->get('cache.eu_oss_catalogue'),
     );
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function isHostingPlatformForUrl(string $repositoryUrl): bool {
+    $gitUri = GitUri::fromUriString($repositoryUrl);
+    return $gitUri && $gitUri->getSchemeAndHost() === $this->getBaseFromRepoUrl($repositoryUrl);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getBaseFromRepoUrl(string $repositoryUrl): string {
+    return 'https://github.com';
   }
 
   /**
@@ -109,10 +131,10 @@ class GitHub extends EuOssCatalogueGitHostingPlatformPluginBase {
   /**
    * {@inheritdoc}
    */
-  public function getProjects(?string $filePath = NULL): iterable {
-    // Build a search query string.
+  public function doGetProjects(array $requestedFiles = []): iterable {
+    // Build a search query as an array.
     // @see https://docs.github.com/search-github
-    $search = ['is:public', 'archived:false'];
+    $search = [];
     foreach ($this->getConfiguration()['projects'] as $namespace => $repos) {
       if ($repos === NULL) {
         $search[] = "owner:$namespace";
@@ -123,80 +145,151 @@ class GitHub extends EuOssCatalogueGitHostingPlatformPluginBase {
       }
     }
 
-    // Using a query builder to build a query such as:
-    // @code
-    // {
-    //   search(
-    //     type: REPOSITORY
-    //     query: "is:public
-    //       archived:false
-    //       owner:namespace1
-    //       repo:namespace2/project2"
-    //     first: 100
-    //   ) {
-    //     nodes {
-    //       ... on Repository {
-    //         id
-    //         description
-    //         name
-    //         owner {
-    //           login
-    //         }
-    //         defaultBranchRef {
-    //           name
-    //         }
-    //         file: object(expression: "HEAD:publiccode.yml") {
-    //           ... on Blob {
-    //             text
-    //           }
-    //         }
-    //       }
-    //     }
-    //   }
-    // }
-    // @endcode
-    $query = new Query('search', [
-      'type' => GitHubSearchType::REPOSITORY,
-      'query' => implode(' ', $search),
-      'first' => 100,
-    ]);
-    $fragment = $query->nodes([])
-      ->on('Repository')
-      ->use('id', 'description', 'name')
-      ->use((new Node('owner'))->use('login'))
-      ->use((new Node('defaultBranchRef'))->use('name'));
-
-    if ($filePath) {
-      $file = (new Node('object', [
-        'expression' => "HEAD:$filePath",
-      ]))->alias('file');
-      $file->on('Blob')->use('text');
-      $fragment->use($file);
-    }
-
     $graphQL = new GraphQL($this->getClient());
-    foreach ($graphQL->execute($query->toString())['data']['search']['nodes'] as $node) {
-      // Repositories without code don't have a default branch.
-      if (!empty($node['defaultBranchRef'])) {
-        yield new HostingPlatformResult(
-          $node['owner']['login'],
-          $node['name'],
-          'https://' . self::GITHUB_BASE_URL . "/{$node['owner']['login']}/{$node['name']}",
-          $node['defaultBranchRef']['name'],
-          $node['id'],
-          $node['description'],
-          $node['file']['text'] ?? NULL,
-        );
-      }
+
+    while ($search) {
+      // The search query can be a very big list of search terms, thus we split
+      // in chunks, to avoid overloading the GitHub API request.
+      $searchQuery = $this->getSearchQuery($search);
+      $endCursor = NULL;
+      do {
+        $query = $this->buildProjectsQuery($searchQuery, $requestedFiles, $endCursor);
+        try {
+          $response = $graphQL->execute($query->toString());
+        }
+        catch (\Throwable $exception) {
+          Error::logException($this->logger, $exception, "Can't get GitHub projects. Query: @query", [
+            '@query' => $searchQuery,
+          ]);
+          break;
+        }
+
+        foreach ($response['data']['search']['nodes'] as $node) {
+          if (empty($node['defaultBranchRef'])) {
+            // Repositories without a default branch don't have code yet.
+            continue;
+          }
+
+          $files = [];
+          foreach ($requestedFiles as $fileId => $filePath) {
+            if ($content = ($node["file__$fileId"]['text'] ?? NULL)) {
+              $files[$fileId] = $content;
+            }
+          }
+
+          yield new Project(
+            $node['owner']['login'],
+            $node['name'],
+            "https://github.com/{$node['owner']['login']}/{$node['name']}",
+            $node['defaultBranchRef']['name'],
+            $node['latestRelease']['tagName'] ?? NULL,
+            $node['latestRelease']['createdAt'] ?? NULL,
+            $node['id'],
+            $node['description'],
+            $files,
+          );
+        }
+
+        // The GraphQL query is paginated to 100 results.
+        $hasNextPage = $response['data']['search']['pageInfo']['hasNextPage'];
+        $endCursor = $response['data']['search']['pageInfo']['endCursor'];
+      } while ($hasNextPage);
     }
   }
 
   /**
-   * {@inheritdoc}
+   * Builds the projects query.
+   *
+   * This renders a query similar to:
+   *
+   * @code
+   * {
+   *   search(
+   *     type: REPOSITORY
+   *     query: "is:public archived:false owner:user1 repo:org2/project2"
+   *     first: 100
+   *   ) {
+   *     pageInfo {
+   *       hasNextPage
+   *       endCursor
+   *     }
+   *     nodes {
+   *       ... on Repository {
+   *         id
+   *         description
+   *         name
+   *         owner {
+   *           login
+   *         }
+   *         defaultBranchRef {
+   *           name
+   *         }
+   *         latestRelease {
+   *           tagName
+   *           createdAt
+   *         }
+   *         file: object(expression: "HEAD:publiccode.yml") {
+   *           ... on Blob {
+   *             text
+   *           }
+   *         }
+   *       }
+   *     }
+   *   }
+   * }
+   * @endcode
+   *
+   * @param string $searchQuery
+   *   The search query. See https://docs.github.com/search-github.
+   * @param string[] $requestedFiles
+   *   A list of file paths keyed by a file identifier.
+   * @param string|null $endCursor
+   *   The end cursor, if any.
+   *
+   * @return \GraphQL\Actions\Query
+   *   A GraphQL query builder instance.
    */
-  public function isHostingPlatformForUrl(string $repositoryUrl): bool {
-    return ($gitUri = GitUri::fromUriString($repositoryUrl))
-      && $gitUri->host === self::GITHUB_BASE_URL;
+  protected function buildProjectsQuery(string $searchQuery, array $requestedFiles = [], ?string $endCursor = NULL): Query {
+    $filters = [
+      'type' => GitHubSearchType::REPOSITORY,
+      'query' => $searchQuery,
+      'first' => 100,
+    ] + ($endCursor ? ['after' => $endCursor] : []);
+
+    $query = new Query('search', $filters);
+    $query->pageInfo([])->use('hasNextPage', 'endCursor');
+
+    $fragment = $query->nodes([])
+      ->on('Repository')
+      ->use('id', 'description', 'name')
+      ->use((new Node('owner'))->use('login'))
+      ->use((new Node('defaultBranchRef'))->use('name'))
+      ->use((new Node('latestRelease'))->use('tagName', 'createdAt'));
+
+    foreach ($requestedFiles as $fileId => $filePath) {
+      $file = (new Node('object', ['expression' => "HEAD:$filePath"]))
+        ->alias("file__$fileId");
+      $file->on('Blob')->use('text');
+      $fragment->use($file);
+    }
+
+    return $query;
+  }
+
+  /**
+   * Returns the search query to be used by GraphQL.
+   *
+   * @param array $search
+   *   A list of search query terms passed by reference. As this method is
+   *   called, the list narrows by removing the already processed search terms.
+   *
+   * @return string
+   *   The search query to be passed to GraphQL query.
+   */
+  protected function getSearchQuery(array &$search): string {
+    // Be kind to GitHub. Limit to 100 namespaces or projects.
+    $searchChunk = array_splice($search, 0, 100);
+    return implode(' ', [...static::DEFAULT_SEARCH_TERMS, ...$searchChunk]);
   }
 
 }

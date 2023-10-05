@@ -21,14 +21,14 @@ final class GitUri {
    *   a path like "repository.example.com/self-hosted-gitlab".
    * @param string|null $namespace
    *   The namespace of the git package.
-   * @param string|null $package
+   * @param string|null $name
    *   The name of the package.
    */
   public function __construct(
     public readonly string $scheme,
     public readonly string $host,
     public readonly ?string $namespace = NULL,
-    public readonly ?string $package = NULL,
+    public readonly ?string $name = NULL,
   ) {}
 
   /**
@@ -45,11 +45,11 @@ final class GitUri {
     if (!UrlHelper::isValid($repositoryUrl)) {
       return NULL;
     }
-    // We can't get scheme from "git@..." URIs. Assume https.
-    $scheme = 'https';
+
+    $scheme = NULL;
     $host = NULL;
     $namespace = NULL;
-    $package = NULL;
+    $name = NULL;
 
     // Example: https://gihub.com/drupal/drupal-driver or
     // https://bitbucket.selfhosted.com/atlassian/docker-browse.git
@@ -57,48 +57,32 @@ final class GitUri {
       $parsed = parse_url($repositoryUrl);
       $scheme = $parsed['scheme'] ?? NULL;
       $host = $parsed['host'];
-      $pathParts = array_filter(
-        explode('/', $parsed['path'] ?? ''),
-        fn (string $part): bool => $part !== ''
-      );
+      $pathParts = array_filter(explode('/', $parsed['path'] ?? ''));
 
-      if (count($pathParts) > 2) {
-        $package = array_pop($pathParts);
+      if (count($pathParts) > 1) {
+        $name = array_pop($pathParts);
         $namespace = implode('/', $pathParts);
-        if (str_ends_with($package, '.git')) {
-          $package = substr($package, 0, -4);
+        if (str_ends_with($name, '.git')) {
+          $name = substr($name, 0, -4);
         }
       }
     }
 
-    // Example: git@foo.bar:namespace/package.git.
-    // git@foo.bar.baz.eu/sub/path:ec-europa/digit-joinup-reference.git.
-    if (
-      str_starts_with($repositoryUrl, 'git@') &&
-      preg_match('#^git@(.*):(.*)/([^/]*)\.git$#', $repositoryUrl, $matches)
-    ) {
-      [, $host, $namespace, $package] = $matches;
-    }
-
-    if (!is_string($scheme) || !is_string($host)) {
+    if (!is_string($scheme) || !is_string($host) || !$name || !$namespace) {
       return NULL;
     }
 
-    return new static($scheme, $host, $namespace, $package);
+    return new self($scheme, $host, $namespace, $name);
   }
 
   /**
-   * Determines whether the git URL is complete.
+   * Returns the "scheme and host" part of the URL.
    *
-   * @return bool
-   *   Whether the current instance represents a URL to a specific package or
-   *   not.
+   * @return string
+   *   The scheme and host.
    */
-  public function isComplete(): bool {
-    return (bool) array_filter(
-      [$this->namespace, $this->package],
-      fn ($property): bool => !is_null($property) && $property !== ''
-    );
+  public function getSchemeAndHost(): string {
+    return $this->scheme . '://' . $this->host;
   }
 
 }

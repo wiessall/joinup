@@ -12,7 +12,7 @@ use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Utility\Error;
 use Drupal\eu_oss_catalogue\Entity\OssSolutionInterface;
 use Drupal\eu_oss_catalogue\Exception\UnresolvableValueException;
-use Drupal\eu_oss_catalogue\Model\FetchedSolution;
+use Drupal\eu_oss_catalogue\Model\Project;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -71,20 +71,43 @@ abstract class EuOssCatalogueParserPluginBase extends PluginBase implements EuOs
   /**
    * {@inheritdoc}
    */
-  public function parse(FetchedSolution $fetchedSolution, EuOssCatalogueProviderInterface $provider): OssSolutionInterface {
+  public function isValid(Project $project): array {
+    return [];
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  final public function parse(Project $project, EuOssCatalogueProviderInterface $provider): ?OssSolutionInterface {
     $nodeStorage = $this->entityTypeManager->getStorage('node');
 
     // For now, we're using the solution URL as UUID.
-    $solutions = $nodeStorage->loadByProperties(['oss_git_url' => $fetchedSolution->url]);
+    $solutions = $nodeStorage->loadByProperties(['oss_git_url' => $project->url]);
 
     $solution = $solutions ? reset($solutions) : $nodeStorage->create(['type' => 'oss_solution']);
-    if (!$solution instanceof OssSolutionInterface) {
-      throw new \RuntimeException("Expected 'oss_solution' node, got {$solution->bundle()}");
-    }
+    \assert($solution instanceof OssSolutionInterface);
 
-    $solution
-      ->set('title', $fetchedSolution->name)
-      ->addProvider($provider);
+    try {
+      // Populate project metadata array. This array is used by some parsers to
+      // add metadata to the final stored node via resolvers.
+      $metadata = $this->getMetadata($project);
+
+      $solution
+        ->set('title', $this->getTitle($project, $metadata))
+        ->set('oss_git_url', $project->url)
+        ->set('oss_git_description', $project->description)
+        ->set('oss_default_branch', $project->defaultBranch)
+        ->set('oss_software_version', $project->latestReleaseTag)
+        ->set('oss_release_date', $project->latestReleaseDate)
+        ->set('oss_platform_reference', $project->platformReference)
+        ->addProvider($provider);
+
+      $this->doParse($solution, $project, $metadata, $provider);
+    }
+    catch (\Throwable $exception) {
+      Error::logException($this->logger, $exception);
+      return NULL;
+    }
 
     foreach ($solution->getFields(FALSE) as $fieldName => $fieldItemList) {
       // It's a convention that all fields are prefixed with oss_*.
@@ -97,10 +120,10 @@ abstract class EuOssCatalogueParserPluginBase extends PluginBase implements EuOs
         if ($settings = $fieldDefinition->getThirdPartySetting('eu_oss_catalogue', $this->getPluginId())) {
           $resolver = $this->getResolver($settings['resolver'], $settings['config']);
           try {
-            $resolver->resolve($fieldItemList, $fetchedSolution);
+            $resolver->resolve($fieldItemList, $project, $metadata);
           }
           catch (UnresolvableValueException $exception) {
-            $this->logger->error($exception->getMessage(), Error::decodeException($exception));
+            Error::logException($this->logger, $exception);
             // Fail softly, don't set this field.
             continue;
           }
@@ -110,6 +133,20 @@ abstract class EuOssCatalogueParserPluginBase extends PluginBase implements EuOs
 
     return $solution;
   }
+
+  /**
+   * Parses project data into the OSS Solution node.
+   *
+   * @param \Drupal\eu_oss_catalogue\Entity\OssSolutionInterface $solution
+   *   The OSS Solution node.
+   * @param \Drupal\eu_oss_catalogue\Model\Project $project
+   *   The project value object.
+   * @param array $metadata
+   *   The project's metadata.
+   * @param \Drupal\eu_oss_catalogue\EuOssCatalogueProviderInterface $provider
+   *   The provider plugin instance.
+   */
+  protected function doParse(OssSolutionInterface $solution, Project $project, array $metadata, EuOssCatalogueProviderInterface $provider): void {}
 
   /**
    * Configures and returns a resolver given its plugin ID and configuration.
@@ -125,6 +162,34 @@ abstract class EuOssCatalogueParserPluginBase extends PluginBase implements EuOs
     }
     $this->resolver[$resolverPluginId]->setConfiguration($configuration);
     return $this->resolver[$resolverPluginId];
+  }
+
+  /**
+   * Returns project's metadata.
+   *
+   * @param \Drupal\eu_oss_catalogue\Model\Project $project
+   *   The project value object.
+   *
+   * @return array
+   *   The project's metadata.
+   */
+  protected function getMetadata(Project $project): array {
+    return [];
+  }
+
+  /**
+   * Returns the OSS solution title.
+   *
+   * @param \Drupal\eu_oss_catalogue\Model\Project $project
+   *   The project value object.
+   * @param array $metadata
+   *   The project's metadata.
+   *
+   * @return string
+   *   The OSS solution title.
+   */
+  protected function getTitle(Project $project, array $metadata): string {
+    return $project->getFullName();
   }
 
 }
