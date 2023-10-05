@@ -25,7 +25,6 @@ dependencies:
     - image.style.logo
     - rdf_entity.rdfentity.collection
   module:
-    - joinup_core
     - svg_image
     - template_suggestion
     - user
@@ -89,6 +88,11 @@ content:
     settings: {  }
     third_party_settings: {  }
     weight: 5
+    region: content
+  oss_solutions:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 6
     region: content
   solutions:
     settings: {  }

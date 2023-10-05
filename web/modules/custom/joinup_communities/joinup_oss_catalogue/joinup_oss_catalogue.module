@@ -7,9 +7,18 @@
 
 declare(strict_types = 1);
 
+use Drupal\Core\Access\AccessResult;
+use Drupal\Core\Cache\Cache;
+use Drupal\Core\Cache\CacheableMetadata;
+use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
+use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Field\BaseFieldDefinition;
+use Drupal\Core\Session\AccountInterface;
+use Drupal\block\BlockInterface;
+use Drupal\collection\Entity\CollectionInterface;
 use Drupal\joinup_oss_catalogue\Entity\JoinupOssSolution;
+use Drupal\joinup_oss_catalogue\OssCatalogueCollectionInterface;
 use Drupal\joinup_oss_catalogue\Plugin\Field\ShortDescriptionWithFallback;
 
 /**
@@ -29,6 +38,76 @@ function joinup_oss_catalogue_views_plugins_argument_alter(array &$plugins): voi
 function joinup_oss_catalogue_entity_bundle_info_alter(array &$bundles): void {
   if (!empty($bundles['node']['oss_solution'])) {
     $bundles['node']['oss_solution']['class'] = JoinupOssSolution::class;
+  }
+}
+
+/**
+ * Implements hook_entity_extra_field_info().
+ */
+function joinup_oss_catalogue_entity_extra_field_info(): array {
+  $fields = [];
+  $fields['rdf_entity']['collection']['display']['oss_solutions'] = [
+    'label' => t('Amount of OpenSource Solutions'),
+    'description' => t('Amount of OpenSource Solutions.'),
+    'visible' => FALSE,
+  ];
+  return $fields;
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_view().
+ *
+ * Shows extra fields for the collection bundle.
+ */
+function joinup_oss_catalogue_rdf_entity_view(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display, string $view_mode): void {
+  if (!$entity instanceof CollectionInterface && $entity->id() === OssCatalogueCollectionInterface::COLLECTION_ENTITY_ID) {
+    return;
+  }
+
+  // OSS Solution count.
+  if ($display->getComponent('oss_solutions')) {
+    $oss_solution_count = \Drupal::entityTypeManager()->getStorage('node')
+      ->getQuery()
+      ->accessCheck()
+      ->condition('status', 1)
+      ->condition('type', 'oss_solution')
+      ->condition('langcode', 'en')
+      ->count()
+      ->execute();
+    $markup = $oss_solution_count === 0 ?
+      \Drupal::translation()->translate('No Open Source Software Solutions were federated yet') :
+      \Drupal::translation()->formatPlural(
+        $oss_solution_count,
+        '@oss_solution_count Open Source Software Solution',
+        '@oss_solution_count Open Source Software Solutions',
+        ['@oss_solution_count' => $oss_solution_count],
+      );
+    $build['oss_solutions'] = [
+      '#markup' => $markup,
+    ];
+    (new CacheableMetadata())
+      ->addCacheTags(Cache::buildTags('og-group-content', $entity->getCacheTagsToInvalidate()))
+      ->addCacheTags(['rdf_entity_list', 'node_list:oss_solution'])
+      ->applyTo($build['oss_solutions']);
+
+  }
+}
+
+/**
+ * Implements hook_block_access().
+ */
+function joinup_oss_catalogue_block_access(BlockInterface $block, string $operation, AccountInterface $account) {
+  if (
+    $operation === 'view' &&
+    $block->id() === 'ventuno_three_dots_menu' &&
+    $account->isAnonymous()
+  ) {
+
+    $group = \Drupal::service('joinup_group.group_manager')
+      ->getGroupFromContext();
+    if ($group && $group->id() === OssCatalogueCollectionInterface::COLLECTION_ENTITY_ID) {
+      return AccessResult::forbidden();
+    }
   }
 }
 

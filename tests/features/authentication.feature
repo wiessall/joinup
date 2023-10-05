@@ -246,7 +246,7 @@ Feature: User authentication
       | admin                              |
       | admin/config                       |
       | admin/content                      |
-      | admin/content/files                                 |
+      | admin/content/files                |
       | admin/content/media                |
       | admin/content/rdf                  |
       | admin/legal-notice                 |
