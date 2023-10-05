@@ -16,7 +16,10 @@
 declare(strict_types = 1);
 
 use Drupal\file\Entity\File;
+use Drupal\interoperable_europe\InteroperableEuropeCollectionInterface;
+use Drupal\joinup_collection\JoinupCollectionHelper;
 use Drupal\rdf_entity\Entity\Rdf;
+use Drupal\sparql_entity_storage\UriEncoder;
 
 /**
  * Revert update of the published state of contact information entities.
@@ -67,4 +70,36 @@ function joinup_core_post_update_109802(): string {
   $storage->delete($entities);
 
   return 'Tallinn data cleaned';
+}
+
+/**
+ * Add navbar menu links.
+ */
+function joinup_core_post_update_109803(): string {
+  $menuLinkStorage = \Drupal::entityTypeManager()
+    ->getStorage('menu_link_content');
+
+  $linksToCreate = [
+    [
+      'title' => 'Interoperable Europe',
+      'uri' => 'entity:rdf_entity/' . UriEncoder::encodeUrl(InteroperableEuropeCollectionInterface::COLLECTION_ENTITY_ID),
+      'weight' => 0,
+    ],
+    [
+      'title' => 'Interoperability Solutions',
+      'uri' => 'entity:node/' . JoinupCollectionHelper::INTEROPERABILITY_SOLUTIONS_ENTITY_ID,
+      'weight' => 1,
+    ],
+  ];
+
+  foreach ($linksToCreate as $linkData) {
+    $menuLinkStorage->create([
+      'title' => $linkData['title'],
+      'link' => ['uri' => $linkData['uri']],
+      'menu_name' => 'navbar',
+      'weight' => $linkData['weight'],
+    ])->save();
+  }
+
+  return 'Navbar menu links have been created';
 }
