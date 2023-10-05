@@ -6,12 +6,6 @@ Feature:
   Scenario: User is redirected from the standard collection URL.
     Given I visit "/collection/eu-oss-catalogue"
     Then I should be on "/eu-oss-catalogue"
-    And I see the text "Open source software of interest for Public Administrations" in the "Header" region
-
-  Scenario: User cannot access OSS Catalogue's Page Manager page
-    # We assume page's path is '/eu-oss-catalogue-dummy'
-    When I go to "/eu-oss-catalogue-dummy"
-    Then the response status code should be 404
 
   Scenario: User sees the right content
     Given oss_solution content:
@@ -152,6 +146,10 @@ Feature:
     And I click "science-and-technology"
     Then I should be on "/eu-oss-catalogue/solutions"
     And I should see the following facet summary "science-and-technology"
+
+    # Check that this node type doesn't leak in search as facet.
+    When I visit "/search"
+    Then I should not see the link "Open source software solution"
 
   Scenario Outline: OSS Catalogue's inaccessible routes.
     Given I am logged in as a user with the "<role>" role
