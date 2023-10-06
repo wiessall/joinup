@@ -50,7 +50,6 @@ settings:
       document: view_mode_tile
       event: view_mode_tile
       news: view_mode_tile
-      tallinn_report: default
       video: view_mode_tile
     'entity:rdf_entity':
       asset_distribution: view_mode_tile

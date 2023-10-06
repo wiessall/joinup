@@ -126,3 +126,10 @@ Feature:
       | event      |
       | discussion |
       | document   |
+
+  @javascript
+  Scenario: Regression test that ensures that search bar works fine.
+    Given I go to "/interoperable-europe"
+    # The search bar icon has a hidden accessibility label "Toggle search box".
+    And I press "Toggle search box"
+    And I enter "About" in the search bar and press enter

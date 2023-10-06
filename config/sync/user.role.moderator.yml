@@ -29,6 +29,7 @@ dependencies:
     - joinup_core
     - joinup_featured
     - joinup_group
+    - joinup_group_content_management
     - joinup_licence
     - joinup_news
     - joinup_newsletter
@@ -50,7 +51,6 @@ dependencies:
     - solution
     - state_machine_permissions
     - system
-    - tallinn
     - taxonomy
     - toolbar
     - view_unpublished
@@ -91,9 +91,7 @@ permissions:
   - 'administer sitewide alert entities'
   - 'administer solution ownership'
   - 'administer support menu items'
-  - 'administer tallinn settings'
   - 'administer users'
-  - 'change tallinn report author'
   - 'create asset_distribution rdf entity'
   - 'create asset_release rdf entity'
   - 'create collection_logo media'
@@ -190,6 +188,7 @@ permissions:
   - 'feature entity'
   - 'filter membership overview'
   - 'manage group announcements'
+  - 'manage group content'
   - 'manage newsroom newsletter subscriptions'
   - 'manage site auto-registration'
   - 'manage solutions'
@@ -404,6 +403,9 @@ permissions:
   - 'update solution_settings meta-entity'
   - 'update spotlight entityqueue'
   - 'update topic meta-entity'
+  - 'vbo joinup archive action'
+  - 'vbo joinup change group action'
+  - 'vbo joinup unarchive action'
   - 'view all sitewide alert revisions'
   - 'view any unpublished content'
   - 'view eif wrapper entity'

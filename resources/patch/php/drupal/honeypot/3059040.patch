@@ -1,0 +1,176 @@
+diff --git a/README.md b/README.md
+index c096502..714e831 100644
+--- a/README.md
++++ b/README.md
+@@ -65,6 +65,80 @@ Honeypot includes a `docker-compose.yml` file that can be used for testing purpo
+ 
+   1. Log into `http://localhost/` with `admin`/`admin` and enable Honeypot (and the Testing module, if desired).
+ 
++### Behat
++
++When the Honeypot time limit is enabled it is important to take this into
++account when writing Behat user scenarios that submit the protected forms.
++
++#### Installation
++
++Add the following to your `composer.json` to ensure that our context file can be
++autoloaded by Behat. You might need to adapt the path to the location where your
++Drupal is installed, if it is not in the `web` folder:
++
++```json
++"autoload-dev": {
++    "psr-4": {
++        "Drupal\\Tests\\honeypot\\": "web/modules/contrib/honeypot/tests/src",
++    }
++},
++```
++
++Ask Composer to export the updated autoload information:
++
++```sh
++$ composer dump-autoload
++```
++
++Then include the context file in your `behat.yml`:
++
++```yml
++default:
++  suites:
++    default:
++      contexts:
++        - Drupal\Tests\honeypot\Behat\HoneypotContext
++```
++
++
++#### Usage
++
++Use the step definition `Given I wait for the spam protection time limit to
++pass` before submitting a form that is protected by Honeypot. Example:
++
++```
++Scenario: Register a new account
++  Given I am an anonymous user
++  When I click "Log in"
++  And I click "Create new account"
++  And I fill in "Email address" with "user@example.com"
++  And I fill in "Username" with "pterry"
++  And I wait for the spam protection time limit to pass
++  And I press "Create new account"
++  Then I should see the success message "Thank you for applying for an account. Your account is currently pending approval by the site administrator."
++```
++
++If on the other hand you are writing a scenario that describes how a spammer
++will be blocked by Honeypot, add the `@honeypot` tag to the scenario. This will
++clear all failed form submissions from the database after the scenario ends.
++This ensures that there won't be any interference with any subsequent scenarios
++that also interact with Honeypot. This is important because on a test server all
++anonymous users will have the same IP address and are seen by Honeypot as the
++same user. Example:
++
++```
++@honeypot
++Scenario: Spammers are delayed by the anti spam feature
++  Given I am an anonymous user
++  When I click "Log in"
++  And I click "Create new account"
++  And I fill in "Email address" with "spammer@example.com"
++  And I fill in "Username" with "spambot"
++  And I press "Create new account"
++  Then I should see the error message "There was a problem with your form submission. Please wait 5 seconds and try again."
++```
++
++
+ ## Credit
+ 
+ The Honeypot module was originally developed by Jeff Geerling of [Midwestern Mac,
+diff --git a/tests/src/Behat/HoneypotContext.php b/tests/src/Behat/HoneypotContext.php
+new file mode 100644
+index 0000000..7afae48
+--- /dev/null
++++ b/tests/src/Behat/HoneypotContext.php
+@@ -0,0 +1,85 @@
++<?php
++
++namespace Drupal\Tests\honeypot\Behat;
++
++use Behat\Behat\Hook\Scope\AfterScenarioScope;
++use Drupal\DrupalExtension\Context\RawDrupalContext;
++
++/**
++ * Integrates Honeypot with Behat Drupal Extension.
++ */
++class HoneypotContext extends RawDrupalContext {
++
++  /**
++   * Waits a few moments to bypass spam bot detection.
++   *
++   * The Honeypot module is intended to block spam bots and detect if actual
++   * humans are entering forms. One of its checks is that it assumes a human
++   * takes at least a few seconds to fill in a form.
++   *
++   * Use this on forms that are protected by Honeypot before submitting the
++   * form.
++   *
++   * @Given I wait for the honeypot time limit to pass
++   * @Given I wait for the spam protection time limit to pass
++   */
++  public function waitForTimeLimit() {
++    $time_limit = \Drupal::config('honeypot.settings')->get('time_limit');
++    if (is_int($time_limit) && $time_limit > 0) {
++      sleep($time_limit);
++    }
++  }
++
++  /**
++   * Removes all failed form submissions from the database.
++   *
++   * The `@honeypot` tag can be added to Behat scenarios that trigger Honeypot
++   * validation. This will clear all failed submissions from the database,
++   * ensuring that any scenarios that are executed later will not need to wait
++   * an exponential amount of time for validation to pass. Example:
++   *
++   * @AfterScenario @honeypot
++   */
++  public function remove(AfterScenarioScope $event) {
++    \Drupal::database()->truncate('honeypot_user')->execute();
++  }
++
++  /**
++   * Check that previous scenarios didn't leave behind failed form submissions.
++   *
++   * If a previous scenario submits a Honeypot-protected form and fails to wait
++   * for the time limit to pass before ending the test then this can affect any
++   * subsequent scenarios. This hook will fail the test if this is the case.
++   *
++   * To prevent this, ensure to always wait for the Honeypot time limit to pass
++   * by using the following step before submitting a form:
++   *
++   * @code
++   * When I wait for the spam protection time limit to pass
++   * @endcode
++   *
++   * In scenarios where a failed form submission is expected (for example in
++   * scenarios that are checking if the spam protection is working correctly),
++   * ensure to add the `@honeypot` tag.
++   *
++   * @BeforeScenario
++   */
++  public function assertNoUnexpiredFormSubmissions() {
++    // By retrieving the Drupal Driver we ensure that Drupal is bootstrapped
++    // before we access the API.
++    // @todo Remove this workaround when Drupal Extension issue #576 is fixed.
++    // @see https://github.com/jhedstrom/drupalextension/issues/576
++    $driver = $this->getDriver();
++    if (!$driver->isBootstrapped()) {
++      $driver->bootstrap();
++    }
++
++    $expire_time = \Drupal::config('honeypot.settings')->get('expire');
++    $query = \Drupal::database()->select('honeypot_user', 'hu')
++      ->condition('timestamp', \Drupal::time()->getCurrentTime() - $expire_time, '>');
++    if ((int) $query->countQuery()->execute()->fetchField() !== 0) {
++      throw new \Exception('Form submissions that failed the Honeypot spam protection are present. Ensure that all scenarios that interact with protected forms wait for the Honeypot time limit to pass before submitting the form.');
++    }
++  }
++
++}
