@@ -154,7 +154,9 @@ function ventuno_theme_suggestions_input_alter(array &$suggestions, array $varia
  * Implements hook_theme_suggestions_HOOK_alter().
  */
 function ventuno_theme_suggestions_select_alter(array &$suggestions, array $variables): void {
-  $suggestions[] = 'select__' . $variables['element']['#name'];
+  if (isset($variables['element']['#name'])) {
+    $suggestions[] = 'select__' . $variables['element']['#name'];
+  }
 }
 
 /**
