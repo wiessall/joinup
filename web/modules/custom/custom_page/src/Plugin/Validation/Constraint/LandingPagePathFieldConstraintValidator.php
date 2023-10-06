@@ -4,38 +4,15 @@ declare(strict_types = 1);
 
 namespace Drupal\custom_page\Plugin\Validation\Constraint;
 
-use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
 use Drupal\custom_page\Entity\CustomPageInterface;
-use Drupal\custom_page\LandingPageAliasValidatorInterface;
 use Drupal\path\Plugin\Field\FieldType\PathItem;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 
 /**
  * Landing page path field constraint validator.
  */
-class LandingPagePathFieldConstraintValidator extends ConstraintValidator implements ContainerInjectionInterface {
-
-  /**
-   * Constructs an object.
-   *
-   * @param \Drupal\custom_page\LandingPageAliasValidatorInterface $aliasValidator
-   *   Landing page alias validator.
-   */
-  public function __construct(
-    protected LandingPageAliasValidatorInterface $aliasValidator
-  ) {
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public static function create(ContainerInterface $container): self {
-    return new static(
-      $container->get('custom_page.landing_page_alias_validator')
-    );
-  }
+class LandingPagePathFieldConstraintValidator extends ConstraintValidator {
 
   /**
    * {@inheritdoc}
@@ -50,9 +27,38 @@ class LandingPagePathFieldConstraintValidator extends ConstraintValidator implem
     }
 
     $alias = $value->get('alias')->getString();
-    if (!$this->aliasValidator->isValid($alias)) {
+    if (!$this->isValid($alias)) {
       $this->context->addViolation($constraint->message, ['@alias' => $alias]);
     }
+  }
+
+  /**
+   * Checks if alias is valid.
+   *
+   * @param string $alias
+   *   Alias.
+   *
+   * @return bool
+   *   True if it is valid.
+   */
+  public function isValid(string $alias): bool {
+    $paths = [
+      '/search',
+      '/topic',
+      '/contact',
+      '/collection',
+      '/user',
+      '/dashboard',
+      '/interoperable-europe',
+    ];
+
+    foreach ($paths as $path) {
+      if ($alias === $path || str_starts_with($alias, $path . '/')) {
+        return FALSE;
+      }
+    }
+
+    return TRUE;
   }
 
 }
