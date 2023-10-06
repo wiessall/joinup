@@ -19,7 +19,6 @@ use Drupal\joinup_licence\Entity\Licence;
 use Drupal\joinup_licence\Entity\LicenceInterface;
 use Drupal\joinup_licence\Entity\LicenceLegalType;
 use Drupal\joinup_licence\Entity\SpdxLicence;
-use Drupal\rdf_entity\Entity\RdfEntityType;
 use Drupal\rdf_entity\RdfInterface;
 
 /**
@@ -88,33 +87,30 @@ function joinup_licence_rdf_entity_access(EntityInterface $entity, string $opera
 function joinup_licence_entity_extra_field_info(): array {
   $fields = [];
 
-  $licence_type = RdfEntityType::load('licence');
-  if ($licence_type) {
-    $display = &$fields['rdf_entity'][$licence_type->id()]['display'];
-    $display['spdx_licence_label'] = [
-      'label' => t('SPDX licence label'),
-      'description' => t('The label of the licence in the SPDX licence list.'),
-      'visible' => FALSE,
-    ];
-    $display['spdx_licence_id'] = [
-      'label' => t('SPDX licence ID'),
-      'description' => t('The ID of the licence in the SPDX licence list.'),
-      'visible' => FALSE,
-    ];
-    $display['spdx_licence_text'] = [
-      'label' => t('Licence text'),
-      'visible' => FALSE,
-    ];
-    $display['spdx_licence_external_url'] = [
-      'label' => t('Licence external URL'),
-      'visible' => FALSE,
-    ];
-    $display['spdx_see_also'] = [
-      'label' => t('See also'),
-      'description' => t('Links to related licences according to SPDX.'),
-      'visible' => FALSE,
-    ];
-  }
+  $display = &$fields['rdf_entity']['licence']['display'];
+  $display['spdx_licence_label'] = [
+    'label' => t('SPDX licence label'),
+    'description' => t('The label of the licence in the SPDX licence list.'),
+    'visible' => FALSE,
+  ];
+  $display['spdx_licence_id'] = [
+    'label' => t('SPDX licence ID'),
+    'description' => t('The ID of the licence in the SPDX licence list.'),
+    'visible' => FALSE,
+  ];
+  $display['spdx_licence_text'] = [
+    'label' => t('Licence text'),
+    'visible' => FALSE,
+  ];
+  $display['spdx_licence_external_url'] = [
+    'label' => t('Licence external URL'),
+    'visible' => FALSE,
+  ];
+  $display['spdx_see_also'] = [
+    'label' => t('See also'),
+    'description' => t('Links to related licences according to SPDX.'),
+    'visible' => FALSE,
+  ];
 
   return $fields;
 }
