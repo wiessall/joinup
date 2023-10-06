@@ -41,7 +41,7 @@ class LandingPagePathFieldConstraintValidator extends ConstraintValidator {
    * @return bool
    *   True if it is valid.
    */
-  public function isValid(string $alias): bool {
+  protected function isValid(string $alias): bool {
     $paths = [
       '/search',
       '/topic',
