@@ -16,6 +16,52 @@ default:
   created:
     -
       value: 1694502293
+  metatag:
+    -
+      tag: meta
+      attributes:
+        name: title
+        content: '| Joinup'
+    -
+      tag: link
+      attributes:
+        rel: canonical
+        href: 'http://web:8080/web/home'
+    -
+      tag: meta
+      attributes:
+        property: 'og:site_name'
+        content: Joinup
+    -
+      tag: meta
+      attributes:
+        property: 'og:type'
+        content: website
+    -
+      tag: meta
+      attributes:
+        property: 'og:url'
+        content: 'http://web:8080/web/home'
+    -
+      tag: meta
+      attributes:
+        property: 'og:title'
+        content: Homepage
+    -
+      tag: meta
+      attributes:
+        property: 'og:image'
+        content: 'http://web:8080/web/themes/ventuno/assets/images/og-image.png'
+    -
+      tag: meta
+      attributes:
+        property: 'og:image:secure_url'
+        content: 'https://web:8080/web/themes/ventuno/assets/images/og-image.png'
+    -
+      tag: meta
+      attributes:
+        property: 'og:image:type'
+        content: image/svg+xml
   path:
     -
       alias: ''
