@@ -12,38 +12,18 @@
 {%
   set search_url = path('view.search_oss_catalogue.search')
 %}
-{%
-  set classes = [
-  'row',
-  'mb-4',
-  'mb-md-0',
-  'block',
-  'block-' ~ configuration.provider|clean_class,
-  'block-' ~ plugin_id|clean_class,
-]
-%}
-<div{{ attributes.addClass(classes) }}>
-  <div class="col-8 offset-2 col-md-7 offset-md-0 col-lg-6 mb-4">
-    <img src="{{ file_url('themes/ventuno/assets/images/logo.svg') }}" class="img-fluid" alt="Joinup logo" width="336" height="86">
-  </div>
-  <div class="col-12 order-md-2">
-    <div class="search-bar mb-3 px-2 ps-md-0 pe-md-5">
-      <label for="search-bar__input" style="display: none">{{ 'Search'|trans }}</label>
+<div{{ attributes.addClass('pt-5') }}>
+  <p class="text-light">{{ 'Welcome to the EU Open Source Solution Catalogue'|t }}</p>
+  <div class="row">
+    <div class="col-12 col-md-10 col-lg-8">
+      <label for="search-bar__input" style="display: none">{{ 'Search'|t }}</label>
       {% block content %}
         {{ content }}
       {% endblock %}
     </div>
-    <div class="col-12 col-md-9 col-lg-12">
-      <p class="mb-4 mb-md-0 text-center text-md-start text-light">{% trans %}
-          <span class="d-block d-md-inline">Need more search options?</span>
-
-          <span class="d-block d-md-inline">Use our <a class="text-light text-decoration-underline fw-bold" href="{{ search_url }}">advanced search</a></span>
-        {% endtrans %}</p>
-    </div>
+    <p class="mb-4 mb-md-0 text-center text-md-start text-light">
+      <span class="d-block d-md-inline">{{ 'Need more search options?'|t }}</span>
+      <span class="d-block d-md-inline">{{ 'Use our'|t }} <a class="text-light text-decoration-underline fw-bold" href="{{ search_url }}">advanced search</a></span>
+    </p>
   </div>
-  <div class="col-8 offset-2 col-md-5 offset-md-0 order-md-1">
-    <p class="mb-0 text-center text-md-end text-light fw-bold">{{ 'European Open-Source Software Solutions Catalogue'|trans }}</p>
-    <p class="mb-0 text-center text-md-end text-light fw-bold">{{ 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod.'|trans }}</p>
-  </div>
-
 </div>
