@@ -140,7 +140,6 @@ function _ventuno_preprocess_tile(array &$variables, string $entity_type_id): vo
       if (!isset($variables['image']['0'])) {
         unset($variables['image']);
       }
-      $variables['bundle']['label'] = t('Solution');
       break;
 
     case 'tallinn_report':
