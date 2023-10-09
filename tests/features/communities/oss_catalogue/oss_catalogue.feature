@@ -3,11 +3,6 @@ Feature:
   In order to present the details about EU OSS catalogue
   I want to view a dedicated collection and landing page
 
-  Scenario: User is redirected from the standard collection URL.
-    Given I visit "/collection/eu-oss-catalogue"
-    Then I should be on "/eu-oss-catalogue"
-    And I should not see the link "Report abusive content"
-  
   Scenario: User sees the right content
     Given oss_solution content:
       | title              | oss_development_status | oss_source        | oss_categories                                                  | oss_short_description                                                                                                                         | status    | oss_release_date |
@@ -17,7 +12,11 @@ Feature:
       | Semantic Turkey    | development            | developers_italia | application-development,it-development,digital-asset-management | Software Registry makes software development phase simplier by showing extended information about projects and allowing source code searches. | published | 2000-04-13 |
       | Cristian Gagliardi | obsolete               | developers_italia | data-collection                                                 | Immuni is a mobile app that helps us to fight the COVID-19 pandemic by notifying users at risk of carrying the virus as early as possible     | published | 2020-09-13 |
 
-    When I visit "/eu-oss-catalogue"
+    Given I visit "/collection/eu-oss-catalogue"
+
+    Then I should be on "/eu-oss-catalogue"
+    # User is redirected from the standard collection URL.
+    And I should not see the link "Report abusive content"
     And I see the text "Open source software of interest for Public Administrations" in the "Header" region
 
     # Check menus.
@@ -49,6 +48,9 @@ Feature:
       | Cristian Gagliardi |
       | Vito Schiraldi     |
       | Semantic Turkey    |
+
+    # Check OSS label in tile footer.
+    And I should see the text "OSS Solution" in the "Spunta" tile
 
     When I click "advanced search"
     And I should see the heading "Search in EU Open Source Solutions Catalogue"
