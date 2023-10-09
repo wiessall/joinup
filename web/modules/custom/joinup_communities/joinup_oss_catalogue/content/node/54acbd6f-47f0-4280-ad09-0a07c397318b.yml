@@ -405,7 +405,7 @@ default:
                   region: content
           paragraph_heading:
             -
-              value: 'Do you want to publish your open souce solution? '
+              value: 'Do you want to publish your open source solution? '
     -
       entity:
         _meta:
