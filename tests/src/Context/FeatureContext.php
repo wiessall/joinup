@@ -1053,7 +1053,7 @@ class FeatureContext extends RawDrupalContext {
       throw new \Exception(sprintf('Page title tag not found on the page "%s".', $session->getCurrentUrl()));
     }
 
-    $page_title = $page_title->getText();
+    $page_title = $page_title->getText() ?: $page_title->getHtml();
     if (!$page_title) {
       throw new \Exception(sprintf('Page title tag is found but contains no text on page "%s".', $session->getCurrentUrl()));
     }
