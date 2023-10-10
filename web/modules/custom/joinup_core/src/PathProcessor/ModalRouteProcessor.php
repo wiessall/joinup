@@ -57,7 +57,7 @@ class ModalRouteProcessor implements InboundPathProcessorInterface, OutboundPath
   /**
    * {@inheritdoc}
    */
-  public function processInbound($path, Request $request) {
+  public function processInbound($path, Request $request): string {
     if (!$this->appliesToInboundPath($path)) {
       return $path;
     }
@@ -96,7 +96,7 @@ class ModalRouteProcessor implements InboundPathProcessorInterface, OutboundPath
   /**
    * {@inheritdoc}
    */
-  public function processOutbound($path, &$options = [], ?Request $request = NULL, ?BubbleableMetadata $bubbleable_metadata = NULL) {
+  public function processOutbound($path, &$options = [], ?Request $request = NULL, ?BubbleableMetadata $bubbleable_metadata = NULL): string {
     if (!$this->appliesToOutboundPath($path)) {
       return $path;
     }

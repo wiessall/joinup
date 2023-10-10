@@ -6,9 +6,6 @@ namespace Drupal\joinup_core\Controller;
 
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Access\AccessResultInterface;
-use Drupal\Core\Ajax\AjaxResponse;
-use Drupal\Core\Ajax\OpenModalDialogCommand;
-use Drupal\Core\Cache\CacheableAjaxResponse;
 use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
 use Drupal\Core\Entity\ContentEntityInterface;
@@ -27,7 +24,7 @@ class ModalFormatterEntityViewController implements ContainerInjectionInterface 
   /**
    * Constructs a new ModalFormatterEntityViewController instance.
    *
-   * @param \Drupal\Core\Entity\EntityFieldManagerInterface $displayRepository
+   * @param \Drupal\Core\Entity\EntityDisplayRepositoryInterface $displayRepository
    *   The entity display repository.
    */
   public function __construct(
@@ -37,7 +34,7 @@ class ModalFormatterEntityViewController implements ContainerInjectionInterface 
   /**
    * {@inheritdoc}
    */
-  public static function create(ContainerInterface $container) {
+  public static function create(ContainerInterface $container): self {
     return new static(
       $container->get('entity_display.repository')
     );
@@ -96,43 +93,6 @@ class ModalFormatterEntityViewController implements ContainerInjectionInterface 
     }
 
     return $build;
-  }
-
-  /**
-   * Builds the AJAX response.
-   *
-   * @param \Drupal\Core\Entity\ContentEntityInterface $entity
-   *   The content entity to render a field from.
-   * @param string $viewMode
-   *   The view mode to use.
-   * @param string $field
-   *   The field to render.
-   *
-   * @return \Drupal\Core\Ajax\AjaxResponse
-   *   An AJAX response (this is now CacheableAjaxResponse).
-   */
-  protected function buildAjaxResponse(ContentEntityInterface $entity, string $viewMode, string $field): AjaxResponse {
-    $response = new CacheableAjaxResponse();
-    $response->addCacheableDependency($entity);
-    $response->addCommand(new OpenModalDialogCommand(
-      NULL,
-      $this->buildEntity($entity, $viewMode, $field),
-      [
-        'title' => $this->title($entity, $field),
-        'width' => 600,
-      ],
-    ));
-
-    // Source entity view display entity must also be cached.
-    $sourceViewDisplay = $this->displayRepository->getViewDisplay($entity->getEntityTypeId(), $entity->bundle(), $viewMode);
-    $response->addCacheableDependency($sourceViewDisplay);
-    if ($sourceViewDisplay->isNew() || !$sourceViewDisplay->status()) {
-      $response->addCacheableDependency(
-        $this->displayRepository->getViewDisplay($entity->getEntityTypeId(), $entity->bundle())
-      );
-    }
-
-    return $response;
   }
 
   /**
