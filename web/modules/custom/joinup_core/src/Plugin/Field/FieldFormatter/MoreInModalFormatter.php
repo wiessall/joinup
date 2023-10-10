@@ -30,19 +30,19 @@ class MoreInModalFormatter extends FormatterBase {
   /**
    * Constructs a new MoreInModalFormatter instance.
    *
-   * @param string $pluginId
+   * @param string $plugin_id
    *   The plugin_id for the formatter.
-   * @param mixed $pluginDefinition
+   * @param mixed $plugin_definition
    *   The plugin implementation definition.
-   * @param \Drupal\Core\Field\FieldDefinitionInterface $fieldDefinition
+   * @param \Drupal\Core\Field\FieldDefinitionInterface $field_definition
    *   The definition of the field to which the formatter is associated.
    * @param array $settings
    *   The formatter settings.
    * @param string $label
    *   The formatter label display setting.
-   * @param string $viewMode
+   * @param string $view_mode
    *   The view mode.
-   * @param array $thirdPartySettings
+   * @param array $third_party_settings
    *   Any third party settings.
    * @param \Drupal\Core\Entity\EntityDisplayRepositoryInterface $displayRepository
    *   The entity display repository.
@@ -50,43 +50,31 @@ class MoreInModalFormatter extends FormatterBase {
    *   The field formatter plugin manager.
    */
   public function __construct(
-    $pluginId,
-    $pluginDefinition,
-    FieldDefinitionInterface $fieldDefinition,
+    $plugin_id,
+    $plugin_definition,
+    FieldDefinitionInterface $field_definition,
     array $settings,
     $label,
-    $viewMode,
-    array $thirdPartySettings,
+    $view_mode,
+    array $third_party_settings,
     protected EntityDisplayRepositoryInterface $displayRepository,
     protected FormatterPluginManager $formatterManager,
   ) {
-    parent::__construct($pluginId, $pluginDefinition, $fieldDefinition, $settings, $label, $viewMode, $thirdPartySettings);
+    parent::__construct($plugin_id, $plugin_definition, $field_definition, $settings, $label, $view_mode, $third_party_settings);
   }
 
   /**
-   * Creates an instance of the plugin.
-   *
-   * @param \Symfony\Component\DependencyInjection\ContainerInterface $container
-   *   The container to pull out services used in the plugin.
-   * @param array $configuration
-   *   A configuration array containing information about the plugin instance.
-   * @param string $pluginId
-   *   The plugin ID for the plugin instance.
-   * @param mixed $pluginDefinition
-   *   The plugin implementation definition.
-   *
-   * @return static
-   *   Returns an instance of this plugin.
+   * {@inheritdoc}
    */
   public static function create(
     ContainerInterface $container,
     array $configuration,
-    $pluginId,
-    $pluginDefinition
-  ) {
+    $plugin_id,
+    $plugin_definition
+  ): self {
     return new static(
-      $pluginId,
-      $pluginDefinition,
+      $plugin_id,
+      $plugin_definition,
       $configuration['field_definition'],
       $configuration['settings'],
       $configuration['label'],
@@ -100,7 +88,7 @@ class MoreInModalFormatter extends FormatterBase {
   /**
    * {@inheritdoc}
    */
-  public static function defaultSettings() {
+  public static function defaultSettings(): array {
     return [
       'max_items_to_show' => -1,
       'modal_link_label_single' => 'Show item',
@@ -110,33 +98,18 @@ class MoreInModalFormatter extends FormatterBase {
   }
 
   /**
-   * Allows formatters to load information for field values being displayed.
-   *
-   * This should be used when a formatter needs to load additional information
-   * from the database in order to render a field, for example a reference
-   * field that displays properties of the referenced entities such as name or
-   * type.
-   *
-   * This method operates on multiple entities. The $entities_items parameter
-   * is an array keyed by entity ID. For performance reasons, information for
-   * all involved entities should be loaded in a single query where possible.
-   *
-   * Changes or additions to field values are done by directly altering the
-   * items.
-   *
-   * @param \Drupal\Core\Field\FieldItemListInterface[] $entitiesItems
-   *   An array with the field values from the multiple entities being rendered.
+   * {@inheritdoc}
    */
-  public function prepareView(array $entitiesItems) {
+  public function prepareView(array $entities_items): void {
     if ($formatter = $this->getSourceFormatter()) {
-      $formatter->prepareView($entitiesItems);
+      $formatter->prepareView($entities_items);
     }
   }
 
   /**
    * {@inheritdoc}
    */
-  public function view(FieldItemListInterface $items, $langcode = NULL) {
+  public function view(FieldItemListInterface $items, $langcode = NULL): array {
     $entity = $items->getEntity();
     $modalLinkLabel = $this->formatPlural(
       $items->count(),
@@ -234,18 +207,10 @@ class MoreInModalFormatter extends FormatterBase {
   }
 
   /**
-   * Returns a form to configure settings for the formatter.
-   *
-   * @param array $form
-   *   The form where the settings form is being included in.
-   * @param \Drupal\Core\Form\FormStateInterface $formState
-   *   The current state of the form.
-   *
-   * @return array
-   *   The form elements for the formatter settings.
+   * {@inheritdoc}
    */
-  public function settingsForm(array $form, FormStateInterface $formState): array {
-    $form = parent::settingsForm($form, $formState);
+  public function settingsForm(array $form, FormStateInterface $form_state): array {
+    $form = parent::settingsForm($form, $form_state);
 
     $form['max_items_to_show'] = [
       '#type' => 'number',
@@ -263,7 +228,7 @@ class MoreInModalFormatter extends FormatterBase {
     );
     $form['modal_view_mode'] = [
       '#type' => 'select',
-      '#title' => $this->t('Soruce view mode'),
+      '#title' => $this->t('Source view mode'),
       '#default_value' => $this->getSetting('modal_view_mode'),
       '#description' => $this->t('View mode of the entity field to use for rendering. This is used to display only the first few items, and this is what will be shown in the modal.'),
       '#options' => $viewModeOptions,
@@ -307,7 +272,7 @@ class MoreInModalFormatter extends FormatterBase {
   /**
    * Returns the view display of the entity what is used to render the field.
    *
-   * @param string $entityTypeID
+   * @param string $entityTypeId
    *   The entity type ID of the entity.
    * @param string $bundle
    *   The bundle (type) of the entity.
@@ -318,19 +283,23 @@ class MoreInModalFormatter extends FormatterBase {
    * @return \Drupal\Core\Entity\Display\EntityViewDisplayInterface
    *   The view display of the entity what is used to render the field.
    */
-  protected function getViewDisplayWithFallback(string $entityTypeID, string $bundle, string $viewMode): EntityViewDisplayInterface {
-    $original = $this->displayRepository->getViewDisplay($entityTypeID, $bundle, $viewMode);
+  protected function getViewDisplayWithFallback(
+    string $entityTypeId,
+    string $bundle,
+    string $viewMode
+  ): EntityViewDisplayInterface {
+    $original = $this->displayRepository->getViewDisplay($entityTypeId, $bundle, $viewMode);
 
     return !$original->isNew() && $original->status()
       ? $original
-      : $this->displayRepository->getViewDisplay($entityTypeID, $bundle);
+      : $this->displayRepository->getViewDisplay($entityTypeId, $bundle);
   }
 
   /**
    * Returns the field formatter from the configured entity view display.
    *
    * @return \Drupal\Core\Field\FormatterInterface|null
-   *   The formatter set for the field in the confugured entity view display.
+   *   The formatter set for the field in the configured entity view display.
    *   Returns NULL if the field is hidden in that display.
    */
   protected function getSourceFormatter(): ?FormatterInterface {
