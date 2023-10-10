@@ -172,7 +172,7 @@
         }
         &[href*='twitter'] {
           &::before {
-            mask-image: url("#{$bootstrap-icons-path}/twitter.svg");
+            mask-image: url("#{$bootstrap-icons-path}/twitter-x.svg");
           }
         }
         &[href*='linkedin'] {
