@@ -137,9 +137,15 @@
   }
   &__faq {
     padding-bottom: 0;
+    .paragraph--accordion {
+      width: 80%;
+      margin-right: auto;
+      margin-left: auto;
+    }
   }
   &__social {
     .paragraph--call-to-action {
+      margin-block-end: 1rem;
       a {
         width: $spacer * 3!important;
         height: $spacer * 3!important;
@@ -175,6 +181,16 @@
           }
         }
       }
+    }
+  }
+  &__discover {
+    .paragraph--call-to-action {
+      margin-block-end: 1rem;
+    }
+  }
+  &__most_recent {
+    .tile__text {
+      -webkit-line-clamp: 2;
     }
   }
 }
