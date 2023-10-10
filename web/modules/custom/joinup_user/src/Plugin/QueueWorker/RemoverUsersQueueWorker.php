@@ -7,7 +7,6 @@ namespace Drupal\joinup_user\Plugin\QueueWorker;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Queue\QueueWorkerBase;
-use Drupal\user\UserInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -55,10 +54,10 @@ class RemoverUsersQueueWorker extends QueueWorkerBase implements ContainerFactor
   public function processItem($data): void {
     foreach ($data as $userId) {
       // The third argument can be one of the following:
-      //   - user_cancel_block: disable user, leave content
-      //   - user_cancel_block_unpublish: disable user, unpublish content
-      //   - user_cancel_reassign: delete user, reassign content to uid=0
-      //   - user_cancel_delete: delete user, delete content
+      // - user_cancel_block: disable user, leave content,
+      // - user_cancel_block_unpublish: disable user, unpublish content,
+      // - user_cancel_reassign: delete user, reassign content to uid=0,
+      // - user_cancel_delete: delete user, delete content,
       user_cancel([], $userId, 'user_cancel_reassign');
       drush_backend_batch_process();
     }
