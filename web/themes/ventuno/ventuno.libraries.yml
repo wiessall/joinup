@@ -302,11 +302,6 @@ paragraph__heading:
     theme:
       assets/css/paragraph--heading.min.css: { minified: true }
 
-paragraph__quote:
-  css:
-    theme:
-      assets/css/paragraph--quote.min.css: { minified: true }
-
 paragraph__poll:
   css:
     theme:
