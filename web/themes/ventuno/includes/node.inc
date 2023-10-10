@@ -94,12 +94,6 @@ function ventuno_preprocess_node(array &$variables): void {
     _ventuno_preprocess_tile($variables, 'node');
   }
 
-  // Add bundle class in listing templates.
-  if ($variables['view_mode'] === 'view_mode_tile' || $variables['view_mode'] === 'view_mode_featured') {
-    $bundle_class = 'listing__card--' . str_replace('_', '-', $bundle);
-    $variables['attributes']['class'][] = $bundle_class;
-  }
-
   // Add the created date to news articles.
   if ($bundle === 'news') {
     $variables['created'] = \Drupal::service('date.formatter')->format($node->getCreatedTime(), 'date_only');
