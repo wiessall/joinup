@@ -4,13 +4,16 @@ declare(strict_types = 1);
 
 namespace Drupal\joinup_core\Controller;
 
+use Drupal\Core\Access\AccessResult;
+use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Ajax\AjaxResponse;
 use Drupal\Core\Ajax\OpenModalDialogCommand;
 use Drupal\Core\Cache\CacheableAjaxResponse;
-use Drupal\Core\Cache\CacheableRedirectResponse;
+use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
 use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\Core\Entity\EntityDisplayRepositoryInterface;
+use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -41,7 +44,7 @@ class ModalFormatterEntityViewController implements ContainerInjectionInterface 
   }
 
   /**
-   * Returns the title of the modal form.
+   * Returns the title of the modal page.
    *
    * @param \Drupal\Core\Entity\ContentEntityInterface $entity
    *   The host entity of the field.
@@ -72,26 +75,27 @@ class ModalFormatterEntityViewController implements ContainerInjectionInterface 
    *   The name of the view mode.
    * @param string $field
    *   The name of the field.
-   * @param string $js
-   *   Can be 'ajax' or 'nojs'.
    *
-   * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Drupal\Core\Ajax\AjaxResponse
-   *   A redirect response to the entity canonical route or the AJAX response.
+   * @return array
+   *   Renderable array of the entity field.
    */
   public function buildViewModeResponse(
     ContentEntityInterface $entity,
     string $viewMode,
     string $field,
-    string $js
-  ) {
-    switch ($js) {
-      case 'ajax':
-        return $this->buildAjaxResponse($entity, $viewMode, $field);
+  ): array {
+    $build = $this->buildEntity($entity, $viewMode, $field);
 
-      default:
-        return (new CacheableRedirectResponse($entity->toUrl()->toString(), 307))
-          ->addCacheableDependency($entity);
+    // Source entity view display entity must also be cached.
+    $sourceViewDisplay = $this->displayRepository->getViewDisplay($entity->getEntityTypeId(), $entity->bundle(), $viewMode);
+    CacheableMetadata::createFromObject($sourceViewDisplay)
+      ->applyTo($build);
+    if ($sourceViewDisplay->isNew() || !$sourceViewDisplay->status()) {
+      CacheableMetadata::createFromObject($this->displayRepository->getViewDisplay($entity->getEntityTypeId(), $entity->bundle())
+      )->applyTo($build);
     }
+
+    return $build;
   }
 
   /**
@@ -132,7 +136,34 @@ class ModalFormatterEntityViewController implements ContainerInjectionInterface 
   }
 
   /**
-   * Builds the renderable array of the field modal.
+   * Determines whether the "modal" page can be accessed.
+   *
+   * @param \Drupal\Core\Entity\EntityInterface $entity
+   *   The entity from the route slug.
+   * @param string $field
+   *   The field to render.
+   *
+   * @return \Drupal\Core\Access\AccessResultInterface
+   *   The access result object.
+   */
+  public function access(EntityInterface $entity, string $field): AccessResultInterface {
+    $accessResult = AccessResult::forbidden();
+
+    if (
+      $entity instanceof ContentEntityInterface
+      && $entity->hasField($field)
+      && !$entity->get($field)->isEmpty()
+    ) {
+      $accessResult = $entity->get($field)->access('view', NULL, TRUE);
+    }
+
+    return $accessResult->addCacheableDependency($entity)
+      ->cachePerUser()
+      ->cachePerPermissions();
+  }
+
+  /**
+   * Builds the renderable array of the field.
    *
    * @param \Drupal\Core\Entity\FieldableEntityInterface $entity
    *   The entity object.
