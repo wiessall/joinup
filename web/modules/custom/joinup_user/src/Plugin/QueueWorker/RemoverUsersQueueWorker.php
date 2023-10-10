@@ -53,13 +53,15 @@ class RemoverUsersQueueWorker extends QueueWorkerBase implements ContainerFactor
    * {@inheritdoc}
    */
   public function processItem($data): void {
-    $users = $this->entityTypeManager->getStorage('user')->loadMultiple($data);
-    foreach ($users as $user) {
-      if ($user instanceof UserInterface) {
-        $user->delete();
-      }
+    foreach ($data as $userId) {
+      // The third argument can be one of the following:
+      //   - user_cancel_block: disable user, leave content
+      //   - user_cancel_block_unpublish: disable user, unpublish content
+      //   - user_cancel_reassign: delete user, reassign content to uid=0
+      //   - user_cancel_delete: delete user, delete content
+      user_cancel([], $userId, 'user_cancel_reassign');
+      drush_backend_batch_process();
     }
-
   }
 
 }
