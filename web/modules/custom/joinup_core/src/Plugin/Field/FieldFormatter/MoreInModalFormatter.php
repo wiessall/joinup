@@ -4,6 +4,7 @@ declare(strict_types = 1);
 
 namespace Drupal\joinup_core\Plugin\Field\FieldFormatter;
 
+use Drupal\Component\Serialization\Json;
 use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 use Drupal\Core\Entity\EntityDisplayRepositoryInterface;
 use Drupal\Core\Field\FieldDefinitionInterface;
@@ -196,12 +197,12 @@ class MoreInModalFormatter extends FormatterBase {
     $url = $entity->isNew()
       ? Url::fromRoute('<current>')
       : Url::fromRoute(
-        "entity.{$entity->getEntityTypeId()}.joinup_core.modal_formatter",
+        'joinup_core.field_more_in_modal',
         [
+          'entityType' => $entity->getEntityTypeId(),
           'entity' => $entity->id(),
           'viewMode' => $this->getSetting('modal_view_mode'),
           'field' => $items->getName(),
-          'js' => 'nojs',
         ],
       );
     $renderable[$maxItemsToShow] = [
@@ -212,7 +213,11 @@ class MoreInModalFormatter extends FormatterBase {
       '#attributes' => [
         'rel' => 'nofollow',
         'class' => ['joinup-modal', 'use-ajax'],
-        'data-ajax-http-method' => 'GET',
+        // If method set to get then we cannot control modal width. But posts
+        // requests aren't render-cached.
+        'data-ajax-http-method' => 'POST',
+        'data-dialog-options' => Json::encode(['width' => 800]),
+        'data-dialog-type' => 'modal',
         'data-joinup-modal' => TRUE,
       ],
     ];
