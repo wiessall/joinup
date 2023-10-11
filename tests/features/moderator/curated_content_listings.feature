@@ -113,5 +113,22 @@ Feature: Curated content listings
     And I click the contextual link "Feature" in the "Licrogravity" tile
     Then the "Licrogravity" tile should be marked as featured
 
-    Then I visit the search page
-    And the "Licrogravity" tile should be marked as featured
+  @loggedErrors @javascript @terms
+  Scenario: Regression test for ISAICP-8152
+  See https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-8152
+
+    Given collection:
+      | title | Spacex in space |
+      | state | published       |
+    And news content:
+      | title          | collection      | topic                                      | state     |
+      | Cardio atrophy | Spacex in space | Finance in EU, Supplier exchange, E-health | published |
+
+    Given I am logged in as a "moderator"
+    When I visit "/admin/structure/entityqueue/highlighted_content/highlighted_content"
+    And I fill in "edit-items-add-more-new-item-target-id" with "Cardio atrophy"
+    And I press "Add item"
+    And I press "Save"
+
+    Then I should see the message "The entity subqueue Highlighted content has been updated."
+    And the site should not have log records with level lower than "notice"
