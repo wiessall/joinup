@@ -51,9 +51,31 @@ SPARQL;
 }
 
 /**
+ * Fix the contact information integer values (UID).
+ */
+function joinup_core_deploy_109801(): string {
+  $database = \Drupal::getContainer()->get('sparql.endpoint');
+  $update_query = <<<SPARQL
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+WITH <http://joinup.eu/contact-information/published>
+DELETE { ?s <http://joinup.eu/owner/uid> ?o }
+INSERT { ?s <http://joinup.eu/owner/uid> ?int }
+WHERE {
+  ?s <http://joinup.eu/owner/uid> ?o .
+  FILTER ( datatype(?o) = <integer> ) .
+  BIND (xsd:integer(?o) as ?int) .
+}
+SPARQL;
+
+  $database->query($update_query);
+
+  return 'Changed the UID of all RDF entities from string to integer.';
+}
+
+/**
  * Update path alias for EU OSS catalogue.
  */
-function joinup_core_deploy_109801(): void {
+function joinup_core_deploy_109802(): void {
   /** @var \Drupal\collection\Entity\CollectionInterface $collection */
   $collection = \Drupal::entityTypeManager()->getStorage('rdf_entity')
     ->load(OssCatalogueCollectionInterface::COLLECTION_ENTITY_ID);
@@ -67,7 +89,7 @@ function joinup_core_deploy_109801(): void {
 /**
  * Update title of EU OSS catalogue collection.
  */
-function joinup_core_deploy_109802(): void {
+function joinup_core_deploy_109803(): void {
   /** @var \Drupal\collection\Entity\CollectionInterface $collection */
   $collection = \Drupal::entityTypeManager()->getStorage('rdf_entity')
     ->load(OssCatalogueCollectionInterface::COLLECTION_ENTITY_ID);
@@ -80,7 +102,7 @@ function joinup_core_deploy_109802(): void {
 /**
  * Import content for EU OpenSource Software Solutions Catalogue.
  */
-function joinup_core_deploy_109803(): void {
+function joinup_core_deploy_109804(): void {
   /** @var \Drupal\Core\Extension\ModuleInstallerInterface $moduleInstaller */
   $moduleInstaller = \Drupal::service('module_installer');
   /** @var \Drupal\Core\Entity\EntityRepositoryInterface $entityRepository */
@@ -113,7 +135,7 @@ function joinup_core_deploy_109803(): void {
 /**
  * Rename menu items for EU OSS catalogue.
  */
-function joinup_core_deploy_109804(): void {
+function joinup_core_deploy_109805(): void {
   $entityTypeManager = \Drupal::entityTypeManager();
   /** @var  \Drupal\menu_link_content\MenuLinkContentStorageInterface $menuLinkContentStorage */
   $menuLinkContentStorage = $entityTypeManager->getStorage('menu_link_content');
