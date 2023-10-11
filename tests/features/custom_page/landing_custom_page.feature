@@ -34,3 +34,21 @@ Feature: Landing custom page.
     Given I am an anonymous user
     When I visit the "Twelve Tables" custom page
     Then I should see the heading "Twelve Tables"
+
+  @javascript
+  Scenario Outline: Limited aliases for landing page
+    Given I am logged in as a "moderator"
+    When I visit "/admin/custom-landing-pages/add"
+    And I fill in "Alias test" for "Title"
+    And I select "Data gathering, data processing" from "Topic"
+    And I press "URL alias"
+    And I uncheck the box "Generate automatic URL alias"
+    And I fill in "<path>" for "URL alias"
+
+    And I press "Publish"
+    Then I should see the error message "<path> can not be used for URL alias field"
+
+    Examples:
+      | path         |
+      | /search      |
+      | /search/test |

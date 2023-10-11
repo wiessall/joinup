@@ -35,6 +35,15 @@ function custom_page_entity_type_alter(array &$entity_types) {
 }
 
 /**
+ * Implements hook_field_info_alter().
+ */
+function custom_page_field_info_alter(&$info): void {
+  if (isset($info['path'])) {
+    $info['path']['constraints']['LandingPagePathFieldConstraint'] = [];
+  }
+}
+
+/**
  * Implements hook_entity_bundle_info_alter().
  */
 function custom_page_entity_bundle_info_alter(array &$bundles) {
