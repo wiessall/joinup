@@ -1,0 +1,13 @@
+diff --git a/src/Form/EditorFileDialog.php b/src/Form/EditorFileDialog.php
+index d470c41..616daf9 100644
+--- a/src/Form/EditorFileDialog.php
++++ b/src/Form/EditorFileDialog.php
+@@ -165,7 +165,7 @@ class EditorFileDialog extends FormBase implements BaseFormIdInterface {
+     $form['attributes']['href'] = [
+       '#title' => $this->t('URL'),
+       '#type' => 'textfield',
+-      '#default_value' => $file_element['href'] ?: '',
++      '#default_value' => $file_element['href'] ?? '',
+       '#maxlength' => 2048,
+       '#required' => TRUE,
+     ];
