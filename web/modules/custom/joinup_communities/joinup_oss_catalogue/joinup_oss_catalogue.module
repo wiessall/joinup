@@ -100,14 +100,18 @@ function joinup_oss_catalogue_rdf_entity_view(array &$build, EntityInterface $en
 function joinup_oss_catalogue_block_access(BlockInterface $block, string $operation, AccountInterface $account) {
   if (
     $operation === 'view' &&
-    $block->id() === 'ventuno_three_dots_menu' &&
-    $account->isAnonymous()
+    $block->id() === 'ventuno_three_dots_menu'
   ) {
-
     $group = \Drupal::service('joinup_group.group_manager')
       ->getGroupFromContext();
-    if ($group && $group->id() === OssCatalogueCollectionInterface::COLLECTION_ENTITY_ID) {
-      return AccessResult::forbidden();
+    if (
+      $group &&
+      $group->id() === OssCatalogueCollectionInterface::COLLECTION_ENTITY_ID
+    ) {
+      /** @var \Drupal\joinup_workflow\WorkflowHelperInterface $workflow_helper */
+      $workflow_helper = \Drupal::service('joinup_workflow.workflow_helper');
+      $allowed_transitions = $workflow_helper->getAvailableTransitions($group, $account);
+      return AccessResult::forbiddenIf(empty($allowed_transitions))->cachePerPermissions()->cachePerUser();
     }
   }
 }
