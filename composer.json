@@ -275,7 +275,8 @@
                 "Allow multi-property references. @see https://github.com/jhedstrom/DrupalDriver/pull/252": "resources/patch/php/drupal/drupal-driver/252.diff"
             },
             "drupal/editor_file": {
-                "Uploaded files are not permanent @see https://www.drupal.org/i/3057895": "resources/patch/php/drupal/editor_file/3057895.patch"
+                "Uploaded files are not permanent @see https://www.drupal.org/i/3057895": "resources/patch/php/drupal/editor_file/3057895.patch",
+                "\"Notice: Undefined index: href\" after upgrade from 1.6 to 1.7 @see https://www.drupal.org/i/3335018": "resources/patch/php/drupal/editor_file/editor_file-undefined-index-3335018-2.patch"
             },
             "drupal/email_confirmer": {
                 "Support for HTML mails @see https://www.drupal.org/i/3047124": "resources/patch/php/drupal/email_confirmer/3047124.diff"
