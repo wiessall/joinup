@@ -154,7 +154,9 @@ function ventuno_theme_suggestions_input_alter(array &$suggestions, array $varia
  * Implements hook_theme_suggestions_HOOK_alter().
  */
 function ventuno_theme_suggestions_select_alter(array &$suggestions, array $variables): void {
-  $suggestions[] = 'select__' . $variables['element']['#name'];
+  if (isset($variables['element']['#name'])) {
+    $suggestions[] = 'select__' . $variables['element']['#name'];
+  }
 }
 
 /**
@@ -193,11 +195,12 @@ function ventuno_preprocess_input__submit(array &$variables): void {
  * Implements hook_preprocess_select().
  */
 function ventuno_preprocess_select(array &$variables): void {
-  $field_name = $variables['element']['#name'];
-  switch ($field_name) {
-    case 'field_topic':
-    case 'field_is_solution_type':
-      $variables['attributes']['class'][] = 'h-50vh';
-      break;
+  if (isset($variables['element']['#name'])) {
+    switch ($variables['element']['#name']) {
+      case 'field_topic':
+      case 'field_is_solution_type':
+        $variables['attributes']['class'][] = 'h-50vh';
+        break;
+    }
   }
 }
