@@ -8,7 +8,6 @@ use Drupal\Core\Database\Database;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\KernelTests\KernelTestBase;
 use Drupal\Tests\node\Traits\ContentTypeCreationTrait;
-use Drupal\Tests\user\Traits\UserCreationTrait;
 
 /**
  * Tests the joinup_debug content update dblog entries.
@@ -19,7 +18,6 @@ class DbLogTest extends KernelTestBase {
     createContentType as drupalCreateContentType;
   }
   use StringTranslationTrait;
-  use UserCreationTrait;
 
   /**
    * Modules to enable.
@@ -71,11 +69,8 @@ class DbLogTest extends KernelTestBase {
     $node_storage = $this->entityTypeManager->getStorage('node');
     $watchdog_query = "SELECT COUNT(wid) FROM {watchdog} WHERE type = 'joinup_debug'";
 
-    $creator = $this->createUser();
-
     /** @var \Drupal\node\NodeInterface $node */
     $node = $node_storage->create([
-      'uid' => $creator->id(),
       'title' => $this->randomString(),
       'type' => 'page',
     ]);
