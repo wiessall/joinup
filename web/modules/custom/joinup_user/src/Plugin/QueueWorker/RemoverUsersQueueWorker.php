@@ -10,6 +10,7 @@ use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Queue\QueueWorkerBase;
 use Drupal\user\UserInterface;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -43,13 +44,16 @@ class RemoverUsersQueueWorker extends QueueWorkerBase implements ContainerFactor
    *   The entity type manager.
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $moduleHandler
    *   Module handler.
+   * @param \Psr\Log\LoggerInterface $logger
+   *   A logger instance.
    */
   public function __construct(
     array $configuration,
     $pluginId,
     $pluginDefinition,
     protected EntityTypeManagerInterface $entityTypeManager,
-    protected ModuleHandlerInterface $moduleHandler
+    protected ModuleHandlerInterface $moduleHandler,
+    protected LoggerInterface $logger,
   ) {
     parent::__construct($configuration, $pluginId, $pluginDefinition);
 
@@ -65,7 +69,8 @@ class RemoverUsersQueueWorker extends QueueWorkerBase implements ContainerFactor
       $plugin_id,
       $plugin_definition,
       $container->get('entity_type.manager'),
-      $container->get('module_handler')
+      $container->get('module_handler'),
+      $container->get('logger.factory')->get('user'),
     );
   }
 
@@ -113,6 +118,10 @@ class RemoverUsersQueueWorker extends QueueWorkerBase implements ContainerFactor
 
     // Delete account.
     $user->delete();
+    $this->logger->notice(
+      'Deleted user: %id %name',
+      ['%id' => $user->id(), '%name' => $user->getAccountName()]
+    );
   }
 
 }
