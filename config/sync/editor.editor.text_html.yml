@@ -36,6 +36,13 @@ settings:
             - BulletedList
             - NumberedList
         -
+          name: Justify
+          items:
+            - JustifyLeft
+            - JustifyCenter
+            - JustifyRight
+            - JustifyBlock
+        -
           name: Media
           items:
             - contactus
