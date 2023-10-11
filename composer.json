@@ -279,7 +279,8 @@
                 "Layout builder doesn't support bundle computed field @see https://drupal.org/i/3034979": "resources/patch/php/drupal/core/layoutbuilder-bundlecomputedfieldsfix-3034979-3-8.6x.patch",
                 "Cannot implement a custom user cancellation method @see https://www.drupal.org/project/drupal/issues/3135592": "resources/patch/php/drupal/core/3135592.patch",
                 "If you don't set the \"version\" of a profile, the report/status displays an empty dash @see https://www.drupal.org/project/drupal/issues/3270892": "resources/patch/php/drupal/core/3270892.patch",
-                "hook_requirements_alter() is not invoked on update @see https://www.drupal.org/project/drupal/issues/3324995": "resources/patch/php/drupal/core/3324995.diff"
+                "hook_requirements_alter() is not invoked on update @see https://www.drupal.org/project/drupal/issues/3324995": "resources/patch/php/drupal/core/3324995.diff",
+                "ExceptionLoggingSubscriber should not log HTTP 4XX errors using PHP logger channel @see https://www.drupal.org/i/2828706": "resources/patch/php/drupal/core/2828706.patch"
             },
             "drupal/default_content": {
                 "Allow manual imports @see https://www.drupal.org/i/2640734": "resources/patch/php/drupal/default_content/2640734.diff"

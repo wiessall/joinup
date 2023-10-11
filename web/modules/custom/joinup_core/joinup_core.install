@@ -102,9 +102,21 @@ function joinup_core_update_109800(): void {
 }
 
 /**
- * Pre-creates oss_category, oss_licence and intended_audience_scope vocabs.
+ * Remove the tallinn module dependency from the moderator role.
  */
 function joinup_core_update_109801(): void {
+  $config_factory = \Drupal::configFactory();
+  $config = $config_factory->getEditable('user.role.moderator');
+  $dependencies = $config->get('dependencies');
+  $dependencies['module'] = array_diff($dependencies['module'], ['tallinn']);
+  $config->set('dependencies', $dependencies);
+  $config->save(TRUE);
+}
+
+/**
+ * Pre-creates oss_category, oss_licence and intended_audience_scope vocabs.
+ */
+function joinup_core_update_109802(): void {
   // Pre-create the new controlled vocabularies provided by eu_oss_catalogue
   // module. Normally, these are imported as config but eu_oss_catalogue install
   // goes first and its install process is also populating them with terms, so
