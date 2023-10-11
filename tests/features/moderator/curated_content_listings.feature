@@ -113,6 +113,9 @@ Feature: Curated content listings
     And I click the contextual link "Feature" in the "Licrogravity" tile
     Then the "Licrogravity" tile should be marked as featured
 
+    Then I visit the search page
+    And the "Licrogravity" tile should be marked as featured
+
   @loggedErrors @javascript @terms
   Scenario: Regression test for ISAICP-8152
   See https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-8152
