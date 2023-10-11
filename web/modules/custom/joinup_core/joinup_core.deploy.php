@@ -50,9 +50,31 @@ SPARQL;
 }
 
 /**
+ * Fix the contact information integer values (UID).
+ */
+function joinup_core_deploy_109801(): string {
+  $database = \Drupal::getContainer()->get('sparql.endpoint');
+  $update_query = <<<SPARQL
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+WITH <http://joinup.eu/contact-information/published>
+DELETE { ?s <http://joinup.eu/owner/uid> ?o }
+INSERT { ?s <http://joinup.eu/owner/uid> ?int }
+WHERE {
+  ?s <http://joinup.eu/owner/uid> ?o .
+  FILTER ( datatype(?o) = <integer> ) .
+  BIND (xsd:integer(?o) as ?int) .
+}
+SPARQL;
+
+  $database->query($update_query);
+
+  return 'Changed the UID of all RDF entities from string to integer.';
+}
+
+/**
  * Migrate Video content into new Media field.
  */
-function joinup_core_deploy_109801(array &$sandbox): string {
+function joinup_core_deploy_109802(array &$sandbox): string {
   $entity_type_manager = \Drupal::entityTypeManager();
   $node_storage = $entity_type_manager->getStorage('node');
   $db = \Drupal::database();
@@ -92,7 +114,7 @@ function joinup_core_deploy_109801(array &$sandbox): string {
 /**
  * Migrate videos and images embed markup into media.
  */
-function joinup_core_deploy_109802(array &$sandbox): string {
+function joinup_core_deploy_109803(array &$sandbox): string {
   $sparql = \Drupal::getContainer()->get('sparql.endpoint');
   $db = \Drupal::database();
   $queue = \Drupal::queue('joinup_media_migrate');

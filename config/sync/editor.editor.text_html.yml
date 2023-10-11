@@ -19,9 +19,17 @@ settings:
       - bulletedList
       - numberedList
       - '|'
+      - alignment
+      - '|'
       - contactus
       - sourceEditing
   plugins:
+    ckeditor5_alignment:
+      enabled_alignments:
+        - center
+        - justify
+        - left
+        - right
     ckeditor5_list:
       reversed: false
       startIndex: false
