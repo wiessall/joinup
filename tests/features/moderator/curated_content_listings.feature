@@ -128,7 +128,8 @@ Feature: Curated content listings
       | Cardio atrophy | Spacex in space | Finance in EU, Supplier exchange, E-health | published |
 
     Given I am logged in as a "moderator"
-    When I visit "/admin/structure/entityqueue/highlighted_content/highlighted_content"
+    When there are no preexisting log records on the site
+    And I visit "/admin/structure/entityqueue/highlighted_content/highlighted_content"
     And I fill in "edit-items-add-more-new-item-target-id" with "Cardio atrophy"
     And I press "Add item"
     And I press "Save"
