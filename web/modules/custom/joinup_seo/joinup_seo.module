@@ -8,7 +8,9 @@
 declare(strict_types = 1);
 
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\image\Plugin\Field\FieldWidget\ImageWidget;
+use Drupal\joinup_seo\JoinupSeoExportHelperInterface;
 
 /**
  * Implements hook_simple_sitemap_sitemap_types_alter().
@@ -73,8 +75,8 @@ function joinup_seo_metatags_alter(array &$metatags, array &$context) {
  * Implements hook_page_attachments().
  */
 function joinup_seo_page_attachments(array &$attachments) {
-  /** @var \Drupal\Core\Routing\RouteMatchInterface $route_match */
   $route_match = \Drupal::service('current_route_match');
+  assert($route_match instanceof RouteMatchInterface);
   if ($route_match->getRouteName() !== 'entity.rdf_entity.canonical') {
     return;
   }
@@ -83,9 +85,25 @@ function joinup_seo_page_attachments(array &$attachments) {
     return;
   }
 
-  /** @var \Drupal\joinup_seo\JoinupSeoExportHelperInterface $serializer */
   $serializer = \Drupal::service('joinup_seo.export_helper');
-  if (!$output = $serializer->exportRdfEntityMetadata($entity)) {
+  assert($serializer instanceof JoinupSeoExportHelperInterface);
+  $output = NULL;
+  try {
+    $output = $serializer->exportRdfEntityMetadata($entity);
+  }
+  catch (\Exception $exception) {
+    \Drupal::logger('joinup_seo')->error(
+      "The RDF entity '@entity-label' (id: ':entity-id') cannot be serialized to JsonLD object. @exception-message",
+      [
+        '@entity-label' => $entity->label(),
+        ':entity-id' => $entity->id(),
+        '@exception-message' => $exception->getMessage(),
+        '@backtrace' => $exception->getTraceAsString(),
+      ],
+    );
+  }
+
+  if (!$output) {
     return;
   }
 
