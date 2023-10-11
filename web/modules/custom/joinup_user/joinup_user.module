@@ -698,7 +698,7 @@ function joinup_user_entity_presave(EntityInterface $entity): void {
     return;
   }
 
-  // Prevent changes to update date in case content is reassigned to anonymous user.
+  // Prevent changes to update date in case content is reassigned to anonymous.
   if (isset($entity->joinupUserCancelReassign)) {
     $entity->setChangedTime($entity->original->getChangedTime());
   }
