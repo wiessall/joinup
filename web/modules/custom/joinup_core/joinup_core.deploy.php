@@ -46,3 +46,25 @@ SPARQL;
 
   return 'Changed the state name of all RDF entities from "validated" to "published".';
 }
+
+/**
+ * Fix the contact information integer values (UID).
+ */
+function joinup_core_deploy_109801(): string {
+  $database = \Drupal::getContainer()->get('sparql.endpoint');
+  $update_query = <<<SPARQL
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+WITH <http://joinup.eu/contact-information/published>
+DELETE { ?s <http://joinup.eu/owner/uid> ?o }
+INSERT { ?s <http://joinup.eu/owner/uid> ?int }
+WHERE {
+  ?s <http://joinup.eu/owner/uid> ?o .
+  FILTER ( datatype(?o) = <integer> ) .
+  BIND (xsd:integer(?o) as ?int) .
+}
+SPARQL;
+
+  $database->query($update_query);
+
+  return 'Changed the UID of all RDF entities from string to integer.';
+}
