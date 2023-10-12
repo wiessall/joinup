@@ -1,0 +1,33 @@
+<?php
+
+/**
+ * @file
+ * Hook implementations for the Joinup Tiles module.
+ */
+
+declare(strict_types = 1);
+
+/**
+ * Implements hook_theme().
+ */
+function joinup_tiles_theme(array $existing, string $type, string $theme, string $path): array {
+  return [
+    'joinup_tiles' => [
+      'path' => \Drupal::service('extension.list.module')->getPath('joinup_tiles') . '/templates',
+    ],
+  ];
+}
+
+/**
+ * Prepares variables for views joinup_tiles template.
+ *
+ * Template: joinup-tiles.html.twig.
+ *
+ * @param array $variables
+ *   An associative array containing:
+ *   - view: The view object.
+ *   - rows: An array of row items. Each row is an array of content.
+ */
+function template_preprocess_joinup_tiles(array &$variables): void {
+  template_preprocess_views_view_unformatted($variables);
+}

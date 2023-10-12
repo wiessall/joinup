@@ -111,3 +111,10 @@ function joinup_core_update_109802(): void {
   $config->set('dependencies', $dependencies);
   $config->save(TRUE);
 }
+
+/**
+ * Enable Joinup Tiles before config import to prevent errors.
+ */
+function joinup_core_update_109803(): void {
+  \Drupal::service('module_installer')->install(['joinup_tiles']);
+}
