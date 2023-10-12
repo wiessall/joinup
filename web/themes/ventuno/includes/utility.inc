@@ -135,7 +135,7 @@ function _ventuno_preprocess_tile(array &$variables, string $entity_type_id): vo
 
     case 'oss_solution':
       unset($variables['info']);
-      $variables['badges'] = _ventuno_terms_to_badges($entity->getCategories(), t('categories'));
+      $variables['badges'] = _ventuno_terms_to_badges($entity->getCategories(), t('categories'), 1);
       // Logo URL is invalid, lets use default image provided by theme.
       if (!isset($variables['image']['0'])) {
         unset($variables['image']);
