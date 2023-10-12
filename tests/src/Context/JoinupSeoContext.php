@@ -133,7 +133,7 @@ class JoinupSeoContext extends RawDrupalContext {
    * @Given :count metatag graph of type :type should exist in the page
    */
   public function assertNumberOfEntityGraphsExist(int $count, string $type): void {
-    $json = $this->getMetatagsAsJson();
+    $json = (array) $this->getMetatagsAsJson();
     $found = 0;
     foreach ($json['@graph'] as $graph) {
       $graph = (array) $graph;
@@ -260,7 +260,7 @@ class JoinupSeoContext extends RawDrupalContext {
   protected function getMetatagsAsJson(): ?array {
     $page = $this->getSession()->getPage();
     if ($script = $page->find('xpath', '//script[@type="application/ld+json"]')) {
-      $json = $script->getText();
+      $json = $script->getText() ?: $script->getHtml();
       return json_decode($json, TRUE);
     }
 
