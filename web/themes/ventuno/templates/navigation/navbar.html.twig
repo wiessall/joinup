@@ -120,7 +120,6 @@
 
                     {% if link.children%}
                       {% set attributes = attributes.setAttribute('aria-expanded', 'false') %}
-                      {% set attributes = attributes.setAttribute('data-bs-toggle', 'dropdown') %}
                       {% set attributes = attributes.setAttribute('id', link_key) %}
                       {% set attributes = attributes.setAttribute('role', 'button') %}
                     {% endif %}
