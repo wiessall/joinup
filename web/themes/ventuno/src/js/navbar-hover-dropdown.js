@@ -11,7 +11,7 @@
        * because the fist link level needs to be clickable too.
        *
        * @param {HTMLElement} li
-       *   list element.
+       *   List element.
        * @param expand
        *   True if we want to expand.
        */
