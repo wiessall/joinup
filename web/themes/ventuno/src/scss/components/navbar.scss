@@ -34,6 +34,15 @@
     justify-content: flex-end;
     width: 100%;
     align-items: center;
+    .dropdown-menu {
+      &--sub {
+        border: 0;
+        box-shadow: none;
+        padding: 0.5rem 0 0 1rem;
+        position: static;
+        white-space: normal;
+      }
+    }
   }
   .nav-item {
     list-style: none;
