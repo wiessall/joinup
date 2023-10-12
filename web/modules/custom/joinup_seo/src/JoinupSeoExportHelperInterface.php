@@ -18,7 +18,10 @@ interface JoinupSeoExportHelperInterface {
    *   The RDF entity to export.
    *
    * @return string
-   *   The exported string;
+   *   The exported string.
+   *
+   * @throws \ML\JsonLD\Exception\JsonLdException
+   *   If the entity cannot be serialized.
    */
   public function exportRdfEntityMetadata(RdfInterface $entity): string;
 
