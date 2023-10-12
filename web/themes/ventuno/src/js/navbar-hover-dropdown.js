@@ -36,7 +36,7 @@
         }
       }
 
-      once('navbar-hover-dropdown', '#main-navbar .nav-item.d-lg-inline-block.dropdown')
+      once('navbar-hover-dropdown', '#main-navbar .nav-item.d-xl-inline-block.dropdown')
           .forEach(function (li) {
             li.addEventListener('mouseover', () => {
               toggleDropdown(li, true);
