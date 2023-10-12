@@ -1,9 +1,10 @@
 /**
- * Navbar hover dropdown.
+ * @file
+ * Navbar hover dropdown for large devices.
  */
-(function (Drupal, once) {
+((Drupal, once) => {
   Drupal.behaviors.navbar_hover_dropdown = {
-    attach: function () {
+    attach() {
       /**
        * It toggles dropdown on hover.
        *
@@ -12,39 +13,40 @@
        *
        * @param {HTMLElement} li
        *   List element.
-       * @param expand
+       * @param {boolean} expand
        *   True if we want to expand.
        */
       function toggleDropdown(li, expand) {
-        let className = 'show';
-        let a = li.querySelector('a.dropdown-toggle');
-        let list = li.querySelector('ul.dropdown-menu');
+        const className = "show";
+        const a = li.querySelector("a.dropdown-toggle");
+        const list = li.querySelector("ul.dropdown-menu");
 
         if (expand) {
           a.classList.add(className);
           list.classList.add(className);
 
-          a.setAttribute('aria-expanded', 'true');
-          list.setAttribute('data-bs-popper', 'static');
-        }
-        else {
+          a.setAttribute("aria-expanded", "true");
+          list.setAttribute("data-bs-popper", "static");
+        } else {
           a.classList.remove(className);
           list.classList.remove(className);
 
-          a.setAttribute('aria-expanded', 'false');
-          list.removeAttribute('data-bs-popper');
+          a.setAttribute("aria-expanded", "false");
+          list.removeAttribute("data-bs-popper");
         }
       }
 
-      once('navbar-hover-dropdown', '#main-navbar .nav-item.d-xl-inline-block.dropdown')
-          .forEach(function (li) {
-            li.addEventListener('mouseover', () => {
-              toggleDropdown(li, true);
-            });
-            li.addEventListener("mouseleave", () => {
-              toggleDropdown(li, false);
-            });
-          })
-    }
+      once(
+        "navbar-hover-dropdown",
+        "#main-navbar .nav-item.d-xl-inline-block.dropdown"
+      ).forEach((li) => {
+        li.addEventListener("mouseover", () => {
+          toggleDropdown(li, true);
+        });
+        li.addEventListener("mouseleave", () => {
+          toggleDropdown(li, false);
+        });
+      });
+    },
   };
 })(Drupal, once);

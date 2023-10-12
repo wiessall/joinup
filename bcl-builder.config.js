@@ -33,8 +33,14 @@ module.exports = {
       },
     },
     {
-      entry: path.resolve(outputFolder, `${ventuno}src/js/navbar-hover-dropdown.js`),
-      dest: path.resolve(outputFolder, `${ventuno}assets/js/navbar-hover-dropdown.js`),
+      entry: path.resolve(
+        outputFolder,
+        `${ventuno}src/js/navbar-hover-dropdown.js`
+      ),
+      dest: path.resolve(
+        outputFolder,
+        `${ventuno}assets/js/navbar-hover-dropdown.js`
+      ),
       options: {
         minify: true,
         sourceMap: true,
