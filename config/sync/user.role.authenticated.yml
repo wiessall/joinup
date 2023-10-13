@@ -67,6 +67,7 @@ permissions:
   - 'create paragraph content quote'
   - 'create paragraph content testimony'
   - 'create paragraph content text'
+  - 'create paragraph content tiles'
   - 'create paragraph content video'
   - 'create polls'
   - 'delete own comments'

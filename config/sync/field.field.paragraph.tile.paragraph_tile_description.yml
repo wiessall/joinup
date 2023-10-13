@@ -1,0 +1,19 @@
+uuid: 5d79c229-5c79-45ab-a4ab-52826cd60c4a
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.paragraph_tile_description
+    - paragraphs.paragraphs_type.tile
+id: paragraph.tile.paragraph_tile_description
+field_name: paragraph_tile_description
+entity_type: paragraph
+bundle: tile
+label: Description
+description: ''
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string_long
