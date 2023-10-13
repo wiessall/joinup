@@ -275,13 +275,17 @@
                 "Allow multi-property references. @see https://github.com/jhedstrom/DrupalDriver/pull/252": "resources/patch/php/drupal/drupal-driver/252.diff"
             },
             "drupal/editor_file": {
-                "Uploaded files are not permanent @see https://www.drupal.org/i/3057895": "resources/patch/php/drupal/editor_file/3057895.patch"
+                "Uploaded files are not permanent @see https://www.drupal.org/i/3057895": "resources/patch/php/drupal/editor_file/3057895.patch",
+                "\"Notice: Undefined index: href\" after upgrade from 1.6 to 1.7 @see https://www.drupal.org/i/3335018": "resources/patch/php/drupal/editor_file/editor_file-undefined-index-3335018-2.patch"
             },
             "drupal/email_confirmer": {
                 "Support for HTML mails @see https://www.drupal.org/i/3047124": "resources/patch/php/drupal/email_confirmer/3047124.diff"
             },
             "drupal/email_contact": {
                 "Move form creation in a protected method from ContactController::content() to ContactController::getForm() @see https://www.drupal.org/project/email_contact/issues/3346470": "resources/patch/php/drupal/email_contact/3346470.patch"
+            },
+            "drupal/entityqueue": {
+                "Undefined array key \"add_more\" @see https://www.drupal.org/project/entityqueue/issues/3388852": "resources/patch/php/drupal/entityqueue/3388852.diff"
             },
             "drupal/entity_legal": {
                 "Custom agree validation error message and submit button label @see https://www.drupal.org/project/entity_legal/issues/3293017": "resources/patch/php/drupal/entity_legal/3293017.patch"
