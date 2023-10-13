@@ -87,7 +87,7 @@ function joinup_core_deploy_109802(): string {
   $queue->createQueue();
 
   while (!empty($usersIds)) {
-    $ids = array_splice($usersIds, 0, 30);
+    $ids = array_splice($usersIds, 0, 10);
     $queue->createItem($ids);
   }
 
