@@ -10,6 +10,7 @@ declare(strict_types = 1);
 use Drupal\Component\Render\PlainTextOutput;
 use Drupal\Component\Utility\Unicode;
 use Drupal\Component\Utility\Xss;
+use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Render\Element;
@@ -20,7 +21,6 @@ use Drupal\joinup_notification\MessageArgumentGenerator;
 use Drupal\joinup_user\Entity\JoinupUser;
 use Drupal\joinup_user\Entity\JoinupUserInterface;
 use Drupal\joinup_user\JoinupUserViewsData;
-use Drupal\node\NodeInterface;
 use Drupal\og\Og;
 use Drupal\og\OgMembershipInterface;
 use Drupal\search_api\Query\QueryInterface;
@@ -693,8 +693,8 @@ function joinup_user_form_views_form_user_admin_people_page_alter(array &$form, 
  * Implements hook_entity_presave().
  */
 function joinup_user_entity_presave(EntityInterface $entity): void {
-  if ($entity->isNew() || !$entity instanceof NodeInterface ||
-    empty($entity->original) || !$entity->original instanceof NodeInterface) {
+  if ($entity->isNew() || !$entity instanceof ContentEntityInterface ||
+    empty($entity->original) || !$entity->original instanceof ContentEntityInterface) {
     return;
   }
 

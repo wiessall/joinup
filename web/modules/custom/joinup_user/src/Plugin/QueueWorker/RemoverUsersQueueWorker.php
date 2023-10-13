@@ -120,6 +120,7 @@ class RemoverUsersQueueWorker extends QueueWorkerBase implements ContainerFactor
     $comments = $this->commentStorage->loadByProperties(['uid' => $user->id()]);
     foreach ($comments as $comment) {
       $comment->original = clone $comment;
+      $comment->joinupUserCancelReassign = TRUE;
       $comment->skip_notification = TRUE;
       foreach (array_keys($comment->getTranslationLanguages()) as $langcode) {
         $commentTranslated = $comment->getTranslation($langcode);
