@@ -12,7 +12,7 @@ id: paragraph.tiles.paragraph_tiles_item
 field_name: paragraph_tiles_item
 entity_type: paragraph
 bundle: tiles
-label: Tile
+label: Tiles
 description: ''
 required: true
 translatable: false
