@@ -1,0 +1,10 @@
+uuid: cd6f9d88-106e-46ec-a592-ed954e763155
+langcode: en
+status: true
+dependencies: {  }
+id: tile
+label: Tile/Card
+icon_uuid: null
+icon_default: null
+description: ''
+behavior_plugins: {  }
