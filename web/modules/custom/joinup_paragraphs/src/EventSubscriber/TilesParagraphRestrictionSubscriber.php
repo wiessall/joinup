@@ -4,8 +4,8 @@ declare(strict_types = 1);
 
 namespace Drupal\joinup_paragraphs\EventSubscriber;
 
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Drupal\layout_paragraphs\Event\LayoutParagraphsAllowedTypesEvent;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
  * Tiles paragraph restriction subscriber.
@@ -40,7 +40,7 @@ class TilesParagraphRestrictionSubscriber implements EventSubscriberInterface {
    * Checks if we have a selected layout.
    *
    * @param \Drupal\layout_paragraphs\Event\LayoutParagraphsAllowedTypesEvent $event
-   * The allowed type event.
+   *   The allowed type event.
    * @param string $layoutName
    *   Layout name.
    *
