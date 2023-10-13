@@ -4,6 +4,7 @@ declare(strict_types = 1);
 
 namespace Drupal\joinup_user\Plugin\QueueWorker;
 
+use Drupal\Core\Config\ImmutableConfig;
 use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
@@ -32,6 +33,13 @@ class RemoverUsersQueueWorker extends QueueWorkerBase implements ContainerFactor
   protected EntityStorageInterface $nodeStorage;
 
   /**
+   * The comment storage class.
+   *
+   * @var \Drupal\Core\Entity\EntityStorageInterface
+   */
+  protected EntityStorageInterface $commentStorage;
+
+  /**
    * Constructs a new plugin instance.
    *
    * @param array $configuration
@@ -46,6 +54,8 @@ class RemoverUsersQueueWorker extends QueueWorkerBase implements ContainerFactor
    *   Module handler.
    * @param \Psr\Log\LoggerInterface $logger
    *   A logger instance.
+   * @param \Drupal\Core\Config\ImmutableConfig $userSettings
+   *   User setting.
    */
   public function __construct(
     array $configuration,
@@ -54,10 +64,12 @@ class RemoverUsersQueueWorker extends QueueWorkerBase implements ContainerFactor
     protected EntityTypeManagerInterface $entityTypeManager,
     protected ModuleHandlerInterface $moduleHandler,
     protected LoggerInterface $logger,
+    protected ImmutableConfig $userSettings,
   ) {
     parent::__construct($configuration, $pluginId, $pluginDefinition);
 
     $this->nodeStorage = $this->entityTypeManager->getStorage('node');
+    $this->commentStorage = $this->entityTypeManager->getStorage('comment');
   }
 
   /**
@@ -71,6 +83,7 @@ class RemoverUsersQueueWorker extends QueueWorkerBase implements ContainerFactor
       $container->get('entity_type.manager'),
       $container->get('module_handler'),
       $container->get('logger.factory')->get('user'),
+      $container->get('config.factory')->get('user.settings'),
     );
   }
 
@@ -100,15 +113,28 @@ class RemoverUsersQueueWorker extends QueueWorkerBase implements ContainerFactor
    */
   protected function processCancellation(UserInterface $user): void {
     // Replicate 'user_cancel_reassign' process.
-    comment_user_cancel([], $user, 'user_cancel_reassign');
     flag_user_cancel([], $user, 'user_cancel_reassign');
     joinup_invite_user_cancel([], $user, 'user_cancel_reassign');
+
+    // Anonymize comments.
+    $comments = $this->commentStorage->loadByProperties(['uid' => $user->id()]);
+    foreach ($comments as $comment) {
+      $comment->original = clone $comment;
+      $comment->skip_notification = TRUE;
+      foreach (array_keys($comment->getTranslationLanguages()) as $langcode) {
+        $commentTranslated = $comment->getTranslation($langcode);
+        $commentTranslated->setOwnerId(0);
+        $commentTranslated->setAuthorName($this->userSettings->get('anonymous'));
+      }
+      $comment->save();
+    }
 
     // Anonymize nodes for this old account.
     $nodeRevisions = $this->nodeStorage->userRevisionIds($user);
     foreach ($nodeRevisions as $vid) {
       $node = $this->nodeStorage->loadRevision($vid);
       $node->joinupUserCancelReassign = TRUE;
+      $node->skip_notification = TRUE;
 
       _node_mass_update_helper(
         $node,
