@@ -186,9 +186,7 @@ class MoreInModalFormatter extends FormatterBase {
       '#attributes' => [
         'rel' => 'nofollow',
         'class' => ['joinup-modal', 'use-ajax'],
-        // If method set to get then we cannot control modal width. But posts
-        // requests aren't render-cached.
-        'data-ajax-http-method' => 'POST',
+        'data-ajax-http-method' => 'GET',
         'data-dialog-options' => Json::encode(['width' => 800]),
         'data-dialog-type' => 'modal',
         'data-joinup-modal' => TRUE,
