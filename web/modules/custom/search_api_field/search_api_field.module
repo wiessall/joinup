@@ -162,23 +162,23 @@ function search_api_field_entity_view(array &$build, EntityInterface $entity, En
  *
  * @param \Drupal\paragraphs\ParagraphInterface $paragraph
  *   The paragraph in question.
+ *
+ * @return int
+ *   The number of paragraphs with facets.
  */
-function _search_api_field_calculate_paragraphs_with_facets(ParagraphInterface $paragraph) {
+function _search_api_field_calculate_paragraphs_with_facets(ParagraphInterface $paragraph): int {
   while ($paragraph instanceof ParagraphInterface) {
     $paragraph = $paragraph->getParentEntity();
   }
 
   if (!$paragraph instanceof CustomPageInterface) {
-    // @todo Are we sure about this?
     return 0;
   }
 
   $number_of_paragraphs_with_facets = 0;
-  $custom_page_paragraphs = $paragraph->field_paragraphs_body->referencedEntities();
+  $custom_page_paragraphs = $paragraph->get('field_paragraphs_body')->referencedEntities();
   foreach ($custom_page_paragraphs as $custom_page_paragraph) {
     if ($custom_page_paragraph->bundle() !== 'content_listing') {
-      // Currently, only content listings show facets.
-      // @todo Do configurable listings show facets too?
       continue;
     }
     $settings = $custom_page_paragraph->content_listing->value;
