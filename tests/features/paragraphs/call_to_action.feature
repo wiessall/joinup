@@ -1,7 +1,7 @@
 @api @group-a
 Feature:
   As a site builder of the site
-  I need to be able to use "Call to action" paragraphs for content.
+  I need to be able to use "Call to action(s)" paragraphs for content.
 
   Background:
     Given the following collection:
@@ -9,7 +9,7 @@ Feature:
       | state | published             |
 
   @javascript
-  Scenario: Call to action has alignment setting.
+  Scenario: Call to action(s) has alignment setting.
     Given custom_page content:
       | title               | collection            | state     |
       | Call to action page | Paragraphs collection | published |
@@ -19,7 +19,7 @@ Feature:
     Then I am logged in as a moderator
     And I go to the edit form of the "Call to action page" "custom page"
     And I click "Choose component"
-    And I click "Call to action"
+    And I click "Call to action(s)"
     And I fill in "Action" with "https://european-union.europa.eu" in the "Modal content" region
     And I fill in "Link text" with "european-union.europa.eu" in the "Modal content" region
     And I press "Settings" in the "Modal content" region
