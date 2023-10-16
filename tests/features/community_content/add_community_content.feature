@@ -214,3 +214,26 @@ Feature: Add community content
     And I should not see the link "Outlook.com"
     And I should not see the link "Office.com"
     And I should not see the link "iCal / MS Outlook"
+
+  @javascript @terms @loggedErrors @api @uploadFiles:logo.png @debug
+  Scenario: Editor File dialog form does not trigger warning
+    Given the following collection:
+      | title | The editor tester collection |
+      | state | published                    |
+    And the site error reporting verbosity is "verbose"
+
+    When I am logged in as a "facilitator" of the "The editor tester collection" collection
+    And I go to the "The editor tester collection" collection
+    And I click "Add news" in the plus button menu
+    Then I should see the heading "Add news"
+    And I should see the "Content" wysiwyg editor
+
+    When there are no preexisting log records on the site
+    And the "File" button should be available in the "Content" wysiwyg editor
+    When I press the button "File" in the "Content" wysiwyg editor
+    Then a modal should open
+    And I attach the file "logo.png" to "File"
+    And I press "Save" in the "Modal buttons" region
+    Then the modal should be closed
+    And the site should not have log records with level lower than "notice"
+
