@@ -53,7 +53,17 @@ function joinup_core_theme(array $existing, string $type, string $theme, string 
         'rows' => [],
       ],
     ],
+    'field__in_modal' => [
+      'base hook' => 'field',
+    ],
   ];
+}
+
+/**
+ * Prepares variables for field templates displayed in modal.
+ */
+function template_preprocess_field__in_modal(&$variables, $hook) {
+  template_preprocess_field($variables, $hook);
 }
 
 /**
@@ -129,8 +139,12 @@ function joinup_core_node_links_alter(array &$links, NodeInterface $entity, arra
  */
 function joinup_core_field_formatter_info_alter(array &$info) {
   $info['link']['field_types'][] = 'report_link';
-  if (isset($info['joinup_core_item_count'])) {
-    $info['joinup_core_item_count']['field_types'] = array_keys(\Drupal::service('plugin.manager.field.field_type')->getDefinitions());
+  $allPluginIds = array_keys(\Drupal::service('plugin.manager.field.field_type')->getDefinitions());
+
+  foreach (['joinup_core_more_in_modal', 'joinup_core_item_count'] as $id) {
+    if (isset($info[$id])) {
+      $info[$id]['field_types'] = $allPluginIds;
+    }
   }
 }
 
