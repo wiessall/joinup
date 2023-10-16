@@ -13,7 +13,12 @@ declare(strict_types = 1);
 function joinup_tiles_theme(array $existing, string $type, string $theme, string $path): array {
   return [
     'joinup_tiles' => [
-      'path' => \Drupal::service('extension.list.module')->getPath('joinup_tiles') . '/templates',
+      'variables' => [
+        'default_row_class' => NULL,
+        'view' => NULL,
+        'rows' => [],
+        'title' => NULL,
+      ],
     ],
   ];
 }
