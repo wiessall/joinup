@@ -34,14 +34,21 @@ function ventuno_preprocess_paragraph(array &$variables): void {
  */
 function ventuno_preprocess_field__paragraph__call_to_action(array &$variables): void {
   $paragraph = $variables['element']['#object'];
-  if ($paragraph instanceof ParagraphInterface) {
-    $color = $paragraph->getBehaviorSetting('color', 'color', 'primary');
-    $variables['attributes']['class'][] = 'btn';
-    $variables['attributes']['class'][] = match ($color) {
-      'brand' => 'btn-brand',
-      'secondary' => 'btn-secondary',
-      default => 'btn-primary',
-    };
+  if (!$paragraph instanceof ParagraphInterface) {
+    return;
+  }
+
+  $color = $paragraph->getBehaviorSetting('color', 'color', 'primary');
+  $variables['attributes']['class'][] = 'btn';
+  $variables['attributes']['class'][] = match ($color) {
+    'brand' => 'btn-brand',
+    'secondary' => 'btn-secondary',
+    default => 'btn-primary',
+  };
+
+  $pill = $paragraph->getBehaviorSetting('pill', 'pill', FALSE);
+  if ($pill) {
+    $variables['attributes']['class'][] = 'rounded-pill';
   }
 }
 
@@ -68,7 +75,7 @@ function ventuno_preprocess_paragraph__accordion(array &$variables): void {
 /**
  * Implements hook_preprocess_HOOK().
  */
-function ventuno_preprocess_paragraph__configurable_listing(&$variables) {
+function ventuno_preprocess_paragraph__configurable_listing(&$variables): void {
   $paragraph = $variables['paragraph'];
 
   // For the configurable listing, the view mode is affected by the type of the
