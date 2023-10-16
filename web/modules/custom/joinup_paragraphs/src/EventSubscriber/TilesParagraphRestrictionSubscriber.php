@@ -22,7 +22,7 @@ class TilesParagraphRestrictionSubscriber implements EventSubscriberInterface {
   }
 
   /**
-   * Restricts usage of tiles in layout.
+   * Restricts usage of tiles by layout paragraph.
    *
    * @param \Drupal\layout_paragraphs\Event\LayoutParagraphsAllowedTypesEvent $event
    *   The allowed type event.
