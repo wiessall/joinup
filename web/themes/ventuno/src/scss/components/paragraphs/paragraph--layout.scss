@@ -6,7 +6,7 @@
   }
   padding-top: $spacer * 1.125; // 18px
   padding-bottom: $spacer * 1.125; // 18px
-  &:first-of-type:not(.paragraph--layout--light):not(.paragraph--layout--secondary):not(.lpb-layout) {
+  &:first-of-type:not(.paragraph--layout--light):not(.paragraph--layout--secondary):not(.lpb-layout):not(.banner) {
     padding-top: 0;
     @include media-breakpoint-up(lg) {
       padding-top: 0;
