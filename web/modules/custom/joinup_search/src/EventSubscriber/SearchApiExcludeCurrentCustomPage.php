@@ -4,7 +4,6 @@ declare(strict_types = 1);
 
 namespace Drupal\joinup_search\EventSubscriber;
 
-use Drupal\custom_page\Entity\CustomPageInterface;
 use Drupal\search_api\Event\QueryPreExecuteEvent;
 use Drupal\search_api\Event\SearchApiEvents;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -36,17 +35,13 @@ class SearchApiExcludeCurrentCustomPage implements EventSubscriberInterface {
     // page, ensure that the current page is excluded from the results to avoid
     // infinite recursion.
     if ($query->getSearchId() === 'paragraph.content_listing.content_listing') {
-      $parent_entity = $query->getOption('search_api_field entity');
-      while (!$parent_entity instanceof CustomPageInterface) {
-        $parent_entity = $parent_entity->getParentEntity();
-
-        if (is_null($parent_entity)) {
-          break;
-        }
+      $parentEntity = $query->getOption('search_api_field entity');
+      while ($parentEntity && method_exists($parentEntity, 'getParentEntity')) {
+        $parentEntity = $parentEntity->getParentEntity();
       }
 
-      if ($parent_entity) {
-        $query->addCondition('id', $parent_entity->id(), '<>');
+      if ($parentEntity) {
+        $query->addCondition('id', $parentEntity->id(), '<>');
       }
     }
   }
