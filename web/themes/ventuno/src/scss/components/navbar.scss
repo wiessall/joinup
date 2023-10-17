@@ -35,12 +35,22 @@
     width: 100%;
     align-items: center;
     .dropdown-menu {
-      &--sub {
-        border: 0;
-        box-shadow: none;
-        padding: 0.5rem 0 0 1rem;
-        position: static;
-        white-space: normal;
+      @include media-breakpoint-up(xl) {
+        &--sub {
+          a {
+            background-color: inherit;
+            color: var(--bs-dropdown-link-hover-color);
+          }
+        }
+      }
+      @include media-breakpoint-down(xl) {
+        &--sub {
+          border: 0;
+          box-shadow: none;
+          padding: 0.5rem 0 0 1rem;
+          position: static;
+          white-space: normal;
+        }
       }
     }
   }
