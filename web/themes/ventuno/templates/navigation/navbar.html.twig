@@ -126,7 +126,7 @@
 
                     {{ link(link.label, link.link, attributes.addClass(desktop_a_classes)) }}
                     {% if link.children %}
-                      <ul class="dropdown-menu" aria-labelledby="{{ link_key }}">
+                      <ul class="dropdown-menu dropdown-menu--sub" aria-labelledby="{{ link_key }}">
                         {% for child in link.children %}
                           <li>
                             <a href="{{ child.link }}" class="dropdown-item">
