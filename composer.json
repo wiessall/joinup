@@ -284,6 +284,9 @@
             "drupal/email_contact": {
                 "Move form creation in a protected method from ContactController::content() to ContactController::getForm() @see https://www.drupal.org/project/email_contact/issues/3346470": "resources/patch/php/drupal/email_contact/3346470.patch"
             },
+            "drupal/entityqueue": {
+                "Undefined array key \"add_more\" @see https://www.drupal.org/project/entityqueue/issues/3388852": "resources/patch/php/drupal/entityqueue/3388852.diff"
+            },
             "drupal/entity_legal": {
                 "Custom agree validation error message and submit button label @see https://www.drupal.org/project/entity_legal/issues/3293017": "resources/patch/php/drupal/entity_legal/3293017.patch"
             },
