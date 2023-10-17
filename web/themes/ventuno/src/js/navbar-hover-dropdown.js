@@ -18,20 +18,20 @@
        */
       function toggleDropdown(li, expand) {
         const className = "show";
-        const a = li.querySelector("a.dropdown-toggle");
+        const top = li.querySelector("a.dropdown-toggle, span.dropdown-toggle");
         const list = li.querySelector("ul.dropdown-menu");
 
         if (expand) {
-          a.classList.add(className);
-          list.classList.add(className);
+          top.classList.add(className);
+          top.setAttribute("aria-expanded", "true");
 
-          a.setAttribute("aria-expanded", "true");
+          list.classList.add(className);
           list.setAttribute("data-bs-popper", "static");
         } else {
-          a.classList.remove(className);
-          list.classList.remove(className);
+          top.classList.remove(className);
+          top.setAttribute("aria-expanded", "false");
 
-          a.setAttribute("aria-expanded", "false");
+          list.classList.remove(className);
           list.removeAttribute("data-bs-popper");
         }
       }
