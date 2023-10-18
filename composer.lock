@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "96c37c2a8fdd15ec842c05d751b1cdc4",
+    "content-hash": "efd14b10915200af8f1cd1fdb0396537",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -3695,6 +3695,10 @@
             ],
             "authors": [
                 {
+                    "name": "Anybody",
+                    "homepage": "https://www.drupal.org/user/291091"
+                },
+                {
                     "name": "Hydra",
                     "homepage": "https://www.drupal.org/user/647364"
                 },
@@ -6662,7 +6666,7 @@
             "extra": {
                 "drupal": {
                     "version": "4.3.0",
-                    "datestamp": "1695108471",
+                    "datestamp": "1696589367",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
