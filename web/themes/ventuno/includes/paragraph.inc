@@ -47,7 +47,7 @@ function ventuno_preprocess_field__paragraph__call_to_action(array &$variables):
   };
 
   $styles = $paragraph->getBehaviorSetting('styles', 'styles', []);
-  if ($styles['rounded']) {
+  if (isset($styles['rounded'])) {
     $variables['attributes']['class'][] = 'rounded-pill';
   }
 }
@@ -70,6 +70,14 @@ function ventuno_preprocess_paragraph__accordion(array &$variables): void {
   $variables['attributes']['class'][] = 'accordion';
   $variables['attributes']['class'][] = 'accordion' . $entity->id();
   $variables['attributes']['class'][] = 'mb-4';
+}
+
+/**
+ * Implements hook_preprocess_paragraph().
+ */
+function ventuno_preprocess_paragraph__call_to_action(array &$variables): void {
+  $variables['attributes']['class'][] = 'flex-wrap';
+  $variables['attributes']['class'][] = 'row-gap-3';
 }
 
 /**
