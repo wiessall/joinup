@@ -68,3 +68,28 @@ SPARQL;
 
   return 'Changed the UID of all RDF entities from string to integer.';
 }
+
+/**
+ * Remove the non-paired users.
+ */
+function joinup_core_deploy_109802(): string {
+  $database = \Drupal::database();
+  $query = $database->select('users', 'u')
+    ->fields('u', ['uid'])
+    ->condition('u.uid', 1, '>');
+  $query->leftJoin('authmap', 'a', 'u.uid = a.uid');
+  $query->condition('a.uid', NULL, 'IS NULL');
+
+  $usersIds = $query->execute()->fetchCol();
+  $toRemove = count($usersIds);
+
+  $queue = \Drupal::queue('joinup_removed_users');
+  $queue->createQueue();
+
+  while (!empty($usersIds)) {
+    $ids = array_splice($usersIds, 0, 10);
+    $queue->createItem($ids);
+  }
+
+  return 'Add ' . $toRemove . ' users to queue.';
+}
