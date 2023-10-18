@@ -37,12 +37,8 @@
     .dropdown-menu {
       @include media-breakpoint-up(xl) {
         &--sub {
-          a {
-            //color: var(--bs-dropdown-link-hover-color);
-            //&:focus{
-            //  background-color: var(--bs-dropdown-link-hover-bg);
-            //}
-          }
+          --bs-dropdown-link-hover-bg: var( --bs-gray-300);
+          padding: 0.5rem 0;
         }
       }
       @include media-breakpoint-down(xl) {
@@ -93,9 +89,6 @@
     &[data-bs-popper] {
       left: unset;
       right: 0;
-    }
-    &--sub {
-      padding: 0;
     }
   }
   .dropdown .dropdown-toggle {
