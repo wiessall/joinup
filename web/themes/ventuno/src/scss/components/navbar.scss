@@ -38,8 +38,10 @@
       @include media-breakpoint-up(xl) {
         &--sub {
           a {
-            background-color: inherit;
-            color: var(--bs-dropdown-link-hover-color);
+            //color: var(--bs-dropdown-link-hover-color);
+            //&:focus{
+            //  background-color: var(--bs-dropdown-link-hover-bg);
+            //}
           }
         }
       }
@@ -91,6 +93,9 @@
     &[data-bs-popper] {
       left: unset;
       right: 0;
+    }
+    &--sub {
+      padding: 0;
     }
   }
   .dropdown .dropdown-toggle {
