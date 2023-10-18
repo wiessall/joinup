@@ -21,6 +21,7 @@ function ventuno_preprocess_paragraph(array &$variables): void {
   if (isset($variables['elements']['#joinup_paragraph_alignment'])) {
     $variables['attributes']['class'][] = 'd-flex';
     $variables['attributes']['class'][] = 'col-gap-3';
+    $variables['attributes']['class'][] = 'row-gap-3';
     $variables['attributes']['class'][] = match ($variables['elements']['#joinup_paragraph_alignment']) {
       'center' => 'justify-content-center',
       'right' => 'justify-content-end',
@@ -77,7 +78,6 @@ function ventuno_preprocess_paragraph__accordion(array &$variables): void {
  */
 function ventuno_preprocess_paragraph__call_to_action(array &$variables): void {
   $variables['attributes']['class'][] = 'flex-wrap';
-  $variables['attributes']['class'][] = 'row-gap-3';
 }
 
 /**
