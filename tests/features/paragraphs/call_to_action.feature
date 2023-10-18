@@ -45,7 +45,7 @@ Feature:
     And I fill in "Action" with "https://european-union.europa.eu" in the "Modal content" region
     And I fill in "Link text" with "europa.eu" in the "Modal content" region
     And I press "Settings" in the "Modal content" region
-    And I check the box "Pill"
+    And I check the box "Rounded corner"
     And I press "Save" in the "Modal buttons" region
     And I press "Update"
     When the page should contain the html text '<a href="https://european-union.europa.eu" class="btn btn-primary rounded-pill">europa.eu</a>'
