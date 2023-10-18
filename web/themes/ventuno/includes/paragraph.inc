@@ -46,8 +46,8 @@ function ventuno_preprocess_field__paragraph__call_to_action(array &$variables):
     default => 'btn-primary',
   };
 
-  $pill = $paragraph->getBehaviorSetting('pill', 'pill', FALSE);
-  if ($pill) {
+  $styles = $paragraph->getBehaviorSetting('styles', 'styles', []);
+  if ($styles['rounded']) {
     $variables['attributes']['class'][] = 'rounded-pill';
   }
 }
