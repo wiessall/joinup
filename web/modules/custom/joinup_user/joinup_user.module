@@ -10,6 +10,8 @@ declare(strict_types = 1);
 use Drupal\Component\Render\PlainTextOutput;
 use Drupal\Component\Utility\Unicode;
 use Drupal\Component\Utility\Xss;
+use Drupal\Core\Entity\ContentEntityInterface;
+use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Render\Element;
 use Drupal\Core\Render\Markup;
@@ -684,6 +686,21 @@ function joinup_user_form_views_form_user_admin_people_page_alter(array &$form, 
       // Cancelled users cannot be deleted, not even from the admin UI.
       unset($form['user_bulk_form'][$delta]);
     }
+  }
+}
+
+/**
+ * Implements hook_entity_presave().
+ */
+function joinup_user_entity_presave(EntityInterface $entity): void {
+  if ($entity->isNew() || !$entity instanceof ContentEntityInterface ||
+    empty($entity->original) || !$entity->original instanceof ContentEntityInterface) {
+    return;
+  }
+
+  // Prevent changes to update date in case content is reassigned to anonymous.
+  if (isset($entity->joinupUserCancelReassign)) {
+    $entity->setChangedTime($entity->original->getChangedTime());
   }
 }
 
