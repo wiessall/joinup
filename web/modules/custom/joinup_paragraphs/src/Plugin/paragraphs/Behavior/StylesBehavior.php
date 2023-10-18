@@ -39,7 +39,7 @@ class StylesBehavior extends ParagraphsBehaviorBase {
   public function buildBehaviorForm(ParagraphInterface $paragraph, array &$form, FormStateInterface $form_state): void {
     $form['styles'] = [
       '#type' => 'checkboxes',
-      '#title' => $this->t('Styles'),
+      '#title' => $this->t('Additional styles'),
       '#options' => [
         'rounded' => $this->t('Rounded corners'),
       ],
