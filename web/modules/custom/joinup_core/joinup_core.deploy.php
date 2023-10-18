@@ -73,9 +73,34 @@ SPARQL;
 }
 
 /**
+ * Remove the non-paired users.
+ */
+function joinup_core_deploy_109802(): string {
+  $database = \Drupal::database();
+  $query = $database->select('users', 'u')
+    ->fields('u', ['uid'])
+    ->condition('u.uid', 1, '>');
+  $query->leftJoin('authmap', 'a', 'u.uid = a.uid');
+  $query->condition('a.uid', NULL, 'IS NULL');
+
+  $usersIds = $query->execute()->fetchCol();
+  $toRemove = count($usersIds);
+
+  $queue = \Drupal::queue('joinup_removed_users');
+  $queue->createQueue();
+
+  while (!empty($usersIds)) {
+    $ids = array_splice($usersIds, 0, 10);
+    $queue->createItem($ids);
+  }
+
+  return 'Add ' . $toRemove . ' users to queue.';
+}
+
+/**
  * Update path alias for EU OSS catalogue.
  */
-function joinup_core_deploy_109802(): void {
+function joinup_core_deploy_109803(): void {
   /** @var \Drupal\collection\Entity\CollectionInterface $collection */
   $collection = \Drupal::entityTypeManager()->getStorage('rdf_entity')
     ->load(OssCatalogueCollectionInterface::COLLECTION_ENTITY_ID);
@@ -89,7 +114,7 @@ function joinup_core_deploy_109802(): void {
 /**
  * Update title of EU OSS catalogue collection.
  */
-function joinup_core_deploy_109803(): void {
+function joinup_core_deploy_109804(): void {
   /** @var \Drupal\collection\Entity\CollectionInterface $collection */
   $collection = \Drupal::entityTypeManager()->getStorage('rdf_entity')
     ->load(OssCatalogueCollectionInterface::COLLECTION_ENTITY_ID);
@@ -102,7 +127,7 @@ function joinup_core_deploy_109803(): void {
 /**
  * Import content for EU OpenSource Software Solutions Catalogue.
  */
-function joinup_core_deploy_109804(): void {
+function joinup_core_deploy_109805(): void {
   /** @var \Drupal\Core\Extension\ModuleInstallerInterface $moduleInstaller */
   $moduleInstaller = \Drupal::service('module_installer');
   /** @var \Drupal\Core\Entity\EntityRepositoryInterface $entityRepository */
@@ -135,7 +160,7 @@ function joinup_core_deploy_109804(): void {
 /**
  * Rename menu items for EU OSS catalogue.
  */
-function joinup_core_deploy_109805(): void {
+function joinup_core_deploy_109806(): void {
   $entityTypeManager = \Drupal::entityTypeManager();
   /** @var  \Drupal\menu_link_content\MenuLinkContentStorageInterface $menuLinkContentStorage */
   $menuLinkContentStorage = $entityTypeManager->getStorage('menu_link_content');
