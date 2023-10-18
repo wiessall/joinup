@@ -14,34 +14,36 @@ use Drupal\paragraphs\ParagraphsBehaviorBase;
  * Provides a behavior for paragraphs pill.
  *
  * @ParagraphsBehavior(
- *   id = "pill",
- *   label = @Translation("Pill"),
- *   description = @Translation("Provides a behavior for content pill."),
+ *   id = "styles",
+ *   label = @Translation("Styles"),
+ *   description = @Translation("Provides a styles behavior."),
  * )
  */
-class PillBehavior extends ParagraphsBehaviorBase {
+class StylesBehavior extends ParagraphsBehaviorBase {
 
   /**
    * Default pill.
    */
-  const DEFAULT_PILL = FALSE;
+  const DEFAULT_STYLES = [];
 
   /**
    * {@inheritdoc}
    */
   public function view(array &$build, Paragraph $paragraph, EntityViewDisplayInterface $display, $view_mode): void {
-    $build['#joinup_paragraph_pill'] = $paragraph->getBehaviorSetting($this->getPluginId(), 'pill', self::DEFAULT_PILL);
+    $build['#joinup_paragraph_styles'] = $paragraph->getBehaviorSetting($this->getPluginId(), 'styles', self::DEFAULT_STYLES);
   }
 
   /**
    * {@inheritdoc}
    */
   public function buildBehaviorForm(ParagraphInterface $paragraph, array &$form, FormStateInterface $form_state): void {
-    $form['pill'] = [
-      '#type' => 'checkbox',
-      '#title' => $this->t('Pill'),
-      '#description' => $this->t('Make element more rounded.'),
-      '#default_value' => $paragraph->getBehaviorSetting($this->getPluginId(), 'pill', self::DEFAULT_PILL),
+    $form['styles'] = [
+      '#type' => 'checkboxes',
+      '#title' => $this->t('Styles'),
+      '#options' => [
+        'rounded' => $this->t('Rounded corners'),
+      ],
+      '#default_value' => $paragraph->getBehaviorSetting($this->getPluginId(), 'styles', self::DEFAULT_STYLES),
     ];
   }
 
