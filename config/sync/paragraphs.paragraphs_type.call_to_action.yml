@@ -16,5 +16,5 @@ behavior_plugins:
     enabled: true
   color:
     enabled: true
-  pill:
+  styles:
     enabled: true
