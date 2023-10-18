@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "efd14b10915200af8f1cd1fdb0396537",
+    "content-hash": "50116b10f281b4a3bd09e2e576d5b5c9",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -16853,14 +16853,6 @@
                     "homepage": "https://www.drupal.org/user/2388214"
                 },
                 {
-                    "name": "Sam152",
-                    "homepage": "https://www.drupal.org/user/1485048"
-                },
-                {
-                    "name": "Wim Leers",
-                    "homepage": "https://www.drupal.org/user/99777"
-                },
-                {
                     "name": "larowlan",
                     "homepage": "https://www.drupal.org/user/395439"
                 },
@@ -16869,8 +16861,16 @@
                     "homepage": "https://www.drupal.org/user/598310"
                 },
                 {
+                    "name": "Sam152",
+                    "homepage": "https://www.drupal.org/user/1485048"
+                },
+                {
                     "name": "sqndr",
                     "homepage": "https://www.drupal.org/user/2516272"
+                },
+                {
+                    "name": "Wim Leers",
+                    "homepage": "https://www.drupal.org/user/99777"
                 }
             ],
             "description": "Provides tools to help debugging cache metadata.",
