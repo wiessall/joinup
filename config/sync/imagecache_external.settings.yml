@@ -24,3 +24,6 @@ imagecache_external_allowed_mimetypes:
   - binary/octet-stream
   - image/svg+xml
 imagecache_external_cron_flush_frequency: 30
+svg_settings:
+  allowed_tags: []
+  allowed_attributes: []
