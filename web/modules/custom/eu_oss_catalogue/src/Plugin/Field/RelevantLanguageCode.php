@@ -12,7 +12,7 @@ use Drupal\Core\TypedData\ComputedItemListTrait;
 /**
  * Computed field with the richest entity translation language code.
  */
-class RichestLanguageCode extends FieldItemList {
+class RelevantLanguageCode extends FieldItemList {
 
   use ComputedItemListTrait;
 
@@ -25,7 +25,7 @@ class RichestLanguageCode extends FieldItemList {
    *
    * @see \Drupal\eu_oss_catalogue\Plugin\Field\RichestField::computeValue()
    */
-  const FIELD_NAME = 'richest_langcode';
+  const FIELD_NAME = 'relevant_language';
 
   /**
    * Name of the field which is used to determine the richest translation.
@@ -38,7 +38,7 @@ class RichestLanguageCode extends FieldItemList {
    * {@inheritdoc}
    */
   protected function computeValue(): void {
-    $this->list[0] = $this->createItem(0, $this->getRichestLanguageCode());
+    $this->list[0] = $this->createItem(0, $this->getRelevantLanguageCode());
   }
 
   /**
@@ -47,7 +47,7 @@ class RichestLanguageCode extends FieldItemList {
    * @return string
    *   The language code of the richest entity translation.
    */
-  protected function getRichestLanguageCode(): string {
+  protected function getRelevantLanguageCode(): string {
     $entity = $this->getEntity();
 
     if (
