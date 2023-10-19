@@ -44,6 +44,9 @@
     'paragraph--' ~ paragraph.bundle|clean_class,
   ]
 %}
+
+{{ attach_library('ventuno/paragraph__tiles')}}
+
 {% block paragraph %}
   <div{{ attributes.addClass(classes) }}>
     {% block content %}
