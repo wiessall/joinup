@@ -96,34 +96,36 @@ Feature:
       | Detailed information   |
       | Gallery                |
     And I should see the following lines of text:
-      | The short description                                                                            |
-      | Description                                                                                      |
-      | The long description. A patient developer can make this long enough to be at least 5 lines long. |
-      | Main copyright owner                                                                             |
-      | FOSS Conference                                                                                  |
-      | Features                                                                                         |
-      | Feature A                                                                                        |
-      | Feature B                                                                                        |
-      | Supported languages                                                                              |
-      | it,                                                                                              |
-      | en,                                                                                              |
-      | de                                                                                               |
-      | Development status                                                                               |
-      | Stable                                                                                           |
-      | License                                                                                          |
-      | GPL-2.0-or-later                                                                                 |
-      | Platforms                                                                                        |
-      | macOs                                                                                            |
-      | Maintenance type                                                                                 |
-      | Maintained by people donating their time to the project                                          |
-      | Software type                                                                                    |
-      | Typically installed and run in a a desktop operating system environment                          |
-      | Used by                                                                                          |
-      | 3 administrations                                                                                |
-      | Maintenance contractors                                                                          |
-      | ACME Ltd.                                                                                        |
-      | Maintenance contacts                                                                             |
-      | FOSS Conference                                                                                  |
+      | The short description                                                                              |
+      | Description                                                                                        |
+      |   The long description. A patient developer can make this long enough to be at least 5 lines long. |
+      | Main copyright owner                                                                               |
+      |   FOSS Conference                                                                                  |
+      | Features                                                                                           |
+      |   Feature A                                                                                        |
+      |   Feature B                                                                                        |
+      | Supported languages                                                                                |
+      |   it,                                                                                              |
+      |   en,                                                                                              |
+      |   de                                                                                               |
+      | Development status                                                                                 |
+      |   Stable                                                                                           |
+      | License                                                                                            |
+      |   GPL-2.0-or-later                                                                                 |
+      | Platforms                                                                                          |
+      |   macOs                                                                                            |
+      | Maintenance type                                                                                   |
+      |   Maintained by people donating their time to the project                                          |
+      | Software type                                                                                      |
+      |   Typically installed and run in a a desktop operating system environment                          |
+      | Used by                                                                                            |
+      |   Administration 1,                                                                                |
+      |   Administration 2,                                                                                |
+      |   Administration 3                                                                                 |
+      | Maintenance contractors                                                                            |
+      |   ACME Ltd.                                                                                        |
+      | Maintenance contacts                                                                               |
+      |   FOSS Conference                                                                                  |
     And I should see the following links:
       # Categories.
       | document-management              |
@@ -140,6 +142,9 @@ Feature:
       # Gallery.
       | https://placehold.co/600x400.png |
       | https://placehold.co/400x400.png |
+    And I should not see the following links:
+      | Show all 3 administrations |
+      | Show administration        |
     # Clicking links of Categories, Providers or Audience must navigate to
     # search.
     When I click "document-management"
@@ -182,3 +187,47 @@ Feature:
       | path                     |
       | eu-oss-catalogue/about   |
       | eu-oss-catalogue/members |
+
+  @javascript
+  Scenario: Modal link should be displayed and must show all field values.
+    Given oss_used_by terms:
+      | name             |
+      | Administration 1 |
+      | Administration 2 |
+      | Administration 3 |
+      | Administration 4 |
+      | Administration 5 |
+      | Administration 6 |
+      | Administration 7 |
+    Given oss_solution content:
+      | title      | status      | oss_release_date | oss_used_by                                                                                                            |
+      | With modal | published   | 2014-11-19       | Administration 1,Administration 2,Administration 3,Administration 4,Administration 5,Administration 6,Administration 7 |
+    When I go to the content page of the type "oss_solution" with the title "With modal"
+    Then I should see the following lines of text:
+      | Used by             |
+      |   Administration 1, |
+      |   Administration 2, |
+      |   Administration 3, |
+      |   Administration 4, |
+      |   Administration 5  |
+    But I should not see the following lines of text:
+      | Administration 6 |
+      | Administration 7 |
+    And I should not see the link "Show administration"
+    But I should see the link "Show all 7 administrations"
+    Then I click "Show all 7 administrations"
+    Then a modal should open
+    Then I should see the following lines of text:
+      | 7 administrations are currently using the With modal solution: |
+      |   Administration 1                                      |
+      |   Administration 2                                      |
+      |   Administration 3                                      |
+      |   Administration 4                                      |
+      |   Administration 5                                      |
+      |   Administration 6                                      |
+      |   Administration 7                                      |
+    Then I click on element ".ui-dialog .ui-dialog-titlebar-close"
+    Then the modal should be closed
+    And I should not see the following lines of text:
+      | Administration 6 |
+      | Administration 7 |
