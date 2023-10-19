@@ -310,7 +310,7 @@ third_party_settings:
             uuid: 7e17db81-4af4-4c6b-b6df-2b052f018e25
             region: first
             configuration:
-              id: 'field_block:node:oss_solution:oss_long_description'
+              id: 'field_block:node:oss_solution:oss_view_long_description'
               label: Description
               label_display: visible
               provider: layout_builder
