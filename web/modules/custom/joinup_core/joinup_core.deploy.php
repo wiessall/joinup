@@ -72,9 +72,34 @@ SPARQL;
 }
 
 /**
+ * Remove the non-paired users.
+ */
+function joinup_core_deploy_109802(): string {
+  $database = \Drupal::database();
+  $query = $database->select('users', 'u')
+    ->fields('u', ['uid'])
+    ->condition('u.uid', 1, '>');
+  $query->leftJoin('authmap', 'a', 'u.uid = a.uid');
+  $query->condition('a.uid', NULL, 'IS NULL');
+
+  $usersIds = $query->execute()->fetchCol();
+  $toRemove = count($usersIds);
+
+  $queue = \Drupal::queue('joinup_removed_users');
+  $queue->createQueue();
+
+  while (!empty($usersIds)) {
+    $ids = array_splice($usersIds, 0, 10);
+    $queue->createItem($ids);
+  }
+
+  return 'Add ' . $toRemove . ' users to queue.';
+}
+
+/**
  * Migrate Video content into new Media field.
  */
-function joinup_core_deploy_109802(array &$sandbox): string {
+function joinup_core_deploy_109803(array &$sandbox): string {
   $entity_type_manager = \Drupal::entityTypeManager();
   $node_storage = $entity_type_manager->getStorage('node');
   $db = \Drupal::database();
@@ -114,7 +139,7 @@ function joinup_core_deploy_109802(array &$sandbox): string {
 /**
  * Migrate videos and images embed markup into media.
  */
-function joinup_core_deploy_109803(array &$sandbox): string {
+function joinup_core_deploy_109804(array &$sandbox): string {
   $sparql = \Drupal::getContainer()->get('sparql.endpoint');
   $db = \Drupal::database();
   $queue = \Drupal::queue('joinup_media_migrate');
