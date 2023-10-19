@@ -7,10 +7,16 @@
 
 declare(strict_types = 1);
 
+use Drupal\Core\Entity\ContentEntityTypeInterface;
+use Drupal\Core\Entity\EntityTypeInterface;
+use Drupal\Core\Field\BaseFieldDefinition;
+use Drupal\Core\Field\FieldDefinitionInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\eu_oss_catalogue\Entity\OssContact;
 use Drupal\eu_oss_catalogue\Entity\OssContractor;
 use Drupal\eu_oss_catalogue\Entity\OssSolution;
+use Drupal\eu_oss_catalogue\Plugin\Field\RichestField;
+use Drupal\eu_oss_catalogue\Plugin\Field\RichestLanguageCode;
 
 /**
  * Implements hook_entity_bundle_info_alter().
@@ -59,5 +65,49 @@ function eu_oss_catalogue_views_data_alter(array &$data): void {
         'id' => 'translation_list',
       ],
     ];
+  }
+}
+
+/**
+ * Implements hook_entity_bundle_field_info_alter().
+ */
+function eu_oss_catalogue_entity_bundle_field_info_alter(&$fields, EntityTypeInterface $entity_type, $bundle): void {
+  if ($bundle !== 'oss_solution' || !$entity_type instanceof ContentEntityTypeInterface) {
+    return;
+  }
+
+  $computedFieldCandidates = array_filter(
+    $fields,
+    function (FieldDefinitionInterface $definition) {
+      // Include every translatable field which is not computed and can be
+      // configured on entity view display.
+      return $definition->isTranslatable()
+        && !$definition->isComputed()
+        && $definition->isDisplayConfigurable('view');
+    }
+  );
+
+  // If there are field candidates, also add the richest language code computed
+  // field.
+  if (!empty($computedFieldCandidates)) {
+    $fields[RichestLanguageCode::FIELD_NAME] = BaseFieldDefinition::create('language')
+      ->setLabel(t('Richest langcode'))
+      ->setComputed(TRUE)
+      ->setClass(RichestLanguageCode::class);
+  }
+
+  // Create a computed field for every translatable fields which than will
+  // display the field value fetched from the richest language code.
+  foreach ($computedFieldCandidates as $fieldName => $fieldDefinition) {
+    \assert($fieldDefinition instanceof FieldDefinitionInterface);
+    $computedName = preg_replace('#^oss_(.*)$#', 'oss_view_$1', $fieldName);
+
+    $fields[$computedName] = BaseFieldDefinition::createFromFieldStorageDefinition($fieldDefinition->getFieldStorageDefinition())
+      ->setName($computedName)
+      ->setLabel($fieldDefinition->getLabel())
+      ->setSetting('computed_source', $fieldName)
+      ->setComputed(TRUE)
+      ->setDisplayConfigurable('view', TRUE)
+      ->setClass(RichestField::class);
   }
 }
