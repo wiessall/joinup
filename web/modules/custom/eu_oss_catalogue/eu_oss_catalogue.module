@@ -15,8 +15,8 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\eu_oss_catalogue\Entity\OssContact;
 use Drupal\eu_oss_catalogue\Entity\OssContractor;
 use Drupal\eu_oss_catalogue\Entity\OssSolution;
+use Drupal\eu_oss_catalogue\Plugin\Field\RelevantLanguageCode;
 use Drupal\eu_oss_catalogue\Plugin\Field\RichestField;
-use Drupal\eu_oss_catalogue\Plugin\Field\RichestLanguageCode;
 
 /**
  * Implements hook_entity_bundle_info_alter().
@@ -90,17 +90,17 @@ function eu_oss_catalogue_entity_bundle_field_info_alter(&$fields, EntityTypeInt
   // If there are field candidates, also add the richest language code computed
   // field.
   if (!empty($computedFieldCandidates)) {
-    $fields[RichestLanguageCode::FIELD_NAME] = BaseFieldDefinition::create('language')
-      ->setLabel(t('Richest langcode'))
+    $fields[RelevantLanguageCode::FIELD_NAME] = BaseFieldDefinition::create('language')
+      ->setLabel(t('Relevant language code'))
       ->setComputed(TRUE)
-      ->setClass(RichestLanguageCode::class);
+      ->setClass(RelevantLanguageCode::class);
   }
 
   // Create a computed field for every translatable fields which than will
   // display the field value fetched from the richest language code.
   foreach ($computedFieldCandidates as $fieldName => $fieldDefinition) {
     \assert($fieldDefinition instanceof FieldDefinitionInterface);
-    $computedName = preg_replace('#^oss_(.*)$#', 'oss_view_$1', $fieldName);
+    $computedName = preg_replace('#^oss_(.*)$#', 'oss__$1', $fieldName);
 
     $fields[$computedName] = BaseFieldDefinition::createFromFieldStorageDefinition($fieldDefinition->getFieldStorageDefinition())
       ->setName($computedName)

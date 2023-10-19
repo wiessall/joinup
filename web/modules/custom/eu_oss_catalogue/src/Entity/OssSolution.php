@@ -9,6 +9,7 @@ use Drupal\Core\Field\BaseFieldDefinition;
 use Drupal\eu_oss_catalogue\EuOssCatalogueProviderInterface;
 use Drupal\eu_oss_catalogue\Plugin\Field\OssGitFullNameItemList;
 use Drupal\eu_oss_catalogue\Plugin\Field\OssGitNameItemList;
+use Drupal\eu_oss_catalogue\Plugin\Field\RelevantLanguageCode;
 use Drupal\node\Entity\Node;
 use Drupal\pluginreference\Plugin\Field\FieldType\PluginReferenceItem;
 
@@ -61,6 +62,15 @@ class OssSolution extends Node implements OssSolutionInterface {
       return $value->plugin_id !== $provider->getPluginId();
     });
     return $this;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getRelevantLangCode(): string {
+    return $this->hasField(RelevantLanguageCode::FIELD_NAME)
+      ? $this->get(RelevantLanguageCode::FIELD_NAME)->first()->getString()
+      : $this->language()->getId();
   }
 
 }

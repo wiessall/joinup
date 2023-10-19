@@ -51,8 +51,8 @@ class RichestField extends FieldItemList {
    */
   protected function getRichestLanguageCode(): string {
     $entity = $this->getEntity();
-    return $entity->hasField(RichestLanguageCode::FIELD_NAME)
-      ? $entity->get(RichestLanguageCode::FIELD_NAME)->first()->getString()
+    return $entity->hasField(RelevantLanguageCode::FIELD_NAME)
+      ? $entity->get(RelevantLanguageCode::FIELD_NAME)->first()->getString()
       : $entity->language()->getId();
   }
 

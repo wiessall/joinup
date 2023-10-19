@@ -32,4 +32,12 @@ interface OssSolutionInterface extends NodeInterface {
    */
   public function removeProvider(EuOssCatalogueProviderInterface $provider): OssSolutionInterface;
 
+  /**
+   * Returns the language code of the richest translation.
+   *
+   * @return string
+   *   The language code of the richest translation.
+   */
+  public function getRelevantLangCode(): string;
+
 }
