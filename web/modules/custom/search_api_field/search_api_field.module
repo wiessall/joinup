@@ -11,7 +11,9 @@ use Drupal\Component\Utility\Html;
 use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\FieldableEntityInterface;
+use Drupal\custom_page\Entity\CustomPageInterface;
 use Drupal\field\Entity\FieldConfig;
+use Drupal\paragraphs\ParagraphInterface;
 
 /**
  * Implements hook_entity_extra_field_info().
@@ -87,6 +89,12 @@ function search_api_field_entity_view(array &$build, EntityInterface $entity, En
       continue;
     }
 
+    if ($entity instanceof ParagraphInterface && _search_api_field_calculate_paragraphs_with_facets($entity) > 1) {
+      // Do not render facets if the more than one paragraphs are shown with
+      // facets.
+      continue;
+    }
+
     // Check number of archived items.
     $archived_items = $build[$field_name]['#archived_items'] ?? 0;
 
@@ -147,6 +155,41 @@ function search_api_field_entity_view(array &$build, EntityInterface $entity, En
       ];
     }
   }
+}
+
+/**
+ * Calculates the number of paragraphs with facets of the parent of a paragraph.
+ *
+ * @param \Drupal\paragraphs\ParagraphInterface $entity
+ *   The paragraph in question.
+ *
+ * @return int
+ *   The number of paragraphs with facets.
+ */
+function _search_api_field_calculate_paragraphs_with_facets(ParagraphInterface $entity): int {
+  while ($entity instanceof ParagraphInterface) {
+    $entity = $entity->getParentEntity();
+  }
+
+  if (!$entity instanceof CustomPageInterface) {
+    return 0;
+  }
+
+  $number_of_paragraphs_with_facets = 0;
+  $custom_page_paragraphs = $entity->get('field_paragraphs_body')->referencedEntities();
+  foreach ($custom_page_paragraphs as $custom_page_paragraph) {
+    if ($custom_page_paragraph->bundle() !== 'content_listing') {
+      continue;
+    }
+    $settings = $custom_page_paragraph->content_listing->value;
+    if (!$settings['enabled']) {
+      continue;
+    }
+
+    $number_of_paragraphs_with_facets++;
+  }
+
+  return $number_of_paragraphs_with_facets;
 }
 
 /**
