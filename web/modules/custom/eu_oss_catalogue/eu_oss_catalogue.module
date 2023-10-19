@@ -8,9 +8,11 @@
 declare(strict_types = 1);
 
 use Drupal\Core\Entity\ContentEntityTypeInterface;
+use Drupal\Core\Entity\EntityFieldManagerInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Field\BaseFieldDefinition;
 use Drupal\Core\Field\FieldDefinitionInterface;
+use Drupal\Core\Field\FieldTypePluginManagerInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\eu_oss_catalogue\Entity\OssContact;
 use Drupal\eu_oss_catalogue\Entity\OssContractor;
@@ -110,4 +112,38 @@ function eu_oss_catalogue_entity_bundle_field_info_alter(&$fields, EntityTypeInt
       ->setDisplayConfigurable('view', TRUE)
       ->setClass(RichestField::class);
   }
+}
+
+/**
+ * Implements hook_views_data().
+ */
+
+/**
+ * Implements hook_views_data_alter().
+ */
+function eu_oss_catalogue_views_data() {
+  $views_data = [];
+  $entityFieldManager = \Drupal::service('entity_field.manager');
+  \assert($entityFieldManager instanceof EntityFieldManagerInterface);
+  $fieldTypeManager = \Drupal::service('plugin.manager.field.field_type');
+  \assert($fieldTypeManager instanceof FieldTypePluginManagerInterface);
+  foreach ($entityFieldManager->getFieldDefinitions('node', 'oss_solution') as $fieldName => $fieldDefinition) {
+    if (!is_a($fieldDefinition->getClass(), RichestField::class, TRUE)) {
+      continue;
+    }
+    $views_data['node_field_data'][$fieldName] = [
+      'title' => $fieldDefinition->getLabel(),
+      'group' => t('EU OSS Catalogue'),
+      'help' => t(
+        'Displays the value of the <code>@field-name</code> field from the relevant translation',
+        ['@field-name' => $fieldName]
+      ),
+      'field' => [
+        'id' => 'field',
+        'default_formatter' => $fieldTypeManager->getDefinition($fieldDefinition->getType())['default_formatter'],
+        'field_name' => $fieldName,
+      ],
+    ];
+  }
+  return $views_data;
 }
