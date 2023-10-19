@@ -7,6 +7,7 @@ dependencies:
     - field.field.paragraph.tile.paragraph_tile_image
     - field.field.paragraph.tile.paragraph_tile_link
     - field.field.paragraph.tile.paragraph_tile_title
+    - image.style.tile_item
     - paragraphs.paragraphs_type.tile
   module:
     - link
@@ -50,7 +51,7 @@ content:
     label: hidden
     settings:
       image_link: ''
-      image_style: ''
+      image_style: tile_item
       image_loading:
         attribute: lazy
       svg_attributes:
