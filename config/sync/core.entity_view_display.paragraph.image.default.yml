@@ -19,12 +19,7 @@ content:
   paragraph_action_link:
     type: auto_blank_link
     label: hidden
-    settings:
-      trim_length: 80
-      url_only: false
-      url_plain: false
-      rel: '0'
-      target: '0'
+    settings: {  }
     third_party_settings:
       template_suggestion:
         template_suggestion: ''
