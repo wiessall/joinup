@@ -276,7 +276,7 @@ third_party_settings:
             uuid: f6501de4-478f-49fe-adbb-2e541ba9d0c3
             region: aside
             configuration:
-              id: 'field_block:node:oss_solution:oss_documentation'
+              id: 'field_block:node:oss_solution:oss_view_documentation'
               label: Documentation
               label_display: '0'
               provider: layout_builder
@@ -338,7 +338,7 @@ third_party_settings:
             uuid: eb1487bc-7a20-40e5-9c0f-d4b997f0e11b
             region: second
             configuration:
-              id: 'field_block:node:oss_solution:oss_features'
+              id: 'field_block:node:oss_solution:oss_view_features'
               label: Features
               label_display: visible
               provider: layout_builder
@@ -676,7 +676,7 @@ third_party_settings:
             uuid: 47b9fb75-bf99-42bc-b2a4-31851abf70f6
             region: content
             configuration:
-              id: 'field_block:node:oss_solution:oss_screenshots'
+              id: 'field_block:node:oss_solution:oss_view_screenshots'
               label: Gallery
               label_display: visible
               provider: layout_builder
@@ -742,6 +742,11 @@ hidden:
   oss_source: true
   oss_source_hash: true
   oss_used_by: true
+  oss_view_documentation: true
+  oss_view_features: true
+  oss_view_long_description: true
+  oss_view_screenshots: true
+  oss_view_short_description: true
   published_at: true
   report: true
   search_api_excerpt: true
