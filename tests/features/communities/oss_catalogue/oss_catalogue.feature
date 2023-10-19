@@ -5,17 +5,19 @@ Feature:
 
   Scenario: User sees the right content
     Given oss_solution content:
-      | title              | oss_development_status | oss_source        | oss_categories                                                  | oss_short_description                                                                                                                         | status    | oss_release_date |
-      | C4S ERP            | stable                 | developers_italia | content-management                                              | A lightweight SAML2 MDQ server that implements draft-young-md-query implementation.                                                           | published | 2022-04-13       |
-      | Vito Schiraldi     | stable                 | developers_italia | data-analytics,data-collection                                  | Docker image to convert QuakeML format to NonLinLoc PHS format.                                                                               | published | 2000-07-13       |
-      | Spunta             | beta                   | developers_italia | digital-asset-management                                        |                                                                                                                                               | published | 2023-08-13       |
-      | Semantic Turkey    | development            | developers_italia | application-development,it-development,digital-asset-management | Software Registry makes software development phase simplier by showing extended information about projects and allowing source code searches. | published | 2000-04-13       |
-      | Cristian Gagliardi | obsolete               | developers_italia | data-collection                                                 | Immuni is a mobile app that helps us to fight the COVID-19 pandemic by notifying users at risk of carrying the virus as early as possible     | published | 2020-09-13       |
+      | title              | oss_development_status | oss_source        | oss_categories                                                  | oss_short_description                                                                                                                         | status      | oss_release_date |
+      | Not published      | development            | developers_italia | content-management                                              | Never published                                                                                                                               | unpublished | 2022-05-24       |
+      | Not released       | development            | developers_italia | content-management                                              | Never released                                                                                                                                | published   |                  |
+      | C4S ERP            | stable                 | developers_italia | content-management                                              | A lightweight SAML2 MDQ server that implements draft-young-md-query implementation.                                                           | published   | 2022-04-13       |
+      | Vito Schiraldi     | stable                 | developers_italia | data-analytics,data-collection                                  | Docker image to convert QuakeML format to NonLinLoc PHS format.                                                                               | published   | 2000-07-13       |
+      | Spunta             | beta                   | developers_italia | digital-asset-management                                        |                                                                                                                                               | published   | 2023-08-13       |
+      | Semantic Turkey    | development            | developers_italia | application-development,it-development,digital-asset-management | Software Registry makes software development phase simplier by showing extended information about projects and allowing source code searches. | published   | 2000-04-13       |
+      | Cristian Gagliardi | obsolete               | developers_italia | data-collection                                                 | Immuni is a mobile app that helps us to fight the COVID-19 pandemic by notifying users at risk of carrying the virus as early as possible     | published   | 2020-09-13       |
 
     Given I visit "/collection/eu-oss-catalogue"
 
-    Then I should be on "/eu-oss-catalogue"
     # User is redirected from the standard collection URL.
+    Then I should be on "/eu-oss-catalogue"
     And I should not see the link "Report abusive content"
     And I see the text "Open source software of interest for Public Administrations" in the "Header" region
 
