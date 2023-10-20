@@ -6,12 +6,15 @@ namespace Drupal\joinup_modal\Controller;
 
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Link;
+use Drupal\Core\Routing\RedirectDestinationTrait;
 use Drupal\Core\Url;
 
 /**
  * Controller for displaying a joinup modal anonymous page.
  */
 class JoinupModalAnonymousController extends ControllerBase {
+
+  use RedirectDestinationTrait;
 
   /**
    * Returns a render-able array for a joinup modal anonymous page.
@@ -23,8 +26,13 @@ class JoinupModalAnonymousController extends ControllerBase {
    *   The "joinup_modal_anonymous" render array.
    */
   public function render(string $type): array {
-    $login = Url::fromRoute('user.login');
-    $register = Url::fromRoute('user.register');
+    $login = Url::fromRoute('cas.login', [], [
+      'query' => $this->getDestinationArray(),
+    ]);
+
+    $register = Url::fromRoute('user.register', [], [
+      'query' => $this->getDestinationArray(),
+    ]);
 
     return [
       '#theme' => 'joinup_modal_anonymous',
