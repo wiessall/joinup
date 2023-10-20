@@ -10,6 +10,7 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
 use Symfony\Component\HttpKernel\Event\ViewEvent;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\KernelEvents;
 
 /**
@@ -71,6 +72,11 @@ final class ExceptionEventSubscriber implements EventSubscriberInterface {
    *   The event to process.
    */
   public function on4xx(ExceptionEvent $event): void {
+    $throwable = $event->getThrowable();
+    if (!$throwable instanceof NotFoundHttpException) {
+      return;
+    }
+
     if ($event->getThrowable()->getStatusCode() !== 404) {
       return;
     }
