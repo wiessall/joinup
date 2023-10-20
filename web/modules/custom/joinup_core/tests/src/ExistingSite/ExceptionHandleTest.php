@@ -6,6 +6,7 @@ namespace Drupal\Tests\joinup_core\ExistingSite;
 
 use Drupal\Core\Logger\RfcLogLevel;
 use Drupal\Tests\joinup_test\ExistingSite\JoinupExistingSiteTestBase;
+use Drupal\sparql_entity_storage\Encoder\SparqlEncoder;
 
 /**
  * Test description.
@@ -61,6 +62,15 @@ final class ExceptionHandleTest extends JoinupExistingSiteTestBase {
     $this->assertSession()->pageTextContains('Not acceptable format: turtle');
     $this->assertSession()->responseHeaderEquals('Content-Type', 'text/turtle; charset=UTF-8');
     $this->assertNoExceptionsLogged('turtle');
+
+    foreach (array_keys(SparqlEncoder::getSupportedFormats()) as $format) {
+      // Regression test that passing rdfxml does not cause an empty format type
+      // case.
+      $this->visit('/non-existing-page?_format=' . $format);
+      $this->assertSession()->statusCodeEquals(404);
+      $this->assertSession()->pageTextContains('No route found for');
+      $this->assertSession()->responseHeaderEquals('Content-Type', 'text/plain; charset=UTF-8');
+    }
   }
 
   /**
