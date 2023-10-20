@@ -40,6 +40,9 @@ class JoinupModalAnonymousController extends ControllerBase {
       '#title' => $this->t('You are not signed in'),
       '#login' => new Link('Sign in', $login),
       '#register' => new Link('Register', $register),
+      '#cache' => [
+        'contexts' => ['url'],
+      ],
     ];
   }
 
