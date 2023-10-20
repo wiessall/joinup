@@ -115,10 +115,6 @@ function eu_oss_catalogue_entity_bundle_field_info_alter(&$fields, EntityTypeInt
 }
 
 /**
- * Implements hook_views_data().
- */
-
-/**
  * Implements hook_views_data_alter().
  */
 function eu_oss_catalogue_views_data() {
