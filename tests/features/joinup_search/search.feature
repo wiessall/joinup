@@ -630,7 +630,7 @@ Feature: Global search
     When I remove the following facet summary "News"
     Then the page should show only the tiles "Radio cooking collection"
 
-  @javascript
+  @javascript @loggedErrors
   Scenario: Anonymous user can find facets summary
     Given the following collection:
       | title            | Radio cooking collection |
@@ -720,6 +720,13 @@ Feature: Global search
     And I wait for AJAX to finish
     Then I should see the following search suggestions:
       | Spheres                  |
+
+    # Check if suggestion does not generate any warnings.
+    Given I visit the search page
+    And there are no preexisting log records
+    When I enter "-histore" in the search bar
+    And I submit the search by pressing enter
+    Then the site should not have log records with level lower than "notice"
 
   @terms
   Scenario: Filter on date
