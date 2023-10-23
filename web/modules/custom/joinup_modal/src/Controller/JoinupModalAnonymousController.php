@@ -29,10 +29,7 @@ class JoinupModalAnonymousController extends ControllerBase {
     $login = Url::fromRoute('cas.login', [], [
       'query' => $this->getDestinationArray(),
     ]);
-
-    $register = Url::fromRoute('user.register', [], [
-      'query' => $this->getDestinationArray(),
-    ]);
+    $register = Url::fromRoute('user.register');
 
     return [
       '#theme' => 'joinup_modal_anonymous',
