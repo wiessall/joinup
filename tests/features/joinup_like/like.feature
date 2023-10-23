@@ -46,6 +46,13 @@ Feature: Like/unlike feature.
     Then I should see the statistics "1" in the "Very liked solution" tile
 
   Scenario: Anonymous user is asked to sign in if they attempt to Like
+    Given users:
+      | Username   | E-mail           |
+      | Cecil Like | clike@example.eu |
+    And CAS users:
+      | Username | E-mail              | Password   | First name | Last name | Local username |
+      | clike    | clike@ec.example.eu | like123!#$ | Cecil      | Like      | Cecil Like     |
+
     Given I am an anonymous user
     When I go to the homepage of the "Very liked solution" solution
     Then I should see the link "Like" in the "Like block"
@@ -58,6 +65,11 @@ Feature: Like/unlike feature.
     And I should see the text "Liking content shows your appreciation to content creators and helps other users find good content" in the "Modal content"
     When I click "Sign in" in the "Modal content"
     Then I should see the heading "Sign in to continue"
+    When I fill in the following:
+      | E-mail address | clike@ec.example.eu |
+      | Password       | like123!#$          |
+    And I press "Log in"
+    Then I should see the heading "Very liked solution"
 
   Scenario Outline: User can like/unlike solution's content
     Given <content type> content:

@@ -7,7 +7,13 @@ Feature: Pool paragraph tests.
       | Poll collection | published |
 
   Scenario: Anonymous user is asked to log in if they attempt to vote
-    Given the following polls:
+    Given users:
+      | Username   | E-mail           |
+      | Cecil Poll | cpoll@example.eu |
+    Given CAS users:
+      | Username | E-mail              | Password   | First name | Last name | Local username |
+      | cpoll    | cpoll@ec.example.eu | poll123!#$ | Cecil      | Poll      | Cecil Poll     |
+    And the following polls:
       | question                  | runtime | cancel_vote_allow | show_number_of_results | choice                                                     | state     |
       | What was the best series? | 1209600 | 0                 | 1                      | Game of Thrones,Breaking Bad,The Wire,The Sopranos,Mad Men | published |
     And custom_page content:
@@ -27,6 +33,11 @@ Feature: Pool paragraph tests.
 
     Then I click "Sign in" in the "Modal content"
     When I should see the heading "Sign in to continue"
+    Then I fill in the following:
+      | E-mail address | cpoll@ec.example.eu |
+      | Password       | poll123!#$          |
+    And I press "Log in"
+    When I should see the heading "TV series"
 
   Scenario: Authenticated user can vote
     Given the following polls:
