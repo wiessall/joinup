@@ -47,3 +47,10 @@ services:
       - '@plugin.manager.eu_oss_catalogue.hosting_platform'
       - '@state'
       - '@logger.channel.eu_oss_catalogue'
+
+  eu_oss_catalogue.oss_solution.import:
+    class: Drupal\eu_oss_catalogue\EventSubscriber\OssSolutionImport
+    tags:
+      - { name: event_subscriber }
+    arguments:
+      - '@queue'
