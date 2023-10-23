@@ -358,7 +358,8 @@
             },
             "drupal/search_api_spellcheck": {
                 "Missing plugins config schema @see https://www.drupal.org/project/search_api_spellcheck/issues/3277693": "resources/patch/php/drupal/search_api_spellcheck/3277693.patch",
-                "URL don't include the base path @see https://www.drupal.org/project/search_api_spellcheck/issues/3280372" : "resources/patch/php/drupal/search_api_spellcheck/3280372.patch"
+                "URL don't include the base path @see https://www.drupal.org/project/search_api_spellcheck/issues/3280372": "resources/patch/php/drupal/search_api_spellcheck/3280372.patch",
+                "PHP Notice Array to string conversion @see https://www.drupal.org/project/search_api_spellcheck/issues/3265659": "resources/patch/php/drupal/search_api_spellcheck/3265659-3.patch"
             },
             "drupal/smart_trim": {
                 "Avoid max nesting level during development @see https://www.drupal.org/project/smart_trim/issues/3013628": "resources/patch/php/drupal/smart_trim/3013628.patch",
