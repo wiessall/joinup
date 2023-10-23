@@ -12,4 +12,9 @@
  * @ingroup themeable
  */
 #}
-<button {{ attributes.addClass('chip--close icon--close') }} aria-hidden="true"><svg class="bi icon--xs"><use xlink:href="/web/themes/ventuno/assets/icons/icons.svg#x-circle-fill"></use></svg>{{ children }}</button>
+<button {{ attributes.addClass('btn--icon icon--close') }} aria-hidden="true" type="button">
+    <svg class="bi icon--xs">
+        <use xlink:href="{{ bcl_icon_path }}#x-circle-fill"></use>
+    </svg>
+    {{ children }}
+</button>
