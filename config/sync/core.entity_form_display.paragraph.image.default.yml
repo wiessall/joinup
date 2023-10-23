@@ -3,17 +3,27 @@ langcode: en
 status: true
 dependencies:
   config:
+    - field.field.paragraph.image.paragraph_action_link
     - field.field.paragraph.image.paragraph_image
     - field.field.paragraph.image.paragraph_image_visibility
     - image.style.thumbnail
     - paragraphs.paragraphs_type.image
   module:
-    - image
+    - link
+    - svg_image
 id: paragraph.image.default
 targetEntityType: paragraph
 bundle: image
 mode: default
 content:
+  paragraph_action_link:
+    type: link_default
+    weight: 1
+    region: content
+    settings:
+      placeholder_url: ''
+      placeholder_title: ''
+    third_party_settings: {  }
   paragraph_image:
     type: image_image
     weight: 0
@@ -24,7 +34,7 @@ content:
     third_party_settings: {  }
   paragraph_image_visibility:
     type: options_buttons
-    weight: 1
+    weight: 2
     region: content
     settings: {  }
     third_party_settings: {  }
