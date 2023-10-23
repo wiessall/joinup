@@ -29,14 +29,14 @@ class JoinupModalAnonymousController extends ControllerBase {
     $login = Url::fromRoute('cas.login', [], [
       'query' => $this->getDestinationArray(),
     ]);
-    $register = Url::fromRoute('user.register');
-
     return [
       '#theme' => 'joinup_modal_anonymous',
       '#type' => $type,
       '#title' => $this->t('You are not signed in'),
       '#login' => new Link('Sign in', $login),
-      '#register' => new Link('Register', $register),
+      // Replicate logic of "Create an account" from navigation, it points
+      // to the EU login page where user can click on "Create an account".
+      '#register' => new Link('Register', $login),
       '#cache' => [
         'contexts' => ['url'],
       ],
