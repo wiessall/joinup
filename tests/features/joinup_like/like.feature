@@ -64,10 +64,10 @@ Feature: Like/unlike feature.
     And I should see the heading "Sign in or register to like this content" in the "Modal content"
     And I should see the text "Liking content shows your appreciation to content creators and helps other users find good content" in the "Modal content"
     When I click "Sign in" in the "Modal content"
-    Then I should see the heading "Login"
+    Then I should see the heading "Sign in to continue"
     When I fill in the following:
-      | E-mail   | clike@ec.example.eu |
-      | Password | like123!#$          |
+      | E-mail address | clike@ec.example.eu |
+      | Password       | like123!#$          |
     And I press "Log in"
     Then I should see the heading "Very liked solution"
 
