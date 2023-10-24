@@ -651,6 +651,7 @@ display:
           empty: false
           content: 'Displaying @start - @end of @total'
       footer: {  }
+      display_extenders: {  }
     cache_metadata:
       max-age: -1
       contexts:
@@ -1508,6 +1509,7 @@ display:
         filters: false
         filter_groups: false
       display_description: ''
+      display_extenders: {  }
       path: admin/content/eu-oss-catalogue/oss-solutions
       menu:
         type: tab
@@ -1659,6 +1661,51 @@ display:
             default_group: All
             default_group_multiple: {  }
             group_items: {  }
+        oss_release_date_value:
+          id: oss_release_date_value
+          table: node__oss_release_date
+          field: oss_release_date_value
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: datetime
+          operator: 'not empty'
+          value:
+            min: ''
+            max: ''
+            value: ''
+            type: date
+          group: 1
+          exposed: false
+          expose:
+            operator_id: ''
+            label: ''
+            description: ''
+            use_operator: false
+            operator: ''
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: ''
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+            min_placeholder: ''
+            max_placeholder: ''
+            placeholder: ''
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
       filter_groups:
         operator: AND
         groups:
@@ -1685,6 +1732,7 @@ display:
         filter_groups: false
         header: false
       header: {  }
+      display_extenders: {  }
     cache_metadata:
       max-age: -1
       contexts:
@@ -1700,6 +1748,7 @@ display:
     display_plugin: page
     position: 1
     display_options:
+      display_extenders: {  }
       path: oss-solutions
     cache_metadata:
       max-age: -1
