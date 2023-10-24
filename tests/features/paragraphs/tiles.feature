@@ -8,7 +8,7 @@ Feature:
       | title | Paragraphs collection |
       | state | published             |
 
-  @javascript @uploadFiles:logo.png
+  @javascript @uploadFiles:topic.png
   Scenario: Add tiles paragraph to one column layout.
     Given custom_page content:
       | title                   | collection            | state     |
@@ -23,11 +23,11 @@ Feature:
     And I fill in "Title" with "Card title" in the "Modal content" region
     And I fill in "Description" with "This is some text within a card body." in the "Modal content" region
     And I fill in "Link" with "https://european-union.europa.eu" in the "Modal content" region
-    And I attach the file "logo.png" to "Image"
+    And I attach the file "topic.png" to "Image"
     And I press "Save" in the "Modal buttons" region
     And I press "Update"
 
-    When I should see the "Card title" tile
+    When I should see the heading "Card title"
     And I see the text "This is some text within a card body."
 
   @javascript

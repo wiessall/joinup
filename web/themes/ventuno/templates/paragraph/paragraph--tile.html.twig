@@ -39,20 +39,9 @@
  */
 #}
 
-{% set classes = [
-  'position-relative',
-  'h-100',
-  'rounded',
-  'overflow-hidden',
-  'shadow-hover'
-] %}
-{% set attributes = create_attribute().addClass(classes) %}
-
-{{ pattern('tile', {
-  attributes,
-  horizontal: true,
-  url: content.paragraph_tile_link[0]["#url"],
-  image: content.paragraph_tile_image,
-  label: content.paragraph_tile_title,
-  text: content.paragraph_tile_description,
-}) }}
+{% include '@ventuno/parts/tile-item.html.twig' with {
+  'title': content.paragraph_tile_title,
+  'image': content.paragraph_tile_image,
+  'url':  content.paragraph_tile_link[0]["#url"],
+  'description': content.paragraph_tile_description
+} %}
