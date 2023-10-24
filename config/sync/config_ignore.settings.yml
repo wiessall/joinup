@@ -1,3 +1,4 @@
+mode: simple
 ignored_config_entities:
   - cas_mock_server.settings
   - composer_deploy.settings
