@@ -112,6 +112,20 @@ function joinup_paragraphs_get_access(AccessResultInterface $access_result, stri
 }
 
 /**
+ * Implements hook_preprocess_paragraph().
+ */
+function joinup_paragraphs_preprocess_paragraph__image(array &$variables): void {
+  // URL is optional.
+  if (!isset($variables['content']['paragraph_action_link'][0]['#url'])) {
+    return;
+  }
+
+  // Copy link url to image formatter.
+  $variables['content']['paragraph_action_link']['#access'] = FALSE;
+  $variables['content']['paragraph_image'][0]['#url'] = $variables['content']['paragraph_action_link'][0]['#url'];
+}
+
+/**
  * Implements hook_preprocess_HOOK().
  */
 function joinup_paragraphs_preprocess_layout_paragraphs_insert_component_btn(&$variables) {
