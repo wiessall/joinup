@@ -17,7 +17,7 @@ bundle: oss_solution
 label: Features
 description: 'A list of software features, describing what capabilities the software allows to do'
 required: false
-translatable: true
+translatable: false
 default_value: {  }
 default_value_callback: ''
 settings: {  }

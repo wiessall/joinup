@@ -10,7 +10,7 @@ entity_type: node
 bundle: oss_solution
 label: 'Default branch'
 description: 'Repository default branch'
-required: true
+required: false
 translatable: false
 default_value: {  }
 default_value_callback: ''

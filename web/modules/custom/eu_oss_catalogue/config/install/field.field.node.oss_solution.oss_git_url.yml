@@ -12,7 +12,7 @@ entity_type: node
 bundle: oss_solution
 label: URL
 description: 'This string must be a URL to the source code repository (git, svn, …) in which the software is published. Temporarily, plays also as an unique identifier for this software'
-required: true
+required: false
 translatable: false
 default_value: {  }
 default_value_callback: ''
