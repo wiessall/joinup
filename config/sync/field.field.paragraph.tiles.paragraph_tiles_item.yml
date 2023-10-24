@@ -1,0 +1,106 @@
+uuid: 070d9318-579a-4a83-8fe3-daffc67d3b2d
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.paragraph_tiles_item
+    - paragraphs.paragraphs_type.tile
+    - paragraphs.paragraphs_type.tiles
+  module:
+    - entity_reference_revisions
+id: paragraph.tiles.paragraph_tiles_item
+field_name: paragraph_tiles_item
+entity_type: paragraph
+bundle: tiles
+label: Tiles
+description: ''
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:paragraph'
+  handler_settings:
+    target_bundles:
+      tile: tile
+    negate: 0
+    target_bundles_drag_drop:
+      1_column_layout:
+        weight: 27
+        enabled: false
+      2_column_featured_left:
+        weight: 28
+        enabled: false
+      2_column_featured_right:
+        weight: 29
+        enabled: false
+      2_column_layout:
+        weight: 30
+        enabled: false
+      3_column_layout:
+        weight: 31
+        enabled: false
+      accordion:
+        weight: 32
+        enabled: false
+      accordion_item:
+        weight: 33
+        enabled: false
+      call_to_action:
+        weight: 34
+        enabled: false
+      carousel:
+        weight: 35
+        enabled: false
+      configurable_listing:
+        weight: 36
+        enabled: false
+      content_listing:
+        weight: 37
+        enabled: false
+      entity_reference:
+        weight: 38
+        enabled: false
+      github_feed:
+        weight: 39
+        enabled: false
+      heading:
+        weight: 40
+        enabled: false
+      iframe:
+        weight: 41
+        enabled: false
+      image:
+        weight: 42
+        enabled: false
+      json_map:
+        weight: 43
+        enabled: false
+      layout:
+        weight: 44
+        enabled: false
+      poll:
+        weight: 45
+        enabled: false
+      quote:
+        weight: 46
+        enabled: false
+      simple_paragraph:
+        weight: 47
+        enabled: false
+      testimony:
+        weight: 48
+        enabled: false
+      text:
+        weight: 49
+        enabled: false
+      tile:
+        weight: 50
+        enabled: true
+      tiles:
+        weight: 51
+        enabled: false
+      video:
+        weight: 52
+        enabled: false
+field_type: entity_reference_revisions
