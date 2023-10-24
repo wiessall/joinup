@@ -1,68 +1,22 @@
-From 73f590d372c04ea25af07c415bde35980667395d Mon Sep 17 00:00:00 2001
-From: Alexandre Dias <alex.jm.dias@gmail.com>
-Date: Mon, 10 Oct 2022 09:31:25 +0100
-Subject: [PATCH 1/2] Clear timeout autosubmit used in views_autosubmit.
-
----
- js/search_api_autocomplete.js | 10 +++++++++-
- 1 file changed, 9 insertions(+), 1 deletion(-)
-
 diff --git a/js/search_api_autocomplete.js b/js/search_api_autocomplete.js
-index 5e1dc39..54b0629 100644
+index b7237e74ec5cbaf370671ba0863aed6dd88b9869..318a33be8d18b2a131dfbbd03605ebe17f5ea3a3 100644
 --- a/js/search_api_autocomplete.js
 +++ b/js/search_api_autocomplete.js
-@@ -60,7 +60,15 @@
-       $(once('search-api-autocomplete',
-         '.ui-autocomplete-input[data-search-api-autocomplete-search]',
-         context)).each(function () {
--          var uiAutocomplete = $(this).data('ui-autocomplete');
-+
-+        // Clear timeout autosubmit used in views_autosubmit.
-+        if (Drupal.behaviors.ViewsAutoSubmit.alterTextInputTimeout) {
-+          Drupal.behaviors.ViewsAutoSubmit.alterTextInputTimeout = function(timeoutID) {
-+            return clearTimeout(timeoutID);
-+          }
-+        }
-+
-+        var uiAutocomplete = $(this).data('ui-autocomplete');
-           if (!uiAutocomplete) {
-             return;
-           }
--- 
-GitLab
-
-
-From dc235b0a5ef1625f0f3b4762264f9133e259c11c Mon Sep 17 00:00:00 2001
-From: Thomas Seidl <remus@gmx.net>
-Date: Sun, 8 Jan 2023 22:13:05 +0100
-Subject: [PATCH 2/2] Improve clarity of comment and call existing alter hooks.
-
----
- js/search_api_autocomplete.js | 10 +++++++---
- 1 file changed, 7 insertions(+), 3 deletions(-)
-
-diff --git a/js/search_api_autocomplete.js b/js/search_api_autocomplete.js
-index 54b0629..27d38e1 100644
---- a/js/search_api_autocomplete.js
-+++ b/js/search_api_autocomplete.js
-@@ -61,10 +61,14 @@
-         '.ui-autocomplete-input[data-search-api-autocomplete-search]',
-         context)).each(function () {
- 
--        // Clear timeout autosubmit used in views_autosubmit.
--        if (Drupal.behaviors.ViewsAutoSubmit.alterTextInputTimeout) {
+@@ -58,6 +58,17 @@
+       // Find all our fields with autocomplete settings.
+       const s = '.ui-autocomplete-input[data-search-api-autocomplete-search]';
+       $(once('search-api-autocomplete', s, context)).each(function foreach() {
 +        // In case the Views Autosubmit module is installed, clear the
 +        // auto-submit timeout.
 +        if (Drupal.behaviors.ViewsAutoSubmit
 +            && Drupal.behaviors.ViewsAutoSubmit.alterTextInputTimeout) {
 +          var old = Drupal.behaviors.ViewsAutoSubmit.alterTextInputTimeout;
-           Drupal.behaviors.ViewsAutoSubmit.alterTextInputTimeout = function(timeoutID) {
--            return clearTimeout(timeoutID);
++          Drupal.behaviors.ViewsAutoSubmit.alterTextInputTimeout = function(timeoutID) {
 +            old(timeoutID);
 +            clearTimeout(timeoutID);
-           }
-         }
- 
--- 
-GitLab
-
++          }
++        }
++
+         const uiAutocomplete = $(this).data('ui-autocomplete');
+         if (!uiAutocomplete) {
+           return;
