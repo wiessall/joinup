@@ -30,6 +30,6 @@ Feature:
     And I press "Save" in the "Modal buttons" region
     And I press "Update"
 
-    Then the page should contain the html text '<div class="paragraph--image d-flex justify-content-end paragraph">'
+    Then the page should contain the html text '<div class="paragraph--image d-flex col-gap-3 row-gap-3 justify-content-end paragraph">'
     And I should see the "a" element with the "target" attribute set to "_blank" in the "Content" region
     And I should see the "a" element with the "rel" attribute set to "noopener" in the "Content" region
