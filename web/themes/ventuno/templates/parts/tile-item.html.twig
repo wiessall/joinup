@@ -1,0 +1,37 @@
+{#
+/**
+ * @file
+ * Tile item.
+ *
+ * Variables:
+ * - title: Renderable title.
+ * - image: Renderable image.
+ * - url: Tile URL.
+ * - description: Tile descritpion.
+ *
+ * @ingroup themeable
+ */
+#}
+
+{% set classes = [
+  'position-relative',
+  'h-100',
+  'rounded',
+  'overflow-hidden',
+  'shadow-hover',
+] %}
+{% set read_more = 'Read more about @title'|t({'@title': title|render|striptags|trim}) %}
+<div class="col">
+  <article{{ attributes.addClass(classes) }}>
+    <a href="{{ url }}" class="position-absolute top-0 end-0 bottom-0 start-0" title="{{ read_more }}">
+      <span class="visually-hidden">{{ read_more }}</span>
+    </a>
+    {{ title_prefix }}
+    {{ image }}
+    <div class="p-3">
+      <h1{{ create_attribute().addClass(['h5', 'text-primary', 'fw-bold']) }}>{{ title }}</h1>
+      <p class="mb-0 text-dark fs-sm">{{ description|render|striptags }}</p>
+    </div>
+    {{ title_suffix }}
+  </article>
+</div>
