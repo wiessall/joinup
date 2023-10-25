@@ -10,7 +10,6 @@ declare(strict_types = 1);
 use Drupal\eif\EifInterface;
 use Drupal\joinup_bundle_class\LogoInterface;
 use Drupal\joinup_group\JoinupGroupHelper;
-use Drupal\joinup_oss_catalogue\OssCatalogueCollectionInterface;
 
 /**
  * Implements hook_preprocess_HOOK().
@@ -121,11 +120,6 @@ function ventuno_preprocess_node(array &$variables): void {
   // Hide the white area (main content block) from the EIF Toolbox.
   if ((int) $node->id() === EifInterface::EIF_ONLINE_ASSISTANT) {
     unset($variables['content']);
-  }
-
-  // Add library specific to OSS Catalogue landing page.
-  if ($variables['view_mode'] === 'full' && $node->uuid() === OssCatalogueCollectionInterface::LANDING_PAGE) {
-    $variables['#attached']['library'][] = 'ventuno/oss';
   }
 }
 

@@ -18,89 +18,9 @@ use Drupal\Core\Url;
 use Drupal\joinup_oss_catalogue\OssCatalogueCollectionInterface;
 
 /**
- * Change the state name of Releases from 'validated' to 'published'.
- */
-function joinup_core_deploy_109800(): string {
-  $database = \Drupal::getContainer()->get('sparql.endpoint');
-  $workflow_urls = [
-    'http://joinup.eu/isr/workflow_status' => [
-      'http://joinup.eu/asset_release/published',
-      'http://joinup.eu/asset_release/draft',
-    ],
-  ];
-
-  foreach ($workflow_urls as $predicate => $graphs) {
-    foreach ($graphs as $graph) {
-      $update_query = <<<SPARQL
-WITH <{$graph}>
-DELETE {
-  ?s <{$predicate}> "validated"^^<http://www.w3.org/2001/XMLSchema#string> .
-}
-INSERT {
-  ?s <{$predicate}> "published"^^<http://www.w3.org/2001/XMLSchema#string> .
-}
-WHERE {
-  ?s <{$predicate}> "validated"^^<http://www.w3.org/2001/XMLSchema#string> .
-}
-SPARQL;
-      $database->query($update_query);
-    }
-  }
-
-  return 'Changed the state name of all RDF entities from "validated" to "published".';
-}
-
-/**
- * Fix the contact information integer values (UID).
- */
-function joinup_core_deploy_109801(): string {
-  $database = \Drupal::getContainer()->get('sparql.endpoint');
-  $update_query = <<<SPARQL
-PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
-WITH <http://joinup.eu/contact-information/published>
-DELETE { ?s <http://joinup.eu/owner/uid> ?o }
-INSERT { ?s <http://joinup.eu/owner/uid> ?int }
-WHERE {
-  ?s <http://joinup.eu/owner/uid> ?o .
-  FILTER ( datatype(?o) = <integer> ) .
-  BIND (xsd:integer(?o) as ?int) .
-}
-SPARQL;
-
-  $database->query($update_query);
-
-  return 'Changed the UID of all RDF entities from string to integer.';
-}
-
-/**
- * Remove the non-paired users.
- */
-function joinup_core_deploy_109802(): string {
-  $database = \Drupal::database();
-  $query = $database->select('users', 'u')
-    ->fields('u', ['uid'])
-    ->condition('u.uid', 1, '>');
-  $query->leftJoin('authmap', 'a', 'u.uid = a.uid');
-  $query->condition('a.uid', NULL, 'IS NULL');
-
-  $usersIds = $query->execute()->fetchCol();
-  $toRemove = count($usersIds);
-
-  $queue = \Drupal::queue('joinup_removed_users');
-  $queue->createQueue();
-
-  while (!empty($usersIds)) {
-    $ids = array_splice($usersIds, 0, 10);
-    $queue->createItem($ids);
-  }
-
-  return 'Add ' . $toRemove . ' users to queue.';
-}
-
-/**
  * Update path alias for EU OSS catalogue.
  */
-function joinup_core_deploy_109803(): void {
+function joinup_core_deploy_109900(): void {
   /** @var \Drupal\collection\Entity\CollectionInterface $collection */
   $collection = \Drupal::entityTypeManager()->getStorage('rdf_entity')
     ->load(OssCatalogueCollectionInterface::COLLECTION_ENTITY_ID);
@@ -114,7 +34,7 @@ function joinup_core_deploy_109803(): void {
 /**
  * Update title of EU OSS catalogue collection.
  */
-function joinup_core_deploy_109804(): void {
+function joinup_core_deploy_109901(): void {
   /** @var \Drupal\collection\Entity\CollectionInterface $collection */
   $collection = \Drupal::entityTypeManager()->getStorage('rdf_entity')
     ->load(OssCatalogueCollectionInterface::COLLECTION_ENTITY_ID);
@@ -127,7 +47,7 @@ function joinup_core_deploy_109804(): void {
 /**
  * Import content for EU OpenSource Software Solutions Catalogue.
  */
-function joinup_core_deploy_109805(): void {
+function joinup_core_deploy_109902(): void {
   /** @var \Drupal\Core\Extension\ModuleInstallerInterface $moduleInstaller */
   $moduleInstaller = \Drupal::service('module_installer');
   /** @var \Drupal\Core\Entity\EntityRepositoryInterface $entityRepository */
@@ -160,7 +80,7 @@ function joinup_core_deploy_109805(): void {
 /**
  * Rename menu items for EU OSS catalogue.
  */
-function joinup_core_deploy_109806(): void {
+function joinup_core_deploy_109903(): void {
   $entityTypeManager = \Drupal::entityTypeManager();
   /** @var  \Drupal\menu_link_content\MenuLinkContentStorageInterface $menuLinkContentStorage */
   $menuLinkContentStorage = $entityTypeManager->getStorage('menu_link_content');

@@ -63,9 +63,6 @@ Feature: OSS catalogue search
     And I should see the "Software Registry" tile
     And I should not see the "Immuni" tile
 
-    # Check OSS label in tile footer.
-    And I should see the text "OSS Solution" in the "Software Registry" tile
-
     # Check input filtering.
     Then I press "Clear filters"
     And I fill in "Search catalogue" with "Immuni"
@@ -89,21 +86,6 @@ Feature: OSS catalogue search
     When set status with 1 in "Django-MDQ" oss_solution
     Then I visit the OSS search page
     And I see the text "4 Open Source Software Solutions" in the "Header" region
-
-    Then I go to the homepage of the "EU Open Source Solutions Catalogue" collection
-    And I should not see the "Entity actions" region
-
-    When I am logged in as a facilitator of the "EU Open Source Solutions Catalogue" collection
-    And I go to the homepage of the "EU Open Source Solutions Catalogue" collection
-    And I should see the link "Metadata" in the "Entity actions" region
-
-    When I am logged in as a user with the "moderator" role
-    And I go to the homepage of the "EU Open Source Solutions Catalogue" collection
-    And I should see the link "Metadata" in the "Entity actions" region
-
-    When I am logged in as an "authenticated user"
-    And I go to the homepage of the "EU Open Source Solutions Catalogue" collection
-    And I should not see the "Entity actions" region
 
   @javascript
   Scenario: User is able to use autocomplete.
