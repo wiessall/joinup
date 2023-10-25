@@ -46,6 +46,9 @@ class OssSolutionImport implements EventSubscriberInterface {
     $queue->createQueue();
 
     foreach ($this->getChangedFileValues($event->getSolution()) as $url) {
+      if (!imagecache_external_validate_host($url)) {
+        continue;
+      }
       $queue->createItem(['source' => $url]);
     }
   }
@@ -102,10 +105,14 @@ class OssSolutionImport implements EventSubscriberInterface {
       return [];
     }
 
-    $originalFieldIsEmpty = !isset($entity->original) || $entity->original->get($fieldName)->isEmpty();
+    $original = isset($entity->original) && $entity->original->hasTranslation($entity->language()->getId())
+      ? $entity->original->getTranslation($entity->language()->getId())
+      : NULL;
+    $originalFieldIsEmpty = !isset($original) || $original->get($fieldName)->isEmpty();
+
     if (
       $originalFieldIsEmpty
-      || $field->hasAffectingChanges($originalField = $entity->original->get($fieldName))
+      || $field->hasAffectingChanges($originalField = $original->get($fieldName))
     ) {
       $originalValues = $originalFieldIsEmpty
         ? []
