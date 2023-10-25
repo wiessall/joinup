@@ -92,6 +92,7 @@ Feature:
       | Detailed information   |
       | Gallery                |
     And I should see the following lines of text:
+      | Source catalogue                                                                                   |
       | The short description                                                                              |
       | Description                                                                                        |
       |   The long description. A patient developer can make this long enough to be at least 5 lines long. |
