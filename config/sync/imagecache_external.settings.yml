@@ -23,3 +23,5 @@ imagecache_external_allowed_mimetypes:
   - application/octet-stream;charset=utf-8
   - binary/octet-stream
 imagecache_external_cron_flush_frequency: 0
+http_client_config:
+  timeout: 4
