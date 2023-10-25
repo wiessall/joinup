@@ -90,12 +90,12 @@ Feature: OSS catalogue search
   @javascript
   Scenario: User is able to use autocomplete.
     Given oss_solution content:
-      | title                     | oss_development_status | oss_source        | oss_categories                                                  | oss_short_description                                                                                                                         | status    |
-      | Trembling Mage            | stable                 | developers_italia | content-management                                              | A lightweight SAML2 MDQ server that implements draft-young-md-query implementation.                                                           | published |
-      | The Missing Secrets       | stable                 | developers_italia | data-analytics,data-collection                                  | Docker image to convert QuakeML format to NonLinLoc PHS format.                                                                               | published |
-      | Light of Person           | beta                   | developers_italia | digital-asset-management                                        |                                                                                                                                               | published |
-      | The Word's Game           | development            | developers_italia | application-development,it-development,digital-asset-management | Software Registry makes software development phase simplier by showing extended information about projects and allowing source code searches. | published |
-      | The Snake of the Servant  | obsolete               | developers_italia | data-collection                                                 | Immuni is a mobile app that helps us to fight the COVID-19 pandemic by notifying users at risk of carrying the virus as early as possible     | published |
+      | title                     | oss_development_status | oss_source        | oss_categories                                                  | oss_short_description                                                                                                                         | status    | oss_release_date |
+      | Trembling Mage            | stable                 | developers_italia | content-management                                              | A lightweight SAML2 MDQ server that implements draft-young-md-query implementation.                                                           | published | 2022-05-24       |
+      | The Missing Secrets       | stable                 | developers_italia | data-analytics,data-collection                                  | Docker image to convert QuakeML format to NonLinLoc PHS format.                                                                               | published | 2021-05-24       |
+      | Light of Person           | beta                   | developers_italia | digital-asset-management                                        |                                                                                                                                               | published | 2020-04-13       |
+      | The Word's Game           | development            | developers_italia | application-development,it-development,digital-asset-management | Software Registry makes software development phase simplier by showing extended information about projects and allowing source code searches. | published |                  |
+      | The Snake of the Servant  | obsolete               | developers_italia | data-collection                                                 | Immuni is a mobile app that helps us to fight the COVID-19 pandemic by notifying users at risk of carrying the virus as early as possible     | published | 1998-08-13       |
 
     When I visit the OSS search page
 
@@ -114,3 +114,33 @@ Feature: OSS catalogue search
     And I wait for AJAX to finish
     Then I should see the following "oss search" suggestions:
       | The Word's Game |
+
+    # Check sort by filters.
+    When I visit the OSS search page
+    Then the option "Most Recent" should be selected
+    And I should see the text "SEARCH RESULTS (5)"
+    And I should see the following tiles in the correct order:
+      | Trembling Mage           |
+      | The Missing Secrets      |
+      | Light of Person          |
+      | The Snake of the Servant |
+      | The Word's Game          |
+    And I should be on "/eu-oss-catalogue/solutions?oss_keys=&sort_by=changed"
+
+    Given I select "Alphabetic Order A-Z" from "Sort by"
+    Then I should see the following tiles in the correct order:
+      | Trembling Mage           |
+      | The Word's Game          |
+      | The Snake of the Servant |
+      | The Missing Secrets      |
+      | Light of Person          |
+    And I should be on "/eu-oss-catalogue/solutions?oss_keys=&sort_by=orderaz"
+
+    Given I select "Alphabetic Order Z-A" from "Sort by"
+    Then I should see the following tiles in the correct order:
+      | Light of Person          |
+      | The Missing Secrets      |
+      | The Snake of the Servant |
+      | The Word's Game          |
+      | Trembling Mage           |
+    And I should be on "/eu-oss-catalogue/solutions?oss_keys=&sort_by=orderza"
