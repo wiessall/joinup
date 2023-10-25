@@ -90,57 +90,77 @@ Feature: OSS catalogue search
   @javascript
   Scenario: User is able to use autocomplete.
     Given oss_solution content:
-      | title                     | oss_development_status | oss_source        | oss_categories                                                  | oss_short_description                                                                                                                         | status    | oss_release_date |
-      | Trembling Mage            | stable                 | developers_italia | content-management                                              | A lightweight SAML2 MDQ server that implements draft-young-md-query implementation.                                                           | published | 2022-05-24       |
-      | The Missing Secrets       | stable                 | developers_italia | data-analytics,data-collection                                  | Docker image to convert QuakeML format to NonLinLoc PHS format.                                                                               | published | 2021-05-24       |
-      | Light of Person           | beta                   | developers_italia | digital-asset-management                                        |                                                                                                                                               | published | 2020-04-13       |
-      | The Word's Game           | development            | developers_italia | application-development,it-development,digital-asset-management | Software Registry makes software development phase simplier by showing extended information about projects and allowing source code searches. | published |                  |
-      | The Snake of the Servant  | obsolete               | developers_italia | data-collection                                                 | Immuni is a mobile app that helps us to fight the COVID-19 pandemic by notifying users at risk of carrying the virus as early as possible     | published | 1998-08-13       |
+      | title                     | oss_development_status | oss_source        | oss_categories                                                   | oss_short_description                                                                 | status    | oss_release_date |
+      | Another Open Source App   | alpha                  | developers_italia | data-analytics,data-collection                                   | A new open-source application that simplifies data management and analysis.           | published | 2023-01-15       |
+      | Magic Data Converter      | stable                 | developers_italia | application-development,it-development                           | A reliable tool to convert various data formats into more usable ones.                | published | 2022-11-30       |
+      | Creative Content Creator  | development            | developers_italia | application-development,it-development,digital-asset-management  | An exciting project for creating unique and stunning digital content.                 | published |                  |
+      | Data Security Sentinel    | stable                 | developers_italia | content-management                                               | Enhance your data security with this robust and well-maintained application.          | published | 2022-09-12       |
+      | Smart IoT Manager         | beta                   | developers_italia | it-development                                                   | An IoT management system that helps you control and monitor your devices smartly.     | published | 2021-08-20       |
+      | Open AI Helper            | development            | developers_italia | data-analytics,data-collection                                   | An AI-powered assistant to make your tasks easier and more efficient.                 | published |                  |
+      | Community Data Tracker    | stable                 | developers_italia | application-development,it-development                           | Track and analyze community data with this reliable tool.                             | published | 2022-12-10       |
+      | Digital Artistry Studio   | beta                   | developers_italia | application-development,it-development,digital-asset-management  | Express your creativity with powerful digital art tools.                              | published | 2021-07-05       |
+      | Secure Password Manager   | stable                 | developers_italia | content-management                                               | Manage your passwords securely and keep your data safe with this trusted application. | published | 2022-06-18       |
+      | Health Tracker Pro        | development            | developers_italia | it-development                                                   | An upcoming health and fitness app to help you stay on top of your well-being goals.  | published |                  |
 
     When I visit the OSS search page
 
-    Then I enter "nd" in the "oss search bar"
+    Then I enter "app" in the "oss search bar"
     And I wait for AJAX to finish
     Then I should see the following "oss search" suggestions:
-      | Trembling Mage      |
-      | The Missing Secrets |
-
-    Then I enter "Mage" in the "oss search bar"
+      | Another Open Source App  |
+    Then I enter "data" in the "oss search bar"
     And I wait for AJAX to finish
     Then I should see the following "oss search" suggestions:
-      | Trembling Mage |
-
-    Then I enter "Game" in the "oss search bar"
+      | Community Data Tracker   |
+      | Magic Data Converter     |
+      | Data Security Sentinel   |
+    Then I enter "open" in the "oss search bar"
     And I wait for AJAX to finish
     Then I should see the following "oss search" suggestions:
-      | The Word's Game |
+      | Another Open Source App   |
+      | Open AI Helper            |
 
     # Check sort by filters.
     When I visit the OSS search page
     Then the option "Most Recent" should be selected
-    And I should see the text "SEARCH RESULTS (5)"
+    And I should see the text "SEARCH RESULTS (10)"
     And I should see the following tiles in the correct order:
-      | Trembling Mage           |
-      | The Missing Secrets      |
-      | Light of Person          |
-      | The Snake of the Servant |
-      | The Word's Game          |
+      | Another Open Source App  |
+      | Community Data Tracker   |
+      | Magic Data Converter     |
+      | Data Security Sentinel   |
+      | Secure Password Manager  |
+      | Smart IoT Manager        |
+      | Digital Artistry Studio  |
+      | Creative Content Creator |
+      | Open AI Helper           |
+      | Health Tracker Pro       |
     And I should be on "/eu-oss-catalogue/solutions?oss_keys=&sort_by=changed"
 
     Given I select "Alphabetic Order A-Z" from "Sort by"
     Then I should see the following tiles in the correct order:
-      | Light of Person          |
-      | The Missing Secrets      |
-      | The Snake of the Servant |
-      | The Word's Game          |
-      | Trembling Mage           |
+      | Another Open Source App  |
+      | Community Data Tracker   |
+      | Creative Content Creator |
+      | Data Security Sentinel   |
+      | Digital Artistry Studio  |
+      | Health Tracker Pro       |
+      | Magic Data Converter     |
+      | Open AI Helper           |
+      | Secure Password Manager  |
+      | Smart IoT Manager        |
     And I should be on "/eu-oss-catalogue/solutions?oss_keys=&sort_by=orderaz"
 
     Given I select "Alphabetic Order Z-A" from "Sort by"
     Then I should see the following tiles in the correct order:
-      | Trembling Mage           |
-      | The Word's Game          |
-      | The Snake of the Servant |
-      | The Missing Secrets      |
-      | Light of Person          |
+      | Smart IoT Manager        |
+      | Secure Password Manager  |
+      | Open AI Helper           |
+      | Magic Data Converter     |
+      | Health Tracker Pro       |
+      | Digital Artistry Studio  |
+      | Data Security Sentinel   |
+      | Creative Content Creator |
+      | Community Data Tracker   |
+      | Another Open Source App  |
     And I should be on "/eu-oss-catalogue/solutions?oss_keys=&sort_by=orderza"
