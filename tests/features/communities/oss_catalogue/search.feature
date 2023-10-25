@@ -129,18 +129,18 @@ Feature: OSS catalogue search
 
     Given I select "Alphabetic Order A-Z" from "Sort by"
     Then I should see the following tiles in the correct order:
-      | Trembling Mage           |
-      | The Word's Game          |
-      | The Snake of the Servant |
-      | The Missing Secrets      |
       | Light of Person          |
+      | The Missing Secrets      |
+      | The Snake of the Servant |
+      | The Word's Game          |
+      | Trembling Mage           |
     And I should be on "/eu-oss-catalogue/solutions?oss_keys=&sort_by=orderaz"
 
     Given I select "Alphabetic Order Z-A" from "Sort by"
     Then I should see the following tiles in the correct order:
-      | Light of Person          |
-      | The Missing Secrets      |
-      | The Snake of the Servant |
-      | The Word's Game          |
       | Trembling Mage           |
+      | The Word's Game          |
+      | The Snake of the Servant |
+      | The Missing Secrets      |
+      | Light of Person          |
     And I should be on "/eu-oss-catalogue/solutions?oss_keys=&sort_by=orderza"
