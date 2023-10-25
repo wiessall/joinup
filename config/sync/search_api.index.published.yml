@@ -16,6 +16,7 @@ dependencies:
     - field.storage.node.field_location
     - field.storage.node.field_organisation
     - field.storage.meta_entity.field_pinned_in
+    - field.storage.node.oss_release_date
     - field.storage.node.field_scope
     - field.storage.node.field_short_title
     - field.storage.node.oss_source
@@ -752,6 +753,14 @@ field_settings:
     dependencies:
       config:
         - field.storage.node.oss_development_status
+  oss_release_date:
+    label: 'Release date'
+    datasource_id: 'entity:node'
+    property_path: oss_release_date
+    type: date
+    dependencies:
+      config:
+        - field.storage.node.oss_release_date
   oss_scope:
     label: 'Intended audience'
     datasource_id: 'entity:node'
@@ -1029,6 +1038,7 @@ processor_settings:
     weights:
       preprocess_index: -50
   auto_aggregated_fulltext_field: {  }
+  custom_value: {  }
   entity_type: {  }
   hierarchy:
     weights:

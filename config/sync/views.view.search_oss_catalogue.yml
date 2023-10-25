@@ -133,18 +133,18 @@ display:
           content: '<div class="page__content">No content found for your search.</div>'
           tokenize: false
       sorts:
-        entity_changed:
-          id: entity_changed
+        oss_release_date:
+          id: oss_release_date
           table: search_api_index_published
-          field: entity_changed
+          field: oss_release_date
           relationship: none
           group_type: group
-          admin_label: ''
+          admin_label: 'Most Recent'
           plugin_id: search_api
           order: DESC
           expose:
             label: 'Most Recent'
-            field_identifier: changed
+            field_identifier: date
           exposed: true
         title:
           id: title
