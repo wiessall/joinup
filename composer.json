@@ -325,6 +325,10 @@
                 "Behat integration. @see https://www.drupal.org/project/honeypot/issues/3059040": "resources/patch/php/drupal/honeypot/3059040.patch",
                 "Provide ways to clean up old honeypot_time_restriction values @see https://www.drupal.org/project/honeypot/issues/2997609": "resources/patch/php/drupal/honeypot/2997609.patch"
             },
+            "drupal/imagecache_external": {
+                "Add option to override the inherited HTTP client configuration @see https://drupal.org/i/3396502": "resources/patch/php/drupal/imagecache_external/3396502-2.diff",
+                "Add option to use only a file URL as fallback image @see https://drupal.org/i/3396511": "resources/patch/php/drupal/imagecache_external/imagecache_external-add-fallback.url-option-3396511-5.diff"
+            },
             "drupal/inline_entity_form": {
                 "Autocomplete field doesn't allow to reference entities with long titles @see https://www.drupal.org/node/2895663": "resources/patch/php/drupal/inline_entity_form/2895663.patch"
             },

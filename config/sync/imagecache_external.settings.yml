@@ -7,7 +7,8 @@ imagecache_external_batch_flush_limit: 1000
 imagecache_external_hosts: ''
 imagecache_external_management: unmanaged
 imagecache_external_use_whitelist: false
-imagecache_fallback_image: 1000
+imagecache_fallback_image: 0
+imagecache_fallback_image_url:
 imagecache_external_allowed_mimetypes:
   - image/jpg
   - image/jpg;charset=utf-8
@@ -24,4 +25,4 @@ imagecache_external_allowed_mimetypes:
   - binary/octet-stream
 imagecache_external_cron_flush_frequency: 0
 http_client_config:
-  timeout: 4
+  timeout: 3
