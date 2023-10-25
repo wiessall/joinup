@@ -20,6 +20,8 @@ function ventuno_preprocess_paragraph(array &$variables): void {
 
   if (isset($variables['elements']['#joinup_paragraph_alignment'])) {
     $variables['attributes']['class'][] = 'd-flex';
+    $variables['attributes']['class'][] = 'col-gap-3';
+    $variables['attributes']['class'][] = 'row-gap-3';
     $variables['attributes']['class'][] = match ($variables['elements']['#joinup_paragraph_alignment']) {
       'center' => 'justify-content-center',
       'right' => 'justify-content-end',
@@ -33,14 +35,21 @@ function ventuno_preprocess_paragraph(array &$variables): void {
  */
 function ventuno_preprocess_field__paragraph__call_to_action(array &$variables): void {
   $paragraph = $variables['element']['#object'];
-  if ($paragraph instanceof ParagraphInterface) {
-    $color = $paragraph->getBehaviorSetting('color', 'color', 'primary');
-    $variables['attributes']['class'][] = 'btn';
-    $variables['attributes']['class'][] = match ($color) {
-      'brand' => 'btn-brand',
-      'secondary' => 'btn-secondary',
-      default => 'btn-primary',
-    };
+  if (!$paragraph instanceof ParagraphInterface) {
+    return;
+  }
+
+  $color = $paragraph->getBehaviorSetting('color', 'color', 'primary');
+  $variables['attributes']['class'][] = 'btn';
+  $variables['attributes']['class'][] = match ($color) {
+    'brand' => 'btn-brand',
+    'secondary' => 'btn-secondary',
+    default => 'btn-primary',
+  };
+
+  $styles = $paragraph->getBehaviorSetting('styles', 'styles', []);
+  if (isset($styles['rounded'])) {
+    $variables['attributes']['class'][] = 'rounded-pill';
   }
 }
 
@@ -65,9 +74,16 @@ function ventuno_preprocess_paragraph__accordion(array &$variables): void {
 }
 
 /**
+ * Implements hook_preprocess_paragraph().
+ */
+function ventuno_preprocess_paragraph__call_to_action(array &$variables): void {
+  $variables['attributes']['class'][] = 'flex-wrap';
+}
+
+/**
  * Implements hook_preprocess_HOOK().
  */
-function ventuno_preprocess_paragraph__configurable_listing(&$variables) {
+function ventuno_preprocess_paragraph__configurable_listing(&$variables): void {
   $paragraph = $variables['paragraph'];
 
   // For the configurable listing, the view mode is affected by the type of the
