@@ -173,8 +173,7 @@
             "drupal/core-composer-scaffold": true,
             "openeuropa/composer-artifacts": true,
             "phpstan/extension-installer": true,
-            "php-http/discovery": true,
-            "mglaman/composer-drupal-lenient": true
+            "php-http/discovery": true
         }
     },
     "autoload": {
@@ -253,9 +252,6 @@
             },
             "drupal/cas": {
                 "Should CAS respect Drupal registration configuration @see https://www.drupal.org/project/cas/issues/3038279": "resources/patch/php/drupal/cas/3038279.patch"
-            },
-            "drupal/coder": {
-                "Support ENUMs @see https://www.drupal.org/project/coder/issues/3283741": "resources/patch/php/drupal/coder/3283741.diff"
             },
             "drupal/core": {
                 "Allow image style to be selected in text editor @see https://www.drupal.org/node/2061377": "resources/patch/php/drupal/core/2061377.patch",
@@ -341,9 +337,6 @@
             "drupal/og": {
                 "The annotations for \"edit-form\" and \"delete-form\" @see https://www.drupal.org/project/og/issues/3338830": "resources/patch/php/drupal/og/3338830.diff"
             },
-            "drupal/pathauto": {
-                "PHP 8.2 compatibility @see https://www.drupal.org/project/pathauto/issues/3328670": "resources/patch/php/drupal/pathauto/3328670.patch"
-            },
             "drupal/pluginreference": {
                 "Empty item filled with 1st option @see https://www.drupal.org/project/pluginreference/issues/3385192": "resources/patch/php/drupal/pluginreference/3385192.diff"
             },
@@ -364,12 +357,12 @@
                 "Not all fields that have a target_type setting are entity references @see https://www.drupal.org/i/3394367": "resources/patch/php/drupal/search_api/3394367.diff"
             },
             "drupal/search_api_autocomplete": {
-                "Clear timeout autosubmit used in views_autosubmit. @see https://www.drupal.org/i/3314418": "resources/patch/php/drupal/search_api_autocomplete/3314418.patch",
-                "Undefined constant SolrBackendInterface::SEARCH_API_SOLR_SCHEMA_VERSION @see https://www.drupal.org/i/3382226": "resources/patch/php/drupal/search_api_autocomplete/3382226.diff"
+                "Clear timeout autosubmit used in views_autosubmit. @see https://www.drupal.org/i/3314418": "resources/patch/php/drupal/search_api_autocomplete/3314418.patch"
             },
             "drupal/search_api_spellcheck": {
                 "Missing plugins config schema @see https://www.drupal.org/project/search_api_spellcheck/issues/3277693": "resources/patch/php/drupal/search_api_spellcheck/3277693.patch",
-                "URL don't include the base path @see https://www.drupal.org/project/search_api_spellcheck/issues/3280372" : "resources/patch/php/drupal/search_api_spellcheck/3280372.patch"
+                "URL don't include the base path @see https://www.drupal.org/project/search_api_spellcheck/issues/3280372": "resources/patch/php/drupal/search_api_spellcheck/3280372.patch",
+                "PHP Notice Array to string conversion @see https://www.drupal.org/project/search_api_spellcheck/issues/3265659": "resources/patch/php/drupal/search_api_spellcheck/3265659-3.patch"
             },
             "drupal/smart_trim": {
                 "Avoid max nesting level during development @see https://www.drupal.org/project/smart_trim/issues/3013628": "resources/patch/php/drupal/smart_trim/3013628.patch",
@@ -389,9 +382,6 @@
             },
             "drupal/swiftmailer": {
                 "Add spooling for increased performance @see https://www.drupal.org/project/swiftmailer/issues/3000553": "resources/patch/php/drupal/swiftmailer/3000553.patch"
-            },
-            "drupal/token": {
-                "token-devel link templates don't work when canonical template has multiple parameters @see https://www.drupal.org/project/token/issues/3254619": "resources/patch/php/drupal/token/3254619.patch"
             },
             "drupal/video_embed_field": {
                 "Extend support for embed URLs. Option to force privacy @see https://www.drupal.org/project/video_embed_field/issues/3060201 (originally on https://www.drupal.org/node/2899093)": "resources/patch/php/drupal/video_embed_field/3060201.patch",
