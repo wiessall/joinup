@@ -1,4 +1,4 @@
-@api @group-c
+@api @group_c
 Feature:
   As a site builder of the site
   I need to be able to use "heading" paragraphs for content.
@@ -57,4 +57,4 @@ Feature:
     And I select "Right" from "Alignment" in the "Modal content" region
     And I press "Save" in the "Modal buttons" region
     And I press "Update"
-    When the page should contain the html text '<div class="paragraph--heading d-flex col-gap-3 justify-content-end paragraph">'
+    When the page should contain the html text '<div class="paragraph--heading d-flex justify-content-end paragraph">'
