@@ -214,7 +214,7 @@ Feature:
       | layout position | 1                                       |
       | region          | content                                 |
       | Heading         | type: text - value: E-justice heading   |
-      | Action link     | type: text - value: http://example.com  |
+      | URL             | type: text - value: http://example.com  |
       | Link text       | type: text - value: E-justice link text |
       | List style      | type: select - value: List              |
       | Query presets   | type: text - value: entity_bundle\|news |
@@ -229,7 +229,7 @@ Feature:
       | layout position | 1                                       |
       | region          | content                                 |
       | Heading         | type: text - value: E-justice heading   |
-      | Action link     | type: text - value: http://example.com  |
+      | URL             | type: text - value: http://example.com  |
       | Link text       | type: text - value: E-justice link text |
       | List style      | type: select - value: Grid              |
       | Query presets   | type: text - value: entity_bundle\|news |
@@ -324,7 +324,7 @@ Feature:
       | layout position | 1                                       |
       | region          | content                                 |
       | Heading         | type: text - value: E-justice heading   |
-      | Action link     | type: text - value: http://example.com  |
+      | URL             | type: text - value: http://example.com  |
       | Link text       | type: text - value: E-justice link text |
       | List style      | type: select - value: List              |
       | Query presets   | type: text - value: entity_bundle\|news |
@@ -345,7 +345,7 @@ Feature:
       | layout position | 1                                                                                                                                       |
       | region          | content                                                                                                                                 |
       | Heading         | type: text - value: E-justice heading                                                                                                   |
-      | Action link     | type: text - value: http://example.com                                                                                                  |
+      | URL             | type: text - value: http://example.com                                                                                                  |
       | Link text       | type: text - value: E-justice link text                                                                                                 |
       | List style      | type: select - value: List                                                                                                              |
       | Query presets   | type: text - value: entity_bundle\|news\ntopic\|http://joinup.eu/ontology/topic#e-justice, http://joinup.eu/ontology/topic#e-health\|IN |
@@ -366,7 +366,7 @@ Feature:
       | layout position | 1                                                                                         |
       | region          | content                                                                                   |
       | Heading         | type: text - value: E-justice heading                                                     |
-      | Action link     | type: text - value: http://example.com                                                    |
+      | URL             | type: text - value: http://example.com                                                    |
       | Link text       | type: text - value: E-justice link text                                                   |
       | List style      | type: select - value: List                                                                |
       | Query presets   | type: text - value: entity_bundle\|news\ntopic\|http://joinup.eu/ontology/topic#e-justice |
@@ -396,7 +396,7 @@ Feature:
       | layout position | 1                                        |
       | region          | content                                  |
       | Heading         | type: text - value: E-justice heading    |
-      | Action link     | type: text - value: http://example.com   |
+      | URL             | type: text - value: http://example.com   |
       | Link text       | type: text - value: E-justice link text  |
       | List style      | type: select - value: List               |
       | Query presets   | type: text - value: entity_bundle\|event |
@@ -435,7 +435,7 @@ Feature:
       | layout position | 1                                         |
       | region          | content                                   |
       | Heading         | type: text - value: E-justice heading     |
-      | Action link     | type: text - value: http://example.com    |
+      | URL             | type: text - value: http://example.com    |
       | Link text       | type: text - value: E-justice link text   |
       | List style      | type: select - value: <list style>        |
       | Query presets   | type: text - value: entity_bundle\|<type> |
@@ -475,7 +475,7 @@ Feature:
       | layout position | 1                                       |
       | region          | content                                 |
       | Heading         | type: text - value: E-justice heading   |
-      | Action link     | type: text - value: http://example.com  |
+      | URL             | type: text - value: http://example.com  |
       | Link text       | type: text - value: E-justice link text |
       | List style      | type: select - value: List              |
       | Query presets   | type: text - value: entity_bundle\|news |
@@ -515,7 +515,7 @@ Feature:
       | layout position | 1                                                 |
       | region          | content                                           |
       | Heading         | type: text - value: E-justice heading             |
-      | Action link     | type: text - value: http://example.com            |
+      | URL             | type: text - value: http://example.com            |
       | Link text       | type: text - value: E-justice link text           |
       | List style      | type: select - value: List                        |
       | Query presets   | type: text - value: entity_bundle\|Nebuchadnezzar |
@@ -541,7 +541,7 @@ Feature:
       | layout position | 1                                              |
       | region          | content                                        |
       | Heading         | type: text - value: E-justice heading          |
-      | Action link     | type: text - value: http://example.com         |
+      | URL             | type: text - value: http://example.com         |
       | Link text       | type: text - value: E-justice link text        |
       | List style      | type: select - value: List                     |
       | Query presets   | type: text - value: entity_bundle\|custom_page |

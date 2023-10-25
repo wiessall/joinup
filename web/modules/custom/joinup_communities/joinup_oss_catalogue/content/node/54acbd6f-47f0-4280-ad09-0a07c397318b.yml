@@ -120,9 +120,9 @@ default:
                     label: ''
                   parent_uuid: null
                   region: null
-                background_theme: {  }
-                extra_class:
-                  extra_class: oss__header
+                background_theme:
+                  background_theme: secondary
+                extra_class: {  }
     -
       entity:
         _meta:
@@ -179,8 +179,7 @@ default:
                   parent_uuid: null
                   region: null
                 background_theme: {  }
-                extra_class:
-                  extra_class: oss__discover
+                extra_class: {  }
     -
       entity:
         _meta:
@@ -200,7 +199,7 @@ default:
             -
               value:
                 heading_behavior:
-                  level: h2
+                  level: h3
                 layout_paragraphs:
                   parent_uuid: 00b46561-49b5-4ce7-a39a-a5b6921bcfb2
                   region: first
@@ -233,7 +232,7 @@ default:
               value: true
           field_body:
             -
-              value: "<p>The EU Open Source Solutions Catalogue aims to provide a comprehensive and organized repository of the Open Source Software Solutions of the Public Administrations in the Member States.</p>\r\n\r\n<p>It serves as a centralized platform for users to discover, evaluate, and select suitable&nbsp;Open Source Software Solutions for their diverse needs. The catalogue covers a wide range of domains including but not limited to web development, data science, artificial intelligence, infrastructure management, and more.</p>\r\n"
+              value: "<p>The EU Open Source Solutions Catalogue aims to provide a comprehensive and organized repository of the Open Source Software Solutions of the Public Administrations in the Member States.</p>\r\n\r\n<p>It serves as a centralized platform for users to discover, evaluate, and select suitable&nbsp;Open Source Software Solutions for their diverse needs. The catalogue covers a wide range of domains including but not limited to web development, data science, artificial intelligence, infrastructure management, and more.</p>\r\n\r\n<p>&nbsp;</p>\r\n"
               format: text_html
     -
       entity:
@@ -321,8 +320,33 @@ default:
                   parent_uuid: null
                   region: null
                 background_theme: {  }
-                extra_class:
-                  extra_class: oss__most_recent
+                extra_class: {  }
+    -
+      entity:
+        _meta:
+          version: '1.0'
+          entity_type: paragraph
+          uuid: dd2a0a7d-89d2-4711-aa2f-6ff3dbba472b
+          bundle: heading
+          default_langcode: en
+        default:
+          status:
+            -
+              value: true
+          created:
+            -
+              value: 1694501839
+          behavior_settings:
+            -
+              value:
+                heading_behavior:
+                  level: h3
+                layout_paragraphs:
+                  parent_uuid: ff539098-171f-4c69-be93-48a87b617e7a
+                  region: content
+          paragraph_heading:
+            -
+              value: 'Most recent solutions'
     -
       entity:
         _meta:
@@ -380,8 +404,7 @@ default:
                   region: null
                 background_theme:
                   background_theme: light
-                extra_class:
-                  extra_class: oss__instructions-heading
+                extra_class: {  }
     -
       entity:
         _meta:
@@ -401,13 +424,13 @@ default:
             -
               value:
                 heading_behavior:
-                  level: h2
+                  level: h3
                 layout_paragraphs:
                   parent_uuid: fb279d1a-794b-4504-893d-a13af243ddfa
                   region: content
           paragraph_heading:
             -
-              value: 'Do you want to publish your open source solution? '
+              value: 'Do you want to publish your open souce solution? '
     -
       entity:
         _meta:
@@ -460,8 +483,7 @@ default:
                   region: null
                 background_theme:
                   background_theme: light
-                extra_class:
-                  extra_class: oss__instructions
+                extra_class: {  }
     -
       entity:
         _meta:
@@ -689,8 +711,6 @@ default:
                 layout_paragraphs:
                   parent_uuid: f2a1d11a-9d0a-403f-b5f1-7b4f786d81c0
                   region: second
-                alignment:
-                  alignment: center
           paragraph_heading:
             -
               value: 'Let’s start with your software name'
@@ -748,8 +768,7 @@ default:
                   parent_uuid: null
                   region: null
                 background_theme: {  }
-                extra_class:
-                  extra_class: oss__faq
+                extra_class: {  }
     -
       entity:
         _meta:
@@ -773,8 +792,6 @@ default:
                 layout_paragraphs:
                   parent_uuid: eedcfdad-600b-4786-8448-b883f13e7c30
                   region: content
-                alignment:
-                  alignment: center
           paragraph_heading:
             -
               value: 'Frequently Asked Questions (FAQ)'
@@ -1009,8 +1026,7 @@ default:
                     label: ''
                   parent_uuid: null
                   region: null
-                background_theme:
-                  background_theme: light
+                background_theme: {  }
                 extra_class: {  }
     -
       entity:
@@ -1035,8 +1051,6 @@ default:
                 layout_paragraphs:
                   parent_uuid: f66f1112-bbdb-452e-82ed-98bcb6006251
                   region: content
-                alignment:
-                  alignment: center
           paragraph_heading:
             -
               value: 'Or if you need any help'
@@ -1094,9 +1108,9 @@ default:
                     label: ''
                   parent_uuid: null
                   region: null
-                background_theme: {  }
-                extra_class:
-                  extra_class: oss__social
+                background_theme:
+                  background_theme: light
+                extra_class: {  }
     -
       entity:
         _meta:
@@ -1120,8 +1134,6 @@ default:
                 layout_paragraphs:
                   parent_uuid: 3a870b47-c2de-42a6-86ba-50dab1687235
                   region: content
-                alignment:
-                  alignment: center
           paragraph_heading:
             -
               value: 'Follow our journey on the social media! '
@@ -1130,7 +1142,7 @@ default:
         _meta:
           version: '1.0'
           entity_type: paragraph
-          uuid: 3611bcd2-531b-4c78-9d72-81b9da87d45b
+          uuid: 81e7dc65-5ac9-4db5-8ba5-76866205e27a
           bundle: call_to_action
           default_langcode: en
         default:
@@ -1139,25 +1151,51 @@ default:
               value: true
           created:
             -
-              value: 1694793901
+              value: 1694514192
           behavior_settings:
             -
               value:
                 alignment:
                   alignment: center
                 color:
-                  color: brand
+                  color: secondary
                 layout_paragraphs:
                   parent_uuid: 3a870b47-c2de-42a6-86ba-50dab1687235
                   region: content
           paragraph_action_link:
             -
-              uri: 'https://twitter.com/'
-              title: Twitter
+              uri: 'internal:/'
+              title: Linkedin
               options: {  }
+    -
+      entity:
+        _meta:
+          version: '1.0'
+          entity_type: paragraph
+          uuid: d6ebb228-5b1c-459c-8c7b-6e864e0e856e
+          bundle: call_to_action
+          default_langcode: en
+        default:
+          status:
             -
-              uri: 'https://www.linkedin.com/'
-              title: LinkedIn
+              value: true
+          created:
+            -
+              value: 1694514126
+          behavior_settings:
+            -
+              value:
+                alignment:
+                  alignment: center
+                color:
+                  color: secondary
+                layout_paragraphs:
+                  parent_uuid: 3a870b47-c2de-42a6-86ba-50dab1687235
+                  region: content
+          paragraph_action_link:
+            -
+              uri: 'internal:/'
+              title: Twitter
               options: {  }
   field_state:
     -
