@@ -75,6 +75,8 @@ hidden:
   oss_features: true
   oss_git_description: true
   oss_git_url: true
+  oss_hosting_platform: true
+  oss_is_archived: true
   oss_landing_url: true
   oss_license: true
   oss_logo: true
