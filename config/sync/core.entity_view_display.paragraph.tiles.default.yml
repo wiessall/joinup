@@ -1,0 +1,25 @@
+uuid: fceeb381-4455-4ca7-a301-6a29a5e5c61e
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.tiles.paragraph_tiles_item
+    - paragraphs.paragraphs_type.tiles
+  module:
+    - entity_reference_revisions
+id: paragraph.tiles.default
+targetEntityType: paragraph
+bundle: tiles
+mode: default
+content:
+  paragraph_tiles_item:
+    type: entity_reference_revisions_entity_view
+    label: above
+    settings:
+      view_mode: default
+      link: ''
+    third_party_settings: {  }
+    weight: 0
+    region: content
+hidden:
+  search_api_excerpt: true
