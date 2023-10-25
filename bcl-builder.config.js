@@ -238,15 +238,6 @@ module.exports = {
       },
     },
     {
-      entry: path.resolve(outputFolder, `${ventuno}src/scss/pages/oss.scss`),
-      dest: path.resolve(outputFolder, `${ventuno}assets/css/oss.min.css`),
-      options: {
-        includePaths,
-        minify: true,
-        sourceMap: "file",
-      },
-    },
-    {
       entry: path.resolve(
         outputFolder,
         `${ventuno}src/scss/pages/searchpage.scss`
@@ -694,7 +685,7 @@ module.exports = {
     {
       entry: path.resolve(
         outputFolder,
-        `${ventuno}src/scss/components/carousel.scss`
+        `${ventuno}src/scss/components/paragraphs/carousel.scss`
       ),
       dest: path.resolve(outputFolder, `${ventuno}assets/css/carousel.min.css`),
       options: {
@@ -756,6 +747,21 @@ module.exports = {
       dest: path.resolve(
         outputFolder,
         `${ventuno}assets/css/paragraph--testimony.min.css`
+      ),
+      options: {
+        includePaths,
+        minify: true,
+        sourceMap: "file",
+      },
+    },
+    {
+      entry: path.resolve(
+        outputFolder,
+        `${ventuno}src/scss/components/paragraphs/paragraph--tiles.scss`
+      ),
+      dest: path.resolve(
+        outputFolder,
+        `${ventuno}assets/css/paragraph--tiles.min.css`
       ),
       options: {
         includePaths,
