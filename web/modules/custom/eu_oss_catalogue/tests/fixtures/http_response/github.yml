@@ -6,6 +6,8 @@ default:
           description: Description of GitHub solution 1
           name: dummy-name-1
           isArchived: false
+          # This logo is ignored as a valid one is provided in publiccode.yml.
+          openGraphImageUrl: https://repository-images.githubusercontent.com/123123123/012345678901234567890123456789012345
           owner:
             login: dummy-namespace-1
           defaultBranchRef:
@@ -108,6 +110,8 @@ default:
           description: Description of GitHub solution 2
           name: dummy-name-2
           isArchived: true
+          # This will be used as logo from publiccode.yml doesn't exist.
+          openGraphImageUrl: https://repository-images.githubusercontent.com/234234234/012345678901234567890123456789012345
           owner:
             login: dummy-namespace-2
           defaultBranchRef:
@@ -121,6 +125,8 @@ default:
               name: GitHub solution 2
               url: http://example.com/vendor/solution2.git
               landingURL: http://landing.example.com/vendor/solution2
+              # This file doesn't exist.
+              logo: path/to/images/logo.jpg
               isBasedOn:
                 - Bootstrap
               softwareVersion: 'v2.4'
