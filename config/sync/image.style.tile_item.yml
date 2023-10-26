@@ -1,0 +1,15 @@
+uuid: 5bb184c5-11c4-4fa5-9212-b13c7e6912bf
+langcode: en
+status: true
+dependencies: {  }
+name: tile_item
+label: 'Tile item'
+effects:
+  d87f3bc3-e7cd-4773-92c1-9e453c3ef42e:
+    uuid: d87f3bc3-e7cd-4773-92c1-9e453c3ef42e
+    id: image_scale_and_crop
+    weight: 2
+    data:
+      width: 552
+      height: 240
+      anchor: center-center

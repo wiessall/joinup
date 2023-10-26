@@ -22,7 +22,7 @@ index 5e33f95..e434fca 100644
 +  }
 +}
 diff --git a/js/soft-limit.js b/js/soft-limit.js
-index d07e85e..4de623b 100644
+index a203352..4de623b 100644
 --- a/js/soft-limit.js
 +++ b/js/soft-limit.js
 @@ -30,7 +30,7 @@
@@ -34,11 +34,12 @@ index d07e85e..4de623b 100644
      var facet_id = facet;
      var facetsList = $('ul[data-drupal-facet-id="' + facet_id + '"]');
 
-@@ -43,12 +43,17 @@
+@@ -43,13 +43,17 @@
 
      // Hide facets over the limit.
      facetsList.each(function () {
--      $(once('applysoftlimit', $(this).children('li:gt(' + zero_based_limit + ')'))).hide();
+-      var allLiElements = $(this).find('li');
+-      $(once('applysoftlimit', allLiElements.slice(zero_based_limit + 1))).hide();
 +      if (limit === 0) {
 +        $(once('applysoftlimit', $(this).children('li'))).hide();
 +      }
@@ -54,7 +55,7 @@ index d07e85e..4de623b 100644
      }))).each(function () {
        var facet = $(this);
        var showLessLabel = settings.facets.softLimitSettings[facet_id].showLessLabel;
-@@ -57,12 +62,23 @@
+@@ -58,12 +62,23 @@
          .text(showMoreLabel)
          .on('click', function () {
            if (facet.find('li:hidden').length > 0) {

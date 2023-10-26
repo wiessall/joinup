@@ -14,6 +14,7 @@ module:
   cas_attributes: 0
   changed_fields: 0
   ckeditor: 0
+  ckeditor5: 0
   collection: 0
   comment: 0
   config: 0
@@ -98,6 +99,7 @@ module:
   joinup_legal: 0
   joinup_licence: 0
   joinup_like: 0
+  joinup_media: 0
   joinup_menu: 0
   joinup_modal: 0
   joinup_news: 0
@@ -131,6 +133,7 @@ module:
   linkit: 0
   mailsystem: 0
   media: 0
+  media_library: 0
   memcache: 0
   menu_link_destination: 0
   menu_ui: 0
@@ -172,6 +175,7 @@ module:
   purge_processor_cron: 0
   purge_processor_lateruntime: 0
   purge_queuer_coretags: 0
+  queue_ui: 0
   rdf_draft: 0
   rdf_entity: 0
   rdf_entity_provenance: 0
@@ -230,6 +234,7 @@ module:
   user: 0
   ventuno_helper: 0
   video_embed_field: 0
+  video_embed_media: 0
   video_embed_wysiwyg: 0
   view_unpublished: 0
   views_autosubmit: 0
