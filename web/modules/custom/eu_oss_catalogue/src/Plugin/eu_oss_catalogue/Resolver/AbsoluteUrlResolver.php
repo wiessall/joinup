@@ -54,16 +54,16 @@ class AbsoluteUrlResolver extends DefaultResolver {
       $plugin_definition,
       $container->get('logger.channel.eu_oss_catalogue'),
       $container->get('plugin.manager.eu_oss_catalogue.hosting_platform'),
+      $container->get('http_client'),
     );
   }
 
   /**
    * {@inheritdoc}
    */
-  public function resolve(Project $project, array $metadata, FieldItemListInterface $fieldItemList): ?array {
-    if (!$paths = (array) parent::resolve($project, $metadata, $fieldItemList)) {
-      // Preserve any field values.
-      return NULL;
+  public function resolve(Project $project, array $metadata, FieldItemListInterface $fieldItemList): array {
+    if (!$paths = parent::resolve($project, $metadata, $fieldItemList)) {
+      return [];
     }
 
     $platformBaseUrl = $project->getHostingPlatformUrl();
@@ -74,13 +74,13 @@ class AbsoluteUrlResolver extends DefaultResolver {
 
     $urls = [];
     foreach ($paths as $path) {
+      $path = trim($path);
       if ($path && $url = $platform->getFileRawUrl($path, $project->url)) {
         $urls[] = $url;
       }
     }
 
-    // If empty, preserve existing values.
-    return $urls ?: NULL;
+    return $urls;
   }
 
 }
