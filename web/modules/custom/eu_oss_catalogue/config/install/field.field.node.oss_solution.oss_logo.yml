@@ -13,6 +13,7 @@ third_party_settings:
       config:
         path: logo
         override: resolved_not_empty
+        verify: true
 id: node.oss_solution.oss_logo
 field_name: oss_logo
 entity_type: node

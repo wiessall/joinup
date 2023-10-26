@@ -6,8 +6,12 @@ namespace Drupal\eu_oss_catalogue\Plugin\eu_oss_catalogue\Resolver;
 
 use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Logger\LoggerChannelInterface;
+use Drupal\Core\Utility\Error;
 use Drupal\eu_oss_catalogue\EuOssCataloguePluginManagerInterface;
 use Drupal\eu_oss_catalogue\Model\Project;
+use GuzzleHttp\ClientInterface;
+use GuzzleHttp\RequestOptions;
+use Psr\Log\LogLevel;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -33,6 +37,8 @@ class AbsoluteUrlResolver extends DefaultResolver {
    *   The EU OSS Catalogue logger.
    * @param \Drupal\eu_oss_catalogue\EuOssCataloguePluginManagerInterface $platformManager
    *   The EU OSS Catalogue code hosting platform plugin manager.
+   * @param \GuzzleHttp\ClientInterface $httpClient
+   *   The HTTP client.
    */
   public function __construct(
     array $configuration,
@@ -40,8 +46,16 @@ class AbsoluteUrlResolver extends DefaultResolver {
     $plugin_definition,
     LoggerChannelInterface $logger,
     protected EuOssCataloguePluginManagerInterface $platformManager,
+    protected ClientInterface $httpClient,
   ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition, $logger);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function defaultConfiguration(): array {
+    return ['verify' => FALSE] + parent::defaultConfiguration();
   }
 
   /**
@@ -76,6 +90,18 @@ class AbsoluteUrlResolver extends DefaultResolver {
     foreach ($paths as $path) {
       $path = trim($path);
       if ($path && $url = $platform->getFileRawUrl($path, $project->url)) {
+        // HTTP verification is required.
+        if ($this->getConfiguration()['verify']) {
+          try {
+            $options = [RequestOptions::TIMEOUT => 10];
+            $this->httpClient->request('HEAD', $url, $options);
+          }
+          catch (\Throwable $exception) {
+            // Just log a warning and continue.
+            Error::logException($this->logger, $exception, Error::DEFAULT_ERROR_MESSAGE, [], LogLevel::WARNING);
+            continue;
+          }
+        }
         $urls[] = $url;
       }
     }

@@ -61,3 +61,11 @@ eu_oss_catalogue.resolver_schema.contact:
     node_type:
       type: string
       label: Node type
+
+eu_oss_catalogue.resolver_schema.absolute_url:
+  type: eu_oss_catalogue.resolver_config_base
+  label: Absolute URL resolver config
+  mapping:
+    verify:
+      type: boolean
+      label: Whether to verify the URL
