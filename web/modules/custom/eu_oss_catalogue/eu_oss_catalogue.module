@@ -17,6 +17,7 @@ use Drupal\eu_oss_catalogue\Entity\OssContractor;
 use Drupal\eu_oss_catalogue\Entity\OssSolution;
 use Drupal\eu_oss_catalogue\Plugin\Field\RelevantLanguageCode;
 use Drupal\eu_oss_catalogue\Plugin\Field\RichestField;
+use Drupal\eu_oss_catalogue\Plugin\Field\RichestFieldWithFallback;
 
 /**
  * Implements hook_entity_bundle_info_alter().
@@ -51,21 +52,25 @@ function eu_oss_catalogue_form_views_exposed_form_alter(array &$form, FormStateI
 }
 
 /**
- * Implements hook_views_data_alter().
+ * Implements hook_entity_bundle_field_info().
  */
-function eu_oss_catalogue_views_data_alter(array &$data): void {
-  /** @var \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager */
-  $entityTypeManager = Drupal::service('entity_type.manager');
-
-  foreach ($entityTypeManager->getDefinitions() as $entity_info) {
-    $data[$entity_info->getBaseTable()]['translation_list'] = [
-      'title' => 'Translation list',
-      'help' => t('Displays all available translations.'),
-      'field' => [
-        'id' => 'translation_list',
-      ],
-    ];
+function eu_oss_catalogue_entity_bundle_field_info(EntityTypeInterface $entity_type, $bundle): array {
+  $fields = [];
+  if ($entity_type->id() === 'node' && $bundle === 'oss_solution') {
+    $fields['description'] = BaseFieldDefinition::create('string_long')
+      ->setLabel(t('Short description'))
+      ->setComputed(TRUE)
+      ->setDisplayConfigurable('view', TRUE)
+      ->setSetting(
+        'computed_sources',
+        [
+          'oss_short_description',
+          'oss_git_description',
+        ]
+      )
+      ->setClass(RichestFieldWithFallback::class);
   }
+  return $fields;
 }
 
 /**
