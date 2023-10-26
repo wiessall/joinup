@@ -120,7 +120,7 @@ function joinup_core_deploy_109903(): void {
 /**
  * Creates a fallback image to be used by imagecache_external.
  */
-function joinup_core_deploy_109901(): void {
+function joinup_core_deploy_109904(): void {
   $fileSystem = \Drupal::service('file_system');
   \assert($fileSystem instanceof FileSystemInterface);
   $fallbackImageFileId = \Drupal::config('imagecache_external.settings')->get('imagecache_fallback_image');
