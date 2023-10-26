@@ -37,6 +37,8 @@
 #}
 
 {{ attach_library('ventuno/navbar') }}
+{# todo: Remove this code in ISAICP-8015. #}
+{{ attach_library('ventuno_helper/ckeditor5-disable') }}
 
 {% if search %}
   {{ attach_library('ventuno/navbar-search') }}
