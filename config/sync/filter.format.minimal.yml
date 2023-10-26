@@ -21,7 +21,7 @@ filters:
     status: true
     weight: -10
     settings:
-      allowed_html: '<a href hreflang> <em> <strong> <i> <b>'
+      allowed_html: '<br> <p> <i> <b> <a hreflang href> <strong> <em>'
       filter_html_help: false
       filter_html_nofollow: false
   filter_autop:
