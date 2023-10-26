@@ -248,7 +248,7 @@ class GitHub extends EuOssCatalogueGitHostingPlatformPluginBase {
    * {
    *   search(
    *     type: REPOSITORY
-   *     query: "is:public archived:false owner:user1 repo:org2/project2"
+   *     query: "is:public fork:true owner:user1 repo:org2/project2"
    *     first: 100
    *   ) {
    *     pageInfo {
