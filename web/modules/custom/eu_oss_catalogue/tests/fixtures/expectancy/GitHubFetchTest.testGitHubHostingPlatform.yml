@@ -6,7 +6,7 @@ GitHub solution 1:
     oss_software_version: '2.3.0'
     oss_release_date: '2023-04-19'
     oss_platform_reference: GitHub-solution-1-internal-ID
-    oss_logo: https://github.com/dummy-namespace-1/dummy-name-1/images/logo-solution-1.png
+    oss_logo: https://raw.githubusercontent.com/dummy-namespace-1/dummy-name-1/HEAD/images/logo-solution-1.png
     oss_publiccode_yml_version: '0.2'
 
 FOSS Conference:
