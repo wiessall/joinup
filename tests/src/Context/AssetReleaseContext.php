@@ -83,7 +83,7 @@ class AssetReleaseContext extends RawDrupalContext {
         }
       }
 
-      $values = $this->convertValueAliases($values);
+      $values = $this->convertEntityReferencesValues('rdf_entity', 'asset_release', $this->parseRdfEntityFields($values));
 
       $this->createAssetRelease($values);
     }
@@ -125,8 +125,7 @@ class AssetReleaseContext extends RawDrupalContext {
       }
     }
 
-    $values = $this->convertValueAliases($values);
-
+    $values = $this->convertEntityReferencesValues('rdf_entity', 'asset_release', $this->parseRdfEntityFields($values));
     $this->createAssetRelease($values);
   }
 
@@ -236,33 +235,6 @@ class AssetReleaseContext extends RawDrupalContext {
       'translation' => 'field_isr_translation',
       'state' => 'field_isr_state',
     ];
-  }
-
-  /**
-   * Converts values from user friendly to normal machine values.
-   *
-   * @param array $fields
-   *   An array of fields keyed by field name.
-   *
-   * @return array
-   *   The array with the values converted.
-   *
-   * @throws \Exception
-   *    Throws an exception when a mapped value is not found.
-   */
-  protected function convertValueAliases(array $fields): array {
-    // Convert the name of the is version of field to an id.
-    // This is handled separately as it is not an entity reference but an
-    // og_standard_reference.
-    if (isset($fields['field_isr_is_version_of'])) {
-      $solution = $this->getEntityByLabel('rdf_entity', $fields['field_isr_is_version_of'], 'solution');
-      $fields['field_isr_is_version_of'] = $solution->id();
-    }
-
-    // Convert any entity reference field label value with the entity id.
-    $fields = $this->convertEntityReferencesValues('rdf_entity', 'asset_release', $this->parseRdfEntityFields($fields));
-
-    return $fields;
   }
 
   /**

@@ -8,6 +8,7 @@ dependencies:
     - media.type.event_logo
     - media.type.news_logo
     - media.type.solution_logo
+    - media.type.video
     - node.type.custom_page
     - node.type.discussion
     - node.type.document
@@ -125,6 +126,7 @@ permissions:
   - 'create paragraph content video'
   - 'create rdf entity news'
   - 'create solution_logo media'
+  - 'create video media'
   - 'delete all sitewide alert revisions'
   - 'delete any collection_logo media'
   - 'delete any discussion_logo media'
