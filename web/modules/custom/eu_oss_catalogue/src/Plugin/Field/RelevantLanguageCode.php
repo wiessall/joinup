@@ -4,6 +4,7 @@ declare(strict_types = 1);
 
 namespace Drupal\eu_oss_catalogue\Plugin\Field;
 
+use Drupal\Component\Serialization\Exception\InvalidDataTypeException;
 use Drupal\Core\Entity\FieldableEntityInterface;
 use Drupal\Core\Entity\TranslatableInterface;
 use Drupal\Core\Field\FieldItemList;
@@ -121,9 +122,16 @@ class RelevantLanguageCode extends FieldItemList {
     ) {
       return [];
     }
+
     \assert($field->getFieldDefinition()->isTranslatable() === FALSE);
     $publicCodeYamlContent = $field->first()->getValue()[$field->first()->mainPropertyName()];
-    $publicCodeYaml = Yaml::decode($publicCodeYamlContent);
+    try {
+      $publicCodeYaml = Yaml::decode($publicCodeYamlContent);
+    }
+    catch (InvalidDataTypeException) {
+      return [];
+    }
+
     if (
       !is_array($publicCodeYaml)
       || empty($publicCodeYaml['description'])
@@ -131,6 +139,7 @@ class RelevantLanguageCode extends FieldItemList {
     ) {
       return [];
     }
+
     return array_keys($publicCodeYaml['description']);
   }
 

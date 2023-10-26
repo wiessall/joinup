@@ -22,23 +22,22 @@ class RichestField extends FieldItemList {
       return;
     }
 
-    $this->list = $this->getEntity()
-      ->getTranslation($this->getRichestLanguageCode())
-      ->get($fieldName)
-      ->list;
+    $richestLangcode = $this->getRichestLanguageCode();
+    $sourceField = $this->getEntity()->getTranslation($richestLangcode)->get($fieldName);
+    $this->list = $sourceField->isEmpty ? [] : $sourceField->list;
   }
 
   /**
    * Returns the machine name of the source field if it is not empty.
    *
    * @return string|null
-   *   The machine name of the source field, or NULL if there is no
-   *   deterministic source field ot it is empty.
+   *   The machine name of the source field, or NULL if is missing on the entity
+   *   or is not configured.
    */
   protected function getSourceFieldName(): ?string {
     $entity = $this->getEntity();
     $sourceField = $this->definition->getSetting('computed_source');
-    return $sourceField && $entity->hasField($sourceField) && !$entity->get($sourceField)->isEmpty()
+    return $sourceField && $entity->hasField($sourceField)
       ? $sourceField
       : NULL;
   }
