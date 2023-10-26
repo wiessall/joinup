@@ -31,8 +31,8 @@ class GitLabSelfHosted extends GitLabDotCom {
   /**
    * {@inheritdoc}
    */
-  public function buildConfigurationForm(array $form, FormStateInterface $formState): array {
-    $form = parent::buildConfigurationForm($form, $formState);
+  public function buildConfigurationForm(array $form, FormStateInterface $form_state): array {
+    $form = parent::buildConfigurationForm($form, $form_state);
     // The list of namespaces or projects is not mandatory for self-hosted
     // GitLab code hosting platforms.
     $form['projects']['#required'] = FALSE;
