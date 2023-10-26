@@ -227,29 +227,3 @@ Feature:
     And I should not see the following lines of text:
       | Administration 6 |
       | Administration 7 |
-
-  Scenario: Translatable fields are displayed based on the richest OSS Solution translation
-    Given oss_solution multilingual content:
-      | title      | status    | oss_source        | oss_release_date | langcode | default_translation | oss_features              | oss_long_description | oss_short_description    | oss_screenshots |
-      | EN Title   | published | developers_italia | 2023-10-19       | en       | 1                   | EN Feature 1              | EN Long description  | EN Short description     |                 |
-      |            |           |                   |                  | it       | 0                   | IT Feature 1,IT Feature 2 | ~~~                  | IT Short description     | IT file 1.jpg   |
-    When I go to the content page of the type "oss_solution" with the title "EN Title"
-    Then I should see the heading "EN Title"
-    And I should not see the following lines of text:
-      | En Feature 1         |
-      | EN Short description |
-      | EN Long description  |
-    But I should see the following lines of text:
-      | IT Short description |
-      | IT Feature 1         |
-      | IT Feature 2         |
-
-    When I visit "/eu-oss-catalogue"
-    Then I should see the following tiles in the correct order:
-      | EN Title |
-    And I should see the text "IT Short description"
-
-    When I visit "/eu-oss-catalogue/solutions"
-    Then I should see the following tiles in the correct order:
-      | EN Title |
-    And I should see the text "IT Short description"

@@ -8,6 +8,7 @@ use Behat\Gherkin\Node\TableNode;
 use Behat\Testwork\Hook\Scope\BeforeSuiteScope;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\joinup\Chip;
+use Drupal\joinup\Traits\ConfigReadOnlyTrait;
 use Drupal\joinup\Traits\EntityTrait;
 use Drupal\joinup\Traits\JavascriptTrait;
 use Drupal\joinup\Traits\TraversingTrait;
@@ -19,6 +20,7 @@ use PHPUnit\Framework\Assert;
  */
 class JoinupCoreContext extends RawDrupalContext {
 
+  use ConfigReadOnlyTrait;
   use JavascriptTrait;
   use EntityTrait;
   use TraversingTrait;
@@ -439,6 +441,24 @@ class JoinupCoreContext extends RawDrupalContext {
     foreach ($rows as $row) {
       Assert::assertContains(implode(' ', $row), $table_rows);
     }
+  }
+
+  /**
+   * Disables read-only config lock.
+   *
+   * @BeforeScenario @no-config-lock
+   */
+  public function takeNodeTypeSnapshot(): void {
+    self::bypassReadOnlyConfig();
+  }
+
+  /**
+   * Resets read-only config lock to its initial state.
+   *
+   * @AfterScenario @no-config-lock
+   */
+  public function cleanupTestNodeTypes(): void {
+    self::restoreReadOnlyConfig();
   }
 
 }
