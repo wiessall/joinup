@@ -7,6 +7,7 @@ namespace Drupal\eu_oss_catalogue\Plugin\Field;
 use Drupal\Core\Entity\FieldableEntityInterface;
 use Drupal\Core\Entity\TranslatableInterface;
 use Drupal\Core\Field\FieldItemList;
+use Drupal\Core\Serialization\Yaml;
 use Drupal\Core\TypedData\ComputedItemListTrait;
 
 /**
@@ -33,6 +34,13 @@ class RelevantLanguageCode extends FieldItemList {
    * @const string
    */
   const FLAGSHIP_FIELD = 'oss_features';
+
+  /**
+   * Name of the field storing the raw publiccode.yml file content.
+   *
+   * @const string
+   */
+  const PUBLICCODE_YAML_FIELD = 'oss_publiccode_yml_content';
 
   /**
    * {@inheritdoc}
@@ -62,8 +70,19 @@ class RelevantLanguageCode extends FieldItemList {
       return key($translationLanguages);
     }
 
-    $stat = array_reduce(
-      array_keys($translationLanguages),
+    $translationLanguageCodes = empty($publicCodeLanguageCodes = $this->getLanguageCodesFromPublicCodeYaml())
+      ? array_keys($translationLanguages)
+      : array_intersect(
+        $publicCodeLanguageCodes,
+        array_keys($translationLanguages)
+    );
+
+    if (count($translationLanguageCodes) === 1) {
+      return reset($translationLanguageCodes);
+    }
+
+    $flagshipFieldItemCounts = array_reduce(
+      $translationLanguageCodes ?: array_keys($translationLanguages),
       function (array $carry, string $languageCode) use ($entity): array {
         $translation = $entity->getTranslation($languageCode);
         \assert($translation instanceof FieldableEntityInterface);
@@ -77,9 +96,42 @@ class RelevantLanguageCode extends FieldItemList {
       []
     );
 
-    $search = array_search(max($stat), $stat, TRUE);
-    \assert($search !== FALSE);
-    return $search;
+    $winnerLanguageCode = array_search(max($flagshipFieldItemCounts), $flagshipFieldItemCounts, TRUE);
+    \assert($winnerLanguageCode !== FALSE);
+    return $winnerLanguageCode;
+  }
+
+  /**
+   * Language codes used in publiccode.yml.
+   *
+   * @return string[]
+   *   The language codes used at the description property. Returns empty array
+   *   if:
+   *   - The solution has no field data at the field.
+   *   - The data is not a valid YAML string (so it cannot be decoded).
+   *   - The decoded content is not an array.
+   *   - The decoded content lacks the description key, or its value is not an
+   *     array, or if it is empty.
+   */
+  protected function getLanguageCodesFromPublicCodeYaml(): array {
+    $entity = $this->getEntity();
+    if (
+      !$entity->hasField(static::PUBLICCODE_YAML_FIELD)
+      || ($field = $entity->get(static::PUBLICCODE_YAML_FIELD))->isEmpty()
+    ) {
+      return [];
+    }
+    \assert($field->getFieldDefinition()->isTranslatable() === FALSE);
+    $publicCodeYamlContent = $field->first()->getValue()[$field->first()->mainPropertyName()];
+    $publicCodeYaml = Yaml::decode($publicCodeYamlContent);
+    if (
+      !is_array($publicCodeYaml)
+      || empty($publicCodeYaml['description'])
+      || !is_array($publicCodeYaml['description'])
+    ) {
+      return [];
+    }
+    return array_keys($publicCodeYaml['description']);
   }
 
 }
