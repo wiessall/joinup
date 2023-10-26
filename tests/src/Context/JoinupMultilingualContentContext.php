@@ -6,6 +6,7 @@ namespace Drupal\joinup\Context;
 
 use Behat\Gherkin\Node\TableNode;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
+use Drupal\DrupalExtension\Hook\Scope\BeforeNodeCreateScope;
 use Drupal\node\NodeInterface;
 
 /**
@@ -37,6 +38,7 @@ class JoinupMultilingualContentContext extends RawDrupalContext {
 
     foreach ($nodesTable->getHash() as $nodeHash) {
       $node = (object) $nodeHash;
+      $node->type = $type;
 
       // @todo Consider creating a standalone command for adding translation.
       if ($node->default_translation === '0') {
@@ -49,16 +51,50 @@ class JoinupMultilingualContentContext extends RawDrupalContext {
         $translation = array_filter(
           array_filter((array) $node) + $original->toArray(),
           function (string|array $value) {
-            return is_string($value) || $value !== ['~~~'];
+            return $value !== '~~~' && $value !== ['~~~'];
           }
         );
         $original->addTranslation($node->langcode, $translation)->save();
         continue;
       }
 
-      $node->type = $type;
       $this->nodeCreate($node);
       $lastId = $node->nid;
+    }
+  }
+
+  /**
+   * Transforms string field values with "!multiline!" notation to be multiline.
+   *
+   * Kinda useful if we want to put a YAML file content into a text field, but
+   * please be aware of that the string cannot contain ":" and "-" chars
+   * surrounded by whitespace, because they have a specion meaning in the behat
+   * context we use. So use " 0: Foo\n 1: Bar" instead of the " - Foo\n - Bar"
+   * block notation.
+   * @code
+   * | title      | text_long field                                   |
+   * | Node title | !multiline!root:\n  foo: {  }\n  bar:\n    0: Baz |
+   * @endcode
+   * The value of the text_long field above will be converted to the following
+   * string:
+   * @code
+   * root:
+   *   foo: {  }
+   *   bar:
+   *     0: Baz
+   * @encode
+   *
+   * @BeforeNodeCreate
+   */
+  public function multilinePrepare(BeforeNodeCreateScope $scope): void {
+    $node = $scope->getEntity();
+
+    foreach ($node as $key => $value) {
+      if (!is_string($value) || !str_starts_with($value, '!multiline!')) {
+        continue;
+      }
+      $multiline = preg_replace('#\\\\n#', PHP_EOL, substr($value, 11));
+      $node->$key = $multiline;
     }
   }
 

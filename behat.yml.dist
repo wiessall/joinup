@@ -127,6 +127,7 @@ default:
                 - '--whitelisted-ips=*'
     LoversOfBehat\TableExtension:
       table_map:
+        'EU OSS Catalogue administration': '[data-drupal-selector="views-form-eu-oss-catalogue-admin-admin"] table.vbo-table'
         'announcement list': '.announcement-list table'
         'group menu edit table': '#menu-overview'
         'eif recommendations': '.eif-recommendations table'
