@@ -18,6 +18,7 @@ dependencies:
     - asset_distribution
     - comment
     - contact_form
+    - custom_page
     - dashboard
     - eif
     - entity_legal
@@ -187,6 +188,7 @@ permissions:
   - 'execute spain pipeline'
   - 'feature entity'
   - 'filter membership overview'
+  - 'manage custom landing pages'
   - 'manage group announcements'
   - 'manage group content'
   - 'manage newsroom newsletter subscriptions'

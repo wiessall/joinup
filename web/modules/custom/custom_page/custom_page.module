@@ -8,6 +8,7 @@
 declare(strict_types = 1);
 
 use Drupal\Core\Access\AccessResult;
+use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Field\FieldDefinitionInterface;
@@ -31,6 +32,15 @@ function custom_page_entity_type_alter(array &$entity_types) {
   // Replaces the standard OG Menu Instance form with a customized one that is
   // suitable for use in the front end.
   $entity_types['ogmenu_instance']->setFormClass('edit', 'Drupal\custom_page\Form\OgMenuInstanceForm');
+}
+
+/**
+ * Implements hook_field_info_alter().
+ */
+function custom_page_field_info_alter(&$info): void {
+  if (isset($info['path'])) {
+    $info['path']['constraints']['LandingPagePathFieldConstraint'] = [];
+  }
 }
 
 /**
@@ -219,7 +229,7 @@ function custom_page_menu_local_actions_alter(&$local_actions) {
  * is not published.
  */
 function custom_page_node_access(NodeInterface $node, $op, AccountInterface $account) {
-  if ($op !== 'view' || !$node instanceof CustomPageInterface) {
+  if ($op !== 'view' || !$node instanceof CustomPageInterface || !$node->hasGroup()) {
     return AccessResult::neutral();
   }
 
@@ -247,12 +257,33 @@ function custom_page_node_access(NodeInterface $node, $op, AccountInterface $acc
 /**
  * Implements hook_entity_field_access().
  */
-function custom_page_entity_field_access($operation, FieldDefinitionInterface $field_definition, AccountInterface $account, ?FieldItemListInterface $items = NULL) {
-  return AccessResult::allowedIf(
-    $operation === 'edit'
-    && $field_definition->getName() === 'status'
-    && $field_definition->getTargetEntityTypeId() === 'node'
-    && $field_definition->getTargetBundle() === 'custom_page');
+function custom_page_entity_field_access($operation, FieldDefinitionInterface $field_definition, AccountInterface $account, ?FieldItemListInterface $items = NULL): AccessResultInterface {
+  switch ($field_definition->getName()) {
+    case 'status':
+      return AccessResult::allowedIf(
+        $operation === 'edit'
+        && $field_definition->getTargetEntityTypeId() === 'node'
+        && $field_definition->getTargetBundle() === 'custom_page');
+
+    case 'path';
+      $accessPermission = AccessResult::allowedIfHasPermissions($account, [
+        'manage custom landing pages',
+        'administer url aliases',
+      ], 'OR')->cachePerPermissions();
+
+      // Check if we are in group context.
+      $group = \Drupal::service('og.context')->getGroup();
+
+      return AccessResult::allowedIf(
+        $operation === 'edit'
+        && $field_definition->getTargetEntityTypeId() === 'node'
+        && !$group)
+        ->andIf($accessPermission)
+        ->addCacheContexts(['route']);
+
+    default:
+      return AccessResult::neutral();
+  }
 }
 
 /**
