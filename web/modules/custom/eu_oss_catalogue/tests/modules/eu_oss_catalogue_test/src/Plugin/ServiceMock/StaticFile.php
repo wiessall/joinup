@@ -8,6 +8,7 @@ use Drupal\Core\Plugin\PluginBase;
 use Drupal\eu_oss_catalogue_test\IntegrationTestTrait;
 use Drupal\http_request_mock\ServiceMockPluginInterface;
 use GuzzleHttp\Psr7\Response;
+use Psr\Http\Client\RequestExceptionInterface;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 
@@ -49,14 +50,15 @@ class StaticFile extends PluginBase implements ServiceMockPluginInterface {
    * @param \Psr\Http\Message\RequestInterface $request
    *   The HTTP request.
    *
-   * @return \Psr\Http\Message\ResponseInterface|null
+   * @return \Psr\Http\Message\ResponseInterface|\Psr\Http\Client\RequestExceptionInterface|null
    *   The HTTP response.
    */
-  protected function doGetResponse(RequestInterface $request): ?ResponseInterface {
+  protected function doGetResponse(RequestInterface $request): ResponseInterface|RequestExceptionInterface|null {
     $key = $request->getMethod() . ':' . $request->getUri();
     if (!isset($this->response[$key])) {
       $this->response[$key] = match($key) {
         'HEAD:https://raw.githubusercontent.com/dummy-namespace-1/dummy-name-1/HEAD/images/logo-solution-1.png' => new Response(),
+        'HEAD:https://raw.githubusercontent.com/dummy-namespace-2/dummy-name-2/HEAD/path/to/images/logo.jpg' => new Response(404),
         default => NULL,
       };
     }
