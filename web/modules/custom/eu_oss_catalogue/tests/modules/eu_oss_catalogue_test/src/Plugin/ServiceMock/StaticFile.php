@@ -59,6 +59,10 @@ class StaticFile extends PluginBase implements ServiceMockPluginInterface {
       $this->response[$key] = match($key) {
         'HEAD:https://raw.githubusercontent.com/dummy-namespace-1/dummy-name-1/HEAD/images/logo-solution-1.png' => new Response(),
         'HEAD:https://raw.githubusercontent.com/dummy-namespace-2/dummy-name-2/HEAD/path/to/images/logo.jpg' => new Response(404),
+        'HEAD:https://all.self-hosted.gitlab.example.com/group1/group1_2/group1_3/project1/raw/HEAD/images/logo.svg' => new Response(),
+        'HEAD:https://all.self-hosted.gitlab.example.com/group2/group2_2/group2_3/project2/raw/HEAD/path/to/non-existing/image/logo.gif' => new Response(404),
+        'HEAD:https://limited.self-hosted.gitlab.example.com/group1/project-1-1/raw/HEAD/images/logo-of-project-1-1.svg' => new Response(),
+        'HEAD:https://limited.self-hosted.gitlab.example.com/group1/project-1-2/raw/HEAD/doesn-t/exist.png' => new Response(404),
         default => NULL,
       };
     }
