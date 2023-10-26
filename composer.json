@@ -15,7 +15,6 @@
         "drupal/addtocal": "^3.0",
         "drupal/allowed_formats": "^3.0",
         "drupal/antibot": "^2.0",
-        "drupal/bootstrap4_modal": "^2.1",
         "drupal/cached_computed_field": "^1.0",
         "drupal/cas": "^2.0",
         "drupal/cas_attributes": "^2.0",
@@ -73,6 +72,7 @@
         "drupal/pipeline": "^1.0",
         "drupal/poll": "^1.6",
         "drupal/publication_date": "^2.0",
+        "drupal/queue_ui": "^3.1",
         "drupal/rdf_entity": "^2.0",
         "drupal/rdf_meta_entity": "^1.0",
         "drupal/redirect": "^1.6",
@@ -265,7 +265,9 @@
                 "Cannot implement a custom user cancellation method @see https://www.drupal.org/project/drupal/issues/3135592": "resources/patch/php/drupal/core/3135592.patch",
                 "If you don't set the \"version\" of a profile, the report/status displays an empty dash @see https://www.drupal.org/project/drupal/issues/3270892": "resources/patch/php/drupal/core/3270892.patch",
                 "hook_requirements_alter() is not invoked on update @see https://www.drupal.org/project/drupal/issues/3324995": "resources/patch/php/drupal/core/3324995.diff",
-                "ExceptionLoggingSubscriber should not log HTTP 4XX errors using PHP logger channel @see https://www.drupal.org/i/2828706": "resources/patch/php/drupal/core/2828706.patch"
+                "ExceptionLoggingSubscriber should not log HTTP 4XX errors using PHP logger channel @see https://www.drupal.org/i/2828706": "resources/patch/php/drupal/core/2828706.patch",
+                "Compress ajax_page_state @see https://www.drupal.org/i/3348789": "resources/patch/php/drupal/core/3348789.patch",
+                "ckeditor5.dialog.fix.js throws \"Uncaught TypeError: event.target.classList is undefined\" in Firefox in Drupal 10 with the editor in a modal @see https://www.drupal.org/i/3351600": "resources/patch/php/drupal/core/3351600.diff"
             },
             "drupal/default_content": {
                 "Allow manual imports @see https://www.drupal.org/i/2640734": "resources/patch/php/drupal/default_content/2640734.diff"
@@ -275,7 +277,10 @@
             },
             "drupal/editor_file": {
                 "Uploaded files are not permanent @see https://www.drupal.org/i/3057895": "resources/patch/php/drupal/editor_file/3057895.patch",
-                "\"Notice: Undefined index: href\" after upgrade from 1.6 to 1.7 @see https://www.drupal.org/i/3335018": "resources/patch/php/drupal/editor_file/editor_file-undefined-index-3335018-2.patch"
+                "Drupal 10 & CKEditor 5 readiness @see https://www.drupal.org/i/3232053": "resources/patch/php/drupal/editor_file/3232053.patch"
+            },
+            "drupal/embed_block": {
+                "Add support for Ckeditor 5. @see https://www.drupal.org/i/3316336": "resources/patch/php/drupal/embed_block/3316336.patch"
             },
             "drupal/email_confirmer": {
                 "Support for HTML mails @see https://www.drupal.org/i/3047124": "resources/patch/php/drupal/email_confirmer/3047124.diff"
@@ -289,10 +294,13 @@
             "drupal/entity_legal": {
                 "Custom agree validation error message and submit button label @see https://www.drupal.org/project/entity_legal/issues/3293017": "resources/patch/php/drupal/entity_legal/3293017.patch"
             },
+            "drupal/error_page": {
+                "Creation of dynamic property deprecated in PHP 8.2 @see https://www.drupal.org/i/3376919": "resources/patch/php/drupal/error_page/3376919.patch"
+            },
             "drupal/facets": {
+                "Facets breaks all AJAX views that uses pagers even without facets @see https://www.drupal.org/i/3379445": "resources/patch/php/drupal/facets/3379445.patch",
                 "Facet Summary for Facet Items with a set dependency. @see https://www.drupal.org/i/2873480": "resources/patch/php/drupal/facets/2873480.patch",
-                "Add 0 option in 'Soft limit' and apply soft limit to facet root li tags and add. @see https://www.drupal.org/i/3208580 and https://www.drupal.org/i/3307082": "resources/patch/php/drupal/facets/3208580-and-3307082.patch",
-                "Creation of dynamic property is deprecated @see https://www.drupal.org/project/facets/issues/3336646": "resources/patch/php/drupal/facets/3336646.diff"
+                "Add 0 option in 'Soft limit' and apply soft limit to facet root li tags and add. @see https://www.drupal.org/i/3208580 and https://www.drupal.org/i/3307082": "resources/patch/php/drupal/facets/3208580-and-3307082.patch"
             },
             "drupal/field_delimiter": {
                 "Doesn't work in layout builder. @see https://www.drupal.org/i/3099580": "resources/patch/php/drupal/field_delimiter/3099580.patch",
@@ -368,7 +376,8 @@
             },
             "drupal/video_embed_field": {
                 "Extend support for embed URLs. Option to force privacy @see https://www.drupal.org/project/video_embed_field/issues/3060201 (originally on https://www.drupal.org/node/2899093)": "resources/patch/php/drupal/video_embed_field/3060201.patch",
-                "WYSIWYG Video URL max length limited to 128 characters @see https://www.drupal.org/project/video_embed_field/issues/2908562": "resources/patch/php/drupal/video_embed_field/2908562.patch"
+                "WYSIWYG Video URL max length limited to 128 characters @see https://www.drupal.org/project/video_embed_field/issues/2908562": "resources/patch/php/drupal/video_embed_field/2908562.patch",
+                "Add support for Ckeditor 5. @see https://www.drupal.org/project/video_embed_field/issues/3311063": "resources/patch/php/drupal/video_embed_field/3311063.diff"
             },
             "drupal/views_autosubmit": {
                 "Stop auto submitting first character entered in an Autocomplete Filter field. @see https://www.drupal.org/project/views_autosubmit/issues/3160600" : "resources/patch/php/drupal/views_autosubmit/3160600.patch"

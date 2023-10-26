@@ -1,0 +1,1629 @@
+diff --git a/composer.json b/composer.json
+index 11ccc31..a1b1ce7 100644
+--- a/composer.json
++++ b/composer.json
+@@ -12,9 +12,9 @@
+   "support": {
+     "issues": "https://www.drupal.org/project/issues/facets",
+     "irc": "irc://irc.freenode.org/drupal-search-api",
+-    "source": "git://git.drupal.org/project/facets.git"
++    "source": "https://git.drupalcode.org/project/facets.git"
+   },
+-  "license": "GPL-2.0+",
++  "license": "GPL-2.0-or-later",
+   "require-dev": {
+     "drupal/search_api": "^1.28||1.x-dev",
+     "drupal/jquery_ui_slider": "~2.0",
+@@ -26,6 +26,7 @@
+     "drupal/jquery_ui_touch_punch": "Required for the 'Facets Range Widget' module to work"
+   },
+   "conflict": {
++    "drupal/core": "<10.1.0",
+     "drupal/search_api": "<1.14"
+   }
+ }
+diff --git a/facets.info.yml b/facets.info.yml
+index f943533..0cd74a8 100644
+--- a/facets.info.yml
++++ b/facets.info.yml
+@@ -1,7 +1,7 @@
+ name: 'Facets'
+ type: module
+ description: 'Faceted search interfaces that can be used on Search API searchers.'
+-core_version_requirement: ^9.3 || ^10.0
++core_version_requirement: ^10.1
+ package: Search
+ configure: entity.facets_facet.collection
+ test_dependencies:
+diff --git a/facets.module b/facets.module
+index 66e8412..0841aa6 100644
+--- a/facets.module
++++ b/facets.module
+@@ -383,23 +383,3 @@ function facets_theme_suggestions_facets_result_item(array $variables) {
+   }
+   return $suggestions;
+ }
+-
+-/**
+- * Implements hook_views_data_alter().
+- */
+-function facets_views_data_alter(array &$data) {
+-
+-  /** @var \Drupal\search_api\IndexInterface $index */
+-  foreach (Index::loadMultiple() as $index) {
+-    $data['search_api_index_' . $index->id()]['facets'] = [
+-      'title' => t('Facets'),
+-      'help' => t('Displays facets in a filter or area.'),
+-      'filter' => [
+-        'id' => 'facets_filter',
+-      ],
+-      'area' => [
+-        'id' => 'facets_area',
+-      ],
+-    ];
+-  }
+-}
+diff --git a/facets.services.yml b/facets.services.yml
+index ba34b70..bb29dbc 100644
+--- a/facets.services.yml
++++ b/facets.services.yml
+@@ -39,10 +39,6 @@ services:
+     arguments: ['@plugin.manager.block']
+     tags:
+       - { name: event_subscriber }
+-  facets.route_alter:
+-    class: \Drupal\facets\EventSubscriber\RouteAlterSubscriber
+-    tags:
+-      - { name: event_subscriber }
+   facets.search_api_subscriber:
+     class: Drupal\facets\EventSubscriber\SearchApiSubscriber
+     arguments: ['@facets.manager']
+diff --git a/js/base-widget.js b/js/base-widget.js
+index de99c03..3a868d7 100644
+--- a/js/base-widget.js
++++ b/js/base-widget.js
+@@ -14,8 +14,7 @@
+    * class: "js-facets-widget".
+    *
+    * Events are doing following:
+-   * "facets_filter" - widget should trigger this event. The facets module will
+-   *   handle it accordingly in case of AJAX and Non-AJAX views.
++   * "facets_filter" - widget should trigger this event.
+    * "facets_filtering" - The facets module will trigger this event before
+    *   filter is executed.
+    *
+diff --git a/js/checkbox-widget.js b/js/checkbox-widget.js
+index 6dbb652..4430b93 100644
+--- a/js/checkbox-widget.js
++++ b/js/checkbox-widget.js
+@@ -88,21 +88,12 @@
+     var label = $('<label for="' + id + '">' + description + '</label>');
+
+     checkbox.on('change.facets', function (e) {
+-      if ($link.data('drupal-facet-ajax') == 0) {
+-        e.preventDefault();
++      e.preventDefault();
+
+-        var $widget = $(this).closest('.js-facets-widget');
++      var $widget = $(this).closest('.js-facets-widget');
+
+-        Drupal.facets.disableFacet($widget);
+-        $widget.trigger('facets_filter', [href]);
+-      }
+-      else {
+-        var current = $(this);
+-        if (current.is(':checked') && current.hasClass(single_selection_group)) {
+-          var $widget = current.closest('.js-facets-widget');
+-          $widget.find('input.' + single_selection_group + ':not(#' + current.attr('id') + ')').prop('checked', false);
+-        }
+-      }
++      Drupal.facets.disableFacet($widget);
++      $widget.trigger('facets_filter', [href]);
+     });
+
+     if (active) {
+diff --git a/js/dropdown-widget.js b/js/dropdown-widget.js
+index ecc0588..59d070c 100644
+--- a/js/dropdown-widget.js
++++ b/js/dropdown-widget.js
+@@ -53,7 +53,7 @@
+         .text(default_option_label);
+       $dropdown.append($default_option);
+
+-      $ul.prepend('<li class="default-option"><a href="' + window.location.href.split('?')[0] + '" data-drupal-facet-ajax="' + $ul.data('drupal-facet-ajax') +'">' + Drupal.checkPlain(default_option_label) + '</a></li>');
++      $ul.prepend('<li class="default-option"><a href="' + window.location.href.split('?')[0] + '">' + Drupal.checkPlain(default_option_label) + '</a></li>');
+
+       var has_active = false;
+       $links.each(function () {
+@@ -89,10 +89,8 @@
+       $dropdown.on('change.facets', function () {
+         var anchor = $($ul).find("[data-drupal-facet-item-id='" + $(this).find(':selected').data('drupalFacetItemId') + "']");
+         var $linkElement = (anchor.length > 0) ? $(anchor) : $ul.find('.default-option a');
+-        if ($linkElement.data('drupal-facet-ajax') == 0) {
+-          var url = $linkElement.attr('href');
+-          $(this).trigger('facets_filter', [ url ]);
+-        }
++        var url = $linkElement.attr('href');
++        $(this).trigger('facets_filter', [ url ]);
+       });
+
+       // Append empty text option.
+diff --git a/js/soft-limit.js b/js/soft-limit.js
+index d07e85e..a203352 100644
+--- a/js/soft-limit.js
++++ b/js/soft-limit.js
+@@ -43,7 +43,8 @@
+
+     // Hide facets over the limit.
+     facetsList.each(function () {
+-      $(once('applysoftlimit', $(this).children('li:gt(' + zero_based_limit + ')'))).hide();
++      var allLiElements = $(this).find('li');
++      $(once('applysoftlimit', allLiElements.slice(zero_based_limit + 1))).hide();
+     });
+
+     // Add "Show more" / "Show less" links.
+diff --git a/modules/facets_exposed_filters/facets_exposed_filters.info.yml b/modules/facets_exposed_filters/facets_exposed_filters.info.yml
+new file mode 100644
+index 0000000..db9ce5f
+--- /dev/null
++++ b/modules/facets_exposed_filters/facets_exposed_filters.info.yml
+@@ -0,0 +1,11 @@
++name: 'Facets exposed filters (Experimental)'
++type: module
++description: 'Render facets in exposed filters.'
++core_version_requirement: ^9.2 || ^10.1
++package: Search
++configure: entity.facets_facet.collection
++dependencies:
++  - search_api:search_api
++  - facets:facets
++  - drupal:views
++  - better_exposed_filters:better_exposed_filters
+diff --git a/modules/facets_exposed_filters/facets_exposed_filters.module b/modules/facets_exposed_filters/facets_exposed_filters.module
+new file mode 100644
+index 0000000..2c02efb
+--- /dev/null
++++ b/modules/facets_exposed_filters/facets_exposed_filters.module
+@@ -0,0 +1,46 @@
++<?php
++
++use Drupal\Core\Form\FormStateInterface;
++use Drupal\search_api\Entity\Index;
++
++/**
++ * Implements hook_views_data_alter().
++ */
++function facets_exposed_filters_views_data_alter(array &$data) {
++  /** @var \Drupal\search_api\IndexInterface $index */
++  foreach (Index::loadMultiple() as $index) {
++    $data['search_api_index_' . $index->id()]['facets'] = [
++      'title' => t('Facets'),
++      'help' => t('Displays facets in a filter or area.'),
++      'filter' => [
++        'id' => 'facets_filter',
++      ],
++      'area' => [
++        'id' => 'facets_area',
++      ],
++    ];
++  }
++}
++
++function facets_exposed_filters_form_facets_facet_edit_form_alter(&$form, FormStateInterface $form_state) {
++  $facet = \Drupal::routeMatch()->getParameter('facets_facet');
++  $facetsource_config = $facet->getFacetSourceConfig();
++
++  // Only alter form when views_exposed_filters url processor is active.
++  if (substr($facetsource_config->getUrlProcessorName(), 0, 21) === 'views_exposed_filters') {
++    // Hide processors who do not apply when using views_exposed_filters.
++    $form['widget'] = ['#type' => 'hidden', '#value' => 'views_exposed_filter'];
++
++    $form["facet_settings"]["only_visible_when_facet_source_is_visible"]['#access'] = FALSE;
++    $form["facet_settings"]["only_visible_when_facet_source_is_visible"]['#value'] = FALSE;
++
++    $form["facet_settings"]["url_alias"]['#access'] = FALSE;
++    $form["facet_settings"]["show_title"]['#access'] = FALSE;
++    $form["facet_settings"]["show_only_one_result"]['#access'] = FALSE;
++    $form["facet_settings"]["show_only_one_result"]['#value'] = FALSE;
++
++    $form["facet_settings"]["empty_behavior"]['#access'] = FALSE;
++    unset($form["facet_settings"]["show_only_one_result"]);
++  }
++}
++
+diff --git a/modules/facets_exposed_filters/src/Plugin/facets/url_processor/ViewsExposedFilters.php b/modules/facets_exposed_filters/src/Plugin/facets/url_processor/ViewsExposedFilters.php
+new file mode 100644
+index 0000000..6ba8c54
+--- /dev/null
++++ b/modules/facets_exposed_filters/src/Plugin/facets/url_processor/ViewsExposedFilters.php
+@@ -0,0 +1,122 @@
++<?php
++
++namespace Drupal\facets_exposed_filters\Plugin\facets\url_processor;
++
++use Drupal\Core\Cache\UnchangingCacheableDependencyTrait;
++use Drupal\Core\Entity\EntityTypeManagerInterface;
++use Drupal\Core\Url;
++use Drupal\facets\FacetInterface;
++use Drupal\facets\UrlProcessor\UrlProcessorPluginBase;
++use Drupal\views\Entity\View;
++use Symfony\Component\DependencyInjection\ContainerInterface;
++use Symfony\Component\HttpFoundation\Request;
++
++/**
++ * Query string URL processor.
++ *
++ * @FacetsUrlProcessor(
++ *   id = "views_exposed_filters",
++ *   label = @Translation("Views exposed filters"),
++ *   description = @Translation("Views exposed filters moves all url logic to
++ *   Views, which provides a better AJAX/Views integration.")
++ * )
++ */
++class ViewsExposedFilters extends UrlProcessorPluginBase {
++
++  use UnchangingCacheableDependencyTrait;
++
++  /**
++   * {@inheritdoc}
++   */
++  public function __construct(array $configuration, $plugin_id, $plugin_definition, Request $request, EntityTypeManagerInterface $entity_type_manager) {
++    parent::__construct($configuration, $plugin_id, $plugin_definition, $request, $entity_type_manager);
++    $this->initializeActiveFilters();
++  }
++
++  /**
++   * {@inheritdoc}
++   */
++  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
++    return new static(
++      $configuration,
++      $plugin_id,
++      $plugin_definition,
++      $container->get('request_stack')->getCurrentRequest(),
++      $container->get('entity_type.manager'),
++    );
++  }
++
++  /**
++   * {@inheritdoc}
++   */
++  public function buildUrls(FacetInterface $facet, array $results) {
++    // No results are found for this facet, so don't try to create urls.
++    if (empty($results)) {
++      return [];
++    }
++
++    $display_id = $this->configuration['facet']->getFacetSource()->pluginDefinition["display_id"];
++    $parts = explode(':', $display_id);
++    $views_info = explode('__', $parts[1]);
++    $views_name = $views_info[0];
++    $views_display = $views_info[1];
++
++    // We dont build real urls here. Views will handle this part for us. However
++    // our code still depends on the url being set, so we set all results to use
++    // the views display url.
++    $url = Url::fromRoute('view.' . $views_name . '.' . $views_display);
++    foreach ($results as $key => $result) {
++      $results[$key]->setUrl($url);
++    }
++
++    return $results;
++  }
++
++  /**
++   * Initializes the active filters from the request query.
++   *
++   * Get all the filters that are active by checking the request query and store
++   * them in activeFilters which is an array where key is the facet id and value
++   * is an array of raw values.
++   */
++  protected function initializeActiveFilters() {
++    $url_parameters = $this->request->query;
++    $active_filters = [];
++    $display_id = $this->configuration['facet']->getFacetSource()->pluginDefinition["display_id"];
++    $parts = explode(':', $display_id);
++    $views_info = explode('__', $parts[1]);
++    $views_name = $views_info[0];
++    $views_display = $views_info[1];
++    $view = View::load($views_name);
++    $display = $view->getDisplay($views_display);
++    if (!isset($display["display_options"]["filters"])) {
++      $display = $view->getDisplay('default');
++    }
++    foreach ($display["display_options"]["filters"] as $filter) {
++      if ($filter["plugin_id"] == 'facets_filter') {
++        $facet_id = $filter['facet'];
++        $identifier = $filter["expose"]["identifier"];
++        $query_params = $url_parameters->all();
++        if (isset($query_params[$identifier]) && $query_params[$identifier]) {
++          if ($filter["expose"]["multiple"]) {
++            $active_filters[$facet_id] = $url_parameters->all()[$identifier];
++          }
++          else {
++            if ($url_parameters->all()[$identifier] != 'All') {
++              $active_filters[$facet_id][] = $url_parameters->all()[$identifier];
++            }
++          }
++        }
++      }
++    }
++    $this->activeFilters = $active_filters;
++  }
++
++  /**
++   * {@inheritdoc}
++   */
++  public function getCacheContexts() {
++    return ['url.query_args'];
++  }
++
++}
+diff --git a/modules/facets_exposed_filters/src/Plugin/facets/widget/ViewsExposedFilterWidget.php b/modules/facets_exposed_filters/src/Plugin/facets/widget/ViewsExposedFilterWidget.php
+new file mode 100644
+index 0000000..3196206
+--- /dev/null
++++ b/modules/facets_exposed_filters/src/Plugin/facets/widget/ViewsExposedFilterWidget.php
+@@ -0,0 +1,49 @@
++<?php
++
++namespace Drupal\facets_exposed_filters\Plugin\facets\widget;
++
++use Drupal\facets\FacetInterface;
++use Drupal\facets\Widget\WidgetPluginBase;
++
++/**
++ * A specific widget used with the views_exposed_filters url processor.
++ *
++ * @FacetsWidget(
++ *   id = "views_exposed_filter",
++ *   label = @Translation("Views exposed filters"),
++ * )
++ */
++class ViewsExposedFilterWidget extends WidgetPluginBase {
++
++  /**
++   * {@inheritdoc}
++   */
++  public function build(FacetInterface $facet) {
++    $results = $facet->getResults();
++    return $this->buildOneLevel($results);
++  }
++
++  /**
++   * Builds one level from results.
++   *
++   * @param \Drupal\facets\Result\ResultInterface[] $results
++   *   A list of results.
++   *
++   * @return array
++   *   Generated build.
++   */
++  protected function buildOneLevel(array $results): array {
++    $items = [];
++
++    foreach ($results as $result) {
++      $label = $result->getDisplayValue();
++      if ($this->getConfiguration()['show_numbers'] && $result->getCount() !== FALSE) {
++        $label .= ' ('. $result->getCount() .')';
++      }
++      $items[$result->getRawValue()] = $label;
++    }
++
++    return $items;
++  }
++
++}
+diff --git a/modules/facets_exposed_filters/src/Plugin/views/FacetsViewsPluginTrait.php b/modules/facets_exposed_filters/src/Plugin/views/FacetsViewsPluginTrait.php
+new file mode 100644
+index 0000000..0241793
+--- /dev/null
++++ b/modules/facets_exposed_filters/src/Plugin/views/FacetsViewsPluginTrait.php
+@@ -0,0 +1,78 @@
++<?php
++
++namespace Drupal\facets_exposed_filters\Plugin\views;
++
++use Drupal\Core\Form\FormStateInterface;
++
++/**
++ * Helper for the main Views plugin.
++ */
++trait FacetsViewsPluginTrait {
++
++  /**
++   * Builds the options form.
++   *
++   * @param array $form
++   *   The form array that is being added to.
++   * @param \Drupal\Core\Form\FormStateInterface $form_state
++   *   The form state object.
++   */
++  public function facetsViewsBuildOptionsForm(array &$form, FormStateInterface $form_state) {
++    $options = [];
++
++    /** @var \Drupal\facets\Entity\Facet[] $facets */
++    $facets = $this->facetStorage->loadMultiple();
++
++    $format = 'search_api:views_%s__%s__%s';
++    $source = sprintf($format, $this->view->getDisplay()
++      ->getPluginId(), $this->view->id(), $this->view->current_display);
++    foreach ($facets as $facet) {
++      if ($facet->getFacetSourceId() === $source) {
++        $options[$facet->id()] = $facet->label();
++      }
++    }
++
++    $form['facet'] = [
++      '#title' => 'Facet',
++      '#options' => $options,
++      '#type' => 'radios',
++      '#required' => TRUE,
++      '#default_value' => isset($this->options['facet']) ? $this->options['facet'] : NULL,
++    ];
++  }
++
++  /**
++   * Gets the facets to render.
++   *
++   * @return array
++   *   The facet blocks to be output, in render array format.
++   */
++  public function facetsViewsGetFacets() {
++    $build = [];
++
++    if (!$this->options['facet']) {
++      return $build;
++    }
++
++    /** @var \Drupal\facets\Entity\Facet $facet */
++    $facet = $this->facetStorage->load($this->options['facet']);
++    $facet_build = $this->facetManager->build($facet);
++
++    if (!isset($facet_build[0]) || !$facet_build[0]) {
++      return $build;
++    }
++
++    $options = [];
++    // Empty behavior is not supported. Ensure we have actual results.
++    if (isset($facet_build[0]) && !isset($facet_build[0]["#type"])) {
++      $build = [
++        '#type' => 'select',
++        '#options' => $facet_build[0],
++        '#multiple' => $this->options["expose"]["multiple"],
++      ];
++    }
++
++    return $build;
++  }
++
++}
+diff --git a/src/Plugin/views/area/FacetsArea.php b/modules/facets_exposed_filters/src/Plugin/views/area/FacetsArea.php
+similarity index 95%
+rename from src/Plugin/views/area/FacetsArea.php
+rename to modules/facets_exposed_filters/src/Plugin/views/area/FacetsArea.php
+index f3e7f59..fc5ed95 100644
+--- a/src/Plugin/views/area/FacetsArea.php
++++ b/modules/facets_exposed_filters/src/Plugin/views/area/FacetsArea.php
+@@ -1,12 +1,12 @@
+ <?php
+
+-namespace Drupal\facets\Plugin\views\area;
++namespace Drupal\facets_exposed_filters\Plugin\views\area;
+
+ use Drupal\Core\Block\BlockPluginInterface;
+ use Drupal\Core\Entity\EntityStorageInterface;
+ use Drupal\Core\Form\FormStateInterface;
+ use Drupal\facets\FacetManager\DefaultFacetManager;
+-use Drupal\facets\Plugin\views\FacetsViewsPluginTrait;
++use Drupal\facets_exposed_filters\Plugin\views\FacetsViewsPluginTrait;
+ use Drupal\views\Plugin\views\area\AreaPluginBase;
+ use Symfony\Component\DependencyInjection\ContainerInterface;
+
+diff --git a/src/Plugin/views/filter/FacetsFilter.php b/modules/facets_exposed_filters/src/Plugin/views/filter/FacetsFilter.php
+similarity index 84%
+rename from src/Plugin/views/filter/FacetsFilter.php
+rename to modules/facets_exposed_filters/src/Plugin/views/filter/FacetsFilter.php
+index bd44301..4be699a 100644
+--- a/src/Plugin/views/filter/FacetsFilter.php
++++ b/modules/facets_exposed_filters/src/Plugin/views/filter/FacetsFilter.php
+@@ -1,15 +1,14 @@
+ <?php
+
+-namespace Drupal\facets\Plugin\views\filter;
++namespace Drupal\facets_exposed_filters\Plugin\views\filter;
+
+ use Drupal\Component\Utility\Random;
+ use Drupal\Core\Block\BlockPluginInterface;
+ use Drupal\Core\Entity\EntityStorageInterface;
+ use Drupal\Core\Form\FormStateInterface;
+ use Drupal\facets\FacetManager\DefaultFacetManager;
+-use Drupal\facets\Plugin\views\FacetsViewsPluginTrait;
++use Drupal\facets_exposed_filters\Plugin\views\FacetsViewsPluginTrait;
+ use Drupal\views\Plugin\views\filter\FilterPluginBase;
+-use Drupal\views\Plugin\views\HandlerBase;
+ use Symfony\Component\DependencyInjection\ContainerInterface;
+
+ /**
+@@ -84,7 +83,8 @@ class FacetsFilter extends FilterPluginBase {
+     $options = parent::defineOptions();
+     $options['exposed'] = ['default' => TRUE];
+     $options['expose']['contains']['identifier'] = ['default' => 'facet_' . $random->name()];
+-    $options['facets']['default'] = [];
++    $options['expose']['contains']['multiple'] = ['default' => TRUE];
++    $options['facet']['default'] = NULL;
+     $options['label_display']['default'] = BlockPluginInterface::BLOCK_LABEL_VISIBLE;
+     return $options;
+   }
+@@ -93,7 +93,7 @@ class FacetsFilter extends FilterPluginBase {
+    * {@inheritdoc}
+    */
+   public function buildOptionsForm(&$form, FormStateInterface $form_state) {
+-    HandlerBase::buildOptionsForm($form, $form_state);
++    parent::buildOptionsForm($form, $form_state);
+     $this->facetsViewsBuildOptionsForm($form, $form_state);
+   }
+
+@@ -101,17 +101,26 @@ class FacetsFilter extends FilterPluginBase {
+    * {@inheritdoc}
+    */
+   public function adminSummary() {
+-    return implode(', ', array_filter($this->options['facets']));
++    return $this->options['facet'];
+   }
+
+   /**
+    * {@inheritdoc}
+    */
+   public function valueForm(&$form, FormStateInterface $form_state) {
++
++    // Dirty check if we are in views UI. Return no values as it removes
++    // settings from the view when editing settings for an existing facet
++    // filter.
++    if(isset($form["admin_label"])) {
++      $form['value'] = [];
++      return;
++    }
++
+     static $is_processing = NULL;
+
+     if ($is_processing) {
+-      $form_state->facets_not_built = TRUE;
++      $form_state->set('facets_not_built', TRUE);
+       $form['value'] = [];
+       return;
+     }
+diff --git a/modules/facets_range_widget/facets_range_widget.libraries.yml b/modules/facets_range_widget/facets_range_widget.libraries.yml
+index d994ac8..5c41972 100644
+--- a/modules/facets_range_widget/facets_range_widget.libraries.yml
++++ b/modules/facets_range_widget/facets_range_widget.libraries.yml
+@@ -23,6 +23,7 @@ slider:
+   dependencies:
+     - core/drupal
+     - core/drupalSettings
+-    - core/jquery.once
++    - core/jquery
++    - core/once
+     - facets_range_widget/jquery.ui.slider.pips
+     - jquery_ui_touch_punch/touch-punch
+diff --git a/modules/facets_range_widget/src/Plugin/facets/processor/RangeSliderProcessor.php b/modules/facets_range_widget/src/Plugin/facets/processor/RangeSliderProcessor.php
+index 62cf04a..b166fd8 100644
+--- a/modules/facets_range_widget/src/Plugin/facets/processor/RangeSliderProcessor.php
++++ b/modules/facets_range_widget/src/Plugin/facets/processor/RangeSliderProcessor.php
+@@ -52,13 +52,16 @@ class RangeSliderProcessor extends SliderProcessor implements PreQueryProcessorI
+       unset($active_filters['']);
+     }
+
++    /** @var \Drupal\facets\Utility\FacetsUrlGenerator $url_generator */
++    $url_generator = \Drupal::service('facets.utility.url_generator');
++
+     /** @var \Drupal\facets\Result\ResultInterface[] $results */
+     foreach ($results as &$result) {
+       $new_active_filters = $active_filters;
+       unset($new_active_filters[$facet->id()]);
+       // Add one generic query filter with the min and max placeholder.
+       $new_active_filters[$facet->id()][] = '(min:__range_slider_min__,max:__range_slider_max__)';
+-      $url = \Drupal::service('facets.utility.url_generator')->getUrl($new_active_filters, FALSE);
++      $url = $url_generator->getUrl($new_active_filters, FALSE);
+       $result->setUrl($url);
+     }
+
+diff --git a/modules/facets_searchbox_widget/facets_searchbox_widget.libraries.yml b/modules/facets_searchbox_widget/facets_searchbox_widget.libraries.yml
+index 468f213..c315e94 100755
+--- a/modules/facets_searchbox_widget/facets_searchbox_widget.libraries.yml
++++ b/modules/facets_searchbox_widget/facets_searchbox_widget.libraries.yml
+@@ -8,4 +8,5 @@ searchbox:
+   dependencies:
+     - core/drupal
+     - core/drupalSettings
+-    - core/jquery.once
++    - core/jquery
++    - core/once
+diff --git a/modules/facets_summary/src/Entity/FacetsSummary.php b/modules/facets_summary/src/Entity/FacetsSummary.php
+index ee3bd7c..b2e438a 100644
+--- a/modules/facets_summary/src/Entity/FacetsSummary.php
++++ b/modules/facets_summary/src/Entity/FacetsSummary.php
+@@ -3,6 +3,7 @@
+ namespace Drupal\facets_summary\Entity;
+
+ use Drupal\Core\Config\Entity\ConfigEntityBase;
++use Drupal\facets\Entity\Facet;
+ use Drupal\facets_summary\FacetsSummaryInterface;
+
+ /**
+@@ -316,6 +317,11 @@ class FacetsSummary extends ConfigEntityBase implements FacetsSummaryInterface {
+       $this->addDependencies($facet_source_dependencies);
+     }
+
++    foreach (array_keys($this->getFacets() ?? []) as $facet_id) {
++      $facet = Facet::load($facet_id);
++      $this->addDependency('config', $facet->getConfigDependencyName());
++    }
++
+     return $this;
+   }
+
+diff --git a/src/Cache/Context/FacetsFilterCacheContext.php b/src/Cache/Context/FacetsFilterCacheContext.php
+index 4fc20f5..e9f3341 100644
+--- a/src/Cache/Context/FacetsFilterCacheContext.php
++++ b/src/Cache/Context/FacetsFilterCacheContext.php
+@@ -7,7 +7,7 @@ use Drupal\Core\Cache\Context\CalculatedCacheContextInterface;
+ use Drupal\Core\Cache\Context\RequestStackCacheContextBase;
+
+ /**
+- * Defines the FacetsAjaxArgsCacheContext service, for per facets args caching.
++ * Defines the FacetsFilterCacheContext service, for per facets args caching.
+  *
+  * Cache context ID: 'facets_filter' (to vary by all request arguments).
+  * Calculated cache context ID: 'facets_filter:%key', e.g.'facets_filter:f'
+@@ -33,7 +33,7 @@ class FacetsFilterCacheContext extends RequestStackCacheContextBase implements C
+       return http_build_query($value);
+     }
+     elseif ($this->requestStack->getCurrentRequest()->request->has($arg)) {
+-      $value = $this->requestStack->getCurrentRequest()->request->get($arg);
++      $value = $this->requestStack->getCurrentRequest()->request->all()[$arg] ?? NULL;
+       if (is_array($value)) {
+         return http_build_query($value);
+       }
+diff --git a/src/Controller/FacetsViewsAjaxController.php b/src/Controller/FacetsViewsAjaxController.php
+deleted file mode 100644
+index 157a81e..0000000
+--- a/src/Controller/FacetsViewsAjaxController.php
++++ /dev/null
+@@ -1,88 +0,0 @@
+-<?php
+-
+-namespace Drupal\facets\Controller;
+-
+-use Drupal\Core\Ajax\ReplaceCommand;
+-use Drupal\Core\Cache\CacheableMetadata;
+-use Drupal\Core\Cache\CacheableResponseInterface;
+-use Drupal\Core\Render\BubbleableMetadata;
+-use Drupal\Core\Render\RenderContext;
+-use Drupal\views\Ajax\ViewAjaxResponse;
+-use Drupal\views\Controller\ViewAjaxController;
+-use Symfony\Component\HttpFoundation\Request;
+-
+-/**
+- * Controller that allows for to replace exposed forms in blocks.
+- */
+-class FacetsViewsAjaxController extends ViewAjaxController {
+-
+-  /**
+-   * {@inheritdoc}
+-   */
+-  public function ajaxView(Request $request) {
+-    $this->facetsRemoveQueryParams($request);
+-    $response = parent::ajaxView($request);
+-
+-    $view = $response->getView();
+-    $display = $view->getDisplay();
+-    if ($display->getOption('exposed_block') && $display->usesExposedFormInBlock()) {
+-      $metadata = $this->addExposedBlockToResponse($response);
+-      if ($response instanceof CacheableResponseInterface) {
+-        $response->addCacheableDependency($metadata);
+-      }
+-    }
+-
+-    return $response;
+-  }
+-
+-  /**
+-   * If there's an AJAX request, remove the 'f' and 'page' key.
+-   *
+-   * ... in case they are in the current browser URL.
+-   *
+-   * This only applies when the method is POST.
+-   *
+-   * @param \Symfony\Component\HttpFoundation\Request $request
+-   *   The request object to process.
+-   */
+-  protected function facetsRemoveQueryParams(Request $request) {
+-    if ($request->isXmlHttpRequest()) {
+-      // @todo replace hardcoded 'f' by facet setting.
+-      foreach (['f', 'page', 'fulltext'] as $key) {
+-        if ($request->query->has($key)) {
+-          $request->query->remove($key);
+-        }
+-      }
+-    }
+-  }
+-
+-  /**
+-   * Adds the exposed form to the response if necessary.
+-   */
+-  protected function addExposedBlockToResponse(ViewAjaxResponse $response): CacheableMetadata {
+-    $view = $response->getView();
+-    $context = new RenderContext();
+-    $exposed_block = $this->renderer->executeInRenderContext($context, function () use ($view) {
+-      $output = $view->display_handler->viewExposedFormBlocks();
+-      if (is_array($output) && !empty($output)) {
+-        return $output;
+-      }
+-
+-      return [];
+-    });
+-
+-    if (!$context->isEmpty() && !empty($exposed_block)) {
+-      $bubbleable_metadata = $context->pop();
+-      BubbleableMetadata::createFromRenderArray($exposed_block)
+-        ->merge($bubbleable_metadata)
+-        ->applyTo($exposed_block);
+-    }
+-
+-    // Replace exposed block.
+-    $selector = 'views-exposed-form-' . strtr($view->id(), '_', '-') . '-' . strtr($view->current_display, '_', '-');
+-    $response->addCommand(new ReplaceCommand("#" . $selector, $exposed_block));
+-
+-    return CacheableMetadata::createFromRenderArray($exposed_block);
+-  }
+-
+-}
+diff --git a/src/Entity/Facet.php b/src/Entity/Facet.php
+index 7e232a3..4deb3d2 100644
+--- a/src/Entity/Facet.php
++++ b/src/Entity/Facet.php
+@@ -1116,7 +1116,11 @@ class Facet extends ConfigEntityBase implements FacetInterface {
+    */
+   public function postSave(EntityStorageInterface $storage, $update = TRUE) {
+     parent::postSave($storage, $update);
+-    if (!$update) {
++    // If a facet is new, update the caching metadata of the facet source.
++    // But only if the facet has been created via the UI and not via config
++    // import.
++    // @see https://www.drupal.org/project/facets/issues/3395567
++    if (!$update && !\Drupal::service('config.installer')->isSyncing()) {
+       self::clearBlockCache();
+       // Register newly created facet within its source, for the caching.
+       if (($source = $this->getFacetSource()) && $source->getCacheMaxAge() !== 0) {
+diff --git a/src/EventSubscriber/RouteAlterSubscriber.php b/src/EventSubscriber/RouteAlterSubscriber.php
+deleted file mode 100644
+index 4d8fc9b..0000000
+--- a/src/EventSubscriber/RouteAlterSubscriber.php
++++ /dev/null
+@@ -1,32 +0,0 @@
+-<?php
+-
+-namespace Drupal\facets\EventSubscriber;
+-
+-use Drupal\Core\Routing\RouteBuildEvent;
+-use Drupal\Core\Routing\RoutingEvents;
+-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+-
+-/**
+- * Modify certain routes.
+- */
+-class RouteAlterSubscriber implements EventSubscriberInterface {
+-
+-  /**
+-   * {@inheritdoc}
+-   */
+-  public function onRouteAlter(RouteBuildEvent $event) {
+-    $collection = $event->getRouteCollection();
+-    if ($route = $collection->get('views.ajax')) {
+-      $route->setDefault('_controller', '\Drupal\facets\Controller\FacetsViewsAjaxController::ajaxView');
+-    }
+-  }
+-
+-  /**
+-   * {@inheritdoc}
+-   */
+-  public static function getSubscribedEvents() {
+-    $events[RoutingEvents::ALTER][] = ['onRouteAlter', -100];
+-    return $events;
+-  }
+-
+-}
+diff --git a/src/FacetManager/DefaultFacetManager.php b/src/FacetManager/DefaultFacetManager.php
+index 4282368..e07eefa 100644
+--- a/src/FacetManager/DefaultFacetManager.php
++++ b/src/FacetManager/DefaultFacetManager.php
+@@ -448,21 +448,6 @@ class DefaultFacetManager {
+           ],
+         ];
+       }
+-      else {
+-        // If the facet has no results, but it is being rendered trough AJAX it
+-        // should render an empty container. This is because the JavaScript
+-        // needs to be able to find a div to replace with the new content.
+-        return [
+-          [
+-            0 => $build,
+-            '#type' => 'container',
+-            '#attributes' => [
+-              'data-drupal-facet-id' => $built_facet->id(),
+-              'class' => ['facet-empty', 'facet-hidden'],
+-            ],
+-          ],
+-        ];
+-      }
+     }
+
+     return [$build];
+diff --git a/src/Plugin/Block/FacetBlock.php b/src/Plugin/Block/FacetBlock.php
+index 63c1c8e..5f561a2 100644
+--- a/src/Plugin/Block/FacetBlock.php
++++ b/src/Plugin/Block/FacetBlock.php
+@@ -93,11 +93,6 @@ class FacetBlock extends BlockBase implements ContainerFactoryPluginInterface {
+     if (!empty($build)) {
+       CacheableMetadata::createFromObject($this)->applyTo($build);
+
+-      // Add extra elements from facet source, for example, ajax scripts.
+-      // @see Drupal\facets\Plugin\facets\facet_source\SearchApiDisplay
+-      /** @var \Drupal\facets\FacetSource\FacetSourcePluginInterface $facet_source */
+-      $facet_source = $facet->getFacetSource();
+-
+       // Add contextual links only when we have results.
+       $build['#contextual_links']['facets_facet'] = [
+         'route_parameters' => ['facets_facet' => $facet->id()],
+diff --git a/src/Plugin/better_exposed_filters/filter/Facets.php b/src/Plugin/better_exposed_filters/filter/Facets.php
+deleted file mode 100644
+index 0f059e6..0000000
+--- a/src/Plugin/better_exposed_filters/filter/Facets.php
++++ /dev/null
+@@ -1,81 +0,0 @@
+-<?php
+-
+-namespace Drupal\facets\Plugin\better_exposed_filters\filter;
+-
+-use Drupal\better_exposed_filters\Plugin\better_exposed_filters\filter\FilterWidgetBase;
+-use Drupal\Core\Cache\CacheableMetadata;
+-use Drupal\Core\Form\FormStateInterface;
+-
+-/**
+- * Default widget implementation.
+- *
+- * @BetterExposedFiltersFilterWidget(
+- *   id = "facets",
+- *   label = @Translation("Facets"),
+- * )
+- */
+-class Facets extends FilterWidgetBase {
+-
+-  /**
+-   * {@inheritdoc}
+-   */
+-  public function exposedFormAlter(array &$form, FormStateInterface $form_state) {
+-    if ($form_state->facets_not_built ?? FALSE) {
+-      return;
+-    }
+-
+-    $field_id = $this->getExposedFilterFieldId();
+-    if (!empty($form[$field_id]) && !empty($form[$field_id]['#content'])) {
+-      $metadata = new CacheableMetadata();
+-      if (isset($form['#cache'])) {
+-        $metadata = CacheableMetadata::createFromRenderArray($form);
+-      }
+-
+-      foreach ($form[$field_id]['#content'] as &$facet_content) {
+-        /** @var \Drupal\facets\FacetInterface $facet */
+-        $facet = $facet_content['content'][0]['#facet'] ?? NULL;
+-        if (!$facet) {
+-          continue;
+-        }
+-
+-        switch ($facet->getWidgetInstance()->getPluginId()) {
+-          case 'array':
+-            // Not supported here.
+-            break;
+-
+-          case 'checkbox':
+-          case 'dropdown':
+-          case 'links':
+-          default:
+-            parent::exposedFormAlter($form, $form_state);
+-
+-            /** @var \Drupal\views\Plugin\views\filter\FilterPluginBase $filter */
+-            $filter = $this->handler;
+-
+-            if ($filter->view->ajaxEnabled() || $filter->view->display_handler->ajaxEnabled()) {
+-              array_walk_recursive( $facet_content, function(&$value, $key) {
+-                if ($key === 'data-drupal-facet-ajax') {
+-                  $value = '1';
+-                }
+-              });
+-            }
+-
+-            $metadata = $metadata->merge(CacheableMetadata::createFromRenderArray($facet_content));
+-
+-            break;
+-        }
+-      }
+-      unset($facet_content);
+-
+-      $metadata->applyTo($form);
+-    }
+-  }
+-
+-  public static function isApplicable($filter = NULL, array $filter_options = []) {
+-    $is_applicable = parent::isApplicable($filter, $filter_options);
+-    if (is_a($filter, 'Drupal\facets\Plugin\views\filter\FacetsFilter')) {
+-      $is_applicable = TRUE;
+-    }
+-    return $is_applicable;
+-  }
+-}
+diff --git a/src/Plugin/facets/processor/BooleanItemProcessor.php b/src/Plugin/facets/processor/BooleanItemProcessor.php
+index 070d39f..f9c0c2c 100644
+--- a/src/Plugin/facets/processor/BooleanItemProcessor.php
++++ b/src/Plugin/facets/processor/BooleanItemProcessor.php
+@@ -62,7 +62,7 @@ class BooleanItemProcessor extends ProcessorPluginBase implements BuildProcessor
+       '#title' => $this->t('On value'),
+       '#type' => 'textfield',
+       '#default_value' => $config['on_value'],
+-      '#description' => $this->t('Use this label instead of <em>0</em> for the <em>On</em> or <em>True</em> value. Leave empty to hide this item.'),
++      '#description' => $this->t('Use this label instead of <em>1</em> for the <em>On</em> or <em>True</em> value. Leave empty to hide this item.'),
+       '#states' => [
+         'required' => ['input[name="facet_settings[boolean_item][settings][off_value]"' => ['empty' => TRUE]],
+       ],
+@@ -72,7 +72,7 @@ class BooleanItemProcessor extends ProcessorPluginBase implements BuildProcessor
+       '#title' => $this->t('Off value'),
+       '#type' => 'textfield',
+       '#default_value' => $config['off_value'],
+-      '#description' => $this->t('Use this label instead of <em>1</em> for the <em>Off</em> or <em>False</em> value. Leave empty to hide this item.'),
++      '#description' => $this->t('Use this label instead of <em>0</em> for the <em>Off</em> or <em>False</em> value. Leave empty to hide this item.'),
+       '#states' => [
+         'required' => ['input[name="facet_settings[boolean_item][settings][on_value]"' => ['empty' => TRUE]],
+       ],
+diff --git a/src/Plugin/facets/processor/DisplayValueWidgetOrderProcessor.php b/src/Plugin/facets/processor/DisplayValueWidgetOrderProcessor.php
+index c148580..f92f46c 100644
+--- a/src/Plugin/facets/processor/DisplayValueWidgetOrderProcessor.php
++++ b/src/Plugin/facets/processor/DisplayValueWidgetOrderProcessor.php
+@@ -68,18 +68,18 @@ class DisplayValueWidgetOrderProcessor extends SortProcessorPluginBase implement
+    */
+   public function sortResults(Result $a, Result $b) {
+     // Get the transliterate values only once.
+-    if (!isset($a->transliterateDisplayValue)) {
+-      $a->transliterateDisplayValue = $this->transliteration->removeDiacritics($a->getDisplayValue());
++    if (!$a->get('transliterateDisplayValue')) {
++      $a->set('transliterateDisplayValue', $this->transliteration->removeDiacritics($a->getDisplayValue()));
+     }
+-    if (!isset($b->transliterateDisplayValue)) {
+-      $b->transliterateDisplayValue = $this->transliteration->removeDiacritics($b->getDisplayValue());
++    if (!$b->get('transliterateDisplayValue')) {
++      $b->set('transliterateDisplayValue', $this->transliteration->removeDiacritics($b->getDisplayValue()));
+     }
+
+     // Return the sort value.
+-    if ($a->transliterateDisplayValue == $b->transliterateDisplayValue) {
++    if ($a->get('transliterateDisplayValue') == $b->get('transliterateDisplayValue')) {
+       return 0;
+     }
+-    return strnatcasecmp($a->transliterateDisplayValue, $b->transliterateDisplayValue);
++    return strnatcasecmp($a->get('transliterateDisplayValue'), $b->get('transliterateDisplayValue'));
+   }
+
+ }
+diff --git a/src/Plugin/facets/processor/HideNonNarrowingResultProcessor.php b/src/Plugin/facets/processor/HideNonNarrowingResultProcessor.php
+index 010a737..25fef5f 100644
+--- a/src/Plugin/facets/processor/HideNonNarrowingResultProcessor.php
++++ b/src/Plugin/facets/processor/HideNonNarrowingResultProcessor.php
+@@ -27,16 +27,34 @@ class HideNonNarrowingResultProcessor extends ProcessorPluginBase implements Bui
+    * {@inheritdoc}
+    */
+   public function build(FacetInterface $facet, array $results) {
+-    $facet_results = $facet->getResults();
+-    $result_count = 0;
+-    foreach ($facet_results as $result) {
+-      if ($result->isActive()) {
+-        $result_count += $result->getCount();
++    $facetSource = $facet->getFacetSource();
++
++    if ($facetSource) {
++      $result_count = $facetSource->getCount();
++    }
++    else {
++      // @todo Backward compatibility, should be removed!
++      $facet_results = $facet->getResults();
++      $result_count = 0;
++      foreach ($facet_results as $result) {
++        if ($result->isActive()) {
++          $result_count += $result->getCount();
++        }
+       }
+     }
+
+     /** @var \Drupal\facets\Result\ResultInterface $result */
+     foreach ($results as $id => $result) {
++      $children_results = $result->getChildren();
++
++      if ($children_results) {
++        $reduced_children_results = $this->build($facet, $children_results);
++        $result->setChildren($reduced_children_results);
++        if ($reduced_children_results) {
++          continue;
++        }
++      }
++
+       if ((($result->getCount() == $result_count) || ($result->getCount() == 0)) && !$result->isActive() && !$result->hasActiveChildren()) {
+         unset($results[$id]);
+       }
+diff --git a/src/Plugin/facets/processor/TermWeightWidgetOrderProcessor.php b/src/Plugin/facets/processor/TermWeightWidgetOrderProcessor.php
+index bedfb2b..3b56512 100644
+--- a/src/Plugin/facets/processor/TermWeightWidgetOrderProcessor.php
++++ b/src/Plugin/facets/processor/TermWeightWidgetOrderProcessor.php
+@@ -71,38 +71,38 @@ class TermWeightWidgetOrderProcessor extends SortProcessorPluginBase implements
+    */
+   public function sortResults(Result $a, Result $b) {
+     // Get the term weight once.
+-    if (!isset($a->termWeight) || !isset($b->termWeight)) {
++    if ($a->get('termWeight') === NULL || $b->get('termWeight') === NULL) {
+       $ids = [];
+-      if (!isset($a->termWeight)) {
++      if ($a->get('termWeight') === NULL) {
+         $a_raw = $a->getRawValue();
+         $ids[] = $a_raw;
+       }
+-      if (!isset($b->termWeight)) {
++      if ($b->get('termWeight') === NULL) {
+         $b_raw = $b->getRawValue();
+         $ids[] = $b_raw;
+       }
+       $entities = $this->entityTypeManager
+         ->getStorage('taxonomy_term')
+         ->loadMultiple($ids);
+-      if (!isset($a->termWeight)) {
++      if ($a->get('termWeight') === NULL) {
+         if (empty($entities[$a_raw])) {
+           return 0;
+         }
+-        $a->termWeight = $entities[$a_raw]->getWeight();
++        $a->set('termWeight', $entities[$a_raw]->getWeight());
+       }
+-      if (!isset($b->termWeight)) {
++      if ($b->get('termWeight') === NULL) {
+         if (empty($entities[$b_raw])) {
+           return 0;
+         }
+-        $b->termWeight = $entities[$b_raw]->getWeight();
++        $b->set('termWeight', $entities[$b_raw]->getWeight());
+       }
+     }
+
+     // Return the sort value.
+-    if ($a->termWeight === $b->termWeight) {
++    if ($a->get('termWeight') === $b->get('termWeight')) {
+       return 0;
+     }
+-    return ($a->termWeight < $b->termWeight) ? -1 : 1;
++    return ($a->get('termWeight') < $b->get('termWeight')) ? -1 : 1;
+   }
+
+   /**
+diff --git a/src/Plugin/views/FacetsViewsPluginTrait.php b/src/Plugin/views/FacetsViewsPluginTrait.php
+deleted file mode 100644
+index df61f33..0000000
+--- a/src/Plugin/views/FacetsViewsPluginTrait.php
++++ /dev/null
+@@ -1,111 +0,0 @@
+-<?php
+-
+-namespace Drupal\facets\Plugin\views;
+-
+-use Drupal\Core\Block\BlockPluginInterface;
+-use Drupal\Core\Cache\CacheableMetadata;
+-use Drupal\Core\Form\FormStateInterface;
+-
+-/**
+- * Helper for the main Views plugin.
+- */
+-trait FacetsViewsPluginTrait {
+-
+-  /**
+-   * Builds the options form.
+-   *
+-   * @param array $form
+-   *   The form array that is being added to.
+-   * @param \Drupal\Core\Form\FormStateInterface $form_state
+-   *   The form state object.
+-   */
+-  public function facetsViewsBuildOptionsForm(array &$form, FormStateInterface $form_state) {
+-    $options = [];
+-
+-    /** @var \Drupal\facets\Entity\Facet[] $facets */
+-    $facets = $this->facetStorage->loadMultiple();
+-
+-    $format = 'search_api:views_%s__%s__%s';
+-    $source = sprintf($format, $this->view->getDisplay()->getPluginId(), $this->view->id(), $this->view->current_display);
+-    foreach ($facets as $facet) {
+-      if ($facet->getFacetSourceId() === $source) {
+-        $options[$facet->id()] = $facet->label();
+-      }
+-    }
+-
+-    $form['facets'] = [
+-      '#title' => 'Facets',
+-      '#options' => $options,
+-      '#type' => 'checkboxes',
+-      '#required' => TRUE,
+-      '#default_value' => isset($this->options['facets']) ? $this->options['facets'] : [],
+-    ];
+-
+-    $form['label_display'] = [
+-      '#type' => 'checkbox',
+-      '#title' => $this->t('Display block title'),
+-      '#default_value' => ($this->options['label_display'] === BlockPluginInterface::BLOCK_LABEL_VISIBLE),
+-      '#return_value' => BlockPluginInterface::BLOCK_LABEL_VISIBLE,
+-    ];
+-  }
+-
+-  /**
+-   * Gets the facets to render.
+-   *
+-   * @return array
+-   *   The facet blocks to be output, in render array format.
+-   */
+-  public function facetsViewsGetFacets() {
+-    $build = [];
+-
+-    /** @var \Drupal\facets\Entity\Facet[] $facets */
+-    $items = [];
+-    $facets = $this->facetStorage->loadMultiple(array_filter($this->options['facets']));
+-    foreach ($facets as $facet) {
+-      $facet_build = $this->facetManager->build($facet);
+-      if (!empty($facet_build)) {
+-        $item = [
+-          '#theme' => 'block',
+-          '#configuration' => [
+-            'provider' => 'facets',
+-            'label' => $facet->label(),
+-            'label_display' => ($this->options['label_display'] === BlockPluginInterface::BLOCK_LABEL_VISIBLE),
+-          ],
+-          '#id' => $facet->id(),
+-          '#plugin_id' => 'facet_block:' . $facet->id(),
+-          '#base_plugin_id' => 'facet_block',
+-          '#derivative_plugin_id' => $facet->id(),
+-          '#weight' => $facet->getWeight(),
+-          'content' => $facet_build,
+-        ];
+-
+-        $metadata = CacheableMetadata::createFromObject($facet);
+-        foreach (array_keys($this->view->getExposedInput()) as $input_key) {
+-          if ($input_key) {
+-            // Fulltext searches anf other exposed filters might influence a
+-            // facet.
+-            $metadata->addCacheContexts(['facets_filter:' . $input_key]);
+-          }
+-        }
+-
+-        $metadata->applyTo($item);
+-        if  ($metadata->getCacheMaxAge() != 0) {
+-          // Try to cache the rendered facet.
+-          $item['#cache']['keys'] = ['facet', $facet->id()];
+-        }
+-
+-        $items[] = $item;
+-      }
+-    }
+-
+-    if (!empty($items)) {
+-      $build = [
+-        '#theme' => 'facets_views_plugin',
+-        '#content' => $items,
+-      ];
+-    }
+-
+-    return $build;
+-  }
+-
+-}
+diff --git a/src/Result/Result.php b/src/Result/Result.php
+index 334dc68..40a0c2e 100644
+--- a/src/Result/Result.php
++++ b/src/Result/Result.php
+@@ -2,6 +2,7 @@
+
+ namespace Drupal\facets\Result;
+
++use Drupal\Component\Utility\NestedArray;
+ use Drupal\Core\Url;
+ use Drupal\facets\FacetInterface;
+
+@@ -10,6 +11,13 @@ use Drupal\facets\FacetInterface;
+  */
+ class Result implements ResultInterface {
+
++  /**
++   * The facet transliterate display value.
++   *
++   * @var string
++   */
++  public $transliterateDisplayValue;
++
+   /**
+    * The facet related to the result.
+    *
+@@ -73,6 +81,13 @@ class Result implements ResultInterface {
+    */
+   protected $children = [];
+
++  /**
++   * Storage for implementation-specific data.
++   *
++   * @var array
++   */
++  protected $storage = [];
++
+   /**
+    * Constructs a new result value object.
+    *
+@@ -221,4 +236,34 @@ class Result implements ResultInterface {
+     return $this->facet;
+   }
+
++  /**
++   * {@inheritdoc}
++   */
++  public function getStorage() {
++    return $this->storage;
++  }
++
++  /**
++   * {@inheritdoc}
++   */
++  public function setStorage(array $storage) {
++    $this->storage = $storage;
++    return $this;
++  }
++
++  /**
++   * {@inheritdoc}
++   */
++  public function get($property) {
++    return NestedArray::getValue($this->storage, (array) $property);
++  }
++
++  /**
++   * {@inheritdoc}
++   */
++  public function set($property, $value) {
++    NestedArray::setValue($this->storage, (array) $property, $value, TRUE);
++    return $this;
++  }
++
+ }
+diff --git a/src/Result/ResultInterface.php b/src/Result/ResultInterface.php
+index 3e23b63..36fbf18 100644
+--- a/src/Result/ResultInterface.php
++++ b/src/Result/ResultInterface.php
+@@ -145,4 +145,52 @@ interface ResultInterface {
+    */
+   public function getChildren();
+
++  /**
++   * Returns the entire set of arbitrary data.
++   *
++   * @return array
++   *   The entire set of arbitrary data storage for this result.
++   */
++  public function getStorage();
++
++  /**
++   * Sets the entire set of arbitrary data.
++   *
++   * @param array $storage
++   *   The entire set of arbitrary data to store for this result.
++   *
++   * @return $this
++   */
++  public function setStorage(array $storage);
++
++  /**
++   * Gets any arbitrary property.
++   *
++   * @param string|array $property
++   *   Properties are often stored as multi-dimensional associative arrays. If
++   *   $property is a string, it will return $storage[$property]. If $property
++   *   is an array, each element of the array will be used as a nested key. If
++   *   $property = ['foo', 'bar'] it will return $storage['foo']['bar'].
++   *
++   * @return mixed
++   *   The property, or the default if the property does not exist.
++   */
++  public function get($property);
++
++  /**
++   * Sets a value to an arbitrary property.
++   *
++   * @param string|array $property
++   *   Properties are often stored as multi-dimensional associative arrays. If
++   *   $property is a string, it will use $storage[$property] = $value. If
++   *   $property is an array, each element of the array will be used as a nested
++   *   key. If $property = ['foo', 'bar'] it will use
++   *   $storage['foo']['bar'] = $value.
++   * @param mixed $value
++   *   The value to set.
++   *
++   * @return $this
++   */
++  public function set($property, $value);
++
+ }
+diff --git a/src/Widget/WidgetPluginBase.php b/src/Widget/WidgetPluginBase.php
+index 1dc23b9..0d1a9d5 100644
+--- a/src/Widget/WidgetPluginBase.php
++++ b/src/Widget/WidgetPluginBase.php
+@@ -67,7 +67,6 @@ abstract class WidgetPluginBase extends PluginBase implements WidgetPluginInterf
+         'data-drupal-facet-filter-key' => $url_processor->getFilterKey(),
+         'data-drupal-facet-id' => $facet->id(),
+         'data-drupal-facet-alias' => $facet->getUrlAlias(),
+-        'data-drupal-facet-ajax' => '0',
+         'class' => [$facet->getActiveItems() ? 'facet-active' : 'facet-inactive'],
+       ],
+       '#context' => !empty($widget['type']) ? ['list_style' => $widget['type']] : [],
+@@ -197,7 +196,6 @@ abstract class WidgetPluginBase extends PluginBase implements WidgetPluginInterf
+     $items['#attributes']['data-drupal-facet-item-value'] = $result->getRawValue();
+     $items['#attributes']['data-drupal-facet-item-count'] = $result->getCount();
+     $items['#attributes']['data-drupal-facet-filter-value'] = $facet->getUrlAlias() . $url_processor->getSeparator() . $result->getRawValue();
+-    $items['#attributes']['data-drupal-facet-ajax'] = '0';
+
+     if ($facet->getShowOnlyOneResult()) {
+       $items['#attributes']['data-drupal-facet-single-selection-group'] = Html::getClass($facet->getUrlAlias());
+diff --git a/tests/src/Functional/FacetsUrlGeneratorTest.php b/tests/src/Functional/FacetsUrlGeneratorTest.php
+index 3b1ac62..a29b13e 100644
+--- a/tests/src/Functional/FacetsUrlGeneratorTest.php
++++ b/tests/src/Functional/FacetsUrlGeneratorTest.php
+@@ -64,7 +64,7 @@ class FacetsUrlGeneratorTest extends FacetsTestBase {
+
+     $url = $this->urlGenerator->getUrl(['test_facet' => ['fuzzy']]);
+
+-    $this->assertEquals('route:view.search_api_test_view.page_1;arg_0&arg_1&arg_2?f%5B0%5D=owl%3Afuzzy', $url->toUriString());
++    $this->assertEquals('route:view.search_api_test_view.page_1;arg_0&arg_1&arg_2&view_id=search_api_test_view&display_id=page_1?f%5B0%5D=owl%3Afuzzy', $url->toUriString());
+
+     // Setup search page URL with contextual parameters as current request and
+     // path.
+@@ -76,7 +76,7 @@ class FacetsUrlGeneratorTest extends FacetsTestBase {
+     \Drupal::service('path.current')->setPath($path);
+     $url = $this->urlGenerator->getUrl(['test_facet' => ['fuzzy']]);
+
+-    $this->assertEquals('route:view.search_api_test_view.page_1;arg_0=entity%3Aentity_test_mulrev_changed&arg_1=entity_test_mulrev_changed&arg_2?f%5B0%5D=owl%3Afuzzy', $url->toUriString());
++    $this->assertEquals('route:view.search_api_test_view.page_1;arg_0=entity%3Aentity_test_mulrev_changed&arg_1=entity_test_mulrev_changed&arg_2&view_id=search_api_test_view&display_id=page_1?f%5B0%5D=owl%3Afuzzy', $url->toUriString());
+     \Drupal::requestStack()->pop();
+   }
+
+@@ -93,7 +93,7 @@ class FacetsUrlGeneratorTest extends FacetsTestBase {
+     $facet->save();
+
+     $url = $this->urlGenerator->getUrl(['owl' => ['foo']]);
+-    $this->assertEquals('route:view.search_api_test_view.page_1;arg_0&arg_1&arg_2?f%5B0%5D=donkey%3Afoo', $url->toUriString());
++    $this->assertEquals('route:view.search_api_test_view.page_1;arg_0&arg_1&arg_2&view_id=search_api_test_view&display_id=page_1?f%5B0%5D=donkey%3Afoo', $url->toUriString());
+
+     // This won't work without it being in the request, so we need to do this
+     // from a block. We first click the link, check that the "orange" facet is
+diff --git a/tests/src/FunctionalJavascript/AjaxBehaviorTest.php b/tests/src/FunctionalJavascript/AjaxBehaviorTest.php
+index 3a638c1..cd5a53a 100644
+--- a/tests/src/FunctionalJavascript/AjaxBehaviorTest.php
++++ b/tests/src/FunctionalJavascript/AjaxBehaviorTest.php
+@@ -24,163 +24,6 @@ class AjaxBehaviorTest extends JsBase {
+     $view->save();
+   }
+
+-  /**
+-   * Tests ajax links.
+-   */
+-  public function testAjaxLinks() {
+-    // Create facets.
+-    $this->createFacet('owl');
+-    $this->createFacet('duck', 'keywords');
+-
+-    // Go to the views page.
+-    $this->drupalGet('search-api-test-fulltext');
+-
+-    // Make sure the blocks are shown on the page.
+-    $page = $this->getSession()->getPage();
+-    $block_owl = $page->findById('block-owl-block');
+-    $block_owl->isVisible();
+-    $block_duck = $page->findById('block-duck-block');
+-    $block_duck->isVisible();
+-    $this->assertSession()->pageTextContains('Displaying 5 search results');
+-
+-    // Check that the article link exists (and is formatted like a facet) link.
+-    $links = $this->xpath('//a//span[normalize-space(text())=:label]', [':label' => 'article']);
+-    $this->assertNotEmpty($links);
+-
+-    // Click the item facets.
+-    $owl_link = $this->assertSession()->elementExists("xpath", "//label[@for='owl-item']/span[1]");
+-    $owl_link->click();
+-
+-    $this->assertSession()->assertWaitOnAjaxRequest();
+-    $this->assertSession()->pageTextContains('Displaying 3 search results');
+-
+-    // Check that the article facet is now gone.
+-    $links = $this->xpath('//a//span[normalize-space(text())=:label]', [':label' => 'article']);
+-    $this->assertEmpty($links);
+-
+-    // Click the item facet again, and check that the article facet is back.
+-    $owl_link->click();
+-    $this->assertSession()->assertWaitOnAjaxRequest();
+-    $this->assertSession()->pageTextContains('Displaying 5 search results');
+-    $links = $this->xpath('//a//span[normalize-space(text())=:label]', [':label' => 'article']);
+-    $this->assertNotEmpty($links);
+-
+-    // Check that the strawberry link disappears when filtering on items.
+-    $links = $this->xpath('//a//span[normalize-space(text())=:label]', [':label' => 'strawberry']);
+-    $this->assertNotEmpty($links);
+-
+-    $owl_link->click();
+-    $this->assertSession()->assertWaitOnAjaxRequest();
+-    $links = $this->xpath('//a//span[normalize-space(text())=:label]', [':label' => 'strawberry']);
+-    $this->assertEmpty($links);
+-  }
+-
+-  /**
+-   * Tests ajax dropdown.
+-   */
+-  public function testAjaxDropdown() {
+-    // Create facets.
+-    $this->createFacet('owl');
+-    $this->createFacet('duck', 'category', 'dropdown', []);
+-
+-    // Go to the views page.
+-    $this->drupalGet('search-api-test-fulltext');
+-
+-    // Make sure the blocks are shown on the page.
+-    $page = $this->getSession()->getPage();
+-    $block_owl = $page->findById('block-owl-block');
+-    $block_owl->isVisible();
+-    $block_duck = $page->findById('block-duck-block');
+-    $block_duck->isVisible();
+-    $this->assertSession()->pageTextContains('Displaying 5 search results');
+-
+-    // Check that the article_category option disappears when filtering on item.
+-    $dropdown_entry = $this->xpath('//*[@id="block-duck-block"]/div/select/option[normalize-space(text())=:label]', [':label' => 'article_category']);
+-    $this->assertNotEmpty($dropdown_entry);
+-    $owl_link = $this->assertSession()->elementExists("xpath", "//label[@for='owl-item']/span[1]");
+-    $owl_link->click();
+-    $this->assertSession()->assertWaitOnAjaxRequest();
+-    $dropdown_entry = $this->xpath('//*[@id="block-duck-block"]/div/select/option[normalize-space(text())=:label]', [':label' => 'article_category']);
+-    $this->assertEmpty($dropdown_entry);
+-
+-    // Click the item facet again.
+-    $owl_link->click();
+-    $this->assertSession()->assertWaitOnAjaxRequest();
+-
+-    // Select the article_category in the dropdown.
+-    $dropdown = $this->xpath('//*[@id="block-duck-block"]/div/select');
+-    $dropdown[0]->selectOption('article_category');
+-    $this->assertSession()->assertWaitOnAjaxRequest();
+-
+-    $this->assertSession()->pageTextContains('Displaying 2 search results');
+-
+-    // Check that the article link exists (and is formatted like a facet) link.
+-    $links = $this->xpath('//a//span[normalize-space(text())=:label]', [':label' => 'article']);
+-    $this->assertNotEmpty($links);
+-    // Check that the item link didn't exists.
+-    $links = $this->xpath('//a//span[normalize-space(text())=:label]', [':label' => 'item']);
+-    $this->assertEmpty($links);
+-  }
+-
+-  /**
+-   * Tests ajax checkbox.
+-   */
+-  public function testAjaxCheckbox() {
+-    // Create facets.
+-    $this->createFacet('owl');
+-    $this->createFacet('duck', 'keywords', 'checkbox');
+-
+-    // Go to the views page.
+-    $this->drupalGet('search-api-test-fulltext');
+-
+-    // Make sure the blocks are shown on the page.
+-    $page = $this->getSession()->getPage();
+-    $block_owl = $page->findById('block-owl-block');
+-    $block_owl->isVisible();
+-    $block_duck = $page->findById('block-duck-block');
+-    $block_duck->isVisible();
+-    $this->assertSession()->pageTextContains('Displaying 5 search results');
+-
+-    // Check that the article link exists (and is formatted like a facet) link.
+-    $links = $this->xpath('//a//span[normalize-space(text())=:label]', [':label' => 'article']);
+-    $this->assertNotEmpty($links);
+-
+-    // Click the item facet.
+-    $owl_link = $this->assertSession()->elementExists("xpath", "//label[@for='owl-item']/span[1]");
+-    $owl_link->click();
+-
+-    $this->assertSession()->assertWaitOnAjaxRequest();
+-    $this->assertSession()->pageTextContains('Displaying 3 search results');
+-
+-    // Check that the article facet is now gone.
+-    $links = $this->xpath('//a//span[normalize-space(text())=:label]', [':label' => 'article']);
+-    $this->assertEmpty($links);
+-
+-    // Click the item facet again, and check that the article facet is back.
+-    $owl_link->click();
+-    $this->assertSession()->assertWaitOnAjaxRequest();
+-    $this->assertSession()->pageTextContains('Displaying 5 search results');
+-    $links = $this->xpath('//a//span[normalize-space(text())=:label]', [':label' => 'article']);
+-    $this->assertNotEmpty($links);
+-
+-    // Check that the strawberry link disappears when filtering on items.
+-    $links = $this->xpath('//a//span[normalize-space(text())=:label]', [':label' => 'strawberry']);
+-    $this->assertNotEmpty($links);
+-    $owl_link->click();
+-    $this->assertSession()->assertWaitOnAjaxRequest();
+-    $links = $this->xpath('//a//span[normalize-space(text())=:label]', [':label' => 'strawberry']);
+-    $this->assertEmpty($links);
+-    $owl_link->click();
+-
+-    $this->getSession()->getPage()->checkField('strawberry');
+-    // Check that the article link exists (and is formatted like a facet) link.
+-    $links = $this->xpath('//a//span[normalize-space(text())=:label]', [':label' => 'article']);
+-    $this->assertNotEmpty($links);
+-    // Check that the item link didn't exists.
+-    $links = $this->xpath('//a//span[normalize-space(text())=:label]', [':label' => 'item']);
+-    $this->assertEmpty($links);
+-  }
+-
+   /**
+    * Tests links with exposed filters.
+    */
+diff --git a/tests/src/Kernel/FacetManager/DefaultFacetManagerTest.php b/tests/src/Kernel/FacetManager/DefaultFacetManagerTest.php
+index 878da30..183c6fa 100644
+--- a/tests/src/Kernel/FacetManager/DefaultFacetManagerTest.php
++++ b/tests/src/Kernel/FacetManager/DefaultFacetManagerTest.php
+@@ -336,6 +336,7 @@ class DefaultFacetManagerTest extends EntityKernelTestBase {
+         // Added by views view source plugin.
+         'config:views.view.search_api_test_view',
+         'config:search_api.index.database_search_index',
++        'search_api_list:database_search_index',
+       ],
+     ];
+     return [
+@@ -348,15 +349,7 @@ class DefaultFacetManagerTest extends EntityKernelTestBase {
+       // strategy.
+       [
+         'search_api:views_page__search_api_test_view__page_2_sapi_tag',
+-        array_merge_recursive(
+-          $basic,
+-          [
+-            'tags' => [
+-              'search_api_list:database_search_index',
+-            ],
+-            'max-age' => Cache::PERMANENT,
+-          ]
+-        ),
++        $basic + ['max-age' => Cache::PERMANENT],
+       ],
+       // Expected cacheability for the facet with a source that has TIME cache
+       // strategy.
+diff --git a/tests/src/Unit/Result/ResultTest.php b/tests/src/Unit/Result/ResultTest.php
+index b70c844..e52c955 100644
+--- a/tests/src/Unit/Result/ResultTest.php
++++ b/tests/src/Unit/Result/ResultTest.php
+@@ -43,6 +43,15 @@ class ResultTest extends UnitTestCase {
+     $url = new Url('foo');
+     $result->setUrl($url);
+     $this->assertSame($url, $result->getUrl());
++
++    $property = ['foo', 'bar'];
++    $value = 'baz';
++    $result->set($property, $value);
++    $this->assertSame($value, $result->get($property));
++
++    $storage = ['foo' => ['bar']];
++    $result->setStorage($storage);
++    $this->assertSame($storage, $result->getStorage());
+   }
+
+ }
