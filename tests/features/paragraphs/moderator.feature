@@ -31,6 +31,7 @@ Feature:
     When I should see the error message "Iframe URL field is required."
     And I should see the error message "Iframe Title field is required."
     Then I fill in "Iframe URL" with "http://example.com"
+    And I fill in "Iframe Title" with "example.com"
     And I press "Save" in the "Modal buttons" region
     And I press "Update"
     # We only test that the <iframe .../> element is in page. Unfortunately, we
