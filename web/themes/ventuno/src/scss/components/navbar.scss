@@ -138,13 +138,20 @@
     &:not(:last-of-type) {
       margin-bottom: $spacer * .5; // 12px
     }
+    .dropdown-menu--sub {
+      padding-left: $spacer;
+      font-size: $font-size-sm;
+    }
   }
-  .dropdown-list-link {
+  .dropdown-list-link,
+  .dropdown-item {
     color: $brand;
     font-weight: $font-weight-bold;
+    background: none;
     &:hover {
       color: $brand;
       text-decoration: none;
+      background: none;
     }
   }
   .get-started {
