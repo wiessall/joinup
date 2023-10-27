@@ -9,8 +9,8 @@ declare(strict_types = 1);
 
 use Drupal\Core\Entity\EntityFieldManagerInterface;
 use Drupal\Core\Field\FieldTypePluginManagerInterface;
-use Drupal\eu_oss_catalogue\Plugin\Field\RichestField;
-use Drupal\eu_oss_catalogue\Plugin\Field\RichestFieldWithFallback;
+use Drupal\Core\StringTranslation\PluralTranslatableMarkup;
+use Drupal\eu_oss_catalogue\Plugin\Field\RelevantField;
 
 /**
  * Implements hook_views_data_alter().
@@ -34,22 +34,27 @@ function eu_oss_catalogue_views_data_alter(array &$data): void {
  */
 function eu_oss_catalogue_views_data() {
   $views_data = [];
+
   $entityFieldManager = \Drupal::service('entity_field.manager');
   \assert($entityFieldManager instanceof EntityFieldManagerInterface);
   $fieldTypeManager = \Drupal::service('plugin.manager.field.field_type');
   \assert($fieldTypeManager instanceof FieldTypePluginManagerInterface);
+
   foreach ($entityFieldManager->getFieldDefinitions('node', 'oss_solution') as $fieldName => $fieldDefinition) {
-    if (!is_a($fieldDefinition->getClass(), RichestField::class, TRUE)) {
+    if (!is_a($fieldDefinition->getClass(), RelevantField::class, TRUE)) {
       continue;
     }
 
-    $label = is_a($fieldDefinition->getClass(), RichestFieldWithFallback::class, TRUE)
-      ? t('Value with fallback from the relevant translation using these fields, in this order: <code>@field-names</code>', [
-        '@field-names' => implode(', ', $fieldDefinition->getSetting('computed_sources')),
-      ])
-      : t('Value of the <code>@field-name</code> field from the relevant translation', [
-        '@field-name' => $fieldDefinition->getSetting('computed_source'),
-      ]);
+    $sourceFields = $fieldDefinition->getSetting(RelevantField::SOURCE_FIELDS_SETTING_KEY);
+    $label = new PluralTranslatableMarkup(
+      count($sourceFields),
+      'Value of the <code>@field-name</code> field from the relevant translation',
+      'Value with fallback from the relevant translation using these fields, in the following order: <code>@field-names</code>',
+      [
+        '@field-names' => implode(', ', $sourceFields),
+        '@field-name' => implode(', ', $sourceFields),
+      ]
+    );
 
     $views_data['node_field_data'][$fieldName] = [
       'title' => $fieldDefinition->getLabel(),
@@ -63,5 +68,6 @@ function eu_oss_catalogue_views_data() {
       ],
     ];
   }
+
   return $views_data;
 }

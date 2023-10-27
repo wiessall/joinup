@@ -9,10 +9,24 @@ use Drupal\Core\TypedData\ComputedItemListTrait;
 
 /**
  * Computed field with the configured field's value in the richest translation.
+ *
+ * This class can also handle fallbacks: if a field is empty or is missing on
+ * the entity, it will check whether the next field in the field definition
+ * "source_fields" config can be displayed instead.
+ *
+ * @see \eu_oss_catalogue_entity_bundle_field_info()
+ * @see \eu_oss_catalogue_entity_bundle_field_info_alter()
  */
-class RichestField extends FieldItemList {
+class RelevantField extends FieldItemList {
 
   use ComputedItemListTrait;
+
+  /**
+   * The configuration key storing the name of the source fields.
+   *
+   * @const string
+   */
+  const SOURCE_FIELDS_SETTING_KEY = 'source_fields';
 
   /**
    * {@inheritdoc}
@@ -31,15 +45,20 @@ class RichestField extends FieldItemList {
    * Returns the machine name of the source field if it is not empty.
    *
    * @return string|null
-   *   The machine name of the source field, or NULL if is missing on the entity
-   *   or is not configured.
+   *   The machine name of the source field, or NULL if it is missing on the
+   *   entity or the field definition is not properly configured.
    */
   protected function getSourceFieldName(): ?string {
-    $entity = $this->getEntity();
-    $sourceField = $this->definition->getSetting('computed_source');
-    return $sourceField && $entity->hasField($sourceField)
-      ? $sourceField
-      : NULL;
+    $languageCode = $this->getRichestLanguageCode();
+    $entity = $this->getEntity()->getTranslation($languageCode);
+    foreach ((array) $this->definition->getSetting(static::SOURCE_FIELDS_SETTING_KEY) as $fieldName) {
+      if (!$entity->hasField($fieldName) || $entity->get($fieldName)->isEmpty()) {
+        continue;
+      }
+      return $fieldName;
+    }
+
+    return NULL;
   }
 
   /**
