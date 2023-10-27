@@ -27,7 +27,7 @@ facets:
     weight: 0
   oss_source:
     checked: true
-    label: Source
+    label: 'Source catalogue'
     separator: ', '
     show_count: false
     weight: 0
