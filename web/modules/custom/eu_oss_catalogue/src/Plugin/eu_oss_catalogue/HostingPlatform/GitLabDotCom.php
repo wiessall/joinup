@@ -151,7 +151,7 @@ class GitLabDotCom extends EuOssCatalogueGitHostingPlatformPluginBase {
         }
 
         foreach ($this->filterGroupProjects($response, $repos) as $project) {
-          yield $this->createHostingPlatformResult($namespace, $project, $requestedFiles);
+          yield $this->createProject($namespace, $project, $requestedFiles);
         }
 
         // Honour pagination.
@@ -312,7 +312,7 @@ class GitLabDotCom extends EuOssCatalogueGitHostingPlatformPluginBase {
    * @return \Drupal\eu_oss_catalogue\Model\Project
    *   A code hosting platform result instance.
    */
-  protected function createHostingPlatformResult(string $namespace, array $project, array $requestedFiles = []): Project {
+  protected function createProject(string $namespace, array $project, array $requestedFiles = []): Project {
     // Get files by reverse engineering from file path to file IDs.
     $files = [];
 
@@ -392,7 +392,7 @@ class GitLabDotCom extends EuOssCatalogueGitHostingPlatformPluginBase {
       try {
         $project = $this->getClient()->graphql()->execute($query->toString())['data']['project'] ?? NULL;
         if ($project && !empty($project['repository']['rootRef'])) {
-          yield $this->createHostingPlatformResult($namespace, $project, $requestedFiles);
+          yield $this->createProject($namespace, $project, $requestedFiles);
         }
         continue;
       }
@@ -408,7 +408,7 @@ class GitLabDotCom extends EuOssCatalogueGitHostingPlatformPluginBase {
       // happen on old versions of GitLab installed. Give it another chance by
       // falling back to REST API.
       if ($project = $this->getProjectWithRestApi("$namespace/$name", $requestedFiles)) {
-        yield $this->createHostingPlatformResult($namespace, $project, $requestedFiles);
+        yield $this->createProject($namespace, $project, $requestedFiles);
       }
     }
   }
