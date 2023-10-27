@@ -50,6 +50,11 @@ licence-comparer:
     theme:
       assets/css/licence-comparer.min.css: { minified: true }
 
+oss:
+  css:
+    theme:
+      assets/css/oss.min.css: { minified: true }
+
 searchpage:
   css:
     theme:
@@ -97,6 +102,20 @@ button-group:
   css:
     theme:
       assets/css/button-group.min.css: { minified: true }
+
+carousel:
+  css:
+    theme:
+      assets/css/carousel.min.css: { minified: true }
+  dependencies:
+    - ventuno/carousel.js
+
+carousel.js:
+  header: true
+  js:
+    assets/js/carousel.min.js: { minified: true, attributes: { defer: true } }
+  dependencies:
+    - ventuno/glide
 
 close:
   css:
@@ -265,20 +284,6 @@ paragraph:
 paragraph__accordion:
   dependencies:
     - ventuno/accordion
-
-carousel:
-  css:
-    theme:
-      assets/css/carousel.min.css: { minified: true }
-  dependencies:
-    - ventuno/carousel.js
-
-carousel.js:
-  header: true
-  js:
-    assets/js/carousel.min.js: { minified: true, attributes: { defer: true } }
-  dependencies:
-    - ventuno/glide
 
 paragraph__layout:
   css:

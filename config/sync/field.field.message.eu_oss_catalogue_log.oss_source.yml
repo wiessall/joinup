@@ -11,7 +11,7 @@ id: message.eu_oss_catalogue_log.oss_source
 field_name: oss_source
 entity_type: message
 bundle: eu_oss_catalogue_log
-label: Source
+label: 'Source catalogue'
 description: ''
 required: false
 translatable: false
