@@ -8,7 +8,7 @@ dependencies:
   module:
     - search_api
 id: oss_source
-name: Catalog
+name: 'Source catalogues'
 weight: 0
 min_count: 1
 missing: false
@@ -29,7 +29,7 @@ enable_parent_when_child_gets_disabled: true
 widget:
   type: checkbox
   config:
-    show_numbers: false
+    show_numbers: true
     arbitrary_facet_plugin: _none
     soft_limit: 5
     show_reset_link: false
