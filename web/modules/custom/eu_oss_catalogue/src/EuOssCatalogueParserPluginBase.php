@@ -121,9 +121,18 @@ abstract class EuOssCatalogueParserPluginBase extends PluginBase implements EuOs
       $fieldDefinition = $solution->getFieldDefinition($fieldName);
       if ($fieldDefinition instanceof ThirdPartySettingsInterface) {
         if ($settings = $fieldDefinition->getThirdPartySetting('eu_oss_catalogue', $this->getPluginId())) {
+          $override = $settings['config']['override'] ?? 'always';
+          if ($override === 'preserve_not_empty' && !$fieldItemList->isEmpty()) {
+            // Don't override a field with data.
+            continue;
+          }
           $resolver = $this->getResolver($settings['resolver'], $settings['config']);
           try {
-            $resolver->resolve($fieldItemList, $project, $metadata);
+            $resolved = $resolver->resolve($project, $metadata, $fieldItemList);
+            if ($override !== 'resolved_not_empty' || $resolved) {
+              // An empty array unsets the field.
+              $fieldItemList->setValue($resolved ?: NULL);
+            }
           }
           catch (UnresolvableValueException $exception) {
             Error::logException($this->logger, $exception);
