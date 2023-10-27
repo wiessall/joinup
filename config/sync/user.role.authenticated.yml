@@ -10,6 +10,9 @@ dependencies:
     - filter.format.minimal
     - filter.format.simple_html
     - filter.format.text_html
+    - media.type.file
+    - media.type.image
+    - media.type.video
     - node.type.document
   module:
     - comment
@@ -54,6 +57,8 @@ permissions:
   - 'cancel own vote'
   - 'create contact_information rdf entity'
   - 'create document content'
+  - 'create file media'
+  - 'create image media'
   - 'create owner rdf entity'
   - 'create paragraph content accordion'
   - 'create paragraph content accordion_item'
@@ -71,6 +76,7 @@ permissions:
   - 'create paragraph content tiles'
   - 'create paragraph content video'
   - 'create polls'
+  - 'create video media'
   - 'delete own comments'
   - 'delete own document content'
   - 'delete paragraph content accordion'
