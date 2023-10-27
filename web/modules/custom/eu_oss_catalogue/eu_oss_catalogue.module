@@ -15,9 +15,8 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\eu_oss_catalogue\Entity\OssContact;
 use Drupal\eu_oss_catalogue\Entity\OssContractor;
 use Drupal\eu_oss_catalogue\Entity\OssSolution;
+use Drupal\eu_oss_catalogue\Plugin\Field\RelevantField;
 use Drupal\eu_oss_catalogue\Plugin\Field\RelevantLanguageCode;
-use Drupal\eu_oss_catalogue\Plugin\Field\RichestField;
-use Drupal\eu_oss_catalogue\Plugin\Field\RichestFieldWithFallback;
 
 /**
  * Implements hook_entity_bundle_info_alter().
@@ -62,13 +61,13 @@ function eu_oss_catalogue_entity_bundle_field_info(EntityTypeInterface $entity_t
       ->setComputed(TRUE)
       ->setDisplayConfigurable('view', TRUE)
       ->setSetting(
-        'computed_sources',
+        RelevantField::SOURCE_FIELDS_SETTING_KEY,
         [
           'oss_short_description',
           'oss_git_description',
         ]
       )
-      ->setClass(RichestFieldWithFallback::class);
+      ->setClass(RelevantField::class);
   }
   return $fields;
 }
@@ -110,9 +109,9 @@ function eu_oss_catalogue_entity_bundle_field_info_alter(&$fields, EntityTypeInt
     $fields[$computedName] = BaseFieldDefinition::createFromFieldStorageDefinition($fieldDefinition->getFieldStorageDefinition())
       ->setName($computedName)
       ->setLabel($fieldDefinition->getLabel())
-      ->setSetting('computed_source', $fieldName)
+      ->setSetting(RelevantField::SOURCE_FIELDS_SETTING_KEY, [$fieldName])
       ->setComputed(TRUE)
       ->setDisplayConfigurable('view', TRUE)
-      ->setClass(RichestField::class);
+      ->setClass(RelevantField::class);
   }
 }
