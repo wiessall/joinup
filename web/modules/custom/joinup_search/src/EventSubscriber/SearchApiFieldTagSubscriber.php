@@ -49,7 +49,7 @@ class SearchApiFieldTagSubscriber implements EventSubscriberInterface {
     }
 
     $group = $entity;
-    if ($parent_entity instanceof GroupContentInterface) {
+    if ($parent_entity instanceof GroupContentInterface && $parent_entity->hasGroup()) {
       $group = $parent_entity->getGroup();
     }
 

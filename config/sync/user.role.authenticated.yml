@@ -10,6 +10,9 @@ dependencies:
     - filter.format.minimal
     - filter.format.simple_html
     - filter.format.text_html
+    - media.type.file
+    - media.type.image
+    - media.type.video
     - node.type.document
   module:
     - comment
@@ -54,6 +57,8 @@ permissions:
   - 'cancel own vote'
   - 'create contact_information rdf entity'
   - 'create document content'
+  - 'create file media'
+  - 'create image media'
   - 'create owner rdf entity'
   - 'create paragraph content accordion'
   - 'create paragraph content accordion_item'
@@ -67,8 +72,11 @@ permissions:
   - 'create paragraph content quote'
   - 'create paragraph content testimony'
   - 'create paragraph content text'
+  - 'create paragraph content tile'
+  - 'create paragraph content tiles'
   - 'create paragraph content video'
   - 'create polls'
+  - 'create video media'
   - 'delete own comments'
   - 'delete own document content'
   - 'delete paragraph content accordion'
@@ -85,6 +93,8 @@ permissions:
   - 'delete paragraph content simple_paragraph'
   - 'delete paragraph content testimony'
   - 'delete paragraph content text'
+  - 'delete paragraph content tile'
+  - 'delete paragraph content tiles'
   - 'delete paragraph content video'
   - 'edit any pools'
   - 'edit behavior plugin settings'
@@ -179,6 +189,8 @@ permissions:
   - 'update paragraph content simple_paragraph'
   - 'update paragraph content testimony'
   - 'update paragraph content text'
+  - 'update paragraph content tile'
+  - 'update paragraph content tiles'
   - 'update paragraph content video'
   - 'use search_api_autocomplete for search'
   - 'use text format basic_html'
@@ -217,6 +229,8 @@ permissions:
   - 'view paragraph content simple_paragraph'
   - 'view paragraph content testimony'
   - 'view paragraph content text'
+  - 'view paragraph content tile'
+  - 'view paragraph content tiles'
   - 'view paragraph content video'
   - 'view published sitewide alert entities'
   - 'view rdf entity'
