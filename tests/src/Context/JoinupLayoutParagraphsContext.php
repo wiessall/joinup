@@ -9,6 +9,7 @@ use Behat\Mink\Element\TraversableElement;
 use Behat\Mink\Exception\ElementNotFoundException;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\joinup\Traits\JavascriptTrait;
+use Drupal\joinup\Traits\WysiwygTrait;
 use PHPUnit\Framework\Assert;
 use function PHPUnit\Framework\assertSame;
 use function PHPUnit\Framework\assertTrue;
@@ -19,6 +20,7 @@ use function PHPUnit\Framework\assertTrue;
 class JoinupLayoutParagraphsContext extends RawDrupalContext {
 
   use JavascriptTrait;
+  use WysiwygTrait;
 
   /**
    * Field mapping. It is the selector without the 'field--name-' prefix.
@@ -83,6 +85,7 @@ class JoinupLayoutParagraphsContext extends RawDrupalContext {
 
     $field = $this->getParagraphsElement($field_alias);
     $links = $field->findAll('named', ['link', 'Add layout']);
+    $this->scrollElementIntoView(end($links));
     end($links)->click();
 
     // Get the 'layout' property from the table.
@@ -196,9 +199,7 @@ class JoinupLayoutParagraphsContext extends RawDrupalContext {
         $this->getSession()->getPage()->selectFieldOption($property, $field_value);
       }
       elseif ($field_type === 'ckeditor') {
-        // Wait for the CKEditor to load.
-        $this->getSession()->wait(5000, "document.querySelector('.lpb-dialog .cke_wysiwyg_frame') !== null");
-        $this->getSession()->executeScript("document.querySelector(\".lpb-dialog .cke_wysiwyg_frame\").contentWindow.document.body.innerHTML = '{$field_value}';");
+        $this->setWysiwygText($property, $field_value);
       }
       else {
         $this->getSession()->getPage()->fillField($property, $field_value);

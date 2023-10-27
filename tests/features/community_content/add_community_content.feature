@@ -229,11 +229,16 @@ Feature: Add community content
     And I should see the "Content" wysiwyg editor
 
     When there are no preexisting log records on the site
-    And the "File" button should be available in the "Content" wysiwyg editor
-    When I press the button "File" in the "Content" wysiwyg editor
-    Then a modal should open
-    And I attach the file "logo.png" to "File"
+    And the "Insert Media" button should be available in the "Content" wysiwyg editor
+    And the "Insert Media" button should be available in the "Content" wysiwyg editor
+    Then I press the button "Insert Media" in the "Content" wysiwyg editor
+    And I attach the file "logo.png" to "Add file"
+    And I wait for AJAX to finish
+    When I fill in "Alternative text" with "Example logo"
     And I press "Save" in the "Modal buttons" region
+    And I wait for AJAX to finish
+
+    When I press "Insert selected" in the "Modal buttons" region
     Then the modal should be closed
     And the site should not have log records with level lower than "notice"
 
