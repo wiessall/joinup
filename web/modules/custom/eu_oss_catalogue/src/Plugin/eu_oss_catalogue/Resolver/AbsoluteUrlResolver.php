@@ -20,7 +20,7 @@ class AbsoluteUrlResolver extends DefaultResolver {
   /**
    * {@inheritdoc}
    */
-  public function resolve(FieldItemListInterface $fieldItemList, Project $project, array $metadata): array {
+  public function resolve(Project $project, array $metadata, FieldItemListInterface $fieldItemList): ?array {
     $paths = (array) parent::resolve($fieldItemList, $project, $metadata);
     foreach ($paths as &$path) {
       if (!preg_match('@^https?://@', $path)) {

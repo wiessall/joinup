@@ -25,6 +25,19 @@ eu_oss_catalogue.resolver_config_base:
     path:
       type: string
       label: Path to data nested value
+    override:
+      type: string
+      label: Whether to override an exsting value
+      constraints:
+        # Available starting with Drupal 10.2.0.
+        # See https://www.drupal.org/node/3376195
+        Choice:
+          # Override any existing value in the field (default).
+          - always
+          # Preserve any non-empty value.
+          - preserve_not_empty
+          # Override only if resolved value is not empty.
+          - resolved_not_empty
 
 eu_oss_catalogue.resolver_schema.*:
   type: eu_oss_catalogue.resolver_config_base
