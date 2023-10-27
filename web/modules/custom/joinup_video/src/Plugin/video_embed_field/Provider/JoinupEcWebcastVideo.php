@@ -11,7 +11,7 @@ use Drupal\video_embed_field\ProviderPluginBase;
  *
  * @VideoEmbedProvider(
  *   id = "joinup_ec_webcast_video",
- *   title = @Translation("European Commission Webcast video")
+ *   title = @Translation("European Commission Webcast")
  * )
  */
 class JoinupEcWebcastVideo extends ProviderPluginBase {
