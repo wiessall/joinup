@@ -27,13 +27,16 @@ Feature:
     And I go to the edit form of the "Don't Mess with the Zohan" "custom page"
     And I click the last "Choose component" link
     And I click "IFrame"
-    And I fill in "Iframe URL" with "http://example.com"
+    Then I press "Save" in the "Modal buttons" region
+    When I should see the error message "Iframe URL field is required."
+    And I should see the error message "Iframe Title field is required."
+    Then I fill in "Iframe URL" with "http://example.com"
     And I press "Save" in the "Modal buttons" region
     And I press "Update"
     # We only test that the <iframe .../> element is in page. Unfortunately, we
     # cannot do precision RegExp search in page source, so we only check for the
     # existence of the iframe and its URL.
-    Then I should see 1 "iframe" elements
+    When I should see 1 "iframe" elements
     And the response should contain "src=\"http://example.com\""
 
     And I go to the edit form of the "Don't Mess with the Zohan" "custom page"
