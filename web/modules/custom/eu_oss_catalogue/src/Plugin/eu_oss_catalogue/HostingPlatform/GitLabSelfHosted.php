@@ -136,7 +136,7 @@ class GitLabSelfHosted extends GitLabDotCom {
           $parts = explode('/', $project['fullPath']);
           array_pop($parts);
           $namespace = implode('/', $parts);
-          yield $this->createHostingPlatformResult($namespace, $project, $requestedFiles);
+          yield $this->createProject($namespace, $project, $requestedFiles);
         }
       }
     } while ($hasNextPage);
