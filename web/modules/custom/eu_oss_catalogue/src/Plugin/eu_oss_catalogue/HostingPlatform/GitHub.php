@@ -216,6 +216,14 @@ class GitHub extends EuOssCatalogueGitHostingPlatformPluginBase {
             }
           }
 
+          $logo = $node['openGraphImageUrl'];
+          if ($logo  && str_starts_with($logo, 'https://opengraph.githubassets.com/')) {
+            // If a repository lacks a logo uploaded by the user, GitHub
+            // generates one under https://opengraph.githubassets.com. Keep only
+            // logos uploaded by the user.
+            $logo = NULL;
+          }
+
           yield new Project(
             $node['owner']['login'],
             $node['name'],
@@ -227,7 +235,7 @@ class GitHub extends EuOssCatalogueGitHostingPlatformPluginBase {
             $node['latestRelease']['createdAt'] ?? NULL,
             $node['id'],
             $node['description'],
-            $node['openGraphImageUrl'],
+            $logo,
             $files,
           );
         }
