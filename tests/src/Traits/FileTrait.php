@@ -4,52 +4,53 @@ declare(strict_types = 1);
 
 namespace Drupal\joinup\Traits;
 
-use Drupal\file\Entity\File;
+use Drupal\Core\File\FileSystemInterface;
+use Drupal\file\FileInterface;
 
 /**
  * Helper methods for dealing with files.
  */
 trait FileTrait {
 
-  /**
-   * Test files.
-   *
-   * @var \Drupal\file\Entity\File[]
-   */
-  protected $files = [];
+  use TestingEntitiesTrait;
 
   /**
-   * Saves a file for an entity and returns the file's ID.
+   * Saves a file for an entity and returns the file entity.
    *
    * @param string $filename
    *   The file name given by the user.
-   * @param string|null $files_path
-   *   The path of the directory where the file is located. Defaults to the path
-   *   configured in the 'files_path' parameter in behat.yml.
+   * @param string $file_path
+   *   The path of the directory where the file should be created.
    *
    * @return \Drupal\file\Entity\File
-   *   The file.
+   *   The file entity.
    *
    * @throws \Exception
    *   Throws an exception when the file is not found.
    */
-  protected function createFile(string $filename, ?string $files_path = NULL) {
-    // Default to the 'files_path' mink parameter defined in behat.yml.
-    if (empty($files_path)) {
-      $files_path = $this->getMinkParameter('files_path');
+  protected function createFile(string $filename, string $file_path = ''): FileInterface {
+    $source_path = rtrim(realpath($this->getMinkParameter('files_path')), DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . $filename;
+    if (!is_file($source_path)) {
+      throw new \Exception("File '$filename' was not found at '$source_path'");
     }
-    $path = rtrim(realpath($files_path), DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . $filename;
-    if (!is_file($path)) {
-      throw new \Exception("File '$filename' was not found in file path '$files_path'.");
+    $file_path = rtrim($file_path, DIRECTORY_SEPARATOR);
+    /** @var \Drupal\Core\File\FileSystemInterface $file_system */
+    $file_system = \Drupal::service('file_system');
+    $file_base_name = basename($filename);
+    $uri = 'public://';
+    if ($file_path) {
+      $uri .= $file_path . DIRECTORY_SEPARATOR;
+      $file_system->prepareDirectory($uri, FileSystemInterface::CREATE_DIRECTORY | FileSystemInterface::MODIFY_PERMISSIONS);
     }
-    // Copy the file into the public files folder and turn it into a File
-    // entity before linking it to the collection.
-    $uri = 'public://' . $filename;
-    $destination = \Drupal::service('file_system')->copy($path, $uri);
-    $file = File::create(['uri' => $destination, 'filename' => $filename]);
+    $uri .= $file_base_name;
+    $destination = $file_system->copy($source_path, $uri);
+    /** @var \Drupal\file\FileInterface $file */
+    $file = \Drupal::entityTypeManager()->getStorage('file')->create([
+      'uri' => $destination,
+      'filename' => $filename,
+    ]);
     $file->save();
-
-    $this->files[$file->id()] = $file;
+    $this->entities['file'][$file->id()] = $file;
 
     return $file;
   }
@@ -90,18 +91,6 @@ trait FileTrait {
       if (in_array($field_info->getType(), ['image', 'file'])) {
         $values[$field_name] = $this->createFile($value)->get('uri')->value;
       }
-    }
-  }
-
-  /**
-   * Remove any created files.
-   *
-   * @AfterScenario @api
-   */
-  public function cleanFiles() {
-    // Remove the image entities that were attached to the collections.
-    foreach ($this->files as $file) {
-      $file->delete();
     }
   }
 

@@ -10,8 +10,8 @@ third_party_settings:
     parent: ''
 _core:
   default_config_hash: D4RUL67nUPtd5VbJ908K4vuxx4rq48Px0mexni3yPJY
-label_singular: 'open source software solution'
-label_plural: 'open source software solutions'
+label_singular: 'OSS Solution'
+label_plural: 'OSS Solutions'
 label_count:
   0: "1 open source software solution\x03@count open source software solutions"
   no_count_capitalize: "Open source software solution\x03Open source software solutions"

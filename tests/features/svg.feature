@@ -17,24 +17,29 @@ Feature: Test SVG attachments.
     When I am logged in as a facilitator of the "SVG" collection
     And I go to the edit form of the "SVG" collection
 
-    And I press the button "Image" in the "Description" wysiwyg editor
+    And I press the button "Insert Media" in the "Description" wysiwyg editor
     Then a modal should open
-    When I fill in "Alternative text" with "Example SVG"
-    And I attach the file "error.svg" to "Image"
+
+    When I attach the file "error.svg" to "Add file"
     And I wait for AJAX to finish
-    Then I should see the error message "Invalid or unsafe SVG file."
-    And I attach the file "simple.svg" to "Image"
+    Then I should see the error message "The specified file error.svg could not be uploaded."
+    And I should see the error message "Invalid or unsafe SVG file."
+
+    But I attach the file "simple.svg" to "Add file"
     And I wait for AJAX to finish
     Then I should not see the error message "Invalid or unsafe SVG file."
-    And I select "Half width" from "Use image style"
+    When I fill in "Alternative text" with "Example SVG"
     And I press "Save" in the "Modal buttons" region
+    And I wait for AJAX to finish
+
+    When I press "Insert selected" in the "Modal buttons" region
     Then the modal should be closed
 
-    # Ensure local svg files are allowed.
-    And I press "Publish"
+    # Ensure local SVG files are allowed.
+    When I press "Publish"
     And I click "About"
-    And the response should not contain "This image has been removed. For security reasons, only images from the local domain are allowed."
-    And the response should contain "inline-images/simple"
+    Then the response should not contain "This image has been removed. For security reasons, only images from the local domain are allowed."
+    But the response should contain "sites/default/files/media/image/simple.svg"
 
   @terms @uploadFiles:error.svg,simple.svg
   Scenario: SVG logos appear in the tiles.
