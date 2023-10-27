@@ -1,0 +1,42 @@
+uuid: 8cbf0971-bf22-434f-af11-f0de0dba5db2
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.media.image.image
+    - field.field.media.image.og_audience
+    - image.style.wysiwyg_full_width
+    - media.type.image
+  module:
+    - svg_image
+    - template_suggestion
+id: media.image.default
+targetEntityType: media
+bundle: image
+mode: default
+content:
+  image:
+    type: image
+    label: hidden
+    settings:
+      image_link: ''
+      image_style: wysiwyg_full_width
+      image_loading:
+        attribute: lazy
+      svg_attributes:
+        width: null
+        height: null
+      svg_render_as_image: true
+    third_party_settings:
+      template_suggestion:
+        template_suggestion: ''
+    weight: 0
+    region: content
+hidden:
+  created: true
+  langcode: true
+  name: true
+  og_audience: true
+  search_api_excerpt: true
+  thumbnail: true
+  uid: true
