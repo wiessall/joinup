@@ -28,6 +28,8 @@ Feature: User authentication
       | admin/content/files                                 |
       | admin/content/media                                 |
       | admin/content/rdf                                   |
+      | admin/custom-landing-pages                          |
+      | admin/custom-landing-pages/add                      |
       | admin/legal-notice                                  |
       | admin/legal-notice/add                              |
       | admin/people                                        |
@@ -50,8 +52,11 @@ Feature: User authentication
       | media/add                                           |
       | media/add/collection_logo                           |
       | media/add/event_logo                                |
+      | media/add/file                                     |
+      | media/add/image                                     |
       | media/add/news_logo                                 |
       | media/add/solution_logo                             |
+      | media/add/video                                    |
       | node/add                                            |
       | node/add/custom_page                                |
       | node/add/discussion                                 |
@@ -107,6 +112,8 @@ Feature: User authentication
       | admin/content/media                                 |
       | admin/content/messages                              |
       | admin/content/rdf                                   |
+      | admin/custom-landing-pages                          |
+      | admin/custom-landing-pages/add                      |
       | admin/legal-notice                                  |
       | admin/legal-notice/add                              |
       | admin/people                                        |
@@ -129,8 +136,11 @@ Feature: User authentication
       | media/add                                           |
       | media/add/collection_logo                           |
       | media/add/event_logo                                |
+      | media/add/file                                     |
+      | media/add/image                                     |
       | media/add/news_logo                                 |
       | media/add/solution_logo                             |
+      | media/add/video                                    |
       | node/add                                            |
       | node/add/custom_page                                |
       | node/add/discussion                                 |
@@ -188,8 +198,11 @@ Feature: User authentication
       | media/add                                   |
       | media/add/collection_logo                   |
       | media/add/event_logo                        |
+      | media/add/file                             |
+      | media/add/image                             |
       | media/add/news_logo                         |
       | media/add/solution_logo                     |
+      | media/add/video                            |
       | outdated-content-threshold                  |
       | propose/collection                          |
 

@@ -49,6 +49,7 @@ abstract class JoinupMailFunctionalTestBase extends BrowserTestBase {
     'joinup_collection',
     'joinup_core',
     'joinup_menu',
+    'joinup_media',
     'joinup_notification',
     'joinup_test_time',
     'joinup_video',
@@ -67,6 +68,7 @@ abstract class JoinupMailFunctionalTestBase extends BrowserTestBase {
     'text',
     'topic',
     'user',
+    'ventuno_helper',
     'workflow_state_permission',
   ];
 
