@@ -6,7 +6,7 @@ dependencies:
     - search_api.index.published
     - system.menu.main
   module:
-    - joinup_material_design
+    - joinup_tiles
     - search_api
 id: solutions
 label: Solutions
