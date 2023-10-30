@@ -2,14 +2,14 @@
 
 declare(strict_types = 1);
 
-namespace Drupal\joinup_material_design\Plugin\views\style;
+namespace Drupal\joinup_tiles\Plugin\views\style;
 
 use Drupal\views\Plugin\views\style\StylePluginBase;
 
 /**
  * A Views style that renders markup for "Tiles".
  *
- * A "tile" is Joinup terminology for a Material Design "card".
+ * A "tile" is Joinup terminology for a "card".
  *
  * How to use this:
  * 1. Create a view that uses the 'Tiles' style (called 'format' in the UI).
