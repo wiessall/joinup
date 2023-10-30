@@ -5,7 +5,9 @@ declare(strict_types = 1);
 namespace Drupal\eu_oss_catalogue\Plugin\Field;
 
 use Drupal\Core\Field\FieldItemList;
+use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\TypedData\ComputedItemListTrait;
+use Drupal\eu_oss_catalogue\Entity\OssSolutionInterface;
 
 /**
  * Computed field with the configured field's value in the richest translation.
@@ -26,19 +28,36 @@ class RelevantField extends FieldItemList {
    *
    * @const string
    */
-  const SOURCE_FIELDS_SETTING_KEY = 'source_fields';
+  const SOURCE_FIELDS_SETTING_KEY = 'eu_oss_catalogue_source_fields';
 
   /**
    * {@inheritdoc}
    */
   protected function computeValue(): void {
-    if (!($fieldName = $this->getSourceFieldName())) {
+    if (!($sourceField = $this->getSourceField())) {
       return;
     }
 
-    $richestLangcode = $this->getRichestLanguageCode();
-    $sourceField = $this->getEntity()->getTranslation($richestLangcode)->get($fieldName);
-    $this->list = $sourceField->isEmpty ? [] : $sourceField->list;
+    foreach ($sourceField as $delta => $item) {
+      $this->list[$delta] = $item;
+    }
+  }
+
+  /**
+   * Returns the source field if it is not empty.
+   *
+   * @return \Drupal\Core\Field\FieldItemListInterface|null
+   *   The machine name of the source field, or NULL if it is missing on the
+   *   entity or the field definition is not properly configured.
+   */
+  protected function getSourceField(): ?FieldItemListInterface {
+    if (!($fieldName = $this->getSourceFieldName())) {
+      return NULL;
+    }
+
+    return $this->getEntity()
+      ->getTranslation($this->getRichestLanguageCode())
+      ->get($fieldName);
   }
 
   /**
@@ -64,13 +83,13 @@ class RelevantField extends FieldItemList {
   /**
    * Returns the language code of the richest entity translation.
    *
-   * @return string|null
+   * @return string
    *   The language code of the richest entity translation.
    */
   protected function getRichestLanguageCode(): string {
     $entity = $this->getEntity();
-    return $entity->hasField(RelevantLanguageCode::FIELD_NAME)
-      ? $entity->get(RelevantLanguageCode::FIELD_NAME)->first()->getString()
+    return $entity instanceof OssSolutionInterface
+      ? $entity->getRelevantLangCode()
       : $entity->language()->getId();
   }
 
