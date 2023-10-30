@@ -18,7 +18,7 @@ entity_type: node
 bundle: oss_solution
 label: 'Maintenance type'
 description: 'How the software is currently maintained'
-required: true
+required: false
 translatable: false
 default_value: {  }
 default_value_callback: ''

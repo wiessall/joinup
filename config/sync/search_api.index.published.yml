@@ -772,7 +772,7 @@ field_settings:
       module:
         - taxonomy
   oss_source:
-    label: Source
+    label: 'Source catalogue'
     datasource_id: 'entity:node'
     property_path: oss_source
     type: string
