@@ -349,9 +349,6 @@
             "drupal/og": {
                 "The annotations for \"edit-form\" and \"delete-form\" @see https://www.drupal.org/project/og/issues/3338830": "resources/patch/php/drupal/og/3338830.diff"
             },
-            "drupal/pluginreference": {
-                "Empty item filled with 1st option @see https://www.drupal.org/project/pluginreference/issues/3385192": "resources/patch/php/drupal/pluginreference/3385192.diff"
-            },
             "drupal/poll": {
                 "Add permissions to edit all polls @see https://www.drupal.org/project/poll/issues/3274724": "resources/patch/php/drupal/poll/3274724-4.patch"
             },
