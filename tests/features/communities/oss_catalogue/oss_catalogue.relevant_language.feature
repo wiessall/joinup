@@ -1,4 +1,4 @@
-@api @group-clone @no-config-lock
+@api @group-clone
 Feature:
   In order to show the most data to visitors, EU OSS Catalogue provides a
   special equivalent of the OSS Solution's translatable fields which fetch and
@@ -31,7 +31,7 @@ Feature:
       | EN Title |
     And I should see the text "IT Short description"
 
-    Given I am logged in as a user with the "access content, administer eu oss catalogue" permissions
+    Given I am logged in as a user with the "administrator" role
     And I accept the "Legal notice" agreement
     When I visit "/admin/content/eu-oss-catalogue/oss-solutions"
     Then I should see the heading "Open Source Software Solutions"
@@ -56,7 +56,7 @@ Feature:
       | DE Feature 1         |
       | DE Feature 2         |
 
-    Given I am logged in as a user with the "access content, administer eu oss catalogue" permissions
+    Given I am logged in as a user with the "administrator" role
     And I accept the "Legal notice" agreement
     When I visit "/admin/content/eu-oss-catalogue/oss-solutions"
     Then I should see the heading "Open Source Software Solutions"

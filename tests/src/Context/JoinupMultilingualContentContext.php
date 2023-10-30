@@ -40,26 +40,31 @@ class JoinupMultilingualContentContext extends RawDrupalContext {
       $node = (object) $nodeHash;
       $node->type = $type;
 
-      // @todo Consider creating a standalone command for adding translation.
-      if ($node->default_translation === '0') {
-        \assert(isset($lastId));
-        \assert(isset($node->langcode));
-        \assert(isset($availableLanguages[$node->langcode]));
-        $original = $storage->load($lastId);
-        \assert($original instanceof NodeInterface);
-        $this->parseEntityFields('node', $node);
-        $translation = array_filter(
-          array_filter((array) $node) + $original->toArray(),
-          function (string|array $value) {
-            return $value !== '~~~' && $value !== ['~~~'];
-          }
-        );
-        $original->addTranslation($node->langcode, $translation)->save();
+      // This must be a new node.
+      if (
+        !isset($node->default_translation)
+        || !empty($node->default_translation)
+      ) {
+        $this->nodeCreate($node);
+        $lastId = $node->nid;
+
         continue;
       }
 
-      $this->nodeCreate($node);
-      $lastId = $node->nid;
+      // If we made it here, then we will add a new translation to the
+      // previously created node.
+      \assert(isset($lastId));
+      \assert(isset($node->langcode));
+      \assert(isset($availableLanguages[$node->langcode]));
+
+      $original = $storage->load($lastId);
+      \assert($original instanceof NodeInterface);
+      $this->parseEntityFields('node', $node);
+      $translation = array_filter(
+        array_filter((array) $node) + $original->toArray(),
+        fn (string|array $value): bool => $value !== '~~~' && $value !== ['~~~']
+      );
+      $original->addTranslation($node->langcode, $translation)->save();
     }
   }
 
