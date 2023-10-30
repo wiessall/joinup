@@ -83,7 +83,7 @@ function joinup_paragraphs_get_access(AccessResultInterface $access_result, stri
   /** @var \Drupal\joinup_group\Entity\GroupContentInterface $parent_entity */
   if ($paragraph && ($parent_entity = $paragraph->getParentEntity())) {
     // If there is a saved parent entity, we try to determine the group.
-    if ($parent_entity instanceof GroupContentInterface) {
+    if ($parent_entity instanceof GroupContentInterface && $parent_entity->hasGroup()) {
       $group = $parent_entity->getGroup();
     }
   }
@@ -109,6 +109,20 @@ function joinup_paragraphs_get_access(AccessResultInterface $access_result, stri
   }
 
   return $access_result;
+}
+
+/**
+ * Implements hook_preprocess_paragraph().
+ */
+function joinup_paragraphs_preprocess_paragraph__image(array &$variables): void {
+  // URL is optional.
+  if (!isset($variables['content']['paragraph_action_link'][0]['#url'])) {
+    return;
+  }
+
+  // Copy link url to image formatter.
+  $variables['content']['paragraph_action_link']['#access'] = FALSE;
+  $variables['content']['paragraph_image'][0]['#url'] = $variables['content']['paragraph_action_link'][0]['#url'];
 }
 
 /**
