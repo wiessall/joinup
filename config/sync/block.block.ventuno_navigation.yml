@@ -8,6 +8,7 @@ dependencies:
     - joinup_core
     - joinup_group
     - og
+    - system
   theme:
     - ventuno
 id: ventuno_navigation
@@ -39,3 +40,7 @@ visibility:
     negate: true
     routes:
       - entity.rdf_entity.edit_form
+  request_path:
+    id: request_path
+    negate: true
+    pages: '/eu-oss-catalogue/solutions/*'
