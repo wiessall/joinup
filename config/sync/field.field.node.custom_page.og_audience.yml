@@ -15,7 +15,7 @@ entity_type: node
 bundle: custom_page
 label: Group
 description: 'The collection this custom page belongs to.'
-required: false
+required: true
 translatable: false
 default_value: {  }
 default_value_callback: ''

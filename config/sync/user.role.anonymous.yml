@@ -72,6 +72,8 @@ permissions:
   - 'view paragraph content simple_paragraph'
   - 'view paragraph content testimony'
   - 'view paragraph content text'
+  - 'view paragraph content tile'
+  - 'view paragraph content tiles'
   - 'view paragraph content video'
   - 'view published sitewide alert entities'
   - 'view rdf entity'

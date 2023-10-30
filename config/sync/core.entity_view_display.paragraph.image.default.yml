@@ -3,10 +3,12 @@ langcode: en
 status: true
 dependencies:
   config:
+    - field.field.paragraph.image.paragraph_action_link
     - field.field.paragraph.image.paragraph_image
     - field.field.paragraph.image.paragraph_image_visibility
     - paragraphs.paragraphs_type.image
   module:
+    - joinup_core
     - image
     - template_suggestion
 id: paragraph.image.default
@@ -14,6 +16,15 @@ targetEntityType: paragraph
 bundle: image
 mode: default
 content:
+  paragraph_action_link:
+    type: auto_blank_link
+    label: hidden
+    settings: {  }
+    third_party_settings:
+      template_suggestion:
+        template_suggestion: ''
+    weight: 1
+    region: content
   paragraph_image:
     type: image
     label: hidden

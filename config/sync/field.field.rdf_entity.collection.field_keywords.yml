@@ -9,8 +9,8 @@ id: rdf_entity.collection.field_keywords
 field_name: field_keywords
 entity_type: rdf_entity
 bundle: collection
-label: Keywords
-description: ''
+label: 'Search keywords'
+description: 'Add one keyword or keyword phrase per line. Relevant keywords improve the search ranking of your content.'
 required: false
 translatable: false
 default_value: {  }
