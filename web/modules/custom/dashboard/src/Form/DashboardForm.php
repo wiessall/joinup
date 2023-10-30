@@ -237,6 +237,10 @@ class DashboardForm extends FormBase {
         '#url' => Url::fromRoute('view.curated_content_listings.page'),
       ],
       [
+        '#title' => $this->t('Custom landing pages'),
+        '#url' => Url::fromRoute('view.content.landing_pages'),
+      ],
+      [
         '#title' => $this->t('Topics'),
         '#url' => Url::fromRoute('view.topic_meta_entity.page'),
       ],

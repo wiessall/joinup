@@ -40,7 +40,7 @@ Feature: Add comments
     When I go to the content page of the type "<content type>" with the title "<title>"
     # Authenticated users can use a rich text editor to enter comments.
     And I should see the "Create comment" wysiwyg editor
-    And the "Image" button should be available in the "Create comment" wysiwyg editor
+    And the "Insert image" button should be available in the "Create comment" wysiwyg editor
     When I enter "Mr scandal was doing something weird the other day." in the "Create comment" wysiwyg editor
     And I press "Post comment"
     Then I should not see the following success messages:

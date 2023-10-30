@@ -89,7 +89,6 @@ trait EntityTrait {
       'release' => 'rdf_entity',
       'solution' => 'rdf_entity',
       'spdx licence' => 'rdf_entity',
-      'tallinn report' => 'node',
       'topic' => 'taxonomy_term',
     ];
   }
@@ -147,7 +146,6 @@ trait EntityTrait {
       'news' => 'news',
       'release' => 'asset_release',
       'spdx licence' => 'spdx_licence',
-      'tallinn report' => 'tallinn_report',
     ];
   }
 
