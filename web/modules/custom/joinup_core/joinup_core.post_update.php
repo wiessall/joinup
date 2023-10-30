@@ -15,7 +15,6 @@
 
 declare(strict_types = 1);
 
-use Drupal\file\Entity\File;
 use Drupal\interoperable_europe\InteroperableEuropeCollectionInterface;
 use Drupal\joinup_collection\JoinupCollectionHelper;
 use Drupal\sparql_entity_storage\UriEncoder;
