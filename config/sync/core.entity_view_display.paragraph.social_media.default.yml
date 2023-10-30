@@ -1,0 +1,32 @@
+uuid: 99c2d9f6-2ea0-44a2-9351-3e25c66d85e0
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.social_media.field_paragraphs_social_media
+    - paragraphs.paragraphs_type.social_media
+  module:
+    - social_media_links_field
+    - template_suggestion
+id: paragraph.social_media.default
+targetEntityType: paragraph
+bundle: social_media
+mode: default
+content:
+  field_paragraphs_social_media:
+    type: social_media_links_field_default
+    label: hidden
+    settings:
+      appearance:
+        orientation: h
+        show_name: true
+      link_attributes:
+        target: _blank
+        rel: nofollow
+    third_party_settings:
+      template_suggestion:
+        template_suggestion: ''
+    weight: 0
+    region: content
+hidden:
+  search_api_excerpt: true
