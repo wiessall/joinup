@@ -101,6 +101,7 @@ Feature: OSS catalogue search
       | Digital Artistry Studio   | beta                   | developers_italia | application-development,it-development,digital-asset-management  | Express your creativity with powerful digital art tools.                              | published | 2021-07-05       |
       | Secure Password Manager   | stable                 | developers_italia | content-management                                               | Manage your passwords securely and keep your data safe with this trusted application. | published | 2022-06-18       |
       | Health Tracker Pro        | development            | developers_italia | it-development                                                   | An upcoming health and fitness app to help you stay on top of your well-being goals.  | published |                  |
+      | LibreOffice               | development            | developers_italia | it-development                                                   | LibreOffice is a free and powerful office suite, and a successor to OpenOffice.       | published | 2023-06-15       |
 
     When I visit the OSS search page
 
@@ -114,17 +115,31 @@ Feature: OSS catalogue search
       | Community Data Tracker   |
       | Magic Data Converter     |
       | Data Security Sentinel   |
+    Then I enter "ope" in the "oss search bar"
+    And I wait for AJAX to finish
+    Then I should see the following "oss search" suggestions:
+      | Another Open Source App   |
+      | Open AI Helper            |
     Then I enter "open" in the "oss search bar"
     And I wait for AJAX to finish
     Then I should see the following "oss search" suggestions:
       | Another Open Source App   |
       | Open AI Helper            |
+    Then I enter "lib" in the "oss search bar"
+    And I wait for AJAX to finish
+    Then I should see the following "oss search" suggestions:
+      | LibreOffice              |
+    Then I enter "libre" in the "oss search bar"
+    And I wait for AJAX to finish
+    Then I should see the following "oss search" suggestions:
+      | LibreOffice              |
 
     # Check sort by filters.
     When I visit the OSS search page
     Then the option "Most Recent" should be selected
     And I should see the text "SEARCH RESULTS (10)"
     And I should see the following tiles in the correct order:
+      | LibreOffice              |
       | Another Open Source App  |
       | Community Data Tracker   |
       | Magic Data Converter     |
@@ -138,13 +153,15 @@ Feature: OSS catalogue search
     And I should be on "/eu-oss-catalogue/solutions?oss_keys=&sort_by=changed"
 
     Given I select "Alphabetic Order A-Z" from "Sort by"
-    Then I should see the following tiles in the correct order:
+    Then I should see the error message "The submitted value orderaz in the Sort by: element is not allowed."
+    And I should see the following tiles in the correct order:
       | Another Open Source App  |
       | Community Data Tracker   |
       | Creative Content Creator |
       | Data Security Sentinel   |
       | Digital Artistry Studio  |
       | Health Tracker Pro       |
+      | LibreOffice              |
       | Magic Data Converter     |
       | Open AI Helper           |
       | Secure Password Manager  |
@@ -152,11 +169,13 @@ Feature: OSS catalogue search
     And I should be on "/eu-oss-catalogue/solutions?oss_keys=&sort_by=orderaz"
 
     Given I select "Alphabetic Order Z-A" from "Sort by"
-    Then I should see the following tiles in the correct order:
+    Then I should see the error message "The submitted value orderza in the Sort by: element is not allowed."
+    And I should see the following tiles in the correct order:
       | Smart IoT Manager        |
       | Secure Password Manager  |
       | Open AI Helper           |
       | Magic Data Converter     |
+      | LibreOffice              |
       | Health Tracker Pro       |
       | Digital Artistry Studio  |
       | Data Security Sentinel   |
