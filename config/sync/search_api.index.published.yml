@@ -262,7 +262,7 @@ field_settings:
     label: Identifier
     datasource_id: 'entity:taxonomy_term'
     property_path: field_eif_identifier
-    type: 'solr_text_custom:ngram'
+    type: text
     dependencies:
       config:
         - field.storage.taxonomy_term.field_eif_identifier
@@ -278,7 +278,7 @@ field_settings:
     label: 'Related term'
     datasource_id: 'entity:taxonomy_term'
     property_path: field_eif_related_term
-    type: 'solr_text_custom:ngram'
+    type: text
     dependencies:
       config:
         - field.storage.taxonomy_term.field_eif_related_term
@@ -657,7 +657,7 @@ field_settings:
   keywords:
     label: Keywords
     property_path: aggregated_field
-    type: 'solr_text_custom:ngram'
+    type: text
     configuration:
       type: union
       fields:

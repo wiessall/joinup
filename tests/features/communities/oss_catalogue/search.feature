@@ -161,7 +161,7 @@ Feature: OSS catalogue search
     # Check sort by filters.
     When I visit the OSS search page
     Then the option "Most Recent" should be selected
-    And I should see the text "SEARCH RESULTS (10)"
+    And I should see the text "SEARCH RESULTS (11)"
     And I should see the following tiles in the correct order:
       | LibreOffice              |
       | Another Open Source App  |
