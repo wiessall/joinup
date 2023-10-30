@@ -429,7 +429,7 @@ third_party_settings:
       -
         layout_id: joinup_layout_four_column_grid
         layout_settings:
-          label: 'Detalied information'
+          label: 'Detailed information'
           context_mapping: {  }
         components:
           bccc0ab9-3d36-4077-a0f9-411649036a9b:
