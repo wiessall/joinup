@@ -47,7 +47,7 @@ Feature: "Add document" visibility options.
     When I go to the homepage of the "Winter of Beginning" solution
     And I click "Add document" in the plus button menu
     Then I should see the heading "Add document"
-    And the following fields should be present "Title, Short title, Type, Topic, Keywords, Geographical coverage, Licence, Description, Upload a new file or enter a URL"
+    And the following fields should be present "Title, Short title, Type, Topic, Search keywords, Geographical coverage, Licence, Description, Upload a new file or enter a URL"
     And the following fields should not be present "Shared on, Motivation"
 
     When I fill in the following:

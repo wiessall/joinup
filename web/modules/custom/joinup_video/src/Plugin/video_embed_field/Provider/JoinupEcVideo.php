@@ -12,7 +12,7 @@ use GuzzleHttp\TransferStats;
  *
  * @VideoEmbedProvider(
  *   id = "joinup_ec_video",
- *   title = @Translation("European Commission video")
+ *   title = @Translation("European Commission")
  * )
  */
 class JoinupEcVideo extends ProviderPluginBase {
