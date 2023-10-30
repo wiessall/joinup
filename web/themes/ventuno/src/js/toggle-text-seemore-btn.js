@@ -2,9 +2,10 @@
  * @file
  * Toggles text inside the "See more" buttons.
  */
-((Drupal, drupalSettings) => {
+
+((Drupal, once) => {
   Drupal.behaviors.toggleTextSeemoreBtn = {
-    attach() {
+    attach(context) {
       const buttons = document.querySelectorAll(".js-see-more-btn");
       const seeMore = Drupal.t("See more");
       const seeLess = Drupal.t("See less");
@@ -14,7 +15,7 @@
         return;
       }
       buttons.forEach((button) => {
-        button.addEventListener("click", (e) => {
+        button.addEventListener("click", (e) => {;
           e.preventDefault();
           if (button.dataset.joinupSeemoreCollapsed === "true") {
             button.innerHTML = `${seeLess} ${chevronUp}`;
