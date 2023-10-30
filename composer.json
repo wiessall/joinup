@@ -78,6 +78,7 @@
         "drupal/pluginreference": "^3.0",
         "drupal/poll": "^1.6",
         "drupal/publication_date": "^2.0",
+        "drupal/queue_ui": "^3.1",
         "drupal/rdf_entity": "^2.0",
         "drupal/rdf_meta_entity": "^1.0",
         "drupal/redirect": "^1.6",
@@ -173,8 +174,7 @@
             "drupal/core-composer-scaffold": true,
             "openeuropa/composer-artifacts": true,
             "phpstan/extension-installer": true,
-            "php-http/discovery": true,
-            "mglaman/composer-drupal-lenient": true
+            "php-http/discovery": true
         }
     },
     "autoload": {
@@ -254,9 +254,6 @@
             "drupal/cas": {
                 "Should CAS respect Drupal registration configuration @see https://www.drupal.org/project/cas/issues/3038279": "resources/patch/php/drupal/cas/3038279.patch"
             },
-            "drupal/coder": {
-                "Support ENUMs @see https://www.drupal.org/project/coder/issues/3283741": "resources/patch/php/drupal/coder/3283741.diff"
-            },
             "drupal/core": {
                 "Allow image style to be selected in text editor @see https://www.drupal.org/node/2061377": "resources/patch/php/drupal/core/2061377.patch",
                 "Allow making the file description a required field @see https://www.drupal.org/node/2320877": "resources/patch/php/drupal/core/2320877.patch",
@@ -279,7 +276,11 @@
                 "Layout builder doesn't support bundle computed field @see https://drupal.org/i/3034979": "resources/patch/php/drupal/core/layoutbuilder-bundlecomputedfieldsfix-3034979-3-8.6x.patch",
                 "Cannot implement a custom user cancellation method @see https://www.drupal.org/project/drupal/issues/3135592": "resources/patch/php/drupal/core/3135592.patch",
                 "If you don't set the \"version\" of a profile, the report/status displays an empty dash @see https://www.drupal.org/project/drupal/issues/3270892": "resources/patch/php/drupal/core/3270892.patch",
-                "hook_requirements_alter() is not invoked on update @see https://www.drupal.org/project/drupal/issues/3324995": "resources/patch/php/drupal/core/3324995.diff"
+                "hook_requirements_alter() is not invoked on update @see https://www.drupal.org/project/drupal/issues/3324995": "resources/patch/php/drupal/core/3324995.diff",
+                "ExceptionLoggingSubscriber should not log HTTP 4XX errors using PHP logger channel @see https://www.drupal.org/i/2828706": "resources/patch/php/drupal/core/2828706.patch",
+                "Dialog options are not honoured when open a dialog using GET @see https://www.drupal.org/project/drupal/issues/3394220": "resources/patch/php/drupal/core/3394220.diff",
+                "Compress ajax_page_state @see https://www.drupal.org/i/3348789": "resources/patch/php/drupal/core/3348789.patch",
+                "ckeditor5.dialog.fix.js throws \"Uncaught TypeError: event.target.classList is undefined\" in Firefox in Drupal 10 with the editor in a modal @see https://www.drupal.org/i/3351600": "resources/patch/php/drupal/core/3351600.diff"
             },
             "drupal/default_content": {
                 "Allow manual imports @see https://www.drupal.org/i/2640734": "resources/patch/php/drupal/default_content/2640734.diff"
@@ -289,7 +290,11 @@
                 "Populate link fields only with URI if value is a string @see https://github.com/jhedstrom/DrupalDriver/pull/267": "resources/patch/php/drupal/drupal-driver/267.diff"
             },
             "drupal/editor_file": {
-                "Uploaded files are not permanent @see https://www.drupal.org/i/3057895": "resources/patch/php/drupal/editor_file/3057895.patch"
+                "Uploaded files are not permanent @see https://www.drupal.org/i/3057895": "resources/patch/php/drupal/editor_file/3057895.patch",
+                "Drupal 10 & CKEditor 5 readiness @see https://www.drupal.org/i/3232053": "resources/patch/php/drupal/editor_file/3232053.patch"
+            },
+            "drupal/embed_block": {
+                "Add support for Ckeditor 5. @see https://www.drupal.org/i/3316336": "resources/patch/php/drupal/embed_block/3316336.patch"
             },
             "drupal/email_confirmer": {
                 "Support for HTML mails @see https://www.drupal.org/i/3047124": "resources/patch/php/drupal/email_confirmer/3047124.diff"
@@ -297,13 +302,19 @@
             "drupal/email_contact": {
                 "Move form creation in a protected method from ContactController::content() to ContactController::getForm() @see https://www.drupal.org/project/email_contact/issues/3346470": "resources/patch/php/drupal/email_contact/3346470.patch"
             },
+            "drupal/entityqueue": {
+                "Undefined array key \"add_more\" @see https://www.drupal.org/project/entityqueue/issues/3388852": "resources/patch/php/drupal/entityqueue/3388852.diff"
+            },
             "drupal/entity_legal": {
                 "Custom agree validation error message and submit button label @see https://www.drupal.org/project/entity_legal/issues/3293017": "resources/patch/php/drupal/entity_legal/3293017.patch"
             },
+            "drupal/error_page": {
+                "Creation of dynamic property deprecated in PHP 8.2 @see https://www.drupal.org/i/3376919": "resources/patch/php/drupal/error_page/3376919.patch"
+            },
             "drupal/facets": {
+                "Facets breaks all AJAX views that uses pagers even without facets @see https://www.drupal.org/i/3379445": "resources/patch/php/drupal/facets/3379445.patch",
                 "Facet Summary for Facet Items with a set dependency. @see https://www.drupal.org/i/2873480": "resources/patch/php/drupal/facets/2873480.patch",
-                "Add 0 option in 'Soft limit' and apply soft limit to facet root li tags and add. @see https://www.drupal.org/i/3208580 and https://www.drupal.org/i/3307082": "resources/patch/php/drupal/facets/3208580-and-3307082.patch",
-                "Creation of dynamic property is deprecated @see https://www.drupal.org/project/facets/issues/3336646": "resources/patch/php/drupal/facets/3336646.diff"
+                "Add 0 option in 'Soft limit' and apply soft limit to facet root li tags and add. @see https://www.drupal.org/i/3208580 and https://www.drupal.org/i/3307082": "resources/patch/php/drupal/facets/3208580-and-3307082.patch"
             },
             "drupal/field_delimiter": {
                 "Doesn't work in layout builder. @see https://www.drupal.org/i/3099580": "resources/patch/php/drupal/field_delimiter/3099580.patch",
@@ -311,7 +322,8 @@
             },
             "drupal/file_url": {
                 "Handle deleted files @see https://www.drupal.org/project/file_url/issues/3326758": "resources/patch/php/drupal/file_url/3326758.diff",
-                "No link template 'canonical' found @see https://www.drupal.org/project/file_url/issues/3346487": "resources/patch/php/drupal/file_url/3346487.diff"
+                "No link template 'canonical' found @see https://www.drupal.org/project/file_url/issues/3346487": "resources/patch/php/drupal/file_url/3346487.diff",
+                "Error thrown when local file does not exist upon deletion @see https://www.drupal.org/project/file_url/issues/3393473": "resources/patch/php/drupal/file_url/3393473.diff"
             },
             "drupal/flag": {
                 "TypeError: Argument 1 passed to FlagCount::count() must implement interface @see https://www.drupal.org/project/flag/issues/3168014": "resources/patch/php/drupal/flag/3168014-46.patch",
@@ -337,9 +349,6 @@
             "drupal/og": {
                 "The annotations for \"edit-form\" and \"delete-form\" @see https://www.drupal.org/project/og/issues/3338830": "resources/patch/php/drupal/og/3338830.diff"
             },
-            "drupal/pathauto": {
-                "PHP 8.2 compatibility @see https://www.drupal.org/project/pathauto/issues/3328670": "resources/patch/php/drupal/pathauto/3328670.patch"
-            },
             "drupal/pluginreference": {
                 "Empty item filled with 1st option @see https://www.drupal.org/project/pluginreference/issues/3385192": "resources/patch/php/drupal/pluginreference/3385192.diff"
             },
@@ -356,15 +365,16 @@
             "drupal/search_api": {
                 "item_id column is too short @see https://www.drupal.org/node/2829696": "resources/patch/php/drupal/search_api/2829696.patch",
                 "Some bulk form field options are missing schema @see https://www.drupal.org/project/search_api/issues/3195199": "resources/patch/php/drupal/search_api/3195199.patch",
-                "The search_api_list:{index} cache tag is not added to the view display @see https://www.drupal.org/project/search_api/issues/3298295": "resources/patch/php/drupal/search_api/3298295.patch"
+                "The search_api_list:{index} cache tag is not added to the view display @see https://www.drupal.org/project/search_api/issues/3298295": "resources/patch/php/drupal/search_api/3298295.patch",
+                "Not all fields that have a target_type setting are entity references @see https://www.drupal.org/i/3394367": "resources/patch/php/drupal/search_api/3394367.diff"
             },
             "drupal/search_api_autocomplete": {
-                "Clear timeout autosubmit used in views_autosubmit. @see https://www.drupal.org/i/3314418": "resources/patch/php/drupal/search_api_autocomplete/3314418.patch",
-                "Undefined constant SolrBackendInterface::SEARCH_API_SOLR_SCHEMA_VERSION @see https://www.drupal.org/i/3382226": "resources/patch/php/drupal/search_api_autocomplete/3382226.diff"
+                "Clear timeout autosubmit used in views_autosubmit. @see https://www.drupal.org/i/3314418": "resources/patch/php/drupal/search_api_autocomplete/3314418.patch"
             },
             "drupal/search_api_spellcheck": {
                 "Missing plugins config schema @see https://www.drupal.org/project/search_api_spellcheck/issues/3277693": "resources/patch/php/drupal/search_api_spellcheck/3277693.patch",
-                "URL don't include the base path @see https://www.drupal.org/project/search_api_spellcheck/issues/3280372" : "resources/patch/php/drupal/search_api_spellcheck/3280372.patch"
+                "URL don't include the base path @see https://www.drupal.org/project/search_api_spellcheck/issues/3280372": "resources/patch/php/drupal/search_api_spellcheck/3280372.patch",
+                "PHP Notice Array to string conversion @see https://www.drupal.org/project/search_api_spellcheck/issues/3265659": "resources/patch/php/drupal/search_api_spellcheck/3265659-3.patch"
             },
             "drupal/smart_trim": {
                 "Avoid max nesting level during development @see https://www.drupal.org/project/smart_trim/issues/3013628": "resources/patch/php/drupal/smart_trim/3013628.patch",
@@ -375,7 +385,8 @@
                 "Mastodon should not have a fixed URL prefix. @see https://www.drupal.org/project/social_media_links/issues/3319694": "resources/patch/php/drupal/social_media_links/3319694.patch"
             },
             "drupal/sparql_entity_storage": {
-                "Interface contract violation @see https://drupal.org/i/3379328": "resources/patch/php/drupal/sparql_entity_storage/3379328.patch"
+                "Interface contract violation @see https://drupal.org/i/3379328": "resources/patch/php/drupal/sparql_entity_storage/3379328.patch",
+                "Prevent processing entities with unsupported characters in the URI @see https://drupal.org/i/3394064": "resources/patch/php/drupal/sparql_entity_storage/3394064.diff"
             },
             "drupal/svg_image": {
                 "SVG is not valid or cannot be sanitized, return an error. @see https://www.drupal.org/i/3350696": "resources/patch/php/drupal/svg_image/3350696.patch",
@@ -384,12 +395,10 @@
             "drupal/swiftmailer": {
                 "Add spooling for increased performance @see https://www.drupal.org/project/swiftmailer/issues/3000553": "resources/patch/php/drupal/swiftmailer/3000553.patch"
             },
-            "drupal/token": {
-                "token-devel link templates don't work when canonical template has multiple parameters @see https://www.drupal.org/project/token/issues/3254619": "resources/patch/php/drupal/token/3254619.patch"
-            },
             "drupal/video_embed_field": {
                 "Extend support for embed URLs. Option to force privacy @see https://www.drupal.org/project/video_embed_field/issues/3060201 (originally on https://www.drupal.org/node/2899093)": "resources/patch/php/drupal/video_embed_field/3060201.patch",
-                "WYSIWYG Video URL max length limited to 128 characters @see https://www.drupal.org/project/video_embed_field/issues/2908562": "resources/patch/php/drupal/video_embed_field/2908562.patch"
+                "WYSIWYG Video URL max length limited to 128 characters @see https://www.drupal.org/project/video_embed_field/issues/2908562": "resources/patch/php/drupal/video_embed_field/2908562.patch",
+                "Add support for Ckeditor 5. @see https://www.drupal.org/project/video_embed_field/issues/3311063": "resources/patch/php/drupal/video_embed_field/3311063.diff"
             },
             "drupal/views_autosubmit": {
                 "Stop auto submitting first character entered in an Autocomplete Filter field. @see https://www.drupal.org/project/views_autosubmit/issues/3160600" : "resources/patch/php/drupal/views_autosubmit/3160600.patch"

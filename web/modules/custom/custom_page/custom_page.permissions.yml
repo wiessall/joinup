@@ -1,0 +1,4 @@
+manage custom landing pages:
+  title: 'Custom landing pages'
+  description: 'Manage custom landing pages'
+  restrict access: TRUE

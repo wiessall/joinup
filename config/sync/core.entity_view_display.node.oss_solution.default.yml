@@ -580,14 +580,16 @@ third_party_settings:
                 entity: layout_builder.entity
                 view_mode: view_mode
               formatter:
-                type: joinup_core_item_count
+                type: joinup_core_more_in_modal
                 label: above
                 settings:
-                  count_suffix_single: administration
-                  count_suffix_multiple: administrations
+                  max_items_to_show: 5
+                  modal_link_label_single: 'Show administration'
+                  modal_link_label_multiple: 'Show all @count administrations'
+                  modal_view_mode: modal
                 third_party_settings:
                   field_delimiter:
-                    delimiter: ', '
+                    delimiter: ''
                   field_formatter_range:
                     order: 0
                     limit: 0

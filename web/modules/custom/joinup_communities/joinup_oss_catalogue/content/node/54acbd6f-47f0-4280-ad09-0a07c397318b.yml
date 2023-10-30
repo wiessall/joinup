@@ -179,7 +179,8 @@ default:
                   parent_uuid: null
                   region: null
                 background_theme: {  }
-                extra_class: {  }
+                extra_class:
+                  extra_class: oss__discover
     -
       entity:
         _meta:
@@ -232,7 +233,7 @@ default:
               value: true
           field_body:
             -
-              value: "<p>The EU Open Source Solutions Catalogue aims to provide a comprehensive and organized repository of the Open Source Software Solutions of the Public Administrations in the Member States.</p>\r\n\r\n<p>It serves as a centralized platform for users to discover, evaluate, and select suitable&nbsp;Open Source Software Solutions for their diverse needs. The catalogue covers a wide range of domains including but not limited to web development, data science, artificial intelligence, infrastructure management, and more.</p>\r\n\r\n<p>&nbsp;</p>\r\n"
+              value: "<p>The EU Open Source Solutions Catalogue aims to provide a comprehensive and organized repository of the Open Source Software Solutions of the Public Administrations in the Member States.</p>\r\n\r\n<p>It serves as a centralized platform for users to discover, evaluate, and select suitable&nbsp;Open Source Software Solutions for their diverse needs. The catalogue covers a wide range of domains including but not limited to web development, data science, artificial intelligence, infrastructure management, and more.</p>\r\n"
               format: text_html
     -
       entity:
@@ -320,7 +321,8 @@ default:
                   parent_uuid: null
                   region: null
                 background_theme: {  }
-                extra_class: {  }
+                extra_class:
+                  extra_class: oss__most_recent
     -
       entity:
         _meta:

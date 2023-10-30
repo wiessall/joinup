@@ -35,11 +35,13 @@ use Drupal\joinup\Traits\UserTrait;
 use Drupal\joinup\Traits\UtilityTrait;
 use Drupal\joinup_core\JoinupVersionInterface;
 use Drupal\media\Entity\Media;
+use Drupal\paragraphs\ParagraphInterface;
 use Joinup\TaskRunner\Traits\TaskRunnerTrait;
 use Joinup\Traits\DigitQaPipelineAwareTrait;
 use LoversOfBehat\TableExtension\Hook\Scope\AfterTableFetchScope;
 use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\ExpectationFailedException;
+use Symfony\Component\Process\Process;
 use WebDriver\Exception;
 use WebDriver\Key;
 
@@ -1051,7 +1053,7 @@ class FeatureContext extends RawDrupalContext {
       throw new \Exception(sprintf('Page title tag not found on the page "%s".', $session->getCurrentUrl()));
     }
 
-    $page_title = $page_title->getText();
+    $page_title = $page_title->getText() ?: $page_title->getHtml();
     if (!$page_title) {
       throw new \Exception(sprintf('Page title tag is found but contains no text on page "%s".', $session->getCurrentUrl()));
     }
@@ -2457,6 +2459,175 @@ class FeatureContext extends RawDrupalContext {
     if (\Drupal::time()->getRequestTime() - $value > 3) {
       throw new ExpectationFailedException("The entity wasn't updated recently");
     }
+  }
+
+  /**
+   * Asserts that a specific entity field is matching a given regexp pattern.
+   *
+   * @param string $bundle
+   *   The human-readable type according to self::bundleAliases().
+   * @param string $title
+   *   The entity title.
+   * @param string $field_label
+   *   The human-readable field name.
+   * @param string $pattern
+   *   The regexp pattern.
+   * @param string $paragraph_tree
+   *   Applies only the $field_label is exposed on a nested paragraph. A string
+   *   like '2nd Body, 1st Accordion item, 1st Item content' where the sequence,
+   *   delimited by comma, is the path down to the paragraph entity on which we
+   *   want to check the $field_label field. Each item consist on human-readable
+   *   delta (1-based) and the reference field label. Defaults to empty string.
+   *
+   * @Then the :field_label field of :title :bundle should match :pattern
+   * @Then the :field_label field of :paragraph_tree paragraph of :title :bundle should match :pattern
+   */
+  public function assertEntityFieldMatches(string $bundle, string $title, string $field_label, string $pattern, string $paragraph_tree = ''): void {
+    if (!$this->entityFieldMatchHelper($bundle, $title, $field_label, $pattern, $paragraph_tree)) {
+      throw new ExpectationFailedException("The '$field_label' of $title' $bundle doesn't match the given regexp pattern but it should");
+    }
+  }
+
+  /**
+   * Asserts that a specific entity field doesn't match a regexp pattern.
+   *
+   * @param string $bundle
+   *   The human-readable type according to self::bundleAliases().
+   * @param string $title
+   *   The entity title.
+   * @param string $field_label
+   *   The human-readable field name.
+   * @param string $pattern
+   *   The regexp pattern.
+   * @param string $paragraph_tree
+   *   Applies only the $field_label is exposed on a nested paragraph. A string
+   *   like '2nd Body, 1st Accordion item, 1st Item content' where the sequence,
+   *   delimited by comma, is the path down to the paragraph entity on which we
+   *   want to check the $field_label field. Each item consist on human-readable
+   *   delta (1-based) and the reference field label. Defaults to empty string.
+   *
+   * @Then the :field_label field of :title :bundle should not match :pattern
+   * @Then the :field_label field of :paragraph_tree paragraph of :title :bundle should not match :pattern
+   */
+  public function assertEntityFieldNotMatch(string $bundle, string $title, string $field_label, string $pattern, string $paragraph_tree = ''): void {
+    if ($this->entityFieldMatchHelper($bundle, $title, $field_label, $pattern, $paragraph_tree)) {
+      throw new ExpectationFailedException("The '$field_label' of $title' $bundle matches the given regexp pattern but it should not");
+    }
+  }
+
+  /**
+   * Provides a helper for entity field content match assertions.
+   *
+   * @param string $bundle
+   *   The human-readable type according to self::entityTypeAliases().
+   * @param string $title
+   *   The entity title.
+   * @param string $field_label
+   *   The human-readable field name.
+   * @param string $pattern
+   *   The regexp pattern.
+   * @param string $paragraph_tree
+   *   Applies only the $field_label is exposed on a nested paragraph. A string
+   *   like '2nd Body, 1st Accordion item, 1st Item content' where the sequence,
+   *   delimited by comma, is the path down to the paragraph entity on which we
+   *   want to check the $field_label field. Each item consist on human-readable
+   *   delta (1-based) and the reference field label. Defaults to empty string.
+   */
+  protected function entityFieldMatchHelper(string $bundle, string $title, string $field_label, string $pattern, string $paragraph_tree): bool {
+    $entity_type_id = static::entityTypeAliases()[$bundle];
+    $entity = $this->getEntityByLabel($entity_type_id, $title);
+
+    $trail = array_map(function (string $part): array {
+      [$position, $paragraph_field] = preg_split('#\s+#', trim($part), 2);
+      // Convert delta from human-readable to 0-based integers.
+      return [$paragraph_field, $this->convertOrdinalToNumber($position) - 1];
+    }, array_filter(explode(',', $paragraph_tree)));
+
+    // Append the field we want to check.
+    $trail[] = [$field_label, 0];
+
+    do {
+      [[$field_label, $delta]] = array_splice($trail, 0, 1);
+      $found = FALSE;
+      foreach ($entity->getFields(FALSE) as $field_name => $field) {
+        $definition = $field->getFieldDefinition();
+        if ($definition->getLabel() === $field_label) {
+          $found = TRUE;
+          break;
+        }
+      }
+      if (!$found) {
+        throw new \LogicException("The {$entity->bundle()} {$entity->getEntityTypeId()} doesn't have a $field_label field");
+      }
+
+      if ($definition->getType() === 'entity_reference_revisions') {
+        $entity = $field->get($delta)->entity;
+        \assert($entity instanceof ParagraphInterface);
+      }
+    } while ($trail);
+
+    $column = $definition->getFieldStorageDefinition()->getMainPropertyName();
+    $value = (string) $entity->get($field_name)->{$column};
+    return (bool) preg_match($pattern, $value);
+  }
+
+  /**
+   * Process a queue worker.
+   *
+   * @param string $queue_name
+   *   The queue name.
+   *
+   * @When I run the :queue_name queue worker
+   */
+  public function iRunTheQueueWorker(string $queue_name): void {
+    $drushCommand = sprintf('drush queue:run %s', $queue_name);
+
+    // Create a new Process instance to run the Drush command.
+    $process = new Process(explode(' ', $drushCommand));
+    $process->setTimeout(1800);
+    $process->run();
+
+    if (!$process->isSuccessful()) {
+      throw new \RuntimeException(sprintf('Failed to execute the queue worker: %s', $process->getErrorOutput()));
+    }
+
+    sleep(1);
+  }
+
+  /**
+   * Wait until a listed items in queue has finished.
+   *
+   * Table format:
+   *
+   * @codingStandardsIgnoreStart
+   * | type       |  id                                                             |
+   * | node       |  706407                                                         |
+   * | rdf_entity |  http://data.europa.eu/w21/0aa21349-959b-4114-b16f-bb88facd324f |
+   * @codingStandardsIgnoreEnd
+   *
+   * @param \Behat\Gherkin\Node\TableNode $table
+   *   The table data.
+   * @param string $queue_name
+   *   The queue name.
+   *
+   * @Given wait until the :queue_name processes the queue items:
+   */
+  public function iWaitUntilQueueIsEmpty(TableNode $table, string $queue_name): void {
+    $database = \Drupal::database();
+    $queue_items = [];
+    foreach ($table->getColumnsHash() as $row) {
+      $query = $database->select('queue', 'queue');
+      $query->fields('queue', ['item_id', 'data']);
+      $query->condition('queue.data', '%' . $row['id'] . '%', 'LIKE');
+      $query->condition('queue.name', $queue_name);
+      $queue_results = $query->execute();
+      foreach ($queue_results as $result) {
+        $queue_items[] = $result->item_id;
+      }
+    }
+    $database->delete('queue')
+      ->condition('item_id', $queue_items, 'NOT IN')
+      ->execute();
   }
 
 }

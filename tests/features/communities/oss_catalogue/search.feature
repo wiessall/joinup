@@ -48,10 +48,16 @@ Feature: OSS catalogue search
     And I should see the "Software Registry" tile
     And I should see the "Immuni" tile
 
+    # Check facets headings.
+    And I see the following headings:
+      | Category           |
+      | Development status |
+      | Source catalogues  |
+
     # Check facets.
     And the "OSS category" checkbox facet should allow selecting the following values "application-development (1),content-management (1),data-analytics (1),data-collection (2),digital-asset-management (2),it-development (1)"
     And the "OSS development status" checkbox facet should allow selecting the following values "Beta (1),Development (1),Obsolete (1),Stable (2)"
-    And the "OSS catalog" checkbox facet should allow selecting the following values "Developers Italia"
+    And the "OSS catalog" checkbox facet should allow selecting the following values "Developers Italia (5)"
     And the page should contain the html text "Italian National OSS Catalogue, by https://developers.italia.it website."
 
     # Check facet filtering.
@@ -89,6 +95,21 @@ Feature: OSS catalogue search
     When set status with 1 in "Django-MDQ" oss_solution
     Then I visit the OSS search page
     And I see the text "4 Open Source Software Solutions" in the "Header" region
+
+    Then I go to the homepage of the "EU Open Source Solutions Catalogue" collection
+    And I should not see the "Entity actions" region
+
+    When I am logged in as a facilitator of the "EU Open Source Solutions Catalogue" collection
+    And I go to the homepage of the "EU Open Source Solutions Catalogue" collection
+    And I should see the link "Metadata" in the "Entity actions" region
+
+    When I am logged in as a user with the "moderator" role
+    And I go to the homepage of the "EU Open Source Solutions Catalogue" collection
+    And I should see the link "Metadata" in the "Entity actions" region
+
+    When I am logged in as an "authenticated user"
+    And I go to the homepage of the "EU Open Source Solutions Catalogue" collection
+    And I should not see the "Entity actions" region
 
   @javascript
   Scenario: User is able to use autocomplete.
