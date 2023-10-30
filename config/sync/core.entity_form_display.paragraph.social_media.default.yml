@@ -13,7 +13,7 @@ bundle: social_media
 mode: default
 content:
   field_paragraphs_social_media:
-    type: social_media_links_field_default
+    type: social_media_links_field_select
     weight: 0
     region: content
     settings: {  }

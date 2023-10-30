@@ -14,5 +14,5 @@ description: ''
 behavior_plugins:
   alignment:
     enabled: true
-  background_theme:
+  color:
     enabled: true

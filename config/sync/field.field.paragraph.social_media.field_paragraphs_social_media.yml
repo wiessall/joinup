@@ -20,136 +20,136 @@ default_value_callback: ''
 settings:
   iconset: 'joinup:default'
   platforms:
-    gitlab:
-      enabled: false
-      description: ''
-      weight: -10
-    facebook:
-      enabled: true
-      description: ''
-      weight: -9
-    telegram:
-      enabled: false
-      description: ''
-      weight: -8
-    meetup:
-      enabled: false
-      description: ''
-      weight: -7
-    tiktok:
-      enabled: false
-      description: ''
-      weight: -6
-    drupal:
-      enabled: false
-      description: ''
-      weight: -5
-    googleplus:
-      enabled: false
-      description: ''
-      weight: -4
-    bitbucket:
-      enabled: false
-      description: ''
-      weight: -3
-    github:
-      enabled: false
-      description: ''
-      weight: -2
-    glassdoor:
-      enabled: false
-      description: ''
-      weight: -1
-    youtube_channel:
-      enabled: false
-      description: ''
-      weight: 0
-    email:
-      enabled: false
-      description: ''
-      weight: 1
-    googleplay:
-      enabled: false
-      description: ''
-      weight: 2
-    slideshare:
-      enabled: false
-      description: ''
-      weight: 3
-    patreon:
-      enabled: false
-      description: ''
-      weight: 4
-    whatsapp:
-      enabled: false
-      description: ''
-      weight: 5
-    vimeo:
-      enabled: false
-      description: ''
-      weight: 6
-    tumblr:
-      enabled: false
-      description: ''
-      weight: 7
-    youtube:
-      enabled: true
-      description: ''
-      weight: 8
-    amazon:
-      enabled: false
-      description: ''
-      weight: 9
-    flickr:
-      enabled: false
-      description: ''
-      weight: 10
-    instagram:
-      enabled: true
-      description: ''
-      weight: 11
-    contact:
-      enabled: false
-      description: ''
-      weight: 12
-    behance:
-      enabled: false
-      description: ''
-      weight: 13
-    rss:
-      enabled: false
-      description: ''
-      weight: 14
-    pinterest:
-      enabled: true
-      description: ''
-      weight: 15
-    mastodon:
-      enabled: false
-      description: ''
-      weight: 16
     twitter:
       enabled: true
       description: ''
-      weight: 17
-    website:
-      enabled: false
-      description: ''
-      weight: 18
-    vkontakte:
-      enabled: false
-      description: ''
-      weight: 19
-    goodreads:
-      enabled: false
-      description: ''
-      weight: 20
-    xing:
-      enabled: false
-      description: ''
-      weight: 21
+      weight: -43
     linkedin:
       enabled: true
       description: ''
-      weight: 22
+      weight: -42
+    youtube:
+      enabled: true
+      description: ''
+      weight: -41
+    mastodon:
+      enabled: true
+      description: ''
+      weight: -40
+    facebook:
+      enabled: true
+      description: ''
+      weight: -39
+    whatsapp:
+      enabled: true
+      description: ''
+      weight: -38
+    vimeo:
+      enabled: true
+      description: ''
+      weight: -37
+    instagram:
+      enabled: true
+      description: ''
+      weight: -36
+    github:
+      enabled: true
+      description: ''
+      weight: -35
+    googleplus:
+      enabled: false
+      description: ''
+      weight: -34
+    bitbucket:
+      enabled: false
+      description: ''
+      weight: -33
+    glassdoor:
+      enabled: false
+      description: ''
+      weight: -32
+    youtube_channel:
+      enabled: false
+      description: ''
+      weight: -31
+    email:
+      enabled: false
+      description: ''
+      weight: -30
+    googleplay:
+      enabled: false
+      description: ''
+      weight: -29
+    slideshare:
+      enabled: false
+      description: ''
+      weight: -28
+    patreon:
+      enabled: false
+      description: ''
+      weight: -27
+    tumblr:
+      enabled: false
+      description: ''
+      weight: -26
+    amazon:
+      enabled: false
+      description: ''
+      weight: -25
+    flickr:
+      enabled: false
+      description: ''
+      weight: -24
+    contact:
+      enabled: false
+      description: ''
+      weight: -23
+    behance:
+      enabled: false
+      description: ''
+      weight: -22
+    rss:
+      enabled: false
+      description: ''
+      weight: -21
+    pinterest:
+      enabled: false
+      description: ''
+      weight: -20
+    website:
+      enabled: false
+      description: ''
+      weight: -19
+    vkontakte:
+      enabled: false
+      description: ''
+      weight: -18
+    goodreads:
+      enabled: false
+      description: ''
+      weight: -17
+    xing:
+      enabled: false
+      description: ''
+      weight: -16
+    gitlab:
+      enabled: false
+      description: ''
+      weight: -15
+    telegram:
+      enabled: false
+      description: ''
+      weight: -14
+    meetup:
+      enabled: false
+      description: ''
+      weight: -13
+    tiktok:
+      enabled: false
+      description: ''
+      weight: -12
+    drupal:
+      enabled: false
+      description: ''
+      weight: -11
 field_type: social_media_links_field
