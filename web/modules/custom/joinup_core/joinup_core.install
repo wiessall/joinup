@@ -92,22 +92,3 @@ function joinup_core_requirements($phase): array {
 
   return $requirements;
 }
-
-/**
- * Remove offending state var.
- */
-function joinup_core_update_109800(): void {
-  \Drupal::state()->delete('joinup.log_alerts');
-}
-
-/**
- * Remove the tallinn module dependency from the moderator role.
- */
-function joinup_core_update_109802(): void {
-  $config_factory = \Drupal::configFactory();
-  $config = $config_factory->getEditable('user.role.moderator');
-  $dependencies = $config->get('dependencies');
-  $dependencies['module'] = array_diff($dependencies['module'], ['tallinn']);
-  $config->set('dependencies', $dependencies);
-  $config->save(TRUE);
-}

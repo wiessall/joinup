@@ -113,24 +113,20 @@ class JoinupEntityStatus extends ProcessorPluginBase implements PluginFormInterf
       $enabled = TRUE;
       if ($object instanceof NodeInterface) {
         $enabled = $object->isPublished();
-
-        if ($enabled) {
-          // The entity can be published only if the parent entity is published.
+        // The entity can be published only if the parent entity is published.
+        // Load the parent from the entity storage cache rather than relying
+        // on the copy that is present in $object->og_audience->entity since
+        // this might be stale. This ensures that if the parent has been
+        // published in this request we will act on the actual updated state.
+        if ($enabled && $object instanceof GroupContentInterface && $object->hasGroup()) {
           $enabled = FALSE;
-
-          // Load the parent from the entity storage cache rather than relying
-          // on the copy that is present in $object->og_audience->entity since
-          // this might be stale. This ensures that if the parent has been
-          // published in this request we will act on the actual updated state.
-          if ($object instanceof GroupContentInterface) {
-            try {
-              $parent = $rdf_storage->load($object->getGroupId());
-              if ($parent instanceof EntityPublishedInterface && $parent->isPublished()) {
-                $enabled = TRUE;
-              }
+          try {
+            $parent = $rdf_storage->load($object->getGroupId());
+            if ($parent instanceof EntityPublishedInterface && $parent->isPublished()) {
+              $enabled = TRUE;
             }
-            catch (MissingGroupException $e) {
-            }
+          }
+          catch (MissingGroupException $e) {
           }
         }
       }
