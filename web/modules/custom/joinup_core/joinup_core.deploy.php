@@ -148,3 +148,22 @@ function joinup_core_deploy_109901(array &$sandbox): string {
   $sandbox['#finished'] = $sandbox['count'] === $sandbox['max'];
   return "Queued {$sandbox['count']} out of {$sandbox['max']} text blobs.";
 }
+
+/**
+ * Remove old menu item for EIF toolbox solution.
+ */
+function joinup_core_deploy_109902(): void {
+  $entityTypeManager = \Drupal::entityTypeManager();
+  /** @var  \Drupal\menu_link_content\MenuLinkContentStorageInterface $menuLinkContentStorage */
+  $menuLinkContentStorage = $entityTypeManager->getStorage('menu_link_content');
+
+  $ids = $menuLinkContentStorage->getQuery()->accessCheck(FALSE)
+    ->condition('bundle', 'menu_link_content')
+    ->condition('link__uri', '%view.eif_recommendation.all%', 'LIKE')
+    ->execute();
+
+  $links = $menuLinkContentStorage->loadMultiple($ids);
+  foreach ($links as $link) {
+    $link->delete();
+  }
+}
