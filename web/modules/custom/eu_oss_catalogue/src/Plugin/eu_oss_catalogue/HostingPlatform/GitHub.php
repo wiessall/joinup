@@ -122,13 +122,21 @@ class GitHub extends EuOssCatalogueGitHostingPlatformPluginBase {
   protected function doGetFileRawUrl(string $url, string $projectUrl): ?string {
     $projectPath = substr($projectUrl, strlen($this->getConfiguration()['baseUrl']) + 1);
     if (preg_match("@^$projectUrl/blob((/[^/]+){3,}.*)$@", $url, $parts)) {
+      // Example:
+      // https://github.com/drupal/core/blob/11.x/misc/logo/drupal-logo.svg
+      // becomes
+      // https://raw.githubusercontent.com/drupal/core/11.x/misc/logo/drupal-logo.svg
       return "https://raw.githubusercontent.com/$projectPath$parts[1]";
     }
+
     // Repository relative URL (e.g. https://github.com/owner/project/dir/file),
     // even this URL doesn't exist. The repository relative path has been
     // previously prefixed with the project URL, but we ignore this. The
     // reference (branch, commit, tag) is unknown, so we assume HEAD.
     if (preg_match("@^$projectUrl/(.+)$@", $url, $parts)) {
+      // Example:
+      // https://github.com/drupal/core/misc/logo/drupal-logo.svg becomes
+      // https://raw.githubusercontent.com/drupal/core/HEAD/misc/logo/drupal-logo.svg
       return "https://raw.githubusercontent.com/$projectPath/HEAD/$parts[1]";
     }
     return NULL;
@@ -141,6 +149,10 @@ class GitHub extends EuOssCatalogueGitHostingPlatformPluginBase {
     if (!str_starts_with($url, 'https://raw.githubusercontent.com/')) {
       return FALSE;
     }
+
+    // The URL path should start with at least three parts.
+    // Valid: https://raw.githubusercontent.com/drupal/core/HEAD/misc/logo/drupal-logo.svg
+    // Invalid: https://raw.githubusercontent.com/drupal/core/drupal-logo.svg
     return (bool) preg_match('@^(/[^/]+){3}/.+$@', parse_url($url, PHP_URL_PATH));
   }
 
