@@ -18,13 +18,10 @@ use Drupal\joinup\Traits\EntityTrait;
 use Drupal\joinup\Traits\SearchTrait;
 use Drupal\joinup\Traits\TestingEntitiesTrait;
 use Drupal\joinup\Traits\UtilityTrait;
-use Drupal\menu_link_content\Entity\MenuLinkContent;
 use Drupal\node\Entity\Node;
-use Drupal\og\OgGroupAudienceHelperInterface;
 use Drupal\paragraphs\Entity\Paragraph;
 use Drupal\rdf_entity\Entity\Rdf;
 use Drupal\rdf_meta_entity\Entity\RdfMetaEntity;
-use Drupal\sparql_entity_storage\UriEncoder;
 use Drupal\taxonomy\Entity\Term;
 
 /**
@@ -116,23 +113,6 @@ class EifContext extends RawDrupalContext {
           'format' => 'content_editor',
         ],
       ]),
-    ])->save();
-
-    $instances = \Drupal::entityTypeManager()->getStorage('ogmenu_instance')->loadByProperties([
-      'type' => 'navigation',
-      OgGroupAudienceHelperInterface::DEFAULT_FIELD => $solution->id(),
-    ]);
-    $instance = reset($instances);
-    $menu_name = "ogmenu-{$instance->id()}";
-    MenuLinkContent::create([
-      'title' => $this->t('Recommendations'),
-      'menu_name' => $menu_name,
-      'link' => [
-        'uri' => Url::fromRoute('view.eif_recommendation.all', [
-          'rdf_entity' => UriEncoder::encodeUrl(EifInterface::EIF_ID),
-        ])->toUriString(),
-      ],
-      'weight' => 4,
     ])->save();
 
     // Ensure the taxonomy terms are indexed.

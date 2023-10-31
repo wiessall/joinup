@@ -2,7 +2,7 @@
 
 declare(strict_types = 1);
 
-namespace Drupal\joinup_material_design\Element;
+namespace Drupal\joinup_invite\Element;
 
 use Drupal\Core\Render\Element\FormElement;
 
