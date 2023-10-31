@@ -7,6 +7,7 @@ namespace Drupal\eu_oss_catalogue\Plugin\eu_oss_catalogue\Resolver;
 use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Logger\LoggerChannelInterface;
 use Drupal\Core\Utility\Error;
+use Drupal\eu_oss_catalogue\EuOssCatalogueHostingPlatformInterface;
 use Drupal\eu_oss_catalogue\EuOssCataloguePluginManagerInterface;
 use Drupal\eu_oss_catalogue\Model\Project;
 use GuzzleHttp\ClientInterface;
@@ -88,25 +89,50 @@ class AbsoluteUrlResolver extends DefaultResolver {
 
     $urls = [];
     foreach ($paths as $path) {
-      $path = trim($path);
-      if ($path && $url = $platform->getFileRawUrl($path, $project->url)) {
-        // HTTP verification is required.
-        if ($this->getConfiguration()['verify']) {
-          try {
-            $options = [RequestOptions::TIMEOUT => 10];
-            $this->httpClient->request('HEAD', $url, $options);
-          }
-          catch (\Throwable $exception) {
-            // Just log a warning and continue.
-            Error::logException($this->logger, $exception, Error::DEFAULT_ERROR_MESSAGE, [], LogLevel::WARNING);
-            continue;
-          }
-        }
-        $urls[] = $url;
+      $urls[] = $this->getAbsoluteUrl($project, $platform, $path);
+    }
+
+    // Filter out null URLs.
+    return array_filter($urls);
+  }
+
+  /**
+   * Returns the absolute URL given a file path.
+   *
+   * @param \Drupal\eu_oss_catalogue\Model\Project $project
+   *   The project value object.
+   * @param \Drupal\eu_oss_catalogue\EuOssCatalogueHostingPlatformInterface $platform
+   *   The code hosting platform plugin instance.
+   * @param string $path
+   *   The relative or absolute path to file.
+   *
+   * @return string|null
+   *   The absolute URL or NULL if it cannot be resolved.
+   */
+  protected function getAbsoluteUrl(Project $project, EuOssCatalogueHostingPlatformInterface $platform, string $path): ?string {
+    if (!$path = trim($path)) {
+      // Empty path.
+      return NULL;
+    }
+    if (!$url = $platform->getFileRawUrl($path, $project->url)) {
+      // Cannot get the file's raw URL.
+      return NULL;
+    }
+
+    // HTTP verification is required.
+    if ($this->getConfiguration()['verify']) {
+      try {
+        $options = [RequestOptions::TIMEOUT => 10];
+        $this->httpClient->request('HEAD', $url, $options);
+      }
+      catch (\Throwable $exception) {
+        // Just log a warning and continue.
+        Error::logException($this->logger, $exception, Error::DEFAULT_ERROR_MESSAGE, [], LogLevel::WARNING);
+        return NULL;
       }
     }
 
-    return $urls;
+    return $url;
   }
 
 }

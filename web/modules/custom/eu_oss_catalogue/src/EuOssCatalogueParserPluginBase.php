@@ -7,6 +7,7 @@ namespace Drupal\eu_oss_catalogue;
 use Drupal\Component\Plugin\PluginBase;
 use Drupal\Core\Config\Entity\ThirdPartySettingsInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Logger\LoggerChannelInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Utility\Error;
@@ -118,28 +119,32 @@ abstract class EuOssCatalogueParserPluginBase extends PluginBase implements EuOs
         continue;
       }
 
-      $fieldDefinition = $solution->getFieldDefinition($fieldName);
-      if ($fieldDefinition instanceof ThirdPartySettingsInterface) {
-        if ($settings = $fieldDefinition->getThirdPartySetting('eu_oss_catalogue', $this->getPluginId())) {
-          $override = $settings['config']['override'] ?? 'always';
-          if ($override === 'preserve_not_empty' && !$fieldItemList->isEmpty()) {
-            // Don't override a field with data.
-            continue;
-          }
-          $resolver = $this->getResolver($settings['resolver'], $settings['config']);
-          try {
-            $resolved = $resolver->resolve($project, $metadata, $fieldItemList);
-            if ($override !== 'resolved_not_empty' || $resolved) {
-              // An empty array unsets the field.
-              $fieldItemList->setValue($resolved ?: NULL);
-            }
-          }
-          catch (UnresolvableValueException $exception) {
-            Error::logException($this->logger, $exception);
-            // Fail softly, don't set this field.
-            continue;
-          }
+      $settings = $this->getFieldSettings($fieldItemList);
+      if ($settings === NULL) {
+        // This field has no EU OSS Catalogue third-party settings.
+        continue;
+      }
+
+      // The override options are documented in eu_oss_catalogue.schema.yml, see
+      // the definition of `eu_oss_catalogue.resolver_config_base:override`.
+      $override = $settings['config']['override'] ?? 'always';
+      if ($override === 'preserve_not_empty' && !$fieldItemList->isEmpty()) {
+        // Don't override a field with data.
+        continue;
+      }
+
+      $resolver = $this->getResolver($settings['resolver'], $settings['config']);
+      try {
+        $resolved = $resolver->resolve($project, $metadata, $fieldItemList);
+        if ($override !== 'resolved_not_empty' || $resolved) {
+          // An empty array unsets the field.
+          $fieldItemList->setValue($resolved ?: NULL);
         }
+      }
+      catch (UnresolvableValueException $exception) {
+        Error::logException($this->logger, $exception);
+        // Fail softly, don't set this field.
+        continue;
       }
     }
 
@@ -202,6 +207,24 @@ abstract class EuOssCatalogueParserPluginBase extends PluginBase implements EuOs
    */
   protected function getTitle(Project $project, array $metadata): string {
     return $project->getFullName();
+  }
+
+  /**
+   * Returns the field EU OSS Catalogue third-party settings.
+   *
+   * @param \Drupal\Core\Field\FieldItemListInterface $fieldItemList
+   *   The field item list.
+   *
+   * @return array|null
+   *   EU OSS Catalogue third-party settings or NULL if this field doesn't
+   *   provide them.
+   */
+  protected function getFieldSettings(FieldItemListInterface $fieldItemList): ?array {
+    $fieldDefinition = $fieldItemList->getFieldDefinition();
+    if ($fieldDefinition instanceof ThirdPartySettingsInterface) {
+      return $fieldDefinition->getThirdPartySetting('eu_oss_catalogue', $this->getPluginId());
+    }
+    return NULL;
   }
 
 }
