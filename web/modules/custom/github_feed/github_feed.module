@@ -57,18 +57,21 @@ function template_preprocess_github_feed(array &$variables): void {
       $variables['type_parsed'] = t('Issues');
       $variables['icon_id'] = 'info-circle';
       $variables['icon_color'] = 'danger';
+      $variables['type_url'] = $variables['url'] . '/issues';
       break;
 
     case 'pull_request':
       $variables['type_parsed'] = t('Pull requests');
       $variables['icon_id'] = 'code-slash';
       $variables['icon_color'] = 'warning';
+      $variables['type_url'] = $variables['url'] . '/pulls';
       break;
 
     case 'events':
       $variables['type_parsed'] = t('Activity feed');
       $variables['icon_id'] = 'rss';
       $variables['icon_color'] = 'dark';
+      $variables['type_url'] = $variables['url'] . '/events';
       break;
   }
 }
@@ -77,21 +80,30 @@ function template_preprocess_github_feed(array &$variables): void {
  * Implements template_preprocess_HOOK().
  */
 function template_preprocess_github_feed_issue(array &$variables): void {
-  _github_feed_preprocess_date($variables);
+  _github_feed_preprocess_item($variables);
+  $item = &$variables['item'];
+  $truncate_html = \Drupal::getContainer()->get('smart_trim.truncate_html');
+  $item['title'] = $truncate_html->truncateChars($item['title'], 50);
 }
 
 /**
  * Implements template_preprocess_HOOK().
  */
 function template_preprocess_github_feed_pull_request(array &$variables): void {
-  _github_feed_preprocess_date($variables);
+  _github_feed_preprocess_item($variables);
+  $item = &$variables['item'];
+  $truncate_html = \Drupal::getContainer()->get('smart_trim.truncate_html');
+  $item['title'] = $truncate_html->truncateChars($item['title'], 50);
 }
 
 /**
  * Implements template_preprocess_HOOK().
  */
 function template_preprocess_github_feed_events(array &$variables): void {
-  _github_feed_preprocess_date($variables);
+  _github_feed_preprocess_item($variables);
+  $item = &$variables['item'];
+  $truncate_html = \Drupal::getContainer()->get('smart_trim.truncate_html');
+  $item['item']['payload']['issue']['title'] = $truncate_html->truncateChars($item['item']['payload']['issue']['title'], 50);
 }
 
 /**
@@ -100,7 +112,7 @@ function template_preprocess_github_feed_events(array &$variables): void {
  * @param array $variables
  *   The variables array.
  */
-function _github_feed_preprocess_date(array &$variables): void {
+function _github_feed_preprocess_item(array &$variables): void {
   $item = &$variables['item'];
   $date_formatter = \Drupal::getContainer()->get('date.formatter');
   $item['created_at'] = [
