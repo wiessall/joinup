@@ -7,7 +7,7 @@ dependencies:
     - field.storage.user.field_user_family_name
     - field.storage.user.field_user_first_name
   module:
-    - joinup_material_design
+    - joinup_tiles
     - joinup_user
     - og
     - user
