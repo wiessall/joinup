@@ -10,7 +10,7 @@ entity_type: node
 bundle: oss_solution
 label: 'Is archived'
 description: 'Whether this project is achieved'
-required: true
+required: false
 translatable: false
 default_value: {  }
 default_value_callback: ''
