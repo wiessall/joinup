@@ -40,7 +40,6 @@ dependencies:
     - joinup_layout
     - layout_builder
     - layout_discovery
-    - pluginreference
     - user
 third_party_settings:
   layout_builder:

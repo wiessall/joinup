@@ -129,8 +129,8 @@ content:
     weight: 38
     region: content
     settings:
-      provider_grouping: true
-      configuration_form: full
+      provider_grouping: false
+      configuration_form: hidden
     third_party_settings: {  }
   oss_is_archived:
     type: boolean_checkbox
