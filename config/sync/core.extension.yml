@@ -99,7 +99,6 @@ module:
   joinup_legal: 0
   joinup_licence: 0
   joinup_like: 0
-  joinup_material_design: 0
   joinup_media: 0
   joinup_menu: 0
   joinup_modal: 0
@@ -118,6 +117,7 @@ module:
   joinup_sparql: 0
   joinup_stats: 0
   joinup_subscription: 0
+  joinup_tiles: 0
   joinup_tour: 0
   joinup_user: 0
   joinup_validation: 0
