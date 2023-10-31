@@ -177,7 +177,7 @@ Feature: OSS catalogue search
     And I should be on "/eu-oss-catalogue/solutions?oss_keys=&sort_by=changed"
 
     Given I select "Alphabetic Order A-Z" from "Sort by"
-    Then I should see the error message "The submitted value orderaz in the Sort by: element is not allowed."
+    Then I should not see the error message "The submitted value orderaz in the Sort by: element is not allowed."
     And I should see the following tiles in the correct order:
       | Another Open Source App  |
       | Community Data Tracker   |
@@ -193,7 +193,7 @@ Feature: OSS catalogue search
     And I should be on "/eu-oss-catalogue/solutions?oss_keys=&sort_by=orderaz"
 
     Given I select "Alphabetic Order Z-A" from "Sort by"
-    Then I should see the error message "The submitted value orderza in the Sort by: element is not allowed."
+    Then I should not see the error message "The submitted value orderza in the Sort by: element is not allowed."
     And I should see the following tiles in the correct order:
       | Smart IoT Manager        |
       | Secure Password Manager  |
