@@ -143,8 +143,12 @@ abstract class InviteFormBase extends FormBase {
       ],
       '#weight' => -100,
     ];
+    $form['button'] = [
+      '#type' => 'container',
+      '#weight' => -99,
+    ];
 
-    $form['add'] = [
+    $form['button']['add'] = [
       '#type' => 'submit',
       '#value' => $this->t('Add'),
       '#name' => 'add_user',
@@ -160,7 +164,6 @@ abstract class InviteFormBase extends FormBase {
         'class' => ['invite-form__add'],
         'data-disable-refocus' => 1,
       ],
-      '#weight' => -99,
     ];
 
     $form['users'] = [
