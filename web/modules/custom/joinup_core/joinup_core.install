@@ -95,9 +95,16 @@ function joinup_core_requirements($phase): array {
 }
 
 /**
- * Pre-creates oss_category, oss_licence and intended_audience_scope vocabs.
+ * Enable Joinup Tiles before config import to prevent errors.
  */
 function joinup_core_update_109900(): void {
+  \Drupal::service('module_installer')->install(['joinup_tiles']);
+}
+
+/**
+ * Pre-creates oss_category, oss_licence and intended_audience_scope vocabs.
+ */
+function joinup_core_update_109901(): void {
   // Pre-create the new controlled vocabularies provided by eu_oss_catalogue
   // module. Normally, these are imported as config but eu_oss_catalogue install
   // goes first and its install process is also populating them with terms, so
