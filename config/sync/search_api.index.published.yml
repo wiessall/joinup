@@ -11,6 +11,8 @@ dependencies:
     - field.storage.node.oss_development_status
     - field.storage.node.field_event_date
     - field.storage.meta_entity.field_featured
+    - field.storage.node.oss_features
+    - field.storage.node.oss_git_description
     - field.storage.node.field_news_headline
     - field.storage.node.oss_scope
     - field.storage.node.field_location
@@ -18,6 +20,7 @@ dependencies:
     - field.storage.meta_entity.field_pinned_in
     - field.storage.node.oss_release_date
     - field.storage.node.field_scope
+    - field.storage.node.oss_short_description
     - field.storage.node.field_short_title
     - field.storage.node.oss_source
     - field.storage.meta_entity.count
@@ -753,6 +756,23 @@ field_settings:
     dependencies:
       config:
         - field.storage.node.oss_development_status
+  oss_features:
+    label: Features
+    datasource_id: 'entity:node'
+    property_path: oss_features
+    type: string
+    boost: 0.5
+    dependencies:
+      config:
+        - field.storage.node.oss_features
+  oss_git_description:
+    label: 'GIT Description'
+    datasource_id: 'entity:node'
+    property_path: oss_git_description
+    type: 'solr_text_custom:ngram'
+    dependencies:
+      config:
+        - field.storage.node.oss_git_description
   oss_release_date:
     label: 'Release date'
     datasource_id: 'entity:node'
@@ -771,6 +791,14 @@ field_settings:
         - field.storage.node.oss_scope
       module:
         - taxonomy
+  oss_short_description:
+    label: 'Short description'
+    datasource_id: 'entity:node'
+    property_path: oss_short_description
+    type: 'solr_text_custom:ngram'
+    dependencies:
+      config:
+        - field.storage.node.oss_short_description
   oss_source:
     label: 'Source catalogue'
     datasource_id: 'entity:node'
@@ -1069,6 +1097,10 @@ processor_settings:
       - field_isr_release_notes_spellcheck
       - field_licence_description
       - field_licence_description_spellcheck
+      - oss_category
+      - oss_features
+      - oss_git_description
+      - oss_short_description
     title: true
     alt: true
     tags:
@@ -1118,6 +1150,8 @@ processor_settings:
       - isr_field_owner_name_spellcheck
       - label
       - label_spellcheck
+      - oss_git_description
+      - oss_short_description
       - title
       - title_spellcheck
   include_custom_page_content:
@@ -1166,6 +1200,8 @@ processor_settings:
       - field_short_title_spellcheck
       - label
       - label_spellcheck
+      - oss_git_description
+      - oss_short_description
       - title
       - title_spellcheck
     stopwords:
@@ -1251,6 +1287,8 @@ processor_settings:
       - isr_field_owner_name_spellcheck
       - label
       - label_spellcheck
+      - oss_git_description
+      - oss_short_description
       - title
       - title_spellcheck
     spaces: ''
@@ -1302,6 +1340,10 @@ processor_settings:
       - isr_field_owner_name_spellcheck
       - label
       - label_spellcheck
+      - oss_category
+      - oss_features
+      - oss_git_description
+      - oss_short_description
       - title
       - title_spellcheck
   type_boost:
