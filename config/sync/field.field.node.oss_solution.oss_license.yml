@@ -20,7 +20,7 @@ entity_type: node
 bundle: oss_solution
 label: License
 description: 'The license under which the solution software is distributed'
-required: true
+required: false
 translatable: false
 default_value: {  }
 default_value_callback: ''
