@@ -138,8 +138,11 @@
   .dropdown-list-item {
     list-style: none;
     .dropdown-menu--sub {
-      padding: 8px 0;
+      padding: 0;
       font-size: $font-size-sm;
+      .dropdown-list-link {
+        padding-left: 1.5*$spacer;
+      }
     }
   }
   .dropdown-list-link,
