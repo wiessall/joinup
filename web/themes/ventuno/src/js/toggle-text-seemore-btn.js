@@ -15,7 +15,7 @@
         return;
       }
       buttons.forEach((button) => {
-        button.addEventListener("click", (e) => {;
+        button.addEventListener("click", (e) => {
           e.preventDefault();
           if (button.dataset.joinupSeemoreCollapsed === "true") {
             button.innerHTML = `${seeLess} ${chevronUp}`;
