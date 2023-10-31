@@ -65,6 +65,16 @@ Feature:
     Then I should see the text "Foo's short description"
     But I should not see the text "Foo's GIT description"
 
+  Scenario: User can see the OSS header.
+    Given oss_solution content:
+      | title   | oss_development_status | oss_source        | oss_categories | oss_short_description   | oss_git_description   | status    | oss_release_date |
+      | Olympus | development            | developers_italia | data-analytics | Foo's short description | Foo's GIT description | published | 2014-11-19       |
+    When I go to the content page of the type "oss_solution" with the title "Olympus"
+    Then I see the text "EU Open Source Solutions Catalogue" in the "Header" region
+    And I see the text "1 Open Source Software Solutions" in the "Header" region
+    And I see the text "Open source software of interest for Public Administrations" in the "Header" region
+    But I should not see the "Navigation menu" region
+
   Scenario: User sees GIT description on OSS Solution page if short description is missing.
     Given oss_solution content:
       | title | oss_development_status | oss_source        | oss_categories | oss_short_description | oss_git_description   | status    | oss_release_date |
