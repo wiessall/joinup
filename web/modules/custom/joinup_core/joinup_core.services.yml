@@ -25,3 +25,9 @@ services:
     class: Drupal\joinup_core\PathProcessor\IdRedirectUuidProcessor
     tags:
       - { name: path_processor_inbound, priority: 200 }
+
+  joinup_core.event_subscriber:
+    class: Drupal\joinup_core\EventSubscriber\ExceptionEventSubscriber
+    arguments: ['@logger.channel.joinup_core']
+    tags:
+      - { name: event_subscriber }
