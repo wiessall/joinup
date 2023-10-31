@@ -12,6 +12,7 @@ use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Field\BaseFieldDefinition;
 use Drupal\Core\Field\FieldDefinitionInterface;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\eu_oss_catalogue\Entity\OssContact;
 use Drupal\eu_oss_catalogue\Entity\OssContractor;
 use Drupal\eu_oss_catalogue\Entity\OssSolution;
@@ -56,8 +57,17 @@ function eu_oss_catalogue_form_views_exposed_form_alter(array &$form, FormStateI
 function eu_oss_catalogue_entity_bundle_field_info(EntityTypeInterface $entity_type, $bundle): array {
   $fields = [];
   if ($entity_type->id() === 'node' && $bundle === 'oss_solution') {
+
+    // We will convert these labels back to the source field's label.
+    /* @see \eu_oss_catalogue_preprocess_field() */
+    $label = t(
+      '@original-field-label (from relevant translation, with fallback)',
+      ['@original-field-label' => t('Short description')],
+      ['context' => 'Relevant field admin label']
+    );
+
     $fields['description'] = BaseFieldDefinition::create('string_long')
-      ->setLabel(t('Short description'))
+      ->setLabel($label)
       ->setComputed(TRUE)
       ->setDisplayConfigurable('view', TRUE)
       ->setSetting(
@@ -102,16 +112,55 @@ function eu_oss_catalogue_entity_bundle_field_info_alter(&$fields, EntityTypeInt
 
   // Create a computed field for every translatable fields which than will
   // display the field value fetched from the richest language code.
-  foreach ($computedFieldCandidates as $fieldName => $fieldDefinition) {
+  foreach ($computedFieldCandidates as $originalFieldName => $fieldDefinition) {
     \assert($fieldDefinition instanceof FieldDefinitionInterface);
-    $computedName = preg_replace('#^oss_(.*)$#', 'oss__$1', $fieldName);
+    $computedName = preg_replace('#^oss_(.*)$#', 'oss__$1', $originalFieldName);
+
+    // We will convert these labels back to the source field's label.
+    /* @see \eu_oss_catalogue_preprocess_field() */
+    $relevantLabel = t(
+      '@original-field-label (from relevant translation)',
+      ['@original-field-label' => $fieldDefinition->getLabel()],
+      ['context' => 'Relevant field admin label']
+    );
 
     $fields[$computedName] = BaseFieldDefinition::createFromFieldStorageDefinition($fieldDefinition->getFieldStorageDefinition())
       ->setName($computedName)
-      ->setLabel($fieldDefinition->getLabel())
-      ->setSetting(RelevantField::SOURCE_FIELDS_SETTING_KEY, [$fieldName])
+      ->setLabel($relevantLabel)
+      ->setSetting(RelevantField::SOURCE_FIELDS_SETTING_KEY, [$originalFieldName])
       ->setComputed(TRUE)
       ->setDisplayConfigurable('view', TRUE)
       ->setClass(RelevantField::class);
   }
+}
+
+/**
+ * Implements hook_preprocess_HOOK() for field.
+ *
+ * Restores the label in templates to the source field label of RelevantField
+ * instances when fields are displayed.
+ */
+function eu_oss_catalogue_preprocess_field(&$variables): void {
+  if (
+    !isset($variables['element']['#title'])
+    || !($label = &$variables['element']['#title']) instanceof TranslatableMarkup
+  ) {
+    return;
+  }
+
+  $markupOptions = $label->getOptions();
+  if (($markupOptions['context'] ?? '') !== 'Relevant field admin label') {
+    return;
+  }
+
+  $originalLabel = $label->getArguments()['@original-field-label'] ?? NULL;
+  if (!isset($originalLabel)) {
+    return;
+  }
+
+  if ($label === $variables['label']) {
+    $variables['label'] = $originalLabel;
+  }
+
+  $label = $originalLabel;
 }
