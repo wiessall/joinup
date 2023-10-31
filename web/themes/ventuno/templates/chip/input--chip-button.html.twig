@@ -1,0 +1,20 @@
+{#
+/**
+ * @file
+ * Theme override for the submit button of a chip.
+ *
+ * Available variables:
+ * - attributes: A list of HTML attributes for the input element.
+ * - children: Optional additional rendered elements.
+ *
+ * @see template_preprocess_input()
+ *
+ * @ingroup themeable
+ */
+#}
+<button {{ attributes.addClass('btn--icon icon--close') }} aria-hidden="true" type="submit">
+    <svg class="bi icon--xs">
+        <use xlink:href="{{ bcl_icon_path }}#x-circle-fill"></use>
+    </svg>
+    {{ children }}
+</button>
