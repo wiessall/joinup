@@ -60,14 +60,25 @@ class GitLabDotCom extends EuOssCatalogueGitHostingPlatformPluginBase {
    * {@inheritdoc}
    */
   protected function doGetFileRawUrl(string $url, string $projectUrl): ?string {
+    // As this method is reused also for self-hosted GitLab, we provide generic
+    // examples covering also https://gitlab.com.
     if (preg_match("@^$projectUrl/(?:-/)?blob/([^/]+)/(.+)$@", $url, $parts)) {
+      // Example:
+      // https://git.drupalcode.org/project/drupal/-/blob/11.x/core/misc/logo/drupal-logo.svg
+      // becomes
+      // https://git.drupalcode.org/project/drupal/-/raw/11.x/core/misc/logo/drupal-logo.svg
       return "$projectUrl/raw/$parts[1]/$parts[2]";
     }
+
     // Repository relative URL (e.g. https://gitlab.com/owner/project/dir/file),
     // even this URL doesn't exist. The repository relative path has been
     // previously prefixed with the project URL, but we ignore this. The
     // reference (branch, commit, tag) is unknown, so we assume HEAD.
     if (preg_match("@^$projectUrl((/[^/]+)+)$@", $url, $parts)) {
+      // Example:
+      // https://git.drupalcode.org/project/drupal/core/misc/logo/drupal-logo.svg
+      // becomes
+      // https://git.drupalcode.org/project/drupal/-/raw/HEAD/core/misc/logo/drupal-logo.svg
       return "$projectUrl/raw/HEAD$parts[1]";
     }
     return NULL;
@@ -80,6 +91,14 @@ class GitLabDotCom extends EuOssCatalogueGitHostingPlatformPluginBase {
     if (!str_starts_with($url, $projectUrl)) {
       return FALSE;
     }
+
+    // We reuse this method also for self-hosted GitLab for which we provide
+    // the following examples, covering also https://gitlab.com:
+    // Valid raw URLs:
+    // - https://git.drupalcode.org/project/drupal/-/raw/11.x/core/misc/logo/drupal-logo.svg
+    // - https://git.drupalcode.org/project/drupal/raw/11.x/core/misc/logo/drupal-logo.svg
+    // Invalid URLs:
+    // - https://git.drupalcode.org/project/drupal/-/11.x/core/misc/logo/drupal-logo.svg
     return (bool) preg_match("@^$projectUrl/(-/)?raw/(.+)$@", $url);
   }
 
