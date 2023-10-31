@@ -7,6 +7,7 @@ dependencies:
   module:
     - joinup_core
     - joinup_group
+    - joinup_oss_catalogue
     - og
   theme:
     - ventuno
@@ -39,3 +40,9 @@ visibility:
     negate: true
     routes:
       - entity.rdf_entity.edit_form
+  oss_content:
+    id: oss_content
+    negate: true
+    context_mapping:
+      node: '@node.node_route_context:node'
+      rdf: '@rdf_entity.rdf_entity_route_context:rdf_entity'
