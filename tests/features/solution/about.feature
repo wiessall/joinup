@@ -379,7 +379,7 @@ Feature: About this solution
       | Extra classes    | test-class |
     And I click "Choose component"
     And I click "Text"
-    And the "Body" wysiwyg editor should have the buttons "Bold, Italic, Link, Unlink, Insert/Remove Bulleted List, Insert/Remove Numbered List, Align Left, Center, Align Right, Justify, Contact us, Source"
+    And the "Body" wysiwyg editor should have the buttons "Bold (Ctrl+B), Italic (Ctrl+I), Link (Ctrl+K), Bulleted List, Numbered List,  Text alignment, Contact us, Source"
     And I press the button "Contact us" in the "Body" wysiwyg editor
     And I press "Save" in the "Modal buttons" region
     And I press "Save"
