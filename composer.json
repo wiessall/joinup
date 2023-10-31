@@ -337,6 +337,9 @@
             "drupal/imagecache_external": {
                 "Support SVG @see https://www.drupal.org/i/3390948": "resources/patch/php/drupal/imagecache_external/3390948.diff"
             },
+            "drupal/iframe": {
+                "Warning: Undefined array key \"url\" @see https://www.drupal.org/project/iframe/issues/3367468": "resources/patch/php/drupal/iframe/3367468-3.patch"
+            },
             "drupal/inline_entity_form": {
                 "Autocomplete field doesn't allow to reference entities with long titles @see https://www.drupal.org/node/2895663": "resources/patch/php/drupal/inline_entity_form/2895663.patch"
             },

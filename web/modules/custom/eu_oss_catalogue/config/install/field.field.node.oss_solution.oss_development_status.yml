@@ -18,7 +18,7 @@ entity_type: node
 bundle: oss_solution
 label: 'Development status'
 description: 'The development status of the solution'
-required: true
+required: false
 translatable: false
 default_value: {  }
 default_value_callback: ''

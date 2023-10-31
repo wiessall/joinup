@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f72b113729f2d32728cf33622b516584",
+    "content-hash": "e2e43ca660c3ea04a5315b2b1f61a10f",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -5250,6 +5250,10 @@
                 {
                     "name": "amitaibu",
                     "homepage": "https://www.drupal.org/user/57511"
+                },
+                {
+                    "name": "bluegeek9",
+                    "homepage": "https://www.drupal.org/user/1286304"
                 },
                 {
                     "name": "fubhy",
