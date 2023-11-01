@@ -103,7 +103,26 @@ function template_preprocess_github_feed_events(array &$variables): void {
   _github_feed_preprocess_item($variables);
   $item = &$variables['item'];
   $truncate_html = \Drupal::getContainer()->get('smart_trim.truncate_html');
-  $item['item']['payload']['issue']['title'] = $truncate_html->truncateChars($item['item']['payload']['issue']['title'], 50);
+
+  // Convert the above in a switch state.
+  switch ($item['type']) {
+    case 'IssueCommentEvent':
+    case 'IssuesEvent':
+      $item['payload']['issue']['title'] = $truncate_html->truncateChars($item['payload']['issue']['title'], 50);
+      break;
+
+    case 'PullRequestEvent':
+      $item['payload']['pull_request']['title'] = $truncate_html->truncateChars($item['payload']['pull_request']['title'], 50);
+      break;
+
+    case 'PullRequestReview':
+      $item['payload']['pull_request']['title'] = $truncate_html->truncateChars($item['payload']['pull_request']['title'], 50);
+      $item['payload']['pull_request']['title'] = $truncate_html->truncateChars($item['payload']['pull_request']['title'], 50);
+      break;
+
+    default:
+      break;
+  }
 }
 
 /**
