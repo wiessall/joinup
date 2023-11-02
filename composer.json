@@ -339,7 +339,7 @@
             },
             "drupal/imagecache_external": {
                 "Add option to override the inherited HTTP client configuration @see https://drupal.org/i/3396502": "resources/patch/php/drupal/imagecache_external/3396502-2.diff",
-                "Add option to use only a file URL as fallback image @see https://drupal.org/i/3396511": "resources/patch/php/drupal/imagecache_external/imagecache_external-add-fallback.url-option-3396511-5.diff"
+                "Do not try to download failed URLs repeatedly: attempt next time only after the local cache is rebuilt @see https://drupal.org/i/3398665": "resources/patch/php/drupal/imagecache_external/3398665.diff"
             },
             "drupal/inline_entity_form": {
                 "Autocomplete field doesn't allow to reference entities with long titles @see https://www.drupal.org/node/2895663": "resources/patch/php/drupal/inline_entity_form/2895663.patch"

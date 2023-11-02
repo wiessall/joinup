@@ -14,12 +14,8 @@
 
 declare(strict_types = 1);
 
-use Drupal\Core\File\FileSystemInterface;
 use Drupal\Core\Url;
 use Drupal\joinup_media\Plugin\QueueWorker\MigrateMedia;
-use Drupal\Core\Utility\UpdateException;
-use Drupal\file\Entity\File;
-use Drupal\file\FileInterface;
 use Drupal\joinup_oss_catalogue\OssCatalogueCollectionInterface;
 
 /**
@@ -268,55 +264,4 @@ function joinup_core_deploy_109906(): void {
     'link' => $link,
     'weight' => -6,
   ])->save();
-}
-
-/**
- * Creates a fallback image to be used by imagecache_external.
- */
-function joinup_core_deploy_109907(): void {
-  $fileSystem = \Drupal::service('file_system');
-  \assert($fileSystem instanceof FileSystemInterface);
-  $fallbackImageFileId = \Drupal::config('imagecache_external.settings')->get('imagecache_fallback_image');
-  if (empty($fallbackImageFileId)) {
-    throw new UpdateException("Imagecache External fallback image file ID isn't set.");
-  }
-  if (File::load($fallbackImageFileId) instanceof FileInterface) {
-    throw new UpdateException(sprintf(
-      "File with ID '%s' already exist. This is is set as fallback image file ID in module settings '%s'.",
-      $fallbackImageFileId,
-      'imagecache_external.settings:imagecache_fallback_image'
-    ));
-  }
-  $directory = 'public://imagecache_external/fallback';
-  if (!$fileSystem->prepareDirectory($directory, FileSystemInterface::CREATE_DIRECTORY | FileSystemInterface::MODIFY_PERMISSIONS)) {
-    throw new UpdateException('Cannot create file directory for Imagecache External fallback image');
-  }
-  $filename = $fileSystem->getDestinationFilename(
-    $directory . '/imagecache-external-fallback.gif',
-    FileSystemInterface::EXISTS_RENAME
-  );
-
-  // Save 1x1 pixel transparent GIF.
-  if (file_put_contents($filename, base64_decode('R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7')) === FALSE) {
-    throw new UpdateException('Cannot save file asset of Imagecache External fallback image');
-  }
-
-  try {
-    $file = File::create([
-      'fid' => $fallbackImageFileId,
-      'uid' => 1,
-      'filename' => basename($filename),
-      'uri' => $filename,
-      'filemime' => 'image/gif',
-      'filesize' => filesize($filename),
-      'status' => 1,
-    ]);
-    $file->save();
-  }
-  catch (\Exception $saveException) {
-    throw new UpdateException(sprintf(
-      "Cannot save Imagecache External fallback image file:\n%s",
-      $saveException->getMessage(),
-    ));
-  }
 }
