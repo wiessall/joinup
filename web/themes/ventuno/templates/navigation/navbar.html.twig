@@ -102,12 +102,44 @@
       >
         {% for item in _items %}
           {% if item.breakpoint %}
-            {% for link in item.links %}
+            {% for link_key,link in item.links %}
               {% if not link.hide_on_desktop %}
-                <li class="nav-item d-none d-{{ item.breakpoint }}-inline-block">
+                {% set desktop_li_attributes = create_attribute() %}
+                {% set desktop_li_classes = [
+                  "nav-item",
+                  "d-none",
+                  "d-" ~ item.breakpoint ~ "-inline-block",
+                  link.children ? 'dropdown'
+                ] %}
+
+                <li{{ desktop_li_attributes.addClass(desktop_li_classes) }}>
                   {% if link.link %}
                     {% set attributes = create_attribute(link.attributes|default([])) %}
-                    {{ link(link.label, link.link, attributes.addClass('nav-link')) }}
+                    {% set desktop_a_classes = [
+                      "nav-link",
+                      "nav-link--underline",
+                      link.children ? 'dropdown-toggle'
+                    ] %}
+
+                    {% if link.children%}
+                      {% set attributes = attributes.setAttribute('aria-expanded', 'false') %}
+                      {% set attributes = attributes.setAttribute('id', link_key) %}
+                      {% set attributes = attributes.setAttribute('role', 'button') %}
+                    {% endif %}
+
+                    {{ link(link.label, link.link, attributes.addClass(desktop_a_classes)) }}
+                    {% if link.children %}
+                      <ul class="dropdown-menu dropdown-menu--sub" aria-labelledby="{{ link_key }}">
+                        {% for child in link.children %}
+                          <li>
+                            <a href="{{ child.link }}" class="dropdown-item">
+                              {{ child.label }}
+                            </a>
+                          </li>
+                        {% endfor %}
+                      </ul>
+                    {% endif %}
+
                   {% elseif link.popover %}
                     <button
                       id="{{ link.id }}"
@@ -173,13 +205,38 @@
                   {{ search }}
                 </div>
               {% else %}
-                <ul class="dropdown-list p-3">
-                  {% for link in item.links %}
+                <ul class="dropdown-list">
+                  {% for link_key,link in item.links %}
                     {% if link.link %}
                       <li class="dropdown-list-item">
-                        <a href="{{ link.link }}" class="dropdown-list-link">
+                        {% set attributes = create_attribute(link.attributes|default([])) %}
+                        {% if link.children%}
+                          {% set attributes = attributes.setAttribute('aria-expanded', 'false') %}
+                          {% set attributes = attributes.setAttribute('id', link_key) %}
+                          {% set attributes = attributes.setAttribute('role', 'button') %}
+                          {% set attributes = attributes.setAttribute('data-bs-toggle', 'dropdown') %}
+                        {% endif %}
+
+                        <a href="{{ link.link }}" {{ attributes.addClass( ['dropdown-list-link']) }}>
                           {{ link.label }}
+                          {% if link.children %}
+                            {{ pattern('icon', {
+                              name: 'chevron-down',
+                              size: 'xs',
+                            }) }}
+                          {% endif %}
                         </a>
+                        {% if link.children %}
+                          <ul class="dropdown-menu dropdown-menu--sub" aria-labelledby="{{ link_key }}">
+                            {% for child in link.children %}
+                              <li class="dropdown-list-item">
+                                <a href="{{ child.link }}" class="dropdown-list-link">
+                                  {{ child.label }}
+                                </a>
+                              </li>
+                            {% endfor %}
+                          </ul>
+                        {% endif %}
                       </li>
                     {% endif %}
                   {% endfor %}
