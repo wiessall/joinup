@@ -53,7 +53,7 @@ class JoinupAcceptHeaderMiddleware implements HttpKernelInterface {
    *   formats.
    */
   protected function getFormatFromRequest(Request $request): ?string {
-    $accept_header_string = $request->headers->get('Accept', NULL, TRUE) ?: 'text/html';
+    $accept_header_string = $request->headers->get('Accept') ?: 'text/html';
     // Use the 'Accept' header to determine format.
     $accept_header = AcceptHeader::fromString($accept_header_string);
     // AcceptHeader::first() is already sorting the list. The first is the
