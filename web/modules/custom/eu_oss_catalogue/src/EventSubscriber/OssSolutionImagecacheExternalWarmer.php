@@ -14,7 +14,7 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 /**
  * Queues new URI values formatted by Imagecache External to be downloaded.
  */
-class OssSolutionImport implements EventSubscriberInterface {
+class OssSolutionImagecacheExternalWarmer implements EventSubscriberInterface {
 
   /**
    * Fields to check for new values.
