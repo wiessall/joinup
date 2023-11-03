@@ -66,6 +66,11 @@ commands:
   toolkit:install-clean:
     - task: run
       command: joinup:environment
+    # Temporary fix.
+    - task: run
+      command: sparql:query
+      arguments:
+        - 'DELETE { GRAPH ?g { ?s ?p ?o . }} WHERE { GRAPH ?g { ?s ?p ?o . } FILTER (STRSTARTS(STR(?g), "no prefix"))}'
     - task: run
       command: sparql:empty
     - task: run
