@@ -72,7 +72,6 @@ class GitHubFeedDefaultFormatter extends FormatterBase {
       }
 
       $fetchedItems = $this->githubFeed->fetchItems($item->repository, $item->type, (int) $item->item_num, (int) $item->comment_num);
-
       if ($fetchedItems === NULL) {
         // Just show a generic failure message.
         $element[$delta] = [
