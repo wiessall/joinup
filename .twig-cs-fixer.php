@@ -7,5 +7,6 @@ $finder->exclude('web/themes/contrib');
 
 $config = new TwigCsFixer\Config\Config();
 $config->setFinder($finder);
+$config->addTokenParser(new Drupal\Core\Template\TwigTransTokenParser());
 
 return $config;
