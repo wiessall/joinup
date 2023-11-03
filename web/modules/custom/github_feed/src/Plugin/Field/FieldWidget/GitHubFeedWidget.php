@@ -26,7 +26,9 @@ class GitHubFeedWidget extends WidgetBase {
    */
   public function formElement(FieldItemListInterface $items, $delta, array $element, array &$form, FormStateInterface $form_state): array {
     $element['#type'] = 'container';
-    $fieldNameBase = $element['#field_parents'][0] . '[' . implode('][', array_slice($element['#field_parents'], 1)) . '][' . $items->getName() . '][' . $delta . ']';
+    $fieldNameBase = empty($element['#field_parents']) ?
+      $items->getName() . '[' . $delta . ']' :
+      $element['#field_parents'][0] . '[' . implode('][', array_slice($element['#field_parents'], 1)) . '][' . $items->getName() . '][' . $delta . ']';
 
     $element['repository'] = [
       '#type' => 'url',
