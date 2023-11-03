@@ -8,7 +8,7 @@
   </nav>
 </div>
 {% set items = logged_in ? [{
-  breakpoint: "lg",
+  breakpoint: "xl",
   classes: ["order-1"],
   id: "landing-pages",
   icon: { name: "justify" },
@@ -16,7 +16,7 @@
   links: landing_page_links,
 }] : [] %}
 {% set items = items|merge([{
-  breakpoint: logged_in ? "" : "lg",
+  breakpoint: logged_in ? "" : "xl",
   id: logged_in ? "account" : "navbar-toggler",
   icon: {
     name: logged_in ? "person-circle" : "justify",
