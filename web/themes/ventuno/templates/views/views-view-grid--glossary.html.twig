@@ -46,7 +46,7 @@
 %}
 {{ attach_library('ventuno/glossary') }}
 {% if title %}
-  <h2{{ create_attribute().addClass(title_classes)}}>{{ title }}</h2>
+  <h2{{ create_attribute().addClass(title_classes) }}>{{ title }}</h2>
 {% endif %}
 <div{{ attributes.addClass(classes) }}>
   {% for row in items %}
