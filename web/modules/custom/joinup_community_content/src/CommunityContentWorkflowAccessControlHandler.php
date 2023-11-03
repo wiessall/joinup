@@ -174,7 +174,7 @@ class CommunityContentWorkflowAccessControlHandler {
     try {
       $content_creation = $content->getGroup()->getContentCreators();
     }
-    catch (MissingGroupException|\TypeError $e) {
+    catch (MissingGroupException | \TypeError $e) {
       // Forbid creating community content if the parent group has not been set
       // (e.g. because the entity is orphaned).
       $this->logger->get('joinup_community_content')->warning($e);
