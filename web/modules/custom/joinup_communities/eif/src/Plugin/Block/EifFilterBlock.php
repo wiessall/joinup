@@ -67,6 +67,10 @@ class EifFilterBlock extends BlockBase implements ContainerFactoryPluginInterfac
     $term_storage = $this->entityTypeManager->getStorage('taxonomy_term');
 
     $vocabularies = [
+      'eif_solution_type' => [
+        'name' => $this->t('Solution category'),
+        'nid'  => 703245,
+      ],
       'eif_principle' => [
         'name' => $this->t('Underlying principles'),
         'nid'  => 703017,
@@ -78,10 +82,6 @@ class EifFilterBlock extends BlockBase implements ContainerFactoryPluginInterfac
       'eif_conceptual_model' => [
         'name' => $this->t('Conceptual model'),
         'nid'  => 703019,
-      ],
-      'eif_solution_type' => [
-        'name' => $this->t('Solution category'),
-        'nid'  => 703245,
       ],
     ];
     foreach ($vocabularies as $machine_name => $vocabulary) {
