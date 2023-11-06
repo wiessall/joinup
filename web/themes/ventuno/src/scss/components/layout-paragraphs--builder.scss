@@ -1,0 +1,36 @@
+//
+// @file
+// Theming rules extending / overriding Layout Paragraphs' Builder UI (admin).
+//
+
+@import "../partials/core";
+
+$wireframe-width: 1px;
+$wireframe-style: dashed;
+$wireframe-color: $black;
+$wireframe-opacity: 0.5;
+
+.lp-builder {
+  .js-lpb-component {
+    outline: $wireframe-width $wireframe-style rgba($wireframe-color, $wireframe-opacity);
+  }
+
+  .js-lpb-component-list > .js-lpb-component {
+    margin-bottom: $spacer;
+  }
+
+  .js-lpb-region ~ .js-lpb-region:before {
+    display: block;
+    position: absolute;
+    inset-inline-start: calc($wireframe-width / -2);
+    border-inline-start: $wireframe-width $wireframe-style rgba($wireframe-color, $wireframe-opacity);
+    height: 100%;
+    content: "";
+  }
+
+  // Doubled selectors needed to override parent library's more specific
+  // declaration (where a qualifier ":hover" is also used).
+  .js-lpb-region.js-lpb-region {
+    outline: none;
+  }
+}

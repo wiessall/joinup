@@ -21,10 +21,10 @@ bundle: contact_form_submission
 mode: mail_subject
 content:
   partial_0:
-    weight: 0
-    region: content
     settings: {  }
     third_party_settings: {  }
+    weight: 0
+    region: content
 hidden:
   field_contact_attachment: true
   field_contact_category: true

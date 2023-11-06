@@ -1,0 +1,74 @@
+diff --git a/features/blackbox.feature b/features/blackbox.feature
+index 0624647..db37c8a 100644
+--- a/features/blackbox.feature
++++ b/features/blackbox.feature
+@@ -90,3 +90,11 @@ Feature: Test DrupalContext
+     Then the "scenariotag" tag should be present
+     And the "blackbox" tag should be present
+     But the "nonexisting" tag should not be present
++
++  Scenario: Regression test. See:
++    - https://github.com/minkphp/MinkBrowserKitDriver/issues/153
++    - https://www.drupal.org/project/drupal/issues/3175718
++    - https://www.drupal.org/project/drupal/issues/3295472
++    - https://github.com/jhedstrom/drupalextension/pull/612
++    Given I am on the homepage
++    Then I should not see "This text shouldn't be visible"
+diff --git a/features/mail.feature b/features/mail.feature
+index 6a8ee6d..b56c233 100644
+--- a/features/mail.feature
++++ b/features/mail.feature
+@@ -73,7 +73,7 @@ Feature: MailContext
+       | subject | test link                               |
+       | body    | A link to Google: http://www.Google.com |
+     And I follow the link to "google" from the mail with the subject "test link"
+-    Then I should see "Search"
++    Then the response should contain "Search"
+
+   Scenario: We try to be order insensitive
+     When Drupal sends an email:
+diff --git a/fixtures/blackbox/index.html b/fixtures/blackbox/index.html
+index d50b7db..cb0c85d 100644
+--- a/fixtures/blackbox/index.html
++++ b/fixtures/blackbox/index.html
+@@ -1,6 +1,9 @@
+ <html>
+   <head>
+     <title>Drupal - Open Source CMS | Drupal.org</title>
++    <script type="application/json">{
++      "description": "This text shouldn't be visible"
++    }</script>
+   </head>
+   <body>
+     <div id="nav-header">
+diff --git a/src/Drupal/DrupalExtension/ServiceContainer/DrupalExtension.php b/src/Drupal/DrupalExtension/ServiceContainer/DrupalExtension.php
+index e0d187e..a72a406 100644
+--- a/src/Drupal/DrupalExtension/ServiceContainer/DrupalExtension.php
++++ b/src/Drupal/DrupalExtension/ServiceContainer/DrupalExtension.php
+@@ -8,6 +8,7 @@ use Behat\Testwork\ServiceContainer\ExtensionManager;
+ use Behat\Testwork\ServiceContainer\ServiceProcessor;
+ use Drupal\DrupalExtension\Compiler\DriverPass;
+ use Drupal\DrupalExtension\Compiler\EventSubscriberPass;
++use DrupalFinder\DrupalFinder;
+ use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
+ use Symfony\Component\Config\FileLocator;
+ use Symfony\Component\DependencyInjection\ContainerBuilder;
+@@ -63,6 +64,18 @@ class DrupalExtension implements ExtensionInterface
+    */
+     public function load(ContainerBuilder $container, array $config)
+     {
++        // Workaround a bug in BrowserKitDriver that wrongly considers as text
++        // of the page, pieces of texts inside the <head> section.
++        // @see https://github.com/minkphp/MinkBrowserKitDriver/issues/153
++        // @see https://www.drupal.org/project/drupal/issues/3175718
++        $drupalFinder = new DrupalFinder();
++        if (!$drupalFinder->locateRoot(getcwd())) {
++            throw new \RuntimeException('Cannot locate Drupal');
++        }
++        $drupalRoot = $drupalFinder->getDrupalRoot();
++        require_once($drupalRoot . '/core/tests/Drupal/Tests/DocumentElement.php');
++        class_alias('\Drupal\Tests\DocumentElement', '\Behat\Mink\Element\DocumentElement', true);
++
+         $loader = new YamlFileLoader($container, new FileLocator(__DIR__ . '/config'));
+         $loader->load('services.yml');
+         $container->setParameter('drupal.drupal.default_driver', $config['default_driver']);

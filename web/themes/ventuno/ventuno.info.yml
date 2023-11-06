@@ -1,15 +1,27 @@
 name: Ventuno
-description: Custom theme for Joinup.
+description: Custom theme for Joinup, sub-theme of OpenEuropa Bootstrap Theme.
 package: Custom
 type: theme
-core_version_requirement: ^8 || ^9
-php: 7.1
+core_version_requirement: '>=9.3'
 base theme: oe_bootstrap_theme
 
 libraries:
-  - ventuno/style
+  - ventuno/base
+  - ventuno/components
+  - ventuno/layout
+  - ventuno/theme
+  - ventuno/tables
+
+libraries-extend:
+  core/drupal.ajax:
+    - ventuno/ajax-throbber
+  joinup_group/shared_entity:
+    - ventuno/shared-entity
+  layout_paragraphs/builder:
+    - ventuno/layout-paragraphs--builder
 
 libraries-override:
+  core/jquery.once: false
   oe_bootstrap_theme/style: false
   oe_bootstrap_theme/bcl: false
   joinup_layout/twocol_60_40:
@@ -23,14 +35,26 @@ libraries-override:
   tour/tour-styling:
     css:
       component:
-        css/tour.module.css: assets/css/tour.css
+        css/tour.module.css: assets/css/tour.min.css
+  core/drupal.checkbox:
+    js:
+      misc/checkbox.js: assets/js/checkbox.min.js
+  layout_discovery/onecol: false
+  layout_discovery/twocol: false
+  layout_builder/twocol_section: false
+  layout_builder/threecol_section: false
+  layout_builder/fourcol_section: false
 
 regions:
-  header_bottom: 'Header bottom'
-  featured: Featured
-  messages: Messages
-  sidebar: Sidebar
+  search_bar: 'Search bar'
+  header: 'Header'
+  featured: 'Featured'
+  messages: 'Messages'
+  sidebar: 'Sidebar'
   content_top: 'Content top'
-  content: Content
-  content_bottom: 'Content bottom'
-  footer: Footer
+  content: 'Content'
+  footer: 'Footer'
+
+joinup:
+  menu_local_tasks:
+    horizontal_tabs_block: ventuno_horizontal_tabs

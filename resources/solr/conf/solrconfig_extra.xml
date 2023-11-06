@@ -60,6 +60,21 @@
     </lst>
   
     <lst name="spellchecker">
+      <str name="name">et</str>
+      <str name="field">spellcheck_et</str>
+      <str name="classname">solr.DirectSolrSpellChecker</str>
+      <str name="distanceMeasure">internal</str>
+      <str name="accuracy">0.5</str>
+      <str name="maxEdits">2</str>
+      <str name="minPrefix">1</str>
+      <str name="maxInspections">5</str>
+      <str name="minQueryLength">4</str>
+      <str name="maxQueryFrequency">0.01</str>
+      <str name="thresholdTokenFrequency">.01</str>
+      <str name="onlyMorePopular">true</str>
+    </lst>
+  
+    <lst name="spellchecker">
       <str name="name">fr</str>
       <str name="field">spellcheck_fr</str>
       <str name="classname">solr.DirectSolrSpellChecker</str>
@@ -157,7 +172,7 @@
       <str name="field">twm_suggest</str>
       <str name="suggestAnalyzerFieldType">text_cs</str>
       <str name="contextField">sm_context_tags</str>
-      <str name="buildOnCommit">true</str>
+      <str name="buildOnCommit">false</str>
       <str name="buildOnStartup">false</str>
     </lst>
   
@@ -168,7 +183,7 @@
       <str name="field">twm_suggest</str>
       <str name="suggestAnalyzerFieldType">text_da</str>
       <str name="contextField">sm_context_tags</str>
-      <str name="buildOnCommit">true</str>
+      <str name="buildOnCommit">false</str>
       <str name="buildOnStartup">false</str>
     </lst>
   
@@ -179,7 +194,7 @@
       <str name="field">twm_suggest</str>
       <str name="suggestAnalyzerFieldType">text_nl</str>
       <str name="contextField">sm_context_tags</str>
-      <str name="buildOnCommit">true</str>
+      <str name="buildOnCommit">false</str>
       <str name="buildOnStartup">false</str>
     </lst>
   
@@ -190,7 +205,18 @@
       <str name="field">twm_suggest</str>
       <str name="suggestAnalyzerFieldType">text_en</str>
       <str name="contextField">sm_context_tags</str>
-      <str name="buildOnCommit">true</str>
+      <str name="buildOnCommit">false</str>
+      <str name="buildOnStartup">false</str>
+    </lst>
+  
+    <lst name="suggester">
+      <str name="name">et</str>
+      <str name="lookupImpl">AnalyzingInfixLookupFactory</str>
+      <str name="dictionaryImpl">DocumentDictionaryFactory</str>
+      <str name="field">twm_suggest</str>
+      <str name="suggestAnalyzerFieldType">text_et</str>
+      <str name="contextField">sm_context_tags</str>
+      <str name="buildOnCommit">false</str>
       <str name="buildOnStartup">false</str>
     </lst>
   
@@ -201,7 +227,7 @@
       <str name="field">twm_suggest</str>
       <str name="suggestAnalyzerFieldType">text_fr</str>
       <str name="contextField">sm_context_tags</str>
-      <str name="buildOnCommit">true</str>
+      <str name="buildOnCommit">false</str>
       <str name="buildOnStartup">false</str>
     </lst>
   
@@ -212,7 +238,7 @@
       <str name="field">twm_suggest</str>
       <str name="suggestAnalyzerFieldType">text_de</str>
       <str name="contextField">sm_context_tags</str>
-      <str name="buildOnCommit">true</str>
+      <str name="buildOnCommit">false</str>
       <str name="buildOnStartup">false</str>
     </lst>
   
@@ -223,7 +249,7 @@
       <str name="field">twm_suggest</str>
       <str name="suggestAnalyzerFieldType">text_el</str>
       <str name="contextField">sm_context_tags</str>
-      <str name="buildOnCommit">true</str>
+      <str name="buildOnCommit">false</str>
       <str name="buildOnStartup">false</str>
     </lst>
   
@@ -234,7 +260,7 @@
       <str name="field">twm_suggest</str>
       <str name="suggestAnalyzerFieldType">text_it</str>
       <str name="contextField">sm_context_tags</str>
-      <str name="buildOnCommit">true</str>
+      <str name="buildOnCommit">false</str>
       <str name="buildOnStartup">false</str>
     </lst>
   
@@ -245,7 +271,7 @@
       <str name="field">twm_suggest</str>
       <str name="suggestAnalyzerFieldType">text_und</str>
       <str name="contextField">sm_context_tags</str>
-      <str name="buildOnCommit">true</str>
+      <str name="buildOnCommit">false</str>
       <str name="buildOnStartup">false</str>
     </lst>
   
@@ -256,7 +282,7 @@
       <str name="field">twm_suggest</str>
       <str name="suggestAnalyzerFieldType">text_es</str>
       <str name="contextField">sm_context_tags</str>
-      <str name="buildOnCommit">true</str>
+      <str name="buildOnCommit">false</str>
       <str name="buildOnStartup">false</str>
     </lst>
   </searchComponent>

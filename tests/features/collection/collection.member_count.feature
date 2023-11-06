@@ -17,8 +17,8 @@ Feature: Collection homepage
       | Hobbit owner |
     And the following collections:
       | title                                   | description        | owner        | logo     | moderation | closed | state     |
-      | Under the mountain                      | Under the mountain | Hobbit owner | logo.png | yes        | no     | validated |
-      | Exactly the same collection, but closed | Under the mountain | Hobbit owner | logo.png | yes        | yes    | validated |
+      | Under the mountain                      | Under the mountain | Hobbit owner | logo.png | yes        | no     | published |
+      | Exactly the same collection, but closed | Under the mountain | Hobbit owner | logo.png | yes        | yes    | published |
     And the following collection user memberships:
       | collection                              | user   | roles       |
       | Under the mountain                      | Thorin | facilitator |
@@ -35,18 +35,18 @@ Feature: Collection homepage
     Then I see the text "3 Members" in the "Header" region
     When I am logged in as "Some goblin"
     And I go to the homepage of the "Under the mountain" collection
-    And I press the "Join this collection" button
+    And I press "Join this collection"
     And I go to the homepage of the "Under the mountain" collection
     Then I see the text "4 Members" in the "Header" region
-    And I click "Members" in the "Left sidebar"
+    And I click "Members" in the "Header"
     Then the "Roles" field should contain the "- Any - (4)" option
 
     # Ensure that leaving a collection, updates the counters.
     When I click "Leave this collection"
-    When I press the "Confirm" button
+    When I press "Confirm"
     Then I should see the success message "You are no longer a member of Under the mountain."
     Then I see the text "3 Members" in the "Header" region
-    And I click "Members" in the "Left sidebar"
+    And I click "Members" in the "Header"
     Then the "Roles" field should contain the "- Any - (3)" option
 
   Scenario: Counters are properly synced for closed collections.
@@ -54,10 +54,10 @@ Feature: Collection homepage
     Then I see the text "3 Members" in the "Header" region
     When I am logged in as "Some goblin"
     And I go to the homepage of the "Exactly the same collection, but closed" collection
-    And I press the "Join this collection" button
+    And I press "Join this collection"
     And I go to the homepage of the "Exactly the same collection, but closed" collection
     Then I see the text "3 Members" in the "Header" region
-    And I click "Members" in the "Left sidebar"
+    And I click "Members" in the "Header"
     Then the "Roles" field should contain the "- Any - (3)" option
 
     # Approve the membership.
@@ -67,12 +67,12 @@ Feature: Collection homepage
     Then I should not see the link "Group"
     And I check the box "Update the member Some goblin"
     Then I select "Approve the pending membership(s)" from "Action"
-    And I press the "Apply to selected items" button
+    And I press "Apply to selected items"
 
     When I am an anonymous user
     And I go to the homepage of the "Exactly the same collection, but closed" collection
     Then I see the text "4 Members" in the "Header" region
-    When I click "Members" in the "Left sidebar"
+    When I click "Members" in the "Header"
     Then the "Roles" field should contain the "- Any - (4)" option
     Then I see the text "4 Members" in the "Header" region
 
@@ -86,15 +86,15 @@ Feature: Collection homepage
     And I am on the homepage
     When I click "People"
     And I fill in "Name or email contains" with "Bilbo"
-    And I press the "Filter" button
+    And I press "Filter"
     Then I check "Bilbo"
     Then I select "Unblock the selected user(s)" from "Action"
-    And I press the "Apply to selected items" button
+    And I press "Apply to selected items"
     Then I should see the success message "Unblock the selected user(s) was applied to 1 item."
     When I am not logged in
     When I go to the homepage of the "Under the mountain" collection
-    Then I should see the text "4 Members" in the "Header" region
-    And I click "Members" in the "Left sidebar"
+    Then I should see the text "4 members" in the "Header" region
+    And I click "Members" in the "Header"
     Then the "Roles" field should contain the "- Any - (4)" option
 
     # Ensure that cache is invalidated properly for tiles in search api views.
@@ -106,15 +106,15 @@ Feature: Collection homepage
     And I am on the homepage
     When I click "People"
     And I fill in "Name or email contains" with "Bilbo"
-    And I press the "Filter" button
+    And I press "Filter"
     Then I check "Bilbo"
     Then I select "Block the selected user(s)" from "Action"
-    And I press the "Apply to selected items" button
+    And I press "Apply to selected items"
     Then I should see the success message "Block the selected user(s) was applied to 1 item."
     When I am not logged in
     When I go to the homepage of the "Under the mountain" collection
-    Then I should see the text "3 Members" in the "Header" region
-    And I click "Members" in the "Left sidebar"
+    Then I should see the text "3 members" in the "Header" region
+    And I click "Members" in the "Header"
     Then the "Roles" field should contain the "- Any - (3)" option
 
     # Ensure that cache is invalidated properly for tiles in search api views.

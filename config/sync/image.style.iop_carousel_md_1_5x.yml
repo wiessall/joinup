@@ -1,0 +1,21 @@
+uuid: cc03f6fb-dd05-4ae4-b76c-59668ddebe94
+langcode: en
+status: true
+dependencies: {  }
+name: iop_carousel_md_1_5x
+label: 'IOP carousel MD 1.5x'
+effects:
+  45d9994b-064d-45da-8c64-89c45451a26f:
+    uuid: 45d9994b-064d-45da-8c64-89c45451a26f
+    id: image_scale_and_crop
+    weight: 1
+    data:
+      width: 368
+      height: 192
+      anchor: center-center
+  8ebdabe9-1c5a-447f-933c-ddef462b26b1:
+    uuid: 8ebdabe9-1c5a-447f-933c-ddef462b26b1
+    id: image_convert
+    weight: 2
+    data:
+      extension: webp

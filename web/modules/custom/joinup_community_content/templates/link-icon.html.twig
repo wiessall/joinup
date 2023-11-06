@@ -13,6 +13,6 @@
  * @ingroup themeable
  */
 #}
-{% spaceless %}
+{% apply spaceless %}
 <a href="{{ url }}"{{ attributes }}><span class="action-link__icon icon icon--{{ icon }}"></span><span class="action-link__link">{{ title }}</span></a>
-{% endspaceless %}
+{% endapply %}

@@ -26,10 +26,12 @@ trait EntityReferenceTrait {
    *   Thrown when no entity with the given label has been found.
    */
   public function convertEntityReferencesValues($entity_type, $entity_bundle, array $values) {
+    $bundle_key = \Drupal::entityTypeManager()->getDefinition($entity_type)->getKey('bundle');
     /** @var \Drupal\Core\Field\FieldDefinitionInterface[] $definitions */
     $definitions = \Drupal::service('entity_field.manager')->getFieldDefinitions($entity_type, $entity_bundle);
+    $types = ['entity_reference', 'og_standard_reference'];
     foreach ($definitions as $name => $definition) {
-      if ($definition->getType() != 'entity_reference' || !array_key_exists($name, $values) || empty($values[$name])) {
+      if (!in_array($definition->getType(), $types, TRUE) || !array_key_exists($name, $values) || empty($values[$name]) || $name === $bundle_key) {
         continue;
       }
 
@@ -38,6 +40,10 @@ trait EntityReferenceTrait {
       $target_entity_type = $settings['target_type'];
       $target_entity_bundles = !empty($settings['handler_settings']['target_bundles']) ? $settings['handler_settings']['target_bundles'] : [];
       if ($target_entity_type === 'user') {
+        $values[$name] = [$values[$name]];
+      }
+
+      if (is_string($values[$name])) {
         $values[$name] = [$values[$name]];
       }
 
@@ -71,7 +77,7 @@ trait EntityReferenceTrait {
    */
   protected function getEntityIdByLabel($label, $entity_type, array $entity_bundle = []) {
     $label_key = $this->getEntityLabelKey($entity_type);
-    $query = \Drupal::entityQuery($entity_type)
+    $query = \Drupal::entityQuery($entity_type)->accessCheck(FALSE)
       ->condition($label_key, $label)
       ->range(0, 1);
 

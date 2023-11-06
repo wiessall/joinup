@@ -16,21 +16,22 @@ use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Field\BaseFieldDefinition;
-use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Render\Markup;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\StreamWrapper\StreamWrapperManager;
 use Drupal\block\BlockInterface;
 use Drupal\joinup_core\ETransBlockConfiguration;
 use Drupal\joinup_core\Element\Datetime;
 use Drupal\joinup_core\Entity\OutdatedContentInterface;
-use Drupal\joinup_core\JoinupSiteAlertListBuilder;
 use Drupal\joinup_core\Plugin\Field\FieldType\OutdatedContentFieldItemList;
+use Drupal\joinup_core\Plugin\Field\FieldWidget\ImageLibraryWidget;
+use Drupal\joinup_workflow\ArchivableEntityInterface;
 use Drupal\node\NodeInterface;
 
 /**
  * Implements hook_theme().
  */
-function joinup_core_theme($existing, $type, $theme, $path) {
+function joinup_core_theme(array $existing, string $type, string $theme, string $path): array {
   return [
     '404_not_found' => [
       'variables' => [
@@ -56,22 +57,22 @@ function joinup_core_theme($existing, $type, $theme, $path) {
 }
 
 /**
+ * Implements hook_requirements_alter().
+ */
+function joinup_core_requirements_alter(array &$requirements): void {
+  $ignored = getenv('DRUPAL_STATUS_REPORT_IGNORE') ?: 'update status,joinup_core_root_user_blocked,search_api_solr_schema_joinup_modifications,deprecated_modules,deprecated_themes,metatag_maintenance_mode,search_api_pending_tasks';
+  $ignored = array_map('trim', explode(',', $ignored));
+
+  $requirements = array_filter($requirements, function (string $requirement) use ($ignored): bool {
+    return !in_array($requirement, $ignored, TRUE);
+  }, ARRAY_FILTER_USE_KEY);
+}
+
+/**
  * Implements hook_cron().
  */
 function joinup_core_cron(): void {
   \Drupal::getContainer()->get('batch.storage')->cleanup();
-}
-
-/**
- * Implements hook_form_BASE_FORM_ID_alter().
- *
- * Alters the Site Alert entity form to hide the scheduling of the alerts. Due
- * to a bug in the core page cache module the scheduling can only work using an
- * additional AJAX call which is undesirable in our case. By disabling the
- * scheduling the alerts are managed manually and the page cache works normally.
- */
-function joinup_core_form_site_alert_form_alter(&$form, FormStateInterface $form_state, $form_id) {
-  $form['scheduling']['#access'] = FALSE;
 }
 
 /**
@@ -106,19 +107,6 @@ function joinup_core_entity_base_field_info(EntityTypeInterface $entity_type) {
   }
 
   return $fields;
-}
-
-/**
- * Implements hook_entity_type_alter().
- */
-function joinup_core_entity_type_alter(array &$entity_types) {
-  // Check that the Site Alert entity type is defined, so we can avoid depending
-  // on the Site Alert module.
-  if (isset($entity_types['site_alert'])) {
-    // Override the list builder with a version which omits the unused 'Start
-    // time' and 'End time' columns.
-    $entity_types['site_alert']->setListBuilderClass(JoinupSiteAlertListBuilder::class);
-  }
 }
 
 /**
@@ -186,26 +174,25 @@ function joinup_core_file_delete(EntityInterface $entity) {
 }
 
 /**
- * Implements hook_editor_js_settings_alter().
+ * Implements hook_preprocess_HOOK().
  *
- * Strip off the h1, h5, h6 tag format options from the 'Format' dropdown.
- * This does not remove the ability of the user to enter or render these tags.
- *
- * @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-3682
+ * @see template_preprocess_image_formatter()
  */
-function joinup_core_editor_js_settings_alter(array &$settings) {
-  if (isset($settings['editor']['formats']['content_editor']) && $settings['editor']['formats']['content_editor']['format'] === 'content_editor') {
-    $options = explode(';', $settings['editor']['formats']['content_editor']['editorSettings']['format_tags']);
-    $options = array_diff($options, ['h1', 'h5', 'h6']);
-    $settings['editor']['formats']['content_editor']['editorSettings']['format_tags'] = implode(';', $options);
+function joinup_core_preprocess_image_formatter(&$variables): void {
+  if ($variables['image']['#alt'] === NULL) {
+    $variables['image']['#alt'] = '';
   }
 }
 
 /**
- * Implements hook_ckeditor_css_alter().
+ * Implements hook_preprocess_HOOK().
+ *
+ * @see template_preprocess_responsive_image_formatter()
  */
-function joinup_core_ckeditor_css_alter(array &$css) {
-  $css[] = drupal_get_path('module', 'joinup_core') . '/css/wysiwyg.css';
+function joinup_core_preprocess_responsive_image_formatter(&$variables): void {
+  if ($variables['responsive_image']['#attributes']['alt'] === NULL) {
+    $variables['responsive_image']['#attributes']['alt'] = '';
+  }
 }
 
 /**
@@ -219,8 +206,8 @@ function joinup_core_config_readonly_whitelist_patterns() {
     'system.menu.footer-european-commission',
     'system.menu.footer-follow-us',
     'system.menu.footer-help-and-support',
-    'system.menu.footer-social-media',
     'system.menu.support',
+    'system.menu.navbar',
     // The outdated content threshold is editable by moderators.
     'joinup_core.outdated_content_threshold',
     'core.menu.static_menu_link_overrides',
@@ -237,6 +224,13 @@ function joinup_core_module_implements_alter(array &$implementations, $hook) {
       // used very rarely but the contextual links menu causes visual clutter.
       unset($implementations['menu_ui']);
       break;
+
+    case 'mail_alter':
+      if (array_key_exists('joinup_core', $implementations)) {
+        $our = $implementations['joinup_core'];
+        unset($implementations['joinup_core']);
+        $implementations['joinup_core'] = $our;
+      }
   }
 }
 
@@ -332,15 +326,28 @@ function joinup_core_get_etrans_block_config_for_current_page(): array {
 }
 
 /**
- * Implements hook_theme_suggestions_HOOK() for menu_local_task.
+ * Implements hook_theme_suggestions_alter().
  */
-function joinup_core_theme_suggestions_menu_local_task(array $variables): array {
-  /** @var \Drupal\joinup_core\LocalTaskLinksHelperInterface $local_task_links_helper */
-  $local_task_links_helper = \Drupal::service('joinup_core.local_task_links_helper');
-  if ($local_task_links_helper->allowHorizontalTabs()->isAllowed()) {
-    return ['menu_local_task__horizontal_tabs'];
+function joinup_core_theme_suggestions_alter(array &$suggestions, array $variables, string $hook): void {
+  static $horizontal_tabs_access;
+  if (!in_array($hook, ['menu_local_task', 'menu_local_tasks'], TRUE)) {
+    return;
   }
-  return ['menu_local_task__three_dots_menu'];
+
+  if (!isset($horizontal_tabs_access)) {
+    /** @var \Drupal\joinup_core\LocalTaskLinksHelperInterface $local_task_links_helper */
+    $local_task_links_helper = \Drupal::service('joinup_core.local_task_links_helper');
+    $horizontal_tabs_access = $local_task_links_helper->allowHorizontalTabs();
+  }
+
+  if ($horizontal_tabs_access->isNeutral()) {
+    return;
+  }
+  elseif ($horizontal_tabs_access->isAllowed()) {
+    $suggestions[] = "{$hook}__horizontal_tabs";
+    return;
+  }
+  $suggestions[] = "{$hook}__three_dots_menu";
 }
 
 /**
@@ -366,6 +373,11 @@ function joinup_core_entity_bundle_field_info(EntityTypeInterface $entity_type, 
  * Implements hook_entity_view_alter().
  */
 function joinup_core_entity_view_alter(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display): void {
+  // Don't show information about outdated content if entity is archived.
+  if ($entity instanceof ArchivableEntityInterface && $entity->isArchived()) {
+    return;
+  }
+
   if ($entity instanceof OutdatedContentInterface && $display->getMode() === 'default') {
     /** @var \Drupal\Core\Entity\EntityTypeBundleInfoInterface $bundle_info */
     $bundle_info = \Drupal::service('entity_type.bundle.info');
@@ -394,6 +406,41 @@ function joinup_core_menu_local_tasks_alter(&$data, $route_name, RefinableCachea
     'entity.user.canonical',
   ];
   if (in_array($route_name, $routes) && isset($data['tabs'][0][$route_name])) {
-    $data['tabs'][0][$route_name]['#access'] = FALSE;
+    $data['tabs'][0][$route_name]['#access'] = AccessResult::forbidden();
   }
+}
+
+/**
+ * Implements hook_page_attachments().
+ */
+function joinup_core_page_attachments(array &$attachments) {
+  // As Joinup uses multiple themes, we pass the active theme to the page to be
+  // used in various contexts.
+  $attachments['#attached']['drupalSettings']['theme'] = \Drupal::theme()->getActiveTheme()->getName();
+}
+
+/**
+ * Implements hook_field_widget_info_alter().
+ */
+function joinup_core_field_widget_info_alter(array &$info): void {
+  if (isset($info['image_library_widget'])) {
+    $info['image_library_widget']['class'] = ImageLibraryWidget::class;
+  }
+}
+
+/**
+ * Implements hook_mail_alter().
+ */
+function joinup_core_mail_alter(&$message) {
+  if (
+    empty($message['headers']['Content-Type']) ||
+    $message['headers']['Content-Type'] !== SWIFTMAILER_FORMAT_HTML
+  ) {
+    return;
+  }
+
+  // Transform body lines not wrapped in block-level HTML tags to paragraphs
+  // in HTML mails.
+  $html_mail_body = implode(PHP_EOL . PHP_EOL, $message['body']);
+  $message['body'] = [Markup::create(_filter_autop($html_mail_body))];
 }

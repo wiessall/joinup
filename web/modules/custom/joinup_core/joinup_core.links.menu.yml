@@ -20,13 +20,6 @@ joinup_core.edit_support_menu:
   parent: system.admin
   weight: 0
 
-joinup_core.site_alerts:
-  title: 'Site alerts'
-  route_name: entity.site_alert.collection
-  description: 'Manage site wide alerts.'
-  parent: system.admin
-  weight: 3
-
 joinup_core.support.contact:
   title: 'Contact support'
   menu_name: support

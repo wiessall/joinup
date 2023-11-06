@@ -1,0 +1,22 @@
+uuid: de13fcb0-bd1d-41d0-92d8-176e521c92eb
+langcode: en
+status: true
+dependencies:
+  module:
+    - field_permissions
+    - meta_entity
+third_party_settings:
+  field_permissions:
+    permission_type: public
+id: meta_entity.metadata_banner_disabled
+field_name: metadata_banner_disabled
+entity_type: meta_entity
+type: boolean
+settings: {  }
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

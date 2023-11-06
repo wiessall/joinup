@@ -1,0 +1,28 @@
+uuid: 2155ed5c-65d1-41c3-9a9f-64116ecb1c1e
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_topic
+    - node.type.custom_page
+    - taxonomy.vocabulary.topic
+id: node.custom_page.field_topic
+field_name: field_topic
+entity_type: node
+bundle: custom_page
+label: Topic
+description: 'You can select multiple topics using the "ctrl" key on your keyboard.'
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'grouped_rdf_taxonomy_term_selection:default'
+  handler_settings:
+    target_bundles:
+      topic: topic
+    sort:
+      field: _none
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

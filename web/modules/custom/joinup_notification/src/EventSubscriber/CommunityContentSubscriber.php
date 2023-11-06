@@ -8,7 +8,6 @@ use Drupal\Core\Config\ConfigFactory;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Session\AccountProxy;
-use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\joinup_discussion\Entity\Discussion;
 use Drupal\joinup_group\JoinupGroupHelper;
 use Drupal\joinup_notification\Event\NotificationEvent;
@@ -22,14 +21,11 @@ use Drupal\og\OgRoleInterface;
 use Drupal\state_machine\Plugin\Workflow\WorkflowInterface;
 use Drupal\state_machine\Plugin\Workflow\WorkflowTransition;
 use Drupal\state_machine_revisions\RevisionManagerInterface;
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
  * Handles notifications related to community content.
  */
-class CommunityContentSubscriber extends NotificationSubscriberBase implements EventSubscriberInterface {
-
-  use StringTranslationTrait;
+class CommunityContentSubscriber extends NotificationSubscriberBase {
 
   /**
    * The transition object.
@@ -181,7 +177,7 @@ class CommunityContentSubscriber extends NotificationSubscriberBase implements E
       return;
     }
 
-    // If we are sending notifications regarding the transition from validated
+    // If we are sending notifications regarding the transition from published
     // to proposed, the users that need to receive the notifications depend on
     // who performed the transition:
     // - A facilitator or moderator might "Request changes" if they see that an
@@ -194,9 +190,9 @@ class CommunityContentSubscriber extends NotificationSubscriberBase implements E
     //   for publication.
     if ($transition_id === 'propose_new_revision') {
       // Determine if we are a privileged user such as a facilitator or
-      // moderator. Only privileged users can update content in validated state
+      // moderator. Only privileged users can update content in published state
       // directly, all other users first need to pass through proposed state.
-      $is_privileged = $entity->isTargetWorkflowStateAllowed('validated', 'validated');
+      $is_privileged = $entity->isTargetWorkflowStateAllowed('published', 'published');
       if ($is_privileged) {
         // We are a facilitator or moderator and are requesting changes. Ensure
         // the notifications are only sent to the content owner.

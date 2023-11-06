@@ -4,10 +4,10 @@ status: true
 dependencies: {  }
 _core:
   default_config_hash: 4ehom1_59vpa7lGXAwm1j09Z8UTV6go7i8kSYgYvlsY
-name: Release
-rid: asset_release
-description: ''
 label_singular: release
 label_plural: releases
 label_count:
   no_count_capitalize: !!binary UmVsZWFzZQNSZWxlYXNlcw==
+name: Release
+rid: asset_release
+description: ''

@@ -9,7 +9,6 @@ use Drupal\Core\Session\AccountInterface;
 use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\og\Entity\OgMembership;
 use Drupal\og\Entity\OgRole;
-use Drupal\og\Og;
 use Drupal\og\OgMembershipInterface;
 use Drupal\rdf_entity\RdfInterface;
 use PHPUnit\Framework\Assert;
@@ -154,6 +153,7 @@ trait OgTrait {
       $result = $entity_type_manager
         ->getStorage($group_content_entity_type_id)
         ->getQuery()
+        ->accessCheck(FALSE)
         ->condition($entity_type->getKey('bundle'), $group_content_bundle_id)
         ->condition($entity_type->getKey('id'), $ids, 'IN')
         ->execute();
@@ -184,7 +184,7 @@ trait OgTrait {
    *   Thrown when a event with the given title does not exist.
    */
   public function assertOgMembership(string $parent, string $parent_bundle, string $content, string $content_bundle): void {
-    $parent = $this->getRdfEntityByLabel($parent, $parent_bundle);
+    $parent = $this->getEntityByLabel('rdf_entity', $parent, $parent_bundle);
 
     $results = \Drupal::entityTypeManager()
       ->getStorage('node')
@@ -247,6 +247,7 @@ trait OgTrait {
 
     $state = !empty($values['state']) ? $values['state'] : NULL;
     $timestamp = !empty($values['created']) ? strtotime($values['created']) : NULL;
+
     $this->subscribeUserToGroup($member, $group, $roles, $state, $timestamp);
   }
 
@@ -267,9 +268,6 @@ trait OgTrait {
    *   Thrown if a membership with the given criteria is not found.
    */
   protected function getMembershipByGroupAndUser(GroupInterface $group, AccountInterface $user, array $states = [OgMembershipInterface::STATE_ACTIVE]): OgMembershipInterface {
-    // Make sure we don't get false positives on previously cached results.
-    self::resetCache();
-
     $membership = $group->getMembership((int) $user->id(), $states);
     if (empty($membership)) {
       throw new \Exception("Og membership for user {$user->getDisplayName()} in group {$group->label()} was not found.");
@@ -298,16 +296,6 @@ trait OgTrait {
     $group_name = $group->label();
     $message = "The $operation operation should " . ($expected_result ? '' : 'not ') . "be accessible for $user_name in $group_name";
     Assert::assertEquals($expected_result, $group->access($operation, $user), $message);
-  }
-
-  /**
-   * Clears the OG related caches.
-   */
-  protected function resetCache(): void {
-    \Drupal::entityTypeManager()->getStorage('og_membership')->resetCache();
-    Og::reset();
-    parent::clearStaticCaches();
-    \Drupal::service('cache.static')->deleteAll();
   }
 
 }

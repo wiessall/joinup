@@ -2,8 +2,7 @@ name: Solution
 description: 'The interoperability solution RDF entity.'
 type: module
 package: Joinup
-core_version_requirement: ^8.9 || ^9.1
-php: 7.1
+core_version_requirement: ">= 9.4"
 
 dependencies:
   - 'drupal:datetime'
@@ -15,10 +14,7 @@ dependencies:
   - 'inline_entity_form:inline_entity_form'
   - 'joinup:asset_distribution'
   - 'joinup:asset_release'
-  - 'joinup:collection'
   - 'joinup:contact_information'
-  - 'joinup:joinup_featured'
-  - 'joinup:joinup_group'
   - 'joinup:joinup_workflow'
   - 'joinup:owner'
   - 'joinup:search_api_field'

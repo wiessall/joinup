@@ -7,12 +7,16 @@
 
 declare(strict_types = 1);
 
+use Drupal\Component\Utility\Unicode;
 use Drupal\Core\Access\AccessResult;
+use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Field\BaseFieldDefinition;
+use Drupal\Core\Field\FieldDefinitionInterface;
+use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Render\Element;
 use Drupal\Core\Session\AccountInterface;
@@ -20,7 +24,9 @@ use Drupal\collection\Entity\Collection;
 use Drupal\collection\Entity\CollectionInterface;
 use Drupal\collection\Entity\GlossaryTerm;
 use Drupal\collection\Plugin\Field\FieldType\LastUpdatedFieldItemList;
+use Drupal\joinup_subscription\JoinupSubscriptionsHelper;
 use Drupal\node\NodeInterface;
+use Drupal\oe_newsroom_newsletter\Form\NewsletterSubscribeForm;
 use Drupal\og\Entity\OgRole;
 use Drupal\og\Og;
 use Drupal\og\OgMembershipInterface;
@@ -30,6 +36,14 @@ use Drupal\rdf_entity\Entity\RdfEntityType;
 use Drupal\rdf_entity\RdfInterface;
 use Drupal\search_api\Query\QueryInterface;
 use Drupal\sparql_entity_storage\SparqlGraphInterface;
+
+/**
+ * Implements hook_entity_type_alter().
+ */
+function collection_entity_type_alter(array &$entity_types): void {
+  /** @var \Drupal\Core\Entity\EntityTypeInterface[] $entity_types */
+  $entity_types['rdf_entity']->setLinkTemplate('glossary', '/rdf_entity/{rdf_entity}/glossary/{letter}');
+}
 
 /**
  * Implements hook_theme().
@@ -128,10 +142,21 @@ function collection_rdf_entity_insert(EntityInterface $entity) {
       'rdf_entity-collection-facilitator',
     ];
 
-    /** @var \Drupal\og\OgMembershipInterface $membership */
-    $membership = Og::createMembership($entity, $entity->getOwner());
-    $membership->setRoles(array_values(OgRole::loadMultiple($roles)));
-    $membership->save();
+    $subscription_bundles = [];
+    foreach (JoinupSubscriptionsHelper::SUBSCRIPTION_BUNDLES['collection'] as $entity_type => $bundles) {
+      foreach ($bundles as $bundle) {
+        $subscription_bundles[] = [
+          'entity_type' => $entity_type,
+          'bundle' => $bundle,
+        ];
+      }
+    }
+
+    Og::createMembership($entity, $entity->getOwner())
+      ->setRoles(array_values(OgRole::loadMultiple($roles)))
+      ->set('subscription_bundles', $subscription_bundles)
+      ->set('announcements', TRUE)
+      ->save();
   }
 }
 
@@ -204,7 +229,7 @@ function collection_rdf_entity_presave(RdfInterface $entity) {
     $entity->set('graph', 'draft');
   }
   elseif (in_array($state, [
-    'validated',
+    'published',
     'archival_request',
     'archived',
   ])) {
@@ -229,7 +254,7 @@ function collection_rdf_entity_update(EntityInterface $entity) {
     return;
   }
 
-  if ($entity->getWorkflowState() === 'validated') {
+  if ($entity->getWorkflowState() === 'published') {
     \Drupal::entityTypeManager()->getStorage('rdf_entity')->deleteFromGraph([$entity], 'draft');
   }
 }
@@ -345,8 +370,13 @@ function collection_rdf_entity_view(array &$build, EntityInterface $entity, Enti
 
   // Read more link to the about page.
   if ($display->getComponent('read_more')) {
-    $build['read_more'] = $entity->toLink(t('Read more'), 'about-page', [
+    $text = [
+      '#type' => 'markup',
+      '#markup' => t('Read more') . '<span class="visually-hidden"> ' . t('about') . ' ' . $entity->getName() . '</span>',
+    ];
+    $build['read_more'] = $entity->toLink($text, 'about-page', [
       'attributes' => [
+        'data-drupal-group-view-mode' => $view_mode,
         'class' => [
           'about-page',
           'read-more',
@@ -354,6 +384,7 @@ function collection_rdf_entity_view(array &$build, EntityInterface $entity, Enti
           'btn',
           'btn-secondary',
         ],
+        'aria-label' => t('Read more about @name.', ['@name' => $entity->getName()]),
       ],
     ])->toRenderable();
   }
@@ -419,8 +450,9 @@ function collection_search_api_query_search_api_field_field_collection_content_a
   // Remove the collection itself from the results.
   $query->addCondition($entity->getEntityType()->getKey('id'), $entity->id(), '<>');
 
-  // Exclude custom pages from the collection overview.
+  // Exclude custom pages and discussion from the collection overview.
   $query->addCondition('entity_bundle', 'custom_page', '<>');
+  $query->addCondition('entity_bundle', 'discussion', '<>');
 }
 
 /**
@@ -462,4 +494,43 @@ function collection_node_delete(NodeInterface $node) {
 function collection_form_meta_entity_collection_settings_form_alter(array &$form, FormStateInterface $form_state, string $form_id): void {
   // Remove the delete button from the 'collection_settings' edit form.
   unset($form['actions']['delete']);
+}
+
+/**
+ * Implements hook_preprocess_HOOK().
+ */
+function collection_preprocess_search_api_field__rdf_entity__field_collection_content__collection(array &$variables): void {
+  /** @var \Drupal\collection\Entity\CollectionInterface $collection */
+  $collection = $variables['entity'];
+
+  /** @var \Drupal\oe_newsroom_newsletter\Plugin\Field\FieldType\NewsletterItem $newsletter_field_item */
+  $newsletter_field_item = $collection->get('field_newsletter')->first();
+
+  $variables['newsletter_enabled'] = $newsletter_field_item && !$newsletter_field_item->isEmpty() && $newsletter_field_item->isEnabled();
+
+  // Collections might have a newsletter. Pass the necessary data that can be
+  // used to render the subscription form inside a tile.
+  if ($variables['newsletter_enabled']) {
+    $label = Unicode::truncate($collection->label(), 20, TRUE, TRUE);
+    $variables['newsletter_motivation'] = t('Keep in touch with %collection', [
+      '%collection' => $label,
+    ]);
+    $variables['newsletter_form'] = \Drupal::formBuilder()->getForm(NewsletterSubscribeForm::class, $newsletter_field_item->getUniverse(), $newsletter_field_item->getServiceId());
+  }
+}
+
+/**
+ * Implements hook_entity_field_access().
+ */
+function collection_entity_field_access(string $operation, FieldDefinitionInterface $field_definition, AccountInterface $account, ?FieldItemListInterface $items = NULL): AccessResultInterface {
+  // Until ISAICP-7223 only moderators are able to set a landing page.
+  // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7223
+  if (
+    $field_definition->getTargetEntityTypeId() === 'meta_entity'
+    && $field_definition->getTargetBundle() === 'collection_settings'
+    && $field_definition->getName() === 'landing_page'
+  ) {
+    return AccessResult::forbiddenIf(!$account->hasPermission('update collection_settings meta-entity'));
+  }
+  return AccessResult::neutral();
 }

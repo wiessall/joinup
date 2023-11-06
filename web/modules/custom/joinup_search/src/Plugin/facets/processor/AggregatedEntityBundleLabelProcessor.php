@@ -4,6 +4,7 @@ declare(strict_types = 1);
 
 namespace Drupal\joinup_search\Plugin\facets\processor;
 
+use Drupal\Core\Cache\Cache;
 use Drupal\Core\Entity\EntityTypeBundleInfoInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormStateInterface;
@@ -167,6 +168,13 @@ class AggregatedEntityBundleLabelProcessor extends ProcessorPluginBase implement
     }
 
     return $results;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getCacheMaxAge() {
+    return Cache::PERMANENT;
   }
 
 }

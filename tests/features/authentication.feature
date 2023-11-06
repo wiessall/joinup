@@ -12,7 +12,6 @@ Feature: User authentication
       | path          |
       | collections   |
       | user/login    |
-      | user/password |
       | user/register |
 
   Scenario Outline: Anonymous user cannot access restricted pages
@@ -26,8 +25,11 @@ Feature: User authentication
       | admin/config                                        |
       | admin/config/search/redirect                        |
       | admin/content                                       |
+      | admin/content/files                                 |
       | admin/content/media                                 |
       | admin/content/rdf                                   |
+      | admin/custom-landing-pages                          |
+      | admin/custom-landing-pages/add                      |
       | admin/legal-notice                                  |
       | admin/legal-notice/add                              |
       | admin/people                                        |
@@ -42,17 +44,19 @@ Feature: User authentication
       | admin/structure/compatibility-document/display      |
       | admin/structure/compatibility-document/form-display |
       | admin/structure/media                               |
-      | admin/structure/views                               |
+      | admin/homepage-topics                               |
+      | announcements                                       |
       | dashboard                                           |
       | licence                                             |
       | licence/add                                         |
       | media/add                                           |
-      | media/add/collection_banner                         |
       | media/add/collection_logo                           |
       | media/add/event_logo                                |
+      | media/add/file                                     |
+      | media/add/image                                     |
       | media/add/news_logo                                 |
-      | media/add/solution_banner                           |
       | media/add/solution_logo                             |
+      | media/add/video                                    |
       | node/add                                            |
       | node/add/custom_page                                |
       | node/add/discussion                                 |
@@ -63,8 +67,6 @@ Feature: User authentication
       | outdated-content-threshold                          |
       | propose/collection                                  |
       | propose/solution                                    |
-      | rdf-graph                                           |
-      | rdf-graph/add                                       |
       | rdf_entity/add                                      |
       | rdf_entity/add/asset_distribution                   |
       | rdf_entity/add/asset_release                        |
@@ -72,7 +74,6 @@ Feature: User authentication
       | rdf_entity/add/contact_information                  |
       | rdf_entity/add/licence                              |
       | rdf_entity/add/owner                                |
-      | rdf_entity/add/rdf_graph                            |
       | rdf_entity/add/solution                             |
       | user/subscriptions                                  |
 
@@ -107,8 +108,12 @@ Feature: User authentication
       | admin                                               |
       | admin/config                                        |
       | admin/content                                       |
+      | admin/content/files                                 |
       | admin/content/media                                 |
+      | admin/content/messages                              |
       | admin/content/rdf                                   |
+      | admin/custom-landing-pages                          |
+      | admin/custom-landing-pages/add                      |
       | admin/legal-notice                                  |
       | admin/legal-notice/add                              |
       | admin/people                                        |
@@ -123,17 +128,19 @@ Feature: User authentication
       | admin/structure/compatibility-document/display      |
       | admin/structure/compatibility-document/form-display |
       | admin/structure/media                               |
-      | admin/structure/views                               |
+      | admin/homepage-topics                               |
+      | announcements                                       |
       | dashboard                                           |
       | licence                                             |
       | licence/add                                         |
       | media/add                                           |
-      | media/add/collection_banner                         |
       | media/add/collection_logo                           |
       | media/add/event_logo                                |
+      | media/add/file                                     |
+      | media/add/image                                     |
       | media/add/news_logo                                 |
-      | media/add/solution_banner                           |
       | media/add/solution_logo                             |
+      | media/add/video                                    |
       | node/add                                            |
       | node/add/custom_page                                |
       | node/add/discussion                                 |
@@ -143,8 +150,6 @@ Feature: User authentication
       | node/add/news                                       |
       | outdated-content-threshold                          |
       | propose/solution                                    |
-      | rdf-graph                                           |
-      | rdf-graph/add                                       |
       | rdf_entity/add                                      |
       | rdf_entity/add/asset_distribution                   |
       | rdf_entity/add/asset_release                        |
@@ -152,7 +157,6 @@ Feature: User authentication
       | rdf_entity/add/contact_information                  |
       | rdf_entity/add/licence                              |
       | rdf_entity/add/owner                                |
-      | rdf_entity/add/rdf_graph                            |
       | rdf_entity/add/solution                             |
 
   Scenario Outline: Authenticated user cannot access restricted non-HTML URLs.
@@ -173,6 +177,7 @@ Feature: User authentication
       | path                                        |
       | admin/content/media                         |
       | admin/content/rdf                           |
+      | admin/content/files                         |
       | admin/legal-notice                          |
       | admin/legal-notice/add                      |
       | admin/people                                |
@@ -180,20 +185,24 @@ Feature: User authentication
       | admin/reporting/distribution-downloads/csv  |
       | admin/reporting/export-user-list            |
       | admin/reporting/group-administrators/export |
+      | admin/reporting/messages-overview           |
       | admin/reporting/solutions-by-licences       |
       | admin/reporting/solutions-by-type           |
       | admin/reporting/subscribers-report          |
       | admin/structure/compatibility-document      |
+      | admin/homepage-topics                       |
+      | announcements                               |
       | dashboard                                   |
       | licence                                     |
       | licence/add                                 |
       | media/add                                   |
-      | media/add/collection_banner                 |
       | media/add/collection_logo                   |
       | media/add/event_logo                        |
+      | media/add/file                             |
+      | media/add/image                             |
       | media/add/news_logo                         |
-      | media/add/solution_banner                   |
       | media/add/solution_logo                     |
+      | media/add/video                            |
       | outdated-content-threshold                  |
       | propose/collection                          |
 
@@ -212,7 +221,6 @@ Feature: User authentication
       | admin/structure/compatibility-document/display      |
       | admin/structure/compatibility-document/form-display |
       | admin/structure/media                               |
-      | admin/structure/views                               |
       | node/add                                            |
       | node/add/custom_page                                |
       | node/add/discussion                                 |
@@ -221,8 +229,6 @@ Feature: User authentication
       | node/add/glossary                                   |
       | node/add/news                                       |
       | propose/solution                                    |
-      | rdf-graph                                           |
-      | rdf-graph/add                                       |
       | rdf_entity/add                                      |
       | rdf_entity/add/asset_distribution                   |
       | rdf_entity/add/asset_release                        |
@@ -230,7 +236,6 @@ Feature: User authentication
       | rdf_entity/add/contact_information                  |
       | rdf_entity/add/licence                              |
       | rdf_entity/add/owner                                |
-      | rdf_entity/add/rdf_graph                            |
       | rdf_entity/add/solution                             |
 
   Scenario Outline: Administrator can access pages they are authorized to
@@ -254,6 +259,7 @@ Feature: User authentication
       | admin                              |
       | admin/config                       |
       | admin/content                      |
+      | admin/content/files                                 |
       | admin/content/media                |
       | admin/content/rdf                  |
       | admin/legal-notice                 |
@@ -266,8 +272,6 @@ Feature: User authentication
       | node/add/document                  |
       | node/add/event                     |
       | node/add/news                      |
-      | rdf-graph                          |
-      | rdf-graph/add                      |
       | rdf_entity/add                     |
       | rdf_entity/add/asset_distribution  |
       | rdf_entity/add/asset_release       |
@@ -275,5 +279,4 @@ Feature: User authentication
       | rdf_entity/add/contact_information |
       | rdf_entity/add/licence             |
       | rdf_entity/add/owner               |
-      | rdf_entity/add/rdf_graph           |
       | rdf_entity/add/solution            |

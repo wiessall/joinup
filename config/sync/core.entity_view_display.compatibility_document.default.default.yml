@@ -13,8 +13,8 @@ content:
   description:
     type: text_default
     label: visually_hidden
-    weight: 10
-    region: content
     settings: {  }
     third_party_settings: {  }
+    weight: 10
+    region: content
 hidden: {  }

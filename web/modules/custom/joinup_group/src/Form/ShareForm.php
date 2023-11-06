@@ -7,8 +7,6 @@ namespace Drupal\joinup_group\Form;
 use Drupal\Core\Ajax\AjaxResponse;
 use Drupal\Core\Ajax\RedirectCommand;
 use Drupal\Core\Entity\EntityInterface;
-use Drupal\Core\EventSubscriber\MainContentViewSubscriber;
-use Drupal\Core\Form\FormBuilderInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\joinup_group\Entity\GroupInterface;
@@ -203,30 +201,6 @@ abstract class ShareForm extends ShareFormBase {
 
     $this->entity->get($this->getSharedOnFieldName())->setValue($current_ids);
     $this->entity->save();
-  }
-
-  /**
-   * Returns whether the form is displayed in a modal.
-   *
-   * @return bool
-   *   TRUE if the form is displayed in a modal.
-   *
-   * @todo Remove when issue #2661046 is in.
-   *
-   * @see https://www.drupal.org/node/2661046
-   */
-  protected function isModal(): bool {
-    return $this->getRequest()->query->get(MainContentViewSubscriber::WRAPPER_FORMAT) === 'drupal_modal';
-  }
-
-  /**
-   * Returns whether the form is being handled with an ajax request.
-   *
-   * @return bool
-   *   TRUE if the form is being handled through an AJAX request.
-   */
-  protected function isAjaxForm(): bool {
-    return $this->getRequest()->query->has(FormBuilderInterface::AJAX_FORM_REQUEST);
   }
 
 }

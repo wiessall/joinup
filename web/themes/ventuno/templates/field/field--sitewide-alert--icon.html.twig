@@ -1,0 +1,12 @@
+{#
+/**
+ * @file
+ * Default template for a field.
+ */
+#}
+
+{% for item in items %}
+  <svg class="flex-shrink-0 me-3 mt-1 bi icon--s">
+    <use xlink:href="{{ bcl_icon_path }}#{{ item.content }}"></use>
+  </svg>
+{% endfor %}

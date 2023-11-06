@@ -6,12 +6,13 @@ dependencies:
     - core.entity_view_mode.node.moderation
     - field.field.node.discussion.body
     - field.field.node.discussion.field_attachment
+    - field.field.node.discussion.field_discussion_logo
     - field.field.node.discussion.field_keywords
-    - field.field.node.discussion.field_topic
     - field.field.node.discussion.field_replies
     - field.field.node.discussion.field_shared_in
     - field.field.node.discussion.field_site_featured
     - field.field.node.discussion.field_state
+    - field.field.node.discussion.field_topic
     - field.field.node.discussion.og_audience
     - node.type.discussion
   module:
@@ -27,46 +28,56 @@ bundle: discussion
 mode: moderation
 content:
   body:
-    weight: 1
+    type: smart_trim
     label: hidden
     settings:
       trim_length: 600
       trim_type: chars
       trim_suffix: …
-      more_link: false
-      more_text: More
+      wrap_output: false
+      wrap_class: trimmed
+      more:
+        display_link: false
+        target_blank: false
+        link_trim_only: false
+        class: more-link
+        text: More
+        aria_label: 'Read more about [node:title]'
       summary_handler: trim
       trim_options:
         text: false
-      more_class: more-link
-      wrap_output: false
-      wrap_class: trimmed
     third_party_settings:
       template_suggestion:
         template_suggestion: ''
-    type: smart_trim
+    weight: 1
     region: content
   field_state:
-    weight: 0
+    type: list_default
     label: inline
     settings: {  }
     third_party_settings: {  }
-    type: list_default
+    weight: 0
     region: content
 hidden:
+  featured: true
   field_attachment: true
+  field_discussion_logo: true
   field_keywords: true
   field_replies: true
   field_shared_in: true
   field_site_featured: true
   field_topic: true
+  flag_like_node: true
   flag_subscribe_discussions: true
   invite_link: true
   langcode: true
+  latest_update_time: true
   links: true
   og_audience: true
+  pinned_in: true
   published_at: true
   read_more: true
   report: true
   search_api_excerpt: true
   share_link: true
+  visit_count: true

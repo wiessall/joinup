@@ -8,7 +8,6 @@
 declare(strict_types = 1);
 
 use Drupal\Core\Site\Settings;
-use Drupal\sparql_entity_storage\SparqlEntityStorage;
 use Drupal\user\Entity\User;
 
 /**
@@ -64,7 +63,8 @@ function joinup_core_requirements($phase): array {
       }
     }
 
-    $requirements_helper = \Drupal::getContainer()->get('joinup_core.requirements_helper');
+    $requirements_helper = \Drupal::getContainer()
+      ->get('joinup_core.requirements_helper');
 
     // Ensure that a cache state inconsistency will not cause also
     // inconsistencies with the published revisions of the entities.
@@ -94,19 +94,8 @@ function joinup_core_requirements($phase): array {
 }
 
 /**
- * Install the 'field_pending_expire_sent' field storage definition.
+ * Enable Joinup Tiles before config import to prevent errors.
  */
-function joinup_core_update_0107900(): void {
-  $field_storage_definition = \Drupal::service('entity_field.manager')->getFieldStorageDefinitions('user')['field_pending_expire_sent'];
-  \Drupal::entityDefinitionUpdateManager()->installFieldStorageDefinition('field_pending_expire_sent', 'user', 'password_policy', $field_storage_definition);
-}
-
-/**
- * Fix the 'rdf_entity' entity type storage definition.
- */
-function joinup_core_update_0107901(): void {
-  $entity_definition_update_manager = \Drupal::entityDefinitionUpdateManager();
-  $entity_type = $entity_definition_update_manager->getEntityType('rdf_entity');
-  $entity_type->setHandlerClass('storage', SparqlEntityStorage::class);
-  $entity_definition_update_manager->updateEntityType($entity_type);
+function joinup_core_update_109900(): void {
+  \Drupal::service('module_installer')->install(['joinup_tiles']);
 }

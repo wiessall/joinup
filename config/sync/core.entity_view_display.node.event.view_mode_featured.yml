@@ -19,19 +19,19 @@ dependencies:
     - field.field.node.event.field_location
     - field.field.node.event.field_organisation
     - field.field.node.event.field_organisation_type
-    - field.field.node.event.field_topic
     - field.field.node.event.field_scope
     - field.field.node.event.field_shared_in
     - field.field.node.event.field_short_title
     - field.field.node.event.field_site_featured
     - field.field.node.event.field_state
+    - field.field.node.event.field_topic
     - field.field.node.event.og_audience
     - image.style.vertical_medium_image
     - node.type.event
   module:
     - datetime_range
-    - image
     - smart_trim
+    - svg_image
     - template_suggestion
     - user
 id: node.event.view_mode_featured
@@ -41,54 +41,66 @@ mode: view_mode_featured
 content:
   body:
     type: smart_trim
-    weight: 2
     label: hidden
     settings:
       trim_length: 50
       trim_type: chars
       trim_suffix: …
-      more_link: false
-      more_text: More
+      wrap_output: false
+      wrap_class: trimmed
+      more:
+        display_link: false
+        target_blank: false
+        link_trim_only: false
+        class: more-link
+        text: More
+        aria_label: 'Read more about [node:title]'
       summary_handler: trim
       trim_options:
         text: false
-      more_class: more-link
-      wrap_output: false
-      wrap_class: trimmed
     third_party_settings:
       template_suggestion:
         template_suggestion: ''
+    weight: 2
     region: content
   field_event_date:
     type: daterange_default
-    weight: 3
-    region: content
     label: hidden
     settings:
       timezone_override: ''
       format_type: date_only
+      fromto: both
       separator: '-'
     third_party_settings:
       template_suggestion:
         template_suggestion: ''
+    weight: 3
+    region: content
   field_event_logo:
-    weight: 1
+    type: image
     label: hidden
     settings:
-      image_style: vertical_medium_image
       image_link: content
+      image_style: vertical_medium_image
+      image_loading:
+        attribute: lazy
+      svg_attributes:
+        width: null
+        height: null
+      svg_render_as_image: true
     third_party_settings: {  }
-    type: image
+    weight: 1
     region: content
   field_short_title:
     type: string
-    weight: 0
-    region: content
     label: hidden
     settings:
       link_to_entity: false
     third_party_settings: {  }
+    weight: 0
+    region: content
 hidden:
+  featured: true
   field_attachment: true
   field_comments: true
   field_event_agenda: true
@@ -106,11 +118,14 @@ hidden:
   field_site_featured: true
   field_state: true
   field_topic: true
+  flag_like_node: true
   langcode: true
   links: true
   og_audience: true
+  pinned_in: true
   published_at: true
   read_more: true
   report: true
   search_api_excerpt: true
   share_link: true
+  visit_count: true

@@ -1,0 +1,23 @@
+uuid: 31317842-935a-4dc6-a78b-1d062ca65e51
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.meta_entity.published
+    - meta_entity.type.topic
+id: meta_entity.topic.published
+field_name: published
+entity_type: meta_entity
+bundle: topic
+label: Published
+description: ''
+required: false
+translatable: false
+default_value:
+  -
+    value: 0
+default_value_callback: ''
+settings:
+  on_label: 'On'
+  off_label: 'Off'
+field_type: boolean

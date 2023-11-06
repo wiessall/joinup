@@ -9,7 +9,7 @@ Feature: Solution moderation
     Given the following collection:
       | title | Collection propose state test |
       | logo  | logo.png                      |
-      | state | validated                     |
+      | state | published                     |
 
     When I am logged in as a member of the "Collection propose state test" collection
     And I go to the add solution form of the "Collection propose state test" collection
@@ -50,12 +50,12 @@ Feature: Solution moderation
       # Facilitator of all the solutions.
       | William Curtis   |           |
     And the following solutions:
-      | title                      | description                | logo     | banner     | owner          | contact information | state        |
-      | Azure Ship                 | Azure ship                 | logo.png | banner.jpg | Angelos Agathe | Placide             | draft        |
-      | The Last Illusion          | The Last Illusion          | logo.png | banner.jpg | Angelos Agathe | Placide             | proposed     |
-      | Rose of Doors              | Rose of Doors              | logo.png | banner.jpg | Angelos Agathe | Placide             | validated    |
-      | The Guardian of the Stream | The Guardian of the Stream | logo.png | banner.jpg | Angelos Agathe | Placide             | needs update |
-      | Flames in the Swords       | Flames in the Swords       | logo.png | banner.jpg | Angelos Agathe | Placide             | blacklisted  |
+      | title                      | description                | logo     | owner          | contact information | state        |
+      | Azure Ship                 | Azure ship                 | logo.png | Angelos Agathe | Placide             | draft        |
+      | The Last Illusion          | The Last Illusion          | logo.png | Angelos Agathe | Placide             | proposed     |
+      | Rose of Doors              | Rose of Doors              | logo.png | Angelos Agathe | Placide             | published    |
+      | The Guardian of the Stream | The Guardian of the Stream | logo.png | Angelos Agathe | Placide             | needs update |
+      | Flames in the Swords       | Flames in the Swords       | logo.png | Angelos Agathe | Placide             | blacklisted  |
     And the following solution user memberships:
       | solution                   | user            | roles       |
       | Azure Ship                 | Franklin Walker | owner       |
@@ -84,7 +84,7 @@ Feature: Solution moderation
       # The following solutions are tested as an owner. In reality, the owner is
       # also a facilitator so the only ability that differentiates the owner
       # from a facilitator is that they have the ability to delete their
-      # solution when the solution is validated. Note that the "Delete" option
+      # solution when the solution is published. Note that the "Delete" option
       # is a link to a confirmation form which is styled to look as a button.
       # This is checked separately below.
       | Azure Ship                 | Franklin Walker  | Save as draft, Propose                                      |

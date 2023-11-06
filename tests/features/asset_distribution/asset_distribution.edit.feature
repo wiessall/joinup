@@ -11,11 +11,11 @@ Feature: Asset distribution editing.
       | Pedro Torres | Pedro.Torres@example.com | Pedro      | Torres      |       |
     And the following collection:
       | title | Collection example |
-      | state | validated          |
+      | state | published          |
     And the following solutions:
       | title      | collection         | description        | state     |
-      | Solution A | Collection example | Sample description | validated |
-      | Solution B | Collection example | Sample description | validated |
+      | Solution A | Collection example | Sample description | published |
+      | Solution B | Collection example | Sample description | published |
     And the following licence:
       | title       | LGPL                                |
       | description | The LGPL more permisssive than GPL. |
@@ -71,7 +71,7 @@ Feature: Asset distribution editing.
     And I should see the warning message "The referenced licence LGPL is deprecated. You are advised to chose a different licence."
     When I fill in "Title" with "Asset distribution example revised"
     # Set a non-HTTP protocol remote URL.
-    And I press the "Remove" button
+    And I press "Remove"
     And I set a remote URL "ftp://example.com/file.txt" to "Access URL"
     And I press "Save"
     Then I should see the heading "Asset distribution example revised"

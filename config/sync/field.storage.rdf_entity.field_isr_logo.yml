@@ -3,9 +3,11 @@ langcode: en
 status: true
 dependencies:
   module:
+    - field_permissions
     - file
     - image
     - rdf_entity
+    - sparql_entity_storage
 third_party_settings:
   sparql_entity_storage:
     mapping:
@@ -24,11 +26,16 @@ third_party_settings:
       height:
         predicate: ''
         format: ''
+  field_permissions:
+    permission_type: public
 id: rdf_entity.field_isr_logo
 field_name: field_isr_logo
 entity_type: rdf_entity
 type: image
 settings:
+  target_type: file
+  display_field: false
+  display_default: false
   uri_scheme: public
   default_image:
     uuid: ''
@@ -36,9 +43,6 @@ settings:
     title: ''
     width: null
     height: null
-  target_type: file
-  display_field: false
-  display_default: false
 module: image
 locked: false
 cardinality: 1

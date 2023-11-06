@@ -109,7 +109,7 @@ class ContactInformationWorkflowTest extends JoinupWorkflowExistingSiteTestBase 
    *     ],
    *   ],
    * ];
-   * @code
+   * @endcode
    * There can be multiple transitions that can lead to a specific state, so
    * the check is being done on allowed transitions.
    *

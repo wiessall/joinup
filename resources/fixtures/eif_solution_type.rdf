@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+         xmlns:adms="http://www.w3.org/ns/adms#"
+         xmlns:skos="http://www.w3.org/2004/02/skos/core#"
+         xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+         xmlns:dc="http://purl.org/dc/terms/">
+
+  <skos:ConceptScheme rdf:about="http://data.europa.eu/eif/SolutionType/">
+    <rdfs:label>The European Interoperability Framework (EIF) solution type</rdfs:label>
+    <skos:prefLabel xml:lang="en">The European Interoperability Framework (EIF) solution type</skos:prefLabel>
+    <adms:identifier></adms:identifier>
+
+  </skos:ConceptScheme>
+
+  <skos:Concept rdf:about="http://data.europa.eu/eif/SolutionType/71244b7e-67cf-4fe4-b937-6346844ce645">
+    <skos:prefLabel xml:lang="en">Assessment tools</skos:prefLabel>
+    <skos:inScheme rdf:resource="http://data.europa.eu/eif/SolutionType/"/>
+    <adms:identifier>1</adms:identifier>
+  </skos:Concept>
+
+  <skos:Concept rdf:about="http://data.europa.eu/eif/SolutionType/4168f0f9-461f-4292-9198-c71a22a157e1">
+    <skos:prefLabel xml:lang="en">Common frameworks</skos:prefLabel>
+    <skos:inScheme rdf:resource="http://data.europa.eu/eif/SolutionType/"/>
+    <adms:identifier>2</adms:identifier>
+  </skos:Concept>
+
+  <skos:Concept rdf:about="http://data.europa.eu/eif/SolutionType/0670b7fa-f56d-4c16-918d-82ca359c4331">
+    <skos:prefLabel xml:lang="en">Common services</skos:prefLabel>
+    <skos:inScheme rdf:resource="http://data.europa.eu/eif/SolutionType/"/>
+    <adms:identifier>3</adms:identifier>
+  </skos:Concept>
+
+  <skos:Concept rdf:about="http://data.europa.eu/eif/SolutionType/867a2cf9-bbdb-40c0-ab60-2fa37847ff68">
+    <skos:prefLabel xml:lang="en">Generic tools</skos:prefLabel>
+    <skos:inScheme rdf:resource="http://data.europa.eu/eif/SolutionType/"/>
+    <adms:identifier>4</adms:identifier>
+  </skos:Concept>
+
+  <skos:Concept rdf:about="http://data.europa.eu/eif/SolutionType/b912ca62-ba11-4be7-94f6-0545dc5a3be0">
+    <skos:prefLabel xml:lang="en">Legal interoperability tools</skos:prefLabel>
+    <skos:inScheme rdf:resource="http://data.europa.eu/eif/SolutionType/"/>
+    <adms:identifier>5</adms:identifier>
+  </skos:Concept>
+
+  <skos:Concept rdf:about="http://data.europa.eu/eif/SolutionType/aa625643-c0c1-497d-b25f-852b2b86e4ca">
+    <skos:prefLabel xml:lang="en">Semantic assets</skos:prefLabel>
+    <skos:inScheme rdf:resource="http://data.europa.eu/eif/SolutionType/"/>
+    <adms:identifier>6</adms:identifier>
+  </skos:Concept>
+
+  <skos:Concept rdf:about="http://data.europa.eu/eif/SolutionType/a1074ec0-a479-4517-8529-22eb346e36b1">
+    <skos:prefLabel xml:lang="en">Catalogue of open standards and specifications</skos:prefLabel>
+    <skos:inScheme rdf:resource="http://data.europa.eu/eif/SolutionType/"/>
+    <adms:identifier>7</adms:identifier>
+  </skos:Concept>
+
+</rdf:RDF>

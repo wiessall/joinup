@@ -6,9 +6,9 @@ Feature: "Add event" visibility options.
 
   Scenario: "Add event" button should not be shown to normal members, authenticated users and anonymous users.
     Given the following collections:
-      | title               | logo     | banner     | state     |
-      | The Stripped Stream | logo.png | banner.jpg | validated |
-      | Years in the Nobody | logo.png | banner.jpg | validated |
+      | title               | logo     | state     |
+      | The Stripped Stream | logo.png | published |
+      | Years in the Nobody | logo.png | published |
 
     When I am logged in as an "authenticated user"
     And I go to the homepage of the "The Stripped Stream" collection
@@ -36,14 +36,14 @@ Feature: "Add event" visibility options.
   @terms @uploadFiles:test.zip
   Scenario: Add event as a facilitator.
     Given collections:
-      | title            | logo     | banner     | state     |
-      | Stream of Dreams | logo.png | banner.jpg | validated |
+      | title            | logo     | state     |
+      | Stream of Dreams | logo.png | published |
     And I am logged in as a facilitator of the "Stream of Dreams" collection
 
     When I go to the homepage of the "Stream of Dreams" collection
     And I click "Add event" in the plus button menu
     Then I should see the heading "Add event"
-    And the following fields should be present "Title, Short title, Description, Agenda, Logo, Contact email, Website, Physical location, Organisation, Organisation type, Topic, Add a new file, Keywords, Scope, Geographical coverage"
+    And the following fields should be present "Title, Short title, Description, Agenda, Logo, Contact email, Website, Physical location, Organisation, Organisation type, Topic, Add a new file, Search keywords, Scope, Geographical coverage"
     # The entity is new, so the current workflow state should not be shown.
     And the following fields should not be present "Current workflow state, Motivation"
     And the following fields should not be present "Shared on"
@@ -89,21 +89,18 @@ Feature: "Add event" visibility options.
     And I should not see the text "Regional"
     And I should see the text "Rue Belliard 28, Brussels, Belgium"
     But I should see the success message 'Event An amazing event has been created as draft. You can find it in the section "My unpublished content" located in your My account page, or in the aforementioned section under the Collection it was created in.'
-    And I should see the text "Event date:"
+    And I should not see the text "Event date:"
     And I should see the text "29 to 30/08/2018"
-    And I should see a map centered on latitude 4.370375 and longitude 50.842156
+    And I should see a map centered on latitude 4.370476 and longitude 50.842291
     And I should see the following marker on the map:
       | name        | An amazing event                   |
       | description | Rue Belliard 28, Brussels, Belgium |
-      | latitude    | 50.842156                          |
-      | longitude   | 4.370375                           |
+      | latitude    | 50.842291                          |
+      | longitude   | 4.370476                           |
     And I should see the link "Joinup homepage"
     And I should see the link "https://drupal.org"
     And the "Stream of Dreams" collection has a event titled "An amazing event"
     And I should not see the text "France"
-    # Check that the link to the event is visible on the collection page.
-    When I go to the homepage of the "Stream of Dreams" collection
-    Then I should see the link "An amazing event"
 
     # Check if the event date range is shown in an understandable format if the
     # event spans a month or year boundary.
@@ -117,17 +114,16 @@ Feature: "Add event" visibility options.
     And I press "Save as draft"
     Then I should see the text "29/08/2018 to 02/01/2019"
 
-  @javascript @generateMedia @uploadFiles:logo.png
+  @javascript @generateMedia @generateMediaTypes:event_logo @uploadFiles:logo.png
   Scenario: Test the image library widget.
     Given the following collection:
       | title | Stream of Dreams |
-      | state | validated        |
+      | state | published        |
     And event content:
       | title             | collection       | body      | online location              | state     |
-      | The Great Opening | Stream of Dreams | It opens! | webinar - http://example.com | validated |
+      | The Great Opening | Stream of Dreams | It opens! | webinar - http://example.com | published |
 
     And I am logged in as a moderator
-    And I accept essential cookies
 
     # Upload works.
     When I go to the edit form of the "The Great Opening" event

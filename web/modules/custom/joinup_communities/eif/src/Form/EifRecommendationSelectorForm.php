@@ -51,6 +51,7 @@ class EifRecommendationSelectorForm extends FormBase {
   public function buildForm(array $form, FormStateInterface $form_state): array {
     $storage = $this->entityTypeManager->getStorage('taxonomy_term');
     $tids = $storage->getQuery()
+      ->accessCheck(FALSE)
       ->condition('vid', 'eif_recommendation')
       ->execute();
 
@@ -72,7 +73,7 @@ class EifRecommendationSelectorForm extends FormBase {
         ],
       ],
       '#attributes' => [
-        'data-drupal-eif-recommendation-selector' => 'true',
+        'data-joinup-eif-recommendation-selector' => 'true',
       ],
       '#cache' => [
         'tags' => [

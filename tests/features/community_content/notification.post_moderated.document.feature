@@ -13,7 +13,7 @@ Feature: Notification test for the document transitions on a post moderated pare
       | CC member        |           | notify_member@test.com      | CC         | Member      |
     And collections:
       | title         | state     | content creation | moderation   |
-      | CC collection | validated | members          | <moderation> |
+      | CC collection | published | members          | <moderation> |
     And the following collection user memberships:
       | collection    | user           | roles       |
       | CC collection | CC owner       | owner       |
@@ -22,11 +22,11 @@ Feature: Notification test for the document transitions on a post moderated pare
     And document content:
       | title                                | author    | body | document type | collection    | field_state  |
       | CC notify post publish               | CC member | body | Document      | CC collection | draft        |
-      | CC notify post request changes       | CC member | body | Document      | CC collection | validated    |
-      | CC notify post report                | CC member | body | Document      | CC collection | validated    |
+      | CC notify post request changes       | CC member | body | Document      | CC collection | published    |
+      | CC notify post report                | CC member | body | Document      | CC collection | published    |
       | CC notify post propose from reported | CC member | body | Document      | CC collection | needs_update |
       | CC notify post approve proposed      | CC member | body | Document      | CC collection | proposed     |
-      | CC notify post delete                | CC member | body | Document      | CC collection | validated    |
+      | CC notify post delete                | CC member | body | Document      | CC collection | published    |
 
     # Test 'create' operation.
     When I am logged in as "CC member"
@@ -40,7 +40,7 @@ Feature: Notification test for the document transitions on a post moderated pare
     Then the following email should have been sent:
       | recipient | CC owner                                                                                                                                                            |
       | subject   | Joinup: Content has been published                                                                                                                                  |
-      | body      | CC Member has published the new document - "CC notify create publish" in the collection: "CC collection".You can access the new content at the following link: http |
+      | body      | CC Member has published the new document - "CC notify create publish" in the collection: "CC collection". You can access the new content at the following link: http |
 
     # Test 'update' operation.
     When I am logged in as "CC member"

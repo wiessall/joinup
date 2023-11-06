@@ -1,0 +1,25 @@
+uuid: 9d044108-9f16-4a84-9f61-249a7e45c797
+langcode: en
+status: true
+dependencies:
+  module:
+    - field_permissions
+    - media
+    - og
+    - rdf_entity
+third_party_settings:
+  field_permissions:
+    permission_type: public
+id: media.og_audience
+field_name: og_audience
+entity_type: media
+type: og_standard_reference
+settings:
+  target_type: rdf_entity
+module: og
+locked: false
+cardinality: 1
+translatable: false
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

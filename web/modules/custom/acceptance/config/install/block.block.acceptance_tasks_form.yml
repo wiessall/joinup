@@ -6,9 +6,9 @@ dependencies:
     - joinup_acceptance
     - joinup_core
   theme:
-    - joinup_theme
+    - ventuno
 id: acceptance_tasks_form
-theme: joinup_theme
+theme: ventuno
 region: content
 weight: 0
 provider: null

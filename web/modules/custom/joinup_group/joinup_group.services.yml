@@ -11,23 +11,33 @@ services:
       - { name: access_check, applies_to: _joinup_group }
   joinup_group.group_manager:
     class: Drupal\joinup_group\JoinupGroupManager
-    arguments: ['@og.membership_manager', '@entity_type.manager']
-    lazy: true
+    arguments: ['@og.membership_manager', '@entity_type.manager', '@og.context', '@current_user', '@og.access']
   joinup_group.group_menu_links:
     class: Drupal\joinup_group\EventSubscriber\GroupMenuLinksSubscriber
     tags:
       - { name: event_subscriber }
+  joinup_group.group_menu_manager:
+    class: Drupal\joinup_group\GroupMenuManager
+    arguments: ['@entity_type.manager']
+  joinup_group.group_settings_form_alter:
+    class: Drupal\joinup_group\GroupSettingsFormAlter
+    arguments: ['@entity_type.manager', '@joinup_group.group_menu_manager']
   joinup_group.join_group_subscriber:
     class: Drupal\joinup_group\EventSubscriber\JoinGroupSubscriber
-    arguments: ['@entity_type.manager', '@datetime.time', '@request_stack', '@messenger']
+    arguments: ['@datetime.time', '@request_stack', '@entity_type.manager', '@messenger']
     tags:
       - { name: event_subscriber }
+  joinup_group.node_access_grants.memory_cache:
+    class: Drupal\Core\Cache\MemoryCache\MemoryCache
+    tags:
+      # Ensure tag invalidation for this backend.
+      - { name: cache.bin }
   joinup_group.node_access_grants:
     class: Drupal\joinup_group\JoinupGroupNodeAccessGrants
-    arguments: ['@database', '@cache.static']
+    arguments: ['@database', '@joinup_group.node_access_grants.memory_cache']
   joinup_group.og_subscriber:
     class: Drupal\joinup_group\EventSubscriber\JoinupGroupOgSubscriber
-    arguments: [ '@current_user']
+    arguments: ['@current_user']
     tags:
       - name: event_subscriber
   joinup_group.route_subscriber:
@@ -36,7 +46,7 @@ services:
       - { name: event_subscriber }
   joinup_group.transfer_ownership_subscriber:
     class: Drupal\joinup_group\EventSubscriber\TransferGroupOwnershipSubscriber
-    arguments: ['@current_user', '@tempstore.private', '@messenger']
+    arguments: ['@current_user', '@messenger', '@tempstore.private']
     tags:
       - { name: event_subscriber }
   joinup_group.group_aware_queue:
@@ -45,3 +55,32 @@ services:
   joinup_group.url_alias_updater:
     class: Drupal\joinup_group\JoinupGroupContentUrlAliasUpdater
     arguments: ['@queue']
+  joinup_group.page_display_variant.subscriber:
+    class: Drupal\joinup_group\EventSubscriber\JoinupGroupPageDisplayVariantSubscriber
+    tags:
+      - { name: event_subscriber }
+  joinup_group.state_machine.transition_guard:
+    class: Drupal\joinup_group\Guard\AnnouncementTransitionsGuard
+    arguments: ['@joinup_group.group_manager']
+    tags:
+      - { name: state_machine.guard, group: announcement }
+  joinup_group.announcements.subscriber:
+    class: Drupal\joinup_group\EventSubscriber\AnnouncementTransitionSubscriber
+    arguments: ['@entity_type.manager', '@plugin.manager.mail', '@language_manager', '@joinup_notification.message_delivery', '@queue']
+    tags:
+      - { name: event_subscriber }
+  joinup_group.announcement_delivery.subscriber:
+    class: Drupal\joinup_group\EventSubscriber\AnnouncementDeliverySubscriber
+    tags:
+      - { name: event_subscriber }
+  joinup_group.announcements_enabled.access_checker:
+    class: Drupal\joinup_group\Access\AnnouncementsAccessCheck
+    calls:
+      - [setJoinupGroupManager, ['@joinup_group.group_manager']]
+    tags:
+      - { name: access_check, applies_to: _joinup_group_announcements }
+  joinup_group.og_permission:
+    class: Drupal\joinup_group\Access\OgPermissionAccessCheck
+    arguments: ['@joinup_group.group_manager']
+    tags:
+      - { name: access_check, applies_to: _og_permission }

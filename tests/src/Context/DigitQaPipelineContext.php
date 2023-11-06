@@ -49,7 +49,7 @@ class DigitQaPipelineContext extends RawMinkContext {
     if (static::isDigitQaPipeline() && !$event->getTestResult()->isPassed()) {
       $projectPath = rtrim(getenv('CI_PROJECT_DIR'), DIRECTORY_SEPARATOR);
       $artifactsPath = static::getArtifactsPath($event->getSuite()->getName());
-      exec("{$projectPath}/vendor/bin/drush sql:dump --tables-list=watchdog --gzip --result-file={$artifactsPath}/watchdog.sql --root={$projectPath}");
+      exec("{$projectPath}/vendor/bin/drush sql:dump --tables-list=watchdog --extra-dump='--no-tablespaces' --gzip --result-file={$artifactsPath}/watchdog.sql --root={$projectPath}");
     }
   }
 

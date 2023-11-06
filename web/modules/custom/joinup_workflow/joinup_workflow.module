@@ -17,6 +17,7 @@ use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\Core\Url;
 use Drupal\collection\Entity\CollectionInterface;
 use Drupal\joinup_community_content\Entity\CommunityContentInterface;
+use Drupal\joinup_workflow\ArchivableEntityInterface;
 use Drupal\joinup_workflow\EntityWorkflowStateInterface;
 use Drupal\solution\Entity\SolutionInterface;
 
@@ -179,20 +180,20 @@ function joinup_workflow_motivation_form_validate(array &$form, FormStateInterfa
   // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-3840
   if ($entity instanceof SolutionInterface) {
     $user_roles = \Drupal::currentUser()->getRoles();
-    $propose_changes = $transition->getId() === 'propose' && $from_state === 'validated' && in_array('moderator', $user_roles);
+    $propose_changes = $transition->getId() === 'propose' && $from_state === 'published' && in_array('moderator', $user_roles);
     if ($propose_changes) {
       $required = TRUE;
     }
   }
 
-  // When a new revision of validated content is proposed this can happen for
+  // When a new revision of published content is proposed this can happen for
   // two reasons: either a facilitator performs this transition because they
   // want to ask the content author to make changes (= 'Request changes'), or a
   // content author wants to update their content and needs a facilitator to
   // approve the changes (= 'Propose changes'). A motivation is only required in
   // the first case.
   if ($transition->getId() === 'propose_new_revision') {
-    $required = $entity->isTargetWorkflowStateAllowed('validated', 'validated');
+    $required = $entity->isTargetWorkflowStateAllowed('published', 'published');
   }
 
   if ($required && empty($form_state->getValue('transition_motivation'))) {
@@ -287,5 +288,20 @@ function joinup_workflow_message_form_submit_draft(array &$form, FormStateInterf
 
       $messenger->addStatus(t('@type %title has been created as %state. You can find it in the section "My unpublished content" located in your <a href=":user">My account page</a>, or in the aforementioned section under the @audience it was created in.', $args));
     }
+  }
+}
+
+/**
+ * Implements hook_entity_presave().
+ */
+function joinup_workflow_entity_presave(EntityInterface $entity) {
+  if ($entity->isNew() || !$entity instanceof ArchivableEntityInterface ||
+    empty($entity->original) || !$entity->original instanceof ArchivableEntityInterface) {
+    return;
+  }
+
+  // Prevent changes to update date in case we archive or unarchive entity.
+  if ($entity->isArchived() || $entity->original->isArchived()) {
+    $entity->set('changed', $entity->original->get('changed')->getValue());
   }
 }

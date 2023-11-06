@@ -1,0 +1,33 @@
+uuid: 1762a57c-a180-4677-99d1-03be391a0954
+langcode: en
+status: true
+dependencies:
+  module:
+    - joinup_group
+    - og
+  theme:
+    - iop
+_core:
+  default_config_hash: lNcx1eTcO-2duy3JjKHExr2AxeKuGkf60Vc6V35A_dI
+id: iop_joinup_add_content
+theme: iop
+region: featured
+weight: -19
+provider: null
+plugin: add_content_block
+settings:
+  id: add_content_block
+  label: 'Add content'
+  label_display: '0'
+  provider: joinup_group
+  context_mapping:
+    og: '@og.context:og'
+visibility:
+  og_group_type:
+    id: og_group_type
+    negate: false
+    context_mapping:
+      og: '@og.context:og'
+    group_types:
+      rdf_entity-collection: rdf_entity-collection
+      rdf_entity-solution: rdf_entity-solution

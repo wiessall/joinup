@@ -5,7 +5,6 @@ declare(strict_types = 1);
 namespace Drupal\joinup_notification\EventSubscriber;
 
 use Drupal\Core\Entity\EntityInterface;
-use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\asset_release\Entity\AssetReleaseInterface;
 use Drupal\joinup_group\JoinupGroupHelper;
 use Drupal\joinup_notification\Event\NotificationEvent;
@@ -14,7 +13,6 @@ use Drupal\joinup_notification\NotificationEvents;
 use Drupal\og\OgRoleInterface;
 use Drupal\state_machine\Plugin\Workflow\WorkflowInterface;
 use Drupal\state_machine\Plugin\Workflow\WorkflowTransition;
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
  * Notification handler for the notifications related to releases.
@@ -40,9 +38,7 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
  *   Recipients: owner
  * @codingStandardsIgnoreEnd
  */
-class ReleaseRdfSubscriber extends NotificationSubscriberBase implements EventSubscriberInterface {
-
-  use StringTranslationTrait;
+class ReleaseRdfSubscriber extends NotificationSubscriberBase {
 
   const TEMPLATE_UPDATE_PUBLISHED = 'release_update';
   const TEMPLATE_DELETE = 'release_delete';
@@ -138,7 +134,7 @@ class ReleaseRdfSubscriber extends NotificationSubscriberBase implements EventSu
     }
 
     // Send notifications when a published release is updated.
-    if ($this->fromState === $this->toState && $this->fromState === 'validated') {
+    if ($this->fromState === $this->toState && $this->fromState === 'published') {
       $user_data = [
         'roles' => [
           'moderator' => [
@@ -289,13 +285,6 @@ class ReleaseRdfSubscriber extends NotificationSubscriberBase implements EventSu
   /**
    * {@inheritdoc}
    */
-  protected function getConfigurationName(): string {
-    return '';
-  }
-
-  /**
-   * {@inheritdoc}
-   */
   protected function generateArguments(EntityInterface $entity): array {
     // PHP does not support covariance on arguments so we cannot narrow the type
     // hint to only asset release entities. Let's assert the type instead.
@@ -304,7 +293,7 @@ class ReleaseRdfSubscriber extends NotificationSubscriberBase implements EventSu
     $arguments = parent::generateArguments($entity);
     /** @var \Drupal\user\UserInterface $actor */
     $actor = $this->entityTypeManager->getStorage('user')->load($this->currentUser->id());
-    $motivation = isset($this->entity->motivation) ? $this->entity->motivation : '';
+    $motivation = $this->entity->motivation ?? '';
     $arguments['@transition:motivation'] = $motivation;
     $arguments['@entity:field_isr_release_number'] = $entity->getVersion();
 

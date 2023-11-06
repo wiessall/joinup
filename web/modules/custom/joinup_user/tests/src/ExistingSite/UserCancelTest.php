@@ -6,7 +6,6 @@ namespace Drupal\Tests\joinup_user\ExistingSite;
 
 use Drupal\Core\Language\LanguageInterface;
 use Drupal\Tests\joinup_test\ExistingSite\JoinupExistingSiteTestBase;
-use Drupal\Tests\rdf_entity\Traits\DrupalTestTraits\RdfEntityCreationTrait;
 use Drupal\file\Entity\File;
 use Drupal\image\Plugin\Field\FieldType\ImageItem;
 use Drupal\og\OgMembershipInterface;
@@ -21,7 +20,6 @@ use weitzman\LoginTrait\LoginTrait;
 class UserCancelTest extends JoinupExistingSiteTestBase {
 
   use LoginTrait;
-  use RdfEntityCreationTrait;
 
   /**
    * Tests user cancellation.
@@ -37,13 +35,13 @@ class UserCancelTest extends JoinupExistingSiteTestBase {
     $collection = $this->createRdfEntity([
       'rid' => 'collection',
       'label' => 'Collection',
-      'field_ar_state' => 'validated',
+      'field_ar_state' => 'published',
     ]);
     $solution = $this->createRdfEntity([
       'rid' => 'solution',
       'label' => 'Solution',
       'collection' => $collection,
-      'field_is_state' => 'validated',
+      'field_is_state' => 'published',
     ]);
 
     $photo_field_definition = $this->container->get('entity_field.manager')->getFieldDefinitions('user', 'user')['field_user_photo'];
@@ -103,7 +101,7 @@ class UserCancelTest extends JoinupExistingSiteTestBase {
 
     // Create a CAS link.
     $authmap->save($account, 'cas', $username);
-    $this->assertSame($username, $authmap->get($account->id(), 'cas'));
+    $this->assertSame($username, $authmap->get((int) $account->id(), 'cas'));
 
     // Add account membership to collection and solution.
     $og_membership->createMembership($collection, $account)->save();
@@ -140,10 +138,10 @@ class UserCancelTest extends JoinupExistingSiteTestBase {
     $this->assertNull($account->get('field_user_frequency')->value);
     $this->assertNull($account->get('field_user_nationality')->value);
     $this->assertNull($account->get('field_user_organisation')->value);
-    $this->assertFileNotExists($photo_file->getFileUri());
+    $this->assertFileDoesNotExist($photo_file->getFileUri());
     $this->assertNull($account->get('field_user_photo')->value);
     $this->assertNull($account->get('field_user_professional_domain')->value);
-    $this->assertFalse($authmap->get($account->id(), 'cas'));
+    $this->assertFalse($authmap->get((int) $account->id(), 'cas'));
     $this->assertEmpty($og_membership->getMemberships($account->id(), OgMembershipInterface::ALL_STATES));
     $this->assertNull($user_data->get('joinup_user', $account->id(), 'foo'));
 

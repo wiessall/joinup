@@ -71,7 +71,7 @@ class RdfEntityProvenanceContext extends RawDrupalContext {
 
       // Convert entity label to ID, if case.
       if (!UrlHelper::isValid($values['provenance_entity'], TRUE)) {
-        $values['provenance_entity'] = $this->getRdfEntityByLabel($values['provenance_entity'])->id();
+        $values['provenance_entity'] = $this->getEntityByLabel('rdf_entity', $values['provenance_entity'])->id();
       }
 
       // Transform the date into a timestamp.
@@ -120,18 +120,9 @@ class RdfEntityProvenanceContext extends RawDrupalContext {
    *   If $referral was passed as entity label and that entity doesn't exist.
    */
   protected function getActivityForReferral(string $referral): ?RdfInterface {
-    $id = !UrlHelper::isValid($referral, TRUE) ? $this->getRdfEntityByLabel($referral)->id() : $referral;
-    /** @var \Drupal\rdf_entity_provenance\ProvenanceHelperInterface $helper */
-    $helper = \Drupal::service('rdf_entity_provenance.provenance_helper');
-    $activity = $helper->loadProvenanceActivity($id);
-    if (empty($activity)) {
-      return NULL;
-    }
-
-    // Deal with the Behat static cache invalidation issue.
-    /** @var \Drupal\rdf_entity\RdfInterface $return */
-    $return = \Drupal::entityTypeManager()->getStorage('rdf_entity')->loadUnchanged($activity->id());
-    return $return;
+    $id = !UrlHelper::isValid($referral, TRUE) ? $this->getEntityByLabel('rdf_entity', $referral)->id() : $referral;
+    $helper = \Drupal::getContainer()->get('rdf_entity_provenance.provenance_helper');
+    return $helper->loadProvenanceActivity($id);
   }
 
   /**
@@ -253,7 +244,7 @@ class RdfEntityProvenanceContext extends RawDrupalContext {
    * @Then I should have :number provenance activities
    */
   public function assertActivitiesCount(int $number): void {
-    $actual = \Drupal::entityQuery('rdf_entity')
+    $actual = \Drupal::entityQuery('rdf_entity')->accessCheck(FALSE)
       ->condition('rid', 'provenance_activity')
       ->count()
       ->execute();
@@ -289,12 +280,8 @@ class RdfEntityProvenanceContext extends RawDrupalContext {
       return;
     }
 
-    // Since we might be cleaning up many activities, temporarily disable the
-    // feature to commit the index after every query.
-    $this->disableCommitOnUpdate();
     \Drupal::entityTypeManager()->getStorage('rdf_entity')->delete($this->provenanceActivities);
     $this->provenanceActivities = [];
-    $this->enableCommitOnUpdate();
   }
 
 }

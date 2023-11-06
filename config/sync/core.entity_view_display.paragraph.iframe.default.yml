@@ -14,23 +14,23 @@ bundle: iframe
 mode: default
 content:
   field_iframe:
-    weight: 0
+    type: iframe_only
     label: hidden
     settings:
       url: ''
       title: ''
-      width: ''
-      height: ''
       class: ''
       frameborder: '0'
       scrolling: ''
       transparency: '0'
-      tokensupport: '0'
       allowfullscreen: '0'
+      tokensupport: '0'
+      width: ''
+      height: ''
     third_party_settings:
       template_suggestion:
         template_suggestion: ''
-    type: iframe_only
+    weight: 0
     region: content
 hidden:
   search_api_excerpt: true

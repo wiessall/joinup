@@ -8,12 +8,11 @@ Feature: "Add document" visibility options.
     Given the following collection:
       | title  | Collective Seventh Name |
       | logo   | logo.png                |
-      | banner | banner.jpg              |
-      | state  | validated               |
+      | state  | published               |
     And the following solutions:
-      | title               | collection              | logo     | banner     | state     |
-      | Seventh Name        | Collective Seventh Name | logo.png | banner.jpg | validated |
-      | The Obsessed Stream | Collective Seventh Name | logo.png | banner.jpg | validated |
+      | title               | collection              | logo     | state     |
+      | Seventh Name        | Collective Seventh Name | logo.png | published |
+      | The Obsessed Stream | Collective Seventh Name | logo.png | published |
 
     When I am logged in as an "authenticated user"
     And I go to the homepage of the "Seventh Name" solution
@@ -39,17 +38,16 @@ Feature: "Add document" visibility options.
     Given the following collection:
       | title  | Collective Winter of Beginning |
       | logo   | logo.png                       |
-      | banner | banner.jpg                     |
-      | state  | validated                      |
+      | state  | published                      |
     And the following solutions:
-      | title               | collection                     | logo     | banner     | state     |
-      | Winter of Beginning | Collective Winter of Beginning | logo.png | banner.jpg | validated |
+      | title               | collection                     | logo     | state     |
+      | Winter of Beginning | Collective Winter of Beginning | logo.png | published |
     And I am logged in as a facilitator of the "Winter of Beginning" solution
 
     When I go to the homepage of the "Winter of Beginning" solution
     And I click "Add document" in the plus button menu
     Then I should see the heading "Add document"
-    And the following fields should be present "Title, Short title, Type, Topic, Keywords, Geographical coverage, Licence, Description, Upload a new file or enter a URL"
+    And the following fields should be present "Title, Short title, Type, Topic, Search keywords, Geographical coverage, Licence, Description, Upload a new file or enter a URL"
     And the following fields should not be present "Shared on, Motivation"
 
     When I fill in the following:
@@ -70,6 +68,3 @@ Feature: "Add document" visibility options.
     And I should see the success message 'Document The Sparks of the Butterfly has been created as draft. You can find it in the section "My unpublished content" located in your My account page, or in the aforementioned section under the Solution it was created in.'
     And I should see the link "test1.zip"
     And the "Winter of Beginning" solution has a document titled "The Sparks of the Butterfly"
-    # Check that the link to the document is visible on the solution page.
-    When I go to the homepage of the "Winter of Beginning" solution
-    Then I should see the link "The Sparks of the Butterfly"

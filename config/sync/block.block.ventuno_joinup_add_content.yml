@@ -3,6 +3,7 @@ langcode: en
 status: true
 dependencies:
   module:
+    - joinup_core
     - joinup_group
     - og
   theme:
@@ -11,23 +12,28 @@ _core:
   default_config_hash: lNcx1eTcO-2duy3JjKHExr2AxeKuGkf60Vc6V35A_dI
 id: ventuno_joinup_add_content
 theme: ventuno
-region: header_bottom
-weight: -23
+region: featured
+weight: -25
 provider: null
 plugin: add_content_block
 settings:
   id: add_content_block
   label: 'Add content'
-  provider: joinup
-  label_display: visible
+  label_display: '0'
+  provider: joinup_group
   context_mapping:
     og: '@og.context:og'
 visibility:
   og_group_type:
     id: og_group_type
-    group_types:
-      rdf_entity-collection: rdf_entity-collection
-      rdf_entity-solution: rdf_entity-solution
     negate: false
     context_mapping:
       og: '@og.context:og'
+    group_types:
+      rdf_entity-collection: rdf_entity-collection
+      rdf_entity-solution: rdf_entity-solution
+  request_route:
+    id: request_route
+    negate: true
+    routes:
+      - entity.rdf_entity.edit_form

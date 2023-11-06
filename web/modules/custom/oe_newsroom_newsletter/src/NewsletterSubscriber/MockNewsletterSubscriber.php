@@ -4,6 +4,7 @@ declare(strict_types = 1);
 
 namespace Drupal\oe_newsroom_newsletter\NewsletterSubscriber;
 
+use Drupal\Core\Site\Settings;
 use Drupal\Core\State\StateInterface;
 use Drupal\oe_newsroom_newsletter\Exception\EmailAddressAlreadySubscribedException;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -25,7 +26,14 @@ class MockNewsletterSubscriber implements NewsletterSubscriberInterface {
    *
    * @var \Drupal\Core\State\StateInterface
    */
-  protected $state;
+  protected StateInterface $state;
+
+  /**
+   * The list of registered service application keys.
+   *
+   * @var array
+   */
+  protected array $settings;
 
   /**
    * Constructs a new NewsletterSubscriber object.
@@ -35,6 +43,11 @@ class MockNewsletterSubscriber implements NewsletterSubscriberInterface {
    */
   public function __construct(StateInterface $state) {
     $this->state = $state;
+    $this->settings = [];
+    $settings = Settings::get('oe_newsroom_universe_keys');
+    if (!empty($settings) && $settings = json_decode($settings)) {
+      $this->settings = (array) $settings;
+    }
   }
 
   /**

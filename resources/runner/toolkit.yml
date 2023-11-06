@@ -1,10 +1,18 @@
 # Toolkit overrides.
 
 toolkit:
-  project_id: joinup
+  project_id: digit-joinup
   tmp_folder: ${joinup.dir}/tmp
   clone:
-    dumpfile: ${mysql.dump_dir}/mysql.sql
+    asda_services:
+      - mysql
+      - solr
+      - virtuoso
+  components:
+    # Disable 'toolkit-components' job check for outdated packages. The Joinup
+    # dependencies policy is to update all dependencies after each release.
+    outdated:
+      check: false
 
   build:
     dist:
@@ -19,24 +27,26 @@ toolkit:
             - ${toolkit.build.dist.root}/.editorconfig
             - ${toolkit.build.dist.root}/.gitattributes
             - ${toolkit.build.dist.root}/.gitignore
+            - ${toolkit.build.dist.root}/package.json
+            - ${toolkit.build.dist.root}/package-lock.json
             # Drupal Finder, and consequently Drush, are still needing
             # composer.json to locate the root dir. Remove only composer.lock.
             - ${toolkit.build.dist.root}/composer.lock
-        # Build theme assets.
-        - task: exec
-          command: cd "${toolkit.build.dist.root}/web/themes/ventuno" && npm install
-        # Remove theme development dependencies.
         - task: remove
-          file: ${toolkit.build.dist.root}/web/themes/ventuno/node_modules
-        - task: remove
-          file: ${toolkit.build.dist.root}/web/themes/ventuno/package.json
-        - task: remove
-          file: ${toolkit.build.dist.root}/web/themes/ventuno/package-lock.json
+          file: ${toolkit.build.dist.root}/node_modules
+
+  test:
+    phpstan:
+      memory_limit: '1G'
+      options: 'debug -vvv no-progress'
 
 commands:
 
   # Overrides the toolkit:build-dev command.
   toolkit:build-dev:
+    - task: mkdir
+      dir: ${joinup.files_public_dir}
+      mode: 0775
     - task: copy
       from: ${joinup.site_dir}/sites/default/default.services.yml
       to: ${joinup.site_dir}/sites/default/services.yml
@@ -47,14 +57,10 @@ commands:
     - task: process
       source: ${joinup.dir}/behat.yml.dist
       destination: ${joinup.dir}/behat.yml
-    - task: run
-      command: joinup:build-assets
     - task: mkdir
       dir: ${joinup.files_private_dir}
     - task: mkdir
       dir: ${env.DRUPAL_FILE_TEMP_PATH}
-    - task: exec
-      command: test "$(git tag)" = "" || git describe --tags | tr -d '\n' > ${joinup.site_dir}/VERSION.txt
 
   # Overrides toolkit:install-clean.
   toolkit:install-clean:
@@ -64,8 +70,8 @@ commands:
       command: sparql:empty
     - task: run
       command: solr:empty
-    - task: run
-      command: redis:flush-all
+    - task: exec
+      command: ${drush.bin} memcache:flush-all
     - task: run
       command: drupal:settings
       arguments:
@@ -76,14 +82,23 @@ commands:
       command: drupal:site-install
     - task: run
       command: dev:import-sparql-fixtures
+    # This is a safety net for the eventuality a developer lacks a mail catcher
+    # tool on their local environment. See the 'Development mail collector'
+    # `settings.php` section from `resources/runner/drupal.yml` for details.
     - task: run
-      command: dev:install-modules
+      command: drush:module-install
+      arguments:
+        - devel
+    - task: run
+      command: testing:install-modules
     - task: run
       command: drupal:settings
       arguments:
         - site-clean
-    - task: run
-      command: dev:demo-users
+    # Checks for extensions metadata deprecations. Note that we run this after
+    # site install as we need a bootstrapped Drupal.
+    - task: exec
+      command: ${drush.bin} joinup:check-extension-metadata-deprecation
     - task: exec
       command: ${drush.bin}
       arguments:
@@ -98,6 +113,59 @@ commands:
         - if (node_access_needs_rebuild()) { node_access_rebuild(); }
     - task: run
       command: config-readonly:enable
+    - task: exec
+      command: ${drush.bin}
+      arguments:
+        - core:requirements
+
+  # Overrides the toolkit:install-clone command.
+  toolkit:install-clone:
+    - task: run
+      command: joinup:environment
+    - task: exec
+      command: ${drush.bin} memcache:flush-all
+    - task: run
+      command: drupal:settings
+      arguments:
+        - install
+    - task: run
+      command: toolkit:install-dump
+    - task: run
+      command: toolkit:run-deploy
+    # The `toolkit:run-deploy` command has enabled config read-only.
+    - task: run
+      command: config-readonly:disable
+    # This is a safety net for the eventuality a developer lacks a mail catcher
+    # tool on their local environment. See the 'Development mail collector'
+    # `settings.php` section from `resources/runner/drupal.yml` for details.
+    - task: run
+      command: drush:module-install
+      arguments:
+        - devel
+    - task: run
+      command: testing:install-modules
+    - task: exec
+      command: ${drush.bin}
+      arguments:
+        - cas-mock-server:start
+      options:
+        yes: null
+        root: ${joinup.site_dir}
+    - task: exec
+      command: ${drush.bin}
+      arguments:
+        - php:eval
+        - if (node_access_needs_rebuild()) { node_access_rebuild(); }
+    - task: run
+      command: drupal:settings
+      arguments:
+        - site-clone
+    - task: run
+      command: config-readonly:enable
+    - task: exec
+      command: ${drush.bin}
+      arguments:
+        - core:requirements
 
   # Overrides the toolkit:test-phpcs command.
   toolkit:test-phpcs:
@@ -113,17 +181,23 @@ commands:
       command: testing:phpcs-setup
     - task: exec
       command: ${phpcs.file.bin}
-    #- task: run
-    #  command: testing:check-deprecated-code
-    #- task: run
-    #  command: testing:check-deprecated-code-contrib
+
+  # Lints JS files  using ESLint.
+  toolkit:lint-js:
+    - task: exec
+      command: ${joinup.dir}/node_modules/.bin/eslint --config .eslintrc.json --ext js .
+
+  # Fixes JS files using ESLint.
+  toolkit:fix-js:
+    - task: exec
+      command: ${joinup.dir}/node_modules/.bin/eslint --config .eslintrc.json --ext js --fix .
 
   # Lints YAML files using ESLint.
   toolkit:lint-yaml:
     - task: exec
-      command: ${joinup.dir}/node_modules/.bin/eslint --ext .yml .
+      command: ${joinup.dir}/node_modules/.bin/eslint --config .eslintrc.json --ext yml .
 
   # Fixes YAML files using ESLint.
   toolkit:fix-yaml:
     - task: exec
-      command: ${joinup.dir}/node_modules/.bin/eslint --ext .yml --fix .
+      command: ${joinup.dir}/node_modules/.bin/eslint --config .eslintrc.json --ext yml --fix .

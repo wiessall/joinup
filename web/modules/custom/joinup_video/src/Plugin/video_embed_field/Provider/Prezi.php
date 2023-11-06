@@ -41,7 +41,7 @@ class Prezi extends ProviderPluginBase {
    */
   public static function getIdFromInput($input) {
     preg_match('#^(?:(?:https?:)?//)?(media\-)?prezi\.com/embed/(?<id>[^&\?/]+)#i', $input, $matches);
-    return isset($matches['id']) ? $matches['id'] : FALSE;
+    return $matches['id'] ?? FALSE;
   }
 
   /**

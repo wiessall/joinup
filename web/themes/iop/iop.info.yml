@@ -1,0 +1,34 @@
+
+name: Interoperable Europe
+description: Custom theme for Interoperable Europe, sub-theme of Ventuno < OpenEuropa Bootstrap Theme.
+package: Custom
+type: theme
+core_version_requirement: '>=9.4'
+php: 7.4
+base theme: ventuno
+
+libraries:
+  - ventuno/base
+  - ventuno/layout
+  - iop/components
+  - iop/theme
+
+libraries-override:
+  tour/tour-styling: false
+  ventuno/components: false
+  ventuno/theme: false
+  ventuno/paragraph__carousel: false
+
+regions:
+  search_bar: 'Search bar'
+  header: 'Header'
+  featured: 'Featured'
+  messages: 'Messages'
+  sidebar: 'Sidebar'
+  content_top: 'Content top'
+  content: 'Content'
+  footer: 'Footer'
+
+joinup:
+  menu_local_tasks:
+    horizontal_tabs_block: ventuno_horizontal_tabs

@@ -4,7 +4,7 @@ Feature: Tests membership to Joinup collection.
   Background:
     Given the following collections:
       | title                   | state     |
-      | An arbitrary collection | validated |
+      | An arbitrary collection | published |
 
   Scenario: As a newly registered user I'm automatically member of the 'Joinup'
     collection and I cannot leave.
@@ -17,7 +17,6 @@ Feature: Tests membership to Joinup collection.
 
     When I go to the homepage of the "Joinup" collection
     Then I should not see the link "Leave this collection"
-    But I should see "You cannot leave the Joinup collection"
 
     When I am about to leave the "Joinup" collection
     Then I should get an access denied error

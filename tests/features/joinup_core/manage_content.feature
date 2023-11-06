@@ -1,6 +1,5 @@
 @api @group-e
 Feature:
-  As a moderator
   In order to better organize the content
   I need to be able to move content between groups
 
@@ -8,25 +7,30 @@ Feature:
 
     Given the following collections:
       | title        | state     |
-      | Vintage Art  | validated |
-      | Decadent Art | validated |
+      | Vintage Art  | published |
+      | Decadent Art | published |
+    And user:
+      | Username | Vasundhara Commentator |
     And document content:
-      | title             | document type | collection  | state     |
-      | The Panama Papers | Document      | Vintage Art | validated |
-      | The Area 51 File  | Document      | Vintage Art | draft     |
+      | title             | document type | collection  | state     | changed          |
+      | The Panama Papers | Document      | Vintage Art | published | 2019-11-19 20:00 |
+      | The Area 51 File  | Document      | Vintage Art | draft     | 2018-11-19 21:00 |
     And discussion content:
-      | title               | collection  | state     |
-      | The Ultimate Debate | Vintage Art | validated |
+      | title               | collection  | state     | created    | publication date | changed    |
+      | The Ultimate Debate | Vintage Art | published | 2016-11-19 | 2016-11-19       | 2016-11-19 |
+    And comments:
+      | message             | author                 | parent              | created          | changed    |
+      | Conducting a Debate | Vasundhara Commentator | The Ultimate Debate | 2017-06-12 19:00 | 1497294000 |
     And event content:
       | title                    | collection  | state     |
-      | Version 2.0 Launch Party | Vintage Art | validated |
+      | Version 2.0 Launch Party | Vintage Art | published |
     And news content:
       | title                              | collection  | state     |
-      | Exports Leap Despite Currency Gain | Vintage Art | validated |
+      | Exports Leap Despite Currency Gain | Vintage Art | published |
     And custom_page content:
-      | title                | collection  |
-      | HOWTOs               | Vintage Art |
-      | Looking for Support? | Vintage Art |
+      | title                | collection  | state     | changed          |
+      | HOWTOs               | Vintage Art | published | 2016-11-19 20:00 |
+      | Looking for Support? | Vintage Art | published | 2015-11-19 20:00 |
     And the following custom page menu structure:
       | title                | parent | weight |
       | Looking for Support? | HOWTOs | 1      |
@@ -39,27 +43,45 @@ Feature:
     And I go to the homepage of the "Vintage Art" collection
     Then I should not see the link "Manage content"
 
-    Given I am logged in as a facilitator of the "Vintage Art" collection
+    # Check if the facilitator can manage only own group.
+    Given I am logged in as a facilitator of the "Decadent Art" collection
     And I go to the homepage of the "Vintage Art" collection
     Then I should not see the link "Manage content"
+
+    Given I am logged in as a facilitator of the "Vintage Art" collection
+    And I go to the homepage of the "Vintage Art" collection
+    Then I should see the link "Manage content"
+    And I click "Manage content"
+    And I should see the heading "Manage content"
+
+    # Archive as facilitator.
+    Given I select the "The Panama Papers" row
+    And I select "Archive content" from "Action"
+    And I press "Apply to selected items"
+    And I wait for the batch process to finish
+    Then I should see "Proceeded updates to 1 entities"
+    And I should see "19/11/2019 - 20:00"
+
+    # Last activity for discussion.
+    And I should see "12/06/2017 - 19:00"
 
     Given I am logged in as a moderator
 
     # Visit one of the pages to warm up the render caches. We can then later
     # check that no stale cached content is being shown.
     When I go to the homepage of the "Vintage Art" collection
-    And I click "HOWTOs" in the "Navigation menu block" region
-    Then I should see the heading "Vintage Art"
+    And I click "HOWTOs" in the "Navigation menu" region
+    Then I should see the link "Vintage Art"
 
     # Start the actual test scenario as a moderator.
     When I go to the homepage of the "Vintage Art" collection
     Then I should see the link "Manage content"
     Given I click "Manage content"
-    Then I should see "Manage content" in the Header
+    Then I should see the heading "Manage content"
 
     # Download the list as CSV.
     When I click "Download CSV"
-    Then the response should contain "Type;Title;\"Created on\";\"Last update\";Published;URL"
+    Then the response should contain "Type;Title;\"Created on\";\"Last update/activity\";State;URL"
     And the response should contain "Document;\"The Panama Papers\";"
     And the response should contain "/document/panama-papers"
     And the response should contain "Document;\"The Area 51 File\";"
@@ -78,7 +100,46 @@ Feature:
     When I go to the homepage of the "Vintage Art" collection
     Then I should see the link "Manage content"
     Given I click "Manage content"
-    Then I should see "Manage content" in the Header
+    Then I should see the heading "Manage content"
+
+    # Archive action.
+    Given I select the "The Ultimate Debate" row
+    And I select "Archive content" from "Action"
+    And I press "Apply to selected items"
+    And I wait for the batch process to finish
+    Then I should see "Proceeded updates to 1 entities"
+    And I should see "12/06/2017 - 19:00"
+
+    # Check archived state.
+    Given I select "Archived" from "State"
+    And I press "Apply"
+    Then I should see the link "The Panama Papers"
+    And I should see the link "The Ultimate Debate"
+
+    # Unarchive action.
+    Given I select the "The Panama Papers" row
+    And I select the "The Ultimate Debate" row
+    And I select "Unarchive content" from "Action"
+    And I press "Apply to selected items"
+    And I wait for the batch process to finish
+    Then I should see "Proceeded updates to 2 entities"
+
+    # Check published state.
+    Given I select "published" from "State"
+    And I press "Apply"
+    Then I should see the link "The Panama Papers"
+    And I should see the link "The Ultimate Debate"
+    And I should see "19/11/2019 - 20:00"
+    And I should see "12/06/2017 - 19:00"
+
+    # Check warning message.
+    Given I press "Reset"
+    And I select the "HOWTOs" row
+    And I select "Archive content" from "Action"
+    And I press "Apply to selected items"
+    And I wait for the batch process to finish
+    Then I should see "Proceeded updates to 1 entities"
+    And I should see "19/11/2016 - 20:00"
 
     # Select rows.
     Given I select the "The Panama Papers" row
@@ -122,22 +183,22 @@ Feature:
     Given I go to the "Vintage Art" collection
     And I should not see the "The Panama Papers" tile
     And I should not see the "Exports Leap Despite Currency Gain" tile
-    And I should not see the "The Ultimate Debate" tile
+    And I should not see the text "Discussions" in the "Navigation menu"
     And I should not see the "Version 2.0 Launch Party" tile
-    And I should not see the link "HOWTOs" in the "Navigation menu block" region
-    And I should not see the link "Looking for Support?" in the "Navigation menu block" region
+    And I should not see the link "HOWTOs" in the "Navigation menu" region
+    And I should not see the link "Looking for Support?" in the "Navigation menu" region
 
     # Visit the destination collection.
     Given I go to the "Decadent Art" collection
     And I should see the "The Panama Papers" tile
     And I should see the "Exports Leap Despite Currency Gain" tile
-    And I should see the "The Ultimate Debate" tile
+    And I should see the text "Discussions" in the "Navigation menu"
     And I should see the "Version 2.0 Launch Party" tile
-    Then I should see the link "HOWTOs" in the "Navigation menu block" region
-    When I click "HOWTOs" in the "Navigation menu block" region
-    Then I should see the link "HOWTOs" in the "Navigation menu block" region
-    And I should see the heading "Decadent Art"
-    And I should not see the link "Looking for Support?" in the "Navigation menu block" region
+    Then I should see the link "HOWTOs" in the "Navigation menu" region
+    When I click "HOWTOs" in the "Navigation menu" region
+    Then I should see the link "HOWTOs" in the "Navigation menu" region
+    And I should see the link "Decadent Art" in the "Header"
+    And I should not see the link "Looking for Support?" in the "Navigation menu" region
 
     # Try moving a child page without moving the parent page. This should move
     # the child to the root of the menu.
@@ -154,6 +215,33 @@ Feature:
     And the "Vintage Art" collection should have a custom page titled "Looking for Support?"
 
     Given I go to the "Vintage Art" collection
-    Then I should see the link "Looking for Support?" in the "Navigation menu block" region
-    When I click "Looking for Support?" in the "Navigation menu block" region
+    Then I should see the link "Looking for Support?" in the "Navigation menu" region
+    When I click "Looking for Support?" in the "Navigation menu" region
     Then I should not see the "Looking for Support?" tile
+
+  @javascript
+  Scenario Outline: Able to select all items on the content management UI
+    Given the following collections:
+      | title       | state     |
+      | Vintage Art | published |
+    And event content:
+      | title                   | collection  | state     |
+      | The Panama Papers Party | Vintage Art | published |
+      | The Area 51 Party       | Vintage Art | published |
+
+    When I am <role>
+    And I go to the "Vintage Art" collection
+    And I open the header local tasks menu
+    And I click "Manage content" in the "Entity actions" region
+    Then the available options in the "Action" select should be "<options>"
+    Then the "The Panama Papers Party" checkbox should not be checked
+    And the "The Area 51 Party" checkbox should not be checked
+
+    When I select the "Title" row
+    Then the "The Panama Papers Party" checkbox should be checked
+    And the "The Area 51 Party" checkbox should be checked
+
+    Examples:
+      | role                                                       | options                                                                       |
+      | logged in as a facilitator of the "Vintage Art" collection | -- Select action -- , Archive content                                         |
+      | logged in as a user with the moderator role                | -- Select action -- , Move to other group, Archive content, Unarchive content |

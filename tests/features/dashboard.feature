@@ -14,3 +14,5 @@ Feature: Dashboard
       | My subscriptions         |
       | Licences overview        |
       | Curated content listings |
+      | Topics                   |
+      | Files                    |

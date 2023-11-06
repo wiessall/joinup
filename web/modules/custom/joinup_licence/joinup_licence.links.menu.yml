@@ -9,3 +9,11 @@ joinup_licence.compatibility_documents:
   description: 'Overview of licence compatibility documents.'
   title: 'Compatibility documents'
   weight: 60
+joinup_licence.legal_type_overview:
+  title: 'Edit tooltip descriptions'
+  route_parameters:
+    taxonomy_vocabulary: 'legal_type'
+  route_name: entity.taxonomy_vocabulary.overview_form
+  description: 'Provides ability to edit tooltip descriptions form legal type terms.'
+  parent: system.admin
+  weight: 110

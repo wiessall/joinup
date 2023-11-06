@@ -14,7 +14,7 @@
 
     <form action="{{ path("view.search.page_1") }}">
         {% for id, filter in filters %}
-            <input type="hidden" class="search-bar__chip" name="f[]" value="{{ id }}" data-description="{{ filter }}">
+            <input type="hidden" class="search-bar__chip" name="f[]" value="{{ id }}" data-joinup-description="{{ filter }}">
         {% endfor %}
         <input class="search-bar__input" type="text" name="keys" id="search-bar__input">
     </form>

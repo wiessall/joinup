@@ -17,11 +17,11 @@ Feature: Subscribing to collection newsletters
       | name              |
       | Antonios Katsaros |
     And the following collections:
-      | title    | description             | logo     | banner     | owner             | contact information   | state     | topic                   |
-      | Volkor X | We do not come in peace | logo.png | banner.jpg | Antonios Katsaros | Charalambos Demetriou | validated | Statistics and Analysis |
+      | title    | description             | logo     | owner             | contact information   | state     | topic                   |
+      | Volkor X | We do not come in peace | logo.png | Antonios Katsaros | Charalambos Demetriou | published | Statistics and Analysis |
     And "news" content:
       | title      | collection | state     | author          |
-      | Hypersleep | Volkor X   | validated | Tatiana Andreas |
+      | Hypersleep | Volkor X   | published | Tatiana Andreas |
     And the following collection user memberships:
       | collection | user               | roles       |
       | Volkor X   | Filippos Demetriou | owner       |
@@ -89,11 +89,10 @@ Feature: Subscribing to collection newsletters
   @javascript @newsroom_newsletter
   Scenario: Subscribe to a newsletter
     Given I am logged in as "Magdalini Kokinos"
-    And I accept essential cookies
     When I go to the "Volkor X" collection
     And I open the header local tasks menu
     And I click "Edit" in the "Entity actions" region
-    And I click the "Additional fields" tab
+    Then I expand the "Additional fields" accordion section
     And I check "Enable newsletter subscriptions"
     And I fill in "Universe acronym" with "volkor-x"
     And I fill in "Newsletter service ID" with "123"

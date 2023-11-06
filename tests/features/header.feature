@@ -7,7 +7,7 @@ Feature: Header
   @joinup
   Scenario Outline: Header shows basic info and directs anonymous users to log in or create an account
     Given I am not logged in
-    And I am on <page>
+    And I visit the <page>
     Then I should see the Joinup logo in the navigation bar
     And I should see the hamburger icon in the main navigation
 
@@ -28,28 +28,28 @@ Feature: Header
     When I click "About us" in the "Hamburger menu"
     Then I should see the heading "About Joinup"
 
-    Given I am on <page>
+    Given I visit the <page>
     When I click "Sign in" in the "Navigation bar"
     Then I should see the heading "Sign in to continue"
 
-    Given I am on <page>
+    Given I visit the <page>
     When I click "Sign in" in the "Hamburger menu"
     Then I should see the heading "Sign in to continue"
 
     Examples:
       | page         |
       # A page with the new Ventuno theme.
-      | the homepage |
+      | search page |
       # A page with the old Joinup Theme theme.
-      | the contact form   |
+      | collection overview |
 
   @joinup @javascript
   Scenario Outline: The 'Get started' button opens a popup with information about EU Login
     Given I am not logged in
-    And I am on <page>
+    And I visit the <page>
 
     # The popup is not shown initially.
-    Then I should not see the link "Create an account"
+    Then I should not see the text "Create an account"
     And I should not see the text "As a signed-in user you can create content, become a member of a community, receive notifications on your favourite solutions and topics, and access all other features available on the platform."
 
     # The popup appears when clicking on 'Get started'.
@@ -68,6 +68,6 @@ Feature: Header
     Examples:
       | page         |
       # A page with the new Ventuno theme.
-      | the homepage |
+      | search page |
       # A page with the old Joinup Theme theme.
-      | the contact form   |
+      | collection overview |

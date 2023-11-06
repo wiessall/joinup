@@ -5,16 +5,10 @@ dependencies:
   config:
     - comment.type.comment
     - field.storage.comment.field_body
+    - filter.format.simple_html
+    - filter.format.simple_text
   module:
-    - allowed_formats
     - text
-third_party_settings:
-  allowed_formats:
-    simple_html: simple_html
-    simple_text: simple_text
-    content_editor: '0'
-    basic_html: '0'
-    plain_text: '0'
 _core:
   default_config_hash: XjinYVUnMIshdBycAetpscFS2ON6_ggwnH1m-FyU6oc
 id: comment.comment.field_body
@@ -27,5 +21,8 @@ required: true
 translatable: false
 default_value: {  }
 default_value_callback: ''
-settings: {  }
+settings:
+  allowed_formats:
+    - simple_html
+    - simple_text
 field_type: text_long

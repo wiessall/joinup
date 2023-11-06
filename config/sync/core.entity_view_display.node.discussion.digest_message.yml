@@ -6,16 +6,18 @@ dependencies:
     - core.entity_view_mode.node.digest_message
     - field.field.node.discussion.body
     - field.field.node.discussion.field_attachment
+    - field.field.node.discussion.field_discussion_logo
     - field.field.node.discussion.field_keywords
-    - field.field.node.discussion.field_topic
     - field.field.node.discussion.field_replies
     - field.field.node.discussion.field_shared_in
     - field.field.node.discussion.field_site_featured
     - field.field.node.discussion.field_state
+    - field.field.node.discussion.field_topic
     - field.field.node.discussion.og_audience
     - node.type.discussion
   module:
     - smart_trim
+    - svg_image
     - template_suggestion
     - user
 _core:
@@ -26,27 +28,42 @@ bundle: discussion
 mode: digest_message
 content:
   body:
-    weight: 0
+    type: smart_trim
     label: hidden
     settings:
       trim_length: 200
       trim_type: chars
       trim_suffix: ''
+      wrap_output: false
       wrap_class: trimmed
-      more_text: More
-      more_class: more-link
+      more:
+        display_link: false
+        target_blank: false
+        link_trim_only: false
+        class: more-link
+        text: More
+        aria_label: 'Read more about [node:title]'
       summary_handler: full
       trim_options:
         text: true
         trim_zero: false
-      wrap_output: false
-      more_link: false
     third_party_settings:
       template_suggestion:
         template_suggestion: no_wrappers
-    type: smart_trim
+    weight: 0
+    region: content
+  field_discussion_logo:
+    type: image_url
+    label: hidden
+    settings:
+      image_style: digest_image
+    third_party_settings:
+      template_suggestion:
+        template_suggestion: ''
+    weight: 1
     region: content
 hidden:
+  featured: true
   field_attachment: true
   field_keywords: true
   field_replies: true
@@ -54,13 +71,17 @@ hidden:
   field_site_featured: true
   field_state: true
   field_topic: true
+  flag_like_node: true
   flag_subscribe_discussions: true
   invite_link: true
   langcode: true
+  latest_update_time: true
   links: true
   og_audience: true
+  pinned_in: true
   published_at: true
   read_more: true
   report: true
   search_api_excerpt: true
   share_link: true
+  visit_count: true

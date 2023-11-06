@@ -7,8 +7,8 @@ Feature: "Event page" editing.
   @terms
   Scenario: Add and remove map
     Given collections:
-      | title  | logo     | banner     | state     |
-      | Heroes | logo.png | banner.jpg | validated |
+      | title  | logo     | state     |
+      | Heroes | logo.png | published |
     And I am logged in as a facilitator of the "Heroes" collection
     When I go to the homepage of the "Heroes" collection
     And I click "Add event" in the plus button menu
@@ -36,13 +36,13 @@ Feature: "Event page" editing.
       | <user>   |
     And the following collections:
       | title        | description        | state     | moderation |
-      | <collection> | Sample description | validated | yes        |
+      | <collection> | Sample description | published | yes        |
     And the following collection user memberships:
       | collection   | user   | roles  |
       | <collection> | <user> | <role> |
     And "event" content:
       | title   | author | collection   | state     |
-      | <event> | <user> | <collection> | validated |
+      | <event> | <user> | <collection> | published |
     When I am logged in as "<user>"
     And I go to the "<event>" event
     Then I should see the link "Edit" in the "Entity actions" region
@@ -62,7 +62,7 @@ Feature: "Event page" editing.
       | Krista Garrett |
     And the following solutions:
       | title                | description        | state     | moderation |
-      | Dreamer in the Snake | Sample description | validated | no         |
+      | Dreamer in the Snake | Sample description | published | no         |
     And the following solution user memberships:
       | solution             | user           | roles       |
       | Dreamer in the Snake | Krista Garrett | facilitator |

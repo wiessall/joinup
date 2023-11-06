@@ -11,16 +11,17 @@
     <exclude-pattern>*.gif$</exclude-pattern>
     <exclude-pattern>*.png$</exclude-pattern>
 
-    <!-- Minified files don't have to comply with coding standards. -->
-    <exclude-pattern>*.min.css$</exclude-pattern>
-    <exclude-pattern>*.min.js$</exclude-pattern>
+    <!-- Non-PHP files don't have to comply with coding standards. -->
+    <exclude-pattern>*.md$</exclude-pattern>
+    <exclude-pattern>*.css$</exclude-pattern>
+    <exclude-pattern>*.js$</exclude-pattern>
 
     <!-- Exclude frontend third-party libraries from coding standards -->
     <exclude-pattern>/web/themes/contrib/*</exclude-pattern>
-    <exclude-pattern>/web/themes/joinup/vendor/*</exclude-pattern>
-    <exclude-pattern>/web/themes/joinup/node_modules/*</exclude-pattern>
     <exclude-pattern>/web/themes/ventuno/assets/*</exclude-pattern>
     <exclude-pattern>/web/themes/ventuno/node_modules/*</exclude-pattern>
+    <exclude-pattern>/web/themes/iop/assets/*</exclude-pattern>
+    <exclude-pattern>/web/themes/iop/node_modules/*</exclude-pattern>
 
     <rule ref="./vendor/drupal/coder/coder_sniffer/Drupal">
         <exclude name="Drupal.Semantics.FunctionTriggerError.TriggerErrorTextLayoutStrict" />
@@ -41,6 +42,8 @@
         <exclude name="QualityAssurance.Functions.DrupalWrappers.FoundWithAlternative" />
         <!-- Ignore non-Drupal code. -->
         <exclude-pattern>/src/Composer/</exclude-pattern>
+        <!-- This sniff is unacceptable because prohibits usage of an official Drupal API. See https://citnet.tech.ec.europa.eu/CITnet/jira/browse/DQA-3678 -->
+        <exclude name="QualityAssurance.Functions.DrupalForbiddenHooks.ForbiddenHook" />
     </rule>
 
     <!-- Do not report lines exceeding 80 characters for Markdown files that contain long file paths. -->
@@ -57,15 +60,10 @@
     <rule ref="./src/CodingStandards"/>
 
     <!-- Require the strict types declaration in every PHP file. -->
-    <rule ref="SlevomatCodingStandard.TypeHints.DeclareStrictTypes">
-        <properties>
-            <property name="newlinesCountBetweenOpenTagAndDeclare" value="2"/>
-        </properties>
-    </rule>
+    <rule ref="SlevomatCodingStandard.TypeHints.DeclareStrictTypes" />
 
     <!-- Require nullable types to be declared as such. -->
-    <rule ref="SlevomatCodingStandard.TypeHints.NullableTypeForNullDefaultValue">
-    </rule>
+    <rule ref="SlevomatCodingStandard.TypeHints.NullableTypeForNullDefaultValue" />
 
     <!-- Forbid annotations which are not included in the Drupal coding standard but are often added by IDEs. -->
     <rule ref="SlevomatCodingStandard.Commenting.ForbiddenAnnotations">

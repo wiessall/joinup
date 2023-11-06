@@ -1,0 +1,172 @@
+@import "../partials/core";
+
+.tile {
+  position: relative;
+  flex-direction: column;
+  height: 100%;
+  background-color: $white;
+  &__link {
+    z-index: 2;
+  }
+  // Make some optional elements be interactable over the tile itself.
+  &__action {
+    position: relative;
+    z-index: 3;
+  }
+  &__figure {
+    overflow: hidden;
+    aspect-ratio: 16 / 9;
+    & picture {
+      height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      & img {
+        max-height: 100%;
+        width: auto;
+        margin-bottom: 0;
+      }
+    }
+  }
+  &__body {
+    padding: $spacer;
+  }
+  &__standout-info {
+    right: $spacer * .5;
+    top: $spacer * -1;
+    font-size: .875rem;
+  }
+  &__standout-info-icon,
+  &__info-icon {
+    font-size: .75rem;
+  }
+  &__info-icon {
+    flex-shrink: 0;
+  }
+  &__info-text {
+    // Limit to 1 line
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 1;
+    overflow: hidden;
+  }
+  &__default-img {
+    &::after {
+      content: "";
+      display: block;
+      position: absolute;
+      width: $spacer * 6;
+      height: $spacer * 6;
+      background-color: $white;
+      border-radius: $border-radius-pill;
+    }
+  }
+  &__default-icon {
+    width: $spacer * 3;
+    height: $spacer * 3;
+    z-index: 1;
+    color: $gray-400;
+  }
+  &__body {
+    flex: 1 1 auto;
+    padding: $spacer $spacer 0;
+  }
+  &__title {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+  }
+  &__text {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 4;
+    overflow: hidden;
+    & div,
+    & p {
+      display: inline; // Fix bug on Safari for clamped text.
+    }
+  }
+  &__bundle-icon {
+    background-color: lighten($warning, 30%);
+    width: $spacer * 1.5;
+    height: $spacer * 1.5;
+  }
+  .mark {
+    position: absolute;
+    z-index: 1;
+    top: $spacer * .5;
+    right: $spacer * .5;
+    width: $spacer * 1.75;
+    height: $spacer * 1.75;
+    border-radius: $border-radius-pill;
+    background-color: $brand;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    &.star::before {
+      @include get-bootstrap-icon('star', $white);
+    }
+    &.pin::before {
+      @include get-bootstrap-icon('pin', $white);
+    }
+  }
+  &__footer {
+    .flag__link {
+      padding: $spacer * .125;
+      border-radius: $border-radius-pill;
+      &:hover {
+        text-decoration: none;
+      }
+    }
+    .flag__link:not(.flag__link--archived) {
+      &:hover {
+        background-color: $secondary;
+      }
+    }
+    .flag__link--archived {
+      &:hover {
+        cursor: not-allowed;
+      }
+    }
+    [data-joinup-card-stats-shared] {
+      &:hover {
+        cursor: help;
+      }
+    }
+  }
+  &--horizontal {
+    width: 100%;
+    @include media-breakpoint-up(md) {
+      flex-direction: row;
+      flex-wrap: wrap;
+      height: auto;
+      .tile__figure {
+        padding: $spacer 0 0 $spacer;
+        width: 180px;
+        aspect-ratio: 1 / 1;
+        & picture {
+          align-items: start;
+        }
+      }
+      .tile__body {
+        flex: 1 1 calc(100% - 180px);
+        padding: $spacer $spacer 0 $spacer;
+        overflow-wrap: anywhere;
+        max-width: calc(100% - 180px);
+      }
+      .tile__standout-info {
+        top: unset;
+        transform: translateX(calc(-100% - $spacer * 1.5));
+        bottom: $spacer * .5;
+        right: unset;
+      }
+      .tile__footer {
+        width: 100%;
+        align-self: end;
+        margin-top: $spacer;
+        border-top: $border-width solid $border-color;
+      }
+    }
+  }
+}

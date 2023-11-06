@@ -16,6 +16,7 @@ use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Installer\InstallerKernel;
 use Drupal\Core\Session\AccountInterface;
+use Drupal\Core\Site\SettingsEditor;
 use Drupal\collection\Entity\CollectionInterface;
 use Drupal\joinup_community_content\Entity\CommunityContentInterface;
 use Drupal\joinup_featured\FeaturedContentInterface;
@@ -97,7 +98,7 @@ function joinup_form_install_settings_form_save($form, FormStateInterface $form_
     'value' => $database,
     'required' => TRUE,
   ];
-  drupal_rewrite_settings($settings);
+  SettingsEditor::rewrite(\Drupal::getContainer()->getParameter('site.path') . '/settings.php', $settings);
   // Load the database connection to make it available in the current request.
   Database::addConnectionInfo($key, $target, $database);
 }
@@ -184,16 +185,6 @@ function joinup_field_widget_inline_entity_form_complex_form_alter(&$element, Fo
       }
     }
   }
-
-  // If no title is provided for the fieldset wrapping the create form, add the
-  // label of the bundle of the entity being created.
-  if (empty($element['form']['#title']) && !empty($element['form']['inline_entity_form']['#bundle'])) {
-    $entity_type = $element['form']['inline_entity_form']['#entity_type'];
-    $bundle = $element['form']['inline_entity_form']['#bundle'];
-
-    $bundle_info = \Drupal::service('entity_type.bundle.info')->getBundleInfo($entity_type);
-    $element['form']['#title'] = $bundle_info[$bundle]['label'];
-  }
 }
 
 /**
@@ -236,7 +227,7 @@ function joinup_form_node_form_alter(&$form, FormStateInterface $form_state, $fo
 function joinup_theme($existing, $type, $theme, $path) {
   $page_template = [
     'variables' => [],
-    'path' => drupal_get_path('profile', 'joinup') . '/templates',
+    'path' => \Drupal::service('extension.list.profile')->getPath('joinup') . '/templates',
   ];
   return [
     'joinup_eligibility_criteria' => $page_template,
@@ -258,7 +249,7 @@ function joinup_theme($existing, $type, $theme, $path) {
  * displayed.
  */
 function joinup_entity_view_alter(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display) {
-  if (in_array($entity->getEntityTypeId(), ['node', 'rdf_entity'])) {
+  if (in_array($entity->getEntityTypeId(), ['node', 'rdf_entity']) && $display->getMode() !== 'group_header') {
     // Add the "entity" contextual links group. Avoid overwriting any existing
     // data that might have been added by other modules. Because of a bug in
     // Drupal core we cannot alter the running order of hook_entity_view_alter()
@@ -349,7 +340,14 @@ function joinup_preprocess_node(&$variables) {
  *   The variables array.
  */
 function _joinup_preprocess_entity_tiles(array &$variables) {
-  if ($variables['view_mode'] !== 'view_mode_tile') {
+  // View modes where tiles are expected.
+  $tile_view_modes = [
+    'highlighted',
+    'view_mode_tile',
+    'view_mode_tile_horizontal',
+    'carousel',
+  ];
+  if (!in_array($variables['view_mode'], $tile_view_modes)) {
     return;
   }
 
@@ -361,22 +359,8 @@ function _joinup_preprocess_entity_tiles(array &$variables) {
 
   // If the entity is featured site-wide, enable the related JS library.
   if ($entity instanceof FeaturedContentInterface && $entity->isFeatured()) {
-    $variables['attributes']['data-drupal-featured'][] = TRUE;
+    $variables['attributes']['data-joinup-featured'][] = TRUE;
     $variables['#attached']['library'][] = 'joinup/site_wide_featured';
-  }
-
-  $context = \Drupal::service('og.context')->getRuntimeContexts(['og']);
-  $group = NULL;
-  if (!empty($context['og'])) {
-    $group = $context['og']->getContextValue();
-  }
-
-  if ($entity instanceof PinnableGroupContentInterface && $entity->isPinned($group)) {
-    $variables['attributes']['class'][] = 'is-pinned';
-    $variables['#attached']['library'][] = 'joinup/pinned_entities';
-
-    $group_ids = $entity->getPinnedGroupIds();
-    $variables['attributes']['data-drupal-pinned-in'] = implode(',', $group_ids);
   }
 }
 

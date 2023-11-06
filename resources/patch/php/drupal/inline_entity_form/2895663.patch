@@ -1,0 +1,13 @@
+diff --git a/inline_entity_form.module b/inline_entity_form.module
+index 89e27de..f0ad215 100644
+--- a/inline_entity_form.module
++++ b/inline_entity_form.module
+@@ -84,7 +84,7 @@ function inline_entity_form_reference_form($reference_form, &$form_state) {
+     '#selection_handler' => $instance->getSetting('handler'),
+     '#selection_settings' => $instance->getSetting('handler_settings'),
+     '#required' => TRUE,
+-    '#maxlength' => 255,
++    '#maxlength' => 1024,
+   ];
+   // Add the actions
+   $reference_form['actions'] = [

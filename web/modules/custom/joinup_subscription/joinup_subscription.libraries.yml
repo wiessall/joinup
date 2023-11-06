@@ -3,4 +3,4 @@ subscriptions:
   js:
     js/subscriptions.js: {}
   dependencies:
-    - core/jquery
+    - core/once

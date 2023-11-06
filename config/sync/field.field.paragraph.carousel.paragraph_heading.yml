@@ -1,0 +1,19 @@
+uuid: f9ff1317-5721-4540-b9ab-2c0f4d912f0c
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.paragraph_heading
+    - paragraphs.paragraphs_type.carousel
+id: paragraph.carousel.paragraph_heading
+field_name: paragraph_heading
+entity_type: paragraph
+bundle: carousel
+label: Heading
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

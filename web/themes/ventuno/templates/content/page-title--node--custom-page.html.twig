@@ -1,0 +1,31 @@
+{#
+/**
+ * @file
+ * Template for the page title.
+ */
+#}
+{{ attach_library('ventuno/page-title') }}
+{{ title_prefix }}
+{% if title %}
+  <div class="page-title page__title-wrapper my-4">
+    <h1 class="page-title__title">
+      {{ title }}
+      {% if permalink %}
+        <a class="permalink" href="{{ permalink }}" title="{{ 'Permalink'|t }}">
+          {{ pattern('icon', {
+            name: 'link-45deg',
+            size: 'm'
+          }) }}
+        </a>
+      {% endif %}
+    </h1>
+
+    <div class="page-title__details mb-4">
+      {% if additional_content.is_archived %}
+        {% include '@ventuno/parts/page-title-detail-archive.html.twig' %}
+      {% endif %}
+    </div>
+  </div>
+{% endif %}
+{{ title_suffix }}
+{% block metadata %}{% endblock %}

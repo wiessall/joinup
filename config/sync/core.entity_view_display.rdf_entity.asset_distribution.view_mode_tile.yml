@@ -16,8 +16,8 @@ dependencies:
     - rdf_entity.rdfentity.asset_distribution
   module:
     - asset_distribution
-    - digital_size_formatter
     - template_suggestion
+    - text
     - user
 _core:
   default_config_hash: uNZd1lhv6BqyS7aBYyVdca5-WbXmPpPiHfauWIDHBa0
@@ -28,8 +28,6 @@ mode: view_mode_tile
 content:
   field_ad_access_url:
     type: tracked_hosted_file_download
-    weight: 3
-    region: content
     label: hidden
     settings:
       hosted_files_title: Download
@@ -38,38 +36,36 @@ content:
     third_party_settings:
       template_suggestion:
         template_suggestion: no_wrappers
-  field_ad_file_size:
-    type: digital_size
-    weight: 10
+    weight: 0
+    region: content
+  field_ad_description:
+    type: text_default
     label: hidden
     settings: {  }
-    third_party_settings: {  }
+    third_party_settings:
+      template_suggestion:
+        template_suggestion: bare
+    weight: 1
     region: content
   field_ad_licence:
-    weight: 5
+    type: entity_reference_label
     label: hidden
     settings:
       link: true
     third_party_settings: {  }
-    type: entity_reference_label
-    region: content
-  label:
-    label: hidden
-    type: string
-    weight: 0
-    settings:
-      link_to_entity: true
-    third_party_settings: {  }
+    weight: 2
     region: content
 hidden:
   changed: true
   created: true
-  field_ad_description: true
+  download_count: true
+  field_ad_file_size: true
   field_ad_format: true
   field_ad_gitb_compliant: true
   field_ad_repr_technique: true
   field_download: true
   field_status: true
+  label: true
   langcode: true
   og_audience: true
   search_api_excerpt: true

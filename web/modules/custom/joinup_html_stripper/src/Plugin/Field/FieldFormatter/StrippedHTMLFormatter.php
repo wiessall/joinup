@@ -7,7 +7,7 @@ namespace Drupal\joinup_html_stripper\Plugin\Field\FieldFormatter;
 use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Field\FormatterBase;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\smart_trim\Truncate\TruncateHTML;
+use Drupal\smart_trim\TruncateHTML;
 
 /**
  * Field formatter which strips all HTML.
@@ -89,11 +89,12 @@ class StrippedHTMLFormatter extends FormatterBase {
       $output = !empty($item->summary) ? $item->summary : $item->value;
 
       // Strip HTML, after applying all embedded media filters.
-      $output = check_markup($output, 'stripped_html');
+      $output = (string) check_markup($output, 'stripped_html');
 
       // Replace funny whitespace.
       $output = preg_replace('/\n|\r|\t/m', ' ', $output);
       $output = str_replace('&nbsp;', ' ', $output);
+      $output = str_replace("&amp;#13;", ' ', $output);
       $output = str_replace("\xc2\xa0", ' ', $output);
       $output = trim(preg_replace('/\s\s+/', ' ', $output));
 
@@ -102,8 +103,9 @@ class StrippedHTMLFormatter extends FormatterBase {
         $truncate = new TruncateHTML();
         $output = $truncate->truncateChars($output, $this->getSetting('trim_length'), '…');
       }
+
       $element[$delta] = [
-        '#markup' => $output,
+        '#markup' => htmlspecialchars_decode($output),
       ];
     }
 

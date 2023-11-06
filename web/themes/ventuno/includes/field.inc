@@ -1,0 +1,125 @@
+<?php
+
+/**
+ * @file
+ * Field specific procedural functions.
+ */
+
+declare(strict_types = 1);
+
+use Drupal\Component\Utility\Html;
+use Drupal\Core\Template\Attribute;
+
+/**
+ * Implements hook_theme_suggestions_HOOK_alter().
+ */
+function ventuno_theme_suggestions_field_alter(array &$suggestions, array $variables): void {
+  // Do not output field labels and wrapping markup for paragraph fields.
+  if (isset($variables['element']['#entity_type']) && $variables['element']['#entity_type'] === 'paragraph') {
+    // Prepend the new suggestion right after the default field template. This
+    // allows overriding single fields, while keeping all the rest markup-free.
+    array_unshift($suggestions, 'field__bare');
+  }
+}
+
+/**
+ * Implements hook_preprocess_field_ui_table().
+ */
+function ventuno_preprocess_field_ui_table(array &$variables): void {
+  if ($variables['user']->isAuthenticated()) {
+    $variables['#attached']['library'][] = 'ventuno/tabledrag';
+  }
+}
+
+/**
+ * Implements hook_preprocess_field_multiple_value_form().
+ */
+function ventuno_preprocess_field_multiple_value_form(array &$variables): void {
+  if ($variables['user']->isAuthenticated()) {
+    $variables['#attached']['library'][] = 'ventuno/tabledrag';
+  }
+
+  // Provide a 'for' property for field labels in multi-value fields
+  // using id of the first element so that it is semantically clear
+  // to which form element this label belongs.
+  if ($variables['multiple']) {
+    // Set new variable label, which contains title.
+    $label = $variables['element']['#title'];
+    $variables['label']['content'] = $label;
+    // Lists of element types.
+    $elements = [
+      'target_id',
+      'value',
+      'uri',
+    ];
+
+    // Fixes link form element title.
+    // @see ventuno_preprocess_form_element().
+    if (isset($variables['element']['0']['uri'])) {
+      foreach ($variables['table']['#rows'] as &$value_row) {
+        $value_row['data'][1]['data']['uri']['#title'] = $label;
+      }
+      // Remove table header for this very specific case to avoid redundancy.
+      if ($variables['element']['#id'] === 'edit-field-event-online-location') {
+        unset($variables['table']['#header']);
+      }
+    }
+
+    // Set first input 'id' as 'for' attribute for table label.
+    foreach ($elements as $value_element) {
+      if (isset($variables['element']['0'][$value_element]['#id'])) {
+        $variables['label']['attributes'] = new Attribute([
+          'for' => $variables['element']['0'][$value_element]['#id'],
+        ]);
+        break;
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_preprocess_field().
+ */
+function ventuno_preprocess_field(array &$variables): void {
+  $element = $variables['element'];
+  // View modes displayed as full page and field types with user input.
+  if (in_array($element['#view_mode'], ['about', 'full'])
+    && in_array($variables['field_type'], ['text_long', 'text_with_summary'])
+  ) {
+    // Add selectors.
+    $variables['attributes']['class'][] = 'fieldset';
+    $variables['attributes']['class'][] = 'fieldset--textarea';
+    // Attach library.
+    $variables['#attached']['library'][] = 'ventuno/paragraph';
+  }
+  // Make the topics appear as badges in solution headers.
+  if ($element['#view_mode'] === 'group_header' && $element['#field_name'] === 'field_topic') {
+    $variables['#attached']['library'][] = 'ventuno/badge';
+    $items = $variables['items'];
+    foreach ($items as $key => $item) {
+      $badge_classes = ['badge', 'bg-secondary', 'rounded-pill'];
+      $variables['items'][$key]['content']['#attributes'] = ['class' => $badge_classes];
+    }
+  }
+
+  $field_names = ['eif_layer', 'eif_model', 'eif_principle'];
+  if (in_array($element['#field_name'], $field_names)) {
+    foreach ($variables['items'] as $key => $item) {
+      $parts = explode(':', $item['content']['#title']);
+      $title = empty($parts[1]) ? $item['content']['#title'] : trim($parts[1]);
+      $variables['items'][$key]['content']['#title'] = $title;
+    }
+  }
+}
+
+/**
+ * Implements hook_preprocess_field_group_accordion_item().
+ */
+function ventuno_preprocess_field_group_accordion_item(array &$variables): void {
+  $element =& $variables['element'];
+  // Remove numbers to ensure getting a valid id.
+  $group_name = preg_replace('/[0-9]+/', '', $element['#group_name']);
+  $id = substr($group_name, 6);
+  // Provide unique ID for the accordion item.
+  $variables['accordion_item_id'] = Html::getUniqueId($id);
+}

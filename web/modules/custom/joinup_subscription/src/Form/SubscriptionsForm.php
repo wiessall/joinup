@@ -32,28 +32,28 @@ class SubscriptionsForm extends FormBase {
    *
    * @var \Drupal\Core\Entity\EntityTypeManagerInterface
    */
-  protected $entityTypeManager;
+  protected EntityTypeManagerInterface $entityTypeManager;
 
   /**
    * The entity type bundle info service.
    *
    * @var \Drupal\Core\Entity\EntityTypeBundleInfoInterface
    */
-  protected $entityTypeBundleInfo;
+  protected EntityTypeBundleInfoInterface $entityTypeBundleInfo;
 
   /**
    * The Joinup group manager service.
    *
    * @var \Drupal\joinup_group\JoinupGroupManagerInterface
    */
-  protected $groupManager;
+  protected JoinupGroupManagerInterface $groupManager;
 
   /**
    * The OG membership manager.
    *
    * @var \Drupal\og\MembershipManagerInterface
    */
-  protected $membershipManager;
+  protected MembershipManagerInterface $membershipManager;
 
   /**
    * Constructs a new MySubscriptionsForm.
@@ -166,8 +166,8 @@ class SubscriptionsForm extends FormBase {
             'label' => 'hidden',
             'type' => 'image',
             'settings' => [
-              'image_style' => 'vertical_medium_image',
-              'image_link' => 'content',
+              'image_style' => 'thumbnail',
+              'image_link' => 'none',
             ],
           ]),
           'link' => [
@@ -178,7 +178,7 @@ class SubscriptionsForm extends FormBase {
           'motivation' => [
             '#markup' => $this->t('Send me notifications for:'),
           ],
-          'bundles' => [
+          'options' => [
             '#type' => 'container',
             '#extra_suggestion' => 'container__subscribe_form',
           ],
@@ -195,7 +195,7 @@ class SubscriptionsForm extends FormBase {
               return $carry || $entity_bundle_pair->getEntityTypeId() === $entity_type_id && $entity_bundle_pair->getBundleId() === $bundle_id;
             }, FALSE);
 
-            $form['groups'][$group->id()]['bundles'][$key] = [
+            $form['groups'][$group->id()]['options'][$key] = [
               '#type' => 'checkbox',
               '#title' => $bundle_info[$entity_type_id][$bundle_id]['label'],
               '#return_value' => TRUE,
@@ -203,15 +203,27 @@ class SubscriptionsForm extends FormBase {
               // Make sure to turn autocomplete off so that the browser doesn't
               // try to restore a half submitted form when the user does a soft
               // reload.
-              '#attributes' => ['autocomplete' => 'off'],
+              '#attributes' => [
+                'autocomplete' => 'off',
+                'data-joinup-group' => $group->id(),
+              ],
             ];
 
             // Store status of checkboxes.
             $subscription_status[$key] = $value;
           }
         }
+        $form['groups'][$group->id()]['options']['announcements'] = [
+          '#type' => 'checkbox',
+          '#title' => $this->t('Announcements'),
+          '#return_value' => TRUE,
+          '#default_value' => $membership->get('announcements')->value,
+          '#attributes' => [
+            'data-joinup-group' => $group->id(),
+          ],
+        ];
 
-        $form['groups'][$group->id()]['bundles']['submit'] = [
+        $form['groups'][$group->id()]['options']['submit'] = [
           '#ajax' => [
             'callback' => '::reloadGroup',
           ],
@@ -233,7 +245,10 @@ class SubscriptionsForm extends FormBase {
             'autocomplete' => 'off',
             // Store the initial state of the subscriptions so that we can
             // unlock the save button in JS whenever a state changes.
-            'data-drupal-subscriptions' => Json::encode(array_values($subscription_status)),
+            'data-joinup-subscriptions' => Json::encode(array_values($subscription_status + [
+              'announcements' => (bool) $membership->get('announcements')->value,
+            ])),
+            'data-joinup-group' => $group->id(),
           ],
         ];
       }
@@ -271,24 +286,35 @@ class SubscriptionsForm extends FormBase {
     // Check if the subscriptions have changed. This allows us to skip saving
     // the membership entity if nothing changed.
     $bundles_value = $form_state->getValue(
-      ['groups', $membership->getGroupId(), 'bundles']
+      ['groups', $membership->getGroupId(), 'options']
     );
     // Ignore the submit button.
     unset($bundles_value['submit']);
+
+    // Get the announcements value early so that we can remove it as well from
+    // the bundles value.
+    $announcements = in_array('announcements', $bundles_value) && $bundles_value['announcements'] === TRUE;
+    $membership->set('announcements', $announcements);
+    unset($bundles_value['announcements']);
     $subscribed_bundles = array_keys(array_filter($bundles_value));
 
     $original_bundles = array_map(function (array $item): string {
       return $item['bundle'];
     }, $membership->get('subscription_bundles')->getValue());
+    $original_announcements = $membership->get('announcements')->value;
 
     sort($subscribed_bundles);
     sort($original_bundles);
-    if ($subscribed_bundles !== $original_bundles) {
+    // Do not save the membership if the bundles or the announcements are not
+    // changed.
+    if ($subscribed_bundles !== $original_bundles || $announcements !== $original_announcements) {
       // Bundle subscriptions have changed, update the membership.
-      $membership->set('subscription_bundles', array_map(function (string $key): array {
+      $value = array_map(function (string $key): array {
         return array_combine(['entity_type', 'bundle'], explode('|', $key));
-      }, $subscribed_bundles))->save();
+      }, $subscribed_bundles);
+      $membership->set('subscription_bundles', $value);
     }
+    $membership->save();
   }
 
   /**
@@ -335,7 +361,7 @@ class SubscriptionsForm extends FormBase {
    */
   public function reloadGroup(array &$form, FormStateInterface $form_state): AjaxResponse {
     $submitted_group_id = $this->getTriggeringElementGroupId($form_state);
-    $form['groups'][$submitted_group_id]['bundles']['submit']['#value'] = $this->t('Saved!');
+    $form['groups'][$submitted_group_id]['options']['submit']['#value'] = $this->t('Saved!');
 
     // Change status of checkboxes.
     $subscription_status = [];
@@ -344,17 +370,19 @@ class SubscriptionsForm extends FormBase {
     foreach ($subscription_bundles as $entity_type_id => $bundle_ids) {
       foreach ($bundle_ids as $bundle_id) {
         $key = static::getSubscriptionKey($entity_type_id, $bundle_id);
-        $subscription_status[$key] = $form['groups'][$submitted_group_id]['bundles'][$key]['#checked'];
+        $subscription_status[$key] = $form['groups'][$submitted_group_id]['options'][$key]['#checked'];
       }
     }
-    $form['groups'][$submitted_group_id]['bundles']['submit']['#attributes']['data-drupal-subscriptions'] = Json::encode(array_values($subscription_status));
+    // Add also the announcements.
+    $subscription_status['announcements'] = $form['groups'][$submitted_group_id]['options']['announcements']['#checked'];
+    $form['groups'][$submitted_group_id]['options']['submit']['#attributes']['data-joinup-subscriptions'] = Json::encode(array_values($subscription_status));
 
     $user = $form_state->get('#user');
     $form['edit-actions']['unsubscribe_all']['#access'] = $this->hasSubscriptions($user);
 
     return (new AjaxResponse())
       ->addCommand(new ReplaceCommand("#{$form['groups'][$submitted_group_id]['#id']}", $form['groups'][$submitted_group_id]))
-      ->addCommand(new ReplaceCommand('#edit-actions', $form['edit-actions']));
+      ->addCommand(new ReplaceCommand('.joinup-subscription-my-subscriptions #edit-actions', $form['edit-actions']));
   }
 
   /**
@@ -368,7 +396,7 @@ class SubscriptionsForm extends FormBase {
    */
   protected function getTriggeringElementGroupId(FormStateInterface $form_state): string {
     // Return the group ID which is stored in the third to last parent of
-    // the button: `['groups'][$group_id]['bundles']['submit']`.
+    // the button: `['groups'][$group_id]['options']['submit']`.
     $clicked_button_parents = array_values($form_state->getTriggeringElement()['#parents']);
     return $clicked_button_parents[count($clicked_button_parents) - 3];
   }
@@ -456,6 +484,7 @@ class SubscriptionsForm extends FormBase {
     return (bool) $this->entityTypeManager
       ->getStorage('og_membership')
       ->getQuery()
+      ->accessCheck(FALSE)
       ->condition('uid', $user->id())
       ->exists('subscription_bundles')
       ->count()

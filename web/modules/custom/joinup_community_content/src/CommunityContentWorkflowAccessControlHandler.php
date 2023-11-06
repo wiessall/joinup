@@ -36,35 +36,35 @@ class CommunityContentWorkflowAccessControlHandler {
    *
    * @var \Drupal\Core\Entity\EntityTypeManagerInterface
    */
-  protected $entityTypeManager;
+  protected EntityTypeManagerInterface $entityTypeManager;
 
   /**
    * The membership manager.
    *
    * @var \Drupal\og\MembershipManagerInterface
    */
-  protected $membershipManager;
+  protected MembershipManagerInterface $membershipManager;
 
   /**
    * The current logged in user.
    *
    * @var \Drupal\Core\Session\AccountInterface
    */
-  protected $currentUser;
+  protected AccountInterface $currentUser;
 
   /**
    * The configuration factory.
    *
    * @var \Drupal\Core\Config\ConfigFactoryInterface
    */
-  protected $configFactory;
+  protected ConfigFactoryInterface $configFactory;
 
   /**
    * The workflow helper class.
    *
    * @var \Drupal\joinup_workflow\WorkflowHelperInterface
    */
-  protected $workflowHelper;
+  protected WorkflowHelperInterface $workflowHelper;
 
   /**
    * Constructs a new CommunityContentWorkflowAccessControlHandler.
@@ -112,18 +112,6 @@ class CommunityContentWorkflowAccessControlHandler {
     $access = $this->hasParentViewAccess($content, $account);
     if ($access->isForbidden()) {
       return $access;
-    }
-
-    // For entities that do not have a published version and are in draft state,
-    // only the owner has access. This access restriction does not apply to
-    // moderators.
-    if (
-      !$account->hasPermission('access draft community content')
-      && !$this->hasPublishedVersion($content)
-      && $content->getWorkflowState() === 'draft'
-      && $content->getOwnerId() !== $account->id()
-    ) {
-      return AccessResult::forbidden()->addCacheableDependency($content);
     }
 
     switch ($operation) {
@@ -248,6 +236,10 @@ class CommunityContentWorkflowAccessControlHandler {
    *   The access result check.
    */
   protected function entityUpdateAccess(CommunityContentInterface $content, AccountInterface $account): AccessResultInterface {
+    if ($this->workflowHelper->accountCanNotUnarchive($content, $account)) {
+      return AccessResult::forbidden()->addCacheableDependency($content);
+    }
+
     $allowed_states = $this->workflowHelper->getAvailableTargetStates($content, $account);
     if (empty($allowed_states)) {
       return AccessResult::forbidden()->addCacheableDependency($content);

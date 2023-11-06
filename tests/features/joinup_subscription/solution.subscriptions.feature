@@ -10,10 +10,10 @@ Feature: Subscribing to a solution
       | abstract    | Abstract               |
       | description | Description            |
       | closed      | yes                    |
-      | state       | validated              |
+      | state       | published              |
     And solution:
       | title      | Some solution to subscribe |
-      | state      | validated                  |
+      | state      | published                  |
       | collection | Some parent collection     |
     And users:
       | Username          |
@@ -29,26 +29,25 @@ Feature: Subscribing to a solution
       | Legal notice | 1.1   | yes       | I have read and accept the <a href="[entity_legal_document:url]">[entity_legal_document:label]</a> | The information on this site is subject to a disclaimer... |
 
     When I am not logged in
-    And I accept essential cookies
     And I go to the "Some solution to subscribe" solution
     # This is a link which is styled as a button.
     Then I should see the link "Subscribe to this solution"
     And the "Some solution to subscribe" solution should have 0 active members
 
     When I click "Subscribe to this solution"
-    Then I should see the text "Sign in to subscribe"
+    Then a modal should open
+    And I should see the text "Sign in to subscribe"
     And I should see "Only signed in users can subscribe to this solution. Please sign in or register an account on EU Login."
     But the cookie that tracks which group I want to join should not be set
     When I press "Sign in / Register" in the "Modal buttons" region
-    Then I should see the heading "Sign in to continue"
+    And I should see the heading "Sign in to continue"
     And a cookie should be set that allows me to join "Some solution to subscribe" after authenticating
 
     When I fill in "E-mail address" with "jon@ankh.am"
     And I fill in "Password" with "j0nathan"
     And I press "Log in"
-    And I select the radio button "I am a new user (create a new account)"
-    And I check the "I have read and accept the Legal notice" material checkbox
-    And I press "Next"
+    And I check "I have read and accept the Legal notice"
+    And I press "Submit"
 
     # The user should be redirected to the solution and be presented with a
     # welcome message.
@@ -61,8 +60,8 @@ Feature: Subscribing to a solution
     # as an anonymous user, we should be shown an appropriate message.
     When I am not logged in
     And I go to the "Some solution to subscribe" solution
-    And I accept essential cookies
     And I click "Subscribe to this solution"
+    Then a modal should open
     And I press "Sign in / Register" in the "Modal buttons" region
     Then I should see the heading "Sign in to continue"
 
@@ -87,13 +86,13 @@ Feature: Subscribing to a solution
 
     When I am not logged in
     And I go to the "Some solution to subscribe" solution
-    And I accept essential cookies
     # This is a link which is styled as a button.
     Then I should see the link "Subscribe to this solution"
     And the "Some solution to subscribe" solution should have 0 active members
 
     When I click "Subscribe to this solution"
-    Then I should see the text "Sign in to subscribe"
+    Then a modal should open
+    And I should see the text "Sign in to subscribe"
     And I should see "Only signed in users can subscribe to this solution. Please sign in or register an account on EU Login."
     But the cookie that tracks which group I want to join should not be set
     When I press "Sign in / Register" in the "Modal buttons" region
@@ -143,7 +142,6 @@ Feature: Subscribing to a solution
   @javascript
   Scenario: Subscribe to a solution as a normal user
     When I am logged in as "Cornilius Darcias"
-    And I accept essential cookies
     And I go to the "Some solution to subscribe" solution
     Then I should see the button "Subscribe to this solution"
 
@@ -158,7 +156,7 @@ Feature: Subscribing to a solution
 
     # For solutions, all bundles are selected by default.
     And the following content subscriptions should be selected:
-      | Some solution to subscribe | Discussion, Document, Event, News |
+      | Some solution to subscribe | Discussion, Document, Event, News, Announcements |
     # The button "Unsubscribe from all" is visible.
     And I should see the link "Unsubscribe from all"
 
@@ -169,13 +167,11 @@ Feature: Subscribing to a solution
     Then I should not see the "Save changes" button on the "Some solution to subscribe" subscription card
     But I should see the "Saved!" button on the "Some solution to subscribe" subscription card
     And the following content subscriptions should be selected:
-      | Some solution to subscribe | Document, Event, News |
+      | Some solution to subscribe | Document, Event, News, Announcements |
 
     When I go to the "Some solution to subscribe" solution
-    And I press "You're a member"
-    And I wait for animations to finish
-    And I click "Unsubscribe from this solution"
-    And a modal should open
+    And I click "Unsubscribe"
+    Then a modal should open
 
     Then I should see the following lines of text:
       | Leave solution                                                                                                |
@@ -189,12 +185,10 @@ Feature: Subscribing to a solution
       | Some solution to subscribe | Cornilius Darcias | <role> |
     When I am logged in as "Cornilius Darcias"
     And I go to the "Some solution to subscribe" solution
-    And I press "You're a member"
-    And I wait for animations to finish
     And I click "<label>"
 
     Examples:
-      | role        | label                          |
-      |             | Unsubscribe from this solution |
-      | author      | Leave this solution            |
-      | facilitator | Leave this solution            |
+      | role        | label               |
+      |             | Unsubscribe         |
+      | author      | Leave this solution |
+      | facilitator | Leave this solution |

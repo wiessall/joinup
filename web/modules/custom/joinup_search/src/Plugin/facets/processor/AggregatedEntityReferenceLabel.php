@@ -104,7 +104,7 @@ class AggregatedEntityReferenceLabel extends ProcessorPluginBase implements Buil
     // the field definition associated with them.
     $reference_types = [];
     foreach ($field->getConfiguration()['fields'] as $combined_id) {
-      list($datasource_id, $property_path) = Utility::splitCombinedId($combined_id);
+      [$datasource_id, $property_path] = Utility::splitCombinedId($combined_id);
       $properties = $index->getPropertyDefinitions($datasource_id);
       if (isset($properties[$property_path])) {
         $property = $properties[$property_path];

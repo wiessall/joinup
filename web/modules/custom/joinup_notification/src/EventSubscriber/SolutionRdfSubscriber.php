@@ -5,13 +5,11 @@ declare(strict_types = 1);
 namespace Drupal\joinup_notification\EventSubscriber;
 
 use Drupal\Core\Entity\EntityInterface;
-use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\joinup_notification\Event\NotificationEvent;
 use Drupal\joinup_notification\NotificationEvents;
 use Drupal\joinup_workflow\EntityWorkflowStateInterface;
 use Drupal\og\OgRoleInterface;
 use Drupal\solution\Entity\SolutionInterface;
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
  * Notification handler for the notifications related to solutions.
@@ -54,14 +52,12 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
  *   Recipients: moderator
  * Template 17: sol_deletion_by_moderator
  *   Operation: delete
- *   Source state: validated, proposed
+ *   Source state: published, proposed
  *   Actor: moderator
  *   Recipients: owner
  * @codingStandardsIgnoreEnd
  */
-class SolutionRdfSubscriber extends NotificationSubscriberBase implements EventSubscriberInterface {
-
-  use StringTranslationTrait;
+class SolutionRdfSubscriber extends NotificationSubscriberBase {
 
   const TEMPLATE_APPROVE = 'sol_approve_proposed';
   const TEMPLATE_BLACKLIST = 'sol_blacklist';
@@ -279,7 +275,7 @@ class SolutionRdfSubscriber extends NotificationSubscriberBase implements EventS
    */
   protected function notificationPropose(): void {
     switch ($this->fromState) {
-      case 'validated':
+      case 'published':
         $user_data = [
           'og_roles' => [
             'rdf_entity-solution-administrator' => [
@@ -409,18 +405,11 @@ class SolutionRdfSubscriber extends NotificationSubscriberBase implements EventS
   /**
    * {@inheritdoc}
    */
-  protected function getConfigurationName(): string {
-    return '';
-  }
-
-  /**
-   * {@inheritdoc}
-   */
   protected function generateArguments(EntityInterface $entity): array {
     $arguments = parent::generateArguments($entity);
     /** @var \Drupal\user\UserInterface $actor */
     $actor = $this->entityTypeManager->getStorage('user')->load($this->currentUser->id());
-    $motivation = isset($this->entity->motivation) ? $this->entity->motivation : '';
+    $motivation = $this->entity->motivation ?? '';
     $arguments['@transition:motivation'] = $motivation;
 
     if (empty($arguments['@actor:role'])) {

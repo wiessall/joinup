@@ -9,18 +9,18 @@ dependencies:
     - ventuno
 id: ventuno_overviewmessage
 theme: ventuno
-region: sidebar
-weight: -19
+region: content
+weight: -16
 provider: null
 plugin: overview_message_block
 settings:
   id: overview_message_block
   label: 'Overview message'
-  provider: joinup_group
   label_display: '0'
+  provider: joinup_group
 visibility:
   request_path:
     id: request_path
-    pages: "/collections\n/solutions"
     negate: false
     context_mapping: {  }
+    pages: "/collections\r\n/solutions"

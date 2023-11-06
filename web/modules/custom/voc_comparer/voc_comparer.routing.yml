@@ -1,0 +1,7 @@
+voc_comparer.compare:
+  path: '/admin/voc-comparer/eira'
+  defaults:
+    _title: 'EIRA version compare'
+    _form: 'Drupal\voc_comparer\Form\EiraVocabularyVersionCompareForm'
+  requirements:
+    _permission: 'compare vocabulary versions'

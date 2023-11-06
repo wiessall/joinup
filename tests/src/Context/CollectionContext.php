@@ -6,6 +6,7 @@ namespace Drupal\joinup\Context;
 
 use Behat\Gherkin\Node\TableNode;
 use Behat\Mink\Exception\ElementNotFoundException;
+use Drupal\Core\Session\AccountInterface;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\DrupalExtension\Hook\Scope\BeforeNodeCreateScope;
 use Drupal\collection\Entity\CollectionInterface;
@@ -13,7 +14,6 @@ use Drupal\joinup\Traits\EntityReferenceTrait;
 use Drupal\joinup\Traits\EntityTrait;
 use Drupal\joinup\Traits\FileTrait;
 use Drupal\joinup\Traits\FormTrait;
-use Drupal\joinup\Traits\NodeTrait;
 use Drupal\joinup\Traits\OgTrait;
 use Drupal\joinup\Traits\RdfEntityTrait;
 use Drupal\joinup\Traits\SearchTrait;
@@ -38,7 +38,6 @@ class CollectionContext extends RawDrupalContext {
   use EntityTrait;
   use FileTrait;
   use FormTrait;
-  use NodeTrait;
   use OgMenuTrait;
   use OgTrait;
   use RdfEntityTrait;
@@ -57,7 +56,6 @@ class CollectionContext extends RawDrupalContext {
     'short ID' => 'field_short_id',
     'abstract' => 'field_ar_abstract',
     'access url' => 'field_ar_access_url',
-    'banner' => 'field_ar_banner',
     'closed' => 'field_ar_closed',
     'contact information' => 'field_ar_contact_information',
     'content creation' => 'field_ar_content_creation',
@@ -79,7 +77,7 @@ class CollectionContext extends RawDrupalContext {
    *
    * @var \Drupal\rdf_entity\Entity\Rdf[]
    */
-  protected $collections = [];
+  protected array $collections = [];
 
   /**
    * Navigates to the propose collection form.
@@ -104,27 +102,8 @@ class CollectionContext extends RawDrupalContext {
    */
   public function visitCollection(string $collection): void {
     /** @var \Drupal\rdf_entity\Entity\Rdf $entity */
-    $entity = $this->getCollectionByName($collection);
+    $entity = $this->getEntityByLabel('rdf_entity', $collection, 'collection');
     $this->visitPath($entity->toUrl()->toString());
-  }
-
-  /**
-   * Returns the Collection with the given title.
-   *
-   * If multiple collections have the same title,
-   * the first one will be returned.
-   *
-   * @param string $title
-   *   The collection title.
-   *
-   * @return \Drupal\collection\Entity\CollectionInterface
-   *   The collection.
-   *
-   * @throws \InvalidArgumentException
-   *   Thrown when a collection with the given title does not exist.
-   */
-  protected function getCollectionByName(string $title): CollectionInterface {
-    return $this->getRdfEntityByLabel($title, 'collection');
   }
 
   /**
@@ -149,7 +128,7 @@ class CollectionContext extends RawDrupalContext {
    * @codingStandardsIgnoreStart
    * | title                   | abstract                                   | access url                             | closed | creation date    | description                                                                                                        | content creation                                  | featured | logo | moderation | modification date | owner | state                                              |
    * | Dog owner collection    | Read up on all about <strong>dogs</strong> | http://dogtime.com/dog-breeds/profiles | yes|no | 28-01-1995 12:05 | The Afghan Hound is elegance personified.                                                                          | facilitators and authors|members|registered users | yes      |      | yes        |                   |       |                                                    |
-   * | Cats collection 4 ever! | Cats are cool!                             | http://mashable.com/category/cats/     | yes|no | 28-01-1995 12:06 | The domestic cat (Felis catus or Felis silvestris catus) is a small usually furry domesticated carnivorous mammal. | facilitators and authors|members|registered users | no       |      | no         |                   |       | draft|proposed|validated|archival request|archived |
+   * | Cats collection 4 ever! | Cats are cool!                             | http://mashable.com/category/cats/     | yes|no | 28-01-1995 12:06 | The domestic cat (Felis catus or Felis silvestris catus) is a small usually furry domesticated carnivorous mammal. | facilitators and authors|members|registered users | no       |      | no         |                   |       | draft|proposed|published|archival request|archived |
    * @codingStandardsIgnoreEnd
    *
    * Only the title field is required.
@@ -242,7 +221,7 @@ class CollectionContext extends RawDrupalContext {
       'field_ar_state' => [
         'draft' => 'draft',
         'proposed' => 'proposed',
-        'validated' => 'validated',
+        'published' => 'published',
         'archival request' => 'archival_request',
         'archived' => 'archived',
       ],
@@ -277,13 +256,10 @@ class CollectionContext extends RawDrupalContext {
    *   Thrown when a given image is not found.
    */
   protected function createCollection(array $values): CollectionInterface {
-    // Add images.
-    $image_fields = ['field_ar_banner', 'field_ar_logo'];
-    foreach ($image_fields as $field_name) {
-      if (!empty($values[$field_name])) {
-        foreach ($values[$field_name] as &$filename) {
-          $filename = [$this->createFile($filename)->id()];
-        }
+    // Add logo image.
+    if (!empty($values['field_ar_logo'])) {
+      foreach ($values['field_ar_logo'] as &$filename) {
+        $filename = [$this->createFile($filename)->id()];
       }
     }
 
@@ -329,7 +305,7 @@ class CollectionContext extends RawDrupalContext {
    * | closed           | yes|no                                             |
    * | content creation | facilitators and authors|members|registered users  |
    * | metadata url     | https://ec.europa.eu/my/url                        |
-   * | state            | draft|proposed|validated|archival request|archived |
+   * | state            | draft|proposed|published|archival request|archived |
    * @codingStandardsIgnoreEnd
    *
    * Only the title field is required.
@@ -374,7 +350,7 @@ class CollectionContext extends RawDrupalContext {
    * @When I delete the :collection collection
    */
   public function deleteCollection(string $collection): void {
-    $collection = $this->getCollectionByName($collection);
+    $collection = $this->getEntityByLabel('rdf_entity', $collection);
     $collection->skip_notification = TRUE;
     $collection->delete();
   }
@@ -417,7 +393,7 @@ class CollectionContext extends RawDrupalContext {
    */
   public function givenCollectionUserMemberships(TableNode $membership_table): void {
     foreach ($membership_table->getColumnsHash() as $values) {
-      $group = $this->getCollectionByName($values['collection']);
+      $group = $this->getEntityByLabel('rdf_entity', $values['collection']);
       $this->givenUserMembership($group, $values);
     }
   }
@@ -481,11 +457,11 @@ class CollectionContext extends RawDrupalContext {
    */
   public function assertCollectionOwnership(string $username, string $rdf_entity): void {
     $user = user_load_by_name($username);
-    if (empty($user)) {
+    if (!$user instanceof AccountInterface) {
       throw new \Exception("User {$username} could not be found.");
     }
 
-    $collection = $this->getRdfEntityByLabel($rdf_entity, 'collection');
+    $collection = $this->getEntityByLabel('rdf_entity', $rdf_entity, 'collection');
     $owner_roles = [
       OgRoleInterface::ADMINISTRATOR,
       OgRoleInterface::AUTHENTICATED,
@@ -525,17 +501,12 @@ class CollectionContext extends RawDrupalContext {
       return;
     }
 
-    // Since we might be cleaning up many collections, temporarily disable the
-    // feature to commit the index after every query.
-    $this->disableCommitOnUpdate();
-
     // Remove any collections that were created.
     foreach ($this->collections as $collection) {
       $collection->skip_notification = TRUE;
       $collection->delete();
     }
     $this->collections = [];
-    $this->enableCommitOnUpdate();
   }
 
   /**
@@ -599,7 +570,7 @@ class CollectionContext extends RawDrupalContext {
   public function verifyDeleteLinkVisibility(TableNode $check_table): void {
     foreach ($check_table->getColumnsHash() as $values) {
       $user = $this->getUserByName($values['user']);
-      $collection = $this->getCollectionByName($values['collection']);
+      $collection = $this->getEntityByLabel('rdf_entity', $values['collection']);
       $visible = $values['delete link'] === 'yes';
       $this->assertGroupEntityOperation($visible, 'delete', $collection, $user);
     }
@@ -675,7 +646,7 @@ class CollectionContext extends RawDrupalContext {
    * @When I change the name of the :collection collection to :name
    */
   public function updateCollectionName(string $collection, string $name): void {
-    $entity = $this->getCollectionByName($collection);
+    $entity = $this->getEntityByLabel('rdf_entity', $collection);
     $entity->setName($name)->save();
   }
 
@@ -693,7 +664,7 @@ class CollectionContext extends RawDrupalContext {
     return $this->createCollection([
       'id' => JoinupCollectionHelper::getCollectionId(),
       'label' => 'Joinup',
-      'field_ar_state' => 'validated',
+      'field_ar_state' => 'published',
     ]);
   }
 
@@ -746,7 +717,7 @@ class CollectionContext extends RawDrupalContext {
    *
    * @BeforeNodeCreate
    */
-  public function provideCollection(BeforeNodeCreateScope $scope) {
+  public function provideCollection(BeforeNodeCreateScope $scope): void {
     $node = $scope->getEntity();
 
     // Only deal with collection content.

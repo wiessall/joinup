@@ -1,0 +1,63 @@
+.btn {
+  &:not(.btn-link) {
+    &:hover {
+      box-shadow: $box-shadow;
+    }
+  }
+}
+
+a.btn-link {
+  &:hover {
+    text-decoration: none;
+  }
+}
+
+.btn-primary {
+  &:hover {
+    background-color: lighten(desaturate($primary, 23.76), 8.63);
+  }
+  &:focus,
+  &:active,
+  &.active {
+    background-color: $primary-darker;
+  }
+}
+
+.btn-secondary {
+  color: $brand-darker;
+  &:hover {
+    color: $brand-darker;
+  }
+}
+
+.btn-light {
+  color: $primary;
+  &:hover {
+    color: $primary;
+  }
+}
+
+.button--primary {
+  @extend .btn-primary;
+}
+
+.button--secondary {
+  @extend .btn-secondary;
+}
+
+.button--link {
+  @extend .btn-link;
+}
+
+.btn--icon {
+  color: $white;
+  padding: 0;
+  background-color: transparent;
+  border: none;
+  box-shadow: none;
+  border-radius: 0;
+  &:hover {
+    box-shadow: none;
+    background-color: transparent;
+  }
+}

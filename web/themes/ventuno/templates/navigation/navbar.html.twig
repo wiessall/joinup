@@ -1,5 +1,5 @@
 
-{% spaceless %}
+{% apply spaceless %}
 
 {# Parameters:
   - brand (object) (default: {})
@@ -37,16 +37,27 @@
 #}
 
 {{ attach_library('ventuno/navbar') }}
+{# todo: Remove this code in ISAICP-8015. #}
+{{ attach_library('ventuno_helper/ckeditor5-disable') }}
+
+{% if search %}
+  {{ attach_library('ventuno/navbar-search') }}
+{% endif %}
 
 {% set _brand = brand|default({}) %}
 {% set _collapse_id = collapse_id|default('') %}
 {% set _list_id = list_id|default('') %}
 {% set _items = items|default([{}]) %}
 
-{% set _nav_classes = ['joinup-navbar', 'navbar', 'navbar-expand', 'joinup-navbar--sticky'] %}
+{% set _nav_classes = [
+  'joinup-navbar',
+  'navbar',
+  'navbar-expand',
+  directory is same as 'themes/ventuno'? 'navbar--sticky',
+] %}
 {% set _navbar_toggler_classes = ['navbar-toggler'] %}
-{% set _list_id = list_id|default('accordion-1') %}
-{% set _list_classes = ['navbar-nav', 'accordion', 'accordion-flush'] %}
+{% set _list_id = list_id|default('list-1') %}
+{% set _list_classes = ['navbar-nav'] %}
 
 {% if nav_attributes is empty %}
   {% set nav_attributes = create_attribute() %}
@@ -64,7 +75,7 @@
   {% set list_item_attributes = create_attribute() %}
 {% endif %}
 
-{% set nav_attributes = nav_attributes.addClass(_nav_classes).setAttribute('id', 'joinup-navbar') %}
+{% set nav_attributes = nav_attributes.addClass(_nav_classes) %}
 {% set navbar_toggler_attributes = navbar_toggler_attributes.addClass(_navbar_toggler_classes) %}
 {% set navbar_toggler_attributes = navbar_toggler_attributes.setAttribute('type', 'button') %}
 {% set navbar_toggler_attributes = navbar_toggler_attributes.setAttribute('data-bs-toggle', 'collapse') %}
@@ -72,105 +83,170 @@
 {% set navbar_toggler_attributes = navbar_toggler_attributes.setAttribute('aria-controls', _list_id) %}
 {% set navbar_toggler_attributes = navbar_toggler_attributes.setAttribute('aria-expanded', 'false') %}
 {% set navbar_toggler_attributes = navbar_toggler_attributes.setAttribute('aria-label', 'Toggle navigation') %}
+{% set navbar_toggler_attributes = navbar_toggler_attributes.setAttribute('role', 'banner') %}
 {% set list_attributes = list_attributes.addClass(_list_classes) %}
 {% set list_attributes = list_attributes.setAttribute('id', _list_id) %}
 
-<nav
+<header
   {{ nav_attributes }}
 >
   <div class="container">
-    <a class="navbar-brand" href="{{ _brand.link }}">
-      <img class="navbar-brand-image" src="{{ _brand.src }}" alt="{{ _brand.alt }}" />
-    </a>
-    {% if _brand.motto is not empty %}
-      <span class="navbar-motto d-none d-md-block">{{ _brand.motto }}</span>
-    {% endif %}
-
-    <div class="" id="{{ _collapse_id }}">
+    <div class="d-flex">
+      <a class="navbar-brand" href="{{ _brand.link }}">
+        <img class="navbar-brand-image" src="{{ _brand.src }}" alt="{{ _brand.alt }}" width="96" height="25"/>
+      </a>
+    </div>
+    <nav id="{{ _collapse_id }}">
       <ul
         {{ list_attributes }}
       >
         {% for item in _items %}
           {% if item.breakpoint %}
-            {% for link in item.links %}
+            {% for link_key,link in item.links %}
               {% if not link.hide_on_desktop %}
-                <li class="nav-item d-none d-{{ item.breakpoint }}-inline-block">
+                {% set desktop_li_attributes = create_attribute() %}
+                {% set desktop_li_classes = [
+                  "nav-item",
+                  "d-none",
+                  "d-" ~ item.breakpoint ~ "-inline-block",
+                  link.children ? 'dropdown'
+                ] %}
+
+                <li{{ desktop_li_attributes.addClass(desktop_li_classes) }}>
                   {% if link.link %}
                     {% set attributes = create_attribute(link.attributes|default([])) %}
-                    {{ link(link.label, link.link, attributes.addClass('nav-link')) }}
+                    {% set desktop_a_classes = [
+                      "nav-link",
+                      "nav-link--underline",
+                      link.children ? 'dropdown-toggle'
+                    ] %}
+
+                    {% if link.children%}
+                      {% set attributes = attributes.setAttribute('aria-expanded', 'false') %}
+                      {% set attributes = attributes.setAttribute('id', link_key) %}
+                      {% set attributes = attributes.setAttribute('role', 'button') %}
+                    {% endif %}
+
+                    {{ link(link.label, link.link, attributes.addClass(desktop_a_classes)) }}
+                    {% if link.children %}
+                      <ul class="dropdown-menu dropdown-menu--sub" aria-labelledby="{{ link_key }}">
+                        {% for child in link.children %}
+                          <li>
+                            <a href="{{ child.link }}" class="dropdown-item">
+                              {{ child.label }}
+                            </a>
+                          </li>
+                        {% endfor %}
+                      </ul>
+                    {% endif %}
+
                   {% elseif link.popover %}
                     <button
-                      data-bs-toggle="popover"
-                      autocomplete="off"
-                      data-bs-placement="bottom"
-                      data-bs-content="<a class='popover__cta' href='{{ link.popover.cta.link }}' {{ link.popover.cta.attributes }}>{{ link.popover.cta.text }}</a><p class='popover__description'>{{ link.popover.description }}</p>"
-                      data-bs-custom-class="navbar__popover"
-                      data-bs-html="true"
-                      data-bs-container=".nav-item"
-                      data-bs-offset="-74, 16"
-                      class="btn btn-light popover-trigger popover-getstarted"
+                      id="{{ link.id }}"
+                      class="btn btn-light get-started__trigger"
+                      data-bs-toggle="dropdown"
+                      aria-expanded="false"
                       type="button"
+                      data-bs-auto-close="outside"
                     >
                       {{ link.label }}
                     </button>
+                    <div
+                      class="dropdown-menu get-started__menu"
+                      aria-labelledby="{{ link.id }}"
+                      data-popper-placement="right"
+                    >
+                      <a class="get-started__cta" href="{{ link.popover.cta.link }}" {{ link.popover.cta.attributes }}>
+                        {{ link.popover.cta.text }}
+                        <svg class="bi icon--s ms-2">
+                          <use xlink:href="{{ bcl_icon_path }}#arrow-right"></use>
+                        </svg>
+                      </a>
+                      <p class="get-started__description">{{ link.popover.description }}</p>
+                    </div>
                   {% endif %}
                 </li>
               {% endif %}
             {% endfor %}
           {% endif %}
           {% set list_item_attributes = create_attribute() %}
-          {% set _list_item_classes = item.classes|default([])|merge(['nav-item', 'accordion-item']) %}
+          {% set _list_item_classes = item.classes|default([])|merge(['nav-item', 'dropdown']) %}
           {% if item.breakpoint %}
             {% set _list_item_classes = _list_item_classes|merge(['d-' ~ item.breakpoint ~ '-none']) %}
           {% endif %}
           {% set list_item_attributes = list_item_attributes.addClass(_list_item_classes) %}
           <li {{ list_item_attributes }}>
-            <span class="accordion-header" id="heading-{{ item.id }}">
-              <button
-                class="accordion-button nav-link"
-                data-bs-toggle="collapse"
-                autocomplete="off"
-                data-bs-target="#collapse-{{ item.id }}"
-                aria-controls="collapse-{{ item.id }}"
-                aria-expanded="false"
-                type="button"
-                title="{{ 'Toggle menu'|t }}"
-              >
-                {% if item.icon is not empty %}
-                  <svg class="bi icon--s">
-                    <use xlink:href="{{ ventuno_icon_path }}#{{ item.icon.name }}"></use>
-                  </svg>
-                {% endif %}
-                {% if item.label is not empty %}
-                  <span class="accordion-button-label">{{ item.label }}</span>
-                {% endif %}
-              </button>
-            </span>
-            <div
-              id="collapse-{{ item.id }}"
-              class="accordion-collapse collapse rounded-bottom"
-              aria-labelledby="heading-{{ item.id }}"
-              data-bs-parent="#{{ _list_id }}"
+            <button
+              id="{{ item.id }}"
+              class="dropdown-toggle nav-link"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+              type="button"
+              data-bs-auto-close="outside"
+              aria-label="{{ item.label }}"
             >
-              <div class="accordion-body">
-                <ul class="accordion-list">
-                  {% for link in item.links %}
+              <span class="visually-hidden">{{ item.label }}</span>
+              {% if item.icon is not empty %}
+                <svg class="bi icon--s">
+                  <use xlink:href="{{ bcl_icon_path }}#{{ item.icon.name }}"></use>
+                </svg>
+              {% endif %}
+            </button>
+            <div
+              {% if item.type is same as 'search' and search %}
+                id="dropdown-menu--search"
+              {% endif %}
+              class="dropdown-menu p-0"
+              aria-labelledby="{{ item.id }}"
+              data-popper-placement="right"
+            >
+              {% if item.type is same as 'search' and search %}
+                <div class="navbar-search p-2">
+                  {{ search }}
+                </div>
+              {% else %}
+                <ul class="dropdown-list">
+                  {% for link_key,link in item.links %}
                     {% if link.link %}
-                      <li class="accordion-list-item">
-                        <a href="{{ link.link }}" class="accordion-list-link">
+                      <li class="dropdown-list-item">
+                        {% set attributes = create_attribute(link.attributes|default([])) %}
+                        {% if link.children%}
+                          {% set attributes = attributes.setAttribute('aria-expanded', 'false') %}
+                          {% set attributes = attributes.setAttribute('id', link_key) %}
+                          {% set attributes = attributes.setAttribute('role', 'button') %}
+                          {% set attributes = attributes.setAttribute('data-bs-toggle', 'dropdown') %}
+                        {% endif %}
+
+                        <a href="{{ link.link }}" {{ attributes.addClass( ['dropdown-list-link']) }}>
                           {{ link.label }}
+                          {% if link.children %}
+                            {{ pattern('icon', {
+                              name: 'chevron-down',
+                              size: 'xs',
+                            }) }}
+                          {% endif %}
                         </a>
+                        {% if link.children %}
+                          <ul class="dropdown-menu dropdown-menu--sub" aria-labelledby="{{ link_key }}">
+                            {% for child in link.children %}
+                              <li class="dropdown-list-item">
+                                <a href="{{ child.link }}" class="dropdown-list-link">
+                                  {{ child.label }}
+                                </a>
+                              </li>
+                            {% endfor %}
+                          </ul>
+                        {% endif %}
                       </li>
                     {% endif %}
                   {% endfor %}
                 </ul>
-              </div>
+              {% endif %}
             </div>
           </li>
         {% endfor %}
       </ul>
-    </div>
+    </nav>
   </div>
-</nav>
-
-{% endspaceless %}
+</header>
+{% endapply %}

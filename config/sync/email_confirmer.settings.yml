@@ -1,0 +1,21 @@
+_core:
+  default_config_hash: mZPvli4k5ulC_BcD35Yk2c8mlzSa6xwRkustThIT4jk
+langcode: en
+hash_expiration: 432000
+restrict_same_ip: false
+resendrequest_delay: 3600
+confirmation_lifetime: 0
+confirmation_request:
+  subject: '[site:name] - Please validate your contact details'
+  body: '<p>Dear Joinup user,</p><p>As owner/facilitator, we’re improving your privacy by replacing the publicly visible contact email information with a contact form that users/members can use to reach you.</p><p>Please confirm your email address <strong>[email-confirmer:confirmation-mail]</strong>, which is set in your contact information for the following:</p>[email-confirmer:confirmation-entities]<p><strong><a href="[email-confirmer:confirmation-url]">Confirm your e-mail address</a></strong><p><p>If the link doesn''t work, just copy this URL to your browser:</p><p>[email-confirmer:confirmation-url]</p><p>If you do not validate your email within the next 5 days, you will not be able to receive any messages from users/members.</p><p>If you think this action is not clear or not due, please contact Joinup Support at <a href="https://joinup.ec.europa.eu/contact" taget="_blank">https://joinup.ec.europa.eu/contact</a>.</p><p>Best regards,<br />The Joinup Team</p>'
+confirmation_response:
+  skip_confirmation_form: false
+  questions:
+    pending: 'Proceed to confirm your email address.'
+    expired: 'This email confirmation process has expired.'
+    cancelled: 'This email confirmation process was cancelled.'
+    confirmed: 'Your email address was confirmed.'
+  url:
+    confirm: '<front>'
+    cancel: '<front>'
+    error: '<front>'

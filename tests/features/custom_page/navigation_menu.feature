@@ -1,4 +1,4 @@
-@api @group-a
+@api @terms @group-a
 Feature: Navigation menu for custom pages
   In order to determine the order and visibility of custom pages in the navigation menu
   As a facilitator
@@ -7,8 +7,8 @@ Feature: Navigation menu for custom pages
   Scenario Outline: Access the navigation menu through the contextual link
     Given the following <group>s:
       | title            | logo     | state     |
-      | Rainbow tables   | logo.png | validated |
-      | Cripple Mr Onion | logo.png | validated |
+      | Rainbow tables   | logo.png | published |
+      | Cripple Mr Onion | logo.png | published |
 
     # By default, a link to the collection canonical page and a link to the
     # about page are added to the menu.
@@ -21,24 +21,24 @@ Feature: Navigation menu for custom pages
       | Members  |
       | About    |
     # Check that the 'Edit menu' local action is present.
-    And I should see the contextual link "Edit menu" in the "Left sidebar" region
+    And I should see the contextual link "Edit menu" in the "Header" region
     # The 'Add link' local action that is present in the default implementation
     # of OG Menu should not be visible. We are managing the menu links behind
     # the scenes. The end user should not be able to interact with these.
-    But I should not see the contextual link "Add link" in the "Left sidebar" region
+    But I should not see the contextual link "Add link" in the "Header" region
 
     # When we create a custom page it should automatically show up in the menu.
-    When I click the contextual link "Add new page" in the "Left sidebar" region
+    When I click the contextual link "Add new page" in the "Header" region
     Then I should see the heading "Add custom page"
     When I fill in the following:
-      | Title | About us |
-    And I enter "A short introduction." in the "Body" wysiwyg editor
-    And I press "Save"
+      | Title  | About us    |
+    And I select "HR" from "Topic"
+    And I press "Publish"
     Then I should see the success message "Custom page About us has been created."
     And the navigation menu of the "Rainbow tables" <group> should have <visible items 2> visible items
 
-    When I click the contextual link "Edit menu" in the "Left sidebar" region
-    Then the navigation menu of the "Rainbow tables" <group> should have 5 items
+    When I click the contextual link "Edit menu" in the "Header" region
+    Then the navigation menu of the "Rainbow tables" <group> should have 6 items
 
     # It should be possible to hide an item from the menu by disabling it.
     When I disable "About us" in the navigation menu of the "Rainbow tables" <group>
@@ -51,10 +51,10 @@ Feature: Navigation menu for custom pages
     And I disable "About" in the navigation menu of the "Rainbow tables" <group>
     And I go to the homepage of the "Rainbow tables" <group>
     Then I should see the text "All the pages have been disabled for this <group>. You can edit the menu configuration or add a new page."
-    And I should see the contextual link "Edit menu" in the "Left sidebar" region
+    And I should see the contextual link "Edit menu" in the "Header" region
 
     # The contextual menu can be used to navigate to the menu edit page.
-    When I click the contextual link "Edit menu" in the "Left sidebar" region
+    When I click the contextual link "Edit menu" in the "Header" region
     Then I should see the heading "Edit navigation menu of the Rainbow tables <group>"
 
     # The form to add a new menu link should not be accessible by anyone. This
@@ -71,9 +71,9 @@ Feature: Navigation menu for custom pages
     # Create a few custom pages in the second collection so we can check if the
     # right menu shows up in each collection.
     Given custom_page content:
-      | title           | body                                                                                                                                  | <group>          |
-      | Eights are wild | You cannot Cripple Mr Onion if your running flush contains more wild eights than the Lesser or Great Onion you are trying to cripple. | Cripple Mr Onion |
-      | Eights are null | They can be included in an existing Onion in order to improve its size by one card.                                                   | Cripple Mr Onion |
+      | title           | body                                                                                                                                  | <group>          | state     | topic |
+      | Eights are wild | You cannot Cripple Mr Onion if your running flush contains more wild eights than the Lesser or Great Onion you are trying to cripple. | Cripple Mr Onion | published | HR    |
+      | Eights are null | They can be included in an existing Onion in order to improve its size by one card.                                                   | Cripple Mr Onion | published | HR    |
 
     # Test as a normal member of the group.
     Given I am logged in as a member of the "Rainbow tables" <group>
@@ -128,8 +128,36 @@ Feature: Navigation menu for custom pages
 
     Examples:
       | group      | visible items 1 | visible items 2 | visible items 3 |
-      | collection | 4               | 5               | 4               |
-      | solution   | 3               | 4               | 3               |
+      | collection | 5               | 6               | 5               |
+      | solution   | 4               | 5               | 4               |
+
+  @javascript
+  Scenario: For menus with more than 6 items, the 6th and beyond should be wrapped in a dropdown
+    Given collection:
+      | title | Plaster molds |
+      | state | published     |
+    And custom_page content:
+      | title             | body                   | collection    | state     | topic |
+      | Molds for walls   | This is a sample body. | Plaster molds | published | HR    |
+      | Molds for crafts  | This is a sample body. | Plaster molds | published | HR    |
+      | Molds for pottery | This is a sample body. | Plaster molds | published | HR    |
+    # A menu with 6 items is displayed normally
+    When I go to the "Plaster molds" collection
+    Then I should see the link "Molds for pottery" in the "Navigation menu"
+    But I should not see the text "See more" in the "Navigation menu"
+    # A menu with more than 6 items has the first 5 displayed normally
+    # Then the rest of items is wrapped in a dropdown
+    Given custom_page content:
+      | title           | body                   | collection    | state     | topic |
+      | Vintage molds   | This is a sample body. | Plaster molds | published | HR    |
+      | Plaster casting | This is a sample body. | Plaster molds | published | HR    |
+    When I go to the "Plaster molds" collection
+    Then I should see the text "See more" in the "Navigation menu"
+    But I should not see the text "Molds for walls" in the "Navigation menu"
+    And I should not see the text "Vintage molds" in the "Navigation menu"
+    Then I press "See more"
+    And I should see the text "Molds for walls" in the "Navigation menu"
+    And I should see the text "Vintage molds" in the "Navigation menu"
 
   @javascript
   Scenario Outline: The contextual links button in the navigation menu should be always visible
@@ -139,25 +167,24 @@ Feature: Navigation menu for custom pages
     Given the following <group>:
       | title | Prism Gazers |
       | logo  | logo.png     |
-      | state | validated    |
+      | state | published    |
     And custom_page content:
-      | title           | body                   | <group>      |
-      | Mists of dreams | This is a sample body. | Prism Gazers |
+      | title           | body                   | <group>      | state     | topic |
+      | Mists of dreams | This is a sample body. | Prism Gazers | published | HR    |
     When I am logged in as a facilitator of the "Prism Gazers" <group>
-    And I accept essential cookies
     And I go to the homepage of the "Prism Gazers" <group>
-    Then I should see the contextual links button in the "Navigation menu block"
+    Then I should see the contextual links button in the "Navigation menu"
     # The links to manage the navigation menu should only appear after clicking on the button.
-    And the "Edit menu" link in the "Navigation menu block" should not be visible
-    And the "Add new page" link in the "Navigation menu block" should not be visible
+    And the "Edit menu" link in the "Navigation menu" should not be visible
+    And the "Add new page" link in the "Navigation menu" should not be visible
     # Click the button, now the links appear.
-    When I click the contextual links button in the "Navigation menu block"
-    Then the "Edit menu" link in the "Navigation menu block" should be visible
-    And the "Add new page" link in the "Navigation menu block" should be visible
+    When I click the contextual links button in the "Navigation menu"
+    Then the "Edit menu" link in the "Navigation menu" should be visible
+    And the "Add new page" link in the "Navigation menu" should be visible
     # Click the button a second time to hide the links again.
-    When I click the contextual links button in the "Navigation menu block"
-    Then the "Edit menu" link in the "Navigation menu block" should not be visible
-    And the "Add new page" link in the "Navigation menu block" should not be visible
+    When I click the contextual links button in the "Navigation menu"
+    Then the "Edit menu" link in the "Navigation menu" should not be visible
+    And the "Add new page" link in the "Navigation menu" should not be visible
 
     Examples:
       | group      |
@@ -167,10 +194,10 @@ Feature: Navigation menu for custom pages
   Scenario Outline: Synchronize titles of custom pages and menu links
     Given the following <group>:
       | title | Ravenous wood-munching alphabeavers |
-      | state | validated                           |
+      | state | published                           |
     And custom_page content:
-      | title       | body                                                                | <group>                             |
-      | Tree eaters | Given time, they will most likely strip the entire region of trees. | Ravenous wood-munching alphabeavers |
+      | title       | body                                                                | <group>                             | topic | state     |
+      | Tree eaters | Given time, they will most likely strip the entire region of trees. | Ravenous wood-munching alphabeavers | HR    | published |
     When I am logged in as a facilitator of the "Ravenous wood-munching alphabeavers" "<group>"
     And I go to the homepage of the "Ravenous wood-munching alphabeavers" <group>
     Then I should see the link "Tree eaters" in the "Navigation menu"
@@ -179,7 +206,7 @@ Feature: Navigation menu for custom pages
     When I click "Tree eaters"
     And I click "Edit" in the "Entity actions" region
     And I fill in "Title" with "An army of furry little killing machines"
-    And I press "Save"
+    And I press "Update"
     And I go to the homepage of the "Ravenous wood-munching alphabeavers" <group>
     Then I should see the link "An army of furry little killing machines" in the "Navigation menu"
     And I should not see the link "Tree eaters" in the "Navigation menu"
@@ -192,18 +219,18 @@ Feature: Navigation menu for custom pages
   Scenario Outline: Only the links below the topmost page are rendered in TOC.
     Given the following <group>s:
       | title                   | state     |
-      | Table of contents group | validated |
+      | Table of contents group | published |
     And custom_page content:
-      | title         | <group>                 |
-      | Page 1        | Table of contents group |
-      | Page 2        | Table of contents group |
-      | Page 3        | Table of contents group |
-      | Subpage 1-1   | Table of contents group |
-      | Subpage 1-1-1 | Table of contents group |
-      | Subpage 1-2   | Table of contents group |
-      | Subpage 1-2-1 | Table of contents group |
-      | Subpage 1-2-2 | Table of contents group |
-      | Subpage 2-1   | Table of contents group |
+      | title         | <group>                 | state     | topic |
+      | Page 1        | Table of contents group | published | HR    |
+      | Page 2        | Table of contents group | published | HR    |
+      | Page 3        | Table of contents group | published | HR    |
+      | Subpage 1-1   | Table of contents group | published | HR    |
+      | Subpage 1-1-1 | Table of contents group | published | HR    |
+      | Subpage 1-2   | Table of contents group | published | HR    |
+      | Subpage 1-2-1 | Table of contents group | published | HR    |
+      | Subpage 1-2-2 | Table of contents group | published | HR    |
+      | Subpage 2-1   | Table of contents group | published | HR    |
     And the following custom page menu structure:
       | title         | parent      | weight |
       | Page 1        |             | 1      |
@@ -260,9 +287,9 @@ Feature: Navigation menu for custom pages
     And I should not see the link "Overview" in the "Table of contents"
     And I should not see the link "Members" in the "Table of contents"
     And I should not see the link "About" in the "Table of contents"
-    But I should see the link "Overview" in the "Navigation menu block"
-    And I should see the link "Members" in the "Navigation menu block"
-    And I should see the link "About" in the "Navigation menu block"
+    But I should see the link "Overview" in the "Navigation menu"
+    And I should see the link "Members" in the "Navigation menu"
+    And I should see the link "About" in the "Navigation menu"
 
     # Only the sub-page links of "Page 2" are rendered.
     When I visit the "Page 2" custom page
@@ -291,14 +318,14 @@ Feature: Navigation menu for custom pages
   Scenario Outline: Only custom page entries can be nested in the navigation menu.
     Given the following <group>:
       | title | Ergonomic backpacks |
-      | state | validated           |
+      | state | published           |
     And custom_page content:
-      | title              | <group>             | status    |
-      | Types of backpacks | Ergonomic backpacks | published |
-      | Frameless          | Ergonomic backpacks | published |
-      | External frame     | Ergonomic backpacks | published |
-      | Internal frame     | Ergonomic backpacks | published |
-      | Bodypack           | Ergonomic backpacks | published |
+      | title              | <group>             | state     | topic |
+      | Types of backpacks | Ergonomic backpacks | published | HR    |
+      | Frameless          | Ergonomic backpacks | published | HR    |
+      | External frame     | Ergonomic backpacks | published | HR    |
+      | Internal frame     | Ergonomic backpacks | published | HR    |
+      | Bodypack           | Ergonomic backpacks | published | HR    |
     And the following custom pages menu structure:
       | title              | parent             | weight |
       | Types of backpacks |                    | 3      |
@@ -308,14 +335,14 @@ Feature: Navigation menu for custom pages
       # Force a reserved page to be nested. This is not possible through the UI.
       | About              | Bodypack           | 7      |
     When I am logged in as a facilitator of the "Ergonomic backpacks" <group>
-    And I accept essential cookies
     And I go to the "Ergonomic backpacks" <group>
-    And I click the contextual link "Edit menu" in the "Left sidebar" region
+    And I click the contextual link "Edit menu" in the "Header" region
     # The "About" page has been moved back to first level.
     Then the draggable menu table should be:
       | title              | parent             |
       | Overview           |                    |
       | Members            |                    |
+      | Discussions        |                    |
       | Glossary           |                    |
       | Bodypack           |                    |
       | About              |                    |
@@ -328,6 +355,7 @@ Feature: Navigation menu for custom pages
       | title              | parent             |
       | Overview           |                    |
       | Members            |                    |
+      | Discussions        |                    |
       | Glossary           |                    |
       | Bodypack           |                    |
       | About              |                    |
@@ -340,6 +368,7 @@ Feature: Navigation menu for custom pages
       | title              | parent             |
       | Overview           |                    |
       | Members            |                    |
+      | Discussions        |                    |
       | Glossary           |                    |
       | Bodypack           |                    |
       | About              |                    |
@@ -355,6 +384,7 @@ Feature: Navigation menu for custom pages
       | title              | parent             |
       | Overview           |                    |
       | Members            |                    |
+      | Discussions        |                    |
       | Glossary           |                    |
       | Bodypack           |                    |
       | About              |                    |
@@ -368,6 +398,7 @@ Feature: Navigation menu for custom pages
       | title              | parent             |
       | Overview           |                    |
       | Members            |                    |
+      | Discussions        |                    |
       | Glossary           |                    |
       | Bodypack           |                    |
       | About              |                    |
@@ -382,8 +413,9 @@ Feature: Navigation menu for custom pages
     Then the draggable menu table should be:
       | title              | parent             |
       | Members            |                    |
-      | Glossary           |                    |
       | Overview           |                    |
+      | Glossary           |                    |
+      | Discussions        |                    |
       | About              |                    |
       | Bodypack           |                    |
       | Types of backpacks |                    |
@@ -396,8 +428,9 @@ Feature: Navigation menu for custom pages
     Then the draggable menu table should be:
       | title              | parent             |
       | Members            |                    |
-      | Glossary           |                    |
       | Overview           |                    |
+      | Glossary           |                    |
+      | Discussions        |                    |
       | About              |                    |
       | Types of backpacks |                    |
       | Frameless          | Types of backpacks |
@@ -413,8 +446,9 @@ Feature: Navigation menu for custom pages
     Then the draggable menu table should be:
       | title              | parent             |
       | Members            |                    |
-      | Glossary           |                    |
       | Overview           |                    |
+      | Glossary           |                    |
+      | Discussions        |                    |
       | About              |                    |
       | Types of backpacks |                    |
       | Frameless          | Types of backpacks |
@@ -430,18 +464,18 @@ Feature: Navigation menu for custom pages
   Scenario Outline: Show appropriate menu entries in the table of contents outline.
     Given the following <group>s:
       | title                     | state     |
-      | Table of contents outline | validated |
+      | Table of contents outline | published |
     And custom_page content:
-      | title      | <group>                   | status      |
-      | TOCO 1     | Table of contents outline | published   |
-      | TOCO 2     | Table of contents outline | published   |
-      | TOCO 1-1   | Table of contents outline | published   |
-      | TOCO 1-1-1 | Table of contents outline | published   |
-      | TOCO 2-1   | Table of contents outline | published   |
-      | TOCO 1-1-2 | Table of contents outline | published   |
-      | TOCO 1-2   | Table of contents outline | published   |
-      | TOCO 2-1-2 | Table of contents outline | unpublished |
-      | TOCO 2-1-1 | Table of contents outline | published   |
+      | title      | <group>                   | state       | topic |
+      | TOCO 1     | Table of contents outline | published   | HR    |
+      | TOCO 2     | Table of contents outline | published   | HR    |
+      | TOCO 1-1   | Table of contents outline | published   | HR    |
+      | TOCO 1-1-1 | Table of contents outline | published   | HR    |
+      | TOCO 2-1   | Table of contents outline | published   | HR    |
+      | TOCO 1-1-2 | Table of contents outline | published   | HR    |
+      | TOCO 1-2   | Table of contents outline | published   | HR    |
+      | TOCO 2-1-2 | Table of contents outline | unpublished | HR    |
+      | TOCO 2-1-1 | Table of contents outline | published   | HR    |
     And the following custom page menu structure:
       | title      | parent   | weight |
       | TOCO 1-2   | TOCO 1   | 2      |
@@ -517,11 +551,11 @@ Feature: Navigation menu for custom pages
   Scenario Outline: Assert cache invalidation of the TOC outline.
     Given the following <group>s:
       | title                            | state     |
-      | Table of contents outline cached | validated |
+      | Table of contents outline cached | published |
     And custom_page content:
-      | title           | <group>                          | status    |
-      | TOCO cached 1   | Table of contents outline cached | published |
-      | TOCO cached 1-1 | Table of contents outline cached | published |
+      | title           | <group>                          | state     | topic |
+      | TOCO cached 1   | Table of contents outline cached | published | HR    |
+      | TOCO cached 1-1 | Table of contents outline cached | published | HR    |
     And the following custom page menu structure:
       | title           | parent        | weight |
       | TOCO cached 1   |               | 1      |
@@ -530,14 +564,14 @@ Feature: Navigation menu for custom pages
     Then I should see the link "Up" in the "Table of contents outline"
 
     When I am logged in as a facilitator of the "Table of contents outline cached" <group>
-    And I accept essential cookies
     And I go to the "Table of contents outline cached" <group>
-    And I click the contextual link "Edit menu" in the "Left sidebar" region
+    And I click the contextual link "Edit menu" in the "Header" region
     When I drag the "TOCO cached 1-1" table row to the left
     Then the draggable menu table should be:
       | title           | parent |
       | Overview        |        |
       | Members         |        |
+      | Discussions     |        |
       | About           |        |
       | Glossary        |        |
       | TOCO cached 1   |        |
@@ -554,17 +588,18 @@ Feature: Navigation menu for custom pages
   Scenario Outline: Test that the edit link appears next to the "About" page.
     Given the following <group>s:
       | title           | state     |
-      | About edit link | validated |
+      | About edit link | published |
 
     When I am logged in as a moderator
     And I go to the "About edit link" <group>
-    And I click the contextual link "Edit menu" in the "Left sidebar" region
+    And I click the contextual link "Edit menu" in the "Header" region
 
     Then the "group menu edit table" table should contain the following columns:
-      | Page     | Enabled | Operations |
-      | Overview |         | Edit       |
-      | Members  |         |            |
-      | About    |         | Edit       |
+      | Page        | Enabled | Operations |
+      | Overview    |         | Edit       |
+      | Members     |         |            |
+      | Discussions |         |            |
+      | About       |         | Edit       |
     When I click "Edit" in the "Content" region
     Then I should see the heading "Edit <label> About edit link"
 

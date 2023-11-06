@@ -5,7 +5,7 @@ declare(strict_types = 1);
 namespace Drupal\joinup_user\Event;
 
 use Drupal\joinup_user\Entity\JoinupUserInterface;
-use Symfony\Component\EventDispatcher\Event;
+use Symfony\Contracts\EventDispatcher\Event;
 
 /**
  * Class representing a 'joinup_user.cancel' event.

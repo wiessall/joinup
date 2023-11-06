@@ -7,6 +7,7 @@ namespace Drupal\joinup_workflow;
 use Drupal\Core\Entity\FieldableEntityInterface;
 use Drupal\state_machine\Plugin\Field\FieldType\StateItemInterface;
 use Drupal\state_machine\Plugin\Workflow\WorkflowInterface;
+use Drupal\state_machine\Plugin\Workflow\WorkflowState;
 
 /**
  * Interface for bundle classes that are subject to workflows.
@@ -20,6 +21,14 @@ interface EntityWorkflowStateInterface extends FieldableEntityInterface {
    *   The workflow state.
    */
   public function getWorkflowState(): string;
+
+  /**
+   * Returns the current state instance.
+   *
+   * @return \Drupal\state_machine\Plugin\Workflow\WorkflowState
+   *   The current state instance.
+   */
+  public function getWorkflowStateInstance(): WorkflowState;
 
   /**
    * Sets the workflow state.
@@ -100,5 +109,21 @@ interface EntityWorkflowStateInterface extends FieldableEntityInterface {
    *   TRUE if the target state is allowed, FALSE if it is not.
    */
   public function isTargetWorkflowStateAllowed(string $to_state, ?string $from_state = NULL): bool;
+
+  /**
+   * Gets the allowed transitions for the current state.
+   *
+   * @return \Drupal\state_machine\Plugin\Workflow\WorkflowTransition[]
+   *   The allowed transitions, keyed by transition ID.
+   */
+  public function getTransitions(): array;
+
+  /**
+   * Check whether at least one transition is available for the current state.
+   *
+   * @return bool
+   *   Whether at least one transition is available for the current state.
+   */
+  public function hasTransitions(): bool;
 
 }

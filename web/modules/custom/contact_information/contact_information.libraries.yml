@@ -1,0 +1,18 @@
+contact-us:
+  version: VERSION
+  js:
+    js/contact-us.js: {}
+  dependencies:
+    - core/drupal
+    - core/js-cookie
+
+contactus:
+  js:
+    js/build/contactus.js: { preprocess: false, minified: true }
+  dependencies:
+    - core/ckeditor5
+
+admin.contactus:
+  css:
+    theme:
+      css/contactus.admin.css: { }

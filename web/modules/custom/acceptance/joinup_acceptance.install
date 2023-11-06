@@ -1,0 +1,26 @@
+<?php
+
+/**
+ * @file
+ * Install, update, uninstall tasks for Joinup Acceptance module.
+ */
+
+declare(strict_types = 1);
+
+/**
+ * Implements hook_install().
+ */
+function joinup_acceptance_install(): void {
+  /** @var \Drupal\user\RoleInterface $role */
+  $role = \Drupal::entityTypeManager()->getStorage('user_role')->load('moderator');
+  $role->grantPermission('perform acceptance tasks')->save();
+}
+
+/**
+ * Implements hook_uninstall().
+ */
+function joinup_acceptance_uninstall(): void {
+  /** @var \Drupal\user\RoleInterface $role */
+  $role = \Drupal::entityTypeManager()->getStorage('user_role')->load('moderator');
+  $role->revokePermission('perform acceptance tasks')->save();
+}

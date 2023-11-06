@@ -1,0 +1,18 @@
+{#
+/**
+ * @file
+ * Default template for a field.
+ */
+#}
+{%
+  set classes = [
+    'action-link',
+    'btn',
+    'btn-link',
+    'px-3'
+  ]
+%}
+
+{% for item in items %}
+  <a{{ attributes.addClass(classes) }} href="{{ item.content["#url"] }}">{{ item.content["#title"] }}</a>
+{% endfor %}

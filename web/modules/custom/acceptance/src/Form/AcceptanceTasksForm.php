@@ -10,7 +10,9 @@ use Drupal\Core\Queue\QueueFactory;
 use Drupal\Core\Queue\QueueWorkerManagerInterface;
 use Drupal\Core\Queue\RequeueException;
 use Drupal\Core\Queue\SuspendQueueException;
+use Drupal\Core\Utility\Error;
 use Drupal\message_digest\Traits\MessageDigestTrait;
+use Drupal\swiftmailer\Commands\SwiftMailerCommands;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -22,17 +24,18 @@ class AcceptanceTasksForm extends FormBase {
 
   /**
    * The queue service.
-   *
-   * @var \Drupal\Core\Queue\QueueFactory
    */
-  protected $queueFactory;
+  protected QueueFactory $queueFactory;
 
   /**
    * The queue manager.
-   *
-   * @var \Drupal\Core\Queue\QueueWorkerManagerInterface
    */
-  protected $queueManager;
+  protected QueueWorkerManagerInterface $queueManager;
+
+  /**
+   * Swift mailer module Drush commands class.
+   */
+  protected SwiftMailerCommands $swiftMailerCommands;
 
   /**
    * Constructs a new form instance.
@@ -41,10 +44,13 @@ class AcceptanceTasksForm extends FormBase {
    *   The queue service.
    * @param \Drupal\Core\Queue\QueueWorkerManagerInterface $queue_manager
    *   The queue manager.
+   * @param \Drupal\swiftmailer\Commands\SwiftMailerCommands $swiftmailer_commands
+   *   Swift mailer module Drush commands class.
    */
-  public function __construct(QueueFactory $queue_factory, QueueWorkerManagerInterface $queue_manager) {
+  public function __construct(QueueFactory $queue_factory, QueueWorkerManagerInterface $queue_manager, SwiftMailerCommands $swiftmailer_commands) {
     $this->queueFactory = $queue_factory;
     $this->queueManager = $queue_manager;
+    $this->swiftMailerCommands = $swiftmailer_commands;
   }
 
   /**
@@ -53,7 +59,8 @@ class AcceptanceTasksForm extends FormBase {
   public static function create(ContainerInterface $container): self {
     return new static(
       $container->get('queue'),
-      $container->get('plugin.manager.queue_worker')
+      $container->get('plugin.manager.queue_worker'),
+      $container->get('joinup_acceptance.swiftmailer_commands')
     );
   }
 
@@ -66,11 +73,16 @@ class AcceptanceTasksForm extends FormBase {
       '#value' => $this->t('Deliver message digests'),
       '#submit' => [[$this, 'deliverDigestMessages']],
     ];
+    $form['send_spool'] = [
+      '#type' => 'submit',
+      '#value' => $this->t('Send spooled emails'),
+      '#submit' => [[$this, 'sendSpooledEmails']],
+    ];
     return $form;
   }
 
   /**
-   * Provides a submit handler for digest messages delivery button.
+   * Provides a "submit" handler for digest messages delivery button.
    *
    * @param array $form
    *   The form API render array.
@@ -88,6 +100,24 @@ class AcceptanceTasksForm extends FormBase {
       }
     } while ($this->countAllUndeliveredDigestMessages());
     $this->messenger()->addStatus('Successfully delivered all digest messages. Note that the messages might have been spooled, meaning it could take some time to receive them.');
+  }
+
+  /**
+   * Provides a "submit" handler for the "Send spooled emails" button.
+   *
+   * @param array $form
+   *   The form API render array.
+   * @param \Drupal\Core\Form\FormStateInterface $form_state
+   *   The form state API object.
+   */
+  public function sendSpooledEmails(array &$form, FormStateInterface $form_state): void {
+    try {
+      $this->swiftMailerCommands->sendSpool(SWIFTMAILER_TRANSPORT_SENDMAIL);
+      $this->messenger()->addStatus('Successfully sent spooled emails.');
+    }
+    catch (\Throwable $exception) {
+      $this->messenger()->addError('Failed to send spooled emails.');
+    }
   }
 
   /**
@@ -125,14 +155,14 @@ class AcceptanceTasksForm extends FormBase {
       catch (SuspendQueueException $e) {
         // The worker indicates there is a problem with the whole queue. Exit.
         $queue->releaseItem($item);
-        watchdog_exception('message_digest', $e);
+        Error::logException($this->logger('message_digest'), $e);
         $this->messenger()->addError($error_status_message);
         return FALSE;
       }
       catch (\Exception $e) {
         // In case of any other kind of exception, log it and leave the item
         // in the queue to be processed again later.
-        watchdog_exception('message_digest', $e);
+        Error::logException($this->logger('message_digest'), $e);
         $this->messenger()->addError($error_status_message);
         return FALSE;
       }

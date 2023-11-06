@@ -14,10 +14,10 @@ Feature: Custom page API
       | logo             | logo.png                 |
       | moderation       | yes                      |
       | content creation | facilitators and authors |
-      | state            | validated                |
+      | state            | published                |
     And custom_page content:
-      | title      | body                                     | collection      |
-      | Dummy page | This is some dummy content like foo:bar. | Le Foie Heureux |
+      | title      | body                                     | collection      | state     |
+      | Dummy page | This is some dummy content like foo:bar. | Le Foie Heureux | published |
      # @Fixme unimplemented. See ISAICP-2369
      # | Exclude from menu |                                              |
     Then I should have a "Custom page" page titled "Dummy page"

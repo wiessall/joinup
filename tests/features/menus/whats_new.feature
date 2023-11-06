@@ -9,10 +9,10 @@ Feature:
   Background:
     Given the following collections:
       | title               | state     |
-      | Flagging collection | validated |
+      | Flagging collection | published |
     And news content:
       | title      | headline   | state     | collection          |
-      | Some title | Some title | validated | Flagging collection |
+      | Some title | Some title | published | Flagging collection |
 
   Scenario: Only content entity internal URLs are allowed for flagging menu items.
     When I am logged in as a moderator
@@ -87,7 +87,6 @@ Feature:
   @javascript
   Scenario: Manual selecting of the content also works with flagging.
     When I am logged in as a moderator
-    And I accept essential cookies
     And I go to "/admin/structure/menu/manage/support"
 
     When I click "Add link"

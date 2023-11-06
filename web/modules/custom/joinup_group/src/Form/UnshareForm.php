@@ -105,7 +105,8 @@ abstract class UnshareForm extends ShareFormBase {
    */
   public function ajaxSubmit(array &$form, FormStateInterface $form_state): AjaxResponse {
     $response = new AjaxResponse();
-    $response->addCommand(new RedirectCommand((string) $this->getRequest()->headers->get('referer')));
+    #$response->addCommand(new RedirectCommand((string) $this->getRequest()->headers->get('referer')));
+    $response->addCommand(new RedirectCommand((string) $this->entity->toUrl()->toString()));
     return $response;
   }
 

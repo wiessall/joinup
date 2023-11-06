@@ -20,10 +20,9 @@ Feature: Event moderation
       | title               | Wet Lords             |
       | description         | The Forgotten Female. |
       | logo                | logo.png              |
-      | banner              | banner.jpg            |
       | content creation    | registered users      |
       | moderation          | no                    |
-      | state               | validated             |
+      | state               | published             |
       | owner               | Alma Lee              |
       | contact information | Evs contact           |
       | topic               | E-inclusion           |
@@ -38,7 +37,6 @@ Feature: Event moderation
     # users to create content, authenticated users that are not members can
     # create events.
     When I am logged in as "Salvador Thomas"
-    And I accept essential cookies
     And I go to the homepage of the "Wet Lords" collection
     And I click "Add event" in the plus button menu
     # Post moderated collections allow publishing content directly.
@@ -46,19 +44,17 @@ Feature: Event moderation
 
     # Edit the collection and set it as moderated.
     When I am logged in as a moderator
-    And I accept essential cookies
     And I go to the homepage of the "Wet Lords" collection
     And I open the header local tasks menu
     And I click "Edit" in the "Entity actions" region
-    And I click the "Additional fields" tab
-    And I check the box "Moderated"
+    And I expand the "Additional fields" accordion section
+    And I check "Moderated"
     Then I press "Publish"
     And I should see the heading "Wet Lords"
 
     # The parent group is now pre-moderated: authenticated non-member users
     # should still be able to create events but not to publish them.
     When I am logged in as "Salvador Thomas"
-    And I accept essential cookies
     And I go to the homepage of the "Wet Lords" collection
     And I click "Add event" in the plus button menu
     Then I should not see the button "Publish"
@@ -68,11 +64,10 @@ Feature: Event moderation
     # Edit the collection and set it to allow only members to create new
     # content.
     When I am logged in as a moderator
-    And I accept essential cookies
     And I go to the homepage of the "Wet Lords" collection
     And I open the header local tasks menu
     And I click "Edit" in the "Entity actions" region
-    And I click the "Additional fields" tab
+    And I expand the "Additional fields" accordion section
     And I check "Closed collection"
     And I wait for AJAX to finish
     And I select the radio button "Only members can create content."

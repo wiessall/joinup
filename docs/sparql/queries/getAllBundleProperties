@@ -1,5 +1,0 @@
-SELECT DISTINCT ?prop
-WHERE {
-  ?entity rdf:type <http://purl.org/adms/sw/SoftwarePackage>.
-  ?entity ?prop ?value
-}

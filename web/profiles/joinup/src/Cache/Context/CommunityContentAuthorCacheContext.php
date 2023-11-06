@@ -83,7 +83,7 @@ class CommunityContentAuthorCacheContext extends UserCacheContextBase implements
     // Since this might be called many times per request, only perform the query
     // once and cache it.
     if (!isset($this->cachedContexts[$uid][$bundle])) {
-      $query = $this->entityTypeManager->getStorage('node')->getQuery();
+      $query = $this->entityTypeManager->getStorage('node')->getQuery()->accessCheck(FALSE);
       $query
         ->condition('uid', $uid)
         ->range(0, 1);

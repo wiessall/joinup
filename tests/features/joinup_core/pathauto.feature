@@ -8,18 +8,18 @@ Feature:
     Given the following collection:
       | title | Pathauto collection |
       | logo  | logo.png            |
-      | state | validated           |
+      | state | published           |
     And the following solution:
       | title       | Pathauto solution   |
       | description | Pathauto solution   |
-      | state       | validated           |
+      | state       | published           |
       | collection  | Pathauto collection |
     And the following release:
       | title          | Pathauto release  |
       | release number | 23                |
       | description    | Pathauto release. |
       | is version of  | Pathauto solution |
-      | state          | validated         |
+      | state          | published         |
     And the following distribution:
       | title       | Pathauto distribution  |
       | description | Pathauto distribution. |
@@ -29,24 +29,24 @@ Feature:
       | description | Pathauto licence |
     And discussion content:
       | title                 | body                  | collection          | solution          | state     |
-      | Pathauto discussion   | Pathauto discussion   | Pathauto collection |                   | validated |
-      | Pathauto discussion 2 | Pathauto discussion 2 |                     | Pathauto solution | validated |
+      | Pathauto discussion   | Pathauto discussion   | Pathauto collection |                   | published |
+      | Pathauto discussion 2 | Pathauto discussion 2 |                     | Pathauto solution | published |
     And document content:
       | title               | body                | collection          | solution          | state     |
-      | Pathauto document   | Pathauto document   | Pathauto collection |                   | validated |
-      | Pathauto document 2 | Pathauto document 2 |                     | Pathauto solution | validated |
+      | Pathauto document   | Pathauto document   | Pathauto collection |                   | published |
+      | Pathauto document 2 | Pathauto document 2 |                     | Pathauto solution | published |
     And event content:
       | title            | body             | collection          | solution          | state     |
-      | Pathauto event   | Pathauto event   | Pathauto collection |                   | validated |
-      | Pathauto event 2 | Pathauto event 2 |                     | Pathauto solution | validated |
+      | Pathauto event   | Pathauto event   | Pathauto collection |                   | published |
+      | Pathauto event 2 | Pathauto event 2 |                     | Pathauto solution | published |
     And news content:
       | title           | body            | collection          | solution          | state     |
-      | Pathauto news   | Pathauto news   | Pathauto collection |                   | validated |
-      | Pathauto news 2 | Pathauto news 2 |                     | Pathauto solution | validated |
+      | Pathauto news   | Pathauto news   | Pathauto collection |                   | published |
+      | Pathauto news 2 | Pathauto news 2 |                     | Pathauto solution | published |
     And custom_page content:
       | title                    | body          | collection          | solution          | state     |
-      | Pathauto collection page | Pathauto page | Pathauto collection |                   | validated |
-      | Pathauto solution page   | Pathauto page |                     | Pathauto solution | validated |
+      | Pathauto collection page | Pathauto page | Pathauto collection |                   | published |
+      | Pathauto solution page   | Pathauto page |                     | Pathauto solution | published |
 
     When I go to the "Pathauto collection" collection
     Then the url should match "collection/pathauto-collection"

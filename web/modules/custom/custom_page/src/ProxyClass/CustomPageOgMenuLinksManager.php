@@ -107,14 +107,6 @@ namespace Drupal\custom_page\ProxyClass {
             return $this->lazyLoadItself()->getOgMenuInstanceByCustomPage($custom_page);
         }
 
-        /**
-         * {@inheritdoc}
-         */
-        public function getOgMenuInstanceByGroupId(string $group_id) : ?\Drupal\og_menu\OgMenuInstanceInterface
-        {
-            return $this->lazyLoadItself()->getOgMenuInstanceByGroupId($group_id);
-        }
-
     }
 
 }

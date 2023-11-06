@@ -9,35 +9,31 @@ dependencies:
     - search_api
 id: search_facets_summary
 name: 'Search facets summary'
+facet_source_id: 'search_api:views_page__search__page_1'
+only_visible_when_facet_source_is_visible: true
+processor_configs: {  }
 facets:
   spatial_coverage:
     checked: true
     label: 'Geographic coverage'
     separator: ', '
-    weight: 0
     show_count: false
+    weight: 0
   topic:
     checked: true
     label: Topic
     separator: ', '
-    weight: 0
     show_count: false
+    weight: 0
   type:
     checked: true
     label: Type
     separator: ', '
-    weight: 0
     show_count: false
+    weight: 0
   group:
     checked: true
     label: Collection/Solution
     separator: ', '
-    weight: 0
     show_count: false
-facet_source_id: 'search_api:views_page__search__page_1'
-processor_configs:
-  hide_when_not_rendered:
-    processor_id: hide_when_not_rendered
-    weights:
-      build: '45'
-    settings: {  }
+    weight: 0

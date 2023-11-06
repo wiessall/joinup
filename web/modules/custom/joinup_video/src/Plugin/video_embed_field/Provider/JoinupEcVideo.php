@@ -12,7 +12,7 @@ use GuzzleHttp\TransferStats;
  *
  * @VideoEmbedProvider(
  *   id = "joinup_ec_video",
- *   title = @Translation("European Commission video")
+ *   title = @Translation("European Commission")
  * )
  */
 class JoinupEcVideo extends ProviderPluginBase {
@@ -27,7 +27,7 @@ class JoinupEcVideo extends ProviderPluginBase {
   /**
    * {@inheritdoc}
    */
-  public function renderEmbedCode($width, $height, $autoplay) {
+  public function renderEmbedCode($width, $height, $autoplay): array {
     $iframe = [
       '#type' => 'video_embed_iframe',
       '#provider' => 'joinup_ec_video',
@@ -58,15 +58,11 @@ class JoinupEcVideo extends ProviderPluginBase {
     // The URL may be an European Union short URL. Resolve it.
     if (preg_match('#^(?:(?:https?:)?//)?europa\.eu/\![0-9a-z]+$#i', $input)) {
       if (!isset(static::$resolvedUrl[$input])) {
+        $uri = NULL;
         // @todo To be refactored in ISAICP-3885.
         /** @var \Psr\Http\Message\UriInterface $uri */
         \Drupal::httpClient()->get($input, [
           'on_stats' => function (TransferStats $stats) use (&$uri) {
-            // @todo Allow coding standards checks on the following line once
-            //   the Coder module correctly recognizes that the $uri variable is
-            //   used.
-            // @see https://www.drupal.org/project/coder/issues/3065679
-            // @codingStandardsIgnoreLine
             $uri = $stats->getEffectiveUri();
           },
         ]);
@@ -80,6 +76,8 @@ class JoinupEcVideo extends ProviderPluginBase {
       '#^(?:(?:https?:)?//)?ec\.europa\.eu/(?:.*ref=)?(?<id>[^&\?]+)#i',
       // New style uris.
       '#^(?:(?:https?:)?//)?audiovisual\.ec\.europa\.eu/embed/index.html(?:.*ref=)?(?<id>[^&\?]+)#i',
+      // Another updates to uris.
+      '#^(?:(?:https?:)?//)?audiovisual\.ec\.europa\.eu/corporateplayer/index.html(?:.*video=)?(?<id>[^&\?]+)#i',
     ];
     foreach ($expressions as $expression) {
       preg_match($expression, $input, $matches);
@@ -98,7 +96,7 @@ class JoinupEcVideo extends ProviderPluginBase {
    */
   protected function getTimeIndex() {
     preg_match('#[&?]starttime=(?<time_index>\d+)#i', $this->getInput(), $matches);
-    return isset($matches['time_index']) ? $matches['time_index'] : 0;
+    return $matches['time_index'] ?? 0;
   }
 
   /**
@@ -107,15 +105,15 @@ class JoinupEcVideo extends ProviderPluginBase {
    * @return string
    *   The language preference if one exists or 'en' if one could not be found.
    */
-  protected function getLanguagePreference() {
+  protected function getLanguagePreference(): string {
     preg_match('#[&?](?:videolang|lg)=(?<language>[a-z\-]+)#i', $this->getInput(), $matches);
-    return isset($matches['language']) ? $matches['language'] : 'en';
+    return $matches['language'] ?? 'en';
   }
 
   /**
    * {@inheritdoc}
    */
-  public function getRemoteThumbnailUrl() {
+  public function getRemoteThumbnailUrl(): string {
     return '';
   }
 

@@ -1,7 +1,7 @@
 dashboard.page:
   path: '/dashboard'
   defaults:
-    _controller: '\Drupal\dashboard\Controller\DashboardController::page'
+    _form: Drupal\dashboard\Form\DashboardForm
     _title: 'Dashboard'
   requirements:
     _permission: 'access dashboard'

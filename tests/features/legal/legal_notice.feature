@@ -26,16 +26,16 @@ Feature:
     And I fill in "Password" with "secretz"
     And I press "Log in"
 
-    And I select the radio button "I am a new user (create a new account)"
     Then I should see "I have read and accept the Legal notice"
+    And I should see the warning message "You must accept this agreement before continuing."
 
     # Submit without accepting the 'Legal notice'.
-    When I press "Next"
+    When I press "Submit"
     Then I should see the error message "You must accept the Legal notice in order to use our platform."
 
     # After accepting the agreement the user can continue.
     Given I check "I have read and accept the Legal notice"
-    And I press "Sign in"
+    And I press "Submit"
     Then I should see the success message "Fill in the fields below to let the Joinup community learn more about you!"
 
     # The user has been redirected to its user account edit form.
@@ -127,7 +127,7 @@ Feature:
     And the row "v2.0" is selected
     But the row "1.1.1" is not selected
 
-    When I click "Legal notice" in the Footer region
+    When I am on "/joinup/legal-notice"
     Then I should see the heading "Legal notice"
     And I should see "New rules..."
 
@@ -135,7 +135,17 @@ Feature:
     And I delete the version "v2.0" of document "Legal notice"
 
   Scenario: Anonymous using the support contact form.
-    Given I am on "/contact"
+    Given I am logged in as a moderator
+    When I click "Legal"
+    Then I should see the heading "Legal notice versions"
+    And I should see the link "New version"
+    And the row "1.1" is selected
+
+    When I press "Set published version"
+    Then I should see the success message "No changes have been made."
+
+    Given I am an anonymous user
+    When I am on "/contact"
     Then I should see "I have read and accept the Legal notice"
     And I should see "Before you submit your request check our FAQ section in case it covers your query/issue."
 
@@ -146,13 +156,11 @@ Feature:
     And I select "Legal issue" from "Category"
     And I fill in "Subject" with "All the lonely people where do they all come from?"
     And I fill in "Message" with "Father McKenzie, wiping the dirt / From his hands as he walks from the grave / No one was saved"
-    Then I wait for the honeypot time limit to pass
 
     When I press "Submit"
     Then I should see the error message "You must accept the Legal notice in order to use our platform."
 
     But I check "I have read and accept the Legal notice"
-    Then I wait for the honeypot time limit to pass
     When I press "Submit"
     Then I should see the success message "Your message has been submitted. Thank you for your feedback."
 
@@ -172,7 +180,7 @@ Feature:
       | Sergeant Pepper | pepper@royalnavy.mod.uk | p3pp3r   | Sergeant Pepper |
     And collections:
       | title              | state     |
-      | Land of submarines | validated |
+      | Land of submarines | published |
 
     Given I am an anonymous user
     When I go to the homepage of the "Land of submarines" collection
@@ -208,3 +216,11 @@ Feature:
     # workflow is described in "join-as-anonymous.feature".
     And I should see the success message "You have been logged in."
     And I should see the success message "You are now a member of Land of submarines."
+
+  Scenario: Moderators can delete legal document versions.
+    Given I am logged in as a moderator
+    When I click "Legal"
+    Then I should see the text "1.1"
+    When I click the "Delete" link in the "1.1" row
+    And I press "Delete"
+    Then I should see the success message "1.1 document version has been deleted from legal_notice."

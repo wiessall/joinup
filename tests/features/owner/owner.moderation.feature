@@ -4,7 +4,7 @@ Feature: Owner moderation
   As a user of the website
   I need to be able to transit the owners from one state to another.
 
-  @terms @uploadFiles:logo.png,banner.jpg
+  @terms @uploadFiles:logo.png
   Scenario: Publish, update, request changes, publish again and ask to delete an owner.
     Given users:
       | Username        |
@@ -22,14 +22,13 @@ Feature: Owner moderation
       | E-mail | duche.baggins@example.com         |
     And I enter "Keep Europe healthy through healthy eating." in the "Description" wysiwyg editor
     And I attach the file "logo.png" to "Logo"
-    And I attach the file "banner.jpg" to "Banner"
     And I click the 'Categorisation' tab
     And I select "EU and European Policies" from "Topic"
 
     # An authenticated user can create an owner in published state.
     When I click the 'Additional fields' tab
     And I press "Add new" at the "Owner" field
-    And I set the Owner type to "Academia/Scientific organisation"
+    And I check the box "Academia/Scientific organisation"
     And I fill in "Name" with "EU healthy movement"
     When I press "Create owner"
     Then I should see "EU healthy movement"
@@ -43,7 +42,7 @@ Feature: Owner moderation
     And I click "Edit" in the "Entity actions" region
     Then I should see the heading "Edit Owner EU healthy movement"
     And the following 2 buttons should be present "Update, Request deletion"
-    And the current workflow state should be "Validated"
+    And the current workflow state should be "Published"
     And I should not see the link "Delete"
     When I fill in "Name" with "EU healthy group"
     And I press "Update"
@@ -55,7 +54,7 @@ Feature: Owner moderation
     And I click "Edit" in the "Entity actions" region
     Then I should see the heading "Edit Owner EU healthy group"
     And the following 3 buttons should be present "Update, Request changes, Request deletion"
-    And the current workflow state should be "Validated"
+    And the current workflow state should be "Published"
     # Deletion should not be possible as the owner entity is referenced by the collection.
     And I should not see the link "Delete"
     And I press "Request changes"
@@ -76,7 +75,7 @@ Feature: Owner moderation
     And the current workflow state should be "Needs update"
     And I should not see the link "Delete"
     # Do the changes.
-    When I set the Owner type to "Non-Governmental Organisation"
+    When I check the box "Non-Governmental Organisation"
     And I press "Update"
     Then I should see the heading "EU healthy group"
 
@@ -95,7 +94,7 @@ Feature: Owner moderation
     And I go to the homepage of the "EU healthy group" owner
     And I click "Edit" in the "Entity actions" region
     And the following 2 buttons should be present "Update, Request deletion"
-    And the current workflow state should be "Validated"
+    And the current workflow state should be "Published"
     And I press "Request deletion"
     Then I should see the error message 'The owner cannot be deleted since it owns the following collections: "The healthy food European project". Please set a different owner for these collections before requesting deletion.'
 
@@ -125,7 +124,7 @@ Feature: Owner moderation
     And I go to the homepage of the "EU healthy group" owner
     And I click "Edit" in the "Entity actions" region
     And the following 2 buttons should be present "Update, Request deletion"
-    And the current workflow state should be "Validated"
+    And the current workflow state should be "Published"
     And I press "Request deletion"
     Then I should see the heading "EU healthy group"
     And I should not see the error message containing 'The owner cannot be deleted'

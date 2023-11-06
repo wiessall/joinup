@@ -6,7 +6,6 @@ namespace Drupal\joinup\Context;
 
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\joinup\Traits\EntityTrait;
-use Drupal\joinup\Traits\RdfEntityTrait;
 use Drupal\joinup\Traits\SearchTrait;
 use Drupal\joinup_collection\JoinupCollectionHelper;
 use Drupal\rdf_entity\Entity\Rdf;
@@ -19,7 +18,6 @@ class JoinupCollectionContext extends RawDrupalContext {
 
   use EntityTrait;
   use SearchTrait;
-  use RdfEntityTrait;
 
   /**
    * Creates the 'Joinup' collection and related data.
@@ -58,7 +56,7 @@ class JoinupCollectionContext extends RawDrupalContext {
       'rid' => 'collection',
       'id' => JoinupCollectionHelper::JOINUP_COLLECTION_DEFAULT_ENTITY_ID,
       'label' => 'Joinup',
-      'field_ar_state' => 'validated',
+      'field_ar_state' => 'published',
       'field_topic' => 'http://example.com/term/sna',
       'field_ar_owner' => 'http://example.com/owner/isa2',
       'field_ar_contact_information' => 'http://example.com/contact/joinup',
@@ -74,8 +72,6 @@ class JoinupCollectionContext extends RawDrupalContext {
    * @AfterScenario @joinup&&@api
    */
   public function cleanJoinupData() {
-    $this->disableCommitOnUpdate();
-
     // Delete the Joinup collection.
     $collection = Rdf::load(JoinupCollectionHelper::JOINUP_COLLECTION_DEFAULT_ENTITY_ID);
     $collection->skip_notification = TRUE;
@@ -85,8 +81,6 @@ class JoinupCollectionContext extends RawDrupalContext {
     Term::load('http://example.com/term/sna')->delete();
     Rdf::load('http://example.com/owner/isa2')->delete();
     Rdf::load('http://example.com/contact/joinup')->delete();
-
-    $this->enableCommitOnUpdate();
   }
 
 }

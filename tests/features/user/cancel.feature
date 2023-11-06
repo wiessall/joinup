@@ -15,15 +15,15 @@ Feature:
     And I click "People"
     And I click "Alicia Potter"
     And I open the header local tasks menu
-    And I click "Edit" in the "Header" region
-    And I press "Cancel account"
+    And I click "Edit" in the "Entity actions" region
+    And I click "Cancel account"
     Then I should see the link "Go back"
-    When I press "Cancel account"
+    When I press "Confirm"
     And I wait for the batch process to finish
     And the following email should have been sent:
       | recipient_mail | AliciaPotter@example.com                                                                                                                                                                                                                                            |
       | subject        | Your account has been deleted.                                                                                                                                                                                                                                      |
-      | body           | Your account alicia__1997 has been deleted.This action has been done in the framework of moderation activities regularly conducted on the Joinup platform. If you believe that this action has been performed by mistake, please contact The Joinup Support Team at |
+      | body           | Your account alicia__1997 has been deleted. This action has been done in the framework of moderation activities regularly conducted on the Joinup platform. If you believe that this action has been performed by mistake, please contact The Joinup Support Team at |
     And 1 e-mail should have been sent
     And the "alicia__1997" user account is cancelled
     And the "Alicia Potter" table row doesn't contain a checkbox
@@ -31,15 +31,15 @@ Feature:
     When I click "Edit" in the "Alicia Potter" row
     Then I should see the warning message "This user account is cancelled. Edit is disabled."
     # On a cancelled account edit form all fields are disabled.
-    And the following fields should be disabled "First name,Family name,Allow user to log in via CAS,CAS Username,Email,Username,Password,Confirm password,Photo,Country of origin,Professional domain,Business title,Organisation,Enable the search field,Facebook,GitHub,LinkedIn,SlideShare,Twitter,Vimeo,Youtube,Save"
+    And the following fields should be disabled "First name,Family name,Allow user to log in via CAS,CAS Username,Email,Username,Photo,Country of origin,Professional domain,Business title,Organisation,Enable the search field,Facebook,GitHub,LinkedIn,SlideShare,Twitter,Vimeo,Youtube,Save"
 
   Scenario: A moderator deletes a user using the administrative UI.
     Given the following collection:
       | title | Test collection      |
-      | state | validated |
+      | state | published |
     And news content:
       | title     | author       | collection      | state     |
-      | News item | alicia__1997 | Test collection | validated |
+      | News item | alicia__1997 | Test collection | published |
 
     Given I am logged in as a moderator
     And I click "People"
@@ -50,16 +50,15 @@ Feature:
 
     Then I should see the heading "Are you sure you want to cancel these user accounts?"
     And I should see "Alicia Potter"
-    And I should see "This action cannot be undone."
 
-    When I press "Cancel accounts"
+    When I press "Confirm"
     And I wait for the batch process to finish
     Then I should see the success message "Alicia Potter has been deleted."
     And I should not see the link "Alicia Potter"
     And the following email should have been sent:
       | recipient_mail | AliciaPotter@example.com                                                                                                                                                                                                                                            |
       | subject        | Your account has been deleted.                                                                                                                                                                                                                                      |
-      | body           | Your account alicia__1997 has been deleted.This action has been done in the framework of moderation activities regularly conducted on the Joinup platform. If you believe that this action has been performed by mistake, please contact The Joinup Support Team at |
+      | body           | Your account alicia__1997 has been deleted. This action has been done in the framework of moderation activities regularly conducted on the Joinup platform. If you believe that this action has been performed by mistake, please contact The Joinup Support Team at |
     # We cannot assert the number of emails because of created content that
     # sends messages to administrators and moderators. Depending on environment
     # the list of recipients might differ. That's why we're only asserting that
@@ -77,16 +76,16 @@ Feature:
   Scenario: Cancel own account.
     Given the following collection:
       | title | Test collection      |
-      | state | validated |
+      | state | published |
     And news content:
       | title     | author       | collection      | state     |
-      | News item | alicia__1997 | Test collection | validated |
+      | News item | alicia__1997 | Test collection | published |
     And document content:
       | title | author       | collection      | state     |
-      | Docky | alicia__1997 | Test collection | validated |
+      | Docky | alicia__1997 | Test collection | published |
     And discussion content:
       | title  | collection      | state     |
-      | Disqus | Test collection | validated |
+      | Disqus | Test collection | published |
     And comments:
       | subject  | field_body   | author       | parent |
       | Awesome! | Let's use it | alicia__1997 | Disqus |
@@ -103,9 +102,9 @@ Feature:
     Given I am logged in as "alicia__1997"
     And I visit "/user"
     And I open the header local tasks menu
-    And I click "Edit" in the "Header" region
-    And I press "Cancel account"
-    And I press "Cancel account"
+    And I click "Edit" in the "Entity actions" region
+    And I click "Cancel account"
+    And I press "Confirm"
     Then the following email should have been sent:
       | recipient_mail | AliciaPotter@example.com                                           |
       | subject        | Account cancellation request for alicia__1997 at Joinup            |

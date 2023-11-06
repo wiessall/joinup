@@ -1,5 +1,5 @@
 {
-  "extends": "./web/.eslintrc.json",
+  "extends": "./web/core/.eslintrc.json",
   "overrides": [
     // Empty mappings are allowed in the docker-compose file. This indicates
     // options that will inherit their value from the environment variables.
@@ -8,6 +8,27 @@
       "rules": {
         "yml/no-empty-mapping-value": "off"
       }
+    },
+    // Only require the @file tag for Javascript files.
+    {
+      "files": ["*.yml"],
+      "rules": {
+        "jsdoc/require-file-overview": "off"
+      }
     }
-  ]
+  ],
+  "globals": {
+    "CKEDITOR": true,
+    "L": true
+  },
+  "plugins": [
+    "jsdoc"
+  ],
+  "ignorePatterns": [
+    "**/contact_information/js/build/*.js"
+  ],
+  "rules": {
+    "jsdoc/require-file-overview": "error",
+    "import/no-extraneous-dependencies": "off"
+  }
 }

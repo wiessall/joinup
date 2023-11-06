@@ -93,7 +93,7 @@ class ProposedEntitiesBlock extends BlockBase implements ContainerFactoryPluginI
   protected function getRows() {
     /** @var \Drupal\sparql_entity_storage\SparqlEntityStorage $storage */
     $storage = $this->entityTypeManager->getStorage('rdf_entity');
-    $query = $storage->getQuery('OR');
+    $query = $storage->getQuery('OR')->accessCheck(FALSE);
     $solution_sub_condition = $query->andConditionGroup();
     $solution_sub_condition->condition('rid', 'solution');
     $solution_sub_condition->condition('field_is_state', 'proposed');

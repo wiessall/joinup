@@ -13,10 +13,10 @@ Feature:
   Scenario: EIF recommendations field is accessible to moderators only.
     Given collection:
       | title | EIF Toolbox |
-      | state | validated   |
+      | state | published   |
     And solution:
       | title      | Some EIF solution |
-      | state      | validated         |
+      | state      | published         |
       | collection | EIF Toolbox       |
 
     Given I am logged in as a facilitator of the "Some EIF solution" solution
@@ -32,17 +32,17 @@ Feature:
   Scenario: EIF recommendations are not visible to the end user.
     Given collection:
       | title | EIF Toolbox |
-      | state | validated   |
+      | state | published   |
     And solution:
       | title         | Some EIF solution |
-      | state         | validated         |
+      | state         | published         |
       | collection    | EIF Toolbox       |
       | eif reference | Recommendation 1  |
       | eif category  | Common services   |
 
     When I go to the "Some EIF solution" solution
     Then I should not see the text "EIF reference"
-    When I click "About" in the "Left sidebar" region
+    When I click "About" in the "Header" region
     Then I should not see the text "EIF reference"
 
     When I go to "/solutions"
@@ -53,12 +53,12 @@ Feature:
   Scenario: Solutions referencing an EIF term should appear in the corresponding page.
     Given collection:
       | title | EIF Toolbox |
-      | state | validated   |
+      | state | published   |
     And solutions:
       | title    | state     | topic      | collection  | eif reference                      |
-      | Balker   | validated |            | EIF Toolbox | Recommendation 1, Recommendation 2 |
-      | Corridor | validated |            | EIF Toolbox | Recommendation 1                   |
-      | Lager    | validated | Demography | EIF Toolbox |                                    |
+      | Balker   | published |            | EIF Toolbox | Recommendation 1, Recommendation 2 |
+      | Corridor | published |            | EIF Toolbox | Recommendation 1                   |
+      | Lager    | published | Demography | EIF Toolbox |                                    |
 
     # Underlying Principle 1.
     When I go to "/taxonomy/term/http_e_f_fdata_ceuropa_ceu_fRec1"

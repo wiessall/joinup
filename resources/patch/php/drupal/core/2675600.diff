@@ -1,0 +1,208 @@
+diff --git a/core/lib/Drupal/Core/Entity/Sql/SqlContentEntityStorageSchema.php b/core/lib/Drupal/Core/Entity/Sql/SqlContentEntityStorageSchema.php
+index 46e96c9a88..c50efde4bf 100644
+--- a/core/lib/Drupal/Core/Entity/Sql/SqlContentEntityStorageSchema.php
++++ b/core/lib/Drupal/Core/Entity/Sql/SqlContentEntityStorageSchema.php
+@@ -2250,7 +2250,8 @@ protected function getDedicatedTableSchema(FieldStorageDefinitionInterface $stor
+     else {
+       $id_schema = [
+         'type' => 'varchar_ascii',
+-        'length' => 128,
++        // @todo Changing this is out of scope for issue #2675600.
++        'length' => 255,
+         'not null' => TRUE,
+         'description' => 'The entity id this data is attached to',
+       ];
+diff --git a/core/modules/file/file.install b/core/modules/file/file.install
+index a975eed34b..6838d165f7 100644
+--- a/core/modules/file/file.install
++++ b/core/modules/file/file.install
+@@ -35,7 +35,7 @@ function file_schema() {
+       'id' => [
+         'description' => 'The primary key of the object using the file.',
+         'type' => 'varchar_ascii',
+-        'length' => 64,
++        'length' => 255,
+         'not null' => TRUE,
+         'default' => 0,
+       ],
+@@ -119,3 +119,22 @@ function file_requirements($phase) {
+ function file_update_last_removed() {
+   return 8700;
+ }
++
++/**
++ * Update file_usage table to support longer entity IDs.
++ */
++function file_update_8301() {
++  $database = \Drupal::database();
++  $database->schema()->changeField(
++    'file_usage',
++    'id',
++    'id',
++    [
++      'type' => 'varchar_ascii',
++      'not null' => TRUE,
++      'default' => 0,
++      'length' => 255,
++      'description' => 'The primary key of the object using the file.',
++    ]
++  );
++}
+diff --git a/core/modules/file/tests/src/Kernel/EntityStringIdTest.php b/core/modules/file/tests/src/Kernel/EntityStringIdTest.php
+new file mode 100644
+index 0000000000..ab1789011a
+--- /dev/null
++++ b/core/modules/file/tests/src/Kernel/EntityStringIdTest.php
+@@ -0,0 +1,130 @@
++<?php
++
++namespace Drupal\Tests\file\Kernel;
++
++use Drupal\Core\Entity\EntityInterface;
++use Drupal\KernelTests\KernelTestBase;
++use Drupal\entity_test\Entity\EntityTestStringId;
++use Drupal\field\Entity\FieldConfig;
++use Drupal\field\Entity\FieldStorageConfig;
++use Drupal\file\Entity\File;
++use Drupal\file\FileInterface;
++use Drupal\user\Entity\User;
++use org\bovigo\vfs\vfsStream;
++
++/**
++ * Tests that entities using string IDs can use file fields.
++ *
++ * @group file
++ */
++class EntityStringIdTest extends KernelTestBase {
++
++  /**
++   * {@inheritdoc}
++   */
++  public static $modules = [
++    'entity_test',
++    'field',
++    'file',
++    'image',
++    'system',
++    'user',
++  ];
++
++  /**
++   * A test user.
++   *
++   * @var \Drupal\user\UserInterface
++   */
++  protected $user;
++
++  /**
++   * {@inheritdoc}
++   */
++  protected function setUp() {
++    parent::setUp();
++
++    $this->installEntitySchema('entity_test_string_id');
++    $this->installEntitySchema('user');
++    $this->installEntitySchema('file');
++    $this->installSchema('file', 'file_usage');
++    $this->installSchema('system', 'sequences');
++
++    $this->user = User::create([
++      'name' => 'username',
++      'status' => 1,
++    ]);
++    $this->user->save();
++    $this->container->get('current_user')->setAccount($this->user);
++  }
++
++  /**
++   * Tests that entities with string IDs can reference files.
++   *
++   * @dataProvider getFileTypes
++   */
++  public function testEntityStringId($file_type) {
++    $field_storage = FieldStorageConfig::create([
++      'field_name' => 'field_test_file',
++      'entity_type' => 'entity_test_string_id',
++      'type' => $file_type,
++    ]);
++    $field_storage->save();
++
++    $field = FieldConfig::create([
++      'field_name' => 'field_test_file',
++      'entity_type' => 'entity_test_string_id',
++      'bundle' => 'entity_test_string_id',
++        'settings' => [
++          //'max_filesize' => '2k',
++          'file_extensions' => 'txt',
++        ],
++    ]);
++    $field->save();
++
++    vfsStream::setup('drupal_root');
++    vfsStream::create([
++      'sites' => [
++        'default' => [
++          'files' => [
++            'test.txt' => 'test',
++          ]
++        ]
++      ]
++    ]);
++
++    /** @var FileInterface $file */
++    $file = File::create([
++      'uri' => 'vfs://drupal_root/sites/default/files/test.txt',
++      'uid' => $this->user->id(),
++    ]);
++    $file->setPermanent();
++    $file->save();
++
++    /** @var EntityInterface $entity_test */
++    $entity_test = EntityTestStringId::create([
++      'uid' => $this->user->id(),
++      'id' => $this->randomMachineName(255),
++      'field_test_file' => [
++        'target_id' => $file->id(),
++      ]
++    ]);
++
++    // Check that there are no validation errors.
++    $result = $entity_test->validate();
++    $this->assertCount(0, $result);
++
++    // Check that the file can correctly be saved on the entity.
++    $entity_test->save();
++    $referenced_file = $entity_test->get('field_test_file')->referencedEntities()[0];
++    $this->assertEquals($file->id(), $referenced_file->id());
++  }
++
++  /**
++   * Provides a list of file types to test.
++   */
++  public function getFileTypes() {
++    return [['file'], ['image']];
++  }
++
++}
+diff --git a/core/tests/Drupal/Tests/Core/Entity/Sql/SqlContentEntityStorageSchemaTest.php b/core/tests/Drupal/Tests/Core/Entity/Sql/SqlContentEntityStorageSchemaTest.php
+index 7ae6eeba57..85ba0388df 100644
+--- a/core/tests/Drupal/Tests/Core/Entity/Sql/SqlContentEntityStorageSchemaTest.php
++++ b/core/tests/Drupal/Tests/Core/Entity/Sql/SqlContentEntityStorageSchemaTest.php
+@@ -1084,13 +1084,15 @@ public function testDedicatedTableSchemaForEntityWithStringIdentifier() {
+           ],
+           'entity_id' => [
+             'type' => 'varchar_ascii',
+-            'length' => 128,
++            // @todo This change is out of scope for issue #2675600.
++            'length' => 255,
+             'not null' => TRUE,
+             'description' => 'The entity id this data is attached to',
+           ],
+           'revision_id' => [
+             'type' => 'varchar_ascii',
+-            'length' => 128,
++            // @todo This change is out of scope for issue #2675600.
++            'length' => 255,
+             'not null' => TRUE,
+             'description' => 'The entity revision id this data is attached to, which for an unversioned entity type is the same as the entity id',
+           ],

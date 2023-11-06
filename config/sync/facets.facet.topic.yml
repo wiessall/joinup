@@ -9,32 +9,40 @@ dependencies:
     - search_api
 id: topic
 name: Topics
-url_alias: topic
-weight: -3
+weight: -4
 min_count: 1
-show_only_one_result: true
-field_identifier: topic
+missing: false
+missing_label: others
+url_alias: topic
 facet_source_id: 'search_api:views_page__search__page_1'
+field_identifier: topic
+query_operator: or
+hard_limit: 0
+exclude: false
+use_hierarchy: true
+keep_hierarchy_parents_active: false
+hierarchy:
+  type: taxonomy
+  config: {  }
+expand_hierarchy: true
+enable_parent_when_child_gets_disabled: false
 widget:
   type: checkbox
   config:
     show_numbers: true
+    arbitrary_facet_plugin: _none
     soft_limit: 3
-    soft_limit_settings:
-      show_less_label: 'Show less'
-      show_more_label: 'Show more'
     show_reset_link: false
     reset_text: 'Show all'
     hide_reset_when_no_selection: false
-    arbitrary_facet_plugin: _none
-query_operator: or
-use_hierarchy: true
-keep_hierarchy_parents_active: false
-expand_hierarchy: true
-enable_parent_when_child_gets_disabled: true
-hard_limit: 0
-exclude: false
+    soft_limit_settings:
+      show_less_label: 'Show less'
+      show_more_label: 'Show more'
+empty_behavior:
+  behavior: none
 only_visible_when_facet_source_is_visible: true
+show_only_one_result: false
+show_title: true
 processor_configs:
   active_widget_order:
     processor_id: active_widget_order
@@ -45,12 +53,12 @@ processor_configs:
   aggregated_entity_reference_label:
     processor_id: aggregated_entity_reference_label
     weights:
-      build: -1
+      build: -9
     settings: {  }
   count_limit:
     processor_id: count_limit
     weights:
-      build: 0
+      build: -2
     settings:
       minimum_items: 1
       maximum_items: null
@@ -66,12 +74,14 @@ processor_configs:
       sort: -10
     settings:
       sort: ASC
+  hierarchy_processor:
+    processor_id: hierarchy_processor
+    weights:
+      build: -8
+    settings: {  }
   url_processor_handler:
     processor_id: url_processor_handler
     weights:
       pre_query: -10
-      build: -2
+      build: -10
     settings: {  }
-empty_behavior:
-  behavior: none
-show_title: true

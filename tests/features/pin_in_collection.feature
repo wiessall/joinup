@@ -7,12 +7,12 @@ Feature: Pinning entities inside collections
   Background:
     Given the following collections:
       | title         | state     |
-      | Orange Wrench | validated |
-      | Cloudy Beam   | validated |
-      | Green Wrench  | validated |
+      | Orange Wrench | published |
+      | Cloudy Beam   | published |
+      | Green Wrench  | published |
     And the following solution:
       | title | Space Silver |
-      | state | validated    |
+      | state | published    |
     And users:
       | Username        | E-mail                      |
       | Rozanne Minett  | rozanne.minett@example.com  |
@@ -30,13 +30,13 @@ Feature: Pinning entities inside collections
       | Green Wrench  | Tyron Ingram    |             |
 
   Scenario Outline: Facilitators can pin and unpin community content inside their collections.
-    Given discussion content:
+    Given news content:
       | title                       | collection    | state     |
-      | What is the HEX for orange? | Orange Wrench | validated |
+      | What is the HEX for orange? | Orange Wrench | published |
     And <content type> content:
       | title              | headline           | collection    | state     | pinned |
-      | Very important     | Important very     | Orange Wrench | validated | yes    |
-      | Useful information | Information useful | Orange Wrench | validated | no     |
+      | Very important     | Important very     | Orange Wrench | published | yes    |
+      | Useful information | Information useful | Orange Wrench | published | no     |
 
     When I am an anonymous user
     And I go to the homepage of the "Orange Wrench" collection
@@ -109,16 +109,15 @@ Feature: Pinning entities inside collections
       | content type | label      |
       | event        | Event      |
       | document     | Document   |
-      | discussion   | Discussion |
 
   Scenario: Facilitators can pin and unpin community news content inside their collections.
-    Given discussion content:
+    Given news content:
       | title                      | collection   | state     |
-      | What is the HEX for green? | Green Wrench | validated |
+      | What is the HEX for green? | Green Wrench | published |
     And news content:
       | title              | headline           | collection   | state     | pinned |
-      | Very important     | Important very     | Green Wrench | validated | yes    |
-      | Useful information | Information useful | Green Wrench | validated | no     |
+      | Very important     | Important very     | Green Wrench | published | yes    |
+      | Useful information | Information useful | Green Wrench | published | no     |
 
     When I am an anonymous user
     And I go to the homepage of the "Green Wrench" collection
@@ -170,8 +169,8 @@ Feature: Pinning entities inside collections
 
     # When we are not in a collection page, the pin/unpin links should not be visible.
     When I am at "/search"
-    Then I should not see the contextual links "Pin, Unpin" in the "Important very" tile
-    And I should not see the contextual links "Pin, Unpin" in the "Information useful" tile
+    Then I should not see the contextual links "Pin, Unpin" in the "Very important" tile
+    And I should not see the contextual links "Pin, Unpin" in the "Useful information" tile
 
   # This scenario will be re-enabled in ISAICP-6771.
   # See https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-6771
@@ -179,13 +178,13 @@ Feature: Pinning entities inside collections
   Scenario: Facilitators can pin and unpin solutions inside their collections.
     Given discussion content:
       | title                         | collection    | state     | pinned | created    |
-      | Where can I find this wrench? | Orange Wrench | validated | no     | 2017-11-20 |
-      | Any thoughts about blue?      | Orange Wrench | validated | yes    | 2017-10-03 |
-      | Multi stratus beaming         | Cloudy Beam   | validated | no     | 2017-11-05 |
+      | Where can I find this wrench? | Orange Wrench | published | no     | 2017-11-20 |
+      | Any thoughts about blue?      | Orange Wrench | published | yes    | 2017-10-03 |
+      | Multi stratus beaming         | Cloudy Beam   | published | no     | 2017-11-05 |
     And solutions:
       | title            | collection                 | state     | pinned in     | creation date |
-      | Wrench catalogue | Orange Wrench              | validated | Orange Wrench | 2017-10-12    |
-      | Orange estimator | Orange Wrench, Cloudy Beam | validated |               | 2017-10-02    |
+      | Wrench catalogue | Orange Wrench              | published | Orange Wrench | 2017-10-12    |
+      | Orange estimator | Orange Wrench, Cloudy Beam | published |               | 2017-10-02    |
 
     When I am an anonymous user
     And I go to the homepage of the "Orange Wrench" collection
@@ -277,61 +276,68 @@ Feature: Pinning entities inside collections
 
   @javascript
   Scenario: Last update time of a solution is not affected by (un)pinning.
+    Given the following collections:
+      | title              | state     | creation date | modification date |
+      | Orange Screwdriver | published | 2018-10-15    | 2019-10-15T23:03  |
+      | Green Screwdriver  | published | 2018-11-05    | 2019-11-05T23:03  |
     Given discussion content:
-      | title                        | collection    | state     | pinned | created    |
-      | What kind of wrench is this? | Orange Wrench | validated | no     | 2017-11-20 |
-    And solutions:
-      | title                | collection    | state     | pinned in     | creation date |
-      | Drop forged wrenches | Orange Wrench | validated | Orange Wrench | 2017-10-12    |
-    And I am logged in as "Rozanne Minett"
-    And I accept essential cookies
+      | title                             | collection         | state     | pinned | created    | changed    |
+      | What kind of screwdriver is this? | Orange Screwdriver | published | no     | 2017-11-20 | 2018-11-20 |
+    Given solutions:
+      | title                    | collection         | state     | pinned in          | creation date | modification date |
+      | Drop forged screwdrivers | Orange Screwdriver | published | Orange Screwdriver | 2017-10-12    | 2018-10-12T23:03  |
+    And the following collection user memberships:
+      | collection         | user           | roles       |
+      | Orange Screwdriver | Rozanne Minett | facilitator |
+      | Green Screwdriver  | Rozanne Minett | facilitator |
+    Given I am logged in as "Rozanne Minett"
 
     # Pinning and unpinning items should not affect the "last update" timestamp.
     # Before changing the pinned status, let's check that the solution is in the
     # expected position when searching for content ordered by last updated time.
     When I visit the search page
     And I select "Last Updated Date" from "Sort by"
-    And I enter "wrench" in the search bar and press enter
+    And I enter "screwdriver" in the search bar and press enter
     Then I should see the following tiles in the correct order:
-      | Green Wrench                 |
-      | Orange Wrench                |
-      | What kind of wrench is this? |
-      | Drop forged wrenches         |
+      | Green Screwdriver                 |
+      | Orange Screwdriver                |
+      | What kind of screwdriver is this? |
+      | Drop forged screwdrivers          |
 
-    When I go to the homepage of the "Orange Wrench" collection
-    When I click the contextual link "Unpin" in the "Drop forged wrenches" tile
-    Then I should see the success message "Solution Drop forged wrenches has been unpinned in the collection Orange Wrench."
+    When I go to the homepage of the "Orange Screwdriver" collection
+    When I click the contextual link "Unpin" in the "Drop forged screwdrivers" tile
+    Then I should see the success message "Solution Drop forged screwdrivers has been unpinned in the collection Orange Screwdriver."
 
     When I visit the search page
     And I select "Last Updated Date" from "Sort by"
-    And I enter "wrench" in the search bar and press enter
+    And I enter "screwdriver" in the search bar and press enter
     Then I should see the following tiles in the correct order:
-      | Green Wrench                 |
-      | Orange Wrench                |
-      | What kind of wrench is this? |
-      | Drop forged wrenches         |
+      | Green Screwdriver                 |
+      | Orange Screwdriver                |
+      | What kind of screwdriver is this? |
+      | Drop forged screwdrivers          |
 
-    When I go to the homepage of the "Orange Wrench" collection
-    When I click the contextual link "Pin" in the "Drop forged wrenches" tile
-    Then I should see the success message "Solution Drop forged wrenches has been pinned in the collection Orange Wrench."
+    When I go to the homepage of the "Orange Screwdriver" collection
+    When I click the contextual link "Pin" in the "Drop forged screwdrivers" tile
+    Then I should see the success message "Solution Drop forged screwdrivers has been pinned in the collection Orange Screwdriver."
 
     # Check that the "last update" timestamp has not been affected. We can check
     # this in the search page.
     When I visit the search page
     And I select "Last Updated Date" from "Sort by"
-    And I enter "wrench" in the search bar and press enter
+    And I enter "screwdriver" in the search bar and press enter
     Then I should see the following tiles in the correct order:
-      | Green Wrench                 |
-      | Orange Wrench                |
-      | What kind of wrench is this? |
-      | Drop forged wrenches         |
+      | Green Screwdriver                 |
+      | Orange Screwdriver                |
+      | What kind of screwdriver is this? |
+      | Drop forged screwdrivers          |
 
   @javascript
   Scenario Outline: Pinned content tiles should show a visual cue only in their collection homepage.
     Given <content type> content:
       | title         | headline      | collection    | state     | pinned | shared on   |
-      | Lantern FAQs  | Lantern FAQs  | Orange Wrench | validated | yes    | Cloudy Beam |
-      | Lantern terms | Lantern terms | Orange Wrench | validated | no     |             |
+      | Lantern FAQs  | Lantern FAQs  | Orange Wrench | published | yes    | Cloudy Beam |
+      | Lantern terms | Lantern terms | Orange Wrench | published | no     |             |
 
     When I go to the homepage of the "Orange Wrench" collection
     Then the "Lantern FAQs" tile should be marked as pinned
@@ -346,7 +352,6 @@ Feature: Pinning entities inside collections
 
     # Verify that changes in the pinned state are reflected to the tile.
     When I am logged in as a facilitator of the "Orange Wrench" collection
-    And I accept essential cookies
     When I go to the homepage of the "Orange Wrench" collection
     Then the "Lantern FAQs" tile should be marked as pinned
     But the "Lantern terms" tile should not be marked as pinned
@@ -363,16 +368,15 @@ Feature: Pinning entities inside collections
       | content type |
       | event        |
       | document     |
-      | discussion   |
       | news         |
 
   @javascript
   Scenario: Pinned solutions tiles should show a visual cue only in their collection homepage.
     Given solutions:
       | title             | collection                 | state     | pinned in     |
-      | Positive sunshine | Orange Wrench              | validated | Orange Wrench |
+      | Positive sunshine | Orange Wrench              | published | Orange Wrench |
       # Note: it is not yet possible to affiliate a solution to multiple collections from the UI.
-      | Fast lightning    | Orange Wrench, Cloudy Beam | validated | Cloudy Beam   |
+      | Fast lightning    | Orange Wrench, Cloudy Beam | published | Cloudy Beam   |
 
     When I go to the homepage of the "Orange Wrench" collection
     Then the "Positive sunshine" tile should be marked as pinned
@@ -387,7 +391,6 @@ Feature: Pinning entities inside collections
 
     # Verify that changes in the pinned state are reflected to the tile.
     When I am logged in as "Rozanne Minett"
-    And I accept essential cookies
     And I go to the homepage of the "Orange Wrench" collection
     And I click the contextual link "Pin" in the "Fast lightning" tile
     Then the "Fast lightning" tile should be marked as pinned

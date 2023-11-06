@@ -178,7 +178,7 @@ class DownloadTrackingController extends ControllerBase {
    *   Allowed when the file exists, neutral otherwise.
    */
   public function isDistributionFile(FileInterface $file, AccountInterface $account) {
-    $query = $this->sparqlStorage->getQuery();
+    $query = $this->sparqlStorage->getQuery()->accessCheck(FALSE);
     $file_url_handler = $this->fileUrlHandler;
 
     // Verify that the file exists and it's attached to a solution.

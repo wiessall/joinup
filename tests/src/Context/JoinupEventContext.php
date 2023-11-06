@@ -9,14 +9,14 @@ use Drupal\Core\Site\Settings;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\DrupalExtension\Hook\Scope\BeforeNodeCreateScope;
 use Drupal\datetime\Plugin\Field\FieldType\DateTimeItemInterface;
-use Drupal\joinup\Traits\NodeTrait;
+use Drupal\joinup\Traits\EntityTrait;
 
 /**
  * Behat step definitions for testing events.
  */
 class JoinupEventContext extends RawDrupalContext {
 
-  use NodeTrait;
+  use EntityTrait;
 
   /**
    * Keeps track of the number of Webtools Geocoding cache results that exist.
@@ -38,7 +38,7 @@ class JoinupEventContext extends RawDrupalContext {
    */
   public function visitEvent(string $title): void {
     /** @var \Drupal\node\Entity\Node $node */
-    $node = $this->getNodeByTitle($title, 'event');
+    $node = $this->getEntityByLabel('node', $title, 'event');
     $this->visitPath($node->toUrl()->toString());
   }
 
@@ -56,22 +56,13 @@ class JoinupEventContext extends RawDrupalContext {
    */
   public static function massageEventFieldsBeforeNodeCreate(BeforeNodeCreateScope $scope): void {
     $node = $scope->getEntity();
-    /** @var \Drupal\Core\Datetime\DateFormatterInterface $date_formatter */
-    $date_formatter = \Drupal::service('date.formatter');
-
     if ($node->type !== 'event') {
       return;
     }
 
     foreach (['field_event_date:value', 'field_event_date:end_value'] as $field) {
       if (isset($node->$field)) {
-        $date = strtotime($node->$field);
-
-        if ($date === FALSE) {
-          throw new \Exception(sprintf('Invalid format for date specified: %s', $node->$field));
-        }
-
-        $node->$field = $date_formatter->format($date, 'custom', DateTimeItemInterface::DATETIME_STORAGE_FORMAT);
+        $node->$field = date(DateTimeItemInterface::DATETIME_STORAGE_FORMAT, strtotime($node->$field));
       }
     }
 
@@ -129,7 +120,7 @@ class JoinupEventContext extends RawDrupalContext {
 
     if ($expected_count !== NULL && $expected_count != self::getWebtoolsGeocodingCacheCount()) {
       $feature = $scope->getFeature()->getFile();
-      throw new \Exception("$feature is doing live requests to the Webtools Geocoding service. Please make sure to commit all cached requests in tests/fixtures/webtools_geocoding_cache.");
+      throw new \Exception("$feature is doing live requests to the Webtools Geocoding service. Please make sure to commit all cached requests in tests/fixtures/geocoding/cache.");
     }
   }
 

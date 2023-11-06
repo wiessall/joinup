@@ -17,8 +17,8 @@ Feature: Solution membership administration
       | Guadalupe Norman |       | guadalupe_norman@example.com | Guadalupe  | Norman      |
       | Marcia Garcia    |       | marcia_garcia@example.com    | Marcia     | Garcia      |
     And the following solutions:
-      | title            | related solutions | description                       | documentation | moderation | logo     | banner     | topic      | state     | solution type | owner                | contact information                      |
-      | The Missing Sons |                   | Blazing fast segmentation faults. | text.pdf      | no         | logo.png | banner.jpg | Demography | validated |               | James Wilson the 2nd | Princeton-Plainsboro Teaching University |
+      | title            | related solutions | description                       | documentation | moderation | logo     | topic      | state     | solution type | owner                | contact information                      |
+      | The Missing Sons |                   | Blazing fast segmentation faults. | text.pdf      | no         | logo.png | Demography | published |               | James Wilson the 2nd | Princeton-Plainsboro Teaching University |
     And the following solution user memberships:
       | solution         | user             | roles       |
       | The Missing Sons | Guadalupe Norman | facilitator |
@@ -66,7 +66,7 @@ Feature: Solution membership administration
     Then I should see the link "Add members"
     Then I check the box "Update the member Marcia Garcia"
     Then I select "Add the facilitator role to the selected members" from "Action"
-    And I press the "Apply to selected items" button
+    And I press "Apply to selected items"
     Then I should see the following success messages:
       | success messages                                                        |
       | Add the facilitator role to the selected members was applied to 1 item. |
@@ -76,7 +76,7 @@ Feature: Solution membership administration
       | body      | Guadalupe Norman has changed your role in solution "The Missing Sons" to facilitator. |
     Then I check the box "Update the member Marcia Garcia"
     Then I select "Remove the facilitator role from the selected members" from "Action"
-    And I press the "Apply to selected items" button
+    And I press "Apply to selected items"
     Then I should see the following success messages:
       | success messages                                                             |
       | Remove the facilitator role from the selected members was applied to 1 item. |

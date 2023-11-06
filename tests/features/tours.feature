@@ -28,12 +28,13 @@ Feature: Tours
 
     Examples:
       | path             | expectation   |
-      | /                | should be     |
+      # No button exists in the homepage.
+      | /                | should not be |
       | /keep-up-to-date | should be     |
       | /collections     | should not be |
       | /solutions       | should not be |
       # Recheck some URLs to ensure that cache contexts are working.
-      | /                | should be     |
+      | /                | should not be |
       | /solutions       | should not be |
       | /keep-up-to-date | should be     |
 
@@ -45,11 +46,7 @@ Feature: Tours
     # occurs and in the screenshots we can see that the "Guided tour" button is
     # just on the bottom edge of the display.
     And I use a device with an "extra extra large" display
-    And I accept essential cookies
-    When I click "Guided tour"
-    # @todo: Revert to the text of the first balloon when ISAICP-6855 is fixed.
-    # @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-6855
-    #Then I should see the text "Sign in or out, and manage your user account"
-    Then I should see the text "Search through the entire Joinup platform and its supported content items."
+    When I press "Guided tour"
+    Then I should see the text "Sign in or out, and manage your user account"
     # Switch back to a smaller resolution.
     And I use a device with an "extra large" display

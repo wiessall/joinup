@@ -6,8 +6,8 @@ namespace Drupal\joinup_user\ContextProvider;
 
 use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Plugin\Context\Context;
-use Drupal\Core\Plugin\Context\ContextDefinition;
 use Drupal\Core\Plugin\Context\ContextProviderInterface;
+use Drupal\Core\Plugin\Context\EntityContextDefinition;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 
@@ -49,7 +49,7 @@ class UserRouteContext implements ContextProviderInterface {
     $cacheability = new CacheableMetadata();
     $cacheability->setCacheContexts(['route']);
 
-    $context = new Context(new ContextDefinition('entity:user', $this->t('User from URL')), $value);
+    $context = new Context(new EntityContextDefinition('entity:user', $this->t('User from URL')), $value);
     $context->addCacheableDependency($cacheability);
 
     return ['user_route' => $context];
@@ -59,7 +59,7 @@ class UserRouteContext implements ContextProviderInterface {
    * {@inheritdoc}
    */
   public function getAvailableContexts() {
-    $context = new Context(new ContextDefinition('entity:user', $this->t('User from URL')));
+    $context = new Context(new EntityContextDefinition('entity:user', $this->t('User from URL')));
     return ['user_route' => $context];
   }
 

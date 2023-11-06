@@ -1,0 +1,9 @@
+uuid: a52b6946-52b1-4e8a-b60d-25af807b9703
+langcode: en
+status: true
+dependencies: {  }
+id: search_api__views_block__solutions_meta_entity__solutions_meta_entity_block
+name: 'search_api:views_block__solutions_meta_entity__solutions_meta_entity_block'
+filter_key: null
+url_processor: query_string
+breadcrumb: {  }

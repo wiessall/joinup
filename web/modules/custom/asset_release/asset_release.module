@@ -8,6 +8,7 @@
 declare(strict_types = 1);
 
 use Drupal\Core\Access\AccessResult;
+use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
@@ -132,7 +133,7 @@ function asset_release_preprocess_rdf_entity(array &$variables): void {
   // Invalidate the rendered template cache of the latest release in that case,
   // so the latest release flag gets updated.
   if ($solution && $variables['is_latest_release']) {
-    $cache_tags = isset($variables['#cache']['tags']) ? $variables['#cache']['tags'] : [];
+    $cache_tags = $variables['#cache']['tags'] ?? [];
     $cache_tags = Cache::mergeTags($cache_tags, $solution->getCacheTags());
 
     // Add the group content tag belonging to the parent too. We need to
@@ -162,7 +163,7 @@ function asset_release_theme($existing, $type, $theme, $path) {
  * granted if there are no transitions allowed for the current state of the
  * node.
  */
-function asset_release_rdf_entity_access(EntityInterface $release, $operation, AccountInterface $account) {
+function asset_release_rdf_entity_access(EntityInterface $release, $operation, AccountInterface $account): AccessResultInterface {
   if (!$release instanceof AssetReleaseInterface || $account->hasPermission($release->getEntityType()->getAdminPermission())) {
     return AccessResult::neutral();
   }
@@ -202,11 +203,20 @@ function asset_release_rdf_entity_access(EntityInterface $release, $operation, A
       return AccessResult::forbiddenIf(empty($allowed_states));
 
     case 'delete':
-      // In Joinup, only moderators can delete releases. The following check
-      // will add a forbidden opinion in the delete access check if the user
-      // does not have a global delete permission to override OG group admin
-      // privileges.
-      return AccessResult::forbiddenIf(!$account->hasPermission('delete asset_release rdf entity'));
+      $parent = $release->getSolution();
+
+      // If for any reason access is requested to an entity without a parent,
+      // deny that access.
+      if (empty($parent)) {
+        return AccessResult::forbidden();
+      }
+
+      $membership = $parent->getMembership((int) $account->id());
+      if (empty($membership)) {
+        return AccessResult::allowedIf($account->hasPermission('delete asset_release rdf entity'));
+      }
+
+      return AccessResult::allowedIf($membership->hasPermission('delete asset_release rdf entity'));
   }
 
   return AccessResult::neutral();
@@ -244,7 +254,7 @@ function asset_release_rdf_entity_presave(EntityInterface $entity) {
   if (in_array($state, ['draft', 'needs_update'])) {
     $entity->set('graph', 'draft');
   }
-  elseif (in_array($state, ['validated'])) {
+  elseif (in_array($state, ['published'])) {
     $entity->set('graph', SparqlGraphInterface::DEFAULT);
   }
   elseif (empty($state)) {
@@ -267,7 +277,7 @@ function asset_release_entity_update(EntityInterface $entity) {
     return;
   }
 
-  if ($entity->field_isr_state->value === 'validated') {
+  if ($entity->field_isr_state->value === 'published') {
     \Drupal::entityTypeManager()->getStorage('rdf_entity')->deleteFromGraph([$entity], 'draft');
   }
 }
@@ -310,7 +320,7 @@ function template_preprocess_asset_release_releases_download(array &$variables) 
  *   TRUE if the title and version are unique.
  */
 function asset_release_title_version_is_unique(AssetReleaseInterface $asset_release, $check_unaffiliated_solutions = FALSE) {
-  $query = \Drupal::entityQuery('rdf_entity')
+  $query = \Drupal::entityQuery('rdf_entity')->accessCheck(FALSE)
     ->condition('label', $asset_release->label())
     ->condition('field_isr_release_number', $asset_release->getVersion())
     ->condition('rid', 'asset_release');

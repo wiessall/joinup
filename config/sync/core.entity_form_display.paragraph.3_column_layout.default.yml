@@ -1,0 +1,139 @@
+uuid: 065966b6-a612-45a1-97dc-7d49fdd431a9
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.3_column_layout.paragraph_column_center
+    - field.field.paragraph.3_column_layout.paragraph_column_left
+    - field.field.paragraph.3_column_layout.paragraph_column_right
+    - paragraphs.paragraphs_type.3_column_layout
+  module:
+    - field_group
+    - paragraphs
+third_party_settings:
+  field_group:
+    group_3_column_accordion:
+      children:
+        - group_3_col_acc_left
+        - group_3_col_acc_center
+        - group_3_col_acc_right
+      label: '3 column accordion'
+      region: content
+      parent_name: ''
+      weight: 0
+      format_type: accordion
+      format_settings:
+        classes: ''
+        show_empty_fields: false
+        id: ''
+        effect: none
+    group_3_col_acc_left:
+      children:
+        - paragraph_column_left
+      label: 'Left sidebar'
+      region: content
+      parent_name: group_3_column_accordion
+      weight: 6
+      format_type: accordion_item
+      format_settings:
+        classes: ''
+        show_empty_fields: false
+        id: ''
+        formatter: closed
+        description: ''
+        required_fields: true
+    group_3_col_acc_center:
+      children:
+        - paragraph_column_center
+      label: Center
+      region: content
+      parent_name: group_3_column_accordion
+      weight: 7
+      format_type: accordion_item
+      format_settings:
+        classes: ''
+        show_empty_fields: false
+        id: ''
+        formatter: closed
+        description: ''
+        required_fields: true
+    group_3_col_acc_right:
+      children:
+        - paragraph_column_right
+      label: 'Right side'
+      region: hidden
+      parent_name: group_3_column_accordion
+      weight: 8
+      format_type: accordion_item
+      format_settings:
+        classes: ''
+        show_empty_fields: false
+        id: ''
+        formatter: closed
+        description: ''
+        required_fields: true
+id: paragraph.3_column_layout.default
+targetEntityType: paragraph
+bundle: 3_column_layout
+mode: default
+content:
+  paragraph_column_center:
+    type: paragraphs
+    weight: 4
+    region: content
+    settings:
+      title: Paragraph
+      title_plural: Paragraphs
+      edit_mode: closed
+      closed_mode: summary
+      autocollapse: none
+      closed_mode_threshold: 0
+      add_mode: dropdown
+      form_display_mode: default
+      default_paragraph_type: _none
+      features:
+        add_above: '0'
+        collapse_edit_all: '0'
+        duplicate: duplicate
+    third_party_settings: {  }
+  paragraph_column_left:
+    type: paragraphs
+    weight: 1
+    region: content
+    settings:
+      title: Paragraph
+      title_plural: Paragraphs
+      edit_mode: closed
+      closed_mode: summary
+      autocollapse: none
+      closed_mode_threshold: 0
+      add_mode: dropdown
+      form_display_mode: default
+      default_paragraph_type: _none
+      features:
+        add_above: '0'
+        collapse_edit_all: '0'
+        duplicate: duplicate
+    third_party_settings: {  }
+  paragraph_column_right:
+    type: paragraphs
+    weight: 3
+    region: content
+    settings:
+      title: Paragraph
+      title_plural: Paragraphs
+      edit_mode: closed
+      closed_mode: summary
+      autocollapse: none
+      closed_mode_threshold: 0
+      add_mode: dropdown
+      form_display_mode: default
+      default_paragraph_type: _none
+      features:
+        add_above: '0'
+        collapse_edit_all: '0'
+        duplicate: duplicate
+    third_party_settings: {  }
+hidden:
+  created: true
+  status: true

@@ -21,8 +21,8 @@ Feature: Collection membership administration
       | Turkey Ham        |       | turkey_ham@example.com        | Turkey     | Ham         |
       | Cam Bridge        |       | cambridge@example.com         | Cam        | Bridge      |
     And the following collections:
-      | title             | description               | logo     | banner     | owner        | contact information                    | closed | state     |
-      | Medical diagnosis | 10 patients in 10 minutes | logo.png | banner.jpg | James Wilson | Princeton-Plainsboro Teaching Hospital | yes    | validated |
+      | title             | description               | logo     | owner        | contact information                    | closed | state     |
+      | Medical diagnosis | 10 patients in 10 minutes | logo.png | James Wilson | Princeton-Plainsboro Teaching Hospital | yes    | published |
     And the following collection user memberships:
       | collection        | user              | roles                      | state   |
       | Medical diagnosis | Lisa Cuddy        | administrator, facilitator | active  |
@@ -39,10 +39,9 @@ Feature: Collection membership administration
   Scenario: Request a membership
     When I am logged in as "Donald Duck"
     And I go to the "Medical diagnosis" collection
-    And I press the "Join this collection" button
+    And I press "Join this collection"
     Then I should see the success message "Your membership to the Medical diagnosis collection is under approval."
     And the email sent to "Lisa Cuddy" with subject "Joinup: A user has requested to join your collection" contains the following lines of text:
-      | text                                                                               |
       | Donald Duck has requested to join your collection "Medical diagnosis" as a member. |
       | To approve or reject this request, click on                                        |
       | If you think this action is not clear or not due, please contact Joinup Support at |
@@ -68,6 +67,7 @@ Feature: Collection membership administration
     Given I am logged in as "Lisa Cuddy"
     And I am on the members page of "Medical diagnosis"
     Then the "Action" select should contain the following options:
+      | - Select -                                                      |
       | Approve the pending membership(s)                               |
       | Block the selected membership(s)                                |
       | Unblock the selected membership(s)                              |
@@ -81,15 +81,13 @@ Feature: Collection membership administration
     Then I should not see the link "Group"
     And I check the box "Update the member Kathie Cumbershot"
     Then I select "Approve the pending membership(s)" from "Action"
-    And I press the "Apply to selected items" button
+    And I press "Apply to selected items"
     Then I should see the following success messages:
       | success messages                                         |
       | Approve the pending membership(s) was applied to 1 item. |
     And the email sent to "Kathie Cumbershot" with subject "Joinup: Your request to join the collection Medical diagnosis was approved" contains the following lines of text:
-      | text                                                                            |
       | Lisa Cuddy has approved your request to join the "Medical diagnosis" collection |
     But the email sent to "Kathie Cumbershot" with subject "Joinup: Your request to join the collection Medical diagnosis was approved" should not contain the following lines of text:
-      | text                                                                                |
       | You will receive weekly notifications for newly created content on this collection. |
       | To manage your notifications go to "My subscriptions" in the user menu.             |
       | If you think this action is not clear or not due, please contact Joinup Support at  |
@@ -105,7 +103,7 @@ Feature: Collection membership administration
   Scenario: Request a membership with subscription and approve it
     When I am logged in as "Cam Bridge"
     And I go to the "Medical diagnosis" collection
-    And I press the "Join this collection" button
+    And I press "Join this collection"
     Then a modal should open
     And I should see the text "Want to receive notifications, too?"
 
@@ -115,19 +113,16 @@ Feature: Collection membership administration
 
     # Approve a membership.
     Given I am logged in as "Lisa Cuddy"
-    And I accept essential cookies
     And I go to the "Medical diagnosis" collection
 
-    And I open the group sidebar menu
-    And I click "Members" in the "Left sidebar"
+    And I click "Members" in the "Header"
     And I check the box "Update the member Cam Bridge"
     Then I select "Approve the pending membership(s)" from "Action"
-    And I press the "Apply to selected items" button
+    And I press "Apply to selected items"
     Then I should see the following success messages:
       | success messages                                         |
       | Approve the pending membership(s) was applied to 1 item. |
     And the email sent to "Cam Bridge" with subject "Joinup: Your request to join the collection Medical diagnosis was approved" contains the following lines of text:
-      | text                                                                                             |
       | Lisa Cuddy has approved your request to join and subscribe to the "Medical diagnosis" collection |
       | You will receive weekly notifications for newly created content on this collection.              |
       | To manage your notifications go to "My subscriptions" in the user menu.                          |
@@ -145,7 +140,7 @@ Feature: Collection membership administration
     And I check the box "Update the member Kathie Cumbershot"
     Then I select "Delete the selected membership(s)" from "Action"
 
-    When I press the "Apply to selected items" button
+    When I press "Apply to selected items"
     Then I should see the heading "Are you sure you want to delete the selected membership from the 'Medical diagnosis' collection?"
     And I should see "The member Kathie Cumbershot will be deleted from the 'Medical diagnosis' collection."
     And I should see "This action cannot be undone."
@@ -156,7 +151,7 @@ Feature: Collection membership administration
     Given I check the box "Update the member Kathie Cumbershot"
     Then I select "Delete the selected membership(s)" from "Action"
 
-    When I press the "Apply to selected items" button
+    When I press "Apply to selected items"
     Then I should see the heading "Are you sure you want to delete the selected membership from the 'Medical diagnosis' collection?"
 
     When I press "Confirm"
@@ -173,7 +168,7 @@ Feature: Collection membership administration
     And I check the box "Update the member Turkey Ham"
 
     When I select "Delete the selected membership(s)" from "Action"
-    And I press the "Apply to selected items" button
+    And I press "Apply to selected items"
     Then I should see the heading "Are you sure you want to delete the selected memberships from the 'Medical diagnosis' collection?"
     And I should see "The following members:"
     And I should see "Gregory House"
@@ -202,12 +197,12 @@ Feature: Collection membership administration
     # Dr Cuddy promotes Dr House to facilitator.
     When I am logged in as "Lisa Cuddy"
     And I go to the "Medical diagnosis" collection
-    Then I click "Members" in the "Left sidebar"
+    Then I click "Members" in the "Header"
     # Assert that the user does not see the default OG tab.
     Then I should not see the link "Group"
     Then I check the box "Update the member Gregory House"
     Then I select "Add the facilitator role to the selected members" from "Action"
-    And I press the "Apply to selected items" button
+    And I press "Apply to selected items"
     Then I should see the following success messages:
       | success messages                                                        |
       | Add the facilitator role to the selected members was applied to 1 item. |
@@ -229,22 +224,22 @@ Feature: Collection membership administration
 
     When I am not logged in
     And I go to the "Medical diagnosis" collection
-    And I click "Members" in the "Left sidebar"
+    And I click "Members" in the "Header"
     Then I should not see the link "Add members"
 
     When I am logged in as an authenticated
     And I go to the "Medical diagnosis" collection
-    And I click "Members" in the "Left sidebar"
+    And I click "Members" in the "Header"
     Then I should not see the link "Add members"
 
     When I am logged in as "dwightone"
     And I go to the "Medical diagnosis" collection
-    And I click "Members" in the "Left sidebar"
+    And I click "Members" in the "Header"
     Then I should not see the link "Add members"
 
     When I am logged in as "Lisa Cuddy"
     And I go to the "Medical diagnosis" collection
-    And I click "Members" in the "Left sidebar"
+    And I click "Members" in the "Header"
     Then I should see the link "Add members"
     When I click "Add members"
     Then I should see the heading "Add members"
@@ -271,19 +266,19 @@ Feature: Collection membership administration
     When I fill in "E-mail" with "j.belanger@example.com"
     And I press "Add"
     Then the page should show the following chips in the Content region:
-      | Jeannette Belanger |
       | Gregory House      |
+      | Jeannette Belanger |
     When I fill in "E-mail" with "donald_duck@example.com"
     And I press "Add"
     Then the page should show the following chips in the Content region:
-      | Jeannette Belanger |
       | Gregory House      |
+      | Jeannette Belanger |
       | Donald Duck        |
     # Remove a user.
     When I press the remove button on the chip "Donald Duck"
     Then the page should show the following chips in the Content region:
-      | Jeannette Belanger |
       | Gregory House      |
+      | Jeannette Belanger |
     And I should not see the text "Donald Duck"
 
     # Add the users as members.
@@ -308,14 +303,14 @@ Feature: Collection membership administration
     # Try new privileges.
     When I am logged in as "dwightone"
     And I go to the "Medical diagnosis" collection
-    And I click "Members" in the "Left sidebar"
+    And I click "Members" in the "Header"
     Then I should see the link "Add members"
     When I click "Add members"
     Then I should see the heading "Add members"
 
     When I am logged in as "jbelanger"
     And I go to the "Medical diagnosis" collection
-    And I click "Members" in the "Left sidebar"
+    And I click "Members" in the "Header"
     Then I should not see the link "Add members"
 
   Scenario: Sort member administration bulk form by full user name
@@ -329,7 +324,7 @@ Feature: Collection membership administration
       | Medical diagnosis | xyzzy123 | active |
     When I am logged in as "Lisa Cuddy"
     And I go to the "Medical diagnosis" collection
-    When I click "Members" in the "Left sidebar"
+    When I click "Members" in the "Header"
     Then I should see a table with 5 columns
     # By default the table should be sorted alphabetically.
     And the "member administration" table should contain the following column:
@@ -359,22 +354,22 @@ Feature: Collection membership administration
 
     When I am not logged in
     And I go to the "Medical diagnosis" collection
-    And I click "Members" in the "Left sidebar"
+    And I click "Members" in the "Header"
     Then I should not see the link "Invite members"
 
     When I am logged in as an authenticated
     And I go to the "Medical diagnosis" collection
-    And I click "Members" in the "Left sidebar"
+    And I click "Members" in the "Header"
     Then I should not see the link "Invite members"
 
     When I am logged in as "dwightone"
     And I go to the "Medical diagnosis" collection
-    And I click "Members" in the "Left sidebar"
+    And I click "Members" in the "Header"
     Then I should not see the link "Invite members"
 
     When I am logged in as "Lisa Cuddy"
     And I go to the "Medical diagnosis" collection
-    And I click "Members" in the "Left sidebar"
+    And I click "Members" in the "Header"
     Then I should see the link "Invite members"
     When I click "Invite members"
     Then I should see the heading "Invite members"
@@ -400,7 +395,7 @@ Feature: Collection membership administration
     And I accept the invitation for the "Medical diagnosis" collection group
     Then I should see the text "You have been promoted to collection facilitator"
     And I go to the "Medical diagnosis" collection
-    And I click "Members" in the "Left sidebar"
+    And I click "Members" in the "Header"
     Then I should see the link "Add members"
     And I should see the link "Invite members"
     When I click "Invite members"
@@ -415,9 +410,9 @@ Feature: Collection membership administration
     # Join the collection manually and trigger the invitation.
     When I am logged in as "jbelanger"
     And I go to the "Medical diagnosis" collection
-    And I press the "Join this collection" button
+    And I press "Join this collection"
     And I go to the "Medical diagnosis" collection
-    And I click "Members" in the "Left sidebar"
+    And I click "Members" in the "Header"
     # The Medical diagnosis collection is closed so normally the membership should be pending.
     # However, since there is an active invitation, both the status and the initial roles are overridden.
     # Being able to view the links below mean that the membership is active and the user is a facilitator.
@@ -435,13 +430,49 @@ Feature: Collection membership administration
 
     When I am logged in as "Lisa Cuddy"
     And I go to the "Medical diagnosis" collection
-    And I click "Members" in the "Left sidebar"
+    And I click "Members" in the "Header"
     When I click "Invite members"
 
     When I fill in "E-mail" with "pending_member@example.com"
     And I press "Add"
     Then the page should show the following chips in the Content region:
-      | Pending Member   |
+      | Pending Member |
     And I press "Invite members"
-    Then I should not see the success message "Successfully invited the selected users."
+    Then I should not see the success message "1 user has been invited to this group."
     And I should see the error message "1 user has a pending membership. Please, approve their membership request and assign the roles."
+
+  @javascript
+  Scenario: Autocomplete creates chips in both the add and the invite forms.
+    Given I am logged in as "Lisa Cuddy"
+    And I go to the "Medical diagnosis" collection
+    And I click "Members" in the "Header"
+    When I click "Invite members"
+    And I type "Donald" in the "E-mail" autocomplete field
+    And I wait until the page contains the text "Donald Duck (Donald Duck)"
+    And I pick "Donald Duck (Donald Duck)" from the "Link" autocomplete suggestions
+    Then the page should show the following chips in the Content region:
+      | Donald Duck |
+    When I press the remove button on the chip "Donald Duck"
+    Then I should not see the text "Donald Duck"
+    When I type "Donald" in the "E-mail" autocomplete field
+    And I wait until the page contains the text "Donald Duck (Donald Duck)"
+    And I pick "Donald Duck (Donald Duck)" from the "Link" autocomplete suggestions
+    And I press "Invite members"
+    Then I should see the success message "1 user has been invited to this group."
+
+    And I click "Members" in the "Header"
+    When I click "Add members"
+    And I type "Turkey" in the "E-mail" autocomplete field
+    And I wait until the page contains the text "Turkey Ham (Turkey Ham)"
+    And I pick "Turkey Ham (Turkey Ham)" from the "Link" autocomplete suggestions
+    Then the page should show the following chips in the Content region:
+      | Turkey Ham |
+    When I press the remove button on the chip "Turkey Ham"
+    Then I should not see the text "Turkey Ham"
+    When I type "Turkey" in the "E-mail" autocomplete field
+    And I wait until the page contains the text "Turkey Ham (Turkey Ham)"
+    And I pick "Turkey Ham (Turkey Ham)" from the "Link" autocomplete suggestions
+    Then the page should show the following chips in the Content region:
+      | Turkey Ham |
+    And I press "Add members"
+    Then I should see the success message "Successfully added the role Member to the selected users."

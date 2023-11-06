@@ -2,8 +2,7 @@ name: 'Joinup user'
 description: 'User profile fields, user notifications, ...'
 type: module
 package: Joinup
-core_version_requirement: ^8.9 || ^9.1
-php: 7.1
+core_version_requirement: ">= 9.4"
 
 dependencies:
   - 'drupal:user'
@@ -12,6 +11,3 @@ dependencies:
   - 'og:og'
   - 'social_media_links:social_media_links_field'
   - 'state_machine_revisions:state_machine_revisions'
-config_devel:
-  install:
-    - joinup_user.mail

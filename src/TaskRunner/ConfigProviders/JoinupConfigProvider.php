@@ -41,7 +41,7 @@ class JoinupConfigProvider implements ConfigProviderInterface {
     // Create all missed env.* configs from environment variables. The task
     // runner config only resolves the environment variables used as tokens in
     // other configs.
-    foreach ($_SERVER as $name => $value) {
+    foreach (getenv() as $name => $value) {
       $config->set("env.{$name}", $value);
     }
 

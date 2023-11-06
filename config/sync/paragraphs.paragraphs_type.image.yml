@@ -1,0 +1,16 @@
+uuid: 5796b809-7451-4112-86c8-631909518409
+langcode: en
+status: true
+dependencies:
+  content:
+    - 'file:file:99e28dd8-a779-43ae-b3eb-23333dcf50b5'
+  module:
+    - joinup_paragraphs
+id: image
+label: Image
+icon_uuid: 99e28dd8-a779-43ae-b3eb-23333dcf50b5
+icon_default: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNiIgaGVpZ2h0PSIxNiIgZmlsbD0iY3VycmVudENvbG9yIiBjbGFzcz0iYmkgYmktaW1hZ2UiIHZpZXdCb3g9IjAgMCAxNiAxNiI+CiAgPHBhdGggZD0iTTYuMDAyIDUuNWExLjUgMS41IDAgMSAxLTMgMCAxLjUgMS41IDAgMCAxIDMgMHoiLz4KICA8cGF0aCBkPSJNMi4wMDIgMWEyIDIgMCAwIDAtMiAydjEwYTIgMiAwIDAgMCAyIDJoMTJhMiAyIDAgMCAwIDItMlYzYTIgMiAwIDAgMC0yLTJoLTEyem0xMiAxYTEgMSAwIDAgMSAxIDF2Ni41bC0zLjc3Ny0xLjk0N2EuNS41IDAgMCAwLS41NzcuMDkzbC0zLjcxIDMuNzEtMi42Ni0xLjc3MmEuNS41IDAgMCAwLS42My4wNjJMMS4wMDIgMTJWM2ExIDEgMCAwIDEgMS0xaDEyeiIvPgo8L3N2Zz4='
+description: ''
+behavior_plugins:
+  alignment:
+    enabled: true

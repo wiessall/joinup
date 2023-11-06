@@ -1,0 +1,21 @@
+{#
+/**
+ * @file
+ * Flag count archived template
+ *
+ * Available variables:
+ * - flag: The flag object.
+ * - flaggable: The flaggable entity.
+ */
+#}
+{% spaceless %}
+  {# Set the remaining Flag CSS classes. #}
+  {% set classes = [
+    'flag',
+    'flag-' ~ flag.id()|clean_class,
+  ] %}
+
+  {% set count = flagcount(flag, flaggable) %}
+
+  <div class="{{ classes|join(' ') }}">{{ flag.label() }}: <span>{{ count }}</span></div>
+{% endspaceless %}

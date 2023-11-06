@@ -14,6 +14,8 @@ use Drupal\joinup\Traits\UserTrait;
 use Drupal\joinup\Traits\UtilityTrait;
 use Drupal\message\Entity\MessageTemplate;
 use PHPUnit\Framework\Assert;
+use PHPUnit\Framework\ExpectationFailedException;
+use Symfony\Component\DomCrawler\Crawler;
 
 /**
  * Behat step definitions for testing notifications.
@@ -154,7 +156,7 @@ class JoinupNotificationContext extends RawDrupalContext {
       }
 
       if (isset($bcc)) {
-        Assert::assertContains($bcc, $mail['headers']['Bcc'] ?? "", 'Bcc is properly set to the email.');
+        Assert::assertStringContainsString($bcc, $mail['headers']['Bcc'] ?? "", 'Bcc is properly set to the email.');
       }
 
       // We found a match. Stop searching.
@@ -207,8 +209,8 @@ class JoinupNotificationContext extends RawDrupalContext {
   /**
    * Asserts that an email has been sent and contains some pieces of text.
    *
-   * @param string $user
-   *   The user name.
+   * @param string $username_or_email
+   *   The username or user email.
    * @param string $subject
    *   The subject of the email.
    * @param \Behat\Gherkin\Node\TableNode $table
@@ -217,39 +219,45 @@ class JoinupNotificationContext extends RawDrupalContext {
    * @throws \Exception
    *   Throws an exception when a parameter is not the expected one.
    *
-   * @Then the email sent to :user with subject :subject contains the( following lines of) text:
+   * @Then the email sent to :username_or_email with subject :subject contains the( following lines of) text:
    */
-  public function assertEmailSentAndContainsText(string $user, string $subject, TableNode $table) {
-    $lines_of_text = $table->getColumnsHash();
-    $user = user_load_by_name($user);
-    $recipient = $user->getEmail();
-    $mails = $this->getEmailsBySubjectAndMail($subject, $recipient);
-    $email_found = FALSE;
-    foreach ($mails as $mail) {
-      $mail_body = ($mail['body'] instanceof MarkupInterface) ?
-        $this->formatMailBodyMarkup($mail['body']) :
-        $this->formatMailBodyText($mail['body']);
+  public function assertEmailSentAndContainsText(string $username_or_email, string $subject, TableNode $table) {
+    $this->emailSentHelper(TRUE, $username_or_email, $subject, $table);
+  }
 
-      foreach ($lines_of_text as $line_of_text) {
-        $text = $line_of_text['text'];
-        if (strpos($mail_body, $text) === FALSE) {
-          continue 2;
+  /**
+   * Asserts that an email contains attachment.
+   *
+   * @param string $email
+   *   Email address.
+   * @param string $subject
+   *   The subject of the email.
+   * @param string $file
+   *   File name.
+   *
+   * @throws \Exception
+   *   Throws an exception when a parameter is not the expected one.
+   *
+   * @Given /^the email sent to "([^"]*)" with subject "([^"]*)" contains "([^"]*)" attachment$/
+   */
+  public function theEmailSentToWithSubjectContainsAttachment(string $email, string $subject, string $file): void {
+    $mails = $this->getEmailsBySubjectAndMail($subject, $email);
+    foreach ($mails as $mail) {
+      foreach ($mail['params']['attachments'] ?? [] as $attachment) {
+        if ($attachment['filename'] === $file) {
+          return;
         }
       }
-
-      // We found a match. Stop searching.
-      $email_found = TRUE;
-      break;
     }
 
-    Assert::assertTrue($email_found, "Did not find expected email to '$recipient' with subject '$subject'.");
+    throw new \InvalidArgumentException("Attachment $file has not been found.");
   }
 
   /**
    * Asserts that no email of the relevant criteria have been sent.
    *
-   * @param string $user
-   *   The user name.
+   * @param string $username_or_email
+   *   The username or user email.
    * @param string $subject
    *   The subject of the email.
    * @param \Behat\Gherkin\Node\TableNode $table
@@ -258,24 +266,56 @@ class JoinupNotificationContext extends RawDrupalContext {
    * @throws \Exception
    *   Throws an exception when a parameter is not the expected one.
    *
-   * @Then the email sent to :user with subject :subject should not contain the( following lines of) text:
+   * @Then the email sent to :username_or_email with subject :subject should not contain the( following lines of) text:
    */
-  public function assertEmailSentNotContainsText(string $user, string $subject, TableNode $table) {
-    $lines_of_text = $table->getColumnsHash();
-    $user = user_load_by_name($user);
-    $recipient = $user->getEmail();
+  public function assertEmailSentNotContainsText(string $username_or_email, string $subject, TableNode $table) {
+    $this->emailSentHelper(FALSE, $username_or_email, $subject, $table);
+  }
+
+  /**
+   * Provides a helper for 'email sent' assertions.
+   *
+   * @param bool $match
+   *   Whether we check existence or lack of the email.
+   * @param string $username_or_email
+   *   The username or user email.
+   * @param string $subject
+   *   The subject of the email.
+   * @param \Behat\Gherkin\Node\TableNode $table
+   *   The mail data table.
+   *
+   * @throws \Exception
+   *   Throws an exception when a parameter is not the expected one.
+   */
+  protected function emailSentHelper(bool $match, string $username_or_email, string $subject, TableNode $table): void {
+    $lines_of_text = $table->getColumn(0);
+    if ($account = user_load_by_name($username_or_email)) {
+      $recipient = $account->getEmail();
+    }
+    elseif (\Drupal::getContainer()->get('email.validator')->isValid($username_or_email)) {
+      $recipient = $username_or_email;
+    }
+    else {
+      throw new \InvalidArgumentException("'$username_or_email' is neither a valid username, nor a valid email.");
+    }
     $mails = $this->getEmailsBySubjectAndMail($subject, $recipient);
     foreach ($mails as $mail) {
-      $mail_body = ($mail['body'] instanceof MarkupInterface) ?
-        $this->formatMailBodyMarkup($mail['body']) :
-        $this->formatMailBodyText($mail['body']);
-
-      foreach ($lines_of_text as $line_of_text) {
-        $text = $line_of_text['text'];
-        if (strpos($mail_body, $text) !== FALSE) {
-          throw new \Exception("Message with subject '$subject' sent to '$recipient' contains the text '$text'.");
+      $body = ($mail['body'] instanceof MarkupInterface) ? $this->formatMailBodyMarkup($mail['body']) : $this->formatMailBodyText($mail['body']);
+      foreach ($lines_of_text as $text) {
+        $pos = strpos($body, $text);
+        if ($match && $pos === FALSE) {
+          continue 2;
+        }
+        if (!$match && $pos !== FALSE) {
+          throw new ExpectationFailedException("Email with subject '$subject' sent to '$recipient' contains the text '$text'.");
         }
       }
+      if ($match) {
+        return;
+      }
+    }
+    if ($match) {
+      throw new ExpectationFailedException("Did not find expected email to '$recipient' with subject '$subject'.");
     }
   }
 
@@ -412,56 +452,70 @@ class JoinupNotificationContext extends RawDrupalContext {
   }
 
   /**
-   * Clicks on a link matching a pattern given the email text and the recipient.
+   * Clicks on the first link from an email with give subject and recipient.
    *
-   * Note that if multiple messages have been sent to the same user, all of them
-   * will be checked but only the first instance of the link matching the
-   * pattern will be clicked.
+   * @param string $username_or_email
+   *   Either the username or an email.
+   * @param string $subject
+   *   The email subject.
    *
-   * @param string $pattern
-   *   The pattern that the link should match to.
-   * @param string $mail
-   *   The recipient's mail.
-   * @param string $no_mail_message
-   *   The exception message to show when no mail was found that matches the
-   *   given e-mail address.
-   * @param string $no_match_message
-   *   The exception message to show when the given pattern was not found in the
-   *   messages sent to the given e-mail address.
-   * @param string|null $template
-   *   (optional) Message template to filter the messages by.
-   *
-   * @throws \Exception
-   *   If no mail was found linked to the given email or if the pattern did not
-   *   find any matches.
+   * @When I click the link from email sent to :username_or_email with subject :subject
    */
-  protected function assertMailLinkMatchingPattern(string $pattern, string $mail, string $no_mail_message, string $no_match_message, ?string $template = NULL): void {
-    $found = FALSE;
-    foreach ($this->getMails() as $mail_sent) {
-      // Optionally filter by mail template.
-      if (!empty($template) && $mail_sent['key'] !== $template) {
-        continue;
-      }
-
-      // Filter out messages that do not match the given e-mail address.
-      if ($mail_sent['to'] !== $mail) {
-        continue;
-      }
-
-      // This is a flag that a message was found to have been sent to the user.
-      $found = TRUE;
-      if (!preg_match($pattern, $mail_sent['plain'], $match)) {
-        continue;
-      }
-
-      $this->visitPath($match[0]);
-      return;
+  public function clickLinkInEmail(string $username_or_email, string $subject): void {
+    if ($account = user_load_by_name($username_or_email)) {
+      $recipient = $account->getEmail();
     }
-
-    if ($found) {
-      throw new \Exception($no_match_message);
+    elseif (\Drupal::getContainer()->get('email.validator')->isValid($username_or_email)) {
+      $recipient = $username_or_email;
     }
-    throw new \Exception($no_mail_message);
+    else {
+      throw new \InvalidArgumentException("'$username_or_email' is neither a valid username, nor a valid email.");
+    }
+    $no_mail_message = "No email with '$subject' subject was sent to $recipient";
+    $no_match_message = "The email sent to $recipient did not contain a link.";
+    $this->assertMailLinkMatchingPattern('!https?://[^\s].*!', $recipient, $no_mail_message, $no_match_message, NULL);
+  }
+
+  /**
+   * Asserts that no email has been sent to a given recipient.
+   *
+   * @param string $username_or_email
+   *   A valid user name or a valid email.
+   *
+   * @Then no email has been sent to :username_or_email
+   */
+  public function noEmailSentToRecipient(string $username_or_email): void {
+    if ($account = user_load_by_name($username_or_email)) {
+      /** @var \Drupal\user\UserInterface $account */
+      $recipient = $account->getEmail();
+    }
+    elseif (\Drupal::service('email.validator')->isValid($username_or_email)) {
+      $recipient = $username_or_email;
+    }
+    else {
+      throw new \InvalidArgumentException("Invalid '$username_or_email' value passed. Should be either a valid username or a vaid email address.");
+    }
+    Assert::assertEmpty($this->getMails(['to' => $recipient]));
+  }
+
+  /**
+   * Clicks on link given its text in an HTML email.
+   *
+   * @param string $link_text
+   *   The link text.
+   * @param string $recipient
+   *   The recipient's email.
+   * @param string $subject
+   *   The email subject.
+   *
+   * @When I click the :link_text link in the email sent to :recipent having the subject :subject
+   */
+  public function clickLinkInHtmlMail(string $link_text, string $recipient, string $subject): void {
+    $mail = $this->getEmailsBySubjectAndMail($subject, $recipient)[0];
+    $body = (string) $mail['body'];
+    $crawler = new Crawler($body);
+    $link = $crawler->filterXPath('//a[text()="' . $link_text . '"]');
+    $this->visitPath($link->getNode(0)->attributes['href']->nodeValue);
   }
 
 }

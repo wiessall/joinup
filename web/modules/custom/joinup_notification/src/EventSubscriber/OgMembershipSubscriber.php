@@ -9,12 +9,11 @@ use Drupal\Core\Url;
 use Drupal\joinup_notification\Event\NotificationEvent;
 use Drupal\joinup_notification\NotificationEvents;
 use Drupal\og\OgMembershipInterface;
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
  * Handles notifications related to changes in group memberships.
  */
-class OgMembershipSubscriber extends NotificationSubscriberBase implements EventSubscriberInterface {
+class OgMembershipSubscriber extends NotificationSubscriberBase {
 
   const TEMPLATE_REQUEST_MEMBERSHIP = 'og_membership_request';
   const TEMPLATE_APPROVE_MEMBERSHIP = 'og_membership_approve';
@@ -47,9 +46,14 @@ class OgMembershipSubscriber extends NotificationSubscriberBase implements Event
   protected function initialize(NotificationEvent $event): void {
     /** @var \Drupal\og\Entity\OgMembership $membership */
     $this->membership = $event->getEntity();
-    $this->entity = $this->membership->getGroup();
+    try {
+      $this->entity = $this->membership->getGroup();
+    }
+    catch (\TypeError $exception) {
+      // The group might have been deleted.
+    }
+
     $this->operation = $event->getOperation();
-    $this->config = $this->getConfigurationName();
   }
 
   /**
@@ -88,6 +92,10 @@ class OgMembershipSubscriber extends NotificationSubscriberBase implements Event
    */
   protected function appliesOnCreate(): bool {
     if ($this->operation !== 'create') {
+      return FALSE;
+    }
+
+    if (!$this->membership->getGroup()) {
       return FALSE;
     }
 
@@ -133,6 +141,10 @@ class OgMembershipSubscriber extends NotificationSubscriberBase implements Event
    */
   protected function appliesOnUpdate(): bool {
     if ($this->operation !== 'update') {
+      return FALSE;
+    }
+
+    if (!$this->membership->getGroup()) {
       return FALSE;
     }
 
@@ -195,13 +207,6 @@ class OgMembershipSubscriber extends NotificationSubscriberBase implements Event
     }
 
     return TRUE;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  protected function getConfigurationName(): string {
-    return '';
   }
 
   /**

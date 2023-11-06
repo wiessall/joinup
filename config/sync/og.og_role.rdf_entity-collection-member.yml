@@ -7,10 +7,10 @@ dependencies:
 id: rdf_entity-collection-member
 label: Member
 weight: 1
-is_admin: null
+group_id: null
 group_type: rdf_entity
 group_bundle: collection
-group_id: null
+is_admin: null
 permissions:
   - 'accept facilitator invitation'
   - 'access comments'
@@ -30,14 +30,12 @@ permissions:
   - 'edit own document content'
   - 'edit own event content'
   - 'edit own news content'
-  - 'edit own tallinn_report content'
   - 'post comments'
   - 'share discussion content'
   - 'share document content'
   - 'share event content'
   - 'share news content'
   - 'share solution rdf_entity'
-  - unsubscribe
   - 'view own revisions'
   - 'view own unpublished content'
 role_type: required

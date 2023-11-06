@@ -7,7 +7,7 @@ Feature: Following discussions
   Background:
     Given the following collection:
       | title | Dairy products |
-      | state | validated      |
+      | state | published      |
     And user:
       | Username | Dr. Hans Zarkov  |
       | E-mail   | hans@example.com |
@@ -16,7 +16,7 @@ Feature: Following discussions
       | Dairy products | Dr. Hans Zarkov |
     And discussion content:
       | title       | body                                                             | collection     | state     | author          |
-      | Rare Butter | I think that the rarest butter out there is the milky way butter | Dairy products | validated | Dr. Hans Zarkov |
+      | Rare Butter | I think that the rarest butter out there is the milky way butter | Dairy products | published | Dr. Hans Zarkov |
       | Rare Whey   | Whey is the liquid remaining after milk has been curdled.        | Dairy products | draft     | Dr. Hans Zarkov |
     Then the "Rare butter" discussion should have 0 subscribers
 
@@ -33,7 +33,6 @@ Feature: Following discussions
     And I should not see the link "Unfollow"
 
     Given I am logged in as an "authenticated user"
-    And I accept essential cookies
     # The subscribe links should never be shown for a discussion which is not
     # published.
     When I go to the "Rare Whey" discussion
@@ -76,7 +75,6 @@ Feature: Following discussions
     # of the comment, he will not receive notification.
     And I click "Follow"
     And I fill in "Create comment" with "I'm the moderator of this discussion. Let's talk."
-    But I wait for the spam protection time limit to pass
     Then I press "Post comment"
     # Subscribers are receiving the notifications.
     And the following email should have been sent:
@@ -124,7 +122,18 @@ Feature: Following discussions
     # Check that no other mails have been unexpectedly sent.
     Then 2 e-mails should have been sent
 
-    # If the discussion is moved from 'validated' to any other state, no
+    # Followers should not receive emails when discussion is archived/unarchived.
+    Given I mark all emails as read
+    And I am logged in as a moderator
+    When I go to the edit form of the "Rare Butter" discussion
+    And I fill in "Content" with "This content was archived"
+    And I press "Archive"
+    When I go to the edit form of the "Rare Butter" discussion
+    And I fill in "Content" with "This content was archived"
+    And I press "Unarchive"
+    And 0 e-mail should have been sent
+
+    # If the discussion is moved from 'published' to any other state, no
     # notification will be sent, regardless if a relevant field is changed.
     Given I mark all emails as read
     And I am logged in as a moderator
@@ -164,7 +173,7 @@ Feature: Following discussions
     # Now check the notifications sent for a published discussion.
     Given discussion content:
       | title     | body                                                   | collection     | state     | author          |
-      | Rare feta | Made from milk from the exclusive Manx Loaghtan sheep. | Dairy products | validated | Dr. Hans Zarkov |
+      | Rare feta | Made from milk from the exclusive Manx Loaghtan sheep. | Dairy products | published | Dr. Hans Zarkov |
     And discussion subscriptions:
       | username    | title     |
       | follower    | Rare feta |

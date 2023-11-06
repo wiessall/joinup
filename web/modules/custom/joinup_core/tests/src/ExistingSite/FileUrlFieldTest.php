@@ -8,7 +8,6 @@ use Behat\Mink\Exception\ElementNotFoundException;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Tests\joinup_core\Traits\TestFileTrait;
 use Drupal\Tests\joinup_test\ExistingSite\JoinupExistingSiteTestBase;
-use Drupal\Tests\rdf_entity\Traits\DrupalTestTraits\RdfEntityCreationTrait;
 use Drupal\Tests\rdf_entity\Traits\EntityUtilityTrait;
 use Drupal\Tests\sparql_entity_storage\Traits\SparqlConnectionTrait;
 use Drupal\file\FileInterface;
@@ -27,7 +26,6 @@ class FileUrlFieldTest extends JoinupExistingSiteTestBase {
   use EntityUtilityTrait;
   use TestFileTrait;
   use LoginTrait;
-  use RdfEntityCreationTrait;
   use SparqlConnectionTrait;
   use StringTranslationTrait;
 
@@ -67,12 +65,12 @@ class FileUrlFieldTest extends JoinupExistingSiteTestBase {
     $solution = $this->createRdfEntity([
       'rid' => 'solution',
       'label' => $this->randomString(),
-      'field_is_state' => 'validated',
+      'field_is_state' => 'published',
       // Ensure a parent collection.
       'collection' => $this->createRdfEntity([
         'rid' => 'collection',
         'label' => $this->randomString(),
-        'field_ar_state' => 'validated',
+        'field_ar_state' => 'published',
       ]),
     ]);
     $licence = $this->createRdfEntity([
@@ -99,7 +97,7 @@ class FileUrlFieldTest extends JoinupExistingSiteTestBase {
 
     $this->drupalGet($url);
     $this->addFileUrlItem($field_name, 'upload', $test_file->getFileUri());
-    $this->drupalPostForm(NULL, ['label[0][value]' => 'Foo'], 'Save');
+    $this->submitForm(['label[0][value]' => 'Foo'], 'Save');
 
     // Check that the file has been uploaded to the file URL field.
     $distribution = Rdf::load($distribution->id());
@@ -108,17 +106,20 @@ class FileUrlFieldTest extends JoinupExistingSiteTestBase {
     $initial_uri = $rdf_entity_file->getFileUri();
     $this->assertFileExists($initial_uri);
 
+    /** @var \Drupal\Core\File\FileUrlGeneratorInterface $file_url_generator */
+    $file_url_generator = \Drupal::service('file_url_generator');
+
     // Ensure the file can be downloaded.
-    $this->drupalGet(file_create_url($initial_uri));
+    $this->drupalGet($file_url_generator->generateAbsoluteString($initial_uri));
     $this->assertSession()->statusCodeEquals(200);
 
     $this->drupalGet($distribution->toUrl());
     $this->getSession()->getPage()->clickLink('Edit');
     // Upload the same file again to test if the file is saved in a new location
     // while still keeping the same file basename.
-    $this->drupalPostForm(NULL, [], 'Remove');
+    $this->submitForm([], 'Remove');
     $this->addFileUrlItem($field_name, 'upload', $test_file->getFileUri());
-    $this->drupalPostForm(NULL, [], 'Save');
+    $this->submitForm([], 'Save');
 
     // @todo We should not need cache clearing here. The cache should have been
     //   wiped out at this point. Fix this regression in ISAICP-3392.
@@ -132,7 +133,7 @@ class FileUrlFieldTest extends JoinupExistingSiteTestBase {
     $this->assertFileExists($second_uri);
 
     // Ensure the file can be downloaded.
-    $this->drupalGet(file_create_url($second_uri));
+    $this->drupalGet($file_url_generator->generateAbsoluteString($second_uri));
     $this->assertSession()->statusCodeEquals(200);
 
     // Check that the same file is uploaded to different locations.
@@ -144,10 +145,10 @@ class FileUrlFieldTest extends JoinupExistingSiteTestBase {
     // Edit the entity and change the field to a remote URL.
     $this->drupalGet($distribution->toUrl());
     $this->getSession()->getPage()->clickLink('Edit');
-    $this->drupalPostForm(NULL, [], 'Remove');
+    $this->submitForm([], 'Remove');
     $url = 'http://example.com/' . $this->randomMachineName();
     $this->addFileUrlItem($field_name, 'remote', $url);
-    $this->drupalPostForm(NULL, [], 'Save');
+    $this->submitForm([], 'Save');
 
     // @todo We should not need cache clearing here. The cache should have been
     //   wiped out at this point. Fix this regression in ISAICP-3392.

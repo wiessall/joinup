@@ -9,11 +9,11 @@ Feature:
       | Amelia Barker |       | AmeliaBarker@example.com | Amelia     | Barker      |
     And collections:
       | title                   | state     |
-      | Lugia was just released | validated |
-      | Articuno is hunted      | validated |
+      | Lugia was just released | published |
+      | Articuno is hunted      | published |
     And solutions:
       | title                        | state     |
-      | Random chat machine learning | validated |
+      | Random chat machine learning | published |
     # Assign facilitator role in order to allow creation of a solution.
     # In UAT this can be done by creating the collection through the UI
     # with the related user.
@@ -32,7 +32,7 @@ Feature:
     And I check "Hazel Olson"
     And I check "Amelia Barker"
     And I select "Delete selected account(s) and their content" from "Action"
-    And I press the "Apply to selected items" button
+    And I press "Apply to selected items"
     Then I should not see the following lines of text:
       | This action cannot be undone.                |
       | When cancelling these accounts               |
@@ -54,8 +54,8 @@ Feature:
     # Use the user profile.
     When I go to "/admin/people"
     And I click "Hazel Olson"
-    And I click "Edit" in the "Header" region
-    And I press "Cancel account"
+    And I click "Edit" in the "Entity actions" region
+    And I click "Cancel account"
     Then I should not see the following lines of text:
       | This action cannot be undone.                |
       | When cancelling these accounts               |
@@ -66,13 +66,13 @@ Feature:
       | Lugia was just released      |
       | Random chat machine learning |
     And I should see the link "Go back"
-    And I should not see the button "Cancel account"
+    And I should not see the link "Cancel account"
 
     # User tries to delete its own account.
     Given I am logged in as "Hazel Olson"
     And I visit "/user"
-    And I click "Edit" in the "Header" region
-    And I press "Cancel account"
+    And I click "Edit" in the "Entity actions" region
+    And I click "Cancel account"
     Then I should see the heading "Cancel account"
     Then I should see the following lines of text:
       | Dear Hazel,                                                                                                    |
@@ -82,4 +82,4 @@ Feature:
       | Lugia was just released      |
       | Random chat machine learning |
     And I should see the link "Go back"
-    And I should not see the button "Cancel account"
+    And I should not see the link "Cancel account"

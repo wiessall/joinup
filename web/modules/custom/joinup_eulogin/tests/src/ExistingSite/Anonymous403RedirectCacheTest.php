@@ -5,7 +5,7 @@ declare(strict_types = 1);
 namespace Drupal\Tests\joinup_eulogin\ExistingSite;
 
 use Drupal\Tests\joinup_test\ExistingSite\JoinupExistingSiteTestBase;
-use Drupal\Tests\rdf_entity\Traits\DrupalTestTraits\RdfEntityCreationTrait;
+use Drupal\Tests\joinup_test\Traits\NodeCreationTrait;
 
 /**
  * Tests the 403 redirection cache.
@@ -23,26 +23,27 @@ use Drupal\Tests\rdf_entity\Traits\DrupalTestTraits\RdfEntityCreationTrait;
  */
 class Anonymous403RedirectCacheTest extends JoinupExistingSiteTestBase {
 
-  use RdfEntityCreationTrait;
+  use NodeCreationTrait;
 
   /**
    * Tests the 403 redirection cache.
    */
   public function testRedirectCache(): void {
-    foreach ($this->getEntities() as $field_name => $entity) {
-      // Visit the unpublished entity to warm-up the redirect cache.
-      $this->drupalGet($entity->toUrl());
-      $this->assertSession()->pageTextContains('Sign in to continue');
+    foreach ($this->getEntities() as $field_name => $entities) {
+      foreach ($entities as $entity) {
+        // Visit the unpublished entity to warm-up the redirect cache.
+        $this->drupalGet($entity->toUrl());
+        $this->assertSession()->pageTextContains('Sign in to continue');
 
-      // Publish the entity.
-      $value = $entity->bundle() === 'custom_page' ? TRUE : 'validated';
-      $entity->set($field_name, $value)->save();
+        // Publish the entity.
+        $entity->set($field_name, 'published')->save();
 
-      // Revisit the entity. It should be visible.
-      $this->drupalGet($entity->toUrl());
-      $this->assertSession()->pageTextNotContains('Sign in to continue');
-      $this->assertSession()->pageTextContains($entity->label());
-      $this->assertSession()->addressEquals($entity->toUrl());
+        // Revisit the entity. It should be visible.
+        $this->drupalGet($entity->toUrl());
+        $this->assertSession()->pageTextNotContains('Sign in to continue');
+        $this->assertSession()->pageTextContains($entity->label());
+        $this->assertSession()->addressEquals($entity->toUrl());
+      }
     }
   }
 
@@ -61,7 +62,7 @@ class Anonymous403RedirectCacheTest extends JoinupExistingSiteTestBase {
       'title' => $this->randomString(),
     ]);
     $collection->save();
-    $entities['field_ar_state'] = $collection;
+    $entities['field_ar_state'][] = $collection;
 
     $solution = $this->createRdfEntity([
       'rid' => 'solution',
@@ -70,7 +71,7 @@ class Anonymous403RedirectCacheTest extends JoinupExistingSiteTestBase {
       'collection' => $collection,
     ]);
     $solution->save();
-    $entities['field_is_state'] = $solution;
+    $entities['field_is_state'][] = $solution;
 
     $release = $this->createRdfEntity([
       'rid' => 'asset_release',
@@ -79,16 +80,7 @@ class Anonymous403RedirectCacheTest extends JoinupExistingSiteTestBase {
       'field_isr_is_version_of' => $solution,
     ]);
     $release->save();
-    $entities['field_isr_state'] = $release;
-
-    $custom_page = $this->createNode([
-      'type' => 'custom_page',
-      'status' => FALSE,
-      'title' => $this->randomString(),
-      'og_audience' => $collection,
-    ]);
-    $custom_page->save();
-    $entities['status'] = $custom_page;
+    $entities['field_isr_state'][] = $release;
 
     $discussion = $this->createNode([
       'type' => 'discussion',
@@ -97,7 +89,7 @@ class Anonymous403RedirectCacheTest extends JoinupExistingSiteTestBase {
       'og_audience' => $collection,
     ]);
     $discussion->save();
-    $entities['field_state'] = $discussion;
+    $entities['field_state'][] = $discussion;
 
     $document = $this->createNode([
       'type' => 'document',
@@ -106,7 +98,7 @@ class Anonymous403RedirectCacheTest extends JoinupExistingSiteTestBase {
       'og_audience' => $collection,
     ]);
     $document->save();
-    $entities['field_state'] = $document;
+    $entities['field_state'][] = $document;
 
     $event = $this->createNode([
       'type' => 'event',
@@ -115,7 +107,7 @@ class Anonymous403RedirectCacheTest extends JoinupExistingSiteTestBase {
       'og_audience' => $collection,
     ]);
     $event->save();
-    $entities['field_state'] = $event;
+    $entities['field_state'][] = $event;
 
     $news = $this->createNode([
       'type' => 'news',
@@ -124,7 +116,7 @@ class Anonymous403RedirectCacheTest extends JoinupExistingSiteTestBase {
       'og_audience' => $collection,
     ]);
     $news->save();
-    $entities['field_state'] = $news;
+    $entities['field_state'][] = $news;
 
     return $entities;
   }

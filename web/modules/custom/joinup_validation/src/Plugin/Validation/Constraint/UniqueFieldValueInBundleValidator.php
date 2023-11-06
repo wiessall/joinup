@@ -64,6 +64,7 @@ class UniqueFieldValueInBundleValidator extends ConstraintValidator implements C
     $main_property = $items->getFieldDefinition()->getFieldStorageDefinition()->getMainPropertyName();
 
     $query = $this->entityTypeManager->getStorage($entity_type_id)->getQuery()
+      ->accessCheck(FALSE)
       ->condition($field_name, $item->{$main_property})
       ->condition($bundle_key, $bundles, 'IN');
     if (!empty($entity->id())) {

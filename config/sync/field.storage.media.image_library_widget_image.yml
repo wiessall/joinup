@@ -3,9 +3,13 @@ langcode: en
 status: true
 dependencies:
   module:
+    - field_permissions
     - file
     - image
     - media
+third_party_settings:
+  field_permissions:
+    permission_type: public
 _core:
   default_config_hash: zFy_mUdkPGt6EEY_7QncjoNI2wTQQkncfbqRacEDRXw
 id: media.image_library_widget_image
@@ -13,16 +17,16 @@ field_name: image_library_widget_image
 entity_type: media
 type: image
 settings:
+  target_type: file
+  display_field: false
+  display_default: false
+  uri_scheme: public
   default_image:
     uuid: null
     alt: ''
     title: ''
     width: null
     height: null
-  target_type: file
-  display_field: false
-  display_default: false
-  uri_scheme: public
 module: image
 locked: false
 cardinality: 1

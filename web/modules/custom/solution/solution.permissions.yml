@@ -1,5 +1,3 @@
-message notification on validate:
-  title: 'Receive notification that a solution has been moved to "Validated" state.'
 manage solutions:
   title: 'Manage solutions'
   restrict access: true

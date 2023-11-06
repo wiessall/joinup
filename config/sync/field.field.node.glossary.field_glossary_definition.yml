@@ -4,22 +4,10 @@ status: true
 dependencies:
   config:
     - field.storage.node.field_glossary_definition
+    - filter.format.glossary_html
     - node.type.glossary
   module:
-    - allowed_formats
     - text
-third_party_settings:
-  allowed_formats:
-    glossary_html: glossary_html
-    content_editor: '0'
-    basic_html: '0'
-    eira_format: '0'
-    licence: '0'
-    restricted_html: '0'
-    simple_html: '0'
-    simple_text: '0'
-    full_html: '0'
-    plain_text: '0'
 id: node.glossary.field_glossary_definition
 field_name: field_glossary_definition
 entity_type: node
@@ -33,4 +21,6 @@ default_value_callback: ''
 settings:
   display_summary: true
   required_summary: false
+  allowed_formats:
+    - glossary_html
 field_type: text_with_summary

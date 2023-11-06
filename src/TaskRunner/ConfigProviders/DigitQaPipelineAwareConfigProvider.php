@@ -39,12 +39,11 @@ class DigitQaPipelineAwareConfigProvider implements ConfigProviderInterface {
       'task' => 'run',
       'command' => 'solr:build-core-config',
     ];
-    $install_clean_commands = $config->get('commands.toolkit:install-clean');
-    $install_clean_commands[] = $build_solr_core_config;
-    $config->set('commands.toolkit:install-clean', $install_clean_commands);
-    $install_clone_commands = $config->get('toolkit.install.clone.commands');
-    $install_clone_commands[] = $build_solr_core_config;
-    $config->set('toolkit.install.clone.commands', $install_clone_commands);
+    foreach (['clean', 'clone'] as $install) {
+      $install_commands = $config->get("commands.toolkit:install-$install");
+      $install_commands[] = $build_solr_core_config;
+      $config->set("commands.toolkit:install-$install", $install_commands);
+    }
   }
 
 }

@@ -10,7 +10,7 @@ Feature: Solution notifications
     Given the following collection:
       | title | Collection of random solutions |
       | logo  | logo.png                       |
-      | state | validated                      |
+      | state | published                      |
     And the following owner:
       | name               | type                  |
       | Karanikolas Kitsos | Private Individual(s) |
@@ -23,14 +23,14 @@ Feature: Solution notifications
       | Ramiro Myers |           | Ramiro     | Myers       | ramiro.myers@example.com |
       | Edith Poole  |           | Edith      | Poole       | edith.poole@example.com  |
     And the following solutions:
-      | title                                                 | author       | description | logo     | banner     | owner              | contact information | state        | topic       | solution type | collection                     |
-      | Solution notification to propose changes              | Ramiro Myers | Sample text | logo.png | banner.jpg | Karanikolas Kitsos | Information Desk    | validated    | E-inclusion | Business      | Collection of random solutions |
-      | Solution notification to blacklist                    | Ramiro Myers | Sample text | logo.png | banner.jpg | Karanikolas Kitsos | Information Desk    | validated    | E-inclusion | Business      | Collection of random solutions |
-      | Solution notification to publish from blacklisted     | Ramiro Myers | Sample text | logo.png | banner.jpg | Karanikolas Kitsos | Information Desk    | blacklisted  | E-inclusion | Business      | Collection of random solutions |
-      | Solution notification to request changes              | Ramiro Myers | Sample text | logo.png | banner.jpg | Karanikolas Kitsos | Information Desk    | validated    | E-inclusion | Business      | Collection of random solutions |
-      | Solution notification to propose from request changes | Ramiro Myers | Sample text | logo.png | banner.jpg | Karanikolas Kitsos | Information Desk    | needs update | E-inclusion | Business      | Collection of random solutions |
-      | Solution notification to delete by moderator team     | Ramiro Myers | Sample text | logo.png | banner.jpg | Karanikolas Kitsos | Information Desk    | validated    | E-inclusion | Business      | Collection of random solutions |
-      | Solution notification to delete by owner              | Ramiro Myers | Sample text | logo.png | banner.jpg | Karanikolas Kitsos | Information Desk    | validated    | E-inclusion | Business      | Collection of random solutions |
+      | title                                                 | author       | description | logo     | owner              | contact information | state        | topic       | solution type | collection                     |
+      | Solution notification to propose changes              | Ramiro Myers | Sample text | logo.png | Karanikolas Kitsos | Information Desk    | published    | E-inclusion | Business      | Collection of random solutions |
+      | Solution notification to blacklist                    | Ramiro Myers | Sample text | logo.png | Karanikolas Kitsos | Information Desk    | published    | E-inclusion | Business      | Collection of random solutions |
+      | Solution notification to publish from blacklisted     | Ramiro Myers | Sample text | logo.png | Karanikolas Kitsos | Information Desk    | blacklisted  | E-inclusion | Business      | Collection of random solutions |
+      | Solution notification to request changes              | Ramiro Myers | Sample text | logo.png | Karanikolas Kitsos | Information Desk    | published    | E-inclusion | Business      | Collection of random solutions |
+      | Solution notification to propose from request changes | Ramiro Myers | Sample text | logo.png | Karanikolas Kitsos | Information Desk    | needs update | E-inclusion | Business      | Collection of random solutions |
+      | Solution notification to delete by moderator team     | Ramiro Myers | Sample text | logo.png | Karanikolas Kitsos | Information Desk    | published    | E-inclusion | Business      | Collection of random solutions |
+      | Solution notification to delete by owner              | Ramiro Myers | Sample text | logo.png | Karanikolas Kitsos | Information Desk    | published    | E-inclusion | Business      | Collection of random solutions |
 
     When I am logged in as "Pat Harper"
 
@@ -43,7 +43,6 @@ Feature: Solution notifications
     When I fill in "Motivation" with "Please, check my updates"
     And I press "Propose"
     Then the email sent to "Ramiro Myers" with subject "Joinup: Changes have been proposed for your solution" contains the following lines of text:
-      | text                                                                                                                                                                                   |
       | The Joinup Support Team has requested you to modify the interoperability solution "Solution notification to propose changes", with the following motivation: Please, check my updates. |
       | If you think this action is not clear or not due, please contact Joinup Support at                                                                                                     |
 
@@ -79,7 +78,6 @@ Feature: Solution notifications
       | body      | the moderator has requested you to modify the interoperability solution - Solution notification to request changes following the following advises: Can you change this?. |
       | bcc       | pat.harper@example.com                                                                                                                                                    |
     And the email sent to "Ramiro Myers" with subject "Joinup: You are requested to update your solution" contains the following lines of text:
-      | text                                                                                                                                                                      |
       | the moderator has requested you to modify the interoperability solution - Solution notification to request changes following the following advises: Can you change this?. |
       | If you think this action is not clear or not due, please contact Joinup Support at                                                                                        |
 
@@ -100,7 +98,6 @@ Feature: Solution notifications
     And I click "Edit" in the "Entity actions" region
     And I press "Propose"
     Then the email sent to "Pat Harper" with subject "Joinup: An update of a solution has been proposed" contains the following lines of text:
-      | text                                                                                                                                     |
       | Ramiro Myers has proposed an update of the Interoperability solution: "Solution notification to propose from request changes" on Joinup. |
       | If you think this action is not clear or not due, please contact Joinup Support at                                                       |
 

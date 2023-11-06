@@ -5,7 +5,6 @@ declare(strict_types = 1);
 namespace Drupal\Tests\asset_release\ExistingSite;
 
 use Drupal\Tests\joinup_test\ExistingSite\JoinupExistingSiteTestBase;
-use Drupal\Tests\rdf_entity\Traits\DrupalTestTraits\RdfEntityCreationTrait;
 use Drupal\rdf_entity\Entity\Rdf;
 use Drupal\taxonomy\Entity\Vocabulary;
 
@@ -15,8 +14,6 @@ use Drupal\taxonomy\Entity\Vocabulary;
  * @group asset_release
  */
 class SyncFieldsFromParentSolutionTest extends JoinupExistingSiteTestBase {
-
-  use RdfEntityCreationTrait;
 
   /**
    * {@inheritdoc}
@@ -65,19 +62,19 @@ class SyncFieldsFromParentSolutionTest extends JoinupExistingSiteTestBase {
       'rid' => 'owner',
       'id' => 'http://example.com/owner1',
       'label' => 'Owner 1',
-      'field_owner_state' => 'validated',
+      'field_owner_state' => 'published',
     ]);
     $this->createRdfEntity([
       'rid' => 'owner',
       'id' => 'http://example.com/owner2',
       'label' => 'Owner 2',
-      'field_owner_state' => 'validated',
+      'field_owner_state' => 'published',
     ]);
 
     $this->createRdfEntity([
       'rid' => 'collection',
       'id' => 'http://example.com/collection',
-      'field_ar_state' => 'validated',
+      'field_ar_state' => 'published',
       'label' => 'Collection',
     ]);
 
@@ -107,7 +104,7 @@ class SyncFieldsFromParentSolutionTest extends JoinupExistingSiteTestBase {
       'rid' => 'solution',
       'id' => 'http://example.com/solution',
       'label' => 'Solution',
-      'field_is_state' => 'validated',
+      'field_is_state' => 'published',
       // Synchronized fields.
       'field_is_description' => 'init description',
       'field_is_solution_type' => 'http://example.com/eira/t1',

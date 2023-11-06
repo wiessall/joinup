@@ -18,21 +18,13 @@ use Symfony\Component\Console\Input\InputInterface;
 class JoinupDataSanitizationCommands extends DrushCommands implements SanitizePluginInterface {
 
   /**
-   * The database connection.
-   *
-   * @var \Drupal\Core\Database\Connection
-   */
-  protected $db;
-
-  /**
    * Constructs a new Drush commands class instance.
    *
    * @param \Drupal\Core\Database\Connection $db
    *   The database connection.
    */
-  public function __construct(Connection $db) {
+  public function __construct(protected Connection $db) {
     parent::__construct();
-    $this->db = $db;
   }
 
   /**
@@ -42,7 +34,7 @@ class JoinupDataSanitizationCommands extends DrushCommands implements SanitizePl
    */
   public function sanitize($result, CommandData $commandData): void {
     $this->sanitizeUserSocialMedia();
-    $this->sanitizeAuthMapTable();
+    $this->sanitizeLogAlertsSettings();
   }
 
   /**
@@ -52,7 +44,7 @@ class JoinupDataSanitizationCommands extends DrushCommands implements SanitizePl
    */
   public function messages(&$messages, InputInterface $input): void {
     $messages[] = dt('Sanitize user social media data.');
-    $messages[] = dt('Sanitize EU Login account mappings.');
+    $messages[] = dt('Sanitize log alerts settings.');
   }
 
   /**
@@ -64,13 +56,14 @@ class JoinupDataSanitizationCommands extends DrushCommands implements SanitizePl
   }
 
   /**
-   * Sanitizes the {authmap} table.
+   * Sanitizes the log alerts settings.
    */
-  protected function sanitizeAuthMapTable(): void {
-    $this->db->update('authmap')
-      ->expression('authname', 'CONCAT(SUBSTRING(authname, 1, 1), LEFT(SHA1(UUID()), 7))')
+  protected function sanitizeLogAlertsSettings(): void {
+    $this->db->delete('key_value')
+      ->condition('collection', 'state')
+      ->condition('name', 'joinup.log_alerts')
       ->execute();
-    $this->logger()->success(dt('authmap table sanitized.'));
+    $this->logger()->success(dt('joinup.log_alerts state var sanitized.'));
   }
 
 }

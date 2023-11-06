@@ -1,0 +1,72 @@
+@import "../../partials/core";
+
+.paragraph--poll {
+  position: relative;
+  // Form overrides
+  .col-form-label {
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+  .form-item.form-item-choice.form-check {
+    padding: 0;
+    &:not(:last-of-type) {
+      border-bottom: 1px solid $gray-300;
+    }
+  }
+  .form-radio.form-check-input {
+    display: none;
+  }
+  .form-check-label.option.form-label {
+    cursor: pointer;
+    padding: $spacer 0;
+    margin: 0;
+  }
+  .poll {
+    .choice-item {
+      &:not(:last-of-type) {
+        border-bottom: 1px solid $gray-300;
+      }
+    }
+    .choice-title,
+    .choice-result {
+      &.selected {
+        color: darken($success, 15);
+        margin-inline: $spacer;
+      }
+      &.not-selected {
+        color: $primary;
+        margin-inline: $spacer;
+      }
+    }
+    .bar {
+      position: absolute;
+      width: 100%;
+      top: $spacer * .6;
+      height: $spacer * 2;
+      background-color: transparent;
+      .foreground {
+        border-radius: $border-radius-pill;
+        height: $spacer * 2;
+        &.selected {
+          background-color: rgba($success, .1);
+        }
+        &.not-selected {
+          background-color: rgba($brand, .1);
+        }
+      }
+    }
+  }
+  .form-actions {
+    margin-top: $spacer;
+    margin-bottom: 0;
+    @include media-breakpoint-up(sm) {
+      margin-top: 0;
+    }
+  }
+  [data-drupal-selector="edit-cancel"] {
+    @include media-breakpoint-up(sm) {
+      position: absolute;
+      bottom: $spacer * -.1; // Align with poll details
+    }
+  }
+}

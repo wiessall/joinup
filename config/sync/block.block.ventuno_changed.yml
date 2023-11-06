@@ -6,18 +6,24 @@ dependencies:
     - facets.facet.aggregated_changed
   module:
     - facets
+    - system
   theme:
     - ventuno
 id: ventuno_changed
 theme: ventuno
-region: sidebar
-weight: -22
+region: content
+weight: -26
 provider: null
 plugin: 'facet_block:aggregated_changed'
 settings:
   id: 'facet_block:aggregated_changed'
   label: Changed
-  provider: facets
   label_display: visible
-  block_id: changed
-visibility: {  }
+  provider: facets
+  context_mapping: {  }
+  block_id: ventuno_changed
+visibility:
+  request_path:
+    id: request_path
+    negate: false
+    pages: /admin/reporting/solutions-by-type

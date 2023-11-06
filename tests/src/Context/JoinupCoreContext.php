@@ -5,10 +5,11 @@ declare(strict_types = 1);
 namespace Drupal\joinup\Context;
 
 use Behat\Gherkin\Node\TableNode;
+use Behat\Testwork\Hook\Scope\BeforeSuiteScope;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\joinup\Chip;
-use Drupal\joinup\Traits\BrowserCapabilityDetectionTrait;
 use Drupal\joinup\Traits\EntityTrait;
+use Drupal\joinup\Traits\JavascriptTrait;
 use Drupal\joinup\Traits\TraversingTrait;
 use Drupal\joinup\Traits\UtilityTrait;
 use PHPUnit\Framework\Assert;
@@ -18,7 +19,7 @@ use PHPUnit\Framework\Assert;
  */
 class JoinupCoreContext extends RawDrupalContext {
 
-  use BrowserCapabilityDetectionTrait;
+  use JavascriptTrait;
   use EntityTrait;
   use TraversingTrait;
   use UtilityTrait;
@@ -116,7 +117,6 @@ class JoinupCoreContext extends RawDrupalContext {
     $base_element = $region ? $this->getRegion($region) : $this->getSession()->getPage();
 
     $chips = [];
-
     // If the chips are being displayed using the `mdl-chip-input` JavaScript
     // library then they will only be visible if the browser supports JS. If the
     // browser doesn't support JavaScript then the chips are still present in
@@ -124,11 +124,8 @@ class JoinupCoreContext extends RawDrupalContext {
     // `is_visible` flag disabled to indicate they only can be interacted with
     // in a limited way.
     $locator_visibility_mapping = [
-      '.mdl-chip__text' => TRUE,
+      '.invite-form__list .badge, .navbar-search .search-badge' => TRUE,
     ];
-    if (!$this->browserSupportsJavaScript()) {
-      $locator_visibility_mapping['.mdl-chipfield__input'] = FALSE;
-    }
     foreach ($locator_visibility_mapping as $locator => $is_visible) {
       foreach ($base_element->findAll('css', $locator) as $element) {
         $chips[] = new Chip($element, $is_visible);
@@ -154,7 +151,7 @@ class JoinupCoreContext extends RawDrupalContext {
    *    Thrown when the region is not found.
    *
    * @return \Drupal\joinup\Chip|null
-   *   The chip, or NULL if no chip with the given text is present in the page.
+   *   The chip or NULL if no chip with the given text is present in the page.
    */
   protected function getChipByText(string $text, ?string $region = NULL): ?Chip {
     foreach ($this->getChips($region) as $chip) {
@@ -171,15 +168,17 @@ class JoinupCoreContext extends RawDrupalContext {
    *
    * @param string $name
    *   The taxonomy term name.
+   * @param string|null $bundle
+   *   (optional) Filter by bundle.
    *
-   * @Given I go to the :name (taxonomy )term( page)
+   * @Given I go to the :name :bundle term page
    *
    * @throws \Drupal\Core\Entity\EntityMalformedException
    *   Thrown when the taxonomy term does not have a URL to go to.
    */
-  public function visitTaxonomyTermPage(string $name): void {
+  public function visitTaxonomyTermPage(string $name, ?string $bundle = NULL): void {
     /** @var \Drupal\taxonomy\TermInterface $term */
-    $term = static::getEntityByLabel('taxonomy_term', $name);
+    $term = static::getEntityByLabel('taxonomy_term', $name, $bundle);
     $this->visitPath($term->toUrl()->toString());
   }
 
@@ -248,18 +247,34 @@ class JoinupCoreContext extends RawDrupalContext {
   }
 
   /**
+   * Asserts the content type of the response from the server.
+   *
+   * @param string $header
+   *   The header of the response.
+   * @param string $value
+   *   The expected value.
+   *
+   * @Given the response header :header should match :value
+   */
+  public function assertResponseHeaderMatches(string $header, string $value): void {
+    $this->assertSession()->responseHeaderMatches($header, "/^$value$/");
+  }
+
+  /**
    * Asserts the order of elements.
    *
    * @Then I should see the following group menu items in the specified order:
    */
   public function assertRepeatedElementContainsText(TableNode $table): void {
-    $parent = $this->getSession()->getPage()->findAll('css', '.block-group-menu-blocknavigation li.sidebar-menu__item');
+    $navigation_menu_selector = $this->getRegionSelector('Navigation menu');
+    $parent = $this->getSession()->getPage()->findAll('css', "$navigation_menu_selector .nav a");
+    $table_hash = $table->getHash();
+    Assert::assertSameSize($table_hash, $parent);
     $i = 0;
-    foreach ($table->getHash() as $repeatedElement) {
-      $child = $parent[$i];
-      $actual_text = $child->find('css', 'a.sidebar-menu__link')->getText();
-      Assert::assertEquals($repeatedElement['text'], $actual_text);
-      $i++;
+    foreach ($table_hash as $expected_element) {
+      $expected_text = $expected_element['text'];
+      $actual_text = $parent[$i++]->getText();
+      Assert::assertSame($expected_text, $actual_text);
     }
   }
 
@@ -320,6 +335,107 @@ class JoinupCoreContext extends RawDrupalContext {
   public function givenNoPipelineRanYet(): void {
     $collection = \Drupal::getContainer()->get('keyvalue')->get('joinup_pipeline_log');
     $collection->deleteAll();
+  }
+
+  /**
+   * Sets the default timezone before a suite.
+   *
+   * @param \Behat\Testwork\Hook\Scope\BeforeSuiteScope $before_suite
+   *   Contains information about the suite.
+   *
+   * @BeforeSuite
+   */
+  public static function setDefaultTimezone(BeforeSuiteScope $before_suite): void {
+    date_default_timezone_set('UTC');
+  }
+
+  /**
+   * Assert the default cache backend service.
+   *
+   * @param string $expected
+   *   The expected cache backend service.
+   *
+   * @Given /^the default cache backend is set to "([^"]*)"$/
+   */
+  public function theDefaultCacheBackendIsSetTo(string $expected): void {
+    $container = \Drupal::getContainer();
+    $factory = $container->get($expected);
+    Assert::assertNotNull($factory, "The service $expected does not exist. Note, that you need to pass a service ID, not a class name.");
+
+    $actual = get_class(\Drupal::cache());
+    $expected = get_class($factory->get('default'));
+    Assert::assertSame($expected, $actual);
+  }
+
+  /**
+   * Alters the state of an entity programmatically.
+   *
+   * @param string $label
+   *   The label of the entity.
+   * @param string $entity_type_id
+   *   The entity type ID of the entity.
+   * @param string $state
+   *   The state to set.
+   *
+   * @Given the workflow state of the :label :entity_type_id is set to :state
+   */
+  public function changeEntityWorkflowState(string $label, string $entity_type_id, string $state): void {
+    $mapping = [
+      'content' => 'node',
+      'rdf entity' => 'rdf_entity',
+    ];
+    Assert::assertArrayHasKey($entity_type_id, $mapping, "The entity type $entity_type_id is not supported. Use one of " . implode(', ', array_keys($mapping)));
+
+    $entity = $this->getEntityByLabel($mapping[$entity_type_id], $label);
+    $entity->setNewRevision();
+    $entity->set('field_state', $state);
+    $entity->save();
+  }
+
+  /**
+   * Checks if page elements have unique id elements.
+   *
+   * @throws \Exception
+   *   Thrown when element's id is not unique.
+   *
+   * @Then page elements must have unique id attributes
+   */
+  public function pageElementsMustHaveUniqueIdAttributes(): void {
+    $elementIds = [];
+
+    $elementsWithIdAttribute = $this->getSession()
+      ->getPage()
+      ->findAll('css', '[id]');
+    foreach ($elementsWithIdAttribute as $elementWithIdAttribute) {
+      $elementId = $elementWithIdAttribute->getAttribute('id');
+
+      if (in_array($elementId, $elementIds)) {
+        throw new \Exception("'$elementId' id attribute is used by more than one element");
+      }
+
+      $elementIds[] = $elementId;
+    }
+  }
+
+  /**
+   * Asserts that the given HTML list of rows exists in the page.
+   *
+   * @param \Behat\Gherkin\Node\TableNode $table
+   *   The table node.
+   *
+   * @Given /^I should see the following table rows:$/
+   */
+  public function iShouldSeeTheFollowingTableRows(TableNode $table): void {
+    $rows = $table->getRows();
+    // Get all table rows/headers in the page regardless of the table.
+    $table_rows = $this->getSession()->getPage()->findAll('css', 'table tr');
+    $table_rows = array_map(function ($row) {
+      return $row->getText();
+    }, $table_rows);
+
+    foreach ($rows as $row) {
+      Assert::assertContains(implode(' ', $row), $table_rows);
+    }
   }
 
 }

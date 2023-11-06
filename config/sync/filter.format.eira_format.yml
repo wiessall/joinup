@@ -1,7 +1,9 @@
 uuid: 31c0b016-e058-4c29-84b7-338e036dece1
 langcode: en
 status: true
-dependencies: {  }
+dependencies:
+  module:
+    - joinup_video
 _core:
   default_config_hash: 6TYT5seKHYxoAB4RSEPFmSEKjRH3L_mp11rav_tcmbo
 name: 'EIRA format'
@@ -20,7 +22,7 @@ filters:
     status: true
     weight: -10
     settings:
-      allowed_html: '<em> <br> <strong> <cite> <blockquote cite> <code> <q> <ul type> <ol start type> <li> <dl> <dt> <dd> <h2 id> <h3 id> <h4 id> <h5 id> <h6 id> <p> <h1> <pre> <img src altwidth height> <table> <caption> <tbody> <thead> <tfoot> <th> <td> <tr> <a hreflang href id rel target title>'
+      allowed_html: '<em> <br> <strong> <cite> <blockquote cite> <code> <q> <ul type> <ol start type> <li> <dl> <dt> <dd> <h2 id> <h3 id> <h4 id> <h5 id> <h6 id> <p> <h1> <pre> <img src alt width height> <table> <caption> <tbody> <thead> <tfoot> <th> <td> <tr> <a hreflang href id rel target title>'
       filter_html_help: true
       filter_html_nofollow: false
   filter_url:
@@ -35,4 +37,10 @@ filters:
     provider: filter
     status: true
     weight: 10
+    settings: {  }
+  filter_add_empty_alt_attribute:
+    id: filter_add_empty_alt_attribute
+    provider: joinup_core
+    status: true
+    weight: 9
     settings: {  }

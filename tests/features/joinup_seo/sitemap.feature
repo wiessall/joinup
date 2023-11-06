@@ -14,15 +14,15 @@ Feature:
     And the following collections:
       | title                        | state     |
       | Sitemap collection draft     | draft     |
-      | Sitemap collection validated | validated |
+      | Sitemap collection published | published |
     And the following solutions:
       | title                      | description                 | owner         | contact information | collection                   | state     |
-      | Sitemap solution draft     | Sitemap keywords everywhere | Sitemap owner | Sitemap secretariat | Sitemap collection validated | draft     |
-      | Sitemap solution validated | Sitemap keywords everywhere | Sitemap owner | Sitemap secretariat | Sitemap collection validated | validated |
+      | Sitemap solution draft     | Sitemap keywords everywhere | Sitemap owner | Sitemap secretariat | Sitemap collection published | draft     |
+      | Sitemap solution published | Sitemap keywords everywhere | Sitemap owner | Sitemap secretariat | Sitemap collection published | published |
     And the following releases:
       | title             | release number | release notes | is version of              | owner         | contact information | state     |
-      | Sitemap release 1 | 1              | New release   | Sitemap solution validated | Sitemap owner | Sitemap secretariat | validated |
-      | Sitemap release 2 | 2              | Newer release | Sitemap solution validated | Sitemap owner | Sitemap secretariat | draft     |
+      | Sitemap release 1 | 1              | New release   | Sitemap solution published | Sitemap owner | Sitemap secretariat | published |
+      | Sitemap release 2 | 2              | Newer release | Sitemap solution published | Sitemap owner | Sitemap secretariat | draft     |
     And the following distributions:
       | title                | description           | parent            | access url |
       | Sitemap distribution | Some kind of download | Sitemap release 1 | test.zip   |
@@ -32,42 +32,50 @@ Feature:
     And "custom_page" content:
       | title                                           | collection                   | body | logo     | langcode |
       | Sitemap custom page of draft                    | Sitemap collection draft     | N/A  | logo.png | en       |
-      | Sitemap custom page of validated                | Sitemap collection validated | N/A  | logo.png | en       |
-      | Sitemap custom page of validated but in Spanish | Sitemap collection validated | N/A  | logo.png | es       |
+      | Sitemap custom page of published                | Sitemap collection published | N/A  | logo.png | en       |
+      | Sitemap custom page of published but in Spanish | Sitemap collection published | N/A  | logo.png | es       |
     And news content:
-      | title                                    | headline     | body              | solution                   | state     | publication date                |
-      | Sitemap news draft                       | Sitemap news | Sitemap news body | Sitemap solution validated | draft     |                                 |
-      | Sitemap news validated and recent        | Sitemap news | Sitemap news body | Sitemap solution validated | validated | 1 day ago                       |
-      | Sitemap news validated but old           | Sitemap news | Sitemap news body | Sitemap solution validated | validated | 2 months ago                    |
-      | Sitemap news validated but parent is not | Sitemap news | Sitemap news body | Sitemap solution draft     | validated | Sun, 01 Dec 2019 13:00:00 +0100 |
+      | title                                    | headline     | body              | solution                   | state     | publication date          |
+      | Sitemap news draft                       | Sitemap news | Sitemap news body | Sitemap solution published | draft     |                           |
+      | Sitemap news published and recent        | Sitemap news | Sitemap news body | Sitemap solution published | published | 1 day ago                 |
+      | Sitemap news published but old           | Sitemap news | Sitemap news body | Sitemap solution published | published | 2 months ago              |
+      | Sitemap news archived                    | Sitemap news | Sitemap news body | Sitemap solution published | archived  | 2 months ago              |
+      | Sitemap news published but parent is not | Sitemap news | Sitemap news body | Sitemap solution draft     | published | Sun, 01 Dec 2019 13:00:00 |
     And event content:
       | title                                     | short title             | body                      | agenda        | location   | organisation        | scope         | solution                   | state     |
-      | Sitemap event draft                       | Sitemap event draft     | It will include fireworks | Event agenda. | Some place | European Commission | International | Sitemap solution validated | draft     |
-      | Sitemap event validated                   | Sitemap event validated | It will include fireworks | Event agenda. | Some place | European Commission | International | Sitemap solution validated | validated |
-      | Sitemap event validated but parent is not | Sitemap event validated | It will include fireworks | Event agenda. | Some place | European Commission | International | Sitemap solution draft     | validated |
+      | Sitemap event draft                       | Sitemap event draft     | It will include fireworks | Event agenda. | Some place | European Commission | International | Sitemap solution published | draft     |
+      | Sitemap event published                   | Sitemap event published | It will include fireworks | Event agenda. | Some place | European Commission | International | Sitemap solution published | published |
+      | Sitemap event archived                    | Sitemap event archived  | It will include fireworks | Event agenda. | Some place | European Commission | International | Sitemap solution published | archived  |
+      | Sitemap event published but parent is not | Sitemap event published | It will include fireworks | Event agenda. | Some place | European Commission | International | Sitemap solution draft     | published |
     And document content:
       | title                                        | document type | short title                | body         | solution                   | state     |
-      | Sitemap document draft                       | Document      | Sitemap document draft     | Read more... | Sitemap solution validated | draft     |
-      | Sitemap document validated                   | Document      | Sitemap document validated | Read more... | Sitemap solution validated | validated |
-      | Sitemap document validated but parent is not | Document      | Sitemap document validated | Read more... | Sitemap solution draft     | validated |
+      | Sitemap document draft                       | Document      | Sitemap document draft     | Read more... | Sitemap solution published | draft     |
+      | Sitemap document published                   | Document      | Sitemap document published | Read more... | Sitemap solution published | published |
+      | Sitemap document archived                    | Document      | Sitemap document archived  | Read more... | Sitemap solution published | archived  |
+      | Sitemap document published but parent is not | Document      | Sitemap document published | Read more... | Sitemap solution draft     | published |
     And discussion content:
       | title                                          | body                  | solution                   | state     |
-      | Sitemap discussion draft                       | Wanna discuss this??? | Sitemap solution validated | draft     |
-      | Sitemap discussion validated                   | Wanna discuss this??? | Sitemap solution validated | validated |
-      | Sitemap discussion validated but parent is not | Wanna discuss this??? | Sitemap solution draft     | validated |
+      | Sitemap discussion draft                       | Wanna discuss this??? | Sitemap solution published | draft     |
+      | Sitemap discussion published                   | Wanna discuss this??? | Sitemap solution published | published |
+      | Sitemap discussion archived                    | Wanna discuss this??? | Sitemap solution published | archived  |
+      | Sitemap discussion published but parent is not | Wanna discuss this??? | Sitemap solution draft     | published |
 
     Given I run cron
     And I visit "/sitemap.xml"
     Then I should see the absolute urls of the following RDF entities:
-      | Sitemap collection validated |
-      | Sitemap solution validated   |
+      | Sitemap collection published |
+      | Sitemap solution published   |
       | Sitemap release 1            |
     And I should see the absolute urls of the following content entities:
-      | Sitemap custom page of validated |
-      | Sitemap discussion validated     |
-      | Sitemap document validated       |
-      | Sitemap event validated          |
-      | Sitemap news validated but old   |
+      | Sitemap custom page of published |
+      | Sitemap discussion published     |
+      | Sitemap discussion archived      |
+      | Sitemap document published       |
+      | Sitemap document archived        |
+      | Sitemap event published          |
+      | Sitemap event archived           |
+      | Sitemap news published but old   |
+      | Sitemap news archived            |
 
     But I should not see the absolute urls of the following RDF entities:
       | Sitemap collection draft |
@@ -79,16 +87,16 @@ Feature:
       | Sitemap secretariat      |
     And I should not see the absolute urls of the following content entities:
       | Sitemap custom page of draft                    |
-      | Sitemap custom page of validated but in Spanish |
+      | Sitemap custom page of published but in Spanish |
       | Sitemap discussion draft                        |
-      | Sitemap discussion validated but parent is not  |
+      | Sitemap discussion published but parent is not  |
       | Sitemap document draft                          |
-      | Sitemap document validated but parent is not    |
+      | Sitemap document published but parent is not    |
       | Sitemap event draft                             |
-      | Sitemap event validated but parent is not       |
+      | Sitemap event published but parent is not       |
       | Sitemap news draft                              |
-      | Sitemap news validated and recent               |
-      | Sitemap news validated but parent is not        |
+      | Sitemap news published and recent               |
+      | Sitemap news published but parent is not        |
     # The following piece of xhtml is used to declare an alternative language. If it exists in the page it means that
     # another language is included in the output.
     And the response should not contain "<xhtml:link rel=\"alternate\" hreflang="
@@ -97,14 +105,14 @@ Feature:
     # topics published in the last 2 days.
     When I visit "/news/sitemap.xml"
     And I should see the absolute urls of the following content entities:
-      | Sitemap news validated and recent |
+      | Sitemap news published and recent |
 
     But I should not see the absolute urls of the following RDF entities:
       | Sitemap collection draft     |
-      | Sitemap collection validated |
+      | Sitemap collection published |
       | Sitemap distribution         |
       | Sitemap solution draft       |
-      | Sitemap solution validated   |
+      | Sitemap solution published   |
       | Sitemap release 1            |
       | Sitemap release 2            |
       | Sitemap licence              |
@@ -113,35 +121,43 @@ Feature:
     And I should not see the absolute urls of the following content entities:
       | Sitemap custom page of draft                   |
       | Sitemap discussion draft                       |
-      | Sitemap discussion validated                   |
-      | Sitemap discussion validated but parent is not |
+      | Sitemap discussion published                   |
+      | Sitemap discussion archived                    |
+      | Sitemap discussion published but parent is not |
       | Sitemap document draft                         |
-      | Sitemap document validated                     |
-      | Sitemap document validated but parent is not   |
+      | Sitemap document published                     |
+      | Sitemap document archived                      |
+      | Sitemap document published but parent is not   |
       | Sitemap event draft                            |
-      | Sitemap event validated                        |
-      | Sitemap event validated but parent is not      |
+      | Sitemap event published                        |
+      | Sitemap event archived                         |
+      | Sitemap event published but parent is not      |
       | Sitemap news draft                             |
-      | Sitemap news validated but old                 |
-      | Sitemap news validated but parent is not       |
+      | Sitemap news published but old                 |
+      | Sitemap news archived                          |
+      | Sitemap news published but parent is not       |
 
     # Simulate that 2 days have passed since last time the sitemaps have been created.
-    When the publication date of the "Sitemap news validated and recent" news content is changed to "3 days ago"
+    When the publication date of the "Sitemap news published and recent" news content is changed to "3 days ago"
     And I run cron
-    # Assert that the "Sitemap news validated and recent" news article is no
+    # Assert that the "Sitemap news published and recent" news article is no
     # longer considered as a hot topic and has moved to the standard sitemap.
     And I visit "/sitemap.xml"
     Then I should see the absolute urls of the following RDF entities:
-      | Sitemap collection validated |
-      | Sitemap solution validated   |
+      | Sitemap collection published |
+      | Sitemap solution published   |
       | Sitemap release 1            |
     And I should see the absolute urls of the following content entities:
-      | Sitemap custom page of validated  |
-      | Sitemap discussion validated      |
-      | Sitemap document validated        |
-      | Sitemap event validated           |
-      | Sitemap news validated and recent |
-      | Sitemap news validated but old    |
+      | Sitemap custom page of published  |
+      | Sitemap discussion published      |
+      | Sitemap discussion archived       |
+      | Sitemap document published        |
+      | Sitemap document archived         |
+      | Sitemap event published           |
+      | Sitemap event archived            |
+      | Sitemap news published and recent |
+      | Sitemap news published but old    |
+      | Sitemap news archived             |
 
     But I should not see the absolute urls of the following RDF entities:
       | Sitemap collection draft |
@@ -154,13 +170,13 @@ Feature:
     And I should not see the absolute urls of the following content entities:
       | Sitemap custom page of draft                   |
       | Sitemap discussion draft                       |
-      | Sitemap discussion validated but parent is not |
+      | Sitemap discussion published but parent is not |
       | Sitemap document draft                         |
-      | Sitemap document validated but parent is not   |
+      | Sitemap document published but parent is not   |
       | Sitemap event draft                            |
-      | Sitemap event validated but parent is not      |
+      | Sitemap event published but parent is not      |
       | Sitemap news draft                             |
-      | Sitemap news validated but parent is not       |
+      | Sitemap news published but parent is not       |
 
     # The hot news article is now removed from the news sitemap, and the page
     # should no longer be present since it doesn't contain any more entries.
