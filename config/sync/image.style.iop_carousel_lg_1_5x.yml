@@ -1,0 +1,21 @@
+uuid: 98a81d0e-e6f5-4124-ab7c-f1f7d5f07682
+langcode: en
+status: true
+dependencies: {  }
+name: iop_carousel_lg_1_5x
+label: 'IOP carousel LG 1.5x'
+effects:
+  9c35dda3-8aa1-49fc-b14d-341079708202:
+    uuid: 9c35dda3-8aa1-49fc-b14d-341079708202
+    id: image_scale_and_crop
+    weight: 1
+    data:
+      width: 501
+      height: 262
+      anchor: center-center
+  530f517d-f12e-44f3-877b-044bdec87088:
+    uuid: 530f517d-f12e-44f3-877b-044bdec87088
+    id: image_convert
+    weight: 2
+    data:
+      extension: webp

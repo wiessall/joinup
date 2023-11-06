@@ -2,15 +2,9 @@ name: Statistics
 description: 'Provide statistics for Joinup entities.'
 type: module
 package: Joinup
-core_version_requirement: ^8.9 || ^9.1
-php: 7.1
+core_version_requirement: ">= 9.4"
 
 dependencies:
   - 'cached_computed_field:cached_computed_field'
   - 'joinup:joinup_bundle_class'
-  - 'matomo_reporting_api:matomo_reporting_api'
   - 'meta_entity:meta_entity'
-
-config_devel:
-  install:
-    - joinup_stats.settings

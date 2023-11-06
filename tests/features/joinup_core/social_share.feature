@@ -7,10 +7,10 @@ Feature: Sharing content on social networks
   Scenario Outline: Sharing content on Facebook and Twitter.
     Given the following collection:
       | title | Social networks |
-      | state | validated       |
+      | state | published       |
     And <content type> content:
       | title                 | collection      | state     |
-      | Important information | Social networks | validated |
+      | Important information | Social networks | published |
 
     When I am an anonymous user
     And I go to the content page of the type "<content type>" with the title "Important information"
@@ -33,10 +33,10 @@ Feature: Sharing content on social networks
   Scenario: Sharing solutions on social media.
     Given the following collection:
       | title | Social networks |
-      | state | validated       |
+      | state | published       |
     And solutions:
       | title              | collection      | state     |
-      | Important solution | Social networks | validated |
+      | Important solution | Social networks | published |
 
     When I am logged in as a user with the "authenticated" role
     And I go to "/solutions"

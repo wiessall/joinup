@@ -1,9 +1,12 @@
-uuid: e0232914-1969-4458-9f9b-039053a3c46a
+uuid: c5a6bde9-cb8b-4326-bcba-101a76f3150f
 langcode: en
 status: true
 dependencies:
   config:
+    - field.field.meta_entity.solution_settings.announcements_enabled
     - field.field.meta_entity.solution_settings.field_ss_related_solutions
+    - field.field.meta_entity.solution_settings.landing_page
+    - field.field.meta_entity.solution_settings.metadata_banner_disabled
     - meta_entity.type.solution_settings
 id: meta_entity.solution_settings.default
 targetEntityType: meta_entity
@@ -11,41 +14,64 @@ bundle: solution_settings
 mode: default
 content:
   changed:
-    label: inline
     type: timestamp
+    label: inline
+    settings:
+      date_format: medium
+      custom_date_format: ''
+      timezone: ''
+      tooltip:
+        date_format: ''
+        custom_date_format: ''
+      time_diff:
+        enabled: false
+        future_format: '@interval hence'
+        past_format: '@interval ago'
+        granularity: 2
+        refresh: 60
+    third_party_settings: {  }
     weight: 22
     region: content
+  created:
+    type: timestamp
+    label: inline
     settings:
       date_format: medium
       custom_date_format: ''
       timezone: ''
+      tooltip:
+        date_format: ''
+        custom_date_format: ''
+      time_diff:
+        enabled: false
+        future_format: '@interval hence'
+        past_format: '@interval ago'
+        granularity: 2
+        refresh: 60
     third_party_settings: {  }
-  created:
-    label: inline
-    type: timestamp
     weight: 20
     region: content
-    settings:
-      date_format: medium
-      custom_date_format: ''
-      timezone: ''
-    third_party_settings: {  }
-  field_ss_related_solutions:
-    weight: 23
-    label: above
-    settings:
-      link: true
-    third_party_settings: {  }
-    type: entity_reference_label
-    region: content
   label:
-    label: hidden
     type: string
-    weight: -5
-    region: content
+    label: hidden
     settings:
       link_to_entity: false
     third_party_settings: {  }
+    weight: -5
+    region: content
+  metadata_banner_disabled:
+    type: boolean
+    label: above
+    settings:
+      format: default
+      format_custom_false: ''
+      format_custom_true: ''
+    third_party_settings: {  }
+    weight: 23
+    region: content
 hidden:
+  announcements_enabled: true
+  field_ss_related_solutions: true
+  landing_page: true
   search_api_excerpt: true
   target: true

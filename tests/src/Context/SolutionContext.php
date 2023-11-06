@@ -15,7 +15,6 @@ use Drupal\joinup\Traits\EntityReferenceTrait;
 use Drupal\joinup\Traits\EntityTrait;
 use Drupal\joinup\Traits\FileTrait;
 use Drupal\joinup\Traits\FormTrait;
-use Drupal\joinup\Traits\NodeTrait;
 use Drupal\joinup\Traits\OgTrait;
 use Drupal\joinup\Traits\RdfEntityTrait;
 use Drupal\joinup\Traits\SearchTrait;
@@ -29,7 +28,7 @@ use Drupal\language\Entity\ConfigurableLanguage;
 use Drupal\og\OgGroupAudienceHelperInterface;
 use Drupal\og\OgRoleInterface;
 use Drupal\rdf_entity\Entity\Rdf;
-use Drupal\solution\Entity\SolutionInterface;
+use Drupal\rdf_entity\RdfInterface;
 use PHPUnit\Framework\Assert;
 
 /**
@@ -42,7 +41,6 @@ class SolutionContext extends RawDrupalContext {
   use EntityTrait;
   use FileTrait;
   use FormTrait;
-  use NodeTrait;
   use OgTrait;
   use RdfEntityTrait;
   use SearchTrait;
@@ -56,7 +54,7 @@ class SolutionContext extends RawDrupalContext {
    *
    * @var \Drupal\rdf_entity\RdfInterface[]
    */
-  protected $rdfEntities = [];
+  protected array $rdfEntities = [];
 
   /**
    * Checks that the user is on the solutions overview page.
@@ -79,8 +77,8 @@ class SolutionContext extends RawDrupalContext {
    * @When I go to the add solution form of the :collection collection
    * @When I visit the add solution form of the :collection collection
    */
-  public function visitAddSolutionForm($collection) {
-    $collection = $this->getRdfEntityByLabel($collection);
+  public function visitAddSolutionForm(string $collection): void {
+    $collection = $this->getEntityByLabel('rdf_entity', $collection);
     $solution_url = Url::fromRoute('solution.collection_solution.add', [
       'rdf_entity' => $collection->id(),
     ]);
@@ -100,9 +98,9 @@ class SolutionContext extends RawDrupalContext {
    *
    * @throws \Drupal\Core\Entity\EntityMalformedException
    */
-  public function visitSolution($solution) {
+  public function visitSolution(string $solution): void {
     /** @var \Drupal\rdf_entity\Entity\Rdf $entity */
-    $entity = $this->getSolutionByName($solution);
+    $entity = $this->getEntityByLabel('rdf_entity', $solution);
     $this->visitPath($entity->toUrl()->toString());
   }
 
@@ -117,7 +115,7 @@ class SolutionContext extends RawDrupalContext {
    *
    * @When I visit the solution overview( page)
    */
-  public function visitSolutionOverviewPage() {
+  public function visitSolutionOverviewPage(): void {
     $this->visitPath('/solutions');
   }
 
@@ -127,8 +125,8 @@ class SolutionContext extends RawDrupalContext {
    * Table format:
    * @codingStandardsIgnoreStart
    * | title        | description            | state                                             | collection      | documentation | closed | creation date    | content creation | featured | moderation | modification date | landing page               | webdav creation | webdav url                  | wiki                        |
-   * | Foo solution | This is a foo solution | draft|proposed|validated|needs update|blacklisted | Some collection | text.pdf      | yes    | 28-01-1995 12:05 | no               | yes      | yes        |                   | http://foo-url-example.com | yes             | http://joinup.eu/foo/webdav | http://foo-wiki-example.com |
-   * | Bar solution | This is a bar solution | validated                                         |                 | text.pdf      | no     | 28-01-1995 12:06 | yes              | no       | no         |                   | http://bar-url-example.com | no              |                             | http://bar-wiki-example.com |
+   * | Foo solution | This is a foo solution | draft|proposed|published|needs update|blacklisted | Some collection | text.pdf      | yes    | 28-01-1995 12:05 | no               | yes      | yes        |                   | http://foo-url-example.com | yes             | http://joinup.eu/foo/webdav | http://foo-wiki-example.com |
+   * | Bar solution | This is a bar solution | published                                         |                 | text.pdf      | no     | 28-01-1995 12:06 | yes              | no       | no         |                   | http://bar-url-example.com | no              |                             | http://bar-wiki-example.com |
    * @codingStandardsIgnoreEnd
    *
    * Fields title and state are mandatory.
@@ -141,7 +139,7 @@ class SolutionContext extends RawDrupalContext {
    *
    * @Given (the following )solutions:
    */
-  public function givenSolutions(TableNode $solution_table) {
+  public function givenSolutions(TableNode $solution_table): void {
     $aliases = self::solutionFieldAliases();
 
     foreach ($solution_table->getColumnsHash() as $solution) {
@@ -170,7 +168,6 @@ class SolutionContext extends RawDrupalContext {
    * Table format:
    * | title               | Sample solution                                                |
    * | description         | A sample solution                                              |
-   * | banner              | banner.png                                                     |
    * | logo                | logo.jpg                                                       |
    * | moderation          | no|yes                                                         |
    * | closed              | no|yes                                                         |
@@ -186,7 +183,7 @@ class SolutionContext extends RawDrupalContext {
    * | related solutions   | Solution 2, Solution 3                                         |
    * | solution type       | [ABB159] Service Discovery Service, ...                        |
    * | spatial coverage    | Denmark, Serbia                                                |
-   * | state               | validated|...                                                  |
+   * | state               | published|...                                                  |
    * | status              | Under development                                              |
    * | webdav creation     | no|yes                                                         |
    * | webdav url          | http://joinup.eu/solution/foobar/webdav                        |
@@ -204,7 +201,7 @@ class SolutionContext extends RawDrupalContext {
    *
    * @Given (the following )solution:
    */
-  public function givenSolution(TableNode $solution_table) {
+  public function givenSolution(TableNode $solution_table): void {
     $aliases = self::solutionFieldAliases();
 
     $values = [];
@@ -243,7 +240,7 @@ class SolutionContext extends RawDrupalContext {
       $collection = Rdf::create([
         'rid' => 'collection',
         'label' => $label,
-        'field_ar_state' => 'validated',
+        'field_ar_state' => 'published',
       ]);
       $collection->save();
       $values['collection'] = $label;
@@ -257,7 +254,7 @@ class SolutionContext extends RawDrupalContext {
       // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-5597
       $entity_type_manager = \Drupal::entityTypeManager();
       $storage = $entity_type_manager->getStorage('ogmenu_instance');
-      $og_menu_instance_ids = $storage->getQuery()
+      $og_menu_instance_ids = $storage->getQuery()->accessCheck(FALSE)
         ->condition('type', 'navigation')
         ->condition(OgGroupAudienceHelperInterface::DEFAULT_FIELD, $collection->id())
         ->execute();
@@ -281,13 +278,13 @@ class SolutionContext extends RawDrupalContext {
    *
    * @Given (the following ):bundle content belong to the corresponding solutions:
    */
-  public function givenContentMemberships($bundle, TableNode $membership_table) {
+  public function givenContentMemberships(string $bundle, TableNode $membership_table): void {
     // As each given step is executed in the same request
     // we need to reset the mapping.
     foreach ($membership_table->getColumnsHash() as $values) {
-      $group = $this->getRdfEntityByLabel($values['solution'], 'solution');
+      $group = $this->getEntityByLabel('rdf_entity', $values['solution'], 'solution');
       /** @var \Drupal\node\NodeInterface $content */
-      $content = $this->getNodeByTitle($values['content'], $bundle);
+      $content = $this->getEntityByLabel('node', $values['content'], $bundle);
       $content->get(OgGroupAudienceHelperInterface::DEFAULT_FIELD)->set(0, $group->id());
       $content->save();
     }
@@ -309,13 +306,13 @@ class SolutionContext extends RawDrupalContext {
    *
    * @Given (the user ):username should be the owner of the :solution solution
    */
-  public function assertSolutionOwnership($username, $solution) {
+  public function assertSolutionOwnership(string $username, string $solution): void {
     $user = user_load_by_name($username);
     if (empty($user)) {
-      throw new \Exception("User {$username} could not be found.");
+      throw new \Exception("User $username could not be found.");
     }
 
-    $solution = $this->getRdfEntityByLabel($solution, 'solution');
+    $solution = $this->getEntityByLabel('rdf_entity', $solution, 'solution');
     $owner_roles = [
       OgRoleInterface::ADMINISTRATOR,
       'facilitator',
@@ -337,17 +334,27 @@ class SolutionContext extends RawDrupalContext {
    *   Thrown when a given image is not found, or when a solution is being
    *   pinned in a non-existing group.
    */
-  protected function createSolution(array $values) {
+  protected function createSolution(array $values): RdfInterface {
+    /** @var \Drupal\file_url\FileUrlHandler $fileHandler */
+    $fileHandler = \Drupal::service('file_url.handler');
+
     $file_fields = [
       'field_is_documentation',
-      'field_is_banner',
       'field_is_logo',
     ];
 
     foreach ($file_fields as $field_name) {
       if (!empty($values[$field_name])) {
         foreach ($values[$field_name] as &$filename) {
-          $filename = [$this->createFile($filename)->id()];
+          $file = $this->createFile($filename);
+          if ($field_name === 'field_is_documentation') {
+            $filename = [
+              'target_id' => $fileHandler::fileToUrl($file),
+            ];
+          }
+          else {
+            $filename = [$file->id()];
+          }
         }
       }
     }
@@ -370,7 +377,7 @@ class SolutionContext extends RawDrupalContext {
 
     if (!empty($values['pinned_in_collection'])) {
       foreach (explode(',', $values['pinned_in_collection']) as $group_label) {
-        $group = self::getRdfEntityByLabel(trim($group_label));
+        $group = $this->getEntityByLabel('rdf_entity', trim($group_label));
         if (!$group instanceof GroupInterface) {
           throw new \Exception("Cannot pin solution {$solution->label()} in $group_label since it does not exist or is not a group.");
         }
@@ -389,29 +396,35 @@ class SolutionContext extends RawDrupalContext {
    *
    * @When I delete the :solution solution
    */
-  public function deleteSolution($solution) {
-    /** @var \Drupal\rdf_entity\Entity\Rdf $solution */
-    $solution = $this->getSolutionByName($solution);
+  public function deleteSolution(string $solution): void {
+    $solution = $this->getEntityByLabel('rdf_entity', $solution);
     $solution->skip_notification = TRUE;
     $solution->delete();
   }
 
   /**
-   * Returns the Solution with the given name.
+   * Deletes a solution document's files.
    *
-   * If multiple solution have the same name, the first one will be returned.
+   * @param string $solution
+   *   The name of the solution.
    *
-   * @param string $title
-   *   The solution name.
-   *
-   * @return \Drupal\solution\Entity\SolutionInterface
-   *   The solution.
-   *
-   * @throws \InvalidArgumentException
-   *   Thrown when a solution with the given name does not exist.
+   * @When I delete documents from :solution solution
    */
-  protected function getSolutionByName($title): SolutionInterface {
-    return $this->getRdfEntityByLabel($title, 'solution');
+  public function deleteDocumentsFromSolution(string $solution): void {
+    $solution = $this->getEntityByLabel('rdf_entity', $solution);
+
+    /** @var \Drupal\file_url\FileUrlHandler $fileHandler */
+    $fileHandler = \Drupal::service('file_url.handler');
+
+    $values = $solution->get('field_is_documentation')->getValue();
+    foreach ($values as $value) {
+      $file = $fileHandler::urlToFile($value['target_id']);
+      if (!$file || $fileHandler::isRemote($file)) {
+        continue;
+      }
+
+      $file->delete();
+    }
   }
 
   /**
@@ -422,14 +435,14 @@ class SolutionContext extends RawDrupalContext {
    * @param string $title
    *   The release name.
    *
-   * @return \Drupal\rdf_entity\Entity\Rdf
+   * @return \Drupal\rdf_entity\RdfInterface
    *   The release.
    *
    * @throws \InvalidArgumentException
    *   Thrown when a release with the given name does not exist.
    */
-  public static function getReleaseByName($title) {
-    $query = \Drupal::entityQuery('rdf_entity')
+  public static function getReleaseByName(string $title): RdfInterface {
+    $query = \Drupal::entityQuery('rdf_entity')->accessCheck(FALSE)
       ->condition('rid', 'solution')
       ->exists('field_is_is_version_of')
       ->condition('label', $title)
@@ -485,9 +498,9 @@ class SolutionContext extends RawDrupalContext {
    *
    * @Given (the following )solution user membership(s):
    */
-  public function givenSolutionUserMemberships(TableNode $membership_table) {
+  public function givenSolutionUserMemberships(TableNode $membership_table): void {
     foreach ($membership_table->getColumnsHash() as $values) {
-      $group = $this->getSolutionByName($values['solution']);
+      $group = $this->getEntityByLabel('rdf_entity', $values['solution']);
       $this->givenUserMembership($group, $values);
     }
   }
@@ -497,14 +510,10 @@ class SolutionContext extends RawDrupalContext {
    *
    * @AfterScenario
    */
-  public function clearEntities(AfterScenarioScope $event) {
+  public function clearEntities(AfterScenarioScope $event): void {
     if (empty($this->rdfEntities)) {
       return;
     }
-
-    // Since we might be cleaning up many solutions, temporarily disable the
-    // feature to commit the index after every query.
-    $this->disableCommitOnUpdate();
 
     // Remove any solutions that were created.
     foreach ($this->rdfEntities as $entity) {
@@ -519,7 +528,6 @@ class SolutionContext extends RawDrupalContext {
       }
     }
     $this->rdfEntities = [];
-    $this->enableCommitOnUpdate();
   }
 
   /**
@@ -528,7 +536,7 @@ class SolutionContext extends RawDrupalContext {
    * @return array
    *   Mapping.
    */
-  protected static function solutionFieldAliases() {
+  protected static function solutionFieldAliases(): array {
     // Mapping alias - field name.
     return [
       'author' => 'uid',
@@ -536,7 +544,6 @@ class SolutionContext extends RawDrupalContext {
       'title' => 'label',
       'short ID' => 'field_short_id',
       'affiliations requests' => 'field_is_affiliations_requests',
-      'banner' => 'field_is_banner',
       'contact information' => 'field_is_contact_information',
       'content creation' => 'field_is_content_creation',
       'creation date' => 'created',
@@ -560,7 +567,6 @@ class SolutionContext extends RawDrupalContext {
       'source code repository' => 'field_is_source_code_repository',
       'spatial coverage' => 'field_spatial_coverage',
       'status' => 'field_status',
-      'topic' => 'field_topic',
       'translation' => 'field_is_translation',
       'webdav creation' => 'field_is_webdav_creation',
       'webdav url' => 'field_is_webdav_url',
@@ -575,18 +581,18 @@ class SolutionContext extends RawDrupalContext {
   }
 
   /**
-   * Converts values from user friendly to normal machine values.
+   * Converts values from user-friendly to normal machine values.
    *
    * @param array $fields
    *   An array of fields keyed by field name.
    *
-   * @return mixed
+   * @return array
    *   The array with the values converted.
    *
    * @throws \Exception
    *    Throws an exception when a mapped value is not found.
    */
-  protected function convertValueAliases(array $fields) {
+  protected function convertValueAliases(array $fields): array {
     $mapped_values = [
       'field_is_moderation' => ['no' => 0, 'yes' => 1],
       'field_is_content_creation' => [
@@ -597,7 +603,7 @@ class SolutionContext extends RawDrupalContext {
       'field_is_state' => [
         'draft' => 'draft',
         'proposed' => 'proposed',
-        'validated' => 'validated',
+        'published' => 'published',
         'needs update' => 'needs_update',
         'blacklisted' => 'blacklisted',
       ],
@@ -630,8 +636,7 @@ class SolutionContext extends RawDrupalContext {
     }
 
     // Convert any entity reference field label value with the entity ID.
-    $fields = $this->convertEntityReferencesValues('rdf_entity', 'solution', $this->parseRdfEntityFields($fields));
-    return $fields;
+    return $this->convertEntityReferencesValues('rdf_entity', 'solution', $this->parseRdfEntityFields($fields));
   }
 
   /**
@@ -640,7 +645,7 @@ class SolutionContext extends RawDrupalContext {
    * The method also checks that these options are the only options available.
    *
    * This method will log in as each user in sequence, so take care to only use
-   * it when the currently logged in user can be discarded.
+   * it when the currently logged-in user can be discarded.
    *
    * Table format:
    * | solution   | user | buttons         |
@@ -655,7 +660,7 @@ class SolutionContext extends RawDrupalContext {
    *
    * @todo Maybe there is a better definition available here like 'The
    * following state buttons should be available for the user on the
-   * solution'.
+   * solution.
    *
    * @Then for the following solution, the corresponding user should have the corresponding (available )state buttons:
    */
@@ -696,7 +701,7 @@ class SolutionContext extends RawDrupalContext {
   public function verifyDeleteLinkVisibility(TableNode $check_table): void {
     foreach ($check_table->getColumnsHash() as $values) {
       $user = $this->getUserByName($values['user']);
-      $solution = $this->getSolutionByName($values['solution']);
+      $solution = $this->getEntityByLabel('rdf_entity', $values['solution']);
       $visible = $values['delete link'] === 'yes';
       $this->assertGroupEntityOperation($visible, 'delete', $solution, $user);
     }
@@ -705,9 +710,12 @@ class SolutionContext extends RawDrupalContext {
   /**
    * Enable a given language.
    *
+   * @param string $langcode
+   *   Language code.
+   *
    * @Given the language :langcode is enabled
    */
-  public function languageEnabled($langcode) {
+  public function languageEnabled(string $langcode): void {
     // Create the needed language.
     $language_manager = \Drupal::languageManager();
     if (!$language_manager->getLanguage($langcode)) {
@@ -728,7 +736,7 @@ class SolutionContext extends RawDrupalContext {
     $collection = $this->getEntityByLabel('rdf_entity', $collection, 'collection');
     $values = [
       'label' => $title,
-      'field_is_state' => 'validated',
+      'field_is_state' => 'published',
       'field_is_description' => "English description",
       'collection' => $collection->id(),
     ];
@@ -761,9 +769,9 @@ class SolutionContext extends RawDrupalContext {
    *
    * @Then the :solution_label solution should be affiliated with the :collection_label collection
    */
-  public function assertCollectionAffiliation($collection_label, $solution_label) {
-    $solution = $this->getRdfEntityByLabel($solution_label, 'solution');
-    $ids = \Drupal::entityQuery('rdf_entity')
+  public function assertCollectionAffiliation(string $collection_label, string $solution_label): void {
+    $solution = $this->getEntityByLabel('rdf_entity', $solution_label, 'solution');
+    $ids = \Drupal::entityQuery('rdf_entity')->accessCheck(FALSE)
       ->condition('rid', 'collection')
       ->condition('label', $collection_label)
       ->condition('field_ar_affiliates', $solution->id())
@@ -788,7 +796,7 @@ class SolutionContext extends RawDrupalContext {
    */
   public function assertTileContainsDownloadCount(string $heading, int $count): void {
     $tile = $this->getTileByHeading($heading);
-    $elements = $tile->findAll('xpath', '//span[contains(concat(" ", normalize-space(@class), " "), " stats__text ") and text() = "' . $count . '"]');
+    $elements = $tile->findAll('xpath', "//span[contains(text(), '$count')]");
     Assert::assertCount(1, $elements);
   }
 
@@ -822,14 +830,14 @@ class SolutionContext extends RawDrupalContext {
    * @throws \Exception
    *   When:
    *   - An invalid $type was specified.
-   *   - The entity with $target_entity_label doesn't exists.
+   *   - The entity with $target_entity_label doesn't exist.
    *   - A related meta entity doesn't exist.
    *
    * @Given the :type count of :target_entity_label is :count
    */
   public function setDownloadCountForEntity(string $type, string $target_entity_label, string $count): void {
     if (!in_array($type, ['download', 'visit'])) {
-      throw new \Exception("Type should be 'download' or 'visit' but '{$type}' was given.");
+      throw new \Exception("Type should be 'download' or 'visit' but '$type' was given.");
     }
 
     $target_entity_type_id = $type === 'visit' ? 'node' : 'rdf_entity';
@@ -840,7 +848,7 @@ class SolutionContext extends RawDrupalContext {
     /** @var \Drupal\meta_entity\Entity\MetaEntityInterface $meta_entity */
     $meta_entity = $target_entity->{$field_name}->entity;
     if (!$meta_entity) {
-      throw new \Exception("The '{$target_entity_label}' doesn't have a related meta entity.");
+      throw new \Exception("The '$target_entity_label' doesn't have a related meta entity.");
     }
 
     $meta_entity->set('count', (int) $count)->save();

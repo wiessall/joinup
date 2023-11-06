@@ -13,10 +13,10 @@ Feature:
       | email | who.cares@example.com    |
     And the following solutions:
       | title         | description | owner                  | contact information      | state     |
-      | Tile solution | Meh...      | Some fancy named owner | Some fancy named contact | validated |
+      | Tile solution | Meh...      | Some fancy named owner | Some fancy named contact | published |
     And the following releases:
       | title        | release number | release notes | is version of | owner                  | contact information      | state     |
-      | Tile release | 1              | Meh...        | Tile solution | Some fancy named owner | Some fancy named contact | validated |
+      | Tile release | 0.1            | Meh...        | Tile solution | Some fancy named owner | Some fancy named contact | published |
     And the following distributions:
       | title       | description | parent       | access url |
       | Tile distro | meh...      | Tile release | test.zip   |
@@ -25,32 +25,27 @@ Feature:
       | Tile licence | Meh...      |
     And news content:
       | title     | headline  | body   | solution      | state     |
-      | Tile news | Tile news | Meh... | Tile solution | validated |
+      | Tile news | Tile news | Meh... | Tile solution | published |
     And event content:
       | title      | short title | body   | agenda        | location   | organisation        | scope         | solution      | state     |
-      | Tile event | Tile event  | Meh... | Event agenda. | Some place | European Commission | International | Tile solution | validated |
+      | Tile event | Tile event  | Meh... | Event agenda. | Some place | European Commission | International | Tile solution | published |
     And document content:
       | title         | document type | short title | body   | solution      | state     |
-      | Tile document | Document      | Meh...      | Meh... | Tile solution | validated |
+      | Tile document | Document      | Meh...      | Meh... | Tile solution | published |
     And discussion content:
       | title           | body   | solution      | state     |
-      | Tile discussion | Meh... | Tile solution | validated |
+      | Tile discussion | Meh... | Tile solution | published |
+    And custom_page content:
+      | title            | solution      | state     |
+      | Tile custom page | Tile solution | published |
+    And I append "content_listing" to "field_paragraphs_body" field in "node" entity with following "Tile custom page" title:
+      | content_listing:value | a:3:{s:7:"enabled";i:1;s:13:"query_presets";s:80:"entity_bundle\|asset_distribution,asset_release,discussion,document,event,news\|IN";s:5:"limit";s:2:"10";} |
 
     When I am logged in as a moderator
-    And I go to the homepage of the "Tile solution" solution
-    And I click "Add custom page"
-
-    When I fill in the following:
-      | Title | Tile custom page |
-      | Body  | Meh...           |
-    And I press "Add Content listing"
-    And I fill in "Query presets" with:
-        """
-        entity_bundle|asset_distribution,asset_release,discussion,document,event,news|IN
-        """
-    When I press "Save"
+    And I go to the "Tile custom page" custom page
 
     Then I should see the "Tile release" tile
+    And I should see the text "v0.1" in the "Tile release" tile
     And I should see the "Tile distro" tile
     And I should see the "Tile news" tile
     And I should see the "Tile event" tile
@@ -67,33 +62,27 @@ Feature:
       | email | who.cares@example.com    |
     And the following collections:
       | title           | description | owner                  | contact information      | state     |
-      | Tile collection | Meh...      | Some fancy named owner | Some fancy named contact | validated |
+      | Tile collection | Meh...      | Some fancy named owner | Some fancy named contact | published |
     And news content:
       | title     | headline  | body   | collection      | state     |
-      | Tile news | Tile news | Meh... | Tile collection | validated |
+      | Tile news | Tile news | Meh... | Tile collection | published |
     And event content:
       | title      | short title | body   | agenda        | location   | organisation        | scope         | collection      | state     |
-      | Tile event | Tile event  | Meh... | Event agenda. | Some place | European Commission | International | Tile collection | validated |
+      | Tile event | Tile event  | Meh... | Event agenda. | Some place | European Commission | International | Tile collection | published |
     And document content:
       | title         | document type | short title | body   | collection      | state     |
-      | Tile document | Document      | Meh...      | Meh... | Tile collection | validated |
+      | Tile document | Document      | Meh...      | Meh... | Tile collection | published |
     And discussion content:
       | title           | body   | collection      | state     |
-      | Tile discussion | Meh... | Tile collection | validated |
+      | Tile discussion | Meh... | Tile collection | published |
+    And custom_page content:
+      | title            | collection      | state     |
+      | Tile custom page | Tile collection | published |
+    And I append "content_listing" to "field_paragraphs_body" field in "node" entity with following "Tile custom page" title:
+      | content_listing:value | a:3:{s:7:"enabled";i:1;s:13:"query_presets";s:47:"entity_bundle\|discussion,document,event,news\|IN";s:5:"limit";s:2:"10";} |
 
     When I am logged in as a moderator
-    And I go to the homepage of the "Tile collection" collection
-    And I click "Add custom page"
-
-    When I fill in the following:
-      | Title | Tile custom page |
-      | Body  | Meh...           |
-    And I press "Add Content listing"
-    And I fill in "Query presets" with:
-        """
-        entity_bundle|discussion,document,event,news|IN
-        """
-    When I press "Save"
+    And I go to the "Tile custom page" custom page
 
     And I should see the "Tile news" tile
     And I should see the "Tile event" tile

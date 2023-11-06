@@ -2,39 +2,21 @@ uuid: 65b311ba-c63c-4f45-951e-11c101e528fc
 langcode: en
 status: true
 dependencies:
-  module:
-    - search_api_solr
-    - node
-    - rdf_entity
-    - paragraphs
-    - user
-    - search_api
-    - asset_distribution
-    - custom_page
-    - joinup_search
   config:
-    - field.storage.node.body
-    - field.storage.rdf_entity.field_ad_description
-    - field.storage.rdf_entity.field_ar_abstract
-    - field.storage.rdf_entity.field_ar_description
     - field.storage.node.field_event_agenda
+    - field.storage.node.field_paragraphs_body
+    - field.storage.paragraph.field_body
+    - field.storage.node.body
     - field.storage.node.field_event_date
-    - field.storage.rdf_entity.field_is_description
-    - field.storage.rdf_entity.field_is_solution_type
-    - field.storage.rdf_entity.field_isr_description
-    - field.storage.rdf_entity.field_isr_release_notes
-    - field.storage.rdf_entity.field_licence_description
-    - field.storage.node.field_location
     - field.storage.node.field_news_headline
+    - field.storage.node.field_location
     - field.storage.node.field_organisation
     - field.storage.node.field_scope
     - field.storage.node.field_shared_in
     - field.storage.node.field_short_title
-    - field.storage.user.field_user_family_name
-    - field.storage.user.field_user_first_name
-    - field.storage.user.field_user_organisation
-    - field.storage.rdf_entity.field_is_contact_information
+    - field.storage.rdf_entity.field_ar_abstract
     - field.storage.rdf_entity.field_ci_name
+    - field.storage.rdf_entity.field_is_contact_information
     - field.storage.rdf_entity.field_isr_contact_information
     - field.storage.rdf_entity.field_ad_description
     - field.storage.rdf_entity.field_ar_description
@@ -44,16 +26,25 @@ dependencies:
     - field.storage.rdf_entity.field_is_eif_recommendation
     - field.storage.rdf_entity.field_is_owner
     - field.storage.rdf_entity.field_owner_name
-    - field.storage.rdf_entity.field_isr_contact_information
     - field.storage.rdf_entity.field_isr_owner
-    - field.storage.node.field_paragraphs_body
-    - field.storage.paragraph.field_body
+    - field.storage.rdf_entity.field_isr_release_notes
+    - field.storage.rdf_entity.field_is_solution_type
     - search_api.server.joinup
+  module:
+    - search_api_solr
+    - node
+    - paragraphs
+    - rdf_entity
+    - search_api
+    - asset_distribution
+    - custom_page
+    - joinup_search
 third_party_settings:
   search_api_solr:
-    finalize: false
+    finalize: true
     commit_before_finalize: false
-    commit_after_finalize: false
+    commit_after_finalize: true
+    debug_finalize: false
     highlighter:
       maxAnalyzedChars: 51200
       fragmenter: gap
@@ -69,14 +60,15 @@ third_party_settings:
         requireFieldMatch: false
         snippets: 3
         fragsize: 0
+    term_modifiers:
+      slop: 10000000
+      fuzzy: 2
     advanced:
       index_prefix: ''
     multilingual:
       limit_to_content_language: false
       include_language_independent: true
-    term_modifiers:
-      slop: 10000000
-      fuzzy: 2
+      specific_languages: {  }
 id: unpublished
 name: 'Unpublished entities index'
 description: ''
@@ -237,7 +229,7 @@ field_settings:
     datasource_id: 'entity:node'
     property_path: field_news_headline
     type: text
-    boost: !!float 5
+    boost: 5.0
     dependencies:
       config:
         - field.storage.node.field_news_headline
@@ -273,30 +265,6 @@ field_settings:
     dependencies:
       config:
         - field.storage.node.field_short_title
-  field_user_family_name:
-    label: 'Family name'
-    datasource_id: 'entity:user'
-    property_path: field_user_family_name
-    type: text
-    dependencies:
-      config:
-        - field.storage.user.field_user_family_name
-  field_user_first_name:
-    label: 'First name'
-    datasource_id: 'entity:user'
-    property_path: field_user_first_name
-    type: text
-    dependencies:
-      config:
-        - field.storage.user.field_user_first_name
-  field_user_organisation:
-    label: Organisation
-    datasource_id: 'entity:user'
-    property_path: field_user_organisation
-    type: text
-    dependencies:
-      config:
-        - field.storage.user.field_user_organisation
   id:
     label: ID
     datasource_id: 'entity:rdf_entity'
@@ -312,8 +280,8 @@ field_settings:
     type: text
     dependencies:
       config:
-        - field.storage.rdf_entity.field_is_contact_information
         - field.storage.rdf_entity.field_ci_name
+        - field.storage.rdf_entity.field_is_contact_information
       module:
         - rdf_entity
   is_field_owner_name:
@@ -334,8 +302,8 @@ field_settings:
     type: text
     dependencies:
       config:
-        - field.storage.rdf_entity.field_isr_contact_information
         - field.storage.rdf_entity.field_ci_name
+        - field.storage.rdf_entity.field_isr_contact_information
       module:
         - rdf_entity
   isr_field_owner_name:
@@ -363,7 +331,7 @@ field_settings:
     datasource_id: 'entity:rdf_entity'
     property_path: label
     type: text
-    boost: !!float 5
+    boost: 5.0
     dependencies:
       module:
         - rdf_entity
@@ -429,6 +397,17 @@ field_settings:
         - 'entity:node/field_document_spatial_coverage'
         - 'entity:node/field_news_spatial_coverage'
         - 'entity:rdf_entity/field_spatial_coverage'
+  state:
+    label: State
+    property_path: aggregated_field
+    type: string
+    configuration:
+      type: union
+      fields:
+        - 'entity:node/field_state'
+        - 'entity:rdf_entity/field_ar_state'
+        - 'entity:rdf_entity/field_is_state'
+        - 'entity:rdf_entity/field_isr_state'
   sticky:
     label: 'Sticky at top of lists'
     datasource_id: 'entity:node'
@@ -442,7 +421,7 @@ field_settings:
     datasource_id: 'entity:node'
     property_path: title
     type: text
-    boost: !!float 5
+    boost: 5.0
     dependencies:
       module:
         - node
@@ -455,14 +434,6 @@ field_settings:
       fields:
         - 'entity:node/field_topic'
         - 'entity:rdf_entity/field_topic'
-  uid:
-    label: 'User ID'
-    datasource_id: 'entity:user'
-    property_path: uid
-    type: integer
-    dependencies:
-      module:
-        - user
 datasource_settings:
   'entity:node':
     bundles:
@@ -474,8 +445,6 @@ datasource_settings:
         - event
         - glossary
         - news
-        - newsletter
-        - tallinn_report
         - video
     languages:
       default: true
@@ -493,14 +462,15 @@ datasource_settings:
     languages:
       default: true
       selected: {  }
-  'entity:user':
-    languages:
-      default: true
-      selected: {  }
 processor_settings:
   add_url: {  }
   aggregated_field: {  }
+  auto_aggregated_fulltext_field: {  }
+  entity_type: {  }
   html_filter:
+    weights:
+      preprocess_index: -43
+      preprocess_query: -15
     all_fields: false
     fields:
       - body
@@ -520,10 +490,10 @@ processor_settings:
       h2: 3
       h3: 2
       strong: 2
-    weights:
-      preprocess_index: -43
-      preprocess_query: -15
   ignorecase:
+    weights:
+      preprocess_index: -48
+      preprocess_query: -50
     all_fields: false
     fields:
       - body
@@ -539,16 +509,10 @@ processor_settings:
       - field_news_headline
       - field_organisation
       - field_short_title
-      - field_user_family_name
-      - field_user_first_name
-      - field_user_organisation
       - isr_field_ci_name
       - isr_field_owner_name
       - label
       - title
-    weights:
-      preprocess_index: -48
-      preprocess_query: -50
   include_custom_page_content:
     weights:
       preprocess_index: -49
@@ -558,11 +522,15 @@ processor_settings:
   joinup_entity_latest_revision: {  }
   joinup_entity_status:
     inverse: true
+  language_with_fallback: {  }
   rendered_item: {  }
   solr_date_range:
     weights:
       preprocess_index: 0
   stopwords:
+    weights:
+      preprocess_index: -45
+      preprocess_query: -47
     all_fields: false
     fields:
       - body
@@ -617,10 +585,10 @@ processor_settings:
       - was
       - will
       - with
-    weights:
-      preprocess_index: -45
-      preprocess_query: -47
   tokenizer:
+    weights:
+      preprocess_index: -47
+      preprocess_query: -49
     all_fields: false
     fields:
       - body
@@ -637,9 +605,6 @@ processor_settings:
       - field_organisation
       - field_scope
       - field_short_title
-      - field_user_family_name
-      - field_user_first_name
-      - field_user_organisation
       - is_field_ci_name
       - is_field_owner_name
       - isr_field_ci_name
@@ -648,12 +613,13 @@ processor_settings:
       - label
       - title
     spaces: ''
+    ignored: ._-
     overlap_cjk: 1
     minimum_word_size: '3'
-    weights:
-      preprocess_index: -47
-      preprocess_query: -49
   transliteration:
+    weights:
+      preprocess_index: -46
+      preprocess_query: -48
     all_fields: false
     fields:
       - body
@@ -669,47 +635,38 @@ processor_settings:
       - field_news_headline
       - field_organisation
       - field_short_title
-      - field_user_family_name
-      - field_user_first_name
-      - field_user_organisation
       - is_field_ci_name
       - is_field_owner_name
       - isr_field_ci_name
       - isr_field_owner_name
       - label
       - title
-    weights:
-      preprocess_index: -46
-      preprocess_query: -48
   type_boost:
-    boosts:
-      'entity:node':
-        datasource_boost: !!float 0
-        bundle_boosts:
-          custom_page: !!float 8
-          discussion: !!float 2
-          document: !!float 0
-          event: !!float 3
-          news: !!float 5
-          newsletter: !!float 0
-          video: !!float 0
-      'entity:rdf_entity':
-        datasource_boost: !!float 0
-        bundle_boosts:
-          asset_distribution: !!float 0
-          asset_release: !!float 0
-          collection: !!float 21
-          licence: !!float 0
-          solution: !!float 13
-      'entity:user':
-        datasource_boost: !!float 0
     weights:
       preprocess_index: -42
+    boosts:
+      'entity:node':
+        datasource_boost: 0.0
+        bundle_boosts:
+          custom_page: 8.0
+          discussion: 2.0
+          document: 0.0
+          event: 3.0
+          news: 5.0
+          video: 0.0
+      'entity:rdf_entity':
+        datasource_boost: 0.0
+        bundle_boosts:
+          asset_distribution: 0.0
+          asset_release: 0.0
+          collection: 21.0
+          licence: 0.0
+          solution: 13.0
 tracker_settings:
   default:
     indexing_order: fifo
 options:
-  index_directly: true
   cron_limit: 50
+  index_directly: true
   track_changes_in_references: true
 server: joinup

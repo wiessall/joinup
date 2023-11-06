@@ -1,0 +1,21 @@
+uuid: a0fdc84c-e4ae-4cfc-bb35-a3ba1e792a84
+langcode: en
+status: true
+dependencies: {  }
+name: iop_carousel_xxl_1x
+label: 'IOP carousel XXL 1x'
+effects:
+  88177ea7-b181-4f85-aeb3-75971725469a:
+    uuid: 88177ea7-b181-4f85-aeb3-75971725469a
+    id: image_scale_and_crop
+    weight: 1
+    data:
+      width: 469
+      height: 245
+      anchor: center-center
+  7f7c57e9-c886-4118-9ed0-a1b2ed8b4d21:
+    uuid: 7f7c57e9-c886-4118-9ed0-a1b2ed8b4d21
+    id: image_convert
+    weight: 2
+    data:
+      extension: webp

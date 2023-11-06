@@ -1,0 +1,135 @@
+#!/usr/bin/env bash
+
+#
+# Git pre-push hook that runs code quality tools against the changed code.
+#
+
+# The SHA1 ID of an empty branch.
+SHA1_EMPTY="0000000000000000000000000000000000000000"
+FULL_CHECK="0"
+
+# Get the top-level directory name.
+TOPLEVEL_DIR=$(basename $(git rev-parse --show-toplevel))
+# Check if Joinup is running via Docker Compose.
+RUN_VIA_DOCKER=$(docker-compose ls --filter name=${TOPLEVEL_DIR} --format json 2>/dev/null)
+if [ "$RUN_VIA_DOCKER" == "[]" ] || [ "$RUN_VIA_DOCKER" == "" ];
+then
+        DOCKER_EXEC_PREFIX=""
+else
+        DOCKER_EXEC_PREFIX="docker compose exec -T --user www-data web"
+fi
+
+# Loop over the commits.
+while IFS= read -r LINE; do
+  PARTS=($LINE)
+  LOCAL_REF=${PARTS[0]}
+  LOCAL_SHA=${PARTS[1]}
+  REMOTE_SHA=${PARTS[3]}
+
+  # Skip if we are deleting a branch or if there is no local branch.
+  if [ "${LOCAL_REF}" = "(delete)" ] || [ "${LOCAL_SHA}" = "${SHA1_EMPTY}" ]
+  then
+    break
+  fi
+
+  # Do a full check if this is a new branch.
+  if [ "${REMOTE_SHA}" = "${SHA1_EMPTY}" ]
+  then
+    FULL_CHECK="1"
+    break
+  fi
+
+  ALL_FILES="${ALL_FILES} $(git diff-tree --no-commit-id --name-only -r ${LOCAL_SHA} ${REMOTE_SHA})"
+done
+
+ALL_FILES="$(echo "$ALL_FILES" | tr "\r" ' ')"
+
+if [ "${FULL_CHECK}" = "0" ] && [ "${ALL_FILES}" != " " ] && [ -f phpcs.xml ]
+then
+  # Remove all files that do not match the extensions from the list.
+  EXTENSIONS=" $(xmllint --xpath "string(/ruleset/arg[@name='extensions']/@value)" phpcs.xml) "
+  for FILE in $ALL_FILES
+  do
+    for EXTENSION in $(echo ${EXTENSIONS} | tr , " ")
+    do
+      if [[ $FILE =~ \.${EXTENSION}$ ]]
+      then
+        FILES="$FILES $FILE"
+        # Don't check the rest of extensions.
+        break
+      fi
+    done
+  done
+
+  ALL_FILES=$FILES
+  FILES=""
+
+  # Check white-listed paths.
+  ALLOWED_PATHS="$(xmllint --xpath "/ruleset/file" phpcs.xml | sed 's#<file>##' | sed 's#</file>##')"
+  ALLOWED_PATHS="$(echo "$ALLOWED_PATHS" | tr "\n" ' ')"
+  if [ "${ALLOWED_PATHS}" != "" ]
+  then
+    for FILE in $ALL_FILES
+    do
+      FILE=$($DOCKER_EXEC_PREFIX realpath "$FILE")
+      for ALLOWED_FILE in $ALLOWED_PATHS
+      do
+        if [[ $FILE =~ ^${ALLOWED_FILE} ]] && [ -f $FILE ]
+        then
+          FILES="$FILES $FILE"
+          # Don't check the rest of allowed files.
+          break
+        fi
+      done
+    done
+  fi
+
+  ALL_FILES=$FILES
+  FILES=""
+
+  # Check exclude patterns.
+  EXCLUDED_PATHS="$(xmllint --xpath "/ruleset/exclude-pattern" phpcs.xml | sed 's#<exclude-pattern>##' | sed 's#</exclude-pattern>##')"
+  EXCLUDED_PATHS="$(echo "$EXCLUDED_PATHS" | tr "\n" ' ')"
+  if [ "${EXCLUDED_PATHS}" != "" ]
+  then
+    for FILE in $ALL_FILES
+    do
+      EXCLUDE="0"
+      for EXCLUDED_PATH in $EXCLUDED_PATHS
+      do
+        if [[ "$FILE" == $EXCLUDED_PATH ]]
+        then
+          EXCLUDE="1"
+        fi
+      done
+      if [ "$EXCLUDE" = "0" ]
+      then
+        FILES="$FILES $FILE"
+      fi
+    done
+  fi
+fi
+
+# Run PHPCS and save the exit code.
+PHPCS="0"
+if [ "$FULL_CHECK" = "1" ] || [ "$FILES" != "" ]
+then
+  $DOCKER_EXEC_PREFIX ./vendor/bin/phpcs ${FILES}
+  PHPCS=$?
+fi
+
+# Run ESLint and save the exit code.
+# TODO: Need a way to check only changed files, similar to PHP.
+echo "Running ESLint on all files...";
+$DOCKER_EXEC_PREFIX ./node_modules/.bin/eslint --config .eslintrc.json --format compact --ext yml --ext js .
+ESLINT=$?
+
+if [ "$ESLINT" != "0" ]
+then
+  echo "- Run ${DOCKER_EXEC_PREFIX} ./vendor/bin/run toolkit:fix-js to fix most Javascript issues.";
+  echo "- Run ${DOCKER_EXEC_PREFIX} ./vendor/bin/run toolkit:fix-yaml to fix most YAML issues.";
+fi
+
+let EXIT_CODE=$PHPCS+$ESLINT
+
+exit $EXIT_CODE

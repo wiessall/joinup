@@ -91,7 +91,7 @@ class UniqueFieldValueInGroupAndBundleValidator extends ConstraintValidator impl
     $bundle_key = $entity_type->getKey('bundle') ?: $entity_type_id;
 
     $storage = $this->entityTypeManager->getStorage($entity_type_id);
-    $query = $storage->getQuery();
+    $query = $storage->getQuery()->accessCheck(FALSE);
 
     $entity_id = $entity->id();
     // Using isset() instead of !empty() as 0 and '0' are valid ID values for

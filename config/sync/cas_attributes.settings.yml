@@ -1,3 +1,5 @@
+_core:
+  default_config_hash: 1Ipw0F9YNfPUvW0q63zjIRwxB8mxPTUpgPz2pT1IoE0
 sitewide_token_support: true
 field:
   sync_frequency: 2
@@ -11,5 +13,3 @@ role:
   deny_login_no_match: false
   deny_registration_no_match: false
   mappings: {  }
-_core:
-  default_config_hash: 1Ipw0F9YNfPUvW0q63zjIRwxB8mxPTUpgPz2pT1IoE0

@@ -1,0 +1,19 @@
+uuid: 09c5ea52-cdff-4cfc-a1e2-8118f3fce4bf
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.paragraph_heading
+    - paragraphs.paragraphs_type.2_column_featured_right
+id: paragraph.2_column_featured_right.paragraph_heading
+field_name: paragraph_heading
+entity_type: paragraph
+bundle: 2_column_featured_right
+label: Heading
+description: 'Heading that will be rendered in a <h2> tag, on top of the row on small devices and on top of right column on medium and big devices.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

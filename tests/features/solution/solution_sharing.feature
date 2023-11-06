@@ -12,12 +12,12 @@ Feature: As a privileged user
       | sand_beach  | sand_beach@example.com  | Sand       | Beach       | moderator |
     And collections:
       | title                        | logo     | state     |
-      | Collection share original    | logo.png | validated |
-      | Collection share candidate 1 | logo.png | validated |
-      | Collection share candidate 2 | logo.png | validated |
+      | Collection share original    | logo.png | published |
+      | Collection share candidate 1 | logo.png | published |
+      | Collection share candidate 2 | logo.png | published |
     And the following solutions:
-      | title                 | description         | logo     | banner     | state     | collection                |
-      | Solution to be shared | Doesn't affect test | logo.png | banner.jpg | validated | Collection share original |
+      | title                 | description         | logo     | state     | collection                |
+      | Solution to be shared | Doesn't affect test | logo.png | published | Collection share original |
     And the following solution user memberships:
       | solution              | user        | roles       |
       | Solution to be shared | joe_dare    | owner       |
@@ -30,7 +30,6 @@ Feature: As a privileged user
     And I should not see the contextual link "Unshare" in the "Solution to be shared" tile
 
     Given I am logged in as a moderator
-    And I accept essential cookies
     And I go to the homepage of the "Collection share original" collection
     Then I should see the "Solution to be shared" tile
     And I should see the contextual link "Share" in the "Solution to be shared" tile
@@ -41,7 +40,6 @@ Feature: As a privileged user
     And the following fields should not be present "Collection share original, Collection share candidate 1, Collection share candidate 2"
 
     Given I am logged in as a member of the "Collection share candidate 1" collection
-    And I accept essential cookies
     And I go to the homepage of the "Collection share original" collection
     Then I should see the "Solution to be shared" tile
     And I should see the contextual link "Share" in the "Solution to be shared" tile
@@ -81,26 +79,22 @@ Feature: As a privileged user
     And I should not see the contextual link "Unshare" in the "Solution to be shared" tile
 
     When I am logged in as an "authenticated user"
-    And I accept essential cookies
     And I go to the homepage of the "Collection share candidate 1" collection
     Then I should see the "Solution to be shared" tile
     And I should not see the contextual link "Unshare" in the "Solution to be shared" tile
 
     # Facilitators of other collections cannot unshare from the specific collection.
     When I am logged in as a facilitator of the "Collection share candidate 2" collection
-    And I accept essential cookies
     And I go to the homepage of the "Collection share candidate 1" collection
     Then I should see the "Solution to be shared" tile
     And I should not see the contextual link "Unshare" in the "Solution to be shared" tile
 
     When I am logged in as a moderator
-    And I accept essential cookies
     And I go to the homepage of the "Collection share candidate 1" collection
     Then I should see the "Solution to be shared" tile
     And I should see the contextual link "Unshare" in the "Solution to be shared" tile
 
     When I am logged in as a facilitator of the "Collection share candidate 1" collection
-    And I accept essential cookies
     And I go to the homepage of the "Collection share candidate 1" collection
     Then I should see the "Solution to be shared" tile
     And I should see the contextual link "Unshare" in the "Solution to be shared" tile

@@ -39,7 +39,7 @@ class AnalyzeIncomingEntitiesBuildSolutionDependencyTreeTest extends StepTestBas
   /**
    * {@inheritdoc}
    */
-  protected function setUp() {
+  protected function setUp(): void {
     parent::setUp();
 
     // Create the 'default' and 'staging' graphs.
@@ -190,7 +190,7 @@ class AnalyzeIncomingEntitiesBuildSolutionDependencyTreeTest extends StepTestBas
   /**
    * {@inheritdoc}
    */
-  public function tearDown() {
+  public function tearDown(): void {
     /** @var \Drupal\sparql_entity_storage\SparqlEntityStorageInterface $storage */
     $storage = $this->container->get('entity_type.manager')->getStorage('rdf_entity');
     $storage->delete($storage->loadMultiple(array_keys(static::getEntityData())));

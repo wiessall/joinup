@@ -7,7 +7,6 @@ dependencies:
     - field.field.rdf_entity.collection.field_ar_abstract
     - field.field.rdf_entity.collection.field_ar_access_url
     - field.field.rdf_entity.collection.field_ar_affiliates
-    - field.field.rdf_entity.collection.field_ar_banner
     - field.field.rdf_entity.collection.field_ar_closed
     - field.field.rdf_entity.collection.field_ar_contact_information
     - field.field.rdf_entity.collection.field_ar_content_creation
@@ -19,14 +18,14 @@ dependencies:
     - field.field.rdf_entity.collection.field_collection_content
     - field.field.rdf_entity.collection.field_keywords
     - field.field.rdf_entity.collection.field_newsletter
-    - field.field.rdf_entity.collection.field_topic
     - field.field.rdf_entity.collection.field_short_id
     - field.field.rdf_entity.collection.field_site_featured
     - field.field.rdf_entity.collection.field_spatial_coverage
+    - field.field.rdf_entity.collection.field_topic
     - image.style.logo
     - rdf_entity.rdfentity.collection
   module:
-    - image
+    - svg_image
     - template_suggestion
     - user
 id: rdf_entity.collection.compact
@@ -36,32 +35,34 @@ mode: compact
 content:
   field_ar_logo:
     type: image
-    weight: 0
-    region: content
     label: hidden
     settings:
-      image_style: logo
       image_link: ''
+      image_style: logo
+      image_loading:
+        attribute: lazy
     third_party_settings:
       template_suggestion:
         template_suggestion: no_wrappers
+    weight: 0
+    region: content
   label:
     type: string
-    weight: 1
-    region: content
     label: hidden
     settings:
       link_to_entity: false
     third_party_settings:
       template_suggestion:
         template_suggestion: no_wrappers
+    weight: 1
+    region: content
 hidden:
   changed: true
   created: true
+  featured: true
   field_ar_abstract: true
   field_ar_access_url: true
   field_ar_affiliates: true
-  field_ar_banner: true
   field_ar_closed: true
   field_ar_contact_information: true
   field_ar_content_creation: true
@@ -81,8 +82,9 @@ hidden:
   last_update: true
   members: true
   og_group: true
-  rdf_entity_field_collection_content_inline_facets: true
-  rdf_entity_field_collection_content_top: true
+  rdf_entity_collection_field_collection_content_inline_facets: true
+  rdf_entity_collection_field_collection_content_top: true
   read_more: true
   search_api_excerpt: true
+  settings: true
   solutions: true

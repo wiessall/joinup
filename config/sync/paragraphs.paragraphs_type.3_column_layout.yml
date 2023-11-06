@@ -1,0 +1,12 @@
+uuid: 54eecb15-a8d8-4cc4-a65a-ed569e167a5b
+langcode: en
+status: true
+dependencies:
+  content:
+    - 'file:file:99d4e852-bb08-4178-bc48-0c6c696b0292'
+id: 3_column_layout
+label: '3 column layout'
+icon_uuid: 99d4e852-bb08-4178-bc48-0c6c696b0292
+icon_default: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNiIgaGVpZ2h0PSIxNiIgZmlsbD0iY3VycmVudENvbG9yIiBjbGFzcz0iYmkgYmktbGF5b3V0LXRocmVlLWNvbHVtbnMiIHZpZXdCb3g9IjAgMCAxNiAxNiI+CiAgPHBhdGggZD0iTTAgMS41QTEuNSAxLjUgMCAwIDEgMS41IDBoMTNBMS41IDEuNSAwIDAgMSAxNiAxLjV2MTNhMS41IDEuNSAwIDAgMS0xLjUgMS41aC0xM0ExLjUgMS41IDAgMCAxIDAgMTQuNXYtMTN6TTEuNSAxYS41LjUgMCAwIDAtLjUuNXYxM2EuNS41IDAgMCAwIC41LjVINVYxSDEuNXpNMTAgMTVWMUg2djE0aDR6bTEgMGgzLjVhLjUuNSAwIDAgMCAuNS0uNXYtMTNhLjUuNSAwIDAgMC0uNS0uNUgxMXYxNHoiLz4KPC9zdmc+'
+description: ''
+behavior_plugins: {  }

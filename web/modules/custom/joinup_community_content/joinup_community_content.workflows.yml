@@ -8,7 +8,7 @@ node:pre_moderated:
       label: New
     draft:
       label: Draft
-    validated:
+    published:
       label: Published
       published: true
     needs_update:
@@ -27,7 +27,7 @@ node:pre_moderated:
       to: draft
     save_new_draft:
       label: 'Save new draft'
-      from: [validated]
+      from: [published]
       to: draft
     propose:
       label: 'Propose'
@@ -40,14 +40,14 @@ node:pre_moderated:
     publish:
       label: 'Publish'
       from: [__new__, draft]
-      to: validated
+      to: published
     approve_proposed:
       label: 'Publish'
       from: [proposed]
-      to: validated
+      to: published
     report:
       label: 'Report'
-      from: [validated]
+      from: [published]
       to: needs_update
     # In pre-moderated groups, if a facilitator proposes a new revision this
     # transition will be shown as "Request changes". If a content author
@@ -58,20 +58,24 @@ node:pre_moderated:
     # @see joinup_community_content_workflow_selector()
     propose_new_revision:
       label: 'Propose new revision'
-      from: [validated]
+      from: [published]
       to: proposed
     request_deletion:
       label: 'Request deletion'
-      from: [validated]
+      from: [published]
       to: deletion_request
     reject_deletion:
       label: 'Reject deletion'
       from: [deletion_request]
-      to: validated
-    disable:
-      label: Disable
-      from: [validated]
+      to: published
+    archive:
+      label: Archive
+      from: [draft, published, needs_update, proposed, deletion_request]
       to: archived
+    unarchive:
+      label: Unarchive
+      from: [archived]
+      to: __new__
 # The workflow of the community content for a post moderated parent.
 node:post_moderated:
   id: post_moderated
@@ -82,7 +86,7 @@ node:post_moderated:
       label: New
     draft:
       label: Draft
-    validated:
+    published:
       label: Published
       published: true
     needs_update:
@@ -99,7 +103,7 @@ node:post_moderated:
       to: draft
     save_new_draft:
       label: 'Save new draft'
-      from: [validated]
+      from: [published]
       to: draft
     propose_from_reported:
       label: 'Propose'
@@ -108,20 +112,24 @@ node:post_moderated:
     publish:
       label: 'Publish'
       from: [__new__, draft]
-      to: validated
+      to: published
     approve_proposed:
       label: 'Publish'
       from: [proposed]
-      to: validated
+      to: published
     report:
       label: 'Report'
-      from: [validated]
+      from: [published]
       to: needs_update
     request_changes:
       label: 'Request changes'
-      from: [validated]
+      from: [published]
       to: proposed
-    disable:
-      label: Disable
-      from: [validated]
+    archive:
+      label: Archive
+      from: [draft, published, needs_update, proposed]
       to: archived
+    unarchive:
+      label: Unarchive
+      from: [archived]
+      to: __new__

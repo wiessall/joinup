@@ -45,6 +45,9 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  *   confirm = FALSE,
  *   pass_context = TRUE,
  *   pass_view = FALSE,
+ *   requirements = {
+ *      "_permission" = "vbo joinup change group action",
+ *   },
  * )
  */
 class ChangeGroupAction extends ViewsBulkOperationsActionBase implements ContainerFactoryPluginInterface {
@@ -222,7 +225,7 @@ class ChangeGroupAction extends ViewsBulkOperationsActionBase implements Contain
         // Check the user selected 2nd tier custom pages.
         if ($is_custom_page && empty($node->isChild)) {
           if ($parent_id = $this->pageMenuLinks[$node->id()]->getParentId()) {
-            list(, $uuid) = explode(':', $parent_id, 2);
+            [, $uuid] = explode(':', $parent_id, 2);
             // If the custom page has a parent that wasn't selected by the user,
             // the page will be moved as top-level page. This is accomplished by
             // removing the corresponding OG menu link parent reference.
@@ -283,7 +286,7 @@ class ChangeGroupAction extends ViewsBulkOperationsActionBase implements Contain
   /**
    * {@inheritdoc}
    */
-  public function validateConfigurationForm(array &$form, FormStateInterface $form_state) {
+  public function validateConfigurationForm(array &$form, FormStateInterface $form_state): void {
     /** @var \Drupal\Core\Url $url */
     $url = $form_state->get('views_bulk_operations')['redirect_url'];
     if ($url->isRouted() && ($parameters = $url->getRouteParameters()) && !empty($parameters['rdf_entity'])) {
@@ -355,7 +358,7 @@ class ChangeGroupAction extends ViewsBulkOperationsActionBase implements Contain
     }
     $menu_link_storage = $this->entityTypeManager->getStorage('menu_link_content');
     $uri = 'entity:node/' . $custom_page->id();
-    $mids = $menu_link_storage->getQuery()
+    $mids = $menu_link_storage->getQuery()->accessCheck(FALSE)
       ->condition('bundle', 'menu_link_content')
       ->condition('menu_name', "ogmenu-{$menu_instance->id()}")
       ->condition('link.uri', $uri)

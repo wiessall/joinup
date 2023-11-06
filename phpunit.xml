@@ -6,6 +6,7 @@
          beStrictAboutOutputDuringTests="true"
          beStrictAboutChangesToGlobalState="true"
          printerClass="\Drupal\Tests\Listeners\HtmlOutputPrinter"
+         testdox="true"
          verbose="true">
   <php>
     <!-- Set error reporting to E_ALL. -->
@@ -67,9 +68,6 @@
   </testsuites>
   <listeners>
     <listener class="\Drupal\Tests\Listeners\DrupalListener">
-    </listener>
-    <!-- The Symfony deprecation listener has to come after the Drupal listener -->
-    <listener class="Symfony\Bridge\PhpUnit\SymfonyTestsListener">
     </listener>
   </listeners>
   <extensions>

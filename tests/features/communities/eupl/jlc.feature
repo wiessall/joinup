@@ -4,7 +4,7 @@ Feature:
   In order to assert whether I can reuse software or data and redistribute it using my favorite licence
   I want to be able to get advice on whether two licences are compatible
 
-  @eupl
+  @terms @eupl
   Scenario: Compatibility of licences can be determined using licence compatibility rules
     Given SPDX licences:
       | uri                                    | title            | ID               |
@@ -262,7 +262,7 @@ Feature:
     # overview. Clean them up again.
     Then all compatibility documents are cleaned up
 
-  @eupl
+  @terms @eupl
   # This scenario and the next are checking the same things, but this one runs
   # without JS so that we can inspect the response headers for cacheability.
   Scenario: Get information about how a project can be redistributed under another licence
@@ -281,7 +281,7 @@ Feature:
     And compatibility documents:
       | id           | description                                                                                                                                                                    |
       | T01          | Freedom for using and re-distributing is a basic common characteristic of all open licences.                                                                                   |
-      | T10          | The hypothetical risk of 'viral effect' from @outbound-licence to the code covered by @inbound-licence in the case of dynamic or even static linking will not be validated. |
+      | T10          | The hypothetical risk of 'viral effect' from @outbound-licence to the code covered by @inbound-licence in the case of dynamic or even static linking will not be published. |
       | T16          | You have to check if the text of @inbound-licence has expressly mentioned @outbound-licence as compatible.                                                                  |
       | INCOMPATIBLE | @inbound-licence is not compatible with @outbound-licence.                                                                                                                  |
 
@@ -301,7 +301,7 @@ Feature:
 
     When I visit "licence/compatibility-check/EUPL-1.2/LGPL-2.1"
     Then I should see the heading "Compatibility between the European Union Public Licence 1.2 (inbound licence) and the GNU Lesser General Public License 2.1 (outbound licence)."
-    And I should see the text "The hypothetical risk of 'viral effect' from LGPL-2.1 to the code covered by EUPL-1.2 in the case of dynamic or even static linking will not be validated."
+    And I should see the text "The hypothetical risk of 'viral effect' from LGPL-2.1 to the code covered by EUPL-1.2 in the case of dynamic or even static linking will not be published."
     And the page should be cacheable
     When I reload the page
     Then the page should be cached
@@ -344,10 +344,10 @@ Feature:
     When I reload the page
     Then the page should be cached
 
-  @eupl @javascript
   # This scenario and the previous are checking the same things, but this one
   # runs with JS so that we can check the frontend implementation.
-  Scenario: Get information about how a project can be redistributed under another licence
+  @terms @eupl @javascript
+  Scenario: Get information about how a project can be redistributed under another licence (JS)
     Given SPDX licences:
       | uri                            | title    | ID       |
       | http://joinup.eu/spdx/CECILL-C | CECILL-C | CECILL-C |
@@ -363,12 +363,11 @@ Feature:
     And compatibility documents:
       | id           | description                                                                                                                                                                    |
       | T01          | Freedom for using and re-distributing is a basic common characteristic of all open licences.                                                                                   |
-      | T10          | The hypothetical risk of 'viral effect' from @outbound-licence to the code covered by @inbound-licence in the case of dynamic or even static linking will not be validated. |
+      | T10          | The hypothetical risk of 'viral effect' from @outbound-licence to the code covered by @inbound-licence in the case of dynamic or even static linking will not be published. |
       | T16          | You have to check if the text of @inbound-licence has expressly mentioned @outbound-licence as compatible.                                                                  |
       | INCOMPATIBLE | @inbound-licence is not compatible with @outbound-licence.                                                                                                                  |
 
     When I visit the "JLC" custom page
-    And I accept essential cookies
     Then the "Check compatibility" buttons should be disabled
     When I choose "EUPL-1.2" as the "Inbound" licence
     Then the "Check compatibility" buttons should be disabled
@@ -405,7 +404,7 @@ Feature:
     When I click "Check compatibility"
     Then the url should match "licence/compatibility-check/EUPL-1.2/LGPL-2.1"
     And I should see the heading "Compatibility between the European Union Public Licence 1.2 (inbound licence) and the GNU Lesser General Public License 2.1 (outbound licence)."
-    And I should see the text "The hypothetical risk of 'viral effect' from LGPL-2.1 to the code covered by EUPL-1.2 in the case of dynamic or even static linking will not be validated."
+    And I should see the text "The hypothetical risk of 'viral effect' from LGPL-2.1 to the code covered by EUPL-1.2 in the case of dynamic or even static linking will not be published."
 
     When I visit the "JLC" custom page
     Then the "Check compatibility" buttons should be disabled
@@ -443,12 +442,12 @@ Feature:
     # thin strips which don't have enough room for contextual links.
     Given I am logged in as a moderator
     When I visit the "JLC" custom page
+    And I should not see the link "Report abusive content"
     Then I should not see any contextual links in the "Content" region
 
     # Authenticated users should also be able to see the licence compatibility
     # checker and compatibility documents.
     Given I am logged in as an "authenticated user"
-    And I accept essential cookies
     When I visit the "JLC" custom page
     Then the "Check compatibility" buttons should be disabled
     When I choose "EUPL-1.2" as the "Inbound" licence

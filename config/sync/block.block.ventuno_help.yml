@@ -9,12 +9,12 @@ dependencies:
 id: ventuno_help
 theme: ventuno
 region: content
-weight: -21
+weight: -14
 provider: null
 plugin: help_block
 settings:
   id: help_block
   label: Help
-  provider: help
   label_display: '0'
+  provider: help
 visibility: {  }

@@ -2,8 +2,7 @@ name: Discussion
 description: 'A discussion content bundle for the Joinup project.'
 type: module
 package: Joinup
-core_version_requirement: ^8.9 || ^9.1
-php: 7.1
+core_version_requirement: ">= 9.4"
 
 dependencies:
   - 'cached_computed_field:cached_computed_field'
@@ -16,5 +15,6 @@ dependencies:
   - 'joinup:joinup_notification'
   - 'joinup:joinup_subscription'
   - 'joinup:joinup_user'
+  - 'joinup:joinup_search'
   - 'message:message'
   - 'smart_trim:smart_trim'

@@ -1,0 +1,35 @@
+uuid: 77c05746-a0b6-4009-84c7-13ec235c29f2
+langcode: en
+status: true
+dependencies:
+  config:
+    - filter.format.minimal
+  module:
+    - ckeditor5
+format: minimal
+editor: ckeditor5
+settings:
+  toolbar:
+    items:
+      - bold
+      - italic
+      - '|'
+      - link
+      - '|'
+      - sourceEditing
+  plugins:
+    ckeditor5_sourceEditing:
+      allowed_tags:
+        - '<i>'
+        - '<b>'
+        - '<a hreflang>'
+    linkit_extension:
+      linkit_enabled: false
+image_upload:
+  status: false
+  scheme: public
+  directory: inline-images
+  max_size: ''
+  max_dimensions:
+    width: null
+    height: null

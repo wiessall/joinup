@@ -13,7 +13,7 @@ Feature: Notification test for the news transitions on a post moderated parent.
       | CC member        |           | notify_member@test.com      | CC         | Member      |
     And collections:
       | title              | state     | content creation | moderation   |
-      | CC post collection | validated | members          | <moderation> |
+      | CC post collection | published | members          | <moderation> |
     And the following collection user memberships:
       | collection         | user           | roles       |
       | CC post collection | CC owner       | owner       |
@@ -22,11 +22,11 @@ Feature: Notification test for the news transitions on a post moderated parent.
     And news content:
       | title                          | author    | body | headline                       | collection         | field_state  |
       | CCN post publish               | CC member | body | CCN post publish               | CC post collection | draft        |
-      | CCN post request changes       | CC member | body | CCN post request changes       | CC post collection | validated    |
-      | CCN post report                | CC member | body | CCN post report                | CC post collection | validated    |
+      | CCN post request changes       | CC member | body | CCN post request changes       | CC post collection | published    |
+      | CCN post report                | CC member | body | CCN post report                | CC post collection | published    |
       | CCN post propose from reported | CC member | body | CCN post propose from reported | CC post collection | needs_update |
       | CCN post approve proposed      | CC member | body | CCN post approve proposed      | CC post collection | proposed     |
-      | CCN post delete                | CC member | body | CCN post delete                | CC post collection | validated    |
+      | CCN post delete                | CC member | body | CCN post delete                | CC post collection | published    |
 
     # Test 'create' operation.
     When I am logged in as "CC member"
@@ -40,7 +40,7 @@ Feature: Notification test for the news transitions on a post moderated parent.
     Then the following email should have been sent:
       | recipient | CC owner                                                                                                                                                       |
       | subject   | Joinup: Content has been published                                                                                                                             |
-      | body      | CC Member has published the new news - "CCN create publish" in the collection: "CC post collection".You can access the new content at the following link: http |
+      | body      | CC Member has published the new news - "CCN create publish" in the collection: "CC post collection". You can access the new content at the following link: http |
 
     # Test 'update' operation.
     When I am logged in as "CC member"
@@ -60,7 +60,6 @@ Feature: Notification test for the news transitions on a post moderated parent.
     When I fill in "Motivation" with "Can you do some changes?"
     And I press "Request changes"
     Then the email sent to "CC member" with subject "Joinup: Content has been updated" contains the following lines of text:
-      | text                                                                                                                                                                                                  |
       | the Facilitator, CC Facilitator has requested you to modify the news - "CCN post request changes" in the collection: "CC post collection", with the following motivation: "Can you do some changes?". |
       | If you think this action is not clear or not due, please contact Joinup Support at                                                                                                                    |
 
@@ -72,7 +71,6 @@ Feature: Notification test for the news transitions on a post moderated parent.
     When I fill in "Motivation" with "Your content is reported"
     And I press "Request changes"
     Then the email sent to "CC member" with subject "Joinup: Content has been updated" contains the following lines of text:
-      | text                                                                                                                                                                                         |
       | the Facilitator, CC Facilitator has requested you to modify the news - "CCN post report" in the collection: "CC post collection", with the following motivation: "Your content is reported". |
       | If you think this action is not clear or not due, please contact Joinup Support at                                                                                                           |
 

@@ -1,4 +1,7 @@
+_core:
+  default_config_hash: R4IF-ClDHXxblLcG0L7MgsLvfBIMAvi_skumNFQwkDc
 module:
+  addtocal: 0
   adms_validator: 0
   allowed_formats: 0
   antibot: 0
@@ -8,13 +11,12 @@ module:
   breakpoint: 0
   cached_computed_field: 0
   cas: 0
-  cas_account_link: 0
   cas_attributes: 0
   changed_fields: 0
   ckeditor: 0
+  ckeditor5: 0
   collection: 0
   comment: 0
-  components: 0
   config: 0
   config_ignore: 0
   config_readonly: 0
@@ -24,11 +26,12 @@ module:
   csv_serialization: 0
   ctools: 0
   curated_content_listing: 0
+  custom_markup_block: 0
   custom_page: 0
   dashboard: 0
   datetime: 0
   datetime_range: 0
-  default_content: 0
+  developers_italia: 0
   diff: 0
   digital_size_formatter: 0
   dpsi: 0
@@ -39,7 +42,8 @@ module:
   editor_file: 0
   eif: 0
   eira: 0
-  email_registration: 0
+  email_confirmer: 0
+  email_contact: 0
   embed_block: 0
   entity_legal: 0
   entity_reference_revisions: 0
@@ -62,11 +66,12 @@ module:
   file_url: 0
   filter: 0
   flag: 0
+  flag_count: 0
   geocoder: 0
   geocoder_field: 0
   geocoder_geofield: 0
   geofield: 0
-  hal: 0
+  github_feed: 0
   help: 0
   honeypot: 0
   iframe: 0
@@ -79,7 +84,6 @@ module:
   joinup_collection: 0
   joinup_community_content: 0
   joinup_core: 0
-  joinup_default_content: 0
   joinup_discussion: 0
   joinup_document: 0
   joinup_eulogin: 0
@@ -94,40 +98,43 @@ module:
   joinup_layout: 0
   joinup_legal: 0
   joinup_licence: 0
-  joinup_material_design: 0
+  joinup_like: 0
+  joinup_media: 0
   joinup_menu: 0
+  joinup_modal: 0
   joinup_news: 0
   joinup_newsletter: 0
   joinup_notification: 0
   joinup_paragraphs: 0
   joinup_pipeline_log: 0
+  joinup_poll: 0
   joinup_publication_date: 0
   joinup_rdf: 0
-  joinup_rdf_graph: 0
   joinup_rss: 0
   joinup_search: 0
   joinup_seo: 0
+  joinup_sitewide_alert: 0
   joinup_sparql: 0
   joinup_stats: 0
   joinup_subscription: 0
+  joinup_tiles: 0
   joinup_tour: 0
   joinup_user: 0
   joinup_validation: 0
   joinup_video: 0
   joinup_workflow: 0
-  jquery_ui: 0
-  jquery_ui_accordion: 0
   json_field: 0
   language: 0
   layout_builder: 0
-  layout_builder_block: 0
   layout_builder_component_attributes: 0
   layout_discovery: 0
+  layout_paragraphs: 0
   link: 0
   linkit: 0
   mailsystem: 0
-  matomo_reporting_api: 0
   media: 0
+  media_library: 0
+  memcache: 0
   menu_link_destination: 0
   menu_ui: 0
   message: 0
@@ -136,18 +143,20 @@ module:
   meta_entity: 0
   metatag: 0
   metatag_open_graph: 0
+  metatag_views: 0
   moderation: 0
   monolog: 0
+  mysql: 0
   nio: 0
   node: 0
   oe_bootstrap_theme_helper: 0
   oe_dashboard_agent: 0
+  oe_gisco_geocoding: 0
   oe_newsroom_newsletter: 0
   oe_webtools: 0
   oe_webtools_analytics: 0
   oe_webtools_cookie_consent: 0
   oe_webtools_etrans: 0
-  oe_webtools_geocoding: 0
   oe_webtools_globan: 0
   oe_webtools_maps: 0
   og: 0
@@ -156,28 +165,25 @@ module:
   owner: 0
   page_cache: 0
   page_manager: 0
-  paragraphs_jquery_ui_accordion: 0
   paragraphs_type_permissions: 0
-  password_policy: 0
-  password_policy_character_types: 0
-  password_policy_characters: 0
-  password_policy_length: 0
   path: 0
   path_alias: 0
   pipeline: 0
+  poll: 0
   purge: 0
   purge_drush: 0
   purge_processor_cron: 0
   purge_processor_lateruntime: 0
   purge_queuer_coretags: 0
+  queue_ui: 0
   rdf_draft: 0
   rdf_entity: 0
   rdf_entity_provenance: 0
   rdf_export: 0
+  rdf_meta_entity: 0
   rdf_schema_field_validation: 0
   rdf_taxonomy: 0
   redirect: 0
-  redis: 0
   responsive_image: 0
   rest: 0
   schema_article: 0
@@ -191,12 +197,14 @@ module:
   search_api_db: 0
   search_api_field: 0
   search_api_solr: 0
+  search_api_solr_autocomplete: 0
+  search_api_spellcheck: 0
   semic: 0
   serialization: 0
   simple_block: 0
   simple_sitemap: 0
-  site_alert: 0
-  site_verify: 0
+  sitewide_alert: 0
+  sitewide_alert_block: 0
   smart_trim: 0
   social_media_links: 0
   social_media_links_field: 0
@@ -208,9 +216,9 @@ module:
   state_machine_permissions: 0
   state_machine_revisions: 0
   subpathauto: 0
+  svg_image: 0
   swiftmailer: 0
   system: 0
-  tallinn: 0
   taxonomy: 0
   template_suggestion: 0
   text: 0
@@ -224,7 +232,9 @@ module:
   ui_patterns_library: 0
   ui_patterns_settings: 0
   user: 0
+  ventuno_helper: 0
   video_embed_field: 0
+  video_embed_media: 0
   video_embed_wysiwyg: 0
   view_unpublished: 0
   views_autosubmit: 0
@@ -245,12 +255,8 @@ module:
   joinup: 1000
   joinup_debug: 1001
 theme:
-  stable: 0
-  classy: 0
-  seven: 0
-  joinup_theme: 0
   ventuno: 0
   oe_bootstrap_theme: 0
+  claro: 0
+  iop: 0
 profile: joinup
-_core:
-  default_config_hash: R4IF-ClDHXxblLcG0L7MgsLvfBIMAvi_skumNFQwkDc

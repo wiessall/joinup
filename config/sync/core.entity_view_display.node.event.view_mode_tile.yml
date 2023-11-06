@@ -19,19 +19,19 @@ dependencies:
     - field.field.node.event.field_location
     - field.field.node.event.field_organisation
     - field.field.node.event.field_organisation_type
-    - field.field.node.event.field_topic
     - field.field.node.event.field_scope
     - field.field.node.event.field_shared_in
     - field.field.node.event.field_short_title
     - field.field.node.event.field_site_featured
     - field.field.node.event.field_state
+    - field.field.node.event.field_topic
     - field.field.node.event.og_audience
-    - image.style.horizontal_medium_image
     - node.type.event
+    - responsive_image.styles.tile
   module:
     - datetime_range
-    - image
-    - smart_trim
+    - joinup_html_stripper
+    - responsive_image
     - template_suggestion
     - user
 id: node.event.view_mode_tile
@@ -40,55 +40,48 @@ bundle: event
 mode: view_mode_tile
 content:
   body:
-    type: smart_trim
-    weight: 2
+    type: joinup_html_stripper_stripped
     label: hidden
     settings:
-      trim_length: 50
-      trim_type: chars
-      trim_suffix: …
-      more_link: false
-      more_text: More
-      summary_handler: trim
-      trim_options:
-        text: false
-      more_class: more-link
-      wrap_output: false
-      wrap_class: trimmed
+      trim_length: 600
     third_party_settings:
       template_suggestion:
-        template_suggestion: ''
+        template_suggestion: bare
+    weight: 2
     region: content
   field_event_date:
     type: daterange_default
-    weight: 3
-    region: content
     label: hidden
     settings:
       timezone_override: ''
       format_type: date_only
+      fromto: start_date
       separator: '-'
     third_party_settings:
       template_suggestion:
         template_suggestion: ''
-  field_event_logo:
     weight: 1
+    region: content
+  field_event_logo:
+    type: responsive_image
     label: hidden
     settings:
-      image_style: horizontal_medium_image
-      image_link: content
-    third_party_settings: {  }
-    type: image
-    region: content
-  field_short_title:
-    type: string
+      responsive_image_style: tile
+      image_link: ''
+      image_loading:
+        attribute: eager
+    third_party_settings:
+      template_suggestion:
+        template_suggestion: bare
     weight: 0
     region: content
-    label: hidden
-    settings:
-      link_to_entity: false
+  flag_like_node:
+    settings: {  }
     third_party_settings: {  }
+    weight: 10
+    region: content
 hidden:
+  featured: true
   field_attachment: true
   field_comments: true
   field_event_agenda: true
@@ -103,14 +96,17 @@ hidden:
   field_organisation_type: true
   field_scope: true
   field_shared_in: true
+  field_short_title: true
   field_site_featured: true
   field_state: true
   field_topic: true
   langcode: true
   links: true
   og_audience: true
+  pinned_in: true
   published_at: true
   read_more: true
   report: true
   search_api_excerpt: true
   share_link: true
+  visit_count: true

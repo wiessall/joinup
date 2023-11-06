@@ -4,14 +4,13 @@
  * Themeing for rdf entities.
  */
 #}
-<article{{ attributes }}>
-    {{ title_prefix }}
-    {% if not page %}
-        <h2{{ title_attributes }}>
-            <a href="{{ url }}" rel="bookmark">{{ label }}</a>
-        </h2>
-    {% endif %}
-    {{ title_suffix }}
-
-    {{ content }}
+<article{{ attributes.addClass('glide__slide') }}>
+  {{ title_prefix }}
+  {% if not page %}
+    <h1{{ title_attributes }}>
+      <a href="{{ url }}" rel="bookmark">{{ label }}</a>
+    </h1>
+  {% endif %}
+  {{ title_suffix }}
+  {{ content }}
 </article>

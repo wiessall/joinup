@@ -7,8 +7,8 @@ Feature: Pinning content entities inside solutions
   Background:
     Given the following solutions:
       | title       | state     |
-      | Blue Wrench | validated |
-      | Sunny Beam  | validated |
+      | Blue Wrench | published |
+      | Sunny Beam  | published |
     And users:
       | Username          | E-mail                        |
       | Sara Jessica      | sara.jessica@example.com      |
@@ -24,13 +24,13 @@ Feature: Pinning content entities inside solutions
       | Sunny Beam  | Melahrini Gilbert |             |
 
   Scenario Outline: Facilitators can pin and unpin community content inside their solutions.
-    Given discussion content:
+    Given news content:
       | title                      | solution    | state     | created    |
-      | What is the HEX for lemon? | Blue Wrench | validated | 2018-12-13 |
+      | What is the HEX for lemon? | Blue Wrench | published | 2018-12-13 |
     And <content type> content:
       | title              | headline           | solution    | state     | pinned | created    |
-      | Very important     | Very important     | Blue Wrench | validated | yes    | 2018-11-03 |
-      | Useful information | Useful information | Blue Wrench | validated | no     | 2018-12-03 |
+      | Very important     | Very important     | Blue Wrench | published | yes    | 2018-11-03 |
+      | Useful information | Useful information | Blue Wrench | published | no     | 2018-12-03 |
 
     When I am an anonymous user
     And I go to the homepage of the "Blue Wrench" solution
@@ -106,15 +106,14 @@ Feature: Pinning content entities inside solutions
       | content type | label      |
       | event        | Event      |
       | document     | Document   |
-      | discussion   | Discussion |
       | news         | News       |
 
   @javascript
   Scenario Outline: Pinned content tiles should show a visual cue only in their solution homepage.
     Given <content type> content:
       | title       | headline | solution    | state     | pinned |
-      | Lantern FAQ | Lantern FAQ |Blue Wrench | validated | yes    |
-      | Lantern TCA | Lantern TCA |Blue Wrench | validated | no     |
+      | Lantern FAQ | Lantern FAQ |Blue Wrench | published | yes    |
+      | Lantern TCA | Lantern TCA |Blue Wrench | published | no     |
 
     When I go to the homepage of the "Blue Wrench" solution
     Then the "Lantern FAQ" tile should be marked as pinned
@@ -125,7 +124,6 @@ Feature: Pinning content entities inside solutions
 
     # Verify that changes in the pinned state are reflected to the tile.
     When I am logged in as a facilitator of the "Blue Wrench" solution
-    And I accept essential cookies
     When I go to the homepage of the "Blue Wrench" solution
     Then the "Lantern FAQ" tile should be marked as pinned
     But the "Lantern TCA" tile should not be marked as pinned
@@ -142,5 +140,4 @@ Feature: Pinning content entities inside solutions
       | content type |
       | event        |
       | document     |
-      | discussion   |
       | news         |

@@ -86,18 +86,18 @@ class InvitationController extends ControllerBase {
    */
   public function updateInvitation(InvitationInterface $invitation, string $action, string $hash): RedirectResponse {
     if ($invitation->getStatus() !== InvitationInterface::STATUS_PENDING) {
-      $this->eventDispatcher->dispatch(InvitationEvents::NOT_PENDING_EVENT, $this->getEvent($invitation, $action));
+      $this->eventDispatcher->dispatch($this->getEvent($invitation, $action), InvitationEvents::NOT_PENDING_EVENT);
     }
     else {
       switch ($action) {
         case self::ACTION_ACCEPT:
           $invitation->accept()->save();
-          $this->eventDispatcher->dispatch(InvitationEvents::ACCEPT_INVITATION_EVENT, $this->getEvent($invitation, $action));
+          $this->eventDispatcher->dispatch($this->getEvent($invitation, $action), InvitationEvents::ACCEPT_INVITATION_EVENT);
           break;
 
         case self::ACTION_REJECT:
           $invitation->reject()->save();
-          $this->eventDispatcher->dispatch(InvitationEvents::REJECT_INVITATION_EVENT, $this->getEvent($invitation, $action));
+          $this->eventDispatcher->dispatch($this->getEvent($invitation, $action), InvitationEvents::REJECT_INVITATION_EVENT);
           break;
 
         default:

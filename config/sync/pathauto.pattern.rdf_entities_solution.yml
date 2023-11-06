@@ -14,12 +14,12 @@ pattern: '[rdf_entity:parent_collection:url:path]/[rdf_entity:rid:target_id]/[rd
 selection_criteria:
   179b128e-5a0b-4c39-8da7-9f3c6de55956:
     id: 'entity_bundle:rdf_entity'
-    bundles:
-      solution: solution
     negate: false
+    uuid: 179b128e-5a0b-4c39-8da7-9f3c6de55956
     context_mapping:
       rdf_entity: rdf_entity
-    uuid: 179b128e-5a0b-4c39-8da7-9f3c6de55956
+    bundles:
+      solution: solution
 selection_logic: and
 weight: -5
 relationships: {  }

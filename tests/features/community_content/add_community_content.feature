@@ -7,7 +7,7 @@ Feature: Add community content
   Scenario Outline: Advanced content and group administration should not be accessible for group members
     Given the following collection:
       | title | The night shift |
-      | state | validated       |
+      | state | published       |
 
     When I am logged in as a "<member type>" of the "The night shift" collection
     And I go to the homepage of the "The night shift" collection
@@ -39,7 +39,7 @@ Feature: Add community content
   Scenario Outline: Advanced content and group administration should not be accessible for moderators
     Given the following collection:
       | title | The night shift |
-      | state | validated       |
+      | state | published       |
 
     When I am logged in as a "moderator"
     And I go to the homepage of the "The night shift" collection
@@ -70,7 +70,7 @@ Feature: Add community content
       | Publisher | publisher-example@test.com | Publisher  | Georgakopoulos | moderator |
     And the following collection:
       | title | The afternoon shift |
-      | state | validated           |
+      | state | published           |
     And discussion content:
       | title             | content         | author    | state | collection          | created    |
       | Sample discussion | Sample content. | Publisher | draft | The afternoon shift | 01-01-2010 |
@@ -112,8 +112,8 @@ Feature: Add community content
   @terms
   Scenario: Directly publishing community content sets the correct publication date.
     Given the following collections:
-      | title        | description                  | logo     | banner     | state     |
-      | CC container | Community content container. | logo.png | banner.jpg | validated |
+      | title        | description                  | logo     | state     |
+      | CC container | Community content container. | logo.png | published |
     And I am logged in as a "facilitator" of the "CC container" collection
 
     # Create a published discussion.
@@ -178,10 +178,10 @@ Feature: Add community content
   Scenario Outline: Community content type is indicated on the byline
     Given the following collection:
       | title | The night watch |
-      | state | validated       |
+      | state | published       |
     And <content type> content:
       | title                   | collection      | state     |
-      | The glorious revolution | The night watch | validated |
+      | The glorious revolution | The night watch | published |
     When I go to the content page of the type "<content type>" with the title "The glorious revolution"
     Then I should see the text <label> in the "Page title" region
 
@@ -189,5 +189,56 @@ Feature: Add community content
       | content type | label      |
       | discussion   | Discussion |
       | document     | Document   |
-      | event        | Event      |
       | news         | News       |
+
+  Scenario: Event content type is not indicated on the byline
+    Given the following collection:
+      | title | The night batch |
+      | state | published       |
+    And event content:
+      | title                    | collection      | state     | start date   | end date            | state     |
+      | Red glorious revolution  | The night batch | published | now +1 years | now +1 years +1 day | published |
+      | Blue glorious revolution | The night batch | published | now -1 years | now -1 years +1 day | published |
+    When I go to the content page of the type "event" with the title "Red glorious revolution"
+    And I should see the button "Add to Calendar"
+    And I should see the link "Google"
+    And I should see the link "Yahoo!"
+    And I should see the link "Outlook.com"
+    And I should see the link "Office.com"
+    And I should see the link "iCal / MS Outlook"
+
+    When I go to the content page of the type "event" with the title "Blue glorious revolution"
+    And I should not see the button "Add to Calendar"
+    And I should not see the link "Google"
+    And I should not see the link "Yahoo!"
+    And I should not see the link "Outlook.com"
+    And I should not see the link "Office.com"
+    And I should not see the link "iCal / MS Outlook"
+
+  @javascript @terms @loggedErrors @api @uploadFiles:logo.png @debug
+  Scenario: Editor File dialog form does not trigger warning
+    Given the following collection:
+      | title | The editor tester collection |
+      | state | published                    |
+    And the site error reporting verbosity is "verbose"
+
+    When I am logged in as a "facilitator" of the "The editor tester collection" collection
+    And I go to the "The editor tester collection" collection
+    And I click "Add news" in the plus button menu
+    Then I should see the heading "Add news"
+    And I should see the "Content" wysiwyg editor
+
+    When there are no preexisting log records on the site
+    And the "Insert Media" button should be available in the "Content" wysiwyg editor
+    And the "Insert Media" button should be available in the "Content" wysiwyg editor
+    Then I press the button "Insert Media" in the "Content" wysiwyg editor
+    And I attach the file "logo.png" to "Add file"
+    And I wait for AJAX to finish
+    When I fill in "Alternative text" with "Example logo"
+    And I press "Save" in the "Modal buttons" region
+    And I wait for AJAX to finish
+
+    When I press "Insert selected" in the "Modal buttons" region
+    Then the modal should be closed
+    And the site should not have log records with level lower than "notice"
+

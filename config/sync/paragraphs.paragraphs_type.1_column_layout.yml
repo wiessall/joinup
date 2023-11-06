@@ -1,0 +1,12 @@
+uuid: 7c5413f9-474e-4954-a268-cec8cb228b02
+langcode: en
+status: true
+dependencies:
+  content:
+    - 'file:file:e83c0e3f-cc80-4508-9cbd-4e87228e3759'
+id: 1_column_layout
+label: '1 column layout'
+icon_uuid: e83c0e3f-cc80-4508-9cbd-4e87228e3759
+icon_default: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNiIgaGVpZ2h0PSIxNiIgZmlsbD0iY3VycmVudENvbG9yIiBjbGFzcz0iYmkgYmktc3F1YXJlIiB2aWV3Qm94PSIwIDAgMTYgMTYiPgogIDxwYXRoIGQ9Ik0xNCAxYTEgMSAwIDAgMSAxIDF2MTJhMSAxIDAgMCAxLTEgMUgyYTEgMSAwIDAgMS0xLTFWMmExIDEgMCAwIDEgMS0xaDEyek0yIDBhMiAyIDAgMCAwLTIgMnYxMmEyIDIgMCAwIDAgMiAyaDEyYTIgMiAwIDAgMCAyLTJWMmEyIDIgMCAwIDAtMi0ySDJ6Ii8+Cjwvc3ZnPg=='
+description: ''
+behavior_plugins: {  }

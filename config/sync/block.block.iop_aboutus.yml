@@ -1,0 +1,25 @@
+uuid: afd41e0d-2bb3-4801-96ea-ef8f7759c168
+langcode: en
+status: true
+dependencies:
+  config:
+    - system.menu.footer-about-us
+  module:
+    - system
+  theme:
+    - iop
+id: iop_aboutus
+theme: iop
+region: footer
+weight: -25
+provider: null
+plugin: 'system_menu_block:footer-about-us'
+settings:
+  id: 'system_menu_block:footer-about-us'
+  label: 'About us'
+  label_display: visible
+  provider: system
+  level: 1
+  depth: 0
+  expand_all_items: false
+visibility: {  }

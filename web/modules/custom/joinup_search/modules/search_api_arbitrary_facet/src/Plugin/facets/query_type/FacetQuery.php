@@ -104,7 +104,7 @@ class FacetQuery extends SearchApiString implements ContainerFactoryPluginInterf
         $active_filter = $facet_definition[$active_item];
         $field_name = $active_filter['field_name'];
         $condition = $active_filter['field_condition'];
-        $operator = isset($active_filter['field_operator']) ? $active_filter['field_operator'] : NULL;
+        $operator = $active_filter['field_operator'] ?? NULL;
         $exclude = $exclude ? '<>' : '=';
         $filter->addCondition($field_name, $condition, $operator ?: $exclude);
       }

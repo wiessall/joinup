@@ -8,7 +8,7 @@ Feature: Embed of videos into the page.
     Given the following collection:
       | title       | Beer brewing corporation             |
       | description | Beer is the real nectar of the gods. |
-      | state       | validated                            |
+      | state       | published                            |
 
   Scenario: As a community content editor I can embed video iframes from allowed providers into the content field.
     Given I am logged in as a "facilitator" of the "Beer brewing corporation" collection
@@ -34,6 +34,8 @@ Feature: Embed of videos into the page.
       <iframe src="https://player.vimeo.com/video/225133231?autoplay=1" width="640" height="360" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
       DailyMotion videos are NOT allowed (yet).
       <iframe frameborder="0" width="480" height="270" src="//www.dailymotion.com/embed/video/x5vl5l0?autoPlay=1" allowfullscreen></iframe>
+      European Commission Videos from webcast are allowed.
+      <iframe width="600" height="340" src="https://webcast.ec.europa.eu/iprs-and-innovation-procurement-22-01-20/embed" scrolling="no" style="overflow:hidden" webkitAllowFullScreen mozAllowFullScreen allowFullScreen frameborder="0"></iframe>
       """
 
     Given I press "Publish"
@@ -43,12 +45,12 @@ Feature: Embed of videos into the page.
     And the response should contain "//europa.eu/webtools/crs/iframe/?oriurl=%2F%2Faudiovisual.ec.europa.eu%2Fembed%2Findex.html%3Fref%3DI-136289%26lg%3Den%26starttime%3D0%26autoplay%3Dfalse"
     And the response should contain "//europa.eu/webtools/crs/iframe/?oriurl=https%3A%2F%2Fwww.youtube-nocookie.com%2Fembed%2FxlnYVHRp128%3Fautoplay%3D0%26start%3D0%26rel%3D0"
     And the response should contain "//europa.eu/webtools/crs/iframe/?oriurl=https%3A%2F%2Fplayer.vimeo.com%2Fvideo%2F225133231"
-    But the response should not contain "//europa.eu/webtools/crs/iframe/?oriurl=%2F%2Fwww.dailymotion.com%2Fembed%2Fvideo%2Fx5vl5l0"
+    And the response should not contain "//europa.eu/webtools/crs/iframe/?oriurl=%2F%2Fwww.dailymotion.com%2Fembed%2Fvideo%2Fx5vl5l0"
+    But the response should contain "//europa.eu/webtools/crs/iframe/?oriurl=%2F%2Fwebcast.ec.europa.eu%2Fiprs-and-innovation-procurement-22-01-20%2Fembed%3Flg%3Den%26starttime%3D0%26autostart%3Dfalse"
 
   @javascript
   Scenario Outline: A video embed button should be shown to community content editors.
     Given I am logged in as a "facilitator" of the "Beer brewing corporation" collection
-    And I accept essential cookies
     And I go to the homepage of the "Beer brewing corporation" collection
     When I open the plus button menu
     And I click "Add news"
@@ -56,25 +58,37 @@ Feature: Embed of videos into the page.
       | Headline    | Some test video |
       | Short title | Some test video |
     And I select "Supplier exchange" from "Topic"
-    And I press the button "Video Embed" in the "Content" wysiwyg editor
-    Then a modal should open
+    And I press the button "Insert Media" in the "Content" wysiwyg editor
+    And a modal should open
+    And I should see the following lines of text:
+      | Image |
+      | File  |
+      | Video |
+    And I click "Video"
     And I should see the text "Youtube and EC videos are allowed."
     And I should see the text "Youtube example: https://www.youtube.com/watch?v=dQw4w9WgXcQ"
     And I should see the text "EC url example: http://europa.eu/123abc!123"
     And I should see the text "EC video example: https://ec.europa.eu/avservices/video/player.cfm?sitelang=en&ref=ABC12345"
-    When I fill in "Video URL" with "<url>"
-    And I press "Save" in the "Modal buttons" region
+    And I should see the text "EC webcast video example: https://webcast.ec.europa.eu/iprs-and-innovation-procurement-22-01-20/embed"
+    When I fill in "Add Video URL" with "<url>"
+    And I press "Add"
+    Then I press "Save" in the "Modal buttons" region
+    And I press "Insert selected" in the "Modal buttons" region
     Then the modal should be closed
     And I press "Save as draft"
     Then the response should contain "<embed url>"
+    And I see the "iframe" element with the "title" attribute set to "Video player" in the "Content" region
 
     Examples:
-      | url                                                                        | embed url                                                                                                                                                 |
-      | https://www.youtube.com/watch?v=YTaLmMsaLOg                                | //europa.eu/webtools/crs/iframe/?oriurl=https%3A%2F%2Fwww.youtube-nocookie.com%2Fembed%2FYTaLmMsaLOg%3Fautoplay%3D0%26start%3D0%26rel%3D0                 |
-      | http://europa.eu/!dV74uw                                                   | //europa.eu/webtools/crs/iframe/?oriurl=%2F%2Faudiovisual.ec.europa.eu%2Fembed%2Findex.html%3Fref%3DI-136289%26lg%3Den%26starttime%3D0%26autoplay%3Dfalse |
-      | https://ec.europa.eu/avservices/video/player.cfm?sitelang=en&ref=I156836   | //europa.eu/webtools/crs/iframe/?oriurl=%2F%2Faudiovisual.ec.europa.eu%2Fembed%2Findex.html%3Fref%3DI156836%26lg%3Den%26starttime%3D0%26autoplay%3Dfalse  |
-      | https://audiovisual.ec.europa.eu/embed/index.html?sitelang=en&ref=I-087075 | //europa.eu/webtools/crs/iframe/?oriurl=%2F%2Faudiovisual.ec.europa.eu%2Fembed%2Findex.html%3Fref%3DI-087075%26lg%3Den%26starttime%3D0%26autoplay%3Dfalse |
+      | url                                                                                                                                                   | embed url                                                                                                                                                                                                                                     |
+      | https://www.youtube.com/watch?v=YTaLmMsaLOg                                                                                                           | //europa.eu/webtools/crs/iframe/?oriurl=https%3A%2F%2Fwww.youtube-nocookie.com%2Fembed%2FYTaLmMsaLOg%3Fautoplay%3D0%26start%3D0%26rel%3D0                                                                                                     |
+      | http://europa.eu/!dV74uw                                                                                                                              | //europa.eu/webtools/crs/iframe/?oriurl=%2F%2Faudiovisual.ec.europa.eu%2Fembed%2Findex.html%3Fref%3DI-136289%26lg%3Den%26starttime%3D0%26autoplay%3Dfalse                                                                                     |
+      | https://ec.europa.eu/avservices/video/player.cfm?sitelang=en&ref=I156836                                                                              | //europa.eu/webtools/crs/iframe/?oriurl=%2F%2Faudiovisual.ec.europa.eu%2Fembed%2Findex.html%3Fref%3DI156836%26lg%3Den%26starttime%3D0%26autoplay%3Dfalse                                                                                      |
+      | https://audiovisual.ec.europa.eu/embed/index.html?sitelang=en&ref=I-087075                                                                            | //europa.eu/webtools/crs/iframe/?oriurl=%2F%2Faudiovisual.ec.europa.eu%2Fembed%2Findex.html%3Fref%3DI-087075%26lg%3Den%26starttime%3D0%26autoplay%3Dfalse                                                                                     |
+      | https://webcast.ec.europa.eu/iprs-and-innovation-procurement-22-01-20/embed                                                                           | //europa.eu/webtools/crs/iframe/?oriurl=%2F%2Fwebcast.ec.europa.eu%2Fiprs-and-innovation-procurement-22-01-20%2Fembed%3Flg%3Den%26starttime%3D0%26autostart%3Dfalse                                                                           |
+      | https://webcast.ec.europa.eu/webinar-on-public-procurement-of-artificial-intelligence-ai-building-trust-for-citizens-and-business-2021-06-25-4c/embed | //europa.eu/webtools/crs/iframe/?oriurl=%2F%2Fwebcast.ec.europa.eu%2Fwebinar-on-public-procurement-of-artificial-intelligence-ai-building-trust-for-citizens-and-business-2021-06-25-4c%2Fembed%3Flg%3Den%26starttime%3D0%26autostart%3Dfalse |
 
+  @wip
   Scenario: Forcing auto-play into the content of an entity will not trigger the auto-play.
     Given I am logged in as a "facilitator" of the "Beer brewing corporation" collection
     And I go to the homepage of the "Beer brewing corporation" collection

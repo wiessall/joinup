@@ -5,20 +5,16 @@ declare(strict_types = 1);
 namespace Drupal\joinup_notification\EventSubscriber;
 
 use Drupal\Core\Entity\EntityInterface;
-use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\collection\Entity\CollectionInterface;
 use Drupal\joinup_notification\Event\NotificationEvent;
 use Drupal\joinup_notification\NotificationEvents;
 use Drupal\joinup_workflow\EntityWorkflowStateInterface;
 use Drupal\og\OgRoleInterface;
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
  * Handles notifications related to collections.
  */
-class CollectionRdfSubscriber extends NotificationSubscriberBase implements EventSubscriberInterface {
-
-  use StringTranslationTrait;
+class CollectionRdfSubscriber extends NotificationSubscriberBase {
 
   const TEMPLATE_APPROVE_EDIT = 'col_approve_edit';
   const TEMPLATE_APPROVE_NEW = 'col_approve_new';
@@ -435,6 +431,7 @@ class CollectionRdfSubscriber extends NotificationSubscriberBase implements Even
     // Count collections that are not archived and are affiliated to the
     // solution.
     $collection_count = $this->entityTypeManager->getStorage('rdf_entity')->getQuery()
+      ->accessCheck(FALSE)
       ->condition('rid', 'collection')
       ->condition('field_ar_affiliates', $solution->id())
       ->condition('field_ar_state', 'archived', '!=')
@@ -470,18 +467,11 @@ class CollectionRdfSubscriber extends NotificationSubscriberBase implements Even
   /**
    * {@inheritdoc}
    */
-  protected function getConfigurationName(): string {
-    return '';
-  }
-
-  /**
-   * {@inheritdoc}
-   */
   protected function generateArguments(EntityInterface $entity): array {
     $arguments = parent::generateArguments($entity);
     /** @var \Drupal\user\UserInterface $actor */
     $actor = $this->entityTypeManager->getStorage('user')->load($this->currentUser->id());
-    $motivation = isset($this->entity->motivation) ? $this->entity->motivation : '';
+    $motivation = $this->entity->motivation ?? '';
     $arguments['@transition:motivation'] = $motivation;
 
     if (empty($arguments['@actor:role'])) {

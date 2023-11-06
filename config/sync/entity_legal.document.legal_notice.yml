@@ -16,3 +16,8 @@ settings:
     require: true
     require_method: redirect
   title_pattern: '[entity_legal_document:label]'
+  ui:
+    acceptance_error_message:
+      value: 'You must accept the <a href="[entity_legal_document:url]">[entity_legal_document:label]</a> in order to use our platform.'
+      format: simple_html
+    submit_label: ''

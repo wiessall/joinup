@@ -9,6 +9,7 @@ use Drupal\Core\Datetime\DateFormatterInterface;
 use Drupal\Core\Entity\EntityFieldManagerInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Security\TrustedCallbackInterface;
 use Drupal\joinup_federation\JoinupFederationStepPluginBase;
 use Drupal\pipeline\Exception\PipelineStepExecutionLogicException;
 use Drupal\pipeline\Plugin\PipelineStepInterface;
@@ -31,7 +32,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  *   label = @Translation("User selection"),
  * )
  */
-class UserSelectionFilter extends JoinupFederationStepPluginBase implements PipelineStepWithFormInterface, PipelineStepWithResponseInterface {
+class UserSelectionFilter extends JoinupFederationStepPluginBase implements PipelineStepWithFormInterface, PipelineStepWithResponseInterface, TrustedCallbackInterface {
 
   use AdmsSchemaEntityReferenceFieldsTrait;
   use PipelineStepWithClientRedirectResponseTrait;
@@ -162,7 +163,7 @@ class UserSelectionFilter extends JoinupFederationStepPluginBase implements Pipe
         $options[$id] = [
           'solution' => $label,
           'info' => $this->getInfo($id, $category_id),
-          '#attributes' => ['data-drupal-federation-category' => $category_id],
+          '#attributes' => ['data-joinup-federation-category' => $category_id],
           '#disabled' => $category_id === 'invalid_collection',
         ];
         $unchecked_categories = [
@@ -328,7 +329,7 @@ class UserSelectionFilter extends JoinupFederationStepPluginBase implements Pipe
     $new_rows = [];
     $previous_category = NULL;
     foreach ($element['#rows'] as $row) {
-      $category = $row['data-drupal-federation-category'];
+      $category = $row['data-joinup-federation-category'];
       if ($category !== $previous_category) {
         $info = static::getCategoryMetadata($category);
         $group = [
@@ -354,6 +355,13 @@ class UserSelectionFilter extends JoinupFederationStepPluginBase implements Pipe
     $element['#rows'] = $new_rows;
 
     return $element;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function trustedCallbacks() {
+    return ['insertRowCategories'];
   }
 
 }

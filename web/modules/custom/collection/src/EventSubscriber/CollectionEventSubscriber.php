@@ -35,10 +35,6 @@ class CollectionEventSubscriber implements EventSubscriberInterface {
     if ($event->getGroupEntityTypeId() === 'rdf_entity' && $event->getGroupBundleId() === 'collection') {
       $event->setPermissions([
         new GroupPermission([
-          'name' => 'request collection deletion',
-          'title' => $this->t('Request to delete collections'),
-        ]),
-        new GroupPermission([
           'name' => 'request collection archival',
           'title' => $this->t('Request to archive collections'),
         ]),

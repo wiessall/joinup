@@ -1,0 +1,48 @@
+uuid: 6321be65-66ac-49ad-9b78-09a229a7576d
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.media.media_library_half_width
+    - field.field.media.image.image
+    - field.field.media.image.og_audience
+    - image.style.wysiwyg_half_width
+    - media.type.image
+  module:
+    - layout_builder
+    - svg_image
+    - template_suggestion
+third_party_settings:
+  layout_builder:
+    enabled: false
+    allow_custom: false
+id: media.image.media_library_half_width
+targetEntityType: media
+bundle: image
+mode: media_library_half_width
+content:
+  image:
+    type: image
+    label: hidden
+    settings:
+      image_link: ''
+      image_style: wysiwyg_half_width
+      image_loading:
+        attribute: lazy
+      svg_attributes:
+        width: null
+        height: null
+      svg_render_as_image: true
+    third_party_settings:
+      template_suggestion:
+        template_suggestion: ''
+    weight: 0
+    region: content
+hidden:
+  created: true
+  langcode: true
+  name: true
+  og_audience: true
+  search_api_excerpt: true
+  thumbnail: true
+  uid: true

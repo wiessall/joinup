@@ -1,0 +1,19 @@
+{#
+/**
+ * @file
+ * Default theme implementation to display a chip component from Material Design library.
+ *
+ * Available variables:
+ * - text: the text of the chip.
+ * - element: the button of the chip.
+ *
+ * @see template_preprocess_chip()
+ *
+ * @ingroup themeable
+ */
+#}
+{{ attach_library('ventuno/badge') }}
+<span class="me-2 mb-2 fs-6 badge rounded-pill text-bg-primary">
+    {{ text }}
+    {{ element }}
+</span>

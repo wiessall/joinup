@@ -1,0 +1,12 @@
+uuid: 027f3efa-d557-4346-bf0e-b3c614200aed
+langcode: en
+status: true
+dependencies:
+  content:
+    - 'file:file:5e715496-9ab7-4f41-997c-d5f20408928c'
+id: video
+label: Video
+icon_uuid: 5e715496-9ab7-4f41-997c-d5f20408928c
+icon_default: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNiIgaGVpZ2h0PSIxNiIgZmlsbD0iY3VycmVudENvbG9yIiBjbGFzcz0iYmkgYmktY2FtZXJhLXZpZGVvIiB2aWV3Qm94PSIwIDAgMTYgMTYiPgogIDxwYXRoIGZpbGwtcnVsZT0iZXZlbm9kZCIgZD0iTTAgNWEyIDIgMCAwIDEgMi0yaDcuNWEyIDIgMCAwIDEgMS45ODMgMS43MzhsMy4xMS0xLjM4MkExIDEgMCAwIDEgMTYgNC4yNjl2Ny40NjJhMSAxIDAgMCAxLTEuNDA2LjkxM2wtMy4xMTEtMS4zODJBMiAyIDAgMCAxIDkuNSAxM0gyYTIgMiAwIDAgMS0yLTJWNXptMTEuNSA1LjE3NSAzLjUgMS41NTZWNC4yNjlsLTMuNSAxLjU1NnY0LjM1ek0yIDRhMSAxIDAgMCAwLTEgMXY2YTEgMSAwIDAgMCAxIDFoNy41YTEgMSAwIDAgMCAxLTFWNWExIDEgMCAwIDAtMS0xSDJ6Ii8+Cjwvc3ZnPg=='
+description: ''
+behavior_plugins: {  }

@@ -12,15 +12,15 @@ Feature: Creation of news through the UI.
       | Family name | Laninga            |
       | E-mail      | milana@example.com |
     And the following collections:
-      | title            | description                                 | logo     | banner     | state     |
-      | Metal fans       | "Share the love for nickel, tungsten & co." | logo.png | banner.jpg | validated |
-      | Hardcore diggers | We dig up stuff hidden beneath the earth.   | logo.png | banner.jpg | validated |
-      | Cool blacksmiths | Keeping it cool while working on hot stuff. | logo.png | banner.jpg | validated |
+      | title            | description                                 | logo     | state     |
+      | Metal fans       | "Share the love for nickel, tungsten & co." | logo.png | published |
+      | Hardcore diggers | We dig up stuff hidden beneath the earth.   | logo.png | published |
+      | Cool blacksmiths | Keeping it cool while working on hot stuff. | logo.png | published |
     And solutions:
-      | title                     | description                               | logo     | banner     | state     |
-      | Density catalogue project | Catalog density on metals with ease.      | logo.png | banner.jpg | validated |
-      | Dig do's and don'ts       | How to dig up stuff with style.           | logo.png | banner.jpg | validated |
-      | Anvil test routines       | How to determine reliability of the tool. | logo.png | banner.jpg | validated |
+      | title                     | description                               | logo     | state     |
+      | Density catalogue project | Catalog density on metals with ease.      | logo.png | published |
+      | Dig do's and don'ts       | How to dig up stuff with style.           | logo.png | published |
+      | Anvil test routines       | How to determine reliability of the tool. | logo.png | published |
     And the following solution user membership:
       | solution                  | user          | roles       |
       | Density catalogue project | isotopedancer | facilitator |
@@ -71,8 +71,8 @@ Feature: Creation of news through the UI.
     # Verify that the referenced solution is rendered as tile.
     And I should see the "Dig do's and don'ts" tile
     # Check that the full author name is shown instead of the username.
-    And I should see the link "Milana Laninga" in the "Content" region
-    But I should not see the link "isotopedancer" in the "Content" region
+    And I should see the link "Milana Laninga" in the "Page title" region
+    But I should not see the link "isotopedancer" in the "Page title" region
 
     # Edit again and try to share onto the same solution.
     When I click "Edit" in the "Entity actions" region
@@ -91,17 +91,16 @@ Feature: Creation of news through the UI.
     When I visit the content overview
     Then I should see the image "logo.png" in the "Ytterbium metal of the year" tile
 
-  @javascript @generateMedia @uploadFiles:logo.png
+  @javascript @generateMedia @generateMediaTypes:news_logo @uploadFiles:logo.png
   Scenario: Test the image library widget.
     Given the following collection:
       | title | Stream of Dreams |
-      | state | validated        |
+      | state | published        |
     And news content:
       | title             | collection       | headline      | body      | state     |
-      | The Great Opening | Stream of Dreams | Here we go... | It opens! | validated |
+      | The Great Opening | Stream of Dreams | Here we go... | It opens! | published |
 
     Given I am logged in as a moderator
-    And I accept essential cookies
 
     # Upload works.
     When I go to the edit form of the "The Great Opening" news
@@ -111,6 +110,7 @@ Feature: Creation of news through the UI.
     # Picking-up pre-uploaded images works.
     When I remove the file from "Logo"
     And I wait for AJAX to finish
+
     And I select image #6 as news logo
     And I wait for AJAX to finish
     And I press "Update"

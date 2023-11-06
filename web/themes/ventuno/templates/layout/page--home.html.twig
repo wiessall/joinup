@@ -44,11 +44,11 @@
  *   comment/reply/12345).
  *
  * Regions:
+ * - page.search_bar: Items for the search_bar region (very custom region).
  * - page.header: Items for the header region.
  * - page.featured: Items for the featured content region.
  * - page.content_top: Items for the region displayed above the main content.
  * - page.content: The main content of the current page.
- * - page.content_bottom: Items for the region displayed below the main content.
  * - page.sidebar: Items for the sidebar.
  * - page.footer: Items for the footer region.
  *
@@ -60,53 +60,17 @@
 {{ attach_library('ventuno/homepage') }}
 
 <div class="layout-container">
-  <div class="section-header">
-    {# Temporary EC header, until this pattern is included in oe_bootstrap. #}
-    <div class="ec__header bcl-header">
-      <nav class="w-100 shadow-sm navbar">
-        <div class="container">
-          <a class="navbar-brand" href="https://ec.europa.eu/info/index_en">
-            <img src="https://cdn1.fpfis.tech.ec.europa.eu/ecl/v3.0.2/ec/images/logo/logo-ec--en.svg" alt="European Commission logo"/>
-          </a>
-        </div>
-      </nav>
-    </div>
-    <header role="banner" class="region-header">
-      {% set items = logged_in ? [{
-        breakpoint: "lg",
-        classes: ["order-1"],
-        id: "landing-pages",
-        icon: { name: "justify" },
-        label: "",
-        links: landing_page_links,
-      }] : [] %}
-      {% set items = items|merge([{
-        breakpoint: logged_in ? "" : "lg",
-        id: logged_in ? "account" : "navbar-toggler",
-        icon: {
-          name: logged_in ? "person-circle" : "justify",
-        },
-        label: logged_in ? user_name : "",
-        links: logged_in ? profile_links : anonymous_links,
-      }]) %}
-      {% include directory ~ '/templates/navigation/navbar.html.twig' with {
-        brand: {
-          src: base_path ~ directory ~ "/assets/images/logo.svg",
-          alt: "Joinup logo"|t,
-          link: front_page,
-        },
-        collapse_id: "main-navbar",
-        list_id: "main-navbar-list",
-        items: items,
-      } %}
-    </header>
-
-    {% if page.header_bottom %}
-      <div class="region-header-bottom">
-        {{ page.header_bottom }}
-      </div>
-    {% endif %}
-  </div>
+  {% include '@ventuno/parts/header.html.twig' with {
+    user_name: user_name,
+    landing_page_links: landing_page_links,
+    profile_links: profile_links,
+    anonymous_links: anonymous_links,
+    hide_searchbar: hide_searchbar,
+    searchbar: page.search_bar,
+  } %}
+  {% if page.header %}
+    {{ page.header }}
+  {% endif %}
 
   {% if page.featured %}
     <div class="region-featured mb-5 py-md-5">
@@ -116,9 +80,11 @@
             {{ page.featured }}
           </div>
           <div class="col-12 col-md-6 my-5 my-md-0 d-flex align-content-between flex-wrap">
-            <img src="{{ directory }}/assets/images/iop-eu-logo.svg" class="px-2 ms-md-5 img-fluid" alt="Interoperable Europe logo">
+            <img src="{{ file_url('themes/ventuno/assets/images/iop-eu-logo.svg') }}" class="px-2 ms-md-5 img-fluid w-100" alt="{{ 'Interoperable Europe logo'|trans }}" width="516" height="118">
             {% if interoperable_europe_url %}
-              <a href="{{ interoperable_europe_url }}" class="w-100 px-2 mt-4 d-block text-light text-center text-md-end fw-bold fs-5">{{ 'Discover more'|trans }} <span class="iop-gradient">...</span></a>
+              <p class="w-100 px-2 mt-4 mb-0 d-block text-center text-md-end">
+                <a href="{{ interoperable_europe_url }}" class="text-light fw-bold fs-5">{{ 'Discover more'|trans }} <span class="iop-gradient">...</span></a>
+              </p>
             {% endif %}
           </div>
         </div>
@@ -127,7 +93,7 @@
   {% endif %}
 
   {% if page.messages %}
-    <div class="region-messages">
+    <div class="container">
       {{ page.messages }}
     </div>
   {% endif %}
@@ -141,23 +107,14 @@
   {{ page.content_top }}
 
   <main role="main">
-    <a id="main-content" tabindex="-1"></a>{# link is in html.html.twig #}
-
+    <div id="main-content" tabindex="-1"></div>{# link is in html.html.twig #}
     <div class="container layout-content">
       {{ page.content }}
     </div>{# /.layout-content #}
-
-    {% if page.sidebar %}
-      <aside class="layout-sidebar" role="complementary">
-        {{ page.sidebar }}
-      </aside>
-    {% endif %}
   </main>
 
-  {{ page.content_bottom }}
-
   {% if page.footer %}
-    {% include directory ~ '/templates/parts/footer.html.twig' %}
+    {% include '@ventuno/parts/footer.html.twig' %}
   {% endif %}
 
 </div>{# /.layout-container #}

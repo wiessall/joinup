@@ -28,10 +28,9 @@ Feature: Contact information access
       | title               | Ausy software solutions |
       | description         | A software company      |
       | logo                | logo.png                |
-      | banner              | banner.jpg              |
       | owner               | Ausy BENELUX            |
       | contact information | info                    |
-      | state               | validated               |
+      | state               | published               |
     And the following collection user memberships:
       | collection              | user          | roles       |
       | Ausy software solutions | Michiel Lucas | facilitator |

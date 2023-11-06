@@ -1,17 +1,16 @@
 <html>
 <head>
-    <link rel="stylesheet" media="all" href="{{ base_path }}themes/joinup/vendor/material-design-lite/material.min.css" />
-    <link rel="stylesheet" media="all" href="{{ base_path }}themes/joinup/css/style.min.css" />
-    <title>We cannot serve your request</title>
+  <link rel="stylesheet" media="all" href="{{ base_path }}themes/ventuno/assets/css/base.min.css" />
+  <link rel="stylesheet" media="all" href="{{ base_path }}themes/ventuno/assets/css/layout.min.css" />
+  <link rel="stylesheet" media="all" href="{{ base_path }}themes/ventuno/assets/css/theme.min.css" />
+  <title>We cannot serve your request</title>
 </head>
 <body>
-    <div class="mdl-grid">
-        <div class="mdl-cell mdl-cell--8-col mdl-cell--2-offset-desktop">
-            <h2>There was an unexpected problem serving your request</h2>
-            <p>Please try again and contact us if the problem persist including <em>{{ uuid }}</em> in your message.</p>
-            <p><a href="{{ base_path }}contact">Contact support</a></p>
-            <p>{{ error_report }}</p>
-        </div>
-    </div>
+  <div class="container mt-5">
+    <h2>There was an unexpected problem serving your request</h2>
+    <p>Please try again and contact us if the problem persist including <em>{{ uuid }}</em> in your message.</p>
+    <p><a href="{{ base_path }}contact">Contact support</a></p>
+    <p>{{ error_report }}</p>
+  </div>
 </body>
 </html>

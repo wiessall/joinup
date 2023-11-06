@@ -7,6 +7,7 @@ namespace Drupal\collection\Entity;
 use Drupal\Component\Utility\NestedArray;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
+use Drupal\contact_information\Traits\ContactInformationTrait;
 use Drupal\joinup_bundle_class\DescriptionTrait;
 use Drupal\joinup_bundle_class\JoinupBundleClassFieldAccessTrait;
 use Drupal\joinup_bundle_class\JoinupBundleClassMetaEntityTrait;
@@ -17,6 +18,7 @@ use Drupal\joinup_group\Entity\GroupTrait;
 use Drupal\joinup_publication_date\Entity\EntityPublicationTimeFallbackTrait;
 use Drupal\joinup_workflow\ArchivableEntityTrait;
 use Drupal\joinup_workflow\EntityWorkflowStateTrait;
+use Drupal\meta_entity\Entity\MetaEntity;
 use Drupal\og\OgMembershipInterface;
 use Drupal\rdf_entity\Entity\Rdf;
 use Drupal\topic\Entity\TopicReferencingEntityTrait;
@@ -40,6 +42,7 @@ class Collection extends Rdf implements CollectionInterface {
   use StringTranslationTrait;
   use TopicReferencingEntityTrait;
   use DescriptionTrait;
+  use ContactInformationTrait;
 
   /**
    * {@inheritdoc}
@@ -126,11 +129,7 @@ class Collection extends Rdf implements CollectionInterface {
    * {@inheritdoc}
    */
   public function getGlossarySettings(): array {
-    /** @var \Drupal\meta_entity\Entity\MetaEntityInterface $meta_entity */
-    $meta_entity = $this->get('settings')->entity;
-    if (!$meta_entity) {
-      throw new \Exception("The {$this->label()} collection doesn't have an associated 'collection_settings' meta-entity.");
-    }
+    $meta_entity = MetaEntity::loadOrCreate('collection_settings', $this);
     return [
       'link_only_first' => (bool) $meta_entity->get('glossary_link_only_first')->value,
     ];
@@ -202,6 +201,13 @@ class Collection extends Rdf implements CollectionInterface {
       $ids = NestedArray::mergeDeep($ids, $solution->getGroupContentIds());
     }
     return $ids;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getContactInformationFieldName(): string {
+    return 'field_ar_contact_information';
   }
 
 }

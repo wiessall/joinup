@@ -7,13 +7,13 @@ Feature: SEO for news articles.
   Scenario Outline: Basic metatags are attached as JSON schema on the page.
     Given collections:
       | title                       | state     |
-      | Joinup SEO event collection | validated |
+      | Joinup SEO event collection | published |
     And users:
       | Username          | E-mail                 | First name | Family name |
       | Joinup SEO author | joinup.seo@example.com | Patrick    | Stewart     |
     And "event" content:
-      | title            | short title   | web url   | start date                      | end date                        | body           | logo     | agenda        | location   | online location                                          | organisation        | scope         | keywords | collection                  | state     |
-      | Joinup SEO event | JOINUPSEO2020 | <web url> | Wed, 25 Dec 2019 13:00:00 +0100 | Wed, 01 Jan 2020 13:00:00 +0100 | Body of event. | logo.png | Event agenda. | <location> | 0: Some title - 1: http://example.com/some-online-meetup | European Commission | International | Alphabet | Joinup SEO event collection | validated |
+      | title            | short title   | web url   | start date                | end date                  | body           | logo     | agenda        | location   | online location                                          | organisation        | scope         | keywords | collection                  | state     |
+      | Joinup SEO event | JOINUPSEO2020 | <web url> | Wed, 25 Dec 2019 13:00:00 | Wed, 01 Jan 2020 13:00:00 | Body of event. | logo.png | Event agenda. | <location> | 0: Some title - 1: http://example.com/some-online-meetup | European Commission | International | Alphabet | Joinup SEO event collection | published |
 
     When I visit the "Joinup SEO event" event
     Then the metatag JSON should be attached in the page
@@ -31,8 +31,8 @@ Feature: SEO for news articles.
       | description | Body of event.                     |
       # The __timezone__ variable will allow any 2-digit number in the string. This is because of different timezones in
       # different environments.
-      | startDate   | 2019-12-25T__timezone__:00:00+0100 |
-      | endDate     | 2020-01-01T__timezone__:00:00+0100 |
+      | startDate   | 2019-12-25T__timezone__:00:00+0000 |
+      | endDate     | 2020-01-01T__timezone__:00:00+0000 |
       # __base_url__ will be replaced with the base url of the website.
       | @id         | <expected url>                     |
     And the metatag graph of the item with "name" "Joinup SEO event" should have the following "image" properties:
@@ -59,8 +59,8 @@ Feature: SEO for news articles.
       | property  | value          |
       | @type     | GeoCoordinates |
       # Geo coordinates are hardcoded as offered by the service.
-      | latitude  | 45.82372       |
-      | longitude | 6.55121        |
+      | latitude  | 50.842291      |
+      | longitude | 4.370476       |
     And the following meta tags should available in the html:
       | identifier      | value                                                                      |
       | description     | Body of event.                                                             |
@@ -91,13 +91,13 @@ Feature: SEO for news articles.
   Scenario: Events without physical address but with online location should still show the online location.
     Given collections:
       | title                       | state     |
-      | Joinup SEO event collection | validated |
+      | Joinup SEO event collection | published |
     And users:
       | Username          | E-mail                 | First name | Family name |
       | Joinup SEO author | joinup.seo@example.com | Patrick    | Stewart     |
     And "event" content:
       | title            | short title   | online location                                          | collection                  | state     |
-      | Joinup SEO event | JOINUPSEO2021 | 0: Some title - 1: http://example.com/some-online-meetup | Joinup SEO event collection | validated |
+      | Joinup SEO event | JOINUPSEO2021 | 0: Some title - 1: http://example.com/some-online-meetup | Joinup SEO event collection | published |
 
     When I visit the "Joinup SEO event" event
     Then the metatag JSON should be attached in the page

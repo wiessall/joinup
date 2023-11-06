@@ -19,65 +19,65 @@ third_party_settings:
         - link_text
         - link_to_external_url
         - external_url
+      label: 'Call to action'
+      region: content
       parent_name: ''
       weight: 2
       format_type: details
-      region: content
       format_settings:
-        description: ''
-        open: true
-        id: ''
         classes: ''
+        id: ''
+        open: true
+        description: ''
         required_fields: false
-      label: 'Call to action'
 id: entity_subqueue.highlighted_event.default
 targetEntityType: entity_subqueue
 bundle: highlighted_event
 mode: default
 content:
   external_url:
+    type: link_default
     weight: 6
+    region: content
     settings:
       placeholder_url: ''
       placeholder_title: ''
     third_party_settings: {  }
-    type: link_default
-    region: content
   header:
+    type: string_textfield
     weight: 1
+    region: content
     settings:
       size: 60
       placeholder: ''
     third_party_settings: {  }
-    type: string_textfield
-    region: content
   items:
     type: entityqueue_dragtable
     weight: 3
+    region: content
     settings:
       match_operator: CONTAINS
+      match_limit: 10
       size: 60
       placeholder: ''
       link_to_entity: false
       link_to_edit_form: true
-      match_limit: 10
-    region: content
     third_party_settings: {  }
   link_text:
+    type: string_textfield
     weight: 4
+    region: content
     settings:
       size: 60
       placeholder: ''
     third_party_settings: {  }
-    type: string_textfield
-    region: content
   link_to_external_url:
+    type: boolean_checkbox
     weight: 5
+    region: content
     settings:
       display_label: true
     third_party_settings: {  }
-    type: boolean_checkbox
-    region: content
   title:
     type: string_textfield
     weight: 0

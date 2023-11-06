@@ -7,6 +7,11 @@
 
 declare(strict_types = 1);
 
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\image\Plugin\Field\FieldWidget\ImageWidget;
+use Drupal\joinup_seo\JoinupSeoExportHelperInterface;
+
 /**
  * Implements hook_simple_sitemap_sitemap_types_alter().
  */
@@ -46,7 +51,10 @@ function joinup_seo_metatags_alter(array &$metatags, array &$context) {
     return;
   }
 
-  $tags = unserialize($metatags['schema_social_media_posting_shared_content']);
+  $tags = unserialize($metatags['schema_social_media_posting_shared_content'], [
+    'allowed_classes' => FALSE,
+  ]);
+
   $tag_list = [
     '@id' => 'entity:url',
     'name' => 'entity:name',
@@ -67,8 +75,8 @@ function joinup_seo_metatags_alter(array &$metatags, array &$context) {
  * Implements hook_page_attachments().
  */
 function joinup_seo_page_attachments(array &$attachments) {
-  /** @var \Drupal\Core\Routing\RouteMatchInterface $route_match */
   $route_match = \Drupal::service('current_route_match');
+  assert($route_match instanceof RouteMatchInterface);
   if ($route_match->getRouteName() !== 'entity.rdf_entity.canonical') {
     return;
   }
@@ -77,9 +85,25 @@ function joinup_seo_page_attachments(array &$attachments) {
     return;
   }
 
-  /** @var \Drupal\joinup_seo\JoinupSeoExportHelperInterface $serializer */
   $serializer = \Drupal::service('joinup_seo.export_helper');
-  if (!$output = $serializer->exportRdfEntityMetadata($entity)) {
+  assert($serializer instanceof JoinupSeoExportHelperInterface);
+  $output = NULL;
+  try {
+    $output = $serializer->exportRdfEntityMetadata($entity);
+  }
+  catch (\Exception $exception) {
+    \Drupal::logger('joinup_seo')->error(
+      "The RDF entity '@entity-label' (id: ':entity-id') cannot be serialized to JsonLD object. @exception-message",
+      [
+        '@entity-label' => $entity->label(),
+        ':entity-id' => $entity->id(),
+        '@exception-message' => $exception->getMessage(),
+        '@backtrace' => $exception->getTraceAsString(),
+      ],
+    );
+  }
+
+  if (!$output) {
     return;
   }
 
@@ -93,4 +117,43 @@ function joinup_seo_page_attachments(array &$attachments) {
     ],
     'rdf_entity_ld_json',
   ];
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function joinup_seo_form_editor_image_dialog_alter(array &$form, FormStateInterface $form_state, string $form_id): void {
+  // @see: https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7587
+  $form['attributes']['alt']['#description'] = t('The text alternative should convey the meaning or content that is displayed visually, which typically isn’t a literal description of the image. See examples at <a target="_blank" href="@wai_url">WAI</a>.', ['@wai_url' => 'https://www.w3.org/WAI/tutorials/images/informative']);
+}
+
+/**
+ * Implements hook_field_widget_form_alter().
+ */
+function joinup_seo_field_widget_form_alter(array &$element, FormStateInterface $form_state, array $context): void {
+  // @see: https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7587
+  if ($context['widget'] instanceof ImageWidget) {
+    $element['#process'][] = 'joinup_seo_image_field_widget_process';
+  }
+}
+
+/**
+ * Changes alternative text for ImageWidget.
+ *
+ * @param array $element
+ *   Element.
+ * @param \Drupal\Core\Form\FormStateInterface $form_state
+ *   FormStateInterface.
+ * @param array $form
+ *   Form element.
+ *
+ * @return array
+ *   Return Element.
+ */
+function joinup_seo_image_field_widget_process(array $element, FormStateInterface &$form_state, array $form): array {
+  // @see: https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7587
+  if (isset($element['alt'])) {
+    $element['alt']['#description'] = t('The text alternative should convey the meaning or content that is displayed visually, which typically isn’t a literal description of the image. See examples at <a target="_blank" href="@wai_url">WAI</a>.', ['@wai_url' => 'https://www.w3.org/WAI/tutorials/images/informative']);
+  }
+  return $element;
 }

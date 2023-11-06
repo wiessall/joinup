@@ -6,7 +6,6 @@ namespace Drupal\Tests\joinup_group\ExistingSite;
 
 use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\Tests\joinup_test\ExistingSite\JoinupExistingSiteTestBase;
-use Drupal\Tests\rdf_entity\Traits\DrupalTestTraits\RdfEntityCreationTrait;
 use Drupal\rdf_taxonomy\Entity\RdfTerm;
 use Drush\TestTraits\DrushTestTrait;
 use weitzman\LoginTrait\LoginTrait;
@@ -20,7 +19,6 @@ class GroupContentUpdateUrlAliasTest extends JoinupExistingSiteTestBase {
 
   use DrushTestTrait;
   use LoginTrait;
-  use RdfEntityCreationTrait;
 
   /**
    * Testing entities.
@@ -141,7 +139,8 @@ class GroupContentUpdateUrlAliasTest extends JoinupExistingSiteTestBase {
 
     // Edit the solution and add a short ID.
     $edit = ['field_short_id[0][value]' => 'abc123'];
-    $this->drupalPostForm($this->entity['rdf_entity']['solution']['1']->toUrl('edit-form'), $edit, 'Publish');
+    $this->drupalGet($this->entity['rdf_entity']['solution']['1']->toUrl('edit-form'));
+    $this->submitForm($edit, 'Publish');
     $this->assertSession()->pageTextContains("You've added a solution short ID: abc123. It will take some time until the solution content URLs will be updated.");
 
     // Process both queues.
@@ -195,7 +194,8 @@ class GroupContentUpdateUrlAliasTest extends JoinupExistingSiteTestBase {
 
     // Edit the the collection.
     $edit = ['field_short_id[0][value]' => 'xyz789'];
-    $this->drupalPostForm($this->entity['rdf_entity']['collection']['1']->toUrl('edit-form'), $edit, 'Publish');
+    $this->drupalGet($this->entity['rdf_entity']['collection']['1']->toUrl('edit-form'));
+    $this->submitForm($edit, 'Publish');
     $this->assertSession()->pageTextContains("You've added a collection short ID: xyz789. It will take some time until the collection content URLs will be updated.");
 
     // Process both queues.
@@ -277,16 +277,20 @@ class GroupContentUpdateUrlAliasTest extends JoinupExistingSiteTestBase {
 
     // Test the success message on short ID update.
     $edit = ['field_short_id[0][value]' => 'other-id'];
-    $this->drupalPostForm($this->entity['rdf_entity']['solution']['1']->toUrl('edit-form'), $edit, 'Publish');
+    $this->drupalGet($this->entity['rdf_entity']['solution']['1']->toUrl('edit-form'));
+    $this->submitForm($edit, 'Publish');
     $this->assertSession()->pageTextContains("You've changed the solution's short ID from abc123 to other-id. It will take some time until the solution content URLs will be updated.");
-    $this->drupalPostForm($this->entity['rdf_entity']['collection']['1']->toUrl('edit-form'), $edit, 'Publish');
+    $this->drupalGet($this->entity['rdf_entity']['collection']['1']->toUrl('edit-form'));
+    $this->submitForm($edit, 'Publish');
     $this->assertSession()->pageTextContains("You've changed the collection's short ID from xyz789 to other-id. It will take some time until the collection content URLs will be updated.");
 
     // Test the success message on short ID delete.
     $edit = ['field_short_id[0][value]' => ''];
-    $this->drupalPostForm($this->entity['rdf_entity']['solution']['1']->toUrl('edit-form'), $edit, 'Publish');
+    $this->drupalGet($this->entity['rdf_entity']['solution']['1']->toUrl('edit-form'));
+    $this->submitForm($edit, 'Publish');
     $this->assertSession()->pageTextContains("You've removed the solution's short ID: other-id. It will take some time until the solution content URLs will be updated.");
-    $this->drupalPostForm($this->entity['rdf_entity']['collection']['1']->toUrl('edit-form'), $edit, 'Publish');
+    $this->drupalGet($this->entity['rdf_entity']['collection']['1']->toUrl('edit-form'));
+    $this->submitForm($edit, 'Publish');
     $this->assertSession()->pageTextContains("You've removed the collection's short ID: other-id. It will take some time until the collection content URLs will be updated.");
   }
 
@@ -346,7 +350,7 @@ class GroupContentUpdateUrlAliasTest extends JoinupExistingSiteTestBase {
       'id' => 'http://collection',
       'label' => 'collection',
       'field_ar_description' => $this->randomString(),
-      'field_ar_state' => 'validated',
+      'field_ar_state' => 'published',
       'field_ar_owner' => 'http://example.com/owner',
       'field_topic' => 'http://example.com/policy',
       'field_ar_contact_information' => 'http://example.com/contact',
@@ -358,7 +362,7 @@ class GroupContentUpdateUrlAliasTest extends JoinupExistingSiteTestBase {
       'label' => "solution 1",
       'collection' => 'http://collection',
       'field_is_description' => $this->randomString(),
-      'field_is_state' => 'validated',
+      'field_is_state' => 'published',
       'field_is_owner' => 'http://example.com/owner',
       'field_topic' => 'http://example.com/policy',
       'field_is_solution_type' => 'http://data.europa.eu/dr8/ArchitectureBuildingBlock',
@@ -372,7 +376,7 @@ class GroupContentUpdateUrlAliasTest extends JoinupExistingSiteTestBase {
         'label' => "release 1.{$i}",
         'field_isr_release_number' => "1.{$i}",
         'field_isr_is_version_of' => 'http://solution/1',
-        'field_isr_state' => 'validated',
+        'field_isr_state' => 'published',
       ]);
       // Release distributions.
       for ($j = 1; $j <= 2; $j++) {
@@ -400,18 +404,18 @@ class GroupContentUpdateUrlAliasTest extends JoinupExistingSiteTestBase {
           'type' => $bundle,
           'title' => "{$bundle} 1.{$i}",
           'og_audience' => 'http://solution/1',
-          'field_state' => 'validated',
+          'field_state' => 'published',
         ]);
       }
     }
     // Collection nodes.
     for ($i = 1; $i <= 2; $i++) {
       foreach ($collection_node_bundles as $bundle) {
-        $this->entity['node'][$bundle]["${i}"] = $this->createNode([
+        $this->entity['node'][$bundle]["{$i}"] = $this->createNode([
           'type' => $bundle,
           'title' => "{$bundle} {$i}",
           'og_audience' => 'http://collection',
-          'field_state' => 'validated',
+          'field_state' => 'published',
         ]);
       }
     }

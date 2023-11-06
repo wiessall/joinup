@@ -115,10 +115,10 @@ class SolutionsByLicenceForm extends FormBase {
     $rows = [];
     foreach ($items as $item) {
       $licence_url = Url::fromRoute('entity.rdf_entity.canonical', [
-        'rdf_entity' => $item->licence,
+        'rdf_entity' => $item->licence->getUri(),
       ]);
       $solution_url = Url::fromRoute('entity.rdf_entity.canonical', [
-        'rdf_entity' => $item->solution,
+        'rdf_entity' => $item->solution->getUri(),
       ]);
 
       $rows[] = [
@@ -212,7 +212,7 @@ WHERE {
 }
 QUERY;
 
-    $extra_condition = $licence_id ? 'VALUES ?licence { ' . SparqlArg::uri($licence_id) . ' } ' : NULL;
+    $extra_condition = $licence_id ? 'VALUES ?licence { ' . SparqlArg::uri($licence_id) . ' } ' : '';
     $query = str_replace('@extra_condition', $extra_condition, $query);
     return $query;
   }

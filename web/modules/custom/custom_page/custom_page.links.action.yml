@@ -3,4 +3,12 @@ custom_page.custom_page.add_link:
   title: 'Add page'
   class: \Drupal\custom_page\Plugin\Menu\LocalAction\CustomPageAdd
   appears_on:
-   - entity.ogmenu_instance.edit_form
+    - entity.ogmenu_instance.edit_form
+
+custom_page.custom_landing_page.add_link:
+  route_name: custom_landing_page.add
+  route_parameters:
+    node_type: custom_page
+  title: 'Add custom landing page'
+  appears_on:
+    - view.content.landing_pages

@@ -2,9 +2,9 @@ name: 'Joinup paragraphs'
 description: 'Contains settings, installation config and functionality related to paragraphs needed in Joinup.'
 type: module
 package: Joinup
-core_version_requirement: ^8.9 || ^9.1
-php: 7.1
+core_version_requirement: ">= 9.4"
 
 dependencies:
   - json_field:json_field
   - paragraphs:paragraphs_type_permissions
+  - layout_paragraphs:layout_paragraphs

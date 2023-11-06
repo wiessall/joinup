@@ -5,7 +5,7 @@ declare(strict_types = 1);
 namespace Drupal\joinup_group\Event;
 
 use Drupal\joinup_group\Entity\GroupInterface;
-use Symfony\Component\EventDispatcher\Event;
+use Symfony\Contracts\EventDispatcher\Event;
 
 /**
  * Event that collects reports to show on the group reports page.

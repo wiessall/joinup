@@ -6,9 +6,9 @@ Feature: "Add document" visibility options.
 
   Scenario: "Add document" button should not be shown to normal members, authenticated users and anonymous users.
     Given the following collections:
-      | title                   | logo     | banner     | state     |
-      | Ring of Truth           | logo.png | banner.jpg | validated |
-      | The Storms of the Waves | logo.png | banner.jpg | validated |
+      | title                   | logo     | state     |
+      | Ring of Truth           | logo.png | published |
+      | The Storms of the Waves | logo.png | published |
 
     When I am logged in as an "authenticated user"
     And I go to the homepage of the "Ring of Truth" collection
@@ -41,8 +41,8 @@ Feature: "Add document" visibility options.
       | Family name | Andries           |
       | E-mail      | eandr@example.com |
     And collections:
-      | title                | logo     | banner     | state     |
-      | Hunter in the Swords | logo.png | banner.jpg | validated |
+      | title                | logo     | state     |
+      | Hunter in the Swords | logo.png | published |
     And the following collection user membership:
       | collection           | user      | roles       |
       | Hunter in the Swords | napcheese | facilitator |
@@ -52,7 +52,7 @@ Feature: "Add document" visibility options.
     When I go to the homepage of the "Hunter in the Swords" collection
     And I click "Add document" in the plus button menu
     Then I should see the heading "Add document"
-    And the following fields should be present "Title, Short title, Type, Topic, Keywords, Geographical coverage, Licence, Description, Upload a new file or enter a URL"
+    And the following fields should be present "Title, Short title, Type, Topic, Search keywords, Geographical coverage, Licence, Description, Upload a new file or enter a URL"
     # The entity is new, so the current workflow state should not be shown.
     And the following fields should not be present "Current workflow state, Motivation"
     And the following fields should not be present "Shared on"
@@ -80,9 +80,6 @@ Feature: "Add document" visibility options.
     # Check that the full author name is shown instead of the username.
     And I should see the link "Eirik Andries" in the "Content" region
     But I should not see the link "napcheese" in the "Content" region
-    # Check that the link to the document is visible on the collection page.
-    When I go to the homepage of the "Hunter in the Swords" collection
-    Then I should see the link "An amazing document"
 
     # Check that the publication date field is prefilled with the current time.
     When I go to the homepage of the "Hunter in the Swords" collection
@@ -95,14 +92,14 @@ Feature: "Add document" visibility options.
   Scenario: Remote URLs can be used in documents.
     Given the following collection:
       | title | Strong Lasers |
-      | state | validated     |
+      | state | published     |
     And licence:
       | title       | Creative Commons Zero                                               |
       | description | CC0 is a legal tool for waiving as many rights as legally possible. |
       | type        | Public domain                                                       |
     And document content:
       | title       | document type | short title | file type | file                   | body                 | licence               | state     | collection    |
-      | Laser types | document      | L-Types     | remote    | http://www.example.com | List of laser types. | Creative Commons Zero | validated | Strong Lasers |
+      | Laser types | document      | L-Types     | remote    | http://www.example.com | List of laser types. | Creative Commons Zero | published | Strong Lasers |
 
     When I am logged in as a facilitator of the "Strong Lasers" collection
     And I go to the "Laser types" document

@@ -15,6 +15,7 @@ use Drupal\file\Entity\File;
  * Tests the download & visit count refresh.
  *
  * @group joinup_stats
+ * @group wip
  */
 class RefreshCountersTest extends KernelTestBase {
 
@@ -267,7 +268,7 @@ class RefreshCountersTest extends KernelTestBase {
   /**
    * {@inheritdoc}
    */
-  public function tearDown() {
+  public function tearDown(): void {
     $storage = $this->container->get('entity_type.manager')->getStorage('rdf_entity');
     $storage->delete($this->entities['rdf_entity']);
     parent::tearDown();

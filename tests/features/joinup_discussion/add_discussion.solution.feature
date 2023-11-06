@@ -8,12 +8,11 @@ Feature: "Add discussion" visibility options.
     Given the following collection:
       | title  | Collective Eager Sliver |
       | logo   | logo.png                |
-      | banner | banner.jpg              |
-      | state  | validated               |
+      | state  | published               |
     And the following solutions:
-      | title              | collection              | logo     | banner     | state     |
-      | Eager Sliver       | Collective Eager Sliver | logo.png | banner.jpg | validated |
-      | The Silent Bridges | Collective Eager Sliver | logo.png | banner.jpg | validated |
+      | title              | collection              | logo     | state     |
+      | Eager Sliver       | Collective Eager Sliver | logo.png | published |
+      | The Silent Bridges | Collective Eager Sliver | logo.png | published |
 
     When I am logged in as an "authenticated user"
     And I go to the homepage of the "Eager Sliver" solution
@@ -39,17 +38,18 @@ Feature: "Add discussion" visibility options.
     Given the following collection:
       | title  | Collective Emerald in the Luck |
       | logo   | logo.png                       |
-      | banner | banner.jpg                     |
-      | state  | validated                      |
+      | state  | published                      |
     And the following solutions:
-      | title               | collection                     | logo     | banner     | state     |
-      | Emerald in the Luck | Collective Emerald in the Luck | logo.png | banner.jpg | validated |
+      | title               | collection                     | logo     | state     |
+      | Emerald in the Luck | Collective Emerald in the Luck | logo.png | published |
     And I am logged in as a facilitator of the "Emerald in the Luck" solution
 
     When I go to the homepage of the "Emerald in the Luck" solution
-    And I click "Add discussion" in the plus button menu
+    Then I should not see the text "Discussions" in the "Navigation menu"
+
+    When I click "Add discussion" in the plus button menu
     Then I should see the heading "Add discussion"
-    And the following fields should be present "Title, Content, Topic, Add a new file"
+    And the following fields should be present "Title, Content, Topic, Logo, Add a new file"
     And the following fields should not be present "Motivation"
 
     # Check required fields.
@@ -74,16 +74,16 @@ Feature: "Add discussion" visibility options.
     Then I should see the heading "Flight of Girlfriend"
     And I should see the success message "Discussion Flight of Girlfriend has been created."
     And the "Emerald in the Luck" solution has a discussion titled "Flight of Girlfriend"
-    # Check that the link to the discussion is visible on the solution page.
-    When I go to the homepage of the "Emerald in the Luck" solution
-    Then I should see the link "Flight of Girlfriend"
+
+    When I go to the discussions page of "Emerald in the Luck"
+    Then I should see the text "Discussions" in the "Navigation menu"
+    And I should see the link "Flight of Girlfriend"
 
     # Check that an anonymous user can see the information.
     Given I am an anonymous user
     When I go to the "Flight of Girlfriend" discussion
-    Then I should see the following headings:
-      | Emerald in the Luck  |
-      | Flight of Girlfriend |
+    Then I see the text "Emerald in the Luck"
+    And I should see the heading "Flight of Girlfriend"
     And I should see the following lines of text:
       | This is going to be an amazing discussion. |
       | Attachments                                |

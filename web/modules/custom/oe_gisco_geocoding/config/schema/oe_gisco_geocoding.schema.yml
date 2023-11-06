@@ -1,0 +1,8 @@
+geocoder_provider.configuration.gisco_geocoding:
+  type: geocoder_provider_configuration
+  label: 'GISCO Geocoding configuration'
+  mapping:
+    referer:
+      type: uri
+      label: 'Referer'
+      nullable: true

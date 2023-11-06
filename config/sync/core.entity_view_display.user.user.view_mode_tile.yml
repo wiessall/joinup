@@ -4,9 +4,6 @@ status: true
 dependencies:
   config:
     - core.entity_view_mode.user.view_mode_tile
-    - field.field.user.user.field_last_password_reset
-    - field.field.user.user.field_password_expiration
-    - field.field.user.user.field_pending_expire_sent
     - field.field.user.user.field_social_media
     - field.field.user.user.field_user_business_title
     - field.field.user.user.field_user_content
@@ -17,9 +14,11 @@ dependencies:
     - field.field.user.user.field_user_organisation
     - field.field.user.user.field_user_photo
     - field.field.user.user.field_user_professional_domain
-    - image.style.horizontal_medium_image
+    - responsive_image.styles.tile
   module:
-    - image
+    - responsive_image
+    - smart_trim
+    - template_suggestion
     - user
 id: user.user.view_mode_tile
 targetEntityType: user
@@ -27,49 +26,78 @@ bundle: user
 mode: view_mode_tile
 content:
   field_user_business_title:
-    type: string
-    weight: 3
+    type: smart_trim
     label: hidden
     settings:
-      link_to_entity: false
-    third_party_settings: {  }
+      trim_length: 30
+      trim_type: chars
+      trim_suffix: ''
+      wrap_output: false
+      wrap_class: trimmed
+      more:
+        display_link: false
+        target_blank: false
+        link_trim_only: false
+        class: more-link
+        text: More
+        aria_label: 'Read more about [node:title]'
+      summary_handler: full
+      trim_options:
+        text: false
+        trim_zero: false
+    third_party_settings:
+      template_suggestion:
+        template_suggestion: ''
+    weight: 3
     region: content
   field_user_family_name:
-    weight: 1
+    type: string
     label: hidden
     settings:
       link_to_entity: false
     third_party_settings: {  }
-    type: string
+    weight: 1
     region: content
   field_user_first_name:
-    weight: 2
+    type: string
     label: hidden
     settings:
       link_to_entity: false
     third_party_settings: {  }
-    type: string
+    weight: 2
     region: content
-  field_user_photo:
-    weight: 0
+  field_user_nationality:
+    type: entity_reference_label
     label: hidden
     settings:
-      image_style: horizontal_medium_image
-      image_link: content
+      link: true
     third_party_settings: {  }
-    type: image
+    weight: 4
+    region: content
+  field_user_photo:
+    type: responsive_image
+    label: hidden
+    settings:
+      responsive_image_style: tile
+      image_link: ''
+      image_loading:
+        attribute: eager
+    third_party_settings:
+      template_suggestion:
+        template_suggestion: ''
+    weight: 0
+    region: content
+  member_for:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 5
     region: content
 hidden:
-  field_last_password_reset: true
-  field_password_expiration: true
-  field_pending_expire_sent: true
   field_social_media: true
   field_user_content: true
   field_user_frequency: true
-  field_user_nationality: true
   field_user_organisation: true
   field_user_professional_domain: true
   langcode: true
-  member_for: true
   search_api_excerpt: true
-  user_field_user_content_top: true
+  user_user_field_user_content_top: true

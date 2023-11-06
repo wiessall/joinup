@@ -1,0 +1,10 @@
+@import "../partials/core";
+
+.toolbar {
+  #toolbar-item-user {
+    max-width: 500px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}

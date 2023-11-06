@@ -1,0 +1,19 @@
+uuid: d9685162-d4cd-40cc-b734-9fdd32b24ddd
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.paragraph_testimony_source
+    - paragraphs.paragraphs_type.testimony
+id: paragraph.testimony.paragraph_testimony_source
+field_name: paragraph_testimony_source
+entity_type: paragraph
+bundle: testimony
+label: 'Quote source'
+description: 'The source of the quoted text.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string_long

@@ -1,0 +1,11 @@
+uuid: e72e4e21-17e6-4311-87f6-8a075c871ec1
+langcode: en
+status: true
+dependencies:
+  config:
+    - simple_sitemap.type.news
+id: news
+label: News
+description: ''
+type: news
+weight: -9

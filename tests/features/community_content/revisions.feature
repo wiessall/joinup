@@ -9,7 +9,7 @@ Feature:
       | title       | Hellow world                              |
       | description | Because I do not know how to spell Hello. |
       | moderation  | <moderation>                              |
-      | state       | validated                                 |
+      | state       | published                                 |
     And users:
       | Username           | E-mail                    | Roles     |
       | Clumsy Bounce      | clumsy.bounce@example.com |           |
@@ -24,8 +24,8 @@ Feature:
       | Hellow world | Jelly Facilitator | facilitator |
     And <content type> content:
       | title                | body                                   | state     | author        | <group type> |
-      | Goodbi world         | Because I cannot spell Goodbye either. | validated | Clumsy Bounce | Hellow world |
-      | Careful with that ax | Someone needs to ax these questions.   | validated | Grumpy Author | Hellow world |
+      | Goodbi world         | Because I cannot spell Goodbye either. | published | Clumsy Bounce | Hellow world |
+      | Careful with that ax | Someone needs to ax these questions.   | published | Grumpy Author | Hellow world |
     And <content type> revisions:
       | current title        | title                 |
       | Careful with that ax | Careful with that axe |
@@ -51,11 +51,12 @@ Feature:
     When I visit the revisions page for "Goodbi world"
     Then I should see the heading "Access denied"
 
+    # Moderators always can access the revisions.
     Given I am logged in as "Fuzzy Moderator"
     When I visit the "Goodbi world" <content type>
-    Then I should not see the link "Revisions" in the "Entity actions" region
+    Then I should see the link "Revisions" in the "Entity actions" region
     When I visit the revisions page for "Goodbi world"
-    Then I should see the heading "Access denied"
+    Then I should see the heading "Revisions for Goodbi world"
 
     Given I am logged in as "Jelly Facilitator"
     When I visit the "Goodbi world" <content type>
@@ -137,7 +138,7 @@ Feature:
 
     # After leaving the group the user is no longer able to see revisions.
     When I click "<leave link>"
-    And I press the "Confirm" button
+    And I press "Confirm"
     Then I should see the success message "You are no longer a member of Hellow world."
 
     When I visit the "<final title>" <content type>
@@ -162,10 +163,10 @@ Feature:
     # When a content author is blocked from the group (e.g. because they were
     # posting spam) then they should no longer have access to the revisions.
     When I go to the "Hellow world" <group type>
-    And I click "Members" in the "Left sidebar"
+    And I click "Members" in the "Header"
     And I check the box "Update the member Clumsy Bounce"
     And I select "Block the selected membership(s)" from "Action"
-    And I press the "Apply to selected items" button
+    And I press "Apply to selected items"
     Then I should see the following success messages:
       | success messages                                        |
       | Block the selected membership(s) was applied to 1 item. |
@@ -191,20 +192,20 @@ Feature:
     # they are posted in a pre-moderated group. The reasoning behind this is
     # everyone should always be free to start a discussion. See ISAICP-2265.
     Examples:
-      | group type | content type | moderation | final title   | moderate action | join button                | leave link                     |
-      | collection | discussion   | yes        | Goodbi world  | Update          | Join this collection       | Leave this collection          |
-      | collection | document     | yes        | Goodbye world | Publish         | Join this collection       | Leave this collection          |
-      | collection | event        | yes        | Goodbye world | Publish         | Join this collection       | Leave this collection          |
-      | collection | news         | yes        | Goodbye world | Publish         | Join this collection       | Leave this collection          |
-      | collection | discussion   | no         | Goodbi world  | Update          | Join this collection       | Leave this collection          |
-      | collection | document     | no         | Goodbi world  | Update          | Join this collection       | Leave this collection          |
-      | collection | event        | no         | Goodbi world  | Update          | Join this collection       | Leave this collection          |
-      | collection | news         | no         | Goodbi world  | Update          | Join this collection       | Leave this collection          |
-      | solution   | discussion   | yes        | Goodbi world  | Update          | Subscribe to this solution | Unsubscribe from this solution |
-      | solution   | document     | yes        | Goodbye world | Publish         | Subscribe to this solution | Unsubscribe from this solution |
-      | solution   | news         | yes        | Goodbye world | Publish         | Subscribe to this solution | Unsubscribe from this solution |
-      | solution   | event        | yes        | Goodbye world | Publish         | Subscribe to this solution | Unsubscribe from this solution |
-      | solution   | discussion   | no         | Goodbi world  | Update          | Subscribe to this solution | Unsubscribe from this solution |
-      | solution   | document     | no         | Goodbi world  | Update          | Subscribe to this solution | Unsubscribe from this solution |
-      | solution   | news         | no         | Goodbi world  | Update          | Subscribe to this solution | Unsubscribe from this solution |
-      | solution   | event        | no         | Goodbi world  | Update          | Subscribe to this solution | Unsubscribe from this solution |
+      | group type | content type | moderation | final title   | moderate action | join button                | leave link            |
+      | collection | discussion   | yes        | Goodbi world  | Update          | Join this collection       | Leave this collection |
+      | collection | document     | yes        | Goodbye world | Publish         | Join this collection       | Leave this collection |
+      | collection | event        | yes        | Goodbye world | Publish         | Join this collection       | Leave this collection |
+      | collection | news         | yes        | Goodbye world | Publish         | Join this collection       | Leave this collection |
+      | collection | discussion   | no         | Goodbi world  | Update          | Join this collection       | Leave this collection |
+      | collection | document     | no         | Goodbi world  | Update          | Join this collection       | Leave this collection |
+      | collection | event        | no         | Goodbi world  | Update          | Join this collection       | Leave this collection |
+      | collection | news         | no         | Goodbi world  | Update          | Join this collection       | Leave this collection |
+      | solution   | discussion   | yes        | Goodbi world  | Update          | Subscribe to this solution | Unsubscribe           |
+      | solution   | document     | yes        | Goodbye world | Publish         | Subscribe to this solution | Unsubscribe           |
+      | solution   | news         | yes        | Goodbye world | Publish         | Subscribe to this solution | Unsubscribe           |
+      | solution   | event        | yes        | Goodbye world | Publish         | Subscribe to this solution | Unsubscribe           |
+      | solution   | discussion   | no         | Goodbi world  | Update          | Subscribe to this solution | Unsubscribe           |
+      | solution   | document     | no         | Goodbi world  | Update          | Subscribe to this solution | Unsubscribe           |
+      | solution   | news         | no         | Goodbi world  | Update          | Subscribe to this solution | Unsubscribe           |
+      | solution   | event        | no         | Goodbi world  | Update          | Subscribe to this solution | Unsubscribe           |

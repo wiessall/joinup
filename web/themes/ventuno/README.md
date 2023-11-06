@@ -83,7 +83,6 @@ $ ./vendor/bin/drush uublk joinup-admin
 $ ./vendor/bin/drush uli
 
 # Bypass EU Login and log in as a Joinup moderator (recommended)
-$ ./vendor/bin/drush role-add-perm moderator "bypass limited access"
 $ ./vendor/bin/drush uli --name=joinup-moderator
 ```
 

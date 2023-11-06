@@ -12,16 +12,16 @@ Feature: Asset distribution editing.
       | type        | Attribution                          |
     And collection:
       | title | Berkeley Software Distributions |
-      | state | validated                       |
+      | state | published                       |
     And solution:
       | title      | OpenBSD                         |
       | collection | Berkeley Software Distributions |
-      | state      | validated                       |
+      | state      | published                       |
     And release:
       | title          | Winter of 95 |
       | release number | 6.1          |
       | is version of  | OpenBSD      |
-      | state          | validated    |
+      | state          | published    |
     And distributions:
       | title          | description                 | parent       | access url                                                  | licence          |
       | i386           | The i386 version            | Winter of 95 | https://mirrors.evowise.com/pub/OpenBSD/6.1/i386/random.iso | Postcard licence |
@@ -33,7 +33,6 @@ Feature: Asset distribution editing.
       | Marianne Sherburne | marianne.herburne@example.com |
 
     When I am logged in as "Bradley Emmett"
-    And I accept essential cookies
     And I go to the "Berkeley Software Distributions" collection
     And I click "OpenBSD"
     And I click "Download releases"
@@ -49,7 +48,6 @@ Feature: Asset distribution editing.
 
     When I am an anonymous user
     And I go to the "OpenBSD" solution
-    And I accept essential cookies
     And I click "Download releases"
     Then I should see "Releases for OpenBSD solution"
 
@@ -93,7 +91,6 @@ Feature: Asset distribution editing.
     # Verify that the tracking happens when clicking the Download button in
     # the tile view mode and in the canonical page view of the distribution.
     When I am logged in as "Marianne Sherburne"
-    And I accept essential cookies
     And I go to the "OpenBSD" solution
     # The only download link is the one in the "OpenBSD images" tile.
     Then I click "Download"
@@ -120,11 +117,11 @@ Feature: Asset distribution editing.
       | user2    | user2@example.com |
     And the following solution:
       | title | Solution  |
-      | state | validated |
+      | state | published |
     And the following release:
       | title         | Release 1 |
       | is version of | Solution  |
-      | state         | validated |
+      | state         | published |
     And the following distributions:
       | title          | parent    | access url |
       | Distribution 1 | Release 1 | text.pdf   |

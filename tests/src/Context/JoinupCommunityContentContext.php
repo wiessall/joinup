@@ -46,9 +46,8 @@ class JoinupCommunityContentContext extends RawDrupalContext {
    * @Then the :heading tile should not be marked as shared
    */
   public function assertTileNotMarkedAsShared(string $heading): void {
-    $element = $this->getTileByHeading($heading);
-
-    if ($element->find('css', '.icon--shared')) {
+    $tile = $this->getTileByHeading($heading);
+    if ($tile->find('css', '[data-joinup-card-stats-shared]')) {
       throw new \Exception("The tile '$heading' is marked as shared, but it shouldn't be.");
     }
   }
@@ -58,32 +57,27 @@ class JoinupCommunityContentContext extends RawDrupalContext {
    *
    * @param string $heading
    *   The heading of the tile.
-   * @param string $collection
+   * @param string $group_label
    *   The collection that the content was shared from.
    *
-   * @throws |Exception
+   * @throws \Exception
    *   Thrown when the tile is not marked as shared, or it's marked as shared
    *   from the wrong collection.
    *
-   * @Then the :heading tile should be marked as shared from :collection
+   * @Then the :heading tile should be marked as shared from :group_label
    */
-  public function assertTileMarkedAsShared(string $heading, string $collection): void {
-    $element = $this->getTileByHeading($heading);
+  public function assertTileMarkedAsShared(string $heading, string $group_label): void {
+    $tile = $this->getTileByHeading($heading);
 
-    $share = $element->find('css', '.icon--shared');
+    $share = $tile->find('css', "[data-joinup-card-stats-shared='$group_label']");
     if (!$share) {
       throw new \Exception("The tile '$heading' is not marked as shared, but it should be.");
     }
 
     /** @var \Behat\Mink\Element\NodeElement $parent */
-    $parent = $share->find('xpath', "/parent::div[@class and contains(concat(' ', normalize-space(@class), ' '), ' listing__stat ')]");
+    $parent = $share->find('xpath', "/ancestor::article[contains(concat(' ', normalize-space(@class), ' '), ' tile ')]");
     if (!$parent) {
       throw new \Exception("The tile '$heading' has faulty markup for the shared content visual cue.");
-    }
-
-    $title_attribute = $parent->getAttribute('title');
-    if ($title_attribute !== "Shared from $collection") {
-      throw new \Exception("The tile '$heading' is marked as shared from $title_attribute, but it should be '$collection'.");
     }
   }
 
@@ -103,7 +97,7 @@ class JoinupCommunityContentContext extends RawDrupalContext {
   public function assertDifferentCreatedTimeWithUnpublishedVersion(string $title, string $type): void {
     // The Publication Date module sets a default value to the publication date
     // for nodes that have never been published.
-    $node = $this->getNodeByTitle($title, $type);
+    $node = $this->getEntityByLabel('node', $title, $type);
     if (!$node instanceof EntityPublicationTimeInterface) {
       throw new \InvalidArgumentException('Node does not have a publication date field.');
     }
@@ -124,7 +118,7 @@ class JoinupCommunityContentContext extends RawDrupalContext {
    *   Thrown when the node does not have a publication date field.
    */
   public function assertDifferentPublishedCreatedTime(string $title, string $type): void {
-    $node = $this->getNodeByTitle($title, $type);
+    $node = $this->getEntityByLabel('node', $title, $type);
     if (!$node instanceof EntityPublicationTimeInterface) {
       throw new \InvalidArgumentException('Node does not have a publication date field.');
     }
@@ -146,7 +140,7 @@ class JoinupCommunityContentContext extends RawDrupalContext {
    *   Thrown when the node does not have a publication date field.
    */
   public function assertSamePublishedCreatedTime(string $title, string $type): void {
-    $node = $this->getNodeByTitle($title, $type);
+    $node = $this->getEntityByLabel('node', $title, $type);
     if (!$node instanceof EntityPublicationTimeInterface) {
       throw new \InvalidArgumentException('Node does not have a publication date field.');
     }
@@ -184,7 +178,7 @@ class JoinupCommunityContentContext extends RawDrupalContext {
     }
     $published = $published === 'published';
 
-    $node = $this->getNodeByTitle($title, $type);
+    $node = $this->getEntityByLabel('node', $title, $type);
     if (!$node instanceof EntityPublicationTimeInterface) {
       throw new \InvalidArgumentException('Node does not have a publication date field.');
     }
@@ -228,7 +222,8 @@ class JoinupCommunityContentContext extends RawDrupalContext {
     if (!($time = strtotime($new_date))) {
       throw new \Exception("{$new_date} could not be converted to string.");
     }
-    $this->getNodeByTitle($title, $bundle)
+
+    $this->getEntityByLabel('node', $title, $bundle)
       ->set($field_name, $time)
       ->save();
   }
@@ -292,7 +287,7 @@ class JoinupCommunityContentContext extends RawDrupalContext {
   public function assertCommentContainsMarkup(string $comment_number, string $markup): void {
     $comment = $this->getNumberedComment($comment_number - 1);
     $regex = '/' . preg_quote($markup, '/') . '/ui';
-    Assert::assertRegExp($regex, $comment->getOuterHtml());
+    Assert::assertMatchesRegularExpression($regex, $comment->getOuterHtml());
   }
 
   /**
@@ -388,7 +383,7 @@ class JoinupCommunityContentContext extends RawDrupalContext {
    */
   protected function getNumberedComment(int $index): NodeElement {
     $session = $this->getSession();
-    $comments = $session->getPage()->findAll('css', '.comment-item');
+    $comments = $session->getPage()->findAll('css', '.comment-item, article.comment');
     if (!isset($comments[$index])) {
       throw new ElementNotFoundException($session, 'Comment #' . ($index + 1));
     }
@@ -412,8 +407,14 @@ class JoinupCommunityContentContext extends RawDrupalContext {
   public function provideTopic(BeforeNodeCreateScope $scope) {
     $node = $scope->getEntity();
 
-    // Only deal with community content.
-    if (!in_array($node->type, CommunityContentHelper::BUNDLES, TRUE)) {
+    $bundles_with_topics = array_merge(
+      CommunityContentHelper::BUNDLES,
+      ['custom_page']
+    );
+
+    // Only deal with community content + custom pages (which have topic field
+    // set as required).
+    if (!in_array($node->type, $bundles_with_topics, TRUE)) {
       return;
     }
 
@@ -426,7 +427,7 @@ class JoinupCommunityContentContext extends RawDrupalContext {
     // Try, first, to get an existing topic term.
     if (!empty($this->entities['taxonomy_term'])) {
       foreach ($this->entities['taxonomy_term'] as $candidate_term) {
-        if ($candidate_term->bundle() === 'topic' && !$candidate_term->get('parent')->isEmpty()) {
+        if ($candidate_term->bundle() === 'topic' && $candidate_term->get('parent')->target_id !== '0') {
           $term = $candidate_term;
           break;
         }
@@ -474,28 +475,28 @@ class JoinupCommunityContentContext extends RawDrupalContext {
    */
   public function assertInTheSpotlight(TableNode $table) {
     $columns = $table->getColumnsHash();
-    $articles = $this->getSession()->getPage()->findAll('css', '.view-in-the-spotlight .views-row');
+    $articles = $this->getSession()->getPage()->findAll('css', '.view-in-the-spotlight article.tile');
     Assert::assertEquals(count($columns), count($articles), sprintf('Expected %d items in the "In the spotlight" section but found %d items.', count($columns), count($articles)));
 
     foreach ($columns as $i => $expected_data) {
       $actual_data = array_shift($articles);
 
       // Check title text.
-      $actual_title = $actual_data->find('css', 'h2')->getText();
+      $actual_title = $actual_data->find('css', 'h1.tile__title')->getText();
       Assert::assertEquals($expected_data['title'], $actual_title, sprintf('Expected title "%s" for article %d in the "In the spotlight" section but instead found "%s".', $expected_data['title'], $i + 1, $actual_title));
 
       // Check that title links to the canonical page of the article.
-      $node = self::getNodeByTitle($actual_title);
-      $xpath = '//h2/a[@href = "' . $this->getEntityUri($node) . '"]';
+      $node = $this->getEntityByLabel('node', $actual_title);
+      $xpath = '//a[@href = "' . $this->getEntityUri($node) . '"]';
       Assert::assertNotEmpty($actual_data->find('xpath', $xpath), sprintf('Article "%s" does not link to the canonical page.', $actual_title));
 
       // Check that the correct number of topics are present.
       $expected_topic_titles = array_map('trim', explode(',', $expected_data['topics']));
-      $topic_elements = $actual_data->findAll('css', '.field--name-field-topic .field__item');
+      $topic_elements = $actual_data->findAll('css', '.tile__body .badge');
       Assert::assertEquals(count($expected_topic_titles), count($topic_elements), sprintf('Expected %d topics for the "%s" article in the "In the spotlight" section but found %d topics.', count($expected_topic_titles), $expected_data['title'], count($topic_elements)));
 
       // Check the body text.
-      $actual_body = $actual_data->find('css', '.field--name-body')->getText();
+      $actual_body = $actual_data->find('css', '.tile__body .tile__text')->getText();
       Assert::assertEquals($expected_data['body'], $actual_body, sprintf('The body text for the article "%s" in the "In the spotlight" section does not contain the expected text.', $actual_title));
 
       foreach ($expected_topic_titles as $j => $expected_topic_title) {
@@ -505,11 +506,6 @@ class JoinupCommunityContentContext extends RawDrupalContext {
         // Check the title of each topic.
         $actual_topic_title = $topic_element->getText();
         Assert::assertEquals($expected_topic_title, $actual_topic_title, sprintf('Expected topic #%d to be "%s" for the "%s" article in the "In the spotlight" section but instead found "%s".', $j + 1, $expected_topic_title, $actual_title, $actual_topic_title));
-
-        // Check that each topic links to their canonical page.
-        $topic_entity = self::getEntityByLabel('taxonomy_term', $actual_topic_title, 'topic');
-        $xpath = '/a[@href = "' . $this->getEntityUri($topic_entity) . '"]';
-        Assert::assertNotEmpty($topic_element->find('xpath', $xpath), sprintf('Topic "%s" for article "%s" does not link to the canonical topic page.', $actual_topic_title, $actual_title));
       }
     }
   }
@@ -525,7 +521,7 @@ class JoinupCommunityContentContext extends RawDrupalContext {
    * @Then I should see :label as the Highlighted content
    */
   public function assertHighlightedContent(string $label): void {
-    $content = self::getNodeByTitle($label);
+    $content = $this->getEntityByLabel('node', $label);
 
     // Only community content can be highlighted.
     Assert::assertInstanceOf(CommunityContentInterface::class, $content);
@@ -544,11 +540,11 @@ class JoinupCommunityContentContext extends RawDrupalContext {
     }
 
     // Check title text.
-    $actual_title = $block_element->find('css', 'article h2')->getText();
+    $actual_title = $block_element->find('css', 'article.tile h1.tile__title')->getText();
     Assert::assertEquals($content->label(), $actual_title, sprintf('Expected the Highlighted content to have the title "%s" but instead found "%s".', $content->label(), $actual_title));
 
     // Check that title links to the canonical page of the content.
-    $xpath = '//h2/a[@href = "' . $this->getEntityUri($content) . '"]';
+    $xpath = '//a[@href = "' . $this->getEntityUri($content) . '"]';
     Assert::assertNotEmpty($block_element->find('xpath', $xpath), sprintf('%s "%s" does not link to the canonical page.', $content->getType(), $actual_title));
 
     // Retrieve the topics from the content, limiting the result to maximum 2
@@ -556,7 +552,7 @@ class JoinupCommunityContentContext extends RawDrupalContext {
     $topics = array_slice($content->getTopics(), 0, 2);
 
     // Check that the correct number of topics are present.
-    $topic_elements = $block_element->findAll('css', '.field--name-field-topic .field__item');
+    $topic_elements = $block_element->findAll('css', '.tile__body .badge');
     Assert::assertEquals(count($topics), count($topic_elements), sprintf('Expected %d topics in the "Highlighted content" section but found %d topics.', count($topics), count($topic_elements)));
 
     foreach ($topics as $j => $topic) {
@@ -566,14 +562,10 @@ class JoinupCommunityContentContext extends RawDrupalContext {
       // Check the title of each topic.
       $actual_topic_title = $topic_element->getText();
       Assert::assertEquals($topic->label(), $actual_topic_title, sprintf('Expected topic #%d to be "%s" in the "Highlighted content" section but instead found "%s".', $j + 1, $topic->label(), $actual_topic_title));
-
-      // Check that each topic links to their canonical page.
-      $xpath = '/a[@href = "' . $this->getEntityUri($topic) . '"]';
-      Assert::assertNotEmpty($topic_element->find('xpath', $xpath), sprintf('Topic "%s" in the "Highlighted content" section does not link to the canonical topic page.', $actual_topic_title));
     }
 
     // Check that the description is present.
-    $actual_description = $block_element->find('css', '.field--name-body')->getText();
+    $actual_description = $block_element->find('css', '.tile__text')->getText();
     Assert::assertNotEmpty($actual_description);
   }
 

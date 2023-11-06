@@ -2,14 +2,12 @@
 
 This is the source code for https://joinup.ec.europa.eu/
 
-[![Build Status](https://status.continuousphp.com/git-hub/ec-europa/joinup-dev?token=77aa9de5-7fef-40bc-8c48-d6ff70fba9ff)](https://continuousphp.com/git-hub/ec-europa/joinup-dev)
-
 Joinup is a collaborative platform created by the European Commission and
 funded by the European Union via the [Interoperability Solutions for European
 Public Administrations (ISA)](http://ec.europa.eu/isa/) Programme.
 
 It offers several services that aim to help e-Government professionals share
-their experience with each other.  We also hope to support them to find,
+their experience with each other. We also hope to support them to find,
 choose, re-use, develop and implement interoperability solutions.
 
 The Joinup platform is developed as a Drupal 8 distribution, and therefore
@@ -21,6 +19,7 @@ Joinup is licensed under the
 compatible with the GPL.
 
 ## Contributing
+
 See our [contributors guide](.github/CONTRIBUTING.md).
 
 ## Running your own instance of Joinup
@@ -30,15 +29,18 @@ There are two ways to run Joinup. With `docker` and `docker-compose` and buildin
 ### Docker
 
 To start with docker, please, check the separated [README file](docs/docker/README.md).
+**This is the preferred way of running Joinup.**
 
 ### Local installation
 
 To run Joinup locally, below is a list of requirements and instructions.
 
 #### On macOS without Docker installation
+
 To start on macOS without Docker, please, check the separated [README file](resources/mac/README.md).
 
 #### Requirements
+
 * A regular LAMP stack running PHP 7.4.0 or higher
 * Virtuoso 7 (Triplestore database)
 * Apache Solr
@@ -80,7 +82,8 @@ used tool.
 
 * Install Virtuoso. For basic instructions, see [setting up
   Virtuoso](https://github.com/ec-europa/rdf_entity/blob/8.x-1.x/README.md).
-  Due to [a bug in Virtuoso 6](https://github.com/openlink/virtuoso-opensource/issues/303) it is recommended to use Virtuoso 7.
+  Due to [a bug in Virtuoso 6](https://github.com/openlink/virtuoso-opensource/issues/303) it is recommended to use
+  Virtuoso 7.
   During installation some RDF based taxonomies will be imported from the `resources/fixtures` folder.
   Make sure Virtuoso can read from this folder by adding it to the `DirsAllowed`
   setting in your `virtuoso.ini`. For example:
@@ -100,26 +103,10 @@ used tool.
 
 * Point the document root of your webserver to the 'web/' directory.
 
-#### Create a local build properties file
-Create a new file in the root of the project named `build.properties.local
-using your favourite text editor:
+#### Create your .env file
 
-```
-$ vim build.properties.local
-```
-
-This file will contain the configuration which is unique to your development
-machine. This is mainly useful for specifying your database credentials and the
-username and password of the Drupal admin user, so they can be used during the
-installation.
-
-Because these settings are personal they should not be shared with the rest of
-the team. Make sure you never commit this file!
-
-All options you can use can be found in the `build.properties` file. Just copy
-the lines you want to override and change their values. Do not copy the entire
-`build.properties` file, since this would override all options.
-
+Copy the `.env.example` file to `.env` and fill in the values for your local
+environment.
 
 #### Create a local task runner configuration file
 
@@ -128,6 +115,8 @@ create a `runner.yml` file in the project's top directory. You can override
 there any default runner configuration, or any other declared in
 `./resources/runner` files or in `runner.yml.dist`. Note that the `runner.yml`
 file is not under VCS control.
+Uncomment the lines for the local development to take full advantage of the
+shortened commands.
 
 #### Setup environment variables
 
@@ -145,7 +134,7 @@ DRUPAL_DATABASE_NAME=joinup
 DRUPAL_DATABASE_HOST=localhost
 DRUPAL_HASH_SALT=some-unique-random-string-like-37h+2BQEQx83YLa/uFdsfG55
 
-SOLR_URL=http://localhost:8983/solr
+SEARCH_API_SERVER_SS_SOLR_HOST=localhost
 
 DRUPAL_SPARQL_HOSTNAME=localhost
 REDIS_HOST=localhost
@@ -169,7 +158,6 @@ $ composer install
 $ ./vendor/bin/run toolkit:install-clean
 ```
 
-
 #### Run the tests
 
 Run the Behat test suite to validate your installation.
@@ -179,7 +167,8 @@ $ cd tests
 $ ./behat
 ```
 
-During development you can enable Behat test screen-shots by uncomment this line in `tests/features/bootstrap/FeatureContext.php`:
+During development you can enable Behat test screen-shots by uncomment this line
+in `tests/features/bootstrap/FeatureContext.php`:
 
 ```php
   // use \Drupal\joinup\Traits\ScreenShotTrait;
@@ -199,11 +188,9 @@ $ cd web
 $ ../vendor/bin/phpunit
 ```
 
-
 ### Frontend development
 
-See the [readme](web/themes/joinup/README.md) in the theme folder.
-
+See the [readme](web/themes/ventuno/README.md) in the theme folder.
 
 ### Upgrade process
 
@@ -238,12 +225,20 @@ For the above example:
   `v2.75.x` as the fourth post update of the `mymodule` module (`02` major
   version, `075` minor version, `03` update weight within the module).
 
-
 ### Technical details
 
 * In [Rdf draft module](web/modules/custom/rdf_entity/rdf_draft/README.md)
-there is information on handling draft in CRUD operations for rdf entities.
+  there is information on handling draft in CRUD operations for rdf entities.
 * In [Joinup notification module](web/modules/custom/joinup_notification/README.md)
-there is information on how to handle notifications in Joinup.
+  there is information on how to handle notifications in Joinup.
 * In [Joinup core module](web/modules/custom/joinup_core/README.md) there is
-information on how to handle and create workflows.
+  information on how to handle and create workflows.
+* For some additional details in our SPARQL related functionality, see our
+  [SPARQL developer documentation](./docs/sparql.md).
+* Check the [third party services](./docs/third-party-services.md)
+  documentation for additional information on the services we integrate with.
+
+### Additional information
+
+* [Joinup website](https://joinup.ec.europa.eu/)
+* [Repositories and branches](https://citnet.tech.ec.europa.eu/CITnet/confluence/display/ISAICP/Development+repositories%2C+branches%2C+Jira+tickets)

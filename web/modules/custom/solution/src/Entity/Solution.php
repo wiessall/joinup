@@ -5,11 +5,14 @@ declare(strict_types = 1);
 namespace Drupal\solution\Entity;
 
 use Drupal\Component\Utility\NestedArray;
+use Drupal\Core\Cache\Cache;
+use Drupal\Core\Field\EntityReferenceFieldItemList;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\asset_release\Entity\AssetReleaseInterface;
 use Drupal\collection\Entity\CollectionInterface;
 use Drupal\collection\Exception\MissingCollectionException;
+use Drupal\contact_information\Traits\ContactInformationTrait;
 use Drupal\joinup_bundle_class\DescriptionTrait;
 use Drupal\joinup_bundle_class\JoinupBundleClassFieldAccessTrait;
 use Drupal\joinup_bundle_class\JoinupBundleClassMetaEntityTrait;
@@ -45,6 +48,7 @@ class Solution extends Rdf implements SolutionInterface {
   use StringTranslationTrait;
   use TopicReferencingEntityTrait;
   use DescriptionTrait;
+  use ContactInformationTrait;
 
   /**
    * {@inheritdoc}
@@ -234,6 +238,28 @@ class Solution extends Rdf implements SolutionInterface {
       default:
         return $this->t('You are already subscribed to %group.', $parameters);
     }
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getSharedInField(): ?EntityReferenceFieldItemList {
+    return $this->get('field_is_shared_in');
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getCacheTagsToInvalidate(): array {
+    $tags = $this->id() ? ['solution_download_count:' . md5($this->id())] : [];
+    return Cache::mergeTags(parent::getCacheTagsToInvalidate(), $tags);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getContactInformationFieldName(): string {
+    return 'field_is_contact_information';
   }
 
 }

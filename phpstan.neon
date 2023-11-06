@@ -3,20 +3,30 @@ parameters:
     reportUnmatchedIgnoredErrors: false
     drupal:
         drupal_root: %currentWorkingDirectory%/web
+        entityMapping:
+            og_membership:
+                class: Drupal\og\Entity\OgMembership
+                storage: Drupal\Core\Entity\Sql\SqlContentEntityStorage
+            rdf_entity:
+                class: Drupal\rdf_entity\Entity\Rdf
+                storage: Drupal\sparql_entity_storage\SparqlEntityStorage
+    paths:
+      - src
+      - tests/src
+      - web/modules/custom
+      - web/profiles
+      - web/themes/ventuno
+      - web/themes/iop
     ignoreErrors:
-        -
-            # The rule that suggests to use dependency injection instead of
-            # calling the \Drupal methods is not applicable in Behat test code.
-            message: '#\\Drupal calls should be avoided in classes, use dependency injection instead#'
-            path: tests/src/*
+        # We're not prepared yet for this.
+        - '#\Drupal calls should be avoided in classes, use dependency injection instead#'
+        # As an exception, we allow extending these two classes.
+        - '#Class Drupal\\joinup_group\\Form\\UserCancelForm extends @internal class Drupal\\user\\Form\\UserCancelForm.#'
+        - '#Class Drupal\\joinup_group\\Form\\UserMultipleCancelConfirm extends @internal class Drupal\\user\\Form\\UserMultipleCancelConfirm.#'
+        # See https://github.com/mglaman/phpstan-drupal/issues/586.
+        - '#Call to deprecated method loadRevision\(\) of class Drupal\\Core\\Entity\\(ContentEntityStorageBase|EntityStorageInterface)\:\nin drupal\:10\.1\.0 and is removed from drupal\:11\.0\.0\. Use\n\\Drupal\\Core\\Entity\\RevisionableStorageInterface\:\:loadRevision instead\.#'
+        - '#Class Drupal\\joinup_media\\JoinupMediaLibrary extends @internal class Drupal\\ckeditor5\\Plugin\\CKEditor5Plugin\\MediaLibrary.#'
     excludePaths:
-        # For some reasons, ContinuousPHP reports:
-        # > Class Drupal\Sniffs\NamingConventions\ValidFunctionNameSniff not
-        # > found and could not be autoloaded.
-        # TODO: Investigate and re-add the PHPCS sniff file to static analysis.
         - src/CodingStandards/Sniffs/NamingConventions/ValidUpdateNameSniff.php
     scanFiles:
         - web/modules/contrib/og/src/OgMembershipInterface.php
-includes:
-    - vendor/mglaman/phpstan-drupal/extension.neon
-    - vendor/phpstan/phpstan-deprecation-rules/rules.neon

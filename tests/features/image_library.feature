@@ -1,6 +1,6 @@
 @api
 Feature:
-  - As a moderator, I am able to pre-upload images for logos & banners.
+  - As a moderator, I am able to pre-upload images for logos.
 
   Scenario Outline: Test moderator tasks.
 
@@ -15,12 +15,12 @@ Feature:
     Then I should see the heading "Add <media type label>"
 
     When I fill in "Name" with "Name of <media type label>"
-    And I attach the file "library/<entity bundle>-<type>.<extension>" to "Image"
+    And I attach the file "library/<entity bundle>-logo.<extension>" to "Add a new file"
     And I press "Save"
     Then I should see the success message "<media type label> Name of <media type label> has been created."
     And I should see the link "Name of <media type label>"
     # Check if the paths were correctly configured.
-    And the response should contain "/sites/default/files/styles/thumbnail/public/library/<entity bundle>/<type>/<entity bundle>-<type>.<extension>"
+    And the response should contain "/sites/default/files/styles/thumbnail/public/library/<entity bundle>/logo/<entity bundle>-logo.<extension>"
 
     # Can edit.
     When I click "Edit" in the "Name of <media type label>" row
@@ -34,10 +34,8 @@ Feature:
     Then I should see the success message "The media item Name of <media type label> has been deleted."
 
     Examples:
-      | media type label  | entity bundle | type   | extension |
-      | Collection banner | collection    | banner | jpg       |
-      | Collection logo   | collection    | logo   | png       |
-      | Solution banner   | solution      | banner | jpg       |
-      | Solution logo     | solution      | logo   | png       |
-      | News logo         | news          | logo   | png       |
-      | Event logo        | event         | logo   | png       |
+      | media type label  | entity bundle | extension |
+      | Collection logo   | collection    | png       |
+      | Solution logo     | solution      | png       |
+      | News logo         | news          | png       |
+      | Event logo        | event         | png       |

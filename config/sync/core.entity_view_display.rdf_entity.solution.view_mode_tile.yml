@@ -6,7 +6,6 @@ dependencies:
     - core.entity_view_mode.rdf_entity.view_mode_tile
     - field.field.rdf_entity.solution.field_is_actor
     - field.field.rdf_entity.solution.field_is_affiliations_requests
-    - field.field.rdf_entity.solution.field_is_banner
     - field.field.rdf_entity.solution.field_is_business_process
     - field.field.rdf_entity.solution.field_is_contact_information
     - field.field.rdf_entity.solution.field_is_content
@@ -40,16 +39,16 @@ dependencies:
     - field.field.rdf_entity.solution.field_is_webdav_url
     - field.field.rdf_entity.solution.field_is_wiki
     - field.field.rdf_entity.solution.field_keywords
-    - field.field.rdf_entity.solution.field_topic
     - field.field.rdf_entity.solution.field_short_id
     - field.field.rdf_entity.solution.field_site_featured
     - field.field.rdf_entity.solution.field_spatial_coverage
     - field.field.rdf_entity.solution.field_status
-    - image.style.horizontal_medium_image
+    - field.field.rdf_entity.solution.field_topic
     - rdf_entity.rdfentity.solution
+    - responsive_image.styles.tile
   module:
-    - image
-    - smart_trim
+    - joinup_html_stripper
+    - responsive_image
     - template_suggestion
     - user
 id: rdf_entity.solution.view_mode_tile
@@ -58,54 +57,46 @@ bundle: solution
 mode: view_mode_tile
 content:
   download_total:
-    weight: 4
-    region: content
     settings: {  }
     third_party_settings: {  }
+    weight: 2
+    region: content
   field_is_description:
-    weight: 3
+    type: joinup_html_stripper_stripped
     label: hidden
     settings:
-      trim_length: 200
-      trim_type: chars
-      trim_suffix: …
-      more_link: false
-      more_text: More
-      trim_options:
-        text: false
-      more_class: more-link
-      summary_handler: full
-      wrap_output: false
-      wrap_class: trimmed
+      trim_length: 600
     third_party_settings:
       template_suggestion:
-        template_suggestion: ''
-    type: smart_trim
+        template_suggestion: bare
+    weight: 1
     region: content
   field_is_logo:
-    type: image
-    weight: 2
+    type: responsive_image
     label: hidden
     settings:
-      image_style: horizontal_medium_image
-      image_link: content
-    third_party_settings: {  }
+      responsive_image_style: tile
+      image_link: ''
+      image_loading:
+        attribute: eager
+    third_party_settings:
+      template_suggestion:
+        template_suggestion: bare
+    weight: 0
     region: content
-  label:
-    type: string
-    weight: 1
-    label: hidden
-    settings:
-      link_to_entity: true
+  flag_like_rdf_entity:
+    settings: {  }
     third_party_settings: {  }
+    weight: 10
     region: content
 hidden:
   changed: true
   collections: true
   created: true
+  eif_perspective: true
+  featured: true
   field_is_actor: true
   field_is_affiliations_requests: true
-  field_is_banner: true
   field_is_business_process: true
   field_is_contact_information: true
   field_is_content: true
@@ -142,11 +133,14 @@ hidden:
   field_spatial_coverage: true
   field_status: true
   field_topic: true
+  label: true
   langcode: true
   og_group: true
-  rdf_entity_field_is_content_inline_facets: true
-  rdf_entity_field_is_content_top: true
+  pinned_in: true
+  rdf_entity_solution_field_is_content_inline_facets: true
+  rdf_entity_solution_field_is_content_top: true
   read_more: true
+  related_solution: true
   related_solutions: true
   releases_overview: true
   search_api_excerpt: true

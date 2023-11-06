@@ -6,6 +6,7 @@ namespace Drupal\joinup\Traits;
 
 use Drupal\Component\Render\MarkupInterface;
 use Drupal\user\UserInterface;
+use PHPUnit\Framework\ExpectationFailedException;
 
 /**
  * Contains utility methods.
@@ -79,7 +80,7 @@ trait MailCollectorTrait {
    *
    * @param string $subject
    *   The subject of the email sent.
-   * @param string $recipient_mail
+   * @param string $recipient
    *   The email of the recipient.
    * @param bool $strict
    *   When set to TRUE will throw an exception if no mails are found with the
@@ -88,44 +89,103 @@ trait MailCollectorTrait {
    * @return array
    *   An array of emails found.
    *
-   * @throws \Exception
-   *   Thrown if no emails are found or no user exists with the given data.
+   * @throws \PHPUnit\Framework\ExpectationFailedException
+   *   When no emails are found with the given subject and/or recipient.
    */
-  protected function getEmailsBySubjectAndMail(string $subject, string $recipient_mail, bool $strict = TRUE): array {
-    $mails = $this->getMails();
-    if (empty($mails)) {
-      throw new \Exception('No mail was sent.');
-    }
-
-    $emails_found = [];
-    foreach ($mails as $mail) {
-      if ($mail['to'] !== $recipient_mail) {
-        continue;
-      }
-
-      if ($subject !== trim($mail['subject'])) {
-        continue;
-      }
-
-      $emails_found[] = $mail;
-    }
-
+  protected function getEmailsBySubjectAndMail(string $subject, string $recipient, bool $strict = TRUE): array {
+    $emails_found = $this->getMails(['to' => $recipient, 'subject' => $subject]);
     if (empty($emails_found) && $strict) {
-      throw new \Exception("No emails found sent to {$recipient_mail} with subject '{$subject}'.");
+      throw new ExpectationFailedException("No emails found sent to {$recipient} with subject '{$subject}'.");
     }
-
     return $emails_found;
   }
 
   /**
-   * Returns all collected emails.
+   * Gets an array containing all emails sent during this test case.
    *
-   * @return array
-   *   All the mails stored in the mail collector.
+   * Not that this method is 98% copied from AssertMailTrait::getMails(), with
+   * two exceptions:
+   * - It uses \Drupal::state() to get the state service.
+   * - It clears the state service cache before doing any processing.
+   *
+   * @param array $filter
+   *   An array containing key/value pairs used to filter the emails that are
+   *   returned.
+   *
+   * @return array[]
+   *   An array containing email messages captured during the current test.
+   *
+   * @see \Drupal\Core\Test\AssertMailTrait::getMails()
    */
-  protected function getMails(): array {
+  protected function getMails(array $filter = []): array {
     \Drupal::state()->resetCache();
-    return \Drupal::state()->get('system.test_mail_collector', []);
+    $captured_emails = \Drupal::state()->get('system.test_mail_collector', []);
+    $filtered_emails = [];
+
+    foreach ($captured_emails as $message) {
+      foreach ($filter as $key => $value) {
+        if (!isset($message[$key]) || $message[$key] != $value) {
+          continue 2;
+        }
+      }
+      $filtered_emails[] = $message;
+    }
+
+    return $filtered_emails;
+  }
+
+  /**
+   * Clicks on a link matching a pattern given the email text and the recipient.
+   *
+   * Note that if multiple messages have been sent to the same user, all of them
+   * will be checked but only the first instance of the link matching the
+   * pattern will be clicked.
+   *
+   * @param string $pattern
+   *   The pattern that the link should match to.
+   * @param string $mail
+   *   The recipient's mail.
+   * @param string $no_mail_message
+   *   The exception message to show when no mail was found that matches the
+   *   given e-mail address.
+   * @param string $no_match_message
+   *   The exception message to show when the given pattern was not found in the
+   *   messages sent to the given e-mail address.
+   * @param string|null $template
+   *   (optional) Message template to filter the messages by.
+   *
+   * @throws \Exception
+   *   If no mail was found linked to the given email or if the pattern did not
+   *   find any matches.
+   */
+  protected function assertMailLinkMatchingPattern(string $pattern, string $mail, string $no_mail_message, string $no_match_message, ?string $template = NULL): void {
+    $found = FALSE;
+    foreach ($this->getMails() as $mail_sent) {
+      // Optionally filter by mail template.
+      if (!empty($template) && $mail_sent['key'] !== $template) {
+        continue;
+      }
+
+      // Filter out messages that do not match the given e-mail address.
+      if ($mail_sent['to'] !== $mail) {
+        continue;
+      }
+
+      // This is a flag that a message was found to have been sent to the user.
+      $found = TRUE;
+      if (!preg_match($pattern, $mail_sent['plain'], $match)) {
+        continue;
+      }
+
+      $link = strpos($pattern, '?<url>') === FALSE ? $match[0] : $match['url'];
+      $this->visitPath($link);
+      return;
+    }
+
+    if ($found) {
+      throw new \Exception($no_match_message);
+    }
+    throw new \Exception($no_mail_message);
   }
 
 }

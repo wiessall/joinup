@@ -3,8 +3,7 @@ type: module
 description: Provides listings of content that can be hand picked by moderators.
 package: Joinup
 
-core_version_requirement: ^8 || ^9
-php: 7.1
+core_version_requirement: ">= 9.4"
 
 dependencies:
   - entityqueue:entityqueue

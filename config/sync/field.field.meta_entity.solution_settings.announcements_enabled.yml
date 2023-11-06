@@ -1,0 +1,23 @@
+uuid: 4a339575-5f98-4491-80e6-4c1bbde3e056
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.meta_entity.announcements_enabled
+    - meta_entity.type.solution_settings
+id: meta_entity.solution_settings.announcements_enabled
+field_name: announcements_enabled
+entity_type: meta_entity
+bundle: solution_settings
+label: 'Announcements enabled'
+description: ''
+required: false
+translatable: false
+default_value:
+  -
+    value: 1
+default_value_callback: ''
+settings:
+  on_label: 'On'
+  off_label: 'Off'
+field_type: boolean

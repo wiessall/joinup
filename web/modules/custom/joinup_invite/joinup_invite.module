@@ -13,16 +13,16 @@ use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\joinup_invite\Entity\InvitationInterface;
 use Drupal\og\OgMembershipInterface;
+use Drupal\user\UserInterface;
 
 /**
  * Implements hook_user_cancel().
  *
  * A user account cancellation removes all its invitations.
  */
-function joinup_invite_user_cancel($edit, $account, $method) {
+function joinup_invite_user_cancel(array $edit, UserInterface $account, string $method): void {
   $storage = \Drupal::entityTypeManager()->getStorage('invitation');
-  /** @var \Drupal\user\UserInterface $account */
-  if ($ids = $storage->getQuery()->condition('uid', $account->id())->execute()) {
+  if ($ids = $storage->getQuery()->accessCheck(FALSE)->condition('uid', $account->id())->execute()) {
     $storage->delete($storage->loadMultiple($ids));
   }
 }
@@ -32,10 +32,10 @@ function joinup_invite_user_cancel($edit, $account, $method) {
  *
  * A content entity deletion should cleanup the related invitations.
  */
-function joinup_invite_entity_delete(EntityInterface $entity) {
+function joinup_invite_entity_delete(EntityInterface $entity): void {
   if ($entity instanceof ContentEntityInterface) {
     $storage = \Drupal::entityTypeManager()->getStorage('invitation');
-    $ids = $storage->getQuery()
+    $ids = $storage->getQuery()->accessCheck(FALSE)
       ->condition('entity_type', $entity->getEntityTypeId())
       ->condition('entity_id', $entity->id())
       ->execute();
@@ -50,7 +50,7 @@ function joinup_invite_entity_delete(EntityInterface $entity) {
  *
  * Set the og_role cache contexts to the local tasks block.
  */
-function joinup_invite_block_view_alter(array &$build, BlockPluginInterface $block) {
+function joinup_invite_block_view_alter(array &$build, BlockPluginInterface $block): void {
   if (isset($build['#id']) && ($build['#id'] === 'primaryadminactions')) {
     // The primaryadminactions contains the 'Add facilitator' link which is
     // accessible only to facilitators. The members page though is accessible
@@ -66,7 +66,7 @@ function joinup_invite_block_view_alter(array &$build, BlockPluginInterface $blo
 /**
  * Applies a role from an invitation if a user was invited but joined manually.
  */
-function joinup_invite_og_membership_presave(OgMembershipInterface $og_membership) {
+function joinup_invite_og_membership_presave(OgMembershipInterface $og_membership): void {
   $user_id = $og_membership->getOwnerId();
   $entity = $og_membership->getGroup();
   $invitations = \Drupal::entityTypeManager()->getStorage('invitation')->loadByProperties([
@@ -88,4 +88,31 @@ function joinup_invite_og_membership_presave(OgMembershipInterface $og_membershi
   $og_membership->setState(OgMembershipInterface::STATE_ACTIVE);
   $invitation->setStatus(InvitationInterface::STATUS_ACCEPTED);
   $invitation->save();
+}
+
+/**
+ * Implements hook_theme().
+ */
+function joinup_invite_theme(array $existing, string $type, string $theme, string $path): array {
+  return [
+    'chip' => [
+      'render element' => 'element',
+    ],
+    'input__chip_button' => [
+      'render element' => 'element',
+    ],
+  ];
+}
+
+/**
+ * Prepares variables for the "chip" template.
+ *
+ * @param array $variables
+ *   An associative array containing:
+ *   - element: An associative array containing the properties of the element.
+ *     Properties used: #text.
+ */
+function template_preprocess_chip(array &$variables): void {
+  $element = $variables['element'];
+  $variables['text'] = $element['#text'];
 }

@@ -19,12 +19,12 @@ dependencies:
     - field.field.node.event.field_location
     - field.field.node.event.field_organisation
     - field.field.node.event.field_organisation_type
-    - field.field.node.event.field_topic
     - field.field.node.event.field_scope
     - field.field.node.event.field_shared_in
     - field.field.node.event.field_short_title
     - field.field.node.event.field_site_featured
     - field.field.node.event.field_state
+    - field.field.node.event.field_topic
     - field.field.node.event.og_audience
     - node.type.event
   module:
@@ -38,33 +38,38 @@ bundle: event
 mode: moderation
 content:
   body:
-    label: hidden
     type: smart_trim
-    weight: 2
+    label: hidden
     settings:
       trim_length: 600
       trim_type: chars
       trim_suffix: …
-      more_link: false
-      more_text: More
+      wrap_output: false
+      wrap_class: trimmed
+      more:
+        display_link: false
+        target_blank: false
+        link_trim_only: false
+        class: more-link
+        text: More
+        aria_label: 'Read more about [node:title]'
       summary_handler: trim
       trim_options:
         text: false
-      more_class: more-link
-      wrap_output: false
-      wrap_class: trimmed
     third_party_settings:
       template_suggestion:
         template_suggestion: ''
+    weight: 1
     region: content
   field_state:
     type: list_default
-    weight: 1
-    region: content
     label: inline
     settings: {  }
     third_party_settings: {  }
+    weight: 0
+    region: content
 hidden:
+  featured: true
   field_attachment: true
   field_comments: true
   field_event_agenda: true
@@ -84,11 +89,14 @@ hidden:
   field_short_title: true
   field_site_featured: true
   field_topic: true
+  flag_like_node: true
   langcode: true
   links: true
   og_audience: true
+  pinned_in: true
   published_at: true
   read_more: true
   report: true
   search_api_excerpt: true
   share_link: true
+  visit_count: true

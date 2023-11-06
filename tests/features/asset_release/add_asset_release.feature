@@ -9,7 +9,7 @@ Feature: "Add release" visibility options.
       | title         | Release solution test |
       | description   | My awesome solution   |
       | documentation | text.pdf              |
-      | state         | validated             |
+      | state         | published             |
 
     When I am logged in as a "facilitator" of the "Release solution test" solution
     And I go to the homepage of the "Release solution test" solution
@@ -31,13 +31,22 @@ Feature: "Add release" visibility options.
       | Organisation example | Company |
     And the following solutions:
       | title          | description        | documentation | owner                | state     |
-      | Release Test 1 | test description 1 | text.pdf      | Organisation example | validated |
+      | Release Test 1 | test description 1 | text.pdf      | Organisation example | published |
     And the following release:
       | title          | Chasing shadows     |
       | is version of  | Release Test 1      |
       | release number | 1.0                 |
-      | state          | validated           |
+      | status         | Deprecated          |
+      | state          | published           |
       | creation date  | 2014-08-30 23:59:00 |
+
+    # Assert that the "Release" tiles are present and contain version, release date, label and bundle type.
+    When I go to the homepage of the "Release Test 1" solution
+    Then I should see the "Chasing shadows" tile
+    And I should see the text "v1.0" in the "Chasing shadows" tile
+    And I should see the text "Release date: 30/08/2014" in the "Chasing shadows" tile
+    And I should see the statistics "Deprecated" in the "Chasing shadows" tile
+    And I should see the text "Release" in the "Chasing shadows" tile
 
     # Check that the release should have a unique combination of title and
     # version number.
@@ -45,9 +54,9 @@ Feature: "Add release" visibility options.
     When I go to the homepage of the "Release Test 1" solution
     And I click "Add release"
     Then I should see the heading "Add Release"
-    And the following fields should be present "Name, Release number, Release notes, Upload a new file or enter a URL, Geographical coverage, Keyword, Status, Language, Date, Time"
+    And the following fields should be present "Name, Release number, Release notes, Upload a new file or enter a URL, Geographical coverage, Search keywords, Status, Language, Date, Time"
     # The entity is new, so the current workflow state should not be shown.
-    And the following fields should not be present "Description, Logo, Banner, Solution type, Contact information, Included asset, Translation, Distribution, Current workflow state, Langcode, Motivation"
+    And the following fields should not be present "Description, Logo, Solution type, Contact information, Included asset, Translation, Distribution, Current workflow state, Langcode, Motivation"
 
     When I press "Publish"
     Then I should see the following error messages:
@@ -95,7 +104,7 @@ Feature: "Add release" visibility options.
     Given the following collection:
       | uri   | http://example1regression |
       | title | The Stripped Stream       |
-      | state | validated                 |
+      | state | published                 |
 
     When I am not logged in
     And I go to "/rdf_entity/http_e_f_fexample1regression/asset_release/add"
@@ -111,7 +120,7 @@ Feature: "Add release" visibility options.
       | Organisation example two | Company |
     And the following solutions:
       | title          | description        | documentation | owner                    | state     |
-      | Release Test 2 | test description 2 | text.pdf      | Organisation example two | validated |
+      | Release Test 2 | test description 2 | text.pdf      | Organisation example two | published |
     When I am logged in as a "facilitator" of the "Release Test 2" solution
     And I go to the homepage of the "Release Test 2" solution
     And I click "Add release" in the plus button menu

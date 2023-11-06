@@ -15,9 +15,7 @@ use Drupal\Core\Routing\RedirectDestinationTrait;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\Url;
 use Drupal\collection\Entity\CollectionInterface;
-use Drupal\interoperable_europe\InteroperableEuropeCollectionInterface;
 use Drupal\joinup_collection\JoinupCollectionHelper;
-use Drupal\node\NodeInterface;
 use Exception;
 use Symfony\Component\HttpFoundation\RequestStack;
 
@@ -90,21 +88,7 @@ class MenuHelper implements MenuHelperInterface {
    * {@inheritdoc}
    */
   public function getBclAccountMenu(): array {
-    $tree = $this->menuLinkTree->load('account', new MenuTreeParameters());
-    $manipulators = [
-      ['callable' => 'menu.default_tree_manipulators:checkAccess'],
-      ['callable' => 'menu.default_tree_manipulators:generateIndexAndSort'],
-    ];
-    $tree = $this->menuLinkTree->transform($tree, $manipulators);
-    $tree = array_filter($tree, function (MenuLinkTreeElement $element): bool {
-      // Hide inaccessible links, unpublished links, as well as the 'EU Login
-      // info' link. The latter is only intended for anonymous users.
-      // @see joinup_eulogin_preprocess_menu()
-      return $element->access instanceof AccessResultInterface &&
-        $element->access->isAllowed() &&
-        $element->link->isEnabled() &&
-        $element->link->getPluginId() !== 'joinup_eulogin.eu_login_info';
-    });
+    $tree = $this->getMenuLinkElements('account');
 
     return array_map(function (MenuLinkTreeElement $element): array {
       return [
@@ -155,6 +139,7 @@ class MenuHelper implements MenuHelperInterface {
       'description' => $this->t('As a signed-in user you can create content, become a member of a community, receive notifications on your favourite solutions and topics, and access all other features available on the platform.'),
     ];
     $anonymous_links[] = [
+      'id' => 'get-started',
       'label' => $this->t('Get started'),
       'popover' => $popover,
     ];
@@ -180,7 +165,7 @@ class MenuHelper implements MenuHelperInterface {
       // collection is considered to be optional. It is for example possible for
       // a project to reuse the Joinup open source code without hosting a
       // "Joinup" collection.
-      // However in scope of the Ventuno theme the About Us link is considered
+      // However, in scope of the Ventuno theme the About Us link is considered
       // to be an important element, so we log a warning to alert the webmaster
       // that corrective action is required.
       $this->logger->get('joinup_menu')->warning('"About us" link could not be rendered because the Joinup collection is not defined or doesn\'t have an About page.');
@@ -193,32 +178,52 @@ class MenuHelper implements MenuHelperInterface {
    * {@inheritdoc}
    */
   public function getBclLandingPageLinks(): array {
-    $node_storage = $this->entityTypeManager->getStorage('node');
-    // Include links to 'Interoperable Europe' and 'Interoperability Solutions'.
-    $landing_page_links = [];
-    foreach ([
-      InteroperableEuropeCollectionInterface::LANDING_PAGE_ENTITY_ID,
-      JoinupCollectionHelper::INTEROPERABILITY_SOLUTIONS_ENTITY_ID,
-    ] as $node_id) {
-      try {
-        $node = $node_storage->load($node_id);
-        if (!$node instanceof NodeInterface) {
-          throw new Exception();
+    $tree = $this->getMenuLinkElements('navbar');
+
+    return array_map(function (MenuLinkTreeElement $element): array {
+      $link = [
+        'link' => $element->link->getUrlObject(),
+        'label' => $element->link->getTitle(),
+        'children' => [],
+      ];
+      if ($element->hasChildren) {
+        foreach ($element->subtree as $child) {
+          $link['children'][] = [
+            'link' => $child->link->getUrlObject(),
+            'label' => $child->link->getTitle(),
+          ];
         }
-        $label = $node->getTitle();
-        $url = $node->toUrl();
-        $landing_page_links[] = [
-          'label' => $label,
-          'link' => $url,
-        ];
       }
-      catch (Exception $e) {
-        // The custom pages cannot be loaded. This should not crash the page
-        // since these pages might not exist in projects that reuse the Joinup
-        // open source project.
-      }
-    }
-    return $landing_page_links;
+
+      return $link;
+    }, $tree);
+  }
+
+  /**
+   * Gets menu link elements.
+   *
+   * @param string $menu
+   *   Menu machine name.
+   *
+   * @return \Drupal\Core\Menu\MenuLinkTreeElement[]
+   *   Menu links elements.
+   */
+  protected function getMenuLinkElements(string $menu): array {
+    $tree = $this->menuLinkTree->load($menu, new MenuTreeParameters());
+    $manipulators = [
+      ['callable' => 'menu.default_tree_manipulators:checkAccess'],
+      ['callable' => 'menu.default_tree_manipulators:generateIndexAndSort'],
+    ];
+    $tree = $this->menuLinkTree->transform($tree, $manipulators);
+    return array_filter($tree, function (MenuLinkTreeElement $element): bool {
+      // Hide inaccessible links, unpublished links, as well as the 'EU Login
+      // info' link. The latter is only intended for anonymous users.
+      // @see joinup_eulogin_preprocess_menu()
+      return $element->access instanceof AccessResultInterface &&
+        $element->access->isAllowed() &&
+        $element->link->isEnabled() &&
+        $element->link->getPluginId() !== 'joinup_eulogin.eu_login_info';
+    });
   }
 
 }

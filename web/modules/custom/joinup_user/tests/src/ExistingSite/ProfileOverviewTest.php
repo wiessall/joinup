@@ -5,7 +5,6 @@ declare(strict_types = 1);
 namespace Drupal\Tests\joinup_user\ExistingSite;
 
 use Drupal\Tests\joinup_test\ExistingSite\JoinupExistingSiteTestBase;
-use Drupal\Tests\rdf_entity\Traits\DrupalTestTraits\RdfEntityCreationTrait;
 use weitzman\LoginTrait\LoginTrait;
 
 /**
@@ -16,7 +15,6 @@ use weitzman\LoginTrait\LoginTrait;
 class ProfileOverviewTest extends JoinupExistingSiteTestBase {
 
   use LoginTrait;
-  use RdfEntityCreationTrait;
 
   /**
    * The owner of the groups.
@@ -73,7 +71,7 @@ class ProfileOverviewTest extends JoinupExistingSiteTestBase {
       $collection = $this->createRdfEntity([
         'rid' => 'collection',
         'label' => 'Collection ' . $count,
-        'field_ar_state' => 'validated',
+        'field_ar_state' => 'published',
         'uid' => $this->owner->id(),
       ]);
 
@@ -82,7 +80,7 @@ class ProfileOverviewTest extends JoinupExistingSiteTestBase {
         'rid' => 'solution',
         'label' => 'Solution ' . $count,
         'collection' => $collection,
-        'field_is_state' => 'validated',
+        'field_is_state' => 'published',
         'uid' => $this->owner->id(),
       ]);
       $og_membership_manager->createMembership($solution, $this->member)->save();

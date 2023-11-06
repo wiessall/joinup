@@ -8,16 +8,33 @@
 declare(strict_types = 1);
 
 use Drupal\Core\Access\AccessResult;
+use Drupal\Core\Access\AccessResultInterface;
+use Drupal\Core\Ajax\AjaxResponse;
+use Drupal\Core\Ajax\RedirectCommand;
+use Drupal\Core\Cache\Cache;
+use Drupal\Core\Cache\CacheableMetadata;
+use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
+use Drupal\Core\Field\BaseFieldDefinition;
+use Drupal\Core\Field\FieldDefinitionInterface;
+use Drupal\Core\Field\FieldItemListInterface;
+use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Session\AccountInterface;
+use Drupal\Core\StringTranslation\PluralTranslatableMarkup;
+use Drupal\Core\Url;
+use Drupal\contact_information\ContactInformationEmailConfirmInterface;
 use Drupal\contact_information\Entity\ContactInformation;
 use Drupal\contact_information\Entity\ContactInformationInterface;
+use Drupal\contact_information\ParentGroupFieldItemList;
+use Drupal\email_confirmer\EmailConfirmationInterface;
+use Drupal\joinup_group\Entity\GroupInterface;
+use Drupal\rdf_entity\RdfInterface;
 
 /**
  * Implements hook_entity_bundle_info_alter().
  */
-function contact_information_entity_bundle_info_alter(&$bundles) {
+function contact_information_entity_bundle_info_alter(array &$bundles): void {
   if (!empty($bundles['rdf_entity']['contact_information'])) {
     $bundles['rdf_entity']['contact_information']['class'] = ContactInformation::class;
   }
@@ -26,21 +43,24 @@ function contact_information_entity_bundle_info_alter(&$bundles) {
 /**
  * Implements hook_entity_bundle_field_info_alter().
  */
-function contact_information_entity_bundle_field_info_alter(&$fields, EntityTypeInterface $entity_type, $bundle) {
-  // During the development of the contact information functionality we were
-  // helpfully supplied by the business analysts with a regular expression to
-  // validate the email addresses, and they were insistent to use this. So we
-  // use a bespoke regex instead of \Drupal\Component\Utility\EmailValidator.
-  // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-2404
-  if ($entity_type->id() == 'rdf_entity' && $bundle == 'contact_information' && !empty($fields['field_ci_email'])) {
-    $fields['field_ci_email']->addConstraint('JoinupEmail');
+function contact_information_entity_bundle_field_info_alter(array &$fields, EntityTypeInterface $entity_type, string $bundle): void {
+  if ($entity_type->id() === 'rdf_entity' && $bundle === 'contact_information') {
+    $fields['related_group'] = BaseFieldDefinition::create('entity_reference')
+      ->setLabel(t('Related group'))
+      ->setName('related_group')
+      ->setDescription(t('The related group where this contact information entity is attached.'))
+      ->setTargetEntityTypeId('rdf_entity')
+      ->setTargetBundle('contact_information')
+      ->setSetting('target_type', 'rdf_entity')
+      ->setComputed(TRUE)
+      ->setClass(ParentGroupFieldItemList::class);
   }
 }
 
 /**
  * Implements hook_ENTITY_TYPE_presave().
  */
-function contact_information_rdf_entity_presave(EntityInterface $entity) {
+function contact_information_rdf_entity_presave(EntityInterface $entity): void {
   // Handle only contact information entities.
   if ($entity->bundle() != 'contact_information') {
     return;
@@ -48,7 +68,7 @@ function contact_information_rdf_entity_presave(EntityInterface $entity) {
 
   contact_information_entity_auto_label($entity);
 
-  // The initial state of a contact information entity is validated. The contact
+  // The initial state of a contact information entity is published. The contact
   // is created as part of proposing a collection, and in the collection propose
   // form the workflow state is hidden from the user, so it would remain in the
   // "__new__" state after submission.
@@ -65,7 +85,7 @@ function contact_information_rdf_entity_presave(EntityInterface $entity) {
  * Alters the name of the header of the entity column in the inline entity form
  * table in the create form. Header label was 'title' before.
  */
-function contact_information_inline_entity_form_table_fields_alter(&$fields, $context) {
+function contact_information_inline_entity_form_table_fields_alter(array &$fields, array $context): void {
   // Replace the label in the contact information table.
   if (
     $context['entity_type'] == 'rdf_entity' &&
@@ -84,7 +104,10 @@ function contact_information_inline_entity_form_table_fields_alter(&$fields, $co
  * the entity until the parent entity is saved. Due to this, the label column
  * in the widget table would be empty.
  */
-function contact_information_inline_entity_form_entity_form_alter(&$entity_form, &$form_state) {
+function contact_information_inline_entity_form_entity_form_alter(array &$entity_form, FormStateInterface &$form_state): void {
+  if ($entity_form['#entity_type'] !== 'rdf_entity' || $entity_form['#bundle'] !== 'contact_information') {
+    return;
+  }
   // Add an entity builder callback to fill the label field with the values of
   // the name field. This is needed because inline entity form doesn't save
   // the entity until the parent entity is saved. Due to this, the label column
@@ -100,11 +123,7 @@ function contact_information_inline_entity_form_entity_form_alter(&$entity_form,
  * @param \Drupal\Core\Entity\EntityInterface $entity
  *   The entity being built.
  */
-function contact_information_inline_entity_form_entity_builder($entity_type, EntityInterface $entity) {
-  // Handle only contact information entities.
-  if ($entity->bundle() != 'contact_information') {
-    return;
-  }
+function contact_information_inline_entity_form_entity_builder(string $entity_type, EntityInterface $entity): void {
   contact_information_entity_auto_label($entity);
 }
 
@@ -129,7 +148,7 @@ function contact_information_entity_auto_label(EntityInterface $entity) {
  *
  * Implements hook_ENTITY_TYPE_access().
  */
-function contact_information_rdf_entity_access(EntityInterface $entity, $operation, AccountInterface $account) {
+function contact_information_rdf_entity_access(EntityInterface $entity, string $operation, AccountInterface $account): AccessResultInterface {
   if (!$entity instanceof ContactInformationInterface) {
     return AccessResult::neutral();
   }
@@ -169,4 +188,246 @@ function contact_information_rdf_entity_access(EntityInterface $entity, $operati
   }
 
   return AccessResult::neutral();
+}
+
+/**
+ * Implements hook_entity_field_access().
+ */
+function contact_information_entity_field_access(string $operation, FieldDefinitionInterface $field_definition, AccountInterface $account, ?FieldItemListInterface $items = NULL): AccessResultInterface {
+  if ($operation === 'view' && $field_definition->getName() === 'field_ci_email') {
+    $confirmation = \Drupal::getContainer()->get('email_confirmer')->getConfirmation($items->value, 'confirmed', ContactInformationEmailConfirmInterface::REALM);
+    $access = $confirmation && $confirmation->get('confirmed')->value == EmailConfirmationInterface::CONFIRMED ? AccessResult::allowed() : AccessResult::forbidden();
+    /** @var \Drupal\contact_information\Entity\ContactInformationInterface $contact_info */
+    $contact_info = $items->getEntity();
+    return $access
+      ->addCacheableDependency($contact_info)
+      // Depend also on the group that attaches this contact information so that
+      // this field access cache is invalidated together with the group cache.
+      ->addCacheableDependency($contact_info->getRelatedGroup());
+  }
+  return AccessResult::neutral();
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_update().
+ */
+function contact_information_rdf_entity_update(RdfInterface $entity): void {
+  if ($entity instanceof ContactInformationInterface) {
+    /** @var \Drupal\contact_information\Entity\ContactInformationInterface|null $original */
+    if ($original = $entity->original ?? NULL) {
+      $original_email = $original->get('field_ci_email')->value;
+      $email = $entity->get('field_ci_email')->value;
+      if (!empty($original_email) && $original_email !== $email) {
+        /** @var \Drupal\contact_information\ContactInformationEmailConfirmInterface $email_confirm */
+        $email_confirm = \Drupal::service('contact_information.email_confirm');
+        $email_confirm->deleteContactInfoConfirmation($original);
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_delete().
+ */
+function contact_information_rdf_entity_delete(RdfInterface $contact_information): void {
+  if ($contact_information instanceof ContactInformationInterface) {
+    /** @var \Drupal\contact_information\ContactInformationEmailConfirmInterface $email_confirm */
+    $email_confirm = \Drupal::service('contact_information.email_confirm');
+    $email_confirm->deleteContactInfoConfirmation($contact_information);
+  }
+}
+
+/**
+ * Implements hook_email_confirmer().
+ */
+function contact_information_email_confirmer(string $op, EmailConfirmationInterface $confirmation): void {
+  if ($op === 'confirm' && $confirmation->getRealm() === ContactInformationEmailConfirmInterface::REALM) {
+    /** @var \Drupal\contact_information\ContactInformationEmailConfirmInterface $email_confirm */
+    $email_confirm = \Drupal::service('contact_information.email_confirm');
+    if ($gids = $email_confirm->getGroupsUsingContactInfoWithEmail($confirmation->getEmail())) {
+      if ($groups = \Drupal::entityTypeManager()->getStorage('rdf_entity')->loadMultiple($gids)) {
+        // When an email is confirmed, invalidate the cache of groups where the
+        // contact information entities with this email so that each group about
+        // page will refresh from backend and will show the contact form link.
+        foreach ($groups as $group) {
+          Cache::invalidateTags($group->getCacheTagsToInvalidate());
+        }
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_form_BASE_FORM_ID_alter().
+ */
+function contact_information_form_rdf_entity_form_alter(array &$form, FormStateInterface $form_state, string $form_id): void {
+  if ($form_state->getFormObject()->getEntity() instanceof GroupInterface) {
+    $form['actions']['submit']['#submit'][] = 'contact_information_confirm_emails';
+  }
+}
+
+/**
+ * Confirms unconfirmed emails and shows a status message.
+ *
+ * @param array $form
+ *   The form render array.
+ * @param \Drupal\Core\Form\FormStateInterface $form_state
+ *   The form state object.
+ */
+function contact_information_confirm_emails(array &$form, FormStateInterface $form_state): void {
+  /** @var \Drupal\joinup_group\Entity\GroupInterface $group */
+  $group = $form_state->getFormObject()->getEntity();
+  /** @var \Drupal\contact_information\ContactInformationEmailConfirmInterface $email_confirm */
+  $email_confirm = \Drupal::service('contact_information.email_confirm');
+  if ($emails = $email_confirm->confirmEmailsForGroup($group)) {
+    // Make the list predictable.
+    sort($emails);
+    $message = new PluralTranslatableMarkup(
+      count($emails),
+      'A new confirmation message has been sent to @emails.',
+      'New confirmation messages have been sent to @emails.',
+      ['@emails' => implode(', ', $emails)]
+    );
+    \Drupal::messenger()->addStatus($message);
+  }
+}
+
+/**
+ * Implements hook_form_BASE_FORM_ID_alter().
+ */
+function contact_information_form_email_confirmer_settings_alter(array &$form, FormStateInterface $form_state, string $form_id): void {
+  // Add new hash expiration time - 5 days.
+  $form['hash_expiration']['#options'][120] = t('120 hours');
+  $form['#validate'][] = '_contact_information_hash_expiration_validate';
+}
+
+/**
+ * Validates new hash expiration time.
+ */
+function _contact_information_hash_expiration_validate(array &$form, FormStateInterface $form_state): void {
+  // Hash expiration validation.
+  $hash_expiration = intval($form_state->getValue('hash_expiration'));
+  if ($hash_expiration === 120) {
+    // Temporarily store all form errors.
+    $form_errors = $form_state->getErrors();
+
+    // Clear the form errors.
+    $form_state->clearErrors();
+
+    // Remove the field_hash_expiration form error.
+    unset($form_errors['hash_expiration']);
+
+    // Now loop through and re-apply the remaining form error messages.
+    foreach ($form_errors as $name => $error_message) {
+      $form_state->setErrorByName($name, $error_message);
+    }
+  }
+}
+
+/**
+ * Provides an Ajax form submit callback for anonymous authentication.
+ *
+ * This callback replaces the original \Drupal\email_contact\Form\ContactForm
+ * Ajax submit callback and, instead of submitting an email contact form, it
+ * redirects an anonymous user to login or register with EU Login.
+ *
+ * @param array $form
+ *   The form render array.
+ * @param \Drupal\Core\Form\FormStateInterface $form_state
+ *   The form state object.
+ */
+function contact_information_require_login(array $form, FormStateInterface $form_state): AjaxResponse {
+  if (\Drupal::currentUser()->isAuthenticated()) {
+    // Normally, we cannot land here while authenticated.
+    throw new \RuntimeException('Bad request.');
+  }
+  /** @var \Drupal\contact_information\Entity\ContactInformationInterface $contact_information */
+  if (!$contact_information = \Drupal::routeMatch()->getParameter('entity')) {
+    throw new \RuntimeException('Cannot determine the contact information entity from route match.');
+  }
+  if (!$group = $contact_information->getRelatedGroup()) {
+    throw new \RuntimeException('Cannot determine the group from contact information entity.');
+  }
+
+  // Set a cookie remembering that the user wants to send a message to this
+  // group, using this particular contact information. The cookie is valid for
+  // 30 minutes. If the user takes more time to sign in or register, we assume
+  // they are no longer actively engaged in the joining process.
+  setrawcookie('email_contact_info', rawurlencode($contact_information->id()), \Drupal::time()->getRequestTime() + 1800, '/');
+
+  // Redirect to EU Login, with a query argument instructing to redirect back
+  // to the group page.
+  $url = (new Url('cas.login'))->setOption('query', [
+    'destination' => $group->toUrl('about-page')->toString(),
+  ])->setAbsolute()->toString();
+
+  return (new AjaxResponse())->addCommand(new RedirectCommand($url));
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_view().
+ */
+function contact_information_rdf_entity_view(array &$build, RdfInterface $contact_information, EntityViewDisplayInterface $display, string $view_mode): void {
+  if ($contact_information instanceof ContactInformationInterface && $view_mode === 'about') {
+    if (\Drupal::currentUser()->isAuthenticated()) {
+      // If an anonymous user clicks on the contact information 'Contact us'
+      // link, they are redirected to log in or register with the EU Login
+      // service. After successfully completing the authentication, they are
+      // redirected back to the group about-page where the link is placed. We
+      // attach a Javascript snippet that automatically opens the 'Contact us'
+      // modal dialog.
+      // @see contact_information_form_email_contact_mail_form_alter()
+      // @see \Drupal\contact_information\EventSubscriber\ContactInformationRedirectedEuLoginSubscriber
+      $build['#attached'] = ['library' => ['contact_information/contact-us']];
+      $build += ['#attributes' => []];
+      $build['#attributes']['data-joinup-contact-info-id'] = $contact_information->id();
+    }
+
+    $resend_access = \Drupal::getContainer()->get('joinup_group.group_manager')->access($contact_information->getRelatedGroup(), 'resend email confirmation request');
+    $cacheable_metadata = CacheableMetadata::createFromRenderArray($build);
+    $email_confirmer = \Drupal::getContainer()->get('email_confirmer');
+    $confirmation = $email_confirmer->getConfirmation($contact_information->get('field_ci_email')->value, 'confirmed', ContactInformationEmailConfirmInterface::REALM);
+    if ($confirmation) {
+      $cacheable_metadata->addCacheableDependency($confirmation);
+    }
+    elseif ($resend_access->isAllowed()) {
+      $confirmation = $email_confirmer->getConfirmation($contact_information->get('field_ci_email')->value, 'pending', ContactInformationEmailConfirmInterface::REALM);
+      // If no confirmation is created yet, create one before adding the link
+      // to the form. Normally, we would have a controller to create the
+      // confirmation instead of sending the existing one but the confirmation
+      // is a standard procedure that all contact information entities should
+      // follow, so it is ok to have it created here by default since the user
+      // is already has access.
+      if (!$confirmation) {
+        $confirmation = $email_confirmer->createConfirmation($contact_information->get('field_ci_email')->value);
+        $confirmation
+          ->setRealm(ContactInformationEmailConfirmInterface::REALM)
+          ->save();
+      }
+
+      if (!$confirmation->isConfirmed()) {
+        $confirmation_url = Url::fromRoute('entity.email_confirmer_confirmation.resend', [
+          'confirmation' => $confirmation->id(),
+        ], [
+          'query' => \Drupal::destination()->getAsArray(),
+        ])->toString();
+
+        $build['email_confirm'] = [
+          '#markup' => t('Please <a href=":resend_url">confirm</a> your contact information to enable users to contact you.', [
+            ':resend_url' => $confirmation_url,
+          ]),
+          // Pretend that it's a normal field to ensure the same spacing.
+          '#prefix' => '<div class="fieldset__field">',
+          '#suffix' => '</div>',
+        ];
+      }
+      $cacheable_metadata->addCacheableDependency($confirmation);
+    }
+
+    // Vary the field's cache by whether the user is logged in or not.
+    $cacheable_metadata
+      ->addCacheContexts(['og_role', 'user.roles:authenticated'])
+      ->addCacheableDependency($contact_information)
+      ->applyTo($build);
+  }
 }

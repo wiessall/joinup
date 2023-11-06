@@ -6,7 +6,6 @@ dependencies:
     - core.entity_view_mode.rdf_entity.digest_message_header
     - field.field.rdf_entity.solution.field_is_actor
     - field.field.rdf_entity.solution.field_is_affiliations_requests
-    - field.field.rdf_entity.solution.field_is_banner
     - field.field.rdf_entity.solution.field_is_business_process
     - field.field.rdf_entity.solution.field_is_contact_information
     - field.field.rdf_entity.solution.field_is_content
@@ -40,11 +39,11 @@ dependencies:
     - field.field.rdf_entity.solution.field_is_webdav_url
     - field.field.rdf_entity.solution.field_is_wiki
     - field.field.rdf_entity.solution.field_keywords
-    - field.field.rdf_entity.solution.field_topic
     - field.field.rdf_entity.solution.field_short_id
     - field.field.rdf_entity.solution.field_site_featured
     - field.field.rdf_entity.solution.field_spatial_coverage
     - field.field.rdf_entity.solution.field_status
+    - field.field.rdf_entity.solution.field_topic
     - rdf_entity.rdfentity.solution
   module:
     - user
@@ -55,20 +54,21 @@ mode: digest_message_header
 content:
   label:
     type: string
-    weight: 0
-    region: content
     label: above
     settings:
       link_to_entity: false
     third_party_settings: {  }
+    weight: 0
+    region: content
 hidden:
   changed: true
   collections: true
   created: true
   download_total: true
+  eif_perspective: true
+  featured: true
   field_is_actor: true
   field_is_affiliations_requests: true
-  field_is_banner: true
   field_is_business_process: true
   field_is_contact_information: true
   field_is_content: true
@@ -107,11 +107,14 @@ hidden:
   field_spatial_coverage: true
   field_status: true
   field_topic: true
+  flag_like_rdf_entity: true
   langcode: true
   og_group: true
-  rdf_entity_field_is_content_inline_facets: true
-  rdf_entity_field_is_content_top: true
+  pinned_in: true
+  rdf_entity_solution_field_is_content_inline_facets: true
+  rdf_entity_solution_field_is_content_top: true
   read_more: true
+  related_solution: true
   related_solutions: true
   releases_overview: true
   search_api_excerpt: true

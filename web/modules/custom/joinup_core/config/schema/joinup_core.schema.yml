@@ -52,6 +52,32 @@ field.formatter.settings.daterange_condensed:
       type: date_format
       label: 'Different years format'
 
+field.formatter.settings.addtocall_daterange_condensed:
+  type: field.formatter.settings.addtocal_view
+  label: 'Add to Call condensed date range formatter settings'
+  mapping:
+    day_diff_format:
+      type: date_format
+      label: 'Different days format'
+    month_diff_format:
+      type: date_format
+      label: 'Different months format'
+    year_diff_format:
+      type: date_format
+      label: 'Different years format'
+
+field.formatter.settings.filtered_entity_reference_bundles:
+  type: field.formatter.settings.entity_reference_revisions_entity_view
+  label: 'Add filtered entity reference types formatter settings'
+  mapping:
+    filtered_entity_bundles:
+      type: sequence
+      label: 'Bundles'
+      nullable: true
+      sequence:
+        type: string
+        label: 'Bundle'
+
 field.widget.settings.email_legacy_multicardinality:
   type: field.widget.settings.email_default
 
@@ -72,20 +98,14 @@ condition.plugin.request_route:
         type: string
         label: Route
 
-# Schema for 'joinup_timestamp_timeago' formatter settings.
-field.formatter.settings.joinup_timestamp_timeago:
-  type: field.formatter.settings.timestamp
-  label: 'Joinup Timestamp Timeago display format settings'
+condition.plugin.joinup_content:
+  type: condition.plugin
+  label: Joinup content condition
   mapping:
-    tooltip_format:
-      type: string
-      label: 'Tooltip date format'
-    tooltip_format_custom:
-      type: string
-      label: 'Tooltip custom date format'
-    timeago_settings:
-      type: ignore
-      label: 'Timeago plugin settings'
+    content:
+      type: sequence
+      sequence:
+        type: string
 
 field.formatter.settings.entity_reference_custom_link:
   type: mapping
@@ -114,3 +134,17 @@ block.settings.joinup_local_tasks_block:
     secondary:
       type: boolean
       label: 'Whether secondary tabs are shown'
+
+block.settings.entity_unpublished:
+  type: block_settings
+  label: 'Unpublished content block settings'
+  mapping:
+    states_filter:
+      type: sequence
+      label: 'States filter'
+      sequence:
+        type: string
+        label: 'State'
+    negate_states_filter:
+      type: boolean
+      label: 'Negate states filter'

@@ -1,0 +1,10 @@
+uuid: 3105b714-6269-4df7-9273-1ab42d032656
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+id: node.carousel
+label: Carousel
+targetEntityType: node
+cache: true

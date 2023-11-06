@@ -21,11 +21,10 @@ Feature: User profile
     And I should not see the link "View" in the "Entity actions" region
 
     When I click "Edit"
-    Then the following fields should be present "Current password, Email, Password, Confirm password, First name"
+    Then the following fields should be present "Email, First name"
     And the following fields should be present "Family name, Photo, Country of origin, Professional domain, Business title"
     And the following fields should be present "Facebook, Twitter, LinkedIn, GitHub, SlideShare, Youtube, Vimeo"
     And the following fields should not be present "Time zone"
-    # Username label and user name are on separate lines to be more MDL-like after ISAICP-3770
     And I should see the text "Username"
     And I should see the text "Leonardo Da Vinci"
     And I fill in "First name" with "Leoke"
@@ -36,14 +35,15 @@ Feature: User profile
     And I fill in "Twitter" with "therealdavinci"
     And I fill in "LinkedIn" with "leonardo.davinci"
     And I fill in "GitHub" with "davinci"
+    And I fill in "Mastodon" with "myaccount.pl"
 
     # Verify that the business title is a field limited to 255 characters.
     When I fill in "Business title" with "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent sagittis justo ornare justo porta tristique vitae eu ligula. Mauris iaculis eros id nulla posuere, id luctus orci ultricies. Aenean at leo diam. Aliquam dapibus nibh et est pharetra, quis interdum"
-    And I press the "Save" button
+    And I press "Save"
     Then I should see the error message "Business title cannot be longer than 255 characters but is currently 262 characters long."
 
     When I fill in "Business title" with "Italian Renaissance polymath"
-    And I press the "Save" button
+    And I press "Save"
     Then I should see the success message "The changes have been saved."
     And I should see the heading "Leoke di ser Piero da Vinci" in the "Header" region
     And I see the text "Italian Renaissance polymath" in the "Header" region
@@ -53,6 +53,7 @@ Feature: User profile
     And the link "Twitter" in the "Header" region should point to "https://www.twitter.com/therealdavinci"
     And the link "LinkedIn" in the "Header" region should point to "https://www.linkedin.com/leonardo.davinci"
     And the link "GitHub" in the "Header" region should point to "https://github.com/davinci"
+    And the link "Mastodon" in the "Header" region should point to "https://myaccount.pl"
     And I should not see the link "SlideShare" in the "Header" region
     And I should not see the link "Youtube" in the "Header" region
     And I should not see the link "Vimeo" in the "Header" region
@@ -77,11 +78,11 @@ Feature: User profile
     Then I click "People"
     Then I should be on "admin/people"
     Then I fill in "Name or email contains" with "Leonardo"
-    And I press the "Filter" button
+    And I press "Filter"
     Then I click "Leonardo Da Vinci"
     Then I click "Edit"
-    Then the following fields should be present "Email, Username, Password, Confirm password"
-    And the following fields should be present "First name, Family name, Photo, Professional domain, Business title"
+    Then the following fields should be present "Email, Username"
+    And the following fields should be present "First name, Family name, Add a new file, Professional domain, Business title"
     And the following fields should be present "Country of origin, Organisation"
     And the following fields should not be present "Time zone"
     And I should not see the text "Username: Leonardo Da Vinci"
@@ -89,7 +90,7 @@ Feature: User profile
     And I fill in "Family name" with "di ser Piero da Vinci"
     And I select "Finance in EU" from "Professional domain"
     And I fill in "Country of origin" with "Italy"
-    And I press the "Save" button
+    And I press "Save"
     Then I should see the success message "The changes have been saved."
     And I should see the success message "The user has been notified that their account has been updated."
     And the following email should have been sent:
@@ -105,29 +106,29 @@ Feature: User profile
       | Jayson Granger    | jayson.granger@example.com    |            |             |
       | Clarette Fairburn | clarette.fairburn@example.com | Clarette   | Fairburn    |
     And the following collections:
-      | title                 | description                           | logo     | banner     | state     | creation date    |
-      | Botanic E.D.E.N.      | European Deep Earth Nurturing project | logo.png | banner.jpg | validated | 2017-02-23 10:00 |
-      | Ethic flower handling | Because even flowers have feelings.   | logo.png | banner.jpg | validated | 2017-02-23 12:00 |
+      | title                 | description                           | logo     | state     | creation date    |
+      | Botanic E.D.E.N.      | European Deep Earth Nurturing project | logo.png | published | 2017-02-23 10:00 |
+      | Ethic flower handling | Because even flowers have feelings.   | logo.png | published | 2017-02-23 12:00 |
     And the following solutions:
-      | title              | collection            | description                                     | logo     | banner     | state     | creation date    |
-      | E.C.O. fertilizers | Botanic E.D.E.N.      | Ecologic cool organic fertilizers production.   | logo.png | banner.jpg | validated | 2017-02-23 13:00 |
-      | SOUND project      | Ethic flower handling | Music playlist for growing flowers with rhythm. | logo.png | banner.jpg | validated | 2017-02-23 14:01 |
+      | title              | collection            | description                                     | logo     | state     | creation date    |
+      | E.C.O. fertilizers | Botanic E.D.E.N.      | Ecologic cool organic fertilizers production.   | logo.png | published | 2017-02-23 13:00 |
+      | SOUND project      | Ethic flower handling | Music playlist for growing flowers with rhythm. | logo.png | published | 2017-02-23 14:01 |
     And discussion content:
       | title                          | author          | collection            | state     | created          |
-      | Repopulating blue iris         | Corwin Robert   | Botanic E.D.E.N.      | validated | 2018-06-15 16:00 |
-      | Best topsoil for plant comfort | Anise Edwardson | Ethic flower handling | validated | 2018-09-01 19:30 |
+      | Repopulating blue iris         | Corwin Robert   | Botanic E.D.E.N.      | published | 2018-06-15 16:00 |
+      | Best topsoil for plant comfort | Anise Edwardson | Ethic flower handling | published | 2018-09-01 19:30 |
     And document content:
       | title                    | author        | collection       | state     | created          |
-      | Cherry blossoms schedule | Corwin Robert | Botanic E.D.E.N. | validated | 2017-05-13 16:00 |
+      | Cherry blossoms schedule | Corwin Robert | Botanic E.D.E.N. | published | 2017-05-13 16:00 |
     And event content:
       | title                | author        | collection       | state     | created          |
-      | Spring blossom party | Corwin Robert | Botanic E.D.E.N. | validated | 2018-06-27 18:00 |
+      | Spring blossom party | Corwin Robert | Botanic E.D.E.N. | published | 2018-06-27 18:00 |
     And news content:
       | title                         | author        | collection       | state     | created         |
-      | Discovered new flower species | Corwin Robert | Botanic E.D.E.N. | validated | 2018-11-15 9:01 |
+      | Discovered new flower species | Corwin Robert | Botanic E.D.E.N. | published | 2018-11-15 9:01 |
     And video content:
       | title                 | author        | collection       | state     | created         |
-      | Planting a tree howto | Corwin Robert | Botanic E.D.E.N. | validated | 2017-10-30 9:30 |
+      | Planting a tree howto | Corwin Robert | Botanic E.D.E.N. | published | 2017-10-30 9:30 |
     # Contact information and owner tiles should never be shown.
     And the following contact:
       | name        | Wibo Verhoeven             |
@@ -156,6 +157,7 @@ Feature: User profile
       | Cherry blossoms schedule      |
       | SOUND project                 |
       | Botanic E.D.E.N.              |
+    And I should see the following facet items "Collection, Discussion, Document, Event, News, Solution, Video" in this order
 
     # A message should be shown when visiting a profile of a user without
     # content.
@@ -193,7 +195,7 @@ Feature: User profile
       | Korben Dallas | k.dallas@cabs.services.zorg.corp |
     And collection:
       | title | Federated Army Veterans |
-      | state | validated               |
+      | state | published               |
     # Visit the user profile page for the first time. It should not yet be
     # cached and we should not see anything about the collection since we are
     # not a member.
@@ -210,7 +212,7 @@ Feature: User profile
     # cleared and the collection that was joined should show up.
     Given I am logged in as "Korben Dallas"
     And I go to the homepage of the "Federated Army Veterans" collection
-    And I press the "Join this collection" button
+    And I press "Join this collection"
 
     When I am an anonymous user
     And I go to the public profile of "Korben Dallas"
@@ -226,7 +228,7 @@ Feature: User profile
     Given I am logged in as "Korben Dallas"
     And I go to the homepage of the "Federated Army Veterans" collection
     And I click "Leave this collection"
-    And I press the "Confirm" button
+    And I press "Confirm"
 
     When I am an anonymous user
     And I go to the public profile of "Korben Dallas"
@@ -244,38 +246,52 @@ Feature: User profile
     Then I should not see the link "Subscription settings"
     And I should not see the link "Persistent Logins"
 
-  Scenario: A user, changing its E-mail should receive a notification on his old
-  E-mail address and a verification link on its new address.
-
+  Scenario: See archived content in user profile.
     Given users:
-      | Username       | E-mail         | Password | First name | Family name |
-      | Caitlyn Jenner | he@example.com | secret   | Caitlyn    | Jenner      |
-    When I am logged in as "Caitlyn Jenner"
-    And I am on the homepage
-    And I click "My account"
-    When I click "Edit"
-    Then the "Email" field should contain "he@example.com"
+      | Username          | E-mail                        |
+      | Janny Robert      | janny.robert@example.com      |
+      | Clarise Edwardson | clarise.edwardson@example.com |
+    And the following collections:
+      | title            | description                           | logo     | state     | creation date    | author             |
+      | Lake E.D.E.N.    | European Deep Earth Nurturing project | logo.png | published | 2017-02-23 10:00 | Janny Robert       |
+      | Rose is red      | Better descriptions ever              | logo.png | published | 2017-02-23 10:00 | Clarise Edwardson  |
+      | Lone handling    | Because even flowers have feelings.   | logo.png | archived  | 2017-02-23 12:00 | Janny Robert       |
+    And discussion content:
+      | title                   | author          | collection    | state     | created         |
+      | Repopulating green iris | Janny Robert   | Lake E.D.E.N. | published | 2018-06-15 16:00 |
+      | Best plant comfort      | Janny Robert   | Lone handling | published | 2018-09-01 19:30 |
+    And document content:
+      | title           | author       | collection    | state     | created          |
+      | Cherry schedule | Janny Robert | Lake E.D.E.N. | published | 2017-05-13 16:00 |
+      | Cherry arch     | Janny Robert | Lake E.D.E.N. | archived  | 2017-05-13 16:00 |
+    And news content:
+      | title             | author       | collection    | state     | created         |
+      | Discovered flower | Janny Robert | Lake E.D.E.N. | published | 2018-11-15 9:01 |
+      | Purple flower     | Janny Robert | Lake E.D.E.N. | published | 2018-11-15 9:01 |
+      | Blue flower       | Janny Robert | Lake E.D.E.N. | archived  | 2018-11-15 9:01 |
 
-    Given I fill in "Current password" with "secret"
-    And I fill in "Email" with "she@example.com"
-    When I press "Save"
-    Then I should see the following warning messages:
-      | warning messages                                                                                                 |
-      | Your updated email address needs to be validated. Further instructions have been sent to your new email address. |
-    And the following email should have been sent:
-      | recipient_mail | he@example.com                                                                                                          |
-      | subject        | Joinup: Email change information for Caitlyn Jenner                                                                     |
-      | body           | In order to complete the change you will need to follow the instructions sent to your new email address within one day. |
-    And the following email should have been sent:
-      | recipient_mail | she@example.com                                                                                                                   |
-      | subject        | Joinup: Email change information for Caitlyn Jenner                                                                               |
-      | body           | A request to change your email address has been made in your Joinup profile. To confirm the request, please click the link below: |
+    When I am an anonymous user
+    And I go to the public profile of "Clarise Edwardson"
+    Then I should see the heading "Clarise Edwardson"
+    And I should see the text "Show archived"
+    When I click "Show archived"
+    And I should see 0 tiles
 
-    But I click the mail change link from the email sent to "she@example.com"
-    Then I should see the following success messages:
-      | success messages                                        |
-      | Your email address has been changed to she@example.com. |
-    # Check that the E-mail has been successfully updated.
-    When I click "My account"
-    And I click "Edit"
-    Then the "Email" field should contain "she@example.com"
+    When I am an anonymous user
+    And I go to the public profile of "Janny Robert"
+    Then I should see the heading "Janny Robert"
+    And I should see the text "Show archived"
+    Then I should see the following tiles in the correct order:
+      | Discovered flower         |
+      | Purple flower             |
+      | Best plant comfort        |
+      | Repopulating green iris   |
+      | Cherry schedule           |
+      | Lake E.D.E.N.             |
+    And I should not see the "Archive news" tile
+
+    When I click "Show archived"
+    Then I should see the following tiles in the correct order:
+      | Blue flower   |
+      | Cherry arch   |
+      | Lone handling |

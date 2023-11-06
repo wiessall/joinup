@@ -20,24 +20,24 @@ mode: about
 content:
   field_owner_name:
     type: string
-    weight: 0
-    region: content
     label: above
     settings:
       link_to_entity: false
     third_party_settings:
       template_suggestion:
         template_suggestion: fieldset
+    weight: 0
+    region: content
   field_owner_type:
     type: entity_reference_label
-    weight: 1
-    region: content
     label: above
     settings:
       link: false
     third_party_settings:
       template_suggestion:
         template_suggestion: fieldset
+    weight: 1
+    region: content
 hidden:
   changed: true
   created: true

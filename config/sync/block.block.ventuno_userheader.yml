@@ -10,15 +10,15 @@ _core:
   default_config_hash: cUHOddgt8ZfDNPWn5Oz4x-XWRYRKnfmp23iF-wfobwg
 id: ventuno_userheader
 theme: ventuno
-region: header_bottom
-weight: -24
+region: header
+weight: -26
 provider: null
 plugin: user_header_block
 settings:
   id: user_header_block
   label: 'User header'
-  provider: joinup_user
   label_display: '0'
+  provider: joinup_user
   context_mapping:
     user_route: '@joinup_user.user_route_context:user_route'
 visibility: {  }

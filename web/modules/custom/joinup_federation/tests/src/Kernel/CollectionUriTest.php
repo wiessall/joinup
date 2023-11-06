@@ -43,10 +43,9 @@ class CollectionUriTest extends StepTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp() {
+  protected function setUp(): void {
     parent::setUp();
 
-    $this->installSchema('system', ['key_value_expire']);
     // Create the collection bundle.
     RdfEntityType::create(['rid' => 'collection', 'name' => 'Collection'])->save();
     // Create graph and mapping.

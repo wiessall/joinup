@@ -10,6 +10,9 @@ dependencies:
     - field.field.rdf_entity.contact_information.field_ci_webpage
     - rdf_entity.rdfentity.contact_information
   module:
+    - email_contact
+    - field_delimiter
+    - field_formatter_range
     - link
     - template_suggestion
     - user
@@ -21,37 +24,50 @@ bundle: contact_information
 mode: about
 content:
   field_ci_email:
-    weight: 1
-    label: above
-    settings: {  }
+    type: email_contact_link
+    label: hidden
+    settings:
+      link_text: 'Contact us'
+      redirection_to: custom
+      custom_path: ''
+      include_values: '1'
+      default_message: ''
+      modal: true
+      title: 'Contact us'
     third_party_settings:
+      field_delimiter:
+        delimiter: ''
+      field_formatter_range:
+        order: 0
+        limit: 0
+        offset: 0
       template_suggestion:
         template_suggestion: fieldset
-    type: email_mailto
+    weight: 1
     region: content
   field_ci_name:
     type: string
-    weight: 0
     label: above
     settings:
       link_to_entity: false
     third_party_settings:
       template_suggestion:
         template_suggestion: fieldset
+    weight: 0
     region: content
   field_ci_webpage:
-    weight: 2
+    type: link
     label: above
     settings:
       trim_length: 80
-      target: _blank
       url_only: false
       url_plain: false
       rel: '0'
+      target: _blank
     third_party_settings:
       template_suggestion:
         template_suggestion: fieldset
-    type: link
+    weight: 2
     region: content
 hidden:
   changed: true

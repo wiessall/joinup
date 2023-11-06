@@ -3,7 +3,10 @@ langcode: en
 status: true
 dependencies:
   config:
+    - field.field.meta_entity.collection_settings.announcements_enabled
     - field.field.meta_entity.collection_settings.glossary_link_only_first
+    - field.field.meta_entity.collection_settings.landing_page
+    - field.field.meta_entity.collection_settings.metadata_banner_disabled
     - meta_entity.type.collection_settings
   module:
     - field_group
@@ -12,29 +15,50 @@ third_party_settings:
     group_glossary_settings:
       children:
         - glossary_link_only_first
+      label: 'Glossary settings'
+      region: content
       parent_name: ''
       weight: 0
       format_type: details
-      region: content
       format_settings:
-        id: ''
         classes: ''
-        description: ''
+        id: ''
         open: true
+        description: ''
         required_fields: true
-      label: 'Glossary settings'
 id: meta_entity.collection_settings.default
 targetEntityType: meta_entity
 bundle: collection_settings
 mode: default
 content:
-  glossary_link_only_first:
+  announcements_enabled:
+    type: boolean_checkbox
     weight: 1
+    region: content
     settings:
       display_label: true
     third_party_settings: {  }
+  glossary_link_only_first:
     type: boolean_checkbox
+    weight: 1
     region: content
+    settings:
+      display_label: true
+    third_party_settings: {  }
+  landing_page:
+    type: options_select
+    weight: 3
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  metadata_banner_disabled:
+    type: boolean_checkbox
+    weight: 2
+    region: content
+    settings:
+      display_label: true
+    third_party_settings: {  }
 hidden:
   label: true
+  path: true
   target: true

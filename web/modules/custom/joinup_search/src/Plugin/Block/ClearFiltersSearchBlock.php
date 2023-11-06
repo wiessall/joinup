@@ -63,7 +63,7 @@ class ClearFiltersSearchBlock extends BlockBase implements ContainerFactoryPlugi
    * {@inheritdoc}
    */
   public function build() {
-    $request = $this->requestStack->getMasterRequest();
+    $request = $this->requestStack->getMainRequest();
     $query_params = $request->query->all();
     $arr = array_diff_key($query_params, array_flip(['keys', 'sort_by']));
     foreach (array_keys($arr) as $key) {
@@ -75,8 +75,9 @@ class ClearFiltersSearchBlock extends BlockBase implements ContainerFactoryPlugi
       '#title' => $this->t('Clear filters'),
       '#url' => Url::fromRoute('view.search.page_1', [], ['query' => $query_params]),
       '#attributes' => [
-        'class' => ['btn', 'btn-outline-brand', 'w-100', 'mb-4-5'],
+        'class' => ['btn', 'btn-outline-brand', 'w-100', 'mb-4'],
         'rel' => 'nofollow',
+        'role' => 'button',
       ],
     ];
   }

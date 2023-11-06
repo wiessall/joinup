@@ -12,6 +12,7 @@ Feature: Add a licence through the UI
       | title       | ID  | see also                                                                                         | text                                                                                               |
       | MIT License | MIT | opensource.org - https://opensource.org/licenses/MIT, mit-license.org - https://mit-license.org/ | "MIT License\n\nCopyright ©2019\n\nPermission is hereby granted, free of charge, to any person..." |
 
+  @terms
   Scenario Outline: Add licence as a Moderator or a Licence Manager.
     Given I am logged in as a "<role>"
     And I am on the homepage
@@ -40,7 +41,6 @@ Feature: Add a licence through the UI
     And I press "Save"
     Then I should have 1 licence
     And I should see the heading "MIT Licence"
-    And I should see the text "Description"
     And I should see the text "The classic open source licence without copyleft."
     And I should see the text "Type"
     And I should see the text "Public domain"

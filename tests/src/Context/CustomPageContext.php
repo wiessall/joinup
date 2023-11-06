@@ -8,10 +8,9 @@ use Drupal\Core\Session\AnonymousUserSession;
 use Drupal\Core\Url;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\DrupalExtension\Hook\Scope\BeforeNodeCreateScope;
+use Drupal\joinup\Traits\EntityTrait;
 use Drupal\joinup\Traits\FileTrait;
-use Drupal\joinup\Traits\NodeTrait;
 use Drupal\joinup\Traits\OgTrait;
-use Drupal\joinup\Traits\RdfEntityTrait;
 use Drupal\joinup\Traits\TraversingTrait;
 use Drupal\joinup\Traits\UtilityTrait;
 use Drupal\og\OgGroupAudienceHelperInterface;
@@ -24,10 +23,9 @@ use PHPUnit\Framework\Assert;
 class CustomPageContext extends RawDrupalContext {
 
   use FileTrait;
-  use NodeTrait;
+  use EntityTrait;
   use OgMenuTrait;
   use OgTrait;
-  use RdfEntityTrait;
   use UtilityTrait;
   use TraversingTrait;
 
@@ -80,7 +78,7 @@ class CustomPageContext extends RawDrupalContext {
    */
   public function visitCustomPage(string $title): void {
     /** @var \Drupal\node\Entity\Node $node */
-    $node = $this->getNodeByTitle($title, 'custom_page');
+    $node = $this->getEntityByLabel('node', $title, 'custom_page');
     $this->visitPath($node->toUrl()->toString());
   }
 
@@ -101,7 +99,7 @@ class CustomPageContext extends RawDrupalContext {
    * @Then the :name :type should have :count custom page(s)
    */
   public function assertContactInformationCount(int $count, string $name, string $type): void {
-    $group = $this->getRdfEntityByLabel($name, $type);
+    $group = $this->getEntityByLabel('rdf_entity', $name, $type);
     $this->assertGroupContentCount($count, $group, 'node', 'custom_page');
   }
 
@@ -129,7 +127,7 @@ class CustomPageContext extends RawDrupalContext {
    */
   public function assertNoAccessToOgMenuAdministration(string $menu, string $title, string $type): void {
     // Retrieve the OG Menu instance for the given menu and group.
-    $group = $this->getRdfEntityByLabel($title, $type);
+    $group = $this->getEntityByLabel('rdf_entity', $title, $type);
     $values = [
       'type' => $menu,
       OgGroupAudienceHelperInterface::DEFAULT_FIELD => $group->id(),
@@ -302,7 +300,7 @@ class CustomPageContext extends RawDrupalContext {
    *   The menu tree.
    */
   protected function getOgMenuTreeByNameLabelAndType(string $menu_name, string $group_label, string $group_type): array {
-    $group = $this->getRdfEntityByLabel($group_label, $group_type);
+    $group = $this->getEntityByLabel('rdf_entity', $group_label, $group_type);
     $menu_instance = $this->getOgMenuInstance($group->id(), $menu_name);
     return $this->getOgMenuTree($menu_instance);
   }
@@ -324,7 +322,7 @@ class CustomPageContext extends RawDrupalContext {
    * @When the publication state of the :title custom page is changed to :state
    */
   public function updatePublicationState(string $title, string $state): void {
-    $node = $this->getNodeByTitle($title, 'custom_page');
+    $node = $this->getEntityByLabel('node', $title, 'custom_page');
     if ($state === 'published') {
       $node->setPublished();
     }
@@ -355,14 +353,15 @@ class CustomPageContext extends RawDrupalContext {
 
     // Retrieve the image entity from the custom page logo.
     /** @var \Drupal\custom_page\Entity\CustomPageInterface $node */
-    $node = $this->getNodeByTitle($title, 'custom_page');
+    $node = $this->getEntityByLabel('node', $title, 'custom_page');
     $image = $node->getLogoAsFile();
 
+    $entity_type_manager = \Drupal::entityTypeManager();
     // Generate the expected URL of the logo using the right image style.
     // @see \Drupal\image\Plugin\Field\FieldFormatter\ImageUrlFormatter::viewElements()
     /** @var \Drupal\image\ImageStyleInterface $image_style */
-    $image_style = \Drupal::entityTypeManager()->getStorage('image_style')->load('horizontal_medium_image');
-    $expected_url = file_url_transform_relative($image_style->buildUrl($image->getFileUri()));
+    $image_style = $entity_type_manager->getStorage('image_style')->load('tile_md_1x');
+    $expected_url = \Drupal::service('file_url_generator')->transformRelative($image_style->buildUrl($image->getFileUri()));
 
     Assert::assertEquals($expected_url, $actual_url, 'The logo shown is not the correct one.');
   }

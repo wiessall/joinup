@@ -1,6 +1,6 @@
 @api @group-g @uploadFiles:logo.png
 Feature: As a moderator I want to be able to maintain sets of images to be
-  reused as logo or banner images for collections, solutions, events and news.
+  reused as logo images for collections, solutions, events and news.
 
   Scenario Outline: Moderator tasks.
 
@@ -12,7 +12,7 @@ Feature: As a moderator I want to be able to maintain sets of images to be
     When I click "<media type>"
     Then I should see the heading "Add <media type>"
     When I fill in "Name" with "Whatever@<media type>"
-    And I attach the file "logo.png" to "Image"
+    And I attach the file "logo.png" to "Add a new file"
     And I press "Upload"
     And I press "Save"
     Then I should see the success message "<media type> Whatever@<media type> has been created."
@@ -32,9 +32,7 @@ Feature: As a moderator I want to be able to maintain sets of images to be
 
     Examples:
       | media type        |
-      | Collection banner |
       | Collection logo   |
-      | Solution banner   |
       | Solution logo     |
       | Event logo        |
       | News logo         |

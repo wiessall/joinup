@@ -4,10 +4,10 @@ status: true
 dependencies: {  }
 _core:
   default_config_hash: Lq-FHp4TWigQACXyoaLLRTJFclf-qL9Wno7oH8FTZkM
-name: 'Provenance activity'
-rid: provenance_activity
-description: ''
 label_singular: Activity
 label_plural: Activities
 label_count:
   no_count_capitalize: !!binary QWN0aXZpdHkDQWN0aXZpdGllcw==
+name: 'Provenance activity'
+rid: provenance_activity
+description: ''

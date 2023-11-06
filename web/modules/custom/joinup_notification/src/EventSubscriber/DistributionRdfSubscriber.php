@@ -5,7 +5,6 @@ declare(strict_types = 1);
 namespace Drupal\joinup_notification\EventSubscriber;
 
 use Drupal\Core\Entity\EntityInterface;
-use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\asset_distribution\Entity\AssetDistributionInterface;
 use Drupal\asset_release\Entity\AssetReleaseInterface;
 use Drupal\joinup_notification\Event\NotificationEvent;
@@ -13,7 +12,6 @@ use Drupal\joinup_notification\MessageArgumentGenerator;
 use Drupal\joinup_notification\NotificationEvents;
 use Drupal\og\OgRoleInterface;
 use Drupal\solution\Exception\MissingSolutionException;
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
  * Notification handler for the notifications related to distributions.
@@ -30,9 +28,7 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
  *   Recipients: owner
  * @codingStandardsIgnoreEnd
  */
-class DistributionRdfSubscriber extends NotificationSubscriberBase implements EventSubscriberInterface {
-
-  use StringTranslationTrait;
+class DistributionRdfSubscriber extends NotificationSubscriberBase {
 
   const TEMPLATE_UPDATE = 'distribution_update';
   const TEMPLATE_DELETE = 'distribution_delete';
@@ -174,13 +170,6 @@ class DistributionRdfSubscriber extends NotificationSubscriberBase implements Ev
     }
 
     return TRUE;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  protected function getConfigurationName(): string {
-    return '';
   }
 
   /**

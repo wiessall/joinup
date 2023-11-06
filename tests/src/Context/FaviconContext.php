@@ -16,7 +16,10 @@ class FaviconContext extends RawDrupalContext {
   /**
    * Lists acceptable MIME types for favicons.
    */
-  protected const MIME_TYPES = ['image/png'];
+  protected const MIME_TYPES = [
+    'image/vnd.microsoft.icon',
+    'image/png',
+  ];
 
   /**
    * Detects if a favicon is shown in the page.

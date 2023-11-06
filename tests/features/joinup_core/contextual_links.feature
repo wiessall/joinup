@@ -8,7 +8,7 @@ Feature:
   Scenario: Revisions link availability.
     Given collection:
       | title | Revisions collection |
-      | state | validated            |
+      | state | published            |
     When I am logged in as a moderator
     And I go to the "Revisions collection" collection
     And I click "Add news" in the plus button menu
@@ -28,17 +28,16 @@ Feature:
     And I click the last "Delete" link
     And I press "Delete"
     Then I should see the heading "Revisions collection has been published"
-    But I should not see the link "Revisions" in the "Entity actions" region
+    And I should see the link "Revisions" in the "Entity actions" region
 
     When I am logged in as a facilitator of the "Revisions collection" collection
     And I go to the homepage of the "Revisions collection" collection
     Then I should not see the link "Revisions" in the "Entity actions" region
 
-  @javascript
   Scenario: Only solutions should have the share contextual link available.
     Given collection:
       | title | Share collection |
-      | state | validated        |
+      | state | published        |
     And contact:
       | name  | Somebody             |
       | email | somebody@example.com |
@@ -47,16 +46,15 @@ Feature:
       | Some owner |
     And solution:
       | title               | Share solution   |
-      | state               | validated        |
+      | state               | published        |
       | collection          | Share collection |
       | contact information | Somebody         |
       | owner               | Some owner       |
 
     When I am logged in as a user with the "moderator" role
-    And I accept essential cookies
     And I go to the "Share solution" solution
     And I click "About"
-    Then I should not see the contextual link "Share"
+    Then I should see the contextual link "Share"
 
     And I visit the collection overview
     Then I should not see the contextual link "Share"

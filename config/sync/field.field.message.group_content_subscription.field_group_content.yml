@@ -33,6 +33,7 @@ settings:
         news: news
       sort:
         field: _none
+        direction: ASC
       auto_create: false
       auto_create_bundle: discussion
   rdf_entity:
@@ -42,6 +43,7 @@ settings:
         solution: solution
       sort:
         field: _none
+        direction: ASC
       auto_create: false
       auto_create_bundle: ''
   download_event:
@@ -152,11 +154,14 @@ settings:
   ogmenu:
     handler: 'default:ogmenu'
     handler_settings: {  }
-  password_policy:
-    handler: 'default:password_policy'
-    handler_settings: {  }
   path_alias:
     handler: 'default:path_alias'
+    handler_settings: {  }
+  poll:
+    handler: 'default:poll'
+    handler_settings: {  }
+  poll_choice:
+    handler: 'default:poll_choice'
     handler_settings: {  }
   rdf_type:
     handler: 'default:rdf_type'
@@ -239,8 +244,8 @@ settings:
   paragraphs_type:
     handler: 'default:paragraphs_type'
     handler_settings: {  }
-  site_alert:
-    handler: 'default:site_alert'
+  sitewide_alert:
+    handler: 'default:sitewide_alert'
     handler_settings: {  }
   simple_block:
     handler: 'default:simple_block'
@@ -285,5 +290,29 @@ settings:
     handler_settings: {  }
   solr_request_handler:
     handler: 'default:solr_request_handler'
+    handler_settings: {  }
+  rdf_meta_entity:
+    handler: 'default:rdf_meta_entity'
+    handler_settings: {  }
+  rdf_meta_entity_type:
+    handler: 'default:rdf_meta_entity_type'
+    handler_settings: {  }
+  eif_wrapper:
+    handler: 'default:eif_wrapper'
+    handler_settings: {  }
+  eif_wrapper_type:
+    handler: 'default:eif_wrapper_type'
+    handler_settings: {  }
+  email_confirmer_confirmation:
+    handler: 'default:email_confirmer_confirmation'
+    handler_settings: {  }
+  email_confirmer_message:
+    handler: 'default:email_confirmer_message'
+    handler_settings: {  }
+  simple_sitemap_type:
+    handler: 'default:simple_sitemap_type'
+    handler_settings: {  }
+  simple_sitemap:
+    handler: 'default:simple_sitemap'
     handler_settings: {  }
 field_type: dynamic_entity_reference

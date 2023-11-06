@@ -1,0 +1,13 @@
+shared_entity:
+  js:
+    js/shared_entity.js: {}
+  dependencies:
+    - core/drupal
+    - core/once
+
+pinned_entities:
+  js:
+    js/pinned_entities.js: {}
+  dependencies:
+    - core/drupal
+    - core/once

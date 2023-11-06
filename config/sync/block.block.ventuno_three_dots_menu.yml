@@ -2,19 +2,26 @@ uuid: c431d6ac-f6d0-4be7-80a8-2b7746dd7a6f
 langcode: en
 status: true
 dependencies:
+  module:
+    - joinup_core
   theme:
     - ventuno
 id: ventuno_three_dots_menu
 theme: ventuno
-region: header_bottom
-weight: -21
+region: featured
+weight: -26
 provider: null
-plugin: local_tasks_block
+plugin: joinup_local_tasks_block
 settings:
-  id: local_tasks_block
+  id: joinup_local_tasks_block
   label: Tabs
-  provider: core
   label_display: '0'
+  provider: joinup_core
   primary: true
   secondary: false
-visibility: {  }
+visibility:
+  request_route:
+    id: request_route
+    negate: true
+    routes:
+      - entity.rdf_entity.edit_form

@@ -4,8 +4,11 @@ declare(strict_types = 1);
 
 namespace Drupal\joinup_group\Controller;
 
+use Drupal\Core\Access\AccessResult;
+use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\og\OgAccessInterface;
 use Drupal\views\Views;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -26,10 +29,8 @@ class GroupMembersController extends ControllerBase {
 
   /**
    * The OG access service.
-   *
-   * @var \Drupal\og\OgAccessInterface
    */
-  protected $ogAccess;
+  protected OgAccessInterface $ogAccess;
 
   /**
    * Constructs a new OgAdminMembersController object.
@@ -44,7 +45,7 @@ class GroupMembersController extends ControllerBase {
   /**
    * {@inheritdoc}
    */
-  public static function create(ContainerInterface $container) {
+  public static function create(ContainerInterface $container): self {
     return new static(
       $container->get('og.access')
     );
@@ -59,7 +60,7 @@ class GroupMembersController extends ControllerBase {
    * @return array
    *   The view containing the members overview, as a renderable array.
    */
-  public function membersList(RouteMatchInterface $route_match) {
+  public function membersList(RouteMatchInterface $route_match): array {
     $group_entity_type_id = $route_match->getRouteObject()->getOption('_og_entity_type_id');
     /** @var \Drupal\Core\Entity\EntityInterface $group */
     $group = $route_match->getParameter($group_entity_type_id);
@@ -69,12 +70,23 @@ class GroupMembersController extends ControllerBase {
     // view that shows the memberships as tiles.
     $show_admin_view = $this->ogAccess->userAccess($group, 'manage members')->isAllowed();
 
-    $route_object = $route_match->getRouteObject();
-    $route_object->setOption('_admin_route', $show_admin_view);
-
-    $view = $show_admin_view ? 'og_members_overview' : 'members_overview';
+    $view_id = $show_admin_view ? 'og_members_overview' : 'members_overview';
     $arguments = [$group->getEntityTypeId(), $group->id()];
-    return Views::getView($view)->executeDisplay('default', $arguments);
+    return Views::getView($view_id)->executeDisplay('default', $arguments);
+  }
+
+  /**
+   * Access check for the group members page.
+   *
+   * @param \Drupal\joinup_group\Entity\GroupInterface $rdf_entity
+   *   The group for which the access to the members page is being determined.
+   *
+   * @return \Drupal\Core\Access\AccessResultInterface
+   *   The access result object.
+   */
+  public function access(GroupInterface $rdf_entity): AccessResultInterface {
+    $access = $this->entityTypeManager()->getAccessControlHandler('rdf_entity')->access($rdf_entity, 'view', $this->currentUser(), TRUE);
+    return $access->andIf(AccessResult::allowedIfHasPermission($this->currentUser(), 'access user profiles'));
   }
 
 }

@@ -5,17 +5,15 @@ declare(strict_types = 1);
 namespace Drupal\joinup\Context;
 
 use Behat\Gherkin\Node\TableNode;
+use Behat\Mink\Element\DocumentElement;
 use Behat\Mink\Element\NodeElement;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\eupl\Eupl;
 use Drupal\joinup\HtmlManipulator;
-use Drupal\joinup\Traits\BrowserCapabilityDetectionTrait;
 use Drupal\joinup\Traits\ConfigReadOnlyTrait;
 use Drupal\joinup\Traits\EntityTrait;
-use Drupal\joinup\Traits\MaterialDesignTrait;
-use Drupal\joinup\Traits\RdfEntityTrait;
+use Drupal\joinup\Traits\JavascriptTrait;
 use Drupal\joinup_licence\Entity\CompatibilityDocument;
-use Drupal\joinup_licence\Entity\LicenceInterface;
 use Drupal\node\Entity\Node;
 use Drupal\rdf_entity\Entity\Rdf;
 use LoversOfBehat\TableExtension\Hook\Scope\AfterTableFetchScope;
@@ -26,11 +24,9 @@ use PHPUnit\Framework\Assert;
  */
 class EuplContext extends RawDrupalContext {
 
-  use BrowserCapabilityDetectionTrait;
   use ConfigReadOnlyTrait;
   use EntityTrait;
-  use MaterialDesignTrait;
-  use RdfEntityTrait;
+  use JavascriptTrait;
 
   /**
    * Creates the standard 'EUPL' collection and several dependencies.
@@ -54,7 +50,7 @@ class EuplContext extends RawDrupalContext {
       'rid' => 'collection',
       'id' => Eupl::EUPL_COMMUNITY_ID,
       'label' => 'EUPL',
-      'field_ar_state' => 'validated',
+      'field_ar_state' => 'published',
       'field_ar_owner' => 'http://example.com/owner',
     ])->save();
 
@@ -63,7 +59,7 @@ class EuplContext extends RawDrupalContext {
       'collection' => Eupl::EUPL_COMMUNITY_ID,
       'id' => Eupl::JLA_SOLUTION,
       'label' => 'Joinup Licensing Assistant',
-      'field_is_state' => 'validated',
+      'field_is_state' => 'published',
     ])->save();
 
     // The 'Joinup Licensing Assistant' standard custom page.
@@ -100,12 +96,20 @@ class EuplContext extends RawDrupalContext {
    * @Given I click the info icon of the :spdx licence( table cell)
    */
   public function clickLicenceInfoIcon(string $spdx): void {
-    $xpath = '//td[@class and contains(concat(" ", normalize-space(@class), " "), " licence-comparer__header ") and contains(., "' . $spdx . '")]//span[@class and contains(concat(" ", normalize-space(@class), " "), " icon--info ")]';
-    $icon = $this->getSession()->getPage()->find('xpath', $xpath);
-    if (empty($icon)) {
-      throw new \Exception("Could not locate a table cell with the text {$spdx}.");
+    $xpath = '//td[@class and contains(concat(" ", normalize-space(@class), " "), " licence-comparer__header ")]/button[contains(., "' . $spdx . '")]';
+    $page = $this->getSession()->getPage();
+    $button = $page->find('xpath', $xpath);
+    if (empty($button)) {
+      throw new \Exception("Could not locate a table cell with the button {$spdx}.");
     }
-    $icon->click();
+    $this->scrollCssSelectedElementIntoView('.licence-comparer__header');
+    $button->press();
+
+    // Wait for modal dialog to be ready.
+    $page->waitFor(5, function (DocumentElement $page): ?NodeElement {
+      // Open modal dialog has `style="display:block"`.
+      return $page->find('xpath', '//div[@style and contains(concat(" ", normalize-space(@class), " "), " modal-dialog ")]//button[@aria-label="Close"]');
+    });
   }
 
   /**
@@ -117,12 +121,12 @@ class EuplContext extends RawDrupalContext {
    * @Given I close the licence modal dialog
    */
   public function closeLicenceModalDialog(): void {
-    $xpath = '//div[@class and contains(concat(" ", normalize-space(@class), " "), " licence-comparer__dialog ")]//button[@title="Close"]';
-    $icon = $this->getSession()->getPage()->find('xpath', $xpath);
-    if (empty($icon)) {
+    $xpath = '//div[@class and contains(concat(" ", normalize-space(@class), " "), " modal-dialog ")]//button[@aria-label="Close"]';
+    $button = $this->getSession()->getPage()->find('xpath', $xpath);
+    if (empty($button)) {
       throw new \Exception("Either the dialog is not available or the 'Close' button could not be located.");
     }
-    $icon->click();
+    $button->press();
   }
 
   /**
@@ -137,7 +141,7 @@ class EuplContext extends RawDrupalContext {
    */
   public function assertLegalTypeTagsCategoriesAndOrder(string $spdx, TableNode $table): void {
     $expected = $table->getColumn(0);
-    $xpath = '//div[@data-spdx="' . $spdx . '"]//div[contains(concat(" ", normalize-space(@class), " "), " listing__inner-tile--wider ")]//span[contains(concat(" ", normalize-space(@class), " "), " licence-tile__label ")]';
+    $xpath = '//article[@data-joinup-spdx="' . $spdx . '"]//span[contains(concat(" ", normalize-space(@class), " "), " licence-tile__label badge ")]';
     $this->assertCategoriesAndOrder($xpath, $expected);
   }
 
@@ -151,7 +155,7 @@ class EuplContext extends RawDrupalContext {
    */
   public function assertFilterCategoriesAndOrder(TableNode $table): void {
     $expected = $table->getColumn(0);
-    $xpath = '//div[contains(concat(" ", normalize-space(@class), " "), " licence-filter ")]//div[contains(concat(" ", normalize-space(@class), " "), " licence-filter__header ")]';
+    $xpath = '//div[contains(concat(" ", normalize-space(@class), " "), " licence-filter ")]//div[contains(concat(" ", normalize-space(@class), " "), " licence-filter__header ")] | //div[contains(concat(" ", normalize-space(@class), " "), " eif-filter ")]//div[contains(concat(" ", normalize-space(@class), " "), " eif-filter__header ")]';
     $this->assertCategoriesAndOrder($xpath, $expected);
   }
 
@@ -213,12 +217,13 @@ class EuplContext extends RawDrupalContext {
    *   When the licence is not found on the page.
    */
   protected function toggleLicenceForComparison(bool $compare, string $spdx_id): void {
-    $licence = $this->findLicenceTile($spdx_id);
+    $checkbox = $this->findLicenceTile($spdx_id)->findField('Add to compare list');
+    $this->scrollElementIntoView($checkbox);
     if ($compare) {
-      $this->checkMaterialDesignField('Add to compare list', $licence);
+      $checkbox->check();
     }
     else {
-      $this->uncheckMaterialDesignField('Add to compare list', $licence);
+      $checkbox->uncheck();
     }
   }
 
@@ -236,9 +241,29 @@ class EuplContext extends RawDrupalContext {
    * @When I choose :spdx_id as the :label licence
    */
   public function selectRadioButtonForLicenceCompatibilityCheck(string $spdx_id, string $label): void {
-    assert(in_array($label, ['Inbound', 'Outbound']), 'The purpose should be either "Use" or "Distribute".');
-    $licence = $this->findLicenceTile($spdx_id);
-    $this->selectMaterialDesignRadioButton($label, $licence);
+    \assert(in_array($label, ['Inbound', 'Outbound']), 'The purpose should be either "Use" or "Distribute".');
+    $radio = $this->findLicenceTile($spdx_id)->findField($label);
+    $this->scrollElementIntoView($radio);
+    $radio->click();
+  }
+
+  /**
+   * Presses a button in a licence tile.
+   *
+   * @param string $label
+   *   The label of the button to press.
+   * @param string $spdx_id
+   *   The SPDX ID of the licence tile.
+   *
+   * @throws \Exception
+   *   Thrown when the licence tile or button are not found in the page.
+   *
+   * @When I press :link in the :spdx_id licence tile
+   */
+  public function clickLicenceTileLink(string $label, string $spdx_id): void {
+    $button = $this->findLicenceTile($spdx_id)->findButton($label);
+    $this->scrollElementIntoView($button);
+    $button->press();
   }
 
   /**
@@ -251,7 +276,7 @@ class EuplContext extends RawDrupalContext {
    *
    * @throws \Exception
    *   When:
-   *   - No 'Compare' buttons were found in page.
+   *   - No buttons were found in page.
    *   - The expectancy is not satisfied.
    *
    * @Then the :label buttons are :status
@@ -261,24 +286,25 @@ class EuplContext extends RawDrupalContext {
     \assert(in_array($status, ['enabled', 'disabled']), 'The $status parameter should take one of the values "enabled" or "disabled" but "' . $status . '" was given.');
 
     $mapping = [
-      'Compare' => 'licence-tile__button--compare',
-      'Check compatibility' => 'licence-tile__button--compatible',
+      'Compare' => ['tag' => 'button', 'class' => 'jla-compare'],
+      'Check compatibility' => ['tag' => 'a', 'class' => 'jla-compatible'],
     ];
-    \assert(array_key_exists($label, $mapping), 'The label should be one of ' . implode(',', array_keys($mapping)) . ' but "' . $label . '" was given.');
+    \assert(array_key_exists($label, $mapping), 'The $label parameter should take one of the values "Compare" or "Check compatibility" but "' . $label . '" was given.');
 
     $page = $this->getSession()->getPage();
-    $xpath = '//a[text()="' . $label . '" and contains(concat(" ", normalize-space(@class), " "), " ' . $mapping[$label] . ' ")]';
+    $xpath = '//' . $mapping[$label]['tag'] . '[text()="' . $label . '" and contains(concat(" ", normalize-space(@class), " "), " ' . $mapping[$label]['class'] . ' ")]';
     $buttons = $page->findAll('xpath', $xpath);
     if (empty($buttons)) {
       throw new \Exception("No '$label' buttons found in the page.");
     }
+    $method = $mapping[$label]['tag'] === 'button' ? 'hasAttribute' : 'hasClass';
 
     /** @var \Behat\Mink\Element\NodeElement[] $buttons */
     foreach ($buttons as $button) {
-      if ($status === 'disabled' && !$button->hasClass('licence-tile__button--disabled')) {
+      if ($status === 'disabled' && !$button->{$method}('disabled')) {
         throw new \Exception("'$label' buttons should be disabled but are enabled.");
       }
-      elseif ($status === 'enabled' && $button->hasClass('licence-tile__button--disabled')) {
+      elseif ($status === 'enabled' && $button->{$method}('disabled')) {
         throw new \Exception("'$label' buttons should be enabled but are disabled.");
       }
     }
@@ -300,13 +326,12 @@ class EuplContext extends RawDrupalContext {
   public function assertLicenceCanBeCompared(string $spdx_id, string $can) {
     \assert(in_array($can, ['can', 'cannot']), 'The $can parameter should take one of the values "can" or "cannot" but "' . $can . '" was given.');
 
-    $licence = $this->findLicenceTile($spdx_id);
-    $checkbox = $licence->find('xpath', '//label[text()="Add to compare list"]/../..');
+    $checkbox = $this->findLicenceTile($spdx_id)->findField('Add to compare list');
 
-    if ($can === 'can' && $checkbox->hasClass('is-disabled')) {
+    if ($can === 'can' && $checkbox->hasAttribute('disabled')) {
       throw new \Exception("The licence '$spdx_id' should be allowed to be compared but is not.");
     }
-    elseif ($can === 'cannot' && !$checkbox->hasClass('is-disabled')) {
+    elseif ($can === 'cannot' && !$checkbox->hasAttribute('disabled')) {
       throw new \Exception("The licence '$spdx_id' shouldn't be allowed to be compared but it is.");
     }
   }
@@ -327,13 +352,12 @@ class EuplContext extends RawDrupalContext {
   public function assertLicenceChecked(string $spdx_id, string $checked) {
     \assert(in_array($checked, ['checked', 'unchecked']), 'The $checked parameter should take one of the values "checked" or "unchecked" but "' . $checked . '" was given.');
 
-    $licence = $this->findLicenceTile($spdx_id);
-    $checkbox = $licence->find('xpath', '//label[text()="Add to compare list"]/../..');
+    $checkbox = $this->findLicenceTile($spdx_id)->findField('Add to compare list');
 
-    if ($checked === 'checked' && !$checkbox->hasClass('is-checked')) {
+    if ($checked === 'checked' && !$checkbox->hasAttribute('checked')) {
       throw new \Exception("The licence '$spdx_id' should be checked but is not.");
     }
-    elseif ($checked === 'unchecked' && $checkbox->hasClass('is-checked')) {
+    elseif ($checked === 'unchecked' && $checkbox->hasAttribute('checked')) {
       throw new \Exception("The licence '$spdx_id' should not be checked but it is.");
     }
   }
@@ -354,8 +378,10 @@ class EuplContext extends RawDrupalContext {
       $redistribute_as_label = $test_case['outbound'];
       $expected_result = $test_case['document ID'];
 
-      $inbound_licence = static::loadLicenceByLabel($use_label);
-      $outbound_licence = static::loadLicenceByLabel($redistribute_as_label);
+      /** @var \Drupal\joinup_licence\Entity\LicenceInterface $inbound_licence */
+      $inbound_licence = $this->getEntityByLabel('rdf_entity', $use_label, 'licence');
+      /** @var \Drupal\joinup_licence\Entity\LicenceInterface $outbound_licence */
+      $outbound_licence = $this->getEntityByLabel('rdf_entity', $redistribute_as_label, 'licence');
 
       $result = $plugin_manager->getCompatibilityDocumentId($inbound_licence, $outbound_licence);
 
@@ -394,25 +420,6 @@ class EuplContext extends RawDrupalContext {
   }
 
   /**
-   * Returns the licence entity with the given label.
-   *
-   * @param string $label
-   *   The label for which to return the licence entity.
-   *
-   * @return \Drupal\joinup_licence\Entity\LicenceInterface
-   *   The licence entity.
-   */
-  protected static function loadLicenceByLabel(string $label): LicenceInterface {
-    $entity = static::getRdfEntityByLabel($label, 'licence');
-    if ($entity instanceof LicenceInterface) {
-      return $entity;
-    }
-
-    $message = "The licence entity with the label '$label' was not found.";
-    throw new \InvalidArgumentException($message);
-  }
-
-  /**
    * Finds a licence tile on the page given a licence SPDX ID.
    *
    * @param string $spdx_id
@@ -425,7 +432,7 @@ class EuplContext extends RawDrupalContext {
    *   When the licence tile is not found on the page.
    */
   protected function findLicenceTile(string $spdx_id): NodeElement {
-    if ($licence = $this->getSession()->getPage()->find('css', 'div[data-spdx="' . $spdx_id . '"]')) {
+    if ($licence = $this->getSession()->getPage()->find('css', 'article[data-joinup-spdx="' . $spdx_id . '"]')) {
       return $licence;
     }
     throw new \Exception("Can't find the '$spdx_id' licence on the page.");
@@ -473,12 +480,16 @@ class EuplContext extends RawDrupalContext {
   }
 
   /**
-   * Inserts an 'x' character in the licence comparer checked cells.
+   * Simplifies the table to make the Behat assert easier.
    *
-   * There's no way to identify the checked cells in tests as the licence
-   * comparer table cells are all empty. Visually, a human is able to identify
-   * them as they are CSS styled. For the purpose of the test we insert an 'x'
-   * character so that the test is able to identify the checked cells.
+   * Table alters:
+   * - Header cells contain nested markup. We're only interested in the header
+   *   cell label for the purpose of comparison.
+   * - There's no way to identify the checked cells in tests as the licence
+   *   comparer table cells contain hidden text. Visually, a human is able to
+   *   identify them as they are CSS styled. For the purpose of the test we
+   *   insert an 'x' character so that the test is able to identify those cells.
+   * - Visually empty cells still contain hidden text. Fully empty those cells.
    *
    * @param \LoversOfBehat\TableExtension\Hook\Scope\AfterTableFetchScope $scope
    *   The "after table fetch" scope object.
@@ -493,13 +504,28 @@ class EuplContext extends RawDrupalContext {
       return;
     }
 
-    /** @var \DOMNode $node */
-    foreach ($html_manipulator->filter('.icon--check-2') as $node) {
+    /** @var \DOMNode $td */
+    foreach ($html_manipulator->filter('td.licence-comparer__header') as $td) {
+      // Reduce header cell content to SPDX ID for easy comparison.
+      if ($td->textContent) {
+        /** @var \DOMElement $button */
+        $button = $td->getElementsByTagName('button')[0];
+        $label = trim($button->nodeValue);
+        $td->textContent = $label;
+      }
+    }
+
+    foreach ($html_manipulator->filter('td.licence-comparer__cell-on') as $td) {
       // Insert an 'x' character the licence comparer table checked cells so
       // that the tests are able to identify them.
       // @see tests/features/communities/eupl/jla.feature
-      $node->textContent = 'x';
+      $td->textContent = 'x';
     }
+    foreach ($html_manipulator->filter('td.licence-comparer__cell-off') as $td) {
+      // Remove hidden markup from empty cells.
+      $td->textContent = '';
+    }
+
     $scope->setHtml($html_manipulator->html());
   }
 

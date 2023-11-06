@@ -1,0 +1,23 @@
+joinup_rdf.vocabulary_importer:
+  path: '/joinup-debug/vocabulary-importer'
+  defaults:
+    _title: 'Vocabulary Importer'
+    _form: 'Drupal\joinup_debug\Form\VocabularyImporterForm'
+  requirements:
+    _permission: 'joinup debug - access vocabulary importer'
+
+joinup_rdf.sparql_console:
+  path: '/joinup-debug/sparql-console'
+  defaults:
+    _title: 'Sparql Console'
+    _form: 'Drupal\joinup_debug\Form\SparqlConsoleForm'
+  requirements:
+    _permission: 'joinup debug - access sparql console'
+
+joinup_debug.vocabulary_index:
+  path: '/joinup-debug/vocabulary-index'
+  defaults:
+    _title: 'Vocabulary Index'
+    _form: 'Drupal\joinup_debug\Form\VocabularyIndexForm'
+  requirements:
+    _permission: 'joinup debug - access vocabulary index'

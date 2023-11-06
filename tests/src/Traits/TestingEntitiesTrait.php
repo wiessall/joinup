@@ -34,20 +34,17 @@ trait TestingEntitiesTrait {
       return;
     }
 
-    // Since we might be cleaning up many entities, temporarily disable the
-    // feature to commit the index after every query.
-    $this->disableCommitOnUpdate();
-
-    foreach ($this->entities as $entities) {
+    foreach ($this->entities as $entity_type_id => $entities) {
       if (!empty($entities)) {
-        foreach ($entities as $entity) {
+        $storage = \Drupal::entityTypeManager()->getStorage($entity_type_id);
+        // We reload entities to account changes made during the test.
+        foreach ($storage->loadMultiple(array_keys($entities)) as $entity) {
           $entity->skip_notification = TRUE;
           @$entity->delete();
         }
       }
     }
     $this->entities = [];
-    $this->enableCommitOnUpdate();
   }
 
 }

@@ -7,10 +7,10 @@ Feature: Report inappropriate content
   Scenario Outline: Report inappropriate community content
     Given collection:
       | title | Deployment tools |
-      | state | validated        |
+      | state | published        |
     And "<type>" content:
-      | title   | body   | collection       | state     |
-      | <title> | <body> | Deployment tools | validated |
+      | title   | body   | collection       | state   |
+      | <title> | <body> | Deployment tools | <state> |
     Given I am not logged in
     When I go to the content page of the type "<type>" with the title "<title>"
     And I click "Report"
@@ -26,15 +26,13 @@ Feature: Report inappropriate content
       | E-mail address | doe@example.rg  |
       | Subject        | Invalid content |
       | Message        | Spam            |
-    # We need to wait 5 seconds for the spam protection time limit to pass.
-    And I wait for the spam protection time limit to pass
     When I press "Submit"
     Then I should see the heading "<title>"
 
     Examples:
-      | type        | title                        | body                    |
-      | discussion  | Git is not a deployment tool | Use tarballs to deploy. |
-      | custom_page | The best tools               | Current best-in-class.  |
-      | news        | Now deploying to containers  | Long awaited feature.   |
-      | document    | Deployment strategies        | Deploy faster.          |
-      | event       | GovDeploy Bootcamp 2017      | Submit your session.    |
+      | type        | title                        | body                    | state     |
+      | discussion  | Git is not a deployment tool | Use tarballs to deploy. | published |
+      | custom_page | The best tools               | Current best-in-class.  | published |
+      | news        | Now deploying to containers  | Long awaited feature.   | published |
+      | document    | Deployment strategies        | Deploy faster.          | published |
+      | event       | GovDeploy Bootcamp 2017      | Submit your session.    | published |

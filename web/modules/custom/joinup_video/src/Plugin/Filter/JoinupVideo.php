@@ -27,7 +27,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  *   id = "joinup_video",
  *   title = @Translation("Joinup Video Embed"),
  *   description = @Translation("Enables the use of iframe video embed."),
- *   type = Drupal\filter\Plugin\FilterInterface::TYPE_MARKUP_LANGUAGE,
+ *   type = Drupal\filter\Plugin\FilterInterface::TYPE_TRANSFORM_IRREVERSIBLE,
  *   settings = {
  *     "allowed_providers" = { },
  *     "autoplay" = FALSE,
@@ -153,7 +153,7 @@ class JoinupVideo extends FilterBase implements ContainerFactoryPluginInterface 
       }
 
       // Replace the JSON settings with a video.
-      $text = str_replace($source_text, $this->renderer->render($embed_code), $text);
+      $text = str_replace($source_text, (string) $this->renderer->render($embed_code), $text);
 
       // Add the required responsive video library only when at least one match
       // is present.

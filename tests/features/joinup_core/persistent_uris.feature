@@ -8,20 +8,20 @@ Feature:
     Given the following collection:
       | title | Persistent collection                                          |
       | logo  | logo.png                                                       |
-      | state | validated                                                      |
+      | state | published                                                      |
       | uri   | http://data.europa.eu/w21/37b8103e-26e5-4c81-8ce5-43ced02ff7d0 |
     And the following solution:
       | title       | Persistent solution                                            |
       | collection  | Persistent collection                                          |
       | description | Persistent solution                                            |
-      | state       | validated                                                      |
+      | state       | published                                                      |
       | uri         | http://data.europa.eu/w21/ffb0ffc9-7704-45d3-95b3-42706b6320e5 |
     And the following release:
       | title          | Persistent release                                             |
       | release number | 23                                                             |
       | description    | Persistent release.                                            |
       | is version of  | Persistent solution                                            |
-      | state          | validated                                                      |
+      | state          | published                                                      |
       | uri            | http://data.europa.eu/w21/98004ec9-62f3-4734-a1b6-af7e4838b09c |
     And the following distribution:
       | title       | Persistent distribution                                        |
@@ -44,24 +44,24 @@ Feature:
       | uri   | http://data.europa.eu/unsupp/30aea866-fc89-4e45-b909-3d130acf49bf |
 
     And "eira" terms:
-      | tid                                   | name         | description                                |
+      | tid                                    | name         | description                                |
       | http://data.europa.eu/dr8/Dream/Domain | Dream Domain | You're safe from pain in the dream domain. |
 
     And discussion content:
       | title                 | body                  | collection            | state     |
-      | Persistent discussion | Persistent discussion | Persistent collection | validated |
+      | Persistent discussion | Persistent discussion | Persistent collection | published |
     And document content:
       | title               | body                | collection            | state     |
-      | Persistent document | Persistent document | Persistent collection | validated |
+      | Persistent document | Persistent document | Persistent collection | published |
     And event content:
       | title            | body             | collection            | state     |
-      | Persistent event | Persistent event | Persistent collection | validated |
+      | Persistent event | Persistent event | Persistent collection | published |
     And news content:
       | title           | body            | collection            | state     |
-      | Persistent news | Persistent news | Persistent collection | validated |
+      | Persistent news | Persistent news | Persistent collection | published |
     And custom_page content:
       | title           | body            | collection            | state     |
-      | Persistent page | Persistent page | Persistent collection | validated |
+      | Persistent page | Persistent page | Persistent collection | published |
 
     When I go to the "Persistent collection" collection
     And I click "About"
@@ -111,7 +111,7 @@ Feature:
     Then I should see the heading "Persistent collection"
 
     Given I am on "data/w21/98004ec9-62f3-4734-a1b6-af7e4838b09c"
-    Then I should see the heading "Persistent release 23"
+    Then I should see the text "Persistent release 23" in the "Page title" region
 
     Given I am on "data/w21/643a2a52-da3b-4594-92bb-295d8134e1fb"
     Then I should see the heading "Persistent distribution"

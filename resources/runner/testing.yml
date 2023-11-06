@@ -1,5 +1,16 @@
 # Testing configs and commands.
 
+testing:
+  modules:
+    - cas_mock_server
+    - composer_deploy
+    - dblog
+    - filecache
+    - http_request_mock
+    - joinup_cas_mock_server
+    - joinup_test
+    - upgrade_status
+
 behat:
   screenshots:
     local:
@@ -15,32 +26,28 @@ phpcs:
     config: ${joinup.dir}/phpcs.xml
     standard: ${joinup.dir}/phpcs-ruleset.xml.dist
     global: ${joinup.dir}/vendor/squizlabs/php_codesniffer/CodeSniffer.conf
+    phpcbf:
+      bin: ${joinup.dir}/vendor/bin/phpcbf
   check:
     extensions:
-      - css
       - inc
-      - info
       - install
-      - js
       - module
       - php
       - profile
-      - test
       - theme
     files:
       - ${joinup.dir}/tests/src
       - ${joinup.dir}/src
-      - ${joinup.site_dir}/modules
-      - ${joinup.site_dir}/profiles
-      - ${joinup.site_dir}/themes
+      - ${joinup.site_dir}/modules/custom
+      - ${joinup.site_dir}/profiles/joinup
+      - ${joinup.site_dir}/themes/iop
+      - ${joinup.site_dir}/themes/ventuno
   ignore:
-    - ${joinup.site_dir}/modules/contrib
-    - ${joinup.site_dir}/themes/contrib
-    - ${joinup.site_dir}/themes/joinup/scss
-    - ${joinup.site_dir}/themes/joinup/node_modules
-    - ${joinup.site_dir}/themes/ventuno/css
-    - ${joinup.site_dir}/themes/ventuno/node_modules
-    - ${joinup.site_dir}/modules/custom/joinup_communities/tallinn/lib
+    - '*/iop/assets/*'
+    - '*/iop/node_modules/*'
+    - '*/ventuno/assets/*'
+    - '*/ventuno/node_modules/*'
   report: full
   options:
     # Show the progress of the run.
@@ -61,13 +68,9 @@ commands:
     - task: remove
       file: ${joinup.dir}/.git/hooks/pre-push
     - task: exec
-      command: (test "${phpcs.run_on_push}" = "1" && ln -s ${joinup.dir}/vendor/pfrenssen/phpcs-pre-push/pre-push ${joinup.dir}/.git/hooks/pre-push) || true
+      command: (test "${phpcs.run_on_push}" = "1" && ln -s ../../scripts/git/pre_push ${joinup.dir}/.git/hooks/pre-push) || true
 
-  # Scans the code base for deprecated code.
-  testing:check-deprecated-code:
-    - task: exec
-      command: php -d memory_limit=-1 ${phpstan.bin} --no-progress analyse src tests/src web/modules/custom web/profiles web/themes
-  testing:check-deprecated-code-contrib:
-    - task: exec
-      # Mute the returning error code as is used only for reporting.
-      command: php -d memory_limit=-1 ${phpstan.bin} --no-progress analyse web/modules/contrib || true
+  testing:install-modules:
+    - task: run
+      command: drush:module-install
+      arguments: ${testing.modules}

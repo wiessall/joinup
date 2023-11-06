@@ -7,7 +7,7 @@ Feature: "Add solution" visibility options.
   Scenario: Required fields should be filled in
     Given the following collection:
       | title | Language parsers |
-      | state | validated        |
+      | state | published        |
     And I am logged in as a facilitator of the "Language parsers" collection
     And I go to the homepage of the "Language parsers" collection
     And I click "Add solution"
@@ -31,7 +31,7 @@ Feature: "Add solution" visibility options.
     Given the following collection:
       | title | Collection solution test |
       | logo  | logo.png                 |
-      | state | validated                |
+      | state | published                |
 
     When I am logged in as a moderator
     And I go to the homepage of the "Collection solution test" collection
@@ -52,12 +52,12 @@ Feature: "Add solution" visibility options.
     And I go to the homepage of the "Collection solution test" collection
     Then I should not see the link "Add solution"
 
-  @terms @uploadFiles:logo.png,banner.jpg
+  @terms @uploadFiles:logo.png
   Scenario: Add solution as a collection facilitator.
     Given the following collection:
       | title | Belgian barista's |
       | logo  | logo.png          |
-      | state | validated         |
+      | state | published         |
     And the following owner:
       | name                 | type                         |
       | Organisation example | Company, Industry consortium |
@@ -75,7 +75,7 @@ Feature: "Add solution" visibility options.
     And I check "I have read and accept the legal notice and I commit to manage my solution on a regular basis."
     And I press "Yes"
     Then I should see the heading "Add Solution"
-    And the following fields should be present "Title, Description, Upload a new file or enter a URL, Logo, Banner, Name, E-mail address, Website URL"
+    And the following fields should be present "Title, Description, Upload a new file or enter a URL, Logo, Name, E-mail address, Website URL"
     And the following fields should not be present "Groups audience, Other groups, Current workflow state, Langcode, Translation, Motivation"
     # Regression test for ensuring that obsolete content creation value is removed.
     # @see: https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-3567
@@ -83,8 +83,7 @@ Feature: "Add solution" visibility options.
     And I should see the text "Only facilitators and authors can create content"
     # Regression test to endure that the language terms "Multilingual Code" are not present.
     And the available options in the "Language" select should not include the "Multilingual Code"
-    And I should see the description "For best result the image must be larger than 2400x345 pixels." for the "Banner" field
-    And the "Solution type" field should contain the "IOP specification underpinning View, Legal View, Organisational View, deprecated" option groups
+    And the "Solution type" field should contain the "EIRA Ontology Viewpoint, Legal View, Deprecated" option groups
     When I fill in the following:
       | Title                 | Espresso is the solution                                      |
       | Description           | This is a test text                                           |
@@ -92,7 +91,7 @@ Feature: "Add solution" visibility options.
       | Language              | http://publications.europa.eu/resource/authority/language/VLS |
       | Name                  | Ernst Brice                                                   |
       | E-mail address        | ernsy1999@gmail.com                                           |
-    Then I select "http://data.europa.eu/dr8/DataExchangeService" from "Solution type"
+    Then I select "Data Owner" from "Solution type"
     And I select "Demography" from "Topic"
     # Attach a PDF to the documentation.
     And I upload the file "text.pdf" to "Upload a new file or enter a URL"
@@ -107,19 +106,16 @@ Feature: "Add solution" visibility options.
     And I select "Completed" from "Status"
     And I press "Propose"
     Then the email sent to "Ruth Lee" with subject "Joinup: A new solution has been proposed" contains the following lines of text:
-      | text                                                                                              |
       | Wendell Silva has proposed a new Interoperability solution: "Espresso is the solution" on Joinup. |
       | If you think this action is not clear or not due, please contact Joinup Support at                |
     And I should see "Thank you for proposing a solution. Your request is currently pending approval by the site administrator."
 
-    # Regression test for non required fields 'Banner' and 'Logo'.
+    # Regression test for the non required field, 'Logo'.
     # @see: https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-3328
     And I should not see the following error messages:
       | error messages            |
-      | Banner field is required. |
       | Logo field is required.   |
     But I should see a logo on the header
-    And I should see a banner on the header
     And I should see the heading "Espresso is the solution"
     When I am logged in as "Ruth Lee"
     And I go to the edit form of the "Espresso is the solution" solution
@@ -151,12 +147,11 @@ Feature: "Add solution" visibility options.
       | Language              | http://publications.europa.eu/resource/authority/language/VLS          |
       | Name                  | Ajit Tamboli                                                           |
       | E-mail address        | tambotamboli@gocloud.in                                                |
-    Then I select "http://data.europa.eu/dr8/DataExchangeService" from "Solution type"
+    Then I select "Data Owner" from "Solution type"
     And I select "E-inclusion" from "Topic"
     # Attach a PDF to the documentation.
     And I upload the file "text.pdf" to "Upload a new file or enter a URL"
     And I attach the file "logo.png" to "Logo"
-    And I attach the file "banner.jpg" to "Banner"
     # Click the button to select an existing owner.
     And I press "Add existing" at the "Owner" field
     And I fill in "Owner" with "Organisation example"
@@ -167,7 +162,7 @@ Feature: "Add solution" visibility options.
     When I go to the homepage of the "Belgian barista's" collection
     Then I should see the heading "Belgian barista's"
     And I should see the link "Espresso is the solution"
-    # The proposed solution should not be visible since it's not yet validated.
+    # The proposed solution should not be visible since it's not yet published.
     But I should not see the link "V60 filter coffee solution"
 
     When I visit "/user"
@@ -184,7 +179,7 @@ Feature: "Add solution" visibility options.
     # @see issue ISAICP-3209
     Given the following collection:
       | title | Language parsers |
-      | state | validated        |
+      | state | published        |
     When I am logged in as a facilitator of the "Language parsers" collection
     And I go to the homepage of the "Language parsers" collection
     And I click "Add solution"
@@ -220,13 +215,13 @@ Feature: "Add solution" visibility options.
   Scenario: Create a solution with a name that already exists
     Given the following collections:
       | title              | state     |
-      | Ocean studies      | validated |
-      | Glacier monitoring | validated |
+      | Ocean studies      | published |
+      | Glacier monitoring | published |
     And the following solution:
       | title       | Climate change tracker                            |
       | description | Atlantic salmon arrived after the Little Ice Age. |
       | collection  | Ocean studies                                     |
-      | state       | validated                                         |
+      | state       | published                                         |
     And the following owner:
       | name                | type                             |
       | University of Basel | Academia/Scientific organisation |
@@ -280,7 +275,7 @@ Feature: "Add solution" visibility options.
     And I delete the "Climate change tracker" solution
     And I delete the "Angela Crespi" contact information
 
-  @javascript @terms @generateMedia
+  @javascript @terms @generateMedia @generateMediaTypes:solution_logo
   Scenario: Tests the image library widget.
     Given the following owner:
       | name                 | type    |
@@ -292,23 +287,18 @@ Feature: "Add solution" visibility options.
       | title               | Cleaning solution                                 |
       | description         | Use on metal surfaces.                            |
       | owner               | Organisation example                              |
-      | state               | validated                                         |
+      | state               | published                                         |
       | solution type       | Non-binding Instrument, Service Discovery Service |
       | topic               | Employment and Support Allowance                  |
       | contact information | Invisible Man                                     |
 
     Given I am logged in as a moderator
-    And I accept essential cookies
     When I go to the edit form of the "Cleaning solution" solution
-    When I click "Additional fields" tab
+    When I expand the "Additional fields" accordion section
     And  I remove the first file from "Logo"
-    And  I remove the first file from "Banner"
     And I wait for AJAX to finish
 
     When I select image #2 as solution logo
     And I wait for AJAX to finish
-    And I select image #9 as solution banner
-    And I wait for AJAX to finish
     And I press "Publish"
     And the "Cleaning solution" solution logo is image #2
-    And the "Cleaning solution" solution banner is image #9

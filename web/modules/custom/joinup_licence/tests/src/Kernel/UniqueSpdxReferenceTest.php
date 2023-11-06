@@ -21,7 +21,7 @@ class UniqueSpdxReferenceTest extends JoinupKernelTestBase {
   /**
    * {@inheritdoc}
    */
-  public static $modules = [
+  protected static $modules = [
     'joinup_licence',
     'joinup_validation',
     'rdf_schema_field_validation',
@@ -104,13 +104,12 @@ class UniqueSpdxReferenceTest extends JoinupKernelTestBase {
    * {@inheritdoc}
    */
   public function tearDown(): void {
-    parent::tearDown();
-
     if (!empty($this->entities)) {
       foreach ($this->entities as $entity) {
         $entity->delete();
       }
     }
+    parent::tearDown();
   }
 
 }

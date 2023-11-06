@@ -52,7 +52,7 @@ Feature: Group administrators report
     But I should not see the button "Generate data"
 
     Given I press "Download"
-    Then the response should contain "\"User name\",\"User url\",\"User email\",\"Group bundle\",\"Group ID\",\"Group label\",\"Group url\",\"Is administrator\""
+    Then the response should contain "\"User name\";\"User url\";\"User email\";\"Group bundle\";\"Group ID\";\"Group label\";\"Group url\";\"Is administrator\""
     And the response should contain "Victor Otto"
     And the response should contain "Melor Vescovi"
     # Only using the name partially to ensure that spaces don't affect the result.

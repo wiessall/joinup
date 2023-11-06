@@ -1,8 +1,0 @@
-imports:
-  - { resource: vendor/ec-europa/qa-automation/dist/qa-conventions.yml }
-
-parameters:
-    ascii: ~
-    git_dir: .
-    bin_dir: vendor/bin
-    tasks: {  }

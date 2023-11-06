@@ -6,7 +6,7 @@ namespace Drupal\joinup\Context;
 
 use Behat\Gherkin\Node\TableNode;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
-use Drupal\joinup\Traits\RdfEntityTrait;
+use Drupal\joinup\Traits\EntityTrait;
 use Drupal\rdf_entity\RdfInterface;
 use PHPUnit\Framework\Assert;
 
@@ -15,7 +15,7 @@ use PHPUnit\Framework\Assert;
  */
 class JoinupSeoContext extends RawDrupalContext {
 
-  use RdfEntityTrait;
+  use EntityTrait;
 
   /**
    * Asserts that a list of meta tags are presented in the page.
@@ -133,7 +133,7 @@ class JoinupSeoContext extends RawDrupalContext {
    * @Given :count metatag graph of type :type should exist in the page
    */
   public function assertNumberOfEntityGraphsExist(int $count, string $type): void {
-    $json = $this->getMetatagsAsJson();
+    $json = (array) $this->getMetatagsAsJson();
     $found = 0;
     foreach ($json['@graph'] as $graph) {
       $graph = (array) $graph;
@@ -260,7 +260,7 @@ class JoinupSeoContext extends RawDrupalContext {
   protected function getMetatagsAsJson(): ?array {
     $page = $this->getSession()->getPage();
     if ($script = $page->find('xpath', '//script[@type="application/ld+json"]')) {
-      $json = $script->getText();
+      $json = $script->getText() ?: $script->getHtml();
       return json_decode($json, TRUE);
     }
 
@@ -360,7 +360,7 @@ class JoinupSeoContext extends RawDrupalContext {
    * @Then the rdf metadata of the :title rdf entity should be attached in the page
    */
   public function assertSerializedRdfMetadataInPage(string $title): void {
-    $rdf_entity = $this->getRdfEntityByLabel($title);
+    $rdf_entity = $this->getEntityByLabel('rdf_entity', $title);
     $json_output = $this->generateSerializedData($rdf_entity);
     $this->assertSession()->responseContains($json_output);
   }
@@ -378,38 +378,9 @@ class JoinupSeoContext extends RawDrupalContext {
    * @Then the rdf metadata of the :title rdf entity should not be attached in the page
    */
   public function assertSerializedRdfMetadataNotInPage(string $title): void {
-    $rdf_entity = $this->getRdfEntityByLabel($title);
+    $rdf_entity = $this->getEntityByLabel('rdf_entity', $title);
     $json_output = $this->generateSerializedData($rdf_entity);
     $this->assertSession()->responseNotContains($json_output);
-  }
-
-  /**
-   * Adds a site verification entry.
-   *
-   * @codingStandardsIgnoreStart
-   * | engine         | google              |
-   * | File           | site_abcdefg        |
-   * | File contents  | site_verify:abcdefg |
-   * @codingStandardsIgnoreEnd
-   *
-   * @param \Behat\Gherkin\Node\TableNode $data
-   *   The site verification data.
-   *
-   * @Given the following site verification:
-   */
-  public function givenSiteVerificationData(TableNode $data): void {
-    $data = $data->getRowsHash();
-    \Drupal::database()->insert('site_verify')
-      ->fields([
-        'engine' => $data['Engine'],
-        'file' => $data['File'],
-        'file_contents' => $data['File contents'],
-        'meta' => '',
-      ])
-      ->execute();
-    // The site_verify module rebuilds the routes whenever a new entry is added
-    // in their settings form.
-    \Drupal::getContainer()->get('router.builder')->rebuild();
   }
 
   /**

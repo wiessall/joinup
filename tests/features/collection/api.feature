@@ -8,21 +8,20 @@ Feature: Collection API
     Given the following collection:
       | title            | Open Data Initiative     |
       | logo             | logo.png                 |
-      | banner           | banner.jpg               |
       | moderation       | no                       |
       | closed           | no                       |
       | content creation | facilitators and authors |
       | topic            | E-health                 |
-      | state            | validated                |
+      | state            | published                |
     Then I should have 1 collection
 
   Scenario: Programmatically create a collection using only the name
     Given the following collection:
       | title | EU Interoperability Support Group |
-      | state | validated                         |
+      | state | published                         |
     Then I should have 1 collection
 
-  @uploadFiles:logo.png,banner.jpg
+  @uploadFiles:logo.png
   Scenario: Assign ownership when a collection is created through UI.
     Given the following owner:
       | name     | type                  |
@@ -38,7 +37,6 @@ Feature: Collection API
       | E-mail      | basic.collection.api@example.com             |
     When I select "Data gathering, data processing" from "Topic"
     And I attach the file "logo.png" to "Logo"
-    And I attach the file "banner.jpg" to "Banner"
     And I press "Add existing" at the "Owner" field
     And I fill in "Owner" with "Prayfish"
     And I press "Add owner"

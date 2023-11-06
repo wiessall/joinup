@@ -95,6 +95,14 @@ class StateMachinePermissions implements ContainerInjectionInterface {
                 ':entity_type_id' => $entity_type_id,
               ]),
             ];
+            $permissions[StateMachinePermissionStringConstructor::constructGroupStateUpdatePermission($workflow, $from_state->getId(), $to_state->getId())] = [
+              'title' => $this->t('@workflow_label (:workflow_id): Transition group from @from_state to @to_state', [
+                '@workflow_label' => $workflow->getLabel(),
+                ':workflow_id' => $workflow->getId(),
+                '@from_state' => $from_state->getLabel(),
+                '@to_state' => $to_state->getLabel(),
+              ]),
+            ];
           }
         }
       }

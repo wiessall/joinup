@@ -13,7 +13,7 @@ Feature: Notification test for the event transitions on a post moderated parent.
       | CC member        |           | notify_member@test.com      | CC         | Member      |
     And collections:
       | title              | state     | content creation | moderation   |
-      | CC post collection | validated | members          | <moderation> |
+      | CC post collection | published | members          | <moderation> |
     And the following collection user memberships:
       | collection         | user           | roles       |
       | CC post collection | CC owner       | owner       |
@@ -22,11 +22,11 @@ Feature: Notification test for the event transitions on a post moderated parent.
     And event content:
       | title                                | author    | body | location                       | collection         | field_state  |
       | CC notify post publish               | CC member | body | Half Moon Street, London       | CC post collection | draft        |
-      | CC notify post request changes       | CC member | body | Quai d'Orleans, Paris          | CC post collection | validated    |
-      | CC notify post report                | CC member | body | Rue du Mont Thabor, Paris      | CC post collection | validated    |
+      | CC notify post request changes       | CC member | body | Quai d'Orleans, Paris          | CC post collection | published    |
+      | CC notify post report                | CC member | body | Rue du Mont Thabor, Paris      | CC post collection | published    |
       | CC notify post propose from reported | CC member | body | Cort Adelers Gate, Oslo        | CC post collection | needs_update |
       | CC notify post approve proposed      | CC member | body | Ferdinand Bolstraat, Amsterdam | CC post collection | proposed     |
-      | CC notify post delete                | CC member | body | Lychener Strasse, Berlin       | CC post collection | validated    |
+      | CC notify post delete                | CC member | body | Lychener Strasse, Berlin       | CC post collection | published    |
 
     # Test 'create' operation.
     When I am logged in as "CC member"
@@ -40,7 +40,7 @@ Feature: Notification test for the event transitions on a post moderated parent.
     Then the following email should have been sent:
       | recipient | CC owner                                                                                                                                                              |
       | subject   | Joinup: Content has been published                                                                                                                                    |
-      | body      | CC Member has published the new event - "CC notify create publish" in the collection: "CC post collection".You can access the new content at the following link: http |
+      | body      | CC Member has published the new event - "CC notify create publish" in the collection: "CC post collection". You can access the new content at the following link: http |
 
     # Test 'update' operation.
     When I am logged in as "CC member"

@@ -4,26 +4,26 @@ Feature: "Document" overview.
   As a user of the website
   I need to be able to interact with them.
 
-  # A document tile redesign in ISAICP-3767 should show only title and description
-  Scenario: Document tiles should show only title and description.
+  # A document tile redesign in switch to Ventuno theme should show only title
+  Scenario: Document tiles should show title but not description.
     Given the following licence:
       | title       | Beer licence                                     |
       | description | Offer a beer to the developer when you meet him. |
       | type        | Attribution                                      |
     And the following collection:
       | title | Traveller tools |
-      | state | validated       |
+      | state | published       |
     And document content:
       | title                      | document type | short title           | file type | file                                                        | body                                            | collection      | licence      | state     |
-      | VAT refund sample document | document      | VAT refund fac-simile | upload    | text.pdf                                                    | Valid for people living outside the EU.         | Traveller tools | Beer licence | validated |
-      | Local maps archive         | document      | Local maps            | remote    | https://github.com/ec-europa/joinup-dev/archive/develop.zip | Contains maps with the top locations in the EU. | Traveller tools | Beer licence | validated |
+      | VAT refund sample document | document      | VAT refund fac-simile | upload    | text.pdf                                                    | Valid for people living outside the EU.         | Traveller tools | Beer licence | published |
+      | Local maps archive         | document      | Local maps            | remote    | https://github.com/ec-europa/joinup-dev/archive/develop.zip | Contains maps with the top locations in the EU. | Traveller tools | Beer licence | published |
 
     When I go to the homepage of the "Traveller tools" collection
     Then I should see the "VAT refund sample document" tile
     And I should see the "Local maps archive" tile
-    # The description should be visible
-    And I should see the text "Valid for people living outside the EU."
-    And I should see the text "Contains maps with the top locations in the EU."
+    # The description should not be visible
+    And I should not see the text "Valid for people living outside the EU."
+    And I should not see the text "Contains maps with the top locations in the EU."
     # Ensure previously displayed information is not visible any more
     But I should not see the text "text.pdf" in the "VAT refund sample document" tile
     And I should not see the text "Type: PDF" in the "VAT refund sample document" tile

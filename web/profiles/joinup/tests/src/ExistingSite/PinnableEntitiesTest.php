@@ -44,8 +44,10 @@ class PinnableEntitiesTest extends JoinupExistingSiteTestBase {
    */
   public function testGetGroupsWherePinnedWithDeletedGroup() {
     // Create a test collection.
-    $collection = Collection::create();
-    $collection->setWorkflowState('validated')->save();
+    $collection = Collection::create([
+      'label' => $this->getRandomGenerator()->string(),
+    ]);
+    $collection->setWorkflowState('published')->save();
 
     // Create a test news article inside the collection.
     /** @var \Drupal\joinup_news\Entity\NewsInterface $news */

@@ -5,7 +5,7 @@ Feature: As a site moderator I am able to import RDF files.
     Given collection:
       | uri   | http://administracionelectronica.gob.es/ctt |
       | title | Spain                                       |
-      | state | validated                                   |
+      | state | published                                   |
     And users:
       | Username        | Roles     |
       | Antoine Batiste | moderator |
@@ -16,6 +16,7 @@ Feature: As a site moderator I am able to import RDF files.
     Given I click "ADMS-AP importer" in the "Administration toolbar" region
     Then the "Data pipeline" select should contain the following options:
       | - Select -                               |
+      | Developers Italia                        |
       | Danish Public Sector Interoperability    |
       | EU Schemantic Interoperability Catalogue |
       | Joinup collection                        |
@@ -123,10 +124,10 @@ Feature: As a site moderator I am able to import RDF files.
     And collection:
       | uri   | http://nio.gov.si/nio/ |
       | title | NIO                    |
-      | state | validated              |
+      | state | published              |
     And solutions:
       | uri                           | title                       | collection | description         | state     | modification date |
-      | http://example.com/solution/2 | Local version of Solution 2 | NIO        | Initial description | validated | 15-07-2018        |
+      | http://example.com/solution/2 | Local version of Solution 2 | NIO        | Initial description | published | 15-07-2018        |
     And the following solution user membership:
       | solution                    | user     | roles                      | state  |
       | Local version of Solution 2 | CS Owner | facilitator, administrator | active |
@@ -252,7 +253,8 @@ Feature: As a site moderator I am able to import RDF files.
 
     # Ensure that the og relation is set between the distribution and the solution.
     When I go to the "Windows" asset distribution
-    Then I should see the heading "Solution 1"
+    Then I see the text "Solution 1" in the "Header" region
+    And I should see the heading "Windows"
 
     # And the SPDX licence IDs were converted to Joinup licence IDs.
     And I should see "Licence same as Apache 2"

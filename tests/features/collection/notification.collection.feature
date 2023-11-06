@@ -23,21 +23,21 @@ Feature: Notification test for the collection transitions.
     And collections:
       | title                  | state            | abstract     | description   | topic             | owner      | contact information        |
       | NC to propose          | draft            | No one cares | No one cares. | Supplier exchange | NC for all | Notificationous absolutous |
-      | NC to validate         | proposed         | No one cares | No one cares. | Supplier exchange | NC for all | Notificationous absolutous |
+      | NC to publish         | proposed         | No one cares | No one cares. | Supplier exchange | NC for all | Notificationous absolutous |
       # The following will also cover the validate edited notification.
-      | NC to propose edit     | validated        | No one cares | No one cares. | Supplier exchange | NC for all | Notificationous absolutous |
-      | NC to validate edit    | validated        | No one cares | No one cares. | Supplier exchange | NC for all | Notificationous absolutous |
-      | NC to request archival | validated        | No one cares | No one cares. | Supplier exchange | NC for all | Notificationous absolutous |
+      | NC to propose edit     | published        | No one cares | No one cares. | Supplier exchange | NC for all | Notificationous absolutous |
+      | NC to publish edit    | published        | No one cares | No one cares. | Supplier exchange | NC for all | Notificationous absolutous |
+      | NC to request archival | published        | No one cares | No one cares. | Supplier exchange | NC for all | Notificationous absolutous |
       | NC to reject archival  | archival request | No one cares | No one cares. | Supplier exchange | NC for all | Notificationous absolutous |
       | NC to archive          | archival request | No one cares | No one cares. | Supplier exchange | NC for all | Notificationous absolutous |
-      | NC to delete           | validated        | No one cares | No one cares. | Supplier exchange | NC for all | Notificationous absolutous |
-      | NC to delete by mod    | validated        | No one cares | No one cares. | Supplier exchange | NC for all | Notificationous absolutous |
+      | NC to delete           | published        | No one cares | No one cares. | Supplier exchange | NC for all | Notificationous absolutous |
+      | NC to delete by mod    | published        | No one cares | No one cares. | Supplier exchange | NC for all | Notificationous absolutous |
     And the following solutions:
-      | title        | collections                          | logo     | banner     | state     |
+      | title        | collections                          | logo     | state     |
       # Has only one affiliate.
-      | NC Solution1 | NC to archive                        | logo.png | banner.jpg | validated |
+      | NC Solution1 | NC to archive                        | logo.png | published |
       # Has more than one affiliate.
-      | NC Solution2 | NC to request archival,NC to archive | logo.png | banner.jpg | validated |
+      | NC Solution2 | NC to request archival,NC to archive | logo.png | published |
     And the following solution user memberships:
       | solution     | user      | roles |
       | NC Solution1 | NCS owner | owner |
@@ -45,11 +45,11 @@ Feature: Notification test for the collection transitions.
     And the following collection user memberships:
       | collection             | user           | roles              |
       | NC to propose          | NC owner       | owner, facilitator |
-      | NC to validate         | NC owner       | owner, facilitator |
+      | NC to publish         | NC owner       | owner, facilitator |
       | NC to propose edit     | NC owner       | owner, facilitator |
       # A third person is needed to test notifications sent to both moderators and the owner.
       | NC to propose edit     | NC facilitator | facilitator        |
-      | NC to validate edit    | NC owner       | owner, facilitator |
+      | NC to publish edit    | NC owner       | owner, facilitator |
       | NC to request archival | NC owner       | owner, facilitator |
       | NC to reject archival  | NC owner       | owner, facilitator |
       | NC to archive          | NC owner       | owner, facilitator |
@@ -77,7 +77,6 @@ Feature: Notification test for the collection transitions.
     And I fill in "Owner" with "NC for all"
     And I press "Propose"
     Then the email sent to "NC moderator" with subject "User NC proposed collection NC proposed new" contains the following lines of text:
-      | text                                                                               |
       | NC User has proposed collection "NC proposed new".                                 |
       | To approve or reject this proposal, please go to                                   |
       | If you think this action is not clear or not due, please contact Joinup Support at |
@@ -92,7 +91,6 @@ Feature: Notification test for the collection transitions.
     And I click "Edit" in the "Entity actions" region
     And I press "Propose"
     Then the email sent to "NC moderator" with subject "User NC proposed collection NC to propose" contains the following lines of text:
-      | text                                                                               |
       | NC Owner has proposed collection "NC to propose".                                  |
       | To approve or reject this proposal, please go to                                   |
       | If you think this action is not clear or not due, please contact Joinup Support at |
@@ -102,7 +100,6 @@ Feature: Notification test for the collection transitions.
     And I click "Edit" in the "Entity actions" region
     And I press "Request archival"
     Then the email sent to "NC moderator" with subject "User NC requested to archive collection NC to request archival" contains the following lines of text:
-      | text                                                                               |
       | NC Owner has requested to archive the collection "NC to request archival".         |
       | To approve or reject this request, please go to                                    |
       | If you think this action is not clear or not due, please contact Joinup Support at |
@@ -130,30 +127,27 @@ Feature: Notification test for the collection transitions.
     And I fill in "Title" with "NC to propose edit proposed"
     And I press "Propose"
     Then the email sent to "NC moderator" with subject "User NC proposed to edit collection NC to propose edit proposed" contains the following lines of text:
-      | text                                                                          |
       | NC Facilitator has proposed to edit collection "NC to propose edit proposed". |
       | To approve or reject this proposal, please go to                              |
     And the email sent to "NC owner" with subject "User NC proposed to edit collection NC to propose edit proposed" contains the following lines of text:
-      | text                                                                          |
       | NC Facilitator has proposed to edit collection "NC to propose edit proposed". |
       | To modify your collection, please go to                                       |
 
     # Test the 'approve new' operation.
     And I am logged in as "NC moderator"
-    And I go to the homepage of the "NC to validate" collection
+    And I go to the homepage of the "NC to publish" collection
     And I click "Edit" in the "Entity actions" region
     And I press "Publish"
     Then the following email should have been sent:
       | recipient | NC owner                                                                          |
-      | subject   | Your proposal of collection NC to validate has been approved                      |
-      | body      | Your proposed collection "NC to validate" has been validated as per your request. |
+      | subject   | Your proposal of collection NC to publish has been approved                      |
+      | body      | Your proposed collection "NC to publish" has been validated as per your request. |
 
     # Test the 'approve proposed' that was proposed through the 'propose edit' operation.
     And I go to the homepage of the "NC to propose edit proposed" collection
     And I click "Edit" in the "Entity actions" region
     And I press "Publish"
     Then the email sent to "NC owner" with subject "Your request to edit collection NC to propose edit proposed has been approved." contains the following lines of text:
-      | text                                                                                  |
       | Your proposal to edit the collection "NC to propose edit proposed" has been accepted. |
       | You can verify the edited version of the collection at                                |
 
@@ -166,7 +160,6 @@ Feature: Notification test for the collection transitions.
     When I fill in "Motivation" with "It will not be archived."
     And I press "Publish"
     Then the email sent to "NC owner" with subject "Your request to archive collection NC to reject archival has been rejected" contains the following lines of text:
-      | text                                                                                      |
       | NC Moderator has rejected your request to archive the collection "NC to reject archival". |
       | The reason for rejection is: It will not be archived.                                     |
 

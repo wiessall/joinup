@@ -118,6 +118,7 @@ class BundleProcessor extends ProcessorPluginBase implements BuildProcessorInter
     $allowed_ids = $this->entityTypeManager
       ->getStorage($this->getEntityTypeId($facet))
       ->getQuery()
+      ->accessCheck(FALSE)
       ->condition($this->getBundleKey($facet), $config['bundle'], $operator)
       ->execute();
 

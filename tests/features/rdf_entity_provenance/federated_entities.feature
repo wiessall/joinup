@@ -21,7 +21,7 @@ Feature: In order to avoid users changing federated values
       | owner               | John Federator           |
       | contact information | John Federator's contact |
       | content creation    | facilitators and authors |
-      | state               | validated                |
+      | state               | published                |
     And the following solution:
       | title               | A federated solution                 |
       | collection          | A federated collection               |
@@ -34,7 +34,7 @@ Feature: In order to avoid users changing federated values
       | webdav creation     | no                                   |
       | webdav url          | http://joinup.eu/solution/foo/webdav |
       | wiki                | http://example.wiki/foobar/wiki      |
-      | state               | validated                            |
+      | state               | published                            |
     And the following release:
       | title          | A federated release         |
       | description    | This is a federated release |
@@ -42,7 +42,7 @@ Feature: In order to avoid users changing federated values
       | release number | 1                           |
       | release notes  | Changed release             |
       | is version of  | A federated solution        |
-      | state          | validated                   |
+      | state          | published                   |
     And the following distribution:
       | title       | A federated distribution         |
       | description | This is a federated distribution |
@@ -76,10 +76,10 @@ Feature: In order to avoid users changing federated values
     And the following fields should not be disabled "<fields not disabled>"
 
     Examples:
-      | label                    | type         | fields disabled                                                                                              | fields not disabled                                                                                   |
-      | A federated collection   | collection   | Title, Description, Contact information, Owner                                                               | Abstract, Access URL, Topic, Moderated, Content creation, Motivation, Logo, Banner, Closed collection |
-      | A federated solution     | solution     | Title, Description, Contact information, Owner, Keywords, Related solutions, Status, Languages, Landing page | Topic, Moderated, Content creation, Motivation, Logo, Banner, Metrics pager                           |
-      | A federated release      | release      | Name, Release number, Keywords, Status, Language                                                             | Motivation                                                                                            |
-      | A federated distribution | distribution | Title, Description, Access URL, Format, Status, Licence                                                      |                                                                                                       |
-      | John Federator           | owner        | Name                                                                                                         |                                                                                                       |
-      | John Federator's contact | contact      | E-mail address, Name, Website URL                                                                            |                                                                                                       |
+      | label                    | type         | fields disabled                                                                                                     | fields not disabled                                                                            |
+      | A federated collection   | collection   | Title, Description, Contact information, Owner                                                                      | Abstract, Access URL, Topic, Moderated, Content creation, Motivation, Logo, Closed collection  |
+      | A federated solution     | solution     | Title, Description, Contact information, Owner, Search keywords, Related solutions, Status, Languages, Landing page | Topic, Moderated, Content creation, Motivation, Logo, Metrics pager                            |
+      | A federated release      | release      | Name, Release number, Search keywords, Status, Language                                                             | Motivation                                                                                     |
+      | A federated distribution | distribution | Title, Description, Access URL, Format, Status, Licence                                                             |                                                                                                |
+      | John Federator           | owner        | Name                                                                                                                |                                                                                                |
+      | John Federator's contact | contact      | E-mail address, Name, Website URL                                                                                   |                                                                                                |

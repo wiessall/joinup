@@ -1,0 +1,11 @@
+group-badge:
+  version: VERSION
+  css:
+    theme:
+      css/search-badge.css: {}
+  js:
+    js/search-badge.js: { minified: false }
+  dependencies:
+    - core/drupal
+    - core/drupalSettings
+    - core/once

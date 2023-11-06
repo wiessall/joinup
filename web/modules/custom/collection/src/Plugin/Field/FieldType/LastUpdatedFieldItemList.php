@@ -46,7 +46,7 @@ class LastUpdatedFieldItemList extends FieldItemList {
 
     // Check for a higher child solution changed timestamp.
     foreach ($collection->getSolutions(TRUE) as $solution) {
-      if ($solution->getWorkflowState() === 'validated') {
+      if ($solution->getWorkflowState() === 'published') {
         if ($solution->getChangedTime() > $last_updated) {
           $last_updated = $solution->getChangedTime();
         }
@@ -55,7 +55,7 @@ class LastUpdatedFieldItemList extends FieldItemList {
 
     // Check for a higher community content or custom page changed timestamp.
     $node_storage = \Drupal::entityTypeManager()->getStorage('node');
-    $nids = $node_storage->getQuery()
+    $nids = $node_storage->getQuery()->accessCheck(FALSE)
       ->condition('og_audience', $collection->id())
       ->condition('status', TRUE)
       ->sort('changed', 'DESC')

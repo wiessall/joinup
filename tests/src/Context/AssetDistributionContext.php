@@ -12,7 +12,9 @@ use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\asset_distribution\Entity\DownloadEvent;
 use Drupal\file_url\FileUrlHandler;
 use Drupal\joinup\Traits\EntityReferenceTrait;
+use Drupal\joinup\Traits\EntityTrait;
 use Drupal\joinup\Traits\FileTrait;
+use Drupal\joinup\Traits\JavascriptTrait;
 use Drupal\joinup\Traits\RdfEntityTrait;
 use Drupal\joinup\Traits\TestingEntitiesTrait;
 use Drupal\meta_entity\Entity\MetaEntity;
@@ -24,9 +26,11 @@ use Drupal\rdf_entity\RdfInterface;
 class AssetDistributionContext extends RawDrupalContext {
 
   use EntityReferenceTrait;
+  use EntityTrait;
   use FileTrait;
   use RdfEntityTrait;
   use TestingEntitiesTrait;
+  use JavascriptTrait;
 
   /**
    * Navigates to the canonical page display of an asset distribution.
@@ -43,7 +47,7 @@ class AssetDistributionContext extends RawDrupalContext {
    */
   public function visitDistribution(string $asset_distribution): void {
     /** @var \Drupal\rdf_entity\Entity\Rdf $entity */
-    $entity = $this->getAssetDistributionByName($asset_distribution);
+    $entity = $this->getEntityByLabel('rdf_entity', $asset_distribution);
     $this->visitPath($entity->toUrl()->toString());
   }
 
@@ -188,50 +192,13 @@ class AssetDistributionContext extends RawDrupalContext {
    *   Thrown when the entity could not be deleted.
    */
   public function deleteAssetDistribution(string $asset_distribution): void {
-    /** @var \Drupal\rdf_entity\Entity\Rdf $entity */
-    $entity = $this->getAssetDistributionByName($asset_distribution);
+    /** @var \Drupal\asset_distribution\Entity\AssetDistributionInterface $entity */
+    $entity = $this->getEntityByLabel('rdf_entity', $asset_distribution);
     if (isset($this->entities['rdf_entity'][$entity->id()])) {
       unset($this->entities['rdf_entity'][$entity->id()]);
     }
     $entity->skip_notification = TRUE;
     $entity->delete();
-  }
-
-  /**
-   * Returns the asset distribution with the given title.
-   *
-   * If multiple asset distributions have the same title,
-   * the first one will be returned.
-   *
-   * @param string $title
-   *   The asset distribution title.
-   *
-   * @return \Drupal\rdf_entity\RdfInterface
-   *   The asset distribution.
-   *
-   * @throws \InvalidArgumentException
-   *   Thrown when an asset distribution with the given title does not exist.
-   */
-  protected function getAssetDistributionByName(string $title): RdfInterface {
-    return $this->getRdfEntityByLabel($title, 'asset_distribution');
-  }
-
-  /**
-   * Returns the Solution with the given title.
-   *
-   * If multiple solution have the same title, the first one will be returned.
-   *
-   * @param string $title
-   *   The solution title.
-   *
-   * @return \Drupal\rdf_entity\RdfInterface
-   *   The solution.
-   *
-   * @throws \InvalidArgumentException
-   *   Thrown when a solution with the given title does not exist.
-   */
-  protected function getSolutionByName(string $title): RdfInterface {
-    return $this->getRdfEntityByLabel($title, 'solution');
   }
 
   /**
@@ -298,13 +265,13 @@ class AssetDistributionContext extends RawDrupalContext {
       throw new \InvalidArgumentException('Only "download" and "external" values are allowed for $link_type.');
     }
     $link_type = ucfirst($link_type);
-    $distribution = $this->getAssetDistributionByName($distribution);
+    $distribution = $this->getEntityByLabel('rdf_entity', $distribution);
     if (empty($distribution->field_ad_access_url->first())) {
       throw new \Exception(sprintf('Asset distribution "%s" does not contain any download links.', $distribution->label()));
     }
     $file = FileUrlHandler::urlToFile($distribution->field_ad_access_url->target_id);
-    $link = FileUrlHandler::isRemote($file) ? $distribution->field_ad_access_url->target_id : file_create_url($file->getFileUri());
-    $result = $this->getSession()->getPage()->find('xpath', "//a[contains(., '{$distribution->label()}')]/ancestor::div[contains(concat(' ', @class, ' '), ' timeline__listing-item ')]//a[@href='{$link}' and contains(text(), '{$link_type}')]");
+    $link = FileUrlHandler::isRemote($file) ? $distribution->field_ad_access_url->target_id : \Drupal::service('file_url_generator')->generateAbsoluteString($file->getFileUri());
+    $result = $this->getSession()->getPage()->find('xpath', "//a[contains(., '{$distribution->label()}')]/ancestor::li[contains(concat(' ', @class, ' '), ' releases__item ')]//a[@href='{$link}' and contains(concat(' ', @class, ' '), ' btn ') and normalize-space(text()) = '{$link_type}']");
     if (empty($result)) {
       throw new \Exception(sprintf('No link was found in the "%s" distribution on the page %s', $distribution->label(), $this->getSession()->getCurrentUrl()));
     }
@@ -324,7 +291,7 @@ class AssetDistributionContext extends RawDrupalContext {
    * @Then the :distribution( asset) distribution should not have any download urls
    */
   public function assertLinkNotPresentInCompactDistributionTile(string $distribution): void {
-    $link = $this->getSession()->getPage()->find('xpath', "//a[contains(text(), '$distribution')]/ancestor::div[contains(concat(' ', @class, ' '), ' timeline__listing-item ')]//a[contains(text(), 'External') or contains(text(), 'Download')]");
+    $link = $this->getSession()->getPage()->find('xpath', "//a[contains(text(), '$distribution')]/ancestor::div[contains(concat(' ', @class, ' '), ' releases__item ')]//a[contains(text(), 'External') or contains(text(), 'Download')]");
     if (!empty($link)) {
       throw new \Exception(sprintf('Asset distribution "%s" contains download link(s).', $distribution));
     }
@@ -344,9 +311,9 @@ class AssetDistributionContext extends RawDrupalContext {
    * @Then the :distribution distribution should have the link of the :file_name in the access URL field
    */
   public function assertLinkSynchronized(string $distribution, string $file_name): void {
-    $distribution = $this->getAssetDistributionByName($distribution);
+    $distribution = $this->getEntityByLabel('rdf_entity', $distribution);
     $file = FileUrlHandler::urlToFile($distribution->field_ad_access_url->target_id);
-    if (($file->getFilename() !== $file_name) || !file_create_url($file->getFileUri())) {
+    if (($file->getFilename() !== $file_name) || !\Drupal::service('file_url_generator')->generateAbsoluteString($file->getFileUri())) {
       throw new \Exception("The file {$file_name} was not found in the '{$distribution->label()}' distribution'");
     }
 
@@ -356,9 +323,9 @@ class AssetDistributionContext extends RawDrupalContext {
       throw new \Exception("File '$file_name' was not found in file path '$files_path'.");
     }
 
-    /** @var \Symfony\Component\HttpFoundation\File\MimeType\MimeTypeGuesserInterface $mime_guesser */
+    /** @var \Symfony\Component\Mime\MimeTypesInterface $mime_guesser */
     $mime_guesser = \Drupal::service('file.mime_type.guesser');
-    $mime_type = $mime_guesser->guess($path);
+    $mime_type = $mime_guesser->guessMimeType($path);
     $expected_file_type = asset_distribution_get_file_type_term_by_mime($mime_type);
     $expected_file_size = filesize($path);
 
@@ -440,6 +407,7 @@ class AssetDistributionContext extends RawDrupalContext {
       throw new \Exception("The tile '$heading' was not found on the page.");
     }
 
+    $this->scrollElementIntoView($element);
     $element->clickLink($link);
   }
 
@@ -466,7 +434,7 @@ class AssetDistributionContext extends RawDrupalContext {
   public function downloadEvents(TableNode $table): void {
     foreach ($table->getColumnsHash() as $row) {
       /** @var \Drupal\asset_distribution\Entity\AssetDistributionInterface $distribution */
-      $distribution = $this->getRdfEntityByLabel($row['distribution'], 'asset_distribution');
+      $distribution = $this->getEntityByLabel('rdf_entity', $row['distribution'], 'asset_distribution');
       $file = FileUrlHandler::urlToFile($distribution->get('field_ad_access_url')->target_id);
       $account = \Drupal::service('email.validator')->isValid($row['user']) ? new AnonymousUserSession() : user_load_by_name($row['user']);
       $mail = $account->isAnonymous() ? $row['user'] : $account->getEmail();
@@ -537,9 +505,9 @@ class AssetDistributionContext extends RawDrupalContext {
    */
   protected function getCompactDistributionByHeading(string $heading): ?NodeElement {
     // Locate all the elements.
-    $xpath = '//*[@class and contains(concat(" ", normalize-space(@class), " "), " timeline__listing-item ")]';
+    $xpath = '//*[@class and contains(concat(" ", normalize-space(@class), " "), " releases__item ")]';
     // That have a heading with the specified text.
-    $xpath .= '[.//*[@class and contains(concat(" ", normalize-space(@class), " "), " timeline__listing-title ")][normalize-space()="' . $heading . '"]]';
+    $xpath .= '[.//article[@class and contains(concat(" ", normalize-space(@class), " "), " tile ")]//h1//a[normalize-space()="' . $heading . '"]]';
 
     return $this->getSession()->getPage()->find('xpath', $xpath);
   }

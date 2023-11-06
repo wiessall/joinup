@@ -1,0 +1,10 @@
+uuid: 45313abf-af00-4673-965f-9d9395a1cc6f
+langcode: en
+status: true
+dependencies: {  }
+id: news
+label: News
+description: News
+sitemap_generator: default
+url_generators:
+  latest_news: latest_news

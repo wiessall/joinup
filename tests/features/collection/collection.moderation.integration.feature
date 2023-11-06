@@ -15,12 +15,12 @@ Feature: As a user of the website
       | name            |
       | Martin Gonzalez |
     And the following collections:
-      | title                | description          | logo     | banner     | owner           | contact information | state            | topic                   |
-      | Willing Fairy        | Willing Fairy        | logo.png | banner.jpg | Martin Gonzalez | Marty Kelley        | draft            | Statistics and Analysis |
-      | The Fallen Thoughts  | The Fallen Thoughts  | logo.png | banner.jpg | Martin Gonzalez | Marty Kelley        | proposed         | Finance in EU           |
-      | Destruction of Scent | Destruction of Scent | logo.png | banner.jpg | Martin Gonzalez | Marty Kelley        | validated        | Supplier exchange       |
-      | The School's Stars   | The School's Stars   | logo.png | banner.jpg | Martin Gonzalez | Marty Kelley        | archival request | E-justice               |
-      | Boy in the Dreams    | Boy in the Dreams    | logo.png | banner.jpg | Martin Gonzalez | Marty Kelley        | archived         | E-health                |
+      | title                | description          | logo     | owner           | contact information | state            | topic                   |
+      | Willing Fairy        | Willing Fairy        | logo.png | Martin Gonzalez | Marty Kelley        | draft            | Statistics and Analysis |
+      | The Fallen Thoughts  | The Fallen Thoughts  | logo.png | Martin Gonzalez | Marty Kelley        | proposed         | Finance in EU           |
+      | Destruction of Scent | Destruction of Scent | logo.png | Martin Gonzalez | Marty Kelley        | published        | Supplier exchange       |
+      | The School's Stars   | The School's Stars   | logo.png | Martin Gonzalez | Marty Kelley        | archival request | E-justice               |
+      | Boy in the Dreams    | Boy in the Dreams    | logo.png | Martin Gonzalez | Marty Kelley        | archived         | E-health                |
     And the following collection user memberships:
       | collection           | user      | roles              |
       | Destruction of Scent | Cornelius | owner, facilitator |
@@ -42,7 +42,7 @@ Feature: As a user of the website
     When I am logged in as a "facilitator" of the "Destruction of Scent" collection
     And I go to the homepage of the "Destruction of Scent" collection
     Then I should see the heading "Destruction of Scent"
-    # Since it's validated, the normal view is the published view and the
+    # Since it's published, the normal view is the published view and the
     # "View draft" should not be shown.
     And I should not see the link "View Draft"
     And I should not see the following warning messages:
@@ -53,7 +53,7 @@ Feature: As a user of the website
     # Edit as facilitator and save as draft.
     When I click "Edit"
     Then the following fields should be present "Current workflow state"
-    And the current workflow state should be "Validated"
+    And the current workflow state should be "Published"
     When I fill in "Title" with "Construction of Scent"
     And I press "Save as draft"
 

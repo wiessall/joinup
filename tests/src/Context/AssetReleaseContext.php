@@ -8,6 +8,7 @@ use Behat\Gherkin\Node\TableNode;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\asset_release\Entity\AssetReleaseInterface;
 use Drupal\joinup\Traits\EntityReferenceTrait;
+use Drupal\joinup\Traits\EntityTrait;
 use Drupal\joinup\Traits\FileTrait;
 use Drupal\joinup\Traits\RdfEntityTrait;
 use Drupal\joinup\Traits\SearchTrait;
@@ -18,6 +19,7 @@ use Drupal\joinup\Traits\SearchTrait;
 class AssetReleaseContext extends RawDrupalContext {
 
   use EntityReferenceTrait;
+  use EntityTrait;
   use FileTrait;
   use SearchTrait;
   use RdfEntityTrait;
@@ -42,7 +44,7 @@ class AssetReleaseContext extends RawDrupalContext {
    */
   public function visitRelease(string $asset_release): void {
     /** @var \Drupal\rdf_entity\Entity\Rdf $entity */
-    $entity = $this->getAssetReleaseByName($asset_release);
+    $entity = $this->getEntityByLabel('rdf_entity', $asset_release);
     $this->visitPath($entity->toUrl()->toString());
   }
 
@@ -81,7 +83,7 @@ class AssetReleaseContext extends RawDrupalContext {
         }
       }
 
-      $values = $this->convertValueAliases($values);
+      $values = $this->convertEntityReferencesValues('rdf_entity', 'asset_release', $this->parseRdfEntityFields($values));
 
       $this->createAssetRelease($values);
     }
@@ -123,8 +125,7 @@ class AssetReleaseContext extends RawDrupalContext {
       }
     }
 
-    $values = $this->convertValueAliases($values);
-
+    $values = $this->convertEntityReferencesValues('rdf_entity', 'asset_release', $this->parseRdfEntityFields($values));
     $this->createAssetRelease($values);
   }
 
@@ -162,28 +163,12 @@ class AssetReleaseContext extends RawDrupalContext {
    * @When I delete the :asset_release release
    */
   public function deleteAssetRelease(string $asset_release): void {
-    $asset_release = $this->getAssetReleaseByName($asset_release);
+    $asset_release = $this->getEntityByLabel('rdf_entity', $asset_release);
     if (isset($this->assetReleases[$asset_release->id()])) {
       unset($this->assetReleases[$asset_release->id()]);
     }
     $asset_release->skip_notification = TRUE;
     $asset_release->delete();
-  }
-
-  /**
-   * Returns the asset release with the given name.
-   *
-   * If multiple asset releases have the same name,
-   * the first one will be returned.
-   *
-   * @param string $title
-   *   The asset release name.
-   *
-   * @return \Drupal\asset_release\Entity\AssetReleaseInterface
-   *   The asset release.
-   */
-  protected function getAssetReleaseByName(string $title): AssetReleaseInterface {
-    return $this->getRdfEntityByLabel($title, 'asset_release');
   }
 
   /**
@@ -212,17 +197,12 @@ class AssetReleaseContext extends RawDrupalContext {
       return;
     }
 
-    // Since we might be cleaning up many releases, temporarily disable the
-    // feature to commit the index after every query.
-    $this->disableCommitOnUpdate();
-
     // Remove any asset_releases that were created.
     foreach ($this->assetReleases as $asset_release) {
       $asset_release->skip_notification = TRUE;
       $asset_release->delete();
     }
     $this->assetReleases = [];
-    $this->enableCommitOnUpdate();
   }
 
   /**
@@ -258,33 +238,6 @@ class AssetReleaseContext extends RawDrupalContext {
   }
 
   /**
-   * Converts values from user friendly to normal machine values.
-   *
-   * @param array $fields
-   *   An array of fields keyed by field name.
-   *
-   * @return array
-   *   The array with the values converted.
-   *
-   * @throws \Exception
-   *    Throws an exception when a mapped value is not found.
-   */
-  protected function convertValueAliases(array $fields): array {
-    // Convert the name of the is version of field to an id.
-    // This is handled separately as it is not an entity reference but an
-    // og_standard_reference.
-    if (isset($fields['field_isr_is_version_of'])) {
-      $solution = $this->getRdfEntityByLabel($fields['field_isr_is_version_of'], 'solution');
-      $fields['field_isr_is_version_of'] = $solution->id();
-    }
-
-    // Convert any entity reference field label value with the entity id.
-    $fields = $this->convertEntityReferencesValues('rdf_entity', 'asset_release', $this->parseRdfEntityFields($fields));
-
-    return $fields;
-  }
-
-  /**
    * Asserts that releases are shown in the page in the exact order.
    *
    * This step is meant for the releases overview page within a solution.
@@ -306,7 +259,7 @@ class AssetReleaseContext extends RawDrupalContext {
       $releases[] = $title['release'];
     }
 
-    $release_titles = $this->getSession()->getPage()->findAll('css', '.timeline__release > .timeline__release-content > .timeline__meta > h2.timeline__release-title');
+    $release_titles = $this->getSession()->getPage()->findAll('css', '.releases__item h2.releases__item-title > a');
     if (count($release_titles) != count($releases)) {
       throw new \Exception("Wrong number of releases found.");
     }
@@ -332,7 +285,7 @@ class AssetReleaseContext extends RawDrupalContext {
    * @Then the :release release should be marked as the latest release
    */
   public function assertReleaseIsLatest(string $release): void {
-    $release = $this->getAssetReleaseByName($release);
+    $release = $this->getEntityByLabel('rdf_entity', $release);
 
     $latest_releases = $this->getSession()->getPage()->findAll('css', '.is-latest');
     if (empty($latest_releases)) {
@@ -347,7 +300,7 @@ class AssetReleaseContext extends RawDrupalContext {
     $name_with_version = $release->label() . " " . $release_version;
 
     $latest_release = reset($latest_releases);
-    if ($latest_release->find('css', '.timeline__release-title')->getText() !== $name_with_version) {
+    if ($latest_release->find('css', '.releases__item-title')->getText() !== $name_with_version) {
       throw new \Exception("{$release->label()} is not marked as the latest release.");
     }
   }

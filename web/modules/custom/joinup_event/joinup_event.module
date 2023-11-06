@@ -182,3 +182,15 @@ function joinup_event_tokens($type, array $tokens, array $data = [], array $opti
 
   return $replacements;
 }
+
+/**
+ * Implements hook_library_info_alter().
+ */
+function joinup_event_library_info_alter(array &$libraries, string $extension): void {
+  // Temporary support for Internet Explorer.
+  // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-5564
+  // @see https://github.com/openeuropa/oe_webtools/pull/104
+  if ($extension === 'oe_webtools') {
+    $libraries['drupal.webtools-smartloader']['header'] = TRUE;
+  }
+}

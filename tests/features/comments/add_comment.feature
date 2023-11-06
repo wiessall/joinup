@@ -5,7 +5,7 @@ Feature: Add comments
   Background:
     Given the following collections:
       | title             | state     | closed |
-      | Gossip collection | validated | no     |
+      | Gossip collection | published | no     |
     And users:
       | Username        | E-mail                 | Roles | First name | Family name |
       | Miss tell tales | tell.tales@example.com |       | Miss       | Tales       |
@@ -18,7 +18,7 @@ Feature: Add comments
 
     Given solutions:
       | title                | collection        | state     |
-      | Gossip girl solution | Gossip collection | validated |
+      | Gossip girl solution | Gossip collection | published |
     And users:
       | Username          | E-mail                        | Roles     | First name | Family name |
       | Comment moderator | comment.moderator@example.com | moderator | Comment    | Moderator   |
@@ -37,15 +37,11 @@ Feature: Add comments
       | title   | body                                                | <parent>       | state   | author       |
       | <title> | How could this ever happen? Moral panic on its way! | <parent title> | <state> | Salma Coster |
     Given I am logged in as "Miss tell tales"
-    And I accept essential cookies
     When I go to the content page of the type "<content type>" with the title "<title>"
-    # The honeypot field that needs to be empty on submission.
-    Then the following fields should be present "user_homepage"
     # Authenticated users can use a rich text editor to enter comments.
     And I should see the "Create comment" wysiwyg editor
-    And the "Image" button should be available in the "Create comment" wysiwyg editor
+    And the "Insert image" button should be available in the "Create comment" wysiwyg editor
     When I enter "Mr scandal was doing something weird the other day." in the "Create comment" wysiwyg editor
-    And I wait for the spam protection time limit to pass
     And I press "Post comment"
     Then I should not see the following success messages:
       | success messages                                                                                     |
@@ -55,23 +51,19 @@ Feature: Add comments
     And I should see the link "Miss Tales"
     But I should not see the link "Miss tell tales"
     And the email sent to "Comment moderator" with subject "Joinup: A new comment has been created." contains the following lines of text:
-      | text                                                                                    |
       | Miss Tales posted a comment in <parent> "<parent title>".                               |
       | To view the comment click                                                               |
       | If you think this action is not clear or not due, please contact Joinup Support at http |
     And the email sent to "Layonel Sarok" with subject "Joinup: A new comment has been created." contains the following lines of text:
-      | text                                                                                    |
       | Miss Tales posted a comment in <parent> "<parent title>".                               |
       | To view the comment click                                                               |
       | If you think this action is not clear or not due, please contact Joinup Support at http |
     And the email sent to "Korma Salya" with subject "Joinup: A new comment has been created." contains the following lines of text:
-      | text                                                                                    |
       | Miss Tales posted a comment in <parent> "<parent title>".                               |
       | To view the comment click                                                               |
       | If you think this action is not clear or not due, please contact Joinup Support at http |
     # Owner receives an email.
     And the email sent to "Salma Coster" with subject "Joinup: A new comment has been created." contains the following lines of text:
-      | text                                                                                    |
       | Miss Tales posted a comment in <parent> "<parent title>".                               |
       | To view the comment click                                                               |
       | If you think this action is not clear or not due, please contact Joinup Support at http |
@@ -83,16 +75,13 @@ Feature: Add comments
     And I should see the text "Mr scandal was doing something weird the other day."
 
     When I am logged in as "Salma Coster"
-    And I accept essential cookies
     And I click the comment link from the last email sent to "Salma Coster"
     And I click "Reply"
     And I should see the "Create comment" wysiwyg editor
     When I enter "I am replying in user's comment." in the "Create comment" wysiwyg editor
-    And I wait for the spam protection time limit to pass
     And I press "Post comment"
     # Parent comment owner receives an email.
     And the email sent to "Miss tell tales" with subject "Joinup: A new comment has been created." contains the following lines of text:
-      | text                                                                                    |
       | Salma Coster posted a comment in <parent> "<parent title>".                             |
       | To view the comment click                                                               |
       | If you think this action is not clear or not due, please contact Joinup Support at http |
@@ -104,12 +93,12 @@ Feature: Add comments
 
     Examples:
       | content type | title               | state     | parent     | parent title         |
-      | news         | Scandalous news     | validated | collection | Gossip collection    |
-      | event        | Celebrity gathering | validated | collection | Gossip collection    |
-      | discussion   | Is gossip bad?      | validated | collection | Gossip collection    |
-      | document     | Wikileaks           | validated | collection | Gossip collection    |
+      | news         | Scandalous news     | published | collection | Gossip collection    |
+      | event        | Celebrity gathering | published | collection | Gossip collection    |
+      | discussion   | Is gossip bad?      | published | collection | Gossip collection    |
+      | document     | Wikileaks           | published | collection | Gossip collection    |
       # Add an example also for solutions to ensure the variables are properly replaced.
-      | news         | Scandalous news     | validated | solution   | Gossip girl solution |
+      | news         | Scandalous news     | published | solution   | Gossip girl solution |
 
   Scenario Outline: Posting comments.
     Given <content type> content:
@@ -119,7 +108,6 @@ Feature: Add comments
     When I go to the content page of the type "<content type>" with the title "<title>"
     # Authenticated users can insert <p> and <br> tags in the comment body.
     And I fill in "Create comment" with "<p>Mr scandal was doing something<br />weird the other day.<p/>"
-    And I wait for the spam protection time limit to pass
     Then I press "Post comment"
     Then I should not see the following success messages:
       | success messages                                                                                     |
@@ -129,14 +117,12 @@ Feature: Add comments
 
     When I click "Reply" in comment #1
     And I fill in "Create comment" with "Comment indent 1"
-    And I wait for the spam protection time limit to pass
     When I press "Post comment"
     Then comment #2 should contain the markup "Comment indent 1"
     And comment #2 indent is 1
 
     When I click "Reply" in comment #2
     And I fill in "Create comment" with "Comment indent 2"
-    And I wait for the spam protection time limit to pass
     When I press "Post comment"
     # This comment hit the maximum deep.
     Then comment #3 should contain the markup "Comment indent 2"
@@ -145,7 +131,6 @@ Feature: Add comments
     # Reply to the deepest comment.
     When I click "Reply" in comment #3
     And I fill in "Create comment" with "Reply to #3"
-    And I wait for the spam protection time limit to pass
     When I press "Post comment"
     Then comment #4 should contain the markup "Reply to #3"
     # The reply has the same indent as the parent comment.
@@ -154,7 +139,6 @@ Feature: Add comments
     # Reply to reply.
     When I click "Reply" in comment #4
     And I fill in "Create comment" with "Reply to reply"
-    And I wait for the spam protection time limit to pass
     When I press "Post comment"
     Then comment #5 should contain the markup "Reply to reply"
     # The reply to reply has the same indent as the deepest comment.
@@ -169,16 +153,15 @@ Feature: Add comments
 
     Examples:
       | content type | title               | state     |
-      | news         | Scandalous news     | validated |
-      | event        | Celebrity gathering | validated |
-      | discussion   | Is gossip bad?      | validated |
-      | document     | Wikileaks           | validated |
+      | news         | Scandalous news     | published |
+      | discussion   | Is gossip bad?      | published |
+      | document     | Wikileaks           | published |
 
   Scenario Outline: Comments are disallowed for anonymous users.
 
     Given the following collections:
       | title          | state     | closed |
-      | Shy collection | validated | yes    |
+      | Shy collection | published | yes    |
     And <content type> content:
       | title   | body                                                | collection   | state   |
       | <title> | How could this ever happen? Moral panic on its way! | <collection> | <state> |
@@ -200,11 +183,9 @@ Feature: Add comments
 
     Examples:
       | collection        | content type | title                     | state     |
-      | Shy collection    | news         | Scandalous news           | validated |
-      | Shy collection    | event        | Celebrity gathering       | validated |
-      | Shy collection    | discussion   | Is gossip bad?            | validated |
-      | Shy collection    | document     | Wikileaks                 | validated |
-      | Gossip collection | news         | Rihanna wears pope outfit | validated |
-      | Gossip collection | event        | Taylor Swift wedding      | validated |
-      | Gossip collection | discussion   | Is gossip good?           | validated |
-      | Gossip collection | document     | Celebrity scandals 2019   | validated |
+      | Shy collection    | news         | Scandalous news           | published |
+      | Shy collection    | discussion   | Is gossip bad?            | published |
+      | Shy collection    | document     | Wikileaks                 | published |
+      | Gossip collection | news         | Rihanna wears pope outfit | published |
+      | Gossip collection | discussion   | Is gossip good?           | published |
+      | Gossip collection | document     | Celebrity scandals 2019   | published |

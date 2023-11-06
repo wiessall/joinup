@@ -6,9 +6,9 @@ Feature: Discussions added to collections
 
   Scenario: "Add discussion" button should not be shown to normal members, authenticated users and anonymous users.
     Given the following collections:
-      | title              | logo     | banner     | state     |
-      | The Fallen History | logo.png | banner.jpg | validated |
-      | White Sons         | logo.png | banner.jpg | validated |
+      | title              | logo     | state     |
+      | The Fallen History | logo.png | published |
+      | White Sons         | logo.png | published |
 
     When I am logged in as an "authenticated user"
     And I go to the homepage of the "The Fallen History" collection
@@ -41,17 +41,19 @@ Feature: Discussions added to collections
       | Family name | Pontecorvo                            |
       | E-mail      | kesha.pontecorvo@ec-europa.example.eu |
     And collections:
-      | title                  | logo     | banner     | state     |
-      | The World of the Waves | logo.png | banner.jpg | validated |
+      | title                  | logo     | state     |
+      | The World of the Waves | logo.png | published |
     And the following collection user membership:
       | collection             | user      | roles       |
       | The World of the Waves | kesha1988 | facilitator |
     And I am logged in as kesha1988
 
     When I go to the homepage of the "The World of the Waves" collection
-    And I click "Add discussion" in the plus button menu
-    Then I should see the heading "Add discussion"
-    And the following fields should be present "Title, Content, Topic, Add a new file"
+    Then I should not see the text "Discussions" in the "Navigation menu"
+
+    When I click "Add discussion" in the plus button menu
+    And I should see the heading "Add discussion"
+    And the following fields should be present "Title, Content, Topic, Logo, Add a new file"
     # The entity is new, so the current workflow state should not be shown.
     And the following fields should not be present "Current workflow state, Motivation"
     And the following fields should not be present "Shared on"
@@ -80,6 +82,7 @@ Feature: Discussions added to collections
     # Verify that the author is visible on the page.
     And I should see the text "Kesha Pontecorvo"
     And I should see the success message "Discussion An amazing discussion has been created."
+    And I should see the text "Discussions" in the "Navigation menu"
     And the "The World of the Waves" collection has a discussion titled "An amazing discussion"
 
     # Attachments should be visible.
@@ -89,20 +92,15 @@ Feature: Discussions added to collections
 
     # Regression test: the workflow state should not be shown to the user.
     But I should not see the text "State" in the "Content" region
-    And I should not see the text "Validated" in the "Content" region
+    And the response should not contain "Published<"
 
     # Check that the tile for the discussion is visible on the collection page.
-    When I go to the homepage of the "The World of the Waves" collection
-    Then I should see the link "An amazing discussion"
+    When I go to the discussions page of "The World of the Waves"
+    Then I should see the text "Discussions" in the "Navigation menu"
+    And I should see the link "An amazing discussion"
     And I should not see the text "Kesha Pontecorvo" in the "An amazing discussion" tile
     # Initially there are 0 comments on the discussion.
-    And I should see the text "0" in the "An amazing discussion" tile
-
-    # Make sure that the page is cached, so that we can ascertain that adding a
-    # comment will invalidate the cache.
-    And the page should be cacheable
-    When I reload the page
-    Then the page should be cached
+    And I should see the statistics "0" in the "An amazing discussion" tile
 
     # Create two new comments and check that the counter is incremented.
     Given comments:
@@ -110,23 +108,40 @@ Feature: Discussions added to collections
       | Product up and running | kesha1988 | An amazing discussion |
       | Smart contract         | kesha1988 | An amazing discussion |
     When I reload the page
-    Then I should see the text "2" in the "An amazing discussion" tile
-    And I should not see the text "0" in the "An amazing discussion" tile
-
-    # Check that the page cache has been correctly invalidated, and a reload
-    # will serve again from cache.
-    And the page should not be cached
-    When I reload the page
-    Then the page should be cached
+    Then I should see the statistics "2" in the "An amazing discussion" tile
 
     # Check that an anonymous user can see the information.
     Given I am an anonymous user
     When I go to the "An amazing discussion" discussion
-    Then I should see the following headings:
-      | The World of the Waves |
-      | An amazing discussion  |
+    Then I should see the text "The World of the Waves"
+    And I should see the heading "An amazing discussion"
     And I should see the following lines of text:
       | This is going to be an amazing discussion. |
       | Attachments                                |
       | 176 bytes                                  |
     And I should see the link "The content of this file is mind blowing"
+
+  @javascript @generateMedia @generateMediaTypes:discussion_logo @uploadFiles:logo.png
+  Scenario: Test the image library widget.
+    Given the following collection:
+      | title | Stream of Dreams |
+      | state | published        |
+    And discussion content:
+      | title       | collection       | state     | created   | content         |
+      | Yellow Zeus | Stream of Dreams | published | yesterday | Sample content. |
+
+    Given I am logged in as a moderator
+
+    # Upload works.
+    When I go to the edit form of the "Yellow Zeus" discussion
+    And I attach the file "logo.png" to "Logo"
+    And I wait for AJAX to finish
+
+    # Picking-up pre-uploaded images works.
+    When I remove the file from "Logo"
+    And I wait for AJAX to finish
+
+    And I select image #4 as discussion logo
+    And I wait for AJAX to finish
+    And I press "Update"
+    And the "Yellow Zeus" discussion logo is image #4
