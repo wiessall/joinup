@@ -4,6 +4,7 @@ declare(strict_types = 1);
 
 namespace Drupal\Tests\eu_oss_catalogue\Functional;
 
+use Drupal\Core\Database\Database;
 use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\Core\Field\EntityReferenceFieldItemListInterface;
 use Drupal\Core\Serialization\Yaml;
@@ -161,6 +162,36 @@ abstract class FetchTestBase extends BrowserTestBase {
 
     // Queue items have been released.
     $this->assertSame(0, $queue->numberOfItems());
+  }
+
+  /**
+   * Gets dblog entries.
+   *
+   * @param string|null $message
+   *   (optional) Searched message.
+   * @param string|null $variables
+   *   (optional) Searched serialized variables.
+   *
+   * @return object[]
+   *   A list of dblog entries.
+   */
+  protected function getLogEntries(?string $message = NULL, ?string $variables = NULL): array {
+    $query = Database::getConnection()
+      ->select('watchdog')
+      ->fields('watchdog', ['message', 'variables'])
+      ->condition('type', 'eu_oss_catalogue');
+
+    if ($message) {
+      $query->condition('message', $message);
+    }
+    if ($variables) {
+      // Use LIKE to be able to check only the first part of serialized
+      // variables blob if it's too big (e.g. if contains the entire backtrace).
+      $like = $query->escapeLike($variables) . '%';
+      $query->condition('variables', $like, 'LIKE');
+    }
+
+    return $query->execute()->fetchAll();
   }
 
 }
