@@ -24,6 +24,10 @@ eu_oss_catalogue.hosting_platform_plugin_default_settings:
 eu_oss_catalogue.hosting_platform_plugin_default_settings_git:
   type: eu_oss_catalogue.hosting_platform_plugin_default_settings
   mapping:
+    baseUrl:
+      type: string
+      label: Platform base URL
+      nullable: true
     projects:
       type: sequence
       label: List of repository IDs or namespaces
@@ -33,21 +37,5 @@ eu_oss_catalogue.hosting_platform_plugin_default_settings_git:
         sequence:
           type: string
 
-# GitHub
-eu_oss_catalogue.hosting_platform_plugin.github:
+eu_oss_catalogue.hosting_platform_plugin.*:
   type: eu_oss_catalogue.hosting_platform_plugin_default_settings_git
-  label: GitHub platform settings
-
-# GitLab (gitlab.com).
-eu_oss_catalogue.hosting_platform_plugin.gitlab_com:
-  type: eu_oss_catalogue.hosting_platform_plugin_default_settings_git
-  label: GitLab as service platform settings
-
-# GitLab (self-hosted).
-eu_oss_catalogue.hosting_platform_plugin.gitlab_self_hosted:
-  type: eu_oss_catalogue.hosting_platform_plugin_default_settings_git
-  label: GitLab self-hosted platform settings
-  mapping:
-    url:
-      type: uri
-      label: GitLab platform URL

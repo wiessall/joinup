@@ -20,8 +20,12 @@ class Project {
    *   The repository name.
    * @param string $url
    *   The repository URL.
+   * @param string $platform
+   *   The code hosting platform plugin ID.
    * @param string $defaultBranch
    *   The repository default branch.
+   * @param bool $isArchived
+   *   Whether the project is archived.
    * @param string|null $latestReleaseTag
    *   The latest release tag.
    * @param string|null $latestReleaseDate
@@ -30,6 +34,8 @@ class Project {
    *   The code platform internal unique ID.
    * @param string|null $description
    *   The repository description if any.
+   * @param string|null $logo
+   *   The URL of the project's logo/avatar.
    * @param string[] $files
    *   A list of file blobs keyed by a file identifier.
    */
@@ -37,11 +43,14 @@ class Project {
     public readonly string $namespace,
     public readonly string $name,
     public readonly string $url,
+    public readonly string $platform,
     public readonly string $defaultBranch,
+    public readonly bool $isArchived,
     public readonly ?string $latestReleaseTag = NULL,
     public readonly ?string $latestReleaseDate = NULL,
     public readonly ?string $platformReference = NULL,
     public readonly ?string $description = NULL,
+    public readonly ?string $logo = NULL,
     public readonly array $files = [],
   ) {}
 
@@ -56,13 +65,37 @@ class Project {
   }
 
   /**
-   * Computes and returns a hash from metadata.
+   * Returns the project platform base URL.
+   *
+   * @return string
+   *   The project platform base URL.
+   */
+  public function getHostingPlatformUrl(): string {
+    return preg_replace("@/{$this->getFullName()}$@", '', $this->url);
+  }
+
+  /**
+   * Computes and returns a hash from metdata.
    *
    * @return string
    *   A hash from metadata.
    */
   public function getHash(): string {
-    return Crypt::hashBase64(serialize($this));
+    return Crypt::hashBase64(serialize($this->toArray()));
+  }
+
+  /**
+   * Returns an array representation of the value object.
+   *
+   * @return array
+   *   Array representation of the value object.
+   */
+  public function toArray(): array {
+    $array = [];
+    foreach (get_object_vars($this) as $property => $value) {
+      $array[$property] = $value;
+    }
+    return $array;
   }
 
 }
