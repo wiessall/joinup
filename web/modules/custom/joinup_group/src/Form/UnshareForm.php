@@ -102,7 +102,7 @@ abstract class UnshareForm extends ShareFormBase {
    */
   public function ajaxSubmit(array &$form, FormStateInterface $form_state): AjaxResponse {
     $response = new AjaxResponse();
-    $response->addCommand(new RedirectCommand((string) $this->entity->toUrl()->toString()));
+    $response->addCommand(new RedirectCommand((string) $this->getRequest()->query->get('destination')));
 
     return $response;
   }
@@ -144,6 +144,7 @@ abstract class UnshareForm extends ShareFormBase {
     unset($current_ids[$group->id()]);
     $this->entity->get($this->getSharedOnFieldName())->setValue(array_flip($current_ids));
     $this->entity->save();
+    $this->invalidator->invalidateTags($group->getCacheTagsToInvalidate());
   }
 
 }
