@@ -6,6 +6,7 @@ namespace Drupal\eu_oss_catalogue\Plugin\eu_oss_catalogue\HostingPlatform;
 
 use Drupal\Cache\Adapter\DrupalAdapter;
 use Drupal\Core\Cache\CacheBackendInterface;
+use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Logger\LoggerChannelInterface;
 use Drupal\Core\Site\Settings;
 use Drupal\Core\Utility\Error;
@@ -28,6 +29,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * @EuOssCatalogueHostingPlatform(
  *   id = "github",
  *   label = @Translation("GitHub"),
+ *   baseUrl = "https://github.com",
  *   weight = -10,
  * )
  */
@@ -93,6 +95,15 @@ class GitHub extends EuOssCatalogueGitHostingPlatformPluginBase {
   /**
    * {@inheritdoc}
    */
+  public function buildConfigurationForm(array $form, FormStateInterface $form_state): array {
+    $form = parent::buildConfigurationForm($form, $form_state);
+    $form['baseUrl']['#type'] = 'value';
+    return $form;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function isHostingPlatformForUrl(string $repositoryUrl): bool {
     $gitUri = GitUri::fromUriString($repositoryUrl);
     return $gitUri && $gitUri->getSchemeAndHost() === $this->getBaseFromRepoUrl($repositoryUrl);
@@ -101,8 +112,48 @@ class GitHub extends EuOssCatalogueGitHostingPlatformPluginBase {
   /**
    * {@inheritdoc}
    */
-  public function getBaseFromRepoUrl(string $repositoryUrl): string {
-    return 'https://github.com';
+  public function getBaseFromRepoUrl(string $repositoryUrl): ?string {
+    return $this->getConfiguration()['baseUrl'];
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  protected function doGetFileRawUrl(string $url, string $projectUrl): ?string {
+    $projectPath = substr($projectUrl, strlen($this->getConfiguration()['baseUrl']) + 1);
+    if (preg_match("@^$projectUrl/blob((/[^/]+){3,}.*)$@", $url, $parts)) {
+      // Example:
+      // https://github.com/drupal/core/blob/11.x/misc/logo/drupal-logo.svg
+      // becomes
+      // https://raw.githubusercontent.com/drupal/core/11.x/misc/logo/drupal-logo.svg
+      return "https://raw.githubusercontent.com/$projectPath$parts[1]";
+    }
+
+    // Repository relative URL (e.g. https://github.com/owner/project/dir/file),
+    // even this URL doesn't exist. The repository relative path has been
+    // previously prefixed with the project URL, but we ignore this. The
+    // reference (branch, commit, tag) is unknown, so we assume HEAD.
+    if (preg_match("@^$projectUrl/(.+)$@", $url, $parts)) {
+      // Example:
+      // https://github.com/drupal/core/misc/logo/drupal-logo.svg becomes
+      // https://raw.githubusercontent.com/drupal/core/HEAD/misc/logo/drupal-logo.svg
+      return "https://raw.githubusercontent.com/$projectPath/HEAD/$parts[1]";
+    }
+    return NULL;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  protected function isFileRawUrl(string $url, string $projectUrl): bool {
+    if (!str_starts_with($url, 'https://raw.githubusercontent.com/')) {
+      return FALSE;
+    }
+
+    // The URL path should start with at least three parts.
+    // Valid: https://raw.githubusercontent.com/drupal/core/HEAD/misc/logo/drupal-logo.svg
+    // Invalid: https://raw.githubusercontent.com/drupal/core/drupal-logo.svg
+    return (bool) preg_match('@^(/[^/]+){3}/.+$@', parse_url($url, PHP_URL_PATH));
   }
 
   /**
@@ -177,15 +228,26 @@ class GitHub extends EuOssCatalogueGitHostingPlatformPluginBase {
             }
           }
 
+          $logo = $node['openGraphImageUrl'];
+          if ($logo  && str_starts_with($logo, 'https://opengraph.githubassets.com/')) {
+            // If a repository lacks a logo uploaded by the user, GitHub
+            // generates one under https://opengraph.githubassets.com. Keep only
+            // logos uploaded by the user.
+            $logo = NULL;
+          }
+
           yield new Project(
             $node['owner']['login'],
             $node['name'],
-            "https://github.com/{$node['owner']['login']}/{$node['name']}",
+            "{$this->getConfiguration()['baseUrl']}/{$node['owner']['login']}/{$node['name']}",
+            $this->getPluginId(),
             $node['defaultBranchRef']['name'],
+            $node['isArchived'],
             $node['latestRelease']['tagName'] ?? NULL,
             $node['latestRelease']['createdAt'] ?? NULL,
             $node['id'],
             $node['description'],
+            $logo,
             $files,
           );
         }
@@ -206,7 +268,7 @@ class GitHub extends EuOssCatalogueGitHostingPlatformPluginBase {
    * {
    *   search(
    *     type: REPOSITORY
-   *     query: "is:public archived:false owner:user1 repo:org2/project2"
+   *     query: "is:public fork:true owner:user1 repo:org2/project2"
    *     first: 100
    *   ) {
    *     pageInfo {
@@ -218,6 +280,8 @@ class GitHub extends EuOssCatalogueGitHostingPlatformPluginBase {
    *         id
    *         description
    *         name
+   *         isArchived
+   *         openGraphImageUrl
    *         owner {
    *           login
    *         }
@@ -261,7 +325,7 @@ class GitHub extends EuOssCatalogueGitHostingPlatformPluginBase {
 
     $fragment = $query->nodes([])
       ->on('Repository')
-      ->use('id', 'description', 'name')
+      ->use('id', 'description', 'name', 'isArchived', 'openGraphImageUrl')
       ->use((new Node('owner'))->use('login'))
       ->use((new Node('defaultBranchRef'))->use('name'))
       ->use((new Node('latestRelease'))->use('tagName', 'createdAt'));

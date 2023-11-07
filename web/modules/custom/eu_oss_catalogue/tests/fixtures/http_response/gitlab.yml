@@ -13,6 +13,8 @@
           id: 'gid://gitlab/Project/1'
           description: Description of Project1
           archived: false
+          # Not set as logo as the logo from publiccode.yml is valid.
+          avatarUrl: https://all.self-hosted.gitlab.example.com/uploads/-/system/project/avatar/1/logo.jpeg
           releases:
             nodes:
               - tagName: 'v1.1.1'
@@ -30,6 +32,8 @@
                     landingURL: "https://example.com/project1"
                     softwareVersion: '1.4.5'
                     releaseDate: "2022-10-07"
+                    # Will be set as logo as the file exists.
+                    logo: images/logo.svg
                     platforms:
                       - linux
                     categories:
@@ -70,6 +74,8 @@
           id: 'gid://gitlab/Project/2'
           description: Description of Project2
           archived: false
+          # Will be set as logo as the logo from publiccode.yml isn't valid.
+          avatarUrl: https://all.self-hosted.gitlab.example.com/uploads/-/system/project/avatar/2/logo.png
           releases:
             nodes:
               - tagName: 'v14.0.1'
@@ -87,6 +93,8 @@
                     landingURL: "https://example.com/project2"
                     softwareVersion: '7.0.2-alpha1'
                     releaseDate: "2021-08-05"
+                    # The GitLab logo will be save.
+                    logo: path/to/non-existing/image/logo.gif
                     platforms:
                       - linux
                     categories:
@@ -126,6 +134,7 @@
           id: 'gid://gitlab/Project/3'
           description: Description of Project3
           archived: true
+          avatarUrl: null
           releases:
             nodes: {  }
           repository:
@@ -211,6 +220,8 @@
             id: gid://gitlab/Project/11
             description: 'Group 1: Project 1: description'
             archived: false
+            # Not set as logo as the logo from publiccode.yml is valid.
+            avatarUrl: https://all.self-hosted.gitlab.example.com/uploads/-/system/project/avatar/2/logo.svg
             releases:
               nodes:
                 - tagName: '2.0.0-alpha12'
@@ -227,6 +238,8 @@
                       url: https://limited.self-hosted.gitlab.example.com/whatever
                       releaseDate: '2022-12-23'
                       softwareVersion: 1.0.2
+                      # Will be set as logo as the file exists.
+                      logo: images/logo-of-project-1-1.svg
                       developmentStatus: stable
                       softwareType: standalone/other
                       platforms:
@@ -269,6 +282,8 @@
             id: gid://gitlab/Project/12
             description: 'Group 1: Project 2: description'
             archived: false
+            # Will be set as logo as the logo from publiccode.yml isn't valid.
+            avatarUrl: https://all.self-hosted.gitlab.example.com/uploads/-/system/project/avatar/12/logo.jpg
             releases:
               nodes:
                 - tagName: '220.0.1'
@@ -282,6 +297,8 @@
                       publiccodeYmlVersion: '0.2'
                       name: 'Project 1.2'
                       url: 'https://example.de/arbitrary'
+                      # This returns 404.
+                      logo: doesn-t/exist.png
                       applicationSuite: Suite1
                       categories:
                         - data-collection
@@ -330,6 +347,7 @@
             id: gid://gitlab/Project/13
             description: 'Group 1: Project 3: description'
             archived: true
+            avatarUrl: null
             releases:
               nodes: []
             repository:

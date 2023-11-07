@@ -1,5 +1,5 @@
 diff --git a/imagecache_external.module b/imagecache_external.module
-index 851681dc3efd08b1102862768d0f4e6d34f7acb8..aaca34fae6aafa138a13cfadb9aac87015b5cbcc 100644
+index 22d62dc..f05cccf 100644
 --- a/imagecache_external.module
 +++ b/imagecache_external.module
 @@ -9,6 +9,7 @@ use Drupal\Component\Utility\UrlHelper;
@@ -7,10 +7,10 @@ index 851681dc3efd08b1102862768d0f4e6d34f7acb8..aaca34fae6aafa138a13cfadb9aac870
  use Drupal\Core\File\FileSystemInterface;
  use Drupal\file\Entity\File;
 +use Drupal\imagecache_external\ImagecacheExternal;
- 
- const IMAGECACHE_EXTERNAL_FLUSH_DIRECTORIES = '_IMAGECACHE_FLUSH_DIRECTORIES_';
- 
-@@ -101,6 +102,9 @@ function template_preprocess_imagecache_external_responsive(&$variables) {
+ use Drupal\imagecache_external\Svg\ImagecacheExternalAttributes;
+ use Drupal\imagecache_external\Svg\ImagecacheExternalTags;
+ use enshrined\svgSanitize\Sanitizer;
+@@ -104,6 +105,9 @@ function template_preprocess_imagecache_external_responsive(&$variables) {
   *   The uri to the image.
   */
  function imagecache_external_generate_path($url) {
@@ -20,7 +20,7 @@ index 851681dc3efd08b1102862768d0f4e6d34f7acb8..aaca34fae6aafa138a13cfadb9aac870
    // Get configuration.
    $config = imagecache_external_config();
  
-@@ -242,6 +246,7 @@ function imagecache_external_fetch(string $url, string $cachepath) {
+@@ -250,6 +254,7 @@ function imagecache_external_fetch(string $url, string $cachepath) {
      if (!empty($fallback_image_fid) && $fallback_image = File::load($fallback_image_fid)) {
        return $fallback_image->getFileUri();
      }
@@ -28,7 +28,7 @@ index 851681dc3efd08b1102862768d0f4e6d34f7acb8..aaca34fae6aafa138a13cfadb9aac870
      \Drupal::logger('imagecache_external')->notice(t('The image %url could not be retrieved', ['%url' => $url]));
      return FALSE;
    }
-@@ -406,6 +411,7 @@ function imagecache_external_flush_create_queue($path) {
+@@ -444,6 +449,7 @@ function imagecache_external_flush_create_queue($path) {
      \Drupal::service('file_system')->deleteRecursive($path);
    }
  
@@ -38,7 +38,7 @@ index 851681dc3efd08b1102862768d0f4e6d34f7acb8..aaca34fae6aafa138a13cfadb9aac870
  
 diff --git a/src/ImagecacheExternal.php b/src/ImagecacheExternal.php
 new file mode 100644
-index 0000000000000000000000000000000000000000..7e911e4ded3f48bd59697c07d5a40767e24937a2
+index 0000000..7e911e4
 --- /dev/null
 +++ b/src/ImagecacheExternal.php
 @@ -0,0 +1,86 @@
@@ -130,7 +130,7 @@ index 0000000000000000000000000000000000000000..7e911e4ded3f48bd59697c07d5a40767
 +}
 diff --git a/tests/src/Kernel/TrackNonDownloadableUrlsTest.php b/tests/src/Kernel/TrackNonDownloadableUrlsTest.php
 new file mode 100644
-index 0000000000000000000000000000000000000000..397b74cd75e52fadbcc921c193095ea1a340afe4
+index 0000000..397b74c
 --- /dev/null
 +++ b/tests/src/Kernel/TrackNonDownloadableUrlsTest.php
 @@ -0,0 +1,129 @@
