@@ -605,7 +605,7 @@ third_party_settings:
             region: content
             configuration:
               id: 'field_block:node:oss_solution:oss_maintenance_contractors'
-              label: 'Maintenance contractors'
+              label: 'Technical Maintainers'
               label_display: '0'
               provider: layout_builder
               context_mapping:
@@ -632,7 +632,7 @@ third_party_settings:
             region: content
             configuration:
               id: 'field_block:node:oss_solution:oss_maintenance_contacts'
-              label: 'Maintenance contacts'
+              label: 'Technical Contacts'
               label_display: '0'
               provider: layout_builder
               context_mapping:

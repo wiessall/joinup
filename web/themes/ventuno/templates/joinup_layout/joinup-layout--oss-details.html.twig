@@ -13,7 +13,7 @@
         {% endif %}
 
         {% if content.copyright|render|trim or content.catalogue|render|trim %}
-          <div class="l-oss-details__row">
+          <div class="l-oss-details__row d-flex flex-column flex-md-row flex-md-nowrap justify-content-start gap-1 align-content-stretch">
             {% if content.copyright|render|trim %}
               <div {{ region_attributes.copyright.addClass('l-oss-details__region', 'l-oss-details__region--copyright') }}>
                 {{- content.copyright -}}
@@ -33,7 +33,7 @@
 
     {% if content.aside %}
       <div class="col-12 col-md-3 col-lg-4">
-        <div class="bg-light p-3 rounded">
+        <div class="bg-light p-3 mt-3 mt-md-0 rounded">
           <div {{ region_attributes.aside.addClass('l-oss-details__region', 'l-oss-details__region--aside') }}>
             {{- content.aside -}}
           </div>
