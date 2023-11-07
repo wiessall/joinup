@@ -81,7 +81,7 @@ abstract class UnshareForm extends ShareFormBase {
     }
 
     if (!empty($groups)) {
-      $this->messenger->addStatus('Item was unshared from the following groups: ' . implode(', ', $groups) . '.');
+      $this->messenger()->addStatus('Item was unshared from the following groups: ' . implode(', ', $groups) . '.');
     }
     $form_state->setRedirectUrl($this->entity->toUrl());
   }
