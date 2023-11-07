@@ -111,7 +111,7 @@ third_party_settings:
                 settings:
                   facet_id: category
                   use_label: true
-                  open_new: true
+                  open_new: false
                 third_party_settings:
                   field_delimiter:
                     delimiter: ','
@@ -210,7 +210,7 @@ third_party_settings:
                 settings:
                   facet_id: source
                   use_label: false
-                  open_new: true
+                  open_new: false
                 third_party_settings:
                   field_delimiter:
                     delimiter: ', '
@@ -241,7 +241,7 @@ third_party_settings:
                   url_only: false
                   url_plain: false
                   rel: nofollow
-                  target: _blank
+                  target: ''
                   link_title: 'Source code repository'
                 third_party_settings:
                   template_suggestion:
@@ -380,7 +380,7 @@ third_party_settings:
                 settings:
                   facet_id: scope
                   use_label: true
-                  open_new: true
+                  open_new: false
                 third_party_settings:
                   field_delimiter:
                     delimiter: ''
