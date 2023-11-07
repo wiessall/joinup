@@ -79,10 +79,10 @@ Feature:
     And the response should contain "/collection/nifo-collection/glossary/term/amazing\" class=\"glossary-term\" title=\"amazing def\">SMASS</a>"
 
     And I should see the following filter categories in the correct order:
+      | Solution category      |
       | Underlying principles  |
       | Interoperability layer |
       | Conceptual model       |
-      | Solution category      |
     And I should see the following headings:
       | Jordan 1 |
       | Jordan 2 |

@@ -152,6 +152,7 @@
         "phpstan/extension-installer": "^1.3",
         "phpunit/phpunit": "^9.6",
         "symfony/phpunit-bridge": "^6.3",
+        "vincentlanglet/twig-cs-fixer": "^1.6",
         "vlucas/phpdotenv": "~5",
         "weitzman/drupal-test-traits": "2.x-dev",
         "weitzman/logintrait": "^1.1"
@@ -280,7 +281,8 @@
                 "ExceptionLoggingSubscriber should not log HTTP 4XX errors using PHP logger channel @see https://www.drupal.org/i/2828706": "resources/patch/php/drupal/core/2828706.patch",
                 "Dialog options are not honoured when open a dialog using GET @see https://www.drupal.org/project/drupal/issues/3394220": "resources/patch/php/drupal/core/3394220.diff",
                 "Compress ajax_page_state @see https://www.drupal.org/i/3348789": "resources/patch/php/drupal/core/3348789.patch",
-                "ckeditor5.dialog.fix.js throws \"Uncaught TypeError: event.target.classList is undefined\" in Firefox in Drupal 10 with the editor in a modal @see https://www.drupal.org/i/3351600": "resources/patch/php/drupal/core/3351600.diff"
+                "ckeditor5.dialog.fix.js throws \"Uncaught TypeError: event.target.classList is undefined\" in Firefox in Drupal 10 with the editor in a modal @see https://www.drupal.org/i/3351600": "resources/patch/php/drupal/core/3351600.diff",
+                "Allow adding computed bundle fields in Views @see https://drupal.org/i/2981047#mr4139-note200447": "resources/patch/php/drupal/core/2981047-mr4224-note200448.diff"
             },
             "drupal/default_content": {
                 "Allow manual imports @see https://www.drupal.org/i/2640734": "resources/patch/php/drupal/default_content/2640734.diff"
