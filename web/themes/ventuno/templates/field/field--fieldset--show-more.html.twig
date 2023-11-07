@@ -12,7 +12,7 @@
   {% if multiple %}
     <div{{ attributes.addClass('fieldset-show-more') }}>
       {% if items|length > 5 %}
-        {{ fieldset.render_items(items|slice(0,5)) }}
+        {{ fieldset.render_items(items|slice(0, 5)) }}
         <div class="collapse" id="extraItems">
           {{ fieldset.render_items(items|slice(5)) }}
         </div>
@@ -42,7 +42,7 @@
   </div>
 {% endif %}
 
-{%  macro render_items(items) %}
+{% macro render_items(items) %}
   {% for item in items %}
     <div{{ item.attributes.addClass('fieldset__field-item') }}>{{ item.content }}</div>
   {% endfor %}

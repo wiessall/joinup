@@ -42,18 +42,33 @@ function joinup_discussion_node_presave(NodeInterface $discussion): void {
 /**
  * Implements hook_entity_bundle_field_info().
  */
-function joinup_discussion_entity_bundle_field_info(EntityTypeInterface $entity_type, string $bundle) {
-
+function joinup_discussion_entity_bundle_field_info(EntityTypeInterface $entity_type, string $bundle): array {
   if ($entity_type->id() === 'node' && $bundle === 'discussion') {
-    $fields['latest_update_time'] = BaseFieldDefinition::create('datetime')
-      ->setName('latest_update_time_field')
-      ->setLabel(t('Last activity'))
-      ->setComputed(TRUE)
-      ->setClass(LatestUpdateTimeFieldItemList::class)
-      ->setDisplayConfigurable('view', TRUE);
-
-    return $fields;
+    return [
+      'latest_update_time' => BaseFieldDefinition::create('datetime')
+        ->setName('latest_update_time_field')
+        ->setLabel(t('Last activity'))
+        ->setComputed(TRUE)
+        ->setClass(LatestUpdateTimeFieldItemList::class)
+        ->setDisplayConfigurable('view', TRUE),
+    ];
   }
+
+  return [];
+}
+
+/**
+ * Implements hook_views_data_alter().
+ */
+function joinup_discussion_views_data_alter(array &$data): void {
+  $data['node_field_data']['latest_update_time_field'] = [
+    'title' => 'Computed last activity',
+    'field' => [
+      'title' => 'Computed last activity',
+      'id' => 'field',
+      'field_name' => 'latest_update_time',
+    ],
+  ];
 }
 
 /**
