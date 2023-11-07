@@ -9,13 +9,18 @@ Feature:
       | title        | state     |
       | Vintage Art  | published |
       | Decadent Art | published |
+    And user:
+      | Username | Vasundhara Commentator |
     And document content:
       | title             | document type | collection  | state     | changed          |
       | The Panama Papers | Document      | Vintage Art | published | 2019-11-19 20:00 |
       | The Area 51 File  | Document      | Vintage Art | draft     | 2018-11-19 21:00 |
     And discussion content:
-      | title               | collection  | state     | changed          |
-      | The Ultimate Debate | Vintage Art | published | 2017-11-19 19:00 |
+      | title               | collection  | state     | created    | publication date | changed    |
+      | The Ultimate Debate | Vintage Art | published | 2016-11-19 | 2016-11-19       | 2016-11-19 |
+    And comments:
+      | message             | author                 | parent              | created          | changed    |
+      | Conducting a Debate | Vasundhara Commentator | The Ultimate Debate | 2017-06-12 19:00 | 1497294000 |
     And event content:
       | title                    | collection  | state     |
       | Version 2.0 Launch Party | Vintage Art | published |
@@ -57,6 +62,9 @@ Feature:
     Then I should see "Proceeded updates to 1 entities"
     And I should see "19/11/2019 - 20:00"
 
+    # Last activity for discussion.
+    And I should see "12/06/2017 - 19:00"
+
     Given I am logged in as a moderator
 
     # Visit one of the pages to warm up the render caches. We can then later
@@ -73,7 +81,7 @@ Feature:
 
     # Download the list as CSV.
     When I click "Download CSV"
-    Then the response should contain "Type;Title;\"Created on\";\"Last update\";State;URL"
+    Then the response should contain "Type;Title;\"Created on\";\"Last update/activity\";State;URL"
     And the response should contain "Document;\"The Panama Papers\";"
     And the response should contain "/document/panama-papers"
     And the response should contain "Document;\"The Area 51 File\";"
@@ -100,7 +108,7 @@ Feature:
     And I press "Apply to selected items"
     And I wait for the batch process to finish
     Then I should see "Proceeded updates to 1 entities"
-    And I should see "19/11/2017 - 19:00"
+    And I should see "12/06/2017 - 19:00"
 
     # Check archived state.
     Given I select "Archived" from "State"
@@ -122,7 +130,7 @@ Feature:
     Then I should see the link "The Panama Papers"
     And I should see the link "The Ultimate Debate"
     And I should see "19/11/2019 - 20:00"
-    And I should see "19/11/2017 - 19:00"
+    And I should see "12/06/2017 - 19:00"
 
     # Check warning message.
     Given I press "Reset"

@@ -5,15 +5,6 @@ Feature:
   I want to manage a dedicated collection and landing page
 
   Scenario: Anonymous visiting the landing page.
-    Given I am not logged in
-    And I am on the homepage
-    # A dedicated link in the header should lead to the landing page.
-    When I click "Interoperable Europe" in the "Navigation bar"
-    # The title should not be visible.
-    Then I should not see "IOP landing page"
-    # Check that we are on the expected URL for the landing page.
-    And I should be on "/interoperable-europe"
-
     Given I am on the homepage
     When I click "Discover more"
     # The title should not be visible when the page is set as landing page.
@@ -56,10 +47,7 @@ Feature:
     Given I am logged in as a user with the authenticated role
     When I check the box "I agree to the Legal notice document"
     And I press "Submit"
-    Then I should see the link "Interoperable Europe"
-
-    # A dedicated link in the header should lead to the landing page.
-    When I click "Interoperable Europe" in the "Navigation bar"
+    When I go to the "Interoperable Europe" collection
     Then I should not see "IOP landing page"
     # Check that we are on the expected URL for the landing page.
     And I should be on "/interoperable-europe"
