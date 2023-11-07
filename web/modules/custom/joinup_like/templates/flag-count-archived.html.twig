@@ -8,7 +8,7 @@
  * - flaggable: The flaggable entity.
  */
 #}
-{% spaceless %}
+{% apply spaceless %}
   {# Set the remaining Flag CSS classes. #}
   {% set classes = [
     'flag',
@@ -18,4 +18,4 @@
   {% set count = flagcount(flag, flaggable) %}
 
   <div class="{{ classes|join(' ') }}">{{ flag.label() }}: <span>{{ count }}</span></div>
-{% endspaceless %}
+{% endapply %}

@@ -13,12 +13,12 @@
   {% for row in rows %}
     <tr>
       {% for col in row %}
-        {%  if loop.first %}
+        {% if loop.first %}
           <th>{{ col }}</th>
         {% else %}
           <td>{{ col }}</td>
         {% endif %}
-      {%  endfor %}
+      {% endfor %}
     </tr>
   {% endfor %}
 </table>
