@@ -31,6 +31,7 @@ Feature:
       | footer-european-commission | 200  | see      |
       | footer-follow-us           | 200  | see      |
       | footer-help-and-support    | 200  | see      |
+      | navbar                     | 200  | see      |
       | tools                      | 403  | not see  |
       | account                    | 403  | not see  |
 

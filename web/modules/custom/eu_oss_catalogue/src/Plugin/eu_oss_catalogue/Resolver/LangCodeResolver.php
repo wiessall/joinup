@@ -64,9 +64,9 @@ class LangCodeResolver extends DefaultResolver implements ContainerFactoryPlugin
   /**
    * {@inheritdoc}
    */
-  public function resolve(FieldItemListInterface $fieldItemList, Project $project, array $metadata): mixed {
+  public function resolve(Project $project, array $metadata, FieldItemListInterface $fieldItemList): array {
     if (!str_contains($this->getConfiguration()['path'], '[lang]')) {
-      return parent::resolve($fieldItemList, $project, $metadata);
+      return parent::resolve($project, $metadata, $fieldItemList);
     }
     $fieldName = $fieldItemList->getName();
 

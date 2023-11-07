@@ -14,3 +14,39 @@
  */
 
 declare(strict_types = 1);
+
+use Drupal\interoperable_europe\InteroperableEuropeCollectionInterface;
+use Drupal\joinup_collection\JoinupCollectionHelper;
+use Drupal\sparql_entity_storage\UriEncoder;
+
+/**
+ * Add navbar menu links.
+ */
+function joinup_core_post_update_109900(): string {
+  $menuLinkStorage = \Drupal::entityTypeManager()
+    ->getStorage('menu_link_content');
+
+  $linksToCreate = [
+    [
+      'title' => 'Interoperable Europe',
+      'uri' => 'entity:rdf_entity/' . UriEncoder::encodeUrl(InteroperableEuropeCollectionInterface::COLLECTION_ENTITY_ID),
+      'weight' => 0,
+    ],
+    [
+      'title' => 'Interoperability Solutions',
+      'uri' => 'entity:node/' . JoinupCollectionHelper::INTEROPERABILITY_SOLUTIONS_ENTITY_ID,
+      'weight' => 1,
+    ],
+  ];
+
+  foreach ($linksToCreate as $linkData) {
+    $menuLinkStorage->create([
+      'title' => $linkData['title'],
+      'link' => ['uri' => $linkData['uri']],
+      'menu_name' => 'navbar',
+      'weight' => $linkData['weight'],
+    ])->save();
+  }
+
+  return 'Navbar menu links have been created';
+}

@@ -10,7 +10,11 @@
     <svg class="bi icon--xs text-{{ icon_color }}">
       <use xlink:href="{{ bcl_icon_path }}#{{ icon_id }}"></use>
     </svg>
-    <span class="text-dark">{{ type_parsed }} ({{ items|length }})</span>
+    <span class="text-dark">
+      <a target="_blank"
+         href="{{ type_url }}">
+        {{ type_parsed }}
+      </a> ({{ items|length }})</span>
   </h4>
   {% for item in items %}
     <div class="github-feed-item border rounded p-3 mb-3">

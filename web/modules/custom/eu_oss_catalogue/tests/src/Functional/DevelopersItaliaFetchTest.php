@@ -4,7 +4,6 @@ declare(strict_types = 1);
 
 namespace Drupal\Tests\eu_oss_catalogue\Functional;
 
-use Drupal\Core\Database\Database;
 use Drupal\eu_oss_catalogue\Entity\OssContactInterface;
 use Drupal\eu_oss_catalogue\Entity\OssContractorInterface;
 use Drupal\eu_oss_catalogue\Entity\OssSolutionInterface;
@@ -82,7 +81,7 @@ class DevelopersItaliaFetchTest extends FetchTestBase {
     $this->assertFalse($this->getNodeByTitle('GitHub solution 1'));
     $updatedSolution = $this->getNodeByTitle('GitHub solution 1 (updated)', TRUE);
     $this->assertSame('3.0.0', $updatedSolution->get('oss_software_version')->value);
-    $this->assertSame('saIuPzFiosNtQhCZf91iPXVcLl66QJgRZTWo63p4PBM', $updatedSolution->get('oss_source_hash')->value);
+    $this->assertSame('woI8JkoNfCtzDiDxfpBGrcxTKCyC7BCEcHHgA3ApMxo', $updatedSolution->get('oss_source_hash')->value);
     // Assert that the provider has been added to the list of providers.
     $this->assertSame(2, $updatedSolution->get('oss_source')->count());
     $expected_providers = ['developers_italia', 'testing_provider'];
@@ -136,33 +135,6 @@ class DevelopersItaliaFetchTest extends FetchTestBase {
     $solution2 = $this->getNodeByTitle('Project 1.1', TRUE);
     $this->assertNotEmpty($solution2);
     $this->assertSame(1, $solution2->get('oss_source')->count());
-  }
-
-  /**
-   * Gets dblog entries.
-   *
-   * @param string|null $message
-   *   (optional) Searched message.
-   * @param string|null $variables
-   *   (optional) Searched serialized variables.
-   *
-   * @return object[]
-   *   A list of dblog entries.
-   */
-  protected function getLogEntries(?string $message = NULL, ?string $variables = NULL): array {
-    $query = Database::getConnection()
-      ->select('watchdog')
-      ->fields('watchdog', ['message', 'variables'])
-      ->condition('type', 'eu_oss_catalogue');
-
-    if ($message) {
-      $query->condition('message', $message);
-    }
-    if ($variables) {
-      $query->condition('variables', $variables);
-    }
-
-    return $query->execute()->fetchAll();
   }
 
 }

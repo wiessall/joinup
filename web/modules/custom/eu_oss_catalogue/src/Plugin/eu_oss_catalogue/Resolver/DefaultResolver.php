@@ -59,17 +59,18 @@ class DefaultResolver extends PluginBase implements EuOssCatalogueResolverInterf
    * {@inheritdoc}
    */
   public function defaultConfiguration(): array {
-    return ['path' => NULL];
+    return [
+      'path' => NULL,
+      'override' => 'always',
+    ];
   }
 
   /**
    * {@inheritdoc}
    */
-  public function resolve(FieldItemListInterface $fieldItemList, Project $project, array $metadata): mixed {
+  public function resolve(Project $project, array $metadata, FieldItemListInterface $fieldItemList): array {
     $path = explode('/', $this->getConfiguration()['path']);
-    $value = (array) NestedArray::getValue($metadata, $path);
-    $fieldItemList->setValue($value);
-    return $value;
+    return (array) NestedArray::getValue($metadata, $path);
   }
 
   /**
