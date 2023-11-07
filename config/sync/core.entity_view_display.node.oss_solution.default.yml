@@ -111,7 +111,6 @@ third_party_settings:
                 settings:
                   facet_id: category
                   use_label: true
-                  open_new: false
                 third_party_settings:
                   field_delimiter:
                     delimiter: ','
@@ -210,7 +209,6 @@ third_party_settings:
                 settings:
                   facet_id: source
                   use_label: false
-                  open_new: false
                 third_party_settings:
                   field_delimiter:
                     delimiter: ', '
@@ -380,7 +378,6 @@ third_party_settings:
                 settings:
                   facet_id: scope
                   use_label: true
-                  open_new: false
                 third_party_settings:
                   field_delimiter:
                     delimiter: ''
