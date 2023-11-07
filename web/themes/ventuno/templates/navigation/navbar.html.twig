@@ -53,7 +53,7 @@
   'joinup-navbar',
   'navbar',
   'navbar-expand',
-  directory is same as 'themes/ventuno'? 'navbar--sticky',
+  directory is same as 'themes/ventuno' ? 'navbar--sticky',
 ] %}
 {% set _navbar_toggler_classes = ['navbar-toggler'] %}
 {% set _list_id = list_id|default('list-1') %}
@@ -102,7 +102,7 @@
       >
         {% for item in _items %}
           {% if item.breakpoint %}
-            {% for link_key,link in item.links %}
+            {% for link_key, link in item.links %}
               {% if not link.hide_on_desktop %}
                 {% set desktop_li_attributes = create_attribute() %}
                 {% set desktop_li_classes = [
@@ -121,7 +121,7 @@
                       link.children ? 'dropdown-toggle'
                     ] %}
 
-                    {% if link.children%}
+                    {% if link.children %}
                       {% set attributes = attributes.setAttribute('aria-expanded', 'false') %}
                       {% set attributes = attributes.setAttribute('id', link_key) %}
                       {% set attributes = attributes.setAttribute('role', 'button') %}
@@ -206,18 +206,18 @@
                 </div>
               {% else %}
                 <ul class="dropdown-list">
-                  {% for link_key,link in item.links %}
+                  {% for link_key, link in item.links %}
                     {% if link.link %}
                       <li class="dropdown-list-item">
                         {% set attributes = create_attribute(link.attributes|default([])) %}
-                        {% if link.children%}
+                        {% if link.children %}
                           {% set attributes = attributes.setAttribute('aria-expanded', 'false') %}
                           {% set attributes = attributes.setAttribute('id', link_key) %}
                           {% set attributes = attributes.setAttribute('role', 'button') %}
                           {% set attributes = attributes.setAttribute('data-bs-toggle', 'dropdown') %}
                         {% endif %}
 
-                        <a href="{{ link.link }}" {{ attributes.addClass( ['dropdown-list-link']) }}>
+                        <a href="{{ link.link }}" {{ attributes.addClass(['dropdown-list-link']) }}>
                           {{ link.label }}
                           {% if link.children %}
                             {{ pattern('icon', {
