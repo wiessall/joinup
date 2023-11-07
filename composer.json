@@ -338,7 +338,7 @@
                 "Warning: Undefined array key \"url\" @see https://www.drupal.org/project/iframe/issues/3367468": "resources/patch/php/drupal/iframe/3367468-3.patch"
             },
             "drupal/imagecache_external": {
-                "Add option to override the inherited HTTP client configuration @see https://drupal.org/i/3396502": "resources/patch/php/drupal/imagecache_external/3396502-2.diff",
+                "Add option to override the inherited HTTP client configuration @see https://drupal.org/i/3396502": "resources/patch/php/drupal/imagecache_external/3396502-7.diff",
                 "Do not try to download failed URLs repeatedly: attempt next time only after the local cache is rebuilt @see https://drupal.org/i/3398665": "resources/patch/php/drupal/imagecache_external/3398665.diff"
             },
             "drupal/inline_entity_form": {
