@@ -5,6 +5,7 @@ id: gitlab_self_hosted_limited
 label: 'GitLab self-hosted (limited)'
 platformId: gitlab_self_hosted
 platformSettings:
+  baseUrl: https://limited.self-hosted.gitlab.example.com
   projects:
     # Get all eligible projects from group1.
     group1: null
@@ -16,4 +17,3 @@ platformSettings:
       - project-1
     # Fetch *all* projects from a user is not permitted by GitLab.
     user2: null
-  url: https://limited.self-hosted.gitlab.example.com
