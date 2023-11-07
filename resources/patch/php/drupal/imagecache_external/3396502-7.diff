@@ -1,11 +1,11 @@
 diff --git a/config/schema/imagecache_external.schema.yml b/config/schema/imagecache_external.schema.yml
-index 41ac1db252abf379c2b3343d4e8dfb196aaa9e6a..917d366a8afbe3cbd0dd1dd9aecde19069de71ce 100644
+index 933224c..92fdf06 100644
 --- a/config/schema/imagecache_external.schema.yml
 +++ b/config/schema/imagecache_external.schema.yml
-@@ -40,6 +40,15 @@ imagecache_external.settings:
-     imagecache_external_cron_flush_frequency:
-       type: integer
-       label: 'Imagecache cron flush threshold'
+@@ -56,6 +56,15 @@ imagecache_external.settings:
+           sequence:
+             type: string
+             label: Attribute
 +    http_client_config:
 +      label: 'HTTP client configuration'
 +      type: mapping
@@ -19,10 +19,10 @@ index 41ac1db252abf379c2b3343d4e8dfb196aaa9e6a..917d366a8afbe3cbd0dd1dd9aecde190
  field.formatter.settings.imagecache_external_image:
    type: mapping
 diff --git a/imagecache_external.module b/imagecache_external.module
-index 851681dc3efd08b1102862768d0f4e6d34f7acb8..0b89592403720715350fd5a594eb974193e11fbd 100644
+index fc34622..22d62dc 100644
 --- a/imagecache_external.module
 +++ b/imagecache_external.module
-@@ -200,7 +200,8 @@ function imagecache_external_fetch(string $url, string $cachepath) {
+@@ -203,7 +203,8 @@ function imagecache_external_fetch(string $url, string $cachepath) {
    try {
      // Drupal httpClient.
      $http = \Drupal::httpClient();
@@ -33,11 +33,11 @@ index 851681dc3efd08b1102862768d0f4e6d34f7acb8..0b89592403720715350fd5a594eb9741
      $types = imagecache_external_allowed_mimetypes();
  
 diff --git a/src/Form/SettingsForm.php b/src/Form/SettingsForm.php
-index 6c880017281eb8092052f492af61567e0a03e1bd..bd38cb5c9d6137c626ee8b6c6a6c500807d9bf02 100644
+index 25c9b6d..16eab9f 100644
 --- a/src/Form/SettingsForm.php
 +++ b/src/Form/SettingsForm.php
-@@ -161,6 +161,20 @@ class SettingsForm extends ConfigFormBase {
-       '#required' => TRUE,
+@@ -179,6 +179,20 @@ class SettingsForm extends ConfigFormBase {
+       '#default_value' => implode(' ', $config->get('svg_settings.allowed_attributes')),
      ];
  
 +    $form['http_client_config'] = [
@@ -57,9 +57,9 @@ index 6c880017281eb8092052f492af61567e0a03e1bd..bd38cb5c9d6137c626ee8b6c6a6c5008
      $form['#validate'][] = '::validateForm';
  
      return parent::buildForm($form, $form_state);
-@@ -197,7 +211,8 @@ class SettingsForm extends ConfigFormBase {
-       }
-     }
+@@ -219,7 +233,8 @@ class SettingsForm extends ConfigFormBase {
+       return array_filter(preg_split('/\s+/', trim($allowed)));
+     }, $values['svg_settings']);
  
 -    $this->config('imagecache_external.settings')
 +    $configuration = $this->config('imagecache_external.settings');
@@ -67,13 +67,13 @@ index 6c880017281eb8092052f492af61567e0a03e1bd..bd38cb5c9d6137c626ee8b6c6a6c5008
        ->set('imagecache_directory', $values['imagecache_directory'])
        ->set('imagecache_subdirectories', $values['imagecache_subdirectories'])
        ->set('imagecache_default_extension', $values['imagecache_default_extension'])
-@@ -205,8 +220,16 @@ class SettingsForm extends ConfigFormBase {
-       ->set('imagecache_external_use_whitelist', $values['imagecache_external_use_whitelist'])
+@@ -228,8 +243,16 @@ class SettingsForm extends ConfigFormBase {
        ->set('imagecache_external_hosts', $values['imagecache_external_hosts'])
        ->set('imagecache_fallback_image', $fallback_image)
--      ->set('imagecache_external_cron_flush_frequency', $values['imagecache_external_cron_flush_frequency'])
+       ->set('imagecache_external_cron_flush_frequency', $values['imagecache_external_cron_flush_frequency'])
+-      ->set('svg_settings', $svg_settings)
 -      ->save();
-+      ->set('imagecache_external_cron_flush_frequency', $values['imagecache_external_cron_flush_frequency']);
++      ->set('svg_settings', $svg_settings);
 +
 +    if ($client_config = array_filter($form_state->getValue('http_client_config'))) {
 +      $configuration->set('http_client_config', $client_config);
@@ -88,7 +88,7 @@ index 6c880017281eb8092052f492af61567e0a03e1bd..bd38cb5c9d6137c626ee8b6c6a6c5008
  
 diff --git a/tests/src/Functional/SettingsFormTest.php b/tests/src/Functional/SettingsFormTest.php
 new file mode 100644
-index 0000000000000000000000000000000000000000..01fbfb54af6daca0466c1c8c4be307bd0739fcfb
+index 0000000..01fbfb5
 --- /dev/null
 +++ b/tests/src/Functional/SettingsFormTest.php
 @@ -0,0 +1,95 @@
