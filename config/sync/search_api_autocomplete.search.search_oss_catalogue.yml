@@ -26,7 +26,6 @@ suggester_settings:
         event: ''
         news: ''
         oss_solution: ''
-        tallinn_report: ''
         video: ''
       'entity:rdf_entity':
         asset_distribution: ''
@@ -47,7 +46,7 @@ suggester_settings:
 suggester_weights:
   live_results: 0
 suggester_limits:
-  live_results: 2
+  live_results: 10
 search_settings:
   'views:search_oss_catalogue':
     displays:
@@ -55,7 +54,7 @@ search_settings:
       selected: {  }
 options:
   limit: 10
-  min_length: 1
+  min_length: 3
   show_count: false
   delay: null
   submit_button_selector: ':submit'
