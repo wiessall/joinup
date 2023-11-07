@@ -66,13 +66,21 @@ abstract class EuOssCatalogueGitHostingPlatformPluginBase extends EuOssCatalogue
   public function defaultConfiguration(): array {
     return [
       'projects' => [],
+      'baseUrl' => $this->getPluginDefinition()['baseUrl'] ?? NULL,
     ] + parent::defaultConfiguration();
   }
 
   /**
    * {@inheritdoc}
    */
-  public function buildConfigurationForm(array $form, FormStateInterface $formState): array {
+  public function buildConfigurationForm(array $form, FormStateInterface $form_state): array {
+    $form['baseUrl'] = [
+      '#type' => 'url',
+      '#title' => $this->t('URL'),
+      '#default_value' => $this->getConfiguration()['baseUrl'],
+      '#required' => TRUE,
+    ];
+
     $form['projects'] = [
       '#type' => 'multivalue',
       '#title' => $this->t('Projects'),
@@ -124,7 +132,10 @@ abstract class EuOssCatalogueGitHostingPlatformPluginBase extends EuOssCatalogue
   /**
    * {@inheritdoc}
    */
-  public function submitConfigurationForm(array &$form, FormStateInterface $formState): void {
+  public function submitConfigurationForm(array &$form, FormStateInterface $form_state): void {
+    $baseUrl = $form_state->getValue('baseUrl');
+    $this->configuration['baseUrl'] = is_string($baseUrl) ? trim($form_state->getValue('baseUrl'), ' /') : NULL;
+
     // Converts from:
     // @code
     // [
@@ -141,7 +152,7 @@ abstract class EuOssCatalogueGitHostingPlatformPluginBase extends EuOssCatalogue
     // ]
     // @endcode
     $projects = [];
-    foreach ($formState->getValue('projects', []) as $row) {
+    foreach ($form_state->getValue('projects', []) as $row) {
       $projects[$row['namespace']] ??= [];
       if ($row['name']) {
         $projects[$row['namespace']][] = $row['name'];
@@ -163,12 +174,59 @@ abstract class EuOssCatalogueGitHostingPlatformPluginBase extends EuOssCatalogue
   /**
    * {@inheritdoc}
    */
+  final public function getFileRawUrl(string $url, string $projectUrl): ?string {
+    if ($this->isFileRawUrl($url, $projectUrl)) {
+      return $url;
+    }
+
+    // Relative path?
+    if (!preg_match('@^https?://@', $url)) {
+      $url = $projectUrl . '/' . ltrim($url, '/');
+    }
+    elseif (!str_starts_with($url, $this->getConfiguration()['baseUrl'])) {
+      // This file is not hosted by this platform.
+      return $url;
+    }
+    return $this->doGetFileRawUrl($url, $projectUrl);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function getProjects(array $requestedFiles = []): iterable {
     \assert($requestedFiles === array_unique($requestedFiles));
     foreach ($this->doGetProjects($requestedFiles) as $project) {
       yield $project;
     }
   }
+
+  /**
+   * Returns a file raw URL given a relative path or URL.
+   *
+   * @param string $url
+   *   A file path relative to the repository root or a full URL.
+   * @param string $projectUrl
+   *   The project homepage URL.
+   *   A branch, commit or a tag.
+   *
+   * @return string|null
+   *   The file raw URL or NULL if it cannot be resolved.
+   */
+  abstract protected function doGetFileRawUrl(string $url, string $projectUrl): ?string;
+
+  /**
+   * Check whether the passed URL represents a file raw URL.
+   *
+   * @param string $url
+   *   The URL to be checked.
+   * @param string $projectUrl
+   *   The project homepage URL.
+   *   A branch or a tag.
+   *
+   * @return bool
+   *   Whether the passed URL is a file raw URL.
+   */
+  abstract protected function isFileRawUrl(string $url, string $projectUrl): bool;
 
   /**
    * Returns the list of projects.

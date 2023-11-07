@@ -118,8 +118,8 @@ class DevelopersItalia extends EuOssCatalogueProviderPluginBase {
       unset($this->fetched[$baseUrl]);
 
       $platformConfig = [
+        'baseUrl' => $baseUrl,
         'projects' => $namespaces['projects'],
-        'url' => $baseUrl,
       ];
       /** @var \Drupal\eu_oss_catalogue\EuOssCatalogueHostingPlatformInterface $hostingPlatform */
       $hostingPlatform = $this->platformManager->createInstance($namespaces['api']->pluginId, $platformConfig);

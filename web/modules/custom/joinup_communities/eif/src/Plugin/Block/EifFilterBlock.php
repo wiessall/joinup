@@ -9,6 +9,7 @@ use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Link;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
+use Drupal\eif\EifInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -67,21 +68,21 @@ class EifFilterBlock extends BlockBase implements ContainerFactoryPluginInterfac
     $term_storage = $this->entityTypeManager->getStorage('taxonomy_term');
 
     $vocabularies = [
+      'eif_solution_type' => [
+        'name' => $this->t('Solution category'),
+        'nid'  => EifInterface::EIF_SOLUTION_CATEGORY_FILTER_TARGET_ID,
+      ],
       'eif_principle' => [
         'name' => $this->t('Underlying principles'),
-        'nid'  => 703017,
+        'nid'  => EifInterface::EIF_PRINCIPLE_FILTER_TARGET_ID,
       ],
       'eif_interoperability_layer' => [
         'name' => $this->t('Interoperability layer'),
-        'nid'  => 703018,
+        'nid'  => EifInterface::EIF_LAYER_FILTER_TARGET_ID,
       ],
       'eif_conceptual_model' => [
         'name' => $this->t('Conceptual model'),
-        'nid'  => 703019,
-      ],
-      'eif_solution_type' => [
-        'name' => $this->t('Solution category'),
-        'nid'  => 703245,
+        'nid'  => EifInterface::EIF_MODEL_FILTER_TARGET_ID,
       ],
     ];
     foreach ($vocabularies as $machine_name => $vocabulary) {

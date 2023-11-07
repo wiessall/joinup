@@ -31,38 +31,12 @@ class GitLabSelfHosted extends GitLabDotCom {
   /**
    * {@inheritdoc}
    */
-  public function defaultConfiguration(): array {
-    return [
-      'url' => NULL,
-    ] + parent::defaultConfiguration();
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function buildConfigurationForm(array $form, FormStateInterface $formState): array {
-    $form = parent::buildConfigurationForm($form, $formState);
-
+  public function buildConfigurationForm(array $form, FormStateInterface $form_state): array {
+    $form = parent::buildConfigurationForm($form, $form_state);
     // The list of namespaces or projects is not mandatory for self-hosted
     // GitLab code hosting platforms.
     $form['projects']['#required'] = FALSE;
-
-    return [
-      'url' => [
-        '#type' => 'url',
-        '#title' => $this->t('URL'),
-        '#default_value' => $this->getConfiguration()['url'],
-        '#required' => TRUE,
-      ],
-    ] + $form;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function submitConfigurationForm(array &$form, FormStateInterface $formState): void {
-    parent::submitConfigurationForm($form, $formState);
-    $this->configuration['url'] = trim($formState->getValue('url'), ' /');
+    return $form;
   }
 
   /**
@@ -126,7 +100,7 @@ class GitLabSelfHosted extends GitLabDotCom {
   protected function getClient(): Client {
     if (!isset($this->client)) {
       $this->client = parent::getClient();
-      $this->client->setUrl($this->getConfiguration()['url']);
+      $this->client->setUrl($this->getConfiguration()['baseUrl']);
     }
     return $this->client;
   }
@@ -162,7 +136,7 @@ class GitLabSelfHosted extends GitLabDotCom {
           $parts = explode('/', $project['fullPath']);
           array_pop($parts);
           $namespace = implode('/', $parts);
-          yield $this->createHostingPlatformResult($namespace, $project, $requestedFiles);
+          yield $this->createProject($namespace, $project, $requestedFiles);
         }
       }
     } while ($hasNextPage);
@@ -186,6 +160,7 @@ class GitLabSelfHosted extends GitLabDotCom {
    *       id
    *       description
    *       archived
+   *       avatarUrl
    *       releases(sort: CREATED_DESC first: 1) {
    *         nodes {
    *           tagName
@@ -221,7 +196,7 @@ class GitLabSelfHosted extends GitLabDotCom {
     $query->pageInfo([])->use('hasNextPage', 'endCursor');
 
     $fragment = $query->nodes([])
-      ->use('fullPath', 'path', 'id', 'description', 'archived')
+      ->use('fullPath', 'path', 'id', 'description', 'archived', 'avatarUrl')
       ->releases(['sort' => GitLabReleaseSort::CREATED_DESC, 'first' => 1])
       ->nodes([])
       ->use('tagName', 'createdAt')

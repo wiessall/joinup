@@ -6,6 +6,7 @@ Project 1:
     oss_software_version: 'v1.1.1'
     oss_release_date: '2015-06-21'
     oss_platform_reference: gid://gitlab/Project/1
+    oss_logo: https://all.self-hosted.gitlab.example.com/group1/group1_2/group1_3/project1/raw/HEAD/images/logo.svg
     oss_publiccode_yml_version: '0.2'
 
 Project 2:
@@ -16,6 +17,7 @@ Project 2:
     oss_software_version: 'v14.0.1'
     oss_release_date: '2007-01-30'
     oss_platform_reference: gid://gitlab/Project/2
+    oss_logo: https://all.self-hosted.gitlab.example.com/uploads/-/system/project/avatar/2/logo.png
     oss_publiccode_yml_version: '0.2'
 
 Project 3:
@@ -26,4 +28,5 @@ Project 3:
     oss_software_version: null
     oss_release_date: null
     oss_platform_reference: gid://gitlab/Project/3
+    oss_logo: null
     oss_publiccode_yml_version: '0.2'

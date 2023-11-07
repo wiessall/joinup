@@ -11,6 +11,8 @@ dependencies:
     - field.field.node.oss_solution.oss_features
     - field.field.node.oss_solution.oss_git_description
     - field.field.node.oss_solution.oss_git_url
+    - field.field.node.oss_solution.oss_hosting_platform
+    - field.field.node.oss_solution.oss_is_archived
     - field.field.node.oss_solution.oss_landing_url
     - field.field.node.oss_solution.oss_license
     - field.field.node.oss_solution.oss_logo
@@ -121,6 +123,21 @@ content:
     settings:
       placeholder_url: ''
       placeholder_title: ''
+    third_party_settings: {  }
+  oss_hosting_platform:
+    type: plugin_reference_select
+    weight: 38
+    region: content
+    settings:
+      provider_grouping: false
+      configuration_form: hidden
+    third_party_settings: {  }
+  oss_is_archived:
+    type: boolean_checkbox
+    weight: 37
+    region: content
+    settings:
+      display_label: true
     third_party_settings: {  }
   oss_landing_url:
     type: link_default
