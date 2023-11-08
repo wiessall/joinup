@@ -8,16 +8,21 @@
   'list-unstyled',
   'd-flex',
   'justify-content-center',
-  'mt-3'
+  'mt-3',
+  'col-gap-3',
 ] %}
 <ul{{ attributes.addClass(classes) }}>
   {% for platform in platforms %}
     <li class="mx-2">
-      <a href="{{ platform.url }}" target="_blank" rel="noopener" class="text-light" title="{{ platform.name }}">
-        {{ pattern('icon', {
-          name: platform.id,
-          size: 's'
-        }) }}
+      <a href="{{ platform.url }}" target="_blank" rel="noopener" title="{{ platform.name }}">
+        {% if platform.id != 'twitter' %}
+          {{ pattern('icon', {
+            name: platform.id,
+            size: 's'
+          }) }}
+        {% else %}
+          {% include '@ventuno/assets/icons/twitter-x.svg' %}
+        {% endif %}
       </a>
     </li>
   {% endfor %}
