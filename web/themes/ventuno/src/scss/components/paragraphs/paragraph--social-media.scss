@@ -1,0 +1,30 @@
+@import "../../partials/core";
+
+.paragraph--social-media {
+  margin-block-end: 1rem;
+  a {
+    width: $spacer * 3!important;
+    height: $spacer * 3!important;
+    border-radius: $border-radius-pill;
+    font-size: 0;
+    padding: $spacer * .5;
+    color: $brand;
+    background-color: transparent;
+    box-shadow: none;
+    border: 0;
+    &::before {
+      display: inline-block;
+      background-color: $brand;
+      width: $spacer * 2;
+      height: $spacer * 2;
+      content: "";
+      mask-size: $spacer * 2;
+    }
+    &:hover {
+      box-shadow: none!important;
+      &::before {
+        background-color: $primary;
+      }
+    }
+  }
+}
