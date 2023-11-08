@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "8e23ed582dd57b2ea9dcff0238ab9593",
+    "content-hash": "31f3733874c45eabf169265c909571b5",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -17111,16 +17111,16 @@
         },
         {
             "name": "ec-europa/toolkit",
-            "version": "9.15.0",
+            "version": "10.5.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/ec-europa/toolkit.git",
-                "reference": "030e98b0300221d53fd6261a78a4d67524feba6f"
+                "reference": "dc63e9e08daa8d25113b1047f4969134d124d0a9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ec-europa/toolkit/zipball/030e98b0300221d53fd6261a78a4d67524feba6f",
-                "reference": "030e98b0300221d53fd6261a78a4d67524feba6f",
+                "url": "https://api.github.com/repos/ec-europa/toolkit/zipball/dc63e9e08daa8d25113b1047f4969134d124d0a9",
+                "reference": "dc63e9e08daa8d25113b1047f4969134d124d0a9",
                 "shasum": ""
             },
             "require": {
@@ -17173,7 +17173,7 @@
                 "email": "DIGIT-NEXTEUROPA-QA@ec.europa.eu",
                 "source": "https://github.com/ec-europa/toolkit"
             },
-            "time": "2023-10-31T10:02:22+00:00"
+            "time": "2023-10-31T10:14:30+00:00"
         },
         {
             "name": "enlightn/security-checker",
