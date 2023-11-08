@@ -362,7 +362,8 @@
             "drupal/social_media_links": {
                 "Missing config schema for field, widget and formatter @see https://www.drupal.org/node/2898680": "resources/patch/php/drupal/social_media_links/2898680.patch",
                 "Mastodon should not have a fixed URL prefix. @see https://www.drupal.org/project/social_media_links/issues/3319694": "resources/patch/php/drupal/social_media_links/3319694.patch",
-                "Theme suggestions for social_media_links_field. @see https://www.drupal.org/project/social_media_links/issues/3397614": "resources/patch/php/drupal/social_media_links/3397614.patch"
+                "Theme suggestions for social_media_links_field. @see https://www.drupal.org/project/social_media_links/issues/3397614": "resources/patch/php/drupal/social_media_links/3397614.patch",
+                "Convert Twitter to X @see https://www.drupal.org/project/social_media_links/issues/3384469": "resources/patch/php/drupal/social_media_links/3384469-7.patch"
             },
             "drupal/sparql_entity_storage": {
                 "Interface contract violation @see https://drupal.org/i/3379328": "resources/patch/php/drupal/sparql_entity_storage/3379328.patch",
