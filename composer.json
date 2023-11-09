@@ -131,7 +131,7 @@
         "drupal/renderviz": "^1.0",
         "drupal/upgrade_status": "^4.0",
         "drupaltest/behat-one-time-login": "^1.0",
-        "ec-europa/toolkit": "^9.10",
+        "ec-europa/toolkit": "^10.5",
         "enlightn/security-checker": "^1",
         "lovers-of-behat/table-extension": "^1.4",
         "mikey179/vfsstream": "~1.6",
@@ -235,7 +235,7 @@
                 "[web-root]/.eslintrc.json": false
             }
         },
-        "enable-patching": true,
+        "enable-patching": false,
         "composer-exit-on-patch-failure": true,
         "patchLevel": {
             "drupal/core": "-p2"
@@ -266,9 +266,7 @@
                 "Cannot implement a custom user cancellation method @see https://www.drupal.org/project/drupal/issues/3135592": "resources/patch/php/drupal/core/3135592.patch",
                 "If you don't set the \"version\" of a profile, the report/status displays an empty dash @see https://www.drupal.org/project/drupal/issues/3270892": "resources/patch/php/drupal/core/3270892.patch",
                 "hook_requirements_alter() is not invoked on update @see https://www.drupal.org/project/drupal/issues/3324995": "resources/patch/php/drupal/core/3324995.diff",
-                "ExceptionLoggingSubscriber should not log HTTP 4XX errors using PHP logger channel @see https://www.drupal.org/i/2828706": "resources/patch/php/drupal/core/2828706.patch",
                 "Compress ajax_page_state @see https://www.drupal.org/i/3348789": "resources/patch/php/drupal/core/3348789.patch",
-                "ckeditor5.dialog.fix.js throws \"Uncaught TypeError: event.target.classList is undefined\" in Firefox in Drupal 10 with the editor in a modal @see https://www.drupal.org/i/3351600": "resources/patch/php/drupal/core/3351600.diff",
                 "Allow adding computed bundle fields in Views @see https://drupal.org/i/2981047#mr4139-note200447": "resources/patch/php/drupal/core/2981047-mr4224-note200448.diff"
             },
             "drupal/default_content": {
