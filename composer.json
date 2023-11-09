@@ -250,7 +250,7 @@
         },
         "patches": {
             "cfpinto/graphql": {
-                "Enum argument https://github.com/cfpinto/graphql/issues/24": "https://patch-diff.githubusercontent.com/raw/cfpinto/graphql/pull/25.diff"
+                "Enum argument https://github.com/cfpinto/graphql/issues/24": "resources/patch/php/cfpinto/graphql/25.diff"
             },
             "drupal/cas": {
                 "Should CAS respect Drupal registration configuration @see https://www.drupal.org/project/cas/issues/3038279": "resources/patch/php/drupal/cas/3038279.patch"
@@ -285,7 +285,7 @@
                 "Allow manual imports @see https://www.drupal.org/i/2640734": "resources/patch/php/drupal/default_content/2640734.diff"
             },
             "drupal/drupal-driver": {
-                "Allow multi-property references. @see https://github.com/jhedstrom/DrupalDriver/pull/252": "https://patch-diff.githubusercontent.com/raw/jhedstrom/DrupalDriver/pull/252.diff",
+                "Allow multi-property references. @see https://github.com/jhedstrom/DrupalDriver/pull/252": "resources/patch/php/drupal/drupal-driver/252.diff",
                 "Populate link fields only with URI if value is a string @see https://github.com/jhedstrom/DrupalDriver/pull/267": "resources/patch/php/drupal/drupal-driver/267.diff"
             },
             "drupal/editor_file": {
@@ -350,9 +350,6 @@
             },
             "drupal/og": {
                 "The annotations for \"edit-form\" and \"delete-form\" @see https://www.drupal.org/project/og/issues/3338830": "resources/patch/php/drupal/og/3338830.diff"
-            },
-            "drupal/pluginreference": {
-                "Empty item filled with 1st option @see https://www.drupal.org/project/pluginreference/issues/3385192": "resources/patch/php/drupal/pluginreference/3385192.diff"
             },
             "drupal/poll": {
                 "Add permissions to edit all polls @see https://www.drupal.org/project/poll/issues/3274724": "resources/patch/php/drupal/poll/3274724-4.patch"

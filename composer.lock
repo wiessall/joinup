@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "7d5b63cf08d06338b14caf5b0af7805c",
+    "content-hash": "7062d359c47b611223de4af212fc21b0",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -5970,17 +5970,17 @@
         },
         {
             "name": "drupal/pluginreference",
-            "version": "3.0.2",
+            "version": "3.0.3",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/pluginreference.git",
-                "reference": "3.0.2"
+                "reference": "3.0.3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/pluginreference-3.0.2.zip",
-                "reference": "3.0.2",
-                "shasum": "6c73f53b9b176cb33b48ec2462ae7797df0f63c0"
+                "url": "https://ftp.drupal.org/files/projects/pluginreference-3.0.3.zip",
+                "reference": "3.0.3",
+                "shasum": "be817e869235ad2ee8f0720e948f357c430a4639"
             },
             "require": {
                 "drupal/core": "^9 || ^10"
@@ -5988,8 +5988,8 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "3.0.2",
-                    "datestamp": "1660829901",
+                    "version": "3.0.3",
+                    "datestamp": "1696852056",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
