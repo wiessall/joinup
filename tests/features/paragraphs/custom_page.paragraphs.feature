@@ -205,3 +205,28 @@ Feature:
     When I am an anonymous user
     And I visit the "Popular quotes" custom page
     Then the page should contain the html text "That's one small step for a man, a giant leap for mankind."
+
+  @javascript
+  Scenario Outline: A paragraph of social media links is available.
+    Given custom_page content:
+      | title        | collection            | state     |
+      | Social media | Paragraphs collection | published |
+    And I append "social_media" to "field_paragraphs_body" field in "node" entity with following "Social media" title:
+      | field_paragraphs_social_media:platform | <platform> |
+      | field_paragraphs_social_media:value    | <value>    |
+
+    When I am an anonymous user
+    And I visit the "Social media" custom page
+    Then I should see the link "<name>"
+
+    Examples:
+      | platform  | value                | name      |
+      | twitter   | someuser             | X         |
+      | linkedin  | someuser             | LinkedIn  |
+      | youtube   | someuser             | Youtube   |
+      | mastodon  | example.com/someuser | Mastodon  |
+      | facebook  | someuser             | Facebook  |
+      | whatsapp  | 123456789            | Whatsapp  |
+      | vimeo     | someuser             | Vimeo     |
+      | instagram | someuser             | Instagram |
+      | github    | someuser             | GitHub    |
