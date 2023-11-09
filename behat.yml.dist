@@ -6,6 +6,18 @@
   - Drupal\DrupalExtension\Context\DrushContext
   - Drupal\DrupalExtension\Context\MarkupContext
   - Drupal\DrupalExtension\Context\MessageContext
+  - Drupal\joinup\Context\AccessibilityContext:
+      # TODO: The list should be revisited by functional team and frontend devs.
+      standardTags:
+        wcag2a: WCAG 2.1 A
+        wcag2aa: WCAG 2.1 AA
+        # See https://www.epa.gov/accessibility/what-section-508
+        section508: Section 508
+        'cat.aria': ARIA attributes
+        # Mostly related to viewport scale and zoom functionality
+        'cat.sensory-and-visual-cues': Sensory and visual cues
+        # See https://www.w3.org/WAI/WCAG21/Understanding/orientation.html
+        wcag134: WCAG 1.3.4 (orientation)
   - Drupal\joinup\Context\AdmsValidatorContext
   - Drupal\joinup\Context\AssetDistributionContext
   - Drupal\joinup\Context\AssetReleaseContext
