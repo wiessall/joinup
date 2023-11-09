@@ -173,7 +173,13 @@ class AccessibilityContext extends RawDrupalContext {
    *   The JS script.
    */
   protected function getJsTriggeringScript(string $axeJsSrc, array $limitToTags): string {
-    $options = Json::encode(['runOnly' => $limitToTags]);
+    $options = Json::encode([
+      'runOnly' => [
+        'type' => 'tag',
+        'values' => $limitToTags,
+      ],
+    ]);
+
     return <<<JavaScript
       (axeJsSrc => {
         const axeRun = () => {
