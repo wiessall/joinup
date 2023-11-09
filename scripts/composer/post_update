@@ -1,5 +1,14 @@
 #!/bin/bash
 
+# Check that patches are local.
+for COMPOSER_PATCH in $(cat composer.json | jq --raw-output '.extra.patches.[] | values[]')
+do
+  if [[ $COMPOSER_PATCH =~ ^https?:\/\/.*$ ]]; then
+    echo "$(tput setaf 1)Patch $COMPOSER_PATCH should be local$(tput sgr0)"
+    exit 1;
+  fi
+done
+
 # Build the codebase.
 test ! -f vendor/bin/run || vendor/bin/run toolkit:build-dev
 
