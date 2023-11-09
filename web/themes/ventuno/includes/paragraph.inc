@@ -29,7 +29,7 @@ function ventuno_preprocess_paragraph(array &$variables): void {
     };
   }
   if (isset($variables['elements']['#joinup_paragraph_color'])) {
-    $variables['attributes']['class'][] = $variables['elements']['#joinup_paragraph_color'];
+    $variables['attributes']['class'][] = $variables['elements']['#joinup_paragraph_color'] ?? 'brand';
   }
 }
 
