@@ -15,13 +15,15 @@
   {% for platform in platforms %}
     <li class="mx-2">
       <a href="{{ platform.url }}" target="_blank" rel="noopener" title="{{ platform.name }}">
-        {% if platform.id != 'twitter' %}
+        {% if platform.id == 'twitter' %}
+          {% include '@ventuno/assets/icons/twitter-x.svg' %}
+        {% elseif platform.id == 'whatsapp' %}
+          {% include '@ventuno/assets/icons/whatsapp.svg' %}
+        {% else %}
           {{ pattern('icon', {
             name: platform.id,
             size: 's'
           }) }}
-        {% else %}
-          {% include '@ventuno/assets/icons/twitter-x.svg' %}
         {% endif %}
       </a>
     </li>
