@@ -48,3 +48,16 @@ a.btn-link {
 .button--link {
   @extend .btn-link;
 }
+
+.btn--icon {
+  color: $white;
+  padding: 0;
+  background-color: transparent;
+  border: none;
+  box-shadow: none;
+  border-radius: 0;
+  &:hover {
+    box-shadow: none;
+    background-color: transparent;
+  }
+}
