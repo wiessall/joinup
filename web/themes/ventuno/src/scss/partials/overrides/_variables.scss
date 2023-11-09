@@ -110,3 +110,5 @@ $spacers: (
 );
 // Regenerate $gutters variables with new $spacers
 $gutters: $spacers;
+
+$dropdown-padding-y: 0;

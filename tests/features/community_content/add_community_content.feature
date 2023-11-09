@@ -45,7 +45,8 @@ Feature: Add community content
     And I go to the homepage of the "The night shift" collection
     And I click "Add <content type>"
     Then I should see the heading "Add <content type>"
-    And the following fields should be present "Authored by"
+    And the following fields <author field present> be present "Authored by"
+    Then I should see the text "Allowed types: azw css csv dbf doc docx dtd.sgml dtd.xml e00 eps epub fmx2 fmx3 fmx4 gif gml gzip indd jpeg jpg json jsonld kml kmz mdb mobi mop mxd odf ods odt op.datpro owl pdf pdfa1a pdfa1b pdfx png pps ppsx ppt pptx ps psd rdf rdf.turtle rdf.xml rss rtf schema.xml sgml skos.xml sparqlq sparqlqres tar tar.gz tar.xz tiff tsv ttl txt xls xlsx xml xslfo xslt zip."
     But I should not see the following lines of text:
       | Authored on                  |
       | Create new revision          |
@@ -58,11 +59,12 @@ Feature: Add community content
       | Sticky at top of lists       |
 
     Examples:
-      | content type |
-      | discussion   |
-      | document     |
-      | event        |
-      | news         |
+      | content type | author field present |
+      | custom page  | should not           |
+      | discussion   | should               |
+      | document     | should               |
+      | event        | should               |
+      | news         | should               |
 
   Scenario Outline: Publishing community content for the first time sets the publication date
     Given users:
