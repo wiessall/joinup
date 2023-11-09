@@ -100,16 +100,16 @@ class AccessibilityContext extends RawDrupalContext {
       throw new \RuntimeException('Exception thrown while running Axe: ' . Json::encode($exception));
     }
 
-    if (!$violations) {
-      // Congratulations!
-      return;
-    }
-
     // Filter out failures with low impact.
     $violations = array_filter(
       $violations,
       fn(array $violation): bool => self::IMPACT[$violation['impact']] <= self::IMPACT[$minimumImpact],
     );
+
+    if (!$violations) {
+      // Congratulations!
+      return;
+    }
 
     // Sort by impact: the most severe on top.
     uasort($violations, function (array $a, array $b): int {
