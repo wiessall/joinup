@@ -2594,40 +2594,4 @@ class FeatureContext extends RawDrupalContext {
     sleep(1);
   }
 
-  /**
-   * Wait until a listed items in queue has finished.
-   *
-   * Table format:
-   *
-   * @codingStandardsIgnoreStart
-   * | type       |  id                                                             |
-   * | node       |  706407                                                         |
-   * | rdf_entity |  http://data.europa.eu/w21/0aa21349-959b-4114-b16f-bb88facd324f |
-   * @codingStandardsIgnoreEnd
-   *
-   * @param \Behat\Gherkin\Node\TableNode $table
-   *   The table data.
-   * @param string $queue_name
-   *   The queue name.
-   *
-   * @Given wait until the :queue_name processes the queue items:
-   */
-  public function iWaitUntilQueueIsEmpty(TableNode $table, string $queue_name): void {
-    $database = \Drupal::database();
-    $queue_items = [];
-    foreach ($table->getColumnsHash() as $row) {
-      $query = $database->select('queue', 'queue');
-      $query->fields('queue', ['item_id', 'data']);
-      $query->condition('queue.data', '%' . $row['id'] . '%', 'LIKE');
-      $query->condition('queue.name', $queue_name);
-      $queue_results = $query->execute();
-      foreach ($queue_results as $result) {
-        $queue_items[] = $result->item_id;
-      }
-    }
-    $database->delete('queue')
-      ->condition('item_id', $queue_items, 'NOT IN')
-      ->execute();
-  }
-
 }
