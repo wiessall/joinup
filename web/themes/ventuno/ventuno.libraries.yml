@@ -243,6 +243,10 @@ navbar:
   css:
     theme:
       assets/css/navbar.min.css: { minified: true }
+  js:
+    assets/js/navbar-hover-dropdown.min.js: { minified: true }
+  dependencies:
+    - core/once
 
 navbar-search:
   css:

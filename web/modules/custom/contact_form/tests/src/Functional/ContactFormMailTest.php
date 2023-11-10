@@ -20,6 +20,7 @@ class ContactFormMailTest extends JoinupMailFunctionalTestBase {
    */
   protected static $modules = [
     'contact_form',
+    'ui_patterns',
   ];
 
   /**
