@@ -7,6 +7,7 @@
 
 declare(strict_types = 1);
 
+use Drupal\Core\Render\Element;
 use Drupal\joinup_bundle_class\DescriptionInterface;
 use Drupal\joinup_bundle_class\LogoInterface;
 use Drupal\joinup_community_content\Entity\CommunityContentInterface;
@@ -62,6 +63,24 @@ function _ventuno_preprocess_tile(array &$variables, string $entity_type_id): vo
     $variables['view_mode'] === 'view_mode_tile_horizontal' ||
     $variables['view_mode'] === 'highlighted') {
     $variables['text'] = $entity instanceof DescriptionInterface && isset($variables['content'][$entity->getDescriptionField()]) ? $variables['content'][$entity->getDescriptionField()] : NULL;
+
+    // Custom pages are using paragraphs and these are very different in
+    // structure. They also come with their own view modes and markup and is not
+    // helpful when rendering them in a tile. We need to render them in the
+    // default view mode and then strip the markup.
+    if ($entity_type_id === 'node' && $entity->bundle() === 'custom_page') {
+      $variables['text']['#view_mode'] = 'default';
+      $renderer = \Drupal::getContainer()->get('renderer');
+      $rendered = [];
+      foreach (Element::children($variables['text']) as $index) {
+        $variables['text'][$index]['#view_mode'] = 'default';
+        $rendered[$index] = (string) $renderer->renderPlain($variables['text'][$index]);
+        $rendered[$index] = trim(strip_tags($rendered[$index]));
+      }
+      $rendered = array_filter($rendered);
+      $variables['text'] = implode(' ', $rendered);
+      $variables['text'] = _ventuno_smart_trim($variables['text'], 200);
+    }
   }
 
   // Image.
