@@ -38,6 +38,8 @@ class JoinupEnvironmentCommands extends AbstractCommands {
       " PHPUnit  {$this->phpunitVersion()}\n" .
       " Behat    {$this->behatVersion()}\n" .
       " Selenium {$this->seleniumVersion()}\n" .
+      " Node     {$this->nodeVersion()}\n" .
+      " NPM      {$this->npmVersion()}\n" .
       " Joinup   {$this->joinupVersion()}";
   }
 
@@ -163,6 +165,26 @@ class JoinupEnvironmentCommands extends AbstractCommands {
    */
   protected function behatVersion(): string {
     return ApplicationFactory::VERSION;
+  }
+
+  /**
+   * Returns the Node version.
+   *
+   * @return string
+   *   The Node version.
+   */
+  protected function nodeVersion(): string {
+    return exec('node --version') ?: '(cannot determine)';
+  }
+
+  /**
+   * Returns the NPM version.
+   *
+   * @return string
+   *   The NPM version.
+   */
+  protected function npmVersion(): string {
+    return exec('npm --version') ?: '(cannot determine)';
   }
 
 }
