@@ -239,7 +239,7 @@ third_party_settings:
                   url_only: false
                   url_plain: false
                   rel: nofollow
-                  target: ''
+                  target: _blank
                   link_title: 'Source code repository'
                 third_party_settings:
                   template_suggestion:
