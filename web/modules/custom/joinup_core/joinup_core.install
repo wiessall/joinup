@@ -92,3 +92,31 @@ function joinup_core_requirements($phase): array {
 
   return $requirements;
 }
+
+/**
+ * Unset video_embed_wysiwyg to prevent deploy error.
+ */
+function joinup_core_update_109901(): void {
+  $config = \Drupal::configFactory()->getEditable('filter.format.content_editor');
+
+  // Remove the video_embed_wysiwyg filter.
+  $filters = $config->get('filters');
+  foreach ($filters as $delta => $filter) {
+    if ($filter['id'] == 'video_embed_wysiwyg') {
+      unset($filters[$delta]);
+      break;
+    }
+  }
+  $dependencies = $config->get('dependencies');
+  foreach ($dependencies['module'] as $delta => $module) {
+    if ($module == 'video_embed_wysiwyg') {
+      unset($dependencies['module'][$delta]);
+      break;
+    }
+  }
+
+  // Save the updated configuration.
+  $config->set('filters', $filters);
+  $config->set('dependencies', $dependencies);
+  $config->save();
+}
