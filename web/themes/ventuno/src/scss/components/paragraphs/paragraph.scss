@@ -2,9 +2,13 @@
 
 .paragraph,
 .fieldset--textarea {
+  .logo-table {
+    display: flex;
+  }
+
   img,
   figure {
-    margin-bottom: $spacer;
+    margin: .5rem;
     max-width: 100%;
     height: auto;
     &.align-left {
