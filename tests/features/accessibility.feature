@@ -8,4 +8,4 @@ Feature: Accessibility
   Scenario: Test accessibility
 
     Given I am on homepage
-    Then the page meets at least moderate accessibility standards
+    Then the page meets accessibility standards

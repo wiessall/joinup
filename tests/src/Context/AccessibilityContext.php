@@ -7,7 +7,6 @@ namespace Drupal\joinup\Context;
 use Behat\Mink\Element\DocumentElement;
 use Drupal\Component\Serialization\Json;
 use Drupal\Component\Utility\SortArray;
-use Drupal\Core\Site\Settings;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\joinup\Traits\JavascriptTrait;
 use PHPUnit\Framework\Assert;
@@ -40,6 +39,13 @@ class AccessibilityContext extends RawDrupalContext {
     'moderate' => 2,
     'minor' => 3,
   ];
+
+  /**
+   * Used to build the report.
+   *
+   * @var int
+   */
+  private const LINE_LENGTH = 80;
 
   /**
    * Constructs a new context.
@@ -120,28 +126,20 @@ class AccessibilityContext extends RawDrupalContext {
 
     $report = [];
     foreach ($violations as $violation) {
-      $tags = implode(', ', $violation['tags']);
-      $report[] = <<<ENTRY
-        ID:          {$violation['id']}
-        Description: {$violation['description']}
-        Impact:      {$violation['impact']}
-        Help:        {$violation['help']}, see {$violation['helpUrl']}
-        Tags:        $tags
-        ----------------------------------
-        ENTRY;
+      $report[] = $this->buildReportEntry($violation);
     }
 
-    if (!$path = tempnam(Settings::get('file_temp_path'), 'a11y.')) {
+    if (!$path = tempnam(DRUPAL_ROOT . '/../debug/', 'a11y.')) {
       throw new \RuntimeException('Cannot create a file for the JSON full report');
     }
     file_put_contents($path, Json::encode($violations));
     rename($path, "$path.json");
 
     throw new ExpectationFailedException(
-      "Accessibility standards violations\n" .
-      "==================================\n" .
+      "Detected accessibility standards violations\n" .
+      str_repeat("=", self::LINE_LENGTH) . "\n" .
       implode("\n", $report) . "\n" .
-      "A JSON encoded full report has been created at $path"
+      "A JSON encoded full report, containing also the offending HTML elements, has been created at $path.json"
     );
   }
 
@@ -212,6 +210,40 @@ class AccessibilityContext extends RawDrupalContext {
         }
       })('$axeJsSrc');
       JavaScript;
+  }
+
+  /**
+   * Builds a report entry.
+   *
+   * @param array $violation
+   *   The violation array.
+   *
+   * @return string
+   *   A report entry.
+   */
+  protected function buildReportEntry(array $violation): string {
+    $entry = [
+      'ID' => $violation['id'],
+      'Impact' => $violation['impact'],
+      'Description' => $violation['description'],
+      'Help' => $violation['help'],
+      'See' => $violation['helpUrl'],
+      'Tags' => implode(', ', $violation['tags']),
+    ];
+
+    $indent = array_reduce(
+      array_keys($entry),
+      fn(int $maxKeyLength, string $key): int => max(strlen($key), $maxKeyLength),
+      0,
+    ) + 2;
+
+    $text = [];
+    foreach ($entry as $key => $value) {
+      $wrapped = wordwrap(trim($value), self::LINE_LENGTH - $indent);
+      $text[] = str_pad("$key:", $indent) . str_replace("\n", "\n" . str_repeat(' ', $indent), $wrapped);
+    }
+
+    return implode("\n", $text) . "\n" . str_repeat('-', self::LINE_LENGTH) . "\n";
   }
 
 }
