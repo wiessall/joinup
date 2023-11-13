@@ -34,12 +34,10 @@ class RelevantField extends FieldItemList {
    * {@inheritdoc}
    */
   protected function computeValue(): void {
-    if (!($sourceField = $this->getSourceField())) {
-      return;
-    }
-
-    foreach ($sourceField as $delta => $item) {
-      $this->list[$delta] = $item;
+    if ($sourceField = $this->getSourceField()) {
+      foreach ($sourceField as $delta => $item) {
+        $this->list[$delta] = $item;
+      }
     }
   }
 
@@ -51,13 +49,13 @@ class RelevantField extends FieldItemList {
    *   entity or the field definition is not properly configured.
    */
   protected function getSourceField(): ?FieldItemListInterface {
-    if (!($fieldName = $this->getSourceFieldName())) {
-      return NULL;
+    if ($fieldName = $this->getSourceFieldName()) {
+      return $this->getEntity()
+        ->getTranslation($this->getRichestLanguageCode())
+        ->get($fieldName);
     }
 
-    return $this->getEntity()
-      ->getTranslation($this->getRichestLanguageCode())
-      ->get($fieldName);
+    return NULL;
   }
 
   /**
@@ -69,9 +67,9 @@ class RelevantField extends FieldItemList {
    */
   protected function getSourceFieldName(): ?string {
     $languageCode = $this->getRichestLanguageCode();
-    $entity = $this->getEntity()->getTranslation($languageCode);
+    $ossSolution = $this->getEntity()->getTranslation($languageCode);
     foreach ((array) $this->definition->getSetting(static::SOURCE_FIELDS_SETTING_KEY) as $fieldName) {
-      if (!$entity->hasField($fieldName) || $entity->get($fieldName)->isEmpty()) {
+      if (!$ossSolution->hasField($fieldName) || $ossSolution->get($fieldName)->isEmpty()) {
         continue;
       }
       return $fieldName;
@@ -87,10 +85,9 @@ class RelevantField extends FieldItemList {
    *   The language code of the richest entity translation.
    */
   protected function getRichestLanguageCode(): string {
-    $entity = $this->getEntity();
-    return $entity instanceof OssSolutionInterface
-      ? $entity->getRelevantLangCode()
-      : $entity->language()->getId();
+    $ossSolution = $this->getEntity();
+    \assert($ossSolution instanceof OssSolutionInterface);
+    return $ossSolution->getRelevantLangCode();
   }
 
 }

@@ -5,11 +5,10 @@ declare(strict_types = 1);
 namespace Drupal\eu_oss_catalogue\Plugin\Field;
 
 use Drupal\Component\Serialization\Exception\InvalidDataTypeException;
-use Drupal\Core\Entity\FieldableEntityInterface;
-use Drupal\Core\Entity\TranslatableInterface;
 use Drupal\Core\Field\FieldItemList;
 use Drupal\Core\Serialization\Yaml;
 use Drupal\Core\TypedData\ComputedItemListTrait;
+use Drupal\eu_oss_catalogue\Entity\OssSolutionInterface;
 
 /**
  * Computed field with the richest entity translation language code.
@@ -57,36 +56,30 @@ class RelevantLanguageCode extends FieldItemList {
    *   The language code of the richest entity translation.
    */
   protected function getRelevantLanguageCode(): string {
-    $entity = $this->getEntity();
+    $ossSolution = $this->getEntity();
 
-    if (
-      !$entity instanceof TranslatableInterface
-      || !$entity instanceof FieldableEntityInterface
-    ) {
-      return $entity->language()->getId();
-    }
-
-    $translationLanguages = $entity->getTranslationLanguages(TRUE);
+    $translationLanguages = $ossSolution->getTranslationLanguages();
     if (count($translationLanguages) === 1) {
       return key($translationLanguages);
     }
 
+    // If publiccode.yml field does not contain any language codes, then we
+    // continue with the existing entity translations. But if we have
+    // publiccode.yml language codes, then we use the union of the pc.yml
+    // language codes and the entity translation language codes.
     $translationLanguageCodes = empty($publicCodeLanguageCodes = $this->getLanguageCodesFromPublicCodeYaml())
       ? array_keys($translationLanguages)
-      : array_intersect(
-        $publicCodeLanguageCodes,
-        array_keys($translationLanguages)
-    );
+      : array_intersect($publicCodeLanguageCodes, array_keys($translationLanguages));
 
+    // Only one translation left, no need to perform the "richest" check.
     if (count($translationLanguageCodes) === 1) {
       return reset($translationLanguageCodes);
     }
 
     $flagshipFieldItemCounts = array_reduce(
       $translationLanguageCodes ?: array_keys($translationLanguages),
-      function (array $carry, string $languageCode) use ($entity): array {
-        $translation = $entity->getTranslation($languageCode);
-        \assert($translation instanceof FieldableEntityInterface);
+      function (array $carry, string $languageCode) use ($ossSolution): array {
+        $translation = $ossSolution->getTranslation($languageCode);
         $flagShipFieldExists = $translation->hasField(static::FLAGSHIP_FIELD) && !$translation->get(static::FLAGSHIP_FIELD)->isEmpty();
 
         $carry[$languageCode] = $flagShipFieldExists
@@ -97,13 +90,11 @@ class RelevantLanguageCode extends FieldItemList {
       []
     );
 
-    $winnerLanguageCode = array_search(max($flagshipFieldItemCounts), $flagshipFieldItemCounts, TRUE);
-    \assert($winnerLanguageCode !== FALSE);
-    return $winnerLanguageCode;
+    return array_search(max($flagshipFieldItemCounts), $flagshipFieldItemCounts, TRUE);
   }
 
   /**
-   * Language codes used in publiccode.yml.
+   * Returns language codes used in publiccode.yml.
    *
    * @return string[]
    *   The language codes used at the description property. Returns empty array
@@ -115,16 +106,12 @@ class RelevantLanguageCode extends FieldItemList {
    *     array, or if it is empty.
    */
   protected function getLanguageCodesFromPublicCodeYaml(): array {
-    $entity = $this->getEntity();
-    if (
-      !$entity->hasField(static::PUBLICCODE_YAML_FIELD)
-      || ($field = $entity->get(static::PUBLICCODE_YAML_FIELD))->isEmpty()
-    ) {
-      return [];
-    }
-
+    $ossSolution = $this->getEntity();
+    \assert($ossSolution instanceof OssSolutionInterface);
+    $field = $ossSolution->get(static::PUBLICCODE_YAML_FIELD);
     \assert($field->getFieldDefinition()->isTranslatable() === FALSE);
     $publicCodeYamlContent = $field->first()->getValue()[$field->first()->mainPropertyName()];
+
     try {
       $publicCodeYaml = Yaml::decode($publicCodeYamlContent);
     }

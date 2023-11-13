@@ -18,8 +18,8 @@ use Drupal\eu_oss_catalogue\Plugin\Field\RelevantField;
 function eu_oss_catalogue_views_data_alter(array &$data): void {
   $entityTypeManager = Drupal::entityTypeManager();
 
-  foreach ($entityTypeManager->getDefinitions() as $entity_info) {
-    $data[$entity_info->getBaseTable()]['translation_list'] = [
+  foreach ($entityTypeManager->getDefinitions() as $entityInfo) {
+    $data[$entityInfo->getBaseTable()]['translation_list'] = [
       'title' => 'Translation list',
       'help' => t('Displays all available translations.'),
       'field' => [
@@ -32,8 +32,8 @@ function eu_oss_catalogue_views_data_alter(array &$data): void {
 /**
  * Implements hook_views_data().
  */
-function eu_oss_catalogue_views_data() {
-  $views_data = [];
+function eu_oss_catalogue_views_data(): array {
+  $viewsData = [];
 
   $entityFieldManager = \Drupal::service('entity_field.manager');
   \assert($entityFieldManager instanceof EntityFieldManagerInterface);
@@ -56,7 +56,7 @@ function eu_oss_catalogue_views_data() {
       ]
     );
 
-    $views_data['node_field_data'][$fieldName] = [
+    $viewsData['node_field_data'][$fieldName] = [
       'title' => $fieldDefinition->getLabel(),
       'group' => t('EU OSS Catalogue'),
       'help' => $label,
@@ -69,5 +69,5 @@ function eu_oss_catalogue_views_data() {
     ];
   }
 
-  return $views_data;
+  return $viewsData;
 }
