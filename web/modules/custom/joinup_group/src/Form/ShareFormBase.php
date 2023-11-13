@@ -4,12 +4,13 @@ declare(strict_types = 1);
 
 namespace Drupal\joinup_group\Form;
 
+use Drupal\Core\Cache\CacheTagsInvalidatorInterface;
 use Drupal\Core\Entity\EntityTypeBundleInfoInterface;
 use Drupal\Core\Entity\EntityViewBuilderInterface;
+use Drupal\Core\Entity\FieldableEntityInterface;
 use Drupal\Core\EventSubscriber\MainContentViewSubscriber;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormBuilderInterface;
-use Drupal\Core\Messenger\MessengerInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\joinup_group\Entity\GroupContentInterface;
 use Drupal\joinup_group\Entity\GroupInterface;
@@ -38,88 +39,39 @@ abstract class ShareFormBase extends FormBase {
   ];
 
   /**
-   * The current user account.
-   *
-   * @var \Drupal\Core\Session\AccountInterface
-   */
-  protected $currentUser;
-
-  /**
-   * The OG membership manager.
-   *
-   * @var \Drupal\og\MembershipManagerInterface
-   */
-  protected $membershipManager;
-
-  /**
-   * The OG role manager service.
-   *
-   * @var \Drupal\og\OgRoleManagerInterface
-   */
-  protected $roleManager;
-
-  /**
    * The entity being shared.
    *
    * @var \Drupal\Core\Entity\FieldableEntityInterface
    */
-  protected $entity;
-
-  /**
-   * The RDF view builder.
-   *
-   * @var \Drupal\Core\Entity\EntityViewBuilderInterface
-   */
-  protected $rdfBuilder;
-
-  /**
-   * The RDF entity storage.
-   *
-   * @var \Drupal\sparql_entity_storage\SparqlEntityStorage
-   */
-  protected $sparqlStorage;
-
-  /**
-   * The messenger service.
-   *
-   * @var \Drupal\Core\Messenger\MessengerInterface
-   */
-  protected $messenger;
-
-  /**
-   * The bundle info service.
-   *
-   * @var \Drupal\Core\Entity\EntityTypeBundleInfoInterface
-   */
-  protected $bundleInfo;
+  protected FieldableEntityInterface $entity;
 
   /**
    * Constructs a new ShareContentFormBase object.
    *
-   * @param \Drupal\sparql_entity_storage\SparqlEntityStorage $sparql_storage
+   * @param \Drupal\sparql_entity_storage\SparqlEntityStorage $sparqlStorage
    *   The RDF entity storage.
-   * @param \Drupal\Core\Entity\EntityViewBuilderInterface $rdf_builder
+   * @param \Drupal\Core\Entity\EntityViewBuilderInterface $rdfBuilder
    *   The RDF view builder.
-   * @param \Drupal\og\MembershipManagerInterface $membership_manager
+   * @param \Drupal\og\MembershipManagerInterface $membershipManager
    *   The OG membership manager.
-   * @param \Drupal\og\OgRoleManagerInterface $role_manager
+   * @param \Drupal\og\OgRoleManagerInterface $roleManager
    *   The OG role manager service.
-   * @param \Drupal\Core\Session\AccountInterface $current_user
+   * @param \Drupal\Core\Session\AccountInterface $currentUser
    *   The current user account.
-   * @param \Drupal\Core\Messenger\MessengerInterface $messenger
-   *   The messenger service.
-   * @param \Drupal\Core\Entity\EntityTypeBundleInfoInterface $bundle_info
+   * @param \Drupal\Core\Entity\EntityTypeBundleInfoInterface $bundleInfo
    *   The bundle info service.
+   * @param \Drupal\Core\Cache\CacheTagsInvalidatorInterface $invalidator
+   *   The cache tag invalidator service.
    */
-  public function __construct(SparqlEntityStorage $sparql_storage, EntityViewBuilderInterface $rdf_builder, MembershipManagerInterface $membership_manager, OgRoleManagerInterface $role_manager, AccountInterface $current_user, MessengerInterface $messenger, EntityTypeBundleInfoInterface $bundle_info) {
-    $this->sparqlStorage = $sparql_storage;
-    $this->rdfBuilder = $rdf_builder;
-    $this->membershipManager = $membership_manager;
-    $this->roleManager = $role_manager;
-    $this->currentUser = $current_user;
-    $this->messenger = $messenger;
-    $this->bundleInfo = $bundle_info;
-  }
+  public function __construct(
+    protected SparqlEntityStorage $sparqlStorage,
+    protected EntityViewBuilderInterface $rdfBuilder,
+    protected MembershipManagerInterface $membershipManager,
+    protected OgRoleManagerInterface $roleManager,
+    protected AccountInterface $currentUser,
+    protected EntityTypeBundleInfoInterface $bundleInfo,
+    protected CacheTagsInvalidatorInterface $invalidator
+  ) {}
 
   /**
    * {@inheritdoc}
@@ -131,8 +83,8 @@ abstract class ShareFormBase extends FormBase {
       $container->get('og.membership_manager'),
       $container->get('og.role_manager'),
       $container->get('current_user'),
-      $container->get('messenger'),
-      $container->get('entity_type.bundle.info')
+      $container->get('entity_type.bundle.info'),
+      $container->get('cache_tags.invalidator')
     );
   }
 

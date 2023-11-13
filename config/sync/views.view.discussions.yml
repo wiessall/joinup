@@ -9,7 +9,7 @@ dependencies:
   module:
     - joinup_discussion
     - joinup_group
-    - joinup_material_design
+    - joinup_tiles
     - search_api
 id: discussions
 label: Discussions
