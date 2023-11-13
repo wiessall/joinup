@@ -2,7 +2,6 @@ langcode: en
 status: true
 dependencies:
   config:
-    - core.entity_view_mode.node.view_mode_tile
     - field.storage.node.oss_git_description
     - field.storage.node.oss_git_url
     - field.storage.node.oss_short_description
@@ -1719,7 +1718,7 @@ display:
         type: 'entity:node'
         options:
           relationship: none
-          view_mode: view_mode_tile
+          view_mode: teaser
       defaults:
         access: false
         title: false
