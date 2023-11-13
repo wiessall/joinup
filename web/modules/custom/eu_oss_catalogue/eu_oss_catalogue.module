@@ -7,7 +7,6 @@
 
 declare(strict_types = 1);
 
-use Drupal\Core\Entity\ContentEntityTypeInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Field\BaseFieldDefinition;
 use Drupal\Core\Field\FieldDefinitionInterface;
@@ -54,10 +53,9 @@ function eu_oss_catalogue_form_views_exposed_form_alter(array &$form, FormStateI
 /**
  * Implements hook_entity_bundle_field_info().
  */
-function eu_oss_catalogue_entity_bundle_field_info(EntityTypeInterface $entity_type, $bundle): array {
+function eu_oss_catalogue_entity_bundle_field_info(EntityTypeInterface $entityType, string $bundle): array {
   $fields = [];
-  if ($entity_type->id() === 'node' && $bundle === 'oss_solution') {
-
+  if ($entityType->id() === 'node' && $bundle === 'oss_solution') {
     // We will convert these labels back to the source field's label.
     /* @see \eu_oss_catalogue_preprocess_field() */
     $label = t(
@@ -85,8 +83,8 @@ function eu_oss_catalogue_entity_bundle_field_info(EntityTypeInterface $entity_t
 /**
  * Implements hook_entity_bundle_field_info_alter().
  */
-function eu_oss_catalogue_entity_bundle_field_info_alter(&$fields, EntityTypeInterface $entity_type, $bundle): void {
-  if ($bundle !== 'oss_solution' || !$entity_type instanceof ContentEntityTypeInterface) {
+function eu_oss_catalogue_entity_bundle_field_info_alter(array &$fields, EntityTypeInterface $entityType, string $bundle): void {
+  if ($entityType->id() !== 'node' || $bundle !== 'oss_solution') {
     return;
   }
 
