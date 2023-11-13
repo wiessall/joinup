@@ -124,7 +124,7 @@ function joinup_core_update_109901(): void {
 /**
  * Create missing video from homepage.
  */
-function joinup_core_update_109903(): void {
+function joinup_core_update_109902(): void {
   $media_storage = \Drupal::entityTypeManager()->getStorage('media');
   $media = $media_storage->create([
     'bundle' => 'video',
