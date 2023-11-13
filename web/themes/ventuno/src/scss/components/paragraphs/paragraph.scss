@@ -2,8 +2,13 @@
 
 .paragraph,
 .fieldset--textarea {
-  .logo-table {
-    display: flex;
+
+  .inline-block {
+    display: inline-block;
+  }
+
+  .align-center {
+    width: fit-content;
   }
 
   img,
