@@ -58,3 +58,4 @@
 
 # Used by the CI for artifacts.
 /debug/
+.twig-cs-fixer.cache
