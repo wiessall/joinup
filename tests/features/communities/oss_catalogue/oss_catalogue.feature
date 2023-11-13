@@ -135,9 +135,9 @@ Feature:
       |   Administration 1,                                                                                |
       |   Administration 2,                                                                                |
       |   Administration 3                                                                                 |
-      | Maintenance contractors                                                                            |
+      | Technical Maintainers                                                                            |
       |   ACME Ltd.                                                                                        |
-      | Maintenance contacts                                                                               |
+      | Technical Contacts                                                                               |
       |   FOSS Conference                                                                                  |
     And I should see the following links:
       # Categories.

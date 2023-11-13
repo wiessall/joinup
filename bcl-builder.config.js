@@ -252,8 +252,29 @@ module.exports = {
       },
     },
     {
-      entry: path.resolve(outputFolder, `${ventuno}src/scss/pages/oss.scss`),
-      dest: path.resolve(outputFolder, `${ventuno}assets/css/oss.min.css`),
+      entry: path.resolve(
+        outputFolder,
+        `${ventuno}src/scss/pages/oss-landing.scss`
+      ),
+      dest: path.resolve(
+        outputFolder,
+        `${ventuno}assets/css/oss-landing.min.css`
+      ),
+      options: {
+        includePaths,
+        minify: true,
+        sourceMap: "file",
+      },
+    },
+    {
+      entry: path.resolve(
+        outputFolder,
+        `${ventuno}src/scss/pages/oss-solution-full.scss`
+      ),
+      dest: path.resolve(
+        outputFolder,
+        `${ventuno}assets/css/oss-solution-full.min.css`
+      ),
       options: {
         includePaths,
         minify: true,
@@ -1176,21 +1197,6 @@ module.exports = {
       options: {
         minify: true,
         includePaths,
-        sourceMap: "file",
-      },
-    },
-    {
-      entry: path.resolve(
-        outputFolder,
-        `${ventuno}src/scss/components/oss-solution-full.tmp.scss`
-      ),
-      dest: path.resolve(
-        outputFolder,
-        `${ventuno}assets/css/oss-solution-full.tmp.css`
-      ),
-      options: {
-        includePaths,
-        minify: true,
         sourceMap: "file",
       },
     },
