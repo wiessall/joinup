@@ -120,3 +120,16 @@ function joinup_core_update_109901(): void {
   $config->set('dependencies', $dependencies);
   $config->save();
 }
+
+/**
+ * Create missing video from homepage.
+ */
+function joinup_core_update_109903(): void {
+  $media_storage = \Drupal::entityTypeManager()->getStorage('media');
+  $media = $media_storage->create([
+    'bundle' => 'video',
+    'video' => 'https://youtu.be/3_dx-K0P9JI',
+    'uuid' => 'b03799ea-2116-4d21-965f-3556002d8a00',
+  ]);
+  $media->save();
+}
