@@ -90,4 +90,5 @@ Feature: Input filter
     And I set long body of "Famous actors" news
 
     When I go to the "Famous actors" news
-    Then I see the "img" element with the "alt" attribute set to "Image removed." in the "Content" region
+    # In CK5 img tag is removed we are using media.
+    Then I should not see the "img" element with the "alt" attribute set to "Image removed." in the "Content" region
