@@ -19,6 +19,8 @@
           {% include '@ventuno/assets/icons/twitter-x.svg' %}
         {% elseif platform.id == 'whatsapp' %}
           {% include '@ventuno/assets/icons/whatsapp.svg' %}
+        {% elseif platform.id == 'instagram' %}
+          {% include '@ventuno/assets/icons/instagram.svg' %}
         {% else %}
           {{ pattern('icon', {
             name: platform.id,
