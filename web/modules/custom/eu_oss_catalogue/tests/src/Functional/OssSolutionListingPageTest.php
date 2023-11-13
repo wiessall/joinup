@@ -4,6 +4,9 @@ declare(strict_types = 1);
 
 namespace Drupal\Tests\eu_oss_catalogue\Functional;
 
+use Drupal\Core\Config\FileStorage;
+use Drupal\Core\Config\InstallStorage;
+use Drupal\Core\Config\StorageInterface;
 use Drupal\Tests\BrowserTestBase;
 use Drupal\user\Entity\Role;
 use Drupal\user\RoleInterface;
@@ -30,6 +33,36 @@ class OssSolutionListingPageTest extends BrowserTestBase {
    * {@inheritdoc}
    */
   protected $defaultTheme = 'stark';
+
+  /**
+   * {@inheritdoc}
+   */
+  protected function setUp(): void {
+    parent::setUp();
+
+    // The admin view requires the 'view_mode_tile' view mode so we are creating
+    // it here.
+    $view_mode_storage = $this->container->get('entity_type.manager')->getStorage('entity_view_mode');
+    $view_mode = $view_mode_storage->create([
+      'targetEntityType' => 'node',
+      'id' => 'node.view_mode_tile',
+      'label' => 'Tile',
+    ]);
+    $view_mode->save();
+
+    // Re-try to install the optional config for the eu_oss_catalogue module.
+    // Get path for the eu_oss_catalogue module.
+    $base_path = \Drupal::getContainer()->get('module_handler')->getModule('eu_oss_catalogue')->getPath();
+
+    $optional_install_path = $base_path . '/' . InstallStorage::CONFIG_OPTIONAL_DIRECTORY;
+    if (is_dir($optional_install_path)) {
+      // Install any optional config the module provides.
+      $storage = new FileStorage($optional_install_path, StorageInterface::DEFAULT_COLLECTION);
+      \Drupal::getContainer()->get('config.installer')->installOptionalConfig($storage, ['module' => 'eu_oss_catalogue']);
+    }
+
+    \Drupal::getContainer()->get('router.builder')->rebuild();
+  }
 
   /**
    * Tests the public page (/oss-solutions).
