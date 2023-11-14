@@ -2,9 +2,18 @@
 
 .paragraph,
 .fieldset--textarea {
+
+  .inline-block {
+    display: inline-block;
+  }
+
+  .align-center {
+    width: fit-content;
+  }
+
   img,
   figure {
-    margin-bottom: $spacer;
+    margin: .5rem;
     max-width: 100%;
     height: auto;
     &.align-left {
