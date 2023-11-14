@@ -74,9 +74,10 @@ class TaxonomyTermResolver extends DefaultResolver implements ContainerFactoryPl
   /**
    * {@inheritdoc}
    */
-  public function resolve(Project $project, array $metadata, FieldItemListInterface $fieldItemList): array {
-    if (!$names = $originalValue = parent::resolve($project, $metadata, $fieldItemList)) {
-      return [];
+  public function resolve(?array &$value, Project $project, array $metadata, FieldItemListInterface $fieldItemList): void {
+    parent::resolve($value, $project, $metadata, $fieldItemList);
+    if (!$names = $originalValue = $value) {
+      return;
     }
 
     $storage = $this->entityTypeManager->getStorage('taxonomy_term');
@@ -108,7 +109,7 @@ class TaxonomyTermResolver extends DefaultResolver implements ContainerFactoryPl
     }
 
     // Preserve the original order.
-    return array_values(array_merge(array_flip($names), $tids));
+    $value = array_values(array_merge(array_flip($names), $tids));
   }
 
 }

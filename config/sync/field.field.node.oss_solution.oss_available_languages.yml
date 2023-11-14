@@ -11,9 +11,10 @@ dependencies:
 third_party_settings:
   eu_oss_catalogue:
     publiccode_yml:
-      resolver: default
-      config:
-        path: localisation/availableLanguages
+      resolvers:
+        - plugin: default
+          config:
+            path: localisation/availableLanguages
 id: node.oss_solution.oss_available_languages
 field_name: oss_available_languages
 entity_type: node

@@ -18,6 +18,9 @@ interface EuOssCatalogueResolverInterface extends PluginInspectionInterface, Con
   /**
    * Resolves a value imported by a provider.
    *
+   * @param array|null $value
+   *   The value to be resolved. It might carry data resulted from a previous
+   *   resolver or NULL, if this is the first acting resolver.
    * @param \Drupal\eu_oss_catalogue\Model\Project $project
    *   The project value object.
    * @param array $metadata
@@ -26,12 +29,9 @@ interface EuOssCatalogueResolverInterface extends PluginInspectionInterface, Con
    *   The Drupal field item list instance. The method might need information
    *   extracted form the field.
    *
-   * @return array
-   *   The resolved value.
-   *
    * @throws \Drupal\eu_oss_catalogue\Exception\UnresolvableValueException
    *   If the value cannot be resolved.
    */
-  public function resolve(Project $project, array $metadata, FieldItemListInterface $fieldItemList): array;
+  public function resolve(?array &$value, Project $project, array $metadata, FieldItemListInterface $fieldItemList): void;
 
 }

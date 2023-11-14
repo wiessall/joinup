@@ -12,9 +12,10 @@ dependencies:
 third_party_settings:
   eu_oss_catalogue:
     publiccode_yml:
-      resolver: langcode
-      config:
-        path: 'description/[lang]/screenshots'
+      resolvers:
+        - plugin: langcode
+          config:
+            path: 'description/[lang]/screenshots'
 id: node.oss_solution.oss_screenshots
 field_name: oss_screenshots
 entity_type: node

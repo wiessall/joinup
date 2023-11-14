@@ -61,12 +61,17 @@ class ContactResolver extends DefaultResolver implements ContainerFactoryPluginI
   /**
    * {@inheritdoc}
    */
-  public function resolve(Project $project, array $metadata, FieldItemListInterface $fieldItemList): array {
+  public function resolve(?array &$value, Project $project, array $metadata, FieldItemListInterface $fieldItemList): void {
+    parent::resolve($value, $project, $metadata, $fieldItemList);
+    if (!$value) {
+      return;
+    }
+
     $storage = $this->entityTypeManager->getStorage('node');
     $nodeType = $this->getConfiguration()['node_type'];
 
     $targets = [];
-    foreach (parent::resolve($project, $metadata, $fieldItemList) as $contact) {
+    foreach ($value as $contact) {
       if (is_string($contact)) {
         // This is a malformed contact because it should be an array, but we
         // allow this and amend later, when we check the schema.
@@ -85,16 +90,16 @@ class ContactResolver extends DefaultResolver implements ContainerFactoryPluginI
         $targets[] = reset($nids);
         continue;
       }
-      $values = ['type' => $nodeType, 'title' => $contact['name']];
-      foreach ($contact as $key => $value) {
+      $contactValues = ['type' => $nodeType, 'title' => $contact['name']];
+      foreach ($contact as $key => $contactValue) {
         if ($key !== 'name') {
-          $values["{$nodeType}_$key"] = $value;
+          $contactValues["{$nodeType}_$key"] = $contactValue;
         }
       }
-      $targets[] = $storage->create($values);
+      $targets[] = $storage->create($contactValues);
     }
 
-    return $targets;
+    $value = $targets;
   }
 
 }
