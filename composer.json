@@ -7,6 +7,7 @@
         "php": ">=8.2",
         "ext-dom": "*",
         "ext-json": "*",
+        "ext-mbstring": "*",
         "ext-memcached": "*",
         "ext-pdo": "*",
         "ext-simplexml": "*",
