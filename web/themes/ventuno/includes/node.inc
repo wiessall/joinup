@@ -125,7 +125,7 @@ function ventuno_preprocess_node(array &$variables): void {
 
   // Add library specific to OSS Catalogue landing page.
   if ($variables['view_mode'] === 'full' && $node->uuid() === OssCatalogueCollectionInterface::LANDING_PAGE) {
-    $variables['#attached']['library'][] = 'ventuno/oss';
+    $variables['#attached']['library'][] = 'ventuno/oss-landing';
   }
 }
 
@@ -146,4 +146,5 @@ function ventuno_preprocess_node__moderation(&$variables) {
  */
 function ventuno_preprocess_node__oss_solution__full(array &$variables): void {
   $variables['#attached']['library'][] = 'ventuno/oss-solution-full';
+  $variables['content_attributes']['class'][] = 'layout--stack';
 }
