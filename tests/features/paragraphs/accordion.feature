@@ -57,3 +57,26 @@ Feature:
       | role                                                  |
       | moderator                                             |
       | facilitator of the "Paragraphs collection" collection |
+
+  Scenario: User should be able to click on "Complete drag & drop".
+    # Regression test for ticket #ISAICP-8233.
+
+    Given custom_page content:
+      | title             | collection            | state     |
+      | Nested paragraphs | Paragraphs collection | published |
+    And I append "layout" to "field_paragraphs_body" field in "node" entity with following "Nested paragraphs" title:
+      | behavior_settings | a:3:{s:17:"layout_paragraphs";a:4:{s:6:"layout";s:13:"layout_onecol";s:6:"config";a:1:{s:5:"label";s:0:"";}s:11:"parent_uuid";N;s:6:"region";N;}s:16:"background_theme";a:0:{}s:11:"extra_class";a:0:{}} |
+
+    Then I am logged in as a moderator
+    And I go to the edit form of the "Nested paragraphs" "custom page"
+    And I click "Choose component"
+    And I click "Accordion"
+    And press "Add Accordion item"
+
+    Then I fill in the 1st "Item label" with "Super" in the "Accordion item" field
+    And I enter "Clumsy text" in the 1st "Body" wysiwyg editor in the "Accordion item" field
+    And I click "Toggle Actions" in the "Accordion item" paragraphs field
+    And I press "Drag & drop"
+    And I press "Complete drag & drop"
+
+    When the following fields should be present "Item label, Body"
