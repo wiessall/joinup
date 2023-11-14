@@ -6,10 +6,18 @@
 .l-four-column-grid__region {
   display: flex;
   flex-wrap: wrap;
-  gap: 2.5rem;
+  gap: 1rem;
 }
 
-.l-four-column-grid__region > * {
-  flex: 0 0 calc(25% - (7.5rem / 4));
-  width: calc(25% - (7.5rem / 4));
+@media (min-width: 992px) {
+  .l-four-column-grid__region > * {
+    flex: 0 0 calc(25% - (7.5rem / 4));
+    width: calc(25% - (7.5rem / 4));
+  }
+}
+
+@media (min-width: 992px) {
+  .l-four-column-grid__region {
+    gap: 2.5rem;
+  }
 }
