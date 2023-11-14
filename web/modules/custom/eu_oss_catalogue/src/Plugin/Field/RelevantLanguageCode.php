@@ -8,6 +8,7 @@ use Drupal\Component\Serialization\Exception\InvalidDataTypeException;
 use Drupal\Core\Field\FieldItemList;
 use Drupal\Core\Serialization\Yaml;
 use Drupal\Core\TypedData\ComputedItemListTrait;
+use Drupal\eu_oss_catalogue\Entity\OssSolution;
 use Drupal\eu_oss_catalogue\Entity\OssSolutionInterface;
 
 /**
@@ -26,7 +27,7 @@ class RelevantLanguageCode extends FieldItemList {
    *
    * @see \Drupal\eu_oss_catalogue\Plugin\Field\RichestField::computeValue()
    */
-  const FIELD_NAME = 'relevant_language';
+  const FIELD_NAME = 'oss__relevant_language';
 
   /**
    * Name of the field which is used to determine the richest translation.
@@ -57,7 +58,7 @@ class RelevantLanguageCode extends FieldItemList {
    */
   protected function getRelevantLanguageCode(): string {
     $ossSolution = $this->getEntity();
-
+    \assert($ossSolution instanceof OssSolution);
     $translationLanguages = $ossSolution->getTranslationLanguages();
     if (count($translationLanguages) === 1) {
       return key($translationLanguages);
@@ -80,9 +81,7 @@ class RelevantLanguageCode extends FieldItemList {
       $translationLanguageCodes ?: array_keys($translationLanguages),
       function (array $carry, string $languageCode) use ($ossSolution): array {
         $translation = $ossSolution->getTranslation($languageCode);
-        $flagShipFieldExists = $translation->hasField(static::FLAGSHIP_FIELD) && !$translation->get(static::FLAGSHIP_FIELD)->isEmpty();
-
-        $carry[$languageCode] = $flagShipFieldExists
+        $carry[$languageCode] = !$translation->get(static::FLAGSHIP_FIELD)->isEmpty()
           ? (int) $translation->get(static::FLAGSHIP_FIELD)->count()
           : 0;
         return $carry;
@@ -90,6 +89,7 @@ class RelevantLanguageCode extends FieldItemList {
       []
     );
 
+    // We have 2 translation language keys at least, so we won't return FALSE.
     return array_search(max($flagshipFieldItemCounts), $flagshipFieldItemCounts, TRUE);
   }
 
