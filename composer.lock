@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "7062d359c47b611223de4af212fc21b0",
+    "content-hash": "0d75f9166820932567718cf2783e0bc1",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -9513,16 +9513,16 @@
         },
         {
             "name": "knplabs/github-api",
-            "version": "v3.11.0",
+            "version": "v3.12.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/KnpLabs/php-github-api.git",
-                "reference": "c68b874ac3267c3cc0544b726dbb4e49a72a9920"
+                "reference": "b50fc1f40bb5ac50957d32c5732fcde9167ac30a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/KnpLabs/php-github-api/zipball/c68b874ac3267c3cc0544b726dbb4e49a72a9920",
-                "reference": "c68b874ac3267c3cc0544b726dbb4e49a72a9920",
+                "url": "https://api.github.com/repos/KnpLabs/php-github-api/zipball/b50fc1f40bb5ac50957d32c5732fcde9167ac30a",
+                "reference": "b50fc1f40bb5ac50957d32c5732fcde9167ac30a",
                 "shasum": ""
             },
             "require": {
@@ -9536,7 +9536,7 @@
                 "psr/cache": "^1.0|^2.0|^3.0",
                 "psr/http-client-implementation": "^1.0",
                 "psr/http-factory-implementation": "^1.0",
-                "psr/http-message": "^1.0",
+                "psr/http-message": "^1.0|^2.0",
                 "symfony/deprecation-contracts": "^2.2|^3.0",
                 "symfony/polyfill-php80": "^1.17"
             },
@@ -9556,7 +9556,7 @@
             "extra": {
                 "branch-alias": {
                     "dev-2.x": "2.20.x-dev",
-                    "dev-master": "3.10.x-dev"
+                    "dev-master": "3.11.x-dev"
                 }
             },
             "autoload": {
@@ -9589,7 +9589,7 @@
             ],
             "support": {
                 "issues": "https://github.com/KnpLabs/php-github-api/issues",
-                "source": "https://github.com/KnpLabs/php-github-api/tree/v3.11.0"
+                "source": "https://github.com/KnpLabs/php-github-api/tree/v3.12.0"
             },
             "funding": [
                 {
@@ -9597,7 +9597,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2023-03-10T11:40:14+00:00"
+            "time": "2023-09-30T16:42:04+00:00"
         },
         {
             "name": "laminas/laminas-stdlib",
@@ -9830,16 +9830,16 @@
         },
         {
             "name": "m4tthumphrey/php-gitlab-api",
-            "version": "11.11.0",
+            "version": "11.12.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/GitLabPHP/Client.git",
-                "reference": "7cd35efcce8a5ca22710bda3b56b918b5542d9f5"
+                "reference": "b0d70a6142c52407a226d940ef2d0ae96e65c7e7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/GitLabPHP/Client/zipball/7cd35efcce8a5ca22710bda3b56b918b5542d9f5",
-                "reference": "7cd35efcce8a5ca22710bda3b56b918b5542d9f5",
+                "url": "https://api.github.com/repos/GitLabPHP/Client/zipball/b0d70a6142c52407a226d940ef2d0ae96e65c7e7",
+                "reference": "b0d70a6142c52407a226d940ef2d0ae96e65c7e7",
                 "shasum": ""
             },
             "require": {
@@ -9847,8 +9847,8 @@
                 "ext-xml": "*",
                 "php": "^7.4.15 || ^8.0.2",
                 "php-http/cache-plugin": "^1.8",
-                "php-http/client-common": "^2.6.1",
-                "php-http/discovery": "^1.17",
+                "php-http/client-common": "^2.7",
+                "php-http/discovery": "^1.19",
                 "php-http/httplug": "^2.4",
                 "php-http/multipart-stream-builder": "^1.3",
                 "psr/cache": "^1.0 || ^2.0 || ^3.0",
@@ -9860,8 +9860,8 @@
             },
             "require-dev": {
                 "bamarni/composer-bin-plugin": "^1.8.2",
-                "guzzlehttp/guzzle": "^7.5.1",
-                "http-interop/http-factory-guzzle": "^1.0"
+                "guzzlehttp/guzzle": "^7.8",
+                "http-interop/http-factory-guzzle": "^1.2"
             },
             "type": "library",
             "extra": {
@@ -9908,7 +9908,7 @@
             ],
             "support": {
                 "issues": "https://github.com/GitLabPHP/Client/issues",
-                "source": "https://github.com/GitLabPHP/Client/tree/11.11.0"
+                "source": "https://github.com/GitLabPHP/Client/tree/11.12.0"
             },
             "funding": [
                 {
@@ -9916,7 +9916,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2023-07-17T09:38:04+00:00"
+            "time": "2023-10-08T14:28:30+00:00"
         },
         {
             "name": "maennchen/zipstream-php",
@@ -12777,16 +12777,16 @@
         },
         {
             "name": "symfony/cache",
-            "version": "v6.3.2",
+            "version": "v6.3.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/cache.git",
-                "reference": "d176b97600860df13e851538c2df2ad88e9e5ca9"
+                "reference": "84aff8d948d6292d2b5a01ac622760be44dddc72"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/cache/zipball/d176b97600860df13e851538c2df2ad88e9e5ca9",
-                "reference": "d176b97600860df13e851538c2df2ad88e9e5ca9",
+                "url": "https://api.github.com/repos/symfony/cache/zipball/84aff8d948d6292d2b5a01ac622760be44dddc72",
+                "reference": "84aff8d948d6292d2b5a01ac622760be44dddc72",
                 "shasum": ""
             },
             "require": {
@@ -12795,7 +12795,7 @@
                 "psr/log": "^1.1|^2|^3",
                 "symfony/cache-contracts": "^2.5|^3",
                 "symfony/service-contracts": "^2.5|^3",
-                "symfony/var-exporter": "^6.2.10"
+                "symfony/var-exporter": "^6.3.6"
             },
             "conflict": {
                 "doctrine/dbal": "<2.13.1",
@@ -12810,7 +12810,7 @@
             },
             "require-dev": {
                 "cache/integration-tests": "dev-master",
-                "doctrine/dbal": "^2.13.1|^3.0",
+                "doctrine/dbal": "^2.13.1|^3|^4",
                 "predis/predis": "^1.1|^2.0",
                 "psr/simple-cache": "^1.0|^2.0|^3.0",
                 "symfony/config": "^5.4|^6.0",
@@ -12853,7 +12853,7 @@
                 "psr6"
             ],
             "support": {
-                "source": "https://github.com/symfony/cache/tree/v6.3.2"
+                "source": "https://github.com/symfony/cache/tree/v6.3.6"
             },
             "funding": [
                 {
@@ -12869,7 +12869,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-07-27T16:19:14+00:00"
+            "time": "2023-10-17T14:44:58+00:00"
         },
         {
             "name": "symfony/cache-contracts",

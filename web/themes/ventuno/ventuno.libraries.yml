@@ -50,10 +50,17 @@ licence-comparer:
     theme:
       assets/css/licence-comparer.min.css: { minified: true }
 
-oss:
+oss-landing:
   css:
     theme:
-      assets/css/oss.min.css: { minified: true }
+      assets/css/oss-landing.min.css: { minified: true }
+
+oss-solution-full:
+  css:
+    theme:
+      assets/css/oss-solution-full.min.css: { minified: true }
+  dependencies:
+    - ventuno/see-more
 
 searchpage:
   css:
@@ -194,11 +201,11 @@ group-banner:
       assets/css/group-banner.min.css: { minified: true }
 
 header-topic:
-  js:
-    assets/js/toggle-text-seemore-btn.min.js: { minified: true }
   css:
     theme:
       assets/css/header-topic.min.css: { minified: true }
+  dependencies:
+    - ventuno/see-more
 
 ief-entity-table:
   css:
@@ -368,6 +375,10 @@ responsive-tables.js:
   js:
     assets/js/responsive-tables.min.js: { minified: true, attributes: { defer: true } }
 
+see-more:
+  js:
+    assets/js/toggle-text-seemore-btn.min.js: { minified: true }
+
 tabs:
   css:
     theme:
@@ -404,8 +415,3 @@ layout-paragraphs--builder:
   css:
     theme:
       assets/css/layout-paragraphs--builder.min.css: { minified: true }
-
-oss-solution-full:
-  css:
-    theme:
-      assets/css/oss-solution-full.tmp.css: { minified: true }
