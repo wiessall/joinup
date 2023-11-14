@@ -64,12 +64,16 @@ class RelevantField extends FieldItemList {
    * @return string|null
    *   The machine name of the source field, or NULL if it is missing on the
    *   entity or the field definition is not properly configured.
+   *
+   * @throws \InvalidArgumentException
+   *   If an invalid field name is configured.
    */
   protected function getSourceFieldName(): ?string {
     $languageCode = $this->getRichestLanguageCode();
     $ossSolution = $this->getEntity()->getTranslation($languageCode);
+    \assert($ossSolution instanceof OssSolutionInterface);
     foreach ((array) $this->definition->getSetting(static::SOURCE_FIELDS_SETTING_KEY) as $fieldName) {
-      if (!$ossSolution->hasField($fieldName) || $ossSolution->get($fieldName)->isEmpty()) {
+      if ($ossSolution->get($fieldName)->isEmpty()) {
         continue;
       }
       return $fieldName;
@@ -85,9 +89,7 @@ class RelevantField extends FieldItemList {
    *   The language code of the richest entity translation.
    */
   protected function getRichestLanguageCode(): string {
-    $ossSolution = $this->getEntity();
-    \assert($ossSolution instanceof OssSolutionInterface);
-    return $ossSolution->getRelevantLangCode();
+    return $this->getEntity()->getRelevantLangCode();
   }
 
 }
