@@ -171,50 +171,6 @@ class JoinupParagraphsContext extends RawDrupalContext {
   }
 
   /**
-   * Clicks a link in the given paragraphs item.
-   *
-   * @param string $label
-   *   The link label.
-   * @param string $field
-   *   The field identifier. One of the keys in the
-   *   \JoinupParagraphsSubContext::fieldMapping array.
-   * @param int|null $delta
-   *   (optional) The position of the item to remove. Starts at 1 for
-   *   readability. If left empty, the button will be searched in the entire
-   *   field.
-   *
-   * @Given I click :label in the :field field for paragraph :delta
-   * @Given I click :label in the :field paragraphs field
-   */
-  public function clickLinkInParagraphsField(string $label, string $field, ?int $delta = NULL): void {
-    $paragraph_item = ($delta === NULL) ? $this->getParagraphsElement($field) : $this->getParagraphsElementItem($field, --$delta);
-    $this->scrollElementIntoView($paragraph_item);
-    if (!$link = $paragraph_item->findButton($label)) {
-      throw new ElementNotFoundException($this->getSession()->getDriver(), 'button', 'label');
-    }
-
-    // It might be a button beneath the three dots dropdown. Check for the
-    // driver as well, because only Selenium2Driver supports isVisible().
-    if (($this->getSession()->getDriver() instanceof Selenium2Driver) && !$link->isVisible()) {
-      // Check first if the button is in the 3-dots dropdown which has the class
-      // "paragraphs-dropdown-actions".
-      $xpath = "//div[contains(concat(' ', @class, ' '), ' paragraphs-dropdown-actions ')]";
-      if ($paragraph_item->find('xpath', $xpath)?->findButton($label)) {
-        // Expand the dropdown.
-        $dropdown = $paragraph_item->find('css', 'button.paragraphs-dropdown-toggle');
-        $dropdown->click();
-      }
-      // Else, expand the 'add paragraph' dropdown in case the button is one of
-      // the 'add paragraph' buttons.
-      elseif ($dropdown = $paragraph_item->find('css', 'button.dropdown-toggle')) {
-        $dropdown->click();
-      }
-    }
-
-    $link->click();
-  }
-
-  /**
    * Asserts the number of rows in the paragraphs field.
    *
    * @param int $expected_rows
