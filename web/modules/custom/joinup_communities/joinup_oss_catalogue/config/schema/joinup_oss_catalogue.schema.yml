@@ -11,7 +11,3 @@ field.formatter.settings.joinup_oss_catalogue_link_to_solution_search:
     open_new:
       type: boolean
       label: 'Open search link in new tab'
-
-condition.plugin.oss_content:
-  type: condition.plugin
-  label: Oss content condition

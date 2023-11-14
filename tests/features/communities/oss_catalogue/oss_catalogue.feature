@@ -73,7 +73,9 @@ Feature:
     Then I see the text "EU Open Source Solutions Catalogue" in the "Header" region
     And I see the text "1 Open Source Software Solution" in the "Header" region
     And I see the text "Open source software of interest for Public Administrations" in the "Header" region
-    But I should not see the "Navigation menu" region
+    And I should see the following links in the "Navigation menu" region:
+      | Welcome |
+      | Search  |
 
   Scenario: User sees GIT description on OSS Solution page if short description is missing.
     Given oss_solution content:
