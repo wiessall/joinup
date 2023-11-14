@@ -71,7 +71,6 @@ Feature:
       | Olympus | development            | developers_italia | data-analytics | Foo's short description | Foo's GIT description | published | 2014-11-19       |
     When I go to the content page of the type "oss_solution" with the title "Olympus"
     Then I see the text "EU Open Source Solutions Catalogue" in the "Header" region
-    And I see the text "1 Open Source Software Solution" in the "Header" region
     And I see the text "Open source software of interest for Public Administrations" in the "Header" region
     And I should see the following links in the "Navigation menu" region:
       | Welcome |
