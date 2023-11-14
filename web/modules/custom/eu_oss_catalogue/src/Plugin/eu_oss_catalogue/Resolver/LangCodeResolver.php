@@ -64,10 +64,12 @@ class LangCodeResolver extends DefaultResolver implements ContainerFactoryPlugin
   /**
    * {@inheritdoc}
    */
-  public function resolve(Project $project, array $metadata, FieldItemListInterface $fieldItemList): array {
+  public function resolve(?array &$value, Project $project, array $metadata, FieldItemListInterface $fieldItemList): void {
     if (!str_contains($this->getConfiguration()['path'], '[lang]')) {
-      return parent::resolve($project, $metadata, $fieldItemList);
+      parent::resolve($value, $project, $metadata, $fieldItemList);
+      return;
     }
+
     $fieldName = $fieldItemList->getName();
 
     /** @var \Drupal\eu_oss_catalogue\Entity\OssSolutionInterface $solution */
@@ -76,16 +78,17 @@ class LangCodeResolver extends DefaultResolver implements ContainerFactoryPlugin
     foreach ($this->languageManger->getLanguages() as $langcode => $language) {
       $path = explode('/', str_replace('[lang]', $langcode, $this->getConfiguration()['path']));
       if (NestedArray::keyExists($metadata, $path)) {
-        $value = NestedArray::getValue($metadata, $path);
+        $metadataValue = NestedArray::getValue($metadata, $path);
         if (!$solution->hasTranslation($langcode)) {
           $solution->addTranslation($langcode, $solution->toArray());
         }
-        $solution->getTranslation($langcode)->set($fieldName, $value);
-        $values[$langcode] = $value;
+        $solution->getTranslation($langcode)->set($fieldName, $metadataValue);
+        $values[$langcode] = $metadataValue;
       }
     }
 
-    return $values;
+    // @todo Ugly!
+    $value = $values;
   }
 
 }

@@ -12,9 +12,10 @@ dependencies:
 third_party_settings:
   eu_oss_catalogue:
     publiccode_yml:
-      resolver: langcode
-      config:
-        path: description/[lang]/documentation
+      resolvers:
+        - plugin: langcode
+          config:
+            path: description/[lang]/documentation
 id: node.oss_solution.oss_documentation
 field_name: oss_documentation
 entity_type: node

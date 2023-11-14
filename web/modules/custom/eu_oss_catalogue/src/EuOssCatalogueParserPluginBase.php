@@ -13,6 +13,7 @@ use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Utility\Error;
 use Drupal\eu_oss_catalogue\Entity\OssSolutionInterface;
 use Drupal\eu_oss_catalogue\Exception\UnresolvableValueException;
+use Drupal\eu_oss_catalogue\Model\FieldOverridingPolicy;
 use Drupal\eu_oss_catalogue\Model\Project;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -125,26 +126,30 @@ abstract class EuOssCatalogueParserPluginBase extends PluginBase implements EuOs
         continue;
       }
 
-      // The override options are documented in eu_oss_catalogue.schema.yml, see
-      // the definition of `eu_oss_catalogue.resolver_config_base:override`.
-      $override = $settings['config']['override'] ?? 'always';
-      if ($override === 'preserve_not_empty' && !$fieldItemList->isEmpty()) {
-        // Don't override a field with data.
+      $resolvers =& $settings['resolvers'];
+      $override = FieldOverridingPolicy::from($settings['override']);
+
+      if ($override === FieldOverridingPolicy::PRESERVE_NOT_EMPTY && !$fieldItemList->isEmpty()) {
+        // Don't override a field not-empty field.
         continue;
       }
 
-      $resolver = $this->getResolver($settings['resolver'], $settings['config']);
-      try {
-        $resolved = $resolver->resolve($project, $metadata, $fieldItemList);
-        if ($override !== 'resolved_not_empty' || $resolved) {
-          // An empty array unsets the field.
-          $fieldItemList->setValue($resolved ?: NULL);
+      $resolved = NULL;
+      foreach ($resolvers as ['plugin' => $pluginId, 'config' => $config]) {
+        $resolver = $this->getResolver($pluginId, $config);
+        try {
+          $resolver->resolve($resolved, $project, $metadata, $fieldItemList);
+        }
+        catch (UnresolvableValueException $exception) {
+          Error::logException($this->logger, $exception);
+          // Fail softly, don't set this field.
+          continue 2;
         }
       }
-      catch (UnresolvableValueException $exception) {
-        Error::logException($this->logger, $exception);
-        // Fail softly, don't set this field.
-        continue;
+
+      if ($override !== FieldOverridingPolicy::RESOLVED_NOT_EMPTY || $resolved) {
+        // An empty array unsets the field.
+        $fieldItemList->setValue($resolved ?: NULL);
       }
     }
 
@@ -217,12 +222,20 @@ abstract class EuOssCatalogueParserPluginBase extends PluginBase implements EuOs
    *
    * @return array|null
    *   EU OSS Catalogue third-party settings or NULL if this field doesn't
-   *   provide them.
+   *   provide them. Structure:
+   *     - override: (optional) The `override` setting is documented in
+   *       \Drupal\eu_oss_catalogue\Model\FieldResolvingOverridePolicy. If
+   *       omitted, defaults to 'always'.
+   *     - resolvers: A list of EU OSS Catalogue resolver plugin options. Each
+   *       option is an associative array containing the plugin ID and its
+   *       configuration.
    */
   protected function getFieldSettings(FieldItemListInterface $fieldItemList): ?array {
     $fieldDefinition = $fieldItemList->getFieldDefinition();
     if ($fieldDefinition instanceof ThirdPartySettingsInterface) {
-      return $fieldDefinition->getThirdPartySetting('eu_oss_catalogue', $this->getPluginId());
+      if ($settings = $fieldDefinition->getThirdPartySetting('eu_oss_catalogue', $this->getPluginId())) {
+        return $settings + ['override' => 'always'];
+      }
     }
     return NULL;
   }

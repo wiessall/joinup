@@ -76,9 +76,10 @@ class AbsoluteUrlResolver extends DefaultResolver {
   /**
    * {@inheritdoc}
    */
-  public function resolve(Project $project, array $metadata, FieldItemListInterface $fieldItemList): array {
-    if (!$paths = parent::resolve($project, $metadata, $fieldItemList)) {
-      return [];
+  public function resolve(?array &$value, Project $project, array $metadata, FieldItemListInterface $fieldItemList): void {
+    parent::resolve($value, $project, $metadata, $fieldItemList);
+    if (!$value) {
+      return;
     }
 
     $platformBaseUrl = $project->getHostingPlatformUrl();
@@ -88,12 +89,12 @@ class AbsoluteUrlResolver extends DefaultResolver {
     ]);
 
     $urls = [];
-    foreach ($paths as $path) {
+    foreach ($value as $path) {
       $urls[] = $this->getAbsoluteUrl($project, $platform, $path);
     }
 
     // Filter out null URLs.
-    return array_filter($urls);
+    $value = array_filter($urls);
   }
 
   /**

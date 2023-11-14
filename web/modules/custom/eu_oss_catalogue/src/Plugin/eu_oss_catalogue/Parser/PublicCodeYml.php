@@ -120,14 +120,11 @@ class PublicCodeYml extends EuOssCatalogueParserPluginBase implements ContainerF
   protected function doParse(OssSolutionInterface $solution, Project $project, array $metadata, EuOssCatalogueProviderInterface $provider): void {
     parent::doParse($solution, $project, $metadata, $provider);
 
-    /** @var \Drupal\Core\Config\Entity\ThirdPartySettingsInterface $definition */
-    $definition = $solution->getFieldDefinition('oss_publiccode_yml_version');
-    $settings = $definition->getThirdPartySetting('eu_oss_catalogue', $this->getPluginId());
-    $this->getResolver($settings['resolver'], $settings['config'])
-      ->resolve($project, $metadata, $solution->get('oss_publiccode_yml_version'));
-
-    // Add also the publiccode.yml content.
-    $solution->set('oss_publiccode_yml_content', Yaml::encode($metadata));
+    $solution
+      // Set the publiccode.yml content.
+      ->set('oss_publiccode_yml_content', Yaml::encode($metadata))
+      // Set the publiccode.yml version.
+      ->set('oss_publiccode_yml_version', $metadata['publiccodeYmlVersion'] ?? NULL);
   }
 
   /**
