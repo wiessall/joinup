@@ -52,9 +52,8 @@ function _ventuno_preprocess_tile(array &$variables, string $entity_type_id): vo
   $route_match = \Drupal::routeMatch();
   $route_name = $route_match->getRouteName();
 
-  // Text.
-  // Only supposed to be passed to horizontal tiles,
-  // but also vertical tiles on Homepage and Topic pages.
+  // Only supposed to be passed to horizontal tiles, but also vertical tiles on
+  // Homepage and Topic pages.
   $routes_with_text = [
     'page_manager.page_view_homepage_homepage-layout_builder-0',
     'entity.meta_entity.canonical',
@@ -69,13 +68,16 @@ function _ventuno_preprocess_tile(array &$variables, string $entity_type_id): vo
     // helpful when rendering them in a tile. We need to render them in the
     // default view mode and then strip the markup.
     if ($entity_type_id === 'node' && $entity->bundle() === 'custom_page') {
-      $variables['text']['#view_mode'] = 'default';
       $renderer = \Drupal::getContainer()->get('renderer');
       $rendered = [];
       foreach (Element::children($variables['text']) as $index) {
-        $variables['text'][$index]['#view_mode'] = 'default';
         $rendered[$index] = (string) $renderer->renderPlain($variables['text'][$index]);
         $rendered[$index] = trim(strip_tags($rendered[$index]));
+        // Apply a fix for the CKEditor converting HTML entities. This is
+        // because we are prematurely rendering the paragraphs as plain text in
+        // order to merge them with the rest of the paragraphs and create a
+        // single text that we can later trim and use as a whole.
+        $rendered[$index] = html_entity_decode($rendered[$index]);
       }
       $rendered = array_filter($rendered);
       $variables['text'] = implode(' ', $rendered);
