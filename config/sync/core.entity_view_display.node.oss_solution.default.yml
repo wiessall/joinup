@@ -76,7 +76,7 @@ third_party_settings:
                 third_party_settings:
                   template_suggestion:
                     template_suggestion: ''
-            weight: 0
+            weight: 1
             additional: {  }
           613fb544-14e1-441e-bb81-629db2f729a3:
             uuid: 613fb544-14e1-441e-bb81-629db2f729a3
@@ -102,7 +102,7 @@ third_party_settings:
                 third_party_settings:
                   template_suggestion:
                     template_suggestion: ''
-            weight: 1
+            weight: 2
             additional: {  }
           f6501de4-478f-49fe-adbb-2e541ba9d0c3:
             uuid: f6501de4-478f-49fe-adbb-2e541ba9d0c3
@@ -128,7 +128,7 @@ third_party_settings:
                 third_party_settings:
                   template_suggestion:
                     template_suggestion: ''
-            weight: 2
+            weight: 3
             additional: {  }
           592281dd-6140-43f3-9ec5-9c88b1db0477:
             uuid: 592281dd-6140-43f3-9ec5-9c88b1db0477
@@ -291,6 +291,20 @@ third_party_settings:
                 third_party_settings:
                   template_suggestion:
                     template_suggestion: ''
+            weight: 0
+            additional: {  }
+          b118901a-e3fe-4597-990b-f73bb23d4b8e:
+            uuid: b118901a-e3fe-4597-990b-f73bb23d4b8e
+            region: aside
+            configuration:
+              id: custom_markup
+              label: 'Quick links'
+              label_display: '0'
+              provider: custom_markup_block
+              context_mapping: {  }
+              markup:
+                value: '<h2>Quick links</h2>'
+                format: content_editor
             weight: 0
             additional: {  }
         third_party_settings: {  }
