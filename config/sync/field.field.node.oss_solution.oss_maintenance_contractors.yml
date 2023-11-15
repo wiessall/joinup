@@ -6,8 +6,6 @@ dependencies:
     - field.storage.node.oss_maintenance_contractors
     - node.type.oss_contractor
     - node.type.oss_solution
-  module:
-    - eu_oss_catalogue
 third_party_settings:
   eu_oss_catalogue:
     publiccode_yml:
@@ -19,7 +17,7 @@ id: node.oss_solution.oss_maintenance_contractors
 field_name: oss_maintenance_contractors
 entity_type: node
 bundle: oss_solution
-label: 'Technical maintainers'
+label: 'Technical Maintainers'
 description: 'The entities, if any, that are currently contracted for maintaining the software. They can be companies, organizations, or other collective names'
 required: false
 translatable: false
