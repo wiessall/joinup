@@ -140,6 +140,9 @@ function _ventuno_preprocess_tile(array &$variables, string $entity_type_id): vo
       if (!isset($variables['image']['0'])) {
         unset($variables['image']);
       }
+      if (!$entity->get('oss_software_version')->isEmpty()) {
+        $variables['highlighted']['text'] = $variables['content']['oss_software_version'];
+      }
       break;
 
     case 'tallinn_report':
