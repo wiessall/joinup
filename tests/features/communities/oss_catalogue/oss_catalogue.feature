@@ -34,7 +34,7 @@ Feature:
       | Do you want to publish your open source solution? |
       | Let’s start with your software name               |
       | Frequently Asked Questions (FAQ)                  |
-      | Or if you need any help                           |
+      | Do you need any help?                             |
       | Follow our journey on the social media!           |
     And I should see the text "Discover our European Open Source Software"
     And I should see the text "Repository of the Open Source Software Solutions of the Public Administrations"
