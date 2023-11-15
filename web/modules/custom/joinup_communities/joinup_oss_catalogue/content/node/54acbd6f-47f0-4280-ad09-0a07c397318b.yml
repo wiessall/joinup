@@ -1001,7 +1001,7 @@ default:
                   alignment: center
           paragraph_heading:
             -
-              value: 'Or if you need any help'
+              value: 'Do you need any help?'
     -
       entity:
         _meta:
@@ -1086,7 +1086,7 @@ default:
                   alignment: center
           paragraph_heading:
             -
-              value: 'Do you need any help?'
+              value: 'Follow our journey on the social media!'
     -
       entity:
         _meta:
