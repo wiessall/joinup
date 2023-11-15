@@ -7,6 +7,7 @@ dependencies:
     - node.type.oss_solution
   module:
     - datetime
+    - eu_oss_catalogue
 third_party_settings:
   eu_oss_catalogue:
     publiccode_yml:
@@ -17,7 +18,7 @@ id: node.oss_solution.oss_release_date
 field_name: oss_release_date
 entity_type: node
 bundle: oss_solution
-label: 'Release date'
+label: 'Last release'
 description: 'The release date'
 required: false
 translatable: false
