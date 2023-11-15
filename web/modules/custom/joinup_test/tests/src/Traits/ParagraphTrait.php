@@ -4,7 +4,7 @@ declare(strict_types = 1);
 
 namespace Drupal\Tests\joinup_test\Traits;
 
-use Drupal\Core\Entity\EntityInterface;
+use Drupal\paragraphs\ParagraphInterface;
 
 /**
  * Reusable methods for paragraphs.
@@ -12,12 +12,19 @@ use Drupal\Core\Entity\EntityInterface;
 trait ParagraphTrait {
 
   /**
+   * Creates a paragraph and marks it for cleanup.
    *
+   * @param array $values
+   *   The values to use for the paragraph.
+   *
+   * @return \Drupal\paragraphs\ParagraphInterface
+   *   The created paragraph.
    */
-  public function createParagraph(array $values = []): EntityInterface {
+  public function createParagraph(array $values = []): ParagraphInterface {
     $values += [
       'type' => 'simple_paragraph',
     ];
+    /** @var \Drupal\paragraphs\ParagraphInterface $paragraph */
     $paragraph = \Drupal::entityTypeManager()->getStorage('paragraph')->create($values);
     $paragraph->save();
 
