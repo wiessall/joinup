@@ -126,6 +126,7 @@ abstract class EuOssCatalogueParserPluginBase extends PluginBase implements EuOs
         continue;
       }
 
+      /** @var array[] $resolvers */
       $resolvers =& $settings['resolvers'];
       $override = FieldOverridingPolicy::from($settings['override']);
 
