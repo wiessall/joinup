@@ -15,16 +15,6 @@ oss_heading:
     layout:
       layouts/oss-heading/oss-heading.css: { }
 
-oss_header:
-  css:
-    layout:
-      layouts/oss-header/oss-header.layout.css: {}
-
-oss_details:
-  css:
-    layout:
-      layouts/oss-details/oss-details.layout.css: {}
-
 four_column_grid:
   css:
     layout:
