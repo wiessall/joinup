@@ -10,6 +10,7 @@ use Drupal\Core\Field\EntityReferenceFieldItemListInterface;
 use Drupal\Core\Serialization\Yaml;
 use Drupal\Tests\BrowserTestBase;
 use Drupal\Tests\node\Traits\NodeCreationTrait;
+use Drupal\language\Entity\ConfigurableLanguage;
 use Drupal\node\NodeInterface;
 use Drush\TestTraits\DrushTestTrait;
 
@@ -32,6 +33,7 @@ abstract class FetchTestBase extends BrowserTestBase {
   protected static $modules = [
     'dblog',
     'eu_oss_catalogue_test',
+    'language',
   ];
 
   /**
@@ -59,6 +61,10 @@ abstract class FetchTestBase extends BrowserTestBase {
       'required' => TRUE,
     ];
     $this->writeSettings($settings);
+
+    // Add Italian and German languages.
+    ConfigurableLanguage::createFromLangcode('it')->save();
+    ConfigurableLanguage::createFromLangcode('de')->save();
   }
 
   /**

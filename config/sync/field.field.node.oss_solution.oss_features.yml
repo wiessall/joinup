@@ -9,7 +9,7 @@ third_party_settings:
   eu_oss_catalogue:
     publiccode_yml:
       resolvers:
-        - plugin: langcode
+        - plugin: default
           config:
             path: 'description/[lang]/features'
 id: node.oss_solution.oss_features

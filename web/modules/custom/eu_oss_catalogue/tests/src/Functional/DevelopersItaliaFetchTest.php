@@ -7,7 +7,6 @@ namespace Drupal\Tests\eu_oss_catalogue\Functional;
 use Drupal\eu_oss_catalogue\Entity\OssContactInterface;
 use Drupal\eu_oss_catalogue\Entity\OssContractorInterface;
 use Drupal\eu_oss_catalogue\Entity\OssSolutionInterface;
-use Drupal\language\Entity\ConfigurableLanguage;
 
 /**
  * EU OSS Catalogue test.
@@ -15,11 +14,6 @@ use Drupal\language\Entity\ConfigurableLanguage;
  * @group eu_oss_catalogue
  */
 class DevelopersItaliaFetchTest extends FetchTestBase {
-
-  /**
-   * {@inheritdoc}
-   */
-  protected static $modules = ['language'];
 
   /**
    * {@inheritdoc}
@@ -34,16 +28,6 @@ class DevelopersItaliaFetchTest extends FetchTestBase {
       'website-builder',
     ],
   ];
-
-  /**
-   * {@inheritdoc}
-   */
-  protected function setUp(): void {
-    parent::setUp();
-    // Add Italian and German languages.
-    ConfigurableLanguage::createFromLangcode('it')->save();
-    ConfigurableLanguage::createFromLangcode('de')->save();
-  }
 
   /**
    * @covers
