@@ -76,7 +76,7 @@
       }
     }
   }
-  &__oss-documentation a {
+  &__oss__documentation a {
     &::before {
       @include get-bootstrap-icon('file-earmark-text', $primary);
       margin-inline-end: $spacer * .5;
