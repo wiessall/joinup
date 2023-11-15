@@ -11,7 +11,7 @@ id: node.oss_solution.oss_source
 field_name: oss_source
 entity_type: node
 bundle: oss_solution
-label: Catatalog
+label: 'Source catalogue'
 description: 'The source Catalogue or any other provider the specific OSS Solution belongs to or is federated from'
 required: true
 translatable: false
