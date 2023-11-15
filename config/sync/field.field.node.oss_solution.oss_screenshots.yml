@@ -14,7 +14,7 @@ third_party_settings:
   eu_oss_catalogue:
     publiccode_yml:
       resolvers:
-        - plugin: langcode
+        - plugin: default
           config:
             path: 'description/[lang]/screenshots'
 id: node.oss_solution.oss_screenshots

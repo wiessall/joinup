@@ -148,8 +148,15 @@ abstract class EuOssCatalogueParserPluginBase extends PluginBase implements EuOs
       }
 
       if ($override !== FieldOverridingPolicy::RESOLVED_NOT_EMPTY || $resolved) {
-        // An empty array unsets the field.
-        $fieldItemList->setValue($resolved ?: NULL);
+        // Populate the node field.
+        foreach ($resolved as $langcode => $values) {
+          // Create a new translation on demand.
+          if (!$solution->hasTranslation($langcode)) {
+            $solution->addTranslation($langcode, $solution->toArray());
+          }
+          // An empty array unsets the field.
+          $solution->getTranslation($langcode)->set($fieldName, $values ?: NULL);
+        }
       }
     }
 

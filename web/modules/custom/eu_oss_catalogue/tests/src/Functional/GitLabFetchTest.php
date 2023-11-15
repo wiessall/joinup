@@ -5,7 +5,6 @@ declare(strict_types = 1);
 namespace Drupal\Tests\eu_oss_catalogue\Functional;
 
 use Drupal\eu_oss_catalogue\Entity\OssSolutionInterface;
-use Drupal\language\Entity\ConfigurableLanguage;
 
 /**
  * Tests the GitLab code hosting provider.
@@ -17,23 +16,10 @@ class GitLabFetchTest extends FetchTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = ['language'];
-
-  /**
-   * {@inheritdoc}
-   */
   protected array $controlledVocabTerms = [
     'oss_licence' => ['AGPL-3.0-or-later', 'MIT', 'EUPL-1.2'],
     'oss_category' => ['data-collection', 'data-analytics', 'nothing'],
   ];
-
-  /**
-   * {@inheritdoc}
-   */
-  protected function setUp(): void {
-    parent::setUp();
-    ConfigurableLanguage::createFromLangcode('de')->save();
-  }
 
   /**
    * Tests fetching all solutions from a GitLab self-hosting platform.
