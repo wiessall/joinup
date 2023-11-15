@@ -2,7 +2,7 @@
 
 declare(strict_types = 1);
 
-namespace Drupal\Tests\ventuno\Functional;
+namespace Drupal\Tests\ventuno\ExistingSite;
 
 use Drupal\Tests\TestFileCreationTrait;
 use Drupal\Tests\joinup_test\ExistingSite\JoinupExistingSiteTestBase;
