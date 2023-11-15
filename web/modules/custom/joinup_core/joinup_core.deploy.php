@@ -20,7 +20,7 @@ use Drupal\joinup_oss_catalogue\OssCatalogueCollectionInterface;
 /**
  * Update path alias for EU OSS catalogue.
  */
-function joinup_core_deploy_109900(): void {
+function joinup_core_deploy_110000(): void {
   /** @var \Drupal\collection\Entity\CollectionInterface $collection */
   $collection = \Drupal::entityTypeManager()->getStorage('rdf_entity')
     ->load(OssCatalogueCollectionInterface::COLLECTION_ENTITY_ID);
@@ -34,7 +34,7 @@ function joinup_core_deploy_109900(): void {
 /**
  * Update title of EU OSS catalogue collection.
  */
-function joinup_core_deploy_109901(): void {
+function joinup_core_deploy_110001(): void {
   /** @var \Drupal\collection\Entity\CollectionInterface $collection */
   $collection = \Drupal::entityTypeManager()->getStorage('rdf_entity')
     ->load(OssCatalogueCollectionInterface::COLLECTION_ENTITY_ID);
@@ -47,7 +47,7 @@ function joinup_core_deploy_109901(): void {
 /**
  * Import content for EU OpenSource Software Solutions Catalogue.
  */
-function joinup_core_deploy_109902(): void {
+function joinup_core_deploy_110002(): void {
   /** @var \Drupal\Core\Extension\ModuleInstallerInterface $moduleInstaller */
   $moduleInstaller = \Drupal::service('module_installer');
   /** @var \Drupal\Core\Entity\EntityRepositoryInterface $entityRepository */
@@ -80,7 +80,7 @@ function joinup_core_deploy_109902(): void {
 /**
  * Rename menu items for EU OSS catalogue.
  */
-function joinup_core_deploy_109903(): void {
+function joinup_core_deploy_110003(): void {
   $entityTypeManager = \Drupal::entityTypeManager();
   /** @var  \Drupal\menu_link_content\MenuLinkContentStorageInterface $menuLinkContentStorage */
   $menuLinkContentStorage = $entityTypeManager->getStorage('menu_link_content');

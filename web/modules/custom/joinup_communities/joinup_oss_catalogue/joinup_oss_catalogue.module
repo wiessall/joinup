@@ -12,14 +12,12 @@ use Drupal\Core\Cache\Cache;
 use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 use Drupal\Core\Entity\EntityInterface;
-use Drupal\Core\Entity\EntityTypeInterface;
-use Drupal\Core\Field\BaseFieldDefinition;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\block\BlockInterface;
 use Drupal\collection\Entity\CollectionInterface;
+use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\joinup_oss_catalogue\Entity\JoinupOssSolution;
 use Drupal\joinup_oss_catalogue\OssCatalogueCollectionInterface;
-use Drupal\joinup_oss_catalogue\Plugin\Field\ShortDescriptionWithFallback;
 
 /**
  * Implements hook_views_plugins_argument_alter().
@@ -99,14 +97,18 @@ function joinup_oss_catalogue_rdf_entity_view(array &$build, EntityInterface $en
 function joinup_oss_catalogue_block_access(BlockInterface $block, string $operation, AccountInterface $account) {
   if (
     $operation === 'view' &&
-    $block->id() === 'ventuno_three_dots_menu' &&
-    $account->isAnonymous()
+    $block->id() === 'ventuno_three_dots_menu'
   ) {
-
     $group = \Drupal::service('joinup_group.group_manager')
       ->getGroupFromContext();
-    if ($group && $group->id() === OssCatalogueCollectionInterface::COLLECTION_ENTITY_ID) {
-      return AccessResult::forbidden();
+    if (
+      $group &&
+      $group->id() === OssCatalogueCollectionInterface::COLLECTION_ENTITY_ID
+    ) {
+      /** @var \Drupal\joinup_workflow\WorkflowHelperInterface $workflow_helper */
+      $workflow_helper = \Drupal::service('joinup_workflow.workflow_helper');
+      $allowed_transitions = $workflow_helper->getAvailableTransitions($group, $account);
+      return AccessResult::forbiddenIf(empty($allowed_transitions))->cachePerPermissions()->cachePerUser();
     }
   }
 }
@@ -125,21 +127,6 @@ function joinup_oss_catalogue_preprocess_facets_item_list__checkbox__oss_source(
 }
 
 /**
- * Implements hook_entity_bundle_field_info().
- */
-function joinup_oss_catalogue_entity_bundle_field_info(EntityTypeInterface $entity_type, $bundle): array {
-  $fields = [];
-  if ($entity_type->id() === 'node' && $bundle === 'oss_solution') {
-    $fields['description'] = BaseFieldDefinition::create('string_long')
-      ->setLabel(t('Short description'))
-      ->setComputed(TRUE)
-      ->setDisplayConfigurable('view', TRUE)
-      ->setClass(ShortDescriptionWithFallback::class);
-  }
-  return $fields;
-}
-
-/**
  * Implements hook_preprocess_HOOK().
  */
 function joinup_oss_catalogue_preprocess_field__in_modal(&$variables) {
@@ -152,4 +139,18 @@ function joinup_oss_catalogue_preprocess_field__in_modal(&$variables) {
     '@count' => count($variables['items']),
     '%solution-label' => $variables['element']['#items']->getEntity()->label(),
   ]);
+}
+
+/**
+ * Implements hook_preprocess_HOOK().
+ */
+function joinup_oss_catalogue_preprocess_node(array &$variables): void {
+  // Disables the "Report" link for OSS pages.
+  $group = \Drupal::routeMatch()->getParameter('rdf_entity');
+  if (
+    $group instanceof GroupInterface &&
+    $group->id() === OssCatalogueCollectionInterface::COLLECTION_ENTITY_ID
+  ) {
+    $variables['content']['report']['#access'] = FALSE;
+  }
 }

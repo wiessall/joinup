@@ -26,9 +26,9 @@ class ContactResolver extends DefaultResolver implements ContainerFactoryPluginI
    *
    * @param array $configuration
    *   A configuration array containing information about the plugin instance.
-   * @param string $pluginId
+   * @param string $plugin_id
    *   The plugin ID for the plugin instance.
-   * @param mixed $pluginDefinition
+   * @param mixed $plugin_definition
    *   The plugin implementation definition.
    * @param \Drupal\Core\Logger\LoggerChannelInterface $logger
    *   The EU OSS Catalogue logger.
@@ -37,22 +37,22 @@ class ContactResolver extends DefaultResolver implements ContainerFactoryPluginI
    */
   public function __construct(
     array $configuration,
-    $pluginId,
-    $pluginDefinition,
+    $plugin_id,
+    $plugin_definition,
     protected LoggerChannelInterface $logger,
     protected EntityTypeManagerInterface $entityTypeManager,
   ) {
-    parent::__construct($configuration, $pluginId, $pluginDefinition, $logger);
+    parent::__construct($configuration, $plugin_id, $plugin_definition, $logger);
   }
 
   /**
    * {@inheritdoc}
    */
-  public static function create(ContainerInterface $container, array $configuration, $pluginId, $pluginDefinition): self {
+  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition): self {
     return new static(
       $configuration,
-      $pluginId,
-      $pluginDefinition,
+      $plugin_id,
+      $plugin_definition,
       $container->get('logger.channel.eu_oss_catalogue'),
       $container->get('entity_type.manager'),
     );
@@ -61,12 +61,12 @@ class ContactResolver extends DefaultResolver implements ContainerFactoryPluginI
   /**
    * {@inheritdoc}
    */
-  public function resolve(FieldItemListInterface $fieldItemList, Project $project, array $metadata): array {
+  public function resolve(Project $project, array $metadata, FieldItemListInterface $fieldItemList): array {
     $storage = $this->entityTypeManager->getStorage('node');
     $nodeType = $this->getConfiguration()['node_type'];
 
     $targets = [];
-    foreach (parent::resolve($fieldItemList, $project, $metadata) as $contact) {
+    foreach (parent::resolve($project, $metadata, $fieldItemList) as $contact) {
       if (is_string($contact)) {
         // This is a malformed contact because it should be an array, but we
         // allow this and amend later, when we check the schema.
@@ -74,7 +74,7 @@ class ContactResolver extends DefaultResolver implements ContainerFactoryPluginI
       }
 
       if (empty($contact['name'])) {
-        return $targets;
+        continue;
       }
 
       $nids = array_values($storage->getQuery()->accessCheck(FALSE)
@@ -93,8 +93,6 @@ class ContactResolver extends DefaultResolver implements ContainerFactoryPluginI
       }
       $targets[] = $storage->create($values);
     }
-
-    $fieldItemList->setValue($targets);
 
     return $targets;
   }

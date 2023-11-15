@@ -57,4 +57,18 @@ interface EuOssCatalogueHostingPlatformInterface extends ConfigurableInterface {
    */
   public function getBaseFromRepoUrl(string $repositoryUrl): ?string;
 
+  /**
+   * Returns a file raw URL given a relative path or URL.
+   *
+   * @param string $url
+   *   A file path relative to the repository root or a full URL.
+   * @param string $projectUrl
+   *   The project homepage URL.
+   *
+   * @return string|null
+   *   The file raw URL or NULL if it cannot be resolved. If an arbitrary URL,
+   *   external to repository is passed, will be returned as it is.
+   */
+  public function getFileRawUrl(string $url, string $projectUrl): ?string;
+
 }

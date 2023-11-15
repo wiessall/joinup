@@ -11,12 +11,16 @@ dependencies:
     - field.storage.node.oss_development_status
     - field.storage.node.field_event_date
     - field.storage.meta_entity.field_featured
+    - field.storage.node.oss_features
+    - field.storage.node.oss_git_description
     - field.storage.node.field_news_headline
     - field.storage.node.oss_scope
     - field.storage.node.field_location
     - field.storage.node.field_organisation
     - field.storage.meta_entity.field_pinned_in
+    - field.storage.node.oss_release_date
     - field.storage.node.field_scope
+    - field.storage.node.oss_short_description
     - field.storage.node.field_short_title
     - field.storage.node.oss_source
     - field.storage.meta_entity.count
@@ -123,7 +127,7 @@ field_settings:
     label: 'Body » Processed text'
     datasource_id: 'entity:node'
     property_path: 'body:processed'
-    type: text
+    type: 'solr_text_custom:ngram'
     dependencies:
       config:
         - field.storage.node.body
@@ -214,7 +218,7 @@ field_settings:
     label: 'Description » Processed text'
     datasource_id: 'entity:rdf_entity'
     property_path: 'field_ad_description:processed'
-    type: text
+    type: 'solr_text_custom:ngram'
     dependencies:
       config:
         - field.storage.rdf_entity.field_ad_description
@@ -230,7 +234,7 @@ field_settings:
     label: 'Abstract » Processed text'
     datasource_id: 'entity:rdf_entity'
     property_path: 'field_ar_abstract:processed'
-    type: text
+    type: 'solr_text_custom:ngram'
     dependencies:
       config:
         - field.storage.rdf_entity.field_ar_abstract
@@ -246,7 +250,7 @@ field_settings:
     label: 'Description » Processed text'
     datasource_id: 'entity:rdf_entity'
     property_path: 'field_ar_description:processed'
-    type: text
+    type: 'solr_text_custom:ngram'
     dependencies:
       config:
         - field.storage.rdf_entity.field_ar_description
@@ -294,7 +298,7 @@ field_settings:
     label: 'Agenda » Processed text'
     datasource_id: 'entity:node'
     property_path: 'field_event_agenda:processed'
-    type: text
+    type: 'solr_text_custom:ngram'
     dependencies:
       config:
         - field.storage.node.field_event_agenda
@@ -326,7 +330,7 @@ field_settings:
     label: 'Description » Processed text'
     datasource_id: 'entity:rdf_entity'
     property_path: 'field_is_description:processed'
-    type: text
+    type: 'solr_text_custom:ngram'
     dependencies:
       config:
         - field.storage.rdf_entity.field_is_description
@@ -366,7 +370,7 @@ field_settings:
     label: 'Description » Processed text'
     datasource_id: 'entity:rdf_entity'
     property_path: 'field_isr_description:processed'
-    type: text
+    type: 'solr_text_custom:ngram'
     dependencies:
       config:
         - field.storage.rdf_entity.field_isr_description
@@ -382,7 +386,7 @@ field_settings:
     label: 'Release notes » Processed text'
     datasource_id: 'entity:rdf_entity'
     property_path: 'field_isr_release_notes:processed'
-    type: text
+    type: 'solr_text_custom:ngram'
     dependencies:
       config:
         - field.storage.rdf_entity.field_isr_release_notes
@@ -398,7 +402,7 @@ field_settings:
     label: 'Description » Processed text'
     datasource_id: 'entity:rdf_entity'
     property_path: 'field_licence_description:processed'
-    type: text
+    type: 'solr_text_custom:ngram'
     dependencies:
       config:
         - field.storage.rdf_entity.field_licence_description
@@ -422,7 +426,7 @@ field_settings:
     label: Location
     datasource_id: 'entity:node'
     property_path: field_location
-    type: text
+    type: 'solr_text_custom:ngram'
     dependencies:
       config:
         - field.storage.node.field_location
@@ -438,7 +442,7 @@ field_settings:
     label: Headline
     datasource_id: 'entity:node'
     property_path: field_news_headline
-    type: text
+    type: 'solr_text_custom:ngram'
     boost: 5.0
     dependencies:
       config:
@@ -456,7 +460,7 @@ field_settings:
     label: Organisation
     datasource_id: 'entity:node'
     property_path: field_organisation
-    type: text
+    type: 'solr_text_custom:ngram'
     dependencies:
       config:
         - field.storage.node.field_organisation
@@ -472,7 +476,7 @@ field_settings:
     label: Scope
     datasource_id: 'entity:node'
     property_path: field_scope
-    type: text
+    type: 'solr_text_custom:ngram'
     dependencies:
       config:
         - field.storage.node.field_scope
@@ -488,7 +492,7 @@ field_settings:
     label: 'Short title'
     datasource_id: 'entity:node'
     property_path: field_short_title
-    type: text
+    type: 'solr_text_custom:ngram'
     dependencies:
       config:
         - field.storage.node.field_short_title
@@ -504,7 +508,7 @@ field_settings:
     label: 'Family name'
     datasource_id: 'entity:user'
     property_path: field_user_family_name
-    type: text
+    type: 'solr_text_custom:ngram'
     dependencies:
       config:
         - field.storage.user.field_user_family_name
@@ -520,7 +524,7 @@ field_settings:
     label: 'First name'
     datasource_id: 'entity:user'
     property_path: field_user_first_name
-    type: text
+    type: 'solr_text_custom:ngram'
     dependencies:
       config:
         - field.storage.user.field_user_first_name
@@ -536,7 +540,7 @@ field_settings:
     label: Organisation
     datasource_id: 'entity:user'
     property_path: field_user_organisation
-    type: text
+    type: 'solr_text_custom:ngram'
     dependencies:
       config:
         - field.storage.user.field_user_organisation
@@ -570,7 +574,7 @@ field_settings:
     label: 'Contact information » Rdf entity » Name'
     datasource_id: 'entity:rdf_entity'
     property_path: 'field_is_contact_information:entity:field_ci_name'
-    type: text
+    type: 'solr_text_custom:ngram'
     dependencies:
       config:
         - field.storage.rdf_entity.field_ci_name
@@ -592,7 +596,7 @@ field_settings:
     label: 'Owner » Rdf entity » Name'
     datasource_id: 'entity:rdf_entity'
     property_path: 'field_is_owner:entity:field_owner_name'
-    type: text
+    type: 'solr_text_custom:ngram'
     dependencies:
       config:
         - field.storage.rdf_entity.field_is_owner
@@ -614,7 +618,7 @@ field_settings:
     label: 'Contact information » Rdf entity » Name'
     datasource_id: 'entity:rdf_entity'
     property_path: 'field_isr_contact_information:entity:field_ci_name'
-    type: text
+    type: 'solr_text_custom:ngram'
     dependencies:
       config:
         - field.storage.rdf_entity.field_ci_name
@@ -636,7 +640,7 @@ field_settings:
     label: 'Owner » Rdf entity » Name'
     datasource_id: 'entity:rdf_entity'
     property_path: 'field_isr_owner:entity:field_owner_name'
-    type: text
+    type: 'solr_text_custom:ngram'
     dependencies:
       config:
         - field.storage.rdf_entity.field_isr_owner
@@ -676,7 +680,7 @@ field_settings:
     label: Title
     datasource_id: 'entity:rdf_entity'
     property_path: label
-    type: text
+    type: 'solr_text_custom:ngram'
     boost: 5.0
     dependencies:
       module:
@@ -694,7 +698,7 @@ field_settings:
     label: Name
     datasource_id: 'entity:taxonomy_term'
     property_path: name
-    type: text
+    type: 'solr_text_custom:ngram'
     dependencies:
       module:
         - taxonomy
@@ -753,6 +757,31 @@ field_settings:
     dependencies:
       config:
         - field.storage.node.oss_development_status
+  oss_features:
+    label: Features
+    datasource_id: 'entity:node'
+    property_path: oss_features
+    type: string
+    boost: 0.5
+    dependencies:
+      config:
+        - field.storage.node.oss_features
+  oss_git_description:
+    label: 'GIT Description'
+    datasource_id: 'entity:node'
+    property_path: oss_git_description
+    type: 'solr_text_custom:ngram'
+    dependencies:
+      config:
+        - field.storage.node.oss_git_description
+  oss_release_date:
+    label: 'Release date'
+    datasource_id: 'entity:node'
+    property_path: oss_release_date
+    type: date
+    dependencies:
+      config:
+        - field.storage.node.oss_release_date
   oss_scope:
     label: 'Intended audience'
     datasource_id: 'entity:node'
@@ -763,12 +792,20 @@ field_settings:
         - field.storage.node.oss_scope
       module:
         - taxonomy
+  oss_short_description:
+    label: 'Short description'
+    datasource_id: 'entity:node'
+    property_path: oss_short_description
+    type: 'solr_text_custom:ngram'
+    dependencies:
+      config:
+        - field.storage.node.oss_short_description
   oss_solution_rendered_item:
     label: 'Oss Solution rendered item'
     property_path: oss_solution_rendered_item
     type: text
   oss_source:
-    label: Source
+    label: 'Source catalogue'
     datasource_id: 'entity:node'
     property_path: oss_source
     type: string
@@ -787,7 +824,7 @@ field_settings:
     label: 'Body » Paragraph » Body » Processed text'
     datasource_id: 'entity:node'
     property_path: 'field_paragraphs_body:entity:field_body:processed'
-    type: text
+    type: 'solr_text_custom:ngram'
     dependencies:
       config:
         - field.storage.node.field_paragraphs_body
@@ -854,7 +891,7 @@ field_settings:
     label: 'Reverse » Related term » Term ID'
     datasource_id: 'entity:taxonomy_term'
     property_path: 'search_api_reverse_entity_references_taxonomy_term__field_eif_related_term:tid'
-    type: text
+    type: 'solr_text_custom:ngram'
   reverse_eif_related_term_tid_spellcheck:
     label: 'Reverse » Related term » Term ID - Spellcheck'
     datasource_id: 'entity:taxonomy_term'
@@ -864,7 +901,7 @@ field_settings:
     label: 'Reverse » Related term » Identifier'
     datasource_id: 'entity:taxonomy_term'
     property_path: 'search_api_reverse_entity_references_taxonomy_term__field_eif_related_term:field_eif_identifier'
-    type: text
+    type: 'solr_text_custom:ngram'
   reverse_field_eif_identifier_spellcheck:
     label: 'Reverse » Related term » Identifier - Spellcheck'
     datasource_id: 'entity:taxonomy_term'
@@ -935,7 +972,7 @@ field_settings:
     label: Title
     datasource_id: 'entity:node'
     property_path: title
-    type: text
+    type: 'solr_text_custom:ngram'
     boost: 5.0
     dependencies:
       module:
@@ -1034,6 +1071,7 @@ processor_settings:
     weights:
       preprocess_index: -50
   auto_aggregated_fulltext_field: {  }
+  custom_value: {  }
   entity_type: {  }
   hierarchy:
     weights:
@@ -1064,6 +1102,10 @@ processor_settings:
       - field_isr_release_notes_spellcheck
       - field_licence_description
       - field_licence_description_spellcheck
+      - oss_category
+      - oss_features
+      - oss_git_description
+      - oss_short_description
       - oss_solution_rendered_item
     title: true
     alt: true
@@ -1114,6 +1156,8 @@ processor_settings:
       - isr_field_owner_name_spellcheck
       - label
       - label_spellcheck
+      - oss_git_description
+      - oss_short_description
       - title
       - title_spellcheck
   include_custom_page_content:
@@ -1163,6 +1207,8 @@ processor_settings:
       - field_short_title_spellcheck
       - label
       - label_spellcheck
+      - oss_git_description
+      - oss_short_description
       - title
       - title_spellcheck
     stopwords:
@@ -1248,6 +1294,8 @@ processor_settings:
       - isr_field_owner_name_spellcheck
       - label
       - label_spellcheck
+      - oss_git_description
+      - oss_short_description
       - title
       - title_spellcheck
     spaces: ''
@@ -1299,6 +1347,10 @@ processor_settings:
       - isr_field_owner_name_spellcheck
       - label
       - label_spellcheck
+      - oss_category
+      - oss_features
+      - oss_git_description
+      - oss_short_description
       - title
       - title_spellcheck
   type_boost:

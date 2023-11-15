@@ -10,5 +10,5 @@
 #}
 <div{{ attributes.addClass(['fs-sm', 'my-2']) }}>
   <p class="text-dark-50 mb-0">{{ item.user.login }} - {{ item.updated_at }}</p>
-  <p class="text-dark mb-0">{{ item.body|length > 100 ? item.body|striptags|slice(0,100)|raw ~ '...' : item.body }}</p>
+  <p class="text-dark mb-0">{{ item.body|length > 100 ? item.body|striptags|slice(0, 100)|raw ~ '...' : item.body }}</p>
 </div>

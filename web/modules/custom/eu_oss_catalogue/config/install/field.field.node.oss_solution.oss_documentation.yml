@@ -19,7 +19,7 @@ id: node.oss_solution.oss_documentation
 field_name: oss_documentation
 entity_type: node
 bundle: oss_solution
-label: Documentation
+label: 'Documentation [stored]'
 description: 'The available documentation of the solution.'
 required: false
 translatable: true

@@ -1,0 +1,30 @@
+uuid: affcb124-66dc-4518-b2be-fa0485bfc05f
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_form_mode.media.media_library
+    - field.field.media.file.file
+    - field.field.media.file.og_audience
+    - media.type.file
+id: media.file.media_library
+targetEntityType: media
+bundle: file
+mode: media_library
+content:
+  name:
+    type: string_textfield
+    weight: 0
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+hidden:
+  created: true
+  file: true
+  langcode: true
+  og_audience: true
+  path: true
+  status: true
+  uid: true

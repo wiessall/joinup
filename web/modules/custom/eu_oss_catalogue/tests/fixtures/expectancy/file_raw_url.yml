@@ -1,0 +1,200 @@
+# GitHub
+
+GitHub - Erroneous:
+  - Drupal\eu_oss_catalogue\Plugin\eu_oss_catalogue\HostingPlatform\GitHub
+  - https://github.com
+  - /
+  - https://github.com/owner/project
+  - null
+GitHub - Raw URL:
+  - Drupal\eu_oss_catalogue\Plugin\eu_oss_catalogue\HostingPlatform\GitHub
+  - https://github.com
+  - https://raw.githubusercontent.com/owner/project/develop/images/picture.jpg
+  - https://github.com/owner/project
+  - https://raw.githubusercontent.com/owner/project/develop/images/picture.jpg
+GitHub - External URL:
+  - Drupal\eu_oss_catalogue\Plugin\eu_oss_catalogue\HostingPlatform\GitHub
+  - https://github.com
+  - http://example.com/path/to/whatever.txt
+  - https://github.com/owner/project
+  - http://example.com/path/to/whatever.txt
+GitHub - URL from web:
+  - Drupal\eu_oss_catalogue\Plugin\eu_oss_catalogue\HostingPlatform\GitHub
+  - https://github.com
+  - https://github.com/owner/project/blob/develop/images/picture.jpg
+  - https://github.com/owner/project
+  - https://raw.githubusercontent.com/owner/project/develop/images/picture.jpg
+GitHub - Relative path from web:
+  - Drupal\eu_oss_catalogue\Plugin\eu_oss_catalogue\HostingPlatform\GitHub
+  - https://github.com
+  - blob/develop/images/picture.jpg
+  - https://github.com/owner/project
+  - https://raw.githubusercontent.com/owner/project/develop/images/picture.jpg
+GitHub - Relative path from web with leading slash:
+  - Drupal\eu_oss_catalogue\Plugin\eu_oss_catalogue\HostingPlatform\GitHub
+  - https://github.com
+  - /blob/develop/images/picture.jpg
+  - https://github.com/owner/project
+  - https://raw.githubusercontent.com/owner/project/develop/images/picture.jpg
+GitHub - Repository relative path:
+  - Drupal\eu_oss_catalogue\Plugin\eu_oss_catalogue\HostingPlatform\GitHub
+  - https://github.com
+  - images/picture.jpg
+  - https://github.com/owner/project
+  - https://raw.githubusercontent.com/owner/project/HEAD/images/picture.jpg
+GitHub - Repository relative path with leading slash:
+  - Drupal\eu_oss_catalogue\Plugin\eu_oss_catalogue\HostingPlatform\GitHub
+  - https://github.com
+  - /images/picture.jpg
+  - https://github.com/owner/project
+  - https://raw.githubusercontent.com/owner/project/HEAD/images/picture.jpg
+
+# GitLab (gitlab.com)
+
+GitLabDotCom - Erroneous:
+  - Drupal\eu_oss_catalogue\Plugin\eu_oss_catalogue\HostingPlatform\GitLabDotCom
+  - https://gitlab.com
+  - /
+  - https://gitlab.com/group1/group-1-1/group-1-1-1/project
+  - null
+GitLabDotCom - Raw URL:
+  - Drupal\eu_oss_catalogue\Plugin\eu_oss_catalogue\HostingPlatform\GitLabDotCom
+  - https://gitlab.com
+  - https://gitlab.com/group1/group-1-1/group-1-1-1/project/raw/develop/images/picture.jpg
+  - https://gitlab.com/group1/group-1-1/group-1-1-1/project
+  - https://gitlab.com/group1/group-1-1/group-1-1-1/project/raw/develop/images/picture.jpg
+GitLabDotCom - Raw URL (dash):
+  - Drupal\eu_oss_catalogue\Plugin\eu_oss_catalogue\HostingPlatform\GitLabDotCom
+  - https://gitlab.com
+  - https://gitlab.com/group1/group-1-1/group-1-1-1/project/-/raw/develop/images/picture.jpg
+  - https://gitlab.com/group1/group-1-1/group-1-1-1/project
+  - https://gitlab.com/group1/group-1-1/group-1-1-1/project/-/raw/develop/images/picture.jpg
+GitLabDotCom - External URL:
+  - Drupal\eu_oss_catalogue\Plugin\eu_oss_catalogue\HostingPlatform\GitLabDotCom
+  - https://gitlab.com
+  - http://example.com/path/to/whatever.txt
+  - https://gitlab.com/group1/group-1-1/group-1-1-1/project
+  - http://example.com/path/to/whatever.txt
+GitLabDotCom - URL from web:
+  - Drupal\eu_oss_catalogue\Plugin\eu_oss_catalogue\HostingPlatform\GitLabDotCom
+  - https://gitlab.com
+  - https://gitlab.com/group1/group-1-1/group-1-1-1/project/blob/develop/images/picture.jpg
+  - https://gitlab.com/group1/group-1-1/group-1-1-1/project
+  - https://gitlab.com/group1/group-1-1/group-1-1-1/project/raw/develop/images/picture.jpg
+GitLabDotCom - URL from web (dash):
+  - Drupal\eu_oss_catalogue\Plugin\eu_oss_catalogue\HostingPlatform\GitLabDotCom
+  - https://gitlab.com
+  - https://gitlab.com/group1/group-1-1/group-1-1-1/project/-/blob/develop/images/picture.jpg
+  - https://gitlab.com/group1/group-1-1/group-1-1-1/project
+  - https://gitlab.com/group1/group-1-1/group-1-1-1/project/raw/develop/images/picture.jpg
+GitLabDotCom - Relative path from web:
+  - Drupal\eu_oss_catalogue\Plugin\eu_oss_catalogue\HostingPlatform\GitLabDotCom
+  - https://gitlab.com
+  - blob/develop/images/picture.jpg
+  - https://gitlab.com/group1/group-1-1/group-1-1-1/project
+  - https://gitlab.com/group1/group-1-1/group-1-1-1/project/raw/develop/images/picture.jpg
+GitLabDotCom - Relative path from web (dash):
+  - Drupal\eu_oss_catalogue\Plugin\eu_oss_catalogue\HostingPlatform\GitLabDotCom
+  - https://gitlab.com
+  - -/blob/develop/images/picture.jpg
+  - https://gitlab.com/group1/group-1-1/group-1-1-1/project
+  - https://gitlab.com/group1/group-1-1/group-1-1-1/project/raw/develop/images/picture.jpg
+GitLabDotCom - Relative path from web with leading slash:
+  - Drupal\eu_oss_catalogue\Plugin\eu_oss_catalogue\HostingPlatform\GitLabDotCom
+  - https://gitlab.com
+  - /blob/develop/images/picture.jpg
+  - https://gitlab.com/group1/group-1-1/group-1-1-1/project
+  - https://gitlab.com/group1/group-1-1/group-1-1-1/project/raw/develop/images/picture.jpg
+GitLabDotCom - Relative path from web with leading slash (dash):
+  - Drupal\eu_oss_catalogue\Plugin\eu_oss_catalogue\HostingPlatform\GitLabDotCom
+  - https://gitlab.com
+  - /-/blob/develop/images/picture.jpg
+  - https://gitlab.com/group1/group-1-1/group-1-1-1/project
+  - https://gitlab.com/group1/group-1-1/group-1-1-1/project/raw/develop/images/picture.jpg
+GitLabDotCom - Repository relative path:
+  - Drupal\eu_oss_catalogue\Plugin\eu_oss_catalogue\HostingPlatform\GitLabDotCom
+  - https://gitlab.com
+  - images/picture.jpg
+  - https://gitlab.com/group1/group-1-1/group-1-1-1/project
+  - https://gitlab.com/group1/group-1-1/group-1-1-1/project/raw/HEAD/images/picture.jpg
+GitLabDotCom - Repository relative path with leading slash:
+  - Drupal\eu_oss_catalogue\Plugin\eu_oss_catalogue\HostingPlatform\GitLabDotCom
+  - https://gitlab.com
+  - /images/picture.jpg
+  - https://gitlab.com/group1/group-1-1/group-1-1-1/project
+  - https://gitlab.com/group1/group-1-1/group-1-1-1/project/raw/HEAD/images/picture.jpg
+
+# GitLab (self-hosted)
+
+GitLabSelfHosted - Erroneous:
+  - Drupal\eu_oss_catalogue\Plugin\eu_oss_catalogue\HostingPlatform\GitLabDotCom
+  - https://self-hosted.gitlab.example.com
+  - /
+  - https://self-hosted.gitlab.example.com/group1/group-1-1/group-1-1-1/project
+  - null
+GitLabSelfHosted - Raw URL:
+  - Drupal\eu_oss_catalogue\Plugin\eu_oss_catalogue\HostingPlatform\GitLabSelfHosted
+  - https://self-hosted.gitlab.example.com
+  - https://self-hosted.gitlab.example.com/group1/group-1-1/group-1-1-1/project/raw/develop/images/picture.jpg
+  - https://self-hosted.gitlab.example.com/group1/group-1-1/group-1-1-1/project
+  - https://self-hosted.gitlab.example.com/group1/group-1-1/group-1-1-1/project/raw/develop/images/picture.jpg
+GitLabSelfHosted - Raw URL (dash):
+  - Drupal\eu_oss_catalogue\Plugin\eu_oss_catalogue\HostingPlatform\GitLabSelfHosted
+  - https://self-hosted.gitlab.example.com
+  - https://self-hosted.gitlab.example.com/group1/group-1-1/group-1-1-1/project/-/raw/develop/images/picture.jpg
+  - https://self-hosted.gitlab.example.com/group1/group-1-1/group-1-1-1/project
+  - https://self-hosted.gitlab.example.com/group1/group-1-1/group-1-1-1/project/-/raw/develop/images/picture.jpg
+GitLabSelfHosted - External URL:
+  - Drupal\eu_oss_catalogue\Plugin\eu_oss_catalogue\HostingPlatform\GitLabSelfHosted
+  - https://self-hosted.gitlab.example.com
+  - http://example.com/path/to/whatever.txt
+  - https://self-hosted.gitlab.example.com/group1/group-1-1/group-1-1-1/project
+  - http://example.com/path/to/whatever.txt
+GitLabSelfHosted - URL from web:
+  - Drupal\eu_oss_catalogue\Plugin\eu_oss_catalogue\HostingPlatform\GitLabSelfHosted
+  - https://self-hosted.gitlab.example.com
+  - https://self-hosted.gitlab.example.com/group1/group-1-1/group-1-1-1/project/blob/develop/images/picture.jpg
+  - https://self-hosted.gitlab.example.com/group1/group-1-1/group-1-1-1/project
+  - https://self-hosted.gitlab.example.com/group1/group-1-1/group-1-1-1/project/raw/develop/images/picture.jpg
+GitLabSelfHosted - URL from web (dash):
+  - Drupal\eu_oss_catalogue\Plugin\eu_oss_catalogue\HostingPlatform\GitLabSelfHosted
+  - https://self-hosted.gitlab.example.com
+  - https://self-hosted.gitlab.example.com/group1/group-1-1/group-1-1-1/project/-/blob/develop/images/picture.jpg
+  - https://self-hosted.gitlab.example.com/group1/group-1-1/group-1-1-1/project
+  - https://self-hosted.gitlab.example.com/group1/group-1-1/group-1-1-1/project/raw/develop/images/picture.jpg
+GitLabSelfHosted - Relative path from web:
+  - Drupal\eu_oss_catalogue\Plugin\eu_oss_catalogue\HostingPlatform\GitLabSelfHosted
+  - https://self-hosted.gitlab.example.com
+  - blob/develop/images/picture.jpg
+  - https://self-hosted.gitlab.example.com/group1/group-1-1/group-1-1-1/project
+  - https://self-hosted.gitlab.example.com/group1/group-1-1/group-1-1-1/project/raw/develop/images/picture.jpg
+GitLabSelfHosted - Relative path from web (dash):
+  - Drupal\eu_oss_catalogue\Plugin\eu_oss_catalogue\HostingPlatform\GitLabSelfHosted
+  - https://self-hosted.gitlab.example.com
+  - -/blob/develop/images/picture.jpg
+  - https://self-hosted.gitlab.example.com/group1/group-1-1/group-1-1-1/project
+  - https://self-hosted.gitlab.example.com/group1/group-1-1/group-1-1-1/project/raw/develop/images/picture.jpg
+GitLabSelfHosted - Relative path from web with leading slash:
+  - Drupal\eu_oss_catalogue\Plugin\eu_oss_catalogue\HostingPlatform\GitLabSelfHosted
+  - https://self-hosted.gitlab.example.com
+  - /blob/develop/images/picture.jpg
+  - https://self-hosted.gitlab.example.com/group1/group-1-1/group-1-1-1/project
+  - https://self-hosted.gitlab.example.com/group1/group-1-1/group-1-1-1/project/raw/develop/images/picture.jpg
+GitLabSelfHosted - Relative path from web with leading slash (dash):
+  - Drupal\eu_oss_catalogue\Plugin\eu_oss_catalogue\HostingPlatform\GitLabSelfHosted
+  - https://self-hosted.gitlab.example.com
+  - /-/blob/develop/images/picture.jpg
+  - https://self-hosted.gitlab.example.com/group1/group-1-1/group-1-1-1/project
+  - https://self-hosted.gitlab.example.com/group1/group-1-1/group-1-1-1/project/raw/develop/images/picture.jpg
+GitLabSelfHosted - Repository relative path:
+  - Drupal\eu_oss_catalogue\Plugin\eu_oss_catalogue\HostingPlatform\GitLabSelfHosted
+  - https://self-hosted.gitlab.example.com
+  - images/picture.jpg
+  - https://self-hosted.gitlab.example.com/group1/group-1-1/group-1-1-1/project
+  - https://self-hosted.gitlab.example.com/group1/group-1-1/group-1-1-1/project/raw/HEAD/images/picture.jpg
+GitLabSelfHosted - Repository relative path with leading slash:
+  - Drupal\eu_oss_catalogue\Plugin\eu_oss_catalogue\HostingPlatform\GitLabSelfHosted
+  - https://self-hosted.gitlab.example.com
+  - /images/picture.jpg
+  - https://self-hosted.gitlab.example.com/group1/group-1-1/group-1-1-1/project
+  - https://self-hosted.gitlab.example.com/group1/group-1-1/group-1-1-1/project/raw/HEAD/images/picture.jpg

@@ -20,7 +20,7 @@ id: node.oss_solution.oss_screenshots
 field_name: oss_screenshots
 entity_type: node
 bundle: oss_solution
-label: Screenshots
+label: 'Screenshots [stored]'
 description: 'URLs to files showing screenshots of the software.'
 required: false
 translatable: true

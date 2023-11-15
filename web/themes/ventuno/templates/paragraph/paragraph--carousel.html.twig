@@ -37,9 +37,10 @@
  */
 #}
 
-{{ attach_library('ventuno/paragraph--carousel') }}
+{{ attach_library('ventuno/carousel') }}
 
 {% set classes = [
+  'carousel',
   'paragraph',
   'paragraph--' ~ paragraph.bundle|clean_class,
   'mb-5',
@@ -50,7 +51,7 @@
     <div class="glide">
       <div class="d-flex flex-wrap align-items-baseline justify-content-end">
         {% if content.paragraph_heading|render|striptags|trim is not empty %}
-          <h2 class="paragraph--carousel__title mt-0 mb-3">{{ content.paragraph_heading }}</h2>
+          <h2 class="carousel__title mt-0 mb-3">{{ content.paragraph_heading }}</h2>
         {% endif %}
 
         {% if content.paragraph_carousel_action|render|striptags|trim is not empty %}

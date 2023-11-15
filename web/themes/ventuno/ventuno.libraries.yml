@@ -50,6 +50,18 @@ licence-comparer:
     theme:
       assets/css/licence-comparer.min.css: { minified: true }
 
+oss-landing:
+  css:
+    theme:
+      assets/css/oss-landing.min.css: { minified: true }
+
+oss-solution-full:
+  css:
+    theme:
+      assets/css/oss-solution-full.min.css: { minified: true }
+  dependencies:
+    - ventuno/see-more
+
 searchpage:
   css:
     theme:
@@ -97,6 +109,20 @@ button-group:
   css:
     theme:
       assets/css/button-group.min.css: { minified: true }
+
+carousel:
+  css:
+    theme:
+      assets/css/carousel.min.css: { minified: true }
+  dependencies:
+    - ventuno/carousel.js
+
+carousel.js:
+  header: true
+  js:
+    assets/js/carousel.min.js: { minified: true, attributes: { defer: true } }
+  dependencies:
+    - ventuno/glide
 
 close:
   css:
@@ -175,11 +201,11 @@ group-banner:
       assets/css/group-banner.min.css: { minified: true }
 
 header-topic:
-  js:
-    assets/js/toggle-text-seemore-btn.min.js: { minified: true }
   css:
     theme:
       assets/css/header-topic.min.css: { minified: true }
+  dependencies:
+    - ventuno/see-more
 
 ief-entity-table:
   css:
@@ -224,6 +250,10 @@ navbar:
   css:
     theme:
       assets/css/navbar.min.css: { minified: true }
+  js:
+    assets/js/navbar-hover-dropdown.min.js: { minified: true }
+  dependencies:
+    - core/once
 
 navbar-search:
   css:
@@ -265,20 +295,6 @@ paragraph:
 paragraph__accordion:
   dependencies:
     - ventuno/accordion
-
-carousel:
-  css:
-    theme:
-      assets/css/carousel.min.css: { minified: true }
-  dependencies:
-    - ventuno/carousel.js
-
-carousel.js:
-  header: true
-  js:
-    assets/js/carousel.min.js: { minified: true, attributes: { defer: true } }
-  dependencies:
-    - ventuno/glide
 
 paragraph__layout:
   css:
@@ -359,6 +375,10 @@ responsive-tables.js:
   js:
     assets/js/responsive-tables.min.js: { minified: true, attributes: { defer: true } }
 
+see-more:
+  js:
+    assets/js/toggle-text-seemore-btn.min.js: { minified: true }
+
 tabs:
   css:
     theme:
@@ -395,8 +415,3 @@ layout-paragraphs--builder:
   css:
     theme:
       assets/css/layout-paragraphs--builder.min.css: { minified: true }
-
-oss-solution-full:
-  css:
-    theme:
-      assets/css/oss-solution-full.tmp.css: { minified: true }
