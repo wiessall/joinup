@@ -56,8 +56,7 @@ Feature:
     # Check OSS label in tile footer.
     And I should see the text "OSS Solution" in the "Spunta" tile
 
-    When I click "advanced search"
-    And I should see the heading "Search in EU Open Source Solutions Catalogue"
+    When I should not see the link "advanced search"
 
   Scenario: User sees short description on OSS Solution page.
     Given oss_solution content:
