@@ -179,11 +179,17 @@ hidden:
   description: true
   langcode: true
   links: true
+  oss__documentation: true
+  oss__features: true
+  oss__long_description: true
+  oss__screenshots: true
   oss_available_languages: true
   oss_default_branch: true
   oss_development_status: true
   oss_documentation: true
   oss_git_url: true
+  oss_hosting_platform: true
+  oss_is_archived: true
   oss_landing_url: true
   oss_license: true
   oss_logo: true
