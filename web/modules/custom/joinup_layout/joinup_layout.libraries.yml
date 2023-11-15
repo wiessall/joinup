@@ -10,6 +10,11 @@ twocolfooter_onecol_67_33:
     theme:
       layouts/twocolfooter-onecol-67-33/twocolfooter_onecol_67_33.css: {}
 
+oss_heading:
+  css:
+    layout:
+      layouts/oss-heading/oss-heading.css: { }
+
 oss_header:
   css:
     layout:
