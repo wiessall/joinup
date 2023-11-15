@@ -234,7 +234,7 @@ third_party_settings:
                 view_mode: view_mode
               formatter:
                 type: string
-                label: hidden
+                label: above
                 settings:
                   link_to_entity: false
                 third_party_settings:
@@ -255,7 +255,7 @@ third_party_settings:
                 view_mode: view_mode
               formatter:
                 type: joinup_oss_catalogue_link_to_solution_search
-                label: inline
+                label: above
                 settings:
                   facet_id: category
                   use_label: true
