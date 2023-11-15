@@ -8,6 +8,8 @@ use Drupal\Component\Plugin\PluginBase;
 use Drupal\Core\Config\Entity\ThirdPartySettingsInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Field\FieldItemListInterface;
+use Drupal\Core\Language\LanguageInterface;
+use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Logger\LoggerChannelInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Utility\Error;
@@ -34,9 +36,9 @@ abstract class EuOssCatalogueParserPluginBase extends PluginBase implements EuOs
    *
    * @param array $configuration
    *   A configuration array containing information about the plugin instance.
-   * @param string $pluginId
+   * @param string $plugin_id
    *   The plugin ID for the plugin instance.
-   * @param mixed $pluginDefinition
+   * @param mixed $plugin_definition
    *   The plugin implementation definition.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
    *   The entity type manager service.
@@ -44,29 +46,33 @@ abstract class EuOssCatalogueParserPluginBase extends PluginBase implements EuOs
    *   The EU OSS Catalogue resolver plugin manager service.
    * @param \Drupal\Core\Logger\LoggerChannelInterface $logger
    *   The EU catalogue logger channel.
+   * @param \Drupal\Core\Language\LanguageManagerInterface $languageManager
+   *   The language manager service.
    */
   public function __construct(
     array $configuration,
-    $pluginId,
-    $pluginDefinition,
+    $plugin_id,
+    $plugin_definition,
     protected EntityTypeManagerInterface $entityTypeManager,
     protected EuOssCataloguePluginManagerInterface $resolverManager,
     protected LoggerChannelInterface $logger,
+    protected LanguageManagerInterface $languageManager,
   ) {
-    parent::__construct($configuration, $pluginId, $pluginDefinition);
+    parent::__construct($configuration, $plugin_id, $plugin_definition);
   }
 
   /**
    * {@inheritdoc}
    */
-  public static function create(ContainerInterface $container, array $configuration, $pluginId, $pluginDefinition): self {
+  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition): self {
     return new static(
       $configuration,
-      $pluginId,
-      $pluginDefinition,
+      $plugin_id,
+      $plugin_definition,
       $container->get('entity_type.manager'),
       $container->get('plugin.manager.eu_oss_catalogue.resolver'),
       $container->get('logger.channel.eu_oss_catalogue'),
+      $container->get('language_manager'),
     );
   }
 
@@ -140,6 +146,7 @@ abstract class EuOssCatalogueParserPluginBase extends PluginBase implements EuOs
         $resolver = $this->getResolver($pluginId, $config);
         try {
           $resolver->resolve($resolved, $project, $metadata, $fieldItemList);
+          $this->checkResolved($resolved, $resolver);
         }
         catch (UnresolvableValueException $exception) {
           Error::logException($this->logger, $exception);
@@ -246,6 +253,44 @@ abstract class EuOssCatalogueParserPluginBase extends PluginBase implements EuOs
       }
     }
     return NULL;
+  }
+
+  /**
+   * Checks that the resolved value has the expected structure.
+   *
+   * @param array|null $resolved
+   *   The resolved value.
+   * @param \Drupal\eu_oss_catalogue\EuOssCatalogueResolverInterface $resolver
+   *   The resolver plugin instance.
+   *
+   * @throws \Exception
+   *   When the resolved value doesn't have a proper structure.
+   */
+  protected function checkResolved(?array $resolved, EuOssCatalogueResolverInterface $resolver): void {
+    if ($resolved === NULL) {
+      // NULL is allowed.
+      return;
+    }
+
+    // Check $resolved array structure.
+    $allowedLanguages = array_keys($this->languageManager->getLanguages());
+    $defaultLanguage = $this->languageManager->getDefaultLanguage()->getId();
+    // Replace default language with 'x-default'.
+    $allowedLanguages = [
+      ...array_diff($allowedLanguages, [$defaultLanguage]),
+      ...[LanguageInterface::LANGCODE_DEFAULT],
+    ];
+
+    // Check that keys are all valid language codes.
+    if ($invalidKeys = array_diff_key($resolved, array_flip($allowedLanguages))) {
+      throw new \Exception('The $value array, returned by ' . $resolver::class . '::resolve()' . ', has invalid keys: ' . implode(', ', $invalidKeys));
+    }
+
+    // Check that each element value is an array.
+    $validValues = array_filter($resolved, 'is_array');
+    if ($invalidValues = array_keys(array_diff_key($resolved, $validValues))) {
+      throw new \Exception('The $value["' . implode('"], $value["', $invalidValues) . '"] array element(s), returned by ' . $resolver::class . '::resolve()' . ', should be array(s)');
+    }
   }
 
 }
