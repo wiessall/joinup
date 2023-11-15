@@ -4,7 +4,8 @@ declare(strict_types = 1);
 
 namespace Drupal\Tests\eu_oss_catalogue\Functional;
 
-use Drupal\Tests\BrowserTestBase;
+use Behat\Mink\Element\NodeElement;
+use Drupal\language\Entity\ConfigurableLanguage;
 use Drupal\user\Entity\Role;
 use Drupal\user\RoleInterface;
 
@@ -13,14 +14,12 @@ use Drupal\user\RoleInterface;
  *
  * @group eu_oss_catalogue
  */
-class OssSolutionListingPageTest extends BrowserTestBase {
+class OssSolutionListingPageTest extends FetchTestBase {
 
   /**
    * {@inheritdoc}
    */
   protected static $modules = [
-    'dblog',
-    'eu_oss_catalogue_test',
     'language',
     'views',
     'views_bulk_operations',
@@ -30,6 +29,19 @@ class OssSolutionListingPageTest extends BrowserTestBase {
    * {@inheritdoc}
    */
   protected $defaultTheme = 'stark';
+
+  /**
+   * {@inheritdoc}
+   */
+  public function setUp(): void {
+    parent::setUp();
+
+    // Add Italian and German languages.
+    ConfigurableLanguage::createFromLangcode('it')->save();
+    ConfigurableLanguage::createFromLangcode('de')->save();
+
+    $this->fetchSolutions('developers_italia', 4);
+  }
 
   /**
    * Tests the public page (/oss-solutions).
@@ -64,7 +76,9 @@ class OssSolutionListingPageTest extends BrowserTestBase {
     $assert_session->statusCodeEquals(403);
 
     $role = Role::load(RoleInterface::AUTHENTICATED_ID);
-    $this->grantPermissions($role, ['administer eu oss catalogue']);
+    $this->grantPermissions($role, [
+      'administer eu oss catalogue',
+    ]);
     $this->getSession()->reload();
 
     $this->drupalLogin($this->drupalCreateUser());
@@ -81,6 +95,82 @@ class OssSolutionListingPageTest extends BrowserTestBase {
     $assert_session->fieldExists('Language');
     $assert_session->fieldExists('Published');
     $assert_session->buttonExists('Filter');
+
+    $table = $assert_session->elementExists('css', '.views-element-container table.vbo-table tbody');
+
+    $this->assertEquals(
+      [
+        [
+          'GitHub solution 1',
+          'GitHub solution 1',
+          'https://github.com/dummy-namespace-1/dummy-name-1',
+          '[IT] Solution 1: Short description',
+          'Developers Italia',
+          'EN, DE, IT',
+          'Yes',
+          '',
+        ],
+        [
+          'Project 1.1',
+          'Project 1.1',
+          'https://limited.self-hosted.gitlab.example.com/group1/project-1-1',
+          '[DE] Group1: Project 1: Short description',
+          'Developers Italia',
+          'EN, DE',
+          'Yes',
+          '',
+        ],
+        [
+          'Project 1.2',
+          'Project 1.2',
+          'https://limited.self-hosted.gitlab.example.com/group1/project-1-2',
+          '[DE] Group1: Project 2: Short description',
+          'Developers Italia',
+          'EN, DE',
+          'Yes',
+          '',
+        ],
+        [
+          'Project 1',
+          'Project 1',
+          'https://limited.self-hosted.gitlab.example.com/user1/project-1',
+          '[DE] User 1: Project 1: Short description',
+          'Developers Italia',
+          'EN, DE',
+          'Yes',
+          '',
+        ],
+      ],
+      $this->getTableCellsText($table)
+    );
+  }
+
+  /**
+   * Returns table cell's text content grouped per table row.
+   *
+   * @return string[][]
+   *   Text of the table cells in the table body, grouped per table row.
+   */
+  protected function getTableCellsText(NodeElement $table): array {
+    $rows = $table->findAll('css', 'tbody tr');
+
+    return array_reduce(
+      $rows,
+      function (array $carry, NodeElement $element): array {
+        $cells = [];
+        foreach ($element->findAll('css', 'td') as $cell) {
+          assert($cell instanceof NodeElement);
+          // Exclude date-like values. Example:
+          if (preg_match('@^\d+/\d+/\d+ - \d+:\d+$@', $text = $cell->getText())) {
+            continue;
+          }
+          $cells[] = $text;
+        }
+        $carry[] = $cells;
+        return $carry;
+      },
+      []
+    );
   }
 
 }
