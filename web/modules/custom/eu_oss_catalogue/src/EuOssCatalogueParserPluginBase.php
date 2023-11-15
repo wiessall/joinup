@@ -141,11 +141,17 @@ abstract class EuOssCatalogueParserPluginBase extends PluginBase implements EuOs
         continue;
       }
 
+      // We don't allow resolvers to modify directly the original field item
+      // list because this is passed only for read-only purposes. Resolvers
+      // should use this object only to extract useful info about the field or
+      // the host entity.
+      $fieldItemListCopy = clone $fieldItemList;
+
       $resolved = NULL;
       foreach ($resolvers as ['plugin' => $pluginId, 'config' => $config]) {
         $resolver = $this->getResolver($pluginId, $config);
         try {
-          $resolver->resolve($resolved, $project, $metadata, $fieldItemList);
+          $resolver->resolve($resolved, $project, $metadata, $fieldItemListCopy);
           $this->checkResolved($resolved, $resolver);
         }
         catch (UnresolvableValueException $exception) {
