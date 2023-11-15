@@ -4,8 +4,6 @@ declare(strict_types = 1);
 
 namespace Drupal\Tests\eu_oss_catalogue\Functional;
 
-use Drupal\eu_oss_catalogue\Entity\OssSolutionInterface;
-
 /**
  * Tests the GitLab code hosting provider.
  *
@@ -26,9 +24,9 @@ class GitLabFetchTest extends FetchTestBase {
    */
   public function testSelfHostedAll(): void {
     $this->fetchSolutions('hosting_platform:gitlab_self_hosted_all', 3);
-    $this->assertNode('Project 1', OssSolutionInterface::class);
-    $this->assertNode('Project 2', OssSolutionInterface::class);
-    $this->assertNode('Project 3', OssSolutionInterface::class);
+    $this->assertOssSolution('Project 1', 'en');
+    $this->assertOssSolution('Project 2', 'de');
+    $this->assertOssSolution('Project 3', 'en');
 
     // Check that 'logo not found' exception has been logged.
     $notFoundLogEntries = $this->getLogEntries(
@@ -46,11 +44,11 @@ class GitLabFetchTest extends FetchTestBase {
    */
   public function testLimitedList(): void {
     $this->fetchSolutions('hosting_platform:gitlab_self_hosted_limited', 5);
-    $this->assertNode('Project 1.1', OssSolutionInterface::class);
-    $this->assertNode('Project 1.2', OssSolutionInterface::class);
-    $this->assertNode('Project 1.3', OssSolutionInterface::class);
-    $this->assertNode('Project 2.1', OssSolutionInterface::class);
-    $this->assertNode('Project 1', OssSolutionInterface::class);
+    $this->assertOssSolution('Project 1.1', 'it');
+    $this->assertOssSolution('Project 1.2', 'de');
+    $this->assertOssSolution('Project 1.3', 'de');
+    $this->assertOssSolution('Project 2.1', 'de');
+    $this->assertOssSolution('Project 1', 'de');
 
     // Check that 'logo not found' exception has been logged.
     $notFoundLogEntries = $this->getLogEntries(

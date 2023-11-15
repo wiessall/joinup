@@ -4,10 +4,6 @@ declare(strict_types = 1);
 
 namespace Drupal\Tests\eu_oss_catalogue\Functional;
 
-use Drupal\eu_oss_catalogue\Entity\OssContactInterface;
-use Drupal\eu_oss_catalogue\Entity\OssContractorInterface;
-use Drupal\eu_oss_catalogue\Entity\OssSolutionInterface;
-
 /**
  * Fetch data from GitHub test.
  *
@@ -29,14 +25,14 @@ class GitHubFetchTest extends FetchTestBase {
   public function testGitHubHostingPlatform(): void {
     $this->fetchSolutions('hosting_platform:github_mockup', 2);
 
-    $this->assertNode('GitHub solution 1', OssSolutionInterface::class);
-    $this->assertNode('FOSS Conference', OssContactInterface::class);
-    $this->assertNode('Pirate Initiative', OssContactInterface::class);
+    $this->assertOssSolution('GitHub solution 1', 'en');
+    $this->assertOssContact('FOSS Conference');
+    $this->assertOssContact('Pirate Initiative');
 
-    $this->assertNode('GitHub solution 2', OssSolutionInterface::class);
-    $this->assertNode('ACME Ltd', OssContractorInterface::class);
-    $this->assertNode('Das Auto GmbH', OssContractorInterface::class);
-    $this->assertNode('Peter Gregory', OssContactInterface::class);
+    $this->assertOssSolution('GitHub solution 2', 'it');
+    $this->assertOssContractor('ACME Ltd');
+    $this->assertOssContractor('Das Auto GmbH');
+    $this->assertOssContact('Peter Gregory');
 
     // Check that 'logo not found' exception has been logged.
     $notFoundLogEntries = $this->getLogEntries(
