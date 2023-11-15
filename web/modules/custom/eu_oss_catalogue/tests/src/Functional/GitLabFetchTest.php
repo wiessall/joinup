@@ -43,6 +43,13 @@ class GitLabFetchTest extends FetchTestBase {
     $this->assertNode('Project 1', OssSolutionInterface::class);
     $this->assertNode('Project 2', OssSolutionInterface::class);
     $this->assertNode('Project 3', OssSolutionInterface::class);
+
+    // Check that 'logo not found' exception has been logged.
+    $notFoundLogEntries = $this->getLogEntries(
+      '%type: @message in %function (line %line of %file).',
+      'a:6:{s:5:"%type";s:36:"GuzzleHttp\Exception\ClientException";s:8:"@message";s:181:"Client error: `HEAD https://all.self-hosted.gitlab.example.com/group2/group2_2/group2_3/project2/raw/HEAD/path/to/non-existing/image/logo.gif` resulted in a `404 Not Found` response";',
+    );
+    $this->assertCount(1, $notFoundLogEntries);
   }
 
   /**
@@ -58,6 +65,13 @@ class GitLabFetchTest extends FetchTestBase {
     $this->assertNode('Project 1.3', OssSolutionInterface::class);
     $this->assertNode('Project 2.1', OssSolutionInterface::class);
     $this->assertNode('Project 1', OssSolutionInterface::class);
+
+    // Check that 'logo not found' exception has been logged.
+    $notFoundLogEntries = $this->getLogEntries(
+      '%type: @message in %function (line %line of %file).',
+      'a:6:{s:5:"%type";s:36:"GuzzleHttp\Exception\ClientException";s:8:"@message";s:152:"Client error: `HEAD https://limited.self-hosted.gitlab.example.com/group1/project-1-2/raw/HEAD/doesn-t/exist.png` resulted in a `404 Not Found` response";',
+    );
+    $this->assertCount(1, $notFoundLogEntries);
   }
 
 }

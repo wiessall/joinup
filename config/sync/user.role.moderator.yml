@@ -8,6 +8,7 @@ dependencies:
     - media.type.event_logo
     - media.type.news_logo
     - media.type.solution_logo
+    - media.type.video
     - node.type.custom_page
     - node.type.discussion
     - node.type.document
@@ -17,6 +18,7 @@ dependencies:
     - asset_distribution
     - comment
     - contact_form
+    - custom_page
     - dashboard
     - eif
     - entity_legal
@@ -83,6 +85,7 @@ permissions:
   - 'administer footer-follow-us menu items'
   - 'administer footer-help-and-support menu items'
   - 'administer matomo integration'
+  - 'administer navbar menu items'
   - 'administer nodes'
   - 'administer organic groups'
   - 'administer outdated content threshold'
@@ -127,6 +130,7 @@ permissions:
   - 'create paragraph content video'
   - 'create rdf entity news'
   - 'create solution_logo media'
+  - 'create video media'
   - 'delete all sitewide alert revisions'
   - 'delete any collection_logo media'
   - 'delete any discussion_logo media'
@@ -189,6 +193,7 @@ permissions:
   - 'execute spain pipeline'
   - 'feature entity'
   - 'filter membership overview'
+  - 'manage custom landing pages'
   - 'manage group announcements'
   - 'manage group content'
   - 'manage newsroom newsletter subscriptions'

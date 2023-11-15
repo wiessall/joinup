@@ -14,9 +14,9 @@ id: node.oss_solution.oss_long_description
 field_name: oss_long_description
 entity_type: node
 bundle: oss_solution
-label: 'Long description'
+label: 'Long description [stored]'
 description: 'Main description of the solution'
-required: true
+required: false
 translatable: true
 default_value: {  }
 default_value_callback: ''

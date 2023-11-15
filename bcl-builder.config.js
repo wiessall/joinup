@@ -33,6 +33,20 @@ module.exports = {
       },
     },
     {
+      entry: path.resolve(
+        outputFolder,
+        `${ventuno}src/js/navbar-hover-dropdown.js`
+      ),
+      dest: path.resolve(
+        outputFolder,
+        `${ventuno}assets/js/navbar-hover-dropdown.js`
+      ),
+      options: {
+        minify: true,
+        sourceMap: true,
+      },
+    },
+    {
       entry: path.resolve(outputFolder, `${ventuno}src/js/explore-block.js`),
       dest: path.resolve(outputFolder, `${ventuno}assets/js/explore-block.js`),
       options: {
@@ -231,6 +245,36 @@ module.exports = {
         `${ventuno}src/scss/pages/homepage.scss`
       ),
       dest: path.resolve(outputFolder, `${ventuno}assets/css/homepage.min.css`),
+      options: {
+        includePaths,
+        minify: true,
+        sourceMap: "file",
+      },
+    },
+    {
+      entry: path.resolve(
+        outputFolder,
+        `${ventuno}src/scss/pages/oss-landing.scss`
+      ),
+      dest: path.resolve(
+        outputFolder,
+        `${ventuno}assets/css/oss-landing.min.css`
+      ),
+      options: {
+        includePaths,
+        minify: true,
+        sourceMap: "file",
+      },
+    },
+    {
+      entry: path.resolve(
+        outputFolder,
+        `${ventuno}src/scss/pages/oss-solution-full.scss`
+      ),
+      dest: path.resolve(
+        outputFolder,
+        `${ventuno}assets/css/oss-solution-full.min.css`
+      ),
       options: {
         includePaths,
         minify: true,
@@ -685,7 +729,7 @@ module.exports = {
     {
       entry: path.resolve(
         outputFolder,
-        `${ventuno}src/scss/components/paragraphs/carousel.scss`
+        `${ventuno}src/scss/components/carousel.scss`
       ),
       dest: path.resolve(outputFolder, `${ventuno}assets/css/carousel.min.css`),
       options: {
@@ -1153,21 +1197,6 @@ module.exports = {
       options: {
         minify: true,
         includePaths,
-        sourceMap: "file",
-      },
-    },
-    {
-      entry: path.resolve(
-        outputFolder,
-        `${ventuno}src/scss/components/oss-solution-full.tmp.scss`
-      ),
-      dest: path.resolve(
-        outputFolder,
-        `${ventuno}assets/css/oss-solution-full.tmp.css`
-      ),
-      options: {
-        includePaths,
-        minify: true,
         sourceMap: "file",
       },
     },

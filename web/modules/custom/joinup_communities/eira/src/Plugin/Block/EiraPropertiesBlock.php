@@ -155,6 +155,7 @@ SPARQL;
     RdfNamespace::delete('dc');
     RdfNamespace::delete('dcterms');
     RdfNamespace::set('dct', 'http://purl.org/dc/terms/');
+    RdfNamespace::set('owlturtle', 'http://www.semanticweb.org/owl/owlapi/turtle#');
   }
 
 }

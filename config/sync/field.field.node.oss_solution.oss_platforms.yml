@@ -22,7 +22,7 @@ entity_type: node
 bundle: oss_solution
 label: Platforms
 description: 'The platform(s) where the solution runs on'
-required: true
+required: false
 translatable: false
 default_value: {  }
 default_value_callback: ''

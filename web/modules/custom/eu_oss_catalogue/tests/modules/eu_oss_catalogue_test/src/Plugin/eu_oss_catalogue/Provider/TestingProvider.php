@@ -26,21 +26,13 @@ class TestingProvider extends DevelopersItalia {
   public function fetch(): iterable {
     foreach (parent::fetch() as $project) {
       if ($project->getFullName() === 'dummy-namespace-1/dummy-name-1') {
-        $fileBlob = $project->files['publiccodeYml'];
+        $values = $project->toArray();
+        $fileBlob = $values['files']['publiccodeYml'];
         $fileBlob = str_replace('name: GitHub solution 1', 'name: GitHub solution 1 (updated)', $fileBlob);
-        $project = new Project(
-          $project->namespace,
-          $project->name,
-          $project->url,
-          $project->defaultBranch,
-          '3.0.0',
-          $project->latestReleaseDate,
-          $project->platformReference,
-          $project->description,
-          ['publiccodeYml' => $fileBlob],
-        );
+        $values['files']['publiccodeYml'] = $fileBlob;
+        $values['latestReleaseTag'] = '3.0.0';
+        yield new Project(...$values);
       }
-
       yield $project;
     }
   }

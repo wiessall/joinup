@@ -74,23 +74,16 @@ class TaxonomyTermResolver extends DefaultResolver implements ContainerFactoryPl
   /**
    * {@inheritdoc}
    */
-  public function resolve(FieldItemListInterface $fieldItemList, Project $project, array $metadata): array {
-    $originalValue = parent::resolve($fieldItemList, $project, $metadata);
-
-    // Convert to array to handle also the multiple terms case.
-    $names = (array) $originalValue;
-
-    $storage = $this->entityTypeManager->getStorage('taxonomy_term');
-    // Variable '$names' or $originalValue might be an empty array.
-    $termIds = [];
-    if ($names) {
-      $termIds = array_values($storage->getQuery()->accessCheck(FALSE)
-        ->condition('vid', $this->getConfiguration()['vid'])
-        ->condition('name', $names, 'IN')
-        ->execute());
+  public function resolve(Project $project, array $metadata, FieldItemListInterface $fieldItemList): array {
+    if (!$names = $originalValue = parent::resolve($project, $metadata, $fieldItemList)) {
+      return [];
     }
 
-    $controlled = $this->getConfiguration()['controlled'] ?? FALSE;
+    $storage = $this->entityTypeManager->getStorage('taxonomy_term');
+    $termIds = array_values($storage->getQuery()->accessCheck(FALSE)
+      ->condition('vid', $this->getConfiguration()['vid'])
+      ->condition('name', $names, 'IN')
+      ->execute());
 
     $tids = [];
     foreach ($storage->loadMultiple($termIds) as $tid => $term) {
@@ -101,7 +94,7 @@ class TaxonomyTermResolver extends DefaultResolver implements ContainerFactoryPl
 
     $missingTermNames = array_diff($names, array_keys($tids));
 
-    if ($controlled && !empty($missingTermNames)) {
+    if ($this->getConfiguration()['controlled'] && !empty($missingTermNames)) {
       // Some terms don't exist in this controlled vocabulary.
       $exception = new UnresolvableValueException($fieldItemList->getName(), $this->getConfiguration()['path'], $originalValue, $metadata);
       Error::logException($this->logger, $exception, Error::DEFAULT_ERROR_MESSAGE, [], LogLevel::WARNING);
@@ -115,11 +108,7 @@ class TaxonomyTermResolver extends DefaultResolver implements ContainerFactoryPl
     }
 
     // Preserve the original order.
-    $tids = array_values(array_merge(array_flip($names), $tids));
-
-    $fieldItemList->setValue($tids);
-
-    return $tids;
+    return array_values(array_merge(array_flip($names), $tids));
   }
 
 }

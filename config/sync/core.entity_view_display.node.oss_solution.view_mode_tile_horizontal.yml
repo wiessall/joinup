@@ -12,6 +12,8 @@ dependencies:
     - field.field.node.oss_solution.oss_features
     - field.field.node.oss_solution.oss_git_description
     - field.field.node.oss_solution.oss_git_url
+    - field.field.node.oss_solution.oss_hosting_platform
+    - field.field.node.oss_solution.oss_is_archived
     - field.field.node.oss_solution.oss_landing_url
     - field.field.node.oss_solution.oss_license
     - field.field.node.oss_solution.oss_logo
@@ -74,6 +76,11 @@ content:
 hidden:
   langcode: true
   links: true
+  oss__documentation: true
+  oss__features: true
+  oss__long_description: true
+  oss__screenshots: true
+  oss__short_description: true
   oss_available_languages: true
   oss_categories: true
   oss_default_branch: true
@@ -82,6 +89,8 @@ hidden:
   oss_features: true
   oss_git_description: true
   oss_git_url: true
+  oss_hosting_platform: true
+  oss_is_archived: true
   oss_landing_url: true
   oss_license: true
   oss_long_description: true
