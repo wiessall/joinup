@@ -6,6 +6,8 @@ dependencies:
     - field.storage.node.oss_maintenance_contacts
     - node.type.oss_contact
     - node.type.oss_solution
+  module:
+    - eu_oss_catalogue
 third_party_settings:
   eu_oss_catalogue:
     publiccode_yml:
@@ -17,7 +19,7 @@ id: node.oss_solution.oss_maintenance_contacts
 field_name: oss_maintenance_contacts
 entity_type: node
 bundle: oss_solution
-label: 'Technical Contacts'
+label: 'Technical contacts'
 description: 'Contacts maintaining this software'
 required: false
 translatable: false
