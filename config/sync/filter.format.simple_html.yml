@@ -15,7 +15,6 @@ dependencies:
     - joinup_video
     - linkit
     - media
-    - video_embed_wysiwyg
 name: 'Simple HTML'
 format: simple_html
 weight: 3
@@ -134,12 +133,6 @@ filters:
       default_view_mode: default
       allowed_view_modes: {  }
       allowed_media_types: {  }
-  video_embed_wysiwyg:
-    id: video_embed_wysiwyg
-    provider: video_embed_wysiwyg
-    status: false
-    weight: -36
-    settings: {  }
   filter_add_empty_alt_attribute:
     id: filter_add_empty_alt_attribute
     provider: joinup_core

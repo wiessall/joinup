@@ -9,9 +9,10 @@ dependencies:
 third_party_settings:
   eu_oss_catalogue:
     publiccode_yml:
-      resolver: default
-      config:
-        path: landingURL
+      resolvers:
+        - plugin: default
+          config:
+            path: landingURL
 id: node.oss_solution.oss_landing_url
 field_name: oss_landing_url
 entity_type: node
