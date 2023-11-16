@@ -291,6 +291,8 @@ paragraph:
   css:
     theme:
       assets/css/paragraph.min.css: { minified: true }
+  js:
+    assets/js/paragraph-inline-img.min.js: { minified: true, attributes: { defer: true } }
 
 paragraph__accordion:
   dependencies:
