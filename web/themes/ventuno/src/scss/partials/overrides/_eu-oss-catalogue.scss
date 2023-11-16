@@ -7,6 +7,9 @@
       background-color: $oss--secondary;
     }
   }
+  .bg-brand {
+    background-color: $oss--brand-darker !important; 
+  }
   .bg-secondary {
     background-color: $oss--secondary !important;
   }
@@ -14,6 +17,9 @@
   .btn-primary {
     background-color: $oss--brand !important;
     border: 1px solid darken($oss--brand, 5%);
+  }
+  .text-secondary {
+    color: $oss--brand-darker !important;
   }
   .oss__instructions {
     .layout__region--first {
