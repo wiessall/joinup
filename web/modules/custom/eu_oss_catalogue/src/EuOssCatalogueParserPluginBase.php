@@ -8,11 +8,14 @@ use Drupal\Component\Plugin\PluginBase;
 use Drupal\Core\Config\Entity\ThirdPartySettingsInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Field\FieldItemListInterface;
+use Drupal\Core\Language\LanguageInterface;
+use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Logger\LoggerChannelInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Utility\Error;
 use Drupal\eu_oss_catalogue\Entity\OssSolutionInterface;
 use Drupal\eu_oss_catalogue\Exception\UnresolvableValueException;
+use Drupal\eu_oss_catalogue\Model\FieldOverridingPolicy;
 use Drupal\eu_oss_catalogue\Model\Project;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -33,9 +36,9 @@ abstract class EuOssCatalogueParserPluginBase extends PluginBase implements EuOs
    *
    * @param array $configuration
    *   A configuration array containing information about the plugin instance.
-   * @param string $pluginId
+   * @param string $plugin_id
    *   The plugin ID for the plugin instance.
-   * @param mixed $pluginDefinition
+   * @param mixed $plugin_definition
    *   The plugin implementation definition.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
    *   The entity type manager service.
@@ -43,29 +46,33 @@ abstract class EuOssCatalogueParserPluginBase extends PluginBase implements EuOs
    *   The EU OSS Catalogue resolver plugin manager service.
    * @param \Drupal\Core\Logger\LoggerChannelInterface $logger
    *   The EU catalogue logger channel.
+   * @param \Drupal\Core\Language\LanguageManagerInterface $languageManager
+   *   The language manager service.
    */
   public function __construct(
     array $configuration,
-    $pluginId,
-    $pluginDefinition,
+    $plugin_id,
+    $plugin_definition,
     protected EntityTypeManagerInterface $entityTypeManager,
     protected EuOssCataloguePluginManagerInterface $resolverManager,
     protected LoggerChannelInterface $logger,
+    protected LanguageManagerInterface $languageManager,
   ) {
-    parent::__construct($configuration, $pluginId, $pluginDefinition);
+    parent::__construct($configuration, $plugin_id, $plugin_definition);
   }
 
   /**
    * {@inheritdoc}
    */
-  public static function create(ContainerInterface $container, array $configuration, $pluginId, $pluginDefinition): self {
+  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition): self {
     return new static(
       $configuration,
-      $pluginId,
-      $pluginDefinition,
+      $plugin_id,
+      $plugin_definition,
       $container->get('entity_type.manager'),
       $container->get('plugin.manager.eu_oss_catalogue.resolver'),
       $container->get('logger.channel.eu_oss_catalogue'),
+      $container->get('language_manager'),
     );
   }
 
@@ -125,26 +132,45 @@ abstract class EuOssCatalogueParserPluginBase extends PluginBase implements EuOs
         continue;
       }
 
-      // The override options are documented in eu_oss_catalogue.schema.yml, see
-      // the definition of `eu_oss_catalogue.resolver_config_base:override`.
-      $override = $settings['config']['override'] ?? 'always';
-      if ($override === 'preserve_not_empty' && !$fieldItemList->isEmpty()) {
-        // Don't override a field with data.
+      /** @var array[] $resolvers */
+      $resolvers =& $settings['resolvers'];
+      $override = FieldOverridingPolicy::from($settings['override']);
+
+      if ($override === FieldOverridingPolicy::PRESERVE_NOT_EMPTY && !$fieldItemList->isEmpty()) {
+        // Don't override a field not-empty field.
         continue;
       }
 
-      $resolver = $this->getResolver($settings['resolver'], $settings['config']);
-      try {
-        $resolved = $resolver->resolve($project, $metadata, $fieldItemList);
-        if ($override !== 'resolved_not_empty' || $resolved) {
-          // An empty array unsets the field.
-          $fieldItemList->setValue($resolved ?: NULL);
+      // We don't allow resolvers to modify directly the original field item
+      // list because this is passed only for read-only purposes. Resolvers
+      // should use this object only to extract useful info about the field or
+      // the host entity.
+      $fieldItemListCopy = clone $fieldItemList;
+
+      $resolved = NULL;
+      foreach ($resolvers as ['plugin' => $pluginId, 'config' => $config]) {
+        $resolver = $this->getResolver($pluginId, $config);
+        try {
+          $resolver->resolve($resolved, $project, $metadata, $fieldItemListCopy);
+          $this->checkResolved($resolved, $resolver);
+        }
+        catch (UnresolvableValueException $exception) {
+          Error::logException($this->logger, $exception);
+          // Fail softly, don't set this field.
+          continue 2;
         }
       }
-      catch (UnresolvableValueException $exception) {
-        Error::logException($this->logger, $exception);
-        // Fail softly, don't set this field.
-        continue;
+
+      if ($override !== FieldOverridingPolicy::RESOLVED_NOT_EMPTY || $resolved) {
+        // Populate the node field.
+        foreach ($resolved as $langcode => $values) {
+          // Create a new translation on demand.
+          if (!$solution->hasTranslation($langcode)) {
+            $solution->addTranslation($langcode, $solution->toArray());
+          }
+          // An empty array unsets the field.
+          $solution->getTranslation($langcode)->set($fieldName, $values ?: NULL);
+        }
       }
     }
 
@@ -217,14 +243,60 @@ abstract class EuOssCatalogueParserPluginBase extends PluginBase implements EuOs
    *
    * @return array|null
    *   EU OSS Catalogue third-party settings or NULL if this field doesn't
-   *   provide them.
+   *   provide them. Structure:
+   *     - override: (optional) The `override` setting is documented in
+   *       \Drupal\eu_oss_catalogue\Model\FieldResolvingOverridePolicy. If
+   *       omitted, defaults to 'always'.
+   *     - resolvers: A list of EU OSS Catalogue resolver plugin options. Each
+   *       option is an associative array containing the plugin ID and its
+   *       configuration.
    */
   protected function getFieldSettings(FieldItemListInterface $fieldItemList): ?array {
     $fieldDefinition = $fieldItemList->getFieldDefinition();
     if ($fieldDefinition instanceof ThirdPartySettingsInterface) {
-      return $fieldDefinition->getThirdPartySetting('eu_oss_catalogue', $this->getPluginId());
+      if ($settings = $fieldDefinition->getThirdPartySetting('eu_oss_catalogue', $this->getPluginId())) {
+        return $settings + ['override' => 'always'];
+      }
     }
     return NULL;
+  }
+
+  /**
+   * Checks that the resolved value has the expected structure.
+   *
+   * @param array|null $resolved
+   *   The resolved value.
+   * @param \Drupal\eu_oss_catalogue\EuOssCatalogueResolverInterface $resolver
+   *   The resolver plugin instance.
+   *
+   * @throws \Exception
+   *   When the resolved value doesn't have a proper structure.
+   */
+  protected function checkResolved(?array $resolved, EuOssCatalogueResolverInterface $resolver): void {
+    if ($resolved === NULL) {
+      // NULL is allowed.
+      return;
+    }
+
+    // Check $resolved array structure.
+    $allowedLanguages = array_keys($this->languageManager->getLanguages());
+    $defaultLanguage = $this->languageManager->getDefaultLanguage()->getId();
+    // Replace default language with 'x-default'.
+    $allowedLanguages = [
+      ...array_diff($allowedLanguages, [$defaultLanguage]),
+      ...[LanguageInterface::LANGCODE_DEFAULT],
+    ];
+
+    // Check that keys are all valid language codes.
+    if ($invalidKeys = array_diff_key($resolved, array_flip($allowedLanguages))) {
+      throw new \Exception('The $value array, returned by ' . $resolver::class . '::resolve()' . ', has invalid keys: ' . implode(', ', $invalidKeys));
+    }
+
+    // Check that each element value is an array.
+    $validValues = array_filter($resolved, 'is_array');
+    if ($invalidValues = array_keys(array_diff_key($resolved, $validValues))) {
+      throw new \Exception('The $value["' . implode('"], $value["', $invalidValues) . '"] array element(s), returned by ' . $resolver::class . '::resolve()' . ', should be array(s)');
+    }
   }
 
 }

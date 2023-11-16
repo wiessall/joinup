@@ -5,7 +5,6 @@ declare(strict_types = 1);
 namespace Drupal\Tests\eu_oss_catalogue\Functional;
 
 use Behat\Mink\Element\NodeElement;
-use Drupal\language\Entity\ConfigurableLanguage;
 use Drupal\user\Entity\Role;
 use Drupal\user\RoleInterface;
 
@@ -20,7 +19,6 @@ class OssSolutionListingPageTest extends FetchTestBase {
    * {@inheritdoc}
    */
   protected static $modules = [
-    'language',
     'views',
     'views_bulk_operations',
   ];
@@ -28,18 +26,8 @@ class OssSolutionListingPageTest extends FetchTestBase {
   /**
    * {@inheritdoc}
    */
-  protected $defaultTheme = 'stark';
-
-  /**
-   * {@inheritdoc}
-   */
   public function setUp(): void {
     parent::setUp();
-
-    // Add Italian and German languages.
-    ConfigurableLanguage::createFromLangcode('it')->save();
-    ConfigurableLanguage::createFromLangcode('de')->save();
-
     $this->fetchSolutions('developers_italia', 4);
   }
 
@@ -104,7 +92,7 @@ class OssSolutionListingPageTest extends FetchTestBase {
           'GitHub solution 1',
           'GitHub solution 1',
           'https://github.com/dummy-namespace-1/dummy-name-1',
-          '[IT] Solution 1: Short description',
+          '[EN] Solution 1: Short description',
           'Developers Italia',
           'EN, DE, IT',
           'Yes',
@@ -114,9 +102,9 @@ class OssSolutionListingPageTest extends FetchTestBase {
           'Project 1.1',
           'Project 1.1',
           'https://limited.self-hosted.gitlab.example.com/group1/project-1-1',
-          '[DE] Group1: Project 1: Short description',
+          '[IT] Group1: Project 1: Short description',
           'Developers Italia',
-          'EN, DE',
+          'EN, DE, IT',
           'Yes',
           '',
         ],
@@ -126,7 +114,7 @@ class OssSolutionListingPageTest extends FetchTestBase {
           'https://limited.self-hosted.gitlab.example.com/group1/project-1-2',
           '[DE] Group1: Project 2: Short description',
           'Developers Italia',
-          'EN, DE',
+          'EN, DE, IT',
           'Yes',
           '',
         ],
