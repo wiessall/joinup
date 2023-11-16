@@ -8,14 +8,15 @@ dependencies:
 third_party_settings:
   eu_oss_catalogue:
     publiccode_yml:
-      resolver: langcode
-      config:
-        path: 'description/[lang]/shortDescription'
+      resolvers:
+        - plugin: default
+          config:
+            path: 'description/[lang]/shortDescription'
 id: node.oss_solution.oss_short_description
 field_name: oss_short_description
 entity_type: node
 bundle: oss_solution
-label: 'Short description'
+label: 'Short description [stored]'
 description: 'Short description of the solution. Part of it will be displayed in listings'
 required: false
 translatable: true

@@ -10,9 +10,10 @@ dependencies:
 third_party_settings:
   eu_oss_catalogue:
     publiccode_yml:
-      resolver: default
-      config:
-        path: releaseDate
+      resolvers:
+        - plugin: default
+          config:
+            path: releaseDate
 id: node.oss_solution.oss_release_date
 field_name: oss_release_date
 entity_type: node
