@@ -1,7 +1,15 @@
 uuid: 555600e7-c4fc-43fa-8371-170bae7e8d8e
 langcode: en
 status: open
-dependencies: {  }
+dependencies:
+  module:
+    - antibot
+    - honeypot
+third_party_settings:
+  antibot:
+    antibot: true
+  honeypot:
+    honeypot: true
 weight: 0
 open: null
 close: null
@@ -32,7 +40,7 @@ settings:
   ajax_progress_type: ''
   ajax_effect: ''
   ajax_speed: null
-  page: true
+  page: false
   page_submit_path: ''
   page_confirm_path: ''
   page_theme_name: ''
@@ -128,7 +136,7 @@ settings:
   draft_loaded_message: ''
   draft_pending_single_message: ''
   draft_pending_multiple_message: ''
-  confirmation_type: page
+  confirmation_type: inline
   confirmation_url: ''
   confirmation_title: ''
   confirmation_message: ''
