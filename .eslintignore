@@ -28,6 +28,3 @@
 # Ignore database backups and temporary files directories.
 /db/
 /tmp/
-
-# todo: Remove this code in ISAICP-8015.
-/web/themes/ventuno/modules/ventuno_helper/js/

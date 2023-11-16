@@ -2,6 +2,15 @@
 
 .paragraph,
 .fieldset--textarea {
+
+  .inline-block {
+    display: inline-block;
+  }
+
+  .align-center {
+    width: fit-content;
+  }
+
   img,
   figure {
     margin-bottom: $spacer;
