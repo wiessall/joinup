@@ -101,6 +101,7 @@
         "drupal/views_bulk_operations": "^4",
         "drupal/views_data_export": "^1.0",
         "drupal/views_multiple_permissions": "^2.0",
+        "drupal/webform": "^6.2",
         "drush/drush": "^12.1",
         "ec-europa/spdx": "^1.0",
         "ec-europa/virtuoso": "^2.1",
