@@ -6,6 +6,7 @@ dependencies:
     - field.field.paragraph.simple_paragraph.field_body
     - paragraphs.paragraphs_type.simple_paragraph
   module:
+    - template_suggestion
     - text
 id: paragraph.simple_paragraph.default
 targetEntityType: paragraph
@@ -16,7 +17,9 @@ content:
     type: text_default
     label: hidden
     settings: {  }
-    third_party_settings: {  }
+    third_party_settings:
+      template_suggestion:
+        template_suggestion: ''
     weight: 0
     region: content
 hidden:

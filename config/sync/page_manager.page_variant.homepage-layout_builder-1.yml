@@ -3,10 +3,19 @@ langcode: en
 status: true
 dependencies:
   config:
+    - entityqueue.entity_queue.highlighted_content
+    - entityqueue.entity_queue.highlighted_event
     - page_manager.page.homepage
+    - views.view.homepage_topics
+    - views.view.in_the_spotlight
+    - views.view.latest_news
   module:
+    - entityqueue_block
+    - joinup_front_page
     - joinup_layout
+    - layout_discovery
     - user
+    - views
 id: homepage-layout_builder-1
 label: Authenticated
 weight: 0

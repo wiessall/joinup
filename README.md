@@ -242,3 +242,19 @@ For the above example:
 
 * [Joinup website](https://joinup.ec.europa.eu/)
 * [Repositories and branches](https://citnet.tech.ec.europa.eu/CITnet/confluence/display/ISAICP/Development+repositories%2C+branches%2C+Jira+tickets)
+
+#### Stage file proxy
+
+The `stage_file_proxy` module is available in Joinup but not enabled by
+default. It is particularly useful for development and testing purposes when
+working with styling images.
+
+To configure it, simply enable the module and add the following to your
+`settings.override.php` file:
+
+```php
+$config['stage_file_proxy.settings']['hotlink'] = TRUE;
+$config['stage_file_proxy.settings']['origin'] = 'https://joinup.ec.europa.eu';
+$config['stage_file_proxy.settings']['verify'] = FALSE;
+$config['stage_file_proxy.settings']['origin_dir'] = 'sites/default/files';
+```
