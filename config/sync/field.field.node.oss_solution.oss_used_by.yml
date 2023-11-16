@@ -9,11 +9,12 @@ dependencies:
 third_party_settings:
   eu_oss_catalogue:
     publiccode_yml:
-      resolver: taxonomy_term
-      config:
-        path: usedBy
-        vid: oss_used_by
-        controlled: false
+      resolvers:
+        - plugin: taxonomy_term
+          config:
+            path: usedBy
+            vid: oss_used_by
+            controlled: false
 id: node.oss_solution.oss_used_by
 field_name: oss_used_by
 entity_type: node
