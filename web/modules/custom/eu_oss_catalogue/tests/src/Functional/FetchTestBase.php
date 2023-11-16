@@ -122,6 +122,7 @@ abstract class FetchTestBase extends BrowserTestBase {
     $this->assertFileExists($filePath);
     $expected = Yaml::decode(file_get_contents($filePath))[$nodeTitle];
     $this->assertIsArray($expected);
+    $this->assertNotEmpty($expected);
 
     /** @var \Drupal\eu_oss_catalogue\Entity\OssSolutionInterface|\Drupal\eu_oss_catalogue\Entity\OssContactInterface|\Drupal\eu_oss_catalogue\Entity\OssContractorInterface $actual */
     $actual = $this->getNodeByTitle($nodeTitle);
