@@ -10,9 +10,10 @@ dependencies:
 third_party_settings:
   eu_oss_catalogue:
     publiccode_yml:
-      resolver: default
-      config:
-        path: maintenance/type
+      resolvers:
+        - plugin: default
+          config:
+            path: maintenance/type
 id: node.oss_solution.oss_maintenance_type
 field_name: oss_maintenance_type
 entity_type: node

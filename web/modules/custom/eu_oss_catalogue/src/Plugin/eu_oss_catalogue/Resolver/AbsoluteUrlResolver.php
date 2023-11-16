@@ -5,6 +5,7 @@ declare(strict_types = 1);
 namespace Drupal\eu_oss_catalogue\Plugin\eu_oss_catalogue\Resolver;
 
 use Drupal\Core\Field\FieldItemListInterface;
+use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Logger\LoggerChannelInterface;
 use Drupal\Core\Utility\Error;
 use Drupal\eu_oss_catalogue\EuOssCatalogueHostingPlatformInterface;
@@ -36,6 +37,8 @@ class AbsoluteUrlResolver extends DefaultResolver {
    *   The plugin implementation definition.
    * @param \Drupal\Core\Logger\LoggerChannelInterface $logger
    *   The EU OSS Catalogue logger.
+   * @param \Drupal\Core\Language\LanguageManagerInterface $languageManger
+   *   The language manager service.
    * @param \Drupal\eu_oss_catalogue\EuOssCataloguePluginManagerInterface $platformManager
    *   The EU OSS Catalogue code hosting platform plugin manager.
    * @param \GuzzleHttp\ClientInterface $httpClient
@@ -45,11 +48,27 @@ class AbsoluteUrlResolver extends DefaultResolver {
     array $configuration,
     $plugin_id,
     $plugin_definition,
-    LoggerChannelInterface $logger,
+    protected LoggerChannelInterface $logger,
+    protected LanguageManagerInterface $languageManger,
     protected EuOssCataloguePluginManagerInterface $platformManager,
     protected ClientInterface $httpClient,
   ) {
-    parent::__construct($configuration, $plugin_id, $plugin_definition, $logger);
+    parent::__construct($configuration, $plugin_id, $plugin_definition, $logger, $this->languageManger);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition): self {
+    return new static(
+      $configuration,
+      $plugin_id,
+      $plugin_definition,
+      $container->get('logger.channel.eu_oss_catalogue'),
+      $container->get('language_manager'),
+      $container->get('plugin.manager.eu_oss_catalogue.hosting_platform'),
+      $container->get('http_client'),
+    );
   }
 
   /**
@@ -62,23 +81,10 @@ class AbsoluteUrlResolver extends DefaultResolver {
   /**
    * {@inheritdoc}
    */
-  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition): self {
-    return new static(
-      $configuration,
-      $plugin_id,
-      $plugin_definition,
-      $container->get('logger.channel.eu_oss_catalogue'),
-      $container->get('plugin.manager.eu_oss_catalogue.hosting_platform'),
-      $container->get('http_client'),
-    );
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function resolve(Project $project, array $metadata, FieldItemListInterface $fieldItemList): array {
-    if (!$paths = parent::resolve($project, $metadata, $fieldItemList)) {
-      return [];
+  public function resolve(?array &$value, Project $project, array $metadata, FieldItemListInterface $fieldItemList): void {
+    parent::resolve($value, $project, $metadata, $fieldItemList);
+    if (!$value) {
+      return;
     }
 
     $platformBaseUrl = $project->getHostingPlatformUrl();
@@ -88,12 +94,15 @@ class AbsoluteUrlResolver extends DefaultResolver {
     ]);
 
     $urls = [];
-    foreach ($paths as $path) {
-      $urls[] = $this->getAbsoluteUrl($project, $platform, $path);
+    foreach ($value as $langcode => $paths) {
+      foreach ($paths as $path) {
+        if ($absoluteUrl = $this->getAbsoluteUrl($project, $platform, $path)) {
+          $urls[$langcode][] = $absoluteUrl;
+        }
+      }
     }
 
-    // Filter out null URLs.
-    return array_filter($urls);
+    $value = $urls;
   }
 
   /**
