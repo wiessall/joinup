@@ -23,7 +23,7 @@ abstract class JoinupUrlGeneratorBase extends EntityUrlGenerator {
   public function getDataSets(): array {
     $data_sets = [];
     $sitemap_entity_types = $this->entityHelper->getSupportedEntityTypes();
-    $all_bundle_settings = $this->entitiesManager->setVariants($this->sitemap->id())->getAllBundleSettings();
+    $all_bundle_settings = $this->entitiesManager->setSitemaps($this->sitemap->id())->getAllBundleSettings();
     if (isset($all_bundle_settings[$this->sitemap->id()])) {
       foreach ($all_bundle_settings[$this->sitemap->id()] as $entity_type_name => $bundles) {
         if (!isset($sitemap_entity_types[$entity_type_name])) {

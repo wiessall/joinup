@@ -128,7 +128,6 @@ Feature: Sharing content between collections
     # I should still be on the same page, but the group content should be
     # changed. The "Interesting content" should no longer be visible.
     Then I should see the success message "Item was unshared from the following groups: Classic Rock."
-
     And the page should show only the tiles "New D'n'B compilation released, Rockabilly is still rocking"
 
     # Verify that the content is again shareable.

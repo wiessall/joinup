@@ -111,10 +111,9 @@ third_party_settings:
                 settings:
                   facet_id: category
                   use_label: true
-                  open_new: true
                 third_party_settings:
                   field_delimiter:
-                    delimiter: ','
+                    delimiter: ''
                   field_formatter_range:
                     order: 0
                     limit: 0
@@ -210,7 +209,6 @@ third_party_settings:
                 settings:
                   facet_id: source
                   use_label: false
-                  open_new: true
                 third_party_settings:
                   field_delimiter:
                     delimiter: ', '
@@ -278,7 +276,7 @@ third_party_settings:
             uuid: f6501de4-478f-49fe-adbb-2e541ba9d0c3
             region: aside
             configuration:
-              id: 'field_block:node:oss_solution:oss_documentation'
+              id: 'field_block:node:oss_solution:oss__documentation'
               label: Documentation
               label_display: '0'
               provider: layout_builder
@@ -312,7 +310,7 @@ third_party_settings:
             uuid: 7e17db81-4af4-4c6b-b6df-2b052f018e25
             region: first
             configuration:
-              id: 'field_block:node:oss_solution:oss_long_description'
+              id: 'field_block:node:oss_solution:oss__long_description'
               label: Description
               label_display: visible
               provider: layout_builder
@@ -340,7 +338,7 @@ third_party_settings:
             uuid: eb1487bc-7a20-40e5-9c0f-d4b997f0e11b
             region: second
             configuration:
-              id: 'field_block:node:oss_solution:oss_features'
+              id: 'field_block:node:oss_solution:oss__features'
               label: Features
               label_display: visible
               provider: layout_builder
@@ -380,7 +378,6 @@ third_party_settings:
                 settings:
                   facet_id: scope
                   use_label: true
-                  open_new: true
                 third_party_settings:
                   field_delimiter:
                     delimiter: ''
@@ -391,6 +388,20 @@ third_party_settings:
                   template_suggestion:
                     template_suggestion: ''
             weight: 1
+            additional: {  }
+          9568bae7-195f-4e8c-88ab-c963049f5e79:
+            uuid: 9568bae7-195f-4e8c-88ab-c963049f5e79
+            region: first
+            configuration:
+              id: custom_markup
+              label: Illustration
+              label_display: '0'
+              provider: custom_markup_block
+              context_mapping: {  }
+              markup:
+                value: '<div class="oss-solution__illustration"></div>'
+                format: full_html
+            weight: 0
             additional: {  }
         third_party_settings: {  }
       -
@@ -417,7 +428,7 @@ third_party_settings:
       -
         layout_id: joinup_layout_four_column_grid
         layout_settings:
-          label: 'Detalied information'
+          label: 'Detailed information'
           context_mapping: {  }
         components:
           bccc0ab9-3d36-4077-a0f9-411649036a9b:
@@ -591,7 +602,7 @@ third_party_settings:
             region: content
             configuration:
               id: 'field_block:node:oss_solution:oss_maintenance_contractors'
-              label: 'Maintenance contractors'
+              label: 'Technical Maintainers'
               label_display: '0'
               provider: layout_builder
               context_mapping:
@@ -618,7 +629,7 @@ third_party_settings:
             region: content
             configuration:
               id: 'field_block:node:oss_solution:oss_maintenance_contacts'
-              label: 'Maintenance contacts'
+              label: 'Technical Contacts'
               label_display: '0'
               provider: layout_builder
               context_mapping:
@@ -678,7 +689,7 @@ third_party_settings:
             uuid: 47b9fb75-bf99-42bc-b2a4-31851abf70f6
             region: content
             configuration:
-              id: 'field_block:node:oss_solution:oss_screenshots'
+              id: 'field_block:node:oss_solution:oss__screenshots'
               label: Gallery
               label_display: visible
               provider: layout_builder
@@ -715,6 +726,11 @@ hidden:
   description: true
   langcode: true
   links: true
+  oss__documentation: true
+  oss__features: true
+  oss__long_description: true
+  oss__screenshots: true
+  oss__short_description: true
   oss_available_languages: true
   oss_categories: true
   oss_default_branch: true

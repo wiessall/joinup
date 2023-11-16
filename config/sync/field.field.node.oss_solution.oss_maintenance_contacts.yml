@@ -9,15 +9,16 @@ dependencies:
 third_party_settings:
   eu_oss_catalogue:
     publiccode_yml:
-      resolver: contact
-      config:
-        path: maintenance/contacts
-        node_type: oss_contact
+      resolvers:
+        - plugin: contact
+          config:
+            path: maintenance/contacts
+            node_type: oss_contact
 id: node.oss_solution.oss_maintenance_contacts
 field_name: oss_maintenance_contacts
 entity_type: node
 bundle: oss_solution
-label: 'Maintenance contacts'
+label: 'Technical Contacts'
 description: 'Contacts maintaining this software'
 required: false
 translatable: false

@@ -7,10 +7,15 @@
 
 declare(strict_types = 1);
 
+use Drupal\Core\Entity\EntityTypeInterface;
+use Drupal\Core\Field\BaseFieldDefinition;
+use Drupal\Core\Field\FieldDefinitionInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\eu_oss_catalogue\Entity\OssContact;
 use Drupal\eu_oss_catalogue\Entity\OssContractor;
 use Drupal\eu_oss_catalogue\Entity\OssSolution;
+use Drupal\eu_oss_catalogue\Plugin\Field\RelevantField;
+use Drupal\eu_oss_catalogue\Plugin\Field\RelevantLanguageCode;
 
 /**
  * Implements hook_entity_bundle_info_alter().
@@ -45,19 +50,73 @@ function eu_oss_catalogue_form_views_exposed_form_alter(array &$form, FormStateI
 }
 
 /**
- * Implements hook_views_data_alter().
+ * Implements hook_entity_bundle_field_info().
  */
-function eu_oss_catalogue_views_data_alter(array &$data): void {
-  /** @var \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager */
-  $entityTypeManager = Drupal::service('entity_type.manager');
+function eu_oss_catalogue_entity_bundle_field_info(EntityTypeInterface $entityType, string $bundle): array {
+  $fields = [];
+  if ($entityType->id() === 'node' && $bundle === 'oss_solution') {
+    $fields['description'] = BaseFieldDefinition::create('string_long')
+      ->setLabel(t('Short description'))
+      ->setComputed(TRUE)
+      ->setDisplayConfigurable('view', TRUE)
+      ->setSetting(
+        RelevantField::SOURCE_FIELDS_SETTING_KEY,
+        [
+          'oss_short_description',
+          'oss_git_description',
+        ]
+      )
+      ->setClass(RelevantField::class);
+  }
+  return $fields;
+}
 
-  foreach ($entityTypeManager->getDefinitions() as $entity_info) {
-    $data[$entity_info->getBaseTable()]['translation_list'] = [
-      'title' => 'Translation list',
-      'help' => t('Displays all available translations.'),
-      'field' => [
-        'id' => 'translation_list',
-      ],
-    ];
+/**
+ * Implements hook_entity_bundle_field_info_alter().
+ */
+function eu_oss_catalogue_entity_bundle_field_info_alter(array &$fields, EntityTypeInterface $entityType, string $bundle): void {
+  if ($entityType->id() !== 'node' || $bundle !== 'oss_solution') {
+    return;
+  }
+
+  $computedFieldCandidates = array_filter(
+    $fields,
+    function (FieldDefinitionInterface $definition) {
+      // Include every translatable field which is not computed and can be
+      // configured on entity view display.
+      return $definition->isTranslatable()
+        && !$definition->isComputed()
+        && $definition->isDisplayConfigurable('view')
+        // Short description already has a relevant field with fallback.
+        && $definition->getName() !== 'oss_short_description';
+    }
+  );
+
+  // If there are field candidates, also add the richest language code computed
+  // field.
+  if (!empty($computedFieldCandidates)) {
+    $fields[RelevantLanguageCode::FIELD_NAME] = BaseFieldDefinition::create('language')
+      ->setLabel(t('Relevant language code'))
+      ->setComputed(TRUE)
+      ->setClass(RelevantLanguageCode::class);
+  }
+
+  // Create a computed field for every translatable fields which than will
+  // display the field value fetched from the richest language code.
+  foreach ($computedFieldCandidates as $originalFieldName => $fieldDefinition) {
+    \assert($fieldDefinition instanceof FieldDefinitionInterface);
+    $computedName = preg_replace('#^oss_(.*)$#', 'oss__$1', $originalFieldName);
+
+    // Field config labels have the " [stored]" suffix, what we remove here.
+    // This original label might be a string or a (translsatable)
+    // MarkupInterface.
+    $relevantLabel = preg_replace('/ \[stored\]/', '', (string) $fieldDefinition->getLabel());
+    $fields[$computedName] = BaseFieldDefinition::createFromFieldStorageDefinition($fieldDefinition->getFieldStorageDefinition())
+      ->setName($computedName)
+      ->setLabel($relevantLabel)
+      ->setSetting(RelevantField::SOURCE_FIELDS_SETTING_KEY, [$originalFieldName])
+      ->setComputed(TRUE)
+      ->setDisplayConfigurable('view', TRUE)
+      ->setClass(RelevantField::class);
   }
 }
