@@ -9,11 +9,12 @@ dependencies:
 third_party_settings:
   eu_oss_catalogue:
     publiccode_yml:
-      resolver: taxonomy_term
-      config:
-        path: legal/license
-        vid: oss_licence
-        controlled: true
+      resolvers:
+        - plugin: taxonomy_term
+          config:
+            path: legal/license
+            vid: oss_licence
+            controlled: true
 id: node.oss_solution.oss_license
 field_name: oss_license
 entity_type: node

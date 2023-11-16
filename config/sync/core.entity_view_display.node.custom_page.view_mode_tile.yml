@@ -43,7 +43,7 @@ content:
     type: filtered_entity_reference_bundles
     label: hidden
     settings:
-      view_mode: tile
+      view_mode: default
       link: ''
       filtered_entity_bundles:
         - simple_paragraph
@@ -56,7 +56,7 @@ content:
         limit: 0
         offset: 0
       template_suggestion:
-        template_suggestion: bare
+        template_suggestion: ''
     weight: 1
     region: content
   flag_like_node:
