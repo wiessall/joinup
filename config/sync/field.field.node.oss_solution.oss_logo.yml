@@ -10,11 +10,12 @@ dependencies:
 third_party_settings:
   eu_oss_catalogue:
     publiccode_yml:
-      resolver: absolute_url
-      config:
-        path: logo
-        override: resolved_not_empty
-        verify: true
+      override: resolved_not_empty
+      resolvers:
+        - plugin: absolute_url
+          config:
+            path: logo
+            verify: true
 id: node.oss_solution.oss_logo
 field_name: oss_logo
 entity_type: node
