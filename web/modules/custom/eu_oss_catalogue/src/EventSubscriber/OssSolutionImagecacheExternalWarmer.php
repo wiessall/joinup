@@ -36,7 +36,7 @@ class OssSolutionImagecacheExternalWarmer implements EventSubscriberInterface {
   ) {}
 
   /**
-   * Removes translations of the solution being saved.
+   * Queues new image URLs to be downloaded by the image cache warmer queue.
    *
    * @param \Drupal\eu_oss_catalogue\Event\EuOssSolutionPreSaveEvent $event
    *   The solution presave event.
