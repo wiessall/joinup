@@ -221,6 +221,7 @@ drupal:
           'memcache_admin',
           'og_ui',
           'page_manager_ui',
+          'stage_file_proxy',
           'update',
           'upgrade_status',
           'views_ui',

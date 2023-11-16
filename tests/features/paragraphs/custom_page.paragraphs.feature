@@ -155,3 +155,17 @@ Feature:
     When I am an anonymous user
     And I visit the "Popular quotes" custom page
     Then the page should contain the html text "That's one small step for a man, a giant leap for mankind."
+
+  @javascript
+  Scenario: Custom page content is trimmed properly.
+    Given custom_page content:
+      | title          | collection            | state     |
+      | Popular quotes | Paragraphs collection | published |
+    And I append "text" to "field_paragraphs_body" field in "node" entity with following "Popular Quotes" title:
+      | field_body:value  |     That's one small step for a man, a giant leap for mankind. |
+      | field_body:format | text_html                                                      |
+    When I am an anonymous user
+    And I am on the homepage
+    And I enter "mankind" in the search bar and press enter
+    # Regression test that text is trimmed properly.
+    Then the response should contain ">That's one small step for a man, a giant leap for mankind.<"
