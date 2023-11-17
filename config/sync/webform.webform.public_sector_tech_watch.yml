@@ -98,7 +98,6 @@ elements: |-
           '#title': 'Public sector organisation'
           '#description': 'Please provide the name of the public sector organisation where the technology is used'
         at_which_level_is_the_responsible:
-          '#wrapper_type': form_element
           '#type': webform_checkboxes_other
           '#options':
             'Central Government': 'Central Government'
@@ -108,6 +107,7 @@ elements: |-
             'Community led': 'Community led'
             'Consortium (e.g. EU-financed project)': 'Consortium (e.g. EU-financed project)'
           '#title': 'At which level is the responsible organisation operating?'
+          '#wrapper_type': form_element
           '#other__option_label': 'Other (please specify)'
     geographical_extent_country:
       '#type': webform_custom_composite
