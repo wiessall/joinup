@@ -379,7 +379,7 @@ settings:
   form_reset: false
   form_access_denied: message
   form_access_denied_title: ''
-  form_access_denied_message: '<p>Access denied access to this webform.</p>'
+  form_access_denied_message: '<p>Please <a href="/caslogin?destination=[current-page:url:path]">login</a> to access the form.</p>'
   form_access_denied_attributes: {  }
   form_file_limit: ''
   form_attributes: {  }
@@ -445,7 +445,7 @@ settings:
   draft_loaded_message: ''
   draft_pending_single_message: ''
   draft_pending_multiple_message: ''
-  confirmation_type: inline
+  confirmation_type: message
   confirmation_url: ''
   confirmation_title: ''
   confirmation_message: '<p>Your use case has been submitted successfully. Soon you will be informed by the Public Sector Tech Watch team about the next steps.</p>'
