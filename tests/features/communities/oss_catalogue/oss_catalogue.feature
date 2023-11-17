@@ -31,7 +31,7 @@ Feature:
 
     And I should see the following headings:
       | Discover our initiative                           |
-      | Most recent open source software solutions        |
+      | Most recent solutions                             |
       | Do you want to publish your open source solution? |
       | Let’s start with your software name               |
       | Frequently Asked Questions (FAQ)                  |
