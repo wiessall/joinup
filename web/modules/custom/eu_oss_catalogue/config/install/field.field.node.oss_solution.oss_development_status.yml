@@ -9,9 +9,10 @@ dependencies:
 third_party_settings:
   eu_oss_catalogue:
     publiccode_yml:
-      resolver: default
-      config:
-        path: developmentStatus
+      resolvers:
+        - plugin: default
+          config:
+            path: developmentStatus
 id: node.oss_solution.oss_development_status
 field_name: oss_development_status
 entity_type: node
