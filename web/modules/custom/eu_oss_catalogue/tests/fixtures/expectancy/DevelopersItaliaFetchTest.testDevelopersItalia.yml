@@ -1,4 +1,4 @@
-Solution 1:
+GitHub solution 1:
   en:
     langcode: en
     default_langcode: '1'
@@ -8,17 +8,11 @@ Solution 1:
       - en
       - de
     oss_categories:
-      - data-collection
       - digital-citizenship
     oss_development_status: stable
-    oss_features:
-      - '[EN] Solution 1: Feature 1'
-      - '[EN] Solution 1: Feature 2'
-      - '[EN] Solution 1: Feature 3'
     oss_git_url: https://github.com/dummy-namespace-1/dummy-name-1
     oss_license: AGPL-3.0-or-later
-    oss_logo: https://github.com/dummy-namespace-1/dummy-name-1/images/the-logo.svg
-    oss_long_description: '[EN] Solution 1: Long description'
+    oss_logo: https://raw.githubusercontent.com/dummy-namespace-1/dummy-name-1/HEAD/images/logo-solution-1.png
     oss_maintenance_contacts:
       - Peter Gregory
     oss_maintenance_contractors:
@@ -29,54 +23,30 @@ Solution 1:
     oss_platforms:
       - web
     oss_publiccode_yml_version: '0.2'
-    oss_release_date: '2023-07-07'
-    oss_screenshots:
-      - Solution_1_EN_Screenshot1.jpg
-    oss_short_description: '[EN] Solution 1: Short description'
+    oss_release_date: '2023-04-19'
     oss_software_type:
       - standalone/web
-    oss_software_version: '1.0.0.0'
+    oss_software_version: '2.3.0'
     oss_source:
       - developers_italia
-    oss_source_hash: '8IXnFXTZRSLTEDs6yeogrT2hjjhOsV1mMuNAN5yYnUY'
+    oss_source_hash: 'TqfnkBSv5JPJFG3GaA0AogZbcRgNHjoMXfQR3Vkm4Vc'
+    oss_long_description: '[EN] Solution 1: Long description'
+    oss_short_description: '[EN] Solution 1: Short description'
+    oss_features:
+      - '[EN] Solution 1: Feature 1'
+      - '[EN] Solution 1: Feature 2'
+      - '[EN] Solution 1: Feature 3'
+    oss_screenshots:
+      - Solution_1_EN_Screenshot1.jpg
   de:
     langcode: de
     default_langcode: '0'
     oss_features:
       - '[DE] Solution 1: Feature 1'
     oss_long_description: '[DE] Solution 1: Long description'
+    oss_short_description: '[DE] Solution 1: Short description'
     oss_screenshots:
       - Solution_1_DE_Screenshot1.jpg
-    oss_short_description: '[DE] Solution 1: Short description'
-    status: '1'
-    oss_available_languages:
-      - it
-      - en
-      - de
-    oss_categories:
-      - data-collection
-      - digital-citizenship
-    oss_development_status: stable
-    oss_git_url: https://github.com/dummy-namespace-1/dummy-name-1
-    oss_license: AGPL-3.0-or-later
-    oss_logo: https://github.com/dummy-namespace-1/dummy-name-1/images/the-logo.svg
-    oss_maintenance_contacts:
-      - Peter Gregory
-    oss_maintenance_contractors:
-      - ACME Ltd
-      - Das Auto GmbH
-    oss_maintenance_type: contract
-    oss_owner: Sin City
-    oss_platforms:
-      - web
-    oss_publiccode_yml_version: '0.2'
-    oss_release_date: '2023-07-07'
-    oss_software_type:
-      - standalone/web
-    oss_software_version: '1.0.0.0'
-    oss_source:
-      - developers_italia
-    oss_source_hash: '8IXnFXTZRSLTEDs6yeogrT2hjjhOsV1mMuNAN5yYnUY'
   it:
     langcode: it
     default_langcode: '0'
@@ -84,58 +54,80 @@ Solution 1:
       - '[IT] Solution 1: Feature 1'
       - '[IT] Solution 1: Feature 2'
     oss_long_description: '[IT] Solution 1: Long description'
+    oss_short_description: '[IT] Solution 1: Short description'
     oss_screenshots:
       - Solution_1_IT_Screenshot1.jpg
-    oss_short_description: '[IT] Solution 1: Short description'
-    status: '1'
-    oss_available_languages:
-      - it
-      - en
-      - de
+
+Project 1.1:
+  it:
+    langcode: it
+    default_langcode: '0'
     oss_categories:
       - data-collection
-      - digital-citizenship
-    oss_development_status: stable
-    oss_git_url: https://github.com/dummy-namespace-1/dummy-name-1
-    oss_license: AGPL-3.0-or-later
-    oss_logo: https://github.com/dummy-namespace-1/dummy-name-1/images/the-logo.svg
-    oss_maintenance_contacts:
-      - Peter Gregory
-    oss_maintenance_contractors:
-      - ACME Ltd
-      - Das Auto GmbH
-    oss_maintenance_type: contract
-    oss_owner: Sin City
-    oss_platforms:
-      - web
+    oss_git_url: https://limited.self-hosted.gitlab.example.com/group1/project-1-1
+    oss_git_description: 'Group 1: Project 1: description'
+    oss_default_branch: branch-project-1-1
+    oss_software_version: '2.0.0-alpha12'
+    oss_release_date: '2010-07-08'
+    oss_platform_reference: gid://gitlab/Project/11
+    oss_logo: https://limited.self-hosted.gitlab.example.com/group1/project-1-1/raw/HEAD/images/logo-of-project-1-1.svg
     oss_publiccode_yml_version: '0.2'
-    oss_release_date: '2023-07-07'
-    oss_software_type:
-      - standalone/web
-    oss_software_version: '1.0.0.0'
-    oss_source:
-      - developers_italia
-    oss_source_hash: '8IXnFXTZRSLTEDs6yeogrT2hjjhOsV1mMuNAN5yYnUY'
+    oss_documentation: https://example.com/group1/project-1-1/it/docs.md
+    oss_features:
+      - '[IT] feat 1'
+      - '[IT] feat 2'
+      - '[IT] feat 3'
+    oss_long_description: '[IT] Group1: Project 1: Long description'
+    oss_short_description: '[IT] Group1: Project 1: Short description'
+  de:
+    langcode: de
+    oss_documentation: https://example.com/group1/project-1-1/de/docs.md
+    oss_features:
+      - '[DE] feat 1'
+      - '[DE] feat 2'
+    oss_long_description: '[DE] Group1: Project 1: Long description'
+    oss_short_description: '[DE] Group1: Project 1: Short description'
 
-ACME Ltd:
+Project 1.2:
+  de:
+    langcode: de
+    default_langcode: '0'
+    oss_categories:
+      - data-collection
+      - data-analytics
+    oss_git_url: https://limited.self-hosted.gitlab.example.com/group1/project-1-2
+    oss_git_description: 'Group 1: Project 2: description'
+    oss_default_branch: branch-project-1-2
+    oss_software_version: '220.0.1'
+    oss_release_date: '2013-08-19'
+    oss_platform_reference: gid://gitlab/Project/12
+    oss_logo: https://all.self-hosted.gitlab.example.com/uploads/-/system/project/avatar/12/logo.jpg
+    oss_publiccode_yml_version: '0.2'
+    oss_documentation: https://example.com/group1/project-1-2/de/docs.md
+    oss_features:
+      - '[DE] feat 1'
+      - '[DE] feat 2'
+    oss_long_description: '[DE] Group1: Project 2: Long description'
+    oss_short_description: '[DE] Group1: Project 2: Short description'
+  it:
+    langcode: it
+    default_langcode: '0'
+    oss_documentation: https://example.com/group1/project-1-2/it/docs.md
+    oss_features:
+      - '[IT] feat 1'
+      - '[IT] feat 2'
+    oss_long_description: '[IT] Group1: Project 2: Long description'
+    oss_short_description: '[IT] Group1: Project 2: Short description'
   en:
-    oss_contractor_until: '2023-12-31'
-    oss_contractor_email: acme@example.com
-    oss_contractor_website: http://www.example.com/acme
+    langcode: en
+    default_langcode: '1'
+    oss_documentation: https://example.com/group1/project-1-2/en/docs.md
+    oss_features:
+      - '[EN] feat 1'
+    oss_long_description: '[EN] Group1: Project 2: Long description'
+    oss_short_description: '[EN] Group1: Project 2: Short description'
 
-Das Auto GmbH:
-  en:
-    oss_contractor_until: '2023-11-12'
-    oss_contractor_email: das-auto@example.com
-    oss_contractor_website: http://www.example.com/auto
-
-Peter Gregory:
-  en:
-    oss_contact_email: pieter@raviga.com
-    oss_contact_phone: RESERVED@
-    oss_contact_affiliation: Pied Piper
-
-Solution 2:
+GitHub solution 2:
   en:
     langcode: en
     status: '1'
@@ -215,14 +207,41 @@ Solution 2:
       - developers_italia
     oss_source_hash: 'WWiM57kppAUvDQdo2IiW1C9qh_Jdfzm8daYXeeS9IzU'
 
-FOSS Conference:
+Project 1:
   en:
-    oss_contact_email: foss@example.com
-    oss_contact_phone: '0040675555453'
-    oss_contact_affiliation: OSS Affiliation
+    oss_git_url: https://limited.self-hosted.gitlab.example.com/user1/project-1
+    oss_git_description: 'User 1: Project 1: description'
+    oss_default_branch: branch-project-1
+    oss_software_version: '1.0.x-dev'
+    oss_release_date: '2020-10-22'
+    oss_platform_reference: gid://gitlab/Project/1
+    oss_publiccode_yml_version: '0.2'
 
-Pirate Initiative:
+ACME Ltd:
   en:
-    oss_contact_email: pirate@example.com
-    oss_contact_phone: '0049689887764'
-    oss_contact_affiliation: On The Sea
+    oss_contractor_until: '2023-12-31'
+    oss_contractor_email: acme@example.com
+    oss_contractor_website: http://www.example.com/acme
+
+Das Auto GmbH:
+  en:
+    oss_contractor_until: '2023-11-12'
+    oss_contractor_email: das-auto@example.com
+    oss_contractor_website: http://www.example.com/auto
+
+Peter Gregory:
+  en:
+    oss_contact_email: pieter@raviga.com
+    oss_contact_phone: RESERVED@
+    oss_contact_affiliation: Pied Piper
+
+Big Brother:
+  en:
+    oss_contact_email: bbrother@example.com
+    oss_contact_phone: '+000000000'
+
+John Doe:
+  en: [  ]
+
+Jane Roe:
+  en: [  ]

@@ -10,9 +10,10 @@ dependencies:
 third_party_settings:
   eu_oss_catalogue:
     publiccode_yml:
-      resolver: default
-      config:
-        path: softwareType
+      resolvers:
+        - plugin: default
+          config:
+            path: softwareType
 id: node.oss_solution.oss_software_type
 field_name: oss_software_type
 entity_type: node
