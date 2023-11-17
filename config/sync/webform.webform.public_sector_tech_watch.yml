@@ -25,6 +25,7 @@ elements: |-
     '#type': webform_section
     '#title': 'Submitter information'
     '#description': '<p>Prefilled fields are inherited from your account as “Joinup registered user”</p>'
+    '#title_tag': h3
     flexbox_01:
       '#type': webform_flexbox
       '#attributes':
@@ -56,6 +57,7 @@ elements: |-
   case_information:
     '#type': webform_section
     '#title': 'Case Information'
+    '#title_tag': h3
     flexbox_03:
       '#type': webform_flexbox
       '#attributes':
@@ -328,6 +330,7 @@ elements: |-
   terms_and_conditions:
     '#type': webform_section
     '#title': 'Terms and Conditions'
+    '#title_tag': h3
     i_have_read_and_agreed_to_the_joinup_legal_notice:
       '#type': checkbox
       '#title': 'I have read and agreed to the <a href="/joinup/legal-notice">Joinup Legal Notice</a> and <a href="/collection/joinup/specific-privacy-statement">the Joinup Privacy Statement</a>.'
@@ -338,6 +341,7 @@ elements: |-
   send_yourself_a_copy:
     '#type': webform_section
     '#title': 'Send yourself a copy'
+    '#title_tag': h3
     send_me_an_email:
       '#type': checkbox
       '#title': 'Send me an email with a copy of this form'
@@ -535,7 +539,7 @@ handlers:
     settings:
       states:
         - completed
-      to_mail: DIGIT-PUBLIC-SECTOR-TECH-WATCH@ec.europa.eu
+      to_mail: digit-public-sector-tech-watch@ec.europa.eu
       to_options: {  }
       bcc_mail: ''
       bcc_options: {  }
@@ -549,14 +553,14 @@ handlers:
       sender_mail: ''
       sender_name: ''
       subject: _default
-      body: '<p>Dear Public Sector Tech Watch team,</p><p>Submitted on [webform_submission:created]</p><p>Submitted by: [webform_submission:user]</p><p>Submitted values are:</p><p>[webform_submission:values]</p><p>Please for your actions.</p><p>Kind regards, The Joinup Support Team</p>'
+      body: '<p><strong>Dear Public Sector Tech Watch team,</strong></p><p><strong>[webform_submission:user] has submitted at [webform_submission:created] the following use case "[webform_submission:values:case_title:raw]"</strong></p><p>&nbsp;</p><p>[webform_submission:values]</p><p>&nbsp;</p><p><strong>Please for your actions.</strong></p><p><strong>Kind regards, The Joinup Support Team</strong></p>'
       excluded_elements: {  }
       ignore_access: false
       exclude_empty: true
       exclude_empty_checkbox: false
       exclude_attachments: false
       html: true
-      attachments: false
+      attachments: true
       twig: false
       theme_name: ''
       parameters: {  }
@@ -575,7 +579,7 @@ handlers:
     settings:
       states:
         - completed
-      to_mail: '[webform_submission:values:contact_email:raw]'
+      to_mail: '[current-user:mail]'
       to_options: {  }
       bcc_mail: ''
       bcc_options: {  }
@@ -589,14 +593,14 @@ handlers:
       sender_mail: ''
       sender_name: ''
       subject: _default
-      body: _default
+      body: '<p><strong>Dear [webform_submission:user],</strong></p><p><strong>Here is the copy of your case submission:</strong></p><p>[webform_submission:values]</p><p>&nbsp;</p><p><strong>Kind regards,&nbsp;</strong></p><p><strong>The Joinup Support Team</strong></p>'
       excluded_elements: {  }
       ignore_access: false
       exclude_empty: true
       exclude_empty_checkbox: false
       exclude_attachments: false
       html: true
-      attachments: false
+      attachments: true
       twig: false
       theme_name: ''
       parameters: {  }
