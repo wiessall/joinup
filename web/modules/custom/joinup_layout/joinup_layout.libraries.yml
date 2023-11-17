@@ -10,15 +10,10 @@ twocolfooter_onecol_67_33:
     theme:
       layouts/twocolfooter-onecol-67-33/twocolfooter_onecol_67_33.css: {}
 
-oss_header:
+oss_heading:
   css:
     layout:
-      layouts/oss-header/oss-header.layout.css: {}
-
-oss_details:
-  css:
-    layout:
-      layouts/oss-details/oss-details.layout.css: {}
+      layouts/oss-heading/oss-heading.css: { }
 
 four_column_grid:
   css:
