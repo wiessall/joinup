@@ -11,7 +11,6 @@ dependencies:
     - linkit
     - media
     - oe_webtools_cookie_consent
-    - video_embed_wysiwyg
 name: 'Stripped HTML'
 format: stripped_html
 weight: 0
@@ -123,12 +122,6 @@ filters:
       allowed_media_types:
         ec_videos: ec_videos
         remote_videos: remote_videos
-  video_embed_wysiwyg:
-    id: video_embed_wysiwyg
-    provider: video_embed_wysiwyg
-    status: false
-    weight: -40
-    settings: {  }
   filter_image_lazy_load:
     id: filter_image_lazy_load
     provider: filter
