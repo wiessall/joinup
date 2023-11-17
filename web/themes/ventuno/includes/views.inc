@@ -60,6 +60,15 @@ function ventuno_theme_suggestions_views_view_fields_alter(array &$suggestions, 
 }
 
 /**
+ * Implements hook_preprocess_HOOK() for "views_view".
+ */
+function ventuno_preprocess_views_view(array &$variables): void {
+  if ($displayTitle = $variables['view']->getDisplay()->getOption('title')) {
+    $variables['display_title'] = $displayTitle;
+  }
+}
+
+/**
  * Implements hook_preprocess_views_view_unformatted().
  */
 function ventuno_preprocess_views_view_unformatted(array &$variables): void {
