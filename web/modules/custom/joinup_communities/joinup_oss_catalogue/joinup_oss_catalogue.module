@@ -156,7 +156,7 @@ function joinup_oss_catalogue_preprocess_node(array &$variables): void {
 }
 
 /**
- * Implements template_preprocess_HOOK() for "image_style".
+ * Implements hook_preprocess_HOOK() for "image_style".
  *
  * Makes SVG file assets visible even if they are formatted as image styles.
  *
