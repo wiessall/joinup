@@ -154,3 +154,28 @@ function joinup_oss_catalogue_preprocess_node(array &$variables): void {
     $variables['content']['report']['#access'] = FALSE;
   }
 }
+
+/**
+ * Implements template_preprocess_HOOK() for "image_style".
+ *
+ * Makes SVG file assets visible even if they are formatted as image styles.
+ *
+ * @see template_preprocess_image_style()
+ */
+function joinup_oss_catalogue_preprocess_image_style(array &$variables): void {
+  // Early return of the image is accessible or if the URI os empty.
+  if (
+    !isset($variables['image']['#access']) ||
+    $variables['image']['#access'] ||
+    empty($variables['image']['#uri'])
+  ) {
+    return;
+  }
+
+  // If the file's extension from the given URI is string, we make the markup
+  // visible by removing the "#access" key.
+  $assetExtension = strtolower(pathinfo($variables['image']['#uri'], PATHINFO_EXTENSION));
+  if ($assetExtension === 'svg') {
+    unset($variables['image']['#access']);
+  }
+}
