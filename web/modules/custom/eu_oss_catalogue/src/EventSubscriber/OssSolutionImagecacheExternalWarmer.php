@@ -4,10 +4,11 @@ declare(strict_types = 1);
 
 namespace Drupal\eu_oss_catalogue\EventSubscriber;
 
-use Drupal\Core\Entity\ContentEntityInterface;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Field\FieldItemInterface;
 use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Queue\QueueFactory;
+use Drupal\eu_oss_catalogue\Entity\OssSolutionInterface;
 use Drupal\eu_oss_catalogue\Event\EuOssSolutionPreSaveEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
@@ -23,6 +24,7 @@ class OssSolutionImagecacheExternalWarmer implements EventSubscriberInterface {
    */
   const FIELDS = [
     'oss_logo',
+    'oss_screenshots',
   ];
 
   /**
@@ -30,9 +32,12 @@ class OssSolutionImagecacheExternalWarmer implements EventSubscriberInterface {
    *
    * @param \Drupal\Core\Queue\QueueFactory $queueFactory
    *   The queue factory service.
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
+   *   The entity type manager.
    */
   public function __construct(
     protected QueueFactory $queueFactory,
+    protected EntityTypeManagerInterface $entityTypeManager
   ) {}
 
   /**
@@ -56,35 +61,25 @@ class OssSolutionImagecacheExternalWarmer implements EventSubscriberInterface {
   /**
    * Returns the main values of changed field items in a content entity.
    *
-   * @param \Drupal\Core\Entity\ContentEntityInterface $entity
-   *   The entity to parse.
+   * This method only parses the "relevant" entity translation.
+   *
+   * @param \Drupal\eu_oss_catalogue\Entity\OssSolutionInterface $ossSolution
+   *   The OSS solution entity to parse.
    *
    * @return string[]
    *   The new main values of the fields in static::FIELDS, across all
    *   translations.
    */
-  protected function getChangedFileValues(ContentEntityInterface $entity): array {
+  protected function getChangedFileValues(OssSolutionInterface $ossSolution): array {
     $fileUrisToFetch = [];
-    $translatableFields = $entity->getTranslatableFields();
+    $relevantTranslation = $ossSolution->getTranslation($ossSolution->getRelevantLangCode());
     foreach (static::FIELDS as $fieldName) {
-      if (!array_key_exists($fieldName, $translatableFields)) {
-        $fileUrisToFetch = array_unique(
-          array_merge(
-            $fileUrisToFetch,
-            $this->getChangedValuesFromField($entity, $fieldName)
-          )
-        );
-        continue;
-      }
-
-      foreach ($entity->getTranslationLanguages() as $languageCode) {
-        $fileUrisToFetch = array_unique(
-          array_merge(
-            $fileUrisToFetch,
-            $this->getChangedValuesFromField($entity->getTranslation($languageCode), $fieldName)
-          )
-        );
-      }
+      $fileUrisToFetch = array_unique(
+        array_merge(
+          $fileUrisToFetch,
+          $this->getChangedValuesFromField($relevantTranslation, $fieldName)
+        )
+      );
     }
     return $fileUrisToFetch;
   }
@@ -92,7 +87,7 @@ class OssSolutionImagecacheExternalWarmer implements EventSubscriberInterface {
   /**
    * Returns the main values of a changed field items of a field.
    *
-   * @param \Drupal\Core\Entity\ContentEntityInterface $entity
+   * @param \Drupal\eu_oss_catalogue\Entity\OssSolutionInterface $ossSolution
    *   The host entity of the field.
    * @param string $fieldName
    *   The name of the field.
@@ -100,19 +95,18 @@ class OssSolutionImagecacheExternalWarmer implements EventSubscriberInterface {
    * @return string[]
    *   The new main values of the field.
    */
-  protected function getChangedValuesFromField(ContentEntityInterface $entity, string $fieldName): array {
-    if (!$entity->hasField($fieldName) || ($field = $entity->get($fieldName))->isEmpty()) {
+  protected function getChangedValuesFromField(OssSolutionInterface $ossSolution, string $fieldName): array {
+    if (!$ossSolution->hasField($fieldName) || ($field = $ossSolution->get($fieldName))->isEmpty()) {
       return [];
     }
 
-    $original = isset($entity->original) && $entity->original->hasTranslation($entity->language()->getId())
-      ? $entity->original->getTranslation($entity->language()->getId())
-      : NULL;
+    $original = $this->getOriginal($ossSolution);
     $originalFieldIsEmpty = !isset($original) || $original->get($fieldName)->isEmpty();
+    $originalField = $original?->get($fieldName);
 
     if (
-      $originalFieldIsEmpty
-      || $field->hasAffectingChanges($originalField = $original->get($fieldName))
+      $originalFieldIsEmpty ||
+      $field->hasAffectingChanges($originalField, $ossSolution->language()->getId())
     ) {
       $originalValues = $originalFieldIsEmpty
         ? []
@@ -144,6 +138,30 @@ class OssSolutionImagecacheExternalWarmer implements EventSubscriberInterface {
       $values[] = $mainValue;
     }
     return $values;
+  }
+
+  /**
+   * Returns the previous version of the OSS Solution object.
+   *
+   * @param \Drupal\eu_oss_catalogue\Entity\OssSolutionInterface $ossSolution
+   *   The OSS solution.
+   *
+   * @return \Drupal\eu_oss_catalogue\Entity\OssSolutionInterface|null
+   *   The previous OSS solution object, if it exists.
+   */
+  protected function getOriginal(OssSolutionInterface $ossSolution): ?OssSolutionInterface {
+    if ($ossSolution->isNew()) {
+      return NULL;
+    }
+    $languageCode = $ossSolution->language()->getId();
+    $original = $this->entityTypeManager
+      ->getStorage($ossSolution->getEntityTypeId())
+      ->loadUnchanged($ossSolution->id());
+    \assert($original instanceof OssSolutionInterface);
+    $originalTranslation = $original->hasTranslation($languageCode)
+      ? $original->getTranslation($languageCode)
+      : NULL;
+    return $originalTranslation;
   }
 
   /**

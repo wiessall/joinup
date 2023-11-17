@@ -29,7 +29,8 @@ class EuOssCatalogueServiceProvider implements ServiceProviderInterface {
         OssSolutionImagecacheExternalWarmer::class
       )
       ->addTag('event_subscriber')
-      ->addArgument(new Reference('queue'));
+      ->addArgument(new Reference('queue'))
+      ->addArgument(new Reference('entity_type.manager'));
   }
 
 }

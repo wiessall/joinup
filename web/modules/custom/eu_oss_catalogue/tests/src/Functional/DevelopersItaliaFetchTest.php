@@ -14,6 +14,13 @@ class DevelopersItaliaFetchTest extends FetchTestBase {
   /**
    * {@inheritdoc}
    */
+  protected static $modules = [
+    'imagecache_external',
+  ];
+
+  /**
+   * {@inheritdoc}
+   */
   protected array $controlledVocabTerms = [
     'oss_licence' => ['AGPL-3.0-or-later', 'BSD-3-Clause', 'EUPL-1.2', 'MIT'],
     'oss_category' => [
@@ -60,7 +67,7 @@ class DevelopersItaliaFetchTest extends FetchTestBase {
     $this->assertFalse($this->getNodeByTitle('GitHub solution 1'));
     $updatedSolution = $this->getNodeByTitle('GitHub solution 1 (updated)', TRUE);
     $this->assertSame('3.0.0', $updatedSolution->get('oss_software_version')->value);
-    $this->assertSame('WENCBNivEyx0MHgtNiS1ACZZrhbTT4p0nigSNGV3TVg', $updatedSolution->get('oss_source_hash')->value);
+    $this->assertSame('u9WPwFCMk8uPJGXy1k4AFjiYcnEkzcWwP-ABUq-6DsE', $updatedSolution->get('oss_source_hash')->value);
     // Assert that the provider has been added to the list of providers.
     $this->assertSame(2, $updatedSolution->get('oss_source')->count());
     $expected_providers = ['developers_italia', 'testing_provider'];
@@ -74,6 +81,56 @@ class DevelopersItaliaFetchTest extends FetchTestBase {
     $this->assertCount(1, $this->getLogEntries('Solution @solution was created.', 'a:1:{s:9:"@solution";s:11:"Project 1.2";}'));
     // Creation log entry for 'Project 1'.
     $this->assertCount(1, $this->getLogEntries('Solution @solution was created.', 'a:1:{s:9:"@solution";s:9:"Project 1";}'));
+
+    // Ensure logos and screenshots are queued to be downloaded.
+    // Check how incoming data has been queued. Only one item is active.
+    $imagecacheWarmerQueue = \Drupal::queue('eu_oss_catalogue_imagecache_warmer');
+    // The queue should contain 3 logos and 2 original + 1 updated screenshot
+    // images summarized.
+    $this->assertSame(6, $imagecacheWarmerQueue->numberOfItems());
+    // "Externals" directory does not exist.
+    $this->assertFalse(imagecache_external_get_directory_path());
+
+    // Allow SVGs.
+    $imagecacheExternalConfig = $this->config('imagecache_external.settings');
+    $imagecacheExternalConfig
+      ->set(
+        'imagecache_external_allowed_mimetypes',
+        array_unique(
+          array_merge(
+            $imagecacheExternalConfig->get('imagecache_external_allowed_mimetypes'),
+            ['image/svg+xml']
+          )
+        )
+      )
+      ->save();
+
+    // Queue must be able to process all the items.
+    $this->drush('queue:run', ['eu_oss_catalogue_imagecache_warmer']);
+    $this->assertSame(0, $imagecacheWarmerQueue->numberOfItems());
+    // Downloaded assets:
+    // - images/logo-solution-1.png,
+    // - Solution_1_EN_Screenshot1.jpg,
+    // - Solution_1_EN_Screenshot2.jpg,
+    // - Solution_1_EN_Screenshot2-updated.jpg,
+    // - images/logo-of-project-1-1.svg.
+    // Missing: Project 1.2's logo.
+    // - https://all.self-hosted.gitlab.example.com/.../avatar/12/logo.jpg.
+    $cachedImages = array_diff(
+      scandir(imagecache_external_get_directory_path()),
+      ['..', '.']
+    );
+    sort($cachedImages);
+    $this->assertEquals(
+      [
+        '15b4a8a50aee601a2ffe36ebc1c3c892.png',
+        '1a86f60daaaf9df0e07efc994b0d1870.svg',
+        '4bba7c249bf66c43b239038015aec57f.jpg',
+        '89b189f663b5f0fb61c5ca30e4bcd6f3.jpg',
+        'eebe2e9044c879b129809f019d9f821d.jpg',
+      ],
+      array_values($cachedImages)
+    );
   }
 
   /**
