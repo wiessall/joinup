@@ -91,16 +91,22 @@ class AccessibilityContext extends RawDrupalContext {
     $this->getSession()->executeScript($this->getJsTriggeringScript($axeJsSrc, $limitToTags));
 
     // Axe runs asynchronously, we have to wait until the results are gathered.
-    ['violations' => $violations, 'exception' => $exception] = $this->getSession()->getPage()->waitFor(
+    $result = $this->getSession()->getPage()->waitFor(
       30,
       function (DocumentElement $page): ?array {
         if ($axeJsElement = $page->find('xpath', '//script[@data-drupal-selector="axe-js"]')) {
           $output = $axeJsElement->getAttribute('data-output');
           return $output ? Json::decode($output) : NULL;
         }
-        throw new \RuntimeException("Can't find the Axe script tag in the page");
+        return NULL;
       }
     );
+
+    if ($result === NULL) {
+      throw new \RuntimeException('Cannot run Axe accessibility check.');
+    }
+
+    ['violations' => $violations, 'exception' => $exception] = $result;
 
     if ($exception) {
       throw new \RuntimeException('Exception thrown while running Axe: ' . Json::encode($exception));
