@@ -24,6 +24,7 @@ elements: |-
   submitter_information:
     '#type': webform_section
     '#title': 'Submitter information'
+    '#description': '<p>Prefilled fields are inherited from your account as “Joinup registered user”</p>'
     flexbox_01:
       '#type': webform_flexbox
       '#attributes':
@@ -81,7 +82,6 @@ elements: |-
       '#type': webform_custom_composite
       '#title': 'Public Sector Organisation responsible for the case'
       '#required': true
-      '#multiple__header': false
       '#multiple__item_label': 'Public Sector Organisation'
       '#multiple__min_items': 1
       '#multiple__sorting': false
@@ -96,22 +96,89 @@ elements: |-
           '#title': 'Public sector organisation'
           '#description': 'Please provide the name of the public sector organisation where the technology is used'
         at_which_level_is_the_responsible:
+          '#wrapper_type': form_element
           '#type': webform_checkboxes_other
           '#options':
             'Central Government': 'Central Government'
             'Regional Government': 'Regional Government'
             'Local Government': 'Local Government'
-            'Academic-Research': 'Academic-Research'
+            Academic-Research: Academic-Research
             'Community led': 'Community led'
             'Consortium (e.g. EU-financed project)': 'Consortium (e.g. EU-financed project)'
           '#title': 'At which level is the responsible organisation operating?'
           '#other__option_label': 'Other (please specify)'
-    geographical_coverage:
-      '#type': select
-      '#title': 'Geographical coverage'
-      '#multiple': true
-      '#options': country_names
+    geographical_extent_country:
+      '#type': webform_custom_composite
+      '#title': 'Geographical extent'
       '#required': true
+      '#multiple__header_label': 'Geographical extent'
+      '#multiple__item_label': 'Geographical extent'
+      '#multiple__min_items': 1
+      '#multiple__sorting': false
+      '#multiple__add': false
+      '#multiple__add_more_input': false
+      '#multiple__add_more_button_label': 'Add country'
+      '#wrapper_type': form_element
+      '#element':
+        geographical_extent:
+          '#type': webform_select_other
+          '#options':
+            Albania: Albania
+            Andorra: Andorra
+            Armenia: Armenia
+            Austria: Austria
+            Azerbaijan: Azerbaijan
+            Belarus: Belarus
+            Belgium: Belgium
+            'Bosnia and Herzegovina': 'Bosnia and Herzegovina'
+            Bulgaria: Bulgaria
+            Croatia: Croatia
+            Cyprus: Cyprus
+            Czechia: Czechia
+            Denmark: Denmark
+            Estonia: Estonia
+            'European Union': 'European Union'
+            Finland: Finland
+            France: France
+            Georgia: Georgia
+            Germany: Germany
+            Greece: Greece
+            Hungary: Hungary
+            Iceland: Iceland
+            Ireland: Ireland
+            Italy: Italy
+            Kazakhstan: Kazakhstan
+            Kosovo: Kosovo
+            Latvia: Latvia
+            Liechtenstein: Liechtenstein
+            Lithuania: Lithuania
+            Luxembourg: Luxembourg
+            Malta: Malta
+            Moldova: Moldova
+            Monaco: Monaco
+            Montenegro: Montenegro
+            Netherlands: Netherlands
+            'North Macedonia': 'North Macedonia'
+            Norway: Norway
+            Poland: Poland
+            Portugal: Portugal
+            Romania: Romania
+            Russia: Russia
+            'San Marino': 'San Marino'
+            Serbia: Serbia
+            Slovakia: Slovakia
+            Slovenia: Slovenia
+            Spain: Spain
+            Sweden: Sweden
+            Switzerland: Switzerland
+            Turkey: Turkey
+            Ukraine: Ukraine
+            'United Kingdom': 'United Kingdom'
+            'Vatican City': 'Vatican City'
+          '#required': true
+          '#title': 'Geographical extent'
+          '#description': 'The geographical extent refers to the geographical layer where the solution is deployed. For example if the solutions is deployed by a municipality the level is local, independently from administrative level of the responsible organisation.'
+          '#other__option_label': 'Other (please specify)'
     flexbox_06:
       '#type': webform_flexbox
       '#attributes':
@@ -141,16 +208,23 @@ elements: |-
           'Public order and safety': 'Public order and safety'
           'Recreation, culture, and religion': 'Recreation, culture, and religion'
           'Social protection': 'Social protection'
-    source_url_:
-      '#type': url
+    source_url:
+      '#type': webform_custom_composite
       '#title': 'Source (URL)'
-      '#multiple': true
-      '#description': '<p>Please provide here the link to external sources describing the case (reports, case studies, presentations, news articles, webpage describing the solution etc). At least one URL is needed to publish the case in the database.</p>'
       '#required': true
+      '#multiple__item_label': 'Source URL'
+      '#multiple__min_items': 1
       '#multiple__sorting': false
-      '#multiple__operations': false
+      '#multiple__add': false
       '#multiple__add_more_input': false
       '#multiple__add_more_button_label': 'Add another source'
+      '#wrapper_type': form_element
+      '#element':
+        source_url_item:
+          '#type': url
+          '#required': true
+          '#title': ' Source (URL)'
+          '#description': 'Please provide here the link to external sources describing the case (reports, case studies, presentations, news articles, webpage describing the solution etc). At least one URL is needed to publish the case in the database.'
     description:
       '#type': textarea
       '#title': Description
@@ -168,6 +242,7 @@ elements: |-
         '#title': 'Is the technological solution available as Open Source?'
         '#options': yes_no
         '#required': true
+        '#wrapper_type': form_element
       status:
         '#type': select
         '#title': Status
@@ -185,6 +260,7 @@ elements: |-
         'Public service quality': 'Public service quality -- The solution improves the relationship between the public administration and citizens, namely it has a direct impact on citizens and external stakeholders'
         'Administrative efficiency': 'Administrative efficiency -- The solution improves the efficiency of the administration in terms of either relationships within one single public administration, between different branches of one public administration and/or between different public administrations.'
       '#required': true
+      '#wrapper_type': form_element
     improved_public_service:
       '#type': checkboxes
       '#title': 'Improved Public Service'
@@ -201,6 +277,7 @@ elements: |-
         visible:
           ':input[name="which_area_does_the_solution_impact"]':
             value: 'Public service quality'
+      '#wrapper_type': form_element
     improved_administrative_efficiency:
       '#type': checkboxes
       '#title': 'Improved administrative efficiency'
@@ -219,6 +296,7 @@ elements: |-
         visible:
           ':input[name="which_area_does_the_solution_impact"]':
             value: 'Administrative efficiency'
+      '#wrapper_type': form_element
     did_the_solution_or_will_the_solution_increase_the_openness:
       '#type': checkboxes
       '#title': 'Did the solution or will the solution increase the openness of government?'
@@ -228,6 +306,7 @@ elements: |-
         'Yes, it improved / will increase public control and influence on government actions and policies': 'Yes, it improved / will increase public control and influence on government actions and policies'
         'None of the above / I don’t know': 'None of the above / I don’t know'
       '#required': true
+      '#wrapper_type': form_element
     did_you_take_inspiration_from_the_eu_model_contractual:
       '#type': radios
       '#title': 'Did you take inspiration from the <a href="https://public-buyers-community.ec.europa.eu/communities/procurement-ai/resources/eu-model-contractual-ai-clauses-pilot-procurements-ai" target="_blank">EU Model Contractual AI</a> procurement clauses developed by the <a href="https://public-buyers-community.ec.europa.eu/communities/procurement-ai" target="_blank">Community of Procurement of AI</a> and supported by the <a href="https://commission.europa.eu/index_en" target="_blank">European Commission</a> for procuring the AI solution?'
@@ -238,6 +317,7 @@ elements: |-
         'No, we procured the solution (or part of it), we were aware of the clauses but they did not fit the purpose': 'No, we procured the solution (or part of it), we were aware of the clauses but they did not fit the purpose'
         'Yes, we procured the solution (or part of it) and we used/took inspiration from the existing procurement clauses': 'Yes, we procured the solution (or part of it) and we used/took inspiration from the existing procurement clauses'
         'I don’t know / not applicable': 'I don’t know / not applicable'
+      '#wrapper_type': form_element
     additional_info:
       '#type': managed_file
       '#title': 'Additional info'
@@ -299,7 +379,7 @@ settings:
   form_reset: false
   form_access_denied: message
   form_access_denied_title: ''
-  form_access_denied_message: '<p>Access <span style="-webkit-text-stroke-width:0px;background-color:rgb(255, 255, 255);color:rgb(35, 36, 41);display:inline !important;float:none;font-family:BlinkMacSystemFont, -apple-system, &quot;Segoe UI&quot;, Roboto, Oxygen-Sans, Ubuntu, Cantarell, &quot;Helvetica Neue&quot;, sans-serif;font-size:14.224px;font-style:normal;font-variant-caps:normal;font-variant-ligatures:normal;letter-spacing:normal;orphans:2;text-align:start;text-decoration-color:initial;text-decoration-style:initial;text-decoration-thickness:initial;text-indent:0px;text-transform:none;white-space:normal;widows:2;word-spacing:0px;">denied access to this webform.</span></p>'
+  form_access_denied_message: '<p>Access denied access to this webform.</p>'
   form_access_denied_attributes: {  }
   form_file_limit: ''
   form_attributes: {  }
@@ -368,7 +448,7 @@ settings:
   confirmation_type: inline
   confirmation_url: ''
   confirmation_title: ''
-  confirmation_message: '<p><span style="-webkit-text-stroke-width:0px;background-color:rgb(255, 255, 255);color:rgb(23, 43, 77);display:inline !important;float:none;font-family:-apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, Roboto, Oxygen, Ubuntu, &quot;Fira Sans&quot;, &quot;Droid Sans&quot;, &quot;Helvetica Neue&quot;, sans-serif;font-size:14px;font-style:normal;font-variant-caps:normal;font-variant-ligatures:normal;font-weight:400;letter-spacing:normal;orphans:2;text-align:left;text-decoration-color:initial;text-decoration-style:initial;text-decoration-thickness:initial;text-indent:0px;text-transform:none;white-space:normal;widows:2;word-spacing:0px;">Your case was successfully submitted</span></p>'
+  confirmation_message: '<p>Your use case has been submitted successfully. Soon you will be informed by the Public Sector Tech Watch team about the next steps.</p>'
   confirmation_attributes: {  }
   confirmation_back: true
   confirmation_back_label: ''
