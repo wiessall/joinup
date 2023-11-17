@@ -77,27 +77,35 @@ elements: |-
         '#other__option_label': 'Other (please specify)'
         '#required': true
         '#wrapper_type': form_element
-    flexbox_04:
-      '#type': webform_flexbox
-      '#attributes':
-        class:
-          - m-0
-      public_sector_organisation:
-        '#type': textfield
-        '#title': 'Public Sector Organisation responsible for the case'
-        '#description': '<p>Please provide the name of the public sector organisation where the technology is used</p>'
-        '#required': true
-    responsible_organisation:
-      '#type': webform_checkboxes_other
-      '#title': 'At which level is the responsible organisation operating?'
-      '#options':
-        'Central Government': 'Central Government'
-        'Regional Government': 'Regional Government'
-        'Local Government': 'Local Government'
-        Academic-Research: Academic-Research
-        'Community led': 'Community led'
-        'Consortium (e.g. EU-financed project)': 'Consortium (e.g. EU-financed project)'
-      '#other__option_label': 'Other (please specify)'
+    public_sector_organisation_responsible_for_the_case:
+      '#type': webform_custom_composite
+      '#title': 'Public Sector Organisation responsible for the case'
+      '#required': true
+      '#multiple__header': false
+      '#multiple__item_label': 'Public Sector Organisation'
+      '#multiple__min_items': 1
+      '#multiple__sorting': false
+      '#multiple__add': false
+      '#multiple__add_more_input': false
+      '#multiple__add_more_button_label': 'Add organisation'
+      '#wrapper_type': form_element
+      '#element':
+        public_sector_organisation:
+          '#type': textfield
+          '#required': true
+          '#title': 'Public sector organisation'
+          '#description': 'Please provide the name of the public sector organisation where the technology is used'
+        at_which_level_is_the_responsible:
+          '#type': webform_checkboxes_other
+          '#options':
+            'Central Government': 'Central Government'
+            'Regional Government': 'Regional Government'
+            'Local Government': 'Local Government'
+            'Academic-Research': 'Academic-Research'
+            'Community led': 'Community led'
+            'Consortium (e.g. EU-financed project)': 'Consortium (e.g. EU-financed project)'
+          '#title': 'At which level is the responsible organisation operating?'
+          '#other__option_label': 'Other (please specify)'
     geographical_coverage:
       '#type': select
       '#title': 'Geographical coverage'
