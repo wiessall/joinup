@@ -192,7 +192,11 @@ class AccessibilityContext extends RawDrupalContext {
           // We'll store the results directly on the HTML tag.
           axeJsElement.dataset.output = ''
 
-          axe.run('body', $options)
+          // Temporarily exclude the pager because it triggers a false
+          // positive. See https://github.com/dequelabs/axe-core/issues/4247.
+          axe.run({
+            exclude: '.pagination'
+          }, $options)
             .then(results => {
               output.violations = results.violations;
               axeJsElement.dataset.output = JSON.stringify(output);
