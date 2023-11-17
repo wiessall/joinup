@@ -192,3 +192,10 @@ block.settings.entity_unpublished:
     negate_states_filter:
       type: boolean
       label: 'Negate states filter'
+
+field.formatter.third_party.joinup_slick_carousel:
+  type: mapping
+  label: 'Slick carousel settings'
+  mapping:
+    preset:
+      type: string
