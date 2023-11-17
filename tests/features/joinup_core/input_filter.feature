@@ -82,8 +82,7 @@ Feature: Input filter
     And I click "Edit" in the "Entity actions" region
     Then the paragraph formats in the "Content" field should not contain the "h1, h5, h6" formats
 
-  # todo: Restore this test in ISAICP-8015.
-  @wip @backtrackLimit
+  @backtrackLimit
   Scenario: Ensure really long HTML tag (e.g. < img > with src:data/image...) does not generate a fatal error.
     Given news content:
       | title         | headline       | body                        | collection    | state     |
@@ -91,4 +90,5 @@ Feature: Input filter
     And I set long body of "Famous actors" news
 
     When I go to the "Famous actors" news
-    Then I see the "img" element with the "alt" attribute set to "Image removed." in the "Content" region
+    # In CK5 img tag is removed we are using media.
+    Then I should not see the "img" element with the "alt" attribute set to "Image removed." in the "Content" region
