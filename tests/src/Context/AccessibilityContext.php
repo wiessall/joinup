@@ -156,13 +156,11 @@ class AccessibilityContext extends RawDrupalContext {
    *   The path to axe.min.js.
    */
   protected function ensureAxeJsScript(): string {
-    $fileSystem = \Drupal::getContainer()->get('file_system');
-    $urlGenerator = \Drupal::getContainer()->get('file_url_generator');
-    if (!file_exists("public://axe.min.js")) {
-      $fileSystem->copy(DRUPAL_ROOT . '/../node_modules/axe-core/axe.min.js', 'public://');
+    if (!file_exists('public://axe.min.js')) {
+      \Drupal::service('file_system')->copy(DRUPAL_ROOT . '/../node_modules/axe-core/axe.min.js', 'public://');
     }
     Assert::assertFileExists('public://axe.min.js');
-    return $urlGenerator->generateString('public://axe.min.js');
+    return \Drupal::service('file_url_generator')->generateString('public://axe.min.js');
   }
 
   /**
