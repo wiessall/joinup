@@ -1,0 +1,62 @@
+From b5f3ca55b57bb074911571c5a00d5a9014cb7e2c Mon Sep 17 00:00:00 2001
+From: Adrian Lorenc <adrian.lorenc@gmail.com>
+Date: Mon, 13 Nov 2023 13:50:35 +0100
+Subject: [PATCH] 3401176: Rename method to getEntity.
+
+---
+ .../layout_paragraphs_library.module                          | 4 ++--
+ src/Contracts/ComponentFormInterface.php                      | 2 +-
+ src/Form/ComponentFormBase.php                                | 2 +-
+ 3 files changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/modules/layout_paragraphs_library/layout_paragraphs_library.module b/modules/layout_paragraphs_library/layout_paragraphs_library.module
+index 2d53d8f..316209e 100644
+--- a/modules/layout_paragraphs_library/layout_paragraphs_library.module
++++ b/modules/layout_paragraphs_library/layout_paragraphs_library.module
+@@ -19,7 +19,7 @@ use Drupal\paragraphs_library\Entity\LibraryItem;
+ function layout_paragraphs_library_form_layout_paragraphs_component_form_alter(array &$form, FormStateInterface $form_state) {
+   /** @var \Drupal\layout_paragraphs\Contracts\ComponentFormInterface $form_object */
+   $form_object = $form_state->getFormObject();
+-  $paragraph = $form_object->getParagraph();
++  $paragraph = $form_object->getEntity();
+   $paragraph_type = $paragraph->getParagraphType();
+ 
+   // Only applies to paragraph types that allow being promoted to library.
+@@ -145,7 +145,7 @@ function layout_paragraphs_library_ajax(&$form, FormStateInterface $form_state)
+   $form_object = $form_state->getFormObject();
+   if (get_class($form_object) == 'Drupal\layout_paragraphs\Form\EditComponentForm') {
+     $response = $form_object->successfulAjaxSubmit($form, $form_state);
+-    $wrong_selector = '[data-uuid=' . $form_object->getParagraph()->uuid() . ']';
++    $wrong_selector = '[data-uuid=' . $form_object->getEntity()->uuid() . ']';
+     $correct_selector = '[data-uuid=' . $original_paragraph->uuid() . ']';
+     foreach ($response->getCommands() as &$command) {
+       if ($command['command'] == 'insert' && $command['selector'] == $wrong_selector) {
+diff --git a/src/Contracts/ComponentFormInterface.php b/src/Contracts/ComponentFormInterface.php
+index 14cc056..22cb33e 100644
+--- a/src/Contracts/ComponentFormInterface.php
++++ b/src/Contracts/ComponentFormInterface.php
+@@ -15,7 +15,7 @@ interface ComponentFormInterface extends FormInterface {
+   /**
+    * Gets the paragraph entity.
+    */
+-  public function getParagraph();
++  public function getEntity();
+ 
+   /**
+    * Sets the paragraph entity.
+diff --git a/src/Form/ComponentFormBase.php b/src/Form/ComponentFormBase.php
+index 25c28a6..96b1dc3 100644
+--- a/src/Form/ComponentFormBase.php
++++ b/src/Form/ComponentFormBase.php
+@@ -126,7 +126,7 @@ abstract class ComponentFormBase extends FormBase implements ComponentFormInterf
+   /**
+    * {@inheritDoc}
+    */
+-  public function getParagraph() {
++  public function getEntity() {
+     return $this->paragraph;
+   }
+ 
+-- 
+GitLab
+
