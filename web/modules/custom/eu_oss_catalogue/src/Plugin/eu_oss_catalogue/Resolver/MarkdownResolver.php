@@ -32,7 +32,12 @@ class MarkdownResolver extends DefaultResolver implements EuOssCatalogueResolver
 
     foreach ($value as $langcode => $items) {
       foreach ($items as $delta => $item) {
-        $value[$langcode][$delta] = check_markup($item, 'markdown');
+        $value[$langcode][$delta] = [
+          'value' => check_markup($item, 'markdown'),
+          // We are using the markdown format to convert the value to valid
+          // HTML, so we need to set the format to full_html.
+          'format' => 'full_html',
+        ];
       }
     }
   }
