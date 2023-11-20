@@ -1,4 +1,7 @@
 @import "../partials/core";
+@import "@openeuropa/bcl-bootstrap/scss/utilities";
+@import "@openeuropa/bcl-bootstrap/scss/utilities/api";
+@import "../partials/overrides/eu-oss-catalogue";
 
 // Ugly hacks
 .region-featured {
@@ -184,8 +187,59 @@
     }
   }
   &__discover {
-    .paragraph--call-to-action {
-      margin-block-end: 1rem;
+    @extend .mt-5;
+    .layout__region--first {
+      @extend .mb-5;
+      @extend .mb-md-0;
+      .paragraph--text p {
+        font-size: $spacer * 3.5;
+        @extend .text-primary;
+        strong {
+          @extend .text-secondary;
+          @extend .bg-secondary;
+          @extend .fw-normal;
+          @extend .px-1;
+        }
+      }
+      .paragraph--call-to-action {
+        margin-block-end: 1rem;
+      }
+    }
+    .layout__region--second {
+      .paragraph--text {
+        p {
+          margin-bottom: $spacer * 2.5!important;
+          padding-left: $spacer * 3.5;
+          position: relative;
+          &::before {
+            position: absolute;
+            left: $spacer * -0.5;
+            color: $oss--bg;
+            width: 3rem;
+            height: 3rem;
+            background-color: $oss--bg;
+            content: "";
+          }
+        }
+        &:nth-of-type(1) {
+          p::before {
+            mask: url("#{$bootstrap-icons-path}/files.svg") no-repeat 50% 50%;
+            mask-size: contain;
+          }
+        }
+        &:nth-of-type(2) {
+          p::before {
+            mask: url("#{$bootstrap-icons-path}/file-text.svg") no-repeat 50% 50%;
+            mask-size: contain;
+          }
+        }
+        &:nth-of-type(3) {
+          p::before {
+            mask: url("#{$bootstrap-icons-path}/eye.svg") no-repeat 50% 50%;
+            mask-size: contain;
+          }
+        }
+      }
     }
   }
   &__most-recent {
