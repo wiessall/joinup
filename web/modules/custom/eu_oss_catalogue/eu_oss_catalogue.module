@@ -126,7 +126,7 @@ function eu_oss_catalogue_entity_bundle_field_info_alter(array &$fields, EntityT
 /**
  * Implements hook_ENTITY_TYPE_insert() for "node" entity type.
  */
-function eu_oss_catalogue_node_insert(EntityInterface $entity) {
+function eu_oss_catalogue_node_insert(EntityInterface $entity): void {
   if (!$entity instanceof OssSolutionInterface) {
     return;
   }
@@ -136,7 +136,7 @@ function eu_oss_catalogue_node_insert(EntityInterface $entity) {
 /**
  * Implements hook_ENTITY_TYPE_update() for "node" entity type.
  */
-function eu_oss_catalogue_node_update(EntityInterface $entity) {
+function eu_oss_catalogue_node_update(EntityInterface $entity): void {
   if (!$entity instanceof OssSolutionInterface) {
     return;
   }
