@@ -1,5 +1,5 @@
 diff --git a/modules/webform_example_composite/src/Element/WebformExampleComposite.php b/modules/webform_example_composite/src/Element/WebformExampleComposite.php
-index 793f0338f..da439029c 100644
+index 793f0338f4c1b2bf2790b61f1f003a0b07ea2d3b..da439029c16fbb1438d6e840d0456065ec791916 100644
 --- a/modules/webform_example_composite/src/Element/WebformExampleComposite.php
 +++ b/modules/webform_example_composite/src/Element/WebformExampleComposite.php
 @@ -55,6 +55,17 @@ class WebformExampleComposite extends WebformCompositeBase {
@@ -21,7 +21,7 @@ index 793f0338f..da439029c 100644
      return $elements;
    }
 diff --git a/modules/webform_example_composite/src/Plugin/WebformElement/WebformExampleComposite.php b/modules/webform_example_composite/src/Plugin/WebformElement/WebformExampleComposite.php
-index a9937b355..f26cb1e34 100644
+index a9937b355f326b432e1fc2b2c3b63d420b9569d0..f26cb1e34dee7f1e759d937588443af1db162bd2 100644
 --- a/modules/webform_example_composite/src/Plugin/WebformElement/WebformExampleComposite.php
 +++ b/modules/webform_example_composite/src/Plugin/WebformElement/WebformExampleComposite.php
 @@ -41,10 +41,11 @@ class WebformExampleComposite extends WebformCompositeBase {
@@ -41,7 +41,7 @@ index a9937b355..f26cb1e34 100644
    }
  
 diff --git a/modules/webform_example_composite/templates/webform-example-composite.html.twig b/modules/webform_example_composite/templates/webform-example-composite.html.twig
-index 785929b67..40b41e74d 100644
+index 785929b672dc8294657922c8ad1ffa33d2c677f0..40b41e74d568e10437a0ff72ef4113788bedb05e 100644
 --- a/modules/webform_example_composite/templates/webform-example-composite.html.twig
 +++ b/modules/webform_example_composite/templates/webform-example-composite.html.twig
 @@ -26,6 +26,9 @@
@@ -55,7 +55,7 @@ index 785929b67..40b41e74d 100644
  {% else %}
    {{ content }}
 diff --git a/modules/webform_example_composite/tests/src/Functional/WebformExampleCompositeTest.php b/modules/webform_example_composite/tests/src/Functional/WebformExampleCompositeTest.php
-index 4e27dd628..b96a94593 100644
+index 4e27dd6283cc3acb08dfdb0c81cfb34bb6da9f25..b96a94593aaf5c996d4d6cccb61f444a4f044d86 100644
 --- a/modules/webform_example_composite/tests/src/Functional/WebformExampleCompositeTest.php
 +++ b/modules/webform_example_composite/tests/src/Functional/WebformExampleCompositeTest.php
 @@ -41,6 +41,8 @@ class WebformExampleCompositeTest extends WebformBrowserTestBase {
@@ -97,7 +97,7 @@ index 4e27dd628..b96a94593 100644
      ]);
    }
 diff --git a/src/Element/WebformCompositeBase.php b/src/Element/WebformCompositeBase.php
-index ab2692ba5..59c1fdea8 100644
+index ab2692ba5d07a9efdd897ce2b765caa5fe091f0f..59c1fdea8bcc24c70c15c41d40cec2a1b9a0a75b 100644
 --- a/src/Element/WebformCompositeBase.php
 +++ b/src/Element/WebformCompositeBase.php
 @@ -266,7 +266,9 @@ abstract class WebformCompositeBase extends FormElement implements WebformCompos
@@ -112,7 +112,7 @@ index ab2692ba5..59c1fdea8 100644
        }
        if ($element_plugin->isComposite()) {
 diff --git a/src/Element/WebformElementComposite.php b/src/Element/WebformElementComposite.php
-index 08d9cea05..bb2b31ef0 100644
+index 08d9cea053c9d772ffe1c18e053d29b2e9163675..bb2b31ef00d866c5a5648d6a57ea912bd8e3e599 100644
 --- a/src/Element/WebformElementComposite.php
 +++ b/src/Element/WebformElementComposite.php
 @@ -350,7 +350,9 @@ class WebformElementComposite extends FormElement {
@@ -127,7 +127,7 @@ index 08d9cea05..bb2b31ef0 100644
        }
      }
 diff --git a/src/Element/WebformOtherBase.php b/src/Element/WebformOtherBase.php
-index 543ed7884..a898aceb3 100644
+index 543ed788490b12725339402ea6a3e4b6c4d003ee..a898aceb332a7e7f9d842ef013e73bca2de82cd2 100644
 --- a/src/Element/WebformOtherBase.php
 +++ b/src/Element/WebformOtherBase.php
 @@ -349,6 +349,8 @@ abstract class WebformOtherBase extends FormElement {
@@ -139,8 +139,38 @@ index 543ed7884..a898aceb3 100644
        $flattened_options = OptGroup::flattenOptions($element['#options']);
        if ($other_options = array_diff_key($default_options, $flattened_options)) {
          return [
+diff --git a/src/Plugin/WebformElement/WebformCheckboxesOther.php b/src/Plugin/WebformElement/WebformCheckboxesOther.php
+index 663217d71108a9df23f68701cac7c3a8ab70877a..17eea64d32f1f9fdff0ea7f69ca3568b93c22cbc 100644
+--- a/src/Plugin/WebformElement/WebformCheckboxesOther.php
++++ b/src/Plugin/WebformElement/WebformCheckboxesOther.php
+@@ -71,4 +71,25 @@ class WebformCheckboxesOther extends Checkboxes implements WebformElementOtherIn
+     }
+   }
+ 
++  /**
++   * {@inheritdoc}
++   */
++  public function setDefaultValue(array &$element) {
++    if (!isset($element['#default_value'])) {
++      return;
++    }
++
++    if (isset($element['#default_value']['other']) && isset($element['#default_value']['checkboxes'])) {
++      // Checkboxes element expects to receive flat array
++      // @see Drupal\Core\Render\Element\Checkboxes::valueCallback()".
++      $other_value = $element['#default_value']['other'];
++      $element['#default_value'] = array_filter($element['#default_value']['checkboxes']);
++      if ($other_value !== '') {
++        $element['#default_value'] += [$other_value => $other_value];
++      }
++    }
++
++    parent::setDefaultValue($element);
++  }
++
+ }
 diff --git a/src/Plugin/WebformElement/WebformCompositeBase.php b/src/Plugin/WebformElement/WebformCompositeBase.php
-index 59f7c6cd9..e45baa4cb 100644
+index 59f7c6cd92e31af10c17b8331f71e3a2c6aa2e90..e45baa4cb93879cf311049aa477c3c154e372ca8 100644
 --- a/src/Plugin/WebformElement/WebformCompositeBase.php
 +++ b/src/Plugin/WebformElement/WebformCompositeBase.php
 @@ -644,8 +644,24 @@ abstract class WebformCompositeBase extends WebformElementBase implements Webfor
@@ -211,7 +241,7 @@ index 59f7c6cd9..e45baa4cb 100644
        || $element_plugin instanceof WebformElementComputedInterface) {
        return FALSE;
 diff --git a/src/Plugin/WebformElementBase.php b/src/Plugin/WebformElementBase.php
-index feef45012..21d890b2e 100644
+index feef450120c54a30e1c8bbd6a297521fa7157118..21d890b2eb4f4d6c8099c9d4b6cc81c60bd6d609 100644
 --- a/src/Plugin/WebformElementBase.php
 +++ b/src/Plugin/WebformElementBase.php
 @@ -1727,12 +1727,18 @@ class WebformElementBase extends PluginBase implements WebformElementInterface,
@@ -239,7 +269,7 @@ index feef45012..21d890b2e 100644
      // Return multiple (delta) value or composite (composite_key) value.
      if (is_array($value)) {
 diff --git a/src/WebformSubmissionStorage.php b/src/WebformSubmissionStorage.php
-index 07c7c04c5..f3652dbde 100644
+index 07c7c04c56aaecccf104d5b1dedcb3f29a0dfb65..f3652dbdee85d60a7215d867f191c051354271b3 100644
 --- a/src/WebformSubmissionStorage.php
 +++ b/src/WebformSubmissionStorage.php
 @@ -3,6 +3,7 @@
