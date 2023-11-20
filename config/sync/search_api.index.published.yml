@@ -60,6 +60,7 @@ dependencies:
     - search_api
     - asset_distribution
     - custom_page
+    - joinup_oss_catalogue
     - joinup_search
 third_party_settings:
   search_api_solr:
@@ -799,6 +800,10 @@ field_settings:
     dependencies:
       config:
         - field.storage.node.oss_short_description
+  oss_solution_rendered_item:
+    label: 'Oss Solution rendered item'
+    property_path: oss_solution_rendered_item
+    type: text
   oss_source:
     label: 'Source catalogue'
     datasource_id: 'entity:node'
@@ -1101,6 +1106,7 @@ processor_settings:
       - oss_features
       - oss_git_description
       - oss_short_description
+      - oss_solution_rendered_item
     title: true
     alt: true
     tags:
@@ -1164,6 +1170,7 @@ processor_settings:
   joinup_entity_status:
     inverse: false
   language_with_fallback: {  }
+  oss_solution_rendered_item: {  }
   rendered_item: {  }
   reverse_entity_references: {  }
   solr_date_range:
