@@ -133,7 +133,7 @@ class RelevantLanguageCode extends FieldItemList {
   /**
    * {@inheritdoc}
    */
-  public function postSave($update) {
+  public function postSave($update): bool {
     // Force recompute after save.
     $this->valueComputed = FALSE;
     $this->list = [];
