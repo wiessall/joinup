@@ -9,10 +9,11 @@ dependencies:
 third_party_settings:
   eu_oss_catalogue:
     publiccode_yml:
-      resolver: contact
-      config:
-        path: maintenance/contractors
-        node_type: oss_contractor
+      resolvers:
+        - plugin: contact
+          config:
+            path: maintenance/contractors
+            node_type: oss_contractor
 id: node.oss_solution.oss_maintenance_contractors
 field_name: oss_maintenance_contractors
 entity_type: node

@@ -8,9 +8,10 @@ dependencies:
 third_party_settings:
   eu_oss_catalogue:
     publiccode_yml:
-      resolver: default
-      config:
-        path: softwareVersion
+      resolvers:
+        - plugin: default
+          config:
+            path: softwareVersion
 id: node.oss_solution.oss_software_version
 field_name: oss_software_version
 entity_type: node
