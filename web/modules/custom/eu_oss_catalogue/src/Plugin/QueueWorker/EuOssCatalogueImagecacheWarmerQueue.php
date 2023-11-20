@@ -18,7 +18,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  *   cron = {"time" = 60},
  * )
  */
-class EuOssCatalogueImageCacheWarmer extends QueueWorkerBase implements ContainerFactoryPluginInterface {
+class EuOssCatalogueImagecacheWarmerQueue extends QueueWorkerBase implements ContainerFactoryPluginInterface {
 
   /**
    * Constructs a new EuOssCatalogueImageCacheWarmer plugin instance.

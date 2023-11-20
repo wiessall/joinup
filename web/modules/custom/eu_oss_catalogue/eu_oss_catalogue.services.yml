@@ -47,3 +47,9 @@ services:
       - '@plugin.manager.eu_oss_catalogue.hosting_platform'
       - '@state'
       - '@logger.channel.eu_oss_catalogue'
+
+  eu_oss_catalogue.oss_solution.imagecache_warmer:
+    class: Drupal\eu_oss_catalogue\EuOssCatalogueImagecacheWarmer
+    arguments:
+      - '@queue'
+      - '@module_handler'
