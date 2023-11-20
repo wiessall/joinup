@@ -199,6 +199,12 @@ Feature:
     Given news content:
       | title  | headline | state     |
       | News 1 | News 1   | published |
+    And custom_page content:
+      | title          | state     |
+      | Popular quotes | published |
+    And I append "text" to "field_paragraphs_body" field in "node" entity with following "Popular Quotes" title:
+      | field_body:value  |     That's one small step for a man, a giant leap for mankind. |
+      | field_body:format | text_html                                                      |
     And the following topics are enabled in the homepage:
       | Economy and Welfare     |
       | Info                    |
@@ -211,16 +217,19 @@ Feature:
       | Background theme | light      |
       | Extra classes    | test-class |
     And I add a "Configurable listing" paragraph in the "Topic meta entity body" form field:
-      | layout position | 1                                       |
-      | region          | content                                 |
-      | Heading         | type: text - value: E-justice heading   |
-      | Action link     | type: text - value: http://example.com  |
-      | Link text       | type: text - value: E-justice link text |
-      | List style      | type: select - value: List              |
-      | Query presets   | type: text - value: entity_bundle\|news |
+      | layout position | 1                                                       |
+      | region          | content                                                 |
+      | Heading         | type: text - value: E-justice heading                   |
+      | Action link     | type: text - value: http://example.com                  |
+      | Link text       | type: text - value: E-justice link text                 |
+      | List style      | type: select - value: List                              |
+      | Query presets   | type: text - value: entity_bundle\|news,custom_page\|IN |
 
     And I press "Save"
     Then I should see the "News 1" tile
+    And I should see the "Popular quotes" tile
+    # Regression test that text is trimmed properly.
+    Then the response should contain ">That's one small step for a man, a giant leap for mankind.<"
     And the url should match "/topic/law-and-justice/e-justice"
 
     When I go to the edit form of the topic meta entity of the "E-justice" topic "taxonomy term"

@@ -5,6 +5,7 @@ dependencies:
   module:
     - asset_distribution
     - custom_page
+    - eu_oss_catalogue
     - joinup_group_content_management
     - rdf_entity
     - redirect
@@ -18,6 +19,7 @@ is_admin: false
 permissions:
   - 'access distribution reports'
   - 'administer account settings'
+  - 'administer eu oss catalogue'
   - 'administer redirects'
   - 'edit collection rdf entity'
   - 'manage custom landing pages'
