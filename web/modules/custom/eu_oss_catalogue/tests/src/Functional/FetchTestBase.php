@@ -10,6 +10,10 @@ use Drupal\Core\Field\EntityReferenceFieldItemListInterface;
 use Drupal\Core\Serialization\Yaml;
 use Drupal\Tests\BrowserTestBase;
 use Drupal\Tests\node\Traits\NodeCreationTrait;
+use Drupal\eu_oss_catalogue\Entity\OssContactInterface;
+use Drupal\eu_oss_catalogue\Entity\OssContractorInterface;
+use Drupal\eu_oss_catalogue\Entity\OssSolutionInterface;
+use Drupal\language\Entity\ConfigurableLanguage;
 use Drupal\node\NodeInterface;
 use Drush\TestTraits\DrushTestTrait;
 
@@ -32,6 +36,7 @@ abstract class FetchTestBase extends BrowserTestBase {
   protected static $modules = [
     'dblog',
     'eu_oss_catalogue_test',
+    'language',
   ];
 
   /**
@@ -59,27 +64,69 @@ abstract class FetchTestBase extends BrowserTestBase {
       'required' => TRUE,
     ];
     $this->writeSettings($settings);
+
+    // Add Italian and German languages.
+    ConfigurableLanguage::createFromLangcode('it')->save();
+    ConfigurableLanguage::createFromLangcode('de')->save();
   }
 
   /**
-   * Asserts that a node with a given title and entity class has expected data.
+   * Asserts that an OSS Solution with a given title has expected data.
+   *
+   * @param string $title
+   *   The OSS Solution title. This used also to retrieve the expectancy data.
+   * @param string $expectedRelevantLangCode
+   *   The code of the relevant language.
+   */
+  protected function assertOssSolution(string $title, string $expectedRelevantLangCode): void {
+    $solution = $this->getNode($title, OssSolutionInterface::class);
+    $this->assertSame($expectedRelevantLangCode, $solution->getRelevantLangCode());
+  }
+
+  /**
+   * Asserts that an OSS Contact with a given title has expected data.
+   *
+   * @param string $title
+   *   The OSS Contact title. This used also to retrieve the expectancy data.
+   */
+  protected function assertOssContact(string $title): void {
+    $this->getNode($title, OssContactInterface::class);
+  }
+
+  /**
+   * Asserts that an OSS Contractor with a given title has expected data.
+   *
+   * @param string $title
+   *   The OSS Contact title. This used also to retrieve the expectancy data.
+   */
+  protected function assertOssContractor(string $title): void {
+    $this->getNode($title, OssContractorInterface::class);
+  }
+
+  /**
+   * Asserts that a node has expected data and returns it.
    *
    * @param string $nodeTitle
    *   The node title. This used also to retrieve the expectancy data.
    * @param string $interface
    *   The entity/bundle class that this node should implement.
    */
-  protected function assertNode(string $nodeTitle, string $interface): void {
+  protected function getNode(string $nodeTitle, string $interface): OssSolutionInterface|OssContactInterface|OssContractorInterface {
     // Expected values are stored in fixture YAML files, named after the calling
     // class and method. Test cases are keyed by $nodeTitle string.
     $trace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
-    // The first trace entry (0) is this method, the second (1) is its caller.
-    $parts = explode('\\', $trace[1]['class']);
-    $filePath = __DIR__ . '/../../fixtures/expectancy/' . array_pop($parts) . '.' . $trace[1]['function'] . '.yml';
+    // The first trace entry (0) is this method, the second (1) is its caller,
+    // which is an assertion. The third (2) is the test method.
+    $parts = explode('\\', $trace[2]['class']);
+    $filePath = __DIR__ . '/../../fixtures/expectancy/' . array_pop($parts) . '.' . $trace[2]['function'] . '.yml';
     $this->assertFileExists($filePath);
     $expected = Yaml::decode(file_get_contents($filePath))[$nodeTitle];
+    $this->assertIsArray($expected);
+    $this->assertNotEmpty($expected);
 
+    /** @var \Drupal\eu_oss_catalogue\Entity\OssSolutionInterface|\Drupal\eu_oss_catalogue\Entity\OssContactInterface|\Drupal\eu_oss_catalogue\Entity\OssContractorInterface $actual */
     $actual = $this->getNodeByTitle($nodeTitle);
+
     $this->assertInstanceOf($interface, $actual);
 
     foreach ($expected as $langcode => $expectedTranslation) {
@@ -92,6 +139,8 @@ abstract class FetchTestBase extends BrowserTestBase {
         $this->assertEquals($expectedValue, $actualValue);
       }
     }
+
+    return $actual;
   }
 
   /**

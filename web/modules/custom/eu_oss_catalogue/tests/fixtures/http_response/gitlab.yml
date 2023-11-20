@@ -267,15 +267,24 @@
                         availableLanguages:
                           - de
                       description:
+                        # Wins because has more features than DE.
+                        it:
+                          genericName: '[IT] Group1: Project 1: Generic name'
+                          documentation: https://example.com/group1/project-1-1/it/docs.md
+                          shortDescription: '[IT] Group1: Project 1: Short description'
+                          longDescription: '[IT] Group1: Project 1: Long description'
+                          features:
+                            - '[IT] feat 1'
+                            - '[IT] feat 2'
+                            - '[IT] feat 3'
                         de:
                           genericName: '[DE] Group1: Project 1: Generic name'
-                          documentation: https://example.com/group1/project-1-1/docs.md
+                          documentation: https://example.com/group1/project-1-1/de/docs.md
                           shortDescription: '[DE] Group1: Project 1: Short description'
                           longDescription: '[DE] Group1: Project 1: Long description'
                           features:
-                            - nice
-                            - kind
-                            - cheap
+                            - '[DE] feat 1'
+                            - '[DE] feat 2'
 
           # Valid project.
           - path: project-1-2
@@ -309,14 +318,30 @@
                             optional: false
                             versionMin: 15.0.2
                       description:
+                        # DE and IT have the same amount of features but this is the 1st.
                         de:
                           genericName: '[DE] Group1: Project 2: Generic name'
-                          documentation: https://example.com/group1/project-1-2/docs.md
+                          documentation: https://example.com/group1/project-1-2/de/docs.md
                           shortDescription: '[DE] Group1: Project 2: Short description'
                           longDescription: '[DE] Group1: Project 2: Long description'
                           features:
-                            - expensive
-                            - ugly
+                            - '[DE] feat 1'
+                            - '[DE] feat 2'
+                        it:
+                          genericName: '[IT] Group1: Project 2: Generic name'
+                          documentation: https://example.com/group1/project-1-2/it/docs.md
+                          shortDescription: '[IT] Group1: Project 2: Short description'
+                          longDescription: '[IT] Group1: Project 2: Long description'
+                          features:
+                            - '[IT] feat 1'
+                            - '[IT] feat 2'
+                        en:
+                          genericName: '[EN] Group1: Project 2: Generic name'
+                          documentation: https://example.com/group1/project-1-2/en/docs.md
+                          shortDescription: '[EN] Group1: Project 2: Short description'
+                          longDescription: '[EN] Group1: Project 2: Long description'
+                          features:
+                            - '[EN] feat 1'
                       developmentStatus: concept
                       intendedAudience:
                         countries:
