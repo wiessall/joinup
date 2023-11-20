@@ -7,6 +7,7 @@
 
 declare(strict_types = 1);
 
+use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Field\BaseFieldDefinition;
 use Drupal\Core\Field\FieldDefinitionInterface;
@@ -14,6 +15,7 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\eu_oss_catalogue\Entity\OssContact;
 use Drupal\eu_oss_catalogue\Entity\OssContractor;
 use Drupal\eu_oss_catalogue\Entity\OssSolution;
+use Drupal\eu_oss_catalogue\Entity\OssSolutionInterface;
 use Drupal\eu_oss_catalogue\Plugin\Field\RelevantField;
 use Drupal\eu_oss_catalogue\Plugin\Field\RelevantLanguageCode;
 
@@ -119,4 +121,24 @@ function eu_oss_catalogue_entity_bundle_field_info_alter(array &$fields, EntityT
       ->setDisplayConfigurable('view', TRUE)
       ->setClass(RelevantField::class);
   }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_insert() for "node" entity type.
+ */
+function eu_oss_catalogue_node_insert(EntityInterface $entity) {
+  if (!$entity instanceof OssSolutionInterface) {
+    return;
+  }
+  \Drupal::service('eu_oss_catalogue.oss_solution.import.imagecache_warmer')->queueImageUrls($entity);
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_update() for "node" entity type.
+ */
+function eu_oss_catalogue_node_update(EntityInterface $entity) {
+  if (!$entity instanceof OssSolutionInterface) {
+    return;
+  }
+  \Drupal::service('eu_oss_catalogue.oss_solution.import.imagecache_warmer')->queueImageUrls($entity);
 }
