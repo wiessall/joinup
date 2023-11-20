@@ -89,11 +89,6 @@ content:
     third_party_settings: {  }
     weight: 5
     region: content
-  oss_solutions:
-    settings: {  }
-    third_party_settings: {  }
-    weight: 6
-    region: content
   solutions:
     settings: {  }
     third_party_settings: {  }
