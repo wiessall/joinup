@@ -1,0 +1,22 @@
+uuid: 91fde17b-2016-4a70-86e5-38b8e1ceae22
+langcode: en
+status: true
+dependencies: {  }
+id: oss_solution_screenshot
+name: oss_solution_screenshot
+weight: 0
+label: 'OSS Solution screenshot'
+group: ''
+skin: ''
+breakpoints: 0
+optimized: true
+options:
+  options__active_tab: edit-options-settings
+  settings:
+    infinite: false
+    lazyLoad: ondemand
+    respondTo: slider
+    rows: 0
+    slidesToShow: 1
+    cssEase: ease-in-out
+    variableWidth: true
