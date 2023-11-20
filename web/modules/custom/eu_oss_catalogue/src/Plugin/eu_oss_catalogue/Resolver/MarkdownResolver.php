@@ -4,15 +4,9 @@ declare(strict_types = 1);
 
 namespace Drupal\eu_oss_catalogue\Plugin\eu_oss_catalogue\Resolver;
 
-use Drupal\Component\Utility\NestedArray;
 use Drupal\Core\Field\FieldItemListInterface;
-use Drupal\Core\Language\LanguageInterface;
-use Drupal\Core\Language\LanguageManagerInterface;
-use Drupal\Core\Logger\LoggerChannelInterface;
-use Drupal\Core\Plugin\PluginBase;
 use Drupal\eu_oss_catalogue\EuOssCatalogueResolverInterface;
 use Drupal\eu_oss_catalogue\Model\Project;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Resolver that converts markdown to HTML.
