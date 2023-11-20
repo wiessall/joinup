@@ -57,6 +57,8 @@ Feature:
     And I should see the text "OSS Solution" in the "Spunta" tile
 
     When I should not see the link "advanced search"
+    Then I click "Browse the catalogue"
+    And I should see the heading "Search in EU Open Source Solutions Catalogue"
 
   Scenario: User sees short description on OSS Solution page.
     Given oss_solution content:
