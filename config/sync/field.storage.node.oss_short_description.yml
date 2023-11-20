@@ -11,9 +11,11 @@ third_party_settings:
 id: node.oss_short_description
 field_name: oss_short_description
 entity_type: node
-type: text
+type: string
 settings:
   max_length: 512
+  case_sensitive: false
+  is_ascii: false
 module: text
 locked: false
 cardinality: 1

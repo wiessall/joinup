@@ -19,7 +19,9 @@ class HostingPlatformUITest extends BrowserTestBase {
    */
   protected static $modules = [
     'block',
+    'editor',
     'eu_oss_catalogue_test',
+    'markdown_easy',
   ];
 
   /**
