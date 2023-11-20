@@ -7,6 +7,8 @@ namespace Drupal\joinup\Context;
 use Behat\Mink\Element\DocumentElement;
 use Drupal\Component\Serialization\Json;
 use Drupal\Component\Utility\SortArray;
+use Drupal\Core\File\FileSystemInterface;
+use Drupal\Core\Serialization\Yaml;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\joinup\Traits\JavascriptTrait;
 use PHPUnit\Framework\Assert;
@@ -46,6 +48,11 @@ class AccessibilityContext extends RawDrupalContext {
    * @var int
    */
   private const LINE_LENGTH = 80;
+
+  /**
+   * Static cache for the file system service.
+   */
+  private FileSystemInterface $fileSystem;
 
   /**
    * Constructs a new context.
@@ -135,18 +142,13 @@ class AccessibilityContext extends RawDrupalContext {
       $report[] = $this->buildReportEntry($violation);
     }
 
-    $reportDir = \Drupal::service('stream_wrapper.public')->getDirectoryPath();
-    if (!$path = tempnam($reportDir, 'a11y.')) {
-      throw new \RuntimeException('Cannot create a file for the JSON full report');
-    }
-    file_put_contents($path, Json::encode($violations));
-    rename($path, "$path.json");
+    $path = $this->generateFullReport($violations);
 
     throw new ExpectationFailedException(
       "Detected accessibility standards violations\n" .
       str_repeat("=", self::LINE_LENGTH) . "\n" .
       implode("\n", $report) . "\n" .
-      "A JSON encoded full report, containing also the offending HTML elements, has been created at $path.json"
+      "A full report, containing also the offending HTML elements, has been created at $path"
     );
   }
 
@@ -158,7 +160,7 @@ class AccessibilityContext extends RawDrupalContext {
    */
   protected function ensureAxeJsScript(): string {
     if (!file_exists('public://axe.min.js')) {
-      \Drupal::service('file_system')->copy(DRUPAL_ROOT . '/../node_modules/axe-core/axe.min.js', 'public://');
+      $this->getFileSystem()->copy(DRUPAL_ROOT . '/../node_modules/axe-core/axe.min.js', 'public://');
     }
     Assert::assertFileExists('public://axe.min.js');
     return \Drupal::service('file_url_generator')->generateString('public://axe.min.js');
@@ -249,6 +251,64 @@ class AccessibilityContext extends RawDrupalContext {
     }
 
     return implode("\n", $text) . "\n" . str_repeat('-', self::LINE_LENGTH) . "\n";
+  }
+
+  /**
+   * Generates a full report as a JSON encoded file and returns its path.
+   *
+   * @param array $violations
+   *   The list of a11y violations.
+   *
+   * @return string
+   *   The JSON encoded file path.
+   */
+  protected function generateFullReport(array $violations): string {
+    $reportsDir = \Drupal::service('stream_wrapper.public')->getDirectoryPath() . '/a11y';
+    $currentUrl = $this->getSession()->getCurrentUrl();
+
+    // Using the URL path to store files for an easy retrieval.
+    $path = trim(parse_url($currentUrl, PHP_URL_PATH) ?? '', '/');
+    // Remove the base path from the beginning of $path.
+    $basePath = trim(base_path(), '/');
+    $path = substr($path, strlen($basePath));
+
+    // Create the directory if it doesn't exist.
+    $fileDir = dirname($path);
+    $reportDir = "$reportsDir/$fileDir";
+    if (!$this->getFileSystem()->prepareDirectory($reportDir, FileSystemInterface::MODIFY_PERMISSIONS | FileSystemInterface::CREATE_DIRECTORY)) {
+      throw new \RuntimeException("Directory $reportDir cannot be created or it's not writable");
+    }
+
+    // Create the report file.
+    $fileName = basename($path) ?: 'homepage';
+    if (!$fullPath = tempnam($reportDir, $fileName . '.')) {
+      throw new \RuntimeException("Cannot create a report file in $reportDir directory");
+    }
+
+    $report = [
+      // Add the page URL to allow easier identification.
+      'page' => $currentUrl,
+      'violations' => $violations,
+    ];
+
+    // Store as YAML (easier to read).
+    file_put_contents($fullPath, Yaml::encode($report));
+    rename($fullPath, "$fullPath.yml");
+
+    return "$fullPath.yml";
+  }
+
+  /**
+   * Returns the file system service.
+   *
+   * @return \Drupal\Core\File\FileSystemInterface
+   *   The file system service.
+   */
+  private function getFileSystem(): FileSystemInterface {
+    if (!isset($this->fileSystem)) {
+      $this->fileSystem = \Drupal::service('file_system');
+    }
+    return $this->fileSystem;
   }
 
 }
