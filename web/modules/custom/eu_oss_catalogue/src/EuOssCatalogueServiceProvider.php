@@ -6,7 +6,6 @@ namespace Drupal\eu_oss_catalogue;
 
 use Drupal\Core\DependencyInjection\ContainerBuilder;
 use Drupal\Core\DependencyInjection\ServiceProviderInterface;
-use Drupal\eu_oss_catalogue\EventSubscriber\OssSolutionImagecacheExternalWarmer;
 use Symfony\Component\DependencyInjection\Reference;
 
 /**
@@ -26,9 +25,8 @@ class EuOssCatalogueServiceProvider implements ServiceProviderInterface {
     $container
       ->register(
         'eu_oss_catalogue.oss_solution.import.imagecache_warmer',
-        OssSolutionImagecacheExternalWarmer::class
+        EuOssCatalogueImagecacheWarmer::class
       )
-      ->addTag('event_subscriber')
       ->addArgument(new Reference('queue'));
   }
 
