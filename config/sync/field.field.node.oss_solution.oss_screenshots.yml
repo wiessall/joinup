@@ -13,14 +13,15 @@ dependencies:
 third_party_settings:
   eu_oss_catalogue:
     publiccode_yml:
-      resolver: langcode
-      config:
-        path: 'description/[lang]/screenshots'
+      resolvers:
+        - plugin: default
+          config:
+            path: 'description/[lang]/screenshots'
 id: node.oss_solution.oss_screenshots
 field_name: oss_screenshots
 entity_type: node
 bundle: oss_solution
-label: Screenshots
+label: 'Screenshots [stored]'
 description: 'URLs to files showing screenshots of the software.'
 required: false
 translatable: true

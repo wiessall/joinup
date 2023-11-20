@@ -2,7 +2,7 @@
 # metadata file that makes public software easily discoverable.
 # More info at https://github.com/italia/publiccode.yml
 
-publiccodeYmlVersion: '0.2'
+publiccodeYmlVersion: '0.3'
 name: EU OSS Catalogue - Drupal module
 softwareVersion: '0.1'
 releaseDate: '2023-10-01'
@@ -39,6 +39,14 @@ description:
       align with it.
     shortDescription: Drupal module for EU OpenSource Software Solutions Catalogue
 categories:
+  - content-management
+  - collaboration
+  - data-collection
+  - identity-management
+  - inventory-management
+  - it-development
+  - it-management
+  - knowledge-management
   - web-collaboration
 maintenance:
   type: internal

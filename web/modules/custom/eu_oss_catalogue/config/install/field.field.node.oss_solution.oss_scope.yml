@@ -11,11 +11,12 @@ dependencies:
 third_party_settings:
   eu_oss_catalogue:
     publiccode_yml:
-      resolver: taxonomy_term
-      config:
-        path: intendedAudience/scope
-        vid: oss_intended_audience_scope
-        controlled: true
+      resolvers:
+        - plugin: taxonomy_term
+          config:
+            path: intendedAudience/scope
+            vid: oss_intended_audience_scope
+            controlled: true
 id: node.oss_solution.oss_scope
 field_name: oss_scope
 entity_type: node
