@@ -4,22 +4,12 @@ declare(strict_types = 1);
 
 namespace Drupal\Tests\eu_oss_catalogue\Functional;
 
-use Drupal\eu_oss_catalogue\Entity\OssContactInterface;
-use Drupal\eu_oss_catalogue\Entity\OssContractorInterface;
-use Drupal\eu_oss_catalogue\Entity\OssSolutionInterface;
-use Drupal\language\Entity\ConfigurableLanguage;
-
 /**
  * EU OSS Catalogue test.
  *
  * @group eu_oss_catalogue
  */
 class DevelopersItaliaFetchTest extends FetchTestBase {
-
-  /**
-   * {@inheritdoc}
-   */
-  protected static $modules = ['language'];
 
   /**
    * {@inheritdoc}
@@ -36,35 +26,24 @@ class DevelopersItaliaFetchTest extends FetchTestBase {
   ];
 
   /**
-   * {@inheritdoc}
-   */
-  protected function setUp(): void {
-    parent::setUp();
-    // Add Italian and German languages.
-    ConfigurableLanguage::createFromLangcode('it')->save();
-    ConfigurableLanguage::createFromLangcode('de')->save();
-  }
-
-  /**
    * @covers
    */
   public function testDevelopersItalia(): void {
     $this->fetchSolutions('developers_italia', 4);
 
-    $this->assertNode('GitHub solution 1', OssSolutionInterface::class);
-    $this->assertNode('ACME Ltd', OssContractorInterface::class);
-    $this->assertNode('Das Auto GmbH', OssContractorInterface::class);
-    $this->assertNode('Peter Gregory', OssContactInterface::class);
+    $this->assertOssSolution('GitHub solution 1', 'en');
+    $this->assertOssContractor('ACME Ltd');
+    $this->assertOssContractor('Das Auto GmbH');
+    $this->assertOssContact('Peter Gregory');
 
-    $this->assertNode('Project 1.1', OssSolutionInterface::class);
-    $this->assertNode('Big Brother', OssContactInterface::class);
+    $this->assertOssSolution('Project 1.1', 'it');
+    $this->assertOssContact('Big Brother');
 
-    $this->assertNode('Project 1.2', OssSolutionInterface::class);
-    $this->assertNode('John Doe', OssContactInterface::class);
-    $this->assertNode('Jane Roe', OssContactInterface::class);
+    $this->assertOssSolution('Project 1.2', 'de');
+    $this->assertOssContact('John Doe');
+    $this->assertOssContact('Jane Roe');
 
-    $this->assertNode('Project 1', OssSolutionInterface::class);
-    $this->assertNode('Still The Big Brother', OssContactInterface::class);
+    $this->assertOssSolution('Project 1', 'de');
 
     // Creation log entry for 'GitHub solution 1'.
     $this->assertCount(1, $this->getLogEntries('Solution @solution was created.', 'a:1:{s:9:"@solution";s:17:"GitHub solution 1";}'));

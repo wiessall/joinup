@@ -41,7 +41,6 @@ class LinkToSolutionSearch extends FormatterBase {
     return [
       'facet_id' => '',
       'use_label' => TRUE,
-      'open_new' => FALSE,
     ] + parent::defaultSettings();
   }
 
@@ -69,12 +68,6 @@ class LinkToSolutionSearch extends FormatterBase {
       '#type' => 'checkbox',
       '#title' => $this->t('Use label instead of ID in search link'),
       '#default_value' => $this->getSetting('use_label'),
-    ];
-    $elements['open_new'] = [
-      '#type' => 'checkbox',
-      '#title' => $this->t('Open search link in new tab'),
-      '#default_value' => $this->getSetting('open_new'),
-      '#description' => $this->t('Also adds noopener relation to the link if checked'),
     ];
 
     return $elements;
@@ -127,7 +120,6 @@ class LinkToSolutionSearch extends FormatterBase {
     assert($items instanceof EntityReferenceFieldItemListInterface);
     $renderable = [];
     $facetId = $this->getFacetId();
-    $openNew = $this->getSetting('open_new');
     foreach ($items as $delta => $item) {
       $linkTitle = $this->getSetting('use_label')
         ? $item->entity->label()
@@ -143,10 +135,6 @@ class LinkToSolutionSearch extends FormatterBase {
           ],
         ),
       ] + static::DEFAULT_LINK;
-      if ($openNew) {
-        $renderable[$delta]['#attributes']['referer'] .= ' noopener';
-        $renderable[$delta]['#attributes']['target'] = '_blank';
-      }
     }
 
     return $renderable;
@@ -168,7 +156,6 @@ class LinkToSolutionSearch extends FormatterBase {
     assert($items instanceof PluginReferenceFieldItemListInterface);
     $renderable = [];
     $facetId = $this->getFacetId();
-    $openNew = $this->getSetting('open_new');
     foreach ($items->referencedPlugins() as $delta => $plugin) {
       $labelFromDefinition = $plugin->getPluginDefinition()['label'] ?? '';
       $linkTitle = $this->getSetting('use_label') && $labelFromDefinition
@@ -185,10 +172,6 @@ class LinkToSolutionSearch extends FormatterBase {
           ],
         ),
       ] + static::DEFAULT_LINK;
-      if ($openNew) {
-        $renderable[$delta]['#attributes']['referer'] .= ' noopener';
-        $renderable[$delta]['#attributes']['target'] = '_blank';
-      }
     }
 
     return $renderable;
