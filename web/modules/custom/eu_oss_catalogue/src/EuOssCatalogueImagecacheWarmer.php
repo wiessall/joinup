@@ -4,6 +4,7 @@ declare(strict_types = 1);
 
 namespace Drupal\eu_oss_catalogue;
 
+use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Field\FieldItemInterface;
 use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Queue\QueueFactory;
@@ -31,8 +32,13 @@ final class EuOssCatalogueImagecacheWarmer {
    *
    * @param \Drupal\Core\Queue\QueueFactory $queueFactory
    *   The queue factory service.
+   * @param \Drupal\Core\Extension\ModuleHandlerInterface $moduleHandler
+   *   The module handler.
    */
-  public function __construct(protected QueueFactory $queueFactory) {}
+  public function __construct(
+    protected QueueFactory $queueFactory,
+    protected ModuleHandlerInterface $moduleHandler,
+  ) {}
 
   /**
    * Queues image URLs found in the OSS Solution node to be downloaded.
@@ -41,6 +47,9 @@ final class EuOssCatalogueImagecacheWarmer {
    *   The OSS solution node being just inserted or updated.
    */
   public function queueImageUrls(OssSolutionInterface $ossSolution): void {
+    if (!$this->moduleHandler->moduleExists('imagecache_external')) {
+      return;
+    }
     $queue = $this->queueFactory->get('eu_oss_catalogue_imagecache_warmer');
     $queue->createQueue();
 

@@ -130,7 +130,7 @@ function eu_oss_catalogue_node_insert(EntityInterface $entity): void {
   if (!$entity instanceof OssSolutionInterface) {
     return;
   }
-  \Drupal::service('eu_oss_catalogue.oss_solution.import.imagecache_warmer')->queueImageUrls($entity);
+  \Drupal::service('eu_oss_catalogue.oss_solution.imagecache_warmer')->queueImageUrls($entity);
 }
 
 /**
@@ -140,5 +140,5 @@ function eu_oss_catalogue_node_update(EntityInterface $entity): void {
   if (!$entity instanceof OssSolutionInterface) {
     return;
   }
-  \Drupal::service('eu_oss_catalogue.oss_solution.import.imagecache_warmer')->queueImageUrls($entity);
+  \Drupal::service('eu_oss_catalogue.oss_solution.imagecache_warmer')->queueImageUrls($entity);
 }
