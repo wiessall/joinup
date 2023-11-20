@@ -26,7 +26,6 @@ settings:
       - '|'
       - blockQuote
       - drupalInsertFile
-      - drupalInsertImage
       - drupalMedia
       - insertTable
       - '|'
@@ -87,8 +86,6 @@ settings:
         - heading2
         - heading3
         - heading4
-    ckeditor5_imageResize:
-      allow_resize: true
     ckeditor5_list:
       reversed: false
       startIndex: true
@@ -113,6 +110,7 @@ settings:
         - '<img alt usemap>'
         - '<a hreflang accesskey id rel target title>'
         - '<iframe src allowfullscreen mozallowfullscreen webkitallowfullscreen width height frameborder>'
+        - '<div class>'
     editor_file_file:
       status: true
       scheme: public
