@@ -1,0 +1,40 @@
+// OSS Catalogue green flavour overrides.
+.eu-oss-catalogue {
+  .btn-secondary {
+    color: $oss--brand-darker;
+    background-color: $oss--secondary;
+    &:hover {
+      background-color: $oss--secondary;
+    }
+  }
+  .bg-brand {
+    background-color: $oss--brand-darker !important; 
+  }
+  .bg-secondary {
+    background-color: $oss--secondary !important;
+  }
+  .btn-brand,
+  .btn-primary {
+    background-color: $oss--brand !important;
+    border: 1px solid darken($oss--brand, 5%);
+  }
+  .text-secondary {
+    color: $oss--brand-darker !important;
+  }
+  .oss__instructions {
+    .layout__region--first {
+      &:before {
+        background-color: $oss--secondary;
+      }
+      .paragraph h3:before {
+        background-color: $oss--brand-darker;
+      }
+    }
+  }
+  .oss__social .paragraph--call-to-action a {
+    background-color: transparent !important;
+    &:before{
+      background-color: $oss--brand;
+    }
+  }
+}
