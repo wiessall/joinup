@@ -8,14 +8,15 @@ dependencies:
 third_party_settings:
   eu_oss_catalogue:
     publiccode_yml:
-      resolver: langcode
-      config:
-        path: 'description/[lang]/features'
+      resolvers:
+        - plugin: default
+          config:
+            path: 'description/[lang]/features'
 id: node.oss_solution.oss_features
 field_name: oss_features
 entity_type: node
 bundle: oss_solution
-label: Features
+label: 'Features [stored]'
 description: 'A list of software features, describing what capabilities the software allows to do'
 required: false
 translatable: true
