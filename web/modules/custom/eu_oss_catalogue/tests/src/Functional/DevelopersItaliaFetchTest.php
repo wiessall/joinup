@@ -60,7 +60,7 @@ class DevelopersItaliaFetchTest extends FetchTestBase {
     $this->assertFalse($this->getNodeByTitle('GitHub solution 1'));
     $updatedSolution = $this->getNodeByTitle('GitHub solution 1 (updated)', TRUE);
     $this->assertSame('3.0.0', $updatedSolution->get('oss_software_version')->value);
-    $this->assertSame('woI8JkoNfCtzDiDxfpBGrcxTKCyC7BCEcHHgA3ApMxo', $updatedSolution->get('oss_source_hash')->value);
+    $this->assertSame('C9U01OIThVXwyyeXfddb8kQIs1clR_lxgaIP6Hh9kcA', $updatedSolution->get('oss_source_hash')->value);
     // Assert that the provider has been added to the list of providers.
     $this->assertSame(2, $updatedSolution->get('oss_source')->count());
     $expected_providers = ['developers_italia', 'testing_provider'];
@@ -114,6 +114,25 @@ class DevelopersItaliaFetchTest extends FetchTestBase {
     $solution2 = $this->getNodeByTitle('Project 1.1', TRUE);
     $this->assertNotEmpty($solution2);
     $this->assertSame(1, $solution2->get('oss_source')->count());
+  }
+
+  /**
+   * Tests that text for short and long descriptions are parsed properly.
+   */
+  public function testMarkDownResolver(): void {
+    $this->fetchSolutions('developers_italia', 4);
+
+    // The fact that the solution is found means that the title was cleaned of
+    // extra spaces.
+    $solution = $this->getNodeByTitle('GitHub solution 1');
+    // Assert that markdown is converted for short description.
+    $this->assertStringContainsString('[EN] Solution 1: <strong>Short description</strong>', $solution->get('oss_short_description')->value);
+
+    // Assert that markdown is converted for long description.
+    $long_description = $solution->get('oss_long_description')->value;
+    $this->assertStringContainsString('<strong>Some bold text</strong>', $long_description);
+    $this->assertStringContainsString("<ul><li>Some list item</li>\n<li>Another list item</li>\n</ul>", $long_description);
+    $this->assertStringContainsString('<em>Some italic text</em>', $long_description);
   }
 
 }

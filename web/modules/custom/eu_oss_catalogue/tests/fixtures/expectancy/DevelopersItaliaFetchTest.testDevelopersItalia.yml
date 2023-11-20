@@ -29,9 +29,9 @@ GitHub solution 1:
     oss_software_version: '2.3.0'
     oss_source:
       - developers_italia
-    oss_source_hash: 'TqfnkBSv5JPJFG3GaA0AogZbcRgNHjoMXfQR3Vkm4Vc'
-    oss_long_description: '[EN] Solution 1: Long description'
-    oss_short_description: '[EN] Solution 1: Short description'
+    oss_source_hash: 'c3FRMDrUrvxd9o6UmtTRQ0E3ybKpbptcaePBw5iWvJY'
+    oss_long_description: "[EN] Solution 1: Long description\n<strong>Some bold text</strong>\n<ul><li>Some list item</li>\n<li>Another list item</li>\n</ul><em>Some italic text</em>"
+    oss_short_description: '[EN] Solution 1: <strong>Short description</strong>'
     oss_features:
       - '[EN] Solution 1: Feature 1'
       - '[EN] Solution 1: Feature 2'
@@ -43,8 +43,8 @@ GitHub solution 1:
     default_langcode: '0'
     oss_features:
       - '[DE] Solution 1: Feature 1'
-    oss_long_description: '[DE] Solution 1: Long description'
-    oss_short_description: '[DE] Solution 1: Short description'
+    oss_long_description: "[DE] Solution 1: Long description\n<strong>Some bold text</strong>\n<ul><li>Some list item</li>\n<li>Another list item</li>\n</ul><em>Some italic text</em>"
+    oss_short_description: '[DE] Solution 1: <strong>Short description</strong>'
     oss_screenshots:
       - Solution_1_DE_Screenshot1.jpg
   it:
@@ -53,8 +53,8 @@ GitHub solution 1:
     oss_features:
       - '[IT] Solution 1: Feature 1'
       - '[IT] Solution 1: Feature 2'
-    oss_long_description: '[IT] Solution 1: Long description'
-    oss_short_description: '[IT] Solution 1: Short description'
+    oss_long_description: "[IT] Solution 1: Long description\n<strong>Some bold text</strong>\n<ul><li>Some list item</li>\n<li>Another list item</li>\n</ul><em>Some italic text</em>"
+    oss_short_description: '[IT] Solution 1: <strong>Short description</strong>'
     oss_screenshots:
       - Solution_1_IT_Screenshot1.jpg
 
@@ -175,7 +175,7 @@ GitHub solution 2:
       voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint
       occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim
       id est laborum.
-    oss_short_description: '[IT] Solution 2: Short description Lorem ipsum'
+    oss_short_description: '[IT] Solution 2: **Short description Lorem ipsum**'
     oss_documentation: http://it.docs.example.com/vendor/solution2
     status: '1'
     oss_available_languages:
