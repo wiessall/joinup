@@ -31,7 +31,11 @@
     }
 
   }
+  .l-oss-heading {
+    @include full-width-color($light);
+  }
   &__oss-software-version {
+    margin-right: $spacer * 2;
     .field__item {
       padding: $spacer * .25 $spacer * .75;
       color: darken($warning, 30%);
@@ -84,19 +88,7 @@
   }
   .l-ventuno--layout_twocol_section--section-label-long-description {
     position: relative;
-    padding-block: $spacer * 3;
-    &:before {
-      content: "";
-      display: block;
-      position: absolute;
-      top: 0;
-      inset-inline-start: 50%;
-      width: 100vw;
-      background: $light;
-      height: 100%;
-      margin-inline-start: -50vw;
-      z-index: -1;
-    }
+    @include full-width-color($light);
     .oss-solution__long-description {
       &--long {
         display: -webkit-box!important;
