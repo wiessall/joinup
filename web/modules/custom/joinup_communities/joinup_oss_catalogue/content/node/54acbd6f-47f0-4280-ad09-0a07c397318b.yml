@@ -170,7 +170,7 @@ default:
                 alignment:
                   alignment: left
                 color:
-                  color: brand
+                  color: secondary
                 layout_paragraphs:
                   parent_uuid: 00b46561-49b5-4ce7-a39a-a5b6921bcfb2
                   region: first
