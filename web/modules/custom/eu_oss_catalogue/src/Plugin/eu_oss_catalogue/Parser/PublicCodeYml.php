@@ -8,6 +8,7 @@ use Drupal\Component\Serialization\Exception\InvalidDataTypeException;
 use Drupal\Core\Config\Schema\SchemaCheckTrait;
 use Drupal\Core\Config\TypedConfigManagerInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Logger\LoggerChannelInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Serialization\Yaml;
@@ -40,9 +41,9 @@ class PublicCodeYml extends EuOssCatalogueParserPluginBase implements ContainerF
    *
    * @param array $configuration
    *   A configuration array containing information about the plugin instance.
-   * @param string $pluginId
+   * @param string $plugin_id
    *   The plugin ID for the plugin instance.
-   * @param mixed $pluginDefinition
+   * @param mixed $plugin_definition
    *   The plugin implementation definition.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
    *   The entity type manager service.
@@ -50,32 +51,36 @@ class PublicCodeYml extends EuOssCatalogueParserPluginBase implements ContainerF
    *   The EU OSS Catalogue resolver plugin manager service.
    * @param \Drupal\Core\Logger\LoggerChannelInterface $logger
    *   The EU catalogue logger channel.
+   * @param \Drupal\Core\Language\LanguageManagerInterface $languageManager
+   *   The language manager service.
    * @param \Drupal\Core\Config\TypedConfigManagerInterface $typedConfigManager
    *   The typed config manager interface.
    */
   public function __construct(
     array $configuration,
-    $pluginId,
-    $pluginDefinition,
+    $plugin_id,
+    $plugin_definition,
     protected EntityTypeManagerInterface $entityTypeManager,
     protected EuOssCataloguePluginManagerInterface $resolverManager,
     protected LoggerChannelInterface $logger,
+    protected LanguageManagerInterface $languageManager,
     protected TypedConfigManagerInterface $typedConfigManager,
   ) {
-    parent::__construct($configuration, $pluginId, $pluginDefinition, $this->entityTypeManager, $this->resolverManager, $logger);
+    parent::__construct($configuration, $plugin_id, $plugin_definition, $this->entityTypeManager, $this->resolverManager, $logger, $this->languageManager);
   }
 
   /**
    * {@inheritdoc}
    */
-  public static function create(ContainerInterface $container, array $configuration, $pluginId, $pluginDefinition): self {
+  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition): self {
     return new static(
       $configuration,
-      $pluginId,
-      $pluginDefinition,
+      $plugin_id,
+      $plugin_definition,
       $container->get('entity_type.manager'),
       $container->get('plugin.manager.eu_oss_catalogue.resolver'),
       $container->get('logger.channel.eu_oss_catalogue'),
+      $container->get('language_manager'),
       $container->get('config.typed'),
     );
   }
@@ -120,14 +125,11 @@ class PublicCodeYml extends EuOssCatalogueParserPluginBase implements ContainerF
   protected function doParse(OssSolutionInterface $solution, Project $project, array $metadata, EuOssCatalogueProviderInterface $provider): void {
     parent::doParse($solution, $project, $metadata, $provider);
 
-    /** @var \Drupal\Core\Config\Entity\ThirdPartySettingsInterface $definition */
-    $definition = $solution->getFieldDefinition('oss_publiccode_yml_version');
-    $settings = $definition->getThirdPartySetting('eu_oss_catalogue', $this->getPluginId());
-    $this->getResolver($settings['resolver'], $settings['config'])
-      ->resolve($project, $metadata, $solution->get('oss_publiccode_yml_version'));
-
-    // Add also the publiccode.yml content.
-    $solution->set('oss_publiccode_yml_content', Yaml::encode($metadata));
+    $solution
+      // Set the publiccode.yml content.
+      ->set('oss_publiccode_yml_content', Yaml::encode($metadata))
+      // Set the publiccode.yml version.
+      ->set('oss_publiccode_yml_version', $metadata['publiccodeYmlVersion'] ?? NULL);
   }
 
   /**
