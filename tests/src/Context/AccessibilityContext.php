@@ -135,7 +135,8 @@ class AccessibilityContext extends RawDrupalContext {
       $report[] = $this->buildReportEntry($violation);
     }
 
-    if (!$path = tempnam(DRUPAL_ROOT . '/../debug/', 'a11y.')) {
+    $reportDir = \Drupal::service('stream_wrapper.public')->getDirectoryPath();
+    if (!$path = tempnam($reportDir, 'a11y.')) {
       throw new \RuntimeException('Cannot create a file for the JSON full report');
     }
     file_put_contents($path, Json::encode($violations));
