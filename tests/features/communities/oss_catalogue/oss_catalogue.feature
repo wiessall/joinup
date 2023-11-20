@@ -30,15 +30,17 @@ Feature:
     And I should not see the "Entity actions" region
 
     And I should see the following headings:
-      | Discover our initiative                           |
       | Most recent solutions                             |
       | Do you want to publish your open source solution? |
       | Let’s start with your software name               |
       | Frequently Asked Questions (FAQ)                  |
+      | Do you need any help?                             |
       | Follow our journey on the social media!           |
-    And I should see the text "Welcome to the EU Open Source Solution Catalogue"
-    And I should see the text "The EU Open Source Solutions Catalogue aims to provide a comprehensive and organized repository of the Open Source Software Solutions of the Public Administrations in the Member States."
-    And I should see the link "Learn more"
+    And I should see the text "Discover our European Open Source Software"
+    And I should see the text "Repository of the Open Source Software Solutions of the Public Administrations"
+    And I should see the text "Centralized platform to discover Open Source Software Solutions for diverse needs"
+    And I should see the text "Open Source Software Solutions that empower collaboration, creativity, and efficiency across various domains"
+    And I should see the link "Browse the catalogue"
     And I should see the text "Just follow the guide!"
     And I should see the text "EU Open Source Solutions Catalogue"
     And I should not see the link "Report abusive content"
@@ -54,8 +56,7 @@ Feature:
     # Check OSS label in tile footer.
     And I should see the text "OSS Solution" in the "Spunta" tile
 
-    When I click "advanced search"
-    And I should see the heading "Search in EU Open Source Solutions Catalogue"
+    When I should not see the link "advanced search"
 
   Scenario: User sees short description on OSS Solution page.
     Given oss_solution content:
