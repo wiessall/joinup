@@ -20,12 +20,37 @@ Feature:
     And I go to the edit form of the "Social media page" "custom page"
     And I click "Choose component"
     And I click "Social media"
-    When the available options in the "Platform" select should be "- None -, Twitter, LinkedIn, Youtube, Mastodon, Facebook, Whatsapp, Vimeo, Instagram, GitHub"
-    Then I select "Twitter" from "Platform" in the "Modal content" region
+    When the available options in the "Platform" select should be "- None -, X, LinkedIn, Youtube, Mastodon, Facebook, Whatsapp, Vimeo, Instagram, GitHub"
+    Then I select "X" from "Platform" in the "Modal content" region
     And I wait for AJAX to finish
-    And I fill in "Twitter" with "EU_Commission" in the "Modal content" region
+    And I fill in "X" with "EU_Commission" in the "Modal content" region
     And I press "Settings" in the "Modal content" region
     And I select "Right" from "Alignment" in the "Modal content" region
     And I select "Light blue" from "Color" in the "Modal content" region
     And I press "Save" in the "Modal buttons" region
     And I press "Update"
+
+  @javascript
+  Scenario Outline: A paragraph of social media links is available.
+    Given custom_page content:
+      | title        | collection            | state     |
+      | Social media | Paragraphs collection | published |
+    And I append "social_media" to "field_paragraphs_body" field in "node" entity with following "Social media" title:
+      | field_paragraphs_social_media:platform | <platform> |
+      | field_paragraphs_social_media:value    | <value>    |
+
+    When I am an anonymous user
+    And I visit the "Social media" custom page
+    Then I should see the link "<name>"
+
+    Examples:
+      | platform  | value                | name      |
+      | twitter   | someuser             | X         |
+      | linkedin  | someuser             | LinkedIn  |
+      | youtube   | someuser             | Youtube   |
+      | mastodon  | example.com/someuser | Mastodon  |
+      | facebook  | someuser             | Facebook  |
+      | whatsapp  | 123456789            | Whatsapp  |
+      | vimeo     | someuser             | Vimeo     |
+      | instagram | someuser             | Instagram |
+      | github    | someuser             | GitHub    |

@@ -1,0 +1,17 @@
+@import "../../partials/core";
+
+.paragraph--social-media {
+  &.brand a > svg {
+    color: $brand;
+  }
+  &.primary a > svg {
+    color: $primary;
+  }
+  &.secondary a > svg {
+    color: $secondary;
+  }
+  a svg {
+    width: $spacer * 2;
+    height: $spacer * 2;
+  }
+}

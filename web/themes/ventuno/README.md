@@ -3,22 +3,33 @@
 Custom theme for Joinup. Built on the [OpenEuropa Bootstrap
 theme](https://github.com/openeuropa/oe_bootstrap_theme).
 
-#### Step 1
-Make sure you have Node and npm installed.
-You can read a guide on how to install node here:
-https://docs.npmjs.com/getting-started/installing-node
+The recommended development workflow is to use Docker. See the main README file
+in the project root for instructions.
 
-#### Step 2
-Go to the root of Ventuno theme and run `npm install`
+## Table of contents
 
-#### Step 3
-Run `npm run watch` to compile files onchange.
+* [Requirements](#requirements)
+* [Development workflow](#development-workflow)
+* [Structure](#structure)
+* [Compilation](#compilation)
+  * [Icons](#icons)
+* [Patterns](#patterns)
+* [Notes](#notes)
+
+## Requirements
+
+All requirements are included in the Docker image. If you are not using Docker
+you will need to install the following dependencies:
+
+* [Node.js](https://nodejs.org/en/)
+* [npm](https://www.npmjs.com/)
 
 ## Development workflow
 
-The code is publicly available at https://github.com/ec-europa/joinup-dev/ but
-following European Commission policy the development is coordinated in a private
-Jira instance: https://citnet.tech.ec.europa.eu/CITnet/jira/projects/ISAICP.
+The code is publicly available at
+[https://git.fpfis.tech.ec.europa.eu/ec-europa/digit-joinup-reference](https://git.fpfis.tech.ec.europa.eu/ec-europa/digit-joinup-reference)
+as part of the Joinup project. The development is coordinated in a private Jira
+instance: [https://citnet.tech.ec.europa.eu/CITnet/jira/projects/ISAICP](https://citnet.tech.ec.europa.eu/CITnet/jira/projects/ISAICP).
 
 When frontend development is requested, in most cases this will be preceded by a
 backend ticket that will be developed first. After the backend work is reviewed
@@ -29,157 +40,74 @@ the backend functionality. In Joinup parlance the combination of both tickets is
 called a "mini-epic". Once the FE ticket is reviewed and accepted, both will be
 merged into the `develop` branch to be included in the next release.
 
-There is often some coordination needed between frontend and backend teams
-during the development of the frontent ticket, so a default time allocation of 4
-hours is provided for the backend team to provide assistance if required. This
-is intended for making any necessary changes to test coverage, or to expose any
-missing data to the theme layer.
+## Structure
 
+The theme is built using the OpenEuropa Bootstrap theme. The theme is built
+using the [Bootstrap 4](https://getbootstrap.com/) framework. The theme is
+built using the [Sass](https://sass-lang.com/) preprocessor.
 
-## Getting started
+The key structure of the theme is as follows:
 
-Install Joinup locally or using Docker. See the main README file in the project
-root for instructions.
+* `assets` directory holds compiled CSS and JS files as well as images and
+fonts. **Important**: do not edit files in this directory directly. They are
+compiled from the `src` directory. However, **keep in mind** that the `assets`
+directory is committed to the repository.
+* `includes` directory holds fractions of the main `.theme` file. Since the
+theming functions are numerous, they are split into separate files for easier
+maintenance. File naming and contents are self-explanatory.
+* `src` directory holds the source files for the theme. This is where you should
+make your changes. The `src` directory is not committed to the repository. 2
+subdirectories are available, the `js` and the `scss` directories which hold the
+corresponding files. Like `includes`, files are split grouped according to their
+contents. File naming and contents are self-explanatory.
+* `templates` directory holds the Twig templates for the theme.
 
-Joinup is an open source project which is intended to be reusable by different
-organisations. When a clean install is performed it is fully functional but does
-not contain any content. An empty site is not practical for frontend development
-so in order to get some content to work with there are two approaches: download
-the production database from the main instance at https://joinup.ec.europa.eu/
-or run the Behat test scenario that is provided in the backend ticket.
+Further information can be found at the `ventuno.info.yml` and
+`ventuno.libraries.yml` files.
 
-### Using production databases
+## Compilation
 
-The simplest way to get a populated website is by downloading and installing the
-the production databases. A nightly snapshot is made of the various databases
-that make up Joinup (MariaDB, Solr, Virtuoso).
+To compile the assets, simply run `npm run build` **from the root of the
+project**. If you are working on the assets in a frontend ticket, you can either
+run `npm run build` everytime you are done with your changes, or you can run
+`npm run watch` to compile the assets on the fly. In project root, there is the
+`bcl-builder.config.js` which holds the configuration for the compilation of the
+assets as well as the icons.
 
-The advantages of this approach are that the site will be fully populated with
-existing real world data. It is also quicker to download and restore the
-databases than building a clean website from scratch, especially when using
-Docker.
+### Icons
 
-The disadvantage is that for newly developed functionality the production
-database will not contain any data related to it, so manual steps are often
-needed. Also the production instance has certain protections that will need to
-be worked around. For example it is not possible to log in as the Drupal root
-user, and EU Login will need to be bypassed. Special permission is also needed
-to be able to download backups of production databases. This access is typically
-only granted to developers that work full time under contract with the European
-Commission.
+The theme uses a list of icons provided by the
+[https://github.com/openeuropa/bootstrap-component-library](https://github.com/openeuropa/bootstrap-component-library).
+The icons that are compiled are defined in the `bcl-builder.config.js` file. The
+icons are compiled in the `assets/icons/icons.svg` file. BCL also provides a way
+to use the icons in the theme. In order to use them in the templates, you can
+use the `pattern` function. For example, if you want to use the `arrow-right`
+icon, you can use the following code:
 
-```shell
-# Install dependencies.
-$ ./vendor/bin/composer install
-
-# Download latest production backups.
-$ ./vendor/bin/run dev:download-databases
-
-# Build an instance of Joinup using the downloaded databases.
-$ ./vendor/bin/run dev:rebuild-environment
-
-# Unblock and log in as the Drupal root user (not recommended!)
-$ ./vendor/bin/drush uublk joinup-admin
-$ ./vendor/bin/drush uli
-
-# Bypass EU Login and log in as a Joinup moderator (recommended)
-$ ./vendor/bin/drush uli --name=joinup-moderator
+```twig
+{{ pattern('icon', {
+  name: 'arrow-right',
+}) }}
 ```
+See `bcl-icon.html.twig` for variables and references.
 
-### Using a clean install
+## Patterns
 
-The most reliable way to get relevant content for a specific frontend ticket is
-to perform a clean installation and run the Behat tests that are written for the
-backend sister ticket. These tests are located in the `tests/features` folder.
-
-The advantage of this is that for new functionality that has never been deployed
-to production data can still be populated. Also reading the Behat test scenario
-will give valuable insight in the functionality that needs to be themed, since
-these scenarios are written as a step-by-step user scenario.
-
-Disadvantages are that only the content specific to the new functionality will
-be populated. The remainder of the site will be a barren wasteland. Also the
-Behat test scenarios will clean up any created content at the end of the test
-run, so a manual breakpoint needs to be placed inside the test at a strategic
-point (usually after the initial test setup, before a test user logs in). A full
-clean installation can also be much slower than a production database restore,
-especially when using Docker.
-
-The example below assumes that we are going to provide a frontend implementation
-for a block showing a list of topics on the homepage. The file containing the
-test scenario is `tests/features/homepage.feature`. The right scenario and the
-file that contains it can be found by looking at the pull request of the backend
-ticket.
-
-```shell
-# Install dependencies.
-$ ./vendor/bin/composer install
-
-# Perform clean installation.
-$ ./vendor/bin/run toolkit:build-dev
-$ ./vendor/bin/run toolkit:install-clean
-
-# Enable error logging so notices and warnings will be visible.
-$ ./vendor/bin/drush cset system.logging error_level --value=verbose
-```
-
-Now edit the test scenario using your favorite editor. Find the right section
-and insert a Behat "breakpoint" in the scenario, after the necessary content is
-being created:
-
-```gherkin
-...
-And the "Highlighted content" content listing contains:
-  | type  | label                            |
-  | topic | Employment and Support Allowance |
-  | topic | E-justice                        |
-
-# After the content creation, insert the following Behat "breakpoint". The
-# test scenario will halt at this point.
-Then I break
-
-When I am logged in as an authenticated user
-...
-```
-
-It is also recommended to disable any scenarios that are not relevant to save
-time. Find all lines that start with `Scenario` and add a `@wip` tag above them.
-Any scenarios tagged with `@wip` are skipped.
-
-```gherkin
-# Adding a "@wip" tag will disable this unrelated test scenario.
-@wip
-Scenario: Explore block shows a list of news.
-...
-```
-
-Now run the test. When the test runner encounters the breakpoint the scenario
-will be paused, and when the website is opened in a browser the content will be
-available. After finishing work, press "enter" in the terminal to continue the
-test scenario.
-
-```shell
-$ cd tests/
-$ ./behat features/homepage.feature
-```
+The
+[Bootstrap Component Library](https://github.com/openeuropa/bootstrap-component-library)
+that the theme uses, provides a list of patterns that can be used in the theme.
+Some patterns are already used, like the `bcl-badge` and `bcl-icon`. For the
+full list of patterns, you can check the `oe_bootstrap_theme/assets/bcl`
+directory.
 
 ## Notes
 
-Joinup deviates from some standard Drupal practices. Here are some things that
-might not be immediately obvious to devs expecting a standard Drupal site:
-
-* The Drupal administration interface is not used by any user in production. It
-  is solely used during development. The end users have a fully custom admin UI.
-  When doing frontend work it is highly recommended to NOT log in as the Drupal
-  admin. Instead log in as a normal user or a moderator, in order to view the
-  site in the way an actual user would.
-* In production config is locked down using the Config Read Only module. This
-  ensures no unexpected configuration changes can be made in the production
-  environment. All configuration changes need to be done in a clean install.
-* Joinup uses a complex backend using multiple databases. This might cause
-  unexpected side effects. For example newly created content might not become
-  immediately visible in overview pages, but will require some additional steps
-  like triggering indexing of the search engine, waiting for cron jobs to run,
-  or forcing a cache clear. In most cases inspecting the Behat test scenarios
-  that accompany the functionality will give insight to which steps might be
-  needed for content to show up.
+This guide should be expanded with more practices used by the Joinup project.
+Things possibly missing:
+* Better way to be able to view BCL components and understand how to interact
+with them.
+* Cases where we are not using the BCL components (like images) and how to
+differentiate them when choosing the most suitable way.
+* Restrictions about practices we are not using in our twig files, or some
+specific development practices (like, what we put in the `includes` directory
+and what goes into the twig files, etc.).
