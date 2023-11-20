@@ -94,65 +94,8 @@ default:
       pathauto: 1
   published_at:
     -
-      value: 1696243186
+      value: 1699952886
   field_paragraphs_body:
-    -
-      entity:
-        _meta:
-          version: '1.0'
-          entity_type: paragraph
-          uuid: ee3aeb11-045f-4ac1-a2bc-1f6f02e28266
-          bundle: layout
-          default_langcode: en
-        default:
-          status:
-            -
-              value: true
-          created:
-            -
-              value: 1694501630
-          behavior_settings:
-            -
-              value:
-                layout_paragraphs:
-                  layout: layout_onecol
-                  config:
-                    label: ''
-                  parent_uuid: null
-                  region: null
-                background_theme: {  }
-                extra_class:
-                  extra_class: oss__header
-    -
-      entity:
-        _meta:
-          version: '1.0'
-          entity_type: paragraph
-          uuid: a6f9c121-b222-4e4e-8135-c019fb7f2d77
-          bundle: block
-          default_langcode: en
-        default:
-          status:
-            -
-              value: true
-          created:
-            -
-              value: 1694501636
-          behavior_settings:
-            -
-              value:
-                layout_paragraphs:
-                  parent_uuid: ee3aeb11-045f-4ac1-a2bc-1f6f02e28266
-                  region: content
-          paragraph_block:
-            -
-              plugin_id: 'views_exposed_filter_block:search_oss_catalogue-search'
-              settings:
-                id: 'views_exposed_filter_block:search_oss_catalogue-search'
-                label: ''
-                label_display: false
-                provider: views
-                views_label: ''
     -
       entity:
         _meta:
@@ -186,32 +129,6 @@ default:
         _meta:
           version: '1.0'
           entity_type: paragraph
-          uuid: 5772fbba-cf36-44b6-a885-6c56f3c7361f
-          bundle: heading
-          default_langcode: en
-        default:
-          status:
-            -
-              value: true
-          created:
-            -
-              value: 1694500417
-          behavior_settings:
-            -
-              value:
-                heading_behavior:
-                  level: h2
-                layout_paragraphs:
-                  parent_uuid: 00b46561-49b5-4ce7-a39a-a5b6921bcfb2
-                  region: first
-          paragraph_heading:
-            -
-              value: 'Discover our initiative'
-    -
-      entity:
-        _meta:
-          version: '1.0'
-          entity_type: paragraph
           uuid: 33957667-93da-4344-b85f-a2b389fd5982
           bundle: text
           default_langcode: en
@@ -228,12 +145,9 @@ default:
                 layout_paragraphs:
                   parent_uuid: 00b46561-49b5-4ce7-a39a-a5b6921bcfb2
                   region: first
-          revision_translation_affected:
-            -
-              value: true
           field_body:
             -
-              value: "<p>The EU Open Source Solutions Catalogue aims to provide a comprehensive and organized repository of the Open Source Software Solutions of the Public Administrations in the Member States.</p>\r\n\r\n<p>It serves as a centralized platform for users to discover, evaluate, and select suitable&nbsp;Open Source Software Solutions for their diverse needs. The catalogue covers a wide range of domains including but not limited to web development, data science, artificial intelligence, infrastructure management, and more.</p>\r\n"
+              value: '<p><strong>Discover</strong> our European Open Source Software</p>'
               format: text_html
     -
       entity:
@@ -256,25 +170,26 @@ default:
                 alignment:
                   alignment: left
                 color:
-                  color: brand
+                  color: secondary
                 layout_paragraphs:
                   parent_uuid: 00b46561-49b5-4ce7-a39a-a5b6921bcfb2
                   region: first
+                styles: {  }
           revision_translation_affected:
             -
               value: true
           paragraph_action_link:
             -
-              title: 'Learn more'
-              uri: internal:/<current>
+              uri: 'internal:/<current>'
+              title: 'Browse the catalogue'
               options: {  }
     -
       entity:
         _meta:
           version: '1.0'
           entity_type: paragraph
-          uuid: c2fcd6fd-afb4-425b-aa77-490c12564399
-          bundle: image
+          uuid: f234e706-573e-4767-a2de-47fb90f8fb1a
+          bundle: text
           default_langcode: en
         default:
           status:
@@ -282,20 +197,67 @@ default:
               value: true
           created:
             -
-              value: 1694507786
+              value: 1700037874
           behavior_settings:
             -
               value:
                 layout_paragraphs:
                   parent_uuid: 00b46561-49b5-4ce7-a39a-a5b6921bcfb2
                   region: second
-          paragraph_image:
+          field_body:
             -
-              entity: 4b8712c1-bc69-4bb2-985d-33635e08466c
-              alt: 'Discover our initiative'
-              title: ''
-              width: 673
-              height: 442
+              value: '<p>Repository of the Open Source Software Solutions of the Public Administrations</p>'
+              format: text_html
+    -
+      entity:
+        _meta:
+          version: '1.0'
+          entity_type: paragraph
+          uuid: 5178c23a-58bc-4ba8-b64c-863029483597
+          bundle: text
+          default_langcode: en
+        default:
+          status:
+            -
+              value: true
+          created:
+            -
+              value: 1700037894
+          behavior_settings:
+            -
+              value:
+                layout_paragraphs:
+                  parent_uuid: 00b46561-49b5-4ce7-a39a-a5b6921bcfb2
+                  region: second
+          field_body:
+            -
+              value: '<p>Centralized platform to discover Open Source Software Solutions for diverse needs</p>'
+              format: text_html
+    -
+      entity:
+        _meta:
+          version: '1.0'
+          entity_type: paragraph
+          uuid: d609ad2b-ceac-4491-b8f1-eba9ddc31d13
+          bundle: text
+          default_langcode: en
+        default:
+          status:
+            -
+              value: true
+          created:
+            -
+              value: 1700037933
+          behavior_settings:
+            -
+              value:
+                layout_paragraphs:
+                  parent_uuid: 00b46561-49b5-4ce7-a39a-a5b6921bcfb2
+                  region: second
+          field_body:
+            -
+              value: '<p>Open Source Software Solutions that empower collaboration, creativity, and efficiency across various domains</p>'
+              format: text_html
     -
       entity:
         _meta:
@@ -1039,7 +1001,7 @@ default:
                   alignment: center
           paragraph_heading:
             -
-              value: 'Or if you need any help'
+              value: 'Do you need any help?'
     -
       entity:
         _meta:
@@ -1124,7 +1086,7 @@ default:
                   alignment: center
           paragraph_heading:
             -
-              value: 'Follow our journey on the social media! '
+              value: 'Follow our journey on the social media!'
     -
       entity:
         _meta:

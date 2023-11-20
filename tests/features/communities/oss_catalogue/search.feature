@@ -22,12 +22,12 @@ Feature: OSS catalogue search
     And I see the text "Open source software of interest for Public Administrations" in the "Header" region
 
     Given oss_solution content:
-      | title                           | oss_development_status | oss_source        | oss_categories                                                  | oss_short_description                                                                                                                         | oss_git_description                                                               | status    | oss_release_date |
-      | Django-MDQ                      | stable                 | developers_italia | content-management                                              | A lightweight SAML2 MDQ server that implements draft-young-md-query implementation.                                                           |                                                                                   | published | 2022-04-13T13:00 |
-      | INGV - QuakeML to NonLinLoc PHS | stable                 | developers_italia | data-analytics,data-collection                                  | Docker image to convert QuakeML format to NonLinLoc PHS format.                                                                               |                                                                                   | published | 2000-07-13T13:00 |
-      | NDC Semantic frontend           | beta                   | developers_italia | digital-asset-management                                        |                                                                                                                                               | This is the frontend for the National Data Catalog for Semantic Interoperability. | published | 2023-08-13T13:00 |
-      | Software Registry               | development            | developers_italia | application-development,it-development,digital-asset-management | Software Registry makes software development phase simplier by showing extended information about projects and allowing source code searches. |                                                                                   | published | 2000-04-13T13:00 |
-      | Immuni                          | obsolete               | developers_italia | data-collection                                                 | Immuni is a mobile app that helps us to fight the COVID-19 pandemic by notifying users at risk of carrying the virus as early as possible     |                                                                                   | published | 2020-09-13T13:00 |
+      | title                           | oss_development_status | oss_source        | oss_categories                                                  | oss_short_description                                                                                                                         | oss_git_description                                                               | status    | oss_release_date | oss_software_version |
+      | Django-MDQ                      | stable                 | developers_italia | content-management                                              | A lightweight SAML2 MDQ server that implements draft-young-md-query implementation.                                                           |                                                                                   | published | 2022-04-13T13:00 | 1.0-beta             |
+      | INGV - QuakeML to NonLinLoc PHS | stable                 | developers_italia | data-analytics,data-collection                                  | Docker image to convert QuakeML format to NonLinLoc PHS format.                                                                               |                                                                                   | published | 2000-07-13T13:00 |                      |
+      | NDC Semantic frontend           | beta                   | developers_italia | digital-asset-management                                        |                                                                                                                                               | This is the frontend for the National Data Catalog for Semantic Interoperability. | published | 2023-08-13T13:00 | 2.2.4                |
+      | Software Registry               | development            | developers_italia | application-development,it-development,digital-asset-management | Software Registry makes software development phase simplier by showing extended information about projects and allowing source code searches. |                                                                                   | published | 2000-04-13T13:00 | 0.1-alpha            |
+      | Immuni                          | obsolete               | developers_italia | data-collection                                                 | Immuni is a mobile app that helps us to fight the COVID-19 pandemic by notifying users at risk of carrying the virus as early as possible     |                                                                                   | published | 2020-09-13T13:00 |                      |
 
     Then I visit the OSS search page
 
@@ -41,11 +41,14 @@ Feature: OSS catalogue search
 
     # Check tiles.
     And I should see the "Django-MDQ" tile
+    And I should see the text "1.0-beta" in the "Django-MDQ" tile
     And I should see the "INGV - QuakeML to NonLinLoc PHS" tile
     And I should see the text "Docker image to convert QuakeML format to NonLinLoc PHS format." in the "INGV - QuakeML to NonLinLoc PHS" tile
     And I should see the "NDC Semantic frontend" tile
+    And I should see the text "2.2.4" in the "NDC Semantic frontend" tile
     And I should see the text "This is the frontend for the National Data Catalog for Semantic Interoperability." in the "NDC Semantic frontend" tile
     And I should see the "Software Registry" tile
+    And I should see the text "0.1-alpha" in the "Software Registry" tile
     And I should see the "Immuni" tile
 
     # Check facets headings.
@@ -110,6 +113,53 @@ Feature: OSS catalogue search
     When I am logged in as an "authenticated user"
     And I go to the homepage of the "EU Open Source Solutions Catalogue" collection
     And I should not see the "Entity actions" region
+
+  Scenario: User is able to search by string in any language.
+    Given oss_solution multilingual content:
+      | title         | status    | changed    | oss_source        | oss_release_date | langcode | default_translation | oss_features                                                                                  | oss_short_description                                                                                                                                        | oss_long_description                                                                                                                                                                                                                        | oss_publiccode_yml_content |
+      | MongoDB Atlas | published | 1700000000 | developers_italia | 2025-10-19       | en       | 1                   | Strong security measures, Easier scalability, Extensive analytics and monitoring              | The multi-cloud database service at the heart of our developer data platform that accelerates and simplifies how you build with data.                        | Atlas simplifies deploying and managing your databases while offering the versatility you need to build resilient and performant global applications on the cloud providers of your choice.                                                 | yml file                   |
+      |               | ~~~       | ~~~        | ~~~               | ~~~              | de       | 0                   | Starke Sicherheitsmaßnahmen, einfachere Skalierbarkeit, umfangreiche Analysen und Überwachung | Der Multi-Cloud-Datenbankdienst im Herzen unserer Entwicklerdatenplattform, der die Erstellung mit Daten beschleunigt und vereinfacht.                       | Atlas vereinfacht die Bereitstellung und Verwaltung Ihrer Datenbanken und bietet gleichzeitig die Vielseitigkeit, die Sie zum Erstellen belastbarer und leistungsstarker globaler Anwendungen bei den Cloud-Anbietern Ihrer Wahl benötigen. | ~~~                        |
+      |               | ~~~       | ~~~        | ~~~               | ~~~              | it       | 0                   | Forti misure di sicurezza, scalabilità più semplice, analisi e monitoraggio estesi            | Il servizio di database multi-cloud al centro della nostra piattaforma dati per sviluppatori che accelera e semplifica il modo in cui costruisci con i dati. | Atlas semplifica la distribuzione e la gestione dei tuoi database offrendo al contempo la versatilità necessaria per creare applicazioni globali resilienti e performanti sui provider cloud di tua scelta.                                 | ~~~                        |
+
+    # Search by oss_features.
+    Then I visit the OSS search page
+    And I fill in "Search catalogue" with "measures"
+    And I press "Search OSS catalogue"
+    When I should see the "MongoDB Atlas" tile
+
+    Then I fill in "Search catalogue" with "Sicherheitsmaßnahmen"
+    And I press "Search OSS catalogue"
+    When I should see the "MongoDB Atlas" tile
+
+    Then I fill in "Search catalogue" with "scalabilità"
+    And I press "Search OSS catalogue"
+    When I should see the "MongoDB Atlas" tile
+
+    # Search by oss_short_description.
+    Then I fill in "Search catalogue" with "accelerates"
+    And I press "Search OSS catalogue"
+    When I should see the "MongoDB Atlas" tile
+
+    Then I fill in "Search catalogue" with "Multi-Cloud-Datenbankdienst"
+    And I press "Search OSS catalogue"
+    When I should see the "MongoDB Atlas" tile
+
+    Then I fill in "Search catalogue" with "piattaforma"
+    And I press "Search OSS catalogue"
+    When I should see the "MongoDB Atlas" tile
+
+    # Search by oss_long_description.
+    Then I fill in "Search catalogue" with "versatility"
+    And I press "Search OSS catalogue"
+    When I should see the "MongoDB Atlas" tile
+
+    Then I fill in "Search catalogue" with "Vielseitigkeit"
+    And I press "Search OSS catalogue"
+    When I should see the "MongoDB Atlas" tile
+
+    Then I fill in "Search catalogue" with "distribuzione"
+    And I press "Search OSS catalogue"
+    When I should see the "MongoDB Atlas" tile
 
   @javascript
   Scenario: User is able to use autocomplete.
