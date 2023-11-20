@@ -7,6 +7,8 @@
 
 declare(strict_types = 1);
 
+use Drupal\Component\Utility\Xss;
+
 /**
  * Implements hook_theme_suggestions_HOOK_alter().
  */
@@ -63,9 +65,10 @@ function ventuno_theme_suggestions_views_view_fields_alter(array &$suggestions, 
  * Implements hook_preprocess_HOOK() for "views_view".
  */
 function ventuno_preprocess_views_view(array &$variables): void {
-  if ($displayTitle = $variables['view']->getDisplay()->getOption('title')) {
-    $variables['display_title'] = $displayTitle;
-  }
+  $variables['title'] = [
+    '#markup' => $variables['view']->getTitle(),
+    '#allowed_tags' => Xss::getHtmlTagList(),
+  ];
 }
 
 /**
