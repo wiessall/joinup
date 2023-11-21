@@ -15,17 +15,21 @@
   }
   &__figure {
     overflow: hidden;
-    aspect-ratio: 16 / 9;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    aspect-ratio: 1 / 1;
     & picture {
-      height: 100%;
-      display: flex;
-      justify-content: center;
-      align-items: center;
       & img {
-        max-height: 100%;
-        width: auto;
+        width: 100%;
         margin-bottom: 0;
       }
+    }
+  }
+  &__default-img {
+    aspect-ratio: 4 / 3;
+    @include media-breakpoint-up(md) {
+      aspect-ratio: 1 / 1;
     }
   }
   &__body {
@@ -135,19 +139,29 @@
       }
     }
   }
+  .field--name-oss-logo {
+    padding: $spacer;
+    width: 100%;
+  }
   &--horizontal {
     width: 100%;
+    .field--name-oss-logo {
+      width: 100%;
+      padding: $spacer;
+    }
+     .tile__figure {
+        aspect-ratio: unset;
+      }
     @include media-breakpoint-up(md) {
       flex-direction: row;
       flex-wrap: wrap;
       height: auto;
+      .field--name-oss-logo {
+        padding: 0;
+      }
       .tile__figure {
         padding: $spacer 0 0 $spacer;
         width: 180px;
-        aspect-ratio: 1 / 1;
-        & picture {
-          align-items: start;
-        }
       }
       .tile__body {
         flex: 1 1 calc(100% - 180px);
