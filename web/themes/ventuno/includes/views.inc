@@ -65,7 +65,7 @@ function ventuno_theme_suggestions_views_view_fields_alter(array &$suggestions, 
  * Implements hook_preprocess_HOOK() for "views_view".
  */
 function ventuno_preprocess_views_view(array &$variables): void {
-  $variables['title'] = [
+  $variables['display_title'] = [
     '#markup' => $variables['view']->getTitle(),
     '#allowed_tags' => Xss::getHtmlTagList(),
   ];
