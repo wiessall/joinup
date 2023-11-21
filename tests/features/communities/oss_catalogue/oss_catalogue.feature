@@ -30,15 +30,17 @@ Feature:
     And I should not see the "Entity actions" region
 
     And I should see the following headings:
-      | Discover our initiative                           |
       | Most recent open source software solutions        |
       | Do you want to publish your open source solution? |
       | Let’s start with your software name               |
       | Frequently Asked Questions (FAQ)                  |
+      | Do you need any help?                             |
       | Follow our journey on the social media!           |
-    And I should see the text "Welcome to the EU Open Source Solution Catalogue"
-    And I should see the text "The EU Open Source Solutions Catalogue aims to provide a comprehensive and organized repository of the Open Source Software Solutions of the Public Administrations in the Member States."
-    And I should see the link "Learn more"
+    And I should see the text "Discover our European Open Source Software"
+    And I should see the text "Repository of the Open Source Software Solutions of the Public Administrations"
+    And I should see the text "Centralized platform to discover Open Source Software Solutions for diverse needs"
+    And I should see the text "Open Source Software Solutions that empower collaboration, creativity, and efficiency across various domains"
+    And I should see the link "Browse the catalogue"
     And I should see the text "Just follow the guide!"
     And I should see the text "EU Open Source Solutions Catalogue"
     And I should not see the link "Report abusive content"
@@ -54,8 +56,7 @@ Feature:
     # Check OSS label in tile footer.
     And I should see the text "OSS Solution" in the "Spunta" tile
 
-    When I click "advanced search"
-    And I should see the heading "Search in EU Open Source Solutions Catalogue"
+    When I should not see the link "advanced search"
 
   Scenario: User sees short description on OSS Solution page.
     Given oss_solution content:
@@ -71,9 +72,10 @@ Feature:
       | Olympus | development            | developers_italia | data-analytics | Foo's short description | Foo's GIT description | published | 2014-11-19       |
     When I go to the content page of the type "oss_solution" with the title "Olympus"
     Then I see the text "EU Open Source Solutions Catalogue" in the "Header" region
-    And I see the text "1 Open Source Software Solution" in the "Header" region
     And I see the text "Open source software of interest for Public Administrations" in the "Header" region
-    But I should not see the "Navigation menu" region
+    And I should see the following links in the "Navigation menu" region:
+      | Welcome |
+      | Search  |
 
   Scenario: User sees GIT description on OSS Solution page if short description is missing.
     Given oss_solution content:
