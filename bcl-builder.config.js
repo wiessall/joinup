@@ -99,6 +99,20 @@ module.exports = {
     {
       entry: path.resolve(
         outputFolder,
+        `${ventuno}src/js/paragraph-inline-img.js`
+      ),
+      dest: path.resolve(
+        outputFolder,
+        `${ventuno}assets/js/paragraph-inline-img.js`
+      ),
+      options: {
+        minify: true,
+        sourceMap: true,
+      },
+    },
+    {
+      entry: path.resolve(
+        outputFolder,
         `${ventuno}src/js/responsive-tables.js`
       ),
       dest: path.resolve(
@@ -755,6 +769,21 @@ module.exports = {
       dest: path.resolve(
         outputFolder,
         `${ventuno}assets/css/paragraph--poll.min.css`
+      ),
+      options: {
+        includePaths,
+        minify: true,
+        sourceMap: "file",
+      },
+    },
+    {
+      entry: path.resolve(
+        outputFolder,
+        `${ventuno}src/scss/components/paragraphs/paragraph--social-media.scss`
+      ),
+      dest: path.resolve(
+        outputFolder,
+        `${ventuno}assets/css/paragraph--social-media.min.css`
       ),
       options: {
         includePaths,
