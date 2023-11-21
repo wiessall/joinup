@@ -10,9 +10,11 @@ declare(strict_types = 1);
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\block\BlockInterface;
+use Drupal\eu_oss_catalogue\Entity\OssSolutionInterface;
 use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\joinup_oss_catalogue\Entity\JoinupOssSolution;
 use Drupal\joinup_oss_catalogue\OssCatalogueCollectionInterface;
+use Drupal\node\NodeInterface;
 
 /**
  * Implements hook_views_plugins_argument_alter().
@@ -133,5 +135,25 @@ function joinup_oss_catalogue_preprocess_image_style(array &$variables): void {
   $assetExtension = strtolower(pathinfo($variables['image']['#uri'], PATHINFO_EXTENSION));
   if ($assetExtension === 'svg') {
     unset($variables['image']['#access']);
+  }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_insert() for "node" entity type.
+ */
+function joinup_oss_catalogue_node_insert(NodeInterface $node): void {
+  if ($node instanceof OssSolutionInterface) {
+    \Drupal::service('joinup_oss_catalogue.oss_solution.imagecache_warmer')
+      ->queueImageUrls($node);
+  }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_update() for "node" entity type.
+ */
+function joinup_oss_catalogue_node_update(NodeInterface $node): void {
+  if ($node instanceof OssSolutionInterface) {
+    \Drupal::service('joinup_oss_catalogue.oss_solution.imagecache_warmer')
+      ->queueImageUrls($node);
   }
 }
