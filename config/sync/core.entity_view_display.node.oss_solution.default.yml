@@ -225,7 +225,7 @@ third_party_settings:
             region: first_left
             configuration:
               id: 'field_block:node:oss_solution:oss_software_version'
-              label: 'Software version'
+              label: 'Version'
               label_display: '0'
               provider: layout_builder
               context_mapping:

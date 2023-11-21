@@ -16,7 +16,7 @@ id: node.oss_solution.oss_software_version
 field_name: oss_software_version
 entity_type: node
 bundle: oss_solution
-label: 'Software version'
+label: 'Version'
 description: 'The latest stable version number of the software.'
 required: false
 translatable: false
