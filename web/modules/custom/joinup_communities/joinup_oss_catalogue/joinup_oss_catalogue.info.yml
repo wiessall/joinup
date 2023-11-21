@@ -8,6 +8,7 @@ dependencies:
   - eu_oss_catalogue:eu_oss_catalogue
   - joinup_bundle_class:joinup_bundle_class
   - message:message
+  - oe_bootstrap_theme_helper:oe_bootstrap_theme_helper
 
 default_content:
   file:
