@@ -97,12 +97,11 @@ class LanguageCodeFormatter extends FormatterBase implements ContainerFactoryPlu
    *   The name of the language or langcode.
    */
   private function getLanguageName(string $langcode): string {
-    //$languages = $this->languageManager->getLanguageName($langcode);
     if ($this->languageManager->getLanguage($langcode)) {
       return $this->languageManager->getLanguageName($langcode);
     }
     // The fallback implemented in case we don't have langcode in list.
-    $predefined = EuropeanUnionLanguages::getLanguageList() + $this->languageManager->getStandardLanguageList();
+    $predefined = EuropeanUnionLanguages::getLanguageList();
     foreach ($predefined as $countries) {
       if (in_array($langcode, $countries, TRUE)) {
         return $countries[0];
