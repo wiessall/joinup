@@ -80,18 +80,19 @@ Feature:
     And I select the radio button "No, we developed the solution internally"
     And I attach the file "logo.png" to "Additional info"
 
-    # Check webform patch.
-    And I press "Add organisation"
-
     Then I should see the heading "Terms and Conditions"
     And I check the box "I have read and agreed to the Joinup Legal Notice and the Joinup Privacy Statement."
 
     Then I should see the heading "Send yourself a copy"
     And I check the box "Send me an email with a copy of this form"
 
+    # Check webform patch.
+    And I press "Add organisation"
+    And I fill in the latest "Public sector organisation" field with "Smith's organisation 2"
+
     # Submit form.
     Then I press "Submit"
-    When I should not see the success message "Status messageYour use case has been submitted successfully. Soon you will be informed by the Public Sector Tech Watch team about the next steps."
+    When I should see the success message "Your use case has been submitted successfully. Soon you will be informed by the Public Sector Tech Watch team about the next steps."
 
     # Check the mail notification.
     And 2 e-mails should have been sent
