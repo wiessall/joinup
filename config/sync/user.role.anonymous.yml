@@ -72,6 +72,7 @@ permissions:
   - 'view paragraph content poll'
   - 'view paragraph content quote'
   - 'view paragraph content simple_paragraph'
+  - 'view paragraph content social_media'
   - 'view paragraph content testimony'
   - 'view paragraph content text'
   - 'view paragraph content tile'

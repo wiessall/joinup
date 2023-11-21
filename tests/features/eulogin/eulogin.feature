@@ -27,7 +27,7 @@ Feature: Log in through EU Login
 
     # The user has been redirected to its user account edit form.
     Then the following fields should be present "Email, First name, Family name, Photo, Country of origin, Professional domain, Business title"
-    And the following fields should be present "Facebook, Twitter, LinkedIn, GitHub, SlideShare, Youtube, Vimeo"
+    And the following fields should be present "Facebook, X, LinkedIn, GitHub, SlideShare, Youtube, Vimeo"
     But I should not see "Fail - Password length must be at least 8 characters."
     And I should not see "Password character length of at least 8"
     And I should not see "Fail - Password must contain at least 3 types of characters from the following character types: lowercase letters, uppercase letters, digits, special characters."

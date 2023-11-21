@@ -8,16 +8,13 @@
 declare(strict_types = 1);
 
 use Drupal\Core\Access\AccessResult;
-use Drupal\Core\Cache\Cache;
-use Drupal\Core\Cache\CacheableMetadata;
-use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
-use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\block\BlockInterface;
-use Drupal\collection\Entity\CollectionInterface;
+use Drupal\eu_oss_catalogue\Entity\OssSolutionInterface;
 use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\joinup_oss_catalogue\Entity\JoinupOssSolution;
 use Drupal\joinup_oss_catalogue\OssCatalogueCollectionInterface;
+use Drupal\node\NodeInterface;
 
 /**
  * Implements hook_views_plugins_argument_alter().
@@ -36,58 +33,6 @@ function joinup_oss_catalogue_views_plugins_argument_alter(array &$plugins): voi
 function joinup_oss_catalogue_entity_bundle_info_alter(array &$bundles): void {
   if (!empty($bundles['node']['oss_solution'])) {
     $bundles['node']['oss_solution']['class'] = JoinupOssSolution::class;
-  }
-}
-
-/**
- * Implements hook_entity_extra_field_info().
- */
-function joinup_oss_catalogue_entity_extra_field_info(): array {
-  $fields = [];
-  $fields['rdf_entity']['collection']['display']['oss_solutions'] = [
-    'label' => t('Amount of OpenSource Solutions'),
-    'description' => t('Amount of OpenSource Solutions.'),
-    'visible' => FALSE,
-  ];
-  return $fields;
-}
-
-/**
- * Implements hook_ENTITY_TYPE_view().
- *
- * Shows extra fields for the collection bundle.
- */
-function joinup_oss_catalogue_rdf_entity_view(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display, string $view_mode): void {
-  if (!$entity instanceof CollectionInterface && $entity->id() === OssCatalogueCollectionInterface::COLLECTION_ENTITY_ID) {
-    return;
-  }
-
-  // OSS Solution count.
-  if ($display->getComponent('oss_solutions')) {
-    $oss_solution_count = \Drupal::entityTypeManager()->getStorage('node')
-      ->getQuery()
-      ->accessCheck()
-      ->condition('status', 1)
-      ->condition('type', 'oss_solution')
-      ->condition('langcode', 'en')
-      ->count()
-      ->execute();
-    $markup = $oss_solution_count === 0 ?
-      \Drupal::translation()->translate('No Open Source Software Solutions were federated yet') :
-      \Drupal::translation()->formatPlural(
-        $oss_solution_count,
-        '@oss_solution_count Open Source Software Solution',
-        '@oss_solution_count Open Source Software Solutions',
-        ['@oss_solution_count' => $oss_solution_count],
-      );
-    $build['oss_solutions'] = [
-      '#markup' => $markup,
-    ];
-    (new CacheableMetadata())
-      ->addCacheTags(Cache::buildTags('og-group-content', $entity->getCacheTagsToInvalidate()))
-      ->addCacheTags(['rdf_entity_list', 'node_list:oss_solution'])
-      ->applyTo($build['oss_solutions']);
-
   }
 }
 
@@ -152,5 +97,63 @@ function joinup_oss_catalogue_preprocess_node(array &$variables): void {
     $group->id() === OssCatalogueCollectionInterface::COLLECTION_ENTITY_ID
   ) {
     $variables['content']['report']['#access'] = FALSE;
+  }
+}
+
+/**
+ * Implements hook_preprocess_HOOK().
+ */
+function joinup_oss_catalogue_preprocess_html(array &$variables): void {
+  // All OSS pages should expose a class eu-oss-catalogue in the <body> tag.
+  /** @var \Drupal\og\OgContextInterface $ogContext */
+  $ogContext = \Drupal::service('og.context');
+
+  if (($group = $ogContext->getGroup()) && $group->id() === OssCatalogueCollectionInterface::COLLECTION_ENTITY_ID) {
+    $variables['attributes']['class'][] = 'eu-oss-catalogue';
+  }
+}
+
+/**
+ * Implements hook_preprocess_HOOK() for "image_style".
+ *
+ * Makes SVG file assets visible even if they are formatted as image styles.
+ *
+ * @see template_preprocess_image_style()
+ */
+function joinup_oss_catalogue_preprocess_image_style(array &$variables): void {
+  // Early return of the image is accessible or if the URI os empty.
+  if (
+    !isset($variables['image']['#access']) ||
+    $variables['image']['#access'] ||
+    empty($variables['image']['#uri'])
+  ) {
+    return;
+  }
+
+  // If the file's extension from the given URI is string, we make the markup
+  // visible by removing the "#access" key.
+  $assetExtension = strtolower(pathinfo($variables['image']['#uri'], PATHINFO_EXTENSION));
+  if ($assetExtension === 'svg') {
+    unset($variables['image']['#access']);
+  }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_insert() for "node" entity type.
+ */
+function joinup_oss_catalogue_node_insert(NodeInterface $node): void {
+  if ($node instanceof OssSolutionInterface) {
+    \Drupal::service('joinup_oss_catalogue.oss_solution.imagecache_warmer')
+      ->queueImageUrls($node);
+  }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_update() for "node" entity type.
+ */
+function joinup_oss_catalogue_node_update(NodeInterface $node): void {
+  if ($node instanceof OssSolutionInterface) {
+    \Drupal::service('joinup_oss_catalogue.oss_solution.imagecache_warmer')
+      ->queueImageUrls($node);
   }
 }
