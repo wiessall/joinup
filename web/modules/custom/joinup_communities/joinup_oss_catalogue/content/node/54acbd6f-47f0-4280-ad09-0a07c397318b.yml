@@ -652,7 +652,7 @@ default:
                   parent_uuid: f2a1d11a-9d0a-403f-b5f1-7b4f786d81c0
                   region: second
                 alignment:
-                  alignment: center
+                  alignment: left
           paragraph_heading:
             -
               value: 'Let’s start with your software name'
