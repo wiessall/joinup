@@ -67,7 +67,7 @@ final class JoinupOssCatalogueImagecacheWarmer {
   protected function getChangedFileValues(OssSolutionInterface $ossSolution): array {
     $fileUrisToFetch = [];
     $relevantTranslation = $ossSolution->getTranslation($ossSolution->getRelevantLangCode());
-    foreach (static::FIELDS as $fieldName) {
+    foreach (self::FIELDS as $fieldName) {
       $fileUrisToFetch = array_unique(
         array_merge(
           $fileUrisToFetch,
