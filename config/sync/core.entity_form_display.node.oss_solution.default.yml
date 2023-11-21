@@ -34,6 +34,7 @@ dependencies:
     - field.field.node.oss_solution.oss_source
     - field.field.node.oss_solution.oss_source_hash
     - field.field.node.oss_solution.oss_used_by
+    - field.field.node.oss_solution.oss_vitality_index
     - node.type.oss_solution
   module:
     - datetime
@@ -313,6 +314,13 @@ content:
       match_operator: CONTAINS
       match_limit: 10
       size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  oss_vitality_index:
+    type: number
+    weight: 40
+    region: content
+    settings:
       placeholder: ''
     third_party_settings: {  }
   path:
