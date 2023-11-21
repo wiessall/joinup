@@ -7,23 +7,13 @@ namespace Drupal\joinup_oss_catalogue\Plugin\Field\FieldFormatter;
 use Drupal\Core\Field\FieldDefinitionInterface;
 use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Field\FormatterBase;
-use Drupal\Core\Locale\CountryManagerInterface;
+use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
+use Drupal\oe_bootstrap_theme_helper\EuropeanUnionLanguages;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Field formatter which strips all HTML.
- *
- * This is tailored to the use case of Joinup. It relies on a custom text filter
- * format `stripped_html` which includes all of the filters that are commonly
- * used in Joinup, such as Joinup Video, Glossary items, etc.
- *
- * The goal of this is to be able to not only strip vanilla HTML elements that
- * are present in the content but also placeholder tokens which are included by
- * CKEditor to mark the location of embedded media and other content.
- *
- * This prevents for example JSON metadata to be shown to the end user in places
- * where only plain text is desired (for example in tiles or teasers).
+ * Resolve the langcodes known by Drupal to full name.
  *
  * @FieldFormatter(
  *   id = "joinup_language_code",
@@ -54,10 +44,10 @@ class LanguageCodeFormatter extends FormatterBase implements ContainerFactoryPlu
    *   The view mode.
    * @param array $third_party_settings
    *   Any third party settings.
-   * @param \Drupal\Core\Locale\CountryManagerInterface $countryManager
-   *   The country manager.
+   * @param \Drupal\Core\Language\LanguageManagerInterface $languageManager
+   *   The language manager.
    */
-  public function __construct($plugin_id, $plugin_definition, FieldDefinitionInterface $field_definition, array $settings, $label, $view_mode, array $third_party_settings, protected CountryManagerInterface $countryManager) {
+  public function __construct($plugin_id, $plugin_definition, FieldDefinitionInterface $field_definition, array $settings, $label, $view_mode, array $third_party_settings, protected LanguageManagerInterface $languageManager) {
     parent::__construct($plugin_id, $plugin_definition, $field_definition, $settings, $label, $view_mode, $third_party_settings);
   }
 
@@ -73,7 +63,7 @@ class LanguageCodeFormatter extends FormatterBase implements ContainerFactoryPlu
       $configuration['label'],
       $configuration['view_mode'],
       $configuration['third_party_settings'],
-      $container->get('country_manager')
+      $container->get('language_manager')
     );
   }
 
@@ -82,12 +72,11 @@ class LanguageCodeFormatter extends FormatterBase implements ContainerFactoryPlu
    */
   public function viewElements(FieldItemListInterface $items, $langcode): array {
     $element = [];
-    $countries = $this->countryManager->getList();
     foreach ($items as $delta => $item) {
       $codes = explode(",", $item->value);
 
       foreach ($codes as $id => $code) {
-        $codes[$id] = $countries[strtoupper($code)] ?? $code;
+        $codes[$id] = $this->getLanguageName(strtolower($code)) ?? $code;
       }
 
       $element[$delta] = [
@@ -96,6 +85,30 @@ class LanguageCodeFormatter extends FormatterBase implements ContainerFactoryPlu
     }
 
     return $element;
+  }
+
+  /**
+   * Returns a language name from the given language code.
+   *
+   * @param string $langcode
+   *   The language code.
+   *
+   * @return string|null
+   *   The name of the language or null.
+   */
+  private function getLanguageName(string $langcode): ?string {
+    $languages = $this->languageManager->getNativeLanguages();
+    if (!empty($languages[$langcode])) {
+      return $languages[$langcode]->getName();
+    }
+    // The fallback implemented in case we don't have langcode in list.
+    $predefined = EuropeanUnionLanguages::getLanguageList() + $this->languageManager->getStandardLanguageList();
+    foreach ($predefined as $countries) {
+      if (in_array($langcode, $countries, TRUE)) {
+        return $countries[0];
+      }
+    }
+    return NULL;
   }
 
 }
