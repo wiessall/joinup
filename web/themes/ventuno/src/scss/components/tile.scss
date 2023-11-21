@@ -149,9 +149,6 @@
       width: 100%;
       padding: $spacer;
     }
-     .tile__figure {
-        aspect-ratio: unset;
-      }
     @include media-breakpoint-up(md) {
       flex-direction: row;
       flex-wrap: wrap;
@@ -172,7 +169,7 @@
       .tile__standout-info {
         top: unset;
         transform: translateX(calc(-100% - $spacer * 1.5));
-        bottom: $spacer * .5;
+        bottom: $spacer * -.5;
         right: unset;
       }
       .tile__footer {
