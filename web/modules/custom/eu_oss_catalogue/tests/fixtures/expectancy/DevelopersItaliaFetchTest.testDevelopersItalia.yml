@@ -82,6 +82,8 @@ Project 1.1:
       - '[IT] feat 3'
     oss_long_description: '[IT] Group1: Project 1: Long description'
     oss_short_description: '[IT] Group1: Project 1: Short description'
+    oss_screenshots:
+      - 'https://limited.self-hosted.gitlab.example.com/group1/project-1-1/raw/HEAD/Group_1_Project1_IT_Screenshot.jpg'
   de:
     langcode: de
     oss_documentation: https://example.com/group1/project-1-1/de/docs.md
