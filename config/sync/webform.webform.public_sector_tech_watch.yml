@@ -109,12 +109,12 @@ elements: |-
           '#title': 'At which level is the responsible organisation operating?'
           '#wrapper_type': form_element
           '#other__option_label': 'Other (please specify)'
-    geographical_extent_country:
+    geographical_coverage_section:
       '#type': webform_custom_composite
-      '#title': 'Geographical extent'
+      '#title': 'Geographical coverage'
       '#required': true
-      '#multiple__header_label': 'Geographical extent'
-      '#multiple__item_label': 'Geographical extent'
+      '#multiple__header_label': 'Geographical coverage'
+      '#multiple__item_label': 'Geographical coverage'
       '#multiple__min_items': 1
       '#multiple__sorting': false
       '#multiple__add': false
@@ -122,7 +122,7 @@ elements: |-
       '#multiple__add_more_button_label': 'Add country'
       '#wrapper_type': form_element
       '#element':
-        geographical_extent:
+        geographical_coverage:
           '#type': webform_select_other
           '#options':
             Albania: Albania
@@ -178,8 +178,7 @@ elements: |-
             'United Kingdom': 'United Kingdom'
             'Vatican City': 'Vatican City'
           '#required': true
-          '#title': 'Geographical extent'
-          '#description': 'The geographical extent refers to the geographical layer where the solution is deployed. For example if the solutions is deployed by a municipality the level is local, independently from administrative level of the responsible organisation.'
+          '#title': 'Geographical coverage'
           '#other__option_label': 'Other (please specify)'
     flexbox_06:
       '#type': webform_flexbox
