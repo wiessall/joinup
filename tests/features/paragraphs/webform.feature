@@ -7,6 +7,9 @@ Feature:
     Given the following collection:
       | title | Webform collection |
       | state | published          |
+    And users:
+      | Username   | E-mail                 | First name | Family name |
+      | john.smith | john.smith@example.com | John       | Smith       |
 
   @javascript @uploadFiles:logo.png
   Scenario: Add webform paragraph.
@@ -31,7 +34,7 @@ Feature:
     When I should not see the heading "Submitter information"
     And I should see the text "Please login to access the form."
 
-    Then I am logged in as a user with the "authenticated" role
+    Then I am logged in as "john.smith"
     And I go to the "Webform example" custom page
 
     # Check validation errors.
@@ -53,9 +56,9 @@ Feature:
 
     # Fill form.
     Then I should see the heading "Submitter information"
-    And I fill in "First name" with "John"
-    And I fill in "Last name" with "Smith"
-    And I fill in "Contact email" with "john.smith@example.com"
+    And I fill in "First name" with "John2"
+    And I fill in "Last name" with "Smith2"
+    And I fill in "Contact email" with "john.smith2@example.com"
     And I fill in "Submitter organisation" with "Smith's organisation"
 
     Then I should see the heading "Case Information"
@@ -89,3 +92,14 @@ Feature:
     # Submit form.
     Then I press "Submit"
     When I should not see the success message "Status messageYour use case has been submitted successfully. Soon you will be informed by the Public Sector Tech Watch team about the next steps."
+
+    # Check the mail notification.
+    And 2 e-mails should have been sent
+
+    And the email sent to "digit-public-sector-tech-watch@ec.europa.eu" with subject "Public Sector Tech Watch" contains the text:
+      | Dear Public Sector Tech Watch team, |
+    And the email sent to "digit-public-sector-tech-watch@ec.europa.eu" with subject "Public Sector Tech Watch" contains "logo.png" attachment
+
+    And the email sent to "john.smith@example.com" with subject "Public Sector Tech Watch" contains the text:
+      | Dear John Smith, |
+    And the email sent to "john.smith@example.com" with subject "Public Sector Tech Watch" contains "logo.png" attachment

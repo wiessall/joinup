@@ -550,7 +550,7 @@ handlers:
       return_path: ''
       sender_mail: ''
       sender_name: ''
-      subject: _default
+      subject: 'Public Sector Tech Watch'
       body: '<p><strong>Dear Public Sector Tech Watch team,</strong></p><p><strong>[webform_submission:user] has submitted at [webform_submission:created] the following use case "[webform_submission:values:case_title:raw]"</strong></p><p>&nbsp;</p><p>[webform_submission:values]</p><p>&nbsp;</p><p><strong>Please for your actions.</strong></p><p><strong>Kind regards, The Joinup Support Team</strong></p>'
       excluded_elements: {  }
       ignore_access: false
@@ -590,7 +590,7 @@ handlers:
       return_path: ''
       sender_mail: ''
       sender_name: ''
-      subject: _default
+      subject: 'Public Sector Tech Watch'
       body: '<p><strong>Dear [webform_submission:user],</strong></p><p><strong>Here is the copy of your case submission:</strong></p><p>[webform_submission:values]</p><p>&nbsp;</p><p><strong>Kind regards,&nbsp;</strong></p><p><strong>The Joinup Support Team</strong></p>'
       excluded_elements: {  }
       ignore_access: false
