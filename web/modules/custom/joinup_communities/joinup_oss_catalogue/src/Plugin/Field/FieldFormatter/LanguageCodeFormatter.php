@@ -76,7 +76,7 @@ class LanguageCodeFormatter extends FormatterBase implements ContainerFactoryPlu
       $codes = explode(",", $item->value);
 
       foreach ($codes as $id => $code) {
-        $codes[$id] = $this->getLanguageName(strtolower($code)) ?? $code;
+        $codes[$id] = $this->getLanguageName(strtolower($code));
       }
 
       $element[$delta] = [
@@ -93,13 +93,13 @@ class LanguageCodeFormatter extends FormatterBase implements ContainerFactoryPlu
    * @param string $langcode
    *   The language code.
    *
-   * @return string|null
-   *   The name of the language or null.
+   * @return string
+   *   The name of the language or langcode.
    */
-  private function getLanguageName(string $langcode): ?string {
-    $languages = $this->languageManager->getNativeLanguages();
-    if (!empty($languages[$langcode])) {
-      return $languages[$langcode]->getName();
+  private function getLanguageName(string $langcode): string {
+    //$languages = $this->languageManager->getLanguageName($langcode);
+    if ($this->languageManager->getLanguage($langcode)) {
+      return $this->languageManager->getLanguageName($langcode);
     }
     // The fallback implemented in case we don't have langcode in list.
     $predefined = EuropeanUnionLanguages::getLanguageList() + $this->languageManager->getStandardLanguageList();
@@ -108,7 +108,7 @@ class LanguageCodeFormatter extends FormatterBase implements ContainerFactoryPlu
         return $countries[0];
       }
     }
-    return NULL;
+    return $langcode;
   }
 
 }
