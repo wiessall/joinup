@@ -130,4 +130,14 @@ class RelevantLanguageCode extends FieldItemList {
     return array_keys($publicCodeYaml['description']);
   }
 
+  /**
+   * {@inheritdoc}
+   */
+  public function postSave($update): bool {
+    // Force recompute after save.
+    $this->valueComputed = FALSE;
+    $this->list = [];
+    return parent::postSave($update);
+  }
+
 }
