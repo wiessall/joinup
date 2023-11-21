@@ -223,7 +223,6 @@ elements: |-
       '#element':
         source_url_item:
           '#type': url
-          '#required': true
           '#title': ' Source (URL)'
           '#description': 'Please provide here the link to external sources describing the case (reports, case studies, presentations, news articles, webpage describing the solution etc). At least one URL is needed to publish the case in the database.'
     description:
