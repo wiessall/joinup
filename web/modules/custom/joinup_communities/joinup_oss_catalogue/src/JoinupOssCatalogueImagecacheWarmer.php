@@ -2,9 +2,8 @@
 
 declare(strict_types = 1);
 
-namespace Drupal\eu_oss_catalogue;
+namespace Drupal\joinup_oss_catalogue;
 
-use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Field\FieldItemInterface;
 use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Queue\QueueFactory;
@@ -15,7 +14,7 @@ use Drupal\eu_oss_catalogue\Entity\OssSolutionInterface;
  *
  * @internal
  */
-final class EuOssCatalogueImagecacheWarmer {
+final class JoinupOssCatalogueImagecacheWarmer {
 
   /**
    * Fields to check for new values.
@@ -28,17 +27,12 @@ final class EuOssCatalogueImagecacheWarmer {
   ];
 
   /**
-   * Constructs a new EuOssCatalogueImagecacheWarmer instance.
+   * Constructs a new JoinupOssCatalogueImagecacheWarmer instance.
    *
    * @param \Drupal\Core\Queue\QueueFactory $queueFactory
    *   The queue factory service.
-   * @param \Drupal\Core\Extension\ModuleHandlerInterface $moduleHandler
-   *   The module handler.
    */
-  public function __construct(
-    protected QueueFactory $queueFactory,
-    protected ModuleHandlerInterface $moduleHandler,
-  ) {}
+  public function __construct(protected QueueFactory $queueFactory) {}
 
   /**
    * Queues image URLs found in the OSS Solution node to be downloaded.
@@ -47,10 +41,7 @@ final class EuOssCatalogueImagecacheWarmer {
    *   The OSS solution node being just inserted or updated.
    */
   public function queueImageUrls(OssSolutionInterface $ossSolution): void {
-    if (!$this->moduleHandler->moduleExists('imagecache_external')) {
-      return;
-    }
-    $queue = $this->queueFactory->get('eu_oss_catalogue_imagecache_warmer');
+    $queue = $this->queueFactory->get('joinup_oss_catalogue_imagecache_warmer');
     $queue->createQueue();
 
     foreach ($this->getChangedFileValues($ossSolution) as $url) {
