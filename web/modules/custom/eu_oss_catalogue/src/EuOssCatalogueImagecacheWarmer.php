@@ -103,7 +103,7 @@ final class EuOssCatalogueImagecacheWarmer {
       return [];
     }
 
-    $original = $this->getOriginalTranslation($ossSolution);
+    $original = $this->getOriginal($ossSolution);
     $originalFieldIsEmpty = !isset($original) || $original->get($fieldName)->isEmpty();
     $originalField = $original?->get($fieldName);
 
@@ -153,12 +153,10 @@ final class EuOssCatalogueImagecacheWarmer {
    *   The previous translation of the OSS solution object with the same
    *   language code; NULL otherwise.
    */
-  protected function getOriginalTranslation(OssSolutionInterface $ossSolution): ?OssSolutionInterface {
+  protected function getOriginal(OssSolutionInterface $ossSolution): ?OssSolutionInterface {
     if ($ossSolution->original instanceof OssSolutionInterface) {
-      $languageCode = $ossSolution->language()->getId();
-      return $ossSolution->original->hasTranslation($languageCode)
-        ? $ossSolution->original->getTranslation($languageCode)
-        : NULL;
+      $languageCode = $ossSolution->original->getRelevantLangCode();
+      return $ossSolution->original->getTranslation($languageCode);
     }
     return NULL;
   }
