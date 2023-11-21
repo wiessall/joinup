@@ -22,8 +22,8 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Render\Markup;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\StreamWrapper\StreamWrapperManager;
-use Drupal\block\BlockInterface;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
+use Drupal\block\BlockInterface;
 use Drupal\joinup_core\ETransBlockConfiguration;
 use Drupal\joinup_core\Element\Datetime;
 use Drupal\joinup_core\Entity\OutdatedContentInterface;
@@ -479,7 +479,8 @@ function joinup_core_field_formatter_third_party_settings_form(FormatterInterfac
     '#type' => 'select',
     '#title' => t('Slick optionset'),
     '#options' => $options,
-    '#default_value' => $plugin->getThirdPartySetting('joinup_core', 'preset'), // Or preset? preset
+  // Or preset? preset.
+    '#default_value' => $plugin->getThirdPartySetting('joinup_core', 'preset'),
   ];
 
   return $element;
@@ -489,17 +490,22 @@ function joinup_core_field_formatter_third_party_settings_form(FormatterInterfac
  * Implements hook_field_formatter_settings_summary_alter().
  */
 function joinup_core_field_formatter_settings_summary_alter(array &$summary, array $context) {
-  $d = 1;
+  if (!empty($variables['element']['#third_party_settings']['joinup_core']['preset'])) {
+    $optionsetId = $variables['element']['#third_party_settings']['joinup_core']['preset'];
+    $optionset = \Drupal::entityTypeManager()->getStorage('slick')->load($optionsetId);
+    if ($optionset) {
+      $summary[] = t('Slick carousel: %slick-optionset-label', [
+        '%slick-optionset-label' => $optionset->label(),
+      ]);
+    }
+  }
 }
-
 
 /**
  * Implements hook_preprocess_field().
  */
 function joinup_core_preprocess_field(array &$variables) {
-  $d = 1;
-
-  if (!empty($variables['element']['#third_party_settings']['joinup_core'])) {
+  if (!empty($variables['element']['#third_party_settings']['joinup_core']['preset'])) {
     $optionset = $variables['element']['#third_party_settings']['joinup_core']['preset'];
     $man = \Drupal::service('slick.manager');
     \assert($man instanceof SlickManagerInterface);
@@ -511,10 +517,7 @@ function joinup_core_preprocess_field(array &$variables) {
       'items' => $items,
       'optionset' => \Drupal::entityTypeManager()->getStorage('slick')->load($optionset),
     ]);
-    $variables['items'] = [
-      [
-        'content' => $build,
-      ]
-    ];
+    // @todo It seems it is possible to pass item attributes to slick__slide.
+    $variables['items'] = [['content' => $build]];
   }
 }
