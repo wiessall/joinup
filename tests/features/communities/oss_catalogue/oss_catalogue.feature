@@ -120,9 +120,9 @@ Feature:
       |   Feature A                                                                                        |
       |   Feature B                                                                                        |
       | Supported languages                                                                                |
-      |   Italy,                                                                                           |
+      |   Italian,                                                                                           |
       |   English,                                                                                         |
-      |   Germany,                                                                                         |
+      |   German,                                                                                         |
       |   error,                                                                                           |
       |   Portuguese                                                                                       |
       | Development status                                                                                 |
