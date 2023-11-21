@@ -6,6 +6,7 @@ package: Joinup communities
 
 dependencies:
   - eu_oss_catalogue:eu_oss_catalogue
+  - imagecache_external:imagecache_external
   - joinup_bundle_class:joinup_bundle_class
   - message:message
 
