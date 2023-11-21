@@ -381,7 +381,7 @@ settings:
   form_reset: false
   form_access_denied: message
   form_access_denied_title: ''
-  form_access_denied_message: '<p>Please <a href="/caslogin?destination=[current-page:url:path]">login</a> to access the form.</p>'
+  form_access_denied_message: '<p>Please <a href="[cas:login-url]?destination=[current-page:url:path]">login</a> to access the form.</p>'
   form_access_denied_attributes: {  }
   form_file_limit: ''
   form_attributes: {  }
