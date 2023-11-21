@@ -33,6 +33,13 @@ function ventuno_preprocess_paragraph(array &$variables): void {
 /**
  * Implements hook_preprocess_HOOK().
  */
+function ventuno_preprocess_paragraph__social_media(array &$variables): void {
+  $variables['attributes']['class'][] = $variables['elements']['#joinup_paragraph_color'] ?? 'brand';
+}
+
+/**
+ * Implements hook_preprocess_HOOK().
+ */
 function ventuno_preprocess_field__paragraph__call_to_action(array &$variables): void {
   $paragraph = $variables['element']['#object'];
   if (!$paragraph instanceof ParagraphInterface) {

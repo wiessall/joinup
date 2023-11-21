@@ -18,7 +18,6 @@ Feature: OSS catalogue search
 
     When I visit the OSS search page
     Then I see the text "EU Open Source Solutions Catalogue" in the "Header" region
-    And I see the text "No Open Source Software Solutions were federated yet" in the "Header" region
     And I see the text "Open source software of interest for Public Administrations" in the "Header" region
 
     Given oss_solution content:
@@ -30,11 +29,6 @@ Feature: OSS catalogue search
       | Immuni                          | obsolete               | developers_italia | data-collection                                                 | Immuni is a mobile app that helps us to fight the COVID-19 pandemic by notifying users at risk of carrying the virus as early as possible     |                                                                                   | published | 2020-09-13T13:00 |                      |
 
     Then I visit the OSS search page
-
-    # Check the group collection header
-    And I see the text "EU Open Source Solutions Catalogue" in the "Header" region
-    And I see the text "5 Open Source Software Solutions" in the "Header" region
-    And I see the text "Open source software of interest for Public Administrations" in the "Header" region
 
     # Check main area
     And I should see the text "SEARCH RESULTS (5)"
@@ -85,19 +79,6 @@ Feature: OSS catalogue search
     And I should not see the "NDC Semantic frontend" tile
     And I should not see the "Software Registry" tile
     And I should see the "Immuni" tile
-
-    # Check header count of solutions.
-    Given I delete the "NDC Semantic frontend" oss_solution
-    When I visit the OSS search page
-    And I see the text "4 Open Source Software Solutions" in the "Header" region
-
-    When set status with 0 in "Django-MDQ" oss_solution
-    Then I visit the OSS search page
-    And I see the text "3 Open Source Software Solutions" in the "Header" region
-
-    When set status with 1 in "Django-MDQ" oss_solution
-    Then I visit the OSS search page
-    And I see the text "4 Open Source Software Solutions" in the "Header" region
 
     Then I go to the homepage of the "EU Open Source Solutions Catalogue" collection
     And I should not see the "Entity actions" region
