@@ -301,6 +301,11 @@ paragraph__poll:
     theme:
       assets/css/paragraph--poll.min.css: { minified: true }
 
+paragraph__social_media:
+  css:
+    theme:
+      assets/css/paragraph--social-media.min.css: { minified: true }
+
 paragraph__testimony:
   css:
     theme:
