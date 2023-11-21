@@ -92,4 +92,14 @@ class RelevantField extends FieldItemList {
     return $this->getEntity()->getRelevantLangCode();
   }
 
+  /**
+   * {@inheritdoc}
+   */
+  public function postSave($update): bool {
+    // Force recompute after save.
+    $this->valueComputed = FALSE;
+    $this->list = [];
+    return parent::postSave($update);
+  }
+
 }
