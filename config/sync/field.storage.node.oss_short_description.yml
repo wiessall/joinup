@@ -16,7 +16,7 @@ settings:
   max_length: 512
   case_sensitive: false
   is_ascii: false
-module: text
+module: core
 locked: false
 cardinality: 1
 translatable: true
