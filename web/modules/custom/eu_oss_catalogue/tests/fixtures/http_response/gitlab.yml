@@ -277,6 +277,8 @@
                             - '[IT] feat 1'
                             - '[IT] feat 2'
                             - '[IT] feat 3'
+                          screenshots:
+                            - 'Group_1_Project1_IT_Screenshot.jpg'
                         de:
                           genericName: '[DE] Group1: Project 1: Generic name'
                           documentation: https://example.com/group1/project-1-1/de/docs.md
@@ -285,6 +287,8 @@
                           features:
                             - '[DE] feat 1'
                             - '[DE] feat 2'
+                          screenshots:
+                            - 'assets/de/Group_1_Project1_DE_Screenshot.png'
 
           # Valid project.
           - path: project-1-2

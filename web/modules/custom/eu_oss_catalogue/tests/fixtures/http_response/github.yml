@@ -265,6 +265,7 @@ developers_italia:
                     - '[EN] Solution 1: Feature 3'
                   screenshots:
                     - 'Solution_1_EN_Screenshot1.jpg'
+                    - 'Solution_1_EN_Screenshot2.jpg'
                 de:
                   genericName: '[DE] ACME Solution 1'
                   longDescription: |
@@ -279,6 +280,9 @@ developers_italia:
                     - '[DE] Solution 1: Feature 1'
                   screenshots:
                     - 'Solution_1_DE_Screenshot1.jpg'
+                    - 'Solution_1_DE_Screenshot2-missing.jpg'
+                    - 'Solution_1_DE_Screenshot3.jpg'
+                    - 'Solution_1_DE_Screenshot4.jpg'
               legal:
                 license: AGPL-3.0-or-later
                 mainCopyrightOwner: Sin City

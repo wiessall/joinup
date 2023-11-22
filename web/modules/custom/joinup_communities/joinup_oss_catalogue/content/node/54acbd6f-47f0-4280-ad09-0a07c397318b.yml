@@ -180,7 +180,7 @@ default:
               value: true
           paragraph_action_link:
             -
-              uri: 'internal:/<current>'
+              uri: 'internal:/eu-oss-catalogue/solutions'
               title: 'Browse the catalogue'
               options: {  }
     -
