@@ -25,7 +25,7 @@ imagecache_external_allowed_mimetypes:
   - image/svg+xml
 imagecache_external_cron_flush_frequency: 0
 svg_settings:
-  allowed_tags: []
-  allowed_attributes: []
+  allowed_tags: {  }
+  allowed_attributes: {  }
 http_client_config:
   timeout: 3
