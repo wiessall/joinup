@@ -24,3 +24,30 @@ Feature:
     # Regression test that text is trimmed properly.
     Then the response should contain ">That's one small step for a man, a giant leap for mankind.<"
 
+  Scenario: Table is visible.
+    Given custom_page content:
+      | title              | collection            | state     |
+      | Table page example | Paragraphs collection | published |
+    And I append "text" to "field_paragraphs_body" field in "node" entity with following "Table page example" title:
+      | field_body:value  | <table><tbody><tr><td>single table cell</td></tr></tbody></table> |
+      | field_body:format | text_html                                                         |
+
+    When I go to the "Table page example" custom page
+    Then I should see an "td" element with the text "single table cell" in the "Content" region
+
+  @javascript
+  Scenario: Editor can add table.
+    Given custom_page content:
+      | title            | collection            | state     |
+      | Table icon check | Paragraphs collection | published |
+    And I append "layout" to "field_paragraphs_body" field in "node" entity with following "Table icon check" title:
+      | behavior_settings | a:3:{s:17:"layout_paragraphs";a:4:{s:6:"layout";s:13:"layout_onecol";s:6:"config";a:1:{s:5:"label";s:0:"";}s:11:"parent_uuid";N;s:6:"region";N;}s:16:"background_theme";a:0:{}s:11:"extra_class";a:0:{}} |
+
+    When I am logged in as a moderator
+    And I go to the edit form of the "Table icon check" "custom page"
+    And I click "Choose component"
+    And I click "Text"
+    And the "Insert table" button should be available in the "Body" wysiwyg editor
+    And I press the button "Insert table" in the "Body" wysiwyg editor
+    And I press "Save" in the "Modal buttons" region
+    And I press "Update"
