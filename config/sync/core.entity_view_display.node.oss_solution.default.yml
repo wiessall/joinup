@@ -34,6 +34,7 @@ dependencies:
     - field.field.node.oss_solution.oss_source
     - field.field.node.oss_solution.oss_source_hash
     - field.field.node.oss_solution.oss_used_by
+    - field.field.node.oss_solution.oss_vitality_index
     - node.type.oss_solution
   module:
     - custom_markup_block
@@ -143,6 +144,25 @@ third_party_settings:
                   template_suggestion:
                     template_suggestion: ''
             weight: 0
+            additional: {  }
+          f565f412-e1f3-4c89-97b2-f2a2be8188b2:
+            uuid: f565f412-e1f3-4c89-97b2-f2a2be8188b2
+            region: first
+            configuration:
+              id: 'field_block:node:oss_solution:oss_vitality_index'
+              label_display: '0'
+              context_mapping:
+                entity: layout_builder.entity
+              formatter:
+                type: number_decimal
+                label: above
+                settings:
+                  thousand_separator: ''
+                  decimal_separator: .
+                  scale: 2
+                  prefix_suffix: true
+                third_party_settings: {  }
+            weight: 1
             additional: {  }
         third_party_settings: {  }
       -
@@ -721,7 +741,18 @@ id: node.oss_solution.default
 targetEntityType: node
 bundle: oss_solution
 mode: default
-content: {  }
+content:
+  oss_vitality_index:
+    type: number_decimal
+    label: above
+    settings:
+      thousand_separator: ''
+      decimal_separator: .
+      scale: 2
+      prefix_suffix: true
+    third_party_settings: {  }
+    weight: 1
+    region: first
 hidden:
   description: true
   langcode: true

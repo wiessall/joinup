@@ -29,7 +29,7 @@ GitHub solution 1:
     oss_software_version: '2.3.0'
     oss_source:
       - developers_italia
-    oss_source_hash: 'c3FRMDrUrvxd9o6UmtTRQ0E3ybKpbptcaePBw5iWvJY'
+    oss_source_hash: 'QWgIx8AjtN2yakRMDKbNa1kBVEbdUDuxXLUiFBFINrc'
     oss_long_description: "[EN] Solution 1: Long description\n<strong>Some bold text</strong>\n<ul><li>Some list item</li>\n<li>Another list item</li>\n</ul><em>Some italic text</em>"
     oss_short_description: '[EN] Solution 1: <strong>Short description</strong>'
     oss_features:
@@ -37,7 +37,8 @@ GitHub solution 1:
       - '[EN] Solution 1: Feature 2'
       - '[EN] Solution 1: Feature 3'
     oss_screenshots:
-      - Solution_1_EN_Screenshot1.jpg
+      - https://raw.githubusercontent.com/dummy-namespace-1/dummy-name-1/HEAD/Solution_1_EN_Screenshot1.jpg
+      - https://raw.githubusercontent.com/dummy-namespace-1/dummy-name-1/HEAD/Solution_1_EN_Screenshot2.jpg
   de:
     langcode: de
     default_langcode: '0'
@@ -46,7 +47,9 @@ GitHub solution 1:
     oss_long_description: "[DE] Solution 1: Long description\n<strong>Some bold text</strong>\n<ul><li>Some list item</li>\n<li>Another list item</li>\n</ul><em>Some italic text</em>"
     oss_short_description: '[DE] Solution 1: <strong>Short description</strong>'
     oss_screenshots:
-      - Solution_1_DE_Screenshot1.jpg
+      - https://raw.githubusercontent.com/dummy-namespace-1/dummy-name-1/HEAD/Solution_1_DE_Screenshot1.jpg
+      - https://raw.githubusercontent.com/dummy-namespace-1/dummy-name-1/HEAD/Solution_1_DE_Screenshot3.jpg
+      - https://raw.githubusercontent.com/dummy-namespace-1/dummy-name-1/HEAD/Solution_1_DE_Screenshot4.jpg
   it:
     langcode: it
     default_langcode: '0'
@@ -56,7 +59,7 @@ GitHub solution 1:
     oss_long_description: "[IT] Solution 1: Long description\n<strong>Some bold text</strong>\n<ul><li>Some list item</li>\n<li>Another list item</li>\n</ul><em>Some italic text</em>"
     oss_short_description: '[IT] Solution 1: <strong>Short description</strong>'
     oss_screenshots:
-      - Solution_1_IT_Screenshot1.jpg
+      - https://raw.githubusercontent.com/dummy-namespace-1/dummy-name-1/HEAD/Solution_1_IT_Screenshot1.jpg
 
 Project 1.1:
   it:
@@ -79,6 +82,8 @@ Project 1.1:
       - '[IT] feat 3'
     oss_long_description: '[IT] Group1: Project 1: Long description'
     oss_short_description: '[IT] Group1: Project 1: Short description'
+    oss_screenshots:
+      - 'https://limited.self-hosted.gitlab.example.com/group1/project-1-1/raw/HEAD/Group_1_Project1_IT_Screenshot.jpg'
   de:
     langcode: de
     oss_documentation: https://example.com/group1/project-1-1/de/docs.md
