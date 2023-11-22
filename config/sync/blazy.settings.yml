@@ -21,7 +21,7 @@ placeholder: ''
 unstyled_extensions: ''
 use_encodedbox: false
 use_oembed: false
-use_theme_blazy: false
+use_theme_blazy: true
 extras: {  }
 blazy:
   loadInvisible: false
