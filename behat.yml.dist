@@ -173,6 +173,8 @@ default:
         Modal buttons: '.ui-dialog-buttonpane'
         Modal content: '.ui-dialog-content'
         Modal title: '.ui-dialog-titlebar'
+        Most recent solutions: '#block-views-block-eu-oss-catalogue-admin-oss-most-recent-solutions'
+        Most active solutions : '#block-views-block-eu-oss-catalogue-admin-oss-most-active-solutions'
         My unpublished content area: '.block-user-unpublished'
         Navigation bar: '.joinup-navbar'
         Navigation menu: '#block-ventuno-navigation'
