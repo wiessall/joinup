@@ -46,15 +46,15 @@ Feature:
     And I should see the text "EU Open Source Solutions Catalogue"
     And I should not see the link "Report abusive content"
 
-    # Check carousel order.
-    And I should see the following tiles in the correct order:
     # Most recent solutions carousel.
+    And I should see the following tiles in the "Most recent solutions" region:
       | Spunta             |
       | C4S ERP            |
       | Cristian Gagliardi |
       | Vito Schiraldi     |
       | Semantic Turkey    |
     # Most active solutions carousel.
+    And I should see the following tiles in the "Most active solutions" region:
       | Cristian Gagliardi |
       | C4S ERP            |
       | Spunta             |
