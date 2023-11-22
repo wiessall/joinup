@@ -12,3 +12,8 @@ services:
     class: Drupal\joinup_oss_catalogue\OssRouteSubscriber
     tags:
       - { name: event_subscriber }
+
+  joinup_oss_catalogue.oss_solution.imagecache_warmer:
+    class: Drupal\joinup_oss_catalogue\JoinupOssCatalogueImagecacheWarmer
+    arguments:
+      - '@queue'

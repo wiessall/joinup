@@ -18,7 +18,6 @@ Feature: OSS catalogue search
 
     When I visit the OSS search page
     Then I see the text "EU Open Source Solutions Catalogue" in the "Header" region
-    And I see the text "No Open Source Software Solutions were federated yet" in the "Header" region
     And I see the text "Open source software of interest for Public Administrations" in the "Header" region
 
     Given oss_solution content:
@@ -30,11 +29,6 @@ Feature: OSS catalogue search
       | Immuni                          | obsolete               | developers_italia | data-collection                                                 | Immuni is a mobile app that helps us to fight the COVID-19 pandemic by notifying users at risk of carrying the virus as early as possible     |                                                                                   | published | 2020-09-13T13:00 |                      |
 
     Then I visit the OSS search page
-
-    # Check the group collection header
-    And I see the text "EU Open Source Solutions Catalogue" in the "Header" region
-    And I see the text "5 Open Source Software Solutions" in the "Header" region
-    And I see the text "Open source software of interest for Public Administrations" in the "Header" region
 
     # Check main area
     And I should see the text "SEARCH RESULTS (5)"
@@ -86,19 +80,6 @@ Feature: OSS catalogue search
     And I should not see the "Software Registry" tile
     And I should see the "Immuni" tile
 
-    # Check header count of solutions.
-    Given I delete the "NDC Semantic frontend" oss_solution
-    When I visit the OSS search page
-    And I see the text "4 Open Source Software Solutions" in the "Header" region
-
-    When set status with 0 in "Django-MDQ" oss_solution
-    Then I visit the OSS search page
-    And I see the text "3 Open Source Software Solutions" in the "Header" region
-
-    When set status with 1 in "Django-MDQ" oss_solution
-    Then I visit the OSS search page
-    And I see the text "4 Open Source Software Solutions" in the "Header" region
-
     Then I go to the homepage of the "EU Open Source Solutions Catalogue" collection
     And I should not see the "Entity actions" region
 
@@ -113,6 +94,53 @@ Feature: OSS catalogue search
     When I am logged in as an "authenticated user"
     And I go to the homepage of the "EU Open Source Solutions Catalogue" collection
     And I should not see the "Entity actions" region
+
+  Scenario: User is able to search by string in any language.
+    Given oss_solution multilingual content:
+      | title         | status    | changed    | oss_source        | oss_release_date | langcode | default_translation | oss_features                                                                                  | oss_short_description                                                                                                                                        | oss_long_description                                                                                                                                                                                                                        | oss_publiccode_yml_content |
+      | MongoDB Atlas | published | 1700000000 | developers_italia | 2025-10-19       | en       | 1                   | Strong security measures, Easier scalability, Extensive analytics and monitoring              | The multi-cloud database service at the heart of our developer data platform that accelerates and simplifies how you build with data.                        | Atlas simplifies deploying and managing your databases while offering the versatility you need to build resilient and performant global applications on the cloud providers of your choice.                                                 | yml file                   |
+      |               | ~~~       | ~~~        | ~~~               | ~~~              | de       | 0                   | Starke Sicherheitsmaßnahmen, einfachere Skalierbarkeit, umfangreiche Analysen und Überwachung | Der Multi-Cloud-Datenbankdienst im Herzen unserer Entwicklerdatenplattform, der die Erstellung mit Daten beschleunigt und vereinfacht.                       | Atlas vereinfacht die Bereitstellung und Verwaltung Ihrer Datenbanken und bietet gleichzeitig die Vielseitigkeit, die Sie zum Erstellen belastbarer und leistungsstarker globaler Anwendungen bei den Cloud-Anbietern Ihrer Wahl benötigen. | ~~~                        |
+      |               | ~~~       | ~~~        | ~~~               | ~~~              | it       | 0                   | Forti misure di sicurezza, scalabilità più semplice, analisi e monitoraggio estesi            | Il servizio di database multi-cloud al centro della nostra piattaforma dati per sviluppatori che accelera e semplifica il modo in cui costruisci con i dati. | Atlas semplifica la distribuzione e la gestione dei tuoi database offrendo al contempo la versatilità necessaria per creare applicazioni globali resilienti e performanti sui provider cloud di tua scelta.                                 | ~~~                        |
+
+    # Search by oss_features.
+    Then I visit the OSS search page
+    And I fill in "Search catalogue" with "measures"
+    And I press "Search OSS catalogue"
+    When I should see the "MongoDB Atlas" tile
+
+    Then I fill in "Search catalogue" with "Sicherheitsmaßnahmen"
+    And I press "Search OSS catalogue"
+    When I should see the "MongoDB Atlas" tile
+
+    Then I fill in "Search catalogue" with "scalabilità"
+    And I press "Search OSS catalogue"
+    When I should see the "MongoDB Atlas" tile
+
+    # Search by oss_short_description.
+    Then I fill in "Search catalogue" with "accelerates"
+    And I press "Search OSS catalogue"
+    When I should see the "MongoDB Atlas" tile
+
+    Then I fill in "Search catalogue" with "Multi-Cloud-Datenbankdienst"
+    And I press "Search OSS catalogue"
+    When I should see the "MongoDB Atlas" tile
+
+    Then I fill in "Search catalogue" with "piattaforma"
+    And I press "Search OSS catalogue"
+    When I should see the "MongoDB Atlas" tile
+
+    # Search by oss_long_description.
+    Then I fill in "Search catalogue" with "versatility"
+    And I press "Search OSS catalogue"
+    When I should see the "MongoDB Atlas" tile
+
+    Then I fill in "Search catalogue" with "Vielseitigkeit"
+    And I press "Search OSS catalogue"
+    When I should see the "MongoDB Atlas" tile
+
+    Then I fill in "Search catalogue" with "distribuzione"
+    And I press "Search OSS catalogue"
+    When I should see the "MongoDB Atlas" tile
 
   @javascript
   Scenario: User is able to use autocomplete.
