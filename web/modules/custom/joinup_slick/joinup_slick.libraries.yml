@@ -1,0 +1,6 @@
+slick-variable-width:
+  js:
+    assets/js/slick-variable-width.js: {  }
+  dependencies:
+    - slick/base
+    - code/jquery

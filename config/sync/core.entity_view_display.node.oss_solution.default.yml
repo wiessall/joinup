@@ -39,6 +39,7 @@ dependencies:
   module:
     - custom_markup_block
     - joinup_layout
+    - joinup_slick
     - layout_builder
     - layout_discovery
     - user
@@ -349,7 +350,7 @@ third_party_settings:
                     order: 0
                     limit: 0
                     offset: 0
-                  joinup_core:
+                  joinup_slick:
                     preset: oss_solution_screenshot
                   template_suggestion:
                     template_suggestion: ''
