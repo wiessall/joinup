@@ -92,7 +92,7 @@ class OssSolutionListingPageTest extends FetchTestBase {
           'GitHub solution 1',
           'GitHub solution 1',
           'https://github.com/dummy-namespace-1/dummy-name-1',
-          '[EN] Solution 1: <strong>Short description</strong>',
+          '[EN] Solution 1: Short description',
           'Developers Italia',
           'EN, DE, IT',
           'Yes',
