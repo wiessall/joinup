@@ -2,7 +2,7 @@
 
 declare(strict_types = 1);
 
-namespace Drupal\eu_oss_catalogue\Plugin\QueueWorker;
+namespace Drupal\joinup_oss_catalogue\Plugin\QueueWorker;
 
 use Drupal\Core\Queue\QueueWorkerBase;
 
@@ -10,12 +10,12 @@ use Drupal\Core\Queue\QueueWorkerBase;
  * Downloads the queued remote files.
  *
  * @QueueWorker(
- *   id = "eu_oss_catalogue_imagecache_warmer",
- *   title = @Translation("EU OSS Catalogue remote image cache warmer"),
+ *   id = "joinup_oss_catalogue_imagecache_warmer",
+ *   title = @Translation("Joinup OSS Catalogue remote image cache warmer"),
  *   cron = {"time" = 60},
  * )
  */
-class EuOssCatalogueImageCacheWarmer extends QueueWorkerBase {
+class JoinupOssCatalogueImagecacheWarmerQueue extends QueueWorkerBase {
 
   /**
    * {@inheritdoc}

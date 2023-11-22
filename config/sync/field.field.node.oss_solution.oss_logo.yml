@@ -12,7 +12,8 @@ third_party_settings:
     publiccode_yml:
       override: resolved_not_empty
       resolvers:
-        - plugin: absolute_url
+        -
+          plugin: absolute_url
           config:
             path: logo
             verify: true

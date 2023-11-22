@@ -28,10 +28,21 @@ class TestingProvider extends DevelopersItalia {
       if ($project->getFullName() === 'dummy-namespace-1/dummy-name-1') {
         $values = $project->toArray();
         $fileBlob = $values['files']['publiccodeYml'];
-        $fileBlob = str_replace('name: GitHub solution 1', 'name: GitHub solution 1 (updated)', $fileBlob);
+        $fileBlob = str_replace(
+          [
+            'name: GitHub solution 1',
+            "- 'Solution_1_EN_Screenshot2.jpg'",
+          ],
+          [
+            'name: GitHub solution 1 (updated)',
+            "- 'Solution_1_EN_Screenshot2-updated.jpg'",
+          ],
+          $fileBlob
+        );
         $values['files']['publiccodeYml'] = $fileBlob;
         $values['latestReleaseTag'] = '3.0.0';
         yield new Project(...$values);
+        continue;
       }
       yield $project;
     }
