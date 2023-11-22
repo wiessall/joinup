@@ -60,7 +60,7 @@ class DevelopersItaliaFetchTest extends FetchTestBase {
     $this->assertFalse($this->getNodeByTitle('GitHub solution 1'));
     $updatedSolution = $this->getNodeByTitle('GitHub solution 1 (updated)', TRUE);
     $this->assertSame('3.0.0', $updatedSolution->get('oss_software_version')->value);
-    $this->assertSame('u9WPwFCMk8uPJGXy1k4AFjiYcnEkzcWwP-ABUq-6DsE', $updatedSolution->get('oss_source_hash')->value);
+    $this->assertSame('ITszt9pf37FZ08Ry0YyHMYUqhGenOP79iYy9IMwbqkE', $updatedSolution->get('oss_source_hash')->value);
     // Assert that the provider has been added to the list of providers.
     $this->assertSame(2, $updatedSolution->get('oss_source')->count());
     $expected_providers = ['developers_italia', 'testing_provider'];
@@ -120,19 +120,27 @@ class DevelopersItaliaFetchTest extends FetchTestBase {
    * Tests that text for short and long descriptions are parsed properly.
    */
   public function testMarkDownResolver(): void {
+    $entity_view_builder = $this->container->get('entity_type.manager')->getViewBuilder('node');
+    $renderer = $this->container->get('renderer');
     $this->fetchSolutions('developers_italia', 4);
 
     // The fact that the solution is found means that the title was cleaned of
     // extra spaces.
     $solution = $this->getNodeByTitle('GitHub solution 1');
+
     // Assert that markdown is converted for short description.
-    $this->assertStringContainsString('[EN] Solution 1: <strong>Short description</strong>', $solution->get('oss_short_description')->value);
+    $field_items = $solution->get('description');
+    $render_array = $entity_view_builder->viewField($field_items);
+    $rendered = (string) $renderer->renderPlain($render_array);
+    $this->assertStringContainsString('[EN] Solution 1: <strong>Short description</strong>', $rendered);
 
     // Assert that markdown is converted for long description.
-    $long_description = $solution->get('oss_long_description')->value;
-    $this->assertStringContainsString('<strong>Some bold text</strong>', $long_description);
-    $this->assertStringContainsString("<ul><li>Some list item</li>\n<li>Another list item</li>\n</ul>", $long_description);
-    $this->assertStringContainsString('<em>Some italic text</em>', $long_description);
+    $field_items = $solution->get('oss__long_description');
+    $render_array = $entity_view_builder->viewField($field_items);
+    $rendered = (string) $renderer->renderPlain($render_array);
+    $this->assertStringContainsString('<strong>Some bold text</strong>', $rendered);
+    $this->assertStringContainsString("<ul><li>Some list item</li>\n<li>Another list item</li>\n</ul>", $rendered);
+    $this->assertStringContainsString('<em>Some italic text</em>', $rendered);
   }
 
 }
