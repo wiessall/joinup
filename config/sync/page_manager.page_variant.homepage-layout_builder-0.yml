@@ -230,7 +230,7 @@ variant_settings:
             provider: custom_markup_block
             context_mapping: {  }
             markup:
-              value: "<p>{\"preview_thumbnail\":\"/sites/default/files/styles/video_embed_wysiwyg_preview/public/video_thumbnails/3_dx-K0P9JI.jpg?itok=LryC_a1d\",\"video_url\":\"https://youtu.be/3_dx-K0P9JI\",\"settings\":{\"responsive\":true,\"width\":\"854\",\"height\":\"480\",\"autoplay\":false},\"settings_summary\":[\"Embedded Video (Responsive).\"]}</p>\r\n"
+              value: '<drupal-media data-entity-type="media" data-entity-uuid="b03799ea-2116-4d21-965f-3556002d8a00">&nbsp;</drupal-media>'
               format: content_editor
           weight: 0
           additional:
