@@ -9,7 +9,8 @@ third_party_settings:
   eu_oss_catalogue:
     publiccode_yml:
       resolvers:
-        - plugin: default
+        -
+          plugin: default
           config:
             path: 'description/[lang]/longDescription'
 id: node.oss_solution.oss_long_description
