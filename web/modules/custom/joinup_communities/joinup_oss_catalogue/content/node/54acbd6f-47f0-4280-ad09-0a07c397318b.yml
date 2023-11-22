@@ -94,7 +94,7 @@ default:
       pathauto: 1
   published_at:
     -
-      value: 1699952886
+      value: 1700675275
   field_paragraphs_body:
     -
       entity:
@@ -124,6 +124,9 @@ default:
                 background_theme: {  }
                 extra_class:
                   extra_class: oss__discover
+          revision_translation_affected:
+            -
+              value: true
     -
       entity:
         _meta:
@@ -145,6 +148,9 @@ default:
                 layout_paragraphs:
                   parent_uuid: 00b46561-49b5-4ce7-a39a-a5b6921bcfb2
                   region: first
+          revision_translation_affected:
+            -
+              value: true
           field_body:
             -
               value: '<p><strong>Discover</strong> our European Open Source Software</p>'
@@ -204,6 +210,9 @@ default:
                 layout_paragraphs:
                   parent_uuid: 00b46561-49b5-4ce7-a39a-a5b6921bcfb2
                   region: second
+          revision_translation_affected:
+            -
+              value: true
           field_body:
             -
               value: '<p>Repository of the Open Source Software Solutions of the Public Administrations</p>'
@@ -229,6 +238,9 @@ default:
                 layout_paragraphs:
                   parent_uuid: 00b46561-49b5-4ce7-a39a-a5b6921bcfb2
                   region: second
+          revision_translation_affected:
+            -
+              value: true
           field_body:
             -
               value: '<p>Centralized platform to discover Open Source Software Solutions for diverse needs</p>'
@@ -254,6 +266,9 @@ default:
                 layout_paragraphs:
                   parent_uuid: 00b46561-49b5-4ce7-a39a-a5b6921bcfb2
                   region: second
+          revision_translation_affected:
+            -
+              value: true
           field_body:
             -
               value: '<p>Open Source Software Solutions that empower collaboration, creativity, and efficiency across various domains</p>'
@@ -282,9 +297,13 @@ default:
                     label: ''
                   parent_uuid: null
                   region: null
-                background_theme: {  }
+                background_theme:
+                  background_theme: light
                 extra_class:
                   extra_class: oss__most_recent
+          revision_translation_affected:
+            -
+              value: true
     -
       entity:
         _meta:
@@ -306,11 +325,78 @@ default:
                 layout_paragraphs:
                   parent_uuid: ff539098-171f-4c69-be93-48a87b617e7a
                   region: content
+          revision_translation_affected:
+            -
+              value: true
           paragraph_block:
             -
               plugin_id: 'views_block:eu_oss_catalogue_admin-oss_most_recent_solutions'
               settings:
                 id: 'views_block:eu_oss_catalogue_admin-oss_most_recent_solutions'
+                label: ''
+                label_display: false
+                provider: views
+                views_label: ''
+                items_per_page: none
+    -
+      entity:
+        _meta:
+          version: '1.0'
+          entity_type: paragraph
+          uuid: 8fbea1c6-206f-45a5-902a-45059f72bceb
+          bundle: layout
+          default_langcode: en
+        default:
+          status:
+            -
+              value: true
+          created:
+            -
+              value: 1700667486
+          behavior_settings:
+            -
+              value:
+                layout_paragraphs:
+                  layout: layout_onecol
+                  config:
+                    label: 'Most Active Solutions'
+                  parent_uuid: null
+                  region: null
+                background_theme: {  }
+                extra_class:
+                  extra_class: oss__most_active
+          revision_translation_affected:
+            -
+              value: true
+    -
+      entity:
+        _meta:
+          version: '1.0'
+          entity_type: paragraph
+          uuid: ce2842c9-8880-40c1-9bd5-daf9361c6f23
+          bundle: block
+          default_langcode: en
+        default:
+          status:
+            -
+              value: true
+          created:
+            -
+              value: 1700667629
+          behavior_settings:
+            -
+              value:
+                layout_paragraphs:
+                  parent_uuid: 8fbea1c6-206f-45a5-902a-45059f72bceb
+                  region: content
+          revision_translation_affected:
+            -
+              value: true
+          paragraph_block:
+            -
+              plugin_id: 'views_block:eu_oss_catalogue_admin-oss_most_active_solutions'
+              settings:
+                id: 'views_block:eu_oss_catalogue_admin-oss_most_active_solutions'
                 label: ''
                 label_display: false
                 provider: views
@@ -344,6 +430,9 @@ default:
                   background_theme: light
                 extra_class:
                   extra_class: oss__instructions-heading
+          revision_translation_affected:
+            -
+              value: true
     -
       entity:
         _meta:
@@ -367,6 +456,9 @@ default:
                 layout_paragraphs:
                   parent_uuid: fb279d1a-794b-4504-893d-a13af243ddfa
                   region: content
+          revision_translation_affected:
+            -
+              value: true
           paragraph_heading:
             -
               value: 'Do you want to publish your open source solution? '
@@ -391,6 +483,9 @@ default:
                 layout_paragraphs:
                   parent_uuid: fb279d1a-794b-4504-893d-a13af243ddfa
                   region: content
+          revision_translation_affected:
+            -
+              value: true
           field_body:
             -
               value: "<p>Just follow the guide!</p>\r\n"
@@ -424,6 +519,9 @@ default:
                   background_theme: light
                 extra_class:
                   extra_class: oss__instructions
+          revision_translation_affected:
+            -
+              value: true
     -
       entity:
         _meta:
@@ -447,6 +545,9 @@ default:
                 layout_paragraphs:
                   parent_uuid: f2a1d11a-9d0a-403f-b5f1-7b4f786d81c0
                   region: first
+          revision_translation_affected:
+            -
+              value: true
           paragraph_heading:
             -
               value: 'Make sure you have a git repository'
@@ -471,6 +572,9 @@ default:
                 layout_paragraphs:
                   parent_uuid: f2a1d11a-9d0a-403f-b5f1-7b4f786d81c0
                   region: first
+          revision_translation_affected:
+            -
+              value: true
           field_body:
             -
               value: "<p>In order to publish your software to this catalogue, you need to include a YAML file generated with some information inside your git repository</p>\r\n"
@@ -498,6 +602,9 @@ default:
                 layout_paragraphs:
                   parent_uuid: f2a1d11a-9d0a-403f-b5f1-7b4f786d81c0
                   region: first
+          revision_translation_affected:
+            -
+              value: true
           paragraph_heading:
             -
               value: 'Fill the information form'
@@ -522,6 +629,9 @@ default:
                 layout_paragraphs:
                   parent_uuid: f2a1d11a-9d0a-403f-b5f1-7b4f786d81c0
                   region: first
+          revision_translation_affected:
+            -
+              value: true
           field_body:
             -
               value: "<p>First, you will have to fill some information like the supported languages, the name of your software, the release date,…</p>\r\n"
@@ -549,6 +659,9 @@ default:
                 layout_paragraphs:
                   parent_uuid: f2a1d11a-9d0a-403f-b5f1-7b4f786d81c0
                   region: first
+          revision_translation_affected:
+            -
+              value: true
           paragraph_heading:
             -
               value: 'Generate the YAML file'
@@ -573,6 +686,9 @@ default:
                 layout_paragraphs:
                   parent_uuid: f2a1d11a-9d0a-403f-b5f1-7b4f786d81c0
                   region: first
+          revision_translation_affected:
+            -
+              value: true
           field_body:
             -
               value: "<p>Once the form is filled, you will be able to generate the YAML with the button dedicated to it on the page</p>\r\n"
@@ -600,6 +716,9 @@ default:
                 layout_paragraphs:
                   parent_uuid: f2a1d11a-9d0a-403f-b5f1-7b4f786d81c0
                   region: first
+          revision_translation_affected:
+            -
+              value: true
           paragraph_heading:
             -
               value: 'Include your YAML file inside your git !'
@@ -624,6 +743,9 @@ default:
                 layout_paragraphs:
                   parent_uuid: f2a1d11a-9d0a-403f-b5f1-7b4f786d81c0
                   region: first
+          revision_translation_affected:
+            -
+              value: true
           field_body:
             -
               value: "<p>You must include this generated YAML file at the rooth of your git and the information will automaticly be retrieved in our platform. Your solution is now published !</p>\r\n"
@@ -653,6 +775,9 @@ default:
                   region: second
                 alignment:
                   alignment: center
+          revision_translation_affected:
+            -
+              value: true
           paragraph_heading:
             -
               value: 'Let’s start with your software name'
@@ -677,6 +802,9 @@ default:
                 layout_paragraphs:
                   parent_uuid: f2a1d11a-9d0a-403f-b5f1-7b4f786d81c0
                   region: second
+          revision_translation_affected:
+            -
+              value: true
           paragraph_block:
             -
               plugin_id: joinup_oss_software_name
@@ -712,6 +840,9 @@ default:
                 background_theme: {  }
                 extra_class:
                   extra_class: oss__faq
+          revision_translation_affected:
+            -
+              value: true
     -
       entity:
         _meta:
@@ -737,6 +868,9 @@ default:
                   region: content
                 alignment:
                   alignment: center
+          revision_translation_affected:
+            -
+              value: true
           paragraph_heading:
             -
               value: 'Frequently Asked Questions (FAQ)'
@@ -833,6 +967,9 @@ default:
                   behavior_settings:
                     -
                       value: {  }
+                  revision_translation_affected:
+                    -
+                      value: true
                   field_paragraphs_item_content:
                     -
                       entity:
@@ -852,6 +989,9 @@ default:
                           behavior_settings:
                             -
                               value: {  }
+                          revision_translation_affected:
+                            -
+                              value: true
                           field_body:
                             -
                               value: "<p>You can contribute to the Open Source Catalogue initiative by suggesting open source projects to be included in the catalogue. Additionally, you can assist in reviewing and organizing existing projects, providing documentation, improving project descriptions, or helping maintain and update the catalogue.</p>\r\n"
@@ -877,6 +1017,9 @@ default:
                   behavior_settings:
                     -
                       value: {  }
+                  revision_translation_affected:
+                    -
+                      value: true
                   field_paragraphs_item_content:
                     -
                       entity:
@@ -896,6 +1039,9 @@ default:
                           behavior_settings:
                             -
                               value: {  }
+                          revision_translation_affected:
+                            -
+                              value: true
                           field_body:
                             -
                               value: "<p>An Open Source Catalogue serves as a valuable resource for developers, organizations, and individuals seeking open source solutions for various purposes. It simplifies the process of discovering and evaluating open source projects, ultimately encouraging the adoption of open source software, which can lead to cost-effective, efficient, and collaborative solutions.</p>\r\n"
@@ -921,6 +1067,9 @@ default:
                   behavior_settings:
                     -
                       value: {  }
+                  revision_translation_affected:
+                    -
+                      value: true
                   field_paragraphs_item_content:
                     -
                       entity:
@@ -940,6 +1089,9 @@ default:
                           behavior_settings:
                             -
                               value: {  }
+                          revision_translation_affected:
+                            -
+                              value: true
                           field_body:
                             -
                               value: "<p>Projects are selected for inclusion in the Open Source Catalogue based on several criteria, including their relevance, popularity, community support, active development, licensing, and adherence to open source principles. The initiative aims to feature a diverse range of high-quality open source projects across different domains and technologies.</p>\r\n"
@@ -974,6 +1126,9 @@ default:
                 background_theme:
                   background_theme: light
                 extra_class: {  }
+          revision_translation_affected:
+            -
+              value: true
     -
       entity:
         _meta:
@@ -999,6 +1154,9 @@ default:
                   region: content
                 alignment:
                   alignment: center
+          revision_translation_affected:
+            -
+              value: true
           paragraph_heading:
             -
               value: 'Do you need any help?'
@@ -1027,6 +1185,9 @@ default:
                 layout_paragraphs:
                   parent_uuid: f66f1112-bbdb-452e-82ed-98bcb6006251
                   region: content
+          revision_translation_affected:
+            -
+              value: true
           paragraph_action_link:
             -
               uri: 'internal:/'
@@ -1059,6 +1220,9 @@ default:
                 background_theme: {  }
                 extra_class:
                   extra_class: oss__social
+          revision_translation_affected:
+            -
+              value: true
     -
       entity:
         _meta:
@@ -1084,6 +1248,9 @@ default:
                   region: content
                 alignment:
                   alignment: center
+          revision_translation_affected:
+            -
+              value: true
           paragraph_heading:
             -
               value: 'Follow our journey on the social media!'
@@ -1112,6 +1279,9 @@ default:
                 layout_paragraphs:
                   parent_uuid: 3a870b47-c2de-42a6-86ba-50dab1687235
                   region: content
+          revision_translation_affected:
+            -
+              value: true
           paragraph_action_link:
             -
               uri: 'https://twitter.com/'
