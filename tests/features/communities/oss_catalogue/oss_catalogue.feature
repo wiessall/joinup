@@ -120,11 +120,11 @@ Feature:
       |   Feature A                                                                                        |
       |   Feature B                                                                                        |
       | Supported languages                                                                                |
-      |   Italian,                                                                                           |
+      |   Italian,                                                                                         |
       |   English,                                                                                         |
-      |   German,                                                                                         |
+      |   German,                                                                                          |
       |   error,                                                                                           |
-      |   Portuguese                                                                                       |
+      |   Portuguese, International                                                                        |
       | Development status                                                                                 |
       |   Stable                                                                                           |
       | License                                                                                            |

@@ -9,7 +9,6 @@ use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Field\FormatterBase;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
-use Drupal\oe_bootstrap_theme_helper\EuropeanUnionLanguages;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -72,11 +71,11 @@ class LanguageCodeFormatter extends FormatterBase implements ContainerFactoryPlu
    */
   public function viewElements(FieldItemListInterface $items, $langcode): array {
     $element = [];
+    $languages = $this->languageManager->getStandardLanguageList();
     foreach ($items as $delta => $item) {
       $codes = explode(",", $item->value);
-
       foreach ($codes as $id => $code) {
-        $codes[$id] = $this->getLanguageName(strtolower($code));
+        $codes[$id] = $languages[$code] ? $languages[$code][0] : $code;
       }
 
       $element[$delta] = [
@@ -85,29 +84,6 @@ class LanguageCodeFormatter extends FormatterBase implements ContainerFactoryPlu
     }
 
     return $element;
-  }
-
-  /**
-   * Returns a language name from the given language code.
-   *
-   * @param string $langcode
-   *   The language code.
-   *
-   * @return string
-   *   The name of the language or langcode.
-   */
-  private function getLanguageName(string $langcode): string {
-    if ($this->languageManager->getLanguage($langcode)) {
-      return $this->languageManager->getLanguageName($langcode);
-    }
-    // The fallback implemented in case we don't have langcode in list.
-    $predefined = EuropeanUnionLanguages::getLanguageList();
-    foreach ($predefined as $countries) {
-      if (in_array($langcode, $countries, TRUE)) {
-        return $countries[0];
-      }
-    }
-    return $langcode;
   }
 
 }
