@@ -3,15 +3,11 @@
  * Modifies non-infinite Slick carousels with variable width enabled.
  */
 ((Drupal, once, $) => {
-  Drupal.slickVariableWidth = {};
-
   /**
-   * Custom control for Slick carousels if variable width enabled.
+   * Object storage and callbacks for Slick carousels if variable width enabled.
    *
-   * @type {Drupal~behavior}
+   * @type {object}
    *
-   * @prop {Drupal~behaviorAttach} attach
-   *   Attaches the required handlers for sliders with variable width.
    * @prop {callback} calculateSlidesToShow
    *   Calculates the max number of slides to show.
    * @prop {callback} deferredRecalculate
@@ -19,37 +15,7 @@
    * @prop {object} timeouts
    *   Object storing recalculation timeouts of slick instances.
    */
-  Drupal.behaviors.slickVariableWidth = {
-    attach(context) {
-      function initialize(slickNode) {
-        // If this instance is infinite or has no variable with, don't do
-        // anything.
-        if (
-          !slickNode.slick ||
-          !slickNode.slick.options ||
-          slickNode.slick.options.infinite ||
-          !slickNode.slick.options.variableWidth
-        ) {
-          return;
-        }
-
-        Drupal.behaviors.slickVariableWidth.calculateSlidesToShow(slickNode);
-
-        // Event listener for window resize.
-        $(window).on("resize", () => {
-          Drupal.behaviors.slickVariableWidth.deferredRecalculate(slickNode);
-        });
-        // Event listener for viewport size change (e.g. vertical toolbar open).
-        $(document).on("drupalViewportOffsetChange", () => {
-          Drupal.behaviors.slickVariableWidth.deferredRecalculate(slickNode);
-        });
-      }
-      once("joinupSlickVariableWidth", "[data-slick]", context).forEach(
-        (slickNode) => {
-          initialize(slickNode);
-        }
-      );
-    },
+  Drupal.joinupSlickVariableWidth = {
     calculateSlidesToShow(slickNode) {
       const $slick = $(slickNode);
       // Get width of the track.
@@ -91,5 +57,46 @@
       );
     },
     timeouts: {},
+  };
+
+  /**
+   * Custom control for Slick carousels if variable width enabled.
+   *
+   * @type {Drupal~behavior}
+   *
+   * @prop {Drupal~behaviorAttach} attach
+   *   Attaches the required handlers for sliders with variable width.
+   */
+  Drupal.behaviors.joinupSlickVariableWidth = {
+    attach(context) {
+      function initialize(slickNode) {
+        // If this instance is infinite or has no variable with, don't do
+        // anything.
+        if (
+          !slickNode.slick ||
+          !slickNode.slick.options ||
+          slickNode.slick.options.infinite ||
+          !slickNode.slick.options.variableWidth
+        ) {
+          return;
+        }
+
+        Drupal.joinupSlickVariableWidth.calculateSlidesToShow(slickNode);
+
+        // Event listener for window resize.
+        $(window).on("resize", () => {
+          Drupal.joinupSlickVariableWidth.deferredRecalculate(slickNode);
+        });
+        // Event listener for viewport size change (e.g. vertical toolbar open).
+        $(document).on("drupalViewportOffsetChange", () => {
+          Drupal.joinupSlickVariableWidth.deferredRecalculate(slickNode);
+        });
+      }
+      once("joinupSlickVariableWidth", "[data-slick]", context).forEach(
+        (slickNode) => {
+          initialize(slickNode);
+        }
+      );
+    },
   };
 })(Drupal, once, jQuery);
