@@ -7,6 +7,10 @@
   }
   &__title {
     flex: 1 1 auto;
+    flex-basis: 100%;
+    @include media-breakpoint-up(md) {
+      flex-basis: 50%;
+    }
   }
   .glide__outer {
     // Visual workarounds to avoid slides' shadow being cut.
