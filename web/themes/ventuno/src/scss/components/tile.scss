@@ -39,6 +39,10 @@
     right: $spacer * .5;
     top: $spacer * -1;
     font-size: .875rem;
+    max-width: 10rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
   &__standout-info-icon,
   &__info-icon {
