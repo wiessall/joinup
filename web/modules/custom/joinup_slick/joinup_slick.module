@@ -66,7 +66,7 @@ function joinup_slick_preprocess_field(array &$variables): void {
     \assert($slickManager instanceof SlickManagerInterface);
     $optionset = \Drupal::entityTypeManager()->getStorage('slick')->load($optionsetId);
 
-    if ($optionset) {
+    if ($optionset instanceof SlickInterface) {
       $items = array_map(
         fn (array $item): array => [
           'slide' => $item['content'],
@@ -77,6 +77,7 @@ function joinup_slick_preprocess_field(array &$variables): void {
       $build = $slickManager->build([
         'items' => $items,
         'optionset' => $optionset,
+        'settings' => ['optionset' => $optionsetId] + $optionset->getSettings(),
       ]);
       // Move Slick renderable to the field theme output, overriding the items
       // key. Structurally, this is the same if the field has one single value.
