@@ -24,6 +24,7 @@ dependencies:
     - field.storage.node.field_short_title
     - field.storage.node.oss_source
     - field.storage.meta_entity.count
+    - field.storage.node.oss_vitality_index
     - field.storage.rdf_entity.field_ar_abstract
     - field.storage.rdf_entity.field_ci_name
     - field.storage.rdf_entity.field_is_contact_information
@@ -812,6 +813,14 @@ field_settings:
     dependencies:
       config:
         - field.storage.node.oss_source
+  oss_vitality_index:
+    label: 'Vitality Index'
+    datasource_id: 'entity:node'
+    property_path: oss_vitality_index
+    type: decimal
+    dependencies:
+      config:
+        - field.storage.node.oss_vitality_index
   parent:
     label: 'Term Parents'
     datasource_id: 'entity:taxonomy_term'
