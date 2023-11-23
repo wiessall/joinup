@@ -359,7 +359,7 @@ default:
                 layout_paragraphs:
                   layout: layout_onecol
                   config:
-                    label: 'Most Active Solutions'
+                    label: 'Most active solutions'
                   parent_uuid: null
                   region: null
                 background_theme: {  }
