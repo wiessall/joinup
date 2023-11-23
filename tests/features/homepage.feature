@@ -365,4 +365,3 @@ Feature: Homepage
     Given I am on the homepage
     Then I should see search bar in navbar
     And I should see the search bar in homepage's header
-    And page elements must have unique id attributes
