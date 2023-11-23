@@ -87,13 +87,6 @@ function ventuno_preprocess_block(array &$variables): void {
 }
 
 /**
- * Implements hook_preprocess_HOOK().
- */
-function ventuno_preprocess_block__field_block__node__oss_solution__oss_vitality_index(&$variables): void {
-  $variables['attributes']['class'][] = 'l-oss-heading__vitality';
-}
-
-/**
  * Implements hook_theme_suggestions_HOOK_alter() for the block hook.
  */
 function ventuno_theme_suggestions_block_alter(array &$suggestions, array $variables): void {

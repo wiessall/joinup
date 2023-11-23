@@ -64,18 +64,6 @@
     &__top-left {
       margin-right: $spacer * 2;
     }
-    &__vitality {
-      display: flex;
-      align-items: center;
-      gap: $spacer;
-      padding-bottom: $spacer * 2;
-
-      div {
-        font-size: $h2-font-size;
-        color: $oss--brand;
-        margin-bottom: $spacer * .5;
-      }
-    }
   }
   &__oss-software-version {
     margin-right: $spacer * 2;
