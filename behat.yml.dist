@@ -6,6 +6,14 @@
   - Drupal\DrupalExtension\Context\DrushContext
   - Drupal\DrupalExtension\Context\MarkupContext
   - Drupal\DrupalExtension\Context\MessageContext
+  - Drupal\joinup\Context\AccessibilityContext:
+      # See https://github.com/dequelabs/axe-core/blob/HEAD/doc/API.md#axe-core-tags
+      # Todo The list of tags should be expanded in ISAICP-8256.
+      # See https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-8256
+      standardTags:
+        wcag2a: WCAG 2.1 A
+        wcag2aa: WCAG 2.1 AA
+        wcag411: Criterion 4.1.1
   - Drupal\joinup\Context\AdmsValidatorContext
   - Drupal\joinup\Context\AssetDistributionContext
   - Drupal\joinup\Context\AssetReleaseContext
