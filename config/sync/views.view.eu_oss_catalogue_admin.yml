@@ -1492,7 +1492,7 @@ display:
     display_plugin: block
     position: 3
     display_options:
-      title: 'Most Active Solutions'
+      title: 'Most active solutions'
       pager:
         type: some
         options:
