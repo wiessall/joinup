@@ -16,13 +16,9 @@ use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Field\BaseFieldDefinition;
-use Drupal\Core\Field\FieldDefinitionInterface;
-use Drupal\Core\Field\FormatterInterface;
-use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Render\Markup;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\StreamWrapper\StreamWrapperManager;
-use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\block\BlockInterface;
 use Drupal\joinup_core\ETransBlockConfiguration;
 use Drupal\joinup_core\Element\Datetime;
@@ -31,8 +27,6 @@ use Drupal\joinup_core\Plugin\Field\FieldType\OutdatedContentFieldItemList;
 use Drupal\joinup_core\Plugin\Field\FieldWidget\ImageLibraryWidget;
 use Drupal\joinup_workflow\ArchivableEntityInterface;
 use Drupal\node\NodeInterface;
-use Drupal\slick\Entity\SlickInterface;
-use Drupal\slick\SlickManagerInterface;
 
 /**
  * Implements hook_theme().
