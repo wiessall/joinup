@@ -11,13 +11,14 @@ use Drupal\Core\Field\FieldDefinitionInterface;
 use Drupal\Core\Field\FormatterInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
+use Drupal\Core\Template\Attribute;
 use Drupal\slick\Entity\SlickInterface;
 use Drupal\slick\SlickManagerInterface;
 
 /**
  * Implements hook_field_formatter_third_party_settings_form().
  */
-function joinup_slick_field_formatter_third_party_settings_form(FormatterInterface $plugin, FieldDefinitionInterface $field_definition, string $view_mode, array $form, FormStateInterface $form_state) {
+function joinup_slick_field_formatter_third_party_settings_form(FormatterInterface $plugin, FieldDefinitionInterface $field_definition, string $view_mode, array $form, FormStateInterface $form_state): array {
   $element = [];
   $field_definition->getFieldStorageDefinition()->getCardinality();
   $options = array_merge(
@@ -37,14 +38,13 @@ function joinup_slick_field_formatter_third_party_settings_form(FormatterInterfa
 
   // @todo Add submit handler which keeps third party settings empty if no
   // optionset is selected.
-
   return $element;
 }
 
 /**
  * Implements hook_field_formatter_settings_summary_alter().
  */
-function joinup_slick_field_formatter_settings_summary_alter(array &$summary) {
+function joinup_slick_field_formatter_settings_summary_alter(array &$summary): void {
   if (!empty($variables['element']['#third_party_settings']['joinup_slick']['preset'])) {
     $optionsetId = $variables['element']['#third_party_settings']['joinup_slick']['preset'];
     $optionset = \Drupal::entityTypeManager()->getStorage('slick')->load($optionsetId);
@@ -59,7 +59,7 @@ function joinup_slick_field_formatter_settings_summary_alter(array &$summary) {
 /**
  * Implements hook_preprocess_field().
  */
-function joinup_slick_preprocess_field(array &$variables) {
+function joinup_slick_preprocess_field(array &$variables): void {
   if (!empty($variables['element']['#third_party_settings']['joinup_slick']['preset'])) {
     $optionsetId = $variables['element']['#third_party_settings']['joinup_slick']['preset'];
     $slickManager = \Drupal::service('slick.manager');
@@ -68,16 +68,26 @@ function joinup_slick_preprocess_field(array &$variables) {
 
     if ($optionset) {
       $items = array_map(
-        fn (array $item): array => ['slide' => $item['content']],
+        fn (array $item): array => [
+          'slide' => $item['content'],
+          'attributes' => $item['attributes']->toArray(),
+        ],
         $variables['items']
       );
       $build = $slickManager->build([
         'items' => $items,
         'optionset' => $optionset,
       ]);
-      // @todo It seems it is possible to pass item attributes to slick__slide.
-      $variables['items'] = [['content' => $build]];
+      // Move Slick renderable to the field theme output, overriding the items
+      // key. Structurally, this is the same if the field has one single value.
+      $variables['items'] = [
+        [
+          'content' => $build,
+          'attributes' => new Attribute(),
+        ],
+      ];
 
+      // Add variable-width library if needed.
       if (
         !empty($optionset->get('options')['settings']['variableWidth']) &&
         empty($optionset->get('options')['settings']['infinite'])
@@ -91,7 +101,7 @@ function joinup_slick_preprocess_field(array &$variables) {
 /**
  * Implements hook_theme_suggestions_HOOK_alter() for "slick".
  */
-function joinup_slick_theme_suggestions_slick_alter(array &$suggestions, array $variables) {
+function joinup_slick_theme_suggestions_slick_alter(array &$suggestions, array $variables): void {
   $optionset = $variables['element']['#optionset'];
   \assert($optionset instanceof SlickInterface);
   $suggestions[] = "slick__{$optionset->id()}";
