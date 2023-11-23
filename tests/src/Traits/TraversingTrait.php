@@ -630,6 +630,97 @@ trait TraversingTrait {
   }
 
   /**
+   * Returns all images found in the given element (or on the entire page).
+   *
+   * @param \Behat\Mink\Element\NodeElement|null $element
+   *   (optional) The element to check in. If omitted the entire page will be
+   *   checked.
+   *
+   * @return array
+   *   The images found in the given element or on the page.
+   */
+  protected function getImages(?NodeElement $element = NULL): array {
+    if (empty($element)) {
+      $element = $this->getSession()->getPage();
+    }
+    return $element->findAll('xpath', "//img[@srcset|@src]");
+  }
+
+  /**
+   * Build a regular expression to find the image in a string.
+   *
+   * Drupal appends an underscore and a number to the filename when duplicate
+   * files are uploaded, for example when a test is run more than once.
+   * The XPath and selector version that we are using does not support regular
+   * expressions, and we cannot easily search for the file name otherwise.
+   * The elements are loaded instead and the regular expression is being run
+   * in php.
+   *
+   * @param string $imageFilename
+   *   Name of the image file to build a regular expression for.
+   *
+   * @return string
+   *   The regular expression to find the image file (or its underscored
+   *   version).
+   */
+  protected function getImageNameRegex(string $imageFilename): string {
+    static $regexMap;
+    if (empty($regexMap[$imageFilename])) {
+      $parts = pathinfo($imageFilename);
+      $extension = preg_quote($parts['extension'], '/');
+      $filename = preg_quote($parts['filename'], '/');
+      $regexMap[$imageFilename] = '/\b' . $filename . '(_\d+)?\.' . $extension . '(\?itok=.*)?(\b|$)/';
+    }
+    return $regexMap[$imageFilename];
+  }
+
+  /**
+   * Determines whether the provided image element's source is the given file.
+   *
+   * @param string $filename
+   *   The name of the image file.
+   * @param \Behat\Mink\Element\NodeElement $imageElement
+   *   The <img/> node element to check.
+   *
+   * @return bool
+   *   Whether the provided image element's source is the given file.
+   */
+  protected function imageSourceMatches(string $filename, NodeElement $imageElement): bool {
+    $expression = $this->getImageNameRegex($filename);
+    $attributesToCheck = array_filter([
+      $imageElement->getAttribute('src'),
+      $imageElement->getAttribute('srcset'),
+    ]);
+    foreach ($attributesToCheck as $source) {
+      if (preg_match($expression, $source)) {
+        return TRUE;
+      }
+    }
+    return FALSE;
+  }
+
+  /**
+   * Returns the image node with a given file name if it exists.
+   *
+   * @param string $filename
+   *   The file name.
+   * @param \Behat\Mink\Element\NodeElement|null $element
+   *   (optional) The element to check in. If omitted the entire page will be
+   *   checked.
+   *
+   * @return mixed
+   *   Whether the element exists or not in the given element or page.
+   */
+  protected function getImage(string $filename, ?NodeElement $element = NULL): mixed {
+    foreach ($this->getImages($element) as $imageElement) {
+      if ($this->imageSourceMatches($filename, $imageElement)) {
+        return $imageElement;
+      }
+    }
+    return NULL;
+  }
+
+  /**
    * Checks if an image with a given file name exists in a given element.
    *
    * @param string $filename
@@ -642,26 +733,8 @@ trait TraversingTrait {
    *   Whether the element exists or not in the given element or page.
    */
   protected function hasImage(string $filename, ?NodeElement $element = NULL): bool {
-    if (empty($element)) {
-      $element = $this->getSession()->getPage();
-    }
-
-    // Drupal appends an underscore and a number to the filename when duplicate
-    // files are uploaded, for example when a test is run more than once.
-    // The XPath and selector version that we are using does not support regular
-    // expressions and we cannot easily search for the file name otherwise.
-    // The elements are loaded instead and the regular expression is being run
-    // in php.
-    $parts = pathinfo($filename);
-    $extension = $parts['extension'];
-    $filename = $parts['filename'];
-    $expression = '/src="[^"]*' . $filename . '(_\d+)?\.' . $extension . '[^"]*"/';
-    $image_elements = $element->findAll('xpath', "//img");
-    foreach ($image_elements as $image_element) {
-      $html = $image_element->getOuterHtml();
-      // The styles directory contains responsive images which are printed using
-      // a random string in the name.
-      if (preg_match($expression, $html) || preg_match('/.*\/sites\/default\/files\/styles.*/', $html)) {
+    foreach ($this->getImages($element) as $imageElement) {
+      if ($this->imageSourceMatches($filename, $imageElement)) {
         return TRUE;
       }
     }
