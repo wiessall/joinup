@@ -20,8 +20,8 @@ id: node.oss_solution.oss_owner
 field_name: oss_owner
 entity_type: node
 bundle: oss_solution
-label: 'Main copyright owner'
-description: 'The entity that owns the copyright on “most” of the code in the repository. Normally, this is the line that is reported with the copyright symbol at the top of most files in the repo. It is possible to list multiple owners if required so, using an English sentence. It is also possible to informally refer to a community of group of people like “Linus Torvalds and all Linux contributors”'
+label: 'Copyrights owner'
+description: 'The entity that owns the copyrights on “most” of the code in the repository. Normally, this is the line that is reported with the copyright symbol at the top of most files in the repo. It is possible to list multiple owners if required so, using an English sentence. It is also possible to informally refer to a community of group of people like “Linus Torvalds and all Linux contributors”'
 required: false
 translatable: false
 default_value: {  }
