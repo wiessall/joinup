@@ -49,9 +49,7 @@
       <div class="glide">
         <div class="d-flex flex-wrap align-items-baseline justify-content-end">
           {{ title_prefix }}
-          {% if display_title -%}
-            <h2 class="carousel__title mt-0 mb-3">{{ display_title }}</h2>
-          {%- endif %}
+            <h2 class="carousel__title mt-0 mb-3">{{ view.title }}</h2>
           {{ title_suffix }}
           <a href="{{ url('<front>')|render }}eu-oss-catalogue/solutions" class="btn btn-secondary mb-3 ms-3">{{ 'View all'|t }}</a>
           <div class="glide__arrows mb-3 ms-3" data-glide-el="controls">
