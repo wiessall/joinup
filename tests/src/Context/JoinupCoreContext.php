@@ -393,31 +393,6 @@ class JoinupCoreContext extends RawDrupalContext {
   }
 
   /**
-   * Checks if page elements have unique id elements.
-   *
-   * @throws \Exception
-   *   Thrown when element's id is not unique.
-   *
-   * @Then page elements must have unique id attributes
-   */
-  public function pageElementsMustHaveUniqueIdAttributes(): void {
-    $elementIds = [];
-
-    $elementsWithIdAttribute = $this->getSession()
-      ->getPage()
-      ->findAll('css', '[id]');
-    foreach ($elementsWithIdAttribute as $elementWithIdAttribute) {
-      $elementId = $elementWithIdAttribute->getAttribute('id');
-
-      if (in_array($elementId, $elementIds)) {
-        throw new \Exception("'$elementId' id attribute is used by more than one element");
-      }
-
-      $elementIds[] = $elementId;
-    }
-  }
-
-  /**
    * Asserts that the given HTML list of rows exists in the page.
    *
    * @param \Behat\Gherkin\Node\TableNode $table
