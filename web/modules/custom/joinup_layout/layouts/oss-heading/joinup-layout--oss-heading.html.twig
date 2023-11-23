@@ -41,16 +41,16 @@
         </div>
       {% endif %}
 
-      {% if content.third_left or content.third_right %}
-        <div class="l-oss-heading__row row">
+      {% if content.third_left  or content.third_right %}
+        <div class="l-oss-heading__row d-flex flex-wrap">
           {% if content.third_left %}
-            <div {{ region_attributes.third_left.addClass('l-oss-heading__third-left col-4') }}>
+            <div {{ region_attributes.third_left.addClass('l-oss-heading__third-left mb-2') }}>
               {{ content.third_left }}
             </div>
           {% endif %}
 
           {% if content.third_right %}
-            <div {{ region_attributes.third_right.addClass('l-oss-heading--third-right col-4 offset-md-1') }}>
+            <div {{ region_attributes.third_right.addClass('l-oss-heading--third-right mb-2') }}>
               {{ content.third_right }}
             </div>
           {% endif %}

@@ -60,16 +60,21 @@
           inset-inline-start: 0;
         }
       }
+      .block {
+        margin-bottom: $spacer;
+      }
     }
     &__top-left {
       margin-right: $spacer * 2;
     }
   }
+  .l-oss-heading__third-left .block{
+    margin-right: $spacer * 3;
+  }
   &__oss-software-version {
     margin-right: $spacer * 2;
     margin-bottom: $spacer;
     .field__label {
-      color: $gray-500;
       margin-bottom: $spacer * .5;
     }
     .field__item {
@@ -84,7 +89,6 @@
   &__oss-categories {
     margin-bottom: $spacer;
     .field__label {
-      color: $gray-500;
       margin-bottom: $spacer * .5;
     }
     a {
@@ -124,15 +128,18 @@
     a {
       font-weight: $font-weight-bold;
       &::before {
-        @include get-bootstrap-icon('link-45deg', $oss--brand, 1.4em);
-        margin-inline-end: $spacer * .5;
+        @include get-bootstrap-icon('link-45deg', $oss--brand, 1.5em);
+        margin-inline-end: $spacer * .3;
       }
     }
   }
-  &__oss__documentation a {
-    &::before {
-      @include get-bootstrap-icon('file-earmark-text', $primary);
-      margin-inline-end: $spacer * .5;
+  &__oss__documentation {
+    a {
+      font-weight: $font-weight-bold;
+      &::before {
+        @include get-bootstrap-icon('file-earmark-text', $oss--brand, 1.3em);
+        margin-inline-end: $spacer * .4;
+      }
     }
   }
   .l-ventuno--layout_twocol_section--section-label-long-description {
@@ -140,8 +147,9 @@
     @include full-width-color($light);
     .oss-solution__long-description {
       &--long {
+        font-size: $font-size-lg;
         display: -webkit-box!important;
-        min-height: 48px;
+        min-height: 60px;
         -webkit-line-clamp: 2;
         -webkit-box-orient: vertical;
         overflow: hidden;
@@ -152,17 +160,20 @@
     }
   }
   &__illustration {
-    aspect-ratio: 5/4;
+    aspect-ratio: 4/3;
     width: 100%;
     height: auto;
-    background-image: url("#{$theme-images-path}/oss-illustration.svg");
-    background-size: cover;
-    border-radius: $border-radius;
+    background: url("#{$theme-images-path}/oss-illustration.svg") no-repeat top center;
+    background-size: contain;
+    @include media-breakpoint-up(lg) {
+      background-size: auto;
+    }
   }
   &__oss__features {
     list-style: none;
     margin-left: 0;
     li {
+      font-size: $font-size-lg;
       margin-bottom: $spacer * .5;
       color: $gray-500;
       &::before {
