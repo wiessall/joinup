@@ -77,7 +77,7 @@ third_party_settings:
                 third_party_settings:
                   template_suggestion:
                     template_suggestion: ''
-            weight: 2
+            weight: 1
             additional: {  }
           613fb544-14e1-441e-bb81-629db2f729a3:
             uuid: 613fb544-14e1-441e-bb81-629db2f729a3
@@ -103,7 +103,7 @@ third_party_settings:
                 third_party_settings:
                   template_suggestion:
                     template_suggestion: ''
-            weight: 3
+            weight: 2
             additional: {  }
           f6501de4-478f-49fe-adbb-2e541ba9d0c3:
             uuid: f6501de4-478f-49fe-adbb-2e541ba9d0c3
@@ -129,7 +129,7 @@ third_party_settings:
                 third_party_settings:
                   template_suggestion:
                     template_suggestion: ''
-            weight: 4
+            weight: 3
             additional: {  }
           592281dd-6140-43f3-9ec5-9c88b1db0477:
             uuid: 592281dd-6140-43f3-9ec5-9c88b1db0477
@@ -226,7 +226,7 @@ third_party_settings:
             region: first_left
             configuration:
               id: 'field_block:node:oss_solution:oss_software_version'
-              label: Version
+              label: 'Version'
               label_display: '0'
               provider: layout_builder
               context_mapping:
@@ -304,26 +304,6 @@ third_party_settings:
               markup:
                 value: '<h2>Quick links</h2>'
                 format: content_editor
-            weight: 1
-            additional: {  }
-          7e8557ef-a668-4f97-84ab-436bdd1e1a94:
-            uuid: 7e8557ef-a668-4f97-84ab-436bdd1e1a94
-            region: aside
-            configuration:
-              id: 'field_block:node:oss_solution:oss_vitality_index'
-              label: Vitality
-              label_display: visible
-              provider: layout_builder
-              context_mapping:
-                entity: layout_builder.entity
-                view_mode: view_mode
-              formatter:
-                type: joinup_oss_catalogue_vitality_percentage
-                label: hidden
-                settings: {  }
-                third_party_settings:
-                  template_suggestion:
-                    template_suggestion: ''
             weight: 0
             additional: {  }
         third_party_settings: {  }
