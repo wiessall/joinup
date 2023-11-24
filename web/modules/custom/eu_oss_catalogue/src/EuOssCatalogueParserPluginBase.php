@@ -109,7 +109,10 @@ abstract class EuOssCatalogueParserPluginBase extends PluginBase implements EuOs
         ->set('oss_software_version', $project->latestReleaseTag)
         ->set('oss_release_date', $project->latestReleaseDate)
         ->set('oss_platform_reference', $project->platformReference)
-        ->set('oss_git_description', $project->description)
+        ->set('oss_git_description', [
+          'value' => $project->description,
+          'format' => 'markdown',
+        ])
         ->set('oss_logo', $project->logo)
         ->addProvider($provider);
 

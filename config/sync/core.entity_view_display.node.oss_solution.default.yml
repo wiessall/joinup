@@ -364,7 +364,7 @@ third_party_settings:
                 entity: layout_builder.entity
                 view_mode: view_mode
               formatter:
-                type: basic_string
+                type: text_default
                 label: hidden
                 settings: {  }
                 third_party_settings:
@@ -709,10 +709,9 @@ third_party_settings:
                 entity: layout_builder.entity
                 view_mode: view_mode
               formatter:
-                type: string
+                type: joinup_language_code
                 label: above
-                settings:
-                  link_to_entity: false
+                settings: {  }
                 third_party_settings:
                   field_delimiter:
                     delimiter: ', '
