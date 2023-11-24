@@ -8,11 +8,11 @@ Feature:
       | title              | oss_development_status | oss_source        | oss_categories                                                  | oss_short_description                                                                                                                         | status      | oss_release_date | oss_vitality_index |
       | Not published      | development            | developers_italia | content-management                                              | Never published                                                                                                                               | unpublished | 2022-05-24       | 0.56               |
       | Not released       | development            | developers_italia | content-management                                              | Never released                                                                                                                                | published   |                  | 0.51               |
-      | C4S ERP            | stable                 | developers_italia | content-management                                              | A lightweight SAML2 MDQ server that implements draft-young-md-query implementation.                                                           | published   | 2022-04-13       | 0.99               |
+      | C4S ERP            | stable                 | developers_italia | content-management                                              | A lightweight SAML2 MDQ server that implements draft-young-md-query implementation.                                                           | published   | 2022-04-13       | 0.98               |
       | Vito Schiraldi     | stable                 | developers_italia | data-analytics,data-collection                                  | Docker image to convert QuakeML format to NonLinLoc PHS format.                                                                               | published   | 2000-07-13       | 0.67               |
       | Spunta             | beta                   | developers_italia | digital-asset-management                                        |                                                                                                                                               | published   | 2023-08-13       | 0.78               |
       | Semantic Turkey    | development            | developers_italia | application-development,it-development,digital-asset-management | Software Registry makes software development phase simplier by showing extended information about projects and allowing source code searches. | published   | 2000-04-13       | 0.50               |
-      | Cristian Gagliardi | obsolete               | developers_italia | data-collection                                                 | Immuni is a mobile app that helps us to fight the COVID-19 pandemic by notifying users at risk of carrying the virus as early as possible     | published   | 2020-09-13       | 1.00               |
+      | Cristian Gagliardi | obsolete               | developers_italia | data-collection                                                 | Immuni is a mobile app that helps us to fight the COVID-19 pandemic by notifying users at risk of carrying the virus as early as possible     | published   | 2020-09-13       | 0.99               |
 
     Given I visit "/collection/eu-oss-catalogue"
 
@@ -30,7 +30,7 @@ Feature:
     And I should not see the "Entity actions" region
 
     And I should see the following headings:
-      | Most recent open source software solutions        |
+      | Most recent solutions                             |
       | Most active solutions                             |
       | Do you want to publish your open source solution? |
       | Let’s start with your software name               |
@@ -109,7 +109,7 @@ Feature:
     Given an oss_platform term with the name "macOs"
     Given oss_solution content:
       | title                  | oss_available_languages | oss_development_status | oss_source        | oss_categories                    | oss_long_description                                                                             | oss_short_description | oss_git_description | status    | oss_release_date | oss_documentation   | oss_features         | oss_git_url         | oss_landing_url     | oss_license      | oss_logo                         | oss_maintenance_contacts | oss_maintenance_contractors | oss_maintenance_type | oss_owner       | oss_platforms | oss_publiccode_yml_version | oss_scope                       | oss_screenshots                                                   | oss_software_type  | oss_software_version | oss_vitality_index | oss_used_by                                        |
-      | Super Awesome Software | it,en,de                | stable                 | developers_italia | document-management,collaboration | The long description. A patient developer can make this long enough to be at least 5 lines long. | The short description | The GIT description | published | 2014-11-19       | https://example.com | Feature A, Feature B | https://example.com | https://example.com | GPL-2.0-or-later | https://placehold.co/200x200.png | FOSS Conference          | ACME Ltd.                   | community            | FOSS Conference | macOs         | 0.4                        | science-and-technology,security | https://placehold.co/600x400.png,https://placehold.co/400x400.png | standalone/desktop | 3.17.143             | 0.41               | Administration 1,Administration 2,Administration 3 |
+      | Super Awesome Software | it,en,de,error,pt       | stable                 | developers_italia | document-management,collaboration | The long description. A patient developer can make this long enough to be at least 5 lines long. | The short description | The GIT description | published | 2014-11-19       | https://example.com | Feature A, Feature B | https://example.com | https://example.com | GPL-2.0-or-later | https://placehold.co/200x200.png | FOSS Conference          | ACME Ltd.                   | community            | FOSS Conference | macOs         | 0.4                        | science-and-technology,security | https://placehold.co/600x400.png,https://placehold.co/400x400.png | standalone/desktop | 3.17.143             | 0.41               | Administration 1,Administration 2,Administration 3 |
     When I go to the content page of the type "oss_solution" with the title "Super Awesome Software"
     Then I should be on "/eu-oss-catalogue/solutions/super-awesome-software"
     And I should see the following headings:
@@ -130,9 +130,11 @@ Feature:
       |   Feature A                                                                                        |
       |   Feature B                                                                                        |
       | Supported languages                                                                                |
-      |   it,                                                                                              |
-      |   en,                                                                                              |
-      |   de                                                                                               |
+      |   Italian,                                                                                         |
+      |   English,                                                                                         |
+      |   German,                                                                                          |
+      |   error,                                                                                           |
+      |   Portuguese, International                                                                        |
       | Development status                                                                                 |
       |   Stable                                                                                           |
       | License                                                                                            |
