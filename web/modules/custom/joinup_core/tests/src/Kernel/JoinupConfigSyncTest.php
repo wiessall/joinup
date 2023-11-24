@@ -37,29 +37,6 @@ class JoinupConfigSyncTest extends KernelTestBase {
   /**
    * {@inheritdoc}
    */
-  public static $configSchemaCheckerExclusions = [
-    // Slick module has incorrect filter plugin settings schema.
-    // @todo Fix in ISAICP-8296.
-    // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-8296.
-    'filter.format.basic_html',
-    'filter.format.content_editor',
-    'filter.format.eira_format',
-    'filter.format.essential_html',
-    'filter.format.full_html',
-    'filter.format.glossary_html',
-    'filter.format.licence',
-    'filter.format.minimal',
-    'filter.format.plain_text',
-    'filter.format.restricted_html',
-    'filter.format.simple_html',
-    'filter.format.simple_text',
-    'filter.format.stripped_html',
-    'filter.format.text_html',
-  ];
-
-  /**
-   * {@inheritdoc}
-   */
   public function register(ContainerBuilder $container): void {
     parent::register($container);
 
@@ -80,9 +57,6 @@ class JoinupConfigSyncTest extends KernelTestBase {
     $config_sync_dir = realpath("{$this->root}/../config/sync");
     $config_sync_storage = new FileStorage($config_sync_dir);
     foreach ($config_sync_storage->listAll() as $config_name) {
-      if (in_array($config_name, static::$configSchemaCheckerExclusions, TRUE)) {
-        continue;
-      }
       $config_data = $config_sync_storage->read($config_name);
       $this->assertConfigSchema($typed_config, $config_name, $config_data);
     }
