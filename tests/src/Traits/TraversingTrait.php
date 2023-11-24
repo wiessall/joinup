@@ -778,6 +778,8 @@ trait TraversingTrait {
         // This second condition and the OR operator means that if there is at
         // least one image on the page which is an image style derivative, then
         // this function will always report a match. For every random file name.
+        // @todo Get rid of this method entirely in ISAICP-8299.
+        // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-8299
         preg_match('/.*\/sites\/default\/files\/styles.*/', $html)
       ) {
         return TRUE;
