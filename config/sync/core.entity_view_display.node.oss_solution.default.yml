@@ -332,7 +332,7 @@ third_party_settings:
             configuration:
               id: 'field_block:node:oss_solution:oss__screenshots'
               label: Gallery
-              label_display: visible
+              label_display: '0'
               provider: layout_builder
               context_mapping:
                 entity: layout_builder.entity
