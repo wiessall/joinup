@@ -22,12 +22,16 @@ function ventuno_theme_suggestions_views_view_grid_alter(array &$suggestions, ar
  * Implements hook_theme_suggestions_HOOK_alter() for the views_view hook.
  */
 function ventuno_theme_suggestions_views_view_alter(array &$suggestions, array $variables): void {
+  /** @var \Drupal\views\ViewExecutable $view */
   $view = $variables['view'];
   $id = $view->storage->id();
 
   // Reuse search template for OSS catalogue search page.
   if ($id === 'search_oss_catalogue') {
     $suggestions[] = 'views_view__search__page';
+  }
+  elseif ($id === 'eu_oss_catalogue_admin' && preg_match('/oss_most_(recent|active)_solutions/', $view->current_display)) {
+    $suggestions[] = 'views_view__eu_oss_catalogue_admin_carousel';
   }
 
   $suggestions[] = 'views_view__' . $id;
