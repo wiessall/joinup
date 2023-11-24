@@ -30,7 +30,7 @@ Feature:
     And I should not see the "Entity actions" region
 
     And I should see the following headings:
-      | Most recent open source software solutions        |
+      | Most recent solutions                             |
       | Most active solutions                             |
       | Do you want to publish your open source solution? |
       | Let’s start with your software name               |

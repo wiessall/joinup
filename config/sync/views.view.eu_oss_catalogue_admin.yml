@@ -1697,7 +1697,7 @@ display:
     display_plugin: block
     position: 3
     display_options:
-      title: 'Most Recent Solutions'
+      title: 'Most recent solutions'
       pager:
         type: some
         options:
