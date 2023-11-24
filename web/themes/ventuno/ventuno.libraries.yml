@@ -103,6 +103,30 @@ button-group:
     theme:
       assets/css/button-group.min.css: { minified: true }
 
+carousel-theme:
+  css:
+    theme:
+      assets/css/carousel.min.css: { minified: true }
+
+carousel:
+  dependencies:
+    - ventuno/carousel.js
+    - ventuno/carousel-theme
+
+image-gallery:
+  css:
+    theme:
+      assets/css/image-gallery.min.css: { minified: true }
+  dependencies:
+    - ventuno/carousel-theme
+
+carousel.js:
+  header: true
+  js:
+    assets/js/carousel.min.js: { minified: true, attributes: { defer: true } }
+  dependencies:
+    - ventuno/glide
+
 close:
   css:
     theme:
