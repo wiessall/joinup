@@ -5,6 +5,7 @@ declare(strict_types = 1);
 namespace Drupal\joinup_group_content_management\Plugin\Action;
 
 use Drupal\Core\Access\AccessResult;
+use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Entity\EntityReferenceSelection\SelectionPluginManagerInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormStateInterface;
@@ -53,53 +54,21 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 class ChangeGroupAction extends ViewsBulkOperationsActionBase implements ContainerFactoryPluginInterface {
 
   /**
-   * The selection plugin manager service.
-   *
-   * @var \Drupal\Core\Entity\EntityReferenceSelection\SelectionPluginManagerInterface
-   */
-  protected $selectionPluginManager;
-
-  /**
-   * The renderer service.
-   *
-   * @var \Drupal\Core\Render\Renderer
-   */
-  protected $renderer;
-
-  /**
-   * The custom pages OG menu links manager service.
-   *
-   * @var \Drupal\custom_page\CustomPageOgMenuLinksManagerInterface
-   */
-  protected $customPageOgMenuLinksManager;
-
-  /**
-   * The entity type manager service.
-   *
-   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
-   */
-  protected $entityTypeManager;
-
-  /**
    * The corresponding OG menu instance.
-   *
-   * @var \Drupal\og_menu\OgMenuInstanceInterface
    */
-  protected $ogMenuInstance;
+  protected OgMenuInstanceInterface $ogMenuInstance;
 
   /**
    * A list UUIDs of menu links of top-level custom pages.
-   *
-   * @var string[]
    */
-  protected $topLevelCustomPages = [];
+  protected array $topLevelCustomPages = [];
 
   /**
    * A list of menu links entities, keyed by custom page node ID.
    *
-   * @var \Drupal\menu_link_content\MenuLinkContentInterface
+   * @var \Drupal\menu_link_content\MenuLinkContentInterface[]
    */
-  protected $pageMenuLinks = [];
+  protected array $pageMenuLinks = [];
 
   /**
    * Constructs a new 'joinup_change_group' action plugin.
@@ -110,27 +79,30 @@ class ChangeGroupAction extends ViewsBulkOperationsActionBase implements Contain
    *   The plugin_id for the plugin instance.
    * @param mixed $plugin_definition
    *   The plugin implementation definition.
-   * @param \Drupal\Core\Entity\EntityReferenceSelection\SelectionPluginManagerInterface $selection_plugin_manager
+   * @param \Drupal\Core\Entity\EntityReferenceSelection\SelectionPluginManagerInterface $selectionPluginManager
    *   The selection plugin manager service.
    * @param \Drupal\Core\Render\Renderer $renderer
    *   The renderer service.
-   * @param \Drupal\custom_page\CustomPageOgMenuLinksManagerInterface $custom_page_og_links_manager
+   * @param \Drupal\custom_page\CustomPageOgMenuLinksManagerInterface $customPageOgMenuLinksManager
    *   The custom pages OG menu links manager service.
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
    *   The entity type manager service.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, SelectionPluginManagerInterface $selection_plugin_manager, Renderer $renderer, CustomPageOgMenuLinksManagerInterface $custom_page_og_links_manager, EntityTypeManagerInterface $entity_type_manager) {
+  public function __construct(
+    array $configuration,
+    $plugin_id,
+    $plugin_definition,
+    protected SelectionPluginManagerInterface $selectionPluginManager,
+    protected Renderer $renderer,
+    protected CustomPageOgMenuLinksManagerInterface $customPageOgMenuLinksManager,
+    protected EntityTypeManagerInterface $entityTypeManager) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
-    $this->selectionPluginManager = $selection_plugin_manager;
-    $this->renderer = $renderer;
-    $this->customPageOgMenuLinksManager = $custom_page_og_links_manager;
-    $this->entityTypeManager = $entity_type_manager;
   }
 
   /**
    * {@inheritdoc}
    */
-  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
+  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition): self {
     return new static(
       $configuration,
       $plugin_id,
@@ -145,7 +117,7 @@ class ChangeGroupAction extends ViewsBulkOperationsActionBase implements Contain
   /**
    * {@inheritdoc}
    */
-  public function access($node, ?AccountInterface $account = NULL, $return_as_object = FALSE) {
+  public function access($object, ?AccountInterface $account = NULL, $return_as_object = FALSE): AccessResultInterface|bool {
     // The access is limited at the view level.
     return $return_as_object ? AccessResult::allowed() : TRUE;
   }
@@ -153,11 +125,11 @@ class ChangeGroupAction extends ViewsBulkOperationsActionBase implements Contain
   /**
    * {@inheritdoc}
    */
-  public function executeMultiple(array $nodes) {
+  public function executeMultiple(array $nodes): void {
     $message = array_fill_keys(['error', 'warning', 'status'], []);
-    $group_id = $this->getConfiguration()['group'];
-    if (!$group = Rdf::load($group_id)) {
-      throw new \RuntimeException("Cannot load RDF entity with ID $group_id");
+    $groupId = $this->getConfiguration()['group'];
+    if (!$group = Rdf::load($groupId)) {
+      throw new \RuntimeException("Cannot load RDF entity with ID $groupId");
     }
 
     // Order the nodes, so that the custom page parent nodes are first. This is
@@ -165,24 +137,24 @@ class ChangeGroupAction extends ViewsBulkOperationsActionBase implements Contain
     // were moved too.
     $this->reorder($nodes);
 
-    $initial_nids = array_map(function (NodeInterface $node) {
+    $initialNids = array_map(function (NodeInterface $node) {
       return $node->id();
     }, $nodes);
     /** @var \Drupal\node\NodeInterface[] $nodes */
     while ($nodes) {
       $node = array_shift($nodes);
-      $is_custom_page = $node->bundle() === 'custom_page';
+      $isCustomPage = $node->bundle() === 'custom_page';
       // Custom pages cannot be group content in solutions.
-      if ($group->bundle() === 'solution' && $is_custom_page) {
+      if ($group->bundle() === 'solution' && $isCustomPage) {
         $args = ['%title' => $node->label()];
         $message['warning'][] = $this->t("Group of %title cannot be changed because a custom page cannot be be attached to a solution.", $args);
         continue;
       }
 
       // It might be a parent custom page.
-      if ($is_custom_page && $children = $this->customPageOgMenuLinksManager->getChildren($node)) {
+      if ($isCustomPage && $children = $this->customPageOgMenuLinksManager->getChildren($node)) {
         // Filter out child nodes that are already in the main set.
-        $children = array_diff_key($children, array_flip($initial_nids));
+        $children = array_diff_key($children, array_flip($initialNids));
         array_walk($children, function (NodeInterface $child) {
           // Flag this as a child.
           $child->isChild = TRUE;
@@ -203,7 +175,7 @@ class ChangeGroupAction extends ViewsBulkOperationsActionBase implements Contain
         // Prevent notification dispatching.
         // @see joinup_notification_dispatch_notification()
         $node->skip_notification = TRUE;
-        $node->set('og_audience', $group_id)->save();
+        $node->set('og_audience', $groupId)->save();
         if (empty($node->isChild)) {
           $message['status'][] = [
             [
@@ -212,20 +184,20 @@ class ChangeGroupAction extends ViewsBulkOperationsActionBase implements Contain
           ];
         }
         else {
-          $last_message =& $message['status'][count($message['status']) - 1];
-          if (!isset($last_message[1])) {
-            $last_message[1] = [
+          $lastMessage =& $message['status'][count($message['status']) - 1];
+          if (!isset($lastMessage[1])) {
+            $lastMessage[1] = [
               '#theme' => 'item_list',
               '#items' => [],
             ];
           }
-          $last_message[1]['#items'][] = $this->t('Child @type <a href=":url">@title</a> group was changed too.', $args);
+          $lastMessage[1]['#items'][] = $this->t('Child @type <a href=":url">@title</a> group was changed too.', $args);
         }
 
         // Check the user selected 2nd tier custom pages.
-        if ($is_custom_page && empty($node->isChild)) {
-          if ($parent_id = $this->pageMenuLinks[$node->id()]->getParentId()) {
-            [, $uuid] = explode(':', $parent_id, 2);
+        if ($isCustomPage && empty($node->isChild)) {
+          if ($parentId = $this->pageMenuLinks[$node->id()]->getParentId()) {
+            [, $uuid] = explode(':', $parentId, 2);
             // If the custom page has a parent that wasn't selected by the user,
             // the page will be moved as top-level page. This is accomplished by
             // removing the corresponding OG menu link parent reference.
@@ -240,11 +212,11 @@ class ChangeGroupAction extends ViewsBulkOperationsActionBase implements Contain
       }
     }
 
-    foreach ($message as $type => $message_group) {
-      if ($message_group) {
+    foreach ($message as $type => $messageGroup) {
+      if ($messageGroup) {
         $list = [
           '#theme' => 'item_list',
-          '#items' => $message_group,
+          '#items' => $messageGroup,
         ];
         $this->messenger()->addMessage($this->renderer->render($list), $type);
       }
@@ -254,20 +226,20 @@ class ChangeGroupAction extends ViewsBulkOperationsActionBase implements Contain
   /**
    * {@inheritdoc}
    */
-  public function execute(?NodeInterface $node = NULL) {
+  public function execute(?NodeInterface $node = NULL): void {
     $this->executeMultiple([$node]);
   }
 
   /**
    * {@inheritdoc}
    */
-  public function buildConfigurationForm(array $form, FormStateInterface $form_state) {
+  public function buildConfigurationForm(array $form, FormStateInterface $formState): array {
     /** @var \Drupal\Core\Entity\EntityReferenceSelection\SelectionPluginBase $selection */
     $selection = $this->selectionPluginManager->createInstance('default:rdf_entity', [
       'target_type' => 'rdf_entity',
       'target_bundles' => ['collection', 'solution'],
     ]);
-    $selection_settings = $selection->getConfiguration() + [
+    $selectionSettings = $selection->getConfiguration() + [
       'match_operator' => 'CONTAINS',
     ];
 
@@ -276,7 +248,7 @@ class ChangeGroupAction extends ViewsBulkOperationsActionBase implements Contain
       '#type' => 'entity_autocomplete',
       '#target_type' => 'rdf_entity',
       '#selection_handler' => 'default:rdf_entity',
-      '#selection_settings' => $selection_settings,
+      '#selection_settings' => $selectionSettings,
       '#maxlength' => 2048,
       '#required' => TRUE,
     ];
@@ -286,19 +258,19 @@ class ChangeGroupAction extends ViewsBulkOperationsActionBase implements Contain
   /**
    * {@inheritdoc}
    */
-  public function validateConfigurationForm(array &$form, FormStateInterface $form_state): void {
+  public function validateConfigurationForm(array &$form, FormStateInterface $formState): void {
     /** @var \Drupal\Core\Url $url */
-    $url = $form_state->get('views_bulk_operations')['redirect_url'];
+    $url = $formState->get('views_bulk_operations')['redirect_url'];
     if ($url->isRouted() && ($parameters = $url->getRouteParameters()) && !empty($parameters['rdf_entity'])) {
-      /** @var \Drupal\rdf_entity\RdfInterface $source_entity */
-      $source_entity = Rdf::load(UriEncoder::decodeUrl($parameters['rdf_entity']));
-      if ($source_entity->id() === $form_state->getValue('group')) {
-        $form_state->setErrorByName('group', $this->t("The destination group is the same as the source group: %group. Please, select other destination group.", [
-          '%group' => $source_entity->label(),
+      /** @var \Drupal\rdf_entity\RdfInterface $sourceEntity */
+      $sourceEntity = Rdf::load(UriEncoder::decodeUrl($parameters['rdf_entity']));
+      if ($sourceEntity->id() === $formState->getValue('group')) {
+        $formState->setErrorByName('group', $this->t("The destination group is the same as the source group: %group. Please, select other destination group.", [
+          '%group' => $sourceEntity->label(),
         ]));
         return;
       }
-      $form_state->setValue('source_entity', $source_entity);
+      $formState->setValue('source_entity', $sourceEntity);
     }
     else {
       throw new \RuntimeException("The view bulk operation has been triggered from an invalid page.");
@@ -318,7 +290,7 @@ class ChangeGroupAction extends ViewsBulkOperationsActionBase implements Contain
    * @param \Drupal\node\NodeInterface[] $nodes
    *   Nodes to be re-ordered.
    */
-  protected function reorder(array &$nodes) {
+  protected function reorder(array &$nodes): void {
     $reordered = $others = [];
     while ($nodes) {
       $node = array_shift($nodes);
@@ -345,27 +317,27 @@ class ChangeGroupAction extends ViewsBulkOperationsActionBase implements Contain
   /**
    * Gets the OG menu link given a custom page.
    *
-   * @param \Drupal\node\NodeInterface $custom_page
+   * @param \Drupal\node\NodeInterface $customPage
    *   The custom page node.
    *
    * @return \Drupal\menu_link_content\MenuLinkContentInterface|null
    *   The OG menu link.
    */
-  protected function getOgMenuLink(NodeInterface $custom_page): ?MenuLinkContentInterface {
-    $menu_instance = $this->getOgMenuInstance();
-    if (empty($menu_instance)) {
+  protected function getOgMenuLink(NodeInterface $customPage): ?MenuLinkContentInterface {
+    $menuInstance = $this->getOgMenuInstance();
+    if (empty($menuInstance)) {
       return NULL;
     }
-    $menu_link_storage = $this->entityTypeManager->getStorage('menu_link_content');
-    $uri = 'entity:node/' . $custom_page->id();
-    $mids = $menu_link_storage->getQuery()->accessCheck(FALSE)
+    $menuLinkStorage = $this->entityTypeManager->getStorage('menu_link_content');
+    $uri = 'entity:node/' . $customPage->id();
+    $mids = $menuLinkStorage->getQuery()->accessCheck(FALSE)
       ->condition('bundle', 'menu_link_content')
-      ->condition('menu_name', "ogmenu-{$menu_instance->id()}")
+      ->condition('menu_name', "ogmenu-{$menuInstance->id()}")
       ->condition('link.uri', $uri)
       ->execute();
     if ($mids) {
       $mid = reset($mids);
-      return $menu_link_storage->load($mid);
+      return $menuLinkStorage->load($mid);
     }
     return NULL;
   }
@@ -378,14 +350,12 @@ class ChangeGroupAction extends ViewsBulkOperationsActionBase implements Contain
    */
   protected function getOgMenuInstance(): ?OgMenuInstanceInterface {
     if (!isset($this->ogMenuInstance)) {
-      $og_menu_storage = $this->entityTypeManager->getStorage('ogmenu_instance');
-      // @todo If we ever support more than one OG Menu then we should no longer
-      //   hardcode on the 'navigation' menu but loop over all available menus.
-      $og_menu_instances = $og_menu_storage->loadByProperties([
+      $ogMenuStorage = $this->entityTypeManager->getStorage('ogmenu_instance');
+      $ogMenuInstances = $ogMenuStorage->loadByProperties([
         'type' => 'navigation',
         'og_audience' => $this->configuration['source_entity']->id(),
       ]);
-      $this->ogMenuInstance = $og_menu_instances ? reset($og_menu_instances) : NULL;
+      $this->ogMenuInstance = $ogMenuInstances ? reset($ogMenuInstances) : NULL;
     }
     return $this->ogMenuInstance;
   }
