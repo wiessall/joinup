@@ -219,6 +219,30 @@ Feature:
     When I click "Looking for Support?" in the "Navigation menu" region
     Then I should not see the "Looking for Support?" tile
 
+  Scenario: Move a custom page to a solution
+    Given the following collections:
+      | title        | state     |
+      | Vintage Art  | published |
+    And the following solutions:
+      | title                | state     |
+      | Vintage Solution Art | published |
+    And custom_page content:
+      | title                       | collection  | state     | changed          |
+      | Will be moved to a solution | Vintage Art | published | 2015-11-19 20:00 |
+
+    Given I am logged in as a moderator
+    And I go to the homepage of the "Vintage Art" collection
+    And I click "Manage content"
+
+    And I select the "Will be moved to a solution" row
+    And I select "Move to other group" from "Action"
+    And I press "Apply to selected items"
+    And I fill in "Select the destination collection or solution" with "Vintage Solution Art"
+    When I press "Apply"
+    And I wait for the batch process to finish
+    Then I should see "Custom page Will be moved to a solution group was changed to Vintage Solution Art."
+    Then the "Vintage Solution Art" solution should have a community content titled "Will be moved to a solution"
+
   @javascript
   Scenario Outline: Able to select all items on the content management UI
     Given the following collections:
