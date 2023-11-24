@@ -13,6 +13,11 @@ final class JoinupSlick {
 
   /**
    * Adds template suggestions to the given slick theme function.
+   *
+   * @param array $suggestions
+   *   The predefined template suggestions (if any).
+   * @param array $variables
+   *   The variables made available for the template.
    */
   public static function addSlickTemplateSuggestion(array &$suggestions, array $variables): void {
     $optionsetId = $variables['element']['#settings']['optionset'];

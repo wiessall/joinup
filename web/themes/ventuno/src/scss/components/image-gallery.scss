@@ -16,10 +16,15 @@
   .slick__slide {
     display: inline-block;
     float: none;
-    max-width: calc( 100% - 3rem);
+    max-width: calc(100% - ($spacer * 2));
     vertical-align: middle;
     white-space: normal;
     font-size: var(--bs-body-font-size);
+
+    &:only-child {
+      width: auto !important;
+      max-width: 100%;
+    }
   }
 
   .slick-arrow.slick-disabled {
