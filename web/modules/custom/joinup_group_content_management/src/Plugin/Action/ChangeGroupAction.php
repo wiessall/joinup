@@ -144,12 +144,6 @@ class ChangeGroupAction extends ViewsBulkOperationsActionBase implements Contain
     while ($nodes) {
       $node = array_shift($nodes);
       $isCustomPage = $node->bundle() === 'custom_page';
-      // Custom pages cannot be group content in solutions.
-      if ($group->bundle() === 'solution' && $isCustomPage) {
-        $args = ['%title' => $node->label()];
-        $message['warning'][] = $this->t("Group of %title cannot be changed because a custom page cannot be be attached to a solution.", $args);
-        continue;
-      }
 
       // It might be a parent custom page.
       if ($isCustomPage && $children = $this->customPageOgMenuLinksManager->getChildren($node)) {
