@@ -32,8 +32,13 @@ default:
               description:
                 it:
                   genericName: '[IT] ACME Solution 1'
-                  shortDescription: '[IT] Solution 1: Short description'
-                  longDescription: '[IT] Solution 1: Long description'
+                  shortDescription: '[IT] Solution 1: **Short description**'
+                  longDescription: |
+                    [IT] Solution 1: Long description
+                    **Some bold text**
+                    * Some list item
+                    * Another list item
+                    _Some italic text_
                   features:
                     - '[IT] Solution 1: Feature 1'
                     - '[IT] Solution 1: Feature 2'
@@ -41,8 +46,13 @@ default:
                     - 'Solution_1_IT_Screenshot1.jpg'
                 en:
                   genericName: '[EN] ACME Solution 1'
-                  shortDescription: '[EN] Solution 1: Short description'
-                  longDescription: '[EN] Solution 1: Long description'
+                  shortDescription: '[EN] Solution 1: **Short description**'
+                  longDescription: |
+                    [EN] Solution 1: Long description
+                    **Some bold text**
+                    * Some list item
+                    * Another list item
+                    _Some italic text_
                   features:
                     - '[EN] Solution 1: Feature 1'
                     - '[EN] Solution 1: Feature 2'
@@ -51,8 +61,13 @@ default:
                     - 'Solution_1_EN_Screenshot1.jpg'
                 de:
                   genericName: '[DE] ACME Solution 1'
-                  shortDescription: '[DE] Solution 1: Short description'
-                  longDescription: '[DE] Solution 1: Long description'
+                  shortDescription: '[DE] Solution 1: **Short description**'
+                  longDescription: |
+                    [DE] Solution 1: Long description
+                    **Some bold text**
+                    * Some list item
+                    * Another list item
+                    _Some italic text_
                   features:
                     - '[DE] Solution 1: Feature 1'
                   screenshots:
@@ -221,8 +236,14 @@ developers_italia:
               description:
                 it:
                   genericName: '[IT] ACME Solution 1'
-                  shortDescription: '[IT] Solution 1: Short description'
-                  longDescription: '[IT] Solution 1: Long description'
+                  longDescription: |
+                    [IT] Solution 1: Long description
+                    **Some bold text**
+                    * Some list item
+                    * Another list item
+
+                    _Some italic text_
+                  shortDescription: '[IT] Solution 1: **Short description**'
                   features:
                     - '[IT] Solution 1: Feature 1'
                     - '[IT] Solution 1: Feature 2'
@@ -230,8 +251,14 @@ developers_italia:
                     - 'Solution_1_IT_Screenshot1.jpg'
                 en:
                   genericName: '[EN] ACME Solution 1'
-                  shortDescription: '[EN] Solution 1: Short description'
-                  longDescription: '[EN] Solution 1: Long description'
+                  longDescription: |
+                    [EN] Solution 1: Long description
+                    **Some bold text**
+                    * Some list item
+                    * Another list item
+
+                    _Some italic text_
+                  shortDescription: '[EN] Solution 1: **Short description**'
                   features:
                     - '[EN] Solution 1: Feature 1'
                     - '[EN] Solution 1: Feature 2'
@@ -241,8 +268,14 @@ developers_italia:
                     - 'Solution_1_EN_Screenshot2.jpg'
                 de:
                   genericName: '[DE] ACME Solution 1'
-                  shortDescription: '[DE] Solution 1: Short description'
-                  longDescription: '[DE] Solution 1: Long description'
+                  longDescription: |
+                    [DE] Solution 1: Long description
+                    **Some bold text**
+                    * Some list item
+                    * Another list item
+
+                    _Some italic text_
+                  shortDescription: '[DE] Solution 1: **Short description**'
                   features:
                     - '[DE] Solution 1: Feature 1'
                   screenshots:
