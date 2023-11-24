@@ -110,12 +110,22 @@ button-group:
     theme:
       assets/css/button-group.min.css: { minified: true }
 
-carousel:
+carousel-theme:
   css:
     theme:
       assets/css/carousel.min.css: { minified: true }
+
+carousel:
   dependencies:
     - ventuno/carousel.js
+    - ventuno/carousel-theme
+
+oss-solution-screenshots-carousel:
+  css:
+    theme:
+      assets/css/oss-solution-screenshots-carousel.min.css: { minified: true }
+  dependencies:
+    - ventuno/carousel-theme
 
 carousel.js:
   header: true
