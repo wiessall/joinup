@@ -81,7 +81,7 @@ content:
       format_type: date_only
     third_party_settings:
       template_suggestion:
-        template_suggestion: ''
+        template_suggestion: no_wrappers
     weight: 2
     region: content
 hidden:
