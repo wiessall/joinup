@@ -4,13 +4,16 @@ status: true
 dependencies:
   config:
     - field.storage.node.oss_short_description
+    - filter.format.markdown
     - node.type.oss_solution
+  module:
+    - text
 third_party_settings:
   eu_oss_catalogue:
     publiccode_yml:
       resolvers:
         -
-          plugin: default
+          plugin: markdown
           config:
             path: 'description/[lang]/shortDescription'
 id: node.oss_solution.oss_short_description
@@ -23,5 +26,7 @@ required: false
 translatable: true
 default_value: {  }
 default_value_callback: ''
-settings: {  }
-field_type: string
+settings:
+  allowed_formats:
+    - markdown
+field_type: text

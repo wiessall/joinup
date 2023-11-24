@@ -146,6 +146,19 @@ display:
             label: 'Most Recent'
             field_identifier: date
           exposed: true
+        oss_vitality_index:
+          id: oss_vitality_index
+          table: search_api_index_published
+          field: oss_vitality_index
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: search_api
+          order: DESC
+          expose:
+            label: 'Most Active'
+            field_identifier: vitality
+          exposed: true
         title:
           id: title
           table: search_api_index_published

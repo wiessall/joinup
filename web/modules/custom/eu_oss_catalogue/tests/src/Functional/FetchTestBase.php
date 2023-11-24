@@ -35,8 +35,10 @@ abstract class FetchTestBase extends BrowserTestBase {
    */
   protected static $modules = [
     'dblog',
+    'editor',
     'eu_oss_catalogue_test',
     'language',
+    'markdown_easy',
   ];
 
   /**
