@@ -18,6 +18,7 @@ options:
     respondTo: slider
     rows: 0
     slidesToShow: 1
+    speed: 300
     swipeToSlide: true
-    cssEase: ease-in-out
+    cssEase: 'cubic-bezier(0.3, 0.8, 0.5, 0.9)'
     variableWidth: true
