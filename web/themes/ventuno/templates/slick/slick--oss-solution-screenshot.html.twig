@@ -1,40 +1,15 @@
 {#
 /**
  * @file
- * Default theme implementation for the Slick carousel template.
+ * Template override for OSS Screenshot Slick carousel template.
  *
- * This template holds 3 displays: main, thumbnail and overlay slicks in one.
- * Arrows are enforced, but toggled by JS accordingly. This allows responsive
- * object to enable and disable it as needed without losing context.
- *
- * Available variables:
- * - items: The array of items containing main image/video/audio, optional
- *     image/video/audio overlay and captions, and optional thumbnail
- *     texts/images.
- * - settings: A cherry-picked settings that mostly defines the slide HTML or
- *     layout, and none of JS settings/options which are defined at data-slick.
- * - attributes: The array of attributes to hold the main container classes, id.
- * - content_attributes: The array of attributes to hold optional RTL, id and
- *     data-slick containing JSON object aka JS settings the Slick expects to
- *     override default options. We don't store these JS settings in the normal
- *     <head>, but inline within data-slick attribute instead.
- *
- * Debug:
- * @see https://www.drupal.org/node/1906780
- * @see https://www.drupal.org/node/1903374
- * Use Kint: {{ kint(variable) }}
- * Dump all available variables and their contents: {{ dump() }}
- * Dump only the available variable keys: {{ dump(_context|keys) }}
- *
- * Note!
- * - Unlike Splide, Slick changed markups when being unslick since it doesn't
- *   use HTML list (UL > LI) to worry about, and it behaves with 1 slide.
- * - If you see blazies, it is used to interop with Splide, such as required by
- *   ElevateZoomPlus.
+ * @see template_preprocess_slick()
+ * @see @slick/slick.html.twig
  */
 #}
 {%
   set classes = [
+    'carousel',
     settings.unslick ? 'unslick',
     settings.vertical ? 'slick--vertical',
     settings.attributes.class ? settings.attributes.class|join(' '),
@@ -51,7 +26,7 @@
   ]
 %}
 {%
-  set arrow_classes = [
+  set arrow_nav_classes = [
     'slick__arrow',
     settings.vertical ? 'slick__arrow--v',
     settings.skin_arrows ? 'slick__arrow--' ~ settings.skin_arrows|clean_class,
@@ -59,16 +34,20 @@
     'flex-wrap',
     'align-items-baseline',
     'justify-content-end',
+    'mb-3',
   ]
 %}
 
-{{ attach_library('ventuno/carousel') }}
+{{ attach_library('ventuno/oss-solution-screenshots-carousel') }}
 
 <div{{ attributes.addClass(classes) }}>
 
   {% block slick_arrow %}
-    <nav{{ arrow_attributes.addClass(arrow_classes) }}>
-      {%- if not settings.unslick -%}
+    <nav{{ arrow_attributes.addClass(arrow_nav_classes) }}>
+      {% if joinup_slick_field_label %}
+        <h2 class="carousel__title my-0">{{ joinup_slick_field_label }}</h2>
+      {% endif %}
+      {% if not settings.unslick %}
       <button type="button" data-role="none" class="slick-prev glide__arrow glide__arrow--left btn btn-lg btn-secondary rounded-circle p-0 me-2" aria-label="{{ settings.prevArrow|t|striptags }}" tabindex="0">
         <svg class="icon--m">
           <use xlink:href="{{ bcl_icon_path }}#chevron-left"></use>
@@ -85,7 +64,7 @@
   {% endblock %}
 
   {%- if not settings.unslick -%}
-    <div{{ content_attributes.addClass('slick__slider') }}>
+    <div{{ content_attributes.addClass('slick__slider', 'mx-n2') }}>
   {%- endif -%}
 
   {% block slick_content %}
