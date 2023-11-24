@@ -45,7 +45,7 @@
       color: $joinup--green;
     }
   }
-  &--interoperability-layer {
+  &--interoperability-layers {
     border: 1px solid $joinup--orange;
     .eif-filter__header {
       background-color: $joinup--orange;
@@ -103,7 +103,7 @@
         color: $joinup--green;
       }
     }
-    &--interoperability-layer {
+    &--interoperability-layers {
       .eif-tile__label {
         background-color: $joinup--orange;
       }
