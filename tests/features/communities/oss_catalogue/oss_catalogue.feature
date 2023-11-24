@@ -280,12 +280,12 @@ Feature:
       | b68f93a5aca1d09eb50e9ea901b90d7c.png |
       | ef8676b28d34d82c4a0688a35ec76335.png |
     # Fourth must not be visible yet.
-    And I should not see the image "99ccd804281fede2d4e3dcc3a9b30a4c.png"
+    And I should not see the image with filename "99ccd804281fede2d4e3dcc3a9b30a4c.png"
     Then I click on element ".slick--optionset--oss-solution-screenshot button[aria-label='Next']:not([aria-disabled='true'])"
     And I wait up to "5" seconds for CSS transitions to finish
-    And I should see the image "99ccd804281fede2d4e3dcc3a9b30a4c.png"
+    And I should see the image with filename "99ccd804281fede2d4e3dcc3a9b30a4c.png"
     Then I click on element ".slick--optionset--oss-solution-screenshot button[aria-label='Previous']:not([aria-disabled='true'])"
     And I wait up to "5" seconds for CSS transitions to finish
-    And I should not see the image "99ccd804281fede2d4e3dcc3a9b30a4c.png"
+    And I should not see the image with filename "99ccd804281fede2d4e3dcc3a9b30a4c.png"
     And the page should have an element with CSS selector ".slick--optionset--oss-solution-screenshot button[aria-label='Previous'][aria-disabled='true']"
 

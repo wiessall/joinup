@@ -721,7 +721,7 @@ trait TraversingTrait {
   }
 
   /**
-   * Checks if an image with a given file name exists in a given element.
+   * Accurately checks if image with a given file name exists in an element.
    *
    * @param string $filename
    *   The file name.
@@ -735,6 +735,51 @@ trait TraversingTrait {
   protected function hasImage(string $filename, ?NodeElement $element = NULL): bool {
     foreach ($this->getImages($element) as $imageElement) {
       if ($this->imageSourceMatches($filename, $imageElement)) {
+        return TRUE;
+      }
+    }
+    return FALSE;
+  }
+
+  /**
+   * Checks if an image with a given file name exists in a given element.
+   *
+   * @param string $filename
+   *   The file name.
+   * @param \Behat\Mink\Element\NodeElement|null $element
+   *   (optional) The element to check in. If omitted the entire page will be
+   *   checked.
+   *
+   * @return bool
+   *   Whether the element exists or not in the given element or page.
+   */
+  protected function hasImageInaccurate(string $filename, ?NodeElement $element = NULL): bool {
+    if (empty($element)) {
+      $element = $this->getSession()->getPage();
+    }
+
+    // Drupal appends an underscore and a number to the filename when duplicate
+    // files are uploaded, for example when a test is run more than once.
+    // The XPath and selector version that we are using does not support regular
+    // expressions and we cannot easily search for the file name otherwise.
+    // The elements are loaded instead and the regular expression is being run
+    // in php.
+    $parts = pathinfo($filename);
+    $extension = $parts['extension'];
+    $filename = $parts['filename'];
+    $expression = '/src="[^"]*' . $filename . '(_\d+)?\.' . $extension . '[^"]*"/';
+    $image_elements = $element->findAll('xpath', "//img");
+    foreach ($image_elements as $image_element) {
+      $html = $image_element->getOuterHtml();
+      // The styles directory contains responsive images which are printed using
+      // a random string in the name.
+      if (
+        preg_match($expression, $html) ||
+        // This second condition and the OR operator means that if there is at
+        // least one image on the page which is an image style derivative, then
+        // this function will always report a match. For every random file name.
+        preg_match('/.*\/sites\/default\/files\/styles.*/', $html)
+      ) {
         return TRUE;
       }
     }

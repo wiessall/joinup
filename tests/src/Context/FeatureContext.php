@@ -471,9 +471,9 @@ class FeatureContext extends RawDrupalContext {
    * @param string $filename
    *   The file name.
    *
-   * @Then I (should )see the image :filename
+   * @Then I (should )see the image with filename :filename
    */
-  public function assertImagePresent(string $filename): void {
+  public function assertImageVisible(string $filename): void {
     if ($imageNode = $this->getImage($filename)) {
       try {
         Assert::assertTrue($imageNode->isVisible());
@@ -491,9 +491,9 @@ class FeatureContext extends RawDrupalContext {
    * @param string $filename
    *   The filename.
    *
-   * @Then I should not see the image :filename
+   * @Then I should not see the image with filename :filename
    */
-  public function assertImageNotPresent(string $filename): void {
+  public function assertImageNotVisible(string $filename): void {
     if ($imageNode = $this->getImage($filename)) {
       try {
         Assert::assertFalse($imageNode->isVisible());
@@ -503,6 +503,30 @@ class FeatureContext extends RawDrupalContext {
       }
     }
     Assert::assertFalse($this->hasImage($filename));
+  }
+
+  /**
+   * Checks that a given image is present in the page.
+   *
+   * @param string $filename
+   *   The file name.
+   *
+   * @Then I (should )see the image :filename
+   */
+  public function assertImagePresent(string $filename): void {
+    Assert::assertTrue($this->hasImageInaccurate($filename));
+  }
+
+  /**
+   * Checks that a given image is not present in the page.
+   *
+   * @param string $filename
+   *   The filename.
+   *
+   * @Then I should not see the image :filename
+   */
+  public function assertImageNotPresent(string $filename): void {
+    Assert::assertFalse($this->hasImageInaccurate($filename));
   }
 
   /**
@@ -517,7 +541,7 @@ class FeatureContext extends RawDrupalContext {
    */
   public function assertImagePresentInRegion(string $filename, string $tile): void {
     $tile = $this->getTileByHeading($tile);
-    Assert::assertTrue($this->hasImage($filename, $tile));
+    Assert::assertTrue($this->hasImageInaccurate($filename, $tile));
   }
 
   /**
@@ -532,7 +556,7 @@ class FeatureContext extends RawDrupalContext {
    */
   public function assertImageNotPresentInRegion(string $filename, string $tile): void {
     $tile = $this->getTileByHeading($tile);
-    Assert::assertFalse($this->hasImage($filename, $tile));
+    Assert::assertFalse($this->hasImageInaccurate($filename, $tile));
   }
 
   /**
