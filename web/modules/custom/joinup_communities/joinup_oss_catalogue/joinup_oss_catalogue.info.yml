@@ -9,6 +9,7 @@ dependencies:
   - imagecache_external:imagecache_external
   - joinup_bundle_class:joinup_bundle_class
   - message:message
+  - oe_bootstrap_theme_helper:oe_bootstrap_theme_helper
 
 default_content:
   file:

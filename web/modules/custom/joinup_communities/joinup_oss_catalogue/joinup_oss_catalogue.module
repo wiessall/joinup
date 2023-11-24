@@ -167,7 +167,7 @@ function joinup_oss_catalogue_node_presave(NodeInterface $entity): void {
   }
 
   if ($entity->get('oss_vitality_index')->isEmpty()) {
-    $value = mt_rand(50, 100) / 100;
+    $value = mt_rand(51, 99) / 100;
     $entity->set('oss_vitality_index', $value);
   }
 }
