@@ -36,5 +36,11 @@
   .slick__slider:not(.slick-initialized) {
     overflow: hidden;
     white-space: nowrap;
+    font-size: 0;
+
+    & > * {
+      white-space: normal;
+      font-size: var(--bs-body-font-size);
+    }
   }
 }
