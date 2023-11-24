@@ -34,7 +34,6 @@
     'flex-wrap',
     'align-items-baseline',
     'justify-content-end',
-    'mb-3',
   ]
 %}
 
@@ -45,7 +44,7 @@
   {% block slick_arrow %}
     <nav{{ arrow_attributes.addClass(arrow_nav_classes) }}>
       {% if joinup_slick_field_label %}
-        <h2 class="carousel__title my-0">{{ joinup_slick_field_label }}</h2>
+        <h2 class="carousel__title mb-3">{{ joinup_slick_field_label }}</h2>
       {% endif %}
       {% if not settings.unslick %}
       <button type="button" data-role="none" class="slick-prev glide__arrow glide__arrow--left btn btn-lg btn-secondary rounded-circle p-0 me-2" aria-label="{{ settings.prevArrow|t|striptags }}" tabindex="0">
@@ -63,15 +62,9 @@
     </nav>
   {% endblock %}
 
-  {%- if not settings.unslick -%}
-    <div{{ content_attributes.addClass('slick__slider', 'mx-n2') }}>
-  {%- endif -%}
-
-  {% block slick_content %}
-    {{- items -}}
-  {% endblock %}
-
-  {%- if not settings.unslick -%}
-    </div>
-  {%- endif -%}
+  <div{{ content_attributes.addClass('slick__slider', 'mx-n2') }}>
+    {% block slick_content %}
+      {{- items -}}
+    {% endblock %}
+  </div>
 </div>

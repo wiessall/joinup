@@ -15,11 +15,16 @@
   }
   .slick__slide {
     display: inline-block;
-    max-width: calc( 100% - 3rem);
+    max-width: calc(100% - ($spacer * 2));
     white-space: normal;
     float: none;
     font-size: var(--bs-body-font-size);
     vertical-align: middle;
+
+    &:only-child {
+      width: auto !important;
+      max-width: 100%;
+    }
   }
 
   .slick-arrow.slick-disabled {

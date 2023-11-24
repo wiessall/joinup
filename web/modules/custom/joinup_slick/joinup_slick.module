@@ -125,11 +125,26 @@ function joinup_slick_theme_suggestions_slick_slide_alter(array &$suggestions, a
 /**
  * Implements hook_preprocess_HOOK() for "slick".
  */
-function joinup_slick_preprocess_slick(&$variables) {
+function joinup_slick_preprocess_slick(array &$variables): void {
   $joinupSlick = $variables['settings']['joinup_slick'] ?? NULL;
   if (is_array($joinupSlick)) {
     foreach ($joinupSlick as $key => $value) {
       $variables["joinup_slick_$key"] = $value;
     }
+
+    // Ensure arrow_attributes is set.
+    $variables['arrow_attributes'] = $variables['arrow_attributes'] ?? new Attribute();
+  }
+}
+
+/**
+ * Implements hook_preprocess_HOOK() for "slick_slide".
+ */
+function joinup_slick_preprocess_slick_slide(array &$variables): void {
+  // Always use wrapper and content attributes if this is a Joinup Slick
+  // instance.
+  if (!empty($variables['settings']['joinup_slick'])) {
+    $variables['settings']['wrapper'] = TRUE;
+    $variables['settings']['use_ca'] = TRUE;
   }
 }
