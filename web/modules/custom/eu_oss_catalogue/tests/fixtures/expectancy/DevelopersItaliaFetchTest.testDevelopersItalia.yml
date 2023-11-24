@@ -29,9 +29,15 @@ GitHub solution 1:
     oss_software_version: '2.3.0'
     oss_source:
       - developers_italia
-    oss_source_hash: 'nBlgcka7pABAXE-m94RbZpq41QrfX_nj9_2HGFTbupA'
-    oss_long_description: '[EN] Solution 1: Long description'
-    oss_short_description: '[EN] Solution 1: Short description'
+    oss_source_hash: 'QWgIx8AjtN2yakRMDKbNa1kBVEbdUDuxXLUiFBFINrc'
+    oss_long_description: |
+      [EN] Solution 1: Long description
+      **Some bold text**
+      * Some list item
+      * Another list item
+
+      _Some italic text_
+    oss_short_description: '[EN] Solution 1: **Short description**'
     oss_features:
       - '[EN] Solution 1: Feature 1'
       - '[EN] Solution 1: Feature 2'
@@ -44,8 +50,14 @@ GitHub solution 1:
     default_langcode: '0'
     oss_features:
       - '[DE] Solution 1: Feature 1'
-    oss_long_description: '[DE] Solution 1: Long description'
-    oss_short_description: '[DE] Solution 1: Short description'
+    oss_long_description: |
+      [DE] Solution 1: Long description
+      **Some bold text**
+      * Some list item
+      * Another list item
+
+      _Some italic text_
+    oss_short_description: '[DE] Solution 1: **Short description**'
     oss_screenshots:
       - https://raw.githubusercontent.com/dummy-namespace-1/dummy-name-1/HEAD/Solution_1_DE_Screenshot1.jpg
       - https://raw.githubusercontent.com/dummy-namespace-1/dummy-name-1/HEAD/Solution_1_DE_Screenshot3.jpg
@@ -56,8 +68,14 @@ GitHub solution 1:
     oss_features:
       - '[IT] Solution 1: Feature 1'
       - '[IT] Solution 1: Feature 2'
-    oss_long_description: '[IT] Solution 1: Long description'
-    oss_short_description: '[IT] Solution 1: Short description'
+    oss_long_description: |
+      [IT] Solution 1: Long description
+      **Some bold text**
+      * Some list item
+      * Another list item
+
+      _Some italic text_
+    oss_short_description: '[IT] Solution 1: **Short description**'
     oss_screenshots:
       - https://raw.githubusercontent.com/dummy-namespace-1/dummy-name-1/HEAD/Solution_1_IT_Screenshot1.jpg
 
@@ -180,7 +198,7 @@ GitHub solution 2:
       voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint
       occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim
       id est laborum.
-    oss_short_description: '[IT] Solution 2: Short description Lorem ipsum'
+    oss_short_description: '[IT] Solution 2: **Short description Lorem ipsum**'
     oss_documentation: http://it.docs.example.com/vendor/solution2
     status: '1'
     oss_available_languages:
