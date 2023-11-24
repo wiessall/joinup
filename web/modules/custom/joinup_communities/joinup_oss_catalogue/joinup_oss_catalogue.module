@@ -157,3 +157,17 @@ function joinup_oss_catalogue_node_update(NodeInterface $node): void {
       ->queueImageUrls($node);
   }
 }
+
+/**
+ * Implements hook_entity_presave().
+ */
+function joinup_oss_catalogue_node_presave(NodeInterface $entity): void {
+  if (!$entity instanceof OssSolutionInterface) {
+    return;
+  }
+
+  if ($entity->get('oss_vitality_index')->isEmpty()) {
+    $value = mt_rand(51, 99) / 100;
+    $entity->set('oss_vitality_index', $value);
+  }
+}
