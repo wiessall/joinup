@@ -7,6 +7,7 @@ dependencies:
   - drupal:datetime
   - drupal:link
   - drupal:node
+  - drupal:markdown_easy
   - drupal:options
   - drupal:taxonomy
   - multivalue_form_element:multivalue_form_element
