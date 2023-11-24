@@ -1,0 +1,35 @@
+@import "../partials/core";
+
+.slick--optionset--image-gallery {
+  .slick__slider {
+    &.mx-n2 {
+      margin-inline: $spacer * -0.5;
+    }
+  }
+
+  .slick-track {
+    position: static;
+    width: auto !important;
+    white-space: nowrap;
+    font-size: 0;
+  }
+  .slick__slide {
+    display: inline-block;
+    float: none;
+    max-width: calc( 100% - 3rem);
+    vertical-align: middle;
+    white-space: normal;
+    font-size: var(--bs-body-font-size);
+  }
+
+  .slick-arrow.slick-disabled {
+    pointer-events: none;
+    opacity: var(--bs-btn-disabled-opacity);
+  }
+
+  // Fouc.
+  .slick__slider:not(.slick-initialized) {
+    overflow: hidden;
+    white-space: nowrap;
+  }
+}
