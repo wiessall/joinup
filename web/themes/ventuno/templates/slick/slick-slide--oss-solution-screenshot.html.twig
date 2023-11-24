@@ -9,28 +9,28 @@
 #}
 {%
   set classes = [
-  'slide--' ~ delta,
-  item.slide is empty ? 'slide--text',
-  settings.layout ? 'slide--caption--' ~ settings.layout|clean_class,
-  settings.class ? settings.class,
-  'p-2',
-]
+    'slide--' ~ delta,
+    item.slide is empty ? 'slide--text',
+    settings.layout ? 'slide--caption--' ~ settings.layout|clean_class,
+    settings.class ? settings.class,
+    'p-2',
+  ]
 %}
 {%
   set content_classes = [
-  settings.detroy ? 'slide',
-  not settings.detroy ? 'slide__content',
-  'rounded',
-  'overflow-hidden',
-  'shadow',
-]
+    settings.detroy ? 'slide',
+    not settings.detroy ? 'slide__content',
+    'rounded',
+    'overflow-hidden',
+    'shadow',
+  ]
 %}
 {%
   set caption_classes = [
-  'slide__caption',
-]
+    'slide__caption',
+  ]
 %}
-{% set use_blazy = blazies.use.theme_blazy  %}
+{% set use_blazy = blazies.use.theme_blazy %}
 {%- if settings.wrapper -%}
 <div{{ attributes.addClass(classes) }}>
   {%- endif -%}
