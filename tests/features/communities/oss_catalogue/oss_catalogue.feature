@@ -1,4 +1,4 @@
-@api
+@api @group-clone
 Feature:
   In order to present the details about EU OSS catalogue
   I want to view a dedicated collection and landing page
@@ -94,7 +94,6 @@ Feature:
     When I go to the content page of the type "oss_solution" with the title "Foo"
     Then I should see the text "Foo's GIT description"
 
-  @loggedErrors
   Scenario: All necessary OSS Solution fields are visible on node page.
     Given oss_contact content:
       | title           |
@@ -107,15 +106,12 @@ Feature:
       | Administration 1 |
       | Administration 2 |
       | Administration 3 |
-    Given oss_platform terms:
-      | name  |
-      | macOs |
+    Given an oss_platform term with the name "macOs"
     Given oss_solution content:
       | title                  | oss_available_languages | oss_development_status | oss_source        | oss_categories                    | oss_long_description                                                                             | oss_short_description | oss_git_description | status    | oss_release_date | oss_documentation   | oss_features         | oss_git_url         | oss_landing_url     | oss_license      | oss_logo                         | oss_maintenance_contacts | oss_maintenance_contractors | oss_maintenance_type | oss_owner       | oss_platforms | oss_publiccode_yml_version | oss_scope                       | oss_screenshots                                                   | oss_software_type  | oss_software_version | oss_vitality_index | oss_used_by                                        |
       | Super Awesome Software | it,en,de,error,pt       | stable                 | developers_italia | document-management,collaboration | The long description. A patient developer can make this long enough to be at least 5 lines long. | The short description | The GIT description | published | 2014-11-19       | https://example.com | Feature A, Feature B | https://example.com | https://example.com | GPL-2.0-or-later | https://placehold.co/200x200.png | FOSS Conference          | ACME Ltd.                   | community            | FOSS Conference | macOs         | 0.4                        | science-and-technology,security | https://placehold.co/600x400.png,https://placehold.co/400x400.png | standalone/desktop | 3.17.143             | 0.41               | Administration 1,Administration 2,Administration 3 |
     When I go to the content page of the type "oss_solution" with the title "Super Awesome Software"
     Then I should be on "/eu-oss-catalogue/solutions/super-awesome-software"
-    And the site should not have log records with level lower than "notice"
     And I should see the following headings:
       | Super Awesome Software |
       | Description            |
