@@ -7,9 +7,8 @@ third_party_settings: {  }
 id: node.oss_long_description
 field_name: oss_long_description
 entity_type: node
-type: string_long
-settings:
-  case_sensitive: false
+type: text_long
+settings: {  }
 module: core
 locked: false
 cardinality: 1
