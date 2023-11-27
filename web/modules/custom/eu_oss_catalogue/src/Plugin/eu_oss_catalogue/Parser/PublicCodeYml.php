@@ -152,7 +152,10 @@ class PublicCodeYml extends EuOssCatalogueParserPluginBase implements ContainerF
    * {@inheritdoc}
    */
   protected function getTitle(Project $project, array $metadata): string {
-    return $metadata['name'] ?? parent::getTitle($project, $metadata);
+    $title = $metadata['name'] ?? parent::getTitle($project, $metadata);
+    // Eliminate multiple spaces.
+    $title = preg_replace('/\s+/', ' ', $title);
+    return trim($title);
   }
 
   /**

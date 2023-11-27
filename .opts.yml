@@ -21,6 +21,7 @@ upgrade_commands:
       - ./vendor/bin/drush eu-oss:fetch developers_italia
       - ./vendor/bin/drush eu-oss:fetch hosting_platform:open_code
       - ./vendor/bin/drush queue:run eu_oss_catalogue
+      - ./vendor/bin/drush queue:run joinup_oss_catalogue_imagecache_warmer
     ephemeral:
       - touch disable-config-readonly
       - ./vendor/bin/drush joinup:acc
@@ -29,6 +30,7 @@ upgrade_commands:
       - ./vendor/bin/drush eu-oss:fetch developers_italia
       - ./vendor/bin/drush eu-oss:fetch hosting_platform:open_code
       - ./vendor/bin/drush queue:run eu_oss_catalogue
+      - ./vendor/bin/drush queue:run joinup_oss_catalogue_imagecache_warmer
 
 php_version: 8.2
 extra_pkgs:
