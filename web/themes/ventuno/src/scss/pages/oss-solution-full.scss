@@ -1,6 +1,13 @@
 @import "../partials/core";
+@import "../partials/overrides/eu-oss-catalogue";
 
 .oss-solution {
+  a {
+    &:link,
+    &:visited {
+      color: $oss--brand;
+    }
+  }
   &__header {
     position: relative;
     &:before {
@@ -31,20 +38,79 @@
     }
 
   }
+  .l-oss-heading {
+    @include full-width-color($light, 0);
+    &__aside {
+      position: relative;
+      &::before {
+        content: '';
+        z-index: -1;
+        background: $oss--secondary;
+        width: 100vw;
+        height: 100%;
+        position: absolute;
+        inset-inline-start: 50%;
+        margin-inline-start: -50vw;
+        top: 0;
+        @include media-breakpoint-up(md) {
+          width: 100vw;
+          height: 100%;
+          left: 0;
+          margin-inline-start: 0;
+          inset-inline-start: 0;
+        }
+      }
+      .block {
+        margin-bottom: $spacer *2;
+      }
+    }
+    &__top-left {
+      margin-right: $spacer * 2;
+    }
+    &__vitality {
+      display: flex;
+      align-items: center;
+      gap: $spacer;
+      padding-bottom: $spacer;
+
+      div {
+        font-size: $h2-font-size;
+        color: $oss--brand;
+        margin-bottom: $spacer * .5;
+      }
+    }
+  }
+  .l-oss-heading__third-left .block{
+    margin-right: $spacer * 3;
+  }
+  &__oss-vitality-index {
+    font-size: $h2-font-size;
+    color: $oss--brand;
+  }
   &__oss-software-version {
+    margin-right: $spacer * 2;
+    margin-bottom: $spacer;
+    .field__label {
+      margin-bottom: $spacer * .5;
+    }
     .field__item {
+      display: inline;
       padding: $spacer * .25 $spacer * .75;
-      color: darken($warning, 30%);
+      color: $white;
       font-weight: $font-weight-bold;
-      background-color: lighten($warning, 30%);
+      background-color: $oss--brand-darker;
       border-radius: $border-radius-pill;
     }
   }
   &__oss-categories {
+    margin-bottom: $spacer;
+    .field__label {
+      margin-bottom: $spacer * .5;
+    }
     a {
       padding: $spacer * .25 $spacer * .75;
-      color: $primary;
-      background-color: $secondary;
+      font-weight: $font-weight-bold;
+      background-color: $oss--secondary;
       border-radius: $border-radius-pill;
       white-space: nowrap;
       &:hover {
@@ -55,14 +121,20 @@
 
   &__description {
     font-size: $font-size-lg;
-    color: $gray-800;
+    color: $gray-500;
     margin-block-end: $spacer;
+  }
+  &__oss-source {
+    .field__item {
+      font-weight: $font-weight-bold;
+    }
   }
   &__oss-git-url {
     margin-block-end: $spacer * .5;
     a {
+      font-weight: $font-weight-bold;
       &::before {
-        @include get-bootstrap-icon('folder2-open', $primary);
+        @include get-bootstrap-icon('folder2-open', $oss--brand, 1.2em);
         margin-inline-end: $spacer * .5;
       }
     }
@@ -70,37 +142,30 @@
   &__oss-landing-url {
     margin-block-end: $spacer * .5;
     a {
+      font-weight: $font-weight-bold;
       &::before {
-        @include get-bootstrap-icon('link-45deg', $primary);
-        margin-inline-end: $spacer * .5;
+        @include get-bootstrap-icon('link-45deg', $oss--brand, 1.5em);
+        margin-inline-end: $spacer * .3;
       }
     }
   }
-  &__oss__documentation a {
-    &::before {
-      @include get-bootstrap-icon('file-earmark-text', $primary);
-      margin-inline-end: $spacer * .5;
+  &__oss__documentation {
+    a {
+      font-weight: $font-weight-bold;
+      &::before {
+        @include get-bootstrap-icon('file-earmark-text', $oss--brand, 1.3em);
+        margin-inline-end: $spacer * .4;
+      }
     }
   }
   .l-ventuno--layout_twocol_section--section-label-long-description {
     position: relative;
-    padding-block: $spacer * 3;
-    &:before {
-      content: "";
-      display: block;
-      position: absolute;
-      top: 0;
-      inset-inline-start: 50%;
-      width: 100vw;
-      background: $light;
-      height: 100%;
-      margin-inline-start: -50vw;
-      z-index: -1;
-    }
+    @include full-width-color($light);
     .oss-solution__long-description {
       &--long {
+        font-size: $font-size-lg;
         display: -webkit-box!important;
-        min-height: 48px;
+        min-height: 60px;
         -webkit-line-clamp: 2;
         -webkit-box-orient: vertical;
         overflow: hidden;
@@ -111,22 +176,28 @@
     }
   }
   &__illustration {
-    aspect-ratio: 5/4;
+    aspect-ratio: 4/3;
     width: 100%;
     height: auto;
-    background-image: url("#{$theme-images-path}/oss-illustration.svg");
-    background-size: cover;
-    border-radius: $border-radius;
+    background: url("#{$theme-images-path}/oss-illustration.svg") no-repeat top center;
+    background-size: contain;
+    @include media-breakpoint-up(lg) {
+      background-size: auto;
+    }
   }
-  &__oss-features {
+  &__oss__features {
     list-style: none;
     margin-left: 0;
     li {
+      font-size: $font-size-lg;
       margin-bottom: $spacer * .5;
+      color: $gray-500;
       &::before {
-        display: inline-block;
-        content:'\2022';
-        margin-right: $spacer * .8;
+        @include get-bootstrap-icon('check-lg', $oss--brand);
+        margin-inline-end: $spacer * .8;
+        width: 1.8em;
+        height: 1.8em;
+        vertical-align: -.5em;
       }
     }
   }
@@ -136,8 +207,9 @@
     gap: $spacer * .5;
     a {
       padding: $spacer * .25 $spacer * .75;
-      color: $primary;
-      background-color: $secondary;
+      color: $oss--brand;
+      font-weight: $font-weight-bold;
+      background-color: $oss--secondary;
       border-radius: $border-radius-pill;
       white-space: nowrap;
       &:hover {
