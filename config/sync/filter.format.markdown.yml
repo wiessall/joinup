@@ -162,3 +162,11 @@ filters:
     status: false
     weight: -36
     settings: {  }
+  slick_filter:
+    id: slick_filter
+    provider: slick
+    status: false
+    weight: 4
+    settings:
+      optionset: default
+      media_switch: ''
