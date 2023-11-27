@@ -216,6 +216,7 @@ drupal:
           'blazy_ui',
           'cas_mock_server',
           'composer_deploy',
+          'config_inspector',
           'config_update',
           'config_update_ui',
           'dblog',

@@ -131,6 +131,7 @@
         "drupal/cas_mock_server": "^2.0",
         "drupal/coder": "*",
         "drupal/composer_deploy": "^1.6",
+        "drupal/config_inspector": "^2.1",
         "drupal/config_update": "^2.0",
         "drupal/devel": "^5.1",
         "drupal/drupal-extension": "^5.0",
