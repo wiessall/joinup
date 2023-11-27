@@ -84,10 +84,8 @@ function ventuno_preprocess_menu__og__navigation(&$variables): void {
   foreach ($variables['items'] as $key => $item) {
     /** @var \Drupal\Core\Url $url */
     $url = $item['url'];
-    if ($url->getRouteName() !== $searchRoute) {
-      continue;
+    if ($url->getRouteName() === $searchRoute) {
+      $variables['items'][$key]['attributes']['class'][] = 'is-active';
     }
-
-    $variables['items'][$key]['attributes']['class'][] = 'is-active';
   }
 }
