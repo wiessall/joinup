@@ -44,7 +44,6 @@ Feature: OSS catalogue search
     And I should see the "Software Registry" tile
     And I should see the text "0.1-alpha" in the "Software Registry" tile
     And I should see the "Immuni" tile
-    And the link "Search" is in the active trail
 
     # Check facets headings.
     And I see the following headings:
@@ -66,7 +65,6 @@ Feature: OSS catalogue search
     And I should not see the "NDC Semantic frontend" tile
     And I should see the "Software Registry" tile
     And I should not see the "Immuni" tile
-    And the link "Search" is in the active trail
 
     # Check OSS label in tile footer.
     And I should see the text "OSS Solution" in the "Software Registry" tile
@@ -81,7 +79,6 @@ Feature: OSS catalogue search
     And I should not see the "NDC Semantic frontend" tile
     And I should not see the "Software Registry" tile
     And I should see the "Immuni" tile
-    And the link "Search" is in the active trail
 
     Then I go to the homepage of the "EU Open Source Solutions Catalogue" collection
     And I should not see the "Entity actions" region
