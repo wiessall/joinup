@@ -449,21 +449,24 @@ Feature:
       | List style      | type: select - value: <list style>        |
       | Query presets   | type: text - value: entity_bundle\|<type> |
     And I press "Save"
-    Then I <should> see the image "linus.jpeg" in the "Custom tile" tile
+    # \Drupal\Driver\Fields\Drupal8\Imagehandler changes the file name to a
+    # random string, so the only thing we can check is the presence of any
+    # image.
+    Then There <expectation> in the "Custom tile" tile
 
     Examples:
-      | type        | should     | list style | state     |
-      | custom_page | should     | list       | published |
-      | custom_page | should     | grid       | published |
-      | news        | should     | list       | published |
-      | news        | should     | grid       | published |
-      | event       | should     | list       | published |
-      | event       | should     | grid       | published |
-      | document    | should     | list       | published |
-      | document    | should     | grid       | published |
+      | type        | expectation              | list style | state     |
+      | custom_page | should be an image      | list       | published |
+      | custom_page | should be an image      | grid       | published |
+      | news        | should be an image      | list       | published |
+      | news        | should be an image      | grid       | published |
+      | event       | should be an image      | list       | published |
+      | event       | should be an image      | grid       | published |
+      | document    | should be an image      | list       | published |
+      | document    | should be an image      | grid       | published |
       # Discussions don't have logos.
-      | discussion  | should not | list       | published |
-      | discussion  | should not | grid       | published |
+      | discussion  | should not be any image | list       | published |
+      | discussion  | should not be any image | grid       | published |
 
   @javascript
   Scenario: Up to 4 topics should be shown for tile-two view modes.
