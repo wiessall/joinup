@@ -1,5 +1,34 @@
 #!/bin/bash
 
+if command -v jq >/dev/null 2>&1; then
+  jq_version=$(jq --version)
+  echo "jq is installed. Version: $jq_version"
+else
+  os_name=$(uname -s)
+  case $os_name in
+      Linux*)
+          apt-get update
+          apt-get install jq -y
+          ;;
+      Darwin*)
+          brew install jq
+          ;;
+      *)
+          echo "Unknown or unsupported operating system, check https://jqlang.github.io/jq/download/"
+          exit 1
+          ;;
+  esac
+fi
+
+# Check that patches are local.
+for COMPOSER_PATCH in $(cat composer.json | jq --raw-output '.extra.patches[] | values[]')
+do
+  if [[ $COMPOSER_PATCH =~ ^https?:\/\/.*$ ]]; then
+    echo "$(tput setaf 1)Patch $COMPOSER_PATCH should be local$(tput sgr0)"
+    exit 1;
+  fi
+done
+
 # Build the codebase.
 test ! -f vendor/bin/run || vendor/bin/run toolkit:build-dev
 
