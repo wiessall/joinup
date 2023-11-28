@@ -9,6 +9,7 @@ use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Entity\EntityPublishedInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\joinup_community_content\Entity\CommunityContentInterface;
 use Drupal\joinup_group\Exception\MissingGroupException;
@@ -32,60 +33,29 @@ use Drupal\og\MembershipManagerInterface;
 class CommunityContentWorkflowAccessControlHandler {
 
   /**
-   * The entity type manager service.
-   *
-   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
-   */
-  protected EntityTypeManagerInterface $entityTypeManager;
-
-  /**
-   * The membership manager.
-   *
-   * @var \Drupal\og\MembershipManagerInterface
-   */
-  protected MembershipManagerInterface $membershipManager;
-
-  /**
-   * The current logged in user.
-   *
-   * @var \Drupal\Core\Session\AccountInterface
-   */
-  protected AccountInterface $currentUser;
-
-  /**
-   * The configuration factory.
-   *
-   * @var \Drupal\Core\Config\ConfigFactoryInterface
-   */
-  protected ConfigFactoryInterface $configFactory;
-
-  /**
-   * The workflow helper class.
-   *
-   * @var \Drupal\joinup_workflow\WorkflowHelperInterface
-   */
-  protected WorkflowHelperInterface $workflowHelper;
-
-  /**
    * Constructs a new CommunityContentWorkflowAccessControlHandler.
    *
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
    *   The entity type manager service.
-   * @param \Drupal\og\MembershipManagerInterface $og_membership_manager
+   * @param \Drupal\og\MembershipManagerInterface $membershipManager
    *   The OG membership manager service.
-   * @param \Drupal\Core\Session\AccountInterface $current_user
+   * @param \Drupal\Core\Session\AccountInterface $currentUser
    *   The current logged in user.
-   * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
+   * @param \Drupal\Core\Config\ConfigFactoryInterface $configFactory
    *   The configuration factory service.
-   * @param \Drupal\joinup_workflow\WorkflowHelperInterface $workflow_helper
+   * @param \Drupal\joinup_workflow\WorkflowHelperInterface $workflowHelper
    *   The workflow helper service.
+   * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $logger
+   *   The logger service.
    */
-  public function __construct(EntityTypeManagerInterface $entity_type_manager, MembershipManagerInterface $og_membership_manager, AccountInterface $current_user, ConfigFactoryInterface $config_factory, WorkflowHelperInterface $workflow_helper) {
-    $this->entityTypeManager = $entity_type_manager;
-    $this->membershipManager = $og_membership_manager;
-    $this->currentUser = $current_user;
-    $this->workflowHelper = $workflow_helper;
-    $this->configFactory = $config_factory;
+  public function __construct(
+    protected EntityTypeManagerInterface $entityTypeManager,
+    protected MembershipManagerInterface $membershipManager,
+    protected AccountInterface $currentUser,
+    protected ConfigFactoryInterface $configFactory,
+    protected WorkflowHelperInterface $workflowHelper,
+    protected LoggerChannelFactoryInterface $logger
+  ) {
   }
 
   /**
@@ -204,9 +174,10 @@ class CommunityContentWorkflowAccessControlHandler {
     try {
       $content_creation = $content->getGroup()->getContentCreators();
     }
-    catch (MissingGroupException $e) {
+    catch (MissingGroupException | \TypeError $e) {
       // Forbid creating community content if the parent group has not been set
       // (e.g. because the entity is orphaned).
+      $this->logger->get('joinup_community_content')->warning($e);
       return AccessResult::forbidden()->addCacheTags($content->getEntityType()->getListCacheTags());
     }
 
