@@ -5,7 +5,7 @@ dependencies:
   config:
     - field.field.node.custom_page.field_attachment
     - field.field.node.custom_page.field_custom_page_logo
-    - field.field.node.custom_page.field_hide_tilte
+    - field.field.node.custom_page.field_hide_title
     - field.field.node.custom_page.field_paragraphs_body
     - field.field.node.custom_page.field_state
     - field.field.node.custom_page.field_topic
@@ -39,7 +39,7 @@ content:
       progress_indicator: throbber
       preview_image_style: thumbnail
     third_party_settings: {  }
-  field_hide_tilte:
+  field_hide_title:
     type: boolean_checkbox
     weight: 1
     region: content
