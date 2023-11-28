@@ -164,7 +164,14 @@ trait GroupTrait {
    * {@inheritdoc}
    */
   public function getContentCreators(): string {
-    return $this->getMainPropertyValue($this->getContentCreationFieldName());
+    $contentCreators = $this->getMainPropertyValue($this->getContentCreationFieldName());
+
+    if (is_null($contentCreators)) {
+      $loggerFactory = \Drupal::service('logger.factory');
+      $loggerFactory->get('joinup_group')->warning('Invalid content creators');
+    }
+
+    return $contentCreators;
   }
 
   /**
