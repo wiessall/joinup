@@ -21,6 +21,8 @@ settings:
       - '|'
       - alignment
       - '|'
+      - insertTable
+      - '|'
       - contactus
       - sourceEditing
   plugins:
