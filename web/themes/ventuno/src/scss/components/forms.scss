@@ -55,6 +55,7 @@ label.form-required {
 
 // Webforms
 .webform-submission-form {
+  max-width: 54rem;
   .webform-flexbox {
     @include media-breakpoint-up(md) {
       margin-left: -0.5em !important;
@@ -72,6 +73,60 @@ label.form-required {
   }
   .webform-multiple-table {
     margin-top: $spacer * 0.5;
+    table {
+      tr {
+        &:not(:first-child) {
+          .webform-element-description {
+            display: none;
+          }
+        }
+      }
+
+      td.webform-multiple-table--operations {
+        text-align: left;
+        position: relative;
+        .image-button {
+           display: inline-block;
+        }
+        &:after {
+          content: 'Remove item';
+          display: inline-block;;
+          font-weight: bold;
+        }
+        @include media-breakpoint-up(md) {
+          &:after {
+            position: absolute;
+            top: 22px;
+            left: 30px
+          }
+          .image-button {
+            position: absolute;
+            top: 22px;
+            width: 22px;
+          }
+        }
+      }
+    }
+  }
+
+  .form-item-geographical-coverage-section {
+    .webform-multiple-table {
+      table {
+        td.webform-multiple-table--operations {
+          @include media-breakpoint-up(md) {
+            position: relative;
+            &:after {
+              top: unset !important;
+              bottom: 25px
+            }
+            .image-button {
+              top: unset !important;
+              bottom: 25px;
+            }
+          }
+        }
+      }
+    }
   }
   .form-check {
     margin-bottom: $spacer * 0.5;
