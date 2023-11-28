@@ -2,7 +2,7 @@
   <div {{ attributes.addClass('l-oss-heading row') }}>
     <div class="l-oss-heading__content col-12 col-md-7 py-5">
       {% if content.top_left or content.top_right %}
-        <div class="l-oss-heading__row flex-wrap mb-4">
+        <div class="l-oss-heading__row l-oss-heading__row--branding mb-4">
           {% if content.top_left %}
             <div {{ region_attributes.top_left.addClass('l-oss-heading__top-left') }}>
               {{ content.top_left }}
