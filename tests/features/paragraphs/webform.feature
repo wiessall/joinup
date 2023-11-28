@@ -67,7 +67,7 @@ Feature:
     And I fill in "Public sector organisation" with "Smith's sector"
     And I check "Central Government"
     And I check "Regional Government"
-    And I select "Denmark" from "Geographical coverage"
+    And I select "Denmark" from "Choose a country"
     And I select "Local" from "Geographical extent"
     And I select "Health" from "Functions of Government"
     And I fill in "Source (URL)" with "http://example.com"
