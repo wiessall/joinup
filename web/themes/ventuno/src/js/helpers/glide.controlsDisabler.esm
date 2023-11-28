@@ -58,6 +58,13 @@ function ControlsDisabler(Glide, Components) {
               right.removeAttribute("disabled"); // Disable on other slides
             }
           }
+
+          // Hide if we do not have nothing to scroll.
+          if (left.disabled && right.disabled) {
+            controlItem.classList.add('glide__arrows--disabled');
+          } else {
+            controlItem.classList.remove('glide__arrows--disabled');
+          }
         });
       });
     },
