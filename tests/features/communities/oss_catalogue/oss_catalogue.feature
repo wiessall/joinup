@@ -183,6 +183,7 @@ Feature:
     When I click "document-management"
     Then I should be on "/eu-oss-catalogue/solutions"
     And I should see the following facet summary "document-management"
+    And the link "Search" is in the active trail
     When I go to the content page of the type "oss_solution" with the title "Super Awesome Software"
     And I click "Developers Italia"
     Then I should be on "/eu-oss-catalogue/solutions"
@@ -190,6 +191,7 @@ Feature:
     When I go to the content page of the type "oss_solution" with the title "Super Awesome Software"
     And I click "science-and-technology"
     Then I should be on "/eu-oss-catalogue/solutions"
+    And the link "Search" is in the active trail
     And I should see the following facet summary "science-and-technology"
 
     # Check that this node type doesn't leak in search as facet.
