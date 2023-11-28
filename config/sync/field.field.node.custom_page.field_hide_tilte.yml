@@ -1,0 +1,21 @@
+uuid: 0d32cb94-3158-4b94-8d82-d56cdbc69892
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_hide_tilte
+    - node.type.custom_page
+id: node.custom_page.field_hide_tilte
+field_name: field_hide_tilte
+entity_type: node
+bundle: custom_page
+label: 'Hide tilte'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  on_label: 'On'
+  off_label: 'Off'
+field_type: boolean
