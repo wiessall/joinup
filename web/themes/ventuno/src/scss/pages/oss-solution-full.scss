@@ -244,4 +244,12 @@
       margin-block-start: $spacer * 2;
     }
   }
+
+  .btn-secondary {
+    color: $oss--brand-darker;
+    background-color: $oss--secondary;
+    &:hover {
+      background-color: $oss--secondary;
+    }
+  }
 }
