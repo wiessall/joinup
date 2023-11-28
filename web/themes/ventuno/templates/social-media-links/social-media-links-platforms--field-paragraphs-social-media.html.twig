@@ -1,0 +1,33 @@
+{#
+/**
+ * @ingroup themeable
+ */
+#}
+
+{% set classes = [
+  'list-unstyled',
+  'd-flex',
+  'justify-content-center',
+  'mt-3',
+  'col-gap-3',
+] %}
+<ul{{ attributes.addClass(classes) }}>
+  {% for platform in platforms %}
+    <li class="mx-2">
+      <a href="{{ platform.url }}" target="_blank" rel="noopener" title="{{ platform.name }}">
+        {% if platform.id == 'twitter' %}
+          {% include '@ventuno/assets/icons/twitter-x.svg' %}
+        {% elseif platform.id == 'whatsapp' %}
+          {% include '@ventuno/assets/icons/whatsapp.svg' %}
+        {% elseif platform.id == 'instagram' %}
+          {% include '@ventuno/assets/icons/instagram.svg' %}
+        {% else %}
+          {{ pattern('icon', {
+            name: platform.id,
+            size: 's'
+          }) }}
+        {% endif %}
+      </a>
+    </li>
+  {% endfor %}
+</ul>

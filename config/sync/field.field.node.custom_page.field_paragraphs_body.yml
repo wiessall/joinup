@@ -20,11 +20,11 @@ dependencies:
     - paragraphs.paragraphs_type.poll
     - paragraphs.paragraphs_type.quote
     - paragraphs.paragraphs_type.simple_paragraph
+    - paragraphs.paragraphs_type.social_media
     - paragraphs.paragraphs_type.testimony
     - paragraphs.paragraphs_type.text
     - paragraphs.paragraphs_type.tiles
     - paragraphs.paragraphs_type.video
-    - paragraphs.paragraphs_type.webform
   module:
     - entity_reference_revisions
 id: node.custom_page.field_paragraphs_body
@@ -56,6 +56,7 @@ settings:
       poll: poll
       quote: quote
       simple_paragraph: simple_paragraph
+      social_media: social_media
       testimony: testimony
       tiles: tiles
       text: text
@@ -126,22 +127,25 @@ settings:
       simple_paragraph:
         weight: -40
         enabled: true
-      testimony:
+      social_media:
         weight: -39
         enabled: true
-      text:
-        weight: -36
-        enabled: true
-      tile:
+      testimony:
         weight: -38
-        enabled: false
-      tiles:
-        weight: -37
         enabled: true
-      video:
+      text:
         weight: -35
         enabled: true
-      webform:
+      tile:
+        weight: -37
+        enabled: false
+      tiles:
+        weight: -36
+        enabled: true
+      video:
         weight: -34
+        enabled: true
+      webform:
+        weight: -32
         enabled: true
 field_type: entity_reference_revisions
