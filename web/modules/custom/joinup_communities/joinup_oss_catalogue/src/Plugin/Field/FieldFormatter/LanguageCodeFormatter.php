@@ -12,7 +12,7 @@ use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Resolve the langcodes known by Drupal to full name.
+ * Resolve the lang codes known by Drupal to full name.
  *
  * @FieldFormatter(
  *   id = "joinup_language_code",
@@ -75,7 +75,7 @@ class LanguageCodeFormatter extends FormatterBase implements ContainerFactoryPlu
     foreach ($items as $delta => $item) {
       $codes = explode(",", $item->value);
       foreach ($codes as $id => $code) {
-        $codes[$id] = $languages[$code] ? $languages[$code][0] : $code;
+        $codes[$id] = isset($languages[$code]) ? $languages[$code][0] : $code;
       }
 
       $element[$delta] = [

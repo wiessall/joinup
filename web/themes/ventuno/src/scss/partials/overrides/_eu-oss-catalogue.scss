@@ -13,6 +13,10 @@
   .bg-secondary {
     background-color: $oss--secondary !important;
   }
+  .btn-link,
+  .button--link {
+    color: $oss--brand-darker !important;
+  }
   .btn-brand,
   .btn-primary {
     background-color: $oss--brand !important;
