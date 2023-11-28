@@ -3,13 +3,13 @@ langcode: en
 status: true
 dependencies:
   config:
-    - field.storage.node.field_hide_tilte
+    - field.storage.node.field_hide_title
     - node.type.custom_page
-id: node.custom_page.field_hide_tilte
-field_name: field_hide_tilte
+id: node.custom_page.field_hide_title
+field_name: field_hide_title
 entity_type: node
 bundle: custom_page
-label: 'Hide tilte'
+label: 'Hide title'
 description: ''
 required: false
 translatable: false
