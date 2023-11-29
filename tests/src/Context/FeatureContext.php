@@ -371,7 +371,7 @@ class FeatureContext extends RawDrupalContext {
    *
    * @Then I (should )see the image :filename
    */
-  public function assertImagePresent(string $filename, NodeElement|null $element = NULL): void {
+  public function assertImagePresent(string $filename, ?NodeElement $element = NULL): void {
     if ($imageNode = $this->getImage($filename, $element)) {
       try {
         Assert::assertTrue($imageNode->isVisible());
@@ -394,7 +394,7 @@ class FeatureContext extends RawDrupalContext {
    *
    * @Then I should not see the image :filename
    */
-  public function assertImageNotPresent(string $filename, NodeElement|null $element = NULL): void {
+  public function assertImageNotPresent(string $filename, ?NodeElement $element = NULL): void {
     if ($imageNode = $this->getImage($filename, $element)) {
       try {
         Assert::assertFalse($imageNode->isVisible());
