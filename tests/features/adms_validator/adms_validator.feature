@@ -4,6 +4,7 @@ Feature: Validate an ADMS-AP file through the UI
   As a user
   I need to be able to publish an RDF file
 
+  @loggedErrors @joinup_collection
   Scenario: Validate a file
     When I am an anonymous user
     And I go to the homepage
@@ -11,6 +12,13 @@ Feature: Validate an ADMS-AP file through the UI
 
     When I go to "/adms-validator"
     Then I should see the heading "ADMS-AP Validator"
+
+    # Submitting the form without adding any file should not cause any PHP
+    # warnings.
+    Given there are no preexisting log records on the site
+    And I press "Upload"
+    Then I should see the error message "Please upload a valid RDF file."
+    And the site should not have any log records
 
     When I attach the file "invalid_adms.rdf" to "File"
     And I press "Upload"
