@@ -11,8 +11,8 @@ Feature:
   @javascript
   Scenario: Test that carousels with specific content is working correctly.
     Given the following collections:
-      | title       | state     |
-      | Sparta      | published |
+      | title  | state     |
+      | Sparta | published |
     And custom_page content:
       | title       | headline    | collection  | content       | state     |
       | Some page 1 | Some page 1 | Roman ruins | Some content. | published |
@@ -65,3 +65,31 @@ Feature:
     Then I should see the "Some page 3" tile
     But I should not see the "Some page 1" tile
     And I should not see the "Some page 2" tile
+
+  @javascript
+  Scenario: Carousel's control buttons should be visible if there is more content to show.
+    Given the following collections:
+      | title  | state     |
+      | Sparta | published |
+    And news content:
+      | title       | headline    | collection | body          | state     |
+      | News page 1 | Some page 1 | Sparta     | Some content. | published |
+      | News page 2 | Some page 2 | Sparta     | Some content. | published |
+      | News page 3 | Some page 3 | Sparta     | Some content. | published |
+    And custom_page content:
+      | title             | collection | state     |
+      | Carousel controls | Sparta     | published |
+    And I append "carousel" to "field_paragraphs_body" field in "node" entity with following "Carousel controls" title:
+      | content_listing:value | a:6:{s:6:"fields";a:1:{s:20:"content_listing_type";a:2:{s:6:"weight";i:0;s:6:"region";s:3:"top";}}s:7:"enabled";i:1;s:13:"query_presets";s:18:"entity_bundle\|news";s:5:"limit";s:2:"12";s:11:"show_shared";i:0;s:13:"global_search";i:0;} |
+
+    Then I go to the "Carousel controls" custom page
+    When the "Previous item" button in the Content region should not be visible
+    And the "Next item" button in the Content region should not be visible
+
+    Then news content:
+      | title       | headline    | collection | body          | state     |
+      | News page 4 | Some page 1 | Sparta     | Some content. | published |
+      | News page 5 | Some page 2 | Sparta     | Some content. | published |
+    And I go to the "Carousel controls" custom page
+    When the "Previous item" button in the Content region should be visible
+    And the "Next item" button in the Content region should be visible
