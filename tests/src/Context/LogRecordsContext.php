@@ -114,6 +114,9 @@ class LogRecordsContext extends RawDrupalContext {
     $this->dblogStatusOriginal = \Drupal::moduleHandler()->moduleExists('dblog');
     $this->timeStamp = time();
     \Drupal::service('module_installer')->install(['dblog']);
+    if (!$this->dblogStatusOriginal) {
+      $this->resetLoggedErrors();
+    }
   }
 
   /**
