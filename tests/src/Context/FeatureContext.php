@@ -423,17 +423,33 @@ class FeatureContext extends RawDrupalContext {
   }
 
   /**
-   * Checks that any image is present in the given tile.
+   * Checks that the tile has any (or the specified number of) image(s).
    *
+   * @param string $count
+   *   The expected number of images in the tile, the string "no" to ensure that
+   *   there is no image (same check as "0"), or the string "an" or "some" to
+   *   verify that there is at least one image in the tile.
    * @param string $tile
    *   The title of the tile.
    *
-   * @Then There should be an image in the :tile tile
+   * @Then there should be :count image(s) in the :tile tile
    */
-  public function assertAnyImagePresentInTile(string $tile): void {
+  public function assertAnyImagePresentInTile(string $count, string $tile): void {
     $tileElement = $this->getTileByHeading($tile);
     Assert::assertNotEmpty($tileElement, "Tile cannot be found");
-    Assert::assertNotEmpty($this->getImages($tileElement));
+    $imageNodes = $this->getImages($tileElement);
+    if (in_array($count, ['an', 'some'], TRUE)) {
+      Assert::assertNotEmpty($imageNodes);
+      return;
+    }
+
+    // Perform count check. First, make sure the count parameter is a number, or
+    // the 'no' string.
+    $countInt = intval($count);
+    if ((string) $countInt !== $count && $count !== 'no') {
+      throw new \Exception("Count must be either the string 'an', or a number");
+    }
+    Assert::assertCount($countInt, $imageNodes);
   }
 
   /**
@@ -450,20 +466,6 @@ class FeatureContext extends RawDrupalContext {
     $tileElement = $this->getTileByHeading($tile);
     Assert::assertNotEmpty($tileElement, "Tile cannot be found");
     $this->assertImageNotPresent($filename, $tileElement);
-  }
-
-  /**
-   * Checks that no image is present in the given tile.
-   *
-   * @param string $tile
-   *   The title of the tile.
-   *
-   * @Then There should not be any image in the :tile tile
-   */
-  public function assertNoImagePresentInTile(string $tile): void {
-    $tileElement = $this->getTileByHeading($tile);
-    Assert::assertNotEmpty($tileElement, "Tile cannot be found");
-    Assert::assertEmpty($this->getImages($tileElement));
   }
 
   /**
