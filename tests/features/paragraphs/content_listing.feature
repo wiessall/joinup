@@ -1,6 +1,6 @@
 @api @terms
 Feature:
-  Access and functionality checks for content_listing paragraphs in custom pages.
+  Functionality checks for content_listing paragraphs in custom pages.
 
   Background:
     Given collection:
