@@ -6,6 +6,7 @@ namespace Drupal\joinup_user\EventSubscriber;
 
 use Drupal\Core\Messenger\MessengerInterface;
 use Drupal\Core\Session\AccountInterface;
+use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\og\Og;
 use Drupal\search_api\Event\QueryPreExecuteEvent;
 use Drupal\search_api\Event\SearchApiEvents;
@@ -21,13 +22,15 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
  */
 class ShowOnlyUserContentSubscriber implements EventSubscriberInterface {
 
+  use StringTranslationTrait;
+
   /**
    * Constructs a ShowOnlyUserContentSubscriber.
    *
    * @param \Drupal\Core\Session\AccountInterface $currentUser
    *   The current user.
    * @param \Drupal\Core\Messenger\MessengerInterface $messenger
-   *  The messenger.
+   *   The messenger.
    */
   public function __construct(
     protected AccountInterface $currentUser,
@@ -75,7 +78,7 @@ class ShowOnlyUserContentSubscriber implements EventSubscriberInterface {
         // If the user is the owner of the profile, show a warning message.
         if ($user->id() === $this->currentUser->id()) {
           $this->messenger
-            ->addMessage(t('You have joined a large number of collections and solutions.<br /> Only the content of the first 100 groups is shown.'), 'warning');
+            ->addMessage($this->t('You have joined a large number of collections and solutions.<br /> Only the content of the first 100 groups is shown.'), 'warning');
         }
       }
       $or = $query->createConditionGroup('OR');
