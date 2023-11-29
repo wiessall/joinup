@@ -4,6 +4,8 @@ declare(strict_types = 1);
 
 namespace Drupal\joinup_user\EventSubscriber;
 
+use Drupal\Core\Messenger\MessengerInterface;
+use Drupal\Core\Session\AccountInterface;
 use Drupal\og\Og;
 use Drupal\search_api\Event\QueryPreExecuteEvent;
 use Drupal\search_api\Event\SearchApiEvents;
@@ -18,6 +20,20 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
  * - do not show entities of some bundles.
  */
 class ShowOnlyUserContentSubscriber implements EventSubscriberInterface {
+
+  /**
+   * Constructs a ShowOnlyUserContentSubscriber.
+   *
+   * @param \Drupal\Core\Session\AccountInterface $currentUser
+   *   The current user.
+   * @param \Drupal\Core\Messenger\MessengerInterface $messenger
+   *  The messenger.
+   */
+  public function __construct(
+    protected AccountInterface $currentUser,
+    protected MessengerInterface $messenger,
+  ) {
+  }
 
   /**
    * {@inheritdoc}
@@ -41,7 +57,6 @@ class ShowOnlyUserContentSubscriber implements EventSubscriberInterface {
 
     /** @var \Drupal\user\Entity\User $user */
     $user = $query->getOption('search_api_field entity');
-    $current_user = \Drupal::currentUser();
 
     // Do not show contact information and owner entities as they are not
     // relevant for the user content, and they are visualized in the related
@@ -58,8 +73,9 @@ class ShowOnlyUserContentSubscriber implements EventSubscriberInterface {
         $subset = array_chunk($groups, 100);
         $groups = reset($subset);
         // If the user is the owner of the profile, show a warning message.
-        if ($user->id() === $current_user->id()) {
-          \Drupal::messenger()->addMessage(t('You have joined a large number of collections and solutions.<br /> Only the content of the first 100 groups is shown.'), 'warning');
+        if ($user->id() === $this->currentUser->id()) {
+          $this->messenger
+            ->addMessage(t('You have joined a large number of collections and solutions.<br /> Only the content of the first 100 groups is shown.'), 'warning');
         }
       }
       $or = $query->createConditionGroup('OR');

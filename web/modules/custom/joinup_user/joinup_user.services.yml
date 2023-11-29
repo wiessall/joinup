@@ -27,6 +27,7 @@ services:
       - { name: 'event_subscriber' }
   joinup_user.show_only_user_content_subscriber:
     class: Drupal\joinup_user\EventSubscriber\ShowOnlyUserContentSubscriber
+    arguments: ['@current_user', '@messenger']
     tags:
       - { name: event_subscriber }
   joinup_user.notification_helper:
