@@ -44,9 +44,10 @@ class AdjustGroupContentSubscriber implements EventSubscriberInterface {
     /** @var \Drupal\Core\Entity\EntityInterface $entity */
     $entity = $query->getOption('search_api_field entity');
     $or = $query->createConditionGroup('OR');
-    // Show content related to this collection through the aggregated
-    // field. This makes sure that other related entities (such as the collection
-    // owner) do not show up as collection content tiles.
+    // Show only content that belongs to this group through
+    // the aggregated field. This makes sure that other related entities
+    // (such as the collection/solution owner)
+    // do not show up as collection/solution content tiles.
     $or->addCondition('entity_groups', [$entity->id()], 'IN');
     // Or show content that has been shared on this collection.
     $or->addCondition('shared_in', [$entity->id()], 'IN');
@@ -56,7 +57,7 @@ class AdjustGroupContentSubscriber implements EventSubscriberInterface {
     $query->addCondition($entity->getEntityType()
       ->getKey('id'), $entity->id(), '<>');
 
-    // Exclude custom pages and discussion from the collection overview.
+    // Exclude custom pages and discussion from the group overview.
     $query->addCondition('entity_bundle', 'custom_page', '<>');
     $query->addCondition('entity_bundle', 'discussion', '<>');
   }
