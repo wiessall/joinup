@@ -449,10 +449,10 @@ Feature:
       | List style      | type: select - value: <list style>        |
       | Query presets   | type: text - value: entity_bundle\|<type> |
     And I press "Save"
-    # \Drupal\Driver\Fields\Drupal8\Imagehandler changes the file name to a
+    # \Drupal\Driver\Fields\Drupal8\ImageHandler changes the file name to a
     # random string, so the only thing we can check is the presence of any
     # image.
-    Then There <expectation> in the "Custom tile" tile
+    Then there <expectation> in the "Custom tile" tile
 
     Examples:
       | type        | expectation              | list style | state     |
