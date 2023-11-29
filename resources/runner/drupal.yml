@@ -53,6 +53,7 @@ drupal:
         - Memcache
         - Custom queue services
         - Monolog
+        - Stage file proxy
       site-clean:
         - Main settings
         - Databases
@@ -353,3 +354,6 @@ drupal:
       Reverse proxy: |
         $settings['reverse_proxy'] = (bool) getenv('DRUPAL_REVERSE_PROXY_ENABLE');
         $settings['reverse_proxy_addresses'] = array_filter(explode(',', (string) getenv('DRUPAL_REVERSE_PROXY_ADDRESSES')));
+      Stage file proxy: |
+        $config['stage_file_proxy.settings']['origin'] = 'https://joinup.ec.europa.eu';
+        $config['stage_file_proxy.settings']['hotlink'] = TRUE;

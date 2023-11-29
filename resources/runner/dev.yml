@@ -12,6 +12,7 @@ dev:
     - memcache_admin
     - page_manager_ui
     - views_ui
+    - stage_file_proxy
 
 rector:
   bin: ${joinup.dir}/vendor/bin/rector
