@@ -466,15 +466,18 @@ class FeatureContext extends RawDrupalContext {
   }
 
   /**
-   * Checks that a given image is present in the page.
+   * Checks that a given image is present.
    *
    * @param string $filename
    *   The file name.
+   * @param \Behat\Mink\Element\NodeElement|null $element
+   *   The element to look for the image in. Optional. Search is performed on
+   *   the entire page if omitted or called with NULL.
    *
-   * @Then I (should )see the image with filename :filename
+   * @Then I (should )see the image :filename
    */
-  public function assertImageVisible(string $filename): void {
-    if ($imageNode = $this->getImage($filename)) {
+  public function assertImagePresent(string $filename, ?NodeElement $element = NULL): void {
+    if ($imageNode = $this->getImage($filename, $element)) {
       try {
         Assert::assertTrue($imageNode->isVisible());
         return;
@@ -482,19 +485,22 @@ class FeatureContext extends RawDrupalContext {
       catch (UnsupportedDriverActionException | UnsupportedDrupalDriverActionException) {
       }
     }
-    Assert::assertTrue($this->hasImage($filename));
+    Assert::assertTrue($this->hasImage($filename, $element));
   }
 
   /**
-   * Checks that a given image is not present in the page.
+   * Checks that a given image is not present.
    *
    * @param string $filename
    *   The filename.
+   * @param \Behat\Mink\Element\NodeElement|null $element
+   *   The element to look for the image in. Optional. Search is performed on
+   *   the entire page if omitted or called with NULL.
    *
-   * @Then I should not see the image with filename :filename
+   * @Then I should not see the image :filename
    */
-  public function assertImageNotVisible(string $filename): void {
-    if ($imageNode = $this->getImage($filename)) {
+  public function assertImageNotPresent(string $filename, ?NodeElement $element = NULL): void {
+    if ($imageNode = $this->getImage($filename, $element)) {
       try {
         Assert::assertFalse($imageNode->isVisible());
         return;
@@ -502,31 +508,7 @@ class FeatureContext extends RawDrupalContext {
       catch (UnsupportedDriverActionException | UnsupportedDrupalDriverActionException) {
       }
     }
-    Assert::assertFalse($this->hasImage($filename));
-  }
-
-  /**
-   * Checks that a given image is present in the page.
-   *
-   * @param string $filename
-   *   The file name.
-   *
-   * @Then I (should )see the image :filename
-   */
-  public function assertImagePresent(string $filename): void {
-    Assert::assertTrue($this->hasImageInaccurate($filename));
-  }
-
-  /**
-   * Checks that a given image is not present in the page.
-   *
-   * @param string $filename
-   *   The filename.
-   *
-   * @Then I should not see the image :filename
-   */
-  public function assertImageNotPresent(string $filename): void {
-    Assert::assertFalse($this->hasImageInaccurate($filename));
+    Assert::assertFalse($this->hasImage($filename, $element));
   }
 
   /**
@@ -540,8 +522,39 @@ class FeatureContext extends RawDrupalContext {
    * @Then I (should )see the image ":filename" in the :tile tile
    */
   public function assertImagePresentInRegion(string $filename, string $tile): void {
-    $tile = $this->getTileByHeading($tile);
-    Assert::assertTrue($this->hasImageInaccurate($filename, $tile));
+    $tileElement = $this->getTileByHeading($tile);
+    Assert::assertNotEmpty($tileElement, "Tile cannot be found");
+    $this->assertImagePresent($filename, $tileElement);
+  }
+
+  /**
+   * Checks that the tile has any (or the specified number of) image(s).
+   *
+   * @param string $count
+   *   The expected number of images in the tile, the string "no" to ensure that
+   *   there is no image (same check as "0"), or the string "an" or "some" to
+   *   verify that there is at least one image in the tile.
+   * @param string $tile
+   *   The title of the tile.
+   *
+   * @Then there should be :count image(s) in the :tile tile
+   */
+  public function assertAnyImagePresentInTile(string $count, string $tile): void {
+    $tileElement = $this->getTileByHeading($tile);
+    Assert::assertNotEmpty($tileElement, "Tile cannot be found");
+    $imageNodes = $this->getImages($tileElement);
+    if (in_array($count, ['an', 'some'], TRUE)) {
+      Assert::assertNotEmpty($imageNodes);
+      return;
+    }
+
+    // Perform count check. First, make sure the count parameter is a number, or
+    // the 'no' string.
+    $countInt = intval($count);
+    if ((string) $countInt !== $count && $count !== 'no') {
+      throw new \Exception("Count must be either the string 'an', or a number");
+    }
+    Assert::assertCount($countInt, $imageNodes);
   }
 
   /**
@@ -555,8 +568,9 @@ class FeatureContext extends RawDrupalContext {
    * @Then I should not see the image :filename in the :tile tile
    */
   public function assertImageNotPresentInRegion(string $filename, string $tile): void {
-    $tile = $this->getTileByHeading($tile);
-    Assert::assertFalse($this->hasImageInaccurate($filename, $tile));
+    $tileElement = $this->getTileByHeading($tile);
+    Assert::assertNotEmpty($tileElement, "Tile cannot be found");
+    $this->assertImageNotPresent($filename, $tileElement);
   }
 
   /**
