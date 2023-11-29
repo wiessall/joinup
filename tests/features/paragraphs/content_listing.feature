@@ -8,7 +8,7 @@ Feature:
       | state | published   |
       | topic | HR          |
 
-  Scenario: Test that carousels content listing options are working correctly.
+  Scenario: Test that content listing options are working correctly.
     Given the following collections:
       | title       | state     |
       | Sparta      | published |
@@ -29,7 +29,7 @@ Feature:
     Then I should see the "Some news 1" tile
     But I should not see the "Some news 2" tile
 
-  Scenario: Carousels should be ordered by creation date by default.
+  Scenario: Content listing should be ordered by creation date by default.
     Given news content:
       | title       | headline    | collection  | content       | state     | created    |
       | Some news 1 | Some news 1 | Roman ruins | Some content. | published | 2 day ago  |
