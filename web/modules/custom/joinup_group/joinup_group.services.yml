@@ -84,3 +84,7 @@ services:
     arguments: ['@joinup_group.group_manager']
     tags:
       - { name: access_check, applies_to: _og_permission }
+  joinup_group.adjust_group_content_subscriber:
+    class: Drupal\joinup_group\EventSubscriber\AdjustGroupContentSubscriber
+    tags:
+      - { name: event_subscriber }
