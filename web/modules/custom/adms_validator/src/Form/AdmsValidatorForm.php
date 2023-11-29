@@ -148,13 +148,15 @@ class AdmsValidatorForm extends FormBase {
    *   File object, if one is uploaded.
    */
   protected function uploadedFile(): ?FileInterface {
-    $files = file_save_upload('adms_file', ['file_validate_extensions' => [0 => 'rdf ttl']], 'public://');
-    /** @var \Drupal\file\FileInterface $file */
-    $file = $files[0];
-    if (!is_object($file)) {
-      return NULL;
-    }
-    return $file;
+    $file = file_save_upload(
+      'adms_file',
+      ['file_validate_extensions' => [0 => 'rdf ttl']],
+      'public://',
+      0
+    );
+    return $file instanceof FileInterface
+      ? $file
+      : NULL;
   }
 
   /**
