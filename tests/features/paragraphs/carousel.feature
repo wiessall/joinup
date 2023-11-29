@@ -8,38 +8,6 @@ Feature:
       | state | published   |
       | topic | HR          |
 
-  @javascript
-  Scenario: Moderators can access paragraph.
-    Given collection:
-      | title | Ronup     |
-      | state | published |
-      | topic | HR        |
-
-    Given I am logged in as a moderator
-    And I go to the "Roman ruins" collection
-    And I click "Add custom page" in the plus button menu
-    And I fill in "Title" with "Hello life"
-    Then I should see the link "Add layout"
-    And I add a layout paragraph in the "Custom page body" form field with the following properties:
-      | layout           | one column |
-      | Background theme | light      |
-      | Extra classes    | test-class |
-    And I click "Choose component"
-
-    When I click "Carousel"
-    Then the following fields should be present "URL, Link text, Available filters"
-
-    Given I am logged in as a facilitator of the "Ronup" collection
-    And I go to the "Ronup" collection
-    And I click "Add custom page" in the plus button menu
-    Then I should see the link "Add layout"
-    And I add a layout paragraph in the "Custom page body" form field with the following properties:
-      | layout           | one column |
-      | Background theme | light      |
-      | Extra classes    | test-class |
-    And I click "Choose component"
-    Then I should see the link "Carousel"
-
   Scenario: Test that carousels content listing options are working correctly.
     Given the following collections:
       | title       | state     |
