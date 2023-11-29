@@ -148,6 +148,8 @@ class AdmsValidatorForm extends FormBase {
    *   File object, if one is uploaded.
    */
   protected function uploadedFile(): ?FileInterface {
+    die('HARD!');
+    // phpcs:disable Squiz.PHP.NonExecutableCode.Unreachable
     $files = file_save_upload('adms_file', ['file_validate_extensions' => [0 => 'rdf ttl']], 'public://');
     /** @var \Drupal\file\FileInterface $file */
     $file = $files[0];
@@ -155,6 +157,7 @@ class AdmsValidatorForm extends FormBase {
       return NULL;
     }
     return $file;
+    // phpcs:enable
   }
 
   /**
