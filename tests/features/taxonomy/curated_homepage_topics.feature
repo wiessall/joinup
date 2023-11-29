@@ -427,7 +427,7 @@ Feature:
       | Event 2 |
       | Event 3 |
 
-  @javascript
+  @javascript @debug
   Scenario Outline: Images should be shown for tile-two view modes.
     Given <type> content:
       | title       | headline    | short title | state   | logo       | published |
@@ -452,21 +452,21 @@ Feature:
     # \Drupal\Driver\Fields\Drupal8\ImageHandler changes the file name to a
     # random string, so the only thing we can check is the presence of any
     # image.
-    Then there <expectation> in the "Custom tile" tile
+    Then there should be "<image count>" image in the "Custom tile" tile
 
     Examples:
-      | type        | expectation              | list style | state     |
-      | custom_page | should be an image      | list       | published |
-      | custom_page | should be an image      | grid       | published |
-      | news        | should be an image      | list       | published |
-      | news        | should be an image      | grid       | published |
-      | event       | should be an image      | list       | published |
-      | event       | should be an image      | grid       | published |
-      | document    | should be an image      | list       | published |
-      | document    | should be an image      | grid       | published |
+      | type        | image count | list style | state     |
+      | custom_page | 1           | list       | published |
+      | custom_page | 1           | grid       | published |
+      | news        | 1           | list       | published |
+      | news        | 1           | grid       | published |
+      | event       | 1           | list       | published |
+      | event       | 1           | grid       | published |
+      | document    | 1           | list       | published |
+      | document    | 1           | grid       | published |
       # Discussions don't have logos.
-      | discussion  | should not be any image | list       | published |
-      | discussion  | should not be any image | grid       | published |
+      | discussion  | 0           | list       | published |
+      | discussion  | 0           | grid       | published |
 
   @javascript
   Scenario: Up to 4 topics should be shown for tile-two view modes.
