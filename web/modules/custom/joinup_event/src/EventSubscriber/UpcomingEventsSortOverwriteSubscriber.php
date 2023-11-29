@@ -10,8 +10,7 @@ use Drupal\search_api\Query\QueryInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
- * Alter a search query with a 'views_content_overview' tag before it gets
- * executed.
+ * Alter a search query with a 'views_content_overview' tag.
  */
 class UpcomingEventsSortOverwriteSubscriber implements EventSubscriberInterface {
 
@@ -46,9 +45,7 @@ class UpcomingEventsSortOverwriteSubscriber implements EventSubscriberInterface 
     // When filtering for upcoming events, show first the events that are going
     // to happen sooner.
     $order = isset($facets['event_date']) && $facets['event_date']->isActiveValue('upcoming_events') ? QueryInterface::SORT_ASC : QueryInterface::SORT_DESC;
-    $sorts = [
-        'field_event_date' => $order,
-      ] + $sorts;
+    $sorts = ['field_event_date' => $order] + $sorts;
   }
 
 }
