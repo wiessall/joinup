@@ -18,7 +18,7 @@ Feature: OSS catalogue search
 
     When I visit the OSS search page
     Then I see the text "EU Open Source Solutions Catalogue" in the "Header" region
-    And I see the text "Open source software of interest for Public Administrations" in the "Header" region
+    And I see the text "Solutions created by and for European Public Services" in the "Header" region
 
     Given oss_solution content:
       | title                           | oss_development_status | oss_source        | oss_categories                                                  | oss_short_description                                                                                                                         | oss_git_description                                                               | status    | oss_release_date | oss_software_version |
