@@ -58,8 +58,10 @@ class AdjustGroupContentSubscriber implements EventSubscriberInterface {
       ->getKey('id'), $entity->id(), '<>');
 
     // Exclude custom pages and discussion from the group overview.
-    $query->addCondition('entity_bundle', 'custom_page', '<>');
-    $query->addCondition('entity_bundle', 'discussion', '<>');
+    $query->addCondition('entity_bundle', [
+      'custom_page',
+      'discussion',
+    ], 'NOT IN');
   }
 
 }
