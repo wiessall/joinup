@@ -336,7 +336,7 @@ class AccessibilityContext extends RawDrupalContext {
   /**
    * Captures the current feature file.
    *
-   * @param BeforeFeatureScope $scope
+   * @param \Behat\Behat\Hook\Scope\BeforeFeatureScope $scope
    *   The scope object.
    *
    * @beforeFeature
@@ -348,8 +348,8 @@ class AccessibilityContext extends RawDrupalContext {
   /**
    * Captures the current scenario line.
    *
-   * @param BeforeScenarioScope $scope
-   *    The scope object.
+   * @param \Behat\Behat\Hook\Scope\BeforeScenarioScope $scope
+   *   The scope object.
    *
    * @beforeScenario @api&&@javascript
    */
