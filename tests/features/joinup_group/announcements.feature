@@ -410,7 +410,7 @@ Feature: Messaging group announcements
       | collection |
       | solution   |
 
-  @javascript
+  @javascript @group-jgroup
   Scenario: Announcement moderation
     Given the following collections:
       | title       | state     |

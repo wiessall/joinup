@@ -1,4 +1,4 @@
-@api @group-f
+@api @group-a
 Feature: Site search
   As an analytics engineer
   I want search statistics grouped by the keyword

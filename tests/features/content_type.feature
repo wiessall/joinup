@@ -1,4 +1,4 @@
-@api @group-a @content_type
+@api @content_type
 Feature:
   As the administrator of content types
   I should be able to add a new content type through Drupal UI.

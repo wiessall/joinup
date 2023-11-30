@@ -1,4 +1,4 @@
-@api @group-d
+@api @group-jdoc
 Feature: Document API
   In order to manage document entities programmatically
   As a backend developer

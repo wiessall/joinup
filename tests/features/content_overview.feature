@@ -1,4 +1,4 @@
-@api @group-a
+@api
 Feature: Content Overview
 
   @terms

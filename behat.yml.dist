@@ -311,9 +311,64 @@ clean:
       paths: *paths
       filters:
         tags: '~@wip&&@group-user'
+    group_assetrelease:
+      contexts: *contexts
+      paths: *paths
+      filters:
+        tags: '~@wip&&@group-assetrelease'
+    group_comment:
+      contexts: *contexts
+      paths: *paths
+      filters:
+        tags: '~@wip&&@group-comment'
+    group_communities:
+      contexts: *contexts
+      paths: *paths
+      filters:
+        tags: '~@wip&&@group-communities'
+    group_cf:
+      contexts: *contexts
+      paths: *paths
+      filters:
+        tags: '~@wip&&@group-cf'
+    group_ci:
+      contexts: *contexts
+      paths: *paths
+      filters:
+        tags: '~@wip&&@group-ci'
+    group_jdoc:
+      contexts: *contexts
+      paths: *paths
+      filters:
+        tags: '~@wip&&@group-jdoc'
+    group_jev:
+      contexts: *contexts
+      paths: *paths
+      filters:
+        tags: '~@wip&&@group-jev'
+    group_jlic:
+      contexts: *contexts
+      paths: *paths
+      filters:
+        tags: '~@wip&&@group-jlic'
+    group_jnews:
+      contexts: *contexts
+      paths: *paths
+      filters:
+        tags: '~@wip&&@group-jnews'
+    group_jsearch:
+      contexts: *contexts
+      paths: *paths
+      filters:
+        tags: '~@wip&&@group-jsearch'
+    group_menu:
+      contexts: *contexts
+      paths: *paths
+      filters:
+        tags: '~@wip&&@group-menu'
 
     default:
       contexts: *contexts
       paths: *paths
       filters:
-        tags: '~@wip&&~@group-a&&~@group-b&&~@group-c&&~@group-d&&~@group-e&&~@group-f&&~@group-g&&~@group-h&&~@group-i&&~@group-clone&&~@group-comm&&~@group-custompage&&~@group-jcore&&~@group-jdiscussion&&~@group-jgroup&&~@group-jseo&&~@group-jsubscription&&~@group-jmoderator&&~@group-jpara&&~@group-user'
+        tags: '~@wip&&~@group-a&&~@group-b&&~@group-c&&~@group-d&&~@group-e&&~@group-f&&~@group-g&&~@group-h&&~@group-i&&~@group-clone&&~@group-comm&&~@group-custompage&&~@group-jcore&&~@group-jdiscussion&&~@group-jgroup&&~@group-jseo&&~@group-jsubscription&&~@group-jmoderator&&~@group-jpara&&~@group-user&&~@group-assetrelease&&~@group-comment&&~@group-communities&&~@group-cf&&~@group-ci&&~@group-jev&&~@group-jdoc&&~@group-jlic&&~@group-jnews&&~@group-jsearch&&~@group-menu'

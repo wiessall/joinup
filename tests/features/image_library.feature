@@ -1,4 +1,4 @@
-@api @group-a
+@api
 Feature:
   - As a moderator, I am able to pre-upload images for logos.
 

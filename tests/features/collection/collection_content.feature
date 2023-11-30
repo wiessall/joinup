@@ -1,4 +1,4 @@
-@api @terms @group-h
+@api @terms @group-b
 Feature: Collection content
   As a user of the website
   I want to access the content of a collection

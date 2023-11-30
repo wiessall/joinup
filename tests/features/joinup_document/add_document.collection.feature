@@ -1,4 +1,4 @@
-@api @group-d
+@api @group-jdoc
 Feature: "Add document" visibility options.
   In order to manage documents
   As a collection member

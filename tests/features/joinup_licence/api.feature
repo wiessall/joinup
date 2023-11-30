@@ -1,4 +1,4 @@
-@api
+@api @group-jlic
 Feature: Licence API
   In order to manage licences programmatically
   As a backend developer

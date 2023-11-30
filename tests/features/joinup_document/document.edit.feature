@@ -1,4 +1,4 @@
-@api @group-d
+@api @group-jdoc
 Feature: "Document page" editing.
   In order to manage documents
   As an owner of the document

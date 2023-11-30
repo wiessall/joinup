@@ -1,4 +1,4 @@
-@api @group-h
+@api @group-b
 Feature: Collection moderation
   In order to manage collections programmatically
   As a user of the website

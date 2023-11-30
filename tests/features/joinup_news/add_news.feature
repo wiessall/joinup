@@ -1,4 +1,4 @@
-@api @terms
+@api @terms @group-jnews
 Feature: Creation of news through the UI.
   In order to manage news
   As a user
