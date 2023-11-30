@@ -1,4 +1,4 @@
-@api @group-d
+@api @group-h
 Feature: Editing collections
   In order to manage collections
   As a collection owner or collection facilitator

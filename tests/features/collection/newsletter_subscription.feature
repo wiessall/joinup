@@ -1,4 +1,4 @@
-@api @terms @group-c
+@api @terms @group-h
 Feature: Subscribing to collection newsletters
   In order to promote my collection
   As a collection owner
