@@ -503,9 +503,9 @@ module.exports = {
     {
       entry: path.resolve(
         outputFolder,
-        `${ventuno}src/scss/components/web-forms.scss`
+        `${ventuno}src/scss/components/webform.scss`
       ),
-      dest: path.resolve(outputFolder, `${ventuno}assets/css/web-forms.min.css`),
+      dest: path.resolve(outputFolder, `${ventuno}assets/css/webform.min.css`),
       options: {
         includePaths,
         minify: true,
