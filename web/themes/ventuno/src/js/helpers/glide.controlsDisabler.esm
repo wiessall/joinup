@@ -25,7 +25,7 @@ function ControlsDisabler(Glide, Components) {
         Glide.disable();
       }
 
-      Glide.on(["mount.after", "run"], () => {
+      Glide.on(["mount.after", "run", "resize"], () => {
         Components.Controls.items.forEach((controlItem) => {
           // Set left arrow state
           const left = controlItem.querySelector(`.${classes.backArrow}`);
