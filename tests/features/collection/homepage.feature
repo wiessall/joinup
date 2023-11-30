@@ -1,4 +1,4 @@
-@api @terms @group-h
+@api @terms @group-b
 Feature: Collection homepage
   In order find content around a topic
   As a user of the website

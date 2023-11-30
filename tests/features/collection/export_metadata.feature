@@ -1,4 +1,4 @@
-@api @group-h
+@api @group-b
 Feature: Export collection metadata
   As a user of Joinup I should be able to download the ADMS properties of the collections.
 

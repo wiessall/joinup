@@ -1,4 +1,4 @@
-@api @group-a
+@api @group-h
 Feature: Distribution API
   In order to manage solutions programmatically
   As a backend developer

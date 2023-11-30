@@ -1,4 +1,4 @@
-@api @terms @group-f
+@api @terms @group-c
 Feature: Owner moderation
   In order to manage owners
   As a user of the website

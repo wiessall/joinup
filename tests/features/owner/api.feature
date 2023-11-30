@@ -1,4 +1,4 @@
-@api @group-f
+@api @group-c
 Feature: Owner API
   In order to manage owners programmatically
   As a backend developer

@@ -1,4 +1,4 @@
-@api
+@api @group-menu
 Feature:
   As a moderator of the website
   In order to present proper footer information to the user

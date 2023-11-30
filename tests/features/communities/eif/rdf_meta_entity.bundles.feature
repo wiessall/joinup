@@ -1,4 +1,4 @@
-@api @group-i
+@api @group-communities
 Feature:
   In order to manage the EIF perspective
   as a user of the website

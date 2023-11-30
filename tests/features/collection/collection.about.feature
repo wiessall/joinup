@@ -1,4 +1,4 @@
-@api @group-h
+@api @group-b
 Feature: About page
   In order to present an overview of the purpose of my collection
   As a collection owner
