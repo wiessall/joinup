@@ -1,4 +1,4 @@
-@api @group-d
+@api @group-h
 Feature: Collections Overview
 
   @terms @uploadFiles:logo.png
