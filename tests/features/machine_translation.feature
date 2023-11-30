@@ -1,4 +1,4 @@
-@api @group-g
+@api @group-a
 Feature: Machine translation
   As a citizen of the European Union
   I am likely not to have English as my native language

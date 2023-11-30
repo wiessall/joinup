@@ -1,4 +1,4 @@
-@api
+@api @group-a
 Feature: Header
   In order to allow users to quickly get to important sections of the site
   As a UX designer

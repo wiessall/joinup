@@ -1,4 +1,4 @@
-@javascript @api
+@javascript @api @group-a
 Feature:
   - As a moderator I want to be able to manage the outdated content thresholds.
   - As a user, regardless of role, I want to see a notice on outdated content.
