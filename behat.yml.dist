@@ -14,6 +14,7 @@
         wcag21a: WCAG 2.1 A
         wcag21aa: WCAG 2.1 AA
         wcag411: Criterion 4.1.1
+        'cat.text-alternatives': Image text alternative
       excludeElements:
         # Third-party code injected in page with Javascript.
         - .globan
