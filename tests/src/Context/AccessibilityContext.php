@@ -60,8 +60,13 @@ class AccessibilityContext extends RawDrupalContext {
    * @param array $standardTags
    *   A list of configurable standard tags as an associative array keyed by tag
    *   and having the tag label as value.
+   * @param string[] $excludeElements
+   *   A list of CSS element selectors to be excluded from check.
    */
-  public function __construct(protected array $standardTags) {}
+  public function __construct(
+    protected array $standardTags,
+    protected array $excludeElements,
+  ) {}
 
   /**
    * Asserts that the current page meets accessibility standards.
@@ -184,7 +189,9 @@ class AccessibilityContext extends RawDrupalContext {
         'values' => $limitToTags,
       ],
     ]);
-
+    $context = $this->excludeElements ? Json::encode([
+      'exclude' => implode(',', $this->excludeElements),
+    ]) : 'body';
     return <<<JavaScript
       (axeJsSrc => {
         const axeRun = () => {
@@ -193,7 +200,7 @@ class AccessibilityContext extends RawDrupalContext {
           // We'll store the results directly on the HTML tag.
           axeJsElement.dataset.output = ''
 
-          axe.run('body', $options)
+          axe.run($context, $options)
             .then(results => {
               output.violations = results.violations;
               axeJsElement.dataset.output = JSON.stringify(output);
