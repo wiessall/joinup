@@ -14,6 +14,9 @@
         wcag2a: WCAG 2.1 A
         wcag2aa: WCAG 2.1 AA
         wcag411: Criterion 4.1.1
+      excludeElements:
+        # Third-party code injected in page with Javascript.
+        - .globan
   - Drupal\joinup\Context\AdmsValidatorContext
   - Drupal\joinup\Context\AssetDistributionContext
   - Drupal\joinup\Context\AssetReleaseContext
