@@ -28,7 +28,8 @@
     "slim-select": "^1.27.1"
   },
   "dependencies": {
-    "jquery-jsonview": "^1.2.3"
+    "jquery-jsonview": "^1.2.3",
+    "slick-carousel": ">1.8.1 || <1.8.1"
   },
   "scripts": {
     "watch": "npm-watch",
@@ -40,7 +41,7 @@
     "build:styles": "cross-env bcl-builder styles",
     "build:copy": "cross-env bcl-builder copy",
     "build:sprite": "cross-env bcl-builder sprite",
-    "postinstall": "patch-package --patch-dir=resources/patch/node && mkdir -p web/libraries/jquery-jsonview/dist && cp node_modules/jquery-jsonview/dist/* web/libraries/jquery-jsonview/dist/"
+    "postinstall": "patch-package --patch-dir=resources/patch/node && ./scripts/node/copy-libraries"
   },
   "watch": {
     "build:styles": {
