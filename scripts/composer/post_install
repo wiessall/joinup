@@ -7,14 +7,9 @@ composer validate --no-check-all --no-check-publish
 
 # Only run in pipeline.
 if [ -n "$CI_RUNNER_ID" ] && [ -n "$CI_RUNNER_DESCRIPTION" ]; then
-  echo "Running in GitLab Runner environment"
-  echo "Runner ID: $CI_RUNNER_ID"
-  echo "Runner Description: $CI_RUNNER_DESCRIPTION"
   apt-get update && apt-get install jq -y
-else
-  echo "Not running in GitLab Runner environment"
 fi
-jq –-version
+jq --version
 
 # Check that patches are local.
 for COMPOSER_PATCH in $(cat composer.json | jq --raw-output '.extra.patches[] | values[]')

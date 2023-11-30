@@ -1,8 +1,10 @@
 #!/bin/bash
 
 # Only run in pipeline.
-test ! -z CI || (apt-get update && apt-get install jq -y)
-jq –-version
+if [ -n "$CI_RUNNER_ID" ] && [ -n "$CI_RUNNER_DESCRIPTION" ]; then
+  apt-get update && apt-get install jq -y
+fi
+jq --version
 
 # Check that patches are local.
 for COMPOSER_PATCH in $(cat composer.json | jq --raw-output '.extra.patches[] | values[]')
