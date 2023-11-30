@@ -1,4 +1,4 @@
-@api @group-e @cookieConsent @antispam
+@api @group-user @cookieConsent @antispam
 Feature: Cookie consent
   In order to be compliant with the ePrivacy directive
   As a product owner

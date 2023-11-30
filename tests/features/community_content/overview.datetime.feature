@@ -1,4 +1,4 @@
-@api @group-b
+@api @group-comm
 Feature:
   As an owner of the website
   In order for my visitor to have more precise information on the actions taken on content

@@ -1,4 +1,4 @@
-@api @group-f
+@api @group-custompage
 Feature: Custom page API
   In order to manage custom pages programmatically
   As a backend developer

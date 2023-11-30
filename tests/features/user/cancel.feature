@@ -1,4 +1,4 @@
-@api @group-f
+@api @group-user
 Feature:
   In order to efficiently manage users
   As a moderator of the website

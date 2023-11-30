@@ -1,4 +1,4 @@
-@api @group-b
+@api @group-comm
 Feature:
   In order to see how content evolved over time
   As a content author or facilitator

@@ -1,4 +1,4 @@
-@api @group-e @terms @javascript
+@api @group-jpara @terms @javascript
 Feature:
   As a site builder of the site
   I need to be able to use "Accordion" paragraph for content.

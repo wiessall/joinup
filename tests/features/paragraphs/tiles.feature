@@ -1,4 +1,4 @@
-@api @group_e
+@api @group-jpara
 Feature:
   As a site builder of the site
   I need to be able to use "Tiles" paragraph for content.

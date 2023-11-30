@@ -1,8 +1,9 @@
-@api @group-g
+@api @group-e
 Feature: Creating a test (solution) in the TRR collection.
   In order to create tests
   As a collection facilitator
   I need to be able to add 'test'-enabled solutions.
+
   @terms @javascript
   Scenario: Test a TRR related fields
     Given the following collection:
@@ -59,6 +60,7 @@ Feature: Creating a test (solution) in the TRR collection.
     And the "Business process" field should contain ""
     And the "Product type" field should contain ""
     And the "Standardization level" field should contain the "- None -" option
+
   @terms @javascript
   Scenario: Create a TRR solution
     Given users:

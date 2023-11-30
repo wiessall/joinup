@@ -1,4 +1,4 @@
-@api @group-d
+@api @group-jgroup
 Feature: Collections/Solutions settings
   In order to edit collections/solutions settings
   As a collection/solution owner or moderator

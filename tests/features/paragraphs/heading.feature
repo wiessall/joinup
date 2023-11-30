@@ -1,4 +1,4 @@
-@api @group-c
+@api @group-jpara
 Feature:
   As a site builder of the site
   I need to be able to use "heading" paragraphs for content.

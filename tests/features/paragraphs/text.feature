@@ -1,4 +1,4 @@
-@api @terms @grouped
+@api @terms @grouped @group-jpara
 Feature:
   As a site builder of the site
   In order to be able to better control the structure of my content
