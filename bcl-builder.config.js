@@ -503,6 +503,18 @@ module.exports = {
     {
       entry: path.resolve(
         outputFolder,
+        `${ventuno}src/scss/components/web-forms.scss`
+      ),
+      dest: path.resolve(outputFolder, `${ventuno}assets/css/web-forms.min.css`),
+      options: {
+        includePaths,
+        minify: true,
+        sourceMap: "file",
+      },
+    },
+    {
+      entry: path.resolve(
+        outputFolder,
         `${ventuno}src/scss/components/group-banner.scss`
       ),
       dest: path.resolve(

@@ -159,6 +159,11 @@ forms:
   dependencies:
     - ventuno/highlight-invalid-fields.js
 
+web-forms:
+  css:
+    theme:
+      assets/css/web-forms.min.css: { minified: true }
+
 highlight-invalid-fields.js:
   header: true
   js:
