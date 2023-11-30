@@ -19,11 +19,16 @@ function ControlsDisabler(Glide, Components) {
       }
 
       // Prevent swipe if there are not enough items to fill available space.
-      if (Components.Sizes.length <= Glide.settings.perView) {
-        // Unfortunately `Swipe.disable()` does not work even though it should,
-        // see https://glidejs.com/docs/components/swipe#disable-
-        Glide.disable();
-      }
+      Glide.on(["mount.after", "resize"], () => {
+        if (Components.Sizes.length <= Glide.settings.perView) {
+          // Unfortunately `Swipe.disable()` does not work even though it
+          // should, see https://glidejs.com/docs/components/swipe#disable-
+          Glide.disable();
+        }
+        else {
+          Glide.enable();
+        }
+      });
 
       Glide.on(["mount.after", "run", "resize"], () => {
         Components.Controls.items.forEach((controlItem) => {
