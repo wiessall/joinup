@@ -1,4 +1,4 @@
-@api @group-g
+@api @group-i
 Feature: Video API
   In order to manage videos programmatically
   As a backend developer

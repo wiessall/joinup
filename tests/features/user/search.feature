@@ -1,4 +1,4 @@
-@api @group-g
+@api @group-user
 Feature: User management
   As a moderator I must be able to search users.
 

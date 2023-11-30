@@ -1,4 +1,4 @@
-@api @casMockServer @group-c
+@api @casMockServer @group-jcore
 Feature:
   As a user of the website
   When I try to login

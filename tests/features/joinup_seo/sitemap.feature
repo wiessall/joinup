@@ -1,4 +1,4 @@
-@api
+@api @group-jseo
 Feature:
   As the owner of the site
   In order to promote content to the search engines properly

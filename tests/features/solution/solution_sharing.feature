@@ -1,4 +1,4 @@
-@api @group-f
+@api @group-e
 Feature: As a privileged user
   I want to share solutions to my collections
   So that useful information has more visibility

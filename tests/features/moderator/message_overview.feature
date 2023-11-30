@@ -1,4 +1,4 @@
-@api @group-i
+@api @group-jmoderator
 Feature: Solutions message overview
   As a moderator of the site
   In order to be able to manage incoming requests

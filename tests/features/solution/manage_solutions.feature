@@ -1,4 +1,4 @@
-@api @group-f
+@api @group-e
 Feature: As a moderator I want to be able to move solutions to other collection.
 
   Scenario: Moderators can move a solution to a different collection.

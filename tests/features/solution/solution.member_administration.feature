@@ -1,4 +1,4 @@
-@api @terms @group-g
+@api @terms @group-e
 Feature: Solution membership administration
   In order to manage a solution
   As a solution facilitator

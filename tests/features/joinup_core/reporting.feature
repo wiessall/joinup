@@ -1,4 +1,4 @@
-@api @group-e
+@api @group-jcore
 Feature:
   As a site moderator/administrator
   When I'm logged in

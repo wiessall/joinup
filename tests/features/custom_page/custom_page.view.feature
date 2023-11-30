@@ -1,4 +1,4 @@
-@api @group-f
+@api @group-custompage
 Feature:
   As a privileged user
   I want to create custom pages inside unpublished collections or solutions

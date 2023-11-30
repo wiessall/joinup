@@ -1,4 +1,4 @@
-@api @terms @group-f
+@api @terms @group-e
 Feature: Test for a 'facets' regression on the solution overview page.
   # @see ISAICP-4188
   Scenario: Test that no pager is shown on the solution page when not needed.

@@ -1,4 +1,4 @@
-@api @terms @group-g
+@api @terms @group-e
 Feature: Related solution
   As a solution facilitator, I need to be able to relate my solution to other
   solutions and present the related solutions to the users.

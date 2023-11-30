@@ -1,4 +1,4 @@
-@api @group-c
+@api @group-jgroup
 Feature:
   In order to understand how my group is being used
   As a facilitator

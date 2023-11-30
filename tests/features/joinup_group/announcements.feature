@@ -1,6 +1,8 @@
+# Contains a scenario with @group-clone annotation.
 @api
 Feature: Messaging group announcements
 
+  @group-jgroup
   Scenario Outline: Announcement creation and transitions
 
     Given the following <group>s:

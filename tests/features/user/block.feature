@@ -1,4 +1,4 @@
-@api @group-e
+@api @group-user
 Feature: Block users
   As a moderator I must be able to block users.
 

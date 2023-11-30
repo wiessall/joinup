@@ -1,4 +1,4 @@
-@api @group-i
+@api @group-jmoderator
 Feature:
   As a moderator
   When I urgently need to import some federated content
