@@ -27,7 +27,6 @@ upgrade_commands:
 php_version: 8.2
 extra_pkgs:
   - php8.2-apcu
-  - jq
 
 mysql_version: "8.0"
 

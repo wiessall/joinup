@@ -5,10 +5,9 @@ set -e
 # Check that composer.lock hash is in sync.
 composer validate --no-check-all --no-check-publish
 
-if command -v jq >/dev/null 2>&1; then
-  jq_version=$(jq --version)
-  echo "jq is installed. Version: $jq_version"
-fi
+# Only run in pipeline.
+test ! -z CI || (apt-get update && apt-get install jq -y)
+jq –-version
 
 # Check that patches are local.
 for COMPOSER_PATCH in $(cat composer.json | jq --raw-output '.extra.patches[] | values[]')
