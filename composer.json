@@ -107,8 +107,6 @@
         "drupal/webform": "^6.2",
         "drush/drush": "^12.1",
         "ec-europa/spdx": "^1.0",
-        "npm-asset/slick-carousel": "1.8.0",
-        "oomphinc/composer-installers-extender": "^2.0",
         "openeuropa/composer-artifacts": "^1.0",
         "openeuropa/gisco-geocoding-provider": "^1.0",
         "openeuropa/oe_bootstrap_theme": "^1.0",
@@ -173,8 +171,7 @@
             "drupal/core-composer-scaffold": true,
             "openeuropa/composer-artifacts": true,
             "phpstan/extension-installer": true,
-            "php-http/discovery": true,
-            "oomphinc/composer-installers-extender": true
+            "php-http/discovery": true
         }
     },
     "autoload": {
@@ -218,9 +215,7 @@
         ]
     },
     "extra": {
-        "installer-types": ["bower-asset", "npm-asset"],
         "installer-paths": {
-            "web/libraries/slick": ["npm-asset/slick-carousel"],
             "drush/Commands/{$name}": ["type:drupal-drush"],
             "drush/contrib/{$name}": ["type:drupal-drush"],
             "web/core": ["type:drupal-core"],
@@ -485,10 +480,6 @@
         {
             "type": "vcs",
             "url": "https://github.com/ec-europa/virtuoso.git"
-        },
-        {
-            "type": "composer",
-            "url": "https://asset-packagist.org"
         }
     ]
 }
