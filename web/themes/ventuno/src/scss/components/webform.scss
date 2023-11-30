@@ -33,7 +33,7 @@
         text-align: left;
         position: relative;
         .image-button {
-           display: inline-block;
+          display: inline-block;
         }
         &:after {
           content: 'Remove item';
@@ -63,18 +63,17 @@
     color: $body-color;
   }
 
-  .table>:not(caption)>*>* {
+  .table > :not(caption) > * > * {
     border-width: 0;
     padding: 0rem 1.5rem 0 0;
   }
-  .table-bordered>:not(caption)> * {
+  .table-bordered > :not(caption) > * {
     border-width: 0;
   }
 }
 
 // Styles specifically for the Public Sector Tech Watch webform paragraph.
 .webform-submission-public-sector-tech-watch-form {
-  
   .form-item-geographical-coverage-section {
     .webform-multiple-table {
       table {
