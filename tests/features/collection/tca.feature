@@ -1,4 +1,4 @@
-@api @group-b
+@api @group-a
 Feature: Collection TCA agreement
   In order to ensure activity by facilitators
   As a site owner
