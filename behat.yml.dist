@@ -196,6 +196,7 @@ default:
         Draft unpublished block: '#block-ventuno-unpublished-draft'
         Proposed unpublished block: '#block-ventuno-unpublished-proposed'
         Other unpublished block: '#block-ventuno-unpublished-other'
+        Visually hidden title: '#block-ventuno-pagetitle .visually-hidden'
       drupal:
         drupal_root: ${joinup.site_dir}
       selectors:
