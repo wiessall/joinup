@@ -1,0 +1,7 @@
+field.formatter.third_party.joinup_slick:
+  type: mapping
+  label: 'Slick carousel settings'
+  mapping:
+    preset:
+      type: string
+      label: 'ID of the Slick carousel preset'

@@ -29,8 +29,12 @@
   }
 }
 
-.shadow-hover {
+.shadow {
   box-shadow: $box-shadow;
+}
+
+.shadow-hover {
+  @extend .shadow;
   &:hover {
     box-shadow: $box-shadow-lg;
   }

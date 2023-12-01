@@ -111,8 +111,8 @@ Feature:
       | name  |
       | macOs |
     Given oss_solution content:
-      | title                  | oss_available_languages | oss_development_status | oss_source        | oss_categories                    | oss_long_description                                                                             | oss_short_description | oss_git_description | status    | oss_release_date | oss_documentation   | oss_features         | oss_git_url         | oss_landing_url     | oss_license      | oss_logo                         | oss_maintenance_contacts | oss_maintenance_contractors | oss_maintenance_type | oss_owner       | oss_platforms | oss_publiccode_yml_version | oss_scope                       | oss_screenshots                                                   | oss_software_type  | oss_software_version | oss_vitality_index | oss_used_by                                        |
-      | Super Awesome Software | it,en,de,error,pt       | stable                 | developers_italia | document-management,collaboration | The long description. A patient developer can make this long enough to be at least 5 lines long. | The short description | The GIT description | published | 2014-11-19       | https://example.com | Feature A, Feature B | https://example.com | https://example.com | GPL-2.0-or-later | https://placehold.co/200x200.png | FOSS Conference          | ACME Ltd.                   | community            | FOSS Conference | macOs         | 0.4                        | science-and-technology,security | https://placehold.co/600x400.png,https://placehold.co/400x400.png | standalone/desktop | 3.17.143             | 0.41               | Administration 1,Administration 2,Administration 3 |
+      | title                  | oss_available_languages | oss_development_status | oss_source        | oss_categories                    | oss_long_description                                                                             | oss_short_description | oss_git_description | status    | oss_release_date | oss_documentation   | oss_features         | oss_git_url         | oss_landing_url     | oss_license      | oss_logo                         | oss_maintenance_contacts | oss_maintenance_contractors | oss_maintenance_type | oss_owner       | oss_platforms | oss_publiccode_yml_version | oss_scope                       | oss_screenshots                                                                                    | oss_software_type  | oss_software_version | oss_vitality_index | oss_used_by                                        |
+      | Super Awesome Software | it,en,de,error,pt       | stable                 | developers_italia | document-management,collaboration | The long description. A patient developer can make this long enough to be at least 5 lines long. | The short description | The GIT description | published | 2014-11-19       | https://example.com | Feature A, Feature B | https://example.com | https://example.com | GPL-2.0-or-later | https://placehold.co/200x200.png | FOSS Conference          | ACME Ltd.                   | community            | FOSS Conference | macOs         | 0.4                        | science-and-technology,security | https://placehold.co/600x400.png,https://placehold.co/400x400.png,https://placehold.co/800x400.jpg | standalone/desktop | 3.17.143             | 0.41               | Administration 1,Administration 2,Administration 3 |
     When I go to the content page of the type "oss_solution" with the title "Super Awesome Software"
     Then I should be on "/eu-oss-catalogue/solutions/super-awesome-software"
     And the site should not have log records with level lower than "notice"
@@ -172,12 +172,20 @@ Feature:
       # Audience
       | science-and-technology           |
       | security                         |
-      # Gallery.
-      | https://placehold.co/600x400.png |
-      | https://placehold.co/400x400.png |
     And I should not see the following links:
       | Show all 3 administrations |
       | Show administration        |
+      # We should see the actual images instead.
+      | https://placehold.co/600x400.png |
+      | https://placehold.co/400x400.png |
+      | https://placehold.co/800x400.jpg |
+    But I should have the following images on the page in this order
+      # Downloaded instance of https://placehold.co/600x400.png
+      | 99ccd804281fede2d4e3dcc3a9b30a4c.png |
+      # Downloaded instance of https://placehold.co/400x400.png.
+      | 93ac8cf04f904a4f19a8418fd565a448.png |
+      # Downloaded instance of https://placehold.co/800x400.jpg.
+      | aeea83704c583614d4900c69de40802c.jpg |
     # Clicking links of Categories, Providers or Audience must navigate to
     # search.
     When I click "document-management"
@@ -266,3 +274,36 @@ Feature:
     And I should not see the following lines of text:
       | Administration 6 |
       | Administration 7 |
+
+  @javascript
+  Scenario: Screenshot carousel with 4 items works as expected.
+    Given oss_solution content:
+      | title | oss_screenshots                                                                                    | oss_development_status | oss_source        | oss_categories   | status    | oss_release_date |
+      | Four  | https://placehold.co/800x400.jpg,https://placehold.co/500x400.png,https://placehold.co/700x400.png,https://placehold.co/600x400.png | stable                 | developers_italia | data-analytics   | published | 2014-11-19       |
+    When I go to the content page of the type "oss_solution" with the title "Four"
+    Then I should see the text "Gallery"
+    And I should have the following images on the page in this order
+      # Downloaded instance of https://placehold.co/800x400.jpg.
+      | aeea83704c583614d4900c69de40802c.jpg |
+      # Downloaded instance of https://placehold.co/500x400.png.
+      | b68f93a5aca1d09eb50e9ea901b90d7c.png |
+      # Downloaded instance of https://placehold.co/700x400.png
+      | ef8676b28d34d82c4a0688a35ec76335.png |
+      # Downloaded instance of https://placehold.co/600x400.png
+      | 99ccd804281fede2d4e3dcc3a9b30a4c.png |
+    # Assuming 1600px wide browser window.
+    And I should see the following images on the page
+      # First 3 images must be visible.
+      | aeea83704c583614d4900c69de40802c.jpg |
+      | b68f93a5aca1d09eb50e9ea901b90d7c.png |
+      | ef8676b28d34d82c4a0688a35ec76335.png |
+    # Fourth must not be visible yet.
+    And I should not see the image "99ccd804281fede2d4e3dcc3a9b30a4c.png"
+    Then I click on element ".slick--optionset--oss-solution-screenshot button[aria-label='Next']:not([aria-disabled='true'])"
+    And I wait up to "5" seconds for CSS transitions to finish
+    And I should see the image "99ccd804281fede2d4e3dcc3a9b30a4c.png"
+    Then I click on element ".slick--optionset--oss-solution-screenshot button[aria-label='Previous']:not([aria-disabled='true'])"
+    And I wait up to "5" seconds for CSS transitions to finish
+    And I should not see the image "99ccd804281fede2d4e3dcc3a9b30a4c.png"
+    And the page should have an element with CSS selector ".slick--optionset--oss-solution-screenshot button[aria-label='Previous'][aria-disabled='true']"
+

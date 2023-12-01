@@ -318,4 +318,7 @@ settings:
   simple_sitemap:
     handler: 'default:simple_sitemap'
     handler_settings: {  }
+  slick:
+    handler: 'default:slick'
+    handler_settings: {  }
 field_type: dynamic_entity_reference
