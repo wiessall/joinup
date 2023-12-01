@@ -69,6 +69,16 @@ function custom_page_entity_bundle_field_info_alter(&$fields, EntityTypeInterfac
 }
 
 /**
+ * Implements hook_preprocess_HOOK().
+ */
+function custom_page_preprocess_page_title__node__custom_page(&$variables): void {
+  /** @var \Drupal\custom_page\Entity\CustomPageInterface $customPage */
+  $customPage = $variables['entity'];
+  $variables['additional_content']['hide_title'] =
+    $customPage->get('field_hide_title')->getString() === '1';
+}
+
+/**
  * Implements hook_ENTITY_TYPE_insert().
  *
  * - Creates a menu link whenever a new custom page is created.
