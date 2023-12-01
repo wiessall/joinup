@@ -11,9 +11,13 @@
       # Todo The list of tags should be expanded in ISAICP-8256.
       # See https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-8256
       standardTags:
-        wcag2a: WCAG 2.1 A
-        wcag2aa: WCAG 2.1 AA
+        wcag21a: WCAG 2.1 A
+        wcag21aa: WCAG 2.1 AA
         wcag411: Criterion 4.1.1
+        'cat.text-alternatives': Image text alternative
+      excludeElements:
+        # Third-party code injected in page with Javascript.
+        - .globan
   - Drupal\joinup\Context\AdmsValidatorContext
   - Drupal\joinup\Context\AssetDistributionContext
   - Drupal\joinup\Context\AssetReleaseContext
