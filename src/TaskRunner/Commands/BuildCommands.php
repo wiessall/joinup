@@ -50,13 +50,6 @@ class BuildCommands extends AbstractCommands {
       ->stopOnFail()
       ->exec('git archive HEAD --worktree-attributes | tar -x -C ' . $options['dist-root']);
 
-    $tasks[] = $this->taskComposerInstall()
-      ->env('COMPOSER_MIRROR_PATH_REPOS', 1)
-      ->env('BUILD_DISTRO', 1)
-      ->workingDir($options['dist-root'])
-      ->optimizeAutoloader()
-      ->noDev();
-
     // Add stage_file_proxy in ephemeral and acceptance environments. This
     // module is required as `require-dev` in the project, as an effect it will
     // not be installed in distribution. Should be removed from `require-dev`
@@ -75,10 +68,15 @@ class BuildCommands extends AbstractCommands {
         ->workingDir($options['dist-root'])
         ->dependency('drupal/stage_file_proxy', $version)
         ->option('update-no-dev')
-        ->optimizeAutoloader()
-        ->noScripts()
-        ->disablePlugins();
+        ->noScripts();
     }
+
+    $tasks[] = $this->taskComposerInstall()
+      ->env('COMPOSER_MIRROR_PATH_REPOS', 1)
+      ->env('BUILD_DISTRO', 1)
+      ->workingDir($options['dist-root'])
+      ->optimizeAutoloader()
+      ->noDev();
 
     $tasks[] = $this->taskExec("{$config->get('runner.bin_dir')}/run")
       ->arg('drupal:settings')
