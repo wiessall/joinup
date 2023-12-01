@@ -69,6 +69,12 @@ class BuildCommands extends AbstractCommands {
         ->dependency('drupal/stage_file_proxy', $version)
         ->option('update-no-dev')
         ->noScripts();
+      // Add stage_file_proxy configuration.
+      $tasks[] = $this->taskExec("{$config->get('runner.bin_dir')}/run")
+        ->arg('drupal:settings')
+        ->arg('acc-override')
+        ->option('filename', 'settings.override.php')
+        ->option('root', "$distDir/web");
     }
 
     $tasks[] = $this->taskComposerInstall()
