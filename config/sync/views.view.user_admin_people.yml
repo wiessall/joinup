@@ -971,11 +971,11 @@ display:
             user_bulk_form: user_bulk_form
             name: name
             status: status
+            mail: mail
             roles_target_id: roles_target_id
             created: created
             access: access
             operations: operations
-            mail: mail
           default: created
           info:
             user_bulk_form:
@@ -997,6 +997,13 @@ display:
               separator: ''
               empty_column: false
               responsive: priority-low
+            mail:
+              sortable: true
+              default_sort_order: asc
+              align: ''
+              separator: ''
+              empty_column: false
+              responsive: ''
             roles_target_id:
               sortable: false
               default_sort_order: asc
@@ -1019,13 +1026,6 @@ display:
               empty_column: false
               responsive: priority-low
             operations:
-              align: ''
-              separator: ''
-              empty_column: false
-              responsive: ''
-            mail:
-              sortable: false
-              default_sort_order: asc
               align: ''
               separator: ''
               empty_column: false
@@ -1057,7 +1057,10 @@ display:
       link_url: ''
       display_comment: ''
       hide_attachment_summary: false
-      display_extenders: {  }
+      display_extenders:
+        metatag_display_extender:
+          metatags: {  }
+          tokenize: false
     cache_metadata:
       max-age: 0
       contexts:
