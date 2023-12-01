@@ -31,8 +31,3 @@ RUN if [ ! -z "${GROUP_ID}" ] && [ -z $(grep -E "[^\:]*\:${GROUP_ID}\:$" /etc/gr
 RUN mkdir -p /tmp/behat_gherkin_cache /tmp/behat_rerun_cache /tmp/drupal && \
     chown -R www-data:www-data /tmp/behat_gherkin_cache /tmp/behat_rerun_cache \
     /tmp/drupal
-
-RUN apt-get update && \
-    apt-get install jq -y && \
-    apt-get autoclean && \
-    apt-get autoremove
