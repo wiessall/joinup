@@ -209,6 +209,7 @@ drupal:
         $settings['config_exclude_modules'] = [
           'admin_toolbar',
           'admin_toolbar_tools',
+          'blazy_ui',
           'cas_mock_server',
           'composer_deploy',
           'config_update',
@@ -224,6 +225,7 @@ drupal:
           'memcache_admin',
           'og_ui',
           'page_manager_ui',
+          'slick_ui',
           'stage_file_proxy',
           'update',
           'upgrade_status',

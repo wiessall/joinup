@@ -1,0 +1,91 @@
+{#
+/**
+ * @file
+ * Template override for individual slides used in OSS solution screenshot.
+ *
+ * @see template_preprocess_slick_slide()
+ * @see @slick/slick-slide.html.twig
+ */
+#}
+{%
+  set classes = [
+    'slide--' ~ delta,
+    item.slide is empty ? 'slide--text',
+    settings.layout ? 'slide--caption--' ~ settings.layout|clean_class,
+    settings.class ? settings.class,
+    'p-2',
+  ]
+%}
+{%
+  set content_classes = [
+    settings.detroy ? 'slide',
+    not settings.detroy ? 'slide__content',
+    'rounded',
+    'overflow-hidden',
+    'shadow',
+  ]
+%}
+{%
+  set caption_classes = [
+    'slide__caption',
+  ]
+%}
+{% set use_blazy = blazies.use.theme_blazy %}
+{%- if settings.wrapper -%}
+<div{{ attributes.addClass(classes) }}>
+  {%- endif -%}
+
+  {%- if use_blazy -%}
+    {{- item -}}
+  {% else %}
+    {# @todo remove all below at 3.x for theme_blazy(). If you need to modify
+    anything, please use MYTHEME_preprocess_blazy() instead, starting at 3.x,
+    or better just use CSS for more reliable theming. FYI, theme_blazy()
+    offers greater possibility and versatility, that is why it is deprecated. #}
+    {%- if settings.use_ca -%}<div{{ content_attributes.addClass(content_classes) }}>{%- endif -%}
+    {% set slide %}
+      {% block slick_slide %}
+        {%- if settings.split -%}
+          <div class="slide__media">{{- item.slide -}}</div>
+        {% else %}
+          {{- item.slide -}}
+        {%- endif -%}
+      {% endblock %}
+    {% endset %}
+
+    {%- if item.slide -%}
+      {{- slide -}}
+    {%- endif -%}
+
+    {%- if item.caption -%}
+      {% block slick_caption %}
+        {%- if settings.fullwidth -%}<div class="slide__constrained">{%- endif -%}
+        <div{{ caption_attributes.addClass(caption_classes) }}>
+          {%- if item.caption.overlay -%}
+          <div class="slide__overlay">{{ item.caption.overlay }}</div>
+          {%- if settings.data -%}<div class="slide__data">{%- endif -%}
+            {%- endif -%}
+            {%- if item.caption.title -%}
+              <h2 class="slide__title">{{ item.caption.title }}</h2>
+            {%- endif -%}
+            {%- if item.caption.alt -%}
+              <p class="slide__description">{{ item.caption.alt }}</p>
+            {%- endif -%}
+            {%- if item.caption.data -%}
+              <div class="slide__description">{{- item.caption.data -}}</div>
+            {%- endif -%}
+            {%- if item.caption.link -%}
+              <div class="slide__link">{{ item.caption.link }}</div>
+            {%- endif -%}
+            {%- if item.caption.overlay and settings.data -%}</div>{%- endif -%}
+        </div>
+        {%- if settings.fullwidth -%}</div>{%- endif -%}
+      {% endblock %}
+    {%- endif -%}
+
+    {%- if settings.use_ca -%}</div>{%- endif -%}
+  {%- endif -%}
+
+  {%- if settings.wrapper -%}
+</div>
+{%- endif -%}

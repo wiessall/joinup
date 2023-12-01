@@ -39,6 +39,7 @@ dependencies:
   module:
     - custom_markup_block
     - joinup_layout
+    - joinup_slick
     - layout_builder
     - layout_discovery
     - user
@@ -339,20 +340,17 @@ third_party_settings:
             configuration:
               id: 'field_block:node:oss_solution:oss__screenshots'
               label: Gallery
-              label_display: visible
+              label_display: '0'
               provider: layout_builder
               context_mapping:
                 entity: layout_builder.entity
                 view_mode: view_mode
               formatter:
-                type: link
+                type: imagecache_external_responsive_image
                 label: hidden
                 settings:
-                  trim_length: null
-                  url_only: false
-                  url_plain: false
-                  rel: nofollow
-                  target: _blank
+                  imagecache_external_link: ''
+                  imagecache_external_responsive_style: oss_solution_screenshot
                 third_party_settings:
                   field_delimiter:
                     delimiter: ''
@@ -360,6 +358,8 @@ third_party_settings:
                     order: 0
                     limit: 0
                     offset: 0
+                  joinup_slick:
+                    preset: oss_solution_screenshot
                   template_suggestion:
                     template_suggestion: ''
             weight: 1
