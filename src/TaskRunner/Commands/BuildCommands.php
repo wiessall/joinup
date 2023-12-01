@@ -56,7 +56,10 @@ class BuildCommands extends AbstractCommands {
       ->optimizeAutoloader()
       ->noDev();
 
-    // Add stage_file_proxy in ephemeral and acceptance environments.
+    // Add stage_file_proxy in ephemeral and acceptance environments. This
+    // module is required as `require-dev` in the project, as an effect it will
+    // not be installed in distribution. Should be removed from `require-dev`
+    // and reinstalled as `require` package.
     if (ToolCommands::getDeploymentEnvironment() === 'acc') {
       $tasks[] = $this->taskComposerRemove()
         ->workingDir($options['dist-root'])
