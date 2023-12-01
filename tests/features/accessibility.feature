@@ -13,7 +13,9 @@ Feature: Accessibility
       | /collection/are3na/solution/re3gistry/news/re3gistry-2022-foss4g-firenze                                                        |
       | /collection/egovernment/news/testa-trusted-solution-endorsed-member-states                                                      |
       | /collection/eupl/news/jrc-and-fao-experts-licensing-assessment                                                                  |
+      | /collection/govtechconnect/news/register-govtech-connect-govtech4all-webinar                                                    |
       | /collection/interoperability-test-bed-repository/solution/interoperability-test-bed/news/validator-plugin-guide                 |
+      | /collection/joinup                                                                                                              |
       | /collection/joinup/about                                                                                                        |
       | /collection/joinup/faq                                                                                                          |
       | /collection/joinup/interoperability-solutions                                                                                   |
@@ -22,6 +24,9 @@ Feature: Accessibility
       | /collection/open-data/news/register-finals-eu-datathon-2022                                                                     |
       | /collection/open-source-observatory-osor/event/open-source-summit-europe                                                        |
       | /collection/open-source-observatory-osor/news/co2-tool-accounting-code                                                          |
+      | /collection/shared-solutions-public-sector-catalonia-aoc-consortium/solution/tools-e-procurement-local-authorities-catalonia    |
+      | /interoperable-europe/event/register-biggest-2023-open-source-conference-brussels                                               |
+      | /interoperable-europe/news/govtech-incubator-launched-2023-digital-government-summit                                            |
       | /search                                                                                                                         |
       | /search?f[0]=topic:http%3A//joinup.eu/ontology/topic%23content-and-knowledge-management                                         |
       | /search?f[0]=topic:http%3A//joinup.eu/ontology/topic%23egovernment                                                              |

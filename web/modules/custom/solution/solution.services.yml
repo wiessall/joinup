@@ -36,3 +36,7 @@ services:
     class: Drupal\solution\EventSubscriber\SolutionGroupMenuLinksSubscriber
     tags:
       - { name: event_subscriber }
+  solution.adjust_group_content_subscriber:
+    class: Drupal\solution\EventSubscriber\AdjustSolutionContentSubscriber
+    tags:
+      - { name: event_subscriber }
