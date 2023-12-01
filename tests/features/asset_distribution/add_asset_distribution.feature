@@ -1,4 +1,4 @@
-@api @group-tmp
+@api
 Feature: Add distribution through the UI
   In order to manage distributions
   As a facilitator

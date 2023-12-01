@@ -1,4 +1,4 @@
-@api @group-h
+@api @group-g
 Feature: Solutions Overview
   As a new visitor of the Joinup website
   To get an idea of the various solutions that are available

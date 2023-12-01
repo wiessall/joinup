@@ -1,4 +1,4 @@
-@api @group-tmp
+@api
 Feature: Asset distribution overview on solution.
   In order to view an overview of a solution's releases and download them
   As a user of the website
