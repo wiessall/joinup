@@ -1,4 +1,4 @@
-@api @group-tmp
+@api
 Feature: Asset release "delete" functionality.
   In order to manage releases
   As a solution facilitator

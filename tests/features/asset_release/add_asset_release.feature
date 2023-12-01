@@ -1,4 +1,4 @@
-@api @group-tmp
+@api
 Feature: "Add release" visibility options.
   In order to manage releases
   As a solution facilitator

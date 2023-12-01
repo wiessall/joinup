@@ -7,11 +7,11 @@ Folders having 2 or less test YAML were not checked.
 | Directory                 | Execution time  | Group            |
 |---------------------------|-----------------|------------------|
 | `./`                      | 11:11 -  671s   | default          |
-| `./adms_validator`        | --              |                  |
-| `./asset_distribution`    | 01:31 -   91s   |                  |
-| `./asset_release`         | 00:48 -   48s   |                  |
+| `./adms_validator`        | --              | default          |
+| `./asset_distribution`    | 01:31 -   91s   | default          |
+| `./asset_release`         | 00:48 -   48s   | default          |
 | `./collection`            | 14:03 -  843s   | group-a, group-b |
-| `./comments`              | 03:37 -  217s   |                  |
+| `./comments`              | 03:37 -  217s   | group-b          |
 | `./communities`           | 05:37 -  337s   | group-b          |
 | `./community_content`     | 26:00 - 1560s   | group-c, group-d |
 | `./contact_form`          | 01:21 -   81s   |                  |
@@ -45,7 +45,7 @@ Folders having 2 or less test YAML were not checked.
 | `./rdf_entity_provenance` | --              |                  |
 | `./security`              | --              |                  |
 | `./solution`              | 16:40 - 1000s   | group-g, group-h |
-| `./taxonomy`              | 07:07 -  427s   | group-i          |
+| `./taxonomy`              | 07:07 -  427s   | group-h          |
 | `./update`                | --              |                  |
-| `./user`                  | 01:24 -   84s   |                  |
+| `./user`                  | 01:24 -   84s   | group-i          |
 | `./video`                 | --              |                  |

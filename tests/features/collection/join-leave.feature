@@ -1,4 +1,4 @@
-@api @group-b
+@api @group-a
 Feature: Joining and leaving collections through the web interface
   In order to participate in the activities of a collection
   As an authenticated user

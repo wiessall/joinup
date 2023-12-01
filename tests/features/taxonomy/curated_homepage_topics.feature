@@ -1,4 +1,4 @@
-@api @terms @group-i
+@api @terms @group-h
 Feature:
   Ensure curated list of topics on the homepage behave properly.
 
