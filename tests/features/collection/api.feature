@@ -1,4 +1,4 @@
-@api @terms @group-b
+@api @terms @group-a
 Feature: Collection API
   In order to manage collections programmatically
   As a backend developer

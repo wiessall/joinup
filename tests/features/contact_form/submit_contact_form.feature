@@ -1,4 +1,4 @@
-@api @group-cf
+@api @group-tmp
 Feature: Submit the contact form
   In order to gather feedback from the users
   As a moderator

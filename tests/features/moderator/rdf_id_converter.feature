@@ -1,4 +1,4 @@
-@api @group-jmoderator
+@api @group-tmp
 Feature:
   As a moderator
   When I have in my possession an RDF entity ID or URL

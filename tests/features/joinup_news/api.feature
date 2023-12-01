@@ -1,4 +1,4 @@
-@api @group-jnews
+@api @group-tmp
 Feature: News API
   In order to manage custom pages programmatically
   As a backend developer

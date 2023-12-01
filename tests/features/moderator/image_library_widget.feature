@@ -1,4 +1,4 @@
-@api @group-jmoderator @uploadFiles:logo.png
+@api @uploadFiles:logo.png @group-tmp
 Feature: As a moderator I want to be able to maintain sets of images to be
   reused as logo images for collections, solutions, events and news.
 

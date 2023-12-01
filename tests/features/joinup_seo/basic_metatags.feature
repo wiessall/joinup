@@ -1,4 +1,4 @@
-@api @group-jseo
+@api @group-tmp
 Feature:
   As the owner of the website
   In order for my site to be more appealing to the search engines

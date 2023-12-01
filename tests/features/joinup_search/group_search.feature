@@ -1,4 +1,4 @@
-@api @terms @group-jsearch
+@api @terms @group-tmp
 Feature: Search inside groups
   In order to quickly find content inside the group I am currently perusing
   As a user of Joinup

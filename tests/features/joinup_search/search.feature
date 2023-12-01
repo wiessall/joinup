@@ -1,4 +1,4 @@
-@api @terms @group-jsearch
+@api @terms @group-tmp
 Feature: Global search
   As a user of the site I can find content through the global search.
 

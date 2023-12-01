@@ -1,4 +1,4 @@
-@api @javascript @group-jpara
+@api @javascript @group-f
 Feature:
   Tests related to layout paragraphs. Anything that is related to the UI, MUST
   include javascript enabled. However, tests about paragraphs in non JS

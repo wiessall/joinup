@@ -1,4 +1,4 @@
-@api @group-b
+@api @group-a
 Feature: As a user of the website
   In order to find my way around events
   I need to be able to view collection events grouped properly.

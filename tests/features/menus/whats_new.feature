@@ -1,4 +1,4 @@
-@api @group-menu @wip
+@api @group-tmp @wip
 # This is disabled because the support menu is currently not shown in the header
 # but this functionality will probably be restored in the future.
 Feature:

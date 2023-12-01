@@ -1,4 +1,4 @@
-@api @terms @group-communities
+@api @terms @group-b
 Feature:
   Access and functionality checks for the IOP related paragraphs.
 

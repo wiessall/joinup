@@ -1,4 +1,4 @@
-@api @eif_community @terms @group-communities
+@api @eif_community @terms @group-b
 Feature: As a user, visiting the EIF Toolbox page, I want to be able to filter
   the page by EIF category.
 

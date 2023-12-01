@@ -1,4 +1,4 @@
-@api @group-comment
+@api @group-tmp
 Feature: Creating comments through the API
   In order to efficiently write tests for the Joinup platform
   As a backend developer

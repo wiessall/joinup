@@ -1,4 +1,4 @@
-@api @group-jseo
+@api @group-tmp
 Feature: SEO for document content.
   As an owner of the website
   in order for my documents to be better visible on the web

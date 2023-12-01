@@ -1,4 +1,4 @@
-@api @group-jnews
+@api @group-tmp
 # This features tests the workflow transitions.
 #
 # The steps @Then I go to the "news" content :title edit screen

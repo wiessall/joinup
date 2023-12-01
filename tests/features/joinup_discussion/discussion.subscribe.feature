@@ -1,4 +1,4 @@
-@api @group-jdiscussion
+@api @group-tmp
 Feature: Following discussions
   As a member of Joinup
   I want to follow interesting discussions

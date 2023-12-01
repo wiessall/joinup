@@ -2,7 +2,7 @@
 @api
 Feature: Messaging group announcements
 
-  @group-jgroup
+  @group-tmp
   Scenario Outline: Announcement creation and transitions
 
     Given the following <group>s:
@@ -410,7 +410,7 @@ Feature: Messaging group announcements
       | collection |
       | solution   |
 
-  @javascript @group-jgroup
+  @javascript @group-tmp
   Scenario: Announcement moderation
     Given the following collections:
       | title       | state     |

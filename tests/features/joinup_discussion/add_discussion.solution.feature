@@ -1,4 +1,4 @@
-@api @group-jdiscussion
+@api @group-tmp
 Feature: "Add discussion" visibility options.
   In order to manage discussions
   As a solution member

@@ -1,4 +1,4 @@
-@api @group-e
+@api @group-g
 Feature:
   In order to better manage my group members
   As a group owner

@@ -1,4 +1,4 @@
-@api @group-jgroup
+@api @group-tmp
 Feature: Collections/Solutions settings
   In order to edit collections/solutions settings
   As a collection/solution owner or moderator

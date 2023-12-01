@@ -1,4 +1,4 @@
-@api @group-jdoc
+@api @group-tmp
 Feature: "Document" overview.
   In order to use documents
   As a user of the website

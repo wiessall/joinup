@@ -1,4 +1,4 @@
-@api @group-jdiscussion
+@api @group-tmp
 Feature: Last Activity feature
   As a user of the website
   I want to be able to see last activity inside a tile.

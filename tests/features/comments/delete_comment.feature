@@ -1,4 +1,4 @@
-@api @group-comment
+@api @group-tmp
 Feature: Delete comments
   As a visitor of the website I can leave a comment on community content.
 

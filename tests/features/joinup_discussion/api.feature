@@ -1,4 +1,4 @@
-@api @group-jdiscussion
+@api @group-tmp
 Feature: Discussion API
   In order to manage discussion entities programmatically
   As a backend developer

@@ -1,4 +1,4 @@
-@api @group-menu
+@api @group-tmp
 Feature:
   - As a moderator, in order to maintain the navbar, I am able to administer the 'navbar' menu.
   - As a user, I should see the new navbar link.

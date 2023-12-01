@@ -1,4 +1,4 @@
-@api @group-assetrelease
+@api @group-tmp
 Feature: "Edit" visibility options.
   In order to manage releases
   As a solution facilitator

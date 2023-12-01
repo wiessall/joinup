@@ -1,4 +1,4 @@
-@api @group-jdiscussion
+@api @group-tmp
 Feature: Discussions added to collections
   In order to manage discussions
   As a collection member
