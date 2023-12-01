@@ -4,6 +4,7 @@ declare(strict_types = 1);
 
 namespace Joinup\TaskRunner\Commands;
 
+use Composer\InstalledVersions;
 use EcEuropa\Toolkit\TaskRunner\Commands\ToolCommands;
 use OpenEuropa\TaskRunner\Commands\AbstractCommands;
 use OpenEuropa\TaskRunner\Tasks\CollectionFactory\loadTasks;
@@ -61,6 +62,7 @@ class BuildCommands extends AbstractCommands {
     // not be installed in distribution. Should be removed from `require-dev`
     // and reinstalled as `require` package.
     if (ToolCommands::getDeploymentEnvironment() === 'acc') {
+      $version = InstalledVersions::getVersion('drupal/stage_file_proxy');
       $tasks[] = $this->taskComposerRemove()
         ->workingDir($options['dist-root'])
         ->arg('drupal/stage_file_proxy')
@@ -71,7 +73,7 @@ class BuildCommands extends AbstractCommands {
       $tasks[] = $this->taskComposerRequire()
         ->env('COMPOSER_MIRROR_PATH_REPOS', 1)
         ->workingDir($options['dist-root'])
-        ->dependency('drupal/stage_file_proxy', '^2.1')
+        ->dependency('drupal/stage_file_proxy', $version)
         ->option('update-no-dev')
         ->noScripts()
         ->disablePlugins();
