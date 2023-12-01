@@ -141,6 +141,8 @@ drupal:
         - Dashboard agent
         - Varnish purge
         - Reverse proxy
+      acc-override:
+        - Stage file proxy
     header: |
       <?php
 
