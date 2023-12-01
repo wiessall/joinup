@@ -75,6 +75,7 @@ class BuildCommands extends AbstractCommands {
         ->workingDir($options['dist-root'])
         ->dependency('drupal/stage_file_proxy', $version)
         ->option('update-no-dev')
+        ->optimizeAutoloader()
         ->noScripts()
         ->disablePlugins();
     }
