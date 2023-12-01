@@ -56,6 +56,24 @@ class BuildCommands extends AbstractCommands {
       ->optimizeAutoloader()
       ->noDev();
 
+    // Add stage_file_proxy in ephemeral and acceptance environments.
+    if (ToolCommands::getDeploymentEnvironment() === 'acc') {
+      $tasks[] = $this->taskComposerRemove()
+        ->workingDir($options['dist-root'])
+        ->arg('drupal/stage_file_proxy')
+        ->dev()
+        ->noUpdate()
+        ->noScripts()
+        ->disablePlugins();
+      $tasks[] = $this->taskComposerRequire()
+        ->env('COMPOSER_MIRROR_PATH_REPOS', 1)
+        ->workingDir($options['dist-root'])
+        ->dependency('drupal/stage_file_proxy', '^2.1')
+        ->option('update-no-dev')
+        ->noScripts()
+        ->disablePlugins();
+    }
+
     $tasks[] = $this->taskExec("{$config->get('runner.bin_dir')}/run")
       ->arg('drupal:settings')
       ->arg('prod')
