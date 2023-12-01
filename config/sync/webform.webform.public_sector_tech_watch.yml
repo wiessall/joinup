@@ -212,6 +212,7 @@ elements: |-
     source_url:
       '#type': webform_custom_composite
       '#title': 'Source (URL)'
+      '#title_display': none
       '#required': true
       '#multiple__item_label': 'Source URL'
       '#multiple__min_items': 1
@@ -223,8 +224,8 @@ elements: |-
       '#element':
         source_url_item:
           '#type': url
-          '#title': ' Source (URL)'
-          '#description': 'Please provide here the link to external sources describing the case (reports, case studies, presentations, news articles, webpage describing the solution etc). At least one URL is needed to publish the case in the database.'
+          '#title': 'Source (URL)'
+          '#description': 'Please provide here the complete link to external sources which describe the case (reports, case studies, presentations, news articles, web page describing the solution etc). At least one URL is needed to publish the case in the database.'
     description:
       '#type': textarea
       '#title': Description
