@@ -19,7 +19,7 @@ Feature:
     # User is redirected from the standard collection URL.
     Then I should be on "/eu-oss-catalogue"
     And I should not see the link "Report abusive content"
-    And I see the text "Open source software of interest for Public Administrations" in the "Header" region
+    And I see the text "Solutions created by and for European Public Services" in the "Header" region
 
     # Check menus.
     Then I should not see the link "Overview" in the "Navigation menu"
@@ -82,7 +82,7 @@ Feature:
       | Olympus | development            | developers_italia | data-analytics | Foo's short description | Foo's GIT description | published | 2014-11-19       |
     When I go to the content page of the type "oss_solution" with the title "Olympus"
     Then I see the text "EU Open Source Solutions Catalogue" in the "Header" region
-    And I see the text "Open source software of interest for Public Administrations" in the "Header" region
+    And I see the text "Solutions created by and for European Public Services" in the "Header" region
     And I should see the following links in the "Navigation menu" region:
       | Welcome |
       | Search  |
