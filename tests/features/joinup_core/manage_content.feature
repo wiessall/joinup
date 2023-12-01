@@ -1,4 +1,4 @@
-@api @group-jcore
+@api @group-tmp
 Feature:
   In order to better organize the content
   I need to be able to move content between groups

@@ -1,4 +1,4 @@
-@api @group-jcore
+@api @group-tmp
 Feature: Plus button
   In order be able to create content
   As a user of the website

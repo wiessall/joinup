@@ -1,4 +1,4 @@
-@api @group-jsubscription
+@api @group-tmp
 Feature: Subscribing to a collection after joining
   In order to promote my collection
   As a collection owner

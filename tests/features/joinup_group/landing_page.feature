@@ -1,4 +1,4 @@
-@api @group-jgroup
+@api @group-tmp
 Feature: Tests the group landing page customization.
 
   Scenario Outline:

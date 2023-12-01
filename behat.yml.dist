@@ -261,114 +261,14 @@ clean:
       paths: *paths
       filters:
         tags: '~@wip&&@group-i'
-    group_comm:
+    group_tmp:
       contexts: *contexts
       paths: *paths
       filters:
-        tags: '~@wip&&@group-comm'
-    group_custompage:
-      contexts: *contexts
-      paths: *paths
-      filters:
-        tags: '~@wip&&@group-custompage'
-    group_jcore:
-      contexts: *contexts
-      paths: *paths
-      filters:
-        tags: '~@wip&&@group-jcore'
-    group_jdiscussion:
-      contexts: *contexts
-      paths: *paths
-      filters:
-        tags: '~@wip&&@group-jdiscussion'
-    group_jgroup:
-      contexts: *contexts
-      paths: *paths
-      filters:
-        tags: '~@wip&&@group-jgroup'
-    group_jseo:
-      contexts: *contexts
-      paths: *paths
-      filters:
-        tags: '~@wip&&@group-jseo'
-    group_jsubscription:
-      contexts: *contexts
-      paths: *paths
-      filters:
-        tags: '~@wip&&@group-jsubscription'
-    group_jmoderator:
-      contexts: *contexts
-      paths: *paths
-      filters:
-        tags: '~@wip&&@group-jmoderator'
-    group_jpara:
-      contexts: *contexts
-      paths: *paths
-      filters:
-        tags: '~@wip&&@group-jpara'
-    group_user:
-      contexts: *contexts
-      paths: *paths
-      filters:
-        tags: '~@wip&&@group-user'
-    group_assetrelease:
-      contexts: *contexts
-      paths: *paths
-      filters:
-        tags: '~@wip&&@group-assetrelease'
-    group_comment:
-      contexts: *contexts
-      paths: *paths
-      filters:
-        tags: '~@wip&&@group-comment'
-    group_communities:
-      contexts: *contexts
-      paths: *paths
-      filters:
-        tags: '~@wip&&@group-communities'
-    group_cf:
-      contexts: *contexts
-      paths: *paths
-      filters:
-        tags: '~@wip&&@group-cf'
-    group_ci:
-      contexts: *contexts
-      paths: *paths
-      filters:
-        tags: '~@wip&&@group-ci'
-    group_jdoc:
-      contexts: *contexts
-      paths: *paths
-      filters:
-        tags: '~@wip&&@group-jdoc'
-    group_jev:
-      contexts: *contexts
-      paths: *paths
-      filters:
-        tags: '~@wip&&@group-jev'
-    group_jlic:
-      contexts: *contexts
-      paths: *paths
-      filters:
-        tags: '~@wip&&@group-jlic'
-    group_jnews:
-      contexts: *contexts
-      paths: *paths
-      filters:
-        tags: '~@wip&&@group-jnews'
-    group_jsearch:
-      contexts: *contexts
-      paths: *paths
-      filters:
-        tags: '~@wip&&@group-jsearch'
-    group_menu:
-      contexts: *contexts
-      paths: *paths
-      filters:
-        tags: '~@wip&&@group-menu'
+        tags: '~@wip&&@group-tmp'
 
     default:
       contexts: *contexts
       paths: *paths
       filters:
-        tags: '~@wip&&~@group-a&&~@group-b&&~@group-c&&~@group-d&&~@group-e&&~@group-f&&~@group-g&&~@group-h&&~@group-i&&~@group-clone&&~@group-comm&&~@group-custompage&&~@group-jcore&&~@group-jdiscussion&&~@group-jgroup&&~@group-jseo&&~@group-jsubscription&&~@group-jmoderator&&~@group-jpara&&~@group-user&&~@group-assetrelease&&~@group-comment&&~@group-communities&&~@group-cf&&~@group-ci&&~@group-jev&&~@group-jdoc&&~@group-jlic&&~@group-jnews&&~@group-jsearch&&~@group-menu'
+        tags: '~@wip&&~@group-a&&~@group-b&&~@group-c&&~@group-d&&~@group-e&&~@group-f&&~@group-g&&~@group-h&&~@group-i&&~@group-clone&&~@group-tmp'

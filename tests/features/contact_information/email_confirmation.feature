@@ -1,4 +1,4 @@
-@api @group-ci
+@api @group-tmp
 Feature: Resend validation email from collection/solution about page
   If the email address of a Collection/Solution has not been published yet,
   then a message must be displayed under the about page

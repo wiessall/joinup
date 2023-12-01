@@ -1,4 +1,4 @@
-@api @group-e
+@api @group-h
 Feature: Creating a test (solution) in the TRR collection.
   In order to create tests
   As a collection facilitator

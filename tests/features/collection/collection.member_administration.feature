@@ -1,4 +1,4 @@
-@api @terms @group-b
+@api @terms @group-a
 Feature: Collection membership administration
   In order to build a community
   As a collection facilitator

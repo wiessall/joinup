@@ -1,4 +1,4 @@
-@api @group-e
+@api @group-g
 Feature: Solution editing.
   In order to manage solutions
   As a solution owner or solution facilitator

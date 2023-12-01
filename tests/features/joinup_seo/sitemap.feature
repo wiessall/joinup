@@ -1,4 +1,4 @@
-@api @group-jseo
+@api @group-tmp
 Feature:
   As the owner of the site
   In order to promote content to the search engines properly

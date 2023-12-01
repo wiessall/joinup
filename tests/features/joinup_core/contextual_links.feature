@@ -1,4 +1,4 @@
-@api @group-jcore
+@api @group-tmp
 Feature:
   As a moderator of the website
   in order to better manage all content

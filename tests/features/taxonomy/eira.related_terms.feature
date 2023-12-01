@@ -1,4 +1,4 @@
-@api @group-f
+@api @group-i
 Feature:
   As a user of the website
   When I go to the overview page of an EIRA term

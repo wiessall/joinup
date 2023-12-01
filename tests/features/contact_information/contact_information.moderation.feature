@@ -1,4 +1,4 @@
-@api @terms @group-ci
+@api @terms @group-tmp
 Feature: Contact Information moderation
   In order to manage contact information
   As a facilitator or moderator

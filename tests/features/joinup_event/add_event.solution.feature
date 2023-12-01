@@ -1,4 +1,4 @@
-@api @group-jev
+@api @group-tmp
 Feature: "Add event" visibility options.
   In order to manage events
   As a solution member

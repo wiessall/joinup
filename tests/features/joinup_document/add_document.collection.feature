@@ -1,4 +1,4 @@
-@api @group-jdoc
+@api @group-tmp
 Feature: "Add document" visibility options.
   In order to manage documents
   As a collection member

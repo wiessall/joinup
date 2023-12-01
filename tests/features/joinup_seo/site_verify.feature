@@ -1,4 +1,4 @@
-@api @group-jseo
+@api @group-tmp
 Feature:
   Tests related to the site verifications.
 

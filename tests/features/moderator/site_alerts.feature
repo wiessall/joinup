@@ -1,4 +1,4 @@
-@api @group-jmoderator
+@api @group-tmp
 Feature: Site alerts
   In order to announce scheduled downtime
   As a moderator

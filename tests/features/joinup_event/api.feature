@@ -1,4 +1,4 @@
-@api @group-jev
+@api @group-tmp
 Feature: Event API
   In order to manage custom pages programmatically
   As a backend developer

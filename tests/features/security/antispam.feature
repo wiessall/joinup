@@ -1,4 +1,4 @@
-@api @javascript @antispam @group-a
+@api @javascript @antispam @group-tmp
 Feature: As a visitor or logged-in user, when I want to post content, the form
   should be protected by Antibot & Honeypot.
 

@@ -1,4 +1,4 @@
-@api @group-user
+@api @group-i
 Feature: User API
   In order to manage users programmatic
   As a backend developer

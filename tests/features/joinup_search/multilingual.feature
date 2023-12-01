@@ -1,4 +1,4 @@
-@api @terms @group-jsearch
+@api @terms @group-tmp
 Feature: Multilingual search
   As a user of the site I should only see English content
 

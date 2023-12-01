@@ -1,4 +1,4 @@
-@api @group-custompage
+@api @group-e
 Feature:
   In order to have better presentation of my content
   as a user of the website

@@ -1,4 +1,4 @@
-@api @group-jgroup
+@api @group-tmp
 Feature: Revoke privileges from former and blocked members
   In order to ensure content in my group is not vandalized by former members
   As a facilitator

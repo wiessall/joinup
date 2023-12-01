@@ -1,4 +1,4 @@
-@api @group-jlic
+@api @group-tmp
 Feature: Edit licence through UI
   In order to manage licences
   As a moderator or a licence_manager

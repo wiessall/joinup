@@ -1,4 +1,4 @@
-@api @group-jgroup
+@api @group-tmp
 Feature:
   As a moderator of the website
   I need to be able to see the unpublished content even for groups that don't
