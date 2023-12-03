@@ -270,6 +270,7 @@ case "$CMD" in
 
 		echo "Starting the Virtuoso Server"
 		$VIRTUOSO +wait
+		echo 'GRANT SPARQL_UPDATE TO "SPARQL";' | isql
 		# Keep the container alive.
     tail -f /dev/null
 		;;
