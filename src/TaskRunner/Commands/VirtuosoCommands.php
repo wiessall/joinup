@@ -4,6 +4,9 @@ declare(strict_types = 1);
 
 namespace Joinup\TaskRunner\Commands;
 
+use Consolidation\AnnotatedCommand\Attributes as CLI;
+use EasyRdf\GraphStore;
+use EasyRdf\Sparql\Client;
 use OpenEuropa\TaskRunner\Commands\AbstractCommands;
 use Robo\Collection\CollectionBuilder;
 use Robo\Sparql\Tasks\Sparql\loadTasks;
@@ -59,6 +62,38 @@ class VirtuosoCommands extends AbstractCommands {
     $config = $this->getConfig();
     $task = $this->taskExec("echo 'checkpoint_interval({$interval});' | {$config->get('isql.bin')} {$config->get('sparql.host')} {$config->get('sparql.user')} {$config->get('sparql.password')}");
     return $this->collectionBuilder()->addTask($task);
+  }
+
+  /**
+   * Empties the SPARQL backend.
+   */
+  #[CLI\Command(name: 'virtuoso:empty')]
+  #[CLI\Help(description: 'Empty the SPARQL backend')]
+  public function empty(): CollectionBuilder {
+    $config = $this->getConfig();
+    $host = "{$config->get('sparql.host')}:{$config->get('sparql.port')}";
+    $credentials = "{$config->get('sparql.user')}:{$config->get('sparql.password')}";
+    $endpointUrl = "http://$credentials@$host/sparql";
+
+    $client = new Client($endpointUrl);
+    $query = 'SELECT DISTINCT(?g) WHERE { GRAPH ?g { ?s ?p ?o } } ORDER BY ?g';
+    $this->say("Querying SPARQL: '$query'");
+    $graphs = $client->query($query);
+
+    if (!$graphs->count()) {
+      $this->say("The SPARQL backend is already empty.");
+      return $this->collectionBuilder();
+    }
+
+    $graphStore = new GraphStore("http://$host/sparql-graph-crud");
+    foreach ($graphs as $graph) {
+      if ($graphUri = $graph->g->getUri()) {
+        $this->say("$graphUri graph");
+        $graphStore->delete($graphUri);
+      }
+    }
+
+    return $this->collectionBuilder();
   }
 
 }
