@@ -27,7 +27,7 @@ services:
       VIRT_SPARQL_DefaultQuery: 'SELECT ?g ?s ?p ?o WHERE { GRAPH ?g { ?s ?p ?o . } } LIMIT 500'
     volumes:
       - virtuoso:/opt/virtuoso-opensource/database
-      - ./virtuoso/script/entrypoint.sh:/opt/virtuoso-opensource/bin/virtuoso-entrypoint.sh
+      - ./virtuoso/entrypoint.sh:/opt/virtuoso-opensource/bin/virtuoso-entrypoint.sh
       - ./virtuoso/snapshot:/opt/virtuoso-opensource/backup
       # Needed to recognize .ddev/commands/virtuoso container commands.
       - .:/mnt/ddev_config
