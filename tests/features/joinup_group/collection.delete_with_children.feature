@@ -1,4 +1,4 @@
-@api @group-tmp
+@api @group-d
 Feature:
   In order to not leave orphaned entities
   As a collection owner

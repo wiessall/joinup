@@ -1,4 +1,4 @@
-@api @group-tmp
+@api @group-b
 Feature: Subscribing to a collection after creating
   In order to subscribe my collection
 

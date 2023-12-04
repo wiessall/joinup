@@ -1,4 +1,4 @@
-@api @group-tmp
+@api @group-b
 Feature: Subscribing to a solution
   In order to promote my solution
   As a solution owner

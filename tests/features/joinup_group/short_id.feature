@@ -1,4 +1,4 @@
-@api @terms @group-tmp
+@api @terms @group-d
 Feature:
   As an owner of a group
   In order to make the URL of my group easier to read

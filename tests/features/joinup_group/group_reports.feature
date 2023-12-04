@@ -1,4 +1,4 @@
-@api @group-tmp
+@api @group-d
 Feature:
   In order to understand how my group is being used
   As a facilitator
