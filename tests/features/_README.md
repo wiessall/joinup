@@ -27,14 +27,14 @@ Folders having 2 or less test YAML were not checked.
 | `./joinup_document`       |          02:24 |     144 | group-h                   |
 | `./joinup_event`          |          02:00 |     120 |                           |
 | `./joinup_federation`     |             -- |         |                           |
-| `./joinup_group`          |          03:45 |     225 |                           |
+| `./joinup_group`          |          03:45 |     225 | group-d                   |
 | `./joinup_licence`        |          00:20 |      20 |                           |
 | `./joinup_like`           |             -- |         |                           |
 | `./joinup_news`           |          04:06 |     246 | group-i                   |
 | `./joinup_rss`            |             -- |         |                           |
 | `./joinup_search`         |          04:14 |     254 | group-i                   |
 | `./joinup_seo`            |          01:06 |     126 |                           |
-| `./joinup_subscription`   |          03:39 |     219 |                           |
+| `./joinup_subscription`   |          03:39 |     219 | group-b                   |
 | `./legal`                 |             -- |         |                           |
 | `./media`                 |             -- |         |                           |
 | `./menus`                 |          00:30 |      30 |                           |

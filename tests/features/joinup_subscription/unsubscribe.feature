@@ -1,4 +1,4 @@
-@api @group-tmp
+@api @group-b
 Feature: Unsubscribe from collections
   In order to reduce the amount of notifications I receive
   As a user of the website
