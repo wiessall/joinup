@@ -1,4 +1,4 @@
-@api @group-tmp
+@api @group-i
 Feature: News API
   In order to manage custom pages programmatically
   As a backend developer
