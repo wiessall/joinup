@@ -102,8 +102,10 @@ commands:
         - site-clean
     # Checks for extensions metadata deprecations. Note that we run this after
     # site install as we need a bootstrapped Drupal.
-    - task: exec
-      command: ${drush.bin} joinup:check-extension-metadata-deprecation
+    # TODO: Re-enable this check when PHP is 8.2.14 or 8.2.15.
+    # See https://github.com/php/php-src/issues/8251
+    # - task: exec
+    #   command: ${drush.bin} joinup:check-extension-metadata-deprecation
     - task: exec
       command: ${drush.bin}
       arguments:
