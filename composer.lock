@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "56406b818c9073365cb1be9ef05900c0",
+    "content-hash": "ec1124e19514fac4732f034cbe6a1ca7",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -5848,10 +5848,6 @@
                 {
                     "name": "nielsvm",
                     "homepage": "https://www.drupal.org/user/163285"
-                },
-                {
-                    "name": "SqyD",
-                    "homepage": "https://www.drupal.org/user/106525"
                 }
             ],
             "description": "Provides a generic external cache invalidation API and queue service.",
@@ -5894,10 +5890,6 @@
                 {
                     "name": "nielsvm",
                     "homepage": "https://www.drupal.org/user/163285"
-                },
-                {
-                    "name": "SqyD",
-                    "homepage": "https://www.drupal.org/user/106525"
                 }
             ],
             "description": "Enables Drush plugins for Purge automatically.",
@@ -5940,10 +5932,6 @@
                 {
                     "name": "nielsvm",
                     "homepage": "https://www.drupal.org/user/163285"
-                },
-                {
-                    "name": "SqyD",
-                    "homepage": "https://www.drupal.org/user/106525"
                 }
             ],
             "description": "Processes the queue every time cron runs, recommended for most configurations.",
@@ -5986,10 +5974,6 @@
                 {
                     "name": "nielsvm",
                     "homepage": "https://www.drupal.org/user/163285"
-                },
-                {
-                    "name": "SqyD",
-                    "homepage": "https://www.drupal.org/user/106525"
                 }
             ],
             "description": "Process the queue on every request, this is only recommended on high latency configurations.",
@@ -6032,10 +6016,6 @@
                 {
                     "name": "nielsvm",
                     "homepage": "https://www.drupal.org/user/163285"
-                },
-                {
-                    "name": "SqyD",
-                    "homepage": "https://www.drupal.org/user/106525"
                 }
             ],
             "description": "Queues every tag that Drupal invalidates internally.",

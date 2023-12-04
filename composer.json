@@ -396,6 +396,9 @@
             },
             "drupal/webform": {
                 "Radios or Checkboxes inside Composite not saved @see https://www.drupal.org/project/webform/issues/3216923" : "resources/patch/php/drupal/webform/368.diff"
+            },
+            "php-task-runner/sparql-robo-tasks": {
+                "Ensure a more solid timeout on imports @see https://github.com/php-task-runner/sparql-robo-tasks/pull/1": "resources/patch/php/php-task-runner/sparql-robo-tasks/1.diff"
             }
         },
         "artifacts": {
