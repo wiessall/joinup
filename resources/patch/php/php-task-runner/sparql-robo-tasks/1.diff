@@ -1,0 +1,29 @@
+diff --git a/src/Tasks/Sparql/AbstractImport.php b/src/Tasks/Sparql/AbstractImport.php
+index 2900d5e..52fc661 100644
+--- a/src/Tasks/Sparql/AbstractImport.php
++++ b/src/Tasks/Sparql/AbstractImport.php
+@@ -6,6 +6,7 @@
+ 
+ use EasyRdf\Graph;
+ use EasyRdf\GraphStore;
++use EasyRdf\Http;
+ use Robo\Result;
+ use Robo\Task\BaseTask;
+ 
+@@ -32,6 +33,16 @@ public function run(): Result
+             return Result::error($this, 'No import content was passed.');
+         }
+ 
++        // Imports are often processing large amount of data. By default, the
++        // EasyRdf HTTP Client timeout is set to 10 seconds only. Use a wider
++        // interval to allow the import to succeed.
++        $httpClient = (new Http\Client())->setConfig([
++          'maxredirects' => 5,
++          'useragent' => 'EasyRdf HTTP Client',
++          'timeout' => 60,
++        ]);
++        Http::setDefaultHttpClient($httpClient);
++
+         $graphStore = new GraphStore($this->endpointUrl);
+         $data = [];
+         foreach (array_keys($this->stack) as $graphUri) {
