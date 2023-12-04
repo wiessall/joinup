@@ -1,4 +1,4 @@
-@api @terms @group-tmp
+@api @terms @group-g
 Feature: Event moderation
   In order to manage events
   As a user of the website

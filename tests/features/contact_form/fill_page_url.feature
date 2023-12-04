@@ -1,4 +1,4 @@
-@api
+@api @group-f
 Feature: Fill Page URL field in Technical problem / bug report on contact form
   As anonymous user
   In order to avoid the Page URL value containing the domain

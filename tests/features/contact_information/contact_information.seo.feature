@@ -1,4 +1,4 @@
-@api @group-clone
+@api @group-h
 Feature: Contant Information entities don't cause exceptions because of their invalid schema
 
   Scenario: Check the page of an entity which had schema issues before

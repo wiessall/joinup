@@ -1,4 +1,4 @@
-@api @group-tmp
+@api @group-i
 Feature: Owner access
   In order to see contextualized information
   As a visitor
