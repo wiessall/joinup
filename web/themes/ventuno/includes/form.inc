@@ -196,7 +196,7 @@ function ventuno_form_poll_view_form_alter(array &$form, FormStateInterface $for
   }
 
   if (isset($form['actions']['back'])) {
-    $form['actions']['back']['#value'] = t('Hide result');
+    $form['actions']['back']['#value'] = t('Hide results');
   }
 }
 
