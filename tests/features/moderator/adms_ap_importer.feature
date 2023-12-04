@@ -1,4 +1,4 @@
-@api @group-tmp
+@api @group-h
 Feature:
   As a moderator
   When I urgently need to import some federated content
