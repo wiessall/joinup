@@ -1,4 +1,4 @@
-@api @group-tmp
+@api @group-h
 Feature: Invite members to subscribe to discussions
   In order to promote discussion of topics
   As a discussion author or moderator

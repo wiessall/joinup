@@ -1,4 +1,4 @@
-@api @group-tmp
+@api @group-h
 Feature: "Document" overview.
   In order to use documents
   As a user of the website

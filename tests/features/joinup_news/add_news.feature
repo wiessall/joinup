@@ -1,4 +1,4 @@
-@api @terms @group-tmp
+@api @terms @group-i
 Feature: Creation of news through the UI.
   In order to manage news
   As a user
