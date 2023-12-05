@@ -17,21 +17,21 @@ Folders having 2 or less test YAML were not checked.
 | `./contact_form`          |          01:21 |      81 | group-f                   |
 | `./contact_information`   |          01:16 |      76 | group-h                   |
 | `./custom_page`           |          12:19 |     739 | group-e                   |
-| `./eulogin`               |             -- |         | group-a                   |
-| `./file_url`              |             -- |         |                           |
-| `./glossary`              |             -- |         |                           |
-| `./isa2_analytics`        |             -- |         |                           |
-| `./joinup_collection`     |             -- |         |                           |
+| `./eulogin`               |             -- |         | group-e                   |
+| `./file_url`              |             -- |         | group-e                   |
+| `./glossary`              |             -- |         | group-e                   |
+| `./isa2_analytics`        |             -- |         | group-e                   |
+| `./joinup_collection`     |             -- |         | group-f                   |
 | `./joinup_core`           |          02:27 |     147 | group-f                   |
 | `./joinup_discussion`     |          03:59 |     239 | group-h                   |
 | `./joinup_document`       |          02:24 |     144 | group-h                   |
 | `./joinup_event`          |          02:00 |     120 | group-g                   |
-| `./joinup_federation`     |             -- |         |                           |
+| `./joinup_federation`     |             -- |         | group-h                   |
 | `./joinup_group`          |          03:45 |     225 | group-d                   |
 | `./joinup_licence`        |          00:20 |      20 | group-i                   |
-| `./joinup_like`           |             -- |         |                           |
+| `./joinup_like`           |             -- |         | group-h                   |
 | `./joinup_news`           |          04:06 |     246 | group-i                   |
-| `./joinup_rss`            |             -- |         |                           |
+| `./joinup_rss`            |             -- |         | group-h                   |
 | `./joinup_search`         |          04:14 |     254 | group-i                   |
 | `./joinup_seo`            |          01:06 |     126 | group-i                   |
 | `./joinup_subscription`   |          03:39 |     219 | group-b                   |

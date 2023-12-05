@@ -1,4 +1,4 @@
-@api @javascript @group-tmp
+@api @javascript @group-h
 Feature: Like/unlike feature.
   In order to express appreciation or approval of a content item
   As a user
