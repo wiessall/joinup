@@ -29,6 +29,18 @@ import ControlsDisabler from "./helpers/glide.controlsDisabler.esm";
             },
           });
 
+          glide.on('resize', function() {
+            if (window.matchMedia('(min-width: 576px)').matches) {
+              glide.update({startAt: 0, perView: 2, gap: 16}).disable();
+            }
+            if (window.matchMedia('(min-width: 768px)').matches) {
+              glide.update({startAt: 0, perView: 3, gap: 16}).disable();
+            } 
+            if (window.matchMedia('(min-width: 1200px)').matches) {
+              glide.update({startAt: 0, perView: 4, gap: 16}).disable();
+            }
+          });
+
           glide.mount({ Controls, Breakpoints, Swipe, ControlsDisabler });
           const forward = slide.querySelector(".glide__arrow--right");
           const backward = slide.querySelector(".glide__arrow--left");
