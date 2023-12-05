@@ -4,11 +4,13 @@ declare(strict_types = 1);
 
 namespace Drupal\joinup\Context;
 
+use Behat\Behat\Hook\Scope\BeforeFeatureScope;
+use Behat\Behat\Hook\Scope\BeforeScenarioScope;
 use Behat\Mink\Element\DocumentElement;
 use Drupal\Component\Serialization\Json;
 use Drupal\Component\Utility\SortArray;
-use Drupal\Core\File\FileSystemInterface;
 use Drupal\Core\Serialization\Yaml;
+use Drupal\Core\StreamWrapper\PublicStream;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\joinup\Traits\JavascriptTrait;
 use PHPUnit\Framework\Assert;
@@ -50,9 +52,19 @@ class AccessibilityContext extends RawDrupalContext {
   private const LINE_LENGTH = 80;
 
   /**
-   * Static cache for the file system service.
+   * Static cache of the a11y files path.
    */
-  private FileSystemInterface $fileSystem;
+  private static string $a11yPath;
+
+  /**
+   * Current feature file.
+   */
+  private static string $file;
+
+  /**
+   * Current scenario line.
+   */
+  private int $line;
 
   /**
    * Constructs a new context.
@@ -60,8 +72,13 @@ class AccessibilityContext extends RawDrupalContext {
    * @param array $standardTags
    *   A list of configurable standard tags as an associative array keyed by tag
    *   and having the tag label as value.
+   * @param string[] $excludeElements
+   *   A list of CSS element selectors to be excluded from check.
    */
-  public function __construct(protected array $standardTags) {}
+  public function __construct(
+    protected array $standardTags,
+    protected array $excludeElements,
+  ) {}
 
   /**
    * Asserts that the current page meets accessibility standards.
@@ -142,13 +159,13 @@ class AccessibilityContext extends RawDrupalContext {
       $report[] = $this->buildReportEntry($violation);
     }
 
-    $path = $this->generateFullReport($violations);
+    $this->updateFullReport($violations);
 
     throw new ExpectationFailedException(
       "Detected accessibility standards violations\n" .
       str_repeat("=", self::LINE_LENGTH) . "\n" .
       implode("\n", $report) . "\n" .
-      "A full report, containing also the offending HTML elements, has been created at $path"
+      'A full report, containing also the offending HTML elements, has been created at ' . static::getReportPath()
     );
   }
 
@@ -159,11 +176,12 @@ class AccessibilityContext extends RawDrupalContext {
    *   The path to axe.min.js.
    */
   protected function ensureAxeJsScript(): string {
-    if (!file_exists('public://axe.min.js')) {
-      $this->getFileSystem()->copy(DRUPAL_ROOT . '/../node_modules/axe-core/axe.min.js', 'public://');
+    $file = static::getA11yPath() . '/axe.min.js';
+    if (!file_exists($file)) {
+      \Drupal::service('file_system')->copy(DRUPAL_ROOT . '/../node_modules/axe-core/axe.min.js', 'public://a11y/');
     }
-    Assert::assertFileExists('public://axe.min.js');
-    return \Drupal::service('file_url_generator')->generateString('public://axe.min.js');
+    Assert::assertFileExists('public://a11y/axe.min.js');
+    return \Drupal::service('file_url_generator')->generateString('public://a11y/axe.min.js');
   }
 
   /**
@@ -184,7 +202,9 @@ class AccessibilityContext extends RawDrupalContext {
         'values' => $limitToTags,
       ],
     ]);
-
+    $context = $this->excludeElements ? Json::encode([
+      'exclude' => implode(',', $this->excludeElements),
+    ]) : 'body';
     return <<<JavaScript
       (axeJsSrc => {
         const axeRun = () => {
@@ -193,7 +213,7 @@ class AccessibilityContext extends RawDrupalContext {
           // We'll store the results directly on the HTML tag.
           axeJsElement.dataset.output = ''
 
-          axe.run('body', $options)
+          axe.run($context, $options)
             .then(results => {
               output.violations = results.violations;
               axeJsElement.dataset.output = JSON.stringify(output);
@@ -254,61 +274,87 @@ class AccessibilityContext extends RawDrupalContext {
   }
 
   /**
-   * Generates a full report as a JSON encoded file and returns its path.
+   * Updates the report with the given list of violations.
    *
    * @param array $violations
    *   The list of a11y violations.
-   *
-   * @return string
-   *   The JSON encoded file path.
    */
-  protected function generateFullReport(array $violations): string {
-    $reportsDir = \Drupal::service('stream_wrapper.public')->getDirectoryPath() . '/a11y';
-    $currentUrl = $this->getSession()->getCurrentUrl();
-
-    // Using the URL path to store files for an easy retrieval.
-    $path = trim(parse_url($currentUrl, PHP_URL_PATH) ?? '', '/');
+  protected function updateFullReport(array $violations): void {
+    $currentUrl = trim(parse_url($this->getSession()->getCurrentUrl(), PHP_URL_PATH) ?? '', '/');
     // Remove the base path from the beginning of $path.
-    $basePath = trim(base_path(), '/');
-    $path = substr($path, strlen($basePath));
+    $currentUrl = substr($currentUrl, strlen(trim(base_path(), '/')));
 
-    // Create the directory if it doesn't exist.
-    $fileDir = dirname($path);
-    $reportDir = "$reportsDir/$fileDir";
-    if (!$this->getFileSystem()->prepareDirectory($reportDir, FileSystemInterface::MODIFY_PERMISSIONS | FileSystemInterface::CREATE_DIRECTORY)) {
-      throw new \RuntimeException("Directory $reportDir cannot be created or it's not writable");
-    }
-
-    // Create the report file.
-    $fileName = basename($path) ?: 'homepage';
-    if (!$fullPath = tempnam($reportDir, $fileName . '.')) {
-      throw new \RuntimeException("Cannot create a report file in $reportDir directory");
-    }
-
-    $report = [
-      // Add the page URL to allow easier identification.
+    $report = Yaml::decode(file_get_contents(static::getReportPath()));
+    $report[static::$file . ':' . $this->line] = [
       'page' => $currentUrl,
       'violations' => $violations,
     ];
-
     // Store as YAML (easier to read).
-    file_put_contents($fullPath, Yaml::encode($report));
-    rename($fullPath, "$fullPath.yml");
-
-    return "$fullPath.yml";
+    file_put_contents(static::getReportPath(), Yaml::encode($report));
   }
 
   /**
-   * Returns the file system service.
+   * Returns the path of the full report.
    *
-   * @return \Drupal\Core\File\FileSystemInterface
-   *   The file system service.
+   * @return string
+   *   The path.
    */
-  private function getFileSystem(): FileSystemInterface {
-    if (!isset($this->fileSystem)) {
-      $this->fileSystem = \Drupal::service('file_system');
+  protected static function getA11yPath(): string {
+    if (!isset(static::$a11yPath)) {
+      static::$a11yPath = DRUPAL_ROOT . '/' . PublicStream::basePath() . '/a11y';
+      if (!is_dir(static::$a11yPath)) {
+        if (!mkdir(static::$a11yPath) || !is_writable(static::$a11yPath)) {
+          throw new \RuntimeException('Directory ' . static::$a11yPath . " cannot be created or it's not writable");
+        }
+      }
     }
-    return $this->fileSystem;
+    return static::$a11yPath;
+  }
+
+  /**
+   * Returns the report path.
+   *
+   * @return string
+   *   The path.
+   */
+  private static function getReportPath(): string {
+    return static::getA11yPath() . '/a11y.report.yml';
+  }
+
+  /**
+   * Initializes a report file.
+   *
+   * If ::assertAccessible() is called several times during a suite run, we want
+   * to consolidate the reports in a single file.
+   *
+   * @beforeSuite
+   */
+  public static function initializeReport(): void {
+    file_put_contents(static::getReportPath(), Yaml::encode([]));
+  }
+
+  /**
+   * Captures the current feature file.
+   *
+   * @param \Behat\Behat\Hook\Scope\BeforeFeatureScope $scope
+   *   The scope object.
+   *
+   * @beforeFeature
+   */
+  public static function setFeatureFile(BeforeFeatureScope $scope): void {
+    static::$file = substr($scope->getFeature()->getFile(), strlen($scope->getEnvironment()->getSuite()->getSetting('paths')[0]) + 1);
+  }
+
+  /**
+   * Captures the current scenario line.
+   *
+   * @param \Behat\Behat\Hook\Scope\BeforeScenarioScope $scope
+   *   The scope object.
+   *
+   * @beforeScenario @api&&@javascript
+   */
+  public function setScenarioLine(BeforeScenarioScope $scope): void {
+    $this->line = $scope->getScenario()->getLine();
   }
 
 }

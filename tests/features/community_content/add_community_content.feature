@@ -217,7 +217,7 @@ Feature: Add community content
     And I should not see the link "Office.com"
     And I should not see the link "iCal / MS Outlook"
 
-  @javascript @terms @loggedErrors @api @uploadFiles:logo.png @debug
+  @javascript @terms @loggedErrors @api @uploadFiles:logo.png
   Scenario: Editor File dialog form does not trigger warning
     Given the following collection:
       | title | The editor tester collection |
