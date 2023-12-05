@@ -2,17 +2,11 @@
 
 set -e
 
+# Check that patches are local.
+php ./scripts/composer/check_patches.php
+
 # Check that composer.lock hash is in sync.
 composer validate --no-check-all --no-check-publish
-
-# Check that patches are local.
-for COMPOSER_PATCH in $(cat composer.json | jq --raw-output '.extra.patches.[] | values[]')
-do
-  if [[ $COMPOSER_PATCH =~ ^https?:\/\/.*$ ]]; then
-    echo "$(tput setaf 1)Patch $COMPOSER_PATCH should be local$(tput sgr0)"
-    exit 1;
-  fi
-done
 
 # Run NPM install only if it's not bypassed or when building the distribution.
 if [ "$BUILD_DISTRO" = "1" ] || [ ! -f .env ] || [ "$(grep 'COMPOSER_DISABLE_NODE_DEPENDENCIES=1' .env)" = "" ]
