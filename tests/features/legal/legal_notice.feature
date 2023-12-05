@@ -1,4 +1,5 @@
-@api @group-f
+# This fails in other groups, must be kept in default.
+@api
 Feature:
   - As a visitor, in order to register to Joinup, I have to accept the site's
     'Legal notice', otherwise I cannot register.
