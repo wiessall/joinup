@@ -1,4 +1,4 @@
-@api @group-tmp
+@api @group-h
 Feature: Solution RSS feed.
   In order to stay up to date with solution updates
   As a user of Joinup

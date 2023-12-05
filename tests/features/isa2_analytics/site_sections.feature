@@ -1,4 +1,4 @@
-@api @terms @group-tmp
+@api @terms @group-e
 Feature: Site sections
   As an analytics engineer
   I want visitor statistics to be grouped in sections
