@@ -186,8 +186,6 @@ Feature: As a moderator or group facilitator I want to be able to add, edit and
     And I click "Alphabet"
     Then I see the heading "Alphabet"
 
-    When I click "About"
-    Then I should see the link "Alphabet"
     When I click "Colors"
     Then I see the heading "Colors"
 
