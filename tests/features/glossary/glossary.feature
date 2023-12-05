@@ -24,8 +24,6 @@ Feature: As a moderator or group facilitator I want to be able to add, edit and
     Then I should see the following group menu items in the specified order:
       | text     |
       | Overview |
-      | Members  |
-      | About    |
     But I should not see the link "Glossary"
 
     When I click "Add glossary term" in the plus button menu
@@ -46,8 +44,6 @@ Feature: As a moderator or group facilitator I want to be able to add, edit and
     Then I should see the following group menu items in the specified order:
       | text     |
       | Overview |
-      | Members  |
-      | About    |
       | Glossary |
     When I click "Glossary"
     Then I should see the heading "A World of Things glossary"
@@ -124,8 +120,6 @@ Feature: As a moderator or group facilitator I want to be able to add, edit and
     Then I should see the following group menu items in the specified order:
       | text     |
       | Overview |
-      | Members  |
-      | About    |
     And I should not see the link "Glossary"
 
     Given I <link visibility> the contextual link "Edit menu" in the "Header" region
@@ -134,8 +128,6 @@ Feature: As a moderator or group facilitator I want to be able to add, edit and
     Then I should see the following group menu items in the specified order:
       | text     |
       | Overview |
-      | Members  |
-      | About    |
       | Glossary |
     And the link "Glossary" points outside group
 
