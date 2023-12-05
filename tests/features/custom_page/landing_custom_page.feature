@@ -1,4 +1,4 @@
-@api @terms @group_c
+@api @terms @group-c
 Feature: Landing custom page.
   In order to create landing custom pages
   As a moderator
