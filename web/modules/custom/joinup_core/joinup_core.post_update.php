@@ -44,3 +44,36 @@ function joinup_core_post_update_110000(array &$sandbox): string {
   $sandbox['#finished'] = (int) empty($sandbox['data']);
   return "Processed {$sandbox['progress']} out of {$sandbox['count']}.";
 }
+
+/**
+ * Disable 'Members' from menu.
+ */
+function joinup_core_post_update_110001(array &$sandbox): string {
+  $entityTypeManager = \Drupal::entityTypeManager();
+  /** @var  \Drupal\menu_link_content\MenuLinkContentStorageInterface $menuLinkContentStorage */
+  $menuLinkContentStorage = $entityTypeManager->getStorage('menu_link_content');
+
+  if (!isset($sandbox['data'])) {
+    $sandbox['data'] = $menuLinkContentStorage->getQuery()->accessCheck(FALSE)
+      ->condition('bundle', 'menu_link_content')
+      ->condition('link__uri', 'route:entity.rdf_entity.member_overview%', 'LIKE')
+      ->execute();
+
+    $sandbox['progress'] = 0;
+    $sandbox['count'] = count($sandbox['data']);
+  }
+
+  $spliced = array_splice($sandbox['data'], 0, 300);
+
+  /** @var \Drupal\menu_link_content\MenuLinkContentInterface[] $links */
+  $links = $menuLinkContentStorage->loadMultiple($spliced);
+  foreach ($links as $link) {
+    $link->set('enabled', 0);
+    $link->save();
+
+    $sandbox['progress']++;
+  }
+
+  $sandbox['#finished'] = (int) empty($sandbox['data']);
+  return "Processed {$sandbox['progress']} out of {$sandbox['count']}.";
+}
