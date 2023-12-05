@@ -70,7 +70,6 @@ Feature: Messaging group announcements
       | Select dynamic placeholders for your announcement                                                                                                                                                  |
       | Copy and paste, in the message body, one or more placeholder(s) (e.g. @recipient_name) and the corresponding shortcut link(s) will be displayed in the announcement email. Available placeholders: |
       | @group_landing_page - will display the <group> landing page URL                                                                                                                                    |
-      | @group_about_page - will display the <group> about page URL                                                                                                                                        |
       | @group_members_page - will display the <group> members page URL                                                                                                                                    |
       | @recipient_name - will display the recipient's full name                                                                                                                                           |
       | @recipient_profile - will display the recipient's profile URL                                                                                                                                      |
@@ -85,7 +84,6 @@ Feature: Messaging group announcements
       | Select dynamic placeholders for your announcement                                                                                                                                                  |
       | Copy and paste, in the message body, one or more placeholder(s) (e.g. @recipient_name) and the corresponding shortcut link(s) will be displayed in the announcement email. Available placeholders: |
       | @group_landing_page - will display the <group> landing page URL                                                                                                                                    |
-      | @group_about_page - will display the <group> about page URL                                                                                                                                        |
       | @group_members_page - will display the <group> members page URL                                                                                                                                    |
       | @recipient_name - will display the recipient's full name                                                                                                                                           |
       | @recipient_profile - will display the recipient's profile URL                                                                                                                                      |
@@ -118,7 +116,6 @@ Feature: Messaging group announcements
      """
      In this email we are testing the available arguments:
      <a href="@group_landing_page">The <group> landing page URL</a>
-     <a href="@group_about_page">The <group> about page URL</a>
      <a href="@group_members_page">The <group> members page URL</a>
      The recipient's full name: @recipient_name
      <a href="@recipient_profile">The recipient's profile URL</a>
@@ -137,7 +134,6 @@ Feature: Messaging group announcements
       | Fail pension <group> has an announcement for its members:                                                                                                                                                                                                  |
       | The Big Opening is postponed                                                                                                                                                                                                                               |
       | In this email we are testing the available arguments:                                                                                                                                                                                                      |
-      | The <group> landing page URL                                                                                                                                                                                                                               |
       | The <group> about page URL                                                                                                                                                                                                                                 |
       | The <group> members page URL                                                                                                                                                                                                                               |
       | The recipient's full name: Sons of tweets                                                                                                                                                                                                                  |
