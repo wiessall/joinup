@@ -17,7 +17,7 @@ Folders having 2 or less test YAML were not checked.
 | `./contact_form`          |          01:21 |      81 | group-f                   |
 | `./contact_information`   |          01:16 |      76 | group-h                   |
 | `./custom_page`           |          12:19 |     739 | group-e                   |
-| `./eulogin`               |             -- |         |                           |
+| `./eulogin`               |             -- |         | group-a                   |
 | `./file_url`              |             -- |         |                           |
 | `./glossary`              |             -- |         |                           |
 | `./isa2_analytics`        |             -- |         |                           |
@@ -35,17 +35,17 @@ Folders having 2 or less test YAML were not checked.
 | `./joinup_search`         |          04:14 |     254 | group-i                   |
 | `./joinup_seo`            |          01:06 |     126 | group-i                   |
 | `./joinup_subscription`   |          03:39 |     219 | group-b                   |
-| `./legal`                 |             -- |         |                           |
-| `./media`                 |             -- |         |                           |
+| `./legal`                 |             -- |         | group-f                   |
+| `./media`                 |             -- |         | group-f                   |
 | `./menus`                 |          00:30 |      30 | group-i                   |
 | `./moderator`             |          02:02 |     122 | group-h                   |
 | `./owner`                 |          00:35 |      35 | group-i                   |
 | `./paragraphs`            |          09:06 |     546 | group-f                   |
-| `./pipeline_log`          |             -- |         |                           |
-| `./rdf_entity_provenance` |             -- |         |                           |
-| `./security`              |             -- |         |                           |
+| `./pipeline_log`          |             -- |         | group-i                   |
+| `./rdf_entity_provenance` |             -- |         | group-i                   |
+| `./security`              |             -- |         | group-i                   |
 | `./solution`              |   16:40  10:27 |    1000 | group-g, group-h          |
 | `./taxonomy`              |          07:07 |     427 | group-h                   |
-| `./update`                |             -- |         |                           |
+| `./update`                |             -- |         | -- clone test only --     |
 | `./user`                  |          01:24 |      84 | group-i                   |
-| `./video`                 |             -- |         |                           |
+| `./video`                 |             -- |         | group-i                   |
