@@ -21,9 +21,7 @@ use Drupal\joinup_notification\MessageArgumentGenerator;
 use Drupal\joinup_user\Entity\JoinupUser;
 use Drupal\joinup_user\Entity\JoinupUserInterface;
 use Drupal\joinup_user\JoinupUserViewsData;
-use Drupal\og\Og;
 use Drupal\og\OgMembershipInterface;
-use Drupal\search_api\Query\QueryInterface;
 use Drupal\user\Entity\User;
 use Drupal\user\UserInterface;
 
@@ -334,54 +332,6 @@ function joinup_user_user_form_submit(array $form, FormStateInterface $form_stat
   /** @var \Drupal\user\AccountForm $form_object */
   $form_object = $form_state->getFormObject();
   $form_state->setRedirectUrl($form_object->getEntity()->toUrl());
-}
-
-/**
- * Implements hook_search_api_query_TAG_alter().
- *
- * Alters the Search API query for the user content:
- * - show only the content the user is author of;
- * - do not show entities of some bundles.
- */
-function joinup_user_search_api_query_search_api_field_field_user_content_alter(QueryInterface &$query) {
-  /** @var \Drupal\user\Entity\User $user */
-  $user = $query->getOption('search_api_field entity');
-  $current_user = \Drupal::currentUser();
-
-  // Do not show contact information and owner entities as they are not
-  // relevant for the user content, and they are visualised in the related
-  // entity "about" page.
-  $query->addCondition('entity_bundle', ['contact_information', 'owner'], 'NOT IN');
-
-  $groups = [];
-  foreach (Og::getMemberships($user) as $membership) {
-    $groups[] = $membership->getGroupId();
-  }
-
-  if ($groups) {
-    if (count($groups) > 100) {
-      $subset = array_chunk($groups, 100);
-      $groups = reset($subset);
-      // If the user is the owner of the profile, show a warning message.
-      if ($user->id() === $current_user->id()) {
-        \Drupal::messenger()->addMessage(t('You have joined a large number of collections and solutions.<br /> Only the content of the first 100 groups is shown.'), 'warning');
-      }
-    }
-    $or = $query->createConditionGroup('OR');
-
-    // Show all the content the user is author of.
-    $or->addCondition('id', $groups, 'IN');
-    // Or all the groups they belong to.
-    $or->addCondition('entity_author', $user->id());
-    $query->addConditionGroup($or);
-  }
-  else {
-    // Show only content the user is author of.
-    $query->addCondition('entity_author', $user->id());
-  }
-
-  // Sort content by their creation date.
-  $query->sort('entity_created', QueryInterface::SORT_DESC);
 }
 
 /**
