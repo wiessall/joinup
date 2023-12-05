@@ -41,7 +41,7 @@ Feature: Machine translation
     Then I should not see any Webtools eTrans elements
     When I go to the "Brexit" collection
     Then I should not see any Webtools eTrans elements
-    When I click "Members"
+    When I am on the members page of "Brexit"
     Then I should not see any Webtools eTrans elements
     When I click "Glossary"
     Then I should see the Webtools eTrans button
