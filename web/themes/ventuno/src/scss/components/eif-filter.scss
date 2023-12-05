@@ -7,6 +7,7 @@
     padding: $spacer * .5; // 8px
     font-weight: $font-weight-bold;
     text-align: center;
+    color: $white;
     a {
       color: $white;
       text-decoration: underline;
@@ -45,7 +46,7 @@
       color: $joinup--green;
     }
   }
-  &--interoperability-layer {
+  &--interoperability-layers {
     border: 1px solid $joinup--orange;
     .eif-filter__header {
       background-color: $joinup--orange;
@@ -103,7 +104,7 @@
         color: $joinup--green;
       }
     }
-    &--interoperability-layer {
+    &--interoperability-layers {
       .eif-tile__label {
         background-color: $joinup--orange;
       }
