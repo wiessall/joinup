@@ -103,8 +103,8 @@ function ventuno_preprocess_rdf_entity__solution__view_mode_search_list_item(arr
     ],
     'layer' => [
       'field' => 'eif_layer',
-      'label' => 'Interoperability layer',
-      'class' => 'interoperability-layer',
+      'label' => 'Interoperability layers',
+      'class' => 'interoperability-layers',
       'weight' => 1,
     ],
     'model' => [
