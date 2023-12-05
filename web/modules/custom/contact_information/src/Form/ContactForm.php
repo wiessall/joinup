@@ -45,7 +45,7 @@ class ContactForm extends ContactInformationFormBase {
   public function submitForm(array &$form, FormStateInterface $form_state): void {
     $this->sendMessage($form, $form_state);
 
-    $form_state->setRedirect('entity.rdf_entity.about_page', [
+    $form_state->setRedirect('entity.rdf_entity.canonical', [
       'rdf_entity' => $this->rdfEntity->id(),
     ]);
   }
