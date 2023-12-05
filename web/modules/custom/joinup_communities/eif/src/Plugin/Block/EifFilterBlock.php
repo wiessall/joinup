@@ -77,7 +77,7 @@ class EifFilterBlock extends BlockBase implements ContainerFactoryPluginInterfac
         'nid'  => EifInterface::EIF_PRINCIPLE_FILTER_TARGET_ID,
       ],
       'eif_interoperability_layer' => [
-        'name' => $this->t('Interoperability layer'),
+        'name' => $this->t('Interoperability layers'),
         'nid'  => EifInterface::EIF_LAYER_FILTER_TARGET_ID,
       ],
       'eif_conceptual_model' => [
@@ -100,7 +100,7 @@ class EifFilterBlock extends BlockBase implements ContainerFactoryPluginInterfac
 
     $build['description'] = [
       '#theme' => 'eif_description',
-      '#title' => $this->t('The online assistant helps users to find operational solutions that cover the alignment and implementation of the European Interoperability Framework and filter them by attributes.'),
+      '#title' => $this->t('The EIF Solutions page counts with an online assistant that helps users to find operational solutions covering the alignment and implementation of the European Interoperability Framework and filter them by attributes.'),
       '#steps' => [
         $this->t('Step 1 - Choose one or combine multiple filters to find solutions that match specifically your EIF requirements'),
         $this->t('Step 2 - Explore operational solutions that help align to the European Interoperability Framework'),

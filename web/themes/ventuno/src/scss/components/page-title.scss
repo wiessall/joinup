@@ -4,11 +4,19 @@
   .permalink {
     display: none;
   }
-  &__title:hover {
-    .permalink {
-      display: inline;
-      position: absolute;
-      margin-left: $spacer * .5;
+  &__title {
+    &:hover {
+      .permalink {
+        display: inline;
+        position: absolute;
+        margin-left: $spacer * .5;
+      }
+    }
+    &.visually-hidden {
+      & + .page-title__details {
+        width: 100%;
+        overflow: hidden;
+      }
     }
   }
   &__title {
