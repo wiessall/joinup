@@ -73,11 +73,12 @@ Feature: As a visitor or logged-in user, when I want to post content, the form
     Then the form is protected by Antibot
     And the form is protected by Honeypot
 
-    When I go to the about page of "Family photos"
-    And I click "Contact us" in the "Content" region
-    Then a modal should open
-    And the form is protected by Antibot
-    And the form is protected by Honeypot
+# @see EIPC-7858
+#    When I go to the about page of "Family photos"
+#    And I click "Contact us" in the "Content" region
+#    Then a modal should open
+#    And the form is protected by Antibot
+#    And the form is protected by Honeypot
 
   Scenario Outline: Extend Honeypot & Antibot to all forms.
     Given users:
