@@ -113,8 +113,8 @@ elements: |-
       '#type': webform_custom_composite
       '#title': 'Geographical coverage'
       '#required': true
-      '#multiple__header_label': 'Geographical coverage'
-      '#multiple__item_label': 'Geographical coverage'
+      '#multiple__header': false
+      '#multiple__item_label': ''
       '#multiple__min_items': 1
       '#multiple__sorting': false
       '#multiple__add': false
@@ -178,7 +178,7 @@ elements: |-
             'United Kingdom': 'United Kingdom'
             'Vatican City': 'Vatican City'
           '#required': true
-          '#title': 'Geographical coverage'
+          '#title': 'Choose a country'
           '#other__option_label': 'Other (please specify)'
     flexbox_06:
       '#type': webform_flexbox
@@ -212,6 +212,7 @@ elements: |-
     source_url:
       '#type': webform_custom_composite
       '#title': 'Source (URL)'
+      '#title_display': none
       '#required': true
       '#multiple__item_label': 'Source URL'
       '#multiple__min_items': 1
@@ -223,8 +224,8 @@ elements: |-
       '#element':
         source_url_item:
           '#type': url
-          '#title': ' Source (URL)'
-          '#description': 'Please provide here the link to external sources describing the case (reports, case studies, presentations, news articles, webpage describing the solution etc). At least one URL is needed to publish the case in the database.'
+          '#title': 'Source (URL)'
+          '#description': 'Please provide here the complete link to external sources which describe the case (reports, case studies, presentations, news articles, web page describing the solution etc). At least one URL is needed to publish the case in the database.'
     description:
       '#type': textarea
       '#title': Description
@@ -241,6 +242,7 @@ elements: |-
         '#type': radios
         '#title': 'Is the technological solution available as Open Source?'
         '#options': yes_no
+        '#options_display': two_columns
         '#required': true
         '#wrapper_type': form_element
       status:
