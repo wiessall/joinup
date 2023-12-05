@@ -377,7 +377,6 @@ function collection_rdf_entity_view(array &$build, EntityInterface $entity, Enti
       'attributes' => [
         'data-drupal-group-view-mode' => $view_mode,
         'class' => [
-          'about-page',
           'read-more',
           'fieldset__read-more',
           'btn',
