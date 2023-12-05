@@ -163,6 +163,4 @@ Feature: Joining and leaving collections through the web interface
 
     When I press "Cancel" in the "Modal buttons" region
     And I wait for AJAX to finish
-    # Since this is a modal, the dialog simply closes and the user is not redirected
-    # to the overview page. This is why the title from "About" is still displayed.
-    Then I should see the heading "About Sapient Pearwood"
+    Then I should see the heading "Sapient Pearwood"
