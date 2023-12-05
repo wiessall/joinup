@@ -76,6 +76,7 @@ permissions:
   - 'view paragraph content tile'
   - 'view paragraph content tiles'
   - 'view paragraph content video'
+  - 'view paragraph content webform'
   - 'view published sitewide alert entities'
   - 'view rdf entity'
   - 'view topic meta-entity'
