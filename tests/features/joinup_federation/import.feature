@@ -229,8 +229,6 @@ Feature: As a site moderator I am able to import RDF files.
     Then I should see the following group menu items in the specified order:
       | text     |
       | Overview |
-      | Members  |
-      | About    |
 
     # Check the affiliation of federated solutions.
     But the "Solution 1" solution should be affiliated with the "NIO" collection
