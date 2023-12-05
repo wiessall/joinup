@@ -332,7 +332,6 @@ class OgMenuInstanceForm extends OriginalOgMenuInstanceForm {
         $operations = [];
         $group_edit_routes = [
           'entity.rdf_entity.canonical',
-          'entity.rdf_entity.about_page',
         ];
 
         // Skip this if this link is not pointing to the canonical view of a

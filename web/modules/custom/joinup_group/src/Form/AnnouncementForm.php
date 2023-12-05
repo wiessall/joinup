@@ -309,10 +309,6 @@ class AnnouncementForm extends FormBase {
         'label' => $this->t('will display the @label landing page URL', $vars),
         'value' => $group->toUrl()->setAbsolute()->toString(),
       ],
-      '@group_about_page' => [
-        'label' => $this->t('will display the @label about page URL', $vars),
-        'value' => $group->toUrl('about-page')->setAbsolute()->toString(),
-      ],
       '@group_members_page' => [
         'label' => $this->t('will display the @label members page URL', $vars),
         'value' => $group->toUrl('member-overview')->setAbsolute()->toString(),
