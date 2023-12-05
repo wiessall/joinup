@@ -182,7 +182,6 @@ function joinup_group_entity_type_alter(array &$entity_types): void {
 
     // Add group link templates, so the OG context will be automatically solved.
     $link_templates = [
-      'about-page' => '/rdf_entity/{rdf_entity}/about',
       'announcement-overview' => '/rdf_entity/{rdf_entity}/announcements',
       'announcement-add' => '/rdf_entity/{rdf_entity}/announcements/add',
       'announcement-edit' => '/rdf_entity/{rdf_entity}/announcements/edit/{message}',

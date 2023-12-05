@@ -308,7 +308,6 @@ function _ventuno_build_permalink(): ?string {
   $routes = [
     'entity.node.canonical',
     'entity.rdf_entity.canonical',
-    'entity.rdf_entity.about_page',
   ];
 
   if (!in_array($route_name, $routes)) {
