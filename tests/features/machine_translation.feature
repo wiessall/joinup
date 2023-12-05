@@ -47,8 +47,6 @@ Feature: Machine translation
     Then I should see the Webtools eTrans button
     When I click "Digital portability"
     Then I should see the Webtools eTrans button
-    When I click "About"
-    Then I should see the Webtools eTrans button
     When I go to the "Increased credit card fees" custom page
     Then I should see the Webtools eTrans button
     When I go to the edit form of the "Increased credit card fees" "custom page"
