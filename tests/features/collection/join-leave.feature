@@ -157,8 +157,6 @@ Feature: Joining and leaving collections through the web interface
     # Members can cancel the "Leave collection" modal.
     Given I am logged in as "Stewe Griffin"
     And I go to the homepage of the "Sapient Pearwood" collection
-    When I click "Read more"
-    Then I should see the heading "About Sapient Pearwood"
 
     When I click "Leave this collection"
     Then a modal should open
