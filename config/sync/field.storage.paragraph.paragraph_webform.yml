@@ -1,0 +1,24 @@
+uuid: 9ee78115-5b5f-4d22-a5e3-cacccf974cc4
+langcode: en
+status: true
+dependencies:
+  module:
+    - field_permissions
+    - paragraphs
+    - webform
+third_party_settings:
+  field_permissions:
+    permission_type: public
+id: paragraph.paragraph_webform
+field_name: paragraph_webform
+entity_type: paragraph
+type: webform
+settings:
+  target_type: webform
+module: webform
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false
