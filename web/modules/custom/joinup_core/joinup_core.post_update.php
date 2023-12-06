@@ -19,24 +19,27 @@ declare(strict_types = 1);
  * Remove 'About' from menu.
  */
 function joinup_core_post_update_110000(array &$sandbox): string {
-  $db = Drupal::database();
-  /** @var \Drupal\Core\Menu\MenuLinkManagerInterface $menuLinkManager */
-  $menuLinkManager = Drupal::service('plugin.manager.menu.link');
+  $entityTypeManager = \Drupal::entityTypeManager();
+  /** @var  \Drupal\menu_link_content\MenuLinkContentStorageInterface $menuLinkContentStorage */
+  $menuLinkContentStorage = $entityTypeManager->getStorage('menu_link_content');
 
   if (!isset($sandbox['data'])) {
-    $sandbox['data'] = $db->select('menu_tree', 'mt')
-      ->fields('mt', ['id'])
-      ->condition('mt.route_name', 'entity.rdf_entity.about_page')
-      ->execute()
-      ->fetchAll();
+    $query = $menuLinkContentStorage->getQuery()->accessCheck(FALSE);
+
+    $sandbox['data'] = $query
+      ->condition('link__uri', 'route:entity.rdf_entity.about_page%', 'LIKE')
+      ->execute();
 
     $sandbox['progress'] = 0;
     $sandbox['count'] = count($sandbox['data']);
   }
 
   $spliced = array_splice($sandbox['data'], 0, 300);
-  foreach ($spliced as $data) {
-    $menuLinkManager->removeDefinition($data->id);
+
+  /** @var \Drupal\menu_link_content\MenuLinkContentInterface[] $links */
+  $links = $menuLinkContentStorage->loadMultiple($spliced);
+  foreach ($links as $link) {
+    $link->delete();
 
     $sandbox['progress']++;
   }
@@ -62,6 +65,7 @@ function joinup_core_post_update_110001(array &$sandbox): string {
     $sandbox['data'] = $query
       ->condition($or)
       ->condition('enabled', 1)
+      ->condition('menu_name', 'ogmenu-%', 'LIKE')
       ->execute();
 
     $sandbox['progress'] = 0;
