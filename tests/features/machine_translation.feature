@@ -34,7 +34,7 @@ Feature: Machine translation
 
     When I am logged in as a moderator
     # Inside a collection sidebar, only custom pages, glossary terms (but not
-    # the glossary overview) and the about page should be translatable.
+    # the glossary overview) should be translatable.
     When I go to the edit form of the "Brexit" collection
     Then I should not see any Webtools eTrans elements
     When I go to the delete form of the "Brexit" collection
