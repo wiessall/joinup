@@ -1,4 +1,4 @@
-@api @group-h
+@api @group-a
 Feature: Contact information API
   In order to manage contact information programmatically
   As a backend developer

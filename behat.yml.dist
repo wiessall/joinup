@@ -261,14 +261,9 @@ clean:
       paths: *paths
       filters:
         tags: '~@wip&&@group-i'
-    group_tmp:
-      contexts: *contexts
-      paths: *paths
-      filters:
-        tags: '~@wip&&@group-tmp'
 
     default:
       contexts: *contexts
       paths: *paths
       filters:
-        tags: '~@wip&&~@group-a&&~@group-b&&~@group-c&&~@group-d&&~@group-e&&~@group-f&&~@group-g&&~@group-h&&~@group-i&&~@group-clone&&~@group-tmp'
+        tags: '~@wip&&~@group-a&&~@group-b&&~@group-c&&~@group-d&&~@group-e&&~@group-f&&~@group-g&&~@group-h&&~@group-i&&~@group-clone'

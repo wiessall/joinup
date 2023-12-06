@@ -1,4 +1,4 @@
-@api @group-c
+@api @group-a
 Feature: SPDX Permissions
   As a moderator of the website
   In order to better present the Joinup licences
