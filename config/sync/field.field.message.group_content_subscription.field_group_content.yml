@@ -214,6 +214,15 @@ settings:
   user:
     handler: 'default:user'
     handler_settings: {  }
+  webform_options:
+    handler: 'default:webform_options'
+    handler_settings: {  }
+  webform_submission:
+    handler: 'default:webform_submission'
+    handler_settings: {  }
+  webform:
+    handler: 'default:webform'
+    handler_settings: {  }
   menu_link_content:
     handler: 'default:menu_link_content'
     handler_settings: {  }

@@ -199,13 +199,17 @@ function ventuno_preprocess_radios(array &$variables): void {
  * Implements hook_form_BASE_FORM_ID_alter().
  */
 function ventuno_form_poll_view_form_alter(array &$form, FormStateInterface $form_state, string $form_id): void {
-  foreach (['result', 'cancel'] as $element) {
+  foreach (['result', 'cancel', 'back'] as $element) {
     if (!isset($form['actions'][$element])) {
       continue;
     }
 
     $form['actions'][$element]['#button_type'] = 'link';
     $form['actions'][$element]['#attributes']['class'][] = 'p-0';
+  }
+
+  if (isset($form['actions']['back'])) {
+    $form['actions']['back']['#value'] = t('Hide results');
   }
 }
 

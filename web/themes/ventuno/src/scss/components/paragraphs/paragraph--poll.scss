@@ -55,6 +55,9 @@
         }
       }
     }
+    &__back {
+      min-width: 100px;
+    }
   }
   .form-actions {
     margin-top: $spacer;
@@ -68,5 +71,10 @@
       position: absolute;
       bottom: $spacer * -.1; // Align with poll details
     }
+  }
+  [data-drupal-selector="edit-back"] {
+    position: absolute;
+    top: 0px;
+    right: 0px;
   }
 }

@@ -1,0 +1,322 @@
+diff --git a/modules/webform_example_composite/src/Element/WebformExampleComposite.php b/modules/webform_example_composite/src/Element/WebformExampleComposite.php
+index 793f0338f4c1b2bf2790b61f1f003a0b07ea2d3b..da439029c16fbb1438d6e840d0456065ec791916 100644
+--- a/modules/webform_example_composite/src/Element/WebformExampleComposite.php
++++ b/modules/webform_example_composite/src/Element/WebformExampleComposite.php
+@@ -55,6 +55,17 @@ class WebformExampleComposite extends WebformCompositeBase {
+       // Use #after_build to add #states.
+       '#after_build' => [[get_called_class(), 'afterBuild']],
+     ];
++    $elements['languages'] = [
++      '#type' => 'webform_checkboxes_other',
++      '#title' => t('Languages spoken'),
++      '#options' => [
++        'English' => t('English'),
++        'French' => t('French'),
++        'Spanish' => t('Spanish'),
++      ],
++      // Use #after_build to add #states.
++      '#after_build' => [[get_called_class(), 'afterBuild']],
++    ];
+ 
+     return $elements;
+   }
+diff --git a/modules/webform_example_composite/src/Plugin/WebformElement/WebformExampleComposite.php b/modules/webform_example_composite/src/Plugin/WebformElement/WebformExampleComposite.php
+index a9937b355f326b432e1fc2b2c3b63d420b9569d0..f26cb1e34dee7f1e759d937588443af1db162bd2 100644
+--- a/modules/webform_example_composite/src/Plugin/WebformElement/WebformExampleComposite.php
++++ b/modules/webform_example_composite/src/Plugin/WebformElement/WebformExampleComposite.php
+@@ -41,10 +41,11 @@ class WebformExampleComposite extends WebformCompositeBase {
+ 
+     $lines = [];
+     $lines[] = ($value['first_name'] ? $value['first_name'] : '') .
+-      ($value['last_name'] ? ' ' . $value['last_name'] : '') .
+-      ($value['sex'] || $value['date_of_birth'] ? ' -' : '') .
+-      ($value['sex'] ? ' ' . $value['sex'] : '') .
+-      ($value['date_of_birth'] ? ' (' . $value['date_of_birth'] . ')' : '');
++      (!empty($value['last_name']) ? ' ' . $value['last_name'] : '') .
++      (!empty($value['sex']) || !empty($value['date_of_birth']) ? ' -' : '') .
++      (!empty($value['sex']) ? ' ' . $value['sex'] : '') .
++      (!empty($value['date_of_birth']) ? ' (' . $value['date_of_birth'] . ')' : '') .
++      (!empty($value['languages']) ? ' [' . implode('; ', $value['languages']) . ')' : '');
+     return $lines;
+   }
+ 
+diff --git a/modules/webform_example_composite/templates/webform-example-composite.html.twig b/modules/webform_example_composite/templates/webform-example-composite.html.twig
+index 785929b672dc8294657922c8ad1ffa33d2c677f0..40b41e74d568e10437a0ff72ef4113788bedb05e 100644
+--- a/modules/webform_example_composite/templates/webform-example-composite.html.twig
++++ b/modules/webform_example_composite/templates/webform-example-composite.html.twig
+@@ -26,6 +26,9 @@
+       {% if content.sex %}
+         <div class="webform-flex webform-flex--1"><div class="webform-flex--container">{{ content.sex }}</div></div>
+       {% endif %}
++      {% if content.languages %}
++        <div class="webform-flex webform-flex--1"><div class="webform-flex--container">{{ content.languages }}</div></div>
++      {% endif %}
+     </div>
+ {% else %}
+   {{ content }}
+diff --git a/modules/webform_example_composite/tests/src/Functional/WebformExampleCompositeTest.php b/modules/webform_example_composite/tests/src/Functional/WebformExampleCompositeTest.php
+index 4e27dd6283cc3acb08dfdb0c81cfb34bb6da9f25..b96a94593aaf5c996d4d6cccb61f444a4f044d86 100644
+--- a/modules/webform_example_composite/tests/src/Functional/WebformExampleCompositeTest.php
++++ b/modules/webform_example_composite/tests/src/Functional/WebformExampleCompositeTest.php
+@@ -41,6 +41,8 @@ class WebformExampleCompositeTest extends WebformBrowserTestBase {
+     $assert_session->fieldExists('edit-webform-example-composite-date-of-birth');
+     $assert_session->responseContains('<label for="edit-webform-example-composite-sex">Sex</label>');
+     $assert_session->fieldExists('edit-webform-example-composite-sex');
++    $assert_session->responseContains('<span class="fieldset-legend">Languages spoken</span>');
++    $assert_session->fieldExists('edit-webform-example-composite-languages-checkboxes-english');
+ 
+     // Check webform element submission.
+     $edit = [
+@@ -48,10 +50,12 @@ class WebformExampleCompositeTest extends WebformBrowserTestBase {
+       'webform_example_composite[last_name]' => 'Smith',
+       'webform_example_composite[sex]' => 'Male',
+       'webform_example_composite[date_of_birth]' => '1910-01-01',
++      'webform_example_composite[languages][checkboxes][English]' => TRUE,
+       'webform_example_composite_multiple[items][0][first_name]' => 'Jane',
+       'webform_example_composite_multiple[items][0][last_name]' => 'Doe',
+       'webform_example_composite_multiple[items][0][sex]' => 'Female',
+       'webform_example_composite_multiple[items][0][date_of_birth]' => '1920-12-01',
++      'webform_example_composite_multiple[items][0][languages][checkboxes][English]' =>  TRUE,
+     ];
+     $sid = $this->postSubmission($webform, $edit);
+     $webform_submission = WebformSubmission::load($sid);
+@@ -60,6 +64,7 @@ class WebformExampleCompositeTest extends WebformBrowserTestBase {
+       'last_name' => 'Smith',
+       'sex' => 'Male',
+       'date_of_birth' => '1910-01-01',
++      'languages' => ['English'],
+     ]);
+     $this->assertEquals($webform_submission->getElementData('webform_example_composite_multiple'), [
+       [
+@@ -67,6 +72,7 @@ class WebformExampleCompositeTest extends WebformBrowserTestBase {
+         'last_name' => 'Doe',
+         'sex' => 'Female',
+         'date_of_birth' => '1920-12-01',
++        'languages' => ['English'],
+       ],
+     ]);
+   }
+diff --git a/src/Element/WebformCompositeBase.php b/src/Element/WebformCompositeBase.php
+index ab2692ba5d07a9efdd897ce2b765caa5fe091f0f..59c1fdea8bcc24c70c15c41d40cec2a1b9a0a75b 100644
+--- a/src/Element/WebformCompositeBase.php
++++ b/src/Element/WebformCompositeBase.php
+@@ -266,7 +266,9 @@ abstract class WebformCompositeBase extends FormElement implements WebformCompos
+         $composite_element += array_intersect_key($element, $select_properties);
+       }
+ 
+-      if ($element_plugin->hasMultipleValues($composite_element)) {
++      $supported_multiple_value_elements = ['checkboxes', 'webform_checkboxes_other', 'select', 'webform_select_other'];
++      if ($element_plugin->hasMultipleValues($composite_element)
++        && !in_array($composite_element['#type'], $supported_multiple_value_elements)) {
+         throw new \Exception('Multiple elements are not supported within composite elements.');
+       }
+       if ($element_plugin->isComposite()) {
+diff --git a/src/Element/WebformElementComposite.php b/src/Element/WebformElementComposite.php
+index 08d9cea053c9d772ffe1c18e053d29b2e9163675..bb2b31ef00d866c5a5648d6a57ea912bd8e3e599 100644
+--- a/src/Element/WebformElementComposite.php
++++ b/src/Element/WebformElementComposite.php
+@@ -350,7 +350,9 @@ class WebformElementComposite extends FormElement {
+       }
+ 
+       // Make sure element is not storing multiple values.
+-      if ($element_plugin->hasMultipleValues($composite_element)) {
++      $supported_multiple_value_elements = ['checkboxes', 'webform_checkboxes_other', 'select', 'webform_select_other'];
++      if ($element_plugin->hasMultipleValues($composite_element)
++        && !in_array($composite_element['#type'], $supported_multiple_value_elements)) {
+         $form_state->setError($element, t('Multiple value is not supported for %title (@type).', $t_args));
+       }
+     }
+diff --git a/src/Element/WebformOtherBase.php b/src/Element/WebformOtherBase.php
+index 543ed788490b12725339402ea6a3e4b6c4d003ee..a898aceb332a7e7f9d842ef013e73bca2de82cd2 100644
+--- a/src/Element/WebformOtherBase.php
++++ b/src/Element/WebformOtherBase.php
+@@ -349,6 +349,8 @@ abstract class WebformOtherBase extends FormElement {
+       }
+ 
+       $default_options = array_combine($default_value, $default_value);
++      // Remove empty strings as default options.
++      unset($default_options['']);
+       $flattened_options = OptGroup::flattenOptions($element['#options']);
+       if ($other_options = array_diff_key($default_options, $flattened_options)) {
+         return [
+diff --git a/src/Plugin/WebformElement/WebformCheckboxesOther.php b/src/Plugin/WebformElement/WebformCheckboxesOther.php
+index 663217d71108a9df23f68701cac7c3a8ab70877a..17eea64d32f1f9fdff0ea7f69ca3568b93c22cbc 100644
+--- a/src/Plugin/WebformElement/WebformCheckboxesOther.php
++++ b/src/Plugin/WebformElement/WebformCheckboxesOther.php
+@@ -71,4 +71,25 @@ class WebformCheckboxesOther extends Checkboxes implements WebformElementOtherIn
+     }
+   }
+ 
++  /**
++   * {@inheritdoc}
++   */
++  public function setDefaultValue(array &$element) {
++    if (!isset($element['#default_value'])) {
++      return;
++    }
++
++    if (isset($element['#default_value']['other']) && isset($element['#default_value']['checkboxes'])) {
++      // Checkboxes element expects to receive flat array
++      // @see Drupal\Core\Render\Element\Checkboxes::valueCallback()".
++      $other_value = $element['#default_value']['other'];
++      $element['#default_value'] = array_filter($element['#default_value']['checkboxes']);
++      if ($other_value !== '') {
++        $element['#default_value'] += [$other_value => $other_value];
++      }
++    }
++
++    parent::setDefaultValue($element);
++  }
++
+ }
+diff --git a/src/Plugin/WebformElement/WebformCompositeBase.php b/src/Plugin/WebformElement/WebformCompositeBase.php
+index 59f7c6cd92e31af10c17b8331f71e3a2c6aa2e90..e45baa4cb93879cf311049aa477c3c154e372ca8 100644
+--- a/src/Plugin/WebformElement/WebformCompositeBase.php
++++ b/src/Plugin/WebformElement/WebformCompositeBase.php
+@@ -644,8 +644,24 @@ abstract class WebformCompositeBase extends WebformElementBase implements Webfor
+       return '';
+     }
+ 
+-    $format_function = 'format' . $type;
+-    return $composite_plugin->$format_function($composite_element, $webform_submission, $options);
++    if ($composite_plugin->hasMultipleValues($composite_element)) {
++      // Set #composite_value, so that composite sub-element get the
++      // correct value.
++      // @see \Drupal\webform\Plugin\WebformElementBase::getValue
++      $composite_element['#composite_value'] = (array) $this->getValue($element, $webform_submission, $options);
++
++      // Clone options and remove #composite_key and #delta.
++      $composite_options = $options;
++      unset($composite_options['composite_key']);
++      unset($composite_options['delta']);
++
++      $format_function = 'format' . $type . 'Items';
++      return $composite_plugin->$format_function($composite_element, $webform_submission, $composite_options);
++    }
++    else {
++      $format_function = 'format' . $type;
++      return $composite_plugin->$format_function($composite_element, $webform_submission, $options);
++    }
+   }
+ 
+   /**
+@@ -1142,12 +1158,19 @@ abstract class WebformCompositeBase extends WebformElementBase implements Webfor
+           '#states' => $state_disabled,
+         ];
+       }
+-      elseif (in_array($type, ['select', 'webform_select_other', 'radios', 'webform_radios_other'])) {
++      elseif (in_array($type, ['select', 'webform_select_other', 'checkboxes', 'webform_checkboxes_other', 'radios', 'webform_radios_other'])) {
+         // Get base type (select or radios).
+-        $base_type = preg_replace('/webform_(select|radios)_other/', '\1', $type);
++        $base_type = preg_replace('/webform_(select|checkboxes|radios)_other/', '\1', $type);
+ 
+         // Get type options.
+         switch ($base_type) {
++          case 'checkboxes':
++            $settings = [
++              'checkboxes' => $this->t('Checkboxes'),
++              'webform_checkboxes_other' => $this->t('Checkboxes other'),
++            ];
++            break;
++
+           case 'radios':
+             $settings = [
+               'radios' => $this->t('Radios'),
+@@ -1200,7 +1223,7 @@ abstract class WebformCompositeBase extends WebformElementBase implements Webfor
+             '#suffix' => '<em>' . $message . '</em>',
+           ];
+         }
+-        elseif ($composite_options) {
++        elseif ($composite_options && count($composite_options) > 1) {
+           $row['settings']['data'][$composite_key . '__options'] = [
+             '#type' => 'select',
+             '#title' => $this->t('@title options', $t_args),
+@@ -1488,7 +1511,7 @@ abstract class WebformCompositeBase extends WebformElementBase implements Webfor
+     if (!$element_plugin->isInput($element)
+       || $element_plugin->isComposite()
+       || $element_plugin->isContainer($element)
+-      || $element_plugin->hasMultipleValues($element)
++      || $element_plugin->hasMultipleValues($element) && (!in_array($type, ['checkboxes', 'webform_checkboxes_other', 'select', 'webform_select_other']))
+       || ($element_plugin instanceof WebformElementEntityReferenceInterface && !($element_plugin instanceof WebformManagedFileBase))
+       || $element_plugin instanceof WebformElementComputedInterface) {
+       return FALSE;
+diff --git a/src/Plugin/WebformElementBase.php b/src/Plugin/WebformElementBase.php
+index feef450120c54a30e1c8bbd6a297521fa7157118..21d890b2eb4f4d6c8099c9d4b6cc81c60bd6d609 100644
+--- a/src/Plugin/WebformElementBase.php
++++ b/src/Plugin/WebformElementBase.php
+@@ -1727,12 +1727,18 @@ class WebformElementBase extends PluginBase implements WebformElementInterface,
+       return $element['#value'];
+     }
+ 
+-    $webform_key = $options['webform_key'] ?? $element['#webform_key'];
+-    $value = $webform_submission->getElementData($webform_key);
+-    // Is value is NULL and there is a #default_value, then use it.
+-    if ($value === NULL && isset($element['#default_value'])) {
+-      $value = $element['#default_value'];
++    if (isset($element['#composite_value'])) {
++      $value = $element['#composite_value'];
+     }
++    else {
++      $webform_key = (isset($options['webform_key'])) ? $options['webform_key'] : $element['#webform_key'];
++      $value = $webform_submission->getElementData($webform_key);
++      // Is value is NULL and there is a #default_value, then use it.
++      if ($value === NULL && isset($element['#default_value'])) {
++        $value = $element['#default_value'];
++      }
++    }
++
+ 
+     // Return multiple (delta) value or composite (composite_key) value.
+     if (is_array($value)) {
+diff --git a/src/WebformSubmissionStorage.php b/src/WebformSubmissionStorage.php
+index 07c7c04c56aaecccf104d5b1dedcb3f29a0dfb65..f3652dbdee85d60a7215d867f191c051354271b3 100644
+--- a/src/WebformSubmissionStorage.php
++++ b/src/WebformSubmissionStorage.php
+@@ -3,6 +3,7 @@
+ namespace Drupal\webform;
+ 
+ use Drupal\Core\Database\Database;
++use Drupal\Component\Serialization\Json;
+ use Drupal\Core\Entity\EntityInterface;
+ use Drupal\Core\Entity\EntityStorageException;
+ use Drupal\Core\Entity\EntityTypeInterface;
+@@ -1320,7 +1321,7 @@ class WebformSubmissionStorage extends SqlContentEntityStorage implements Webfor
+                 'name' => $name,
+                 'property' => $property,
+                 'delta' => $delta,
+-                'value' => (string) $value,
++                'value' => (is_array($value)) ? Json::encode($value) : (string) $value,
+               ];
+             }
+           }
+@@ -1416,19 +1417,26 @@ class WebformSubmissionStorage extends SqlContentEntityStorage implements Webfor
+         $elements = ($webform) ? $webform->getElementsInitializedFlattenedAndHasValue() : [];
+         $element = $elements[$name] ?? ['#webform_multiple' => FALSE, '#webform_composite' => FALSE];
+ 
++        $value = $record['value'];
+         if ($element['#webform_composite']) {
++          // JSON decode composite sub element that is storing
++          // multiple values.
++          if (strpos($value, '{') === 0 || strpos($value, '[') === 0) {
++            $data = Json::decode($value);
++            $value = ($data !== NULL) ? $data : $value;
++          }
+           if ($element['#webform_multiple']) {
+-            $submissions_data[$sid][$name][$record['delta']][$record['property']] = $record['value'];
++            $submissions_data[$sid][$name][$record['delta']][$record['property']] = $value;
+           }
+           else {
+-            $submissions_data[$sid][$name][$record['property']] = $record['value'];
++            $submissions_data[$sid][$name][$record['property']] = $value;
+           }
+         }
+         elseif ($element['#webform_multiple']) {
+-          $submissions_data[$sid][$name][$record['delta']] = $record['value'];
++          $submissions_data[$sid][$name][$record['delta']] = $value;
+         }
+         else {
+-          $submissions_data[$sid][$name] = $record['value'];
++          $submissions_data[$sid][$name] = $value;
+         }
+       }
+ 
