@@ -1,4 +1,4 @@
-@api @group-i
+@api @group-c
 Feature:
   In order keep the users up to date with licences
   As a site moderator

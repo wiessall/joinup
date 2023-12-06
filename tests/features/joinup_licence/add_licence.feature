@@ -1,4 +1,4 @@
-@api @group-i
+@api @group-c
 Feature: Add a licence through the UI
   In order to manage licences
   As a moderator or a licence manager
