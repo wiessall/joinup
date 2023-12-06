@@ -1,4 +1,4 @@
-@api @terms @group-e
+@api @terms @group-b
 Feature:
   Access and functionality checks for carousel paragraphs in custom pages.
 
