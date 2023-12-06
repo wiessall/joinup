@@ -36,7 +36,7 @@ Feature: Navigation menu for custom pages
     And the navigation menu of the "Rainbow tables" <group> should have <visible items 2> visible items
 
     When I click the contextual link "Edit menu" in the "Header" region
-    Then the navigation menu of the "Rainbow tables" <group> should have 4 items
+    Then the navigation menu of the "Rainbow tables" <group> should have 5 items
 
     # When all the pages are disabled in the navigation menu, a message should
     # be shown to the user.
