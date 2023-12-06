@@ -160,10 +160,7 @@ Feature:
     And I press "<moderate action>"
     Then I should see the heading "Goodbi world"
 
-    # When a content author is blocked from the group (e.g. because they were
-    # posting spam) then they should no longer have access to the revisions.
-    When I go to the "Hellow world" <group type>
-    And I click "Members" in the "Header"
+    When I am on the members page of "Hellow world"
     And I check the box "Update the member Clumsy Bounce"
     And I select "Block the selected membership(s)" from "Action"
     And I press "Apply to selected items"
