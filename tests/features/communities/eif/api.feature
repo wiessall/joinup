@@ -1,4 +1,4 @@
-@api @group-b
+@api @group-e
 Feature:
   Basic test steps for the EIF perspective meta entity.
 

@@ -1,4 +1,4 @@
-@api @group-b
+@api @group-e
 Feature: My subscriptions
   As a user I must be able to manage my subscriptions and related settings.
 
