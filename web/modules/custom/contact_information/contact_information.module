@@ -373,7 +373,7 @@ function contact_information_rdf_entity_view(array &$build, RdfInterface $contac
       // If an anonymous user clicks on the contact information 'Contact us'
       // link, they are redirected to log in or register with the EU Login
       // service. After successfully completing the authentication, they are
-      // redirected back to the group about-page where the link is placed. We
+      // redirected back to canonical page where the link is placed. We
       // attach a Javascript snippet that automatically opens the 'Contact us'
       // modal dialog.
       // @see contact_information_form_email_contact_mail_form_alter()
