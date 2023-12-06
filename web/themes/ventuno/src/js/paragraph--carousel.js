@@ -23,25 +23,33 @@ import ControlsDisabler from "./helpers/glide.controlsDisabler.esm";
             gap: 16,
             perView: 4,
             breakpoints: {
+              9999: { perView: 4 },
               1199: { perView: 3 },
               767: { perView: 2 },
               575: { perView: 1 },
             },
           });
 
-          glide.on('resize', function() {
-            if (window.matchMedia('(min-width: 576px)').matches) {
-              glide.update({startAt: 0, perView: 2, gap: 16}).disable();
+          let resetTimeoutId;
+          glide.on("resize", () => {
+            if (resetTimeoutId) {
+              clearTimeout(resetTimeoutId);
             }
-            if (window.matchMedia('(min-width: 768px)').matches) {
-              glide.update({startAt: 0, perView: 3, gap: 16}).disable();
-            } 
-            if (window.matchMedia('(min-width: 1200px)').matches) {
-              glide.update({startAt: 0, perView: 4, gap: 16}).disable();
-            }
+            resetTimeoutId = setTimeout(
+              (glide) => {
+                if (glide.settings.perView === glide.previousPerView) {
+                  return;
+                }
+                glide.previousPerView = glide.settings.perView;
+                glide.enable().go("<<").disable();
+              },
+              50,
+              glide
+            );
           });
 
           glide.mount({ Controls, Breakpoints, Swipe, ControlsDisabler });
+          glide.previousPerView = glide.settings.perView;
           const forward = slide.querySelector(".glide__arrow--right");
           const backward = slide.querySelector(".glide__arrow--left");
 
