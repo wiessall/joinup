@@ -144,7 +144,7 @@ class MenuHelper implements MenuHelperInterface {
       'popover' => $popover,
     ];
 
-    // Generate a link to the About page of the Joinup collection, to show as
+    // Generate a link to the Joinup collection, to show as
     // the "About us" link in the hamburger menu for anonymous users.
     $rdf_storage = $this->entityTypeManager->getStorage('rdf_entity');
     try {

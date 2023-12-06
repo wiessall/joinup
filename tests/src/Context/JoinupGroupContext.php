@@ -64,7 +64,7 @@ class JoinupGroupContext extends RawDrupalContext {
    * Navigates to the discussions page of a collection/solution.
    *
    * @param string $label
-   *   The label of the group for which to visit the about page.
+   *   The label of the group for which to visit the discussion page.
    *
    * @Given I go to the discussions page of :label
    */

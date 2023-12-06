@@ -9,9 +9,7 @@ Feature: Navigation menu for custom pages
       | title            | logo     | state     |
       | Rainbow tables   | logo.png | published |
       | Cripple Mr Onion | logo.png | published |
-
-    # By default, a link to the collection canonical page and a link to the
-    # about page are added to the menu.
+    
     When I am logged in as a facilitator of the "Rainbow tables" <group>
     And I go to the homepage of the "Rainbow tables" <group>
     Then the navigation menu of the "Rainbow tables" <group> should have <visible items 1> visible items

@@ -302,7 +302,7 @@ function joinup_group_rdf_entity_insert(RdfInterface $group): void {
 
   // When a group is created, create a new navigation menu and associate it with
   // the new collection or solution. This menu can be used to link to custom
-  // pages, member overviews, an about page, etc.
+  // pages, member, overviews, etc.
   $og_menu_instance = OgMenuInstance::create([
     'type' => 'navigation',
     OgGroupAudienceHelperInterface::DEFAULT_FIELD => $group->id(),
