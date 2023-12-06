@@ -37,10 +37,15 @@
       {% if not meta_banner_disabled %}
         <ul class="group-banner__meta mw-100 align-self-end list-unstyled d-flex flex-column flex-lg-row flex-wrap mt-2 mb-0 group-stats fs-6">
           <li class="group-banner__li group-banner__li--collection text-muted">{{ content.collections }}</li>
-          <li class="group-banner__li group-banner__li--topics text-muted d-flex align-items-baseline mw-100">{{ 'Topics'|t }}: {{ content.field_topic }}</li>
-          {% if content.downloads.count|render|striptags %}
-            <li class="group-banner__li text-muted">{{ 'Downloads'|t }}: {{ content.downloads.count|render|striptags }}</li>
-          {% endif %}
+          <li class="group-banner__li text-muted">
+            <a class="" href="{{ path('entity.rdf_entity.member_overview', {'rdf_entity': rdf_entity.id()}) }}">
+              <svg class="bi icon--xs me-1">
+                <use xlink:href="{{ bcl_icon_path }}#people"></use>
+              </svg>
+              {{ content.members }}
+            </a>
+          </li>
+          <li class="group-banner__li group-banner__li--topics text-muted d-flex align-items-baseline mw-100 w-100">{{ 'Topics'|t }}: {{ content.field_topic }}</li>
         </ul>
       {% endif %}
     </div>
