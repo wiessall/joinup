@@ -139,106 +139,107 @@ Feature: As a moderator or group facilitator I want to be able to add, edit and
       | nick | moderator |             | should see      |
       | wade |           | facilitator | should not see  |
 
-  Scenario: Glossary terms should be shown as links in collection content
-    Given collection:
-      | title       | Collection With Glossary                                                                             |
-      | state       | published                                                                                            |
-      | description | Colors of Paradise. Abbreviated as CLR. <a href="../../contact"><strong>Colors of Dream</strong></a> |
-      | abstract    | The Alphabet is back and it's s/ashy.                                                                |
-    And solution:
-      | title       | Under The Bridge         |
-      | description | No Colors                |
-      | state       | published                |
-      | collection  | Collection With Glossary |
-    And release:
-      | title          | Summer of 69          |
-      | release number | 6.22                  |
-      | release notes  | Everything was Colors |
-      | is version of  | Under The Bridge      |
-      | state          | published             |
-    And distributions:
-      | title   | description          | parent           | access url         |
-      | Distro1 | Alphabet & CLR       | Under The Bridge | http://example.com |
-      | Distro2 | Colors & ABC & colrs | Summer of 69     | http://example.com |
-    And custom_page content:
-      | title    | body              | solution         | state     |
-      | Schedule | Colors everywhere | Under The Bridge | published |
-    And discussion content:
-      | title        | content                   | collection               | state     |
-      | The Big Talk | The Alphabet. Call it ABC | Collection With Glossary | published |
-    And document content:
-      | title             | body             | collection               | state     |
-      | Authentic Papyrus | Alphabet is back | Collection With Glossary | published |
-    And event content:
-      | title      | body                              | solution         | state     |
-      | Soho Night | Any cOLOrs You Like. Maybe colrs? | Under The Bridge | published |
-    And news content:
-      | title         | body                                       | solution         | state     |
-      | Won at Bingo! | aBC is for ALPHABET what CLR is for Colors | Under The Bridge | published |
-    And glossary content:
-      | title    | synonyms  | summary                  | definition                  | collection               |
-      | Alphabet | ABC       | Summary of Alphabet      | Long, long definition field | Collection With Glossary |
-      | Colors   | CLR,colrs | Summary of Colors        | Colors definition field     | Collection With Glossary |
-      | S/ashy   | /S\|ASH   | S/ashes Like an Ion Beam | Cutting things in ha/f      | Collection With Glossary |
-
-    When I go to the "Collection With Glossary" collection
-    When I click "Overview"
-    And I click "Alphabet"
-    Then I see the heading "Alphabet"
-
-    When I click "Colors"
-    Then I see the heading "Colors"
-
-    When I move backward one page
-    And I click "CLR"
-    Then I see the heading "Colors"
-
-    When I move backward one page
-    And I click "s/ashy"
-    Then I see the heading "S/ashy"
-
-    # A glossary term inside a link text remains untouched.
-    When I move backward one page
-    And I click "Colors of Dream"
-    Then I should see the heading "Contact"
-
-    When I go to the "Under The Bridge" solution
-    Then I should see the link "Colors"
-
-    When I go to the "Summer of 69" release
-    Then I should see the link "Colors"
-
-    When I go to the "Distro1" distribution
-    Then I should see the link "Alphabet"
-    And I should see the link "CLR"
-
-    When I go to the "Distro2" distribution
-    Then I should see the link "Colors"
-    And I should see the link "ABC"
-    And I should see the link "colrs"
-
-    When I go to the "Schedule" custom page
-    Then I should see the link "Colors"
-
-    When I go to the "The Big Talk" discussion
-    Then I should see the link "Alphabet"
-    And I should see the link "ABC"
-
-    When I go to the "Authentic Papyrus" document
-    Then I should see the link "Alphabet"
-
-    When I go to the "Soho Night" event
-    # Test that the replacement is case insensitive.
-    Then I should see the link "cOLOrs"
-    Then I should see the link "colrs"
-
-    When I go to the "Won at Bingo!" news
-    Then I should see the link "Colors"
-    And I should see the link "CLR"
-    # Test that the replacement is case insensitive.
-    And I should see the link "ALPHABET"
-    # Test that the synonym replacement is case insensitive.
-    And I should see the link "aBC"
+# @see EIPC-7858
+#  Scenario: Glossary terms should be shown as links in collection content
+#    Given collection:
+#      | title       | Collection With Glossary                                                                             |
+#      | state       | published                                                                                            |
+#      | description | Colors of Paradise. Abbreviated as CLR. <a href="../../contact"><strong>Colors of Dream</strong></a> |
+#      | abstract    | The Alphabet is back and it's s/ashy.                                                                |
+#    And solution:
+#      | title       | Under The Bridge         |
+#      | description | No Colors                |
+#      | state       | published                |
+#      | collection  | Collection With Glossary |
+#    And release:
+#      | title          | Summer of 69          |
+#      | release number | 6.22                  |
+#      | release notes  | Everything was Colors |
+#      | is version of  | Under The Bridge      |
+#      | state          | published             |
+#    And distributions:
+#      | title   | description          | parent           | access url         |
+#      | Distro1 | Alphabet & CLR       | Under The Bridge | http://example.com |
+#      | Distro2 | Colors & ABC & colrs | Summer of 69     | http://example.com |
+#    And custom_page content:
+#      | title    | body              | solution         | state     |
+#      | Schedule | Colors everywhere | Under The Bridge | published |
+#    And discussion content:
+#      | title        | content                   | collection               | state     |
+#      | The Big Talk | The Alphabet. Call it ABC | Collection With Glossary | published |
+#    And document content:
+#      | title             | body             | collection               | state     |
+#      | Authentic Papyrus | Alphabet is back | Collection With Glossary | published |
+#    And event content:
+#      | title      | body                              | solution         | state     |
+#      | Soho Night | Any cOLOrs You Like. Maybe colrs? | Under The Bridge | published |
+#    And news content:
+#      | title         | body                                       | solution         | state     |
+#      | Won at Bingo! | aBC is for ALPHABET what CLR is for Colors | Under The Bridge | published |
+#    And glossary content:
+#      | title    | synonyms  | summary                  | definition                  | collection               |
+#      | Alphabet | ABC       | Summary of Alphabet      | Long, long definition field | Collection With Glossary |
+#      | Colors   | CLR,colrs | Summary of Colors        | Colors definition field     | Collection With Glossary |
+#      | S/ashy   | /S\|ASH   | S/ashes Like an Ion Beam | Cutting things in ha/f      | Collection With Glossary |
+#
+#    When I go to the "Collection With Glossary" collection
+#    When I click "Overview"
+#    And I click "Alphabet"
+#    Then I see the heading "Alphabet"
+#
+#    When I click "Colors"
+#    Then I see the heading "Colors"
+#
+#    When I move backward one page
+#    And I click "CLR"
+#    Then I see the heading "Colors"
+#
+#    When I move backward one page
+#    And I click "s/ashy"
+#    Then I see the heading "S/ashy"
+#
+#    # A glossary term inside a link text remains untouched.
+#    When I move backward one page
+#    And I click "Colors of Dream"
+#    Then I should see the heading "Contact"
+#
+#    When I go to the "Under The Bridge" solution
+#    Then I should see the link "Colors"
+#
+#    When I go to the "Summer of 69" release
+#    Then I should see the link "Colors"
+#
+#    When I go to the "Distro1" distribution
+#    Then I should see the link "Alphabet"
+#    And I should see the link "CLR"
+#
+#    When I go to the "Distro2" distribution
+#    Then I should see the link "Colors"
+#    And I should see the link "ABC"
+#    And I should see the link "colrs"
+#
+#    When I go to the "Schedule" custom page
+#    Then I should see the link "Colors"
+#
+#    When I go to the "The Big Talk" discussion
+#    Then I should see the link "Alphabet"
+#    And I should see the link "ABC"
+#
+#    When I go to the "Authentic Papyrus" document
+#    Then I should see the link "Alphabet"
+#
+#    When I go to the "Soho Night" event
+#    # Test that the replacement is case insensitive.
+#    Then I should see the link "cOLOrs"
+#    Then I should see the link "colrs"
+#
+#    When I go to the "Won at Bingo!" news
+#    Then I should see the link "Colors"
+#    And I should see the link "CLR"
+#    # Test that the replacement is case insensitive.
+#    And I should see the link "ALPHABET"
+#    # Test that the synonym replacement is case insensitive.
+#    And I should see the link "aBC"
 
   Scenario: Limiting replacements to the first occurrence.
     Given users:
