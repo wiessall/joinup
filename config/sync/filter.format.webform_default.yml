@@ -10,4 +10,12 @@ _core:
 name: 'Webform (Default) - DO NOT EDIT'
 format: webform_default
 weight: 100
-filters: {  }
+filters:
+  slick_filter:
+    id: slick_filter
+    provider: slick
+    status: false
+    weight: 4
+    settings:
+      optionset: default
+      media_switch: ''
