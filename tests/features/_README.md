@@ -14,14 +14,14 @@ Folders having 2 or less test YAML were not checked.
 | `./comments`              |          03:37 |     217 | group-e                   |
 | `./communities`           |          05:37 |     337 | group-e                   |
 | `./community_content`     |   31:00  26:00 |    1560 | group-c, group-d, group-e |
-| `./contact_form`          |          01:21 |      81 | group-f                   |
+| `./contact_form`          |          01:21 |      81 | group-h                   |
 | `./contact_information`   |          01:16 |      76 | group-a                   |
 | `./custom_page`           |          12:19 |     739 | group-b                   |
 | `./eulogin`               |             -- |         | group-b                   |
 | `./file_url`              |             -- |         | group-b                   |
 | `./glossary`              |             -- |         | group-b                   |
 | `./isa2_analytics`        |             -- |         | group-b                   |
-| `./joinup_collection`     |             -- |         | group-f                   |
+| `./joinup_collection`     |             -- |         | group-h                   |
 | `./joinup_core`           |          02:27 |     147 | group-f                   |
 | `./joinup_discussion`     |          03:59 |     239 | group-h                   |
 | `./joinup_document`       |          02:24 |     144 | group-h                   |
