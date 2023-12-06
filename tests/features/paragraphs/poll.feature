@@ -39,10 +39,11 @@ Feature: Pool paragraph tests.
     And I press "Log in"
     When I should see the heading "TV series"
 
+  @javascript
   Scenario: Authenticated user can vote
     Given the following polls:
-      | question                  | runtime | cancel_vote_allow | show_number_of_results | choice                                                     | state     |
-      | What was the best series? | 1209600 | 0                 | 1                      | Game of Thrones,Breaking Bad,The Wire,The Sopranos,Mad Men | published |
+      | question                  | runtime | cancel_vote_allow | show_number_of_results | result_vote_allow | choice                                                     | state     |
+      | What was the best series? | 1209600 | 0                 | 1                      | 1                 | Game of Thrones,Breaking Bad,The Wire,The Sopranos,Mad Men | published |
     And custom_page content:
       | title     | body                                                         | collection      | state     |
       | TV series | We've rounded up our picks for the best shows to binge-watch | Poll collection | published |
@@ -51,10 +52,15 @@ Feature: Pool paragraph tests.
     Then I am logged in as a user with the "authenticated" role
     And I go to the "TV series" custom page
     When I should see the heading "What was the best series?"
-    And I should not see the button "View results"
+    And I should see the button "View results"
     And the following fields should be present "Game of Thrones,Breaking Bad,The Wire,The Sopranos,Mad Men"
     And I should see "0 votes"
     And I should see "1 week 6 days left to vote"
+
+    Then I press "View results"
+    When I should not see the button "View results"
+    Then I press "Hide results"
+    When I should not see the button "Hide results"
 
     Then I click on label "Game of Thrones"
     And I wait for AJAX to finish
@@ -72,6 +78,7 @@ Feature: Pool paragraph tests.
     Then I am logged in as a user with the "authenticated" role
     And I go to the "Pizza types" custom page
     When I should see the heading "Whats the best pizza topping?"
+    And I should not see the button "View results"
     And the following fields should be present "Pepperoni,Pineapple,Just cheese,Mushrooms"
     And I should not see "0 votes"
     And I should see "4 days 23 hours left to vote"
