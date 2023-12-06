@@ -34,8 +34,7 @@ UPDATE
       nid,
       MIN(vid) as vid
     FROM {node_field_revision}
-    WHERE status = 1
-    AND published_at = 2147483647
+    WHERE published_at = 2147483647
     GROUP BY nid
     ORDER BY vid
   ) t
@@ -61,7 +60,6 @@ UPDATE {node_field_revision} r, (
 SET r.published_at = r.created
 WHERE
   r.nid = s.nid
-  AND r.status = 1
   AND r.published_at = 2147483647
 SQL,
     ],
