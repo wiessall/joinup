@@ -49,8 +49,6 @@ class HomepageContext extends RawDrupalContext {
 
       if (in_array($type, ['collection', 'solution'])) {
         $entity = $this->getEntityByLabel('rdf_entity', $expected_data['title']);
-        // In Joinup, "Read more" links of collections and solutions lead to the
-        // 'About' page.
         $read_more_url = $this->getEntityUri($entity, 'canonical');
       }
       else {
