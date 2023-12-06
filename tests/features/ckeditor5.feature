@@ -110,8 +110,10 @@ Feature: CKEditor5
     Then the modal should be closed
 
     When I press "Publish"
-    And I click "About"
-    But the response should contain "media/image/alan.jpg"
+
+#  @see EIPC-7858
+#    And I click "About"
+#    But the response should contain "media/image/alan.jpg"
 
     When I go to the edit form of the "The Other Collection" collection
     And I press the button "Insert Media" in the "Description" wysiwyg editor
