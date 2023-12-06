@@ -1,4 +1,4 @@
-@api @group-e
+@api @group-c
 Feature: Content archival.
 
   Scenario Outline: All community content can be archived any time.
