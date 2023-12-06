@@ -15,7 +15,7 @@ Folders having 2 or less test YAML were not checked.
 | `./communities`           |          05:37 |     337 | group-e                   |
 | `./community_content`     |   31:00  26:00 |    1560 | group-c, group-d, group-e |
 | `./contact_form`          |          01:21 |      81 | group-f                   |
-| `./contact_information`   |          01:16 |      76 | group-h                   |
+| `./contact_information`   |          01:16 |      76 | group-a                   |
 | `./custom_page`           |          12:19 |     739 | group-b                   |
 | `./eulogin`               |             -- |         | group-b                   |
 | `./file_url`              |             -- |         | group-b                   |
@@ -28,7 +28,7 @@ Folders having 2 or less test YAML were not checked.
 | `./joinup_event`          |          02:00 |     120 | group-g                   |
 | `./joinup_federation`     |             -- |         | group-h                   |
 | `./joinup_group`          |          03:45 |     225 | group-d                   |
-| `./joinup_licence`        |          00:20 |      20 | group-c                   |
+| `./joinup_licence`        |          00:20 |      20 | group-a                   |
 | `./joinup_like`           |             -- |         | group-h                   |
 | `./joinup_news`           |          04:06 |     246 | group-i                   |
 | `./joinup_rss`            |             -- |         | group-h                   |
