@@ -53,8 +53,10 @@ Feature:
 
     When I am logged in as a user with the "moderator" role
     And I go to the "Share solution" solution
-    And I click "About"
-    Then I should see the contextual link "Share"
+
+#  @see EIPC-7858, probably this will be moved to overview.
+#    And I click "About"
+#    Then I should see the contextual link "Share"
 
     And I visit the collection overview
     Then I should not see the contextual link "Share"
