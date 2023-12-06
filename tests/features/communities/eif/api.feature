@@ -23,7 +23,6 @@ Feature:
     Then I should see the following group menu items in the specified order:
       | text            |
       | Overview        |
-      | EIF Perspective |
     Then there should be an EIF perspective associated with the "EIF solution" solution
     And there should be an EIF perspective associated with the "EIF only type" solution
 
