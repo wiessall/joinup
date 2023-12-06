@@ -194,8 +194,7 @@ Feature: Collection membership administration
 
     # Dr Cuddy promotes Dr House to facilitator.
     When I am logged in as "Lisa Cuddy"
-    And I go to the "Medical diagnosis" collection
-    Then I click "Members" in the "Header"
+    And I am on the members page of "Medical diagnosis"
     # Assert that the user does not see the default OG tab.
     Then I should not see the link "Group"
     Then I check the box "Update the member Gregory House"
