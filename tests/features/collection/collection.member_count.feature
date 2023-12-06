@@ -72,7 +72,7 @@ Feature: Collection homepage
     When I am an anonymous user
     And I go to the homepage of the "Exactly the same collection, but closed" collection
     Then I see the text "4 Members" in the "Header" region
-    When I click "Members" in the "Header"
+    When I am on the members page of "Exactly the same collection, but closed"
     Then the "Roles" field should contain the "- Any - (4)" option
     Then I see the text "4 Members" in the "Header" region
 
