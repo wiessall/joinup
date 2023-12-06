@@ -36,17 +36,12 @@ Feature: Navigation menu for custom pages
     And the navigation menu of the "Rainbow tables" <group> should have <visible items 2> visible items
 
     When I click the contextual link "Edit menu" in the "Header" region
-    Then the navigation menu of the "Rainbow tables" <group> should have 6 items
-
-    # It should be possible to hide an item from the menu by disabling it.
-    When I disable "About us" in the navigation menu of the "Rainbow tables" <group>
-    Then the navigation menu of the "Rainbow tables" <group> should have <visible items 3> visible items
+    Then the navigation menu of the "Rainbow tables" <group> should have 4 items
 
     # When all the pages are disabled in the navigation menu, a message should
     # be shown to the user.
     When I disable "Overview" in the navigation menu of the "Rainbow tables" <group>
     And I disable "Members" in the navigation menu of the "Rainbow tables" <group>
-    And I disable "About" in the navigation menu of the "Rainbow tables" <group>
     And I go to the homepage of the "Rainbow tables" <group>
     Then I should see the text "All the pages have been disabled for this <group>. You can edit the menu configuration or add a new page."
     And I should see the contextual link "Edit menu" in the "Header" region
@@ -61,10 +56,6 @@ Feature: Navigation menu for custom pages
     # reorder the navigation menu, but they should not be able to access the
     # related menu administration screens.
     And I should not have access to the menu link administration pages for the navigation menu of the "Rainbow tables" <group>
-
-    # Enable the menu entry for the 'About us' page again so we can check if it
-    # is visible for all users.
-    When I enable "About us" in the navigation menu of the "Rainbow tables" <group>
 
     # Create a few custom pages in the second collection so we can check if the
     # right menu shows up in each collection.
@@ -81,7 +72,6 @@ Feature: Navigation menu for custom pages
     Then I should not have access to the menu link administration pages for the navigation menu of the "Rainbow tables" <group>
     # The navigation link from the current group should be visible, but not
     # the link from the second collection.
-    And I should see the link "About us" in the "Navigation menu"
     But I should not see the link "Eights are wild" in the "Navigation menu"
     And I should not see the link "Eights are null" in the "Navigation menu"
     # Test the navigation link of the second collection.
@@ -97,7 +87,6 @@ Feature: Navigation menu for custom pages
     Then I should not have access to the menu link administration pages for the navigation menu of the "Rainbow tables" <group>
     # The navigation link from the current group should be visible, but not
     # the link from the second group.
-    And I should see the link "About us" in the "Navigation menu"
     But I should not see the link "Eights are wild" in the "Navigation menu"
     And I should not see the link "Eights are null" in the "Navigation menu"
     # Test the navigation link of the second collection.
@@ -115,7 +104,6 @@ Feature: Navigation menu for custom pages
 
     # The navigation link from the current collection should be visible, but not
     # the link from the second group.
-    And I should see the link "About us" in the "Navigation menu"
     But I should not see the link "Eights are wild" in the "Navigation menu"
     And I should not see the link "Eights are null" in the "Navigation menu"
     # Test the navigation link of the second group.
