@@ -61,22 +61,6 @@ class JoinupGroupContext extends RawDrupalContext {
   }
 
   /**
-   * Navigates to the about page of a collection or solution.
-   *
-   * @param string $label
-   *   The label of the group for which to visit the about page.
-   *
-   * @Given I go to the about page of :label
-   */
-  public function visitAboutPage(string $label): void {
-    $group = $this->getEntityByLabel('rdf_entity', $label);
-    $url = Url::fromRoute('entity.rdf_entity.about_page', [
-      'rdf_entity' => $group->id(),
-    ]);
-    $this->visitPath($url->toString());
-  }
-
-  /**
    * Navigates to the discussions page of a collection/solution.
    *
    * @param string $label
