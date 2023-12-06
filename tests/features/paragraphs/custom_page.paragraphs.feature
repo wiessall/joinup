@@ -86,6 +86,7 @@ Feature:
     And I should see the link "Testimony"
     And I should see the link "Text"
     And I should see the link "Video"
+    And I should not see the link "Webform"
 
     # Facilitator.
     When I am logged in as "Gilfoyle"
@@ -109,6 +110,7 @@ Feature:
     And I should see the link "Testimony"
     And I should see the link "Text"
     And I should see the link "Video"
+    And I should not see the link "Webform"
 
     # Moderator.
     Given I am logged in as a moderator
@@ -132,6 +134,7 @@ Feature:
     And I should see the link "Testimony"
     And I should see the link "Text"
     And I should see the link "Video"
+    And I should see the link "Webform"
 
     And I should not see the link "1 column layout"
     And I should not see the link "2 column layout"

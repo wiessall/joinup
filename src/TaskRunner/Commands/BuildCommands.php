@@ -4,6 +4,7 @@ declare(strict_types = 1);
 
 namespace Joinup\TaskRunner\Commands;
 
+use Composer\InstalledVersions;
 use EcEuropa\Toolkit\TaskRunner\Commands\ToolCommands;
 use OpenEuropa\TaskRunner\Commands\AbstractCommands;
 use OpenEuropa\TaskRunner\Tasks\CollectionFactory\loadTasks;
@@ -48,6 +49,33 @@ class BuildCommands extends AbstractCommands {
     $tasks[] = $this->taskExecStack()
       ->stopOnFail()
       ->exec('git archive HEAD --worktree-attributes | tar -x -C ' . $options['dist-root']);
+
+    // Add stage_file_proxy in ephemeral and acceptance environments. This
+    // module is required as `require-dev` in the project, as an effect it will
+    // not be installed in distribution. Should be removed from `require-dev`
+    // and reinstalled as `require` package.
+    if (ToolCommands::getDeploymentEnvironment() === 'acc') {
+      $version = InstalledVersions::getVersion('drupal/stage_file_proxy');
+      $tasks[] = $this->taskComposerRemove()
+        ->workingDir($options['dist-root'])
+        ->arg('drupal/stage_file_proxy')
+        ->dev()
+        ->noUpdate()
+        ->noScripts()
+        ->disablePlugins();
+      $tasks[] = $this->taskComposerRequire()
+        ->env('COMPOSER_MIRROR_PATH_REPOS', 1)
+        ->workingDir($options['dist-root'])
+        ->dependency('drupal/stage_file_proxy', $version)
+        ->option('update-no-dev')
+        ->noScripts();
+      // Add stage_file_proxy configuration.
+      $tasks[] = $this->taskExec("{$config->get('runner.bin_dir')}/run")
+        ->arg('drupal:settings')
+        ->arg('acc-override')
+        ->option('filename', 'settings.override.php')
+        ->option('root', "$distDir/web");
+    }
 
     $tasks[] = $this->taskComposerInstall()
       ->env('COMPOSER_MIRROR_PATH_REPOS', 1)
