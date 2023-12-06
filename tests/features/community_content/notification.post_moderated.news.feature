@@ -1,4 +1,4 @@
-@api @terms @group-d
+@api @terms @group-e
 Feature: Notification test for the news transitions on a post moderated parent.
   In order to manage my collections
   As an owner of the collection
