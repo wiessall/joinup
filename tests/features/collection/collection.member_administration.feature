@@ -113,9 +113,7 @@ Feature: Collection membership administration
 
     # Approve a membership.
     Given I am logged in as "Lisa Cuddy"
-    And I go to the "Medical diagnosis" collection
-
-    And I click "Members" in the "Header"
+    And I am on the members page of "Medical diagnosis"
     And I check the box "Update the member Cam Bridge"
     Then I select "Approve the pending membership(s)" from "Action"
     And I press "Apply to selected items"
