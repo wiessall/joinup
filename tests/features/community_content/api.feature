@@ -1,4 +1,4 @@
-@api @group-c
+@api @group-e
 Feature: Create community content through the API
   In order to quickly generate community content for testing purposes
   As a developer for the Joinup platform
