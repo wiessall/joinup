@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "ec1124e19514fac4732f034cbe6a1ca7",
+    "content-hash": "f092e4f9780858ab2955469e25be7eb3",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -16675,16 +16675,16 @@
         },
         {
             "name": "drupal/drupal-extension",
-            "version": "v5.0.0rc1",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/jhedstrom/drupalextension.git",
-                "reference": "8707984f2ce5a7c90c1e6d064b1db6aeda950d2a"
+                "reference": "5291a2faedc05c6ee4fac07c49bfa45a266387f1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/jhedstrom/drupalextension/zipball/8707984f2ce5a7c90c1e6d064b1db6aeda950d2a",
-                "reference": "8707984f2ce5a7c90c1e6d064b1db6aeda950d2a",
+                "url": "https://api.github.com/repos/jhedstrom/drupalextension/zipball/5291a2faedc05c6ee4fac07c49bfa45a266387f1",
+                "reference": "5291a2faedc05c6ee4fac07c49bfa45a266387f1",
                 "shasum": ""
             },
             "require": {
@@ -16705,6 +16705,7 @@
                 "php-parallel-lint/php-parallel-lint": "^1.3",
                 "phpspec/phpspec": "^4.0 || ^6.0 || ^7.0"
             },
+            "default-branch": true,
             "type": "behat-extension",
             "extra": {
                 "branch-alias": {
@@ -16756,7 +16757,7 @@
             ],
             "support": {
                 "issues": "https://github.com/jhedstrom/drupalextension/issues",
-                "source": "https://github.com/jhedstrom/drupalextension/tree/v5.0.0rc1"
+                "source": "https://github.com/jhedstrom/drupalextension/tree/master"
             },
             "funding": [
                 {
@@ -16764,7 +16765,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2023-03-17T17:20:38+00:00"
+            "time": "2023-06-15T16:01:20+00:00"
         },
         {
             "name": "drupal/filecache",
@@ -21972,6 +21973,7 @@
         "drupal/facets_date_range": 10,
         "drupal/page_manager": 10,
         "drupal/views_block_area": 10,
+        "drupal/drupal-extension": 20,
         "drupal/masquerade": 5,
         "php-task-runner/composer": 20,
         "php-task-runner/sparql": 20,

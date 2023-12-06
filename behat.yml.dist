@@ -101,7 +101,9 @@ default:
       base_url: ${env.DRUPAL_BASE_URL}
       ajax_timeout: 10
       files_path: ${joinup.dir}/tests/fixtures/files
-      browserkit_http: ~
+      browserkit_http:
+        guzzle_request_options:
+          verify: false
       javascript_session: selenium2
       browser_name: ${behat.browser_name}
       selenium2:
