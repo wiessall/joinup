@@ -136,3 +136,10 @@ function ventuno_preprocess_paragraph__poll(array &$variables): void {
   $variables['attributes']['class'][] = 'bg-light';
   $variables['attributes']['class'][] = 'p-3';
 }
+
+/**
+ * Implements hook_preprocess_paragraph().
+ */
+function ventuno_preprocess_paragraph__webform(array &$variables): void {
+  $variables['#attached']['library'][] = 'ventuno/webform';
+}
