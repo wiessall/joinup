@@ -46,7 +46,7 @@ function joinup_core_post_update_110000(array &$sandbox): string {
 }
 
 /**
- * Disable 'Members' from menu.
+ * Disable 'Members' and 'EIF Perspective' from menu.
  */
 function joinup_core_post_update_110001(array &$sandbox): string {
   $entityTypeManager = \Drupal::entityTypeManager();
@@ -54,9 +54,14 @@ function joinup_core_post_update_110001(array &$sandbox): string {
   $menuLinkContentStorage = $entityTypeManager->getStorage('menu_link_content');
 
   if (!isset($sandbox['data'])) {
-    $sandbox['data'] = $menuLinkContentStorage->getQuery()->accessCheck(FALSE)
-      ->condition('bundle', 'menu_link_content')
+    $query = $menuLinkContentStorage->getQuery()->accessCheck(FALSE);
+    $or = $query->orConditionGroup()
       ->condition('link__uri', 'route:entity.rdf_entity.member_overview%', 'LIKE')
+      ->condition('link__uri', 'route:entity.rdf_entity.eif_perspective%', 'LIKE');
+
+    $sandbox['data'] = $query
+      ->condition($or)
+      ->condition('enabled', 1)
       ->execute();
 
     $sandbox['progress'] = 0;
