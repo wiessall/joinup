@@ -18,8 +18,6 @@ Feature: Navigation menu for custom pages
     And I should see the following group menu items in the specified order:
       | text     |
       | Overview |
-      | Members  |
-      | About    |
     # Check that the 'Edit menu' local action is present.
     And I should see the contextual link "Edit menu" in the "Header" region
     # The 'Add link' local action that is present in the default implementation
@@ -128,8 +126,8 @@ Feature: Navigation menu for custom pages
 
     Examples:
       | group      | visible items 1 | visible items 2 | visible items 3 |
-      | collection | 5               | 6               | 5               |
-      | solution   | 4               | 5               | 4               |
+      | collection | 3               | 4               | 3               |
+      | solution   | 2               | 3               | 2               |
 
   @javascript
   Scenario: For menus with more than 6 items, the 6th and beyond should be wrapped in a dropdown
@@ -138,6 +136,7 @@ Feature: Navigation menu for custom pages
       | state | published     |
     And custom_page content:
       | title             | body                   | collection    | state     | topic |
+      | Molds for candles | This is a sample body. | Plaster molds | published | HR    |
       | Molds for walls   | This is a sample body. | Plaster molds | published | HR    |
       | Molds for crafts  | This is a sample body. | Plaster molds | published | HR    |
       | Molds for pottery | This is a sample body. | Plaster molds | published | HR    |
@@ -153,10 +152,10 @@ Feature: Navigation menu for custom pages
       | Plaster casting | This is a sample body. | Plaster molds | published | HR    |
     When I go to the "Plaster molds" collection
     Then I should see the text "See more" in the "Navigation menu"
-    But I should not see the text "Molds for walls" in the "Navigation menu"
+    But I should not see the text "Plaster casting" in the "Navigation menu"
     And I should not see the text "Vintage molds" in the "Navigation menu"
     Then I press "See more"
-    And I should see the text "Molds for walls" in the "Navigation menu"
+    And I should see the text "Plaster casting" in the "Navigation menu"
     And I should see the text "Vintage molds" in the "Navigation menu"
 
   @javascript
@@ -288,8 +287,7 @@ Feature: Navigation menu for custom pages
     And I should not see the link "Members" in the "Table of contents"
     And I should not see the link "About" in the "Table of contents"
     But I should see the link "Overview" in the "Navigation menu"
-    And I should see the link "Members" in the "Navigation menu"
-    And I should see the link "About" in the "Navigation menu"
+    And I should not see the link "Members" in the "Navigation menu"
 
     # Only the sub-page links of "Page 2" are rendered.
     When I visit the "Page 2" custom page
@@ -332,8 +330,6 @@ Feature: Navigation menu for custom pages
       | Frameless          | Types of backpacks | 4      |
       | External frame     | Types of backpacks | 5      |
       | Internal frame     |                    | 6      |
-      # Force a reserved page to be nested. This is not possible through the UI.
-      | About              | Bodypack           | 7      |
     When I am logged in as a facilitator of the "Ergonomic backpacks" <group>
     And I go to the "Ergonomic backpacks" <group>
     And I click the contextual link "Edit menu" in the "Header" region
@@ -345,7 +341,6 @@ Feature: Navigation menu for custom pages
       | Discussions        |                    |
       | Glossary           |                    |
       | Bodypack           |                    |
-      | About              |                    |
       | Types of backpacks |                    |
       | Frameless          | Types of backpacks |
       | External frame     | Types of backpacks |
@@ -358,7 +353,6 @@ Feature: Navigation menu for custom pages
       | Discussions        |                    |
       | Glossary           |                    |
       | Bodypack           |                    |
-      | About              |                    |
       | Types of backpacks |                    |
       | Frameless          | Types of backpacks |
       | External frame     |                    |
@@ -371,14 +365,12 @@ Feature: Navigation menu for custom pages
       | Discussions        |                    |
       | Glossary           |                    |
       | Bodypack           |                    |
-      | About              |                    |
       | Types of backpacks |                    |
       | Frameless          | Types of backpacks |
       | External frame     |                    |
       | Internal frame     | External frame     |
     # Links that don't refer to a node cannot be nested.
     When I drag the "Members" table row to the right
-    And I drag the "About" table row to the right
     And I drag the "Glossary" table row to the right
     Then the draggable menu table should be:
       | title              | parent             |
@@ -387,7 +379,6 @@ Feature: Navigation menu for custom pages
       | Discussions        |                    |
       | Glossary           |                    |
       | Bodypack           |                    |
-      | About              |                    |
       | Types of backpacks |                    |
       | Frameless          | Types of backpacks |
       | External frame     |                    |
@@ -401,14 +392,12 @@ Feature: Navigation menu for custom pages
       | Discussions        |                    |
       | Glossary           |                    |
       | Bodypack           |                    |
-      | About              |                    |
       | Types of backpacks |                    |
       | Frameless          | Types of backpacks |
       | External frame     |                    |
       | Internal frame     | External frame     |
     # But they can still be re-ordered up and down.
     When I drag the "Overview" table row down
-    When I drag the "About" table row up
     And I drag the "Glossary" table row up
     Then the draggable menu table should be:
       | title              | parent             |
@@ -416,7 +405,6 @@ Feature: Navigation menu for custom pages
       | Overview           |                    |
       | Glossary           |                    |
       | Discussions        |                    |
-      | About              |                    |
       | Bodypack           |                    |
       | Types of backpacks |                    |
       | Frameless          | Types of backpacks |
@@ -431,7 +419,6 @@ Feature: Navigation menu for custom pages
       | Overview           |                    |
       | Glossary           |                    |
       | Discussions        |                    |
-      | About              |                    |
       | Types of backpacks |                    |
       | Frameless          | Types of backpacks |
       | Bodypack           | Types of backpacks |
@@ -449,7 +436,6 @@ Feature: Navigation menu for custom pages
       | Overview           |                    |
       | Glossary           |                    |
       | Discussions        |                    |
-      | About              |                    |
       | Types of backpacks |                    |
       | Frameless          | Types of backpacks |
       | Bodypack           | Frameless          |
@@ -572,7 +558,6 @@ Feature: Navigation menu for custom pages
       | Overview        |        |
       | Members         |        |
       | Discussions     |        |
-      | About           |        |
       | Glossary        |        |
       | TOCO cached 1   |        |
       | TOCO cached 1-1 |        |
@@ -599,7 +584,6 @@ Feature: Navigation menu for custom pages
       | Overview    |         | Edit       |
       | Members     |         |            |
       | Discussions |         |            |
-      | About       |         | Edit       |
     When I click "Edit" in the "Content" region
     Then I should see the heading "Edit <label> About edit link"
 
