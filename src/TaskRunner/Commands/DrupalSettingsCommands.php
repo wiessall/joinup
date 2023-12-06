@@ -103,7 +103,8 @@ class DrupalSettingsCommands extends AbstractCommands {
         ->line(trim($content));
     }
 
-    if ($settingsFooter = $this->getConfig()->get('drupal.settings.footer')) {
+    // Only add the footer in the main file.
+    if ($options['filename'] === 'settings.php' && ($settingsFooter = $this->getConfig()->get('drupal.settings.footer'))) {
       $taskWriteToFile->lines(['', '', trim($settingsFooter)]);
     }
 
