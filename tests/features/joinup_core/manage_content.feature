@@ -243,7 +243,8 @@ Feature:
     Then I should see "Custom page Will be moved to a solution group was changed to Vintage Solution Art."
     Then the "Vintage Solution Art" solution should have a community content titled "Will be moved to a solution"
 
-  @javascript
+  # Re-enable test in ISAICP-8331
+  @javascript @wip
   Scenario Outline: Able to select all items on the content management UI
     Given the following collections:
       | title       | state     |

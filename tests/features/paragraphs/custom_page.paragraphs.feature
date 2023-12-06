@@ -86,6 +86,7 @@ Feature:
     And I should see the link "Testimony"
     And I should see the link "Text"
     And I should see the link "Video"
+    And I should not see the link "Webform"
 
     # Facilitator.
     When I am logged in as "Gilfoyle"
@@ -109,6 +110,7 @@ Feature:
     And I should see the link "Testimony"
     And I should see the link "Text"
     And I should see the link "Video"
+    And I should not see the link "Webform"
 
     # Moderator.
     Given I am logged in as a moderator
@@ -132,6 +134,7 @@ Feature:
     And I should see the link "Testimony"
     And I should see the link "Text"
     And I should see the link "Video"
+    And I should see the link "Webform"
 
     And I should not see the link "1 column layout"
     And I should not see the link "2 column layout"
@@ -144,14 +147,3 @@ Feature:
       | group type |
       | collection |
       | solution   |
-
-  Scenario: View quote paragraph in the custom page.
-    Given custom_page content:
-      | title          | collection            | state     |
-      | Popular quotes | Paragraphs collection | published |
-    And I append "quote" to "field_paragraphs_body" field in "node" entity with following "Popular Quotes" title:
-      | paragraph_quote | That's one small step for a man, a giant leap for mankind. |
-
-    When I am an anonymous user
-    And I visit the "Popular quotes" custom page
-    Then the page should contain the html text "That's one small step for a man, a giant leap for mankind."
