@@ -17300,16 +17300,16 @@
         },
         {
             "name": "ec-europa/toolkit",
-            "version": "10.5.0",
+            "version": "10.6.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/ec-europa/toolkit.git",
-                "reference": "dc63e9e08daa8d25113b1047f4969134d124d0a9"
+                "reference": "794398210c5844f78252ac65e0db3bd93d08005c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ec-europa/toolkit/zipball/dc63e9e08daa8d25113b1047f4969134d124d0a9",
-                "reference": "dc63e9e08daa8d25113b1047f4969134d124d0a9",
+                "url": "https://api.github.com/repos/ec-europa/toolkit/zipball/794398210c5844f78252ac65e0db3bd93d08005c",
+                "reference": "794398210c5844f78252ac65e0db3bd93d08005c",
                 "shasum": ""
             },
             "require": {
@@ -17362,7 +17362,7 @@
                 "email": "DIGIT-NEXTEUROPA-QA@ec.europa.eu",
                 "source": "https://github.com/ec-europa/toolkit"
             },
-            "time": "2023-10-31T10:14:30+00:00"
+            "time": "2023-11-30T14:22:13+00:00"
         },
         {
             "name": "enlightn/security-checker",
