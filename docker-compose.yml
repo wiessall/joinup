@@ -68,7 +68,6 @@ services:
       VIRT_Parameters_MaxDirtyBuffers: 250000
       VIRT_Replication_ServerEnable: 0
       VIRT_SPARQL_ResultSetMaxRows: 1000000
-      DOCKER_RESTORE_PRODUCTION:
     command:
       - '/bin/bash'
       - '-c'
@@ -83,7 +82,6 @@ services:
       - ./scripts/docker/solr/precreate.sh:/docker-entrypoint-initdb.d/precreate.sh
     environment:
       SEARCH_API_SERVER_SS_SOLR_CORE: digit-joinup
-      DOCKER_RESTORE_PRODUCTION:
 
   memcached:
     image: memcached:1.6.15

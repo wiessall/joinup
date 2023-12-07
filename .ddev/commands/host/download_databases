@@ -1,0 +1,9 @@
+#!/bin/bash
+
+# Just a shorthand for `ddev run dev:download-databases`
+
+## Description: Downloads MySQL dump, Solr and Virtuoso snapshots
+## Usage: download-databases
+## Example: ddev download-databases
+
+ddev run dev:download-databases

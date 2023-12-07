@@ -1,0 +1,8 @@
+#!/bin/bash
+
+## Description: Executes a Toolkit command
+## Usage: run <Toolkit command>
+## Example: ddev run toolkit:build-dev
+## ExecRaw: true
+
+./vendor/bin/run "$@"

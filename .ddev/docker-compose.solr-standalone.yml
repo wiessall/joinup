@@ -1,0 +1,27 @@
+services:
+
+  solr-standalone:
+    container_name: ddev-${DDEV_SITENAME}-solr-standalone
+    image: solr:8
+    labels:
+        com.ddev.site-name: ${DDEV_SITENAME}
+        com.ddev.approot: ${DDEV_APPROOT}
+    expose:
+      - 8983
+    environment:
+      VIRTUAL_HOST: ${DDEV_HOSTNAME}
+      HTTP_EXPOSE: '8983:8983'
+      SEARCH_API_SERVER_SS_SOLR_CORE: digit-joinup
+    volumes:
+      - data:/var/solr/data
+      - ./solr-standalone/snapshot:/var/solr/data/snapshot
+      - ./solr-standalone/conf:/solr/conf
+      - ./solr-standalone/script/restore_solr.sh:/opt/solr/bin/restore_solr.sh
+      # Needed to recognize .ddev/commands/solr-standalone container commands.
+      - .:/mnt/ddev_config
+    command:
+      - solr-precreate
+      - digit-joinup
+      - /solr
+volumes:
+  data:

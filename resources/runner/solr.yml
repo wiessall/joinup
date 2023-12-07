@@ -8,7 +8,7 @@ solr:
     bin: ${solr.local.server_dir}/bin/solr
     core_dir: ${solr.local.server_dir}/server/solr/${env.SEARCH_API_SERVER_SS_SOLR_CORE}
     download_url: http://archive.apache.org/dist/lucene/solr/${solr.local.version}/solr-${solr.local.version}.tgz
-  snapshot_dir: ${joinup.db_dir}/solr
+  snapshot_dir: ${joinup.ddev_dir}/solr-standalone/snapshot
   config_tmp: ${toolkit.tmp_folder}/solr_config
   config_dir: ${joinup.dir}/resources/solr/conf
 

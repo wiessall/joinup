@@ -1,14 +1,10 @@
 #!/bin/bash
 
 # Restores a backup of the Solr data.
-# This script is intended to be run in the Jenkins pipelines of the acceptance
-# and UAT environments. For local development better use the runner command:
-# $ ./vendor/bin/run toolkit:install-dump
 
-CURRENT_DIR=$(pwd)
+# Defaults
 SOLR_SERVER_URL="http://localhost:8983/solr"
-TIMEOUT=300
-TIMEOUT_PATTERN='^[0-9]+$'
+TIMEOUT=120
 
 # Displays help options.
 function show_help {
@@ -19,8 +15,8 @@ function show_help {
   echo -e "-c, --core          Solr core to be restored"
   echo -e "-d, --snapshot-dir  The directory containing the snapshot"
   echo -e "-n, --snapshot-name The snapshot name"
-  echo -e "-e, --solr-url      Solr server URL. Default: http://localhost:8983/solr"
-  echo -e "-t, --timeout       Restore time timeout"
+  echo -e "-e, --solr-url      Solr server URL. Default http://localhost:8983/solr"
+  echo -e "-t, --timeout       Restore time timeout. Default 120s"
   echo -e "-v, --verbose       If set, verbose logging is on"
 }
 
@@ -53,7 +49,7 @@ while [[ "$1" == -* ]]; do
   esac
 done
 
-if ! [[ $TIMEOUT =~ ${TIMEOUT_PATTERN} ]] ; then
+if ! [[ $TIMEOUT =~ ^[0-9]+$ ]] ; then
   error "Timeout needs to be numeric!";
 fi
 
@@ -66,39 +62,61 @@ if [ ! -z "${SNAPSHOT_DIR%%/*}" ] || ! pathchk -p "${SNAPSHOT_DIR}"; then
   error "The --snapshot-dir path should be absolute!"
 fi
 
-CORE_EXISTS=`curl -sS "${SOLR_SERVER_URL}/admin/cores?action=STATUS&core=${CORE}&wt=xml" |grep -o '<long name="uptime">'`
+CORE_EXISTS=$(curl -sS "${SOLR_SERVER_URL}/admin/cores?action=STATUS&core=${CORE}&wt=xml" |grep -o '<long name="uptime">')
+
 if [ "${CORE_EXISTS}" == '' ]; then
   error "Solr '${CORE}' core does not exists on this server!";
 fi
 
 # Wipe out the existing index.
-log "Wiping out the exiting index of Solr '${CORE}' core."
-WIPE_INDEX=`/usr/bin/curl -sS --request POST --header "Content-Type: application/xml" --data "<delete><query>*:*</query></delete>" "${SOLR_SERVER_URL}/${CORE}/update?commit=true&wt=xml"`
+echo "Clearing '${CORE}' core exiting index"
+WIPE_INDEX=$(/usr/bin/curl -sS --request POST --header "Content-Type: application/xml" --data "<delete><query>*:*</query></delete>" "${SOLR_SERVER_URL}/${CORE}/update?commit=true&wt=xml")
 log "${WIPE_INDEX}"
 
 # Restore the index.
+echo -n "Restoring '${CORE}' core index [|]"
 line="${SOLR_SERVER_URL}/${CORE}/replication?command=restore&name=${SNAPSHOT_NAME}&location=${SNAPSHOT_DIR}&wt=xml"
-RESTORE_START=`/usr/bin/curl -sS ${line}`
+RESTORE_START=$(/usr/bin/curl -sS ${line})
 log "${RESTORE_START}$(tput sgr0)"
 
-RESTORE_START_CHECK=`echo ${RESTORE_START} | grep -o '<str name="status">OK</str>'`
+RESTORE_START_CHECK=$(echo ${RESTORE_START} | grep -o '<str name="status">OK</str>')
 
 if [ "${RESTORE_START_CHECK}" == '' ]; then
   error "Restore failed to start! Please check the output with -v";
 fi
 
 SUCCESS=""
+RETRIES=1
+SPINNER="/-\|"
+START_TIME="$(date +%s)"
 
-COUNTER=0
+# Hide the cursor
+tput civis -- invisible
 
-while [[ "${SUCCESS}" != '<str name="status">success</str>' ]] && [[ ${COUNTER} -lt ${TIMEOUT} ]]
+while [[ "${SUCCESS}" != '<str name="status">success</str>' ]]
 do
-  sleep 1
+  ## Check whether the timeout exceeded
+  CURRENT_TIME="$(date +%s)"
+  ELAPSED=$(("$CURRENT_TIME - $START_TIME"))
+  if [ ${ELAPSED} -ge ${TIMEOUT} ]; then
+    # Restore cursor
+    tput cnorm -- normal
+    echo
+    error "Timeout of ${TIMEOUT} seconds exceeded"
+  fi
 
-  CHECK_SUCCESS=`/usr/bin/curl -sS "${SOLR_SERVER_URL}/${CORE}/replication?command=restorestatus&name=${SNAPSHOT_NAME}&location=${SNAPSHOT_DIR}&wt=xml"`
-  SUCCESS=`echo ${CHECK_SUCCESS} | grep -o '<str name="status">success</str>'`
+  # Wait a little
+  sleep 0.25
+
+  test $RETRIES -gt 1 || printf "\b"
+  CHECK_SUCCESS=$(/usr/bin/curl -sS "${SOLR_SERVER_URL}/${CORE}/replication?command=restorestatus&name=${SNAPSHOT_NAME}&location=${SNAPSHOT_DIR}&wt=xml")
+  SUCCESS=$(echo ${CHECK_SUCCESS} | grep -o '<str name="status">success</str>')
   log "${CHECK_SUCCESS}"
-
-  COUNTER=$((COUNTER+1))
-  log "Timeout counter = ${COUNTER}"
+  log "Counter = ${RETRIES}"
+  printf "\b${SPINNER:RETRIES++%${#SPINNER}:1}"
 done
+
+# Restore the cursor
+tput cnorm -- normal
+
+echo -e "\r\033[KSuccessfully restored '${CORE}' core index"
