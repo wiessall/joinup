@@ -34,13 +34,38 @@ UPDATE
       nid,
       MIN(vid) as vid
     FROM {node_field_revision}
+    WHERE status = 1
+    GROUP BY nid
+    ORDER BY vid
+  ) t
+SET r.published_at = s.revision_timestamp
+WHERE
+  r.published_at = 2147483647
+  AND r.nid = t.nid
+  AND s.nid = t.nid
+  AND s.vid = t.vid
+  AND r.vid >= t.vid;
+SQL,
+    ],
+    // Check unpublished content.
+    [
+      'query' => <<<SQL
+UPDATE
+  {node_field_revision} r,
+  {node_revision} s,
+  (
+    SELECT
+      nid,
+      MIN(vid) as vid
+    FROM {node_field_revision}
     WHERE published_at = 2147483647
     GROUP BY nid
     ORDER BY vid
   ) t
 SET r.published_at = s.revision_timestamp
 WHERE
-  r.nid = t.nid
+  r.published_at = 2147483647
+  AND r.nid = t.nid
   AND s.nid = t.nid
   AND s.vid = t.vid
   AND r.vid >= t.vid;
@@ -69,7 +94,8 @@ SQL,
       'query' => <<<SQL
 UPDATE {node_field_data} d, {node_field_revision} r
 SET d.published_at = r.published_at
-WHERE d.vid = r.vid;
+WHERE d.vid = r.vid
+AND d.published_at = 2147483647
 SQL,
     ],
   ];
