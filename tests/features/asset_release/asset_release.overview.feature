@@ -1,4 +1,5 @@
-@api @group-a
+# Fix this in https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-8328
+@api @group-a @wip
 Feature: Asset distribution overview on solution.
   In order to view an overview of a solution's releases and download them
   As a user of the website

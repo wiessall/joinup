@@ -44,8 +44,8 @@ Feature: About page
     And I should see the text "Tamsin Irwin"
     And I should see the text "Irwin BVBA made-up company"
     # The following 2 fields should not be visible after change request in ISAICP-3664.
-    And I should not see the text "E-health"
-    And I should not see the text "Belgium"
+    And I should not see the text "E-health" in the "Content" region
+    And I should not see the text "Belgium" in the "Content" region
 
     # There should be a section explaining how the collection is moderated.
     And I should see the heading "Moderation"
@@ -54,6 +54,18 @@ Feature: About page
     And I should see the text "Non moderated"
     # Regression test for the "Moderation" label appearing twice.
     And the text "Moderation" should appear 1 time
+
+    Then I should see the text "0 Solutions" in the "Header" region
+    And I should see the text "0 members" in the "Header" region
+    And I should see the text "E-health" in the "Header" region
+    And I click "Members" in the "Header"
+    Then I should see the heading "Members"
+    And the "Roles" field should contain the "- Any - (0)" option
+
+    When I click "E-health"
+    Then I should see the heading "Advanced search"
+    Then the "E-health" content checkbox item should be selected
+    And I should see the following facet summary "E-health"
 
     # When there is no abstract, the description should be shown in the homepage.
     When I am logged in as a "moderator"
