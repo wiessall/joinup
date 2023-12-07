@@ -226,7 +226,7 @@ elements: |-
           '#type': url
           '#title': 'Source (URL)'
           '#description': 'Please provide here the complete link to external sources which describe the case (reports, case studies, presentations, news articles, web page describing the solution etc). At least one URL is needed to publish the case in the database.'
-          '#title_display': none
+          '#title_display': invisible
     description:
       '#type': textarea
       '#title': Description
