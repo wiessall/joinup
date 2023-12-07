@@ -118,10 +118,10 @@
   }
   .more-link {
     position: absolute;
-    bottom: 1rem;
+    bottom: $spacer;
+    right: 0;
     @include media-breakpoint-up(md) {
-      right: 0;
-      top: 12px;
+      top: $spacer;
       bottom: unset;
     }
     &::after {
@@ -143,10 +143,10 @@
   }
   .more-link {
     position: absolute;
-    bottom: -2rem;
+    bottom: $spacer * -3;
+    right: 0;
     @include media-breakpoint-up(md) {
-      right: 0;
-      top: 12px;
+      top: $spacer;
       bottom: unset;
     }
     &::after {
@@ -169,10 +169,10 @@
   }
   .more-link {
     position: absolute;
-    bottom: -2rem;
+    bottom: 0;
+    right: 0;
     @include media-breakpoint-up(md) {
-      right: 0;
-      top: 12px;
+      top: $spacer;
       bottom: unset;
     }
     &::after {
