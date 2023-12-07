@@ -5,4 +5,4 @@
 ## Example: ddev run toolkit:build-dev
 ## ExecRaw: true
 
-./vendor/bin/run "$@"
+vendor/bin/run "$@"
