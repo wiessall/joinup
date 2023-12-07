@@ -5,7 +5,7 @@ virtuoso:
   root: ${runner.working_dir}/vendor/ec-europa/virtuoso
   db: ${virtuoso.root}/db
   backup_prefix: VIRTUOSO_DUMP_
-  backup_dir: ${joinup.db_dir}/virtuoso
+  backup_dir: ${joinup.ddev_dir}/virtuoso
   snapshot_dir: ${virtuoso.backup_dir}/snapshot
 
 isql:

@@ -1,7 +1,7 @@
 # MySQL configs and commands.
 
 mysql:
-  dumpfile: ${joinup.db_dir}/mysql/mysql.sql
+  dumpfile: ${joinup.ddev_dir}/db/dump/mysql.sql
 commands:
 
   # Unpack and prepare the MySQL dump.

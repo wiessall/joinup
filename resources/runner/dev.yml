@@ -32,28 +32,6 @@ commands:
     - task: run
       command: solr:download-snapshot
 
-  # Restores all backends from backup.
-  dev:restore-databases:
-    - task: run
-      command: solr:restore
-    - task: run
-      command: virtuoso:restore
-    - task: run
-      command: drupal:settings
-      arguments:
-        - site-clone
-    - task: run
-      command: toolkit:install-dump
-
-  # Rebuilds the dev environment by restoring backups and applying updates.
-  dev:rebuild-environment:
-    - task: run
-      command: solr:restore
-    - task: run
-      command: virtuoso:restore
-    - task: run
-      command: toolkit:install-clone
-
   dev:install-modules:
     - task: run
       command: config-readonly:disable

@@ -1,0 +1,11 @@
+#!/bin/bash
+
+## Description: Restore Virtuoso from a snapshot
+## Usage: virtuoso:restore
+
+VIRTUOSO_DB=/usr/local/virtuoso-opensource/var/lib/virtuoso/db
+
+echo "shutdown();" | isql-vt localhost dba dba || true
+rm virtuoso-temp.db virtuoso.db virtuoso.log virtuoso.pxa virtuoso.trx
+cd backups && virtuoso-t +configfile $VIRTUOSO_DB/virtuoso.ini +restore-backup VIRTUOSO_DUMP_
+test -f $VIRTUOSO_DB/virtuoso.lck || virtuoso-t +configfile $VIRTUOSO_DB/virtuoso.ini +wait
