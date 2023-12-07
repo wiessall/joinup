@@ -1,15 +1,8 @@
 # Virtuoso configs and commands.
 
 virtuoso:
-  bin: /opt/virtuoso-7/bin/virtuoso-t
-  root: ${runner.working_dir}/vendor/ec-europa/virtuoso
-  db: ${virtuoso.root}/db
-  backup_prefix: VIRTUOSO_DUMP_
   backup_dir: ${joinup.ddev_dir}/virtuoso
   snapshot_dir: ${virtuoso.backup_dir}/snapshot
-
-isql:
-  bin: /usr/bin/isql-vt
 
 sparql:
   host: ${env.DRUPAL_SPARQL_HOSTNAME}
@@ -36,40 +29,3 @@ commands:
         directory: ${virtuoso.backup_dir}
     - task: exec
       command: mv $(find ${virtuoso.backup_dir} -type d -name 'digit-joinup-reference_*') ${virtuoso.snapshot_dir}
-
-  # Restores the Virtuoso database from a snapshot.
-  virtuoso:restore:
-    - task: run
-      command: virtuoso:stop
-    - task: run
-      command: virtuoso:setup
-    - task: exec
-      command: ${virtuoso.bin} +configfile ${virtuoso.db}/virtuoso.ini +restore-backup ${virtuoso.backup_prefix}
-      dir: ${virtuoso.snapshot_dir}
-    - task: run
-      command: virtuoso:start
-
-  # Setups an empty Virtuoso database.
-  virtuoso:setup:
-    - task: remove
-      file: ${virtuoso.db}
-    - task: mkdir
-      dir: ${virtuoso.db}
-    - task: touch
-      file: ${virtuoso.db}/.gitkeep
-    - task: process
-      source: ${virtuoso.root}/virtuoso.ini.template
-      destination: ${virtuoso.db}/virtuoso.ini
-
-  # Starts the Virtuoso server.
-  virtuoso:start:
-    - test -f ${virtuoso.root}/db/virtuoso.lck || ${virtuoso.bin} +configfile ${virtuoso.db}/virtuoso.ini +wait
-    - echo 'GRANT SPARQL_UPDATE TO "SPARQL";' | ${isql.bin} ${sparql.host} ${sparql.user} ${sparql.password}
-
-  # Stops the Virtuoso server.
-  virtuoso:stop:
-    - echo "shutdown();" | ${isql.bin} ${sparql.host} ${sparql.user} ${sparql.password} || true
-
-  # Executes a Virtuoso checkpoint.
-  virtuoso:checkpoint-execute:
-    - echo 'checkpoint;' | ${isql.bin} ${sparql.host} ${sparql.user} ${sparql.password}
