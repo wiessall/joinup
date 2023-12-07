@@ -120,12 +120,17 @@ function joinup_core_post_update_110002(array &$sandbox): string {
       continue;
     }
 
-    $redirectStorage->create([
-      'redirect_source' => ltrim($alias . '/about', '/'),
-      'redirect_redirect' => 'internal:' . $path,
-      'status_code' => '301',
-      'language' => 'en',
-    ])->save();
+    try {
+      $redirectStorage->create([
+        'redirect_source' => ltrim($alias . '/about', '/'),
+        'redirect_redirect' => 'internal:' . $path,
+        'status_code' => '301',
+        'language' => 'en',
+      ])->save();
+    }
+    catch (\Exception $e) {
+      // Simple skip as some redirects already exists.
+    }
 
     $sandbox['progress']++;
   }
