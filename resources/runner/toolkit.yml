@@ -87,13 +87,6 @@ commands:
       command: drupal:site-install
     - task: run
       command: dev:import-sparql-fixtures
-    # This is a safety net for the eventuality a developer lacks a mail catcher
-    # tool on their local environment. See the 'Development mail collector'
-    # `settings.php` section from `resources/runner/drupal.yml` for details.
-    - task: run
-      command: drush:module-install
-      arguments:
-        - devel
     - task: run
       command: testing:install-modules
     - task: run
@@ -138,13 +131,6 @@ commands:
     # The `toolkit:run-deploy` command has enabled config read-only.
     - task: run
       command: config-readonly:disable
-    # This is a safety net for the eventuality a developer lacks a mail catcher
-    # tool on their local environment. See the 'Development mail collector'
-    # `settings.php` section from `resources/runner/drupal.yml` for details.
-    - task: run
-      command: drush:module-install
-      arguments:
-        - devel
     - task: run
       command: testing:install-modules
     - task: exec
