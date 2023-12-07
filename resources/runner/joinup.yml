@@ -1,7 +1,6 @@
 # Configuration and commands specific for Joinup.
 joinup:
   site_dir: ${joinup.dir}/web
-  db_dir: ${joinup.dir}/db
   files_public_dir: ${joinup.site_dir}/sites/default/files
   files_private_dir: ${joinup.site_dir}/${env.DRUPAL_PRIVATE_FILE_SYSTEM}
   ddev_dir: ${joinup.dir}/.ddev
