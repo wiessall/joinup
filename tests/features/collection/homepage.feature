@@ -92,7 +92,7 @@ Feature: Collection homepage
     And I should not see the text "Moderated"
     And I should not see the text "Open collection"
     And I should not see the text "Bilbo Baggins"
-    And I should not see the text "Employment and Support Allowance"
+    And I should see the text "Employment and Support Allowance" in the "Header" region
     # The collection content is shown here in the correct order.
     Then I should see the following tiles in the correct order:
       | Rohirrim make extraordinary deal                  |

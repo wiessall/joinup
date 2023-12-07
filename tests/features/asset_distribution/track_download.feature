@@ -4,7 +4,8 @@ Feature: Asset distribution editing.
   I want to track downloads of distributions
   So I can create some metrics
 
-  @javascript
+  # Fix this in https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-8328
+  @javascript @wip
   Scenario: Downloads made by authenticated users are logged.
     Given the following licence:
       | title       | Postcard licence                     |
