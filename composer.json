@@ -113,7 +113,8 @@
         "psr/http-factory-implementation": "*",
         "semiceu/adms-ap_validator": "1.0.0-alpha1",
         "sweetrdf/easyrdf": "^1.9",
-        "symfony/http-client": "*"
+        "symfony/http-client": "*",
+        "viaaurea/swiftmailer-legacy": "^1.0"
     },
     "require-dev": {
         "ext-fileinfo": "*",
