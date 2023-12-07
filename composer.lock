@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f092e4f9780858ab2955469e25be7eb3",
+    "content-hash": "965a463ad4cb707fe483fcc664a96215",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -8406,41 +8406,6 @@
                 "source": "https://github.com/ec-europa/spdx/tree/1.0.0-alpha12"
             },
             "time": "2022-11-19T16:41:19+00:00"
-        },
-        {
-            "name": "ec-europa/virtuoso",
-            "version": "2.1.3",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/ec-europa/virtuoso.git",
-                "reference": "5991818b3a5c5a5bb74d3c18f1826d3d0e24321d"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/ec-europa/virtuoso/zipball/5991818b3a5c5a5bb74d3c18f1826d3d0e24321d",
-                "reference": "5991818b3a5c5a5bb74d3c18f1826d3d0e24321d",
-                "shasum": ""
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Virtuoso\\": "src"
-                }
-            },
-            "license": [
-                "EUPL"
-            ],
-            "authors": [
-                {
-                    "name": "Sander Van Dooren",
-                    "email": "sander.vandooren@ausy.be"
-                }
-            ],
-            "support": {
-                "source": "https://github.com/ec-europa/virtuoso/tree/2.1.3",
-                "issues": "https://github.com/ec-europa/virtuoso/issues"
-            },
-            "time": "2019-01-29T12:41:51+00:00"
         },
         {
             "name": "egulias/email-validator",
