@@ -13,7 +13,7 @@ services:
       HTTP_EXPOSE: '8983:8983'
       SEARCH_API_SERVER_SS_SOLR_CORE: digit-joinup
     volumes:
-      - data:/var/solr/data
+      - solr:/var/solr/data
       - ./solr-standalone/snapshot:/var/solr/data/snapshot
       - ./solr-standalone/conf:/solr/conf
       - ./solr-standalone/script/restore_solr.sh:/opt/solr/bin/restore_solr.sh
@@ -24,4 +24,4 @@ services:
       - digit-joinup
       - /solr
 volumes:
-  data:
+  solr:
