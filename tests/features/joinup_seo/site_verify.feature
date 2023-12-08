@@ -1,4 +1,4 @@
-@api
+@api @group-i
 Feature:
   Tests related to the site verifications.
 
