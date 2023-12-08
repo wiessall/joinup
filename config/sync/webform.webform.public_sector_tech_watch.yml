@@ -24,7 +24,7 @@ elements: |-
   submitter_information:
     '#type': webform_section
     '#title': 'Submitter information'
-    '#description': '<p>Prefilled fields are inherited from your account as “Joinup registered user”</p>'
+    '#description': '<small>Prefilled fields are inherited from your EU Login account.</small>'
     '#title_tag': h3
     flexbox_01:
       '#type': webform_flexbox
@@ -121,6 +121,9 @@ elements: |-
       '#multiple__add_more_input': false
       '#multiple__add_more_button_label': 'Add country'
       '#wrapper_type': form_element
+      '#label_attributes':
+        class:
+          - mb-0
       '#element':
         geographical_coverage:
           '#type': webform_select_other
@@ -179,7 +182,10 @@ elements: |-
             'Vatican City': 'Vatican City'
           '#required': true
           '#title': 'Choose a country'
+          '#title_display': invisible
+          '#description': 'Choose a country'
           '#other__option_label': 'Other (please specify)'
+          '#wrapper_type': form_element
     flexbox_06:
       '#type': webform_flexbox
       '#attributes':
@@ -221,6 +227,9 @@ elements: |-
       '#multiple__add_more_input': false
       '#multiple__add_more_button_label': 'Add another source'
       '#wrapper_type': form_element
+      '#label_attributes':
+        class:
+          - mb-0
       '#element':
         source_url_item:
           '#type': url
@@ -326,13 +335,13 @@ elements: |-
     additional_info_description:
       '#type': textarea
       '#title': 'Additional info'
-      '#description': '<small class="description form-text text-muted">Please upload here all the material (if any) on the case that can be useful to know more about it. Moreover, please feel free to share any other request or comments you might have</small>'
+      '#description': '<p>Please upload here all the material (if any) on the case that can be useful to know more about it. Moreover, please feel free to share any other request or comments you might have</p>'
       '#description_display': before
       '#maxlength': 4000
       '#rows': 3
     additional_info_file:
       '#type': managed_file
-      '#title': 'Files'
+      '#title': Files
       '#multiple': true
       '#title_display': invisible
       '#max_filesize': '10'
