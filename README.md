@@ -252,7 +252,7 @@ Find out more on how to write custom commands [here](https://ddev.readthedocs.io
 ### Locally exposed services
 
 * https://joinup.ddev.site, http://joinup.ddev.site -- The website
-* https://joinup.ddev.site:8890/sparql -- The SPARQL endpoint
+* http://joinup.ddev.site:8890/sparql -- The SPARQL endpoint
 * http://joinup.ddev.site:8983 -- The Solr admin UI
 * https://joinup.ddev.site:7900, http://joinup.ddev.site:7910 -- The Selenium
   tests viewer (use "secret" as password)
