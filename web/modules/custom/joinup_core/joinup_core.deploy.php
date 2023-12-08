@@ -26,7 +26,7 @@ use Drupal\sparql_entity_storage\SparqlEntityStorageInterface;
 /**
  * Pre-populate solution abstract fields.
  */
-function joinup_core_deploy_0199201(array &$sandbox = []): string {
+function joinup_core_deploy_110101(array &$sandbox = []): string {
   $rdfStorage = \Drupal::entityTypeManager()
     ->getStorage('rdf_entity');
   \assert($rdfStorage instanceof SparqlEntityStorageInterface);
