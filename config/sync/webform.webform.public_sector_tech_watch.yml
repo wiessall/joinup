@@ -277,7 +277,7 @@ elements: |-
       '#type': checkboxes
       '#title': 'Improved Public Service'
       '#multiple': 3
-      '#description': '<small class="description form-text text-muted">More specifically, what benefit or expected benefit this solution produced or might produce? (Please select up to the three most relevant answers)</small>'
+      '#description': '<small class="form-text mb-2">More specifically, what benefit or expected benefit this solution produced or might produce? (Please select up to the three most relevant answers)</small>'
       '#description_display': before
       '#options':
         'Services are more personalised': 'Services are more personalised'
@@ -295,7 +295,7 @@ elements: |-
       '#type': checkboxes
       '#title': 'Improved administrative efficiency'
       '#multiple': 3
-      '#description': '<small class="description form-text text-muted">More specifically, what benefit or expected benefit this solution produced or might produce? (Please select up to the three most relevant answers)</small>'
+      '#description': '<small class="form-text mb-2">More specifically, what benefit or expected benefit this solution produced or might produce? (Please select up to the three most relevant answers)</small>'
       '#description_display': before
       '#options':
         'Costs can be reduced': 'Costs can be reduced'
