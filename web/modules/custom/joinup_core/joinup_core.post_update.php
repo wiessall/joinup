@@ -24,87 +24,72 @@ function joinup_core_post_update_110000(): void {
     // Update nodes with multiple revisions that have at least one published
     // revision so the publication date is set to the timestamp of the first
     // published revision.
-    [
-      'query' => <<<SQL
-        UPDATE
-          {node_field_revision} r,
-          {node_revision} s,
-          (
-            SELECT
-              nid,
-              MIN(vid) as vid
-            FROM {node_field_revision}
-            WHERE status = 1
-            GROUP BY nid
-            ORDER BY vid
-          ) t
-        SET r.published_at = s.revision_timestamp
-        WHERE
-          r.published_at = 2147483647
-          AND r.nid = t.nid
-          AND s.nid = t.nid
-          AND s.vid = t.vid
-          AND r.vid >= t.vid;
-        SQL,
-    ],
+    'UPDATE
+        {node_field_revision} r,
+        {node_revision} s,
+        (
+          SELECT
+            nid,
+            MIN(vid) as vid
+          FROM {node_field_revision}
+          WHERE status = 1
+          GROUP BY nid
+          ORDER BY vid
+        ) t
+      SET r.published_at = s.revision_timestamp
+      WHERE
+        r.published_at = 2147483647
+        AND r.nid = t.nid
+        AND s.nid = t.nid
+        AND s.vid = t.vid
+        AND r.vid >= t.vid',
+
     // Check unpublished content.
-    [
-      'query' => <<<SQL
-        UPDATE
-          {node_field_revision} r,
-          {node_revision} s,
-          (
-            SELECT
-              nid,
-              MIN(vid) as vid
-            FROM {node_field_revision}
-            WHERE published_at = 2147483647
-            GROUP BY nid
-            ORDER BY vid
-          ) t
-        SET r.published_at = s.revision_timestamp
-        WHERE
-          r.published_at = 2147483647
-          AND r.nid = t.nid
-          AND s.nid = t.nid
-          AND s.vid = t.vid
-          AND r.vid >= t.vid;
-        SQL,
-    ],
+    'UPDATE
+        {node_field_revision} r,
+        {node_revision} s,
+        (
+          SELECT
+            nid,
+            MIN(vid) as vid
+          FROM {node_field_revision}
+          WHERE published_at = 2147483647
+          GROUP BY nid
+          ORDER BY vid
+        ) t
+      SET r.published_at = s.revision_timestamp
+      WHERE
+        r.published_at = 2147483647
+        AND r.nid = t.nid
+        AND s.nid = t.nid
+        AND s.vid = t.vid
+        AND r.vid >= t.vid',
 
     // Update the revisions table so that nodes that have a single published
     // revision have the publication timestamp set to the creation timestamp.
-    [
-      'query' => <<<SQL
-        UPDATE {node_field_revision} r, (
-          SELECT nid
-          FROM {node_field_revision}
-          GROUP BY nid
-          HAVING COUNT(*) = 1
-        ) s
-        SET r.published_at = r.created
-        WHERE
-          r.nid = s.nid
-          AND r.published_at = 2147483647
-        SQL,
-    ],
+    'UPDATE {node_field_revision} r, (
+        SELECT nid
+        FROM {node_field_revision}
+        GROUP BY nid
+        HAVING COUNT(*) = 1
+      ) s
+      SET r.published_at = r.created
+      WHERE
+        r.nid = s.nid
+        AND r.published_at = 2147483647',
 
     // Copy the publication date from the revisions table to the node table.
-    [
-      'query' => <<<SQL
-        UPDATE {node_field_data} d, {node_field_revision} r
-        SET d.published_at = r.published_at
-        WHERE d.vid = r.vid
-        AND d.published_at = 2147483647
-        SQL,
-    ],
+    'UPDATE {node_field_data} d, {node_field_revision} r
+      SET d.published_at = r.published_at
+      WHERE d.vid = r.vid
+      AND d.published_at = 2147483647',
   ];
 
   // Perform the operations in a single atomic transaction.
   $transaction = $connection->startTransaction();
   try {
-    foreach ($queries as $query_data) {
-      \Drupal::database()->query($query_data['query']);
+    foreach ($queries as $query) {
+      $connection->query($query);
     }
   }
   catch (Exception $e) {
