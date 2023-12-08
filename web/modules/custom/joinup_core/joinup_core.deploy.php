@@ -14,11 +14,14 @@
 
 declare(strict_types = 1);
 
+use Drupal\Core\Field\FieldConfigInterface;
 use Drupal\Core\Field\FormatterPluginManager;
+use Drupal\field\Entity\FieldConfig;
 use Drupal\smart_trim\Plugin\Field\FieldFormatter\SmartTrimFormatter;
-use Drupal\smart_trim\TruncateHTML;
 use Drupal\solution\Entity\SolutionInterface;
 use Drupal\sparql_entity_storage\SparqlEntityStorageInterface;
+
+// phpcs:disable CodingStandards.NamingConventions.ValidUpdateName.InvalidUpdateId
 
 /**
  * Pre-populate solution abstract fields.
@@ -41,39 +44,40 @@ function joinup_core_deploy_0199201(array &$sandbox = []): string {
   $ids = array_splice($sandbox['ids'], 0, 50);
   $formatterPluginManager = \Drupal::service('plugin.manager.field.formatter');
   \assert($formatterPluginManager instanceof FormatterPluginManager);
-  $truncate = \Drupal::service('smart_trim.truncate_html');
-  \assert($truncate instanceof TruncateHTML);
-  $descriptionFieldName = NULL;
-  $smartTrim = NULL;
+
+  // Assume solution description field won't change until golive.
+  $descriptionFieldDefinition = FieldConfig::load('rdf_entity.solution.field_is_description');
+  \assert($descriptionFieldDefinition instanceof FieldConfigInterface);
+  $descriptionFieldName = $descriptionFieldDefinition->getName();
+  $smartTrim = $formatterPluginManager->createInstance(
+    'smart_trim',
+    [
+      'field_definition' => $descriptionFieldDefinition,
+      'settings' => [
+        'trim_length' => 200,
+        'trim_type' => 'chars',
+        'trim_suffix' => '…',
+        'wrap_output' => FALSE,
+        'more' => ['display_link' => FALSE],
+        'summary_handler' => 'trim',
+        'trim_options' => [
+          'text' => 'text',
+          'replace_tokens' => 'replace_tokens',
+        ],
+      ],
+      'label' => 0,
+      'view_mode' => '_custom',
+      'third_party_settings' => [],
+    ]
+  );
+  \assert($smartTrim instanceof SmartTrimFormatter);
+
   foreach ($rdfStorage->loadMultiple($ids) as $solution) {
     \assert($solution instanceof SolutionInterface);
-    $descriptionFieldName = $descriptionFieldName ?? $solution->getDescriptionField();
     $descriptionItemList = $solution->get($descriptionFieldName);
     if ($descriptionItemList->isEmpty()) {
       continue;
     }
-    $smartTrim = $smartTrim ?? $formatterPluginManager->createInstance(
-      'smart_trim',
-      [
-        'field_definition' => $descriptionItemList->getFieldDefinition(),
-        'settings' => [
-          'trim_length' => 200,
-          'trim_type' => 'chars',
-          'trim_suffix' => '…',
-          'wrap_output' => FALSE,
-          'more' => ['display_link' => FALSE],
-          'summary_handler' => 'trim',
-          'trim_options' => [
-            'text' => 'text',
-            'replace_tokens' => 'replace_tokens',
-          ],
-        ],
-        'label' => 0,
-        'view_mode' => '_custom',
-        'third_party_settings' => [],
-      ]
-    );
-    \assert($smartTrim instanceof SmartTrimFormatter);
 
     $abstractRenderable = $smartTrim->viewElements($solution->get($descriptionFieldName));
     $abstract = $abstractRenderable[0]['#output']['#text'] ?? '';
