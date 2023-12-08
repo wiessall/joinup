@@ -1,4 +1,4 @@
-@api @terms
+@api @terms @group-e
 Feature:
   Access and functionality checks for the IOP related paragraphs.
 

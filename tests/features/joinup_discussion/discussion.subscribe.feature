@@ -1,4 +1,4 @@
-@api @group-g
+@api @group-h
 Feature: Following discussions
   As a member of Joinup
   I want to follow interesting discussions

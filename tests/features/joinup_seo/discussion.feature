@@ -1,4 +1,4 @@
-@api @group-c
+@api @group-i
 Feature: SEO for discussion forum posts.
   As an owner of the website
   in order for my discussions to be better visible on the web
