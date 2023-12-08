@@ -10,12 +10,11 @@ import Glide, {
 } from "@glidejs/glide/dist/glide.modular.esm";
 import ControlsDisabler from "./helpers/glide.controlsDisabler.esm";
 
-(() => {
+((Drupal, once) => {
   Drupal.behaviors.glide = {
-    attach() {
-      function mountSlide() {
-        const slides = document.querySelectorAll(".paragraph--carousel .glide");
-        slides.forEach((slide) => {
+    attach(context) {
+      once("ventuno-glide", ".paragraph--carousel .glide", context).forEach(
+        (slide) => {
           const glide = new Glide(slide, {
             rewind: false,
             bound: true,
@@ -31,21 +30,18 @@ import ControlsDisabler from "./helpers/glide.controlsDisabler.esm";
           });
 
           let resetTimeoutId;
+          const resetHandler = (glideSlider) => {
+            if (glideSlider.settings.perView === glideSlider.previousPerView) {
+              return;
+            }
+            glideSlider.previousPerView = glideSlider.settings.perView;
+            glideSlider.enable().go("<<").disable();
+          };
           glide.on("resize", () => {
             if (resetTimeoutId) {
               clearTimeout(resetTimeoutId);
             }
-            resetTimeoutId = setTimeout(
-              (glide) => {
-                if (glide.settings.perView === glide.previousPerView) {
-                  return;
-                }
-                glide.previousPerView = glide.settings.perView;
-                glide.enable().go("<<").disable();
-              },
-              50,
-              glide
-            );
+            resetTimeoutId = setTimeout(resetHandler, 50, glide);
           });
 
           glide.mount({ Controls, Breakpoints, Swipe, ControlsDisabler });
@@ -60,9 +56,8 @@ import ControlsDisabler from "./helpers/glide.controlsDisabler.esm";
           backward.addEventListener("click", () => {
             glide.go("<");
           });
-        });
-      }
-      mountSlide();
+        }
+      );
     },
   };
-})();
+})(Drupal, once);
