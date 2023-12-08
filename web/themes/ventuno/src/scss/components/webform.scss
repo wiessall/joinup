@@ -36,7 +36,7 @@
       }
       td {
         .my-4 {
-          margin-top: $spacer !important;
+          margin-top: $spacer * 0.5 !important;
         }
       }
 
@@ -85,19 +85,19 @@
 
 // Styles specifically for the Public Sector Tech Watch webform paragraph.
 .webform-submission-public-sector-tech-watch-form {
-  .form-item-geographical-coverage-section {
+  .form-item-source-url, .form-item-geographical-coverage-section {
     .webform-multiple-table {
+      margin-top: 0;
+
       table {
         td.webform-multiple-table--operations {
           @include media-breakpoint-up(md) {
             position: relative;
             &:after {
-              top: unset !important;
-              bottom: 25px
+              top: 16px;
             }
             .image-button {
-              top: unset !important;
-              bottom: 25px;
+              top: 16px;
             }
           }
         }

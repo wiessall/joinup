@@ -78,7 +78,8 @@ Feature:
     And I check the box "Services are more personalised"
     And I check the box "Yes, it increased / will increase transparency of public sector operations"
     And I select the radio button "No, we developed the solution internally"
-    And I attach the file "logo.png" to "Additional info"
+    And I fill in "Additional info" with "Some additional description"
+    And I attach the file "logo.png" to "Files"
 
     Then I should see the heading "Terms and Conditions"
     And I check the box "I have read and agreed to the Joinup Legal Notice and the Joinup Privacy Statement."
