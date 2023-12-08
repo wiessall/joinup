@@ -25,6 +25,7 @@ dependencies:
     - paragraphs.paragraphs_type.text
     - paragraphs.paragraphs_type.tiles
     - paragraphs.paragraphs_type.video
+    - paragraphs.paragraphs_type.webform
   module:
     - entity_reference_revisions
 id: node.custom_page.field_paragraphs_body
@@ -61,6 +62,7 @@ settings:
       tiles: tiles
       text: text
       video: video
+      webform: webform
     negate: 0
     target_bundles_drag_drop:
       1_column_layout:
@@ -143,5 +145,8 @@ settings:
         enabled: true
       video:
         weight: -34
+        enabled: true
+      webform:
+        weight: -32
         enabled: true
 field_type: entity_reference_revisions
