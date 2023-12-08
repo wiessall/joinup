@@ -339,6 +339,9 @@ elements: |-
       '#description_display': before
       '#maxlength': 4000
       '#rows': 3
+      '#attributes':
+        class:
+          - mt-3
     additional_info_file:
       '#type': managed_file
       '#title': Files
