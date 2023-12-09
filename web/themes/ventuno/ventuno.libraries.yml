@@ -290,6 +290,8 @@ paragraph__carousel.js:
     assets/js/paragraph--carousel.min.js: { minified: true, attributes: { defer: true } }
   dependencies:
     - ventuno/glide
+    - core/drupal
+    - core/once
 
 paragraph__layout:
   css:
