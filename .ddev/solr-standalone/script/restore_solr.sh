@@ -69,7 +69,7 @@ if [ "${CORE_EXISTS}" == '' ]; then
 fi
 
 # Wipe out the existing index.
-echo "Clearing '${CORE}' core exiting index"
+echo "Clearing '${CORE}' core existing index"
 WIPE_INDEX=$(/usr/bin/curl -sS --request POST --header "Content-Type: application/xml" --data "<delete><query>*:*</query></delete>" "${SOLR_SERVER_URL}/${CORE}/update?commit=true&wt=xml")
 log "${WIPE_INDEX}"
 
