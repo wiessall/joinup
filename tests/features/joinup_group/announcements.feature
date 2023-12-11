@@ -1,6 +1,8 @@
+# Contains a scenario with @group-clone annotation.
 @api
 Feature: Messaging group announcements
 
+  @group-d
   Scenario Outline: Announcement creation and transitions
 
     Given the following <group>s:
@@ -397,7 +399,7 @@ Feature: Messaging group announcements
       | collection |
       | solution   |
 
-  @javascript
+  @javascript @group-d
   Scenario: Announcement moderation
     Given the following collections:
       | title       | state     |
