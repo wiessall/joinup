@@ -33,7 +33,7 @@ class InternalPathTest extends JoinupExistingSiteTestBase {
         'format' => 'content_editor',
       ],
     ]);
-    $this->drupalGet($collection->toUrl('canonical'));
+    $this->drupalGet($collection->toUrl());
     $this->assertSession()->pageTextContains('Sample Collection');
     // No iframe has been rendered.
     $this->assertSession()->responseNotContains('<iframe');
