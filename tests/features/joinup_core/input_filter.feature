@@ -1,4 +1,4 @@
-@api @group-e
+@api @group-f
 Feature: Input filter
   In order to maintain security
   As a user

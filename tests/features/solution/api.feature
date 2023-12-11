@@ -1,4 +1,4 @@
-@api @group-e
+@api @group-g
 Feature: Solution API
   In order to manage solutions programmatically
   As a backend developer

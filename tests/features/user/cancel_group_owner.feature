@@ -1,4 +1,4 @@
-@api @group-f
+@api @group-i
 Feature:
   Accounts of group owners cannot be cancelled.
 

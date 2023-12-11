@@ -1,4 +1,4 @@
-@api @terms
+@api @terms @group-i
 Feature: SEO for RDF entities.
   As an owner of the website
   in order for my RDF entities to be better visible on the web

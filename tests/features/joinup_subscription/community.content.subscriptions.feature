@@ -1,4 +1,4 @@
-@api @group-d
+@api @group-e
 Feature: Subscribing to community content in collections and solutions
   As an avid fan of Joinup
   I want to receive a periodic digest listing newly published content
