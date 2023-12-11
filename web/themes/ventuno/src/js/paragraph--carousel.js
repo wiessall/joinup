@@ -10,12 +10,11 @@ import Glide, {
 } from "@glidejs/glide/dist/glide.modular.esm";
 import ControlsDisabler from "./helpers/glide.controlsDisabler.esm";
 
-(() => {
+((Drupal, once) => {
   Drupal.behaviors.glide = {
-    attach() {
-      function mountSlide() {
-        const slides = document.querySelectorAll(".paragraph--carousel .glide");
-        slides.forEach((slide) => {
+    attach(context) {
+      once("ventuno-glide", ".paragraph--carousel .glide", context).forEach(
+        (slide) => {
           const glide = new Glide(slide, {
             rewind: false,
             bound: true,
@@ -23,13 +22,30 @@ import ControlsDisabler from "./helpers/glide.controlsDisabler.esm";
             gap: 16,
             perView: 4,
             breakpoints: {
+              9999: { perView: 4 },
               1199: { perView: 3 },
               767: { perView: 2 },
               575: { perView: 1 },
             },
           });
 
+          let resetTimeoutId;
+          const resetHandler = (glideSlider) => {
+            if (glideSlider.settings.perView === glideSlider.previousPerView) {
+              return;
+            }
+            glideSlider.previousPerView = glideSlider.settings.perView;
+            glideSlider.enable().go("<<").disable();
+          };
+          glide.on("resize", () => {
+            if (resetTimeoutId) {
+              clearTimeout(resetTimeoutId);
+            }
+            resetTimeoutId = setTimeout(resetHandler, 50, glide);
+          });
+
           glide.mount({ Controls, Breakpoints, Swipe, ControlsDisabler });
+          glide.previousPerView = glide.settings.perView;
           const forward = slide.querySelector(".glide__arrow--right");
           const backward = slide.querySelector(".glide__arrow--left");
 
@@ -40,9 +56,8 @@ import ControlsDisabler from "./helpers/glide.controlsDisabler.esm";
           backward.addEventListener("click", () => {
             glide.go("<");
           });
-        });
-      }
-      mountSlide();
+        }
+      );
     },
   };
-})();
+})(Drupal, once);
