@@ -18,82 +18,50 @@ declare(strict_types = 1);
 /**
  * Set the published_at to NULL where it currently is 2147483647.
  */
-function joinup_core_post_update_110000(): void {
-  $connection = \Drupal::database();
-  $queries = [
-    // Update nodes with multiple revisions that have at least one published
-    // revision so the publication date is set to the timestamp of the first
-    // published revision.
-    'UPDATE
-        {node_field_revision} r,
-        {node_revision} s,
-        (
-          SELECT
-            nid,
-            MIN(vid) as vid
-          FROM {node_field_revision}
-          WHERE status = 1
-          GROUP BY nid
-          ORDER BY vid
-        ) t
-      SET r.published_at = s.revision_timestamp
-      WHERE
-        r.published_at = 2147483647
-        AND r.nid = t.nid
-        AND s.nid = t.nid
-        AND s.vid = t.vid
-        AND r.vid >= t.vid',
+function joinup_core_post_update_110000(array &$sandbox): string {
+  $database = \Drupal::database();
+  if (empty($sandbox['nodes'])) {
+    $query = $database->select('node_field_revision', 'nfr');
+    $query->join('node_revision', 'nr', 'nfr.vid = nr.vid');
+    $query->fields('nfr', ['nid']);
+    $query->addExpression('MAX(nfr.vid)', 'vid');
+    $query->addExpression('MAX(nr.revision_timestamp)', 'revision_timestamp');
+    $query->condition('nfr.status', 1);
+    $query->condition('nfr.published_at', 2147483647);
+    $query->groupBy('nfr.nid');
 
-    // Check unpublished content.
-    'UPDATE
-        {node_field_revision} r,
-        {node_revision} s,
-        (
-          SELECT
-            nid,
-            MIN(vid) as vid
-          FROM {node_field_revision}
-          WHERE published_at = 2147483647
-          GROUP BY nid
-          ORDER BY vid
-        ) t
-      SET r.published_at = s.revision_timestamp
-      WHERE
-        r.published_at = 2147483647
-        AND r.nid = t.nid
-        AND s.nid = t.nid
-        AND s.vid = t.vid
-        AND r.vid >= t.vid',
+    $sandbox['nodes'] = $query->execute()->fetchAll();
+    $sandbox['current'] = 0;
+    $sandbox['total'] = count($sandbox['nodes']);
+  }
 
-    // Update the revisions table so that nodes that have a single published
-    // revision have the publication timestamp set to the creation timestamp.
-    'UPDATE {node_field_revision} r, (
-        SELECT nid
-        FROM {node_field_revision}
-        GROUP BY nid
-        HAVING COUNT(*) = 1
-      ) s
-      SET r.published_at = r.created
-      WHERE
-        r.nid = s.nid
-        AND r.published_at = 2147483647',
-
+  $limit = 50;
+  $nodes = array_slice($sandbox['nodes'], $sandbox['current'], $limit);
+  $sandbox['current'] += count($nodes);
+  foreach ($nodes as $node) {
+    $database->update('node_field_revision')
+      ->fields(['published_at' => NULL])
+      ->condition('vid', $node->vid, '<')
+      ->condition('nid', $node->nid)
+      ->execute();
+    $database->update('node_field_revision')
+      ->fields(['published_at' => $node->revision_timestamp])
+      ->condition('vid', $node->vid, '>=')
+      ->condition('nid', $node->nid)
+      ->execute();
+  }
+  if ($sandbox['current'] >= $sandbox['total']) {
+    // Clean unpublished content published_at date.
+    $database->query('UPDATE node_field_revision SET published_at = NULL WHERE published_at = 2147483647');
     // Copy the publication date from the revisions table to the node table.
-    'UPDATE {node_field_data} d, {node_field_revision} r
+    $database->query('UPDATE {node_field_data} d, {node_field_revision} r
       SET d.published_at = r.published_at
       WHERE d.vid = r.vid
-      AND d.published_at = 2147483647',
-  ];
-
-  // Perform the operations in a single atomic transaction.
-  $transaction = $connection->startTransaction();
-  try {
-    foreach ($queries as $query) {
-      $connection->query($query);
-    }
+      AND d.published_at = 2147483647');
+    $sandbox['#finished'] = 1;
   }
-  catch (Exception $e) {
-    $transaction->rollBack();
-    throw new Exception('Database error', 0, $e);
+  else {
+    $sandbox['#finished'] = ($sandbox['current'] / $sandbox['total']);
   }
+  return "Processed {$sandbox['current']} out of {$sandbox['total']} nodes";
 }
