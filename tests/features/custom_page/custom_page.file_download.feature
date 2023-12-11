@@ -1,4 +1,4 @@
-@api @group-f
+@api @group-b
 Feature: Permalinks for custom page attachments.
 
   Scenario: Users can download attachments using the permalinks.

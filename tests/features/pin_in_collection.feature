@@ -1,4 +1,4 @@
-@api @group-f
+@api
 Feature: Pinning entities inside collections
   As a facilitator of a collection
   I want to pin entities at the top of the collection homepage
