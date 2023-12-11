@@ -76,7 +76,7 @@ Feature: Collection membership overview
     Then I should not see the link "Members" in the "Header"
 
     # The first 12 active members should be shown, ordered by first name - last name.
-  # @see EPIC-7858" - set back as this will be added later
+  # @see EPIC-7858 - set back as this will be added later
   #    When I click "Members"
     When I am on the members page of "Jubilant Robots"
     Then I should see the heading "Members"
