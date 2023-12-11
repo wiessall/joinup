@@ -1,4 +1,4 @@
-@api @group-c
+@api @group-f
 Feature:
   As an owner of a website
   In order to guarantee data persistence

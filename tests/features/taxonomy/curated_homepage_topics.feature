@@ -1,4 +1,4 @@
-@api @terms
+@api @terms @group-h
 Feature:
   Ensure curated list of topics on the homepage behave properly.
 
@@ -427,7 +427,7 @@ Feature:
       | Event 2 |
       | Event 3 |
 
-  @javascript @debug
+  @javascript
   Scenario Outline: Images should be shown for tile-two view modes.
     Given <type> content:
       | title       | headline    | short title | state   | logo       | published |
