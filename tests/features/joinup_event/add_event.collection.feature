@@ -1,4 +1,4 @@
-@api @group-d
+@api @group-g
 Feature: "Add event" visibility options.
   In order to manage events
   As a collection member
