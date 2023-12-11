@@ -16,7 +16,9 @@ services:
       HTTP_EXPOSE: '8890:8890'
       DBA_PASSWORD: dba
       DAV_PASSWORD: dav
-
+      # Pass the host user IDs.
+      DDEV_UID:
+      DDEV_GID:
       # Virtuoso .ini overrides. Pattern: VIRT_$SECTION_$KEY: $VALUE
       # See https://hub.docker.com/r/openlink/virtuoso-opensource-7
       VIRT_HTTPServer_KeepAliveTimeout: 60
