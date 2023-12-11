@@ -1,4 +1,4 @@
-@api @group-f
+@api
 Feature: Test SVG attachments.
 
   Background:
