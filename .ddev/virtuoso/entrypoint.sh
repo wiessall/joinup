@@ -4,10 +4,12 @@
 # Disclaimer: Forked from original entry point file.
 #
 
-#
 #  Set mask for file permissions
-#
 umask 0027
+
+# Set 'virtuoso' user & group IDs to match the host user
+usermod -u $DDEV_UID virtuoso
+usermod -g $DDEV_GID virtuoso
 
 #
 #  Default programs
