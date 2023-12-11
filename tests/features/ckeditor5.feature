@@ -111,7 +111,7 @@ Feature: CKEditor5
 
     When I press "Publish"
 
-#  @see EIPC-7858
+#  @see EPIC-7858
 #    And I click "About"
 #    But the response should contain "media/image/alan.jpg"
 
@@ -143,7 +143,7 @@ Feature: CKEditor5
     Then the modal should be closed
 
     When I press "Publish"
-#  @see EIPC-7858
+#  @see EPIC-7858
 #    And I click "About"
 #    But the response should contain "media/image/richard.jpg"
 

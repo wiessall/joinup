@@ -139,7 +139,7 @@ Feature: As a moderator or group facilitator I want to be able to add, edit and
       | nick | moderator |             | should see      |
       | wade |           | facilitator | should not see  |
 
-# @see EIPC-7858
+# @see EPIC-7858
 #  Scenario: Glossary terms should be shown as links in collection content
 #    Given collection:
 #      | title       | Collection With Glossary                                                                             |

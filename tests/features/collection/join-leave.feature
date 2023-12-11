@@ -124,7 +124,7 @@ Feature: Joining and leaving collections through the web interface
     And I click "Leave this collection"
     And I press "Confirm"
 
-# @see EIPC-7858 - User will be able to click members in header.
+# @see EPIC-7858 - User will be able to click members in header.
 #    When I click "Members"
 #    Then I should not see the link "Add members"
 
