@@ -1,15 +1,10 @@
-uuid: 780b650a-2ce1-4186-95f0-43c2e68c960a
+uuid: 0d328f76-a5e4-4a91-b952-6c92dd8622ec
 langcode: en
 status: true
 dependencies:
   config:
     - field.storage.rdf_entity.field_ar_abstract
-    - filter.format.essential_html
     - rdf_entity.rdfentity.collection
-  module:
-    - text
-_core:
-  default_config_hash: 1VOX4tmugcY6Vy3QcRmHxAkjRp7JR3DWZznLsDjPFRM
 id: rdf_entity.collection.field_ar_abstract
 field_name: field_ar_abstract
 entity_type: rdf_entity
@@ -20,7 +15,5 @@ required: false
 translatable: false
 default_value: {  }
 default_value_callback: ''
-settings:
-  allowed_formats:
-    - essential_html
-field_type: text_long
+settings: {  }
+field_type: string_long
