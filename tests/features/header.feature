@@ -25,9 +25,6 @@ Feature: Header
     When I click "Home" in the "Hamburger menu"
     Then I should be on "/"
 
-    When I click "About us" in the "Hamburger menu"
-    Then I should see the heading "About Joinup"
-
     Given I visit the <page>
     When I click "Sign in" in the "Navigation bar"
     Then I should see the heading "Sign in to continue"

@@ -83,8 +83,6 @@ Feature: Proposing a collection
     And I should see the following group menu items in the specified order:
       | text     |
       | Overview |
-      | Members  |
-      | About    |
     When I click the contextual link "Add new page" in the "Header" region
     Then I should see the heading "Add custom page"
     When I fill in the following:
