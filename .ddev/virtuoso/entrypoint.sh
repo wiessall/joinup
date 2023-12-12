@@ -7,10 +7,6 @@
 #  Set mask for file permissions
 umask 0027
 
-# Set 'virtuoso' user & group IDs to match the host user
-usermod -u $DDEV_UID virtuoso
-usermod -g $DDEV_GID virtuoso
-
 #
 #  Default programs
 #
@@ -127,8 +123,6 @@ initialize_virtuoso_directory()
     echo "Setting passwords"
     "$VIRTUOSO" -f +checkpoint-only +pwdold dba +pwddba "$DBA_PASSWORD" +pwddav "$DAV_PASSWORD"
   fi
-
-  chown -R virtuoso:virtuoso $VIRTUOSO_HOME
 }
 
 initialize_virtuoso_directory
