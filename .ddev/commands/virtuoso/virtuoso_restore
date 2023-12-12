@@ -12,5 +12,5 @@ echo "shutdown();" | $VIRTUOSO_BIN/isql localhost dba dba || true
 rm -f virtuoso-temp.db virtuoso.db virtuoso.log virtuoso.pxa virtuoso.trx
 
 # Restore and restart.
-cd ../backup && $VIRTUOSO_BIN/virtuoso-t +configfile $VIRTUOSO_DB/virtuoso.ini +restore-backup VIRTUOSO_DUMP_
+cd ../tmp && $VIRTUOSO_BIN/virtuoso-t +configfile $VIRTUOSO_DB/virtuoso.ini +restore-backup VIRTUOSO_DUMP_
 test -f $VIRTUOSO_DB/virtuoso.lck || virtuoso-t +configfile $VIRTUOSO_DB/virtuoso.ini +wait

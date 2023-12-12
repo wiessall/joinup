@@ -127,6 +127,7 @@ initialize_virtuoso_directory()
     echo "Setting passwords"
     "$VIRTUOSO" -f +checkpoint-only +pwdold dba +pwddba "$DBA_PASSWORD" +pwddav "$DAV_PASSWORD"
   fi
+
   chown -R virtuoso:virtuoso $VIRTUOSO_HOME
 }
 
