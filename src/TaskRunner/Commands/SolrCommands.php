@@ -8,7 +8,6 @@ use Drupal\Component\Serialization\Json;
 use Joinup\TaskRunner\Traits\SolrTrait;
 use OpenEuropa\TaskRunner\Commands\AbstractCommands;
 use Robo\Exception\AbortTasksException;
-use Symfony\Component\Filesystem\Filesystem;
 
 /**
  * Provides commands for ApacheSolr admin.
