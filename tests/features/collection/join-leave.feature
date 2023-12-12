@@ -123,8 +123,10 @@ Feature: Joining and leaving collections through the web interface
     When I go to the homepage of the "Insectarium" collection
     And I click "Leave this collection"
     And I press "Confirm"
-    When I click "Members"
-    Then I should not see the link "Add members"
+
+# @see EPIC-7858 - User will be able to click members in header.
+#    When I click "Members"
+#    Then I should not see the link "Add members"
 
   @javascript
   Scenario: Close the modal dialogs with the cancel button.
@@ -155,14 +157,10 @@ Feature: Joining and leaving collections through the web interface
     # Members can cancel the "Leave collection" modal.
     Given I am logged in as "Stewe Griffin"
     And I go to the homepage of the "Sapient Pearwood" collection
-    When I click "Read more"
-    Then I should see the heading "About Sapient Pearwood"
 
     When I click "Leave this collection"
     Then a modal should open
 
     When I press "Cancel" in the "Modal buttons" region
     And I wait for AJAX to finish
-    # Since this is a modal, the dialog simply closes and the user is not redirected
-    # to the overview page. This is why the title from "About" is still displayed.
-    Then I should see the heading "About Sapient Pearwood"
+    Then I should see the heading "Sapient Pearwood"

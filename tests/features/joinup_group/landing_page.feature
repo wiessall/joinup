@@ -26,8 +26,6 @@ Feature: Tests the group landing page customization.
     And I should see the following group menu items in the specified order:
       | text          |
       | Overview      |
-      | Members       |
-      | About         |
       | Custom Page 1 |
       | Custom Page 2 |
       | Custom Page 3 |
@@ -92,8 +90,6 @@ Feature: Tests the group landing page customization.
     And I should see the following group menu items in the specified order:
       | text          |
       | Welcome       |
-      | Members       |
-      | About         |
       | Custom Page 1 |
       | Custom Page 2 |
       | Custom Page 3 |

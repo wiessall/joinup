@@ -309,7 +309,7 @@ function collection_entity_extra_field_info() {
 
   $display['read_more'] = [
     'label' => t('Read more'),
-    'description' => t('Shows a link to the about page of the collection'),
+    'description' => t('Shows a link to the the collection'),
     'visible' => FALSE,
   ];
 
@@ -367,17 +367,16 @@ function collection_rdf_entity_view(array &$build, EntityInterface $entity, Enti
     ];
   }
 
-  // Read more link to the about page.
+  // Read more link to the collection.
   if ($display->getComponent('read_more')) {
     $text = [
       '#type' => 'markup',
       '#markup' => t('Read more') . '<span class="visually-hidden"> ' . t('about') . ' ' . $entity->getName() . '</span>',
     ];
-    $build['read_more'] = $entity->toLink($text, 'about-page', [
+    $build['read_more'] = $entity->toLink($text, 'canonical', [
       'attributes' => [
         'data-drupal-group-view-mode' => $view_mode,
         'class' => [
-          'about-page',
           'read-more',
           'fieldset__read-more',
           'btn',
