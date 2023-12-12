@@ -46,7 +46,7 @@ commands:
   toolkit:build-dev:
     - task: mkdir
       dir: ${joinup.files_public_dir}
-      mode: 0775
+      mode: 509
     - task: copy
       from: ${joinup.site_dir}/sites/default/default.services.yml
       to: ${joinup.site_dir}/sites/default/services.yml
@@ -59,8 +59,10 @@ commands:
       destination: ${joinup.dir}/behat.yml
     - task: mkdir
       dir: ${joinup.files_private_dir}
+      mode: 509
     - task: mkdir
       dir: ${env.DRUPAL_FILE_TEMP_PATH}
+      mode: 509
 
   # Overrides toolkit:install-clean.
   toolkit:install-clean:
