@@ -24,8 +24,8 @@ function joinup_core_post_update_110000(array &$sandbox): string {
     $query = $database->select('node_field_revision', 'nfr');
     $query->join('node_revision', 'nr', 'nfr.vid = nr.vid');
     $query->fields('nfr', ['nid']);
-    $query->addExpression('MAX(nfr.vid)', 'vid');
-    $query->addExpression('MAX(nr.revision_timestamp)', 'revision_timestamp');
+    $query->addExpression('MIN(nfr.vid)', 'vid');
+    $query->addExpression('MIN(nr.revision_timestamp)', 'revision_timestamp');
     $query->condition('nfr.status', 1);
     $query->condition('nfr.published_at', 2147483647);
     $query->groupBy('nfr.nid');
