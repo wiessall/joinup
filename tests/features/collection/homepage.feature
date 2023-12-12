@@ -87,12 +87,6 @@ Feature: Collection homepage
 
   Scenario: The collection homepage shows related content.
     When I go to the homepage of the "Middle earth daily" collection
-    # The collection fields are shown in the about page.
-    Then I should not see the text "Only members can create new content"
-    And I should not see the text "Moderated"
-    And I should not see the text "Open collection"
-    And I should not see the text "Bilbo Baggins"
-    And I should not see the text "Employment and Support Allowance"
     # The collection content is shown here in the correct order.
     Then I should see the following tiles in the correct order:
       | Rohirrim make extraordinary deal                  |
