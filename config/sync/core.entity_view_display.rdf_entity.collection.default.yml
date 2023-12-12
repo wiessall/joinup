@@ -258,6 +258,38 @@ third_party_settings:
                     offset: 0
                   template_suggestion:
                     template_suggestion: ''
+            weight: 1
+            additional: {  }
+          f0743480-207f-440b-8300-77e9a7d58d36:
+            uuid: f0743480-207f-440b-8300-77e9a7d58d36
+            region: content
+            configuration:
+              id: 'field_block:rdf_entity:collection:last_update'
+              label: 'Last updated'
+              label_display: '0'
+              provider: layout_builder
+              context_mapping:
+                entity: layout_builder.entity
+                view_mode: view_mode
+              formatter:
+                type: timestamp
+                label: above
+                settings:
+                  date_format: medium
+                  custom_date_format: ''
+                  timezone: ''
+                  tooltip:
+                    date_format: long
+                    custom_date_format: ''
+                  time_diff:
+                    enabled: true
+                    future_format: '@interval hence'
+                    past_format: '@interval ago'
+                    granularity: 1
+                    refresh: 60
+                third_party_settings:
+                  template_suggestion:
+                    template_suggestion: ''
             weight: 0
             additional: {  }
         third_party_settings: {  }
