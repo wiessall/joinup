@@ -1,7 +1,5 @@
 #!/bin/bash
 
-# Just a shorthand for `ddev run dev:download-databases`
-
 ## Description: Downloads MySQL dump, Solr and Virtuoso snapshots
 ## Usage: download-databases
 ## Example: ddev download-databases
@@ -15,4 +13,5 @@ rm -rf .ddev/virtuoso/snapshot/VIRTUOSO_DUMP_*
 tar xvf tmp/virtuoso.gz --directory=.ddev/virtuoso/snapshot --strip-components=1
 
 # Solr
-ddev run solr:download-snapshot
+rm -rf .ddev/solr-standalone/snapshot/snapshot.digit-joinup/*
+tar xvf tmp/solr.gz --directory=.ddev/solr-standalone/snapshot/snapshot.digit-joinup --strip-components=1
