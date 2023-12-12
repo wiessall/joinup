@@ -24,6 +24,7 @@ dependencies:
     - rdf_entity.rdfentity.collection
   module:
     - custom_markup_block
+    - joinup_layout
     - layout_builder
     - layout_discovery
     - user
@@ -33,46 +34,132 @@ third_party_settings:
     allow_custom: false
     sections:
       -
-        layout_id: layout_onecol
+        layout_id: joinup_layout_group_heading
         layout_settings:
-          label: 'Content tiles'
+          label: 'Heading section'
           context_mapping: {  }
         components:
-          2afad626-0bb4-4969-89ac-a6d2fd61ef19:
-            uuid: 2afad626-0bb4-4969-89ac-a6d2fd61ef19
-            region: content
+          128ffb79-6159-4982-82f6-83eaa42021c2:
+            uuid: 128ffb79-6159-4982-82f6-83eaa42021c2
+            region: aside
             configuration:
-              id: 'extra_field_block:user:user:user_user_field_user_content_top'
-              label: 'Facet region: Collection content top'
+              id: custom_markup
+              label: 'Custom Markup'
               label_display: '0'
-              provider: layout_builder
-              context_mapping:
-                entity: '@user.current_user_context:current_user'
-              formatter:
-                settings: {  }
-                third_party_settings: {  }
+              provider: custom_markup_block
+              context_mapping: {  }
+              markup:
+                value: '<h2>Quick links</h2>'
+                format: content_editor
             weight: 0
             additional: {  }
-          6206c6c6-9fcb-4afc-a09c-9af75ee60677:
-            uuid: 6206c6c6-9fcb-4afc-a09c-9af75ee60677
-            region: content
+          9e789968-e0ed-4a49-a322-25da73528daf:
+            uuid: 9e789968-e0ed-4a49-a322-25da73528daf
+            region: main
             configuration:
-              id: 'extra_field_block:rdf_entity:collection:rdf_entity_collection_field_collection_content_top'
-              label: 'Facet region: Collection content top'
+              id: 'field_block:rdf_entity:collection:field_ar_abstract'
+              label: Abstract
               label_display: '0'
               provider: layout_builder
               context_mapping:
                 entity: layout_builder.entity
+                view_mode: view_mode
               formatter:
+                type: text_default
+                label: hidden
                 settings: {  }
-                third_party_settings: {  }
+                third_party_settings:
+                  template_suggestion:
+                    template_suggestion: ''
             weight: 1
+            additional: {  }
+          d376972e-fd7a-493d-a3b7-80ee05799cfd:
+            uuid: d376972e-fd7a-493d-a3b7-80ee05799cfd
+            region: left
+            configuration:
+              id: 'field_block:rdf_entity:collection:field_ar_owner'
+              label: Owner
+              label_display: '0'
+              provider: layout_builder
+              context_mapping:
+                entity: layout_builder.entity
+                view_mode: view_mode
+              formatter:
+                type: entity_reference_entity_view
+                label: above
+                settings:
+                  view_mode: about
+                third_party_settings:
+                  template_suggestion:
+                    template_suggestion: ''
+            weight: 0
+            additional: {  }
+          826c0d70-ad1c-41fc-aefc-503c40b8a1a8:
+            uuid: 826c0d70-ad1c-41fc-aefc-503c40b8a1a8
+            region: right
+            configuration:
+              id: 'field_block:rdf_entity:collection:field_ar_contact_information'
+              label: 'Contact information'
+              label_display: '0'
+              provider: layout_builder
+              context_mapping:
+                entity: layout_builder.entity
+                view_mode: view_mode
+              formatter:
+                type: entity_reference_entity_view
+                label: above
+                settings:
+                  view_mode: about
+                third_party_settings:
+                  field_delimiter:
+                    delimiter: ''
+                  field_formatter_range:
+                    order: 0
+                    limit: 0
+                    offset: 0
+                  template_suggestion:
+                    template_suggestion: ''
+            weight: 0
             additional: {  }
         third_party_settings: {  }
       -
         layout_id: layout_onecol
         layout_settings:
-          label: 'Detailed information header'
+          label: 'Description section'
+          context_mapping: {  }
+        components:
+          cc1204b7-2b5c-4e96-b9b6-d726a9ea2b96:
+            uuid: cc1204b7-2b5c-4e96-b9b6-d726a9ea2b96
+            region: content
+            configuration:
+              id: 'field_block:rdf_entity:collection:field_ar_description'
+              label: Description
+              label_display: '0'
+              provider: layout_builder
+              context_mapping:
+                entity: layout_builder.entity
+                view_mode: view_mode
+              formatter:
+                type: text_default
+                label: hidden
+                settings: {  }
+                third_party_settings:
+                  template_suggestion:
+                    template_suggestion: ''
+            weight: 0
+            additional: {  }
+        third_party_settings: {  }
+      -
+        layout_id: layout_onecol
+        layout_settings:
+          label: 'Search section'
+          context_mapping: {  }
+        components: {  }
+        third_party_settings: {  }
+      -
+        layout_id: layout_onecol
+        layout_settings:
+          label: 'Detailed header'
           context_mapping: {  }
         components:
           672ccc51-b39c-426a-a037-cc6ffe8812c5:
@@ -93,7 +180,7 @@ third_party_settings:
       -
         layout_id: layout_onecol
         layout_settings:
-          label: 'Detailed information'
+          label: 'Detailed items'
           context_mapping: {  }
         components:
           504f9a8c-ab74-424a-b513-12f70ba3aef4:
@@ -127,7 +214,7 @@ third_party_settings:
       -
         layout_id: layout_onecol
         layout_settings:
-          label: Moderation
+          label: 'Moderation section'
           context_mapping: {  }
         components:
           d78c7b8a-3a6a-4f91-8e05-91a99cc7f72c:
@@ -152,26 +239,6 @@ third_party_settings:
                   template_suggestion:
                     template_suggestion: ''
             weight: 1
-            additional: {  }
-          eacb9910-c662-479f-a1e6-414ba0134a87:
-            uuid: eacb9910-c662-479f-a1e6-414ba0134a87
-            region: content
-            configuration:
-              id: 'field_block:rdf_entity:collection:field_ar_content_creation'
-              label: 'Content creation'
-              label_display: '0'
-              provider: layout_builder
-              context_mapping:
-                entity: layout_builder.entity
-                view_mode: view_mode
-              formatter:
-                type: list_default
-                label: hidden
-                settings: {  }
-                third_party_settings:
-                  template_suggestion:
-                    template_suggestion: ''
-            weight: 2
             additional: {  }
           fc1c1b18-8be1-42b1-90cb-1d7ca038db1c:
             uuid: fc1c1b18-8be1-42b1-90cb-1d7ca038db1c
