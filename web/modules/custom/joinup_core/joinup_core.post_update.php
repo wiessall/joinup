@@ -86,3 +86,12 @@ function joinup_core_post_update_110001(array &$sandbox): string {
   $sandbox['#finished'] = (int) empty($sandbox['data']);
   return "Processed {$sandbox['progress']} out of {$sandbox['count']}.";
 }
+
+/**
+ * Deletes the field_ar_abstract field so that it can be re-created.
+ */
+function joinup_core_post_update_110002(): string {
+  $fieldStorage = \Drupal::entityTypeManager()->getStorage('field_storage_config')->load('rdf_entity.field_ar_abstract');
+  $fieldStorage?->delete();
+  return 'Deleted field_ar_abstract field.';
+}
