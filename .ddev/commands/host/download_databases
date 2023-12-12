@@ -4,14 +4,19 @@
 ## Usage: download-databases
 ## Example: ddev download-databases
 
-# MySQL
+# Download dump and snapshots.
 ddev run toolkit:download-dump --yes
-ddev run mysql:unpack-dump
 
-# Virtuoso
+# Unpack dump and snapshots.
+
+echo "Unpacking MySQL dump"
+rm -f .ddev/db/dump/mysql.sql
+gunzip -c tmp/mysql.gz > .ddev/db/dump/mysql.sql
+
+echo "Unpacking Virtuoso snapshot"
 rm -rf .ddev/virtuoso/snapshot/VIRTUOSO_DUMP_*
-tar xvf tmp/virtuoso.gz --directory=.ddev/virtuoso/snapshot --strip-components=1
+tar xvf tmp/virtuoso.gz --directory=.ddev/virtuoso/snapshot --strip-components=1 >& /dev/null
 
-# Solr
+echo "Unpacking Solr snapshot"
 rm -rf .ddev/solr-standalone/snapshot/snapshot.digit-joinup/*
-tar xvf tmp/solr.gz --directory=.ddev/solr-standalone/snapshot/snapshot.digit-joinup --strip-components=1
+tar xvf tmp/solr.gz --directory=.ddev/solr-standalone/snapshot/snapshot.digit-joinup --strip-components=1 >& /dev/null
