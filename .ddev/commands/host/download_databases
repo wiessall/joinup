@@ -12,10 +12,7 @@ ddev run mysql:unpack-dump
 
 # Virtuoso
 rm -rf .ddev/virtuoso/snapshot/VIRTUOSO_DUMP_*
-tar xvf tmp/virtuoso.gz --directory=tmp
-SOURCE=$(find tmp -type d -name digit-joinup-reference_*)
-cp $SOURCE/VIRTUOSO_DUMP_* .ddev/virtuoso/snapshot/
-rm -rf tmp/digit-joinup-reference_*
+tar xvf tmp/virtuoso.gz --directory=.ddev/virtuoso/snapshot --strip-components=1
 
 # Solr
 ddev run solr:download-snapshot
