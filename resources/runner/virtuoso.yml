@@ -1,31 +1,7 @@
 # Virtuoso configs and commands.
 
-virtuoso:
-  backup_dir: ${joinup.ddev_dir}/virtuoso
-  snapshot_dir: ${virtuoso.backup_dir}/snapshot
-
 sparql:
   host: ${env.DRUPAL_SPARQL_HOSTNAME}
   port: ${env.DRUPAL_SPARQL_PORT}
   user: ${env.DRUPAL_SPARQL_USER}
   password: ${env.DRUPAL_SPARQL_PASSWORD}
-
-commands:
-
-  # Downloads and unpacks the Virtuoso snapshot.
-  virtuoso:download-snapshot:
-    # Cleanup any stale data.
-    - task: exec
-      command: rm -rf ${virtuoso.backup_dir}/digit-joinup-reference_*
-    - task: remove
-      file: ${virtuoso.snapshot_dir}
-    # Unpack and organize.
-    - task: exec
-      command: tar
-      arguments:
-        - xvf
-        - ${toolkit.tmp_folder}/virtuoso.gz
-      options:
-        directory: ${virtuoso.backup_dir}
-    - task: exec
-      command: mv $(find ${virtuoso.backup_dir} -type d -name 'digit-joinup-reference_*') ${virtuoso.snapshot_dir}
