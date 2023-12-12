@@ -251,7 +251,7 @@ third_party_settings:
                   link: false
                 third_party_settings:
                   field_delimiter:
-                    delimiter: ''
+                    delimiter: ','
                   field_formatter_range:
                     order: 0
                     limit: 0
@@ -287,6 +287,7 @@ third_party_settings:
                     past_format: '@interval ago'
                     granularity: 1
                     refresh: 60
+                    description: ''
                 third_party_settings:
                   template_suggestion:
                     template_suggestion: ''
