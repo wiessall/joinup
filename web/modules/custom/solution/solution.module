@@ -353,11 +353,10 @@ function solution_rdf_entity_view(array &$build, RdfInterface $solution, EntityV
         '#type' => 'markup',
         '#markup' => t('Read more') . '<span class="visually-hidden"> ' . t('about') . ' ' . $solution->getName() . '</span>',
       ];
-      $link = $solution->toLink($text, 'about-page', [
+      $link = $solution->toLink($text, 'canonical', [
         'attributes' => [
           'data-drupal-group-view-mode' => $view_mode,
           'class' => [
-            'about-page',
             'read-more',
             'fieldset__read-more',
             'btn',

@@ -41,9 +41,8 @@ class GroupMenuLinksSubscriber implements EventSubscriberInterface {
 
     $event
       ->addMenuLink($group->toUrl(), 'Overview', -10)
-      ->addMenuLink($group->toUrl('member-overview'), 'Members', -9)
-      ->addMenuLink($discussionUrl, 'Discussions', -8)
-      ->addMenuLink($group->toUrl('about-page'), 'About', -7);
+      ->addMenuLink($group->toUrl('member-overview'), 'Members', -9, ['enabled' => 0])
+      ->addMenuLink($discussionUrl, 'Discussions', -8);
   }
 
 }

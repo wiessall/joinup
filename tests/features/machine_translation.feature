@@ -34,20 +34,18 @@ Feature: Machine translation
 
     When I am logged in as a moderator
     # Inside a collection sidebar, only custom pages, glossary terms (but not
-    # the glossary overview) and the about page should be translatable.
+    # the glossary overview) should be translatable.
     When I go to the edit form of the "Brexit" collection
     Then I should not see any Webtools eTrans elements
     When I go to the delete form of the "Brexit" collection
     Then I should not see any Webtools eTrans elements
     When I go to the "Brexit" collection
     Then I should not see any Webtools eTrans elements
-    When I click "Members"
+    When I am on the members page of "Brexit"
     Then I should not see any Webtools eTrans elements
     When I click "Glossary"
     Then I should see the Webtools eTrans button
     When I click "Digital portability"
-    Then I should see the Webtools eTrans button
-    When I click "About"
     Then I should see the Webtools eTrans button
     When I go to the "Increased credit card fees" custom page
     Then I should see the Webtools eTrans button

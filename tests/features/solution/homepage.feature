@@ -21,9 +21,6 @@ Feature: Solution homepage
     And the page should be cacheable
     # The description itself should be stripped of unsightly links.
     But I should not see the link "mathematical"
-    # The 'Read more' link leads to the About page.
-    When I click "Read more"
-    Then I should see the heading "About Petri net"
 
   # This is a regression test for the entities that include a hashmark on their Uri.
   # @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-3225
