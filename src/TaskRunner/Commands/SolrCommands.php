@@ -66,28 +66,6 @@ class SolrCommands extends AbstractCommands {
   }
 
   /**
-   * Takes a snapshot from the Solr server core index.
-   *
-   * @command solr:backup
-   *
-   * @throws \Robo\Exception\AbortTasksException
-   *   When the server response is invalid.
-   */
-  public function backup(): void {
-    $config = $this->getConfig();
-    $core = $config->get('env.SEARCH_API_SERVER_SS_SOLR_CORE');
-
-    $this->say("Backup Solr '{$core}' core.");
-
-    // Ensure there's no existing backup.
-    $file_system = new Filesystem();
-    $file_system->remove($config->get('solr.snapshot_dir') . "/snapshot.$core");
-
-    $this->executeReplicationCommand($core, 'backup');
-    $this->say("Successfully backed-up Solr '{$core}' core.");
-  }
-
-  /**
    * Restores the Solr server core index from a snapshot.
    *
    * @command solr:restore

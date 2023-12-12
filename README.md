@@ -143,20 +143,6 @@ In most of the practical cases, you want to download them all at once:
 ddev download-databases
 ```
 
-But you can also download them one by one:
-
-```shell
-# MySQL dump download and unpack
-ddev run toolkit:download-dump
-ddev run mysql:unpack-dump
-
-# Virtuoso snapshot download
-ddev run virtuoso:download-snapshot
-
-# Solr snapshot download
-ddev run solr:download-snapshot
-```
-
 #### Actually rebuild the site
 
 ```shell
