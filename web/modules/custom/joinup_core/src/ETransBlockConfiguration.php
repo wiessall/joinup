@@ -63,11 +63,6 @@ class ETransBlockConfiguration {
       ],
     ],
     'routes' => [
-      // The "About" page of a collection or solution.
-      'entity.rdf_entity.about_page' => [
-        'include' => 'h1.page-title__title,#block-ventuno-content',
-      ],
-
       // The "Glossary" page of a collection.
       'entity.rdf_entity.glossary' => [
         'include' => '.view-glossary',
