@@ -154,7 +154,57 @@ third_party_settings:
         layout_settings:
           label: 'Search section'
           context_mapping: {  }
-        components: {  }
+        components:
+          2c5ec8f0-ddf7-4dc9-9ae9-8f4d758dd09e:
+            uuid: 2c5ec8f0-ddf7-4dc9-9ae9-8f4d758dd09e
+            region: content
+            configuration:
+              id: 'extra_field_block:rdf_entity:collection:rdf_entity_collection_field_collection_content_inline_facets'
+              label: 'Facet region: Inline facets'
+              label_display: '0'
+              provider: layout_builder
+              context_mapping:
+                entity: layout_builder.entity
+              formatter:
+                settings: {  }
+                third_party_settings: {  }
+            weight: 1
+            additional: {  }
+          d1f695ec-f806-4486-aec5-4a2628b74955:
+            uuid: d1f695ec-f806-4486-aec5-4a2628b74955
+            region: content
+            configuration:
+              id: 'field_block:rdf_entity:collection:field_collection_content'
+              label: 'Collection content'
+              label_display: '0'
+              provider: layout_builder
+              context_mapping:
+                entity: layout_builder.entity
+                view_mode: view_mode
+              formatter:
+                type: search_api_field
+                label: hidden
+                settings: {  }
+                third_party_settings:
+                  template_suggestion:
+                    template_suggestion: ''
+            weight: 2
+            additional: {  }
+          34d526c7-aa2c-4f9c-bfa6-d44a31343480:
+            uuid: 34d526c7-aa2c-4f9c-bfa6-d44a31343480
+            region: content
+            configuration:
+              id: 'extra_field_block:rdf_entity:collection:rdf_entity_collection_field_collection_content_top'
+              label: 'Facet region: Collection content top'
+              label_display: '0'
+              provider: layout_builder
+              context_mapping:
+                entity: layout_builder.entity
+              formatter:
+                settings: {  }
+                third_party_settings: {  }
+            weight: 0
+            additional: {  }
         third_party_settings: {  }
       -
         layout_id: layout_onecol
