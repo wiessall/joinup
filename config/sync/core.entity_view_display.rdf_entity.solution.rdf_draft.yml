@@ -328,6 +328,7 @@ hidden:
   field_site_featured: true
   flag_like_rdf_entity: true
   langcode: true
+  members: true
   og_group: true
   pinned_in: true
   rdf_entity_solution_field_is_content_inline_facets: true
