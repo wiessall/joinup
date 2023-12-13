@@ -11,14 +11,15 @@ their experience with each other. We also hope to support them to find, choose,
 re-use, develop and implement interoperability solutions.
 
 The Joinup platform is developed as a [Drupal](https://www.drupal.org)
-distribution, and therefore tries to follow the "open source way" as much as
+distribution, and therefore tries to follow the "open-source way" as much as
 possible.
 
 You are free to fork this project to host your own collaborative platform.
-However, Joinup is not a full reusable solution, because it doesn't guarantee
-backwards compatibility, nor a full upgrade path between two version. If you
-download and install your own instance, you're responsible to update and edapt
-the code when new Joinup versions are available.
+However, Joinup is not a full reusable solution because it doesn't guarantee
+backwards compatibility, nor a full upgrade path between two versions.
+
+If you download and install your own instance, you're responsible for update and
+adapt the code when new Joinup versions are available.
 
 Joinup is licensed under the [EUPL](https://joinup.ec.europa.eu/community/eupl/og_page/eupl),
 which is compatible with the GPL.
@@ -45,7 +46,7 @@ streamlined and unified development process.
 * DDEV is used mostly via CLI commands. [Configure shell completion & autocomplete](https://ddev.readthedocs.io/en/stable/users/install/shell-completion/)
   according to your environment.
 * Configure your IDE to take advantage of the DDEV features. This is a critical
-  step in order to be able to test and debug your Joinup. Remember, the website
+  step to be able to test and debug your Joinup. Remember, the website
   runs inside Docker, so pay attention to these configurations:
   - [PhpStorm Setup](https://ddev.readthedocs.io/en/stable/users/install/phpstorm/)
   - [Configure](https://ddev.readthedocs.io/en/stable/users/debugging-profiling/step-debugging/)
@@ -71,7 +72,7 @@ Inside the cloned project run:
 ddev start
 ```
 
-This command will fire-up the Docker containers and add all configurations.
+This command will fire up the Docker containers and add all configurations.
 
 ### Install dependencies
 
@@ -83,7 +84,7 @@ This will install the PHP and Node dependencies. The codebase is deployed.
 
 ### Configure sensitive data (secrets)
 
-* Copy the `.env.example` file as `.env`. The `.env` file in not under VCS
+* Copy the `.env.example` file as `.env`. The `.env` file is not under VCS
   control and is used to override values stored into `.env.dist` file but, more
   important, to store here sensitive data, such as credentials, tokens,
   passwords, etc.
@@ -100,7 +101,7 @@ This way of installing is referred also as a _clean installing_. The site
 exposes all functionalities but doesn't come with content and users (except the
 superuser).
 
-Most of the tests are ran against the empty site so this is helpful when you
+Most of the tests are run against the empty site, so this is helpful when you
 write tests or run most of the tests.
 
 #### Install an empty site
@@ -119,8 +120,8 @@ ddev run dev:demo-users
 
 ### Site rebuilt from production
 
-This install type, referred also as a _clone installing_, rebuilds the site by
-restoring data from production. Note that sensitive data, such as user's full
+This installation type, referred also as a _clone installing_, rebuilds the site
+by restoring data from production. Note that sensitive data, such as user's full
 names, emails, etc. is already sanitized.
 
 #### Nextcloud credentials
@@ -134,7 +135,7 @@ and snapshots.
 #### Download database dumps and snapshots
 
 Joinup needs to restore dumps/snapshots from three sources: MySQL, Virtuoso and
-Solr in order to be able rebuilt the website with production data. They can be
+Solr to be able to rebuild the website with production data. They can be
 downloaded separately or all at once.
 
 In most of the practical cases, you want to download them all at once:
@@ -151,7 +152,7 @@ ddev rebuild
 
 This command:
 
-* Restores the dump and snapshots,
+* Restore the dump and snapshots,
 * Runs the update, post-update functions,
 * Synchronizes configuration from `config/sync` directory,
 * Runs the `hook_deploy()` functions.
@@ -178,7 +179,7 @@ Launch the site as superuser:
 ddev drush uli
 ```
 
-The command will provide an URL that allows you to login as supersuser.
+The command will provide a URL that allows you to log in as superuser.
 
 ### Running commands
 
@@ -237,12 +238,12 @@ Find out more on how to write custom commands [here](https://ddev.readthedocs.io
 
 ### Locally exposed services
 
-* https://joinup.ddev.site, http://joinup.ddev.site -- The website
-* http://joinup.ddev.site:8890/sparql -- The SPARQL endpoint
-* http://joinup.ddev.site:8983 -- The Solr admin UI
-* https://joinup.ddev.site:7900, http://joinup.ddev.site:7910 -- The Selenium
+* https://joinup.ddev.site, http://joinup.ddev.site — The website
+* http://joinup.ddev.site:8890/sparql — The SPARQL endpoint
+* http://joinup.ddev.site:8983 — The Solr admin UI
+* https://joinup.ddev.site:7900, http://joinup.ddev.site:7910 — The Selenium
   tests viewer (use "secret" as password)
-* https://joinup.ddev.site:8026, http://joinup.ddev.site:8025 -- The mailcatcher
+* https://joinup.ddev.site:8026, http://joinup.ddev.site:8025 — The mailcatcher
   UI (Mailpit)
 * To connect locally to MySQL, you'll need to find the port as this is
   dynamically allocated each time. Run:
