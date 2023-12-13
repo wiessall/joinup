@@ -8,8 +8,6 @@ services:
     labels:
         com.ddev.site-name: ${DDEV_SITENAME}
         com.ddev.approot: ${DDEV_APPROOT}
-    # This is the Virtuoso user inside the container.
-    user: '1000:1000'
     expose:
       - 1111
       - 8890
