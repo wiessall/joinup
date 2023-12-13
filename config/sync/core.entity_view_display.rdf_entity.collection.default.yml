@@ -74,6 +74,7 @@ content:
       trim_options:
         text: false
         trim_zero: false
+        replace_tokens: false
     third_party_settings:
       template_suggestion:
         template_suggestion: p_wrapper
