@@ -165,13 +165,13 @@ function search_api_field_entity_view(array &$build, EntityInterface $entity, En
 /**
  * Get number of archived.
  *
- * @param $data
+ * @param array $data
  *   Build data.
  *
  * @return int|null
- *   number of archived items.
+ *   Number of archived items.
  */
-function _search_api_field_find_archived($data): ?int {
+function _search_api_field_find_archived(array $data): ?int {
   foreach ($data as $key => $item) {
     if (!is_array($item)) {
       continue;
