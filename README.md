@@ -199,8 +199,10 @@ ddev exec -s <service> <command>
 
 #### Task runners
 
-Joinup is using two task runners, [Drush](https://github.com/drush-ops/drush)
-and [Toolkit](https://github.com/ec-europa/toolkit):
+Joinup is using two task runners:
+
+* [Drush](https://github.com/drush-ops/drush): This is the official Drupal shell tool.
+* [Toolkit](https://github.com/ec-europa/toolkit): The European Commission PHP runner.
 
 ##### Drush
 
@@ -215,6 +217,22 @@ ddev drush <command>
 ```shell
 ddev run <command>
 ```
+
+Note that Toolkit uses its own configuration. Few aspects:
+
+* Apart from configuration provided by Toolkit, Joinup exposes its own
+  configuration under `resources/runner`.
+* You can override any configuration by creating a `runner.yml` file in the
+  project's root directory. Note that this file is not under VCS control. For
+  instance, you may want to disable the "config read-only" feature while you
+  work on the project. All you need to do is to add this line in `runner.yml`:
+  ```yaml
+  config_readonly: false
+  ```
+* You can inspect the configuration. Find out how by running this command:
+  ```yaml
+  ddev run config --help
+  ```
 
 #### Developer local commands
 
