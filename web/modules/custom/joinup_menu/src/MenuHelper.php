@@ -152,7 +152,7 @@ class MenuHelper implements MenuHelperInterface {
       if (!$joinup_collection instanceof CollectionInterface) {
         throw new Exception();
       }
-      $url = $joinup_collection->toUrl('canonical');
+      $url = $joinup_collection->toUrl();
       $anonymous_links[] = [
         'label' => $this->t('About us'),
         'link' => $url,

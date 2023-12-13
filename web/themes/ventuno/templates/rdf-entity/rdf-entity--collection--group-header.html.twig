@@ -31,9 +31,21 @@
       {% endif %}
       {% if not meta_banner_disabled %}
         <ul class="group-banner__meta mw-100 align-self-end list-unstyled d-flex flex-wrap mt-2 mb-0 group-stats fs-6">
-          <li class="group-banner__li text-muted">{{ 'Last update'|t }}:&nbsp;{{ content.last_update }}</li>
-          <li class="group-banner__li text-muted">{{ content.members }}</li>
-          <li class="group-banner__li text-muted">{{ content.solutions }}</li>
+          <li class="group-banner__li text-muted">
+            <svg class="bi icon--xs me-1">
+              <use xlink:href="{{ bcl_icon_path }}#clipboard2-check"></use>
+            </svg>
+            {{ content.solutions }}
+          </li>
+          <li class="group-banner__li text-muted">
+            <a href="{{ path('entity.rdf_entity.member_overview', {'rdf_entity': rdf_entity.id()}) }}">
+              <svg class="bi icon--xs me-1">
+                <use xlink:href="{{ bcl_icon_path }}#people"></use>
+              </svg>
+              {{ content.members }}
+            </a>
+          </li>
+          <li class="group-banner__li group-banner__li--topics text-muted d-flex align-items-baseline w-100 mw-100">{{ 'Topics'|t }}: {{ content.field_topic }}</li>
         </ul>
       {% endif %}
     </div>
