@@ -185,6 +185,7 @@ hidden:
   flag_like_rdf_entity: true
   label: true
   langcode: true
+  members: true
   og_group: true
   pinned_in: true
   related_solution: true

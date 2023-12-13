@@ -1,4 +1,4 @@
-@api @group-e
+@api @group-a
 Feature: Resend validation email from collection/solution about page
   If the email address of a Collection/Solution has not been published yet,
   then a message must be displayed under the about page
@@ -127,64 +127,66 @@ Feature: Resend validation email from collection/solution about page
 #    Then I should not see the text "Please confirm your contact information to enable users to contact you"
 
 # @see ISAICP-8333
-#  Scenario: Test the resend functionality for a contact created through API.
-#    Given the following contact:
-#      | email | existing@resend.com |
-#      | name  | Existing to resend  |
-#    And solutions:
-#      | title                       | description          | state     | contact information |
-#      | Existing to resend solution | Default description. | published | Existing to resend  |
-#
-#    When I am logged in as a user with the authenticated role
-#    And I go to the about page of "Existing to resend solution"
-#    Then I should not see the text "Please confirm your contact information to enable users to contact you"
-#
-#    When I am logged in as a moderator
-#    And I go to the about page of "Existing to resend solution"
-#    Then I should see the text "Please confirm your contact information to enable users to contact you"
-#    When I click "confirm"
-#    Then I should see the text "A new confirmation message has been sent to existing@resend.com"
-#
-#    # Check permissions again to ensure that the link is cached properly.
-#    Given I am not logged in
-#    When I go to the about page of "Existing to resend solution"
-#    Then I should not see the text "Please confirm your contact information to enable users to contact you"
-#
-#    Given I am logged in as a moderator
-#    And I go to the about page of "Existing to resend solution"
-#    Then I should see the text "Please confirm your contact information to enable users to contact you"
-#
-#    Given I am logged in as a facilitator of the "Existing to resend solution" solution
-#    And I go to the about page of "Existing to resend solution"
-#    Then I should see the text "Please confirm your contact information to enable users to contact you"
-#
-#    Given I am logged in as a user with the authenticated role
-#    And I go to the about page of "Existing to resend solution"
-#    Then I should not see the text "Please confirm your contact information to enable users to contact you"
+  @wip
+  Scenario: Test the resend functionality for a contact created through API.
+    Given the following contact:
+      | email | existing@resend.com |
+      | name  | Existing to resend  |
+    And solutions:
+      | title                       | description          | state     | contact information |
+      | Existing to resend solution | Default description. | published | Existing to resend  |
+
+    When I am logged in as a user with the authenticated role
+    And I go to the about page of "Existing to resend solution"
+    Then I should not see the text "Please confirm your contact information to enable users to contact you"
+
+    When I am logged in as a moderator
+    And I go to the about page of "Existing to resend solution"
+    Then I should see the text "Please confirm your contact information to enable users to contact you"
+    When I click "confirm"
+    Then I should see the text "A new confirmation message has been sent to existing@resend.com"
+
+    # Check permissions again to ensure that the link is cached properly.
+    Given I am not logged in
+    When I go to the about page of "Existing to resend solution"
+    Then I should not see the text "Please confirm your contact information to enable users to contact you"
+
+    Given I am logged in as a moderator
+    And I go to the about page of "Existing to resend solution"
+    Then I should see the text "Please confirm your contact information to enable users to contact you"
+
+    Given I am logged in as a facilitator of the "Existing to resend solution" solution
+    And I go to the about page of "Existing to resend solution"
+    Then I should see the text "Please confirm your contact information to enable users to contact you"
+
+    Given I am logged in as a user with the authenticated role
+    And I go to the about page of "Existing to resend solution"
+    Then I should not see the text "Please confirm your contact information to enable users to contact you"
 
 # @see ISAICP-8333
-#  Scenario: Regression test to verify permissions into multiple edge cases.
-#    Given the following contact:
-#      | email | some.resend@example.com |
-#      | name  | Some Resend             |
-#    And solutions:
-#      | title                       | description          | state     | contact information |
-#      | Existing to resend solution | Default description. | published | Some Resend         |
-#    And the following email confirmation requests:
-#      | email                   | status    |
-#      | some.resend@example.com | pending   |
-#
-#    When I am logged in as a moderator
-#    When I go to the about page of "Existing to resend solution"
-#    Then I should not see the text "Contact us"
-#    But I should see the text "Please confirm your contact information to enable users to contact you"
-#
-#    Given the following email confirmation request:
-#      | email                   | status    |
-#      | some.resend@example.com | confirmed |
-#      # Create a second confirmation request right after, to ensure that in the
-#      # database, the confirmed one is never the first or the last.
-#      | some.resend@example.com | cancelled |
-#    When I go to the about page of "Existing to resend solution"
-#    Then I should see the text "Contact us"
-#    But I should not see the text "Please confirm your contact information to enable users to contact you"
+  @wip
+  Scenario: Regression test to verify permissions into multiple edge cases.
+    Given the following contact:
+      | email | some.resend@example.com |
+      | name  | Some Resend             |
+    And solutions:
+      | title                       | description          | state     | contact information |
+      | Existing to resend solution | Default description. | published | Some Resend         |
+    And the following email confirmation requests:
+      | email                   | status    |
+      | some.resend@example.com | pending   |
+
+    When I am logged in as a moderator
+    When I go to the about page of "Existing to resend solution"
+    Then I should not see the text "Contact us"
+    But I should see the text "Please confirm your contact information to enable users to contact you"
+
+    Given the following email confirmation request:
+      | email                   | status    |
+      | some.resend@example.com | confirmed |
+      # Create a second confirmation request right after, to ensure that in the
+      # database, the confirmed one is never the first or the last.
+      | some.resend@example.com | cancelled |
+    When I go to the about page of "Existing to resend solution"
+    Then I should see the text "Contact us"
+    But I should not see the text "Please confirm your contact information to enable users to contact you"

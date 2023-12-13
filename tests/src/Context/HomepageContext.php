@@ -49,12 +49,11 @@ class HomepageContext extends RawDrupalContext {
 
       if (in_array($type, ['collection', 'solution'])) {
         $entity = $this->getEntityByLabel('rdf_entity', $expected_data['title']);
-        $read_more_url = $this->getEntityUri($entity, 'canonical');
       }
       else {
         $entity = $this->getEntityByLabel('node', $expected_data['title']);
-        $read_more_url = $this->getEntityUri($entity, 'canonical');
       }
+      $read_more_url = $this->getEntityUri($entity);
 
       // Check that title links to the canonical page of the
       // news, event, solution and collection.

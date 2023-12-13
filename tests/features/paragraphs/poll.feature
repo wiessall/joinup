@@ -1,4 +1,4 @@
-@api @group-b @javascript
+@api @javascript @group-f
 Feature: Pool paragraph tests.
 
   Background:
