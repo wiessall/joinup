@@ -96,7 +96,7 @@ function search_api_field_entity_view(array &$build, EntityInterface $entity, En
     }
 
     // Check number of archived items.
-    if (isset($build['_layout_builder'])) {
+    if (isset($build['_layout_builder']) && count($build['_layout_builder']) > 1) {
       $archived_items = _search_api_field_find_archived($build['_layout_builder']) ?? 0;
     }
     else {
