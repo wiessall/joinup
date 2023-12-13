@@ -94,33 +94,6 @@ third_party_settings:
                     template_suggestion: ''
             weight: 0
             additional: {  }
-          826c0d70-ad1c-41fc-aefc-503c40b8a1a8:
-            uuid: 826c0d70-ad1c-41fc-aefc-503c40b8a1a8
-            region: right
-            configuration:
-              id: 'field_block:rdf_entity:collection:field_ar_contact_information'
-              label: 'Contact information'
-              label_display: '0'
-              provider: layout_builder
-              context_mapping:
-                entity: layout_builder.entity
-                view_mode: view_mode
-              formatter:
-                type: entity_reference_entity_view
-                label: above
-                settings:
-                  view_mode: about
-                third_party_settings:
-                  field_delimiter:
-                    delimiter: ''
-                  field_formatter_range:
-                    order: 0
-                    limit: 0
-                    offset: 0
-                  template_suggestion:
-                    template_suggestion: ''
-            weight: 0
-            additional: {  }
         third_party_settings: {  }
       -
         layout_id: layout_onecol
