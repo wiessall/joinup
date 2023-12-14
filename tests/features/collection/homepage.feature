@@ -154,6 +154,21 @@ Feature: Collection homepage
     And I should see the "Rohirrim make extraordinary deal" tile
     But I should not see the "Big hobbit feast - fireworks at midnight" tile
 
+  Scenario: The collection homepage shows details.
+    When I go to the homepage of the "Middle earth daily" collection
+
+    Then I should see the following headings:
+      | Quick links          |
+      | Detailed information |
+      | Moderation           |
+    And I should see the following lines of text:
+      | Owner              |
+      | Bilbo Baggins      |
+      | Middle earth daily |
+      | Last updated       |
+      | Open collection    |
+      | Moderated          |
+
   # Regression test to ensure that related community content does not appear in the draft view.
   # @see: https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-3262
   Scenario: The related content should not be shown in the draft view version as part of the content.
