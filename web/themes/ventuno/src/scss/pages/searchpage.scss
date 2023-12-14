@@ -115,7 +115,7 @@
       border-color: $form-check-input-checked-border-color;
     }
   }
-  .facet-item {
+  .facet-item:not(:last-child) {
     margin-bottom: $spacer * .75; // 12px
     .facets-widget- {
       margin-top: $spacer * .75; // 12px
