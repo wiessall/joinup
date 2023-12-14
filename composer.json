@@ -126,7 +126,7 @@
         "drupal/composer_deploy": "^1.6",
         "drupal/config_update": "^2.0",
         "drupal/devel": "^5.1",
-        "drupal/drupal-extension": "dev-master",
+        "drupal/drupal-extension": "^5.0",
         "drupal/filecache": "^1.1",
         "drupal/http_request_mock": "^1.1",
         "drupal/masquerade": "^2.0@RC",
@@ -278,9 +278,6 @@
             "drupal/drupal-driver": {
                 "Allow multi-property references. @see https://github.com/jhedstrom/DrupalDriver/pull/252": "resources/patch/php/drupal/drupal-driver/252.diff"
             },
-            "drupal/drupal-extension": {
-                "Run against an HTTPS site with failing SSL peer verification @see https://github.com/jhedstrom/drupalextension/pull/655": "resources/patch/php/drupal/drupal-extension/655.diff"
-            },
             "drupal/editor_file": {
                 "Uploaded files are not permanent @see https://www.drupal.org/i/3057895": "resources/patch/php/drupal/editor_file/3057895.patch",
                 "Drupal 10 & CKEditor 5 readiness @see https://www.drupal.org/i/3232053": "resources/patch/php/drupal/editor_file/3232053.patch"
@@ -399,12 +396,6 @@
             },
             "drupal/webform": {
                 "Radios or Checkboxes inside Composite not saved @see https://www.drupal.org/project/webform/issues/3216923": "resources/patch/php/drupal/webform/368.diff"
-            },
-            "drupaltest/behat-one-time-login": {
-                "Should work also with HTTPS base URL @see https://github.com/drupaltest/behat-one-time-login/pull/9": "resources/patch/php/drupaltest/behat-one-time-login/9.diff"
-            },
-            "php-task-runner/sparql-robo-tasks": {
-                "Ensure a more solid timeout on imports @see https://github.com/php-task-runner/sparql-robo-tasks/pull/1": "resources/patch/php/php-task-runner/sparql-robo-tasks/1.diff"
             }
         },
         "artifacts": {
