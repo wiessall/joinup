@@ -80,8 +80,6 @@ commands:
         - search-api-solr:get-server-config
         - joinup
         - ${solr.config_tmp}.zip
-        # See \Joinup\TaskRunner\ConfigProviders\JoinupConfigProvider::provide().
-        - ${solr.version.major}
     - task: exec
       command: unzip -q ${solr.config_tmp}.zip
       options:
