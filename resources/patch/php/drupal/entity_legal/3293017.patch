@@ -1,393 +1,5 @@
-From 57e10c55ffcca6912a11cb5eb0bc5771e8863749 Mon Sep 17 00:00:00 2001
-From: Claudiu Cristea <clau.cristea@gmail.com>
-Date: Tue, 28 Jun 2022 18:23:03 +0300
-Subject: [PATCH 1/4] Customize submit label and error message
-
----
- entity_legal.install                          | 22 +++++++++++
- src/Entity/EntityLegalDocumentVersion.php     | 12 ++++++
- .../EntityLegalDocumentAcceptanceForm.php     | 33 ++++++++++++++--
- src/Form/EntityLegalDocumentVersionForm.php   | 15 +++++++
- .../EntityLegalDocumentAcceptanceTest.php     | 39 +++++++++++++++++++
- .../EntityLegalDocumentVersionTest.php        | 15 ++++++-
- tests/src/Traits/EntityLegalTestTrait.php     | 24 ++++++++----
- 7 files changed, 148 insertions(+), 12 deletions(-)
-
-diff --git a/entity_legal.install b/entity_legal.install
-index 4320f17..9ca52c0 100644
---- a/entity_legal.install
-+++ b/entity_legal.install
-@@ -153,3 +153,25 @@ function entity_legal_update_9001(array &$sandbox = NULL) {
-     '@total' => $sandbox['total'],
-   ]);
- }
-+
-+/**
-+ * Add acceptance_error_message and submit_label fields.
-+ */
-+function entity_legal_update_9002(): void {
-+  $definitions = [
-+    'acceptance_error_message' => BaseFieldDefinition::create('text_long')
-+      ->setLabel(t('Acceptance error message'))
-+      ->setDescription(t('Error message to be show when the form is submitted without being accepted. If empty, the standard error message is used.'))
-+      ->setTranslatable(TRUE)
-+      ->setRequired(FALSE),
-+    'submit_label' => BaseFieldDefinition::create('string')
-+      ->setLabel(t('Submit label'))
-+      ->setDescription(t('Submit button label. If empty, "Submit" is used.'))
-+      ->setTranslatable(TRUE)
-+      ->setRequired(FALSE),
-+  ];
-+  $manager = \Drupal::entityDefinitionUpdateManager();
-+  foreach ($definitions as $field_name => $definition) {
-+    $manager->installFieldStorageDefinition($field_name, 'entity_legal_document_version', 'entity_legal', $definition);
-+  }
-+}
-diff --git a/src/Entity/EntityLegalDocumentVersion.php b/src/Entity/EntityLegalDocumentVersion.php
-index 5fc51c1..2b1524d 100644
---- a/src/Entity/EntityLegalDocumentVersion.php
-+++ b/src/Entity/EntityLegalDocumentVersion.php
-@@ -101,6 +101,18 @@ class EntityLegalDocumentVersion extends ContentEntityBase implements EntityLega
-       ->setTranslatable(TRUE)
-       ->setRequired(TRUE);
- 
-+    $fields['acceptance_error_message'] = BaseFieldDefinition::create('text_long')
-+      ->setLabel(t('Acceptance error message'))
-+      ->setDescription(t('Error message to be show when the form is submitted without being accepted. If empty, the standard error message is used.'))
-+      ->setTranslatable(TRUE)
-+      ->setRequired(FALSE);
-+
-+    $fields['submit_label'] = BaseFieldDefinition::create('string')
-+      ->setLabel(t('Submit label'))
-+      ->setDescription(t('Submit button label. If empty, "Submit" is used.'))
-+      ->setTranslatable(TRUE)
-+      ->setRequired(FALSE);
-+
-     $fields['created'] = BaseFieldDefinition::create('created')
-       ->setLabel(t('Created'))
-       ->setDescription(t('The date the document was created.'))
-diff --git a/src/Form/EntityLegalDocumentAcceptanceForm.php b/src/Form/EntityLegalDocumentAcceptanceForm.php
-index 9e5a2d5..647aff4 100644
---- a/src/Form/EntityLegalDocumentAcceptanceForm.php
-+++ b/src/Form/EntityLegalDocumentAcceptanceForm.php
-@@ -5,6 +5,7 @@ namespace Drupal\entity_legal\Form;
- use Drupal\Core\Form\FormBase;
- use Drupal\Core\Form\FormStateInterface;
- use Drupal\Core\TempStore\PrivateTempStoreFactory;
-+use Drupal\Core\Utility\Token;
- use Drupal\entity_legal\EntityLegalDocumentInterface;
- use Symfony\Component\DependencyInjection\ContainerInterface;
- 
-@@ -27,21 +28,34 @@ class EntityLegalDocumentAcceptanceForm extends FormBase {
-    */
-   protected $tempStore;
- 
-+  /**
-+   * The token service.
-+   *
-+   * @var \Drupal\Core\Utility\Token
-+   */
-+  protected $token;
-+
-   /**
-    * Builds a new form instance.
-    *
-    * @param \Drupal\Core\TempStore\PrivateTempStoreFactory $private_temp_store_factory
-    *   The private temp store factory service.
-+   * @param \Drupal\Core\Utility\Token $token
-+   *   The token service.
-    */
--  public function __construct(PrivateTempStoreFactory $private_temp_store_factory) {
-+  public function __construct(PrivateTempStoreFactory $private_temp_store_factory, Token $token) {
-     $this->tempStore = $private_temp_store_factory->get('entity_legal');
-+    $this->token = $token;
-   }
- 
-   /**
-    * {@inheritdoc}
-    */
-   public static function create(ContainerInterface $container) {
--    return new static($container->get('tempstore.private'));
-+    return new static(
-+      $container->get('tempstore.private'),
-+      $container->get('token')
-+    );
-   }
- 
-   /**
-@@ -75,8 +89,21 @@ class EntityLegalDocumentAcceptanceForm extends FormBase {
-       '#disabled' => $has_agreed,
-     ];
- 
-+    $version = $this->document->getPublishedVersion();
-+    if ($required_error = trim($version->get('acceptance_error_message')->value)) {
-+      $required_error = $this->token->replace($required_error, [
-+        ENTITY_LEGAL_DOCUMENT_ENTITY_NAME => $this->document,
-+        ENTITY_LEGAL_DOCUMENT_VERSION_ENTITY_NAME => $version,
-+      ]);
-+      $form['agree']['#required_error'] = [
-+        '#type' => 'processed_text',
-+        '#text' => $required_error,
-+        '#format' => $version->get('acceptance_error_message')->format,
-+      ];
-+    }
-+
-     $form['submit'] = [
--      '#value' => t('Submit'),
-+      '#value' => $version->get('submit_label')->value ?: t('Submit'),
-       '#type' => 'submit',
-       '#access' => !$has_agreed,
-     ];
-diff --git a/src/Form/EntityLegalDocumentVersionForm.php b/src/Form/EntityLegalDocumentVersionForm.php
-index e63fa32..e7e83c5 100644
---- a/src/Form/EntityLegalDocumentVersionForm.php
-+++ b/src/Form/EntityLegalDocumentVersionForm.php
-@@ -95,6 +95,21 @@ class EntityLegalDocumentVersionForm extends ContentEntityForm {
-       ])->render();
-     }
- 
-+    $form['acceptance_error_message'] = [
-+      '#type' => 'text_format',
-+      '#title' => $this->entity->getFieldDefinition('acceptance_error_message')->getLabel(),
-+      '#description' => $this->entity->getFieldDefinition('acceptance_error_message')->getDescription(),
-+      '#default_value' => $this->getEntity()->get('acceptance_error_message')->value,
-+      '#format' =>  $this->getEntity()->get('acceptance_error_message')->format,
-+    ];
-+
-+    $form['submit_label'] = [
-+      '#type' => 'textfield',
-+      '#title' => $this->entity->getFieldDefinition('submit_label')->getLabel(),
-+      '#description' => $this->entity->getFieldDefinition('submit_label')->getDescription(),
-+      '#default_value' => $this->getEntity()->get('submit_label')->value,
-+    ];
-+
-     $form['token_help'] = [
-       '#theme' => 'token_tree_link',
-       '#token_types' => ['entity_legal_document'],
-diff --git a/tests/src/Functional/EntityLegalDocumentAcceptanceTest.php b/tests/src/Functional/EntityLegalDocumentAcceptanceTest.php
-index e870aa7..64c6456 100644
---- a/tests/src/Functional/EntityLegalDocumentAcceptanceTest.php
-+++ b/tests/src/Functional/EntityLegalDocumentAcceptanceTest.php
-@@ -3,6 +3,7 @@
- namespace Drupal\Tests\entity_legal\Functional;
- 
- use Drupal\entity_legal\Entity\EntityLegalDocument;
-+use Drupal\filter\Entity\FilterFormat;
- 
- /**
-  * Tests acceptance functionality for the legal document entity.
-@@ -85,4 +86,42 @@ class EntityLegalDocumentAcceptanceTest extends EntityLegalTestBase {
-     $this->assertEmpty($aid_count);
-   }
- 
-+  /**
-+   * Tests custom validation error message and custom submit button label.
-+   */
-+  public function testCustomStrings(): void {
-+    FilterFormat::create(['format' => 'test', 'name' => $this->randomString()])
-+      ->setFilterConfig('filter_html',[
-+        'status' => TRUE,
-+        'settings' => [
-+          'allowed_html' => '<a href>'
-+        ],
-+      ])->save();
-+
-+    $document = $this->createDocument(TRUE, TRUE, [
-+      'existing_users' => [
-+        'require_method' => 'redirect',
-+      ],
-+    ]);
-+    $version = $this->createDocumentVersion($document, TRUE, [
-+      'acceptance_error_message' => [
-+        'value' => 'You cannot login without accepting <a href="[entity_legal_document:url]">[entity_legal_document:label] (version [entity_legal_document_version:label])</a>',
-+        'format' => 'test',
-+      ],
-+      'submit_label' => 'Proceed!',
-+    ]);
-+    $this->drupalLogin($this->drupalCreateUser([
-+      $document->getPermissionView(),
-+      $document->getPermissionExistingUser(),
-+    ]));
-+
-+    $assert = $this->assertSession();
-+    $assert->buttonNotExists('Submit');
-+    $assert->buttonExists('Proceed!');
-+
-+    $this->getSession()->getPage()->pressButton('Proceed!');
-+    $assert->statusMessageContains("You cannot login without accepting {$document->label()} (version {$version->label()})");
-+    $assert->responseContains('You cannot login without accepting <a href="' . $document->toUrl('canonical')->setAbsolute()->toString() . '">' . $document->label() . ' (version ' . $version->label() . ')</a>');
-+  }
-+
- }
-diff --git a/tests/src/Functional/EntityLegalDocumentVersionTest.php b/tests/src/Functional/EntityLegalDocumentVersionTest.php
-index 78b01e4..00a8000 100644
---- a/tests/src/Functional/EntityLegalDocumentVersionTest.php
-+++ b/tests/src/Functional/EntityLegalDocumentVersionTest.php
-@@ -46,6 +46,8 @@ class EntityLegalDocumentVersionTest extends EntityLegalTestBase {
-     $test_label = $this->randomMachineName();
-     $document_text = $this->randomMachineName();
-     $acceptance_label = $this->randomMachineName();
-+    $acceptance_error_message = $this->randomString();
-+    $submit_label = $this->randomMachineName();
- 
-     $this->drupalLogin($this->adminUser);
-     $this->drupalGet('admin/structure/legal/manage/' . $document->id() . '/add');
-@@ -53,6 +55,8 @@ class EntityLegalDocumentVersionTest extends EntityLegalTestBase {
-       'label' => $test_label,
-       'entity_legal_document_text[0][value]' => $document_text,
-       'acceptance_label' => $acceptance_label,
-+      'acceptance_error_message[value]' => $acceptance_error_message,
-+      'submit_label' => $submit_label,
-     ], 'Save');
- 
-     $document = EntityLegalDocument::load($document->id());
-@@ -61,7 +65,7 @@ class EntityLegalDocumentVersionTest extends EntityLegalTestBase {
-     /** @var \Drupal\entity_legal\EntityLegalDocumentVersionInterface $created_version */
-     $created_version = reset($versions);
- 
--    $this->assertTrue(!empty($created_version), 'Document version was successfully created');
-+    $this->assertNotNull($created_version);
- 
-     $this->drupalGet('admin/structure/legal/manage/' . $document->id());
- 
-@@ -74,6 +78,7 @@ class EntityLegalDocumentVersionTest extends EntityLegalTestBase {
-       $this->assertSame($document_text, $created_version->get('entity_legal_document_text')[0]->value);
-       $this->assertSame($document->id(), $created_version->bundle());
-       $this->assertSame($document->getPublishedVersion()->id(), $created_version->id());
-+      $this->assertSame($acceptance_error_message, $created_version->get('acceptance_error_message')->value);
-     }
-   }
- 
-@@ -92,22 +97,30 @@ class EntityLegalDocumentVersionTest extends EntityLegalTestBase {
-     $assert->fieldValueEquals('label', $version->label());
-     $assert->fieldValueEquals('entity_legal_document_text[0][value]', $version->get('entity_legal_document_text')[0]->value);
-     $assert->fieldValueEquals('acceptance_label', $version->get('acceptance_label')->value);
-+    $assert->fieldValueEquals('acceptance_error_message[value]', $version->get('acceptance_error_message')->value);
-+    $assert->fieldValueEquals('submit_label', $version->get('submit_label')->value);
- 
-     // Test that changing values saves correctly.
-     $new_label = $this->randomMachineName();
-     $new_text = $this->randomMachineName();
-     $new_acceptance_label = $this->randomMachineName();
-+    $new_acceptance_error_message = $this->randomString();
-+    $new_submit_label = $this->randomMachineName();
- 
-     $this->submitForm([
-       'label' => $new_label,
-       'entity_legal_document_text[0][value]' => $new_text,
-       'acceptance_label' => $new_acceptance_label,
-+      'acceptance_error_message[value]' => $new_acceptance_error_message,
-+      'submit_label' => $new_submit_label,
-     ], 'Save');
- 
-     $version = EntityLegalDocumentVersion::load($version->id());
-     $this->assertSame($new_label, $version->label());
-     $this->assertSame($new_text, $version->get('entity_legal_document_text')[0]->value);
-     $this->assertSame($new_acceptance_label, $version->get('acceptance_label')->value);
-+    $this->assertSame($new_acceptance_error_message, $version->get('acceptance_error_message')->value);
-+    $this->assertSame($new_submit_label, $version->get('submit_label')->value);
-   }
- 
- }
-diff --git a/tests/src/Traits/EntityLegalTestTrait.php b/tests/src/Traits/EntityLegalTestTrait.php
-index 80f83e8..3c6335e 100644
---- a/tests/src/Traits/EntityLegalTestTrait.php
-+++ b/tests/src/Traits/EntityLegalTestTrait.php
-@@ -57,6 +57,8 @@ trait EntityLegalTestTrait {
-    *   The document to add the version to.
-    * @param bool $save_as_default
-    *   Whether to save the version as the default for the document.
-+   * @param array $values
-+   *   An array of entity values.
-    *
-    * @return \Drupal\entity_legal\EntityLegalDocumentVersionInterface
-    *   The created legal document version.
-@@ -65,17 +67,23 @@ trait EntityLegalTestTrait {
-    * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
-    * @throws \Drupal\Core\Entity\EntityStorageException
-    */
--  protected function createDocumentVersion(EntityLegalDocumentInterface $document, bool $save_as_default = FALSE): EntityLegalDocumentVersionInterface {
-+  protected function createDocumentVersion(EntityLegalDocumentInterface $document, bool $save_as_default = FALSE, array $values = []): EntityLegalDocumentVersionInterface {
-+    $defaults = [
-+      'label' => $this->randomMachineName(),
-+      'name' => $this->randomMachineName(64),
-+      'document_name' => $document->id(),
-+      'acceptance_label' => 'I agree to the <a href="[entity_legal_document:url]">document</a>',
-+      'entity_legal_document_text' => $this->randomMachineName(),
-+      'acceptance_error_message' => [
-+        'value' => $this->randomString(),
-+        'format' => filter_default_format(),
-+      ],
-+      'submit_label' => $this->randomMachineName(),
-+    ];
-     /** @var \Drupal\entity_legal\EntityLegalDocumentVersionInterface $entity */
-     $entity = \Drupal::entityTypeManager()
-       ->getStorage('entity_legal_document_version')
--      ->create([
--        'label' => $this->randomMachineName(),
--        'name' => $this->randomMachineName(64),
--        'document_name' => $document->id(),
--        'acceptance_label' => 'I agree to the <a href="[entity_legal_document:url]">document</a>',
--        'entity_legal_document_text' => [['value' => $this->randomMachineName()]],
--      ]);
-+      ->create($values + $defaults);
-     $entity->save();
- 
-     if ($save_as_default) {
--- 
-GitLab
-
-
-From 7019e120f210fdee1bc40995ab1379ae2e76718e Mon Sep 17 00:00:00 2001
-From: Claudiu Cristea <clau.cristea@gmail.com>
-Date: Tue, 28 Jun 2022 18:34:12 +0300
-Subject: [PATCH 2/4] Fix defaults
-
----
- tests/src/Traits/EntityLegalTestTrait.php | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/tests/src/Traits/EntityLegalTestTrait.php b/tests/src/Traits/EntityLegalTestTrait.php
-index 3c6335e..efef9dd 100644
---- a/tests/src/Traits/EntityLegalTestTrait.php
-+++ b/tests/src/Traits/EntityLegalTestTrait.php
-@@ -75,10 +75,10 @@ trait EntityLegalTestTrait {
-       'acceptance_label' => 'I agree to the <a href="[entity_legal_document:url]">document</a>',
-       'entity_legal_document_text' => $this->randomMachineName(),
-       'acceptance_error_message' => [
--        'value' => $this->randomString(),
-+        'value' => '',
-         'format' => filter_default_format(),
-       ],
--      'submit_label' => $this->randomMachineName(),
-+      'submit_label' => '',
-     ];
-     /** @var \Drupal\entity_legal\EntityLegalDocumentVersionInterface $entity */
-     $entity = \Drupal::entityTypeManager()
--- 
-GitLab
-
-
-From 15683a3a29c084f42b60e16af78178fd391dd49c Mon Sep 17 00:00:00 2001
-From: Claudiu Cristea <clau.cristea@gmail.com>
-Date: Wed, 29 Jun 2022 09:10:23 +0300
-Subject: [PATCH 3/4] Move fields in legal doc
-
----
- config/schema/entity_legal.schema.yml         | 10 ++++++
- entity_legal.install                          | 22 -------------
- src/Entity/EntityLegalDocumentVersion.php     | 12 -------
- .../EntityLegalDocumentAcceptanceForm.php     | 11 ++++---
- src/Form/EntityLegalDocumentForm.php          | 32 +++++++++++++++++++
- src/Form/EntityLegalDocumentVersionForm.php   | 15 ---------
- .../EntityLegalDocumentAcceptanceTest.php     | 13 ++++----
- .../Functional/EntityLegalDocumentTest.php    | 17 ++++++++++
- .../EntityLegalDocumentVersionTest.php        | 15 +--------
- tests/src/Traits/EntityLegalTestTrait.php     | 24 +++++---------
- 10 files changed, 81 insertions(+), 90 deletions(-)
-
 diff --git a/config/schema/entity_legal.schema.yml b/config/schema/entity_legal.schema.yml
-index ad7fe9a..41cdda6 100644
+index ad7fe9ac0ccda13548d18f6bf4e4a6583c982bed..41cdda6cdef03364fddce109a9d7049fc410558b 100644
 --- a/config/schema/entity_legal.schema.yml
 +++ b/config/schema/entity_legal.schema.yml
 @@ -44,3 +44,13 @@ entity_legal.document.*:
@@ -404,96 +16,70 @@ index ad7fe9a..41cdda6 100644
 +            submit_label:
 +              type: label
 +              label: Acceptance submit button label
-diff --git a/entity_legal.install b/entity_legal.install
-index 9ca52c0..4320f17 100644
---- a/entity_legal.install
-+++ b/entity_legal.install
-@@ -153,25 +153,3 @@ function entity_legal_update_9001(array &$sandbox = NULL) {
-     '@total' => $sandbox['total'],
-   ]);
- }
--
--/**
-- * Add acceptance_error_message and submit_label fields.
-- */
--function entity_legal_update_9002(): void {
--  $definitions = [
--    'acceptance_error_message' => BaseFieldDefinition::create('text_long')
--      ->setLabel(t('Acceptance error message'))
--      ->setDescription(t('Error message to be show when the form is submitted without being accepted. If empty, the standard error message is used.'))
--      ->setTranslatable(TRUE)
--      ->setRequired(FALSE),
--    'submit_label' => BaseFieldDefinition::create('string')
--      ->setLabel(t('Submit label'))
--      ->setDescription(t('Submit button label. If empty, "Submit" is used.'))
--      ->setTranslatable(TRUE)
--      ->setRequired(FALSE),
--  ];
--  $manager = \Drupal::entityDefinitionUpdateManager();
--  foreach ($definitions as $field_name => $definition) {
--    $manager->installFieldStorageDefinition($field_name, 'entity_legal_document_version', 'entity_legal', $definition);
--  }
--}
-diff --git a/src/Entity/EntityLegalDocumentVersion.php b/src/Entity/EntityLegalDocumentVersion.php
-index 2b1524d..5fc51c1 100644
---- a/src/Entity/EntityLegalDocumentVersion.php
-+++ b/src/Entity/EntityLegalDocumentVersion.php
-@@ -101,18 +101,6 @@ class EntityLegalDocumentVersion extends ContentEntityBase implements EntityLega
-       ->setTranslatable(TRUE)
-       ->setRequired(TRUE);
- 
--    $fields['acceptance_error_message'] = BaseFieldDefinition::create('text_long')
--      ->setLabel(t('Acceptance error message'))
--      ->setDescription(t('Error message to be show when the form is submitted without being accepted. If empty, the standard error message is used.'))
--      ->setTranslatable(TRUE)
--      ->setRequired(FALSE);
--
--    $fields['submit_label'] = BaseFieldDefinition::create('string')
--      ->setLabel(t('Submit label'))
--      ->setDescription(t('Submit button label. If empty, "Submit" is used.'))
--      ->setTranslatable(TRUE)
--      ->setRequired(FALSE);
--
-     $fields['created'] = BaseFieldDefinition::create('created')
-       ->setLabel(t('Created'))
-       ->setDescription(t('The date the document was created.'))
 diff --git a/src/Form/EntityLegalDocumentAcceptanceForm.php b/src/Form/EntityLegalDocumentAcceptanceForm.php
-index 647aff4..9fcef26 100644
+index 825356ed8b245a47e81c0023793931350305c65a..3fc7944b9622f98c892c8f08eb03159086d8b01b 100644
 --- a/src/Form/EntityLegalDocumentAcceptanceForm.php
 +++ b/src/Form/EntityLegalDocumentAcceptanceForm.php
-@@ -89,21 +89,22 @@ class EntityLegalDocumentAcceptanceForm extends FormBase {
+@@ -8,6 +8,7 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
+ use Drupal\Core\Form\FormBase;
+ use Drupal\Core\Form\FormStateInterface;
+ use Drupal\Core\TempStore\PrivateTempStoreFactory;
++use Drupal\Core\Utility\Token;
+ use Drupal\entity_legal\EntityLegalDocumentInterface;
+ use Symfony\Component\DependencyInjection\ContainerInterface;
+ 
+@@ -28,10 +29,13 @@ class EntityLegalDocumentAcceptanceForm extends FormBase {
+    *   The private temp store factory service.
+    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
+    *   The entity type manager service.
++   * @param \Drupal\Core\Utility\Token $token
++   *   The token service.
+    */
+   public function __construct(
+     protected PrivateTempStoreFactory $privateTempStoreFactory,
+     protected EntityTypeManagerInterface $entityTypeManager,
++    protected Token $token,
+   ) {}
+ 
+   /**
+@@ -41,6 +45,7 @@ class EntityLegalDocumentAcceptanceForm extends FormBase {
+     return new static(
+       $container->get('tempstore.private'),
+       $container->get('entity_type.manager'),
++      $container->get('token'),
+     );
+   }
+ 
+@@ -75,8 +80,23 @@ class EntityLegalDocumentAcceptanceForm extends FormBase {
        '#disabled' => $has_agreed,
      ];
  
--    $version = $this->document->getPublishedVersion();
--    if ($required_error = trim($version->get('acceptance_error_message')->value)) {
 +    $ui = $this->document->get('settings')['ui'] ?? [];
 +    $required_error = trim($ui['acceptance_error_message']['value'] ?? '');
 +    if ($required_error) {
-       $required_error = $this->token->replace($required_error, [
-         ENTITY_LEGAL_DOCUMENT_ENTITY_NAME => $this->document,
--        ENTITY_LEGAL_DOCUMENT_VERSION_ENTITY_NAME => $version,
++      $required_error = $this->token->replace($required_error, [
++        ENTITY_LEGAL_DOCUMENT_ENTITY_NAME => $this->document,
 +        ENTITY_LEGAL_DOCUMENT_VERSION_ENTITY_NAME => $this->document->getPublishedVersion(),
-       ]);
-       $form['agree']['#required_error'] = [
-         '#type' => 'processed_text',
-         '#text' => $required_error,
--        '#format' => $version->get('acceptance_error_message')->format,
++      ]);
++      $form['agree']['#required_error'] = [
++        '#type' => 'processed_text',
++        '#text' => $required_error,
 +        '#format' => $ui['acceptance_error_message']['format'] ?? filter_default_format(),
-       ];
-     }
- 
++      ];
++    }
++
++    $submit_label = trim($ui['submit_label'] ?? '');
      $form['submit'] = [
--      '#value' => $version->get('submit_label')->value ?: t('Submit'),
-+      '#value' => $ui['submit_label'] ?? t('Submit'),
+-      '#value' => t('Submit'),
++      '#value' => $submit_label ?: t('Submit'),
        '#type' => 'submit',
        '#access' => !$has_agreed,
      ];
 diff --git a/src/Form/EntityLegalDocumentForm.php b/src/Form/EntityLegalDocumentForm.php
-index 4a4953e..c001651 100644
+index aca8f87a968059ddb110532d079dc3ce0501b76d..ec4a56a35d119bea4d350a6d6493f241b2aa9712 100644
 --- a/src/Form/EntityLegalDocumentForm.php
 +++ b/src/Form/EntityLegalDocumentForm.php
-@@ -286,6 +286,38 @@ class EntityLegalDocumentForm extends EntityForm implements ContainerInjectionIn
+@@ -257,6 +257,38 @@ class EntityLegalDocumentForm extends EntityForm implements ContainerInjectionIn
        '#token_types' => ['entity_legal_document'],
      ];
  
@@ -532,72 +118,76 @@ index 4a4953e..c001651 100644
      $this->formPathSettings($form);
  
      return $form;
-diff --git a/src/Form/EntityLegalDocumentVersionForm.php b/src/Form/EntityLegalDocumentVersionForm.php
-index e7e83c5..e63fa32 100644
---- a/src/Form/EntityLegalDocumentVersionForm.php
-+++ b/src/Form/EntityLegalDocumentVersionForm.php
-@@ -95,21 +95,6 @@ class EntityLegalDocumentVersionForm extends ContentEntityForm {
-       ])->render();
-     }
- 
--    $form['acceptance_error_message'] = [
--      '#type' => 'text_format',
--      '#title' => $this->entity->getFieldDefinition('acceptance_error_message')->getLabel(),
--      '#description' => $this->entity->getFieldDefinition('acceptance_error_message')->getDescription(),
--      '#default_value' => $this->getEntity()->get('acceptance_error_message')->value,
--      '#format' =>  $this->getEntity()->get('acceptance_error_message')->format,
--    ];
--
--    $form['submit_label'] = [
--      '#type' => 'textfield',
--      '#title' => $this->entity->getFieldDefinition('submit_label')->getLabel(),
--      '#description' => $this->entity->getFieldDefinition('submit_label')->getDescription(),
--      '#default_value' => $this->getEntity()->get('submit_label')->value,
--    ];
--
-     $form['token_help'] = [
-       '#theme' => 'token_tree_link',
-       '#token_types' => ['entity_legal_document'],
 diff --git a/tests/src/Functional/EntityLegalDocumentAcceptanceTest.php b/tests/src/Functional/EntityLegalDocumentAcceptanceTest.php
-index 64c6456..ef95efe 100644
+index a8c6c76a9621ed30bbc72efe8a3e19257b9f4892..c91a666caad983ea7ba98e2e21b60f3dc85bea08 100644
 --- a/tests/src/Functional/EntityLegalDocumentAcceptanceTest.php
 +++ b/tests/src/Functional/EntityLegalDocumentAcceptanceTest.php
-@@ -102,14 +102,15 @@ class EntityLegalDocumentAcceptanceTest extends EntityLegalTestBase {
-       'existing_users' => [
-         'require_method' => 'redirect',
-       ],
--    ]);
--    $version = $this->createDocumentVersion($document, TRUE, [
--      'acceptance_error_message' => [
--        'value' => 'You cannot login without accepting <a href="[entity_legal_document:url]">[entity_legal_document:label] (version [entity_legal_document_version:label])</a>',
--        'format' => 'test',
+@@ -5,6 +5,7 @@ declare(strict_types = 1);
+ namespace Drupal\Tests\entity_legal\Functional;
+ 
+ use Drupal\entity_legal\Entity\EntityLegalDocument;
++use Drupal\filter\Entity\FilterFormat;
+ 
+ /**
+  * Tests acceptance functionality for the legal document entity.
+@@ -89,4 +90,43 @@ class EntityLegalDocumentAcceptanceTest extends EntityLegalTestBase {
+     $this->assertEmpty($aid_count);
+   }
+ 
++  /**
++   * Tests custom validation error message and custom submit button label.
++   */
++  public function testCustomStrings(): void {
++    FilterFormat::create(['format' => 'test', 'name' => $this->randomString()])
++      ->setFilterConfig('filter_html', [
++        'status' => TRUE,
++        'settings' => [
++          'allowed_html' => '<a href>',
++        ],
++      ])->save();
++
++    $document = $this->createDocument(TRUE, TRUE, [
++      'existing_users' => [
++        'require_method' => 'redirect',
++      ],
 +      'ui' => [
 +        'acceptance_error_message' => [
 +          'value' => 'You cannot login without accepting <a href="[entity_legal_document:url]">[entity_legal_document:label] (version [entity_legal_document_version:label])</a>',
 +          'format' => 'test',
 +        ],
 +        'submit_label' => 'Proceed!',
-       ],
--      'submit_label' => 'Proceed!',
-     ]);
++      ],
++    ]);
 +    $version = $this->createDocumentVersion($document, TRUE);
-     $this->drupalLogin($this->drupalCreateUser([
-       $document->getPermissionView(),
-       $document->getPermissionExistingUser(),
++    $this->drupalLogin($this->drupalCreateUser([
++      $document->getPermissionView(),
++      $document->getPermissionExistingUser(),
++    ]));
++
++    $assert = $this->assertSession();
++    $assert->buttonNotExists('Submit');
++    $assert->buttonExists('Proceed!');
++
++    $this->getSession()->getPage()->pressButton('Proceed!');
++    $assert->statusMessageContains("You cannot login without accepting {$document->label()} (version {$version->label()})");
++    $assert->responseContains('You cannot login without accepting <a href="' . $document->toUrl('canonical')->setAbsolute()->toString() . '">' . $document->label() . ' (version ' . $version->label() . ')</a>');
++  }
++
+ }
 diff --git a/tests/src/Functional/EntityLegalDocumentTest.php b/tests/src/Functional/EntityLegalDocumentTest.php
-index d037f45..54dc8ce 100644
+index 2caa071623868326b0676a40d430318bdadc5f9d..efce8ca0bb9437428483505a8b5c16d284452cdc 100644
 --- a/tests/src/Functional/EntityLegalDocumentTest.php
 +++ b/tests/src/Functional/EntityLegalDocumentTest.php
-@@ -50,6 +50,8 @@ class EntityLegalDocumentTest extends EntityLegalTestBase {
+@@ -52,6 +52,8 @@ class EntityLegalDocumentTest extends EntityLegalTestBase {
        'settings[new_users][require_method]' => 'form_inline',
        'settings[existing_users][require]' => 1,
        'settings[existing_users][require_method]' => 'redirect',
 +      'settings[ui][acceptance_error_message][value]' => 'Accepting the terms & conditions is mandatory',
-+      'settings[ui][submit_label]' => 'Proceed!'
++      'settings[ui][submit_label]' => 'Proceed!',
      ], 'Save');
  
      /** @var \Drupal\entity_legal\EntityLegalDocumentInterface $created_document */
-@@ -64,6 +66,8 @@ class EntityLegalDocumentTest extends EntityLegalTestBase {
+@@ -66,6 +68,8 @@ class EntityLegalDocumentTest extends EntityLegalTestBase {
        $this->assertTrue($created_document->get('require_existing'));
        $this->assertSame('form_inline', $created_document->get('settings')['new_users']['require_method']);
        $this->assertSame('redirect', $created_document->get('settings')['existing_users']['require_method']);
@@ -606,7 +196,7 @@ index d037f45..54dc8ce 100644
      }
    }
  
-@@ -78,6 +82,13 @@ class EntityLegalDocumentTest extends EntityLegalTestBase {
+@@ -80,6 +84,13 @@ class EntityLegalDocumentTest extends EntityLegalTestBase {
        'existing_users' => [
          'require_method' => 'redirect',
        ],
@@ -620,16 +210,16 @@ index d037f45..54dc8ce 100644
      ]);
  
      $this->drupalLogin($this->adminUser);
-@@ -91,6 +102,8 @@ class EntityLegalDocumentTest extends EntityLegalTestBase {
+@@ -93,6 +104,8 @@ class EntityLegalDocumentTest extends EntityLegalTestBase {
      $assert->fieldValueEquals('settings[new_users][require_method]', 'form_inline');
-     $assert->fieldValueEquals('settings[existing_users][require]', 1);
+     $assert->fieldValueEquals('settings[existing_users][require]', '1');
      $assert->fieldValueEquals('settings[existing_users][require_method]', 'redirect');
 +    $assert->fieldValueEquals('settings[ui][acceptance_error_message][value]', 'Accepting the terms & conditions is mandatory');
 +    $assert->fieldValueEquals('settings[ui][submit_label]', 'Proceed!');
  
      // Test that changing values saves correctly.
      $new_label = $this->randomMachineName();
-@@ -100,6 +113,8 @@ class EntityLegalDocumentTest extends EntityLegalTestBase {
+@@ -102,6 +115,8 @@ class EntityLegalDocumentTest extends EntityLegalTestBase {
        'settings[new_users][require_method]' => 'form_link',
        'settings[existing_users][require]' => FALSE,
        'settings[existing_users][require_method]' => 'popup',
@@ -638,7 +228,7 @@ index d037f45..54dc8ce 100644
      ], 'Save');
  
      $document = EntityLegalDocument::load($document->id());
-@@ -109,6 +124,8 @@ class EntityLegalDocumentTest extends EntityLegalTestBase {
+@@ -111,6 +126,8 @@ class EntityLegalDocumentTest extends EntityLegalTestBase {
      $this->assertFalse($document->get('require_existing'));
      $this->assertSame('form_link', $document->get('settings')['new_users']['require_method']);
      $this->assertSame('popup', $document->get('settings')['existing_users']['require_method']);
@@ -648,148 +238,23 @@ index d037f45..54dc8ce 100644
  
    /**
 diff --git a/tests/src/Functional/EntityLegalDocumentVersionTest.php b/tests/src/Functional/EntityLegalDocumentVersionTest.php
-index 00a8000..78b01e4 100644
+index 16c33bef1b02fa0cb2a187d922c41c07383566ce..a0fcf0be7ac883cd7ba367281d0b801a002ace24 100644
 --- a/tests/src/Functional/EntityLegalDocumentVersionTest.php
 +++ b/tests/src/Functional/EntityLegalDocumentVersionTest.php
-@@ -46,8 +46,6 @@ class EntityLegalDocumentVersionTest extends EntityLegalTestBase {
-     $test_label = $this->randomMachineName();
-     $document_text = $this->randomMachineName();
-     $acceptance_label = $this->randomMachineName();
--    $acceptance_error_message = $this->randomString();
--    $submit_label = $this->randomMachineName();
+@@ -6,6 +6,7 @@ namespace Drupal\Tests\entity_legal\Functional;
  
-     $this->drupalLogin($this->adminUser);
-     $this->drupalGet('admin/structure/legal/manage/' . $document->id() . '/add');
-@@ -55,8 +53,6 @@ class EntityLegalDocumentVersionTest extends EntityLegalTestBase {
-       'label' => $test_label,
-       'entity_legal_document_text[0][value]' => $document_text,
-       'acceptance_label' => $acceptance_label,
--      'acceptance_error_message[value]' => $acceptance_error_message,
--      'submit_label' => $submit_label,
-     ], 'Save');
+ use Drupal\entity_legal\Entity\EntityLegalDocument;
+ use Drupal\entity_legal\Entity\EntityLegalDocumentVersion;
++use Drupal\entity_legal\EntityLegalDocumentVersionInterface;
  
-     $document = EntityLegalDocument::load($document->id());
-@@ -65,7 +61,7 @@ class EntityLegalDocumentVersionTest extends EntityLegalTestBase {
+ /**
+  * Tests admin functionality for the legal document version entity.
+@@ -63,7 +64,7 @@ class EntityLegalDocumentVersionTest extends EntityLegalTestBase {
      /** @var \Drupal\entity_legal\EntityLegalDocumentVersionInterface $created_version */
      $created_version = reset($versions);
  
--    $this->assertNotNull($created_version);
-+    $this->assertTrue(!empty($created_version), 'Document version was successfully created');
+-    $this->assertNotFalse($created_version, 'Document version was successfully created');
++    $this->assertInstanceOf(EntityLegalDocumentVersionInterface::class, $created_version);
  
      $this->drupalGet('admin/structure/legal/manage/' . $document->id());
  
-@@ -78,7 +74,6 @@ class EntityLegalDocumentVersionTest extends EntityLegalTestBase {
-       $this->assertSame($document_text, $created_version->get('entity_legal_document_text')[0]->value);
-       $this->assertSame($document->id(), $created_version->bundle());
-       $this->assertSame($document->getPublishedVersion()->id(), $created_version->id());
--      $this->assertSame($acceptance_error_message, $created_version->get('acceptance_error_message')->value);
-     }
-   }
- 
-@@ -97,30 +92,22 @@ class EntityLegalDocumentVersionTest extends EntityLegalTestBase {
-     $assert->fieldValueEquals('label', $version->label());
-     $assert->fieldValueEquals('entity_legal_document_text[0][value]', $version->get('entity_legal_document_text')[0]->value);
-     $assert->fieldValueEquals('acceptance_label', $version->get('acceptance_label')->value);
--    $assert->fieldValueEquals('acceptance_error_message[value]', $version->get('acceptance_error_message')->value);
--    $assert->fieldValueEquals('submit_label', $version->get('submit_label')->value);
- 
-     // Test that changing values saves correctly.
-     $new_label = $this->randomMachineName();
-     $new_text = $this->randomMachineName();
-     $new_acceptance_label = $this->randomMachineName();
--    $new_acceptance_error_message = $this->randomString();
--    $new_submit_label = $this->randomMachineName();
- 
-     $this->submitForm([
-       'label' => $new_label,
-       'entity_legal_document_text[0][value]' => $new_text,
-       'acceptance_label' => $new_acceptance_label,
--      'acceptance_error_message[value]' => $new_acceptance_error_message,
--      'submit_label' => $new_submit_label,
-     ], 'Save');
- 
-     $version = EntityLegalDocumentVersion::load($version->id());
-     $this->assertSame($new_label, $version->label());
-     $this->assertSame($new_text, $version->get('entity_legal_document_text')[0]->value);
-     $this->assertSame($new_acceptance_label, $version->get('acceptance_label')->value);
--    $this->assertSame($new_acceptance_error_message, $version->get('acceptance_error_message')->value);
--    $this->assertSame($new_submit_label, $version->get('submit_label')->value);
-   }
- 
- }
-diff --git a/tests/src/Traits/EntityLegalTestTrait.php b/tests/src/Traits/EntityLegalTestTrait.php
-index efef9dd..80f83e8 100644
---- a/tests/src/Traits/EntityLegalTestTrait.php
-+++ b/tests/src/Traits/EntityLegalTestTrait.php
-@@ -57,8 +57,6 @@ trait EntityLegalTestTrait {
-    *   The document to add the version to.
-    * @param bool $save_as_default
-    *   Whether to save the version as the default for the document.
--   * @param array $values
--   *   An array of entity values.
-    *
-    * @return \Drupal\entity_legal\EntityLegalDocumentVersionInterface
-    *   The created legal document version.
-@@ -67,23 +65,17 @@ trait EntityLegalTestTrait {
-    * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
-    * @throws \Drupal\Core\Entity\EntityStorageException
-    */
--  protected function createDocumentVersion(EntityLegalDocumentInterface $document, bool $save_as_default = FALSE, array $values = []): EntityLegalDocumentVersionInterface {
--    $defaults = [
--      'label' => $this->randomMachineName(),
--      'name' => $this->randomMachineName(64),
--      'document_name' => $document->id(),
--      'acceptance_label' => 'I agree to the <a href="[entity_legal_document:url]">document</a>',
--      'entity_legal_document_text' => $this->randomMachineName(),
--      'acceptance_error_message' => [
--        'value' => '',
--        'format' => filter_default_format(),
--      ],
--      'submit_label' => '',
--    ];
-+  protected function createDocumentVersion(EntityLegalDocumentInterface $document, bool $save_as_default = FALSE): EntityLegalDocumentVersionInterface {
-     /** @var \Drupal\entity_legal\EntityLegalDocumentVersionInterface $entity */
-     $entity = \Drupal::entityTypeManager()
-       ->getStorage('entity_legal_document_version')
--      ->create($values + $defaults);
-+      ->create([
-+        'label' => $this->randomMachineName(),
-+        'name' => $this->randomMachineName(64),
-+        'document_name' => $document->id(),
-+        'acceptance_label' => 'I agree to the <a href="[entity_legal_document:url]">document</a>',
-+        'entity_legal_document_text' => [['value' => $this->randomMachineName()]],
-+      ]);
-     $entity->save();
- 
-     if ($save_as_default) {
--- 
-GitLab
-
-
-From ad681c984773c9d8b2c1d0a29701d6d1fcf767e2 Mon Sep 17 00:00:00 2001
-From: "claudiu.cristea" <claudiucristea@56348.no-reply.drupal.org>
-Date: Wed, 29 Jun 2022 06:35:05 +0000
-Subject: [PATCH 4/4] Submit label fix
-
----
- src/Form/EntityLegalDocumentAcceptanceForm.php | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/src/Form/EntityLegalDocumentAcceptanceForm.php b/src/Form/EntityLegalDocumentAcceptanceForm.php
-index 9fcef26..85b244d 100644
---- a/src/Form/EntityLegalDocumentAcceptanceForm.php
-+++ b/src/Form/EntityLegalDocumentAcceptanceForm.php
-@@ -103,8 +103,9 @@ class EntityLegalDocumentAcceptanceForm extends FormBase {
-       ];
-     }
- 
-+    $submit_label = trim($ui['submit_label']  ?? '');
-     $form['submit'] = [
--      '#value' => $ui['submit_label'] ?? t('Submit'),
-+      '#value' => $submit_label ?: t('Submit'),
-       '#type' => 'submit',
-       '#access' => !$has_agreed,
-     ];
--- 
-GitLab
-
