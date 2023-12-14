@@ -228,6 +228,10 @@
                 "web-root": "web/"
             },
             "file-mapping": {
+                "[web-root]/core/.deprecation-ignore.txt": {
+                    "append": "resources/drupal-scaffold/.deprecation-ignore.txt.append",
+                    "force-append": true
+                },
                 "[web-root]/.htaccess": {
                     "append": "resources/drupal-scaffold/.htaccess.append"
                 },
