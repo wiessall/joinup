@@ -11,7 +11,7 @@ their experience with each other. We also hope to support them to find, choose,
 re-use, develop and implement interoperability solutions.
 
 The Joinup platform is developed as a [Drupal](https://www.drupal.org)
-distribution, and therefore tries to follow the "open-source way" as much as
+web application, and therefore tries to follow the "open-source way" as much as
 possible.
 
 You are free to fork this project to host your own collaborative platform.
@@ -132,13 +132,10 @@ values should be provided according to these [instructions](https://webgate.ec.e
 These credentials are needed to be able to download the Joinup databases dumps
 and snapshots.
 
-#### Download database dumps and snapshots
+#### Download database dump/snapshots
 
-Joinup needs to restore dumps/snapshots from three sources: MySQL, Virtuoso and
-Solr to be able to rebuild the website with production data. They can be
-downloaded separately or all at once.
-
-In most of the practical cases, you want to download them all at once:
+Joinup needs to restore dump/snapshots from three sources: MySQL, Virtuoso and
+Solr; to be able to rebuild the website with production data:
 
 ```shell
 ddev download-databases
@@ -195,6 +192,21 @@ Run a command in any other service container (including `web`):
 
 ```shell
 ddev exec -s <service> <command>
+```
+
+Alternatively, you can SSH into any container that has some advantages over
+`ddev exec`, such as keeping the command history.
+
+SSH into main (`web`) container:
+
+```shell
+ddev ssh
+```
+
+SSH into any container:
+
+```shell
+ddev ssh -s <service>
 ```
 
 #### Task runners
