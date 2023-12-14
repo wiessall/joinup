@@ -15,6 +15,7 @@ use Behat\Mink\Exception\ElementNotFoundException;
 use Behat\Mink\Exception\ExpectationException;
 use Behat\Mink\Exception\ResponseTextException;
 use Behat\Mink\Exception\UnsupportedDriverActionException;
+use Behat\Mink\Selector\SelectorsHandler;
 use Drupal\Component\Serialization\Json;
 use Drupal\Component\Serialization\Yaml;
 use Drupal\Core\Cache\Cache;
@@ -1706,7 +1707,7 @@ class FeatureContext extends RawDrupalContext {
       throw new \RuntimeException("Only Selenium is currently supported for typing in autocomplete fields.");
     }
 
-    $xpath = $this->getSession()->getSelectorsHandler()->selectorToXpath('named', [
+    $xpath = (new SelectorsHandler())->selectorToXpath('named', [
       'field',
       $field,
     ]);
