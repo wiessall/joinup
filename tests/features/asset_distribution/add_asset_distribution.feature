@@ -188,6 +188,7 @@ Feature: Add distribution through the UI
       | description | Sample description     |
       | access url  | test.zip               |
       | parent      | Solution random x name |
+      | state       | published              |
     And I am logged in as a facilitator of the "Solution random x name" solution
     When I go to the homepage of the "Solution random x name" solution
     And I click "Add distribution" in the plus button menu
@@ -201,9 +202,9 @@ Feature: Add distribution through the UI
       | title       | Boost Software License                                                         |
       | description | It is a permissive license in the style of the BSD license and the MIT license |
     And distributions:
-      | title        | licence                | parent                 |
-      | Hot Snake    | WTFPL                  | Solution random x name |
-      | Quality Yard | Boost Software License | Solution random x name |
+      | title        | licence                | parent                 | state     |
+      | Hot Snake    | WTFPL                  | Solution random x name | published |
+      | Quality Yard | Boost Software License | Solution random x name | published |
 
     When I go to the homepage of the "Solution random x name" solution
     # Distributions are still shown in the solution page and so the License text will be visible in the page.

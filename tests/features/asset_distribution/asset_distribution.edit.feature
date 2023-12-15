@@ -31,6 +31,7 @@ Feature: Asset distribution editing.
       | licence     | LGPL                       |
       | access url  | test.zip                   |
       | parent      | Asset release example      |
+      | state       | published                  |
     And the following solution user membership:
       | solution   | user         | roles       |
       | Solution A | Gregg Hill   | owner       |
