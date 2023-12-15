@@ -11,9 +11,9 @@ Feature: Tests the group landing page customization.
   - As a moderator, when I visit a group, I can set a landing page.
 
     Given the following <group>s:
-      | title               | state     | description                         |
-      | <group> group       | published | The <group> arbitrary description   |
-      | other <group> group | published | Other <group> arbitrary description |
+      | title               | state     | description                         | abstract |
+      | <group> group       | published | The <group> arbitrary description   | <group>  |
+      | other <group> group | published | Other <group> arbitrary description | <group>  |
     And "custom_page" content:
       | title         | <group>       | body                      |
       | Custom Page 1 | <group> group | The custom page 1 content |
