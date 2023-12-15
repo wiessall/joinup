@@ -79,5 +79,4 @@ class AssetDistribution extends Rdf implements AssetDistributionInterface {
     return 'field_ad_state';
   }
 
-
 }
