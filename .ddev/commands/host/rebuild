@@ -1,0 +1,12 @@
+#!/bin/bash
+
+## Description: Rebuilds the environment from database dumps
+## Usage: rebuild
+## Example: ddev rebuild
+
+ddev solr:restore
+ddev virtuoso:restore
+ddev run toolkit:install-clone
+ddev run config-readonly:disable
+ddev run dev:install-modules
+ddev run config-readonly:enable
