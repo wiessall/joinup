@@ -228,33 +228,6 @@ third_party_settings:
                 third_party_settings: {  }
             weight: 2
             additional: {  }
-          52ce8db3-d18f-45eb-a5bf-b2e7b2db5745:
-            uuid: 52ce8db3-d18f-45eb-a5bf-b2e7b2db5745
-            region: content
-            configuration:
-              id: 'field_block:rdf_entity:solution:field_spatial_coverage'
-              label: 'Geographical coverage'
-              label_display: '0'
-              provider: layout_builder
-              context_mapping:
-                entity: layout_builder.entity
-                view_mode: view_mode
-              formatter:
-                type: entity_reference_label
-                label: above
-                settings:
-                  link: false
-                third_party_settings:
-                  field_delimiter:
-                    delimiter: ','
-                  field_formatter_range:
-                    order: 0
-                    limit: 0
-                    offset: 0
-                  template_suggestion:
-                    template_suggestion: ''
-            weight: 3
-            additional: {  }
         third_party_settings: {  }
       -
         layout_id: layout_onecol
@@ -536,32 +509,20 @@ third_party_settings:
           label: 'Section share'
           context_mapping: {  }
         components:
-          7accf998-beb9-4b89-a010-205118058d6f:
-            uuid: 7accf998-beb9-4b89-a010-205118058d6f
+          c3c8d42d-4bf7-4566-be62-1b56b050b80c:
+            uuid: c3c8d42d-4bf7-4566-be62-1b56b050b80c
             region: content
             configuration:
-              id: 'field_block:rdf_entity:solution:field_is_shared_in'
-              label: 'Shared on'
+              id: 'extra_field_block:rdf_entity:solution:share_link'
+              label: Share
               label_display: '0'
               provider: layout_builder
               context_mapping:
                 entity: layout_builder.entity
-                view_mode: view_mode
               formatter:
-                type: entity_reference_entity_view
-                label: above
-                settings:
-                  view_mode: view_mode_tile
-                third_party_settings:
-                  field_delimiter:
-                    delimiter: ''
-                  field_formatter_range:
-                    order: 0
-                    limit: 0
-                    offset: 0
-                  template_suggestion:
-                    template_suggestion: entity_reference__listing_tile
-            weight: 0
+                settings: {  }
+                third_party_settings: {  }
+            weight: 1
             additional: {  }
         third_party_settings: {  }
 id: rdf_entity.solution.default
