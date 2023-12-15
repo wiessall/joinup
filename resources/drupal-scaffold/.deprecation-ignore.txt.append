@@ -1,0 +1,7 @@
+# Temporarily ignore these deprecations until https://www.drupal.org/i/3397522.
+# Todo: Remove this exception in ISAICP-8350.
+# See: https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-8350
+%Since symfony/dependency-injection 6.4: "Symfony\\Component\\DependencyInjection\\ContainerAwareTrait" is deprecated, use dependency injection instead.%
+%The ".*" class uses "Symfony\\Component\\DependencyInjection\\ContainerAwareTrait" that is deprecated since Symfony 6.4, use dependency injection instead.%
+%The ".*" class implements "Symfony\\Component\\DependencyInjection\\ContainerAwareInterface" that is deprecated since Symfony 6.4, use dependency injection instead.%
+%The ".*" interface extends "Symfony\\Component\\DependencyInjection\\ContainerAwareInterface" that is deprecated since Symfony 6.4, use dependency injection instead.%
