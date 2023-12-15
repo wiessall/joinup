@@ -15,10 +15,12 @@
 
 declare(strict_types = 1);
 
+use Drupal\sparql_entity_storage\UriEncoder;
+
 /**
  * Remove 'About' from menu.
  */
-function joinup_core_post_update_110000(array &$sandbox): string {
+function joinup_core_post_update_110100(array &$sandbox): string {
   $entityTypeManager = \Drupal::entityTypeManager();
   /** @var  \Drupal\menu_link_content\MenuLinkContentStorageInterface $menuLinkContentStorage */
   $menuLinkContentStorage = $entityTypeManager->getStorage('menu_link_content');
@@ -51,7 +53,7 @@ function joinup_core_post_update_110000(array &$sandbox): string {
 /**
  * Disable 'Members' and 'EIF Perspective' from menu.
  */
-function joinup_core_post_update_110001(array &$sandbox): string {
+function joinup_core_post_update_110101(array &$sandbox): string {
   $entityTypeManager = \Drupal::entityTypeManager();
   /** @var  \Drupal\menu_link_content\MenuLinkContentStorageInterface $menuLinkContentStorage */
   $menuLinkContentStorage = $entityTypeManager->getStorage('menu_link_content');
@@ -88,9 +90,59 @@ function joinup_core_post_update_110001(array &$sandbox): string {
 }
 
 /**
+ * Redirect removed about pages to canonical page.
+ */
+function joinup_core_post_update_110102(array &$sandbox): string {
+  /** @var \Drupal\sparql_entity_storage\SparqlEntityStorageInterface $storage */
+  $rdfStorage = \Drupal::entityTypeManager()->getStorage('rdf_entity');
+  /** @var \Drupal\Core\Entity\EntityStorageInterface $redirectStorage */
+  $redirectStorage = \Drupal::entityTypeManager()->getStorage('redirect');
+  /** @var \Drupal\path_alias\AliasManagerInterface $aliasManager */
+  $aliasManager = \Drupal::service('path_alias.manager');
+
+  if (!isset($sandbox['data'])) {
+    $sandbox['data'] = $rdfStorage->getQuery()->accessCheck(FALSE)
+      ->condition('rid', ['collection', 'solution'], 'IN')
+      ->execute();
+
+    $sandbox['progress'] = 0;
+    $sandbox['count'] = count($sandbox['data']);
+  }
+
+  $spliced = array_splice($sandbox['data'], 0, 300);
+
+  /** @var \Drupal\rdf_entity\RdfInterface[] $groups */
+  $groups = $rdfStorage->loadMultiple($spliced);
+  foreach ($groups as $group) {
+    $path = '/rdf_entity/' . UriEncoder::encodeUrl($group->id());
+    $alias = $aliasManager->getAliasByPath($path);
+    if (!$alias) {
+      continue;
+    }
+
+    try {
+      $redirectStorage->create([
+        'redirect_source' => ltrim($alias . '/about', '/'),
+        'redirect_redirect' => 'internal:' . $path,
+        'status_code' => '301',
+        'language' => 'en',
+      ])->save();
+    }
+    catch (\Exception $e) {
+      // Simple skip as some redirects already exists.
+    }
+
+    $sandbox['progress']++;
+  }
+
+  $sandbox['#finished'] = (int) empty($sandbox['data']);
+  return "Processed {$sandbox['progress']} out of {$sandbox['count']}.";
+}
+
+/**
  * Deletes the field_ar_abstract field so that it can be re-created.
  */
-function joinup_core_post_update_110002(): string {
+function joinup_core_post_update_110103(): string {
   $fieldStorage = \Drupal::entityTypeManager()->getStorage('field_storage_config')->load('rdf_entity.field_ar_abstract');
   $fieldStorage?->delete();
   return 'Deleted field_ar_abstract field.';
