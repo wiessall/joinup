@@ -1,0 +1,6 @@
+#!/bin/bash
+
+## Description: Restore Solr index from a snapshot
+## Usage: solr:restore
+
+/opt/solr/bin/restore_solr.sh --core digit-joinup --snapshot-dir /var/solr/data/snapshot --snapshot-name digit-joinup

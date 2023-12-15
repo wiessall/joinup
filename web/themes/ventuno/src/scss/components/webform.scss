@@ -1,0 +1,113 @@
+@import "../partials/core";
+
+// Webform.
+.webform-submission-form {
+  max-width: 54rem;
+  .webform-flexbox {
+    @include media-breakpoint-up(md) {
+      margin-left: -0.5em !important;
+      margin-right: -0.5em !important;
+    }
+  }
+  .webform-section-title {
+    font-size: $h2-font-size;
+    margin-top: $spacer * 2;
+  }
+  .webform-select-other {
+    .js-form-type-select {
+      margin: 0 !important;
+    }
+  }
+  .js-form-type-radios,
+  .js-form-type-checkboxes {
+    & > .form-label {
+      margin: $spacer*1.5 0 $spacer;
+    }
+  }
+  .webform-multiple-table {
+    margin-top: $spacer * 0.5;
+    table {
+      tr {
+        &:not(:first-child) {
+          .webform-element-description {
+            display: none;
+          }
+        }
+      }
+      td {
+        .my-4 {
+          margin-top: $spacer * 0.5 !important;
+        }
+      }
+
+      td.webform-multiple-table--operations {
+        text-align: left;
+        position: relative;
+        .image-button {
+          display: inline-block;
+        }
+        &:after {
+          content: 'Remove item';
+          display: inline-block;;
+          font-weight: bold;
+        }
+        @include media-breakpoint-up(md) {
+          &:after {
+            position: absolute;
+            top: 22px;
+            left: 30px
+          }
+          .image-button {
+            position: absolute;
+            top: 22px;
+            width: 22px;
+          }
+        }
+      }
+    }
+  }
+  .form-check {
+    margin-bottom: $spacer * 0.5;
+  }
+  .form-check-label {
+    font-size: $font-size-base;
+    color: $body-color;
+  }
+
+  .table > :not(caption) > * > * {
+    border-width: 0;
+    padding: 0rem 1.5rem 0 0;
+  }
+  .table-bordered > :not(caption) > * {
+    border-width: 0;
+  }
+}
+
+// Styles specifically for the Public Sector Tech Watch webform paragraph.
+.webform-submission-public-sector-tech-watch-form {
+  .form-item-source-url, .form-item-geographical-coverage-section {
+    .webform-multiple-table {
+      margin-top: 0;
+
+      table {
+        td.webform-multiple-table--operations {
+          @include media-breakpoint-up(md) {
+            position: relative;
+            &:after {
+              top: 16px;
+            }
+            .image-button {
+              top: 16px;
+            }
+          }
+        }
+      }
+    }
+  }
+  .form-item-is-the-technological-solution-available {
+    .form-check {
+      display: inline-block;
+      margin-right: $spacer;
+    }
+  }
+}

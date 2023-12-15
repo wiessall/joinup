@@ -1,242 +1,350 @@
 # Joinup website
 
-This is the source code for https://joinup.ec.europa.eu/
+This is the source code for https://joinup.ec.europa.eu.
 
-Joinup is a collaborative platform created by the European Commission and
-funded by the European Union via the [Interoperability Solutions for European
-Public Administrations (ISA)](http://ec.europa.eu/isa/) Programme.
+Joinup is a collaborative platform created by the European Commission and funded
+by the European Union via the [Interoperable Europe](https://joinup.ec.europa.eu/interoperable-europe)
+Programme.
 
 It offers several services that aim to help e-Government professionals share
-their experience with each other. We also hope to support them to find,
-choose, re-use, develop and implement interoperability solutions.
+their experience with each other. We also hope to support them to find, choose,
+re-use, develop and implement interoperability solutions.
 
-The Joinup platform is developed as a Drupal 8 distribution, and therefore
-tries to follow the 'drupal-way' as much as possible.
+The Joinup platform is developed as a [Drupal](https://www.drupal.org)
+web application, and therefore tries to follow the "open-source way" as much as
+possible.
 
 You are free to fork this project to host your own collaborative platform.
-Joinup is licensed under the
-[EUPL](https://joinup.ec.europa.eu/community/eupl/og_page/eupl), which is
-compatible with the GPL.
+However, Joinup is not a full reusable solution because it doesn't guarantee
+backwards compatibility, nor a full upgrade path between two versions.
 
-## Contributing
+If you download and install your own instance, you're responsible for update and
+adapt the code when new Joinup versions are available.
 
-See our [contributors guide](.github/CONTRIBUTING.md).
+Joinup is licensed under the [EUPL](https://joinup.ec.europa.eu/community/eupl/og_page/eupl),
+which is compatible with the GPL.
 
-## Running your own instance of Joinup
+## Development
 
-There are two ways to run Joinup. With `docker` and `docker-compose` and building a local installation.
+We're using [DDEV](https://ddev.com), a Docker-based PHP development tool, for a
+streamlined and unified development process.
 
-### Docker
+### Before you begin
 
-To start with docker, please, check the separated [README file](docs/docker/README.md).
-**This is the preferred way of running Joinup.**
+* Make sure you use a good PHP [IDE](https://en.wikipedia.org/wiki/Integrated_development_environment)
+  such as [PhpStorm](https://www.jetbrains.com/phpstorm/), [VS Code](https://code.visualstudio.com)
+  or [Eclipse](https://eclipseide.org). Joinup code is complex and needs good
+  tools.
+* Get familiarised with [DDEV](https://ddev.com). Check the DDEV [documentation](https://ddev.readthedocs.io).
 
-### Local installation
+### Install DDEV
 
-To run Joinup locally, below is a list of requirements and instructions.
+* Install a Docker provider by following DDEV [Docker Installation](https://ddev.readthedocs.io/en/stable/users/install/docker-installation/)
+  instructions for your Operating System.
+* [Install DDEV](https://ddev.readthedocs.io/en/stable/users/install/ddev-installation/),
+  use the documentation that best fits your OS.
+* DDEV is used mostly via CLI commands. [Configure shell completion & autocomplete](https://ddev.readthedocs.io/en/stable/users/install/shell-completion/)
+  according to your environment.
+* Configure your IDE to take advantage of the DDEV features. This is a critical
+  step to be able to test and debug your Joinup. Remember, the website
+  runs inside Docker, so pay attention to these configurations:
+  - [PhpStorm Setup](https://ddev.readthedocs.io/en/stable/users/install/phpstorm/)
+  - [Configure](https://ddev.readthedocs.io/en/stable/users/debugging-profiling/step-debugging/)
+    PhpStorm and VS Code for step debugging.
+  - Profiling with [xhprof](https://ddev.readthedocs.io/en/stable/users/debugging-profiling/xhprof-profiling/),
+    [Xdebug](https://ddev.readthedocs.io/en/stable/users/debugging-profiling/xdebug-profiling/)
+    and [Blackfire](https://ddev.readthedocs.io/en/stable/users/debugging-profiling/blackfire-profiling/).
 
-#### On macOS without Docker installation
+### Deploy the codebase
 
-To start on macOS without Docker, please, check the separated [README file](resources/mac/README.md).
+#### Checkout the project
 
-#### Requirements
-
-* A regular LAMP stack running PHP 7.4.0 or higher
-* Virtuoso 7 (Triplestore database)
-* Apache Solr
-* NPM 8 or higher
-
-#### Dependency management and builds
-
-We use Drupal composer as a template for the project. For the most up-to-date
-information on how to use Composer, build the project using the Task Runner, or
-on how to run the Behat test, please refer directly to the documentation of each
-used tool.
-
-#### Initial setup
-
-* Clone the repository.
-
-    ```
-    $ git clone https://github.com/ec-europa/joinup-dev.git
-    ```
-
-* Use [composer](https://getcomposer.org/) to install the dependencies.
-
-    ```
-    $ cd joinup-dev
-    $ composer install
-    ```
-
-* Install Solr. If you already have Solr installed you can configure it manually
-  by [following the installation
-  instructions](http://cgit.drupalcode.org/search_api_solr/plain/INSTALL.txt?h=8.x-1.x)
-  from the Search API Solr module. Or you can execute the following commands to
-  download and configure a local instance of Solr. It will be installed in the
-  folder `./vendor/apache/solr`.
-
-    ```
-    $ ./vendor/bin/run solr:download-bin
-    $ ./vendor/bin/run solr:config
-    ```
-
-* Install Virtuoso. For basic instructions, see [setting up
-  Virtuoso](https://github.com/ec-europa/rdf_entity/blob/8.x-1.x/README.md).
-  Due to [a bug in Virtuoso 6](https://github.com/openlink/virtuoso-opensource/issues/303) it is recommended to use
-  Virtuoso 7.
-  During installation some RDF based taxonomies will be imported from the `resources/fixtures` folder.
-  Make sure Virtuoso can read from this folder by adding it to the `DirsAllowed`
-  setting in your `virtuoso.ini`. For example:
-
-    ```
-    DirsAllowed = /var/www/joinup/resources/fixtures, /usr/share/virtuoso-opensource-7/vad
-    ```
-
-* Install [Selenium](https://github.com/SeleniumHQ/docker-selenium/blob/master/README.md).
-  The simplest way of doing this is using Docker to install and run it with a
-  single command. This will download all necessary files and start the browser
-  in the background in headless mode:
-
-    ```
-    $ docker run -d -p 4444:4444 --network=host selenium/standalone-chrome
-    ```
-
-* Point the document root of your webserver to the 'web/' directory.
-
-#### Create your .env file
-
-Copy the `.env.example` file to `.env` and fill in the values for your local
-environment.
-
-#### Create a local task runner configuration file
-
-In order to override any configuration of the task runner (`./vendor/bin/run`),
-create a `runner.yml` file in the project's top directory. You can override
-there any default runner configuration, or any other declared in
-`./resources/runner` files or in `runner.yml.dist`. Note that the `runner.yml`
-file is not under VCS control.
-Uncomment the lines for the local development to take full advantage of the
-shortened commands.
-
-#### Setup environment variables
-
-Sensitive data will be stored in [environment variables](
-https://en.wikipedia.org/wiki/Environment_variable). See `.env.dist` for
-details. To adapt these values to your own environment, create a `.env` file
-that contains only the overridden values. For a local development environment
-this could look like the following:
-
-```bash
-DRUPAL_BASE_URL=http://my-base-url.local
-DRUPAL_DATABASE_USERNAME=my-database-username
-DRUPAL_DATABASE_PASSWORD=my-database-password
-DRUPAL_DATABASE_NAME=joinup
-DRUPAL_DATABASE_HOST=localhost
-DRUPAL_HASH_SALT=some-unique-random-string-like-37h+2BQEQx83YLa/uFdsfG55
-
-SEARCH_API_SERVER_SS_SOLR_HOST=localhost
-
-DRUPAL_SPARQL_HOSTNAME=localhost
-REDIS_HOST=localhost
-
-SIMPLETEST_BASE_URL=http://my-base-url.local
-SIMPLETEST_DB=mysql://root@localhost:3306/joinup
-SIMPLETEST_SPARQL_DB=sparql://localhost:8890
-MINK_DRIVER_ARGS_WEBDRIVER=""
-DTT_BASE_URL=http://my-base-url.local
-DTT_API_URL=http://localhost:4444/wd/hub
-DTT_MINK_DRIVER_ARGS="['chrome', null, 'http://localhost:4444/wd/hub']"
+```shell
+git clone git@git.fpfis.tech.ec.europa.eu:ec-europa/digit-joinup-reference.git joinup
+cd joinup
 ```
 
-#### Build the project
+### Start DDEV
 
-Run Composer install to get all dependencies and prepare the code base, then
-install the site with `toolkit:install-clean`:
+Inside the cloned project run:
 
-```
-$ composer install
-$ ./vendor/bin/run toolkit:install-clean
+```shell
+ddev start
 ```
 
-#### Run the tests
+This command will fire up the Docker containers and add all configurations.
 
-Run the Behat test suite to validate your installation.
+### Install dependencies
 
-```
-$ cd tests
-$ ./behat
-```
-
-During development you can enable Behat test screen-shots by uncomment this line
-in `tests/features/bootstrap/FeatureContext.php`:
-
-```php
-  // use \Drupal\joinup\Traits\ScreenShotTrait;
+```shell
+ddev composer install
 ```
 
-and use the `pretty` formatter instead of `progress`, in `tests/behat.yml`:
+This will install the PHP and Node dependencies. The codebase is deployed.
 
-```yaml
-  formatters:
-    pretty: ~
+### Configure sensitive data (secrets)
+
+* Copy the `.env.example` file as `.env`. The `.env` file is not under VCS
+  control and is used to override values stored into `.env.dist` file but, more
+  important, to store here sensitive data, such as credentials, tokens,
+  passwords, etc.
+* You should fill the `.env` file environment variables with values. Each
+  variable is documented in `.env.example`.
+
+### Install Joinup
+
+There are two ways to install Joinup:
+
+### Empty site
+
+This way of installing is referred also as a _clean installing_. The site
+exposes all functionalities but doesn't come with content and users (except the
+superuser).
+
+Most of the tests are run against the empty site, so this is helpful when you
+write tests or run most of the tests.
+
+#### Install an empty site
+
+```shell
+ddev install
 ```
 
-Also run the PHPUnit tests, from the web root.
+#### Add demo users (Optional)
 
+As the site doesn't have users, you might want to add some demo users:
+
+```shell
+ddev run dev:demo-users
 ```
-$ cd web
-$ ../vendor/bin/phpunit
+
+### Site rebuilt from production
+
+This installation type, referred also as a _clone installing_, rebuilds the site
+by restoring data from production. Note that sensitive data, such as user's full
+names, emails, etc. is already sanitized.
+
+#### Nextcloud credentials
+
+Make sure that you followed the [Configure sensitive data (secrets)](#configure-sensitive-data-secrets)
+section, and you set the `NEXTCLOUD_*` environment variables in `.env` file. The
+values should be provided according to these [instructions](https://webgate.ec.europa.eu/fpfis/qa/how-to?nid=22351).
+These credentials are needed to be able to download the Joinup databases dumps
+and snapshots.
+
+#### Download database dump/snapshots
+
+Joinup needs to restore dump/snapshots from three sources: MySQL, Virtuoso and
+Solr; to be able to rebuild the website with production data:
+
+```shell
+ddev download-databases
 ```
 
-### Frontend development
+#### Actually rebuild the site
 
-See the [readme](web/themes/ventuno/README.md) in the theme folder.
+```shell
+ddev rebuild
+```
+
+This command:
+
+* Restore the dump and snapshots,
+* Runs the update, post-update functions,
+* Synchronizes configuration from `config/sync` directory,
+* Runs the `hook_deploy()` functions.
+* Performs other needed tasks.
+
+There are cases when you only want to restore the database dump and snapshots,
+for instance, to inspect existing values from the backends:
+
+```shell
+ddev restore-databases
+```
+
+### Launching
+
+Launch the site as anonymous:
+
+```shell
+ddev launch
+```
+
+Launch the site as superuser:
+
+```shell
+ddev drush uli
+```
+
+The command will provide a URL that allows you to log in as superuser.
+
+### Running commands
+
+#### Any command in any container
+
+Run a command in the default service container (`web`):
+
+```shell
+ddev exec <command>
+```
+
+Run a command in any other service container (including `web`):
+
+```shell
+ddev exec -s <service> <command>
+```
+
+Alternatively, you can SSH into any container that has some advantages over
+`ddev exec`, such as keeping the command history.
+
+SSH into main (`web`) container:
+
+```shell
+ddev ssh
+```
+
+SSH into any container:
+
+```shell
+ddev ssh -s <service>
+```
+
+#### Task runners
+
+Joinup is using two task runners:
+
+* [Drush](https://github.com/drush-ops/drush): This is the official Drupal shell tool.
+* [Toolkit](https://github.com/ec-europa/toolkit): The European Commission PHP runner.
+
+##### Drush
+
+Launch a Drush command:
+
+```shell
+ddev drush <command>
+```
+
+##### Toolkit
+
+```shell
+ddev run <command>
+```
+
+Note that Toolkit uses its own configuration. Few aspects:
+
+* Apart from configuration provided by Toolkit, Joinup exposes its own
+  configuration under `resources/runner`.
+* You can override any configuration by creating a `runner.yml` file in the
+  project's root directory. Note that this file is not under VCS control. For
+  instance, you may want to disable the "config read-only" feature while you
+  work on the project. All you need to do is to add this line in `runner.yml`:
+  ```yaml
+  config_readonly: false
+  ```
+* You can inspect the configuration. Find out how by running this command:
+  ```yaml
+  ddev run config --help
+  ```
+
+#### Developer local commands
+
+Developers love to create local shorthand commands to run a more sophisticated
+command or a sequence of commands that they run often but still don't qualify to
+merged into the project `.ddev/commands` because they are not generic enough.
+
+As a naming convention, such commands can be created by prefixing the command
+file name with underscore (`_`). For instance, the following command, having
+this path: `.ddev/commands/virtuoso/_say_hello` will run inside the `virtuoso`
+service container but will not be committed in Git:
+
+```shell
+#!/bin/bash
+## Description: Say hello
+## Usage: say-hello
+echo "Hello!"
+```
+
+Find out more on how to write custom commands [here](https://ddev.readthedocs.io/en/stable/users/extend/custom-commands/)
+
+### Locally exposed services
+
+* https://joinup.ddev.site, http://joinup.ddev.site — The website
+* http://joinup.ddev.site:8890/sparql — The SPARQL endpoint
+* http://joinup.ddev.site:8983 — The Solr admin UI
+* https://joinup.ddev.site:7900, http://joinup.ddev.site:7910 — The Selenium
+  tests viewer (use "secret" as password)
+* https://joinup.ddev.site:8026, http://joinup.ddev.site:8025 — The mailcatcher
+  UI (Mailpit)
+* To connect locally to MySQL, you'll need to find the port as this is
+  dynamically allocated each time. Run:
+  ```shell
+  ddev describe -j | jq -r .raw.dbinfo.published_port`
+  ```
+  and connect from host to `mysql://db:db/127.0.0.1:<port>/db`.
+
+### Testing & code quality checks
+
+Testing frameworks used by Joinup:
+
+#### Behat testing
+
+* See https://behat.org
+* Run Behat tests from IDE or from CLI:
+  ```shell
+  ddev exec vendor/bin/behat [arguments and options]
+  ```
+
+#### PHPUnit testing
+
+* See https://phpunit.de
+* Run PHPUnit tests from IDE ot from CLI:
+  ```shell
+  ddev exec vendor/bin/phpunit [arguments and options]
+  ```
+* PHPUnit testing includes Drupal-style tests such as kernel, functional and [existing
+  site](https://gitlab.com/weitzman/drupal-test-traits) but also plain PHPUnit
+  tests.
+
+#### PHP coding standards check
+
+```shell
+ddev exec vendor/bin/phpcs [arguments and options]
+```
+
+To fix violations, run:
+
+```shell
+ddev exec vendor/bin/phpcbf [arguments and options]
+```
+
+#### PHP statical analysis
+
+```shell
+ddev run toolkit:test-phpstan
+```
+
+#### Javascript lint
+
+```shell
+ddev run toolkit:lint-js
+````
+
+#### YAML files lint
+
+```shell
+ddev run toolkit:lint-yaml
+````
 
 ### Upgrade process
 
-Joinup offers only _contiguous upgrades_. For instance, if you project is
-currently on Joinup `v1.39.2`, and the latest stable version is `v1.42.0`, then
-you cannot upgrade directly to the latest version. Instead, you should upgrade
-first to `v1.40.0`, second to `v1.40.1` (if exists) and, finally, to `v1.42.0`.
-
-The Joinup update and post-update scripts naming is following this pattern:
-
-`function mymodule_update_0106100() {...}`
-
-or
-
-`function mymodule_post_update_0207503() {...}`
-
-The (post)updated identifier (the numeric part consists in seven digits with the
-following meaning:
-
-* The first two digits are the Joinup major version.
-* The following three digits are the Joinup minor version.
-* The last two digits are an integer that sets the weight within updates or
-  post updates from the same extension (module or profile). `00` is the first
-  (post)update that applies.
-
-For the above example:
-
-* `function mymodule_update_0106100() {...}`: Was applied in Joinup `v1.61.x` as
-  the first update of the `mymodule` module (`01` major version, `061` minor
-  version, `00` update weight within the module).
-* `function mymodule_post_update_0207503() {...}`: Was applied in Joinup
-  `v2.75.x` as the fourth post update of the `mymodule` module (`02` major
-  version, `075` minor version, `03` update weight within the module).
+Joinup offers only _contiguous upgrades_. For details and naming conventions,
+please read documentation of [ValidUpdateNameSniff](src/CodingStandards/Sniffs/NamingConventions/ValidUpdateNameSniff.php)
+coding standards rule.
 
 ### Technical details
 
-* In [Rdf draft module](web/modules/custom/rdf_entity/rdf_draft/README.md)
-  there is information on handling draft in CRUD operations for rdf entities.
-* In [Joinup notification module](web/modules/custom/joinup_notification/README.md)
-  there is information on how to handle notifications in Joinup.
-* In [Joinup core module](web/modules/custom/joinup_core/README.md) there is
-  information on how to handle and create workflows.
-* For some additional details in our SPARQL related functionality, see our
-  [SPARQL developer documentation](./docs/sparql.md).
-* Check the [third party services](./docs/third-party-services.md)
-  documentation for additional information on the services we integrate with.
+For some additional details in our SPARQL related functionality, see our
+[SPARQL developer documentation](docs/sparql.md).
 
 ### Mailhog
 
@@ -264,5 +372,6 @@ $config['swiftmailer.transport']['smtp_port'] = '1025';
 
 ### Additional information
 
-* [Joinup website](https://joinup.ec.europa.eu/)
-* [Repositories and branches](https://citnet.tech.ec.europa.eu/CITnet/confluence/display/ISAICP/Development+repositories%2C+branches%2C+Jira+tickets)
+* [Code of conduct](docs/code_of_conduct.md)
+* [Deployment workflow](docs/release_workflow.md)
+* [Contributors guide](docs/contributing.md).

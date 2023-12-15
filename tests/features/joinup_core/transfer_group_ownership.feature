@@ -1,4 +1,4 @@
-@api @group-e
+@api @group-f
 Feature: As a group (collection or solution) owner or site moderator
   In order to manage my group
   I should be able to transfer the group ownership.

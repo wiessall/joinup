@@ -9,7 +9,10 @@ testing:
     - http_request_mock
     - joinup_cas_mock_server
     - joinup_test
-    - upgrade_status
+    # TODO: Re-enable this check when PHP is 8.2.14 or 8.2.15, in ISAICP-8337.
+    # See https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-8337
+    # See https://github.com/php/php-src/issues/8251
+    # - upgrade_status
 
 behat:
   screenshots:
@@ -30,15 +33,11 @@ phpcs:
       bin: ${joinup.dir}/vendor/bin/phpcbf
   check:
     extensions:
-      - css
       - inc
-      - info
       - install
-      - js
       - module
       - php
       - profile
-      - test
       - theme
     files:
       - ${joinup.dir}/tests/src
@@ -78,3 +77,13 @@ commands:
     - task: run
       command: drush:module-install
       arguments: ${testing.modules}
+
+  # Lints Twig files using Twig Coding Standard Rules.
+  testing:lint-twig:
+    - task: exec
+      command: ${joinup.dir}/vendor/bin/twig-cs-fixer lint
+
+  # Fixes Twig files using Twig Coding Standard Rules.
+  testing:fix-twig:
+    - task: exec
+      command: ${joinup.dir}/vendor/bin/twig-cs-fixer lint --fix

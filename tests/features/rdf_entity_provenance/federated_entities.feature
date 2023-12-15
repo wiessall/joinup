@@ -1,4 +1,4 @@
-@api @group-e
+@api @group-i
 Feature: In order to avoid users changing federated values
   As a site owner
   I want federated entities to have the schema values disabled.
@@ -76,10 +76,10 @@ Feature: In order to avoid users changing federated values
     And the following fields should not be disabled "<fields not disabled>"
 
     Examples:
-      | label                    | type         | fields disabled                                                                                              | fields not disabled                                                                                   |
-      | A federated collection   | collection   | Title, Description, Contact information, Owner                                                               | Abstract, Access URL, Topic, Moderated, Content creation, Motivation, Logo, Closed collection |
-      | A federated solution     | solution     | Title, Description, Contact information, Owner, Keywords, Related solutions, Status, Languages, Landing page | Topic, Moderated, Content creation, Motivation, Logo, Metrics pager                           |
-      | A federated release      | release      | Name, Release number, Keywords, Status, Language                                                             | Motivation                                                                                            |
-      | A federated distribution | distribution | Title, Description, Access URL, Format, Status, Licence                                                      |                                                                                                       |
-      | John Federator           | owner        | Name                                                                                                         |                                                                                                       |
-      | John Federator's contact | contact      | E-mail address, Name, Website URL                                                                            |                                                                                                       |
+      | label                    | type         | fields disabled                                                                                                     | fields not disabled                                                                            |
+      | A federated collection   | collection   | Title, Description, Contact information, Owner                                                                      | Abstract, Access URL, Topic, Moderated, Content creation, Motivation, Logo, Closed collection  |
+      | A federated solution     | solution     | Title, Description, Contact information, Owner, Search keywords, Related solutions, Status, Languages, Landing page | Topic, Moderated, Content creation, Motivation, Logo, Metrics pager                            |
+      | A federated release      | release      | Name, Release number, Search keywords, Status, Language                                                             | Motivation                                                                                     |
+      | A federated distribution | distribution | Title, Description, Access URL, Format, Status, Licence                                                             |                                                                                                |
+      | John Federator           | owner        | Name                                                                                                                |                                                                                                |
+      | John Federator's contact | contact      | E-mail address, Name, Website URL                                                                                   |                                                                                                |

@@ -1,4 +1,4 @@
-@api @group-f
+@api @group-b
 Feature:
   In order to make it easy to browse to specific content
   As a moderator
@@ -692,3 +692,21 @@ Feature:
       | Rare Nintendo64 disk drive discovered |
       | Event pagination 2                    |
       | Event pagination 3                    |
+
+  @javascript
+  Scenario: Facets are not shown when there are more than one paragraphs of the same datasource in the page.
+    Given custom_page content:
+      | title                  | collection | state     |
+      | Multi paragraph facets | Nintendo64 | published |
+    And I append "content_listing" to "field_paragraphs_body" field in "node" entity with following "Multi paragraph facets" title:
+      | content_listing:value | a:6:{s:6:"fields";a:1:{s:20:"content_listing_type";a:2:{s:6:"weight";i:0;s:6:"region";s:3:"top";}}s:7:"enabled";i:1;s:13:"query_presets";s:38:"entity_bundle\|discussion,event,news\|IN";s:5:"limit";s:2:"12";s:11:"show_shared";i:0;s:13:"global_search";i:1;} |
+
+    And I go to the "Multi paragraph facets" custom page
+    Then I should see the heading "Multi paragraph facets"
+    And I should see the following facet items "Discussion, Event, News" in this order
+
+    Given I append "content_listing" to "field_paragraphs_body" field in "node" entity with following "Multi paragraph facets" title:
+      | content_listing:value | a:6:{s:6:"fields";a:1:{s:20:"content_listing_type";a:2:{s:6:"weight";i:0;s:6:"region";s:3:"top";}}s:7:"enabled";i:1;s:13:"query_presets";s:38:"entity_bundle\|discussion,event,news\|IN";s:5:"limit";s:2:"12";s:11:"show_shared";i:0;s:13:"global_search";i:1;} |
+    And I go to the "Multi paragraph facets" custom page
+    Then I should see the heading "Multi paragraph facets"
+    And I should not see the following facet items "Discussion, Event, News"

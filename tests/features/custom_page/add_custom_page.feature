@@ -1,4 +1,4 @@
-@api @group-f
+@api @group-b
 Feature: "Add custom page" visibility options.
   In order to manage custom pages
   As a group facilitator
@@ -119,6 +119,17 @@ Feature: "Add custom page" visibility options.
       | first title | second title    | group      |
       | Code Camp   | Open Collective | collection |
       | Parachute   | Skydiving       | solution   |
+
+  Scenario: Title can be visually hidden.
+    Given the following collection:
+      | title | Aggressive Rubber |
+      | state | published         |
+    And custom_page content:
+      | title        | collection        | field_hide_title | state     |
+      | Rubber bands | Aggressive Rubber | 1                | published |
+
+    When I go to the "Rubber bands" custom page
+    Then I see the text "Rubber bands" in the "Visually hidden title" region
 
   Scenario: Moderators can access the "Add custom page" menu item.
     Given users:

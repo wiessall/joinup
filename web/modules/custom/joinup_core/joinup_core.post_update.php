@@ -14,16 +14,3 @@
  */
 
 declare(strict_types = 1);
-
-/**
- * Clean tallinn data.
- */
-function joinup_core_post_update_109800(): string {
-  $storage = \Drupal::entityTypeManager()->getStorage('node');
-  $entities = $storage->loadByProperties([
-    'type' => 'tallinn_report',
-  ]);
-  $storage->delete($entities);
-
-  return 'Tallinn data cleaned';
-}

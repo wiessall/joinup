@@ -31,7 +31,6 @@ function ventuno_preprocess_page(array &$variables): void {
   // Export the username to display in the header.
   $variables['user_name'] = \Drupal::currentUser()->getDisplayName();
 
-  // Show links to 'Interoperable Europe' and 'Interoperability Solutions'.
   /** @var \Drupal\joinup_menu\MenuHelperInterface $menu_helper */
   $menu_helper = \Drupal::service('joinup_menu.menu_helper');
   $variables['landing_page_links'] = $menu_helper->getBclLandingPageLinks();
@@ -44,6 +43,8 @@ function ventuno_preprocess_page(array &$variables): void {
 
   // The "About us" link is only shown if the Joinup collection exists.
   $variables['#cache']['tags'][] = 'joinup_collection:exists';
+  // Moderator can change navbar links.
+  $variables['#cache']['tags'][] = 'config:system.menu.navbar';
 
   $variables['hide_searchbar'] = FALSE;
   $route_match = \Drupal::routeMatch();

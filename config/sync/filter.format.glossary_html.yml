@@ -8,7 +8,6 @@ dependencies:
     - image
     - joinup_video
     - linkit
-    - video_embed_wysiwyg
 name: 'Glossary HTML'
 format: glossary_html
 weight: 0
@@ -44,7 +43,7 @@ filters:
     status: true
     weight: -49
     settings:
-      allowed_html: '<a href hreflang> <p> <strong> <em> <u> <ul> <li> <ol>'
+      allowed_html: '<br> <p> <a hreflang href> <strong> <em> <u> <ul> <li> <ol>'
       filter_html_help: false
       filter_html_nofollow: false
   filter_autop:
@@ -109,12 +108,6 @@ filters:
     weight: -40
     settings:
       title: true
-  video_embed_wysiwyg:
-    id: video_embed_wysiwyg
-    provider: video_embed_wysiwyg
-    status: false
-    weight: -39
-    settings: {  }
   filter_image_lazy_load:
     id: filter_image_lazy_load
     provider: filter

@@ -24,6 +24,7 @@ Feature: Github feed paragraph tests.
     And I press "Save" in the "Modal buttons" region
     And I press "Update"
     And I should see the heading "Pull requests (5)"
+    And I should see the link "Pull requests"
     And I should not see the heading "Comments"
 
     When I go to the edit form of the "Catalogue of paragraphs" "custom page"
@@ -33,6 +34,7 @@ Feature: Github feed paragraph tests.
     And I press "Save" in the "Modal buttons" region
     And I press "Update"
     And I should see the heading "Activity feed (5)"
+    And I should see the link "Activity feed"
 
     When I go to the edit form of the "Catalogue of paragraphs" "custom page"
     Then I "edit" from the "Custom page body" field the child 1 paragraph of 1 layout
@@ -42,6 +44,7 @@ Feature: Github feed paragraph tests.
     And I press "Update"
     Then I should see the heading "Catalogue of paragraphs"
     And I should see the heading "Issues (5)"
+    And I should see the link "Issues"
     And I should not see the heading "Comments (5)"
 
     When I go to the edit form of the "Catalogue of paragraphs" "custom page"

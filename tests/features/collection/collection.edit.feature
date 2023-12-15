@@ -1,4 +1,4 @@
-@api @group-d
+@api @group-a
 Feature: Editing collections
   In order to manage collections
   As a collection owner or collection facilitator
@@ -19,13 +19,13 @@ Feature: Editing collections
     And I go to the homepage of the "Überwaldean Land Eels" collection
     And I click "Edit" in the "Entity actions" region
     Then I should see the heading "Edit Collection Überwaldean Land Eels"
-    Then the following fields should be present "Title, Description, Abstract, Topic, Geographical coverage, Keywords, Content creation, Moderated, Motivation"
+    Then the following fields should be present "Title, Description, Abstract, Topic, Geographical coverage, Search keywords, Content creation, Moderated, Motivation"
     And the following field widgets should be present "Contact information, Owner"
     And the following fields should not be present "Langcode, Translation, Affiliates, Enable the search field, Query presets, Limit"
     And I should see "Short description text of the collection. Appears on the Overview page. (Leave blank to use the trimmed value of the Description field.)"
     And I should see "Add a country name relevant to the content of this collection."
-    And the "Description" wysiwyg editor should have the buttons "HTML block format, Bold, Italic, Remove format, Link, Unlink, Contact us, Bullet list, Numbered list, Outdent, Indent, Blockquote, Image, File, Table, Video Embed, Cut, Copy, Paste, Paste Text, Undo, Redo, Source code"
-    And the "Abstract" wysiwyg editor should have the buttons "HTML block format, Bold, Italic, Remove format, Link, Unlink, Outdent, Indent, Source code"
+    And the "Description" wysiwyg editor should have the buttons "Heading,Bold,Italic,Remove Format,Link,Contact us,Bulleted list,Numbered list,Outdent,Indent,Block quote,File,Drupal media,table,Undo,Redo,Source,Code,Code Block"
+    And the "Abstract" wysiwyg editor should have the buttons "Heading,Bold,Italic,Remove Format,Link,Outdent,Indent,Source,Code,Code Block"
 
     # Query builder is disabled in collections.
     But I should not see the button "Add and configure filter"
@@ -52,10 +52,14 @@ Feature: Editing collections
 
     When I open the header local tasks menu
     And I click "Edit" in the "Entity actions" region
-    And I press the button "Video Embed" in the "Description" wysiwyg editor
-    Then a modal should open
-    When I fill in "Video URL" with "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
-    And I press "Save" in the "Modal buttons" region
+    And I press the button "Insert Media" in the "Description" wysiwyg editor
+    Then I wait for AJAX to finish
+    And a modal should open
+    And I click "Video"
+    When I fill in "Add Video URL" with "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+    And I press "Add"
+    Then I press "Save" in the "Modal buttons" region
+    And I press "Insert selected" in the "Modal buttons" region
     Then the modal should be closed
 
   @terms @javascript
@@ -75,7 +79,7 @@ Feature: Editing collections
 
     When I open the header local tasks menu
     And I click "Edit" in the "Entity actions" region
-    And I press the button "File" in the "Description" wysiwyg editor
+    And I press the button "Insert file" in the "Description" wysiwyg editor
     Then a modal should open
     And I should not see the text "0 bytes limit"
     When I attach the file "empty_pdf.pdf" to "File"

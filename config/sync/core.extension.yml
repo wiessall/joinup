@@ -13,7 +13,7 @@ module:
   cas: 0
   cas_attributes: 0
   changed_fields: 0
-  ckeditor: 0
+  ckeditor5: 0
   collection: 0
   comment: 0
   config: 0
@@ -98,7 +98,7 @@ module:
   joinup_legal: 0
   joinup_licence: 0
   joinup_like: 0
-  joinup_material_design: 0
+  joinup_media: 0
   joinup_menu: 0
   joinup_modal: 0
   joinup_news: 0
@@ -109,7 +109,6 @@ module:
   joinup_poll: 0
   joinup_publication_date: 0
   joinup_rdf: 0
-  joinup_rdf_graph: 0
   joinup_rss: 0
   joinup_search: 0
   joinup_seo: 0
@@ -117,6 +116,7 @@ module:
   joinup_sparql: 0
   joinup_stats: 0
   joinup_subscription: 0
+  joinup_tiles: 0
   joinup_tour: 0
   joinup_user: 0
   joinup_validation: 0
@@ -132,6 +132,7 @@ module:
   linkit: 0
   mailsystem: 0
   media: 0
+  media_library: 0
   memcache: 0
   menu_link_destination: 0
   menu_ui: 0
@@ -173,6 +174,7 @@ module:
   purge_processor_cron: 0
   purge_processor_lateruntime: 0
   purge_queuer_coretags: 0
+  queue_ui: 0
   rdf_draft: 0
   rdf_entity: 0
   rdf_entity_provenance: 0
@@ -231,13 +233,14 @@ module:
   user: 0
   ventuno_helper: 0
   video_embed_field: 0
-  video_embed_wysiwyg: 0
+  video_embed_media: 0
   view_unpublished: 0
   views_autosubmit: 0
   views_block_area: 0
   views_bulk_operations: 0
   views_data_export: 0
   views_multiple_permissions: 0
+  webform: 0
   whats_new: 0
   workflow_state_permission: 0
   menu_admin_per_menu: 1

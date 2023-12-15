@@ -6,6 +6,7 @@ dependencies:
     - core.entity_view_mode.node.view_mode_tile
     - field.field.node.custom_page.field_attachment
     - field.field.node.custom_page.field_custom_page_logo
+    - field.field.node.custom_page.field_hide_title
     - field.field.node.custom_page.field_paragraphs_body
     - field.field.node.custom_page.field_state
     - field.field.node.custom_page.field_topic
@@ -43,7 +44,7 @@ content:
     type: filtered_entity_reference_bundles
     label: hidden
     settings:
-      view_mode: tile
+      view_mode: default
       link: ''
       filtered_entity_bundles:
         - simple_paragraph
@@ -56,7 +57,7 @@ content:
         limit: 0
         offset: 0
       template_suggestion:
-        template_suggestion: bare
+        template_suggestion: ''
     weight: 1
     region: content
   flag_like_node:
@@ -66,6 +67,7 @@ content:
     region: content
 hidden:
   field_attachment: true
+  field_hide_title: true
   field_state: true
   field_topic: true
   langcode: true

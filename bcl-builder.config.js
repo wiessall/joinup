@@ -33,6 +33,20 @@ module.exports = {
       },
     },
     {
+      entry: path.resolve(
+        outputFolder,
+        `${ventuno}src/js/navbar-hover-dropdown.js`
+      ),
+      dest: path.resolve(
+        outputFolder,
+        `${ventuno}assets/js/navbar-hover-dropdown.js`
+      ),
+      options: {
+        minify: true,
+        sourceMap: true,
+      },
+    },
+    {
       entry: path.resolve(outputFolder, `${ventuno}src/js/explore-block.js`),
       dest: path.resolve(outputFolder, `${ventuno}assets/js/explore-block.js`),
       options: {
@@ -76,6 +90,20 @@ module.exports = {
       dest: path.resolve(
         outputFolder,
         `${ventuno}assets/js/paragraph--carousel.js`
+      ),
+      options: {
+        minify: true,
+        sourceMap: true,
+      },
+    },
+    {
+      entry: path.resolve(
+        outputFolder,
+        `${ventuno}src/js/paragraph-inline-img.js`
+      ),
+      dest: path.resolve(
+        outputFolder,
+        `${ventuno}assets/js/paragraph-inline-img.js`
       ),
       options: {
         minify: true,
@@ -475,6 +503,18 @@ module.exports = {
     {
       entry: path.resolve(
         outputFolder,
+        `${ventuno}src/scss/components/webform.scss`
+      ),
+      dest: path.resolve(outputFolder, `${ventuno}assets/css/webform.min.css`),
+      options: {
+        includePaths,
+        minify: true,
+        sourceMap: "file",
+      },
+    },
+    {
+      entry: path.resolve(
+        outputFolder,
         `${ventuno}src/scss/components/group-banner.scss`
       ),
       dest: path.resolve(
@@ -751,11 +791,56 @@ module.exports = {
     {
       entry: path.resolve(
         outputFolder,
+        `${ventuno}src/scss/components/paragraphs/paragraph--social-media.scss`
+      ),
+      dest: path.resolve(
+        outputFolder,
+        `${ventuno}assets/css/paragraph--social-media.min.css`
+      ),
+      options: {
+        includePaths,
+        minify: true,
+        sourceMap: "file",
+      },
+    },
+    {
+      entry: path.resolve(
+        outputFolder,
+        `${ventuno}src/scss/components/paragraphs/paragraph--simple-paragraph.scss`
+      ),
+      dest: path.resolve(
+        outputFolder,
+        `${ventuno}assets/css/paragraph--simple-paragraph.min.css`
+      ),
+      options: {
+        includePaths,
+        minify: true,
+        sourceMap: "file",
+      },
+    },
+    {
+      entry: path.resolve(
+        outputFolder,
         `${ventuno}src/scss/components/paragraphs/paragraph--testimony.scss`
       ),
       dest: path.resolve(
         outputFolder,
         `${ventuno}assets/css/paragraph--testimony.min.css`
+      ),
+      options: {
+        includePaths,
+        minify: true,
+        sourceMap: "file",
+      },
+    },
+    {
+      entry: path.resolve(
+        outputFolder,
+        `${ventuno}src/scss/components/paragraphs/paragraph--tiles.scss`
+      ),
+      dest: path.resolve(
+        outputFolder,
+        `${ventuno}assets/css/paragraph--tiles.min.css`
       ),
       options: {
         includePaths,
