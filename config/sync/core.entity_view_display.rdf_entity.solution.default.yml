@@ -358,6 +358,96 @@ third_party_settings:
                     template_suggestion: ''
             weight: 2
             additional: {  }
+          9cee878e-b949-4a83-a2c9-7235e431e320:
+            uuid: 9cee878e-b949-4a83-a2c9-7235e431e320
+            region: content
+            configuration:
+              id: 'field_block:rdf_entity:solution:field_spatial_coverage'
+              label: 'Geographical coverage'
+              label_display: '0'
+              provider: layout_builder
+              context_mapping:
+                entity: layout_builder.entity
+                view_mode: view_mode
+              formatter:
+                type: entity_reference_label
+                label: above
+                settings:
+                  link: false
+                third_party_settings:
+                  field_delimiter:
+                    delimiter: ','
+                  field_formatter_range:
+                    order: 0
+                    limit: 0
+                    offset: 0
+                  template_suggestion:
+                    template_suggestion: ''
+            weight: 3
+            additional: {  }
+          39d3c3ed-cfc8-49bd-8bbe-9fd93e76e8cc:
+            uuid: 39d3c3ed-cfc8-49bd-8bbe-9fd93e76e8cc
+            region: content
+            configuration:
+              id: 'field_block:rdf_entity:solution:field_is_business_process'
+              label: 'Business process'
+              label_display: '0'
+              provider: layout_builder
+              context_mapping:
+                entity: layout_builder.entity
+                view_mode: view_mode
+              formatter:
+                type: entity_reference_label
+                label: above
+                settings:
+                  link: false
+                third_party_settings:
+                  template_suggestion:
+                    template_suggestion: ''
+            weight: 5
+            additional: {  }
+          f519b608-0e9b-4859-bcd0-f8ebf8f6bc19:
+            uuid: f519b608-0e9b-4859-bcd0-f8ebf8f6bc19
+            region: content
+            configuration:
+              id: 'field_block:rdf_entity:solution:field_is_product_type'
+              label: 'Product type'
+              label_display: '0'
+              provider: layout_builder
+              context_mapping:
+                entity: layout_builder.entity
+                view_mode: view_mode
+              formatter:
+                type: entity_reference_label
+                label: above
+                settings:
+                  link: false
+                third_party_settings:
+                  template_suggestion:
+                    template_suggestion: ''
+            weight: 6
+            additional: {  }
+          26bdb361-9338-49ce-b71a-629179d3ad4c:
+            uuid: 26bdb361-9338-49ce-b71a-629179d3ad4c
+            region: content
+            configuration:
+              id: 'field_block:rdf_entity:solution:latest_release'
+              label: 'Latest release'
+              label_display: '0'
+              provider: layout_builder
+              context_mapping:
+                entity: layout_builder.entity
+                view_mode: view_mode
+              formatter:
+                type: entity_reference_entity_view
+                label: hidden
+                settings:
+                  view_mode: about
+                third_party_settings:
+                  template_suggestion:
+                    template_suggestion: ''
+            weight: 4
+            additional: {  }
         third_party_settings: {  }
       -
         layout_id: layout_onecol
