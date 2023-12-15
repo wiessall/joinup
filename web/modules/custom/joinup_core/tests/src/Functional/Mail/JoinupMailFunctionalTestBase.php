@@ -43,12 +43,14 @@ abstract class JoinupMailFunctionalTestBase extends BrowserTestBase {
     'cas_mock_server',
     'collection',
     'embed_block',
+    'editor',
     'field',
     'filter',
     'interoperable_europe',
     'joinup_collection',
     'joinup_core',
     'joinup_menu',
+    'joinup_media',
     'joinup_notification',
     'joinup_test_time',
     'joinup_video',
@@ -67,6 +69,7 @@ abstract class JoinupMailFunctionalTestBase extends BrowserTestBase {
     'text',
     'topic',
     'user',
+    'ventuno_helper',
     'workflow_state_permission',
   ];
 

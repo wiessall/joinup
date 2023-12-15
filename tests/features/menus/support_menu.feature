@@ -1,4 +1,4 @@
-@api @group-f
+@api @group-i
 Feature:
   - As a moderator, in order to maintain the support dropdown, I am able to administer the 'support' menu.
   - As a user, I should see the the 'Take a tour' menu item only on pages that are implementing tours.
@@ -31,6 +31,7 @@ Feature:
       | footer-european-commission | 200  | see      |
       | footer-follow-us           | 200  | see      |
       | footer-help-and-support    | 200  | see      |
+      | navbar                     | 200  | see      |
       | tools                      | 403  | not see  |
       | account                    | 403  | not see  |
 

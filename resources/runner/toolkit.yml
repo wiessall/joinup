@@ -44,9 +44,8 @@ commands:
 
   # Overrides the toolkit:build-dev command.
   toolkit:build-dev:
-    - task: mkdir
-      dir: ${joinup.files_public_dir}
-      mode: 0775
+    - task: exec
+      command: mkdir ${joinup.files_public_dir} -p -m ug=rwx,o=
     - task: copy
       from: ${joinup.site_dir}/sites/default/default.services.yml
       to: ${joinup.site_dir}/sites/default/services.yml
@@ -57,15 +56,20 @@ commands:
     - task: process
       source: ${joinup.dir}/behat.yml.dist
       destination: ${joinup.dir}/behat.yml
-    - task: mkdir
-      dir: ${joinup.files_private_dir}
-    - task: mkdir
-      dir: ${env.DRUPAL_FILE_TEMP_PATH}
+    - task: exec
+      command: mkdir ${joinup.files_private_dir} -p -m ug=rwx,o=
+    - task: exec
+      command: mkdir ${env.DRUPAL_FILE_TEMP_PATH} -p -m ug=rwx,o=
 
   # Overrides toolkit:install-clean.
   toolkit:install-clean:
     - task: run
       command: joinup:environment
+    # Temporary fix.
+    - task: run
+      command: sparql:query
+      arguments:
+        - 'DELETE { GRAPH ?g { ?s ?p ?o . }} WHERE { GRAPH ?g { ?s ?p ?o . } FILTER (STRSTARTS(STR(?g), "no prefix"))}'
     - task: run
       command: sparql:empty
     - task: run
@@ -82,13 +86,6 @@ commands:
       command: drupal:site-install
     - task: run
       command: dev:import-sparql-fixtures
-    # This is a safety net for the eventuality a developer lacks a mail catcher
-    # tool on their local environment. See the 'Development mail collector'
-    # `settings.php` section from `resources/runner/drupal.yml` for details.
-    - task: run
-      command: drush:module-install
-      arguments:
-        - devel
     - task: run
       command: testing:install-modules
     - task: run
@@ -97,8 +94,11 @@ commands:
         - site-clean
     # Checks for extensions metadata deprecations. Note that we run this after
     # site install as we need a bootstrapped Drupal.
-    - task: exec
-      command: ${drush.bin} joinup:check-extension-metadata-deprecation
+    # TODO: Re-enable this check when PHP is 8.2.14 or 8.2.15, in ISAICP-8337.
+    # See Re-enable this check when PHP is 8.2.14 or 8.2.15.
+    # See https://github.com/php/php-src/issues/8251
+    # - task: exec
+    #   command: ${drush.bin} joinup:check-extension-metadata-deprecation
     - task: exec
       command: ${drush.bin}
       arguments:
@@ -113,10 +113,6 @@ commands:
         - if (node_access_needs_rebuild()) { node_access_rebuild(); }
     - task: run
       command: config-readonly:enable
-    - task: exec
-      command: ${drush.bin}
-      arguments:
-        - core:requirements
 
   # Overrides the toolkit:install-clone command.
   toolkit:install-clone:
@@ -135,13 +131,6 @@ commands:
     # The `toolkit:run-deploy` command has enabled config read-only.
     - task: run
       command: config-readonly:disable
-    # This is a safety net for the eventuality a developer lacks a mail catcher
-    # tool on their local environment. See the 'Development mail collector'
-    # `settings.php` section from `resources/runner/drupal.yml` for details.
-    - task: run
-      command: drush:module-install
-      arguments:
-        - devel
     - task: run
       command: testing:install-modules
     - task: exec
@@ -162,10 +151,6 @@ commands:
         - site-clone
     - task: run
       command: config-readonly:enable
-    - task: exec
-      command: ${drush.bin}
-      arguments:
-        - core:requirements
 
   # Overrides the toolkit:test-phpcs command.
   toolkit:test-phpcs:
@@ -179,6 +164,8 @@ commands:
       command: test "$(git rev-parse --is-shallow-repository)" = "false" || git fetch --unshallow
     - task: run
       command: testing:phpcs-setup
+    - task: run
+      command: testing:lint-twig
     - task: exec
       command: ${phpcs.file.bin}
 

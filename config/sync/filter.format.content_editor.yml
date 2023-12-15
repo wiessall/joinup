@@ -3,6 +3,9 @@ langcode: en
 status: true
 dependencies:
   config:
+    - core.entity_view_mode.media.media_library_full_width
+    - core.entity_view_mode.media.media_library_half_width
+    - core.entity_view_mode.media.media_library_one_third_width
     - image.style.wysiwyg_full_width
     - image.style.wysiwyg_half_width
     - image.style.wysiwyg_one_third_width
@@ -14,7 +17,7 @@ dependencies:
     - joinup_core
     - joinup_video
     - linkit
-    - video_embed_wysiwyg
+    - media
 name: 'Content Editor'
 format: content_editor
 weight: -10
@@ -31,7 +34,7 @@ filters:
     status: true
     weight: -49
     settings:
-      allowed_html: '<em> <br> <strong> <cite> <blockquote cite> <code> <q> <ul type> <ol type start> <li> <dl> <dt> <dd> <h2 id> <h3 id> <h4 id> <h5 id> <h6 id> <p> <h1> <pre> <img src alt data-entity-type data-entity-uuid data-align data-caption data-image-style usemap width height> <table> <caption> <tbody> <thead> <tfoot> <th> <td> <tr> <a hreflang href data-entity-type data-entity-uuid !href accesskey id rel target title> <iframe src allowfullscreen mozallowfullscreen webkitallowfullscreen width height frameborder> <map name> <area alt coords href hreflang rel shape>'
+      allowed_html: '<br> <p> <h2 id> <h3 id> <h4 id> <cite> <q> <dl> <dt> <dd> <map name> <area alt coords href hreflang rel shape> <blockquote cite> <ul type> <ol type start> <h1> <h5 id> <h6 id> <img alt usemap> <a hreflang accesskey id rel target title href data-joinup-contact-information-href data-joinup-contact-information-login data-entity-uuid data-entity-type data-entity-substitution> <iframe src allowfullscreen mozallowfullscreen webkitallowfullscreen width height frameborder> <div class> <strong> <em> <code class="language-*"> <pre> <li> <table> <tr> <td rowspan colspan> <th rowspan colspan> <thead> <tbody> <tfoot> <caption> <drupal-media data-entity-type data-entity-uuid alt data-view-mode data-caption data-align>'
       filter_html_help: true
       filter_html_nofollow: false
   filter_htmlcorrector:
@@ -50,7 +53,7 @@ filters:
   filter_html_image_secure:
     id: filter_html_image_secure
     provider: filter
-    status: true
+    status: false
     weight: -45
     settings: {  }
   joinup_video:
@@ -108,16 +111,10 @@ filters:
   linkit:
     id: linkit
     provider: linkit
-    status: false
+    status: true
     weight: -36
     settings:
       title: true
-  video_embed_wysiwyg:
-    id: video_embed_wysiwyg
-    provider: video_embed_wysiwyg
-    status: true
-    weight: -48
-    settings: {  }
   embed_block:
     id: embed_block
     provider: embed_block
@@ -142,3 +139,17 @@ filters:
     status: true
     weight: -41
     settings: {  }
+  media_embed:
+    id: media_embed
+    provider: media
+    status: true
+    weight: 100
+    settings:
+      default_view_mode: media_library_half_width
+      allowed_view_modes:
+        media_library_full_width: media_library_full_width
+        media_library_half_width: media_library_half_width
+        media_library_one_third_width: media_library_one_third_width
+      allowed_media_types:
+        image: image
+        video: video

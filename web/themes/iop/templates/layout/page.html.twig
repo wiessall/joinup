@@ -41,7 +41,7 @@
  */
 #}
 {% set node_attributes = create_attribute() %}
-<div{{ node_attributes.addClass(node_classes, 'layout-container')}}>
+<div{{ node_attributes.addClass(node_classes, 'layout-container') }}>
   {% include '@ventuno/parts/header.html.twig' with {
     user_name: user_name,
     landing_page_links: landing_page_links,

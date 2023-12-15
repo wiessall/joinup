@@ -18,3 +18,11 @@ h4 {
     color: $primary-darker;
   }
 }
+
+// Overrides for accessibility.
+.bg-light {
+  .btn-link,
+  .button--link {
+    color: darken(saturate($link-color, 0.40), 1.57);
+  }
+}

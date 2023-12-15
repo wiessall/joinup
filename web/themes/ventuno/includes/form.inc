@@ -88,6 +88,20 @@ function ventuno_theme_suggestions_form_alter(array &$suggestions, array $variab
 }
 
 /**
+ * Implements hook_preprocess_form().
+ */
+function ventuno_preprocess_form(array &$variables): void {
+  $form_id = $variables['element']['#id'];
+
+  switch ($form_id) {
+    // Theme the form displayed in a modal when adding media through CKE5.
+    case 'views-exposed-form-media-library-widget':
+      $variables['attributes']['class'][] = 'my-0 row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-xl-4 g-3 align-items-end';
+      break;
+  }
+}
+
+/**
  * Implements hook_preprocess_form_element().
  */
 function ventuno_preprocess_form_element(array &$variables): void {
@@ -154,7 +168,9 @@ function ventuno_theme_suggestions_input_alter(array &$suggestions, array $varia
  * Implements hook_theme_suggestions_HOOK_alter().
  */
 function ventuno_theme_suggestions_select_alter(array &$suggestions, array $variables): void {
-  $suggestions[] = 'select__' . $variables['element']['#name'];
+  if (isset($variables['element']['#name'])) {
+    $suggestions[] = 'select__' . $variables['element']['#name'];
+  }
 }
 
 /**
@@ -170,13 +186,17 @@ function ventuno_preprocess_radios(array &$variables): void {
  * Implements hook_form_BASE_FORM_ID_alter().
  */
 function ventuno_form_poll_view_form_alter(array &$form, FormStateInterface $form_state, string $form_id): void {
-  foreach (['result', 'cancel'] as $element) {
+  foreach (['result', 'cancel', 'back'] as $element) {
     if (!isset($form['actions'][$element])) {
       continue;
     }
 
     $form['actions'][$element]['#button_type'] = 'link';
     $form['actions'][$element]['#attributes']['class'][] = 'p-0';
+  }
+
+  if (isset($form['actions']['back'])) {
+    $form['actions']['back']['#value'] = t('Hide results');
   }
 }
 
@@ -193,11 +213,12 @@ function ventuno_preprocess_input__submit(array &$variables): void {
  * Implements hook_preprocess_select().
  */
 function ventuno_preprocess_select(array &$variables): void {
-  $field_name = $variables['element']['#name'];
-  switch ($field_name) {
-    case 'field_topic':
-    case 'field_is_solution_type':
-      $variables['attributes']['class'][] = 'h-50vh';
-      break;
+  if (isset($variables['element']['#name'])) {
+    switch ($variables['element']['#name']) {
+      case 'field_topic':
+      case 'field_is_solution_type':
+        $variables['attributes']['class'][] = 'h-50vh';
+        break;
+    }
   }
 }

@@ -1,4 +1,4 @@
-@api @terms
+@api @terms @group-h
 Feature:
   Ensure curated list of topics on the homepage behave properly.
 
@@ -199,6 +199,12 @@ Feature:
     Given news content:
       | title  | headline | state     |
       | News 1 | News 1   | published |
+    And custom_page content:
+      | title          | state     |
+      | Popular quotes | published |
+    And I append "text" to "field_paragraphs_body" field in "node" entity with following "Popular Quotes" title:
+      | field_body:value  |     That's one small step for a man, a giant leap for mankind. |
+      | field_body:format | text_html                                                      |
     And the following topics are enabled in the homepage:
       | Economy and Welfare     |
       | Info                    |
@@ -211,16 +217,19 @@ Feature:
       | Background theme | light      |
       | Extra classes    | test-class |
     And I add a "Configurable listing" paragraph in the "Topic meta entity body" form field:
-      | layout position | 1                                       |
-      | region          | content                                 |
-      | Heading         | type: text - value: E-justice heading   |
-      | URL             | type: text - value: http://example.com  |
-      | Link text       | type: text - value: E-justice link text |
-      | List style      | type: select - value: List              |
-      | Query presets   | type: text - value: entity_bundle\|news |
+      | layout position | 1                                                       |
+      | region          | content                                                 |
+      | Heading         | type: text - value: E-justice heading                   |
+      | Action link     | type: text - value: http://example.com                  |
+      | Link text       | type: text - value: E-justice link text                 |
+      | List style      | type: select - value: List                              |
+      | Query presets   | type: text - value: entity_bundle\|news,custom_page\|IN |
 
     And I press "Save"
     Then I should see the "News 1" tile
+    And I should see the "Popular quotes" tile
+    # Regression test that text is trimmed properly.
+    Then the response should contain ">That's one small step for a man, a giant leap for mankind.<"
     And the url should match "/topic/law-and-justice/e-justice"
 
     When I go to the edit form of the topic meta entity of the "E-justice" topic "taxonomy term"
@@ -229,7 +238,7 @@ Feature:
       | layout position | 1                                       |
       | region          | content                                 |
       | Heading         | type: text - value: E-justice heading   |
-      | URL             | type: text - value: http://example.com  |
+      | Action link     | type: text - value: http://example.com  |
       | Link text       | type: text - value: E-justice link text |
       | List style      | type: select - value: Grid              |
       | Query presets   | type: text - value: entity_bundle\|news |
@@ -324,7 +333,7 @@ Feature:
       | layout position | 1                                       |
       | region          | content                                 |
       | Heading         | type: text - value: E-justice heading   |
-      | URL             | type: text - value: http://example.com  |
+      | Action link     | type: text - value: http://example.com  |
       | Link text       | type: text - value: E-justice link text |
       | List style      | type: select - value: List              |
       | Query presets   | type: text - value: entity_bundle\|news |
@@ -345,7 +354,7 @@ Feature:
       | layout position | 1                                                                                                                                       |
       | region          | content                                                                                                                                 |
       | Heading         | type: text - value: E-justice heading                                                                                                   |
-      | URL             | type: text - value: http://example.com                                                                                                  |
+      | Action link     | type: text - value: http://example.com                                                                                                  |
       | Link text       | type: text - value: E-justice link text                                                                                                 |
       | List style      | type: select - value: List                                                                                                              |
       | Query presets   | type: text - value: entity_bundle\|news\ntopic\|http://joinup.eu/ontology/topic#e-justice, http://joinup.eu/ontology/topic#e-health\|IN |
@@ -366,7 +375,7 @@ Feature:
       | layout position | 1                                                                                         |
       | region          | content                                                                                   |
       | Heading         | type: text - value: E-justice heading                                                     |
-      | URL             | type: text - value: http://example.com                                                    |
+      | Action link     | type: text - value: http://example.com                                                    |
       | Link text       | type: text - value: E-justice link text                                                   |
       | List style      | type: select - value: List                                                                |
       | Query presets   | type: text - value: entity_bundle\|news\ntopic\|http://joinup.eu/ontology/topic#e-justice |
@@ -396,7 +405,7 @@ Feature:
       | layout position | 1                                        |
       | region          | content                                  |
       | Heading         | type: text - value: E-justice heading    |
-      | URL             | type: text - value: http://example.com   |
+      | Action link     | type: text - value: http://example.com   |
       | Link text       | type: text - value: E-justice link text  |
       | List style      | type: select - value: List               |
       | Query presets   | type: text - value: entity_bundle\|event |
@@ -435,26 +444,29 @@ Feature:
       | layout position | 1                                         |
       | region          | content                                   |
       | Heading         | type: text - value: E-justice heading     |
-      | URL             | type: text - value: http://example.com    |
+      | Action link     | type: text - value: http://example.com    |
       | Link text       | type: text - value: E-justice link text   |
       | List style      | type: select - value: <list style>        |
       | Query presets   | type: text - value: entity_bundle\|<type> |
     And I press "Save"
-    Then I <should> see the image "linus.jpeg" in the "Custom tile" tile
+    # \Drupal\Driver\Fields\Drupal8\ImageHandler changes the file name to a
+    # random string, so the only thing we can check is the presence of any
+    # image.
+    Then there should be "<image count>" image in the "Custom tile" tile
 
     Examples:
-      | type        | should     | list style | state     |
-      | custom_page | should     | list       | published |
-      | custom_page | should     | grid       | published |
-      | news        | should     | list       | published |
-      | news        | should     | grid       | published |
-      | event       | should     | list       | published |
-      | event       | should     | grid       | published |
-      | document    | should     | list       | published |
-      | document    | should     | grid       | published |
+      | type        | image count | list style | state     |
+      | custom_page | 1           | list       | published |
+      | custom_page | 1           | grid       | published |
+      | news        | 1           | list       | published |
+      | news        | 1           | grid       | published |
+      | event       | 1           | list       | published |
+      | event       | 1           | grid       | published |
+      | document    | 1           | list       | published |
+      | document    | 1           | grid       | published |
       # Discussions don't have logos.
-      | discussion  | should not | list       | published |
-      | discussion  | should not | grid       | published |
+      | discussion  | 0           | list       | published |
+      | discussion  | 0           | grid       | published |
 
   @javascript
   Scenario: Up to 4 topics should be shown for tile-two view modes.
@@ -475,7 +487,7 @@ Feature:
       | layout position | 1                                       |
       | region          | content                                 |
       | Heading         | type: text - value: E-justice heading   |
-      | URL             | type: text - value: http://example.com  |
+      | Action link     | type: text - value: http://example.com  |
       | Link text       | type: text - value: E-justice link text |
       | List style      | type: select - value: List              |
       | Query presets   | type: text - value: entity_bundle\|news |
@@ -515,7 +527,7 @@ Feature:
       | layout position | 1                                                 |
       | region          | content                                           |
       | Heading         | type: text - value: E-justice heading             |
-      | URL             | type: text - value: http://example.com            |
+      | Action link     | type: text - value: http://example.com            |
       | Link text       | type: text - value: E-justice link text           |
       | List style      | type: select - value: List                        |
       | Query presets   | type: text - value: entity_bundle\|Nebuchadnezzar |
@@ -541,7 +553,7 @@ Feature:
       | layout position | 1                                              |
       | region          | content                                        |
       | Heading         | type: text - value: E-justice heading          |
-      | URL             | type: text - value: http://example.com         |
+      | Action link     | type: text - value: http://example.com         |
       | Link text       | type: text - value: E-justice link text        |
       | List style      | type: select - value: List                     |
       | Query presets   | type: text - value: entity_bundle\|custom_page |

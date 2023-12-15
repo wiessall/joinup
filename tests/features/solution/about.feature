@@ -1,4 +1,4 @@
-@api @group-e
+@api @group-g
 Feature: About this solution
   In order to expose basic information about my solutions
   As a solution owner or solution facilitator
@@ -379,7 +379,7 @@ Feature: About this solution
       | Extra classes    | test-class |
     And I click "Choose component"
     And I click "Text"
-    And the "Body" wysiwyg editor should have the buttons "Bold, Italic, Link, Unlink, Insert/Remove Bulleted List, Insert/Remove Numbered List, Contact us, Source"
+    And the "Body" wysiwyg editor should have the buttons "Bold (Ctrl+B), Italic (Ctrl+I), Link (Ctrl+K), Bulleted List, Numbered List,  Text alignment, Insert table, Contact us, Source"
     And I press the button "Contact us" in the "Body" wysiwyg editor
     And I press "Save" in the "Modal buttons" region
     And I press "Save"

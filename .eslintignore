@@ -28,6 +28,3 @@
 # Ignore database backups and temporary files directories.
 /db/
 /tmp/
-
-# Ignore files copied as they are.
-/web/modules/custom/joinup_core/js/jquery.timeago.min.js

@@ -53,6 +53,7 @@ drupal:
         - Memcache
         - Custom queue services
         - Monolog
+        - Stage file proxy
       site-clean:
         - Main settings
         - Databases
@@ -140,6 +141,8 @@ drupal:
         - Dashboard agent
         - Varnish purge
         - Reverse proxy
+      acc-override:
+        - Stage file proxy
     header: |
       <?php
 
@@ -221,6 +224,7 @@ drupal:
           'memcache_admin',
           'og_ui',
           'page_manager_ui',
+          'stage_file_proxy',
           'update',
           'upgrade_status',
           'views_ui',
@@ -260,15 +264,20 @@ drupal:
           'namespace' => 'Drupal\\joinup_sparql\\Driver\\Database\\joinup_sparql',
           'driver' => 'sparql',
         ];
-        $settings['joinup']['sparql_public_endpoint'] = getenv('DRUPAL_SPARQL_PUBLIC_ENDPOINT');
       Permissions: |
         $settings['skip_permissions_hardening'] = TRUE;
       Null mail collector: |
         $config['system.mail']['interface']['default'] = 'null';
         $config['mailsystem.settings']['defaults']['sender'] = 'null';
       Development mail collector: |
-        $config['system.mail']['interface']['default'] = 'devel_mail_log';
-        $config['mailsystem.settings']['defaults']['sender'] = 'devel_mail_log';
+        $config['swiftmailer.transport']['transport'] = 'smtp';
+        $config['swiftmailer.transport']['smtp_host'] = 'localhost';
+        $config['swiftmailer.transport']['smtp_port'] = 1025;
+        $config['swiftmailer.transport']['smtp_encryption'] = '0';
+        $config['swiftmailer.transport']['smtp_credential_provider'] = 'swiftmailer';
+        $config['swiftmailer.transport']['smtp_credentials'] = [
+          'swiftmailer' => ['username' => '', 'password' => ''],
+        ];
       Test mail collector: |
         $config['system.mail']['interface']['default'] = 'test_mail_collector';
         $config['mailsystem.settings']['defaults']['sender'] = 'test_mail_collector';
@@ -353,3 +362,8 @@ drupal:
       Reverse proxy: |
         $settings['reverse_proxy'] = (bool) getenv('DRUPAL_REVERSE_PROXY_ENABLE');
         $settings['reverse_proxy_addresses'] = array_filter(explode(',', (string) getenv('DRUPAL_REVERSE_PROXY_ADDRESSES')));
+      Stage file proxy: |
+        $config['stage_file_proxy.settings']['hotlink'] = TRUE;
+        $config['stage_file_proxy.settings']['origin'] = 'https://joinup.ec.europa.eu';
+        $config['stage_file_proxy.settings']['verify'] = FALSE;
+        $config['stage_file_proxy.settings']['origin_dir'] = 'sites/default/files';

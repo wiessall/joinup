@@ -1,15 +1,15 @@
-@api @group-g
-  # This features tests the workflow transitions.
-  #
-  # The steps @Then I go to the "news" content :title edit screen
-  # can be tested through the UI by going to the page of the content and press
-  # the edit button. But there are many edit buttons on the screen including
-  # the contextual links so there can be a false positive when searching for the button
-  # or when pressing an 'Edit' button.
-  #
-  # The steps @And the :title news content should (not )be published
-  # cannot be tested through the UI and are only for ensuring proper
-  # functionality.
+@api @group-i
+# This features tests the workflow transitions.
+#
+# The steps @Then I go to the "news" content :title edit screen
+# can be tested through the UI by going to the page of the content and press
+# the edit button. But there are many edit buttons on the screen including
+# the contextual links so there can be a false positive when searching for the button
+# or when pressing an 'Edit' button.
+#
+# The steps @And the :title news content should (not )be published
+# cannot be tested through the UI and are only for ensuring proper
+# functionality.
 Feature: News moderation.
   As a member, facilitator or collection owner
   In order to manage news about my collection
@@ -141,7 +141,7 @@ Feature: News moderation.
     And I go to the homepage of the "Justice League" collection
     And I click "Add news"
     Then I should see the heading "Add news"
-    And the following fields should be present "Headline, Short title, Logo, Content, Topic, Keywords, Geographical coverage"
+    And the following fields should be present "Headline, Short title, Logo, Content, Topic, Search keywords, Geographical coverage"
     # The entity is new, so the current workflow state should not be shown.
     And the following fields should not be present "Current workflow state"
 

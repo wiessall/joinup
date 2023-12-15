@@ -1,3 +1,4 @@
+# This fails in other groups, must be kept in default.
 @api
 Feature:
   - As a visitor, in order to register to Joinup, I have to accept the site's
@@ -40,7 +41,7 @@ Feature:
 
     # The user has been redirected to its user account edit form.
     And the following fields should be present "Email, First name, Family name, Photo, Country of origin, Professional domain, Business title"
-    And the following fields should be present "Facebook, Twitter, LinkedIn, GitHub, SlideShare, Youtube, Vimeo"
+    And the following fields should be present "Facebook, X, LinkedIn, GitHub, SlideShare, Youtube, Vimeo"
 
     # Login again to check that the acceptance enforcement has gone.
     Given I click "Sign out"

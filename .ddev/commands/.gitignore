@@ -1,0 +1,3 @@
+# Command file names starting with underscore are local commands and are not
+# under the VCS/Git control.
+/*/_*

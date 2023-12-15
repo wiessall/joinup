@@ -72,7 +72,7 @@
 {% elseif content.field_event_logo|render|striptags|trim %}
   {% set image_url = site_url ~ content.field_event_logo|render|striptags|trim %}
 {% else %}
-  {% set image_url = site_url ~ '/' ~ directory ~ '/images/digest-message/' ~ node.bundle ~ '_icon.png'%}
+  {% set image_url = site_url ~ '/' ~ directory ~ '/images/digest-message/' ~ node.bundle ~ '_icon.png' %}
 {% endif %}
 
 {% if content.field_document_publication_date|render %}

@@ -159,6 +159,11 @@ forms:
   dependencies:
     - ventuno/highlight-invalid-fields.js
 
+webform:
+  css:
+    theme:
+      assets/css/webform.min.css: { minified: true }
+
 highlight-invalid-fields.js:
   header: true
   js:
@@ -224,6 +229,10 @@ navbar:
   css:
     theme:
       assets/css/navbar.min.css: { minified: true }
+  js:
+    assets/js/navbar-hover-dropdown.min.js: { minified: true }
+  dependencies:
+    - core/once
 
 navbar-search:
   css:
@@ -261,6 +270,8 @@ paragraph:
   css:
     theme:
       assets/css/paragraph.min.css: { minified: true }
+  js:
+    assets/js/paragraph-inline-img.min.js: { minified: true, attributes: { defer: true } }
 
 paragraph__accordion:
   dependencies:
@@ -279,6 +290,8 @@ paragraph__carousel.js:
     assets/js/paragraph--carousel.min.js: { minified: true, attributes: { defer: true } }
   dependencies:
     - ventuno/glide
+    - core/drupal
+    - core/once
 
 paragraph__layout:
   css:
@@ -290,20 +303,30 @@ paragraph__heading:
     theme:
       assets/css/paragraph--heading.min.css: { minified: true }
 
-paragraph__quote:
-  css:
-    theme:
-      assets/css/paragraph--quote.min.css: { minified: true }
-
 paragraph__poll:
   css:
     theme:
       assets/css/paragraph--poll.min.css: { minified: true }
 
+paragraph__simple_paragraph:
+  css:
+    theme:
+      assets/css/paragraph--simple-paragraph.min.css: { minified: true }
+
+paragraph__social_media:
+  css:
+    theme:
+      assets/css/paragraph--social-media.min.css: { minified: true }
+
 paragraph__testimony:
   css:
     theme:
       assets/css/paragraph--testimony.min.css: { minified: true }
+
+paragraph__tiles:
+  css:
+    theme:
+      assets/css/paragraph--tiles.min.css: { minified: true }
 
 paragraph__video:
   css:

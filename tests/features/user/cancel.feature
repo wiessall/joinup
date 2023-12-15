@@ -1,4 +1,4 @@
-@api @group-f
+@api @group-i
 Feature:
   In order to efficiently manage users
   As a moderator of the website
@@ -31,7 +31,7 @@ Feature:
     When I click "Edit" in the "Alicia Potter" row
     Then I should see the warning message "This user account is cancelled. Edit is disabled."
     # On a cancelled account edit form all fields are disabled.
-    And the following fields should be disabled "First name,Family name,Allow user to log in via CAS,CAS Username,Email,Username,Photo,Country of origin,Professional domain,Business title,Organisation,Enable the search field,Facebook,GitHub,LinkedIn,SlideShare,Twitter,Vimeo,Youtube,Save"
+    And the following fields should be disabled "First name,Family name,Allow user to log in via CAS,CAS Username,Email,Username,Photo,Country of origin,Professional domain,Business title,Organisation,Enable the search field,Facebook,GitHub,LinkedIn,SlideShare,X,Vimeo,Youtube,Save"
 
   Scenario: A moderator deletes a user using the administrative UI.
     Given the following collection:

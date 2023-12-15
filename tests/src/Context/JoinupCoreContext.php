@@ -124,11 +124,8 @@ class JoinupCoreContext extends RawDrupalContext {
     // `is_visible` flag disabled to indicate they only can be interacted with
     // in a limited way.
     $locator_visibility_mapping = [
-      '.mdl-chip__text, .navbar-search .search-badge' => TRUE,
+      '.invite-form__list .badge, .navbar-search .search-badge' => TRUE,
     ];
-    if (!$this->hasJavascriptSupport()) {
-      $locator_visibility_mapping['.mdl-chipfield__input'] = FALSE;
-    }
     foreach ($locator_visibility_mapping as $locator => $is_visible) {
       foreach ($base_element->findAll('css', $locator) as $element) {
         $chips[] = new Chip($element, $is_visible);
@@ -393,31 +390,6 @@ class JoinupCoreContext extends RawDrupalContext {
     $entity->setNewRevision();
     $entity->set('field_state', $state);
     $entity->save();
-  }
-
-  /**
-   * Checks if page elements have unique id elements.
-   *
-   * @throws \Exception
-   *   Thrown when element's id is not unique.
-   *
-   * @Then page elements must have unique id attributes
-   */
-  public function pageElementsMustHaveUniqueIdAttributes(): void {
-    $elementIds = [];
-
-    $elementsWithIdAttribute = $this->getSession()
-      ->getPage()
-      ->findAll('css', '[id]');
-    foreach ($elementsWithIdAttribute as $elementWithIdAttribute) {
-      $elementId = $elementWithIdAttribute->getAttribute('id');
-
-      if (in_array($elementId, $elementIds)) {
-        throw new \Exception("'$elementId' id attribute is used by more than one element");
-      }
-
-      $elementIds[] = $elementId;
-    }
   }
 
   /**

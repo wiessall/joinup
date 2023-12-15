@@ -49,12 +49,10 @@
 /tmp/
 /web/VERSION.txt
 
-# Ignore local docker-compose file.
-/docker-compose.override.yml
-
 # Ignore project specific temporary generated files.
 /latest.sh1
 /temporary_inputfile.txt
 
 # Used by the CI for artifacts.
 /debug/
+.twig-cs-fixer.cache

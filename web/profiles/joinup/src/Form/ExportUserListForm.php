@@ -324,7 +324,13 @@ class ExportUserListForm extends FormBase {
    *   The first value.
    */
   protected function getFirstValue(array $value) {
-    return reset($value)['value'];
+    if (($firstItem = reset($value)) === FALSE) {
+      return NULL;
+    }
+
+    return array_key_exists('value', $firstItem)
+      ? $firstItem['value']
+      : $firstItem[key($firstItem)];
   }
 
   /**

@@ -1,6 +1,8 @@
+# Contains a scenario with @group-clone annotation.
 @api
 Feature: Messaging group announcements
 
+  @group-d
   Scenario Outline: Announcement creation and transitions
 
     Given the following <group>s:
@@ -408,6 +410,7 @@ Feature: Messaging group announcements
       | collection |
       | solution   |
 
+  @javascript @group-d
   Scenario: Announcement moderation
     Given the following collections:
       | title       | state     |
@@ -449,8 +452,7 @@ Feature: Messaging group announcements
     Given I am logged in as "Xela moderator"
     When I click "Announcements" in the "Administration toolbar"
 
-    Then the "Group" field should contain the "- Any -,Collection1 (Collection),Collection2 (Collection),Collection1 Solution1 (Solution),Collection1 Solution2 (Solution),Collection2 Solution1 (Solution)" options
-    And the "State" field should contain the "- Any -,Draft,Pending approval,Delivered,Rejected" options
+    Then the "State" field should contain the "- Any -,Draft,Pending approval,Delivered,Rejected" options
     And the "announcement list" table should be:
       | Group                 | Subject            | State            | Created on | Author           | Edit |
       | Collection2 Solution1 | Announcement1 C2S1 | Delivered        | 03/08/2022 | Miau user        |      |
@@ -460,7 +462,9 @@ Feature: Messaging group announcements
       | Collection1           | Announcement1 C1   | Draft            | 05/11/2005 | Lory Facilitator | edit |
       | Collection1 Solution2 | Announcement1 C1S2 | Draft            | 30/04/1999 | Lory Facilitator | edit |
 
-    When I select "Collection1 Solution1 (Solution)" from "Group"
+    When I type "Collection1 Solution1" in the "group" autocomplete field
+    Then I wait until the page contains the text "Collection1 Solution1"
+    And I pick "Collection1 Solution1" from the autocomplete suggestions
     And I press "Apply"
     Then the "announcement list" table should be:
       | Group                 | Subject            | State            | Created on | Author           | Edit |

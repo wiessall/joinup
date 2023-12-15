@@ -10,6 +10,10 @@ dependencies:
     - filter.format.minimal
     - filter.format.simple_html
     - filter.format.text_html
+    - filter.format.webform_default
+    - media.type.file
+    - media.type.image
+    - media.type.video
     - node.type.document
   module:
     - comment
@@ -54,6 +58,8 @@ permissions:
   - 'cancel own vote'
   - 'create contact_information rdf entity'
   - 'create document content'
+  - 'create file media'
+  - 'create image media'
   - 'create owner rdf entity'
   - 'create paragraph content accordion'
   - 'create paragraph content accordion_item'
@@ -65,10 +71,14 @@ permissions:
   - 'create paragraph content layout'
   - 'create paragraph content poll'
   - 'create paragraph content quote'
+  - 'create paragraph content social_media'
   - 'create paragraph content testimony'
   - 'create paragraph content text'
+  - 'create paragraph content tile'
+  - 'create paragraph content tiles'
   - 'create paragraph content video'
   - 'create polls'
+  - 'create video media'
   - 'delete own comments'
   - 'delete own document content'
   - 'delete paragraph content accordion'
@@ -83,8 +93,11 @@ permissions:
   - 'delete paragraph content poll'
   - 'delete paragraph content quote'
   - 'delete paragraph content simple_paragraph'
+  - 'delete paragraph content social_media'
   - 'delete paragraph content testimony'
   - 'delete paragraph content text'
+  - 'delete paragraph content tile'
+  - 'delete paragraph content tiles'
   - 'delete paragraph content video'
   - 'edit any pools'
   - 'edit behavior plugin settings'
@@ -177,8 +190,11 @@ permissions:
   - 'update paragraph content poll'
   - 'update paragraph content quote'
   - 'update paragraph content simple_paragraph'
+  - 'update paragraph content social_media'
   - 'update paragraph content testimony'
   - 'update paragraph content text'
+  - 'update paragraph content tile'
+  - 'update paragraph content tiles'
   - 'update paragraph content video'
   - 'use search_api_autocomplete for search'
   - 'use text format basic_html'
@@ -188,6 +204,7 @@ permissions:
   - 'use text format minimal'
   - 'use text format simple_html'
   - 'use text format text_html'
+  - 'use text format webform_default'
   - 'view compatibility documents'
   - 'view eif wrapper entity'
   - 'view eif_perspective rdf-meta-entity'
@@ -215,9 +232,13 @@ permissions:
   - 'view paragraph content poll'
   - 'view paragraph content quote'
   - 'view paragraph content simple_paragraph'
+  - 'view paragraph content social_media'
   - 'view paragraph content testimony'
   - 'view paragraph content text'
+  - 'view paragraph content tile'
+  - 'view paragraph content tiles'
   - 'view paragraph content video'
+  - 'view paragraph content webform'
   - 'view published sitewide alert entities'
   - 'view rdf entity'
   - 'view topic meta-entity'

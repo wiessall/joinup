@@ -48,6 +48,34 @@ interface EifInterface {
   public const EIF_ONLINE_ASSISTANT = 705372;
 
   /**
+   * The NID target of the solution category filter.
+   *
+   * @var null|int
+   */
+  public const EIF_SOLUTION_CATEGORY_FILTER_TARGET_ID = NULL;
+
+  /**
+   * The NID target of the principle filter.
+   *
+   * @var int
+   */
+  public const EIF_PRINCIPLE_FILTER_TARGET_ID = 707251;
+
+  /**
+   * The NID target of the layer filter.
+   *
+   * @var int
+   */
+  public const EIF_LAYER_FILTER_TARGET_ID = 707252;
+
+  /**
+   * The NID target of the model filter.
+   *
+   * @var int
+   */
+  public const EIF_MODEL_FILTER_TARGET_ID = 707200;
+
+  /**
    * Returns the EIF categories.
    *
    * This is a wrapper around static::EIF_ID, used in the

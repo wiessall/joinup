@@ -17,12 +17,15 @@ dependencies:
     - paragraphs.paragraphs_type.image
     - paragraphs.paragraphs_type.json_map
     - paragraphs.paragraphs_type.layout
-    - paragraphs.paragraphs_type.quote
     - paragraphs.paragraphs_type.poll
+    - paragraphs.paragraphs_type.quote
     - paragraphs.paragraphs_type.simple_paragraph
+    - paragraphs.paragraphs_type.social_media
     - paragraphs.paragraphs_type.testimony
     - paragraphs.paragraphs_type.text
+    - paragraphs.paragraphs_type.tiles
     - paragraphs.paragraphs_type.video
+    - paragraphs.paragraphs_type.webform
   module:
     - entity_reference_revisions
 id: node.custom_page.field_paragraphs_body
@@ -51,84 +54,99 @@ settings:
       image: image
       layout: layout
       json_map: json_map
-      quote: quote
       poll: poll
+      quote: quote
       simple_paragraph: simple_paragraph
+      social_media: social_media
       testimony: testimony
+      tiles: tiles
       text: text
       video: video
+      webform: webform
     negate: 0
     target_bundles_drag_drop:
       1_column_layout:
-        weight: -30
+        weight: -33
         enabled: false
       2_column_featured_left:
-        weight: -27
+        weight: -30
         enabled: false
       2_column_featured_right:
-        weight: -26
-        enabled: false
-      2_column_layout:
         weight: -29
         enabled: false
+      2_column_layout:
+        weight: -32
+        enabled: false
       3_column_layout:
-        weight: -28
+        weight: -31
         enabled: false
       accordion:
-        weight: -49
+        weight: -55
         enabled: true
       accordion_item:
-        weight: -48
+        weight: -54
         enabled: false
       call_to_action:
-        weight: -47
+        weight: -53
         enabled: true
       carousel:
-        weight: -46
+        weight: -52
         enabled: true
       configurable_listing:
-        weight: -45
+        weight: -51
         enabled: true
       content_listing:
-        weight: -44
+        weight: -50
         enabled: true
       entity_reference:
-        weight: -43
+        weight: -49
         enabled: true
       github_feed:
-        weight: -42
+        weight: -48
         enabled: true
       heading:
-        weight: -41
+        weight: -47
         enabled: true
       iframe:
-        weight: -40
+        weight: -46
         enabled: true
       image:
-        weight: -39
+        weight: -45
         enabled: true
       json_map:
-        weight: -37
+        weight: -43
         enabled: true
       layout:
-        weight: -38
+        weight: -44
         enabled: true
       poll:
-        weight: -37
+        weight: -42
         enabled: true
       quote:
-        weight: -36
+        weight: -41
         enabled: true
       simple_paragraph:
-        weight: -34
+        weight: -40
+        enabled: true
+      social_media:
+        weight: -39
         enabled: true
       testimony:
-        weight: -33
+        weight: -38
         enabled: true
       text:
-        weight: -32
+        weight: -35
+        enabled: true
+      tile:
+        weight: -37
+        enabled: false
+      tiles:
+        weight: -36
         enabled: true
       video:
-        weight: -31
+        weight: -34
+        enabled: true
+      webform:
+        weight: -32
         enabled: true
 field_type: entity_reference_revisions

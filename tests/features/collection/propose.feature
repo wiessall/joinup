@@ -1,4 +1,4 @@
-@api @group-e
+@api @group-b
 Feature: Proposing a collection
   In order to create a new collection on Joinup
   As the product owner of a collection of software solutions
@@ -56,7 +56,8 @@ Feature: Proposing a collection
       # Contact information data.
       | Name                  | Contact person                                                                                       |
       | E-mail                | contact_person@example.com                                                                           |
-      | Keywords              | Some keyword                                                                                         |
+      | Search keywords       | Some keyword                                                                                         |
+    Then I should see the text "Add one keyword or keyword phrase per line. Relevant keywords improve the search ranking of your content."
     When I select "HR" from "Topic"
     And I select the radio button "Only members can create content."
     And I check "Moderated"
@@ -71,7 +72,7 @@ Feature: Proposing a collection
       | Field Logo is required   |
     And I should see the heading "Ancient and Classical Mythology"
     # Regression test for the keywords field in the about page.
-    And I should not see the text "Keywords" in the "Content" region
+    And I should not see the text "Search keywords" in the "Content" region
     And I should not see the text "Some keyword" in the "Content" region
     And I should see a logo on the header
     And I should see "Thank you for proposing a collection. Your request is currently pending approval by the site administrator."

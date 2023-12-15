@@ -1,4 +1,4 @@
-@api @group-f
+@api @group-a
 Feature: Contact information access
   In order to see contextualized information
   As a visitor

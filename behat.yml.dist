@@ -6,6 +6,18 @@
   - Drupal\DrupalExtension\Context\DrushContext
   - Drupal\DrupalExtension\Context\MarkupContext
   - Drupal\DrupalExtension\Context\MessageContext
+  - Drupal\joinup\Context\AccessibilityContext:
+      # See https://github.com/dequelabs/axe-core/blob/HEAD/doc/API.md#axe-core-tags
+      # Todo The list of tags should be expanded in ISAICP-8256.
+      # See https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-8256
+      standardTags:
+        wcag21a: WCAG 2.1 A
+        wcag21aa: WCAG 2.1 AA
+        wcag411: Criterion 4.1.1
+        'cat.text-alternatives': Image text alternative
+      excludeElements:
+        # Third-party code injected in page with Javascript.
+        - .globan
   - Drupal\joinup\Context\AdmsValidatorContext
   - Drupal\joinup\Context\AssetDistributionContext
   - Drupal\joinup\Context\AssetReleaseContext
@@ -47,6 +59,8 @@
   - Drupal\joinup\Context\JoinupSeoContext
   - Drupal\joinup\Context\JoinupSubscriptionContext
   - Drupal\joinup\Context\JoinupUserContext
+  - Drupal\joinup\Context\LogRecordsContext
+  - Drupal\joinup\Context\MediaContext
   - Drupal\joinup\Context\MetaEntityContext
   - Drupal\joinup\Context\MinkContext
   - Drupal\joinup\Context\ModerationContext
@@ -87,7 +101,9 @@ default:
       base_url: ${env.DRUPAL_BASE_URL}
       ajax_timeout: 10
       files_path: ${joinup.dir}/tests/fixtures/files
-      browserkit_http: ~
+      browserkit_http:
+        guzzle_request_options:
+          verify: false
       javascript_session: selenium2
       browser_name: ${behat.browser_name}
       selenium2:
@@ -132,6 +148,7 @@ default:
         'licence comparer': 'table[data-drupal-selector="licence-comparer"]'
         'pipeline log': 'table.joinup-pipeline-log-table'
         'subscribers report': 'table'
+        'media admin': 'form[data-drupal-selector="views-form-media-media-page-list"] table'
     Drupal\DrupalExtension:
       api_driver: 'drupal'
       blackbox: ~
@@ -181,6 +198,7 @@ default:
         Draft unpublished block: '#block-ventuno-unpublished-draft'
         Proposed unpublished block: '#block-ventuno-unpublished-proposed'
         Other unpublished block: '#block-ventuno-unpublished-other'
+        Visually hidden title: '#block-ventuno-pagetitle .visually-hidden'
       drupal:
         drupal_root: ${joinup.site_dir}
       selectors:
@@ -240,8 +258,19 @@ clean:
       paths: *paths
       filters:
         tags: '~@wip&&@group-g'
+    group_h:
+      contexts: *contexts
+      paths: *paths
+      filters:
+        tags: '~@wip&&@group-h'
+    group_i:
+      contexts: *contexts
+      paths: *paths
+      filters:
+        tags: '~@wip&&@group-i'
+
     default:
       contexts: *contexts
       paths: *paths
       filters:
-        tags: '~@wip&&~@group-a&&~@group-b&&~@group-c&&~@group-d&&~@group-e&&~@group-f&&~@group-g&&~@group-clone'
+        tags: '~@wip&&~@group-a&&~@group-b&&~@group-c&&~@group-d&&~@group-e&&~@group-f&&~@group-g&&~@group-h&&~@group-i&&~@group-clone'

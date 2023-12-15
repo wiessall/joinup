@@ -1,4 +1,4 @@
-@api @group-g
+@api @group-i
 Feature: Video API
   In order to manage videos programmatically
   As a backend developer
@@ -18,7 +18,7 @@ Feature: Video API
       | content creation | facilitators and authors |
       | state            | published                |
     And video content:
-      | title       | body        | field_video                                 | og_audience   |
+      | title       | body        | video_url                                   | og_audience   |
       | Dummy Video | Dummy text. | https://www.youtube.com/watch?v=uLcS7uIlqPo | Video library |
     Then I should have a "Video" page titled "Dummy Video"
 

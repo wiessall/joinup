@@ -60,7 +60,7 @@ function joinup_core_theme(array $existing, string $type, string $theme, string 
  * Implements hook_requirements_alter().
  */
 function joinup_core_requirements_alter(array &$requirements): void {
-  $ignored = getenv('DRUPAL_STATUS_REPORT_IGNORE') ?: 'update status,joinup_core_root_user_blocked,search_api_solr_schema_joinup_modifications,deprecated_modules,deprecated_themes,metatag_maintenance_mode,search_api_pending_tasks';
+  $ignored = getenv('DRUPAL_STATUS_REPORT_IGNORE') ?: 'update status,joinup_core_root_user_blocked,search_api_solr_schema_joinup_modifications,metatag_maintenance_mode,webform_libraries';
   $ignored = array_map('trim', explode(',', $ignored));
 
   $requirements = array_filter($requirements, function (string $requirement) use ($ignored): bool {
@@ -174,27 +174,6 @@ function joinup_core_file_delete(EntityInterface $entity) {
 }
 
 /**
- * Implements hook_editor_js_settings_alter().
- *
- * Strip off the h1, h5, h6 tag format options from the 'Format' dropdown.
- * This does not remove the ability of the user to enter or render these tags.
- *
- * @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-3682
- */
-function joinup_core_editor_js_settings_alter(array &$settings) {
-  if (isset($settings['editor']['formats']['content_editor']) && $settings['editor']['formats']['content_editor']['format'] === 'content_editor') {
-    $options = explode(';', $settings['editor']['formats']['content_editor']['editorSettings']['format_tags']);
-    $options = array_diff($options, ['h1', 'h5', 'h6']);
-    $settings['editor']['formats']['content_editor']['editorSettings']['format_tags'] = implode(';', $options);
-    // Hide image resizer through js settings.
-    // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-3921
-    foreach ($settings['editor']['formats'] as &$format_settings) {
-      $format_settings['editorSettings']['image2_disableResizer'] = TRUE;
-    }
-  }
-}
-
-/**
  * Implements hook_preprocess_HOOK().
  *
  * @see template_preprocess_image_formatter()
@@ -228,6 +207,7 @@ function joinup_core_config_readonly_whitelist_patterns() {
     'system.menu.footer-follow-us',
     'system.menu.footer-help-and-support',
     'system.menu.support',
+    'system.menu.navbar',
     // The outdated content threshold is editable by moderators.
     'joinup_core.outdated_content_threshold',
     'core.menu.static_menu_link_overrides',
