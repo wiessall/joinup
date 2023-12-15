@@ -51,6 +51,7 @@ Feature: Collections Overview
     Then I should see the heading "Propose collection"
     When I fill in the following:
       | Title       | Colonies in space                   |
+      | Abstract    | Some space mumbo jumbo abstract.    |
       | Description | Some space mumbo jumbo description. |
       # Contact information data.
       | Name        | Overviewer contact                  |

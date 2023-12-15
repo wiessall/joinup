@@ -349,6 +349,7 @@ class GroupContentUpdateUrlAliasTest extends JoinupExistingSiteTestBase {
       'rid' => 'collection',
       'id' => 'http://collection',
       'label' => 'collection',
+      'field_ar_abstract' => $this->randomString(),
       'field_ar_description' => $this->randomString(),
       'field_ar_state' => 'published',
       'field_ar_owner' => 'http://example.com/owner',
