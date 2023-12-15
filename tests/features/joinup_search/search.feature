@@ -403,7 +403,7 @@ Feature: Global search
     And I select "LGPL" from "Licence"
     And I select "CSV" from "Format"
     And I select "Human Language" from "Representation technique"
-    And I press "Save"
+    And I press "Update"
     Then I should see the heading "DistroZzolu"
 
     # Repeat the previous searches to prove that the initial keywords were
@@ -497,7 +497,7 @@ Feature: Global search
     And I select "LGPL" from "Licence"
     And I select "CSV" from "Format"
     And I select "Human Language" from "Representation technique"
-    And I press "Save"
+    And I press "Update"
 
     # Repeat the previous searches to prove that the initial keywords were
     # removed from the Search API index.
