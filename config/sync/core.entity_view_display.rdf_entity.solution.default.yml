@@ -228,6 +228,33 @@ third_party_settings:
                 third_party_settings: {  }
             weight: 2
             additional: {  }
+          52ce8db3-d18f-45eb-a5bf-b2e7b2db5745:
+            uuid: 52ce8db3-d18f-45eb-a5bf-b2e7b2db5745
+            region: content
+            configuration:
+              id: 'field_block:rdf_entity:solution:field_spatial_coverage'
+              label: 'Geographical coverage'
+              label_display: '0'
+              provider: layout_builder
+              context_mapping:
+                entity: layout_builder.entity
+                view_mode: view_mode
+              formatter:
+                type: entity_reference_label
+                label: above
+                settings:
+                  link: false
+                third_party_settings:
+                  field_delimiter:
+                    delimiter: ','
+                  field_formatter_range:
+                    order: 0
+                    limit: 0
+                    offset: 0
+                  template_suggestion:
+                    template_suggestion: ''
+            weight: 3
+            additional: {  }
         third_party_settings: {  }
       -
         layout_id: layout_onecol
@@ -255,7 +282,82 @@ third_party_settings:
         layout_settings:
           label: 'Detailed items'
           context_mapping: {  }
-        components: {  }
+        components:
+          a6db9a21-e068-4956-bc80-546313dacf23:
+            uuid: a6db9a21-e068-4956-bc80-546313dacf23
+            region: content
+            configuration:
+              id: 'field_block:rdf_entity:solution:field_is_solution_type'
+              label: 'Solution type'
+              label_display: '0'
+              provider: layout_builder
+              context_mapping:
+                entity: layout_builder.entity
+                view_mode: view_mode
+              formatter:
+                type: entity_reference_label
+                label: above
+                settings:
+                  link: false
+                third_party_settings:
+                  field_delimiter:
+                    delimiter: ','
+                  field_formatter_range:
+                    order: 0
+                    limit: 0
+                    offset: 0
+                  template_suggestion:
+                    template_suggestion: ''
+            weight: 0
+            additional: {  }
+          3cf24ce9-8700-44c3-a663-1834b2f44c4d:
+            uuid: 3cf24ce9-8700-44c3-a663-1834b2f44c4d
+            region: content
+            configuration:
+              id: 'field_block:rdf_entity:solution:field_is_language'
+              label: Languages
+              label_display: '0'
+              provider: layout_builder
+              context_mapping:
+                entity: layout_builder.entity
+                view_mode: view_mode
+              formatter:
+                type: entity_reference_label
+                label: above
+                settings:
+                  link: false
+                third_party_settings:
+                  field_delimiter:
+                    delimiter: ','
+                  field_formatter_range:
+                    order: 0
+                    limit: 0
+                    offset: 0
+                  template_suggestion:
+                    template_suggestion: ''
+            weight: 1
+            additional: {  }
+          bbf37e40-0a11-4edc-bbcf-1b43cae0304e:
+            uuid: bbf37e40-0a11-4edc-bbcf-1b43cae0304e
+            region: content
+            configuration:
+              id: 'field_block:rdf_entity:solution:field_status'
+              label: Status
+              label_display: '0'
+              provider: layout_builder
+              context_mapping:
+                entity: layout_builder.entity
+                view_mode: view_mode
+              formatter:
+                type: entity_reference_label
+                label: above
+                settings:
+                  link: false
+                third_party_settings:
+                  template_suggestion:
+                    template_suggestion: ''
+            weight: 2
+            additional: {  }
         third_party_settings: {  }
       -
         layout_id: layout_onecol
