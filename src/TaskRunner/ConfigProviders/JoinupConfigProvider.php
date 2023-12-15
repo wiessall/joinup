@@ -4,7 +4,6 @@ declare(strict_types = 1);
 
 namespace Joinup\TaskRunner\ConfigProviders;
 
-use Drupal\Component\Serialization\Yaml;
 use DrupalFinder\DrupalFinder;
 use OpenEuropa\TaskRunner\Contract\ConfigProviderInterface;
 use OpenEuropa\TaskRunner\Traits\ConfigFromFilesTrait;
@@ -44,14 +43,6 @@ class JoinupConfigProvider implements ConfigProviderInterface {
     foreach (getenv() as $name => $value) {
       $config->set("env.{$name}", $value);
     }
-
-    // Set the Solr version by reading the .opts.yml file.
-    $opts = Yaml::decode(file_get_contents("{$joinup_dir}/.opts.yml"));
-    $solr_major_version = $opts['solr_version'] ?? NULL;
-    if (!$solr_major_version) {
-      throw new \Exception("The 'solr_version' option is missing from .opts.yml file.");
-    }
-    $config->set('solr.version.major', intval($solr_major_version));
 
     // Import configurations from ./resources/runner/.
     static::importFromFiles($config, glob('resources/runner/*.yml'));
