@@ -92,33 +92,3 @@ function joinup_core_requirements($phase): array {
 
   return $requirements;
 }
-
-/**
- * Add state value to asset distributions.
- */
-function joinup_core_update_110100(?array &$sandbox = NULL): string {
-  /** @var \Drupal\sparql_entity_storage\SparqlEntityStorageInterface $storage */
-  $storage = \Drupal::entityTypeManager()->getStorage('rdf_entity');
-
-  if (!isset($sandbox['rids'])) {
-    $query = $storage->getQuery()->accessCheck(FALSE);
-    $query->condition('rid', ['asset_distribution'], 'IN');
-
-    $sandbox['rids'] = $query->execute();
-    $sandbox['total'] = count($sandbox['rids']);
-    $sandbox['progress'] = 0;
-  }
-
-  $rids = array_splice($sandbox['rids'], 0, 50);
-  /** @var \Drupal\asset_distribution\Entity\AssetDistributionInterface $rdf_entity */
-  foreach ($storage->loadMultiple($rids) as $rdf_entity) {
-    $rdf_entity->set('field_ad_state', 'published');
-    $rdf_entity->skip_notification = TRUE;
-    $rdf_entity->save();
-  }
-
-  $sandbox['progress'] += count($rids);
-  $sandbox['#finished'] = (int) empty($sandbox['rids']);
-
-  return "Processed {$sandbox['progress']} out of {$sandbox['total']} distributions";
-}

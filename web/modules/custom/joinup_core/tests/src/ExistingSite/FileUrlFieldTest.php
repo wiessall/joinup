@@ -88,6 +88,7 @@ class FileUrlFieldTest extends JoinupExistingSiteTestBase {
       'field_ad_licence' => $licence->id(),
       'field_ad_description' => $this->randomString(),
       'parent' => $solution,
+      'field_ad_state' => 'published',
     ]);
 
     $field_name = 'field_ad_access_url';
