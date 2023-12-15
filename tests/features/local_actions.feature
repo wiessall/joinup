@@ -38,6 +38,7 @@ Feature:
     Given distribution:
       | title  | Test distribution |
       | parent | Test release      |
+      | state  | published         |
     When I go to the "Test distribution" distribution
     Then I should not see the link "View" in the "Entity actions" region
     And I should not see the link "Manage content"
