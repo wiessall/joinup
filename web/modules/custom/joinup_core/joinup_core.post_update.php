@@ -20,7 +20,7 @@ use Drupal\sparql_entity_storage\UriEncoder;
 /**
  * Remove 'About' from menu.
  */
-function joinup_core_post_update_110000(array &$sandbox): string {
+function joinup_core_post_update_110100(array &$sandbox): string {
   $entityTypeManager = \Drupal::entityTypeManager();
   /** @var  \Drupal\menu_link_content\MenuLinkContentStorageInterface $menuLinkContentStorage */
   $menuLinkContentStorage = $entityTypeManager->getStorage('menu_link_content');
@@ -53,7 +53,7 @@ function joinup_core_post_update_110000(array &$sandbox): string {
 /**
  * Disable 'Members' and 'EIF Perspective' from menu.
  */
-function joinup_core_post_update_110001(array &$sandbox): string {
+function joinup_core_post_update_110101(array &$sandbox): string {
   $entityTypeManager = \Drupal::entityTypeManager();
   /** @var  \Drupal\menu_link_content\MenuLinkContentStorageInterface $menuLinkContentStorage */
   $menuLinkContentStorage = $entityTypeManager->getStorage('menu_link_content');
@@ -92,7 +92,7 @@ function joinup_core_post_update_110001(array &$sandbox): string {
 /**
  * Redirect removed about pages to canonical page.
  */
-function joinup_core_post_update_110002(array &$sandbox): string {
+function joinup_core_post_update_110102(array &$sandbox): string {
   /** @var \Drupal\sparql_entity_storage\SparqlEntityStorageInterface $storage */
   $rdfStorage = \Drupal::entityTypeManager()->getStorage('rdf_entity');
   /** @var \Drupal\Core\Entity\EntityStorageInterface $redirectStorage */
