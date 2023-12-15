@@ -17,16 +17,18 @@ declare(strict_types = 1);
 /**
  * Alter abstracts of collections.
  */
-function joinup_core_deploy_110000(array &$sandbox): string {
+function joinup_core_deploy_110100(array &$sandbox): string {
   $sparql_connection = \Drupal::getContainer()->get('sparql.endpoint');
   if (empty($sandbox['data'])) {
     $query = <<<SPARQL
 SELECT ?graph ?collection ?abstract
-FROM <http://joinup.eu/collection/default>
-FROM <http://joinup.eu/collection/draft>
 WHERE {
     GRAPH ?graph {
         ?collection <http://purl.org/dc/terms/abstract> ?abstract .
+    }
+    VALUES ?graph {
+        <http://joinup.eu/collection/published>
+        <http://joinup.eu/collection/draft>
     }
 }
 SPARQL;
@@ -46,14 +48,16 @@ SPARQL;
   $spliced = array_splice($sandbox['data'], 0, 300);
   foreach ($spliced as $item) {
     $item['abstract'] = trim(strip_tags($item['abstract']));
-    $item['abstract'] = str_replace('"', '\\"', $item['abstract']);
-    $item['abstract'] = str_replace("'", "\\'", $item['abstract']);
-    // Replace the non-breaking space with a regular space.
-    $item['abstract'] = str_replace("\xc2\xa0", ' ', $item['abstract']);
+    $characters_to_replace = [
+      '"' => '\\"',
+      "'" => "\\'",
+      "\xc2\xa0" => ' ',
+      // The non-breaking space is stored as plain text after the tag stripping.
+      "&nbsp;" => ' ',
+    ];
+    $item['abstract'] = strtr($item['abstract'], $characters_to_replace);
     // Replace multiple spaces with a single space.
     $item['abstract'] = preg_replace('/\s+/', ' ', $item['abstract']);
-    // Replace multiple newlines with a single newline.
-    $item['abstract'] = preg_replace('/\n+/', "\n", $item['abstract']);
 
     $query = <<<SPARQL
 WITH <{$item['graph']}>
