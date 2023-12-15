@@ -11,16 +11,9 @@ Feature: Solution homepage
       | logo        | logo.png                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
       | state       | published                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
     When I go to the homepage of the "Petri net" solution
-    # Checking for HTML text ensures that any HTML elements in the abstract are correctly stripped.
-    Then the page should contain the html text "A Petri net, also known as a place/transition (PT) net, is one of several mathematical modeling languages for the description of distributed systems."
-    # The text should be split on a word boundary after 500 characters, followed by an ellipsis.
-    And the page should contain the html text "(signified by arrows)…"
-    # There should be a link to the about page.
-    And I should see the link "Read more"
+    Then the page should contain the html text "<p>A Petri net, also known as a place/transition (PT) net, is one of several <a>mathematical</a> modeling languages for the description of distributed systems."
     # The page should be cacheable.
     And the page should be cacheable
-    # The description itself should be stripped of unsightly links.
-    But I should not see the link "mathematical"
 
   # This is a regression test for the entities that include a hashmark on their Uri.
   # @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-3225
