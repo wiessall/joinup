@@ -1,0 +1,9 @@
+#!/bin/bash
+
+## Description: Restore databases
+## Usage: restore-databases
+
+ddev solr:restore
+ddev virtuoso:restore
+ddev run drupal:settings site-clone
+ddev run toolkit:install-dump

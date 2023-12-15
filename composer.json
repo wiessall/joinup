@@ -105,7 +105,6 @@
         "drupal/webform": "^6.2",
         "drush/drush": "^12.1",
         "ec-europa/spdx": "^1.0",
-        "ec-europa/virtuoso": "^2.1",
         "openeuropa/composer-artifacts": "^1.0",
         "openeuropa/gisco-geocoding-provider": "^1.0",
         "openeuropa/oe_bootstrap_theme": "^1.0",
@@ -114,7 +113,8 @@
         "psr/http-factory-implementation": "*",
         "semiceu/adms-ap_validator": "1.0.0-alpha1",
         "sweetrdf/easyrdf": "^1.9",
-        "symfony/http-client": "*"
+        "symfony/http-client": "*",
+        "viaaurea/swiftmailer-legacy": "^1.0"
     },
     "require-dev": {
         "ext-fileinfo": "*",
@@ -399,7 +399,7 @@
                 "Stop auto submitting first character entered in an Autocomplete Filter field. @see https://www.drupal.org/project/views_autosubmit/issues/3160600" : "resources/patch/php/drupal/views_autosubmit/3160600.patch"
             },
             "drupal/webform": {
-                "Radios or Checkboxes inside Composite not saved @see https://www.drupal.org/project/webform/issues/3216923" : "resources/patch/php/drupal/webform/368.diff"
+                "Radios or Checkboxes inside Composite not saved @see https://www.drupal.org/project/webform/issues/3216923": "resources/patch/php/drupal/webform/368.diff"
             }
         },
         "artifacts": {
