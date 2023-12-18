@@ -1,4 +1,4 @@
-@api
+@api @wip
 Feature: Asset distribution deleting.
   In order to manage asset distributions
   As a solution owner or solution facilitator
