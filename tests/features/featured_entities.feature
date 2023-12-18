@@ -1,4 +1,4 @@
-@api @javascript @group-c
+@api @javascript
 Feature: Featuring content site-wide
   As a moderator of Joinup
   I want to feature content in the website

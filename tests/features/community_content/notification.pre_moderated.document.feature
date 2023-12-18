@@ -1,4 +1,4 @@
-@api @terms @group-b
+@api @terms @group-d
 Feature: Notification test for the document transitions on a pre moderated parent.
   In order to manage my collections
   As an owner of the collection

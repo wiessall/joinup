@@ -113,9 +113,6 @@
         "drupal/webform": "^6.2",
         "drush/drush": "^12.1",
         "ec-europa/spdx": "^1.0",
-        "ec-europa/virtuoso": "^2.1",
-        "knplabs/github-api": "^3.0",
-        "m4tthumphrey/php-gitlab-api": "^11.11",
         "openeuropa/composer-artifacts": "^1.0",
         "openeuropa/gisco-geocoding-provider": "^1.0",
         "openeuropa/oe_bootstrap_theme": "^1.0",
@@ -124,7 +121,8 @@
         "psr/http-factory-implementation": "*",
         "semiceu/adms-ap_validator": "1.0.0-alpha1",
         "sweetrdf/easyrdf": "^1.9",
-        "symfony/http-client": "*"
+        "symfony/http-client": "*",
+        "viaaurea/swiftmailer-legacy": "^1.0"
     },
     "require-dev": {
         "ext-fileinfo": "*",
@@ -238,6 +236,13 @@
                 "web-root": "web/"
             },
             "file-mapping": {
+                "[web-root]/core/.deprecation-ignore.txt": {
+                    "append": "resources/drupal-scaffold/.deprecation-ignore.txt.append",
+                    "force-append": true
+                },
+                "[web-root]/.htaccess": {
+                    "append": "resources/drupal-scaffold/.htaccess.append"
+                },
                 "[web-root]/robots.txt": {
                     "append": "resources/drupal-scaffold/robots.txt.append"
                 },
@@ -339,14 +344,6 @@
                 "Behat integration. @see https://www.drupal.org/project/honeypot/issues/3059040": "resources/patch/php/drupal/honeypot/3059040.patch",
                 "Provide ways to clean up old honeypot_time_restriction values @see https://www.drupal.org/project/honeypot/issues/2997609": "resources/patch/php/drupal/honeypot/2997609.patch"
             },
-            "drupal/iframe": {
-                "Warning: Undefined array key \"url\" @see https://www.drupal.org/project/iframe/issues/3367468": "resources/patch/php/drupal/iframe/3367468-3.patch"
-            },
-            "drupal/imagecache_external": {
-                "Support SVG @see https://www.drupal.org/i/3390948": "resources/patch/php/drupal/imagecache_external/3390948.diff",
-                "Add option to override the inherited HTTP client configuration @see https://drupal.org/i/3396502": "resources/patch/php/drupal/imagecache_external/3396502-7.diff",
-                "Do not try to download failed URLs repeatedly: attempt next time only after the local cache is rebuilt @see https://drupal.org/i/3398665": "resources/patch/php/drupal/imagecache_external/3398665.diff"
-            },
             "drupal/inline_entity_form": {
                 "Autocomplete field doesn't allow to reference entities with long titles @see https://www.drupal.org/node/2895663": "resources/patch/php/drupal/inline_entity_form/2895663.patch"
             },
@@ -377,8 +374,7 @@
             "drupal/search_api": {
                 "item_id column is too short @see https://www.drupal.org/node/2829696": "resources/patch/php/drupal/search_api/2829696.patch",
                 "Some bulk form field options are missing schema @see https://www.drupal.org/project/search_api/issues/3195199": "resources/patch/php/drupal/search_api/3195199.patch",
-                "The search_api_list:{index} cache tag is not added to the view display @see https://www.drupal.org/project/search_api/issues/3298295": "resources/patch/php/drupal/search_api/3298295.patch",
-                "Not all fields that have a target_type setting are entity references @see https://www.drupal.org/i/3394367": "resources/patch/php/drupal/search_api/3394367.diff"
+                "The search_api_list:{index} cache tag is not added to the view display @see https://www.drupal.org/project/search_api/issues/3298295": "resources/patch/php/drupal/search_api/3298295.patch"
             },
             "drupal/search_api_autocomplete": {
                 "Clear timeout autosubmit used in views_autosubmit. @see https://www.drupal.org/i/3314418": "resources/patch/php/drupal/search_api_autocomplete/3314418.patch"
@@ -422,10 +418,6 @@
             },
             "drupal/webform": {
                 "Radios or Checkboxes inside Composite not saved @see https://www.drupal.org/project/webform/issues/3216923": "resources/patch/php/drupal/webform/368.diff"
-            },
-            "m4tthumphrey/php-gitlab-api": {
-                "GraphQL API @see https://github.com/GitLabPHP/Client/issues/766": "resources/patch/php/drupal/m4tthumphrey/php-gitlab-api/772.diff",
-                "Add support for prefixed URIs on base path @see https://github.com/GitLabPHP/Client/issues/726": "resources/patch/php/drupal/m4tthumphrey/php-gitlab-api/726.diff"
             }
         },
         "artifacts": {

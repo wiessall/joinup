@@ -9,7 +9,10 @@ testing:
     - http_request_mock
     - joinup_cas_mock_server
     - joinup_test
-    - upgrade_status
+    # TODO: Re-enable this check when PHP is 8.2.14 or 8.2.15, in ISAICP-8337.
+    # See https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-8337
+    # See https://github.com/php/php-src/issues/8251
+    # - upgrade_status
 
 behat:
   screenshots:
