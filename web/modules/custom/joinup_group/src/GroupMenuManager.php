@@ -32,7 +32,7 @@ class GroupMenuManager implements GroupMenuManagerInterface {
     }
 
     $properties = [
-      'type' => 'navigation',
+      'type' => 'quick_links',
       OgGroupAudienceHelperInterface::DEFAULT_FIELD => $group_id,
     ];
     $storage = $this->entityTypeManager->getStorage('ogmenu_instance');
