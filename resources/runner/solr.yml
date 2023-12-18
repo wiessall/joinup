@@ -1,72 +1,11 @@
 # Solr configs and commands.
 
 solr:
-  local:
-    version: '8.11.2'
-    vendor_dir: ${joinup.dir}/vendor/apache
-    server_dir: ${solr.local.vendor_dir}/solr-${solr.local.version}
-    bin: ${solr.local.server_dir}/bin/solr
-    core_dir: ${solr.local.server_dir}/server/solr/${env.SEARCH_API_SERVER_SS_SOLR_CORE}
-    download_url: http://archive.apache.org/dist/lucene/solr/${solr.local.version}/solr-${solr.local.version}.tgz
-  snapshot_dir: ${joinup.db_dir}/solr
+  snapshot_dir: ${joinup.ddev_dir}/solr-standalone/snapshot
   config_tmp: ${toolkit.tmp_folder}/solr_config
   config_dir: ${joinup.dir}/resources/solr/conf
 
 commands:
-
-  # Starts Solr.
-  solr:start:
-    - task: exec
-      command: ${solr.local.bin} status ; test $? -eq 0 || ${solr.local.bin} start -Dsolr.allowPaths=${solr.snapshot_dir}
-
-  # Stops Solr.
-  solr:stop:
-    - task: exec
-      command: ${solr.local.bin} status ; test $? -ne 0 || ${solr.local.bin} stop
-
-  # Restarts Solr.
-  solr:restart:
-    - task: exec
-      command: ${solr.local.bin} restart
-
-  # Downloads and unpacks the Solr snapshot.
-  solr:download-snapshot:
-    # Cleanup any stale data.
-    - task: remove
-      file: ${solr.snapshot_dir}/snapshot.${env.SEARCH_API_SERVER_SS_SOLR_CORE}
-    # Snapshot dir.
-    - task: mkdir
-      dir: ${solr.snapshot_dir}/snapshot.${env.SEARCH_API_SERVER_SS_SOLR_CORE}
-    # Unpack and organize.
-    - task: exec
-      command: tar -xvf ${toolkit.tmp_folder}/solr.gz -C ${solr.snapshot_dir}/snapshot.${env.SEARCH_API_SERVER_SS_SOLR_CORE} --strip-components=1
-
-  # Downloads and installs the Solr binary.
-  solr:download-bin:
-    - task: exec
-      command: wget
-      arguments:
-        - ${solr.local.download_url}
-      options:
-        no-host-directories: null
-        directory-prefix: ${toolkit.tmp_folder}
-        timestamping: null
-    - task: mkdir
-      dir: ${solr.local.server_dir}
-    - task: exec
-      command: tar
-      arguments:
-        - xzf
-        - ${toolkit.tmp_folder}/solr-${solr.local.version}.tgz
-      options:
-        directory: ${solr.local.vendor_dir}
-
-  # Configures the Solr core.
-  solr:config:
-    - task: run
-      command: solr:start
-    - task: exec
-      command: test -f ${solr.local.core_dir}/core.properties || ${solr.local.bin} create_core -c ${env.SEARCH_API_SERVER_SS_SOLR_CORE} -d ${solr.config_dir}
 
   # Builds the Solr core configuration.
   solr:build-core-config:
@@ -80,8 +19,6 @@ commands:
         - search-api-solr:get-server-config
         - joinup
         - ${solr.config_tmp}.zip
-        # See \Joinup\TaskRunner\ConfigProviders\JoinupConfigProvider::provide().
-        - ${solr.version.major}
     - task: exec
       command: unzip -q ${solr.config_tmp}.zip
       options:
