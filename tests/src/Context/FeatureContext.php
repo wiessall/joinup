@@ -1419,6 +1419,7 @@ class FeatureContext extends RawDrupalContext {
    */
   public function checkTableselectRow(string $text): void {
     $element = $this->getCheckboxOrRadioByRowText($text);
+    $this->scrollElementIntoView($element);
     if ($element->getAttribute('type') === 'checkbox') {
       $element->check();
     }
