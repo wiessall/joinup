@@ -33,16 +33,25 @@ class GroupMenuLinksSubscriber implements EventSubscriberInterface {
    *   The event object.
    */
   public function addLinks(GroupMenuLinksEvent $event): void {
-    $group = $event->getGroup();
+    if ($event->getMenuName() === 'navigation') {
+      $group = $event->getGroup();
+      $discussionUrl = Url::fromRoute('view.discussions.overview', [
+        'rdf_entity' => UriEncoder::encodeUrl($group->id()),
+      ]);
 
-    $discussionUrl = Url::fromRoute('view.discussions.overview', [
-      'rdf_entity' => UriEncoder::encodeUrl($group->id()),
-    ]);
+      $event
+        ->addMenuLink($group->toUrl(), 'Overview', -10)
+        ->addMenuLink($discussionUrl, 'Discussions', -8);
+    }
 
-    $event
-      ->addMenuLink($group->toUrl(), 'Overview', -10)
-      ->addMenuLink($group->toUrl('member-overview'), 'Members', -9, ['enabled' => 0])
-      ->addMenuLink($discussionUrl, 'Discussions', -8);
+    if ($event->getMenuName() === 'quick_links') {
+      $group = $event->getGroup();
+
+      // @todo Create the default links for collections.
+      // - Website link (from the access URL field).
+      // - Contact us link.
+      // - Glossary link.
+    }
   }
 
 }
