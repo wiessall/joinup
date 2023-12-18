@@ -95,13 +95,8 @@
     <tbody>
       <tr>
         <td>
-          <span class="d-flex justify-content-center bg-primary p-3 fw-bold fs-sm text-white text-uppercase">
-            {{ publication_date }}
-          </span>
+          <span class="d-flex bg-primary p-3 fw-bold fs-sm text-white text-uppercase">{{ publication_date }}</span>
         </td>
-      </tr>
-      <tr>
-        <td height="10">&nbsp;</td>
       </tr>
       <tr>
         <td class="fs-lg fw-bold">
@@ -118,10 +113,10 @@
             <tbody>
             <tr>
               {% if image_url %}
-                <td width="200" class="d-none d-sm-block"><a href="{{ url }}"><img src="{{ image_url }}" width="200" alt=""/></a></td>
+                <td width="200" class="d-none d-sm-block me-3"><a href="{{ url }}"><img src="{{ image_url }}" width="200" alt=""/></a></td>
                 <td width="20" class="d-none d-sm-block">&nbsp;</td>
               {% endif %}
-              <td>{{ content.body }}</td>
+              <td valign="top">{{ content.body }}</td>
             </tr>
             </tbody>
           </table>
