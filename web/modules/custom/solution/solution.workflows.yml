@@ -26,6 +26,8 @@ solution_workflow:
       label: Needs update
     blacklisted:
       label: Blacklisted
+    archived:
+      label: Archived
   transitions:
     draft:
       label: Save as draft
@@ -47,3 +49,11 @@ solution_workflow:
       label: Blacklist
       from: [published]
       to: blacklisted
+    archive:
+      label: Archive
+      from: [ published ]
+      to: archived
+    unarchive:
+      label: Unarchive
+      from: [ archived ]
+      to: published
