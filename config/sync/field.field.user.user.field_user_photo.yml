@@ -35,4 +35,5 @@ settings:
     title: ''
     width: 640
     height: 615
+  description_field_required: 0
 field_type: image
