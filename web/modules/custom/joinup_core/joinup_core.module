@@ -319,7 +319,7 @@ function joinup_core_get_etrans_block_config_for_current_page(): array {
   );
 
   foreach ($contexts as $context) {
-    if (!$context->hasContextValue()) {
+    if (!$context->hasContextValue() || !str_ends_with($current_route_name, '.canonical')) {
       continue;
     }
 
