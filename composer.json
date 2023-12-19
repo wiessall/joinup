@@ -254,6 +254,9 @@
             "drupal/cas": {
                 "Should CAS respect Drupal registration configuration @see https://www.drupal.org/project/cas/issues/3038279": "resources/patch/php/drupal/cas/3038279.patch"
             },
+            "drupal/cached_computed_field": {
+                "[Drupal 10.2] Category should not be translatable @see https://www.drupal.org/project/cached_computed_field/issues/3409739": "resources/patch/php/drupal/cached_computed_field/3409739.diff"
+            },
             "drupal/core": {
                 "Allow image style to be selected in text editor @see https://www.drupal.org/node/2061377": "resources/patch/php/drupal/core/2061377-d10.2-455.diff",
                 "Allow making the file description a required field @see https://www.drupal.org/node/2320877": "resources/patch/php/drupal/core/2320877.patch",
