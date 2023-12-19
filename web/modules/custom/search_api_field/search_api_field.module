@@ -97,7 +97,7 @@ function search_api_field_entity_view(array &$build, EntityInterface $entity, En
 
     // Check number of archived items.
     if (isset($build['_layout_builder']) && count($build['_layout_builder']) > 1) {
-      $archived_items = _search_api_field_find_archived($build['_layout_builder']) ?? 0;
+      $archived_items = _search_api_field_find_archived($build['_layout_builder'], $field_name) ?? 0;
     }
     else {
       $archived_items = $build[$field_name]['#archived_items'] ?? 0;
@@ -163,15 +163,17 @@ function search_api_field_entity_view(array &$build, EntityInterface $entity, En
 }
 
 /**
- * Get number of archived.
+ * Get number of archived items.
  *
  * @param array $data
  *   Build data.
+ * @param string $field
+ *   Machine name of the Search API field.
  *
  * @return int|null
  *   Number of archived items.
  */
-function _search_api_field_find_archived(array $data): ?int {
+function _search_api_field_find_archived(array $data, $field): ?int {
   foreach ($data as $key => $item) {
     if (!is_array($item)) {
       continue;
@@ -180,11 +182,11 @@ function _search_api_field_find_archived(array $data): ?int {
       continue;
     }
 
-    if (isset($item['#archived_items']) && $item['#theme'] === 'search_api_field') {
+    if (isset($item['#archived_items']) && $item['#field_name'] === $field) {
       return (int) $item['#archived_items'];
     }
 
-    $archivedItem = _search_api_field_find_archived($item);
+    $archivedItem = _search_api_field_find_archived($item, $field);
     if ($archivedItem) {
       return $archivedItem;
     }
