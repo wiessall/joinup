@@ -11,6 +11,32 @@
     width: fit-content;
   }
 
+  // Override core align.module.css
+  .align-left {
+    // Do not align left on small screens.
+    float: none !important;
+    width: fit-content;
+    margin: 0 auto;
+    @include media-breakpoint-up(sm) {
+      float: left !important;
+      img {
+        margin-right: $spacer * 1.25;
+      }
+    }
+  }
+  .align-right {
+    // Do not align right on small screens.
+    float: none !important;
+    width: fit-content;
+    margin: 0 auto;
+    @include media-breakpoint-up(sm) {
+      float: right !important;
+      img {
+        margin-left: $spacer * 1.25;
+      }
+    }
+  }
+
   img,
   figure {
     margin-bottom: $spacer;
