@@ -1,0 +1,32 @@
+diff --git a/src/Driver/Database/sparql/Install/Tasks.php b/src/Driver/Database/sparql/Install/Tasks.php
+new file mode 100644
+index 0000000000000000000000000000000000000000..aac5b90185cd053f7d698225d8b4402f83f65117
+--- /dev/null
++++ b/src/Driver/Database/sparql/Install/Tasks.php
+@@ -0,0 +1,26 @@
++<?php
++
++namespace Drupal\sparql_entity_storage\Driver\Database\sparql\Install;
++
++use Drupal\Core\Database\Install\Tasks as InstallTasks;
++
++/**
++ * Specifies installation tasks for SPARQL driver.
++ */
++class Tasks extends InstallTasks {
++
++  /**
++   * {@inheritdoc}
++   */
++  public function name(): string {
++    return $this->t('SPARQL');
++  }
++
++  /**
++   * {@inheritdoc}
++   */
++  public function getFormOptions(array $database): array {
++    return [];
++  }
++
++}
