@@ -180,7 +180,7 @@ function _search_api_field_find_archived(array $data): ?int {
       continue;
     }
 
-    if (isset($item['#archived_items'])) {
+    if (isset($item['#archived_items']) && $item['#theme'] === 'search_api_field') {
       return (int) $item['#archived_items'];
     }
 
