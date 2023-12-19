@@ -1,15 +1,15 @@
-@api @group-g
-  # This features tests the workflow transitions.
-  #
-  # The steps @Then I go to the "news" content :title edit screen
-  # can be tested through the UI by going to the page of the content and press
-  # the edit button. But there are many edit buttons on the screen including
-  # the contextual links so there can be a false positive when searching for the button
-  # or when pressing an 'Edit' button.
-  #
-  # The steps @And the :title news content should (not )be published
-  # cannot be tested through the UI and are only for ensuring proper
-  # functionality.
+@api @group-i
+# This features tests the workflow transitions.
+#
+# The steps @Then I go to the "news" content :title edit screen
+# can be tested through the UI by going to the page of the content and press
+# the edit button. But there are many edit buttons on the screen including
+# the contextual links so there can be a false positive when searching for the button
+# or when pressing an 'Edit' button.
+#
+# The steps @And the :title news content should (not )be published
+# cannot be tested through the UI and are only for ensuring proper
+# functionality.
 Feature: News moderation.
   As a member, facilitator or collection owner
   In order to manage news about my collection

@@ -1,4 +1,4 @@
-@api @group-e
+@api @group-f
 Feature:
   As a site builder of the site
   I need to be able to use "Tiles" paragraph for content.

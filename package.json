@@ -2,7 +2,6 @@
   "author": "European Commission",
   "license": "EUPL-1.2",
   "devDependencies": {
-    "@glidejs/glide": "^3.6.0",
     "@openeuropa/bcl-bootstrap": "1.2.0",
     "@openeuropa/bcl-builder": "1.2.0",
     "@openeuropa/bcl-theme-default": "1.2.0",
@@ -29,7 +28,8 @@
   },
   "dependencies": {
     "jquery-jsonview": "^1.2.3",
-    "slick-carousel": ">1.8.1 || <1.8.1"
+    "slick-carousel": ">1.8.1 || <1.8.1",
+    "@glidejs/glide": "^3.6.0"
   },
   "scripts": {
     "watch": "npm-watch",

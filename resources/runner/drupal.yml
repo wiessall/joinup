@@ -275,8 +275,14 @@ drupal:
         $config['system.mail']['interface']['default'] = 'null';
         $config['mailsystem.settings']['defaults']['sender'] = 'null';
       Development mail collector: |
-        $config['system.mail']['interface']['default'] = 'devel_mail_log';
-        $config['mailsystem.settings']['defaults']['sender'] = 'devel_mail_log';
+        $config['swiftmailer.transport']['transport'] = 'smtp';
+        $config['swiftmailer.transport']['smtp_host'] = 'localhost';
+        $config['swiftmailer.transport']['smtp_port'] = 1025;
+        $config['swiftmailer.transport']['smtp_encryption'] = '0';
+        $config['swiftmailer.transport']['smtp_credential_provider'] = 'swiftmailer';
+        $config['swiftmailer.transport']['smtp_credentials'] = [
+          'swiftmailer' => ['username' => '', 'password' => ''],
+        ];
       Test mail collector: |
         $config['system.mail']['interface']['default'] = 'test_mail_collector';
         $config['mailsystem.settings']['defaults']['sender'] = 'test_mail_collector';
