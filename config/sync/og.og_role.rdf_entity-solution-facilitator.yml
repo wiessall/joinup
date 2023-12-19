@@ -202,6 +202,7 @@ permissions:
   - 'unshare document content'
   - 'unshare event content'
   - 'unshare news content'
+  - 'update any asset_distribution rdf_entity'
   - 'update any asset_release rdf_entity'
   - 'update any navigation ogmenu_instance'
   - 'update group'
