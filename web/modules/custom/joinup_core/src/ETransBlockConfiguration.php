@@ -64,10 +64,12 @@ class ETransBlockConfiguration {
         'exclude' => '.page-title__details a[title="View user profile."],.action-link,.news__field-shared-in,.news__referenced-solution,section.comments',
       ],
       CollectionInterface::class => [
-        'include' => '.page-title',
+        'include' => '.layout-content .layout',
+        'exclude' => '.block-field-blockrdf-entitycollectionfield-collection-content',
       ],
       SolutionInterface::class => [
-        'include' => '.page-title',
+        'include' => '.layout-content .layout',
+        'exclude' => '.block-field-blockrdf-entitysolutionfield-is-content, .block-extra-field-blockrdf-entitysolutionrelated-solutions',
       ],
     ],
     'routes' => [
