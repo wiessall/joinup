@@ -264,7 +264,6 @@ function search_api_field_theme() {
         'field_name' => NULL,
         'entity' => NULL,
         'view_mode' => NULL,
-
         'archived_items' => NULL,
       ],
     ],
