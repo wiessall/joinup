@@ -7,12 +7,13 @@ dev:
   modules:
     - admin_toolbar
     - config_update
+    - devel
     - field_ui
     - masquerade
     - memcache_admin
     - page_manager_ui
-    - views_ui
     - stage_file_proxy
+    - views_ui
 
 rector:
   bin: ${joinup.dir}/vendor/bin/rector
@@ -31,28 +32,6 @@ commands:
       command: virtuoso:download-snapshot
     - task: run
       command: solr:download-snapshot
-
-  # Restores all backends from backup.
-  dev:restore-databases:
-    - task: run
-      command: solr:restore
-    - task: run
-      command: virtuoso:restore
-    - task: run
-      command: drupal:settings
-      arguments:
-        - site-clone
-    - task: run
-      command: toolkit:install-dump
-
-  # Rebuilds the dev environment by restoring backups and applying updates.
-  dev:rebuild-environment:
-    - task: run
-      command: solr:restore
-    - task: run
-      command: virtuoso:restore
-    - task: run
-      command: toolkit:install-clone
 
   dev:install-modules:
     - task: run
@@ -182,25 +161,25 @@ commands:
     - task: run
       command: virtuoso:import-fixtures
       arguments:
-        - resources/fixtures/actor.rdf
-        - resources/fixtures/adms-definition.rdf
-        - resources/fixtures/ADMS-SW-v1.00.rdf
-        - resources/fixtures/ADMS_SKOS_v1.00.rdf
-        - resources/fixtures/business-process.rdf
-        - resources/fixtures/countries-skos.rdf
-        - resources/fixtures/data-theme-skos.rdf
-        - resources/fixtures/eif_conceptual_model.rdf
-        - resources/fixtures/eif_interoperability_layer.rdf
-        - resources/fixtures/eif_principle.rdf
-        - resources/fixtures/eif_recommendation.rdf
-        - resources/fixtures/eif_solution_type.rdf
-        - resources/fixtures/EIRA_SKOS.rdf
-        - resources/fixtures/filetypes-skos.rdf
-        - resources/fixtures/languages-skos.rdf
-        - resources/fixtures/product_type.rdf
-        - resources/fixtures/solution_category.rdf
-        - resources/fixtures/standardization_level.rdf
-        - resources/fixtures/test_resource_type.rdf
+        - .ddev/virtuoso/vocab/actor.rdf
+        - .ddev/virtuoso/vocab/adms-definition.rdf
+        - .ddev/virtuoso/vocab/ADMS-SW-v1.00.rdf
+        - .ddev/virtuoso/vocab/ADMS_SKOS_v1.00.rdf
+        - .ddev/virtuoso/vocab/business-process.rdf
+        - .ddev/virtuoso/vocab/countries-skos.rdf
+        - .ddev/virtuoso/vocab/data-theme-skos.rdf
+        - .ddev/virtuoso/vocab/eif_conceptual_model.rdf
+        - .ddev/virtuoso/vocab/eif_interoperability_layer.rdf
+        - .ddev/virtuoso/vocab/eif_principle.rdf
+        - .ddev/virtuoso/vocab/eif_recommendation.rdf
+        - .ddev/virtuoso/vocab/eif_solution_type.rdf
+        - .ddev/virtuoso/vocab/EIRA_SKOS.rdf
+        - .ddev/virtuoso/vocab/filetypes-skos.rdf
+        - .ddev/virtuoso/vocab/languages-skos.rdf
+        - .ddev/virtuoso/vocab/product_type.rdf
+        - .ddev/virtuoso/vocab/solution_category.rdf
+        - .ddev/virtuoso/vocab/standardization_level.rdf
+        - .ddev/virtuoso/vocab/test_resource_type.rdf
     - task: run
       command: sparql:query
       arguments:

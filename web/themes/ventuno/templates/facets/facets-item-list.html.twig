@@ -48,17 +48,16 @@
     {%- if title is not empty -%}
       <h3>{{ title }}</h3>
     {%- endif -%}
-
     {%- if items -%}
-    <{{ list_type }}{{ attributes }}>
-    {%- for item in items -%}
+      <{{ list_type }}{{ attributes }}>
+      {%- for item in items -%}
       <li{{ item.attributes }}>{{ item.value }}</li>
-    {%- endfor -%}
-  </{{ list_type }}>
+      {%- endfor -%}
+      </{{ list_type }}>
     {%- else -%}
       {{- empty -}}
-      {%- endif -%}
-    {%- endif %}
+    {%- endif -%}
+  {%- endif %}
 
   {% if facet.widget.type == "dropdown" %}
     <label id="facet_{{ facet.id }}_label">{{ 'Facet'|t }} {{ facet.label }}</label>

@@ -113,9 +113,8 @@
         "drupal/webform": "^6.2",
         "drush/drush": "^12.1",
         "ec-europa/spdx": "^1.0",
-        "ec-europa/virtuoso": "^2.1",
-        "knplabs/github-api": "^3.0",
-        "m4tthumphrey/php-gitlab-api": "^11.11",
+        "knplabs/github-api": "^3.13",
+        "m4tthumphrey/php-gitlab-api": "^11.12",
         "openeuropa/composer-artifacts": "^1.0",
         "openeuropa/gisco-geocoding-provider": "^1.0",
         "openeuropa/oe_bootstrap_theme": "^1.0",
@@ -124,7 +123,8 @@
         "psr/http-factory-implementation": "*",
         "semiceu/adms-ap_validator": "1.0.0-alpha1",
         "sweetrdf/easyrdf": "^1.9",
-        "symfony/http-client": "*"
+        "symfony/http-client": "*",
+        "viaaurea/swiftmailer-legacy": "^1.0"
     },
     "require-dev": {
         "ext-fileinfo": "*",
@@ -238,6 +238,13 @@
                 "web-root": "web/"
             },
             "file-mapping": {
+                "[web-root]/core/.deprecation-ignore.txt": {
+                    "append": "resources/drupal-scaffold/.deprecation-ignore.txt.append",
+                    "force-append": true
+                },
+                "[web-root]/.htaccess": {
+                    "append": "resources/drupal-scaffold/.htaccess.append"
+                },
                 "[web-root]/robots.txt": {
                     "append": "resources/drupal-scaffold/robots.txt.append"
                 },
@@ -338,9 +345,6 @@
             "drupal/honeypot": {
                 "Behat integration. @see https://www.drupal.org/project/honeypot/issues/3059040": "resources/patch/php/drupal/honeypot/3059040.patch",
                 "Provide ways to clean up old honeypot_time_restriction values @see https://www.drupal.org/project/honeypot/issues/2997609": "resources/patch/php/drupal/honeypot/2997609.patch"
-            },
-            "drupal/iframe": {
-                "Warning: Undefined array key \"url\" @see https://www.drupal.org/project/iframe/issues/3367468": "resources/patch/php/drupal/iframe/3367468-3.patch"
             },
             "drupal/imagecache_external": {
                 "Support SVG @see https://www.drupal.org/i/3390948": "resources/patch/php/drupal/imagecache_external/3390948.diff",
