@@ -311,12 +311,21 @@ function joinup_core_get_etrans_block_config_for_current_page(): array {
 
   /** @var \Drupal\Core\Plugin\Context\ContextRepositoryInterface $context_repository */
   $context_repository = \Drupal::service('context.repository');
-  $contexts = $context_repository->getRuntimeContexts(['@node.node_route_context:node']);
+  $contexts = $context_repository->getRuntimeContexts(
+    [
+      '@node.node_route_context:node',
+      '@rdf_entity.rdf_entity_route_context:rdf_entity',
+    ]
+  );
 
-  if ($contexts['@node.node_route_context:node']->hasContextValue()) {
-    $entity = $contexts['@node.node_route_context:node']->getContextValue();
-    foreach (ETransBlockConfiguration::CONFIG_MAPPING['bundles'] as $bundle_class => $config) {
-      if ($entity instanceof $bundle_class) {
+  foreach ($contexts as $context) {
+    if (!$context->hasContextValue()) {
+      continue;
+    }
+
+    $entity = $context->getContextValue();
+    foreach (ETransBlockConfiguration::CONFIG_MAPPING['bundles'] as $bundleClass => $config) {
+      if ($entity instanceof $bundleClass) {
         return $config;
       }
     }
