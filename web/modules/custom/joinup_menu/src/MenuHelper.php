@@ -301,7 +301,9 @@ class MenuHelper implements MenuHelperInterface {
       case 'field_is_documentation':
         /** @var \Drupal\file\FileInterface $documentationFile */
         if ($documentationFile = $group->field_is_documentation->entity) {
-          return Url::fromUri('public:/' . $documentationFile->createFileUrl());
+          return Url::fromRoute('joinup_menu.file_download', [
+            'file_identifier' => $documentationFile->id() . '-' . urlencode($documentationFile->getFilename()),
+          ]);
         }
         return Url::fromUri('internal:#');
 
