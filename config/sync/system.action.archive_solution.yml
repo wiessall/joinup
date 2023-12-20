@@ -1,0 +1,11 @@
+uuid: 66f694a2-2a0c-4eb0-8b94-4a0309dee26a
+langcode: en
+status: true
+dependencies:
+  module:
+    - solution
+id: archive_solution
+label: 'Archive solution'
+type: rdf_entity
+plugin: archive_solution
+configuration: {  }
