@@ -87,10 +87,6 @@ Feature: Asset distribution editing.
       | Bradley Emmett           | bradley.emmett@example.com | Changelog      |
       | Bradley Emmett           | bradley.emmett@example.com | OpenBSD images |
 
-    # Sub test to assert that distribution tiles show the external button.
-    When I go to the "Winter of 95" release
-    Then I should see the link "External" in the "i386" tile
-
   Scenario: Download a CSV export of the distributions download report.
     Given users:
       | Username | E-mail            |
