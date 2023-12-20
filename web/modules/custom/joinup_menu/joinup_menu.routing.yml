@@ -1,0 +1,9 @@
+# The menu item does not accept the public:// stream wrapper, so we need to use
+# a custom controller to serve a file.
+joinup_menu.file_download:
+  path: '/file-download/{file_identifier}'
+  defaults:
+    _title: 'File Download'
+    _controller: '\Drupal\joinup_menu\Controller\FileDownloadController::downloadFile'
+  requirements:
+    _custom_access: '\Drupal\joinup_menu\Controller\FileDownloadController::checkAccess'

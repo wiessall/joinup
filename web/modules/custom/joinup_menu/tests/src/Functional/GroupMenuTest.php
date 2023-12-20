@@ -5,17 +5,17 @@ declare(strict_types = 1);
 namespace Drupal\Tests\joinup_menu\Functional;
 
 use Drupal\Core\Url;
-use Drupal\file\Entity\File;
-use Drupal\rdf_meta_entity\Entity\RdfMetaEntity;
+use Drupal\Tests\TestFileCreationTrait;
 use Drupal\Tests\joinup_test\ExistingSite\JoinupExistingSiteTestBase;
 use Drupal\contact_information\ContactInformationEmailConfirmInterface;
+use Drupal\file\Entity\File;
 use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\menu_link_content\MenuLinkContentInterface;
 use Drupal\og\OgGroupAudienceHelper;
-use Drupal\Tests\TestFileCreationTrait;
+use Drupal\rdf_meta_entity\Entity\RdfMetaEntity;
 
 /**
- * Test description.
+ * Tests the menus of the groups.
  *
  * @group joinup_menu
  */
@@ -179,6 +179,9 @@ final class GroupMenuTest extends JoinupExistingSiteTestBase {
     ]);
     $file->setPermanent();
     $file->save();
+    $fileUrl = Url::fromRoute('joinup_menu.file_download', [
+      'file_identifier' => $file->id() . '-' . urlencode($file->getFilename()),
+    ])->getInternalPath();
 
     // Set a documentation field to the solution and re-check.
     $solution->set('field_is_documentation', $file->id());
@@ -187,7 +190,7 @@ final class GroupMenuTest extends JoinupExistingSiteTestBase {
     $menuLinks = $this->loadMenuLinks($ogMenuInstances[1]->id());
     $this->assertMenuLink($menuLinks[0], 'Website link', 'https://example.com', TRUE);
     $this->assertMenuLink($menuLinks[1], 'Release history', $releasesUrl, TRUE);
-    $this->assertMenuLink($menuLinks[2], 'Documentation', 'public:/' . $file->createFileUrl(), TRUE);
+    $this->assertMenuLink($menuLinks[2], 'Documentation', $fileUrl, TRUE);
     $this->assertMenuLink($menuLinks[3], 'Contact us', $contactUrl, FALSE);
 
     $contactInformation = $this->createRdfEntity([
@@ -204,7 +207,7 @@ final class GroupMenuTest extends JoinupExistingSiteTestBase {
     $menuLinks = $this->loadMenuLinks($ogMenuInstances[1]->id());
     $this->assertMenuLink($menuLinks[0], 'Website link', 'https://example.com', TRUE);
     $this->assertMenuLink($menuLinks[1], 'Release history', $releasesUrl, TRUE);
-    $this->assertMenuLink($menuLinks[2], 'Documentation', 'public:/' . $file->createFileUrl(), TRUE);
+    $this->assertMenuLink($menuLinks[2], 'Documentation', $fileUrl, TRUE);
     $this->assertMenuLink($menuLinks[3], 'Contact us', $contactUrl, FALSE);
 
     // Create an email confirmation and confirm it.
@@ -212,7 +215,7 @@ final class GroupMenuTest extends JoinupExistingSiteTestBase {
     $menuLinks = $this->loadMenuLinks($ogMenuInstances[1]->id());
     $this->assertMenuLink($menuLinks[0], 'Website link', 'https://example.com', TRUE);
     $this->assertMenuLink($menuLinks[1], 'Release history', $releasesUrl, TRUE);
-    $this->assertMenuLink($menuLinks[2], 'Documentation', 'public:/' . $file->createFileUrl(), TRUE);
+    $this->assertMenuLink($menuLinks[2], 'Documentation', $fileUrl, TRUE);
     $this->assertMenuLink($menuLinks[3], 'Contact us', $contactUrl, TRUE);
 
     // Create the EIF perspective for the solution.
@@ -226,7 +229,7 @@ final class GroupMenuTest extends JoinupExistingSiteTestBase {
     $this->assertCount(5, $menuLinks);
     $this->assertMenuLink($menuLinks[0], 'Website link', 'https://example.com', TRUE);
     $this->assertMenuLink($menuLinks[1], 'Release history', $releasesUrl, TRUE);
-    $this->assertMenuLink($menuLinks[2], 'Documentation', 'public:/' . $file->createFileUrl(), TRUE);
+    $this->assertMenuLink($menuLinks[2], 'Documentation', $fileUrl, TRUE);
     $this->assertMenuLink($menuLinks[3], 'Contact us', $contactUrl, TRUE);
     // By default the menu item is disabled.
     // @see \_eif_add_eif_link_to_leftside_menu
