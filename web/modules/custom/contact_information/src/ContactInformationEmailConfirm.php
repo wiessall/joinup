@@ -27,12 +27,10 @@ class ContactInformationEmailConfirm implements ContactInformationEmailConfirmIn
    *   The renderer service.
    * @param \Drupal\email_confirmer\EmailConfirmerManagerInterface $emailConfirmer
    *   The email confirmer service.
-   * @param \Drupal\joinup_menu\MenuHelperInterface $menuHelper
-   *   The menu helper service.
    *
    * @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7300
    */
-  public function __construct(protected EntityTypeManagerInterface $entityTypeManager, protected RendererInterface $renderer, protected EmailConfirmerManagerInterface $emailConfirmer, protected MenuHelperInterface $menuHelper) {}
+  public function __construct(protected EntityTypeManagerInterface $entityTypeManager, protected RendererInterface $renderer, protected EmailConfirmerManagerInterface $emailConfirmer) {}
 
   /**
    * {@inheritdoc}
@@ -77,12 +75,7 @@ class ContactInformationEmailConfirm implements ContactInformationEmailConfirmIn
     if (!$this->emailConfirmer->getConfirmation($email, FALSE, static::REALM)) {
       // Ignore if the contact information is not attached to any group.
       if ($gids = $this->getGroupsUsingContactInfoWithEmail($email)) {
-        $return = (bool) $this->emailConfirmer->confirm($email, ['groups' => $gids], static::REALM);
-        // Enable the 'Contact us' menu link for the groups.
-        foreach ($gids as $gid) {
-          $this->menuHelper->enableContactQuickLink($gid);
-        }
-        return $return;
+        return (bool) $this->emailConfirmer->confirm($email, ['groups' => $gids], static::REALM);
       }
     }
     return FALSE;

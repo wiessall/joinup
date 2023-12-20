@@ -190,6 +190,9 @@ function joinup_group_entity_type_alter(array &$entity_types): void {
       'discussion-overview' => '/rdf_entity/{rdf_entity}/discussions',
       'member-add' => '/rdf_entity/{rdf_entity}/members/add',
       'member-invite' => '/rdf_entity/{rdf_entity}/members/invite',
+      'website-link' => '/rdf_entity/{rdf_entity}/website-link',
+      'documentation-file' => '/rdf_entity/{rdf_entity}/documentation-file',
+      'contact-form' => '/rdf_entity/{rdf_entity}/contact-form',
     ];
     foreach ($link_templates as $key => $path) {
       $entity_types['rdf_entity']->setLinkTemplate($key, $path);
