@@ -139,17 +139,3 @@ function joinup_core_post_update_110102(array &$sandbox): string {
   $sandbox['#finished'] = (int) empty($sandbox['data']);
   return "Processed {$sandbox['progress']} out of {$sandbox['count']}.";
 }
-
-/**
- * Install the 'internal_identifier' field on menu link content entities.
- */
-function joinup_core_post_update_110103(): string {
-  $field_storage_definition = BaseFieldDefinition::create('string')
-    ->setName('internal_identifier')
-    ->setLabel(t('Internal identifier'))
-    ->setDescription(t('The internal identifier of the menu link.'))
-    ->setReadOnly(TRUE);
-
-  \Drupal::entityDefinitionUpdateManager()->installFieldStorageDefinition('internal_identifier', 'menu_link_content', 'menu_link_content', $field_storage_definition);
-  return 'Installed the "internal_identifier" field on menu link content entities.';
-}
