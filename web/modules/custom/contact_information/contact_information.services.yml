@@ -6,7 +6,7 @@ services:
       - { name: state_machine.guard, group: contact_information }
   contact_information.email_confirm:
     class: Drupal\contact_information\ContactInformationEmailConfirm
-    arguments: ['@entity_type.manager', '@renderer', '@email_confirmer']
+    arguments: ['@entity_type.manager', '@renderer', '@email_confirmer', '@joinup_menu.menu_helper']
   contact_information.redirected_eu_login.subscriber:
     class: Drupal\contact_information\EventSubscriber\ContactInformationRedirectedEuLoginSubscriber
     arguments: ['@datetime.time', '@request_stack', '@entity_type.manager']
