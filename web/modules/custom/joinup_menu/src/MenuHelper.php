@@ -299,8 +299,9 @@ class MenuHelper implements MenuHelperInterface {
         return $accessUrl ? Url::fromUri($accessUrl) : Url::fromUri('internal:#');
 
       case 'field_is_documentation':
+        /** @var \Drupal\file\FileInterface $documentationFile */
         if ($documentationFile = $group->field_is_documentation->entity) {
-          return $documentationFile->url();
+          return Url::fromUri('public:/' . $documentationFile->createFileUrl());
         }
         return Url::fromUri('internal:#');
 
