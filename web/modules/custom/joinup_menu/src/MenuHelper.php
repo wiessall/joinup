@@ -15,7 +15,12 @@ use Drupal\Core\Routing\RedirectDestinationTrait;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\Url;
 use Drupal\collection\Entity\CollectionInterface;
+use Drupal\contact_information\ContactInformationEmailConfirmInterface;
+use Drupal\email_confirmer\EmailConfirmerManagerInterface;
 use Drupal\joinup_collection\JoinupCollectionHelper;
+use Drupal\joinup_group\Entity\GroupInterface;
+use Drupal\menu_link_content\MenuLinkContentInterface;
+use Drupal\og\OgGroupAudienceHelper;
 use Exception;
 use Symfony\Component\HttpFoundation\RequestStack;
 
@@ -28,61 +33,29 @@ class MenuHelper implements MenuHelperInterface {
   use RedirectDestinationTrait;
 
   /**
-   * The logger channel factory.
-   *
-   * @var \Drupal\Core\Logger\LoggerChannelFactoryInterface
-   */
-  protected LoggerChannelFactoryInterface $logger;
-
-  /**
-   * The menu link tree service.
-   *
-   * @var \Drupal\Core\Menu\MenuLinkTreeInterface
-   */
-  protected MenuLinkTreeInterface $menuLinkTree;
-
-  /**
-   * The entity type manager.
-   *
-   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
-   */
-  protected EntityTypeManagerInterface $entityTypeManager;
-
-  /**
-   * The request stack.
-   *
-   * @var \Symfony\Component\HttpFoundation\RequestStack
-   */
-  protected RequestStack $requestStack;
-
-  /**
-   * The path matcher.
-   *
-   * @var \Drupal\Core\Path\PathMatcherInterface
-   */
-  protected PathMatcherInterface $pathMatcher;
-
-  /**
    * Constructs an instance of the MenuHelper service.
    *
    * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $logger
    *   The logger channel factory.
-   * @param \Drupal\Core\Menu\MenuLinkTreeInterface $menu_link_tree
+   * @param \Drupal\Core\Menu\MenuLinkTreeInterface $menuLinkTree
    *   The menu link tree service.
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
    *   The entity type manager.
-   * @param \Symfony\Component\HttpFoundation\RequestStack $request_stack
+   * @param \Symfony\Component\HttpFoundation\RequestStack $requestStack
    *   The request stack.
-   * @param \Drupal\Core\Path\PathMatcherInterface $path_matcher
+   * @param \Drupal\Core\Path\PathMatcherInterface $pathMatcher
    *   The path matcher.
+   * @param \Drupal\email_confirmer\EmailConfirmerManagerInterface $emailConfirmer
+   *   The email confirmer service.
    */
-  public function __construct(LoggerChannelFactoryInterface $logger, MenuLinkTreeInterface $menu_link_tree, EntityTypeManagerInterface $entity_type_manager, RequestStack $request_stack, PathMatcherInterface $path_matcher) {
-    $this->logger = $logger;
-    $this->menuLinkTree = $menu_link_tree;
-    $this->entityTypeManager = $entity_type_manager;
-    $this->requestStack = $request_stack;
-    $this->pathMatcher = $path_matcher;
-  }
+  public function __construct(
+    protected LoggerChannelFactoryInterface $logger,
+    protected MenuLinkTreeInterface $menuLinkTree,
+    protected EntityTypeManagerInterface $entityTypeManager,
+    protected RequestStack $requestStack,
+    protected PathMatcherInterface $pathMatcher,
+    protected EmailConfirmerManagerInterface $emailConfirmer
+  ) {}
 
   /**
    * {@inheritdoc}
@@ -224,6 +197,159 @@ class MenuHelper implements MenuHelperInterface {
         $element->link->isEnabled() &&
         $element->link->getPluginId() !== 'joinup_eulogin.eu_login_info';
     });
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function syncQuickLinksMenuItems(GroupInterface $group): void {
+    if (!isset($group->original)) {
+      throw new \RuntimeException('This method should only be called during a group update hook. There is no original values available.');
+    }
+
+    foreach (MenuHelperInterface::IDENTIFIER_MAPPINGS as $fieldName => $identifier) {
+      if (!$group->hasField($fieldName)) {
+        continue;
+      }
+
+      // Skip if the field is not changed.
+      if ($group->get($fieldName)->equals($group->original->get($fieldName))) {
+        continue;
+      }
+
+      $menuLink = $this->getQuickLinksMenuLink($group->id(), $identifier);
+      if (!$menuLink instanceof MenuLinkContentInterface) {
+        continue;
+      }
+
+      // If the field was emptied, set the menu link to 'internal:#' and disable
+      // it.
+      if ($group->get($fieldName)->isEmpty()) {
+        $menuLink->set('link', ['uri' => 'internal:#']);
+        $menuLink->set('enabled', FALSE);
+      }
+      else {
+        $link = $this->getQuickLinksUrlForField($group, $fieldName);
+        $link = $link->isExternal() ? $link->getUri() : 'internal:/' . $link->getInternalPath();
+        $menuLink->set('link', $link);
+        $menuLink->set('enabled', $this->isLinkEnabled($group, $fieldName));
+      }
+
+      $menuLink->save();
+    }
+  }
+
+  /**
+   * Returns the quick links menu link.
+   *
+   * @param \Drupal\joinup_group\Entity\GroupInterface $groupId
+   *   The group entity.
+   * @param string $identifier
+   *   The identifier.
+   *
+   * @return \Drupal\menu_link_content\MenuLinkContentInterface|null
+   *   The menu link or NULL if not found.
+   */
+  protected function getQuickLinksMenuLink(string $groupId, string $identifier): ?MenuLinkContentInterface {
+    $menus = $this->entityTypeManager
+      ->getStorage('ogmenu_instance')
+      ->loadByProperties([
+        OgGroupAudienceHelper::DEFAULT_FIELD => $groupId,
+        'type' => 'quick_links',
+      ]);
+    $menu = reset($menus);
+    if (empty($menu)) {
+      return NULL;
+    }
+
+    $menuLinkStorage = $this->entityTypeManager
+      ->getStorage('menu_link_content');
+    $menuLinkIds = $menuLinkStorage->getQuery()
+      ->accessCheck(FALSE)
+      ->condition('menu_name', 'ogmenu-' . $menu->id())
+      ->condition('internal_identifier', $identifier)
+      ->execute();
+
+    $menuLink = $menuLinkStorage->load(reset($menuLinkIds));
+    if (!$menuLink instanceof MenuLinkContentInterface) {
+      return NULL;
+    }
+
+    return $menuLink;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function enableContactQuickLink(string $groupId): void {
+    if ($menuLink = $this->getQuickLinksMenuLink($groupId, MenuHelperInterface::INTERNAL_IDENTIFIER_CONTACT_US)) {
+      $menuLink->set('enabled', TRUE);
+      $menuLink->save();
+    }
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getQuickLinksUrlForField(GroupInterface $group, string $fieldName): Url {
+    switch ($fieldName) {
+      case 'field_ar_access_url':
+      case 'field_is_landing_page':
+        $accessUrl = $group->$fieldName->uri;
+        return $accessUrl ? Url::fromUri($accessUrl) : Url::fromUri('internal:#');
+
+      case 'field_is_documentation':
+        if ($documentationFile = $group->field_is_documentation->entity) {
+          return $documentationFile->url();
+        }
+        return Url::fromUri('internal:#');
+
+      case 'field_ar_contact_information':
+      case 'field_is_contact_information':
+        return Url::fromRoute('email_contact.form', [
+          'entity_type' => $group->getEntityTypeId(),
+          'entity' => $group->id(),
+          'field_name' => $fieldName,
+        ]);
+
+      default:
+        throw new \RuntimeException(sprintf('The field "%s" is not supported.', $fieldName));
+    }
+  }
+
+  /**
+   * Returns whether the link should be enabled.
+   *
+   * @param \Drupal\joinup_group\Entity\GroupInterface $group
+   *   The group entity.
+   * @param string $fieldName
+   *   The field name.
+   *
+   * @return bool
+   *   Whether the link should be enabled.
+   */
+  protected function isLinkEnabled(GroupInterface $group, string $fieldName): bool {
+    switch ($fieldName) {
+      case 'field_ar_access_url':
+      case 'field_is_landing_page':
+        return !empty($group->$fieldName->uri);
+
+      case 'field_is_documentation':
+        return !empty($group->field_is_documentation->entity);
+
+      case 'field_ar_contact_information':
+      case 'field_is_contact_information':
+        // @todo The service should be injected.
+        foreach ($group->$fieldName->referencedEntities() as $contactInformation) {
+          if ($contactInformation->field_ci_email->value && $this->emailConfirmer->getConfirmation($contactInformation->field_ci_email->value, TRUE, ContactInformationEmailConfirmInterface::REALM)) {
+            return TRUE;
+          }
+        }
+        return FALSE;
+
+      default:
+        throw new \RuntimeException(sprintf('The field "%s" is not supported.', $fieldName));
+    }
   }
 
 }
