@@ -18,7 +18,6 @@ use Drupal\Core\Url;
 use Drupal\eif\EifInterface;
 use Drupal\eif\Form\EifWrapperInlineForm;
 use Drupal\field\FieldConfigInterface;
-use Drupal\joinup_menu\MenuHelperInterface;
 use Drupal\og\OgGroupAudienceHelperInterface;
 use Drupal\rdf_meta_entity\Entity\RdfMetaEntityInterface;
 use Drupal\solution\Entity\SolutionInterface;
@@ -288,7 +287,6 @@ function _eif_add_eif_link_to_leftside_menu(RdfMetaEntityInterface $meta_entity)
           'link' => $link,
           'enabled' => 0,
           'weight' => -2,
-          'internal_identifier' => MenuHelperInterface::INTERNAL_IDENTIFIER_EIF_PERSPECTIVE,
         ])->save();
       }
     }

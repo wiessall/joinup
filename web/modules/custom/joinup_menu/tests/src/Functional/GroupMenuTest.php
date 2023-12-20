@@ -13,6 +13,7 @@ use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\menu_link_content\MenuLinkContentInterface;
 use Drupal\og\OgGroupAudienceHelper;
 use Drupal\rdf_meta_entity\Entity\RdfMetaEntity;
+use Drupal\sparql_entity_storage\UriEncoder;
 
 /**
  * Tests the menus of the groups.
@@ -36,14 +37,14 @@ final class GroupMenuTest extends JoinupExistingSiteTestBase {
     $this->assertCount(2, $ogMenuInstances);
 
     $menuLinks = $this->loadMenuLinks($ogMenuInstances[0]->id());
-    $this->assertMenuLink($menuLinks[0], 'Overview', $collection->toUrl()->getInternalPath(), TRUE);
+    $this->assertMenuLink($menuLinks[0], 'Overview', $collection->toUrl()->getInternalPath());
 
     // @todo Use the link template to get the URL.
     // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-8361
     $url = Url::fromRoute('view.discussions.overview', [
       'rdf_entity' => $collection->id(),
     ]);
-    $this->assertMenuLink($menuLinks[1], 'Discussions', $url->getInternalPath(), TRUE);
+    $this->assertMenuLink($menuLinks[1], 'Discussions', $url->getInternalPath());
   }
 
   /**
@@ -54,28 +55,30 @@ final class GroupMenuTest extends JoinupExistingSiteTestBase {
       'rid' => 'collection',
       'field_ar_state' => 'published',
     ]);
+    $urlParameters = ['rdf_entity' => UriEncoder::encodeUrl($collection->id())];
 
     $ogMenuInstances = $this->loadEntityOgMenuInstances($collection);
     $this->assertCount(2, $ogMenuInstances);
     $menuLinks = $this->loadMenuLinks($ogMenuInstances[1]->id());
 
-    // Assert that both menu links are enabled and both the links point to '' -
-    // route:<none>.
-    $this->assertMenuLink($menuLinks[0], 'Website link', '', FALSE);
-    $contactUrl = Url::fromRoute('email_contact.form', [
-      'entity_type' => $collection->getEntityTypeId(),
-      'entity' => $collection->id(),
-      'field_name' => 'field_ar_contact_information',
-    ])->getInternalPath();
-    $this->assertMenuLink($menuLinks[1], 'Contact us', $contactUrl, FALSE);
+    // Assert the website link for the collection.
+    $websiteUrl = Url::fromRoute('joinup_menu.website_link', $urlParameters)->getInternalPath();
+    $this->assertMenuLink($menuLinks[0], 'Website link', $websiteUrl);
+    $contactUrl = Url::fromRoute('joinup_menu.contact_form', $urlParameters)->getInternalPath();
+    $this->assertMenuLink($menuLinks[1], 'Contact us', $contactUrl);
+
+    // Assert the website link for the collection.
+    $renderedMenu = $this->getRenderedMenu('ogmenu-' . $ogMenuInstances[1]->id());
+    $this->assertStringNotContainsString($websiteUrl, $renderedMenu);
+    $this->assertStringNotContainsString($contactUrl, $renderedMenu);
 
     // Set an access URL to the collection and re-check.
     $collection->set('field_ar_access_url', 'https://example.com');
     $collection->save();
 
-    $menuLinks = $this->loadMenuLinks($ogMenuInstances[1]->id());
-    $this->assertMenuLink($menuLinks[0], 'Website link', 'https://example.com', TRUE);
-    $this->assertMenuLink($menuLinks[1], 'Contact us', $contactUrl, FALSE);
+    $renderedMenu = $this->getRenderedMenu('ogmenu-' . $ogMenuInstances[1]->id());
+    $this->assertStringContainsString($websiteUrl, $renderedMenu);
+    $this->assertStringNotContainsString($contactUrl, $renderedMenu);
 
     $contactInformation = $this->createRdfEntity([
       'rid' => 'contact_information',
@@ -88,15 +91,23 @@ final class GroupMenuTest extends JoinupExistingSiteTestBase {
     $collection->set('field_ar_contact_information', $contactInformation->id());
     $collection->save();
 
-    $menuLinks = $this->loadMenuLinks($ogMenuInstances[1]->id());
-    $this->assertMenuLink($menuLinks[0], 'Website link', 'https://example.com', TRUE);
-    $this->assertMenuLink($menuLinks[1], 'Contact us', $contactUrl, FALSE);
+    $renderedMenu = $this->getRenderedMenu('ogmenu-' . $ogMenuInstances[1]->id());
+    $this->assertStringContainsString($websiteUrl, $renderedMenu);
+    $this->assertStringNotContainsString($contactUrl, $renderedMenu);
 
     // Create an email confirmation and confirm it.
-    \Drupal::getContainer()->get('contact_information.email_confirm')->confirmEmail($contactInformation->field_ci_email->value);
-    $menuLinks = $this->loadMenuLinks($ogMenuInstances[1]->id());
-    $this->assertMenuLink($menuLinks[0], 'Website link', 'https://example.com', TRUE);
-    $this->assertMenuLink($menuLinks[1], 'Contact us', $contactUrl, TRUE);
+    \Drupal::getContainer()->get('contact_information.email_confirm')->confirmEmailsForGroup($collection);
+    $confirmation = \Drupal::entityTypeManager()->getStorage('email_confirmer_confirmation')->loadByProperties([
+      'email' => 'test@example.com',
+      'realm' => ContactInformationEmailConfirmInterface::REALM,
+    ]);
+    $confirmation = reset($confirmation);
+    $confirmation->confirm($confirmation->getHash());
+    $confirmation->save();
+
+    $renderedMenu = $this->getRenderedMenu('ogmenu-' . $ogMenuInstances[1]->id());
+    $this->assertStringContainsString($websiteUrl, $renderedMenu);
+    $this->assertStringContainsString($contactUrl, $renderedMenu);
   }
 
   /**
@@ -112,19 +123,17 @@ final class GroupMenuTest extends JoinupExistingSiteTestBase {
       'field_is_state' => 'published',
       'collection' => $collection->id(),
     ]);
+    $urlParameters = ['rdf_entity' => $solution->id()];
 
     $ogMenuInstances = $this->loadEntityOgMenuInstances($solution);
     $this->assertCount(2, $ogMenuInstances);
 
     $menuLinks = $this->loadMenuLinks($ogMenuInstances[0]->id());
-    $this->assertMenuLink($menuLinks[0], 'Overview', $solution->toUrl()->getInternalPath(), TRUE);
-
+    $this->assertMenuLink($menuLinks[0], 'Overview', $solution->toUrl()->getInternalPath());
     // @todo Use the link template to get the URL.
     // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-8361
-    $url = Url::fromRoute('view.discussions.overview', [
-      'rdf_entity' => $solution->id(),
-    ]);
-    $this->assertMenuLink($menuLinks[1], 'Discussions', $url->getInternalPath(), TRUE);
+    $url = Url::fromRoute('view.discussions.overview', $urlParameters);
+    $this->assertMenuLink($menuLinks[1], 'Discussions', $url->getInternalPath());
   }
 
   /**
@@ -140,37 +149,39 @@ final class GroupMenuTest extends JoinupExistingSiteTestBase {
       'field_is_state' => 'published',
       'collection' => $collection->id(),
     ]);
+    $urlParameters = ['rdf_entity' => UriEncoder::encodeUrl($solution->id())];
 
     $ogMenuInstances = $this->loadEntityOgMenuInstances($solution);
     $this->assertCount(2, $ogMenuInstances);
     $menuLinks = $this->loadMenuLinks($ogMenuInstances[1]->id());
     $this->assertCount(4, $menuLinks);
 
-    // Assert that both menu links are enabled and both the links point to '' -
-    // route:<none>.
-    $this->assertMenuLink($menuLinks[0], 'Website link', '', FALSE);
+    $websiteUrl = Url::fromRoute('joinup_menu.website_link', $urlParameters)->getInternalPath();
+    $this->assertMenuLink($menuLinks[0], 'Website link', $websiteUrl);
     $releasesUrl = Url::fromRoute('asset_release.solution_asset_release.overview', [
       'rdf_entity' => $solution->id(),
     ])->getInternalPath();
+    $this->assertMenuLink($menuLinks[1], 'Release history', $releasesUrl);
+    $documentationUrl = Url::fromRoute('joinup_menu.documentation_file', $urlParameters)->getInternalPath();
+    $this->assertMenuLink($menuLinks[2], 'Documentation', $documentationUrl);
+    $contactUrl = Url::fromRoute('joinup_menu.contact_form', $urlParameters)->getInternalPath();
+    $this->assertMenuLink($menuLinks[3], 'Contact us', $contactUrl);
 
-    $this->assertMenuLink($menuLinks[1], 'Release history', $releasesUrl, TRUE);
-    $this->assertMenuLink($menuLinks[2], 'Documentation', '', FALSE);
-    $contactUrl = Url::fromRoute('email_contact.form', [
-      'entity_type' => $solution->getEntityTypeId(),
-      'entity' => $solution->id(),
-      'field_name' => 'field_is_contact_information',
-    ])->getInternalPath();
-    $this->assertMenuLink($menuLinks[3], 'Contact us', $contactUrl, FALSE);
+    $renderedMenu = $this->getRenderedMenu('ogmenu-' . $ogMenuInstances[1]->id());
+    $this->assertStringNotContainsString($websiteUrl, $renderedMenu);
+    $this->assertStringContainsString($releasesUrl, $renderedMenu);
+    $this->assertStringNotContainsString($documentationUrl, $renderedMenu);
+    $this->assertStringNotContainsString($contactUrl, $renderedMenu);
 
     // Set an access URL to the solution and re-check.
     $solution->set('field_is_landing_page', 'https://example.com');
     $solution->save();
 
-    $menuLinks = $this->loadMenuLinks($ogMenuInstances[1]->id());
-    $this->assertMenuLink($menuLinks[0], 'Website link', 'https://example.com', TRUE);
-    $this->assertMenuLink($menuLinks[1], 'Release history', $releasesUrl, TRUE);
-    $this->assertMenuLink($menuLinks[2], 'Documentation', '', FALSE);
-    $this->assertMenuLink($menuLinks[3], 'Contact us', $contactUrl, FALSE);
+    $renderedMenu = $this->getRenderedMenu('ogmenu-' . $ogMenuInstances[1]->id());
+    $this->assertStringContainsString($websiteUrl, $renderedMenu);
+    $this->assertStringContainsString($releasesUrl, $renderedMenu);
+    $this->assertStringNotContainsString($documentationUrl, $renderedMenu);
+    $this->assertStringNotContainsString($contactUrl, $renderedMenu);
 
     // Create a dummy text file with dummy contents.
     $fileUri = $this->generateFile('test', 10, 10, 'text');
@@ -179,19 +190,17 @@ final class GroupMenuTest extends JoinupExistingSiteTestBase {
     ]);
     $file->setPermanent();
     $file->save();
-    $fileUrl = Url::fromRoute('joinup_menu.file_download', [
-      'file_identifier' => $file->id() . '-' . urlencode($file->getFilename()),
-    ])->getInternalPath();
+    $documentationUrl = Url::fromRoute('joinup_menu.documentation_file', $urlParameters)->getInternalPath();
 
     // Set a documentation field to the solution and re-check.
     $solution->set('field_is_documentation', $file->id());
     $solution->save();
 
-    $menuLinks = $this->loadMenuLinks($ogMenuInstances[1]->id());
-    $this->assertMenuLink($menuLinks[0], 'Website link', 'https://example.com', TRUE);
-    $this->assertMenuLink($menuLinks[1], 'Release history', $releasesUrl, TRUE);
-    $this->assertMenuLink($menuLinks[2], 'Documentation', $fileUrl, TRUE);
-    $this->assertMenuLink($menuLinks[3], 'Contact us', $contactUrl, FALSE);
+    $renderedMenu = $this->getRenderedMenu('ogmenu-' . $ogMenuInstances[1]->id());
+    $this->assertStringContainsString($websiteUrl, $renderedMenu);
+    $this->assertStringContainsString($releasesUrl, $renderedMenu);
+    $this->assertStringContainsString($documentationUrl, $renderedMenu);
+    $this->assertStringNotContainsString($contactUrl, $renderedMenu);
 
     $contactInformation = $this->createRdfEntity([
       'rid' => 'contact_information',
@@ -205,18 +214,20 @@ final class GroupMenuTest extends JoinupExistingSiteTestBase {
     $solution->save();
 
     $menuLinks = $this->loadMenuLinks($ogMenuInstances[1]->id());
-    $this->assertMenuLink($menuLinks[0], 'Website link', 'https://example.com', TRUE);
-    $this->assertMenuLink($menuLinks[1], 'Release history', $releasesUrl, TRUE);
-    $this->assertMenuLink($menuLinks[2], 'Documentation', $fileUrl, TRUE);
-    $this->assertMenuLink($menuLinks[3], 'Contact us', $contactUrl, FALSE);
+    $this->assertMenuLink($menuLinks[0], 'Website link', $websiteUrl);
+    $this->assertMenuLink($menuLinks[1], 'Release history', $releasesUrl);
+    $this->assertMenuLink($menuLinks[2], 'Documentation', $documentationUrl);
+    $this->assertMenuLink($menuLinks[3], 'Contact us', $contactUrl);
 
     // Create an email confirmation and confirm it.
-    \Drupal::getContainer()->get('contact_information.email_confirm')->confirmEmail($contactInformation->field_ci_email->value);
-    $menuLinks = $this->loadMenuLinks($ogMenuInstances[1]->id());
-    $this->assertMenuLink($menuLinks[0], 'Website link', 'https://example.com', TRUE);
-    $this->assertMenuLink($menuLinks[1], 'Release history', $releasesUrl, TRUE);
-    $this->assertMenuLink($menuLinks[2], 'Documentation', $fileUrl, TRUE);
-    $this->assertMenuLink($menuLinks[3], 'Contact us', $contactUrl, TRUE);
+    \Drupal::getContainer()->get('contact_information.email_confirm')->confirmEmailsForGroup($solution);
+    $confirmation = \Drupal::entityTypeManager()->getStorage('email_confirmer_confirmation')->loadByProperties([
+      'email' => 'test@example.com',
+      'realm' => ContactInformationEmailConfirmInterface::REALM,
+    ]);
+    $confirmation = reset($confirmation);
+    $confirmation->confirm($confirmation->getHash());
+    $confirmation->save();
 
     // Create the EIF perspective for the solution.
     $metaEntity = RdfMetaEntity::loadOrCreate('eif_perspective', $solution);
@@ -227,13 +238,42 @@ final class GroupMenuTest extends JoinupExistingSiteTestBase {
 
     $menuLinks = $this->loadMenuLinks($ogMenuInstances[1]->id());
     $this->assertCount(5, $menuLinks);
-    $this->assertMenuLink($menuLinks[0], 'Website link', 'https://example.com', TRUE);
-    $this->assertMenuLink($menuLinks[1], 'Release history', $releasesUrl, TRUE);
-    $this->assertMenuLink($menuLinks[2], 'Documentation', $fileUrl, TRUE);
-    $this->assertMenuLink($menuLinks[3], 'Contact us', $contactUrl, TRUE);
+    $this->assertMenuLink($menuLinks[0], 'Website link', $websiteUrl);
+    $this->assertMenuLink($menuLinks[1], 'Release history', $releasesUrl);
+    $this->assertMenuLink($menuLinks[2], 'Documentation', $documentationUrl);
+    $this->assertMenuLink($menuLinks[3], 'Contact us', $contactUrl);
     // By default the menu item is disabled.
     // @see \_eif_add_eif_link_to_leftside_menu
-    $this->assertMenuLink($menuLinks[4], 'EIF Perspective', $eifPerspectiveUrl, FALSE);
+    $this->assertMenuLink($menuLinks[4], 'EIF Perspective', $eifPerspectiveUrl);
+
+    $renderedMenu = $this->getRenderedMenu('ogmenu-' . $ogMenuInstances[1]->id());
+    $this->assertStringContainsString($websiteUrl, $renderedMenu);
+    $this->assertStringContainsString($releasesUrl, $renderedMenu);
+    $this->assertStringContainsString($documentationUrl, $renderedMenu);
+    $this->assertStringContainsString($contactUrl, $renderedMenu);
+    $this->assertStringNotContainsString($eifPerspectiveUrl, $renderedMenu);
+  }
+
+  /**
+   * Renders a menu.
+   *
+   * @param string $menuName
+   *   The menu name.
+   *
+   * @return string
+   *   The rendered menu.
+   */
+  protected function getRenderedMenu(string $menuName): string {
+    $menuTree = \Drupal::menuTree();
+    $parameters = $menuTree->getCurrentRouteMenuTreeParameters($menuName);
+    $tree = $menuTree->load($menuName, $parameters);
+    $manipulators = [
+      ['callable' => 'menu.default_tree_manipulators:checkAccess'],
+      ['callable' => 'menu.default_tree_manipulators:generateIndexAndSort'],
+    ];
+    $tree = $menuTree->transform($tree, $manipulators);
+    $build = $menuTree->build($tree);
+    return (string) \Drupal::service('renderer')->renderRoot($build);
   }
 
   /**
@@ -245,14 +285,11 @@ final class GroupMenuTest extends JoinupExistingSiteTestBase {
    *   The expected title.
    * @param string $url
    *   The expected URL.
-   * @param bool $enabled
-   *   The expected enabled status.
    */
-  protected function assertMenuLink(MenuLinkContentInterface $menuLink, string $title, string $url, bool $enabled): void {
+  protected function assertMenuLink(MenuLinkContentInterface $menuLink, string $title, string $url): void {
     $this->assertEquals($title, $menuLink->getTitle());
     $actualUri = $menuLink->getUrlObject()->isExternal() ? $menuLink->getUrlObject()->getUri() : $menuLink->getUrlObject()->getInternalPath();
     $this->assertEquals($url, $actualUri);
-    $this->assertEquals($enabled, $menuLink->isEnabled());
   }
 
   /**
