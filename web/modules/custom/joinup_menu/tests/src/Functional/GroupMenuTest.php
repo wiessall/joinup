@@ -31,8 +31,15 @@ final class GroupMenuTest extends JoinupExistingSiteTestBase {
     $ogMenuInstances = array_values($ogMenuInstances);
     $this->assertCount(2, $ogMenuInstances);
 
-    $menuLinks = $this->loadMenuLinks($ogMenuInstances[0]->id());
-    $this->assertMenuLinks(['Overview', 'Discussions'], $menuLinks);
+    $menuLinks = array_values($this->loadMenuLinks($ogMenuInstances[0]->id()));
+    $this->assertMenuLink($menuLinks[0], 'Overview', $collection->toUrl()->getInternalPath(), TRUE);
+
+    // @todo Use the link template to get the URL.
+    // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-8361
+    $url = Url::fromRoute('view.discussions.overview', [
+      'rdf_entity' => $collection->id(),
+    ]);
+    $this->assertMenuLink($menuLinks[1], 'Discussions', $url->getInternalPath(), TRUE);
   }
 
   /**
