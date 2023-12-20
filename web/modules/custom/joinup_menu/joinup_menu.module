@@ -1,0 +1,48 @@
+<?php
+
+/**
+ * @file
+ * Contains hooks and functions for the joinup_menu module.
+ */
+
+declare(strict_types = 1);
+
+use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Entity\EntityTypeInterface;
+use Drupal\Core\Field\BaseFieldDefinition;
+use Drupal\joinup_group\Entity\GroupInterface;
+
+/**
+ * Implements hook_entity_base_field_info().
+ */
+function joinup_menu_entity_base_field_info(EntityTypeInterface $entity_type) {
+  if ($entity_type->id() === 'menu_link_content') {
+    // The internal identifier is used to identify the menu link item for
+    // internal purposes like identifying the 'Contact us' link. The reason for
+    // this is that there is no way to identify which link to sync after a group
+    // is updated since 1. the link can have its title changed, 2. the links can
+    // be reordered (so we cannot depend on the first available), and 3. the
+    // default URI is 'internal:#' for empty links, so we cannot identify them
+    // by URI.
+    $fields['internal_identifier'] = BaseFieldDefinition::create('string')
+      ->setLabel(t('Internal identifier'))
+      ->setDescription(t('The internal identifier of the menu link.'))
+      ->setReadOnly(TRUE);
+
+    return $fields;
+  }
+
+  return [];
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_update().
+ */
+function joinup_menu_rdf_entity_update(EntityInterface $entity) {
+  if (!$entity instanceof GroupInterface) {
+    return;
+  }
+
+  $menuHelper = \Drupal::getContainer()->get('joinup_menu.menu_helper');
+  $menuHelper->syncQuickLinksMenuItems($entity);
+}
