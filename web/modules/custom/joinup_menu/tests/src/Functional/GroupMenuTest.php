@@ -6,6 +6,7 @@ namespace Drupal\Tests\joinup_menu\Functional;
 
 use Drupal\Core\Url;
 use Drupal\file\Entity\File;
+use Drupal\rdf_meta_entity\Entity\RdfMetaEntity;
 use Drupal\Tests\joinup_test\ExistingSite\JoinupExistingSiteTestBase;
 use Drupal\contact_information\ContactInformationEmailConfirmInterface;
 use Drupal\joinup_group\Entity\GroupInterface;
@@ -143,6 +144,7 @@ final class GroupMenuTest extends JoinupExistingSiteTestBase {
     $ogMenuInstances = $this->loadEntityOgMenuInstances($solution);
     $this->assertCount(2, $ogMenuInstances);
     $menuLinks = $this->loadMenuLinks($ogMenuInstances[1]->id());
+    $this->assertCount(4, $menuLinks);
 
     // Assert that both menu links are enabled and both the links point to '' -
     // route:<none>.
@@ -212,6 +214,23 @@ final class GroupMenuTest extends JoinupExistingSiteTestBase {
     $this->assertMenuLink($menuLinks[1], 'Release history', $releasesUrl, TRUE);
     $this->assertMenuLink($menuLinks[2], 'Documentation', 'public:/' . $file->createFileUrl(), TRUE);
     $this->assertMenuLink($menuLinks[3], 'Contact us', $contactUrl, TRUE);
+
+    // Create the EIF perspective for the solution.
+    $metaEntity = RdfMetaEntity::loadOrCreate('eif_perspective', $solution);
+    $metaEntity->save();
+    $eifPerspectiveUrl = Url::fromRoute('entity.rdf_entity.eif_perspective', [
+      'rdf_entity' => $solution->id(),
+    ])->getInternalPath();
+
+    $menuLinks = $this->loadMenuLinks($ogMenuInstances[1]->id());
+    $this->assertCount(5, $menuLinks);
+    $this->assertMenuLink($menuLinks[0], 'Website link', 'https://example.com', TRUE);
+    $this->assertMenuLink($menuLinks[1], 'Release history', $releasesUrl, TRUE);
+    $this->assertMenuLink($menuLinks[2], 'Documentation', 'public:/' . $file->createFileUrl(), TRUE);
+    $this->assertMenuLink($menuLinks[3], 'Contact us', $contactUrl, TRUE);
+    // By default the menu item is disabled.
+    // @see \_eif_add_eif_link_to_leftside_menu
+    $this->assertMenuLink($menuLinks[4], 'EIF Perspective', $eifPerspectiveUrl, FALSE);
   }
 
   /**
