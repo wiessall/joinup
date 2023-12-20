@@ -70,12 +70,15 @@ class GroupMenuLinksSubscriber implements EventSubscriberInterface {
           'internal_identifier' => MenuHelperInterface::INTERNAL_IDENTIFIER_WEBSITE_LINK,
         ]);
         $event->addMenuLink($this->menuHelper->getQuickLinksUrlForField($group, 'field_ar_contact_information'), 'Contact us', -6, [
-          'enabled' => $group->get('field_ar_contact_information')->isEmpty() === FALSE,
+          // By default, on install, no contact information is verified, so the
+          // link is disabled.
+          'enabled' => FALSE,
           'internal_identifier' => MenuHelperInterface::INTERNAL_IDENTIFIER_CONTACT_US,
         ]);
       }
       elseif ($group->bundle() === 'solution') {
         $event->addMenuLink($this->menuHelper->getQuickLinksUrlForField($group, 'field_is_landing_page'), 'Website link', -7, [
+          'enabled' => $group->get('field_is_landing_page')->isEmpty() === FALSE,
           'internal_identifier' => MenuHelperInterface::INTERNAL_IDENTIFIER_WEBSITE_LINK,
         ]);
         $event->addMenuLink(Url::fromRoute('asset_release.solution_asset_release.overview', [
@@ -86,9 +89,13 @@ class GroupMenuLinksSubscriber implements EventSubscriberInterface {
         // Leave -5 for the EIF perspective link.
         // @see \_eif_add_eif_link_to_leftside_menu
         $event->addMenuLink($this->menuHelper->getQuickLinksUrlForField($group, 'field_is_documentation'), 'Documentation', -4, [
+          'enabled' => $group->get('field_is_documentation')->isEmpty() === FALSE,
           'internal_identifier' => MenuHelperInterface::INTERNAL_IDENTIFIER_DOCUMENTATION,
         ]);
         $event->addMenuLink($this->menuHelper->getQuickLinksUrlForField($group, 'field_is_contact_information'), 'Contact us', -3, [
+          // By default, on install, no contact information is verified, so the
+          // link is disabled.
+          'enabled' => FALSE,
           'internal_identifier' => MenuHelperInterface::INTERNAL_IDENTIFIER_CONTACT_US,
         ]);
       }

@@ -5,11 +5,13 @@ declare(strict_types = 1);
 namespace Drupal\Tests\joinup_menu\Functional;
 
 use Drupal\Core\Url;
+use Drupal\file\Entity\File;
 use Drupal\Tests\joinup_test\ExistingSite\JoinupExistingSiteTestBase;
 use Drupal\contact_information\ContactInformationEmailConfirmInterface;
 use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\menu_link_content\MenuLinkContentInterface;
 use Drupal\og\OgGroupAudienceHelper;
+use Drupal\Tests\TestFileCreationTrait;
 
 /**
  * Test description.
@@ -17,6 +19,8 @@ use Drupal\og\OgGroupAudienceHelper;
  * @group joinup_menu
  */
 final class GroupMenuTest extends JoinupExistingSiteTestBase {
+
+  use TestFileCreationTrait;
 
   /**
    * Tests the collection navigation menu.
@@ -28,10 +32,9 @@ final class GroupMenuTest extends JoinupExistingSiteTestBase {
     ]);
 
     $ogMenuInstances = $this->loadEntityOgMenuInstances($collection);
-    $ogMenuInstances = array_values($ogMenuInstances);
     $this->assertCount(2, $ogMenuInstances);
 
-    $menuLinks = array_values($this->loadMenuLinks($ogMenuInstances[0]->id()));
+    $menuLinks = $this->loadMenuLinks($ogMenuInstances[0]->id());
     $this->assertMenuLink($menuLinks[0], 'Overview', $collection->toUrl()->getInternalPath(), TRUE);
 
     // @todo Use the link template to get the URL.
@@ -52,9 +55,8 @@ final class GroupMenuTest extends JoinupExistingSiteTestBase {
     ]);
 
     $ogMenuInstances = $this->loadEntityOgMenuInstances($collection);
-    $ogMenuInstances = array_values($ogMenuInstances);
     $this->assertCount(2, $ogMenuInstances);
-    $menuLinks = array_values($this->loadMenuLinks($ogMenuInstances[1]->id()));
+    $menuLinks = $this->loadMenuLinks($ogMenuInstances[1]->id());
 
     // Assert that both menu links are enabled and both the links point to '' -
     // route:<none>.
@@ -70,7 +72,7 @@ final class GroupMenuTest extends JoinupExistingSiteTestBase {
     $collection->set('field_ar_access_url', 'https://example.com');
     $collection->save();
 
-    $menuLinks = array_values($this->loadMenuLinks($ogMenuInstances[1]->id()));
+    $menuLinks = $this->loadMenuLinks($ogMenuInstances[1]->id());
     $this->assertMenuLink($menuLinks[0], 'Website link', 'https://example.com', TRUE);
     $this->assertMenuLink($menuLinks[1], 'Contact us', $contactUrl, FALSE);
 
@@ -85,15 +87,131 @@ final class GroupMenuTest extends JoinupExistingSiteTestBase {
     $collection->set('field_ar_contact_information', $contactInformation->id());
     $collection->save();
 
-    $menuLinks = array_values($this->loadMenuLinks($ogMenuInstances[1]->id()));
+    $menuLinks = $this->loadMenuLinks($ogMenuInstances[1]->id());
     $this->assertMenuLink($menuLinks[0], 'Website link', 'https://example.com', TRUE);
     $this->assertMenuLink($menuLinks[1], 'Contact us', $contactUrl, FALSE);
 
     // Create an email confirmation and confirm it.
     \Drupal::getContainer()->get('contact_information.email_confirm')->confirmEmail($contactInformation->field_ci_email->value);
-    $menuLinks = array_values($this->loadMenuLinks($ogMenuInstances[1]->id()));
+    $menuLinks = $this->loadMenuLinks($ogMenuInstances[1]->id());
     $this->assertMenuLink($menuLinks[0], 'Website link', 'https://example.com', TRUE);
     $this->assertMenuLink($menuLinks[1], 'Contact us', $contactUrl, TRUE);
+  }
+
+  /**
+   * Tests the solution navigation menu.
+   */
+  public function testSolutionNavigationMenu(): void {
+    $collection = $this->createRdfEntity([
+      'rid' => 'collection',
+      'field_ar_state' => 'published',
+    ]);
+    $solution = $this->createRdfEntity([
+      'rid' => 'solution',
+      'field_is_state' => 'published',
+      'collection' => $collection->id(),
+    ]);
+
+    $ogMenuInstances = $this->loadEntityOgMenuInstances($solution);
+    $this->assertCount(2, $ogMenuInstances);
+
+    $menuLinks = $this->loadMenuLinks($ogMenuInstances[0]->id());
+    $this->assertMenuLink($menuLinks[0], 'Overview', $solution->toUrl()->getInternalPath(), TRUE);
+
+    // @todo Use the link template to get the URL.
+    // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-8361
+    $url = Url::fromRoute('view.discussions.overview', [
+      'rdf_entity' => $solution->id(),
+    ]);
+    $this->assertMenuLink($menuLinks[1], 'Discussions', $url->getInternalPath(), TRUE);
+  }
+
+  /**
+   * Tests the solution quick links menu.
+   */
+  public function testSolutionQuickLinksMenu(): void {
+    $collection = $this->createRdfEntity([
+      'rid' => 'collection',
+      'field_ar_state' => 'published',
+    ]);
+    $solution = $this->createRdfEntity([
+      'rid' => 'solution',
+      'field_is_state' => 'published',
+      'collection' => $collection->id(),
+    ]);
+
+    $ogMenuInstances = $this->loadEntityOgMenuInstances($solution);
+    $this->assertCount(2, $ogMenuInstances);
+    $menuLinks = $this->loadMenuLinks($ogMenuInstances[1]->id());
+
+    // Assert that both menu links are enabled and both the links point to '' -
+    // route:<none>.
+    $this->assertMenuLink($menuLinks[0], 'Website link', '', FALSE);
+    $releasesUrl = Url::fromRoute('asset_release.solution_asset_release.overview', [
+      'rdf_entity' => $solution->id(),
+    ])->getInternalPath();
+
+    $this->assertMenuLink($menuLinks[1], 'Release history', $releasesUrl, TRUE);
+    $this->assertMenuLink($menuLinks[2], 'Documentation', '', FALSE);
+    $contactUrl = Url::fromRoute('email_contact.form', [
+      'entity_type' => $solution->getEntityTypeId(),
+      'entity' => $solution->id(),
+      'field_name' => 'field_is_contact_information',
+    ])->getInternalPath();
+    $this->assertMenuLink($menuLinks[3], 'Contact us', $contactUrl, FALSE);
+
+    // Set an access URL to the solution and re-check.
+    $solution->set('field_is_landing_page', 'https://example.com');
+    $solution->save();
+
+    $menuLinks = $this->loadMenuLinks($ogMenuInstances[1]->id());
+    $this->assertMenuLink($menuLinks[0], 'Website link', 'https://example.com', TRUE);
+    $this->assertMenuLink($menuLinks[1], 'Release history', $releasesUrl, TRUE);
+    $this->assertMenuLink($menuLinks[2], 'Documentation', '', FALSE);
+    $this->assertMenuLink($menuLinks[3], 'Contact us', $contactUrl, FALSE);
+
+    // Create a dummy text file with dummy contents.
+    $fileUri = $this->generateFile('test', 10, 10, 'text');
+    $file = File::create([
+      'uri' => $fileUri,
+    ]);
+    $file->setPermanent();
+    $file->save();
+
+    // Set a documentation field to the solution and re-check.
+    $solution->set('field_is_documentation', $file->id());
+    $solution->save();
+
+    $menuLinks = $this->loadMenuLinks($ogMenuInstances[1]->id());
+    $this->assertMenuLink($menuLinks[0], 'Website link', 'https://example.com', TRUE);
+    $this->assertMenuLink($menuLinks[1], 'Release history', $releasesUrl, TRUE);
+    $this->assertMenuLink($menuLinks[2], 'Documentation', 'public:/' . $file->createFileUrl(), TRUE);
+    $this->assertMenuLink($menuLinks[3], 'Contact us', $contactUrl, FALSE);
+
+    $contactInformation = $this->createRdfEntity([
+      'rid' => 'contact_information',
+      'field_ci_email' => 'test@example.com',
+      'field_ci_name' => 'Some name',
+    ]);
+    $contactInformation->save();
+
+    // Set a contact information field to the solution and re-check.
+    $solution->set('field_is_contact_information', $contactInformation->id());
+    $solution->save();
+
+    $menuLinks = $this->loadMenuLinks($ogMenuInstances[1]->id());
+    $this->assertMenuLink($menuLinks[0], 'Website link', 'https://example.com', TRUE);
+    $this->assertMenuLink($menuLinks[1], 'Release history', $releasesUrl, TRUE);
+    $this->assertMenuLink($menuLinks[2], 'Documentation', 'public:/' . $file->createFileUrl(), TRUE);
+    $this->assertMenuLink($menuLinks[3], 'Contact us', $contactUrl, FALSE);
+
+    // Create an email confirmation and confirm it.
+    \Drupal::getContainer()->get('contact_information.email_confirm')->confirmEmail($contactInformation->field_ci_email->value);
+    $menuLinks = $this->loadMenuLinks($ogMenuInstances[1]->id());
+    $this->assertMenuLink($menuLinks[0], 'Website link', 'https://example.com', TRUE);
+    $this->assertMenuLink($menuLinks[1], 'Release history', $releasesUrl, TRUE);
+    $this->assertMenuLink($menuLinks[2], 'Documentation', 'public:/' . $file->createFileUrl(), TRUE);
+    $this->assertMenuLink($menuLinks[3], 'Contact us', $contactUrl, TRUE);
   }
 
   /**
@@ -131,7 +249,7 @@ final class GroupMenuTest extends JoinupExistingSiteTestBase {
       ->condition(OgGroupAudienceHelper::DEFAULT_FIELD, $group->id())
       ->execute();
 
-    return $ogMenuInstanceStorage->loadMultiple($ogMenuInstanceIds);
+    return array_values($ogMenuInstanceStorage->loadMultiple($ogMenuInstanceIds));
   }
 
   /**
@@ -150,7 +268,7 @@ final class GroupMenuTest extends JoinupExistingSiteTestBase {
       ->condition('menu_name', 'ogmenu-' . $ogMenuInstanceId)
       ->execute();
 
-    return $menuLinkStorage->loadMultiple($menuLinkIds);
+    return array_values($menuLinkStorage->loadMultiple($menuLinkIds));
   }
 
   /**
