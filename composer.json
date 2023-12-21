@@ -334,7 +334,8 @@
                 "TypeError: Argument 1 passed to FlagCount::count() must implement interface @see https://www.drupal.org/project/flag/issues/3168014": "resources/patch/php/drupal/flag/3168014-46.patch",
                 "AJAX link broken if flaggable entity id is string @see https://www.drupal.org/project/flag/issues/3359007": "resources/patch/php/drupal/flag/3359007-47.patch",
                 "Disclose flagging view mode in flag theming @see https://www.drupal.org/project/flag/issues/3049155": "resources/patch/php/drupal/flag/3049155-16.patch",
-                "[Drupal 10.2] Deprecated sequence type schema definition @see https://www.drupal.org/i/3410265": "resources/patch/php/drupal/flag/3410265.diff"
+                "[Drupal 10.2] Deprecated sequence type schema definition @see https://www.drupal.org/i/3410265": "resources/patch/php/drupal/flag/3410265.diff",
+                "[Drupal 10.2] Merge::key() with array is deprecated @see https://www.drupal.org/i/3410363": "resources/patch/php/drupal/flag/3410363.diff"
             },
             "drupal/honeypot": {
                 "Behat integration. @see https://www.drupal.org/project/honeypot/issues/3059040": "resources/patch/php/drupal/honeypot/3059040.patch",
