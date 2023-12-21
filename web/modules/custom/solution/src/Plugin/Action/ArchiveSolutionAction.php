@@ -21,13 +21,19 @@ use Drupal\solution\Entity\SolutionInterface;
 class ArchiveSolutionAction extends ActionBase {
 
   /**
+   * ID of the archived state.
+   */
+  protected const ARCHIVED_STATE_ID = 'archived';
+
+  /**
    * {@inheritdoc}
    */
   public function access($object, ?AccountInterface $account = NULL, $return_as_object = FALSE) {
     $access = AccessResult::forbidden();
     if (
       $object instanceof SolutionInterface &&
-      $object->isTargetWorkflowStateAllowed('archive')
+      $object->getWorkflowState() !== self::ARCHIVED_STATE_ID &&
+      $object->isTargetWorkflowStateAllowed(self::ARCHIVED_STATE_ID)
     ) {
       $access = AccessResult::allowed();
     }
@@ -41,7 +47,8 @@ class ArchiveSolutionAction extends ActionBase {
     if (is_null($solution)) {
       return;
     }
-    $solution->setWorkflowState('archive')->save();
+    $solution->setWorkflowState(self::ARCHIVED_STATE_ID)->save();
+    \Drupal::entityTypeManager()->getStorage($solution->getEntityTypeId())->resetCache();
   }
 
 }
