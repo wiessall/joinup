@@ -1,4 +1,7 @@
-@api @group-b
+# Re-enable this when the new pages are build. Please, see instructions in
+# the corresponding ticket.
+# @see ISAICP-8332
+@api @group-b @wip
 Feature: As a moderator or group facilitator I want to be able to add, edit and
   delete glossary terms. As a user I want to be able to see glossary terms as
   links to their definition page.

@@ -5,6 +5,10 @@ Feature:
 
   Scenario: Use the content management UI
 
+    # Re-enable this when the new pages are build. Please, see instructions in
+    # the corresponding ticket.
+    # @see ISAICP-8332
+    @wip
     Given the following collections:
       | title        | state     |
       | Vintage Art  | published |
