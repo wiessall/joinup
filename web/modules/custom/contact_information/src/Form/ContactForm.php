@@ -62,7 +62,7 @@ class ContactForm extends ContactInformationFormBase {
   public function access(RdfInterface $rdf_entity): AccessResultInterface {
     return AccessResult::allowedIf(
       $this->currentUser()->isAuthenticated() &&
-      !empty($rdf_entity->getValidatedContactInformation())
+      !empty($rdf_entity->getValidatedContactInformationEmails())
     );
   }
 
@@ -70,7 +70,7 @@ class ContactForm extends ContactInformationFormBase {
    * {@inheritdoc}
    */
   protected function getEmailAddresses(): array {
-    return $this->rdfEntity->getValidatedContactInformation();
+    return $this->rdfEntity->getValidatedContactInformationEmails();
   }
 
 }

@@ -355,4 +355,20 @@ interface GroupInterface extends RdfInterface, LogoInterface, ShortIdInterface, 
    */
   public function getContactInformationFieldName(): string;
 
+  /**
+   * Returns validated contact information entities from the group.
+   *
+   * @return \Drupal\contact_information\Entity\ContactInformationInterface[]
+   *   A list of validated contact information entities.
+   */
+  public function getValidatedContactInformationEntities(): array;
+
+  /**
+   * Returns validated emails from the group.
+   *
+   * @return string[]
+   *   A list of validated emails.
+   */
+  public function getValidatedContactInformationEmails(): array;
+
 }
