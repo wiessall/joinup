@@ -13,7 +13,6 @@ WEB_DIR="web/publiccode-editor"
 rm -rf $EDITOR_DIR
 git clone --depth=1 --single-branch --branch v1.4.3 https://github.com/italia/publiccode-editor.git $EDITOR_DIR
 cat $PUBLICCODE_DIR/joinup.diff | patch -p1 -d $EDITOR_DIR
-cp $PUBLICCODE_DIR/.env $EDITOR_DIR/
 
 # Build the distribution. It needs Node 10 :(
 nvm install 10
