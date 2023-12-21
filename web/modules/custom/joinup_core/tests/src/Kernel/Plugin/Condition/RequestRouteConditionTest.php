@@ -53,8 +53,6 @@ class RequestRouteConditionTest extends KernelTestBase {
   protected function setUp(): void {
     parent::setUp();
 
-    $this->installSchema('system', ['sequences']);
-
     $this->pluginManager = $this->container->get('plugin.manager.condition');
     $this->requestStack = new RequestStack();
 
