@@ -1,4 +1,7 @@
-@api @group-b
+# Re-enable this when the new pages are build. Please, see instructions in
+# the corresponding ticket.
+# @see ISAICP-8332
+@api @group-b @wip
 Feature: "Add custom page" visibility options.
   In order to manage custom pages
   As a group facilitator

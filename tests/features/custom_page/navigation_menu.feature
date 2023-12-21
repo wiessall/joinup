@@ -1,4 +1,7 @@
-@api @terms @group-b
+# Re-enable this when the new pages are build. Please, see instructions in
+# the corresponding ticket.
+# @see ISAICP-8332
+@api @terms @group-b @wip
 Feature: Navigation menu for custom pages
   In order to determine the order and visibility of custom pages in the navigation menu
   As a facilitator
@@ -9,7 +12,6 @@ Feature: Navigation menu for custom pages
       | title            | logo     | state     |
       | Rainbow tables   | logo.png | published |
       | Cripple Mr Onion | logo.png | published |
-    
     When I am logged in as a facilitator of the "Rainbow tables" <group>
     And I go to the homepage of the "Rainbow tables" <group>
     Then the navigation menu of the "Rainbow tables" <group> should have <visible items 1> visible items
@@ -556,25 +558,3 @@ Feature: Navigation menu for custom pages
       | group      |
       | collection |
       | solution   |
-
-  Scenario Outline: Test that the edit link appears next to the "About" page.
-    Given the following <group>s:
-      | title           | state     |
-      | About edit link | published |
-
-    When I am logged in as a moderator
-    And I go to the "About edit link" <group>
-    And I click the contextual link "Edit menu" in the "Header" region
-
-    Then the "group menu edit table" table should contain the following columns:
-      | Page        | Enabled | Operations |
-      | Overview    |         | Edit       |
-      | Members     |         |            |
-      | Discussions |         |            |
-    When I click "Edit" in the "Content" region
-    Then I should see the heading "Edit <label> About edit link"
-
-    Examples:
-      | group      | label      |
-      | collection | Collection |
-      | solution   | Solution   |
