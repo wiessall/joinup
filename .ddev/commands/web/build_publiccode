@@ -1,8 +1,8 @@
 #!/bin/bash
 
 ## Description: Builds the publiccode.yml editor
-## Usage: publiccode
-## Example: ddev publiccode
+## Usage: build-publiccode
+## Example: ddev build-publiccode
 
 set -e
 
