@@ -64,7 +64,7 @@ final class GroupMenuTest extends JoinupExistingSiteTestBase {
     // Assert the website link for the collection.
     $websiteUrl = Url::fromRoute('joinup_menu.website_link', $urlParameters)->getInternalPath();
     $this->assertMenuLink($menuLinks[0], 'Website link', $websiteUrl);
-    $contactUrl = Url::fromRoute('joinup_menu.contact_form', $urlParameters)->getInternalPath();
+    $contactUrl = Url::fromRoute('entity.rdf_entity.contact', $urlParameters)->getInternalPath();
     $this->assertMenuLink($menuLinks[1], 'Contact us', $contactUrl);
 
     // Assert the website link for the collection.
@@ -164,7 +164,7 @@ final class GroupMenuTest extends JoinupExistingSiteTestBase {
     $this->assertMenuLink($menuLinks[1], 'Release history', $releasesUrl);
     $documentationUrl = Url::fromRoute('joinup_menu.documentation_file', $urlParameters)->getInternalPath();
     $this->assertMenuLink($menuLinks[2], 'Documentation', $documentationUrl);
-    $contactUrl = Url::fromRoute('joinup_menu.contact_form', $urlParameters)->getInternalPath();
+    $contactUrl = Url::fromRoute('entity.rdf_entity.contact', $urlParameters)->getInternalPath();
     $this->assertMenuLink($menuLinks[3], 'Contact us', $contactUrl);
 
     $renderedMenu = $this->getRenderedMenu('ogmenu-' . $ogMenuInstances[1]->id());

@@ -26,18 +26,3 @@ joinup_menu.website_link:
       bundles:
         - collection
         - solution
-
-joinup_menu.contact_form:
-  path: 'rdf_entity/{rdf_entity}/contact-form'
-  defaults:
-    _title: 'Contact Form'
-    _controller: '\Drupal\joinup_menu\Controller\JoinupMenuController::contactForm'
-  requirements:
-    _custom_access: '\Drupal\joinup_menu\Controller\JoinupMenuController::contactFormAccess'
-  options:
-    rdf_entity:
-
-      type: entity:rdf_entity
-      bundles:
-        - collection
-        - solution

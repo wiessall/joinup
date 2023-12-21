@@ -75,30 +75,4 @@ final class JoinupMenuController extends ControllerBase {
     return AccessResult::allowedIf(!empty($rdf_entity->$field->uri));
   }
 
-  /**
-   * Returns the contact form.
-   *
-   * @param \Drupal\rdf_entity\RdfInterface $rdf_entity
-   *   The RDF entity.
-   *
-   * @return array
-   *   The contact form.
-   */
-  public function contactForm(RdfInterface $rdf_entity): array {
-    return $this->formBuilder->getForm(ContactForm::class, $rdf_entity);
-  }
-
-  /**
-   * Checks access to the contact form.
-   *
-   * @param \Drupal\rdf_entity\RdfInterface $rdf_entity
-   *   The RDF entity.
-   *
-   * @return \Drupal\Core\Access\AccessResultInterface
-   *   The access result.
-   */
-  public static function contactFormAccess(RdfInterface $rdf_entity): AccessResultInterface {
-    return AccessResult::allowedIf(!empty($rdf_entity->getValidatedContactInformation()));
-  }
-
 }
