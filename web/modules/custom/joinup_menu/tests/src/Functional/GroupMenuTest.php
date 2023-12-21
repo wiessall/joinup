@@ -104,6 +104,15 @@ final class GroupMenuTest extends JoinupExistingSiteTestBase {
     $confirmation = reset($confirmation);
     $confirmation->confirm($confirmation->getHash());
     $confirmation->save();
+    \Drupal::cache()->invalidateMultiple($ogMenuInstances[1]->getCacheTags());
+
+    $renderedMenu = $this->getRenderedMenu('ogmenu-' . $ogMenuInstances[1]->id());
+    $this->assertStringContainsString($websiteUrl, $renderedMenu);
+    // Contact URL is not available for anonymous users.
+    $this->assertStringNotContainsString($contactUrl, $renderedMenu);
+
+    $authenticatedUser = $this->createUser();
+    $this->drupalLogin($authenticatedUser);
 
     $renderedMenu = $this->getRenderedMenu('ogmenu-' . $ogMenuInstances[1]->id());
     $this->assertStringContainsString($websiteUrl, $renderedMenu);
@@ -250,8 +259,16 @@ final class GroupMenuTest extends JoinupExistingSiteTestBase {
     $this->assertStringContainsString($websiteUrl, $renderedMenu);
     $this->assertStringContainsString($releasesUrl, $renderedMenu);
     $this->assertStringContainsString($documentationUrl, $renderedMenu);
-    $this->assertStringContainsString($contactUrl, $renderedMenu);
+    // Contact URL is not available for anonymous users.
+    $this->assertStringNotContainsString($contactUrl, $renderedMenu);
     $this->assertStringNotContainsString($eifPerspectiveUrl, $renderedMenu);
+
+    $authenticatedUser = $this->createUser();
+    $this->drupalLogin($authenticatedUser);
+
+    $renderedMenu = $this->getRenderedMenu('ogmenu-' . $ogMenuInstances[1]->id());
+    $this->assertStringContainsString($websiteUrl, $renderedMenu);
+    $this->assertStringContainsString($contactUrl, $renderedMenu);
   }
 
   /**
