@@ -7,7 +7,6 @@ namespace Drupal\joinup_menu\Controller;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Controller\ControllerBase;
-use Drupal\contact_information\Form\ContactForm;
 use Drupal\rdf_entity\RdfInterface;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;

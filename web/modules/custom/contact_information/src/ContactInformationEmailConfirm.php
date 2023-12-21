@@ -10,7 +10,6 @@ use Drupal\contact_information\Entity\ContactInformationInterface;
 use Drupal\email_confirmer\EmailConfirmerManagerInterface;
 use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\joinup_group\JoinupGroupHelper;
-use Drupal\joinup_menu\MenuHelperInterface;
 use Drupal\sparql_entity_storage\SparqlGraphInterface;
 
 /**

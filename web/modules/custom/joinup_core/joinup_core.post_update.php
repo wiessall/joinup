@@ -15,7 +15,6 @@
 
 declare(strict_types = 1);
 
-use Drupal\Core\Field\BaseFieldDefinition;
 use Drupal\sparql_entity_storage\UriEncoder;
 
 /**
