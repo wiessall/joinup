@@ -4,9 +4,9 @@ declare(strict_types = 1);
 
 namespace Drupal\Tests\rdf_entity_provenance\Kernel;
 
-use Drupal\joinup_core\Plugin\Validation\Constraint\SingleValueUniqueFieldConstraint;
 use Drupal\Tests\joinup_test\Traits\ConfigTestTrait;
 use Drupal\Tests\rdf_entity\Kernel\RdfKernelTestBase;
+use Drupal\joinup_core\Plugin\Validation\Constraint\SingleValueUniqueFieldConstraint;
 use Drupal\rdf_entity\Entity\Rdf;
 use Drupal\rdf_entity\Entity\RdfEntityType;
 
