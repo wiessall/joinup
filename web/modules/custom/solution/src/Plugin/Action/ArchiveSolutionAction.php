@@ -48,7 +48,6 @@ class ArchiveSolutionAction extends ActionBase {
       return;
     }
     $solution->setWorkflowState(self::ARCHIVED_STATE_ID)->save();
-    \Drupal::entityTypeManager()->getStorage($solution->getEntityTypeId())->resetCache();
   }
 
 }
