@@ -28,6 +28,7 @@ class SolutionAffiliationTest extends KernelTestBase {
     'og',
     'rdf_schema_field_validation',
     'rdf_draft',
+    'rdf_entity_provenance',
     'rdf_entity',
     'solution',
     'sparql_entity_storage',
