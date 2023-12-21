@@ -577,6 +577,7 @@ class SolutionContext extends RawDrupalContext {
       'featured' => 'feature',
       'pinned in' => 'pinned_in_collection',
       'shared on' => 'field_is_shared_in',
+      'abstract' => 'field_is_abstract',
     ];
   }
 
