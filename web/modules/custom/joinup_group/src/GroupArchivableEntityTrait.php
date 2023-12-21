@@ -9,7 +9,7 @@ use Drupal\joinup_workflow\ArchivableEntityInterface;
 use Drupal\joinup_workflow\ArchivableEntityTrait;
 
 /**
- * implements interface for group archivable entities.
+ * Implements interface for group archivable entities.
  */
 trait GroupArchivableEntityTrait {
 
@@ -20,7 +20,7 @@ trait GroupArchivableEntityTrait {
    * Checks whether the parent's entity is archived.
    *
    * @return bool
-   *    Whether group entity is archived.
+   *   Whether group entity is archived.
    */
   public function isParentArchived(): bool {
     assert($this instanceof GroupArchivableEntityInterface, 'Classes using ' . __TRAIT__ . ' should implement \Drupal\joinup_group\GroupArchivableEntityInterface');

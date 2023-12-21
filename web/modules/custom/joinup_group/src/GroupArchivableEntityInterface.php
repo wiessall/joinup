@@ -5,7 +5,7 @@ declare(strict_types = 1);
 namespace Drupal\joinup_group;
 
 /**
- * Provide an interface for group archivable entities.
+ * Provides an interface for group archivable entities.
  */
 interface GroupArchivableEntityInterface {
 
