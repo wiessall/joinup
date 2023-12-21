@@ -6,14 +6,13 @@ namespace Drupal\custom_page\Guard;
 
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\custom_page\Entity\CustomPageInterface;
-use Drupal\joinup_workflow\ArchivableEntityInterface;
 use Drupal\state_machine\Guard\GuardInterface;
 use Drupal\state_machine\Plugin\Workflow\WorkflowInterface;
 use Drupal\state_machine\Plugin\Workflow\WorkflowTransition;
 use Drupal\state_machine\WorkflowManagerInterface;
 
 /**
- * Guard class for custom page group.
+ * Guard class for custom page entity.
  */
 class CustomPageGuard implements GuardInterface {
 
@@ -42,33 +41,11 @@ class CustomPageGuard implements GuardInterface {
     }
 
     // Prevent un-archiving content of an archived parent.
-    if ($fromState === 'archived' && $toState === 'published' && $this->isParentArchived($entity)) {
+    if ($fromState === 'archived' && $toState === 'published' && $entity->isParentArchived()) {
       return FALSE;
     }
 
     return TRUE;
-  }
-
-  /**
-   * Checks if parent is archived.
-   *
-   * @param \Drupal\custom_page\Entity\CustomPageInterface $entity
-   *   Entity.
-   *
-   * @return bool
-   *   TRUE if parent is archived.
-   */
-  protected function isParentArchived(CustomPageInterface $entity): bool {
-    if (!$entity->hasGroup()) {
-      return FALSE;
-    }
-
-    $parentGroup = $entity->getGroup();
-    if ($parentGroup instanceof ArchivableEntityInterface && $parentGroup->isArchived()) {
-      return TRUE;
-    }
-
-    return FALSE;
   }
 
 }
