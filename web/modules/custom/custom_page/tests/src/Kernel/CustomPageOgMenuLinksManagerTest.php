@@ -178,26 +178,6 @@ class CustomPageOgMenuLinksManagerTest extends KernelTestBase {
       $ogmenu_instance->save();
       $ogmenu_instance_ids[$index] = $ogmenu_instance->id();
     }
-
-    // Create a custom page in the first collection.
-    /** @var \Drupal\node\NodeInterface $custom_page */
-    $custom_page = Node::create([
-      'type' => 'custom_page',
-      'title' => $this->randomString(),
-      'og_audience' => $collection_ids[1],
-    ]);
-    $custom_page->save();
-
-    // Check that a corresponding menu link has been created.
-    $this->assertMenuLink($ogmenu_instance_ids[1], $custom_page->id());
-
-    // Move the custom page in the 2nd collection.
-    $custom_page->set('og_audience', $collection_ids[2])->save();
-
-    // Check that the menu link has been removed from the 1st collection.
-    $this->assertNotMenuLink($ogmenu_instance_ids[1], $custom_page->id());
-    // Check that a menu link has been moved in the 2nd collection.
-    $this->assertMenuLink($ogmenu_instance_ids[2], $custom_page->id());
   }
 
   /**

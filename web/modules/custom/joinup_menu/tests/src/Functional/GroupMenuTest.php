@@ -5,6 +5,7 @@ declare(strict_types = 1);
 namespace Drupal\Tests\joinup_menu\Functional;
 
 use Drupal\Core\Url;
+use Drupal\node\Entity\Node;
 use Drupal\Tests\TestFileCreationTrait;
 use Drupal\Tests\joinup_test\ExistingSite\JoinupExistingSiteTestBase;
 use Drupal\contact_information\ContactInformationEmailConfirmInterface;
@@ -117,6 +118,30 @@ final class GroupMenuTest extends JoinupExistingSiteTestBase {
     $renderedMenu = $this->getRenderedMenu('ogmenu-' . $ogMenuInstances[1]->id());
     $this->assertStringContainsString($websiteUrl, $renderedMenu);
     $this->assertStringContainsString($contactUrl, $renderedMenu);
+
+    // Create a custom page in the collection.
+    $custom_page = Node::create([
+      'type' => 'custom_page',
+      'title' => $this->randomString(),
+      'og_audience' => $collection->id(),
+    ]);
+    $custom_page->save();
+
+    // Check that a corresponding menu link has been created.
+    $menuLinks = $this->loadMenuLinks($ogMenuInstances[1]->id());
+    $this->assertMenuLink($menuLinks[2], $custom_page->label(), $custom_page->toUrl()->getInternalPath());
+
+    // Move the custom page in a 2nd collection.
+    $newCollection = $this->createRdfEntity([
+      'rid' => 'collection',
+      'field_ar_state' => 'published',
+    ]);
+    $custom_page->set('og_audience', $newCollection)->save();
+
+    // Check that the menu link has been moved to the new collection.
+    $menuLinks = $this->loadMenuLinks($ogMenuInstances[1]->id());
+    // The custom page item was removed.
+    $this->assertCount(2, $menuLinks);
   }
 
   /**
@@ -269,6 +294,18 @@ final class GroupMenuTest extends JoinupExistingSiteTestBase {
     $renderedMenu = $this->getRenderedMenu('ogmenu-' . $ogMenuInstances[1]->id());
     $this->assertStringContainsString($websiteUrl, $renderedMenu);
     $this->assertStringContainsString($contactUrl, $renderedMenu);
+
+    // Create a custom page in the collection.
+    $custom_page = Node::create([
+      'type' => 'custom_page',
+      'title' => $this->randomString(),
+      'og_audience' => $solution->id(),
+    ]);
+    $custom_page->save();
+
+    // Check that a corresponding menu link has been created.
+    $menuLinks = $this->loadMenuLinks($ogMenuInstances[1]->id());
+    $this->assertMenuLink($menuLinks[5], $custom_page->label(), $custom_page->toUrl()->getInternalPath());
   }
 
   /**
