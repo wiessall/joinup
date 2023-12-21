@@ -1,0 +1,22 @@
+diff --git a/entity_reference_revisions.field_type_categories.yml b/entity_reference_revisions.field_type_categories.yml
+new file mode 100644
+index 0000000000000000000000000000000000000000..bf791e108b39ede6f5926d5606733100e72f404d
+--- /dev/null
++++ b/entity_reference_revisions.field_type_categories.yml
+@@ -0,0 +1,3 @@
++reference_revisions:
++  label: Reference revisions
++  description: Entity reference fields with support for revisions
+diff --git a/src/Plugin/Field/FieldType/EntityReferenceRevisionsItem.php b/src/Plugin/Field/FieldType/EntityReferenceRevisionsItem.php
+index 4a313ea6c70185ebef17df52379d34e2467a8b9e..1a1cf793036f81c5d7b14729852c7ca5206979bc 100644
+--- a/src/Plugin/Field/FieldType/EntityReferenceRevisionsItem.php
++++ b/src/Plugin/Field/FieldType/EntityReferenceRevisionsItem.php
+@@ -30,7 +30,7 @@ use Drupal\entity_reference_revisions\EntityNeedsSaveInterface;
+  *   id = "entity_reference_revisions",
+  *   label = @Translation("Entity reference revisions"),
+  *   description = @Translation("An entity field containing an entity reference to a specific revision."),
+- *   category = @Translation("Reference revisions"),
++ *   category = "reference_revisions",
+  *   no_ui = FALSE,
+  *   class = "\Drupal\entity_reference_revisions\Plugin\Field\FieldType\EntityReferenceRevisionsItem",
+  *   list_class = "\Drupal\entity_reference_revisions\EntityReferenceRevisionsFieldItemList",

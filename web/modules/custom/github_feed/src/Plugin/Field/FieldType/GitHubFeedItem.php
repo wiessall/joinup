@@ -18,6 +18,7 @@ use Drupal\github_feed\GitHubFeedInterface;
  * @FieldType(
  *   id = "github_feed",
  *   label = @Translation("GitHub feed"),
+ *   description = @Translation("Exposes a GitHub feed"),
  *   default_widget = "github_feed",
  *   default_formatter = "github_feed_default"
  * )
