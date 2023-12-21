@@ -49,6 +49,7 @@ Feature: Collection content
     And I press "Yes"
     And I fill in the following:
       | Title                 | Solution from draft to published                                    |
+      | Abstract              | The abstract of the solution.                                       |
       | Description           | Testing that publishing a solution, updates the collection content. |
       | Geographical coverage | Switzerland                                                         |
       | Name                  | Costas Papazoglou                                                   |
