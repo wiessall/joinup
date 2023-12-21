@@ -79,6 +79,7 @@ Feature: Solution API
     And I press "Yes"
     When I fill in the following:
       | Title          | Solution API example                         |
+      | Abstract       | Abstract is very important to our users      |
       | Description    | We do not care that much about descriptions. |
       | Name           | Gopheadow                                    |
       | E-mail address | solutionAPI@example.com                      |

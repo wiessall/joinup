@@ -17,6 +17,7 @@ Feature: Resend validation email from collection/solution about page
     And the following solution:
       | title            | Klop mirubes                                      |
       | state            | published                                         |
+      | abstract         | Klop mirubes abstact                              |
       | description      | Klop mirubes desc                                 |
       | topic            | Demography, E-inclusion                           |
       | owner            | Rotterdam                                         |
