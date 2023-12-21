@@ -1,4 +1,4 @@
-{% set image_url = site_url ~ '/' ~ directory ~ '/images/digest-message' %}
+{% set image_url = site_url ~ '/' ~ directory ~ '/assets/images/' %}
 
 {% set subscription_url = site_url ~ path('joinup_subscription.my_subscriptions') %}
 
@@ -30,9 +30,9 @@
                   <table role="presentation">
                     <tbody>
                       <tr>
-                        <td width="30" class="d-none d-sm-block"><img src="{{ image_url }}/img-1-1@2x.jpg" width="107" height="30" alt=""/></td>
-                        <td width="20" height="30" class="bg-warning">&nbsp;</td>
-                        <td width="110" class="bg-warning fs-sm text-uppercase fw-bold">
+                        <td width="350" class="bg-primary">&nbsp;</td>
+                        <td width="20" class="bg-warning">&nbsp;</td>
+                        <td width="110" height="30" class="bg-warning fs-sm text-uppercase fw-bold">
                           {% trans %}Issue: {{ issue_date }}{% endtrans %}
                         </td>
                         <td width="20" class="bg-warning">&nbsp;</td>
@@ -47,32 +47,29 @@
                 <td class="bg-primary text-center">
                   <table role="presentation">
                     <tbody>
-                    <tr>
-                      <td width="110" height="170" class="text-left d-none d-sm-block">
-                        <img src="{{ image_url }}/img-1-2@2x.jpg" width="107" height="72" alt=""/>
-                      </td>
-                      <td>
-                        <table role="presentation">
-                          <tbody>
-                          <tr>
-                            <td class="text-center">
-                              <a href="{{ site_url }}">
-                                <img src="{{ image_url }}/Logo@2x.jpg" width="250" height="75" alt=""/>
-                              </a>
-                            </td>
-                          </tr>
-                          <tr>
-                            <td class="text-center text-white" >
-                              <span class="fs-lg">{% trans %}{{ frequency }} digest message{% endtrans %}</span>
-                            </td>
-                          </tr>
-                          </tbody>
-                        </table>
-                      </td>
-                      <td width="110" class="text-right" class="d-none d-sm-block">
-                        <img src="{{ image_url }}/img-2@2x.jpg" width="77" height="145" alt=""/>
-                      </td>
-                    </tr>
+                      <tr>
+                        <td>
+                          <table role="presentation">
+                            <tbody>
+                              <tr>
+                                <td class="text-center">
+                                  <a href="{{ site_url }}">
+                                    <img src="{{ image_url }}/logo.svg" width="250" height="75" alt=""/>
+                                  </a>
+                                </td>
+                              </tr>
+                              <tr>
+                                <td class="text-center text-white" >
+                                  <span class="fs-lg">{% trans %}{{ frequency }} digest message{% endtrans %}</span>
+                                </td>
+                              </tr>
+                              <tr>
+                                <td height="20" class="bg-primary">&nbsp;</td>
+                              </tr>
+                            </tbody>
+                          </table>
+                        </td>
+                      </tr>
                     </tbody>
                   </table>
                 </td>
@@ -110,9 +107,6 @@
                   {% endtrans %}
                 </td>
               </tr>
-              <tr>
-                <td height="30" class="bg-secondary">&nbsp;</td>
-              </tr>
               </tbody>
             </table></td>
           <td class="bg-secondary">
@@ -143,7 +137,7 @@
           <tr>
             <td class="bg-primary text-center">
               <a href="{{ site_url }}">
-                <img src="{{ image_url }}/Logo-2@2x.jpg" width="200" height="50" alt=""/>
+                <img src="{{ image_url }}/logo.svg" width="200" height="50" alt=""/>
               </a>
             </td>
           </tr>
