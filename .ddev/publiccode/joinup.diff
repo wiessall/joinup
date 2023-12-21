@@ -1,3 +1,10 @@
+diff --git a/.env b/.env
+new file mode 100644
+index 0000000..9f087c7
+--- /dev/null
++++ b/.env
+@@ -0,0 +1 @@
++DEFAULT_LANGUAGE="en"
 diff --git a/src/app/app.js b/src/app/app.js
 index 4906b19..6ac91aa 100644
 --- a/src/app/app.js
