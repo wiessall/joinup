@@ -54,10 +54,8 @@ class SolutionFulfillmentGuard implements GuardInterface {
     $fromState = $entity->getWorkflowState();
 
     // Don't (un)archive federated solutions.
-    if (in_array($toState, [
-        'archived',
-        'unarchive',
-      ], TRUE) && $this->isFederated($entity)) {
+    if (in_array($toState, ['archived', 'unarchive'], TRUE)
+      && $this->isFederated($entity)) {
       return FALSE;
     }
 
@@ -73,7 +71,7 @@ class SolutionFulfillmentGuard implements GuardInterface {
    *   Entity.
    *
    * @return bool
-   *  TRUE if it is federated, FALSE otherwise.
+   *   TRUE if it is federated, FALSE otherwise.
    */
   protected function isFederated(EntityInterface $entity): bool {
     $activity = $this->provenanceHelper->loadProvenanceActivity($entity->id());
