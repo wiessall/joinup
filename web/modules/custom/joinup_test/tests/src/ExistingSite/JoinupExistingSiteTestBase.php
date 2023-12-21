@@ -5,6 +5,8 @@ declare(strict_types = 1);
 namespace Drupal\Tests\joinup_test\ExistingSite;
 
 use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Session\AccountInterface;
+use Drupal\Core\Url;
 use Drupal\Tests\joinup_test\Traits\RdfEntityCreationTrait;
 use Drupal\joinup\Traits\ConfigReadOnlyTrait;
 use weitzman\DrupalTestTraits\ExistingSiteBase;
@@ -76,6 +78,21 @@ abstract class JoinupExistingSiteTestBase extends ExistingSiteBase {
     foreach (['page', 'dynamic_page_cache', 'render'] as $bin) {
       \Drupal::cache($bin)->deleteAll();
     }
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  protected function drupalLogin(AccountInterface $account) {
+    if ($this->loggedInUser) {
+      $this->drupalLogout();
+    }
+
+    $url = user_pass_reset_url($account);
+    $this->drupalGet($url);
+
+    $this->loggedInUser = $account;
+    $this->container->get('current_user')->setAccount($account);
   }
 
 }
