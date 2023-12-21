@@ -2,7 +2,7 @@
 # metadata file that makes public software easily discoverable.
 # More info at https://github.com/italia/publiccode.yml
 
-publiccodeYmlVersion: '0.3'
+publiccodeYmlVersion: '0.2'
 name: EU OSS Catalogue - Drupal module
 softwareVersion: '0.1'
 releaseDate: '2023-10-01'
@@ -18,6 +18,7 @@ localisation:
 description:
   en:
     genericName: EU OSS Catalogue - Drupal module
+    shortDescription: Drupal module for EU OpenSource Software Solutions Catalogue
     longDescription: |
       This is a Drupal module for generating the first MVP (minimum viable
       product) version of a EU OpenSource Software Solutions, produced or used
@@ -37,7 +38,11 @@ description:
       for), adopting the Publiccode.yml Metadata Standard throughout an internal
       MIDM (Minimum Interoperability Data Model) able to map and semantically
       align with it.
-    shortDescription: Drupal module for EU OpenSource Software Solutions Catalogue
+    features:
+      - APIs Federation from National OSS Catalogues
+      - Drupal Open Source Module
+      - SOLR Indexing & Search
+      - publiccode.yml validation
 categories:
   - content-management
   - collaboration
@@ -54,7 +59,7 @@ maintenance:
     - name: Bernard Claes
       email: bernard.claes@ec.europa.eu
     - name: Miguel Diez Blanco
-      email: Miguel.DIEZ-BLANCO@ec.europa.eu
+      email: miguel.diez-blanco@ec.europa.eu
 legal:
   license: EUPL-1.2
   mainCopyrightOwner: European Commission - Digit B2
