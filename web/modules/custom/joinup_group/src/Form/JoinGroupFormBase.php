@@ -156,7 +156,7 @@ abstract class JoinGroupFormBase extends FormBase implements JoinGroupFormInterf
     }
 
     // Inform anonymous users that they need to authenticate to join the group.
-    if ($this->user->isAnonymous()) {
+    elseif ($this->user->isAnonymous()) {
       $parameters = ['rdf_entity' => $this->group->id()];
       if ($this->accessManager->checkNamedRoute('joinup_group.authenticate_to_join', $parameters)) {
         $form['authenticate'] = [
