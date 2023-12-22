@@ -24,8 +24,8 @@ Feature: Like/unlike feature.
     When I go to the homepage of the "Mount Vitosha" solution
     Then I should not see the link "Like" in the "Like block" region
 
-    Given I am logged in as "Gregory Like"
-    When I go to the homepage of the "Mount Vitosha" solution
+    When I am logged in as "Gregory Like"
+    And I go to the homepage of the "Mount Vitosha" solution
     Then I should not see the link "Like" in the "Like block" region
 
   Scenario: User can like/unlike solution
