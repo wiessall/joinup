@@ -5,13 +5,13 @@ declare(strict_types = 1);
 namespace Drupal\Tests\joinup_menu\Functional;
 
 use Drupal\Core\Url;
-use Drupal\node\Entity\Node;
 use Drupal\Tests\TestFileCreationTrait;
 use Drupal\Tests\joinup_test\ExistingSite\JoinupExistingSiteTestBase;
 use Drupal\contact_information\ContactInformationEmailConfirmInterface;
 use Drupal\file\Entity\File;
 use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\menu_link_content\MenuLinkContentInterface;
+use Drupal\node\Entity\Node;
 use Drupal\og\OgGroupAudienceHelper;
 use Drupal\rdf_meta_entity\Entity\RdfMetaEntity;
 use Drupal\sparql_entity_storage\UriEncoder;

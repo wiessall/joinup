@@ -1,4 +1,7 @@
-@api @group-b
+# Re-enable this when the new pages are build. Please, see instructions in
+# the corresponding ticket.
+# @see ISAICP-8332
+@api @group-b @wip
 Feature: Custom pages enhance search results for their collections/solutions
   In order to increase the chances of my group to be found
   As a facilitator

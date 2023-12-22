@@ -120,7 +120,7 @@ abstract class JoinupExistingSiteTestBase extends ExistingSiteBase {
   /**
    * {@inheritdoc}
    */
-  protected function createUser(array $permissions = [], $name = NULL, $admin = FALSE, array $values = []): AccountInterface {
+  protected function createUser(array $permissions = [], $name = NULL, $admin = FALSE, array $values = []) {
     $account = parent::createUser($permissions, $name, $admin, $values);
 
     // Since we are using the CAS mock server, we need to create the user in the

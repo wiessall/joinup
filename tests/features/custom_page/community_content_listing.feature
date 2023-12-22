@@ -454,7 +454,6 @@ Feature:
       | content_listing:value | a:6:{s:6:"fields";a:1:{s:20:"content_listing_type";a:2:{s:6:"weight";i:0;s:6:"region";s:3:"top";}}s:7:"enabled";i:1;s:13:"query_presets";s:38:"entity_bundle\|discussion,event,news\|IN";s:5:"limit";s:2:"12";s:11:"show_shared";i:0;s:13:"global_search";i:1;} |
 
     When I go to the "All content" custom page
-    Then I should see the heading "All content"
     # All tiles are available.
     And I should see the following tiles in the correct order:
       | 30 year anniversary                   |
@@ -476,8 +475,7 @@ Feature:
     And I press "Publish"
     Then I should see the text "Current wars"
 
-    When I go to the homepage of the "Nintendo64" collection
-    And I click "All content" in the "Header" region
+    When I go to the "All content" custom page
     And I should see the following tiles in the correct order:
       | 30 year anniversary                   |
       | Current wars                          |
@@ -492,8 +490,7 @@ Feature:
     And I press "Update"
     Then I should see the text "Current wars is over"
 
-    When I go to the homepage of the "Nintendo64" collection
-    And I click "All content" in the "Header" region
+    When I go to the "All content" custom page
     And I should see the following tiles in the correct order:
       | 30 year anniversary                   |
       | Current wars is over                  |

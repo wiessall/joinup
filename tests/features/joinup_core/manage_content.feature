@@ -3,12 +3,11 @@ Feature:
   In order to better organize the content
   I need to be able to move content between groups
 
+  # Re-enable this when the new pages are build. Please, see instructions in
+  # the corresponding ticket.
+  # @see ISAICP-8332
+  @wip
   Scenario: Use the content management UI
-
-    # Re-enable this when the new pages are build. Please, see instructions in
-    # the corresponding ticket.
-    # @see ISAICP-8332
-    @wip
     Given the following collections:
       | title        | state     |
       | Vintage Art  | published |
