@@ -94,7 +94,7 @@ function joinup_core_requirements($phase): array {
 }
 
 /**
- * Implements hook_update_N().
+ * Install the RDF provenance fields.
  */
 function joinup_core_update_110100(): void {
   $manager = \Drupal::entityDefinitionUpdateManager();
