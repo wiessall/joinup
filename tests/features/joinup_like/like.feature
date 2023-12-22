@@ -16,6 +16,18 @@ Feature: Like/unlike feature.
       | title               | state     | collection |
       | Very liked solution | published | Bulgaria   |
 
+  Scenario: Like functionality is disabled for archived content.
+    Given the following solutions:
+      | title         | state    | collection |
+      | Mount Vitosha | archived | Bulgaria   |
+
+    When I go to the homepage of the "Mount Vitosha" solution
+    Then I should not see the link "Like" in the "Like block" region
+
+    Given I am logged in as "Gregory Like"
+    When I go to the homepage of the "Mount Vitosha" solution
+    Then I should not see the link "Like" in the "Like block" region
+
   Scenario: User can like/unlike solution
     Given I am logged in as "Gregory Like"
     When I go to the homepage of the "Very liked solution" solution
