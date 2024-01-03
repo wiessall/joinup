@@ -53,6 +53,7 @@ Feature: Global search with archive content
 
     # When the toggle is active, archived content is shown.
     When I click "Show archived"
+
     Then I should see the following tiles in the correct order:
       | Event 2         |
       | Some document 2 |
