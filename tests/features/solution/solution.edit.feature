@@ -41,6 +41,7 @@ Feature: Solution editing.
     Then I should see the heading "Add Solution"
     When I fill in the following:
       | Title          | Solution A         |
+      | Abstract       | Abstract of "A"    |
       | Description    | First letter       |
       | Name           | Yancy Burton       |
       | E-mail address | yancyb@example.com |
