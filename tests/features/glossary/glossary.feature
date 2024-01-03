@@ -1,4 +1,3 @@
-
 @api @group-b
 Feature: As a moderator or group facilitator I want to be able to add, edit and
   delete glossary terms. As a user I want to be able to see glossary terms as

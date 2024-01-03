@@ -272,7 +272,7 @@ function _eif_add_eif_link_to_leftside_menu(RdfMetaEntityInterface $meta_entity)
     if ($solution instanceof SolutionInterface) {
       $og_menu = \Drupal::entityTypeManager()->getStorage('ogmenu_instance')->loadByProperties([
         'og_audience' => $solution->id(),
-        'type' => 'navigation',
+        'type' => 'quick_links',
       ]);
       if ($og_menu = reset($og_menu)) {
         $menu_name = 'ogmenu-' . $og_menu->id();
