@@ -18,41 +18,20 @@ use Symfony\Contracts\EventDispatcher\Event;
 class GroupMenuLinksEvent extends Event {
 
   /**
-   * The group to provide menu links for.
-   *
-   * @var \Drupal\joinup_group\Entity\GroupInterface
-   */
-  protected GroupInterface $group;
-
-  /**
-   * The menu name.
-   *
-   * @var string
-   */
-  protected string $menuName;
-
-  /**
-   * The entity type manager service.
-   *
-   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
-   */
-  protected EntityTypeManagerInterface $entityTypeManager;
-
-  /**
    * Constructs a new event instance.
    *
    * @param \Drupal\joinup_group\Entity\GroupInterface $group
    *   The group to provide menu links for.
-   * @param string $menu_name
+   * @param string $menuName
    *   The menu name.
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
    *   The entity type manager service.
    */
-  public function __construct(GroupInterface $group, string $menu_name, EntityTypeManagerInterface $entity_type_manager) {
-    $this->group = $group;
-    $this->menuName = $menu_name;
-    $this->entityTypeManager = $entity_type_manager;
-  }
+  public function __construct(
+    protected GroupInterface $group,
+    protected string $menuName,
+    protected EntityTypeManagerInterface $entityTypeManager
+  ) {}
 
   /**
    * Returns the group to provide menu links for.
