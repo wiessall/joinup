@@ -59,6 +59,18 @@ final class GroupMenuTest extends JoinupExistingSiteTestBase {
 
     $renderedMenu = $this->getRenderedMenu('ogmenu-' . $ogMenuInstances[1]->id());
     $this->assertStringContainsString($websiteUrl, $renderedMenu);
+
+    // Create a custom page in the collection.
+    $custom_page = $this->createNode([
+      'type' => 'custom_page',
+      'title' => $this->randomString(),
+      'og_audience' => $collection->id(),
+    ]);
+
+    // Check that a corresponding menu link has been created.
+    $menuLinks = $this->loadMenuLinks($ogMenuInstances[1]->id());
+    $this->assertMenuLink($menuLinks[1], $custom_page->label(), $custom_page->toUrl()->getInternalPath());
+    $this->assertFalse($menuLinks[1]->isEnabled());
   }
 
   /**
