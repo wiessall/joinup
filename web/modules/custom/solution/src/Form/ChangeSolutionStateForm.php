@@ -161,12 +161,12 @@ class ChangeSolutionStateForm extends ConfirmFormBase {
     if ($form_state->getValue('confirm')) {
       $labels = [];
       foreach ($form_state->getTemporaryValue('solutions') as $solution) {
-        if (!$solution instanceof SolutionInterface) {
-          continue;
-        }
+        \assert($solution instanceof SolutionInterface);
         $solution->setWorkflowState($targetState)->save();
         $labels[] = $solution->label();
       }
+
+      natsort($labels);
 
       $this->messenger()->addStatus(
         $this->formatPlural(
