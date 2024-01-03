@@ -70,17 +70,17 @@ namespace Drupal\custom_page\ProxyClass {
         /**
          * {@inheritdoc}
          */
-        public function getChildren(\Drupal\node\NodeInterface $customPage) : array
+        public function getChildren(\Drupal\node\NodeInterface $customPage, string $menuType) : array
         {
-            return $this->lazyLoadItself()->getChildren($customPage);
+            return $this->lazyLoadItself()->getChildren($customPage, $menuType);
         }
 
         /**
          * {@inheritdoc}
          */
-        public function addLink(\Drupal\node\NodeInterface $customPage, string $ogMenuInstanceId, array $properties = []) : \Drupal\custom_page\CustomPageOgMenuLinksManagerInterface
+        public function addLink(\Drupal\node\NodeInterface $customPage, string $menuType, array $properties = []) : \Drupal\custom_page\CustomPageOgMenuLinksManagerInterface
         {
-            return $this->lazyLoadItself()->addLink($customPage, $ogMenuInstanceId, $properties);
+            return $this->lazyLoadItself()->addLink($customPage, $menuType, $properties);
         }
 
         /**
@@ -102,9 +102,9 @@ namespace Drupal\custom_page\ProxyClass {
         /**
          * {@inheritdoc}
          */
-        public function getOgMenuInstanceByCustomPage(\Drupal\node\NodeInterface $customPage, string $ogMenuInstanceId) : ?\Drupal\og_menu\OgMenuInstanceInterface
+        public function getOgMenuInstanceByCustomPage(\Drupal\node\NodeInterface $customPage, string $menuType) : ?\Drupal\og_menu\OgMenuInstanceInterface
         {
-            return $this->lazyLoadItself()->getOgMenuInstanceByCustomPage($customPage, $ogMenuInstanceId);
+            return $this->lazyLoadItself()->getOgMenuInstanceByCustomPage($customPage, $menuType);
         }
 
     }
