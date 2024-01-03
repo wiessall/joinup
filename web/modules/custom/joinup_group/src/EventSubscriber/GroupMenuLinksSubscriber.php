@@ -64,7 +64,6 @@ class GroupMenuLinksSubscriber implements EventSubscriberInterface {
         $event->addMenuLink(Url::fromRoute('asset_release.solution_asset_release.overview', $parameters), 'Release history');
         $event->addMenuLink(Url::fromRoute('joinup_menu.documentation_file', $parameters), 'Documentation');
       }
-      $event->addMenuLink(Url::fromRoute('entity.rdf_entity.contact', $parameters), 'Contact us');
     }
   }
 
