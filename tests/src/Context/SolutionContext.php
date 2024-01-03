@@ -579,6 +579,7 @@ class SolutionContext extends RawDrupalContext {
       'business process' => 'field_is_business_process',
       'product type' => 'field_is_product_type',
       'shared on' => 'field_is_shared_in',
+      'abstract' => 'field_is_abstract',
     ];
   }
 

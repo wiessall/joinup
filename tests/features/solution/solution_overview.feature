@@ -124,6 +124,7 @@ Feature: Solutions Overview
     Then I should see the heading "Add Solution"
     When I fill in the following:
       | Title                 | Colonies in Earth                                                      |
+      | Abstract              | Some abstract                                                          |
       | Description           | Some space mumbo jumbo description.                                    |
       | Geographical coverage | Belgium (http://publications.europa.eu/resource/authority/country/BEL) |
       | Language              | http://publications.europa.eu/resource/authority/language/VLS          |
