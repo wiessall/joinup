@@ -28,10 +28,14 @@ interface CustomPageOgMenuLinksManagerInterface {
    *
    * @param \Drupal\node\NodeInterface $customPage
    *   The custom page entity.
+   * @param string $ogMenuInstanceId
+   *   The ID of the OG menu instance. Whether 'navigation' or 'quick_links'.
+   * @param array $properties
+   *   (optional) The properties of the menu link. Defaults to an empty array.
    *
    * @return $this
    */
-  public function addLink(NodeInterface $customPage): CustomPageOgMenuLinksManagerInterface;
+  public function addLink(NodeInterface $customPage, string $ogMenuInstanceId, array $properties): CustomPageOgMenuLinksManagerInterface;
 
   /**
    * Move the OG menu links of a custom page to a new group OG menu instance.
@@ -60,10 +64,12 @@ interface CustomPageOgMenuLinksManagerInterface {
    *
    * @param \Drupal\node\NodeInterface $customPage
    *   The custom page entity.
+   * @param string $ogMenuInstanceId
+   *   The ID of the OG menu instance. Whether 'navigation' or 'quick_links'.
    *
    * @return \Drupal\og_menu\OgMenuInstanceInterface|null
    *   The OG menu instance or NULL if none can be determined.
    */
-  public function getOgMenuInstanceByCustomPage(NodeInterface $customPage): ?OgMenuInstanceInterface;
+  public function getOgMenuInstanceByCustomPage(NodeInterface $customPage, string $ogMenuInstanceId): ?OgMenuInstanceInterface;
 
 }

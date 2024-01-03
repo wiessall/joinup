@@ -78,9 +78,9 @@ namespace Drupal\custom_page\ProxyClass {
         /**
          * {@inheritdoc}
          */
-        public function addLink(\Drupal\node\NodeInterface $customPage) : \Drupal\custom_page\CustomPageOgMenuLinksManagerInterface
+        public function addLink(\Drupal\node\NodeInterface $customPage, string $ogMenuInstanceId, array $properties = []) : \Drupal\custom_page\CustomPageOgMenuLinksManagerInterface
         {
-            return $this->lazyLoadItself()->addLink($customPage);
+            return $this->lazyLoadItself()->addLink($customPage, $ogMenuInstanceId, $properties);
         }
 
         /**
@@ -102,9 +102,9 @@ namespace Drupal\custom_page\ProxyClass {
         /**
          * {@inheritdoc}
          */
-        public function getOgMenuInstanceByCustomPage(\Drupal\node\NodeInterface $customPage) : ?\Drupal\og_menu\OgMenuInstanceInterface
+        public function getOgMenuInstanceByCustomPage(\Drupal\node\NodeInterface $customPage, string $ogMenuInstanceId) : ?\Drupal\og_menu\OgMenuInstanceInterface
         {
-            return $this->lazyLoadItself()->getOgMenuInstanceByCustomPage($customPage);
+            return $this->lazyLoadItself()->getOgMenuInstanceByCustomPage($customPage, $ogMenuInstanceId);
         }
 
     }
