@@ -17,6 +17,8 @@ interface CustomPageOgMenuLinksManagerInterface {
    *
    * @param \Drupal\node\NodeInterface $customPage
    *   The parent custom page node.
+   * @param string $menuType
+   *   The type of the OG menu instance. Whether 'navigation' or 'quick_links'.
    *
    * @return \Drupal\node\NodeInterface[]
    *   A list of child nodes.
