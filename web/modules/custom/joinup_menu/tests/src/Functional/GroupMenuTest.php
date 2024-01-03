@@ -71,6 +71,15 @@ final class GroupMenuTest extends JoinupExistingSiteTestBase {
     $menuLinks = $this->loadMenuLinks($ogMenuInstances[1]->id());
     $this->assertMenuLink($menuLinks[1], $custom_page->label(), $custom_page->toUrl()->getInternalPath());
     $this->assertFalse($menuLinks[1]->isEnabled());
+
+    // Assert that the link is not enabled.
+    $renderedMenu = $this->getRenderedMenu('ogmenu-' . $ogMenuInstances[1]->id());
+    $this->assertStringNotContainsString($custom_page->toUrl()->getInternalPath(), $renderedMenu);
+
+    // Delete the page and ensure the menu link is gone.
+    $custom_page->delete();
+    $menuLinks = $this->loadMenuLinks($ogMenuInstances[1]->id());
+    $this->assertCount(1, $menuLinks);
   }
 
   /**
