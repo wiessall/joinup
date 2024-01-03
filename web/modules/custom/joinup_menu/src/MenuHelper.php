@@ -49,8 +49,7 @@ class MenuHelper implements MenuHelperInterface {
     protected MenuLinkTreeInterface $menuLinkTree,
     protected EntityTypeManagerInterface $entityTypeManager,
     protected RequestStack $requestStack,
-    protected PathMatcherInterface $pathMatcher,
-    protected EmailConfirmerManagerInterface $emailConfirmer
+    protected PathMatcherInterface $pathMatcher
   ) {}
 
   /**
