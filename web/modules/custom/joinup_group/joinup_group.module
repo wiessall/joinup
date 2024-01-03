@@ -32,6 +32,7 @@ use Drupal\joinup_group\Event\GroupMenuLinksEvent;
 use Drupal\joinup_group\Form\RdfDeleteForm;
 use Drupal\joinup_group\Form\UserCancelForm;
 use Drupal\joinup_group\JoinupGroupHelper;
+use Drupal\joinup_workflow\ArchivableEntityInterface;
 use Drupal\joinup_workflow\EntityWorkflowStateInterface;
 use Drupal\meta_entity\Entity\MetaEntity;
 use Drupal\meta_entity\Entity\MetaEntityInterface;
@@ -948,6 +949,17 @@ function joinup_group_entity_update(EntityInterface $group): void {
         \Drupal::messenger()->addStatus(t("You've removed the @bundle's short ID: %original. It will take some time until the @bundle content URLs will be updated.", $arguments));
       }
     }
+  }
+}
+
+/**
+ * Implements hook_entity_presave().
+ */
+function joinup_group_entity_presave(EntityInterface $entity) {
+  // Unshare archived content.
+  if ($entity instanceof GroupContentInterface && $entity instanceof ArchivableEntityInterface && $entity->isArchived()
+    && ($sharedField = $entity->getSharedInField()) && !$sharedField->isEmpty()) {
+    $sharedField->setValue([]);
   }
 }
 
