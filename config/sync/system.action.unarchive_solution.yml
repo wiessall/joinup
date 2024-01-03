@@ -10,7 +10,3 @@ type: rdf_entity
 plugin: 'change_state:rdf_entity:solution'
 configuration:
   target_state: published
-  label: 'Unarchive (publish) solutions'
-  id: unarchive_solution
-  plugin: 'change_state:rdf_entity:solution'
-  type: rdf_entity
