@@ -39,6 +39,7 @@
         <rdf:type rdf:resource="http://www.w3.org/ns/dcat#Dataset"/>
         <dct:title>Solution 1</dct:title>
         <dct:description>This is a solution that includes 2 releases.</dct:description>
+        <dct:abstract>This is the solution 1 abstact.</dct:abstract>
         <dc:issued rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2012-05-07T11:35:24+03:00</dc:issued>
         <dc:modified rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2014-12-05T16:02:24+02:00</dc:modified>
         <dct:publisher rdf:resource="http://example.com/owner/1"/>
@@ -58,6 +59,7 @@
     <rdf:Description rdf:about="http://example.com/solution/2">
         <rdf:type rdf:resource="http://www.w3.org/ns/dcat#Dataset"/>
         <dct:title>Solution 2</dct:title>
+        <dct:abstract>This is the solution 2 abstact.</dct:abstract>
         <dct:description>This solution has a standalone distribution.</dct:description>
         <dc:issued rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2014-05-07T11:35:24+03:00</dc:issued>
         <dc:modified rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2015-12-05T16:02:24+02:00</dc:modified>
@@ -72,6 +74,7 @@
     <rdf:Description rdf:about="http://example.com/solution/3">
         <rdf:type rdf:resource="http://www.w3.org/ns/dcat#Dataset"/>
         <dct:title>Solution 3</dct:title>
+        <dct:abstract>This is the solution 3 abstact.</dct:abstract>
         <dct:description>This solution 3.</dct:description>
         <dct:publisher rdf:resource="http://example.com/owner/1"/>
         <dcat:contactPoint rdf:resource="http://example.com/contact/1"/>
