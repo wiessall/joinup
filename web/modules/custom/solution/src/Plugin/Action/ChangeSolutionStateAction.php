@@ -158,4 +158,13 @@ class ChangeSolutionStateAction extends ViewsBulkOperationsActionBase implements
     return $form;
   }
 
+  /**
+   * {@inheritdoc}
+   */
+  public function submitConfigurationForm(array &$form, FormStateInterface $form_state) {
+    foreach (array_keys($this->defaultConfiguration()) as $key) {
+      $this->configuration[$key] = $form_state->getValue($key);
+    }
+  }
+
 }

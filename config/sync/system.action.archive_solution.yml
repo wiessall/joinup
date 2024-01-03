@@ -10,7 +10,3 @@ type: rdf_entity
 plugin: 'change_state:rdf_entity:solution'
 configuration:
   target_state: archived
-  label: 'Archive solutions'
-  id: archive_solution
-  plugin: 'change_state:rdf_entity:solution'
-  type: rdf_entity
