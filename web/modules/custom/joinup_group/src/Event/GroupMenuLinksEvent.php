@@ -24,12 +24,15 @@ class GroupMenuLinksEvent extends Event {
    *   The group to provide menu links for.
    * @param string $menuName
    *   The menu name.
+   * @param string $menuType
+   *   The menu type.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
    *   The entity type manager service.
    */
   public function __construct(
     protected GroupInterface $group,
     protected string $menuName,
+    protected string $menuType,
     protected EntityTypeManagerInterface $entityTypeManager
   ) {}
 
@@ -51,6 +54,16 @@ class GroupMenuLinksEvent extends Event {
    */
   public function getMenuName(): string {
     return $this->menuName;
+  }
+
+  /**
+   * Returns the menu type.
+   *
+   * @return string
+   *   The menu type. Either 'navigation' or 'quick_links'.
+   */
+  public function getMenuType(): string {
+    return $this->menuType;
   }
 
   /**
