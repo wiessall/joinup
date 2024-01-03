@@ -346,20 +346,16 @@ coding standards rule.
 For some additional details in our SPARQL related functionality, see our
 [SPARQL developer documentation](docs/sparql.md).
 
-### Mailhog
+### Mailpit
 
-Mailhog is a tool that allows you to catch all emails sent by the application
-during development. Mailhog is optional, as the default setup of Joinup, is to
+Mailpit is a tool that allows you to catch all emails sent by the application
+during development. Mailpit is optional, as the default setup of Joinup, is to
 use the devel mail server which stores the emails as text messages in the tmp
-directory. However, Mailhog is more convenient to use, as it provides a web UI
-to view the emails. It is available as a Docker image. To start it, run the
-following command:
+directory. However, Mailpit is more convenient to use, as it provides a web UI
+to view the emails.
+You can access the Mailpit UI at https://joinup.ddev.site:8026.
 
-```
-$ docker run -d -p 8025:8025 -p 1025:1025 mailhog/mailhog
-```
-Then, you can access the Mailhog UI at http://127.0.0.1:8025.
-In order to have the application send emails to Mailhog, you need to set the
+In order to have the application send emails to Mailpit, you need to set the
 following settings in your `settings.override.php` file:
 
 ```php
