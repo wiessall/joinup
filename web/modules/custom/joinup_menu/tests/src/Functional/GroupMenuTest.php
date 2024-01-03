@@ -40,7 +40,7 @@ final class GroupMenuTest extends JoinupExistingSiteTestBase {
     $menuLinks = $this->loadMenuLinks($ogMenuInstances[1]->id());
 
     // Assert the website link for the collection.
-    $websiteUrl = Url::fromRoute('joinup_menu.website_link', $urlParameters)->getInternalPath();
+    $websiteUrl = Url::fromRoute('joinup_menu.website_link', $urlParameters)->toString();
     $this->assertMenuLink($menuLinks[0], 'Website link', $websiteUrl);
 
     // Assert the website link for the collection.
@@ -69,7 +69,7 @@ final class GroupMenuTest extends JoinupExistingSiteTestBase {
 
     // Check that a corresponding menu link has been created.
     $menuLinks = $this->loadMenuLinks($ogMenuInstances[1]->id());
-    $this->assertMenuLink($menuLinks[1], $custom_page->label(), $custom_page->toUrl()->getInternalPath());
+    $this->assertMenuLink($menuLinks[1], $custom_page->label(), $custom_page->toUrl()->toString());
     $this->assertFalse($menuLinks[1]->isEnabled());
   }
 
@@ -93,18 +93,18 @@ final class GroupMenuTest extends JoinupExistingSiteTestBase {
     $menuLinks = $this->loadMenuLinks($ogMenuInstances[1]->id());
     $this->assertCount(3, $menuLinks);
 
-    $websiteUrl = Url::fromRoute('joinup_menu.website_link', $urlParameters)->getInternalPath();
+    $websiteUrl = Url::fromRoute('joinup_menu.website_link', $urlParameters)->toString();
     $this->assertMenuLink($menuLinks[0], 'Website link', $websiteUrl);
     $releasesUrl = Url::fromRoute('asset_release.solution_asset_release.overview', [
       'rdf_entity' => $solution->id(),
-    ])->getInternalPath();
+    ])->toString();
     $this->assertMenuLink($menuLinks[1], 'Release history', $releasesUrl);
-    $documentationUrl = Url::fromRoute('joinup_menu.documentation_file', $urlParameters)->getInternalPath();
+    $documentationUrl = Url::fromRoute('joinup_menu.documentation_file', $urlParameters)->toString();
     $this->assertMenuLink($menuLinks[2], 'Documentation', $documentationUrl);
 
     $renderedMenu = $this->getRenderedMenu('ogmenu-' . $ogMenuInstances[1]->id());
     $this->assertStringNotContainsString($websiteUrl, $renderedMenu);
-    $this->assertStringContainsString($releasesUrl, $renderedMenu);
+    $this->assertStringNotContainsString($releasesUrl, $renderedMenu);
     $this->assertStringNotContainsString($documentationUrl, $renderedMenu);
 
     // Set an access URL to the solution and re-check.
@@ -113,8 +113,17 @@ final class GroupMenuTest extends JoinupExistingSiteTestBase {
 
     $renderedMenu = $this->getRenderedMenu('ogmenu-' . $ogMenuInstances[1]->id());
     $this->assertStringContainsString($websiteUrl, $renderedMenu);
+
+    // Create a release for the solution.
+    $this->createRdfEntity([
+      'rid' => 'asset_release',
+      'field_ar_state' => 'published',
+      'field_isr_is_version_of' => $solution->id(),
+    ]);
+
+    // Re-check that the release link is now visible.
+    $renderedMenu = $this->getRenderedMenu('ogmenu-' . $ogMenuInstances[1]->id());
     $this->assertStringContainsString($releasesUrl, $renderedMenu);
-    $this->assertStringNotContainsString($documentationUrl, $renderedMenu);
 
     // Create a dummy text file with dummy contents.
     $fileUri = $this->generateFile('test', 10, 10, 'text');
@@ -123,9 +132,11 @@ final class GroupMenuTest extends JoinupExistingSiteTestBase {
     ]);
     $file->setPermanent();
     $file->save();
-    $documentationUrl = Url::fromRoute('joinup_menu.documentation_file', $urlParameters)->getInternalPath();
+    $documentationUrl = Url::fromRoute('joinup_menu.documentation_file', $urlParameters)->toString();
 
-    // Set a documentation field to the solution and re-check.
+    // Reload the solution as it has been modified by the release creation above
+    // and set the documentation file.
+    $solution = \Drupal::entityTypeManager()->getStorage('rdf_entity')->load($solution->id());
     $solution->set('field_is_documentation', $file->id());
     $solution->save();
 
@@ -139,7 +150,7 @@ final class GroupMenuTest extends JoinupExistingSiteTestBase {
     $metaEntity->save();
     $eifPerspectiveUrl = Url::fromRoute('entity.rdf_entity.eif_perspective', [
       'rdf_entity' => $solution->id(),
-    ])->getInternalPath();
+    ])->toString();
 
     $menuLinks = $this->loadMenuLinks($ogMenuInstances[1]->id());
     $this->assertCount(4, $menuLinks);
@@ -149,7 +160,6 @@ final class GroupMenuTest extends JoinupExistingSiteTestBase {
     // By default the menu item is disabled.
     // @see \_eif_add_eif_link_to_leftside_menu
     $this->assertMenuLink($menuLinks[3], 'EIF Perspective', $eifPerspectiveUrl);
-
     $renderedMenu = $this->getRenderedMenu('ogmenu-' . $ogMenuInstances[1]->id());
     $this->assertStringContainsString($websiteUrl, $renderedMenu);
     $this->assertStringContainsString($releasesUrl, $renderedMenu);
@@ -172,7 +182,7 @@ final class GroupMenuTest extends JoinupExistingSiteTestBase {
 
     // Check that a corresponding menu link has been created.
     $menuLinks = $this->loadMenuLinks($ogMenuInstances[1]->id());
-    $this->assertMenuLink($menuLinks[4], $custom_page->label(), $custom_page->toUrl()->getInternalPath());
+    $this->assertMenuLink($menuLinks[4], $custom_page->label(), $custom_page->toUrl()->toString());
   }
 
   /**
@@ -209,7 +219,7 @@ final class GroupMenuTest extends JoinupExistingSiteTestBase {
    */
   protected function assertMenuLink(MenuLinkContentInterface $menuLink, string $title, string $url): void {
     $this->assertEquals($title, $menuLink->getTitle());
-    $actualUri = $menuLink->getUrlObject()->isExternal() ? $menuLink->getUrlObject()->getUri() : $menuLink->getUrlObject()->getInternalPath();
+    $actualUri = $menuLink->getUrlObject()->isExternal() ? $menuLink->getUrlObject()->getUri() : $menuLink->getUrlObject()->toString();
     $this->assertEquals($url, $actualUri);
   }
 
