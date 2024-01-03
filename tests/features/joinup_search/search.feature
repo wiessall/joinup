@@ -127,7 +127,6 @@ Feature: Global search
     And I should not see the "El Tuba de Los Lobos" tile
 
     Given I am on the search page
-
     When I check the "Show only Archived items" checkbox from the "Status" facet
     And I should not see the "Molecular cooking collection" tile
     And I should not see the "Spherification" tile
