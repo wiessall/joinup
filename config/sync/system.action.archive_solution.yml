@@ -1,11 +1,16 @@
-uuid: 66f694a2-2a0c-4eb0-8b94-4a0309dee26a
+uuid: 38600f62-7f5e-44ff-82a6-bcdbddb1aee1
 langcode: en
 status: true
 dependencies:
   module:
     - solution
 id: archive_solution
-label: 'Archive solution'
+label: 'Archive solutions'
 type: rdf_entity
-plugin: archive_solution
-configuration: {  }
+plugin: 'change_state:rdf_entity:solution'
+configuration:
+  target_state: archived
+  label: 'Archive solutions'
+  id: archive_solution
+  plugin: 'change_state:rdf_entity:solution'
+  type: rdf_entity

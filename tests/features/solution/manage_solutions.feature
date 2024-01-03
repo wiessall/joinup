@@ -80,12 +80,12 @@ Feature: As a moderator I want to be able to move solutions to other collection.
     And I click "Manage solutions"
     Then I should see the heading "Manage solutions"
     Then the "manage solutions" table should contain the following columns:
-      | Title      | Created on         | Last update        |
-      | Solution 5 | 22/11/2021 - 10:00 | 22/12/2021 - 10:00 |
-      | Solution 4 | 21/11/2020 - 10:00 | 21/12/2020 - 10:00 |
-      | Solution 3 | 20/11/2019 - 10:00 | 20/12/2019 - 10:00 |
-      | Solution 2 | 19/11/2018 - 10:00 | 19/12/2018 - 10:00 |
-      | Solution 1 | 18/11/2017 - 10:00 | 18/12/2017 - 10:00 |
+      | Title      | Created on         | Last update        | State     |
+      | Solution 5 | 22/11/2021 - 10:00 | 22/12/2021 - 10:00 | Archived  |
+      | Solution 4 | 21/11/2020 - 10:00 | 21/12/2020 - 10:00 | Published |
+      | Solution 3 | 20/11/2019 - 10:00 | 20/12/2019 - 10:00 | Published |
+      | Solution 2 | 19/11/2018 - 10:00 | 19/12/2018 - 10:00 | Published |
+      | Solution 1 | 18/11/2017 - 10:00 | 18/12/2017 - 10:00 | Published |
     When I select the "Solution 1" row
     When I select the "Solution 2" row
     And I select the "Solution 5" row
@@ -97,8 +97,18 @@ Feature: As a moderator I want to be able to move solutions to other collection.
       | Archive solution was applied to 2 items. |
     # Solution 5 can't be archived since it is already archived.
     Then I should see the following error message:
-      | Error messages                                                               |
+      | Error messages                                                      |
       | No access to execute Archive solution on the Rdf entity Solution 5. |
+    And the "manage solutions" table should contain the following columns:
+      # Skip last update since it is not under our control.
+      # If states aren't updated instantly, then the patch we apply for
+      # https://drupal.org/i/3294051 needs to be updated.
+      | Title      | Created on         | State     |
+      | Solution 5 | 22/11/2021 - 10:00 | Archived  |
+      | Solution 4 | 21/11/2020 - 10:00 | Published |
+      | Solution 3 | 20/11/2019 - 10:00 | Published |
+      | Solution 2 | 19/11/2018 - 10:00 | Archived  |
+      | Solution 1 | 18/11/2017 - 10:00 | Archived  |
     When I go to the edit form of the "Solution 1" solution
     Then I should see the button "Unarchive"
     When I go to the edit form of the "Solution 2" solution
