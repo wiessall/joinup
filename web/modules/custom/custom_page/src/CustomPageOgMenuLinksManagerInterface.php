@@ -15,55 +15,55 @@ interface CustomPageOgMenuLinksManagerInterface {
   /**
    * Returns a list of child custom pages linked through OG menu links.
    *
-   * @param \Drupal\node\NodeInterface $custom_page
+   * @param \Drupal\node\NodeInterface $customPage
    *   The parent custom page node.
    *
    * @return \Drupal\node\NodeInterface[]
    *   A list of child nodes.
    */
-  public function getChildren(NodeInterface $custom_page): array;
+  public function getChildren(NodeInterface $customPage): array;
 
   /**
    * Adds a OG menu link pointing to a custom page.
    *
-   * @param \Drupal\node\NodeInterface $custom_page
+   * @param \Drupal\node\NodeInterface $customPage
    *   The custom page entity.
    *
    * @return $this
    */
-  public function addLink(NodeInterface $custom_page): CustomPageOgMenuLinksManagerInterface;
+  public function addLink(NodeInterface $customPage): CustomPageOgMenuLinksManagerInterface;
 
   /**
    * Move the OG menu links of a custom page to a new group OG menu instance.
    *
-   * @param \Drupal\node\NodeInterface $custom_page
+   * @param \Drupal\node\NodeInterface $customPage
    *   The custom page entity.
-   * @param string $group_id
+   * @param string $groupId
    *   The ID of the group where the custom page is moved.
    *
    * @return $this
    */
-  public function moveLinks(NodeInterface $custom_page, $group_id): CustomPageOgMenuLinksManagerInterface;
+  public function moveLinks(NodeInterface $customPage, $groupId): CustomPageOgMenuLinksManagerInterface;
 
   /**
    * Deletes all the corresponding OG menu links pointing to a custom page.
    *
-   * @param \Drupal\node\NodeInterface $custom_page
+   * @param \Drupal\node\NodeInterface $customPage
    *   The custom page entity.
    *
    * @return $this
    */
-  public function deleteLinks(NodeInterface $custom_page): CustomPageOgMenuLinksManagerInterface;
+  public function deleteLinks(NodeInterface $customPage): CustomPageOgMenuLinksManagerInterface;
 
   /**
    * Gets the OG menu instance, given a custom page.
    *
-   * @param \Drupal\node\NodeInterface $custom_page
+   * @param \Drupal\node\NodeInterface $customPage
    *   The custom page entity.
    *
    * @return \Drupal\og_menu\OgMenuInstanceInterface|null
    *   The OG menu instance or NULL if none can be determined.
    */
-  public function getOgMenuInstanceByCustomPage(NodeInterface $custom_page): ?OgMenuInstanceInterface;
+  public function getOgMenuInstanceByCustomPage(NodeInterface $customPage): ?OgMenuInstanceInterface;
 
 }
