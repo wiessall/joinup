@@ -355,17 +355,6 @@ directory. However, Mailpit is more convenient to use, as it provides a web UI
 to view the emails.
 You can access the Mailpit UI at https://joinup.ddev.site:8026.
 
-In order to have the application send emails to Mailpit, you need to set the
-following settings in your `settings.override.php` file:
-
-```php
-$config['system.mail']['interface']['default'] = 'swiftmailer';
-$config['mailsystem.settings']['defaults']['sender'] = 'swiftmailer';
-$config['swiftmailer.transport']['transport'] = 'smtp';
-$config['swiftmailer.transport']['smtp_host'] = '127.0.0.1';
-$config['swiftmailer.transport']['smtp_port'] = '1025';
-```
-
 ### Additional information
 
 * [Code of conduct](docs/code_of_conduct.md)
