@@ -1,0 +1,25 @@
+.fieldset--textarea {
+  // Override drupal core align.module.css
+  .align-left,
+  .align-right {
+    // Align center on small screens.
+    float: none;
+    width: fit-content;
+    margin: 0 auto;
+  }
+  @include media-breakpoint-up(md) {
+    // Put back original alignment on larger screens and add margin on the images.
+    .align-left {
+      float: left;
+      img {
+        margin-right: $spacer * 1.25;
+      }
+    }
+    .align-right {
+      float: right;
+      img {
+        margin-left: $spacer * 1.25;
+      }
+    }
+  }
+}
