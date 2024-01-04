@@ -150,7 +150,7 @@ content:
     weight: 3
     region: content
     settings:
-      size: 200
+      size: 60
       placeholder: ''
     third_party_settings: {  }
   field_is_actor:
