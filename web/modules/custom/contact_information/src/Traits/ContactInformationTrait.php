@@ -34,10 +34,10 @@ trait ContactInformationTrait {
       return $ids;
     }
     $contacts = $this->entityTypeManager()->getStorage('rdf_entity')->loadMultiple($ids);
-    /** @var \Drupal\email_confirmer\EmailConfirmerManagerInterface $email_confirmer */
-    $email_confirmer = \Drupal::getContainer()->get('email_confirmer');
-    return array_filter($contacts, function (ContactInformationInterface $contact) use ($email_confirmer): bool {
-      return (bool) $email_confirmer->getConfirmation($contact->get('field_ci_email')->value, 'confirmed', ContactInformationEmailConfirmInterface::REALM);
+    /** @var \Drupal\email_confirmer\EmailConfirmerManagerInterface $emailConfirmer */
+    $emailConfirmer = \Drupal::getContainer()->get('email_confirmer');
+    return array_filter($contacts, function (ContactInformationInterface $contact) use ($emailConfirmer): bool {
+      return (bool) $emailConfirmer->getConfirmation($contact->get('field_ci_email')->value, 'confirmed', ContactInformationEmailConfirmInterface::REALM);
     });
   }
 
