@@ -34,9 +34,9 @@ Feature: Asset release moderation
     Then I should see the heading "Add Release"
     And I should see the workflow buttons "Save as draft, Publish"
     And I fill in the following:
-      | Name           | Release of the dark ship |
-      | Release number | 1                        |
-      | Release notes  | We go live.              |
+      | Name            | Release of the dark ship |
+      | Release version | 1                        |
+      | Release notes   | We go live.              |
     And I press "Save as draft"
     Then I should see the text "Release of the dark ship 1" in the "Page title" region
     But I should not see the following warning messages:
