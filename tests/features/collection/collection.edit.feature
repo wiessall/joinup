@@ -22,7 +22,7 @@ Feature: Editing collections
     Then the following fields should be present "Title, Description, Abstract, Topic, Geographical coverage, Search keywords, Content creation, Moderated, Motivation"
     And the following field widgets should be present "Contact information, Owner"
     And the following fields should not be present "Langcode, Translation, Affiliates, Enable the search field, Query presets, Limit"
-    And I should see "Short description text of the collection. Appears on the Overview page. (Leave blank to use the trimmed value of the Description field.)"
+    And I should see "Short description text of the collection. Appears on the Overview page."
     And I should see "Add a country name relevant to the content of this collection."
     And the "Description" wysiwyg editor should have the buttons "Heading,Bold,Italic,Remove Format,Link,Contact us,Bulleted list,Numbered list,Outdent,Indent,Block quote,File,Drupal media,table,Undo,Redo,Source,Code,Code Block"
 
