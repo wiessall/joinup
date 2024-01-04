@@ -256,6 +256,10 @@ Feature: User profile
       | Lake E.D.E.N.    | European Deep Earth Nurturing project | logo.png | published | 2017-02-23 10:00 | Janny Robert       |
       | Rose is red      | Better descriptions ever              | logo.png | published | 2017-02-23 10:00 | Clarise Edwardson  |
       | Lone handling    | Because even flowers have feelings.   | logo.png | archived  | 2017-02-23 12:00 | Janny Robert       |
+    And the following solutions:
+      | title          | collection    | state     | creation date   | author       |
+      | Sugar is sweet | Lake E.D.E.N. | archived  | 2015-03-03T8:00 | Janny Robert |
+      | Salt is salty  | Lake E.D.E.N. | published | 2015-02-03T7:00 | Janny Robert |
     And discussion content:
       | title                   | author          | collection    | state     | created         |
       | Repopulating green iris | Janny Robert   | Lake E.D.E.N. | published | 2018-06-15 16:00 |
@@ -282,16 +286,17 @@ Feature: User profile
     Then I should see the heading "Janny Robert"
     And I should see the text "Show archived"
     Then I should see the following tiles in the correct order:
-      | Discovered flower         |
-      | Purple flower             |
-      | Best plant comfort        |
-      | Repopulating green iris   |
-      | Cherry schedule           |
-      | Lake E.D.E.N.             |
-    And I should not see the "Archive news" tile
+      | Discovered flower       |
+      | Purple flower           |
+      | Best plant comfort      |
+      | Repopulating green iris |
+      | Cherry schedule         |
+      | Lake E.D.E.N.           |
+      | Salt is salty           |
 
     When I click "Show archived"
     Then I should see the following tiles in the correct order:
-      | Blue flower   |
-      | Cherry arch   |
-      | Lone handling |
+      | Blue flower    |
+      | Cherry arch    |
+      | Lone handling  |
+      | Sugar is sweet |
