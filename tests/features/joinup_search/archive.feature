@@ -69,3 +69,33 @@ Feature: Global search with archive content
       | bundle label | group type |
       | Collection   | collection |
       | Solution     | solution   |
+
+  @terms
+  Scenario: Group content supports archived solutions.
+    Given owner:
+      | name       |
+      | Erno Rubik |
+    And contact:
+      | name | Tom Kremer |
+    And collection:
+      | title               | Rubik Cube         |
+      | description         | combination puzzle |
+      | topic               | Supplier exchange  |
+      | owner               | Erno Rubik         |
+      | contact information | Tom Kremer         |
+      | state               | published          |
+    And solutions:
+      | title    | state     | collection |
+      | Megaminx | published | Rubik Cube |
+      | 4x4 cube | archived  | Rubik Cube |
+
+    When I am logged in as a moderator
+    And I go to the edit form of the "Rubik Cube" collection
+    And I select "All" from "Show archived content"
+    And I press "Publish"
+
+    Then I should see the following tiles in the correct order:
+      | Megaminx |
+    When I click "Show archived"
+    Then I should see the following tiles in the correct order:
+      | 4x4 cube |
