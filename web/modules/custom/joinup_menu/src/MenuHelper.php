@@ -15,7 +15,6 @@ use Drupal\Core\Routing\RedirectDestinationTrait;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\Url;
 use Drupal\collection\Entity\CollectionInterface;
-use Drupal\email_confirmer\EmailConfirmerManagerInterface;
 use Drupal\joinup_collection\JoinupCollectionHelper;
 use Exception;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -41,16 +40,13 @@ class MenuHelper implements MenuHelperInterface {
    *   The request stack.
    * @param \Drupal\Core\Path\PathMatcherInterface $pathMatcher
    *   The path matcher.
-   * @param \Drupal\email_confirmer\EmailConfirmerManagerInterface $emailConfirmer
-   *   The email confirmer service.
    */
   public function __construct(
     protected LoggerChannelFactoryInterface $logger,
     protected MenuLinkTreeInterface $menuLinkTree,
     protected EntityTypeManagerInterface $entityTypeManager,
     protected RequestStack $requestStack,
-    protected PathMatcherInterface $pathMatcher,
-    protected EmailConfirmerManagerInterface $emailConfirmer
+    protected PathMatcherInterface $pathMatcher
   ) {}
 
   /**

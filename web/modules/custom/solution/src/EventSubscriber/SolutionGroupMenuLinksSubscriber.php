@@ -32,7 +32,7 @@ class SolutionGroupMenuLinksSubscriber implements EventSubscriberInterface {
    *   The event object.
    */
   public function addLinks(GroupMenuLinksEvent $event): void {
-    if ($event->getMenuName() !== 'navigation') {
+    if ($event->getMenuType() !== 'navigation') {
       return;
     }
 
