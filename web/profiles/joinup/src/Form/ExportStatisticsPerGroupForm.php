@@ -99,11 +99,24 @@ class ExportStatisticsPerGroupForm extends ExportBatchedDataFormBase {
   public function generateData(array &$form, FormStateInterface $form_state): void {
     // Query to fetch all groups.
     $ids_query = <<<QUERY
-SELECT DISTINCT ?entity_id
-FROM <http://joinup.eu/collection/published>
-FROM <http://joinup.eu/solution/published>
-WHERE {
-  ?entity_id a ?bundle_uri .
+SELECT * WHERE
+{
+    {
+        SELECT DISTINCT ?entity_id
+        FROM <http://joinup.eu/solution/published>
+        WHERE {
+            ?entity_id <http://joinup.eu/is/workflow_status> ?o .
+            FILTER (!regex(?o, "archived", "i"))
+        }
+    }
+    UNION
+    {
+        SELECT DISTINCT ?entity_id
+        FROM <http://joinup.eu/collection/published>
+        WHERE {
+            ?entity_id a ?bundle_uri .
+        }
+    }
 }
 QUERY;
 
