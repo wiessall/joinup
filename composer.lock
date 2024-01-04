@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "950661f273b841f63009c84fe18368d1",
+    "content-hash": "f08d4dc8a08bee8b6a849e745ad11fe0",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -7931,6 +7931,10 @@
                 {
                     "name": "nils.destoop",
                     "homepage": "https://www.drupal.org/user/361625"
+                },
+                {
+                    "name": "paulrad",
+                    "homepage": "https://www.drupal.org/user/3722439"
                 }
             ],
             "description": "Exposes all blocks as a views area.",
