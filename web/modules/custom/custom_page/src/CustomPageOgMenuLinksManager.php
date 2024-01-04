@@ -152,7 +152,7 @@ class CustomPageOgMenuLinksManager implements CustomPageOgMenuLinksManagerInterf
           if ($result = $this->menuLinkManager->loadLinksByRoute($url->getRouteName(), $url->getRouteParameters())) {
             /** @var \Drupal\menu_link_content\Plugin\Menu\MenuLinkContent $instance */
             foreach ($result as $id => $instance) {
-              if ($instance->getMenuName() === $menuName && $instance->isDeletable() && strpos($id, 'menu_link_content:') === 0) {
+              if ($instance->getMenuName() === $menuName && $instance->isDeletable() && str_starts_with($id, 'menu_link_content:')) {
                 $instance->deleteLink();
                 // Search for children of deleted menu link.
                 $mids = $menuLinkContentStorage->getQuery()->accessCheck(FALSE)

@@ -16,12 +16,12 @@ interface GroupMenuManagerInterface {
    *
    * @param string $groupId
    *   The ID of the group to which OG menu instance is attached.
-   * @param string $ogMenuInstanceId
+   * @param string $menuType
    *   The type of the OG menu instance.
    *
    * @return \Drupal\og_menu\OgMenuInstanceInterface|null
    *   The OG menu instance or NULL if none can be determined.
    */
-  public function getMenuByGroupId(string $groupId, string $ogMenuInstanceId): ?OgMenuInstanceInterface;
+  public function getMenuByGroupId(string $groupId, string $menuType): ?OgMenuInstanceInterface;
 
 }

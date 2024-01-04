@@ -9,14 +9,7 @@ id: ogmenu_instance.quick_links.default
 targetEntityType: ogmenu_instance
 bundle: quick_links
 mode: default
-content:
-  og_audience:
-    type: entity_reference_label
-    label: above
-    settings:
-      link: true
-    third_party_settings: {  }
-    weight: 0
-    region: content
+content: {  }
 hidden:
+  og_audience: true
   search_api_excerpt: true

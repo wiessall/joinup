@@ -371,4 +371,12 @@ interface GroupInterface extends RdfInterface, LogoInterface, ShortIdInterface, 
    */
   public function getValidatedContactInformationEmails(): array;
 
+  /**
+   * Returns the website link field name.
+   *
+   * @return string
+   *   The website link field name.
+   */
+  public function getWebsiteLinkFieldName(): string;
+
 }

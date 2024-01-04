@@ -42,7 +42,7 @@ final class JoinupMenuController extends ControllerBase {
    *   The access result.
    */
   public static function documentationFileAccess(RdfInterface $rdf_entity): AccessResultInterface {
-    return AccessResult::allowedIf(!empty($rdf_entity->field_is_documentation->entity));
+    return AccessResult::allowedIf(!$rdf_entity->get('field_is_documentation')->isEmpty());
   }
 
   /**
@@ -55,8 +55,7 @@ final class JoinupMenuController extends ControllerBase {
    *   The redirect response.
    */
   public function websiteLink(RdfInterface $rdf_entity): RedirectResponse {
-    $field = $rdf_entity->bundle() === 'collection' ? 'field_ar_access_url' : 'field_is_landing_page';
-    $url = $rdf_entity->$field->uri;
+    $url = $rdf_entity->{$rdf_entity->getWebsiteLinkFieldName()}->uri;
     return new RedirectResponse($url);
   }
 
@@ -70,8 +69,7 @@ final class JoinupMenuController extends ControllerBase {
    *   The access result.
    */
   public static function websiteLinkAccess(RdfInterface $rdf_entity): AccessResultInterface {
-    $field = $rdf_entity->bundle() === 'collection' ? 'field_ar_access_url' : 'field_is_landing_page';
-    return AccessResult::allowedIf(!empty($rdf_entity->$field->uri));
+    return AccessResult::allowedIf(!empty($rdf_entity->{$rdf_entity->getWebsiteLinkFieldName()}->uri));
   }
 
 }

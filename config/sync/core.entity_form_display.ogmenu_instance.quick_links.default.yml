@@ -5,28 +5,11 @@ dependencies:
   config:
     - field.field.ogmenu_instance.quick_links.og_audience
     - og_menu.ogmenu.quick_links
-  module:
-    - og
 id: ogmenu_instance.quick_links.default
 targetEntityType: ogmenu_instance
 bundle: quick_links
 mode: default
-content:
-  langcode:
-    type: language_select
-    weight: 10
-    region: content
-    settings:
-      include_locked: true
-    third_party_settings: {  }
-  og_audience:
-    type: og_complex
-    weight: 11
-    region: content
-    settings:
-      match_operator: CONTAINS
-      match_limit: 10
-      size: 60
-      placeholder: ''
-    third_party_settings: {  }
-hidden: {  }
+content: {  }
+hidden:
+  langcode: true
+  og_audience: true

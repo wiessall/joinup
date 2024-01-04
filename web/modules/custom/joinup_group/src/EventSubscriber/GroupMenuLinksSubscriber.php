@@ -44,8 +44,8 @@ class GroupMenuLinksSubscriber implements EventSubscriberInterface {
   public function addLinks(GroupMenuLinksEvent $event): void {
     $ogMenuInstanceId = substr($event->getMenuName(), 7);
     $menu = $this->entityTypeManager->getStorage('ogmenu_instance')->load($ogMenuInstanceId);
+    $group = $event->getGroup();
     if ($menu->bundle() === 'navigation') {
-      $group = $event->getGroup();
       $discussionUrl = Url::fromRoute('view.discussions.overview', [
         'rdf_entity' => UriEncoder::encodeUrl($group->id()),
       ]);

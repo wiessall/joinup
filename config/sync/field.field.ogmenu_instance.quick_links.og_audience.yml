@@ -5,6 +5,8 @@ dependencies:
   config:
     - field.storage.ogmenu_instance.og_audience
     - og_menu.ogmenu.quick_links
+    - rdf_entity.rdfentity.collection
+    - rdf_entity.rdfentity.solution
   module:
     - og
 id: ogmenu_instance.quick_links.og_audience
@@ -18,6 +20,14 @@ translatable: true
 default_value: {  }
 default_value_callback: ''
 settings:
-  handler: 'og:default'
-  handler_settings: {  }
+  handler: 'default:rdf_entity'
+  handler_settings:
+    target_bundles:
+      collection: collection
+      solution: solution
+    sort:
+      field: _none
+      direction: ASC
+    auto_create: false
+    auto_create_bundle: collection
 field_type: og_standard_reference
