@@ -75,7 +75,7 @@ Feature: "Add solution" visibility options.
     And I check "I have read and accept the legal notice and I commit to manage my solution on a regular basis."
     And I press "Yes"
     Then I should see the heading "Add Solution"
-    And the following fields should be present "Title, Description, Upload a new file or enter a URL, Logo, Name, E-mail address, Website URL"
+    And the following fields should be present "Title, Abstract, Description, Upload a new file or enter a URL, Logo, Name, E-mail address, Website URL"
     And the following fields should not be present "Groups audience, Other groups, Current workflow state, Langcode, Translation, Motivation"
     # Regression test for ensuring that obsolete content creation value is removed.
     # @see: https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-3567
@@ -86,6 +86,7 @@ Feature: "Add solution" visibility options.
     And the "Solution type" field should contain the "EIRA Ontology Viewpoint, Legal View, Deprecated" option groups
     When I fill in the following:
       | Title                 | Espresso is the solution                                      |
+      | Abstract              | Abstract used for testing                                     |
       | Description           | This is a test text                                           |
       | Geographical coverage | Belgium                                                       |
       | Language              | http://publications.europa.eu/resource/authority/language/VLS |
@@ -142,6 +143,7 @@ Feature: "Add solution" visibility options.
     And I press "Yes"
     When I fill in the following:
       | Title                 | V60 filter coffee solution                                             |
+      | Abstract              | Abstract of filter coffee                                              |
       | Description           | This is a test text                                                    |
       | Geographical coverage | Belgium (http://publications.europa.eu/resource/authority/country/BEL) |
       | Language              | http://publications.europa.eu/resource/authority/language/VLS          |
@@ -219,6 +221,7 @@ Feature: "Add solution" visibility options.
       | Glacier monitoring | published |
     And the following solution:
       | title       | Climate change tracker                            |
+      | abstract    | Tracks climate change                             |
       | description | Atlantic salmon arrived after the Little Ice Age. |
       | collection  | Ocean studies                                     |
       | state       | published                                         |
@@ -246,6 +249,7 @@ Feature: "Add solution" visibility options.
     And I press "Yes"
     And I fill in the following:
       | Title                 | Climate change tracker                      |
+      | Abstract              | Tracks climate change                       |
       | Description           | Logs retreat of 40 glaciers in Switzerland. |
       | Geographical coverage | Switzerland                                 |
       | Name                  | Angela Crespi                               |
@@ -285,6 +289,7 @@ Feature: "Add solution" visibility options.
       | name  | Invisible Man             |
     And the following solution:
       | title               | Cleaning solution                                 |
+      | abstract            | Cleans anything dirty                             |
       | description         | Use on metal surfaces.                            |
       | owner               | Organisation example                              |
       | state               | published                                         |

@@ -4,6 +4,7 @@ status: true
 dependencies:
   config:
     - core.entity_form_mode.rdf_entity.inline
+    - field.field.rdf_entity.solution.field_is_abstract
     - field.field.rdf_entity.solution.field_is_actor
     - field.field.rdf_entity.solution.field_is_affiliations_requests
     - field.field.rdf_entity.solution.field_is_business_process
@@ -92,6 +93,7 @@ third_party_settings:
         - current_workflow_state
         - field_is_state
         - transition_motivation
+        - field_is_abstract
       label: 'Main fields'
       region: content
       parent_name: group_general
@@ -142,6 +144,14 @@ content:
       title: 'Current workflow state'
       title_display: before
       show_for_new_entities: false
+    third_party_settings: {  }
+  field_is_abstract:
+    type: string_textfield
+    weight: 3
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
     third_party_settings: {  }
   field_is_actor:
     type: options_select
