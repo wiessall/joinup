@@ -19,7 +19,7 @@ field_name: field_ar_abstract
 entity_type: rdf_entity
 type: string
 settings:
-  max_length: 255
+  max_length: 200
   case_sensitive: false
   is_ascii: false
 module: core

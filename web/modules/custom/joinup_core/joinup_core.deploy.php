@@ -59,6 +59,9 @@ SPARQL;
     // Replace multiple spaces with a single space.
     $item['abstract'] = preg_replace('/\s+/', ' ', $item['abstract']);
 
+    // Trim the abstract to 200 characters.
+    $field['abstract'] = _ventuno_smart_trim($item['abstract'], 200);
+
     $query = <<<SPARQL
 WITH <{$item['graph']}>
 DELETE {

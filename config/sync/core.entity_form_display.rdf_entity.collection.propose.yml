@@ -103,7 +103,7 @@ content:
     weight: 2
     region: content
     settings:
-      size: 255
+      size: 200
       placeholder: ''
     third_party_settings: {  }
   field_ar_access_url:
