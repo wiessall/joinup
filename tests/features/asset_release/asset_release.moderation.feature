@@ -45,7 +45,7 @@ Feature: Asset release moderation
     When I click "Edit" in the "Entity actions" region
     Then the current workflow state should be "Draft"
     And I should see the workflow buttons "Save as draft, Publish"
-    When I fill in "Release number" with "v1"
+    When I fill in "Release version" with "v1"
     And I press "Publish"
     Then I should see the text "Release of the dark ship v1" in the "Page title" region
     And I should not see the following warning messages:

@@ -54,7 +54,7 @@ Feature: Solution homepage
       | Completed                                         |
       | Geographical coverage                             |
       | Belgium                                           |
-      | Release number                                    |
+      | Release version                                    |
       | v1.1                                              |
       | Business process                                  |
       | Supply Chain                                      |
