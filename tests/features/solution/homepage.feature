@@ -35,6 +35,7 @@ Feature: Solution homepage
       | release notes  | Changed release  |
       | is version of  | Petri net        |
       | state          | published        |
+      | creation date  | 2017-03-17T12:50 |
 
     When I go to the homepage of the "Petri net" solution
     Then the page should be cacheable
@@ -54,8 +55,10 @@ Feature: Solution homepage
       | Completed                                         |
       | Geographical coverage                             |
       | Belgium                                           |
-      | Release version                                    |
+      | Release version                                   |
       | v1.1                                              |
+      | Release date                                      |
+      | 17/03/2017                                        |
       | Business process                                  |
       | Supply Chain                                      |
       | Collaboration                                     |

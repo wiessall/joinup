@@ -51,6 +51,7 @@ dependencies:
     - joinup_layout
     - layout_builder
     - layout_discovery
+    - solution
     - user
 third_party_settings:
   field_group:
@@ -421,6 +422,17 @@ third_party_settings:
                   template_suggestion:
                     template_suggestion: ''
             weight: 4
+            additional: {  }
+          9f0cd2ee-67dc-45bd-99e7-7a84c0febd2f:
+            uuid: 9f0cd2ee-67dc-45bd-99e7-7a84c0febd2f
+            region: content
+            configuration:
+              id: solution_release_date
+              label: 'Release date'
+              label_display: '0'
+              provider: solution
+              context_mapping: {  }
+            weight: 7
             additional: {  }
         third_party_settings: {  }
       -
