@@ -29,6 +29,9 @@ Feature: Global search
       | title         | headline     | body       | collection                   | topic       | spatial coverage | state    |
       | Rummy news 5 | Rummy title 5 | Dummy body | Molecular cooking collection | E-inclusion | Luxembourg       | archived |
       | Rummy news 6 | Rummy title 6 | Dummy body | Molecular cooking collection | E-inclusion | Luxembourg       | archived |
+    And the following solutions:
+      | title         | collection                   | description                            | state    |
+      | Spring device | Molecular cooking collection | A mechanical device that stores energy | archived |
 
     Given I am logged in as a user with the "authenticated" role
     Then I visit the search page
@@ -135,6 +138,7 @@ Feature: Global search
     And I should not see the "Dummy news 4" tile
     And I should see the "Rummy news 5" tile
     And I should see the "Rummy news 6" tile
+    And I should see the "Spring device" tile
 
     Then I check the "Show only Archived items" checkbox from the "Status" facet
     And I should see the "Molecular cooking collection" tile
@@ -147,6 +151,7 @@ Feature: Global search
     And I should see the "Dummy news 4" tile
     And I should not see the "Rummy news 5" tile
     And I should not see the "Rummy news 6" tile
+    And I should not see the "Spring device" tile
 
   @javascript
   Scenario: Alphabetical order for the spatial coverage in the search page.
