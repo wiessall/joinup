@@ -37,13 +37,13 @@ class CustomPageOgMenuLinksManager implements CustomPageOgMenuLinksManagerInterf
   /**
    * {@inheritdoc}
    */
-  public function getChildren(NodeInterface $customPage): array {
+  public function getChildren(NodeInterface $customPage, string $menuType): array {
     $menuLinkContentStorage = $this->entityTypeManager->getStorage('menu_link_content');
     $nodeStorage = $this->entityTypeManager->getStorage('node');
 
     $this->verifyCustomPage($customPage);
     $children = [];
-    if ($ogMenuInstance = $this->getOgMenuInstanceByCustomPage($customPage)) {
+    if ($ogMenuInstance = $this->getOgMenuInstanceByCustomPage($customPage, $menuType)) {
       $menuName = "ogmenu-{$ogMenuInstance->id()}";
       // Collect the IDs of links to the custom page.
       $mids = $menuLinkContentStorage->getQuery()->accessCheck(FALSE)
@@ -89,10 +89,10 @@ class CustomPageOgMenuLinksManager implements CustomPageOgMenuLinksManagerInterf
   /**
    * {@inheritdoc}
    */
-  public function addLink(NodeInterface $customPage, string $ogMenuInstanceId, array $properties = []): CustomPageOgMenuLinksManagerInterface {
+  public function addLink(NodeInterface $customPage, string $menuType, array $properties = []): CustomPageOgMenuLinksManagerInterface {
     $menuLinkContentStorage = $this->entityTypeManager->getStorage('menu_link_content');
     $this->verifyCustomPage($customPage);
-    if ($ogMenuInstance = $this->getOgMenuInstanceByCustomPage($customPage, $ogMenuInstanceId)) {
+    if ($ogMenuInstance = $this->getOgMenuInstanceByCustomPage($customPage, $menuType)) {
       $properties = $properties + [
         'title' => $customPage->label(),
         'menu_name' => 'ogmenu-' . $ogMenuInstance->id(),
@@ -177,10 +177,10 @@ class CustomPageOgMenuLinksManager implements CustomPageOgMenuLinksManagerInterf
   /**
    * {@inheritdoc}
    */
-  public function getOgMenuInstanceByCustomPage(NodeInterface $customPage, string $ogMenuInstanceId): ?OgMenuInstanceInterface {
+  public function getOgMenuInstanceByCustomPage(NodeInterface $customPage, string $menuType): ?OgMenuInstanceInterface {
     $this->verifyCustomPage($customPage);
     if ($group_id = $customPage->get(OgGroupAudienceHelperInterface::DEFAULT_FIELD)->target_id) {
-      return $this->groupMenuManager->getMenuByGroupId($group_id, $ogMenuInstanceId);
+      return $this->groupMenuManager->getMenuByGroupId($group_id, $menuType);
     }
     return NULL;
   }

@@ -17,25 +17,27 @@ interface CustomPageOgMenuLinksManagerInterface {
    *
    * @param \Drupal\node\NodeInterface $customPage
    *   The parent custom page node.
+   * @param string $menuType
+   *   The type of the OG menu instance. Whether 'navigation' or 'quick_links'.
    *
    * @return \Drupal\node\NodeInterface[]
    *   A list of child nodes.
    */
-  public function getChildren(NodeInterface $customPage): array;
+  public function getChildren(NodeInterface $customPage, string $menuType): array;
 
   /**
    * Adds a OG menu link pointing to a custom page.
    *
    * @param \Drupal\node\NodeInterface $customPage
    *   The custom page entity.
-   * @param string $ogMenuInstanceId
-   *   The ID of the OG menu instance. Whether 'navigation' or 'quick_links'.
+   * @param string $menuType
+   *   The type of the OG menu instance. Whether 'navigation' or 'quick_links'.
    * @param array $properties
    *   (optional) The properties of the menu link. Defaults to an empty array.
    *
    * @return $this
    */
-  public function addLink(NodeInterface $customPage, string $ogMenuInstanceId, array $properties): CustomPageOgMenuLinksManagerInterface;
+  public function addLink(NodeInterface $customPage, string $menuType, array $properties): CustomPageOgMenuLinksManagerInterface;
 
   /**
    * Move the OG menu links of a custom page to a new group OG menu instance.
@@ -47,7 +49,7 @@ interface CustomPageOgMenuLinksManagerInterface {
    *
    * @return $this
    */
-  public function moveLinks(NodeInterface $customPage, $groupId): CustomPageOgMenuLinksManagerInterface;
+  public function moveLinks(NodeInterface $customPage, string $groupId): CustomPageOgMenuLinksManagerInterface;
 
   /**
    * Deletes all the corresponding OG menu links pointing to a custom page.
@@ -64,12 +66,12 @@ interface CustomPageOgMenuLinksManagerInterface {
    *
    * @param \Drupal\node\NodeInterface $customPage
    *   The custom page entity.
-   * @param string $ogMenuInstanceId
-   *   The ID of the OG menu instance. Whether 'navigation' or 'quick_links'.
+   * @param string $menuType
+   *   The type of the OG menu instance. Whether 'navigation' or 'quick_links'.
    *
    * @return \Drupal\og_menu\OgMenuInstanceInterface|null
    *   The OG menu instance or NULL if none can be determined.
    */
-  public function getOgMenuInstanceByCustomPage(NodeInterface $customPage, string $ogMenuInstanceId): ?OgMenuInstanceInterface;
+  public function getOgMenuInstanceByCustomPage(NodeInterface $customPage, string $menuType): ?OgMenuInstanceInterface;
 
 }

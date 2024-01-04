@@ -43,7 +43,7 @@ function joinup_core_deploy_110100(array &$sandbox): string {
     $event_dispatcher = \Drupal::getContainer()->get('event_dispatcher');
 
     // Allow subscribers to automatically create the menu links.
-    $event = new GroupMenuLinksEvent($group, $menu_name, \Drupal::entityTypeManager());
+    $event = new GroupMenuLinksEvent($group, $menu_name, $og_menu_instance->bundle(), \Drupal::entityTypeManager());
     $event_dispatcher->dispatch($event);
   }
 
