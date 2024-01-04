@@ -92,6 +92,7 @@ Feature:
     When I press "Add existing" at the "Owner" field
     And I fill in the following:
       | Title          | I know what a solution is |
+      | Abstract       | Some summary              |
       | Description    | Dummy text                |
       # Contact information details.
       | Name           | John Smith                |
