@@ -14,6 +14,8 @@
 
 declare(strict_types = 1);
 
+use Drupal\smart_trim\TruncateHTML;
+
 /**
  * Alter abstracts of collections.
  */
@@ -45,6 +47,7 @@ SPARQL;
     $sandbox['count'] = count($sandbox['data']);
   }
 
+  $truncater = new TruncateHTML();
   $spliced = array_splice($sandbox['data'], 0, 300);
   foreach ($spliced as $item) {
     $item['abstract'] = trim(strip_tags($item['abstract']));
@@ -60,7 +63,7 @@ SPARQL;
     $item['abstract'] = preg_replace('/\s+/', ' ', $item['abstract']);
 
     // Trim the abstract to 200 characters.
-    $field['abstract'] = _ventuno_smart_trim($item['abstract'], 200);
+    $item['abstract'] = $truncater->truncateChars($item['abstract'], 200);
 
     $query = <<<SPARQL
 WITH <{$item['graph']}>
