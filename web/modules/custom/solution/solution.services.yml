@@ -40,3 +40,16 @@ services:
     class: Drupal\solution\EventSubscriber\AdjustSolutionContentSubscriber
     tags:
       - { name: event_subscriber }
+
+  solution.post_archive.subscriber:
+    class: Drupal\solution\EventSubscriber\SolutionArchiveEventSubscriber
+    arguments:
+      - '@queue'
+      - '@current_user'
+    tags:
+      - { name: event_subscriber }
+
+  logger.channel.solution:
+    parent: logger.channel_base
+    arguments:
+      - 'solution'
