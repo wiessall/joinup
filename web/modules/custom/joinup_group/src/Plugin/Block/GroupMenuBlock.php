@@ -4,9 +4,12 @@ declare(strict_types = 1);
 
 namespace Drupal\joinup_group\Plugin\Block;
 
+use Drupal\Core\Access\AccessResult;
+use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Block\BlockPluginInterface;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Menu\MenuTreeParameters;
+use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Url;
 use Drupal\og_menu\OgMenuInstanceInterface;
 use Drupal\og_menu\Plugin\Block\OgMenuBlock;
@@ -140,7 +143,7 @@ class GroupMenuBlock extends OgMenuBlock {
   protected function getEmptyResultsBuild(): array {
     /** @var \Drupal\rdf_entity\RdfInterface $group */
     $group = $this->getContext('og')->getContextData()->getValue();
-    if (empty($group->id())) {
+    if (empty($group->id()) || $this->getOgMenuInstance()->bundle() === 'quick_links') {
       // In certain cases, like the layout builder, the entity is passed as a
       // clone without an ID, thus we cannot load the menu instance.
       return [];
@@ -211,6 +214,19 @@ class GroupMenuBlock extends OgMenuBlock {
       $this->ogMenuInstance = parent::getOgMenuInstance();
     }
     return $this->ogMenuInstance;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function access(AccountInterface $account, $return_as_object = FALSE): AccessResultInterface|bool {
+    // For the quick links menu, deny access if the '#items' array is empty from
+    // the build. Otherwise, allow the parent to check access.
+    if ($this->getOgMenuInstance()->bundle() === 'quick_links' && empty($this->build()['#items'])) {
+      return $return_as_object ? AccessResult::forbidden() : FALSE;
+    }
+
+    return parent::access($account, $return_as_object);
   }
 
 }
