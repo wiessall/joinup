@@ -4,7 +4,6 @@ declare(strict_types = 1);
 
 namespace Drupal\solution\Plugin\Block;
 
-use Drupal\asset_release\Entity\AssetReleaseInterface;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Block\BlockBase;
@@ -13,6 +12,7 @@ use Drupal\Core\Datetime\DateFormatterInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Session\AccountInterface;
+use Drupal\asset_release\Entity\AssetReleaseInterface;
 use Drupal\solution\Entity\SolutionInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
