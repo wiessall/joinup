@@ -44,10 +44,12 @@ dependencies:
     - field.field.rdf_entity.solution.field_spatial_coverage
     - field.field.rdf_entity.solution.field_status
     - field.field.rdf_entity.solution.field_topic
+    - og_menu.ogmenu.quick_links
     - rdf_entity.rdfentity.solution
   module:
     - custom_markup_block
     - field_group
+    - joinup_group
     - joinup_layout
     - layout_builder
     - layout_discovery
@@ -136,18 +138,18 @@ third_party_settings:
                     template_suggestion: ''
             weight: 0
             additional: {  }
-          41a67600-c44e-41c8-bf4e-7f8cac7db892:
-            uuid: 41a67600-c44e-41c8-bf4e-7f8cac7db892
+          9a783eec-afab-4fe1-a4bd-24f4f3e5d2a2:
+            uuid: 9a783eec-afab-4fe1-a4bd-24f4f3e5d2a2
             region: aside
             configuration:
-              id: custom_markup
-              label: 'Custom Markup'
-              label_display: '0'
-              provider: custom_markup_block
-              context_mapping: {  }
-              markup:
-                value: '<h2>Quick links</h2>'
-                format: content_editor
+              id: 'group_menu_block:quick_links'
+              label: 'Quick links'
+              label_display: visible
+              provider: joinup_group
+              context_mapping:
+                og: layout_builder.entity
+              level: 1
+              depth: 0
             weight: 0
             additional: {  }
         third_party_settings: {  }
