@@ -140,6 +140,11 @@ class GroupMenuBlock extends OgMenuBlock {
   protected function getEmptyResultsBuild(): array {
     /** @var \Drupal\rdf_entity\RdfInterface $group */
     $group = $this->getContext('og')->getContextData()->getValue();
+    if (empty($group->id())) {
+      // In certain cases, like the layout builder, the entity is passed as a
+      // clone without an ID, thus we cannot load the menu instance.
+      return [];
+    }
     // Define URLs that are used in help texts.
     $create_custom_page_url = Url::fromRoute('joinup_group.add_content', [
       'rdf_entity' => $group->id(),
