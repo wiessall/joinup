@@ -7,6 +7,7 @@ namespace Drupal\joinup_menu\Controller;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Controller\ControllerBase;
+use Drupal\Core\Routing\TrustedRedirectResponse;
 use Drupal\rdf_entity\RdfInterface;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -51,12 +52,12 @@ final class JoinupMenuController extends ControllerBase {
    * @param \Drupal\rdf_entity\RdfInterface $rdf_entity
    *   The RDF entity.
    *
-   * @return \Symfony\Component\HttpFoundation\RedirectResponse
+   * @return \Drupal\Core\Routing\TrustedRedirectResponse
    *   The redirect response.
    */
-  public function websiteLink(RdfInterface $rdf_entity): RedirectResponse {
+  public function websiteLink(RdfInterface $rdf_entity): TrustedRedirectResponse {
     $url = $rdf_entity->{$rdf_entity->getWebsiteLinkFieldName()}->uri;
-    return new RedirectResponse($url);
+    return new TrustedRedirectResponse($url);
   }
 
   /**
