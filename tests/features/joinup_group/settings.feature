@@ -49,6 +49,7 @@ Feature: Collections/Solutions settings
 
     When I fill in the following:
       | Title          | Solution Beta      |
+      | Abstract       | Short abstract     |
       | Description    | Last letter        |
       | Name           | Jony Burton        |
       | E-mail address | jonb@example.com   |
