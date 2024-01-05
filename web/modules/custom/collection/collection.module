@@ -18,7 +18,6 @@ use Drupal\Core\Field\BaseFieldDefinition;
 use Drupal\Core\Field\FieldDefinitionInterface;
 use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Render\Element;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\collection\Entity\Collection;
 use Drupal\collection\Entity\CollectionInterface;
@@ -385,20 +384,6 @@ function collection_rdf_entity_view(array &$build, EntityInterface $entity, Enti
         'aria-label' => t('Read more about @name.', ['@name' => $entity->getName()]),
       ],
     ])->toRenderable();
-  }
-}
-
-/**
- * Implements hook_ENTITY_TYPE_view_alter().
- */
-function collection_rdf_entity_view_alter(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display) {
-  if (!$entity instanceof CollectionInterface || $display->getMode() !== 'default') {
-    return;
-  }
-
-  // Hide the description when the abstract is available.
-  if (Element::children($build['field_ar_abstract'])) {
-    $build['field_ar_description']['#access'] = FALSE;
   }
 }
 
