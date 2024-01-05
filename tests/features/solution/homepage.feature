@@ -27,14 +27,17 @@ Feature: Solution homepage
       | spatial coverage    | Belgium                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
       | business process    | Supply Chain, Collaboration                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
       | product type        | Capital good, Raw material                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
+      | creation date       |  2017-12-01T8:43                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
+      | modification date   |  2012-12-01T8:43                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
     And the following release:
-      | title          | Petri net v1     |
-      | description    | A sample release |
-      | documentation  | text.pdf         |
-      | release number | v1.1             |
-      | release notes  | Changed release  |
-      | is version of  | Petri net        |
-      | state          | published        |
+      | title            | Petri net v1     |
+      | description      | A sample release |
+      | documentation    | text.pdf         |
+      | release number   | v1.1             |
+      | release notes    | Changed release  |
+      | is version of    | Petri net        |
+      | state            | published        |
+      | creation date    | 2022-12-21T13:00 |
 
     When I go to the homepage of the "Petri net" solution
     Then the page should be cacheable
@@ -43,6 +46,8 @@ Feature: Solution homepage
       | Detailed information |
       | Moderation           |
     And I should see the following lines of text:
+      | Last update                                       |
+      | 21/12/2022                                        |
       | Owner                                             |
       | Awesome owner                                     |
       | Solution type                                     |

@@ -3,6 +3,7 @@ langcode: en
 status: true
 dependencies:
   config:
+    - field.field.rdf_entity.solution.field_is_abstract
     - field.field.rdf_entity.solution.field_is_actor
     - field.field.rdf_entity.solution.field_is_affiliations_requests
     - field.field.rdf_entity.solution.field_is_business_process
@@ -281,7 +282,7 @@ third_party_settings:
                     offset: 0
                   template_suggestion:
                     template_suggestion: ''
-            weight: 0
+            weight: 2
             additional: {  }
           3cf24ce9-8700-44c3-a663-1834b2f44c4d:
             uuid: 3cf24ce9-8700-44c3-a663-1834b2f44c4d
@@ -308,7 +309,7 @@ third_party_settings:
                     offset: 0
                   template_suggestion:
                     template_suggestion: ''
-            weight: 1
+            weight: 3
             additional: {  }
           bbf37e40-0a11-4edc-bbcf-1b43cae0304e:
             uuid: bbf37e40-0a11-4edc-bbcf-1b43cae0304e
@@ -329,7 +330,7 @@ third_party_settings:
                 third_party_settings:
                   template_suggestion:
                     template_suggestion: ''
-            weight: 2
+            weight: 4
             additional: {  }
           9cee878e-b949-4a83-a2c9-7235e431e320:
             uuid: 9cee878e-b949-4a83-a2c9-7235e431e320
@@ -356,7 +357,7 @@ third_party_settings:
                     offset: 0
                   template_suggestion:
                     template_suggestion: ''
-            weight: 3
+            weight: 5
             additional: {  }
           39d3c3ed-cfc8-49bd-8bbe-9fd93e76e8cc:
             uuid: 39d3c3ed-cfc8-49bd-8bbe-9fd93e76e8cc
@@ -377,7 +378,7 @@ third_party_settings:
                 third_party_settings:
                   template_suggestion:
                     template_suggestion: ''
-            weight: 5
+            weight: 7
             additional: {  }
           f519b608-0e9b-4859-bcd0-f8ebf8f6bc19:
             uuid: f519b608-0e9b-4859-bcd0-f8ebf8f6bc19
@@ -398,7 +399,7 @@ third_party_settings:
                 third_party_settings:
                   template_suggestion:
                     template_suggestion: ''
-            weight: 6
+            weight: 8
             additional: {  }
           26bdb361-9338-49ce-b71a-629179d3ad4c:
             uuid: 26bdb361-9338-49ce-b71a-629179d3ad4c
@@ -419,7 +420,39 @@ third_party_settings:
                 third_party_settings:
                   template_suggestion:
                     template_suggestion: ''
-            weight: 4
+            weight: 6
+            additional: {  }
+          215eea21-4677-4722-a8dd-10153035c3fc:
+            uuid: 215eea21-4677-4722-a8dd-10153035c3fc
+            region: content
+            configuration:
+              id: 'field_block:rdf_entity:solution:changed'
+              label: 'Last Update'
+              label_display: '0'
+              provider: layout_builder
+              context_mapping:
+                entity: layout_builder.entity
+                view_mode: view_mode
+              formatter:
+                type: timestamp
+                label: above
+                settings:
+                  date_format: date_only
+                  custom_date_format: ''
+                  timezone: ''
+                  tooltip:
+                    date_format: long
+                    custom_date_format: ''
+                  time_diff:
+                    enabled: false
+                    future_format: '@interval hence'
+                    past_format: '@interval ago'
+                    granularity: 2
+                    refresh: 60
+                third_party_settings:
+                  template_suggestion:
+                    template_suggestion: solution_last_update_date
+            weight: 1
             additional: {  }
         third_party_settings: {  }
       -
@@ -537,6 +570,7 @@ hidden:
   download_total: true
   eif_perspective: true
   featured: true
+  field_is_abstract: true
   field_is_actor: true
   field_is_affiliations_requests: true
   field_is_business_process: true
