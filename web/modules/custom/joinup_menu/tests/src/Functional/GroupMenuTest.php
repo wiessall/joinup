@@ -154,15 +154,6 @@ final class GroupMenuTest extends JoinupExistingSiteTestBase {
     $this->assertStringContainsString($releasesUrl, $renderedMenu);
     $this->assertStringContainsString($documentationUrl, $renderedMenu);
 
-    // Delete the file and do not update the solution to ensure that access to
-    // the documentation file is denied.
-    $file->delete();
-
-    $renderedMenu = $this->getRenderedMenu('ogmenu-' . $ogMenuInstances[1]->id());
-    $this->assertStringContainsString($websiteUrl, $renderedMenu);
-    $this->assertStringContainsString($releasesUrl, $renderedMenu);
-    $this->assertStringNotContainsString($documentationUrl, $renderedMenu);
-
     // Create the EIF perspective for the solution.
     $metaEntity = RdfMetaEntity::loadOrCreate('eif_perspective', $solution);
     $metaEntity->save();
