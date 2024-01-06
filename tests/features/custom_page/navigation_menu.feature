@@ -1,7 +1,4 @@
-# Re-enable this when the new pages are build. Please, see instructions in
-# the corresponding ticket.
-# @see ISAICP-8332
-@api @terms @group-b @wip
+@api @terms @group-b
 Feature: Navigation menu for custom pages
   In order to determine the order and visibility of custom pages in the navigation menu
   As a facilitator
@@ -36,12 +33,11 @@ Feature: Navigation menu for custom pages
     And the navigation menu of the "Rainbow tables" <group> should have <visible items 2> visible items
 
     When I click the contextual link "Edit menu" in the "Header" region
-    Then the navigation menu of the "Rainbow tables" <group> should have 5 items
+    Then the navigation menu of the "Rainbow tables" <group> should have 4 items
 
     # When all the pages are disabled in the navigation menu, a message should
     # be shown to the user.
     When I disable "Overview" in the navigation menu of the "Rainbow tables" <group>
-    And I disable "Members" in the navigation menu of the "Rainbow tables" <group>
     And I disable "About us" in the navigation menu of the "Rainbow tables" <group>
     And I go to the homepage of the "Rainbow tables" <group>
     Then I should see the text "All the pages have been disabled for this <group>. You can edit the menu configuration or add a new page."
@@ -114,9 +110,9 @@ Feature: Navigation menu for custom pages
     But I should not see the link "About us" in the "Navigation menu"
 
     Examples:
-      | group      | visible items 1 | visible items 2 | visible items 3 |
-      | collection | 3               | 4               | 3               |
-      | solution   | 2               | 3               | 2               |
+      | group      | visible items 1 | visible items 2 |
+      | collection | 3               | 4               |
+      | solution   | 2               | 3               |
 
   @javascript
   Scenario: For menus with more than 6 items, the 6th and beyond should be wrapped in a dropdown
