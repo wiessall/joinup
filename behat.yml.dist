@@ -124,7 +124,7 @@ default:
                 - '--no-sandbox'
                 - '--start-maximized'
                 - '--disable-gpu'
-                - '--window-size=1366,768'
+                - '--window-size=1600,1200'
                 - '--disable-dev-shm-usage'
                 - '--disable-setuid-sandbox'
                 - '--disable-web-security'
