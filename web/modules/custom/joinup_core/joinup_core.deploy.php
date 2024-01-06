@@ -24,6 +24,7 @@ use Drupal\og_menu\Entity\OgMenuInstance;
 function joinup_core_deploy_110100(array &$sandbox): string {
   if (empty($sandbox['group_ids'])) {
     $groups = \Drupal::entityTypeManager()->getStorage('rdf_entity')->getQuery()
+      ->accessCheck(FALSE)
       ->condition('rid', ['collection', 'solution'], 'IN')
       ->execute();
     $sandbox['group_ids'] = array_keys($groups);
