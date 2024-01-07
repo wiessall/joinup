@@ -143,7 +143,7 @@ class JoinupVideo extends FilterBase implements ContainerFactoryPluginInterface 
 
       $tempIframeDom = new DOMDocument();
       @$tempIframeDom->loadHTML((string) $this->renderer->render($embed_code));
-      $newIframeNode = $tempIframeDom->getElementsByTagName($element)->item(0)->firstChild;
+      $newIframeNode = $tempIframeDom->getElementsByTagName($element)->item(0);
       $newIframeImported = $dom->importNode($newIframeNode, TRUE);
       $iframe->parentNode->replaceChild($newIframeImported, $iframe);
 
