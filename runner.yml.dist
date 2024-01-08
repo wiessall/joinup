@@ -1,2 +1,4 @@
-# Copy this file in the project root directory, as runner.yml, in order to
-# override the default configurations and commands.
+# Create a runner.yml file in the project root directory to override any
+# configurations and commands from this file or from resources/runner.
+runner:
+  config_dir: resources/runner

@@ -7,8 +7,8 @@ namespace Joinup\TaskRunner\Commands;
 use Behat\Behat\ApplicationFactory;
 use Drupal\Core\Database\Database;
 use EasyRdf\Http;
+use EcEuropa\Toolkit\TaskRunner\AbstractCommands;
 use Joinup\TaskRunner\Traits\SolrTrait;
-use OpenEuropa\TaskRunner\Commands\AbstractCommands;
 use PHPUnit\Runner\Version;
 use Robo\Robo;
 
