@@ -203,6 +203,18 @@ third_party_settings:
         layout_settings:
           label: 'Search section'
           context_mapping: {  }
+          custom_id: ''
+          custom_classes: mb-5
+          custom_class_choose: {  }
+          custom_styles: ''
+          custom_data_attributes: ''
+          regions:
+            content:
+              region_id: ''
+              region_class_choose: {  }
+              region_classes: ''
+              region_styles: ''
+              region_data: ''
         components:
           2c5ec8f0-ddf7-4dc9-9ae9-8f4d758dd09e:
             uuid: 2c5ec8f0-ddf7-4dc9-9ae9-8f4d758dd09e
