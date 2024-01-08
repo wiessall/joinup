@@ -414,6 +414,12 @@ class CollectionContext extends RawDrupalContext {
    *
    * @param \Behat\Gherkin\Node\TableNode $menu_table
    *   The menu table.
+   * @param string $menu_type
+   *   The OG menu instance bundle. Either 'main' or 'navigation'.
+   * @param string $group_label
+   *   The label of the group entity.
+   * @param string $group_bundle
+   *   The bundle of the group entity.
    *
    * @throws \Exception
    *    Throws an exception if the parent item is not found.
