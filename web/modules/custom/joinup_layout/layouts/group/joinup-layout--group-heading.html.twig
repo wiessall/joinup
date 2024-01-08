@@ -1,6 +1,6 @@
 {% if content %}
-  <div {{ attributes.addClass('l-group-heading row') }}>
-    <div class="l-group-heading__content col-12 col-md-7 py-5">
+  <div {{ attributes.addClass('l-group-heading row mb-5') }}>
+    <div class="l-group-heading__content col-12 col-md-7">
       {% if content.main %}
         <div class="row mb-4">
           <div {{ region_attributes.second.addClass('l-group-heading__main') }}>
@@ -12,13 +12,13 @@
       {% if content.left or content.right %}
         <div class="row d-flex flex-wrap">
           {% if content.left %}
-            <div {{ region_attributes.left.addClass('l-group-heading__left col-12 col-md-6 mb-2') }}>
+            <div {{ region_attributes.left.addClass('l-group-heading__left col-12 col-md-6') }}>
               {{ content.left }}
             </div>
           {% endif %}
 
           {% if content.right %}
-            <div {{ region_attributes.right.addClass('l-group-heading--right col-12 col-md-6 mb-2') }}>
+            <div {{ region_attributes.right.addClass('l-group-heading--right col-12 col-md-6') }}>
               {{ content.right }}
             </div>
           {% endif %}
@@ -27,7 +27,7 @@
     </div>
 
     {% if content.aside %}
-      <div {{ region_attributes.aside.addClass('l-group-heading__aside col-12 col-md-5 py-5 ps-5') }}>
+      <div {{ region_attributes.aside.addClass('l-group-heading__aside col-12 offset-md-1 col-md-4 p-4 p-lg-5 bg-light rounded-3') }}>
         {{ content.aside }}
       </div>
     {% endif %}
