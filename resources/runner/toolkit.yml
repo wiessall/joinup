@@ -85,6 +85,8 @@ commands:
       command: config-readonly:disable
     - task: run
       command: drupal:site-install
+      options:
+        existing-config: null
     - task: run
       command: dev:import-sparql-fixtures
     - task: run
