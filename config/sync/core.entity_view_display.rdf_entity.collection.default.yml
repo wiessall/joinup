@@ -3,6 +3,7 @@ langcode: en
 status: true
 dependencies:
   config:
+    - core.base_field_override.rdf_entity.collection.label
     - field.field.rdf_entity.collection.field_ar_abstract
     - field.field.rdf_entity.collection.field_ar_access_url
     - field.field.rdf_entity.collection.field_ar_affiliates
@@ -72,7 +73,23 @@ third_party_settings:
                   template_suggestion:
                     template_suggestion: ''
             weight: 1
-            additional: {  }
+            additional:
+              component_attributes:
+                block_attributes:
+                  id: ''
+                  class: fs-4
+                  style: ''
+                  data: ''
+                block_title_attributes:
+                  id: ''
+                  class: ''
+                  style: ''
+                  data: ''
+                block_content_attributes:
+                  id: ''
+                  class: ''
+                  style: ''
+                  data: ''
           d376972e-fd7a-493d-a3b7-80ee05799cfd:
             uuid: d376972e-fd7a-493d-a3b7-80ee05799cfd
             region: left
@@ -121,6 +138,22 @@ third_party_settings:
                     template_suggestion: ''
             weight: 0
             additional: {  }
+          6a2c3e9b-443d-4793-af8c-8bfdf3d8a4b5:
+            uuid: 6a2c3e9b-443d-4793-af8c-8bfdf3d8a4b5
+            region: content
+            configuration:
+              id: 'field_block:rdf_entity:collection:label'
+              label_display: '0'
+              context_mapping:
+                entity: layout_builder.entity
+              formatter:
+                type: string
+                label: hidden
+                settings:
+                  link_to_entity: false
+                third_party_settings: {  }
+            weight: 0
+            additional: {  }
         third_party_settings: {  }
       -
         layout_id: layout_onecol
@@ -145,7 +178,7 @@ third_party_settings:
                 settings: {  }
                 third_party_settings:
                   template_suggestion:
-                    template_suggestion: ''
+                    template_suggestion: description__see__more
             weight: 0
             additional: {  }
         third_party_settings: {  }

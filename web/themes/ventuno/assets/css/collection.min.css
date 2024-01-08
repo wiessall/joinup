@@ -1,0 +1,2 @@
+.collection__field-ar-description,.solution__field-is-description{font-size:1.25rem;margin-bottom:3rem;padding-bottom:3rem;padding-top:3rem;position:relative}.collection__field-ar-description:before,.solution__field-is-description:before{background:#f8f9fa;bottom:0;content:"";margin-left:calc(50% - 50vw);position:absolute;top:0;width:100vw;z-index:-1}@media (min-width:768px){.collection__field-ar-description:before,.solution__field-is-description:before{background:linear-gradient(0deg,#f8f9fa 3rem,#f8f9fa 0)}}
+/*# sourceMappingURL=collection.min.css.map */
