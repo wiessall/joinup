@@ -1,10 +1,11 @@
 /**
  * @file
- * Toggles text inside the "See more" button in description of topic header.
+ * Toggles text inside the "See more" button in topic header, Collections and Solitions description field.
  */
 ((Drupal, drupalSettings) => {
   Drupal.behaviors.toggleTextSeemoreBtn = {
     attach() {
+      const collapseSeeMore = document.getElementById("collapseSeeMore");
       const button = document.getElementById("seeMoreBtn");
       const seeMore = Drupal.t("See more");
       const seeLess = Drupal.t("See less");
@@ -13,16 +14,12 @@
       if (button === null || button === undefined) {
         return;
       }
-      button.addEventListener("click", (e) => {
-        e.preventDefault();
-        if (button.dataset.joinupSeemoreCollapsed === "true") {
-          button.innerHTML = `${seeLess} ${chevronUp}`;
-          button.dataset.joinupSeemoreCollapsed = "false";
-        } else {
-          button.innerHTML = `${seeMore} ${chevronDown}`;
-          button.dataset.joinupSeemoreCollapsed = "true";
-        }
-      });
+      collapseSeeMore.addEventListener('hidden.bs.collapse', function () {
+        button.innerHTML = `${seeMore} ${chevronDown}`;
+      }),
+      collapseSeeMore.addEventListener('shown.bs.collapse', function () {
+        button.innerHTML = `${seeLess} ${chevronUp}`;
+      })
     },
   };
 })(Drupal, drupalSettings);

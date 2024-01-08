@@ -18,31 +18,14 @@
   }
   &__description {
     color: $white;
-    margin-bottom: 0;
-    &--long {
-      display: -webkit-box!important;
-      min-height: 48px;
-      -webkit-line-clamp: 2;
-      -webkit-box-orient: vertical;
-      overflow: hidden;
-      &.show {
-        -webkit-line-clamp: unset;
-      }
-      p {
-        display: inline;
-        &:not(:last-child)::after {
-          content: " \A\A";
-          white-space: pre;
-        }
-      }
-    }
-    p {
-      display: inline;
-    }
     a {
       color: $white;
       text-decoration: underline;
       text-decoration-color: $white!important;
+    }
+    &.see-more--long {
+      min-height: 48px;
+      -webkit-line-clamp: 2;
     }
   }
   &__see-more-btn {

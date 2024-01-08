@@ -57,6 +57,11 @@ searchpage:
   dependencies:
     - ventuno/close
 
+collection:
+  css:
+    theme:
+      assets/css/collection.min.css: { minified: true }
+
 # Components
 abstract:
   css:
@@ -180,8 +185,6 @@ group-banner:
       assets/css/group-banner.min.css: { minified: true }
 
 header-topic:
-  js:
-    assets/js/toggle-text-seemore-btn.min.js: { minified: true }
   css:
     theme:
       assets/css/header-topic.min.css: { minified: true }
@@ -337,6 +340,13 @@ releases:
   css:
     theme:
       assets/css/releases.min.css: { minified: true }
+
+see-more:
+  css:
+    theme:
+      assets/css/see-more.min.css: { minified: true }
+  js:
+    assets/js/toggle-text-seemore-btn.min.js: { minified: true }
 
 share-content-form:
   css:

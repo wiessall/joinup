@@ -1,0 +1,18 @@
+@import "../partials/core";
+
+// Collection Common styles
+.collection__field-ar-description,
+.solution__field-is-description {
+  font-size: $h3-font-size;
+  position: relative;
+  margin-bottom: $spacer * 3; // 48px
+  @include full-width-color-to-top(
+    $light,
+    $light,
+    3rem,
+    3rem,
+    $light,
+    0,
+    3rem
+  );
+}
