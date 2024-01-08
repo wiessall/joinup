@@ -4,6 +4,8 @@ solr:
   snapshot_dir: ${joinup.ddev_dir}/solr-standalone/snapshot
   config_tmp: ${toolkit.tmp_folder}/solr_config
   config_dir: ${joinup.dir}/resources/solr/conf
+  server:
+    core: ${env.SEARCH_API_SERVER_SS_SOLR_CORE}
 
 commands:
 

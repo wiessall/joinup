@@ -54,7 +54,7 @@ class SolrCommands extends AbstractCommands {
    */
   public function empty(): void {
     $config = $this->getConfig();
-    $core = $config->get('env.SEARCH_API_SERVER_SS_SOLR_CORE');
+    $core = $config->get('solr.server.core');
     $this->say("Empty Solr '{$core}' core.");
     $this->httpPost(
       self::getSolrUrl() . "/$core/update?commit=true&wt=json",
@@ -74,7 +74,7 @@ class SolrCommands extends AbstractCommands {
    */
   public function restore(): void {
     $config = $this->getConfig();
-    $core = $config->get('env.SEARCH_API_SERVER_SS_SOLR_CORE');
+    $core = $config->get('solr.server.core');
 
     $this->say("Restoring Solr '{$core}' core.");
 
@@ -176,7 +176,7 @@ class SolrCommands extends AbstractCommands {
   protected function getUrl(string $operation): string {
     $config = $this->getConfig();
     $command = static::COMMAND_MAP[$operation][FALSE];
-    return self::getSolrUrl() . "/{$config->get("env.SEARCH_API_SERVER_SS_SOLR_CORE")}/replication?command={$command}&name={$config->get("env.SEARCH_API_SERVER_SS_SOLR_CORE")}&location={$config->get('solr.snapshot_dir')}";
+    return self::getSolrUrl() . "/{$config->get("solr.server.core")}/replication?command={$command}&name={$config->get("solr.server.core")}&location={$config->get('solr.snapshot_dir')}";
   }
 
   /**
@@ -191,7 +191,7 @@ class SolrCommands extends AbstractCommands {
   protected function getOperationStatusUrl(string $operation): string {
     $config = $this->getConfig();
     $command = static::COMMAND_MAP[$operation][TRUE];
-    return self::getSolrUrl() . "/{$config->get("env.SEARCH_API_SERVER_SS_SOLR_CORE")}/replication?command={$command}";
+    return self::getSolrUrl() . "/{$config->get("solr.server.core")}/replication?command={$command}";
   }
 
 }
