@@ -322,7 +322,6 @@ Feature: Navigation menu for custom pages
     Then the draggable menu table of the "Ergonomic backpacks" <group> should be:
       | title              | parent             |
       | Overview           |                    |
-      | Members            |                    |
       | Discussions        |                    |
       | Glossary           |                    |
       | Bodypack           |                    |
@@ -334,7 +333,6 @@ Feature: Navigation menu for custom pages
     Then the draggable menu table of the "Ergonomic backpacks" <group> should be:
       | title              | parent             |
       | Overview           |                    |
-      | Members            |                    |
       | Discussions        |                    |
       | Glossary           |                    |
       | Bodypack           |                    |
@@ -346,7 +344,6 @@ Feature: Navigation menu for custom pages
     Then the draggable menu table of the "Ergonomic backpacks" <group> should be:
       | title              | parent             |
       | Overview           |                    |
-      | Members            |                    |
       | Discussions        |                    |
       | Glossary           |                    |
       | Bodypack           |                    |
@@ -355,12 +352,10 @@ Feature: Navigation menu for custom pages
       | External frame     |                    |
       | Internal frame     | External frame     |
     # Links that don't refer to a node cannot be nested.
-    When I drag the "Members" table row to the right
     And I drag the "Glossary" table row to the right
     Then the draggable menu table of the "Ergonomic backpacks" <group> should be:
       | title              | parent             |
       | Overview           |                    |
-      | Members            |                    |
       | Discussions        |                    |
       | Glossary           |                    |
       | Bodypack           |                    |
@@ -373,7 +368,6 @@ Feature: Navigation menu for custom pages
     Then the draggable menu table of the "Ergonomic backpacks" <group> should be:
       | title              | parent             |
       | Overview           |                    |
-      | Members            |                    |
       | Discussions        |                    |
       | Glossary           |                    |
       | Bodypack           |                    |
@@ -382,11 +376,9 @@ Feature: Navigation menu for custom pages
       | External frame     |                    |
       | Internal frame     | External frame     |
     # But they can still be re-ordered up and down.
-    When I drag the "Overview" table row down
-    And I drag the "Glossary" table row up
+    When I drag the "Glossary" table row up
     Then the draggable menu table of the "Ergonomic backpacks" <group> should be:
       | title              | parent             |
-      | Members            |                    |
       | Overview           |                    |
       | Glossary           |                    |
       | Discussions        |                    |
@@ -400,7 +392,6 @@ Feature: Navigation menu for custom pages
     And I drag the "Bodypack" table row down
     Then the draggable menu table of the "Ergonomic backpacks" <group> should be:
       | title              | parent             |
-      | Members            |                    |
       | Overview           |                    |
       | Glossary           |                    |
       | Discussions        |                    |
@@ -417,7 +408,6 @@ Feature: Navigation menu for custom pages
     And I drag the "Internal frame" table row to the right
     Then the draggable menu table of the "Ergonomic backpacks" <group> should be:
       | title              | parent             |
-      | Members            |                    |
       | Overview           |                    |
       | Glossary           |                    |
       | Discussions        |                    |
