@@ -96,6 +96,8 @@ Feature: Global search with archive content
 
     Then I should see the following tiles in the correct order:
       | Megaminx |
+    And I should not see the text "Archived" in the "Megaminx" tile
     When I click "Show archived"
     Then I should see the following tiles in the correct order:
       | 4x4 cube |
+    And I should see the text "Archived" in the "4x4 cube" tile
