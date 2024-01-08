@@ -1,7 +1,4 @@
-# Re-enable this when the new pages are build. Please, see instructions in
-# the corresponding ticket.
-# @see ISAICP-8332
-@api @terms @group-b @wip
+@api @terms @group-b
 Feature: Navigation menu for custom pages
   In order to determine the order and visibility of custom pages in the navigation menu
   As a facilitator
