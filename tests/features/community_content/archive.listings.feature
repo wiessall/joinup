@@ -39,6 +39,8 @@ Feature: Archived content on content listings - groups and paragraphs.
     Then I should see the following tiles in the correct order:
       | Published news |
       | Pyraminx cube  |
+    And I should not see the text "Archived" in the "Published news" tile
+    And I should not see the text "Archived" in the "Pyraminx cube" tile
 
     When I go to the edit form of the "Some collection" collection
     And I select "Archived" from "Show archived content"
@@ -47,6 +49,8 @@ Feature: Archived content on content listings - groups and paragraphs.
     Then I should see the following tiles in the correct order:
       | Archived news |
       | Skewb cube    |
+    And I should see the text "Archived" in the "Archived news" tile
+    And I should see the text "Archived" in the "Skewb cube" tile
 
     When I go to the edit form of the "Some collection" collection
     And I select "All" from "Show archived content"
@@ -55,6 +59,8 @@ Feature: Archived content on content listings - groups and paragraphs.
     Then I should see the following tiles in the correct order:
       | Published news |
       | Pyraminx cube  |
+    And I should not see the text "Archived" in the "Published news" tile
+    And I should not see the text "Archived" in the "Pyraminx cube" tile
 
   @javascript
   Scenario: Content listing paragraph can control visibility of archived items.

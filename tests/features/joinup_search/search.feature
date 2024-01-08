@@ -139,6 +139,7 @@ Feature: Global search
     And I should see the "Rummy news 5" tile
     And I should see the "Rummy news 6" tile
     And I should see the "Spring device" tile
+    And I should see the text "Archived" in the "Spring device" tile
 
     Then I check the "Show only Archived items" checkbox from the "Status" facet
     And I should see the "Molecular cooking collection" tile
