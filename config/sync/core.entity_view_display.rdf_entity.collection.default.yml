@@ -137,7 +137,23 @@ third_party_settings:
                   template_suggestion:
                     template_suggestion: ''
             weight: 0
-            additional: {  }
+            additional:
+              component_attributes:
+                block_attributes:
+                  id: ''
+                  class: ''
+                  style: ''
+                  data: ''
+                block_title_attributes:
+                  id: ''
+                  class: ''
+                  style: ''
+                  data: ''
+                block_content_attributes:
+                  id: ''
+                  class: ''
+                  style: ''
+                  data: ''
           6a2c3e9b-443d-4793-af8c-8bfdf3d8a4b5:
             uuid: 6a2c3e9b-443d-4793-af8c-8bfdf3d8a4b5
             region: content
@@ -265,6 +281,18 @@ third_party_settings:
         layout_settings:
           label: 'Detailed items'
           context_mapping: {  }
+          custom_id: ''
+          custom_classes: ''
+          custom_class_choose: {  }
+          custom_styles: ''
+          custom_data_attributes: ''
+          regions:
+            content:
+              region_id: ''
+              region_class_choose: {  }
+              region_classes: 'd-flex flex-wrap rounded-3 bg-light mt-4 mb-5'
+              region_styles: ''
+              region_data: ''
         components:
           504f9a8c-ab74-424a-b513-12f70ba3aef4:
             uuid: 504f9a8c-ab74-424a-b513-12f70ba3aef4
@@ -292,7 +320,23 @@ third_party_settings:
                   template_suggestion:
                     template_suggestion: ''
             weight: 1
-            additional: {  }
+            additional:
+              component_attributes:
+                block_attributes:
+                  id: ''
+                  class: 'p-4 p-lg-5'
+                  style: ''
+                  data: ''
+                block_title_attributes:
+                  id: ''
+                  class: ''
+                  style: ''
+                  data: ''
+                block_content_attributes:
+                  id: ''
+                  class: ''
+                  style: ''
+                  data: ''
           f0743480-207f-440b-8300-77e9a7d58d36:
             uuid: f0743480-207f-440b-8300-77e9a7d58d36
             region: content
@@ -324,13 +368,41 @@ third_party_settings:
                   template_suggestion:
                     template_suggestion: ''
             weight: 0
-            additional: {  }
+            additional:
+              component_attributes:
+                block_attributes:
+                  id: ''
+                  class: 'p-4 p-lg-5'
+                  style: ''
+                  data: ''
+                block_title_attributes:
+                  id: ''
+                  class: ''
+                  style: ''
+                  data: ''
+                block_content_attributes:
+                  id: ''
+                  class: ''
+                  style: ''
+                  data: ''
         third_party_settings: {  }
       -
         layout_id: layout_onecol
         layout_settings:
           label: 'Moderation section'
           context_mapping: {  }
+          custom_id: ''
+          custom_classes: ''
+          custom_class_choose: {  }
+          custom_styles: ''
+          custom_data_attributes: ''
+          regions:
+            content:
+              region_id: ''
+              region_class_choose: {  }
+              region_classes: 'p-4 p-lg-5 d-flex flex-wrap rounded-3 bg-light'
+              region_styles: ''
+              region_data: ''
         components:
           d78c7b8a-3a6a-4f91-8e05-91a99cc7f72c:
             uuid: d78c7b8a-3a6a-4f91-8e05-91a99cc7f72c
@@ -354,7 +426,23 @@ third_party_settings:
                   template_suggestion:
                     template_suggestion: ''
             weight: 1
-            additional: {  }
+            additional:
+              component_attributes:
+                block_attributes:
+                  id: ''
+                  class: 'me-4 me-lg-5'
+                  style: ''
+                  data: ''
+                block_title_attributes:
+                  id: ''
+                  class: ''
+                  style: ''
+                  data: ''
+                block_content_attributes:
+                  id: ''
+                  class: ''
+                  style: ''
+                  data: ''
           fc1c1b18-8be1-42b1-90cb-1d7ca038db1c:
             uuid: fc1c1b18-8be1-42b1-90cb-1d7ca038db1c
             region: content
@@ -377,7 +465,23 @@ third_party_settings:
                   template_suggestion:
                     template_suggestion: ''
             weight: 3
-            additional: {  }
+            additional:
+              component_attributes:
+                block_attributes:
+                  id: ''
+                  class: 'me-4 me-lg-5'
+                  style: ''
+                  data: ''
+                block_title_attributes:
+                  id: ''
+                  class: ''
+                  style: ''
+                  data: ''
+                block_content_attributes:
+                  id: ''
+                  class: ''
+                  style: ''
+                  data: ''
           dc7639da-0089-48f6-95e5-c4b4edf7a867:
             uuid: dc7639da-0089-48f6-95e5-c4b4edf7a867
             region: content
@@ -388,10 +492,26 @@ third_party_settings:
               provider: custom_markup_block
               context_mapping: {  }
               markup:
-                value: '<h3>Moderation</h3>'
+                value: '<h4><strong>Moderation</strong></h4>'
                 format: content_editor
             weight: 0
-            additional: {  }
+            additional:
+              component_attributes:
+                block_attributes:
+                  id: ''
+                  class: w-100
+                  style: ''
+                  data: ''
+                block_title_attributes:
+                  id: ''
+                  class: ''
+                  style: ''
+                  data: ''
+                block_content_attributes:
+                  id: ''
+                  class: fw-bold
+                  style: ''
+                  data: ''
         third_party_settings: {  }
 id: rdf_entity.collection.default
 targetEntityType: rdf_entity
