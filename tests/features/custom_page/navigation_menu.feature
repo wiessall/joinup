@@ -215,7 +215,7 @@ Feature: Navigation menu for custom pages
       | Subpage 1-2-1 | Table of contents group | published | HR    |
       | Subpage 1-2-2 | Table of contents group | published | HR    |
       | Subpage 2-1   | Table of contents group | published | HR    |
-    And the following custom page menu structure:
+    And the following custom pages navigation menu structure for the "Table of contents group" <group>:
       | title         | parent      | weight |
       | Page 1        |             | 1      |
       | Page 2        |             | 2      |
@@ -309,7 +309,7 @@ Feature: Navigation menu for custom pages
       | External frame     | Ergonomic backpacks | published | HR    |
       | Internal frame     | Ergonomic backpacks | published | HR    |
       | Bodypack           | Ergonomic backpacks | published | HR    |
-    And the following custom pages menu structure:
+    And the following custom pages navigation menu structure for the "Ergonomic backpacks" <group>:
       | title              | parent             | weight |
       | Types of backpacks |                    | 3      |
       | Frameless          | Types of backpacks | 4      |
@@ -319,7 +319,7 @@ Feature: Navigation menu for custom pages
     And I go to the "Ergonomic backpacks" <group>
     And I click the contextual link "Edit menu" in the "Header" region
     # The "About" page has been moved back to first level.
-    Then the draggable menu table should be:
+    Then the draggable menu table of the "Ergonomic backpacks" <group> should be:
       | title              | parent             |
       | Overview           |                    |
       | Members            |                    |
@@ -331,7 +331,7 @@ Feature: Navigation menu for custom pages
       | External frame     | Types of backpacks |
       | Internal frame     |                    |
     When I drag the "External frame" table row to the left
-    Then the draggable menu table should be:
+    Then the draggable menu table of the "Ergonomic backpacks" <group> should be:
       | title              | parent             |
       | Overview           |                    |
       | Members            |                    |
@@ -343,7 +343,7 @@ Feature: Navigation menu for custom pages
       | External frame     |                    |
       | Internal frame     |                    |
     When I drag the "Internal frame" table row to the right
-    Then the draggable menu table should be:
+    Then the draggable menu table of the "Ergonomic backpacks" <group> should be:
       | title              | parent             |
       | Overview           |                    |
       | Members            |                    |
@@ -357,7 +357,7 @@ Feature: Navigation menu for custom pages
     # Links that don't refer to a node cannot be nested.
     When I drag the "Members" table row to the right
     And I drag the "Glossary" table row to the right
-    Then the draggable menu table should be:
+    Then the draggable menu table of the "Ergonomic backpacks" <group> should be:
       | title              | parent             |
       | Overview           |                    |
       | Members            |                    |
@@ -370,7 +370,7 @@ Feature: Navigation menu for custom pages
       | Internal frame     | External frame     |
     # Nor cannot have child rows.
     When I drag the "Bodypack" table row to the right
-    Then the draggable menu table should be:
+    Then the draggable menu table of the "Ergonomic backpacks" <group> should be:
       | title              | parent             |
       | Overview           |                    |
       | Members            |                    |
@@ -384,7 +384,7 @@ Feature: Navigation menu for custom pages
     # But they can still be re-ordered up and down.
     When I drag the "Overview" table row down
     And I drag the "Glossary" table row up
-    Then the draggable menu table should be:
+    Then the draggable menu table of the "Ergonomic backpacks" <group> should be:
       | title              | parent             |
       | Members            |                    |
       | Overview           |                    |
@@ -398,7 +398,7 @@ Feature: Navigation menu for custom pages
     # Links pointing to nodes can be moved too.
     When I drag the "Bodypack" table row down
     And I drag the "Bodypack" table row down
-    Then the draggable menu table should be:
+    Then the draggable menu table of the "Ergonomic backpacks" <group> should be:
       | title              | parent             |
       | Members            |                    |
       | Overview           |                    |
@@ -415,7 +415,7 @@ Feature: Navigation menu for custom pages
     And I drag the "Internal frame" table row up
     And I drag the "Internal frame" table row to the right
     And I drag the "Internal frame" table row to the right
-    Then the draggable menu table should be:
+    Then the draggable menu table of the "Ergonomic backpacks" <group> should be:
       | title              | parent             |
       | Members            |                    |
       | Overview           |                    |
@@ -447,7 +447,7 @@ Feature: Navigation menu for custom pages
       | TOCO 1-2   | Table of contents outline | published   | HR    |
       | TOCO 2-1-2 | Table of contents outline | unpublished | HR    |
       | TOCO 2-1-1 | Table of contents outline | published   | HR    |
-    And the following custom page menu structure:
+    And the following custom pages navigation menu structure for the "Table of contents outline" <group>:
       | title      | parent   | weight |
       | TOCO 1-2   | TOCO 1   | 2      |
       | TOCO 1-1-2 | TOCO 1-1 | 2      |
@@ -527,7 +527,7 @@ Feature: Navigation menu for custom pages
       | title           | <group>                          | state     | topic |
       | TOCO cached 1   | Table of contents outline cached | published | HR    |
       | TOCO cached 1-1 | Table of contents outline cached | published | HR    |
-    And the following custom page menu structure:
+    And the following custom pages navigation menu structure for the "Table of contents outline cached" <group>:
       | title           | parent        | weight |
       | TOCO cached 1   |               | 1      |
       | TOCO cached 1-1 | TOCO cached 1 | 1      |
@@ -538,10 +538,9 @@ Feature: Navigation menu for custom pages
     And I go to the "Table of contents outline cached" <group>
     And I click the contextual link "Edit menu" in the "Header" region
     When I drag the "TOCO cached 1-1" table row to the left
-    Then the draggable menu table should be:
+    Then the draggable menu table of the "Table of contents outline cached" <group> should be:
       | title           | parent |
       | Overview        |        |
-      | Members         |        |
       | Discussions     |        |
       | Glossary        |        |
       | TOCO cached 1   |        |
