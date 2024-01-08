@@ -22,9 +22,7 @@ commands:
         - joinup
         - ${solr.config_tmp}.zip
     - task: exec
-      command: unzip -q ${solr.config_tmp}.zip
-      options:
-        '-d': ${solr.config_tmp}
+      command: unzip -q ${solr.config_tmp}.zip -d ${solr.config_tmp}
     - task: remove
       file: ${solr.config_dir}
     - task: rename
