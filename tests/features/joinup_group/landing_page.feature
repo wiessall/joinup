@@ -1,10 +1,6 @@
 @api @group-d
 Feature: Tests the group landing page customization.
 
-  # Re-enable this when the new pages are build. Please, see instructions in
-  # the corresponding ticket.
-  # @see ISAICP-8332
-  @wip
   Scenario Outline:
   - As an anonymous, when I visit a group, I cannot set its landing page.
   - As a user, when I visit a group, I cannot set its landing page.

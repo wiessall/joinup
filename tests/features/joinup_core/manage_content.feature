@@ -3,10 +3,6 @@ Feature:
   In order to better organize the content
   I need to be able to move content between groups
 
-  # Re-enable this when the new pages are build. Please, see instructions in
-  # the corresponding ticket.
-  # @see ISAICP-8332
-  @wip
   Scenario: Use the content management UI
     Given the following collections:
       | title        | state     |
@@ -34,7 +30,7 @@ Feature:
       | title                | collection  | state     | changed          |
       | HOWTOs               | Vintage Art | published | 2016-11-19 20:00 |
       | Looking for Support? | Vintage Art | published | 2015-11-19 20:00 |
-    And the following custom page menu structure:
+    And the following custom page navigation menu structure for the "Vintage Art" collection:
       | title                | parent | weight |
       | Looking for Support? | HOWTOs | 1      |
 
