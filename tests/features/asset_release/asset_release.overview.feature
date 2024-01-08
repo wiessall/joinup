@@ -129,4 +129,5 @@ Feature: Asset distribution overview on solution.
     And I delete the "The Deep Doors" release
     When I go to the homepage of the "Lovely Butterfly" solution
     Then I should not see the link "Release history"
+    When I go to "/collection/end-past/solution/lovely-butterfly/releases"
     Then I should see the text "Sign in to continue"
