@@ -1,18 +1,23 @@
 @api @group-h
-Feature: Discussion homepage
+Feature: Share discussion
   As a user of the website
-  I want to be able to view the discussion information
+  I want to be able to view the shared discussion information
   In order to have an overview of its content
 
-  Scenario: The discussion homepage should show the collections where it is shared on.
+  Background:
     Given the following collections:
       | title                         | description       | state     |
       | Development through bricolage | Bricolage 101.    | published |
       | Carrots love tomatoes         | Truth is out now. | published |
     And discussion content:
       | title         | state     | collection                    | shared on             |
-      | Tools cabinet | published | Development through bricolage | Carrots love tomatoes |
+      | Tool cabinet | published | Development through bricolage | Carrots love tomatoes |
 
-    When I go to the "Tools cabinet" discussion
+  Scenario: The discussion homepage should show the collections where it is shared on.
+    When I go to the "Tool cabinet" discussion
     Then I should see the text "Shared on"
     And I should see the "Carrots love tomatoes" tile
+
+  Scenario: The shared discussion should be displayed in listing.
+    When I go to the discussions page of "Carrots love tomatoes"
+    Then I should see the "Tool cabinet" tile
