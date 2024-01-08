@@ -302,7 +302,7 @@ third_party_settings:
             content:
               region_id: ''
               region_class_choose: {  }
-              region_classes: 'd-flex flex-wrap rounded-3 bg-light mt-4 mb-5'
+              region_classes: 'd-flex flex-wrap rounded-3 bg-light mt-4 mb-5 px-4 px-lg-5 pt-4 pt-lg-5'
               region_styles: ''
               region_data: ''
         components:
@@ -336,7 +336,7 @@ third_party_settings:
               component_attributes:
                 block_attributes:
                   id: ''
-                  class: 'p-4 p-lg-5'
+                  class: 'pe-4 pe-lg-5 pb-4 pb-lg-5'
                   style: ''
                   data: ''
                 block_title_attributes:
@@ -384,7 +384,7 @@ third_party_settings:
               component_attributes:
                 block_attributes:
                   id: ''
-                  class: 'p-4 p-lg-5'
+                  class: 'pe-4 pe-lg-5 pb-4 pb-lg-5'
                   style: ''
                   data: ''
                 block_title_attributes:
