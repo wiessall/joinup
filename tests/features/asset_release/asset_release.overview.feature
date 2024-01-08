@@ -1,4 +1,3 @@
-# Fix this in https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-8332
 @api
 Feature: Asset distribution overview on solution.
   In order to view an overview of a solution's releases and download them
