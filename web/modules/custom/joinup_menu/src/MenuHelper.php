@@ -16,6 +16,8 @@ use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\Url;
 use Drupal\collection\Entity\CollectionInterface;
 use Drupal\joinup_collection\JoinupCollectionHelper;
+use Drupal\og\OgGroupAudienceHelperInterface;
+use Drupal\og_menu\OgMenuInstanceInterface;
 use Exception;
 use Symfony\Component\HttpFoundation\RequestStack;
 
@@ -162,6 +164,19 @@ class MenuHelper implements MenuHelperInterface {
 
       return $link;
     }, $tree);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getOgMenuByGroup(string $menuType, string $groupId): ?OgMenuInstanceInterface {
+    /** @var \Drupal\og_menu\OgMenuInstanceInterface[] $ogMenuInstances */
+    $ogMenuInstances = $this->entityTypeManager->getStorage('ogmenu_instance')->loadByProperties([
+      'type' => $menuType,
+      OgGroupAudienceHelperInterface::DEFAULT_FIELD => $groupId,
+    ]);
+
+    return $ogMenuInstances ? reset($ogMenuInstances) : NULL;
   }
 
   /**
