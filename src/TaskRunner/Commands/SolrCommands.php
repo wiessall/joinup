@@ -5,8 +5,8 @@ declare(strict_types = 1);
 namespace Joinup\TaskRunner\Commands;
 
 use Drupal\Component\Serialization\Json;
+use EcEuropa\Toolkit\TaskRunner\AbstractCommands;
 use Joinup\TaskRunner\Traits\SolrTrait;
-use OpenEuropa\TaskRunner\Commands\AbstractCommands;
 use Robo\Exception\AbortTasksException;
 
 /**
