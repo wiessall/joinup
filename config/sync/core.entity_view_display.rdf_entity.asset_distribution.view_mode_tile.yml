@@ -16,7 +16,6 @@ dependencies:
     - field.field.rdf_entity.asset_distribution.og_audience
     - rdf_entity.rdfentity.asset_distribution
   module:
-    - asset_distribution
     - template_suggestion
     - text
     - user
@@ -27,18 +26,6 @@ targetEntityType: rdf_entity
 bundle: asset_distribution
 mode: view_mode_tile
 content:
-  field_ad_access_url:
-    type: tracked_hosted_file_download
-    label: hidden
-    settings:
-      hosted_files_title: Download
-      remote_files_title: External
-      show_remote_files: true
-    third_party_settings:
-      template_suggestion:
-        template_suggestion: no_wrappers
-    weight: 0
-    region: content
   field_ad_description:
     type: text_default
     label: hidden
@@ -46,20 +33,23 @@ content:
     third_party_settings:
       template_suggestion:
         template_suggestion: bare
-    weight: 1
+    weight: 0
     region: content
   field_ad_licence:
     type: entity_reference_label
     label: hidden
     settings:
-      link: true
-    third_party_settings: {  }
-    weight: 2
+      link: false
+    third_party_settings:
+      template_suggestion:
+        template_suggestion: bare
+    weight: 1
     region: content
 hidden:
   changed: true
   created: true
   download_count: true
+  field_ad_access_url: true
   field_ad_file_size: true
   field_ad_format: true
   field_ad_gitb_compliant: true
