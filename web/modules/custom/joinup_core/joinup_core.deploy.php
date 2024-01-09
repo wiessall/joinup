@@ -30,12 +30,16 @@ function joinup_core_deploy_110100(?array &$sandbox = NULL): string {
     $sandbox['progress'] = 0;
   }
 
-  $rids = array_splice($sandbox['rids'], 0, 50);
-  /** @var \Drupal\asset_distribution\Entity\AssetDistributionInterface $rdf_entity */
-  foreach ($storage->loadMultiple($rids) as $rdf_entity) {
-    $rdf_entity->set('field_ad_state', 'published');
-    $rdf_entity->skip_notification = TRUE;
-    $rdf_entity->save();
+  $database = \Drupal::getContainer()->get('sparql.endpoint');
+
+  $rids = array_splice($sandbox['rids'], 0, 300);
+  foreach ($rids as $entity_id) {
+    $query = <<<SPARQL
+WITH <http://joinup.eu/asset_distribution/published>
+INSERT { <$entity_id> <http://joinup.eu/ad/workflow_status> "published" }
+WHERE { <$entity_id> a ?type . FILTER NOT EXISTS { <$entity_id> <http://joinup.eu/ad/workflow_status> ?status } }
+SPARQL;
+    $database->update($query);
   }
 
   $sandbox['progress'] += count($rids);
