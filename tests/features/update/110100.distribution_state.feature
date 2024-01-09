@@ -1,4 +1,4 @@
-@api @clone
+@api @group-clone
 Feature:
   Test update 110100.
 
