@@ -39,26 +39,4 @@ class VirtuosoCommands extends AbstractCommands {
     return $this->collectionBuilder()->addTask($taskImport);
   }
 
-  /**
-   * Sets a checkpoint with a given interval.
-   *
-   * @param int $interval
-   *   The checkpoint interval.
-   *
-   * @return \Robo\Collection\CollectionBuilder
-   *   The Robo collection builder.
-   *
-   * @command virtuoso:checkpoint-set
-   *
-   * @todo Convert this to a dynamic command, once
-   *   https://github.com/openeuropa/task-runner/issues/138 gets fixed.
-   *
-   * @see https://github.com/openeuropa/task-runner/issues/138
-   */
-  public function setCheckpoint(int $interval = 60): CollectionBuilder {
-    $config = $this->getConfig();
-    $task = $this->taskExec("echo 'checkpoint_interval({$interval});' | {$config->get('isql.bin')} {$config->get('sparql.host')} {$config->get('sparql.user')} {$config->get('sparql.password')}");
-    return $this->collectionBuilder()->addTask($task);
-  }
-
 }
