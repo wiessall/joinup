@@ -2681,19 +2681,21 @@ class JoinupContext extends RawDrupalContext {
       $menu_link = $this->getMenuLinkByTitle($data['title'], $group->id(), 'navigation');
       $parent_input = $current_row->find('css', 'input[name="links[menu_plugin_id:' . $menu_link->getPluginId() . '][parent]"]');
 
-      if (!$parent_input) {
-        throw new \Exception('Cannot find parent input field.');
-      }
-
       // When a parent is available, the line should be indented. Find all
       // indentation elements to assert later on based on the parent value.
       $indentation = $current_row->findAll('css', 'div.indentation');
 
       if (!isset($data['parent']) || $data['parent'] === '') {
-        Assert::assertEmpty($parent_input->getValue());
+        if (!empty($parent_input)) {
+          Assert::assertEmpty($parent_input->getValue());
+        }
         Assert::assertCount(0, $indentation, "The menu link '{$data['title']}' should not be indented but it is.");
       }
       else {
+        if (!$parent_input) {
+          throw new \Exception('Cannot find parent input field.');
+        }
+
         $parent_link = $this->getMenuLinkByTitle($data['parent'], $group->id(), 'navigation');
         Assert::assertEquals($parent_link->getPluginId(), $parent_input->getValue());
         Assert::assertNotCount(0, $indentation, "The menu link '{$data['title']}' should be indented but it's not.");
