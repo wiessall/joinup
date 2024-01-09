@@ -318,7 +318,10 @@ module.exports = {
         outputFolder,
         `${ventuno}src/scss/pages/collection.scss`
       ),
-      dest: path.resolve(outputFolder, `${ventuno}assets/css/collection.min.css`),
+      dest: path.resolve(
+        outputFolder,
+        `${ventuno}assets/css/collection.min.css`
+      ),
       options: {
         includePaths,
         minify: true,
@@ -902,15 +905,12 @@ module.exports = {
         sourceMap: "file",
       },
     },
-        {
+    {
       entry: path.resolve(
         outputFolder,
         `${ventuno}src/scss/components/see-more.scss`
       ),
-      dest: path.resolve(
-        outputFolder,
-        `${ventuno}assets/css/see-more.min.css`
-      ),
+      dest: path.resolve(outputFolder, `${ventuno}assets/css/see-more.min.css`),
       options: {
         includePaths,
         minify: true,
