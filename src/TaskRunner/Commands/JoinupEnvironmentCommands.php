@@ -8,16 +8,16 @@ use Behat\Behat\ApplicationFactory;
 use Drupal\Core\Database\Database;
 use EasyRdf\Http;
 use EcEuropa\Toolkit\TaskRunner\AbstractCommands;
-use Joinup\TaskRunner\Traits\SolrTrait;
+use GuzzleHttp\Client;
 use PHPUnit\Runner\Version;
+use Psr\Http\Message\ResponseInterface;
+use Robo\Exception\AbortTasksException;
 use Robo\Robo;
 
 /**
  * Joinup Environment Commands.
  */
 class JoinupEnvironmentCommands extends AbstractCommands {
-
-  use SolrTrait;
 
   /**
    * Displays information about Joinup environment.
@@ -96,7 +96,7 @@ class JoinupEnvironmentCommands extends AbstractCommands {
    *   The Solr server version
    */
   protected function solrVersion(): string {
-    $info = json_decode($this->httpGet(SolrCommands::getSolrUrl() . "/admin/info/system?wt=json")->getBody()->getContents(), TRUE);
+    $info = json_decode($this->httpGet($this->getSolrUrl() . "/admin/info/system?wt=json")->getBody()->getContents(), TRUE);
     $version = '0.0.0';
     if (isset($info['lucene']['solr-spec-version'])) {
       // Some Solr distributions or docker images append additional info to the
@@ -185,6 +185,48 @@ class JoinupEnvironmentCommands extends AbstractCommands {
    */
   protected function npmVersion(): string {
     return exec('npm --version') ?: '(cannot determine)';
+  }
+
+  /**
+   * Returns the SOLR URL including the path.
+   *
+   * @return string
+   *   The URL of SOLR endpoint, including the path.
+   */
+  protected function getSolrUrl(): string {
+    return http_build_url([
+      'scheme' => getenv('SEARCH_API_SERVER_SS_SOLR_SCHEME') ?: 'http',
+      'host' => getenv('SEARCH_API_SERVER_SS_SOLR_HOST'),
+      'port' => getenv('SEARCH_API_SERVER_SS_SOLR_PORT'),
+      'path' => 'solr',
+    ]);
+  }
+
+
+  /**
+   * Performs an HTTP get request.
+   *
+   * @param string $url
+   *   The HTTP get request URL.
+   *
+   * @return \Psr\Http\Message\ResponseInterface
+   *   The HTTP response
+   *
+   * @throws \Robo\Exception\AbortTasksException|\GuzzleHttp\Exception\GuzzleException
+   *   When the server response is invalid.
+   */
+  protected function httpGet(string $url): ResponseInterface {
+    try {
+      $response = (new Client())->get($url);
+    }
+    catch (\Exception $exception) {
+      throw new AbortTasksException($exception->getMessage(), 0, $exception);
+    }
+    if ($response->getStatusCode() != 200) {
+      throw new AbortTasksException("Server returned HTTP code {$response->getStatusCode()}, while querying {$url}.");
+    }
+
+    return $response;
   }
 
 }
