@@ -28,7 +28,7 @@ class CollectionFulfillmentGuard implements GuardInterface {
    *   The service that determines the permission to update the workflow state
    *   for a given entity.
    */
-  public function __construct(protected AccountInterface $currentUser, WorkflowStatePermissionInterface $workflowStatePermission) {}
+  public function __construct(protected AccountInterface $currentUser, protected WorkflowStatePermissionInterface $workflowStatePermission) {}
 
   /**
    * {@inheritdoc}
