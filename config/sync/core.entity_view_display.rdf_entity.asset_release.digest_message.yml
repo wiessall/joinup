@@ -53,7 +53,7 @@ content:
         refresh: 60
     third_party_settings:
       template_suggestion:
-        template_suggestion: no_wrappers
+        template_suggestion: bare
     weight: 2
     region: content
   field_isr_affiliations_requests:
@@ -156,7 +156,7 @@ content:
         trim_zero: false
     third_party_settings:
       template_suggestion:
-        template_suggestion: ''
+        template_suggestion: bare
     weight: 3
     region: content
   field_isr_release_number:
@@ -164,7 +164,9 @@ content:
     label: hidden
     settings:
       link_to_entity: false
-    third_party_settings: {  }
+    third_party_settings:
+      template_suggestion:
+        template_suggestion: bare
     weight: 1
     region: content
   field_isr_source_code_repository:
@@ -220,7 +222,7 @@ content:
       link_to_entity: false
     third_party_settings:
       template_suggestion:
-        template_suggestion: no_wrappers
+        template_suggestion: bare
     weight: 0
     region: content
 hidden:
