@@ -11,15 +11,16 @@
       const seeLess = Drupal.t("See less");
       const chevronDown = `<svg class="bi icon--s"><use xlink:href="${drupalSettings.bcl_icon_path}#chevron-down"></use></svg>`;
       const chevronUp = `<svg class="bi icon--s"><use xlink:href="${drupalSettings.bcl_icon_path}#chevron-up"></use></svg>`;
-      if (button === null || button === undefined) {
-        return;
+
+      if (button) {
+        collapseSeeMore.addEventListener("hidden.bs.collapse", () => {
+          button.innerHTML = `${seeMore} ${chevronDown}`;
+        });
+
+        collapseSeeMore.addEventListener("shown.bs.collapse", () => {
+          button.innerHTML = `${seeLess} ${chevronUp}`;
+        });
       }
-      collapseSeeMore.addEventListener('hidden.bs.collapse', function () {
-        button.innerHTML = `${seeMore} ${chevronDown}`;
-      }),
-      collapseSeeMore.addEventListener('shown.bs.collapse', function () {
-        button.innerHTML = `${seeLess} ${chevronUp}`;
-      })
     },
   };
 })(Drupal, drupalSettings);
