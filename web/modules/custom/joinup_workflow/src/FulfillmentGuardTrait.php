@@ -33,8 +33,8 @@ trait FulfillmentGuardTrait {
 
     $from_state = $entity->getWorkflowState();
 
-    \assertTrue(property_exists($this, 'currentUser'), 'currentUser property is missing');
-    \assertTrue(property_exists($this, 'workflowStatePermission'), 'workflowStatePermission property is missing');
+    \assert(property_exists($this, 'currentUser'), 'currentUser property is missing');
+    \assert(property_exists($this, 'workflowStatePermission'), 'workflowStatePermission property is missing');
 
     // Note that we cannot call $entity->isTargetWorkflowStateAllowed() since it
     // invokes the guards, causing an endless loop.
