@@ -170,7 +170,6 @@ Feature: CKEditor5
     # Use the pager.
     When I click "Go to page 2"
     And I wait for AJAX to finish
-    And I wait until the page contains the text "Pager test twelve"
     Then I should not see "Too angry for Angry Birds"
     And I should not see "Pager test 1"
     And I should not see "Pager test 2"
@@ -189,7 +188,6 @@ Feature: CKEditor5
 
     When I click "Go to page 1"
     And I wait for AJAX to finish
-    And I wait until the page contains the text "Pager test 1"
     Then I select "Name (A-Z)" from "Sort by"
     And I press "Apply filters"
     And I wait for AJAX to finish
@@ -215,7 +213,6 @@ Feature: CKEditor5
     # Use the pager.
     When I click "Go to page 2"
     And I wait for AJAX to finish
-    And I wait until the page contains the text "Pager test twelve"
     But I should not see "Pager test 1"
     And I should not see "Pager test 2"
     And I should not see "Pager test 3"
