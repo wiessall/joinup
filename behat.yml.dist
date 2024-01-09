@@ -190,6 +190,7 @@ default:
         Pager: 'nav.pager'
         Plus button menu: '#block-ventuno-joinup-add-content'
         Primary menu: '.region-primary-menu'
+        Quick links: '.block-group-menu-blockquick-links'
         Related solutions: '.field--name-field-is-related-solutions'
         SevenHeader: '.region-header'
         Statistics: '#block-ventuno-statistics'

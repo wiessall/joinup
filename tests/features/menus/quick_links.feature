@@ -38,9 +38,16 @@ Feature: Test the visibility of the quick links menu.
     Then I should see the text "Quick links"
     And I should see the link "Website link"
 
+    # Test that facilitators can see the contextual links
+    Given I am logged in as a facilitator of the "Some collection" collection
+    And I go to the "Some collection" collection
+    Then I should see the text "Quick links"
+    And I should see the contextual link "Edit menu" in the Content region
+
     When I am not logged in
     And I go to the "Some collection" collection
     Then I should see the text "Quick links"
+    And I should not see the contextual link "Edit menu" in the Content region
 
     # Unset the value, and ensure the link is not visible.
     When I am logged in as a moderator
@@ -61,7 +68,7 @@ Feature: Test the visibility of the quick links menu.
       | abstract            | Some abstract        |
       | description         | Some description     |
       | topic               | Supplier exchange    |
-      | solution type       | Digital Solution      |
+      | solution type       | Digital Solution     |
       | owner               | Organisation example |
       | contact information | Collection editorial |
       | state               | published            |
@@ -97,6 +104,12 @@ Feature: Test the visibility of the quick links menu.
       | Release history |
       | Documentation   |
 
+     # Test that facilitators can see the contextual links
+    Given I am logged in as a facilitator of the "Some solution" solution
+    And I go to the "Some solution" solution
+    Then I should see the text "Quick links"
+    And I should see the contextual link "Edit menu" in the Content region
+
     When I am not logged in
     And I go to the "Some solution" solution
     Then I should see the text "Quick links"
@@ -104,3 +117,54 @@ Feature: Test the visibility of the quick links menu.
       | Website link    |
       | Release history |
       | Documentation   |
+    And I should not see the contextual link "Edit menu" in the Content region
+
+  @javascript
+  Scenario: Test quick links menu structure.
+    Given the following collection:
+      | title | Some collection |
+      | state | published       |
+    And custom_page content:
+      | title         | collection      | state     | topic |
+      | Custom page 1 | Some collection | published | HR    |
+      | Custom page 2 | Some collection | published | HR    |
+      | Custom page 3 | Some collection | published | HR    |
+      | Custom page 4 | Some collection | published | HR    |
+      | Custom page 5 | Some collection | published | HR    |
+    And the following custom pages "quick_links" menu structure for the "Some collection" collection:
+      | title         | enabled | parent | weight |
+      | Custom page 1 | yes     |        | 3      |
+      | Custom page 2 | yes     |        | 4      |
+      | Custom page 3 | yes     |        | 5      |
+      | Custom page 4 | yes     |        | 6      |
+      | Custom page 5 | yes     |        | 7      |
+    When I am logged in as a facilitator of the "Some collection" collection
+    And I go to the "Some collection" collection
+    And I click the contextual link "Edit menu" in the "Quick links" region
+    Then the draggable menu table of the "Some collection" collection should be:
+      | title         |
+      | Custom page 1 |
+      | Custom page 2 |
+      | Custom page 3 |
+      | Custom page 4 |
+      | Custom page 5 |
+
+    When I drag the "Custom page 2" table row up
+    Then the draggable menu table of the "Some collection" collection should be:
+      | title         |
+      | Custom page 2 |
+      | Custom page 1 |
+      | Custom page 3 |
+      | Custom page 4 |
+      | Custom page 5 |
+
+    And I press "Save"
+    Then I should see the text "Quick links"
+    And I click the contextual link "Edit menu" in the "Quick links" region
+    Then the draggable menu table of the "Some collection" collection should be:
+      | title         |
+      | Custom page 2 |
+      | Custom page 1 |
+      | Custom page 3 |
+      | Custom page 4 |
+      | Custom page 5 |
