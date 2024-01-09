@@ -73,8 +73,6 @@ commands:
         - 'DELETE { GRAPH ?g { ?s ?p ?o . }} WHERE { GRAPH ?g { ?s ?p ?o . } FILTER (STRSTARTS(STR(?g), "no prefix"))}'
     - task: run
       command: sparql:empty
-    - task: run
-      command: solr:empty
     - task: exec
       command: ${drush.bin} memcache:flush-all
     - task: run
