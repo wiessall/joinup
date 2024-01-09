@@ -94,7 +94,7 @@ Feature: As a moderator I want to be able to move solutions to other collection.
     And I select the "Solution 6" row
     And I select "<option>" from "Action"
     And I press "Apply to selected items"
-    Then I should see the heading "Confirmation of Changing the State to <target state>"
+    Then I should see the heading "Confirmation of Changing the State of Solutions to <target state>"
     And I should see the button "Confirm"
     When I press "Confirm"
     # Two solution were changed.
