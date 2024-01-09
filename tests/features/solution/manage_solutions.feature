@@ -74,7 +74,7 @@ Feature: As a moderator I want to be able to move solutions to other collection.
       | Solution 2 |
 
   Scenario Outline: Manage solutions page must have a bulk-archive and bulk-unarchive option.
-    And I am logged in as a moderator
+    Given I am logged in as a moderator
     When I go to the homepage of the "Source" collection
     Then I should see the heading "Source"
     And I should see the link "Manage solutions"
