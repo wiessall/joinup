@@ -170,7 +170,7 @@ class ChangeSolutionStateForm extends ConfirmFormBase {
       // user will get the rendered Views rows which are based on the outdated
       // state of the entities; and even if we apply the patch from
       // https://drupal.org/i/3327645, the user won't be able to see the
-      // up-to-date data unless they reload the page.
+      // up-to-date data until they reload the page.
       //
       // But luckily, the issue above is quite easy to be solved here:
       // We can assume post request indexer queue (in this PHP request) was
