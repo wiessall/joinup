@@ -191,7 +191,7 @@ class ChangeSolutionStateForm extends ConfirmFormBase {
   protected function getTargetStateLabel(): ?string {
     $workflow = $this->workflowManager->createInstance(ChangeSolutionStateAction::WORKFLOW_ID);
     \assert($workflow instanceof WorkflowInterface);
-    $workflowId = $workflowId = $this->getTargetStateId();
+    $workflowId = $this->getTargetStateId();
     $workflowState = $workflowId
       ? $workflow->getState($workflowId)
       : NULL;
