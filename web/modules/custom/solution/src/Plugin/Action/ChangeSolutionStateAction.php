@@ -12,6 +12,7 @@ use Drupal\Core\Plugin\PluginFormInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Session\AccountProxyInterface;
 use Drupal\Core\TempStore\PrivateTempStoreFactory;
+use Drupal\rdf_entity\RdfInterface;
 use Drupal\solution\Entity\SolutionInterface;
 use Drupal\state_machine\Plugin\Workflow\WorkflowInterface;
 use Drupal\state_machine\Plugin\Workflow\WorkflowState;
@@ -40,6 +41,20 @@ class ChangeSolutionStateAction extends ViewsBulkOperationsActionBase implements
    * @const string
    */
   public const TEMPSTORE_COLLECTION = 'solution.change_state.multiple';
+
+  /**
+   * The key in tempstore collection containing the solutions.
+   *
+   * @const string
+   */
+  public const TEMPSTORE_SOLUTION_IDS_KEY = 'solutions';
+
+  /**
+   * The key in tempstore collection containing the target state.
+   *
+   * @const string
+   */
+  public const TEMPSTORE_TARGET_STATE_KEY = 'targetState';
 
   /**
    * ID of the workflow to use in this action.
@@ -117,14 +132,27 @@ class ChangeSolutionStateAction extends ViewsBulkOperationsActionBase implements
    * {@inheritdoc}
    */
   public function executeMultiple(array $objects): void {
-    $this->tempStoreFactory->get(self::TEMPSTORE_COLLECTION)
-      ->set(
-        $this->currentUser->id(),
-        [
-          'solutions' => $objects,
-          'target_state' => $this->getConfiguration()['target_state'],
-        ]
-      );
+    $solutionIds = array_reduce(
+      $objects,
+      function (array $carry, RdfInterface $rfd) {
+        if (!$rfd instanceof SolutionInterface) {
+          throw new \LogicException(sprintf(
+            "The '%s' action can be applied only to '%s' entities, but the entity with ID '%s' is a '%s'.",
+            $this->getPluginId(),
+            SolutionInterface::class,
+            $rfd->id(),
+            get_class($rfd)
+          ));
+        }
+        $carry[] = $rfd->id();
+        return $carry;
+      },
+      [],
+    );
+
+    $tempStore = $this->tempStoreFactory->get(self::TEMPSTORE_COLLECTION);
+    $tempStore->set(self::TEMPSTORE_SOLUTION_IDS_KEY, $solutionIds);
+    $tempStore->set(self::TEMPSTORE_TARGET_STATE_KEY, $this->getConfiguration()['target_state']);
   }
 
   /**
@@ -161,7 +189,7 @@ class ChangeSolutionStateAction extends ViewsBulkOperationsActionBase implements
   /**
    * {@inheritdoc}
    */
-  public function submitConfigurationForm(array &$form, FormStateInterface $form_state) {
+  public function submitConfigurationForm(array &$form, FormStateInterface $form_state): void {
     foreach (array_keys($this->defaultConfiguration()) as $key) {
       $this->configuration[$key] = $form_state->getValue($key);
     }
