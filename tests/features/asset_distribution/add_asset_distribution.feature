@@ -213,7 +213,7 @@ Feature: Add distribution through the UI
     # Assert that the "Distribution" tile is present and contains licence link, label and bundle type.
     But I should see the "Quality Yard" tile
     And I should see the "Hot Snake" tile
-    And I should see the link "WTFPL" in the "Hot Snake" tile
+    And I should see the text "WTFPL" in the "Hot Snake" tile
     And I should see the text "Distribution" in the "Hot Snake" tile
     # Assert that the "Release" tile is present
     And I should see the "Authoritarian Alpaca" tile
