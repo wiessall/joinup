@@ -27,8 +27,6 @@ dependencies:
     - field_group
     - layout_builder
     - layout_discovery
-    - smart_trim
-    - template_suggestion
     - user
 third_party_settings:
   field_group:
@@ -160,15 +158,7 @@ id: rdf_entity.collection.explore_item
 targetEntityType: rdf_entity
 bundle: collection
 mode: explore_item
-content:
-  label:
-    type: string
-    label: hidden
-    settings:
-      link_to_entity: false
-    third_party_settings: {  }
-    weight: -5
-    region: content
+content: {  }
 hidden:
   changed: true
   created: true
@@ -192,6 +182,7 @@ hidden:
   field_spatial_coverage: true
   field_topic: true
   join_collection: true
+  label: true
   langcode: true
   last_update: true
   members: true
