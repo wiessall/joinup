@@ -428,6 +428,11 @@ function contact_information_rdf_entity_view(array &$build, RdfInterface $contac
       $cacheable_metadata->addCacheableDependency($confirmation);
     }
 
+    if ($confirmation->isConfirmed()) {
+      $build['field_ci_email'][0]['#title'] = $build['field_ci_name'][0];
+      unset($build['field_ci_name']);
+    }
+
     // Vary the field's cache by whether the user is logged in or not.
     $cacheable_metadata
       ->addCacheContexts(['og_role', 'user.roles:authenticated'])
