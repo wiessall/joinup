@@ -21,7 +21,3 @@ asset_distribution_workflow:
       label: Archive
       from: [ published ]
       to: archived
-    unarchive:
-      label: Unarchive
-      from: [ archived ]
-      to: published
