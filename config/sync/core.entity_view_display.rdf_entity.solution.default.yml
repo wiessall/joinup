@@ -156,6 +156,18 @@ third_party_settings:
         layout_settings:
           label: 'Description section'
           context_mapping: {  }
+          custom_id: null
+          custom_classes: ''
+          custom_class_choose: null
+          custom_styles: null
+          custom_data_attributes: null
+          regions:
+            content:
+              region_id: null
+              region_class_choose: null
+              region_classes: joinup-group
+              region_styles: null
+              region_data: null
         components:
           0a924836-b054-4860-bf01-e4ccd8b934f8:
             uuid: 0a924836-b054-4860-bf01-e4ccd8b934f8
