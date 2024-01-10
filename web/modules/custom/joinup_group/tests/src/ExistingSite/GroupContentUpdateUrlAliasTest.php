@@ -6,7 +6,7 @@ namespace Drupal\Tests\joinup_group\ExistingSite;
 
 use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\Tests\joinup_test\ExistingSite\JoinupExistingSiteTestBase;
-use Drupal\rdf_taxonomy\Entity\RdfTerm;
+use Drupal\taxonomy\Entity\Term;
 use Drush\TestTraits\DrushTestTrait;
 use weitzman\LoginTrait\LoginTrait;
 
@@ -329,14 +329,14 @@ class GroupContentUpdateUrlAliasTest extends JoinupExistingSiteTestBase {
       'field_ci_email' => $this->randomMachineName() . '@example.com',
     ]);
 
-    $parent = RdfTerm::create([
+    $parent = Term::create([
       'vid' => 'topic',
       'tid' => 'http://example.com/policy/parent',
       'name' => $this->randomString(),
     ]);
     $parent->save();
     $this->markEntityForCleanup($parent);
-    $term = RdfTerm::create([
+    $term = Term::create([
       'vid' => 'topic',
       'tid' => 'http://example.com/policy',
       'name' => $this->randomString(),

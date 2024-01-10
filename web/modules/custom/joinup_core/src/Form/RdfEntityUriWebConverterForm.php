@@ -5,17 +5,33 @@ declare(strict_types=1);
 namespace Drupal\joinup_core\Form;
 
 use Drupal\Component\Utility\UrlHelper;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
 use Drupal\rdf_entity\Entity\Rdf;
-use Drupal\rdf_taxonomy\Entity\RdfTerm;
 use Drupal\sparql_entity_storage\UriEncoder;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Simple form that redirects to a RDF entity page.
  */
 class RdfEntityUriWebConverterForm extends FormBase {
+
+  /**
+   * Constructs a new form instance.
+   *
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
+   *   The entity type manager service.
+   */
+  public function __construct(protected EntityTypeManagerInterface $entityTypeManager) {}
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function create(ContainerInterface $container): self {
+    return new static($container->get('entity_type.manager'));
+  }
 
   /**
    * {@inheritdoc}
@@ -52,7 +68,7 @@ class RdfEntityUriWebConverterForm extends FormBase {
           $form_state->set('passed_as', 'id');
           $form_state->set('entity_type', 'rdf_entity');
         }
-        elseif (RdfTerm::load($id)) {
+        elseif ($this->entityTypeManager->getStorage('taxonomy_term')->load($id)) {
           $form_state->set('passed_as', 'id');
           $form_state->set('entity_type', 'taxonomy_term');
         }

@@ -25,7 +25,6 @@ class UniqueSpdxReferenceTest extends JoinupKernelTestBase {
     'joinup_licence',
     'joinup_validation',
     'rdf_schema_field_validation',
-    'rdf_taxonomy',
     'spdx',
     'taxonomy',
     'template_suggestion',

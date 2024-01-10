@@ -8,6 +8,11 @@ dependencies:
     - rdf_entity.rdfentity.collection
   module:
     - text
+third_party_settings:
+  rdf_sync:
+    value:
+      predicate: 'http://purl.org/dc/terms/description'
+      type: t_literal
 _core:
   default_config_hash: _Uas7wdvfIb9mVHi4EaSOB6rVDHuuRguoIJuX2A0JsU
 id: rdf_entity.collection.field_ar_description

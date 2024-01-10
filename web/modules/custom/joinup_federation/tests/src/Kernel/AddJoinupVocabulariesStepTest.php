@@ -28,7 +28,7 @@ class AddJoinupVocabulariesStepTest extends StepTestBase {
    * {@inheritdoc}
    */
   protected static $modules = [
-    'rdf_taxonomy',
+    'taxonomy',
     'taxonomy',
   ];
 

@@ -1,0 +1,5 @@
+services:
+  rdf_sync.mapper:
+    class: Drupal\rdf_sync\RdfSyncMapper
+    arguments:
+      - '@entity_type.bundle.info'
