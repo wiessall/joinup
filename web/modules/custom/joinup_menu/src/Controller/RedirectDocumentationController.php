@@ -46,6 +46,10 @@ final class RedirectDocumentationController extends ControllerBase {
     // redirect response.
     $response = new BinaryFileResponse($file->getFileUri());
     $response->setContentDisposition('attachment', $file->getFilename());
+    // The binary response is cached on the browser side. This is to avoid
+    // re-downloading the file when the user clicks on the back button. In order
+    // to avoid the file being cached on the browser side, we set the following
+    // cache headers.
     $response->setCache([
       'no_cache' => TRUE,
       'max_age' => 0,
