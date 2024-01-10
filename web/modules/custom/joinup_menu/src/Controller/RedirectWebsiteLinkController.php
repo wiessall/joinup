@@ -28,7 +28,7 @@ final class RedirectWebsiteLinkController extends ControllerBase {
     $url = $rdf_entity->{$rdf_entity->getWebsiteLinkFieldName()}->uri;
     $response = new TrustedRedirectResponse($url);
     $response->addCacheableDependency($rdf_entity);
-    return new TrustedRedirectResponse($url);
+    return $response;
   }
 
   /**
