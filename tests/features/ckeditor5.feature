@@ -186,9 +186,11 @@ Feature: CKEditor5
     And I should see "Pager test thirteen"
     And I should see "Pager test fourteen"
 
-    When I click "Go to page 1"
-    And I wait for AJAX to finish
-    And I select "Name (A-Z)" from "Sort by" in the "Modal content" region
+    When I close the modal dialog
+    And the modal should be closed
+    Then I press the button "Insert Media" in the "Description" wysiwyg editor
+    And a modal should open
+    And I select "Name (A-Z)" from "Sort by"
     And I press "Apply filters"
     And I wait for AJAX to finish
     Then I should see "Pager test 1"
