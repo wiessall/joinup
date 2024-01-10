@@ -280,18 +280,18 @@ third_party_settings:
         layout_settings:
           label: 'Detailed items'
           context_mapping: {  }
-          custom_id: ''
+          custom_id: null
           custom_classes: ''
-          custom_class_choose: {  }
-          custom_styles: ''
-          custom_data_attributes: ''
+          custom_class_choose: null
+          custom_styles: null
+          custom_data_attributes: null
           regions:
             content:
-              region_id: ''
-              region_class_choose: {  }
-              region_classes: 'd-flex flex-wrap rounded-3 bg-light mt-4 mb-5 px-4 px-lg-5 pt-4 pt-lg-5'
-              region_styles: ''
-              region_data: ''
+              region_id: null
+              region_class_choose: null
+              region_classes: 'd-flex flex-wrap rounded-3 bg-light mt-4 mb-5 px-4 px-4 pt-4 '
+              region_styles: null
+              region_data: null
         components:
           a6db9a21-e068-4956-bc80-546313dacf23:
             uuid: a6db9a21-e068-4956-bc80-546313dacf23
@@ -323,7 +323,7 @@ third_party_settings:
               component_attributes:
                 block_attributes:
                   id: ''
-                  class: 'pe-4 pe-lg-5 pb-4 pb-lg-5'
+                  class: 'pe-5 pb-4'
                   style: ''
                   data: ''
                 block_title_attributes:
@@ -366,7 +366,7 @@ third_party_settings:
               component_attributes:
                 block_attributes:
                   id: ''
-                  class: 'pe-4 pe-lg-5 pb-4 pb-lg-5'
+                  class: 'pe-5 pb-4'
                   style: ''
                   data: ''
                 block_title_attributes:
@@ -403,7 +403,7 @@ third_party_settings:
               component_attributes:
                 block_attributes:
                   id: ''
-                  class: 'pe-4 pe-lg-5 pb-4 pb-lg-5'
+                  class: 'pe-5 pb-4'
                   style: ''
                   data: ''
                 block_title_attributes:
@@ -446,7 +446,7 @@ third_party_settings:
               component_attributes:
                 block_attributes:
                   id: ''
-                  class: 'pe-4 pe-lg-5 pb-4 pb-lg-5'
+                  class: 'pe-5 pb-4'
                   style: ''
                   data: ''
                 block_title_attributes:
@@ -483,7 +483,7 @@ third_party_settings:
               component_attributes:
                 block_attributes:
                   id: ''
-                  class: 'pe-4 pe-lg-5 pb-4 pb-lg-5'
+                  class: 'pe-5 pb-4'
                   style: ''
                   data: ''
                 block_title_attributes:
@@ -520,7 +520,7 @@ third_party_settings:
               component_attributes:
                 block_attributes:
                   id: ''
-                  class: 'pe-4 pe-lg-5 pb-4 pb-lg-5'
+                  class: 'pe-5 pb-4'
                   style: ''
                   data: ''
                 block_title_attributes:
@@ -557,7 +557,7 @@ third_party_settings:
               component_attributes:
                 block_attributes:
                   id: ''
-                  class: 'pe-4 pe-lg-5 pb-4 pb-lg-5'
+                  class: 'pe-5 pb-4'
                   style: ''
                   data: ''
                 block_title_attributes:
@@ -605,7 +605,7 @@ third_party_settings:
               component_attributes:
                 block_attributes:
                   id: ''
-                  class: 'pe-4 pe-lg-5 pb-4 pb-lg-5'
+                  class: 'pe-5 pb-4'
                   style: ''
                   data: ''
                 block_title_attributes:
@@ -653,18 +653,18 @@ third_party_settings:
         layout_settings:
           label: 'Moderation section'
           context_mapping: {  }
-          custom_id: ''
+          custom_id: null
           custom_classes: mb-5
-          custom_class_choose: {  }
-          custom_styles: ''
-          custom_data_attributes: ''
+          custom_class_choose: null
+          custom_styles: null
+          custom_data_attributes: null
           regions:
             content:
-              region_id: ''
-              region_class_choose: {  }
-              region_classes: 'p-4 p-lg-5 d-flex flex-wrap rounded-3 bg-light'
-              region_styles: ''
-              region_data: ''
+              region_id: null
+              region_class_choose: null
+              region_classes: 'p-4 rounded-3 bg-light'
+              region_styles: null
+              region_data: null
         components:
           8add6d2e-a7d0-4b66-8c58-510135c0a62f:
             uuid: 8add6d2e-a7d0-4b66-8c58-510135c0a62f
@@ -683,7 +683,7 @@ third_party_settings:
               component_attributes:
                 block_attributes:
                   id: ''
-                  class: w-100
+                  class: ''
                   style: ''
                   data: ''
                 block_title_attributes:
@@ -722,7 +722,7 @@ third_party_settings:
               component_attributes:
                 block_attributes:
                   id: ''
-                  class: 'me-4 me-lg-5'
+                  class: ''
                   style: ''
                   data: ''
                 block_title_attributes:
@@ -758,7 +758,7 @@ third_party_settings:
               component_attributes:
                 block_attributes:
                   id: ''
-                  class: 'me-4 me-lg-5'
+                  class: ''
                   style: ''
                   data: ''
                 block_title_attributes:
