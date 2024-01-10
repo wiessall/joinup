@@ -162,9 +162,13 @@ function contact_information_rdf_entity_access(EntityInterface $entity, string $
   }
 
   // For anonymous users, deny access to the canonical route.
-  if ($account->isAnonymous()) {
+  if ($account->isAnonymous() && $operation === 'view') {
     $route_name = \Drupal::routeMatch()->getRouteName();
-    if ($route_name === 'entity.rdf_entity.canonical') {
+    if ($route_name !== 'entity.rdf_entity.canonical') {
+      return AccessResult::neutral();
+    }
+    $route_entity = \Drupal::routeMatch()->getParameter('rdf_entity');
+    if ($route_entity instanceof ContactInformationInterface && $route_entity->id() === $entity->id()) {
       return AccessResult::forbidden('Anonymous users should not see contact information on the canonical route.');
     }
   }
