@@ -21,7 +21,7 @@ class TopicHierarchyIndexingTest extends JoinupExistingSiteTestBase {
   /**
    * A list of terms used in the test.
    *
-   * @var \Drupal\rdf_taxonomy\Entity\RdfTerm[]
+   * @var \Drupal\taxonomy\TermInterface[]
    */
   protected $terms = [];
 

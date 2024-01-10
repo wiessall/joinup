@@ -1,10 +1,32 @@
 uuid: 33e1581e-52ba-40dc-a9dc-ba55050903cc
 langcode: en
 status: true
-dependencies: {  }
+dependencies:
+  module:
+    - joinup_taxonomy
 third_party_settings:
-  rdf_taxonomy:
+  joinup_taxonomy:
     locked: false
+  rdf_sync:
+    type: 'http://data.europa.eu/eif/Recommendation/'
+    uri_plugin: null
+    fields:
+      vid:
+        target_id:
+          predicate: 'http://www.w3.org/2004/02/skos/core#inScheme'
+          type: resource
+      name:
+        value:
+          predicate: 'http://www.w3.org/2004/02/skos/core#prefLabel'
+          type: t_literal
+      description:
+        processed:
+          predicate: 'http://www.w3.org/2004/02/skos/core#definition'
+          type: t_literal
+      weight:
+        value:
+          predicate: 'http://www.w3.org/ns/adms#identifier'
+          type: 'xsd:integer'
 name: 'EIF Recommendation'
 vid: eif_recommendation
 description: 'Terms that represent a recommendation of the EIF Toolbox.'

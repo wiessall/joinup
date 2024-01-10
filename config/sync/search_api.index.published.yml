@@ -48,7 +48,6 @@ dependencies:
     - rdf_entity
     - publication_date
     - taxonomy
-    - rdf_taxonomy
     - user
     - search_api
     - asset_distribution
@@ -893,9 +892,6 @@ field_settings:
     datasource_id: 'entity:taxonomy_term'
     property_path: tid
     type: string
-    dependencies:
-      module:
-        - rdf_taxonomy
   title:
     label: Title
     datasource_id: 'entity:node'

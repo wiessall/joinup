@@ -43,7 +43,6 @@ class ThreeWayMergeStepTest extends StepTestBase {
     'field',
     'joinup_sparql',
     'rdf_schema_field_validation',
-    'rdf_taxonomy',
     'taxonomy',
     'text',
     'user',

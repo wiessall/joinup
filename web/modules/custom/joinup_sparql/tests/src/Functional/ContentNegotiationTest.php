@@ -9,7 +9,7 @@ use Drupal\Core\Session\AccountInterface;
 use Drupal\Tests\BrowserTestBase;
 use Drupal\Tests\sparql_entity_storage\Traits\SparqlConnectionTrait;
 use Drupal\rdf_entity\Entity\Rdf;
-use Drupal\rdf_taxonomy\Entity\RdfTerm;
+use Drupal\taxonomy\Entity\Term;
 use EasyRdf\Format;
 
 /**
@@ -81,7 +81,7 @@ class ContentNegotiationTest extends BrowserTestBase {
    * Tests content negotiation.
    */
   public function testContentNegotiation(): void {
-    $term = RdfTerm::create([
+    $term = Term::create([
       'vid' => 'fruit_type',
       'tid' => 'http://example.com/citrus-fruits',
       'name' => 'Citrus fruits',
@@ -250,7 +250,7 @@ class ContentNegotiationTest extends BrowserTestBase {
    */
   public function tearDown(): void {
     Rdf::load('http://example.com/apple')->delete();
-    RdfTerm::load('http://example.com/citrus-fruits')->delete();
+    Term::load('http://example.com/citrus-fruits')->delete();
     parent::tearDown();
   }
 

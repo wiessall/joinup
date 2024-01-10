@@ -1,0 +1,49 @@
+<?php
+
+/**
+ * @file
+ * Hook implementations for RDF Sync module.
+ */
+
+declare(strict_types = 1);
+
+use Drupal\Core\Entity\ContentEntityInterface;
+
+/**
+ * Implements hook_entity_bundle_info_alter().
+ */
+function rdf_sync_entity_bundle_info_alter(array &$bundles): void {
+  $entityTypeManager = \Drupal::entityTypeManager();
+  $entityFieldManager = \Drupal::getContainer()->get('entity_field.manager');
+
+  foreach ($entityTypeManager->getDefinitions() as $entityTypeId => $entityType) {
+    if (!$entityType->entityClassImplements(ContentEntityInterface::class) || !($bundleEntityTypeId = $entityType->getBundleEntityType())) {
+      // Filter out config entities or entities without bundle as config entity.
+      continue;
+    }
+    $bundleStorage = $entityTypeManager->getStorage($bundleEntityTypeId);
+    /** @var \Drupal\Core\Config\Entity\ConfigEntityInterface&\Drupal\Core\Config\Entity\ThirdPartySettingsInterface $bundle */
+    foreach ($bundleStorage->loadMultiple() as $bundleId => $bundle) {
+      if ($rdfSyncSettings = $bundle->getThirdPartySettings('rdf_sync')) {
+        if (!empty($rdfSyncSettings['type'])) {
+          // Add bundle level mappings.
+          $bundles[$entityTypeId][$bundleId]['rdf_sync'] = $rdfSyncSettings;
+          // Add configurable fields mappings.
+          foreach ($entityFieldManager->getFieldDefinitions($entityTypeId, $bundleId) as $fieldName => $fieldDefinition) {
+            if (method_exists($fieldDefinition, 'getThirdPartySettings')) {
+              foreach ($fieldDefinition->getThirdPartySettings('rdf_sync') as $columnName => $mapping) {
+                if (empty($mapping['predicate'])) {
+                  throw new \Exception("Mapping of $entityTypeId:$bundleId:$fieldName:$columnName is missing the 'predicate' value");
+                }
+                if (empty($mapping['type'])) {
+                  throw new \Exception("Mapping of $entityTypeId:$bundleId:$fieldName:$columnName is missing the 'type' value");
+                }
+                $bundles[$entityTypeId][$bundleId]['rdf_sync']['fields'][$fieldName][$columnName] = $mapping;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
