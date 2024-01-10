@@ -185,7 +185,7 @@ third_party_settings:
             content:
               region_id: null
               region_class_choose: null
-              region_classes: joinup-group
+              region_classes: joinup-group--description
               region_styles: null
               region_data: null
         components:
@@ -305,18 +305,18 @@ third_party_settings:
         layout_settings:
           label: 'Detailed items'
           context_mapping: {  }
-          custom_id: ''
+          custom_id: null
           custom_classes: ''
-          custom_class_choose: {  }
-          custom_styles: ''
-          custom_data_attributes: ''
+          custom_class_choose: null
+          custom_styles: null
+          custom_data_attributes: null
           regions:
             content:
-              region_id: ''
-              region_class_choose: {  }
-              region_classes: 'd-flex flex-wrap rounded-3 bg-light mt-4 mb-5 px-4 px-lg-5 pt-4 pt-lg-5'
-              region_styles: ''
-              region_data: ''
+              region_id: null
+              region_class_choose: null
+              region_classes: 'joinup-group--detailed-items d-flex flex-wrap rounded-3 bg-light mt-4 mb-5 px-4 pt-4'
+              region_styles: null
+              region_data: null
         components:
           504f9a8c-ab74-424a-b513-12f70ba3aef4:
             uuid: 504f9a8c-ab74-424a-b513-12f70ba3aef4
@@ -348,7 +348,7 @@ third_party_settings:
               component_attributes:
                 block_attributes:
                   id: ''
-                  class: 'pe-4 pe-lg-5 pb-4 pb-lg-5'
+                  class: 'pe-5 pb-4'
                   style: ''
                   data: ''
                 block_title_attributes:
@@ -396,7 +396,7 @@ third_party_settings:
               component_attributes:
                 block_attributes:
                   id: ''
-                  class: 'pe-4 pe-lg-5 pb-4 pb-lg-5'
+                  class: 'pe-5 pb-4'
                   style: ''
                   data: ''
                 block_title_attributes:
@@ -415,18 +415,18 @@ third_party_settings:
         layout_settings:
           label: 'Moderation section'
           context_mapping: {  }
-          custom_id: ''
+          custom_id: null
           custom_classes: ''
-          custom_class_choose: {  }
-          custom_styles: ''
-          custom_data_attributes: ''
+          custom_class_choose: null
+          custom_styles: null
+          custom_data_attributes: null
           regions:
             content:
-              region_id: ''
-              region_class_choose: {  }
-              region_classes: 'p-4 p-lg-5 d-flex flex-wrap rounded-3 bg-light'
-              region_styles: ''
-              region_data: ''
+              region_id: null
+              region_class_choose: null
+              region_classes: 'p-4 rounded-3 bg-light'
+              region_styles: null
+              region_data: null
         components:
           d78c7b8a-3a6a-4f91-8e05-91a99cc7f72c:
             uuid: d78c7b8a-3a6a-4f91-8e05-91a99cc7f72c
@@ -454,7 +454,7 @@ third_party_settings:
               component_attributes:
                 block_attributes:
                   id: ''
-                  class: 'me-4 me-lg-5'
+                  class: ''
                   style: ''
                   data: ''
                 block_title_attributes:
@@ -493,7 +493,7 @@ third_party_settings:
               component_attributes:
                 block_attributes:
                   id: ''
-                  class: 'me-4 me-lg-5'
+                  class: ''
                   style: ''
                   data: ''
                 block_title_attributes:
@@ -516,14 +516,14 @@ third_party_settings:
               provider: custom_markup_block
               context_mapping: {  }
               markup:
-                value: '<h4><strong>Moderation</strong></h4>'
+                value: '<h3>Moderation</h3>'
                 format: content_editor
             weight: 0
             additional:
               component_attributes:
                 block_attributes:
                   id: ''
-                  class: w-100
+                  class: ''
                   style: ''
                   data: ''
                 block_title_attributes:

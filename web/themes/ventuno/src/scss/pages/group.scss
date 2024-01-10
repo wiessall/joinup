@@ -2,16 +2,28 @@
 
 // Collections and Solutions common styles.
 .joinup-group {
-  font-size: $h3-font-size;
-  position: relative;
-  margin-bottom: $spacer * 3; // 48px
-  @include full-width-color-to-top(
-    $light,
-    $light,
-    3rem,
-    3rem,
-    $light,
-    0,
-    3rem
-  );
+  &--description {
+    font-size: $h3-font-size;
+    position: relative;
+    margin-bottom: $spacer * 3; // 48px
+    @include full-width-color-to-top(
+      $light,
+      $light,
+      3rem,
+      3rem,
+      $light,
+      0,
+      3rem
+    );
+  }
+  &--detailed-items {
+    .field--name-field-spatial-coverage {
+      .field__items {
+        display: flex;
+        .field__item {
+          margin-right: $spacer * .25;
+        }
+      }
+    }
+  }
 }
