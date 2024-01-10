@@ -56,7 +56,8 @@ function contact_information_entity_bundle_field_info_alter(array &$fields, Enti
         'target_bundles' => [
           'collection' => 'collection',
           'solution' => 'solution',
-      ]])
+        ],
+      ])
       ->setComputed(TRUE)
       ->setClass(ParentGroupFieldItemList::class);
   }
