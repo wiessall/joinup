@@ -1,4 +1,4 @@
-@api @terms @javascript
+@api @terms @javascript @javascriptError
 Feature: CKEditor5
 
   Background:
