@@ -80,15 +80,15 @@ class RdfSyncMapper {
    * @param string $bundle
    *   The bundle.
    *
-   * @return array
-   *   The bundle mapping.
+   * @return array|null
+   *   The bundle mapping or NULL if no mapping is defined.
    */
-  protected function getBundleMapping(string $entityTypeId, string $bundle): array {
+  protected function getBundleMapping(string $entityTypeId, string $bundle): ?array {
     // Cover entity types without bundles.
     $bundle = $bundle ?: $entityTypeId;
     $bundleInfo = $this->entityTypeBundleInfo->getBundleInfo($entityTypeId)[$bundle] ?? [];
     if (!$bundleInfo) {
-      throw new \InvalidArgumentException("No info for '$bundle', entity type '$entityTypeId'");
+      return NULL;
     }
     return $bundleInfo['rdf_sync'] ?? [];
   }
