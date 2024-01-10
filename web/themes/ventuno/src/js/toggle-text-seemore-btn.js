@@ -1,6 +1,6 @@
 /**
  * @file
- * Toggles text inside the "See more" button in topic header, Collections and Solitions description field.
+ * Toggles text inside the "See more" button in topic header, Collections and Solutions description field.
  */
 ((Drupal, drupalSettings) => {
   Drupal.behaviors.toggleTextSeemoreBtn = {

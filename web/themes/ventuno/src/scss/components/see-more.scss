@@ -6,7 +6,7 @@
   overflow: hidden;
   margin-bottom: 0;
   &--long {
-    min-height: 145px;
+    min-height: 120px;
     -webkit-line-clamp: 5;
     overflow: hidden;
     &.show {

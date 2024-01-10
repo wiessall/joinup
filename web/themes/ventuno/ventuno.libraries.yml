@@ -57,10 +57,10 @@ searchpage:
   dependencies:
     - ventuno/close
 
-collection:
+group:
   css:
     theme:
-      assets/css/collection.min.css: { minified: true }
+      assets/css/group.min.css: { minified: true }
 
 # Components
 abstract:

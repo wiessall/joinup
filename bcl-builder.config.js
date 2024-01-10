@@ -316,11 +316,11 @@ module.exports = {
     {
       entry: path.resolve(
         outputFolder,
-        `${ventuno}src/scss/pages/collection.scss`
+        `${ventuno}src/scss/pages/group.scss`
       ),
       dest: path.resolve(
         outputFolder,
-        `${ventuno}assets/css/collection.min.css`
+        `${ventuno}assets/css/group.min.css`
       ),
       options: {
         includePaths,

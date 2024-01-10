@@ -1,8 +1,7 @@
 @import "../partials/core";
 
-// Collection Common styles
-.collection__field-ar-description,
-.solution__field-is-description {
+// Collections and Solutions common styles.
+.joinup-group {
   font-size: $h3-font-size;
   position: relative;
   margin-bottom: $spacer * 3; // 48px
