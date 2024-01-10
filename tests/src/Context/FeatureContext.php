@@ -2652,46 +2652,4 @@ class FeatureContext extends RawDrupalContext {
     sleep(1);
   }
 
-  /**
-   * Grab the JavaScript errors from the session. Only works in companion
-   * with a global window variable `errors` that contains the JavaScript
-   * and/or XHR errors.
-   *
-   * @AfterStep @javascriptError&&@javascript
-   */
-  public function takeJSErrorsAfterFailedStep(AfterStepScope $event): void {
-    $code = $event->getTestResult()->getResultCode();
-    $driver = $this->getSession()->getDriver();
-
-    if ($driver instanceof Selenium2Driver && $code === 99) {
-      // Fetch errors from window variable.
-      try {
-        $json = $this->getSession()->evaluateScript("return JSON.stringify(window.errors);");
-      }
-      catch (\Exception $e) {
-        // Ignore this exception, because this may be caused by the
-        // driver and/or JavaScript.
-        return;
-      }
-
-      // Unserialize the errors.
-      $errors = json_decode($json);
-
-      if (json_last_error() == JSON_ERROR_NONE) {
-        $messages = [];
-
-        foreach ($errors as $error) {
-          if ($error->type == "javascript") {
-            $messages[] = "- {$error->message} ({$error->location})";
-          }
-          elseif ($error->type == "xhr") {
-            $messages[] = "- {$error->message} ({$error->method} {$error->url}): {$error->statusCode} {$error->response}";
-          }
-        }
-
-        printf("JavaScript errors:\n\n" . implode("\n", $messages));
-      }
-    }
-  }
-
 }
