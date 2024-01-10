@@ -52,6 +52,11 @@ function contact_information_entity_bundle_field_info_alter(array &$fields, Enti
       ->setTargetEntityTypeId('rdf_entity')
       ->setTargetBundle('contact_information')
       ->setSetting('target_type', 'rdf_entity')
+      ->setSetting('handler_settings', [
+        'target_bundles' => [
+          'collection' => 'collection',
+          'solution' => 'solution',
+      ]])
       ->setComputed(TRUE)
       ->setClass(ParentGroupFieldItemList::class);
   }
