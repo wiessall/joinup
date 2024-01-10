@@ -174,7 +174,7 @@ Feature: Resend validation email from collection/solution about page
 
     When I am logged in as a moderator
     When I go to the "Existing to resend solution" solution
-    Then I should not see the text "Contact us"
+    Then I should not see the link "Some Resend"
     But I should see the text "Please confirm your contact information to enable users to contact you"
 
     Given the following email confirmation request:
@@ -184,5 +184,5 @@ Feature: Resend validation email from collection/solution about page
       # database, the confirmed one is never the first or the last.
       | some.resend@example.com | cancelled |
     When I go to the "Existing to resend solution" solution
-    Then I should see the text "Contact us"
+    Then I should see the link "Some Resend"
     But I should not see the text "Please confirm your contact information to enable users to contact you"
