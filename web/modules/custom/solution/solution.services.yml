@@ -46,6 +46,7 @@ services:
     arguments:
       - '@queue'
       - '@current_user'
+      - '@messenger'
     tags:
       - { name: event_subscriber }
 
