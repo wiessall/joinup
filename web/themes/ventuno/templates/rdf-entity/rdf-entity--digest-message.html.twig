@@ -6,7 +6,7 @@
  * @see template_preprocess_rdf_entity()
  */
 #}
-{% set image_url = site_url ~ '/' ~ directory ~ '/images/digest-message/' ~ rdf_entity.bundle ~ '_icon.png' %}
+{% set image_url = site_url ~ '/' ~ directory ~ '/assets/images/digest-message/' ~ rdf_entity.bundle ~ '_icon.png' %}
 {% set publication_date = rdf_entity.getCreatedTime()|format_date('date_only') %}
 {% if content.field_isr_release_number|render %}
   {% set release_number = content.field_isr_release_number|render|striptags %}
@@ -18,54 +18,51 @@
 {% endif %}
 <!-- RDF -->
 <tr>
-  <td align="left" valign="top" bgcolor="#E9EDEE" class="node--container"><table width="100%" border="0" cellspacing="0" cellpadding="0" class="node">
+  <td height="20" class="bg-secondary">&nbsp;</td>
+</tr>
+<tr>
+  <td class="bg-light text-center">
+    <table role="presentation">
     <tbody>
       <tr>
-        <td align="left" valign="top" class="node--date"><span>{{ publication_date }}</span></td>
+        <td class="bg-primary text-white fs-sm fw-bold text-uppercase"><span>{{ publication_date }}</span></td>
       </tr>
       <tr>
-        <td align="left" valign="top" class="node--separator-small">&nbsp;</td>
+        <td height="10">&nbsp;</td>
       </tr>
       <tr>
-        <td align="left" valign="top" class="node--title"><a href="{{ url }}">{{ label }}{% if release_number %} {{ release_number }}{% endif %}</a></td>
+        <td class="fs-lg fw-bold text-primary">
+          <a class="text-none" href="{{ url }}">{{ label }}{% if release_number %} {{ release_number }}{% endif %}</a>
+        </td>
       </tr>
       <tr>
-        <td align="left" valign="top" class="node--separator">&nbsp;</td>
+        <td height="20">&nbsp;</td>
       </tr>
 
       <tr>
-        <td align="left" valign="top"><table width="100%" border="0" cellspacing="0" cellpadding="0">
+        <td>
+        <table role="presentation">
           <tbody>
             <tr>
               {% if image_url %}
-                <td width="200" align="left" valign="top" class="node--img hidden"><a href="{{ url }}"><img src="{{ image_url }}" width="200" alt=""/></a></td>
-                <td width="20" align="left" valign="top" class="hidden">&nbsp;</td>
+                <td width="200" class="d-sm-none"><a href="{{ url }}"><img src="{{ image_url }}" width="200" alt=""/></a></td>
+                <td width="20" class="d-sm-none">&nbsp;</td>
               {% endif %}
-              <td align="left" valign="top">{{ body }}</td>
+              <td>{{ body }}</td>
             </tr>
           </tbody>
         </table></td>
       </tr>
       <tr>
-        <td align="left" valign="top" class="node--separator">&nbsp;</td>
+        <td height="20">&nbsp;</td>
       </tr>
-
       <tr>
-        <td><table width="100%" border="0" cellspacing="0" cellpadding="0" class="node--end-separator">
-          <tbody>
-            <tr>
-              <td width="35%" align="left" valign="top" class="hidden">&nbsp;</td>
-              <td align="left" valign="top" class="node--button-container"><table width="100%" border="0" align="center" cellpadding="0" cellspacing="0">
-                <tbody>
-                  <tr>
-                    <td align="center" valign="middle" class="node--button-link"><a href="{{ url }}">{{ 'Read more'|t }}</a></td>
-                  </tr>
-                </tbody>
-              </table></td>
-              <td width="35%" align="left" valign="top" class="hidden">&nbsp;</td>
-            </tr>
-          </tbody>
-        </table></td>
+        <td class="d-flex justify-content-center">
+          <a class="btn btn-brand" href="{{ url }}">{{ 'Read more'|t }}</a>
+        </td>
+      </tr>
+      <tr>
+        <td height="30">&nbsp;</td>
       </tr>
     </tbody>
   </table></td>
