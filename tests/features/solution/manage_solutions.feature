@@ -134,3 +134,14 @@ Feature: As a moderator I want to be able to move solutions to other collection.
     And the workflow state of the "Solution 1 Release 1" "rdf entity" should be "archived"
     And the workflow state of the "Solution 1 Release 2" "rdf entity" should be "draft"
     And the workflow state of the "Solution 1 Release 3" "rdf entity" should be "archived"
+    And the following email should have been sent:
+      | recipient | John The Moderator                 |
+      | subject   | Joinup: Solution has been archived |
+    And the email sent to "John The Moderator" with subject "Joinup: Solution has been archived" contains the following lines of text:
+      | Dear John,                                                           |
+      | The Solution 1, along with its associated content items, has been    |
+      | archived. Even though the Solution has been archived, you can still  |
+      | access its pages through the Advanced Search page by selecting 'Show |
+      | only Archived items' or through the Collection it belonged to.       |
+      | If you think this action is not clear, please contact Joinup Support |
+      | at                                                                   |
