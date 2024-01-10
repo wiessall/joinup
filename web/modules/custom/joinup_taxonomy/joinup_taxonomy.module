@@ -1,0 +1,33 @@
+<?php
+
+/**
+ * @file
+ * Hook implementations for Joinup taxonomy module.
+ */
+
+declare(strict_types = 1);
+
+use Drupal\Core\Access\AccessResult;
+use Drupal\Core\Access\AccessResultInterface;
+use Drupal\Core\Session\AccountInterface;
+use Drupal\taxonomy\TermInterface;
+
+/**
+ * Implements hook_ENTITY_TYPE_access().
+ */
+function joinup_taxonomy_taxonomy_term_access(TermInterface $term, string $operation, AccountInterface $account): AccessResultInterface {
+  /** @var \Drupal\taxonomy\VocabularyInterface $vocabulary */
+  $vocabulary = $term->get('vid')->entity;
+  $locked = ($operation !== 'view') && $vocabulary->getThirdPartySetting('joinup_taxonomy', 'locked', FALSE);
+  return AccessResult::forbiddenIf($locked)/*->addCacheTags($vocabulary->getCacheTagsToInvalidate())*/;
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_create_access().
+ */
+function joinup_taxonomy_taxonomy_term_create_access(AccountInterface $account, array $context, string $entity_bundle): AccessResultInterface {
+  /** @var \Drupal\taxonomy\VocabularyInterface $vocabulary */
+  $vocabulary = \Drupal::entityTypeManager()->getStorage('taxonomy_vocabulary')->load($entity_bundle);
+  $locked = $vocabulary->getThirdPartySetting('joinup_taxonomy', 'locked', FALSE);
+  return AccessResult::forbiddenIf($locked)/*->addCacheTags($vocabulary->getCacheTagsToInvalidate())*/;
+}
