@@ -23,7 +23,7 @@ Feature: Asset distribution content archival.
     And I should see the text "Archive" in the "Page title" region
     When I go to the edit form of the "Hot Snake" distribution
     Then I should not see the button "Archive"
-    And I should not see the button "Unarchive"
+    And I should see the button "Unarchive"
 
     Given I am logged in as a facilitator of the "Some AD solution" solution
     And I go to the edit form of the "Red Snake" distribution
