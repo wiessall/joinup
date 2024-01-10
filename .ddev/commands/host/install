@@ -1,0 +1,11 @@
+#!/bin/bash
+
+## Description: Installs an empty Joinup site
+## Usage: install
+## Example: ddev install
+
+ddev solr:empty
+ddev exec vendor/bin/run toolkit:install-clean
+ddev exec vendor/bin/run config-readonly:disable
+ddev exec vendor/bin/run dev:install-modules
+ddev exec vendor/bin/run config-readonly:enable

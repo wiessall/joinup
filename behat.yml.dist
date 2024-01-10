@@ -107,7 +107,7 @@ default:
       javascript_session: selenium2
       browser_name: ${behat.browser_name}
       selenium2:
-        wd_host: ${env.WEBDRIVER_URL}
+        wd_host: ${behat.selenium.webdriver_url}
         capabilities:
           browser: chrome
           nativeEvents: true
