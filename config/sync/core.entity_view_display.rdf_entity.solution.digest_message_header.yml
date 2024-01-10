@@ -47,6 +47,7 @@ dependencies:
     - field.field.rdf_entity.solution.field_topic
     - rdf_entity.rdfentity.solution
   module:
+    - template_suggestion
     - user
 id: rdf_entity.solution.digest_message_header
 targetEntityType: rdf_entity
@@ -58,7 +59,9 @@ content:
     label: above
     settings:
       link_to_entity: false
-    third_party_settings: {  }
+    third_party_settings:
+      template_suggestion:
+        template_suggestion: bare
     weight: 0
     region: content
 hidden:
