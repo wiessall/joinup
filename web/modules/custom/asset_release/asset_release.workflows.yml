@@ -10,6 +10,9 @@ asset_release_workflow:
       label: Needs update
     published:
       label: Published
+    archived:
+      label: Archived
+      published: true
   transitions:
     draft:
       label: Save as draft
@@ -23,3 +26,11 @@ asset_release_workflow:
       label: Request changes
       from: [published]
       to: needs_update
+    archive:
+      label: Archive
+      from: [ published, needs_update ]
+      to: archived
+    unarchive:
+      label: Unarchive
+      from: [ archived ]
+      to: published
