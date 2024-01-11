@@ -1,5 +1,6 @@
 # Configuration and commands specific for Joinup.
 joinup:
+  dir: ${drupal.root_absolute}/..
   site_dir: ${joinup.dir}/web
   files_public_dir: ${joinup.site_dir}/sites/default/files
   files_private_dir: ${joinup.site_dir}/${env.DRUPAL_PRIVATE_FILE_SYSTEM}

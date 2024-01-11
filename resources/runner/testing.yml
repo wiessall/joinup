@@ -22,6 +22,8 @@ behat:
   browser_name: chrome
   formatter:
     name: progress
+  selenium:
+    webdriver_url: ${env.WEBDRIVER_URL}
 
 phpcs:
   file:
