@@ -6,6 +6,7 @@ namespace Drupal\solution\Plugin\QueueWorker;
 
 use Drupal\Component\Utility\Variable;
 use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Entity\EntityPublishedInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Logger\LoggerChannelInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
@@ -16,8 +17,10 @@ use Drupal\asset_release\Entity\AssetReleaseInterface;
 use Drupal\custom_page\Entity\CustomPageInterface;
 use Drupal\joinup_community_content\Entity\CommunityContentInterface;
 use Drupal\joinup_group\Entity\GroupInterface;
-use Drupal\joinup_workflow\EntityWorkflowStateInterface;
+use Drupal\joinup_workflow\ArchivableEntityInterface;
 use Drupal\solution\Entity\SolutionInterface;
+use Drupal\sparql_entity_storage\SparqlEntityStorageInterface;
+use Drupal\sparql_entity_storage\SparqlGraphInterface;
 use Drupal\user\UserInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -105,6 +108,7 @@ class SolutionContentArchiverQueue extends QueueWorkerBase implements ContainerF
         "Queue item processing failed: item is invalid. Got '%id'",
         ['%id' => Variable::export($data)],
       );
+      // Simply release the invalid queue item.
       return;
     }
 
@@ -137,19 +141,38 @@ class SolutionContentArchiverQueue extends QueueWorkerBase implements ContainerF
       return;
     }
 
-    $entitiesToArchive = $this->getSolutionGroupContent($solution);
     $this->accountSwitcher->switchTo($actor);
-    foreach ($entitiesToArchive as $key => $entity) {
+    $entitiesToArchive = $this->getSolutionGroupContent($solution);
+    foreach ($entitiesToArchive as $entity) {
+      if (!$entity instanceof ArchivableEntityInterface) {
+        // Continue silently.
+        continue;
+      }
+
+      $storage = $this->entityTypeManager->getStorage($entity->getEntityTypeId());
       if (
-        !$entity instanceof EntityWorkflowStateInterface ||
-        !$entity->isTargetWorkflowStateAllowed(static::TARGET_STATE)
+        $storage instanceof SparqlEntityStorageInterface &&
+        $entity->get('graph')->getString() !== SparqlGraphInterface::DEFAULT
+      ) {
+        // Load from the default (assuming "published") graph, because we want
+        // to archive only the publicly accessible instance.
+        $entity = $storage->load($entity->id(), [SparqlGraphInterface::DEFAULT]) ?? $entity;
+      }
+
+      // Current user cannot change the state to archived.
+      if (!$entity->isTargetWorkflowStateAllowed(static::TARGET_STATE)) {
+        continue;
+      }
+      // No need to archive unpublished or already archived entities.
+      if (
+        $entity->isArchived() ||
+        ($entity instanceof EntityPublishedInterface && !$entity->isPublished())
       ) {
         // Continue silently.
         continue;
       }
 
       $entity->setWorkflowState(static::TARGET_STATE)->save();
-      $entitiesArchived[$key] = $entity;
     }
     $this->accountSwitcher->switchBack();
   }
