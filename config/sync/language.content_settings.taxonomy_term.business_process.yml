@@ -1,0 +1,11 @@
+uuid: 8843fbdc-b86e-4898-ad70-839fcfb6bd3e
+langcode: en
+status: true
+dependencies:
+  config:
+    - taxonomy.vocabulary.business_process
+id: taxonomy_term.business_process
+target_entity_type_id: taxonomy_term
+target_bundle: business_process
+default_langcode: site_default
+language_alterable: false
