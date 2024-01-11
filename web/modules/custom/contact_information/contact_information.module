@@ -394,8 +394,11 @@ function contact_information_rdf_entity_view(array &$build, RdfInterface $contac
     if ($confirmation) {
       $cacheable_metadata->addCacheableDependency($confirmation);
     }
-    elseif ($resend_access->isAllowed()) {
+    // Only act for published groups because the functionality is not available
+    // when the group is still proposed.
+    elseif ($contact_information->getRelatedGroup()->isPublished() && $resend_access->isAllowed()) {
       $confirmation = $email_confirmer->getConfirmation($contact_information->get('field_ci_email')->value, 'pending', ContactInformationEmailConfirmInterface::REALM);
+
       // If no confirmation is created yet, create one before adding the link
       // to the form. Normally, we would have a controller to create the
       // confirmation instead of sending the existing one but the confirmation
