@@ -215,6 +215,8 @@ Feature: CKEditor5
     # Use the pager.
     When I click "Go to page 2"
     And I wait for AJAX to finish
+    # Wait for the animation to finish.
+    And I wait for 2 second
     But I should not see "Pager test 1"
     And I should not see "Pager test 2"
     And I should not see "Pager test 3"
