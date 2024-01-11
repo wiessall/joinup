@@ -73,6 +73,7 @@ class MediaContext extends RawDrupalContext {
       $media->setName($name);
       $media->setRevisionLogMessage('first revision');
       $media->setCreatedTime($revision);
+      $media->setChangedTime($revision);
       $media->setRevisionCreationTime($revision);
       $media->save();
       $this->entities['media'][$media->id()] = $media;
