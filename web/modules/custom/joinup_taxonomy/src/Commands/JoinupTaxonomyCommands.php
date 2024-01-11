@@ -337,7 +337,7 @@ class JoinupTaxonomyCommands extends DrushCommands {
     foreach ($graph->resources() as $resource) {
       if ($resource->type() === 'skos:Concept') {
         foreach ($graph->allLiterals($resource, 'skos:prefLabel', 'en') as $object) {
-          if ($object->getValue() != 'Multilingual Code') {
+          if ($object->getValue() !== 'Multilingual Code') {
             $newResource= new Resource($resource->getUri(), $newGraph);
             $newResource->setType('skos:Concept');
             $newGraph->addResource($newResource, new Resource('http://www.w3.org/2004/02/skos/core#inScheme'), new Resource('http://publications.europa.eu/resource/authority/language'));
