@@ -1,0 +1,8 @@
+services:
+  joinup_taxonomy.commands:
+    class: Drupal\joinup_taxonomy\Commands\JoinupTaxonomyCommands
+    arguments:
+      - '@entity_type.manager'
+      - '@rdf_sync.mapper'
+    tags:
+      - { name: drush.command }
