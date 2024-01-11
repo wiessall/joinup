@@ -79,21 +79,26 @@ Feature: As a moderator I want to be able to move solutions to other collection.
       | Solution 1 Event | Solution 1 | published |
     And "news" content:
       | title           | solution   | state     |
-      | Solution 1 News | Solution 1 | published |
+      | Solution 1 News 1 | Solution 1 | published |
+      | Solution 1 News 2 | Solution 1 | draft     |
+      | Solution 1 News 3 | Solution 1 | published |
+    And the workflow state of the "Solution 1 News 3" node is changed to "needs_update"
     And "document" content:
       | title               | collection | state     |
       | Solution 1 Document | Solution 1 | published |
     And "discussion" content:
       | title                 | collection | state     |
       | Solution 1 Discussion | Solution 1 | published |
-    # And distribution:
-    #   | title  | Solution 1 Distribution |
-    #   | parent | Solution 1              |
-    #   | state  | published               |
-    And release:
-      | title         | Solution 1 Release |
-      | is version of | Solution 1         |
-      | state         | published          |
+    And distribution:
+      | title  | Solution 1 Distribution |
+      | parent | Solution 1              |
+      | state  | published               |
+    And releases:
+      | title                | is version of | state     |
+      | Solution 1 Release 1 | Solution 1    | published |
+      | Solution 1 Release 2 | Solution 1    | draft     |
+      | Solution 1 Release 3 | Solution 1    | published |
+    And the workflow state of the "Solution 1 Release 3" "rdf_entity" is changed to "needs_update"
     Given I am logged in as a user with the moderator role and I have the following fields:
       | name                   | John The Moderator             |
       | mail                   | john.the.moderator@example.com |
@@ -128,8 +133,12 @@ Feature: As a moderator I want to be able to move solutions to other collection.
       | Solution 1 | 18/11/2017 - 10:00 | Archived |
     When I run cron
     Then the workflow state of the "Solution 1 Event" content should be "archived"
-    And the workflow state of the "Solution 1 News" content should be "archived"
+    And the workflow state of the "Solution 1 News 1" content should be "archived"
+    And the workflow state of the "Solution 1 News 2" content should be "draft"
+    And the workflow state of the "Solution 1 News 3" content should be "archived"
     And the workflow state of the "Solution 1 Document" content should be "archived"
     And the workflow state of the "Solution 1 Discussion" content should be "archived"
-    # And the workflow state of the "Solution 1 Distribution" "rdf entity" is set to "archived"
-    And the workflow state of the "Solution 1 Release" "rdf entity" should be "archived"
+    And the workflow state of the "Solution 1 Distribution" "rdf entity" should be "archived"
+    And the workflow state of the "Solution 1 Release 1" "rdf entity" should be "archived"
+    And the workflow state of the "Solution 1 Release 2" "rdf entity" should be "draft"
+    And the workflow state of the "Solution 1 Release 3" "rdf entity" should be "archived"
