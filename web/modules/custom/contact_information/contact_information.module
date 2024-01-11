@@ -395,7 +395,10 @@ function contact_information_rdf_entity_view(array &$build, RdfInterface $contac
       $cacheable_metadata->addCacheableDependency($confirmation);
     }
     // Only act for published groups because the functionality is not available
-    // when the group is still proposed.
+    // when the group is still proposed. This works along with
+    // ContactInformationEmailConfirm class to prevent the confirmation to be
+    // created if the entity is not published.
+    // @see \Drupal\contact_information\ContactInformationEmailConfirm::confirmEmailsForGroup
     elseif ($contact_information->getRelatedGroup()->isPublished() && $resend_access->isAllowed()) {
       $confirmation = $email_confirmer->getConfirmation($contact_information->get('field_ci_email')->value, 'pending', ContactInformationEmailConfirmInterface::REALM);
 
