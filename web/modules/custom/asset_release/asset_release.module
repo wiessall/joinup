@@ -298,7 +298,7 @@ function asset_release_entity_update(EntityInterface $entity) {
   // Quick escape check to avoid unnecessary loadings.
   if (
     !$entity instanceof AssetReleaseInterface ||
-    !!\Drupal::service('sparql.graph_handler')->bundleHasGraph('rdf_entity', 'asset_release', 'draft')
+    !\Drupal::service('sparql.graph_handler')->bundleHasGraph('rdf_entity', 'asset_release', 'draft')
   ) {
     return;
   }
