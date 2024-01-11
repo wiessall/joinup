@@ -219,6 +219,7 @@ Feature: Proposing a collection
     Given I am logged in as an "authenticated user"
     Then I go to the propose collection form
     And I fill in "Title" with "Some email validation"
+    And I fill in "Abstract" with "Meaningless summary"
     And I enter "Nothing..." in the "Description" wysiwyg editor
     And I select "HR" from "Topic"
     And I press "Add existing" at the "Owner" field
