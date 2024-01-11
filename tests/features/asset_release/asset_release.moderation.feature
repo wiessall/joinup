@@ -173,7 +173,11 @@ Feature: Asset release moderation
       | release number | 1111       |
       | release notes  | Some notes |
       | state          | published  |
-    Given I am logged in as a "moderator"
+    Given I am logged in as a user with the moderator role and I have the following fields:
+      | name                   | John Smith             |
+      | mail                   | john.smith@example.com |
+      | field_user_first_name  | John                   |
+      | field_user_family_name | Smith                  |
     When I visit the "Release" release
     Then I should see the text "1111"
     And I click "Edit"
@@ -198,6 +202,7 @@ Feature: Asset release moderation
     And I should see the text "Updated release notes"
     Then I visit the homepage of the "Release" release
     And I click "Edit"
+    And I mark all emails as read
     And I press "Archive"
     Then I should see the heading "Release 1111 Latest release"
     # Release's default version must be archived.
@@ -205,3 +210,4 @@ Feature: Asset release moderation
     # But on the edit form, we should see "Needs update".
     And I click "Edit"
     And the current workflow state should be "Needs update"
+    And 0 e-mails should have been sent
