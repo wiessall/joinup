@@ -82,7 +82,7 @@ Feature: Asset release moderation
     And I go to the "Release of the dark ship" release
     And I click "Edit" in the "Entity actions" region
     Then the current workflow state should be "Published"
-    And I should see the workflow buttons "Update, Save as draft, Request changes"
+    And I should see the workflow buttons "Update, Save as draft, Request changes, Archive"
     # The "Delete" button is actually a link to the confirmation form, but it is
     # styled to look identical to a button.
     And I should see the link "Delete"
@@ -134,7 +134,7 @@ Feature: Asset release moderation
     When I am logged in as a moderator
     And I go to the "Release of the dark ship" release
     And I click "Edit" in the "Entity actions" region
-    And I should see the workflow buttons "Update, Publish"
+    And I should see the workflow buttons "Update, Publish, Archive"
     And I press "Publish"
     # The published is updated.
     Then I should see the text "Release fix v1" in the "Page title" region
