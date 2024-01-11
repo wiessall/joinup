@@ -61,13 +61,16 @@
 *.woff2   -text diff
 
 # Exclude non-essential files from dist
-.dockerignore export-ignore
 .editorconfig export-ignore
 .env.dist export-ignore
 .env.example export-ignore
+.eslintignore export-ignore
+.eslintrc.json export-ignore
 .gitattributes export-ignore
 .github export-ignore
 .prettierignore export-ignore
+.twig-cs-fixer.php export-ignore
+/.ddev export-ignore
 /db export-ignore
 /docs export-ignore
 /drush/Commands/ export-ignore
@@ -91,6 +94,7 @@ behat.yml.dist export-ignore
 docker-compose.override.yml.dist export-ignore
 docker-compose.yml export-ignore
 phpcs-ruleset.xml.dist export-ignore
+phpmd.xml export-ignore
 phpstan.neon export-ignore
 phpunit.xml export-ignore
 rector.php export-ignore
