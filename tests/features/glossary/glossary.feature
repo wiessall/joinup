@@ -143,7 +143,7 @@ Feature: As a moderator or group facilitator I want to be able to add, edit and
     Given collection:
       | title       | Collection With Glossary                                                                             |
       | state       | published                                                                                            |
-      | description | Colors of Paradise. Abbreviated as CLR. <a href="../../contact"><strong>Colors of Dream</strong></a> |
+      | description | Colors of Paradise. Abbreviated as CLR. <a href="../contact"><strong>Colors of Dream</strong></a> |
       | abstract    | The Alphabet is back and it's s/ashy.                                                                |
     And solution:
       | title       | Under The Bridge         |
@@ -200,6 +200,7 @@ Feature: As a moderator or group facilitator I want to be able to add, edit and
     # A glossary term inside a link text remains untouched.
     When I move backward one page
     And I click "Colors of Dream"
+    And I break
     Then I should see the heading "Contact"
 
     When I go to the "Under The Bridge" solution
