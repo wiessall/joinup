@@ -10,7 +10,7 @@ Feature: Share discussion
       | Development through bricolage | Bricolage 101.    | published |
       | Carrots love tomatoes         | Truth is out now. | published |
     And discussion content:
-      | title         | state     | collection                    | shared on             |
+      | title        | state     | collection                    | shared on             |
       | Tool cabinet | published | Development through bricolage | Carrots love tomatoes |
 
   Scenario: The discussion homepage should show the collections where it is shared on.
@@ -21,3 +21,12 @@ Feature: Share discussion
   Scenario: The shared discussion should be displayed in listing.
     When I go to the discussions page of "Carrots love tomatoes"
     Then I should see the "Tool cabinet" tile
+
+  Scenario: Single archived discussion should be displayed in listing.
+    And discussion content:
+      | title       | state    | collection            | shared on                     |
+      | Chest combo | archived | Carrots love tomatoes | Development through bricolage |
+
+    When I go to the discussions page of "Development through bricolage"
+    When I click "Show archived"
+    Then I should see the "Chest combo" tile
