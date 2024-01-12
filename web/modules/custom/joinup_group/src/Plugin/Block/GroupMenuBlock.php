@@ -229,17 +229,4 @@ class GroupMenuBlock extends OgMenuBlock {
     return $this->ogMenuInstance;
   }
 
-  /**
-   * {@inheritdoc}
-   */
-  public function access(AccountInterface $account, $return_as_object = FALSE): AccessResultInterface|bool {
-    // For the quick links menu, deny access if the '#items' array is empty from
-    // the build. Otherwise, allow the parent to check access.
-    if ($this->getOgMenuInstance()->bundle() === 'quick_links' && empty($this->build()['#items'])) {
-      return $return_as_object ? AccessResult::forbidden() : FALSE;
-    }
-
-    return parent::access($account, $return_as_object);
-  }
-
 }
