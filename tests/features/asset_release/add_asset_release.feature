@@ -82,10 +82,9 @@ Feature: "Add release" visibility options.
     # of the "Release Test 1" solution.
     When I go to the homepage of the "Release Test 1" solution
     Then I should not see the text "Download releases"
-    # Fix this in https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-8328
-    # When I click "Download releases"
-    # Then I should see the text "Chasing shadows"
-    # And I should see the text "1.1"
+    When I click "Release history"
+    Then I should see the text "Chasing shadows"
+    And I should see the text "1.1"
 
     # It should be possible to create a release with the same version number but
     # a different title.
