@@ -143,11 +143,12 @@ class GroupMenuBlock extends OgMenuBlock {
   protected function getEmptyResultsBuild(): array {
     /** @var \Drupal\rdf_entity\RdfInterface $group */
     $group = $this->getContext('og')->getContextData()->getValue();
-    if (empty($group->id()) || $this->getOgMenuInstance()->bundle() === 'quick_links') {
+    if (empty($group->id())) {
       // In certain cases, like the layout builder, the entity is passed as a
       // clone without an ID, thus we cannot load the menu instance.
       return [];
     }
+
     // Define URLs that are used in help texts.
     $create_custom_page_url = Url::fromRoute('joinup_group.add_content', [
       'rdf_entity' => $group->id(),
@@ -164,18 +165,30 @@ class GroupMenuBlock extends OgMenuBlock {
       ])->toString();
     }
 
+    $disabled_message = '';
+    if ($menu_instance->bundle() === 'navigation') {
+      $disabled_message = $this->t('All the pages have been disabled for this :type. You can <a href=":edit_menu_url">edit the menu configuration</a> or <a href=":add_page_url">add a new page</a>.', [
+        ':type' => $group->get('rid')->entity->getSingularLabel(),
+        ':edit_menu_url' => $edit_navigation_menu_url,
+        ':add_page_url' => $create_custom_page_url->toString(),
+      ]);
+    }
+    elseif ($menu_instance->bundle() === 'quick_links') {
+      $disabled_message = $this->t('There are not any links to show. You can manage the quick links
+      items through the <a href=":edit_menu_url">Edit menu</a>
+      or you can add your links through the <a href=":group_edit">Edit page</a>.', [
+        ':edit_menu_url' => $edit_navigation_menu_url,
+        ':group:edit' => $group->toUrl('edit-form')->toString(),
+      ]);
+    }
+
     // If there are entries in the tree but none of those is in the build array,
     // it means that all the available pages have been disabled inside the menu
     // configuration.
     $build['disabled'] = [
       '#type' => 'html_tag',
       '#tag' => 'p',
-      '#value' => $this->t('All the pages have been disabled for this :type. You can <a href=":edit_menu_url">edit the menu configuration</a> or <a href=":add_page_url">add a new page</a>.',
-        [
-          ':type' => $group->get('rid')->entity->getSingularLabel(),
-          ':edit_menu_url' => $edit_navigation_menu_url,
-          ':add_page_url' => $create_custom_page_url->toString(),
-        ]),
+      '#value' => $disabled_message,
       '#access' => $create_custom_page_url->access(),
     ];
 
