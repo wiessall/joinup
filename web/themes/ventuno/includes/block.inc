@@ -105,6 +105,21 @@ function ventuno_theme_suggestions_block_alter(array &$suggestions, array $varia
 /**
  * Implements hook_preprocess_block().
  */
+function ventuno_preprocess_block__facetsblock_searchpage(array &$variables): void {
+  $block_manager = \Drupal::getContainer()->get('plugin.manager.block');
+  $plugin_block = $block_manager->createInstance('joinup_search_clear_filters');
+  $clear_button = $plugin_block->build();
+  \Drupal::getContainer()->get('renderer')->addCacheableDependency($clear_button, $plugin_block);
+
+  $variables['content'] = [
+    $clear_button,
+    $variables['content'],
+  ];
+}
+
+/**
+ * Implements hook_preprocess_block().
+ */
 function ventuno_preprocess_block__group_menu_block__quick_links(array &$variables): void {
   // Hide the block title if there are no links available. Privileged users will
   // still see a help message and be able to access the contextual links.
