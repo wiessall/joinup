@@ -27,7 +27,5 @@ transitions:
     archived:
       - moderator
   archived:
-    needs_update:
-      - moderator
     published:
       - moderator
