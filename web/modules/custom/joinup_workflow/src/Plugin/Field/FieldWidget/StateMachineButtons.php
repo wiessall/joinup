@@ -228,12 +228,12 @@ class StateMachineButtons extends OptionsSelectWidget implements ContainerFactor
       ];
     }
 
-    if (isset($form['actions']['state_machine_archived'])) {
-      $form['actions']['state_machine_archived']['#submit'] = array_merge(
-        [[static::class, 'archiveEntitySubmitHandler']],
-        $form['actions']['state_machine_archived']['#submit'] ?? []
-      );
-    }
+    // if (isset($form['actions']['state_machine_archived'])) {
+    //   $form['actions']['state_machine_archived']['#submit'] = array_merge(
+    //     [[static::class, 'archiveEntitySubmitHandler']],
+    //     $form['actions']['state_machine_archived']['#submit'] ?? []
+    //   );
+    // }
 
     return $element;
   }
@@ -363,6 +363,7 @@ class StateMachineButtons extends OptionsSelectWidget implements ContainerFactor
     ) {
       \assert($publishedInstance instanceof EntityWorkflowStateInterface);
       $formObject->setEntity($publishedInstance);
+
       $storage->deleteFromGraph([$entity], $entity->get('graph')->getString());
     }
   }

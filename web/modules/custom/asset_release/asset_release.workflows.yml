@@ -28,7 +28,7 @@ asset_release_workflow:
       to: needs_update
     archive:
       label: Archive
-      from: [ published, needs_update ]
+      from: [ published ]
       to: archived
     unarchive:
       label: Unarchive

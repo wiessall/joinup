@@ -257,7 +257,7 @@ function asset_release_rdf_entity_presave(EntityInterface $entity) {
   if (in_array($state, ['draft', 'needs_update'])) {
     $entity->set('graph', 'draft');
   }
-  elseif (in_array($state, ['published'])) {
+  elseif (in_array($state, ['published', 'archived'])) {
     $entity->set('graph', SparqlGraphInterface::DEFAULT);
   }
   // We have a forward revision (a not-yet-published next version) in the
