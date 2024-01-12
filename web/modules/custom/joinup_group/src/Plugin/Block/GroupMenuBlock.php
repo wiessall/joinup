@@ -76,6 +76,12 @@ class GroupMenuBlock extends OgMenuBlock {
       // block, so that it will always be invalidated whenever the menu changes.
       // @see \Drupal\Core\Menu\MenuTreeStorage::save()
       $build['#cache']['tags'][] = 'config:system.menu.ogmenu-' . $menu_instance->id();
+      // For the quick links, the menu items are dependent on the group itself
+      // as menu links change their availability based on the group field
+      // values.
+      if ($menu_instance->bundle() === 'quick_links') {
+        $build['#cache']['tags'] = Cache::mergeTags($build['#cache']['tags'], $menu_instance->getGroup()->getCacheTags());
+      }
     }
 
     return $build;
