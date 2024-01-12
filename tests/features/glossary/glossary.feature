@@ -200,7 +200,6 @@ Feature: As a moderator or group facilitator I want to be able to add, edit and
     # A glossary term inside a link text remains untouched.
     When I move backward one page
     And I click "Colors of Dream"
-    And I break
     Then I should see the heading "Contact"
 
     When I go to the "Under The Bridge" solution
