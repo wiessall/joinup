@@ -124,9 +124,8 @@ Feature: Joining and leaving collections through the web interface
     And I click "Leave this collection"
     And I press "Confirm"
 
-# @see EPIC-7858 - User will be able to click members in header.
-#    When I click "Members"
-#    Then I should not see the link "Add members"
+    When I click "1 member"
+    Then I should not see the link "Add members"
 
   @javascript
   Scenario: Close the modal dialogs with the cancel button.
