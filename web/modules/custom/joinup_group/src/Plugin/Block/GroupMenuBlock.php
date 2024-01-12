@@ -4,12 +4,9 @@ declare(strict_types = 1);
 
 namespace Drupal\joinup_group\Plugin\Block;
 
-use Drupal\Core\Access\AccessResult;
-use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Block\BlockPluginInterface;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Menu\MenuTreeParameters;
-use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Url;
 use Drupal\og_menu\OgMenuInstanceInterface;
 use Drupal\og_menu\Plugin\Block\OgMenuBlock;
