@@ -4,8 +4,7 @@ Feature: Asset distribution editing.
   I want to track downloads of distributions
   So I can create some metrics
 
-  # Fix this in https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-8328
-  @javascript @wip
+  @javascript
   Scenario: Downloads made by authenticated users are logged.
     Given the following licence:
       | title       | Postcard licence                     |
@@ -35,7 +34,7 @@ Feature: Asset distribution editing.
     When I am logged in as "Bradley Emmett"
     And I go to the "Berkeley Software Distributions" collection
     And I click "OpenBSD"
-    And I click "Download releases"
+    And I click "Release history"
     Then I should see "Releases for OpenBSD solution"
 
     And I should see the download link in the "OpenBSD images" asset distribution
@@ -48,7 +47,7 @@ Feature: Asset distribution editing.
 
     When I am an anonymous user
     And I go to the "OpenBSD" solution
-    And I click "Download releases"
+    And I click "Release history"
     Then I should see "Releases for OpenBSD solution"
 
     # The same download links are shown to anonymous users.
