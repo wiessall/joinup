@@ -22,7 +22,7 @@ Feature: Share discussion
     When I go to the discussions page of "Carrots love tomatoes"
     Then I should see the "Tool cabinet" tile
 
-  Scenario: Single archived discussion should be displayed in listing.
+  Scenario: Single shared archived discussion should be displayed in listing.
     And discussion content:
       | title       | state    | collection            | shared on                     |
       | Chest combo | archived | Carrots love tomatoes | Development through bricolage |
