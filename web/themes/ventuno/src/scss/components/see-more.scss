@@ -10,7 +10,7 @@
     -webkit-line-clamp: 5;
     overflow: hidden;
     &.show {
-      -webkit-line-clamp: unset;
+      -webkit-line-clamp: unset !important;
     }
     p {
     display: inline;
