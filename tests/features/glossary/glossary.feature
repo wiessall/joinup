@@ -139,8 +139,6 @@ Feature: As a moderator or group facilitator I want to be able to add, edit and
       | nick | moderator |             | should see      |
       | wade |           | facilitator | should not see  |
 
-  # @see EPIC-7858
-  @wip
   Scenario: Glossary terms should be shown as links in collection content
     Given collection:
       | title       | Collection With Glossary                                                                             |
@@ -184,11 +182,11 @@ Feature: As a moderator or group facilitator I want to be able to add, edit and
       | S/ashy   | /S\|ASH   | S/ashes Like an Ion Beam | Cutting things in ha/f      | Collection With Glossary |
 
     When I go to the "Collection With Glossary" collection
-    When I click "Overview"
     And I click "Alphabet"
     Then I see the heading "Alphabet"
 
-    When I click "Colors"
+    When I move backward one page
+    And I click "Colors"
     Then I see the heading "Colors"
 
     When I move backward one page
