@@ -52,6 +52,29 @@ class RdfSyncMapper {
   }
 
   /**
+   * Returns a list of entity type IDs having at least one mapping.
+   *
+   * @return string[]
+   *   A list of entity type IDs.
+   */
+  public function getEntityTypeIdsWithMappings(): array {
+    $allBundleInfo = $this->entityTypeBundleInfo->getAllBundleInfo();
+    return array_reduce(
+      array_keys($allBundleInfo),
+      function(array $entityTypeIds, string $entityTypeId) use ($allBundleInfo): array {
+        foreach ($allBundleInfo[$entityTypeId] as $bundleInfo) {
+          if (!empty($bundleInfo['rdf_sync'])) {
+            $entityTypeIds[] = $entityTypeId;
+            break;
+          }
+        }
+        return $entityTypeIds;
+      },
+      [],
+    );
+  }
+
+  /**
    * Returns the mappings of given bundle.
    *
    * @param string $entityTypeId
