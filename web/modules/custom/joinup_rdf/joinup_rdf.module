@@ -12,6 +12,7 @@ use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Field\BaseFieldDefinition;
+use Drupal\Core\Field\FieldDefinition;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Link;
 use Drupal\Core\Session\AccountInterface;
@@ -249,11 +250,43 @@ function joinup_rdf_condition_info_alter(array &$definitions): void {
 }
 
 /**
- * Implements hook_entity_operation_alter().
+ * Implements hook_entity_field_storage_info().
  */
-function joinup_rdf_entity_operation_alter(array &$operations, EntityInterface $entity): void {
-  if ($entity instanceof RdfTerm) {
-    // RDF taxonomy terms don't support drafts.
-    unset($operations['draft']);
+function joinup_rdf_entity_field_storage_info(EntityTypeInterface $entityType): array {
+  $definitions = [];
+  $mapper = \Drupal::getContainer()->get('rdf_sync.mapper');
+  if (in_array($entityType->id(), $mapper->getEntityTypeIdsWithMappings(), TRUE)) {
+    $definitions['uri'] = BaseFieldDefinition::create('uri')
+      ->setName('uri')
+      ->setTargetEntityTypeId($entityType->id())
+      ->setTargetBundle(NULL)
+      ->setLabel(t('URI'))
+      // Limit to allow indexing.
+      // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7751
+      ->setSetting('max_length', 768)
+      ->setRevisionable(FALSE)
+      ->setCardinality(1);
   }
+  return $definitions;
+}
+
+/**
+ * Implements hook_entity_bundle_field_info().
+ */
+function joinup_rdf_entity_bundle_field_info(EntityTypeInterface $entityType, string $bundle, array $baseFieldDefinitions): array {
+  $fields = [];
+  $mapper = \Drupal::getContainer()->get('rdf_sync.mapper');
+  if ($mapper->isMappedBundle($entityType->id(), $bundle)) {
+    $storageDefinitions = \Drupal::service('entity_field.manager')->getActiveFieldStorageDefinitions('taxonomy_term');
+    if (isset($storageDefinitions['uri'])) {
+      $fields['uri'] = FieldDefinition::createFromFieldStorageDefinition($storageDefinitions['uri'])
+        ->setTargetBundle($bundle)
+        ->setLabel(t('URI'))
+        ->setRequired(TRUE)
+        ->addConstraint('UniqueField')
+        ->setDisplayConfigurable('form', TRUE)
+        ->setDisplayConfigurable('view', TRUE);
+    }
+  }
+  return $fields;
 }
