@@ -260,26 +260,6 @@ function asset_release_rdf_entity_presave(EntityInterface $entity) {
   elseif (in_array($state, ['published', 'archived'])) {
     $entity->set('graph', SparqlGraphInterface::DEFAULT);
   }
-  // We have a forward revision (a not-yet-published next version) in the
-  // "draft" graph, and also a publicly accessible version. We want to keep the
-  // instance in the "draft" graph as it is now. So: we prevent changing the WF
-  // state change of THIS instance, and we change the state of the other one in
-  // the "default" graph.
-  elseif ($state === 'archived') {
-    if ($entity->get('graph')->getString() === SparqlGraphInterface::DEFAULT) {
-      return;
-    }
-
-    if ($publishedInstance = $storage->load($entity->id(), [SparqlGraphInterface::DEFAULT])) {
-      // We always archive the published version of releases. Change current
-      // (forward draft) revision's state back to the previous state. In this
-      // case we assume the entity is not new, so the object already contains
-      // the original entity instance, where we can get the previous workflow
-      // state from.
-      $entity->setWorkflowState($entity->original->getWorkflowState());
-      $publishedInstance->setWorkflowState('archived')->save();
-    }
-  }
   elseif (empty($state)) {
     throw new \Exception('State field not found while trying to get the appropriate graph.');
   }
@@ -296,15 +276,18 @@ function asset_release_rdf_entity_presave(EntityInterface $entity) {
  */
 function asset_release_entity_update(EntityInterface $entity) {
   // Quick escape check to avoid unnecessary loadings.
-  if (
-    !$entity instanceof AssetReleaseInterface ||
-    !\Drupal::service('sparql.graph_handler')->bundleHasGraph('rdf_entity', 'asset_release', 'draft')
-  ) {
+  if (!$entity instanceof AssetReleaseInterface) {
     return;
   }
 
-  if ($entity->getWorkflowState() === 'published') {
-    \Drupal::entityTypeManager()->getStorage('rdf_entity')->deleteFromGraph([$entity], 'draft');
+  $storage = \Drupal::entityTypeManager()->getStorage($entity->getEntityTypeId());
+  \assert($storage instanceof SparqlEntityStorageInterface);
+  if (!$storage->getGraphHandler()->bundleHasGraph('rdf_entity', 'asset_release', 'draft')) {
+    return;
+  }
+
+  if (in_array($entity->getWorkflowState(), ['published', 'archived'], TRUE)) {
+    $storage->deleteFromGraph([$entity], 'draft');
   }
 }
 

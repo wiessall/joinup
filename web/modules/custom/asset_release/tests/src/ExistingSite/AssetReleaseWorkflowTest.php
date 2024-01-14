@@ -442,7 +442,6 @@ class AssetReleaseWorkflowTest extends JoinupWorkflowExistingSiteTestBase {
       'needs_update' => [
         'userAuthenticated' => [],
         'userModerator' => [
-          'archived',
           'needs_update',
           'published',
         ],

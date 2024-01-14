@@ -5,7 +5,6 @@ declare(strict_types = 1);
 namespace Drupal\joinup_workflow\Plugin\Field\FieldWidget;
 
 use Drupal\Core\Cache\CacheableMetadata;
-use Drupal\Core\Entity\EntityFormInterface;
 use Drupal\Core\Field\FieldDefinitionInterface;
 use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Field\Plugin\Field\FieldWidget\OptionsSelectWidget;
@@ -16,9 +15,6 @@ use Drupal\joinup_workflow\EntityWorkflowStateInterface;
 use Drupal\joinup_workflow\Event\StateMachineButtonLabelsEvent;
 use Drupal\joinup_workflow\Event\StateMachineButtonLabelsEventInterface;
 use Drupal\joinup_workflow\Event\UnchangedWorkflowStateUpdateEvent;
-use Drupal\rdf_entity\RdfInterface;
-use Drupal\sparql_entity_storage\SparqlEntityStorageInterface;
-use Drupal\sparql_entity_storage\SparqlGraphInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
@@ -228,13 +224,6 @@ class StateMachineButtons extends OptionsSelectWidget implements ContainerFactor
       ];
     }
 
-    // if (isset($form['actions']['state_machine_archived'])) {
-    //   $form['actions']['state_machine_archived']['#submit'] = array_merge(
-    //     [[static::class, 'archiveEntitySubmitHandler']],
-    //     $form['actions']['state_machine_archived']['#submit'] ?? []
-    //   );
-    // }
-
     return $element;
   }
 
@@ -334,38 +323,6 @@ class StateMachineButtons extends OptionsSelectWidget implements ContainerFactor
         '@bundle' => ucfirst($entity->{$entity_type->getKey('bundle')}->entity->getSingularLabel()),
         '%label' => $entity->label(),
       ]));
-  }
-
-  /**
-   * Form API submit callback to handle archiving of an RDF entity.
-   *
-   * If an RDF entity has both a forward revision and also a published revision,
-   * then the instance which must be archived is the published version. And to
-   * provide a coherent editor experience, we delete the draft revision.
-   *
-   * @param array $form
-   *    The form's renderable array.
-   * @param \Drupal\Core\Form\FormStateInterface $formState
-   *    The form API form state object.
-   */
-  public static function archiveEntitySubmitHandler(array &$form, FormStateInterface $formState): void {
-    $formObject = $formState->getFormObject();
-    \assert($formObject instanceof EntityFormInterface);
-    if (!($entity = $formObject->getEntity()) instanceof RdfInterface) {
-      return;
-    }
-    \assert($entity instanceof EntityWorkflowStateInterface);
-    $storage = \Drupal::entityTypeManager()->getStorage($entity->getEntityTypeId());
-    \assert($storage instanceof SparqlEntityStorageInterface);
-    if (
-      $entity->get('graph')->getString() !== SparqlGraphInterface::DEFAULT
-      && ($publishedInstance = $storage->load($entity->id(), [SparqlGraphInterface::DEFAULT]))
-    ) {
-      \assert($publishedInstance instanceof EntityWorkflowStateInterface);
-      $formObject->setEntity($publishedInstance);
-
-      $storage->deleteFromGraph([$entity], $entity->get('graph')->getString());
-    }
   }
 
 }
