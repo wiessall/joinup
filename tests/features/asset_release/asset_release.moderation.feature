@@ -134,7 +134,7 @@ Feature: Asset release moderation
     When I am logged in as a moderator
     And I go to the "Release of the dark ship" release
     And I click "Edit" in the "Entity actions" region
-    And I should see the workflow buttons "Update, Publish, Archive"
+    And I should see the workflow buttons "Update, Publish"
     And I press "Publish"
     # The published is updated.
     Then I should see the text "Release fix v1" in the "Page title" region
@@ -162,52 +162,3 @@ Feature: Asset release moderation
       | recipient | Patric Sereira                                             |
       | subject   | Joinup: A release has been deleted                         |
       | body      | release Release fix, v1 of Dark Ship solution was deleted. |
-
-  Scenario: Asset release archival with forward revision
-    Given the following solution:
-      | title | Solution  |
-      | state | published |
-    And release:
-      | title          | Release    |
-      | is version of  | Solution   |
-      | release number | 1111       |
-      | release notes  | Some notes |
-      | state          | published  |
-    Given I am logged in as a user with the moderator role and I have the following fields:
-      | name                   | John Smith             |
-      | mail                   | john.smith@example.com |
-      | field_user_first_name  | John                   |
-      | field_user_family_name | Smith                  |
-    When I visit the "Release" release
-    Then I should see the text "1111"
-    And I click "Edit"
-    Then I should see the button "Archive"
-    And I should see the button "Request changes"
-    # Change title slightly to be able to distinguish published and forward
-    # draft revisions.
-    When I fill in the following:
-      | Name           | Release (changes requested)                            |
-      | Release number | 1111.1                                                 |
-      | Release notes  | Updated release notes                                  |
-      | Motivation     | We have to update this because the artifact is missing |
-    And I press "Request changes"
-    Then I should see the following warning messages:
-      | Warning messages                                                |
-      | You are viewing the published version. To view the latest draft |
-      | version, click here.                                            |
-    And I should see the heading "Release 1111 Latest release"
-    But I should not see the text "Release (changes requested) 1111.1 Latest release"
-    When I click "here"
-    Then I should see the heading "Release (changes requested)"
-    And I should see the text "Updated release notes"
-    Then I visit the homepage of the "Release" release
-    And I click "Edit"
-    And I mark all emails as read
-    And I press "Archive"
-    Then I should see the heading "Release 1111 Latest release"
-    # Release's default version must be archived.
-    And the workflow state of the "Release" "rdf entity" should be "Archived"
-    # But on the edit form, we should see "Needs update".
-    And I click "Edit"
-    And the current workflow state should be "Needs update"
-    And 0 e-mails should have been sent
