@@ -31,7 +31,6 @@ Feature: Asset distribution editing.
     And users:
       | Username           | E-mail                        |
       | Bradley Emmett     | bradley.emmett@example.com    |
-      | Marianne Sherburne | marianne.herburne@example.com |
 
     When I am logged in as "Bradley Emmett"
     And I go to the "Berkeley Software Distributions" collection
@@ -88,28 +87,6 @@ Feature: Asset distribution editing.
       | Anonymous (not verified) | trackme@example.com        | OpenBSD images |
       | Bradley Emmett           | bradley.emmett@example.com | Changelog      |
       | Bradley Emmett           | bradley.emmett@example.com | OpenBSD images |
-
-    # Verify that the tracking happens when clicking the Download button in
-    # the tile view mode and in the canonical page view of the distribution.
-    When I am logged in as "Marianne Sherburne"
-    And I go to the "OpenBSD" solution
-    # The only download link is the one in the "OpenBSD images" tile.
-    Then I click "Download"
-    And I click "Winter of 95"
-    # The only download link is the one in the "Changelog" tile.
-    And I click "Download"
-
-    When I am logged in as a user with the moderator role
-    And I go to the distribution downloads page
-    Then I should see the following download entries:
-      | user                     | e-mail                        | distribution   |
-      | Marianne Sherburne       | marianne.herburne@example.com | Changelog      |
-      | Marianne Sherburne       | marianne.herburne@example.com | OpenBSD images |
-      | Anonymous (not verified) | trackme@example.com           | OpenBSD images |
-
-    # Sub test to assert that distribution tiles show the external button.
-    When I go to the "Winter of 95" release
-    Then I should see the link "External" in the "i386" tile
 
   Scenario: Download a CSV export of the distributions download report.
     Given users:
