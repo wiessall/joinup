@@ -178,20 +178,13 @@ class CollectionContext extends RawDrupalContext {
   protected function provideDefaultValues(array $fields): array {
     $default_values = [
       'field_ar_state' => 'draft',
+      'field_ar_abstract' => 'This is a test abstract.',
     ];
 
     foreach ($default_values as $field => $default_value) {
       if (!isset($fields[$field])) {
         $fields[$field] = $default_value;
       }
-    }
-
-    // Set the default filter format for the abstract field.
-    if (!empty($fields['field_ar_abstract'][0]) && empty($fields['field_ar_abstract'][0]['format'])) {
-      $value = $fields['field_ar_abstract'][0];
-      unset($fields['field_ar_abstract'][0]);
-      $fields['field_ar_abstract'][0]['value'] = $value;
-      $fields['field_ar_abstract'][0]['format'] = 'essential_html';
     }
 
     return $fields;
