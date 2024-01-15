@@ -55,7 +55,7 @@ content:
         trim_zero: false
     third_party_settings:
       template_suggestion:
-        template_suggestion: no_wrappers
+        template_suggestion: bare
     weight: 1
     region: content
   field_document_logo:
@@ -76,7 +76,7 @@ content:
       format_type: date_only
     third_party_settings:
       template_suggestion:
-        template_suggestion: no_wrappers
+        template_suggestion: bare
     weight: 2
     region: content
   field_short_title:
@@ -86,7 +86,7 @@ content:
       link_to_entity: false
     third_party_settings:
       template_suggestion:
-        template_suggestion: no_wrappers
+        template_suggestion: bare
     weight: 0
     region: content
 hidden:
