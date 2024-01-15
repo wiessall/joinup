@@ -151,6 +151,27 @@ third_party_settings:
                 format: content_editor
             weight: 0
             additional: {  }
+          5d9de396-8b5c-4b3c-9a69-ec3fb12f0c50:
+            uuid: 5d9de396-8b5c-4b3c-9a69-ec3fb12f0c50
+            region: main
+            configuration:
+              id: 'field_block:rdf_entity:solution:field_is_abstract'
+              label: Abstract
+              label_display: '0'
+              provider: layout_builder
+              context_mapping:
+                entity: layout_builder.entity
+                view_mode: view_mode
+              formatter:
+                type: string
+                label: hidden
+                settings:
+                  link_to_entity: false
+                third_party_settings:
+                  template_suggestion:
+                    template_suggestion: ''
+            weight: 0
+            additional: {  }
         third_party_settings: {  }
       -
         layout_id: layout_onecol
