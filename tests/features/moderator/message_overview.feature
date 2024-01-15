@@ -45,6 +45,7 @@ Feature: Solutions message overview
     When I go to the propose collection form
     When I fill in the following:
       | Title                 | Message overview proposal |
+      | Abstract              | Doesn't matter.           |
       | Description           | Doesn't matter.           |
       | Geographical coverage | Belgium                   |
     When I select "HR" from "Topic"
