@@ -95,26 +95,26 @@ Feature: Solution homepage
 
     # The pager should only appear when there are more than 12 items.
     Given the following distributions:
-      | title           | description    | parent            |
-      | Distribution 1  | Description 1  | Chiricahua Server |
-      | Distribution 2  | Description 2  | Chiricahua Server |
-      | Distribution 3  | Description 3  | Chiricahua Server |
-      | Distribution 4  | Description 4  | Chiricahua Server |
-      | Distribution 5  | Description 5  | Chiricahua Server |
-      | Distribution 6  | Description 6  | Chiricahua Server |
-      | Distribution 7  | Description 7  | Chiricahua Server |
-      | Distribution 8  | Description 8  | Chiricahua Server |
-      | Distribution 9  | Description 9  | Chiricahua Server |
-      | Distribution 10 | Description 10 | Chiricahua Server |
-      | Distribution 11 | Description 11 | Chiricahua Server |
-      | Distribution 12 | Description 12 | Chiricahua Server |
+      | title           | description    | parent            | state     |
+      | Distribution 1  | Description 1  | Chiricahua Server | published |
+      | Distribution 2  | Description 2  | Chiricahua Server | published |
+      | Distribution 3  | Description 3  | Chiricahua Server | published |
+      | Distribution 4  | Description 4  | Chiricahua Server | published |
+      | Distribution 5  | Description 5  | Chiricahua Server | published |
+      | Distribution 6  | Description 6  | Chiricahua Server | published |
+      | Distribution 7  | Description 7  | Chiricahua Server | published |
+      | Distribution 8  | Description 8  | Chiricahua Server | published |
+      | Distribution 9  | Description 9  | Chiricahua Server | published |
+      | Distribution 10 | Description 10 | Chiricahua Server | published |
+      | Distribution 11 | Description 11 | Chiricahua Server | published |
+      | Distribution 12 | Description 12 | Chiricahua Server | published |
     When I go to the homepage of the "Chiricahua Server" solution
     Then I should not see the "Pager" region
     And I should not see the "Distribution 13" tile
 
     Given the following distributions:
-      | title           | description    | parent            |
-      | Distribution 13 | Description 13 | Chiricahua Server |
+      | title           | description    | parent            | state     |
+      | Distribution 13 | Description 13 | Chiricahua Server | published |
     When I go to the homepage of the "Chiricahua Server" solution
     Then I should see the following links:
       | Current page    |
@@ -140,19 +140,19 @@ Feature: Solution homepage
     And I should not see the "Distribution 12" tile
 
     Given the following distributions:
-      | title           | description    | parent            |
-      | Distribution 14 | Description 14 | Chiricahua Server |
-      | Distribution 15 | Description 15 | Chiricahua Server |
-      | Distribution 16 | Description 16 | Chiricahua Server |
-      | Distribution 17 | Description 17 | Chiricahua Server |
-      | Distribution 18 | Description 18 | Chiricahua Server |
-      | Distribution 19 | Description 19 | Chiricahua Server |
-      | Distribution 20 | Description 20 | Chiricahua Server |
-      | Distribution 21 | Description 21 | Chiricahua Server |
-      | Distribution 22 | Description 22 | Chiricahua Server |
-      | Distribution 23 | Description 23 | Chiricahua Server |
-      | Distribution 24 | Description 24 | Chiricahua Server |
-      | Distribution 25 | Description 25 | Chiricahua Server |
+      | title           | description    | parent            | state     |
+      | Distribution 14 | Description 14 | Chiricahua Server | published |
+      | Distribution 15 | Description 15 | Chiricahua Server | published |
+      | Distribution 16 | Description 16 | Chiricahua Server | published |
+      | Distribution 17 | Description 17 | Chiricahua Server | published |
+      | Distribution 18 | Description 18 | Chiricahua Server | published |
+      | Distribution 19 | Description 19 | Chiricahua Server | published |
+      | Distribution 20 | Description 20 | Chiricahua Server | published |
+      | Distribution 21 | Description 21 | Chiricahua Server | published |
+      | Distribution 22 | Description 22 | Chiricahua Server | published |
+      | Distribution 23 | Description 23 | Chiricahua Server | published |
+      | Distribution 24 | Description 24 | Chiricahua Server | published |
+      | Distribution 25 | Description 25 | Chiricahua Server | published |
 
     When I go to the homepage of the "Chiricahua Server" solution
     Then I should see the following links:
@@ -211,8 +211,8 @@ Feature: Solution homepage
       | state       | published             |
       | owner       | Chiricahua Foundation |
     And the following distributions:
-      | title               | description   | parent          |
-      | Solr distribution 1 | Description 1 | Chiricahua Solr |
+      | title               | description   | parent          | state     |
+      | Solr distribution 1 | Description 1 | Chiricahua Solr | published |
     When I go to the homepage of the "Chiricahua Solr" solution
     Then I should not see the "Pager" region
 

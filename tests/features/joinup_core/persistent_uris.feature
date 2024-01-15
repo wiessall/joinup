@@ -29,6 +29,7 @@ Feature:
       | access url  | test.zip                                                       |
       | parent      | Persistent solution                                            |
       | uri         | http://data.europa.eu/w21/643a2a52-da3b-4594-92bb-295d8134e1fb |
+      | state       | published                                                      |
     And the following licence:
       | title       | Persistent licence                                             |
       | description | Persistent licence                                             |
