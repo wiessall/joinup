@@ -214,10 +214,11 @@ Feature: Collection moderation
     When I go to the propose collection form
     Then the "Main fields" accordion section should be active
     And I fill in the following:
-      | Title  | Spectres in fog        |
+      | Title    | Spectres in fog        |
+      | Abstract | The fog is haunted.    |
       # Contact information data.
-      | Name   | A secretary in the fog |
-      | E-mail | fog@example.com        |
+      | Name     | A secretary in the fog |
+      | E-mail   | fog@example.com        |
     And I enter "The samurai are attacking the railroads" in the "Description" wysiwyg editor
     And I select "Employment and Support Allowance" from "Topic"
     And I press "Add new" at the "Owner" field
@@ -272,10 +273,11 @@ Feature: Collection moderation
     Given I am logged in as a user with the "authenticated" role
     When I go to the propose collection form
     And I fill in the following:
-      | Title  | Domestic bovins    |
+      | Title    | Domestic bovins                    |
+      | Abstract | Domestic bovins are friendly pets. |
       # Contact information data.
-      | Name   | Domestic secretary |
-      | E-mail | ds@example.com     |
+      | Name     | Domestic secretary                 |
+      | E-mail   | ds@example.com                     |
     And I enter "Yaks and goats are friendly pets." in the "Description" wysiwyg editor
     And I select "Statistics and Analysis" from "Topic"
     # An ajax callback is executed now.
@@ -312,10 +314,11 @@ Feature: Collection moderation
     Given I am logged in as a user with the "authenticated" role
     When I go to the propose collection form
     And I fill in the following:
-      | Title  | Theft of Body        |
+      | Title    | Theft of Body        |
+      | Abstract | The body is stolen.  |
       # Contact information data.
-      | Name   | Secretary of thieves |
-      | E-mail | st@example.com       |
+      | Name     | Secretary of thieves |
+      | E-mail   | st@example.com       |
     And I enter "Kleptomaniac to the bone." in the "Description" wysiwyg editor
     And I select "Supplier exchange" from "Topic"
     # An ajax callback is executed now.
@@ -353,10 +356,11 @@ Feature: Collection moderation
     Given I am logged in as a user with the "authenticated" role
     When I go to the propose collection form
     And I fill in the following:
-      | Title  | Silken Emperor    |
+      | Title    | Silken Emperor         |
+      | Abstract | The emperor is smooth. |
       # Contact information data.
-      | Name   | Secretary of Silk |
-      | E-mail | ss@example.com    |
+      | Name     | Secretary of Silk      |
+      | E-mail   | ss@example.com         |
     And I enter "So smooth." in the "Description" wysiwyg editor
     And I select "Data gathering, data processing" from "Topic"
     # An ajax callback is executed now.
@@ -395,10 +399,11 @@ Feature: Collection moderation
     Given I am logged in as a user with the "authenticated" role
     When I go to the propose collection form
     And I fill in the following:
-      | Title  | The blue ships          |
+      | Title    | The blue ships          |
+      | Abstract | The ships are blue.     |
       # Contact information data.
-      | Name   | Secretary of the harbor |
-      | E-mail | sh@example.com          |
+      | Name     | Secretary of the harbor |
+      | E-mail   | sh@example.com          |
     And I enter "Invisible ships on deep sea." in the "Description" wysiwyg editor
     And I select "Employment and Support Allowance" from "Topic"
     # An ajax callback is executed now.
