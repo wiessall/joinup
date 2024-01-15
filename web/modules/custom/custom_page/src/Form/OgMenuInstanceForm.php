@@ -136,7 +136,7 @@ class OgMenuInstanceForm extends OriginalOgMenuInstanceForm {
    *   Form's state.
    *
    * @return array
-   *    The form structure.
+   *   The form structure.
    */
   public function buildQuickLinksForm(array $form, FormStateInterface $formState): array {
     $build = parent::buildForm($form, $formState);
@@ -164,7 +164,7 @@ class OgMenuInstanceForm extends OriginalOgMenuInstanceForm {
    *   Form's state.
    *
    * @return array
-   *    The form structure.
+   *   The form structure.
    */
   public function buildNavigationForm(array $form, FormStateInterface $formState): array {
     $form = EntityForm::buildForm($form, $formState);
