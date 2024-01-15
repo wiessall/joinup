@@ -31,6 +31,7 @@ Feature: Collection API
     Then I should see the heading "Propose collection"
     When I fill in the following:
       | Title       | Collection API example                       |
+      | Abstract    | This is a collection created through the API |
       | Description | We do not care that much about descriptions. |
       # Contact information data.
       | Name        | BasicCollectionAPI Contact                   |
