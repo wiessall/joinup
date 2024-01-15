@@ -185,6 +185,7 @@ AddEncoding gzip svgz
   RequestHeader unset Proxy
 </IfModule>
 
+
 # Start Toolkit block.
 <FilesMatch "(README\.(md|txt)|CHANGELOG\.(md|txt))$">
   <IfModule mod_authz_core.c>
