@@ -199,14 +199,6 @@ module.exports = {
         sourceMap: true,
       },
     },
-    {
-      entry: path.resolve(outputFolder, `${ventuno}src/js/ck5-video.js`),
-      dest: path.resolve(outputFolder, `${ventuno}assets/js/ck5-video.js`),
-      options: {
-        minify: true,
-        sourceMap: true,
-      },
-    },
     // IOP
     {
       entry: path.resolve(outputFolder, `${iop}src/js/glide.js`),
