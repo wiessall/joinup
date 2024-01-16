@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "be33756829e6ed7d55e3812eb9898957",
+    "content-hash": "75ff1fa7f6b552be1d663153f934fbe0",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -1565,26 +1565,29 @@
         },
         {
             "name": "drupal/cached_computed_field",
-            "version": "1.0.0-beta7",
+            "version": "1.0.0-beta8",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/cached_computed_field.git",
-                "reference": "8.x-1.0-beta7"
+                "reference": "8.x-1.0-beta8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/cached_computed_field-8.x-1.0-beta7.zip",
-                "reference": "8.x-1.0-beta7",
-                "shasum": "1c0058b0c83443fa2500bf650aa054e86f6039ee"
+                "url": "https://ftp.drupal.org/files/projects/cached_computed_field-8.x-1.0-beta8.zip",
+                "reference": "8.x-1.0-beta8",
+                "shasum": "6381ebcc68a780e97a7d1bfc04aaf46744a7a529"
             },
             "require": {
                 "drupal/core": "^8.9 || ^9.1 || ^10"
             },
+            "conflict": {
+                "drupal/core": "<10.2.0"
+            },
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "8.x-1.0-beta7",
-                    "datestamp": "1668807245",
+                    "version": "8.x-1.0-beta8",
+                    "datestamp": "1705398334",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "Project has not opted into security advisory coverage!"
