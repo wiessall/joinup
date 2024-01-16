@@ -6,6 +6,7 @@ namespace Drupal\joinup_group\Plugin\Block;
 
 use Drupal\Core\Block\BlockPluginInterface;
 use Drupal\Core\Cache\Cache;
+use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Menu\MenuTreeParameters;
 use Drupal\Core\Url;
 use Drupal\og_menu\OgMenuInstanceInterface;
@@ -73,11 +74,13 @@ class GroupMenuBlock extends OgMenuBlock {
       // block, so that it will always be invalidated whenever the menu changes.
       // @see \Drupal\Core\Menu\MenuTreeStorage::save()
       $build['#cache']['tags'][] = 'config:system.menu.ogmenu-' . $menu_instance->id();
-      // For the quick links, the menu items are dependent on the group itself
-      // as menu links change their availability based on the group field
-      // values.
       if ($menu_instance->bundle() === 'quick_links') {
-        $build['#cache']['tags'] = Cache::mergeTags($build['#cache']['tags'], $menu_instance->getGroup()->getCacheTags());
+        // For the quick links, the menu items are dependent on the group itself
+        // as menu links change their availability based on the group field
+        // values.
+        CacheableMetadata::createFromRenderArray($build)
+          ->addCacheableDependency($menu_instance->getGroup())
+          ->applyTo($build);
       }
     }
 
@@ -181,7 +184,7 @@ class GroupMenuBlock extends OgMenuBlock {
       items through the <a href=":edit_menu_url">Edit menu</a>
       or you can add your links through the <a href=":group_edit">Edit page</a>.', [
         ':edit_menu_url' => $edit_navigation_menu_url,
-        ':group:edit' => $group->toUrl('edit-form')->toString(),
+        ':group_edit' => $group->toUrl('edit-form')->toString(),
       ]);
     }
 
