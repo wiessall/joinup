@@ -32,20 +32,6 @@ index e348b14..cf5743b 100644
  
      // checks whether url query parameter
      // is present in url, if so it will
-diff --git a/src/app/components/head.js b/src/app/components/head.js
-index 2958c94..e07b7a8 100644
---- a/src/app/components/head.js
-+++ b/src/app/components/head.js
-@@ -53,9 +53,6 @@ class head extends Component {
-         <div className="content__head__title">publiccode.yml Editor</div>
-         <div className="content__head__help">
-           <div>
--            <a className="pr-5" href={privacyPolicyUrl} rel="noopener noreferrer" target="_blank">
--              Privacy policy
--            </a>
-             <a href={repositoryUrl} rel="noopener noreferrer" target="_blank">
-               Need help?
-             </a>
 diff --git a/src/app/contents/constants.js b/src/app/contents/constants.js
 index 6c2e55c..39ac399 100644
 --- a/src/app/contents/constants.js
@@ -53,7 +39,8 @@ index 6c2e55c..39ac399 100644
 @@ -1,10 +1,10 @@
  let {REPOSITORY, ELASTIC_URL, VALIDATOR_URL, VALIDATOR_REMOTE_URL} = process.env;
  
- export const privacyPolicyUrl = `https://developers.italia.it/it/privacy-policy/`;
+-export const privacyPolicyUrl = `https://developers.italia.it/it/privacy-policy/`;
++export const privacyPolicyUrl = `https://joinup.ec.europa.eu/collection/joinup/specific-privacy-statement`;
 -export const repositoryUrl = `https://docs.italia.it/italia/developers-italia/publiccodeyml/it/master/`;
 +export const repositoryUrl = `https://yml.publiccode.tools`;
  export const versionsUrl = `https://api.github.com/repos/${REPOSITORY}/contents/version`;
