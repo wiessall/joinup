@@ -92,11 +92,15 @@ Feature: Asset release moderation
     And I should see the text "Authored on"
     And the following fields should not be present "Langcode, Translation"
     And I press "Archive"
-    And I click "Edit" in the "Entity actions" region
+    Then I should see the text "Release of the dark ship" in the "Page title" region
+    And I should see the text "Archived" in the "Page title" region
+    And I go to the edit form of the "Release of the dark ship" release
     And the current workflow state should be "Archived"
     And I should see the workflow buttons "Update, Unarchive"
     And I press "Unarchive"
-    And I click "Edit" in the "Entity actions" region
+    Then I should see the text "Release of the dark ship" in the "Page title" region
+    But I should not see the text "Archived" in the "Page title" region
+    And I go to the edit form of the "Release of the dark ship" release
     And the current workflow state should be "Published"
 
     # Request changes as a moderator.
