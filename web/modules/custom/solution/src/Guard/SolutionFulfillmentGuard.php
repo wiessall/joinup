@@ -6,6 +6,7 @@ namespace Drupal\solution\Guard;
 
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Session\AccountInterface;
+use Drupal\joinup_workflow\FulfillmentGuardTrait;
 use Drupal\rdf_entity_provenance\ProvenanceHelperInterface;
 use Drupal\state_machine\Guard\GuardInterface;
 use Drupal\state_machine\Plugin\Workflow\WorkflowInterface;
@@ -17,10 +18,7 @@ use Drupal\workflow_state_permission\WorkflowStatePermissionInterface;
  */
 class SolutionFulfillmentGuard implements GuardInterface {
 
-  /**
-   * Virtual state.
-   */
-  const NON_STATE = '__new__';
+  use FulfillmentGuardTrait;
 
   /**
    * Instantiates a SolutionFulfillmentGuard service.
@@ -43,25 +41,15 @@ class SolutionFulfillmentGuard implements GuardInterface {
   /**
    * {@inheritdoc}
    */
-  public function allowed(WorkflowTransition $transition, WorkflowInterface $workflow, EntityInterface $entity): bool {
-    /** @var \Drupal\solution\Entity\SolutionInterface $entity */
-    $toState = $transition->getToState()->getId();
-    // Disable virtual state.
-    if ($toState === self::NON_STATE) {
-      return FALSE;
-    }
-
-    $fromState = $entity->getWorkflowState();
-
+  public function allowed(WorkflowTransition $transition, WorkflowInterface $workflow, EntityInterface $entity) {
     // Don't (un)archive federated solutions.
+    $toState = $transition->getToState()->getId();
     if (in_array($toState, ['archived', 'unarchive'], TRUE)
       && $this->isFederated($entity)) {
       return FALSE;
     }
 
-    // Note that we cannot call $entity->isTargetWorkflowStateAllowed() since it
-    // invokes the guards, causing an endless loop.
-    return $this->workflowStatePermission->isStateUpdatePermitted($this->currentUser, $entity, $workflow, $fromState, $toState);
+    return $this->allowedByPermission($transition, $workflow, $entity);
   }
 
   /**

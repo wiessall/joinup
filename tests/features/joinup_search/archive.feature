@@ -77,23 +77,18 @@ Feature: Global search with archive content
       | Erno Rubik |
     And contact:
       | name | Tom Kremer |
-    And collection:
-      | title               | Rubik Cube         |
-      | description         | combination puzzle |
-      | topic               | Supplier exchange  |
-      | owner               | Erno Rubik         |
-      | contact information | Tom Kremer         |
-      | state               | published          |
+    And collections:
+      | title      | description                | topic             | owner      | contact information | state     |
+      | Rubik Cube | combination puzzle         | Supplier exchange | Erno Rubik | Tom Kremer          | published |
+      | Speed cube | also known as speedsolving | Supplier exchange | Erno Rubik | Tom Kremer          | published |
     And solutions:
-      | title    | state     | collection |
-      | Megaminx | published | Rubik Cube |
-      | 4x4 cube | archived  | Rubik Cube |
+      | title    | state     | collection | shared on  |
+      | Megaminx | published | Rubik Cube | Speed cube |
+      | 4x4 cube | archived  | Rubik Cube | Speed cube |
+    And the "Rubik Cube" collection is configured to show "All" community content
+    And the "Speed cube" collection is configured to show "All" community content
 
-    When I am logged in as a moderator
-    And I go to the edit form of the "Rubik Cube" collection
-    And I select "All" from "Show archived content"
-    And I press "Publish"
-
+    And I go to the homepage of the "Rubik Cube" collection
     Then I should see the following tiles in the correct order:
       | Megaminx |
     And I should not see the text "Archived" in the "Megaminx" tile
@@ -101,3 +96,8 @@ Feature: Global search with archive content
     Then I should see the following tiles in the correct order:
       | 4x4 cube |
     And I should see the text "Archived" in the "4x4 cube" tile
+
+    And I go to the homepage of the "Speed cube" collection
+    When I click "Show archived"
+    Then I should see the following tiles in the correct order:
+      | 4x4 cube |
