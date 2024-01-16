@@ -67,6 +67,7 @@ Feature: Notification test for the collection transitions.
     When I go to the propose collection form
     When I fill in the following:
       | Title                 | NC proposed new     |
+      | Abstract              | No one cares        |
       | Description           | No one cares.       |
       | Geographical coverage | Belgium             |
       # Contact information data.

@@ -26,8 +26,8 @@ dependencies:
     - responsive_image.styles.tile
   module:
     - responsive_image
+    - smart_trim
     - template_suggestion
-    - text
     - user
 id: rdf_entity.collection.view_mode_tile
 targetEntityType: rdf_entity
@@ -35,9 +35,26 @@ bundle: collection
 mode: view_mode_tile
 content:
   field_ar_abstract:
-    type: text_default
+    type: smart_trim
     label: hidden
-    settings: {  }
+    settings:
+      trim_length: 200
+      trim_type: chars
+      trim_suffix: ''
+      wrap_output: false
+      wrap_class: trimmed
+      more:
+        display_link: false
+        target_blank: false
+        link_trim_only: false
+        class: more-link
+        text: More
+        aria_label: 'Read more about [node:title]'
+      summary_handler: full
+      trim_options:
+        text: false
+        trim_zero: false
+        replace_tokens: false
     third_party_settings:
       template_suggestion:
         template_suggestion: bare
