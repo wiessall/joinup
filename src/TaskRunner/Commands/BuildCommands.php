@@ -5,18 +5,15 @@ declare(strict_types = 1);
 namespace Joinup\TaskRunner\Commands;
 
 use Composer\InstalledVersions;
+use EcEuropa\Toolkit\TaskRunner\AbstractCommands;
 use EcEuropa\Toolkit\TaskRunner\Commands\ToolCommands;
-use OpenEuropa\TaskRunner\Commands\AbstractCommands;
-use OpenEuropa\TaskRunner\Tasks\CollectionFactory\loadTasks;
+use Gitonomy\Git\Repository;
 use Robo\Collection\CollectionBuilder;
-use Robo\Robo;
 
 /**
  * Provides commands to build the site's distribution.
  */
 class BuildCommands extends AbstractCommands {
-
-  use loadTasks;
 
   /**
    * Replaces the toolkit:build-dist command.
@@ -112,7 +109,7 @@ class BuildCommands extends AbstractCommands {
     // Collect and execute list of commands set on local runner.yml.
     $commands = $config->get("toolkit.build.dist.commands");
     if (!empty($commands)) {
-      $tasks[] = $this->taskCollectionFactory($commands);
+      $tasks[] = $this->taskExecute($commands);
     }
 
     return $this->collectionBuilder()->addTaskList($tasks);
@@ -125,8 +122,7 @@ class BuildCommands extends AbstractCommands {
    *   Current Git tag.
    */
   protected function getGitTag(): string {
-    /** @var \Gitonomy\Git\Repository $repository */
-    $repository = Robo::getContainer()->get('repository');
+    $repository = new Repository($this->getConfig()->get('joinup.dir'));
 
     // Handle a potential case where the repository has been shallow cloned.
     // Typically, this happens in GitLab pipelines, where the repos are shallow
@@ -147,7 +143,8 @@ class BuildCommands extends AbstractCommands {
    *   Current Git hash.
    */
   protected function getGitCommitHash(): string {
-    return Robo::getContainer()->get('repository')->getHeadCommit()->getHash();
+    $repository = new Repository($this->getConfig()->get('joinup.dir'));
+    return $repository->getHeadCommit()->getHash();
   }
 
 }
