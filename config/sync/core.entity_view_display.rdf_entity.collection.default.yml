@@ -66,12 +66,13 @@ third_party_settings:
                 entity: layout_builder.entity
                 view_mode: view_mode
               formatter:
-                type: text_default
+                type: string
                 label: hidden
-                settings: {  }
+                settings:
+                  link_to_entity: false
                 third_party_settings:
                   template_suggestion:
-                    template_suggestion: ''
+                    template_suggestion: 'p_wrapper'
             weight: 1
             additional:
               component_attributes:

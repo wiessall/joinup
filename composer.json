@@ -376,7 +376,8 @@
             },
             "drupal/smart_trim": {
                 "Avoid max nesting level during development @see https://www.drupal.org/project/smart_trim/issues/3013628": "resources/patch/php/drupal/smart_trim/3013628.patch",
-                "Space inserted before full stop, comma, etc @see https://www.drupal.org/project/smart_trim/issues/3369954": "resources/patch/php/drupal/smart_trim/3369954.diff"
+                "Space inserted before full stop, comma, etc @see https://www.drupal.org/project/smart_trim/issues/3369954": "resources/patch/php/drupal/smart_trim/3369954.diff",
+                "Remove token_browser from saved configuration of formatter @see https://www.drupal.org/i/3368694": "resources/patch/php/drupal/smart_trim/3368694.diff"
             },
             "drupal/social_media_links": {
                 "Missing config schema for field, widget and formatter @see https://www.drupal.org/node/2898680": "resources/patch/php/drupal/social_media_links/2898680.patch",
