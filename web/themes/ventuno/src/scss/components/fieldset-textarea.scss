@@ -7,16 +7,23 @@
     width: fit-content;
     margin: 0 auto;
   }
+  .align-center.js-ck5-video,
+  .js-ck5-video {
+    max-width: 648px;
+    width: 100%;
+  }
   @include media-breakpoint-up(md) {
     // Put back original alignment on larger screens and add margin on the images.
     .align-left {
       float: left;
+      &.js-ck5-video,
       img {
         margin-right: $spacer * 1.25;
       }
     }
     .align-right {
       float: right;
+      &.js-ck5-video,
       img {
         margin-left: $spacer * 1.25;
       }

@@ -418,7 +418,3 @@ layout-paragraphs--builder:
   css:
     theme:
       assets/css/layout-paragraphs--builder.min.css: { minified: true }
-
-ck5_video:
-  js:
-    assets/js/ck5-video.min.js: { minified: true, attributes: { defer: true } }
