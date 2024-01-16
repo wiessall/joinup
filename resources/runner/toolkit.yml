@@ -27,6 +27,7 @@ toolkit:
             - ${toolkit.build.dist.root}/.editorconfig
             - ${toolkit.build.dist.root}/.gitattributes
             - ${toolkit.build.dist.root}/.gitignore
+            - ${toolkit.build.dist.root}/bcl-builder.config.js
             - ${toolkit.build.dist.root}/package.json
             - ${toolkit.build.dist.root}/package-lock.json
             # Drupal Finder, and consequently Drush, are still needing
@@ -72,8 +73,6 @@ commands:
         - 'DELETE { GRAPH ?g { ?s ?p ?o . }} WHERE { GRAPH ?g { ?s ?p ?o . } FILTER (STRSTARTS(STR(?g), "no prefix"))}'
     - task: run
       command: sparql:empty
-    - task: run
-      command: solr:empty
     - task: exec
       command: ${drush.bin} memcache:flush-all
     - task: run
@@ -84,6 +83,8 @@ commands:
       command: config-readonly:disable
     - task: run
       command: drupal:site-install
+      options:
+        existing-config: null
     - task: run
       command: dev:import-sparql-fixtures
     - task: run
@@ -113,6 +114,8 @@ commands:
         - if (node_access_needs_rebuild()) { node_access_rebuild(); }
     - task: run
       command: config-readonly:enable
+    - task: exec
+      command: test ! -z "$CI" || vendor/bin/run solr:build-core-config
 
   # Overrides the toolkit:install-clone command.
   toolkit:install-clone:
@@ -151,6 +154,8 @@ commands:
         - site-clone
     - task: run
       command: config-readonly:enable
+    - task: exec
+      command: test ! -z "$CI" || vendor/bin/run solr:build-core-config
 
   # Overrides the toolkit:test-phpcs command.
   toolkit:test-phpcs:
