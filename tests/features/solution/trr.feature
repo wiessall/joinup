@@ -166,11 +166,13 @@ Feature: Creating a test (solution) in the TRR collection.
       | description | Asset distribution sample description |
       | access url  | test.zip                              |
       | parent      | TRR release foo                       |
+      | state       | published                             |
     And the following distribution:
       | title       | TRR Distribution bar                  |
       | description | Asset distribution sample description |
       | access url  | test.zip                              |
       | parent      | TRR release bar                       |
+      | state       | published                             |
 
     # The GITB compliant field is only shown when the solution has a certain solution type.
     When I am logged in as a "facilitator" of the "TRR solution foo" solution

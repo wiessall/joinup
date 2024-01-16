@@ -45,6 +45,7 @@ class TokenTest extends JoinupExistingSiteTestBase {
       'rid' => 'asset_distribution',
       'title' => $this->randomMachineName(),
       'og_audience' => $solution->id(),
+      'field_ad_state' => 'published',
     ]);
 
     // Check both the token itself and one of the recursively generated

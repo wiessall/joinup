@@ -30,5 +30,6 @@ Feature: Test for a 'facets' regression on the solution overview page.
       | description | Apache distribution |
       | access url  | test.zip            |
       | parent      | Apache              |
+      | state       | published           |
     And I go to the homepage of the "Apache" solution
     Then I should not see the "Pager" region

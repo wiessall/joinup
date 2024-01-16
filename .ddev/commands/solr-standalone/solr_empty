@@ -1,0 +1,10 @@
+#!/bin/bash
+
+## Description: Empty Solr index
+## Usage: solr:empty
+
+set -e
+
+echo "Clearing 'digit-joinup' Solr core existing index"
+/usr/bin/curl -sS --request POST --header "Content-Type: application/xml" --data "<delete><query>*:*</query></delete>" "http://localhost:8983/solr/digit-joinup/update?commit=true&wt=xml" > /dev/null
+echo "Successfully emptied 'digit-joinup' Solr core"

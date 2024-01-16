@@ -195,6 +195,8 @@ permissions:
   - 'transition group from published to draft using the solution - solution_workflow workflow'
   - 'transition group from published to proposed using the solution - solution_workflow workflow'
   - 'transition group from published to published using the solution - solution_workflow workflow'
+  - 'transition any rdf_entity asset_distribution from __new__ to published using the asset_distribution - asset_distribution_workflow workflow'
+  - 'transition any rdf_entity asset_distribution from published to published using the asset_distribution - asset_distribution_workflow workflow'
   - 'unpin group content'
   - 'unshare discussion content'
   - 'unshare document content'
