@@ -37,7 +37,7 @@ Feature: Editing collections
 
   @terms @javascript
   Scenario: Edit a collection wysiwyg modal should close.
-    # Regression test for ticket ISAICP-7181.
+    # Regression test for ticket ISAICP-7181 and ISAICP-8355.
     Given the following owner:
       | name            | type                    |
       | wysiwyg example | Non-Profit Organisation |
@@ -61,6 +61,11 @@ Feature: Editing collections
     Then I press "Save" in the "Modal buttons" region
     And I press "Insert selected" in the "Modal buttons" region
     Then the modal should be closed
+    And I press "Propose"
+    And I click "About"
+
+    Then I should see the heading "Rhyme Land Eels"
+    And the page should contain the html text '<div class="js-ck5-video">'
 
   @terms @javascript
   Scenario: Regression test wysiwyg add file shows a 0 bytes limit.
