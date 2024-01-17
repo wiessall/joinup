@@ -13,6 +13,7 @@ WEB_DIR="web/publiccode-editor"
 rm -rf $EDITOR_DIR
 git clone --depth=1 --single-branch --branch v1.4.3 https://github.com/italia/publiccode-editor.git $EDITOR_DIR
 cat $PUBLICCODE_DIR/joinup.diff | patch -p1 -d $EDITOR_DIR
+cp web/themes/ventuno/assets/images/favicon/favicon-32x32.png $EDITOR_DIR/src/asset/img/
 
 # Build the distribution. It needs Node 10 :(
 nvm install 10
