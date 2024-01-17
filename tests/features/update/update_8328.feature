@@ -5,3 +5,7 @@ Feature:
   Scenario: EIF Perspective links now appear in the quick links menu.
     Given I go to the "ABR - BRegDCAT-AP" solution
     Then I should see the link "EIF Perspective" in the "Quick links" region
+
+    # There is one solution with an EIF Perspective but a disabled link.
+    Given I go to the "Big Data Test Infrastructure (BDTI)" solution
+    Then I should not see the link "EIF Perspective" in the "Quick links" region
