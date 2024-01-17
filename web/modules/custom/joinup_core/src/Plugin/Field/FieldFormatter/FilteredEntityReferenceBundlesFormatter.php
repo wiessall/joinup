@@ -7,7 +7,9 @@ namespace Drupal\joinup_core\Plugin\Field\FieldFormatter;
 use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\Core\Entity\EntityTypeBundleInfoInterface;
 use Drupal\Core\Field\EntityReferenceFieldItemListInterface;
+use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Render\RendererInterface;
 use Drupal\entity_reference_revisions\Plugin\Field\FieldFormatter\EntityReferenceRevisionsEntityFormatter;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -33,11 +35,19 @@ class FilteredEntityReferenceBundlesFormatter extends EntityReferenceRevisionsEn
   protected EntityTypeBundleInfoInterface $entityTypeBundleInfo;
 
   /**
+   * Renderer service.
+   *
+   * @var \Drupal\Core\Render\RendererInterface
+   */
+  protected RendererInterface $renderer;
+
+  /**
    * {@inheritdoc}
    */
   public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
     $formatter = parent::create($container, $configuration, $plugin_id, $plugin_definition);
     $formatter->setEntityTypeBundleInfo($container->get('entity_type.bundle.info'));
+    $formatter->setRenderer($container->get('renderer'));
 
     return $formatter;
   }
@@ -53,6 +63,16 @@ class FilteredEntityReferenceBundlesFormatter extends EntityReferenceRevisionsEn
   }
 
   /**
+   * Sets renderer.
+   *
+   * @param \Drupal\Core\Render\RendererInterface $renderer
+   *    The renderer service.
+   */
+  public function setRenderer(RendererInterface $renderer): void {
+    $this->renderer = $renderer;
+  }
+
+  /**
    * {@inheritdoc}
    */
   public static function defaultSettings(): array {
@@ -65,6 +85,8 @@ class FilteredEntityReferenceBundlesFormatter extends EntityReferenceRevisionsEn
    * {@inheritdoc}
    */
   public function settingsForm(array $form, FormStateInterface $form_state): array {
+    $elements = parent::settingsForm($form, $form_state);
+
     $entityTypeId = $this->getFieldSetting('target_type');
     $bundles = $this->entityTypeBundleInfo->getBundleInfo($entityTypeId);
 
@@ -78,6 +100,21 @@ class FilteredEntityReferenceBundlesFormatter extends EntityReferenceRevisionsEn
     ];
 
     return $elements;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function viewElements(FieldItemListInterface $items, $langcode) {
+    // Render the paragraph output.
+    $elements = parent::viewElements($items, $langcode);
+
+    return [
+      '#type' => 'processed_text',
+      '#text' => $this->renderer->render($elements),
+      '#format' => 'stripped_html',
+      '#langcode' => $langcode,
+    ];
   }
 
   /**
