@@ -61,7 +61,7 @@ class RdfSyncMapper {
     $allBundleInfo = $this->entityTypeBundleInfo->getAllBundleInfo();
     return array_reduce(
       array_keys($allBundleInfo),
-      function(array $entityTypeIds, string $entityTypeId) use ($allBundleInfo): array {
+      function (array $entityTypeIds, string $entityTypeId) use ($allBundleInfo): array {
         foreach ($allBundleInfo[$entityTypeId] as $bundleInfo) {
           if (!empty($bundleInfo['rdf_sync'])) {
             $entityTypeIds[] = $entityTypeId;
