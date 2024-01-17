@@ -23,8 +23,8 @@
         "drupal/ckeditor": "^1.0",
         "drupal/config_ignore": "^3.0",
         "drupal/config_readonly": "^1.0",
-        "drupal/core": "~10.1",
-        "drupal/core-composer-scaffold": "~10.1",
+        "drupal/core": "~10.1.0",
+        "drupal/core-composer-scaffold": "~10.1.0",
         "drupal/custom_markup_block": "^1.2",
         "drupal/default_content": "^2.0",
         "drupal/diff": "~1.0",
@@ -231,6 +231,9 @@
                 "[web-root]/core/.deprecation-ignore.txt": {
                     "append": "resources/drupal-scaffold/.deprecation-ignore.txt.append",
                     "force-append": true
+                },
+                "[project-root]/.editorconfig": {
+                    "append": "resources/drupal-scaffold/.editorconfig.append"
                 },
                 "[web-root]/.htaccess": {
                     "append": "resources/drupal-scaffold/.htaccess.append"
