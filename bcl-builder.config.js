@@ -806,21 +806,6 @@ module.exports = {
     {
       entry: path.resolve(
         outputFolder,
-        `${ventuno}src/scss/components/paragraphs/paragraph--simple-paragraph.scss`
-      ),
-      dest: path.resolve(
-        outputFolder,
-        `${ventuno}assets/css/paragraph--simple-paragraph.min.css`
-      ),
-      options: {
-        includePaths,
-        minify: true,
-        sourceMap: "file",
-      },
-    },
-    {
-      entry: path.resolve(
-        outputFolder,
         `${ventuno}src/scss/components/paragraphs/paragraph--testimony.scss`
       ),
       dest: path.resolve(
