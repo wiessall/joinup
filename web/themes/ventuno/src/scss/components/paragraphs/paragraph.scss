@@ -1,14 +1,52 @@
 @import "../../partials/core";
 
 .paragraph,
-.fieldset--textarea {
+.fieldset--textarea,
+// Also add these styles when editing content.
+.ck-content {
 
   .inline-block {
     display: inline-block;
   }
 
+  // Override drupal core align.module.css
+  .align-left,
+  .align-right {
+    // Align center on small screens.
+    float: none;
+    margin: 0 auto;
+    width: fit-content;
+  }
   .align-center {
     width: fit-content;
+  }
+
+  @include media-breakpoint-up(lg) {
+    // Put back original alignment on larger screens and add margin where needed for images and videos.
+    .align-left {
+      float: left;
+      &.js-ck5-video,
+      img {
+        margin-right: $spacer * 1.25;
+      }
+    }
+    .align-right {
+      float: right;
+      &.js-ck5-video,
+      img {
+        margin-left: $spacer * 1.25;
+      }
+    }
+  }
+
+  // Dirty hack to make videos responsive and half width.
+  .js-ck5-video {
+    max-width: 648px;
+    width: 100%;
+    margin-bottom: $spacer;
+    iframe {
+      max-width: 100%;
+    }
   }
 
   img,
@@ -16,19 +54,6 @@
     margin-bottom: $spacer;
     max-width: 100%;
     height: auto;
-    &.align-left {
-      @include media-breakpoint-up(sm) {
-        float: left;
-        margin-right: $spacer * 1.25;
-      }
-    }
-
-    &.align-right {
-      @include media-breakpoint-up(sm) {
-        float: right;
-        margin-left: $spacer * 1.25;
-      }
-    }
   }
 
   table {

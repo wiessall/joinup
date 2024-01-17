@@ -11,6 +11,7 @@ libraries:
   - ventuno/layout
   - ventuno/theme
   - ventuno/tables
+  - ventuno/paragraph
 
 libraries-extend:
   core/drupal.ajax:
