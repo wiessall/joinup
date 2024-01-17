@@ -559,6 +559,5 @@ Feature:
       | Query presets   | type: text - value: entity_bundle\|custom_page |
     And I press "Save"
     And the url should match "/topic/law-and-justice/e-justice"
-    And I break
     And I should see the text "What do we mean by Legislation & Technology?" in the "Legislation & Technology" tile
     And I should not see the text "What do we mean by Legislation &amp; Technology?" in the "Legislation & Technology" tile
