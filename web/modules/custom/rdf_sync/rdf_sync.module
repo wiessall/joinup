@@ -8,6 +8,9 @@
 declare(strict_types = 1);
 
 use Drupal\Core\Entity\ContentEntityInterface;
+use Drupal\Core\Entity\EntityTypeInterface;
+use Drupal\Core\Field\BaseFieldDefinition;
+use Drupal\Core\Field\FieldDefinition;
 
 /**
  * Implements hook_entity_bundle_info_alter().
@@ -46,4 +49,48 @@ function rdf_sync_entity_bundle_info_alter(array &$bundles): void {
       }
     }
   }
+}
+
+/**
+ * Implements hook_entity_field_storage_info().
+ */
+function rdf_sync_entity_field_storage_info(EntityTypeInterface $entityType): array {
+  $definitions = [];
+  // @todo Using getEntityTypeIdsWithMappings() doesn't work on install clean.
+  //   $mapper = \Drupal::getContainer()->get('rdf_sync.mapper');
+  //  if (in_array($entityType->id(), $mapper->getEntityTypeIdsWithMappings(), TRUE)) {
+  if (in_array($entityType->id(), ['taxonomy_term'], TRUE)) {
+    $definitions['uri'] = BaseFieldDefinition::create('uri')
+      ->setName('uri')
+      ->setTargetEntityTypeId($entityType->id())
+      ->setTargetBundle(NULL)
+      ->setLabel(t('URI'))
+      // Limit to allow indexing.
+      // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7751
+      ->setSetting('max_length', 768)
+      ->setRevisionable(FALSE)
+      ->setCardinality(1);
+  }
+  return $definitions;
+}
+
+/**
+ * Implements hook_entity_bundle_field_info().
+ */
+function rdf_sync_entity_bundle_field_info(EntityTypeInterface $entityType, string $bundle, array $baseFieldDefinitions): array {
+  $fields = [];
+  $mapper = \Drupal::getContainer()->get('rdf_sync.mapper');
+  if ($mapper->isMappedBundle($entityType->id(), $bundle)) {
+    $storageDefinitions = \Drupal::service('entity_field.manager')->getActiveFieldStorageDefinitions('taxonomy_term');
+    if (isset($storageDefinitions['uri'])) {
+      $fields['uri'] = FieldDefinition::createFromFieldStorageDefinition($storageDefinitions['uri'])
+        ->setTargetBundle($bundle)
+        ->setLabel(t('URI'))
+        ->setRequired(TRUE)
+        ->addConstraint('UniqueField')
+        ->setDisplayConfigurable('form', TRUE)
+        ->setDisplayConfigurable('view', TRUE);
+    }
+  }
+  return $fields;
 }
