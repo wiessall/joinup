@@ -14,7 +14,6 @@
 
 declare(strict_types = 1);
 
-use Drupal\Core\Url;
 use Drupal\joinup_group\Event\GroupMenuLinksEvent;
 use Drupal\og\OgGroupAudienceHelperInterface;
 use Drupal\og_menu\Entity\OgMenuInstance;
@@ -103,6 +102,17 @@ function joinup_core_deploy_110101(array &$sandbox): string {
     $sandbox['group_ids'] = array_keys($groups);
     $sandbox['progress'] = 0;
     $sandbox['count'] = count($sandbox['group_ids']);
+    // Get the list of solution IDs for which the EIF Perspective link is
+    // disabled.
+    $query = \Drupal::database()->select('menu_link_content_data', 'mlcd');
+    $query->leftJoin('ogmenu_instance__og_audience', 'ogm', 'CONCAT(\'ogmenu-\', ogm.entity_id) = mlcd.menu_name');
+    $sandbox['disabled_eif_perspective'] = $query
+      ->condition('mlcd.menu_name', 'ogmenu-%', 'LIKE')
+      ->condition('mlcd.link__uri', 'route:entity.rdf_entity.eif_perspective%', 'LIKE')
+      ->condition('mlcd.enabled', 0)
+      ->fields('ogm', ['og_audience_target_id'])
+      ->execute()
+      ->fetchCol();
   }
 
   $group_ids = array_splice($sandbox['group_ids'], 0, 50);
@@ -133,7 +143,7 @@ function joinup_core_deploy_110101(array &$sandbox): string {
         'link' => [
           'uri' => $eif_perspective->toUrl()->toString(),
         ],
-        'enabled' => 1,
+        'enabled' => !in_array($group->id(), $sandbox['disabled_eif_perspective']),
       ])->save();
     }
   }
