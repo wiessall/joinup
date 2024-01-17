@@ -23,6 +23,33 @@ use EasyRdf\Resource;
  */
 class JoinupTaxonomyCommands extends DrushCommands {
 
+  // BEGIN: testing code.
+  const CHECK = [
+    'actor' => 20,
+    'business_process' => 249,
+    'eif_conceptual_model' => 8,
+    'eif_interoperability_layer' => 6,
+    'eif_principle' => 12,
+    'eif_recommendation' => 47,
+    'eif_solution_type' => 7,
+    'file_type' => 120,
+    'language' => 262,
+    'themes' => 14,
+    'eurovoc' => 0,
+    'licence_type' => 15,
+    'owner_type' => 11,
+    'product_type' => 9454,
+    'spatial' => 253,
+    'standardization_level' => 3,
+    'status' => 4,
+    'test_resource_type' => 7,
+    'representation_technique' => 27,
+    'solution_category' => 2,
+    // @todo Ilias reported 797. Double check this.
+    'eira' => 535,
+  ];
+  // END: testing code.
+
   /**
    * List of locked vocabularies grouped by their fixture file.
    *
@@ -180,6 +207,17 @@ class JoinupTaxonomyCommands extends DrushCommands {
         '!count' => count($terms),
         '!vocab' => $vid,
       ]);
+
+      // BEGIN: testing code.
+      $c = $termStorage->getQuery()
+        ->accessCheck(FALSE)
+        ->count()
+        ->condition('vid', $vid)
+        ->execute();
+      if ($c != self::CHECK[$vid]) {
+        throw new \Exception("$vid expects " . static::CHECK[$vid] . " got $c");
+      }
+      // END: testing code.
     }
 
     $context['message'] = dt("✅ imported !counts from !file", [
