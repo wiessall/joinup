@@ -141,7 +141,7 @@ class FilteredEntityReferenceBundlesFormatter extends EntityReferenceRevisionsEn
 
     $truncate = new TruncateHTML();
     return [
-      '#markup' => $truncate->truncateChars($text, 200)
+      '#markup' => $truncate->truncateChars($text, 200),
     ];
   }
 
