@@ -238,6 +238,7 @@ function joinup_core_deploy_110106(array &$sandbox): string {
     $menuLinkContent
       ->createDuplicate()
       ->set('menu_name', "ogmenu-$quickLinksMenuInstanceId")
+      ->setUnpublished()
       ->save();
   }
 
