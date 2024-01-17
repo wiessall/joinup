@@ -8,4 +8,5 @@ Feature:
 
     # There is one solution with an EIF Perspective but a disabled link.
     Given I go to the "Big Data Test Infrastructure (BDTI)" solution
-    Then I should not see the link "EIF Perspective" in the "Quick links" region
+    # Use the main content region as the quick links is not rendered at all.
+    Then I should not see the link "EIF Perspective" in the "Content" region
