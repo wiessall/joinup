@@ -19,7 +19,7 @@ function joinup_taxonomy_taxonomy_term_access(TermInterface $term, string $opera
   /** @var \Drupal\taxonomy\VocabularyInterface $vocabulary */
   $vocabulary = $term->get('vid')->entity;
   $locked = ($operation !== 'view') && $vocabulary->getThirdPartySetting('joinup_taxonomy', 'locked', FALSE);
-  return AccessResult::forbiddenIf($locked)/*->addCacheTags($vocabulary->getCacheTagsToInvalidate())*/;
+  return AccessResult::forbiddenIf($locked);
 }
 
 /**
@@ -29,5 +29,5 @@ function joinup_taxonomy_taxonomy_term_create_access(AccountInterface $account, 
   /** @var \Drupal\taxonomy\VocabularyInterface $vocabulary */
   $vocabulary = \Drupal::entityTypeManager()->getStorage('taxonomy_vocabulary')->load($entity_bundle);
   $locked = $vocabulary->getThirdPartySetting('joinup_taxonomy', 'locked', FALSE);
-  return AccessResult::forbiddenIf($locked)/*->addCacheTags($vocabulary->getCacheTagsToInvalidate())*/;
+  return AccessResult::forbiddenIf($locked);
 }
