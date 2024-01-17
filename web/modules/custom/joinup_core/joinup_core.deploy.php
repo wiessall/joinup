@@ -141,7 +141,7 @@ function joinup_core_deploy_110101(array &$sandbox): string {
         'title' => t('EIF Perspective'),
         'menu_name' => $menu_name,
         'link' => [
-          'uri' => $eif_perspective->toUrl()->toString(),
+          'uri' => $eif_perspective->toUrl()->toUriString(),
         ],
         'enabled' => !in_array($group->id(), $sandbox['disabled_eif_perspective']),
       ])->save();
