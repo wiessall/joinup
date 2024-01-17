@@ -4,6 +4,7 @@ declare(strict_types = 1);
 
 namespace Drupal\joinup_taxonomy\Commands;
 
+use Drupal\Component\Serialization\Json;
 use Drupal\Component\Utility\NestedArray;
 use Drupal\Core\Batch\BatchBuilder;
 use Drupal\Core\DependencyInjection\ContainerBuilder;
@@ -481,7 +482,7 @@ class JoinupTaxonomyCommands extends DrushCommands {
         // For EIRA_SKOS, after version 6, they have added all extra properties
         // of the EIRA terms as separate terms in the graph. To properly handle
         // these secondary terms in the website, we extract the extra-properties
-        // and inject them, as a PHP serialized array, into the main term.
+        // and inject them, as a Json serialized array, into the main term.
         $namespaces = $rows = [];
         $mainResource = $resource->getResource('skos:related');
         foreach ($resource->propertyUris() as $propertyUri) {
@@ -507,7 +508,7 @@ class JoinupTaxonomyCommands extends DrushCommands {
         }
 
         // Inject properties in the main term.
-        $graph->addLiteral($mainResource, 'http://joinup.eu/eira/properties', serialize([
+        $graph->addLiteral($mainResource, 'http://joinup.eu/eira/properties', Json::encode([
           'namespaces' => $namespaces,
           'rows' => $rows,
         ]));
