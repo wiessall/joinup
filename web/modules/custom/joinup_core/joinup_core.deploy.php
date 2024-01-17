@@ -14,6 +14,7 @@
 
 declare(strict_types = 1);
 
+use Drupal\Core\Url;
 use Drupal\joinup_group\Event\GroupMenuLinksEvent;
 use Drupal\og\OgGroupAudienceHelperInterface;
 use Drupal\og_menu\Entity\OgMenuInstance;
@@ -108,6 +109,7 @@ function joinup_core_deploy_110101(array &$sandbox): string {
   $groups = \Drupal::getContainer()->get('entity_type.manager')->getStorage('rdf_entity')->loadMultiple($group_ids);
   $event_dispatcher = \Drupal::getContainer()->get('event_dispatcher');
   $rdf_repository = \Drupal::getContainer()->get('rdf_meta_entity.repository');
+  $menu_link_content_storage = \Drupal::entityTypeManager()->getStorage('menu_link_content');
   foreach ($groups as $group) {
     $og_menu_instance = OgMenuInstance::create([
       'type' => 'quick_links',
@@ -125,7 +127,14 @@ function joinup_core_deploy_110101(array &$sandbox): string {
     }
 
     if ($eif_perspective = $rdf_repository->getMetaEntityForEntity($group, 'eif_perspective')) {
-      _eif_add_eif_link_to_group_menus($eif_perspective);
+      $menu_link_content_storage->create([
+        'title' => t('EIF Perspective'),
+        'menu_name' => $menu_name,
+        'link' => [
+          'uri' => $eif_perspective->toUrl()->toString(),
+        ],
+        'enabled' => 1,
+      ])->save();
     }
   }
 
