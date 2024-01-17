@@ -142,3 +142,42 @@ function joinup_core_deploy_110101(array &$sandbox): string {
   $sandbox['#finished'] = (int) empty($sandbox['group_ids']);
   return "Processed {$sandbox['progress']} out of {$sandbox['count']} groups.";
 }
+
+/**
+ * Disable 'Members' and 'EIF Perspective' from menu.
+ */
+function joinup_core_deploy_110102(array &$sandbox): string {
+  $entityTypeManager = \Drupal::entityTypeManager();
+  /** @var  \Drupal\menu_link_content\MenuLinkContentStorageInterface $menuLinkContentStorage */
+  $menuLinkContentStorage = $entityTypeManager->getStorage('menu_link_content');
+
+  if (!isset($sandbox['data'])) {
+    $query = $menuLinkContentStorage->getQuery()->accessCheck(FALSE);
+    $or = $query->orConditionGroup()
+      ->condition('link__uri', 'route:entity.rdf_entity.member_overview%', 'LIKE')
+      ->condition('link__uri', 'route:entity.rdf_entity.eif_perspective%', 'LIKE');
+
+    $sandbox['data'] = $query
+      ->condition($or)
+      ->condition('enabled', 1)
+      ->condition('menu_name', 'ogmenu-%', 'LIKE')
+      ->execute();
+
+    $sandbox['progress'] = 0;
+    $sandbox['count'] = count($sandbox['data']);
+  }
+
+  $spliced = array_splice($sandbox['data'], 0, 300);
+
+  /** @var \Drupal\menu_link_content\MenuLinkContentInterface[] $links */
+  $links = $menuLinkContentStorage->loadMultiple($spliced);
+  foreach ($links as $link) {
+    $link->set('enabled', 0);
+    $link->save();
+
+    $sandbox['progress']++;
+  }
+
+  $sandbox['#finished'] = (int) empty($sandbox['data']);
+  return "Processed {$sandbox['progress']} out of {$sandbox['count']}.";
+}
