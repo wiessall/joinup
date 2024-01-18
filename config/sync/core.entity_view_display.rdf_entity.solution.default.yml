@@ -165,7 +165,7 @@ third_party_settings:
             content:
               region_id: null
               region_class_choose: null
-              region_classes: joinup-group
+              region_classes: joinup-group--description
               region_styles: null
               region_data: null
         components:
