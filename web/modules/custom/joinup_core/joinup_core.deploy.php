@@ -118,7 +118,6 @@ function joinup_core_deploy_110101(array &$sandbox): string {
   $group_ids = array_splice($sandbox['group_ids'], 0, 50);
   $groups = \Drupal::getContainer()->get('entity_type.manager')->getStorage('rdf_entity')->loadMultiple($group_ids);
   $event_dispatcher = \Drupal::getContainer()->get('event_dispatcher');
-  $rdf_repository = \Drupal::getContainer()->get('rdf_meta_entity.repository');
   $menu_link_content_storage = \Drupal::entityTypeManager()->getStorage('menu_link_content');
   foreach ($groups as $group) {
     $og_menu_instance = OgMenuInstance::create([
@@ -166,16 +165,18 @@ function joinup_core_deploy_110102(array &$sandbox): string {
   $menuLinkContentStorage = $entityTypeManager->getStorage('menu_link_content');
 
   if (!isset($sandbox['data'])) {
-    $query = $menuLinkContentStorage->getQuery()->accessCheck(FALSE);
+    $query = \Drupal::database()->select('menu_link_content_data', 'mlcd');
+    $query->leftJoin('ogmenu_instance', 'ogm', 'CONCAT(\'ogmenu-\', ogm.id) = mlcd.menu_name');
     $or = $query->orConditionGroup()
-      ->condition('link__uri', 'route:entity.rdf_entity.member_overview%', 'LIKE')
-      ->condition('link__uri', 'route:entity.rdf_entity.eif_perspective%', 'LIKE');
-
-    $sandbox['data'] = $query
-      ->condition($or)
-      ->condition('enabled', 1)
-      ->condition('menu_name', 'ogmenu-%', 'LIKE')
-      ->execute();
+      ->condition('mlcd.link__uri', 'route:entity.rdf_entity.member_overview%', 'LIKE')
+      ->condition('mlcd.link__uri', 'route:entity.rdf_entity.eif_perspective%', 'LIKE');
+    $sandbox['data'] = $query->condition($or)
+      ->condition('mlcd.menu_name', 'ogmenu-%', 'LIKE')
+      ->condition('mlcd.enabled', 1)
+      ->condition('ogm.type', 'navigation')
+      ->fields('mlcd', ['id'])
+      ->execute()
+      ->fetchCol();
 
     $sandbox['progress'] = 0;
     $sandbox['count'] = count($sandbox['data']);
