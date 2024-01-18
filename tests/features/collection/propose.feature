@@ -51,6 +51,7 @@ Feature: Proposing a collection
 
     When I fill in the following:
       | Title                 | Ancient and Classical Mythology                                                                      |
+      | Abstract              | The seminal work on the ancient mythologies of the primitive and classical peoples of the Discworld. |
       | Description           | The seminal work on the ancient mythologies of the primitive and classical peoples of the Discworld. |
       | Geographical coverage | Belgium                                                                                              |
       # Contact information data.
@@ -103,6 +104,7 @@ Feature: Proposing a collection
     When I go to the propose collection form
     And I fill in the following:
       | Title       | The Ratcatcher's Guild                                            |
+      | Abstract    | Some abstract                                                     |
       | Description | A guild of serious men with sacks in which things are struggling. |
       # Contact information data.
       | Name        | Some contact                                                      |
@@ -130,14 +132,15 @@ Feature: Proposing a collection
 
     Given I am logged in as an "authenticated user"
     When I go to the propose collection form
-    Then the following fields should be visible "Title, Description, Topic"
+    Then the following fields should be visible "Title, Abstract, Description, Topic"
     And the following field widgets should be visible "Owner"
-    And the following fields should not be visible "Moderated, Abstract, Content creation, Geographical coverage"
+    And the following fields should not be visible "Moderated, Content creation, Geographical coverage"
     And the following fields should not be present "Affiliates"
     And the following field widgets should be visible "Contact information"
 
     # Fill the mandatory fields.
     And I fill in "Title" with "Just a proposal"
+    And I fill in "Abstract" with "Just a proposal"
     And I enter "Nothing..." in the "Description" wysiwyg editor
     And I select "Employment and Support Allowance" from "Topic"
     And I press "Add existing" at the "Owner" field
@@ -151,9 +154,9 @@ Feature: Proposing a collection
     # Close "Main fields" to check its fields visibility.
     When I expand the "Additional fields" accordion section
     And I collapse the "Main fields" accordion section
-    Then the following fields should not be visible "Title, Description, Topic"
+    Then the following fields should not be visible "Title, Abstract, Description, Topic"
     And the following field widgets should not be visible "Owner"
-    And the following fields should be visible "Content creation, Moderated, Abstract, Geographical coverage"
+    And the following fields should be visible "Content creation, Moderated, Geographical coverage"
     And the following fields should not be present "Affiliates"
     And the following field widgets should not be visible "Contact information"
 
@@ -196,6 +199,7 @@ Feature: Proposing a collection
     Then the "Main fields" accordion section should be active
     # This form has two elements only that have browser-side validation.
     When I fill in "Title" with "Constraint validation API"
+    And I fill in "Abstract" with "Constraint validation API"
     And I expand the "Additional fields" accordion section
     And I press "Propose"
     # Our code should have changed the active accordion item now. A browser message will
@@ -219,7 +223,7 @@ Feature: Proposing a collection
     Given I am logged in as an "authenticated user"
     Then I go to the propose collection form
     And I fill in "Title" with "Some email validation"
-    And I fill in "Abstract" with "Meaningless summary"
+    And I fill in "Abstract" with "Some email validation"
     And I enter "Nothing..." in the "Description" wysiwyg editor
     And I select "HR" from "Topic"
     And I press "Add existing" at the "Owner" field
@@ -304,6 +308,7 @@ Feature: Proposing a collection
     When I go to the propose collection form
     Then I should see the heading "Propose collection"
     When I fill in "Title" with "SVG API example"
+    And I fill in "Abstract" with "SVG API example"
     And I enter "We do not care that much about descriptions." in the "Description" wysiwyg editor
     And I select "Employment and Support Allowance" from "Topic"
     And I press "Add existing" at the "Owner" field

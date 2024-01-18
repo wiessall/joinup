@@ -13,6 +13,7 @@
       standardTags:
         wcag21a: WCAG 2.1 A
         wcag21aa: WCAG 2.1 AA
+        wcag143: Criterion 1.4.3
         wcag411: Criterion 4.1.1
         'cat.text-alternatives': Image text alternative
       excludeElements:
@@ -190,6 +191,7 @@ default:
         Pager: 'nav.pager'
         Plus button menu: '#block-ventuno-joinup-add-content'
         Primary menu: '.region-primary-menu'
+        Quick links: '.block-group-menu-blockquick-links'
         Related solutions: '.field--name-field-is-related-solutions'
         SevenHeader: '.region-header'
         Statistics: '#block-ventuno-statistics'

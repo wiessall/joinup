@@ -73,7 +73,7 @@ class ContactUs extends CKEditor5PluginDefault implements ContainerFactoryPlugin
 
     return [
       'contactus' => [
-        'contactInformation_enabled' => !empty($group->getValidatedContactInformation()),
+        'contactInformation_enabled' => !empty($group->getValidatedContactInformationEmails()),
         'contactInformation_url' => $url,
       ],
     ];

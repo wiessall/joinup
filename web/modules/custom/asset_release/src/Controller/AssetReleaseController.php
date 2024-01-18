@@ -5,6 +5,7 @@ declare(strict_types = 1);
 namespace Drupal\asset_release\Controller;
 
 use Drupal\Component\Render\MarkupInterface;
+use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Controller\ControllerBase;
@@ -170,7 +171,10 @@ class AssetReleaseController extends ControllerBase {
       throw new NotFoundHttpException();
     }
 
-    return $rdf_entity->access('view', $account, TRUE);
+    /** @var \Drupal\solution\Entity\SolutionInterface $rdf_entity */
+    return $rdf_entity->access('view', $account, TRUE) && !empty($rdf_entity->getReleases())
+      ? AccessResult::allowed()
+      : AccessResult::forbidden();
   }
 
   /**

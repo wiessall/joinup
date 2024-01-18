@@ -2657,12 +2657,17 @@ class JoinupContext extends RawDrupalContext {
    *
    * @param \Behat\Gherkin\Node\TableNode $table
    *   The menu data.
+   * @param string $group_label
+   *   The group label.
+   * @param string $group_bundle
+   *   The group bundle.
    *
-   * @Then the draggable menu table should be:
+   * @Then the draggable menu table of the :group_label :group_type should be:
    */
-  public function assertDraggableMenuTable(TableNode $table) {
+  public function assertDraggableMenuTable(TableNode $table, string $group_label, string $group_bundle): void {
     self::assertJavaScriptEnabledBrowser();
 
+    $group = $this->getEntityByLabel('rdf_entity', $group_label, $group_bundle);
     /** @var \Behat\Mink\Element\NodeElement[] $rows */
     $rows = $this->getSession()->getPage()->findAll('css', '#menu-overview tbody tr.draggable');
     $expected = $table->getColumnsHash();
@@ -2673,23 +2678,25 @@ class JoinupContext extends RawDrupalContext {
       $title_element = $current_row->find('css', 'td:first-of-type a:not(.tabledrag-handle)');
       Assert::assertEquals($data['title'], trim($title_element->getText()));
 
-      $menu_link = $this->getMenuLinkByTitle($data['title']);
+      $menu_link = $this->getMenuLinkByTitle($data['title'], $group->id(), 'navigation');
       $parent_input = $current_row->find('css', 'input[name="links[menu_plugin_id:' . $menu_link->getPluginId() . '][parent]"]');
-
-      if (!$parent_input) {
-        throw new \Exception('Cannot find parent input field.');
-      }
 
       // When a parent is available, the line should be indented. Find all
       // indentation elements to assert later on based on the parent value.
       $indentation = $current_row->findAll('css', 'div.indentation');
 
       if (!isset($data['parent']) || $data['parent'] === '') {
-        Assert::assertEmpty($parent_input->getValue());
+        if (!empty($parent_input)) {
+          Assert::assertEmpty($parent_input->getValue());
+        }
         Assert::assertCount(0, $indentation, "The menu link '{$data['title']}' should not be indented but it is.");
       }
       else {
-        $parent_link = $this->getMenuLinkByTitle($data['parent']);
+        if (!$parent_input) {
+          throw new \Exception('Cannot find parent input field.');
+        }
+
+        $parent_link = $this->getMenuLinkByTitle($data['parent'], $group->id(), 'navigation');
         Assert::assertEquals($parent_link->getPluginId(), $parent_input->getValue());
         Assert::assertNotCount(0, $indentation, "The menu link '{$data['title']}' should be indented but it's not.");
       }

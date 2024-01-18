@@ -32,6 +32,10 @@ class CollectionGroupMenuLinksSubscriber implements EventSubscriberInterface {
    *   The event object.
    */
   public function addLinks(GroupMenuLinksEvent $event): void {
+    if ($event->getMenuType() !== 'navigation') {
+      return;
+    }
+
     $group = $event->getGroup();
     if ($group instanceof CollectionInterface) {
       $event->addMenuLink($group->toUrl('glossary'), 'Glossary', -7);
