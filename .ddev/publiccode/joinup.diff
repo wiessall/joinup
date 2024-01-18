@@ -33,15 +33,15 @@ index e348b14..cf5743b 100644
      // checks whether url query parameter
      // is present in url, if so it will
 diff --git a/src/app/contents/constants.js b/src/app/contents/constants.js
-index 6c2e55c..39ac399 100644
+index 6c2e55c..e6373f9 100644
 --- a/src/app/contents/constants.js
 +++ b/src/app/contents/constants.js
 @@ -1,10 +1,10 @@
  let {REPOSITORY, ELASTIC_URL, VALIDATOR_URL, VALIDATOR_REMOTE_URL} = process.env;
  
 -export const privacyPolicyUrl = `https://developers.italia.it/it/privacy-policy/`;
-+export const privacyPolicyUrl = `https://joinup.ec.europa.eu/collection/joinup/specific-privacy-statement`;
 -export const repositoryUrl = `https://docs.italia.it/italia/developers-italia/publiccodeyml/it/master/`;
++export const privacyPolicyUrl = `https://joinup.ec.europa.eu/collection/joinup/specific-privacy-statement`;
 +export const repositoryUrl = `https://yml.publiccode.tools`;
  export const versionsUrl = `https://api.github.com/repos/${REPOSITORY}/contents/version`;
  export const sampleUrl = `https://raw.githubusercontent.com/italia/pc-web-validator/master/tests/valid.minimal.yml`;
