@@ -99,51 +99,76 @@ class SolutionContentArchiverQueue extends QueueWorkerBase implements ContainerF
    * {@inheritdoc}
    */
   public function processItem($data): void {
-    if (
-      !is_array($data) ||
-      !isset($data['user']) ||
-      !isset($data['solution'])
-    ) {
-      $this->logger->error(
-        "Queue item processing failed: item is invalid. Got '%id'",
-        ['%id' => Variable::export($data)],
-      );
-      // Simply release the invalid queue item.
+    if (!$this->queueItemIsValid($data)) {
       return;
     }
-
-    $context = ['%id' => $data['user'], '%actor' => $data['solution']];
-    $solution = $this->entityTypeManager->getStorage('rdf_entity')->load($data['solution']);
-    if (is_null($solution)) {
-      // Log and skip processing.
-      $this->logger->warning(
-        "Cannot archive entities of item with ID '%id': solution does not exist anymore.",
-        $context,
-      );
-      return;
-    }
-    if (!$solution instanceof SolutionInterface) {
-      // Log and skip processing.
-      $this->logger->error(
-        "Cannot archive entities of item with ID '%id': item is not a solution.",
-        $context,
-      );
-      return;
-    }
-
-    $actor = $this->entityTypeManager->getStorage('user')->load($data['user']);
-    if (!$actor instanceof UserInterface) {
-      // Log and skip processing.
-      $this->logger->error(
-        "Cannot archive entities of item with ID '%id': actor account with ID '%actor' is missing.",
-        $context,
-      );
+    \assert(is_array($data));
+    if (!$actor = $this->getActorFromItem($data)) {
       return;
     }
 
     $this->accountSwitcher->switchTo($actor);
-    $entitiesToArchive = $this->getSolutionGroupContent($solution);
-    foreach ($entitiesToArchive as $entity) {
+    try {
+      $this->performOperation($data);
+    }
+    catch (\Exception $exception) {
+      throw $exception;
+    }
+    finally {
+      $this->accountSwitcher->switchBack();
+    }
+  }
+
+  /**
+   * Returns group content of the solution which should be changed.
+   *
+   * @param \Drupal\joinup_group\Entity\GroupInterface $solution
+   *   The solution.
+   *
+   * @return array<\Drupal\Core\Entity\ContentEntityInterface>
+   *   Array of entity instances to change belonging to the provided solution.
+   */
+  protected function getSolutionGroupContent(GroupInterface $solution): array {
+    $idsPerTypeAndBundle = $solution->getGroupContentIds();
+    $entities = [];
+    foreach ($idsPerTypeAndBundle as $entityType => $idsPerBundle) {
+      $entityIds = array_merge(...array_values($idsPerBundle));
+      $entities = array_merge(
+        $entities,
+        array_values($this->entityTypeManager->getStorage($entityType)->loadMultiple($entityIds))
+      );
+    }
+
+    // Filter out content which shouldn't be changed.
+    return array_filter(
+      $entities,
+      function (EntityInterface $entity): bool {
+        foreach (static::ENTITY_CLASSES_TO_ARCHIVE as $class) {
+          if (is_a($entity, $class)) {
+            return TRUE;
+          }
+        }
+        return FALSE;
+      }
+    );
+  }
+
+  /**
+   * Performs the archive transition on the sub content of the solution.
+   *
+   * @param array $data
+   *   The queue item array with string value at the "solution" key.
+   *
+   * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
+   * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
+   * @throws \Drupal\Core\Entity\EntityStorageException
+   */
+  protected function performOperation(array $data): void {
+    if (!$solution = $this->getParentSolutionFromItem($data)) {
+      return;
+    }
+
+    foreach ($this->getSolutionGroupContent($solution) as $entity) {
       if (!$entity instanceof ArchivableEntityInterface) {
         // Continue silently.
         continue;
@@ -159,7 +184,7 @@ class SolutionContentArchiverQueue extends QueueWorkerBase implements ContainerF
         $entity = $storage->load($entity->id(), [SparqlGraphInterface::DEFAULT]) ?? $entity;
       }
 
-      // Current user cannot change the state to archived.
+      // Current user cannot change the state to "archived" state.
       if (!$entity->isTargetWorkflowStateAllowed(static::TARGET_STATE)) {
         continue;
       }
@@ -174,41 +199,109 @@ class SolutionContentArchiverQueue extends QueueWorkerBase implements ContainerF
 
       $entity->setWorkflowState(static::TARGET_STATE)->save();
     }
-    $this->accountSwitcher->switchBack();
   }
 
   /**
-   * Returns group content of the solution which should be archived.
+   * Determines whether the queue item is valid or not.
    *
-   * @param \Drupal\joinup_group\Entity\GroupInterface $solution
-   *   The solution.
+   * @param mixed $data
+   *   The queue item.
    *
-   * @return array<\Drupal\Core\Entity\ContentEntityInterface>
-   *   Array of entity instances to archive belonging to the provided solution.
+   * @return bool
+   *   Returns FALSE if the queue item is invalid, or TRUE if:
+   *   - The item is an array.
+   *   - It has a "user" key with integer or string value.
+   *   - It has a "solution" key with string value.
    */
-  public function getSolutionGroupContent(GroupInterface $solution): array {
-    $idsPerTypeAndBundle = $solution->getGroupContentIds();
-    $entities = [];
-    foreach ($idsPerTypeAndBundle as $entityType => $idsPerBundle) {
-      $entityIds = array_merge(...array_values($idsPerBundle));
-      $entities = array_merge(
-        $entities,
-        array_values($this->entityTypeManager->getStorage($entityType)->loadMultiple($entityIds))
+  protected function queueItemIsValid(mixed $data): bool {
+    if (
+      !is_array($data) ||
+      !isset($data['user']) ||
+      !isset($data['solution'])
+    ) {
+      $this->logger->error(
+        "Queue item processing failed: item is invalid. Got '%item'",
+        ['%item' => Variable::export($data)],
       );
+      return FALSE;
     }
 
-    // Filter out content which shouldn't be archived.
-    return array_filter(
-      $entities,
-      function (EntityInterface $entity): bool {
-        foreach (static::ENTITY_CLASSES_TO_ARCHIVE as $class) {
-          if (is_a($entity, $class)) {
-            return TRUE;
-          }
-        }
-        return FALSE;
-      }
-    );
+    ['user' => $uid, 'solution' => $solutionId] = $data;
+    if (
+      (!is_int($uid) && !is_string($uid)) ||
+      (!is_string($solutionId))
+    ) {
+      $this->logger->error(
+        "Queue item processing failed: user ID and solution ID must be string. Got '%item'",
+        ['%item' => Variable::export($data)],
+      );
+      return FALSE;
+    }
+
+    return TRUE;
+  }
+
+  /**
+   * Instantiates the solution instance from the provided queue item.
+   *
+   * @param array $data
+   *   The queue item array with string value at the "solution" key.
+   *
+   * @return \Drupal\solution\Entity\SolutionInterface|null
+   *   The solution entity if it exists.
+   *
+   * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
+   * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
+   */
+  protected function getParentSolutionFromItem(array $data): ?SolutionInterface {
+    $context = ['%solutionId' => $data['solution']];
+    $solution = $this->entityTypeManager->getStorage('rdf_entity')->load($data['solution']);
+    if (is_null($solution)) {
+      // Log and skip processing.
+      $this->logger->warning(
+        "Cannot archive entities of item with ID '%id': solution does not exist anymore.",
+        $context,
+      );
+      return NULL;
+    }
+    if (!$solution instanceof SolutionInterface) {
+      // Log and skip processing.
+      $this->logger->error(
+        "Cannot archive entities of item with ID '%id': item is not a solution.",
+        $context,
+      );
+      return NULL;
+    }
+    return $solution;
+  }
+
+  /**
+   * Instantiates the solution instance from the provided queue item.
+   *
+   * @param array $data
+   *   The queue item array with string or integer value at the "user" key.
+   *
+   * @return \Drupal\user\UserInterface|null
+   *   The user account which will be used as the actor of the state transition,
+   *   or NULL if it does not exist anymore.
+   *
+   * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
+   * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
+   */
+  protected function getActorFromItem(array $data): ?UserInterface {
+    $actor = $this->entityTypeManager->getStorage('user')->load($data['user']);
+    if (!$actor instanceof UserInterface) {
+      // Log and skip processing.
+      $this->logger->error(
+        "Cannot archive entities of item with ID '%solutionId': actor account with ID '%actor' is missing.",
+        [
+          '%solutionId' => $data['solution'],
+          '%actor' => $data['user'],
+        ],
+      );
+      return NULL;
+    }
+    return $actor;
   }
 
 }
