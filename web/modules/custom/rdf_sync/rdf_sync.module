@@ -9,8 +9,8 @@ declare(strict_types = 1);
 
 use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
-use Drupal\Core\Field\BaseFieldDefinition;
 use Drupal\Core\Field\FieldDefinition;
+use Drupal\rdf_sync\BundleFieldDefinition;
 
 /**
  * Implements hook_entity_bundle_info_alter().
@@ -60,7 +60,7 @@ function rdf_sync_entity_field_storage_info(EntityTypeInterface $entityType): ar
   //   $mapper = \Drupal::getContainer()->get('rdf_sync.mapper');
   //  if (in_array($entityType->id(), $mapper->getEntityTypeIdsWithMappings(), TRUE)) {
   if (in_array($entityType->id(), ['taxonomy_term'], TRUE)) {
-    $definitions['uri'] = BaseFieldDefinition::create('uri')
+    $definitions['uri'] = BundleFieldDefinition::create('uri')
       ->setName('uri')
       ->setTargetEntityTypeId($entityType->id())
       ->setTargetBundle(NULL)
