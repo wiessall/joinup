@@ -26,14 +26,14 @@ class GroupMenuManager implements GroupMenuManagerInterface {
   /**
    * {@inheritdoc}
    */
-  public function getMenuByGroupId(string $group_id): ?OgMenuInstanceInterface {
-    if (!Rdf::load($group_id)) {
+  public function getMenuByGroupId(string $groupId, string $menuType): ?OgMenuInstanceInterface {
+    if (!Rdf::load($groupId)) {
       return NULL;
     }
 
     $properties = [
-      'type' => 'navigation',
-      OgGroupAudienceHelperInterface::DEFAULT_FIELD => $group_id,
+      'type' => $menuType,
+      OgGroupAudienceHelperInterface::DEFAULT_FIELD => $groupId,
     ];
     $storage = $this->entityTypeManager->getStorage('ogmenu_instance');
     if ($instances = $storage->loadByProperties($properties)) {

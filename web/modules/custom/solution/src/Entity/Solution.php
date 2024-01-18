@@ -262,4 +262,11 @@ class Solution extends Rdf implements SolutionInterface {
     return 'field_is_contact_information';
   }
 
+  /**
+   * {@inheritdoc}
+   */
+  public function getWebsiteLinkFieldName(): string {
+    return 'field_is_landing_page';
+  }
+
 }

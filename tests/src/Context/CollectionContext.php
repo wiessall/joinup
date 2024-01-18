@@ -407,19 +407,24 @@ class CollectionContext extends RawDrupalContext {
    *
    * @param \Behat\Gherkin\Node\TableNode $menu_table
    *   The menu table.
+   * @param string $menu_type
+   *   The OG menu instance bundle. Either 'main' or 'navigation'.
+   * @param string $group_label
+   *   The label of the group entity.
+   * @param string $group_bundle
+   *   The bundle of the group entity.
    *
    * @throws \Exception
    *    Throws an exception if the parent item is not found.
    *
-   * @Given (the following )custom page(s) menu structure:
-   * @Given (the following )collection menu structure:
+   * @Given (the following )custom page(s) :menu_type menu structure for the :group_label :group_bundle:
    */
-  public function givenCollectionMenuStructure(TableNode $menu_table): void {
-    /** @var \Drupal\Core\Menu\MenuLinkManagerInterface $menu_link_manager */
-    $menu_link_manager = \Drupal::service('plugin.manager.menu.link');
+  public function givenCollectionMenuStructure(TableNode $menu_table, string $menu_type, string $group_label, string $group_bundle): void {
+    $group = $this->getEntityByLabel('rdf_entity', $group_label, $group_bundle);
+    $menu_link_manager = \Drupal::getContainer()->get('plugin.manager.menu.link');
     foreach ($menu_table->getColumnsHash() as $values) {
       if (!empty($values['parent'])) {
-        $parent_link = $this->getMenuLinkByTitle($values['parent']);
+        $parent_link = $this->getMenuLinkByTitle($values['parent'], $group->id(), $menu_type);
         $values['parent'] = $parent_link->getPluginId();
       }
 
@@ -427,7 +432,7 @@ class CollectionContext extends RawDrupalContext {
         $values['enabled'] = (int) ($values['enabled'] === 'yes');
       }
 
-      $child_link = $this->getMenuLinkByTitle($values['title']);
+      $child_link = $this->getMenuLinkByTitle($values['title'], $group->id(), $menu_type);
       $menu_link_manager->updateDefinition($child_link->getPluginId(), $values);
     }
   }
