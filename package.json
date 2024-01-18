@@ -1,4 +1,5 @@
 {
+  "name": "joinup",
   "author": "European Commission",
   "license": "EUPL-1.2",
   "devDependencies": {

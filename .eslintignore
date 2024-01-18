@@ -1,6 +1,5 @@
 # Ignore generated files.
 /behat.yml
-/docker-compose.override.yml
 /runner.yml
 /web/themes/ventuno/assets/
 /web/themes/iop/assets/
@@ -26,5 +25,8 @@
 /dist/
 
 # Ignore database backups and temporary files directories.
-/db/
 /tmp/
+
+# Ignore publiccode.yml editor.
+/.ddev/publiccode/
+/web/publiccode-editor/
