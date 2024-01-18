@@ -80,7 +80,7 @@ Feature: Asset distribution overview on solution.
     And I click "Add release" in the plus button menu
     Then I should see the heading "Add Release"
     When I fill in "Name" with "The Deep Doors"
-    And I fill in "Release number" with "4"
+    And I fill in "Release version" with "4"
     And I enter "Notes 4" in the "Release notes" wysiwyg editor
 
     # Regression test. First save as draft and then publish to ensure
