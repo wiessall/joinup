@@ -5,6 +5,7 @@ declare(strict_types = 1);
 namespace Drupal\rdf_sync;
 
 use Drupal\Core\Entity\EntityTypeBundleInfoInterface;
+use Drupal\rdf_sync\Model\ColumnMapping;
 
 /**
  * RDF Sync mapper service.

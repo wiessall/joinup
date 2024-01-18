@@ -2,12 +2,12 @@
 
 declare(strict_types = 1);
 
-namespace Drupal\rdf_sync;
+namespace Drupal\rdf_sync\Model;
 
 /**
  * Data model for a mapping.
  */
-class ColumnMapping {
+readonly class ColumnMapping {
 
   /**
    * Constructs a new column mapper instance.
@@ -18,8 +18,8 @@ class ColumnMapping {
    *   The mapping type.
    */
   public function __construct(
-    public readonly string $predicate,
-    public readonly string $type,
+    public string $predicate,
+    public string $type,
   ) {}
 
   /**
