@@ -210,4 +210,11 @@ class Collection extends Rdf implements CollectionInterface {
     return 'field_ar_contact_information';
   }
 
+  /**
+   * {@inheritdoc}
+   */
+  public function getWebsiteLinkFieldName(): string {
+    return 'field_ar_access_url';
+  }
+
 }

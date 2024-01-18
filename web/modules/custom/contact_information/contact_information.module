@@ -52,6 +52,12 @@ function contact_information_entity_bundle_field_info_alter(array &$fields, Enti
       ->setTargetEntityTypeId('rdf_entity')
       ->setTargetBundle('contact_information')
       ->setSetting('target_type', 'rdf_entity')
+      ->setSetting('handler_settings', [
+        'target_bundles' => [
+          'collection' => 'collection',
+          'solution' => 'solution',
+        ],
+      ])
       ->setComputed(TRUE)
       ->setClass(ParentGroupFieldItemList::class);
   }
@@ -196,6 +202,12 @@ function contact_information_rdf_entity_access(EntityInterface $entity, string $
  */
 function contact_information_entity_field_access(string $operation, FieldDefinitionInterface $field_definition, AccountInterface $account, ?FieldItemListInterface $items = NULL): AccessResultInterface {
   if ($operation === 'view' && $field_definition->getName() === 'field_ci_email') {
+    if ($items->getEntity()->isNew()) {
+      // If the contact information entity is new, we don't need to check
+      // anything else.
+      return AccessResult::forbidden();
+    }
+
     $confirmation = \Drupal::getContainer()->get('email_confirmer')->getConfirmation($items->value, 'confirmed', ContactInformationEmailConfirmInterface::REALM);
     $access = $confirmation && $confirmation->get('confirmed')->value == EmailConfirmationInterface::CONFIRMED ? AccessResult::allowed() : AccessResult::forbidden();
     /** @var \Drupal\contact_information\Entity\ContactInformationInterface $contact_info */
