@@ -33,3 +33,7 @@ services:
     arguments: [ '@facets.manager' ]
     tags:
       - { name: event_subscriber }
+  joinup_discussion.shared_content_for_discussions:
+    class: Drupal\joinup_discussion\EventSubscriber\SharedContentForDiscussionsSubscriber
+    tags:
+      - { name: event_subscriber }
