@@ -55,9 +55,44 @@ function joinup_core_deploy_110100(array &$sandbox): string {
 }
 
 /**
- * Alter abstracts of collections.
+ * Create a quick links menu for the groups.
  */
 function joinup_core_deploy_110101(array &$sandbox): string {
+  if (empty($sandbox['group_ids'])) {
+    $groups = \Drupal::entityTypeManager()->getStorage('rdf_entity')->getQuery()
+      ->accessCheck(FALSE)
+      ->condition('rid', ['collection', 'solution'], 'IN')
+      ->execute();
+    $sandbox['group_ids'] = array_keys($groups);
+    $sandbox['progress'] = 0;
+    $sandbox['count'] = count($sandbox['group_ids']);
+  }
+
+  $group_ids = array_splice($sandbox['group_ids'], 0, 50);
+  $groups = \Drupal::getContainer()->get('entity_type.manager')->getStorage('rdf_entity')->loadMultiple($group_ids);
+  foreach ($groups as $group) {
+    $og_menu_instance = OgMenuInstance::create([
+      'type' => 'quick_links',
+      OgGroupAudienceHelperInterface::DEFAULT_FIELD => $group->id(),
+    ]);
+    $og_menu_instance->save();
+    $menu_name = 'ogmenu-' . $og_menu_instance->id();
+    $event_dispatcher = \Drupal::getContainer()->get('event_dispatcher');
+
+    // Allow subscribers to automatically create the menu links.
+    $event = new GroupMenuLinksEvent($group, $menu_name, $og_menu_instance->bundle(), \Drupal::entityTypeManager());
+    $event_dispatcher->dispatch($event);
+  }
+
+  $sandbox['progress'] += count($group_ids);
+  $sandbox['#finished'] = (int) empty($sandbox['group_ids']);
+  return "Processed {$sandbox['progress']} out of {$sandbox['count']} groups.";
+}
+
+/**
+ * Alter abstracts of collections.
+ */
+function joinup_core_deploy_110102(array &$sandbox): string {
   $sparql_connection = \Drupal::getContainer()->get('sparql.endpoint');
   if (empty($sandbox['data'])) {
     $query = <<<SPARQL
