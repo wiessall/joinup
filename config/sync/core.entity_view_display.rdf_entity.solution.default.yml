@@ -53,6 +53,7 @@ dependencies:
     - joinup_layout
     - layout_builder
     - layout_discovery
+    - solution
     - user
 third_party_settings:
   field_group:
@@ -150,6 +151,27 @@ third_party_settings:
                 og: layout_builder.entity
               level: 1
               depth: 0
+            weight: 0
+            additional: {  }
+          5d9de396-8b5c-4b3c-9a69-ec3fb12f0c50:
+            uuid: 5d9de396-8b5c-4b3c-9a69-ec3fb12f0c50
+            region: main
+            configuration:
+              id: 'field_block:rdf_entity:solution:field_is_abstract'
+              label: Abstract
+              label_display: '0'
+              provider: layout_builder
+              context_mapping:
+                entity: layout_builder.entity
+                view_mode: view_mode
+              formatter:
+                type: string
+                label: hidden
+                settings:
+                  link_to_entity: false
+                third_party_settings:
+                  template_suggestion:
+                    template_suggestion: ''
             weight: 0
             additional: {  }
         third_party_settings: {  }
@@ -455,6 +477,17 @@ third_party_settings:
                   template_suggestion:
                     template_suggestion: solution_last_update_date
             weight: 1
+            additional: {  }
+          9f0cd2ee-67dc-45bd-99e7-7a84c0febd2f:
+            uuid: 9f0cd2ee-67dc-45bd-99e7-7a84c0febd2f
+            region: content
+            configuration:
+              id: solution_release_date
+              label: 'Release date'
+              label_display: '0'
+              provider: solution
+              context_mapping: {  }
+            weight: 7
             additional: {  }
         third_party_settings: {  }
       -
