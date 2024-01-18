@@ -1,0 +1,26 @@
+diff --git a/src/Form/OverviewMenuInstances.php b/src/Form/OverviewMenuInstances.php
+index bd7efa1..e1adfe7 100644
+--- a/src/Form/OverviewMenuInstances.php
++++ b/src/Form/OverviewMenuInstances.php
+@@ -28,6 +28,13 @@ class OverviewMenuInstances extends FormBase {
+    */
+   protected $storageController;
+ 
++  /*
++  * The entity type manager.
++  *
++  * @var \Drupal\Core\Entity\EntityTypeManagerInterface
++  */
++ protected $entityTypeManager;
++
+   /**
+    * Constructs an OverviewTerms object.
+    *
+@@ -63,6 +70,7 @@ class OverviewMenuInstances extends FormBase {
+     ];
+     $og_instance_storage = $this->entityTypeManager->getStorage('ogmenu_instance');
+     $query = $og_instance_storage->getQuery()
++      ->accessCheck(TRUE)
+       ->pager(50)
+       ->sort('id')
+       ->condition('type', $ogmenu->id());

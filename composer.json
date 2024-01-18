@@ -297,7 +297,8 @@
                 "Support for HTML mails @see https://www.drupal.org/i/3047124": "resources/patch/php/drupal/email_confirmer/3047124.diff"
             },
             "drupal/email_contact": {
-                "Move form creation in a protected method from ContactController::content() to ContactController::getForm() @see https://www.drupal.org/project/email_contact/issues/3346470": "resources/patch/php/drupal/email_contact/3346470.patch"
+                "Move form creation in a protected method from ContactController::content() to ContactController::getForm() @see https://www.drupal.org/project/email_contact/issues/3346470": "resources/patch/php/drupal/email_contact/3346470.patch",
+                "Deprecated dynamic creation of property @see https://www.drupal.org/project/email_contact/issues/3397818": "resources/patch/php/drupal/email_contact/3397818.patch"
             },
             "drupal/entityqueue": {
                 "Undefined array key \"add_more\" @see https://www.drupal.org/project/entityqueue/issues/3388852": "resources/patch/php/drupal/entityqueue/3388852.diff"
@@ -346,6 +347,10 @@
             "drupal/og": {
                 "The annotations for \"edit-form\" and \"delete-form\" @see https://www.drupal.org/project/og/issues/3338830": "resources/patch/php/drupal/og/3338830.diff"
             },
+            "drupal/og_menu": {
+                "D10 deprecations @see https://www.drupal.org/project/og_menu/issues/3391985": "resources/patch/php/drupal/og_menu/3391985.patch",
+                "menu_name accessed before initialized @see https://www.drupal.org/project/og_menu/issues/3392055": "resources/patch/php/drupal/og_menu/3392055.patch"
+            },
             "drupal/poll": {
                 "Add permissions to edit all polls @see https://www.drupal.org/project/poll/issues/3274724": "resources/patch/php/drupal/poll/3274724-4.patch",
                 "User can stuck on View results @see https://www.drupal.org/project/poll/issues/3405509": "resources/patch/php/drupal/poll/3405509.patch"
@@ -355,7 +360,8 @@
             },
             "drupal/rdf_entity": {
                 "Allow bundle label plural variants @see https://github.com/ec-europa/rdf_entity/pull/12": "resources/patch/php/drupal/rdf_entity/ea8f6af001fca732e89a4be0e29643953f49a88f.diff",
-                "rdf_taxonomy generates a fatal error on the latest devel version @see https://www.drupal.org/project/rdf_entity/issues/3389721": "resources/patch/php/drupal/rdf_entity/3389721.diff"
+                "rdf_taxonomy generates a fatal error on the latest devel version @see https://www.drupal.org/project/rdf_entity/issues/3389721": "resources/patch/php/drupal/rdf_entity/3389721.diff",
+                "Allow new entities to be rendered @see https://www.drupal.org/project/rdf_entity/issues/3413718": "resources/patch/php/drupal/rdf_entity/3413718.diff"
             },
             "drupal/search_api": {
                 "item_id column is too short @see https://www.drupal.org/node/2829696": "resources/patch/php/drupal/search_api/2829696.patch",
