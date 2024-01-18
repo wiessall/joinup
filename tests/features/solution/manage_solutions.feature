@@ -123,6 +123,9 @@ Feature: As a moderator I want to be able to move solutions to other collection.
       | Success messages                                                            |
       | The archiving process of the Solution has been initiated.                   |
       | You will receive an email notification as soon as the process is completed. |
+    Given the following contact information emails are validated:
+      | Liam Smith |
+    And I mark all emails as read
     Then I run cron
     And the workflow state of the "Solution 1 Event" content should be "archived"
     And the workflow state of the "Solution 1 News 1" content should be "archived"
@@ -134,11 +137,22 @@ Feature: As a moderator I want to be able to move solutions to other collection.
     And the workflow state of the "Solution 1 Release 1" "rdf entity" should be "archived"
     And the workflow state of the "Solution 1 Release 2" "rdf entity" should be "draft"
     And the workflow state of the "Solution 1 Release 3" "rdf entity" should be "archived"
+    And 2 e-mails should have been sent
     And the following email should have been sent:
       | recipient | John The Moderator                 |
       | subject   | Joinup: Solution has been archived |
     And the email sent to "John The Moderator" with subject "Joinup: Solution has been archived" contains the following lines of text:
       | Dear John,                                                           |
+      | The Solution 1, along with its associated content items, has been    |
+      | archived. Even though the Solution has been archived, you can still  |
+      | access its pages through the Advanced Search page by selecting 'Show |
+      | only Archived items' or through the Collection it belonged to.       |
+      | If you think this action is not clear, please contact Joinup Support |
+      | at                                                                   |
+    # The email sent to Liam (the contact person of the solution) won't contain
+    # the "Dear Liam," greeting since Liam does not have a user account on
+    # Joinup.
+    And the email sent to "liam.smith@example.com" with subject "Joinup: Solution has been archived" contains the following lines of text:
       | The Solution 1, along with its associated content items, has been    |
       | archived. Even though the Solution has been archived, you can still  |
       | access its pages through the Advanced Search page by selecting 'Show |
