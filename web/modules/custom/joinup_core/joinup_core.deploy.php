@@ -17,7 +17,7 @@ declare(strict_types = 1);
 /**
  * Add state value to asset distributions.
  */
-function joinup_core_deploy_110100(?array &$sandbox = NULL): string {
+function joinup_core_deploy_110200(?array &$sandbox = NULL): string {
   /** @var \Drupal\sparql_entity_storage\SparqlEntityStorageInterface $storage */
   $storage = \Drupal::entityTypeManager()->getStorage('rdf_entity');
 
