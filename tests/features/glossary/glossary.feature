@@ -248,9 +248,9 @@ Feature: As a moderator or group facilitator I want to be able to add, edit and
       | mod      | moderator |
       | fac1     |           |
     And the following collections:
-      | title                    | description                                                                                            | state     |
-      | Collection With Glossary | The Battle of Evermore of the batTle and the BATTLE. Call it everMore or EVERmore. Also, battle again. | published |
-      | The Other Collection     | desc                                                                                                   | published |
+      | title                    | description                                                                                            | abstract                                                                                               | state     |
+      | Collection With Glossary | The Battle of Evermore of the batTle and the BATTLE. Call it everMore or EVERmore. Also, battle again. | The Battle of Evermore of the batTle and the BATTLE. Call it everMore or EVERmore. Also, battle again. | published |
+      | The Other Collection     | desc                                                                                                   | desc                                                                                                   | published |
     And the following collection user membership:
       | collection               | user | roles       |
       | Collection With Glossary | fac  | facilitator |
@@ -428,8 +428,8 @@ Feature: As a moderator or group facilitator I want to be able to add, edit and
       | collection               | user | roles       |
       | Collection With Glossary | mod  | facilitator |
     Given glossary content:
-      | title        | synonyms | definition                                                                                                | collection               |
-      | battle       | evermore | Definition <strong>bold</strong> <em>italic</em> <u>underline</u> <ul><li>list 1</li><li>list 2</li></ul> | Collection With Glossary |
+      | title  | synonyms | definition                                                                                                | collection               |
+      | battle | evermore | Definition <strong>bold</strong> <em>italic</em> <u>underline</u> <ul><li>list 1</li><li>list 2</li></ul> | Collection With Glossary |
     When I am logged in as a moderator
     And I go to the edit form of the "battle" glossary
     Then the "Definition" wysiwyg editor should have the buttons "Bold, Italic, Underline, Link, Bulleted list, Numbered list, Source"
