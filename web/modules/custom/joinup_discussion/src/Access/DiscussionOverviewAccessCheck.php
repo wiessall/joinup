@@ -50,10 +50,16 @@ class DiscussionOverviewAccessCheck implements AccessInterface {
     }
 
     $storage = $this->entityTypeManager->getStorage('node');
-    $count = $storage->getQuery()
+    $queryStorage = $storage->getQuery();
+
+    $orCondition = $queryStorage->orConditionGroup();
+    $orCondition->condition('og_audience', $group->id());
+    $orCondition->condition('field_shared_in', [$group->id()], 'IN');
+
+    $count = $queryStorage
       ->accessCheck(FALSE)
       ->condition('type', 'discussion')
-      ->condition('og_audience', $group->id())
+      ->condition($orCondition)
       ->condition('status', TRUE)
       ->count()
       ->execute();
