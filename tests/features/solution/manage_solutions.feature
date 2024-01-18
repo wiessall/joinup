@@ -74,6 +74,9 @@ Feature: As a moderator I want to be able to move solutions to other collection.
       | Solution 2 |
 
   Scenario: Archiving a solution must archive its sub-content.
+    Given owner:
+      | name        | type    |
+      | The Company | Company |
     And "event" content:
       | title            | solution   | state     |
       | Solution 1 Event | Solution 1 | published |
@@ -104,35 +107,24 @@ Feature: As a moderator I want to be able to move solutions to other collection.
       | mail                   | john.the.moderator@example.com |
       | field_user_first_name  | John                           |
       | field_user_family_name | Moderator                      |
-    # Change the state through the VBO form since it does not triggers form or
-    # entity validation.
-    When I go to the homepage of the "Source" collection
-    And I click "Manage solutions"
-    And the "manage solutions" table should contain the following columns:
-      | Title      | Created on         | State     |
-      | Solution 1 | 18/11/2017 - 10:00 | Published |
-    When I select the "Solution 1" row
-    And I select "Archive solutions" from "Action"
-    And I press "Apply to selected items"
-    Then I should see the heading "Confirmation of Changing the State of Solutions to Archived"
-    And I should see the following lines of text:
-      | Please confirm the state transition of the selected solution. |
-      | The action will be applied on the following items:            |
-      | Solution 1                                                    |
-    And I should not see the following lines of text:
-      | The following items can't be changed: |
-    And I should see the button "Confirm"
-    When I press "Confirm"
+    When I go to the edit form of the "Solution 1" solution
+    Then I should see the button "Archive"
+    # Fill required fields which are still empty.
+    And I enter "Description" in the "Description" wysiwyg editor
+    And I fill in the following:
+      | Name           | Liam Smith             |
+      | E-mail address | liam.smith@example.com |
+    And I press "Add existing" at the "Owner" field
+    And I fill in "Owner" with "The Company"
+    And I press "Add owner"
+    And I select "Data" from "Solution type"
+    When I press "Archive"
     Then I should see the following success messages:
       | Success messages                                                            |
-      | The Solution 1 solution's state was changed to Archived.                    |
       | The archiving process of the Solution has been initiated.                   |
       | You will receive an email notification as soon as the process is completed. |
-    And the "manage solutions" table should contain the following columns:
-      | Title      | Created on         | State    |
-      | Solution 1 | 18/11/2017 - 10:00 | Archived |
-    When I run cron
-    Then the workflow state of the "Solution 1 Event" content should be "archived"
+    Then I run cron
+    And the workflow state of the "Solution 1 Event" content should be "archived"
     And the workflow state of the "Solution 1 News 1" content should be "archived"
     And the workflow state of the "Solution 1 News 2" content should be "draft"
     And the workflow state of the "Solution 1 News 3" content should be "archived"
