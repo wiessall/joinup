@@ -14,6 +14,7 @@
 
 declare(strict_types = 1);
 
+use Drupal\Core\Url;
 use Drupal\joinup_group\Event\GroupMenuLinksEvent;
 use Drupal\og\OgGroupAudienceHelperInterface;
 use Drupal\og_menu\Entity\OgMenuInstance;
@@ -106,13 +107,12 @@ function joinup_core_deploy_110101(array &$sandbox): string {
     // disabled.
     $query = \Drupal::database()->select('menu_link_content_data', 'mlcd');
     $query->leftJoin('ogmenu_instance__og_audience', 'ogm', 'CONCAT(\'ogmenu-\', ogm.entity_id) = mlcd.menu_name');
-    $sandbox['disabled_eif_perspective'] = $query
-      ->condition('mlcd.menu_name', 'ogmenu-%', 'LIKE')
+    $sandbox['eif_perspective'] = $query->condition('mlcd.menu_name', 'ogmenu-%', 'LIKE')
       ->condition('mlcd.link__uri', 'route:entity.rdf_entity.eif_perspective%', 'LIKE')
-      ->condition('mlcd.enabled', 0)
       ->fields('ogm', ['og_audience_target_id'])
+      ->fields('mlcd', ['enabled'])
       ->execute()
-      ->fetchCol();
+      ->fetchAllKeyed();
   }
 
   $group_ids = array_splice($sandbox['group_ids'], 0, 50);
@@ -136,14 +136,18 @@ function joinup_core_deploy_110101(array &$sandbox): string {
       continue;
     }
 
-    if ($eif_perspective = $rdf_repository->getMetaEntityForEntity($group, 'eif_perspective')) {
+    if (in_array($group->id(), array_keys($sandbox['eif_perspective']))) {
+      $link = [
+        'uri' => Url::fromRoute('entity.rdf_entity.eif_perspective', [
+          'rdf_entity' => $group->id(),
+        ])->toUriString(),
+      ];
+
       $menu_link_content_storage->create([
         'title' => t('EIF Perspective'),
         'menu_name' => $menu_name,
-        'link' => [
-          'uri' => $eif_perspective->toUrl()->toUriString(),
-        ],
-        'enabled' => !in_array($group->id(), $sandbox['disabled_eif_perspective']),
+        'link' => $link,
+        'enabled' => $sandbox['eif_perspective'][$group->id()],
       ])->save();
     }
   }
