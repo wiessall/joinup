@@ -59,7 +59,7 @@ use Drupal\solution\Entity\SolutionInterface;
  * Template 24: solution_content_archive
  *   Operation: update
  *   Actor: moderator
- *   Recipients: owner, moderators
+ *   Recipients: contacts, moderators
  * @codingStandardsIgnoreEnd
  */
 class SolutionRdfSubscriber extends NotificationSubscriberBase {
@@ -518,19 +518,18 @@ class SolutionRdfSubscriber extends NotificationSubscriberBase {
       return;
     }
 
-    // Sub-content bulk archive is an action performed in a queue worker, where
-    // we need to set an actor account to move the sub-content to the archived
-    // state, because of the required permissions.
     $solution = $event->getEntity();
     \assert($solution instanceof SolutionInterface);
-    $recipientIds = array_unique(
-      array_merge(
-        $solution->getGroupOwnerIds(),
-        $this->getRecipientIdsByRole('moderator')
-      )
+
+    // Notify contacts.
+    $this->messageDelivery->sendMessageTemplateToEmailAddresses(
+      self::TEMPLATE_ARCHIVAL_COMPLETE,
+      $this->generateArguments($solution),
+      $solution->getValidatedContactInformation(),
     );
+    // Notify moderators.
     $this->sendUserDataMessages([
-      self::TEMPLATE_ARCHIVAL_COMPLETE => $recipientIds,
+      self::TEMPLATE_ARCHIVAL_COMPLETE => $this->getRecipientIdsByRole('moderator'),
     ]);
   }
 
