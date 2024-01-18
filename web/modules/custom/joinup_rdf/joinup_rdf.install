@@ -7,7 +7,7 @@
 
 declare(strict_types=1);
 
-use Drupal\Core\Field\BaseFieldDefinition;
+use Drupal\rdf_sync\BundleFieldDefinition;
 
 /**
  * Performs checks for the RDF entities and its storage.
@@ -57,7 +57,7 @@ function joinup_rdf_update_110100(): void {
   _joinup_rdf_reinstall_taxonomy();
 
   // Install the 'uri' field on taxonomy terms.
-  $definition = BaseFieldDefinition::create('uri')
+  $definition = BundleFieldDefinition::create('uri')
     ->setName('uri')
     ->setTargetEntityTypeId('taxonomy_term')
     ->setTargetBundle(NULL)
