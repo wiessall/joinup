@@ -42,7 +42,6 @@ use Drupal\node\Entity\Node;
 use Drupal\og\OgGroupAudienceHelperInterface;
 use Drupal\og\OgRoleInterface;
 use Drupal\paragraphs\Entity\Paragraph;
-use Drupal\state_machine\Plugin\Workflow\WorkflowState;
 use GuzzleHttp\Client;
 use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\ExpectationFailedException;
@@ -1078,7 +1077,7 @@ class JoinupContext extends RawDrupalContext {
    * @param string $type
    *   The entity type ID of the entity.
    * @param string $stateExpected
-   *   The expected workflow state.
+   *   The expected workflow state's label.
    *
    * @Given the workflow state of the :label :type should be :stateExpected
    */
@@ -1094,20 +1093,16 @@ class JoinupContext extends RawDrupalContext {
       $entity,
       "The entity doesn't seem to have any workflow."
     );
-    // State might be a label or a machine name. The simplest approach is to
-    // compare labels.
-    $workflowState = $entity->getWorkflow()->getStates()[$stateExpected] ?? NULL;
-    $stateLabelExpected = $workflowState instanceof WorkflowState
-      ? $workflowState->getLabel()
-      : $stateExpected;
+    // State might be a label or a machine name.
+    $stateIdExpected = static::translateWorkflowStateAlias($stateExpected);
     Assert::assertSame(
-      $stateLabelExpected,
-      $actual = $entity->getWorkflowStateInstance()->getLabel(),
+      $stateIdExpected,
+      $actual = $entity->getWorkflowState(),
       sprintf(
         "Workflow state of '%s' '%s' is different than expected. Expected state is '%s', while the actual one is '%s'.",
         $label,
         $type,
-        $stateLabelExpected,
+        $stateIdExpected,
         $actual,
       )
     );
