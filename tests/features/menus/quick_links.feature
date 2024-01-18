@@ -174,3 +174,14 @@ Feature: Test the visibility of the quick links menu.
       | Custom page 3 |
       | Custom page 4 |
       | Custom page 5 |
+
+    # Nesting functionality should be disabled.
+    When I drag the "Custom page 2" table row left
+    When I drag the "Custom page 1" table row right
+    Then the draggable menu table of the "Some collection" collection should be:
+      | title         |
+      | Custom page 2 |
+      | Custom page 1 |
+      | Custom page 3 |
+      | Custom page 4 |
+      | Custom page 5 |
