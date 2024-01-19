@@ -97,6 +97,21 @@ class RdfSyncMapper {
   }
 
   /**
+   * Returns the bundle RDF URI plugin ID.
+   *
+   * @param string $entityTypeId
+   *   The bundle's entity type ID.
+   * @param string $bundle
+   *   The bundle.
+   *
+   * @return array|null
+   *   The bundle RDF URI plugin ID.
+   */
+  public function getRdfUriPluginId(string $entityTypeId, string $bundle): ?string {
+    return $this->getBundleMapping($entityTypeId, $bundle)['uri_plugin'] ?? NULL;
+  }
+
+  /**
    * Returns the bundle mapping.
    *
    * @param string $entityTypeId

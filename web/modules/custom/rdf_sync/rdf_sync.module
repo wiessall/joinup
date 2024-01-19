@@ -8,6 +8,7 @@
 declare(strict_types = 1);
 
 use Drupal\Core\Entity\ContentEntityInterface;
+use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Field\FieldDefinition;
 use Drupal\rdf_sync\BundleFieldDefinition;
@@ -93,4 +94,27 @@ function rdf_sync_entity_bundle_field_info(EntityTypeInterface $entityType, stri
     }
   }
   return $fields;
+}
+
+/**
+ * Implements hook_entity_presave().
+ */
+function rdf_sync_entity_presave(EntityInterface $entity): void {
+  if (
+    !$entity instanceof ContentEntityInterface ||
+    !$entity->isNew() ||
+    ($entity->hasField('uri') && !$entity->get('uri')->isEmpty())
+  ) {
+    return;
+  }
+
+  // Set the 'uri' field for new entities but only if the value is not filled.
+  $mapper = \Drupal::getContainer()->get('rdf_sync.mapper');
+  if ($mapper->isMappedBundle($entity->getEntityTypeId(), $entity->bundle())) {
+    $pluginId = $mapper->getRdfUriPluginId($entity->getEntityTypeId(), $entity->bundle());
+    /** @var \Drupal\rdf_sync\RdfUriGeneratorPluginInterface $plugin */
+    $plugin = \Drupal::getContainer()->get('plugin.manager.rdf_sync.uri_generator')->createInstance($pluginId);
+    $entity->set('uri', $plugin->setEntity($entity)->generate());
+  }
+
 }
