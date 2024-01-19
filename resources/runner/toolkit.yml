@@ -126,6 +126,10 @@ commands:
       command: drupal:site-install
       options:
         existing-config: null
+    - task: exec
+      command: ${drush.bin}
+      arguments:
+        - joinup:create-locked-vocabulary-terms
     - task: run
       command: dev:import-sparql-fixtures
     - task: run
