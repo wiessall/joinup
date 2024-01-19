@@ -57,9 +57,8 @@ function rdf_sync_entity_bundle_info_alter(array &$bundles): void {
  */
 function rdf_sync_entity_field_storage_info(EntityTypeInterface $entityType): array {
   $definitions = [];
-  // @todo Using getEntityTypeIdsWithMappings() doesn't work on install clean.
-  //   $mapper = \Drupal::getContainer()->get('rdf_sync.mapper');
-  //  if (in_array($entityType->id(), $mapper->getEntityTypeIdsWithMappings(), TRUE)) {
+  // @todo Find out why we cannot check whether the entity type ID is in array
+  //   \Drupal::service('rdf_sync.mapper')->getEntityTypeIdsWithMappings().
   if (in_array($entityType->id(), ['taxonomy_term'], TRUE)) {
     $definitions['uri'] = BundleFieldDefinition::create('uri')
       ->setName('uri')

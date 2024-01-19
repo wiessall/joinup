@@ -42,7 +42,7 @@ function joinup_rdf_requirements(string $phase): array {
 /**
  * Uninstall rdf_taxonomy and reinstall taxonomy.
  */
-function joinup_rdf_update_110100(): void {
+function joinup_rdf_update_110200(): void {
   $db = \Drupal::database();
 
   // Anticipate deletion of taxonomy SPARQL mapping entities to avoid errors
@@ -55,40 +55,11 @@ function joinup_rdf_update_110100(): void {
   \Drupal::service('module_installer')->uninstall(['rdf_taxonomy'], FALSE);
 
   // Updating the taxonomy storage definitions and installing the missing tables
-  // is a nightmare. A better way is to uninstall and install on fresh.
-  _joinup_rdf_reinstall_taxonomy();
-
-  // Anticipate this module installation. Needed to create the new field.
-  \Drupal::getContainer()->get('module_installer')->install(['rdf_sync']);
-
-  // Install the 'uri' field on taxonomy terms.
-  $definition = BundleFieldDefinition::create('uri')
-    ->setName('uri')
-    ->setTargetEntityTypeId('taxonomy_term')
-    ->setTargetBundle(NULL)
-    ->setLabel(t('URI'))
-    // Limit to allow indexing.
-    // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7751
-    ->setSetting('max_length', 768)
-    ->setRevisionable(FALSE)
-    ->setCardinality(1);
-  \Drupal::entityDefinitionUpdateManager()->installFieldStorageDefinition('uri', 'taxonomy_term', 'joinup_taxonomy', $definition);
-  // Index the new field.
-  $db->schema()->addUniqueKey('taxonomy_term__uri', 'uri', ['uri_value']);
-  $db->schema()->addUniqueKey('taxonomy_term_revision__uri', 'uri', ['uri_value']);
-}
-
-/**
- * Re-installs the taxonomy module.
- *
- * To enforce recreation of all taxonomy tables, we forcibly uninstall the
- * module first. We're not using the normal uninstall API because this triggers
- * side effects and tasks that we want to avoid. End by re-installing the module
- * on fresh, so that all storage and its definitions are recreated.
- */
-function _joinup_rdf_reinstall_taxonomy(): void {
-  $db = \Drupal::database();
-
+  // is a nightmare. A better way is to uninstall and install on fresh. To
+  // enforce recreation of all taxonomy tables, we forcibly uninstall the
+  // module first. We're not using the normal uninstall API because that
+  // triggers side effects and tasks that we want to avoid. End by re-installing
+  // the module on fresh, so that all storage and its definitions are recreated.
   // Act directly on core.extension config.
   $config = unserialize($db->select('config')
     ->fields('config', ['data'])
@@ -131,4 +102,23 @@ function _joinup_rdf_reinstall_taxonomy(): void {
 
   // Re-install the module on clean w/o dependencies, they're already installed.
   \Drupal::service('module_installer')->install(['taxonomy'], FALSE);
+
+  // Anticipate this module installation. Needed to create the new field.
+  \Drupal::getContainer()->get('module_installer')->install(['rdf_sync']);
+
+  // Install the 'uri' field on taxonomy terms.
+  $definition = BundleFieldDefinition::create('uri')
+    ->setName('uri')
+    ->setTargetEntityTypeId('taxonomy_term')
+    ->setTargetBundle(NULL)
+    ->setLabel(t('URI'))
+    // Limit to allow indexing.
+    // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7751
+    ->setSetting('max_length', 768)
+    ->setRevisionable(FALSE)
+    ->setCardinality(1);
+  \Drupal::entityDefinitionUpdateManager()->installFieldStorageDefinition('uri', 'taxonomy_term', 'joinup_taxonomy', $definition);
+  // Index the new field.
+  $db->schema()->addUniqueKey('taxonomy_term__uri', 'uri', ['uri_value']);
+  $db->schema()->addUniqueKey('taxonomy_term_revision__uri', 'uri', ['uri_value']);
 }
