@@ -105,3 +105,25 @@ Feature: When a solution is archived then its sub-content also should be archive
       | only Archived items' or through the Collection it belonged to.       |
       | If you think this action is not clear, please contact Joinup Support |
       | at                                                                   |
+    # Now, check the unarchive operation.
+    Given I mark all emails as read
+    When I go to the edit form of the "Solution" solution
+    Then I should see the button "Unarchive"
+    When I press "Unarchive"
+    Then I should see the following success messages:
+      | Success messages                                            |
+      | The unarchiving process of the Solution has been initiated. |
+    Given I run the "solution_archive_related_content" queue worker
+    Then 0 e-mails should have been sent
+    # Archived community content (events, discussions, news etc) cannot transit
+    # to published state.
+    And the workflow state of the "Solution Event" content should be "archived"
+    And the workflow state of the "Solution News 1" content should be "archived"
+    And the workflow state of the "Solution News 2" content should be "draft"
+    And the workflow state of the "Solution News 3" content should be "archived"
+    And the workflow state of the "Solution Document" content should be "archived"
+    And the workflow state of the "Solution Discussion" content should be "archived"
+    And the workflow state of the "Solution Distribution" "rdf entity" should be "published"
+    And the workflow state of the "Solution Release 1" "rdf entity" should be "published"
+    And the workflow state of the "Solution Release 2" "rdf entity" should be "draft"
+    And the workflow state of the "Solution Release 3" "rdf entity" should be "published"

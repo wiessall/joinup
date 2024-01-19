@@ -20,6 +20,7 @@ use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\joinup_notification\NotificationEvents;
 use Drupal\joinup_workflow\ArchivableEntityInterface;
 use Drupal\solution\Entity\SolutionInterface;
+use Drupal\solution\TargetState;
 use Drupal\sparql_entity_storage\SparqlEntityStorageInterface;
 use Drupal\sparql_entity_storage\SparqlGraphInterface;
 use Drupal\user\UserInterface;
@@ -42,13 +43,6 @@ class SolutionContentArchiverQueue extends QueueWorkerBase implements ContainerF
     CustomPageInterface::class,
     CommunityContentInterface::class,
   ];
-
-  /**
-   * Machine name of the target state.
-   *
-   * @const string
-   */
-  private const TARGET_STATE = 'archived';
 
   /**
    * Constructs a new SolutionContentArchiverQueue instance.
@@ -114,7 +108,7 @@ class SolutionContentArchiverQueue extends QueueWorkerBase implements ContainerF
 
     $this->accountSwitcher->switchTo($actor);
     try {
-      $this->performOperation($solution);
+      $this->performOperation($solution, $data['targetState']);
     }
     finally {
       $this->accountSwitcher->switchBack();
@@ -160,12 +154,14 @@ class SolutionContentArchiverQueue extends QueueWorkerBase implements ContainerF
    *
    * @param \Drupal\solution\Entity\SolutionInterface $solution
    *   The solution whose sub-contents we want to archive.
+   * @param \Drupal\solution\TargetState $targetState
+   *   The target state.
    *
    * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
    * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
    * @throws \Drupal\Core\Entity\EntityStorageException
    */
-  protected function performOperation(SolutionInterface $solution): void {
+  protected function performOperation(SolutionInterface $solution, TargetState $targetState): void {
     foreach ($this->getSolutionGroupContent($solution) as $entity) {
       if (!$entity instanceof ArchivableEntityInterface) {
         // Continue silently.
@@ -182,13 +178,14 @@ class SolutionContentArchiverQueue extends QueueWorkerBase implements ContainerF
         $entity = $storage->load($entity->id(), [SparqlGraphInterface::DEFAULT]) ?? $entity;
       }
 
-      // Current user cannot change the state to "archived" state.
-      if (!$entity->isTargetWorkflowStateAllowed(static::TARGET_STATE)) {
+      // Current user cannot change the state to "archived" or "unarchived"
+      // state.
+      if (!$entity->isTargetWorkflowStateAllowed($targetState->getMachineName())) {
         continue;
       }
       // No need to archive unpublished or already archived entities.
       if (
-        $entity->isArchived() ||
+        $entity->getWorkflowState() === $targetState->getMachineName() ||
         ($entity instanceof EntityPublishedInterface && !$entity->isPublished())
       ) {
         // Continue silently.
@@ -196,10 +193,12 @@ class SolutionContentArchiverQueue extends QueueWorkerBase implements ContainerF
       }
 
       $entity->skip_notification = TRUE;
-      $entity->setWorkflowState(static::TARGET_STATE)->save();
+      $entity->setWorkflowState($targetState->getMachineName())->save();
     }
 
-    joinup_notification_dispatch_notification('update', NotificationEvents::RDF_ENTITY_ARCHIVE_COMPLETED, $solution);
+    if ($targetState === TargetState::ARCHIVED) {
+      joinup_notification_dispatch_notification('update', NotificationEvents::RDF_ENTITY_ARCHIVE_COMPLETED, $solution);
+    }
   }
 
   /**
@@ -213,12 +212,14 @@ class SolutionContentArchiverQueue extends QueueWorkerBase implements ContainerF
    *   - The item is an array.
    *   - It has a "user" key with integer or string value.
    *   - It has a "solution" key with string value.
+   *   - It has a "targetState" key with \Drupal\solution\TargetState value.
    */
   protected function queueItemIsValid(mixed $data): bool {
     if (
       !is_array($data) ||
       !isset($data['user']) ||
-      !isset($data['solution'])
+      !isset($data['solution']) ||
+      !isset($data['targetState'])
     ) {
       $this->logger->error(
         "Queue item processing failed: item is invalid. Got '%item'",
@@ -227,13 +228,25 @@ class SolutionContentArchiverQueue extends QueueWorkerBase implements ContainerF
       return FALSE;
     }
 
-    ['user' => $uid, 'solution' => $solutionId] = $data;
+    [
+      'user' => $uid,
+      'solution' => $solutionId,
+      'targetState' => $targetState,
+    ] = $data;
     if (
       (!is_int($uid) && !is_string($uid)) ||
       (!is_string($solutionId))
     ) {
       $this->logger->error(
         "Queue item processing failed: user ID and solution ID must be string. Got '%item'",
+        ['%item' => Variable::export($data)],
+      );
+      return FALSE;
+    }
+
+    if (!$targetState instanceof TargetState) {
+      $this->logger->error(
+        "Queue item processing failed: Target state is invalid. Got '%item'",
         ['%item' => Variable::export($data)],
       );
       return FALSE;
