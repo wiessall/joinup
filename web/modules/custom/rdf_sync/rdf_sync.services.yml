@@ -3,3 +3,6 @@ services:
     class: Drupal\rdf_sync\RdfSyncMapper
     arguments:
       - '@entity_type.bundle.info'
+  plugin.manager.rdf_sync.uri_generator:
+    class: Drupal\rdf_sync\RdfUriGeneratorPluginManager
+    arguments: ['@container.namespaces', '@cache.discovery', '@module_handler']

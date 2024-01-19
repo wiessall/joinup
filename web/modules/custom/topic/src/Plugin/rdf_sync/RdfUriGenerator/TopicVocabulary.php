@@ -2,29 +2,21 @@
 
 declare(strict_types=1);
 
-namespace Drupal\joinup_core\Plugin\sparql_entity_storage\Id;
+namespace Drupal\topic\Plugin\rdf_sync\RdfUriGenerator;
 
 use Drupal\Component\Transliteration\TransliterationInterface;
-use Drupal\Core\Entity\EntityTypeManagerInterface;
-use Drupal\sparql_entity_storage\SparqlEntityStorageEntityIdPluginBase;
+use Drupal\rdf_sync\RdfUriGeneratorPluginBase;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Generates the entity ID for 'topic' taxonomy terms.
+ * Generates the RDF URI for 'topic' taxonomy terms.
  *
- * @SparqlEntityIdGenerator(
+ * @RdfUriGenerator(
  *   id = "topic",
  *   name = @Translation("Topic terms"),
  * )
  */
-class TopicVocabulary extends SparqlEntityStorageEntityIdPluginBase {
-
-  /**
-   * The transliteration service.
-   *
-   * @var \Drupal\Component\Transliteration\TransliterationInterface
-   */
-  protected $transliteration;
+class TopicVocabulary extends RdfUriGeneratorPluginBase {
 
   /**
    * Constructs a TopicVocabulary plugin.
@@ -35,25 +27,21 @@ class TopicVocabulary extends SparqlEntityStorageEntityIdPluginBase {
    *   The plugin_id for the plugin instance.
    * @param mixed $plugin_definition
    *   The plugin implementation definition.
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
-   *   The entity type manager service.
    * @param \Drupal\Component\Transliteration\TransliterationInterface $transliteration
    *   The transliteration service.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, EntityTypeManagerInterface $entity_type_manager, TransliterationInterface $transliteration) {
-    parent::__construct($configuration, $plugin_id, $plugin_definition, $entity_type_manager);
-    $this->transliteration = $transliteration;
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, protected TransliterationInterface $transliteration) {
+    parent::__construct($configuration, $plugin_id, $plugin_definition);
   }
 
   /**
    * {@inheritdoc}
    */
-  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
+  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition): self {
     return new static(
       $configuration,
       $plugin_id,
       $plugin_definition,
-      $container->get('entity_type.manager'),
       $container->get('transliteration')
     );
   }
@@ -61,7 +49,7 @@ class TopicVocabulary extends SparqlEntityStorageEntityIdPluginBase {
   /**
    * {@inheritdoc}
    */
-  public function generate() {
+  public function generate(): string {
     $entity = $this->getEntity();
 
     if (empty($entity->parent->target_id)) {
