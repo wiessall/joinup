@@ -65,7 +65,7 @@ Feature: Editing collections
     And I click "About"
 
     Then I should see the heading "Rhyme Land Eels"
-    And the page should contain the html text '<div class="js-ck5-video">'
+    And the page should contain the html text '<div class="media-video">'
 
   @terms @javascript
   Scenario: Regression test wysiwyg add file shows a 0 bytes limit.

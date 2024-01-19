@@ -14,6 +14,7 @@ use Drupal\paragraphs\ParagraphInterface;
  * Implements hook_preprocess_paragraph().
  */
 function ventuno_preprocess_paragraph(array &$variables): void {
+  $variables['#attached']['library'][] = 'ventuno/paragraph';
   $variables['#attached']['library'][] = 'ventuno/paragraph__' . $variables['paragraph']->bundle();
   $variables['attributes']['class'][] = 'paragraph--' . str_replace('_', '-', $variables['paragraph']->bundle());
 
