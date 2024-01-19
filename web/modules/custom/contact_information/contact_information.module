@@ -168,10 +168,11 @@ function contact_information_rdf_entity_access(EntityInterface $entity, string $
   }
 
   // For anonymous users, deny access to the canonical route.
-  if ($account->isAnonymous()) {
-    $route_name = \Drupal::routeMatch()->getRouteName();
-    if ($route_name === 'entity.rdf_entity.canonical') {
-      return AccessResult::forbidden('Anonymous users should not see contact information on the canonical route.');
+  $route_match = \Drupal::routeMatch();
+  if ($account->isAnonymous() && $operation === 'view' && $route_match->getRouteName() === 'entity.rdf_entity.canonical') {
+    $route_entity = $route_match->getParameter('rdf_entity');
+    if ($route_entity instanceof ContactInformationInterface && $route_entity->id() === $entity->id()) {
+      return AccessResult::forbidden('Anonymous users should not see the contact information canonical route.');
     }
   }
   elseif ($operation == 'edit') {
@@ -402,9 +403,14 @@ function contact_information_rdf_entity_view(array &$build, RdfInterface $contac
     if ($confirmation) {
       $cacheable_metadata->addCacheableDependency($confirmation);
     }
-    // @see ISAICP-8333
-    elseif ($resend_access->isAllowed() && 1 === 'WIP') {
+    // Only act for published groups because the functionality is not available
+    // when the group is still proposed. This works along with
+    // ContactInformationEmailConfirm class to prevent the confirmation to be
+    // created if the entity is not published.
+    // @see \Drupal\contact_information\ContactInformationEmailConfirm::confirmEmailsForGroup
+    elseif ($contact_information->getRelatedGroup()->isPublished() && $resend_access->isAllowed()) {
       $confirmation = $email_confirmer->getConfirmation($contact_information->get('field_ci_email')->value, 'pending', ContactInformationEmailConfirmInterface::REALM);
+
       // If no confirmation is created yet, create one before adding the link
       // to the form. Normally, we would have a controller to create the
       // confirmation instead of sending the existing one but the confirmation
@@ -435,6 +441,11 @@ function contact_information_rdf_entity_view(array &$build, RdfInterface $contac
         ];
       }
       $cacheable_metadata->addCacheableDependency($confirmation);
+    }
+
+    if ($confirmation && $confirmation->isConfirmed()) {
+      $build['field_ci_email'][0]['#title'] = $build['field_ci_name'][0];
+      unset($build['field_ci_name']);
     }
 
     // Vary the field's cache by whether the user is logged in or not.
