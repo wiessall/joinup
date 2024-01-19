@@ -5,6 +5,7 @@ declare(strict_types = 1);
 namespace Drupal\joinup_taxonomy\Commands;
 
 use Drupal\Component\Serialization\Json;
+use Drupal\Component\Utility\Crypt;
 use Drupal\Component\Utility\NestedArray;
 use Drupal\Core\Batch\BatchBuilder;
 use Drupal\Core\DependencyInjection\ContainerBuilder;
@@ -25,8 +26,8 @@ class JoinupTaxonomyCommands extends DrushCommands {
   /**
    * List of locked vocabularies grouped by their fixture file.
    *
-   * The order is important for vocabularies whose terms are refering terms from
-   * other vocabularies (e.g. eif_* vocabularies).
+   * The order is important for vocabularies whose terms are referring to other
+   * vocabularies (e.g., eif_* vocabularies).
    *
    * @const string[][]
    */
@@ -61,11 +62,28 @@ class JoinupTaxonomyCommands extends DrushCommands {
   private const FIXTURES_DIR = DRUPAL_ROOT . '/../.ddev/virtuoso/vocab';
 
   /**
-   * Creates terms in the locked vocabularies.
+   * Static cache of dump file path.
    */
-  #[CLI\Command(name: 'joinup:create-term-dump', aliases: ['jctd'])]
-  #[CLI\Help(description: 'Create terms in locked vocabularies')]
+  private static string $dumpFile;
+
+  /**
+   * Creates locked vocabularies terms.
+   */
+  #[CLI\Command(name: 'joinup:create-locked-vocabulary-terms')]
+  #[CLI\Help(
+    description: 'Create terms in locked vocabularies',
+    synopsis: 'If there are changes to the RDF files or the MySQL dump file is missing, the command will recreate the MySQL dump file',
+  )]
   public function createLockedVocabulariesTermDump(): void {
+    if (file_exists($this->getDumpFilePath())) {
+      // We already have a valid MySQL dump file. Restore terms from dump.
+      $this->createTermsFromDump();
+      Drush::logger()->notice(dt('✅ created locked vocabularies terms from MySQL dump'));
+      return;
+    }
+
+    // Either the dump file is missing or source RDF files have changes. We
+    // recreate the MySQL dump file in a batch process.
     $batchBuilder = (new BatchBuilder())->addOperation([self::class, 'init']);
     foreach (array_keys(self::VOCABS) as $file) {
       $batchBuilder->addOperation([self::class, 'processFile'], [$file]);
@@ -181,18 +199,30 @@ class JoinupTaxonomyCommands extends DrushCommands {
    *   List of performed operations.
    */
   public static function finish(bool $success, array $results, array $operations): void {
-    $file = self::FIXTURES_DIR . '/' . 'terms.sql';
+    $file = static::getDumpFilePath(FALSE);
+
     // Dump the taxonomy term tables.
     Drush::drush(Drush::aliasManager()->getSelf(), 'sql:dump', [], [
       'tables-list' => 'taxonomy_term_*',
       'result-file' => $file,
-      'data-only' => TRUE,
       'gzip' => NULL,
       'no-interaction' => TRUE,
     ])->run();
-    Drush::logger()->notice(dt('Terms dumped to !file', [
-      '!file' => realpath("$file.gz"),
-    ]));
+
+    $file = realpath("$file.gz");
+
+    // Remove stale dump files.
+    $staleFiles = array_filter(
+      glob(self::FIXTURES_DIR . '/*.sql.gz'),
+      function (string $staleFile) use ($file): bool {
+        return realpath($staleFile) !== $file;
+      }
+    );
+    array_walk($staleFiles, function (string $file): void {
+      \Drupal::getContainer()->get('file_system')->unlink($file);
+    });
+
+    Drush::logger()->notice(dt('Terms dumped to !file', ['!file' => $file]));
   }
 
   /**
@@ -556,6 +586,41 @@ class JoinupTaxonomyCommands extends DrushCommands {
       }
     }
     return $vocabReference->getUri() === $rdfType;
+  }
+
+  /**
+   * Returns the path to the dump file.
+   *
+   * @param bool $compressed
+   *   Whether to append .gz at the end.
+   *
+   * @return string
+   *   A file path.
+   */
+  private static function getDumpFilePath(bool $compressed = TRUE): string {
+    if (!isset(static::$dumpFile)) {
+      $checksum = '';
+      foreach (array_keys(self::VOCABS) as $file) {
+        $checksum .= sha1_file(self::FIXTURES_DIR . '/' . $file);
+      }
+      $checksum = Crypt::hashBase64($checksum);
+      static::$dumpFile = self::FIXTURES_DIR . "/terms.$checksum.sql";
+    }
+    return static::$dumpFile . ($compressed ? '.gz' : '');
+  }
+
+  /**
+   * Creates the locked vocabularies terms from MySQL dump.
+   */
+  private function createTermsFromDump(): void {
+    $mysql = sprintf(
+      'mysql -u%s%s -h%s %s',
+      getenv('DRUPAL_DATABASE_USERNAME'),
+      getenv('DRUPAL_DATABASE_PASSWORD') ? ' -p' . getenv('DRUPAL_DATABASE_PASSWORD') : '',
+      getenv('DRUPAL_DATABASE_HOST'),
+      getenv('DRUPAL_DATABASE_NAME'),
+    );
+    exec('gunzip < ' . static::getDumpFilePath() . ' | ' . $mysql);
   }
 
 }
