@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace Drupal\joinup_taxonomy\Entity;
 
@@ -16,7 +16,7 @@ class JoinupTermStorageSchema extends TermStorageSchema {
   /**
    * {@inheritdoc}
    */
-  public function getDedicatedTableSchema(FieldStorageDefinitionInterface $storage_definition, ContentEntityTypeInterface $entity_type = NULL): array {
+  public function getDedicatedTableSchema(FieldStorageDefinitionInterface $storage_definition, ?ContentEntityTypeInterface $entity_type = NULL): array {
     $schema = parent::getDedicatedTableSchema($storage_definition, $entity_type);
 
     // Add a unique index on 'uri' column to increase queries performance.
