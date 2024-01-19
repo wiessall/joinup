@@ -63,7 +63,7 @@ function joinup_core_deploy_110100(array &$sandbox): string {
 /**
  * Alter abstracts of collections.
  */
-function joinup_core_deploy_110101(array &$sandbox): string {
+function joinup_core_deploy_110200(array &$sandbox): string {
   $sparql_connection = \Drupal::getContainer()->get('sparql.endpoint');
   if (empty($sandbox['data'])) {
     $query = <<<SPARQL
@@ -133,7 +133,7 @@ SPARQL;
 /**
  * Create a quick links menu for the groups.
  */
-function joinup_core_deploy_110102(array &$sandbox): string {
+function joinup_core_deploy_110201(array &$sandbox): string {
   if (empty($sandbox['group_ids'])) {
     $groups = \Drupal::entityTypeManager()->getStorage('rdf_entity')->getQuery()
       ->accessCheck(FALSE)

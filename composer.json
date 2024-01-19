@@ -23,15 +23,15 @@
         "drupal/ckeditor": "^1.0",
         "drupal/config_ignore": "^3.0",
         "drupal/config_readonly": "^1.0",
-        "drupal/core": "~10.1",
-        "drupal/core-composer-scaffold": "~10.1",
+        "drupal/core": "~10.1.0",
+        "drupal/core-composer-scaffold": "~10.1.0",
         "drupal/custom_markup_block": "^1.2",
         "drupal/default_content": "^2.0",
         "drupal/diff": "~1.0",
         "drupal/digital_size_formatter": "~2.0",
         "drupal/dropsolid_purge": "^1.0@beta",
         "drupal/dynamic_entity_reference": "^4.0",
-        "drupal/editor_file": "^1.6",
+        "drupal/editor_file": "^2.0",
         "drupal/email_confirmer": "^1.0",
         "drupal/email_contact": "^2.0",
         "drupal/embed_block": "^1.0",
@@ -232,6 +232,9 @@
                     "append": "resources/drupal-scaffold/.deprecation-ignore.txt.append",
                     "force-append": true
                 },
+                "[project-root]/.editorconfig": {
+                    "append": "resources/drupal-scaffold/.editorconfig.append"
+                },
                 "[web-root]/.htaccess": {
                     "append": "resources/drupal-scaffold/.htaccess.append"
                 },
@@ -285,10 +288,6 @@
             },
             "drupal/drupal-driver": {
                 "Allow multi-property references. @see https://github.com/jhedstrom/DrupalDriver/pull/252": "resources/patch/php/drupal/drupal-driver/252.diff"
-            },
-            "drupal/editor_file": {
-                "Uploaded files are not permanent @see https://www.drupal.org/i/3057895": "resources/patch/php/drupal/editor_file/3057895.patch",
-                "Drupal 10 & CKEditor 5 readiness @see https://www.drupal.org/i/3232053": "resources/patch/php/drupal/editor_file/3232053.patch"
             },
             "drupal/embed_block": {
                 "Add support for Ckeditor 5. @see https://www.drupal.org/i/3316336": "resources/patch/php/drupal/embed_block/3316336.patch"
@@ -388,8 +387,7 @@
                 "Convert Twitter to X @see https://www.drupal.org/project/social_media_links/issues/3384469": "resources/patch/php/drupal/social_media_links/3384469-7.patch"
             },
             "drupal/sparql_entity_storage": {
-                "Interface contract violation @see https://drupal.org/i/3379328": "resources/patch/php/drupal/sparql_entity_storage/3379328.patch",
-                "Prevent processing entities with unsupported characters in the URI @see https://drupal.org/i/3394064": "resources/patch/php/drupal/sparql_entity_storage/3394064.diff"
+                "Interface contract violation @see https://drupal.org/i/3379328": "resources/patch/php/drupal/sparql_entity_storage/3379328.patch"
             },
             "drupal/svg_image": {
                 "SVG is not valid or cannot be sanitized, return an error. @see https://www.drupal.org/i/3350696": "resources/patch/php/drupal/svg_image/3350696.patch",
