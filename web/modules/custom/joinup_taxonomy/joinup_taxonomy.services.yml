@@ -1,0 +1,6 @@
+services:
+  joinup_taxonomy.vocabulary_updater:
+    class: Drupal\joinup_taxonomy\VocabularyUpdater
+    arguments: ['@entity_type.manager', '@entity_field.manager', '@plugin.manager.field.field_type', '@rdf_sync.mapper']
+    # This is a stateful service. Make sure each call creates a new instance.
+    shared: false
