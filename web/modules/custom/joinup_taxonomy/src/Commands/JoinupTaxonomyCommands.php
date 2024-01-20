@@ -6,11 +6,9 @@ namespace Drupal\joinup_taxonomy\Commands;
 
 use Drupal\Component\Serialization\Json;
 use Drupal\Component\Utility\Crypt;
-use Drupal\Component\Utility\NestedArray;
 use Drupal\Core\Batch\BatchBuilder;
 use Drupal\Core\DependencyInjection\ContainerBuilder;
-use Drupal\Core\Field\Plugin\Field\FieldType\EntityReferenceItem;
-use Drupal\text\Plugin\Field\FieldType\TextItemBase;
+use Drupal\joinup_taxonomy\VocabularyUpdater;
 use Drush\Attributes as CLI;
 use Drush\Commands\DrushCommands;
 use Drush\Drush;
@@ -67,6 +65,11 @@ class JoinupTaxonomyCommands extends DrushCommands {
   private static string $dumpFile;
 
   /**
+   * Static cache for vocabulary updater service.
+   */
+  private static VocabularyUpdater $vocabularyUpdater;
+
+  /**
    * Creates locked vocabularies terms.
    */
   #[CLI\Command(name: 'joinup:create-locked-vocabulary-terms')]
@@ -111,6 +114,7 @@ class JoinupTaxonomyCommands extends DrushCommands {
 
     $context['results']['vids'] = $vids;
     $context['results']['pattern'] = '@' . implode('|', array_map('preg_quote', array_keys($vids))) . '@';
+    $context['results']['uri_to_tid'] = [];
   }
 
   /**
@@ -132,60 +136,42 @@ class JoinupTaxonomyCommands extends DrushCommands {
 
     $graph = new Graph();
     $graph->parse($content);
+    $graphUri = 'http://' . strtolower(pathinfo($file, PATHINFO_FILENAME));
 
-    $message = [];
-    $entityTypeManager = \Drupal::entityTypeManager();
-    /** @var \Drupal\taxonomy\VocabularyStorageInterface $vocabularyStorage */
-    $vocabularyStorage = $entityTypeManager->getStorage('taxonomy_vocabulary');
-    /** @var \Drupal\taxonomy\TermStorageInterface $termStorage */
-    $termStorage = $entityTypeManager->getStorage('taxonomy_term');
+    $callbacks = [];
     foreach (self::VOCABS[$file] as $vid) {
-      /** @var \Drupal\taxonomy\VocabularyInterface $vocabulary */
-      $vocabulary = $vocabularyStorage->load($vid);
-      $isLockedVocabulary = $vocabulary->getThirdPartySetting('joinup_taxonomy', 'locked', FALSE);
+      $rdfType = array_flip($context['results']['vids'])[$vid];
+      self::getVocabularyUpdater()->registerVocabulary($vid, $rdfType, $graphUri);
 
-      self::prepareGraph($graph, $vid);
-
+      $callbacks[] = [self::class, 'prepareGraph'];
       // Allow specific vocabulary alters.
       $method = 'alterGraphFor' . ContainerBuilder::camelize($vid);
       if (method_exists(static::class, $method)) {
-        static::$method($graph);
+        $callbacks[] = [self::class, $method];
       }
-
-      // Extract terms from graph.
-      $terms = self::getTerms($graph, $vid, $context);
-
-      foreach ($terms as $term) {
-        if ($existingTerms = $termStorage->loadByProperties(['uri' => $term['uri']])) {
-          // Delete if already exists.
-          reset($existingTerms)->delete();
-        }
-        $termStorage->create($term)->save();
-      }
-
-      if ($isLockedVocabulary) {
-        // Locked vocabularies: remove existing terms missing from the graph.
-        $processed = array_column($terms, 'uri');
-        $tidsToRemove = $termStorage->getQuery()
-          ->accessCheck(FALSE)
-          ->condition('vid', $vid)
-          ->condition('uri', $processed, 'NOT IN')
-          ->execute();
-        if ($tidsToRemove) {
-          $termStorage->delete($termStorage->loadMultiple($tidsToRemove));
-        }
-      }
-
-      $message[] = dt('!count terms into !vocab', [
-        '!count' => count($terms),
-        '!vocab' => $vid,
-      ]);
     }
 
-    $context['message'] = dt("✅ imported !counts from !file", [
-      '!counts' => implode(', ', $message),
-      '!file' => $file,
-    ]);
+    $results = self::getVocabularyUpdater()
+      // Pass the already collected, URI <-> TID mappings to resolve
+      // dependencies between terms from different vocabularies.
+      ->setUriToTid($context['results']['uri_to_tid'])
+      ->registerGraph($graphUri, $graph, $callbacks)
+      ->update();
+
+    // Get the updated list and make it available to the next batch operation.
+    $context['results']['uri_to_tid'] = self::getVocabularyUpdater()->getUriToTid();
+
+    foreach ($results as $vid => $result) {
+      $stats = [];
+      foreach ($result as $op => $count) {
+        $stats[] = "$count $op";
+      }
+      Drush::logger()->notice(dt('✅ From !file into !vid (!stats)', [
+        '!file' => $file,
+        '!vid' => $vid,
+        '!stats' => implode(', ', $stats),
+      ]));
+    }
   }
 
   /**
@@ -226,149 +212,14 @@ class JoinupTaxonomyCommands extends DrushCommands {
   }
 
   /**
-   * Processes the graph and return a list of terms.
-   *
-   * @param \EasyRdf\Graph $graph
-   *   The RDF graph.
-   * @param string $vid
-   *   The vocabulary ID.
-   * @param array $context
-   *   The batch context passed by reference.
-   *
-   * @return array
-   *   A list of terms as arrays. Each array is suitable to be passed to the
-   *   Term::create() method.
-   */
-  private static function getTerms(Graph $graph, string $vid, array &$context): array {
-    $rdfType = array_search($vid, $context['results']['vids'], TRUE);
-
-    $fieldManager = \Drupal::getContainer()->get('entity_field.manager');
-
-    $fieldStorageDefinitions = $fieldManager->getFieldStorageDefinitions('taxonomy_term');
-    $fieldDefinitions = $fieldManager->getFieldDefinitions('taxonomy_term', $vid);
-    $fieldTypeManager = \Drupal::getContainer()->get('plugin.manager.field.field_type');
-    $mapper = \Drupal::getContainer()->get('rdf_sync.mapper');
-
-    $terms = [];
-    // For performance reasons, we assign TIDs to terms before they are saved,
-    // so that we can compute the entity reference fields between terms (parent,
-    // related, etc.) without needing successive entity saves. Getting and using
-    // the next auto-increment is not safe in 99.99% of the cases. However, here
-    // we strongly assume that no parallel process is underway as this Drush
-    // command is used in very rarely and only by developers, only when they
-    // re-create the taxonomy terms MySQL dump.
-    $tid = \Drupal::database()->query("SELECT MAX(tid) FROM {taxonomy_term_data}")->fetchField() + 1;
-    foreach ($graph->resources() as $resource) {
-      if (!static::isTerm($resource, $rdfType)) {
-        continue;
-      }
-
-      $references = [];
-      $term = [
-        'tid' => $tid++,
-        'vid' => $vid,
-        'uri' => $resource->getUri(),
-      ];
-
-      // Register the URI > TID mapping (used to resolve references).
-      $context['results']['uri_to_tid'][$resource->getUri()] = $term['tid'];
-
-      $mappings = $mapper->getMappings('taxonomy_term', $vid);
-      // Already added.
-      unset($mappings['vid']);
-      foreach ($mappings as $fieldName => $columns) {
-        /** @var \Drupal\rdf_sync\Model\ColumnMapping $mapping */
-        foreach ($columns as $columnName => $mapping) {
-          $fieldType = $fieldStorageDefinitions[$fieldName]->getType();
-          $fieldTypePlugin = $fieldTypeManager->getDefinition($fieldType);
-
-          $isTermReference = FALSE;
-          if (is_a($fieldTypePlugin['class'], EntityReferenceItem::class, TRUE)) {
-            // Check if this field is an entity reference to another term.
-            $fieldDefinition = $fieldDefinitions[$fieldName];
-            if ($fieldDefinition->getSetting('target_type') === 'taxonomy_term') {
-              $handlerSettings = $fieldDefinition->getSetting('handler_settings');
-              // NULL means "all bundles".
-              $isTermReference = $handlerSettings['target_bundles'] === NULL || !empty($handlerSettings['target_bundles']);
-            }
-          }
-
-          $isFormattedText = is_a($fieldTypePlugin['class'], TextItemBase::class, TRUE);
-          // Change 'processed' to 'value' on data import.
-          $columnName = $isFormattedText && $columnName === 'processed' ? 'value' : $columnName;
-
-          $property = RdfNamespace::shorten($mapping->predicate, TRUE) ?? $mapping->predicate;
-          if ($graph->hasProperty($resource, $property)) {
-            // To iterate over all the objects from a resource and having the
-            // same property, we need to use different methods, depending on
-            // whether the object is a resource or a literal.
-            $allMethod = $mapping->type === 'resource' ? 'allResources' : 'allLiterals';
-            $valueMethod = $mapping->type === 'resource' ? 'getUri' : 'getValue';
-
-            $delta = 0;
-            foreach ($graph->{$allMethod}($resource, $property) as $object) {
-              $value = $object->{$valueMethod}();
-              if ($isTermReference && !empty($value)) {
-                // Register the path to field item to be resolved later.
-                $references[] = [$fieldName, $delta, $columnName];
-              }
-              $term[$fieldName][$delta][$columnName] = $value;
-              if ($isFormattedText) {
-                // Special treatment for formatted text fields.
-                $term[$fieldName][$delta]['format'] = filter_default_format();
-              }
-              $delta++;
-            }
-          }
-        }
-      }
-
-      // Some vocabularies are using reverse references, from parent to child.
-      // @see skos:Collection
-      $term['_children'] = array_map(function (Resource $child): string {
-        return $child->getUri();
-      }, $resource->allResources('skos:member'));
-
-      $term['_references'] = $references;
-      $terms[$resource->getUri()] = $term;
-    }
-
-    foreach ($terms as &$term) {
-      // Convert reverse references to normal 'parent' references.
-      foreach ($term['_children'] as $childUri) {
-        if (isset($terms[$childUri])) {
-          $terms[$childUri]['parent'] = $term['tid'];
-        }
-      }
-      unset($term['_children']);
-
-      // Replace all reference URIs to TIDs. Remove dead references.
-      foreach ($term['_references'] as $trail) {
-        $targetUri = NestedArray::getValue($term, $trail);
-        if (isset($context['results']['uri_to_tid'][$targetUri])) {
-          // Convert URI to TID.
-          NestedArray::setValue($term, $trail, $context['results']['uri_to_tid'][$targetUri]);
-        }
-        else {
-          // Dead references are removed.
-          NestedArray::unsetValue($term, $trail);
-        }
-      }
-      unset($term['_references']);
-    }
-
-    return $terms;
-  }
-
-  /**
    * Prepares the graph.
    *
-   * @param \EasyRdf\Graph $graph
-   *   The graph to be cleaned up.
    * @param string $vid
+   *   The graph to be altered.
+   * @param \EasyRdf\Graph $graph
    *   The vocabulary.
    */
-  private static function prepareGraph(Graph $graph, string $vid): void {
+  public static function prepareGraph(string $vid, Graph $graph): void {
     foreach ($graph->resources() as $resource) {
       foreach ($resource->propertyUris() as $propertyUri) {
         // Remove any non-English version of the taxonomy terms since we are
@@ -389,10 +240,12 @@ class JoinupTaxonomyCommands extends DrushCommands {
   /**
    * Alters the 'language' vocabulary graph.
    *
-   * @param \EasyRdf\Graph $graph
+   * @param string $vid
    *   The graph to be altered.
+   * @param \EasyRdf\Graph $graph
+   *   The vocabulary.
    */
-  private static function alterGraphForLanguage(Graph $graph): void {
+  public static function alterGraphForLanguage(string $vid, Graph $graph): void {
     foreach ($graph->resources() as $resource) {
       // If it's not a "skos:Concept", then it's not a language vocabulary term.
       // Remove this resource and continue with the next one.
@@ -429,10 +282,12 @@ class JoinupTaxonomyCommands extends DrushCommands {
   /**
    * Alters the 'spatial' vocabulary graph.
    *
-   * @param \EasyRdf\Graph $graph
+   * @param string $vid
    *   The graph to be altered.
+   * @param \EasyRdf\Graph $graph
+   *   The vocabulary.
    */
-  private static function alterGraphForSpatial(Graph $graph): void {
+  public static function alterGraphForSpatial(string $vid, Graph $graph): void {
     // Remove deprecated countries from the country list. See ISAICP-3442.
     foreach ($graph->resources() as $resource) {
       if ($graph->hasProperty($resource, 'http://publications.europa.eu/ontology/authority/end.use')) {
@@ -448,10 +303,12 @@ class JoinupTaxonomyCommands extends DrushCommands {
    * that can be mapped. Due to the extensions and mime-type RDF representation,
    * this cannot be done by a simple RDF field mapping.
    *
-   * @param \EasyRdf\Graph $graph
+   * @param string $vid
    *   The graph to be altered.
+   * @param \EasyRdf\Graph $graph
+   *   The vocabulary.
    */
-  private static function alterGraphForFileType(Graph $graph): void {
+  public static function alterGraphForFileType(string $vid, Graph $graph): void {
     foreach ($graph->resources() as $resource) {
       if ($resource->type() === 'skos:Concept') {
         $mappedCode = $resource->allResources(RdfNamespace::shorten('http://publications.europa.eu/ontology/authority/op-mapped-code', TRUE));
@@ -481,10 +338,12 @@ class JoinupTaxonomyCommands extends DrushCommands {
   /**
    * Alters the 'owner_type' vocabulary graph.
    *
-   * @param \EasyRdf\Graph $graph
+   * @param string $vid
    *   The graph to be altered.
+   * @param \EasyRdf\Graph $graph
+   *   The vocabulary.
    */
-  private static function alterGraphForOwnerType(Graph $graph): void {
+  public static function alterGraphForOwnerType(string $vid, Graph $graph): void {
     // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-3084
     $graph->addResource(
       'http://purl.org/adms/licencetype/ViralEffect-ShareAlike',
@@ -496,10 +355,12 @@ class JoinupTaxonomyCommands extends DrushCommands {
   /**
    * Alters the 'eira' vocabulary graph.
    *
-   * @param \EasyRdf\Graph $graph
+   * @param string $vid
    *   The graph to be altered.
+   * @param \EasyRdf\Graph $graph
+   *   The vocabulary.
    */
-  private static function alterGraphForEira(Graph $graph): void {
+  public static function alterGraphForEira(string $vid, Graph $graph): void {
     RdfNamespace::set('eira', 'http://data.europa.eu/dr8/');
     // Replace the `dc` namespace with `dct` - requested by the client.
     RdfNamespace::delete('dc');
@@ -569,26 +430,6 @@ class JoinupTaxonomyCommands extends DrushCommands {
   }
 
   /**
-   * Checks if a given RDF resource represents a taxonomy term.
-   *
-   * @param \EasyRdf\Resource $resource
-   *   The RDF resource.
-   * @param string $rdfType
-   *   The predicate of the vocabulary.
-   *
-   * @return bool
-   *   Whether the resource is a term.
-   */
-  private static function isTerm(Resource $resource, string $rdfType): bool {
-    if (!$vocabReference = $resource->getResource('skos:inScheme')) {
-      if (!$vocabReference = $resource->getResource('skos:topConceptOf')) {
-        return FALSE;
-      }
-    }
-    return $vocabReference->getUri() === $rdfType;
-  }
-
-  /**
    * Returns the path to the dump file.
    *
    * @param bool $compressed
@@ -621,6 +462,19 @@ class JoinupTaxonomyCommands extends DrushCommands {
       getenv('DRUPAL_DATABASE_NAME'),
     );
     exec('gunzip < ' . static::getDumpFilePath() . ' | ' . $mysql);
+  }
+
+  /**
+   * Returns the vocabulary updater service.
+   *
+   * @return \Drupal\joinup_taxonomy\VocabularyUpdater
+   *   The vocabulary updater service.
+   */
+  private static function getVocabularyUpdater(): VocabularyUpdater {
+    if (!isset(self::$vocabularyUpdater)) {
+      static::$vocabularyUpdater = \Drupal::service('joinup_taxonomy.vocabulary_updater');
+    }
+    return self::$vocabularyUpdater;
   }
 
 }
