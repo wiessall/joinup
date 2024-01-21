@@ -32,7 +32,7 @@ class JoinupTaxonomyCommands extends DrushCommands {
   private const VOCABS = [
     'actor.rdf' => ['actor'],
     'ADMS-SW-v1.00.rdf' => ['owner_type', 'licence_type'],
-    'ADMS_SKOS_v1.00.rdf' => ['representation_technique'],
+    'ADMS_SKOS_v1.00.rdf' => ['representation_technique', 'status'],
     'business-process.rdf' => ['business_process'],
     'countries-skos.rdf' => ['spatial'],
     'data-theme-skos.rdf' => ['themes'],
