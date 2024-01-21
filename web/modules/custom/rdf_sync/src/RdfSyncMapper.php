@@ -33,7 +33,7 @@ class RdfSyncMapper {
    * @return string|null
    *   The RDF type URI or NULL if not mapped.
    */
-  public function getBundleType(string $entityTypeId, string $bundle): ?string {
+  public function getBundleRdfType(string $entityTypeId, string $bundle): ?string {
     return $this->getBundleMapping($entityTypeId, $bundle)['type'] ?? NULL;
   }
 
@@ -49,7 +49,7 @@ class RdfSyncMapper {
    *   Whether a given bundle is mapped.
    */
   public function isMappedBundle(string $entityTypeId, string $bundle): bool {
-    return (bool) $this->getBundleType($entityTypeId, $bundle);
+    return (bool) $this->getBundleRdfType($entityTypeId, $bundle);
   }
 
   /**
