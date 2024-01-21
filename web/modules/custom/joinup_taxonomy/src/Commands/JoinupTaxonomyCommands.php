@@ -4,22 +4,22 @@ declare(strict_types = 1);
 
 namespace Drupal\joinup_taxonomy\Commands;
 
-use Drupal\Component\Serialization\Json;
 use Drupal\Component\Utility\Crypt;
 use Drupal\Core\Batch\BatchBuilder;
 use Drupal\Core\DependencyInjection\ContainerBuilder;
+use Drupal\joinup_taxonomy\VocabularyGraphAlterersTrait;
 use Drupal\joinup_taxonomy\VocabularyUpdater;
 use Drush\Attributes as CLI;
 use Drush\Commands\DrushCommands;
 use Drush\Drush;
 use EasyRdf\Graph;
-use EasyRdf\RdfNamespace;
-use EasyRdf\Resource;
 
 /**
  * Joinup taxonomy Drush commands.
  */
 class JoinupTaxonomyCommands extends DrushCommands {
+
+  use VocabularyGraphAlterersTrait;
 
   /**
    * List of locked vocabularies grouped by their fixture file.
@@ -107,7 +107,7 @@ class JoinupTaxonomyCommands extends DrushCommands {
     $mapper = \Drupal::getContainer()->get('rdf_sync.mapper');
     $vids = [];
     foreach (\Drupal::entityTypeManager()->getStorage('taxonomy_vocabulary')->loadMultiple() as $vid => $vocabulary) {
-      if ($type = $mapper->getBundleType('taxonomy_term', $vid)) {
+      if ($type = $mapper->getBundleRdfType('taxonomy_term', $vid)) {
         $vids[$type] = $vid;
       }
     }
