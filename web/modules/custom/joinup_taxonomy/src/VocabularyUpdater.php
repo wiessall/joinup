@@ -31,11 +31,11 @@ use EasyRdf\Resource;
  *   ->registerVocabulary('third_vocab', 'http://vocab/3rd', 'http://graph2')
  *   ->update();
  * @encode
- * This will insert/update terms from the two graph in the registered vocabs.
+ * This will insert/update terms from the two graphs in the registered vocabs.
  *
  * You can pass an initial list of relations between term URIs and TIDs to help
- * resolve the dependencies between terms being parsed with other terms, not
- * part of the process:
+ * resolve the dependencies between terms being parsed with other terms, which
+ * are not part of the process:
  * @code
  * $uriToTid = [
  *   'http://term/1' => 8765,
@@ -55,6 +55,8 @@ use EasyRdf\Resource;
  * new instance, making it safe to use.
  */
 class VocabularyUpdater {
+
+  use VocabularyGraphAlterersTrait;
 
   /**
    * Registered graphs.
