@@ -1,4 +1,7 @@
-@api @group-h
+# TODO: The whole federation functionality will be removed. For now just disable
+# testing. A final decision on how to handle this will be made in ISAICP-8376.
+# See https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-8376
+@api @group-h @wip
 Feature: As a site moderator I am able to import RDF files.
 
   Background:
