@@ -15,14 +15,18 @@ use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\owner\Entity\Owner;
 use Drupal\owner\Entity\OwnerInterface;
+use Drupal\owner\Entity\OwnerType;
 use Drupal\rdf_entity\RdfInterface;
 
 /**
  * Implements hook_entity_bundle_info_alter().
  */
-function owner_entity_bundle_info_alter(&$bundles) {
+function owner_entity_bundle_info_alter(array &$bundles): void {
   if (!empty($bundles['rdf_entity']['owner'])) {
     $bundles['rdf_entity']['owner']['class'] = Owner::class;
+  }
+  if (!empty($bundles['taxonomy_term']['owner_type'])) {
+    $bundles['taxonomy_term']['owner_type']['class'] = OwnerType::class;
   }
 }
 
