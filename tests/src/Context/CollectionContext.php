@@ -178,6 +178,7 @@ class CollectionContext extends RawDrupalContext {
   protected function provideDefaultValues(array $fields): array {
     $default_values = [
       'field_ar_state' => 'draft',
+      'field_ar_abstract' => 'This is a test abstract.',
     ];
 
     foreach ($default_values as $field => $default_value) {
