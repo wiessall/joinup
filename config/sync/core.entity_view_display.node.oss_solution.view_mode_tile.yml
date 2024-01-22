@@ -54,7 +54,7 @@ targetEntityType: node
 bundle: oss_solution
 mode: view_mode_tile
 content:
-  description:
+  oss__description:
     type: joinup_html_stripper_stripped
     label: hidden
     settings:

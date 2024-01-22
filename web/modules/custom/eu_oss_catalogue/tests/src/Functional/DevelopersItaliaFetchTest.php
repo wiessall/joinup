@@ -129,7 +129,7 @@ class DevelopersItaliaFetchTest extends FetchTestBase {
     $solution = $this->getNodeByTitle('GitHub solution 1');
 
     // Assert that markdown is converted for short description.
-    $field_items = $solution->get('description');
+    $field_items = $solution->get('oss__description');
     $render_array = $entity_view_builder->viewField($field_items);
     $rendered = (string) $renderer->renderPlain($render_array);
     $this->assertStringContainsString('[EN] Solution 1: <strong>Short description</strong>', $rendered);
