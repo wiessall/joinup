@@ -184,15 +184,21 @@ function joinup_discussion_preprocess_node__view_mode_tile(array &$variables): v
  * Implements hook_preprocess_block().
  */
 function joinup_discussion_preprocess_block(array &$variables): void {
-  if ($variables["plugin_id"] !== 'facet_block:entity_status') {
+  if ($variables['plugin_id'] !== 'facet_block:entity_status') {
     return;
   }
-  $route_entity = \Drupal::routeMatch()->getParameter('rdf_entity');
-  $count = \Drupal::entityTypeManager()->getStorage('node')
-    ->getQuery()
+  $routeEntity = \Drupal::routeMatch()->getParameter('rdf_entity');
+  $storage = \Drupal::entityTypeManager()->getStorage('node');
+  $queryStorage = $storage->getQuery();
+
+  $orCondition = $queryStorage->orConditionGroup();
+  $orCondition->condition('og_audience', $routeEntity->id());
+  $orCondition->condition('field_shared_in', [$routeEntity->id()], 'IN');
+
+  $count = $queryStorage
     ->accessCheck(FALSE)
     ->condition('type', 'discussion')
-    ->condition('og_audience', $route_entity->id())
+    ->condition($orCondition)
     ->condition('field_state', 'archived')
     ->condition('status', TRUE)
     ->count()

@@ -346,7 +346,16 @@ coding standards rule.
 For some additional details in our SPARQL related functionality, see our
 [SPARQL developer documentation](docs/sparql.md).
 
-## Additional information
+### Mailpit
+
+Mailpit is a tool that allows you to catch all emails sent by the application
+during development. Mailpit is optional, as the default setup of Joinup, is to
+use the devel mail server which stores the emails as text messages in the tmp
+directory. However, Mailpit is more convenient to use, as it provides a web UI
+to view the emails.
+You can access the Mailpit UI at https://joinup.ddev.site:8026.
+
+### Additional information
 
 * [Code of conduct](docs/code_of_conduct.md)
 * [Deployment workflow](docs/release_workflow.md)
