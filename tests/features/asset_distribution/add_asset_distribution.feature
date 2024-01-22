@@ -115,6 +115,7 @@ Feature: Add distribution through the UI
     And I enter "<p>The full source code.</p>" in the "Description" wysiwyg editor
     Given I upload the file "test.zip" to "Access URL"
     And I select "WTFPL" from "Licence"
+    And I select "RDF XML" from "Format"
     And I select "Web Ontology Language Full/DL/Lite" from "Representation technique"
     And I press "Save"
     Then I should have 1 distribution
@@ -130,7 +131,13 @@ Feature: Add distribution through the UI
     When I click "Source tarball"
     Then I should see the heading "Source tarball"
     And I should see the link "WTFPL"
-    And I should see the text "The full source code."
+    And I should see the heading "Categorisation"
+    And I should see the following lines of text:
+      | The full source code.              |
+      | Format                             |
+      | RDF XML                            |
+      | Representation technique           |
+      | Web Ontology Language Full/DL/Lite |
 
     And I go to the homepage of the "Solution random x name" solution
     # Clean up the asset distribution that was created through the UI.
