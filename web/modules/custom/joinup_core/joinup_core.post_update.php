@@ -65,5 +65,14 @@ function joinup_core_post_update_110200(): string {
       ->execute();
   }
 
+  // Because names are obfuscated in the database, it is not simple to test the
+  // update with the current step definitions. In order to not create an unused
+  // step definition only for navigating to the user page by UID, we will assert
+  // that no user exists with the old values here.
+  $users = \Drupal::entityTypeManager()->getStorage('user')->loadByProperties([
+    'field_user_professional_domain' => array_keys($mapping),
+  ]);
+  \assert(empty($users), 'No user exists with the old value for the professional domain.');
+
   return 'The professional domains have been updated.';
 }
