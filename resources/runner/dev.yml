@@ -161,25 +161,25 @@ commands:
     - task: run
       command: virtuoso:import-fixtures
       arguments:
-        - .ddev/virtuoso/vocab/actor.rdf
-        - .ddev/virtuoso/vocab/adms-definition.rdf
-        - .ddev/virtuoso/vocab/ADMS-SW-v1.00.rdf
-        - .ddev/virtuoso/vocab/ADMS_SKOS_v1.00.rdf
-        - .ddev/virtuoso/vocab/business-process.rdf
-        - .ddev/virtuoso/vocab/countries-skos.rdf
-        - .ddev/virtuoso/vocab/data-theme-skos.rdf
-        - .ddev/virtuoso/vocab/eif_conceptual_model.rdf
-        - .ddev/virtuoso/vocab/eif_interoperability_layer.rdf
-        - .ddev/virtuoso/vocab/eif_principle.rdf
-        - .ddev/virtuoso/vocab/eif_recommendation.rdf
-        - .ddev/virtuoso/vocab/eif_solution_type.rdf
-        - .ddev/virtuoso/vocab/EIRA_SKOS.rdf
-        - .ddev/virtuoso/vocab/filetypes-skos.rdf
-        - .ddev/virtuoso/vocab/languages-skos.rdf
-        - .ddev/virtuoso/vocab/product_type.rdf
-        - .ddev/virtuoso/vocab/solution_category.rdf
-        - .ddev/virtuoso/vocab/standardization_level.rdf
-        - .ddev/virtuoso/vocab/test_resource_type.rdf
+        - resources/adms/adms-definition.rdf
+        - resources/vocab/actor.rdf
+        - resources/vocab/ADMS-SW-v1.00.rdf
+        - resources/vocab/ADMS_SKOS_v1.00.rdf
+        - resources/vocab/business-process.rdf
+        - resources/vocab/countries-skos.rdf
+        - resources/vocab/data-theme-skos.rdf
+        - resources/vocab/eif_conceptual_model.rdf
+        - resources/vocab/eif_interoperability_layer.rdf
+        - resources/vocab/eif_principle.rdf
+        - resources/vocab/eif_recommendation.rdf
+        - resources/vocab/eif_solution_type.rdf
+        - resources/vocab/EIRA_SKOS.rdf
+        - resources/vocab/filetypes-skos.rdf
+        - resources/vocab/languages-skos.rdf
+        - resources/vocab/product_type.rdf
+        - resources/vocab/solution_category.rdf
+        - resources/vocab/standardization_level.rdf
+        - resources/vocab/test_resource_type.rdf
     - task: run
       command: sparql:query
       arguments:

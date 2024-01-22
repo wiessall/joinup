@@ -205,8 +205,8 @@ Feature: Global search
       | title         | release number | release notes                               | keywords | is version of  | owner             | contact information | state     |
       | Release Alpha | 1              | <p>Release notes for <em>beta</em> changes. | Alphabet | Solution alpha | Responsible owner | Go-to contact       | published |
     And the following distributions:
-      | title              | description                                    | parent        | access url |
-      | Distribution alpha | <p>A simple beta distribution description.</p> | Release Alpha | test.zip   |
+      | title              | description                                    | parent        | access url | state     |
+      | Distribution alpha | <p>A simple beta distribution description.</p> | Release Alpha | test.zip   | published |
     And the following licences:
       | title         | description                         |
       | Licence Alpha | A beta description for the licence. |
@@ -383,6 +383,7 @@ Feature: Global search
       | licence                  | Apache-2.0                      |
       | format                   | HTML                            |
       | representation technique | Datalog                         |
+      | state                    | published                       |
 
     When I enter "zzoludistro" in the search bar and press enter
     Then the page should show only the tiles "Zzolution"
@@ -407,7 +408,7 @@ Feature: Global search
     And I select "LGPL" from "Licence"
     And I select "CSV" from "Format"
     And I select "Human Language" from "Representation technique"
-    And I press "Save"
+    And I press "Update"
     Then I should see the heading "DistroZzolu"
 
     # Repeat the previous searches to prove that the initial keywords were
@@ -476,6 +477,7 @@ Feature: Global search
       | licence                  | Apache-2.0                        |
       | format                   | HTML                              |
       | representation technique | Datalog                           |
+      | state                    | published                         |
 
     When I enter "releazzDistro" in the search bar and press enter
     Then the page should show only the tiles "Releazz"
@@ -500,7 +502,7 @@ Feature: Global search
     And I select "LGPL" from "Licence"
     And I select "CSV" from "Format"
     And I select "Human Language" from "Representation technique"
-    And I press "Save"
+    And I press "Update"
 
     # Repeat the previous searches to prove that the initial keywords were
     # removed from the Search API index.
