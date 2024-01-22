@@ -112,17 +112,17 @@ class Tid implements EventSubscriberInterface {
    * @param string $uri
    *   The URI.
    *
-   * @return int|null
+   * @return string|int|null
    *   The taxonomy term ID.
    */
-  protected function getTid(string $uri): ?int {
+  protected function getTid(string $uri): string|int|null {
     if (!($this->uriToTid[$uri] ?? NULL)) {
       $storage = $this->entityTypeManager->getStorage('taxonomy_term');
       $tids = $storage->getQuery()
         ->accessCheck(FALSE)
         ->condition('uri', $uri)
         ->execute();
-      $this->uriToTid[$uri] = $tids ? (int) current($tids) : NULL;
+      $this->uriToTid[$uri] = $tids ? current($tids) : NULL;
     }
     return $this->uriToTid[$uri];
   }
@@ -138,7 +138,7 @@ class Tid implements EventSubscriberInterface {
    */
   protected function getUri(int|string|TermInterface $term): ?string {
     $isEntity = $term instanceof TermInterface;
-    $tid = $isEntity ? (int) $term->id() : (int) $term;
+    $tid = $isEntity ? (string) $term->id() : (string) $term;
     if (($uri = array_search($tid, $this->uriToTid, TRUE)) === FALSE) {
       if (!$isEntity) {
         $term = $this->entityTypeManager->getStorage('taxonomy_term')->load($tid);
