@@ -226,7 +226,7 @@ Feature: As a site moderator I am able to import RDF files.
     # Regression test to ensure that solutions with complex urls still receive all menu items.
     # @see: https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-5608
     When I visit the "Solution 1" solution
-    Then I should see the following group menu items in the specified order:
+    Then I should see the following navigation menu items in the specified order:
       | text     |
       | Overview |
 

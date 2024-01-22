@@ -51,48 +51,9 @@ function joinup_core_post_update_110200(array &$sandbox): string {
 }
 
 /**
- * Disable 'Members' and 'EIF Perspective' from menu.
- */
-function joinup_core_post_update_110201(array &$sandbox): string {
-  $entityTypeManager = \Drupal::entityTypeManager();
-  /** @var  \Drupal\menu_link_content\MenuLinkContentStorageInterface $menuLinkContentStorage */
-  $menuLinkContentStorage = $entityTypeManager->getStorage('menu_link_content');
-
-  if (!isset($sandbox['data'])) {
-    $query = $menuLinkContentStorage->getQuery()->accessCheck(FALSE);
-    $or = $query->orConditionGroup()
-      ->condition('link__uri', 'route:entity.rdf_entity.member_overview%', 'LIKE')
-      ->condition('link__uri', 'route:entity.rdf_entity.eif_perspective%', 'LIKE');
-
-    $sandbox['data'] = $query
-      ->condition($or)
-      ->condition('enabled', 1)
-      ->condition('menu_name', 'ogmenu-%', 'LIKE')
-      ->execute();
-
-    $sandbox['progress'] = 0;
-    $sandbox['count'] = count($sandbox['data']);
-  }
-
-  $spliced = array_splice($sandbox['data'], 0, 300);
-
-  /** @var \Drupal\menu_link_content\MenuLinkContentInterface[] $links */
-  $links = $menuLinkContentStorage->loadMultiple($spliced);
-  foreach ($links as $link) {
-    $link->set('enabled', 0);
-    $link->save();
-
-    $sandbox['progress']++;
-  }
-
-  $sandbox['#finished'] = (int) empty($sandbox['data']);
-  return "Processed {$sandbox['progress']} out of {$sandbox['count']}.";
-}
-
-/**
  * Redirect removed about pages to canonical page.
  */
-function joinup_core_post_update_110202(array &$sandbox): string {
+function joinup_core_post_update_110201(array &$sandbox): string {
   /** @var \Drupal\sparql_entity_storage\SparqlEntityStorageInterface $storage */
   $rdfStorage = \Drupal::entityTypeManager()->getStorage('rdf_entity');
   /** @var \Drupal\Core\Entity\EntityStorageInterface $redirectStorage */
@@ -142,7 +103,7 @@ function joinup_core_post_update_110202(array &$sandbox): string {
 /**
  * Deletes the field_ar_abstract field so that it can be re-created.
  */
-function joinup_core_post_update_110203(): string {
+function joinup_core_post_update_110202(): string {
   $fieldStorage = \Drupal::entityTypeManager()->getStorage('field_storage_config')->load('rdf_entity.field_ar_abstract');
   $fieldStorage?->delete();
   return 'Deleted field_ar_abstract field.';
