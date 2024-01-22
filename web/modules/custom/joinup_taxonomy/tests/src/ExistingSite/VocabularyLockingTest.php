@@ -26,8 +26,6 @@ class VocabularyLockingTest extends JoinupExistingSiteTestBase {
     $this->bypassReadOnlyConfig();
     $vocabulary = $this->createVocabulary();
     $vocabulary->setThirdPartySetting('joinup_taxonomy', 'locked', FALSE)->save();
-    $this->restoreReadOnlyConfig();
-
     $account = $this->createUser([
       "create terms in {$vocabulary->id()}",
       "edit terms in {$vocabulary->id()}",
@@ -36,6 +34,8 @@ class VocabularyLockingTest extends JoinupExistingSiteTestBase {
       // Bypass the legal notice form.
       'administer entity legal',
     ]);
+    $this->restoreReadOnlyConfig();
+
     $oneTimeLoginUrl = $this->user_pass_reset_url($account) . '/login';
     $session->visit($oneTimeLoginUrl);
 
