@@ -34,6 +34,7 @@ Feature: Distribution API
       | description | Asset distribution sample description |
       | access url  | test.zip                              |
       | parent      | Asset distribution asset release      |
+      | state       | published                             |
     Then I should have 1 solution
     And I should have 1 release
     And I should have 1 distribution
@@ -62,6 +63,7 @@ Feature: Distribution API
       | description | Asset distribution sample description |
       | access url  | test.zip                              |
       | parent      | AD first release                      |
+      | state       | published                             |
     Then I should have 1 solution
     And I should have 1 release
     And I should have 1 distribution
