@@ -6,6 +6,7 @@ namespace Drupal\joinup_licence\Entity;
 
 use Drupal\joinup_bundle_class\JoinupBundleClassFieldAccessTrait;
 use Drupal\joinup_taxonomy\Entity\MappedTerm;
+use Drupal\joinup_rdf\Entity\RdfSyncEntityTrait;
 
 /**
  * Bundle class for the 'legal_type' taxonomy term.
@@ -13,6 +14,7 @@ use Drupal\joinup_taxonomy\Entity\MappedTerm;
 class LicenceLegalType extends MappedTerm implements LicenceLegalTypeInterface {
 
   use JoinupBundleClassFieldAccessTrait;
+  use RdfSyncEntityTrait;
 
   /**
    * {@inheritdoc}
