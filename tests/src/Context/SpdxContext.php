@@ -2,29 +2,30 @@
 
 declare(strict_types = 1);
 
-namespace Drupal\spdx\Traits;
+namespace Drupal\joinup\Context;
 
 use Behat\Gherkin\Node\TableNode;
+use Drupal\DrupalExtension\Context\RawDrupalContext;
+use Drupal\joinup\Traits\TestingEntitiesTrait;
 use Drupal\rdf_entity\Entity\Rdf;
-use Drupal\sparql_entity_storage\SparqlEntityStorageInterface;
 
 /**
- * Behat step definitions for the SPDX Licences module.
- *
- * This code is reused both by the (deprecated) SpdxSubContext and the
- * (recommended) SpdxContext.
- *
- * @see \SpdxSubContext
- * @see \Drupal\Tests\spdx\Behat\SpdxContext
+ * SPDX licences context.
  */
-trait SpdxContextTrait {
+class SpdxContext extends RawDrupalContext {
+
+  use TestingEntitiesTrait;
 
   /**
-   * Keeps track of licences created during the scenario, for later cleanup.
-   *
-   * @var \Drupal\rdf_entity\RdfInterface[]
+   * Mapping of human-readable field labels to machine names.
    */
-  protected $licences = [];
+  protected const FIELD_ALIASES = [
+    'uri' => 'id',
+    'ID' => 'field_spdx_licence_id',
+    'title' => 'label',
+    'see also' => 'field_spdx_see_also',
+    'text' => 'field_spdx_licence_text',
+  ];
 
   /**
    * Creates a number of SPDX licence records.
@@ -48,7 +49,7 @@ trait SpdxContextTrait {
     foreach ($data->getColumnsHash() as $licence_data) {
       $values = (object) ['rid' => 'spdx_licence'];
 
-      // Replace the human readable aliases with the field machine names.
+      // Replace the human-readable aliases with the field machine names.
       foreach ($licence_data as $key => $value) {
         if (!array_key_exists($key, $aliases)) {
           throw new \Exception("Unknown column '$key' in the data table.");
@@ -74,6 +75,7 @@ trait SpdxContextTrait {
    */
   public function visitSpdxLicence(string $licence): void {
     $result = \Drupal::entityQuery('rdf_entity')
+      ->accessCheck(FALSE)
       ->condition('label', $licence)
       ->condition('rid', 'spdx_licence')
       ->range(0, 1)
@@ -85,18 +87,6 @@ trait SpdxContextTrait {
     }
     $licence = Rdf::load(reset($result));
     $this->visitPath($licence->toUrl()->toString());
-  }
-
-  /**
-   * Removes any created SPDX licences.
-   *
-   * @throws \Drupal\Core\Entity\EntityStorageException
-   *   Thrown when one or more licences cannot be deleted.
-   *
-   * @AfterScenario
-   */
-  public function cleanSpdxLicences() {
-    $this->getRdfStorage()->delete($this->licences);
   }
 
   /**
@@ -117,17 +107,7 @@ trait SpdxContextTrait {
     $this->parseEntityFields('rdf_entity', $values);
     $entity_id = $this->getDriver()->createEntity('rdf_entity', $values)->id;
 
-    $this->licences[] = $this->getRdfStorage()->load($entity_id);
-  }
-
-  /**
-   * Returns the RDF Entity storage handler.
-   *
-   * @return \Drupal\sparql_entity_storage\SparqlEntityStorageInterface
-   *   The storage handler.
-   */
-  protected function getRdfStorage(): SparqlEntityStorageInterface {
-    return \Drupal::entityTypeManager()->getStorage('rdf_entity');
+    $this->entities['rdf_entity'][$entity_id] = Rdf::load($entity_id);
   }
 
 }
