@@ -51,7 +51,7 @@ content:
         trim_zero: false
     third_party_settings:
       template_suggestion:
-        template_suggestion: no_wrappers
+        template_suggestion: bare
     weight: 0
     region: content
   field_news_headline:
@@ -61,7 +61,7 @@ content:
       link_to_entity: false
     third_party_settings:
       template_suggestion:
-        template_suggestion: no_wrappers
+        template_suggestion: bare
     weight: 1
     region: content
   field_news_logo:
