@@ -136,7 +136,7 @@ third_party_settings:
             uuid: 592281dd-6140-43f3-9ec5-9c88b1db0477
             region: second
             configuration:
-              id: 'field_block:node:oss_solution:description'
+              id: 'field_block:node:oss_solution:oss__description'
               label: 'Short description (computed)'
               label_display: '0'
               provider: layout_builder
@@ -764,6 +764,7 @@ hidden:
   description: true
   langcode: true
   links: true
+  oss__description: true
   oss__documentation: true
   oss__features: true
   oss__long_description: true
