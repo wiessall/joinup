@@ -17,6 +17,11 @@ use EasyRdf\Graph;
  * Tests the '3_way_merge' process step plugin.
  *
  * @group joinup_federation
+ *
+ * @todo The whole federation functionality will be removed. For now just
+ *   disable testing. A final decision will be made in ISAICP-8376.
+ * @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-8376
+ * @group wip
  */
 class ThreeWayMergeStepTest extends StepTestBase {
 
