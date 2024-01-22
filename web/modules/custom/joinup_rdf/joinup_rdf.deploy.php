@@ -9,9 +9,9 @@ declare(strict_types = 1);
 
 use Drupal\Component\Serialization\Json;
 use Drupal\joinup_taxonomy\VocabularyUpdater;
-use Drupal\sparql_entity_storage\SparqlGraphStoreTrait;
 use EasyRdf\Graph;
 use EasyRdf\Http;
+use EasyRdf\Http\Client;
 use EasyRdf\Http\Exception;
 use EasyRdf\RdfNamespace;
 use EasyRdf\Resource;
@@ -48,8 +48,8 @@ function joinup_rdf_deploy_110200(array &$sandbox): string {
     $sandbox['uri_to_tid'] = [];
   }
 
-  /** @var \EasyRdf\GraphStore $graphStore */
-  $graphStore = (new class { use SparqlGraphStoreTrait; })::createGraphStore();
+  $graphStoreHelper = \Drupal::getContainer()->get('joinup_sparql.graph_store.helper');
+  $graphStore = $graphStoreHelper->createGraphStore();
   $graphUri = key($sandbox['graphs']);
   $vids = current($sandbox['graphs']);
   unset($sandbox['graphs'][$graphUri]);
@@ -57,7 +57,7 @@ function joinup_rdf_deploy_110200(array &$sandbox): string {
     // Imports are often processing large amount of data. By default, the
     // EasyRdf HTTP Client timeout is set to 10 seconds only. Use a wider
     // interval to allow the import to succeed.
-    $httpClient = (new Http\Client())->setConfig([
+    $httpClient = (new Client())->setConfig([
       'maxredirects' => 5,
       'useragent' => 'EasyRdf HTTP Client',
       'timeout' => 60,
@@ -171,8 +171,9 @@ function joinup_rdf_deploy_110202(array &$sandbox): void {
     );
   }
 
-  /** @var \EasyRdf\Graph $graph */
-  $graph = (new class { use SparqlGraphStoreTrait; })::createGraphStore()->get('http://eira_skos_properties');
+  $graph = \Drupal::getContainer()
+    ->get('joinup_sparql.graph_store.helper')
+    ->createGraphStore()->get('http://eira_skos_properties');
   $tids = array_splice($sandbox['tids'], 0, 50);
   foreach ($storage->loadMultiple($tids) as $term) {
     $resourceUri = $term->get('uri')->value . '_Properties';
@@ -208,4 +209,84 @@ function joinup_rdf_deploy_110202(array &$sandbox): void {
   }
 
   $sandbox['#finished'] = (int) empty($sandbox['tids']);
+}
+
+/**
+ * Fix term reference fields.
+ */
+function joinup_rdf_deploy_110203(array &$sandbox): string {
+  $db = \Drupal::database();
+  $schema = $db->schema();
+
+  if (!isset($sandbox['fields'])) {
+    $sandbox['fields'] = [
+      'field_document_spatial_coverage' => 'node',
+      'field_event_spatial_coverage' => 'node',
+      'field_news_spatial_coverage' => 'node',
+      'field_topic' => 'node',
+      'field_video_spatial_coverage' => 'node',
+      'field_user_nationality' => 'user',
+      'field_user_professional_domain' => 'user',
+    ];
+    $sandbox['table_prefixes'] = [
+      'node' => ['node', 'node_revision'],
+      'user' => ['user'],
+    ];
+  }
+
+  // Extract a foeld from stack.
+  $field = key($sandbox['fields']);
+  $entityTypeId = current($sandbox['fields']);
+  unset($sandbox['fields'][$field]);
+
+  $store = \Drupal::keyValue('entity.storage_schema.sql');
+
+  // This key-value needs update to align field storage definition.
+  $key = "$entityTypeId.field_schema_data.$field";
+  $definition = $store->get($key);
+
+  foreach ($sandbox['table_prefixes'][$entityTypeId] as $tablePrefix) {
+    $table = "{$tablePrefix}__$field";
+    $column = "{$field}_target_id";
+
+    // Replace the URI with TID in the 'target_id' field.
+    $query = <<<QUERY
+      UPDATE {{$table}} n
+      INNER JOIN {taxonomy_term__uri} u ON n.$column = u.uri_value
+      SET n.$column = u.entity_id
+      QUERY;
+    $db->query($query);
+
+    if ($table === 'user__field_user_professional_domain') {
+      // Some term references were not converted because of ISAICP-8403.
+      // Temporarily delete them to unblock this issue.
+      // @todo Remove this hack in ISAICP-8403.
+      // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-8403
+      $db->query("DELETE FROM {user__field_user_professional_domain} WHERE LEFT(field_user_professional_domain_target_id, 4) = 'http'");
+    }
+
+    // New field schema.
+    $fieldSpec = [
+      'type' => 'int',
+      'unsigned' => TRUE,
+      'not null' => TRUE,
+      'description' => 'The ID of the target entity.',
+    ];
+
+    // Change the field type and recreate the index.
+    $schema->changeField($table, $column, $column, $fieldSpec);
+    $schema->dropIndex($table, $column);
+    $schema->addIndex($table, $column, [$column], [
+      'fields' => [$column => $fieldSpec],
+      'indexes' => [$column => [$column]],
+    ]);
+
+    // Fix field storage definition.
+    $definition[$table]['fields'][$column] = $fieldSpec;
+  }
+  $store->set($key, $definition);
+
+  $sandbox['#finished'] = (int) empty($sandbox['fields']);
+
+  return "✅ Fixed storage definition for field $entityTypeId.$field";
 }
