@@ -71,7 +71,7 @@ Feature: Asset release moderation
       | subject   | Joinup: A release has been updated                                              |
       | body      | The release Release of the dark ship, v1 of the solution Dark Ship was updated. |
 
-    # Request changes as a moderator.
+    # Archive and unarchive as moderator.
     Given I am logged in as a moderator
 
     # Ensure that the moderator has access to the 'Authored on' field when creating a release.
@@ -82,7 +82,7 @@ Feature: Asset release moderation
     And I go to the "Release of the dark ship" release
     And I click "Edit" in the "Entity actions" region
     Then the current workflow state should be "Published"
-    And I should see the workflow buttons "Update, Save as draft, Request changes"
+    And I should see the workflow buttons "Update, Save as draft, Request changes, Archive"
     # The "Delete" button is actually a link to the confirmation form, but it is
     # styled to look identical to a button.
     And I should see the link "Delete"
@@ -91,6 +91,19 @@ Feature: Asset release moderation
     # @see ISAICP-4068
     And I should see the text "Authored on"
     And the following fields should not be present "Langcode, Translation"
+    And I press "Archive"
+    Then I should see the text "Release of the dark ship" in the "Page title" region
+    And I should see the text "Archived" in the "Page title" region
+    And I go to the edit form of the "Release of the dark ship" release
+    And the current workflow state should be "Archived"
+    And I should see the workflow buttons "Update, Unarchive"
+    And I press "Unarchive"
+    Then I should see the text "Release of the dark ship" in the "Page title" region
+    But I should not see the text "Archived" in the "Page title" region
+    And I go to the edit form of the "Release of the dark ship" release
+    And the current workflow state should be "Published"
+
+    # Request changes as a moderator.
     When I fill in "Name" with "Release"
     And I press "Request changes"
     # Motivation required.
