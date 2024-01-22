@@ -866,10 +866,10 @@ display:
           multi_type: separator
           separator: ', '
           field_api_classes: false
-        description:
-          id: description
+        oss__description:
+          id: oss__description
           table: node_field_data
-          field: description
+          field: oss__description
           relationship: none
           group_type: group
           admin_label: ''
