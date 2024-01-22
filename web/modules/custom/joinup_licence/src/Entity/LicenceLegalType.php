@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Drupal\joinup_licence\Entity;
 
 use Drupal\joinup_bundle_class\JoinupBundleClassFieldAccessTrait;
+use Drupal\rdf_sync\Entity\RdfSyncEntityTrait;
 use Drupal\taxonomy\Entity\Term;
 
 /**
@@ -13,6 +14,7 @@ use Drupal\taxonomy\Entity\Term;
 class LicenceLegalType extends Term implements LicenceLegalTypeInterface {
 
   use JoinupBundleClassFieldAccessTrait;
+  use RdfSyncEntityTrait;
 
   /**
    * {@inheritdoc}
