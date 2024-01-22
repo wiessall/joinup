@@ -9,6 +9,7 @@ use Drupal\sparql_entity_storage\Event\InboundValueEvent;
 use Drupal\sparql_entity_storage\Event\OutboundValueEvent;
 use Drupal\sparql_entity_storage\Event\SparqlEntityStorageEvents;
 use Drupal\sparql_entity_storage\Event\ValueEventBase;
+use Drupal\taxonomy\TermInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
@@ -101,7 +102,7 @@ class Tid implements EventSubscriberInterface {
    */
   public function onSave(OutboundValueEvent $event): void {
     if ($this->acceptsConversion($event)) {
-      $event->setValue($this->getUri((int) $event->getValue()));
+      $event->setValue($this->getUri($event->getValue()));
     }
   }
 
@@ -129,16 +130,21 @@ class Tid implements EventSubscriberInterface {
   /**
    * Returns and caches a URI given its corresponding taxonomy term ID.
    *
-   * @param int $tid
-   *   The taxonomy term ID.
+   * @param int|string|TermInterface $term
+   *   The term as entity or as term ID.
    *
    * @return string|null
    *   The URI.
    */
-  protected function getUri(int $tid): ?string {
+  protected function getUri(int|string|TermInterface $term): ?string {
+    $isEntity = $term instanceof TermInterface;
+    $tid = $isEntity ? (int) $term->id() : (int) $term;
     if (($uri = array_search($tid, $this->uriToTid, TRUE)) === FALSE) {
-      $storage = $this->entityTypeManager->getStorage('taxonomy_term');
-      $uri = $storage->load($tid)->get('uri')->value;
+      if (!$isEntity) {
+        $term = $this->entityTypeManager->getStorage('taxonomy_term')->load($tid);
+      }
+      $uri = $term->get('uri')->value;
+      // Cache this match.
       $this->uriToTid[$uri] = $tid;
     }
     return $uri;
