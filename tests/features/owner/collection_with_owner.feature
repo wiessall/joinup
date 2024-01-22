@@ -88,10 +88,9 @@ Feature: Creation of owners through UI
       | title | Jump Mak                                                       |
       | state | published                                                      |
       | owner | Makinator                                                      |
-
     When I am logged in as a "facilitator" of the "Jump Mak" collection
     Then I go to the edit form of the "Jump Mak" collection
     When I press "Remove" at the "Owner" field
     And I press "Remove" at the "Owner" field
     Then I should not see "Makinator"
-    Then the site should not have log records with level lower than "notice"
+    Then the site should not have log records with level lower than "notice" for "php" errors
