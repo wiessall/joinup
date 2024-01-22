@@ -8,10 +8,12 @@
 declare(strict_types = 1);
 
 use Drupal\Core\Render\Element;
+use Drupal\joinup_bundle_class\AbstractInterface;
 use Drupal\joinup_bundle_class\DescriptionInterface;
 use Drupal\joinup_bundle_class\LogoInterface;
 use Drupal\joinup_community_content\Entity\CommunityContentInterface;
 use Drupal\joinup_core\Controller\IdRedirect;
+use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\joinup_workflow\ArchivableEntityInterface;
 use Drupal\smart_trim\TruncateHTML;
 use Drupal\topic\Entity\TopicReferencingEntityInterface;
@@ -63,7 +65,7 @@ function _ventuno_preprocess_tile(array &$variables, string $entity_type_id): vo
     $variables['view_mode'] === 'highlighted' ||
     ($entity_type_id === 'node' && $entity->bundle() === 'custom_page')
   ) {
-    $variables['text'] = $entity instanceof DescriptionInterface && isset($variables['content'][$entity->getDescriptionField()]) ? $variables['content'][$entity->getDescriptionField()] : NULL;
+    $variables['text'] = $entity instanceof DescriptionInterface && !$entity->get($entity->getDescriptionField())->isEmpty() ? $variables['content'][$entity->getDescriptionField()] : NULL;
 
     // Custom pages are using paragraphs and these are very different in
     // structure. They also come with their own view modes and markup and is not
@@ -258,6 +260,10 @@ function _ventuno_preprocess_tile(array &$variables, string $entity_type_id): vo
       'icon' => 'archive-fill',
       'label' => t('Archived'),
     ];
+  }
+
+  if ($entity instanceof GroupInterface && $route_name === 'view.search.page_1') {
+    $variables['text'] = $entity instanceof AbstractInterface && !$entity->get($entity->getAbstractField())->isEmpty() ? $variables['content'][$entity->getAbstractField()] : $variables['text'];
   }
 }
 

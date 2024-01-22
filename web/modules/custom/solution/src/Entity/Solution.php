@@ -13,6 +13,7 @@ use Drupal\asset_release\Entity\AssetReleaseInterface;
 use Drupal\collection\Entity\CollectionInterface;
 use Drupal\collection\Exception\MissingCollectionException;
 use Drupal\contact_information\Traits\ContactInformationTrait;
+use Drupal\joinup_bundle_class\AbstractTrait;
 use Drupal\joinup_bundle_class\DescriptionTrait;
 use Drupal\joinup_bundle_class\JoinupBundleClassFieldAccessTrait;
 use Drupal\joinup_bundle_class\JoinupBundleClassMetaEntityTrait;
@@ -35,6 +36,7 @@ use Drupal\topic\Entity\TopicReferencingEntityTrait;
  */
 class Solution extends Rdf implements SolutionInterface {
 
+  use AbstractTrait;
   use EntityPublicationTimeFallbackTrait;
   use EntityWorkflowStateTrait;
   use FeaturedContentTrait;
@@ -267,6 +269,13 @@ class Solution extends Rdf implements SolutionInterface {
    */
   public function getWebsiteLinkFieldName(): string {
     return 'field_is_landing_page';
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getAbstractField(): string {
+    return 'field_is_abstract';
   }
 
 }
