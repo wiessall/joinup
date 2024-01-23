@@ -4,7 +4,7 @@ declare(strict_types = 1);
 
 namespace Joinup\TaskRunner\Commands;
 
-use OpenEuropa\TaskRunner\Commands\AbstractCommands;
+use EcEuropa\Toolkit\TaskRunner\AbstractCommands;
 
 /**
  * Provides commands for PHP coding standards.
