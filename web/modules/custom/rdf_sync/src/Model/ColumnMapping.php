@@ -10,6 +10,22 @@ namespace Drupal\rdf_sync\Model;
 readonly class ColumnMapping {
 
   /**
+   * Allowed triple object types.
+   *
+   * @const string[]
+   */
+  public const ALLOWED_TYPES = [
+    'resource',
+    'xsd:string',
+    'xsd:boolean',
+    'xsd:date',
+    'xsd:dateTime',
+    'xsd:decimal',
+    'xsd:integer',
+    'xsd:anyURI',
+  ];
+
+  /**
    * Constructs a new column mapper instance.
    *
    * @param string $predicate
@@ -31,12 +47,6 @@ readonly class ColumnMapping {
    * @return $this
    */
   public static function createFromArray(array $mapping): self {
-    if (!isset($mapping['predicate'])) {
-      throw new \InvalidArgumentException("Missing the 'predicate' key");
-    }
-    if (!isset($mapping['type'])) {
-      throw new \InvalidArgumentException("Missing the 'type' key");
-    }
     return new static($mapping['predicate'], $mapping['type']);
   }
 
