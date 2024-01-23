@@ -1,10 +1,8 @@
 @api @group-e
-Feature: Creating comments through the API
-  In order to efficiently write tests for the Joinup platform
-  As a backend developer
-  I need to be able to programmatically create comments
+Feature: View a comment
+  As a visitor of the website I can view a comment on community content.
 
-  Scenario Outline: Creating comments on community content
+  Scenario Outline: View comments on community content
     Given collection:
       | title | Hashrate, shares & workers |
       | state | published                  |
