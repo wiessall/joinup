@@ -7,6 +7,7 @@
 
 declare(strict_types = 1);
 
+use Drupal\Core\Config\Entity\ThirdPartySettingsInterface;
 use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
@@ -19,6 +20,7 @@ use Drupal\rdf_sync\BundleFieldDefinition;
 function rdf_sync_entity_bundle_info_alter(array &$bundles): void {
   $entityTypeManager = \Drupal::entityTypeManager();
   $entityFieldManager = \Drupal::getContainer()->get('entity_field.manager');
+  $bundleMappingDefaults = ['uri_plugin' => NULL, 'fields' => []];
 
   foreach ($entityTypeManager->getDefinitions() as $entityTypeId => $entityType) {
     if (!$entityType->entityClassImplements(ContentEntityInterface::class) || !($bundleEntityTypeId = $entityType->getBundleEntityType())) {
@@ -29,22 +31,23 @@ function rdf_sync_entity_bundle_info_alter(array &$bundles): void {
     /** @var \Drupal\Core\Config\Entity\ConfigEntityInterface&\Drupal\Core\Config\Entity\ThirdPartySettingsInterface $bundle */
     foreach ($bundleStorage->loadMultiple() as $bundleId => $bundle) {
       if ($rdfSyncSettings = $bundle->getThirdPartySettings('rdf_sync')) {
-        if (!empty($rdfSyncSettings['type'])) {
-          // Add bundle level mappings.
-          $bundles[$entityTypeId][$bundleId]['rdf_sync'] = $rdfSyncSettings;
-          // Add configurable fields mappings.
-          foreach ($entityFieldManager->getFieldDefinitions($entityTypeId, $bundleId) as $fieldName => $fieldDefinition) {
-            if (method_exists($fieldDefinition, 'getThirdPartySettings')) {
-              foreach ($fieldDefinition->getThirdPartySettings('rdf_sync') as $columnName => $mapping) {
-                if (empty($mapping['predicate'])) {
-                  throw new \Exception("Mapping of $entityTypeId:$bundleId:$fieldName:$columnName is missing the 'predicate' value");
-                }
-                if (empty($mapping['type'])) {
-                  throw new \Exception("Mapping of $entityTypeId:$bundleId:$fieldName:$columnName is missing the 'type' value");
-                }
-                $bundles[$entityTypeId][$bundleId]['rdf_sync']['fields'][$fieldName][$columnName] = $mapping;
-              }
+        // Add bundle level mappings.
+        $bundles[$entityTypeId][$bundleId]['rdf_sync'] = $rdfSyncSettings + $bundleMappingDefaults;
+
+        // Add configurable fields mappings.
+        foreach ($entityFieldManager->getFieldDefinitions($entityTypeId, $bundleId) as $fieldName => $fieldDefinition) {
+          if (!$fieldDefinition instanceof ThirdPartySettingsInterface) {
+            continue;
+          }
+
+          foreach ($fieldDefinition->getThirdPartySettings('rdf_sync') as $columnName => $mapping) {
+            if (empty($mapping['predicate'])) {
+              throw new \Exception("Mapping of $entityTypeId:$bundleId:$fieldName:$columnName is missing the 'predicate' value");
             }
+            if (empty($mapping['type'])) {
+              throw new \Exception("Mapping of $entityTypeId:$bundleId:$fieldName:$columnName is missing the 'type' value");
+            }
+            $bundles[$entityTypeId][$bundleId]['rdf_sync']['fields'][$fieldName][$columnName] = $mapping;
           }
         }
       }

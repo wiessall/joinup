@@ -83,7 +83,7 @@ class RdfSyncMapper {
    * @param string $bundle
    *   The bundle.
    *
-   * @return array
+   * @return \Drupal\rdf_sync\Model\ColumnMapping[][]
    *   Mappings list.
    */
   public function getMappings(string $entityTypeId, string $bundle): array {
