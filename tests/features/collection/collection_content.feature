@@ -18,18 +18,27 @@ Feature: Collection content
     And discussion content:
       | title                                 | body                                                                    | state     | collection                | topic                                                 | created          | changed                   |
       | Bigger than Egyptian Museum of Cairo? | <p><a href="#link">Link to the museum</a> web<strong>site</strong>.</p> | published | Turin Egyptian Collection | Finance in EU, Supplier exchange, E-health, E-justice | 2017-11-11T11:11 | Wed, 25 Dec 2019 15:00:00 |
+      | Archived discussion                   | No body needed                                                          | archived  | Turin Egyptian Collection | Finance in EU                                         | 2017-11-11T11:11 | Wed, 25 Dec 2019 15:00:00 |
     And document content:
       | title             | body                                             | state     | collection                | creation date    | changed          | topic    |
       | Upper Floor Map   | <p>A sample <a href="#link">map</a> example.</p> | published | Turin Egyptian Collection | 2017-11-11T11:11 | 2017-11-30T11:11 | E-health |
+      | Archived document | No body needed                                   | archived  | Turin Egyptian Collection | 2017-11-11T11:11 | 2017-11-30T11:11 | E-health |
     And event content:
       | title                                     | state     | collection                | start date          | end date            | topic             |
       | Opening of the Hellenistic Period Section | published | Turin Egyptian Collection | 2016-03-15T11:12:12 | 2016-03-15T11:12:12 | Supplier exchange |
+      | Archived event                            | archived  | Turin Egyptian Collection | 2016-03-15T11:12:12 | 2016-03-15T11:12:12 | Supplier exchange |
     And news content:
       | title                          | body                                                           | state     | collection                | changed    | topic             |
       | Turin Egyptian Museum Reopened | <p>After <em>more than</em> <a href="#link">two years</a>.</p> | published | Turin Egyptian Collection | 2019-11-19 | Supplier exchange |
+      | Archived news                  | No body needed                                                 | archived  | Turin Egyptian Collection | 2019-11-19 | Supplier exchange |
     And video content:
       | title                                  | state     | collection                | creation date    | changed          |
       | Watch the mummy conservation technique | published | Turin Egyptian Collection | 2017-11-29T11:11 | 2017-11-30T17:30 |
+    And the "Turin Egyptian Collection" collection is configured to show the following content:
+      | enabled       | yes |
+      | limit         | 12  |
+      | show_archived | all |
+      | query_presets |     |
 
   Scenario: Publishing new solutions should result in counters being properly updated.
     Given owner:
@@ -184,3 +193,25 @@ Feature: Collection content
     And I should see the text "+2 topics" in the "Bigger than Egyptian Museum of Cairo?" tile
     And I should see the statistics "0" in the "Bigger than Egyptian Museum of Cairo?" tile
     And I should see the text "Discussion" in the "Bigger than Egyptian Museum of Cairo?" tile
+
+  Scenario: Archived content are not available by default.
+    Given I go to the homepage of the "Turin Egyptian Collection" collection
+    And I should not see the link "Archived discussion"
+    And I should not see the link "Archived document"
+    And I should not see the link "Archived event"
+    And I should not see the link "Archived news"
+
+    When I click "Show archived"
+    Then I should see the link "Archived document"
+    And I should see the link "Archived event"
+    And I should see the link "Archived news"
+    # Discussions are shown only in the "Discussions" tab.
+    But I should not see the link "Archived discussion"
+
+    Given I am logged in as a moderator
+    And I go to the edit form of the "Archived news" news
+    And I press "Publish"
+    And I go to the homepage of the "Turin Egyptian Collection" collection
+    Then I should see the link "Archived news"
+    When I click "Show archived"
+    Then I should not see the link "Archived news"

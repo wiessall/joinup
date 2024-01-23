@@ -8,6 +8,7 @@ use Behat\Gherkin\Node\TableNode;
 use Behat\Mink\Exception\ElementNotFoundException;
 use Drupal\Core\Url;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
+use Drupal\collection\Entity\CollectionInterface;
 use Drupal\joinup\Traits\EntityTrait;
 use Drupal\joinup\Traits\MailCollectorTrait;
 use Drupal\joinup\Traits\TestingEntitiesTrait;
@@ -412,6 +413,49 @@ class JoinupGroupContext extends RawDrupalContext {
         $offset += $limit;
       }
     }
+  }
+
+  /**
+   * Updates a group's content overview listing.
+   *
+   * The format of the table is:
+   * @codingStandardsIgnoreStart
+   * | enabled       | (yes|no)                    |
+   * | show_archived | (archived|unarchived|all)   |
+   * | query_presets | entity_bundle|news,event|in |
+   * | limit         | (number)                    |
+   * @codingStandardsIgnoreEnd
+   *
+   * @param string $label
+   *   The label of the group.
+   * @param string $bundle
+   *   The bundle of the group.
+   * @param \Behat\Gherkin\Node\TableNode $table
+   *   A list of values to configure.
+   *
+   * @Given the :label :bundle is configured to show the following content:
+   */
+  public function setGroupContentValues(string $label, string $bundle, TableNode $table): void {
+    $allowed_values = ['enabled', 'show_archived', 'query_presets', 'limit'];
+    $group = $this->getEntityByLabel('rdf_entity', $label, $bundle);
+    $field = $group instanceof CollectionInterface ? 'field_collection_content' : 'field_is_content';
+
+    $field_values = $group->get($field)->getValue();
+    foreach ($table->getRowsHash() as $key => $value) {
+      if (!in_array($key, $allowed_values)) {
+        throw new \InvalidArgumentException("'$key' is not a valid value.");
+      }
+
+      if ($key === 'enabled') {
+        \assert(in_array($value, ['yes', 'no']), "Only 'yes' or 'no' are allowed values for the 'enabled' key.");
+        $value = $value === 'yes' ? 1 : 0;
+      }
+
+      $field_values[0]['value'][$key] = $value;
+    }
+
+    $group->set($field, $field_values);
+    $group->save();
   }
 
   /**
