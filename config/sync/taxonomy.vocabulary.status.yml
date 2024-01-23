@@ -18,7 +18,7 @@ third_party_settings:
       name:
         value:
           predicate: 'http://www.w3.org/2004/02/skos/core#prefLabel'
-          type: t_literal
+          type: null
       parent:
         target_id:
           predicate: 'http://www.w3.org/2004/02/skos/core#broader'

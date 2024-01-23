@@ -18,11 +18,11 @@ third_party_settings:
       name:
         value:
           predicate: 'http://www.w3.org/2004/02/skos/core#prefLabel'
-          type: t_literal
+          type: null
       description:
         processed:
           predicate: 'http://www.w3.org/2004/02/skos/core#altLabel'
-          type: t_literal
+          type: null
 _core:
   default_config_hash: s9Cs3GmX9KclcKa-duZTUhNyTk0AjVzmf9tFWf9R688
 name: 'File type'
