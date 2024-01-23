@@ -30,24 +30,28 @@ readonly class ColumnMapping {
    *
    * @param string $predicate
    *   The mapping predicate.
-   * @param string $type
-   *   The mapping type.
+   * @param string|null $type
+   *   The RDF type which could be 'resource', one of 'xsd:*' types or NULL.
+   *   NULL is used for non-types, i.e., for translatable fields.
    */
   public function __construct(
     public string $predicate,
-    public string $type,
+    public ?string $type,
   ) {}
 
   /**
    * Creates a mapping object given an array.
    *
    * @param array $mapping
-   *   The mapping array, having two keys: 'predicate' and 'type'.
+   *   The mapping array has two keys:
+   *   - predicate: The RDF predicate to map to.
+   *   - type: The RDF type which could be 'resource', one of 'xsd:*' types or
+   *     NULL. NULL is used for non-types, i.e., for translatable fields.
    *
    * @return $this
    */
   public static function createFromArray(array $mapping): self {
-    return new static($mapping['predicate'], $mapping['type']);
+    return new static($mapping['predicate'], $mapping['type'] ?? NULL);
   }
 
 }

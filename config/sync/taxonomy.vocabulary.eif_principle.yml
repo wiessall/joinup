@@ -18,11 +18,11 @@ third_party_settings:
       name:
         value:
           predicate: 'http://www.w3.org/2004/02/skos/core#prefLabel'
-          type: t_literal
+          type: null
       description:
         processed:
           predicate: 'http://www.w3.org/2004/02/skos/core#definition'
-          type: t_literal
+          type: null
       weight:
         value:
           predicate: 'http://www.w3.org/ns/adms#identifier'
