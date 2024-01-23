@@ -15,6 +15,7 @@
 declare(strict_types = 1);
 
 use Drupal\Core\Entity\ContentEntityStorageInterface;
+use Drupal\Core\Url;
 use Drupal\Core\Utility\UpdateException;
 use Drupal\joinup_group\Event\GroupMenuLinksEvent;
 use Drupal\menu_link_content\MenuLinkContentInterface;
@@ -24,11 +25,12 @@ use Drupal\og\OgGroupAudienceHelperInterface;
 use Drupal\og_menu\Entity\OgMenuInstance;
 use Drupal\og_menu\OgMenuInstanceInterface;
 use Drupal\smart_trim\TruncateHTML;
+use Drupal\solution\Entity\SolutionInterface;
 
 /**
  * Create a quick links menu for the groups.
  */
-function joinup_core_deploy_110100(array &$sandbox): string {
+function joinup_core_deploy_110200(array &$sandbox): string {
   if (empty($sandbox['group_ids'])) {
     $groups = \Drupal::entityTypeManager()->getStorage('rdf_entity')->getQuery()
       ->accessCheck(FALSE)
@@ -63,7 +65,7 @@ function joinup_core_deploy_110100(array &$sandbox): string {
 /**
  * Alter abstracts of collections.
  */
-function joinup_core_deploy_110200(array &$sandbox): string {
+function joinup_core_deploy_110201(array &$sandbox): string {
   $sparql_connection = \Drupal::getContainer()->get('sparql.endpoint');
   if (empty($sandbox['data'])) {
     $query = <<<SPARQL
@@ -133,7 +135,7 @@ SPARQL;
 /**
  * Create a quick links menu for the groups.
  */
-function joinup_core_deploy_110201(array &$sandbox): string {
+function joinup_core_deploy_110202(array &$sandbox): string {
   if (empty($sandbox['group_ids'])) {
     $groups = \Drupal::entityTypeManager()->getStorage('rdf_entity')->getQuery()
       ->accessCheck(FALSE)
@@ -142,10 +144,22 @@ function joinup_core_deploy_110201(array &$sandbox): string {
     $sandbox['group_ids'] = array_keys($groups);
     $sandbox['progress'] = 0;
     $sandbox['count'] = count($sandbox['group_ids']);
+    // Get the list of solution IDs for which the EIF Perspective link is
+    // disabled.
+    $query = \Drupal::database()->select('menu_link_content_data', 'mlcd');
+    $query->leftJoin('ogmenu_instance__og_audience', 'ogm', 'CONCAT(\'ogmenu-\', ogm.entity_id) = mlcd.menu_name');
+    $sandbox['eif_perspective'] = $query->condition('mlcd.menu_name', 'ogmenu-%', 'LIKE')
+      ->condition('mlcd.link__uri', 'route:entity.rdf_entity.eif_perspective%', 'LIKE')
+      ->fields('ogm', ['og_audience_target_id'])
+      ->fields('mlcd', ['enabled'])
+      ->execute()
+      ->fetchAllKeyed();
   }
 
   $group_ids = array_splice($sandbox['group_ids'], 0, 50);
   $groups = \Drupal::getContainer()->get('entity_type.manager')->getStorage('rdf_entity')->loadMultiple($group_ids);
+  $event_dispatcher = \Drupal::getContainer()->get('event_dispatcher');
+  $menu_link_content_storage = \Drupal::entityTypeManager()->getStorage('menu_link_content');
   foreach ($groups as $group) {
     $og_menu_instance = OgMenuInstance::create([
       'type' => 'quick_links',
@@ -153,11 +167,29 @@ function joinup_core_deploy_110201(array &$sandbox): string {
     ]);
     $og_menu_instance->save();
     $menu_name = 'ogmenu-' . $og_menu_instance->id();
-    $event_dispatcher = \Drupal::getContainer()->get('event_dispatcher');
 
     // Allow subscribers to automatically create the menu links.
     $event = new GroupMenuLinksEvent($group, $menu_name, $og_menu_instance->bundle(), \Drupal::entityTypeManager());
     $event_dispatcher->dispatch($event);
+
+    if (!$group instanceof SolutionInterface) {
+      continue;
+    }
+
+    if (in_array($group->id(), array_keys($sandbox['eif_perspective']))) {
+      $link = [
+        'uri' => Url::fromRoute('entity.rdf_entity.eif_perspective', [
+          'rdf_entity' => $group->id(),
+        ])->toUriString(),
+      ];
+
+      $menu_link_content_storage->create([
+        'title' => t('EIF Perspective'),
+        'menu_name' => $menu_name,
+        'link' => $link,
+        'enabled' => $sandbox['eif_perspective'][$group->id()],
+      ])->save();
+    }
   }
 
   $sandbox['progress'] += count($group_ids);
@@ -166,9 +198,50 @@ function joinup_core_deploy_110201(array &$sandbox): string {
 }
 
 /**
+ * Disable 'Members' and 'EIF Perspective' from menu.
+ */
+function joinup_core_deploy_110203(array &$sandbox): string {
+  $entityTypeManager = \Drupal::entityTypeManager();
+  /** @var  \Drupal\menu_link_content\MenuLinkContentStorageInterface $menuLinkContentStorage */
+  $menuLinkContentStorage = $entityTypeManager->getStorage('menu_link_content');
+
+  if (!isset($sandbox['data'])) {
+    $query = \Drupal::database()->select('menu_link_content_data', 'mlcd');
+    $query->leftJoin('ogmenu_instance', 'ogm', 'CONCAT(\'ogmenu-\', ogm.id) = mlcd.menu_name');
+    $or = $query->orConditionGroup()
+      ->condition('mlcd.link__uri', 'route:entity.rdf_entity.member_overview%', 'LIKE')
+      ->condition('mlcd.link__uri', 'route:entity.rdf_entity.eif_perspective%', 'LIKE');
+    $sandbox['data'] = $query->condition($or)
+      ->condition('mlcd.menu_name', 'ogmenu-%', 'LIKE')
+      ->condition('mlcd.enabled', 1)
+      ->condition('ogm.type', 'navigation')
+      ->fields('mlcd', ['id'])
+      ->execute()
+      ->fetchCol();
+
+    $sandbox['progress'] = 0;
+    $sandbox['count'] = count($sandbox['data']);
+  }
+
+  $spliced = array_splice($sandbox['data'], 0, 300);
+
+  /** @var \Drupal\menu_link_content\MenuLinkContentInterface[] $links */
+  $links = $menuLinkContentStorage->loadMultiple($spliced);
+  foreach ($links as $link) {
+    $link->set('enabled', 0);
+    $link->save();
+
+    $sandbox['progress']++;
+  }
+
+  $sandbox['#finished'] = (int) empty($sandbox['data']);
+  return "Processed {$sandbox['progress']} out of {$sandbox['count']}.";
+}
+
+/**
  * Move custom page links from OG navigation to OG quick links menu.
  */
-function joinup_core_deploy_110103(array &$sandbox): string {
+function joinup_core_deploy_110204(array &$sandbox): string {
   $menuLinkContentStorage = \Drupal::entityTypeManager()->getStorage('menu_link_content');
   \assert($menuLinkContentStorage instanceof MenuLinkContentStorageInterface);
   if ($menuLinkContentStorage->getMenuLinkIdsWithPendingRevisions()) {
