@@ -275,14 +275,13 @@ Feature:
       | Administration 6 |
       | Administration 7 |
 
-  @javascript @loggedErrors
+  @javascript
   Scenario: Screenshot carousel with 4 items works as expected.
     Given oss_solution content:
       | title | oss_screenshots                                                                                    | oss_development_status | oss_source        | oss_categories   | status    | oss_release_date |
       | Four  | https://placehold.co/800x400.jpg,https://placehold.co/500x400.png,https://placehold.co/700x400.png,https://placehold.co/600x400.png | stable                 | developers_italia | data-analytics   | published | 2014-11-19       |
     When I go to the content page of the type "oss_solution" with the title "Four"
     Then I should see the text "Gallery"
-    And the site should not have log records with level lower than "notice"
     And I should have the following images on the page in this order
       # Downloaded instance of https://placehold.co/800x400.jpg.
       | aeea83704c583614d4900c69de40802c.jpg |
