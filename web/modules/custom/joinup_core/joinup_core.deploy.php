@@ -28,7 +28,7 @@ use Drupal\smart_trim\TruncateHTML;
 /**
  * Create a quick links menu for the groups.
  */
-function joinup_core_deploy_110100(array &$sandbox): string {
+function joinup_core_deploy_110200(array &$sandbox): string {
   if (empty($sandbox['group_ids'])) {
     $groups = \Drupal::entityTypeManager()->getStorage('rdf_entity')->getQuery()
       ->accessCheck(FALSE)
@@ -63,7 +63,7 @@ function joinup_core_deploy_110100(array &$sandbox): string {
 /**
  * Alter abstracts of collections.
  */
-function joinup_core_deploy_110200(array &$sandbox): string {
+function joinup_core_deploy_110201(array &$sandbox): string {
   $sparql_connection = \Drupal::getContainer()->get('sparql.endpoint');
   if (empty($sandbox['data'])) {
     $query = <<<SPARQL
@@ -133,7 +133,7 @@ SPARQL;
 /**
  * Create a quick links menu for the groups.
  */
-function joinup_core_deploy_110201(array &$sandbox): string {
+function joinup_core_deploy_110202(array &$sandbox): string {
   if (empty($sandbox['group_ids'])) {
     $groups = \Drupal::entityTypeManager()->getStorage('rdf_entity')->getQuery()
       ->accessCheck(FALSE)
@@ -168,7 +168,7 @@ function joinup_core_deploy_110201(array &$sandbox): string {
 /**
  * Move custom page links from OG navigation to OG quick links menu.
  */
-function joinup_core_deploy_110103(array &$sandbox): string {
+function joinup_core_deploy_110203(array &$sandbox): string {
   $menuLinkContentStorage = \Drupal::entityTypeManager()->getStorage('menu_link_content');
   \assert($menuLinkContentStorage instanceof MenuLinkContentStorageInterface);
   if ($menuLinkContentStorage->getMenuLinkIdsWithPendingRevisions()) {
