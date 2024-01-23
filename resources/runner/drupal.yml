@@ -301,7 +301,7 @@ drupal:
         // Since Search API Solr 3.x, the Solr endpoint '/solr' (V1 API) has been
         // dropped in favour of '/'. The Solarium library automatically appends the
         // 'solr' part in Endpoint::getCoreBaseUri(). We  prevent changes of
-        // environment variables of deployment servers and pipelines by hardcoding
+        // environment variables of deployment servers and pipelines by hardcodeing
         // the value.
         // @see search_api_solr_update_8309()
         // @see \Solarium\Core\Client\Endpoint::getCoreBaseUri()

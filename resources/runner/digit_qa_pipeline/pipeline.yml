@@ -1,0 +1,49 @@
+# Settings and commands only available inside Digit QA Pipeline.
+
+.before: &before
+  # Ensure writable public file directory.
+  - task: chgrp
+    file: ${joinup.files_public_dir}
+    group: ${env.DAEMON_GROUP}
+    recursive: true
+  - task: chmod
+    file: ${joinup.files_public_dir}
+    # Octal 0775.
+    permissions: 509
+    umask: 0
+    recursive: true
+  # Ensure writable private files directory.
+  - task: chgrp
+    file: ${joinup.files_private_dir}
+    group: ${env.DAEMON_GROUP}
+    recursive: true
+  - task: chmod
+    file: ${joinup.files_private_dir}
+    # Octal 0775.
+    permissions: 509
+    umask: 0
+    recursive: true
+  # Ensure writable temporary files directory.
+  - task: chgrp
+    file: ${toolkit.tmp_folder}
+    group: ${env.DAEMON_GROUP}
+    recursive: true
+  - task: chmod
+    file: ${toolkit.tmp_folder}
+    # Octal 0775.
+    permissions: 509
+    umask: 0
+    recursive: true
+  - task: run
+    command: joinup:environment
+
+# See \EcEuropa\Toolkit\TaskRunner\Commands\TestsCommands::toolkitPhpUnit()
+phpunit:
+  commands:
+    before: *before
+# See \EcEuropa\Toolkit\TaskRunner\Commands\TestsCommands::toolkitBehat()
+toolkit:
+  test:
+    behat:
+      commands:
+        before: *before
