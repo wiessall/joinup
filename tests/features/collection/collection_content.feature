@@ -209,9 +209,9 @@ Feature: Collection content
     But I should not see the link "Archived discussion"
 
     Given I am logged in as a moderator
-    And I go to the edit form of the "Archived news" news
-    And I press "Publish"
-    And I go to the homepage of the "Turin Egyptian Collection" collection
+    # Changing the state by code since there is no previous revision.
+    And the workflow state of the "Archived news" content is set to "archived"
+    When I go to the homepage of the "Turin Egyptian Collection" collection
     Then I should see the link "Archived news"
     When I click "Show archived"
     Then I should not see the link "Archived news"
