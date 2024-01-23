@@ -81,7 +81,7 @@ Feature: Proposing a collection
     # The user that proposed the collection should be auto-subscribed.
     And the "Ancient and Classical Mythology" collection should have 1 active member
     # The overview and about links should be added automatically in the menu.
-    And I should see the following group menu items in the specified order:
+    And I should see the following navigation menu items in the specified order:
       | text     |
       | Overview |
     When I click the contextual link "Add new page" in the "Header" region
