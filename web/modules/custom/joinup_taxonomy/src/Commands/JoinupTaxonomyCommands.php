@@ -57,7 +57,7 @@ class JoinupTaxonomyCommands extends DrushCommands {
    *
    * @var string
    */
-  private const FIXTURES_DIR = DRUPAL_ROOT . '/../.ddev/virtuoso/vocab';
+  private const FIXTURES_DIR = DRUPAL_ROOT . '/../resources/vocab';
 
   /**
    * Static cache of dump file path.

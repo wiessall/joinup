@@ -203,7 +203,7 @@ commands:
     - task: run
       command: virtuoso:import-fixtures
       arguments:
-        - .ddev/virtuoso/vocab/adms-definition.rdf
+        - resources/adms/adms-definition.rdf
 
   dev:rector:
     - task: exec
