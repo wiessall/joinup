@@ -18,20 +18,53 @@ Feature: Global search
     And news content:
       | title                | headline              | body             | collection                   | topic                   | spatial coverage | state     |
       | El Tuba de Los Lobos | El Celler de Can Roca | The best in town | Molecular cooking collection | Statistics and Analysis | Luxembourg       | published |
-      | Dummy news 1        | Dummy title 1          | Dummy body       | Molecular cooking collection | E-inclusion             | Luxembourg       | published |
-      | Dummy news 2        | Dummy title 2          | Dummy body       | Molecular cooking collection | E-inclusion             | Luxembourg       | published |
-      | Dummy news 3        | Dummy title 3          | Dummy body       | Molecular cooking collection | E-inclusion             | Luxembourg       | published |
-      | Dummy news 4        | Dummy title 4          | Dummy body       | Molecular cooking collection | E-inclusion             | Luxembourg       | published |
-    When I visit the search page
-    Then the response should not contain "data-drupal-facet-id=\"status\""
+      | Dummy news 1         | Dummy title 1         | Dummy body       | Molecular cooking collection | E-inclusion             | Luxembourg       | published |
+      | Dummy news 2         | Dummy title 2         | Dummy body       | Molecular cooking collection | E-inclusion             | Luxembourg       | published |
+      | Dummy news 3         | Dummy title 3         | Dummy body       | Molecular cooking collection | E-inclusion             | Luxembourg       | published |
+      | Dummy news 4         | Dummy title 4         | Dummy body       | Molecular cooking collection | E-inclusion             | Luxembourg       | published |
 
+    # Create some archived content too.
     Given news content:
-      | title         | headline     | body       | collection                   | topic       | spatial coverage | state    |
-      | Rummy news 5 | Rummy title 5 | Dummy body | Molecular cooking collection | E-inclusion | Luxembourg       | archived |
-      | Rummy news 6 | Rummy title 6 | Dummy body | Molecular cooking collection | E-inclusion | Luxembourg       | archived |
+      | title      | headline    | body       | collection                   | topic       | spatial coverage | state    |
+      | Rummy news | Rummy title | Dummy body | Molecular cooking collection | E-inclusion | Luxembourg       | archived |
+    And event content:
+      | title       | body       | collection                   | topic       | spatial coverage | state    |
+      | Rummy event | Dummy body | Molecular cooking collection | E-inclusion | Luxembourg       | archived |
+    And document content:
+      | title          | document type | short title          | body       | collection                   | topic       | spatial coverage | state    |
+      | Rummy document | Document      | Rummy document short | Dummy body | Molecular cooking collection | E-inclusion | Luxembourg       | archived |
+    And discussion content:
+      | title            | body       | collection                   | topic       | spatial coverage | state    |
+      | Rummy discussion | Dummy body | Molecular cooking collection | E-inclusion | Luxembourg       | archived |
     And the following solutions:
       | title         | collection                   | description                            | state    |
       | Spring device | Molecular cooking collection | A mechanical device that stores energy | archived |
+
+    When I visit the search page
+    Then the response should not contain "data-drupal-facet-id=\"status\""
+
+    # Test that archived items are not available in the autocomplete.
+    And I focus on the search input
+    And I enter "Rummy" in the search bar
+    And I wait for animations to finish
+    Then I should not see the text "Rummy news"
+    And I should not see the text "Rummy event"
+    And I should not see the text "Rummy document"
+    And I should not see the text "Rummy discussion"
+
+    # Test that archived items are not available in the search results.
+    When I enter "Rummy" in the search bar and press enter
+    Then I should not see the text "Rummy news"
+    And I should not see the text "Rummy event"
+    And I should not see the text "Rummy document"
+    And I should not see the text "Rummy discussion"
+
+    # But clicking the "Show only Archived items" checkbox should show them.
+    When I check the "Show only Archived items" checkbox from the "Status" facet
+    Then I should see the "Rummy news" tile
+    And I should see the "Rummy event" tile
+    And I should see the "Rummy document" tile
+    And I should see the "Rummy discussion" tile
 
     Given I am logged in as a user with the "authenticated" role
     Then I visit the search page
@@ -136,8 +169,6 @@ Feature: Global search
     And I should not see the "Dummy news 2" tile
     And I should not see the "Dummy news 3" tile
     And I should not see the "Dummy news 4" tile
-    And I should see the "Rummy news 5" tile
-    And I should see the "Rummy news 6" tile
     And I should see the "Spring device" tile
 
     Then I check the "Show only Archived items" checkbox from the "Status" facet
@@ -149,8 +180,6 @@ Feature: Global search
     And I should see the "Dummy news 2" tile
     And I should see the "Dummy news 3" tile
     And I should see the "Dummy news 4" tile
-    And I should not see the "Rummy news 5" tile
-    And I should not see the "Rummy news 6" tile
     And I should not see the "Spring device" tile
 
   @javascript
@@ -726,7 +755,7 @@ Feature: Global search
     Then I enter "spheres" in the search bar
     And I wait for AJAX to finish
     Then I should see the following search suggestions:
-      | Spheres                  |
+      | Spheres |
 
   @terms
   Scenario: Filter on date
