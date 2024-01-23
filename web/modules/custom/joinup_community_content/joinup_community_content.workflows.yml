@@ -70,7 +70,7 @@ node:pre_moderated:
       to: published
     archive:
       label: Archive
-      from: [draft, published, needs_update, proposed, deletion_request]
+      from: [published]
       to: archived
     unarchive:
       label: Unarchive
@@ -127,7 +127,7 @@ node:post_moderated:
       to: proposed
     archive:
       label: Archive
-      from: [draft, published, needs_update, proposed]
+      from: [published]
       to: archived
     unarchive:
       label: Unarchive
