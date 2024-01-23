@@ -4,7 +4,7 @@ declare(strict_types = 1);
 
 namespace Joinup\TaskRunner\Commands;
 
-use OpenEuropa\TaskRunner\Commands\AbstractCommands;
+use EcEuropa\Toolkit\TaskRunner\AbstractCommands;
 use Robo\Collection\CollectionBuilder;
 use Robo\Exception\AbortTasksException;
 use Symfony\Component\Console\Input\InputOption;
