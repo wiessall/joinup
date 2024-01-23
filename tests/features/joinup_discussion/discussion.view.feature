@@ -1,8 +1,6 @@
 @api @group-h
-Feature: Discussion API
-  In order to manage discussion entities programmatically
-  As a backend developer
-  I need to be able to use the Node API to handle the "Discussion" bundle
+Feature: View discussion API
+  As a visitor of the website I can view a discussion content.
 
   Scenario: Programmatically create a discussion
     And the following collection:
