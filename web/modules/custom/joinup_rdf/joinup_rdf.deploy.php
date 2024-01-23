@@ -136,7 +136,7 @@ function joinup_rdf_deploy_110201(array &$sandbox): string {
   unset($sandbox['vocabs'][$file]);
 
   $graph = new Graph();
-  $graph->parseFile(DRUPAL_ROOT . '/../.ddev/virtuoso/vocab/' . $file);
+  $graph->parseFile(DRUPAL_ROOT . '/../resources/vocab/' . $file);
   $graphUri = 'http://' . strtolower(pathinfo($file, PATHINFO_FILENAME));
   $rdfType = $mapper->getBundleRdfType('taxonomy_term', $vid);
   $results = $vocabularyUpdater
