@@ -702,13 +702,11 @@ abstract class CommunityContentWorkflowTestBase extends JoinupWorkflowExistingSi
               'draft',
               'proposed',
               'published',
-              'archived',
             ],
             'userOgFacilitator' => [
               'draft',
               'proposed',
               'published',
-              'archived',
             ],
           ],
         ],
@@ -720,12 +718,10 @@ abstract class CommunityContentWorkflowTestBase extends JoinupWorkflowExistingSi
             'userModerator' => [
               'proposed',
               'published',
-              'archived',
             ],
             'userOgFacilitator' => [
               'proposed',
               'published',
-              'archived',
             ],
           ],
         ],
@@ -759,11 +755,9 @@ abstract class CommunityContentWorkflowTestBase extends JoinupWorkflowExistingSi
           'any' => [
             'userModerator' => [
               'proposed',
-              'archived',
             ],
             'userOgFacilitator' => [
               'proposed',
-              'archived',
             ],
           ],
         ],
@@ -771,11 +765,9 @@ abstract class CommunityContentWorkflowTestBase extends JoinupWorkflowExistingSi
           'any' => [
             'userModerator' => [
               'published',
-              'archived',
             ],
             'userOgFacilitator' => [
               'published',
-              'archived',
             ],
           ],
         ],
@@ -790,12 +782,10 @@ abstract class CommunityContentWorkflowTestBase extends JoinupWorkflowExistingSi
             'userModerator' => [
               'draft',
               'published',
-              'archived',
             ],
             'userOgFacilitator' => [
               'draft',
               'published',
-              'archived',
             ],
           ],
         ],
@@ -807,12 +797,10 @@ abstract class CommunityContentWorkflowTestBase extends JoinupWorkflowExistingSi
             'userModerator' => [
               'proposed',
               'published',
-              'archived',
             ],
             'userOgFacilitator' => [
               'proposed',
               'published',
-              'archived',
             ],
           ],
         ],
@@ -845,11 +833,9 @@ abstract class CommunityContentWorkflowTestBase extends JoinupWorkflowExistingSi
           'any' => [
             'userModerator' => [
               'proposed',
-              'archived',
             ],
             'userOgFacilitator' => [
               'proposed',
-              'archived',
             ],
           ],
         ],

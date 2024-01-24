@@ -40,6 +40,8 @@ Feature: "Add release" visibility options.
       | state          | published           |
       | creation date  | 2014-08-30 23:59:00 |
 
+    Then I should have 1 release
+
     # Assert that the "Release" tiles are present and contain version, release date, label and bundle type.
     When I go to the homepage of the "Release Test 1" solution
     Then I should see the "Chasing shadows" tile
