@@ -783,42 +783,6 @@ class FeatureContext extends RawDrupalContext {
   }
 
   /**
-   * Checks the users existence.
-   *
-   * @param string $username
-   *   The username of the user.
-   *
-   * @throws \Exception
-   *   Thrown when the user is not found.
-   *
-   * @Then I should have a :username user
-   */
-  public function assertUserExists(string $username): void {
-    $user = $this->getUserByName($username);
-
-    if (empty($user)) {
-      throw new \Exception("Unable to load expected user " . $username);
-    }
-  }
-
-  /**
-   * Checks that user doesn't exist.
-   *
-   * @param string $username
-   *   The username of the user.
-   *
-   * @throws \Exception
-   *   Thrown when the user is found.
-   *
-   * @Then I should not have a :username user
-   */
-  public function assertUserNotExists(string $username): void {
-    if (user_load_by_name($username)) {
-      throw new \Exception("The user '$username' exists but it should not exist.");
-    }
-  }
-
-  /**
    * Deletes the user account with the given name.
    *
    * This intended to be used for user accounts that are created through the UI
