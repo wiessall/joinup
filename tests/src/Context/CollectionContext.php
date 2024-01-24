@@ -70,7 +70,6 @@ class CollectionContext extends RawDrupalContext {
     'spatial coverage' => 'field_spatial_coverage',
     'state' => 'field_ar_state',
     'featured' => 'feature',
-    'collection content' => 'field_collection_content',
   ];
 
   /**

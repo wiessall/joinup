@@ -62,6 +62,25 @@ Feature: Global search with archive content
     And I should not see the "Event 1" tile
     And I should not see the "Some document 1" tile
 
+    Given discussion content:
+      | title               | body           | state    | <group type>      | topic         | created          | changed                   |
+      | Archived discussion | No body needed | archived | Some <group type> | Finance in EU | 2017-11-11T11:11 | Wed, 25 Dec 2019 15:00:00 |
+    And news content:
+      | title         | body           | state    | <group type>      | changed    | topic             |
+      | Archived news | No body needed | archived | Some <group type> | 2019-11-19 | Supplier exchange |
+
+    When I go to the homepage of the "Some <group type>" <group type>
+    Then I should not see the "Archived discussion" tile
+    And I should not see the "Archived news" tile
+
+    When I click "Show archived"
+    Then I should see the following tiles in the correct order:
+      | Event 2         |
+      | Some document 2 |
+      | Archived news   |
+    # Discussions do not show in the overview anyway.
+    But I should not see the "Archived discussion" tile
+
     When I go to the homepage of the "Rare <group type>" <group type>
     Then I should not see the "<group type> content archived toggle" facet
 
@@ -69,6 +88,25 @@ Feature: Global search with archive content
       | bundle label | group type |
       | Collection   | collection |
       | Solution     | solution   |
+
+  Scenario: Distributions directly under a solution respect the state.
+    And the following solutions:
+      | title         | description | state     |
+      | Some solution | Description | published |
+    And the following distributions:
+      | title                 | description | state     | parent      |
+      | Some zip distribution | Description | published | Some solution |
+      | Some rar distribution | Description | archived  | Some solution |
+    And the "Some solution" solution is configured to show "All" community content in the overview
+
+    When I go to the homepage of the "Some solution" solution
+    Then I should see the following tiles in the correct order:
+      | Some zip distribution |
+    And I should not see the "Some rar distribution" tile
+    When I click "Show archived"
+    Then I should see the following tiles in the correct order:
+      | Some rar distribution |
+    And I should not see the "Some zip distribution" tile
 
   @terms
   Scenario: Group content supports archived solutions.
