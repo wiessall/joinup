@@ -108,7 +108,6 @@ class SolutionContentArchiverQueue extends QueueWorkerBase implements ContainerF
       return;
     }
 
-    $solution = $this->getParentSolutionFromItem($data);
     if (!$solution = $this->getParentSolutionFromItem($data)) {
       return;
     }
