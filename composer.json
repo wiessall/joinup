@@ -194,8 +194,9 @@
             "web/modules/contrib/message_digest/src/Traits/MessageDigestTrait.php",
             "web/modules/contrib/og_menu/src/Tests/Traits/OgMenuTrait.php",
             "web/modules/contrib/pipeline/src/Traits/PipelineContextTrait.php",
-            "web/modules/contrib/spdx/src/Traits/SpdxContextTrait.php",
-            "scripts/composer/ComposerPatches.php"
+            "web/modules/custom/rdf_sync/src/Entity/RdfSyncEntityInterface.php",
+            "web/modules/custom/rdf_sync/src/Entity/RdfSyncEntityTrait.php",
+            "scripts/composer/ComposerPatches.php",
         ],
         "files": [
             "src/Composer/load.environment.php"
