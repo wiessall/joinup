@@ -7,3 +7,4 @@ dependencies:
   - drupal:rest
   - drupal:taxonomy
   - joinup:joinup_sparql
+  - joinup:joinup_taxonomy

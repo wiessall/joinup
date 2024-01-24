@@ -64,16 +64,9 @@ class ContentNegotiationTest extends BrowserTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function bootEnvironment() {
-    parent::bootEnvironment();
-    $this->setUpSparql();
-  }
-
-  /**
-   * {@inheritdoc}
-   */
   protected function setUp(): void {
     parent::setUp();
+    $this->setUpSparql();
     user_role_grant_permissions(AccountInterface::ANONYMOUS_ROLE, ['view rdf entity']);
   }
 
@@ -81,10 +74,17 @@ class ContentNegotiationTest extends BrowserTestBase {
    * Tests content negotiation.
    */
   public function testContentNegotiation(): void {
+    $parent = Term::create([
+      'vid' => 'fruit_type',
+      'uri' => 'http://example.com/exotic',
+      'name' => 'Exotic fruits',
+    ]);
     $term = Term::create([
       'vid' => 'fruit_type',
-      'tid' => 'http://example.com/citrus-fruits',
+      'uri' => 'http://example.com/citrus-fruits',
       'name' => 'Citrus fruits',
+      'description' => 'Amazing fruits http://example.com/very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-long.html',
+      'parent' => $parent,
     ]);
     $term->save();
 
@@ -250,7 +250,6 @@ class ContentNegotiationTest extends BrowserTestBase {
    */
   public function tearDown(): void {
     Rdf::load('http://example.com/apple')->delete();
-    Term::load('http://example.com/citrus-fruits')->delete();
     parent::tearDown();
   }
 

@@ -7,6 +7,26 @@ dependencies:
 third_party_settings:
   joinup_taxonomy:
     locked: false
+  rdf_sync:
+    type: http://example.com/fruit-type
+    uri_plugin: null
+    fields:
+      vid:
+        target_id:
+          predicate: 'http://www.w3.org/2004/02/skos/core#inScheme'
+          type: resource
+      name:
+        value:
+          predicate: 'http://www.w3.org/2004/02/skos/core#prefLabel'
+          type: null
+      description:
+        processed:
+          predicate: 'http://www.w3.org/2004/02/skos/core#definition'
+          type: null
+      parent:
+        target_id:
+          predicate: 'http://www.w3.org/2004/02/skos/core#broaderTransitive'
+          type: resource
 name: 'Fruit type'
 vid: fruit_type
 description: ''
