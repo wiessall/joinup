@@ -40,8 +40,7 @@ class LicenceCompatibilityController extends ControllerBase {
       $view_builder->view($compatibility_document),
     ];
 
-    $cache_metadata = new CacheableMetadata();
-    $cache_metadata
+    CacheableMetadata::createFromRenderArray($build)
       ->addCacheableDependency($compatibility_document)
       ->addCacheableDependency($inbound_licence)
       ->addCacheableDependency($outbound_licence)
