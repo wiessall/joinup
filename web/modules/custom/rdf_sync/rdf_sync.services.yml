@@ -1,3 +1,11 @@
+parameters:
+  rdf_sync.format:
+    - jsonld
+    - n3
+    - ntriples
+    - rdfxml
+    - turtle
+
 services:
   rdf_sync.mapper:
     class: Drupal\rdf_sync\RdfSyncMapper
@@ -5,4 +13,18 @@ services:
       - '@entity_type.bundle.info'
   plugin.manager.rdf_sync.uri_generator:
     class: Drupal\rdf_sync\RdfUriGeneratorPluginManager
-    arguments: ['@container.namespaces', '@cache.discovery', '@module_handler']
+    arguments:
+      - '@container.namespaces'
+      - '@cache.discovery'
+      - '@module_handler'
+  rdf_sync.normalizer:
+    class: Drupal\rdf_sync\Normalizer\RdfSyncNormalizer
+    arguments:
+      - '@entity_type.manager'
+      - '@entity_type.repository'
+      - '@entity_field.manager'
+      - '@rdf_sync.mapper'
+      - '@language_manager'
+      - '@event_dispatcher'
+    tags:
+      - { name: normalizer, priority: 15 }
