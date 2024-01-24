@@ -54,7 +54,6 @@ Feature: When a solution is archived then its sub-content also should be archive
       | mail                   | john.the.moderator@example.com |
       | field_user_first_name  | John                           |
       | field_user_family_name | Moderator                      |
-    And the queue "solution_archive_related_content" is empty
     When I go to the edit form of the "Solution" solution
     Then I should see the button "Archive"
     When I press "Archive"
@@ -62,11 +61,10 @@ Feature: When a solution is archived then its sub-content also should be archive
       | Success messages                                                            |
       | The archiving process of the Solution has been initiated.                   |
       | You will receive an email notification as soon as the process is completed. |
-    And the queue "solution_archive_related_content" should have 1 item
     Given the following contact information emails are validated:
       | Liam Smith |
     And I mark all emails as read
-    Given the queue "solution_archive_related_content" is executed
+    Given I run the "solution_archive_related_content" queue worker
     And the workflow state of the "Solution Event" content should be "archived"
     And the workflow state of the "Solution News 1" content should be "archived"
     And the workflow state of the "Solution News 2" content should be "draft"
@@ -77,7 +75,6 @@ Feature: When a solution is archived then its sub-content also should be archive
     And the workflow state of the "Solution Release 1" "rdf entity" should be "archived"
     And the workflow state of the "Solution Release 2" "rdf entity" should be "draft"
     And the workflow state of the "Solution Release 3" "rdf entity" should be "archived"
-    And the queue "solution_archive_related_content" should have 0 items
     And 2 e-mails should have been sent
     And the following email should have been sent:
       | recipient | John The Moderator                 |

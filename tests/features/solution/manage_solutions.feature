@@ -72,3 +72,46 @@ Feature: As a moderator I want to be able to move solutions to other collection.
     Then I should see the following tiles in the correct order:
       | Solution 3 |
       | Solution 2 |
+
+  Scenario Outline: Manage solutions page must have a bulk-archive and bulk-unarchive option.
+    Given I am logged in as a moderator
+    When I go to the homepage of the "Source" collection
+    Then I should see the heading "Source"
+    And I should see the link "Manage solutions"
+    And I click "Manage solutions"
+    Then I should see the heading "Manage solutions"
+    Then the "manage solutions" table should contain the following columns:
+      | Title      | Created on         | Last update        | State     |
+      | Solution 6 | 23/11/2022 - 10:00 | 23/12/2022 - 10:00 | Archived  |
+      | Solution 5 | 22/11/2021 - 10:00 | 22/12/2021 - 10:00 | Archived  |
+      | Solution 4 | 21/11/2020 - 10:00 | 21/12/2020 - 10:00 | Published |
+      | Solution 3 | 20/11/2019 - 10:00 | 20/12/2019 - 10:00 | Published |
+      | Solution 2 | 19/11/2018 - 10:00 | 19/12/2018 - 10:00 | Published |
+      | Solution 1 | 18/11/2017 - 10:00 | 18/12/2017 - 10:00 | Published |
+    When I select the "Solution 3" row
+    And I select the "Solution 4" row
+    And I select the "Solution 5" row
+    And I select the "Solution 6" row
+    And I select "<option>" from "Action"
+    And I press "Apply to selected items"
+    Then I should see the heading "Confirmation of Changing the State of Solutions to <target state>"
+    And I should see the button "Confirm"
+    When I press "Confirm"
+    # Two solution were changed.
+    Then I should see the following success messages:
+      | Success messages                         |
+      | The following solutions' state was changed to <target state>: <changed solutions>. |
+    And the "manage solutions" table should contain the following columns:
+      # Skip last update since it is not under our control.
+      | Title      | Created on         | State          |
+      | Solution 6 | 23/11/2022 - 10:00 | <target state> |
+      | Solution 5 | 22/11/2021 - 10:00 | <target state> |
+      | Solution 4 | 21/11/2020 - 10:00 | <target state> |
+      | Solution 3 | 20/11/2019 - 10:00 | <target state> |
+      | Solution 2 | 19/11/2018 - 10:00 | Published      |
+      | Solution 1 | 18/11/2017 - 10:00 | Published      |
+
+    Examples:
+      | option                        | target state | changed solutions      |
+      | Archive solutions             | Archived     | Solution 3, Solution 4 |
+      | Unarchive (publish) solutions | Published    | Solution 5, Solution 6 |
