@@ -23,6 +23,9 @@ Feature: Global search
       | Dummy news 3         | Dummy title 3         | Dummy body       | Molecular cooking collection | E-inclusion             | Luxembourg       | published |
       | Dummy news 4         | Dummy title 4         | Dummy body       | Molecular cooking collection | E-inclusion             | Luxembourg       | published |
 
+    When I visit the search page
+    Then the response should not contain "data-drupal-facet-id=\"status\""
+
     # Create some archived content too.
     Given news content:
       | title      | headline    | body       | collection                   | topic       | spatial coverage | state    |
@@ -40,10 +43,8 @@ Feature: Global search
       | title         | collection                   | description                            | state    |
       | Spring device | Molecular cooking collection | A mechanical device that stores energy | archived |
 
-    When I visit the search page
-    Then the response should not contain "data-drupal-facet-id=\"status\""
-
     # Test that archived items are not available in the autocomplete.
+    When I visit the search page
     And I focus on the search input
     And I enter "Rummy" in the search bar
     And I wait for animations to finish
