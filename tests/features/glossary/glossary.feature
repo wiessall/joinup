@@ -21,7 +21,7 @@ Feature: As a moderator or group facilitator I want to be able to add, edit and
     Given I am logged in as <user>
     When I go to the "A World of Things" collection
 
-    Then I should see the following group menu items in the specified order:
+    Then I should see the following navigation menu items in the specified order:
       | text     |
       | Overview |
     But I should not see the link "Glossary"
@@ -41,7 +41,7 @@ Feature: As a moderator or group facilitator I want to be able to add, edit and
 
     When I click "A World of Things" in the Header region
 
-    Then I should see the following group menu items in the specified order:
+    Then I should see the following navigation menu items in the specified order:
       | text     |
       | Overview |
       | Glossary |
@@ -117,7 +117,7 @@ Feature: As a moderator or group facilitator I want to be able to add, edit and
     And I should see "ABC, alphabeta, alfabet"
 
     When I go to the "Things To Come" solution
-    Then I should see the following group menu items in the specified order:
+    Then I should see the following navigation menu items in the specified order:
       | text     |
       | Overview |
     And I should not see the link "Glossary"
@@ -125,7 +125,7 @@ Feature: As a moderator or group facilitator I want to be able to add, edit and
     Given I <link visibility> the contextual link "Edit menu" in the "Header" region
     And I enable "Glossary" in the navigation menu of the "Things To Come" solution
     And I go to the "Things To Come" solution
-    Then I should see the following group menu items in the specified order:
+    Then I should see the following navigation menu items in the specified order:
       | text     |
       | Overview |
       | Glossary |
