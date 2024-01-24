@@ -4,3 +4,7 @@ services:
     arguments: ['@entity_type.manager', '@entity_field.manager', '@plugin.manager.field.field_type', '@rdf_sync.mapper']
     # This is a stateful service. Make sure each call creates a new instance.
     shared: false
+  joinup_taxonomy.normalizer.subscriber:
+    class: Drupal\joinup_taxonomy\EventSubscriber\NormalizeSubscriber
+    tags:
+      - { name: event_subscriber }

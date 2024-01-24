@@ -79,6 +79,11 @@ class RdfSyncNormalizer extends EntityNormalizer {
             continue;
           }
 
+          if ($value === NULL) {
+            // Don't store NULLs.
+            continue;
+          }
+
           $fieldDefinition = $object->getFieldDefinition($fieldName);
 
           // The bundle field value is the RDF type.
@@ -122,9 +127,10 @@ class RdfSyncNormalizer extends EntityNormalizer {
     }
 
     // Allow 3rd-party to alter the normalized array.
-    $this->eventDispatcher->dispatch(new RdfSyncNormalizeEvent($rdf, $object));
+    $event = new RdfSyncNormalizeEvent($rdf, $object);
+    $this->eventDispatcher->dispatch($event);
 
-    return $rdf;
+    return $event->getNormalizedArray();
   }
 
   /**
