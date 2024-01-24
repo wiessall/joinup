@@ -107,12 +107,14 @@ class SolutionContentArchiverQueue extends QueueWorkerBase implements ContainerF
       return;
     }
 
+    $solution = $this->getParentSolutionFromItem($data);
+    if (!$solution = $this->getParentSolutionFromItem($data)) {
+      return;
+    }
+
     $this->accountSwitcher->switchTo($actor);
     try {
-      $this->performOperation($data);
-    }
-    catch (\Exception $exception) {
-      throw $exception;
+      $this->performOperation($solution);
     }
     finally {
       $this->accountSwitcher->switchBack();
@@ -156,18 +158,14 @@ class SolutionContentArchiverQueue extends QueueWorkerBase implements ContainerF
   /**
    * Performs the archive transition on the sub content of the solution.
    *
-   * @param array $data
-   *   The queue item array with string value at the "solution" key.
+   * @param \Drupal\solution\Entity\SolutionInterface $solution
+   *   The solution whose sub-contents we want to archive.
    *
    * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
    * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
    * @throws \Drupal\Core\Entity\EntityStorageException
    */
-  protected function performOperation(array $data): void {
-    if (!$solution = $this->getParentSolutionFromItem($data)) {
-      return;
-    }
-
+  protected function performOperation(SolutionInterface $solution): void {
     foreach ($this->getSolutionGroupContent($solution) as $entity) {
       if (!$entity instanceof ArchivableEntityInterface) {
         // Continue silently.
