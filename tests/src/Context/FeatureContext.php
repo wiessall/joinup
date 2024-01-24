@@ -678,42 +678,6 @@ class FeatureContext extends RawDrupalContext {
   }
 
   /**
-   * Checks the users existence.
-   *
-   * @param string $username
-   *   The username of the user.
-   *
-   * @throws \Exception
-   *   Thrown when the user is not found.
-   *
-   * @Then I should have a :username user
-   */
-  public function assertUserExists(string $username): void {
-    $user = $this->getUserByName($username);
-
-    if (empty($user)) {
-      throw new \Exception("Unable to load expected user " . $username);
-    }
-  }
-
-  /**
-   * Checks that user doesn't exist.
-   *
-   * @param string $username
-   *   The username of the user.
-   *
-   * @throws \Exception
-   *   Thrown when the user is found.
-   *
-   * @Then I should not have a :username user
-   */
-  public function assertUserNotExists(string $username): void {
-    if (user_load_by_name($username)) {
-      throw new \Exception("The user '$username' exists but it should not exist.");
-    }
-  }
-
-  /**
    * Deletes the user account with the given name.
    *
    * This intended to be used for user accounts that are created through the UI
@@ -2638,11 +2602,12 @@ class FeatureContext extends RawDrupalContext {
    * @When I run the :queue_name queue worker
    */
   public function iRunTheQueueWorker(string $queue_name): void {
-    $drushCommand = sprintf('drush queue:run %s', $queue_name);
-
     // Create a new Process instance to run the Drush command.
-    $process = new Process(explode(' ', $drushCommand));
-    $process->setTimeout(1800);
+    $process = Process::fromShellCommandline(
+      command: sprintf('composer exec drush queue:run %s', $queue_name),
+      cwd: getenv('DDEV_COMPOSER_ROOT') ?: dirname(DRUPAL_ROOT),
+      timeout: 1800
+    );
     $process->run();
 
     if (!$process->isSuccessful()) {
