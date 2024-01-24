@@ -88,20 +88,14 @@ function rdf_sync_check_column_mappings(array $columns, string $fieldName, array
       throw new \Exception("The 'type' key of $entityTypeId:$bundleId:$fieldName:$columnName mapping should be NULL or one of '" . implode("', '", ColumnMapping::ALLOWED_TYPES) . "'");
     }
 
-    // The 'type' can be NULL only on translatable string fields.
-    if ($mapping['type'] === NULL) {
-      $fieldDefinition = \Drupal::getContainer()->get('entity_field.manager')->getFieldDefinitions($entityTypeId, $bundleId)[$fieldName];
-      if (!$fieldDefinition->isTranslatable()) {
-        throw new \Exception("The 'type' key can be NULL only for translatable fields but is NULL for $entityTypeId:$bundleId:$fieldName:$columnName");
-      }
-      $fieldItemDefinition = $fieldDefinition->getItemDefinition();
-      $property = $fieldItemDefinition->getPropertyDefinition($columnName);
-      if ($property->getDataType() !== 'string') {
-        throw new \Exception("The 'type' is NULL for $entityTypeId:$bundleId:$fieldName:$columnName but this column is not a string");
-      }
-    }
+    // @todo The 'type' can be NULL only on translatable string fields. Find a
+    //   way to check this early. Getting here the field definition to check
+    //   whether is translatable will call rdf_sync_entity_bundle_field_info()
+    //   which will call RdfSyncMapper::isMappedBundle() but the bundle info is
+    //   not yet prepared (we're in the middle of the process). Consider
+    //   detecting whether a bundle is mapped by checking if the bundle class
+    //   extends RdfSyncEntityInterface rather than relying on mappings.
   }
-
 }
 
 /**
