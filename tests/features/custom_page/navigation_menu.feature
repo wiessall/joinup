@@ -12,7 +12,7 @@ Feature: Navigation menu for custom pages
     When I am logged in as a facilitator of the "Rainbow tables" <group>
     And I go to the homepage of the "Rainbow tables" <group>
     Then the navigation menu of the "Rainbow tables" <group> should have <visible items 1> visible items
-    And I should see the following group menu items in the specified order:
+    And I should see the following navigation menu items in the specified order:
       | text     |
       | Overview |
     # Check that the 'Edit menu' local action is present.

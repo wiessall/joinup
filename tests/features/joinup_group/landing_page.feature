@@ -23,7 +23,7 @@ Feature: Tests the group landing page customization.
     When I go to the homepage of the "<group> group" <group>
     Then I should not see the link "Settings"
     And I should not see the link "Edit landing page"
-    And I should see the following group menu items in the specified order:
+    And I should see the following navigation menu items in the specified order:
       | text          |
       | Overview      |
       | Custom Page 1 |
@@ -87,7 +87,7 @@ Feature: Tests the group landing page customization.
     But I should not see "The <group> arbitrary description"
     And I should not see "The custom page 2 content"
     And I should see the link "Edit landing page"
-    And I should see the following group menu items in the specified order:
+    And I should see the following navigation menu items in the specified order:
       | text          |
       | Welcome       |
       | Custom Page 1 |
