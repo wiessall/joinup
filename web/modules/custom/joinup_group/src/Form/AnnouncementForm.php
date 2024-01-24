@@ -179,7 +179,7 @@ class AnnouncementForm extends FormBase {
       ];
     }
 
-    (new CacheableMetadata())
+    CacheableMetadata::createFromRenderArray($form)
       ->addCacheableDependency($this->announcement)
       ->applyTo($form);
 
