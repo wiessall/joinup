@@ -56,7 +56,7 @@
         "drupal/iframe": "^2",
         "drupal/image_library_widget": "^2.0",
         "drupal/imagecache_external": "^3.0",
-        "drupal/inline_entity_form": "^1.0",
+        "drupal/inline_entity_form": "^3.0",
         "drupal/json_field": "^1.0",
         "drupal/layout_builder_component_attributes": "^2.1",
         "drupal/layout_paragraphs": "^2.0",
@@ -351,7 +351,8 @@
                 "Do not try to download failed URLs repeatedly: attempt next time only after the local cache is rebuilt @see https://drupal.org/i/3398665": "resources/patch/php/drupal/imagecache_external/3398665.diff"
             },
             "drupal/inline_entity_form": {
-                "Autocomplete field doesn't allow to reference entities with long titles @see https://www.drupal.org/node/2895663": "resources/patch/php/drupal/inline_entity_form/2895663.patch"
+                "Autocomplete field doesn't allow to reference entities with long titles @see https://www.drupal.org/node/2895663": "resources/patch/php/drupal/inline_entity_form/2895663.patch",
+                "Undefined array key \"delete\". @see https://www.drupal.org/i/3416328": "resources/patch/php/drupal/inline_entity_form/3416328.patch"
             },
             "drupal/layout_paragraphs": {
                 "Utilize layout preview mode https://drupal.org/i/3392735": "resources/patch/php/drupal/layout_paragraphs/layout_paragraphs-utilize_layout_preview-3392735-5--fix-only.patch",
