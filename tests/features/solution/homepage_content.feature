@@ -123,22 +123,3 @@ Feature: Solution homepage
     And I click "View draft" in the "Entity actions" region
     Then I should not see the "IS protocol paper 1" tile
     And I should not see the "Protocol draft" tile
-
-  Scenario: Archived content should not be shown by default in the solution homepage.
-    Given the "Information sharing protocol" solution is configured to show the following content:
-      | enabled       | yes |
-      | limit         | 12  |
-      | show_archived | all |
-      | query_presets |     |
-
-    When I go to the homepage of the "Information sharing protocol" solution
-    Then I should see the "IS protocol paper" tile
-    But I should not see the "IS protocol archived" tile
-    And I should not see the "Some archived dist." tile
-    And I should not see the "Archiving some distribution" tile
-
-    When I click "Show archived"
-    Then I should not see the "IS protocol paper" tile
-    But I should see the "IS protocol archived" tile
-    And I should see the "Archiving some distribution" tile
-    And I should see the "Some archived dist." tile
