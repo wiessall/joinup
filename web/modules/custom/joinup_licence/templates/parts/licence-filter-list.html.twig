@@ -13,6 +13,9 @@
  * --- description: The description of the field to pass to the data attribute.
  */
 #}
+{% set button_attributes = create_attribute()
+  .addClass(['licence-filter__button']) %}
+
 <div class="listing listing-grid listing-grid--licence">
   {% for parent_item in items %}
     <div class="licence-filter {{ parent_item.class }}">
@@ -23,7 +26,9 @@
         <ul class="licence-filter__list">
           {% for child in parent_item.items %}
             <li class="licence-filter__item">
-              <button class="licence-filter__button" data-joinup-licence-category="{{ child.licence_category }}" title="{{ child.description }}" type="button">
+              <button{{ button_attributes.setAttribute('data-joinup-licence-category', child.licence_category)
+                .setAttribute('title', child.description|striptags)
+                .setAttribute('type', 'button') }}>
                 {{ child.title }}
               </button>
             </li>
