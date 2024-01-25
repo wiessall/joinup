@@ -137,6 +137,14 @@ function asset_distribution_rdf_entity_presave(RdfInterface $distribution): void
       if (!FileUrlHandler::isRemote($file)) {
         // Set the file size field.
         $distribution->get('field_ad_file_size')->setValue($file->getSize());
+
+        $tids = \Drupal::entityQuery('taxonomy_term')
+          ->accessCheck(FALSE)
+          ->condition('mime_type', $file->getMimeType())
+          ->execute();
+        if ($tids) {
+          $distribution->set('field_ad_format', reset($tids));
+        }
       }
     }
   }
