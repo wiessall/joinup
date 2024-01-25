@@ -196,21 +196,19 @@ commands:
 
   # Lints YAML files using ESLint.
   toolkit:lint-css:
-    #- task: run
-    #  command: toolkit:core-stylelint-setup
     - task: exec
-      commanddd: ${joinup.dir}/node_modules/.bin/eslint --config .eslintrc.json --ext yml .
       dir: ${joinup.dir}
-      commandd: ./node_modules/.bin/stylelint "**/*.css" --custom-formatter ./node_modules/stylelint-checkstyle-formatter/index.js
-      commanfd: ./node_modules/.bin/stylelint -c ${joinup.dir}/.stylelintrc.json --ignore-path ${joinup.dir}/.gitignore "${joinup.site_dir}/themes/**/*.css" "!${joinup.site_dir}/themes/contrib/**/*.css"
       command: |-
         ./node_modules/.bin/stylelint \
           --config ${joinup.dir}/.stylelintrc.json \
           --ignore-path ${joinup.dir}/.gitignore \
-          "${joinup.site_dir}/themes/ventuno/**/*.{css,scss,sass}" \
-          "!${joinup.site_dir}/themes/ventuno/**/*.min.css"
+          "${joinup.site_dir}/{modules,profiles,themes}/!(contrib)/**/!(*.min).{css,pcss,scss,sass}"
 
-  toolkit:core-stylelint-setup:
-    - task: exec
-      command: yarn install --frozen-lock
-      dir: ${joinup.site_dir}/core
+  # Lints YAML files using ESLint.
+  toolkit:fix-css:
+    - task: run
+      command: toolkit:lint-css
+      options:
+        fix: null
+      # arguments:
+      #   - install
