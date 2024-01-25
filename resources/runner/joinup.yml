@@ -4,4 +4,5 @@ joinup:
   site_dir: ${joinup.dir}/web
   files_public_dir: ${joinup.site_dir}/sites/default/files
   files_private_dir: ${joinup.site_dir}/${env.DRUPAL_PRIVATE_FILE_SYSTEM}
+  files_temp_dir: ${joinup.site_dir}/${env.DRUPAL_FILE_TEMP_PATH}
   ddev_dir: ${joinup.dir}/.ddev
