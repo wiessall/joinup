@@ -194,23 +194,9 @@ commands:
     - task: exec
       command: ${joinup.dir}/node_modules/.bin/eslint --config .eslintrc.json --ext yml --fix .
 
-  # Lints CSS, PCSS and S(A|C)SS files with stylelint.
-  toolkit:lint-css:
-    - task: exec
-      dir: ${joinup.dir}
-      command: |-
-        ./node_modules/.bin/stylelint \
-          --config .stylelintrc.json \
-          --ignore-path .gitignore \
-          "${joinup.site_dir}/{modules,profiles,themes}/!(contrib)/**/!(*.min).{css,pcss,scss,sass}"
-
   # Fixes CSS, PCSS and S(A|C)SS files with stylelint.
   toolkit:fix-css:
-    - task: exec
-      dir: ${joinup.dir}
-      command: |-
-        ./node_modules/.bin/stylelint \
-          --config .stylelintrc.json \
-          --ignore-path .gitignore \
-          "${joinup.site_dir}/{modules,profiles,themes}/!(contrib)/**/!(*.min).{css,pcss,scss,sass}" \
-          --fix
+    - task: run
+      command: toolkit:lint-css
+      options:
+        fix: null
