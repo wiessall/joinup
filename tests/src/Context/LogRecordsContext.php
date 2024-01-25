@@ -39,9 +39,10 @@ class LogRecordsContext extends RawDrupalContext {
    * Ensures there are no logs with level lower than the given severity level.
    *
    * @Given the site should not have log records with level lower than :level
+   * @Given the site should not have log records with level lower than :level for :type errors
    */
-  public function assertNoLogRecordsBelowLevel($level): void {
-    $this->failIfLogRecords($level);
+  public function assertNoLogRecordsBelowLevel($level, $type = NULL): void {
+    $this->failIfLogRecords($level, $type);
   }
 
   /**
@@ -50,11 +51,14 @@ class LogRecordsContext extends RawDrupalContext {
    * @param string|null $level
    *   The minimum level of the log records to ignore. Defaults to NULL, which
    *   means log must be completely empty.
+   * @param string|null $type
+   *   Type of the log records to filter. Defaults to NULL, which
+   *   means show all logs.
    *
    * @throws \Exception
    *   If there are any log records with level lower than the given level.
    */
-  protected function failIfLogRecords(?string $level = NULL): void {
+  protected function failIfLogRecords(?string $level = NULL, ?string $type = NULL): void {
     if (!is_null($level)) {
       $levelCapitalized = mb_convert_case($level, MB_CASE_TITLE);
       $levelMapping = array_map(
@@ -68,7 +72,7 @@ class LogRecordsContext extends RawDrupalContext {
     }
 
     $logRecords = array_filter(
-      $this->getLogRecords(),
+      $this->getLogRecords($type),
       function (array $record) use ($levelInt) {
         return $record['severity'] < $levelInt;
       }
@@ -93,14 +97,21 @@ class LogRecordsContext extends RawDrupalContext {
   /**
    * The captured log records since scenario start or since the last reset.
    *
+   * @param string|null $type
+   *   Type of the log records to filter. Defaults to NULL, which
+   *   means show all logs.
+   *
    * @return array[]
    *   The captured log records since scenario start or since the last reset.
    */
-  protected function getLogRecords(): array {
-    return \Drupal::database()->select('watchdog', 'log')
+  protected function getLogRecords($type): array {
+    $query = \Drupal::database()->select('watchdog', 'log')
       ->fields('log')
-      ->condition('timestamp', $this->timeStamp, '>=')
-      ->execute()
+      ->condition('timestamp', $this->timeStamp, '>=');
+    if ($type) {
+      $query->condition('type', $type);
+    }
+    return $query->execute()
       ->fetchAll(\PDO::FETCH_ASSOC);
   }
 
