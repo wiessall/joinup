@@ -185,9 +185,16 @@ commands:
       command: ${joinup.dir}/node_modules/.bin/eslint --config .eslintrc.json --ext js --fix .
 
   # Lints YAML files using ESLint.
-  toolkit:lint-yaml:
+  toolkit:lint-yml:
     - task: exec
       command: ${joinup.dir}/node_modules/.bin/eslint --config .eslintrc.json --ext yml .
+
+  # Lints YAML files using ESLint, and also CSS.
+  toolkit:lint-yaml:
+    - task: run
+      command: toolkit:lint-css
+    - task: run
+      command: toolkit:lint-yml
 
   # Fixes YAML files using ESLint.
   toolkit:fix-yaml:
