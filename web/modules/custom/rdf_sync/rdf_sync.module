@@ -13,6 +13,7 @@ use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Field\FieldDefinition;
 use Drupal\rdf_sync\BundleFieldDefinition;
+use Drupal\rdf_sync\Entity\RdfSyncEntityInterface;
 use Drupal\rdf_sync\Model\ColumnMapping;
 
 /**
@@ -162,4 +163,34 @@ function rdf_sync_entity_presave(EntityInterface $entity): void {
     $entity->set('uri', $plugin->setEntity($entity)->generate());
   }
 
+}
+
+/**
+ * Implements hook_entity_insert().
+ */
+function rdf_sync_entity_insert(EntityInterface $entity): void {
+  if ($entity instanceof RdfSyncEntityInterface) {
+    // @todo Consider queueing.
+    \Drupal::getContainer()->get('rdf_sync.backend_updater')->insert($entity);
+  }
+}
+
+/**
+ * Implements hook_entity_update().
+ */
+function rdf_sync_entity_update(EntityInterface $entity): void {
+  if ($entity instanceof RdfSyncEntityInterface) {
+    // @todo Consider queueing.
+    \Drupal::getContainer()->get('rdf_sync.backend_updater')->update($entity);
+  }
+}
+
+/**
+ * Implements hook_entity_delete().
+ */
+function rdf_sync_entity_delete(EntityInterface $entity): void {
+  if ($entity instanceof RdfSyncEntityInterface) {
+    // @todo Consider queueing.
+    \Drupal::getContainer()->get('rdf_sync.backend_updater')->delete($entity);
+  }
 }
