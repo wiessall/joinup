@@ -194,21 +194,23 @@ commands:
     - task: exec
       command: ${joinup.dir}/node_modules/.bin/eslint --config .eslintrc.json --ext yml --fix .
 
-  # Lints YAML files using ESLint.
+  # Lints CSS, PCSS and S(A|C)SS files with stylelint.
   toolkit:lint-css:
     - task: exec
       dir: ${joinup.dir}
       command: |-
         ./node_modules/.bin/stylelint \
-          --config ${joinup.dir}/.stylelintrc.json \
-          --ignore-path ${joinup.dir}/.gitignore \
+          --config .stylelintrc.json \
+          --ignore-path .gitignore \
           "${joinup.site_dir}/{modules,profiles,themes}/!(contrib)/**/!(*.min).{css,pcss,scss,sass}"
 
-  # Lints YAML files using ESLint.
+  # Fixes CSS, PCSS and S(A|C)SS files with stylelint.
   toolkit:fix-css:
-    - task: run
-      command: toolkit:lint-css
-      options:
-        fix: null
-      # arguments:
-      #   - install
+    - task: exec
+      dir: ${joinup.dir}
+      command: |-
+        ./node_modules/.bin/stylelint \
+          --config .stylelintrc.json \
+          --ignore-path .gitignore \
+          "${joinup.site_dir}/{modules,profiles,themes}/!(contrib)/**/!(*.min).{css,pcss,scss,sass}" \
+          --fix
