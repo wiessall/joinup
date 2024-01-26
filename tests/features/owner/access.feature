@@ -6,8 +6,11 @@ Feature: Owner access
 
   Scenario: Anonymous user contact information access
     Given owner:
-      | name          | type                  |
-      | Daisy Johnson | Private Individual(s) |
+      | name          | type                             |
+      | Daisy Johnson | Academia/Scientific organisation |
+
+    Then I should have 1 owner
+
     When I am an anonymous user
     When I go to the "Daisy Johnson" owner
     Then I should see the heading "Sign in to continue"

@@ -158,7 +158,6 @@ Feature: Collection homepage
     When I go to the homepage of the "Middle earth daily" collection
 
     Then I should see the following headings:
-      | Quick links          |
       | Detailed information |
       | Moderation           |
     And I should see the following lines of text:

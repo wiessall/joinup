@@ -1,0 +1,15 @@
+uuid: 5ed28d02-46fc-4e4a-9647-deb6ffcc213e
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.ogmenu_instance.quick_links.og_audience
+    - og_menu.ogmenu.quick_links
+id: ogmenu_instance.quick_links.default
+targetEntityType: ogmenu_instance
+bundle: quick_links
+mode: default
+content: {  }
+hidden:
+  og_audience: true
+  search_api_excerpt: true

@@ -202,7 +202,7 @@ function eif_eif_wrapper_access(EntityInterface $entity, string $operation, Acco
  */
 function eif_rdf_meta_entity_insert(RdfMetaEntityInterface $entity): void {
   _eif_reindex_parent_solution($entity);
-  _eif_add_eif_link_to_leftside_menu($entity);
+  _eif_add_eif_link_to_group_menus($entity);
 }
 
 /**
@@ -232,6 +232,12 @@ function _eif_reindex_parent_solution(RdfMetaEntityInterface $entity): void {
 
   $solution = \Drupal::entityTypeManager()->getStorage('rdf_entity')->loadUnchanged($entity->target->target_id);
 
+  // In case the solutions was deleted prior to the perspective, the solution
+  // will be NULL.
+  if (!$solution) {
+    return;
+  }
+
   // Manually update the entry of the solution in the SOLR index as we need to
   // index the extra property for the EIF perspective.
   $tracking_manager = \Drupal::getContainer()->get('search_api.entity_datasource.tracking_manager');
@@ -260,27 +266,29 @@ function _eif_reindex_parent_solution(RdfMetaEntityInterface $entity): void {
  * @param \Drupal\rdf_meta_entity\Entity\RdfMetaEntityInterface $meta_entity
  *   The RDF meta entity.
  */
-function _eif_add_eif_link_to_leftside_menu(RdfMetaEntityInterface $meta_entity): void {
+function _eif_add_eif_link_to_group_menus(RdfMetaEntityInterface $meta_entity): void {
   if ($meta_entity->bundle() === 'eif_perspective') {
     $solution = $meta_entity->getTargetEntity();
     if ($solution instanceof SolutionInterface) {
-      $og_menu = \Drupal::entityTypeManager()->getStorage('ogmenu_instance')->loadByProperties([
-        'og_audience' => $solution->id(),
-      ]);
-      if ($og_menu = reset($og_menu)) {
-        $menu_name = 'ogmenu-' . $og_menu->id();
-        $link = [
-          'uri' => Url::fromRoute('entity.rdf_entity.eif_perspective', [
-            'rdf_entity' => $solution->id(),
-          ])->toUriString(),
-        ];
-        \Drupal::entityTypeManager()->getStorage('menu_link_content')->create([
-          'title' => t('EIF Perspective'),
-          'menu_name' => $menu_name,
-          'link' => $link,
-          'enabled' => 0,
-          'weight' => -6,
-        ])->save();
+      foreach (['navigation', 'quick_links'] as $bundle) {
+        $og_menu = \Drupal::entityTypeManager()->getStorage('ogmenu_instance')->loadByProperties([
+          'og_audience' => $solution->id(),
+          'type' => $bundle,
+        ]);
+        if ($og_menu = reset($og_menu)) {
+          $menu_name = 'ogmenu-' . $og_menu->id();
+          $link = [
+            'uri' => Url::fromRoute('entity.rdf_entity.eif_perspective', [
+              'rdf_entity' => $solution->id(),
+            ])->toUriString(),
+          ];
+          \Drupal::entityTypeManager()->getStorage('menu_link_content')->create([
+            'title' => t('EIF Perspective'),
+            'menu_name' => $menu_name,
+            'link' => $link,
+            'enabled' => $bundle === 'quick_links',
+          ])->save();
+        }
       }
     }
   }
