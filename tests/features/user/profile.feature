@@ -300,3 +300,7 @@ Feature: User profile
       | Cherry arch    |
       | Lone handling  |
       | Sugar is sweet |
+    And I should see the text "Archived" in the "Blue flower" tile
+    And I should see the text "Archived" in the "Cherry arch" tile
+    And I should see the text "Archived" in the "Lone handling" tile
+    And I should see the text "Archived" in the "Sugar is sweet" tile

@@ -171,6 +171,7 @@ Feature: Global search
     And I should not see the "Dummy news 3" tile
     And I should not see the "Dummy news 4" tile
     And I should see the "Spring device" tile
+    And I should see the text "Archived" in the "Spring device" tile
 
     Then I check the "Show only Archived items" checkbox from the "Status" facet
     And I should see the "Molecular cooking collection" tile

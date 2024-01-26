@@ -129,9 +129,11 @@ Feature: Global search with archive content
     And I go to the homepage of the "Rubik Cube" collection
     Then I should see the following tiles in the correct order:
       | Megaminx |
+    And I should not see the text "Archived" in the "Megaminx" tile
     When I click "Show archived"
     Then I should see the following tiles in the correct order:
       | 4x4 cube |
+    And I should see the text "Archived" in the "4x4 cube" tile
 
     And I go to the homepage of the "Speed cube" collection
     When I click "Show archived"
