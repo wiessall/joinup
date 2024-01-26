@@ -84,6 +84,7 @@ function contact_form_form_message_contact_form_submission_form_alter(&$form, Fo
   // success message informing the user that their message has been successfully
   // sent.
   $form['actions']['submit']['#submit'][] = 'contact_form_form_message_contact_form_submission_submit';
+  $form['#validate'][] = "_validate_report_page_form_message_contact";
 
   $form['#attached']['library'][] = 'contact_form/empty-url';
 
@@ -119,6 +120,21 @@ function contact_form_form_message_contact_form_submission_submit(&$form, FormSt
     \Drupal::logger('contact')->error('Cannot send contact form message.', [
       'message' => $event->getEntity()->toArray(),
     ]);
+  }
+}
+
+/**
+ * Validate page url if category is report.
+ *
+ * @param array $form
+ *   The form array.
+ * @param \Drupal\Core\Form\FormStateInterface $form_state
+ *   The form state.
+ */
+function _validate_report_page_form_message_contact(array &$form, FormStateInterface $form_state): void {
+  $values = $form_state->getValues();
+  if ($values['field_contact_category'][0]['value'] === 'report' && empty($values['field_contact_url'][0]['uri'])) {
+    $form_state->setErrorByName('field_contact_url', t('Page URL field is required.'));
   }
 }
 

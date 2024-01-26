@@ -120,10 +120,26 @@ Feature: Submit the contact form
       | success messages                                              |
       | Your message has been submitted. Thank you for your feedback. |
 
-  @javascript
+  @javascript @terms
   Scenario: Regression test for ISAICP-8398
   See https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-8398
 
+    Given the following contact:
+      | email | rmartykelley@bar.com |
+      | name  | Rarty Kelley        |
+    And the following owner:
+      | name              |
+      | Martinez Gonzalez |
+    And collection:
+      | title               | Rumba                |
+      | description         | Destruction of Rumba |
+      | owner               | Martinez Gonzalez    |
+      | contact information | Rarty Kelley         |
+      | state               | published            |
+      | topic               | Supplier exchange    |
+    And event content:
+      | title           | author      | body | location  | collection  | field_state |
+      | Tumba spatial   | Report user | body | Somewhere | Rumba       | published   |
     Given I am not logged in
     Then I go to the contact form
     And I fill in "First name" with "Jonh"
@@ -131,9 +147,15 @@ Feature: Submit the contact form
     And I fill in "Organisation" with "Lucotores State"
     And I fill in "E-mail address" with "jonh.chaves@free.pe"
     And I select "Inappropriate content" from "Category"
-    And I select "Question on usage" from "Inappropriate category"
     And I fill in "Subject" with "Reminder to remove content"
     And I enter "I will be back soon..." in the "Message" wysiwyg editor
+    Then I press "Submit"
+    And I should see the following error messages:
+      | error messages               |
+      | Page URL field is required.  |
+
+    And I pick "Tumba spatial" from the "Page URL" autocomplete suggestions
+    And I wait for AJAX to finish
     Then I press "Submit"
     And I should see the following success messages:
       | success messages                                              |
