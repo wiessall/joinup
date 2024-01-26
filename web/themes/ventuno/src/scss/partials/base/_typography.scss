@@ -1,3 +1,5 @@
+@use "sass:color";
+
 // stylelint-disable selector-no-qualifying-type
 .fs-sm,
 .fs-xs {
@@ -23,6 +25,10 @@ h4 {
 .bg-light {
   .btn-link,
   .button--link {
-    color: darken(saturate($link-color, 0.40), 1.57);
+    color: color.adjust(
+      $link-color,
+      $saturation: 0.40%,
+      $lightness: -1.57%
+    );
   }
 }

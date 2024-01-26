@@ -1,10 +1,11 @@
+@use "sass:color";
 @import "../partials/core";
 
 .abstract {
   .btn.read-more {
     margin-top: $spacer;
     padding: 0; // Override button properties
-    color: darken($brand, 15); // Override button properties
+    color: color.adjust($brand, $lightness: -15%); // Override button properties
     border: none; // Override button properties
     border-radius: 0; // Override button properties
     background-color: transparent; // Override button properties

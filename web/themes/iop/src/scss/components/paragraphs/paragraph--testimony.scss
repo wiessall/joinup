@@ -3,14 +3,13 @@
 .paragraph--testimony {
   display: flex;
   flex-direction: column;
-  margin-bottom: $spacer * 4; //64px
+  margin-bottom: $spacer * 4; // 64px
   blockquote {
     overflow: unset;
     margin-right: 0;
     margin-left: 0;
     padding: unset;
-    // Override Ventuno's blockquote style
-    border-left: none;
+    border-left: none; // Override Ventuno's blockquote style
   }
   .testimony {
     &__quote {
@@ -86,7 +85,6 @@
         width: 100%;
       }
       @include media-breakpoint-up(lg) {
-        width: 50%;
         width: calc(50% - 1rem);
       }
     }
@@ -109,6 +107,6 @@
   @include media-breakpoint-up(md) {
     justify-content: space-between;
     height: 100%;
-    margin-bottom: $spacer * 2; //32px
+    margin-bottom: $spacer * 2; // 32px
   }
 }

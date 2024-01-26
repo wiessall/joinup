@@ -3,7 +3,7 @@
 .paragraph--testimony {
   display: flex;
   flex-direction: column;
-  margin-bottom: $spacer * 4; //64px
+  margin-bottom: $spacer * 4; // 64px
   .testimony {
     &__quote {
       margin-bottom: $spacer; // 16px
@@ -96,6 +96,6 @@
   }
   @include media-breakpoint-up(md) {
     height: 100%;
-    margin-bottom: $spacer * 2; //32px
+    margin-bottom: $spacer * 2; // 32px
   }
 }

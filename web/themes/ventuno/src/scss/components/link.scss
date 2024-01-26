@@ -1,3 +1,5 @@
+@use "sass:color";
+
 a {
   // Avoid purple underline for visited links.
   &:hover {
@@ -21,5 +23,5 @@ a {
   }
 }
 .bg-light a:not(.btn) {
-  color: darken($brand, 15); // Ensure having enough contrast
+  color: color.adjust($brand, $lightness: -15%); // Ensure having enough contrast
 }

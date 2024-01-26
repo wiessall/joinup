@@ -21,7 +21,7 @@
   .js-form-type-radios,
   .js-form-type-checkboxes {
     & > .form-label {
-      margin: $spacer*1.5 0 $spacer;
+      margin: ($spacer * 1.5) 0 $spacer;
     }
   }
   .webform-multiple-table {
