@@ -1,6 +1,6 @@
 {% if content %}
   <div {{ attributes.addClass('layout', 'l-group-heading', 'row') }}>
-    <div class="l-group-heading__content col-12 col-md-7 py-5">
+    <div class="l-group-heading__content col-12 col-md-7 col-lg-6 py-5">
       {% if content.main %}
         <div class="row mb-4">
           <div {{ region_attributes.second.addClass('l-group-heading__main') }}>
@@ -27,7 +27,7 @@
     </div>
 
     {% if content.aside %}
-      <div {{ region_attributes.aside.addClass('l-group-heading__aside', 'col-12', 'col-md-5', 'py-5', 'ps-5') }}>
+      <div {{ region_attributes.aside.addClass('l-group-heading__aside', 'bg-light', 'col-12', 'col-md-5', 'col-lg-4', 'offset-lg-2', 'rounded-3', 'p-4', 'p-lg-5', 'mb-5') }}>
         {{ content.aside }}
       </div>
     {% endif %}
