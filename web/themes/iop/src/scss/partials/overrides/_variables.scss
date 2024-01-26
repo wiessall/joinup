@@ -92,6 +92,7 @@ $theme-colors: map-merge(
     "brand": $brand,
   )
 );
+
 // Regenerate $theme-colors-rgb variables map with the addition of $brand
 $theme-colors-rgb: map-loop($theme-colors, to-rgb, "$value");
 
@@ -107,5 +108,6 @@ $spacers: (
   4: $spacer * 1.5,
   5: $spacer * 3,
 );
+
 // Regenerate $gutters variables with new $spacers
 $gutters: $spacers;

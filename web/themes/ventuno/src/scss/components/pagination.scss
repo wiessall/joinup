@@ -28,8 +28,8 @@
       color: $link-color;
     }
     &.active .page-link {
-      font-weight: $font-weight-normal;
       background: rgba(16, 115, 222, 0.1);
+      font-weight: $font-weight-normal;
     }
     &.disabled .page-link {
       color: $gray-500;

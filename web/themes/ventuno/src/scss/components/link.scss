@@ -5,11 +5,13 @@ a {
       text-decoration-color: currentColor!important;
     }
   }
+
   // Add icon to show users the link is external.
   &.external {
     &::after {
-      margin: 0 0 0 $spacer * .375; // 0 0 0 6px
       @include get-bootstrap-icon('box-arrow-up-right');
+
+      margin: 0 0 0 $spacer * .375; // 0 0 0 6px
     }
     &:hover {
       &::after {

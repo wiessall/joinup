@@ -2,6 +2,7 @@
 
 .paragraph--poll {
   position: relative;
+
   // Form overrides
   .col-form-label {
     padding-top: 0;
@@ -17,9 +18,9 @@
     display: none;
   }
   .form-check-label.option.form-label {
-    cursor: pointer;
-    padding: $spacer 0;
     margin: 0;
+    padding: $spacer 0;
+    cursor: pointer;
   }
   .poll {
     .choice-item {
@@ -40,13 +41,13 @@
     }
     .bar {
       position: absolute;
-      width: 100%;
       top: $spacer * .6;
+      width: 100%;
       height: $spacer * 2;
       background-color: transparent;
       .foreground {
-        border-radius: $border-radius-pill;
         height: $spacer * 2;
+        border-radius: $border-radius-pill;
         &.selected {
           background-color: rgba($success, .1);
         }
@@ -74,7 +75,7 @@
   }
   [data-drupal-selector="edit-back"] {
     position: absolute;
-    top: 0px;
-    right: 0px;
+    top: 0;
+    right: 0;
   }
 }

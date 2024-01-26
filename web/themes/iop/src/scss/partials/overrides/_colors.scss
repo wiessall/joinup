@@ -6,20 +6,16 @@ $lightblue: #238dc1;
 $turquoise: #19d3c5;
 $lightgreen: #cdd854;
 $orange: #f29100;
-
 $brand: $lightblue;
 $link-color: $brand;
 $primary: $darkblue;
 $secondary: lighten($lightblue, 50);
 $gradient: linear-gradient(to right, $lightblue 0%, $blue 25%, $turquoise 55%, $lightgreen 80%, $orange 100%);
-
 $brand-darker: darken($brand, 15);
 $primary-darker: darken(desaturate($primary, 0.07), 4.12);
-
 $success: #18bf80;
 $warning: #eba843;
 $danger: #eb3434;
-
 $gray-100: #fafbfc;
 $gray-200: #f5f6f7;
 $gray-300: #dadee0;
