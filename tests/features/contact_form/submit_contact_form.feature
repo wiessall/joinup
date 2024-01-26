@@ -119,3 +119,22 @@ Feature: Submit the contact form
     And I should see the following success messages:
       | success messages                                              |
       | Your message has been submitted. Thank you for your feedback. |
+
+  @javascript
+  Scenario: Regression test for ISAICP-8398
+  See https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-8398
+
+    Given I am not logged in
+    Then I go to the contact form
+    And I fill in "First name" with "Jonh"
+    And I fill in "Last name" with "Chaves"
+    And I fill in "Organisation" with "Lucotores State"
+    And I fill in "E-mail address" with "jonh.chaves@free.pe"
+    And I select "Inappropriate content" from "Category"
+    And I select "Question on usage" from "Inappropriate category"
+    And I fill in "Subject" with "Reminder to remove content"
+    And I enter "I will be back soon..." in the "Message" wysiwyg editor
+    Then I press "Submit"
+    And I should see the following success messages:
+      | success messages                                              |
+      | Your message has been submitted. Thank you for your feedback. |
