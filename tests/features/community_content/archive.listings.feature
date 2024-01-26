@@ -30,23 +30,23 @@ Feature: Archived content on content listings - groups and paragraphs.
     And I check "Enable the search field"
     And I press "Publish"
     Then I should see the heading "Some collection"
-    # By default, 'Show archived content' is set to 'unarchived'.
+    # By default, 'Show content' is set to 'unarchived'.
     And I should see the "Published news" tile
     But I should not see the "Archived news" tile
 
     When I go to the edit form of the "Some collection" collection
-    And I select "Archived" from "Show archived content"
+    And I select "Archived" from "Show content"
     And I press "Publish"
     Then I should see the heading "Some collection"
     And I should see the "Archived news" tile
     But I should not see the "Published news" tile
 
     When I go to the edit form of the "Some collection" collection
-    And I select "All" from "Show archived content"
+    And I select "All" from "Show content"
     And I press "Publish"
     Then I should see the heading "Some collection"
     And I should see the "Published news" tile
-    # By default, the toggle to show archived content is disabled.
+    # By default, the toggle to Show content is disabled.
     But I should not see the "Archived news" tile
 
   @javascript
@@ -70,7 +70,7 @@ Feature: Archived content on content listings - groups and paragraphs.
     And I press "Save" in the "Modal buttons" region
     And I press "Update"
     Then I should see the heading "Some page"
-    # By default, 'Show archived content' is set to 'unarchived'.
+    # By default, 'Show content' is set to 'unarchived'.
     And I should see the "Published news" tile
     But I should not see the "Archived news" tile
 
@@ -78,7 +78,7 @@ Feature: Archived content on content listings - groups and paragraphs.
     And I select "Supplier exchange" from "Topic"
     And I click "Choose component"
     And I click "Content listing"
-    And I select "All" from "Show archived content" in the "Modal content" region
+    And I select "All" from "Show content" in the "Modal content" region
     And I fill in "Query presets" with "entity_bundle|news"
     And I press "Save" in the "Modal buttons" region
     And I press "Update"
@@ -91,7 +91,7 @@ Feature: Archived content on content listings - groups and paragraphs.
     Then I open the header local tasks menu
     And I click "Edit" in the "Entity actions" region
     Then I "edit" from the "Custom page body" field the child 1 paragraph of 1 layout
-    And I select "Archived" from "Show archived content" in the "Modal content" region
+    And I select "Archived" from "Show content" in the "Modal content" region
     And I press "Save" in the "Modal buttons" region
     And I press "Update"
     Then I should see the heading "Some page"
@@ -106,7 +106,7 @@ Feature: Archived content on content listings - groups and paragraphs.
     Then I open the header local tasks menu
     And I click "Edit" in the "Entity actions" region
     Then I "edit" from the "Custom page body" field the child 1 paragraph of 1 layout
-    And I select "All" from "Show archived content" in the "Modal content" region
+    And I select "All" from "Show content" in the "Modal content" region
     And I press "Save" in the "Modal buttons" region
     And I press "Update"
     Then I should see the heading "Some page"
@@ -123,7 +123,7 @@ Feature: Archived content on content listings - groups and paragraphs.
     Then I open the header local tasks menu
     And I click "Edit" in the "Entity actions" region
     Then I "edit" from the "Custom page body" field the child 1 paragraph of 1 layout
-    And I select "Unarchived" from "Show archived content" in the "Modal content" region
+    And I select "Unarchived" from "Show content" in the "Modal content" region
     And I press "Save" in the "Modal buttons" region
     And I press "Update"
     Then I should see the heading "Some page"
@@ -156,7 +156,7 @@ Feature: Archived content on content listings - groups and paragraphs.
     And I press "Save" in the "Modal buttons" region
     And I press "Update"
     Then I should see the heading "IOP page"
-    # By default, 'Show archived content' is set to 'unarchived'.
+    # By default, 'Show content' is set to 'unarchived'.
     And I should see the "IOP published news" tile
     But I should not see the "IOP archived news" tile
 
@@ -164,7 +164,7 @@ Feature: Archived content on content listings - groups and paragraphs.
     And I open the header local tasks menu
     And I click "Edit" in the "Entity actions" region
     Then I "edit" from the "Custom page body" field the child 1 paragraph of 1 layout
-    And I select "Archived" from "Show archived content" in the "Modal content" region
+    And I select "Archived" from "Show content" in the "Modal content" region
     And I press "Save" in the "Modal buttons" region
     And I press "Update"
     Then I should see the heading "IOP page"
@@ -175,7 +175,7 @@ Feature: Archived content on content listings - groups and paragraphs.
     And I open the header local tasks menu
     And I click "Edit" in the "Entity actions" region
     Then I "edit" from the "Custom page body" field the child 1 paragraph of 1 layout
-    And I select "All" from "Show archived content" in the "Modal content" region
+    And I select "All" from "Show content" in the "Modal content" region
     And I press "Save" in the "Modal buttons" region
     And I press "Update"
     Then I should see the heading "IOP page"
