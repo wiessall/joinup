@@ -64,7 +64,7 @@ function _ventuno_preprocess_tile(array &$variables, string $entity_type_id): vo
     $variables['view_mode'] === 'highlighted' ||
     ($entity_type_id === 'node' && $entity->bundle() === 'custom_page')
   ) {
-    $variables['text'] = $variables['text'] = $entity instanceof DescriptionInterface && isset($variables['content'][$entity->getDescriptionField()]) ? $variables['content'][$entity->getDescriptionField()] : NULL;
+    $variables['text'] = $entity instanceof DescriptionInterface && isset($variables['content'][$entity->getDescriptionField()]) ? $variables['content'][$entity->getDescriptionField()] : NULL;
 
     // Custom pages are using paragraphs and these are very different in
     // structure. They also come with their own view modes and markup and is not
