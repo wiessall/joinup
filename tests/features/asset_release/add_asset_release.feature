@@ -40,6 +40,8 @@ Feature: "Add release" visibility options.
       | state          | published           |
       | creation date  | 2014-08-30 23:59:00 |
 
+    Then I should have 1 release
+
     # Assert that the "Release" tiles are present and contain version, release date, label and bundle type.
     When I go to the homepage of the "Release Test 1" solution
     Then I should see the "Chasing shadows" tile
@@ -54,7 +56,7 @@ Feature: "Add release" visibility options.
     When I go to the homepage of the "Release Test 1" solution
     And I click "Add release"
     Then I should see the heading "Add Release"
-    And the following fields should be present "Name, Release number, Release notes, Upload a new file or enter a URL, Geographical coverage, Search keywords, Status, Language, Date, Time"
+    And the following fields should be present "Name, Release version, Release notes, Upload a new file or enter a URL, Geographical coverage, Search keywords, Status, Language, Date, Time"
     # The entity is new, so the current workflow state should not be shown.
     And the following fields should not be present "Description, Logo, Solution type, Contact information, Included asset, Translation, Distribution, Current workflow state, Langcode, Motivation"
 
@@ -62,10 +64,10 @@ Feature: "Add release" visibility options.
     Then I should see the following error messages:
       | error messages                    |
       | Name field is required.           |
-      | Release number field is required. |
+      | Release version field is required. |
 
     When I fill in "Name" with "Chasing shadows"
-    And I fill in "Release number" with "1.0"
+    And I fill in "Release version" with "1.0"
     And I fill in "Release notes" with "Changed release."
     # Ensure that the Status field is a dropdown.
     # @see: https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-3342
@@ -74,7 +76,7 @@ Feature: "Add release" visibility options.
     Then I should see the error message "A release with title Chasing shadows and version 1.0 already exists in this solution. Please choose a different title or version."
 
     # It should be possible to choose a different version number.
-    And I fill in "Release number" with "1.1"
+    And I fill in "Release version" with "1.1"
     And I press "Publish"
     Then I should have 2 releases
 
@@ -92,7 +94,7 @@ Feature: "Add release" visibility options.
     When I go to the homepage of the "Release Test 1" solution
     And I click "Add release"
     When I fill in "Name" with "Chasing flares"
-    And I fill in "Release number" with "1.0"
+    And I fill in "Release version" with "1.0"
     And I press "Publish"
     Then I should have 3 releases
 
@@ -128,7 +130,7 @@ Feature: "Add release" visibility options.
     Then I should see the heading "Add Release"
     And I should see the workflow buttons "Save as draft, Publish"
     And I fill in "Name" with "Release of the dark ship1"
-    And I fill in "Release number" with "1"
+    And I fill in "Release version" with "1"
     And I fill in "Authored on" with the date "+2 day"
     And I press "Publish"
     Then I should see the error message 'Your "Authored on" field date is greater than'

@@ -66,7 +66,7 @@ class GroupSettingsFormAlter implements GroupSettingsFormAlterInterface {
       return NULL;
     }
 
-    $menu = $this->groupMenuManager->getMenuByGroupId($group->id());
+    $menu = $this->groupMenuManager->getMenuByGroupId($group->id(), 'navigation');
     if (!$menu) {
       return NULL;
     }

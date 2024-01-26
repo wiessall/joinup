@@ -118,6 +118,17 @@ function ventuno_preprocess_block__facetsblock_searchpage(array &$variables): vo
 }
 
 /**
+ * Implements hook_preprocess_block().
+ */
+function ventuno_preprocess_block__group_menu_block__quick_links(array &$variables): void {
+  // Hide the block title if there are no links available. Privileged users will
+  // still see a help message and be able to access the contextual links.
+  if (isset($variables['content']['disabled'])) {
+    $variables['label'] = '';
+  }
+}
+
+/**
  * Implements hook_preprocess_block() for the highlighted content block.
  */
 function ventuno_preprocess_block__entityqueue_block__highlighted_content(&$variables) {

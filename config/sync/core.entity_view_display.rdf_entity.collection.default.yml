@@ -22,9 +22,11 @@ dependencies:
     - field.field.rdf_entity.collection.field_site_featured
     - field.field.rdf_entity.collection.field_spatial_coverage
     - field.field.rdf_entity.collection.field_topic
+    - og_menu.ogmenu.quick_links
     - rdf_entity.rdfentity.collection
   module:
     - custom_markup_block
+    - joinup_group
     - joinup_layout
     - layout_builder
     - layout_discovery
@@ -40,20 +42,6 @@ third_party_settings:
           label: 'Heading section'
           context_mapping: {  }
         components:
-          128ffb79-6159-4982-82f6-83eaa42021c2:
-            uuid: 128ffb79-6159-4982-82f6-83eaa42021c2
-            region: aside
-            configuration:
-              id: custom_markup
-              label: 'Custom Markup'
-              label_display: '0'
-              provider: custom_markup_block
-              context_mapping: {  }
-              markup:
-                value: '<h2>Quick links</h2>'
-                format: content_editor
-            weight: 0
-            additional: {  }
           9e789968-e0ed-4a49-a322-25da73528daf:
             uuid: 9e789968-e0ed-4a49-a322-25da73528daf
             region: main
@@ -169,6 +157,20 @@ third_party_settings:
                 settings:
                   link_to_entity: false
                 third_party_settings: {  }
+            weight: 0
+            additional: {  }
+          f7eda7e5-fc8d-48b4-824a-e908843362fb:
+            uuid: f7eda7e5-fc8d-48b4-824a-e908843362fb
+            region: aside
+            configuration:
+              id: 'group_menu_block:quick_links'
+              label: 'Quick links'
+              label_display: visible
+              provider: joinup_group
+              context_mapping:
+                og: layout_builder.entity
+              level: 1
+              depth: 0
             weight: 0
             additional: {  }
         third_party_settings: {  }
