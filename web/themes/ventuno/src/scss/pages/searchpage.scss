@@ -14,70 +14,70 @@
 // Filters
 .joinup-search-filters {
   .bcl-offcanvas {
-    box-shadow: none;
     z-index: 503; // Avoid offcanvas to be overlapped by sticky navbar
-    @include media-breakpoint-up(lg) {
-      // Avoid sidebar to overlap toolbar tray when logged in.
-      z-index: 49;
-      visibility: visible;
-      position: relative;
-      width: auto;
-      transform: none;
-      border: none;
-    }
+    box-shadow: none;
     &::before {
-      width: 100vw;
-      height: 100%;
-      content: '';
       position: absolute;
       z-index: -10;
       right: 0;
+      width: 100vw;
+      height: 100%;
+      content: '';
       @include media-breakpoint-up(lg) {
         background: $gray-200;
       }
     }
     .offcanvas-title {
-      font-weight: $font-weight-normal;
-      font-size: $font-size-lg; // 20px
       margin-bottom: $spacer;
+      font-size: $font-size-lg; // 20px
+      font-weight: $font-weight-normal;
       @include media-breakpoint-up(lg) {
         padding-top: $spacer * 1.5; // 24px
         font-size: $font-size-lg * .9; // 18px
       }
     }
+    @include media-breakpoint-up(lg) {
+      position: relative;
+      // Avoid sidebar to overlap toolbar tray when logged in.
+      z-index: 49;
+      visibility: visible;
+      width: auto;
+      transform: none;
+      border: none;
+    }
   }
   .facets-widget-checkbox {
-    padding-bottom: $spacer * 1.5;
     margin-bottom: $spacer * 1.5;
+    padding-bottom: $spacer * 1.5;
     border-bottom: 1px solid $gray-500;
     h3 {
-      color: $black;
-      font-weight: $font-weight-normal;
       text-transform: uppercase;
+      color: $black;
       font-size: $font-size-lg * .9; // 18px
+      font-weight: $font-weight-normal;
       @include media-breakpoint-up(lg) {
         font-size: $font-size-base; // 16px
       }
     }
   }
   .facets-soft-limit-link {
-    margin-top: $spacer * .5;
     display: inline-block;
     width: 100%;
+    margin-top: $spacer * .5;
     text-align: right;
     &::after {
       display: inline-block;
-      color: $secondary;
-      margin-left: $spacer * .25; // 4px
       width: 1em;
       height: 1em;
+      margin-left: $spacer * .25; // 4px
       content: '';
+      transition: transform .5s;
+      vertical-align: middle;
+      color: $secondary;
       background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%231073de' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M2 5l6 6 6-6'/%3e%3c/svg%3e"); // Corresponding BS variable '$form-select-indicator' don't work bc of '<' and '>' characters
       background-repeat: no-repeat;
       background-position: right;
       background-size: 1em 1em;
-      vertical-align: middle;
-      transition: transform .5s;
     }
     &.open::after {
       transform: rotate(180deg);
@@ -85,34 +85,34 @@
   }
   .item-list__checkbox,
   .item-list__date_range {
-    padding-left: 0;
-    margin-bottom: 0;
-    list-style: none;
-    max-height: 410px;
     overflow-y: auto;
+    max-height: 410px;
+    margin-bottom: 0;
+    padding-left: 0;
+    list-style: none;
   }
   .facets-widget- ul {
     padding-left: $spacer; // 16px
     list-style: none;
   }
   .facets-checkbox {
-    background-position: 50%;
-    background-repeat: no-repeat;
-    background-size: contain;
-    border:$form-check-input-border;
-    margin-right: $spacer * .5; // 8px
     width: 1rem; // 16px
     height: 1rem; // 16px
+    margin-right: $spacer * .5; // 8px
+    border:$form-check-input-border;
     border-radius: .25em;
+    background-repeat: no-repeat;
+    background-position: 50%;
+    background-size: contain;
     &:focus {
       border-color: $form-check-input-focus-border;
-      box-shadow: $form-check-input-focus-box-shadow;
       outline: 0;
+      box-shadow: $form-check-input-focus-box-shadow;
     }
     &:checked[type="checkbox"] {
-      background-image: $form-check-input-checked-bg-image;
-      background-color: $form-check-input-checked-bg-color;
       border-color: $form-check-input-checked-border-color;
+      background-color: $form-check-input-checked-bg-color;
+      background-image: $form-check-input-checked-bg-image;
     }
   }
   .facet-item:not(:last-child) {
@@ -126,10 +126,10 @@
   }
   .facets-widget-date_range {
     h3 {
+      margin-bottom: 1rem;
+      text-transform: uppercase;
       font-size: $font-size-base; // 16px
       font-weight: $font-weight-normal;
-      text-transform: uppercase;
-      margin-bottom: 1rem;
     }
     li {
       margin-bottom: $spacer * 1.5; // 24px
@@ -147,13 +147,13 @@
       .ss-values {
         padding: $btn-padding-y;
         .ss-value {
-          border-radius: $border-radius-pill;
+          margin: 2px 10px 2px 0;
           padding: 2px $spacer;
+          border-radius: $border-radius-pill;
           font-size: $font-size-sm;
-          margin: 2px 10px 2px 0px;
         }
         .ss-disabled {
-          padding: 2px 0px;
+          padding: 2px 0;
           color: $gray-400;
         }
       }
@@ -164,8 +164,8 @@
     .ss-content {
       .ss-search {
         input {
-          border-color: $input-focus-border-color;
           height: auto;
+          border-color: $input-focus-border-color;
           &:focus {
             box-shadow: none;
           }
@@ -173,8 +173,8 @@
       }
       .ss-option {
         &:hover {
-          background-color: $secondary;
           color: $gray-900;
+          background-color: $secondary;
         }
         &.ss-disabled,
         &.ss-disabled:hover {
@@ -195,21 +195,22 @@
     background-position: calc(100% - 10px) center;
   }
   .btn-search {
+    padding-right: 1.2rem;
+    padding-left: 1.2rem;
+    background-color: $primary;
+    font-size: 0;
     &::before {
       @include get-bootstrap-icon('search', $white);
+
       font-size: 1rem;
     }
-    background-color: $primary;
-    padding-left: 1.2rem;
-    padding-right: 1.2rem;
-    font-size: 0;
   }
 }
 .ui-widget.search-api-autocomplete-search {
-  border: 1px solid $brand;
-  background-color: $gray-100;
-  border-radius: 0 0 4px 4px;
   z-index: 1046;
+  border: 1px solid $brand;
+  border-radius: 0 0 4px 4px;
+  background-color: $gray-100;
   .ui-menu-item {
     .ui-menu-item-wrapper {
       display: block;
@@ -236,15 +237,9 @@
       align-items: center;
       justify-content: space-between;
       color: $primary;
-      @include media-breakpoint-up(lg) {
-        margin-top: $spacer; // 16px
-      }
       .form-item-keys {
         flex-basis: 100%;
         margin-bottom: $spacer !important;
-        @include media-breakpoint-up(md) {
-          margin-bottom: $spacer * 3 !important;
-        }
         label {
           position: absolute !important;
           overflow: hidden;
@@ -253,19 +248,18 @@
           height: 1px;
           word-wrap: normal;
         }
+        @include media-breakpoint-up(md) {
+          margin-bottom: $spacer * 3 !important;
+        }
       }
       .form-item-results-count {
-        color: $primary;
         text-transform: uppercase;
+        color: $primary;
         @include media-breakpoint-up(md) {
           flex-basis: 60%;
         }
       }
       .form-item-sort-by {
-        @include media-breakpoint-up(md) {
-          flex-basis: 40%;
-          justify-content: end;
-        }
         display: flex;
         align-items: baseline;
         .form-label {
@@ -274,15 +268,22 @@
         .form-select {
           width: auto;
         }
+        @include media-breakpoint-up(md) {
+          flex-basis: 40%;
+          justify-content: end;
+        }
+      }
+      @include media-breakpoint-up(lg) {
+        margin-top: $spacer; // 16px
       }
     }
     .block-facets-summary {
       margin-top: $spacer * 2;
       ul {
-        list-style: none;
         display: flex;
         flex-wrap: wrap;
         padding-left: 0;
+        list-style: none;
       }
     }
   }
@@ -290,6 +291,7 @@
     display: flex;
     justify-content: center;
   }
+
   // img[src*="user_icon.png"] {
   //   filter: invert(0.085);
   // }

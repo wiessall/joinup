@@ -9,9 +9,9 @@
 legend.form-required,
 label.form-required {
   &::after {
+    margin-left: $spacer * .25; // 4px
     content: '*';
     color: $danger;
-    margin-left: $spacer * .25; // 4px
   }
 }
 

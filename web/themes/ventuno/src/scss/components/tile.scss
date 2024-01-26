@@ -8,6 +8,7 @@
   &__link {
     z-index: 2;
   }
+
   // Make some optional elements be interactable over the tile itself.
   &__action {
     position: relative;
@@ -17,13 +18,13 @@
     overflow: hidden;
     aspect-ratio: 16 / 9;
     & picture {
-      height: 100%;
       display: flex;
-      justify-content: center;
       align-items: center;
+      justify-content: center;
+      height: 100%;
       & img {
-        max-height: 100%;
         width: auto;
+        max-height: 100%;
         margin-bottom: 0;
       }
     }
@@ -32,8 +33,8 @@
     padding: $spacer;
   }
   &__standout-info {
-    right: $spacer * .5;
     top: $spacer * -1;
+    right: $spacer * .5;
     font-size: .875rem;
   }
   &__standout-info-icon,
@@ -52,19 +53,19 @@
   }
   &__default-img {
     &::after {
-      content: "";
-      display: block;
       position: absolute;
+      display: block;
       width: $spacer * 6;
       height: $spacer * 6;
-      background-color: $white;
+      content: "";
       border-radius: $border-radius-pill;
+      background-color: $white;
     }
   }
   &__default-icon {
+    z-index: 1;
     width: $spacer * 3;
     height: $spacer * 3;
-    z-index: 1;
     color: $gray-400;
   }
   &__body {
@@ -88,22 +89,22 @@
     }
   }
   &__bundle-icon {
-    background-color: lighten($warning, 30%);
     width: $spacer * 1.5;
     height: $spacer * 1.5;
+    background-color: lighten($warning, 30%);
   }
   .mark {
     position: absolute;
     z-index: 1;
     top: $spacer * .5;
     right: $spacer * .5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     width: $spacer * 1.75;
     height: $spacer * 1.75;
     border-radius: $border-radius-pill;
     background-color: $brand;
-    display: flex;
-    align-items: center;
-    justify-content: center;
     &.star::before {
       @include get-bootstrap-icon('star', $white);
     }
@@ -142,8 +143,8 @@
       flex-wrap: wrap;
       height: auto;
       .tile__figure {
-        padding: $spacer 0 0 $spacer;
         width: 180px;
+        padding: $spacer 0 0 $spacer;
         aspect-ratio: 1 / 1;
         & picture {
           align-items: start;
@@ -151,19 +152,19 @@
       }
       .tile__body {
         flex: 1 1 calc(100% - 180px);
+        max-width: calc(100% - 180px);
         padding: $spacer $spacer 0 $spacer;
         overflow-wrap: anywhere;
-        max-width: calc(100% - 180px);
       }
       .tile__standout-info {
         top: unset;
-        transform: translateX(calc(-100% - $spacer * 1.5));
-        bottom: $spacer * .5;
         right: unset;
+        bottom: $spacer * .5;
+        transform: translateX(calc(-100% - $spacer * 1.5));
       }
       .tile__footer {
-        width: 100%;
         align-self: end;
+        width: 100%;
         margin-top: $spacer;
         border-top: $border-width solid $border-color;
       }

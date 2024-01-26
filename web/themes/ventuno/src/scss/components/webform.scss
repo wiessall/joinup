@@ -5,13 +5,13 @@
   max-width: 54rem;
   .webform-flexbox {
     @include media-breakpoint-up(md) {
-      margin-left: -0.5em !important;
       margin-right: -0.5em !important;
+      margin-left: -0.5em !important;
     }
   }
   .webform-section-title {
-    font-size: $h2-font-size;
     margin-top: $spacer * 2;
+    font-size: $h2-font-size;
   }
   .webform-select-other {
     .js-form-type-select {
@@ -41,18 +41,18 @@
       }
 
       td.webform-multiple-table--operations {
-        text-align: left;
         position: relative;
+        text-align: left;
         .image-button {
           display: inline-block;
         }
-        &:after {
-          content: 'Remove item';
-          display: inline-block;;
+        &::after {
+          display: inline-block;
+          content: 'Remove item';;
           font-weight: bold;
         }
         @include media-breakpoint-up(md) {
-          &:after {
+          &::after {
             position: absolute;
             top: 22px;
             left: 30px
@@ -70,13 +70,13 @@
     margin-bottom: $spacer * 0.5;
   }
   .form-check-label {
-    font-size: $font-size-base;
     color: $body-color;
+    font-size: $font-size-base;
   }
 
   .table > :not(caption) > * > * {
+    padding: 0 1.5rem 0 0;
     border-width: 0;
-    padding: 0rem 1.5rem 0 0;
   }
   .table-bordered > :not(caption) > * {
     border-width: 0;
@@ -93,7 +93,7 @@
         td.webform-multiple-table--operations {
           @include media-breakpoint-up(md) {
             position: relative;
-            &:after {
+            &::after {
               top: 16px;
             }
             .image-button {

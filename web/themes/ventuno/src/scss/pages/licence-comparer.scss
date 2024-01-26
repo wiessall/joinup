@@ -2,9 +2,6 @@
 
 .licence-comparer {
   text-align: center;
-  @include media-breakpoint-up(md) {
-    table-layout: fixed;
-  }
   &__empty {
     display: none;
   }
@@ -14,28 +11,28 @@
   }
   &__sidebar-header {
     &.licence-filter--can {
-      background-color: $joinup--green !important;
       color: $white;
+      background-color: $joinup--green !important;
     }
     &.licence-filter--must {
-      background-color: $joinup--brown !important;
       color: $white;
+      background-color: $joinup--brown !important;
     }
     &.licence-filter--cannot {
-      background-color: $joinup--red !important;
       color: $white;
+      background-color: $joinup--red !important;
     }
     &.licence-filter--compatible {
-      background-color: $joinup--softblue !important;
       color: $white;
+      background-color: $joinup--softblue !important;
     }
     &.licence-filter--law {
-      background-color: $joinup--gray !important; // Increase contrast to pass a11y tests
       color: $white;
+      background-color: $joinup--gray !important; // Increase contrast to pass a11y tests
     }
     &.licence-filter--support {
-      background-color: $joinup--orange !important;
       color: $white;
+      background-color: $joinup--orange !important;
     }
   }
   &__sidebar-cell {
@@ -60,6 +57,9 @@
   }
   &__header {
     background-color: $gray-200 !important;
+  }
+  @include media-breakpoint-up(md) {
+    table-layout: fixed;
   }
 }
 .modal-body {
