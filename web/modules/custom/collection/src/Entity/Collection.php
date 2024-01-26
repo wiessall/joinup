@@ -8,6 +8,7 @@ use Drupal\Component\Utility\NestedArray;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\contact_information\Traits\ContactInformationTrait;
+use Drupal\joinup_bundle_class\AbstractTrait;
 use Drupal\joinup_bundle_class\DescriptionTrait;
 use Drupal\joinup_bundle_class\JoinupBundleClassFieldAccessTrait;
 use Drupal\joinup_bundle_class\JoinupBundleClassMetaEntityTrait;
@@ -28,6 +29,7 @@ use Drupal\topic\Entity\TopicReferencingEntityTrait;
  */
 class Collection extends Rdf implements CollectionInterface {
 
+  use AbstractTrait;
   use ArchivableEntityTrait;
   use EntityPublicationTimeFallbackTrait;
   use EntityWorkflowStateTrait;
@@ -215,6 +217,13 @@ class Collection extends Rdf implements CollectionInterface {
    */
   public function getWebsiteLinkFieldName(): string {
     return 'field_ar_access_url';
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getAbstractField(): string {
+    return 'field_ar_abstract';
   }
 
 }
