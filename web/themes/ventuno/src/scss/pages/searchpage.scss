@@ -38,8 +38,7 @@
     }
     @include media-breakpoint-up(lg) {
       position: relative;
-      // Avoid sidebar to overlap toolbar tray when logged in.
-      z-index: 49;
+      z-index: 49; // Avoid sidebar to overlap toolbar tray when logged in.
       visibility: visible;
       width: auto;
       transform: none;

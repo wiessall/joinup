@@ -1,3 +1,5 @@
+@use "sass:map";
+
 // Override Bootstrap default variables for IOP
 
 // General config
@@ -86,7 +88,7 @@ $bootstrap-icons-path: '../icons';
 $theme-images-path: '../images';
 
 // Regenerate $theme-colors variables map with the addition of $brand
-$theme-colors: map-merge(
+$theme-colors: map.merge(
   $theme-colors,
   (
     "brand": $brand,

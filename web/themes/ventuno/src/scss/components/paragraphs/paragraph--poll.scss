@@ -1,3 +1,4 @@
+@use "sass:color";
 @import "../../partials/core";
 
 .paragraph--poll {
@@ -31,7 +32,7 @@
     .choice-title,
     .choice-result {
       &.selected {
-        color: darken($success, 15);
+        color: color.adjust($success, $lightness: -15%);
         margin-inline: $spacer;
       }
       &.not-selected {

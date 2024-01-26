@@ -1,13 +1,21 @@
+@use "sass:color";
+
 // Ventuno theme colors
 $brand: #1073de;
 $primary: #143b76;
-$secondary: lighten(
-  desaturate(adjust-hue($brand, -1), 15.13),
-  47.84
-  ); // #e7f1fb
+$secondary: color.adjust(
+  $brand,
+  $hue: -1,
+  $saturation: -15.13%,
+  $lightness: 47.84%
+); // #e7f1fb
 
-$brand-darker: darken($brand, 15); // #0b4e97
-$primary-darker: darken(desaturate($primary, 0.07), 4.12); // #113264
+$brand-darker: color.adjust($brand, $lightness: -15%); // #0b4e97
+$primary-darker: color.adjust(
+  $primary,
+  $saturation: -0.07%,
+  $lightness: -4.12%
+); // #113264
 
 $link-color: $brand;
 $success: #18bf80;
@@ -24,11 +32,11 @@ $gray-800: #3d3f40;
 $gray-900: #242626;
 
 // Joinup colors
-$joinup--green: #067F77;
-$joinup--brown: #7F7366;
-$joinup--red: #CD4747;
-$joinup--softblue: #2375CD;
-$joinup--gray: #687692;
-$joinup--orange: #9E6D1F;
+$joinup-green: #067F77;
+$joinup-brown: #7F7366;
+$joinup-red: #CD4747;
+$joinup-softblue: #2375CD;
+$joinup-gray: #687692;
+$joinup-orange: #9E6D1F;
 
 

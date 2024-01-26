@@ -38,39 +38,39 @@
     }
   }
   &--underlying-principles {
-    border: 1px solid $joinup--green;
+    border: 1px solid $joinup-green;
     .eif-filter__header {
-      background-color: $joinup--green;
+      background-color: $joinup-green;
     }
     .eif-filter__content {
-      color: $joinup--green;
+      color: $joinup-green;
     }
   }
   &--interoperability-layers {
-    border: 1px solid $joinup--orange;
+    border: 1px solid $joinup-orange;
     .eif-filter__header {
-      background-color: $joinup--orange;
+      background-color: $joinup-orange;
     }
     .eif-filter__content {
-      color: $joinup--orange;
+      color: $joinup-orange;
     }
   }
   &--conceptual-model {
-    border: 1px solid $joinup--softblue;
+    border: 1px solid $joinup-softblue;
     .eif-filter__header {
-      background-color: $joinup--softblue;
+      background-color: $joinup-softblue;
     }
     .eif-filter__content {
-      color: $joinup--softblue;
+      color: $joinup-softblue;
     }
   }
   &--solution-category {
-    border: 1px solid $joinup--brown;
+    border: 1px solid $joinup-brown;
     .eif-filter__header {
-      background-color: $joinup--brown;
+      background-color: $joinup-brown;
     }
     .eif-filter__content {
-      color: $joinup--brown;
+      color: $joinup-brown;
     }
   }
 }
@@ -98,34 +98,34 @@
   &__line {
     &--underlying-principles {
       .eif-tile__label {
-        background-color: $joinup--green;
+        background-color: $joinup-green;
       }
       .eif-tile__values {
-        color: $joinup--green;
+        color: $joinup-green;
       }
     }
     &--interoperability-layers {
       .eif-tile__label {
-        background-color: $joinup--orange;
+        background-color: $joinup-orange;
       }
       .eif-tile__values {
-        color: $joinup--orange;
+        color: $joinup-orange;
       }
     }
     &--conceptual-model {
       .eif-tile__label {
-        background-color: $joinup--softblue;
+        background-color: $joinup-softblue;
       }
       .eif-tile__values {
-        color: $joinup--softblue;
+        color: $joinup-softblue;
       }
     }
     &--solution-category {
       .eif-tile__label {
-        background-color: $joinup--brown;
+        background-color: $joinup-brown;
       }
       .eif-tile__values {
-        color: $joinup--brown;
+        color: $joinup-brown;
       }
     }
   }
