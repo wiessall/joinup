@@ -124,7 +124,10 @@ Feature: Submit the contact form
   Scenario: Regression test for ISAICP-8398
   See https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-8398
 
-    Given the following contact:
+    Given users:
+      | Username         | E-mail                       |
+      | Julian Munson    | julian.munson@example.com    |
+    And the following contact:
       | email | rmartykelley@bar.com |
       | name  | Rarty Kelley        |
     And the following owner:
@@ -137,9 +140,12 @@ Feature: Submit the contact form
       | contact information | Rarty Kelley         |
       | state               | published            |
       | topic               | Supplier exchange    |
-    And event content:
-      | title           | author      | body | location  | collection  | field_state |
-      | Tumba spatial   | Report user | body | Somewhere | Rumba       | published   |
+    And news content:
+      | title           | headline  | body | collection  | field_state |
+      | Tumba spatial   | headline  | body | Rumba       | published   |
+    And the following collection user memberships:
+      | collection  | user          | roles              |
+      | Rumba       | Julian Munson | owner, facilitator |
     Given I am not logged in
     Then I go to the contact form
     And I fill in "First name" with "Jonh"
@@ -154,7 +160,7 @@ Feature: Submit the contact form
       | error messages               |
       | Page URL field is required.  |
 
-    And I pick "Tumba spatial" from the "Page URL" autocomplete suggestions
+    And I fill in "Page URL" with "/collection/rumba/news/tumba-spatial"
     And I wait for AJAX to finish
     Then I press "Submit"
     And I should see the following success messages:
