@@ -303,6 +303,7 @@ class VocabularyUpdater {
     // @todo Use a directed acyclic graph manipulator to reorder $terms.
     // @see \Drupal\Component\Graph\Graph
     $tid = \Drupal::database()->query("SELECT MAX(tid) FROM {taxonomy_term_data}")->fetchField() + 1;
+    $revision_id = \Drupal::database()->query("SELECT MAX(revision_id) FROM {taxonomy_term_data}")->fetchField() + 1;
     foreach ($graph->resources() as $resource) {
       if (!$this->isTerm($resource, $rdfType)) {
         continue;
@@ -311,6 +312,7 @@ class VocabularyUpdater {
       $references = [];
       $term = [
         'tid' => $tid++,
+        'revision_id' => $revision_id++,
         'vid' => $vid,
         'uri' => $resource->getUri(),
       ];
