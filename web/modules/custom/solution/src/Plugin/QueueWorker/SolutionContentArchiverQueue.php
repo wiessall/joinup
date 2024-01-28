@@ -195,6 +195,7 @@ class SolutionContentArchiverQueue extends QueueWorkerBase implements ContainerF
         continue;
       }
 
+      $entity->skip_notification = TRUE;
       $entity->setWorkflowState(static::TARGET_STATE)->save();
     }
 
