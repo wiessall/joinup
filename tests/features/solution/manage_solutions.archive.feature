@@ -24,6 +24,14 @@ Feature: When a solution is archived then its sub-content also should be archive
       | modification date   | 2018-12-19T10:00                 |
       | owner               | The Company                      |
       | contact information | Jennifer Unconfirmed, Liam Smith |
+    And users:
+      | Username     | E-mail                   |
+      | Anne Smith   | anne.smith@example.com   |
+      | Andrew Smith | andrew.smith@example.com |
+    And the following solution user memberships:
+      | solution | user         | roles                      |
+      | Solution | Anne Smith   | administrator, facilitator |
+      | Solution | Andrew Smith | facilitator                |
     And "event" content:
       | title          | solution | state     |
       | Solution Event | Solution | published |
