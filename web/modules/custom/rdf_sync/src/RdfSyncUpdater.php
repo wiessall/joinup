@@ -5,6 +5,7 @@ declare(strict_types = 1);
 namespace Drupal\rdf_sync;
 
 use Drupal\rdf_sync\Entity\RdfSyncEntityInterface;
+use EasyRdf\Serialiser\Ntriples;
 use Symfony\Component\Serializer\SerializerInterface;
 
 /**
@@ -33,10 +34,20 @@ class RdfSyncUpdater {
    * Inserts an entity in the RDF backend.
    *
    * @param \Drupal\rdf_sync\Entity\RdfSyncEntityInterface $entity
-   *   The entity for which to update the RDF backend.
+   *   The entity to be inserted in the RDF backend.
    */
   public function insert(RdfSyncEntityInterface $entity): void {
-    $this->doUpdate($entity, 'insert');
+    $this->insertMultiple([$entity]);
+  }
+
+  /**
+   * Inserts a list of entities in the RDF backend.
+   *
+   * @param \Drupal\rdf_sync\Entity\RdfSyncEntityInterface[] $entities
+   *   A list of entities to be inserted in the RDF backend.
+   */
+  public function insertMultiple(array $entities): void {
+    $this->doUpdate($entities, 'insert');
   }
 
   /**
@@ -46,7 +57,17 @@ class RdfSyncUpdater {
    *   The entity for which to update the RDF backend.
    */
   public function update(RdfSyncEntityInterface $entity): void {
-    $this->doUpdate($entity, 'insert');
+    $this->updateMultiple([$entity]);
+  }
+
+  /**
+   * Updates a list of entities in the RDF backend.
+   *
+   * @param \Drupal\rdf_sync\Entity\RdfSyncEntityInterface[] $entities
+   *   A list of entities for which to update the RDF backend.
+   */
+  public function updateMultiple(array $entities): void {
+    $this->doUpdate($entities, 'update');
   }
 
   /**
@@ -56,45 +77,91 @@ class RdfSyncUpdater {
    *   The entity for which to update the RDF backend.
    */
   public function delete(RdfSyncEntityInterface $entity): void {
+    $this->deleteMultiple([$entity]);
+  }
+
+  /**
+   * Deletes a list of entities from the RDF backend.
+   *
+   * @param \Drupal\rdf_sync\Entity\RdfSyncEntityInterface[] $entities
+   *   A list of entities being deleted.
+   */
+  public function deleteMultiple(array $entities): void {
     $graph = RdfSyncConnection::GRAPH;
+    $uris = $this->getSerializedUris($entities, ",\n  ");
     $query = <<<QUERY
       WITH <$graph>
-      DELETE { <{$entity->id()}> ?predicate ?object . }
-      WHERE { <{$entity->id()}> ?predicate ?object . }
+      DELETE { ?subject ?predicate ?object . }
+      WHERE {
+        ?subject ?predicate ?object .
+        FILTER(?subject IN (
+          $uris
+        )) .
+      }
       QUERY;
     RdfSyncConnection::update($query);
   }
 
   /**
-   * Provides a helper to insert/update trhe RDF backend given an entity.
+   * Provides a helper to update the RDF backend given a list of entities.
    *
-   * @param \Drupal\rdf_sync\Entity\RdfSyncEntityInterface $entity
-   *   The entity for which to update the RDF backend.
+   * @param \Drupal\rdf_sync\Entity\RdfSyncEntityInterface[] $entities
+   *   The entities for which to update the RDF backend.
    * @param string $method
    *   Method: 'insert' or 'update'.
    */
-  protected function doUpdate(RdfSyncEntityInterface $entity, string $method): void {
+  protected function doUpdate(array $entities, string $method): void {
     assert(in_array($method, ['insert', 'update'], TRUE));
 
-    $graph = RdfSyncConnection::GRAPH;
-    $triples = $this->serializer->serialize($entity, 'ntriples');
+    $graphUri = RdfSyncConnection::GRAPH;
+
+    $triples = '';
+    foreach ($entities as $entity) {
+      $triples .= $this->serializer->serialize($entity, 'ntriples');
+    }
 
     $delete = $where = '';
     if ($method === 'update') {
-      $delete = "DELETE { <{$entity->id()}> ?predicate ?object . }";
-      $where = "WHERE { <{$entity->id()}> ?predicate ?object . }";
+      $uris = $this->getSerializedUris($entities, ",\n  ");
+      $delete = "DELETE { ?subject ?predicate ?object . }";
+      $where = "WHERE {\n  ?subject ?predicate ?object .\n  FILTER(?subject IN (\n    $uris\n  )) .\n}";
     }
 
     $query = <<<QUERY
-      WITH <{$graph}>
+      WITH <$graphUri>
       {$delete}
       INSERT {
-        {$triples}
+      {$triples}
       }
       {$where}
       QUERY;
 
     RdfSyncConnection::update($query);
+  }
+
+  /**
+   * Returns a list of concatenated serialized URIs.
+   *
+   * @param array $entities
+   *   The list of entities.
+   * @param string $glue
+   *   The separator.
+   *
+   * @return string
+   *   List of concatenated serialized URIs.
+   */
+  protected function getSerializedUris(array $entities, string $glue = ', '): string {
+    $rdfSerializer = new Ntriples();
+
+    $uris = [];
+    foreach ($entities as $entity) {
+      $uris[] = $rdfSerializer->serialiseValue([
+        'value' => $entity->getUri(),
+        'type' => 'uri',
+      ]);
+    }
+
+    return implode($glue, $uris);
   }
 
 }
