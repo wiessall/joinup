@@ -163,66 +163,6 @@ trait VocabularyGraphAlterersTrait {
    * @param \EasyRdf\Graph $graph
    *   The vocabulary.
    */
-  public static function alterGraphForEiraAddExtraProperties(string $vid, Graph $graph): void {
-    RdfNamespace::set('eira', 'http://data.europa.eu/dr8/');
-    // Replace the `dc` namespace with `dct` - requested by the client.
-    RdfNamespace::delete('dc');
-    RdfNamespace::delete('dcterms');
-    RdfNamespace::set('dct', 'http://purl.org/dc/terms/');
-    RdfNamespace::set('owlturtle', 'http://www.semanticweb.org/owl/owlapi/turtle#');
-
-    foreach ($graph->resources() as $resource) {
-      if (!str_ends_with($resource->getUri(), '_Properties')) {
-        continue;
-      }
-
-      // For EIRA_SKOS, after version 6, they have added all extra properties
-      // of the EIRA terms as separate terms in the graph. To properly handle
-      // these secondary terms in the website, we extract the extra-properties
-      // and inject them, as a Json serialized array, into the main term.
-      $namespaces = $rows = [];
-      $mainResource = $resource->getResource('skos:related');
-      foreach ($resource->propertyUris() as $propertyUri) {
-        $shortenedProperty = RdfNamespace::shorten($propertyUri);
-        // Do not store the skos:topConceptOf and skos:related properties.
-        if (in_array($shortenedProperty, ['skos:topConceptOf', 'skos:related'], TRUE)) {
-          continue;
-        }
-        $prefix = RdfNamespace::prefixOfUri($propertyUri);
-        $namespaces[$prefix] = [
-          'namespace' => $prefix . ':',
-          'uri' => RdfNamespace::get($prefix),
-        ];
-        foreach ($graph->all($resource, $shortenedProperty) as $object) {
-          $value = $object instanceof Resource ? $object->getUri() : $object->getValue();
-          if ($value) {
-            $rows[] = [
-              'property' => $shortenedProperty,
-              'value' => $value,
-            ];
-          }
-        }
-      }
-
-      // Inject properties in the main term.
-      $graph->addLiteral($mainResource, 'http://joinup.eu/eira/properties', Json::encode([
-        'namespaces' => $namespaces,
-        'rows' => $rows,
-      ]));
-
-      // We've extracted what we need. Drop this resource and jump to next.
-      $graph->deleteEntireResource($resource);
-    }
-  }
-
-  /**
-   * Alters the 'eira' vocabulary graph.
-   *
-   * @param string $vid
-   *   The graph to be altered.
-   * @param \EasyRdf\Graph $graph
-   *   The vocabulary.
-   */
   public static function alterGraphForEira(string $vid, Graph $graph): void {
     RdfNamespace::set('eira', 'http://data.europa.eu/dr8/');
     // Replace the `dc` namespace with `dct` - requested by the client.
@@ -232,6 +172,47 @@ trait VocabularyGraphAlterersTrait {
     RdfNamespace::set('owlturtle', 'http://www.semanticweb.org/owl/owlapi/turtle#');
 
     foreach ($graph->resources() as $resource) {
+      if (str_ends_with($resource->getUri(), '_Properties')) {
+        // For EIRA_SKOS, after version 6, they have added all extra properties
+        // of the EIRA terms as separate terms in the graph. To properly handle
+        // these secondary terms in the website, we extract the extra-properties
+        // and inject them, as a Json serialized array, into the main term.
+        $namespaces = $rows = [];
+        $mainResource = $resource->getResource('skos:related');
+        foreach ($resource->propertyUris() as $propertyUri) {
+          $shortenedProperty = RdfNamespace::shorten($propertyUri);
+          // Do not store the skos:topConceptOf and skos:related properties.
+          if (in_array($shortenedProperty, ['skos:topConceptOf', 'skos:related'], TRUE)) {
+            continue;
+          }
+          $prefix = RdfNamespace::prefixOfUri($propertyUri);
+          $namespaces[$prefix] = [
+            'namespace' => $prefix . ':',
+            'uri' => RdfNamespace::get($prefix),
+          ];
+          foreach ($graph->all($resource, $shortenedProperty) as $object) {
+            $value = $object instanceof Resource ? $object->getUri() : $object->getValue();
+            if ($value) {
+              $rows[] = [
+                'property' => $shortenedProperty,
+                'value' => $value,
+              ];
+            }
+          }
+        }
+
+        // Inject properties in the main term.
+        $graph->addLiteral($mainResource, 'http://joinup.eu/eira/properties', Json::encode([
+          'namespaces' => $namespaces,
+          'rows' => $rows,
+        ]));
+        $graph->deleteSingleProperty($mainResource, $resource->getUri());
+
+        // We've extracted what we need. Drop this resource and jump to next.
+        $graph->deleteEntireResource($resource);
+        continue;
+      }
+
       if ($resource->isA('skos:Collection')) {
         // Add the skos:Concept type to all collection elements so that they are
         // listed as parent terms.
