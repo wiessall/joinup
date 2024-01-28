@@ -171,7 +171,7 @@ function rdf_sync_entity_presave(EntityInterface $entity): void {
 function rdf_sync_entity_insert(EntityInterface $entity): void {
   if ($entity instanceof RdfSyncEntityInterface) {
     // @todo Consider queueing.
-    \Drupal::getContainer()->get('rdf_sync.backend_updater')->insert($entity);
+    \Drupal::getContainer()->get('rdf_sync.synchronizer')->insert($entity);
   }
 }
 
@@ -181,7 +181,7 @@ function rdf_sync_entity_insert(EntityInterface $entity): void {
 function rdf_sync_entity_update(EntityInterface $entity): void {
   if ($entity instanceof RdfSyncEntityInterface) {
     // @todo Consider queueing.
-    \Drupal::getContainer()->get('rdf_sync.backend_updater')->update($entity);
+    \Drupal::getContainer()->get('rdf_sync.synchronizer')->update($entity);
   }
 }
 
@@ -191,6 +191,6 @@ function rdf_sync_entity_update(EntityInterface $entity): void {
 function rdf_sync_entity_delete(EntityInterface $entity): void {
   if ($entity instanceof RdfSyncEntityInterface) {
     // @todo Consider queueing.
-    \Drupal::getContainer()->get('rdf_sync.backend_updater')->delete($entity);
+    \Drupal::getContainer()->get('rdf_sync.synchronizer')->delete($entity);
   }
 }
