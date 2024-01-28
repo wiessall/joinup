@@ -4,31 +4,53 @@ declare(strict_types = 1);
 
 namespace Drupal\rdf_sync;
 
+use Drupal\Core\State\StateInterface;
 use Drupal\rdf_sync\Entity\RdfSyncEntityInterface;
+use Drupal\rdf_sync\Model\SyncMode;
 use EasyRdf\Serialiser\Ntriples;
 use Symfony\Component\Serializer\SerializerInterface;
 
 /**
- * Updates the RDF backend.
- *
- * @todo In ISAICP-8409, implement a switch that allows to switch to a delayed
- *   update using a queue and a worker, so that:
- *   - In local development and CI pipeline, use instant update so the tests are
- *     getting the results in real-time. Performance is not an issue.
- *   - In production set the switch to delayed update, so we offload the current
- *     operations. It could be useful to be able to action the switch from UI in
- *     production so that we can do debugging when it's the case.
- * @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-8409
+ * Synchronizes the RDF backend.
  */
-class RdfSyncUpdater {
+class RdfSyncSynchronizer {
 
   /**
    * Constructs a new service instance.
    *
+   * @param \Drupal\Core\State\StateInterface $state
+   *    The state variables service.
    * @param \Symfony\Component\Serializer\SerializerInterface $serializer
    *   The serializer service.
    */
-  public function __construct(protected SerializerInterface $serializer) {}
+  public function __construct(
+    protected StateInterface $state,
+    protected SerializerInterface $serializer,
+  ) {}
+
+  /**
+   * Returns the RDF synchronization mode.
+   *
+   * @return \Drupal\rdf_sync\Model\SyncMode
+   *   The RDF synchronization mode. The default value is SyncMode::DELAYED.
+   */
+  public function getSyncMode(): SyncMode {
+    $mode = $this->state->get('rdf_sync.sync_mode', SyncMode::DELAYED->value);
+    return SyncMode::from($mode);
+  }
+
+  /**
+   * Sets the RDF synchronization mode.
+   *
+   * @param \Drupal\rdf_sync\Model\SyncMode $mode
+   *   The RDF synchronization mode to be set.
+   *
+   * @return $this
+   */
+  public function setSyncMode(SyncMode $mode): self {
+    $this->state->set('rdf_sync.sync_mode', $mode->value);
+    return $this;
+  }
 
   /**
    * Inserts an entity in the RDF backend.

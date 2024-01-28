@@ -28,7 +28,8 @@ services:
       - '@event_dispatcher'
     tags:
       - { name: normalizer, priority: 15 }
-  rdf_sync.backend_updater:
-    class: Drupal\rdf_sync\RdfSyncUpdater
+  rdf_sync.synchorizer:
+    class: Drupal\rdf_sync\RdfSyncSynchronizer
     arguments:
+      - '@state'
       - '@serializer'
