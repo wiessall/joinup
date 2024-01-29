@@ -1,0 +1,19 @@
+{#
+/**
+ * Template for a menu.
+ */
+#}
+
+<ul class="list-unstyled">
+  {% for item in items %}
+    <li>
+      {{ pattern('link', {
+        label: item.label,
+        path: item.path,
+        variant: 'link',
+        icon_position: 'before',
+        icon: item.icon
+      }) }}
+    </li>
+  {% endfor %}
+</ul>
