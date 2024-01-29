@@ -129,7 +129,22 @@ commands:
     - task: exec
       command: ${drush.bin}
       arguments:
+        - rdf_sync:mode
+        - none
+    - task: exec
+      command: ${drush.bin}
+      arguments:
         - joinup:create-locked-vocabulary-terms
+    - task: exec
+      command: ${drush.bin}
+      arguments:
+        - rdf_sync:mode
+        - instant
+    - task: exec
+      command: ${drush.bin}
+      arguments:
+        - rdf_sync:synchronize
+        - taxonomy_term
     - task: run
       command: dev:import-sparql-fixtures
     - task: run
