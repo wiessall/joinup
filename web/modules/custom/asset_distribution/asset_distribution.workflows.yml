@@ -1,6 +1,6 @@
 asset_distribution_workflow:
   id: asset_distribution_workflow
-  label: "Default"
+  label: "Asset distribution"
   group: asset_distribution
   states:
     __new__:
