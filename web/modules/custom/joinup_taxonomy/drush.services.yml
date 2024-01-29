@@ -1,5 +1,0 @@
-services:
-  joinup_taxonomy.commands:
-    class: Drupal\joinup_taxonomy\Commands\JoinupTaxonomyCommands
-    tags:
-      - { name: drush.command }

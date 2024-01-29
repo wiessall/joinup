@@ -2,7 +2,7 @@
 
 declare(strict_types = 1);
 
-namespace Drupal\joinup_taxonomy\Commands;
+namespace Drupal\joinup_taxonomy\Drush\Commands;
 
 use Drupal\Component\Utility\Crypt;
 use Drupal\Core\Batch\BatchBuilder;
