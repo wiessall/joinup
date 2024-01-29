@@ -28,8 +28,9 @@ services:
       - '@event_dispatcher'
     tags:
       - { name: normalizer, priority: 15 }
-  rdf_sync.synchorizer:
+  rdf_sync.synchronizer:
     class: Drupal\rdf_sync\RdfSyncSynchronizer
     arguments:
       - '@state'
       - '@serializer'
+      - '@queue'
