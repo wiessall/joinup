@@ -6,7 +6,6 @@ namespace Drupal\rdf_sync;
 
 use Drupal\Core\Queue\QueueFactory;
 use Drupal\Core\State\StateInterface;
-use Drupal\rdf_sync\Entity\RdfSyncEntityInterface;
 use Drupal\rdf_sync\Model\SyncMode;
 use Symfony\Component\Serializer\SerializerInterface;
 
@@ -58,77 +57,22 @@ class RdfSyncSynchronizer {
   }
 
   /**
-   * Inserts an entity in the RDF backend.
-   *
-   * @param \Drupal\rdf_sync\Entity\RdfSyncEntityInterface $entity
-   *   The entity to be inserted in the RDF backend.
-   */
-  public function insert(RdfSyncEntityInterface $entity): void {
-    $this->insertMultiple([$entity]);
-  }
-
-  /**
-   * Inserts a list of entities in the RDF backend.
-   *
-   * @param \Drupal\rdf_sync\Entity\RdfSyncEntityInterface[] $entities
-   *   A list of entities to be inserted in the RDF backend.
-   */
-  public function insertMultiple(array $entities): void {
-    $this->handleSynchronization($entities, 'insert');
-  }
-
-  /**
-   * Updates an entity in the RDF backend.
-   *
-   * @param \Drupal\rdf_sync\Entity\RdfSyncEntityInterface $entity
-   *   The entity for which to update the RDF backend.
-   */
-  public function update(RdfSyncEntityInterface $entity): void {
-    $this->updateMultiple([$entity]);
-  }
-
-  /**
-   * Updates a list of entities in the RDF backend.
-   *
-   * @param \Drupal\rdf_sync\Entity\RdfSyncEntityInterface[] $entities
-   *   A list of entities for which to update the RDF backend.
-   */
-  public function updateMultiple(array $entities): void {
-    $this->handleSynchronization($entities, 'update');
-  }
-
-  /**
-   * Deletes an entity from the RDF backend.
-   *
-   * @param \Drupal\rdf_sync\Entity\RdfSyncEntityInterface $entity
-   *   The entity for which to update the RDF backend.
-   */
-  public function delete(RdfSyncEntityInterface $entity): void {
-    $this->deleteMultiple([$entity]);
-  }
-
-  /**
-   * Deletes a list of entities from the RDF backend.
-   *
-   * @param \Drupal\rdf_sync\Entity\RdfSyncEntityInterface[] $entities
-   *   A list of entities being deleted.
-   */
-  public function deleteMultiple(array $entities): void {
-    $this->handleSynchronization($entities, 'delete');
-  }
-
-  /**
-   * Decides how to handle the synchronization.
+   * Synchronizes entities to the RDF backend.
    *
    * @param \Drupal\rdf_sync\Entity\RdfSyncEntityInterface[] $entities
    *   The entities for which to update the RDF backend.
    * @param string $method
    *   Method: 'insert', 'update' or 'delete'.
+   * @param \Drupal\rdf_sync\Model\SyncMode|null $mode
+   *   (optional) The synchronization mode. If passed, will override the stored
+   *   synchronization mode.
    */
-  protected function handleSynchronization(array $entities, string $method): void {
-    switch ($this->getSyncMode()) {
+  public function synchronize(array $entities, string $method, ?SyncMode $mode = NULL): void {
+    $mode ??= $this->getSyncMode();
+
+    switch ($mode) {
       case SyncMode::INSTANT:
-        $this->synchronize($entities, $method);
+        $this->doSynchronize($entities, $method);
         break;
 
       case SyncMode::DELAYED:
