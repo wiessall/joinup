@@ -115,7 +115,6 @@ Feature: Add distribution through the UI
     And I enter "<p>The full source code.</p>" in the "Description" wysiwyg editor
     Given I upload the file "test.zip" to "Access URL"
     And I select "WTFPL" from "Licence"
-    And I select "RDF XML" from "Format"
     And I select "Web Ontology Language Full/DL/Lite" from "Representation technique"
     And I press "Publish"
     Then I should have 1 distribution
@@ -135,7 +134,7 @@ Feature: Add distribution through the UI
     And I should see the following lines of text:
       | The full source code.              |
       | Format                             |
-      | RDF XML                            |
+      | ZIP                            |
       | Representation technique           |
       | Web Ontology Language Full/DL/Lite |
 
