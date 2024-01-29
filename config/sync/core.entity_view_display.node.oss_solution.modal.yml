@@ -72,6 +72,7 @@ hidden:
   description: true
   langcode: true
   links: true
+  oss__description: true
   oss__documentation: true
   oss__features: true
   oss__long_description: true
