@@ -68,10 +68,6 @@ class RdfEntityUriWebConverterForm extends FormBase {
           $form_state->set('passed_as', 'id');
           $form_state->set('entity_type', 'rdf_entity');
         }
-        elseif ($this->entityTypeManager->getStorage('taxonomy_term')->load($id)) {
-          $form_state->set('passed_as', 'id');
-          $form_state->set('entity_type', 'taxonomy_term');
-        }
         else {
           $form_state->setErrorByName('id', $this->t('Not a valid RDF ID: :id.', [':id' => $id]));
         }
@@ -91,11 +87,6 @@ class RdfEntityUriWebConverterForm extends FormBase {
       if (!empty($parameters['rdf_entity'])) {
         $form_state->set('passed_as', 'url');
         $form_state->setValue('entity_id', UriEncoder::decodeUrl($parameters['rdf_entity']));
-        return;
-      }
-      elseif (!empty($parameters['taxonomy_term'])) {
-        $form_state->set('passed_as', 'url');
-        $form_state->setValue('entity_id', UriEncoder::decodeUrl($parameters['taxonomy_term']));
         return;
       }
     }
