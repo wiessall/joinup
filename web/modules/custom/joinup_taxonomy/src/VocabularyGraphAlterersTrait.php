@@ -95,7 +95,9 @@ trait VocabularyGraphAlterersTrait {
     foreach ($graph->resources() as $resource) {
       if ($graph->hasProperty($resource, 'http://publications.europa.eu/ontology/authority/end.use')) {
         $graph->deleteEntireResource($resource);
+        continue;
       }
+      $graph->addType($resource, 'http://purl.org/dc/terms/Location');
     }
   }
 
