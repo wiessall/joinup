@@ -3330,4 +3330,37 @@ JS;
     }
   }
 
+  /**
+   * Visits a taxonomy term canonical page given its URI.
+   *
+   * @param string $label
+   *   The vocabulary label.
+   * @param string $uri
+   *   The taxonomy term URI, if any.
+   *
+   * @Given I visit the page of :vocabulary term with URI :uri
+   */
+  public function visitTermPageByUri(string $label, string $uri): void {
+    $vocabulary = $this->getEntityByLabel('taxonomy_vocabulary', $label);
+
+    $mapper = \Drupal::getContainer()->get('rdf_sync.mapper');
+    if (!$mapper->isMappedBundle('taxonomy_term', $vocabulary->id())) {
+      throw new \InvalidArgumentException("Terms from '$label' vocabulary don't support URIs");
+    }
+
+    $storage = \Drupal::entityTypeManager()->getStorage('taxonomy_term');
+    $terms = $storage->loadByProperties([
+      'uri' => $uri,
+      'vid' => $vocabulary->id(),
+    ]);
+    if (!$terms) {
+      throw new \InvalidArgumentException("No term in '$label' vocabulary has URI $uri");
+    }
+
+    /** @var \Drupal\rdf_sync\Entity\RdfSyncEntityInterface $term */
+    $term = reset($terms);
+
+    $this->visitPath($term->toUrl()->toString());
+  }
+
 }

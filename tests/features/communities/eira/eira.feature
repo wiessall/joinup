@@ -15,8 +15,7 @@ Feature: As an anonymous user, when I visit /data/dr8, I should get the cached
     When I am logged in as a moderator
     And I am on the homepage
     And I click "RDF ID converter"
-    And I fill in "RDF entity ID or a URL" with "http://data.europa.eu/dr8/AnalyticalCapacityValue"
-    And I press "Go!"
+    When I visit the page of "EIRA" term with URI "http://data.europa.eu/dr8/AnalyticalCapacityValue"
 
     Then I should see the heading "Analytical Capacity"
     And I should see the heading "EIRA properties"
