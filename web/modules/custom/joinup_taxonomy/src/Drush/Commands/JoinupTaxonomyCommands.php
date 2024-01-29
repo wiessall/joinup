@@ -9,10 +9,13 @@ use Drupal\Core\Batch\BatchBuilder;
 use Drupal\Core\DependencyInjection\ContainerBuilder;
 use Drupal\joinup_taxonomy\VocabularyGraphAlterersTrait;
 use Drupal\joinup_taxonomy\VocabularyUpdater;
+use Drupal\rdf_sync\RdfSyncConnection;
+use Drupal\rdf_sync\RdfSyncMapper;
 use Drush\Attributes as CLI;
 use Drush\Commands\DrushCommands;
 use Drush\Drush;
 use EasyRdf\Graph;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Joinup taxonomy Drush commands.
@@ -69,6 +72,25 @@ class JoinupTaxonomyCommands extends DrushCommands {
   private static VocabularyUpdater $vocabularyUpdater;
 
   /**
+   * Constructs a new Drush commands class instance.
+   *
+   * @param \Drupal\rdf_sync\RdfSyncMapper $mapper
+   *   The RDF Sync mapper service.
+   */
+  public function __construct(
+    private readonly RdfSyncMapper $mapper,
+  ) {
+    parent::__construct();
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function create(ContainerInterface $container): self {
+    return new static($container->get('rdf_sync.mapper'));
+  }
+
+  /**
    * Creates locked vocabularies terms.
    */
   #[CLI\Command(name: 'joinup:create-locked-vocabulary-terms')]
@@ -77,7 +99,7 @@ class JoinupTaxonomyCommands extends DrushCommands {
     synopsis: 'If there are changes to the RDF files or the MySQL dump file is missing, the command will recreate the MySQL dump file',
   )]
   public function createLockedVocabulariesTermDump(): void {
-    if (file_exists($this->getDumpFilePath())) {
+    if (file_exists($this->getDumpFilePath('sql'))) {
       // We already have a valid MySQL dump file. Restore terms from dump.
       $this->createTermsFromDump();
       Drush::logger()->notice(dt('✅ created locked vocabularies terms from MySQL dump'));
@@ -94,6 +116,56 @@ class JoinupTaxonomyCommands extends DrushCommands {
 
     batch_set($batchBuilder->toArray());
     drush_backend_batch_process();
+  }
+
+  /**
+   * Synchronizes Drupal terms to RDF backend.
+   */
+  #[CLI\Command(name: 'joinup:sync-locked-vocabulary-terms')]
+  #[CLI\Help(
+    description: 'Synchronize Drupal terms to RDF backend',
+    synopsis: 'If there are changes to the RDF files or the RDF dump file is missing, the command will recreate the RDF dump file',
+  )]
+  public function synchronizeTerms(): void {
+    if (file_exists($this->getDumpFilePath('rdf', FALSE))) {
+      // We already have a valid RDFXML dump file. Restore terms from dump.
+      $this->synchronizeTermsFromRdfXmlFile();
+      Drush::logger()->notice(dt('✅ synchronized locked vocabularies terms from RDFXML dump'));
+      return;
+    }
+
+    $vids = array_merge(...array_values(self::VOCABS));
+
+    // We already have a Drush command. Use it.
+    $process = Drush::drush(
+      Drush::aliasManager()->getSelf(),
+      'rdf_sync:synchronize',
+      ['taxonomy_term'],
+      ['bundle' => implode(',', $vids)],
+    );
+    $process
+      ->disableOutput()
+      ->run($process->showRealtime());
+
+    $graph = RdfSyncConnection::createGraphStore()->get(RdfSyncConnection::GRAPH);
+
+    $vocabularyUris = array_map(function (string $vid): string {
+      return $this->mapper->getBundleRdfType('taxonomy_term', $vid);
+    }, $vids);
+    foreach ($graph->resources() as $resource) {
+      // Cleanup potential triples which are not part of the vocabularies.
+      if (!$resource->isA('skos:Concept') || !in_array($resource->getResource('skos:inScheme')->getUri(), $vocabularyUris, TRUE)) {
+        $graph->deleteEntireResource($resource);
+      }
+    }
+
+    // Generate the RDFXML dump file.
+    $file = static::getDumpFilePath('rdf', FALSE);
+    file_put_contents($file, $graph->serialise('rdfxml'));
+
+    $this->logger()->notice(dt('Triples dumped to !file', [
+      '!file' => realpath($file),
+    ]));
   }
 
   /**
@@ -184,7 +256,7 @@ class JoinupTaxonomyCommands extends DrushCommands {
    *   List of performed operations.
    */
   public static function finish(bool $success, array $results, array $operations): void {
-    $file = static::getDumpFilePath(FALSE);
+    $file = static::getDumpFilePath('sql', FALSE);
 
     // Dump the taxonomy term tables.
     Drush::drush(Drush::aliasManager()->getSelf(), 'sql:dump', [], [
@@ -213,20 +285,22 @@ class JoinupTaxonomyCommands extends DrushCommands {
   /**
    * Returns the path to the dump file.
    *
+   * @param string $extension
+   *   The file extension.
    * @param bool $compressed
    *   Whether to append .gz at the end.
    *
    * @return string
    *   A file path.
    */
-  private static function getDumpFilePath(bool $compressed = TRUE): string {
+  private static function getDumpFilePath(string $extension, bool $compressed = TRUE): string {
     if (!isset(static::$dumpFile)) {
       $checksum = '';
       foreach (array_keys(self::VOCABS) as $file) {
         $checksum .= sha1_file(self::FIXTURES_DIR . '/' . $file);
       }
       $checksum = Crypt::hashBase64($checksum);
-      static::$dumpFile = self::FIXTURES_DIR . "/terms.$checksum.sql";
+      static::$dumpFile = self::FIXTURES_DIR . "/terms.$checksum.$extension";
     }
     return static::$dumpFile . ($compressed ? '.gz' : '');
   }
@@ -242,7 +316,17 @@ class JoinupTaxonomyCommands extends DrushCommands {
       getenv('DRUPAL_DATABASE_HOST'),
       getenv('DRUPAL_DATABASE_NAME'),
     );
-    exec('gunzip < ' . static::getDumpFilePath() . ' | ' . $mysql);
+    exec('gunzip < ' . static::getDumpFilePath('sql') . ' | ' . $mysql);
+  }
+
+  /**
+   * Synchronizes the locked vocabularies terms from RDFXML dump file.
+   */
+  private function synchronizeTermsFromRdfXmlFile(): void {
+    $graphStore = RdfSyncConnection::createGraphStore();
+    $graph = new Graph(RdfSyncConnection::GRAPH);
+    $graph->parseFile(static::getDumpFilePath('rdf', FALSE));
+    $graphStore->insert($graph);
   }
 
   /**
