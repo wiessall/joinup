@@ -5,14 +5,16 @@ custom_page_workflow:
   states:
     __new__:
       label: New
-      published: true
+      published: false
     draft:
       label: Draft
+      published: false
     published:
       label: Published
       published: true
     unpublished:
       label: Unpublished
+      published: false
     archived:
       label: Archived
       published: true
@@ -23,7 +25,7 @@ custom_page_workflow:
       to: draft
     publish:
       label: Publish
-      from: [ __new__, draft, unpublished ]
+      from: [ __new__, draft, published, unpublished ]
       to: published
     unpublish:
       label: Unpublish
