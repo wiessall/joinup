@@ -233,7 +233,7 @@ class SearchWidget extends WidgetBase implements ContainerFactoryPluginInterface
     // items, show only unarchived content or show only archived content.
     $element['wrapper']['show_archived'] = [
       '#type' => 'select',
-      '#title' => $this->t('Show archived content'),
+      '#title' => $this->t('Show content'),
       '#options' => [
         'all' => $this->t('All'),
         'archived' => $this->t('Archived'),
