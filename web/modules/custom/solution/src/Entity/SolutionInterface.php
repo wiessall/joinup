@@ -22,7 +22,7 @@ use Drupal\rdf_entity\RdfInterface;
 interface SolutionInterface extends RdfInterface, CollectionContentInterface, EntityPublicationTimeInterface, EntityWorkflowStateInterface, FeaturedContentInterface, PinnableGroupContentInterface, GroupInterface, DistributionsParentInterface, ArchivableEntityInterface, DescriptionInterface {
 
   /**
-   * Returns teh child releases.
+   * Returns the child releases.
    *
    * @return \Drupal\asset_release\Entity\AssetReleaseInterface[]
    *   An array of child releases, keyed by their ID.

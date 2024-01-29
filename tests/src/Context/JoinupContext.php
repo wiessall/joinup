@@ -36,6 +36,7 @@ use Drupal\joinup_community_content\CommunityContentHelper;
 use Drupal\joinup_group\Entity\GroupContentInterface;
 use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\joinup_group\Entity\PinnableGroupContentInterface;
+use Drupal\joinup_workflow\EntityWorkflowStateInterface;
 use Drupal\meta_entity\Entity\MetaEntity;
 use Drupal\node\Entity\Node;
 use Drupal\og\OgGroupAudienceHelperInterface;
@@ -1066,6 +1067,45 @@ class JoinupContext extends RawDrupalContext {
     $node = $this->getEntityByLabel('node', $title, $type);
     $actual = $node->getWorkflowState();
     Assert::assertEquals($state, $actual, "The $title $type content has the expected state '$state' (actual: '$actual')");
+  }
+
+  /**
+   * Checks the current workflow state on the given entity.
+   *
+   * @param string $label
+   *   The label of the entity.
+   * @param string $type
+   *   The entity type ID of the entity.
+   * @param string $stateExpected
+   *   The expected workflow state's label.
+   *
+   * @Given the workflow state of the :label :type should be :stateExpected
+   */
+  public function assertEntityWorkflowState(string $label, string $type, string $stateExpected): void {
+    $mapping = [
+      'content' => 'node',
+      'rdf entity' => 'rdf_entity',
+    ];
+    $entityTypeId = $mapping[$type] ?? $type;
+    $entity = $this->getEntityByLabel($entityTypeId, $label);
+    Assert::assertInstanceOf(
+      EntityWorkflowStateInterface::class,
+      $entity,
+      "The entity doesn't seem to have any workflow."
+    );
+    // State might be a label or a machine name.
+    $stateIdExpected = static::translateWorkflowStateAlias($stateExpected);
+    Assert::assertSame(
+      $stateIdExpected,
+      $actual = $entity->getWorkflowState(),
+      sprintf(
+        "Workflow state of '%s' '%s' is different than expected. Expected state is '%s', while the actual one is '%s'.",
+        $label,
+        $type,
+        $stateIdExpected,
+        $actual,
+      )
+    );
   }
 
   /**
