@@ -5,6 +5,7 @@ declare(strict_types = 1);
 namespace Drupal\joinup_taxonomy;
 
 use Drupal\Component\Utility\NestedArray;
+use Drupal\Core\Database\Connection;
 use Drupal\Core\Entity\EntityFieldManagerInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Field\FieldTypePluginManagerInterface;
@@ -97,12 +98,15 @@ class VocabularyUpdater {
    *   The field type plugin manager service.
    * @param \Drupal\rdf_sync\RdfSyncMapper $mapper
    *   The RDF sync mapper service.
+   * @param \Drupal\Core\Database\Connection $database
+   *   The database connection.
    */
   public function __construct(
     protected EntityTypeManagerInterface $entityTypeManager,
     protected EntityFieldManagerInterface $fieldManager,
     protected FieldTypePluginManagerInterface $fieldTypeManager,
     protected RdfSyncMapper $mapper,
+    protected Connection $database,
   ) {}
 
   /**
@@ -302,8 +306,8 @@ class VocabularyUpdater {
     // re-create the taxonomy terms MySQL dump.
     // @todo Use a directed acyclic graph manipulator to reorder $terms.
     // @see \Drupal\Component\Graph\Graph
-    $tid = \Drupal::database()->query("SELECT MAX(tid) FROM {taxonomy_term_data}")->fetchField() + 1;
-    $revision_id = \Drupal::database()->query("SELECT MAX(revision_id) FROM {taxonomy_term_data}")->fetchField() + 1;
+    $tid = $this->database->query("SELECT MAX(tid) FROM {taxonomy_term_data}")->fetchField() + 1;
+    $revision_id = $this->database->query("SELECT MAX(revision_id) FROM {taxonomy_term_data}")->fetchField() + 1;
     foreach ($graph->resources() as $resource) {
       if (!$this->isTerm($resource, $rdfType)) {
         continue;
