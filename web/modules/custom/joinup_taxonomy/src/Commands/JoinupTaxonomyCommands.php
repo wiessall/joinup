@@ -35,7 +35,6 @@ class JoinupTaxonomyCommands extends DrushCommands {
     'ADMS_SKOS_v1.00.rdf' => ['representation_technique', 'status'],
     'business-process.rdf' => ['business_process'],
     'countries-skos.rdf' => ['spatial'],
-    'data-theme-skos.rdf' => ['themes'],
     'eif_conceptual_model.rdf' => ['eif_conceptual_model'],
     'eif_interoperability_layer.rdf' => ['eif_interoperability_layer'],
     'eif_principle.rdf' => ['eif_principle'],

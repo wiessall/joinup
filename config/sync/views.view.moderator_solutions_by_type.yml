@@ -174,8 +174,6 @@ display:
                 display_method: label
               eira:
                 display_method: label
-              eurovoc:
-                display_method: label
               file_type:
                 display_method: label
               language:
@@ -197,8 +195,6 @@ display:
               status:
                 display_method: label
               test_resource_type:
-                display_method: label
-              themes:
                 display_method: label
               topic:
                 display_method: label

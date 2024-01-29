@@ -27,7 +27,6 @@ function joinup_rdf_deploy_110200(array &$sandbox): string {
       'http://adms_skos_v1.00' => ['owner_type', 'representation_technique', 'status'],
       'http://business-process' => ['business_process'],
       'http://countries-skos' => ['spatial'],
-      'http://data-theme-skos' => ['themes'],
       'http://eif_conceptual_model' => ['eif_conceptual_model'],
       'http://eif_interoperability_layer' => ['eif_interoperability_layer'],
       'http://eif_principle' => ['eif_principle'],
