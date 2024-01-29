@@ -39,7 +39,7 @@ contact_information_workflow:
       label: Request deletion
       from: [validated]
       to: deletion_request
-    return_to_validated:
+    retract_deletion_request:
       label: Publish
       from: [deletion_request]
       to: validated
