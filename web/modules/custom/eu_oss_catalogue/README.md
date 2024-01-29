@@ -239,6 +239,12 @@ Run the following, to fetch from
 ./vendor/bin/drush eu-oss:fetch hosting_platform:open_code
 ```
 
+Run the following, to fetch from
+[Code Europa EU (European Commission OSS Catalogue)](https://code.europa.eu)
+```bash
+./vendor/bin/drush eu-oss:fetch hosting_platform:code_europa_eu
+```
+
 This command queries the Developers Italia provider endpoint, fetches the data
 and populates the queue. Later, the cronjob is triggering the queue worker which
 is gradually creating or updating the OSS Solutions.
