@@ -200,7 +200,7 @@ function owner_rdf_entity_access(EntityInterface $entity, $operation, AccountInt
     return AccessResult::neutral();
   }
   if ($entity->id() == $route_entity->id()) {
-    return AccessResult::forbidden('Anonymous users should not see contact information on the canonical route.');
+    return AccessResult::forbidden('Anonymous users should not see owner entities on the canonical route.');
   }
   return AccessResult::neutral();
 }
