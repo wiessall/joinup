@@ -11,7 +11,7 @@
 # The virtual state allowes to handle the initial values during a node create.
 solution_workflow:
   id: solution_workflow
-  label: "Default"
+  label: "Solution"
   group: solution
   states:
     __new__:

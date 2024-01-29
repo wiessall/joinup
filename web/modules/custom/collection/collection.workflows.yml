@@ -11,7 +11,7 @@
 # The virtual state allowes to handle the initial values during a node create.
 collection_workflow:
   id: collection_workflow
-  label: "Default"
+  label: "Collection"
   group: collection
   states:
     __new__:

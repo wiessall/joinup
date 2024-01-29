@@ -1,7 +1,7 @@
 # The workflow of the owner entity.
 owner_workflow:
   id: owner_workflow
-  label: "Default"
+  label: "Owner"
   group: owner
   states:
     # The state used as initial.
