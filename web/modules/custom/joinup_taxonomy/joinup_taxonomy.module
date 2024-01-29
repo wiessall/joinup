@@ -11,6 +11,7 @@ use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\joinup_taxonomy\Entity\JoinupTermStorageSchema;
+use Drupal\joinup_taxonomy\Entity\Spatial;
 use Drupal\taxonomy\TermInterface;
 
 /**
@@ -39,4 +40,18 @@ function joinup_taxonomy_taxonomy_term_create_access(AccountInterface $account, 
   $vocabulary = \Drupal::entityTypeManager()->getStorage('taxonomy_vocabulary')->load($entity_bundle);
   $locked = $vocabulary->getThirdPartySetting('joinup_taxonomy', 'locked', FALSE);
   return AccessResult::forbiddenIf($locked);
+}
+
+/**
+ * Implements hook_entity_bundle_info_alter().
+ */
+function joinup_taxonomy_entity_bundle_info_alter(array &$bundles): void {
+  $vocabulary_classes = [
+    'spatial' => Spatial::class,
+  ];
+  foreach ($vocabulary_classes as $vid => $class) {
+    if (!empty($bundles['taxonomy_term'][$vid])) {
+      $bundles['taxonomy_term'][$vid]['class'] = $class;
+    }
+  }
 }

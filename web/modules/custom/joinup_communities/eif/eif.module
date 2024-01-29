@@ -16,6 +16,11 @@ use Drupal\Core\Render\Element;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Url;
 use Drupal\eif\EifInterface;
+use Drupal\eif\Entity\EifConceptualModel;
+use Drupal\eif\Entity\EifInteroperabilityLayer;
+use Drupal\eif\Entity\EifPrinciple;
+use Drupal\eif\Entity\EifRecommendation;
+use Drupal\eif\Entity\EifSolutionType;
 use Drupal\eif\Form\EifWrapperInlineForm;
 use Drupal\field\FieldConfigInterface;
 use Drupal\og\OgGroupAudienceHelperInterface;
@@ -144,6 +149,24 @@ function eif_entity_type_build(array &$entity_types): void {
   if (isset($entity_types['eif_wrapper']) && !$entity_types['eif_wrapper']->getHandlerClass('inline_form')) {
     // Use a dedicated inline form handler for 'eif_wrapper' entities.
     $entity_types['eif_wrapper']->setHandlerClass('inline_form', EifWrapperInlineForm::class);
+  }
+}
+
+/**
+ * Implements hook_entity_bundle_info_alter().
+ */
+function eif_entity_bundle_info_alter(array &$bundles): void {
+  $vocabulary_classes = [
+    'eif_conceptual_model' => EifConceptualModel::class,
+    'eif_interoperability_layer' => EifInteroperabilityLayer::class,
+    'eif_principle' => EifPrinciple::class,
+    'eif_recommendation' => EifRecommendation::class,
+    'eif_solution_type' => EifSolutionType::class,
+  ];
+  foreach ($vocabulary_classes as $vid => $class) {
+    if (!empty($bundles['taxonomy_term'][$vid])) {
+      $bundles['taxonomy_term'][$vid]['class'] = $class;
+    }
   }
 }
 
