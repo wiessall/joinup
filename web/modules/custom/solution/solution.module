@@ -39,7 +39,6 @@ use Drupal\solution\Entity\SolutionType;
 use Drupal\solution\Entity\StandardizationLevel;
 use Drupal\solution\Entity\Status;
 use Drupal\solution\Entity\TestResourceType;
-use Drupal\solution\Entity\Themes;
 use Drupal\solution\SolutionAffiliationFieldItemList;
 use Drupal\solution\SolutionLatestReleasesFieldItemList;
 use Drupal\solution\SolutionReleasesAndDistributionsFieldItemList;
@@ -119,7 +118,6 @@ function solution_entity_bundle_info_alter(&$bundles) {
     'standardization_level' => StandardizationLevel::class,
     'status' => Status::class,
     'test_resource_type' => TestResourceType::class,
-    'themes' => Themes::class,
   ];
   foreach ($vocabulary_classes as $vid => $class) {
     if (!empty($bundles['taxonomy_term'][$vid])) {
