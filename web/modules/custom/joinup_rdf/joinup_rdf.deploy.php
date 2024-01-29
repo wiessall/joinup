@@ -256,14 +256,6 @@ function joinup_rdf_deploy_110203(array &$sandbox): string {
       QUERY;
     $db->query($query);
 
-    if ($table === 'user__field_user_professional_domain') {
-      // Some term references were not converted because of ISAICP-8403.
-      // Temporarily delete them to unblock this issue.
-      // @todo Remove this hack in ISAICP-8403.
-      // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-8403
-      $db->query("DELETE FROM {user__field_user_professional_domain} WHERE LEFT(field_user_professional_domain_target_id, 4) = 'http'");
-    }
-
     // New field schema.
     $fieldSpec = [
       'type' => 'int',
