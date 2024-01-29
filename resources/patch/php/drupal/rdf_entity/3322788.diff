@@ -1,0 +1,65 @@
+diff --git a/modules/rdf_taxonomy/tests/src/Functional/ManageUnlockedVocabularyTermsTest.php b/modules/rdf_taxonomy/tests/src/Functional/ManageUnlockedVocabularyTermsTest.php
+index 892bb04f03434c4e308e03a7eb54b673d7d550ed..e2b3b0d02e2bb0699a00469e19490262d1adde7f 100644
+--- a/modules/rdf_taxonomy/tests/src/Functional/ManageUnlockedVocabularyTermsTest.php
++++ b/modules/rdf_taxonomy/tests/src/Functional/ManageUnlockedVocabularyTermsTest.php
+@@ -87,8 +87,8 @@ class ManageUnlockedVocabularyTermsTest extends BrowserTestBase {
+     $this->drupalLogin($this->createUser([
+       'create terms in unlocked_vocab',
+       'create terms in no_parent',
+-      'edit terms in unlocked_vocab',
+-      'edit terms in no_parent',
++      'update terms in unlocked_vocab',
++      'update terms in no_parent',
+       'delete terms in unlocked_vocab',
+       'delete terms in no_parent',
+       'access taxonomy overview',
+diff --git a/src/RdfAccessControlHandler.php b/src/RdfAccessControlHandler.php
+index 0b8c14a3acef605c482aecc7cdc5c4c8fbb4a647..63dfa49455f77582bedff7c8d197194b09bf4711 100755
+--- a/src/RdfAccessControlHandler.php
++++ b/src/RdfAccessControlHandler.php
+@@ -22,11 +22,6 @@ class RdfAccessControlHandler extends EntityAccessControlHandler {
+    * $operation as defined in the routing.yml file.
+    */
+   protected function checkAccess(EntityInterface $entity, $operation, AccountInterface $account) {
+-    if ($operation === 'edit') {
+-      @trigger_error('Passing in the "edit" operation to RdfAccessControlHandler::checkAccess() is deprecated in rdf_entity:8.x-1.0-alpha19 and is removed in rdf_entity:8.x-1.0-beta1. Pass in the "update" operation instead. See https://www.drupal.org/project/rdf_entity/issues/3322788', E_USER_DEPRECATED);
+-      $operation = 'update';
+-    }
+-
+     if (!$entity instanceof RdfInterface) {
+       throw new \Exception('Can only handle access of Rdf entity instances.');
+     }
+@@ -50,11 +45,11 @@ class RdfAccessControlHandler extends EntityAccessControlHandler {
+         return $access_result;
+ 
+       case 'update':
+-        if ($account->hasPermission('edit ' . $entity_bundle . ' rdf entity')) {
++        if ($account->hasPermission('update any ' . $entity_bundle . ' rdf entity')) {
+           return AccessResult::allowed();
+         }
+ 
+-        return AccessResult::allowedIf($is_owner && $account->hasPermission('edit own ' . $entity_bundle . ' rdf entity'));
++        return AccessResult::allowedIf($is_owner && $account->hasPermission('update own ' . $entity_bundle . ' rdf entity'));
+ 
+       case 'delete':
+         if ($account->hasPermission('delete ' . $entity_bundle . ' rdf entity')) {
+diff --git a/src/RdfPermissions.php b/src/RdfPermissions.php
+index 1e1e9de7a69121bcc4faf1a48b9e7c066dea5885..8103ebbe859a456cd755b5214c473e47a42712ef 100644
+--- a/src/RdfPermissions.php
++++ b/src/RdfPermissions.php
+@@ -47,11 +47,11 @@ class RdfPermissions {
+       "create $type_id rdf entity" => [
+         'title' => $this->t('%type_name: Create new rdf entity', $type_params),
+       ],
+-      "edit own $type_id rdf entity" => [
+-        'title' => $this->t('%type_name: Edit own rdf entity', $type_params),
++      "update own $type_id rdf entity" => [
++        'title' => $this->t('%type_name: Update own rdf entity', $type_params),
+       ],
+-      "edit $type_id rdf entity" => [
+-        'title' => $this->t('%type_name: Edit any rdf entity', $type_params),
++      "update any $type_id rdf entity" => [
++        'title' => $this->t('%type_name: Update any rdf entity', $type_params),
+       ],
+       "delete own $type_id rdf entity" => [
+         'title' => $this->t('%type_name: Delete own rdf entity', $type_params),
