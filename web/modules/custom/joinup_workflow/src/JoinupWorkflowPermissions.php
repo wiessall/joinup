@@ -64,8 +64,8 @@ class JoinupWorkflowPermissions implements ContainerInjectionInterface {
     $workflow_id = $workflow->getId();
     $return = [];
     foreach ($transitions as $transition_id => $transition) {
-      $return["perform $workflow_id:$transition_id transition"] = [
-        'title' => $this->t('Perform %workflow_name: %transition_name transition', [
+      $return["perform $workflow_id workflow $transition_id transition"] = [
+        'title' => $this->t('Perform %workflow_name workflow: %transition_name transition', [
           '%workflow_name' => $workflow->getLabel(),
           '%transition_name' => $transition->getLabel(),
         ]),
