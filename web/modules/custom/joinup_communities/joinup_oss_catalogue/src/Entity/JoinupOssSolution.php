@@ -25,7 +25,7 @@ class JoinupOssSolution extends OssSolution implements DescriptionInterface, Log
    * {@inheritdoc}
    */
   public function getDescriptionField(): string {
-    return 'description';
+    return 'oss__description';
   }
 
   /**
