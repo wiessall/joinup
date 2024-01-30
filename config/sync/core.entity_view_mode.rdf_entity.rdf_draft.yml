@@ -8,5 +8,6 @@ _core:
   default_config_hash: GaCdkA0fJOQmkBs2chcajFN-rG-dUpMUSYTHE3xl6uo
 id: rdf_entity.rdf_draft
 label: Draft
+description: ''
 targetEntityType: rdf_entity
 cache: true

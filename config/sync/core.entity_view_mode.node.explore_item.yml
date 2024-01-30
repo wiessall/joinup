@@ -6,5 +6,6 @@ dependencies:
     - node
 id: node.explore_item
 label: 'Explore item'
+description: ''
 targetEntityType: node
 cache: true
