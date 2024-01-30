@@ -152,7 +152,23 @@ third_party_settings:
               level: 1
               depth: 0
             weight: 0
-            additional: {  }
+            additional:
+              component_attributes:
+                block_attributes:
+                  id: ''
+                  class: ''
+                  style: ''
+                  data: ''
+                block_title_attributes:
+                  id: ''
+                  class: mb-3
+                  style: ''
+                  data: ''
+                block_content_attributes:
+                  id: ''
+                  class: ''
+                  style: ''
+                  data: ''
           5d9de396-8b5c-4b3c-9a69-ec3fb12f0c50:
             uuid: 5d9de396-8b5c-4b3c-9a69-ec3fb12f0c50
             region: main
