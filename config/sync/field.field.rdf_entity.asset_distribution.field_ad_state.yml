@@ -20,4 +20,6 @@ default_value_callback: ''
 settings:
   workflow: asset_distribution_workflow
   workflow_callback: ''
+  always_allow_default: false
+  current_state_first: true
 field_type: state
