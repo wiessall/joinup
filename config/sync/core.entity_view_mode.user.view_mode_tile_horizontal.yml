@@ -6,5 +6,6 @@ dependencies:
     - user
 id: user.view_mode_tile_horizontal
 label: 'Tile horizontal'
+description: ''
 targetEntityType: user
 cache: true

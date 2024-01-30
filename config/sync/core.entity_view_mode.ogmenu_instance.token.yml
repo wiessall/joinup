@@ -6,5 +6,6 @@ dependencies:
     - og_menu
 id: ogmenu_instance.token
 label: Token
+description: ''
 targetEntityType: ogmenu_instance
 cache: true
