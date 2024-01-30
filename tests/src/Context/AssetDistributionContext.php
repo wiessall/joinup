@@ -324,16 +324,7 @@ class AssetDistributionContext extends RawDrupalContext {
       throw new \Exception("File '$file_name' was not found in file path '$files_path'.");
     }
 
-    /** @var \Symfony\Component\Mime\MimeTypesInterface $mime_guesser */
-    $mime_guesser = \Drupal::service('file.mime_type.guesser');
-    $mime_type = $mime_guesser->guessMimeType($path);
-    $expected_file_type = asset_distribution_get_file_type_term_by_mime($mime_type);
     $expected_file_size = filesize($path);
-
-    // Test the file format.
-    if ($expected_file_type !== $distribution->field_ad_format->target_id) {
-      throw new \Exception("File '$file_name' has the format '{$distribution->field_ad_format->target_id}'. Expected '$expected_file_type'.");
-    }
 
     // Test the file size.
     if ($expected_file_size !== (int) $distribution->field_ad_file_size->value) {

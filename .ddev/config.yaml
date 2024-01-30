@@ -29,7 +29,7 @@ additional_fqdns: []
 use_dns_when_possible: true
 composer_version: "2"
 web_environment:
-  - DRUPAL_TRUSTED_HOST_PATTERNS=joinup.ddev.site
+  - DRUPAL_TRUSTED_HOST_PATTERNS=.*
 disable_settings_management: true
 
 hooks:
