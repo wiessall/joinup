@@ -47,48 +47,12 @@ class HostingPlatformDeriver extends DeriverBase implements ContainerDeriverInte
     foreach ($hostingPlatforms as $hostingPlatform) {
       $this->derivatives[$hostingPlatform->id()] = [
         'label' => $hostingPlatform->label(),
-        'description' => $this->getDerivativeDescription($base_plugin_definition, $hostingPlatform),
+        'description' => $hostingPlatform->getDescription(),
         'platformId' => $hostingPlatform->getPlatformPluginId(),
         'platformSettings' => $hostingPlatform->getPlatformSettings(),
       ] + $base_plugin_definition;
     }
     return $this->derivatives;
-  }
-
-  /**
-   * Gets derivative description.
-   *
-   * @param array $basePluginDefinition
-   *   Plugin definition.
-   * @param \Drupal\eu_oss_catalogue\Entity\HostingPlatformConfigInterface $hostingPlatform
-   *   Hosting platform.
-   *
-   * @return \Drupal\Core\StringTranslation\TranslatableMarkup
-   *   Description.
-   */
-  protected function getDerivativeDescription(array $basePluginDefinition, HostingPlatformConfigInterface $hostingPlatform): TranslatableMarkup {
-    $platformId = $hostingPlatform->getPlatformPluginId();
-
-    /** @var \Drupal\Core\Plugin\DefaultSingleLazyPluginCollection $settings */
-    $settings = $hostingPlatform->getPluginCollections()['platformSettings'];
-
-    /** @var \Drupal\eu_oss_catalogue\EuOssCatalogueHostingPlatformInterface $platform */
-    $platform = $settings->get($platformId);
-
-    if ($hostingPlatform->getDescription()) {
-      $args = [
-        '@description' => $hostingPlatform->getDescription() ?? '',
-        '@platform' => $platform->getLabel(),
-      ];
-    }
-    else {
-      $args = [
-        '@description' => $basePluginDefinition['description'],
-        '@platform' => $platform->getLabel(),
-      ];
-    }
-
-    return $this->t('@description (@platform)', $args);
   }
 
 }
