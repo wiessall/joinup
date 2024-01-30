@@ -49,6 +49,8 @@ class EuOssCatalogueController extends ControllerBase {
     $rows = [];
     foreach ($this->providerPluginManager->getDefinitions() as $pluginId => $definition) {
       $links = [];
+      /** @var \Drupal\eu_oss_catalogue\EuOssCatalogueHostingPlatformInterface|NULL $platform */
+      $platform = NULL;
 
       // If the plugin is configured by an entity, add entity operations.
       if (str_contains($pluginId, ':') && ($entityTypeId = $definition['configuredBy'])) {
@@ -57,6 +59,10 @@ class EuOssCatalogueController extends ControllerBase {
           [, $derivativeId] = explode(PluginBase::DERIVATIVE_SEPARATOR, $pluginId, 2);
           $storage = $this->entityTypeManager()->getStorage($entityTypeId);
           if ($entity = $storage->load($derivativeId)) {
+            /** @var \Drupal\Core\Plugin\DefaultSingleLazyPluginCollection $settings */
+            $settings = $entity->getPluginCollections()['platformSettings'];
+            $platform = $settings->get($entity->getPlatformPluginId());
+
             $listBuilder = $this->entityTypeManager()->getListBuilder($entityTypeId);
             $links = $listBuilder->getOperations($entity);
           }
@@ -85,6 +91,11 @@ class EuOssCatalogueController extends ControllerBase {
           ],
           [
             'data' => [
+              '#markup' => $platform?->getLabel(),
+            ],
+          ],
+          [
+            'data' => [
               '#type' => 'operations',
               '#links' => $links,
             ],
@@ -98,6 +109,7 @@ class EuOssCatalogueController extends ControllerBase {
       '#header' => [
         $this->t('ID'),
         $this->t('Name'),
+        $this->t('Code hosting platform'),
         $this->t('Operations'),
       ],
       '#rows' => $rows,
