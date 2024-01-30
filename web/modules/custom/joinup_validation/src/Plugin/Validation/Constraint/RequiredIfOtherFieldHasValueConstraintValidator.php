@@ -4,7 +4,10 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_validation\Plugin\Validation\Constraint;
 
+use Drupal\Core\Field\Plugin\Field\FieldType\EntityReferenceItem;
 use Drupal\joinup_core\Traits\FieldItemsTrait;
+use Drupal\rdf_sync\Entity\RdfSyncEntityInterface;
+use Drupal\taxonomy\TermInterface;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 
@@ -37,6 +40,23 @@ class RequiredIfOtherFieldHasValueConstraintValidator extends ConstraintValidato
     }
 
     $dependent_values = $this->getFieldItemListMainPropertyValues($dependent_field);
+
+    $dependent_field_definition = $dependent_field->getFieldDefinition();
+    $dependent_item_class = $dependent_field_definition->getItemDefinition()->getClass();
+    if (is_a($dependent_item_class, EntityReferenceItem::class, TRUE)) {
+      $dependent_field_storage_definition = $dependent_field_definition->getFieldStorageDefinition();
+      if ($dependent_field_storage_definition->getSetting('target_type') === 'taxonomy_term') {
+        $term_storage = \Drupal::entityTypeManager()->getStorage('taxonomy_term');
+        $terms = array_values($term_storage->loadMultiple($dependent_values));
+        $dependent_values = array_map(
+          function (TermInterface $term): int|string {
+            return $term instanceof RdfSyncEntityInterface ? $term->getUri() : $term->id();
+          },
+          $terms,
+        );
+      }
+    }
+
     $matched_values = array_intersect($dependent_values, $constraint->values);
     if (!$matched_values) {
       return;
