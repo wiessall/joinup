@@ -40,7 +40,7 @@ Feature: Solution moderation
       | associated with    | entity       | enabled |
       | http://example.com | Azura Cruise | yes     |
 
-    Then I am logged in as a moderator
+    And I am logged in as a moderator
     And "Azura Cruise" should have a related provenance activity
     And I go to the edit form of the "Azura Cruise" solution
     When I should not see the button "<button>"
