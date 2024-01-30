@@ -199,6 +199,7 @@ default:
         Primary menu: '.region-primary-menu'
         Related solutions: '.field--name-field-is-related-solutions'
         SevenHeader: '.region-header'
+        Search filters: '.joinup-search-filters'
         Statistics: '#block-ventuno-statistics'
         Table of contents: '#block-ventuno-table-of-contents'
         Table of contents outline: '#block-ventuno-toc-outline'
