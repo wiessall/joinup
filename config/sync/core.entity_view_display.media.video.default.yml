@@ -3,6 +3,7 @@ langcode: en
 status: true
 dependencies:
   config:
+    - field.field.media.video.og_audience
     - field.field.media.video.video
     - media.type.video
   module:
