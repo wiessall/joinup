@@ -87,7 +87,6 @@ class JoinupSubscriberServiceTest extends KernelTestBase {
   protected function setUp(): void {
     parent::setUp();
 
-    $this->installSchema('system', ['sequences']);
     $this->installSchema('flag', ['flag_counts']);
     $this->installEntitySchema('user');
     $this->installEntitySchema('entity_test');

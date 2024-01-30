@@ -7,8 +7,9 @@ dependencies:
     - field.field.paragraph.simple_paragraph.field_body
     - paragraphs.paragraphs_type.simple_paragraph
   module:
+    - joinup_html_stripper
     - layout_builder
-    - text
+    - template_suggestion
 third_party_settings:
   layout_builder:
     enabled: false
@@ -19,10 +20,13 @@ bundle: simple_paragraph
 mode: tile
 content:
   field_body:
-    type: text_default
+    type: joinup_html_stripper_stripped
     label: hidden
-    settings: {  }
-    third_party_settings: {  }
+    settings:
+      trim_length: 600
+    third_party_settings:
+      template_suggestion:
+        template_suggestion: ''
     weight: 0
     region: content
 hidden:
