@@ -219,8 +219,8 @@ Feature: Global search
       | title            | body                                                              | solution       | state     |
       | Discussion omega | <p>Does anybody has idea why this <em>epsilon</em> is everywhere? | Solution alpha | published |
     And custom_page content:
-      | title      | body                                     | collection       | state     |
-      | Page omega | This is just an epsilon but should work. | Collection alpha | published |
+      | title      | body                                     | collection       | state     | keywords |
+      | Page omega | This is just an epsilon but should work. | Collection alpha | published | Alphabet |
     And video content:
       | title       | body          | field_video                                 | collection       |
       | Video alpha | Slap like now | https://www.youtube.com/watch?v=JhGf8ZY0tN8 | Collection alpha |
@@ -261,7 +261,7 @@ Feature: Global search
 
     # "Alphabet" is used in all the keywords fields.
     When I enter "Alphabet" in the search bar and press enter
-    Then the page should show the tiles "Solution alpha, Release Alpha, News omega, Event Omega, Document omega"
+    Then the page should show the tiles "Solution alpha, Release Alpha, News omega, Event Omega, Document omega, Page omega"
 
     # "Gamma" is used in the collection abstract.
     When I enter "gamma" in the search bar and press enter

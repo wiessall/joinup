@@ -96,8 +96,6 @@ function ventuno_preprocess_field(array &$variables): void {
     // Add selectors.
     $variables['attributes']['class'][] = 'fieldset';
     $variables['attributes']['class'][] = 'fieldset--textarea';
-    // Attach library.
-    $variables['#attached']['library'][] = 'ventuno/paragraph';
   }
   // Make the topics appear as badges in solution headers.
   if ($element['#view_mode'] === 'group_header' && $element['#field_name'] === 'field_topic') {
