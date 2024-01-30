@@ -61,7 +61,7 @@ class EiraPropertiesBlock extends BlockBase implements ContainerFactoryPluginInt
       ];
     }
 
-    $data = Json::decode($term->get('extra_properties')->value);
+    $data = Json::decode($term->get('extra_properties')->value) ?? [];
 
     return [
       '#type' => 'container',
@@ -71,7 +71,7 @@ class EiraPropertiesBlock extends BlockBase implements ContainerFactoryPluginInt
           'namespace' => $this->t('Namespace'),
           'uri' => $this->t('URI'),
         ],
-        '#rows' => array_values($data['namespaces']),
+        '#rows' => array_values($data['namespaces'] ?? []),
       ],
       'properties_table' => [
         '#theme' => 'table',
@@ -79,7 +79,7 @@ class EiraPropertiesBlock extends BlockBase implements ContainerFactoryPluginInt
           'property' => $this->t('Property'),
           'value' => $this->t('Value'),
         ],
-        '#rows' => $data['rows'],
+        '#rows' => $data['rows'] ?? [],
       ],
     ];
   }
