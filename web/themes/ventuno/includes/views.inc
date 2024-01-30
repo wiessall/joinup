@@ -7,6 +7,8 @@
 
 declare(strict_types = 1);
 
+use \Drupal\Core\Url;
+
 /**
  * Implements hook_theme_suggestions_HOOK_alter().
  */
@@ -95,4 +97,24 @@ function ventuno_preprocess_views_view__media_library(array &$variables): void {
       $variables['header'][$key]['#options']['attributes']['class'][] = 'active';
     }
   }
+}
+
+/**
+ * Implements hook_preprocess_HOOK().
+ */
+function ventuno_preprocess_views_view__eu_oss_catalogue_admin_carousel(&$variables): void {
+  $url = Url::fromRoute('view.search_oss_catalogue.search');
+  $variables['search_url'] = match ($variables['display_id']) {
+    'oss_most_recent_solutions' => $url->setOptions([
+      'query' => [
+        'sort_by' => 'date',
+      ],
+    ]),
+    'oss_most_active_solutions' => $url->setOptions([
+      'query' => [
+        'sort_by' => 'vitality',
+      ],
+    ]),
+    default => $url,
+  };
 }
