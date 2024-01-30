@@ -7,7 +7,7 @@
 
 declare(strict_types = 1);
 
-use \Drupal\Core\Url;
+use Drupal\Core\Url;
 
 /**
  * Implements hook_theme_suggestions_HOOK_alter().
