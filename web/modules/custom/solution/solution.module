@@ -439,13 +439,12 @@ function solution_get_related_solutions_ids(EntityInterface $entity) {
   }
   $recurse = TRUE;
 
+  $term_storage = \Drupal::entityTypeManager()->getStorage('taxonomy_term');
   $eira_ids = [];
   if ($entity->get('field_is_show_eira_related')->value === '1') {
     // Get all solutions that reference the same EIRA building block.
-    $eira = [];
-    foreach ($entity->get('field_is_solution_type')->getValue() as $field) {
-      $eira[] = $field['target_id'];
-    }
+    $tids = array_map(fn(array $field) => $field['target_id'], $entity->get('field_is_solution_type')->getValue());
+    $eira = array_map(fn(SolutionType $term): string => $term->getUri(), $term_storage->loadMultiple($tids));
     if ($eira) {
       $query = \Drupal::entityQuery('rdf_entity')->accessCheck(FALSE)
         ->condition('rid', 'solution')
