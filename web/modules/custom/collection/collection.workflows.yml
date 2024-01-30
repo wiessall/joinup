@@ -34,11 +34,11 @@ collection_workflow:
   transitions:
     draft:
       label: Save as draft
-      from: [__new__, proposed, published]
+      from: [__new__, draft, proposed, published]
       to: draft
     propose:
       label: Propose
-      from: [__new__, draft, published]
+      from: [__new__, draft, proposed, published]
       to: proposed
     validate:
       label: Publish
