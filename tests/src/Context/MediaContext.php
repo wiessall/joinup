@@ -57,11 +57,24 @@ class MediaContext extends RawDrupalContext {
       throw new \InvalidArgumentException("Missing mandatory column(s): '" . implode("', '", $missingColumns) . "'");
     }
 
+    $revision = time();
+
     $mediaStorage = $entityTypeManager->getStorage('media');
     foreach ($table->getColumnsHash() as $row) {
+      if (isset($row['revision'])) {
+        $revision = strtotime($row['revision']);
+        unset($row['revision']);
+      }
+      $name = $row['name'];
       $values = ['bundle' => $mediaTypeId] + $row;
       $this->prepareFields($values);
       $media = $mediaStorage->create($values);
+      $media->setNewRevision();
+      $media->setName($name);
+      $media->setRevisionLogMessage('first revision');
+      $media->setCreatedTime($revision);
+      $media->setChangedTime($revision);
+      $media->setRevisionCreationTime($revision);
       $media->save();
       $this->entities['media'][$media->id()] = $media;
     }
@@ -166,6 +179,7 @@ class MediaContext extends RawDrupalContext {
       'owner' => ['field' => 'uid', 'optional' => TRUE],
       'published' => ['field' => 'status', 'optional' => TRUE],
       'uuid' => ['field' => 'uuid', 'optional' => TRUE],
+      'revision' => ['field' => 'revision_created', 'optional' => TRUE],
     ];
     $imageLibraryField = ['image' => ['field' => 'image_library_widget_image']];
     $groupField = ['group' => ['field' => 'og_audience']];
