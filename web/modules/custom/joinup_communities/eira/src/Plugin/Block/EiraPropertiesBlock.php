@@ -61,7 +61,7 @@ class EiraPropertiesBlock extends BlockBase implements ContainerFactoryPluginInt
       ];
     }
 
-    $data = Json::decode($term->get('extra_properties')->value) ?? [];
+    $data = Json::decode($term->get('extra_properties')->value ?? '') ?? [];
 
     return [
       '#type' => 'container',
