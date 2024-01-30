@@ -8,8 +8,6 @@ use Drupal\Component\Plugin\Derivative\DeriverBase;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Plugin\Discovery\ContainerDeriverInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
-use Drupal\Core\StringTranslation\TranslatableMarkup;
-use Drupal\eu_oss_catalogue\Entity\HostingPlatformConfigInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
