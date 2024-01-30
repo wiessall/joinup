@@ -5,6 +5,7 @@ declare(strict_types = 1);
 namespace Drupal\state_machine_permissions;
 
 use Drupal\state_machine\Plugin\Workflow\WorkflowInterface;
+use Drupal\state_machine\Plugin\Workflow\WorkflowTransition;
 
 /**
  * Handles generation of permission strings.
@@ -51,6 +52,21 @@ class StateMachinePermissionStringConstructor {
    */
   public static function constructGroupStateUpdatePermission(WorkflowInterface $workflow, string $from_state_id, string $to_state_id): string {
     return "transition group from {$from_state_id} to {$to_state_id} using the {$workflow->getGroup()} - {$workflow->getId()} workflow";
+  }
+
+  /**
+   * Returns the permission string for performing a workflow transition.
+   *
+   * @param \Drupal\state_machine\Plugin\Workflow\WorkflowInterface $workflow
+   *   The workflow.
+   * @param \Drupal\state_machine\Plugin\Workflow\WorkflowTransition $transition
+   *   The transition.
+   *
+   * @return string
+   *   The permission string.
+   */
+  public static function constructWorkflowTransitionPermission(WorkflowInterface $workflow, WorkflowTransition $transition): string {
+    return "perform {$workflow->getId()} workflow {$transition->getId()} transition";
   }
 
 }
