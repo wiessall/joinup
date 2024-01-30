@@ -7,6 +7,7 @@ namespace Drupal\solution\Guard;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\joinup_workflow\FulfillmentGuardTrait;
+use Drupal\joinup_workflow\WorkflowHelper;
 use Drupal\rdf_entity_provenance\ProvenanceHelperInterface;
 use Drupal\state_machine\Guard\GuardInterface;
 use Drupal\state_machine\Plugin\Workflow\WorkflowInterface;
@@ -25,15 +26,14 @@ class SolutionFulfillmentGuard implements GuardInterface {
    *
    * @param \Drupal\Core\Session\AccountInterface $currentUser
    *   The current logged-in user.
-   * @param \Drupal\workflow_state_permission\WorkflowStatePermissionInterface $workflowStatePermission
-   *   The service that determines the permission to update the workflow state
-   *   for a given entity.
+   * @param \Drupal\joinup_workflow\WorkflowHelper $workflowHelper
+   *    The workflow helper service.
    * @param \Drupal\rdf_entity_provenance\ProvenanceHelperInterface $provenanceHelper
    *   Provenance helper.
    */
   public function __construct(
     protected AccountInterface $currentUser,
-    protected WorkflowStatePermissionInterface $workflowStatePermission,
+    protected WorkflowHelper $workflowHelper,
     protected ProvenanceHelperInterface $provenanceHelper
   ) {
   }
@@ -41,7 +41,7 @@ class SolutionFulfillmentGuard implements GuardInterface {
   /**
    * {@inheritdoc}
    */
-  public function allowed(WorkflowTransition $transition, WorkflowInterface $workflow, EntityInterface $entity) {
+  public function allowed(WorkflowTransition $transition, WorkflowInterface $workflow, EntityInterface $entity): bool {
     // Don't (un)archive federated solutions.
     $toState = $transition->getToState()->getId();
     if (in_array($toState, ['archived', 'unarchive'], TRUE)

@@ -15,7 +15,7 @@ services:
       - { name: 'cache.context'}
   solution.fulfillment_guard:
     class: Drupal\solution\Guard\SolutionFulfillmentGuard
-    arguments: ['@current_user', '@workflow_state_permission.workflow_state_permission', '@rdf_entity_provenance.provenance_helper']
+    arguments: ['@current_user', '@joinup_workflow.workflow_helper', '@rdf_entity_provenance.provenance_helper']
     tags:
       - { name: state_machine.guard, group: solution }
   solution.requirements_helper:

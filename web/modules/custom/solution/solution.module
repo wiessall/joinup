@@ -192,7 +192,7 @@ function solution_rdf_entity_access(EntityInterface $entity, $operation, Account
     return AccessResult::neutral();
   }
 
-  if ($operation == 'edit') {
+  if ($operation == 'update') {
     /** @var \Drupal\joinup_workflow\WorkflowHelperInterface $workflow_helper */
     $workflow_helper = \Drupal::service('joinup_workflow.workflow_helper');
     $allowed_transitions = $workflow_helper->getAvailableTransitions($entity, $account);
