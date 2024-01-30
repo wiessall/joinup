@@ -6,6 +6,7 @@ namespace Drupal\joinup_group\Entity;
 
 use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\Core\Field\EntityReferenceFieldItemList;
+use Drupal\og\Plugin\views\argument_default\Group;
 
 /**
  * Interface for entities that are group content.
@@ -34,6 +35,17 @@ interface GroupContentInterface extends ContentEntityInterface {
    *   Thrown when the parent group is missing.
    */
   public function getGroup(): GroupInterface;
+
+  /**
+   * Sets the group to which this entity belongs.
+   *
+   * @param \Drupal\joinup_group\Entity\GroupInterface $group
+   *   The parent group ID.
+   *
+   * @return $this
+   *   The called entity.
+   */
+  public function setGroup(GroupInterface $group): self;
 
   /**
    * Returns the ID of the group to which this entity belongs.
