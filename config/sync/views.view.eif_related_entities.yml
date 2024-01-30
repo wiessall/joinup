@@ -141,7 +141,6 @@ display:
             limit: false
             vids: {  }
             anyall: ','
-          default_argument_skip_url: false
           summary_options: {  }
           summary:
             sort_order: asc
