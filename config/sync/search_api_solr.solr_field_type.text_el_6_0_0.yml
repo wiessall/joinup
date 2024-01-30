@@ -225,6 +225,9 @@ solr_configs:
             -
               name: buildOnStartup
               VALUE: 'false'
+            -
+              name: indexPath
+              VALUE: ./el
 text_files:
   stopwords: |
     ο

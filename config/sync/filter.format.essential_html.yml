@@ -11,13 +11,12 @@ name: 'Essential HTML'
 format: essential_html
 weight: 0
 filters:
-  filter_url:
-    id: filter_url
-    provider: filter
+  collection_glossary:
+    id: collection_glossary
+    provider: collection
     status: true
-    weight: -49
-    settings:
-      filter_url_length: 72
+    weight: 0
+    settings: {  }
   filter_html:
     id: filter_html
     provider: filter
@@ -33,6 +32,13 @@ filters:
     status: true
     weight: -41
     settings: {  }
+  filter_url:
+    id: filter_url
+    provider: filter
+    status: true
+    weight: -49
+    settings:
+      filter_url_length: 72
   joinup_video:
     id: joinup_video
     provider: joinup_video
@@ -51,9 +57,3 @@ filters:
         youtube_playlist: 0
       autoplay: false
       responsive: true
-  collection_glossary:
-    id: collection_glossary
-    provider: collection
-    status: true
-    weight: 0
-    settings: {  }
