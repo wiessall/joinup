@@ -186,6 +186,8 @@ permissions:
   - 'perform owner_workflow workflow validate transition'
   - 'perform owner_workflow workflow propose_changes transition'
   - 'perform owner_workflow workflow retract_deletion_request transition'
+  - 'perform solution_workflow workflow draft transition'
+  - 'perform solution_workflow workflow propose transition'
   - 'perform custom_page_workflow workflow save_as_draft transition'
   - 'perform custom_page_workflow workflow publish transition'
   - 'perform custom_page_workflow workflow unpublish transition'

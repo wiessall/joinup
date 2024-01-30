@@ -126,7 +126,7 @@ interface WorkflowHelperInterface {
    * that a group admin has full permissions, or a blocked user has no
    * permissions. Use OgAccess to check access.
    *
-   * @param string $permissions
+   * @param string $permission
    *   The permission string.
    * @param \Drupal\Core\Entity\EntityInterface $group
    *   The group entity.
@@ -137,7 +137,7 @@ interface WorkflowHelperInterface {
    *   TRUE if the permission is present in at least one of the user's role in
    *   the group.
    */
-  public function hasOgPermission(string $permissions, EntityInterface $group, AccountInterface $user): bool;
+  public function hasOgPermission(string $permission, EntityInterface $group, AccountInterface $user): bool;
 
   /**
    * Checks whether the user has at least one of the provided roles.
