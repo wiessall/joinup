@@ -2,35 +2,6 @@
 
 .paragraph,
 .fieldset--textarea {
-
-  .inline-block {
-    display: inline-block;
-  }
-
-  .align-center {
-    width: fit-content;
-  }
-
-  img,
-  figure {
-    max-width: 100%;
-    height: auto;
-    margin-bottom: $spacer;
-    &.align-left {
-      @include media-breakpoint-up(sm) {
-        float: left;
-        margin-right: $spacer * 1.25;
-      }
-    }
-
-    &.align-right {
-      @include media-breakpoint-up(sm) {
-        float: right;
-        margin-left: $spacer * 1.25;
-      }
-    }
-  }
-
   table {
 
     td {

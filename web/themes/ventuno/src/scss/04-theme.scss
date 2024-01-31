@@ -16,6 +16,7 @@
  @import "@openeuropa/bcl-bootstrap/scss/utilities";
  @import "@openeuropa/bcl-theme-default/src/scss/base/utilities";
  @import "partials/overrides/utilities"; // Override with required utilities only
+ @import "partials/overrides/general"; // Core and modules overrides
  @import "@openeuropa/bcl-bootstrap/scss/helpers";
  @import "@openeuropa/bcl-bootstrap/scss/utilities/api";
 

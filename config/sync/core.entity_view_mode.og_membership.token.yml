@@ -6,5 +6,6 @@ dependencies:
     - og
 id: og_membership.token
 label: Token
+description: ''
 targetEntityType: og_membership
 cache: true

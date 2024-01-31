@@ -92,3 +92,14 @@ function joinup_core_requirements($phase): array {
 
   return $requirements;
 }
+
+/**
+ * Install the RDF provenance fields.
+ */
+function joinup_core_update_110200(): void {
+  $manager = \Drupal::entityDefinitionUpdateManager();
+  $entityType = $manager->getEntityType('rdf_entity');
+  foreach (rdf_entity_provenance_entity_field_storage_info($entityType) as $fieldName => $definition) {
+    $manager->installFieldStorageDefinition($fieldName, 'rdf_entity', 'rdf_entity_provenance', $definition);
+  }
+}
