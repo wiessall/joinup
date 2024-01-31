@@ -7,6 +7,7 @@ namespace Drupal\asset_distribution\Guard;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\joinup_workflow\FulfillmentGuardTrait;
+use Drupal\joinup_workflow\WorkflowHelper;
 use Drupal\state_machine\Guard\GuardInterface;
 use Drupal\state_machine\Plugin\Workflow\WorkflowInterface;
 use Drupal\state_machine\Plugin\Workflow\WorkflowTransition;
@@ -24,11 +25,10 @@ class DistributionFulfillmentGuard implements GuardInterface {
    *
    * @param \Drupal\Core\Session\AccountInterface $currentUser
    *   The current logged-in user.
-   * @param \Drupal\workflow_state_permission\WorkflowStatePermissionInterface $workflowStatePermission
-   *   The service that determines the permission to update the workflow state
-   *   for a given entity.
+   * @param \Drupal\joinup_workflow\WorkflowHelper $workflowHelper
+ *     The workflow helper service.
    */
-  public function __construct(protected AccountInterface $currentUser, protected WorkflowStatePermissionInterface $workflowStatePermission) {}
+  public function __construct(protected AccountInterface $currentUser, protected WorkflowHelper $workflowHelper) {}
 
   /**
    * {@inheritdoc}
