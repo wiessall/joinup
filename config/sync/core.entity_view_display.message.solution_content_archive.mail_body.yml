@@ -1,0 +1,24 @@
+uuid: 2e9306bc-4b38-47b9-904a-787c4f4a7492
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.message.mail_body
+    - message.template.solution_content_archive
+  module:
+    - layout_builder
+third_party_settings:
+  layout_builder:
+    enabled: false
+    allow_custom: false
+id: message.solution_content_archive.mail_body
+targetEntityType: message
+bundle: solution_content_archive
+mode: mail_body
+content:
+  partial_1:
+    weight: 0
+    region: content
+hidden:
+  partial_0: true
+  search_api_excerpt: true
