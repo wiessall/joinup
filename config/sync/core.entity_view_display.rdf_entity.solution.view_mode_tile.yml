@@ -60,6 +60,14 @@ content:
   download_total:
     settings: {  }
     third_party_settings: {  }
+    weight: 3
+    region: content
+  field_is_abstract:
+    type: joinup_html_stripper_stripped
+    label: hidden
+    settings:
+      trim_length: 600
+    third_party_settings: {  }
     weight: 2
     region: content
   field_is_description:
@@ -88,7 +96,7 @@ content:
   flag_like_rdf_entity:
     settings: {  }
     third_party_settings: {  }
-    weight: 10
+    weight: 4
     region: content
 hidden:
   changed: true
@@ -96,7 +104,6 @@ hidden:
   created: true
   eif_perspective: true
   featured: true
-  field_is_abstract: true
   field_is_actor: true
   field_is_affiliations_requests: true
   field_is_business_process: true
