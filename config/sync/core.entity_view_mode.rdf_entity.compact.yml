@@ -8,5 +8,6 @@ _core:
   default_config_hash: LodD1DtuQcpWCiJrZjvMoZi4wz9XHHpipASPKcwPG_0
 id: rdf_entity.compact
 label: Compact
+description: ''
 targetEntityType: rdf_entity
 cache: true
