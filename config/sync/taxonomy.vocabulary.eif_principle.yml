@@ -6,7 +6,7 @@ dependencies:
     - joinup_taxonomy
 third_party_settings:
   joinup_taxonomy:
-    locked: false
+    locked: true
   rdf_sync:
     type: 'http://data.europa.eu/eif/Principle/'
     uri_plugin: null
