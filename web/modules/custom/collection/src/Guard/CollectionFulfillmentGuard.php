@@ -11,7 +11,6 @@ use Drupal\joinup_workflow\WorkflowHelper;
 use Drupal\state_machine\Guard\GuardInterface;
 use Drupal\state_machine\Plugin\Workflow\WorkflowInterface;
 use Drupal\state_machine\Plugin\Workflow\WorkflowTransition;
-use Drupal\workflow_state_permission\WorkflowStatePermissionInterface;
 
 /**
  * Guard class for the transitions of the collection entity.

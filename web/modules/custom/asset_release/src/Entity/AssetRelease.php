@@ -13,7 +13,6 @@ use Drupal\joinup_group\Exception\MissingGroupException;
 use Drupal\joinup_publication_date\Entity\EntityPublicationTimeFallbackTrait;
 use Drupal\joinup_workflow\ArchivableEntityTrait;
 use Drupal\joinup_workflow\EntityWorkflowStateTrait;
-use Drupal\og\OgGroupAudienceHelperInterface;
 use Drupal\rdf_entity\Entity\Rdf;
 use Drupal\solution\Entity\SolutionContentTrait;
 

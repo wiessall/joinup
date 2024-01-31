@@ -8,13 +8,11 @@ use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\joinup_group\Entity\GroupContentInterface;
 use Drupal\joinup_group\Entity\GroupInterface;
-use Drupal\joinup_workflow\FulfillmentGuardTrait;
 use Drupal\joinup_workflow\WorkflowHelper;
 use Drupal\state_machine\Guard\GuardInterface;
 use Drupal\state_machine\Plugin\Workflow\WorkflowInterface;
 use Drupal\state_machine\Plugin\Workflow\WorkflowTransition;
 use Drupal\state_machine_permissions\StateMachinePermissionStringConstructor;
-use Drupal\workflow_state_permission\WorkflowStatePermissionInterface;
 
 /**
  * Generic guard class that checks the transition permissions.

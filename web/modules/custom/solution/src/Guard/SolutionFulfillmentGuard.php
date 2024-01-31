@@ -12,7 +12,6 @@ use Drupal\rdf_entity_provenance\ProvenanceHelperInterface;
 use Drupal\state_machine\Guard\GuardInterface;
 use Drupal\state_machine\Plugin\Workflow\WorkflowInterface;
 use Drupal\state_machine\Plugin\Workflow\WorkflowTransition;
-use Drupal\workflow_state_permission\WorkflowStatePermissionInterface;
 
 /**
  * Guard class for the transitions of the solution entity.
@@ -27,7 +26,7 @@ class SolutionFulfillmentGuard implements GuardInterface {
    * @param \Drupal\Core\Session\AccountInterface $currentUser
    *   The current logged-in user.
    * @param \Drupal\joinup_workflow\WorkflowHelper $workflowHelper
-   *    The workflow helper service.
+   *   The workflow helper service.
    * @param \Drupal\rdf_entity_provenance\ProvenanceHelperInterface $provenanceHelper
    *   Provenance helper.
    */
