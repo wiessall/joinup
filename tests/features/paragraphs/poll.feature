@@ -108,11 +108,11 @@ Feature: Pool paragraph tests.
 
     Then I fill in "Question" with "What do you find scariest?"
     And I fill in "Choice" with "Heights"
-    And I press "Add another item" at the "Choice" field
+    And I press "Add another item" in the "Modal content" region
     And I fill in the latest "Choice" field with "Flying"
-    And I press "Add another item" at the "Choice" field
+    And I press "Add another item" in the "Modal content" region
     And I fill in the latest "Choice" field with "Small spaces"
-    And I press "Add another item" at the "Choice" field
+    And I press "Add another item" in the "Modal content" region
     And I fill in the latest "Choice" field with "Work"
     And I press "Save" in the "Modal buttons" region
     And I press "Update"

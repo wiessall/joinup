@@ -8,6 +8,7 @@
 declare(strict_types = 1);
 
 use Drupal\Core\Render\Element;
+use Drupal\joinup_bundle_class\AbstractInterface;
 use Drupal\joinup_bundle_class\DescriptionInterface;
 use Drupal\joinup_bundle_class\LogoInterface;
 use Drupal\joinup_community_content\Entity\CommunityContentInterface;
@@ -258,6 +259,10 @@ function _ventuno_preprocess_tile(array &$variables, string $entity_type_id): vo
       'icon' => 'archive-fill',
       'label' => t('Archived'),
     ];
+  }
+
+  if ($entity instanceof AbstractInterface && $route_name === 'view.search.page_1') {
+    $variables['text'] = !$entity->get($entity->getAbstractField())->isEmpty() ? $variables['content'][$entity->getAbstractField()] : $variables['text'];
   }
 }
 
