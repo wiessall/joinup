@@ -35,7 +35,7 @@ Feature: Fill Page URL field in Technical problem / bug report on contact form
       | success messages                                              |
       | Your message has been submitted. Thank you for your feedback. |
 
-  @javascript @terms
+  @javascript
   Scenario: Regression test for ISAICP-8398
   See https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-8398
 
@@ -54,7 +54,6 @@ Feature: Fill Page URL field in Technical problem / bug report on contact form
       | owner               | Martinez Gonzalez    |
       | contact information | Rarty Kelley         |
       | state               | published            |
-      | topic               | Supplier exchange    |
     And news content:
       | title           | headline  | body | collection  | field_state |
       | Tumba spatial   | headline  | body | Rumba       | published   |
