@@ -6,7 +6,6 @@ namespace Drupal\joinup_group\Entity;
 
 use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\Core\Field\EntityReferenceFieldItemList;
-use Drupal\og\Plugin\views\argument_default\Group;
 
 /**
  * Interface for entities that are group content.

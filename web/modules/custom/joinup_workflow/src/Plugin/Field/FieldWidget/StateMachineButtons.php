@@ -4,7 +4,6 @@ declare(strict_types = 1);
 
 namespace Drupal\joinup_workflow\Plugin\Field\FieldWidget;
 
-use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Field\FieldDefinitionInterface;
 use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Field\Plugin\Field\FieldWidget\OptionsSelectWidget;
@@ -14,7 +13,6 @@ use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\joinup_workflow\EntityWorkflowStateInterface;
 use Drupal\joinup_workflow\Event\StateMachineButtonLabelsEvent;
 use Drupal\joinup_workflow\Event\StateMachineButtonLabelsEventInterface;
-use Drupal\joinup_workflow\Event\UnchangedWorkflowStateUpdateEvent;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
