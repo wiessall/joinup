@@ -9,6 +9,7 @@ declare(strict_types = 1);
 
 use Drupal\Component\Serialization\Json;
 use Drupal\joinup_taxonomy\VocabularyUpdater;
+use Drupal\rdf_sync\RdfSyncConnection;
 use EasyRdf\Graph;
 use EasyRdf\Http;
 use EasyRdf\Http\Client;
@@ -16,31 +17,33 @@ use EasyRdf\Http\Exception;
 use EasyRdf\RdfNamespace;
 use EasyRdf\Resource;
 
+const JOINUP_RDF_VOCABS = [
+  'http://actor' => ['actor'],
+  'http://adms-sw-v1.00' => ['licence_type'],
+  'http://adms_skos_v1.00' => ['owner_type', 'representation_technique', 'status'],
+  'http://business-process' => ['business_process'],
+  'http://countries-skos' => ['spatial'],
+  'http://eif_conceptual_model' => ['eif_conceptual_model'],
+  'http://eif_interoperability_layer' => ['eif_interoperability_layer'],
+  'http://eif_principle' => ['eif_principle'],
+  'http://eif_recommendation' => ['eif_recommendation'],
+  'http://eif_solution_type' => ['eif_solution_type'],
+  'http://eira_skos' => ['eira'],
+  'http://filetypes-skos' => ['file_type'],
+  'http://joinup.eu/license_type/published' => ['eurovoc'],
+  'http://licence-legal-type' => ['legal_type'],
+  'http://solution_category' => ['solution_category'],
+  'http://standardization_level' => ['standardization_level'],
+  'http://test_resource_type' => ['test_resource_type'],
+  'http://topic' => ['topic'],
+];
+
 /**
- * Import terms from SPARQL backend.
+ * Current vocabularies.
  */
 function joinup_rdf_deploy_110200(array &$sandbox): string {
   if (!isset($sandbox['graphs'])) {
-    $sandbox['graphs'] = [
-      'http://actor' => ['actor'],
-      'http://adms-sw-v1.00' => ['licence_type'],
-      'http://adms_skos_v1.00' => ['owner_type', 'representation_technique', 'status'],
-      'http://business-process' => ['business_process'],
-      'http://countries-skos' => ['spatial'],
-      'http://eif_conceptual_model' => ['eif_conceptual_model'],
-      'http://eif_interoperability_layer' => ['eif_interoperability_layer'],
-      'http://eif_principle' => ['eif_principle'],
-      'http://eif_recommendation' => ['eif_recommendation'],
-      'http://eif_solution_type' => ['eif_solution_type'],
-      'http://eira_skos' => ['eira'],
-      'http://filetypes-skos' => ['file_type'],
-      'http://joinup.eu/license_type/published' => ['eurovoc'],
-      'http://licence-legal-type' => ['legal_type'],
-      'http://solution_category' => ['solution_category'],
-      'http://standardization_level' => ['standardization_level'],
-      'http://test_resource_type' => ['test_resource_type'],
-      'http://topic' => ['topic'],
-    ];
+    $sandbox['graphs'] = JOINUP_RDF_VOCABS;
     $sandbox['callbacks'] = [
       'http://filetypes-skos' => [[VocabularyUpdater::class, 'alterGraphForFileType']],
     ];
@@ -233,7 +236,7 @@ function joinup_rdf_deploy_110203(array &$sandbox): string {
     ];
   }
 
-  // Extract a foeld from stack.
+  // Extract a field from stack.
   $field = key($sandbox['fields']);
   $entityTypeId = current($sandbox['fields']);
   unset($sandbox['fields'][$field]);
@@ -280,4 +283,19 @@ function joinup_rdf_deploy_110203(array &$sandbox): string {
   $sandbox['#finished'] = (int) empty($sandbox['fields']);
 
   return "✅ Fixed storage definition for field $entityTypeId.$field";
+}
+
+/**
+ * Cleanup legacy data.
+ */
+function joinup_rdf_deploy_110204(array &$sandbox): string {
+  $graphUris = [
+    ...array_keys(JOINUP_RDF_VOCABS),
+    ...['http://languages-skos', 'http://product_type'],
+  ];
+  sort($graphUris);
+  foreach ($graphUris as $graphUri) {
+    RdfSyncConnection::query("CLEAR GRAPH <$graphUri>;");
+  }
+  return dt("Removed graphs: !graphs", ['!graphs' => implode(', ', $graphUris)]);
 }
