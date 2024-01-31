@@ -732,7 +732,7 @@ third_party_settings:
                 type: joinup_core_more_in_modal
                 label: above
                 settings:
-                  max_items_to_show: 5
+                  max_items_to_show: 10
                   modal_link_label_single: 'Show language'
                   modal_link_label_multiple: 'Show all @count languages'
                   modal_view_mode: modal
