@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace Drupal\joinup_core\Form;
 
 use Drupal\Component\Utility\UrlHelper;
+use Drupal\Core\Database\Connection;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
-use Drupal\rdf_entity\Entity\Rdf;
 use Drupal\sparql_entity_storage\UriEncoder;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -23,14 +23,22 @@ class RdfEntityUriWebConverterForm extends FormBase {
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
    *   The entity type manager service.
+   * @param \Drupal\Core\Database\Connection $db
+   *   The database connection.
    */
-  public function __construct(protected EntityTypeManagerInterface $entityTypeManager) {}
+  public function __construct(
+    protected EntityTypeManagerInterface $entityTypeManager,
+    protected Connection $db,
+  ) {}
 
   /**
    * {@inheritdoc}
    */
   public static function create(ContainerInterface $container): self {
-    return new static($container->get('entity_type.manager'));
+    return new static(
+      $container->get('entity_type.manager'),
+      $container->get('database'),
+    );
   }
 
   /**
@@ -54,19 +62,36 @@ class RdfEntityUriWebConverterForm extends FormBase {
   /**
    * {@inheritdoc}
    */
-  public function validateForm(array &$form, FormStateInterface $form_state) {
+  public function validateForm(array &$form, FormStateInterface $form_state): void {
     global $base_url;
     parent::validateForm($form, $form_state);
 
-    $id = $path = trim($form_state->getValue('entity_id'), " ");
+    $id = $path = trim($form_state->getValue('entity_id'));
 
     // An absolute URL.
     if (UrlHelper::isExternal($id)) {
-      // Potential RDF entity ID.
       if (!UrlHelper::externalIsLocal($id, $base_url)) {
-        if (Rdf::load($id)) {
+        $entity_type_id = NULL;
+
+        // Potential RDF entity ID.
+        if ($this->entityTypeManager->getStorage('rdf_entity')->load($id)) {
+          $entity_type_id = 'rdf_entity';
+        }
+
+        // It might be a mapped taxonomy term.
+        $tid = $this->db->select('taxonomy_term__uri', 't')
+          ->fields('t', ['entity_id'])
+          ->condition('t.uri_value', $id)
+          ->execute()
+          ->fetchField();
+        if ($tid) {
+          $entity_type_id = 'taxonomy_term';
+          $form_state->setValue('entity_id', $tid);
+        }
+
+        if ($entity_type_id) {
           $form_state->set('passed_as', 'id');
-          $form_state->set('entity_type', 'rdf_entity');
+          $form_state->set('entity_type', $entity_type_id);
         }
         else {
           $form_state->setErrorByName('id', $this->t('Not a valid RDF ID: :id.', [':id' => $id]));
@@ -78,11 +103,11 @@ class RdfEntityUriWebConverterForm extends FormBase {
     }
 
     // Build a Drupal internal URI.
-    $uri = 'internal:/' . trim($path, " /");
+    $uri = 'internal:/' . trim($path, "/");
     $url = Url::fromUri($uri);
     // The path was build from a route.
     if ($url->isRouted()) {
-      // This path contains a RDF parameter.
+      // This path contains an RDF parameter.
       $parameters = $url->getRouteParameters();
       if (!empty($parameters['rdf_entity'])) {
         $form_state->set('passed_as', 'url');
@@ -96,12 +121,14 @@ class RdfEntityUriWebConverterForm extends FormBase {
   /**
    * {@inheritdoc}
    */
-  public function submitForm(array &$form, FormStateInterface $form_state) {
+  public function submitForm(array &$form, FormStateInterface $form_state): void {
     $passed_as = $form_state->get('passed_as');
-    $id = trim($form_state->getValue('entity_id'), " ");
-    $entity_type = $form_state->get('entity_type');
+    $id = trim($form_state->getValue('entity_id'));
+    $entity_type_id = $form_state->get('entity_type');
     if ($passed_as === 'id') {
-      $form_state->setRedirect("entity.{$entity_type}.canonical", [$entity_type => $id]);
+      $form_state->setRedirect("entity.$entity_type_id.canonical", [
+        $entity_type_id => $id,
+      ]);
     }
     elseif ($passed_as === 'url') {
       // We display only the ID, so it can be easily selected with a mouse
