@@ -4,12 +4,12 @@ declare(strict_types = 1);
 
 namespace Drupal\joinup_group\Access;
 
-use Drupal\asset_release\Entity\AssetReleaseInterface;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Routing\Access\AccessInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\asset_release\Entity\AssetReleaseInterface;
 use Drupal\joinup_group\JoinupGroupHelper;
 use Drupal\rdf_entity\RdfInterface;
 use Drupal\sparql_entity_storage\UriEncoder;
