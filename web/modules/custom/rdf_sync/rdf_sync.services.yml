@@ -34,3 +34,9 @@ services:
       - '@state'
       - '@serializer'
       - '@queue'
+  rdf_sync.normalizer.subscriber:
+    class: Drupal\rdf_sync\EventSubscriber\RdfSyncNormalizeSubscriber
+    arguments:
+      - '@rdf_sync.mapper'
+    tags:
+      - { name: event_subscriber }
