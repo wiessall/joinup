@@ -124,8 +124,14 @@ class JoinupGroupManager implements JoinupGroupManagerInterface {
    */
   public function access(GroupInterface $group, string $og_permission, ?string $site_permission = NULL, ?AccountInterface $account = NULL): AccessResultInterface {
     $account ??= $this->currentUser;
+
     // Check the site-wide permission.
-    return (AccessResult::allowedIf($site_permission)->andIf(AccessResult::allowedIfHasPermission($account, $site_permission)))
+    $site_access = AccessResult::allowedIf($site_permission);
+    if ($site_access->isAllowed()) {
+      $site_access = $site_access->andIf(AccessResult::allowedIfHasPermission($account, $site_permission));
+    }
+
+    return $site_access
         // Check the OG permission.
       ->orIf($this->ogAccess->userAccess($group, $og_permission, $account))
       ->addCacheableDependency($group)
