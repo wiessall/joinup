@@ -5,6 +5,7 @@ dependencies:
   module:
     - blazy
     - joinup_video
+    - markdown_easy
     - slick
 _core:
   default_config_hash: _EOmoFGHhTjV4rORLrzpQZv9C6rnPb8LVLDoNMqBz7U
@@ -12,46 +13,6 @@ name: 'Basic HTML'
 format: basic_html
 weight: 0
 filters:
-  filter_url:
-    id: filter_url
-    provider: filter
-    status: true
-    weight: -49
-    settings:
-      filter_url_length: 72
-  filter_html:
-    id: filter_html
-    provider: filter
-    status: true
-    weight: -48
-    settings:
-      allowed_html: '<br> <p> <i> <b> <a hreflang href> <strong> <em> <blockquote> <ul> <ol> <li>'
-      filter_html_help: false
-      filter_html_nofollow: true
-  filter_htmlcorrector:
-    id: filter_htmlcorrector
-    provider: filter
-    status: true
-    weight: -41
-    settings: {  }
-  joinup_video:
-    id: joinup_video
-    provider: joinup_video
-    status: false
-    weight: 0
-    settings:
-      allowed_providers:
-        joinup_ec_video: 0
-        internal_path: 0
-        google_docs: 0
-        joinup_ec_webcast_video: 0
-        prezi: 0
-        slideshare: 0
-        vimeo: 0
-        youtube: 0
-        youtube_playlist: 0
-      autoplay: false
-      responsive: true
   blazy_filter:
     id: blazy_filter
     provider: blazy
@@ -67,6 +28,54 @@ filters:
         img: img
         iframe: iframe
       use_data_uri: '0'
+  filter_html:
+    id: filter_html
+    provider: filter
+    status: true
+    weight: -48
+    settings:
+      allowed_html: '<br> <p> <i> <b> <a hreflang href> <strong> <em> <blockquote> <ul> <ol> <li>'
+      filter_html_help: false
+      filter_html_nofollow: true
+  filter_htmlcorrector:
+    id: filter_htmlcorrector
+    provider: filter
+    status: true
+    weight: -41
+    settings: {  }
+  filter_url:
+    id: filter_url
+    provider: filter
+    status: true
+    weight: -49
+    settings:
+      filter_url_length: 72
+  joinup_video:
+    id: joinup_video
+    provider: joinup_video
+    status: false
+    weight: 0
+    settings:
+      allowed_providers:
+        slideshare: 0
+        internal_path: 0
+        prezi: 0
+        joinup_ec_video: 0
+        joinup_ec_webcast_video: 0
+        google_docs: 0
+        youtube: 0
+        vimeo: 0
+        youtube_playlist: 0
+      autoplay: false
+      responsive: true
+  markdown_easy:
+    id: markdown_easy
+    provider: markdown_easy
+    status: false
+    weight: 0
+    settings:
+      flavor: standard
+      tips: ''
   slick_filter:
     id: slick_filter
     provider: slick

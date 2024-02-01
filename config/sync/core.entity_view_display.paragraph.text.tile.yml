@@ -1,0 +1,33 @@
+uuid: ad34648e-bb4e-4845-bc61-e6606af50eab
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.paragraph.tile
+    - field.field.paragraph.text.field_body
+    - paragraphs.paragraphs_type.text
+  module:
+    - joinup_html_stripper
+    - layout_builder
+    - template_suggestion
+third_party_settings:
+  layout_builder:
+    enabled: false
+    allow_custom: false
+id: paragraph.text.tile
+targetEntityType: paragraph
+bundle: text
+mode: tile
+content:
+  field_body:
+    type: joinup_html_stripper_stripped
+    label: hidden
+    settings:
+      trim_length: 600
+    third_party_settings:
+      template_suggestion:
+        template_suggestion: ''
+    weight: 0
+    region: content
+hidden:
+  search_api_excerpt: true
