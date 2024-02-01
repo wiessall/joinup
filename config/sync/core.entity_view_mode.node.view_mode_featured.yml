@@ -8,5 +8,6 @@ _core:
   default_config_hash: 5k72FtJ9esgHSZHe3ZSolef7tJt0Bd4jpBkEhEN6UbM
 id: node.view_mode_featured
 label: Featured
+description: ''
 targetEntityType: node
 cache: true
