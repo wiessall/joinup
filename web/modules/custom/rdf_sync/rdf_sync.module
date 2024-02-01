@@ -105,8 +105,9 @@ function rdf_sync_check_column_mappings(array $columns, string $fieldName, array
 function rdf_sync_entity_field_storage_info(EntityTypeInterface $entityType): array {
   $definitions = [];
   // @todo Find out why we cannot check whether the entity type ID is in array
-  //   \Drupal::service('rdf_sync.mapper')->getEntityTypeIdsWithMappings().
-  if (in_array($entityType->id(), ['taxonomy_term'], TRUE)) {
+  //   \Drupal::service('rdf_sync.mapper')->getEntityTypeIdsWithMappings(). It
+  //   seems that a race condition prevent us to do so.
+  if (in_array($entityType->id(), ['node', 'taxonomy_term'], TRUE)) {
     $definitions['uri'] = BundleFieldDefinition::create('uri')
       ->setName('uri')
       ->setTargetEntityTypeId($entityType->id())
@@ -128,7 +129,7 @@ function rdf_sync_entity_bundle_field_info(EntityTypeInterface $entityType, stri
   $fields = [];
   $mapper = \Drupal::getContainer()->get('rdf_sync.mapper');
   if ($mapper->isMappedBundle($entityType->id(), $bundle)) {
-    $storageDefinitions = \Drupal::service('entity_field.manager')->getActiveFieldStorageDefinitions('taxonomy_term');
+    $storageDefinitions = \Drupal::service('entity_field.manager')->getActiveFieldStorageDefinitions($entityType->id());
     if (isset($storageDefinitions['uri'])) {
       $fields['uri'] = FieldDefinition::createFromFieldStorageDefinition($storageDefinitions['uri'])
         ->setTargetBundle($bundle)
