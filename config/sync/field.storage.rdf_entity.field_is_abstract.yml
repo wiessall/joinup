@@ -17,7 +17,7 @@ field_name: field_is_abstract
 entity_type: rdf_entity
 type: string
 settings:
-  max_length: 200
+  max_length: 250
   case_sensitive: false
   is_ascii: false
 module: core
