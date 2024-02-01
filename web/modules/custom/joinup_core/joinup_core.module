@@ -27,6 +27,7 @@ use Drupal\joinup_core\Plugin\Field\FieldType\OutdatedContentFieldItemList;
 use Drupal\joinup_core\Plugin\Field\FieldWidget\ImageLibraryWidget;
 use Drupal\joinup_workflow\ArchivableEntityInterface;
 use Drupal\node\NodeInterface;
+use Drupal\symfony_mailer_lite\Plugin\Mail\SymfonyMailer;
 
 /**
  * Implements hook_theme().
@@ -434,7 +435,7 @@ function joinup_core_field_widget_info_alter(array &$info): void {
 function joinup_core_mail_alter(&$message) {
   if (
     empty($message['headers']['Content-Type']) ||
-    $message['headers']['Content-Type'] !== SWIFTMAILER_FORMAT_HTML
+    $message['headers']['Content-Type'] !== SymfonyMailer::FORMAT_HTML
   ) {
     return;
   }
