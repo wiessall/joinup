@@ -24,13 +24,6 @@ use Psr\EventDispatcher\EventDispatcherInterface;
 class RdfSyncNormalizer extends EntityNormalizer {
 
   /**
-   * Classes accepted by this normalizer.
-   *
-   * @var string
-   */
-  protected string $supportedInterfaceOrClass = RdfSyncEntityInterface::class;
-
-  /**
    * Constructs a new normalizer instance.
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
@@ -55,6 +48,13 @@ class RdfSyncNormalizer extends EntityNormalizer {
     protected EventDispatcherInterface $eventDispatcher,
   ) {
     parent::__construct($entity_type_manager, $entity_type_repository, $entity_field_manager);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getSupportedTypes(?string $format): array {
+    return [RdfSyncEntityInterface::class => TRUE];
   }
 
   /**
