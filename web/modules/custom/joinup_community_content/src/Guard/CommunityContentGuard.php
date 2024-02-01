@@ -116,7 +116,7 @@ class CommunityContentGuard implements GuardInterface {
     }
 
     // Prevent un-archiving content of an archived parent.
-    if ($from_state === 'archived' && $to_state === '__new__' && $entity->isParentArchived()) {
+    if ($from_state === 'archived' && $to_state !== 'archived' && $entity->isParentArchived()) {
       return FALSE;
     }
 

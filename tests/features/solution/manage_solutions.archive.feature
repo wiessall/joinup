@@ -1,7 +1,7 @@
 @api @group-g
 Feature: When a solution is archived then its sub-content also should be archived.
 
-  Scenario: Archiving a solution must archive its sub-content.
+  Scenario: Archiving / unarchiving a solution must archive / unarchive its sub-content.
     Given the following collection:
       | title | Collection |
       | state | published  |
@@ -117,12 +117,12 @@ Feature: When a solution is archived then its sub-content also should be archive
     Then 0 e-mails should have been sent
     # Archived community content (events, discussions, news etc) cannot transit
     # to published state.
-    And the workflow state of the "Solution Event" content should be "archived"
-    And the workflow state of the "Solution News 1" content should be "archived"
+    And the workflow state of the "Solution Event" content should be "published"
+    And the workflow state of the "Solution News 1" content should be "published"
     And the workflow state of the "Solution News 2" content should be "draft"
-    And the workflow state of the "Solution News 3" content should be "archived"
-    And the workflow state of the "Solution Document" content should be "archived"
-    And the workflow state of the "Solution Discussion" content should be "archived"
+    And the workflow state of the "Solution News 3" content should be "published"
+    And the workflow state of the "Solution Document" content should be "published"
+    And the workflow state of the "Solution Discussion" content should be "published"
     And the workflow state of the "Solution Distribution" "rdf entity" should be "published"
     And the workflow state of the "Solution Release 1" "rdf entity" should be "published"
     And the workflow state of the "Solution Release 2" "rdf entity" should be "draft"
