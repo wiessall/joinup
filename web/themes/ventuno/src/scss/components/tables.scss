@@ -9,6 +9,7 @@
   &:not(.licence-comparer) {
     > tbody > tr:nth-of-type(#{$table-striped-order}) > * {
       --#{$prefix}table-accent-bg: var(--#{$prefix}table-striped-bg);
+
       color: var(--#{$prefix}table-striped-color);
     }
   }
