@@ -116,9 +116,11 @@ class HostingPlatformUITest extends BrowserTestBase {
     $assertSession = $this->assertSession();
 
     // Description for github_example.
-    $assertSession->pageTextContains('Code hosting platform (GitHub)');
+    $assertSession->pageTextContains('Code hosting platform');
     // Description for github_mockup.
-    $assertSession->pageTextContains('Test GitHub hosting provider (GitHub)');
+    $assertSession->pageTextContains('Test GitHub hosting provider');
+    // Platform label for github_example and github_mockup.
+    $assertSession->pageTextContains('GitLab');
   }
 
 }

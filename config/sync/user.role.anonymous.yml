@@ -3,6 +3,7 @@ langcode: en
 status: true
 dependencies:
   config:
+    - entity_legal.document.legal_notice
     - filter.format.basic_html
     - filter.format.simple_text
   module:

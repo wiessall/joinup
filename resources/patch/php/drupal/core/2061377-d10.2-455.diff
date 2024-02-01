@@ -123,11 +123,11 @@ index 768835903f..03e7f1f454 100644
     * Gets the default region.
     *
 diff --git a/core/misc/cspell/dictionary.txt b/core/misc/cspell/dictionary.txt
-index 114bed611f..09b691027d 100644
+index 8fcbd4fe32..22ac84ce18 100644
 --- a/core/misc/cspell/dictionary.txt
 +++ b/core/misc/cspell/dictionary.txt
-@@ -352,6 +352,7 @@ drupalelementstyleui
- drupalget
+@@ -260,6 +260,7 @@ drupalelementstyleediting
+ drupalelementstyleui
  drupalhtmlbuilder
  drupalimage
 +drupalimagestyle
@@ -135,10 +135,10 @@ index 114bed611f..09b691027d 100644
  drupalism
  drupalisms
 diff --git a/core/modules/filter/filter.module b/core/modules/filter/filter.module
-index c7a1a14aeb..a502887ffe 100644
+index 8814e0d8ea..55801fcebb 100644
 --- a/core/modules/filter/filter.module
 +++ b/core/modules/filter/filter.module
-@@ -316,7 +316,7 @@ function check_markup($text, $format_id = NULL, $langcode = '', $filter_types_to
+@@ -323,7 +323,7 @@ function check_markup($text, $format_id = NULL, $langcode = '', $filter_types_to
   * @return array
   *   An associative array of filtering tips, keyed by filter name. Each
   *   filtering tip is an associative array with elements:
@@ -147,7 +147,7 @@ index c7a1a14aeb..a502887ffe 100644
   *   - id: Filter ID.
   */
  function _filter_tips($format_id, $long = FALSE) {
-@@ -334,8 +334,9 @@ function _filter_tips($format_id, $long = FALSE) {
+@@ -341,8 +341,9 @@ function _filter_tips($format_id, $long = FALSE) {
        if ($filter->status) {
          $tip = $filter->tips($long);
          if (isset($tip)) {
@@ -159,7 +159,7 @@ index c7a1a14aeb..a502887ffe 100644
            ];
          }
 diff --git a/core/modules/filter/src/Entity/FilterFormat.php b/core/modules/filter/src/Entity/FilterFormat.php
-index cf03af72a7..04b5c83cbe 100644
+index b47ed360cd..1ae3115b41 100644
 --- a/core/modules/filter/src/Entity/FilterFormat.php
 +++ b/core/modules/filter/src/Entity/FilterFormat.php
 @@ -4,6 +4,7 @@
@@ -170,7 +170,7 @@ index cf03af72a7..04b5c83cbe 100644
  use Drupal\Core\Entity\EntityWithPluginCollectionInterface;
  use Drupal\Core\Entity\EntityStorageInterface;
  use Drupal\filter\FilterFormatInterface;
-@@ -55,6 +56,8 @@
+@@ -56,6 +57,8 @@
   */
  class FilterFormat extends ConfigEntityBase implements FilterFormatInterface, EntityWithPluginCollectionInterface {
  
@@ -179,7 +179,7 @@ index cf03af72a7..04b5c83cbe 100644
    /**
     * Unique machine name of the format.
     *
-@@ -391,7 +394,28 @@ public function removeFilter($instance_id) {
+@@ -395,7 +398,28 @@ public function removeFilter($instance_id) {
    public function onDependencyRemoval(array $dependencies) {
      $changed = parent::onDependencyRemoval($dependencies);
      $filters = $this->filters();
@@ -208,7 +208,7 @@ index cf03af72a7..04b5c83cbe 100644
        // Remove disabled filters, so that this FilterFormat config entity can
        // continue to exist.
        if (!$filter->status && in_array($filter->provider, $dependencies['module'])) {
-@@ -415,4 +439,14 @@ protected function calculatePluginDependencies(PluginInspectionInterface $instan
+@@ -419,4 +443,14 @@ protected function calculatePluginDependencies(PluginInspectionInterface $instan
      }
    }
  
@@ -272,7 +272,7 @@ index 7714f03e61..c87d4d1d0d 100644
 +
  }
 diff --git a/core/modules/image/config/schema/image.schema.yml b/core/modules/image/config/schema/image.schema.yml
-index 5368f85f4c..4ace75c0e3 100644
+index d3c9e980f0..4d1218f6ab 100644
 --- a/core/modules/image/config/schema/image.schema.yml
 +++ b/core/modules/image/config/schema/image.schema.yml
 @@ -168,3 +168,15 @@ field.widget.settings.image_image:
@@ -292,7 +292,7 @@ index 5368f85f4c..4ace75c0e3 100644
 +        type: string
 +        label: 'Image style ID'
 diff --git a/core/modules/image/image.module b/core/modules/image/image.module
-index 807b58c33a..e780ba8064 100644
+index eb407dcfd1..cec64d0eed 100644
 --- a/core/modules/image/image.module
 +++ b/core/modules/image/image.module
 @@ -6,12 +6,14 @@
@@ -1827,7 +1827,7 @@ index e478e91301..a07b7b8924 100644
      $twig_tokens = [];
      foreach ($tokens as $token => $replacement) {
 diff --git a/core/profiles/demo_umami/config/install/filter.format.basic_html.yml b/core/profiles/demo_umami/config/install/filter.format.basic_html.yml
-index 070b17a8aa..15725a1de0 100644
+index b57e2a67a7..1cfc83f98c 100644
 --- a/core/profiles/demo_umami/config/install/filter.format.basic_html.yml
 +++ b/core/profiles/demo_umami/config/install/filter.format.basic_html.yml
 @@ -5,6 +5,7 @@ dependencies:
@@ -1838,16 +1838,16 @@ index 070b17a8aa..15725a1de0 100644
      - media
  name: 'Basic HTML'
  format: basic_html
-@@ -16,7 +17,7 @@ filters:
+@@ -40,7 +41,7 @@ filters:
      status: true
      weight: -10
      settings:
 -      allowed_html: '<a href hreflang> <em> <strong> <cite> <blockquote cite> <ul type> <ol start type> <li> <dl> <dt> <dd> <h2 id> <h3 id> <h4 id> <h5 id> <h6 id> <p> <br> <img src alt loading height width data-entity-type data-entity-uuid data-align data-caption> <drupal-media data-entity-type data-entity-uuid data-view-mode data-align data-caption alt title>'
-+      allowed_html: '<a href hreflang> <em> <strong> <cite> <blockquote cite> <ul type> <ol start type> <li> <dl> <dt> <dd> <h2 id> <h3 id> <h4 id> <h5 id> <h6 id> <p> <br> <img src alt height width data-entity-type data-entity-uuid data-align data-caption data-image-style> <drupal-media data-entity-type data-entity-uuid data-view-mode data-align data-caption alt title>'
++      allowed_html: '<a href hreflang> <em> <strong> <cite> <blockquote cite> <ul type> <ol start type> <li> <dl> <dt> <dd> <h2 id> <h3 id> <h4 id> <h5 id> <h6 id> <p> <br> <img src alt loading height width data-entity-type data-entity-uuid data-align data-caption data-image-style> <drupal-media data-entity-type data-entity-uuid data-view-mode data-align data-caption alt title>'
        filter_html_help: false
        filter_html_nofollow: false
-   filter_align:
-@@ -70,3 +71,10 @@ filters:
+   filter_html_image_secure:
+@@ -71,3 +72,10 @@ filters:
          image: image
          remote_video: remote_video
          video: video
@@ -1859,7 +1859,7 @@ index 070b17a8aa..15725a1de0 100644
 +    settings:
 +      allowed_styles: {  }
 diff --git a/core/profiles/demo_umami/config/install/filter.format.full_html.yml b/core/profiles/demo_umami/config/install/filter.format.full_html.yml
-index 8e11a57235..d09f7b6f3b 100644
+index 44a1d1ab59..5ecd5b9729 100644
 --- a/core/profiles/demo_umami/config/install/filter.format.full_html.yml
 +++ b/core/profiles/demo_umami/config/install/filter.format.full_html.yml
 @@ -5,6 +5,7 @@ dependencies:
@@ -1883,7 +1883,7 @@ index 8e11a57235..d09f7b6f3b 100644
 +      allowed_styles: {  }
          video: video
 diff --git a/core/profiles/standard/config/install/filter.format.basic_html.yml b/core/profiles/standard/config/install/filter.format.basic_html.yml
-index 60a4084ca6..d34b743c7e 100644
+index d81fc17303..87fc32e052 100644
 --- a/core/profiles/standard/config/install/filter.format.basic_html.yml
 +++ b/core/profiles/standard/config/install/filter.format.basic_html.yml
 @@ -3,6 +3,7 @@ status: true
@@ -1894,7 +1894,16 @@ index 60a4084ca6..d34b743c7e 100644
  name: 'Basic HTML'
  format: basic_html
  weight: 0
-@@ -15,7 +16,7 @@ filters:
+@@ -13,7 +14,7 @@ filters:
+     id: editor_file_reference
+     provider: editor
+     status: true
+-    weight: 11
++    weight: 10
+     settings: {  }
+   filter_align:
+     id: filter_align
+@@ -33,7 +34,7 @@ filters:
      status: true
      weight: -10
      settings:
@@ -1902,8 +1911,8 @@ index 60a4084ca6..d34b743c7e 100644
 +      allowed_html: '<br> <p> <h2 id> <h3 id> <h4 id> <h5 id> <h6 id> <cite> <dl> <dt> <dd> <a hreflang href> <blockquote cite> <ul type> <ol start type> <strong> <em> <code> <li> <img src alt data-entity-uuid data-entity-type height width data-caption data-align data-image-style>'
        filter_html_help: false
        filter_html_nofollow: false
-   filter_align:
-@@ -42,9 +43,16 @@ filters:
+   filter_html_image_secure:
+@@ -48,3 +49,10 @@ filters:
      status: true
      weight: 15
      settings: {  }
@@ -1914,15 +1923,8 @@ index 60a4084ca6..d34b743c7e 100644
 +    weight: 11
 +    settings:
 +      allowed_styles: {  }
-   editor_file_reference:
-     id: editor_file_reference
-     provider: editor
-     status: true
--    weight: 11
-+    weight: 10
-     settings: {  }
 diff --git a/core/profiles/standard/config/install/filter.format.full_html.yml b/core/profiles/standard/config/install/filter.format.full_html.yml
-index 3a586cdd36..63e95823c7 100644
+index a0e616a498..b12a3c0e02 100644
 --- a/core/profiles/standard/config/install/filter.format.full_html.yml
 +++ b/core/profiles/standard/config/install/filter.format.full_html.yml
 @@ -3,6 +3,7 @@ status: true
@@ -1935,7 +1937,7 @@ index 3a586cdd36..63e95823c7 100644
  weight: 2
 @@ -39,3 +40,10 @@ filters:
      status: true
-     weight: 11
+     weight: 15
      settings: {  }
 +  filter_image_style:
 +    id: filter_image_style
