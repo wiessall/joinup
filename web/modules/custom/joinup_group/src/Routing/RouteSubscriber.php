@@ -31,15 +31,15 @@ class RouteSubscriber extends RouteSubscriberBase {
       $route->setOptions($options);
     }
 
-    // Add the '_joinup_group' requirement to the
-    // 'views.view.group_content_management.page' and
-    // 'views.view.group_content_management.csv_export' routes.
-    if ($route = $collection->get('view.group_content_management.manage')) {
-      $route->setRequirement('_joinup_group', 'TRUE');
-    }
-
-    if ($route = $collection->get('view.group_content_management.csv_export')) {
-      $route->setRequirement('_joinup_group', 'TRUE');
+    // Add the '_joinup_group' requirement to 'common' routes.
+    $routes = [
+      'view.group_content_management.manage',
+      'view.group_content_management.csv_export',
+    ];
+    foreach ($routes as $route_name) {
+      if ($route = $collection->get($route_name)) {
+        $route->setRequirement('_joinup_group', 'TRUE');
+      }
     }
   }
 
