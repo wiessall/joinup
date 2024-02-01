@@ -83,29 +83,32 @@ class RdfSyncNormalizer extends EntityNormalizer {
             continue;
           }
 
-          if ($value === NULL) {
-            // Don't store NULLs.
-            continue;
-          }
-
           $fieldDefinition = $object->getFieldDefinition($fieldName);
-
-          if ($fieldName === $entityType->getKey('bundle') && $hasBundleMapping) {
-            // This entity has bundle mapping. Taxonomy terms, for instance,
-            // need the bundle mapping to refer to the vocabulary resource.
-            $value = $rdfType;
-          }
-
-          // Resolve references to other entities.
           $itemDefinition = $fieldDefinition->getItemDefinition();
-          if (is_a(EntityReferenceItem::class, $itemDefinition->getClass(), TRUE)) {
+
+          if ($fieldName === $entityType->getKey('bundle')) {
+            if ($hasBundleMapping) {
+              // This entity has bundle mapping. Taxonomy terms, for instance,
+              // need the bundle mapping to refer to the vocabulary resource.
+              $value = $rdfType;
+            }
+          }
+          // Resolve references to other entities.
+          elseif (is_a(EntityReferenceItem::class, $itemDefinition->getClass(), TRUE)) {
             /** @var \Drupal\Core\Entity\EntityInterface $entity */
-            $entity = $object->get($fieldName)->entity;
-            if ($this->mapper->isMappedBundle($entity->getEntityTypeId(), $entity->bundle())) {
+            if (!$entity = $object->get($fieldName)->entity) {
+              $value = NULL;
+            }
+            elseif ($this->mapper->isMappedBundle($entity->getEntityTypeId(), $entity->bundle())) {
               // If the destination is also mapped, replace the scalar ID (int,
               // string) with the URI.
               $value = $object->get($fieldName)->entity->getUri();
             }
+          }
+
+          if ($value === NULL) {
+            // Don't store NULLs.
+            continue;
           }
 
           // phpcs:disable
