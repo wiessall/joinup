@@ -131,6 +131,10 @@ class GitLabDotCom extends EuOssCatalogueGitHostingPlatformPluginBase {
         $query = $this->buildGroupQuery($namespace, $requestedFiles, $endCursor);
         try {
           $response = $this->getClient()->graphql()->execute($query->toString());
+          // Stop in case we have some errors.
+          if (isset($response['errors'][0]['message'])) {
+            throw new \RuntimeException($response['errors'][0]['message']);
+          }
         }
         catch (\RuntimeException $exception) {
           if ($exception->getCode() === 404) {
