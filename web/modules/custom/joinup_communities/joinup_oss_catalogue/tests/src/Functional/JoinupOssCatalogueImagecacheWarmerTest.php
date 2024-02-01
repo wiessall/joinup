@@ -23,7 +23,7 @@ class JoinupOssCatalogueImagecacheWarmerTest extends DevelopersItaliaFetchTest {
    * {@inheritdoc}
    */
   public function setUp(): void {
-    if ($this->getName(FALSE) === 'testRemovedSolution') {
+    if ($this->getName(FALSE) !== 'testDevelopersItalia') {
       $this->markTestSkipped();
     }
     parent::setUp();

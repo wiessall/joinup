@@ -8,5 +8,6 @@ _core:
   default_config_hash: AhkWlRH-t5Ho27qfnio98_Hj_sLhNQridzkv8P6ohok
 id: rdf_entity.view_mode_tile
 label: Tile
+description: ''
 targetEntityType: rdf_entity
 cache: true

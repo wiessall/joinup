@@ -50,7 +50,7 @@ Feature: Input filter
     When I go to the "Image map" news
     Then I see the "map" element with the "name" attribute set to "imagemap" in the "Content" region
     And I see the "img" element with the "usemap" attribute set to "imagemap" in the "Content" region
-    And the response should contain "<area shape=\"circle\" coords=\"50,50,25\" href=\"/\" alt=\"Homepage\" />"
+    And the response should contain "<area shape=\"circle\" coords=\"50,50,25\" href=\"/\" alt=\"Homepage\">"
     When I go to the "Accessibility planning" news
     Then I see the "img" element with empty "alt" attribute in the "Content" region
     When I go to the "Accessibility rating" news
