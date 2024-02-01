@@ -1,6 +1,7 @@
 @api @group-g
 Feature: When a solution is archived then its sub-content also should be archived.
 
+  @terms
   Scenario: Archiving a solution must archive its sub-content.
     Given the following collection:
       | title | Collection |
@@ -16,6 +17,7 @@ Feature: When a solution is archived then its sub-content also should be archive
       | collection          | Collection       |
       | state               | published        |
       | description         | Description      |
+      | topic               | Demography       |
       | solution type       | Innovation       |
       | creation date       | 2018-11-19T10:00 |
       | modification date   | 2018-12-19T10:00 |
@@ -105,3 +107,10 @@ Feature: When a solution is archived then its sub-content also should be archive
       | Group      | Subject              | State | Created on | Author  | Edit |
       | Solution   | Announcement1 C1     | Draft | 05/11/2005 | Blahman |      |
       | Collection | Some announcement C2 | Draft | 05/11/2005 | Blahman | edit |
+
+    # Ensure that visiting the members page, even moderators see the
+    # non-privileged version.
+    When I go to the members page of "Solution"
+    Then I should not see the following links:
+      | Add member    |
+      | Invite member |
