@@ -88,15 +88,15 @@ class StrippedHTMLFormatter extends FormatterBase {
       // Default to the summary if present.
       $output = !empty($item->summary) ? $item->summary : $item->value;
 
-      // Strip HTML, after applying all embedded media filters.
-      $output = (string) check_markup($output, 'stripped_html');
-
       // Replace funny whitespace.
       $output = preg_replace('/\n|\r|\t/m', ' ', $output);
       $output = str_replace('&nbsp;', ' ', $output);
       $output = str_replace("&amp;#13;", ' ', $output);
       $output = str_replace("\xc2\xa0", ' ', $output);
       $output = trim(preg_replace('/\s\s+/', ' ', $output));
+
+      // Strip HTML, after applying all embedded media filters.
+      $output = (string) check_markup($output, 'stripped_html');
 
       // Trim the text if a maximum length has been set.
       if ($this->getSetting('trim_length') !== 0) {
@@ -105,7 +105,7 @@ class StrippedHTMLFormatter extends FormatterBase {
       }
 
       $element[$delta] = [
-        '#markup' => htmlspecialchars_decode($output),
+        '#markup' => html_entity_decode($output, ENT_QUOTES, 'UTF-8'),
       ];
     }
 

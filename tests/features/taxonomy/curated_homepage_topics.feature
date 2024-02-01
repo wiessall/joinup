@@ -203,7 +203,7 @@ Feature:
       | title          | state     |
       | Popular quotes | published |
     And I append "text" to "field_paragraphs_body" field in "node" entity with following "Popular Quotes" title:
-      | field_body:value  |     That's one small step for a man, a giant leap for mankind. |
+      | field_body:value  |     That's one small step for a&nbsp;man, a giant leap for mankind. |
       | field_body:format | text_html                                                      |
     And the following topics are enabled in the homepage:
       | Economy and Welfare     |
