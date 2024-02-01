@@ -151,6 +151,10 @@ function ventuno_form_alter(array &$form, FormStateInterface $form_state, string
         ];
       }
       break;
+
+    case 'ogmenu_instance_quick_links_edit_form':
+      $form['#attached']['library'][] = 'ventuno/tabledrag';
+      break;
   }
 }
 
