@@ -95,7 +95,7 @@ final class ThemingTest extends JoinupExistingSiteTestBase {
     // Assert that the image paragraph is present by asserting the div with the
     // 'paragraph--image' class.
     $this->assertStringContainsString('paragraph--image', $rendered);
-    $this->assertStringContainsString(' Some \n <br /> beta ', $rendered);
+    $this->assertStringContainsString(' Some \n <br> beta ', $rendered);
 
     // Test the tile view mode.
     $render_array = $view_builder->view($custom_page, 'view_mode_tile');
