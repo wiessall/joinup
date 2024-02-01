@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Drupal\rdf_sync;
 
 use Drupal\Core\Entity\EntityTypeBundleInfoInterface;
+use Drupal\rdf_sync\Entity\RdfSyncEntityInterface;
 use Drupal\rdf_sync\Model\ColumnMapping;
 
 /**
@@ -109,6 +110,25 @@ class RdfSyncMapper {
    */
   public function getRdfUriPluginId(string $entityTypeId, string $bundle): ?string {
     return $this->getBundleMapping($entityTypeId, $bundle)['uri_plugin'] ?? NULL;
+  }
+
+  /**
+   * Checks whether an entity did map the bundle.
+   *
+   * @param \Drupal\rdf_sync\Entity\RdfSyncEntityInterface $entity
+   *   The entity.
+   *
+   * @return bool
+   *   Whether an entity did map the bundle.
+   */
+  public function hasBundleMapping(RdfSyncEntityInterface $entity): bool {
+    $bundleKey = $entity->getEntityType()->getKey('bundle');
+    $fieldMappings = $this->getMappings($entity->getEntityTypeId(), $entity->bundle());
+    if (!isset($fieldMappings[$bundleKey])) {
+      return FALSE;
+    }
+    $mainProperty = $entity->getFieldDefinition($bundleKey)->getFieldStorageDefinition()->getMainPropertyName();
+    return isset($fieldMappings[$bundleKey][$mainProperty]);
   }
 
   /**

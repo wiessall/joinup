@@ -71,6 +71,10 @@ class RdfSyncNormalizer extends EntityNormalizer {
     $rdfType = $this->mapper->getBundleRdfType($entityType->id(), $object->bundle());
 
     $rdf = [];
+    if (!$hasBundleMapping = $this->mapper->hasBundleMapping($object)) {
+      $rdf[$id->getUri()]['http://www.w3.org/1999/02/22-rdf-syntax-ns#type'][] = (new Resource($rdfType))->toRdfPhp();
+    }
+
     foreach ($normalized as $fieldName => $items) {
       foreach ($items as $item) {
         foreach ($item as $columnName => $value) {
@@ -86,12 +90,10 @@ class RdfSyncNormalizer extends EntityNormalizer {
 
           $fieldDefinition = $object->getFieldDefinition($fieldName);
 
-          // The bundle field value is the RDF type.
-          if ($fieldName === $entityType->getKey('bundle')) {
-            $mainColumnName = $fieldDefinition->getFieldStorageDefinition()->getMainPropertyName();
-            if ($columnName === $mainColumnName) {
-              $value = $rdfType;
-            }
+          if ($fieldName === $entityType->getKey('bundle') && $hasBundleMapping) {
+            // This entity has bundle mapping. Taxonomy terms, for instance,
+            // need the bundle mapping to refer to the vocabulary resource.
+            $value = $rdfType;
           }
 
           // Resolve references to other entities.
