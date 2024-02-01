@@ -4,6 +4,7 @@ declare(strict_types = 1);
 
 namespace Drupal\joinup_group\Access;
 
+use Drupal\asset_release\Entity\AssetReleaseInterface;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
@@ -72,7 +73,13 @@ class JoinupGroupAccessCheck implements AccessInterface {
       throw new \Exception("The '_joinup_group' route requirement should have one of the following values: 'TRUE', 'FALSE', 'collection' or 'solution' but '{$requirement}' was given.");
     }
 
+    // If the rdf_entity from the route is a release, we might be in a route
+    // that is related to a distribution, thus, still we need to check for the
+    // solution instead.
     $rdf_entity = $route_match->getParameter('rdf_entity');
+    if ($rdf_entity instanceof AssetReleaseInterface) {
+      $rdf_entity = $rdf_entity->getGroup();
+    }
 
     // If the route wasn't configured to upcast the parameter, try to load an
     // RDF entity given its ID.
