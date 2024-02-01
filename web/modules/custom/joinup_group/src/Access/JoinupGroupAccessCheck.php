@@ -94,6 +94,9 @@ class JoinupGroupAccessCheck implements AccessInterface {
       ($requirement === 'FALSE' && !isset(JoinupGroupHelper::GROUP_BUNDLES[$bundle])) ||
       (isset(JoinupGroupHelper::GROUP_BUNDLES[$requirement]) && $bundle === JoinupGroupHelper::GROUP_BUNDLES[$requirement]);
 
+    /** @var \Drupal\joinup_workflow\ArchivableEntityInterface $rdf_entity */
+    $allow_access = $allow_access && !$rdf_entity->isArchived();
+
     return $allow_access ? AccessResult::allowed() : AccessResult::forbidden();
   }
 
