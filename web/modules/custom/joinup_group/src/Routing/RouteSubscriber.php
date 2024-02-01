@@ -35,6 +35,7 @@ class RouteSubscriber extends RouteSubscriberBase {
     $routes = [
       'view.group_content_management.manage',
       'view.group_content_management.csv_export',
+      'view.moderated_content.moderated_content',
     ];
     foreach ($routes as $route_name) {
       if ($route = $collection->get($route_name)) {

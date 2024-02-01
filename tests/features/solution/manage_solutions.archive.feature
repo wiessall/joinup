@@ -65,3 +65,26 @@ Feature: When a solution is archived then its sub-content also should be archive
     And the workflow state of the "Solution Release 1" "rdf entity" should be "archived"
     And the workflow state of the "Solution Release 2" "rdf entity" should be "draft"
     And the workflow state of the "Solution Release 3" "rdf entity" should be "archived"
+
+    # Test links that are not available for archived solutions.
+    Given I am logged in as a moderator
+    And I go to the "Solution" solution
+    Then I should not see the following links:
+    # From the plus button menu.
+      | Add custom page     |
+      | Add distribution    |
+      | Add event           |
+      | Add discussion      |
+      | Add document        |
+      | Add news            |
+      | Add release         |
+    # From the 3-dots menu.
+      | Manage content      |
+      | Moderate content    |
+      | Unpublished content |
+
+    # Announcements are accessible but we cannot add or edit any.
+    When I click "Announcements"
+    Then I should not see the link "Add announcement"
+    # @todo Need an announcment to check this.
+    And I should not see the link "Edit" in the "Content" region
