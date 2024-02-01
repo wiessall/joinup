@@ -1,0 +1,10 @@
+name: Page
+type: page
+third_party_settings:
+  rdf_sync:
+    type: http://example.com/page
+    fields:
+      title:
+        value:
+          predicate: http://example.com/page/title
+          type: null

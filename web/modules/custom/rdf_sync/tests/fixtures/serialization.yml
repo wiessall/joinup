@@ -1,0 +1,76 @@
+jsonld:
+  taxonomy_term: |-
+    [{"@id":"http://example.com/category"},{"@id":"http://example.com/category/id/1","http://www.w3.org/2004/02/skos/core#inScheme":[{"@id":"http://example.com/category"}],"http://www.w3.org/2004/02/skos/core#prefLabel":[{"@value":"Series","@language":"en"}],"http://www.w3.org/2004/02/skos/core#definition":[{"@value":"7 seasons","@language":"en"}],"@type":["http://www.w3.org/2004/02/skos/core#Concept"]},{"@id":"http://www.w3.org/2004/02/skos/core#Concept"}]
+  node: |-
+    [{"@id":"http://example.com/category/id/1"},{"@id":"http://example.com/page"},{"@id":"http://example.com/page/id/1","@type":["http://example.com/page"],"http://example.com/page/title":[{"@value":"Mad Men","@language":"en"}],"http://example.com/page/category":[{"@id":"http://example.com/category/id/1"}],"http://example.com/page/body":[{"@value":"Strong is stripped while <em>Emphasis</em> is kept","@language":"en"}]}]
+n3:
+  taxonomy_term: |-
+    @prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+
+    <http://example.com/category/id/1>
+      skos:inScheme <http://example.com/category> ;
+      skos:prefLabel "Series"@en ;
+      skos:definition "7 seasons"@en ;
+      a skos:Concept .
+  node: |-
+    @prefix ns0: <http://example.com/page/> .
+
+    <http://example.com/page/id/1>
+      a <http://example.com/page> ;
+      ns0:title "Mad Men"@en ;
+      ns0:category <http://example.com/category/id/1> ;
+      ns0:body "Strong is stripped while <em>Emphasis</em> is kept"@en .
+ntriples:
+  taxonomy_term: |-
+    <http://example.com/category/id/1> <http://www.w3.org/2004/02/skos/core#inScheme> <http://example.com/category> .
+    <http://example.com/category/id/1> <http://www.w3.org/2004/02/skos/core#prefLabel> "Series"@en .
+    <http://example.com/category/id/1> <http://www.w3.org/2004/02/skos/core#definition> "7 seasons"@en .
+    <http://example.com/category/id/1> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2004/02/skos/core#Concept> .
+  node: |-
+    <http://example.com/page/id/1> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://example.com/page> .
+    <http://example.com/page/id/1> <http://example.com/page/title> "Mad Men"@en .
+    <http://example.com/page/id/1> <http://example.com/page/category> <http://example.com/category/id/1> .
+    <http://example.com/page/id/1> <http://example.com/page/body> "Strong is stripped while <em>Emphasis</em> is kept"@en .
+rdfxml:
+  taxonomy_term: |-
+    <?xml version="1.0" encoding="utf-8" ?>
+    <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+             xmlns:skos="http://www.w3.org/2004/02/skos/core#">
+
+      <skos:Concept rdf:about="http://example.com/category/id/1">
+        <skos:inScheme rdf:resource="http://example.com/category"/>
+        <skos:prefLabel xml:lang="en">Series</skos:prefLabel>
+        <skos:definition xml:lang="en">7 seasons</skos:definition>
+      </skos:Concept>
+
+    </rdf:RDF>
+  node: |-
+    <?xml version="1.0" encoding="utf-8" ?>
+    <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+             xmlns:ns0="http://example.com/page/">
+
+      <rdf:Description rdf:about="http://example.com/page/id/1">
+        <rdf:type rdf:resource="http://example.com/page"/>
+        <ns0:title xml:lang="en">Mad Men</ns0:title>
+        <ns0:category rdf:resource="http://example.com/category/id/1"/>
+        <ns0:body xml:lang="en">Strong is stripped while &lt;em&gt;Emphasis&lt;/em&gt; is kept</ns0:body>
+      </rdf:Description>
+
+    </rdf:RDF>
+turtle:
+  taxonomy_term: |-
+    @prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+
+    <http://example.com/category/id/1>
+      skos:inScheme <http://example.com/category> ;
+      skos:prefLabel "Series"@en ;
+      skos:definition "7 seasons"@en ;
+      a skos:Concept .
+  node: |-
+    @prefix ns0: <http://example.com/page/> .
+
+    <http://example.com/page/id/1>
+      a <http://example.com/page> ;
+      ns0:title "Mad Men"@en ;
+      ns0:category <http://example.com/category/id/1> ;
+      ns0:body "Strong is stripped while <em>Emphasis</em> is kept"@en .
