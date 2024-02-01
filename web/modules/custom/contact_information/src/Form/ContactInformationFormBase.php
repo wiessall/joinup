@@ -11,6 +11,7 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Mail\MailManagerInterface;
 use Drupal\Core\Render\Markup;
+use Drupal\Core\StringTranslation\ByteSizeMarkup;
 use Drupal\email_contact\Form\ContactForm;
 use Drupal\file\FileInterface;
 use Drupal\honeypot\HoneypotServiceInterface;
@@ -191,10 +192,10 @@ abstract class ContactInformationFormBase extends ContactForm {
     $form['attachment'] = [
       '#type' => 'managed_file',
       '#title' => $this->t('Attachment'),
-      '#description' => $this->t(
-        'Attach a file (optional). Max limit: @limit, allowed types: @extensions',
-        ['@limit' => format_size($maxFilesize), '@extensions' => $extensions]
-      ),
+      '#description' => $this->t('Attach a file (optional). Max limit: @limit, allowed types: @extensions', [
+        '@limit' => ByteSizeMarkup::create($maxFilesize),
+        '@extensions' => $extensions,
+      ]),
       '#upload_validators' => [
         'file_validate_extensions' => [$extensions],
         'file_validate_size' => [$maxFilesize],

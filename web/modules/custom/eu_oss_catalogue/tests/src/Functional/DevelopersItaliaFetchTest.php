@@ -139,7 +139,7 @@ class DevelopersItaliaFetchTest extends FetchTestBase {
     $render_array = $entity_view_builder->viewField($field_items);
     $rendered = (string) $renderer->renderPlain($render_array);
     $this->assertStringContainsString('<strong>Some bold text</strong>', $rendered);
-    $this->assertStringContainsString("<ul><li>Some list item</li>\n<li>Another list item</li>\n</ul>", $rendered);
+    $this->assertStringContainsString("<ul>\n<li>Some list item</li>\n<li>Another list item</li>\n</ul>", $rendered);
     $this->assertStringContainsString('<em>Some italic text</em>', $rendered);
   }
 
