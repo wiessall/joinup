@@ -45,6 +45,13 @@ Feature: When a solution is archived then its sub-content also should be archive
       | Solution Release 1 | Solution      | published |
       | Solution Release 2 | Solution      | draft     |
       | Solution Release 3 | Solution      | published |
+    And users:
+      | Username | E-mail                  |
+      | Blahman  | ferners-lee@example.com |
+    And the following announcements:
+      | group      | subject              | state | created    | author  |
+      | Solution   | Announcement1 C1     | draft | 2005-11-05 | Blahman |
+      | Collection | Some announcement C2 | draft | 2005-11-05 | Blahman |
     And the workflow state of the "Solution Release 3" "rdf_entity" is changed to "needs_update"
     Given I am logged in as a "moderator"
     When I go to the edit form of the "Solution" solution
@@ -84,7 +91,17 @@ Feature: When a solution is archived then its sub-content also should be archive
       | Unpublished content |
 
     # Announcements are accessible but we cannot add or edit any.
-    When I click "Announcements"
+    When I click "Announcements" in the "Entity actions" region
     Then I should not see the link "Add announcement"
-    # @todo Need an announcment to check this.
-    And I should not see the link "Edit" in the "Content" region
+    And the "announcement list" table should be:
+      | Subject          | State | Created on | Author  | Edit |
+      | Announcement1 C1 | Draft | 05/11/2005 | Blahman |      |
+
+    # The link in the header toolbar will be clicked and all announcements are
+    # available there. This is to test that other announcements are not
+    # accidentally affected by the edit permission restriction.
+    When I click "Announcements"
+    Then the "announcement list" table should be:
+      | Group      | Subject              | State | Created on | Author  | Edit |
+      | Solution   | Announcement1 C1     | Draft | 05/11/2005 | Blahman |      |
+      | Collection | Some announcement C2 | Draft | 05/11/2005 | Blahman | edit |
