@@ -21,6 +21,7 @@ custom_landing_page.add:
   requirements:
     _entity_create_access: 'node:{node_type}'
     _permission: 'manage custom landing pages'
+    _joinup_group: TRUE
   options:
     _node_operation_route: TRUE
     _admin_route: FALSE
