@@ -30,6 +30,17 @@ class RouteSubscriber extends RouteSubscriberBase {
       $options['parameters']['group'] = ['type' => 'entity:rdf_entity'];
       $route->setOptions($options);
     }
+
+    // Add the '_joinup_group' requirement to the
+    // 'views.view.group_content_management.page' and
+    // 'views.view.group_content_management.csv_export' routes.
+    if ($route = $collection->get('view.group_content_management.manage')) {
+      $route->setRequirement('_joinup_group', 'TRUE');
+    }
+
+    if ($route = $collection->get('view.group_content_management.csv_export')) {
+      $route->setRequirement('_joinup_group', 'TRUE');
+    }
   }
 
 }
