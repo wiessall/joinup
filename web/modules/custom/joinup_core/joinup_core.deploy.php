@@ -73,8 +73,8 @@ SPARQL;
     // Replace multiple spaces with a single space.
     $item['abstract'] = preg_replace('/\s+/', ' ', $item['abstract']);
 
-    // Trim the abstract to 200 characters.
-    $item['abstract'] = $truncater->truncateChars($item['abstract'], 200);
+    // Trim the abstract to 250 characters.
+    $item['abstract'] = $truncater->truncateChars($item['abstract'], 250);
 
     $query = <<<SPARQL
 WITH <{$item['graph']}>
