@@ -8,5 +8,6 @@ _core:
   default_config_hash: Ggclz9My2ahpEs9JniKrjC7QNGt0nenU0hTU0sY05SE
 id: rdf_entity.view_mode_featured
 label: Featured
+description: ''
 targetEntityType: rdf_entity
 cache: true

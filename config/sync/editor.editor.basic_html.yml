@@ -27,8 +27,10 @@ settings:
       - sourceEditing
   plugins:
     ckeditor5_list:
-      reversed: false
-      startIndex: false
+      properties:
+        reversed: false
+        startIndex: false
+      multiBlock: true
     ckeditor5_sourceEditing:
       allowed_tags:
         - '<i>'
