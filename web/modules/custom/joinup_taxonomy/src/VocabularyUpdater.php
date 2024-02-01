@@ -328,7 +328,6 @@ class VocabularyUpdater {
       // Already added.
       unset($mappings['vid']);
       foreach ($mappings as $fieldName => $columns) {
-        /** @var \Drupal\rdf_sync\Model\ColumnMapping $mapping */
         foreach ($columns as $columnName => $mapping) {
           $fieldType = $fieldStorageDefinitions[$fieldName]->getType();
           $fieldTypePlugin = $this->fieldTypeManager->getDefinition($fieldType);
