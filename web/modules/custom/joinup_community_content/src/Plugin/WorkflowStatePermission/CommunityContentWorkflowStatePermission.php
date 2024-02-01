@@ -35,6 +35,14 @@ class CommunityContentWorkflowStatePermission extends GroupWorkflowStatePermissi
    * {@inheritdoc}
    */
   public function isStateUpdatePermitted(AccountInterface $account, EntityInterface $entity, WorkflowInterface $workflow, string $from_state, string $to_state): bool {
+    if (
+      $from_state === 'archived' &&
+      $to_state !== 'archived' &&
+      !$this->workflowHelper->accountCanNotUnarchive($entity, $account)
+    ) {
+      return TRUE;
+    }
+
     if ($account->hasPermission($entity->getEntityType()->getAdminPermission())) {
       return TRUE;
     }
