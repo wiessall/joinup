@@ -35,3 +35,10 @@ rdf_sync.field_mapping:
 
 field.field.*.*.*.third_party.rdf_sync:
   type: rdf_sync.field_mapping
+
+# TODO: Find out a way to automatically generate the schema for each bundle
+# config entity, without needing to explicitly declare it.
+node.type.*.third_party.rdf_sync:
+  type: rdf_sync.bundle_mapping
+taxonomy.vocabulary.*.third_party.rdf_sync:
+  type: rdf_sync.bundle_mapping
