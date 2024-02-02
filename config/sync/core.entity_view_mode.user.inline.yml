@@ -8,6 +8,5 @@ _core:
   default_config_hash: 3WdcGzQ9tuxQotejtmWZyuDMFZXIS5YC1763rJBrKRk
 id: user.inline
 label: 'User inline'
-description: ''
 targetEntityType: user
 cache: true

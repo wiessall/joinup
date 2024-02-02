@@ -6,6 +6,5 @@ dependencies:
     - rdf_entity
 id: rdf_entity.digest_message_header
 label: 'Digest message header'
-description: ''
 targetEntityType: rdf_entity
 cache: true

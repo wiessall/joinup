@@ -6,6 +6,5 @@ dependencies:
     - node
 id: node.carousel
 label: Carousel
-description: ''
 targetEntityType: node
 cache: true

@@ -6,6 +6,5 @@ dependencies:
     - rdf_entity
 id: rdf_entity.explore_item
 label: 'Explore item'
-description: ''
 targetEntityType: rdf_entity
 cache: true

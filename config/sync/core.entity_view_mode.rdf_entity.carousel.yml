@@ -6,6 +6,5 @@ dependencies:
     - rdf_entity
 id: rdf_entity.carousel
 label: Carousel
-description: ''
 targetEntityType: rdf_entity
 cache: true

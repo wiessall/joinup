@@ -6,6 +6,5 @@ dependencies:
     - meta_entity
 id: meta_entity.teaser
 label: Teaser
-description: ''
 targetEntityType: meta_entity
 cache: true

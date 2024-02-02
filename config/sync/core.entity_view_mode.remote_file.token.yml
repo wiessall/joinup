@@ -6,6 +6,5 @@ dependencies:
     - file_url
 id: remote_file.token
 label: Token
-description: ''
 targetEntityType: remote_file
 cache: true

@@ -6,6 +6,5 @@ dependencies:
     - node
 id: node.view_mode_tile_horizontal
 label: 'Tile horizontal'
-description: ''
 targetEntityType: node
 cache: true

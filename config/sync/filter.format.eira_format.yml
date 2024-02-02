@@ -14,27 +14,6 @@ name: 'EIRA format'
 format: eira_format
 weight: 0
 filters:
-  blazy_filter:
-    id: blazy_filter
-    provider: blazy
-    status: false
-    weight: 3
-    settings:
-      media_switch: ''
-      hybrid_style: ''
-      box_style: ''
-      box_media_style: ''
-      box_caption: ''
-      filter_tags:
-        img: img
-        iframe: iframe
-      use_data_uri: '0'
-  filter_add_empty_alt_attribute:
-    id: filter_add_empty_alt_attribute
-    provider: joinup_core
-    status: true
-    weight: 9
-    settings: {  }
   filter_autop:
     id: filter_autop
     provider: filter
@@ -50,12 +29,6 @@ filters:
       allowed_html: '<em> <br> <strong> <cite> <blockquote cite> <code> <q> <ul type> <ol start type> <li> <dl> <dt> <dd> <h2 id> <h3 id> <h4 id> <h5 id> <h6 id> <p> <h1> <pre> <img src alt width height> <table> <caption> <tbody> <thead> <tfoot> <th> <td> <tr> <a hreflang href id rel target title>'
       filter_html_help: true
       filter_html_nofollow: false
-  filter_htmlcorrector:
-    id: filter_htmlcorrector
-    provider: filter
-    status: true
-    weight: 10
-    settings: {  }
   filter_url:
     id: filter_url
     provider: filter
@@ -63,6 +36,33 @@ filters:
     weight: 0
     settings:
       filter_url_length: 72
+  filter_htmlcorrector:
+    id: filter_htmlcorrector
+    provider: filter
+    status: true
+    weight: 10
+    settings: {  }
+  filter_add_empty_alt_attribute:
+    id: filter_add_empty_alt_attribute
+    provider: joinup_core
+    status: true
+    weight: 9
+    settings: {  }
+  blazy_filter:
+    id: blazy_filter
+    provider: blazy
+    status: false
+    weight: 3
+    settings:
+      media_switch: ''
+      hybrid_style: ''
+      box_style: ''
+      box_media_style: ''
+      box_caption: ''
+      filter_tags:
+        img: img
+        iframe: iframe
+      use_data_uri: '0'
   joinup_video:
     id: joinup_video
     provider: joinup_video
@@ -81,14 +81,6 @@ filters:
         youtube_playlist: 0
       autoplay: false
       responsive: true
-  markdown_easy:
-    id: markdown_easy
-    provider: markdown_easy
-    status: false
-    weight: 0
-    settings:
-      flavor: standard
-      tips: ''
   slick_filter:
     id: slick_filter
     provider: slick
@@ -133,3 +125,11 @@ filters:
       override: false
       preserve_keys: false
       visible_items: null
+  markdown_easy:
+    id: markdown_easy
+    provider: markdown_easy
+    status: false
+    weight: 0
+    settings:
+      flavor: standard
+      tips: ''

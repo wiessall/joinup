@@ -8,6 +8,5 @@ _core:
   default_config_hash: rgWUVgPP2jvHXOgi9MQjWlnwbEFqrQlxl_PJkUdbsz0
 id: node.moderation
 label: Moderation
-description: ''
 targetEntityType: node
 cache: true

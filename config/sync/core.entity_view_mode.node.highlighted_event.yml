@@ -6,6 +6,5 @@ dependencies:
     - node
 id: node.highlighted_event
 label: 'Highlighted event'
-description: ''
 targetEntityType: node
 cache: true

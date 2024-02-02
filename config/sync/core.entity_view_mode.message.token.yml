@@ -6,6 +6,5 @@ dependencies:
     - message
 id: message.token
 label: Token
-description: ''
 targetEntityType: message
 cache: true
