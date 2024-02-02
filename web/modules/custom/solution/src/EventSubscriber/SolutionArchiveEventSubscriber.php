@@ -9,7 +9,7 @@ use Drupal\Core\Queue\QueueFactory;
 use Drupal\Core\Session\AccountProxyInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\solution\Entity\SolutionInterface;
-use Drupal\solution\TargetState;
+use Drupal\solution\Transition;
 use Drupal\state_machine\Event\WorkflowTransitionEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
@@ -56,7 +56,7 @@ class SolutionArchiveEventSubscriber implements EventSubscriberInterface {
    *   The workflow transition event dispatched after a solution was archived.
    */
   public function onSolutionPostArchiveTransition(WorkflowTransitionEvent $event): void {
-    if (!$this->queueSolutionSubContentTransition($event, TargetState::ARCHIVED)) {
+    if (!$this->queueSolutionSubContentTransition($event, Transition::ARCHIVE)) {
       return;
     }
 
@@ -77,7 +77,7 @@ class SolutionArchiveEventSubscriber implements EventSubscriberInterface {
    *   The workflow transition event dispatched after a solution was unarchived.
    */
   public function onSolutionPostUnarchiveTransition(WorkflowTransitionEvent $event): void {
-    if (!$this->queueSolutionSubContentTransition($event, TargetState::PUBLISHED)) {
+    if (!$this->queueSolutionSubContentTransition($event, Transition::UNARCIVE)) {
       return;
     }
 
@@ -91,13 +91,14 @@ class SolutionArchiveEventSubscriber implements EventSubscriberInterface {
    *
    * @param \Drupal\state_machine\Event\WorkflowTransitionEvent $event
    *   The workflow transition event.
-   * @param \Drupal\solution\TargetState $state
-   *   The target state of the solution's sub-content.
+   * @param \Drupal\solution\Transition $transition
+   *   The transition to apply on sub content of a solution if it was
+   *   (un)archived.
    *
    * @return bool
    *   Whether queueing was successful.
    */
-  public function queueSolutionSubContentTransition(WorkflowTransitionEvent $event, TargetState $state): bool {
+  public function queueSolutionSubContentTransition(WorkflowTransitionEvent $event, Transition $transition): bool {
     if (!($solution = $event->getEntity()) instanceof SolutionInterface) {
       return FALSE;
     }
@@ -107,7 +108,7 @@ class SolutionArchiveEventSubscriber implements EventSubscriberInterface {
     $queue->createItem([
       'user' => $this->currentUser->id(),
       'solution' => $solution->id(),
-      'targetState' => $state,
+      'transition' => $transition,
     ]);
     return TRUE;
   }

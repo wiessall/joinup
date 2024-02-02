@@ -76,10 +76,6 @@ node:pre_moderated:
       label: Unarchive
       from: [archived]
       to: __new__
-    unarchive_published:
-      label: Restore to published
-      from: [archived]
-      to: published
 # The workflow of the community content for a post moderated parent.
 node:post_moderated:
   id: post_moderated
@@ -137,7 +133,3 @@ node:post_moderated:
       label: Unarchive
       from: [archived]
       to: __new__
-    unarchive_published:
-      label: Restore to published
-      from: [archived]
-      to: published

@@ -10,15 +10,19 @@ use Drupal\Core\Entity\EntityFieldManagerInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Entity\FieldableEntityInterface;
+use Drupal\Core\Entity\RevisionLogInterface;
+use Drupal\Core\Entity\RevisionableInterface;
 use Drupal\Core\Field\FieldDefinitionInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Session\AccountProxyInterface;
 use Drupal\Core\Session\AccountSwitcherInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\og\MembershipManagerInterface;
 use Drupal\state_machine\Plugin\Workflow\WorkflowInterface;
 use Drupal\state_machine\Plugin\Workflow\WorkflowTransition;
 use Drupal\workflow_state_permission\WorkflowStatePermissionInterface;
+use Stringable;
 
 /**
  * Contains helper methods to retrieve workflow related data from entities.
@@ -235,30 +239,94 @@ class WorkflowHelper implements WorkflowHelperInterface {
   /**
    * {@inheritdoc}
    */
+  public function archiveEntity(EntityWorkflowStateInterface $entity, null|string|Stringable|TranslatableMarkup $revisionLogMessage = NULL): EntityWorkflowStateInterface {
+    if (
+      !$entity instanceof ArchivableEntityInterface ||
+      $entity->isArchived() ||
+      !$entity->isTargetWorkflowStateAllowed('archived')
+    ) {
+      throw new \Exception(sprintf(
+        "The %s entity with id '%s' cannot be archived.",
+        $entity->getEntityType()->getLabel(),
+        $entity->id(),
+      ));
+    }
+
+    if ($entity instanceof RevisionableInterface && $entity->getEntityType()->isRevisionable()) {
+      $entity->setNewRevision();
+      $entity->isDefaultRevision(TRUE);
+      if ($entity instanceof RevisionLogInterface) {
+        $revisionLogMessage = $revisionLogMessage ?? $this->t('Archived by user @user', [
+          '@user' => $this->currentUser->getAccountName(),
+        ]);
+        $entity->setRevisionLogMessage((string) $revisionLogMessage)
+          ->setRevisionUserId($this->currentUser->id())
+          ->setRevisionCreationTime($this->time->getRequestTime());
+      }
+    }
+
+    $entity->setWorkflowState('archived');
+    $entity->save();
+    return $entity;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function unarchiveEntity(EntityInterface $entity): EntityInterface {
-    // Revert to the previous revision of the node.
+    if (
+      !$entity instanceof EntityWorkflowStateInterface ||
+      !$entity instanceof ArchivableEntityInterface ||
+      !$entity->isArchived()
+    ) {
+      throw new \Exception(sprintf(
+        "The %s entity with id '%s' cannot be unarchived.",
+        $entity->getEntityType()->getLabel(),
+        $entity->id(),
+      ));
+    }
+
+    // Revert to the previous revision of the entity.
     $entityType = $entity->getEntityType();
+    if (!$entity instanceof RevisionableInterface || !$entityType->isRevisionable()) {
+      $entity->setWorkflowState('published')->save();
+      return $entity;
+    }
     $entityStorage = $this->entityTypeManager->getStorage($entityType->id());
 
-    // Load the previous revision IDs.
-    $revisionIds = $entityStorage->getQuery()
+    // Load the previous published revision's IDs.
+    $revisionIdsQuery = $entityStorage->getQuery()
       ->accessCheck(FALSE)
       ->allRevisions()
       ->condition($entityType->getKey('id'), $entity->id())
-      ->sort($entity->getEntityType()->getKey('revision'), 'DESC')
-      ->range(1, 1)
-      ->execute();
-    $revisionIds = array_keys($revisionIds);
+      ->condition($entity->getWorkflowStateFieldName(), 'published')
+      ->sort($entityType->getKey('revision'), 'DESC');
+    if ($defaultRevisionKey = $entityType->getRevisionMetadataKey('revision_default')) {
+      $revisionIdsQuery->condition($defaultRevisionKey, TRUE);
+    }
+
+    $revisionIds = array_keys($revisionIdsQuery->execute());
+    $revisionId = reset($revisionIds);
+    if (!$revisionId) {
+      throw new \Exception(sprintf(
+        "The %s entity with id '%s' cannot be unarchived: cannot find the previous revision it was archived from.",
+        $entity->getEntityType()->getLabel(),
+        $entity->id(),
+      ));
+    }
 
     // Load the previous revision.
     $previousRevision = $entityStorage->loadRevision(reset($revisionIds));
-    $previousRevision->setNewRevision(TRUE);
+    \assert($previousRevision instanceof RevisionableInterface);
+    $previousRevision->setNewRevision();
     $previousRevision->isDefaultRevision(TRUE);
-    $previousRevision->setRevisionLogMessage($this->t('Unarchived by @user', [
-      '@user' => $this->currentUser->getAccountName(),
-    ]));
-    $previousRevision->setRevisionCreationTime($this->time->getRequestTime());
-    $previousRevision->setRevisionUserId($this->currentUser->id());
+    if ($previousRevision instanceof RevisionLogInterface) {
+      $previousRevision->setRevisionLogMessage($this->t('Unarchived by @user', [
+        '@user' => $this->currentUser->getAccountName(),
+      ]));
+      $previousRevision->setRevisionCreationTime($this->time->getRequestTime());
+      $previousRevision->setRevisionUserId($this->currentUser->id());
+    }
     $previousRevision->save();
 
     return $previousRevision;
