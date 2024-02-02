@@ -82,10 +82,10 @@ bundle: solution
 mode: view_mode_tile_horizontal
 content:
   field_is_abstract:
-    type: joinup_html_stripper_stripped
+    type: string
     label: hidden
     settings:
-      trim_length: 600
+      link_to_entity: false
     third_party_settings: {  }
     weight: 3
     region: content
