@@ -63,10 +63,10 @@ content:
     weight: 3
     region: content
   field_is_abstract:
-    type: joinup_html_stripper_stripped
+    type: string
     label: hidden
     settings:
-      trim_length: 600
+      link_to_entity: false
     third_party_settings: {  }
     weight: 2
     region: content
