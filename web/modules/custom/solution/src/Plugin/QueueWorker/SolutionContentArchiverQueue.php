@@ -17,6 +17,7 @@ use Drupal\asset_release\Entity\AssetReleaseInterface;
 use Drupal\custom_page\Entity\CustomPageInterface;
 use Drupal\joinup_community_content\Entity\CommunityContentInterface;
 use Drupal\joinup_group\Entity\GroupInterface;
+use Drupal\joinup_notification\NotificationEvents;
 use Drupal\joinup_workflow\ArchivableEntityInterface;
 use Drupal\solution\Entity\SolutionInterface;
 use Drupal\sparql_entity_storage\SparqlEntityStorageInterface;
@@ -194,8 +195,11 @@ class SolutionContentArchiverQueue extends QueueWorkerBase implements ContainerF
         continue;
       }
 
+      $entity->skip_notification = TRUE;
       $entity->setWorkflowState(static::TARGET_STATE)->save();
     }
+
+    joinup_notification_dispatch_notification('update', NotificationEvents::RDF_ENTITY_ARCHIVE_COMPLETED, $solution);
   }
 
   /**
