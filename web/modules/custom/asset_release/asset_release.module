@@ -170,10 +170,13 @@ function asset_release_rdf_entity_access(EntityInterface $release, $operation, A
     return AccessResult::neutral();
   }
 
+  $parent = $release->getSolution();
+  if ($operation !== 'view' && $parent->isArchived()) {
+    return AccessResult::forbidden();
+  }
+
   switch ($operation) {
     case 'view':
-      $parent = $release->getSolution();
-
       // If for any reason access is requested to an entity without a parent,
       // deny that access.
       if (empty($parent)) {
