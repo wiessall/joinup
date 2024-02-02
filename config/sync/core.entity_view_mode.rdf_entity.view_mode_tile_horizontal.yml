@@ -6,6 +6,5 @@ dependencies:
     - rdf_entity
 id: rdf_entity.view_mode_tile_horizontal
 label: 'Tile horizontal'
-description: ''
 targetEntityType: rdf_entity
 cache: true

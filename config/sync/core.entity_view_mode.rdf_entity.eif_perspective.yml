@@ -6,6 +6,5 @@ dependencies:
     - rdf_entity
 id: rdf_entity.eif_perspective
 label: 'EIF Perspective'
-description: ''
 targetEntityType: rdf_entity
 cache: true

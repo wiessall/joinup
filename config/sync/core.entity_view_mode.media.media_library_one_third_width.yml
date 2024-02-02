@@ -6,6 +6,5 @@ dependencies:
     - media
 id: media.media_library_one_third_width
 label: 'One third width'
-description: ''
 targetEntityType: media
 cache: true

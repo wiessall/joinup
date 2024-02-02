@@ -6,6 +6,5 @@ dependencies:
     - node
 id: node.digest_message
 label: 'Digest message'
-description: ''
 targetEntityType: node
 cache: true
