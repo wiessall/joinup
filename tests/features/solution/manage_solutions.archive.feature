@@ -40,6 +40,7 @@ Feature: When a solution is archived then its sub-content also should be archive
       | Solution News 1 | Solution | published |
       | Solution News 2 | Solution | draft     |
       | Solution News 3 | Solution | published |
+      | Solution News 4 | Solution | published |
     And the workflow state of the "Solution News 3" node is changed to "needs_update"
     And "document" content:
       | title             | collection | state     |
@@ -57,6 +58,7 @@ Feature: When a solution is archived then its sub-content also should be archive
       | Solution Release 2 | Solution      | draft     |
       | Solution Release 3 | Solution      | published |
     And the workflow state of the "Solution Release 3" "rdf_entity" is changed to "needs_update"
+    And the workflow state of the "Solution News 4" "content" is changed to "archived"
     Given I am logged in as a user with the moderator role and I have the following fields:
       | name                   | John The Moderator             |
       | mail                   | john.the.moderator@example.com |
@@ -121,6 +123,7 @@ Feature: When a solution is archived then its sub-content also should be archive
     And the workflow state of the "Solution News 1" content should be "published"
     And the workflow state of the "Solution News 2" content should be "draft"
     And the workflow state of the "Solution News 3" content should be "published"
+    And the workflow state of the "Solution News 4" content should be "published"
     And the workflow state of the "Solution Document" content should be "published"
     And the workflow state of the "Solution Discussion" content should be "published"
     And the workflow state of the "Solution Distribution" "rdf entity" should be "published"
