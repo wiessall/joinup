@@ -1,0 +1,25 @@
+uuid: d2e1fd12-8f2c-43ba-a645-6a2341cfff85
+langcode: en
+status: true
+dependencies:
+  module:
+    - cached_computed_field
+    - field_permissions
+    - node
+third_party_settings:
+  field_permissions:
+    permission_type: public
+id: node.git_stars
+field_name: git_stars
+entity_type: node
+type: cached_computed_integer
+settings:
+  unsigned: false
+  size: normal
+module: cached_computed_field
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false
