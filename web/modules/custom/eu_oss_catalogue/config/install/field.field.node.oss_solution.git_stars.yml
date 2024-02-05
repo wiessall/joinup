@@ -4,8 +4,6 @@ dependencies:
   config:
     - field.storage.node.git_stars
     - node.type.oss_solution
-  module:
-    - cached_computed_field
 id: node.oss_solution.git_stars
 field_name: git_stars
 entity_type: node
@@ -21,5 +19,4 @@ settings:
   max: null
   prefix: ''
   suffix: ''
-  cache-max-age: 3600
-field_type: cached_computed_integer
+field_type: integer

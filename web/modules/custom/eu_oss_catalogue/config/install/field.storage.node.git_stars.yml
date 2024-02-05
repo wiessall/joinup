@@ -1,9 +1,7 @@
-uuid: d2e1fd12-8f2c-43ba-a645-6a2341cfff85
 langcode: en
 status: true
 dependencies:
   module:
-    - cached_computed_field
     - field_permissions
     - node
 third_party_settings:
@@ -12,14 +10,14 @@ third_party_settings:
 id: node.git_stars
 field_name: git_stars
 entity_type: node
-type: cached_computed_integer
+type: integer
 settings:
   unsigned: false
   size: normal
-module: cached_computed_field
+module: core
 locked: false
 cardinality: 1
-translatable: true
+translatable: false
 indexes: {  }
 persist_with_no_fields: false
 custom_storage: false
