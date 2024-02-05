@@ -1,12 +1,11 @@
-uuid: 5bb2ec61-b7d9-49f3-bf53-f488f9e21ecd
 langcode: en
 status: true
 dependencies:
   config:
-    - field.storage.node.git_open_issues
+    - field.storage.node.oss_git_open_issues
     - node.type.oss_solution
-id: node.oss_solution.git_open_issues
-field_name: git_open_issues
+id: node.oss_solution.oss_git_open_issues
+field_name: oss_git_open_issues
 entity_type: node
 bundle: oss_solution
 label: 'GIT Open Issues'
