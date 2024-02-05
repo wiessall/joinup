@@ -11,13 +11,27 @@ name: Minimal
 format: minimal
 weight: 0
 filters:
-  filter_url:
-    id: filter_url
+  blazy_filter:
+    id: blazy_filter
+    provider: blazy
+    status: false
+    weight: 3
+    settings:
+      media_switch: ''
+      hybrid_style: ''
+      box_style: ''
+      box_media_style: ''
+      box_caption: ''
+      filter_tags:
+        img: img
+        iframe: iframe
+      use_data_uri: '0'
+  filter_autop:
+    id: filter_autop
     provider: filter
     status: true
     weight: 0
-    settings:
-      filter_url_length: 72
+    settings: {  }
   filter_html:
     id: filter_html
     provider: filter
@@ -27,18 +41,19 @@ filters:
       allowed_html: '<br> <p> <i> <b> <a hreflang href> <strong> <em>'
       filter_html_help: false
       filter_html_nofollow: false
-  filter_autop:
-    id: filter_autop
-    provider: filter
-    status: true
-    weight: 0
-    settings: {  }
   filter_htmlcorrector:
     id: filter_htmlcorrector
     provider: filter
     status: true
     weight: 10
     settings: {  }
+  filter_url:
+    id: filter_url
+    provider: filter
+    status: true
+    weight: 0
+    settings:
+      filter_url_length: 72
   joinup_video:
     id: joinup_video
     provider: joinup_video
@@ -57,21 +72,14 @@ filters:
         youtube_playlist: 0
       autoplay: false
       responsive: true
-  blazy_filter:
-    id: blazy_filter
-    provider: blazy
+  markdown_easy:
+    id: markdown_easy
+    provider: markdown_easy
     status: false
-    weight: 3
+    weight: 0
     settings:
-      media_switch: ''
-      hybrid_style: ''
-      box_style: ''
-      box_media_style: ''
-      box_caption: ''
-      filter_tags:
-        img: img
-        iframe: iframe
-      use_data_uri: '0'
+      flavor: standard
+      tips: ''
   slick_filter:
     id: slick_filter
     provider: slick
@@ -116,11 +124,3 @@ filters:
       override: false
       preserve_keys: false
       visible_items: null
-  markdown_easy:
-    id: markdown_easy
-    provider: markdown_easy
-    status: false
-    weight: 0
-    settings:
-      flavor: standard
-      tips: ''

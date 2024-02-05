@@ -18,6 +18,21 @@ name: 'Stripped HTML'
 format: stripped_html
 weight: 0
 filters:
+  blazy_filter:
+    id: blazy_filter
+    provider: blazy
+    status: false
+    weight: 3
+    settings:
+      media_switch: ''
+      hybrid_style: ''
+      box_style: ''
+      box_media_style: ''
+      box_caption: ''
+      filter_tags:
+        img: img
+        iframe: iframe
+      use_data_uri: '0'
   collection_glossary:
     id: collection_glossary
     provider: collection
@@ -36,35 +51,17 @@ filters:
     status: false
     weight: -36
     settings: {  }
-  filter_html_escape:
-    id: filter_html_escape
+  filter_autop:
+    id: filter_autop
     provider: filter
-    status: true
-    weight: -39
-    settings: {  }
-  filter_htmlcorrector:
-    id: filter_htmlcorrector
-    provider: filter
-    status: true
-    weight: -41
+    status: false
+    weight: -44
     settings: {  }
   filter_caption:
     id: filter_caption
     provider: filter
     status: false
     weight: -43
-    settings: {  }
-  filter_html_image_secure:
-    id: filter_html_image_secure
-    provider: filter
-    status: false
-    weight: -39
-    settings: {  }
-  filter_autop:
-    id: filter_autop
-    provider: filter
-    status: false
-    weight: -44
     settings: {  }
   filter_html:
     id: filter_html
@@ -75,13 +72,36 @@ filters:
       allowed_html: ''
       filter_html_help: true
       filter_html_nofollow: false
-  filter_url:
-    id: filter_url
+  filter_html_escape:
+    id: filter_html_escape
+    provider: filter
+    status: true
+    weight: -39
+    settings: {  }
+  filter_html_image_secure:
+    id: filter_html_image_secure
     provider: filter
     status: false
-    weight: -42
-    settings:
-      filter_url_length: 72
+    weight: -39
+    settings: {  }
+  filter_htmlcorrector:
+    id: filter_htmlcorrector
+    provider: filter
+    status: true
+    weight: -41
+    settings: {  }
+  filter_iframe_cck:
+    id: filter_iframe_cck
+    provider: oe_webtools_cookie_consent
+    status: false
+    weight: -36
+    settings: {  }
+  filter_image_lazy_load:
+    id: filter_image_lazy_load
+    provider: filter
+    status: true
+    weight: -44
+    settings: {  }
   filter_image_style:
     id: filter_image_style
     provider: image
@@ -89,6 +109,13 @@ filters:
     weight: -41
     settings:
       allowed_styles: {  }
+  filter_url:
+    id: filter_url
+    provider: filter
+    status: false
+    weight: -42
+    settings:
+      filter_url_length: 72
   joinup_video:
     id: joinup_video
     provider: joinup_video
@@ -114,6 +141,14 @@ filters:
     weight: -43
     settings:
       title: true
+  markdown_easy:
+    id: markdown_easy
+    provider: markdown_easy
+    status: false
+    weight: 0
+    settings:
+      flavor: standard
+      tips: ''
   media_embed:
     id: media_embed
     provider: media
@@ -123,33 +158,6 @@ filters:
       default_view_mode: default
       allowed_view_modes: {  }
       allowed_media_types: {  }
-  filter_image_lazy_load:
-    id: filter_image_lazy_load
-    provider: filter
-    status: true
-    weight: -44
-    settings: {  }
-  filter_iframe_cck:
-    id: filter_iframe_cck
-    provider: oe_webtools_cookie_consent
-    status: false
-    weight: -36
-    settings: {  }
-  blazy_filter:
-    id: blazy_filter
-    provider: blazy
-    status: false
-    weight: 3
-    settings:
-      media_switch: ''
-      hybrid_style: ''
-      box_style: ''
-      box_media_style: ''
-      box_caption: ''
-      filter_tags:
-        img: img
-        iframe: iframe
-      use_data_uri: '0'
   slick_filter:
     id: slick_filter
     provider: slick
@@ -194,11 +202,3 @@ filters:
       override: false
       preserve_keys: false
       visible_items: null
-  markdown_easy:
-    id: markdown_easy
-    provider: markdown_easy
-    status: false
-    weight: 0
-    settings:
-      flavor: standard
-      tips: ''
