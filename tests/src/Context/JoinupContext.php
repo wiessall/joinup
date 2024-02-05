@@ -3198,4 +3198,21 @@ class JoinupContext extends RawDrupalContext {
     return $this->getSession()->getPage()->findAll('css', implode(', ', $locators));
   }
 
+  /**
+   * Closes the modal dialog.
+   *
+   * @throws \Exception
+   *   Thrown if the dialog is not open or the x button is not found.
+   *
+   * @Given I close the modal dialog
+   */
+  public function closeMediaModalDialog(): void {
+    $xpath = '//div[@class and contains(concat(" ", normalize-space(@class), " "), " ui-dialog ")]//button[@class and contains(concat(" ", normalize-space(@class), " "), " ui-dialog-titlebar-close ")]';
+    $button = $this->getSession()->getPage()->find('xpath', $xpath);
+    if (empty($button)) {
+      throw new \Exception("Either the dialog is not available or the 'Close' button could not be located.");
+    }
+    $button->press();
+  }
+
 }

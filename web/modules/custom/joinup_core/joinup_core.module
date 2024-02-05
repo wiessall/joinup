@@ -27,6 +27,7 @@ use Drupal\joinup_core\Plugin\Field\FieldType\OutdatedContentFieldItemList;
 use Drupal\joinup_core\Plugin\Field\FieldWidget\ImageLibraryWidget;
 use Drupal\joinup_workflow\ArchivableEntityInterface;
 use Drupal\node\NodeInterface;
+use Drupal\symfony_mailer_lite\Plugin\Mail\SymfonyMailer;
 
 /**
  * Implements hook_theme().
@@ -60,7 +61,7 @@ function joinup_core_theme(array $existing, string $type, string $theme, string 
  * Implements hook_requirements_alter().
  */
 function joinup_core_requirements_alter(array &$requirements): void {
-  $ignored = getenv('DRUPAL_STATUS_REPORT_IGNORE') ?: 'update status,joinup_core_root_user_blocked,search_api_solr_schema_joinup_modifications,metatag_maintenance_mode,webform_libraries';
+  $ignored = getenv('DRUPAL_STATUS_REPORT_IGNORE') ?: 'update status,joinup_core_root_user_blocked,search_api_solr_schema_joinup_modifications,metatag_maintenance_mode,webform_libraries,output_buffering';
   $ignored = array_map('trim', explode(',', $ignored));
 
   $requirements = array_filter($requirements, function (string $requirement) use ($ignored): bool {
@@ -443,7 +444,7 @@ function joinup_core_field_widget_info_alter(array &$info): void {
 function joinup_core_mail_alter(&$message) {
   if (
     empty($message['headers']['Content-Type']) ||
-    $message['headers']['Content-Type'] !== SWIFTMAILER_FORMAT_HTML
+    $message['headers']['Content-Type'] !== SymfonyMailer::FORMAT_HTML
   ) {
     return;
   }

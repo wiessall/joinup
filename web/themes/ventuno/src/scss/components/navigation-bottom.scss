@@ -2,9 +2,9 @@
 
 .navigation-bottom {
   &__links {
-    padding: 0;
     display: flex;
     margin: $spacer * 2 0;
+    padding: 0;
     list-style-type: none;
     li {
       &.prev {
@@ -14,8 +14,9 @@
           align-items: center;
           justify-content: start;
           &::before {
-            margin-right: $spacer * .5;
             @include get-bootstrap-icon('chevron-left', currentColor);
+
+            margin-right: $spacer * .5;
           }
         }
       }
@@ -27,8 +28,9 @@
           align-items: center;
           justify-content: end;
           &::after {
-            margin-left: $spacer * .5;
             @include get-bootstrap-icon('chevron-right', currentColor);
+
+            margin-left: $spacer * .5;
           }
         }
       }

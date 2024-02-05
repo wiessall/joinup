@@ -141,7 +141,6 @@ display:
           default_argument_type: rdf_entity
           default_argument_options:
             parameter_name: rdf_entity
-          default_argument_skip_url: false
           summary_options:
             base_path: ''
             count: true

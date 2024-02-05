@@ -2,7 +2,7 @@ joinup_layout_group_heading:
   label: 'Joinup group heading'
   path: layouts/group
   template: joinup-layout--group-heading
-  default_region: first
+  default_region: main
   icon_map:
     - [main, aside]
     - [left, right, aside]

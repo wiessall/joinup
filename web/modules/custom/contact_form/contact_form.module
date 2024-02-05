@@ -16,6 +16,7 @@ use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Url;
 use Drupal\contact_form\ContactFormEvents;
 use Drupal\joinup_notification\Event\NotificationEvent;
+use Drupal\symfony_mailer_lite\Plugin\Mail\SymfonyMailer;
 use Drupal\user\Entity\User;
 
 /**
@@ -206,7 +207,7 @@ function contact_form_mail($key, &$message, $params) {
   $message['body'][] = t('The Joinup Support Team');
 
   // Send as HTML.
-  $message['headers']['Content-Type'] = SWIFTMAILER_FORMAT_HTML;
+  $message['headers']['Content-Type'] = SymfonyMailer::FORMAT_HTML;
 }
 
 /**
