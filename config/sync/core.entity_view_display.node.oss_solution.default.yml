@@ -751,56 +751,13 @@ id: node.oss_solution.default
 targetEntityType: node
 bundle: oss_solution
 mode: default
-content:
-  git_forks:
-    type: number_integer
-    label: above
-    settings:
-      thousand_separator: ''
-      prefix_suffix: true
-    third_party_settings: {  }
-    weight: 4
-    region: second
-  git_open_issues:
-    type: number_integer
-    label: above
-    settings:
-      thousand_separator: ''
-      prefix_suffix: true
-    third_party_settings: {  }
-    weight: 3
-    region: second
-  git_open_pullrequests:
-    type: number_integer
-    label: above
-    settings:
-      thousand_separator: ''
-      prefix_suffix: true
-    third_party_settings: {  }
-    weight: 5
-    region: second
-  git_stars:
-    type: number_integer
-    label: above
-    settings:
-      thousand_separator: ''
-      prefix_suffix: true
-    third_party_settings: {  }
-    weight: 2
-    region: second
-  oss_vitality_index:
-    type: number_decimal
-    label: above
-    settings:
-      thousand_separator: ''
-      decimal_separator: .
-      scale: 2
-      prefix_suffix: true
-    third_party_settings: {  }
-    weight: 1
-    region: first
+content: {  }
 hidden:
   description: true
+  git_forks: true
+  git_open_issues: true
+  git_open_pullrequests: true
+  git_stars: true
   langcode: true
   links: true
   oss__description: true
@@ -840,6 +797,7 @@ hidden:
   oss_source: true
   oss_source_hash: true
   oss_used_by: true
+  oss_vitality_index: true
   published_at: true
   report: true
   search_api_excerpt: true
