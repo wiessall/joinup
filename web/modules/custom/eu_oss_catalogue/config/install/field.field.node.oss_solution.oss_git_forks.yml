@@ -1,12 +1,11 @@
-uuid: b6605382-7f17-4379-b69b-6dfbe3297c9b
 langcode: en
 status: true
 dependencies:
   config:
-    - field.storage.node.git_forks
+    - field.storage.node.oss_git_forks
     - node.type.oss_solution
-id: node.oss_solution.git_forks
-field_name: git_forks
+id: node.oss_solution.oss_git_forks
+field_name: oss_git_forks
 entity_type: node
 bundle: oss_solution
 label: 'GIT Forks'

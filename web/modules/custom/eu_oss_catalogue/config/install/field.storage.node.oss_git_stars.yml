@@ -1,15 +1,10 @@
-uuid: e1fa39a4-a966-488e-aa92-1ba77a1f0142
 langcode: en
 status: true
 dependencies:
   module:
-    - field_permissions
     - node
-third_party_settings:
-  field_permissions:
-    permission_type: public
-id: node.git_forks
-field_name: git_forks
+id: node.oss_git_stars
+field_name: oss_git_stars
 entity_type: node
 type: integer
 settings:

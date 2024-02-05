@@ -2,10 +2,10 @@ langcode: en
 status: true
 dependencies:
   config:
-    - field.storage.node.git_stars
+    - field.storage.node.oss_git_stars
     - node.type.oss_solution
-id: node.oss_solution.git_stars
-field_name: git_stars
+id: node.oss_solution.oss_git_stars
+field_name: oss_git_stars
 entity_type: node
 bundle: oss_solution
 label: 'GIT Stars'
