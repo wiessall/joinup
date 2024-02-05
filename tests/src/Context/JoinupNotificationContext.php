@@ -13,6 +13,7 @@ use Drupal\joinup\Traits\MailCollectorTrait;
 use Drupal\joinup\Traits\UserTrait;
 use Drupal\joinup\Traits\UtilityTrait;
 use Drupal\message\Entity\MessageTemplate;
+use Drupal\symfony_mailer_lite\Plugin\Mail\SymfonyMailer;
 use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\ExpectationFailedException;
 use Symfony\Component\DomCrawler\Crawler;
@@ -170,10 +171,10 @@ class JoinupNotificationContext extends RawDrupalContext {
     // mail.
     /** @var array $mail */
     if ($html) {
-      Assert::assertEquals(SWIFTMAILER_FORMAT_HTML, $mail['headers']['Content-Type'], 'The mail is not sent as HTML.');
+      Assert::assertEquals(SymfonyMailer::FORMAT_HTML, $mail['headers']['Content-Type'], 'The mail is not sent as HTML.');
     }
     else {
-      Assert::assertStringStartsWith(SWIFTMAILER_FORMAT_PLAIN, $mail['headers']['Content-Type'], 'The mail is not sent as plain text.');
+      Assert::assertStringStartsWith(SymfonyMailer::FORMAT_PLAIN, $mail['headers']['Content-Type'], 'The mail is not sent as plain text.');
     }
   }
 

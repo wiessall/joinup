@@ -259,6 +259,9 @@ solr_configs:
             -
               name: buildOnStartup
               VALUE: 'false'
+            -
+              name: indexPath
+              VALUE: ./nl
 text_files:
   stopwords: |
     de

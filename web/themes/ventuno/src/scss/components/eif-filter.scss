@@ -1,76 +1,76 @@
 @import "../partials/core";
 
 .eif-filter {
-  border-radius: $border-radius-lg;
   overflow: hidden;
+  border-radius: $border-radius-lg;
   &__header {
     padding: $spacer * .5; // 8px
-    font-weight: $font-weight-bold;
     text-align: center;
     color: $white;
+    font-weight: $font-weight-bold;
     a {
-      color: $white;
       text-decoration: underline;
+      color: $white;
       text-decoration-color: $white!important;
     }
   }
   &__list {
-    padding: $spacer * .5 0;
     margin-bottom: 0;
+    padding: $spacer * .5 0;
     list-style: none;
   }
   &__button {
     width: 100%;
     padding: $spacer * .5; // 8px
+    text-align: left;
+    word-break: break-word;
+    color: inherit; // Resets
     border: 0; // Resets
     background: none; // Resets
-    color: inherit; // Resets
     font-size: .875rem; // 14px
-    word-break: break-word;
-    text-align: left;
     &:hover {
-      text-decoration: underline;
       cursor: pointer;
+      text-decoration: underline;
     }
     &.is-active {
-      background: $gray-300;
       color: $black;
+      background: $gray-300;
     }
   }
   &--underlying-principles {
-    border: 1px solid $joinup--green;
+    border: 1px solid $joinup-green;
     .eif-filter__header {
-      background-color: $joinup--green;
+      background-color: $joinup-green;
     }
     .eif-filter__content {
-      color: $joinup--green;
+      color: $joinup-green;
     }
   }
   &--interoperability-layers {
-    border: 1px solid $joinup--orange;
+    border: 1px solid $joinup-orange;
     .eif-filter__header {
-      background-color: $joinup--orange;
+      background-color: $joinup-orange;
     }
     .eif-filter__content {
-      color: $joinup--orange;
+      color: $joinup-orange;
     }
   }
   &--conceptual-model {
-    border: 1px solid $joinup--softblue;
+    border: 1px solid $joinup-softblue;
     .eif-filter__header {
-      background-color: $joinup--softblue;
+      background-color: $joinup-softblue;
     }
     .eif-filter__content {
-      color: $joinup--softblue;
+      color: $joinup-softblue;
     }
   }
   &--solution-category {
-    border: 1px solid $joinup--brown;
+    border: 1px solid $joinup-brown;
     .eif-filter__header {
-      background-color: $joinup--brown;
+      background-color: $joinup-brown;
     }
     .eif-filter__content {
-      color: $joinup--brown;
+      color: $joinup-brown;
     }
   }
 }
@@ -85,47 +85,47 @@
   }
   &__label {
     margin: $spacer * .25; // 4px
-    font-size: $font-size-sm;
     border-radius: $border-radius-sm;
+    font-size: $font-size-sm;
   }
   &__value {
     font-size: $font-size-sm;
     &:hover {
-      text-decoration: underline;
       cursor: help;
+      text-decoration: underline;
     }
   }
   &__line {
     &--underlying-principles {
       .eif-tile__label {
-        background-color: $joinup--green;
+        background-color: $joinup-green;
       }
       .eif-tile__values {
-        color: $joinup--green;
+        color: $joinup-green;
       }
     }
     &--interoperability-layers {
       .eif-tile__label {
-        background-color: $joinup--orange;
+        background-color: $joinup-orange;
       }
       .eif-tile__values {
-        color: $joinup--orange;
+        color: $joinup-orange;
       }
     }
     &--conceptual-model {
       .eif-tile__label {
-        background-color: $joinup--softblue;
+        background-color: $joinup-softblue;
       }
       .eif-tile__values {
-        color: $joinup--softblue;
+        color: $joinup-softblue;
       }
     }
     &--solution-category {
       .eif-tile__label {
-        background-color: $joinup--brown;
+        background-color: $joinup-brown;
       }
       .eif-tile__values {
-        color: $joinup--brown;
+        color: $joinup-brown;
       }
     }
   }

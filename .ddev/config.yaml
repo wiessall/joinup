@@ -1,25 +1,44 @@
+# DDEV instance configuration documentation:
+# - Basic: https://ddev.readthedocs.io/en/stable/users/configuration/config/
+# - Extend/override: https://ddev.readthedocs.io/en/stable/users/extend/customization-extendibility/#extending-configyaml-with-custom-configyaml-files
+
 name: joinup
 type: drupal10
 docroot: web
 php_version: "8.2"
+webimage_extra_packages: [php-apcu]
+
+# It's not possible to use fpfis/httpd-php because DDEV is strongly advising
+# against using a non-DDEV image. But this has no impact on the Joinup code runs
+# in CI/CD or on production.
+# See:
+# - https://ddev.readthedocs.io/en/latest/users/configuration/config/#webimage
+# - https://github.com/ddev/ddev/issues/5497
 webserver_type: apache-fpm
 xdebug_enabled: false
+
+# Tip: Run `ddev describe -j | jq -r .raw.dbinfo.published_port` to get the port
+# exposed on host. DDEV is assigning a random, unused port, for each instance.
+database:
+  type: mysql
+  version: "8.0"
+
+timezone: Europe/Brussels
 additional_hostnames: []
 additional_fqdns: []
-database:
-    type: mysql
-    version: "8.0"
-hooks:
-    post-start:
-        - exec: nvm install 20
-        - exec: nvm install-latest-npm
-    pre-start:
-        - exec-host: rm -f .ddev/solr-standalone/conf
-        - exec-host: ln -s ../../resources/solr/conf .ddev/solr-standalone/
-webimage_extra_packages: [php-apcu]
 use_dns_when_possible: true
-timezone: Europe/Brussels
 composer_version: "2"
-disable_settings_management: true
 web_environment:
-    - DRUPAL_TRUSTED_HOST_PATTERNS=joinup.ddev.site
+  - DRUPAL_TRUSTED_HOST_PATTERNS=.*
+disable_settings_management: true
+
+hooks:
+  pre-start:
+    # Symlink the Solr config to be exposed into container. The Digit CI still
+    # retrieves the Apache Solr configuration from resources/solr/conf dir.
+    - exec-host: rm -f .ddev/solr-standalone/conf
+    - exec-host: ln -s ../../resources/solr/conf .ddev/solr-standalone/
+  post-start:
+    # Update Node and NPM.
+    - exec: nvm install 20
+    - exec: nvm install-latest-npm
