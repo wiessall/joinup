@@ -333,3 +333,18 @@ function custom_page_form_node_custom_page_delete_form_alter(array &$form, FormS
     $form['actions']['submit']['#access'] = FALSE;
   }
 }
+
+/**
+ * Implements hook_entity_extra_field_info().
+ */
+function custom_page_entity_extra_field_info(): array {
+  $fields = [];
+
+  $fields['node']['custom_page']['display']['share_link'] = [
+    'label' => t('Share'),
+    'description' => t('A link to share the content'),
+    'visible' => FALSE,
+  ];
+
+  return $fields;
+}
