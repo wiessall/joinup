@@ -1,20 +1,14 @@
 @import "../partials/core";
 
 .page-header {
-  padding: $spacer * 2 0!important; // 32px 0
   width: 100vw;
   height: 100%;
+  padding: $spacer * 2 0!important; // 32px 0
+  text-align: center;
   background-color: $primary;
   background-repeat: no-repeat;
   background-position: center;
   background-size: cover;
-  text-align: center;
-  @include media-breakpoint-up(md) {
-    padding: $spacer * 3.5 0!important; // 56px 0
-  }
-  @include media-breakpoint-up(xxl) {
-    padding: $spacer * 5 0!important; // 64px 0
-  }
   &__title {
     margin: 0!important;
     color: $white;
@@ -27,6 +21,12 @@
     @include media-breakpoint-up(xxl) {
       font-size: 5rem;
     }
+  }
+  @include media-breakpoint-up(md) {
+    padding: $spacer * 3.5 0!important; // 56px 0
+  }
+  @include media-breakpoint-up(xxl) {
+    padding: $spacer * 5 0!important; // 64px 0
   }
 }
 .page--news {

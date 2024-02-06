@@ -8,6 +8,7 @@
  @import "partials/core"; // Functions, variables, utilities and mixins required
  @import "partials/base/fonts";
  @import "partials/base/typography";
+
   // @import "@openeuropa/bcl-bootstrap/scss/reboot";
  @import "partials/overrides/reboot"; // Hack to prevent build break
  @import "@openeuropa/bcl-bootstrap/scss/type";
