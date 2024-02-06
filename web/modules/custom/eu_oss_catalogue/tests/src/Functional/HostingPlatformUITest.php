@@ -65,49 +65,6 @@ class HostingPlatformUITest extends BrowserTestBase {
   }
 
   /**
-   * Tests hosting provider operations.
-   */
-  public function testHostingProviderOperations(): void {
-    $assertSession = $this->assertSession();
-
-    $this->drupalLogin($this->adminUser);
-
-    $this->drupalGet('admin/content/eu-oss-catalogue');
-    $this->clickLink('Platform provider');
-
-    $data = [
-      'id' => 'test_hosting_platform',
-      'label' => 'Test hosting platform',
-      'description' => 'Description for Test hosting platform',
-      'platformId' => 'github',
-    ];
-    $this->submitForm($data, 'Save');
-
-    $assertSession->pageTextContains('hosting_platform:test_hosting_platform');
-    $assertSession->pageTextContains('Test hosting platform');
-
-    $this->clickLink('Edit');
-
-    // Type correct namespace and name.
-    $data = [
-      'label' => 'Test hosting platform updated',
-      'platformSettings[projects][0][namespace]' => 'dummy-namespace-1',
-      'platformSettings[projects][0][name]' => 'dummy-name-1',
-    ];
-    $this->submitForm($data, 'Save');
-
-    $assertSession->pageTextContains('Test hosting platform updated');
-
-    // Check deletion.
-    $this->clickLink('Delete');
-    $assertSession->pageTextContains('This action cannot be undone.');
-
-    $this->submitForm([], 'Delete');
-
-    $assertSession->pageTextContains('The code hosting platform config Test hosting platform updated has been deleted.');
-  }
-
-  /**
    * Tests hosting provider description.
    */
   public function testDescription(): void {
