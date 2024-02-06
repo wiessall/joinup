@@ -64,8 +64,8 @@ interface JoinupGroupManagerInterface {
    * Checks whether an account has access to a group.
    *
    * In many places, we're performing a group composite access check, either by
-   * a site-wide permission or by a OG permission. This method aim is to provide
-   * a centralised, unified way to do this check.
+   * a site-wide permission or by an OG permission. This method aim is to
+   * provide a centralized, unified way to do this check.
    *
    * @param \Drupal\joinup_group\Entity\GroupInterface $group
    *   The group to be checked.

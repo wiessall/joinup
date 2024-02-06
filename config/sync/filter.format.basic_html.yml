@@ -10,13 +10,6 @@ name: 'Basic HTML'
 format: basic_html
 weight: 0
 filters:
-  filter_url:
-    id: filter_url
-    provider: filter
-    status: true
-    weight: -49
-    settings:
-      filter_url_length: 72
   filter_html:
     id: filter_html
     provider: filter
@@ -32,6 +25,13 @@ filters:
     status: true
     weight: -41
     settings: {  }
+  filter_url:
+    id: filter_url
+    provider: filter
+    status: true
+    weight: -49
+    settings:
+      filter_url_length: 72
   joinup_video:
     id: joinup_video
     provider: joinup_video

@@ -20,18 +20,18 @@
   position: relative;
   padding-top: $padding-top;
   padding-bottom: $padding-bottom;
-  &:before {
-    content: "";
+  &::before {
     position: absolute;
     z-index: -1;
-    width: 100vw;
-    margin-left: calc(50% - 50vw);
     top: 0;
     bottom: 0;
+    width: 100vw;
+    margin-left: calc(50% - 50vw);
+    content: "";
     background: $mobile-color;
   }
   @include media-breakpoint-up(md) {
-    &:before {
+    &::before {
       background: linear-gradient(
         to bottom,
         $top-color $top-size,
@@ -61,14 +61,14 @@
   position: relative;
   padding-top: $padding-top;
   padding-bottom: $padding-bottom;
-  &:before {
-    content: "";
+  &::before {
     position: absolute;
     z-index: -1;
-    width: 100vw;
-    margin-left: calc(50% - 50vw);
     top: 0;
     bottom: 0;
+    width: 100vw;
+    margin-left: calc(50% - 50vw);
+    content: "";
     background: $mobile-color;
     @include media-breakpoint-up(md) {
       background: linear-gradient(

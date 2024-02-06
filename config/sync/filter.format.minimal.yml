@@ -8,13 +8,12 @@ name: Minimal
 format: minimal
 weight: 0
 filters:
-  filter_url:
-    id: filter_url
+  filter_autop:
+    id: filter_autop
     provider: filter
     status: true
     weight: 0
-    settings:
-      filter_url_length: 72
+    settings: {  }
   filter_html:
     id: filter_html
     provider: filter
@@ -24,18 +23,19 @@ filters:
       allowed_html: '<br> <p> <i> <b> <a hreflang href> <strong> <em>'
       filter_html_help: false
       filter_html_nofollow: false
-  filter_autop:
-    id: filter_autop
-    provider: filter
-    status: true
-    weight: 0
-    settings: {  }
   filter_htmlcorrector:
     id: filter_htmlcorrector
     provider: filter
     status: true
     weight: 10
     settings: {  }
+  filter_url:
+    id: filter_url
+    provider: filter
+    status: true
+    weight: 0
+    settings:
+      filter_url_length: 72
   joinup_video:
     id: joinup_video
     provider: joinup_video

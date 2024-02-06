@@ -12,11 +12,28 @@
   .align-right {
     // Align center on small screens.
     float: none;
-    margin: 0 auto;
     width: fit-content;
+    margin: 0 auto;
   }
   .align-center {
     width: fit-content;
+  }
+
+  // Dirty hack to make videos responsive and half width.
+  .media-video {
+    width: 100%;
+    max-width: 648px;
+    margin-bottom: $spacer;
+    iframe {
+      max-width: 100%;
+    }
+  }
+
+  img,
+  figure {
+    max-width: 100%;
+    height: auto;
+    margin-bottom: $spacer;
   }
 
   @include media-breakpoint-up(lg) {
@@ -35,22 +52,5 @@
         margin-left: $spacer * 1.25;
       }
     }
-  }
-
-  // Dirty hack to make videos responsive and half width.
-  .media-video {
-    max-width: 648px;
-    width: 100%;
-    margin-bottom: $spacer;
-    iframe {
-      max-width: 100%;
-    }
-  }
-
-  img,
-  figure {
-    margin-bottom: $spacer;
-    max-width: 100%;
-    height: auto;
   }
 }
