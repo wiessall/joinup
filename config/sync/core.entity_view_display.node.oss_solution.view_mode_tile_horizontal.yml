@@ -13,7 +13,7 @@ dependencies:
     - field.field.node.oss_solution.oss_git_description
     - field.field.node.oss_solution.oss_git_forks
     - field.field.node.oss_solution.oss_git_open_issues
-    - field.field.node.oss_solution.oss_git_open_pullrequests
+    - field.field.node.oss_solution.oss_git_open_pull_requests
     - field.field.node.oss_solution.oss_git_stars
     - field.field.node.oss_solution.oss_git_url
     - field.field.node.oss_solution.oss_hosting_platform
@@ -107,7 +107,7 @@ hidden:
   oss_git_description: true
   oss_git_forks: true
   oss_git_open_issues: true
-  oss_git_open_pullrequests: true
+  oss_git_open_pull_requests: true
   oss_git_stars: true
   oss_git_url: true
   oss_hosting_platform: true
