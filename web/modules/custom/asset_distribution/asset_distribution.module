@@ -7,10 +7,14 @@
 
 declare(strict_types = 1);
 
+use Drupal\Core\Access\AccessResult;
+use Drupal\Core\Access\AccessResultInterface;
+use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Field\BaseFieldDefinition;
 use Drupal\Core\Field\Plugin\Field\FieldType\EntityReferenceItem;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Session\AccountInterface;
 use Drupal\asset_distribution\DistributionParentFieldItemList;
 use Drupal\asset_distribution\Entity\AssetDistribution;
 use Drupal\asset_distribution\Entity\AssetDistributionInterface;
@@ -101,6 +105,23 @@ function asset_distribution_sparql_bundle_load_alter(array $entity_values, array
       $bundles = array_diff($bundles, ['asset_release']);
     }
   }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_access().
+ */
+function asset_distribution_rdf_entity_access(EntityInterface $entity, $operation, AccountInterface $account): AccessResultInterface {
+  if ($entity->bundle() !== 'asset_distribution') {
+    return AccessResult::neutral();
+  }
+
+  /** @var \Drupal\asset_distribution\Entity\AssetDistributionInterface $entity */
+  $solution = $entity->getSolution();
+  if ($operation !== 'view' && $solution->isArchived()) {
+    return AccessResult::forbidden();
+  }
+
+  return AccessResult::neutral();
 }
 
 /**
