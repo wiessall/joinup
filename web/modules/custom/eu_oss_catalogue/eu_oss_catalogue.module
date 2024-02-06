@@ -120,3 +120,10 @@ function eu_oss_catalogue_entity_bundle_field_info_alter(array &$fields, EntityT
       ->setClass(RelevantField::class);
   }
 }
+
+/**
+ * Implements hook_cron().
+ */
+function eu_oss_catalogue_cron(): void {
+  \Drupal::service('eu_oss_catalogue.vitality_index')->process();
+}
