@@ -19,7 +19,9 @@ use Drupal\joinup_community_content\Entity\CommunityContentInterface;
 use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\joinup_notification\NotificationEvents;
 use Drupal\joinup_workflow\ArchivableEntityInterface;
+use Drupal\joinup_workflow\WorkflowHelperInterface;
 use Drupal\solution\Entity\SolutionInterface;
+use Drupal\solution\Transition;
 use Drupal\sparql_entity_storage\SparqlEntityStorageInterface;
 use Drupal\sparql_entity_storage\SparqlGraphInterface;
 use Drupal\user\UserInterface;
@@ -44,13 +46,6 @@ class SolutionContentArchiverQueue extends QueueWorkerBase implements ContainerF
   ];
 
   /**
-   * Machine name of the target state.
-   *
-   * @const string
-   */
-  private const TARGET_STATE = 'archived';
-
-  /**
    * Constructs a new SolutionContentArchiverQueue instance.
    *
    * @param array $configuration
@@ -65,6 +60,8 @@ class SolutionContentArchiverQueue extends QueueWorkerBase implements ContainerF
    *   Logger channel of solutions.
    * @param \Drupal\Core\Session\AccountSwitcherInterface $accountSwitcher
    *   The account switcher service.
+   * @param \Drupal\joinup_workflow\WorkflowHelperInterface $workflowHelper
+   *   The workflow helper service.
    */
   public function __construct(
     array $configuration,
@@ -73,6 +70,7 @@ class SolutionContentArchiverQueue extends QueueWorkerBase implements ContainerF
     protected EntityTypeManagerInterface $entityTypeManager,
     protected LoggerChannelInterface $logger,
     protected AccountSwitcherInterface $accountSwitcher,
+    protected WorkflowHelperInterface $workflowHelper,
   ) {
     parent::__construct($configuration, $pluginId, $pluginDefinition);
   }
@@ -93,6 +91,7 @@ class SolutionContentArchiverQueue extends QueueWorkerBase implements ContainerF
       $container->get('entity_type.manager'),
       $container->get('logger.channel.solution'),
       $container->get('account_switcher'),
+      $container->get('joinup_workflow.workflow_helper')
     );
   }
 
@@ -114,7 +113,7 @@ class SolutionContentArchiverQueue extends QueueWorkerBase implements ContainerF
 
     $this->accountSwitcher->switchTo($actor);
     try {
-      $this->performOperation($solution);
+      $this->performOperation($solution, $data['transition']);
     }
     finally {
       $this->accountSwitcher->switchBack();
@@ -160,12 +159,14 @@ class SolutionContentArchiverQueue extends QueueWorkerBase implements ContainerF
    *
    * @param \Drupal\solution\Entity\SolutionInterface $solution
    *   The solution whose sub-contents we want to archive.
+   * @param \Drupal\solution\Transition $transition
+   *   The transition to apply.
    *
    * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
    * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
    * @throws \Drupal\Core\Entity\EntityStorageException
    */
-  protected function performOperation(SolutionInterface $solution): void {
+  protected function performOperation(SolutionInterface $solution, Transition $transition): void {
     foreach ($this->getSolutionGroupContent($solution) as $entity) {
       if (!$entity instanceof ArchivableEntityInterface) {
         // Continue silently.
@@ -182,13 +183,16 @@ class SolutionContentArchiverQueue extends QueueWorkerBase implements ContainerF
         $entity = $storage->load($entity->id(), [SparqlGraphInterface::DEFAULT]) ?? $entity;
       }
 
-      // Current user cannot change the state to "archived" state.
-      if (!$entity->isTargetWorkflowStateAllowed(static::TARGET_STATE)) {
+      // Current user cannot change the state to "archived" or "unarchived"
+      // state.
+      $allowedTransitions = $entity->getWorkflow()->getAllowedTransitions($entity->getWorkflowState(), $entity);
+      if (!array_key_exists($transition->getMachineName(), $allowedTransitions)) {
         continue;
       }
+      $targetState = $allowedTransitions[$transition->getMachineName()]->getToState()->getId();
       // No need to archive unpublished or already archived entities.
       if (
-        $entity->isArchived() ||
+        $entity->getWorkflowState() === $targetState ||
         ($entity instanceof EntityPublishedInterface && !$entity->isPublished())
       ) {
         // Continue silently.
@@ -196,10 +200,15 @@ class SolutionContentArchiverQueue extends QueueWorkerBase implements ContainerF
       }
 
       $entity->skip_notification = TRUE;
-      $entity->setWorkflowState(static::TARGET_STATE)->save();
+      match ($transition) {
+        Transition::ARCHIVE => $this->workflowHelper->archiveEntity($entity),
+        Transition::UNARCIVE => $this->workflowHelper->unarchiveEntity($entity),
+      };
     }
 
-    joinup_notification_dispatch_notification('update', NotificationEvents::RDF_ENTITY_ARCHIVE_COMPLETED, $solution);
+    if ($transition === Transition::ARCHIVE) {
+      joinup_notification_dispatch_notification('update', NotificationEvents::RDF_ENTITY_ARCHIVE_COMPLETED, $solution);
+    }
   }
 
   /**
@@ -213,12 +222,14 @@ class SolutionContentArchiverQueue extends QueueWorkerBase implements ContainerF
    *   - The item is an array.
    *   - It has a "user" key with integer or string value.
    *   - It has a "solution" key with string value.
+   *   - It has a "transition" key with \Drupal\solution\Transition value.
    */
   protected function queueItemIsValid(mixed $data): bool {
     if (
       !is_array($data) ||
       !isset($data['user']) ||
-      !isset($data['solution'])
+      !isset($data['solution']) ||
+      !isset($data['transition'])
     ) {
       $this->logger->error(
         "Queue item processing failed: item is invalid. Got '%item'",
@@ -227,13 +238,25 @@ class SolutionContentArchiverQueue extends QueueWorkerBase implements ContainerF
       return FALSE;
     }
 
-    ['user' => $uid, 'solution' => $solutionId] = $data;
+    [
+      'user' => $uid,
+      'solution' => $solutionId,
+      'transition' => $transition,
+    ] = $data;
     if (
       (!is_int($uid) && !is_string($uid)) ||
       (!is_string($solutionId))
     ) {
       $this->logger->error(
         "Queue item processing failed: user ID and solution ID must be string. Got '%item'",
+        ['%item' => Variable::export($data)],
+      );
+      return FALSE;
+    }
+
+    if (!$transition instanceof Transition) {
+      $this->logger->error(
+        "Queue item processing failed: Transition invalid. Got '%item'",
         ['%item' => Variable::export($data)],
       );
       return FALSE;
