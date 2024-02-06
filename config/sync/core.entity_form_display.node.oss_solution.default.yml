@@ -39,6 +39,7 @@ dependencies:
     - field.field.node.oss_solution.oss_source_hash
     - field.field.node.oss_solution.oss_used_by
     - field.field.node.oss_solution.oss_vitality_index
+    - field.field.node.oss_solution.oss_vitality_index_range
     - node.type.oss_solution
   module:
     - datetime
@@ -180,7 +181,7 @@ content:
     third_party_settings: {  }
   oss_hosting_platform:
     type: plugin_reference_select
-    weight: 41
+    weight: 39
     region: content
     settings:
       provider_grouping: false
@@ -188,7 +189,7 @@ content:
     third_party_settings: {  }
   oss_is_archived:
     type: boolean_checkbox
-    weight: 40
+    weight: 38
     region: content
     settings:
       display_label: true
@@ -221,7 +222,7 @@ content:
     third_party_settings: {  }
   oss_long_description:
     type: text_textarea
-    weight: 20
+    weight: 19
     region: content
     settings:
       rows: 5
@@ -323,7 +324,7 @@ content:
     third_party_settings: {  }
   oss_short_description:
     type: text_textfield
-    weight: 21
+    weight: 20
     region: content
     settings:
       size: 60
@@ -337,7 +338,7 @@ content:
     third_party_settings: {  }
   oss_software_version:
     type: string_textfield
-    weight: 42
+    weight: 40
     region: content
     settings:
       size: 60
@@ -353,7 +354,7 @@ content:
     third_party_settings: {  }
   oss_source_hash:
     type: string_textfield
-    weight: 43
+    weight: 41
     region: content
     settings:
       size: 60
@@ -371,7 +372,7 @@ content:
     third_party_settings: {  }
   oss_vitality_index:
     type: number
-    weight: 44
+    weight: 42
     region: content
     settings:
       placeholder: ''
@@ -439,3 +440,4 @@ content:
     third_party_settings: {  }
 hidden:
   current_workflow_state: true
+  oss_vitality_index_range: true

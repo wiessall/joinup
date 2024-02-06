@@ -39,6 +39,7 @@ dependencies:
     - field.field.node.oss_solution.oss_source_hash
     - field.field.node.oss_solution.oss_used_by
     - field.field.node.oss_solution.oss_vitality_index
+    - field.field.node.oss_solution.oss_vitality_index_range
     - node.type.oss_solution
   module:
     - custom_markup_block
@@ -802,6 +803,7 @@ hidden:
   oss_source_hash: true
   oss_used_by: true
   oss_vitality_index: true
+  oss_vitality_index_range: true
   published_at: true
   report: true
   search_api_excerpt: true
