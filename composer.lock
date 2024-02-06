@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "077bb1100402b1ef09d8fc60ad5c20df",
+    "content-hash": "fd2d2d90a1808e6fa2f1ba912d7dd542",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -4273,6 +4273,10 @@
                     "homepage": "https://www.drupal.org/user/99340"
                 },
                 {
+                    "name": "dww",
+                    "homepage": "https://www.drupal.org/user/46549"
+                },
+                {
                     "name": "geek-merlin",
                     "homepage": "https://www.drupal.org/user/229048"
                 },
@@ -4952,6 +4956,10 @@
                 {
                     "name": "amitaibu",
                     "homepage": "https://www.drupal.org/user/57511"
+                },
+                {
+                    "name": "bluegeek9",
+                    "homepage": "https://www.drupal.org/user/1286304"
                 },
                 {
                     "name": "jhedstrom",
@@ -6841,6 +6849,10 @@
                     "homepage": "https://www.drupal.org/u/claudiucristea"
                 },
                 {
+                    "name": "claudiu.cristea",
+                    "homepage": "https://www.drupal.org/user/56348"
+                },
+                {
                     "name": "Neslee Canil Pinto",
                     "homepage": "https://www.drupal.org/user/3580850"
                 }
@@ -7412,6 +7424,54 @@
             }
         },
         {
+            "name": "drupal/symfony_mailer_lite",
+            "version": "1.0.4",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/symfony_mailer_lite.git",
+                "reference": "1.0.4"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/symfony_mailer_lite-1.0.4.zip",
+                "reference": "1.0.4",
+                "shasum": "51fc6549ffa3213be64337ed93cfbad3b241fe4e"
+            },
+            "require": {
+                "drupal/core": "^9 || ^10",
+                "drupal/mailsystem": "^4.4",
+                "html2text/html2text": "^4.0.1",
+                "symfony/mailer": "^5.3 || ^6.0",
+                "tijsverkoyen/css-to-inline-styles": "^2.2"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "1.0.4",
+                    "datestamp": "1706390689",
+                    "security-coverage": {
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "zengenuity",
+                    "homepage": "https://www.drupal.org/user/326925"
+                }
+            ],
+            "description": "Drupal Symfony Mailer Lite",
+            "homepage": "https://www.drupal.org/project/symfony_mailer_lite",
+            "support": {
+                "source": "https://git.drupalcode.org/project/symfony_mailer_lite"
+            }
+        },
+        {
             "name": "drupal/theme_rule",
             "version": "1.1.0",
             "source": {
@@ -7805,20 +7865,8 @@
             "authors": [
                 {
                     "name": "Agnes Chisholm",
-                    "homepage": "https://www.drupal.org/user/66428",
+                    "homepage": "https://www.drupal.org/user/173461",
                     "email": "amaria@chisholmtech.com"
-                },
-                {
-                    "name": "beeradb",
-                    "homepage": "https://www.drupal.org/user/120651"
-                },
-                {
-                    "name": "elevins",
-                    "homepage": "https://www.drupal.org/user/781882"
-                },
-                {
-                    "name": "entendu",
-                    "homepage": "https://www.drupal.org/user/173461"
                 },
                 {
                     "name": "fathima.asmat",

@@ -3,13 +3,13 @@
 .paragraph,
 .fieldset--textarea {
   table {
-    @include media-breakpoint-up(md) {
-      table-layout: fixed;
-    }
 
     td {
-      vertical-align: top;
       min-width: 100px;
+      vertical-align: top;
+    }
+    @include media-breakpoint-up(md) {
+      table-layout: fixed;
     }
   }
 
@@ -21,10 +21,10 @@
 
   blockquote {
     overflow: hidden;
-    border-left: $spacer * 1.25 solid $brand;
-    padding: $spacer * 1.5 0 $spacer * 1.5 $spacer * 1.5;
     margin-right: 0;
     margin-left: 0;
+    padding: $spacer * 1.5 0 $spacer * 1.5 $spacer * 1.5;
+    border-left: $spacer * 1.25 solid $brand;
     @include media-breakpoint-up(md) {
       margin-left: 100px;
     }

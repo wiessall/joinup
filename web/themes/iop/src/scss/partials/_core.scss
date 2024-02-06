@@ -20,8 +20,10 @@
 
 // BCL default theme variables
 @import "@openeuropa/bcl-theme-default/src/scss/base/variables";
+
 // Override with used variables only to make utilities a lot lighter
 @import "overrides/variables";
+
 // Bootstrap default maps
 @import "@openeuropa/bcl-bootstrap/scss/maps";
 
