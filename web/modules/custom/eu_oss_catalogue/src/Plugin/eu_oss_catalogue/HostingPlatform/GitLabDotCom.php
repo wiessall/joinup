@@ -37,7 +37,7 @@ class GitLabDotCom extends EuOssCatalogueGitHostingPlatformPluginBase {
    */
   public function buildConfigurationForm(array $form, FormStateInterface $form_state): array {
     $form = parent::buildConfigurationForm($form, $form_state);
-    $form['baseUrl']['#type'] = 'value';
+    $form['baseUrl']['#disabled'] = TRUE;
     return $form;
   }
 
