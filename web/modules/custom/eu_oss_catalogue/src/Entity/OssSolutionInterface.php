@@ -40,4 +40,12 @@ interface OssSolutionInterface extends NodeInterface {
    */
   public function getRelevantLangCode(): string;
 
+  /**
+   * Returns the repository URL.
+   *
+   * @return string
+   *   The repository URL.
+   */
+  public function getUrl(): string;
+
 }

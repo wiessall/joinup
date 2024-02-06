@@ -71,4 +71,11 @@ class OssSolution extends Node implements OssSolutionInterface {
     return $this->get(RelevantLanguageCode::FIELD_NAME)->first()->getString();
   }
 
+  /**
+   * {@inheritdoc}
+   */
+  public function getUrl(): string {
+    return $this->get('oss_git_url')->first()->getValue()['uri'];
+  }
+
 }
