@@ -52,6 +52,12 @@ Feature: When a solution is archived then its sub-content also should be archive
     And "discussion" content:
       | title               | collection | state     |
       | Solution Discussion | Solution   | published |
+    And "custom_page" content:
+      | title                  | solution | state     |
+      | Solution Custom page 1 | Solution | published |
+      | Solution Custom page 2 | Solution | draft     |
+      | Solution Custom page 3 | Solution | published |
+    And the workflow state of the "Solution Custom page 3" "content" is changed to "archived"
     And distribution:
       | title  | Solution Distribution |
       | parent | Solution              |
@@ -78,6 +84,36 @@ Feature: When a solution is archived then its sub-content also should be archive
       | Success messages                                                            |
       | The archiving process of the Solution has been initiated.                   |
       | You will receive an email notification as soon as the process is completed. |
+
+    # Sub-content of an archived solution must not be editable from UI.
+    When I go to the edit form of the "Solution Event" event
+    Then the response status code should be 403
+    When I go to the edit form of the "Solution News 1" news
+    Then the response status code should be 403
+    When I go to the edit form of the "Solution News 2" news
+    Then the response status code should be 403
+    When I go to the edit form of the "Solution News 3" news
+    Then the response status code should be 403
+    When I go to the edit form of the "Solution Document" document
+    Then the response status code should be 403
+    When I go to the edit form of the "Solution Discussion" discussion
+    Then the response status code should be 403
+    When I go to the edit form of the "Solution Custom page 1" "custom page"
+    Then the response status code should be 403
+    When I go to the edit form of the "Solution Custom page 2" "custom page"
+    Then the response status code should be 403
+    When I go to the edit form of the "Solution Custom page 3" "custom page"
+    Then the response status code should be 403
+    When I go to the edit form of the "Solution Distribution" distribution
+    Then the response status code should be 403
+    When I go to the edit form of the "Solution Release 1" release
+    Then the response status code should be 403
+    When I go to the edit form of the "Solution Release 2" release
+    Then the response status code should be 403
+    When I go to the edit form of the "Solution Release 3" release
+    Then the response status code should be 403
+
+    # Execute the queue.
     Given the following contact information emails are validated:
       | Liam Smith |
     And I mark all emails as read
@@ -88,6 +124,9 @@ Feature: When a solution is archived then its sub-content also should be archive
     And the workflow state of the "Solution News 3" content should be "archived"
     And the workflow state of the "Solution Document" content should be "archived"
     And the workflow state of the "Solution Discussion" content should be "archived"
+    And the workflow state of the "Solution Custom page 1" content should be "archived"
+    And the workflow state of the "Solution Custom page 2" content should be "draft"
+    And the workflow state of the "Solution Custom page 3" content should be "archived"
     And the workflow state of the "Solution Distribution" "rdf entity" should be "archived"
     And the workflow state of the "Solution Release 1" "rdf entity" should be "archived"
     And the workflow state of the "Solution Release 2" "rdf entity" should be "draft"
@@ -162,10 +201,38 @@ Feature: When a solution is archived then its sub-content also should be archive
     Then I should see the following success messages:
       | Success messages                                            |
       | The unarchiving process of the Solution has been initiated. |
+
+    # Sub-content must became editable from UI again.
+    When I go to the edit form of the "Solution Event" event
+    Then the response status code should be 200
+    When I go to the edit form of the "Solution News 1" news
+    Then the response status code should be 200
+    When I go to the edit form of the "Solution News 2" news
+    Then the response status code should be 200
+    When I go to the edit form of the "Solution News 3" news
+    Then the response status code should be 200
+    When I go to the edit form of the "Solution Document" document
+    Then the response status code should be 200
+    When I go to the edit form of the "Solution Discussion" discussion
+    Then the response status code should be 200
+    When I go to the edit form of the "Solution Custom page 1" "custom page"
+    Then the response status code should be 200
+    When I go to the edit form of the "Solution Custom page 2" "custom page"
+    Then the response status code should be 200
+    When I go to the edit form of the "Solution Custom page 3" "custom page"
+    Then the response status code should be 200
+    When I go to the edit form of the "Solution Distribution" distribution
+    Then the response status code should be 200
+    When I go to the edit form of the "Solution Release 1" release
+    Then the response status code should be 200
+    When I go to the edit form of the "Solution Release 2" release
+    Then the response status code should be 200
+    When I go to the edit form of the "Solution Release 3" release
+    Then the response status code should be 200
+
+    # Execute the queue.
     Given I run the "solution_archive_related_content" queue worker
     Then 0 e-mails should have been sent
-    # Archived community content (events, discussions, news etc) cannot transit
-    # to published state.
     And the workflow state of the "Solution Event" content should be "published"
     And the workflow state of the "Solution News 1" content should be "published"
     And the workflow state of the "Solution News 2" content should be "draft"
@@ -173,6 +240,9 @@ Feature: When a solution is archived then its sub-content also should be archive
     And the workflow state of the "Solution News 4" content should be "published"
     And the workflow state of the "Solution Document" content should be "published"
     And the workflow state of the "Solution Discussion" content should be "published"
+    And the workflow state of the "Solution Custom page 1" content should be "published"
+    And the workflow state of the "Solution Custom page 2" content should be "draft"
+    And the workflow state of the "Solution Custom page 3" content should be "published"
     And the workflow state of the "Solution Distribution" "rdf entity" should be "published"
     And the workflow state of the "Solution Release 1" "rdf entity" should be "published"
     And the workflow state of the "Solution Release 2" "rdf entity" should be "draft"
