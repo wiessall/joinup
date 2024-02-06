@@ -2,9 +2,9 @@
 
 .toolbar {
   #toolbar-item-user {
+    overflow: hidden;
     max-width: 500px;
     white-space: nowrap;
-    overflow: hidden;
     text-overflow: ellipsis;
   }
 }

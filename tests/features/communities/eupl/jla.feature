@@ -90,7 +90,7 @@ Feature:
     When I click "Edit" in the "Use/reproduce" row
     Then I should see the heading "Edit term"
     And the following fields should not be disabled "Name"
-    When I fill in "Description" with "Description of tooltip"
+    When I fill in "Description" with "<div>Description of tooltip</div>"
     And I press "Save"
     And I visit the "JLA" custom page
     Then I should see the "button" element with the "title" attribute set to "Description of tooltip" in the "Content" region

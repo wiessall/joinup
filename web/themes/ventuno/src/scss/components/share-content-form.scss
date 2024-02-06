@@ -2,13 +2,13 @@
 
 .share-content-form {
   .form-wrapper {
-    margin-top: 1rem;
     display: flex;
+    margin-top: 1rem;
   }
   .rdf-entity--compact {
-    order: 1;
     display: flex;
     align-items: center;
+    order: 1;
     img {
       width: 3rem;
       height: auto;

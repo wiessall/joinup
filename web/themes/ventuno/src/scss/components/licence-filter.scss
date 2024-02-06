@@ -1,89 +1,89 @@
 @import "../partials/core";
 
 .licence-filter {
-  border-radius: $border-radius-lg;
   overflow: hidden;
+  border-radius: $border-radius-lg;
   &__header {
     padding: $spacer * .5; // 8px
+    text-align: center;
     color: $white;
     font-weight: $font-weight-bold;
-    text-align: center;
   }
   &__list {
-    padding: $spacer * .5 0;
     margin-bottom: 0;
+    padding: $spacer * .5 0;
     list-style: none;
   }
   &__button {
     width: 100%;
     padding: $spacer * .5; // 8px
+    text-align: left;
+    word-break: break-word;
+    color: inherit; // Resets
     border: 0; // Resets
     background: none; // Resets
-    color: inherit; // Resets
     font-size: .875rem; // 14px
-    word-break: break-word;
-    text-align: left;
     &:hover {
-      text-decoration: underline;
       cursor: help;
+      text-decoration: underline;
     }
     &.is-active {
-      background: $gray-300;
       color: $black;
+      background: $gray-300;
     }
   }
   &--can {
-    border: 1px solid $joinup--green;
+    border: 1px solid $joinup-green;
     .licence-filter__header {
-      background-color: $joinup--green;
+      background-color: $joinup-green;
     }
     .licence-filter__content {
-      color: $joinup--green;
+      color: $joinup-green;
     }
   }
   &--must {
-    border: 1px solid $joinup--brown;
+    border: 1px solid $joinup-brown;
     .licence-filter__header {
-      background-color: $joinup--brown;
+      background-color: $joinup-brown;
     }
     .licence-filter__content {
-      color: $joinup--brown;
+      color: $joinup-brown;
     }
   }
   &--cannot {
-    border: 1px solid $joinup--red;
+    border: 1px solid $joinup-red;
     .licence-filter__header {
-      background-color: $joinup--red;
+      background-color: $joinup-red;
     }
     .licence-filter__content {
-      color: $joinup--red;
+      color: $joinup-red;
     }
   }
   &--compatible {
-    border: 1px solid $joinup--softblue;
+    border: 1px solid $joinup-softblue;
     .licence-filter__header {
-      background-color: $joinup--softblue;
+      background-color: $joinup-softblue;
     }
     .licence-filter__content {
-      color: $joinup--softblue;
+      color: $joinup-softblue;
     }
   }
   &--law {
-    border: 1px solid $joinup--gray;
+    border: 1px solid $joinup-gray;
     .licence-filter__header {
-      background-color: $joinup--gray;
+      background-color: $joinup-gray;
     }
     .licence-filter__content {
-      color: $joinup--gray;
+      color: $joinup-gray;
     }
   }
   &--support {
-    border: 1px solid $joinup--orange;
+    border: 1px solid $joinup-orange;
     .licence-filter__header {
-      background-color: $joinup--orange;
+      background-color: $joinup-orange;
     }
     .licence-filter__content {
-      color: $joinup--orange;
+      color: $joinup-orange;
     }
   }
 }
@@ -99,63 +99,63 @@
     }
     &__label {
       margin: $spacer * .25; // 4px
-      font-size: $font-size-sm;
       border-radius: $border-radius-sm;
+      font-size: $font-size-sm;
     }
     &__value {
       font-size: $font-size-sm;
       &:hover {
-        text-decoration: underline;
         cursor: help;
+        text-decoration: underline;
       }
     }
     &__line {
       &--can {
         .licence-tile__label {
-          background-color: $joinup--green;
+          background-color: $joinup-green;
         }
         .licence-tile__values {
-          color: $joinup--green;
+          color: $joinup-green;
         }
       }
       &--must {
         .licence-tile__label {
-          background-color: $joinup--brown;
+          background-color: $joinup-brown;
         }
         .licence-tile__values {
-          color: $joinup--brown;
+          color: $joinup-brown;
         }
       }
       &--cannot {
         .licence-tile__label {
-          background-color: $joinup--red;
+          background-color: $joinup-red;
         }
         .licence-tile__values {
-          color: $joinup--red;
+          color: $joinup-red;
         }
       }
       &--compatible {
         .licence-tile__label {
-          background-color: $joinup--softblue;
+          background-color: $joinup-softblue;
         }
         .licence-tile__values {
-          color: $joinup--softblue;
+          color: $joinup-softblue;
         }
       }
       &--law {
         .licence-tile__label {
-          background-color: $joinup--gray;
+          background-color: $joinup-gray;
         }
         .licence-tile__values {
-          color: $joinup--gray;
+          color: $joinup-gray;
         }
       }
       &--support {
         .licence-tile__label {
-          background-color: $joinup--orange;
+          background-color: $joinup-orange;
         }
         .licence-tile__values {
-          color: $joinup--orange;
+          color: $joinup-orange;
         }
       }
     }

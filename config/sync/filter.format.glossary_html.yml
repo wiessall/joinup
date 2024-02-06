@@ -24,19 +24,24 @@ filters:
     status: false
     weight: -46
     settings: {  }
-  filter_html_image_secure:
-    id: filter_html_image_secure
+  filter_align:
+    id: filter_align
     provider: filter
     status: false
-    weight: -38
+    weight: -45
     settings: {  }
-  filter_url:
-    id: filter_url
+  filter_autop:
+    id: filter_autop
     provider: filter
-    status: true
-    weight: -50
-    settings:
-      filter_url_length: 72
+    status: false
+    weight: -44
+    settings: {  }
+  filter_caption:
+    id: filter_caption
+    provider: filter
+    status: false
+    weight: -43
+    settings: {  }
   filter_html:
     id: filter_html
     provider: filter
@@ -46,23 +51,17 @@ filters:
       allowed_html: '<br> <p> <a hreflang href> <strong> <em> <u> <ul> <li> <ol>'
       filter_html_help: false
       filter_html_nofollow: false
-  filter_autop:
-    id: filter_autop
+  filter_html_escape:
+    id: filter_html_escape
     provider: filter
     status: false
-    weight: -44
+    weight: -48
     settings: {  }
-  filter_align:
-    id: filter_align
+  filter_html_image_secure:
+    id: filter_html_image_secure
     provider: filter
     status: false
-    weight: -45
-    settings: {  }
-  filter_caption:
-    id: filter_caption
-    provider: filter
-    status: false
-    weight: -43
+    weight: -38
     settings: {  }
   filter_htmlcorrector:
     id: filter_htmlcorrector
@@ -70,11 +69,11 @@ filters:
     status: true
     weight: -37
     settings: {  }
-  filter_html_escape:
-    id: filter_html_escape
+  filter_image_lazy_load:
+    id: filter_image_lazy_load
     provider: filter
-    status: false
-    weight: -48
+    status: true
+    weight: -46
     settings: {  }
   filter_image_style:
     id: filter_image_style
@@ -83,6 +82,13 @@ filters:
     weight: -42
     settings:
       allowed_styles: {  }
+  filter_url:
+    id: filter_url
+    provider: filter
+    status: true
+    weight: -50
+    settings:
+      filter_url_length: 72
   joinup_video:
     id: joinup_video
     provider: joinup_video
@@ -108,9 +114,3 @@ filters:
     weight: -40
     settings:
       title: true
-  filter_image_lazy_load:
-    id: filter_image_lazy_load
-    provider: filter
-    status: true
-    weight: -46
-    settings: {  }

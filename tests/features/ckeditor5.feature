@@ -36,24 +36,24 @@ Feature: CKEditor5
   @uploadFiles:alan.jpg
   Scenario: Media image with CKEditor5.
     Given the following "Image" media:
-      | name                                | image        | alt            | group                 |
-      | The Image in Shaping of disruption  | simple.svg   | A simple image | Shaping of disruption |
-      | Other Image in The Other Collection | richard.jpg  | Long Live FOSS | The Other Collection  |
-      | Too angry for Angry Birds           | leonardo.jpg | The Genius     | Angry Birds           |
-      | Pager test 1                        | leonardo.jpg | pager test 1   | Angry Birds           |
-      | Pager test 2                        | leonardo.jpg | pager test 2   | Angry Birds           |
-      | Pager test 3                        | leonardo.jpg | pager test 3   | Angry Birds           |
-      | Pager test 4                        | leonardo.jpg | pager test 4   | Angry Birds           |
-      | Pager test 5                        | leonardo.jpg | pager test 5   | Angry Birds           |
-      | Pager test 6                        | leonardo.jpg | pager test 6   | Angry Birds           |
-      | Pager test 7                        | leonardo.jpg | pager test 7   | Angry Birds           |
-      | Pager test 8                        | leonardo.jpg | pager test 8   | Angry Birds           |
-      | Pager test 9                        | leonardo.jpg | pager test 9   | Angry Birds           |
-      | Pager test ten                      | leonardo.jpg | pager test 10  | Angry Birds           |
-      | Pager test eleven                   | leonardo.jpg | pager test 11  | Angry Birds           |
-      | Pager test twelve                   | leonardo.jpg | pager test 12  | Angry Birds           |
-      | Pager test thirteen                 | leonardo.jpg | pager test 13  | Angry Birds           |
-      | Pager test fourteen                 | leonardo.jpg | pager test 14  | Angry Birds           |
+      | name                                | image        | alt            | group                 | revision         |
+      | The Image in Shaping of disruption  | simple.svg   | A simple image | Shaping of disruption | 2016-07-10T13:00 |
+      | Other Image in The Other Collection | richard.jpg  | Long Live FOSS | The Other Collection  | 2016-07-11T13:00 |
+      | Too angry for Angry Birds           | leonardo.jpg | The Genius     | Angry Birds           | 2016-07-26T13:00 |
+      | Pager test 1                        | leonardo.jpg | pager test 1   | Angry Birds           | 2016-07-25T13:00 |
+      | Pager test 2                        | leonardo.jpg | pager test 2   | Angry Birds           | 2016-07-24T13:00 |
+      | Pager test 3                        | leonardo.jpg | pager test 3   | Angry Birds           | 2016-07-23T13:00 |
+      | Pager test 4                        | leonardo.jpg | pager test 4   | Angry Birds           | 2016-07-22T13:00 |
+      | Pager test 5                        | leonardo.jpg | pager test 5   | Angry Birds           | 2016-07-21T13:00 |
+      | Pager test 6                        | leonardo.jpg | pager test 6   | Angry Birds           | 2016-07-20T13:00 |
+      | Pager test 7                        | leonardo.jpg | pager test 7   | Angry Birds           | 2016-07-19T13:00 |
+      | Pager test 8                        | leonardo.jpg | pager test 8   | Angry Birds           | 2016-07-18T13:00 |
+      | Pager test 9                        | leonardo.jpg | pager test 9   | Angry Birds           | 2016-07-17T13:00 |
+      | Pager test ten                      | leonardo.jpg | pager test 10  | Angry Birds           | 2016-07-16T13:00 |
+      | Pager test eleven                   | leonardo.jpg | pager test 11  | Angry Birds           | 2016-07-15T13:00 |
+      | Pager test twelve                   | leonardo.jpg | pager test 12  | Angry Birds           | 2016-07-14T13:00 |
+      | Pager test thirteen                 | leonardo.jpg | pager test 13  | Angry Birds           | 2016-07-13T13:00 |
+      | Pager test fourteen                 | leonardo.jpg | pager test 14  | Angry Birds           | 2016-07-12T13:00 |
 
     Given I am logged in as a moderator
 
@@ -168,7 +168,7 @@ Feature: CKEditor5
     # Use the pager.
     When I click "Go to page 2"
     And I wait for AJAX to finish
-    But I should not see "Too angry for Angry Birds"
+    Then I should not see "Too angry for Angry Birds"
     And I should not see "Pager test 1"
     And I should not see "Pager test 2"
     And I should not see "Pager test 3"
@@ -184,9 +184,11 @@ Feature: CKEditor5
     And I should see "Pager test thirteen"
     And I should see "Pager test fourteen"
 
-    When I click "Go to page 1"
-    And I wait for AJAX to finish
-    Then I select "Name (A-Z)" from "Sort by"
+    When I close the modal dialog
+    And the modal should be closed
+    Then I press the button "Insert Media" in the "Description" wysiwyg editor
+    And a modal should open
+    And I select "Name (A-Z)" from "Sort by"
     And I press "Apply filters"
     And I wait for AJAX to finish
     Then I should see "Pager test 1"
@@ -211,6 +213,8 @@ Feature: CKEditor5
     # Use the pager.
     When I click "Go to page 2"
     And I wait for AJAX to finish
+    # Wait for the animation to finish.
+    And I wait for 2 second
     But I should not see "Pager test 1"
     And I should not see "Pager test 2"
     And I should not see "Pager test 3"
