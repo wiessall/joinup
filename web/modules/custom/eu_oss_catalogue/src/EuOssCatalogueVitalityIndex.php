@@ -19,7 +19,7 @@ use Gitonomy\Git\Repository;
 class EuOssCatalogueVitalityIndex {
 
   /**
-   * Directory relative to private://.
+   * Directory relative to 'private://'.
    */
   protected const GIT_CLONE_DIR = 'eu_oss_catalogue';
 
@@ -41,9 +41,20 @@ class EuOssCatalogueVitalityIndex {
 
   /**
    * Processes the vitality index for a batch of solutions.
+   *
+   * The method is processing a node ID ordered list of solutions. Useful for
+   * cron jobs, in order to spit the work across many batches.
+   *
+   * @param int|null $lastProcessedNid
+   *   The last processed node before the method is called, passed by reference.
+   *   The variable is updated as the nodes are updated, so the caller knows
+   *   from where to start a new call.
+   * @param int $count
+   *   (optional) Number of OSS solution nodes to process once. Defaults to 20.
+   *
+   * @see \eu_oss_catalogue_cron()
    */
-  public function process(): void {
-    $lastProcessedNid = $this->state->get('eu_oss_catalogue.vitality_index.last_nid', 0);
+  public function processBatch(?int &$lastProcessedNid, int $count = 20): void {
     $storage = $this->entityTypeManager->getStorage('node');
 
     $nids = $storage->getQuery()->accessCheck(FALSE)
@@ -51,31 +62,37 @@ class EuOssCatalogueVitalityIndex {
       ->condition('status', TRUE)
       ->condition('nid', $lastProcessedNid, '>')
       ->sort('nid')
-      ->range(0, 20)
+      ->range(0, $count)
       ->execute();
 
     if (!$nids) {
-      // A complete pass through all OSS solutions is done. Reset the tracker.
-      $this->state->delete('eu_oss_catalogue.vitality_index.last_nid');
-      return;
+      $lastProcessedNid = NULL;
     }
 
     /** @var \Drupal\eu_oss_catalogue\Entity\OssSolutionInterface $solution */
     foreach ($storage->loadMultiple($nids) as $nid => $solution) {
-      $lastProcessedNid = $nid;
-      if ($vitalityIndex = $this->getVitalityIndexPerDay($solution)) {
-        $vitalityIndexEncoded = Json::encode($vitalityIndex);
-        if ($vitalityIndexEncoded !== $solution->get('oss_vitality_index_range')->value) {
-          $solution
-            ->set('oss_vitality_index_range', $vitalityIndexEncoded)
-            ->set('oss_vitality_index', array_sum($vitalityIndex) / count($vitalityIndex) / 100)
-            ->save();
-        }
+      $this->processSolution($solution);
+      $lastProcessedNid = (int) $nid;
+    }
+  }
+
+  /**
+   * Computes and stores the vitality index for one solution.
+   *
+   * @param \Drupal\eu_oss_catalogue\Entity\OssSolutionInterface $solution
+   *   The OSS Solution entity.
+   */
+  public function processSolution(OssSolutionInterface $solution): void {
+    if ($vitalityIndex = $this->getVitalityIndexPerDay($solution)) {
+      // Order chronologically.
+      $vitalityIndexEncoded = Json::encode(array_reverse($vitalityIndex));
+      if ($vitalityIndexEncoded !== $solution->get('oss_vitality_index_range')->value) {
+        $solution
+          ->set('oss_vitality_index_range', $vitalityIndexEncoded)
+          ->set('oss_vitality_index', array_sum($vitalityIndex) / count($vitalityIndex) / 100)
+          ->save();
       }
     }
-
-    // Save latest node ID.
-    $this->state->set('eu_oss_catalogue.vitality_index.last_nid', $lastProcessedNid);
   }
 
   /**
@@ -95,6 +112,8 @@ class EuOssCatalogueVitalityIndex {
     $repository = is_dir($repoPath) ? $this->gitFetch($repoPath) : $this->gitClone($repoPath, $url);
 
     if (!$repository) {
+      // The repository could not be cloned or fetches. Just ignore it for now
+      // and continue the process. The error has been logged.
       return NULL;
     }
 
