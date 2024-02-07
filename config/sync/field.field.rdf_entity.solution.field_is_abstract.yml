@@ -1,0 +1,19 @@
+uuid: 2ae9c9ec-6e6d-49a6-aa86-eab931a8b755
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.rdf_entity.field_is_abstract
+    - rdf_entity.rdfentity.solution
+id: rdf_entity.solution.field_is_abstract
+field_name: field_is_abstract
+entity_type: rdf_entity
+bundle: solution
+label: Abstract
+description: 'Short description text of the solution.'
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

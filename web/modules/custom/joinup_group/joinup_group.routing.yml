@@ -1,18 +1,3 @@
-entity.rdf_entity.about_page:
-  path: 'rdf_entity/{rdf_entity}/about'
-  defaults:
-    _controller: '\Drupal\joinup_group\Controller\AboutPageController::aboutPage'
-    _title_callback: '\Drupal\joinup_group\Controller\AboutPageController::aboutPageTitle'
-  requirements:
-    _entity_access: 'rdf_entity.view'
-  options:
-    parameters:
-      rdf_entity:
-        type: entity:rdf_entity
-        bundle:
-          - collection
-          - solution
-
 entity.rdf_entity.member_overview:
   path: 'rdf_entity/{rdf_entity}/members'
   defaults:

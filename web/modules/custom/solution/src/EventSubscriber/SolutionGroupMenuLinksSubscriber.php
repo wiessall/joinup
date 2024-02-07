@@ -32,6 +32,10 @@ class SolutionGroupMenuLinksSubscriber implements EventSubscriberInterface {
    *   The event object.
    */
   public function addLinks(GroupMenuLinksEvent $event): void {
+    if ($event->getMenuType() !== 'navigation') {
+      return;
+    }
+
     $solution = $event->getGroup();
     if ($solution instanceof SolutionInterface) {
       $url = $solution->getCollection()->toUrl('glossary')->mergeOptions([

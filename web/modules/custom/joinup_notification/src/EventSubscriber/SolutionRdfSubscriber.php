@@ -525,7 +525,7 @@ class SolutionRdfSubscriber extends NotificationSubscriberBase {
     $this->messageDelivery->sendMessageTemplateToEmailAddresses(
       self::TEMPLATE_ARCHIVAL_COMPLETE,
       $this->generateArguments($solution),
-      $solution->getValidatedContactInformation(),
+      $solution->getValidatedContactInformationEmails(),
     );
     // Notify moderators.
     $this->sendUserDataMessages([

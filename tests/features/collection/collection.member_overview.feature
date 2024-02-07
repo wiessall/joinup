@@ -68,15 +68,16 @@ Feature: Collection membership overview
     # The membership overview should be accessible for owner users for draft collection.
     When I am logged in as "Ruby Valenta"
     And I go to the members page of "Jubilant Rabits"
-    Then I should see the link "Members" in the "Header"
+    Then I should not see the link "Members" in the "Header"
 
     # The membership overview should be accessible for anonymous users.
     When I am not logged in
     And I go to the members page of "Jubilant Robots"
-    Then I should see the link "Members" in the "Header"
+    Then I should not see the link "Members" in the "Header"
 
     # The first 12 active members should be shown, ordered by first name - last name.
-    When I click "Members"
+    When I click "14 members"
+    When I am on the members page of "Jubilant Robots"
     Then I should see the heading "Members"
 
     # Check that clean URLs are being applied to the "members" subpage.

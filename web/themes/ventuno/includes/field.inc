@@ -78,6 +78,13 @@ function ventuno_preprocess_field_multiple_value_form(array &$variables): void {
 }
 
 /**
+ * Implements hook_preprocess_HOOK().
+ */
+function ventuno_preprocess_field__solution_last_update_date(&$variables): void {
+  $variables['label'] = t('Last update');
+}
+
+/**
  * Implements hook_preprocess_field().
  */
 function ventuno_preprocess_field(array &$variables): void {

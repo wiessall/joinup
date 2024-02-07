@@ -37,7 +37,6 @@ Feature: Test SVG attachments.
 
     # Ensure local SVG files are allowed.
     When I press "Publish"
-    And I click "About"
     Then the response should not contain "This image has been removed. For security reasons, only images from the local domain are allowed."
     But the response should contain "sites/default/files/media/image/simple.svg"
 

@@ -126,8 +126,8 @@ Feature: As a site moderator I am able to import RDF files.
       | title | NIO                    |
       | state | published              |
     And solutions:
-      | uri                           | title                       | collection | description         | state     | modification date |
-      | http://example.com/solution/2 | Local version of Solution 2 | NIO        | Initial description | published | 15-07-2018        |
+      | uri                           | title                       | collection | abstract         | description         | state     | modification date |
+      | http://example.com/solution/2 | Local version of Solution 2 | NIO        | Initial abstract | Initial description | published | 15-07-2018        |
     And the following solution user membership:
       | solution                    | user     | roles                      | state  |
       | Local version of Solution 2 | CS Owner | facilitator, administrator | active |
@@ -227,11 +227,9 @@ Feature: As a site moderator I am able to import RDF files.
     # Regression test to ensure that solutions with complex urls still receive all menu items.
     # @see: https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-5608
     When I visit the "Solution 1" solution
-    Then I should see the following group menu items in the specified order:
+    Then I should see the following navigation menu items in the specified order:
       | text     |
       | Overview |
-      | Members  |
-      | About    |
 
     # Check the affiliation of federated solutions.
     But the "Solution 1" solution should be affiliated with the "NIO" collection

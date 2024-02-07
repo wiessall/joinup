@@ -90,7 +90,10 @@ function custom_page_node_insert(EntityInterface $entity): void {
     return;
   }
 
-  \Drupal::service('custom_page.og_menu_links_manager')->addLink($entity);
+  \Drupal::getContainer()->get('custom_page.og_menu_links_manager')->addLink($entity, 'navigation');
+  \Drupal::getContainer()->get('custom_page.og_menu_links_manager')->addLink($entity, 'quick_links', [
+    'enabled' => FALSE,
+  ]);
 
   // The content of custom pages is included in the search index of their
   // collections and solutions, so that the parent group can be found when
@@ -335,4 +338,19 @@ function custom_page_form_node_custom_page_delete_form_alter(array &$form, FormS
     ];
     $form['actions']['submit']['#access'] = FALSE;
   }
+}
+
+/**
+ * Implements hook_entity_extra_field_info().
+ */
+function custom_page_entity_extra_field_info(): array {
+  $fields = [];
+
+  $fields['node']['custom_page']['display']['share_link'] = [
+    'label' => t('Share'),
+    'description' => t('A link to share the content'),
+    'visible' => FALSE,
+  ];
+
+  return $fields;
 }
