@@ -1,8 +1,7 @@
-@api @group-g
+@api @group-g @terms
 Feature: When a solution is archived then its sub-content also should be archived.
 
-  @terms
-  Scenario: Archiving / unarchiving a solution must archive / unarchive its sub-content.
+  Background:
     Given the following collection:
       | title | Collection |
       | state | published  |
@@ -27,14 +26,15 @@ Feature: When a solution is archived then its sub-content also should be archive
       | owner               | The Company                      |
       | contact information | Jennifer Unconfirmed, Liam Smith |
     And users:
-      | Username     | E-mail                   |
-      | Anne Smith   | anne.smith@example.com   |
-      | Andrew Smith | andrew.smith@example.com |
-      | Blahman      | ferners-lee@example.com  |
+      | Username           | E-mail                     | First name | Family name | Roles     |
+      | Anne Group Admin   | anne.smith@example.com     | Anne       | Smith       |           |
+      | Andrew Facilitator | andrew.smith@example.com   | Andrew     | Smith       |           |
+      | Blahman            | ferners-lee@example.com    |            |             |           |
+      | John Moderator     | john.moderator@example.com | John       | Moderator   | moderator |
     And the following solution user memberships:
-      | solution | user         | roles                      |
-      | Solution | Anne Smith   | administrator, facilitator |
-      | Solution | Andrew Smith | facilitator                |
+      | solution | user               | roles                      |
+      | Solution | Anne Group Admin   | administrator, facilitator |
+      | Solution | Andrew Facilitator | facilitator                |
     And "event" content:
       | title          | solution | state     |
       | Solution Event | Solution | published |
@@ -44,8 +44,8 @@ Feature: When a solution is archived then its sub-content also should be archive
       | Solution News 2 | Solution | draft     |
       | Solution News 3 | Solution | published |
       | Solution News 4 | Solution | published |
-    And the workflow state of the "Solution News 3" node is changed to "needs_update"
-    And the workflow state of the "Solution News 4" "content" is changed to "archived"
+    And the workflow state of the "Solution News 3" content is changed to "needs_update"
+    And the workflow state of the "Solution News 4" content is changed to "archived"
     And "document" content:
       | title             | collection | state     |
       | Solution Document | Solution   | published |
@@ -57,7 +57,7 @@ Feature: When a solution is archived then its sub-content also should be archive
       | Solution Custom page 1 | Solution | published |
       | Solution Custom page 2 | Solution | draft     |
       | Solution Custom page 3 | Solution | published |
-    And the workflow state of the "Solution Custom page 3" "content" is changed to "archived"
+    And the workflow state of the "Solution Custom page 3" content is changed to "archived"
     And distribution:
       | title  | Solution Distribution |
       | parent | Solution              |
@@ -67,16 +67,14 @@ Feature: When a solution is archived then its sub-content also should be archive
       | Solution Release 1 | Solution      | published |
       | Solution Release 2 | Solution      | draft     |
       | Solution Release 3 | Solution      | published |
-   And the workflow state of the "Solution Release 3" "rdf_entity" is changed to "needs_update"
+    And the workflow state of the "Solution Release 3" "rdf_entity" is changed to "needs_update"
     And the following announcements:
       | group      | subject              | state | created    | author  |
       | Solution   | Announcement1 C1     | draft | 2005-11-05 | Blahman |
       | Collection | Some announcement C2 | draft | 2005-11-05 | Blahman |
-    Given I am logged in as a user with the moderator role and I have the following fields:
-      | name                   | John The Moderator             |
-      | mail                   | john.the.moderator@example.com |
-      | field_user_first_name  | John                           |
-      | field_user_family_name | Moderator                      |
+
+  Scenario: Archiving / unarchiving a solution must archive / unarchive its sub-content.
+    Given I am logged in as "John Moderator"
     When I go to the edit form of the "Solution" solution
     Then I should see the button "Archive"
     When I press "Archive"
@@ -84,34 +82,6 @@ Feature: When a solution is archived then its sub-content also should be archive
       | Success messages                                                            |
       | The archiving process of the Solution has been initiated.                   |
       | You will receive an email notification as soon as the process is completed. |
-
-    # Sub-content of an archived solution must not be editable from UI.
-    When I go to the edit form of the "Solution Event" event
-    Then the response status code should be 403
-    When I go to the edit form of the "Solution News 1" news
-    Then the response status code should be 403
-    When I go to the edit form of the "Solution News 2" news
-    Then the response status code should be 403
-    When I go to the edit form of the "Solution News 3" news
-    Then the response status code should be 403
-    When I go to the edit form of the "Solution Document" document
-    Then the response status code should be 403
-    When I go to the edit form of the "Solution Discussion" discussion
-    Then the response status code should be 403
-    When I go to the edit form of the "Solution Custom page 1" "custom page"
-    Then the response status code should be 403
-    When I go to the edit form of the "Solution Custom page 2" "custom page"
-    Then the response status code should be 403
-    When I go to the edit form of the "Solution Custom page 3" "custom page"
-    Then the response status code should be 403
-    When I go to the edit form of the "Solution Distribution" distribution
-    Then the response status code should be 403
-    When I go to the edit form of the "Solution Release 1" release
-    Then the response status code should be 403
-    When I go to the edit form of the "Solution Release 2" release
-    Then the response status code should be 403
-    When I go to the edit form of the "Solution Release 3" release
-    Then the response status code should be 403
 
     # Execute the queue.
     Given the following contact information emails are validated:
@@ -133,9 +103,9 @@ Feature: When a solution is archived then its sub-content also should be archive
     And the workflow state of the "Solution Release 3" "rdf entity" should be "archived"
     And 2 e-mails should have been sent
     And the following email should have been sent:
-      | recipient | John The Moderator                 |
+      | recipient | John Moderator                     |
       | subject   | Joinup: Solution has been archived |
-    And the email sent to "John The Moderator" with subject "Joinup: Solution has been archived" contains the following lines of text:
+    And the email sent to "John Moderator" with subject "Joinup: Solution has been archived" contains the following lines of text:
       | Dear John,                                                           |
       | The Solution, along with its associated content items, has been      |
       | archived. Even though the Solution has been archived, you can still  |
@@ -201,35 +171,6 @@ Feature: When a solution is archived then its sub-content also should be archive
     Then I should see the following success messages:
       | Success messages                                            |
       | The unarchiving process of the Solution has been initiated. |
-
-    # Sub-content must became editable from UI again.
-    When I go to the edit form of the "Solution Event" event
-    Then the response status code should be 200
-    When I go to the edit form of the "Solution News 1" news
-    Then the response status code should be 200
-    When I go to the edit form of the "Solution News 2" news
-    Then the response status code should be 200
-    When I go to the edit form of the "Solution News 3" news
-    Then the response status code should be 200
-    When I go to the edit form of the "Solution Document" document
-    Then the response status code should be 200
-    When I go to the edit form of the "Solution Discussion" discussion
-    Then the response status code should be 200
-    When I go to the edit form of the "Solution Custom page 1" "custom page"
-    Then the response status code should be 200
-    When I go to the edit form of the "Solution Custom page 2" "custom page"
-    Then the response status code should be 200
-    When I go to the edit form of the "Solution Custom page 3" "custom page"
-    Then the response status code should be 200
-    When I go to the edit form of the "Solution Distribution" distribution
-    Then the response status code should be 200
-    When I go to the edit form of the "Solution Release 1" release
-    Then the response status code should be 200
-    When I go to the edit form of the "Solution Release 2" release
-    Then the response status code should be 200
-    When I go to the edit form of the "Solution Release 3" release
-    Then the response status code should be 200
-
     # Execute the queue.
     Given I run the "solution_archive_related_content" queue worker
     Then 0 e-mails should have been sent
@@ -247,3 +188,41 @@ Feature: When a solution is archived then its sub-content also should be archive
     And the workflow state of the "Solution Release 1" "rdf entity" should be "published"
     And the workflow state of the "Solution Release 2" "rdf entity" should be "draft"
     And the workflow state of the "Solution Release 3" "rdf entity" should be "published"
+
+  Scenario Outline: Users must not be able to edit the sub-content of an archived solution
+    Given the workflow state of the "Solution" "rdf_entity" is changed to "archived"
+    And I am logged in as "<User>"
+
+    When I go to the edit form of the "Solution Event" event
+    Then the response status code should be 403
+    When I go to the edit form of the "Solution News 1" news
+    Then the response status code should be 403
+    When I go to the edit form of the "Solution News 2" news
+    Then the response status code should be 403
+    When I go to the edit form of the "Solution News 3" news
+    Then the response status code should be 403
+    When I go to the edit form of the "Solution Document" document
+    Then the response status code should be 403
+    When I go to the edit form of the "Solution Discussion" discussion
+    Then the response status code should be 403
+    When I go to the edit form of the "Solution Custom page 1" "custom page"
+    Then the response status code should be 403
+    When I go to the edit form of the "Solution Custom page 2" "custom page"
+    Then the response status code should be 403
+    When I go to the edit form of the "Solution Custom page 3" "custom page"
+    Then the response status code should be 403
+    When I go to the edit form of the "Solution Distribution" distribution
+    Then the response status code should be 403
+    When I go to the edit form of the "Solution Release 1" release
+    Then the response status code should be 403
+    When I go to the edit form of the "Solution Release 2" release
+    Then the response status code should be 403
+    When I go to the edit form of the "Solution Release 3" release
+    Then the response status code should be 403
+
+    Examples:
+      | User               |
+      | John Moderator     |
+      | Anne Group Admin   |
+      | Andrew Facilitator |
+
