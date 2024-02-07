@@ -1,6 +1,7 @@
 @api @group-g
 Feature: When a solution is archived then its sub-content also should be archived.
 
+  @terms
   Scenario: Archiving / unarchiving a solution must archive / unarchive its sub-content.
     Given the following collection:
       | title | Collection |
@@ -19,6 +20,7 @@ Feature: When a solution is archived then its sub-content also should be archive
       | collection          | Collection                       |
       | state               | published                        |
       | description         | Description                      |
+      | topic               | Demography                       |
       | solution type       | Innovation                       |
       | creation date       | 2018-11-19T10:00                 |
       | modification date   | 2018-12-19T10:00                 |
@@ -28,6 +30,7 @@ Feature: When a solution is archived then its sub-content also should be archive
       | Username     | E-mail                   |
       | Anne Smith   | anne.smith@example.com   |
       | Andrew Smith | andrew.smith@example.com |
+      | Blahman      | ferners-lee@example.com  |
     And the following solution user memberships:
       | solution | user         | roles                      |
       | Solution | Anne Smith   | administrator, facilitator |
@@ -42,6 +45,7 @@ Feature: When a solution is archived then its sub-content also should be archive
       | Solution News 3 | Solution | published |
       | Solution News 4 | Solution | published |
     And the workflow state of the "Solution News 3" node is changed to "needs_update"
+    And the workflow state of the "Solution News 4" "content" is changed to "archived"
     And "document" content:
       | title             | collection | state     |
       | Solution Document | Solution   | published |
@@ -58,7 +62,10 @@ Feature: When a solution is archived then its sub-content also should be archive
       | Solution Release 2 | Solution      | draft     |
       | Solution Release 3 | Solution      | published |
     And the workflow state of the "Solution Release 3" "rdf_entity" is changed to "needs_update"
-    And the workflow state of the "Solution News 4" "content" is changed to "archived"
+    And the following announcements:
+      | group      | subject              | state | created    | author  |
+      | Solution   | Announcement1 C1     | draft | 2005-11-05 | Blahman |
+      | Collection | Some announcement C2 | draft | 2005-11-05 | Blahman |
     Given I am logged in as a user with the moderator role and I have the following fields:
       | name                   | John The Moderator             |
       | mail                   | john.the.moderator@example.com |
@@ -107,6 +114,46 @@ Feature: When a solution is archived then its sub-content also should be archive
       | only Archived items' or through the Collection it belonged to.       |
       | If you think this action is not clear, please contact Joinup Support |
       | at                                                                   |
+
+    # Test links that are not available for archived solutions.
+    Given I go to the "Solution" solution
+    Then I should not see the following links:
+    # From the plus button menu.
+      | Add custom page     |
+      | Add distribution    |
+      | Add event           |
+      | Add discussion      |
+      | Add document        |
+      | Add news            |
+      | Add release         |
+    # From the 3-dots menu.
+      | Manage content      |
+      | Moderate content    |
+      | Unpublished content |
+
+    # Announcements are accessible but we cannot add or edit any.
+    When I click "Announcements" in the "Entity actions" region
+    Then I should not see the link "Add announcement"
+    And the "announcement list" table should be:
+      | Subject          | State | Created on | Author  | Edit |
+      | Announcement1 C1 | Draft | 05/11/2005 | Blahman |      |
+
+    # The link in the header toolbar will be clicked and all announcements are
+    # available there. This is to test that other announcements are not
+    # accidentally affected by the edit permission restriction.
+    When I click "Announcements"
+    Then the "announcement list" table should be:
+      | Group      | Subject              | State | Created on | Author  | Edit |
+      | Solution   | Announcement1 C1     | Draft | 05/11/2005 | Blahman |      |
+      | Collection | Some announcement C2 | Draft | 05/11/2005 | Blahman | edit |
+
+    # Ensure that visiting the members page, even moderators see the
+    # non-privileged version.
+    When I go to the members page of "Solution"
+    Then I should not see the following links:
+      | Add member    |
+      | Invite member |
+
     # Now, check the unarchive operation.
     Given I mark all emails as read
     When I go to the edit form of the "Solution" solution
