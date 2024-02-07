@@ -237,18 +237,19 @@ class GitHub extends EuOssCatalogueGitHostingPlatformPluginBase {
           }
 
           yield new Project(
-            $node['owner']['login'],
-            $node['name'],
-            "{$this->getConfiguration()['baseUrl']}/{$node['owner']['login']}/{$node['name']}",
-            $this->getPluginId(),
-            $node['defaultBranchRef']['name'],
-            $node['isArchived'],
-            $node['latestRelease']['tagName'] ?? NULL,
-            $node['latestRelease']['createdAt'] ?? NULL,
-            $node['id'],
-            $node['description'],
-            $logo,
-            $files,
+            namespace: $node['owner']['login'],
+            name: $node['name'],
+            url: "{$this->getConfiguration()['baseUrl']}/{$node['owner']['login']}/{$node['name']}",
+            platform: $this->getPluginId(),
+            defaultBranch: $node['defaultBranchRef']['name'],
+            isArchived: $node['isArchived'],
+            latestReleaseTag: $node['latestRelease']['tagName'] ?? NULL,
+            latestReleaseDate: $node['latestRelease']['createdAt'] ?? NULL,
+            platformReference: $node['id'],
+            description: $node['description'],
+            logo: $logo,
+            forksCount: $node['forksCount'],
+            files: $files,
           );
         }
 
@@ -281,6 +282,7 @@ class GitHub extends EuOssCatalogueGitHostingPlatformPluginBase {
    *         description
    *         name
    *         isArchived
+   *         forkCount
    *         openGraphImageUrl
    *         owner {
    *           login
@@ -325,7 +327,7 @@ class GitHub extends EuOssCatalogueGitHostingPlatformPluginBase {
 
     $fragment = $query->nodes([])
       ->on('Repository')
-      ->use('id', 'description', 'name', 'isArchived', 'openGraphImageUrl')
+      ->use('id', 'description', 'name', 'isArchived', 'forkCount', 'openGraphImageUrl')
       ->use((new Node('owner'))->use('login'))
       ->use((new Node('defaultBranchRef'))->use('name'))
       ->use((new Node('latestRelease'))->use('tagName', 'createdAt'));
