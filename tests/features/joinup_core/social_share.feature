@@ -4,7 +4,7 @@ Feature: Sharing content on social networks
   I want to share content in my social networks
   So that useful information has more visibility
 
-  Scenario Outline: Sharing content on Facebook and Twitter.
+  Scenario Outline: Sharing content on Facebook, Twitter and Linkedin.
     Given the following collection:
       | title | Social networks |
       | state | published       |
@@ -29,6 +29,7 @@ Feature: Sharing content on social networks
       | document     |
       | discussion   |
       | news         |
+      | custom_page  |
 
   Scenario: Sharing solutions on social media.
     Given the following collection:
