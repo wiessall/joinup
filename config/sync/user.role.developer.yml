@@ -4,9 +4,12 @@ status: true
 dependencies:
   module:
     - role_delegation
+    - toolbar
 id: developer
 label: Developer
 weight: 5
 is_admin: null
 permissions:
+  - 'access toolbar'
+  - 'administer users'
   - 'assign developer role'

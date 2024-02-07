@@ -413,6 +413,38 @@ class JoinupContext extends RawDrupalContext {
   }
 
   /**
+   * Asserts the available checkboxes options of a field.
+   *
+   * @param string $field
+   *   The name of the field element.
+   * @param TableNode $options
+   *   The available list of options.
+   *
+   * @Then the :field checkboxes should contain the following options:
+   */
+  public function assertCheckboxesFieldOptions(string $field, TableNode $options): void {
+    // We are looking for a field with the class 'field--widget-options-buttons'
+    // that contains a fieldset and a legend with the $field as span.
+    $xpath = "//fieldset[legend/span[text()='{$field}']]";
+    $field = $this->getSession()->getPage()->find('xpath', $xpath);
+    if (!$field) {
+      throw new \Exception("The field '{$field}' was not found.");
+    }
+
+    // Get the checkboxes.
+    $checkboxes = $field->findAll('css', 'input[type="checkbox"]');
+    $checkbox_labels = array_map(function (NodeElement $checkbox): string {
+      return $checkbox->getParent()->getText();
+    }, $checkboxes);
+
+    $expected_options = $options->getColumn(0);
+    sort($expected_options);
+    sort($checkbox_labels);
+
+    Assert::assertEquals($expected_options, $checkbox_labels);
+  }
+
+  /**
    * Checks that a select field does not have any of the given options.
    *
    * @param string $select
