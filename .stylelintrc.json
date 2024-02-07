@@ -1,0 +1,42 @@
+{
+  "extends": [
+    "./web/core/.stylelintrc.json"
+  ],
+  "rules": {
+    "selector-id-pattern": "^[a-z][-_a-z0-9]*$|^eTransButton$"
+  },
+  "overrides": [
+    {
+      "files": [
+        "**/*.{sass,scss}"
+      ],
+      "extends": [
+        "stylelint-config-standard-scss",
+        "./web/core/.stylelintrc.json"
+      ],
+      "rules": {
+        "annotation-no-unknown": [
+          true,
+          {
+            "ignoreAnnotations": [
+              "default"
+            ]
+          }
+        ],
+        "at-rule-no-unknown": null,
+        "scss/at-rule-no-unknown": true,
+        "function-no-unknown": [
+          true,
+          {
+            "ignoreFunctions": [
+              "map-loop",
+              "tint-color"
+            ]
+          }
+        ],
+        "no-invalid-position-at-import-rule": null,
+        "scss/at-extend-no-missing-placeholder": null
+      }
+    }
+  ]
+}

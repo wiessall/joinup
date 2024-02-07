@@ -2,18 +2,15 @@
 
 .iop-navbar {
   background: linear-gradient(to bottom, $darkblue 0%, $darkblue 60%, $blue 120%);
-  @include media-breakpoint-up(lg) {
-    padding: $spacer 0; // 16px 0
-  }
   .navbar-brand {
     position: relative;
     left: 50%;
-    transform: translateX(-50%);
     padding: 0;
+    transform: translateX(-50%);
     @include media-breakpoint-up(md) {
       left: 0;
-      transform: translateX(0);
       margin: 0 $spacer 0 0; // 0px 16px 0px 0px
+      transform: translateX(0);
     }
   }
   .navbar-brand-image {
@@ -30,8 +27,8 @@
     }
   }
   .navbar-toggler {
-    border: 0;
     padding: $spacer * .25; // 4px
+    border: 0;
     &:focus {
       box-shadow: 0 0 0 0.125rem $lightblue;
     }
@@ -59,9 +56,9 @@
   }
   .nav-link {
     display: inline;
+    padding: $spacer * .25 $spacer * .75; // 4px 12px
     color: $white;
     border: 2px solid transparent;
-    padding: $spacer * .25 $spacer * .75; // 4px 12px
     border-radius: $border-radius-pill;
     &:hover,
     &.active {
@@ -72,7 +69,10 @@
   }
   &.navbar--sticky {
     position: sticky;
-    top: 0;
     z-index: 49; // Avoid navbar to be overlapped by search page offcanvas AND to overlap joinup navbar's search bar
+    top: 0;
+  }
+  @include media-breakpoint-up(lg) {
+    padding: $spacer 0; // 16px 0
   }
 }

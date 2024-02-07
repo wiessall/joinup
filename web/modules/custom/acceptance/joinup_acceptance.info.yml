@@ -7,5 +7,4 @@ core_version_requirement: ">= 9.4"
 dependencies:
   - joinup:dashboard
   - message_digest:message_digest
-  - mail:swiftmailer
   - stage_file_proxy:stage_file_proxy
