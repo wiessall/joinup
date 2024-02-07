@@ -1,0 +1,16 @@
+chart.js:
+  version: VERSION
+  js:
+    # TODO: Move this in our codebase with NPM.
+    https://cdn.jsdelivr.net/npm/chart.js@2.9.4:
+      type: external
+vitality-index-chart:
+  version: VERSION
+  js:
+    js/vitality_index_chart.js:
+      attributes:
+        defer: true
+  dependencies:
+    - core/drupal
+    - core/once
+    - joinup_oss_catalogue/chart.js
