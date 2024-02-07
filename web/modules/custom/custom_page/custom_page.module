@@ -252,11 +252,6 @@ function custom_page_node_access(NodeInterface $node, $op, AccountInterface $acc
       ->addCacheableDependency($parent);
   }
 
-  // Prevent custom page view access to unprivileged users when the parent
-  // entity is not published.
-  if (!$parent) {
-    return AccessResult::neutral();
-  }
   // Let parentless nodes be handled by the core access.
   if (!$parent->access('view', $account)) {
     // Anonymous users do not have access to content of non published groups.
