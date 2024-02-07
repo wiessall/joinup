@@ -196,7 +196,6 @@ class GitLabSelfHosted extends GitLabDotCom {
     $query->use('count');
     $query->pageInfo([])->use('hasNextPage', 'endCursor');
 
-
     $fragment = $query->nodes([])
       ->use('fullPath', 'path', 'id', 'description', 'archived', 'forksCount', 'avatarUrl')
       ->releases(['sort' => GitLabReleaseSort::CREATED_DESC, 'first' => 1])
