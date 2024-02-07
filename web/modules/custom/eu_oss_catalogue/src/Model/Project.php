@@ -36,7 +36,7 @@ class Project {
    *   The repository description, if any.
    * @param string|null $logo
    *   The URL of the project's logo/avatar.
-   * @param int|null $forksCount
+   * @param int|null $numberOfForks
    *   Number of times the project has been forked.
    * @param string[] $files
    *   A list of file blobs keyed by a file identifier.
