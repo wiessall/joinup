@@ -101,6 +101,7 @@
         "drupal/subpathauto": "^1.2",
         "drupal/svg_image": "^3.0",
         "drupal/swiftmailer": "^2.2",
+        "drupal/symfony_mailer_lite": "^1.0",
         "drupal/theme_rule": "^1.0",
         "drupal/token": "~1.7",
         "drupal/video_embed_field": "^2",

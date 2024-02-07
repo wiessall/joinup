@@ -23,7 +23,7 @@
         <ul class="licence-filter__list">
           {% for child in parent_item.items %}
             <li class="licence-filter__item">
-              <button class="licence-filter__button" data-joinup-licence-category="{{ child.licence_category }}" title="{{ child.description }}" type="button">
+              <button class="licence-filter__button" data-joinup-licence-category="{{ child.licence_category }}" title="{{ child.description|striptags }}" type="button">
                 {{ child.title }}
               </button>
             </li>

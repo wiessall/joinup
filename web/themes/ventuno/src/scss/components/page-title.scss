@@ -7,15 +7,15 @@
   &__title {
     &:hover {
       .permalink {
-        display: inline;
         position: absolute;
+        display: inline;
         margin-left: $spacer * .5;
       }
     }
     &.visually-hidden {
       & + .page-title__details {
-        width: 100%;
         overflow: hidden;
+        width: 100%;
       }
     }
   }
