@@ -1,0 +1,24 @@
+uuid: 5dbec2ea-9a17-4c46-a1d3-7f598c658695
+langcode: en
+status: true
+dependencies:
+  module:
+    - field_permissions
+    - node
+third_party_settings:
+  field_permissions:
+    permission_type: public
+id: node.oss_git_open_pull_requests
+field_name: oss_git_open_pull_requests
+entity_type: node
+type: integer
+settings:
+  unsigned: false
+  size: normal
+module: core
+locked: false
+cardinality: 1
+translatable: false
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false
