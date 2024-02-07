@@ -12,16 +12,16 @@
 }
 .oss {
   &__header {
-    color: $white;
     position: relative;
+    color: $white;
     &::before {
-      content: "";
       position: absolute;
       z-index: -1;
       bottom: 0;
+      left: $spacer * -.75; // -12px
       width: 100vw;
       height: 100%;
-      left: $spacer * -.75; // -12px
+      content: "";
       background-color: $ec-blue;
       @include media-breakpoint-up(sm) {
         left: calc(-50vw + 258px);
@@ -40,19 +40,20 @@
       }
     }
     .search-bar__input {
+      border-style: none;
       border-top-left-radius: 50rem;
       border-bottom-left-radius: 50rem;
-      border-style: none;
     }
     .btn-search {
-      &::before {
-        @include get-bootstrap-icon('search', $primary);
-        font-size: 1rem;
-      }
+      color: $primary;
       border-top-right-radius: 50rem;
       border-bottom-right-radius: 50rem;
       background-color: $white;
-      color: $primary;
+      &::before {
+        @include get-bootstrap-icon('search', $primary);
+
+        font-size: 1rem;
+      }
     }
   }
   &__instructions-heading {
@@ -65,20 +66,22 @@
   &__instructions {
     padding-top: 0;
     .layout__region--first {
+      position: relative;
+      padding-inline-start: $spacer * 4;
       .paragraph {
         h3 {
-          color: $black;
-          margin-bottom: $spacer * .5!important;
           position: relative;
+          margin-bottom: $spacer * .5!important;
+          color: $black;
           &::before {
             position: absolute;
             top: $spacer * .25;
             left: $spacer * -2.5;
-            color: $primary;
             width: $spacer;
             height: $spacer;
-            background-color: $primary;
             content: "";
+            color: $primary;
+            background-color: $primary;
             mask-size: cover;
           }
         }
@@ -106,17 +109,15 @@
       p {
         margin-bottom: $spacer * 2;
       }
-      padding-inline-start: $spacer * 4;
-      position: relative;
       &::before {
-        content: "";
         position: absolute;
         top: $spacer * -.5;
         bottom: $spacer;
         left: $spacer;
+        width: $spacer * 2;
+        content: "";
         border-radius: 50rem;
         background-color: $secondary;
-        width: $spacer * 2;
       }
     }
     .layout__region--second {
@@ -150,19 +151,19 @@
       a {
         width: $spacer * 3!important;
         height: $spacer * 3!important;
-        border-radius: $border-radius-pill;
-        font-size: 0;
         padding: $spacer * .5;
         color: $brand;
+        border: 0;
+        border-radius: $border-radius-pill;
         background-color: transparent;
         box-shadow: none;
-        border: 0;
+        font-size: 0;
         &::before {
           display: inline-block;
-          background-color: $brand;
           width: $spacer * 2;
           height: $spacer * 2;
           content: "";
+          background-color: $brand;
           mask-size: $spacer * 2;
         }
         &:hover {
@@ -190,8 +191,9 @@
       @extend .mb-5;
       @extend .mb-md-0;
       .paragraph--text p {
-        font-size: $spacer * 3.5;
         @extend .text-primary;
+
+        font-size: $spacer * 3.5;
         strong {
           @extend .text-secondary;
           @extend .bg-secondary;
@@ -206,17 +208,17 @@
     .layout__region--second {
       .paragraph--text {
         p {
+          position: relative;
           margin-bottom: $spacer * 2.5!important;
           padding-left: $spacer * 3.5;
-          position: relative;
           &::before {
             position: absolute;
             left: $spacer * -0.5;
-            color: $oss--bg;
             width: 3rem;
             height: 3rem;
-            background-color: $oss--bg;
             content: "";
+            color: $oss-bg;
+            background-color: $oss-bg;
           }
         }
         &:nth-of-type(1) {

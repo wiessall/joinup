@@ -8,8 +8,8 @@
   // Allow absolute positioning of the button
   &--ventuno {
     @include media-breakpoint-up(md) {
-      float: right;
       z-index: 1;
+      float: right;
     }
   }
 }
@@ -19,25 +19,25 @@
     // Make it look like "btn btn-secondary"
     display: inline-block;
     padding: $btn-padding-y $btn-padding-x;
-    font-family: $font-family-sans-serif;
-    font-size: $btn-font-size;
-    font-weight: 500;
-    line-height: $btn-line-height;
-    color: $brand-darker;
-    text-align: center;
-    vertical-align: middle;
     cursor: pointer;
     -webkit-user-select: none;
     -moz-user-select: none;
     user-select: none;
+    transition: $btn-transition;
+    text-align: center;
+    vertical-align: middle;
+    color: $brand-darker;
     border: $btn-border-width solid $secondary;
     border-radius: $btn-border-radius;
     background-color: $secondary;
     box-shadow: $btn-box-shadow;
-    transition: $btn-transition;
+    font-family: $font-family-sans-serif;
+    font-size: $btn-font-size;
+    font-weight: 500;
+    line-height: $btn-line-height;
     &:hover {
-      color: $dark;
       text-decoration: none;
+      color: $dark;
       box-shadow: $box-shadow;
     }
     &:focus-visible {
@@ -45,8 +45,9 @@
     }
 
     &::before {
-      margin-right: $spacer * .5;
       @include get-bootstrap-icon('translate', currentColor);
+
+      margin-right: $spacer * .5;
     }
   }
 }
