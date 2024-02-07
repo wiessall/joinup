@@ -38,7 +38,7 @@
           </div>
           <div class="licence-tile__values">
             {% for item in category_list.items %}
-              <span class="licence-tile__value" title="{{ item.description }}">{{ item.title }}</span>{% if loop.last == false %}, {% endif %}
+              <span class="licence-tile__value" title="{{ item.description|striptags }}">{{ item.title }}</span>{% if loop.last == false %}, {% endif %}
             {% endfor %}
           </div>
         </div>

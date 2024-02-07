@@ -2,7 +2,7 @@
 Feature: When a solution is archived then its sub-content also should be archived.
 
   @terms
-  Scenario: Archiving a solution must archive its sub-content.
+  Scenario: Archiving / unarchiving a solution must archive / unarchive its sub-content.
     Given the following collection:
       | title | Collection |
       | state | published  |
@@ -30,6 +30,7 @@ Feature: When a solution is archived then its sub-content also should be archive
       | Username     | E-mail                   |
       | Anne Smith   | anne.smith@example.com   |
       | Andrew Smith | andrew.smith@example.com |
+      | Blahman      | ferners-lee@example.com  |
     And the following solution user memberships:
       | solution | user         | roles                      |
       | Solution | Anne Smith   | administrator, facilitator |
@@ -42,7 +43,9 @@ Feature: When a solution is archived then its sub-content also should be archive
       | Solution News 1 | Solution | published |
       | Solution News 2 | Solution | draft     |
       | Solution News 3 | Solution | published |
+      | Solution News 4 | Solution | published |
     And the workflow state of the "Solution News 3" node is changed to "needs_update"
+    And the workflow state of the "Solution News 4" "content" is changed to "archived"
     And "document" content:
       | title             | collection | state     |
       | Solution Document | Solution   | published |
@@ -58,14 +61,11 @@ Feature: When a solution is archived then its sub-content also should be archive
       | Solution Release 1 | Solution      | published |
       | Solution Release 2 | Solution      | draft     |
       | Solution Release 3 | Solution      | published |
-    And users:
-      | Username | E-mail                  |
-      | Blahman  | ferners-lee@example.com |
+    And the workflow state of the "Solution Release 3" "rdf_entity" is changed to "needs_update"
     And the following announcements:
       | group      | subject              | state | created    | author  |
       | Solution   | Announcement1 C1     | draft | 2005-11-05 | Blahman |
       | Collection | Some announcement C2 | draft | 2005-11-05 | Blahman |
-    And the workflow state of the "Solution Release 3" "rdf_entity" is changed to "needs_update"
     Given I am logged in as a user with the moderator role and I have the following fields:
       | name                   | John The Moderator             |
       | mail                   | john.the.moderator@example.com |
@@ -116,8 +116,7 @@ Feature: When a solution is archived then its sub-content also should be archive
       | at                                                                   |
 
     # Test links that are not available for archived solutions.
-    Given I am logged in as a moderator
-    And I go to the "Solution" solution
+    Given I go to the "Solution" solution
     Then I should not see the following links:
     # From the plus button menu.
       | Add custom page     |
@@ -154,3 +153,27 @@ Feature: When a solution is archived then its sub-content also should be archive
     Then I should not see the following links:
       | Add member    |
       | Invite member |
+
+    # Now, check the unarchive operation.
+    Given I mark all emails as read
+    When I go to the edit form of the "Solution" solution
+    Then I should see the button "Unarchive"
+    When I press "Unarchive"
+    Then I should see the following success messages:
+      | Success messages                                            |
+      | The unarchiving process of the Solution has been initiated. |
+    Given I run the "solution_archive_related_content" queue worker
+    Then 0 e-mails should have been sent
+    # Archived community content (events, discussions, news etc) cannot transit
+    # to published state.
+    And the workflow state of the "Solution Event" content should be "published"
+    And the workflow state of the "Solution News 1" content should be "published"
+    And the workflow state of the "Solution News 2" content should be "draft"
+    And the workflow state of the "Solution News 3" content should be "published"
+    And the workflow state of the "Solution News 4" content should be "published"
+    And the workflow state of the "Solution Document" content should be "published"
+    And the workflow state of the "Solution Discussion" content should be "published"
+    And the workflow state of the "Solution Distribution" "rdf entity" should be "published"
+    And the workflow state of the "Solution Release 1" "rdf entity" should be "published"
+    And the workflow state of the "Solution Release 2" "rdf entity" should be "draft"
+    And the workflow state of the "Solution Release 3" "rdf entity" should be "published"

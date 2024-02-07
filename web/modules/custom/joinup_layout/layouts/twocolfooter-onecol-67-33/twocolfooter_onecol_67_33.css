@@ -9,14 +9,14 @@
 }
 
 .joinup-layout--twocolfooter-onecol-67-33 > .inline-column-left {
-  flex: 0 1 67%;
   display: flex;
+  flex: 0 1 67%;
   flex-wrap: wrap;
 }
 
 .joinup-layout--twocolfooter-onecol-67-33 > .inline-column-right {
-  flex: 0 1 33%;
   display: flex;
+  flex: 0 1 33%;
   flex-wrap: wrap;
 }
 

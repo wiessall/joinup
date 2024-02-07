@@ -5,12 +5,12 @@
   .page-item {
     &.active .page-link {
       color: $gray-900;
-      font-weight: $font-weight-bold;
       background: $gray-300;
+      font-weight: $font-weight-bold;
     }
     .page-link {
-      color: $gray-700;
       padding: $spacer * .5 $spacer * .875; // 8px 14px
+      color: $gray-700;
       &:hover {
         background: $gray-300;
       }
