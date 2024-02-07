@@ -12,9 +12,9 @@ Feature: Solution homepage
       | name  | Placebo             |
       | email | Placebo@example.com |
     And the following solutions:
-      | title                        | description                           | logo     | state     | owner         | contact information | solution type | topic       |
-      | Information sharing protocol | Handling information sharing securely | logo.png | published | Kostas Agathe | Placebo             | Business      | E-inclusion |
-      | Security audit tools         | Automated test of security            | logo.png | published | Kostas Agathe | Placebo             | Business      | E-inclusion |
+      | title                        | abstract                              | description                           | logo     | state     | owner         | contact information | solution type | topic       |
+      | Information sharing protocol | Handling information sharing securely | Handling information sharing securely | logo.png | published | Kostas Agathe | Placebo             | Business      | E-inclusion |
+      | Security audit tools         | Automated test of security            | Automated test of security            | logo.png | published | Kostas Agathe | Placebo             | Business      | E-inclusion |
     And the following releases:
       | title             | release number | creation date     | release notes                               | is version of                | state     | spatial coverage |
       | IS protocol paper | 1              | 2018-10-04 8:01am | First stable version.                       | Information sharing protocol | published | Belgium          |
@@ -59,14 +59,13 @@ Feature: Solution homepage
     And I should not see the "Code of conduct" tile
     # Nor the solution itself should be shown.
     And I should not see the "Information sharing protocol" tile
-    # The total downloads of the 3 distributions should be shown.
-    And I should see the text "Downloads: 1667"
+    And I should not see the text "Downloads: 1667"
 
     # Test that the solution download counter is updating.
     Given the download count of "PDF version" is 1589
     When I reload the page
     Then I should not see the text "Downloads: 1667"
-    But I should see the text "Downloads: 2667"
+    But I should not see the text "Downloads: 2667"
     # Reset all compounded distribution download counters to 0.
     Given the download count of "PDF version" is 0
     And the download count of "ZIP version" is 0
@@ -78,7 +77,7 @@ Feature: Solution homepage
     And the download count of "ZIP version" is 514
     And the download count of "Protocol draft" is 564
     When I reload the page
-    Then I should see the text "Downloads: 1667"
+    Then I should not see the text "Downloads: 1667"
 
     # Test the filtering on the content type facet.
     When I click the Distribution content tab
@@ -106,8 +105,7 @@ Feature: Solution homepage
     And I should see the "Code of conduct" tile
     But I should not see the "IS protocol paper 1" tile
     And I should not see the "Protocol draft" tile
-    # The total downloads of the 2 distributions should be shown.
-    And I should see the text "Downloads: 1172"
+    And I should not see the text "Downloads: 1172"
 
   # Regression test to ensure that related community content does not appear in the draft view.
   # @see: https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-3262
