@@ -203,6 +203,7 @@ field_settings:
       type: union
       fields:
         - 'entity:node/field_state'
+        - 'entity:rdf_entity/field_ad_state'
         - 'entity:rdf_entity/field_ar_state'
         - 'entity:rdf_entity/field_is_state'
         - 'entity:rdf_entity/field_isr_state'

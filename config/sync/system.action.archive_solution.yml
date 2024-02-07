@@ -1,0 +1,12 @@
+uuid: 38600f62-7f5e-44ff-82a6-bcdbddb1aee1
+langcode: en
+status: true
+dependencies:
+  module:
+    - solution
+id: archive_solution
+label: 'Archive solutions'
+type: rdf_entity
+plugin: 'change_state:rdf_entity:solution'
+configuration:
+  target_state: archived

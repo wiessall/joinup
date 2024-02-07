@@ -49,6 +49,7 @@ Feature: In order to avoid users changing federated values
       | access url  | test.zip                         |
       | parent      | A federated release              |
       | licence     | A federated licence              |
+      | state       | published                        |
     And the following provenance activities:
       | associated with    | entity                   | enabled |
       | http://example.com | A federated solution     | yes     |

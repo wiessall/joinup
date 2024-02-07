@@ -63,3 +63,17 @@ solution.change_collection:
     parameters:
       rdf_entity:
         type: entity:rdf_entity
+
+solution.change_state.multiple:
+  path: '/rdf_entity/{rdf_entity}/manage-solutions/change-state'
+  defaults:
+    _form: Drupal\solution\Form\ChangeSolutionStateForm
+    _title_callback: Drupal\solution\Form\ChangeSolutionStateForm::getQuestion
+  requirements:
+    _permission: 'manage solutions'
+  options:
+    parameters:
+      rdf_entity:
+        type: entity:rdf_entity
+        bundle:
+          - collection

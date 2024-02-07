@@ -139,6 +139,7 @@ Feature: As a site moderator I am able to import RDF files.
       | parent            | Local version of Solution 2                |
       | creation date     | 15-07-2018                                 |
       | modification date | 15-07-2018                                 |
+      | state             | published                                  |
     And the following collection user membership:
       | collection | user     | roles                      | state  |
       | NIO        | CS Owner | facilitator, administrator | active |
