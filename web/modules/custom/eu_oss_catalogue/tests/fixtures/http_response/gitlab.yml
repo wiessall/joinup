@@ -13,6 +13,7 @@
           id: 'gid://gitlab/Project/1'
           description: Description of Project1
           archived: false
+          forksCount: 201
           # Not set as logo as the logo from publiccode.yml is valid.
           avatarUrl: https://all.self-hosted.gitlab.example.com/uploads/-/system/project/avatar/1/logo.jpeg
           releases:
@@ -74,6 +75,7 @@
           id: 'gid://gitlab/Project/2'
           description: Description of Project2
           archived: false
+          forksCount: 202
           # Will be set as logo as the logo from publiccode.yml isn't valid.
           avatarUrl: https://all.self-hosted.gitlab.example.com/uploads/-/system/project/avatar/2/logo.png
           releases:
@@ -134,6 +136,7 @@
           id: 'gid://gitlab/Project/3'
           description: Description of Project3
           archived: true
+          forksCount: 203
           avatarUrl: null
           releases:
             nodes: {  }
@@ -188,6 +191,7 @@
           id: 'gid://gitlab/Project/4'
           description: Description of Project4
           archived: false
+          forksCount: 204
           releases:
             nodes: {  }
           repository:
@@ -201,6 +205,7 @@
           id: 'gid://gitlab/Project/5'
           description: Description of Project5
           archived: false
+          forksCount: 205
           releases:
             nodes: {  }
           repository:
@@ -220,6 +225,7 @@
             id: gid://gitlab/Project/11
             description: 'Group 1: Project 1: description'
             archived: false
+            forksCount: 206
             # Not set as logo as the logo from publiccode.yml is valid.
             avatarUrl: https://all.self-hosted.gitlab.example.com/uploads/-/system/project/avatar/2/logo.svg
             releases:
@@ -295,6 +301,7 @@
             id: gid://gitlab/Project/12
             description: 'Group 1: Project 2: description'
             archived: false
+            forksCount: 207
             # Will be set as logo as the logo from publiccode.yml isn't valid.
             avatarUrl: https://all.self-hosted.gitlab.example.com/uploads/-/system/project/avatar/12/logo.jpg
             releases:
@@ -376,6 +383,7 @@
             id: gid://gitlab/Project/13
             description: 'Group 1: Project 3: description'
             archived: true
+            forksCount: 208
             avatarUrl: null
             releases:
               nodes: []
@@ -431,6 +439,7 @@
             id: gid://gitlab/Project/21
             description: 'Group 2: Project 1: description'
             archived: false
+            forksCount: 209
             releases:
               nodes:
                 - tagName: '1.12.0-beta2'
@@ -484,6 +493,7 @@
             id: gid://gitlab/Project22
             description: 'Group 2: Project 2: description'
             archived: false
+            forksCount: 210
             releases:
               nodes: []
             repository:
@@ -531,6 +541,7 @@
       id: gid://gitlab/Project/1
       description: 'User 1: Project 1: description'
       archived: false
+      forksCount: 211
       releases:
         nodes:
           - tagName: '1.0.x-dev'
