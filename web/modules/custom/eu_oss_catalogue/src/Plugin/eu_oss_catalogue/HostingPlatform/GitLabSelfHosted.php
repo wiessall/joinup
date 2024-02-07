@@ -148,7 +148,7 @@ class GitLabSelfHosted extends GitLabDotCom {
    * This renders a query similar to:
    * @code
    * {
-   *   projects(first: 100 after: "gtT54Weo") {
+   *   projects(first: 100) {
    *     count
    *     pageInfo {
    *       hasNextPage
@@ -160,6 +160,7 @@ class GitLabSelfHosted extends GitLabDotCom {
    *       id
    *       description
    *       archived
+   *       forksCount
    *       avatarUrl
    *       releases(sort: CREATED_DESC first: 1) {
    *         nodes {
@@ -195,8 +196,9 @@ class GitLabSelfHosted extends GitLabDotCom {
     $query->use('count');
     $query->pageInfo([])->use('hasNextPage', 'endCursor');
 
+
     $fragment = $query->nodes([])
-      ->use('fullPath', 'path', 'id', 'description', 'archived', 'avatarUrl')
+      ->use('fullPath', 'path', 'id', 'description', 'archived', 'forksCount', 'avatarUrl')
       ->releases(['sort' => GitLabReleaseSort::CREATED_DESC, 'first' => 1])
       ->nodes([])
       ->use('tagName', 'createdAt')
