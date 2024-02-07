@@ -47,22 +47,31 @@ Feature:
     And I should not see the link "Report abusive content"
 
     # Most recent solutions carousel.
-    And I should see the following tiles in the "Most recent solutions" region:
+    Then I should see the following tiles in the "Most recent solutions" region:
       | Spunta             |
       | C4S ERP            |
       | Cristian Gagliardi |
       | Vito Schiraldi     |
       | Semantic Turkey    |
+
+    When I click "View all" in the "Most recent solutions" region
+    Then the option with text "Most Recent" from select "Sort by" is selected
+
     # Most active solutions carousel.
-    And I should see the following tiles in the "Most active solutions" region:
+    When I visit the OSS welcome page
+    Then I should see the following tiles in the "Most active solutions" region:
       | Cristian Gagliardi |
       | C4S ERP            |
       | Spunta             |
       | Vito Schiraldi     |
       | Semantic Turkey    |
 
+    When I click "View all" in the "Most active solutions" region
+    Then the option with text "Most Active" from select "Sort by" is selected
+
     # Check OSS label in tile footer.
-    And I should see the text "OSS Solution" in the "Spunta" tile
+    When I visit the OSS welcome page
+    Then I should see the text "OSS Solution" in the "Spunta" tile
 
     When I should not see the link "advanced search"
     Then I click "Browse the catalogue"
