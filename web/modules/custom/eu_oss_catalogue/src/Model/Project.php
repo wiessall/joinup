@@ -53,7 +53,7 @@ class Project {
     public readonly ?string $platformReference = NULL,
     public readonly ?string $description = NULL,
     public readonly ?string $logo = NULL,
-    public readonly ?int $forksCount = NULL,
+    public readonly ?int $numberOfForks = NULL,
     public readonly array $files = [],
   ) {}
 
