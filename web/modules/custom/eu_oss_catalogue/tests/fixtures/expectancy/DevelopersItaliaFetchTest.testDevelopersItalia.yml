@@ -13,6 +13,7 @@ GitHub solution 1:
     oss_git_url: https://github.com/dummy-namespace-1/dummy-name-1
     oss_license: AGPL-3.0-or-later
     oss_logo: https://raw.githubusercontent.com/dummy-namespace-1/dummy-name-1/HEAD/images/logo-solution-1.png
+    oss_git_forks: 103
     oss_maintenance_contacts:
       - Peter Gregory
     oss_maintenance_contractors:
@@ -29,7 +30,7 @@ GitHub solution 1:
     oss_software_version: '2.3.0'
     oss_source:
       - developers_italia
-    oss_source_hash: 'QWgIx8AjtN2yakRMDKbNa1kBVEbdUDuxXLUiFBFINrc'
+    oss_source_hash: 'nijbgwh4WalTrgaYCKOo0a6aSGvXEPH-WkaMT2QOuyA'
     oss_long_description: |
       [EN] Solution 1: Long description
       **Some bold text**
@@ -92,6 +93,7 @@ Project 1.1:
     oss_release_date: '2010-07-08'
     oss_platform_reference: gid://gitlab/Project/11
     oss_logo: https://limited.self-hosted.gitlab.example.com/group1/project-1-1/raw/HEAD/images/logo-of-project-1-1.svg
+    oss_git_forks: 206
     oss_publiccode_yml_version: '0.2'
     oss_documentation: https://example.com/group1/project-1-1/it/docs.md
     oss_features:
@@ -125,6 +127,7 @@ Project 1.2:
     oss_release_date: '2013-08-19'
     oss_platform_reference: gid://gitlab/Project/12
     oss_logo: https://all.self-hosted.gitlab.example.com/uploads/-/system/project/avatar/12/logo.jpg
+    oss_git_forks: 207
     oss_publiccode_yml_version: '0.2'
     oss_documentation: https://example.com/group1/project-1-2/de/docs.md
     oss_features:

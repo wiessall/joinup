@@ -13,7 +13,6 @@
           id: 'gid://gitlab/Project/1'
           description: Description of Project1
           archived: false
-          forksCount: 201
           # Not set as logo as the logo from publiccode.yml is valid.
           avatarUrl: https://all.self-hosted.gitlab.example.com/uploads/-/system/project/avatar/1/logo.jpeg
           releases:
