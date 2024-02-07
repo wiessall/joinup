@@ -36,7 +36,7 @@ class Project {
    *   The repository description, if any.
    * @param string|null $logo
    *   The URL of the project's logo/avatar.
-   * @param string|null $forksCount
+   * @param int|null $forksCount
    *   Number of times the project has been forked.
    * @param string[] $files
    *   A list of file blobs keyed by a file identifier.
@@ -53,7 +53,7 @@ class Project {
     public readonly ?string $platformReference = NULL,
     public readonly ?string $description = NULL,
     public readonly ?string $logo = NULL,
-    public readonly ?string $forksCount = NULL,
+    public readonly ?int $forksCount = NULL,
     public readonly array $files = [],
   ) {}
 
