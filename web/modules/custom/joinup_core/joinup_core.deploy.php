@@ -26,6 +26,7 @@ use Drupal\og_menu\Entity\OgMenuInstance;
 use Drupal\og_menu\OgMenuInstanceInterface;
 use Drupal\smart_trim\TruncateHTML;
 use Drupal\solution\Entity\SolutionInterface;
+use Drupal\user\Entity\User;
 
 /**
  * Add state value to asset distributions.
@@ -353,4 +354,17 @@ function joinup_core_deploy_110204(array &$sandbox): string {
 
   $sandbox['#finished'] = $sandbox['progress'] / $sandbox['total'];
   return "Processed {$sandbox['progress']} out of {$sandbox['total']}.";
+}
+
+/**
+ * Block UID 1 if unblocked.
+ */
+function joinup_core_deploy_110205(): string {
+  $user = User::load(1);
+  if ($user->isBlocked()) {
+    return 'User 1 is already blocked.';
+  }
+
+  $user->block();
+  return 'User 1 has been blocked.';
 }
