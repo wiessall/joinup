@@ -157,9 +157,9 @@ Feature: As a moderator or group facilitator I want to be able to add, edit and
       | is version of  | Under The Bridge      |
       | state          | published             |
     And distributions:
-      | title   | description          | parent           | access url         |
-      | Distro1 | Alphabet & CLR       | Under The Bridge | http://example.com |
-      | Distro2 | Colors & ABC & colrs | Summer of 69     | http://example.com |
+      | title   | description          | parent           | access url         | state     |
+      | Distro1 | Alphabet & CLR       | Under The Bridge | http://example.com | published |
+      | Distro2 | Colors & ABC & colrs | Summer of 69     | http://example.com | published |
     And custom_page content:
       | title    | body              | solution         | state     |
       | Schedule | Colors everywhere | Under The Bridge | published |

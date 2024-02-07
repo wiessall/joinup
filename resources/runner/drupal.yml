@@ -207,6 +207,7 @@ drupal:
         $settings['joinup.parse_cached_computed_field'] = FALSE;
       Configuration: |
         $settings['config_exclude_modules'] = [
+          'action',
           'admin_toolbar',
           'admin_toolbar_tools',
           'cas_mock_server',

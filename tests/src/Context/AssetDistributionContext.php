@@ -235,6 +235,7 @@ class AssetDistributionContext extends RawDrupalContext {
       'modification date' => 'changed',
       'representation technique' => 'field_ad_repr_technique',
       'parent' => 'parent',
+      'state' => 'field_ad_state',
       'status' => 'field_status',
       'title' => 'label',
       'uri' => 'id',

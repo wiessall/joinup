@@ -610,6 +610,7 @@ class SolutionContext extends RawDrupalContext {
         'published' => 'published',
         'needs update' => 'needs_update',
         'blacklisted' => 'blacklisted',
+        'archived' => 'archived',
       ],
       'field_is_show_eira_related' => ['no' => 0, 'yes' => 1],
     ];

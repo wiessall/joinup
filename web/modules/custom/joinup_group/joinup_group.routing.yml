@@ -131,6 +131,7 @@ entity.rdf_entity.announcement_add:
   requirements:
     _custom_access: Drupal\joinup_group\Controller\AnnouncementsController::access
     _og_user_access_group: 'manage group announcements'
+    _joinup_group: 'TRUE'
   options:
     parameters:
       rdf_entity:
@@ -148,6 +149,7 @@ entity.rdf_entity.announcement_edit:
   requirements:
     _custom_access: Drupal\joinup_group\Controller\AnnouncementsController::access
     _og_user_access_group: 'manage group announcements'
+    _joinup_group: 'TRUE'
   options:
     parameters:
       rdf_entity:
@@ -189,6 +191,7 @@ entity.rdf_entity.unpublished_content:
     _title: 'Unpublished content'
   requirements:
     _custom_access: Drupal\joinup_group\Controller\UnpublishedContentPageController::access
+    _joinup_group: 'TRUE'
   options:
     parameters:
       rdf_entity:
