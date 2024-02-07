@@ -4,6 +4,7 @@ status: true
 dependencies:
   config:
     - core.entity_view_mode.rdf_entity.explore_item
+    - field.field.rdf_entity.solution.field_is_abstract
     - field.field.rdf_entity.solution.field_is_actor
     - field.field.rdf_entity.solution.field_is_affiliations_requests
     - field.field.rdf_entity.solution.field_is_business_process
@@ -251,6 +252,7 @@ hidden:
   download_total: true
   eif_perspective: true
   featured: true
+  field_is_abstract: true
   field_is_actor: true
   field_is_affiliations_requests: true
   field_is_business_process: true
@@ -291,6 +293,7 @@ hidden:
   field_status: true
   field_topic: true
   langcode: true
+  members: true
   og_group: true
   pinned_in: true
   rdf_entity_solution_field_is_content_inline_facets: true

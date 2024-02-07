@@ -113,9 +113,7 @@ Feature: Collection membership administration
 
     # Approve a membership.
     Given I am logged in as "Lisa Cuddy"
-    And I go to the "Medical diagnosis" collection
-
-    And I click "Members" in the "Header"
+    And I am on the members page of "Medical diagnosis"
     And I check the box "Update the member Cam Bridge"
     Then I select "Approve the pending membership(s)" from "Action"
     And I press "Apply to selected items"
@@ -196,8 +194,7 @@ Feature: Collection membership administration
 
     # Dr Cuddy promotes Dr House to facilitator.
     When I am logged in as "Lisa Cuddy"
-    And I go to the "Medical diagnosis" collection
-    Then I click "Members" in the "Header"
+    And I am on the members page of "Medical diagnosis"
     # Assert that the user does not see the default OG tab.
     Then I should not see the link "Group"
     Then I check the box "Update the member Gregory House"
@@ -223,23 +220,19 @@ Feature: Collection membership administration
       | dwightone | dwight1@example.com    | Christian  | Dwight      |
 
     When I am not logged in
-    And I go to the "Medical diagnosis" collection
-    And I click "Members" in the "Header"
+    And I am on the members page of "Medical diagnosis"
     Then I should not see the link "Add members"
 
     When I am logged in as an authenticated
-    And I go to the "Medical diagnosis" collection
-    And I click "Members" in the "Header"
+    And I am on the members page of "Medical diagnosis"
     Then I should not see the link "Add members"
 
     When I am logged in as "dwightone"
-    And I go to the "Medical diagnosis" collection
-    And I click "Members" in the "Header"
+    And I am on the members page of "Medical diagnosis"
     Then I should not see the link "Add members"
 
     When I am logged in as "Lisa Cuddy"
-    And I go to the "Medical diagnosis" collection
-    And I click "Members" in the "Header"
+    And I am on the members page of "Medical diagnosis"
     Then I should see the link "Add members"
     When I click "Add members"
     Then I should see the heading "Add members"
@@ -302,15 +295,13 @@ Feature: Collection membership administration
 
     # Try new privileges.
     When I am logged in as "dwightone"
-    And I go to the "Medical diagnosis" collection
-    And I click "Members" in the "Header"
+    And I am on the members page of "Medical diagnosis"
     Then I should see the link "Add members"
     When I click "Add members"
     Then I should see the heading "Add members"
 
     When I am logged in as "jbelanger"
-    And I go to the "Medical diagnosis" collection
-    And I click "Members" in the "Header"
+    And I am on the members page of "Medical diagnosis"
     Then I should not see the link "Add members"
 
   Scenario: Sort member administration bulk form by full user name
@@ -323,8 +314,7 @@ Feature: Collection membership administration
       | Medical diagnosis | qux98765 | active |
       | Medical diagnosis | xyzzy123 | active |
     When I am logged in as "Lisa Cuddy"
-    And I go to the "Medical diagnosis" collection
-    When I click "Members" in the "Header"
+    And I am on the members page of "Medical diagnosis"
     Then I should see a table with 5 columns
     # By default the table should be sorted alphabetically.
     And the "member administration" table should contain the following column:
@@ -353,23 +343,19 @@ Feature: Collection membership administration
       | dwightone | dwight1@example.com    | Christian  | Dwight      |
 
     When I am not logged in
-    And I go to the "Medical diagnosis" collection
-    And I click "Members" in the "Header"
+    And I am on the members page of "Medical diagnosis"
     Then I should not see the link "Invite members"
 
     When I am logged in as an authenticated
-    And I go to the "Medical diagnosis" collection
-    And I click "Members" in the "Header"
+    And I am on the members page of "Medical diagnosis"
     Then I should not see the link "Invite members"
 
     When I am logged in as "dwightone"
-    And I go to the "Medical diagnosis" collection
-    And I click "Members" in the "Header"
+    And I am on the members page of "Medical diagnosis"
     Then I should not see the link "Invite members"
 
     When I am logged in as "Lisa Cuddy"
-    And I go to the "Medical diagnosis" collection
-    And I click "Members" in the "Header"
+    And I am on the members page of "Medical diagnosis"
     Then I should see the link "Invite members"
     When I click "Invite members"
     Then I should see the heading "Invite members"
@@ -394,8 +380,7 @@ Feature: Collection membership administration
     When I am logged in as "dwightone"
     And I accept the invitation for the "Medical diagnosis" collection group
     Then I should see the text "You have been promoted to collection facilitator"
-    And I go to the "Medical diagnosis" collection
-    And I click "Members" in the "Header"
+    And I am on the members page of "Medical diagnosis"
     Then I should see the link "Add members"
     And I should see the link "Invite members"
     When I click "Invite members"
@@ -411,8 +396,7 @@ Feature: Collection membership administration
     When I am logged in as "jbelanger"
     And I go to the "Medical diagnosis" collection
     And I press "Join this collection"
-    And I go to the "Medical diagnosis" collection
-    And I click "Members" in the "Header"
+    And I am on the members page of "Medical diagnosis"
     # The Medical diagnosis collection is closed so normally the membership should be pending.
     # However, since there is an active invitation, both the status and the initial roles are overridden.
     # Being able to view the links below mean that the membership is active and the user is a facilitator.
@@ -429,8 +413,7 @@ Feature: Collection membership administration
       | Medical diagnosis | pending_member | pending |
 
     When I am logged in as "Lisa Cuddy"
-    And I go to the "Medical diagnosis" collection
-    And I click "Members" in the "Header"
+    And I am on the members page of "Medical diagnosis"
     When I click "Invite members"
 
     When I fill in "E-mail" with "pending_member@example.com"
@@ -444,8 +427,7 @@ Feature: Collection membership administration
   @javascript
   Scenario: Autocomplete creates chips in both the add and the invite forms.
     Given I am logged in as "Lisa Cuddy"
-    And I go to the "Medical diagnosis" collection
-    And I click "Members" in the "Header"
+    And I am on the members page of "Medical diagnosis"
     When I click "Invite members"
     And I type "Donald" in the "E-mail" autocomplete field
     And I wait until the page contains the text "Donald Duck (Donald Duck)"
@@ -460,7 +442,6 @@ Feature: Collection membership administration
     And I press "Invite members"
     Then I should see the success message "1 user has been invited to this group."
 
-    And I click "Members" in the "Header"
     When I click "Add members"
     And I type "Turkey" in the "E-mail" autocomplete field
     And I wait until the page contains the text "Turkey Ham (Turkey Ham)"

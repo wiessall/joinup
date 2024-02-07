@@ -43,13 +43,13 @@ namespace Drupal\custom_page\ProxyClass {
          *
          * @param \Symfony\Component\DependencyInjection\ContainerInterface $container
          *   The container.
-         * @param string $drupal_proxy_original_service_id
+         * @param string $drupalProxyOriginalServiceId
          *   The service ID of the original service.
          */
-        public function __construct(\Symfony\Component\DependencyInjection\ContainerInterface $container, $drupal_proxy_original_service_id)
+        public function __construct(\Symfony\Component\DependencyInjection\ContainerInterface $container, $drupalProxyOriginalServiceId)
         {
             $this->container = $container;
-            $this->drupalProxyOriginalServiceId = $drupal_proxy_original_service_id;
+            $this->drupalProxyOriginalServiceId = $drupalProxyOriginalServiceId;
         }
 
         /**
@@ -70,41 +70,41 @@ namespace Drupal\custom_page\ProxyClass {
         /**
          * {@inheritdoc}
          */
-        public function getChildren(\Drupal\node\NodeInterface $custom_page) : array
+        public function getChildren(\Drupal\node\NodeInterface $customPage, string $menuType) : array
         {
-            return $this->lazyLoadItself()->getChildren($custom_page);
+            return $this->lazyLoadItself()->getChildren($customPage, $menuType);
         }
 
         /**
          * {@inheritdoc}
          */
-        public function addLink(\Drupal\node\NodeInterface $custom_page) : \Drupal\custom_page\CustomPageOgMenuLinksManagerInterface
+        public function addLink(\Drupal\node\NodeInterface $customPage, string $menuType, array $properties = []) : \Drupal\custom_page\CustomPageOgMenuLinksManagerInterface
         {
-            return $this->lazyLoadItself()->addLink($custom_page);
+            return $this->lazyLoadItself()->addLink($customPage, $menuType, $properties);
         }
 
         /**
          * {@inheritdoc}
          */
-        public function moveLinks(\Drupal\node\NodeInterface $custom_page, $group_id) : \Drupal\custom_page\CustomPageOgMenuLinksManagerInterface
+        public function moveLinks(\Drupal\node\NodeInterface $customPage, $groupId) : \Drupal\custom_page\CustomPageOgMenuLinksManagerInterface
         {
-            return $this->lazyLoadItself()->moveLinks($custom_page, $group_id);
+            return $this->lazyLoadItself()->moveLinks($customPage, $groupId);
         }
 
         /**
          * {@inheritdoc}
          */
-        public function deleteLinks(\Drupal\node\NodeInterface $custom_page) : \Drupal\custom_page\CustomPageOgMenuLinksManagerInterface
+        public function deleteLinks(\Drupal\node\NodeInterface $customPage) : \Drupal\custom_page\CustomPageOgMenuLinksManagerInterface
         {
-            return $this->lazyLoadItself()->deleteLinks($custom_page);
+            return $this->lazyLoadItself()->deleteLinks($customPage);
         }
 
         /**
          * {@inheritdoc}
          */
-        public function getOgMenuInstanceByCustomPage(\Drupal\node\NodeInterface $custom_page) : ?\Drupal\og_menu\OgMenuInstanceInterface
+        public function getOgMenuInstanceByCustomPage(\Drupal\node\NodeInterface $customPage, string $menuType) : ?\Drupal\og_menu\OgMenuInstanceInterface
         {
-            return $this->lazyLoadItself()->getOgMenuInstanceByCustomPage($custom_page);
+            return $this->lazyLoadItself()->getOgMenuInstanceByCustomPage($customPage, $menuType);
         }
 
     }

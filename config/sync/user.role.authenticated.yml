@@ -9,6 +9,7 @@ dependencies:
     - filter.format.essential_html
     - filter.format.glossary_html
     - filter.format.minimal
+    - filter.format.plain_text_glossary
     - filter.format.simple_html
     - filter.format.text_html
     - filter.format.webform_default
@@ -203,6 +204,7 @@ permissions:
   - 'use text format essential_html'
   - 'use text format glossary_html'
   - 'use text format minimal'
+  - 'use text format plain_text_glossary'
   - 'use text format simple_html'
   - 'use text format text_html'
   - 'use text format webform_default'

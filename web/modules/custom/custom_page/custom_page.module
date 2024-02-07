@@ -90,7 +90,10 @@ function custom_page_node_insert(EntityInterface $entity): void {
     return;
   }
 
-  \Drupal::service('custom_page.og_menu_links_manager')->addLink($entity);
+  \Drupal::getContainer()->get('custom_page.og_menu_links_manager')->addLink($entity, 'navigation');
+  \Drupal::getContainer()->get('custom_page.og_menu_links_manager')->addLink($entity, 'quick_links', [
+    'enabled' => FALSE,
+  ]);
 
   // The content of custom pages is included in the search index of their
   // collections and solutions, so that the parent group can be found when

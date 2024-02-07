@@ -5,6 +5,7 @@ dependencies:
   config:
     - entity_legal.document.legal_notice
     - filter.format.basic_html
+    - filter.format.plain_text_glossary
     - filter.format.simple_text
   module:
     - comment
@@ -42,6 +43,7 @@ permissions:
   - 'never autoplay videos'
   - 'use search_api_autocomplete for search'
   - 'use text format basic_html'
+  - 'use text format plain_text_glossary'
   - 'use text format simple_text'
   - 'view compatibility documents'
   - 'view eif wrapper entity'
