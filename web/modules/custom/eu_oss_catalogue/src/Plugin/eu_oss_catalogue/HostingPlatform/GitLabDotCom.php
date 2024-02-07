@@ -361,7 +361,7 @@ class GitLabDotCom extends EuOssCatalogueGitHostingPlatformPluginBase {
       platformReference: $project['id'],
       description: $project['description'],
       logo: $project['avatarUrl'] ?? NULL,
-      numberOfForks: $project['forksCount'] ?? NULL,
+      numberOfForks: $project['forksCount'],
       files: $files,
     );
   }
@@ -500,7 +500,7 @@ class GitLabDotCom extends EuOssCatalogueGitHostingPlatformPluginBase {
       'id' => (string) $response['id'],
       'description' => $response['description'],
       'archived' => $response['archived'] ?? FALSE,
-      'forksCount ' => $response['forks_count'],
+      'forksCount' => $response['forks_count'],
       'avatarUrl' => $response['avatar_url'],
     ];
   }
