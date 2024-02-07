@@ -248,7 +248,7 @@ class GitHub extends EuOssCatalogueGitHostingPlatformPluginBase {
             platformReference: $node['id'],
             description: $node['description'],
             logo: $logo,
-            forksCount: $node['forksCount'],
+            numberOfForks: $node['forkCount'],
             files: $files,
           );
         }
