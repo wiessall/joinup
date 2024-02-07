@@ -59,11 +59,13 @@ bundle: collection
 mode: view_mode_tile_horizontal
 content:
   field_ar_abstract:
-    type: joinup_html_stripper_stripped
+    type: string
     label: hidden
     settings:
-      trim_length: 600
-    third_party_settings: {  }
+      link_to_entity: false
+    third_party_settings:
+      template_suggestion:
+        template_suggestion: ''
     weight: 2
     region: content
   field_ar_description:
