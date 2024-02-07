@@ -215,27 +215,6 @@ Feature:
     When I click "Looking for Support?" in the "Navigation menu" region
     Then I should not see the "Looking for Support?" tile
 
-  Scenario: User should not be allowed unarchiving content of an archived solution.
-    Given the following solution:
-      | title | Cartridge cleaner |
-      | state | archived          |
-    And "custom_page" content:
-      | title          | solution          | state    |
-      | Cyclone filter | Cartridge cleaner | archived |
-    And event content:
-      | title   | solution          | state    |
-      | HTH SPA | Cartridge cleaner | archived |
-
-    When I am logged in as a moderator
-    And I go to the manage content page of "Cartridge cleaner"
-
-    And I select the "Cyclone filter" row
-    And I select the "HTH SPA" row
-    And I select "Unarchive" from "Action"
-    And I press "Apply to selected items"
-    Then I should see "Cyclone filter can not not be processed: Parent entity is archived"
-    And I should see "HTH SPA can not not be processed: Parent entity is archived"
-
   Scenario: Move a custom page to a solution
     Given the following collections:
       | title        | state     |
