@@ -6,6 +6,7 @@ dependencies:
     - custom_page
     - role_delegation
     - system
+    - toolbar
 _core:
   default_config_hash: xKyy6NiCYYSeq0L__tK8RfM3jxXIHAFSrHulgff4TJw
 id: administrator
@@ -13,6 +14,8 @@ label: 'Product owner'
 weight: 4
 is_admin: false
 permissions:
+  - 'access toolbar'
+  - 'administer users'
   - 'assign administrator role'
   - 'assign all roles'
   - 'assign developer role'
