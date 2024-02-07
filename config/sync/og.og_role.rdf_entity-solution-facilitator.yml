@@ -177,6 +177,7 @@ permissions:
   - 'update any asset_distribution rdf_entity'
   - 'update any asset_release rdf_entity'
   - 'update any navigation ogmenu_instance'
+  - 'update any quick_links ogmenu_instance'
   - 'update group'
   - 'update own asset_distribution rdf_entity'
   - 'update own asset_release rdf_entity'

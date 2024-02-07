@@ -21,7 +21,7 @@ Feature:
     And I should see the statistics "10" in the "Climate change tracker" tile
     When I go to the homepage of the "Climate change tracker" solution
     # Check the same thing on the homepage of the solutions.
-    Then I should see the text "Downloads: 10"
+    Then I should not see the text "Downloads: 10"
     When I delete the "Sample distribution" asset distribution
     And I reload the page
     # Check it again after the first distribution is deleted and cache has been cleared.

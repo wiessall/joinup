@@ -64,14 +64,6 @@ Feature:
       | title           | body            | collection            | state     |
       | Persistent page | Persistent page | Persistent collection | published |
 
-    When I go to the "Persistent collection" collection
-    And I click "About"
-    Then the persistent url should contain "http://data.europa.eu/w21"
-
-    When I go to the "Persistent solution" solution
-    And I click "About"
-    Then the persistent url should contain "http://data.europa.eu/w21"
-
     When I go to the "Persistent release" release
     Then the persistent url should contain "http://data.europa.eu/w21"
 

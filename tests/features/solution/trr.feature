@@ -10,9 +10,10 @@ Feature: Creating a test (solution) in the TRR collection.
       | title | Friends of the test repository |
       | state | published                      |
     And the following solution:
-      | title              | Linked Open Data Trr field             |
-      | description        | Re-usable government data       |
-      | state              | published                       |
+      | title              | Linked Open Data Trr field |
+      | abstract           | An abstract                |
+      | description        | Re-usable government data  |
+      | state              | published                  |
     And the following owner:
       | name | type                         |
       | W3C  | Company, Industry consortium |
@@ -85,6 +86,7 @@ Feature: Creating a test (solution) in the TRR collection.
 
     # Fill in basic solution data.
     When I fill in "Title" with "Linked Open Data"
+    And I fill in "Abstract" with "Abstract of LOD"
     And I enter "Re-usable government data" in the "Description" wysiwyg editor
     When I fill in the following:
       | Name           | Lucky Luke          |

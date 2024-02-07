@@ -18,6 +18,7 @@ Feature: When a solution is archived then its sub-content also should be archive
       | title               | Solution                         |
       | collection          | Collection                       |
       | state               | published                        |
+      | abstract            | Abstract                         |
       | description         | Description                      |
       | topic               | Demography                       |
       | solution type       | Innovation                       |

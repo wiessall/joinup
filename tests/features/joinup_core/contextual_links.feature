@@ -53,7 +53,6 @@ Feature:
 
     When I am logged in as a user with the "moderator" role
     And I go to the "Share solution" solution
-    And I click "About"
     Then I should see the contextual link "Share"
 
     And I visit the collection overview
