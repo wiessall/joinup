@@ -201,6 +201,8 @@ class GitLabDotCom extends EuOssCatalogueGitHostingPlatformPluginBase {
    *         id
    *         description
    *         archived
+   *         forksCount
+   *         starCount
    *         avatarUrl
    *         releases(sort: CREATED_DESC first: 1) {
    *           nodes {
@@ -243,7 +245,7 @@ class GitLabDotCom extends EuOssCatalogueGitHostingPlatformPluginBase {
       ->use('hasNextPage', 'endCursor')
       ->prev()
       ->nodes([])
-      ->use('path', 'id', 'description', 'archived', 'forksCount', 'avatarUrl')
+      ->use('path', 'id', 'description', 'archived', 'forksCount', 'starCount', 'avatarUrl')
       ->releases(['sort' => GitLabReleaseSort::CREATED_DESC, 'first' => 1])
       ->nodes([])
       ->use('tagName', 'createdAt')
@@ -273,6 +275,7 @@ class GitLabDotCom extends EuOssCatalogueGitHostingPlatformPluginBase {
    *     description
    *     archived
    *     forksCount
+   *     starCount
    *     avatarUrl
    *     releases(sort: CREATED_DESC first: 1) {
    *       nodes {
@@ -305,7 +308,7 @@ class GitLabDotCom extends EuOssCatalogueGitHostingPlatformPluginBase {
    */
   protected function buildProjectQuery(string $namespace, string $name, array $requestedFiles = []): Query {
     $query = new Query('project', ['fullPath' => "$namespace/$name"]);
-    $fragment = $query->use('path', 'id', 'description', 'archived', 'forksCount', 'avatarUrl')
+    $fragment = $query->use('path', 'id', 'description', 'archived', 'forksCount', 'starCount', 'avatarUrl')
       ->releases(['sort' => GitLabReleaseSort::CREATED_DESC, 'first' => 1])
       ->nodes([])
       ->use('tagName', 'createdAt')
@@ -362,6 +365,7 @@ class GitLabDotCom extends EuOssCatalogueGitHostingPlatformPluginBase {
       description: $project['description'],
       logo: $project['avatarUrl'] ?? NULL,
       numberOfForks: $project['forksCount'],
+      numberOfStars: $project['starCount'],
       files: $files,
     );
   }
@@ -501,6 +505,7 @@ class GitLabDotCom extends EuOssCatalogueGitHostingPlatformPluginBase {
       'description' => $response['description'],
       'archived' => $response['archived'] ?? FALSE,
       'forksCount' => $response['forks_count'],
+      'starCount' => $response['star_count'],
       'avatarUrl' => $response['avatar_url'],
     ];
   }

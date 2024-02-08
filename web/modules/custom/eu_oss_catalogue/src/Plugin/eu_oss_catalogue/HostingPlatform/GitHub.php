@@ -249,6 +249,7 @@ class GitHub extends EuOssCatalogueGitHostingPlatformPluginBase {
             description: $node['description'],
             logo: $logo,
             numberOfForks: $node['forkCount'],
+            numberOfStars: $node['stargazerCount'],
             files: $files,
           );
         }
@@ -283,6 +284,7 @@ class GitHub extends EuOssCatalogueGitHostingPlatformPluginBase {
    *         name
    *         isArchived
    *         forkCount
+   *         stargazerCount
    *         openGraphImageUrl
    *         owner {
    *           login
@@ -327,7 +329,7 @@ class GitHub extends EuOssCatalogueGitHostingPlatformPluginBase {
 
     $fragment = $query->nodes([])
       ->on('Repository')
-      ->use('id', 'description', 'name', 'isArchived', 'forkCount', 'openGraphImageUrl')
+      ->use('id', 'description', 'name', 'isArchived', 'forkCount', 'stargazerCount', 'openGraphImageUrl')
       ->use((new Node('owner'))->use('login'))
       ->use((new Node('defaultBranchRef'))->use('name'))
       ->use((new Node('latestRelease'))->use('tagName', 'createdAt'));

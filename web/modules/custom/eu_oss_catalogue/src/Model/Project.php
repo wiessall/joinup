@@ -38,6 +38,8 @@ class Project {
    *   The URL of the project's logo/avatar.
    * @param int|null $numberOfForks
    *   Number of times the project has been forked.
+   * @param int|null $numberOfStars
+   *   Number of times the project has been starred.
    * @param string[] $files
    *   A list of file blobs keyed by a file identifier.
    */
@@ -54,6 +56,7 @@ class Project {
     public readonly ?string $description = NULL,
     public readonly ?string $logo = NULL,
     public readonly ?int $numberOfForks = NULL,
+    public readonly ?int $numberOfStars = NULL,
     public readonly array $files = [],
   ) {}
 
