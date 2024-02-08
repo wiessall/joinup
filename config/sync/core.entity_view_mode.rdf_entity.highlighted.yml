@@ -6,5 +6,6 @@ dependencies:
     - rdf_entity
 id: rdf_entity.highlighted
 label: Highlighted
+description: ''
 targetEntityType: rdf_entity
 cache: true

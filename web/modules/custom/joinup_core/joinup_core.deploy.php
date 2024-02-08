@@ -28,9 +28,43 @@ use Drupal\smart_trim\TruncateHTML;
 use Drupal\solution\Entity\SolutionInterface;
 
 /**
+ * Add state value to asset distributions.
+ */
+function joinup_core_deploy_110200(?array &$sandbox = NULL): string {
+  /** @var \Drupal\sparql_entity_storage\SparqlEntityStorageInterface $storage */
+  $storage = \Drupal::entityTypeManager()->getStorage('rdf_entity');
+
+  if (!isset($sandbox['rids'])) {
+    $query = $storage->getQuery()->accessCheck(FALSE);
+    $query->condition('rid', ['asset_distribution'], 'IN');
+
+    $sandbox['rids'] = $query->execute();
+    $sandbox['total'] = count($sandbox['rids']);
+    $sandbox['progress'] = 0;
+  }
+
+  $database = \Drupal::getContainer()->get('sparql.endpoint');
+
+  $rids = array_splice($sandbox['rids'], 0, 300);
+  foreach ($rids as $entity_id) {
+    $query = <<<SPARQL
+WITH <http://joinup.eu/asset_distribution/published>
+INSERT { <$entity_id> <http://joinup.eu/ad/workflow_status> "published" }
+WHERE { <$entity_id> a ?type . FILTER NOT EXISTS { <$entity_id> <http://joinup.eu/ad/workflow_status> ?status } }
+SPARQL;
+    $database->update($query);
+  }
+
+  $sandbox['progress'] += count($rids);
+  $sandbox['#finished'] = (int) empty($sandbox['rids']);
+
+  return "Processed {$sandbox['progress']} out of {$sandbox['total']} distributions";
+}
+
+/**
  * Alter abstracts of collections.
  */
-function joinup_core_deploy_110200(array &$sandbox): string {
+function joinup_core_deploy_110201(array &$sandbox): string {
   $sparql_connection = \Drupal::getContainer()->get('sparql.endpoint');
   if (empty($sandbox['data'])) {
     $query = <<<SPARQL
@@ -73,8 +107,8 @@ SPARQL;
     // Replace multiple spaces with a single space.
     $item['abstract'] = preg_replace('/\s+/', ' ', $item['abstract']);
 
-    // Trim the abstract to 200 characters.
-    $item['abstract'] = $truncater->truncateChars($item['abstract'], 200);
+    // Trim the abstract to 250 characters.
+    $item['abstract'] = $truncater->truncateChars($item['abstract'], 250);
 
     $query = <<<SPARQL
 WITH <{$item['graph']}>
@@ -100,7 +134,7 @@ SPARQL;
 /**
  * Create a quick links menu for the groups.
  */
-function joinup_core_deploy_110201(array &$sandbox): string {
+function joinup_core_deploy_110202(array &$sandbox): string {
   if (empty($sandbox['group_ids'])) {
     $groups = \Drupal::entityTypeManager()->getStorage('rdf_entity')->getQuery()
       ->accessCheck(FALSE)
@@ -165,7 +199,7 @@ function joinup_core_deploy_110201(array &$sandbox): string {
 /**
  * Disable 'Members' and 'EIF Perspective' from menu.
  */
-function joinup_core_deploy_110202(array &$sandbox): string {
+function joinup_core_deploy_110203(array &$sandbox): string {
   $entityTypeManager = \Drupal::entityTypeManager();
   /** @var  \Drupal\menu_link_content\MenuLinkContentStorageInterface $menuLinkContentStorage */
   $menuLinkContentStorage = $entityTypeManager->getStorage('menu_link_content');
@@ -206,7 +240,7 @@ function joinup_core_deploy_110202(array &$sandbox): string {
 /**
  * Move custom page links from OG navigation to OG quick links menu.
  */
-function joinup_core_deploy_110203(array &$sandbox): string {
+function joinup_core_deploy_110204(array &$sandbox): string {
   $menuLinkContentStorage = \Drupal::entityTypeManager()->getStorage('menu_link_content');
   \assert($menuLinkContentStorage instanceof MenuLinkContentStorageInterface);
   if ($menuLinkContentStorage->getMenuLinkIdsWithPendingRevisions()) {

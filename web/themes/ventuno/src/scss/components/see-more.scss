@@ -6,9 +6,9 @@
   overflow: hidden;
   margin-bottom: 0;
   &--long {
+    overflow: hidden;
     min-height: 120px;
     -webkit-line-clamp: 5;
-    overflow: hidden;
     &.show {
       -webkit-line-clamp: unset !important;
     }

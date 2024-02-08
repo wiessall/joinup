@@ -387,6 +387,7 @@ class GroupContentUpdateUrlAliasTest extends JoinupExistingSiteTestBase {
           'id' => "http://distribution/1.{$i}.{$j}",
           'label' => "distribution 1.{$i}.{$j}",
           'parent' => "http://release/1.{$i}",
+          'field_ad_state' => 'published',
         ]);
       }
     }
@@ -397,6 +398,7 @@ class GroupContentUpdateUrlAliasTest extends JoinupExistingSiteTestBase {
         'id' => "http://distribution/1.{$i}",
         'label' => "distribution 1.{$i}",
         'parent' => 'http://solution/1',
+        'field_ad_state' => 'published',
       ]);
     }
     // Solution nodes.

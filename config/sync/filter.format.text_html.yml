@@ -8,6 +8,12 @@ name: 'Text HTML'
 format: text_html
 weight: 0
 filters:
+  filter_autop:
+    id: filter_autop
+    provider: filter
+    status: true
+    weight: 0
+    settings: {  }
   filter_html:
     id: filter_html
     provider: filter
@@ -41,9 +47,3 @@ filters:
         vimeo: 0
       autoplay: false
       responsive: true
-  filter_autop:
-    id: filter_autop
-    provider: filter
-    status: true
-    weight: 0
-    settings: {  }

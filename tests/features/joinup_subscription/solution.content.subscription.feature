@@ -58,11 +58,11 @@ Feature: Subscribing to community content in solutions
       | title       | release number | release notes   | is version of        | state     |
       | Spring 2021 | 2021/03        | Blooming pears. | Products of Bulgaria | published |
     And distributions:
-      | title                 | description    | parent               |
+      | title                 | description    | parent               | state     |
       # A distribution linked directly to the solution.
-      | Full list of products | There are many | Products of Bulgaria |
+      | Full list of products | There are many | Products of Bulgaria | published |
       # A distribution linked to a release.
-      | Spring discounts      | Get them now   | Spring 2021          |
+      | Spring discounts      | Get them now   | Spring 2021          | published |
 
     Then the daily group content subscription digest for hristo should match the following messages:
       | Duck liver            |
