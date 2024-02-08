@@ -1,7 +1,7 @@
-// stylelint-disable indentation
+@use "sass:map";
+
 $utilities: () !default;
-// stylelint-disable-next-line scss/dollar-variable-default
-$utilities: map-merge(
+$utilities: map.merge(
   $utilities,
   (
     "align": null,
@@ -58,12 +58,12 @@ $utilities: map-merge(
     ),
     "link": null,
     "font-weight":
-      map-merge(
-        map-get($utilities, "font-weight"),
+      map.merge(
+        map.get($utilities, "font-weight"),
         (
           values:
-            map-merge(
-              map-get(map-get($utilities, "font-weight"), "values"),
+            map.merge(
+              map.get(map.get($utilities, "font-weight"), "values"),
               (
                 md: $font-weight-medium,
               )
@@ -71,12 +71,12 @@ $utilities: map-merge(
         )
       ),
     "font-size":
-      map-merge(
-        map-get($utilities, "font-size"),
+      map.merge(
+        map.get($utilities, "font-size"),
         (
           values:
-            map-merge(
-              map-get(map-get($utilities, "font-size"), "values"),
+            map.merge(
+              map.get(map.get($utilities, "font-size"), "values"),
               (
                 sm: $font-size-sm,
                 xs: $font-size-xs,

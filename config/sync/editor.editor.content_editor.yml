@@ -87,8 +87,10 @@ settings:
         - heading3
         - heading4
     ckeditor5_list:
-      reversed: false
-      startIndex: true
+      properties:
+        reversed: false
+        startIndex: true
+      multiBlock: true
     ckeditor5_sourceEditing:
       allowed_tags:
         - '<cite>'
@@ -110,7 +112,6 @@ settings:
         - '<img alt usemap>'
         - '<a hreflang accesskey id rel target title>'
         - '<iframe src allowfullscreen mozallowfullscreen webkitallowfullscreen width height frameborder>'
-        - '<div class>'
     editor_file_file:
       status: true
       scheme: public

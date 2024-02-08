@@ -79,6 +79,24 @@ class JoinupGroupContext extends RawDrupalContext {
   }
 
   /**
+   * Navigates to the manage content page of a collection/solution.
+   *
+   * @param string $label
+   *   The label of the group for which to visit the about page.
+   *
+   * @Given I go to the manage content page of :label
+   */
+  public function visitManageContentPage(string $label): void {
+    $group = $this->getEntityByLabel('rdf_entity', $label);
+
+    $url = Url::fromRoute('view.group_content_management.manage', [
+      'rdf_entity' => $group->id(),
+    ]);
+
+    $this->visitPath($url->toString());
+  }
+
+  /**
    * Checks if the given node belongs to the given group.
    *
    * If there are multiple nodes or groups with the same name, then only

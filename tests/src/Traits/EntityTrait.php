@@ -4,7 +4,6 @@ declare(strict_types = 1);
 
 namespace Drupal\joinup\Traits;
 
-use Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException;
 use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\menu_link_content\MenuLinkContentInterface;
@@ -35,12 +34,7 @@ trait EntityTrait {
    */
   protected static function getEntityByLabel(string $entity_type_id, string $label, ?string $bundle = NULL): EntityInterface {
     $entity_type_manager = \Drupal::entityTypeManager();
-    try {
-      $storage = $entity_type_manager->getStorage($entity_type_id);
-    }
-    catch (InvalidPluginDefinitionException $e) {
-      throw new \RuntimeException('Storage not found', NULL, $e);
-    }
+    $storage = $entity_type_manager->getStorage($entity_type_id);
     $entity = $entity_type_manager->getDefinition($entity_type_id);
 
     $query = $storage->getQuery()

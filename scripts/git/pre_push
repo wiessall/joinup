@@ -122,6 +122,19 @@ then
   echo "- Run 'ddev run toolkit:fix-yaml' to fix most YAML issues.";
 fi
 
-let EXIT_CODE=$PHPCS+$ESLINT
+# Stylelint CSS, PCSS and S(A|C)SS files.
+# TODO: Need a way to check only changed files, similar to PHP.
+echo "Running Stylelint on all CSS-like files...";
+ddev run toolkit:lint-css -q
+CSSLINT=$?
+
+if [ "$CSSLINT" != "0" ]
+then
+  echo "CSS linting has failed.";
+  echo " - Run 'ddev run toolkit:lint-css' to see the report.";
+  echo " - Run 'ddev run toolkit:fix-css' to fix all fixable CSS issues.";
+fi
+
+let EXIT_CODE=$PHPCS+$ESLINT+$CSSLINT
 
 exit $EXIT_CODE

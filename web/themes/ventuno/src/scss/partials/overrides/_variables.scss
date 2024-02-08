@@ -1,3 +1,5 @@
+@use "sass:map";
+
 // Override Bootstrap default variables for Ventuno
 
 // General config
@@ -87,12 +89,13 @@ $bootstrap-icons-path: '../icons';
 $theme-images-path: '../images';
 
 // Regenerate $theme-colors variables map with the addition of $brand
-$theme-colors: map-merge(
+$theme-colors: map.merge(
   $theme-colors,
   (
     "brand": $brand,
   )
 );
+
 // Regenerate $theme-colors-rgb variables map with the addition of $brand
 $theme-colors-rgb: map-loop($theme-colors, to-rgb, "$value");
 
@@ -108,7 +111,7 @@ $spacers: (
   4: $spacer * 1.5,
   5: $spacer * 3,
 );
+
 // Regenerate $gutters variables with new $spacers
 $gutters: $spacers;
-
 $dropdown-padding-y: 0;
