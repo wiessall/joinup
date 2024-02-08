@@ -4,21 +4,46 @@ Feature: User role management
 
   Background:
     Given users:
-      | Username   | Roles     | E-mail                 |
-      | Rick Rolls | Moderator | rick.roles@example.com |
-      | Nibby Noob |           | nicky.noob@example.com |
-      | Ursus      |           |                        |
+      | Username        | Roles           | E-mail                    |
+      | Product owner   | Product owner   | product.owner@example.com |
+      | Rick Rolls      | Moderator       | rick.rolls@example.com    |
+      | Licence manager | Licence manager | rick.rolls@example.com    |
+      | Awesome dev     | Developer       | awesome.dev@example.com   |
+      | Nibby Noob      |                 | nicky.noob@example.com    |
+      | Ursus           |                 |                           |
+
+  Scenario: Verify user edit roles available options.
+    When I am logged in as "Product owner"
+    And I click "People" in the "Administration toolbar" region
+    And I click "Edit" in the "Ursus" row
+    And the "Roles" checkboxes should contain the following options:
+      | Licence manager |
+      | Moderator       |
+      | Product owner   |
+      | Developer       |
+
+    Given I am logged in as "Rick Rolls"
+    And I click "People" in the "Administration toolbar" region
+    And I click "Edit" in the "Ursus" row
+    And the "Roles" checkboxes should contain the following options:
+      | Licence manager |
+
+    Given I am logged in as "Awesome dev"
+    And I click "People" in the "Administration toolbar" region
+    And I click "Edit" in the "Ursus" row
+    And the "Roles" checkboxes should contain the following options:
+      | Developer       |
 
   Scenario: Verify options available to the moderator.
     Given I am logged in as "Rick Rolls"
     And I am on the homepage
     And I click "People"
 
-    Then the "Action" field should contain the "Add the Moderator role to the selected user(s), Remove the Moderator role from the selected user(s), Add the Licence manager role to the selected user(s), Remove the Licence manager role from the selected user(s)" options
-    And the available options in the "Action" select should not include the "Add the Administrator role to the selected user(s), Remove the Administrator role from the selected user(s)" options
+    Then the "Action" field should contain the "Add the Licence manager role to the selected user(s), Remove the Licence manager role from the selected user(s)" options
+    And the available options in the "Action" select should not include the "Add the Moderator role to the selected user(s), Remove the Moderator role from the selected user(s), Add the Administrator role to the selected user(s), Remove the Administrator role from the selected user(s)" options
 
-  Scenario: A moderator can assign the moderator role.
-    Given I am logged in as "Rick Rolls"
+  Scenario: A product owner can assign the moderator role.
+    Given I am logged in as "Product owner"
     And I am on the homepage
     And I click "People"
 
