@@ -12,6 +12,7 @@ use Drupal\Core\Site\Settings;
 use Drupal\Core\Utility\Error;
 use Drupal\eu_oss_catalogue\EuOssCatalogueGitHostingPlatformPluginBase;
 use Drupal\eu_oss_catalogue\Exception\MissingAccessTokenException;
+use Drupal\eu_oss_catalogue\Model\GitHub\IssueState;
 use Drupal\eu_oss_catalogue\Model\GitHubSearchType;
 use Drupal\eu_oss_catalogue\Model\GitUri;
 use Drupal\eu_oss_catalogue\Model\Project;
@@ -209,8 +210,9 @@ class GitHub extends EuOssCatalogueGitHostingPlatformPluginBase {
           $response = $graphQL->execute($query->toString());
         }
         catch (\Throwable $exception) {
-          Error::logException($this->logger, $exception, "Can't get GitHub projects. Query: @query", [
-            '@query' => $searchQuery,
+          Error::logException($this->logger, $exception, "Can't get GitHub projects. Query: @query, Message: @message", [
+            '@query' => $query->toString(),
+            '@message' => $exception->getMessage(),
           ]);
           break;
         }
@@ -250,6 +252,7 @@ class GitHub extends EuOssCatalogueGitHostingPlatformPluginBase {
             logo: $logo,
             numberOfForks: $node['forkCount'],
             numberOfStars: $node['stargazerCount'],
+            numberOfIssues: $node['issues']['totalCount'],
             files: $files,
           );
         }
@@ -296,6 +299,9 @@ class GitHub extends EuOssCatalogueGitHostingPlatformPluginBase {
    *           tagName
    *           createdAt
    *         }
+   *         issues (states: OPEN) {
+   *           totalCount
+   *         }
    *         file: object(expression: "HEAD:publiccode.yml") {
    *           ... on Blob {
    *             text
@@ -332,7 +338,8 @@ class GitHub extends EuOssCatalogueGitHostingPlatformPluginBase {
       ->use('id', 'description', 'name', 'isArchived', 'forkCount', 'stargazerCount', 'openGraphImageUrl')
       ->use((new Node('owner'))->use('login'))
       ->use((new Node('defaultBranchRef'))->use('name'))
-      ->use((new Node('latestRelease'))->use('tagName', 'createdAt'));
+      ->use((new Node('latestRelease'))->use('tagName', 'createdAt'))
+      ->use((new Node('issues', ['states' => IssueState::OPEN]))->use('totalCount'));
 
     foreach ($requestedFiles as $fileId => $filePath) {
       $file = (new Node('object', ['expression' => "HEAD:$filePath"]))
