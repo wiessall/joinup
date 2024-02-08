@@ -4,12 +4,16 @@ status: true
 dependencies:
   module:
     - role_delegation
+    - system
     - toolbar
 id: developer
 label: Developer
 weight: 5
-is_admin: true
+is_admin: false
 permissions:
+  - 'access administration pages'
+  - 'access site reports'
   - 'access toolbar'
   - 'administer users'
   - 'assign developer role'
+  - 'view the administration theme'
