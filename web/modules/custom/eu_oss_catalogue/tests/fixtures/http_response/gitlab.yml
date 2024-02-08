@@ -75,6 +75,7 @@
           description: Description of Project2
           archived: false
           forksCount: 202
+          starCount: 222
           # Will be set as logo as the logo from publiccode.yml isn't valid.
           avatarUrl: https://all.self-hosted.gitlab.example.com/uploads/-/system/project/avatar/2/logo.png
           releases:
@@ -136,6 +137,7 @@
           description: Description of Project3
           archived: true
           forksCount: 203
+          starCount: 223
           avatarUrl: null
           releases:
             nodes: {  }
@@ -191,6 +193,7 @@
           description: Description of Project4
           archived: false
           forksCount: 204
+          starCount: 224
           releases:
             nodes: {  }
           repository:
@@ -205,6 +208,7 @@
           description: Description of Project5
           archived: false
           forksCount: 205
+          starCount: 225
           releases:
             nodes: {  }
           repository:
@@ -225,6 +229,7 @@
             description: 'Group 1: Project 1: description'
             archived: false
             forksCount: 206
+            starCount: 226
             # Not set as logo as the logo from publiccode.yml is valid.
             avatarUrl: https://all.self-hosted.gitlab.example.com/uploads/-/system/project/avatar/2/logo.svg
             releases:
@@ -301,6 +306,7 @@
             description: 'Group 1: Project 2: description'
             archived: false
             forksCount: 207
+            starCount: 227
             # Will be set as logo as the logo from publiccode.yml isn't valid.
             avatarUrl: https://all.self-hosted.gitlab.example.com/uploads/-/system/project/avatar/12/logo.jpg
             releases:
@@ -383,6 +389,7 @@
             description: 'Group 1: Project 3: description'
             archived: true
             forksCount: 208
+            starCount: 228
             avatarUrl: null
             releases:
               nodes: []
@@ -439,6 +446,7 @@
             description: 'Group 2: Project 1: description'
             archived: false
             forksCount: 209
+            starCount: 229
             releases:
               nodes:
                 - tagName: '1.12.0-beta2'
@@ -493,6 +501,7 @@
             description: 'Group 2: Project 2: description'
             archived: false
             forksCount: 210
+            starCount: 230
             releases:
               nodes: []
             repository:
@@ -541,6 +550,7 @@
       description: 'User 1: Project 1: description'
       archived: false
       forksCount: 211
+      starCount: 231
       releases:
         nodes:
           - tagName: '1.0.x-dev'
