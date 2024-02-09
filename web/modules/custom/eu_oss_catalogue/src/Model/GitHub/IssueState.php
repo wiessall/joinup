@@ -7,7 +7,7 @@ namespace Drupal\eu_oss_catalogue\Model\GitHub;
 /**
  * Issue state.
  *
- * https://docs.github.com/en/graphql/reference/enums#issuestate
+ * @see https://docs.github.com/en/graphql/reference/enums#issuestate
  */
 enum IssueState {
 

@@ -2,14 +2,14 @@
 
 declare(strict_types = 1);
 
-namespace Drupal\eu_oss_catalogue\Model;
+namespace Drupal\eu_oss_catalogue\Model\GitHub;;
 
 /**
  * GitHub search types.
  *
  * @see https://docs.github.com/en/graphql/reference/enums#searchtype
  */
-enum GitHubSearchType {
+enum SearchType {
 
   case DISCUSSION;
   case ISSUE;
