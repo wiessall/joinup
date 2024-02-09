@@ -7,7 +7,7 @@ namespace Drupal\eu_oss_catalogue\Plugin\eu_oss_catalogue\HostingPlatform;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Utility\Error;
 use Drupal\eu_oss_catalogue\EuOssCatalogueGitHostingPlatformPluginBase;
-use Drupal\eu_oss_catalogue\Model\GitLabReleaseSort;
+use Drupal\eu_oss_catalogue\Model\GitLab\ReleaseSort;
 use Drupal\eu_oss_catalogue\Model\GitUri;
 use Drupal\eu_oss_catalogue\Model\Project;
 use Gitlab\Client;
@@ -203,6 +203,7 @@ class GitLabDotCom extends EuOssCatalogueGitHostingPlatformPluginBase {
    *         archived
    *         forksCount
    *         starCount
+   *         openIssuesCount
    *         avatarUrl
    *         releases(sort: CREATED_DESC first: 1) {
    *           nodes {
@@ -245,8 +246,8 @@ class GitLabDotCom extends EuOssCatalogueGitHostingPlatformPluginBase {
       ->use('hasNextPage', 'endCursor')
       ->prev()
       ->nodes([])
-      ->use('path', 'id', 'description', 'archived', 'forksCount', 'starCount', 'avatarUrl')
-      ->releases(['sort' => GitLabReleaseSort::CREATED_DESC, 'first' => 1])
+      ->use('path', 'id', 'description', 'archived', 'forksCount', 'starCount', 'openIssuesCount', 'avatarUrl')
+      ->releases(['sort' => ReleaseSort::CREATED_DESC, 'first' => 1])
       ->nodes([])
       ->use('tagName', 'createdAt')
       ->prev()
@@ -276,6 +277,7 @@ class GitLabDotCom extends EuOssCatalogueGitHostingPlatformPluginBase {
    *     archived
    *     forksCount
    *     starCount
+   *     openIssuesCount
    *     avatarUrl
    *     releases(sort: CREATED_DESC first: 1) {
    *       nodes {
@@ -308,8 +310,8 @@ class GitLabDotCom extends EuOssCatalogueGitHostingPlatformPluginBase {
    */
   protected function buildProjectQuery(string $namespace, string $name, array $requestedFiles = []): Query {
     $query = new Query('project', ['fullPath' => "$namespace/$name"]);
-    $fragment = $query->use('path', 'id', 'description', 'archived', 'forksCount', 'starCount', 'avatarUrl')
-      ->releases(['sort' => GitLabReleaseSort::CREATED_DESC, 'first' => 1])
+    $fragment = $query->use('path', 'id', 'description', 'archived', 'forksCount', 'starCount', 'openIssuesCount', 'avatarUrl')
+      ->releases(['sort' => ReleaseSort::CREATED_DESC, 'first' => 1])
       ->nodes([])
       ->use('tagName', 'createdAt')
       ->prev()
@@ -366,6 +368,7 @@ class GitLabDotCom extends EuOssCatalogueGitHostingPlatformPluginBase {
       logo: $project['avatarUrl'] ?? NULL,
       numberOfForks: $project['forksCount'],
       numberOfStars: $project['starCount'],
+      numberOfIssues: $project['openIssuesCount'],
       files: $files,
     );
   }
@@ -506,6 +509,7 @@ class GitLabDotCom extends EuOssCatalogueGitHostingPlatformPluginBase {
       'archived' => $response['archived'] ?? FALSE,
       'forksCount' => $response['forks_count'],
       'starCount' => $response['star_count'],
+      'openIssuesCount' => NULL,
       'avatarUrl' => $response['avatar_url'],
     ];
   }

@@ -5,7 +5,7 @@ declare(strict_types = 1);
 namespace Drupal\eu_oss_catalogue\Plugin\eu_oss_catalogue\HostingPlatform;
 
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\eu_oss_catalogue\Model\GitLabReleaseSort;
+use Drupal\eu_oss_catalogue\Model\GitLab\ReleaseSort;
 use Drupal\eu_oss_catalogue\Model\GitUri;
 use Gitlab\Client;
 use GraphQL\Actions\Query;
@@ -162,6 +162,7 @@ class GitLabSelfHosted extends GitLabDotCom {
    *       archived
    *       forksCount
    *       starCount
+   *       openIssuesCount
    *       avatarUrl
    *       releases(sort: CREATED_DESC first: 1) {
    *         nodes {
@@ -198,8 +199,8 @@ class GitLabSelfHosted extends GitLabDotCom {
     $query->pageInfo([])->use('hasNextPage', 'endCursor');
 
     $fragment = $query->nodes([])
-      ->use('fullPath', 'path', 'id', 'description', 'archived', 'forksCount', 'starCount', 'avatarUrl')
-      ->releases(['sort' => GitLabReleaseSort::CREATED_DESC, 'first' => 1])
+      ->use('fullPath', 'path', 'id', 'description', 'archived', 'forksCount', 'starCount', 'openIssuesCount', 'avatarUrl')
+      ->releases(['sort' => ReleaseSort::CREATED_DESC, 'first' => 1])
       ->nodes([])
       ->use('tagName', 'createdAt')
       ->prev()
