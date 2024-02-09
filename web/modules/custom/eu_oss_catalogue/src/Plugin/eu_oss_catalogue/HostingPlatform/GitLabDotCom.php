@@ -201,6 +201,8 @@ class GitLabDotCom extends EuOssCatalogueGitHostingPlatformPluginBase {
    *         id
    *         description
    *         archived
+   *         forksCount
+   *         starCount
    *         avatarUrl
    *         releases(sort: CREATED_DESC first: 1) {
    *           nodes {
@@ -243,7 +245,7 @@ class GitLabDotCom extends EuOssCatalogueGitHostingPlatformPluginBase {
       ->use('hasNextPage', 'endCursor')
       ->prev()
       ->nodes([])
-      ->use('path', 'id', 'description', 'archived', 'avatarUrl')
+      ->use('path', 'id', 'description', 'archived', 'forksCount', 'starCount', 'avatarUrl')
       ->releases(['sort' => GitLabReleaseSort::CREATED_DESC, 'first' => 1])
       ->nodes([])
       ->use('tagName', 'createdAt')
@@ -272,6 +274,8 @@ class GitLabDotCom extends EuOssCatalogueGitHostingPlatformPluginBase {
    *     id
    *     description
    *     archived
+   *     forksCount
+   *     starCount
    *     avatarUrl
    *     releases(sort: CREATED_DESC first: 1) {
    *       nodes {
@@ -304,7 +308,7 @@ class GitLabDotCom extends EuOssCatalogueGitHostingPlatformPluginBase {
    */
   protected function buildProjectQuery(string $namespace, string $name, array $requestedFiles = []): Query {
     $query = new Query('project', ['fullPath' => "$namespace/$name"]);
-    $fragment = $query->use('path', 'id', 'description', 'archived', 'avatarUrl')
+    $fragment = $query->use('path', 'id', 'description', 'archived', 'forksCount', 'starCount', 'avatarUrl')
       ->releases(['sort' => GitLabReleaseSort::CREATED_DESC, 'first' => 1])
       ->nodes([])
       ->use('tagName', 'createdAt')
@@ -349,18 +353,20 @@ class GitLabDotCom extends EuOssCatalogueGitHostingPlatformPluginBase {
     }
 
     return new Project(
-      $namespace,
-      $project['path'],
-      "{$this->getConfiguration()['baseUrl']}/$namespace/{$project['path']}",
-      $this->getPluginId(),
-      $project['repository']['rootRef'],
-      $project['archived'],
-      $project['releases']['nodes'][0]['tagName'] ?? NULL,
-      $project['releases']['nodes'][0]['createdAt'] ?? NULL,
-      $project['id'],
-      $project['description'],
-      $project['avatarUrl'] ?? NULL,
-      $files,
+      namespace: $namespace,
+      name: $project['path'],
+      url: "{$this->getConfiguration()['baseUrl']}/$namespace/{$project['path']}",
+      platform: $this->getPluginId(),
+      defaultBranch: $project['repository']['rootRef'],
+      isArchived: $project['archived'],
+      latestReleaseTag: $project['releases']['nodes'][0]['tagName'] ?? NULL,
+      latestReleaseDate: $project['releases']['nodes'][0]['createdAt'] ?? NULL,
+      platformReference: $project['id'],
+      description: $project['description'],
+      logo: $project['avatarUrl'] ?? NULL,
+      numberOfForks: $project['forksCount'],
+      numberOfStars: $project['starCount'],
+      files: $files,
     );
   }
 
@@ -498,6 +504,8 @@ class GitLabDotCom extends EuOssCatalogueGitHostingPlatformPluginBase {
       'id' => (string) $response['id'],
       'description' => $response['description'],
       'archived' => $response['archived'] ?? FALSE,
+      'forksCount' => $response['forks_count'],
+      'starCount' => $response['star_count'],
       'avatarUrl' => $response['avatar_url'],
     ];
   }
