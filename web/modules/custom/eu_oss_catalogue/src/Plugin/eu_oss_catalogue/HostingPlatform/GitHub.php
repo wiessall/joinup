@@ -13,7 +13,7 @@ use Drupal\Core\Utility\Error;
 use Drupal\eu_oss_catalogue\EuOssCatalogueGitHostingPlatformPluginBase;
 use Drupal\eu_oss_catalogue\Exception\MissingAccessTokenException;
 use Drupal\eu_oss_catalogue\Model\GitHub\IssueState;
-use Drupal\eu_oss_catalogue\Model\GitHubSearchType;
+use Drupal\eu_oss_catalogue\Model\GitHub\SearchType;
 use Drupal\eu_oss_catalogue\Model\GitUri;
 use Drupal\eu_oss_catalogue\Model\Project;
 use Github\Api\GraphQL;
@@ -325,7 +325,7 @@ class GitHub extends EuOssCatalogueGitHostingPlatformPluginBase {
    */
   protected function buildProjectsQuery(string $searchQuery, array $requestedFiles = [], ?string $endCursor = NULL): Query {
     $filters = [
-      'type' => GitHubSearchType::REPOSITORY,
+      'type' => SearchType::REPOSITORY,
       'query' => $searchQuery,
       'first' => 100,
     ] + ($endCursor ? ['after' => $endCursor] : []);
