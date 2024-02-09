@@ -5,6 +5,7 @@ dependencies:
   config:
     - field.field.paragraph.image_gallery.image
     - paragraphs.paragraphs_type.image_gallery
+    - responsive_image.styles.image_gallery
   module:
     - field_delimiter
     - field_formatter_range
@@ -17,13 +18,13 @@ bundle: image_gallery
 mode: default
 content:
   image:
-    type: slick_file
+    type: slick_image
     label: hidden
     settings:
       caption:
         alt: '0'
         title: '0'
-      optionset: default
+      optionset: image_gallery
       link: ''
       layout: ''
       view_mode: ''
@@ -32,9 +33,9 @@ content:
       box_caption: ''
       box_caption_custom: ''
       box_media_style: ''
-      loading: lazy
+      loading: ''
       preload: false
-      responsive_image_style: ''
+      responsive_image_style: image_gallery
       use_theme_field: false
       box_style: ''
       image_style: ''
@@ -45,12 +46,6 @@ content:
       grid_medium: ''
       grid_small: ''
       style: ''
-      svg_inline: false
-      svg_fill: false
-      svg_sanitize: true
-      svg_sanitize_remote: false
-      svg_hide_caption: false
-      svg_attributes: ''
       skin: ''
       overridables:
         arrows: '0'
