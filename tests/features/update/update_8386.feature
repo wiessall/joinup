@@ -13,14 +13,8 @@ Feature: Simple deploy hook tests for ISAICP-8386.
       | Federation of solutions  |
       | Glossary                 |
       | Technical documentation  |
-    # All links must be disabled for anonymous.
-    And I should not see the following links in the "Quick links":
-      | FAQ                      |
-      | Joinup Roadmap           |
-      | Joinup code reuse        |
-      | How-To & video tutorials |
-      | Federation of solutions  |
-      | Technical documentation  |
+    # All links are disabled for anonymous so region is not displayed.
+    And I should not see the "Quick links" region
 
     When I am logged in as a moderator
     And I go to the homepage of the "Joinup" collection

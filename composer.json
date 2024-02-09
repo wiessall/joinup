@@ -55,6 +55,7 @@
         "drupal/inline_entity_form": "^3.0",
         "drupal/json_field": "^1.0",
         "drupal/layout_builder_component_attributes": "^2.1",
+        "drupal/layout_custom_section_classes": "^1.0",
         "drupal/layout_paragraphs": "^2.0",
         "drupal/linkit": "^6.1",
         "drupal/memcache": "^2.5",
