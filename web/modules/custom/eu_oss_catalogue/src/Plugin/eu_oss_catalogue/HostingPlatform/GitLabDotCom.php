@@ -10,6 +10,7 @@ use Drupal\eu_oss_catalogue\EuOssCatalogueGitHostingPlatformPluginBase;
 use Drupal\eu_oss_catalogue\Model\GitLab\ReleaseSort;
 use Drupal\eu_oss_catalogue\Model\GitUri;
 use Drupal\eu_oss_catalogue\Model\Project;
+use Gitlab\Api\Issues;
 use Gitlab\Client;
 use Gitlab\ResultPager;
 use GraphQL\Actions\Query;
@@ -484,6 +485,7 @@ class GitLabDotCom extends EuOssCatalogueGitHostingPlatformPluginBase {
 
     $this->addProjectLastReleaseWithRestApi($project, $fullPath);
     $this->addProjectFilesWithRestApi($project, $fullPath, $requestedFiles);
+    $this->addProjectOpenIssuesRestApi($project, $project['id']);
 
     return $project;
   }
@@ -509,7 +511,7 @@ class GitLabDotCom extends EuOssCatalogueGitHostingPlatformPluginBase {
       'archived' => $response['archived'] ?? FALSE,
       'forksCount' => $response['forks_count'],
       'starCount' => $response['star_count'],
-      'openIssuesCount' => NULL,
+      'openIssuesCount' => $response['open_issues'] ?? NULL,
       'avatarUrl' => $response['avatar_url'],
     ];
   }
@@ -578,6 +580,33 @@ class GitLabDotCom extends EuOssCatalogueGitHostingPlatformPluginBase {
   }
 
   /**
+   * Appends open issues info to the project array.
+   *
+   * @param array $project
+   *   The project array.
+   * @param string $projectId
+   *   The project id.
+   */
+  protected function addProjectOpenIssuesRestApi(array &$project, string $projectId): void {
+    try {
+      $pager = new ResultPager($this->getClient());
+      $issues = $pager->fetchAll(
+        $this->getClient()->issues(),
+        'all',
+        [$projectId, ['state' => Issues::STATE_OPENED]]
+      );
+      $project['releases']['nodes'][0]['open_issues'] = count($issues);
+    }
+    catch (\Throwable $exception) {
+      // Log a warning.
+      Error::logException($this->logger, $exception, "Can't get open issues for project {project_id} from {url} using REST API", [
+        'project_id' => $projectId,
+        'url' => $this->getConfiguration()['baseUrl'],
+      ], LogLevel::WARNING);
+    }
+  }
+
+  /**
    * Returns the group projects by using GitLab REST API.
    *
    * @param string $namespace
@@ -597,6 +626,7 @@ class GitLabDotCom extends EuOssCatalogueGitHostingPlatformPluginBase {
         $project = $this->buildProjectArray($row);
         $this->addProjectLastReleaseWithRestApi($project, "$namespace/{$project['path']}");
         $this->addProjectFilesWithRestApi($project, "$namespace/{$project['path']}", $requestedFiles);
+        $this->addProjectOpenIssuesRestApi($project, $project['id']);
         $projects[] = $project;
       }
       return ['projects' => ['nodes' => $projects]];
