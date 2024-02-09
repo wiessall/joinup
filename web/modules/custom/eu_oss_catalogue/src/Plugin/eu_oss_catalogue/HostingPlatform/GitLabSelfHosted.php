@@ -36,6 +36,7 @@ class GitLabSelfHosted extends GitLabDotCom {
     // The list of namespaces or projects is not mandatory for self-hosted
     // GitLab code hosting platforms.
     $form['projects']['#required'] = FALSE;
+    $form['baseUrl']['#type'] = 'url';
     return $form;
   }
 
