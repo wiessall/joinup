@@ -3,6 +3,7 @@ langcode: en
 status: true
 dependencies:
   config:
+    - core.base_field_override.rdf_entity.collection.label
     - field.field.rdf_entity.collection.field_ar_abstract
     - field.field.rdf_entity.collection.field_ar_access_url
     - field.field.rdf_entity.collection.field_ar_affiliates
@@ -60,7 +61,23 @@ third_party_settings:
                   template_suggestion:
                     template_suggestion: p_wrapper
             weight: 1
-            additional: {  }
+            additional:
+              component_attributes:
+                block_attributes:
+                  id: ''
+                  class: fs-4
+                  style: ''
+                  data: ''
+                block_title_attributes:
+                  id: ''
+                  class: ''
+                  style: ''
+                  data: ''
+                block_content_attributes:
+                  id: ''
+                  class: ''
+                  style: ''
+                  data: ''
           d376972e-fd7a-493d-a3b7-80ee05799cfd:
             uuid: d376972e-fd7a-493d-a3b7-80ee05799cfd
             region: left
@@ -108,6 +125,38 @@ third_party_settings:
                   template_suggestion:
                     template_suggestion: ''
             weight: 0
+            additional:
+              component_attributes:
+                block_attributes:
+                  id: ''
+                  class: ''
+                  style: ''
+                  data: ''
+                block_title_attributes:
+                  id: ''
+                  class: ''
+                  style: ''
+                  data: ''
+                block_content_attributes:
+                  id: ''
+                  class: ''
+                  style: ''
+                  data: ''
+          6a2c3e9b-443d-4793-af8c-8bfdf3d8a4b5:
+            uuid: 6a2c3e9b-443d-4793-af8c-8bfdf3d8a4b5
+            region: content
+            configuration:
+              id: 'field_block:rdf_entity:collection:label'
+              label_display: '0'
+              context_mapping:
+                entity: layout_builder.entity
+              formatter:
+                type: string
+                label: hidden
+                settings:
+                  link_to_entity: false
+                third_party_settings: {  }
+            weight: 0
             additional: {  }
           f7eda7e5-fc8d-48b4-824a-e908843362fb:
             uuid: f7eda7e5-fc8d-48b4-824a-e908843362fb
@@ -122,6 +171,38 @@ third_party_settings:
               level: 1
               depth: 0
             weight: 0
+            additional:
+              component_attributes:
+                block_attributes:
+                  id: ''
+                  class: ''
+                  style: ''
+                  data: ''
+                block_title_attributes:
+                  id: ''
+                  class: mb-3
+                  style: ''
+                  data: ''
+                block_content_attributes:
+                  id: ''
+                  class: ''
+                  style: ''
+                  data: ''
+          101eacc5-7bad-4f56-b95a-2d9405ec7d6b:
+            uuid: 101eacc5-7bad-4f56-b95a-2d9405ec7d6b
+            region: content
+            configuration:
+              id: 'field_block:rdf_entity:collection:label'
+              label_display: '0'
+              context_mapping:
+                entity: layout_builder.entity
+              formatter:
+                type: string
+                label: hidden
+                settings:
+                  link_to_entity: false
+                third_party_settings: {  }
+            weight: 1
             additional: {  }
         third_party_settings: {  }
       -
@@ -129,6 +210,18 @@ third_party_settings:
         layout_settings:
           label: 'Description section'
           context_mapping: {  }
+          custom_id: null
+          custom_classes: ''
+          custom_class_choose: null
+          custom_styles: null
+          custom_data_attributes: null
+          regions:
+            content:
+              region_id: null
+              region_class_choose: null
+              region_classes: joinup-group--description
+              region_styles: null
+              region_data: null
         components:
           cc1204b7-2b5c-4e96-b9b6-d726a9ea2b96:
             uuid: cc1204b7-2b5c-4e96-b9b6-d726a9ea2b96
@@ -147,7 +240,7 @@ third_party_settings:
                 settings: {  }
                 third_party_settings:
                   template_suggestion:
-                    template_suggestion: ''
+                    template_suggestion: description__see__more
             weight: 0
             additional: {  }
         third_party_settings: {  }
@@ -156,6 +249,18 @@ third_party_settings:
         layout_settings:
           label: 'Search section'
           context_mapping: {  }
+          custom_id: ''
+          custom_classes: mb-5
+          custom_class_choose: {  }
+          custom_styles: ''
+          custom_data_attributes: ''
+          regions:
+            content:
+              region_id: ''
+              region_class_choose: {  }
+              region_classes: ''
+              region_styles: ''
+              region_data: ''
         components:
           2c5ec8f0-ddf7-4dc9-9ae9-8f4d758dd09e:
             uuid: 2c5ec8f0-ddf7-4dc9-9ae9-8f4d758dd09e
@@ -234,6 +339,18 @@ third_party_settings:
         layout_settings:
           label: 'Detailed items'
           context_mapping: {  }
+          custom_id: null
+          custom_classes: ''
+          custom_class_choose: null
+          custom_styles: null
+          custom_data_attributes: null
+          regions:
+            content:
+              region_id: null
+              region_class_choose: null
+              region_classes: 'joinup-group--detailed-items d-flex flex-wrap rounded-3 bg-light mt-4 mb-5 px-4 pt-4'
+              region_styles: null
+              region_data: null
         components:
           504f9a8c-ab74-424a-b513-12f70ba3aef4:
             uuid: 504f9a8c-ab74-424a-b513-12f70ba3aef4
@@ -261,7 +378,23 @@ third_party_settings:
                   template_suggestion:
                     template_suggestion: ''
             weight: 1
-            additional: {  }
+            additional:
+              component_attributes:
+                block_attributes:
+                  id: ''
+                  class: 'pe-5 pb-4'
+                  style: ''
+                  data: ''
+                block_title_attributes:
+                  id: ''
+                  class: ''
+                  style: ''
+                  data: ''
+                block_content_attributes:
+                  id: ''
+                  class: ''
+                  style: ''
+                  data: ''
           f0743480-207f-440b-8300-77e9a7d58d36:
             uuid: f0743480-207f-440b-8300-77e9a7d58d36
             region: content
@@ -293,13 +426,41 @@ third_party_settings:
                   template_suggestion:
                     template_suggestion: ''
             weight: 0
-            additional: {  }
+            additional:
+              component_attributes:
+                block_attributes:
+                  id: ''
+                  class: 'pe-5 pb-4'
+                  style: ''
+                  data: ''
+                block_title_attributes:
+                  id: ''
+                  class: ''
+                  style: ''
+                  data: ''
+                block_content_attributes:
+                  id: ''
+                  class: ''
+                  style: ''
+                  data: ''
         third_party_settings: {  }
       -
         layout_id: layout_onecol
         layout_settings:
           label: 'Moderation section'
           context_mapping: {  }
+          custom_id: null
+          custom_classes: ''
+          custom_class_choose: null
+          custom_styles: null
+          custom_data_attributes: null
+          regions:
+            content:
+              region_id: null
+              region_class_choose: null
+              region_classes: 'p-4 rounded-3 bg-light'
+              region_styles: null
+              region_data: null
         components:
           d78c7b8a-3a6a-4f91-8e05-91a99cc7f72c:
             uuid: d78c7b8a-3a6a-4f91-8e05-91a99cc7f72c
@@ -323,7 +484,23 @@ third_party_settings:
                   template_suggestion:
                     template_suggestion: ''
             weight: 1
-            additional: {  }
+            additional:
+              component_attributes:
+                block_attributes:
+                  id: ''
+                  class: ''
+                  style: ''
+                  data: ''
+                block_title_attributes:
+                  id: ''
+                  class: ''
+                  style: ''
+                  data: ''
+                block_content_attributes:
+                  id: ''
+                  class: ''
+                  style: ''
+                  data: ''
           fc1c1b18-8be1-42b1-90cb-1d7ca038db1c:
             uuid: fc1c1b18-8be1-42b1-90cb-1d7ca038db1c
             region: content
@@ -346,7 +523,23 @@ third_party_settings:
                   template_suggestion:
                     template_suggestion: ''
             weight: 3
-            additional: {  }
+            additional:
+              component_attributes:
+                block_attributes:
+                  id: ''
+                  class: ''
+                  style: ''
+                  data: ''
+                block_title_attributes:
+                  id: ''
+                  class: ''
+                  style: ''
+                  data: ''
+                block_content_attributes:
+                  id: ''
+                  class: ''
+                  style: ''
+                  data: ''
           dc7639da-0089-48f6-95e5-c4b4edf7a867:
             uuid: dc7639da-0089-48f6-95e5-c4b4edf7a867
             region: content
@@ -360,7 +553,23 @@ third_party_settings:
                 value: '<h3>Moderation</h3>'
                 format: content_editor
             weight: 0
-            additional: {  }
+            additional:
+              component_attributes:
+                block_attributes:
+                  id: ''
+                  class: ''
+                  style: ''
+                  data: ''
+                block_title_attributes:
+                  id: ''
+                  class: ''
+                  style: ''
+                  data: ''
+                block_content_attributes:
+                  id: ''
+                  class: fw-bold
+                  style: ''
+                  data: ''
         third_party_settings: {  }
 id: rdf_entity.collection.default
 targetEntityType: rdf_entity
