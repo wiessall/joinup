@@ -139,7 +139,7 @@ class GitLabDotCom extends EuOssCatalogueGitHostingPlatformPluginBase {
         catch (\RuntimeException $exception) {
           if ($exception->getCode() === 404) {
             // Group doesn't exist. We set the response in this way to be picked
-            // up few lines later and retry as user instead of group.
+            // up a few lines later and retry as user instead of a group.
             $response['data']['group'] = NULL;
           }
           elseif ($exception->getCode() === 500) {
@@ -160,7 +160,7 @@ class GitLabDotCom extends EuOssCatalogueGitHostingPlatformPluginBase {
         }
 
         if ($response['data']['group'] === NULL) {
-          // Not a group. It might be a user namespace but let's see. For users,
+          // Not a group. It might be a user namespace, but let's see. For users,
           // we only deal with the case where projects were explicitly passed,
           // i.e. both namespace and project name were specified. Otherwise,
           // GitLab requires authentication and we don't support that.
@@ -523,7 +523,7 @@ class GitLabDotCom extends EuOssCatalogueGitHostingPlatformPluginBase {
    *   The project full path.
    */
   protected function addProjectLastReleaseWithRestApi(array &$project, string $fullPath): void {
-    // Try to get latest release.
+    // Try to get the latest release.
     try {
       $response = $this->getClient()->repositories()->releases($fullPath);
       if ($response) {
