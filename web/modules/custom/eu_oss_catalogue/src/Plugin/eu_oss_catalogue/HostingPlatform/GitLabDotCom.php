@@ -161,10 +161,11 @@ class GitLabDotCom extends EuOssCatalogueGitHostingPlatformPluginBase {
         }
 
         if ($response['data']['group'] === NULL) {
-          // Not a group. It might be a user namespace, but let's see. For users,
-          // we only deal with the case where projects were explicitly passed,
-          // i.e. both namespace and project name were specified. Otherwise,
-          // GitLab requires authentication and we don't support that.
+          // Not a group. It might be a user namespace, but let's see.
+          // For users, we only deal with the case where projects were
+          // explicitly passed, i.e. both namespace and project name
+          // were specified. Otherwise, GitLab requires authentication
+          // and we don't support that.
           if ($repos !== NULL) {
             foreach ($this->fetchIndividualProjects($namespace, $repos, $requestedFiles) as $project) {
               yield $project;
