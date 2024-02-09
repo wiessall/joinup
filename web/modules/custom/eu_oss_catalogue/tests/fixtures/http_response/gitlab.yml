@@ -76,6 +76,7 @@
           archived: false
           forksCount: 202
           starCount: 222
+          openIssuesCount: 242
           # Will be set as logo as the logo from publiccode.yml isn't valid.
           avatarUrl: https://all.self-hosted.gitlab.example.com/uploads/-/system/project/avatar/2/logo.png
           releases:
@@ -138,6 +139,7 @@
           archived: true
           forksCount: 203
           starCount: 223
+          openIssuesCount: 243
           avatarUrl: null
           releases:
             nodes: {  }
@@ -194,6 +196,7 @@
           archived: false
           forksCount: 204
           starCount: 224
+          openIssuesCount: 244
           releases:
             nodes: {  }
           repository:
@@ -209,6 +212,7 @@
           archived: false
           forksCount: 205
           starCount: 225
+          openIssuesCount: 245
           releases:
             nodes: {  }
           repository:
@@ -230,6 +234,7 @@
             archived: false
             forksCount: 206
             starCount: 226
+            openIssuesCount: 246
             # Not set as logo as the logo from publiccode.yml is valid.
             avatarUrl: https://all.self-hosted.gitlab.example.com/uploads/-/system/project/avatar/2/logo.svg
             releases:
@@ -307,6 +312,7 @@
             archived: false
             forksCount: 207
             starCount: 227
+            openIssuesCount: 247
             # Will be set as logo as the logo from publiccode.yml isn't valid.
             avatarUrl: https://all.self-hosted.gitlab.example.com/uploads/-/system/project/avatar/12/logo.jpg
             releases:
@@ -390,6 +396,7 @@
             archived: true
             forksCount: 208
             starCount: 228
+            openIssuesCount: 248
             avatarUrl: null
             releases:
               nodes: []
@@ -447,6 +454,7 @@
             archived: false
             forksCount: 209
             starCount: 229
+            openIssuesCount: 249
             releases:
               nodes:
                 - tagName: '1.12.0-beta2'
@@ -502,6 +510,7 @@
             archived: false
             forksCount: 210
             starCount: 230
+            openIssuesCount: 250
             releases:
               nodes: []
             repository:
@@ -551,6 +560,7 @@
       archived: false
       forksCount: 211
       starCount: 231
+      openIssuesCount: 251
       releases:
         nodes:
           - tagName: '1.0.x-dev'
