@@ -17,7 +17,7 @@ services:
       - '@container.namespaces'
       - '@cache.discovery'
       - '@module_handler'
-  rdf_sync.normalizer:
+  rdf_sync.normalizer.base:
     class: Drupal\rdf_sync\Normalizer\RdfSyncNormalizer
     arguments:
       - '@entity_type.manager'
@@ -32,8 +32,9 @@ services:
   # get a PHP array representation of entities. Create an alias for directly
   # accessing the normalizer.
   # See \Drupal\rdf_sync\RdfSyncSynchronizerTrait::doSynchronize()
-  rdf_sync.normalizer.alias:
-    alias: rdf_sync.normalizer
+  rdf_sync.normalizer:
+    alias: rdf_sync.normalizer.base
+    public: true
   rdf_sync.synchronizer:
     class: Drupal\rdf_sync\RdfSyncSynchronizer
     arguments:
