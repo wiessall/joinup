@@ -24,6 +24,8 @@ use Psr\Http\Message\UriInterface;
  */
 class Bitbucket extends PluginBase implements ServiceMockPluginInterface {
 
+  const DEFAULT_RESPONSE_HEADERS = ['content-type' => 'application/json'];
+
   /**
    * Static cache for response fixture.
    */
@@ -46,18 +48,29 @@ class Bitbucket extends PluginBase implements ServiceMockPluginInterface {
    *   Whether this plugin can handle the incoming request or not.
    */
   protected function apiRequestMatches(RequestInterface $request): bool {
-    $request_uri = $request->getUri();
-    if ($request->getMethod() !== 'GET' || $request_uri->getScheme() !== 'https') {
+    if (
+      !in_array($request->getMethod(), ['GET', 'HEAD']) ||
+      $request->getUri()->getScheme() !== 'https'
+    ) {
       return FALSE;
     }
 
-    $root = $this->getRepoRootFromRequestUri($request_uri);
-    $namespace = $this->getNamespaceFromRequestUri($request_uri);
-    $package = $this->getPackageFromRequestUri($request_uri);
+    return !is_null($this->getMockResponse($request));
+  }
 
-    return !empty($namespace) &&
-      !empty($package) &&
-      array_key_exists($package, self::getFixture()[$root][$namespace] ?? []);
+  /**
+   * Returns the path parts from the given URI.
+   *
+   * @return array
+   *   The path parts from the given URI.
+   */
+  protected function getPathParts(UriInterface $uri): array {
+    $pathParts = explode('/api/2.0/repositories/', $uri->getPath(), 2);
+    if (count($pathParts) < 2) {
+      // Can happen that the request was made to api.bitbucket.org/api/2.0/.
+      $pathParts = explode('/2.0/repositories/', $uri->getPath(), 2);
+    }
+    return $pathParts;
   }
 
   /**
@@ -70,36 +83,8 @@ class Bitbucket extends PluginBase implements ServiceMockPluginInterface {
    *   The repository root from the given URI.
    */
   protected function getRepoRootFromRequestUri(UriInterface $uri): string {
-    $path_parts = explode('/api/2.0/repositories/', $uri->getPath(), 2);
-    return $uri->getHost() . $path_parts[0];
-  }
-
-  /**
-   * Returns the repository namespace from the given URI.
-   *
-   * @param \Psr\Http\Message\UriInterface $uri
-   *   The request URI.
-   *
-   * @return string
-   *   The repository namespace from the given URI.
-   */
-  protected function getNamespaceFromRequestUri(UriInterface $uri): ?string {
-    $path_parts = explode('/api/2.0/repositories/', $uri->getPath(), 2);
-    return explode('/', urldecode($path_parts[1] ?? ''))[0] ?? NULL;
-  }
-
-  /**
-   * Returns the package name from the given URI.
-   *
-   * @param \Psr\Http\Message\UriInterface $uri
-   *   The request URI.
-   *
-   * @return string
-   *   The package name from the given URI.
-   */
-  protected function getPackageFromRequestUri(UriInterface $uri): ?string {
-    $path_parts = explode('/api/2.0/repositories/', $uri->getPath(), 2);
-    return explode('/', urldecode($path_parts[1] ?? ''))[1] ?? NULL;
+    $pathParts = $this->getPathParts($uri);
+    return $uri->getHost() . $pathParts[0];
   }
 
   /**
@@ -133,15 +118,72 @@ class Bitbucket extends PluginBase implements ServiceMockPluginInterface {
    *   The mocked API response.
    */
   public function getResponse(RequestInterface $request, array $options): ResponseInterface {
-    $root = $this->getRepoRootFromRequestUri($request->getUri());
-    $namespace = $this->getNamespaceFromRequestUri($request->getUri());
-    $package = $this->getPackageFromRequestUri($request->getUri());
+    $mockResponse = $this->getMockResponse($request);
+    $status = $mockResponse['_http_status'] ?? 200;
+    if (is_array($mockResponse)) {
+      unset($mockResponse['_http_status']);
+    }
 
     return new Response(
-      200,
-      [],
-      Json::encode(static::getFixture()[$root][$namespace][$package]),
+      $status,
+      is_array($mockResponse)
+        ? static::DEFAULT_RESPONSE_HEADERS
+        : [],
+      is_array($mockResponse)
+        ? Json::encode($mockResponse)
+        : $mockResponse,
     );
+  }
+
+  /**
+   * Returns the mocked response, if any can be found.
+   *
+   * @return array|string|null
+   *   The mocked response. Array responses are returned as JSON string, string
+   *   responses are returned as plain text. Returns NULL if no response mock
+   *   can be found.
+   */
+  protected function getMockResponse(RequestInterface $request): array|string|null {
+    $requestUri = $request->getUri();
+    $root = $this->getRepoRootFromRequestUri($requestUri);
+    $path = $pathWithQuery = $requestUri->getPath();
+    if ($query = $requestUri->getQuery()) {
+      $pathWithQuery .= '?' . $query;
+    }
+
+    if (!array_key_exists($root, self::getFixture())) {
+      return NULL;
+    }
+
+    if (array_key_exists($pathWithQuery, self::getFixture()[$root])) {
+      return self::getFixture()[$root][$pathWithQuery];
+    }
+
+    if (array_key_exists($path, self::getFixture()[$root])) {
+      return self::getFixture()[$root][$path];
+    }
+
+    // If this is a simple repository info request, then try to get it from the
+    // general namespace response mock if it is available.
+    if (preg_match('#^(?>/api)?/2\.0/repositories/(?>[^/]+)/([^/]+)$#', $path, $matches)) {
+      $name = $matches[1];
+      $pathWithoutNamespace = $pathWithoutNamespaceWithQuery = preg_replace('#/' . preg_quote($name) . '#', '', $path);
+      if ($query) {
+        $pathWithoutNamespaceWithQuery .= '?' . $requestUri->getQuery();
+      }
+
+      $projects = self::getFixture()[$root][$pathWithoutNamespaceWithQuery]
+        ?? self::getFixture()[$root][$pathWithoutNamespace]
+        ?? [];
+
+      foreach ($projects['values'] ?? [] as $project) {
+        if ($project['slug'] === $name) {
+          return $project;
+        }
+      }
+    }
+
+    return NULL;
   }
 
 }
