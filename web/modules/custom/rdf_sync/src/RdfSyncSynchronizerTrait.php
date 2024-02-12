@@ -19,8 +19,6 @@ trait RdfSyncSynchronizerTrait {
    *   The entities for which to update the RDF backend.
    * @param string $method
    *   Method: 'insert', 'update' or 'delete'.
-   *
-   * @todo Is it possible to run the update in a single query?
    */
   protected function doSynchronize(array $entities, string $method): void {
     assert($this instanceof RdfSyncSynchronizer || $this instanceof RdfSyncSynchronizerWorker);
