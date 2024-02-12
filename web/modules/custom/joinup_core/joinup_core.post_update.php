@@ -13,4 +13,4 @@
  * In most cases though update code should be placed in joinup_core.deploy.php.
  */
 
-declare(strict_types = 1);
+declare(strict_types=1);

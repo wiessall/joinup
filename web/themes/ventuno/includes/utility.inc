@@ -5,7 +5,7 @@
  * Utility procedural functions.
  */
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 use Drupal\joinup_bundle_class\AbstractInterface;
 use Drupal\joinup_bundle_class\DescriptionInterface;
