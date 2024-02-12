@@ -426,6 +426,94 @@ api.bitbucket.org:
           - 'assets/Bar-Screenshot-2.png'
           - 'assets/Bar-Screenshot-3.png'
 
+  # Logo metadata of Bar project.
+  /2.0/repositories/test_namespace/bar/src/master/assets/logo.png?format=meta:
+    path: assets/logo.png
+    commit:
+      hash: da001cdf6ce8f3fd3f178f0ef189ef0c524bdc97
+      links:
+        self:
+          href: https://api.bitbucket.org/2.0/repositories/test_namespace/bar/commit/da001cdf6ce8f3fd3f178f0ef189ef0c524bdc97
+        html:
+          href: https://bitbucket.org/test_namespace/bar/commits/da001cdf6ce8f3fd3f178f0ef189ef0c524bdc97
+      type: commit
+    type: commit_file
+    attributes: [ ]
+    escaped_path: assets/logo.png
+    size: 2129
+    mimetype: image/png
+    links:
+      self:
+        href: https://api.bitbucket.org/2.0/repositories/test_namespace/bar/src/da001cdf6ce8f3fd3f178f0ef189ef0c524bdc97/assets/logo.png
+      meta:
+        href: https://api.bitbucket.org/2.0/repositories/test_namespace/bar/src/da001cdf6ce8f3fd3f178f0ef189ef0c524bdc97/assets/logo.png?format=meta
+      history:
+        href: https://api.bitbucket.org/2.0/repositories/test_namespace/bar/filehistory/da001cdf6ce8f3fd3f178f0ef189ef0c524bdc97/assets/logo.png
+
+  # Logo of Bar project - binary file response.
+  /2.0/repositories/test_namespace/bar/src/da001cdf6ce8f3fd3f178f0ef189ef0c524bdc97/assets/logo.png: !!binary iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAACklEQVR4nGMAAQAABQABDQottAAAAABJRU5ErkJggg==
+
+  # Screeshot 1 metadata of Bar project.
+  /2.0/repositories/test_namespace/bar/src/master/assets/Bar-Screenshot-1.png?format=meta:
+    path: assets/Bar-Screenshot-1.png
+    commit:
+      hash: da001cdf6ce8f3fd3f178f0ef189ef0c524bdc97
+      links:
+        self:
+          href: https://api.bitbucket.org/2.0/repositories/test_namespace/bar/commit/da001cdf6ce8f3fd3f178f0ef189ef0c524bdc97
+        html:
+          href: https://bitbucket.org/test_namespace/bar/commits/da001cdf6ce8f3fd3f178f0ef189ef0c524bdc97
+      type: commit
+    type: commit_file
+    attributes: [ ]
+    escaped_path: assets/Bar-Screenshot-1.png
+    size: 2129
+    mimetype: image/png
+    links:
+      self:
+        href: https://api.bitbucket.org/2.0/repositories/test_namespace/bar/src/da001cdf6ce8f3fd3f178f0ef189ef0c524bdc97/assets/Bar-Screenshot-1.png
+      meta:
+        href: https://api.bitbucket.org/2.0/repositories/test_namespace/bar/src/da001cdf6ce8f3fd3f178f0ef189ef0c524bdc97/assets/Bar-Screenshot-1.png?format=meta
+      history:
+        href: https://api.bitbucket.org/2.0/repositories/test_namespace/bar/filehistory/da001cdf6ce8f3fd3f178f0ef189ef0c524bdc97/assets/Bar-Screenshot-1.png
+
+  # Bar Screenshot 1 - binary file response.
+  /2.0/repositories/test_namespace/bar/src/da001cdf6ce8f3fd3f178f0ef189ef0c524bdc97/assets/Bar-Screenshot-1.png: !!binary iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAACklEQVR4nGMAAQAABQABDQottAAAAABJRU5ErkJggg==
+
+  # Screeshot 2 metadata of Bar project.
+  /2.0/repositories/test_namespace/bar/src/master/assets/Bar-Screenshot-2.png?format=meta:
+    path: assets/Bar-Screenshot-2.png
+    commit:
+      hash: da001cdf6ce8f3fd3f178f0ef189ef0c524bdc97
+      links:
+        self:
+          href: https://api.bitbucket.org/2.0/repositories/test_namespace/bar/commit/da001cdf6ce8f3fd3f178f0ef189ef0c524bdc97
+        html:
+          href: https://bitbucket.org/test_namespace/bar/commits/da001cdf6ce8f3fd3f178f0ef189ef0c524bdc97
+      type: commit
+    type: commit_file
+    attributes: [ ]
+    escaped_path: assets/Bar-Screenshot-2.png
+    size: 2129
+    mimetype: image/png
+    links:
+      self:
+        href: https://api.bitbucket.org/2.0/repositories/test_namespace/bar/src/da001cdf6ce8f3fd3f178f0ef189ef0c524bdc97/assets/Bar-Screenshot-2.png
+      meta:
+        href: https://api.bitbucket.org/2.0/repositories/test_namespace/bar/src/da001cdf6ce8f3fd3f178f0ef189ef0c524bdc97/assets/Bar-Screenshot-2.png?format=meta
+      history:
+        href: https://api.bitbucket.org/2.0/repositories/test_namespace/bar/filehistory/da001cdf6ce8f3fd3f178f0ef189ef0c524bdc97/assets/Bar-Screenshot-2.png
+
+  # Bar Screenshot 2 - binary file response.
+  /2.0/repositories/test_namespace/bar/src/da001cdf6ce8f3fd3f178f0ef189ef0c524bdc97/assets/Bar-Screenshot-2.png: !!binary iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAACklEQVR4nGMAAQAABQABDQottAAAAABJRU5ErkJggg==
+
+  # Screeshot 3 metadata of Bar project.
+  /2.0/repositories/test_namespace/bar/src/master/assets/Bar-Screenshot-3.png?format=meta:
+    _http_status: 404
+    type: error
+    error:
+      message: 'No such file or directory: assets/Bar-Screenshot-3.png'
+
   # Tags of Baz project.
   /2.0/repositories/test_namespace/baz/refs/tags?pagelen=1&sort=-target.date:
     values:
