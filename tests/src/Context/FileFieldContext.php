@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Drupal\joinup\Context;
 
+use Behat\Mink\Element\NodeElement;
 use Behat\Mink\Exception\ElementNotFoundException;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\joinup\Traits\TraversingTrait;
@@ -130,12 +131,13 @@ class FileFieldContext extends RawDrupalContext {
    * @param string|null $region
    *   The file region.
    *
-   * @return \Behat\Mink\Element\TraversableElement
+   * @return \Behat\Mink\Element\NodeElement
    *   The file field node element.
    *
-   * @throws \Behat\Mink\Exception\ElementNotFoundException Thrown when the element is not found.
+   * @throws \Behat\Mink\Exception\ElementNotFoundException
+   *    Thrown when the element is not found.
    */
-  protected function findSubFieldOfFileField(string $field, ?string $region = NULL): TraversableElement {
+  protected function findSubFieldOfFileField(string $field, ?string $region = NULL): NodeElement {
     $region_element = $region ? $this->getRegion($region) : $this->getSession()->getPage();
     $xpath = "//div[contains(concat(' ', @class, ' '), ' field--type-file ') and .//summary[contains(., '{$field}')]] | //div[contains(concat(' ', @class, ' '), ' field--type-image ') and .//summary[contains(., '{$field}')]]";
     $element = $region_element->find('xpath', $xpath);
