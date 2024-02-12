@@ -398,7 +398,8 @@
             },
             "drupal/slick": {
                 "Slick filter schema is incomplete @see https://www.drupal.org/i/3404070": "resources/patch/php/drupal/slick/3404070.diff",
-                "The definition for the sequence declares the type of its items in a way that is deprecated in drupal:8.0.0 @see https://drupal.org/i/3411048": "resources/patch/php/drupal/slick/slick-deprecated_schema_declaration-3411048-2--on-top-of-3404070.patch"
+                "The definition for the sequence declares the type of its items in a way that is deprecated in drupal:8.0.0 @see https://drupal.org/i/3411048": "resources/patch/php/drupal/slick/slick-deprecated_schema_declaration-3411048-2--on-top-of-3404070.patch",
+                "Slick image schema is incomplete @see https://www.drupal.org/i/3420880": "resources/patch/php/drupal/slick/3420880.patch"
             },
             "drupal/smart_trim": {
                 "Avoid max nesting level during development @see https://www.drupal.org/project/smart_trim/issues/3013628": "resources/patch/php/drupal/smart_trim/3013628.patch",

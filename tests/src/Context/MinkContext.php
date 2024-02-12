@@ -210,7 +210,7 @@ class MinkContext extends DrupalExtensionMinkContext {
   /**
    * Change the attachments file to field in the specified region.
    *
-   * Example: And I attach the file "bwayne_profile.png" to "profileImageUpload" in the "Modal content" region.
+   * Example: And I attach the file "hi.png" to "image" in the "Modal" region.
    *
    * @Given /^(?:|I )attach the file "(?P<path>[^"]*)" to "(?P<field>(?:[^"]|\\")*)" in the "(?P<region>[^"]*)" region$/
    */
