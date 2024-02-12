@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Drupal\rdf_sync;
 
+use Drupal\rdf_sync\Entity\RdfSyncEntityInterface;
 use Drupal\rdf_sync\Plugin\QueueWorker\RdfSyncSynchronizerWorker;
-use EasyRdf\Serialiser\Ntriples;
 
 /**
  * Reusable code between RDF synchronizer service and plugin.
@@ -26,43 +26,21 @@ trait RdfSyncSynchronizerTrait {
     assert($this instanceof RdfSyncSynchronizer || $this instanceof RdfSyncSynchronizerWorker);
     assert(in_array($method, ['insert', 'update', 'delete'], TRUE));
 
-    $graphUri = RdfSyncConnection::GRAPH;
-
     if (in_array($method, ['update', 'delete'], TRUE)) {
-      $rdfSerializer = new Ntriples();
-      $uris = [];
-      foreach ($entities as $entity) {
-        $uris[] = $rdfSerializer->serialiseValue([
-          'value' => $entity->getUri(),
-          'type' => 'uri',
-        ]);
-      }
-      $uris = implode(",\n", $uris);
-      $query = <<<QUERY
-        WITH <$graphUri>
-        DELETE  { ?subject ?predicate ?object . }
-        WHERE {
-        ?subject ?predicate ?object .
-        FILTER(?subject IN (
-        $uris
-        )) .
-        }
-        QUERY;
-      RdfSyncConnection::update($query);
+      $uris = array_map(
+        fn(RdfSyncEntityInterface $entity): string => $entity->getUri(),
+        $entities,
+      );
+      RdfSyncConnection::deleteTriples($uris);
     }
 
     if (in_array($method, ['insert', 'update'])) {
-      $triples = '';
+      $normalizer = \Drupal::getContainer()->get('rdf_sync.normalizer.alias');
+      $triples = [];
       foreach ($entities as $entity) {
-        $triples .= $this->serializer->serialize($entity, 'ntriples');
+        $triples += $normalizer->normalize($entity);
       }
-      $query = <<<QUERY
-        WITH <$graphUri>
-        INSERT {
-        $triples
-        }
-        QUERY;
-      RdfSyncConnection::update($query);
+      RdfSyncConnection::insertTriples($triples);
     }
   }
 

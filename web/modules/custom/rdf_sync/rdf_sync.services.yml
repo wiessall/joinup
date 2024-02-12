@@ -28,6 +28,12 @@ services:
       - '@event_dispatcher'
     tags:
       - { name: normalizer, priority: 15 }
+  # The rdf_sync.normalizer service is not publicly available, but we need it to
+  # get a PHP array representation of entities. Create an alias for directly
+  # accessing the normalizer.
+  # See \Drupal\rdf_sync\RdfSyncSynchronizerTrait::doSynchronize()
+  rdf_sync.normalizer.alias:
+    alias: rdf_sync.normalizer
   rdf_sync.synchronizer:
     class: Drupal\rdf_sync\RdfSyncSynchronizer
     arguments:
