@@ -12,4 +12,4 @@
  * imported, it should instead be placed in joinup_core.post_update.php.
  */
 
-declare(strict_types = 1);
+declare(strict_types=1);

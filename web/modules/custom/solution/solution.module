@@ -5,7 +5,7 @@
  * Contains hooks regarding the solution rdf entity bundle.
  */
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Cache\Cache;

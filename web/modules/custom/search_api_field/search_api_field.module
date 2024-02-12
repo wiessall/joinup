@@ -5,7 +5,7 @@
  * The entity hooks needed to display facets in pseudo-fields.
  */
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 use Drupal\Component\Utility\Html;
 use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
