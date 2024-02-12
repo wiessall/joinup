@@ -154,6 +154,7 @@ default:
         'pipeline log': 'table.joinup-pipeline-log-table'
         'subscribers report': 'table'
         'media admin': 'form[data-drupal-selector="views-form-media-media-page-list"] table'
+        'Ventuno media library': '.view-id-media_library.view-display-id-widget form table'
     Drupal\DrupalExtension:
       api_driver: 'drupal'
       blackbox: ~

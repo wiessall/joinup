@@ -1,6 +1,7 @@
 _core:
-  default_config_hash: 1ErUI34W400SFVtJGG8W1mfDZ6-Dw3L9l9ZST2PsTMs
+  default_config_hash: pxXXt2Y_C4hI99GWfwgveH4pNT6ev8mQMkJEkVOashQ
 content_type: text/html
+override: true
 text_format: plain_text
 generate_plain: true
 character_set: UTF-8
