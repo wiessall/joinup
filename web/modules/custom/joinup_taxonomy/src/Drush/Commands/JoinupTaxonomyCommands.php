@@ -15,6 +15,8 @@ use Drush\Attributes as CLI;
 use Drush\Commands\DrushCommands;
 use Drush\Drush;
 use EasyRdf\Graph;
+use EasyRdf\Literal;
+use EasyRdf\Resource;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -131,6 +133,20 @@ class JoinupTaxonomyCommands extends DrushCommands {
 
     $vids = array_merge(...array_values(self::VOCABS));
 
+    // Add the vocabulary entries.
+    foreach (\Drupal::entityTypeManager()->getStorage('taxonomy_vocabulary')->loadMultiple() as $vid => $vocabulary) {
+      RdfSyncConnection::updateTriples([
+        $this->mapper->getBundleRdfType('taxonomy_term', $vid) => [
+          'http://www.w3.org/1999/02/22-rdf-syntax-ns#type' => [
+            (new Resource('http://www.w3.org/2004/02/skos/core#ConceptScheme'))->toRdfPhp(),
+          ],
+          'http://www.w3.org/2004/02/skos/core#prefLabel' => [
+            (new Literal($vocabulary->label(), 'en'))->toRdfPhp(),
+          ],
+        ],
+      ]);
+    }
+
     // We already have a Drush command. Use it.
     $process = Drush::drush(
       Drush::aliasManager()->getSelf(),
@@ -148,6 +164,10 @@ class JoinupTaxonomyCommands extends DrushCommands {
       return $this->mapper->getBundleRdfType('taxonomy_term', $vid);
     }, $vids);
     foreach ($graph->resources() as $resource) {
+      // This resource is a vocabulary definition.
+      if ($resource->isA('skos:ConceptScheme')) {
+        continue;
+      }
       // Cleanup potential triples which are not part of the vocabularies.
       if (!$resource->isA('skos:Concept') || !in_array($resource->getResource('skos:inScheme')->getUri(), $vocabularyUris, TRUE)) {
         $graph->deleteEntireResource($resource);
