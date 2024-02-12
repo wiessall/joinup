@@ -52,7 +52,12 @@ class RdfSyncSynchronizer {
    * @return $this
    */
   public function setSyncMode(SyncMode $mode): self {
-    $this->state->set('rdf_sync.sync_mode', $mode->value);
+    if ($mode === SyncMode::DELAYED) {
+      $this->state->delete('rdf_sync.sync_mode');
+    }
+    else {
+      $this->state->set('rdf_sync.sync_mode', $mode->value);
+    }
     return $this;
   }
 
