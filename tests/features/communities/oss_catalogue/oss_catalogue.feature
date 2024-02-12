@@ -47,22 +47,31 @@ Feature:
     And I should not see the link "Report abusive content"
 
     # Most recent solutions carousel.
-    And I should see the following tiles in the "Most recent solutions" region:
+    Then I should see the following tiles in the "Most recent solutions" region:
       | Spunta             |
       | C4S ERP            |
       | Cristian Gagliardi |
       | Vito Schiraldi     |
       | Semantic Turkey    |
+
+    When I click "View all" in the "Most recent solutions" region
+    Then the option with text "Most Recent" from select "Sort by" is selected
+
     # Most active solutions carousel.
-    And I should see the following tiles in the "Most active solutions" region:
+    When I visit the OSS welcome page
+    Then I should see the following tiles in the "Most active solutions" region:
       | Cristian Gagliardi |
       | C4S ERP            |
       | Spunta             |
       | Vito Schiraldi     |
       | Semantic Turkey    |
 
+    When I click "View all" in the "Most active solutions" region
+    Then the option with text "Most Active" from select "Sort by" is selected
+
     # Check OSS label in tile footer.
-    And I should see the text "OSS Solution" in the "Spunta" tile
+    When I visit the OSS welcome page
+    Then I should see the text "OSS Solution" in the "Spunta" tile
 
     When I should not see the link "advanced search"
     Then I click "Browse the catalogue"
@@ -242,38 +251,63 @@ Feature:
       | Administration 5 |
       | Administration 6 |
       | Administration 7 |
-    Given oss_solution content:
-      | title      | status      | oss_release_date | oss_used_by                                                                                                            |
-      | With modal | published   | 2014-11-19       | Administration 1,Administration 2,Administration 3,Administration 4,Administration 5,Administration 6,Administration 7 |
+    And oss_solution content:
+      | title      | status    | oss_release_date | oss_available_languages                | oss_used_by                                                                                                            |
+      | With modal | published | 2014-11-19       | it,en,de,pt,eo,fr,he,ja,lt,pl,ro,gd,si | Administration 1,Administration 2,Administration 3,Administration 4,Administration 5,Administration 6,Administration 7 |
+
     When I go to the content page of the type "oss_solution" with the title "With modal"
+
+    # Check "Used by" field.
     Then I should see the following lines of text:
-      | Used by             |
-      |   Administration 1, |
-      |   Administration 2, |
-      |   Administration 3, |
-      |   Administration 4, |
-      |   Administration 5  |
+      | Used by           |
+      | Administration 1, |
+      | Administration 2, |
+      | Administration 3, |
+      | Administration 4, |
+      | Administration 5  |
     But I should not see the following lines of text:
       | Administration 6 |
       | Administration 7 |
     And I should not see the link "Show administration"
     But I should see the link "Show all 7 administrations"
-    Then I click "Show all 7 administrations"
+    When I click "Show all 7 administrations"
     Then a modal should open
-    Then I should see the following lines of text:
+    And I should see the following lines of text:
       | 7 administrations are currently using the With modal solution: |
-      |   Administration 1                                      |
-      |   Administration 2                                      |
-      |   Administration 3                                      |
-      |   Administration 4                                      |
-      |   Administration 5                                      |
-      |   Administration 6                                      |
-      |   Administration 7                                      |
-    Then I click on element ".ui-dialog .ui-dialog-titlebar-close"
+      | Administration 1                                               |
+      | Administration 2                                               |
+      | Administration 3                                               |
+      | Administration 4                                               |
+      | Administration 5                                               |
+      | Administration 6                                               |
+      | Administration 7                                               |
+    When I click on element ".ui-dialog .ui-dialog-titlebar-close"
     Then the modal should be closed
     And I should not see the following lines of text:
       | Administration 6 |
       | Administration 7 |
+
+    # Check "Supported languages" field.
+    Then I should see the following lines of text:
+      | Supported languages |
+      | Italian,            |
+      | English,            |
+    And I should see the link "Show all 13 languages"
+    But I should not see the following lines of text:
+      | Romanian,     |
+      | Scots Gaelic, |
+    When I click "Show all 13 languages"
+    Then a modal should open
+    And I should see the following lines of text:
+      | Italian      |
+      | English      |
+      | Romanian     |
+      | Scots Gaelic |
+    When I click on element ".ui-dialog .ui-dialog-titlebar-close"
+    Then the modal should be closed
+    And I should not see the following lines of text:
+      | Romanian,     |
+      | Scots Gaelic, |
 
   @javascript
   Scenario: Screenshot carousel with 4 items works as expected.

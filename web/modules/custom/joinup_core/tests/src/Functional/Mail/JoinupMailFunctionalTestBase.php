@@ -66,7 +66,7 @@ abstract class JoinupMailFunctionalTestBase extends BrowserTestBase {
     'options',
     'pathauto',
     'state_machine_revisions',
-    'swiftmailer',
+    'symfony_mailer_lite',
     'text',
     'topic',
     'user',
@@ -92,7 +92,10 @@ abstract class JoinupMailFunctionalTestBase extends BrowserTestBase {
       'system.mail',
       'system.site',
       'mailsystem.settings',
-      'swiftmailer.transport',
+      'symfony_mailer_lite.settings',
+      'symfony_mailer_lite.symfony_mailer_lite_transport.native',
+      'symfony_mailer_lite.symfony_mailer_lite_transport.null',
+      'symfony_mailer_lite.symfony_mailer_lite_transport.sendmail',
     ]);
 
     $this->config('system.theme')->set('default', 'ventuno')->save();
@@ -102,11 +105,6 @@ abstract class JoinupMailFunctionalTestBase extends BrowserTestBase {
 
     $this->config('system.mail')
       ->set('interface.default', 'test_mail_collector')
-      ->save();
-
-    // Set SwiftMailer's transport type to 'null' transport.
-    $this->config('swiftmailer.transport')
-      ->set('transport', SWIFTMAILER_TRANSPORT_NULL)
       ->save();
 
     $this->config('mailsystem.settings')

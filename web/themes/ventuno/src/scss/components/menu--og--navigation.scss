@@ -1,30 +1,31 @@
 @import "../partials/core";
 
 .menu--og--navigation {
-  background-color: $light;
   position: relative;
+  background-color: $light;
   &__menu {
+    overflow-x: auto;
+    overflow-y: hidden;
     width: 100%;
     padding: 0;
     background-color: $light;
-    overflow-x: auto;
-    overflow-y: hidden;
     -ms-overflow-style: none;  // Hide scrollbar for IE and Edge
     scrollbar-width: none;  // Hide scrollbar for Firefox
     // Hide scrollbar for Chrome, Safari and Opera
     &::-webkit-scrollbar {
       display: none;
     }
+
     // Create a visual hint to let user know menu is scrollable to the right
     &::after {
-      content: "";
-      pointer-events: none; // Allow clickthrough
       position: absolute;
-      width: $spacer * 5;
       top: 0;
       right: 0;
       left: calc(100% - 5rem);
+      width: $spacer * 5;
       height: 100%;
+      content: "";
+      pointer-events: none; // Allow clickthrough
       background-image: linear-gradient(90deg, transparent 50%, $light 100%);
       @include media-breakpoint-up(lg) {
         display: none;
@@ -46,9 +47,9 @@
       }
       .nav-link {
         height: 28px;
+        padding: 0 $spacer * .25;
         white-space: nowrap;
         color: $primary;
-        padding: 0 $spacer * .25;
         border: none;
         border-radius: 0%;
         box-shadow: 0 4px 0 0 transparent;
@@ -59,13 +60,13 @@
         &.is-active,
         &.active.is-active {
           color: $primary;
-          font-weight: $font-weight-bold;
           background-color: unset;
           box-shadow: 0 4px 0 0 $primary;
+          font-weight: $font-weight-bold;
         }
         @include media-breakpoint-up(lg) {
-          max-width: calc((960px - 12px * 8 - 10rem) / 6);
           overflow-x: hidden;
+          max-width: calc((960px - 12px * 8 - 10rem) / 6);
           text-overflow: ellipsis;
         }
         @include media-breakpoint-up(xl) {
@@ -82,20 +83,20 @@
     &-btn {
       display: inline;
       height: 28px;
-      padding: 0 $spacer * .25 $spacer * .25;
       margin: $spacer * .25 $spacer * .5;
+      padding: 0 $spacer * .25 $spacer * .25;
+      white-space: nowrap;
+      color: $primary;
       border: none;
       border-color: $primary;
       border-radius: 0;
-      color: $primary;
-      font-weight: $font-weight-normal;
       box-shadow: 0 4px 0 0 transparent;
-      white-space: nowrap;
+      font-weight: $font-weight-normal;
       &.show,
       &:hover {
+        text-decoration: none;
         color: $primary;
         box-shadow: 0 4px 0 0 $primary!important;
-        text-decoration: none;
       }
     }
     .nav-link {

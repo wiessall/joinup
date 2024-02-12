@@ -3,9 +3,9 @@
 */
 @mixin get-bootstrap-icon($icon-name, $icon-color: currentColor, $size: 1em) {
   display: inline-block;
-  content: "";
   width: $size;
   height: $size;
+  content: "";
   vertical-align: $size * -0.16;
   background-color: $icon-color;
   mask-image: url("#{$bootstrap-icons-path}/#{$icon-name}.svg");
