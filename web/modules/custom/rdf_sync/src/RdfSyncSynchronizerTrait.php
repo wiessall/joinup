@@ -33,7 +33,7 @@ trait RdfSyncSynchronizerTrait {
     }
 
     if (in_array($method, ['insert', 'update'])) {
-      $normalizer = \Drupal::getContainer()->get('rdf_sync.normalizer.alias');
+      $normalizer = \Drupal::getContainer()->get('rdf_sync.normalizer');
       $triples = [];
       foreach ($entities as $entity) {
         $triples += $normalizer->normalize($entity);
