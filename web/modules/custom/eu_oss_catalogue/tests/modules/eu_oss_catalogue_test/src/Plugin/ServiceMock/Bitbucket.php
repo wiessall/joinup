@@ -5,6 +5,7 @@ declare(strict_types = 1);
 namespace Drupal\eu_oss_catalogue_test\Plugin\ServiceMock;
 
 use Drupal\Component\Serialization\Json;
+use Drupal\Component\Utility\Random;
 use Drupal\Core\Plugin\PluginBase;
 use Drupal\Core\Serialization\Yaml;
 use Drupal\http_request_mock\ServiceMockPluginInterface;
@@ -24,7 +25,8 @@ use Psr\Http\Message\UriInterface;
  */
 class Bitbucket extends PluginBase implements ServiceMockPluginInterface {
 
-  const DEFAULT_RESPONSE_HEADERS = ['content-type' => 'application/json'];
+  const JSON_RESPONSE_HEADERS = ['content-type' => 'application/json'];
+  const TEXT_RESPONSE_HEADERS = ['content-type' => 'text/plain; charset=utf-8'];
 
   /**
    * Static cache for response fixture.
@@ -123,15 +125,39 @@ class Bitbucket extends PluginBase implements ServiceMockPluginInterface {
     if (is_array($mockResponse)) {
       unset($mockResponse['_http_status']);
     }
+    $headers = self::JSON_RESPONSE_HEADERS;
+    $requestIsHead = $request->getMethod() === 'HEAD';
+
+    // Assume that URLs ending with .png, .gif or .jpg/.jpeg expected to get a
+    // binary file response.
+    $filename = basename((string) $request->getUri());
+    $parts = explode('.', $filename);
+    $extension = count($parts) > 1
+      ? end($parts)
+      : NULL;
+    if ($extension) {
+      $headers = match($extension) {
+        'jpg', 'jpeg', 'png', 'gif', => ['content-type' => "image/$extension"],
+        'svg' => ['content-type' => 'image/svg+xml'],
+        'yml' => self::TEXT_RESPONSE_HEADERS,
+        default => $headers,
+      };
+      if (!$requestIsHead) {
+        $mockResponse = match($extension) {
+          'jpg', 'jpeg', 'png', 'gif' => file_get_contents((new Random())->image("temporary://test-$filename", '1x1', '1x1')),
+          default => $mockResponse,
+        };
+      }
+    }
+
+    $responseBody = is_array($mockResponse)
+      ? Json::encode($mockResponse)
+      : $mockResponse;
 
     return new Response(
       $status,
-      is_array($mockResponse)
-        ? static::DEFAULT_RESPONSE_HEADERS
-        : [],
-      is_array($mockResponse)
-        ? Json::encode($mockResponse)
-        : $mockResponse,
+      $headers,
+      $requestIsHead ? NULL : $responseBody,
     );
   }
 
@@ -140,8 +166,10 @@ class Bitbucket extends PluginBase implements ServiceMockPluginInterface {
    *
    * @return array|string|null
    *   The mocked response. Array responses are returned as JSON string, string
-   *   responses are returned as plain text. Returns NULL if no response mock
-   *   can be found.
+   *   responses are returned either as plain text, or as binary content,
+   *   depending on whether the request URL ends in a file name with "png",
+   *   "gif", "jpg/jpeg" extension. Returns NULL if no response mock can be
+   *   found.
    */
   protected function getMockResponse(RequestInterface $request): array|string|null {
     $requestUri = $request->getUri();
