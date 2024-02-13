@@ -4,7 +4,6 @@ Feature: Solution homepage
   As a user of the website
   I need to be able see an introduction of the solution on its homepage
 
-  @terms
   Scenario: The solution homepage shows basic information about the solution
     Given the following owner:
       | name          |
@@ -87,7 +86,6 @@ Feature: Solution homepage
     Then I should see the heading "Information sharing protocols"
     And I should not see the text "Page not found"
 
-  @terms
   Scenario: Custom pages should not be visible on the solution homepage
     Given the following solution:
       | title            | Jira restarters                      |
@@ -127,7 +125,6 @@ Feature: Solution homepage
     Then I should see the link "Disappointed Steel"
     But I should not see the link "Random Arm"
 
-  @terms
   Scenario: Test that a pager is shown on the solution page when needed.
     Given the following owner:
       | name                  | type                  |
@@ -265,7 +262,7 @@ Feature: Solution homepage
     When I go to the homepage of the "Chiricahua Solr" solution
     Then I should not see the "Pager" region
 
-  @terms @javascript
+  @javascript
   Scenario: Test that up to 7 topic terms are visible in the solution overview header.
     Given the following solutions:
       | title      | description        | logo     | state     | topic                                                                                                                              |

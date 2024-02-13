@@ -372,7 +372,7 @@ Feature: Moderate community content
       | High frequency              |
       | Cluster                     |
 
-  @terms @uploadFiles:logo.png
+  @uploadFiles:logo.png
   Scenario: The logo image can be replaced for an event or news item that's in
     the "proposed" state. See ISAICP-5818.
 

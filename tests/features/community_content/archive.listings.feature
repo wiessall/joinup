@@ -1,4 +1,4 @@
-@api @group-e @terms
+@api @group-e
 Feature: Archived content on content listings - groups and paragraphs.
 
   Background:
