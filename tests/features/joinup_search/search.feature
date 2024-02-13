@@ -1,4 +1,4 @@
-@api @terms @group-i
+@api @group-i
 Feature: Global search
   As a user of the site I can find content through the global search.
 
@@ -759,7 +759,6 @@ Feature: Global search
     Then I should see the following search suggestions:
       | Spheres |
 
-  @terms
   Scenario: Filter on date
     Given collection:
       | title | Mice in space |

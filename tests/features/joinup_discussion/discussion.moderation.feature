@@ -4,7 +4,6 @@ Feature: Discussion moderation
   As a user of the website
   I need to be able to transit the discussions from one state to another.
 
-  @terms
   Scenario: Publish, request changes, propose, publish again and archive a discussion.
     Given users:
       | Username        |

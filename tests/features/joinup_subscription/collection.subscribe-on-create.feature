@@ -2,7 +2,6 @@
 Feature: Subscribing to a collection after creating
   In order to subscribe my collection
 
-  @terms
   Scenario: Check my subscription after create a new collection.
 
     Given I am logged in as an authenticated

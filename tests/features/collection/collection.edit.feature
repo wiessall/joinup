@@ -4,7 +4,6 @@ Feature: Editing collections
   As a collection owner or collection facilitator
   I need to be able to edit collections through the UI
 
-  @terms
   Scenario: Edit a collection
     Given the following owner:
       | name                 | type                    |
@@ -37,7 +36,7 @@ Feature: Editing collections
     And I press "Save as draft"
     Then I should see the heading "Überwaldean Sea Eels"
 
-  @terms @javascript
+  @javascript
   Scenario: Edit a collection wysiwyg modal should close.
     # Regression test for ticket ISAICP-7181 and ISAICP-8355.
     Given the following owner:
@@ -68,7 +67,7 @@ Feature: Editing collections
     Then I should see the heading "Rhyme Land Eels"
     And the page should contain the html text '<div class="media-video">'
 
-  @terms @javascript
+  @javascript
   Scenario: Regression test wysiwyg add file shows a 0 bytes limit.
     # Regression test for ticket ISAICP-7177.
     Given the following owner:
