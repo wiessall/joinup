@@ -361,7 +361,7 @@ Feature: Collection moderation
       | Name     | Secretary of Silk      |
       | E-mail   | ss@example.com         |
     And I enter "So smooth." in the "Description" wysiwyg editor
-    And I select "Data gathering, data processing" from "Topic"
+    And I select "Data gathering and processing" from "Topic"
     # An ajax callback is executed now.
     And I press "Add new" at the "Owner" field
     And I wait for AJAX to finish
