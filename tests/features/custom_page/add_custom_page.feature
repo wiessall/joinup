@@ -214,6 +214,7 @@ Feature: "Add custom page" visibility options.
 
     When I fill in the following:
       | Title | Rubber boots |
+    And I select "HR" from "Topic"
     And I press "Save"
     Then I should see the heading "Rubber boots"
     And I should see the success message "Custom page Rubber boots has been created."
