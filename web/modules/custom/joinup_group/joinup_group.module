@@ -1059,29 +1059,6 @@ function joinup_group_rdf_entity_delete(RdfInterface $group): void {
 }
 
 /**
- * Implements hook_ENTITY_TYPE_delete().
- */
-function joinup_group_og_membership_delete(EntityInterface $entity): void {
-  if ($group = $entity->getGroup()) {
-    og_invalidate_group_content_cache_tags($group);
-  }
-}
-
-/**
- * Implements hook_ENTITY_TYPE_insert().
- */
-function joinup_group_og_membership_insert(EntityInterface $entity): void {
-  og_invalidate_group_content_cache_tags($entity->getGroup());
-}
-
-/**
- * Implements hook_ENTITY_TYPE_update().
- */
-function joinup_group_og_membership_update(EntityInterface $entity): void {
-  og_invalidate_group_content_cache_tags($entity->getGroup());
-}
-
-/**
  * Implements hook_mail().
  */
 function joinup_group_mail(string $key, array &$message, array $params): void {
