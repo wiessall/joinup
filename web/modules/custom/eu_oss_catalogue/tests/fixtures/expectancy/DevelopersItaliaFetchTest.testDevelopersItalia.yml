@@ -31,7 +31,7 @@ GitHub solution 1:
     oss_software_version: '2.3.0'
     oss_source:
       - developers_italia
-    oss_source_hash: 'K-R_Bukg4pUo-vwJBStnbUrm5ZHoeUtCx00FpJes7sM'
+    oss_source_hash: '9bklXh1q6uEmwcGhYVAKQajQNbFMWzmPefkemd8pMB8'
     oss_long_description: |
       [EN] Solution 1: Long description
       **Some bold text**
@@ -47,6 +47,7 @@ GitHub solution 1:
     oss_screenshots:
       - https://raw.githubusercontent.com/dummy-namespace-1/dummy-name-1/HEAD/Solution_1_EN_Screenshot1.jpg
       - https://raw.githubusercontent.com/dummy-namespace-1/dummy-name-1/HEAD/Solution_1_EN_Screenshot2.jpg
+    oss_git_open_pull_requests: 3
   de:
     langcode: de
     default_langcode: '0'
@@ -106,6 +107,7 @@ Project 1.1:
     oss_short_description: '[IT] Group1: Project 1: Short description'
     oss_screenshots:
       - 'https://limited.self-hosted.gitlab.example.com/group1/project-1-1/raw/HEAD/Group_1_Project1_IT_Screenshot.jpg'
+    oss_git_open_pull_requests: 32
   de:
     langcode: de
     oss_documentation: https://example.com/group1/project-1-1/de/docs.md
@@ -138,6 +140,7 @@ Project 1.2:
       - '[DE] feat 2'
     oss_long_description: '[DE] Group1: Project 2: Long description'
     oss_short_description: '[DE] Group1: Project 2: Short description'
+    oss_git_open_pull_requests: 2
   it:
     langcode: it
     default_langcode: '0'
@@ -188,6 +191,7 @@ GitHub solution 2:
     oss_source:
       - developers_italia
     oss_source_hash: 'WWiM57kppAUvDQdo2IiW1C9qh_Jdfzm8daYXeeS9IzU'
+    oss_git_open_pull_requests: 0
   it:
     langcode: it
     default_langcode: '0'
@@ -245,6 +249,7 @@ Project 1:
     oss_release_date: '2020-10-22'
     oss_platform_reference: gid://gitlab/Project/1
     oss_publiccode_yml_version: '0.2'
+    oss_git_open_pull_requests: 1
 
 ACME Ltd:
   en:

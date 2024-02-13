@@ -13,6 +13,7 @@ use Drupal\Core\Utility\Error;
 use Drupal\eu_oss_catalogue\EuOssCatalogueGitHostingPlatformPluginBase;
 use Drupal\eu_oss_catalogue\Exception\MissingAccessTokenException;
 use Drupal\eu_oss_catalogue\Model\GitHubSearchType;
+use Drupal\eu_oss_catalogue\Model\GitHubState;
 use Drupal\eu_oss_catalogue\Model\GitUri;
 use Drupal\eu_oss_catalogue\Model\Project;
 use Github\Api\GraphQL;
@@ -34,6 +35,8 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * )
  */
 class GitHub extends EuOssCatalogueGitHostingPlatformPluginBase {
+
+  protected const PULLREQUEST_FILTER = ['states' => GitHubState::OPEN];
 
   /**
    * Default terms for GitHub search.
@@ -250,6 +253,7 @@ class GitHub extends EuOssCatalogueGitHostingPlatformPluginBase {
             logo: $logo,
             numberOfForks: $node['forkCount'],
             numberOfStars: $node['stargazerCount'],
+            numberOfPullRequests: $node['pullRequests']['totalCount'],
             files: $files,
           );
         }
@@ -332,7 +336,8 @@ class GitHub extends EuOssCatalogueGitHostingPlatformPluginBase {
       ->use('id', 'description', 'name', 'isArchived', 'forkCount', 'stargazerCount', 'openGraphImageUrl')
       ->use((new Node('owner'))->use('login'))
       ->use((new Node('defaultBranchRef'))->use('name'))
-      ->use((new Node('latestRelease'))->use('tagName', 'createdAt'));
+      ->use((new Node('latestRelease'))->use('tagName', 'createdAt'))
+      ->use((new Node('pullRequests', static::PULLREQUEST_FILTER))->use('totalCount'));
 
     foreach ($requestedFiles as $fileId => $filePath) {
       $file = (new Node('object', ['expression' => "HEAD:$filePath"]))

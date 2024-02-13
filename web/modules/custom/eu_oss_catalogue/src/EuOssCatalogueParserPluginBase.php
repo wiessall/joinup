@@ -116,6 +116,7 @@ abstract class EuOssCatalogueParserPluginBase extends PluginBase implements EuOs
           'format' => 'markdown',
         ])
         ->set('oss_logo', $project->logo)
+        ->set('oss_git_open_pull_requests', $project->numberOfPullRequests)
         ->addProvider($provider);
 
       $this->doParse($solution, $project, $metadata, $provider);

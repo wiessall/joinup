@@ -163,6 +163,7 @@ class GitLabSelfHosted extends GitLabDotCom {
    *       forksCount
    *       starCount
    *       avatarUrl
+   *       openMergeRequestsCount
    *       releases(sort: CREATED_DESC first: 1) {
    *         nodes {
    *           tagName
@@ -198,7 +199,7 @@ class GitLabSelfHosted extends GitLabDotCom {
     $query->pageInfo([])->use('hasNextPage', 'endCursor');
 
     $fragment = $query->nodes([])
-      ->use('fullPath', 'path', 'id', 'description', 'archived', 'forksCount', 'starCount', 'avatarUrl')
+      ->use('fullPath', 'path', 'id', 'description', 'archived', 'forksCount', 'starCount', 'avatarUrl', 'openMergeRequestsCount')
       ->releases(['sort' => GitLabReleaseSort::CREATED_DESC, 'first' => 1])
       ->nodes([])
       ->use('tagName', 'createdAt')
