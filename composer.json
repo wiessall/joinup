@@ -266,6 +266,9 @@
             "drupal/core": "-p2"
         },
         "patches": {
+            "bitbucket/client": {
+                "Slashes in file path used in Src and Downloads API classes are url-encoded @see https://github.com/BitbucketPHP/Client/pull/83": "resources/patch/php/bitbucket/client/fe8b7771e51d2a2852b75e7be90fc871b1bc895f.diff"
+            },
             "cfpinto/graphql": {
                 "Enum argument https://github.com/cfpinto/graphql/issues/24": "resources/patch/php/cfpinto/graphql/25.diff"
             },
