@@ -10438,16 +10438,16 @@
         },
         {
             "name": "openeuropa/oe_webtools",
-            "version": "1.27.0",
+            "version": "1.28.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/openeuropa/oe_webtools.git",
-                "reference": "1ca1269241e4bff413c530991525b138e36b9330"
+                "reference": "44e11bf15ab244ef0202ef8ec51dde8ffa93125d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/openeuropa/oe_webtools/zipball/1ca1269241e4bff413c530991525b138e36b9330",
-                "reference": "1ca1269241e4bff413c530991525b138e36b9330",
+                "url": "https://api.github.com/repos/openeuropa/oe_webtools/zipball/44e11bf15ab244ef0202ef8ec51dde8ffa93125d",
+                "reference": "44e11bf15ab244ef0202ef8ec51dde8ffa93125d",
                 "shasum": ""
             },
             "require": {
@@ -10466,7 +10466,7 @@
                 "drupal/geocoder": "^4.0",
                 "drupal/geofield": "^1.0",
                 "drupal/json_field": "~1.1",
-                "drush/drush": "^11.1",
+                "drush/drush": "^12",
                 "mikey179/vfsstream": "^1.6",
                 "nikic/php-parser": "^4.18",
                 "openeuropa/behat-transformation-context": "^0.2",
@@ -10520,9 +10520,9 @@
             "description": "OpenEuropa Webtools integration.",
             "support": {
                 "issues": "https://github.com/openeuropa/oe_webtools/issues",
-                "source": "https://github.com/openeuropa/oe_webtools/tree/1.27.0"
+                "source": "https://github.com/openeuropa/oe_webtools/tree/1.28.0"
             },
-            "time": "2024-01-15T16:56:21+00:00"
+            "time": "2024-02-13T10:10:48+00:00"
         },
         {
             "name": "pear/archive_tar",
@@ -12063,16 +12063,16 @@
         },
         {
             "name": "sweetrdf/rdf-interface",
-            "version": "1.0.1",
+            "version": "2.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sweetrdf/rdfInterface.git",
-                "reference": "b0c930b7bd7a80e63f77510d0dcb261aead4f0a3"
+                "reference": "9a8c01779a214fa37f3420aa1d7228d51c170a19"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sweetrdf/rdfInterface/zipball/b0c930b7bd7a80e63f77510d0dcb261aead4f0a3",
-                "reference": "b0c930b7bd7a80e63f77510d0dcb261aead4f0a3",
+                "url": "https://api.github.com/repos/sweetrdf/rdfInterface/zipball/9a8c01779a214fa37f3420aa1d7228d51c170a19",
+                "reference": "9a8c01779a214fa37f3420aa1d7228d51c170a19",
                 "shasum": ""
             },
             "require": {
@@ -12081,8 +12081,7 @@
                 "zozlak/rdf-constants": "*"
             },
             "require-dev": {
-                "phpstan/phpstan": "*",
-                "squizlabs/php_codesniffer": "*"
+                "phpstan/phpstan": "*"
             },
             "type": "library",
             "autoload": {
@@ -12105,9 +12104,9 @@
             "homepage": "https://github.com/sweetrdf/rdfInterface",
             "support": {
                 "issues": "https://github.com/sweetrdf/rdfInterface/issues",
-                "source": "https://github.com/sweetrdf/rdfInterface/tree/1.0.1"
+                "source": "https://github.com/sweetrdf/rdfInterface/tree/2.0.0"
             },
-            "time": "2023-07-21T08:26:06+00:00"
+            "time": "2024-02-09T12:03:33+00:00"
         },
         {
             "name": "symfony/console",
@@ -19502,16 +19501,16 @@
         },
         {
             "name": "phpstan/phpstan",
-            "version": "1.10.57",
+            "version": "1.10.58",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan.git",
-                "reference": "1627b1d03446904aaa77593f370c5201d2ecc34e"
+                "reference": "a23518379ec4defd9e47cbf81019526861623ec2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/1627b1d03446904aaa77593f370c5201d2ecc34e",
-                "reference": "1627b1d03446904aaa77593f370c5201d2ecc34e",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/a23518379ec4defd9e47cbf81019526861623ec2",
+                "reference": "a23518379ec4defd9e47cbf81019526861623ec2",
                 "shasum": ""
             },
             "require": {
@@ -19560,7 +19559,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-01-24T11:51:34+00:00"
+            "time": "2024-02-12T20:02:57+00:00"
         },
         {
             "name": "phpstan/phpstan-deprecation-rules",
