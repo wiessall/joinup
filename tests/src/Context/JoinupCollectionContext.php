@@ -51,7 +51,7 @@ class JoinupCollectionContext extends RawDrupalContext {
       'id' => JoinupCollectionHelper::JOINUP_COLLECTION_DEFAULT_ENTITY_ID,
       'label' => 'Joinup',
       'field_ar_state' => 'published',
-      'field_topic' => $this->getRandomTopic(),
+      'field_topic' => $this->getRandomTopic()->id(),
       'field_ar_owner' => 'http://example.com/owner/isa2',
       'field_ar_contact_information' => 'http://example.com/contact/joinup',
     ])->save();
