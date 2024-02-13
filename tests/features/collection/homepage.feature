@@ -35,6 +35,7 @@ Feature: Collection homepage
       | content creation | registered users      |
       | creation date    | 2014-10-17 8:32am     |
       | state            | published             |
+      | topic            | Info                  |
     And the following collection user memberships:
       | collection         | user    | roles       |
       | Middle earth daily | Frodo   | facilitator |
@@ -118,6 +119,7 @@ Feature: Collection homepage
       | Supplier exchange (2)   |
       | Economy and Welfare (1) |
       | Finance in EU (1)       |
+      | Info (1)                |
 
     When I click "Supplier exchange" in the "collection topic" inline facet
     Then "Supplier exchange (2)" should be selected in the "collection topic" inline facet
@@ -125,6 +127,7 @@ Feature: Collection homepage
       | eGov (2)                |
       | Economy and Welfare (1) |
       | Finance in EU (1)       |
+      | Info (1)                |
       | all topics              |
     Then I should see the following tiles in the correct order:
       | Big hobbit feast - fireworks at midnight          |
