@@ -317,7 +317,7 @@ Feature: Proposing a collection
       | E-mail | basic.svg.api@example.com |
       | Name   | BasicSvgAPI Contact       |
     And I press "Create contact information"
-    When I select "Data gathering, data processing" from "Topic"
+    When I select "Data gathering and processing" from "Topic"
 
     When I expand the "Additional fields" accordion section
     # Shows error when svg is invalid or unsafe and fails to upload.

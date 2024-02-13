@@ -189,7 +189,7 @@ Feature: "Add solution" visibility options.
     And I fill in the following:
       | Title       | PHP comments parser                             |
       | Description | A simple parser that goes through PHP comments. |
-    And I select "Data gathering, data processing" from "Topic"
+    And I select "Data gathering and processing" from "Topic"
     And I select "Implementing Guideline" from "Solution type"
 
     # Submit the incomplete form, so error messages about missing fields will
@@ -254,7 +254,7 @@ Feature: "Add solution" visibility options.
       | Geographical coverage | Switzerland                                 |
       | Name                  | Angela Crespi                               |
       | E-mail address        | angela_crespi@glacmon.basel-uni.ch          |
-    And I select "Data gathering, data processing" from "Topic"
+    And I select "Data gathering and processing" from "Topic"
     And I select "Logging Service" from "Solution type"
     And I press "Add existing" at the "Owner" field
     And I fill in "Owner" with "University of Basel"
