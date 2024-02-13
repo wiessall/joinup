@@ -753,7 +753,7 @@ class JoinupContext extends RawDrupalContext {
       // For some tests, the node's topic has no relevance. Such tests are
       // allowed to omit an explicit topic. We're assigning a random topic term,
       // to satisfy data integrity and prevent form validation errors.
-      $node->field_topic = \Drupal::entityTypeManager()->getStorage('taxonomy_term')->load($this->getRandomTopic())->label();
+      $node->field_topic = $this->getRandomTopic()->label();
     }
   }
 
