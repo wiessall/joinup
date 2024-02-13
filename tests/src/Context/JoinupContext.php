@@ -28,6 +28,7 @@ use Drupal\joinup\Traits\KeyboardInteractionTrait;
 use Drupal\joinup\Traits\OgTrait;
 use Drupal\joinup\Traits\TabledragTrait;
 use Drupal\joinup\Traits\TestingEntitiesTrait;
+use Drupal\joinup\Traits\TopicTrait;
 use Drupal\joinup\Traits\TraversingTrait;
 use Drupal\joinup\Traits\UserTrait;
 use Drupal\joinup\Traits\UtilityTrait;
@@ -64,6 +65,7 @@ class JoinupContext extends RawDrupalContext {
   use StringTranslationTrait;
   use TabledragTrait;
   use TestingEntitiesTrait;
+  use TopicTrait;
   use TraversingTrait;
   use UserTrait;
   use UtilityTrait;
@@ -744,6 +746,14 @@ class JoinupContext extends RawDrupalContext {
       $node->{"field_paragraphs_body:target_id"} = $paragraph->id();
       $node->{"field_paragraphs_body:target_revision_id"} = $paragraph->getRevisionId();
       unset($node->field_paragraphs_body);
+    }
+
+    $field_definitions = \Drupal::service('entity_field.manager')->getFieldDefinitions('node', $node->type);
+    if (!empty($field_definitions['field_topic']) && empty($node->field_topic)) {
+      // For some tests, the node's topic has no relevance. Such tests are
+      // allowed to omit an explicit topic. We're assigning a random topic term,
+      // to satisfy data integrity and prevent form validation errors.
+      $node->field_topic = \Drupal::entityTypeManager()->getStorage('taxonomy_term')->load($this->getRandomTopic())->label();
     }
   }
 
