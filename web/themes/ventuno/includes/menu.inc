@@ -5,7 +5,7 @@
  * Menu specific procedural functions.
  */
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 use Drupal\Core\Url;
 use Drupal\block\Entity\Block;
