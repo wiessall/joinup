@@ -2016,6 +2016,10 @@ class JoinupContext extends RawDrupalContext {
       }
 
       $this->dispatchHooks('BeforeNodeCreateScope', $fake_node);
+      // Correction to topic field.
+      if (!empty($fake_node->field_topic) && ($topic = $this->getEntityByLabel('taxonomy_term', $fake_node->field_topic, 'topic'))) {
+        $fake_node->field_topic = $topic->id();
+      }
       $this->parseEntityFields('node', $fake_node);
       // Remove the type property as we cannot change that.
       unset($fake_node->type);
