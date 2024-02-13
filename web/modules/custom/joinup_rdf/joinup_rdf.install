@@ -5,7 +5,7 @@
  * Post update functions for the Joinup RDF module.
  */
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 /**
  * Performs checks for the RDF entities and its storage.

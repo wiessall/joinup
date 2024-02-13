@@ -1,12 +1,13 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Drupal\joinup_core\Plugin\Block;
 
 use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Menu\Plugin\Block\LocalTasksBlock;
 use Drupal\Core\Render\Element;
+use Drupal\joinup_core\Traits\GroupPluginCacheTrait;
 
 /**
  * Provides a "Tabs" block to display the local tasks.
@@ -27,6 +28,8 @@ use Drupal\Core\Render\Element;
  * )
  */
 class JoinupLocalTasksBlock extends LocalTasksBlock {
+
+  use GroupPluginCacheTrait;
 
   /**
    * {@inheritdoc}
