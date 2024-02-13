@@ -6,13 +6,13 @@ Feature: "Add custom page" visibility options.
 
   Background:
     Given collections:
-      | title           | logo     | state     |
-      | Open Collective | logo.png | published |
-      | Code Camp       | logo.png | published |
+      | title           | logo     | state     | topic      |
+      | Open Collective | logo.png | published | Demography |
+      | Code Camp       | logo.png | published | Demography |
     And solutions:
-      | title     | logo     | state     |
-      | Parachute | logo.png | published |
-      | Skydiving | logo.png | published |
+      | title     | logo     | state     | topic      |
+      | Parachute | logo.png | published | Demography |
+      | Skydiving | logo.png | published | Demography |
 
   Scenario Outline: Links and help text for adding custom pages should should only be shown to privileged users
     # Custom pages cannot be added by normal members. Custom pages are
