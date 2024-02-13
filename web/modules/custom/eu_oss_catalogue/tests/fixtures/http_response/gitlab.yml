@@ -15,6 +15,7 @@
           archived: false
           # Not set as logo as the logo from publiccode.yml is valid.
           avatarUrl: https://all.self-hosted.gitlab.example.com/uploads/-/system/project/avatar/1/logo.jpeg
+          openMergeRequestsCount: 1
           releases:
             nodes:
               - tagName: 'v1.1.1'
@@ -78,6 +79,7 @@
           starCount: 222
           # Will be set as logo as the logo from publiccode.yml isn't valid.
           avatarUrl: https://all.self-hosted.gitlab.example.com/uploads/-/system/project/avatar/2/logo.png
+          openMergeRequestsCount: 0
           releases:
             nodes:
               - tagName: 'v14.0.1'
@@ -139,6 +141,7 @@
           forksCount: 203
           starCount: 223
           avatarUrl: null
+          openMergeRequestsCount: 11
           releases:
             nodes: {  }
           repository:
@@ -194,6 +197,7 @@
           archived: false
           forksCount: 204
           starCount: 224
+          openMergeRequestsCount: 0
           releases:
             nodes: {  }
           repository:
@@ -209,6 +213,7 @@
           archived: false
           forksCount: 205
           starCount: 225
+          openMergeRequestsCount: 3
           releases:
             nodes: {  }
           repository:
@@ -232,6 +237,7 @@
             starCount: 226
             # Not set as logo as the logo from publiccode.yml is valid.
             avatarUrl: https://all.self-hosted.gitlab.example.com/uploads/-/system/project/avatar/2/logo.svg
+            openMergeRequestsCount: 32
             releases:
               nodes:
                 - tagName: '2.0.0-alpha12'
@@ -309,6 +315,7 @@
             starCount: 227
             # Will be set as logo as the logo from publiccode.yml isn't valid.
             avatarUrl: https://all.self-hosted.gitlab.example.com/uploads/-/system/project/avatar/12/logo.jpg
+            openMergeRequestsCount: 2
             releases:
               nodes:
                 - tagName: '220.0.1'
@@ -391,6 +398,7 @@
             forksCount: 208
             starCount: 228
             avatarUrl: null
+            openMergeRequestsCount: 0
             releases:
               nodes: []
             repository:
@@ -447,6 +455,7 @@
             archived: false
             forksCount: 209
             starCount: 229
+            openMergeRequestsCount: 7
             releases:
               nodes:
                 - tagName: '1.12.0-beta2'
@@ -502,6 +511,7 @@
             archived: false
             forksCount: 210
             starCount: 230
+            openMergeRequestsCount: 1
             releases:
               nodes: []
             repository:
@@ -551,6 +561,7 @@
       archived: false
       forksCount: 211
       starCount: 231
+      openMergeRequestsCount: 1
       releases:
         nodes:
           - tagName: '1.0.x-dev'

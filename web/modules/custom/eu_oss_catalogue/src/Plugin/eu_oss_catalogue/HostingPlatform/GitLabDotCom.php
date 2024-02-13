@@ -204,6 +204,7 @@ class GitLabDotCom extends EuOssCatalogueGitHostingPlatformPluginBase {
    *         forksCount
    *         starCount
    *         avatarUrl
+   *         openMergeRequestsCount
    *         releases(sort: CREATED_DESC first: 1) {
    *           nodes {
    *             tagName
@@ -245,7 +246,7 @@ class GitLabDotCom extends EuOssCatalogueGitHostingPlatformPluginBase {
       ->use('hasNextPage', 'endCursor')
       ->prev()
       ->nodes([])
-      ->use('path', 'id', 'description', 'archived', 'forksCount', 'starCount', 'avatarUrl')
+      ->use('path', 'id', 'description', 'archived', 'forksCount', 'starCount', 'avatarUrl', 'openMergeRequestsCount')
       ->releases(['sort' => GitLabReleaseSort::CREATED_DESC, 'first' => 1])
       ->nodes([])
       ->use('tagName', 'createdAt')
@@ -277,6 +278,7 @@ class GitLabDotCom extends EuOssCatalogueGitHostingPlatformPluginBase {
    *     forksCount
    *     starCount
    *     avatarUrl
+   *     openMergeRequestsCount
    *     releases(sort: CREATED_DESC first: 1) {
    *       nodes {
    *         tagName
@@ -366,6 +368,7 @@ class GitLabDotCom extends EuOssCatalogueGitHostingPlatformPluginBase {
       logo: $project['avatarUrl'] ?? NULL,
       numberOfForks: $project['forksCount'],
       numberOfStars: $project['starCount'],
+      numberOfPullRequests: $project['openMergeRequestsCount'],
       files: $files,
     );
   }
