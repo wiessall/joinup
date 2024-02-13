@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "6a4e0b0c46e80ef5e4f33a27e2b00e56",
+    "content-hash": "a44317754dbc76a63b0f9837428fe8a2",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -162,7 +162,7 @@
                 "symfony/var-dumper": "^6.3",
                 "symfony/yaml": "^6.3",
                 "vimeo/psalm": "^5.14.0"
-            },
+            },<<<
             "bin": [
                 "bin/dcg"
             ],
