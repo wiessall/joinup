@@ -1,0 +1,60 @@
+<?php
+
+/**
+ * @file
+ * Install, update and uninstall hooks for Joinup Test module.
+ */
+
+declare(strict_types = 1);
+
+use Drupal\Component\Serialization\Yaml;
+
+/**
+ * Implements hook_install().
+ */
+function joinup_test_install($is_syncing): void {
+  // Create the testing taxonomy terms. Limitation: It creates terms with
+  // maximum 2 level hierarchy.
+  $fixture = file_get_contents(__DIR__ . '/fixtures/testing_terms.yml');
+  $hierarchy = Yaml::decode($fixture);
+  $storage = \Drupal::entityTypeManager()->getStorage('taxonomy_term');
+  $tids = [];
+  foreach ($hierarchy as $vid => $terms) {
+    foreach ($terms as $parent_index => $data) {
+      $weight = $parent_index - 1;
+      $term = $storage->create([
+        'vid' => $vid,
+        'name' => $data['name'],
+        'weight' => $weight,
+      ]);
+      $term->save();
+      $parentTermId = $term->id();
+      $tids[] = $parentTermId;
+      foreach ($data['children'] ?? [] as $child_index => $child) {
+        $weight = $child_index - 1;
+        $term = $storage->create([
+          'vid' => $vid,
+          'name' => $child['name'],
+          'parent' => $parentTermId,
+          'weight' => $weight,
+          'description' => $child['description'] ?? '',
+        ]);
+        $term->save();
+        $tids[] = $term->id();
+      }
+    }
+  }
+  \Drupal::state()->set('joinup_test.testing_terms', $tids);
+}
+
+/**
+ * Implements hook_uninstall().
+ */
+function joinup_test_uninstall($is_syncing): void {
+  $state = \Drupal::state();
+  if ($tids = $state->get('joinup_test.testing_terms', [])) {
+    $storage = \Drupal::entityTypeManager()->getStorage('taxonomy_term');
+    $storage->delete($storage->loadMultiple($tids));
+  }
+  $state->delete('joinup_test.testing_terms');
+}
