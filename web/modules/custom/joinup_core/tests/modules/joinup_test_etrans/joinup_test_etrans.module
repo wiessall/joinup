@@ -1,0 +1,15 @@
+<?php
+
+/**
+ * @file
+ * Contains hooks of Joinup ETrans Debugger.
+ */
+
+declare(strict_types=1);
+
+/**
+ * Implements hook_block_view_BASE_BLOCK_ID_alter().
+ */
+function joinup_test_etrans_block_view_oe_webtools_etrans_alter(array &$build) {
+  $build['#attached']['library'][] = 'joinup_test_etrans/etrans_debugger';
+}
