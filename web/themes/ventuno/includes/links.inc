@@ -5,7 +5,7 @@
  * Links specific procedural functions.
  */
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 /**
  * Implements hook_preprocess_links__media_library_menu().

@@ -73,8 +73,8 @@ Feature: As a visitor or logged-in user, when I want to post content, the form
     Then the form is protected by Antibot
     And the form is protected by Honeypot
 
-    When I go to the about page of "Family photos"
-    And I click "Contact us" in the "Content" region
+    When I go to the homepage of the "Family photos" collection
+    And I click "ACME Inc." in the "Content" region
     Then a modal should open
     And the form is protected by Antibot
     And the form is protected by Honeypot

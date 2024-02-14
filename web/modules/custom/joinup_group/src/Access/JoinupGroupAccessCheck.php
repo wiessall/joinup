@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Drupal\joinup_group\Access;
 
@@ -9,6 +9,7 @@ use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Routing\Access\AccessInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\asset_release\Entity\AssetReleaseInterface;
 use Drupal\joinup_group\JoinupGroupHelper;
 use Drupal\rdf_entity\RdfInterface;
 use Drupal\sparql_entity_storage\UriEncoder;
@@ -72,7 +73,13 @@ class JoinupGroupAccessCheck implements AccessInterface {
       throw new \Exception("The '_joinup_group' route requirement should have one of the following values: 'TRUE', 'FALSE', 'collection' or 'solution' but '{$requirement}' was given.");
     }
 
+    // If the rdf_entity from the route is a release, we might be in a route
+    // that is related to a distribution, thus, still we need to check for the
+    // solution instead.
     $rdf_entity = $route_match->getParameter('rdf_entity');
+    if ($rdf_entity instanceof AssetReleaseInterface) {
+      $rdf_entity = $rdf_entity->getGroup();
+    }
 
     // If the route wasn't configured to upcast the parameter, try to load an
     // RDF entity given its ID.
@@ -93,6 +100,9 @@ class JoinupGroupAccessCheck implements AccessInterface {
       ($requirement === 'TRUE' && isset(JoinupGroupHelper::GROUP_BUNDLES[$bundle])) ||
       ($requirement === 'FALSE' && !isset(JoinupGroupHelper::GROUP_BUNDLES[$bundle])) ||
       (isset(JoinupGroupHelper::GROUP_BUNDLES[$requirement]) && $bundle === JoinupGroupHelper::GROUP_BUNDLES[$requirement]);
+
+    /** @var \Drupal\joinup_workflow\ArchivableEntityInterface $rdf_entity */
+    $allow_access = $allow_access && !$rdf_entity->isArchived();
 
     return $allow_access ? AccessResult::allowed() : AccessResult::forbidden();
   }

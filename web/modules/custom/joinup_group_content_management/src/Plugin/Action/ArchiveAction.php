@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Drupal\joinup_group_content_management\Plugin\Action;
 
@@ -9,6 +9,7 @@ use Drupal\Core\Render\RendererInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\joinup_group_content_management\Exception\ActionException;
 use Drupal\joinup_workflow\EntityWorkflowStateInterface;
+use Drupal\joinup_workflow\WorkflowHelperInterface;
 use Drupal\node\NodeInterface;
 use Drupal\views\ViewExecutable;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -42,8 +43,18 @@ class ArchiveAction extends StateActionBase {
    *   The time service.
    * @param \Drupal\Core\Session\AccountInterface $currentUser
    *   The current user.
+   * @param \Drupal\joinup_workflow\WorkflowHelperInterface $workflowHelper
+   *   The workflow helper service.
    */
-  public function __construct(array $configuration, $pluginId, $pluginDefinition, protected RendererInterface $renderer, protected TimeInterface $time, protected AccountInterface $currentUser) {
+  public function __construct(
+    array $configuration,
+    string $pluginId,
+    $pluginDefinition,
+    protected RendererInterface $renderer,
+    protected TimeInterface $time,
+    protected AccountInterface $currentUser,
+    protected WorkflowHelperInterface $workflowHelper,
+  ) {
     parent::__construct($configuration, $pluginId, $pluginDefinition);
   }
 
@@ -57,7 +68,8 @@ class ArchiveAction extends StateActionBase {
       $plugin_definition,
       $container->get('renderer'),
       $container->get('datetime.time'),
-      $container->get('current_user')
+      $container->get('current_user'),
+      $container->get('joinup_workflow.workflow_helper')
     );
   }
 
@@ -71,13 +83,7 @@ class ArchiveAction extends StateActionBase {
       return;
     }
 
-    $node->setNewRevision();
-    $node->isDefaultRevision(TRUE);
-    $node->setRevisionLogMessage('Updated state to ' . self::ARCHIVE_STATE . ' by VBO action');
-    $node->setRevisionUserId($this->currentUser->id());
-    $node->setRevisionCreationTime($this->time->getRequestTime());
-    $node->setWorkflowState(self::ARCHIVE_STATE);
-    $node->save();
+    $this->workflowHelper->archiveEntity($node, 'Updated state to ' . self::ARCHIVE_STATE . ' by VBO action');
   }
 
   /**

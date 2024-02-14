@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Drupal\joinup\Context;
 
@@ -36,6 +36,7 @@ use Drupal\joinup_community_content\CommunityContentHelper;
 use Drupal\joinup_group\Entity\GroupContentInterface;
 use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\joinup_group\Entity\PinnableGroupContentInterface;
+use Drupal\joinup_workflow\EntityWorkflowStateInterface;
 use Drupal\meta_entity\Entity\MetaEntity;
 use Drupal\node\Entity\Node;
 use Drupal\og\OgGroupAudienceHelperInterface;
@@ -1067,6 +1068,45 @@ class JoinupContext extends RawDrupalContext {
     $node = $this->getEntityByLabel('node', $title, $type);
     $actual = $node->getWorkflowState();
     Assert::assertEquals($state, $actual, "The $title $type content has the expected state '$state' (actual: '$actual')");
+  }
+
+  /**
+   * Checks the current workflow state on the given entity.
+   *
+   * @param string $label
+   *   The label of the entity.
+   * @param string $type
+   *   The entity type ID of the entity.
+   * @param string $stateExpected
+   *   The expected workflow state's label.
+   *
+   * @Given the workflow state of the :label :type should be :stateExpected
+   */
+  public function assertEntityWorkflowState(string $label, string $type, string $stateExpected): void {
+    $mapping = [
+      'content' => 'node',
+      'rdf entity' => 'rdf_entity',
+    ];
+    $entityTypeId = $mapping[$type] ?? $type;
+    $entity = $this->getEntityByLabel($entityTypeId, $label);
+    Assert::assertInstanceOf(
+      EntityWorkflowStateInterface::class,
+      $entity,
+      "The entity doesn't seem to have any workflow."
+    );
+    // State might be a label or a machine name.
+    $stateIdExpected = static::translateWorkflowStateAlias($stateExpected);
+    Assert::assertSame(
+      $stateIdExpected,
+      $actual = $entity->getWorkflowState(),
+      sprintf(
+        "Workflow state of '%s' '%s' is different than expected. Expected state is '%s', while the actual one is '%s'.",
+        $label,
+        $type,
+        $stateIdExpected,
+        $actual,
+      )
+    );
   }
 
   /**
@@ -2684,12 +2724,17 @@ JS;
    *
    * @param \Behat\Gherkin\Node\TableNode $table
    *   The menu data.
+   * @param string $group_label
+   *   The group label.
+   * @param string $group_bundle
+   *   The group bundle.
    *
-   * @Then the draggable menu table should be:
+   * @Then the draggable menu table of the :group_label :group_type should be:
    */
-  public function assertDraggableMenuTable(TableNode $table) {
+  public function assertDraggableMenuTable(TableNode $table, string $group_label, string $group_bundle): void {
     self::assertJavaScriptEnabledBrowser();
 
+    $group = $this->getEntityByLabel('rdf_entity', $group_label, $group_bundle);
     /** @var \Behat\Mink\Element\NodeElement[] $rows */
     $rows = $this->getSession()->getPage()->findAll('css', '#menu-overview tbody tr.draggable');
     $expected = $table->getColumnsHash();
@@ -2700,23 +2745,25 @@ JS;
       $title_element = $current_row->find('css', 'td:first-of-type a:not(.tabledrag-handle)');
       Assert::assertEquals($data['title'], trim($title_element->getText()));
 
-      $menu_link = $this->getMenuLinkByTitle($data['title']);
+      $menu_link = $this->getMenuLinkByTitle($data['title'], $group->id(), 'navigation');
       $parent_input = $current_row->find('css', 'input[name="links[menu_plugin_id:' . $menu_link->getPluginId() . '][parent]"]');
-
-      if (!$parent_input) {
-        throw new \Exception('Cannot find parent input field.');
-      }
 
       // When a parent is available, the line should be indented. Find all
       // indentation elements to assert later on based on the parent value.
       $indentation = $current_row->findAll('css', 'div.indentation');
 
       if (!isset($data['parent']) || $data['parent'] === '') {
-        Assert::assertEmpty($parent_input->getValue());
+        if (!empty($parent_input)) {
+          Assert::assertEmpty($parent_input->getValue());
+        }
         Assert::assertCount(0, $indentation, "The menu link '{$data['title']}' should not be indented but it is.");
       }
       else {
-        $parent_link = $this->getMenuLinkByTitle($data['parent']);
+        if (!$parent_input) {
+          throw new \Exception('Cannot find parent input field.');
+        }
+
+        $parent_link = $this->getMenuLinkByTitle($data['parent'], $group->id(), 'navigation');
         Assert::assertEquals($parent_link->getPluginId(), $parent_input->getValue());
         Assert::assertNotCount(0, $indentation, "The menu link '{$data['title']}' should be indented but it's not.");
       }

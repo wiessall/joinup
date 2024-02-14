@@ -10,6 +10,7 @@ dependencies:
     - field.field.rdf_entity.asset_distribution.field_ad_gitb_compliant
     - field.field.rdf_entity.asset_distribution.field_ad_licence
     - field.field.rdf_entity.asset_distribution.field_ad_repr_technique
+    - field.field.rdf_entity.asset_distribution.field_ad_state
     - field.field.rdf_entity.asset_distribution.field_status
     - field.field.rdf_entity.asset_distribution.og_audience
     - rdf_entity.rdfentity.asset_distribution
@@ -17,6 +18,7 @@ dependencies:
     - asset_distribution
     - digital_size_formatter
     - field_group
+    - options
     - template_suggestion
     - text
     - user
@@ -107,6 +109,13 @@ content:
       template_suggestion:
         template_suggestion: fieldset
     weight: 2
+    region: content
+  field_ad_state:
+    type: list_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 21
     region: content
   field_status:
     type: entity_reference_label

@@ -132,6 +132,7 @@ module:
   language: 0
   layout_builder: 0
   layout_builder_component_attributes: 0
+  layout_custom_section_classes: 0
   layout_discovery: 0
   layout_paragraphs: 0
   link: 0
