@@ -5,7 +5,7 @@
  * RDF Meta Entity specific procedural functions.
  */
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 use Drupal\Core\Url;
 

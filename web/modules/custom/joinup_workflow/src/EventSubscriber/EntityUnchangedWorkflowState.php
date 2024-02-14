@@ -1,11 +1,12 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
-namespace Drupal\custom_page\EventSubscriber;
+namespace Drupal\joinup_workflow\EventSubscriber;
 
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
+use Drupal\asset_distribution\Entity\AssetDistributionInterface;
 use Drupal\custom_page\Entity\CustomPageInterface;
 use Drupal\joinup_workflow\Event\UnchangedWorkflowStateUpdateEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -13,7 +14,7 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 /**
  * Event subscribers for the "joinup_workflow.unchanged_workflow_state_update".
  */
-class CustomPageUnchangedWorkflowState implements EventSubscriberInterface {
+class EntityUnchangedWorkflowState implements EventSubscriberInterface {
 
   use StringTranslationTrait;
 
@@ -34,7 +35,7 @@ class CustomPageUnchangedWorkflowState implements EventSubscriberInterface {
    */
   public function onUnchangedWorkflowStateUpdate(UnchangedWorkflowStateUpdateEvent $event): void {
     $entity = $event->getEntity();
-    if (!$entity instanceof CustomPageInterface) {
+    if (!($entity instanceof CustomPageInterface || $entity instanceof AssetDistributionInterface)) {
       return;
     }
 

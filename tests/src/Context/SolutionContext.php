@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Drupal\joinup\Context;
 
@@ -543,6 +543,7 @@ class SolutionContext extends RawDrupalContext {
       'uri' => 'id',
       'title' => 'label',
       'short ID' => 'field_short_id',
+      'abstract' => 'field_is_abstract',
       'affiliations requests' => 'field_is_affiliations_requests',
       'contact information' => 'field_is_contact_information',
       'content creation' => 'field_is_content_creation',
@@ -576,7 +577,10 @@ class SolutionContext extends RawDrupalContext {
       'collections' => 'collection',
       'featured' => 'feature',
       'pinned in' => 'pinned_in_collection',
+      'business process' => 'field_is_business_process',
+      'product type' => 'field_is_product_type',
       'shared on' => 'field_is_shared_in',
+      'abstract' => 'field_is_abstract',
     ];
   }
 
@@ -606,6 +610,7 @@ class SolutionContext extends RawDrupalContext {
         'published' => 'published',
         'needs update' => 'needs_update',
         'blacklisted' => 'blacklisted',
+        'archived' => 'archived',
       ],
       'field_is_show_eira_related' => ['no' => 0, 'yes' => 1],
     ];

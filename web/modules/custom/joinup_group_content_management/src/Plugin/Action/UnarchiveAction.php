@@ -1,12 +1,13 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Drupal\joinup_group_content_management\Plugin\Action;
 
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Entity\RevisionableInterface;
 use Drupal\Core\Render\RendererInterface;
+use Drupal\joinup_group\GroupArchivableEntityInterface;
 use Drupal\joinup_group_content_management\Exception\ActionException;
 use Drupal\joinup_workflow\EntityWorkflowStateInterface;
 use Drupal\joinup_workflow\WorkflowHelperInterface;
@@ -72,6 +73,10 @@ class UnarchiveAction extends StateActionBase {
     $actual = $node->getWorkflowState();
     if ($actual != self::ARCHIVE_STATE) {
       throw new ActionException('Entity must be ' . self::ARCHIVE_STATE);
+    }
+
+    if ($node instanceof GroupArchivableEntityInterface && $node->isParentArchived()) {
+      throw new ActionException('Parent entity is archived');
     }
 
     $previous = $this->getPreviousRevision($node);

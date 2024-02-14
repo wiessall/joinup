@@ -41,6 +41,10 @@ content:
       image_style: logo
       image_loading:
         attribute: lazy
+      svg_attributes:
+        width: null
+        height: null
+      svg_render_as_image: true
     third_party_settings:
       template_suggestion:
         template_suggestion: no_wrappers

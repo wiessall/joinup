@@ -14,6 +14,7 @@ Feature: Creation of owners through UI
     Then the following field widgets should be present "Contact information, Owner"
     When I fill in the following:
       | Title       | Classical and Ancient Mythology                                                                      |
+      | Abstract    | Some abstract                                                                                        |
       | Description | The seminal work on the ancient mythologies of the primitive and classical peoples of the Discworld. |
       # Contact information data.
       | Name        | Larry Joe                                                                                            |

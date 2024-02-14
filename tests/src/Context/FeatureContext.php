@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Drupal\joinup\Context;
 
@@ -2727,11 +2727,12 @@ class FeatureContext extends RawDrupalContext {
    * @When I run the :queue_name queue worker
    */
   public function iRunTheQueueWorker(string $queue_name): void {
-    $drushCommand = sprintf('drush queue:run %s', $queue_name);
-
     // Create a new Process instance to run the Drush command.
-    $process = new Process(explode(' ', $drushCommand));
-    $process->setTimeout(1800);
+    $process = Process::fromShellCommandline(
+      command: sprintf('composer exec drush queue:run %s', $queue_name),
+      cwd: getenv('DDEV_COMPOSER_ROOT') ?: dirname(DRUPAL_ROOT),
+      timeout: 1800
+    );
     $process->run();
 
     if (!$process->isSuccessful()) {

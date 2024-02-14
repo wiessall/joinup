@@ -69,6 +69,11 @@ searchpage:
   dependencies:
     - ventuno/close
 
+group:
+  css:
+    theme:
+      assets/css/group.min.css: { minified: true }
+
 # Components
 abstract:
   css:
@@ -352,6 +357,13 @@ releases:
   css:
     theme:
       assets/css/releases.min.css: { minified: true }
+
+see-more:
+  css:
+    theme:
+      assets/css/see-more.min.css: { minified: true }
+  js:
+    assets/js/toggle-text-seemore-btn.min.js: { minified: true }
 
 share-content-form:
   css:

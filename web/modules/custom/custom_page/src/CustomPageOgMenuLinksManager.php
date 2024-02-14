@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Drupal\custom_page;
 
@@ -37,39 +37,39 @@ class CustomPageOgMenuLinksManager implements CustomPageOgMenuLinksManagerInterf
   /**
    * {@inheritdoc}
    */
-  public function getChildren(NodeInterface $custom_page): array {
-    $menu_link_content_storage = $this->entityTypeManager->getStorage('menu_link_content');
-    $node_storage = $this->entityTypeManager->getStorage('node');
+  public function getChildren(NodeInterface $customPage, string $menuType): array {
+    $menuLinkContentStorage = $this->entityTypeManager->getStorage('menu_link_content');
+    $nodeStorage = $this->entityTypeManager->getStorage('node');
 
-    $this->verifyCustomPage($custom_page);
+    $this->verifyCustomPage($customPage);
     $children = [];
-    if ($og_menu_instance = $this->getOgMenuInstanceByCustomPage($custom_page)) {
-      $menu_name = "ogmenu-{$og_menu_instance->id()}";
+    if ($ogMenuInstance = $this->getOgMenuInstanceByCustomPage($customPage, $menuType)) {
+      $menuName = "ogmenu-{$ogMenuInstance->id()}";
       // Collect the IDs of links to the custom page.
-      $mids = $menu_link_content_storage->getQuery()->accessCheck(FALSE)
+      $mids = $menuLinkContentStorage->getQuery()->accessCheck(FALSE)
         ->condition('bundle', 'menu_link_content')
-        ->condition('menu_name', $menu_name)
-        ->condition('link.uri', "entity:node/{$custom_page->id()}")
+        ->condition('menu_name', $menuName)
+        ->condition('link.uri', "entity:node/{$customPage->id()}")
         ->execute();
       if ($mids) {
         $parents = [];
-        /** @var \Drupal\menu_link_content\MenuLinkContentInterface $menu_link */
-        foreach ($menu_link_content_storage->loadMultiple($mids) as $menu_link) {
-          $parents[] = $menu_link->getPluginId();
+        /** @var \Drupal\menu_link_content\MenuLinkContentInterface $menuLink */
+        foreach ($menuLinkContentStorage->loadMultiple($mids) as $menuLink) {
+          $parents[] = $menuLink->getPluginId();
         }
         if ($parents) {
-          $children_ids = $menu_link_content_storage->getQuery()->accessCheck(FALSE)
+          $childrenIds = $menuLinkContentStorage->getQuery()->accessCheck(FALSE)
             ->condition('bundle', 'menu_link_content')
-            ->condition('menu_name', $menu_name)
+            ->condition('menu_name', $menuName)
             ->condition('parent', $parents, 'IN')
             ->execute();
-          if ($children_ids) {
-            foreach ($menu_link_content_storage->loadMultiple($children_ids) as $menu_link) {
-              if ($uri = $menu_link->link->uri) {
+          if ($childrenIds) {
+            foreach ($menuLinkContentStorage->loadMultiple($childrenIds) as $menuLink) {
+              if ($uri = $menuLink->link->uri) {
                 try {
                   $url = Url::fromUri($uri);
                   if ($url->isRouted() && $url->getRouteName() === 'entity.node.canonical' && ($parameters = $url->getRouteParameters()) && !empty($parameters['node'])) {
-                    if ($node = $node_storage->load($parameters['node'])) {
+                    if ($node = $nodeStorage->load($parameters['node'])) {
                       $children[$parameters['node']] = $node;
                     }
                   }
@@ -89,16 +89,18 @@ class CustomPageOgMenuLinksManager implements CustomPageOgMenuLinksManagerInterf
   /**
    * {@inheritdoc}
    */
-  public function addLink(NodeInterface $custom_page): CustomPageOgMenuLinksManagerInterface {
-    $menu_link_content_storage = $this->entityTypeManager->getStorage('menu_link_content');
-    $this->verifyCustomPage($custom_page);
-    if ($og_menu_instance = $this->getOgMenuInstanceByCustomPage($custom_page)) {
-      $menu_link_content_storage->create([
-        'title' => $custom_page->label(),
-        'menu_name' => 'ogmenu-' . $og_menu_instance->id(),
-        'link' => ['uri' => 'entity:node/' . $custom_page->id()],
+  public function addLink(NodeInterface $customPage, string $menuType, array $properties = []): CustomPageOgMenuLinksManagerInterface {
+    $menuLinkContentStorage = $this->entityTypeManager->getStorage('menu_link_content');
+    $this->verifyCustomPage($customPage);
+    if ($ogMenuInstance = $this->getOgMenuInstanceByCustomPage($customPage, $menuType)) {
+      $properties = $properties + [
+        'title' => $customPage->label(),
+        'menu_name' => 'ogmenu-' . $ogMenuInstance->id(),
+        'link' => ['uri' => 'entity:node/' . $customPage->id()],
         'enabled' => TRUE,
-      ])->save();
+      ];
+
+      $menuLinkContentStorage->create($properties)->save();
     }
     return $this;
   }
@@ -106,24 +108,26 @@ class CustomPageOgMenuLinksManager implements CustomPageOgMenuLinksManagerInterf
   /**
    * {@inheritdoc}
    */
-  public function moveLinks(NodeInterface $custom_page, $group_id): CustomPageOgMenuLinksManagerInterface {
-    $menu_link_content_storage = $this->entityTypeManager->getStorage('menu_link_content');
-    $this->verifyCustomPage($custom_page);
-    if ($source_og_menu_instance = $this->getOgMenuInstanceByCustomPage($custom_page)) {
-      if ($target_og_menu_instance = $this->groupMenuManager->getMenuByGroupId($group_id)) {
-        $source_menu_name = "ogmenu-{$source_og_menu_instance->id()}";
-        // Collect the IDs of links to the custom page.
-        $mids = $menu_link_content_storage->getQuery()->accessCheck(FALSE)
-          ->condition('bundle', 'menu_link_content')
-          ->condition('menu_name', $source_menu_name)
-          ->condition('link.uri', "entity:node/{$custom_page->id()}")
-          ->execute();
-        if ($mids) {
-          $target_menu_name = "ogmenu-{$target_og_menu_instance->id()}";
-          /** @var \Drupal\menu_link_content\MenuLinkContentInterface $menu_link */
-          foreach ($menu_link_content_storage->loadMultiple($mids) as $menu_link) {
-            // Change the OG menu instance of each link.
-            $menu_link->set('menu_name', $target_menu_name)->save();
+  public function moveLinks(NodeInterface $customPage, $groupId): CustomPageOgMenuLinksManagerInterface {
+    $menuLinkContentStorage = $this->entityTypeManager->getStorage('menu_link_content');
+    $this->verifyCustomPage($customPage);
+    foreach (['navigation', 'quick_links'] as $ogMenuInstanceId) {
+      if ($sourceOgMenuInstance = $this->getOgMenuInstanceByCustomPage($customPage, $ogMenuInstanceId)) {
+        if ($targetOgMenuInstance = $this->groupMenuManager->getMenuByGroupId($groupId, $ogMenuInstanceId)) {
+          $sourceMenuName = "ogmenu-{$sourceOgMenuInstance->id()}";
+          // Collect the IDs of links to the custom page.
+          $mids = $menuLinkContentStorage->getQuery()->accessCheck(FALSE)
+            ->condition('bundle', 'menu_link_content')
+            ->condition('menu_name', $sourceMenuName)
+            ->condition('link.uri', "entity:node/{$customPage->id()}")
+            ->execute();
+          if ($mids) {
+            $targetMenuName = "ogmenu-{$targetOgMenuInstance->id()}";
+            /** @var \Drupal\menu_link_content\MenuLinkContentInterface $menuLink */
+            foreach ($menuLinkContentStorage->loadMultiple($mids) as $menuLink) {
+              // Change the OG menu instance of each link.
+              $menuLink->set('menu_name', $targetMenuName)->save();
+            }
           }
         }
       }
@@ -135,29 +139,31 @@ class CustomPageOgMenuLinksManager implements CustomPageOgMenuLinksManagerInterf
   /**
    * {@inheritdoc}
    */
-  public function deleteLinks(NodeInterface $custom_page): CustomPageOgMenuLinksManagerInterface {
-    $menu_link_content_storage = $this->entityTypeManager->getStorage('menu_link_content');
-    $this->verifyCustomPage($custom_page);
-    /** @var \Drupal\Core\Menu\MenuLinkTreeInterface $t */
-    if ($og_menu_instance = $this->getOgMenuInstanceByCustomPage($custom_page)) {
-      $menu_name = "ogmenu-{$og_menu_instance->id()}";
-      foreach ($custom_page->uriRelationships() as $rel) {
-        $url = $custom_page->toUrl($rel);
-        // Delete all MenuLinkContent links that point to this entity route.
-        if ($result = $this->menuLinkManager->loadLinksByRoute($url->getRouteName(), $url->getRouteParameters())) {
-          /** @var \Drupal\menu_link_content\Plugin\Menu\MenuLinkContent $instance */
-          foreach ($result as $id => $instance) {
-            if ($instance->getMenuName() === $menu_name && $instance->isDeletable() && strpos($id, 'menu_link_content:') === 0) {
-              $instance->deleteLink();
-              // Search for children of deleted menu link.
-              $mids = $menu_link_content_storage->getQuery()->accessCheck(FALSE)
-                ->condition('parent', "menu_link_content:{$instance->getDerivativeId()}")
-                ->execute();
-              if ($mids) {
-                // Remove the relationship to the deleted parent menu link.
-                /** @var \Drupal\menu_link_content\MenuLinkContentInterface $menu_link_content */
-                foreach ($menu_link_content_storage->loadMultiple($mids) as $menu_link_content) {
-                  $menu_link_content->set('parent', NULL)->save();
+  public function deleteLinks(NodeInterface $customPage): CustomPageOgMenuLinksManagerInterface {
+    $menuLinkContentStorage = $this->entityTypeManager->getStorage('menu_link_content');
+    $this->verifyCustomPage($customPage);
+
+    foreach (['navigation', 'quick_links'] as $ogMenuInstanceId) {
+      if ($ogMenuInstance = $this->getOgMenuInstanceByCustomPage($customPage, $ogMenuInstanceId)) {
+        $menuName = "ogmenu-{$ogMenuInstance->id()}";
+        foreach ($customPage->uriRelationships() as $rel) {
+          $url = $customPage->toUrl($rel);
+          // Delete all MenuLinkContent links that point to this entity route.
+          if ($result = $this->menuLinkManager->loadLinksByRoute($url->getRouteName(), $url->getRouteParameters())) {
+            /** @var \Drupal\menu_link_content\Plugin\Menu\MenuLinkContent $instance */
+            foreach ($result as $id => $instance) {
+              if ($instance->getMenuName() === $menuName && $instance->isDeletable() && str_starts_with($id, 'menu_link_content:')) {
+                $instance->deleteLink();
+                // Search for children of deleted menu link.
+                $mids = $menuLinkContentStorage->getQuery()->accessCheck(FALSE)
+                  ->condition('parent', "menu_link_content:{$instance->getDerivativeId()}")
+                  ->execute();
+                if ($mids) {
+                  // Remove the relationship to the deleted parent menu link.
+                  /** @var \Drupal\menu_link_content\MenuLinkContentInterface $menuLinkContent */
+                  foreach ($menuLinkContentStorage->loadMultiple($mids) as $menuLinkContent) {
+                    $menuLinkContent->set('parent', NULL)->save();
+                  }
                 }
               }
             }
@@ -171,10 +177,10 @@ class CustomPageOgMenuLinksManager implements CustomPageOgMenuLinksManagerInterf
   /**
    * {@inheritdoc}
    */
-  public function getOgMenuInstanceByCustomPage(NodeInterface $custom_page): ?OgMenuInstanceInterface {
-    $this->verifyCustomPage($custom_page);
-    if ($group_id = $custom_page->get(OgGroupAudienceHelperInterface::DEFAULT_FIELD)->target_id) {
-      return $this->groupMenuManager->getMenuByGroupId($group_id);
+  public function getOgMenuInstanceByCustomPage(NodeInterface $customPage, string $menuType): ?OgMenuInstanceInterface {
+    $this->verifyCustomPage($customPage);
+    if ($group_id = $customPage->get(OgGroupAudienceHelperInterface::DEFAULT_FIELD)->target_id) {
+      return $this->groupMenuManager->getMenuByGroupId($group_id, $menuType);
     }
     return NULL;
   }
@@ -182,11 +188,11 @@ class CustomPageOgMenuLinksManager implements CustomPageOgMenuLinksManagerInterf
   /**
    * Checks that the passed in node is a custom page.
    *
-   * @param \Drupal\node\NodeInterface $custom_page
+   * @param \Drupal\node\NodeInterface $customPage
    *   The node to check.
    */
-  protected function verifyCustomPage(NodeInterface $custom_page): void {
-    $bundle = $custom_page->bundle();
+  protected function verifyCustomPage(NodeInterface $customPage): void {
+    $bundle = $customPage->bundle();
     if ($bundle !== 'custom_page') {
       throw new \InvalidArgumentException("The node is not a custom page, but a '$bundle'.");
     }

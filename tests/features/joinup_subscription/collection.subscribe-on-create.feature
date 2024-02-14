@@ -9,6 +9,7 @@ Feature: Subscribing to a collection after creating
     When I go to the propose collection form
     When I fill in the following:
       | Title       | Rollerblade and Ancient Mythology                                                                      |
+      | Abstract    | The seminal work on the ancient mythologies of the primitive and classical peoples of the Rollerblade. |
       | Description | The seminal work on the ancient mythologies of the primitive and classical peoples of the Rollerblade. |
       # Contact information data.
       | Name        | Larry Jaoe                                                                                              |

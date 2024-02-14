@@ -5,7 +5,7 @@
  * Builds placeholder replacement tokens for meta entity topic.
  */
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 use Drupal\Core\Render\BubbleableMetadata;
 use Drupal\topic\Entity\TopicInterface;

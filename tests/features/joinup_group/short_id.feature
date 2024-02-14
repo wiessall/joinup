@@ -24,6 +24,7 @@ Feature:
     When I press "Add existing" at the "Owner" field
     And I fill in the following:
       | Title       | Structural Solar Traces    |
+      | Abstract    | Dummy text                 |
       | Description | Structural Solar Traces    |
       | Owner       | Organisation example       |
       # Contact information data.
@@ -91,6 +92,7 @@ Feature:
     When I press "Add existing" at the "Owner" field
     And I fill in the following:
       | Title          | I know what a solution is |
+      | Abstract       | Some summary              |
       | Description    | Dummy text                |
       # Contact information details.
       | Name           | John Smith                |

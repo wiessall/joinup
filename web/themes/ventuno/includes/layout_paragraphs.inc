@@ -5,7 +5,7 @@
  * Layout paragraphs specific procedural functions.
  */
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 /**
  * Implements hook_preprocess_layout_paragraphs_builder_component_menu().
