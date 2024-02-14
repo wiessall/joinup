@@ -13,6 +13,7 @@ use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\Utility\Error;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\DrupalExtension\Hook\Scope\BeforeNodeCreateScope;
+use Drupal\meta_entity\Entity\MetaEntityInterface;
 use Drupal\User\Entity\User;
 use Drupal\comment\CommentInterface;
 use Drupal\comment\Entity\Comment;
@@ -3267,6 +3268,45 @@ class JoinupContext extends RawDrupalContext {
       throw new \Exception("Either the dialog is not available or the 'Close' button could not be located.");
     }
     $button->press();
+  }
+
+  /**
+   * Cleans up the environment after a curated homepage topics scenarios.
+   *
+   * These scenarios are altering the topic term meta entities. We need to reset
+   * them after each run.
+   *
+   * @afterScenario @topic&&@api
+   */
+  public function resetTopicMetaEntity(): void {
+    // Remove any entity queue related to homepage topics.
+    \Drupal::entityTypeManager()->getStorage('entity_subqueue')
+      ->load('homepage_topics')
+      ->clearItems()
+      ->save();
+
+    $meta_entity_storage = \Drupal::entityTypeManager()->getStorage('meta_entity');
+    $ids = $meta_entity_storage->getQuery()->accessCheck(FALSE)
+      ->condition('type', 'topic')
+      ->condition('published', TRUE)
+      ->execute();
+
+    // Recreate topic terms corresponding meta entities.
+    if ($ids) {
+      /** @var \Drupal\meta_entity\Entity\MetaEntityInterface[] $meta_entities */
+      $meta_entities = $meta_entity_storage->loadMultiple($ids);
+      $tids = array_map(fn(MetaEntityInterface $meta_entity) => $meta_entity->getTargetEntity()->id(), $meta_entities);
+      $meta_entity_storage->delete($meta_entities);
+      foreach ($tids as $tid) {
+        $meta_entity_storage->create([
+          'type' => 'topic',
+          'target' => [
+            'target_type' => 'taxonomy_term',
+            'target_id' => $tid,
+          ],
+        ])->save();
+      }
+    }
   }
 
 }
