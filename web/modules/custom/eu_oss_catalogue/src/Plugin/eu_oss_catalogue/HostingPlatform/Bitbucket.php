@@ -95,20 +95,20 @@ class Bitbucket extends EuOssCatalogueGitHostingPlatformPluginBase {
             : NULL;
 
           yield new Project(
-            $node['workspace']['slug'],
-            $packageName,
-            $node['links']['html']['href'],
-            $this->getPluginId(),
-            $mainBranch,
-            FALSE,
-            $tag,
-            $tagDate,
-            substr($node['uuid'], 1, 36),
-            $node['description'],
-            $logoUrl,
-            $this->getForks($namespace, $packageName),
-            0,
-            $this->getFilesContent($namespace, $packageName, $mainBranch, $requestedFiles),
+            namespace: $node['workspace']['slug'],
+            name: $packageName,
+            url: $node['links']['html']['href'],
+            platform: $this->getPluginId(),
+            defaultBranch: $mainBranch,
+            isArchived: FALSE,
+            latestReleaseTag: $tag,
+            latestReleaseDate: $tagDate,
+            platformReference: substr($node['uuid'], 1, 36),
+            description: $node['description'],
+            logo: $logoUrl,
+            numberOfForks: $this->getForks($namespace, $packageName),
+            numberOfStars: 0,
+            files: $this->getFilesContent($namespace, $packageName, $mainBranch, $requestedFiles),
           );
         }
       }
