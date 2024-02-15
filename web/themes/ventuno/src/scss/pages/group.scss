@@ -28,3 +28,8 @@
     }
   }
 }
+
+// CSS hack to align Quick links box, see #ISAICP-8461.
+.l-group-heading__aside {
+  margin-right: $spacer * -.75;
+}
