@@ -5,7 +5,7 @@
  * Hook implementations for joinup_content_negotiation_test.
  */
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 use Drupal\joinup_content_negotiation_test\FruitType;
 
