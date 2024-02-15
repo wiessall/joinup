@@ -42,7 +42,7 @@ function joinup_rdf_requirements(string $phase): array {
 /**
  * Uninstall 'rdf_taxonomy' module.
  */
-function joinup_rdf_update_110200(): void {
+function joinup_rdf_update_110300(): void {
   // Anticipate deletion of taxonomy SPARQL mapping entities to avoid errors.
   \Drupal::database()->delete('config')
     ->condition('name', 'sparql_entity_storage.mapping.taxonomy_term.%', 'LIKE')
@@ -54,7 +54,7 @@ function joinup_rdf_update_110200(): void {
 /**
  * Reinstall 'taxonomy' module.
  */
-function joinup_rdf_update_110201(): void {
+function joinup_rdf_update_110301(): void {
   $db = \Drupal::database();
 
   // Updating the taxonomy storage definitions and installing the missing tables
@@ -110,7 +110,7 @@ function joinup_rdf_update_110201(): void {
 /**
  * Install the 'uri' field.
  */
-function joinup_rdf_update_110202(): void {
+function joinup_rdf_update_110302(): void {
   // Anticipate this module installation. Needed for the rest of updates.
   \Drupal::getContainer()->get('module_installer')->install(['rdf_sync']);
 
