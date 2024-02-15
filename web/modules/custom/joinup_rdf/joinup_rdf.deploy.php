@@ -5,7 +5,7 @@
  * Deploy hooks for Joinup RDF module.
  */
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 use Drupal\Component\Serialization\Json;
 use Drupal\joinup_taxonomy\VocabularyUpdater;
