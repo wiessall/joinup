@@ -409,10 +409,6 @@ responsive-tables.js:
   js:
     assets/js/responsive-tables.min.js: { minified: true, attributes: { defer: true } }
 
-see-more:
-  js:
-    assets/js/toggle-text-seemore-btn.min.js: { minified: true }
-
 tabs:
   css:
     theme:
