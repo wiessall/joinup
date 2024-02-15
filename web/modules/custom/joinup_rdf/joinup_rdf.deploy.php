@@ -20,7 +20,7 @@ use EasyRdf\Resource;
 /**
  * Current vocabularies.
  */
-function joinup_rdf_deploy_110200(array &$sandbox): string {
+function joinup_rdf_deploy_110300(array &$sandbox): string {
   if (!isset($sandbox['graphs'])) {
     $sandbox['graphs'] = [
       'http://actor' => ['actor'],
@@ -108,7 +108,7 @@ function joinup_rdf_deploy_110200(array &$sandbox): string {
 /**
  * Import terms from SPARQL backend (big vocabularies).
  */
-function joinup_rdf_deploy_110201(array &$sandbox): string {
+function joinup_rdf_deploy_110301(array &$sandbox): string {
   // Graphs of 'language' and 'product_type' vocabularies are huge, and the
   // Virtuoso server's SPARQL query configuration is limited to manipulate such
   // large results. We'll import them directly from files.
@@ -156,7 +156,7 @@ function joinup_rdf_deploy_110201(array &$sandbox): string {
 /**
  * Add EIRA extra-properties.
  */
-function joinup_rdf_deploy_110202(array &$sandbox): void {
+function joinup_rdf_deploy_110302(array &$sandbox): void {
   RdfNamespace::set('eira', 'http://data.europa.eu/dr8/');
   // Replace the `dc` namespace with `dct` - requested by the client.
   RdfNamespace::delete('dc');
@@ -214,7 +214,7 @@ function joinup_rdf_deploy_110202(array &$sandbox): void {
 /**
  * Fix term reference fields.
  */
-function joinup_rdf_deploy_110203(array &$sandbox): string {
+function joinup_rdf_deploy_110303(array &$sandbox): string {
   $db = \Drupal::database();
   $schema = $db->schema();
 
@@ -286,7 +286,7 @@ function joinup_rdf_deploy_110203(array &$sandbox): string {
 /**
  * Cleanup legacy data.
  */
-function joinup_rdf_deploy_110204(array &$sandbox): string {
+function joinup_rdf_deploy_110304(array &$sandbox): string {
   $graphUris = [
     'http://actor',
     'http://adms-sw-v1.00',
