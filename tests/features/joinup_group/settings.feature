@@ -9,7 +9,7 @@ Feature: Collections/Solutions settings
       | name       | type    |
       | Jonny inc. | Company |
 
-  @terms @uploadFiles:logo.png
+  @uploadFiles:logo.png
   Scenario: Edit settings in a collection
     Given the following owner:
       | name            | type                    |

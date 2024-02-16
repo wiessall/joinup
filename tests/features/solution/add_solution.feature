@@ -52,7 +52,7 @@ Feature: "Add solution" visibility options.
     And I go to the homepage of the "Collection solution test" collection
     Then I should not see the link "Add solution"
 
-  @terms @uploadFiles:logo.png
+  @uploadFiles:logo.png
   Scenario: Add solution as a collection facilitator.
     Given the following collection:
       | title | Belgian barista's |
@@ -173,7 +173,6 @@ Feature: "Add solution" visibility options.
     Then I delete the "V60 filter coffee solution" solution
     Then I delete the "Espresso is the solution" solution
 
-  @terms
   Scenario: Correct transition buttons are shown after a partial filled form is submitted.
     # This is a regression test for a bug that was causing the owner state
     # buttons to leak into the solution create form, causing critical errors
@@ -190,7 +189,7 @@ Feature: "Add solution" visibility options.
     And I fill in the following:
       | Title       | PHP comments parser                             |
       | Description | A simple parser that goes through PHP comments. |
-    And I select "Data gathering, data processing" from "Topic"
+    And I select "Data gathering and processing" from "Topic"
     And I select "Implementing Guideline" from "Solution type"
 
     # Submit the incomplete form, so error messages about missing fields will
@@ -213,7 +212,6 @@ Feature: "Add solution" visibility options.
     But I should not see the link "Delete"
     And I should not see the button "Update"
 
-  @terms
   Scenario: Create a solution with a name that already exists
     Given the following collections:
       | title              | state     |
@@ -256,7 +254,7 @@ Feature: "Add solution" visibility options.
       | Geographical coverage | Switzerland                                 |
       | Name                  | Angela Crespi                               |
       | E-mail address        | angela_crespi@glacmon.basel-uni.ch          |
-    And I select "Data gathering, data processing" from "Topic"
+    And I select "Data gathering and processing" from "Topic"
     And I select "Logging Service" from "Solution type"
     And I press "Add existing" at the "Owner" field
     And I fill in "Owner" with "University of Basel"
@@ -281,7 +279,7 @@ Feature: "Add solution" visibility options.
     And I delete the "Climate change tracker" solution
     And I delete the "Angela Crespi" contact information
 
-  @javascript @terms @generateMedia @generateMediaTypes:solution_logo
+  @javascript @generateMedia @generateMediaTypes:solution_logo
   Scenario: Tests the image library widget.
     Given the following owner:
       | name                 | type    |

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "777e5556f7a73249b0c3c4b3c9739ee6",
+    "content-hash": "53097346af36452830835f0e33b9c829",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -7916,76 +7916,6 @@
             }
         },
         {
-            "name": "drupal/swiftmailer",
-            "version": "2.4.0",
-            "source": {
-                "type": "git",
-                "url": "https://git.drupalcode.org/project/swiftmailer.git",
-                "reference": "8.x-2.4"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/swiftmailer-8.x-2.4.zip",
-                "reference": "8.x-2.4",
-                "shasum": "790c682ea8774b4e03200db2c2426966d3564820"
-            },
-            "require": {
-                "drupal/core": "^8.9.11 || ^9.0.10 || ^10",
-                "drupal/mailsystem": "^4.1.0",
-                "egulias/email-validator": "^2.0||^3",
-                "html2text/html2text": "^4.0.1",
-                "php": ">=7.0.0",
-                "swiftmailer/swiftmailer": "^6.1.3",
-                "tijsverkoyen/css-to-inline-styles": "^2.2"
-            },
-            "type": "drupal-module",
-            "extra": {
-                "drupal": {
-                    "version": "8.x-2.4",
-                    "datestamp": "1706212504",
-                    "security-coverage": {
-                        "status": "revoked",
-                        "message": "Project has been unsupported by the Drupal Security Team"
-                    }
-                }
-            },
-            "notification-url": "https://packages.drupal.org/8/downloads",
-            "license": [
-                "GPL-2.0-or-later"
-            ],
-            "authors": [
-                {
-                    "name": "AdamPS",
-                    "homepage": "https://www.drupal.org/user/2650563"
-                },
-                {
-                    "name": "Anybody",
-                    "homepage": "https://www.drupal.org/user/291091"
-                },
-                {
-                    "name": "B-Prod",
-                    "homepage": "https://www.drupal.org/user/407852"
-                },
-                {
-                    "name": "geek-merlin",
-                    "homepage": "https://www.drupal.org/user/229048"
-                },
-                {
-                    "name": "sbrattla",
-                    "homepage": "https://www.drupal.org/user/53422"
-                },
-                {
-                    "name": "webflo",
-                    "homepage": "https://www.drupal.org/user/254778"
-                }
-            ],
-            "description": "Swiftmailer",
-            "homepage": "https://www.drupal.org/project/swiftmailer",
-            "support": {
-                "source": "https://git.drupalcode.org/project/swiftmailer"
-            }
-        },
-        {
             "name": "drupal/symfony_mailer_lite",
             "version": "1.0.4",
             "source": {
@@ -9098,21 +9028,22 @@
         },
         {
             "name": "enshrined/svg-sanitize",
-            "version": "0.17.0",
+            "version": "0.16.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/darylldoyle/svg-sanitizer.git",
-                "reference": "a1af5cd21636306414da3f6ad4707b98c7601582"
+                "reference": "239e257605e2141265b429e40987b2ee51bba4b4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/darylldoyle/svg-sanitizer/zipball/a1af5cd21636306414da3f6ad4707b98c7601582",
-                "reference": "a1af5cd21636306414da3f6ad4707b98c7601582",
+                "url": "https://api.github.com/repos/darylldoyle/svg-sanitizer/zipball/239e257605e2141265b429e40987b2ee51bba4b4",
+                "reference": "239e257605e2141265b429e40987b2ee51bba4b4",
                 "shasum": ""
             },
             "require": {
                 "ext-dom": "*",
                 "ext-libxml": "*",
+                "ezyang/htmlpurifier": "^4.16",
                 "php": "^5.6 || ^7.0 || ^8.0"
             },
             "require-dev": {
@@ -9137,9 +9068,9 @@
             "description": "An SVG sanitizer for PHP",
             "support": {
                 "issues": "https://github.com/darylldoyle/svg-sanitizer/issues",
-                "source": "https://github.com/darylldoyle/svg-sanitizer/tree/0.17.0"
+                "source": "https://github.com/darylldoyle/svg-sanitizer/tree/0.16.0"
             },
-            "time": "2024-02-14T17:34:36+00:00"
+            "time": "2023-03-20T10:51:12+00:00"
         },
         {
             "name": "ezyang/htmlpurifier",
@@ -10589,16 +10520,16 @@
         },
         {
             "name": "mck89/peast",
-            "version": "v1.16.1",
+            "version": "v1.16.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/mck89/peast.git",
-                "reference": "f6e681062bb25c8dacbd30e079f4ad3fd890d7ad"
+                "reference": "63dee902bd281c792f1dd760b6df268682032ed0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mck89/peast/zipball/f6e681062bb25c8dacbd30e079f4ad3fd890d7ad",
-                "reference": "f6e681062bb25c8dacbd30e079f4ad3fd890d7ad",
+                "url": "https://api.github.com/repos/mck89/peast/zipball/63dee902bd281c792f1dd760b6df268682032ed0",
+                "reference": "63dee902bd281c792f1dd760b6df268682032ed0",
                 "shasum": ""
             },
             "require": {
@@ -10611,7 +10542,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.16.1-dev"
+                    "dev-master": "1.16.0-dev"
                 }
             },
             "autoload": {
@@ -10632,9 +10563,9 @@
             "description": "Peast is PHP library that generates AST for JavaScript code",
             "support": {
                 "issues": "https://github.com/mck89/peast/issues",
-                "source": "https://github.com/mck89/peast/tree/v1.16.1"
+                "source": "https://github.com/mck89/peast/tree/v1.16.0"
             },
-            "time": "2024-02-14T08:15:19+00:00"
+            "time": "2024-01-11T14:36:12+00:00"
         },
         {
             "name": "mkalkbrenner/php-htmldiff-advanced",
@@ -11306,19 +11237,20 @@
         },
         {
             "name": "openeuropa/oe_bootstrap_theme",
-            "version": "1.9.0",
+            "version": "1.8.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/openeuropa/oe_bootstrap_theme.git",
-                "reference": "d28e750204282e30bcb5ed2f434ead23b5fc5aee"
+                "reference": "e564c9100ab8330c12467336b95114c1780b69cd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/openeuropa/oe_bootstrap_theme/zipball/d28e750204282e30bcb5ed2f434ead23b5fc5aee",
-                "reference": "d28e750204282e30bcb5ed2f434ead23b5fc5aee",
+                "url": "https://api.github.com/repos/openeuropa/oe_bootstrap_theme/zipball/e564c9100ab8330c12467336b95114c1780b69cd",
+                "reference": "e564c9100ab8330c12467336b95114c1780b69cd",
                 "shasum": ""
             },
             "require": {
+                "cweagans/composer-patches": "^1.7",
                 "drupal/core": "^10",
                 "drupal/ui_patterns": "^1.4",
                 "drupal/ui_patterns_settings": "^2.0",
@@ -11330,7 +11262,7 @@
                 "drupal/core-composer-scaffold": "^10",
                 "drupal/core-dev": "^10",
                 "drupal/styleguide": "^2",
-                "drush/drush": "^12",
+                "drush/drush": "^11.1",
                 "ext-dom": "*",
                 "nikic/php-parser": "^4",
                 "openeuropa/code-review": "^2.0.0-alpha6",
@@ -11376,9 +11308,9 @@
             "description": "OpenEuropa Bootstrap base theme.",
             "support": {
                 "issues": "https://github.com/openeuropa/oe_bootstrap_theme/issues",
-                "source": "https://github.com/openeuropa/oe_bootstrap_theme/tree/1.9.0"
+                "source": "https://github.com/openeuropa/oe_bootstrap_theme/tree/1.8.1"
             },
-            "time": "2024-02-15T15:05:47+00:00"
+            "time": "2024-01-17T14:49:09+00:00"
         },
         {
             "name": "openeuropa/oe_dashboard_agent",
@@ -16611,69 +16543,6 @@
             "time": "2023-11-21T18:54:41+00:00"
         },
         {
-            "name": "viaaurea/swiftmailer-legacy",
-            "version": "1.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/viaaurea/swiftmailer-legacy.git",
-                "reference": "1671d4b6238c540fcadb853f0e0e5382d1baf138"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/viaaurea/swiftmailer-legacy/zipball/1671d4b6238c540fcadb853f0e0e5382d1baf138",
-                "reference": "1671d4b6238c540fcadb853f0e0e5382d1baf138",
-                "shasum": ""
-            },
-            "require": {
-                "egulias/email-validator": "^2.0|^3.1",
-                "php": ">=7.4",
-                "symfony/polyfill-iconv": "^1.0",
-                "symfony/polyfill-intl-idn": "^1.10",
-                "symfony/polyfill-mbstring": "^1.0"
-            },
-            "replace": {
-                "swiftmailer/swiftmailer": "v6.3.0"
-            },
-            "require-dev": {
-                "mockery/mockery": "^1.0",
-                "symfony/phpunit-bridge": "^4.4|^5.4"
-            },
-            "suggest": {
-                "ext-intl": "Needed to support internationalized email addresses"
-            },
-            "type": "library",
-            "autoload": {
-                "files": [
-                    "lib/swift_required.php"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Chris Corbyn"
-                },
-                {
-                    "name": "Fabien Potencier",
-                    "email": "fabien@symfony.com"
-                }
-            ],
-            "description": "Legacy port of Swiftmailer, free feature-rich PHP mailer",
-            "homepage": "https://swiftmailer.symfony.com",
-            "keywords": [
-                "email",
-                "mail",
-                "mailer"
-            ],
-            "support": {
-                "issues": "https://github.com/viaaurea/swiftmailer-legacy/issues",
-                "source": "https://github.com/viaaurea/swiftmailer-legacy/tree/1.0"
-            },
-            "time": "2023-06-06T10:09:24+00:00"
-        },
-        {
             "name": "webflo/drupal-finder",
             "version": "1.2.2",
             "source": {
@@ -18864,16 +18733,16 @@
         },
         {
             "name": "ec-europa/toolkit",
-            "version": "10.9.0",
+            "version": "10.8.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/ec-europa/toolkit.git",
-                "reference": "0c4c9754b69e6c41596aeca269dcf3a710e0ca37"
+                "reference": "e32d42df50eb7c941affbdecbd22644f2ce7868a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ec-europa/toolkit/zipball/0c4c9754b69e6c41596aeca269dcf3a710e0ca37",
-                "reference": "0c4c9754b69e6c41596aeca269dcf3a710e0ca37",
+                "url": "https://api.github.com/repos/ec-europa/toolkit/zipball/e32d42df50eb7c941affbdecbd22644f2ce7868a",
+                "reference": "e32d42df50eb7c941affbdecbd22644f2ce7868a",
                 "shasum": ""
             },
             "require": {
@@ -18898,8 +18767,7 @@
                 "phpstan/phpstan": "^1.10",
                 "phpstan/phpstan-deprecation-rules": "^1.0",
                 "phpunit/phpunit": "^9.5 || ^10.0",
-                "squizlabs/php_codesniffer": "^3.7",
-                "vlucas/phpdotenv": "^5.6"
+                "squizlabs/php_codesniffer": "^3.7"
             },
             "suggest": {
                 "drupal/console": "The Drupal CLI, tool to generate boilerplate code, interact with and debug Drupal."
@@ -18921,13 +18789,13 @@
             "license": [
                 "EUPL-1.2"
             ],
-            "description": "Toolkit packaged for Drupal projects based on Robo.",
+            "description": "Toolkit packaged for Drupal 9.",
             "homepage": "https://github.com/ec-europa/toolkit",
             "support": {
                 "email": "DIGIT-NEXTEUROPA-QA@ec.europa.eu",
                 "source": "https://github.com/ec-europa/toolkit"
             },
-            "time": "2024-02-15T10:44:09+00:00"
+            "time": "2024-02-02T10:37:01+00:00"
         },
         {
             "name": "enlightn/security-checker",
@@ -19542,21 +19410,21 @@
         },
         {
             "name": "mathieuviossat/arraytotexttable",
-            "version": "v1.0.11",
+            "version": "v1.0.10",
             "source": {
                 "type": "git",
                 "url": "https://github.com/viossat/arraytotexttable.git",
-                "reference": "069561a0895fb69ea1939fcd09262ccea081cbb8"
+                "reference": "dddaf50d2c1d655b985e63337c421b298f7854be"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/viossat/arraytotexttable/zipball/069561a0895fb69ea1939fcd09262ccea081cbb8",
-                "reference": "069561a0895fb69ea1939fcd09262ccea081cbb8",
+                "url": "https://api.github.com/repos/viossat/arraytotexttable/zipball/dddaf50d2c1d655b985e63337c421b298f7854be",
+                "reference": "dddaf50d2c1d655b985e63337c421b298f7854be",
                 "shasum": ""
             },
             "require": {
                 "laminas/laminas-text": "^2.10",
-                "php": ">=8.0.0"
+                "php": "~8.0.0 || ~8.1.0 || ~8.2.0"
             },
             "type": "library",
             "autoload": {
@@ -19587,22 +19455,22 @@
             ],
             "support": {
                 "issues": "https://github.com/viossat/arraytotexttable/issues",
-                "source": "https://github.com/viossat/arraytotexttable/tree/v1.0.11"
+                "source": "https://github.com/viossat/arraytotexttable/tree/v1.0.10"
             },
-            "time": "2024-02-13T17:19:01+00:00"
+            "time": "2023-09-21T16:42:23+00:00"
         },
         {
             "name": "mglaman/phpstan-drupal",
-            "version": "1.2.7",
+            "version": "1.2.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/mglaman/phpstan-drupal.git",
-                "reference": "32f79fcf48c74532014248687ae3850581a22416"
+                "reference": "ba8678f8cbea42cc41022c21751004eb677cf5a4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mglaman/phpstan-drupal/zipball/32f79fcf48c74532014248687ae3850581a22416",
-                "reference": "32f79fcf48c74532014248687ae3850581a22416",
+                "url": "https://api.github.com/repos/mglaman/phpstan-drupal/zipball/ba8678f8cbea42cc41022c21751004eb677cf5a4",
+                "reference": "ba8678f8cbea42cc41022c21751004eb677cf5a4",
                 "shasum": ""
             },
             "require": {
@@ -19677,7 +19545,7 @@
             "description": "Drupal extension and rules for PHPStan",
             "support": {
                 "issues": "https://github.com/mglaman/phpstan-drupal/issues",
-                "source": "https://github.com/mglaman/phpstan-drupal/tree/1.2.7"
+                "source": "https://github.com/mglaman/phpstan-drupal/tree/1.2.6"
             },
             "funding": [
                 {
@@ -19693,7 +19561,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-02-14T04:38:08+00:00"
+            "time": "2024-01-16T00:42:10+00:00"
         },
         {
             "name": "mikey179/vfsstream",
@@ -23356,12 +23224,12 @@
             "source": {
                 "type": "git",
                 "url": "https://gitlab.com/weitzman/drupal-test-traits.git",
-                "reference": "ace882b37000f39e1465a3212c63f865c9a5b81e"
+                "reference": "68d50c7c4e755576cf413c34add967aa75073869"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://gitlab.com/api/v4/projects/weitzman%2Fdrupal-test-traits/repository/archive.zip?sha=ace882b37000f39e1465a3212c63f865c9a5b81e",
-                "reference": "ace882b37000f39e1465a3212c63f865c9a5b81e",
+                "url": "https://gitlab.com/api/v4/projects/weitzman%2Fdrupal-test-traits/repository/archive.zip?sha=68d50c7c4e755576cf413c34add967aa75073869",
+                "reference": "68d50c7c4e755576cf413c34add967aa75073869",
                 "shasum": ""
             },
             "require": {
@@ -23406,7 +23274,7 @@
                 "issues": "https://gitlab.com/weitzman/drupal-test-traits/-/issues",
                 "source": "https://gitlab.com/weitzman/drupal-test-traits/-/tree/2.x"
             },
-            "time": "2024-02-14T13:00:09+00:00"
+            "time": "2023-11-14T04:47:33+00:00"
         },
         {
             "name": "weitzman/logintrait",

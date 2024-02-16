@@ -1,4 +1,4 @@
-@api @terms @group-i
+@api @group-i
 Feature: Global search
   As a user of the site I can find content through the global search.
 
@@ -14,7 +14,7 @@ Feature: Global search
     And the following solutions:
       | title          | collection                   | description                                                                                                                          | topic      | spatial coverage | state     |
       | Spherification | Molecular cooking collection | Spherification is the culinary process of shaping a liquid into spheres                                                              | Demography | European Union   | published |
-      | Foam           | Molecular cooking collection | "The use of foam in cuisine has been used in many forms in the history of cooking:whipped cream, meringue, and mousse are all foams" |            |                  | published |
+      | Foam           | Molecular cooking collection | "The use of foam in cuisine has been used in many forms in the history of cooking:whipped cream, meringue, and mousse are all foams" | eGov       |                  | published |
     And news content:
       | title                | headline              | body             | collection                   | topic                   | spatial coverage | state     |
       | El Tuba de Los Lobos | El Celler de Can Roca | The best in town | Molecular cooking collection | Statistics and Analysis | Luxembourg       | published |
@@ -40,8 +40,8 @@ Feature: Global search
       | title            | body       | collection                   | topic       | spatial coverage | state    |
       | Rummy discussion | Dummy body | Molecular cooking collection | E-inclusion | Luxembourg       | archived |
     And the following solutions:
-      | title         | collection                   | description                            | state    |
-      | Spring device | Molecular cooking collection | A mechanical device that stores energy | archived |
+      | title         | collection                   | description                            | state    | topic             |
+      | Spring device | Molecular cooking collection | A mechanical device that stores energy | archived | Supplier exchange |
 
     # Test that archived items are not available in the autocomplete.
     When I visit the search page
@@ -75,7 +75,7 @@ Feature: Global search
     And I should see the "Spherification" tile
     And I should see the "Foam" tile
     # Terms are sorted alphabetically
-    And the "topic" checkbox facet should allow selecting the following values "Info (1), Statistics and Analysis (1), Social and Political (6), Demography (2), E-inclusion (4)"
+    And the "topic" checkbox facet should allow selecting the following values "eGov (1), Info (1), Statistics and Analysis (1), Social and Political (6), Demography (2), E-inclusion (4)"
     Then I click show more from the "spatial coverage" facet
     And the "spatial coverage" checkbox facet should allow selecting the following values "Belgium (1), European Union (1), Luxembourg (5)"
 
@@ -85,7 +85,7 @@ Feature: Global search
 
     When I check the "Social and Political (6)" checkbox from the "topic" facet
     Then the "Social and Political" content checkbox item should be selected
-    And the "topic" checkbox facet should allow selecting the following values "Info (1), Statistics and Analysis (1), Social and Political (6), Demography (2), E-inclusion (4)"
+    And the "topic" checkbox facet should allow selecting the following values "eGov (1), Info (1), Statistics and Analysis (1), Social and Political (6), Demography (2), E-inclusion (4)"
     # The tiles appear because the parent term is selected even though they do not have a direct reference there.
     And I should see the "Dummy news 1" tile
     And I should see the "Dummy news 2" tile
@@ -105,7 +105,7 @@ Feature: Global search
     # The selected option moves to the last position by default.
     When I click "E-inclusion"
     Then I should see the text "SEARCH RESULTS (2)"
-    And the "topic" checkbox facet should allow selecting the following values "Info (1), Statistics and Analysis (1), Social and Political (6), Demography (2), E-inclusion (4)"
+    And the "topic" checkbox facet should allow selecting the following values "eGov (1), Info (1), Statistics and Analysis (1), Social and Political (6), Demography (2), E-inclusion (4)"
     When I click show more from the "spatial coverage" facet
     Then the "spatial coverage" checkbox facet should allow selecting the following values "Belgium (1), European Union (1)"
     And I should see the "Molecular cooking collection" tile
@@ -143,7 +143,7 @@ Feature: Global search
     And the "News" content checkbox item should be selected
     And I should see the following facet summary "Solutions, News"
     Then the "Content types" checkbox facet should allow selecting the following values "Collection (1), Solutions (2), News (5)"
-    And the "topic" checkbox facet should allow selecting the following values "Info (1), Statistics and Analysis (1), Social and Political (5), Demography (1), E-inclusion (4)"
+    And the "topic" checkbox facet should allow selecting the following values "eGov (1), Info (1), Statistics and Analysis (1), Social and Political (5), Demography (1), E-inclusion (4)"
     Then I click show more from the "spatial coverage" facet
     And the "spatial coverage" checkbox facet should allow selecting the following values "European Union (1), Luxembourg (5)"
     And I should not see the "Molecular cooking collection" tile
@@ -759,7 +759,6 @@ Feature: Global search
     Then I should see the following search suggestions:
       | Spheres |
 
-  @terms
   Scenario: Filter on date
     Given collection:
       | title | Mice in space |

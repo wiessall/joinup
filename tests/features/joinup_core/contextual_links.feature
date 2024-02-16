@@ -4,7 +4,6 @@ Feature:
   in order to better manage all content
   I need to be able to access operations directly through the contextual links.
 
-  @terms
   Scenario: Revisions link availability.
     Given collection:
       | title | Revisions collection |

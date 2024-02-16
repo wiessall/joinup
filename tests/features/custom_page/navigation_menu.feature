@@ -1,4 +1,4 @@
-@api @terms @group-b
+@api @group-b
 Feature: Navigation menu for custom pages
   In order to determine the order and visibility of custom pages in the navigation menu
   As a facilitator

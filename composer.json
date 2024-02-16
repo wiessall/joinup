@@ -101,7 +101,6 @@
         "drupal/state_machine": "^1.0",
         "drupal/subpathauto": "^1.2",
         "drupal/svg_image": "^3.0",
-        "drupal/swiftmailer": "^2.2",
         "drupal/symfony_mailer_lite": "^1.0",
         "drupal/theme_rule": "^1.0",
         "drupal/token": "~1.7",
@@ -125,8 +124,7 @@
         "psr/http-factory-implementation": "*",
         "semiceu/adms-ap_validator": "1.0.0-alpha1",
         "sweetrdf/easyrdf": "^1.9",
-        "symfony/http-client": "*",
-        "viaaurea/swiftmailer-legacy": "^1.0"
+        "symfony/http-client": "*"
     },
     "require-dev": {
         "ext-fileinfo": "*",
@@ -441,9 +439,6 @@
                 "SVG is not valid or cannot be sanitized, return an error. @see https://www.drupal.org/i/3350696": "resources/patch/php/drupal/svg_image/3350696.patch",
                 "Upload a SVG from CKEditor (image inline). @see https://www.drupal.org/i/3093972": "resources/patch/php/drupal/svg_image/3093972.patch"
             },
-            "drupal/swiftmailer": {
-                "Add spooling for increased performance @see https://www.drupal.org/project/swiftmailer/issues/3000553": "resources/patch/php/drupal/swiftmailer/3000553.patch"
-            },
             "drupal/video_embed_field": {
                 "Extend support for embed URLs. Option to force privacy @see https://www.drupal.org/project/video_embed_field/issues/3060201 (originally on https://www.drupal.org/node/2899093)": "resources/patch/php/drupal/video_embed_field/3060201.patch",
                 "WYSIWYG Video URL max length limited to 128 characters @see https://www.drupal.org/project/video_embed_field/issues/2908562": "resources/patch/php/drupal/video_embed_field/2908562.patch",
@@ -458,6 +453,9 @@
             "m4tthumphrey/php-gitlab-api": {
                 "GraphQL API @see https://github.com/GitLabPHP/Client/issues/766": "resources/patch/php/drupal/m4tthumphrey/php-gitlab-api/772.diff",
                 "Add support for prefixed URIs on base path @see https://github.com/GitLabPHP/Client/issues/726": "resources/patch/php/drupal/m4tthumphrey/php-gitlab-api/726.diff"
+            },
+            "ec-europa/toolkit": {
+                "DROPSEC-8519: Correctly parse the .env files @see https://github.com/ec-europa/toolkit/pull/744": "resources/patch/php/ec-europa/toolkit/744.diff"
             }
         },
         "artifacts": {
