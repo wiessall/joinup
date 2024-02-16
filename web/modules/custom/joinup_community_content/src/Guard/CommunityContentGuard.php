@@ -1,12 +1,13 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Drupal\joinup_community_content\Guard;
 
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Session\AccountInterface;
+use Drupal\joinup_community_content\Entity\CommunityContentInterface;
 use Drupal\joinup_group\JoinupGroupHelper;
 use Drupal\joinup_workflow\WorkflowHelperInterface;
 use Drupal\state_machine\Guard\GuardInterface;
@@ -109,6 +110,15 @@ class CommunityContentGuard implements GuardInterface {
   public function allowedUpdate(WorkflowTransition $transition, WorkflowInterface $workflow, EntityInterface $entity) {
     $from_state = $entity->getWorkflowState();
     $to_state = $transition->getToState()->getId();
+
+    if (!$entity instanceof CommunityContentInterface) {
+      return FALSE;
+    }
+
+    // Prevent un-archiving content of an archived parent.
+    if ($from_state === 'archived' && $to_state === '__new__' && $entity->isParentArchived()) {
+      return FALSE;
+    }
 
     // Note that we cannot call $entity->isTargetWorkflowStateAllowed() since it
     // invokes the guards, causing an endless loop.

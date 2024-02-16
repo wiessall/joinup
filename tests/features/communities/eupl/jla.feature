@@ -4,7 +4,7 @@ Feature:
   in order to make it easier for users to find appropriate licences
   I need to be able to present them in a nice searchable way.
 
-  @terms @javascript
+  @javascript
   Scenario: Present and search the licences.
     Given SPDX licences:
       | uri                       | title            | ID       |
@@ -68,7 +68,6 @@ Feature:
     And I should see the text "Foo Licence"
     And I should see the text "Bar Licence"
 
-  @terms
   Scenario: Test the licence manager can edit name and tooltip description
     Given SPDX licences:
       | uri                       | title            | ID       |
@@ -95,7 +94,6 @@ Feature:
     And I visit the "JLA" custom page
     Then I should see the "button" element with the "title" attribute set to "Description of tooltip" in the "Content" region
 
-  @terms
   Scenario: Test the licence manager can not edit name fields of parent terms.
     Given SPDX licences:
       | uri                       | title            | ID       |
@@ -115,7 +113,7 @@ Feature:
     Then I should see the heading "Edit term"
     And the following fields should be disabled "Name"
 
-  @terms @javascript
+  @javascript
   Scenario: Test the licence comparer trigger.
     Given SPDX licences:
       | uri                              | title      | ID         |
@@ -173,7 +171,6 @@ Feature:
     And I press "Compare" in the "LGPL-2.1" licence tile
     And the url should match "/licence/compare/Apache-2.0;GPL-2.0\+;BSL-1.0;0BSD;LGPL-2.1"
 
-  @terms
   Scenario: Test the licence comparer.
     Given SPDX licences:
       | uri                              | title      | ID         |
@@ -405,7 +402,7 @@ Feature:
       | OSI approved      |          |            |  |  |  |
       | FSF Free/Libre    |          |            |  |  |  |
 
-  @terms @javascript
+  @javascript
   Scenario: The reset button should change everything to the default state.
     Given SPDX licences:
       | uri                              | title      | ID         |
@@ -450,7 +447,7 @@ Feature:
     And I press "Compare"
     Then the url should match "/licence/compare/Apache-2.0;GPL-2.0\+"
 
-  @terms @javascript
+  @javascript
   Scenario: A user can view the comment details of a licence through the info icon.
     Given SPDX licences:
       | uri                       | title            | ID       |
@@ -476,7 +473,7 @@ Feature:
     And I should see the button "Licence text"
     But I should not see the text "Licence details for the foo licence."
 
-  @terms @javascript
+  @javascript
   Scenario: Check JLA entry Disclose source.
     Given I am an anonymous user
     When I visit the "JLA" custom page

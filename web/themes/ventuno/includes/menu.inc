@@ -5,8 +5,9 @@
  * Menu specific procedural functions.
  */
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
+use Drupal\Core\Url;
 use Drupal\block\Entity\Block;
 
 /**
@@ -87,5 +88,32 @@ function ventuno_preprocess_menu__og__navigation(&$variables): void {
     if ($url->getRouteName() === $searchRoute) {
       $variables['items'][$key]['attributes']['class'][] = 'is-active';
     }
+  }
+}
+
+/**
+ * Implements hook_preprocess_HOOK().
+ */
+function ventuno_preprocess_menu__og__quick_links(&$variables): void {
+  if (!isset($variables['items']) || !is_array($variables['items'])) {
+    return;
+  }
+
+  foreach ($variables['items'] as &$item) {
+    $route = ($item['url'] instanceof Url) ? $item['url']->getRouteName() : NULL;
+    $item['icon'] = match ($route) {
+      // Release History.
+      'asset_release.solution_asset_release.overview' => 'eye',
+      // Website link.
+      'joinup_menu.website_link' => 'link',
+      // Custom page.
+      'entity.node.canonical' => 'file-earmark-text',
+      // EIF Perspective.
+      'entity.rdf_entity.eif_perspective' => 'file-earmark-text',
+      // Documentation link.
+      'joinup_menu.documentation_file' => 'file-earmark-text',
+      // Fallback.
+      default => 'file-earmark-text',
+    };
   }
 }

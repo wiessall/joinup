@@ -1,10 +1,9 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Drupal\joinup\Traits;
 
-use Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException;
 use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\menu_link_content\MenuLinkContentInterface;
@@ -35,12 +34,7 @@ trait EntityTrait {
    */
   protected static function getEntityByLabel(string $entity_type_id, string $label, ?string $bundle = NULL): EntityInterface {
     $entity_type_manager = \Drupal::entityTypeManager();
-    try {
-      $storage = $entity_type_manager->getStorage($entity_type_id);
-    }
-    catch (InvalidPluginDefinitionException $e) {
-      throw new \RuntimeException('Storage not found', NULL, $e);
-    }
+    $storage = $entity_type_manager->getStorage($entity_type_id);
     $entity = $entity_type_manager->getDefinition($entity_type_id);
 
     $query = $storage->getQuery()
@@ -159,6 +153,10 @@ trait EntityTrait {
    *
    * @param string $title
    *   The label of the menu item.
+   * @param string $group_id
+   *   The group ID of the menu item.
+   * @param string $menu_type
+   *   The bundle of the OG menu instance.
    *
    * @return \Drupal\menu_link_content\MenuLinkContentInterface
    *   The MenuLinkContent entity.
@@ -166,11 +164,15 @@ trait EntityTrait {
    * @throws \Exception
    *    Thrown when the menu item is not found.
    */
-  public function getMenuLinkByTitle(string $title): MenuLinkContentInterface {
-    /** @var \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager */
-    $entity_type_manager = \Drupal::service('entity_type.manager');
+  public function getMenuLinkByTitle(string $title, string $group_id, string $menu_type): MenuLinkContentInterface {
+    $entity_type_manager = \Drupal::getContainer()->get('entity_type.manager');
+    $menu_helper = \Drupal::getContainer()->get('joinup_menu.menu_helper');
+    $navigation_menu = $menu_helper->getOgMenuByGroup($menu_type, $group_id);
     $menu_links = $entity_type_manager->getStorage('menu_link_content')->loadByProperties(
-      ['title' => $title]
+      [
+        'title' => $title,
+        'menu_name' => 'ogmenu-' . $navigation_menu->id(),
+      ]
     );
     if (empty($menu_links)) {
       throw new \Exception("The menu link with title '{$title}' was not found.");

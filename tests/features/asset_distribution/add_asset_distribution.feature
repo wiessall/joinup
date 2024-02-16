@@ -39,7 +39,7 @@ Feature: Add distribution through the UI
     And the "Licence" field should contain the "WTFPL" options
     But the "Licence" field should not contain the "Deprecated licence" options
 
-    When I press "Save"
+    When I press "Publish"
     Then I should see the following error messages:
       | error messages             |
       | Title field is required.   |
@@ -52,7 +52,7 @@ Feature: Add distribution through the UI
     And I select "GNU zip" from "Format"
     And I select "Web Ontology Language Full/DL/Lite" from "Representation technique"
     And I select "WTFPL" from "Licence"
-    And I press "Save"
+    And I press "Publish"
     Then I should have 1 distribution
     And the "Linux x86-64 SDK" distribution should have the link of the "test.zip" in the access URL field
 
@@ -117,7 +117,7 @@ Feature: Add distribution through the UI
     And I select "WTFPL" from "Licence"
     And I select "RDF XML" from "Format"
     And I select "Web Ontology Language Full/DL/Lite" from "Representation technique"
-    And I press "Save"
+    And I press "Publish"
     Then I should have 1 distribution
 
     # Debug step since the default view of the distribution, does not have the access URL shown.
@@ -168,12 +168,12 @@ Feature: Add distribution through the UI
     And I click "Add distribution" in the plus button menu
     When I fill in "Title" with "MacOSX binary"
     And I select "WTFPL" from "Licence"
-    And I press "Save"
+    And I press "Publish"
     Then I should have 1 distribution
     When I click "Add distribution" in the plus button menu
     When I fill in "Title" with "MacOSX binary"
     And I select "WTFPL" from "Licence"
-    And I press "Save"
+    And I press "Publish"
     Then I should see the error message "A distribution with title MacOSX binary already exists in this release. Please choose a different title."
     And I should have 1 distribution
 
@@ -182,7 +182,7 @@ Feature: Add distribution through the UI
     And I click "Add distribution" in the plus button menu
     When I fill in "Title" with "MacOSX binary"
     And I select "WTFPL" from "Licence"
-    And I press "Save"
+    And I press "Publish"
     Then I should have 2 distributions
 
     # Clean up the entities created through the user interface.
@@ -195,12 +195,13 @@ Feature: Add distribution through the UI
       | description | Sample description     |
       | access url  | test.zip               |
       | parent      | Solution random x name |
+      | state       | published              |
     And I am logged in as a facilitator of the "Solution random x name" solution
     When I go to the homepage of the "Solution random x name" solution
     And I click "Add distribution" in the plus button menu
     When I fill in "Title" with "Windows - source"
     And I select "WTFPL" from "Licence"
-    And I press "Save"
+    And I press "Publish"
     Then I should see the error message "A distribution with title Windows - source already exists in this solution. Please choose a different title."
 
   Scenario: Licences are not shown in the solution header.
@@ -208,9 +209,9 @@ Feature: Add distribution through the UI
       | title       | Boost Software License                                                         |
       | description | It is a permissive license in the style of the BSD license and the MIT license |
     And distributions:
-      | title        | licence                | parent                 |
-      | Hot Snake    | WTFPL                  | Solution random x name |
-      | Quality Yard | Boost Software License | Solution random x name |
+      | title        | licence                | parent                 | state     |
+      | Hot Snake    | WTFPL                  | Solution random x name | published |
+      | Quality Yard | Boost Software License | Solution random x name | published |
 
     When I go to the homepage of the "Solution random x name" solution
     # Distributions are still shown in the solution page and so the License text will be visible in the page.

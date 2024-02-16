@@ -4,7 +4,6 @@ Feature:
   I need to be able to move content between groups
 
   Scenario: Use the content management UI
-
     Given the following collections:
       | title        | state     |
       | Vintage Art  | published |
@@ -31,7 +30,7 @@ Feature:
       | title                | collection  | state     | changed          |
       | HOWTOs               | Vintage Art | published | 2016-11-19 20:00 |
       | Looking for Support? | Vintage Art | published | 2015-11-19 20:00 |
-    And the following custom page menu structure:
+    And the following custom page navigation menu structure for the "Vintage Art" collection:
       | title                | parent | weight |
       | Looking for Support? | HOWTOs | 1      |
 
@@ -97,10 +96,7 @@ Feature:
     And the response should contain "\"Custom page\";\"Looking for Support?\";"
     And the response should contain "/collection/vintage-art/looking-support"
 
-    When I go to the homepage of the "Vintage Art" collection
-    Then I should see the link "Manage content"
-    Given I click "Manage content"
-    Then I should see the heading "Manage content"
+    When I go to the manage content page of "Vintage Art"
 
     # Archive action.
     Given I select the "The Ultimate Debate" row
@@ -202,8 +198,7 @@ Feature:
 
     # Try moving a child page without moving the parent page. This should move
     # the child to the root of the menu.
-    When I go to the homepage of the "Decadent Art" collection
-    And I click "Manage content"
+    And I go to the manage content page of "Decadent Art"
     And I select the "Looking for Support?" row
     And I select "Move to other group" from "Action"
     And I press "Apply to selected items"
@@ -231,8 +226,7 @@ Feature:
       | Will be moved to a solution | Vintage Art | published | 2015-11-19 20:00 |
 
     Given I am logged in as a moderator
-    And I go to the homepage of the "Vintage Art" collection
-    And I click "Manage content"
+    And I go to the manage content page of "Vintage Art"
 
     And I select the "Will be moved to a solution" row
     And I select "Move to other group" from "Action"
@@ -254,9 +248,7 @@ Feature:
       | The Area 51 Party       | Vintage Art | published |
 
     When I am <role>
-    And I go to the "Vintage Art" collection
-    And I open the header local tasks menu
-    And I click "Manage content" in the "Entity actions" region
+    And I go to the manage content page of "Vintage Art"
     Then the available options in the "Action" select should be "<options>"
     Then the "The Panama Papers Party" checkbox should not be checked
     And the "The Area 51 Party" checkbox should not be checked

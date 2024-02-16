@@ -20,6 +20,11 @@
       </a>
     {% endif %}
   </h1>
+  {% if additional_content.is_archived %}
+    <div class="page-title__details mb-4">
+      {% include '@ventuno/parts/page-title-detail-archive.html.twig' %}
+    </div>
+  {% endif %}
 </div>
 {% endif %}
 {{ title_suffix }}

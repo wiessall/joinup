@@ -4,7 +4,7 @@ Feature:
   In order to assert whether I can reuse software or data and redistribute it using my favorite licence
   I want to be able to get advice on whether two licences are compatible
 
-  @terms @eupl
+  @eupl
   Scenario: Compatibility of licences can be determined using licence compatibility rules
     Given SPDX licences:
       | uri                                    | title            | ID               |
@@ -262,7 +262,7 @@ Feature:
     # overview. Clean them up again.
     Then all compatibility documents are cleaned up
 
-  @terms @eupl
+  @eupl
   # This scenario and the next are checking the same things, but this one runs
   # without JS so that we can inspect the response headers for cacheability.
   Scenario: Get information about how a project can be redistributed under another licence
@@ -346,7 +346,7 @@ Feature:
 
   # This scenario and the previous are checking the same things, but this one
   # runs with JS so that we can check the frontend implementation.
-  @terms @eupl @javascript
+  @eupl @javascript
   Scenario: Get information about how a project can be redistributed under another licence (JS)
     Given SPDX licences:
       | uri                            | title    | ID       |

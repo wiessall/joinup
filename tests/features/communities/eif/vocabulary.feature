@@ -42,14 +42,11 @@ Feature:
 
     When I go to the "Some EIF solution" solution
     Then I should not see the text "EIF reference"
-    When I click "About" in the "Header" region
-    Then I should not see the text "EIF reference"
 
     When I go to "/solutions"
     Then I should see the "Some EIF solution" tile
     But I should not see the text "EIF reference"
 
-  @terms
   Scenario: Solutions referencing an EIF term should appear in the corresponding page.
     Given collection:
       | title | EIF Toolbox |

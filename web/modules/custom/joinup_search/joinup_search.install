@@ -5,7 +5,7 @@
  * Install, update and uninstall functions for Joinup Search module.
  */
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 use Drupal\Component\Serialization\Json;
 use Drupal\search_api_solr\Utility\Utility;

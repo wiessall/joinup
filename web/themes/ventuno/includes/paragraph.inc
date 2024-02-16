@@ -5,7 +5,7 @@
  * Paragraph specific procedural functions.
  */
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\paragraphs\ParagraphInterface;
