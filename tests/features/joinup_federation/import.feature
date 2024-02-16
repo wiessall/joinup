@@ -114,7 +114,6 @@ Feature: As a site moderator I am able to import RDF files.
       | This value should not be null.                                                         |
       | The distribution Windows is linked also by the Asset release 1 release.                |
 
-  @terms
   Scenario: Test a successful import.
     Given user:
       | Username    | CS Owner                |

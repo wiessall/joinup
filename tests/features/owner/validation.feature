@@ -4,7 +4,6 @@ Feature: Validation of owners created through UI
   As a collection owner
   I need to prevent incomplete owners being created
 
-  @terms
   Scenario: Owner fields are required
     Given I am logged in as a user with the "authenticated" role
     And I go to the propose collection form
