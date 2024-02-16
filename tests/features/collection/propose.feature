@@ -23,7 +23,6 @@ Feature: Proposing a collection
     And I press "Log in"
     Then I should see the heading "Propose collection"
 
-  @terms
   Scenario: Propose a collection
     Given owner:
       | name                 | type    |
@@ -124,7 +123,7 @@ Feature: Proposing a collection
     And I should see the text "Only members can create content."
     And I should see the text "Any user can create content."
 
-  @javascript @generateMedia @generateMediaTypes:collection_logo @terms @uploadFiles:logo.png
+  @javascript @generateMedia @generateMediaTypes:collection_logo @uploadFiles:logo.png
   Scenario: Propose collection form fields should be organized in tabs.
     Given the following owner:
       | name                 | type    |
@@ -187,7 +186,7 @@ Feature: Proposing a collection
     And I delete the "Just a proposal" collection
     And I delete the "Invisible Man" contact information
 
-  @javascript @terms
+  @javascript
   # This is a regression test for a bug where nothing was happening when
   # submitting the collection form after not filling some of the required
   # fields. This was due the HTML5 constraint validation not being able to
@@ -214,7 +213,7 @@ Feature: Proposing a collection
     # The backend-side validation will kick in now.
     Then I should see the error message "Description field is required."
 
-  @terms @email
+  @email
   Scenario: Email validator after submit a Collection/Solution.
     Given the following owner:
       | name               | type    |
@@ -299,7 +298,7 @@ Feature: Proposing a collection
     And I delete the "Some email validation" collection
     And I delete the "Rolly email validation" solution
 
-  @javascript @terms @uploadFiles:error.svg,simple.svg
+  @javascript @uploadFiles:error.svg,simple.svg
   Scenario: Allowing users to upload SVGs.
     Given the following owner:
       | name    | type                  |
@@ -318,7 +317,7 @@ Feature: Proposing a collection
       | E-mail | basic.svg.api@example.com |
       | Name   | BasicSvgAPI Contact       |
     And I press "Create contact information"
-    When I select "Data gathering, data processing" from "Topic"
+    When I select "Data gathering and processing" from "Topic"
 
     When I expand the "Additional fields" accordion section
     # Shows error when svg is invalid or unsafe and fails to upload.

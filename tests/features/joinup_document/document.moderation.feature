@@ -1,4 +1,4 @@
-@api @terms @group-h
+@api @group-h
 Feature: Document moderation
   In order to manage documents
   As a user of the website
@@ -78,7 +78,7 @@ Feature: Document moderation
     And I go to the homepage of the "The Naked Ashes" collection
     Then the plus button menu should be empty
 
-  @terms @uploadFiles:test.zip
+  @uploadFiles:test.zip
   Scenario: Transit documents from one state to another.
     When I am logged in as "Gretchen Greene"
     And I go to the homepage of the "The Naked Ashes" collection

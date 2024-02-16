@@ -1,4 +1,4 @@
-@api @terms @group-f
+@api @group-f
 Feature:
   As a moderator of the site
   I need to be able to use "iframe" and "map" paragraphs for content.
