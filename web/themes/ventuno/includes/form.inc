@@ -97,7 +97,7 @@ function ventuno_form_views_exposed_form_alter(array &$form, FormStateInterface 
  */
 function ventuno_theme_suggestions_form_alter(array &$suggestions, array $variables): void {
   $id = $variables['element']['#id'];
-  $suggestions[] = 'form__' . str_replace('-', '_', $id);
+  $suggestions[] = $id;
 }
 
 /**

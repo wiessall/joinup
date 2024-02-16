@@ -11306,20 +11306,19 @@
         },
         {
             "name": "openeuropa/oe_bootstrap_theme",
-            "version": "1.8.1",
+            "version": "1.9.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/openeuropa/oe_bootstrap_theme.git",
-                "reference": "e564c9100ab8330c12467336b95114c1780b69cd"
+                "reference": "d28e750204282e30bcb5ed2f434ead23b5fc5aee"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/openeuropa/oe_bootstrap_theme/zipball/e564c9100ab8330c12467336b95114c1780b69cd",
-                "reference": "e564c9100ab8330c12467336b95114c1780b69cd",
+                "url": "https://api.github.com/repos/openeuropa/oe_bootstrap_theme/zipball/d28e750204282e30bcb5ed2f434ead23b5fc5aee",
+                "reference": "d28e750204282e30bcb5ed2f434ead23b5fc5aee",
                 "shasum": ""
             },
             "require": {
-                "cweagans/composer-patches": "^1.7",
                 "drupal/core": "^10",
                 "drupal/ui_patterns": "^1.4",
                 "drupal/ui_patterns_settings": "^2.0",
@@ -11331,7 +11330,7 @@
                 "drupal/core-composer-scaffold": "^10",
                 "drupal/core-dev": "^10",
                 "drupal/styleguide": "^2",
-                "drush/drush": "^11.1",
+                "drush/drush": "^12",
                 "ext-dom": "*",
                 "nikic/php-parser": "^4",
                 "openeuropa/code-review": "^2.0.0-alpha6",
@@ -11377,9 +11376,9 @@
             "description": "OpenEuropa Bootstrap base theme.",
             "support": {
                 "issues": "https://github.com/openeuropa/oe_bootstrap_theme/issues",
-                "source": "https://github.com/openeuropa/oe_bootstrap_theme/tree/1.8.1"
+                "source": "https://github.com/openeuropa/oe_bootstrap_theme/tree/1.9.0"
             },
-            "time": "2024-01-17T14:49:09+00:00"
+            "time": "2024-02-15T15:05:47+00:00"
         },
         {
             "name": "openeuropa/oe_dashboard_agent",

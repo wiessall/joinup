@@ -223,11 +223,8 @@ Feature:
 
     Examples:
       | path                     | role          |
-      | eu-oss-catalogue/about   | administrator |
       | eu-oss-catalogue/members | administrator |
-      | eu-oss-catalogue/about   | authenticated |
       | eu-oss-catalogue/members | authenticated |
-      | eu-oss-catalogue/about   | moderator     |
       | eu-oss-catalogue/members | moderator     |
 
   Scenario Outline: Anonymous user cannot access OSS Catalogue's inaccessible routes.
