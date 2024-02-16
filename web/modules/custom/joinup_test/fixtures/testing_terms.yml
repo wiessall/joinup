@@ -15,7 +15,7 @@ topic:
       - name: 'HR'
   - name: 'Info'
     children:
-      - name: 'Data gathering, data processing'
+      - name: 'Data gathering and processing'
       - name: 'Statistics and Analysis'
   - name: 'Law and Justice'
     children:

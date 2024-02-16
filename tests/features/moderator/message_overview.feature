@@ -33,7 +33,6 @@ Feature: Solutions message overview
       | Ran out of gas                          |
       | Do you have 1 euro to buy a cheese pie? |
 
-  @terms
   Scenario: Workflow messages are available in the message overview.
     Given users:
       | Username   | Roles     |
