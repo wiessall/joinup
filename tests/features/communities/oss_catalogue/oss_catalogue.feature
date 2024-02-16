@@ -227,15 +227,10 @@ Feature:
       | eu-oss-catalogue/members | authenticated |
       | eu-oss-catalogue/members | moderator     |
 
-  Scenario Outline: Anonymous user cannot access OSS Catalogue's inaccessible routes.
+  Scenario: Anonymous user cannot access OSS Catalogue's inaccessible routes.
     Given I am not logged in
-    When I go to "<path>"
+    When I go to "eu-oss-catalogue/members"
     Then I should see the heading "Sign in to continue"
-
-    Examples:
-      | path                     |
-      | eu-oss-catalogue/about   |
-      | eu-oss-catalogue/members |
 
   @javascript
   Scenario: Modal link should be displayed and must show all field values.

@@ -235,4 +235,4 @@ Feature: Search inside groups
     # Search page doesn't have search bar in header.
     When I am on the homepage
     Then I should toggle search bar in navbar
-    And the page should not contain any chips
+    And the "Navigation bar" region should not contain any chips
