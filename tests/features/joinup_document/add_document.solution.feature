@@ -33,7 +33,6 @@ Feature: "Add document" visibility options.
     And I go to the homepage of the "Seventh Name" solution
     Then I should see the link "Add document"
 
-  @terms
   Scenario: Add document as a facilitator.
     Given the following collection:
       | title  | Collective Winter of Beginning |

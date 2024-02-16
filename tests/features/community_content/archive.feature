@@ -38,6 +38,25 @@ Feature: Content archival.
       | event      | Event      | published        | Published        | 2019-11-18 20:00 | 18/11/2019 |
       | news       | News       | published        | Published        | 2019-11-13 20:00 | 13/11/2019 |
 
+  Scenario Outline: User should not be allowed unarchiving content of an archived solution.
+    Given the following solution:
+      | title | Cartridge cleaner |
+      | state | archived          |
+    Given <type> content:
+      | title                | state    | solution          | state    |
+      | Test archived <type> | archived | Cartridge cleaner | archived |
+
+    When I am logged in as a moderator
+    And I go to the edit form of the "Test archived <type>" <type>
+    Then I should not see the button "Unarchive"
+
+    Examples:
+      | type       |
+      | discussion |
+      | document   |
+      | event      |
+      | news       |
+
   Scenario Outline: Group facilitators can not unarchived community content
     Given <group type>:
       | title      | Some group |

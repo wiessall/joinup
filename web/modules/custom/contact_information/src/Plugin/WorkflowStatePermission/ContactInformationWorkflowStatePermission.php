@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Drupal\contact_information\Plugin\WorkflowStatePermission;
 
@@ -33,7 +33,7 @@ class ContactInformationWorkflowStatePermission extends PluginBase implements Wo
   protected $configFactory;
 
   /**
-   * Constructs a CollectionWorkflowStatePermissions object.
+   * Constructs a ContactInformationWorkflowStatePermission object.
    *
    * @param array $configuration
    *   A configuration array containing information about the plugin instance.

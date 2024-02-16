@@ -1,10 +1,12 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Drupal\Tests\joinup_test\ExistingSite;
 
 use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Session\AccountInterface;
+use Drupal\Core\Url;
 use Drupal\Tests\joinup_test\Traits\RdfEntityCreationTrait;
 use Drupal\joinup\Traits\ConfigReadOnlyTrait;
 use weitzman\DrupalTestTraits\ExistingSiteBase;
@@ -13,6 +15,15 @@ use weitzman\DrupalTestTraits\ExistingSiteBase;
  * Base class for Joinup ExistingSite tests.
  */
 abstract class JoinupExistingSiteTestBase extends ExistingSiteBase {
+
+  /**
+   * A list of users to clean from the cas mock server.
+   *
+   * @var array
+   *   An array of usernames. Each array entry contains the 'username',
+   *   'password' and 'email' keys.
+   */
+  protected array $casUsers = [];
 
   use ConfigReadOnlyTrait;
   use RdfEntityCreationTrait;
@@ -59,6 +70,9 @@ abstract class JoinupExistingSiteTestBase extends ExistingSiteBase {
     /** @var \Drupal\og\OgDeleteOrphansInterface $delete_orphans_plugin */
     $delete_orphans_plugin = $delete_orphans_manager->createInstance('simple');
 
+    // Cleanup the cas mock server.
+    \Drupal::getContainer()->get('cas_mock_server.user_manager')->deleteUsers($this->casUsers);
+
     // The parent method might cleanup config entities.
     $this->bypassReadOnlyConfig();
     parent::tearDown();
@@ -76,6 +90,51 @@ abstract class JoinupExistingSiteTestBase extends ExistingSiteBase {
     foreach (['page', 'dynamic_page_cache', 'render'] as $bin) {
       \Drupal::cache($bin)->deleteAll();
     }
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  protected function drupalLogin(AccountInterface $account) {
+    if ($this->loggedInUser) {
+      $this->drupalLogout();
+    }
+
+    $this->drupalGet(Url::fromRoute('user.login'));
+
+    // Since we are using CAS mock server, we need to override the following for
+    // the difference in the form element names.
+    $this->submitForm([
+      'email' => $account->getEmail(),
+      'password' => $account->passRaw,
+    ], 'Log in');
+
+    // @see ::drupalUserIsLoggedIn()
+    $account->sessionId = $this->getSession()->getCookie(\Drupal::service('session_configuration')->getOptions(\Drupal::request())['name']);
+    $this->assertTrue($this->drupalUserIsLoggedIn($account), "User {$account->getAccountName()} successfully logged in.");
+
+    $this->loggedInUser = $account;
+    $this->container->get('current_user')->setAccount($account);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  protected function createUser(array $permissions = [], $name = NULL, $admin = FALSE, array $values = []) {
+    $account = parent::createUser($permissions, $name, $admin, $values);
+
+    // Since we are using the CAS mock server, we need to create the user in the
+    // CAS mock server and link it to the Drupal user account.
+    $casUserManager = \Drupal::getContainer()->get('cas_mock_server.user_manager');
+    $casUserManager->addUser([
+      'username' => $account->getAccountName(),
+      'email' => $account->getEmail(),
+      'password' => $account->passRaw,
+    ]);
+
+    $externalAuth = \Drupal::getContainer()->get('externalauth.externalauth');
+    $externalAuth->linkExistingAccount($account->getAccountName(), 'cas', $account);
+    return $account;
   }
 
 }

@@ -5,7 +5,7 @@
  * The entity hooks needed to display facets in pseudo-fields.
  */
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 use Drupal\Component\Utility\Html;
 use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
@@ -96,7 +96,12 @@ function search_api_field_entity_view(array &$build, EntityInterface $entity, En
     }
 
     // Check number of archived items.
-    $archived_items = $build[$field_name]['#archived_items'] ?? 0;
+    if (isset($build['_layout_builder']) && count($build['_layout_builder']) > 1) {
+      $archived_items = _search_api_field_find_archived($build['_layout_builder'], $field_name) ?? 0;
+    }
+    else {
+      $archived_items = $build[$field_name]['#archived_items'] ?? 0;
+    }
 
     // The facets available for the facet source offered by this field have been
     // organized into pseudo fields. Loop over the configuration to render them
@@ -155,6 +160,39 @@ function search_api_field_entity_view(array &$build, EntityInterface $entity, En
       ];
     }
   }
+}
+
+/**
+ * Get number of archived items.
+ *
+ * @param array $data
+ *   Build data.
+ * @param string $field
+ *   Machine name of the Search API field.
+ *
+ * @return int|null
+ *   Number of archived items.
+ */
+function _search_api_field_find_archived(array $data, $field): ?int {
+  foreach ($data as $key => $item) {
+    if (!is_array($item)) {
+      continue;
+    }
+    if (str_starts_with((string) $key, '#')) {
+      continue;
+    }
+
+    if (isset($item['#archived_items']) && $item['#field_name'] === $field) {
+      return (int) $item['#archived_items'];
+    }
+
+    $archivedItem = _search_api_field_find_archived($item, $field);
+    if ($archivedItem) {
+      return $archivedItem;
+    }
+  }
+
+  return NULL;
 }
 
 /**
