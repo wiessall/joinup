@@ -172,8 +172,6 @@ display:
             display_methods:
               actor:
                 display_method: label
-              business_process:
-                display_method: label
               eira:
                 display_method: label
               eurovoc:
