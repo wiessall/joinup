@@ -59,7 +59,7 @@ Feature: Search inside groups
     # Pages that do not belong to a collection or solution do not have chips in
     # the search field.
     When I am on the homepage
-    Then the page should not contain any chips
+    Then the "Navigation bar" region should not contain any chips
     When I visit the collection overview
     Then the page should not contain any chips
     When I visit the solution overview
