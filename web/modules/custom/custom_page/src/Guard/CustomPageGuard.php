@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Drupal\custom_page\Guard;
 
@@ -12,7 +12,7 @@ use Drupal\state_machine\Plugin\Workflow\WorkflowTransition;
 use Drupal\state_machine\WorkflowManagerInterface;
 
 /**
- * Guard class for custom page group.
+ * Guard class for custom page entity.
  */
 class CustomPageGuard implements GuardInterface {
 
@@ -30,7 +30,18 @@ class CustomPageGuard implements GuardInterface {
    */
   public function allowed(WorkflowTransition $transition, WorkflowInterface $workflow, EntityInterface $entity): bool {
     $toState = $transition->getToState()->getId();
-    if ($entity instanceof CustomPageInterface && $entity->isGroupLandingPage() && $toState === 'unpublished') {
+    $fromState = $entity->getWorkflowState();
+
+    if (!$entity instanceof CustomPageInterface) {
+      return FALSE;
+    }
+
+    if ($entity->isGroupLandingPage() && $toState === 'unpublished') {
+      return FALSE;
+    }
+
+    // Prevent un-archiving content of an archived parent.
+    if ($fromState === 'archived' && $toState === 'published' && $entity->isParentArchived()) {
       return FALSE;
     }
 

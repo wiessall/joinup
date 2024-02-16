@@ -5,7 +5,7 @@
  * Install, update, uninstall tasks for Joinup Acceptance module.
  */
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 /**
  * Implements hook_install().

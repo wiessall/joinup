@@ -5,7 +5,7 @@
  * Contains hooks regarding the asset_release rdf entity bundle.
  */
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Access\AccessResultInterface;
@@ -19,6 +19,7 @@ use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\asset_release\Entity\AssetRelease;
 use Drupal\asset_release\Entity\AssetReleaseInterface;
 use Drupal\rdf_entity\RdfInterface;
+use Drupal\sparql_entity_storage\SparqlEntityStorageInterface;
 use Drupal\sparql_entity_storage\SparqlGraphInterface;
 
 /**
@@ -169,10 +170,13 @@ function asset_release_rdf_entity_access(EntityInterface $release, $operation, A
     return AccessResult::neutral();
   }
 
+  $parent = $release->getSolution();
+  if ($operation !== 'view' && $parent->isArchived()) {
+    return AccessResult::forbidden();
+  }
+
   switch ($operation) {
     case 'view':
-      $parent = $release->getSolution();
-
       // If for any reason access is requested to an entity without a parent,
       // deny that access.
       if (empty($parent)) {
@@ -234,12 +238,14 @@ function asset_release_rdf_entity_presave(EntityInterface $entity) {
     return;
   }
 
+  $storage = \Drupal::entityTypeManager()->getStorage('rdf_entity');
+  \assert($storage instanceof SparqlEntityStorageInterface);
   if (!$entity->get('field_isr_is_version_of')->isEmpty()) {
     // Synchronize common fields from parent solution.
     \Drupal::service('asset_release.relations')->syncFieldsFromParentSolution($entity);
   }
 
-  if (!\Drupal::service('sparql.graph_handler')->bundleHasGraph('rdf_entity', 'asset_release', 'draft')) {
+  if (!$storage->getGraphHandler()->bundleHasGraph('rdf_entity', 'asset_release', 'draft')) {
     return;
   }
 
@@ -255,7 +261,7 @@ function asset_release_rdf_entity_presave(EntityInterface $entity) {
   if (in_array($state, ['draft', 'needs_update'])) {
     $entity->set('graph', 'draft');
   }
-  elseif (in_array($state, ['published'])) {
+  elseif (in_array($state, ['published', 'archived'])) {
     $entity->set('graph', SparqlGraphInterface::DEFAULT);
   }
   elseif (empty($state)) {
@@ -274,12 +280,18 @@ function asset_release_rdf_entity_presave(EntityInterface $entity) {
  */
 function asset_release_entity_update(EntityInterface $entity) {
   // Quick escape check to avoid unnecessary loadings.
-  if ($entity->bundle() !== 'asset_release' || !\Drupal::service('sparql.graph_handler')->bundleHasGraph('rdf_entity', 'asset_release', 'draft')) {
+  if (!$entity instanceof AssetReleaseInterface) {
     return;
   }
 
-  if ($entity->field_isr_state->value === 'published') {
-    \Drupal::entityTypeManager()->getStorage('rdf_entity')->deleteFromGraph([$entity], 'draft');
+  $storage = \Drupal::entityTypeManager()->getStorage($entity->getEntityTypeId());
+  \assert($storage instanceof SparqlEntityStorageInterface);
+  if (!$storage->getGraphHandler()->bundleHasGraph('rdf_entity', 'asset_release', 'draft')) {
+    return;
+  }
+
+  if (in_array($entity->getWorkflowState(), ['published', 'archived'], TRUE)) {
+    $storage->deleteFromGraph([$entity], 'draft');
   }
 }
 
@@ -413,6 +425,7 @@ function asset_release_preprocess_page_title__rdf_entity__asset_release(array &$
   ]);
 
   $is_latest_release = $release->isLatestRelease();
+  $variables['additional_content']['is_archived'] = $release->isArchived();
   $variables['additional_content']['is_latest_release'] = $is_latest_release;
   if (!$is_latest_release && ($latest_release = $release->getSolution()->getLatestRelease())) {
     $variables['additional_content']['latest_release'] = $latest_release->toUrl()->toString();

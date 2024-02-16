@@ -1,4 +1,4 @@
-@api @terms @group-i
+@api @group-i
 Feature: Search inside groups
   In order to quickly find content inside the group I am currently perusing
   As a user of Joinup
@@ -51,15 +51,15 @@ Feature: Search inside groups
       | title     | release number | release notes              | is version of        | state     |
       | Pre-alpha | 0.0-alpha0     | Only works on flat ground. | Inclined foundations | published |
     And distributions:
-      | title       | description          | parent    | access url |
-      | Zip archive | It has files inside. | Pre-alpha | test.zip   |
+      | title       | description          | parent    | access url | state     |
+      | Zip archive | It has files inside. | Pre-alpha | test.zip   | published |
 
   @javascript
   Scenario: Group filters are shown as chips
     # Pages that do not belong to a collection or solution do not have chips in
     # the search field.
     When I am on the homepage
-    Then the page should not contain any chips
+    Then the "Navigation bar" region should not contain any chips
     When I visit the collection overview
     Then the page should not contain any chips
     When I visit the solution overview
@@ -235,4 +235,4 @@ Feature: Search inside groups
     # Search page doesn't have search bar in header.
     When I am on the homepage
     Then I should toggle search bar in navbar
-    And the page should not contain any chips
+    And the "Navigation bar" region should not contain any chips

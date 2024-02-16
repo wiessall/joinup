@@ -59,6 +59,7 @@
         "drupal/inline_entity_form": "^3.0",
         "drupal/json_field": "^1.0",
         "drupal/layout_builder_component_attributes": "^2.1",
+        "drupal/layout_custom_section_classes": "^1.0",
         "drupal/layout_paragraphs": "^2.0",
         "drupal/linkit": "^6.1",
         "drupal/markdown_easy": "^1.0",
@@ -100,7 +101,6 @@
         "drupal/state_machine": "^1.0",
         "drupal/subpathauto": "^1.2",
         "drupal/svg_image": "^3.0",
-        "drupal/swiftmailer": "^2.2",
         "drupal/symfony_mailer_lite": "^1.0",
         "drupal/theme_rule": "^1.0",
         "drupal/token": "~1.7",
@@ -124,8 +124,7 @@
         "psr/http-factory-implementation": "*",
         "semiceu/adms-ap_validator": "1.0.0-alpha1",
         "sweetrdf/easyrdf": "^1.9",
-        "symfony/http-client": "*",
-        "viaaurea/swiftmailer-legacy": "^1.0"
+        "symfony/http-client": "*"
     },
     "require-dev": {
         "ext-fileinfo": "*",
@@ -298,8 +297,8 @@
                 "Cannot implement a custom user cancellation method @see https://www.drupal.org/project/drupal/issues/3135592": "resources/patch/php/drupal/core/3135592.patch",
                 "If you don't set the \"version\" of a profile, the report/status displays an empty dash @see https://www.drupal.org/project/drupal/issues/3270892": "resources/patch/php/drupal/core/3270892.patch",
                 "Transaction autocommit during shutdown relies on unreliable object destruction order @see https://www.drupal.org/i/3405976": "resources/patch/php/drupal/core/3405976.diff",
-                "Fixed pagination and sorting of tables on pages with ajax https://www.drupal.org/i/2925598": "resources/patch/php/drupal/core/2925598-37.patch",
-                "Views Block Display skips preBlockBuild() call on ajax rebuild https://www.drupal.org/i/2605218": "resources/patch/php/drupal/core/2605218-134.diff"
+                "Views Block Display skips preBlockBuild() call on ajax rebuild https://www.drupal.org/i/2605218": "resources/patch/php/drupal/core/2605218-134.diff",
+                "Deprecated function: strnatcasecmp(): Passing null to parameter #1 ($string1) of type string is deprecated in LayoutPluginManager https://www.drupal.org/i/3392572": "resources/patch/php/drupal/core/3392572.patch"
             },
             "drupal/default_content": {
                 "Allow manual imports @see https://www.drupal.org/i/2640734": "resources/patch/php/drupal/default_content/2640734.diff"
@@ -316,7 +315,8 @@
                 "Support for HTML mails @see https://www.drupal.org/i/3047124": "resources/patch/php/drupal/email_confirmer/3047124.diff"
             },
             "drupal/email_contact": {
-                "Move form creation in a protected method from ContactController::content() to ContactController::getForm() @see https://www.drupal.org/project/email_contact/issues/3346470": "resources/patch/php/drupal/email_contact/3346470.patch"
+                "Move form creation in a protected method from ContactController::content() to ContactController::getForm() @see https://www.drupal.org/project/email_contact/issues/3346470": "resources/patch/php/drupal/email_contact/3346470.patch",
+                "Deprecated dynamic creation of property @see https://www.drupal.org/project/email_contact/issues/3397818": "resources/patch/php/drupal/email_contact/3397818.patch"
             },
             "drupal/entityqueue": {
                 "Undefined array key \"add_more\" @see https://www.drupal.org/project/entityqueue/issues/3388852": "resources/patch/php/drupal/entityqueue/3388852.diff"
@@ -370,7 +370,8 @@
             },
             "drupal/layout_paragraphs": {
                 "Utilize layout preview mode https://drupal.org/i/3392735": "resources/patch/php/drupal/layout_paragraphs/layout_paragraphs-utilize_layout_preview-3392735-5--fix-only.patch",
-                "Allow to drag and drop nested paragraphs @see https://www.drupal.org/project/layout_paragraphs/issues/3401176": "resources/patch/php/drupal/layout_paragraphs/3401176.patch"
+                "Allow to drag and drop nested paragraphs @see https://www.drupal.org/project/layout_paragraphs/issues/3401176": "resources/patch/php/drupal/layout_paragraphs/3401176.patch",
+                "Buttons are duplicated when form has validation errors. @see https://www.drupal.org/i/3265794": "resources/patch/php/drupal/layout_paragraphs/3265794.diff"
             },
             "drupal/message": {
                 "[Drupal 10.2] Deprecated sequence type schema definition @see https://www.drupal.org/i/3410267": "resources/patch/php/drupal/message/3410267.diff"
@@ -385,6 +386,10 @@
             "drupal/page_manager": {
                 "[Drupal 10.2] Deprecated sequence type schema definition @see https://www.drupal.org/i/3410270": "resources/patch/php/drupal/page_manager/3410270.diff"
             },
+            "drupal/og_menu": {
+                "D10 deprecations @see https://www.drupal.org/project/og_menu/issues/3391985": "resources/patch/php/drupal/og_menu/3391985.patch",
+                "menu_name accessed before initialized @see https://www.drupal.org/project/og_menu/issues/3392055": "resources/patch/php/drupal/og_menu/3392055.patch"
+            },
             "drupal/poll": {
                 "Add permissions to edit all polls @see https://www.drupal.org/project/poll/issues/3274724": "resources/patch/php/drupal/poll/3274724-4.patch",
                 "User can stuck on View results @see https://www.drupal.org/project/poll/issues/3405509": "resources/patch/php/drupal/poll/3405509.patch"
@@ -394,13 +399,15 @@
             },
             "drupal/rdf_entity": {
                 "Allow bundle label plural variants @see https://github.com/ec-europa/rdf_entity/pull/12": "resources/patch/php/drupal/rdf_entity/ea8f6af001fca732e89a4be0e29643953f49a88f.diff",
-                "rdf_taxonomy generates a fatal error on the latest devel version @see https://www.drupal.org/project/rdf_entity/issues/3389721": "resources/patch/php/drupal/rdf_entity/3389721.diff"
+                "rdf_taxonomy generates a fatal error on the latest devel version @see https://www.drupal.org/project/rdf_entity/issues/3389721": "resources/patch/php/drupal/rdf_entity/3389721.diff",
+                "Allow new entities to be rendered @see https://www.drupal.org/project/rdf_entity/issues/3413718": "resources/patch/php/drupal/rdf_entity/3413718.diff"
             },
             "drupal/search_api": {
                 "item_id column is too short @see https://www.drupal.org/node/2829696": "resources/patch/php/drupal/search_api/2829696.patch",
                 "Some bulk form field options are missing schema @see https://www.drupal.org/project/search_api/issues/3195199": "resources/patch/php/drupal/search_api/3195199.patch",
                 "The search_api_list:{index} cache tag is not added to the view display @see https://www.drupal.org/project/search_api/issues/3298295": "resources/patch/php/drupal/search_api/3298295.patch",
-                "Not all fields that have a target_type setting are entity references @see https://www.drupal.org/i/3394367": "resources/patch/php/drupal/search_api/3394367.diff"
+                "Not all fields that have a target_type setting are entity references @see https://www.drupal.org/i/3394367": "resources/patch/php/drupal/search_api/3394367.diff",
+                "View recalculated with wrong data from cache @see https://drupal.org/i/3327645": "resources/patch/php/drupal/search_api/sapi-views_cache_metadata-3327645-9--fix-only.patch"
             },
             "drupal/search_api_autocomplete": {
                 "Clear timeout autosubmit used in views_autosubmit. @see https://www.drupal.org/i/3314418": "resources/patch/php/drupal/search_api_autocomplete/3314418.patch"
@@ -416,7 +423,8 @@
             },
             "drupal/smart_trim": {
                 "Avoid max nesting level during development @see https://www.drupal.org/project/smart_trim/issues/3013628": "resources/patch/php/drupal/smart_trim/3013628.patch",
-                "Space inserted before full stop, comma, etc @see https://www.drupal.org/project/smart_trim/issues/3369954": "resources/patch/php/drupal/smart_trim/3369954.diff"
+                "Space inserted before full stop, comma, etc @see https://www.drupal.org/project/smart_trim/issues/3369954": "resources/patch/php/drupal/smart_trim/3369954.diff",
+                "Remove token_browser from saved configuration of formatter @see https://www.drupal.org/i/3368694": "resources/patch/php/drupal/smart_trim/3368694.diff"
             },
             "drupal/social_media_links": {
                 "Missing config schema for field, widget and formatter @see https://www.drupal.org/node/2898680": "resources/patch/php/drupal/social_media_links/2898680.patch",
@@ -430,9 +438,6 @@
             "drupal/svg_image": {
                 "SVG is not valid or cannot be sanitized, return an error. @see https://www.drupal.org/i/3350696": "resources/patch/php/drupal/svg_image/3350696.patch",
                 "Upload a SVG from CKEditor (image inline). @see https://www.drupal.org/i/3093972": "resources/patch/php/drupal/svg_image/3093972.patch"
-            },
-            "drupal/swiftmailer": {
-                "Add spooling for increased performance @see https://www.drupal.org/project/swiftmailer/issues/3000553": "resources/patch/php/drupal/swiftmailer/3000553.patch"
             },
             "drupal/video_embed_field": {
                 "Extend support for embed URLs. Option to force privacy @see https://www.drupal.org/project/video_embed_field/issues/3060201 (originally on https://www.drupal.org/node/2899093)": "resources/patch/php/drupal/video_embed_field/3060201.patch",
@@ -448,6 +453,9 @@
             "m4tthumphrey/php-gitlab-api": {
                 "GraphQL API @see https://github.com/GitLabPHP/Client/issues/766": "resources/patch/php/drupal/m4tthumphrey/php-gitlab-api/772.diff",
                 "Add support for prefixed URIs on base path @see https://github.com/GitLabPHP/Client/issues/726": "resources/patch/php/drupal/m4tthumphrey/php-gitlab-api/726.diff"
+            },
+            "ec-europa/toolkit": {
+                "DROPSEC-8519: Correctly parse the .env files @see https://github.com/ec-europa/toolkit/pull/744": "resources/patch/php/ec-europa/toolkit/744.diff"
             }
         },
         "artifacts": {

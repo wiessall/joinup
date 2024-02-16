@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Drupal\joinup\Context;
 
@@ -235,6 +235,7 @@ class AssetDistributionContext extends RawDrupalContext {
       'modification date' => 'changed',
       'representation technique' => 'field_ad_repr_technique',
       'parent' => 'parent',
+      'state' => 'field_ad_state',
       'status' => 'field_status',
       'title' => 'label',
       'uri' => 'id',

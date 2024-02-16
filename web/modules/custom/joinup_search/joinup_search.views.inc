@@ -5,7 +5,7 @@
  * Views hook implementations for the Joinup search module.
  */
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 use Drupal\search_api\Entity\Index;
 

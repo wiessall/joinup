@@ -1,15 +1,15 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Drupal\joinup\Context;
 
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\joinup\Traits\EntityTrait;
 use Drupal\joinup\Traits\SearchTrait;
+use Drupal\joinup\Traits\TopicTrait;
 use Drupal\joinup_collection\JoinupCollectionHelper;
 use Drupal\rdf_entity\Entity\Rdf;
-use Drupal\taxonomy\Entity\Term;
 
 /**
  * Behat step definitions and related methods related to the Joinup collection.
@@ -18,6 +18,7 @@ class JoinupCollectionContext extends RawDrupalContext {
 
   use EntityTrait;
   use SearchTrait;
+  use TopicTrait;
 
   /**
    * Creates the 'Joinup' collection and related data.
@@ -28,14 +29,7 @@ class JoinupCollectionContext extends RawDrupalContext {
    *
    * @BeforeScenario @joinup&&@api
    */
-  public function setupJoinupCollection() {
-    // Create the topic term.
-    Term::create([
-      'vid' => 'topic',
-      'tid' => 'http://example.com/term/sna',
-      'name' => 'Supra-national authority',
-    ])->save();
-
+  public function setupJoinupCollection(): void {
     // Create the owner.
     Rdf::create([
       'rid' => 'owner',
@@ -57,7 +51,7 @@ class JoinupCollectionContext extends RawDrupalContext {
       'id' => JoinupCollectionHelper::JOINUP_COLLECTION_DEFAULT_ENTITY_ID,
       'label' => 'Joinup',
       'field_ar_state' => 'published',
-      'field_topic' => 'http://example.com/term/sna',
+      'field_topic' => $this->getRandomTopic()->id(),
       'field_ar_owner' => 'http://example.com/owner/isa2',
       'field_ar_contact_information' => 'http://example.com/contact/joinup',
     ])->save();
@@ -78,7 +72,6 @@ class JoinupCollectionContext extends RawDrupalContext {
     $collection->delete();
 
     // Delete related entities.
-    Term::load('http://example.com/term/sna')->delete();
     Rdf::load('http://example.com/owner/isa2')->delete();
     Rdf::load('http://example.com/contact/joinup')->delete();
   }

@@ -5,7 +5,7 @@
  * Page title specific procedural functions.
  */
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 use Drupal\joinup_community_content\Entity\CommunityContentInterface;
 use Drupal\joinup_workflow\ArchivableEntityInterface;
