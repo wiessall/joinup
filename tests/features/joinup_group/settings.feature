@@ -9,7 +9,7 @@ Feature: Collections/Solutions settings
       | name       | type    |
       | Jonny inc. | Company |
 
-  @terms @uploadFiles:logo.png
+  @uploadFiles:logo.png
   Scenario: Edit settings in a collection
     Given the following owner:
       | name            | type                    |
@@ -49,6 +49,7 @@ Feature: Collections/Solutions settings
 
     When I fill in the following:
       | Title          | Solution Beta      |
+      | Abstract       | Short abstract     |
       | Description    | Last letter        |
       | Name           | Jony Burton        |
       | E-mail address | jonb@example.com   |

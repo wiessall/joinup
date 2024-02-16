@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Drupal\joinup\Context;
 
@@ -49,14 +49,11 @@ class HomepageContext extends RawDrupalContext {
 
       if (in_array($type, ['collection', 'solution'])) {
         $entity = $this->getEntityByLabel('rdf_entity', $expected_data['title']);
-        // In Joinup, "Read more" links of collections and solutions lead to the
-        // 'About' page.
-        $read_more_url = $this->getEntityUri($entity, 'about-page');
       }
       else {
         $entity = $this->getEntityByLabel('node', $expected_data['title']);
-        $read_more_url = $this->getEntityUri($entity, 'canonical');
       }
+      $read_more_url = $this->getEntityUri($entity);
 
       // Check that title links to the canonical page of the
       // news, event, solution and collection.

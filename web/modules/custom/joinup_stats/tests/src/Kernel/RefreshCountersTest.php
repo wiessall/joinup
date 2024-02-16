@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Drupal\Tests\joinup_stats\Kernel;
 
@@ -221,6 +221,7 @@ class RefreshCountersTest extends KernelTestBase {
             'uri' => 'public://d1',
           ]),
           'og_audience' => 'http://example.com/solution/1',
+          'field_ad_state' => 'published',
         ],
         [
           'id' => 'http://example.com/distro/2',
@@ -229,6 +230,7 @@ class RefreshCountersTest extends KernelTestBase {
           'field_ad_access_url' => File::create([
             'uri' => 'public://d2',
           ]),
+          'field_ad_state' => 'published',
         ],
         [
           'id' => 'http://example.com/distro/3',
@@ -237,6 +239,7 @@ class RefreshCountersTest extends KernelTestBase {
           'field_ad_access_url' => File::create([
             'uri' => 'public://d3',
           ]),
+          'field_ad_state' => 'published',
         ],
       ],
       // Enforce predictable NIDs.

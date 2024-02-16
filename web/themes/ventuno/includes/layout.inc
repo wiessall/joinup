@@ -5,7 +5,7 @@
  * HTML, page, region specific procedural functions.
  */
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 use Drupal\Core\Template\Attribute;
 use Drupal\interoperable_europe\InteroperableEuropeCollectionInterface;

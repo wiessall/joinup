@@ -5,7 +5,7 @@
  * Hook implementations for the Joinup Publication Date module.
  */
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 use Drupal\joinup_publication_date\Entity\EntityPublicationTimeInterface;
 use Drupal\joinup_publication_date\Plugin\Field\FieldType\PublicationDateFieldItemList;

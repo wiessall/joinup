@@ -2,13 +2,13 @@
 Feature: Subscribing to a collection after creating
   In order to subscribe my collection
 
-  @terms
   Scenario: Check my subscription after create a new collection.
 
     Given I am logged in as an authenticated
     When I go to the propose collection form
     When I fill in the following:
       | Title       | Rollerblade and Ancient Mythology                                                                      |
+      | Abstract    | The seminal work on the ancient mythologies of the primitive and classical peoples of the Rollerblade. |
       | Description | The seminal work on the ancient mythologies of the primitive and classical peoples of the Rollerblade. |
       # Contact information data.
       | Name        | Larry Jaoe                                                                                              |
