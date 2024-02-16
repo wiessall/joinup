@@ -34,7 +34,6 @@ Feature: Homepage
     And I am on the homepage
     Then I should see the text "The Joinup platform is the European Commission's one-stop shop for interoperable"
 
-  @terms
   Scenario: Latest news is shown on the homepage
     Given collection:
       | title | Shaping of nature |
@@ -64,7 +63,6 @@ Feature: Homepage
     And I should see the following facet summary "News"
     And the page should show the tiles "Current biodiversity crisis, Environmental stewardship, Spatial reconstruction, Earlier transformations"
 
-  @terms
   Scenario: Community content can be placed "In the spotlight" on the homepage
     Given collection:
       | title | Mice in space |
@@ -94,7 +92,6 @@ Feature: Homepage
       | 2      | charles.jpg | EU and European Policies                    | Stay at the ISS | event    | Two groups of mice (six per group) were housed aboard the International Space Station for 35 days. One group was subjected to artificial gravity (1 g) and the other to microgravity.           |
       | 3      | alan.jpg    | HR, Statistics and Analysis, E-justice      | Microgravity    | document | Conventional studies investigating the effects of reduced gravity on muscle mass and function have used a ground control group that is not directly comparable to the space experimental group. |
 
-  @terms
   Scenario Outline: Community content be highlighted on the homepage
     Given collection:
       | title | Clash of documents |
@@ -208,7 +205,6 @@ Feature: Homepage
     Then I should be on the search page
     And I should see the "RNA vaccines" tile
 
-  @terms
   Scenario: Explore block shows a selection of news, events, collections and solutions
     Given users:
       | Username     | E-mail                   |

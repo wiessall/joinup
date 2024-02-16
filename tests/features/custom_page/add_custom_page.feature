@@ -6,13 +6,13 @@ Feature: "Add custom page" visibility options.
 
   Background:
     Given collections:
-      | title           | logo     | state     |
-      | Open Collective | logo.png | published |
-      | Code Camp       | logo.png | published |
+      | title           | logo     | state     | topic      |
+      | Open Collective | logo.png | published | Demography |
+      | Code Camp       | logo.png | published | Demography |
     And solutions:
-      | title     | logo     | state     |
-      | Parachute | logo.png | published |
-      | Skydiving | logo.png | published |
+      | title     | logo     | state     | topic      |
+      | Parachute | logo.png | published | Demography |
+      | Skydiving | logo.png | published | Demography |
 
   Scenario Outline: Links and help text for adding custom pages should should only be shown to privileged users
     # Custom pages cannot be added by normal members. Custom pages are
@@ -56,7 +56,7 @@ Feature: "Add custom page" visibility options.
       | Code Camp | collection |
       | Parachute | solution   |
 
-  @uploadFiles:test.zip,alan.jpg @terms
+  @uploadFiles:test.zip,alan.jpg
   Scenario Outline: Add custom page as a facilitator.
     And I am logged in as a facilitator of the "<second title>" <group>
 
@@ -214,6 +214,7 @@ Feature: "Add custom page" visibility options.
 
     When I fill in the following:
       | Title | Rubber boots |
+    And I select "HR" from "Topic"
     And I press "Save"
     Then I should see the heading "Rubber boots"
     And I should see the success message "Custom page Rubber boots has been created."
