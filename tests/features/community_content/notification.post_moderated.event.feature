@@ -1,4 +1,4 @@
-@api @terms @group-d
+@api @group-d
 Feature: Notification test for the event transitions on a post moderated parent.
   In order to manage my collections
   As an owner of the collection

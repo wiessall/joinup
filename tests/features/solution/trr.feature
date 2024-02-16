@@ -4,7 +4,7 @@ Feature: Creating a test (solution) in the TRR collection.
   As a collection facilitator
   I need to be able to add 'test'-enabled solutions.
 
-  @terms @javascript
+  @javascript
   Scenario: Test a TRR related fields
     Given the following collection:
       | title | Friends of the test repository |
@@ -62,7 +62,7 @@ Feature: Creating a test (solution) in the TRR collection.
     And the "Product type" field should contain ""
     And the "Standardization level" field should contain the "- None -" option
 
-  @terms @javascript
+  @javascript
   Scenario: Create a TRR solution
     Given users:
       | Username | Roles |

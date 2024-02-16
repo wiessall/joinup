@@ -3,7 +3,6 @@ Feature: User profile
   A user must be able to change his own profile.
   A moderator must be able to edit any user account.
 
-  @terms
   Scenario: A logged-in user can navigate to his own profile and edit it.
     Given users:
       | Username             | E-mail              |
@@ -67,7 +66,6 @@ Feature: User profile
     When I go to the public profile of "Leonardo Da Vinci"
     Then I should see the text "Country of origin: Italy" in the "Header" region
 
-  @terms
   Scenario: A moderator can navigate to any user's profile and edit it.
     Given users:
       | Username          | E-mail                | Roles     |

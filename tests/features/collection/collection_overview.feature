@@ -1,7 +1,7 @@
 @api @group-a
 Feature: Collections Overview
 
-  @terms @uploadFiles:logo.png
+  @uploadFiles:logo.png
   Scenario: View collection overview as an anonymous user
     Given users:
       | Username      | E-mail                       |
@@ -81,7 +81,6 @@ Feature: Collections Overview
     Then I delete the "Colonies in space" collection
     And I delete the "Overviewer contact" contact information
 
-  @terms
   Scenario: Custom pages should not be visible on the overview page
     Given the following collection:
       | title            | Jira       |

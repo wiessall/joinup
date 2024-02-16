@@ -1,4 +1,4 @@
-@api @terms @group-a
+@api @group-a
 Feature: Collection membership administration
   In order to build a community
   As a collection facilitator
@@ -403,7 +403,6 @@ Feature: Collection membership administration
     Then I should see the link "Add members"
     And I should see the link "Invite members"
 
-  @terms
   Scenario: Invitations can not be sent for pending users.
     Given users:
       | Username       | E-mail                     | First name | Family name |
