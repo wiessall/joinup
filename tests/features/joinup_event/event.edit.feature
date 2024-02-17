@@ -4,7 +4,6 @@ Feature: "Event page" editing.
   As an owner of the event
   I need to be able to edit it.
 
-  @terms
   Scenario: Add and remove map
     Given collections:
       | title  | logo     | state     |

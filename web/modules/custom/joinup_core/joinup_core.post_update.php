@@ -13,159 +13,52 @@
  * In most cases though update code should be placed in joinup_core.deploy.php.
  */
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
-use Drupal\sparql_entity_storage\UriEncoder;
-use Drupal\taxonomy\Entity\Term;
+use Drupal\sparql_entity_storage\Entity\Query\Sparql\SparqlArg;
 
 /**
- * Implements hook_post_update_NAME().
+ * Remove TRR content.
  */
-function joinup_core_post_update_110200(): string {
-  // Most changes took place in ISAICP-7435.
-  // @see https://git.fpfis.tech.ec.europa.eu/digit/digit-joinup-dev/-/merge_requests/468
-  $mapping = [
-    'http://joinup.eu/ontology/topic#authorisation-and-authentication' => 'http://joinup.eu/ontology/topic#eidentity-and-esignature',
-    'http://joinup.eu/ontology/topic#culture' => 'http://joinup.eu/ontology/topic#culture-and-education',
-    'http://joinup.eu/ontology/topic#education' => 'http://joinup.eu/ontology/topic#culture-and-education',
-    'http://joinup.eu/ontology/topic#defence' => 'http://joinup.eu/ontology/topic#ict-security',
-    'http://joinup.eu/ontology/topic#economic-analysis' => 'http://joinup.eu/ontology/topic#banking-and-financial-services',
-    'http://joinup.eu/ontology/topic#eu-finance' => 'http://joinup.eu/ontology/topic#banking-and-financial-services',
-    // The following two were changed in 2 tickets, first in ISAICP-7435 and
-    // then in ISAICP-7489.
-    'http://joinup.eu/ontology/topic#ejustice' => 'http://joinup.eu/ontology/topic#legal',
-    'http://joinup.eu/ontology/topic#law' => 'http://joinup.eu/ontology/topic#legal',
-    'http://joinup.eu/ontology/topic#energy' => 'http://joinup.eu/ontology/topic#energy-and-environment',
-    'http://joinup.eu/ontology/topic#environment' => 'http://joinup.eu/ontology/topic#energy-and-environment',
-    // The following two were changed in 2 tickets, first in ISAICP-7435 and
-    // then in ISAICP-7489.
-    'http://joinup.eu/ontology/topic#free-and-open-source-software' => 'http://joinup.eu/ontology/topic#open-source-software',
-    'http://joinup.eu/ontology/topic#free-and-open-source-software-in-public-administrations' => 'http://joinup.eu/ontology/topic#open-source-software',
-    // The following two were changed in 2 tickets, first in ISAICP-7435 and
-    // then in ISAICP-7489.
-    'http://joinup.eu/ontology/topic#ict-standardisation' => 'http://joinup.eu/ontology/topic#standardisation',
-    'http://joinup.eu/ontology/topic#ict-standardisation-in-egovernment' => 'http://joinup.eu/ontology/topic#standardisation',
-    'http://joinup.eu/ontology/topic#information' => 'http://joinup.eu/ontology/topic#content-and-knowledge-management',
-    // Changed in ISAICP-7939.
-    'http://joinup.eu/ontology/topic#innovation' => 'http://joinup.eu/ontology/topic#digital-innovation',
-    'http://joinup.eu/ontology/topic#open-government' => 'http://joinup.eu/ontology/topic#egovernment',
-    'http://joinup.eu/ontology/topic#politics' => 'http://joinup.eu/ontology/topic#european-policies',
-    'http://joinup.eu/ontology/topic#security' => 'http://joinup.eu/ontology/topic#ict-security',
-    // There is a typo in the target URI.
-    'http://joinup.eu/ontology/topic#statistics' => 'http://joinup.eu/ontology/topic#statistics-and-informatino',
+function joinup_core_post_update_110300(array &$sandbox): void {
+  $sparql = \Drupal::getContainer()->get('sparql.endpoint');
+  $graphs = [
+    'http://joinup.eu/solution/published',
+    'http://joinup.eu/solution/draft',
+  ];
+  $predicates = SparqlArg::serializeUris([
+    'http://joinup.ec.europa.eu/trr#actor',
+    'http://joinup.ec.europa.eu/trr#businessProcess',
+    'http://joinup.ec.europa.eu/trr#productType',
+    'http://joinup.ec.europa.eu/trr#StandardizationLevel',
+    'http://joinup.eu/test_resource_type',
+  ]);
+  $vocabs = [
+    'http://actor',
+    'http://business-process',
+    'http://product_type',
+    'http://standardization_level',
+    'http://test_resource_type',
   ];
 
-  $database = \Drupal::database();
-  foreach ($mapping as $source => $target) {
-    // Ensure the target exists.
-    \assert(!empty(Term::load($target)), sprintf('Term %s does not exist.', $target));
-
-    $database->update('user__field_user_professional_domain')
-      ->fields(['field_user_professional_domain_target_id' => $target])
-      ->condition('field_user_professional_domain_target_id', $source)
-      ->execute();
-  }
-
-  // Because names are obfuscated in the database, it is not simple to test the
-  // update with the current step definitions. In order to not create an unused
-  // step definition only for navigating to the user page by UID, we will assert
-  // that no user exists with the old values here.
-  $users = \Drupal::entityTypeManager()->getStorage('user')->loadByProperties([
-    'field_user_professional_domain' => array_keys($mapping),
-  ]);
-  \assert(empty($users), 'No user exists with the old value for the professional domain.');
-
-  return 'The professional domains have been updated.';
-}
-
-/**
- * Remove 'About' from menu.
- */
-function joinup_core_post_update_110201(array &$sandbox): string {
-  $entityTypeManager = \Drupal::entityTypeManager();
-  /** @var  \Drupal\menu_link_content\MenuLinkContentStorageInterface $menuLinkContentStorage */
-  $menuLinkContentStorage = $entityTypeManager->getStorage('menu_link_content');
-
-  if (!isset($sandbox['data'])) {
-    $query = $menuLinkContentStorage->getQuery()->accessCheck(FALSE);
-
-    $sandbox['data'] = $query
-      ->condition('link__uri', 'route:entity.rdf_entity.about_page%', 'LIKE')
-      ->execute();
-
-    $sandbox['progress'] = 0;
-    $sandbox['count'] = count($sandbox['data']);
-  }
-
-  $spliced = array_splice($sandbox['data'], 0, 300);
-
-  /** @var \Drupal\menu_link_content\MenuLinkContentInterface[] $links */
-  $links = $menuLinkContentStorage->loadMultiple($spliced);
-  foreach ($links as $link) {
-    $link->delete();
-
-    $sandbox['progress']++;
-  }
-
-  $sandbox['#finished'] = (int) empty($sandbox['data']);
-  return "Processed {$sandbox['progress']} out of {$sandbox['count']}.";
-}
-
-/**
- * Redirect removed about pages to canonical page.
- */
-function joinup_core_post_update_110202(array &$sandbox): string {
-  /** @var \Drupal\sparql_entity_storage\SparqlEntityStorageInterface $storage */
-  $rdfStorage = \Drupal::entityTypeManager()->getStorage('rdf_entity');
-  /** @var \Drupal\Core\Entity\EntityStorageInterface $redirectStorage */
-  $redirectStorage = \Drupal::entityTypeManager()->getStorage('redirect');
-  /** @var \Drupal\path_alias\AliasManagerInterface $aliasManager */
-  $aliasManager = \Drupal::service('path_alias.manager');
-
-  if (!isset($sandbox['data'])) {
-    $sandbox['data'] = $rdfStorage->getQuery()->accessCheck(FALSE)
-      ->condition('rid', ['collection', 'solution'], 'IN')
-      ->execute();
-
-    $sandbox['progress'] = 0;
-    $sandbox['count'] = count($sandbox['data']);
-  }
-
-  $spliced = array_splice($sandbox['data'], 0, 300);
-
-  /** @var \Drupal\rdf_entity\RdfInterface[] $groups */
-  $groups = $rdfStorage->loadMultiple($spliced);
-  foreach ($groups as $group) {
-    $path = '/rdf_entity/' . UriEncoder::encodeUrl($group->id());
-    $alias = $aliasManager->getAliasByPath($path);
-    if (!$alias) {
-      continue;
+  $query = <<<QUERY
+    WITH <%s>
+    DELETE { ?s ?p ?o }
+    WHERE {
+      ?s ?p ?o .
+      FILTER( ?p IN (
+        $predicates
+      )) .
     }
+    QUERY;
 
-    try {
-      $redirectStorage->create([
-        'redirect_source' => ltrim($alias . '/about', '/'),
-        'redirect_redirect' => 'internal:' . $path,
-        'status_code' => '301',
-        'language' => 'en',
-      ])->save();
-    }
-    catch (\Exception $e) {
-      // Simple skip as some redirects already exists.
-    }
-
-    $sandbox['progress']++;
+  // Remove field references.
+  foreach ($graphs as $graph) {
+    $sparql->update(sprintf($query, $graph));
   }
 
-  $sandbox['#finished'] = (int) empty($sandbox['data']);
-  return "Processed {$sandbox['progress']} out of {$sandbox['count']}.";
-}
-
-/**
- * Deletes the field_ar_abstract field so that it can be re-created.
- */
-function joinup_core_post_update_110203(): string {
-  $fieldStorage = \Drupal::entityTypeManager()->getStorage('field_storage_config')->load('rdf_entity.field_ar_abstract');
-  $fieldStorage?->delete();
-  return 'Deleted field_ar_abstract field.';
+  // Remove terms.
+  foreach ($vocabs as $vocab) {
+    $sparql->query("CLEAR GRAPH <$vocab>");
+  }
 }

@@ -56,6 +56,7 @@
         "drupal/inline_entity_form": "^3.0",
         "drupal/json_field": "^1.0",
         "drupal/layout_builder_component_attributes": "^2.1",
+        "drupal/layout_custom_section_classes": "^1.0",
         "drupal/layout_paragraphs": "^2.0",
         "drupal/linkit": "^6.1",
         "drupal/memcache": "^2.5",
@@ -94,7 +95,6 @@
         "drupal/state_machine": "^1.0",
         "drupal/subpathauto": "^1.2",
         "drupal/svg_image": "^3.0",
-        "drupal/swiftmailer": "^2.2",
         "drupal/symfony_mailer_lite": "^1.0",
         "drupal/theme_rule": "^1.0",
         "drupal/token": "~1.7",
@@ -116,8 +116,7 @@
         "psr/http-factory-implementation": "*",
         "semiceu/adms-ap_validator": "1.0.0-alpha1",
         "sweetrdf/easyrdf": "^1.9",
-        "symfony/http-client": "*",
-        "viaaurea/swiftmailer-legacy": "^1.0"
+        "symfony/http-client": "*"
     },
     "require-dev": {
         "ext-fileinfo": "*",
@@ -284,7 +283,6 @@
                 "Cannot implement a custom user cancellation method @see https://www.drupal.org/project/drupal/issues/3135592": "resources/patch/php/drupal/core/3135592.patch",
                 "If you don't set the \"version\" of a profile, the report/status displays an empty dash @see https://www.drupal.org/project/drupal/issues/3270892": "resources/patch/php/drupal/core/3270892.patch",
                 "Transaction autocommit during shutdown relies on unreliable object destruction order @see https://www.drupal.org/i/3405976": "resources/patch/php/drupal/core/3405976.diff",
-                "Fixed pagination and sorting of tables on pages with ajax https://www.drupal.org/i/2925598": "resources/patch/php/drupal/core/2925598-37.patch",
                 "Views Block Display skips preBlockBuild() call on ajax rebuild https://www.drupal.org/i/2605218": "resources/patch/php/drupal/core/2605218-134.diff"
             },
             "drupal/default_content": {
@@ -349,7 +347,8 @@
                 "Link shown after the autocomplete selection is the bare node/xxx link, not the alias @see https://www.drupal.org/node/2877535": "resources/patch/php/drupal/linkit/2877535.patch"
             },
             "drupal/layout_paragraphs": {
-                "Allow to drag and drop nested paragraphs @see https://www.drupal.org/project/layout_paragraphs/issues/3401176": "resources/patch/php/drupal/layout_paragraphs/3401176.patch"
+                "Allow to drag and drop nested paragraphs @see https://www.drupal.org/project/layout_paragraphs/issues/3401176": "resources/patch/php/drupal/layout_paragraphs/3401176.patch",
+                "Buttons are duplicated when form has validation errors. @see https://www.drupal.org/i/3265794": "resources/patch/php/drupal/layout_paragraphs/3265794.diff"
             },
             "drupal/message": {
                 "[Drupal 10.2] Deprecated sequence type schema definition @see https://www.drupal.org/i/3410267": "resources/patch/php/drupal/message/3410267.diff"
@@ -406,14 +405,12 @@
                 "Convert Twitter to X @see https://www.drupal.org/project/social_media_links/issues/3384469": "resources/patch/php/drupal/social_media_links/3384469-7.patch"
             },
             "drupal/sparql_entity_storage": {
-                "Interface contract violation @see https://drupal.org/i/3379328": "resources/patch/php/drupal/sparql_entity_storage/3379328.patch"
+                "Interface contract violation @see https://drupal.org/i/3379328": "resources/patch/php/drupal/sparql_entity_storage/3379328.patch",
+                "Error when deleting a vocabulary @see https://www.drupal.org/i/3421694": "resources/patch/php/drupal/sparql_entity_storage/3421694.diff"
             },
             "drupal/svg_image": {
                 "SVG is not valid or cannot be sanitized, return an error. @see https://www.drupal.org/i/3350696": "resources/patch/php/drupal/svg_image/3350696.patch",
                 "Upload a SVG from CKEditor (image inline). @see https://www.drupal.org/i/3093972": "resources/patch/php/drupal/svg_image/3093972.patch"
-            },
-            "drupal/swiftmailer": {
-                "Add spooling for increased performance @see https://www.drupal.org/project/swiftmailer/issues/3000553": "resources/patch/php/drupal/swiftmailer/3000553.patch"
             },
             "drupal/video_embed_field": {
                 "Extend support for embed URLs. Option to force privacy @see https://www.drupal.org/project/video_embed_field/issues/3060201 (originally on https://www.drupal.org/node/2899093)": "resources/patch/php/drupal/video_embed_field/3060201.patch",
@@ -425,6 +422,9 @@
             },
             "drupal/webform": {
                 "Radios or Checkboxes inside Composite not saved @see https://www.drupal.org/project/webform/issues/3216923": "resources/patch/php/drupal/webform/368.diff"
+            },
+            "ec-europa/toolkit": {
+                "DROPSEC-8519: Correctly parse the .env files @see https://github.com/ec-europa/toolkit/pull/744": "resources/patch/php/ec-europa/toolkit/744.diff"
             }
         },
         "artifacts": {

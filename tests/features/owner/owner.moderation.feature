@@ -1,10 +1,10 @@
-@api @terms @group-i
+@api @group-i
 Feature: Owner moderation
   In order to manage owners
   As a user of the website
   I need to be able to transit the owners from one state to another.
 
-  @terms @uploadFiles:logo.png
+  @uploadFiles:logo.png
   Scenario: Publish, update, request changes, publish again and ask to delete an owner.
     Given users:
       | Username        |

@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Drupal\joinup\Context;
 
@@ -18,6 +18,7 @@ use Drupal\joinup\Traits\FormTrait;
 use Drupal\joinup\Traits\OgTrait;
 use Drupal\joinup\Traits\RdfEntityTrait;
 use Drupal\joinup\Traits\SearchTrait;
+use Drupal\joinup\Traits\TopicTrait;
 use Drupal\joinup\Traits\TraversingTrait;
 use Drupal\joinup\Traits\UserTrait;
 use Drupal\joinup\Traits\UtilityTrait;
@@ -44,6 +45,7 @@ class SolutionContext extends RawDrupalContext {
   use OgTrait;
   use RdfEntityTrait;
   use SearchTrait;
+  use TopicTrait;
   use TraversingTrait;
   use UserTrait;
   use UtilityTrait;
@@ -366,6 +368,8 @@ class SolutionContext extends RawDrupalContext {
       'yes',
     ]);
 
+    $this->setFallbackTopic($values);
+
     /** @var \Drupal\solution\Entity\SolutionInterface $solution */
     $solution = $this->createRdfEntity('solution', $values);
 
@@ -577,10 +581,7 @@ class SolutionContext extends RawDrupalContext {
       'collections' => 'collection',
       'featured' => 'feature',
       'pinned in' => 'pinned_in_collection',
-      'business process' => 'field_is_business_process',
-      'product type' => 'field_is_product_type',
       'shared on' => 'field_is_shared_in',
-      'abstract' => 'field_is_abstract',
     ];
   }
 

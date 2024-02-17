@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Drupal\joinup\Context;
 
@@ -17,6 +17,7 @@ use Drupal\joinup\Traits\FormTrait;
 use Drupal\joinup\Traits\OgTrait;
 use Drupal\joinup\Traits\RdfEntityTrait;
 use Drupal\joinup\Traits\SearchTrait;
+use Drupal\joinup\Traits\TopicTrait;
 use Drupal\joinup\Traits\UserTrait;
 use Drupal\joinup\Traits\UtilityTrait;
 use Drupal\joinup\Traits\WorkflowTrait;
@@ -42,6 +43,7 @@ class CollectionContext extends RawDrupalContext {
   use OgTrait;
   use RdfEntityTrait;
   use SearchTrait;
+  use TopicTrait;
   use UserTrait;
   use UtilityTrait;
   use WorkflowTrait;
@@ -262,6 +264,8 @@ class CollectionContext extends RawDrupalContext {
       'y',
       'yes',
     ]);
+
+    $this->setFallbackTopic($values);
 
     /** @var \Drupal\collection\Entity\CollectionInterface $collection */
     $collection = $this->createRdfEntity('collection', $values);

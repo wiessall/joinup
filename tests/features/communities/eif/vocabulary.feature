@@ -47,7 +47,6 @@ Feature:
     Then I should see the "Some EIF solution" tile
     But I should not see the text "EIF reference"
 
-  @terms
   Scenario: Solutions referencing an EIF term should appear in the corresponding page.
     Given collection:
       | title | EIF Toolbox |
