@@ -28,17 +28,12 @@ use Drupal\og\OgRoleInterface;
 use Drupal\rdf_entity\Entity\Rdf;
 use Drupal\rdf_entity\Entity\RdfEntityType;
 use Drupal\rdf_entity\RdfInterface;
-use Drupal\solution\Entity\Actor;
-use Drupal\solution\Entity\BusinessProcess;
 use Drupal\solution\Entity\Language;
-use Drupal\solution\Entity\ProductType;
 use Drupal\solution\Entity\Solution;
 use Drupal\solution\Entity\SolutionCategory;
 use Drupal\solution\Entity\SolutionInterface;
 use Drupal\solution\Entity\SolutionType;
-use Drupal\solution\Entity\StandardizationLevel;
 use Drupal\solution\Entity\Status;
-use Drupal\solution\Entity\TestResourceType;
 use Drupal\solution\SolutionAffiliationFieldItemList;
 use Drupal\solution\SolutionLatestReleasesFieldItemList;
 use Drupal\solution\SolutionReleasesAndDistributionsFieldItemList;
@@ -109,15 +104,10 @@ function solution_entity_bundle_info_alter(&$bundles) {
   }
 
   $vocabulary_classes = [
-    'actor' => Actor::class,
-    'business_process' => BusinessProcess::class,
     'eira' => SolutionType::class,
     'language' => Language::class,
-    'product_type' => ProductType::class,
     'solution_category' => SolutionCategory::class,
-    'standardization_level' => StandardizationLevel::class,
     'status' => Status::class,
-    'test_resource_type' => TestResourceType::class,
   ];
   foreach ($vocabulary_classes as $vid => $class) {
     if (!empty($bundles['taxonomy_term'][$vid])) {

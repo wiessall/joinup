@@ -23,10 +23,8 @@ use EasyRdf\Resource;
 function joinup_rdf_deploy_110300(array &$sandbox): string {
   if (!isset($sandbox['graphs'])) {
     $sandbox['graphs'] = [
-      'http://actor' => ['actor'],
       'http://adms-sw-v1.00' => ['licence_type'],
       'http://adms_skos_v1.00' => ['owner_type', 'representation_technique', 'status'],
-      'http://business-process' => ['business_process'],
       'http://countries-skos' => ['spatial'],
       'http://eif_conceptual_model' => ['eif_conceptual_model'],
       'http://eif_interoperability_layer' => ['eif_interoperability_layer'],
@@ -38,8 +36,6 @@ function joinup_rdf_deploy_110300(array &$sandbox): string {
       'http://joinup.eu/license_type/published' => ['eurovoc'],
       'http://licence-legal-type' => ['legal_type'],
       'http://solution_category' => ['solution_category'],
-      'http://standardization_level' => ['standardization_level'],
-      'http://test_resource_type' => ['test_resource_type'],
       'http://topic' => ['topic'],
     ];
     $sandbox['callbacks'] = [
@@ -115,15 +111,11 @@ function joinup_rdf_deploy_110301(array &$sandbox): string {
   if (!isset($sandbox['vocabs'])) {
     $sandbox['vocabs'] = [
       'languages-skos.rdf' => 'language',
-      'product_type.rdf' => 'product_type',
     ];
     $sandbox['callbacks'] = [
       'languages-skos.rdf' => [
         [VocabularyUpdater::class, 'prepareGraph'],
         [VocabularyUpdater::class, 'alterGraphForLanguage'],
-      ],
-      'product_type.rdf' => [
-        [VocabularyUpdater::class, 'prepareGraph'],
       ],
     ];
   }
@@ -288,10 +280,8 @@ function joinup_rdf_deploy_110303(array &$sandbox): string {
  */
 function joinup_rdf_deploy_110304(array &$sandbox): string {
   $graphUris = [
-    'http://actor',
     'http://adms-sw-v1.00',
     'http://adms_skos_v1.00',
-    'http://business-process',
     'http://countries-skos',
     'http://eif_conceptual_model',
     'http://eif_interoperability_layer',
@@ -303,10 +293,7 @@ function joinup_rdf_deploy_110304(array &$sandbox): string {
     'http://joinup.eu/license_type/published',
     'http://languages-skos',
     'http://licence-legal-type',
-    'http://product_type',
     'http://solution_category',
-    'http://standardization_level',
-    'http://test_resource_type',
     'http://topic',
   ];
   foreach ($graphUris as $graphUri) {
