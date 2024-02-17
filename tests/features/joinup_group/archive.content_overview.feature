@@ -1,4 +1,4 @@
-@api @terms @group-i
+@api @group-i
 Feature: Global search with archive content
 
   Scenario Outline: Group content has an 'Show archived' facet.
@@ -108,7 +108,6 @@ Feature: Global search with archive content
       | Some rar distribution |
     And I should not see the "Some zip distribution" tile
 
-  @terms
   Scenario: Group content supports archived solutions.
     Given owner:
       | name       |

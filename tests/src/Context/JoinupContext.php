@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Drupal\joinup\Context;
 
@@ -28,6 +28,7 @@ use Drupal\joinup\Traits\KeyboardInteractionTrait;
 use Drupal\joinup\Traits\OgTrait;
 use Drupal\joinup\Traits\TabledragTrait;
 use Drupal\joinup\Traits\TestingEntitiesTrait;
+use Drupal\joinup\Traits\TopicTrait;
 use Drupal\joinup\Traits\TraversingTrait;
 use Drupal\joinup\Traits\UserTrait;
 use Drupal\joinup\Traits\UtilityTrait;
@@ -38,6 +39,7 @@ use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\joinup_group\Entity\PinnableGroupContentInterface;
 use Drupal\joinup_workflow\EntityWorkflowStateInterface;
 use Drupal\meta_entity\Entity\MetaEntity;
+use Drupal\meta_entity\Entity\MetaEntityInterface;
 use Drupal\node\Entity\Node;
 use Drupal\og\OgGroupAudienceHelperInterface;
 use Drupal\og\OgRoleInterface;
@@ -64,6 +66,7 @@ class JoinupContext extends RawDrupalContext {
   use StringTranslationTrait;
   use TabledragTrait;
   use TestingEntitiesTrait;
+  use TopicTrait;
   use TraversingTrait;
   use UserTrait;
   use UtilityTrait;
@@ -776,6 +779,14 @@ class JoinupContext extends RawDrupalContext {
       $node->{"field_paragraphs_body:target_id"} = $paragraph->id();
       $node->{"field_paragraphs_body:target_revision_id"} = $paragraph->getRevisionId();
       unset($node->field_paragraphs_body);
+    }
+
+    $field_definitions = \Drupal::service('entity_field.manager')->getFieldDefinitions('node', $node->type);
+    if (!empty($field_definitions['field_topic']) && empty($node->field_topic)) {
+      // For some tests, the node's topic has no relevance. Such tests are
+      // allowed to omit an explicit topic. We're assigning a random topic term,
+      // to satisfy data integrity and prevent form validation errors.
+      $node->field_topic = $this->getRandomTopic()->label();
     }
   }
 
@@ -2038,6 +2049,10 @@ class JoinupContext extends RawDrupalContext {
       }
 
       $this->dispatchHooks('BeforeNodeCreateScope', $fake_node);
+      // Correction to topic field.
+      if (!empty($fake_node->field_topic) && ($topic = $this->getEntityByLabel('taxonomy_term', $fake_node->field_topic, 'topic'))) {
+        $fake_node->field_topic = $topic->id();
+      }
       $this->parseEntityFields('node', $fake_node);
       // Remove the type property as we cannot change that.
       unset($fake_node->type);
@@ -3285,6 +3300,45 @@ class JoinupContext extends RawDrupalContext {
       throw new \Exception("Either the dialog is not available or the 'Close' button could not be located.");
     }
     $button->press();
+  }
+
+  /**
+   * Cleans up the environment after a curated homepage topics scenarios.
+   *
+   * These scenarios are altering the topic term meta entities. We need to reset
+   * them after each run.
+   *
+   * @afterScenario @topic&&@api
+   */
+  public function resetTopicMetaEntity(): void {
+    // Remove any entity queue related to homepage topics.
+    \Drupal::entityTypeManager()->getStorage('entity_subqueue')
+      ->load('homepage_topics')
+      ->clearItems()
+      ->save();
+
+    $meta_entity_storage = \Drupal::entityTypeManager()->getStorage('meta_entity');
+    $ids = $meta_entity_storage->getQuery()->accessCheck(FALSE)
+      ->condition('type', 'topic')
+      ->condition('published', TRUE)
+      ->execute();
+
+    // Recreate topic terms corresponding meta entities.
+    if ($ids) {
+      /** @var \Drupal\meta_entity\Entity\MetaEntityInterface[] $meta_entities */
+      $meta_entities = $meta_entity_storage->loadMultiple($ids);
+      $tids = array_map(fn(MetaEntityInterface $meta_entity) => $meta_entity->getTargetEntity()->id(), $meta_entities);
+      $meta_entity_storage->delete($meta_entities);
+      foreach ($tids as $tid) {
+        $meta_entity_storage->create([
+          'type' => 'topic',
+          'target' => [
+            'target_type' => 'taxonomy_term',
+            'target_id' => $tid,
+          ],
+        ])->save();
+      }
+    }
   }
 
 }

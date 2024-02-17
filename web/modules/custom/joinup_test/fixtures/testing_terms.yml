@@ -15,7 +15,7 @@ topic:
       - name: 'HR'
   - name: 'Info'
     children:
-      - name: 'Data gathering, data processing'
+      - name: 'Data gathering and processing'
       - name: 'Statistics and Analysis'
   - name: 'Law and Justice'
     children:
@@ -25,16 +25,6 @@ topic:
     children:
       - name: 'Demography'
       - name: 'E-inclusion'
-business_process:
-  - name: Supply Chain
-    children: [ ]
-  - name: Collaboration
-    children: [ ]
-product_type:
-  - name: Capital good
-    children: [ ]
-  - name: Raw material
-    children: [ ]
 legal_type:
   - name: 'Can'
     children:

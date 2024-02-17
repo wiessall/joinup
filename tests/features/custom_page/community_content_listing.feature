@@ -73,6 +73,7 @@ Feature:
     Then I should see the heading "Add custom page"
     When I fill in the following:
       | Title | Latest content |
+    And I select "HR" from "Topic"
     And I add a layout paragraph in the "Custom page body" form field with the following properties:
       | layout           | one column |
       | Background theme | light      |
@@ -167,6 +168,7 @@ Feature:
     And I click "Add custom page" in the plus button menu
     Then I should see the heading "Add custom page"
     When I fill in "Title" with "Chosen content"
+    And I select "HR" from "Topic"
     And I add a layout paragraph in the "Custom page body" form field with the following properties:
       | layout           | one column |
       | Background theme | light      |
@@ -327,6 +329,7 @@ Feature:
     Then I should see the heading "Add custom page"
     When I fill in the following:
       | Title | Collection content |
+    And I select "HR" from "Topic"
     And I add a layout paragraph in the "Custom page body" form field with the following properties:
       | layout           | one column |
       | Background theme | light      |
@@ -444,7 +447,6 @@ Feature:
     And I press "Save" in the "Modal buttons" region
     Then I should see the error message "You need to add a filter in the Content listing block"
 
-  @terms
   Scenario: Global search setting allows for site-wide content in the content listing.
     Given I am logged in as a moderator
     And custom_page content:
