@@ -33,25 +33,20 @@ class JoinupTaxonomyCommands extends DrushCommands {
    * @const string[][]
    */
   private const VOCABS = [
-    'actor.rdf' => ['actor'],
     'ADMS-SW-v1.00.rdf' => ['owner_type', 'licence_type'],
     'ADMS_SKOS_v1.00.rdf' => ['representation_technique', 'status'],
-    'business-process.rdf' => ['business_process'],
     'countries-skos.rdf' => ['spatial'],
     'eif_conceptual_model.rdf' => ['eif_conceptual_model'],
     'eif_interoperability_layer.rdf' => ['eif_interoperability_layer'],
     'eif_principle.rdf' => ['eif_principle'],
     // References eif_conceptual_model, eif_interoperability_layer,
-    // eif_principle. That's why comes last.
+    // eif_principle. That's why it comes last.
     'eif_recommendation.rdf' => ['eif_recommendation'],
     'eif_solution_type.rdf' => ['eif_solution_type'],
     'EIRA_SKOS.rdf' => ['eira'],
     'filetypes-skos.rdf' => ['file_type'],
     'languages-skos.rdf' => ['language'],
-    'product_type.rdf' => ['product_type'],
     'solution_category.rdf' => ['solution_category'],
-    'standardization_level.rdf' => ['standardization_level'],
-    'test_resource_type.rdf' => ['test_resource_type'],
   ];
 
   /**
@@ -162,6 +157,17 @@ class JoinupTaxonomyCommands extends DrushCommands {
     // Generate the RDFXML dump file.
     $file = static::getDumpFilePath('rdf', FALSE);
     file_put_contents($file, $graph->serialise('rdfxml'));
+
+    // Remove stale dump files.
+    $staleFiles = array_filter(
+      glob(self::FIXTURES_DIR . '/terms.*.rdf'),
+      function (string $staleFile) use ($file): bool {
+        return realpath($staleFile) !== $file;
+      }
+    );
+    array_walk($staleFiles, function (string $file): void {
+      \Drupal::getContainer()->get('file_system')->unlink($file);
+    });
 
     $this->logger()->notice(dt('Triples dumped to !file', [
       '!file' => realpath($file),
@@ -297,7 +303,10 @@ class JoinupTaxonomyCommands extends DrushCommands {
     if (!isset(static::$dumpFile)) {
       $checksum = '';
       foreach (array_keys(self::VOCABS) as $file) {
-        $checksum .= sha1_file(self::FIXTURES_DIR . '/' . $file);
+        $filePath = self::FIXTURES_DIR . '/' . $file;
+        if (file_exists($filePath)) {
+          $checksum .= sha1_file($filePath);
+        }
       }
       $checksum = Crypt::hashBase64($checksum);
       static::$dumpFile = self::FIXTURES_DIR . "/terms.$checksum.$extension";
