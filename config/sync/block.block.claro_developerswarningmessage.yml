@@ -1,0 +1,30 @@
+uuid: ea59d28d-8122-4779-bf90-6d6dad53513d
+langcode: en
+status: true
+dependencies:
+  config:
+    - simple_block.simple_block.developers_warning_message
+  module:
+    - simple_block
+    - user
+  theme:
+    - claro
+id: claro_developerswarningmessage
+theme: claro
+region: highlighted
+weight: 0
+provider: null
+plugin: 'simple_block:developers_warning_message'
+settings:
+  id: 'simple_block:developers_warning_message'
+  label: 'Developers warning message'
+  label_display: '0'
+  provider: simple_block
+visibility:
+  user_role:
+    id: user_role
+    negate: false
+    context_mapping:
+      user: '@joinup_user.user_route_context:user_route'
+    roles:
+      developer: developer
