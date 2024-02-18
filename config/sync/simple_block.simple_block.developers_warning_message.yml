@@ -1,0 +1,11 @@
+uuid: 3a104566-0538-46dd-8b09-dfed991505dc
+langcode: en
+status: true
+dependencies:
+  config:
+    - filter.format.content_editor
+id: developers_warning_message
+title: 'Developers warning message'
+content:
+  value: '<p><strong>Warning: You are working on production. Configuration is unlocked. Please, be extra cautious!</strong></p>'
+  format: content_editor
