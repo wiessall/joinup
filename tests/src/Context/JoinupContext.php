@@ -2060,7 +2060,7 @@ class JoinupContext extends RawDrupalContext {
       if (isset($fake_node->author)) {
         $user = user_load_by_name($fake_node->author);
         if ($user) {
-          $node->uid = $user->id();
+          $node->set('uid', $user->id());
         }
         unset($fake_node->author);
       }
