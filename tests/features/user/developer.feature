@@ -50,3 +50,12 @@ Feature: Variety tests for the developer role.
     Given I am logged in as an authenticated
     And I am on the homepage
     Then I should not see the text "Warning: You are working on production. Configuration is unlocked. Please, be extra cautious!"
+
+  Scenario: Configuration is locked and unlocked on developers login and logout.
+    Given I am logged in as a developer
+    And I go to "admin/structure/block"
+    Then the configuration should be unlocked
+
+    When I am on the homepage
+    And I click "Sign out"
+    Then the configuration should be locked
