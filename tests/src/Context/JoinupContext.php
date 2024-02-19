@@ -3331,36 +3331,25 @@ JS;
   }
 
   /**
-   * Visits a taxonomy term canonical page given its URI.
+   * Visits an entity canonical page given its RDF resource (URI).
    *
-   * @param string $label
-   *   The vocabulary label.
    * @param string $uri
-   *   The taxonomy term URI, if any.
+   *   The entity RDF URI.
    *
-   * @Given I visit the page of :vocabulary term with URI :uri
+   * @Given I visit the page of the entity having :uri as RDF resource
    */
-  public function visitTermPageByUri(string $label, string $uri): void {
-    $vocabulary = $this->getEntityByLabel('taxonomy_vocabulary', $label);
-
-    $mapper = \Drupal::getContainer()->get('rdf_sync.mapper');
-    if (!$mapper->isMappedBundle('taxonomy_term', $vocabulary->id())) {
-      throw new \InvalidArgumentException("Terms from '$label' vocabulary don't support URIs");
+  public function visitEntityCanonicalPagePageByRdfUri(string $uri): void {
+    // @todo Make this generic, for all mapped entities, in ISAICP-8475.
+    $tid = \Drupal::database()->select('taxonomy_term__uri', 'u')
+      ->fields('u', ['entity_id'])
+      ->condition('u.uri_value', $uri)
+      ->execute()
+      ->fetchField();
+    if (!$tid) {
+      throw new \InvalidArgumentException("No mapped entity with RDF URI $uri");
     }
 
-    $storage = \Drupal::entityTypeManager()->getStorage('taxonomy_term');
-    $terms = $storage->loadByProperties([
-      'uri' => $uri,
-      'vid' => $vocabulary->id(),
-    ]);
-    if (!$terms) {
-      throw new \InvalidArgumentException("No term in '$label' vocabulary has URI $uri");
-    }
-
-    /** @var \Drupal\rdf_sync\Entity\RdfSyncEntityInterface $term */
-    $term = reset($terms);
-
-    $this->visitPath($term->toUrl()->toString());
+    $this->visitPath(\Drupal::entityTypeManager()->getStorage('taxonomy_term')->load($tid)->toUrl()->toString());
   }
 
 }
