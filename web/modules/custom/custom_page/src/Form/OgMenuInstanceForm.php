@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Drupal\custom_page\Form;
 
@@ -120,13 +120,54 @@ class OgMenuInstanceForm extends OriginalOgMenuInstanceForm {
    * {@inheritdoc}
    */
   public function buildForm(array $form, FormStateInterface $form_state): array {
-    // If we are not showing the navigation menu for custom pages, fall back to
-    // the original form.
-    if ($this->entity->getType() !== 'navigation') {
-      return parent::buildForm($form, $form_state);
+    return match ($this->entity->getType()) {
+      'navigation' => $this->buildNavigationForm($form, $form_state),
+      'quick_links' => $this->buildQuickLinksForm($form, $form_state),
+      default => parent::buildForm($form, $form_state),
+    };
+  }
+
+  /**
+   * Builds a quick links form.
+   *
+   * @param array $form
+   *   Form.
+   * @param \Drupal\Core\Form\FormStateInterface $formState
+   *   Form's state.
+   *
+   * @return array
+   *   The form structure.
+   */
+  public function buildQuickLinksForm(array $form, FormStateInterface $formState): array {
+    $build = parent::buildForm($form, $formState);
+
+    foreach ($build['links'] as $key => &$link) {
+      // Adjust only links.
+      if (!str_starts_with($key, 'menu_plugin_id:menu_link_content:')) {
+        continue;
+      }
+
+      // Disable nesting.
+      $link['#attributes']['class'][] = 'tabledrag-root';
+      $link['#attributes']['class'][] = 'tabledrag-leaf';
     }
 
-    $form = EntityForm::buildForm($form, $form_state);
+    return $build;
+  }
+
+  /**
+   * Builds a navigation form.
+   *
+   * @param array $form
+   *   Form.
+   * @param \Drupal\Core\Form\FormStateInterface $formState
+   *   Form's state.
+   *
+   * @return array
+   *   The form structure.
+   */
+  public function buildNavigationForm(array $form, FormStateInterface $formState): array {
+    $form = EntityForm::buildForm($form, $formState);
     // On entity add, no links are attached yet, so bail out here.
     if ($this->entity->isNew()) {
       return $form;
@@ -134,8 +175,8 @@ class OgMenuInstanceForm extends OriginalOgMenuInstanceForm {
 
     // Ensure that menu_overview_form_submit() knows the parents of this form
     // section.
-    if (!$form_state->has('menu_overview_form_parents')) {
-      $form_state->set('menu_overview_form_parents', []);
+    if (!$formState->has('menu_overview_form_parents')) {
+      $formState->set('menu_overview_form_parents', []);
     }
 
     $form['#attached']['library'][] = 'menu_ui/drupal.menu_ui.adminforms';
@@ -332,7 +373,6 @@ class OgMenuInstanceForm extends OriginalOgMenuInstanceForm {
         $operations = [];
         $group_edit_routes = [
           'entity.rdf_entity.canonical',
-          'entity.rdf_entity.about_page',
         ];
 
         // Skip this if this link is not pointing to the canonical view of a

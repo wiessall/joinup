@@ -1,4 +1,4 @@
-@api @terms @group-i
+@api @group-i
 Feature: Embed of videos into the page.
   In order to show videos regarding my content
   As a user of the website

@@ -5,7 +5,7 @@
  * Views support for Joinup Topic module.
  */
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 /**
  * Implements hook_views_data_alter().

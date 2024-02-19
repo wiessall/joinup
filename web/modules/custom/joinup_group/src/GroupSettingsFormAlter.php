@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Drupal\joinup_group;
 
@@ -66,7 +66,7 @@ class GroupSettingsFormAlter implements GroupSettingsFormAlterInterface {
       return NULL;
     }
 
-    $menu = $this->groupMenuManager->getMenuByGroupId($group->id());
+    $menu = $this->groupMenuManager->getMenuByGroupId($group->id(), 'navigation');
     if (!$menu) {
       return NULL;
     }

@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Drupal\eu_oss_catalogue_test\Plugin\ServiceMock;
 

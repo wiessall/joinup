@@ -1,4 +1,4 @@
-@api @terms @javascript
+@api @javascript
 Feature: CKEditor5
 
   Background:
@@ -110,8 +110,7 @@ Feature: CKEditor5
     Then the modal should be closed
 
     When I press "Publish"
-    And I click "About"
-    But the response should contain "media/image/alan.jpg"
+    Then the response should contain "media/image/alan.jpg"
 
     When I go to the edit form of the "The Other Collection" collection
     And I press the button "Insert Media" in the "Description" wysiwyg editor
@@ -141,8 +140,7 @@ Feature: CKEditor5
     Then the modal should be closed
 
     When I press "Publish"
-    And I click "About"
-    But the response should contain "media/image/richard.jpg"
+    Then the response should contain "media/image/richard.jpg"
 
     When I go to the edit form of the "Angry Birds" solution
     And I press the button "Insert Media" in the "Description" wysiwyg editor

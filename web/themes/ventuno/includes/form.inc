@@ -5,7 +5,7 @@
  * Form specific procedural functions.
  */
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 use Drupal\Component\Utility\Html;
 use Drupal\Core\Form\FormStateInterface;
@@ -163,6 +163,10 @@ function ventuno_form_alter(array &$form, FormStateInterface $form_state, string
           'btn-brand',
         ];
       }
+      break;
+
+    case 'ogmenu_instance_quick_links_edit_form':
+      $form['#attached']['library'][] = 'ventuno/tabledrag';
       break;
   }
 }

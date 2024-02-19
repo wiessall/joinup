@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Drupal\joinup_group\Form;
 
@@ -16,6 +16,7 @@ use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\Core\Url;
 use Drupal\collection\Entity\CollectionInterface;
 use Drupal\joinup_group\Entity\GroupInterface;
+use Drupal\joinup_workflow\ArchivableEntityInterface;
 use Drupal\og\MembershipManagerInterface;
 use Drupal\og\OgMembershipInterface;
 use Drupal\og\OgRoleInterface;
@@ -147,8 +148,15 @@ abstract class JoinGroupFormBase extends FormBase implements JoinGroupFormInterf
     $this->group = $group;
     $this->user = $this->loadUser((int) $user->id());
 
+    $membership = $this->user->isAnonymous() ? NULL : $this->getUserNonBlockedMembership();
+
+    // User should not be allowed to subscribe if entity it archived.
+    if (empty($membership) && $group instanceof ArchivableEntityInterface && $group->isArchived()) {
+      $form['#access'] = FALSE;
+    }
+
     // Inform anonymous users that they need to authenticate to join the group.
-    if ($this->user->isAnonymous()) {
+    elseif ($this->user->isAnonymous()) {
       $parameters = ['rdf_entity' => $this->group->id()];
       if ($this->accessManager->checkNamedRoute('joinup_group.authenticate_to_join', $parameters)) {
         $form['authenticate'] = [
@@ -169,7 +177,7 @@ abstract class JoinGroupFormBase extends FormBase implements JoinGroupFormInterf
 
     // In case the user is not a member or does not have a pending membership,
     // give the possibility to request one.
-    elseif (empty($membership = $this->getUserNonBlockedMembership())) {
+    elseif (empty($membership)) {
       $form['join'] = [
         '#type' => 'submit',
         '#value' => $this->getJoinSubmitLabel(),

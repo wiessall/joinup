@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Drupal\joinup\Context;
 
@@ -9,18 +9,15 @@ use Behat\Mink\Element\NodeElement;
 use Behat\Mink\Exception\ElementNotFoundException;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\DrupalExtension\Hook\Scope\AfterNodeCreateScope;
-use Drupal\DrupalExtension\Hook\Scope\BeforeNodeCreateScope;
 use Drupal\joinup\Traits\EntityTrait;
 use Drupal\joinup\Traits\NodeTrait;
 use Drupal\joinup\Traits\TestingEntitiesTrait;
 use Drupal\joinup\Traits\TraversingTrait;
-use Drupal\joinup_community_content\CommunityContentHelper;
 use Drupal\joinup_community_content\Entity\CommunityContentInterface;
 use Drupal\joinup_group\Entity\PinnableGroupContentInterface;
 use Drupal\joinup_group\Exception\MissingGroupException;
 use Drupal\joinup_publication_date\Entity\EntityPublicationTimeInterface;
 use Drupal\node\Entity\Node;
-use Drupal\rdf_taxonomy\Entity\RdfTerm;
 use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\ExpectationFailedException;
 
@@ -388,70 +385,6 @@ class JoinupCommunityContentContext extends RawDrupalContext {
       throw new ElementNotFoundException($session, 'Comment #' . ($index + 1));
     }
     return $comments[$index];
-  }
-
-  /**
-   * Sets a random topic for community content that misses one.
-   *
-   * For some tests the community content's topic has no relevance. Such tests
-   * are allowed to omit an explicit topic. We're creating a dummy topic term,
-   * together with its parent, just to satisfy data integrity and prevent form
-   * validation errors.
-   *
-   * @param \Drupal\DrupalExtension\Hook\Scope\BeforeNodeCreateScope $scope
-   *   An object containing the entity properties and fields that are to be used
-   *   for creating the node as properties on the object.
-   *
-   * @BeforeNodeCreate
-   */
-  public function provideTopic(BeforeNodeCreateScope $scope) {
-    $node = $scope->getEntity();
-
-    $bundles_with_topics = array_merge(
-      CommunityContentHelper::BUNDLES,
-      ['custom_page']
-    );
-
-    // Only deal with community content + custom pages (which have topic field
-    // set as required).
-    if (!in_array($node->type, $bundles_with_topics, TRUE)) {
-      return;
-    }
-
-    // A topic has been already set.
-    $alias = 'topic';
-    if (!empty($node->{$alias})) {
-      return;
-    }
-
-    // Try, first, to get an existing topic term.
-    if (!empty($this->entities['taxonomy_term'])) {
-      foreach ($this->entities['taxonomy_term'] as $candidate_term) {
-        if ($candidate_term->bundle() === 'topic' && $candidate_term->get('parent')->target_id !== '0') {
-          $term = $candidate_term;
-          break;
-        }
-      }
-    }
-
-    // Create a new topic term.
-    if (!isset($term)) {
-      $term = RdfTerm::create([
-        'vid' => 'topic',
-        'name' => $this->getRandom()->name(8, TRUE),
-        'parent' => RdfTerm::create([
-          'vid' => 'topic',
-          'name' => $this->getRandom()->name(8, TRUE),
-        ]),
-      ]);
-      $term->save();
-
-      // Register the new terms to be cleaned-up after scenario.
-      $this->entities['taxonomy_term'][$term->get('parent')->target_id] = $term->get('parent')->entity;
-      $this->entities['taxonomy_term'][$term->id()] = $term;
-    }
-
-    $node->{$alias} = $term->label();
   }
 
   /**

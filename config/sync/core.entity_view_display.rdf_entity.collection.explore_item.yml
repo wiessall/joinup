@@ -27,8 +27,6 @@ dependencies:
     - field_group
     - layout_builder
     - layout_discovery
-    - smart_trim
-    - template_suggestion
     - user
 third_party_settings:
   field_group:
@@ -160,66 +158,10 @@ id: rdf_entity.collection.explore_item
 targetEntityType: rdf_entity
 bundle: collection
 mode: explore_item
-content:
-  created:
-    type: timestamp
-    label: hidden
-    settings:
-      date_format: medium
-      custom_date_format: ''
-      timezone: ''
-      tooltip:
-        date_format: ''
-        custom_date_format: ''
-      time_diff:
-        enabled: false
-        future_format: '@interval hence'
-        past_format: '@interval ago'
-        granularity: 2
-        refresh: 60
-    third_party_settings: {  }
-    weight: 2
-    region: content
-  field_ar_description:
-    type: smart_trim
-    label: hidden
-    settings:
-      trim_length: 500
-      trim_type: chars
-      trim_suffix: …
-      wrap_output: false
-      wrap_class: trimmed
-      more:
-        display_link: false
-        target_blank: false
-        link_trim_only: false
-        class: more-link
-        text: More
-        aria_label: 'Read more about [node:title]'
-      summary_handler: full
-      trim_options:
-        text: true
-        trim_zero: false
-    third_party_settings:
-      template_suggestion:
-        template_suggestion: p_wrapper
-    weight: 1
-    region: content
-  label:
-    type: string
-    label: hidden
-    settings:
-      link_to_entity: false
-    third_party_settings: {  }
-    weight: 0
-    region: content
-  read_more:
-    settings: {  }
-    third_party_settings: {  }
-    weight: 3
-    region: content
+content: {  }
 hidden:
   changed: true
+  created: true
   featured: true
   field_ar_abstract: true
   field_ar_access_url: true
@@ -227,6 +169,7 @@ hidden:
   field_ar_closed: true
   field_ar_contact_information: true
   field_ar_content_creation: true
+  field_ar_description: true
   field_ar_logo: true
   field_ar_moderation: true
   field_ar_owner: true
@@ -239,12 +182,14 @@ hidden:
   field_spatial_coverage: true
   field_topic: true
   join_collection: true
+  label: true
   langcode: true
   last_update: true
   members: true
   og_group: true
   rdf_entity_collection_field_collection_content_inline_facets: true
   rdf_entity_collection_field_collection_content_top: true
+  read_more: true
   search_api_excerpt: true
   settings: true
   solutions: true
