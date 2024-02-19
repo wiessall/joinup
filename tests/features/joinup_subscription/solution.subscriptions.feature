@@ -19,6 +19,18 @@ Feature: Subscribing to a solution
       | Username          |
       | Cornilius Darcias |
 
+  Scenario: Subscribe functionality is disabled for archived content.
+    Given the following solutions:
+      | title            | state    | collection             |
+      | Plovdiv old town | archived | Some parent collection |
+
+    When I go to the homepage of the "Plovdiv old town" solution
+    Then I should not see the link "Subscribe to this solution"
+
+    When I am logged in as "Cornilius Darcias"
+    And I go to the homepage of the "Plovdiv old town" solution
+    Then I should not see the button "Subscribe to this solution"
+
   @javascript
   Scenario: Subscribe to a solution as an anonymous user
     Given CAS users:

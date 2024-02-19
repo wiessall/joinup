@@ -53,7 +53,7 @@ Feature: Solutions Overview
     But I should not see the link "Next page"
     And I should not see the link "Last page"
 
-  @terms @uploadFiles:logo.png
+  @uploadFiles:logo.png
   Scenario: View solution overview as an anonymous user
     Given users:
       | Username      | E-mail                            |
@@ -124,6 +124,7 @@ Feature: Solutions Overview
     Then I should see the heading "Add Solution"
     When I fill in the following:
       | Title                 | Colonies in Earth                                                      |
+      | Abstract              | Some abstract                                                          |
       | Description           | Some space mumbo jumbo description.                                    |
       | Geographical coverage | Belgium (http://publications.europa.eu/resource/authority/country/BEL) |
       | Language              | http://publications.europa.eu/resource/authority/language/VLS          |

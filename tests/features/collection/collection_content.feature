@@ -1,4 +1,4 @@
-@api @terms @group-a
+@api @group-a
 Feature: Collection content
   As a user of the website
   I want to access the content of a collection
@@ -49,11 +49,12 @@ Feature: Collection content
     And I press "Yes"
     And I fill in the following:
       | Title                 | Solution from draft to published                                    |
+      | Abstract              | The abstract of the solution.                                       |
       | Description           | Testing that publishing a solution, updates the collection content. |
       | Geographical coverage | Switzerland                                                         |
       | Name                  | Costas Papazoglou                                                   |
       | E-mail address        | CostasPapazoglou@example.com                                        |
-    And I select "Data gathering, data processing" from "Topic"
+    And I select "Data gathering and processing" from "Topic"
     And I select "Networking Infrastructure Enablers" from "Solution type"
     And I press "Add existing" at the "Owner" field
     And I fill in "Owner" with "Particle sweeper"

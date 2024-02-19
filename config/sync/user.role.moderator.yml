@@ -3,6 +3,7 @@ langcode: en
 status: true
 dependencies:
   config:
+    - filter.format.plain_text_glossary
     - media.type.collection_logo
     - media.type.discussion_logo
     - media.type.event_logo
@@ -25,6 +26,7 @@ dependencies:
     - entityqueue
     - field_permissions
     - file
+    - filter
     - joinup
     - joinup_community_content
     - joinup_core
@@ -320,6 +322,9 @@ permissions:
   - 'transition any node news from published to proposed using the community_content - node:pre_moderated workflow'
   - 'transition any node news from published to published using the community_content - node:post_moderated workflow'
   - 'transition any node news from published to published using the community_content - node:pre_moderated workflow'
+  - 'transition any rdf_entity asset_distribution from __new__ to published using the asset_distribution - asset_distribution_workflow workflow'
+  - 'transition any rdf_entity asset_distribution from archived to published using the asset_distribution - asset_distribution_workflow workflow'
+  - 'transition any rdf_entity asset_distribution from published to archived using the asset_distribution - asset_distribution_workflow workflow'
   - 'transition group from __new__ to draft using the collection - collection_workflow workflow'
   - 'transition group from __new__ to draft using the solution - solution_workflow workflow'
   - 'transition group from __new__ to proposed using the collection - collection_workflow workflow'
@@ -328,6 +333,8 @@ permissions:
   - 'transition group from __new__ to published using the solution - solution_workflow workflow'
   - 'transition group from archival_request to archived using the collection - collection_workflow workflow'
   - 'transition group from archival_request to published using the collection - collection_workflow workflow'
+  - 'transition group from archived to published using the asset_distribution - asset_distribution_workflow workflow'
+  - 'transition group from archived to published using the solution - solution_workflow workflow'
   - 'transition group from blacklisted to draft using the solution - solution_workflow workflow'
   - 'transition group from blacklisted to proposed using the solution - solution_workflow workflow'
   - 'transition group from blacklisted to published using the solution - solution_workflow workflow'
@@ -347,6 +354,8 @@ permissions:
   - 'transition group from proposed to proposed using the solution - solution_workflow workflow'
   - 'transition group from proposed to published using the collection - collection_workflow workflow'
   - 'transition group from proposed to published using the solution - solution_workflow workflow'
+  - 'transition group from published to archived using the asset_distribution - asset_distribution_workflow workflow'
+  - 'transition group from published to archived using the solution - solution_workflow workflow'
   - 'transition group from published to blacklisted using the solution - solution_workflow workflow'
   - 'transition group from published to draft using the collection - collection_workflow workflow'
   - 'transition group from published to draft using the solution - solution_workflow workflow'
@@ -386,6 +395,7 @@ permissions:
   - 'update solution_settings meta-entity'
   - 'update spotlight entityqueue'
   - 'update topic meta-entity'
+  - 'use text format plain_text_glossary'
   - 'vbo joinup archive action'
   - 'vbo joinup change group action'
   - 'vbo joinup unarchive action'

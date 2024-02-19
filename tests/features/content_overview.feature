@@ -1,7 +1,6 @@
 @api
 Feature: Content Overview
 
-  @terms
   Scenario: View content overview as an anonymous user
     Given users:
       | Username     | First name | Family name | E-mail               |

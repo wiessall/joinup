@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Drupal\custom_page\Plugin\Block;
 
@@ -223,7 +223,7 @@ class TableOfContentsOutline extends BlockBase implements ContainerFactoryPlugin
     if (empty($this->ogMenuInstance)) {
       /** @var \Drupal\node\NodeInterface $custom_page */
       $custom_page = $this->getContext('node')->getContextData()->getValue();
-      $this->ogMenuInstance = $this->ogMenuManager->getOgMenuInstanceByCustomPage($custom_page);
+      $this->ogMenuInstance = $this->ogMenuManager->getOgMenuInstanceByCustomPage($custom_page, 'navigation');
     }
     return $this->ogMenuInstance;
   }
