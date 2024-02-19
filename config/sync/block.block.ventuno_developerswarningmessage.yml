@@ -1,11 +1,9 @@
-uuid: 90c80d66-3a50-4500-83cc-8dbbafa40cdd
+uuid: ae4065e2-c824-4af0-a3e1-5bd2b6e4bd2c
 langcode: en
 status: true
 dependencies:
-  config:
-    - simple_block.simple_block.developers_warning_message
   module:
-    - simple_block
+    - developer
     - user
   theme:
     - ventuno
@@ -14,12 +12,12 @@ theme: ventuno
 region: messages
 weight: -27
 provider: null
-plugin: 'simple_block:developers_warning_message'
+plugin: developer_warning_message
 settings:
-  id: 'simple_block:developers_warning_message'
+  id: developer_warning_message
   label: 'Developers warning message'
   label_display: '0'
-  provider: simple_block
+  provider: developer
 visibility:
   user_role:
     id: user_role

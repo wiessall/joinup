@@ -31,6 +31,7 @@ module:
   dashboard: 0
   datetime: 0
   datetime_range: 0
+  developer: 0
   developers_italia: 0
   diff: 0
   digital_size_formatter: 0
