@@ -5,10 +5,10 @@
  * Primary module hooks for Developer module.
  */
 
-use Drupal\block\Entity\Block;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Session\AccountInterface;
+use Drupal\block\Entity\Block;
 
 /**
  * Implements hook_block_access().

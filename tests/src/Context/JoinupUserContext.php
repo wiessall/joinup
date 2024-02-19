@@ -259,6 +259,8 @@ class JoinupUserContext extends RawDrupalContext {
   }
 
   /**
+   * Asserts that the superuser is blocked.
+   *
    * @Given /^superuser is blocked$/
    */
   public function superuserIsBlocked(): void {

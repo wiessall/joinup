@@ -420,7 +420,7 @@ class JoinupContext extends RawDrupalContext {
    *
    * @param string $field
    *   The name of the field element.
-   * @param TableNode $options
+   * @param \Behat\Gherkin\Node\TableNode $options
    *   The available list of options.
    *
    * @Then the :field checkboxes should contain the following options:
