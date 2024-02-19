@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Drupal\joinup_group_content_management\Plugin\Action;
 
@@ -140,69 +140,81 @@ class ChangeGroupAction extends ViewsBulkOperationsActionBase implements Contain
     $initialNids = array_map(function (NodeInterface $node) {
       return $node->id();
     }, $nodes);
-    /** @var \Drupal\node\NodeInterface[] $nodes */
-    while ($nodes) {
-      $node = array_shift($nodes);
-      $isCustomPage = $node->bundle() === 'custom_page';
 
-      // It might be a parent custom page.
-      if ($isCustomPage && $children = $this->customPageOgMenuLinksManager->getChildren($node)) {
-        // Filter out child nodes that are already in the main set.
-        $children = array_diff_key($children, array_flip($initialNids));
-        array_walk($children, function (NodeInterface $child) {
-          // Flag this as a child.
-          $child->isChild = TRUE;
-        });
-        // Add children in the flow, just after the parent which is currently
-        // being processed.
-        $nodes = array_merge($children, $nodes);
-      }
+    foreach (['navigation', 'quick_links'] as $menuType) {
+      $nodesToProcess = $nodes;
+      /** @var \Drupal\node\NodeInterface[] $nodes */
+      while ($nodesToProcess) {
+        $node = array_shift($nodesToProcess);
+        $isCustomPage = $node->bundle() === 'custom_page';
 
-      $args = [
-        '@title' => $node->label(),
-        ':url' => $node->toUrl()->toString(),
-        '@type' => $node->type->entity->label(),
-        '@group' => $group->label(),
-        ':group_url' => $group->toUrl()->toString(),
-      ];
-      try {
-        // Prevent notification dispatching.
-        // @see joinup_notification_dispatch_notification()
-        $node->skip_notification = TRUE;
-        $node->set('og_audience', $groupId)->save();
-        if (empty($node->isChild)) {
-          $message['status'][] = [
-            [
-              '#markup' => $this->t('@type <a href=":url">@title</a> group was changed to <a href=":group_url">@group</a>.', $args),
-            ],
-          ];
+        // It might be a parent custom page.
+        if ($isCustomPage && $children = $this->customPageOgMenuLinksManager->getChildren($node, $menuType)) {
+          // Filter out child nodes that are already in the main set.
+          $children = array_diff_key($children, array_flip($initialNids));
+          array_walk($children, function (NodeInterface $child) {
+            // Flag this as a child.
+            $child->isChild = TRUE;
+          });
+          // Add children in the flow, just after the parent which is currently
+          // being processed.
+          $nodesToProcess = array_merge($children, $nodesToProcess);
         }
-        else {
-          $lastMessage =& $message['status'][count($message['status']) - 1];
-          if (!isset($lastMessage[1])) {
-            $lastMessage[1] = [
-              '#theme' => 'item_list',
-              '#items' => [],
+
+        $args = [
+          '@title' => $node->label(),
+          ':url' => $node->toUrl()->toString(),
+          '@type' => $node->type->entity->label(),
+          '@group' => $group->label(),
+          ':group_url' => $group->toUrl()->toString(),
+        ];
+
+        // Avoid trying to re-assign the group if the node is already in the
+        // group.
+        if ($node->get('og_audience')->target_id === $groupId) {
+          continue;
+        }
+
+        try {
+          // Prevent notification dispatching.
+          // @see joinup_notification_dispatch_notification()
+          $node->skip_notification = TRUE;
+          $node->set('og_audience', $groupId)->save();
+          if (empty($node->isChild)) {
+            $message['status'][] = [
+              [
+                '#markup' => $this->t('@type <a href=":url">@title</a> group was changed to <a href=":group_url">@group</a>.', $args),
+              ],
             ];
           }
-          $lastMessage[1]['#items'][] = $this->t('Child @type <a href=":url">@title</a> group was changed too.', $args);
-        }
+          else {
+            $lastMessage =& $message['status'][count($message['status']) - 1];
+            if (!isset($lastMessage[1])) {
+              $lastMessage[1] = [
+                '#theme' => 'item_list',
+                '#items' => [],
+              ];
+            }
+            $lastMessage[1]['#items'][] = $this->t('Child @type <a href=":url">@title</a> group was changed too.', $args);
+          }
 
-        // Check the user selected 2nd tier custom pages.
-        if ($isCustomPage && empty($node->isChild)) {
-          if ($parentId = $this->pageMenuLinks[$node->id()]->getParentId()) {
-            [, $uuid] = explode(':', $parentId, 2);
-            // If the custom page has a parent that wasn't selected by the user,
-            // the page will be moved as top-level page. This is accomplished by
-            // removing the corresponding OG menu link parent reference.
-            if (!in_array($uuid, $this->topLevelCustomPages)) {
-              $this->pageMenuLinks[$node->id()]->set('parent', NULL)->save();
+          // Check the user selected 2nd tier custom pages.
+          if ($isCustomPage && empty($node->isChild)) {
+            if ($parentId = $this->pageMenuLinks[$node->id()]->getParentId()) {
+              [, $uuid] = explode(':', $parentId, 2);
+              // If the custom page has a parent that wasn't selected by the
+              // user, the page will be moved as top-level page. This is
+              // accomplished by removing the corresponding OG menu link parent
+              // reference.
+              if (!in_array($uuid, $this->topLevelCustomPages)) {
+                $this->pageMenuLinks[$node->id()]->set('parent', NULL)->save();
+              }
             }
           }
         }
-      }
-      catch (\Exception $e) {
-        $message['error'][] = $this->t("Error while trying to change the group for '@title'.", $args);
+        catch (\Exception $e) {
+          $message['error'][] = $this->t("Error while trying to change the group for '@title'.", $args);
+        }
       }
     }
 

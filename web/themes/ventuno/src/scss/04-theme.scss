@@ -8,6 +8,7 @@
  @import "partials/core"; // Functions, variables, utilities and mixins required
  @import "partials/base/fonts";
  @import "partials/base/typography";
+
   // @import "@openeuropa/bcl-bootstrap/scss/reboot";
  @import "partials/overrides/reboot"; // Hack to prevent build break
  @import "@openeuropa/bcl-bootstrap/scss/type";
@@ -20,13 +21,13 @@
  @import "@openeuropa/bcl-bootstrap/scss/utilities/api";
 
 .glossary-term {
-  border-bottom: 1px dotted $dark;
-  color: $dark;
-  text-decoration: none;
   cursor: help;
+  text-decoration: none;
+  color: $dark;
+  border-bottom: 1px dotted $dark;
   &:hover {
-    color: $dark;
     text-decoration: none;
+    color: $dark;
   }
 }
 

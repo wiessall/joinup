@@ -1,0 +1,44 @@
+diff --git a/src/Plugin/Block/OgMenuBlock.php b/src/Plugin/Block/OgMenuBlock.php
+index 297960c..87cee17 100644
+--- a/src/Plugin/Block/OgMenuBlock.php
++++ b/src/Plugin/Block/OgMenuBlock.php
+@@ -99,6 +99,7 @@ class OgMenuBlock extends BlockBase implements ContainerFactoryPluginInterface,
+     $this->accessManager = $access_manager;
+     $this->account = $account;
+     $this->entityTypeManager = $entity_type_manager;
++    $this->menuName = '';
+   }
+
+   /**
+@@ -284,13 +285,15 @@ class OgMenuBlock extends BlockBase implements ContainerFactoryPluginInterface,
+    */
+   public function getOgMenuInstance() {
+     $entity = $this->getContext('og')->getContextData()->getValue();
+-    $entity_id = $entity->id();
+-    $instances = $this->entityTypeManager->getStorage('ogmenu_instance')->loadByProperties([
+-      'type' => $this->getDerivativeId(),
+-      OgGroupAudienceHelperInterface::DEFAULT_FIELD => $entity_id,
+-    ]);
+-    if ($instances) {
+-      return array_pop($instances);
++    $entity_id = $entity->id();
++    if ($entity_id) {
++      $instances = $this->entityTypeManager->getStorage('ogmenu_instance')->loadByProperties([
++        'type' => $this->getDerivativeId(),
++        OgGroupAudienceHelperInterface::DEFAULT_FIELD => $entity_id,
++      ]);
++      if ($instances) {
++        return array_pop($instances);
++      }
+     }
+     return NULL;
+   }
+@@ -302,7 +305,7 @@ class OgMenuBlock extends BlockBase implements ContainerFactoryPluginInterface,
+    *   The name of the menu, or null if no menu instance is found.
+    */
+   public function getMenuName() {
+-    if (isset($this->menuName)) {
++    if (isset($this->menuName) && $this->menuName !== '') {
+       return $this->menuName;
+     }
+     $instance = $this->getOgMenuInstance();

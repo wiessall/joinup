@@ -173,6 +173,8 @@ commands:
       command: testing:lint-twig
     - task: exec
       command: ${phpcs.file.bin}
+    - task: run
+      command: toolkit:lint-css
 
   # Lints JS files  using ESLint.
   toolkit:lint-js:
@@ -193,3 +195,24 @@ commands:
   toolkit:fix-yaml:
     - task: exec
       command: ${joinup.dir}/node_modules/.bin/eslint --config .eslintrc.json --ext yml --fix .
+
+  # Lints CSS, and S(A|C)SS files with stylelint.
+  toolkit:lint-css:
+    - task: exec
+      dir: ${joinup.dir}
+      command: |-
+        ./node_modules/.bin/stylelint \
+          --config .stylelintrc.json \
+          --ignore-path .gitignore \
+          "${joinup.site_dir}/{modules,profiles,themes}/!(contrib)/**/!(*.min).{css,scss,sass}"
+
+  # Fixes CSS, PCSS and S(A|C)SS files with stylelint.
+  toolkit:fix-css:
+    - task: exec
+      dir: ${joinup.dir}
+      command: |-
+        ./node_modules/.bin/stylelint \
+          --config .stylelintrc.json \
+          --ignore-path .gitignore \
+          "${joinup.site_dir}/{modules,profiles,themes}/!(contrib)/**/!(*.min).{css,scss,sass}" \
+          --fix

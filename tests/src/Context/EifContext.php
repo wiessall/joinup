@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Drupal\joinup\Context;
 
@@ -17,12 +17,12 @@ use Drupal\joinup\Traits\EntityReferenceTrait;
 use Drupal\joinup\Traits\EntityTrait;
 use Drupal\joinup\Traits\SearchTrait;
 use Drupal\joinup\Traits\TestingEntitiesTrait;
+use Drupal\joinup\Traits\TopicTrait;
 use Drupal\joinup\Traits\UtilityTrait;
 use Drupal\node\Entity\Node;
 use Drupal\paragraphs\Entity\Paragraph;
 use Drupal\rdf_entity\Entity\Rdf;
 use Drupal\rdf_meta_entity\Entity\RdfMetaEntity;
-use Drupal\taxonomy\Entity\Term;
 
 /**
  * Behat step definitions and related methods provided by the eif module.
@@ -34,6 +34,7 @@ class EifContext extends RawDrupalContext {
   use SearchTrait;
   use StringTranslationTrait;
   use TestingEntitiesTrait;
+  use TopicTrait;
   use UtilityTrait;
 
   /**
@@ -42,13 +43,6 @@ class EifContext extends RawDrupalContext {
    * @BeforeScenario @eif_community&&@api
    */
   public function setupEifData(BeforeScenarioScope $scope): void {
-    // Create one topic term.
-    Term::create([
-      'vid' => 'topic',
-      'tid' => 'http://example.com/term/1',
-      'name' => 'Term 1',
-    ])->save();
-
     // Create an owner.
     Rdf::create([
       'rid' => 'owner',
@@ -69,7 +63,7 @@ class EifContext extends RawDrupalContext {
       'id' => 'http://nifo.collection',
       'label' => 'NIFO collection',
       'field_ar_state' => 'published',
-      'field_topic' => 'http://example.com/term/1',
+      'field_topic' => $tid = $this->getRandomTopic()->id(),
       'field_ar_owner' => 'http://example.com/owner',
       'field_ar_contact_information' => 'http://example.com/contact',
     ])->save();
@@ -81,7 +75,7 @@ class EifContext extends RawDrupalContext {
       'label' => 'EIF Toolbox',
       'collection' => 'http://nifo.collection',
       'field_is_state' => 'published',
-      'field_topic' => 'http://example.com/term/1',
+      'field_topic' => $tid,
       'field_is_owner' => 'http://example.com/owner',
       'field_is_contact_information' => 'http://example.com/contact',
     ]);
@@ -155,8 +149,6 @@ class EifContext extends RawDrupalContext {
       $entity->skip_notification = TRUE;
       $entity->delete();
     }
-
-    Term::load('http://example.com/term/1')->delete();
   }
 
   /**

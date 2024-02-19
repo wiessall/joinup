@@ -1,10 +1,11 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Drupal\contact_information\Traits;
 
 use Drupal\contact_information\ContactInformationEmailConfirmInterface;
+use Drupal\contact_information\Entity\ContactInformationInterface;
 use Drupal\joinup_group\Entity\GroupInterface;
 
 /**
@@ -13,9 +14,19 @@ use Drupal\joinup_group\Entity\GroupInterface;
 trait ContactInformationTrait {
 
   /**
-   * Returns validated emails from collection/solution.
+   * {@inheritdoc}
    */
-  public function getValidatedContactInformation(): array {
+  public function getValidatedContactInformationEmails(): array {
+    $contacts = $this->getValidatedContactInformationEntities();
+    return array_map(function (ContactInformationInterface $contact): string {
+      return $contact->get('field_ci_email')->value;
+    }, $contacts);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getValidatedContactInformationEntities(): array {
     assert(is_subclass_of($this, GroupInterface::class), __TRAIT__ . ' is intended to be used in bundle classes for group entities.');
     assert(method_exists($this, 'getReferencedEntityIds'), __TRAIT__ . ' depends on JoinupBundleClassFieldAccessTrait. Please include it in your class.');
     $ids = $this->getReferencedEntityIds($this->getContactInformationFieldName())['rdf_entity'] ?? [];
@@ -23,15 +34,11 @@ trait ContactInformationTrait {
       return $ids;
     }
     $contacts = $this->entityTypeManager()->getStorage('rdf_entity')->loadMultiple($ids);
-    $emails = [];
-    /** @var \Drupal\email_confirmer\EmailConfirmerManagerInterface $email_confirmer */
-    $email_confirmer = \Drupal::service('email_confirmer');
-    foreach ($contacts as $contact) {
-      if ($email_confirmer->getConfirmation($contact->get('field_ci_email')->value, 'confirmed', ContactInformationEmailConfirmInterface::REALM)) {
-        $emails[] = $contact->get('field_ci_email')->value;
-      }
-    }
-    return $emails;
+    /** @var \Drupal\email_confirmer\EmailConfirmerManagerInterface $emailConfirmer */
+    $emailConfirmer = \Drupal::getContainer()->get('email_confirmer');
+    return array_filter($contacts, function (ContactInformationInterface $contact) use ($emailConfirmer): bool {
+      return (bool) $emailConfirmer->getConfirmation($contact->get('field_ci_email')->value, 'confirmed', ContactInformationEmailConfirmInterface::REALM);
+    });
   }
 
 }

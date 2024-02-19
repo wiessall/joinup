@@ -10,6 +10,10 @@ dependencies:
     - field.field.node.oss_solution.oss_documentation
     - field.field.node.oss_solution.oss_features
     - field.field.node.oss_solution.oss_git_description
+    - field.field.node.oss_solution.oss_git_forks
+    - field.field.node.oss_solution.oss_git_open_issues
+    - field.field.node.oss_solution.oss_git_open_pull_requests
+    - field.field.node.oss_solution.oss_git_stars
     - field.field.node.oss_solution.oss_git_url
     - field.field.node.oss_solution.oss_hosting_platform
     - field.field.node.oss_solution.oss_is_archived
@@ -39,10 +43,31 @@ dependencies:
   module:
     - datetime
     - entityqueue
+    - field_group
     - link
     - path
     - pluginreference
     - publication_date
+    - text
+third_party_settings:
+  field_group:
+    group_git_indicators:
+      children:
+        - oss_git_stars
+        - oss_git_open_issues
+        - oss_git_forks
+        - oss_git_open_pull_requests
+      label: 'GIT Indicators'
+      region: content
+      parent_name: ''
+      weight: 15
+      format_type: fieldset
+      format_settings:
+        classes: ''
+        show_empty_fields: false
+        id: ''
+        description: ''
+        required_fields: false
 id: node.oss_solution.default
 targetEntityType: node
 bundle: oss_solution
@@ -63,7 +88,7 @@ content:
     third_party_settings: {  }
   oss_available_languages:
     type: string_textfield
-    weight: 32
+    weight: 34
     region: content
     settings:
       size: 60
@@ -71,7 +96,7 @@ content:
     third_party_settings: {  }
   oss_categories:
     type: entity_reference_autocomplete
-    weight: 23
+    weight: 25
     region: content
     settings:
       match_operator: CONTAINS
@@ -81,7 +106,7 @@ content:
     third_party_settings: {  }
   oss_default_branch:
     type: string_textfield
-    weight: 37
+    weight: 39
     region: content
     settings:
       size: 60
@@ -89,13 +114,13 @@ content:
     third_party_settings: {  }
   oss_development_status:
     type: options_select
-    weight: 21
+    weight: 23
     region: content
     settings: {  }
     third_party_settings: {  }
   oss_documentation:
     type: link_default
-    weight: 34
+    weight: 36
     region: content
     settings:
       placeholder_url: ''
@@ -103,18 +128,46 @@ content:
     third_party_settings: {  }
   oss_features:
     type: string_textfield
-    weight: 28
+    weight: 30
     region: content
     settings:
       size: 60
       placeholder: ''
     third_party_settings: {  }
   oss_git_description:
-    type: string_textarea
+    type: text_textarea
     weight: 14
     region: content
     settings:
       rows: 5
+      placeholder: ''
+    third_party_settings: {  }
+  oss_git_forks:
+    type: number
+    weight: 26
+    region: content
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
+  oss_git_open_issues:
+    type: number
+    weight: 25
+    region: content
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
+  oss_git_open_pull_requests:
+    type: number
+    weight: 27
+    region: content
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
+  oss_git_stars:
+    type: number
+    weight: 24
+    region: content
+    settings:
       placeholder: ''
     third_party_settings: {  }
   oss_git_url:
@@ -127,7 +180,7 @@ content:
     third_party_settings: {  }
   oss_hosting_platform:
     type: plugin_reference_select
-    weight: 38
+    weight: 41
     region: content
     settings:
       provider_grouping: false
@@ -135,14 +188,14 @@ content:
     third_party_settings: {  }
   oss_is_archived:
     type: boolean_checkbox
-    weight: 37
+    weight: 40
     region: content
     settings:
       display_label: true
     third_party_settings: {  }
   oss_landing_url:
     type: link_default
-    weight: 15
+    weight: 16
     region: content
     settings:
       placeholder_url: ''
@@ -150,7 +203,7 @@ content:
     third_party_settings: {  }
   oss_license:
     type: entity_reference_autocomplete
-    weight: 25
+    weight: 27
     region: content
     settings:
       match_operator: CONTAINS
@@ -160,15 +213,15 @@ content:
     third_party_settings: {  }
   oss_logo:
     type: link_default
-    weight: 17
+    weight: 18
     region: content
     settings:
       placeholder_url: ''
       placeholder_title: ''
     third_party_settings: {  }
   oss_long_description:
-    type: string_textarea
-    weight: 19
+    type: text_textarea
+    weight: 20
     region: content
     settings:
       rows: 5
@@ -176,7 +229,7 @@ content:
     third_party_settings: {  }
   oss_maintenance_contacts:
     type: entity_reference_autocomplete
-    weight: 31
+    weight: 33
     region: content
     settings:
       match_operator: CONTAINS
@@ -186,7 +239,7 @@ content:
     third_party_settings: {  }
   oss_maintenance_contractors:
     type: entity_reference_autocomplete
-    weight: 29
+    weight: 31
     region: content
     settings:
       match_operator: CONTAINS
@@ -196,13 +249,13 @@ content:
     third_party_settings: {  }
   oss_maintenance_type:
     type: options_select
-    weight: 30
+    weight: 32
     region: content
     settings: {  }
     third_party_settings: {  }
   oss_owner:
     type: string_textfield
-    weight: 26
+    weight: 28
     region: content
     settings:
       size: 60
@@ -210,7 +263,7 @@ content:
     third_party_settings: {  }
   oss_platform_reference:
     type: string_textfield
-    weight: 36
+    weight: 38
     region: content
     settings:
       size: 60
@@ -218,7 +271,7 @@ content:
     third_party_settings: {  }
   oss_platforms:
     type: entityqueue_dragtable
-    weight: 18
+    weight: 19
     region: content
     settings:
       match_operator: CONTAINS
@@ -238,7 +291,7 @@ content:
     third_party_settings: {  }
   oss_publiccode_yml_version:
     type: string_textfield
-    weight: 27
+    weight: 29
     region: content
     settings:
       size: 60
@@ -246,13 +299,13 @@ content:
     third_party_settings: {  }
   oss_release_date:
     type: datetime_default
-    weight: 16
+    weight: 17
     region: content
     settings: {  }
     third_party_settings: {  }
   oss_scope:
     type: entity_reference_autocomplete
-    weight: 33
+    weight: 35
     region: content
     settings:
       match_operator: CONTAINS
@@ -262,15 +315,15 @@ content:
     third_party_settings: {  }
   oss_screenshots:
     type: link_default
-    weight: 35
+    weight: 37
     region: content
     settings:
       placeholder_url: ''
       placeholder_title: ''
     third_party_settings: {  }
   oss_short_description:
-    type: string_textfield
-    weight: 20
+    type: text_textfield
+    weight: 21
     region: content
     settings:
       size: 60
@@ -278,13 +331,13 @@ content:
     third_party_settings: {  }
   oss_software_type:
     type: options_select
-    weight: 22
+    weight: 24
     region: content
     settings: {  }
     third_party_settings: {  }
   oss_software_version:
     type: string_textfield
-    weight: 38
+    weight: 42
     region: content
     settings:
       size: 60
@@ -300,7 +353,7 @@ content:
     third_party_settings: {  }
   oss_source_hash:
     type: string_textfield
-    weight: 39
+    weight: 43
     region: content
     settings:
       size: 60
@@ -308,7 +361,7 @@ content:
     third_party_settings: {  }
   oss_used_by:
     type: entity_reference_autocomplete
-    weight: 24
+    weight: 26
     region: content
     settings:
       match_operator: CONTAINS
@@ -318,7 +371,7 @@ content:
     third_party_settings: {  }
   oss_vitality_index:
     type: number
-    weight: 40
+    weight: 44
     region: content
     settings:
       placeholder: ''

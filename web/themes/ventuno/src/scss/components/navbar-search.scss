@@ -1,25 +1,7 @@
+@use "sass:map";
 @import "../partials/core";
 
 .navbar-search {
-  // Adjust position to right side of container
-  @include media-breakpoint-between(xs, sm) {
-    width: calc(100vw - .25rem);
-  }
-  @include media-breakpoint-between(sm, md) {
-    width: calc(map-get($container-max-widths, sm) - 1.5rem);
-  }
-  @include media-breakpoint-between(md, lg) {
-    width: calc(map-get($container-max-widths, md) - 1.5rem);
-  }
-  @include media-breakpoint-between(lg, xl) {
-    width: calc(map-get($container-max-widths, lg) - 1.5rem);
-  }
-  @include media-breakpoint-between(xl, xxl) {
-    width: calc(map-get($container-max-widths, xl) - 1.5rem);
-  }
-  @include media-breakpoint-up(xxl) {
-    width: calc(map-get($container-max-widths, xxl) - 1.5rem);
-  }
   form {
     display: flex;
     align-items: center;
@@ -44,32 +26,32 @@
     }
   }
   .form-item {
-    width: 100%;
     align-self: center;
+    width: 100%;
     margin-bottom: 0!important;
   }
   .form-autocomplete {
+    padding: .25rem;
     border-style: none;
     box-shadow: none;
-    padding: .25rem;
     font-size: $font-size-sm;
   }
   .form__actions {
     display: none;
   }
   .btn.btn-search {
+    width: 2.5rem;
+    margin-left: .125rem;
+    padding: $spacer * .25 $spacer * .5;
+    color: $primary;
+    border-style: none;
+    background: transparent;
+    font-size: 0!important;
     &::before {
       @include get-bootstrap-icon('search', $primary);
+
       font-size: 1rem;
     }
-    width: 2.5rem;
-    border-style: none;
-    padding: $spacer * .25 $spacer * .5;
-    color: $dark;
-    background: transparent;
-    color: $primary;
-    font-size: 0!important;
-    margin-left: .125rem;
     &:hover {
       box-shadow: none;
     }
@@ -78,11 +60,31 @@
   &__submit {
     &:focus-visible {
       outline: $brand solid 2px;
-      outline-offset: 0px;
+      outline-offset: 0;
     }
   }
   .form-item-results-count {
     display: none;
+  }
+
+  // Adjust position to right side of container
+  @include media-breakpoint-between(xs, sm) {
+    width: calc(100vw - .25rem);
+  }
+  @include media-breakpoint-between(sm, md) {
+    width: calc(map.get($container-max-widths, sm) - 1.5rem);
+  }
+  @include media-breakpoint-between(md, lg) {
+    width: calc(map.get($container-max-widths, md) - 1.5rem);
+  }
+  @include media-breakpoint-between(lg, xl) {
+    width: calc(map.get($container-max-widths, lg) - 1.5rem);
+  }
+  @include media-breakpoint-between(xl, xxl) {
+    width: calc(map.get($container-max-widths, xl) - 1.5rem);
+  }
+  @include media-breakpoint-up(xxl) {
+    width: calc(map.get($container-max-widths, xxl) - 1.5rem);
   }
 }
 #dropdown-menu--search {

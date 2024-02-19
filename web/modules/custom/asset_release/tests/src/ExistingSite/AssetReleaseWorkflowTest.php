@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Drupal\Tests\asset_release\ExistingSite;
 
@@ -428,6 +428,7 @@ class AssetReleaseWorkflowTest extends JoinupWorkflowExistingSiteTestBase {
       'published' => [
         'userAuthenticated' => [],
         'userModerator' => [
+          'archived',
           'draft',
           'published',
           'needs_update',

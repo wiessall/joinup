@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Drupal\joinup_community_content;
 
@@ -84,6 +84,12 @@ class CommunityContentWorkflowAccessControlHandler {
       return $access;
     }
 
+    $parent = $content->getGroup();
+    // Anything other than view, is denied if the parent is archived.
+    if ($operation !== 'view' && $parent->isArchived()) {
+      return AccessResult::forbidden();
+    }
+
     switch ($operation) {
       case 'view':
         return $this->entityViewAccess($content, $account);
@@ -98,7 +104,6 @@ class CommunityContentWorkflowAccessControlHandler {
         return $this->entityDeleteAccess($content, $account);
 
       case 'post comments':
-        $parent = $content->getGroup();
         $parent_state = $parent instanceof EntityWorkflowStateInterface ? $parent->getWorkflowState() : '';
         $entity_state = $content->getWorkflowState();
 

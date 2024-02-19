@@ -19,6 +19,7 @@ Feature: Asset distribution deleting.
       | description | Sample description    |
       | access url  | test.zip              |
       | parent      | Rough valentine's day |
+      | state       | published             |
 
     When I am logged in as a facilitator of the "Rough valentine's day" solution
     And I go to the homepage of the "Francesco's cats" asset distribution

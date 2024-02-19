@@ -44,6 +44,7 @@
 
 {% block page_header %}
   {{ attach_library('ventuno/header-topic') }}
+  {{ attach_library('ventuno/see-more') }}
   <div class="container region-header">
     <header class="header-topic">
       {{ title_prefix }}
@@ -56,7 +57,7 @@
           {{ meta_description }}
         </div>
       {% else %}
-        <div class="header-topic__description header-topic__description--long collapse" id="collapseHeaderTopics">
+        <div class="header-topic__description see-more see-more--long collapse" id="collapseSeeMore">
           {{ meta_description }}
         </div>
         <div class="d-flex justify-content-end mt-3{{ logged_in ? ' mb-3' }}">
@@ -65,9 +66,9 @@
             type="button"
             data-joinup-seemore-collapsed="true"
             data-bs-toggle="collapse"
-            data-bs-target="#collapseHeaderTopics"
+            data-bs-target="#collapseSeeMore"
             aria-expanded="false"
-            aria-controls="collapseHeaderTopics">
+            aria-controls="collapseSeeMore">
             {{ 'See more'|t }}
             <svg class="bi icon--s">
               <use xlink:href="{{ bcl_icon_path }}#chevron-down"></use>

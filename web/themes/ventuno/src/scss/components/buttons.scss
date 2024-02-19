@@ -1,3 +1,5 @@
+@use "sass:color";
+
 .btn {
   &:not(.btn-link) {
     &:hover {
@@ -14,7 +16,11 @@ a.btn-link {
 
 .btn-primary {
   &:hover {
-    background-color: lighten(desaturate($primary, 23.76), 8.63);
+    background-color: color.adjust(
+      $primary,
+      $saturation: -23.76%,
+      $lightness: 8.63%
+    );
   }
   &:focus,
   &:active,
@@ -50,14 +56,14 @@ a.btn-link {
 }
 
 .btn--icon {
-  color: $white;
   padding: 0;
-  background-color: transparent;
+  color: $white;
   border: none;
-  box-shadow: none;
   border-radius: 0;
+  background-color: transparent;
+  box-shadow: none;
   &:hover {
-    box-shadow: none;
     background-color: transparent;
+    box-shadow: none;
   }
 }
