@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Drupal\Tests\eu_oss_catalogue\Functional;
 
+use Drupal\Component\Utility\Variable;
 use Drupal\Core\Database\Database;
 use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\Core\Field\EntityReferenceFieldItemListInterface;
@@ -138,7 +139,16 @@ abstract class FetchTestBase extends BrowserTestBase {
       $actualTranslation = $this->normalizeActualNodeArray($actualTranslation, $actual, $langcode);
       foreach ($expectedTranslation as $field => $expectedValue) {
         $actualValue = $actualTranslation[$field] ?? NULL;
-        $this->assertEquals($expectedValue, $actualValue);
+        $this->assertEquals(
+          $expectedValue,
+          $actualValue,
+          sprintf(
+            "Value of field '%s' is different than expected. Expected %s, actual is %s.",
+            $field,
+            Variable::export($expectedValue),
+            Variable::export($actualValue),
+          )
+        );
       }
     }
 
