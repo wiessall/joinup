@@ -1,0 +1,27 @@
+asset_distribution_workflow:
+  id: asset_distribution_workflow
+  label: "Default"
+  group: asset_distribution
+  states:
+    __new__:
+      label: New
+      published: true
+    published:
+      label: Published
+      published: true
+    archived:
+      label: Archived
+      published: true
+  transitions:
+    publish:
+      label: Publish
+      from: [ __new__ ]
+      to: published
+    archive:
+      label: Archive
+      from: [ published ]
+      to: archived
+    unarchive:
+      label: Unarchive
+      from: [ archived ]
+      to: published

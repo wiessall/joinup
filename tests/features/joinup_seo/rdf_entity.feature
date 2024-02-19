@@ -1,4 +1,4 @@
-@api @terms @group-i
+@api @group-i
 Feature: SEO for RDF entities.
   As an owner of the website
   in order for my RDF entities to be better visible on the web
@@ -37,6 +37,7 @@ Feature: SEO for RDF entities.
     And the following distribution:
       | title  | SEO distribution |
       | parent | SEO release      |
+      | state  | published        |
 
     When I go to the "SEO release" release
     Then the rdf metadata of the "SEO release" rdf entity should be attached in the page

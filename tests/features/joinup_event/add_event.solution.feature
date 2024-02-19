@@ -33,7 +33,7 @@ Feature: "Add event" visibility options.
     And I go to the homepage of the "Ragged Tower" solution
     Then I should see the link "Add event"
 
-  @terms @uploadFiles:test.zip
+  @uploadFiles:test.zip
   Scenario: Add event as a facilitator.
     Given the following collection:
       | title  | Collective The Luscious Bridges |

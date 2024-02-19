@@ -12,7 +12,6 @@ Feature: Add a licence through the UI
       | title       | ID  | see also                                                                                         | text                                                                                               |
       | MIT License | MIT | opensource.org - https://opensource.org/licenses/MIT, mit-license.org - https://mit-license.org/ | "MIT License\n\nCopyright ©2019\n\nPermission is hereby granted, free of charge, to any person..." |
 
-  @terms
   Scenario Outline: Add licence as a Moderator or a Licence Manager.
     Given I am logged in as a "<role>"
     And I am on the homepage

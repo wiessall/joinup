@@ -1,0 +1,20 @@
+{#
+/**
+ * @file
+ * Theme override of a solution's member count.
+ *
+ * Available variables:
+ * - count: the number of members in the solution.
+ * - view_mode: View mode; for example, "teaser" or "full".
+ * - attributes: A list of HTML attributes for the input element.
+ *
+ * @ingroup themeable
+ */
+#}
+<span{{ attributes }}>
+  {% trans %}
+    1 member
+  {% plural count %}
+    {{ count }} members
+  {% endtrans %}
+</span>

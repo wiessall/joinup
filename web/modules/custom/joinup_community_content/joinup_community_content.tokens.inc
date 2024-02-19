@@ -5,7 +5,7 @@
  * Builds placeholder replacement tokens for community content related data.
  */
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 use Drupal\Core\Render\BubbleableMetadata;
 use Drupal\Core\Url;

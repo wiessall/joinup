@@ -1,20 +1,21 @@
 @api @group-g
 Feature: As a moderator I want to be able to move solutions to other collection.
 
-  Scenario: Moderators can move a solution to a different collection.
-
+  Background:
     Given the following collections:
       | uri                            | title       | state     |
       | http://example.com/source      | Source      | published |
       | http://example.com/destination | Destination | published |
-
     And solutions:
-      | title      | collection | state     |
-      | Solution 1 | Source     | published |
-      | Solution 2 | Source     | published |
-      | Solution 3 | Source     | published |
-      | Solution 4 | Source     | published |
+      | title      | collection | state     | creation date    | modification date |
+      | Solution 1 | Source     | published | 2017-11-18T10:00 | 2017-12-18T10:00  |
+      | Solution 2 | Source     | published | 2018-11-19T10:00 | 2018-12-19T10:00  |
+      | Solution 3 | Source     | published | 2019-11-20T10:00 | 2019-12-20T10:00  |
+      | Solution 4 | Source     | published | 2020-11-21T10:00 | 2020-12-21T10:00  |
+      | Solution 5 | Source     | archived  | 2021-11-22T10:00 | 2021-12-22T10:00  |
+      | Solution 6 | Source     | archived  | 2022-11-23T10:00 | 2022-12-23T10:00  |
 
+  Scenario: Moderators can move a solution to a different collection.
     # Only moderators should be able to access this feature.
     Given I am an anonymous user
     When I go to the homepage of the "Source" collection
@@ -64,10 +65,53 @@ Feature: As a moderator I want to be able to move solutions to other collection.
 
     When I go to the homepage of the "Destination" collection
     Then I should see the following tiles in the correct order:
-      | Solution 1 |
       | Solution 4 |
+      | Solution 1 |
 
     When I go to the homepage of the "Source" collection
     Then I should see the following tiles in the correct order:
-      | Solution 2 |
       | Solution 3 |
+      | Solution 2 |
+
+  Scenario Outline: Manage solutions page must have a bulk-archive and bulk-unarchive option.
+    Given I am logged in as a moderator
+    When I go to the homepage of the "Source" collection
+    Then I should see the heading "Source"
+    And I should see the link "Manage solutions"
+    And I click "Manage solutions"
+    Then I should see the heading "Manage solutions"
+    Then the "manage solutions" table should contain the following columns:
+      | Title      | Created on         | Last update        | State     |
+      | Solution 6 | 23/11/2022 - 10:00 | 23/12/2022 - 10:00 | Archived  |
+      | Solution 5 | 22/11/2021 - 10:00 | 22/12/2021 - 10:00 | Archived  |
+      | Solution 4 | 21/11/2020 - 10:00 | 21/12/2020 - 10:00 | Published |
+      | Solution 3 | 20/11/2019 - 10:00 | 20/12/2019 - 10:00 | Published |
+      | Solution 2 | 19/11/2018 - 10:00 | 19/12/2018 - 10:00 | Published |
+      | Solution 1 | 18/11/2017 - 10:00 | 18/12/2017 - 10:00 | Published |
+    When I select the "Solution 3" row
+    And I select the "Solution 4" row
+    And I select the "Solution 5" row
+    And I select the "Solution 6" row
+    And I select "<option>" from "Action"
+    And I press "Apply to selected items"
+    Then I should see the heading "Confirmation of Changing the State of Solutions to <target state>"
+    And I should see the button "Confirm"
+    When I press "Confirm"
+    # Two solution were changed.
+    Then I should see the following success messages:
+      | Success messages                         |
+      | The following solutions' state was changed to <target state>: <changed solutions>. |
+    And the "manage solutions" table should contain the following columns:
+      # Skip last update since it is not under our control.
+      | Title      | Created on         | State          |
+      | Solution 6 | 23/11/2022 - 10:00 | <target state> |
+      | Solution 5 | 22/11/2021 - 10:00 | <target state> |
+      | Solution 4 | 21/11/2020 - 10:00 | <target state> |
+      | Solution 3 | 20/11/2019 - 10:00 | <target state> |
+      | Solution 2 | 19/11/2018 - 10:00 | Published      |
+      | Solution 1 | 18/11/2017 - 10:00 | Published      |
+
+    Examples:
+      | option                        | target state | changed solutions      |
+      | Archive solutions             | Archived     | Solution 3, Solution 4 |
+      | Unarchive (publish) solutions | Published    | Solution 5, Solution 6 |

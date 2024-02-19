@@ -5,7 +5,7 @@
  * Contains hooks and functions for the isa2_analytics modules.
  */
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 use Drupal\views\ViewExecutable;
 

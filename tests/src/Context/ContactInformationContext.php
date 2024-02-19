@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Drupal\joinup\Context;
 
@@ -210,7 +210,7 @@ class ContactInformationContext extends RawDrupalContext {
       $contact_info = $this->getEntityByLabel('rdf_entity', $label, 'contact_information');
       $email_field = $contact_info->get('field_ci_email');
       if (!$email_field->isEmpty()) {
-        $confirmation = $email_confirmer->createConfirmation($email_field->value);
+        $confirmation = $email_confirmer->getConfirmation($email_field->value, 'pending') ?: $email_confirmer->createConfirmation($email_field->value);
         if (!$confirmation->confirm($confirmation->getHash())) {
           throw new \RuntimeException("Failed to confirm {$email_field->value}");
         }
