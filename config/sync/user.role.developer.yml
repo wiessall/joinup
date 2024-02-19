@@ -3,17 +3,229 @@ langcode: en
 status: true
 dependencies:
   module:
+    - antibot
+    - asset_distribution
+    - block
+    - comment
+    - contact_form
+    - contextual
+    - custom_page
+    - dashboard
+    - eif
+    - email_confirmer
+    - entity_legal
+    - entity_reference_revisions
+    - entityqueue
+    - externalauth
+    - facets
+    - field_ui
+    - file
+    - flag
+    - help
+    - honeypot
+    - joinup
+    - joinup_core
+    - joinup_featured
+    - joinup_group
+    - joinup_group_content_management
+    - joinup_licence
+    - joinup_newsletter
+    - joinup_pipeline_log
+    - joinup_search
+    - joinup_subscription
+    - layout_builder
+    - layout_builder_component_attributes
+    - layout_custom_section_classes
+    - mailsystem
+    - media
+    - menu_admin_per_menu
+    - message
+    - message_digest
+    - meta_entity
+    - metatag
+    - moderation
+    - node
+    - oe_webtools_analytics
+    - oe_webtools_cookie_consent
+    - oe_webtools_globan
+    - og
+    - og_menu
+    - page_manager
+    - paragraphs
+    - paragraphs_type_permissions
+    - path
+    - pathauto
+    - poll
+    - publication_date
+    - queue_ui
+    - rdf_draft
+    - rdf_entity
+    - rdf_export
+    - rdf_meta_entity
+    - redirect
+    - responsive_image
     - role_delegation
+    - search_api
+    - search_api_autocomplete
+    - sitewide_alert
+    - solution
+    - symfony_mailer_lite
     - system
+    - taxonomy
     - toolbar
+    - tour
+    - webform
 id: developer
 label: Developer
 weight: 5
 is_admin: false
 permissions:
   - 'access administration pages'
+  - 'access compatibility document overview'
+  - 'access contact form messages'
+  - 'access content moderation overview'
+  - 'access contextual links'
+  - 'access dashboard'
+  - 'access distribution reports'
+  - 'access files overview'
+  - 'access group reports'
+  - 'access help pages'
+  - 'access joinup reports'
+  - 'access media overview'
+  - 'access pipeline report'
+  - 'access poll overview'
+  - 'access site in maintenance mode'
   - 'access site reports'
+  - 'access slab cachedump'
+  - 'access taxonomy overview'
   - 'access toolbar'
+  - 'access tour'
+  - 'access uri converter'
+  - 'admin queue_ui'
+  - 'administer account menu items'
+  - 'administer account settings'
+  - 'administer admin menu items'
+  - 'administer antibot configuration'
+  - 'administer blocks'
+  - 'administer collection ownership'
+  - 'administer comment fields'
+  - 'administer compatibility document types'
+  - 'administer compatibility_document fields'
+  - 'administer devel menu items'
+  - 'administer eif_wrapper fields'
+  - 'administer email confirmations'
+  - 'administer entity legal'
+  - 'administer entity_legal_document_version fields'
+  - 'administer entity_subqueue fields'
+  - 'administer entityqueue'
+  - 'administer facets'
+  - 'administer flagging fields'
+  - 'administer flaggings'
+  - 'administer flags'
+  - 'administer footer menu items'
+  - 'administer footer-about-us menu items'
+  - 'administer footer-european-commission menu items'
+  - 'administer footer-follow-us menu items'
+  - 'administer footer-help-and-support menu items'
+  - 'administer honeypot'
+  - 'administer layout builder component attributes'
+  - 'administer layout builder section attributes'
+  - 'administer layout builder section classes module settings'
+  - 'administer layout builder sections region attributes'
+  - 'administer log alerts'
+  - 'administer main menu items'
+  - 'administer matomo integration'
+  - 'administer media'
+  - 'administer media fields'
+  - 'administer media types'
+  - 'administer menu'
+  - 'administer message digest'
+  - 'administer message fields'
+  - 'administer message templates'
+  - 'administer messages'
+  - 'administer meta entity'
+  - 'administer meta tags'
+  - 'administer meta_entity fields'
+  - 'administer navbar menu items'
+  - 'administer node fields'
+  - 'administer nodes'
+  - 'administer og menu'
+  - 'administer og_membership fields'
+  - 'administer ogmenu_instance fields'
+  - 'administer organic groups'
+  - 'administer outdated content threshold'
+  - 'administer pages'
+  - 'administer paragraph fields'
+  - 'administer paragraphs settings'
+  - 'administer paragraphs types'
+  - 'administer pathauto'
+  - 'administer poll fields'
+  - 'administer polls'
+  - 'administer publication date'
+  - 'administer rdf entity'
+  - 'administer rdf meta entity'
+  - 'administer rdf metadata settings'
+  - 'administer rdf_entity fields'
+  - 'administer rdf_meta_entity fields'
+  - 'administer redirect settings'
+  - 'administer redirects'
+  - 'administer responsive images'
+  - 'administer search fields'
+  - 'administer search_api'
+  - 'administer search_api_autocomplete'
+  - 'administer shared entities'
+  - 'administer site configuration'
+  - 'administer sitewide alert'
+  - 'administer sitewide alert entities'
+  - 'administer sitewide_alert fields'
+  - 'administer solution ownership'
+  - 'administer support menu items'
+  - 'administer symfony_mailer_lite configuration'
+  - 'administer taxonomy'
+  - 'administer taxonomy_term fields'
+  - 'administer tools menu items'
+  - 'administer url aliases'
+  - 'administer user fields'
   - 'administer users'
+  - 'administer views'
+  - 'administer webform'
+  - 'administer webform element access'
+  - 'administer webform submission'
+  - 'administer webtools analytics'
+  - 'administer webtools cookie consent'
+  - 'administer webtools globan'
+  - administer_mailsystem
   - 'assign developer role'
+  - 'bypass paragraphs type content access'
+  - 'configure any layout'
+  - 'create and edit custom blocks'
+  - 'create eif wrapper entity'
+  - 'delete any file'
+  - 'delete eif wrapper entity'
+  - 'delete orphan revisions'
+  - 'download subscribers report'
+  - 'edit short id after publication'
+  - 'export rdf metadata'
+  - 'feature entity'
+  - 'manage custom landing pages'
+  - 'manage group announcements'
+  - 'manage group content'
+  - 'manage layout builder component attributes'
+  - 'manage newsroom newsletter subscriptions'
+  - 'manage site auto-registration'
+  - 'manage solutions'
+  - 'overview messages'
+  - 'skip antibot'
+  - 'unfeature entity'
+  - 'update eif wrapper entity'
+  - 'vbo joinup archive action'
+  - 'vbo joinup change group action'
+  - 'vbo joinup unarchive action'
+  - 'view all graphs'
+  - 'view authmap'
+  - 'view compatibility documents'
+  - 'view eif wrapper entity'
+  - 'view licence overview page'
+  - 'view rdf entity'
+  - 'view rdf entity overview'
   - 'view the administration theme'
