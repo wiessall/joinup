@@ -5,7 +5,7 @@
  * Hook implementations for RDF Sync Test module.
  */
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 use Drupal\rdf_sync_test\Category;
 use Drupal\rdf_sync_test\Page;
