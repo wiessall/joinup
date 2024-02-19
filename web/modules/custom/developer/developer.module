@@ -9,6 +9,8 @@ use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\block\Entity\Block;
+use Drupal\Core\Session\AccountProxy;
+use Drupal\user\UserInterface;
 
 /**
  * Implements hook_block_access().
@@ -21,4 +23,36 @@ function developer_block_access(Block $block, $operation, AccountInterface $acco
   // Deny access to the block for local environments to not allow the devs get
   // used to the warning message.
   return AccessResult::forbidden();
+}
+
+/**
+ * Implements hook_user_login().
+ */
+function developer_user_login(UserInterface $account): void {
+  if (!getenv('AUTOLOGOUT_PRODUCTION')) {
+    return;
+  }
+
+  if (!$account->hasRole('developer')) {
+    return;
+  }
+
+  // Disable config read-only mode for developers.
+  touch(DRUPAL_ROOT. '/../disable-config-readonly');
+}
+
+/**
+ * Implements hook_user_logout().
+ */
+function developer_user_logout(AccountProxy $account): void {
+  if (!getenv('AUTOLOGOUT_PRODUCTION')) {
+    return;
+  }
+
+  if (!$account->hasRole('developer')) {
+    return;
+  }
+
+  // Enable config read-only mode for developers.
+  \Drupal::getContainer()->get('file_system')->unlink(DRUPAL_ROOT . '/../disable-config-readonly');
 }
