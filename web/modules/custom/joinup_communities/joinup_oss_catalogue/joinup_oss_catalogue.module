@@ -5,10 +5,11 @@
  * Main file of Joinup OSS Catalogue module.
  */
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Session\AccountInterface;
+use Drupal\Core\Url;
 use Drupal\block\BlockInterface;
 use Drupal\eu_oss_catalogue\Entity\OssSolutionInterface;
 use Drupal\joinup_group\Entity\GroupInterface;
@@ -170,4 +171,24 @@ function joinup_oss_catalogue_node_presave(NodeInterface $entity): void {
     $value = mt_rand(51, 99) / 100;
     $entity->set('oss_vitality_index', $value);
   }
+}
+
+/**
+ * Implements hook_preprocess_HOOK().
+ */
+function joinup_oss_catalogue_preprocess_views_view__eu_oss_catalogue_admin_carousel(&$variables): void {
+  $url = Url::fromRoute('view.search_oss_catalogue.search');
+  $variables['search_url'] = match ($variables['display_id']) {
+    'oss_most_recent_solutions' => $url->setOptions([
+      'query' => [
+        'sort_by' => 'date',
+      ],
+    ]),
+    'oss_most_active_solutions' => $url->setOptions([
+      'query' => [
+        'sort_by' => 'vitality',
+      ],
+    ]),
+    default => $url,
+  };
 }

@@ -1,15 +1,17 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Drupal\joinup_core;
 
+use Drupal\collection\Entity\CollectionInterface;
 use Drupal\collection\Entity\GlossaryTermInterface;
 use Drupal\custom_page\Entity\CustomPageInterface;
 use Drupal\joinup_discussion\Entity\DiscussionInterface;
 use Drupal\joinup_document\Entity\DocumentInterface;
 use Drupal\joinup_event\Entity\EventInterface;
 use Drupal\joinup_news\Entity\NewsInterface;
+use Drupal\solution\Entity\SolutionInterface;
 
 /**
  * Provides the Webtools eTrans block configuration for routes and bundles.
@@ -61,13 +63,16 @@ class ETransBlockConfiguration {
         'include' => '.page-title,#block-ventuno-content,#block-iop-content',
         'exclude' => '.page-title__details a[title="View user profile."],.action-link,.news__field-shared-in,.news__referenced-solution,section.comments',
       ],
+      CollectionInterface::class => [
+        'include' => '.layout-content .layout',
+        'exclude' => '.block-field-blockrdf-entitycollectionfield-collection-content',
+      ],
+      SolutionInterface::class => [
+        'include' => '.layout-content .layout',
+        'exclude' => '.block-field-blockrdf-entitysolutionfield-is-content, .block-extra-field-blockrdf-entitysolutionrelated-solutions',
+      ],
     ],
     'routes' => [
-      // The "About" page of a collection or solution.
-      'entity.rdf_entity.about_page' => [
-        'include' => 'h1.page-title__title,#block-ventuno-content',
-      ],
-
       // The "Glossary" page of a collection.
       'entity.rdf_entity.glossary' => [
         'include' => '.view-glossary',

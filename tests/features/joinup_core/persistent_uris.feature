@@ -29,6 +29,7 @@ Feature:
       | access url  | test.zip                                                       |
       | parent      | Persistent solution                                            |
       | uri         | http://data.europa.eu/w21/643a2a52-da3b-4594-92bb-295d8134e1fb |
+      | state       | published                                                      |
     And the following licence:
       | title       | Persistent licence                                             |
       | description | Persistent licence                                             |
@@ -62,14 +63,6 @@ Feature:
     And custom_page content:
       | title           | body            | collection            | state     |
       | Persistent page | Persistent page | Persistent collection | published |
-
-    When I go to the "Persistent collection" collection
-    And I click "About"
-    Then the persistent url should contain "http://data.europa.eu/w21"
-
-    When I go to the "Persistent solution" solution
-    And I click "About"
-    Then the persistent url should contain "http://data.europa.eu/w21"
 
     When I go to the "Persistent release" release
     Then the persistent url should contain "http://data.europa.eu/w21"

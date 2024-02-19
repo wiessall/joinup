@@ -30,7 +30,7 @@ Feature:
       | no         | registered users         |
       | no         | facilitators and authors |
 
-  @terms @uploadFiles:logo.png
+  @uploadFiles:logo.png
   Scenario: Assign ownership during creation of solutions through UI
     Given the following owner:
       | name      | type            |
@@ -58,6 +58,7 @@ Feature:
     When I fill in the following:
       | Title          | Solution API example                         |
       | Description    | We do not care that much about descriptions. |
+      | Abstract       | We do not care that much about abstract.     |
       | Name           | Gopheadow                                    |
       | E-mail address | solutionAPI@example.com                      |
     And I attach the file "logo.png" to "Logo"

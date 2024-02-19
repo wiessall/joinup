@@ -1,4 +1,4 @@
-@api @terms @javascript
+@api @javascript
 Feature: CKEditor5
 
   Background:
@@ -110,8 +110,7 @@ Feature: CKEditor5
     Then the modal should be closed
 
     When I press "Publish"
-    And I click "About"
-    But the response should contain "media/image/alan.jpg"
+    Then the response should contain "media/image/alan.jpg"
 
     When I go to the edit form of the "The Other Collection" collection
     And I press the button "Insert Media" in the "Description" wysiwyg editor
@@ -141,25 +140,26 @@ Feature: CKEditor5
     Then the modal should be closed
 
     When I press "Publish"
-    And I click "About"
-    But the response should contain "media/image/richard.jpg"
+    Then the response should contain "media/image/richard.jpg"
 
     When I go to the edit form of the "Angry Birds" solution
     And I press the button "Insert Media" in the "Description" wysiwyg editor
     Then a modal should open
 
-    Then I should see "Too angry for Angry Birds"
-    And I should see "Pager test 1"
-    And I should see "Pager test 2"
-    And I should see "Pager test 3"
-    And I should see "Pager test 4"
-    And I should see "Pager test 5"
-    And I should see "Pager test 6"
-    And I should see "Pager test 7"
-    And I should see "Pager test 8"
-    And I should see "Pager test 9"
-    And I should see "Pager test ten"
-    And I should see "Pager test eleven"
+    And the "Ventuno media library" table should be:
+      | | Thumbnail | Name                      | Authored by | Updated                 |
+      | |           | Too angry for Angry Birds | Anonymous   | Tue, 26/07/2016 - 13:00 |
+      | |           | Pager test 1              | Anonymous   | Mon, 25/07/2016 - 13:00 |
+      | |           | Pager test 2              | Anonymous   | Sun, 24/07/2016 - 13:00 |
+      | |           | Pager test 3              | Anonymous   | Sat, 23/07/2016 - 13:00 |
+      | |           | Pager test 4              | Anonymous   | Fri, 22/07/2016 - 13:00 |
+      | |           | Pager test 5              | Anonymous   | Thu, 21/07/2016 - 13:00 |
+      | |           | Pager test 6              | Anonymous   | Wed, 20/07/2016 - 13:00 |
+      | |           | Pager test 7              | Anonymous   | Tue, 19/07/2016 - 13:00 |
+      | |           | Pager test 8              | Anonymous   | Mon, 18/07/2016 - 13:00 |
+      | |           | Pager test 9              | Anonymous   | Sun, 17/07/2016 - 13:00 |
+      | |           | Pager test ten            | Anonymous   | Sat, 16/07/2016 - 13:00 |
+      | |           | Pager test eleven         | Anonymous   | Fri, 15/07/2016 - 13:00 |
     And I should not see "Pager test twelve"
     And I should not see "Pager test thirteen"
     And I should not see "Pager test fourteen"
@@ -182,9 +182,11 @@ Feature: CKEditor5
     And I should not see "Pager test 9"
     And I should not see "Pager test ten"
     And I should not see "Pager test eleven"
-    But I should see "Pager test twelve"
-    And I should see "Pager test thirteen"
-    And I should see "Pager test fourteen"
+    But the "Ventuno media library" table should be:
+      | | Thumbnail | Name                | Authored by | Updated                 |
+      | |           | Pager test twelve   | Anonymous   | Thu, 14/07/2016 - 13:00 |
+      | |           | Pager test thirteen | Anonymous   | Wed, 13/07/2016 - 13:00 |
+      | |           | Pager test fourteen | Anonymous   | Tue, 12/07/2016 - 13:00 |
 
     When I close the modal dialog
     And the modal should be closed
@@ -192,19 +194,23 @@ Feature: CKEditor5
     And a modal should open
     And I select "Name (A-Z)" from "Sort by"
     And I press "Apply filters"
+    # Prevent "stale element reference" error.
+    And I wait for 1 second
     And I wait for AJAX to finish
-    Then I should see "Pager test 1"
-    And I should see "Pager test 2"
-    And I should see "Pager test 3"
-    And I should see "Pager test 4"
-    And I should see "Pager test 5"
-    And I should see "Pager test 6"
-    And I should see "Pager test 7"
-    And I should see "Pager test 8"
-    And I should see "Pager test 9"
-    And I should see "Pager test eleven"
-    And I should see "Pager test fourteen"
-    And I should see "Pager test ten"
+    Then the "Ventuno media library" table should be:
+      | | Thumbnail | Name                | Authored by | Updated                 |
+      | |           | Pager test 1        | Anonymous   | Mon, 25/07/2016 - 13:00 |
+      | |           | Pager test 2        | Anonymous   | Sun, 24/07/2016 - 13:00 |
+      | |           | Pager test 3        | Anonymous   | Sat, 23/07/2016 - 13:00 |
+      | |           | Pager test 4        | Anonymous   | Fri, 22/07/2016 - 13:00 |
+      | |           | Pager test 5        | Anonymous   | Thu, 21/07/2016 - 13:00 |
+      | |           | Pager test 6        | Anonymous   | Wed, 20/07/2016 - 13:00 |
+      | |           | Pager test 7        | Anonymous   | Tue, 19/07/2016 - 13:00 |
+      | |           | Pager test 8        | Anonymous   | Mon, 18/07/2016 - 13:00 |
+      | |           | Pager test 9        | Anonymous   | Sun, 17/07/2016 - 13:00 |
+      | |           | Pager test eleven   | Anonymous   | Fri, 15/07/2016 - 13:00 |
+      | |           | Pager test fourteen | Anonymous   | Tue, 12/07/2016 - 13:00 |
+      | |           | Pager test ten      | Anonymous   | Sat, 16/07/2016 - 13:00 |
     And I should not see "Pager test twelve"
     And I should not see "Pager test thirteen"
     And I should not see "Too angry for Angry Birds"
@@ -229,9 +235,11 @@ Feature: CKEditor5
     And I should not see "Pager test eleven"
     And I should not see "Pager test fourteen"
     And I should not see "Pager test ten"
-    And I should see "Pager test twelve"
-    And I should see "Pager test thirteen"
-    And I should see "Too angry for Angry Birds"
+    And the "Ventuno media library" table should be:
+      | | Thumbnail | Name                      | Authored by | Updated                 |
+      | |           | Pager test thirteen       | Anonymous   | Wed, 13/07/2016 - 13:00 |
+      | |           | Pager test twelve         | Anonymous   | Thu, 14/07/2016 - 13:00 |
+      | |           | Too angry for Angry Birds | Anonymous   | Tue, 26/07/2016 - 13:00 |
     But I should not see "The Image in Shaping of disruption"
     And I should not see "This is Alan we love"
     And I should not see "Other Image in The Other Collection"

@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Drupal\eu_oss_catalogue\Model;
 
@@ -33,9 +33,13 @@ class Project {
    * @param string|null $platformReference
    *   The code platform internal unique ID.
    * @param string|null $description
-   *   The repository description if any.
+   *   The repository description, if any.
    * @param string|null $logo
    *   The URL of the project's logo/avatar.
+   * @param int|null $numberOfForks
+   *   Number of times the project has been forked.
+   * @param int|null $numberOfStars
+   *   Number of times the project has been starred.
    * @param string[] $files
    *   A list of file blobs keyed by a file identifier.
    */
@@ -51,6 +55,8 @@ class Project {
     public readonly ?string $platformReference = NULL,
     public readonly ?string $description = NULL,
     public readonly ?string $logo = NULL,
+    public readonly ?int $numberOfForks = NULL,
+    public readonly ?int $numberOfStars = NULL,
     public readonly array $files = [],
   ) {}
 
@@ -75,7 +81,7 @@ class Project {
   }
 
   /**
-   * Computes and returns a hash from metdata.
+   * Computes and returns a hash from metadata.
    *
    * @return string
    *   A hash from metadata.

@@ -5,7 +5,7 @@
  * Enables modules and site configuration for the Joinup profile.
  */
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Cache\Cache;

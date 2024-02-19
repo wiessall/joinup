@@ -5,7 +5,7 @@
  * Messages specific procedural functions.
  */
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 use Drupal\Component\Utility\Unicode;
 use Drupal\Core\Session\AccountInterface;
@@ -13,9 +13,9 @@ use Drupal\message\MessageInterface;
 use Drupal\user\Entity\User;
 
 /**
- * Implements hook_preprocess_swiftmailer().
+ * Implements hook_preprocess_symfony_mailer_lite_email().
  */
-function ventuno_preprocess_swiftmailer(array &$variables): void {
+function ventuno_preprocess_symfony_mailer_lite_email(array &$variables): void {
   $variables['site_url'] = \Drupal::request()->getSchemeAndHttpHost();
 }
 

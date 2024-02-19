@@ -4,7 +4,7 @@ Feature: Creation of owners through UI
   As a user
   I need to be able to create owners, or add existing, through the UI when proposing a collection.
 
-  @terms @uploadFiles:logo.png
+  @uploadFiles:logo.png
   Scenario: Propose a collection
     Given the following owner:
       | name                                                                                                                                                                                                                                                           | type    |
@@ -14,6 +14,7 @@ Feature: Creation of owners through UI
     Then the following field widgets should be present "Contact information, Owner"
     When I fill in the following:
       | Title       | Classical and Ancient Mythology                                                                      |
+      | Abstract    | Some abstract                                                                                        |
       | Description | The seminal work on the ancient mythologies of the primitive and classical peoples of the Discworld. |
       # Contact information data.
       | Name        | Larry Joe                                                                                            |

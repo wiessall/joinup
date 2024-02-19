@@ -1,4 +1,4 @@
-@api @terms @group-b
+@api @group-b
 Feature: Notification test for the collection transitions.
   In order to manage my collections
   As an user that is related to the collection
@@ -67,6 +67,7 @@ Feature: Notification test for the collection transitions.
     When I go to the propose collection form
     When I fill in the following:
       | Title                 | NC proposed new     |
+      | Abstract              | No one cares        |
       | Description           | No one cares.       |
       | Geographical coverage | Belgium             |
       # Contact information data.

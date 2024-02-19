@@ -173,13 +173,6 @@ drupal:
       Main settings: |
         if (!$hash_salt = getenv('DRUPAL_HASH_SALT')) {
           $hash_salt = \Drupal\Component\Utility\Crypt::randomBytesBase64(55);
-          $env_file = "{$app_root}/../.env";
-          $env = file_get_contents($env_file);
-          $env = preg_replace('/DRUPAL_HASH_SALT=.*/', "DRUPAL_HASH_SALT={$hash_salt}", $env);
-          file_put_contents($env_file, $env);
-
-          # Also include this to the `.env.pipeline` which is used by the
-          # pipelines.
           $env_file = "{$app_root}/../.env.pipeline";
           if (!file_exists($env_file)) {
             file_put_contents($env_file, "DRUPAL_HASH_SALT={$hash_salt}");
@@ -210,6 +203,7 @@ drupal:
         $settings['joinup.parse_cached_computed_field'] = FALSE;
       Configuration: |
         $settings['config_exclude_modules'] = [
+          'action',
           'admin_toolbar',
           'admin_toolbar_tools',
           'blazy_ui',
@@ -272,26 +266,17 @@ drupal:
       Permissions: |
         $settings['skip_permissions_hardening'] = TRUE;
       Null mail collector: |
-        $config['system.mail']['interface']['default'] = 'null';
-        $config['mailsystem.settings']['defaults']['sender'] = 'null';
+        $config['symfony_mailer_lite.settings']['default_transport'] = 'null';
       Development mail collector: |
-        $config['swiftmailer.transport']['transport'] = 'smtp';
-        $config['swiftmailer.transport']['smtp_host'] = 'localhost';
-        $config['swiftmailer.transport']['smtp_port'] = 1025;
-        $config['swiftmailer.transport']['smtp_encryption'] = '0';
-        $config['swiftmailer.transport']['smtp_credential_provider'] = 'swiftmailer';
-        $config['swiftmailer.transport']['smtp_credentials'] = [
-          'swiftmailer' => ['username' => '', 'password' => ''],
-        ];
+        $config['symfony_mailer_lite.settings']['default_transport'] = 'native';
       Test mail collector: |
         $config['system.mail']['interface']['default'] = 'test_mail_collector';
         $config['mailsystem.settings']['defaults']['sender'] = 'test_mail_collector';
       Site email:
         $config['system.site']['mail'] = getenv('DRUPAL_SITE_MAIL');
       Mail transport: |
-        $config['swiftmailer.transport']['sendmail_path'] = getenv('DRUPAL_MAIL_SENDMAIL_PATH');
-        $config['swiftmailer.transport']['sendmail_mode'] = getenv('DRUPAL_MAIL_SENDMAIL_MODE');
-        $config['swiftmailer.transport']['spool_directory'] = getenv('DRUPAL_MAIL_SPOOL_DIR');
+        $config['symfony_mailer_lite.settings']['default_transport'] = 'sendmail';
+        $config['symfony_mailer_lite.symfony_mailer_lite_transport.sendmail']['configuration']['query']['command'] = getenv('DRUPAL_MAIL_SENDMAIL_PATH') . ' -' . getenv('DRUPAL_MAIL_SENDMAIL_MODE');
       Search API: |
         // Adding a fallback for the scheme in case it is not properly
         // consumed by the production environment.

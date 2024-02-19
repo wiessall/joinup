@@ -26,6 +26,10 @@
   </h1>
 {% endif %}
 {{ title_suffix }}
-<div class="fs-sm mb-3">
-  {{ additional_content.created }}
+{# Metadata line #}
+<div class="page-title__details fs-sm mb-3 d-flex">
+  <span class="page-title__detail">{{ additional_content.created }}</span>
+  {% if additional_content.is_archived %}
+    {% include '@ventuno/parts/page-title-detail-archive.html.twig' %}
+  {% endif %}
 </div>
