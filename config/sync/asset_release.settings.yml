@@ -24,3 +24,8 @@ transitions:
     published:
       - moderator
       - rdf_entity-solution-facilitator
+    archived:
+      - moderator
+  archived:
+    published:
+      - moderator

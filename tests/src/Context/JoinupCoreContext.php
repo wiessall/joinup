@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Drupal\joinup\Context;
 
@@ -263,10 +263,31 @@ class JoinupCoreContext extends RawDrupalContext {
   /**
    * Asserts the order of elements.
    *
-   * @Then I should see the following group menu items in the specified order:
+   * @Then I should see the following quick links menu items in the specified order:
    */
-  public function assertRepeatedElementContainsText(TableNode $table): void {
-    $navigation_menu_selector = $this->getRegionSelector('Navigation menu');
+  public function assertQuickMenuLinks(TableNode $table): void {
+    $this->assertGroupMenuItems($table, 'Quick links');
+  }
+
+  /**
+   * Asserts the order of elements.
+   *
+   * @Then I should see the following navigation menu items in the specified order:
+   */
+  public function assertNavigationMenuLinks(TableNode $table): void {
+    $this->assertGroupMenuItems($table, 'Navigation menu');
+  }
+
+  /**
+   * Asserts the order of elements.
+   *
+   * @param \Behat\Gherkin\Node\TableNode $table
+   *   The table node.
+   * @param string $region
+   *   The region.
+   */
+  protected function assertGroupMenuItems(TableNode $table, string $region): void {
+    $navigation_menu_selector = $this->getRegionSelector($region);
     $parent = $this->getSession()->getPage()->findAll('css', "$navigation_menu_selector .nav a");
     $table_hash = $table->getHash();
     Assert::assertSameSize($table_hash, $parent);

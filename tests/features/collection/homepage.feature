@@ -1,4 +1,4 @@
-@api @terms @group-a
+@api @group-a
 Feature: Collection homepage
   In order find content around a topic
   As a user of the website
@@ -35,6 +35,7 @@ Feature: Collection homepage
       | content creation | registered users      |
       | creation date    | 2014-10-17 8:32am     |
       | state            | published             |
+      | topic            | Info                  |
     And the following collection user memberships:
       | collection         | user    | roles       |
       | Middle earth daily | Frodo   | facilitator |
@@ -87,12 +88,6 @@ Feature: Collection homepage
 
   Scenario: The collection homepage shows related content.
     When I go to the homepage of the "Middle earth daily" collection
-    # The collection fields are shown in the about page.
-    Then I should not see the text "Only members can create new content"
-    And I should not see the text "Moderated"
-    And I should not see the text "Open collection"
-    And I should not see the text "Bilbo Baggins"
-    And I should not see the text "Employment and Support Allowance"
     # The collection content is shown here in the correct order.
     Then I should see the following tiles in the correct order:
       | Rohirrim make extraordinary deal                  |
@@ -124,6 +119,7 @@ Feature: Collection homepage
       | Supplier exchange (2)   |
       | Economy and Welfare (1) |
       | Finance in EU (1)       |
+      | Info (1)                |
 
     When I click "Supplier exchange" in the "collection topic" inline facet
     Then "Supplier exchange (2)" should be selected in the "collection topic" inline facet
@@ -131,6 +127,7 @@ Feature: Collection homepage
       | eGov (2)                |
       | Economy and Welfare (1) |
       | Finance in EU (1)       |
+      | Info (1)                |
       | all topics              |
     Then I should see the following tiles in the correct order:
       | Big hobbit feast - fireworks at midnight          |
@@ -159,6 +156,20 @@ Feature: Collection homepage
     And I should see the "Breaking: Gandalf supposedly plans his retirement" tile
     And I should see the "Rohirrim make extraordinary deal" tile
     But I should not see the "Big hobbit feast - fireworks at midnight" tile
+
+  Scenario: The collection homepage shows details.
+    When I go to the homepage of the "Middle earth daily" collection
+
+    Then I should see the following headings:
+      | Detailed information |
+      | Moderation           |
+    And I should see the following lines of text:
+      | Owner              |
+      | Bilbo Baggins      |
+      | Middle earth daily |
+      | Last updated       |
+      | Open collection    |
+      | Moderated          |
 
   # Regression test to ensure that related community content does not appear in the draft view.
   # @see: https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-3262

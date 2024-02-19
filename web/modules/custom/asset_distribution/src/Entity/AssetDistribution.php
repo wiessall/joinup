@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Drupal\asset_distribution\Entity;
 
@@ -10,6 +10,8 @@ use Drupal\joinup_bundle_class\JoinupBundleClassMetaEntityTrait;
 use Drupal\joinup_group\Entity\GroupContentTrait;
 use Drupal\joinup_stats\Entity\DownloadCountAwareInterface;
 use Drupal\joinup_stats\Entity\DownloadCountAwareTrait;
+use Drupal\joinup_workflow\ArchivableEntityTrait;
+use Drupal\joinup_workflow\EntityWorkflowStateTrait;
 use Drupal\rdf_entity\Entity\Rdf;
 use Drupal\solution\Entity\SolutionContentTrait;
 use Drupal\solution\Entity\SolutionInterface;
@@ -22,8 +24,10 @@ use Drupal\solution\Entity\SolutionInterface;
  */
 class AssetDistribution extends Rdf implements AssetDistributionInterface {
 
+  use ArchivableEntityTrait;
   use DescriptionTrait;
   use DownloadCountAwareTrait;
+  use EntityWorkflowStateTrait;
   use GroupContentTrait;
   use SolutionContentTrait;
   use JoinupBundleClassMetaEntityTrait;
@@ -66,6 +70,13 @@ class AssetDistribution extends Rdf implements AssetDistributionInterface {
    */
   public function getDescriptionField(): string {
     return 'field_ad_description';
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getWorkflowStateFieldName(): string {
+    return 'field_ad_state';
   }
 
 }

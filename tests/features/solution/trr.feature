@@ -4,15 +4,16 @@ Feature: Creating a test (solution) in the TRR collection.
   As a collection facilitator
   I need to be able to add 'test'-enabled solutions.
 
-  @terms @javascript
+  @javascript
   Scenario: Test a TRR related fields
     Given the following collection:
       | title | Friends of the test repository |
       | state | published                      |
     And the following solution:
-      | title              | Linked Open Data Trr field             |
-      | description        | Re-usable government data       |
-      | state              | published                       |
+      | title              | Linked Open Data Trr field |
+      | abstract           | An abstract                |
+      | description        | Re-usable government data  |
+      | state              | published                  |
     And the following owner:
       | name | type                         |
       | W3C  | Company, Industry consortium |
@@ -61,7 +62,7 @@ Feature: Creating a test (solution) in the TRR collection.
     And the "Product type" field should contain ""
     And the "Standardization level" field should contain the "- None -" option
 
-  @terms @javascript
+  @javascript
   Scenario: Create a TRR solution
     Given users:
       | Username | Roles |
@@ -85,6 +86,7 @@ Feature: Creating a test (solution) in the TRR collection.
 
     # Fill in basic solution data.
     When I fill in "Title" with "Linked Open Data"
+    And I fill in "Abstract" with "Abstract of LOD"
     And I enter "Re-usable government data" in the "Description" wysiwyg editor
     When I fill in the following:
       | Name           | Lucky Luke          |
@@ -166,11 +168,13 @@ Feature: Creating a test (solution) in the TRR collection.
       | description | Asset distribution sample description |
       | access url  | test.zip                              |
       | parent      | TRR release foo                       |
+      | state       | published                             |
     And the following distribution:
       | title       | TRR Distribution bar                  |
       | description | Asset distribution sample description |
       | access url  | test.zip                              |
       | parent      | TRR release bar                       |
+      | state       | published                             |
 
     # The GITB compliant field is only shown when the solution has a certain solution type.
     When I am logged in as a "facilitator" of the "TRR solution foo" solution
