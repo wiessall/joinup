@@ -132,11 +132,15 @@ class JoinupTaxonomyCommands extends DrushCommands {
     }
 
     $vids = array_merge(...array_values(self::VOCABS));
+    // Collect triples in this graph to create a fixture file later.
+    $fixtureFileGraph = new Graph();
+    $vocabularyUris = [];
 
     // Add the vocabulary entries.
-    foreach (\Drupal::entityTypeManager()->getStorage('taxonomy_vocabulary')->loadMultiple() as $vid => $vocabulary) {
-      RdfSyncConnection::updateTriples([
-        $this->mapper->getBundleRdfType('taxonomy_term', $vid) => [
+    foreach (\Drupal::entityTypeManager()->getStorage('taxonomy_vocabulary')->loadMultiple($vids) as $vid => $vocabulary) {
+      $vocabularyUri = $this->mapper->getBundleRdfType('taxonomy_term', $vid);
+      $triples = [
+        $vocabularyUri => [
           'http://www.w3.org/1999/02/22-rdf-syntax-ns#type' => [
             (new Resource('http://www.w3.org/2004/02/skos/core#ConceptScheme'))->toRdfPhp(),
           ],
@@ -144,7 +148,10 @@ class JoinupTaxonomyCommands extends DrushCommands {
             (new Literal($vocabulary->label(), 'en'))->toRdfPhp(),
           ],
         ],
-      ]);
+      ];
+      RdfSyncConnection::updateTriples($triples);
+      $fixtureFileGraph->parse($triples, 'php');
+      $vocabularyUris[] = $vocabularyUri;
     }
 
     // We already have a Drush command. Use it.
@@ -158,31 +165,34 @@ class JoinupTaxonomyCommands extends DrushCommands {
       ->disableOutput()
       ->run($process->showRealtime());
 
-    $graph = RdfSyncConnection::createGraphStore()->get(RdfSyncConnection::GRAPH);
+    $query = <<<QUERY
+      SELECT ?subject ?predicate ?object
+      WHERE {
+        GRAPH <%s> {
+          ?subject ?predicate ?object .
+          ?subject a <http://www.w3.org/2004/02/skos/core#Concept> .
+          ?subject ?vocab_type ?vocab .
+          VALUES ?vocab_type { <http://www.w3.org/2004/02/skos/core#inScheme> <http://www.w3.org/2004/02/skos/core#topConceptOf> } .
+          VALUES ?vocab { %s } .
+        }
+      }
+      QUERY;
 
-    $vocabularyUris = array_map(function (string $vid): string {
-      return $this->mapper->getBundleRdfType('taxonomy_term', $vid);
-    }, $vids);
-    foreach ($graph->resources() as $resource) {
-      // This resource is a vocabulary definition.
-      if ($resource->isA('skos:ConceptScheme')) {
-        continue;
-      }
-      // Cleanup potential triples which are not part of the vocabularies.
-      if (!$resource->isA('skos:Concept') || !in_array($resource->getResource('skos:inScheme')->getUri(), $vocabularyUris, TRUE)) {
-        $graph->deleteEntireResource($resource);
-      }
+    // Get all locked vocabulary triples and store them in the collector graph.
+    $results = RdfSyncConnection::query(sprintf($query, RdfSyncConnection::GRAPH, '<' . implode('> <', $vocabularyUris) . '>' ));
+    foreach ($results as $row) {
+      $fixtureFileGraph->add($row->subject, $row->predicate, $row->object);
     }
 
     // Generate the RDFXML dump file.
     $file = static::getDumpFilePath('rdf', FALSE);
-    file_put_contents($file, $graph->serialise('rdfxml'));
+    file_put_contents($file, $fixtureFileGraph->serialise('rdfxml'));
 
     // Remove stale dump files.
     $staleFiles = array_filter(
       glob(self::FIXTURES_DIR . '/terms.*.rdf'),
       function (string $staleFile) use ($file): bool {
-        return realpath($staleFile) !== $file;
+        return $staleFile !== $file;
       }
     );
     array_walk($staleFiles, function (string $file): void {
