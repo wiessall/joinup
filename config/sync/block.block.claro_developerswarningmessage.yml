@@ -25,6 +25,6 @@ visibility:
     id: user_role
     negate: false
     context_mapping:
-      user: '@joinup_user.user_route_context:user_route'
+      user: '@user.current_user_context:current_user'
     roles:
       developer: developer
