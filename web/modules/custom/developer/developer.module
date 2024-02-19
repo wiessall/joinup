@@ -4,3 +4,21 @@
  * @file
  * Primary module hooks for Developer module.
  */
+
+use Drupal\block\Entity\Block;
+use Drupal\Core\Access\AccessResult;
+use Drupal\Core\Access\AccessResultInterface;
+use Drupal\Core\Session\AccountInterface;
+
+/**
+ * Implements hook_block_access().
+ */
+function developer_block_access(Block $block, $operation, AccountInterface $account): AccessResultInterface {
+  if ($operation !== 'view' || $block->getPluginId() !== 'developer_warning_message' || !getenv('AUTOLOGOUT_PRODUCTION')) {
+    return AccessResult::neutral();
+  }
+
+  // Deny access to the block for local environments to not allow the devs get
+  // used to the warning message.
+  return AccessResult::forbidden();
+}
