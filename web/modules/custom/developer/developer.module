@@ -4,14 +4,3 @@
  * @file
  * Primary module hooks for Developer module.
  */
-
-/**
- * Implements hook_block_view_alter().
- */
-function developer_block_view_alter(array &$build, \Drupal\Core\Block\BlockPluginInterface $block) {
-  if ($block->getPluginId() == 'simple_block:developers_warning_message') {
-    $build['#cache']['max-age'] = 0;
-
-  }
-}
-
