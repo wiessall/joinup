@@ -96,14 +96,6 @@ function joinup_slick_preprocess_field(array &$variables): void {
           'attributes' => new Attribute(),
         ],
       ];
-
-      // Add variable-width library if needed.
-      if (
-        !empty($optionset->get('options')['settings']['variableWidth']) &&
-        empty($optionset->get('options')['settings']['infinite'])
-      ) {
-        $variables['#attached']['library'][] = 'joinup_slick/slick-variable-width';
-      }
     }
   }
 }
@@ -134,6 +126,13 @@ function joinup_slick_preprocess_slick(array &$variables): void {
 
     // Ensure arrow_attributes is set.
     $variables['arrow_attributes'] = $variables['arrow_attributes'] ?? new Attribute();
+  }
+  // Add variable-width library if needed.
+  if (
+    !empty($variables["element"]["#optionset"]->get('options')['settings']['variableWidth']) &&
+    empty($variables["element"]["#optionset"]->get('options')['settings']['infinite'])
+  ) {
+    $variables['#attached']['library'][] = 'joinup_slick/slick-variable-width';
   }
 }
 

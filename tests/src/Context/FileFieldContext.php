@@ -135,7 +135,7 @@ class FileFieldContext extends RawDrupalContext {
    *   The file field node element.
    *
    * @throws \Behat\Mink\Exception\ElementNotFoundException
-   *    Thrown when the element is not found.
+   *   Thrown when the element is not found.
    */
   protected function findSubFieldOfFileField(string $field, ?string $region = NULL): NodeElement {
     $region_element = $region ? $this->getRegion($region) : $this->getSession()->getPage();
