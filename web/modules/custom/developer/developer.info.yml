@@ -1,0 +1,5 @@
+name: 'Developer'
+type: module
+description: 'Functionality for the developer role.'
+package: Joinup
+core_version_requirement: ^10
