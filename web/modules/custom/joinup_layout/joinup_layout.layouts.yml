@@ -64,9 +64,9 @@ joinup_layout_oss_heading:
   library: joinup_layout/oss_heading
   default_region: second
   icon_map:
-    - [ top_left, top_right, aside ]
+    - [ top_left, top_right, indicator ]
     - [ first_left, first_right, aside ]
-    - [ second, aside ]
+    - [ second, second, aside ]
     - [ third_left, third_right, aside ]
   regions:
     top_left:
@@ -83,6 +83,8 @@ joinup_layout_oss_heading:
       label: Third left
     third_right:
       label: Third right
+    indicator:
+      label: Indicator
     aside:
       label: Aside
 
