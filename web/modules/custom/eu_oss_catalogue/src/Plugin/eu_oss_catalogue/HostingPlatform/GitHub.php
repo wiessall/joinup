@@ -12,8 +12,8 @@ use Drupal\Core\Site\Settings;
 use Drupal\Core\Utility\Error;
 use Drupal\eu_oss_catalogue\EuOssCatalogueGitHostingPlatformPluginBase;
 use Drupal\eu_oss_catalogue\Exception\MissingAccessTokenException;
-use Drupal\eu_oss_catalogue\Model\GitHubSearchType;
-use Drupal\eu_oss_catalogue\Model\GitHubState;
+use Drupal\eu_oss_catalogue\Model\GitHub\SearchType;
+use Drupal\eu_oss_catalogue\Model\GitHub\State;
 use Drupal\eu_oss_catalogue\Model\GitUri;
 use Drupal\eu_oss_catalogue\Model\Project;
 use Github\Api\GraphQL;
@@ -36,7 +36,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  */
 class GitHub extends EuOssCatalogueGitHostingPlatformPluginBase {
 
-  protected const PULLREQUEST_FILTER = ['states' => GitHubState::OPEN];
+  protected const PULLREQUEST_FILTER = ['states' => State::OPEN];
 
   /**
    * Default terms for GitHub search.
@@ -83,11 +83,11 @@ class GitHub extends EuOssCatalogueGitHostingPlatformPluginBase {
   /**
    * {@inheritdoc}
    */
-  public static function create(ContainerInterface $container, array $configuration, $pluginId, $pluginDefinition): self {
+  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition): self {
     return new static(
       $configuration,
-      $pluginId,
-      $pluginDefinition,
+      $plugin_id,
+      $plugin_definition,
       $container->get('http_client'),
       $container->get('settings'),
       $container->get('logger.channel.eu_oss_catalogue'),
@@ -212,8 +212,9 @@ class GitHub extends EuOssCatalogueGitHostingPlatformPluginBase {
           $response = $graphQL->execute($query->toString());
         }
         catch (\Throwable $exception) {
-          Error::logException($this->logger, $exception, "Can't get GitHub projects. Query: @query", [
-            '@query' => $searchQuery,
+          Error::logException($this->logger, $exception, "Can't get GitHub projects. Query: @query, Message: @message", [
+            '@query' => $query->toString(),
+            '@message' => $exception->getMessage(),
           ]);
           break;
         }
@@ -253,6 +254,7 @@ class GitHub extends EuOssCatalogueGitHostingPlatformPluginBase {
             logo: $logo,
             numberOfForks: $node['forkCount'],
             numberOfStars: $node['stargazerCount'],
+            numberOfIssues: $node['issues']['totalCount'],
             numberOfPullRequests: $node['pullRequests']['totalCount'],
             files: $files,
           );
@@ -300,6 +302,9 @@ class GitHub extends EuOssCatalogueGitHostingPlatformPluginBase {
    *           tagName
    *           createdAt
    *         }
+   *         issues (states: OPEN) {
+   *           totalCount
+   *         }
    *         file: object(expression: "HEAD:publiccode.yml") {
    *           ... on Blob {
    *             text
@@ -323,7 +328,7 @@ class GitHub extends EuOssCatalogueGitHostingPlatformPluginBase {
    */
   protected function buildProjectsQuery(string $searchQuery, array $requestedFiles = [], ?string $endCursor = NULL): Query {
     $filters = [
-      'type' => GitHubSearchType::REPOSITORY,
+      'type' => SearchType::REPOSITORY,
       'query' => $searchQuery,
       'first' => 100,
     ] + ($endCursor ? ['after' => $endCursor] : []);
@@ -337,6 +342,7 @@ class GitHub extends EuOssCatalogueGitHostingPlatformPluginBase {
       ->use((new Node('owner'))->use('login'))
       ->use((new Node('defaultBranchRef'))->use('name'))
       ->use((new Node('latestRelease'))->use('tagName', 'createdAt'))
+      ->use((new Node('issues', ['states' => State::OPEN]))->use('totalCount'))
       ->use((new Node('pullRequests', static::PULLREQUEST_FILTER))->use('totalCount'));
 
     foreach ($requestedFiles as $fileId => $filePath) {

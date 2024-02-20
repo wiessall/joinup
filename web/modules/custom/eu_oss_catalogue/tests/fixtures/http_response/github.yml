@@ -8,6 +8,8 @@ default:
           isArchived: false
           forkCount: 101
           stargazerCount: 121
+          issues:
+            totalCount: 141
           # This logo is ignored as a valid one is provided in publiccode.yml.
           openGraphImageUrl: https://repository-images.githubusercontent.com/123123123/012345678901234567890123456789012345
           owner:
@@ -131,6 +133,8 @@ default:
           isArchived: true
           forkCount: 102
           stargazerCount: 122
+          issues:
+            totalCount: 142
           # This will be used as logo from publiccode.yml doesn't exist.
           openGraphImageUrl: https://repository-images.githubusercontent.com/234234234/012345678901234567890123456789012345
           owner:
@@ -222,6 +226,8 @@ developers_italia:
           isArchived: false
           forkCount: 103
           stargazerCount: 123
+          issues:
+            totalCount: 143
           owner:
             login: dummy-namespace-1
           defaultBranchRef:

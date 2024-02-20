@@ -7,9 +7,10 @@ namespace Drupal\eu_oss_catalogue\Plugin\eu_oss_catalogue\HostingPlatform;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Utility\Error;
 use Drupal\eu_oss_catalogue\EuOssCatalogueGitHostingPlatformPluginBase;
-use Drupal\eu_oss_catalogue\Model\GitLabReleaseSort;
+use Drupal\eu_oss_catalogue\Model\GitLab\ReleaseSort;
 use Drupal\eu_oss_catalogue\Model\GitUri;
 use Drupal\eu_oss_catalogue\Model\Project;
+use Gitlab\Api\Issues;
 use Gitlab\Client;
 use Gitlab\ResultPager;
 use GraphQL\Actions\Query;
@@ -139,7 +140,7 @@ class GitLabDotCom extends EuOssCatalogueGitHostingPlatformPluginBase {
         catch (\RuntimeException $exception) {
           if ($exception->getCode() === 404) {
             // Group doesn't exist. We set the response in this way to be picked
-            // up few lines later and retry as user instead of group.
+            // up a few lines later and retry as user instead of a group.
             $response['data']['group'] = NULL;
           }
           elseif ($exception->getCode() === 500) {
@@ -160,10 +161,11 @@ class GitLabDotCom extends EuOssCatalogueGitHostingPlatformPluginBase {
         }
 
         if ($response['data']['group'] === NULL) {
-          // Not a group. It might be a user namespace but let's see. For users,
-          // we only deal with the case where projects were explicitly passed,
-          // i.e. both namespace and project name were specified. Otherwise,
-          // GitLab requires authentication and we don't support that.
+          // Not a group. It might be a user namespace, but let's see.
+          // For users, we only deal with the case where projects were
+          // explicitly passed, i.e. both namespace and project name
+          // were specified. Otherwise, GitLab requires authentication
+          // and we don't support that.
           if ($repos !== NULL) {
             foreach ($this->fetchIndividualProjects($namespace, $repos, $requestedFiles) as $project) {
               yield $project;
@@ -203,6 +205,7 @@ class GitLabDotCom extends EuOssCatalogueGitHostingPlatformPluginBase {
    *         archived
    *         forksCount
    *         starCount
+   *         openIssuesCount
    *         avatarUrl
    *         openMergeRequestsCount
    *         releases(sort: CREATED_DESC first: 1) {
@@ -246,8 +249,18 @@ class GitLabDotCom extends EuOssCatalogueGitHostingPlatformPluginBase {
       ->use('hasNextPage', 'endCursor')
       ->prev()
       ->nodes([])
-      ->use('path', 'id', 'description', 'archived', 'forksCount', 'starCount', 'avatarUrl', 'openMergeRequestsCount')
-      ->releases(['sort' => GitLabReleaseSort::CREATED_DESC, 'first' => 1])
+      ->use(
+        'path',
+        'id',
+        'description',
+        'archived',
+        'forksCount',
+        'starCount',
+        'openIssuesCount',
+        'avatarUrl',
+        'openMergeRequestsCount'
+      )
+      ->releases(['sort' => ReleaseSort::CREATED_DESC, 'first' => 1])
       ->nodes([])
       ->use('tagName', 'createdAt')
       ->prev()
@@ -277,6 +290,7 @@ class GitLabDotCom extends EuOssCatalogueGitHostingPlatformPluginBase {
    *     archived
    *     forksCount
    *     starCount
+   *     openIssuesCount
    *     avatarUrl
    *     openMergeRequestsCount
    *     releases(sort: CREATED_DESC first: 1) {
@@ -310,8 +324,19 @@ class GitLabDotCom extends EuOssCatalogueGitHostingPlatformPluginBase {
    */
   protected function buildProjectQuery(string $namespace, string $name, array $requestedFiles = []): Query {
     $query = new Query('project', ['fullPath' => "$namespace/$name"]);
-    $fragment = $query->use('path', 'id', 'description', 'archived', 'forksCount', 'starCount', 'avatarUrl')
-      ->releases(['sort' => GitLabReleaseSort::CREATED_DESC, 'first' => 1])
+    $fragment = $query
+      ->use(
+        'path',
+        'id',
+        'description',
+        'archived',
+        'forksCount',
+        'starCount',
+        'openIssuesCount',
+        'avatarUrl',
+        'openMergeRequestsCount'
+      )
+      ->releases(['sort' => ReleaseSort::CREATED_DESC, 'first' => 1])
       ->nodes([])
       ->use('tagName', 'createdAt')
       ->prev()
@@ -368,6 +393,7 @@ class GitLabDotCom extends EuOssCatalogueGitHostingPlatformPluginBase {
       logo: $project['avatarUrl'] ?? NULL,
       numberOfForks: $project['forksCount'],
       numberOfStars: $project['starCount'],
+      numberOfIssues: $project['openIssuesCount'],
       numberOfPullRequests: $project['openMergeRequestsCount'],
       files: $files,
     );
@@ -484,6 +510,7 @@ class GitLabDotCom extends EuOssCatalogueGitHostingPlatformPluginBase {
 
     $this->addProjectLastReleaseWithRestApi($project, $fullPath);
     $this->addProjectFilesWithRestApi($project, $fullPath, $requestedFiles);
+    $this->addProjectOpenIssuesRestApi($project, $project['id']);
 
     return $project;
   }
@@ -509,6 +536,7 @@ class GitLabDotCom extends EuOssCatalogueGitHostingPlatformPluginBase {
       'archived' => $response['archived'] ?? FALSE,
       'forksCount' => $response['forks_count'],
       'starCount' => $response['star_count'],
+      'openIssuesCount' => $response['open_issues'] ?? NULL,
       'avatarUrl' => $response['avatar_url'],
     ];
   }
@@ -522,7 +550,7 @@ class GitLabDotCom extends EuOssCatalogueGitHostingPlatformPluginBase {
    *   The project full path.
    */
   protected function addProjectLastReleaseWithRestApi(array &$project, string $fullPath): void {
-    // Try to get latest release.
+    // Try to get the latest release.
     try {
       $response = $this->getClient()->repositories()->releases($fullPath);
       if ($response) {
@@ -577,6 +605,33 @@ class GitLabDotCom extends EuOssCatalogueGitHostingPlatformPluginBase {
   }
 
   /**
+   * Appends open issues info to the project array.
+   *
+   * @param array $project
+   *   The project array.
+   * @param string $projectId
+   *   The project id.
+   */
+  protected function addProjectOpenIssuesRestApi(array &$project, string $projectId): void {
+    try {
+      $pager = new ResultPager($this->getClient());
+      $issues = $pager->fetchAll(
+        $this->getClient()->issues(),
+        'all',
+        [$projectId, ['state' => Issues::STATE_OPENED]]
+      );
+      $project['releases']['nodes'][0]['open_issues'] = count($issues);
+    }
+    catch (\Throwable $exception) {
+      // Log a warning.
+      Error::logException($this->logger, $exception, "Can't get open issues for project {project_id} from {url} using REST API", [
+        'project_id' => $projectId,
+        'url' => $this->getConfiguration()['baseUrl'],
+      ], LogLevel::WARNING);
+    }
+  }
+
+  /**
    * Returns the group projects by using GitLab REST API.
    *
    * @param string $namespace
@@ -596,6 +651,7 @@ class GitLabDotCom extends EuOssCatalogueGitHostingPlatformPluginBase {
         $project = $this->buildProjectArray($row);
         $this->addProjectLastReleaseWithRestApi($project, "$namespace/{$project['path']}");
         $this->addProjectFilesWithRestApi($project, "$namespace/{$project['path']}", $requestedFiles);
+        $this->addProjectOpenIssuesRestApi($project, $project['id']);
         $projects[] = $project;
       }
       return ['projects' => ['nodes' => $projects]];

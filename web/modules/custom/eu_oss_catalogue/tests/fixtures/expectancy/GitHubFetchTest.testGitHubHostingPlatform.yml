@@ -9,6 +9,7 @@ GitHub solution 1:
     oss_logo: https://raw.githubusercontent.com/dummy-namespace-1/dummy-name-1/HEAD/images/logo-solution-1.png
     oss_git_forks: 101
     oss_git_stars: 121
+    oss_git_open_issues: 141
     oss_publiccode_yml_version: '0.2'
     oss_git_open_pull_requests: 8
 
@@ -35,6 +36,7 @@ GitHub solution 2:
     oss_logo: https://repository-images.githubusercontent.com/234234234/012345678901234567890123456789012345
     oss_git_forks: 102
     oss_git_stars: 122
+    oss_git_open_issues: 142
     oss_publiccode_yml_version: '0.4'
     oss_git_open_pull_requests: 0
 
