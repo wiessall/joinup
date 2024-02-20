@@ -91,7 +91,6 @@ permissions:
   - 'administer collection ownership'
   - 'administer comments'
   - 'administer compatibility document types'
-  - 'administer devel menu items'
   - 'administer entity legal'
   - 'administer entityqueue'
   - 'administer footer menu items'
