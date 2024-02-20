@@ -330,6 +330,94 @@ third_party_settings:
                     template_suggestion: ''
             weight: 0
             additional: {  }
+          9e4488e0-c6e8-41bb-8f5a-8f0ed703f5a2:
+            uuid: 9e4488e0-c6e8-41bb-8f5a-8f0ed703f5a2
+            region: indicator
+            configuration:
+              id: 'field_block:node:oss_solution:oss_git_stars'
+              label: Stars
+              label_display: '0'
+              provider: layout_builder
+              context_mapping:
+                entity: layout_builder.entity
+                view_mode: view_mode
+              formatter:
+                type: number_integer
+                label: visually_hidden
+                settings:
+                  thousand_separator: ''
+                  prefix_suffix: false
+                third_party_settings:
+                  template_suggestion:
+                    template_suggestion: git_indicator
+            weight: 0
+            additional: {  }
+          5fd354d9-fecf-4319-8a2f-e09a11961c90:
+            uuid: 5fd354d9-fecf-4319-8a2f-e09a11961c90
+            region: indicator
+            configuration:
+              id: 'field_block:node:oss_solution:oss_git_open_issues'
+              label: 'Open Issues'
+              label_display: '0'
+              provider: layout_builder
+              context_mapping:
+                entity: layout_builder.entity
+                view_mode: view_mode
+              formatter:
+                type: number_integer
+                label: visually_hidden
+                settings:
+                  thousand_separator: ''
+                  prefix_suffix: false
+                third_party_settings:
+                  template_suggestion:
+                    template_suggestion: git_indicator
+            weight: 1
+            additional: {  }
+          451af157-5f2a-4d80-9f82-8d9794f7122b:
+            uuid: 451af157-5f2a-4d80-9f82-8d9794f7122b
+            region: indicator
+            configuration:
+              id: 'field_block:node:oss_solution:oss_git_open_pull_requests'
+              label: 'Open Pull / Merge Requests'
+              label_display: '0'
+              provider: layout_builder
+              context_mapping:
+                entity: layout_builder.entity
+                view_mode: view_mode
+              formatter:
+                type: number_integer
+                label: visually_hidden
+                settings:
+                  thousand_separator: ''
+                  prefix_suffix: false
+                third_party_settings:
+                  template_suggestion:
+                    template_suggestion: git_indicator
+            weight: 2
+            additional: {  }
+          68bdaeb3-5329-42cc-be0a-6263b0e1c4dd:
+            uuid: 68bdaeb3-5329-42cc-be0a-6263b0e1c4dd
+            region: indicator
+            configuration:
+              id: 'field_block:node:oss_solution:oss_git_forks'
+              label: Forks
+              label_display: '0'
+              provider: layout_builder
+              context_mapping:
+                entity: layout_builder.entity
+                view_mode: view_mode
+              formatter:
+                type: number_integer
+                label: visually_hidden
+                settings:
+                  thousand_separator: ''
+                  prefix_suffix: false
+                third_party_settings:
+                  template_suggestion:
+                    template_suggestion: git_indicator
+            weight: 3
+            additional: {  }
         third_party_settings: {  }
       -
         layout_id: layout_onecol
