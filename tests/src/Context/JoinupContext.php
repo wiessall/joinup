@@ -44,6 +44,7 @@ use Drupal\node\Entity\Node;
 use Drupal\og\OgGroupAudienceHelperInterface;
 use Drupal\og\OgRoleInterface;
 use Drupal\paragraphs\Entity\Paragraph;
+use Drupal\rdf_sync\RdfSyncConnection;
 use GuzzleHttp\Client;
 use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\ExpectationFailedException;
@@ -3350,6 +3351,33 @@ JS;
     }
 
     $this->visitPath(\Drupal::entityTypeManager()->getStorage('taxonomy_term')->load($tid)->toUrl()->toString());
+  }
+
+  /**
+   * Asserts that a list of triples exists in a certain graph.
+   *
+   * Each row is a triple serialized as NTriples:
+   * | <http://subject1> <http://predicate1> <http://reference1>  |
+   * | <http://subject1> <http://predicate2> "value1"@en          |
+   * | <http://subject2> <http://predicate3> "value2"^^xsd:string |
+   *
+   * @param string $graph
+   *   The graph to be queried.
+   * @param \Behat\Gherkin\Node\TableNode $triples
+   *   The user data.
+   *
+   * @Then the following :graph graph triples should exist in the RDF backend:
+   */
+  public function assertTriples(string $graph, TableNode $triples): void {
+    $failedTriples = [];
+    foreach ($triples->getRows() as [$triple]) {
+      if (!RdfSyncConnection::query("ASK WHERE { GRAPH <$graph> { $triple } }")->getBoolean()) {
+        $failedTriples[] = $triple;
+      }
+    }
+    if ($failedTriples) {
+      throw new ExpectationFailedException(sprintf("Triple(s) %s doesn't exists in the RDF backend", implode(', ', $failedTriples)));
+    }
   }
 
 }
