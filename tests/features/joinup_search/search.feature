@@ -1,4 +1,4 @@
-@api @terms @group-i
+@api @group-i
 Feature: Global search
   As a user of the site I can find content through the global search.
 
@@ -14,7 +14,7 @@ Feature: Global search
     And the following solutions:
       | title          | collection                   | description                                                                                                                          | topic      | spatial coverage | state     |
       | Spherification | Molecular cooking collection | Spherification is the culinary process of shaping a liquid into spheres                                                              | Demography | European Union   | published |
-      | Foam           | Molecular cooking collection | "The use of foam in cuisine has been used in many forms in the history of cooking:whipped cream, meringue, and mousse are all foams" |            |                  | published |
+      | Foam           | Molecular cooking collection | "The use of foam in cuisine has been used in many forms in the history of cooking:whipped cream, meringue, and mousse are all foams" | eGov       |                  | published |
     And news content:
       | title                | headline              | body             | collection                   | topic                   | spatial coverage | state     |
       | El Tuba de Los Lobos | El Celler de Can Roca | The best in town | Molecular cooking collection | Statistics and Analysis | Luxembourg       | published |
@@ -40,8 +40,8 @@ Feature: Global search
       | title            | body       | collection                   | topic       | spatial coverage | state    |
       | Rummy discussion | Dummy body | Molecular cooking collection | E-inclusion | Luxembourg       | archived |
     And the following solutions:
-      | title         | collection                   | description                            | state    |
-      | Spring device | Molecular cooking collection | A mechanical device that stores energy | archived |
+      | title         | collection                   | description                            | state    | topic             |
+      | Spring device | Molecular cooking collection | A mechanical device that stores energy | archived | Supplier exchange |
 
     # Test that archived items are not available in the autocomplete.
     When I visit the search page
@@ -75,7 +75,7 @@ Feature: Global search
     And I should see the "Spherification" tile
     And I should see the "Foam" tile
     # Terms are sorted alphabetically
-    And the "topic" checkbox facet should allow selecting the following values "Info (1), Statistics and Analysis (1), Social and Political (6), Demography (2), E-inclusion (4)"
+    And the "topic" checkbox facet should allow selecting the following values "eGov (1), Info (1), Statistics and Analysis (1), Social and Political (6), Demography (2), E-inclusion (4)"
     Then I click show more from the "spatial coverage" facet
     And the "spatial coverage" checkbox facet should allow selecting the following values "Belgium (1), European Union (1), Luxembourg (5)"
 
@@ -85,7 +85,7 @@ Feature: Global search
 
     When I check the "Social and Political (6)" checkbox from the "topic" facet
     Then the "Social and Political" content checkbox item should be selected
-    And the "topic" checkbox facet should allow selecting the following values "Info (1), Statistics and Analysis (1), Social and Political (6), Demography (2), E-inclusion (4)"
+    And the "topic" checkbox facet should allow selecting the following values "eGov (1), Info (1), Statistics and Analysis (1), Social and Political (6), Demography (2), E-inclusion (4)"
     # The tiles appear because the parent term is selected even though they do not have a direct reference there.
     And I should see the "Dummy news 1" tile
     And I should see the "Dummy news 2" tile
@@ -105,7 +105,7 @@ Feature: Global search
     # The selected option moves to the last position by default.
     When I click "E-inclusion"
     Then I should see the text "SEARCH RESULTS (2)"
-    And the "topic" checkbox facet should allow selecting the following values "Info (1), Statistics and Analysis (1), Social and Political (6), Demography (2), E-inclusion (4)"
+    And the "topic" checkbox facet should allow selecting the following values "eGov (1), Info (1), Statistics and Analysis (1), Social and Political (6), Demography (2), E-inclusion (4)"
     When I click show more from the "spatial coverage" facet
     Then the "spatial coverage" checkbox facet should allow selecting the following values "Belgium (1), European Union (1)"
     And I should see the "Molecular cooking collection" tile
@@ -143,7 +143,7 @@ Feature: Global search
     And the "News" content checkbox item should be selected
     And I should see the following facet summary "Solutions, News"
     Then the "Content types" checkbox facet should allow selecting the following values "Collection (1), Solutions (2), News (5)"
-    And the "topic" checkbox facet should allow selecting the following values "Info (1), Statistics and Analysis (1), Social and Political (5), Demography (1), E-inclusion (4)"
+    And the "topic" checkbox facet should allow selecting the following values "eGov (1), Info (1), Statistics and Analysis (1), Social and Political (5), Demography (1), E-inclusion (4)"
     Then I click show more from the "spatial coverage" facet
     And the "spatial coverage" checkbox facet should allow selecting the following values "European Union (1), Luxembourg (5)"
     And I should not see the "Molecular cooking collection" tile
@@ -255,8 +255,8 @@ Feature: Global search
       | title            | body                                                              | solution       | state     |
       | Discussion omega | <p>Does anybody has idea why this <em>epsilon</em> is everywhere? | Solution alpha | published |
     And custom_page content:
-      | title      | body                                     | collection       | state     |
-      | Page omega | This is just an epsilon but should work. | Collection alpha | published |
+      | title      | body                                     | collection       | state     | keywords |
+      | Page omega | This is just an epsilon but should work. | Collection alpha | published | Alphabet |
     And video content:
       | title       | body          | field_video                                 | collection       |
       | Video alpha | Slap like now | https://www.youtube.com/watch?v=JhGf8ZY0tN8 | Collection alpha |
@@ -297,7 +297,7 @@ Feature: Global search
 
     # "Alphabet" is used in all the keywords fields.
     When I enter "Alphabet" in the search bar and press enter
-    Then the page should show the tiles "Solution alpha, Release Alpha, News omega, Event Omega, Document omega"
+    Then the page should show the tiles "Solution alpha, Release Alpha, News omega, Event Omega, Document omega, Page omega"
 
     # "Gamma" is used in the collection abstract.
     When I enter "gamma" in the search bar and press enter
@@ -759,7 +759,6 @@ Feature: Global search
     Then I should see the following search suggestions:
       | Spheres |
 
-  @terms
   Scenario: Filter on date
     Given collection:
       | title | Mice in space |
@@ -839,3 +838,52 @@ Feature: Global search
     When I enter "-histore" in the search bar
     And I submit the search by pressing enter
     Then the site should not have log records with level lower than "notice"
+
+  @javascript
+  Scenario: Search page - Show the abstract or description in the search results.
+    Given the following owner:
+      | name        | type    |
+      | Renew owner | Company |
+    And the following contact:
+      | name  | Gor-to contact     |
+      | email | gor-to@example.com |
+    And the following collections:
+      | title             | description                                          | abstract                      | state     |
+      | Pull alpha        | <p>collection <strong>pull</strong> description.</p> | The collection pull abstract. | published |
+      | Col for Sol javi  | <p>collection for the solution javi.</p>             | Random abstract.              | published |
+      | Roll alpha        | <p>collection <strong>roll</strong> description.</p> | The collection roll abstract. | archived  |
+      | Col for Sol net   | <p>collection for the solution net.</p>              | Loky and Rocky.               | archived  |
+    And the following solutions:
+      | title         | description                                                | abstract                    | keywords | owner       | contact information | collection        | state     |
+      | Solution pull | <p>This is the solution <strong>pull</strong> description. | The solution pull abstract. | Alphabet | Renew owner | Gor-to contact      | Pull alpha        | published |
+      | Solution javi | <p>This is the solution <strong>javi</strong> description. |                             | Alphabet | Renew owner | Gor-to contact      | Col for Sol javi  | published |
+      | Solution roll | <p>This is the solution <strong>roll</strong> description. | The solution roll abstract. | Alphabet | Renew owner | Gor-to contact      | Roll alpha        | published |
+      | Solution net  | <p>This is the solution <strong>net</strong> description.  |                             | Alphabet | Renew owner | Gor-to contact      | Col for Sol net   | published |
+
+    When I visit the search page
+    And I should see the "Pull alpha" tile
+    And I should see the "Col for Sol javi" tile
+    And I should see the "Solution pull" tile
+    And I should see the "Solution javi" tile
+    And I should see the "Solution roll" tile
+    And I should see the "Solution net" tile
+    And I should not see the "Roll alpha" tile
+    And I should not see the "Col for Sol net" tile
+    And I should see the text "The collection pull abstract." in the "Pull alpha" card
+    And I should see the text "Random abstract." in the "Col for Sol javi" card
+    And I should see the text "The solution pull abstract." in the "Solution pull" card
+    And I should see the text "This is the solution javi description" in the "Solution javi" card
+    And I should see the text "The solution roll abstract." in the "Solution roll" card
+    And I should see the text "This is the solution net description" in the "Solution net" card
+
+    Then I check the "Show only Archived items" checkbox from the "Status" facet
+    And I should not see the "Pull alpha" tile
+    And I should not see the "Col for Sol javi" tile
+    And I should not see the "Solution pull" tile
+    And I should not see the "Solution javi" tile
+    And I should not see the "Solution roll" tile
+    And I should not see the "Solution net" tile
+    And I should see the "Roll alpha" tile
+    And I should see the "Col for Sol net" tile
+    And I should see the text "The collection roll abstract." in the "Roll alpha" card
+    And I should see the text "Loky and Rocky." in the "Col for Sol net" card

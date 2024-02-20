@@ -5,12 +5,16 @@
  * Contains asset_distribution.module.
  */
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
+use Drupal\Core\Access\AccessResult;
+use Drupal\Core\Access\AccessResultInterface;
+use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Field\BaseFieldDefinition;
 use Drupal\Core\Field\Plugin\Field\FieldType\EntityReferenceItem;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Session\AccountInterface;
 use Drupal\asset_distribution\DistributionParentFieldItemList;
 use Drupal\asset_distribution\Entity\AssetDistribution;
 use Drupal\asset_distribution\Entity\AssetDistributionInterface;
@@ -104,6 +108,23 @@ function asset_distribution_sparql_bundle_load_alter(array $entity_values, array
 }
 
 /**
+ * Implements hook_ENTITY_TYPE_access().
+ */
+function asset_distribution_rdf_entity_access(EntityInterface $entity, $operation, AccountInterface $account): AccessResultInterface {
+  if ($entity->bundle() !== 'asset_distribution') {
+    return AccessResult::neutral();
+  }
+
+  /** @var \Drupal\asset_distribution\Entity\AssetDistributionInterface $entity */
+  $solution = $entity->getSolution();
+  if ($operation !== 'view' && $solution->isArchived()) {
+    return AccessResult::forbidden();
+  }
+
+  return AccessResult::neutral();
+}
+
+/**
  * Implements hook_ENTITY_TYPE_presave().
  */
 function asset_distribution_rdf_entity_presave(RdfInterface $distribution): void {
@@ -117,12 +138,6 @@ function asset_distribution_rdf_entity_presave(RdfInterface $distribution): void
       if (!FileUrlHandler::isRemote($file)) {
         // Set the file size field.
         $distribution->get('field_ad_file_size')->setValue($file->getSize());
-
-        // Set the file format field.
-        $tid = asset_distribution_get_file_type_term_by_mime($file->getMimeType());
-        if ($tid) {
-          $distribution->get('field_ad_format')->setValue($tid);
-        }
       }
     }
   }
@@ -192,37 +207,6 @@ function asset_distribution_preprocess_rdf_entity(array &$variables): void {
     // Provide a flag if this is a standalone distribution.
     $variables['is_standalone'] = $distribution->isStandalone();
   }
-}
-
-/**
- * Returns the ID of the 'file_type' term given a mime type.
- *
- * @param string $mime_type
- *   The mime type for which to locate the 'file_type' term.
- *
- * @return string|null
- *   The term ID as URI or NULL, if the term doesn't exists.
- */
-function asset_distribution_get_file_type_term_by_mime(string $mime_type): ?string {
-  /** @var \Drupal\sparql_entity_storage\Driver\Database\sparql\ConnectionInterface $sparql */
-  $sparql = \Drupal::service('sparql.endpoint');
-
-  $query = <<<QUERY
-SELECT ?entity_id
-WHERE {
-  ?entity_id <http://publications.europa.eu/ontology/authority/op-mapped-code> ?op_mime_type .
-  ?op_mime_type <http://purl.org/dc/elements/1.1/source> "manifestation-type-cellar" .
-  ?op_mime_type <http://publications.europa.eu/ontology/authority/legacy-code> "$mime_type" .
-}
-QUERY;
-
-  $results = $sparql->query($query);
-  if ($results->count()) {
-    $result = &$results[0];
-    return $result->entity_id->getUri();
-  }
-
-  return NULL;
 }
 
 /**

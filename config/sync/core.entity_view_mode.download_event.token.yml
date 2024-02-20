@@ -6,5 +6,6 @@ dependencies:
     - asset_distribution
 id: download_event.token
 label: Token
+description: ''
 targetEntityType: download_event
 cache: true

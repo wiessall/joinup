@@ -151,6 +151,7 @@ default:
         'subscribers report': 'table'
         'media admin': 'form[data-drupal-selector="views-form-media-media-page-list"] table'
         'manage solutions': '.view-id-manage_collection_solutions.view-display-id-manage_solutions table'
+        'Ventuno media library': '.view-id-media_library.view-display-id-widget form table'
     Drupal\DrupalExtension:
       api_driver: 'drupal'
       blackbox: ~
@@ -192,6 +193,7 @@ default:
         Pager: 'nav.pager'
         Plus button menu: '#block-ventuno-joinup-add-content'
         Primary menu: '.region-primary-menu'
+        Quick links: '.block-group-menu-blockquick-links'
         Related solutions: '.field--name-field-is-related-solutions'
         SevenHeader: '.region-header'
         Statistics: '#block-ventuno-statistics'

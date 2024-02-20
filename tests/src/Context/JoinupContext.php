@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Drupal\joinup\Context;
 
@@ -28,6 +28,7 @@ use Drupal\joinup\Traits\KeyboardInteractionTrait;
 use Drupal\joinup\Traits\OgTrait;
 use Drupal\joinup\Traits\TabledragTrait;
 use Drupal\joinup\Traits\TestingEntitiesTrait;
+use Drupal\joinup\Traits\TopicTrait;
 use Drupal\joinup\Traits\TraversingTrait;
 use Drupal\joinup\Traits\UserTrait;
 use Drupal\joinup\Traits\UtilityTrait;
@@ -36,7 +37,9 @@ use Drupal\joinup_community_content\CommunityContentHelper;
 use Drupal\joinup_group\Entity\GroupContentInterface;
 use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\joinup_group\Entity\PinnableGroupContentInterface;
+use Drupal\joinup_workflow\EntityWorkflowStateInterface;
 use Drupal\meta_entity\Entity\MetaEntity;
+use Drupal\meta_entity\Entity\MetaEntityInterface;
 use Drupal\node\Entity\Node;
 use Drupal\og\OgGroupAudienceHelperInterface;
 use Drupal\og\OgRoleInterface;
@@ -63,6 +66,7 @@ class JoinupContext extends RawDrupalContext {
   use StringTranslationTrait;
   use TabledragTrait;
   use TestingEntitiesTrait;
+  use TopicTrait;
   use TraversingTrait;
   use UserTrait;
   use UtilityTrait;
@@ -744,6 +748,14 @@ class JoinupContext extends RawDrupalContext {
       $node->{"field_paragraphs_body:target_revision_id"} = $paragraph->getRevisionId();
       unset($node->field_paragraphs_body);
     }
+
+    $field_definitions = \Drupal::service('entity_field.manager')->getFieldDefinitions('node', $node->type);
+    if (!empty($field_definitions['field_topic']) && empty($node->field_topic)) {
+      // For some tests, the node's topic has no relevance. Such tests are
+      // allowed to omit an explicit topic. We're assigning a random topic term,
+      // to satisfy data integrity and prevent form validation errors.
+      $node->field_topic = $this->getRandomTopic()->label();
+    }
   }
 
   /**
@@ -762,6 +774,7 @@ class JoinupContext extends RawDrupalContext {
       'custom_page' => [
         'attachments' => 'field_attachment',
         'body' => 'field_paragraphs_body',
+        'keywords' => 'field_keywords',
         'logo' => 'field_custom_page_logo',
         'state' => 'field_state',
       ],
@@ -1066,6 +1079,45 @@ class JoinupContext extends RawDrupalContext {
     $node = $this->getEntityByLabel('node', $title, $type);
     $actual = $node->getWorkflowState();
     Assert::assertEquals($state, $actual, "The $title $type content has the expected state '$state' (actual: '$actual')");
+  }
+
+  /**
+   * Checks the current workflow state on the given entity.
+   *
+   * @param string $label
+   *   The label of the entity.
+   * @param string $type
+   *   The entity type ID of the entity.
+   * @param string $stateExpected
+   *   The expected workflow state's label.
+   *
+   * @Given the workflow state of the :label :type should be :stateExpected
+   */
+  public function assertEntityWorkflowState(string $label, string $type, string $stateExpected): void {
+    $mapping = [
+      'content' => 'node',
+      'rdf entity' => 'rdf_entity',
+    ];
+    $entityTypeId = $mapping[$type] ?? $type;
+    $entity = $this->getEntityByLabel($entityTypeId, $label);
+    Assert::assertInstanceOf(
+      EntityWorkflowStateInterface::class,
+      $entity,
+      "The entity doesn't seem to have any workflow."
+    );
+    // State might be a label or a machine name.
+    $stateIdExpected = static::translateWorkflowStateAlias($stateExpected);
+    Assert::assertSame(
+      $stateIdExpected,
+      $actual = $entity->getWorkflowState(),
+      sprintf(
+        "Workflow state of '%s' '%s' is different than expected. Expected state is '%s', while the actual one is '%s'.",
+        $label,
+        $type,
+        $stateIdExpected,
+        $actual,
+      )
+    );
   }
 
   /**
@@ -1965,6 +2017,10 @@ class JoinupContext extends RawDrupalContext {
       }
 
       $this->dispatchHooks('BeforeNodeCreateScope', $fake_node);
+      // Correction to topic field.
+      if (!empty($fake_node->field_topic) && ($topic = $this->getEntityByLabel('taxonomy_term', $fake_node->field_topic, 'topic'))) {
+        $fake_node->field_topic = $topic->id();
+      }
       $this->parseEntityFields('node', $fake_node);
       // Remove the type property as we cannot change that.
       unset($fake_node->type);
@@ -2657,12 +2713,17 @@ class JoinupContext extends RawDrupalContext {
    *
    * @param \Behat\Gherkin\Node\TableNode $table
    *   The menu data.
+   * @param string $group_label
+   *   The group label.
+   * @param string $group_bundle
+   *   The group bundle.
    *
-   * @Then the draggable menu table should be:
+   * @Then the draggable menu table of the :group_label :group_type should be:
    */
-  public function assertDraggableMenuTable(TableNode $table) {
+  public function assertDraggableMenuTable(TableNode $table, string $group_label, string $group_bundle): void {
     self::assertJavaScriptEnabledBrowser();
 
+    $group = $this->getEntityByLabel('rdf_entity', $group_label, $group_bundle);
     /** @var \Behat\Mink\Element\NodeElement[] $rows */
     $rows = $this->getSession()->getPage()->findAll('css', '#menu-overview tbody tr.draggable');
     $expected = $table->getColumnsHash();
@@ -2673,23 +2734,25 @@ class JoinupContext extends RawDrupalContext {
       $title_element = $current_row->find('css', 'td:first-of-type a:not(.tabledrag-handle)');
       Assert::assertEquals($data['title'], trim($title_element->getText()));
 
-      $menu_link = $this->getMenuLinkByTitle($data['title']);
+      $menu_link = $this->getMenuLinkByTitle($data['title'], $group->id(), 'navigation');
       $parent_input = $current_row->find('css', 'input[name="links[menu_plugin_id:' . $menu_link->getPluginId() . '][parent]"]');
-
-      if (!$parent_input) {
-        throw new \Exception('Cannot find parent input field.');
-      }
 
       // When a parent is available, the line should be indented. Find all
       // indentation elements to assert later on based on the parent value.
       $indentation = $current_row->findAll('css', 'div.indentation');
 
       if (!isset($data['parent']) || $data['parent'] === '') {
-        Assert::assertEmpty($parent_input->getValue());
+        if (!empty($parent_input)) {
+          Assert::assertEmpty($parent_input->getValue());
+        }
         Assert::assertCount(0, $indentation, "The menu link '{$data['title']}' should not be indented but it is.");
       }
       else {
-        $parent_link = $this->getMenuLinkByTitle($data['parent']);
+        if (!$parent_input) {
+          throw new \Exception('Cannot find parent input field.');
+        }
+
+        $parent_link = $this->getMenuLinkByTitle($data['parent'], $group->id(), 'navigation');
         Assert::assertEquals($parent_link->getPluginId(), $parent_input->getValue());
         Assert::assertNotCount(0, $indentation, "The menu link '{$data['title']}' should be indented but it's not.");
       }
@@ -3188,6 +3251,62 @@ class JoinupContext extends RawDrupalContext {
     ];
 
     return $this->getSession()->getPage()->findAll('css', implode(', ', $locators));
+  }
+
+  /**
+   * Closes the modal dialog.
+   *
+   * @throws \Exception
+   *   Thrown if the dialog is not open or the x button is not found.
+   *
+   * @Given I close the modal dialog
+   */
+  public function closeMediaModalDialog(): void {
+    $xpath = '//div[@class and contains(concat(" ", normalize-space(@class), " "), " ui-dialog ")]//button[@class and contains(concat(" ", normalize-space(@class), " "), " ui-dialog-titlebar-close ")]';
+    $button = $this->getSession()->getPage()->find('xpath', $xpath);
+    if (empty($button)) {
+      throw new \Exception("Either the dialog is not available or the 'Close' button could not be located.");
+    }
+    $button->press();
+  }
+
+  /**
+   * Cleans up the environment after a curated homepage topics scenarios.
+   *
+   * These scenarios are altering the topic term meta entities. We need to reset
+   * them after each run.
+   *
+   * @afterScenario @topic&&@api
+   */
+  public function resetTopicMetaEntity(): void {
+    // Remove any entity queue related to homepage topics.
+    \Drupal::entityTypeManager()->getStorage('entity_subqueue')
+      ->load('homepage_topics')
+      ->clearItems()
+      ->save();
+
+    $meta_entity_storage = \Drupal::entityTypeManager()->getStorage('meta_entity');
+    $ids = $meta_entity_storage->getQuery()->accessCheck(FALSE)
+      ->condition('type', 'topic')
+      ->condition('published', TRUE)
+      ->execute();
+
+    // Recreate topic terms corresponding meta entities.
+    if ($ids) {
+      /** @var \Drupal\meta_entity\Entity\MetaEntityInterface[] $meta_entities */
+      $meta_entities = $meta_entity_storage->loadMultiple($ids);
+      $tids = array_map(fn(MetaEntityInterface $meta_entity) => $meta_entity->getTargetEntity()->id(), $meta_entities);
+      $meta_entity_storage->delete($meta_entities);
+      foreach ($tids as $tid) {
+        $meta_entity_storage->create([
+          'type' => 'topic',
+          'target' => [
+            'target_type' => 'taxonomy_term',
+            'target_id' => $tid,
+          ],
+        ])->save();
+      }
+    }
   }
 
 }

@@ -5,7 +5,7 @@
  * Contains hooks regarding the solution rdf entity bundle.
  */
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Cache\Cache;
@@ -17,11 +17,13 @@ use Drupal\Core\Field\BaseFieldDefinition;
 use Drupal\Core\Field\FieldStorageDefinitionInterface;
 use Drupal\Core\Form\FormBuilderInterface;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Render\Element;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Url;
 use Drupal\meta_entity\Entity\MetaEntity;
 use Drupal\og\Entity\OgRole;
 use Drupal\og\Og;
+use Drupal\og\OgMembershipInterface;
 use Drupal\og\OgRoleInterface;
 use Drupal\rdf_entity\Entity\Rdf;
 use Drupal\rdf_entity\Entity\RdfEntityType;
@@ -251,6 +253,11 @@ function solution_entity_extra_field_info(): array {
       'description' => t('Subscribes the user to the solution.'),
       'visible' => FALSE,
     ];
+    $display['members'] = [
+      'label' => t('Amount of members'),
+      'description' => t('Amount of members of the solution'),
+      'visible' => FALSE,
+    ];
   }
 
   return $fields;
@@ -353,11 +360,10 @@ function solution_rdf_entity_view(array &$build, RdfInterface $solution, EntityV
         '#type' => 'markup',
         '#markup' => t('Read more') . '<span class="visually-hidden"> ' . t('about') . ' ' . $solution->getName() . '</span>',
       ];
-      $link = $solution->toLink($text, 'about-page', [
+      $link = $solution->toLink($text, 'canonical', [
         'attributes' => [
           'data-drupal-group-view-mode' => $view_mode,
           'class' => [
-            'about-page',
             'read-more',
             'fieldset__read-more',
             'btn',
@@ -393,6 +399,20 @@ function solution_rdf_entity_view(array &$build, RdfInterface $solution, EntityV
       // This form varies by the role a user has inside the collection. Set the
       // applicable cache context.
       '#cache' => ['contexts' => ['og_role']],
+    ];
+  }
+
+  // Member count.
+  if ($display->getComponent('members')) {
+    $member_count = solution_member_count($solution);
+    // Invalidate the member count every time the group membership list changes.
+    // @see \Drupal\og\Plugin\Block\MemberCountBlock::getCacheTags()
+    $tags = Cache::buildTags(OgMembershipInterface::GROUP_MEMBERSHIP_LIST_CACHE_TAG_PREFIX, $solution->getCacheTagsToInvalidate());
+    $build['members'] = [
+      '#theme' => 'solution_member_count',
+      '#count' => $member_count,
+      '#view_mode' => $view_mode,
+      '#cache' => ['tags' => $tags],
     ];
   }
 }
@@ -719,5 +739,68 @@ function solution_module_implements_alter(&$implementations, $hook) {
     $solution = $implementations['solution'];
     unset($implementations['solution']);
     $implementations = ['solution' => $solution] + $implementations;
+  }
+}
+
+/**
+ * Amount of members of a solution.
+ *
+ * @param \Drupal\rdf_entity\RdfInterface $entity
+ *   The solution.
+ *
+ * @return int
+ *   Amount of members.
+ */
+function solution_member_count(RdfInterface $entity): int {
+  // We're doing a direct database query rather than using methods in OG's
+  // MembershipManager service since we just need a count, and we need to filter
+  // out blocked user accounts.
+  $query = \Drupal::database()->select('og_membership', 'om');
+  $query->innerJoin('users_field_data', 'ufd', '[om].[uid] = [ufd].[uid]');
+  $query->condition('ufd.status', 1)
+    ->condition('om.entity_type', 'rdf_entity')
+    ->condition('om.entity_id', $entity->id())
+    ->condition('om.state', OgMembershipInterface::STATE_ACTIVE);
+  return (int) $query->countQuery()->execute()->fetchField();
+}
+
+/**
+ * Implements hook_theme().
+ */
+function solution_theme(array $existing, string $type, string $theme, string $path): array {
+  return [
+    'solution_member_count' => [
+      'variables' => [
+        'count' => 0,
+        'view_mode' => '',
+      ],
+    ],
+  ];
+}
+
+/**
+ * Implements hook_theme_suggestions_HOOK().
+ *
+ * Allows the solution member count to be themed differently per view mode.
+ */
+function solution_theme_suggestions_solution_member_count(array $variables): array {
+  $suggestions = [];
+  $sanitized_view_mode = strtr($variables['view_mode'], '.', '_');
+  $suggestions[] = 'solution_member_count__' . $sanitized_view_mode;
+
+  return $suggestions;
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_view_alter().
+ */
+function solution_rdf_entity_view_alter(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display) {
+  if (!$entity instanceof SolutionInterface || $display->getMode() !== 'default') {
+    return;
+  }
+
+  // Hide the description when the abstract is available.
+  if (isset($build['field_is_abstract']) && Element::children($build['field_is_abstract'])) {
+    $build['field_is_description']['#access'] = FALSE;
   }
 }

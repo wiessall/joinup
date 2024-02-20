@@ -1,8 +1,10 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Drupal\joinup_menu;
+
+use Drupal\og_menu\OgMenuInstanceInterface;
 
 /**
  * Interface describing helper methods for working with menus.
@@ -45,5 +47,18 @@ interface MenuHelperInterface {
    *   - label: The link label.
    */
   public function getBclLandingPageLinks(): array;
+
+  /**
+   * Loads an OG menu instance for the given group.
+   *
+   * @param string $menuType
+   *   The OG menu bundle.
+   * @param string $groupId
+   *   The group ID.
+   *
+   * @return \Drupal\og_menu\OgMenuInstanceInterface|null
+   *   The OG menu instance or NULL if none was found.
+   */
+  public function getOgMenuByGroup(string $menuType, string $groupId): ?OgMenuInstanceInterface;
 
 }

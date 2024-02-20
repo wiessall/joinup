@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Drupal\Tests\joinup_group\Kernel;
 
@@ -53,7 +53,6 @@ class UniqueFieldValueInGroupAndBundleTest extends KernelTestBase {
     $this->installConfig(['og', 'unique_field_value_in_group_and_bundle_test']);
     $this->installEntitySchema('entity_test');
     $this->installEntitySchema('user');
-    $this->installSchema('system', ['sequences']);
 
     // Create two group bundles.
     entity_test_create_bundle('group');

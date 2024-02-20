@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Drupal\contact_information\Plugin\WorkflowStatePermission;
 
@@ -77,7 +77,7 @@ class ContactInformationWorkflowStatePermission extends PluginBase implements Wo
     }
 
     $allowed_conditions = $this->configFactory->get('contact_information.settings')->get('transitions');
-    $matrix = $allowed_conditions[$to_state][$from_state];
+    $matrix = $allowed_conditions[$to_state][$from_state] ?? [];
     $access = !empty($matrix) && $this->userHasOwnAnyRoles($entity, $account, $matrix);
 
     // If the user has access to the 'request_deletion' transition but also has

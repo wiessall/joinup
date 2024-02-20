@@ -1,4 +1,0 @@
-services:
-  joinup_acceptance.swiftmailer_commands:
-    class: Drupal\swiftmailer\Commands\SwiftMailerCommands
-    arguments: [ '@swiftmailer.transport' ]

@@ -34,10 +34,13 @@ bundle: collection
 mode: rdf_draft
 content:
   field_ar_abstract:
-    type: text_default
+    type: string
     label: above
-    settings: {  }
-    third_party_settings: {  }
+    settings:
+      link_to_entity: false
+    third_party_settings:
+      template_suggestion:
+        template_suggestion: ''
     weight: 8
     region: content
   field_ar_access_url:

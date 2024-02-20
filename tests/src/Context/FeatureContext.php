@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Drupal\joinup\Context;
 
@@ -17,7 +17,6 @@ use Behat\Mink\Exception\ResponseTextException;
 use Behat\Mink\Exception\UnsupportedDriverActionException;
 use Behat\Mink\Selector\SelectorsHandler;
 use Drupal\Component\Serialization\Json;
-use Drupal\Component\Serialization\Yaml;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Datetime\DrupalDateTime;
 use Drupal\Core\Entity\EntityChangedInterface;
@@ -954,45 +953,6 @@ class FeatureContext extends RawDrupalContext {
 
     $this->scrollToTop();
     $this->findVerticalTab($tab)->clickLink($tab);
-  }
-
-  /**
-   * Creates testing terms for scenarios tagged with @terms tag.
-   *
-   * Limitation: It creates terms with maximum 2 level hierarchy.
-   *
-   * @BeforeScenario @terms&&@api
-   */
-  public function provideTestingTerms(): void {
-    $fixture = file_get_contents(__DIR__ . '/../../fixtures/testing_terms.yml');
-    $hierarchy = Yaml::decode($fixture);
-    foreach ($hierarchy as $vid => $terms) {
-      foreach ($terms as $parent_index => $data) {
-        $weight = $parent_index - 1;
-        $has_children = array_key_exists('children', $data);
-        $term = (object) [
-          'vocabulary_machine_name' => $vid,
-          'name' => $data['name'],
-          'weight' => $weight,
-        ];
-        $children = $data['children'];
-        $this->termCreate($term);
-        $parent_tid = $term->tid;
-        if ($has_children) {
-          foreach ($children as $child_index => $child) {
-            $weight = $child_index - 1;
-            $term = (object) [
-              'vocabulary_machine_name' => $vid,
-              'name' => $child['name'],
-              'parent' => $parent_tid,
-              'weight' => $weight,
-              'description' => $child['description'] ?? '',
-            ];
-            $this->termCreate($term);
-          }
-        }
-      }
-    }
   }
 
   /**
@@ -2602,11 +2562,12 @@ class FeatureContext extends RawDrupalContext {
    * @When I run the :queue_name queue worker
    */
   public function iRunTheQueueWorker(string $queue_name): void {
-    $drushCommand = sprintf('drush queue:run %s', $queue_name);
-
     // Create a new Process instance to run the Drush command.
-    $process = new Process(explode(' ', $drushCommand));
-    $process->setTimeout(1800);
+    $process = Process::fromShellCommandline(
+      command: sprintf('composer exec drush queue:run %s', $queue_name),
+      cwd: getenv('DDEV_COMPOSER_ROOT') ?: dirname(DRUPAL_ROOT),
+      timeout: 1800
+    );
     $process->run();
 
     if (!$process->isSuccessful()) {

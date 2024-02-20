@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Drupal\Tests\joinup_core\Traits;
 
@@ -50,7 +50,12 @@ trait ModuleSetupTestTrait {
       $installer_name = $module_handler->loadInclude($module_to_install, 'install');
 
       if ($installer_name && function_exists($schema_function = "{$module_to_install}_schema")) {
-        $this->installSchema($module_to_install, array_keys($schema_function()));
+        $tables = $schema_function();
+        if ($module_to_install === 'system') {
+          // @see https://www.drupal.org/node/3349345
+          unset($tables['sequences']);
+        }
+        $this->installSchema($module_to_install, array_keys($tables));
       }
 
       \Drupal::entityTypeManager()->clearCachedDefinitions();

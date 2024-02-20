@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Drupal\joinup_core\Element;
 
@@ -35,9 +35,6 @@ class Datetime extends CoreDatetime {
           $title = $parent_element['#title'];
         }
       }
-      $date_format = $element['#date_date_element'] != 'none' ? static::getHtml5DateFormat($element) : '';
-      $time_format = $element['#date_time_element'] != 'none' ? static::getHtml5TimeFormat($element) : '';
-      $format = trim($date_format . ' ' . $time_format);
 
       // If there's empty input and the field is not required, set it to empty.
       if (empty($input['date']) && empty($input['time']) && !$element['#required']) {
@@ -48,13 +45,9 @@ class Datetime extends CoreDatetime {
       elseif (empty($input['date']) && empty($input['time']) && $element['#required']) {
         $form_state->setError(
           $element,
-          t(
-            'The %field date is required. Please enter a date in the format %format.',
-            [
-              '%field' => $title,
-              '%format' => static::formatExample($format),
-            ]
-          )
+          t('The %field date is required. Enter a date in the correct format.', [
+            '%field' => $title,
+          ])
         );
       }
       else {
@@ -73,13 +66,9 @@ class Datetime extends CoreDatetime {
         else {
           $form_state->setError(
             $element,
-            t(
-              'The %field date is invalid. Please enter a date in the format %format.',
-              [
-                '%field' => $title,
-                '%format' => static::formatExample($format),
-              ]
-            )
+            t('The %field date is invalid. Enter a date in the correct format.', [
+              '%field' => $title,
+            ])
           );
         }
       }

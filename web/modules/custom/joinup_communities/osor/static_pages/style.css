@@ -1,60 +1,60 @@
 .hex-list {
+  display: inline-block;
   float: none;
   clear: both;
   width: auto;
-  display: inline-block;
   padding-bottom: 45px;
 }
 
 .hex-list-wrapper {
-  text-align: center;
   width: 100%;
+  text-align: center;
 }
 
 .hex-list .hex-row {
+  float: left;
   clear: left;
   line-height: 0px;
-  float: left;
 }
 .hex-list .hex {
   float: left;
-  margin-left: 5px;
   margin-bottom: -30px;
+  margin-left: 5px;
 }
 .hex-list .hex .top {
   width: 0;
+  border-right: 70px solid transparent;
   border-bottom: 35px solid #f2f2f2;
   border-left: 70px solid transparent;
-  border-right: 70px solid transparent;
 }
 .hex-list .hex .middle {
   width: 140px;
   height: 70px;
-  line-height: 70px;
+  text-align: center;
   background: #f2f2f2;
   font-family: arial, verdana, sans-serif;
   font-size: 16px;
-  text-align: center;
+  line-height: 70px;
 }
 .hex-list .hex .middle span {
   display: table-cell;
+  width: 140px;
+  height: 70px;
   vertical-align: middle;
   line-height: normal;
-  height: 70px;
-  width: 140px;
 }
 .hex-list .hex .middle a {
-  text-decoration: none;
   display: block;
+  text-decoration: none;
 }
 .hex-list div[id*="action"] .middle a {
-  color: #ffffff;
+  color: #fff;
 }
 .hex-list .hex .bottom {
   width: 0;
   border-top: 35px solid #f2f2f2;
-  border-left: 70px solid transparent;
   border-right: 70px solid transparent;
+  border-left: 70px solid transparent;
 }
 .hex-list div[id*="reaction"] {
   display: none;
@@ -73,7 +73,7 @@
 }
 
 .hex-list .hex-grey .middle span {
-  color: #ffffff;
+  color: #fff;
 }
 
 .hex-list .hex-grey .bottom {

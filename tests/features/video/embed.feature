@@ -1,4 +1,4 @@
-@api @terms @group-i
+@api @group-i
 Feature: Embed of videos into the page.
   In order to show videos regarding my content
   As a user of the website
@@ -30,7 +30,7 @@ Feature: Embed of videos into the page.
       <iframe src="http://europa.eu/!dV74uw" width="852" height="480" frameborder="0" scrolling="no" webkitAllowFullScreen="true" mozallowfullscreen="true" allowFullScreen="true"></iframe>
       YouTube videos are allowed.
       <iframe width="560" height="315" src="https://www.youtube.com/embed/xlnYVHRp128?autoplay=1" frameborder="0" allowfullscreen></iframe>
-      Vimeo videos are NOT allowed (yet).
+      Vimeo videos are allowed.
       <iframe src="https://player.vimeo.com/video/225133231?autoplay=1" width="640" height="360" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
       DailyMotion videos are NOT allowed (yet).
       <iframe frameborder="0" width="480" height="270" src="//www.dailymotion.com/embed/video/x5vl5l0?autoPlay=1" allowfullscreen></iframe>

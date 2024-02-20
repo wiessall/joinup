@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Drupal\Tests\joinup_core\Kernel\Plugin\Condition;
 
@@ -52,8 +52,6 @@ class RequestRouteConditionTest extends KernelTestBase {
    */
   protected function setUp(): void {
     parent::setUp();
-
-    $this->installSchema('system', ['sequences']);
 
     $this->pluginManager = $this->container->get('plugin.manager.condition');
     $this->requestStack = new RequestStack();

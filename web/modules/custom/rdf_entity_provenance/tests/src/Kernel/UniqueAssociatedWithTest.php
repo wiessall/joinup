@@ -1,12 +1,12 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Drupal\Tests\rdf_entity_provenance\Kernel;
 
-use Drupal\Core\Validation\Plugin\Validation\Constraint\UniqueFieldConstraint;
 use Drupal\Tests\joinup_test\Traits\ConfigTestTrait;
 use Drupal\Tests\rdf_entity\Kernel\RdfKernelTestBase;
+use Drupal\joinup_core\Plugin\Validation\Constraint\SingleValueUniqueFieldConstraint;
 use Drupal\rdf_entity\Entity\Rdf;
 use Drupal\rdf_entity\Entity\RdfEntityType;
 
@@ -23,6 +23,7 @@ class UniqueAssociatedWithTest extends RdfKernelTestBase {
    * {@inheritdoc}
    */
   protected static $modules = [
+    'joinup_core',
     'rdf_entity_provenance',
   ];
 
@@ -84,7 +85,7 @@ class UniqueAssociatedWithTest extends RdfKernelTestBase {
     $violations = $entity_that_fails->validate();
 
     $this->assertCount(1, $violations);
-    $this->assertInstanceOf(UniqueFieldConstraint::class, $violations[0]->getConstraint());
+    $this->assertInstanceOf(SingleValueUniqueFieldConstraint::class, $violations[0]->getConstraint());
   }
 
 }

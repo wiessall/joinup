@@ -5,7 +5,7 @@
  * Node specific procedural functions.
  */
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 use Drupal\eif\EifInterface;
 use Drupal\joinup_bundle_class\LogoInterface;
