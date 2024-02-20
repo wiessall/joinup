@@ -11,3 +11,4 @@ dependencies:
   - 'og:og'
   - 'social_media_links:social_media_links_field'
   - 'state_machine_revisions:state_machine_revisions'
+  - 'role_delegation:role_delegation'
