@@ -63,6 +63,11 @@ class EiraPropertiesBlock extends BlockBase implements ContainerFactoryPluginInt
 
     $data = Json::decode($term->get('extra_properties')->value ?? '') ?? [];
 
+    $rows = array_map(function (array $row): array {
+      $row['value'] = $row['value']['value'];
+      return $row;
+    }, $data['rows'] ?? []);
+
     return [
       '#type' => 'container',
       'namespaces_table' => [
@@ -79,7 +84,7 @@ class EiraPropertiesBlock extends BlockBase implements ContainerFactoryPluginInt
           'property' => $this->t('Property'),
           'value' => $this->t('Value'),
         ],
-        '#rows' => $data['rows'] ?? [],
+        '#rows' => $rows,
       ],
     ];
   }
