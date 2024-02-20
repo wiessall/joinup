@@ -2591,7 +2591,7 @@ class FeatureContext extends RawDrupalContext {
     // Settings array persist over the static request so in order to check if
     // configuration is readonly, we are checking the disable-config-readonly
     // file.
-    Assert::assertTrue(file_exists(DRUPAL_ROOT. '/../disable-config-readonly') === ($state === 'unlocked'));
+    Assert::assertTrue(file_exists(DRUPAL_ROOT . '/../disable-config-readonly') === ($state === 'unlocked'));
   }
 
 }
