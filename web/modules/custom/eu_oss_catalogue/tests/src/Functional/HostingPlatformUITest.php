@@ -110,7 +110,7 @@ class HostingPlatformUITest extends BrowserTestBase {
   /**
    * Tests visibility of the URL field.
    */
-  public function testVisibilityOfURLField(): void {
+  public function testVisibilityOfUrlField(): void {
     $this->drupalLogin($this->adminUser);
 
     $this->drupalGet('admin/content/eu-oss-catalogue/hosting-platform/add', ['query' => ['platformId' => 'gitlab_self_hosted']]);
