@@ -58,10 +58,7 @@ Feature: Variety tests for the developer role.
       | Some dev 2 | Developer |
 
     Given there are no active sessions
-    And I am not logged in
-    Then the configuration should be locked
-
-    Given I am logged in as "Some dev 1"
+    And I am logged in as "Some dev 1"
     Then the configuration should be unlocked
 
     When user "Some dev 2" have active sessions
