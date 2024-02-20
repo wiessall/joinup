@@ -5,7 +5,7 @@
  * Hook implementations for Joinup Test module.
  */
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 /**
  * Implements hook_honeypot_form_protections_alter().

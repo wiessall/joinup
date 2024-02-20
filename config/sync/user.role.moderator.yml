@@ -3,6 +3,7 @@ langcode: en
 status: true
 dependencies:
   config:
+    - filter.format.plain_text_glossary
     - media.type.collection_logo
     - media.type.discussion_logo
     - media.type.event_logo
@@ -25,6 +26,7 @@ dependencies:
     - entityqueue
     - field_permissions
     - file
+    - filter
     - joinup
     - joinup_community_content
     - joinup_core
@@ -383,6 +385,7 @@ permissions:
   - 'edit any asset_distribution rdf entity'
   - 'edit any collection rdf entity'
   - 'update topic meta-entity'
+  - 'use text format plain_text_glossary'
   - 'vbo joinup archive action'
   - 'vbo joinup change group action'
   - 'vbo joinup unarchive action'

@@ -1,6 +1,9 @@
 @prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
 
-<http://joinup.eu/product-type#44611100-7>
-  a skos:Concept ;
-  skos:inScheme <http://joinup.eu/product-type#> ;
-  skos:prefLabel "Air cylinders"@en .
+<http://purl.org/adms/representationtechnique/1.0> skos:hasTopConcept <http://purl.org/adms/representationtechnique/BPMN> .
+<http://purl.org/adms/representationtechnique/BPMN>
+  a owl:NamedIndividual, skos:Concept ;
+  skos:inScheme <http://purl.org/adms/representationtechnique/1.0> ;
+  skos:notation "BPMN" ;
+  skos:prefLabel "Business Process Modeling Notation"@en .

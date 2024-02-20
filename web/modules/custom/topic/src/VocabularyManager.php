@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Drupal\topic;
 
@@ -234,6 +234,13 @@ class VocabularyManager {
     $this->database->update('node_revision__field_topic')
       ->fields(['field_topic_target_id' => $newId])
       ->condition('field_topic_target_id', $oldId)
+      ->execute();
+
+    // The users also refer to the vocabulary via the
+    // field_user_professional_domain field.
+    $this->database->update('user__field_user_professional_domain')
+      ->fields(['field_user_professional_domain_target_id' => $newId])
+      ->condition('field_user_professional_domain_target_id', $oldId)
       ->execute();
   }
 

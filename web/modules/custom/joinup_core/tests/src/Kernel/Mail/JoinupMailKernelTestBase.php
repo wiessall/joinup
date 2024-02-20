@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Drupal\Tests\joinup_core\Kernel\Mail;
 
@@ -40,7 +40,7 @@ abstract class JoinupMailKernelTestBase extends KernelTestBase {
     'user',
     'token',
     'mailsystem',
-    'swiftmailer',
+    'symfony_mailer_lite',
 
     // Joinup Notification + its dependencies.
     'joinup_notification',
@@ -87,7 +87,7 @@ abstract class JoinupMailKernelTestBase extends KernelTestBase {
       'rdf_entity',
       'sparql_entity_storage',
       'mailsystem',
-      'swiftmailer',
+      'symfony_mailer_lite',
     ]);
 
     \Drupal::service('theme_installer')
@@ -97,7 +97,10 @@ abstract class JoinupMailKernelTestBase extends KernelTestBase {
       'system.mail',
       'system.site',
       'mailsystem.settings',
-      'swiftmailer.transport',
+      'symfony_mailer_lite.settings',
+      'symfony_mailer_lite.symfony_mailer_lite_transport.native',
+      'symfony_mailer_lite.symfony_mailer_lite_transport.null',
+      'symfony_mailer_lite.symfony_mailer_lite_transport.sendmail',
       'field.storage.user.field_user_first_name',
       'field.storage.user.field_user_family_name',
       'field.field.user.user.field_user_first_name',
@@ -110,11 +113,6 @@ abstract class JoinupMailKernelTestBase extends KernelTestBase {
       ->save();
     $this->config('system.mail')
       ->set('interface.default', 'test_mail_collector')
-      ->save();
-
-    // Set SwiftMailer's transport type to 'null' transport.
-    $this->config('swiftmailer.transport')
-      ->set('transport', SWIFTMAILER_TRANSPORT_NULL)
       ->save();
 
     $this->config('mailsystem.settings')

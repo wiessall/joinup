@@ -6,5 +6,6 @@ dependencies:
     - taxonomy
 id: taxonomy_term.eif_recommendation
 label: 'EIF recommendation inline'
+description: ''
 targetEntityType: taxonomy_term
 cache: true

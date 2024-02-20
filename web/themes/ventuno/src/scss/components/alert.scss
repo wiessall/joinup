@@ -1,3 +1,4 @@
+@use "sass:color";
 @import "../partials/core";
 @import "@openeuropa/bcl-bootstrap/scss/alert";
 @import "@openeuropa/bcl-theme-default/src/scss/alert";
@@ -8,6 +9,6 @@
     margin-bottom: 0;
   }
   a {
-    color: darken($link-color, 4%); // Make sure we comply with WCAG 2.0 level AA contrast ratio
+    color: color.adjust($link-color, $lightness: -4%); // Make sure we comply with WCAG 2.0 level AA contrast ratio
   }
 }

@@ -1,4 +1,4 @@
-@api @terms @group-h
+@api @group-h @topic
 Feature:
   Ensure curated list of topics on the homepage behave properly.
 
@@ -203,7 +203,7 @@ Feature:
       | title          | state     |
       | Popular quotes | published |
     And I append "text" to "field_paragraphs_body" field in "node" entity with following "Popular Quotes" title:
-      | field_body:value  |     That's one small step for a man, a giant leap for mankind. |
+      | field_body:value  |     That's one small step for a&nbsp;man, a giant leap for mankind. |
       | field_body:format | text_html                                                      |
     And the following topics are enabled in the homepage:
       | Economy and Welfare     |
@@ -295,13 +295,13 @@ Feature:
 
     # Open collapse
     When I press "See more"
-    Then I should see the text "See less"
+    Then I wait until the page contains the text "See less"
     And I should not see the text "See more"
     Then the "See less" collapse is expanded
 
     # Close collapse again
     When I press "See less"
-    Then I should see the text "See more"
+    Then I wait until the page contains the text "See more"
     And I should not see the text "See less"
     Then the "See more" collapse is collapsed
 

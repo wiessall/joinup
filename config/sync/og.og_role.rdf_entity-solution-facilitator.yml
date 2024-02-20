@@ -185,6 +185,7 @@ permissions:
   - 'unshare event content'
   - 'unshare news content'
   - 'update any navigation ogmenu_instance'
+  - 'update any quick_links ogmenu_instance'
   - 'update group'
   - 'edit own asset_release rdf entity'
   - 'update paragraph content github_feed'

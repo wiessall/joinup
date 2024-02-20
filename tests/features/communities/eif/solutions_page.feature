@@ -1,4 +1,4 @@
-@api @eif_community @terms @group-e
+@api @eif_community @group-e
 Feature: As a user, visiting the EIF Toolbox page, I want to be able to filter
   the page by EIF category.
 
@@ -70,6 +70,7 @@ Feature: As a user, visiting the EIF Toolbox page, I want to be able to filter
     And I check the box "Semantic assets"
     # Other require fields...
     And I fill in "Description" with "foo"
+    And I fill in "Abstract" with "bar"
     And I fill in "Name" with "TikTok"
     And I fill in "E-mail address" with "where@example.com"
     And I select "E-health" from "Topic"

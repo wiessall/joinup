@@ -1,7 +1,5 @@
-//
 // @file
 // Theming rules extending / overriding Layout Paragraphs' Builder UI (admin).
-//
 
 @import "../partials/core";
 
@@ -19,13 +17,13 @@ $wireframe-opacity: 0.5;
     margin-bottom: $spacer;
   }
 
-  .js-lpb-region ~ .js-lpb-region:before {
-    display: block;
+  .js-lpb-region ~ .js-lpb-region::before {
     position: absolute;
-    inset-inline-start: calc($wireframe-width / -2);
-    border-inline-start: $wireframe-width $wireframe-style rgba($wireframe-color, $wireframe-opacity);
+    display: block;
     height: 100%;
     content: "";
+    border-inline-start: $wireframe-width $wireframe-style rgba($wireframe-color, $wireframe-opacity);
+    inset-inline-start: calc($wireframe-width / -2);
   }
 
   // Doubled selectors needed to override parent library's more specific

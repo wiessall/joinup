@@ -5,25 +5,65 @@ Feature: Solution homepage
   I need to be able see an introduction of the solution on its homepage
 
   Scenario: The solution homepage shows basic information about the solution
+    Given the following owner:
+      | name          |
+      | Awesome owner |
+    And the following contact:
+      | name        | Awesome contact            |
+      | email       | awesomecontact@example.com |
+      | Website URL | http://example.com         |
     Given the following solution:
-      | title       | Petri net                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
-      | description | "<p>A <b>Petri net</b>, also known as a <b>place/transition (PT) net</b>, is one of several <a href=\"#mathematical\">mathematical</a> modeling languages for the description of distributed systems. It is a class of discrete event dynamic system. A Petri net is a directed bipartite graph, in which the nodes represent transitions (i.e. events that may occur, represented by bars) and places (i.e. conditions, represented by circles). The directed arcs describe which places are pre- and/or postconditions for which transitions (signified by arrows). Some sources state that Petri nets were invented in August 1939 by Carl Adam Petri — at the age of 13 — for the purpose of describing chemical processes.</p>" |
-      | logo        | logo.png                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
-      | state       | published                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
+      | title               | Petri net                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
+      | description         | "<p>A <b>Petri net</b>, also known as a <b>place/transition (PT) net</b>, is one of several <a href=\"#mathematical\">mathematical</a> modeling languages for the description of distributed systems. It is a class of discrete event dynamic system. A Petri net is a directed bipartite graph, in which the nodes represent transitions (i.e. events that may occur, represented by bars) and places (i.e. conditions, represented by circles). The directed arcs describe which places are pre- and/or postconditions for which transitions (signified by arrows). Some sources state that Petri nets were invented in August 1939 by Carl Adam Petri - at the age of 13 - for the purpose of describing chemical processes.</p>" |
+      | state               | published                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
+      | owner               | Awesome owner                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
+      | contact information | Awesome contact                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
+      | topic               | Demography, E-inclusion                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
+      | solution type       | Non-binding Instrument, Comformance Testing Application                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
+      | spatial coverage    | Italy, Egypt                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
+      | language            | English, Interlingua                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
+      | status              | Completed                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
+      | spatial coverage    | Belgium                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
+      | creation date       | 2017-12-01T8:43                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
+      | modification date   | 2012-12-01T8:43                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
+      | abstract            | Short abstract description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
+    And the following release:
+      | title            | Petri net v1     |
+      | description      | A sample release |
+      | documentation    | text.pdf         |
+      | release number   | v1.1             |
+      | release notes    | Changed release  |
+      | is version of    | Petri net        |
+      | state            | published        |
+      | creation date    | 2022-12-21T13:00 |
+
     When I go to the homepage of the "Petri net" solution
-    # Checking for HTML text ensures that any HTML elements in the abstract are correctly stripped.
-    Then the page should contain the html text "A Petri net, also known as a place/transition (PT) net, is one of several mathematical modeling languages for the description of distributed systems."
-    # The text should be split on a word boundary after 500 characters, followed by an ellipsis.
-    And the page should contain the html text "(signified by arrows)…"
-    # There should be a link to the about page.
-    And I should see the link "Read more"
-    # The page should be cacheable.
-    And the page should be cacheable
-    # The description itself should be stripped of unsightly links.
-    But I should not see the link "mathematical"
-    # The 'Read more' link leads to the About page.
-    When I click "Read more"
-    Then I should see the heading "About Petri net"
+    Then the page should be cacheable
+    And I should see the following headings:
+      | Quick links          |
+      | Detailed information |
+      | Moderation           |
+    And I should see the following lines of text:
+      | Short abstract description                        |
+      | Last update                                       |
+      | 21/12/2022                                        |
+      | Owner                                             |
+      | Awesome owner                                     |
+      | Solution type                                     |
+      | Comformance Testing Application                   |
+      | Languages                                         |
+      | English                                           |
+      | Interlingua                                       |
+      | Status                                            |
+      | Completed                                         |
+      | Geographical coverage                             |
+      | Belgium                                           |
+      | Release version                                   |
+      | v1.1                                              |
+      | Release date                                      |
+      | 21/12/2022                                        |
+      | Only facilitators and authors can create content. |
+      | Non moderated                                     |
 
   # This is a regression test for the entities that include a hashmark on their Uri.
   # @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-3225
@@ -38,7 +78,6 @@ Feature: Solution homepage
     Then I should see the heading "Information sharing protocols"
     And I should not see the text "Page not found"
 
-  @terms
   Scenario: Custom pages should not be visible on the solution homepage
     Given the following solution:
       | title            | Jira restarters                      |
@@ -78,7 +117,6 @@ Feature: Solution homepage
     Then I should see the link "Disappointed Steel"
     But I should not see the link "Random Arm"
 
-  @terms
   Scenario: Test that a pager is shown on the solution page when needed.
     Given the following owner:
       | name                  | type                  |
@@ -216,7 +254,7 @@ Feature: Solution homepage
     When I go to the homepage of the "Chiricahua Solr" solution
     Then I should not see the "Pager" region
 
-  @terms @javascript
+  @javascript
   Scenario: Test that up to 7 topic terms are visible in the solution overview header.
     Given the following solutions:
       | title      | description        | logo     | state     | topic                                                                                                                              |

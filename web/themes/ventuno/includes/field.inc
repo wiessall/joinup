@@ -5,7 +5,7 @@
  * Field specific procedural functions.
  */
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 use Drupal\Component\Utility\Html;
 use Drupal\Core\Template\Attribute;
@@ -78,6 +78,13 @@ function ventuno_preprocess_field_multiple_value_form(array &$variables): void {
 }
 
 /**
+ * Implements hook_preprocess_HOOK().
+ */
+function ventuno_preprocess_field__solution_last_update_date(&$variables): void {
+  $variables['label'] = t('Last update');
+}
+
+/**
  * Implements hook_preprocess_field().
  */
 function ventuno_preprocess_field(array &$variables): void {
@@ -89,8 +96,6 @@ function ventuno_preprocess_field(array &$variables): void {
     // Add selectors.
     $variables['attributes']['class'][] = 'fieldset';
     $variables['attributes']['class'][] = 'fieldset--textarea';
-    // Attach library.
-    $variables['#attached']['library'][] = 'ventuno/paragraph';
   }
   // Make the topics appear as badges in solution headers.
   if ($element['#view_mode'] === 'group_header' && $element['#field_name'] === 'field_topic') {

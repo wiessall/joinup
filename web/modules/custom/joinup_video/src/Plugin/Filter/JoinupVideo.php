@@ -1,11 +1,11 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Drupal\joinup_video\Plugin\Filter;
 
+use DOMDocument;
 use Drupal\Component\Utility\Html;
-use Drupal\Component\Utility\UrlHelper;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Render\RendererInterface;
@@ -14,6 +14,7 @@ use Drupal\Core\Url;
 use Drupal\filter\FilterProcessResult;
 use Drupal\filter\Plugin\FilterBase;
 use Drupal\video_embed_field\ProviderManagerInterface;
+use Drupal\video_embed_field\ProviderPluginInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -38,27 +39,6 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 class JoinupVideo extends FilterBase implements ContainerFactoryPluginInterface {
 
   /**
-   * The video provider manager.
-   *
-   * @var \Drupal\video_embed_field\ProviderManagerInterface
-   */
-  protected $providerManager;
-
-  /**
-   * The renderer.
-   *
-   * @var \Drupal\Core\Render\RendererInterface
-   */
-  protected $renderer;
-
-  /**
-   * The current user.
-   *
-   * @var \Drupal\Core\Session\AccountProxyInterface
-   */
-  protected $currentUser;
-
-  /**
    * Constructs a new JoinupVideo filter.
    *
    * @param array $configuration
@@ -67,18 +47,15 @@ class JoinupVideo extends FilterBase implements ContainerFactoryPluginInterface 
    *   Plugin ID.
    * @param mixed $plugin_definition
    *   Plugin definition.
-   * @param \Drupal\video_embed_field\ProviderManagerInterface $provider_manager
+   * @param \Drupal\video_embed_field\ProviderManagerInterface $providerManager
    *   The video provider manager.
    * @param \Drupal\Core\Render\RendererInterface $renderer
    *   The renderer.
-   * @param \Drupal\Core\Session\AccountProxyInterface $current_user
+   * @param \Drupal\Core\Session\AccountProxyInterface $currentUser
    *   The current user.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, ProviderManagerInterface $provider_manager, RendererInterface $renderer, AccountProxyInterface $current_user) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, protected ProviderManagerInterface $providerManager, protected RendererInterface $renderer, protected AccountProxyInterface $currentUser) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
-    $this->providerManager = $provider_manager;
-    $this->renderer = $renderer;
-    $this->currentUser = $current_user;
   }
 
   /**
@@ -98,7 +75,7 @@ class JoinupVideo extends FilterBase implements ContainerFactoryPluginInterface 
   /**
    * {@inheritdoc}
    */
-  public function settingsForm(array $form, FormStateInterface $form_state) {
+  public function settingsForm(array $form, FormStateInterface $form_state): array {
     $settings = $this->getConfiguration()['settings'];
     $form['allowed_providers'] = [
       '#title' => $this->t('Allowed providers'),
@@ -125,24 +102,35 @@ class JoinupVideo extends FilterBase implements ContainerFactoryPluginInterface 
   /**
    * {@inheritdoc}
    */
-  public function process($text, $langcode) {
-    $response = new FilterProcessResult($text);
+  public function process($text, $langcode): FilterProcessResult {
+    $response = new FilterProcessResult();
 
-    foreach ($this->getValidMatches($text) as $source_text => $data) {
-      if (!$provider = $this->getProvider($data['video_url'])) {
+    // Ensure that we have iframes in the markup.
+    if (stristr($text, '<iframe') === FALSE) {
+      return $response->setProcessedText($text);
+    }
+
+    $plugin_settings = $this->getConfiguration()['settings'];
+    $dom = Html::load($text);
+    $xpath = new \DOMXPath($dom);
+    foreach ($xpath->query('//iframe') as $iframe) {
+      /** @var \DOMElement $iframe */
+      $src = $iframe->getAttribute('src');
+      if (!$provider = $this->getProvider($src)) {
         // No enabled provider knows to handle this URL. Strip out the <iframe>.
-        $text = str_replace($source_text, '', $text);
+        $iframe->parentNode->removeChild($iframe);
         continue;
       }
 
-      $autoplay = $this->currentUser->hasPermission('never autoplay videos') ? FALSE : $data['settings']['autoplay'];
-      $embed_code = $provider->renderEmbedCode($data['settings']['width'], $data['settings']['height'], $autoplay);
+      $autoplay = $this->currentUser->hasPermission('never autoplay videos') ? FALSE : $plugin_settings['autoplay'];
+      $embed_code = $provider->renderEmbedCode($iframe->getAttribute('width'), $iframe->getAttribute('height'), $autoplay);
 
       // Add the container to make the video responsive if it's been
       // configured as such. This usually is attached to field output in the
       // case of a formatter, but a custom container must be used where one is
       // not present.
-      if ($data['settings']['responsive']) {
+      $element = 'iframe';
+      if ($plugin_settings['responsive']) {
         $embed_code = [
           '#type' => 'container',
           '#attributes' => [
@@ -150,10 +138,14 @@ class JoinupVideo extends FilterBase implements ContainerFactoryPluginInterface 
           ],
           'children' => $embed_code,
         ];
+        $element = 'div';
       }
 
-      // Replace the JSON settings with a video.
-      $text = str_replace($source_text, (string) $this->renderer->render($embed_code), $text);
+      $tempIframeDom = new DOMDocument();
+      @$tempIframeDom->loadHTML((string) $this->renderer->render($embed_code));
+      $newIframeNode = $tempIframeDom->getElementsByTagName($element)->item(0);
+      $newIframeImported = $dom->importNode($newIframeNode, TRUE);
+      $iframe->parentNode->replaceChild($newIframeImported, $iframe);
 
       // Add the required responsive video library only when at least one match
       // is present.
@@ -161,41 +153,9 @@ class JoinupVideo extends FilterBase implements ContainerFactoryPluginInterface 
       $response->setCacheContexts(['user.permissions']);
     }
 
-    $response->setProcessedText($text);
+    $response->setProcessedText(Html::serialize($dom));
 
     return $response;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  protected function getValidMatches($text) {
-    $matches = [];
-    $plugin_settings = $this->getConfiguration()['settings'];
-    $document = Html::load($text);
-    foreach ($document->getElementsByTagName('iframe') as $iframe) {
-      /** @var \DOMElement $iframe */
-      if ($src = $iframe->getAttribute('src')) {
-        $parts = UrlHelper::parse($src);
-        $parts['query'] = UrlHelper::filterQueryParameters($parts['query'], [
-          'autoplay',
-          'autoPlay',
-          'autostart',
-        ]);
-        $url = $this->getUrl($parts);
-        $matches[$document->saveHTML($iframe)] = [
-          'video_url' => $url,
-          'settings' => [
-            'width' => $iframe->getAttribute('width'),
-            'height' => $iframe->getAttribute('height'),
-            'autoplay' => $plugin_settings['autoplay'],
-            'responsive' => $plugin_settings['responsive'],
-          ],
-        ];
-      }
-    }
-
-    return $matches;
   }
 
   /**
@@ -207,7 +167,7 @@ class JoinupVideo extends FilterBase implements ContainerFactoryPluginInterface 
    * @return \Drupal\video_embed_field\ProviderPluginInterface|null
    *   One of the enabled providers that handles this URL or NULL.
    */
-  protected function getProvider($url) {
+  protected function getProvider($url): ProviderPluginInterface|null {
     /** @var \Drupal\video_embed_field\ProviderPluginBase $provider */
     if (!$provider = $this->providerManager->loadProviderFromInput($url)) {
       return NULL;

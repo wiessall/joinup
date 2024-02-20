@@ -4,9 +4,8 @@ status: true
 dependencies:
   config:
     - core.entity_view_mode.rdf_entity.group_header
-    - field.field.rdf_entity.solution.field_is_actor
+    - field.field.rdf_entity.solution.field_is_abstract
     - field.field.rdf_entity.solution.field_is_affiliations_requests
-    - field.field.rdf_entity.solution.field_is_business_process
     - field.field.rdf_entity.solution.field_is_contact_information
     - field.field.rdf_entity.solution.field_is_content
     - field.field.rdf_entity.solution.field_is_content_creation
@@ -24,15 +23,12 @@ dependencies:
     - field.field.rdf_entity.solution.field_is_metrics_page
     - field.field.rdf_entity.solution.field_is_moderation
     - field.field.rdf_entity.solution.field_is_owner
-    - field.field.rdf_entity.solution.field_is_product_type
     - field.field.rdf_entity.solution.field_is_related_solutions
     - field.field.rdf_entity.solution.field_is_shared_in
     - field.field.rdf_entity.solution.field_is_show_eira_related
     - field.field.rdf_entity.solution.field_is_solution_type
     - field.field.rdf_entity.solution.field_is_source_code_repository
-    - field.field.rdf_entity.solution.field_is_standardization_level
     - field.field.rdf_entity.solution.field_is_state
-    - field.field.rdf_entity.solution.field_is_test_resource_type
     - field.field.rdf_entity.solution.field_is_translation
     - field.field.rdf_entity.solution.field_is_version
     - field.field.rdf_entity.solution.field_is_webdav_creation
@@ -47,6 +43,8 @@ dependencies:
     - image.style.logo
     - rdf_entity.rdfentity.solution
   module:
+    - field_delimiter
+    - field_formatter_range
     - joinup_core
     - svg_image
     - template_suggestion
@@ -59,7 +57,7 @@ content:
   collections:
     settings: {  }
     third_party_settings: {  }
-    weight: 5
+    weight: 4
     region: content
   download_total:
     settings: {  }
@@ -92,8 +90,14 @@ content:
       query_parameters: "f[0]|topic:[term:tid]\r\nf[1]|type:solution"
       limit: 7
     third_party_settings:
+      field_delimiter:
+        delimiter: ''
+      field_formatter_range:
+        order: 0
+        limit: 0
+        offset: 0
       template_suggestion:
-        template_suggestion: solution_header_topic
+        template_suggestion: group_header_topic
     weight: 3
     region: content
   label:
@@ -106,10 +110,10 @@ content:
         template_suggestion: ''
     weight: 1
     region: content
-  releases_overview:
+  members:
     settings: {  }
     third_party_settings: {  }
-    weight: 4
+    weight: 5
     region: content
   solution_subscribe:
     settings: {  }
@@ -121,9 +125,8 @@ hidden:
   created: true
   eif_perspective: true
   featured: true
-  field_is_actor: true
+  field_is_abstract: true
   field_is_affiliations_requests: true
-  field_is_business_process: true
   field_is_contact_information: true
   field_is_content: true
   field_is_content_creation: true
@@ -140,15 +143,12 @@ hidden:
   field_is_metrics_page: true
   field_is_moderation: true
   field_is_owner: true
-  field_is_product_type: true
   field_is_related_solutions: true
   field_is_shared_in: true
   field_is_show_eira_related: true
   field_is_solution_type: true
   field_is_source_code_repository: true
-  field_is_standardization_level: true
   field_is_state: true
-  field_is_test_resource_type: true
   field_is_translation: true
   field_is_version: true
   field_is_webdav_creation: true
@@ -168,5 +168,6 @@ hidden:
   read_more: true
   related_solution: true
   related_solutions: true
+  releases_overview: true
   search_api_excerpt: true
   share_link: true

@@ -5,7 +5,7 @@
  * Module handling notifications in joinup.
  */
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Render\Markup;
@@ -17,6 +17,7 @@ use Drupal\joinup_group\Exception\MissingGroupException;
 use Drupal\joinup_notification\Event\NotificationEvent;
 use Drupal\joinup_notification\NotificationEvents;
 use Drupal\rdf_entity\RdfInterface;
+use Drupal\symfony_mailer_lite\Plugin\Mail\SymfonyMailer;
 
 /**
  * Implements hook_ENTITY_TYPE_insert().
@@ -198,8 +199,8 @@ function joinup_notification_mail_alter(array &$message): void {
   if ($message['module'] === 'user' || $message['module'] === 'joinup_user') {
     // Convert new lines to paragraphs and line breaks. Also transform the body
     // to markup.
-    // @see swiftmailer_mail()
-    $message['headers']['Content-Type'] = SWIFTMAILER_FORMAT_HTML;
+    // @see symfony_mailer_lite_mail()
+    $message['headers']['Content-Type'] = SymfonyMailer::FORMAT_HTML;
     $message['body'] = array_map(function ($text) {
       return Markup::create(_filter_autop($text));
     }, $message['body']);
@@ -207,7 +208,7 @@ function joinup_notification_mail_alter(array &$message): void {
 
   // Mails sent by the message_notify module are already HTML ready.
   if ($message['module'] === 'message_notify') {
-    $message['headers']['Content-Type'] = SWIFTMAILER_FORMAT_HTML;
+    $message['headers']['Content-Type'] = SymfonyMailer::FORMAT_HTML;
     // Some notifications such as the 'contact_form_submission' are not being
     // sent to users of the platform, but to an automated helpdesk service. In
     // this case the message will be read by cold, soulless machines so we can

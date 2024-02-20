@@ -1,0 +1,33 @@
+uuid: 8348a101-cccb-4628-8b3c-0aae83322a81
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.ogmenu_instance.og_audience
+    - og_menu.ogmenu.quick_links
+    - rdf_entity.rdfentity.collection
+    - rdf_entity.rdfentity.solution
+  module:
+    - og
+id: ogmenu_instance.quick_links.og_audience
+field_name: og_audience
+entity_type: ogmenu_instance
+bundle: quick_links
+label: 'Groups audience'
+description: 'OG group audience reference field.'
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:rdf_entity'
+  handler_settings:
+    target_bundles:
+      collection: collection
+      solution: solution
+    sort:
+      field: _none
+      direction: ASC
+    auto_create: false
+    auto_create_bundle: collection
+field_type: og_standard_reference

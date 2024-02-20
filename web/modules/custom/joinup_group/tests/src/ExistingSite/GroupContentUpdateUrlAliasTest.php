@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Drupal\Tests\joinup_group\ExistingSite;
 
@@ -349,6 +349,7 @@ class GroupContentUpdateUrlAliasTest extends JoinupExistingSiteTestBase {
       'rid' => 'collection',
       'id' => 'http://collection',
       'label' => 'collection',
+      'field_ar_abstract' => $this->randomString(),
       'field_ar_description' => $this->randomString(),
       'field_ar_state' => 'published',
       'field_ar_owner' => 'http://example.com/owner',
@@ -361,6 +362,7 @@ class GroupContentUpdateUrlAliasTest extends JoinupExistingSiteTestBase {
       'id' => "http://solution/1",
       'label' => "solution 1",
       'collection' => 'http://collection',
+      'field_is_abstract' => $this->randomString(),
       'field_is_description' => $this->randomString(),
       'field_is_state' => 'published',
       'field_is_owner' => 'http://example.com/owner',

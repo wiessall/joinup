@@ -35,7 +35,6 @@ third_party_settings:
   field_group:
     group_abstract_wrapper:
       children:
-        - field_ar_abstract
         - read_more
       label: 'Abstract wrapper'
       parent_name: ''
@@ -59,6 +58,16 @@ targetEntityType: rdf_entity
 bundle: collection
 mode: view_mode_tile_horizontal
 content:
+  field_ar_abstract:
+    type: string
+    label: hidden
+    settings:
+      link_to_entity: false
+    third_party_settings:
+      template_suggestion:
+        template_suggestion: ''
+    weight: 2
+    region: content
   field_ar_description:
     type: joinup_html_stripper_stripped
     label: hidden
@@ -85,13 +94,12 @@ content:
   members:
     settings: {  }
     third_party_settings: {  }
-    weight: 2
+    weight: 3
     region: content
 hidden:
   changed: true
   created: true
   featured: true
-  field_ar_abstract: true
   field_ar_access_url: true
   field_ar_affiliates: true
   field_ar_closed: true

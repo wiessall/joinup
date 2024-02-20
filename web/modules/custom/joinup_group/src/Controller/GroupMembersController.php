@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Drupal\joinup_group\Controller;
 
@@ -68,7 +68,8 @@ class GroupMembersController extends ControllerBase {
     // If the user has the permission to manage members (aka is a facilitator),
     // show the administration view. Otherwise, show the public version of the
     // view that shows the memberships as tiles.
-    $show_admin_view = $this->ogAccess->userAccess($group, 'manage members')->isAllowed();
+    $show_admin_view = $this->ogAccess->userAccess($group, 'manage members')->isAllowed()
+      && !$group->isArchived();
 
     $view_id = $show_admin_view ? 'og_members_overview' : 'members_overview';
     $arguments = [$group->getEntityTypeId(), $group->id()];

@@ -5,7 +5,7 @@
  * Social share specific procedural functions.
  */
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 /**
  * Preprocess function for the "social_share" theme hook.

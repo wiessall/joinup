@@ -1,4 +1,4 @@
-@api @terms @group-b
+@api @group-b
 Feature: Landing custom page.
   In order to create landing custom pages
   As a moderator
@@ -24,7 +24,7 @@ Feature: Landing custom page.
     And the following field should be present "URL alias"
     And I fill in the following:
       | Title | Twelve Tables |
-    And I select "Data gathering, data processing" from "Topic"
+    And I select "Data gathering and processing" from "Topic"
     And I press "Publish"
 
     When I visit "/admin/custom-landing-pages"
@@ -40,7 +40,7 @@ Feature: Landing custom page.
     Given I am logged in as a "moderator"
     When I visit "/admin/custom-landing-pages/add"
     And I fill in "Alias test" for "Title"
-    And I select "Data gathering, data processing" from "Topic"
+    And I select "Data gathering and processing" from "Topic"
     And I press "URL alias"
     And I uncheck the box "Generate automatic URL alias"
     And I fill in "<path>" for "URL alias"

@@ -3,9 +3,11 @@ langcode: en
 status: true
 dependencies:
   config:
+    - filter.format.plain_text_glossary
     - taxonomy.vocabulary.legal_type
   module:
     - dashboard
+    - filter
     - joinup_licence
     - rdf_entity
     - taxonomy
@@ -23,4 +25,5 @@ permissions:
   - 'delete licence rdf entity'
   - 'edit licence rdf entity'
   - 'edit terms in legal_type'
+  - 'use text format plain_text_glossary'
   - 'view licence overview page'

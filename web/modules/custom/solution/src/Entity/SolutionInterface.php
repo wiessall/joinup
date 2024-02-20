@@ -1,12 +1,13 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Drupal\solution\Entity;
 
 use Drupal\asset_distribution\Entity\DistributionsParentInterface;
 use Drupal\asset_release\Entity\AssetReleaseInterface;
 use Drupal\collection\Entity\CollectionContentInterface;
+use Drupal\joinup_bundle_class\AbstractInterface;
 use Drupal\joinup_bundle_class\DescriptionInterface;
 use Drupal\joinup_featured\FeaturedContentInterface;
 use Drupal\joinup_group\Entity\GroupInterface;
@@ -19,10 +20,10 @@ use Drupal\rdf_entity\RdfInterface;
 /**
  * Interface for solution entities in Joinup.
  */
-interface SolutionInterface extends RdfInterface, CollectionContentInterface, EntityPublicationTimeInterface, EntityWorkflowStateInterface, FeaturedContentInterface, PinnableGroupContentInterface, GroupInterface, DistributionsParentInterface, ArchivableEntityInterface, DescriptionInterface {
+interface SolutionInterface extends RdfInterface, CollectionContentInterface, EntityPublicationTimeInterface, EntityWorkflowStateInterface, FeaturedContentInterface, PinnableGroupContentInterface, GroupInterface, DistributionsParentInterface, ArchivableEntityInterface, DescriptionInterface, AbstractInterface {
 
   /**
-   * Returns teh child releases.
+   * Returns the child releases.
    *
    * @return \Drupal\asset_release\Entity\AssetReleaseInterface[]
    *   An array of child releases, keyed by their ID.

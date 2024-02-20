@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Drupal\Tests\joinup_debug\Functional;
 
@@ -50,7 +50,6 @@ class DbLogTest extends KernelTestBase {
     $this->installEntitySchema('user');
     $this->installEntitySchema('node');
     $this->installConfig('node');
-    $this->installSchema('system', 'sequences');
     $this->installSchema('dblog', 'watchdog');
     $this->installSchema('node', 'node_access');
     $this->drupalCreateContentType([
