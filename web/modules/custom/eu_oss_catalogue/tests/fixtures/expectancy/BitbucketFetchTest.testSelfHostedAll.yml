@@ -40,7 +40,9 @@ Bar Project:
       - 'https://api.bitbucket.org/2.0/repositories/test_namespace/bar/src/da001cdf6ce8f3fd3f178f0ef189ef0c524bdc97/assets/Bar-Screenshot-2.png'
     oss_git_forks: 5
     oss_git_stars: 0
-    oss_source_hash: ddq2P_yjyJnQscwfbkZrbO61HOqUEUWeIOslaTPUjns
+    oss_git_open_issues: 0
+    oss_git_open_pull_requests: 2
+    oss_source_hash: H2LTLowz44VPdh7iTerj5B1XRvD8QnIma0qUmunoawM
   en:
     langcode: en
     default_langcode: '1'
