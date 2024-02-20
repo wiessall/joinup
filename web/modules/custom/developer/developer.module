@@ -8,8 +8,8 @@
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Session\AccountInterface;
-use Drupal\block\Entity\Block;
 use Drupal\Core\Session\AccountProxy;
+use Drupal\block\Entity\Block;
 use Drupal\user\UserInterface;
 
 /**
@@ -38,7 +38,7 @@ function developer_user_login(UserInterface $account): void {
   }
 
   // Disable config read-only mode for developers.
-  touch(DRUPAL_ROOT. '/../disable-config-readonly');
+  touch(DRUPAL_ROOT . '/../disable-config-readonly');
 }
 
 /**
@@ -53,6 +53,7 @@ function developer_user_logout(AccountProxy $account): void {
     return;
   }
 
+  // @todo Check if there are any developers still logged in.
   // Enable config read-only mode for developers.
   \Drupal::getContainer()->get('file_system')->unlink(DRUPAL_ROOT . '/../disable-config-readonly');
 }
