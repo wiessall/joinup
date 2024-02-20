@@ -40,6 +40,8 @@ class Project {
    *   Number of times the project has been forked.
    * @param int|null $numberOfStars
    *   Number of times the project has been starred.
+   * @param int|null $numberOfIssues
+   *   Number of open issues for the project.
    * @param int|null $numberOfPullRequests
    *   Number of open pull requests.
    * @param string[] $files
@@ -59,6 +61,7 @@ class Project {
     public readonly ?string $logo = NULL,
     public readonly ?int $numberOfForks = NULL,
     public readonly ?int $numberOfStars = NULL,
+    public readonly ?int $numberOfIssues = NULL,
     public readonly ?int $numberOfPullRequests = NULL,
     public readonly array $files = [],
   ) {}

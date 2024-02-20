@@ -22,6 +22,7 @@
     "license": "GPL-2.0+",
     "minimum-stability": "dev",
     "require": {
+        "bitbucket/client": "^4.5",
         "cfpinto/graphql": "dev-master",
         "claudiu-cristea/drupal-cache-adapter": "^1.0",
         "cweagans/composer-patches": "^1.7",

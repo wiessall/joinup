@@ -7,6 +7,7 @@ namespace Drupal\eu_oss_catalogue;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Logger\LoggerChannelInterface;
 use Drupal\Core\Queue\QueueFactory;
+use Drupal\Core\Utility\Error;
 use Drupal\eu_oss_catalogue\Entity\OssSolutionInterface;
 use Drupal\eu_oss_catalogue\Event\EuOssPostFetchEvent;
 use Drupal\eu_oss_catalogue\Event\EuOssSolutionPreSaveEvent;
@@ -179,7 +180,14 @@ class EuOssCatalogue implements EuOssCatalogueInterface {
     // Set source hash.
     $solution->set('oss_source_hash', $project->getHash());
 
-    $operationResult = $solution->save();
+    try {
+      $operationResult = $solution->save();
+    }
+    catch (\Exception $exception) {
+      // Solution could not be saved.
+      Error::logException($this->logger, $exception);
+      return NULL;
+    }
 
     $loggerArguments = [
       '@solution' => $solution->label(),

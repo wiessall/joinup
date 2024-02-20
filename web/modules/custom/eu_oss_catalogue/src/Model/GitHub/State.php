@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Drupal\eu_oss_catalogue\Model;
+namespace Drupal\eu_oss_catalogue\Model\GitHub;
 
 /**
- * GitHub filter values.
+ * GitHub status filter values.
  *
  * @see https://docs.github.com/en/graphql/reference/enums#discussionstate
  * @see https://docs.github.com/en/graphql/reference/enums#issuestate
@@ -16,7 +16,7 @@ namespace Drupal\eu_oss_catalogue\Model;
  * @see https://docs.github.com/en/graphql/reference/enums#pullrequestupdatestate
  * @see https://docs.github.com/en/graphql/reference/enums#trackedissuestates
  */
-enum GitHubState {
+enum State {
 
   case OPEN;
   case CLOSED;
