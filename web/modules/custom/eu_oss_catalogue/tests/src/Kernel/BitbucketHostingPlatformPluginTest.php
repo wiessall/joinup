@@ -104,6 +104,8 @@ class BitbucketHostingPlatformPluginTest extends KernelTestBase implements Logge
           'logo' => NULL,
           'numberOfForks' => 5,
           'numberOfStars' => NULL,
+          'numberOfIssues' => NULL,
+          'numberOfPullRequests' => 2,
         ],
         'test_namespace/baz' => [
           'namespace' => 'test_namespace',
@@ -119,6 +121,8 @@ class BitbucketHostingPlatformPluginTest extends KernelTestBase implements Logge
           'logo' => 'https://bytebucket.org/ravatar/%7Bf9883d63-17c1-44b6-8fb1-0478c7b9e557%7D?ts=453345',
           'numberOfForks' => 0,
           'numberOfStars' => NULL,
+          'numberOfIssues' => NULL,
+          'numberOfPullRequests' => 5,
         ],
       ],
       $projectsArray
