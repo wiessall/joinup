@@ -16,7 +16,7 @@ use Drupal\user\UserInterface;
  * Implements hook_block_access().
  */
 function developer_block_access(Block $block, $operation, AccountInterface $account): AccessResultInterface {
-  if ($operation !== 'view' || $block->getPluginId() !== 'developer_warning_message' || !getenv('AUTOLOGOUT_PRODUCTION')) {
+  if ($operation !== 'view' || $block->getPluginId() !== 'developer_warning_message' || getenv('AUTOLOGOUT_PRODUCTION')) {
     return AccessResult::neutral();
   }
 
