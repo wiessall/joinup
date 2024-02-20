@@ -6,7 +6,12 @@
 upgrade_commands:
   default:
     - touch disable-config-readonly
+    # Remove this line in ISAICP-8376
     - ./vendor/bin/drush deploy --yes
+    # Remove next 3 lines ISAICP-8376
+    - ./vendor/bin/drush joinup:sync-locked-vocabulary-terms
+    - ./vendor/bin/drush rdf_sync:synchronize taxonomy_term --bundle=legal_type,topic
+    - ./vendor/bin/drush rdf_sync:mode delayed
     - ./vendor/bin/drush search-api:reset-tracker --yes
     - ./vendor/bin/drush joinup:node-access-rebuild
     - rm disable-config-readonly

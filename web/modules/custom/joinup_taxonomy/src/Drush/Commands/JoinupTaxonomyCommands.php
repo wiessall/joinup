@@ -335,7 +335,7 @@ class JoinupTaxonomyCommands extends DrushCommands {
    * @return string
    *   A file path.
    */
-  private static function getDumpFilePath(string $extension, bool $compressed = TRUE): string {
+  public static function getDumpFilePath(string $extension, bool $compressed = TRUE): string {
     if (!isset(static::$dumpFile)) {
       $checksum = '';
       foreach (array_keys(self::VOCABS) as $file) {
