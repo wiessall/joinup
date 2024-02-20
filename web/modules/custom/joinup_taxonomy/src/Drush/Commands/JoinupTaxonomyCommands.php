@@ -16,6 +16,7 @@ use Drush\Commands\DrushCommands;
 use Drush\Drush;
 use EasyRdf\Graph;
 use EasyRdf\Literal;
+use EasyRdf\RdfNamespace;
 use EasyRdf\Resource;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -150,6 +151,11 @@ class JoinupTaxonomyCommands extends DrushCommands {
         ],
       ];
       RdfSyncConnection::updateTriples($triples);
+
+      // Add 'eira' and 'adms' namespaces.
+      RdfNamespace::set('eira', 'http://data.europa.eu/dr8/');
+      RdfNamespace::set('adms', 'http://www.w3.org/ns/adms#');
+
       $fixtureFileGraph->parse($triples, 'php');
       $vocabularyUris[] = $vocabularyUri;
     }
@@ -179,7 +185,7 @@ class JoinupTaxonomyCommands extends DrushCommands {
       QUERY;
 
     // Get all locked vocabulary triples and store them in the collector graph.
-    $results = RdfSyncConnection::query(sprintf($query, RdfSyncConnection::GRAPH, '<' . implode('> <', $vocabularyUris) . '>' ));
+    $results = RdfSyncConnection::query(sprintf($query, RdfSyncConnection::GRAPH, '<' . implode('> <', $vocabularyUris) . '>'));
     foreach ($results as $row) {
       $fixtureFileGraph->add($row->subject, $row->predicate, $row->object);
     }

@@ -193,13 +193,10 @@ trait VocabularyGraphAlterersTrait {
             'uri' => RdfNamespace::get($prefix),
           ];
           foreach ($graph->all($resource, $shortenedProperty) as $object) {
-            $value = $object instanceof Resource ? $object->getUri() : $object->getValue();
-            if ($value) {
-              $rows[] = [
-                'property' => $shortenedProperty,
-                'value' => $value,
-              ];
-            }
+            $rows[] = [
+              'property' => $shortenedProperty,
+              'value' => $object->toRdfPhp(),
+            ];
           }
         }
 
