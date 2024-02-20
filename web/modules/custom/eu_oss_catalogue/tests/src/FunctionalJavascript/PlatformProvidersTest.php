@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Drupal\Tests\eu_oss_catalogue\FunctionalJavascript;
 
@@ -36,22 +36,6 @@ class PlatformProvidersTest extends WebDriverTestBase {
    * @var \Drupal\user\UserInterface
    */
   protected UserInterface $adminUser;
-
-  /**
-   * {@inheritdoc}
-   */
-  protected function setUp(): void {
-    parent::setUp();
-
-    $this->adminUser = $this->drupalCreateUser(['administer eu oss catalogue']);
-    $this->drupalPlaceBlock('local_actions_block');
-
-    $settings['settings']['eu_oss_catalogue']['platform_github']['access_token'] = (object) [
-      'value' => 'dummy-token',
-      'required' => TRUE,
-    ];
-    $this->writeSettings($settings);
-  }
 
   /**
    * Tests hosting provider operations.
@@ -103,6 +87,22 @@ class PlatformProvidersTest extends WebDriverTestBase {
     $this->submitForm([], 'Delete');
 
     $assertSession->pageTextContains('The code hosting platform config Test hosting platform updated has been deleted.');
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  protected function setUp(): void {
+    parent::setUp();
+
+    $this->adminUser = $this->drupalCreateUser(['administer eu oss catalogue']);
+    $this->drupalPlaceBlock('local_actions_block');
+
+    $settings['settings']['eu_oss_catalogue']['platform_github']['access_token'] = (object) [
+      'value' => 'dummy-token',
+      'required' => TRUE,
+    ];
+    $this->writeSettings($settings);
   }
 
 }
