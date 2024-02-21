@@ -10,6 +10,7 @@ Feature: Variety tests for the developer role.
       | page                                               |
       | /dashboard                                         |
       | /admin/custom-landing-pages                        |
+      | /admin/content                                     |
       | /admin/content/meta-entity                         |
       | /admin/content/poll                                |
       | /admin/content/rdf                                 |
