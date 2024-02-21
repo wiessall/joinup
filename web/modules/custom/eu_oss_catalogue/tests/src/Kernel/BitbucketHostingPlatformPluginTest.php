@@ -122,7 +122,7 @@ class BitbucketHostingPlatformPluginTest extends KernelTestBase implements Logge
           'numberOfForks' => 0,
           'numberOfStars' => NULL,
           'numberOfIssues' => NULL,
-          'numberOfPullRequests' => 5,
+          'numberOfPullRequests' => NULL,
         ],
       ],
       $projectsArray
@@ -138,6 +138,13 @@ class BitbucketHostingPlatformPluginTest extends KernelTestBase implements Logge
               '%repository' => 'test_namespace/baz',
               '%base_url' => 'https://bitbucket.org',
               '%reference' => 'master',
+            ],
+          ],
+          [
+            'message' => "Cannot fetch number of PRs of '%repository' on '%base_url'.",
+            'context' => [
+              '%repository' => 'test_namespace/baz',
+              '%base_url' => 'https://bitbucket.org',
             ],
           ],
         ],
