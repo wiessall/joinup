@@ -25,7 +25,7 @@ final class WarningMessageBlock extends BlockBase {
       '#theme' => 'status_messages',
       '#message_list' => [
         'warning' => [
-          'Warning: You are working on production. Configuration is unlocked. Please, be extra cautious!',
+          'Warning: You are working on production. Please, be extra cautious!',
         ],
       ],
     ];
