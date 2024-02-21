@@ -278,7 +278,6 @@ drupal:
         $config['system.site']['mail'] = getenv('DRUPAL_SITE_MAIL');
       Mail transport: |
         $config['symfony_mailer_lite.settings']['default_transport'] = 'sendmail';
-        $config['symfony_mailer_lite.symfony_mailer_lite_transport.sendmail']['configuration']['query']['command'] =  getenv('DRUPAL_MAIL_SENDMAIL_PATH') . ' -' . getenv('DRUPAL_MAIL_SENDMAIL_MODE');
       Search API: |
         // Adding a fallback for the scheme in case it is not properly
         // consumed by the production environment.
