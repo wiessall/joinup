@@ -602,20 +602,10 @@ api.bitbucket.org:
 
   # PRs of Baz project.
   /2.0/repositories/test_namespace/baz/pullrequests?state=OPEN&pagelen=1:
-    values:
-      - comment_count: 0
-        task_count: 0
-        type: pullrequest
-        id: 22
-        title: Do something to Baz
-        description: Issue description
-        state: OPEN
-        created_on: '2014-09-10T16:16:35.968019+00:00'
-        updated_on: '2020-09-29T14:14:29.207451+00:00'
-    pagelen: 1
-    size: 5
-    page: 1
-    next: https://api.bitbucket.org/2.0/repositories/atlassianlabs/cwdapache/pullrequests?state=OPEN&pagelen=1&page=2
+    _http_status: 500
+    type: error
+    error:
+      message: 'Internal server error'
 
 
   # Publiccode of Baz project 2.

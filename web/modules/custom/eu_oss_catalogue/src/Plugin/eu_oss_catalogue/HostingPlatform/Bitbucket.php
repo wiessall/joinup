@@ -361,6 +361,13 @@ class Bitbucket extends EuOssCatalogueGitHostingPlatformPluginBase {
       return $forks['size'] ?? NULL;
     }
     catch (\Exception) {
+      $this->logger->debug(
+        "Cannot fetch number of forks of '%repository' on '%base_url'.",
+        [
+          '%repository' => "$namespace/$name",
+          '%base_url' => $this->getConfiguration()['baseUrl'],
+        ]
+      );
     }
     return NULL;
   }
@@ -385,6 +392,13 @@ class Bitbucket extends EuOssCatalogueGitHostingPlatformPluginBase {
       return $prs['size'] ?? NULL;
     }
     catch (\Exception) {
+      $this->logger->debug(
+        "Cannot fetch number of PRs of '%repository' on '%base_url'.",
+        [
+          '%repository' => "$namespace/$name",
+          '%base_url' => $this->getConfiguration()['baseUrl'],
+        ]
+      );
     }
     return NULL;
   }
