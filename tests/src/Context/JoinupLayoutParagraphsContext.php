@@ -95,10 +95,10 @@ class JoinupLayoutParagraphsContext extends RawDrupalContext {
 
     // Select the layout.
     $xpath = "//div[contains(concat(' ', @class, ' '), ' layout-select__item ')]/input[@value='$layout']";
-    $this->getSession()->wait(5000, "document.querySelector('div.layout-select__item input[value=\"$layout\"]') !== null");
+    $this->getSession()->wait(100, "document.querySelector('div.layout-select__item input[value=\"$layout\"]') !== null");
     $this->getSession()->getPage()->find('xpath', $xpath)->getParent()->click();
     // Wait until AJAX is done.
-    $this->getSession()->wait(5000, "jQuery.active === 0");
+    $this->getSession()->wait(100, "jQuery.active === 0");
 
     // Expand both the "Layout options" and "Settings" fieldsets. The classes
     // are details[id="layout-paragraphs-layout-options"] and
@@ -128,7 +128,7 @@ class JoinupLayoutParagraphsContext extends RawDrupalContext {
     // Finally, click the "Save" button to add the paragraph.
     $this->getSession()->getPage()->find('css', '.ui-dialog-buttonpane')->pressButton('Save');
     // Wait until the button pane is gone.
-    $this->getSession()->wait(5000, "document.querySelector('.ui-dialog-buttonpane') === null");
+    $this->getSession()->wait(100, "document.querySelector('.ui-dialog-buttonpane') === null");
   }
 
   /**
