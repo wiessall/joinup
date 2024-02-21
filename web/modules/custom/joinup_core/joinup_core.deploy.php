@@ -13,18 +13,3 @@
  */
 
 declare(strict_types=1);
-
-use Drupal\user\Entity\User;
-
-/**
- * Block UID 1 if unblocked.
- */
-function joinup_core_deploy_110300(): string {
-  $user = User::load(1);
-  if ($user->isBlocked()) {
-    return 'User 1 is already blocked.';
-  }
-
-  $user->block();
-  return 'User 1 has been blocked.';
-}
