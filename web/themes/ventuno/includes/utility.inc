@@ -148,6 +148,20 @@ function _ventuno_preprocess_tile(array &$variables, string $entity_type_id): vo
         $variables['info']['icon'] = 'calendar-event';
         $variables['info']['label'] = $variables['content']['oss_release_date'];
       }
+
+      $indicators = [
+        'oss_git_stars',
+        'oss_git_open_issues',
+        'oss_git_open_pull_requests',
+        'oss_git_forks',
+      ];
+
+      foreach ($indicators as $indicator) {
+        if (isset($variables['content'][$indicator][0])) {
+          $variables['indicators'][] = $variables['content'][$indicator];
+        }
+      }
+
       break;
 
     case 'asset_distribution':

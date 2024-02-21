@@ -58,6 +58,12 @@
       {% endif %}
     </div>
 
+    {% if content.indicator %}
+      <div {{ region_attributes.indicator.addClass('l-oss-heading__indicator col-12 col-md-5 py-5 ps-5') }}>
+        {{ content.indicator }}
+      </div>
+    {% endif %}
+
     {% if content.aside %}
       <div {{ region_attributes.aside.addClass('l-oss-heading__aside col-12 col-md-5 py-5 ps-5') }}>
         {{ content.aside }}

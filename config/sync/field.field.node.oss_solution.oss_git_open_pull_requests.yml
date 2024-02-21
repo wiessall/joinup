@@ -9,7 +9,7 @@ id: node.oss_solution.oss_git_open_pull_requests
 field_name: oss_git_open_pull_requests
 entity_type: node
 bundle: oss_solution
-label: 'GIT Open Pull Requests'
+label: 'Open Pull / Merge Requests'
 description: ''
 required: false
 translatable: false
