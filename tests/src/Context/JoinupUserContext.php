@@ -12,7 +12,6 @@ use Drupal\DrupalExtension\Hook\Scope\BeforeUserCreateScope;
 use Drupal\joinup\Traits\MailCollectorTrait;
 use Drupal\joinup\Traits\UserTrait;
 use Drupal\joinup\Traits\UtilityTrait;
-use Drupal\user\Entity\User;
 use Drupal\user\UserInterface;
 use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\ExpectationFailedException;
@@ -256,16 +255,6 @@ class JoinupUserContext extends RawDrupalContext {
       // @see https://www.drupal.org/project/drupal/issues/2548095
       'base_url' => $GLOBALS['base_url'],
     ])->toString();
-  }
-
-  /**
-   * Asserts that the superuser is blocked.
-   *
-   * @Given /^superuser is blocked$/
-   */
-  public function superuserIsBlocked(): void {
-    $user = User::load(1);
-    \assert($user->isBlocked());
   }
 
   /**
