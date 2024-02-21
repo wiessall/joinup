@@ -1,0 +1,16 @@
+{#
+/**
+ * @file
+ * Default template for a field.
+ */
+#}
+{% set classes = [
+  'field--name-' ~ field_name|clean_class,
+  'indicator' ~ '__' ~ field_name_clean|clean_class,
+] %}
+
+<div{{ attributes.addClass(classes).setAttribute('title', label) }}>
+  {% for item in items %}
+    <div{{ item.attributes.addClass('field__item') }}>{{ item.content }}</div>
+  {% endfor %}
+</div>
