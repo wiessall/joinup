@@ -158,7 +158,7 @@ function _ventuno_preprocess_tile(array &$variables, string $entity_type_id): vo
 
       foreach ($indicators as $indicator) {
         if (isset($variables['content'][$indicator][0])) {
-          $variables['extra_data'][] = ['label' => $variables['content'][$indicator]];
+          $variables['indicators'][] = $variables['content'][$indicator];
         }
       }
 
