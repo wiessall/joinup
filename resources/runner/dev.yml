@@ -162,10 +162,8 @@ commands:
       command: virtuoso:import-fixtures
       arguments:
         - resources/adms/adms-definition.rdf
-        - resources/vocab/actor.rdf
         - resources/vocab/ADMS-SW-v1.00.rdf
         - resources/vocab/ADMS_SKOS_v1.00.rdf
-        - resources/vocab/business-process.rdf
         - resources/vocab/countries-skos.rdf
         - resources/vocab/data-theme-skos.rdf
         - resources/vocab/eif_conceptual_model.rdf
@@ -176,10 +174,7 @@ commands:
         - resources/vocab/EIRA_SKOS.rdf
         - resources/vocab/filetypes-skos.rdf
         - resources/vocab/languages-skos.rdf
-        - resources/vocab/product_type.rdf
         - resources/vocab/solution_category.rdf
-        - resources/vocab/standardization_level.rdf
-        - resources/vocab/test_resource_type.rdf
     - task: run
       command: sparql:query
       arguments:
