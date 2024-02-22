@@ -607,3 +607,15 @@
 'limited.self-hosted.gitlab.example.com null':
   data:
     group: null
+
+'wrong.self-hosted.gitlab.example.com': |
+  <!DOCTYPE html>
+  <html lang="en">
+    <head prefix="og: http://ogp.me/ns#">
+     <meta charset="utf-8">
+     <title>Foo</title>
+    </head>
+    <body>
+      <p>Bar Baz</p>
+    </body>
+  </html>

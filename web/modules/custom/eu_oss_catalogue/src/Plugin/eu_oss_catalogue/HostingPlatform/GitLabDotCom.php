@@ -132,7 +132,11 @@ class GitLabDotCom extends EuOssCatalogueGitHostingPlatformPluginBase {
         $query = $this->buildGroupQuery($namespace, $requestedFiles, $endCursor);
         try {
           $response = $this->getClient()->graphql()->execute($query->toString());
-          // Stop in case we have some errors.
+          // Stop in case we have some errors or when the response is not an
+          // array.
+          if (!is_array($response)) {
+            throw new \RuntimeException('Response returned by GraphQL client is not an array.');
+          }
           if (isset($response['errors'][0]['message'])) {
             throw new \RuntimeException($response['errors'][0]['message']);
           }
