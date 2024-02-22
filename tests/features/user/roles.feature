@@ -32,7 +32,11 @@ Feature: User role management
     And I click "People" in the "Administration toolbar" region
     And I click "Edit" in the "Ursus" row
     And the "Roles" checkboxes should contain the following options:
-      | Developer       |
+      | Administrator      |
+      | Authenticated user |
+      | Developer          |
+      | Licence manager    |
+      | Moderator          |
 
   Scenario: Verify options available to the moderator.
     Given I am logged in as "Rick Rolls"
