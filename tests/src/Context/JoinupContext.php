@@ -2104,7 +2104,7 @@ class JoinupContext extends RawDrupalContext {
    *
    * @Then the modal should be closed
    */
-  public function waitForDrupalModalToClose() {
+  public function waitForDrupalModalToClose(): void {
     self::assertModalToClose();
   }
 
