@@ -17,7 +17,8 @@ description: ''
 required: false
 translatable: false
 default_value:
-  - 'http://purl.org/adms/status/Completed'
+  -
+    target_id: 'http://purl.org/adms/status/Completed'
 default_value_callback: ''
 settings:
   handler: 'default:taxonomy_term'
