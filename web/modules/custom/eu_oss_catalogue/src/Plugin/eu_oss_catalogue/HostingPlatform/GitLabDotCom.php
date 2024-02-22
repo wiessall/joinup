@@ -394,7 +394,7 @@ class GitLabDotCom extends EuOssCatalogueGitHostingPlatformPluginBase {
       numberOfForks: $project['forksCount'],
       numberOfStars: $project['starCount'],
       numberOfIssues: $project['openIssuesCount'],
-      numberOfPullRequests: $project['openMergeRequestsCount'],
+      numberOfPullRequests: $project['openMergeRequestsCount'] ?? NULL,
       files: $files,
     );
   }
