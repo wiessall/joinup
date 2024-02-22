@@ -143,7 +143,6 @@
           starCount: 223
           openIssuesCount: 243
           avatarUrl: null
-          openMergeRequestsCount: 11
           releases:
             nodes: {  }
           repository:
