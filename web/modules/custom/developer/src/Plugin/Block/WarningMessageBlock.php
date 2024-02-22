@@ -4,17 +4,18 @@ declare(strict_types=1);
 
 namespace Drupal\developer\Plugin\Block;
 
+use Drupal\Core\Block\Attribute\Block;
 use Drupal\Core\Block\BlockBase;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 
 /**
  * Provides a developers warning message block.
- *
- * @Block(
- *   id = "developer_warning_message",
- *   admin_label = @Translation("Developers warning message"),
- *   category = @Translation("Joinup"),
- * )
  */
+#[Block(
+  id: "developer_warning_message",
+  admin_label: new TranslatableMarkup("Developers warning message"),
+  category: new TranslatableMarkup("Joinup"),
+)]
 final class WarningMessageBlock extends BlockBase {
 
   /**
