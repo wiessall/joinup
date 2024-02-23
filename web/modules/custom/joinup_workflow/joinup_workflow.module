@@ -48,6 +48,8 @@ function joinup_workflow_entity_base_field_info(EntityTypeInterface $entity_type
  * Implements hook_entity_create().
  */
 function joinup_workflow_entity_create(EntityInterface $entity) {
+  //@todo This should be removed entirely.
+
   // Since the state_machine module does not support same from-to state
   // transitions, the transition events also don't fire. Normally, the
   // transition event would be the one to decide whether the entity would be

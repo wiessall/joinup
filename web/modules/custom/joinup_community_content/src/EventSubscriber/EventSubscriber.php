@@ -89,7 +89,10 @@ class EventSubscriber implements EventSubscriberInterface {
         'checkEntityRevisionAccess', 10,
       ],
       OgPermissionEventInterface::EVENT_NAME => [['provideOgRevisionPermissions']],
-      StateMachineButtonLabelsEventInterface::EVENT_NAME => 'provideStateMachineButtonLabels',
+      StateMachineButtonLabelsEventInterface::EVENT_NAME => [
+        ['provideStateMachineButtonLabels'],
+        ['setSameFromToLabel'],
+      ],
       'joinup_workflow.unchanged_workflow_state_update' => 'onUnchangedWorkflowStateUpdate',
     ];
   }
@@ -322,15 +325,13 @@ class EventSubscriber implements EventSubscriberInterface {
     $access->addCacheContexts(['user.roles', 'og_role']);
     $event->setAccess($access);
 
-    // Set a custom button label as defined in the functional specification.
-    switch ($state) {
-      case 'draft':
-        $event->setLabel($this->t('Save as draft'));
-        break;
-
-      case 'proposed':
-      case 'published':
-        $event->setLabel($this->t('Update'));
+    if ($state === 'draft') {
+      $event->setLabel($this->t('Save as draft'));
+    }
+    else {
+      // In case the state is not moved to draft, if the target and source state
+      // are the same, then we the label should be 'Update'.
+      $event->setLabel($this->t('Update'));
     }
   }
 

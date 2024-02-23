@@ -1,5 +1,5 @@
 diff --git a/src/RdfAccessControlHandler.php b/src/RdfAccessControlHandler.php
-index 0b8c14a3acef605c482aecc7cdc5c4c8fbb4a647..23114431682652a8588fe8619310db38ab695a4c 100755
+index 0b8c14a3acef605c482aecc7cdc5c4c8fbb4a647..a046941bc5bbe2a184dddcd422cc054cf409ed6b 100755
 --- a/src/RdfAccessControlHandler.php
 +++ b/src/RdfAccessControlHandler.php
 @@ -22,11 +22,6 @@ class RdfAccessControlHandler extends EntityAccessControlHandler {
@@ -14,12 +14,20 @@ index 0b8c14a3acef605c482aecc7cdc5c4c8fbb4a647..23114431682652a8588fe8619310db38
      if (!$entity instanceof RdfInterface) {
        throw new \Exception('Can only handle access of Rdf entity instances.');
      }
-@@ -50,7 +45,7 @@ class RdfAccessControlHandler extends EntityAccessControlHandler {
+@@ -50,14 +45,14 @@ class RdfAccessControlHandler extends EntityAccessControlHandler {
          return $access_result;
  
        case 'update':
 -        if ($account->hasPermission('edit ' . $entity_bundle . ' rdf entity')) {
 +        if ($account->hasPermission('edit any ' . $entity_bundle . ' rdf entity')) {
+           return AccessResult::allowed();
+         }
+ 
+         return AccessResult::allowedIf($is_owner && $account->hasPermission('edit own ' . $entity_bundle . ' rdf entity'));
+ 
+       case 'delete':
+-        if ($account->hasPermission('delete ' . $entity_bundle . ' rdf entity')) {
++        if ($account->hasPermission('delete any ' . $entity_bundle . ' rdf entity')) {
            return AccessResult::allowed();
          }
  
