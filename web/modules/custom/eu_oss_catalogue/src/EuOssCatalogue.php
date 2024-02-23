@@ -180,6 +180,9 @@ class EuOssCatalogue implements EuOssCatalogueInterface {
     // Set source hash.
     $solution->set('oss_source_hash', $project->getHash());
 
+    // Make sure it is not archived.
+    $solution->set('oss_archived', 0);
+
     try {
       $operationResult = $solution->save();
     }
@@ -297,6 +300,8 @@ class EuOssCatalogue implements EuOssCatalogueInterface {
         'oss_source_hash' => $hash,
         // Also have to take the provider reference into consideration.
         'oss_source' => $provider->getPluginId(),
+        // Limit only to not archived solutions.
+        'oss_archived' => 0,
       ]);
 
     return empty($solutionNodes);
