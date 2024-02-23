@@ -13,7 +13,7 @@ import ControlsDisabler from "./helpers/glide.controlsDisabler.esm";
 ((Drupal, once) => {
   Drupal.behaviors.glide = {
     attach(context) {
-      once(".carousel .glide", context).forEach((slide) => {
+      once("glide", ".carousel .glide", context).forEach((slide) => {
         const glide = new Glide(slide, {
           rewind: false,
           bound: true,
