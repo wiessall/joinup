@@ -5,8 +5,8 @@
     margin-right: $spacer;
   }
   span {
-    font-size: $font-size-xs;
     padding-bottom: $spacer * .2;
+    font-size: $font-size-xs;
   }
   &__oss-git-stars::after {
     @include get-bootstrap-icon('oss_git_stars', $gray-800, 1.6em);
