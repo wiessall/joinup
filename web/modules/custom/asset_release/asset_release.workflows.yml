@@ -17,23 +17,35 @@ asset_release_workflow:
   transitions:
     draft:
       label: Save as draft
-      from: [draft, published]
+      from: [ draft, published ]
       to: draft
     validate:
       label: Publish
-      from: [draft, needs_update]
+      from: [ draft ]
       to: published
-    update_validated:
-      label: Update validated
-      from: [published]
+    update_published:
+      label: Update
+      from: [ published ]
+      to: published
+    validate_changes:
+      label: Publish
+      from: [ needs_update ]
       to: published
     request_changes:
       label: Request changes
-      from: [published]
+      from: [ published ]
+      to: needs_update
+    provide_changes:
+      label: Update
+      from: [ needs_update ]
       to: needs_update
     archive:
       label: Archive
       from: [ published ]
+      to: archived
+    update_archived:
+      label: Update
+      from: [ archived ]
       to: archived
     unarchive:
       label: Unarchive
