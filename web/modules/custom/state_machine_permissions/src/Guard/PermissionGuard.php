@@ -37,7 +37,7 @@ class PermissionGuard implements GuardInterface {
       return TRUE;
     }
 
-    $permission = StateMachinePermissionStringConstructor::constructWorkflowTransitionPermission($workflow, $transition);
+    $permission = StateMachinePermissionStringConstructor::constructTransitionPermission($workflow, $transition);
     if ($this->currentUser->hasPermission($permission)) {
       return TRUE;
     }
