@@ -125,6 +125,9 @@ Feature: When a solution is archived then its sub-content also should be archive
       | If you think this action is not clear, please contact Joinup Support |
       | at                                                                   |
 
+    When I go to the homepage of the "Solution" solution
+    Then I should see the text "Archived" in the "Header"
+
     # Test links that are not available for archived solutions.
     Given I go to the "Solution" solution
     Then I should not see the following links:
@@ -190,10 +193,15 @@ Feature: When a solution is archived then its sub-content also should be archive
     And the workflow state of the "Solution Release 2" "rdf entity" should be "draft"
     And the workflow state of the "Solution Release 3" "rdf entity" should be "published"
 
+    When I go to the homepage of the "Solution" solution
+    Then I should not see the text "Archived" in the "Header"
+
   Scenario Outline: Users must not be able to edit the sub-content of an archived solution
     Given the workflow state of the "Solution" "rdf_entity" is changed to "archived"
     And I am logged in as "<User>"
 
+    When I go to the homepage of the "Solution" solution
+    Then I should see the text "Archived" in the "Header"
     When I go to the edit form of the "Solution Event" event
     Then the response status code should be 403
     When I go to the edit form of the "Solution News 1" news

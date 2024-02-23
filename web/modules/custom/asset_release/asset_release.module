@@ -335,8 +335,11 @@ function template_preprocess_asset_release_releases_download(array &$variables) 
 function asset_release_title_version_is_unique(AssetReleaseInterface $asset_release, $check_unaffiliated_solutions = FALSE) {
   $query = \Drupal::entityQuery('rdf_entity')->accessCheck(FALSE)
     ->condition('label', $asset_release->label())
-    ->condition('field_isr_release_number', $asset_release->getVersion())
     ->condition('rid', 'asset_release');
+  if ($asset_release->getVersion()) {
+    $query->condition('field_isr_release_number', $asset_release->getVersion());
+  }
+
   if (!empty($asset_release->id())) {
     $query->condition('id', $asset_release->id(), '<>');
   }
