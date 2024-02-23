@@ -249,8 +249,9 @@ class EuOssCatalogue implements EuOssCatalogueInterface {
     foreach ($this->entityTypeManager->getStorage('node')->loadMultiple($solutionIds) as $solution) {
       $solution->removeProvider($provider);
       if ($solution->get('oss_source')->isEmpty()) {
-        $solution->delete();
-        $this->logger->info("Solution '@solution' (@url) was removed due to having no active providers", [
+        $solution->set('oss_archived', 1);
+        $solution->save();
+        $this->logger->info("Solution '@solution' (@url) was archived due to having no active providers", [
           '@solution' => $solution->label(),
           '@url' => $solution->get('oss_git_url')->value,
         ]);
