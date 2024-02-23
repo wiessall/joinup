@@ -1,0 +1,83 @@
+uuid: adea252e-ca76-45b7-a486-8ff4e5ef99c2
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.image_gallery.image
+    - paragraphs.paragraphs_type.image_gallery
+    - responsive_image.styles.image_gallery
+  module:
+    - field_delimiter
+    - field_formatter_range
+    - joinup_slick
+    - slick
+    - template_suggestion
+id: paragraph.image_gallery.default
+targetEntityType: paragraph
+bundle: image_gallery
+mode: default
+content:
+  image:
+    type: slick_image
+    label: hidden
+    settings:
+      caption:
+        alt: '0'
+        title: '0'
+      optionset: image_gallery
+      link: ''
+      layout: ''
+      view_mode: ''
+      cache: 0
+      background: false
+      box_caption: ''
+      box_caption_custom: ''
+      box_media_style: ''
+      loading: ''
+      preload: false
+      responsive_image_style: image_gallery
+      use_theme_field: false
+      box_style: ''
+      image_style: ''
+      media_switch: ''
+      ratio: ''
+      thumbnail_style: ''
+      grid: ''
+      grid_medium: ''
+      grid_small: ''
+      style: ''
+      skin: ''
+      overridables:
+        arrows: '0'
+        autoplay: '0'
+        dots: '0'
+        draggable: '0'
+        infinite: '0'
+        mouseWheel: '0'
+        randomize: '0'
+        variableWidth: '0'
+      optionset_thumbnail: ''
+      skin_thumbnail: ''
+      thumbnail_caption: ''
+      thumbnail_effect: ''
+      thumbnail_position: ''
+      override: false
+      skin_arrows: ''
+      skin_dots: ''
+      preserve_keys: false
+      visible_items: null
+    third_party_settings:
+      field_delimiter:
+        delimiter: ''
+      field_formatter_range:
+        order: 0
+        limit: 0
+        offset: 0
+      joinup_slick:
+        preset: ''
+      template_suggestion:
+        template_suggestion: ''
+    weight: 0
+    region: content
+hidden:
+  search_api_excerpt: true

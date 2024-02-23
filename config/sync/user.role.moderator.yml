@@ -122,6 +122,7 @@ permissions:
   - 'create paragraph content heading'
   - 'create paragraph content iframe'
   - 'create paragraph content image'
+  - 'create paragraph content image_gallery'
   - 'create paragraph content json_map'
   - 'create paragraph content layout'
   - 'create paragraph content poll'
