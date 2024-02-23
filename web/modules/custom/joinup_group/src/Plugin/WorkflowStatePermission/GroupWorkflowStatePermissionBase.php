@@ -63,8 +63,7 @@ abstract class GroupWorkflowStatePermissionBase extends PluginBase implements Wo
       return TRUE;
     }
 
-    // @todo The transition should be passed in the method instead of searching it.
-    $permission = StateMachinePermissionStringConstructor::constructWorkflowTransitionPermission($workflow, $workflow->findTransition($from_state, $to_state));
+    $permission = StateMachinePermissionStringConstructor::constructTransitionPermission($workflow, $workflow->findTransition($from_state, $to_state));
     return $account->hasPermission($permission) || $this->workflowHelper->hasOgPermission($permission, $entity, $account);
   }
 

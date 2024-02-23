@@ -39,9 +39,9 @@ class CommunityContentWorkflowStatePermission extends GroupWorkflowStatePermissi
       return TRUE;
     }
 
-    $any_permission = StateMachinePermissionStringConstructor::constructTransitionPermission($entity->getEntityTypeId(), $entity->bundle(), $workflow, $from_state, $to_state, TRUE);
-    $own_permission = StateMachinePermissionStringConstructor::constructTransitionPermission($entity->getEntityTypeId(), $entity->bundle(), $workflow, $from_state, $to_state, FALSE);
-    $has_access = $account->hasPermission($any_permission) || (($entity->getOwnerId() === $account->id()) && $account->hasPermission($own_permission));
+    // @todo: Replaced own/any with a single permission check. Needs to work properly with the rest of the access handlers.
+    $transition_permission = StateMachinePermissionStringConstructor::constructTransitionPermission($workflow, $workflow->findTransition($from_state, $to_state));
+    $has_access = $account->hasPermission($transition_permission);
     if ($has_access) {
       return TRUE;
     }
@@ -49,8 +49,7 @@ class CommunityContentWorkflowStatePermission extends GroupWorkflowStatePermissi
     // No access has been given by the account permissions, check OG permissions
     // next.
     $group = $entity->getGroup();
-    $has_access = $this->workflowHelper->hasOgPermission($any_permission, $group, $account)
-      || ($entity->getOwnerId() === $account->id() && $this->workflowHelper->hasOgPermission($own_permission, $group, $account));
+    $has_access = $this->workflowHelper->hasOgPermission($transition_permission, $group, $account);
 
     // If the user has access to the 'request_deletion' transition but also has
     // delete permission to the entity, revoke the permission to request

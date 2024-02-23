@@ -72,7 +72,7 @@ class DistributionWorkflowStatePermission extends PluginBase implements Workflow
     }
 
     // Distributions do not have an owner so own permissions are not applicable.
-    $permission = StateMachinePermissionStringConstructor::constructTransitionPermission('rdf_entity', 'asset_distribution', $workflow, $from_state, $to_state, TRUE);
+    $permission = StateMachinePermissionStringConstructor::constructTransitionPermission($workflow, $workflow->findTransition($from_state, $to_state));
     return $account->hasPermission($permission) || $this->workflowHelper->hasOgPermission($permission, $entity->getSolution(), $account);
   }
 

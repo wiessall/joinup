@@ -36,10 +36,14 @@ trait FulfillmentGuardTrait {
       return TRUE;
     }
 
-    $permission = StateMachinePermissionStringConstructor::constructWorkflowTransitionPermission($workflow, $transition);
+    $permission = StateMachinePermissionStringConstructor::constructTransitionPermission($workflow, $transition);
     if ($this->currentUser->hasPermission($permission)) {
       return TRUE;
     }
+
+    // @todo: Probably, everything below here, should be some kind of an
+    //    override on the default method. Maybe the default should move to a
+    //    base class instead.
 
     // If the entity is a group, check if the user has the permission on the
     // group. However, if the group is a solution, and the entity is new, then

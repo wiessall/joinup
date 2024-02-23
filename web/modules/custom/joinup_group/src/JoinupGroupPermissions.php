@@ -85,15 +85,13 @@ class JoinupGroupPermissions implements ContainerInjectionInterface {
     /** @var \Drupal\state_machine\Plugin\Workflow\WorkflowInterface $workflow */
     $workflow = $this->workflowManager->createInstance('announcement');
     foreach ($workflow->getTransitions() as $transition) {
-      foreach ($transition->getFromStates() as $from_state) {
-        $name = StateMachinePermissionStringConstructor::constructTransitionPermission('message', 'announcement', $workflow, $from_state->getId(), $transition->getToState()->getId(), TRUE);
-        $permissions[$name] = [
-          'title' => $this->t('Transition any announcement from %from to %to', [
-            '%from' => $from_state->getLabel(),
-            '%to' => $transition->getToState()->getLabel(),
-          ]),
-        ];
-      }
+      $name = StateMachinePermissionStringConstructor::constructTransitionPermission($workflow, $transition);
+      $permissions[$name] = [
+        'title' => $this->t('Perform @workflow workflow @transition transition', [
+          '%workflow' => $workflow->getLabel(),
+          '%transition' => $transition->getLabel(),
+        ]),
+      ];
     }
 
     return $permissions;
