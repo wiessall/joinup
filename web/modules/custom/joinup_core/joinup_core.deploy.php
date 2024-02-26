@@ -123,7 +123,7 @@ function joinup_core_deploy_110304(): string {
 
   // Collect the IDs of links to the custom page.
   $ids = $nodeStorage->getQuery()->accessCheck(FALSE)
-    ->condition('type', 'oss_archived')
+    ->condition('type', 'oss_solution')
     ->notExists('oss_archived')
     ->execute();
 
