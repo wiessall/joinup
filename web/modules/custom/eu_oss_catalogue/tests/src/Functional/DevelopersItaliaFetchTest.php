@@ -90,7 +90,9 @@ class DevelopersItaliaFetchTest extends FetchTestBase {
 
     /** @var \Drupal\eu_oss_catalogue\Entity\OssSolutionInterface $node1 */
     $this->assertNotFalse($this->getNodeByTitle('GitHub solution 1'));
-    $this->assertFalse($this->getNodeByTitle('Project 1.1'));
+    $archived = $this->getNodeByTitle('Project 1.1', TRUE);
+    $this->assertNotFalse($archived);
+    $this->assertSame('1', $archived->get('oss_archived')->getString());
 
     // Test that if the solution has more than one provider it is not removed
     // due to a single provider removal.
