@@ -58,6 +58,7 @@ class ContentNegotiationTest extends BrowserTestBase {
    */
   protected static $modules = [
     'joinup_content_negotiation_test',
+    'joinup_rdf',
     'page_cache',
   ];
 

@@ -79,6 +79,7 @@
         "drupal/queue_ui": "^3.1",
         "drupal/rdf_entity": "^2.0",
         "drupal/rdf_meta_entity": "^1.0",
+        "drupal/rdf_sync": "^1.0",
         "drupal/redirect": "^1.6",
         "drupal/role_delegation": "^1.2",
         "drupal/schema_digital_document": "^1.0",
@@ -196,7 +197,7 @@
             "web/modules/contrib/pipeline/src/Traits/PipelineContextTrait.php",
             "web/modules/custom/rdf_sync/src/Entity/RdfSyncEntityInterface.php",
             "web/modules/custom/rdf_sync/src/Entity/RdfSyncEntityTrait.php",
-            "scripts/composer/ComposerPatches.php",
+            "scripts/composer/ComposerPatches.php"
         ],
         "files": [
             "src/Composer/load.environment.php"

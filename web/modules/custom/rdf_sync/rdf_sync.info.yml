@@ -1,6 +1,0 @@
-name: RDF Sync
-description: Synchronizes Drupal entities into a RDF backend.
-type: module
-core_version_requirement: ">= 9.4"
-dependencies:
-  - drupal:serialization
