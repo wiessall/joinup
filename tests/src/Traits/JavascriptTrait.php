@@ -181,7 +181,9 @@ trait JavascriptTrait {
         // Normally the modal should be completely removed from the DOM,
         // but sometimes the markup is kept in the DOM as hidden.
         // @see Drupal.AjaxCommands.prototype.closeDialog()
-        $modal = $this->getRegion('Modal content');
+        $modal = $this->getSession()
+          ->getPage()
+          ->find('css', '.ui-dialog-content');
         return !$modal || !$modal->isVisible();
       }
       catch (NoSuchElement $e) {
