@@ -1,0 +1,10 @@
+_core:
+  default_config_hash: NYnyB3rF8Td2HsdVMMkcxR6klgxf3g9O9CyurZ5PKo8
+endpoint:
+  scheme: http
+  host: localhost
+  port: 8890
+  paths:
+    query: sparql
+    update: sparql
+    graph_store: sparql-graph-crud

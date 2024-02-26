@@ -1,7 +1,0 @@
-type: module
-name: RDF Sync Test
-description: Testing module for RDF Sync
-core_version_requirement: ">= 9.4"
-dependencies:
-  - joinup:rdf_sync
-package: Testing
