@@ -112,3 +112,26 @@ function joinup_core_deploy_110303(): void {
     'weight' => -6,
   ])->save();
 }
+
+/**
+ * Make sure that oss_archived has a default value.
+ */
+function joinup_core_deploy_110304(): string {
+  $entityTypeManager = \Drupal::entityTypeManager();
+  /** @var \Drupal\node\NodeStorage $nodeStorage */
+  $nodeStorage = $entityTypeManager->getStorage('node');
+
+  // Collect the IDs of links to the custom page.
+  $ids = $nodeStorage->getQuery()->accessCheck(FALSE)
+    ->condition('type', 'oss_archived')
+    ->notExists('oss_archived')
+    ->execute();
+
+  $solutions = $nodeStorage->loadMultiple($ids);
+  foreach ($solutions as $solution) {
+    $solution->set('oss_archived', 0);
+    $solution->save();
+  }
+
+  return 'Processed ' . count($solutions) . ' solutions.';
+}
