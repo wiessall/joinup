@@ -16,6 +16,7 @@ module:
   changed_fields: 0
   ckeditor5: 0
   collection: 0
+  colorbox: 0
   comment: 0
   config: 0
   config_ignore: 0
