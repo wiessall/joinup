@@ -174,7 +174,7 @@ trait JavascriptTrait {
    * @throws \Exception
    *   Thrown when the modal doesn't close within 5 seconds.
    */
-  public function assertModalToClose(): void {
+  protected function assertModalToClose(): void {
     // A modal can be opened only in a JavaScript-enabled browser.
     self::assertJavaScriptEnabledBrowser();
 
