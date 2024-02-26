@@ -127,7 +127,7 @@ function joinup_core_deploy_110304(array &$sandbox): string {
       ->notExists('oss_archived')
       ->execute();
 
-    $sandbox['ids'] = array_keys($results);
+    $sandbox['ids'] = array_values($results);
     $sandbox['progress'] = 0;
     $sandbox['count'] = count($sandbox['ids']);
   }
