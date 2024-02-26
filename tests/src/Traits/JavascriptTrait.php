@@ -157,9 +157,7 @@ trait JavascriptTrait {
 
     $result = $this->getSession()->getPage()->waitFor(5, function (): bool {
       // Retrieve again a fresh copy of the page element at each cycle.
-      $modal = $this->getSession()
-        ->getPage()
-        ->find('css', '.ui-dialog-content');
+      $modal = $this->getRegion('Modal content');
       return $modal && $modal->isVisible();
     });
 
