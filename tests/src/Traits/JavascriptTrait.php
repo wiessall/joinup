@@ -176,13 +176,12 @@ trait JavascriptTrait {
     // A modal can be opened only in a JavaScript-enabled browser.
     self::assertJavaScriptEnabledBrowser();
 
-    $result = $this->getSession()->getPage()->waitFor(5, function () {
+    $result = $this->getSession()->getPage()->waitFor(5, function (): bool {
       try {
         // Normally the modal should be completely removed from the DOM,
         // but sometimes the markup is kept in the DOM as hidden.
         // @see Drupal.AjaxCommands.prototype.closeDialog()
         $modal = $this->getRegion('Modal content');
-
         return !$modal || !$modal->isVisible();
       }
       catch (NoSuchElement $e) {
