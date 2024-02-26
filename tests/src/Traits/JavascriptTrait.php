@@ -148,8 +148,6 @@ trait JavascriptTrait {
    *
    * @throws \Exception
    *   Thrown when the modal doesn't open within 5 seconds.
-   *
-   * @Then a modal should/will open
    */
   protected function assertModalToOpen(): void {
     // A modal can be opened only in a JavaScript-enabled browser.
