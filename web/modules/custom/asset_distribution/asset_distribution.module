@@ -274,7 +274,7 @@ function asset_distribution_form_alter(array &$form, FormStateInterface $form_st
   $solution_types = $solution->get('field_is_solution_type')->getValue();
   $term_storage = \Drupal::entityTypeManager()->getStorage('taxonomy_term');
   foreach ($solution_types as $solution_type) {
-    /** @var \Drupal\solution\Entity\SolutionType $term */
+    /** @var \Drupal\joinup_taxonomy\Entity\MappedTerm $term */
     $term = $term_storage->load($solution_type['target_id']);
     if (in_array($term->getUri(), TrrConstants::getTestValues())) {
       $form['field_ad_gitb_compliant']['#access'] = TRUE;
