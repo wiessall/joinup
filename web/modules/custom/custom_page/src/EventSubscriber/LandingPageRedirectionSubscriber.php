@@ -27,7 +27,6 @@ class LandingPageRedirectionSubscriber implements EventSubscriberInterface {
   ) {
   }
 
-
   /**
    * {@inheritdoc}
    */
