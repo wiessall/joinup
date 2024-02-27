@@ -4,6 +4,7 @@ status: true
 dependencies:
   config:
     - field.field.paragraph.image_gallery.image
+    - field.field.paragraph.image_gallery.paragraph_heading
     - paragraphs.paragraphs_type.image_gallery
     - responsive_image.styles.highlighted_content
     - responsive_image.styles.image_gallery
@@ -38,8 +39,18 @@ content:
         offset: 0
       joinup_slick:
         preset: image_gallery
+        field_label: false
+        custom_label: ''
       template_suggestion:
         template_suggestion: ''
+    weight: 1
+    region: content
+  paragraph_heading:
+    type: string
+    label: visually_hidden
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
     weight: 0
     region: content
 hidden:
