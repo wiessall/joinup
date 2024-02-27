@@ -3337,20 +3337,16 @@ JS;
    * @param string $uri
    *   The entity RDF URI.
    *
+   * @throws \InvalidArgumentException
+   *   When for the passed URI no entity can be found.
+   *
    * @Given I visit the page of the entity having :uri as RDF resource
    */
   public function visitEntityCanonicalPagePageByRdfUri(string $uri): void {
-    // @todo Make this generic, for all mapped entities, in ISAICP-8475.
-    $tid = \Drupal::database()->select('taxonomy_term__uri', 'u')
-      ->fields('u', ['entity_id'])
-      ->condition('u.uri_value', $uri)
-      ->execute()
-      ->fetchField();
-    if (!$tid) {
-      throw new \InvalidArgumentException("No mapped entity with RDF URI $uri");
+    if ($entity = \Drupal::getContainer()->get('rdf_sync.mapper')->getEntityByUri($uri)) {
+      $this->visitPath($entity->toUrl()->toString());
     }
-
-    $this->visitPath(\Drupal::entityTypeManager()->getStorage('taxonomy_term')->load($tid)->toUrl()->toString());
+    throw new \InvalidArgumentException("No entity fount for URI $uri");
   }
 
   /**
