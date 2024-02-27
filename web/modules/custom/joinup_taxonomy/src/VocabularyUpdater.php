@@ -249,9 +249,8 @@ class VocabularyUpdater {
       $terms = $this->getTerms($vid, $rdfType, $graph);
 
       foreach ($terms as $term) {
-        if ($existingTerms = $termStorage->loadByProperties(['uri' => $term['uri']])) {
-          // Delete if already exists.
-          reset($existingTerms)->delete();
+        if ($existingTerm = $this->mapper->getEntityByUri($term['uri'])) {
+          $existingTerm->delete();
           $results[$vid]['updated']++;
         }
         else {
@@ -263,11 +262,8 @@ class VocabularyUpdater {
       if ($isLockedVocabulary) {
         // Locked vocabularies: remove existing terms missing from the graph.
         $processed = array_column($terms, 'uri');
-        $tidsToRemove = $termStorage->getQuery()
-          ->accessCheck(FALSE)
-          ->condition('vid', $vid)
-          ->condition('uri', $processed, 'NOT IN')
-          ->execute();
+        $existing = $this->mapper->getUrisByEntityType('taxonomy_term', $vid);
+        $tidsToRemove = array_keys(array_diff($existing, $processed));
         if ($tidsToRemove) {
           $termStorage->delete($termStorage->loadMultiple($tidsToRemove));
           $results[$vid]['deleted'] += count($tidsToRemove);
