@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_taxonomy\EventSubscriber;
 
-use Drupal\joinup_taxonomy\Entity\Spatial;
 use Drupal\rdf_sync\Event\RdfSyncNormalizeEvent;
 use EasyRdf\Resource;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -39,7 +38,7 @@ class NormalizeSubscriber implements EventSubscriberInterface {
    * @see https://webgate.ec.europa.eu/CITnet/jira/browse/ISAICP-4566
    */
   public function addLocationTypeToCountry(RdfSyncNormalizeEvent $event): void {
-    if ($event->getEntity() instanceof Spatial) {
+    if ($event->getEntity()->bundle() === 'spatial') {
       $normalizedArray = $event->getNormalizedArray();
       $subject = key($normalizedArray);
       $normalizedArray[$subject]['http://www.w3.org/1999/02/22-rdf-syntax-ns#type'][] = (new Resource('http://purl.org/dc/terms/Location'))->toRdfPhp();

@@ -19,6 +19,6 @@ services:
   # TODO: Drop in ISAICP-8376
   joinup_rdf.outbound_value.tid:
     class: Drupal\joinup_rdf\EventSubscriber\Tid
-    arguments: ['@entity_type.manager']
+    arguments: ['@entity_type.manager', '@database']
     tags:
       - { name: event_subscriber }

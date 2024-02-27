@@ -6,9 +6,7 @@ namespace Drupal\Tests\joinup_group\ExistingSite;
 
 use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\Tests\joinup_test\ExistingSite\JoinupExistingSiteTestBase;
-use Drupal\owner\Entity\OwnerType;
-use Drupal\solution\Entity\SolutionType;
-use Drupal\taxonomy\Entity\Term;
+use Drupal\joinup_taxonomy\Entity\MappedTerm;
 use Drupal\topic\Entity\Topic;
 use Drush\TestTraits\DrushTestTrait;
 use weitzman\LoginTrait\LoginTrait;
@@ -323,7 +321,7 @@ class GroupContentUpdateUrlAliasTest extends JoinupExistingSiteTestBase {
       'id' => 'http://example.com/owner',
       'rid' => 'owner',
       'field_owner_name' => $this->randomString(),
-      'field_owner_type' => OwnerType::loadByUri('http://purl.org/adms/publishertype/SupraNationalAuthority'),
+      'field_owner_type' => \Drupal::getContainer()->get('rdf_sync.mapper')->getEntityByUri('http://purl.org/adms/publishertype/SupraNationalAuthority'),
     ]);
     $this->createRdfEntity([
       'id' => 'http://example.com/contact',
@@ -331,22 +329,6 @@ class GroupContentUpdateUrlAliasTest extends JoinupExistingSiteTestBase {
       'field_ci_name' => $this->randomString(),
       'field_ci_email' => $this->randomMachineName() . '@example.com',
     ]);
-
-    $parent = Term::create([
-      'vid' => 'topic',
-      'uri' => 'http://example.com/policy/parent',
-      'name' => $this->randomString(),
-    ]);
-    $parent->save();
-    $this->markEntityForCleanup($parent);
-    $term = Term::create([
-      'vid' => 'topic',
-      'uri' => 'http://example.com/policy',
-      'name' => $this->randomString(),
-      'parent' => $parent,
-    ]);
-    $term->save();
-    $this->markEntityForCleanup($term);
 
     $this->entity['rdf_entity']['collection']['1'] = $this->createRdfEntity([
       'rid' => 'collection',
@@ -356,7 +338,7 @@ class GroupContentUpdateUrlAliasTest extends JoinupExistingSiteTestBase {
       'field_ar_description' => $this->randomString(),
       'field_ar_state' => 'published',
       'field_ar_owner' => 'http://example.com/owner',
-      'field_topic' => Topic::loadByUri('http://example.com/policy'),
+      'field_topic' => Topic::loadByUri('http://joinup.eu/ontology/topic#finance-in-eu'),
       'field_ar_contact_information' => 'http://example.com/contact',
     ]);
 
@@ -369,8 +351,8 @@ class GroupContentUpdateUrlAliasTest extends JoinupExistingSiteTestBase {
       'field_is_description' => $this->randomString(),
       'field_is_state' => 'published',
       'field_is_owner' => 'http://example.com/owner',
-      'field_topic' => Topic::loadByUri('http://example.com/policy'),
-      'field_is_solution_type' => SolutionType::loadByUri('http://data.europa.eu/dr8/ArchitectureBuildingBlock'),
+      'field_topic' => Topic::loadByUri('http://joinup.eu/ontology/topic#finance-in-eu'),
+      'field_is_solution_type' => MappedTerm::loadByUri('http://data.europa.eu/dr8/ArchitectureBuildingBlock'),
       'field_is_contact_information' => 'http://example.com/contact',
     ]);
     // Releases.

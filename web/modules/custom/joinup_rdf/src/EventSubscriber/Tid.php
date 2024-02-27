@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_rdf\EventSubscriber;
 
+use Drupal\Core\Database\Connection;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\sparql_entity_storage\Event\InboundValueEvent;
 use Drupal\sparql_entity_storage\Event\OutboundValueEvent;
@@ -69,8 +70,13 @@ class Tid implements EventSubscriberInterface {
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
    *   The entity type manager service.
+   * @param \Drupal\Core\Database\Connection $database
+   *   The database connection.
    */
-  public function __construct(private EntityTypeManagerInterface $entityTypeManager) {}
+  public function __construct(
+    private readonly EntityTypeManagerInterface $entityTypeManager,
+    private readonly Connection $database,
+  ) {}
 
   /**
    * {@inheritdoc}
@@ -117,12 +123,11 @@ class Tid implements EventSubscriberInterface {
    */
   protected function getTid(string $uri): string|int|null {
     if (!($this->uriToTid[$uri] ?? NULL)) {
-      $storage = $this->entityTypeManager->getStorage('taxonomy_term');
-      $tids = $storage->getQuery()
-        ->accessCheck(FALSE)
+      $this->uriToTid[$uri] = $this->database->select('rdf_sync_uri')
+        ->fields('rdf_sync_uri', ['entity_id'])
         ->condition('uri', $uri)
-        ->execute();
-      $this->uriToTid[$uri] = $tids ? current($tids) : NULL;
+        ->execute()
+        ->fetchField() ?: NULL;
     }
     return $this->uriToTid[$uri];
   }
