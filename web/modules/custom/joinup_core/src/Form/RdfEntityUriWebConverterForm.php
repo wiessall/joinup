@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace Drupal\joinup_core\Form;
 
 use Drupal\Component\Utility\UrlHelper;
-use Drupal\Core\Database\Connection;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
+use Drupal\rdf_sync\RdfSyncMapper;
 use Drupal\sparql_entity_storage\UriEncoder;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -23,12 +23,12 @@ class RdfEntityUriWebConverterForm extends FormBase {
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
    *   The entity type manager service.
-   * @param \Drupal\Core\Database\Connection $db
-   *   The database connection.
+   * @param \Drupal\rdf_sync\RdfSyncMapper $mapper
+   *   The RDF Sync mapper service.
    */
   public function __construct(
     protected EntityTypeManagerInterface $entityTypeManager,
-    protected Connection $db,
+    protected RdfSyncMapper $mapper,
   ) {}
 
   /**
@@ -37,7 +37,7 @@ class RdfEntityUriWebConverterForm extends FormBase {
   public static function create(ContainerInterface $container): self {
     return new static(
       $container->get('entity_type.manager'),
-      $container->get('database'),
+      $container->get('rdf_sync.mapper'),
     );
   }
 
@@ -79,14 +79,9 @@ class RdfEntityUriWebConverterForm extends FormBase {
         }
 
         // It might be a mapped taxonomy term.
-        $tid = $this->db->select('taxonomy_term__uri', 't')
-          ->fields('t', ['entity_id'])
-          ->condition('t.uri_value', $id)
-          ->execute()
-          ->fetchField();
-        if ($tid) {
+        if (($term = $this->mapper->getEntityByUri($id)) && $term->getEntityTypeId() === 'taxonomy_term') {
           $entity_type_id = 'taxonomy_term';
-          $form_state->setValue('entity_id', $tid);
+          $form_state->setValue('entity_id', $term->id());
         }
 
         if ($entity_type_id) {

@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Drupal\joinup_core\Controller;
 
 use Drupal\Core\Controller\ControllerBase;
-use Drupal\Core\Database\Connection;
+use Drupal\rdf_sync\RdfSyncMapper;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
@@ -17,16 +17,20 @@ class IdRedirect extends ControllerBase {
   /**
    * Constructs a new controller instance.
    *
-   * @param \Drupal\Core\Database\Connection $database
-   *   The database connection.
+   * @param \Drupal\rdf_sync\RdfSyncMapper $mapper
+   *   The RDF Sync mapper service.
    */
-  public function __construct(protected Connection $database) {}
+  public function __construct(
+    protected RdfSyncMapper $mapper,
+  ) {}
 
   /**
    * {@inheritdoc}
    */
   public static function create(ContainerInterface $container): self {
-    return new static($container->get('database'));
+    return new static(
+      $container->get('rdf_sync.mapper'),
+    );
   }
 
   /**
@@ -51,14 +55,10 @@ class IdRedirect extends ControllerBase {
 
     $id = "http://data.europa.eu/$namespace/$uuid";
     if ($entity_type_id === 'taxonomy_term') {
-      $id = $this->database->select('taxonomy_term__uri', 'u')
-        ->fields('u', ['entity_id'])
-        ->condition('u.uri_value', $id)
-        ->execute()
-        ->fetchField();
-      if (!$id) {
+      if (!$term = $this->mapper->getEntityByUri($id)) {
         return $this->redirect('joinup_core.not_found');
       }
+      $id = $term->id();
     }
 
     return $this->redirect("entity.$entity_type_id.canonical", [
