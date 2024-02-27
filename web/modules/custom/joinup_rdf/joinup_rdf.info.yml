@@ -5,6 +5,6 @@ package: Joinup
 core_version_requirement: ">= 9.4"
 
 dependencies:
-  - 'joinup:rdf_sync'
+  - 'rdf_sync:rdf_sync'
   - 'rdf_entity:rdf_entity'
   - 'sparql_entity_storage:sparql_entity_storage'
