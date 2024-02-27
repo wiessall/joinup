@@ -24,3 +24,8 @@ services:
     arguments: ['@plugin.manager.workflow']
     tags:
       - { name: state_machine.guard, group: custom_page }
+  custom_page.landing_page_redirection:
+    class: Drupal\custom_page\EventSubscriber\LandingPageRedirectionSubscriber
+    arguments: [ '@current_route_match' ]
+    tags:
+      - { name: event_subscriber }
