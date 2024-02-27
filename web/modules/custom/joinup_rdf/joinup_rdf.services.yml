@@ -18,7 +18,7 @@ services:
       - { name: paramconverter, priority: 10 }
   # TODO: Drop in ISAICP-8376
   joinup_rdf.outbound_value.tid:
-    class: Drupal\joinup_rdf\EventSubscriber\Tid
-    arguments: ['@database']
+    class: Drupal\joinup_rdf\EventSubscriber\UriIdConversion
+    arguments: ['@database', '@entity_field.manager']
     tags:
       - { name: event_subscriber }
