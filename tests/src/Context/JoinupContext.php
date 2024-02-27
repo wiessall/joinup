@@ -3343,10 +3343,10 @@ JS;
    * @Given I visit the page of the entity having :uri as RDF resource
    */
   public function visitEntityCanonicalPagePageByRdfUri(string $uri): void {
-    if ($entity = \Drupal::getContainer()->get('rdf_sync.mapper')->getEntityByUri($uri)) {
-      $this->visitPath($entity->toUrl()->toString());
+    if (!$entity = \Drupal::getContainer()->get('rdf_sync.mapper')->getEntityByUri($uri)) {
+      throw new \InvalidArgumentException("No entity found for URI $uri");
     }
-    throw new \InvalidArgumentException("No entity fount for URI $uri");
+    $this->visitPath($entity->toUrl()->toString());
   }
 
   /**

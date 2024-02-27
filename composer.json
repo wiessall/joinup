@@ -195,8 +195,9 @@
             "web/modules/contrib/message_digest/src/Traits/MessageDigestTrait.php",
             "web/modules/contrib/og_menu/src/Tests/Traits/OgMenuTrait.php",
             "web/modules/contrib/pipeline/src/Traits/PipelineContextTrait.php",
-            "web/modules/custom/rdf_sync/src/Entity/RdfSyncEntityInterface.php",
-            "web/modules/custom/rdf_sync/src/Entity/RdfSyncEntityTrait.php",
+            "web/modules/contrib/rdf_sync/src/Encoder/RdfSyncEncoder.php",
+            "web/modules/contrib/rdf_sync/src/Model/RdfSyncFormat.php",
+            "web/modules/custom/joinup_taxonomy/src/Entity/MappedTerm.php",
             "scripts/composer/ComposerPatches.php"
         ],
         "files": [

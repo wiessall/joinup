@@ -16,13 +16,9 @@ use Drupal\Core\Render\Element;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Url;
 use Drupal\eif\EifInterface;
-use Drupal\eif\Entity\EifConceptualModel;
-use Drupal\eif\Entity\EifInteroperabilityLayer;
-use Drupal\eif\Entity\EifPrinciple;
-use Drupal\eif\Entity\EifRecommendation;
-use Drupal\eif\Entity\EifSolutionType;
 use Drupal\eif\Form\EifWrapperInlineForm;
 use Drupal\field\FieldConfigInterface;
+use Drupal\joinup_taxonomy\Entity\MappedTerm;
 use Drupal\og\OgGroupAudienceHelperInterface;
 use Drupal\rdf_meta_entity\Entity\RdfMetaEntityInterface;
 use Drupal\solution\Entity\SolutionInterface;
@@ -156,16 +152,16 @@ function eif_entity_type_build(array &$entity_types): void {
  * Implements hook_entity_bundle_info_alter().
  */
 function eif_entity_bundle_info_alter(array &$bundles): void {
-  $vocabulary_classes = [
-    'eif_conceptual_model' => EifConceptualModel::class,
-    'eif_interoperability_layer' => EifInteroperabilityLayer::class,
-    'eif_principle' => EifPrinciple::class,
-    'eif_recommendation' => EifRecommendation::class,
-    'eif_solution_type' => EifSolutionType::class,
+  $vids = [
+    'eif_conceptual_model',
+    'eif_interoperability_layer',
+    'eif_principle',
+    'eif_recommendation',
+    'eif_solution_type',
   ];
-  foreach ($vocabulary_classes as $vid => $class) {
+  foreach ($vids as $vid) {
     if (!empty($bundles['taxonomy_term'][$vid])) {
-      $bundles['taxonomy_term'][$vid]['class'] = $class;
+      $bundles['taxonomy_term'][$vid]['class'] = MappedTerm::class;
     }
   }
 }

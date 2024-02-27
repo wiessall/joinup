@@ -7,12 +7,12 @@
 
 declare(strict_types=1);
 
-use Drupal\joinup_content_negotiation_test\FruitType;
+use Drupal\joinup_taxonomy\Entity\MappedTerm;
 
 /**
  * Implements hook_entity_type_alter().
  */
 function joinup_content_negotiation_test_entity_type_alter(array &$entityTypes): void {
   /** @var \Drupal\Core\Entity\EntityTypeInterface[] $entityTypes */
-  $entityTypes['taxonomy_term']->setClass(FruitType::class);
+  $entityTypes['taxonomy_term']->setClass(MappedTerm::class);
 }

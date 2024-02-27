@@ -6,7 +6,7 @@ namespace Drupal\joinup_validation\Plugin\Validation\Constraint;
 
 use Drupal\Core\Field\Plugin\Field\FieldType\EntityReferenceItem;
 use Drupal\joinup_core\Traits\FieldItemsTrait;
-use Drupal\rdf_sync\Entity\RdfSyncEntityInterface;
+use Drupal\joinup_rdf\Entity\RdfSyncEntityInterface;
 use Drupal\taxonomy\TermInterface;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
