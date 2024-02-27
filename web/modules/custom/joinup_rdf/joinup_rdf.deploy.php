@@ -7,35 +7,12 @@
 
 declare(strict_types=1);
 
-use Drupal\joinup_taxonomy\Drush\Commands\JoinupTaxonomyCommands;
-use Drupal\rdf_sync\Model\SyncMode;
 use Drupal\rdf_sync\RdfSyncConnection;
-use EasyRdf\Http\Exception;
-
-/**
- * Create locked vocabularies terms.
- */
-function joinup_rdf_deploy_110300(): string {
-  // Avoid RDF synchronization during deploy scripts. Synchronization is
-  // performed after `drush deploy`.
-  // @see .opts.yml
-  \Drupal::getContainer()->get('rdf_sync.synchronizer')->setSyncMode(SyncMode::NONE);
-
-  $mysql = sprintf(
-    'mysql -u%s%s -h%s %s',
-    getenv('DRUPAL_DATABASE_USERNAME'),
-    getenv('DRUPAL_DATABASE_PASSWORD') ? ' -p' . getenv('DRUPAL_DATABASE_PASSWORD') : '',
-    getenv('DRUPAL_DATABASE_HOST'),
-    getenv('DRUPAL_DATABASE_NAME'),
-  );
-  exec('gunzip < ' . JoinupTaxonomyCommands::getDumpFilePath('sql') . ' | ' . $mysql);
-  return '✅ created locked vocabularies terms from MySQL dump';
-}
 
 /**
  * Create open vocabularies terms.
  */
-function joinup_rdf_deploy_110301(array &$sandbox): string {
+function joinup_rdf_deploy_110300(array &$sandbox): string {
   if (!isset($sandbox['graphs'])) {
     $sandbox['graphs'] = [
       'http://licence-legal-type' => 'legal_type',
@@ -58,12 +35,11 @@ function joinup_rdf_deploy_110301(array &$sandbox): string {
     throw $exception;
   }
 
-  $vocabularyUpdater = \Drupal::getContainer()->get('joinup_taxonomy.vocabulary_updater');
-  $vocabularyUpdater->registerGraph($graphUri, $graph);
   $rdfType = \Drupal::service('rdf_sync.mapper')->getBundleRdfType('taxonomy_term', $vid);
-  $vocabularyUpdater->registerVocabulary($vid, $rdfType, $graphUri);
-
-  $results = $vocabularyUpdater->update();
+  $results = \Drupal::getContainer()->get('joinup_taxonomy.vocabulary_updater')
+    ->registerGraph($graphUri, $graph)
+    ->registerVocabulary($vid, $rdfType, $graphUri)
+    ->update();
 
   $sandbox['#finished'] = (int) empty($sandbox['graphs']);
 
@@ -82,7 +58,7 @@ function joinup_rdf_deploy_110301(array &$sandbox): string {
 /**
  * Fix term reference fields.
  */
-function joinup_rdf_deploy_110302(array &$sandbox): string {
+function joinup_rdf_deploy_110301(array &$sandbox): string {
   $db = \Drupal::database();
   $schema = $db->schema();
 
@@ -120,7 +96,7 @@ function joinup_rdf_deploy_110302(array &$sandbox): string {
     // Replace the URI with TID in the 'target_id' field.
     $query = <<<QUERY
       UPDATE {{$table}} n
-      INNER JOIN {taxonomy_term__uri} u ON n.$column = u.uri_value
+      INNER JOIN {rdf_sync_uri} u ON n.$column = u.uri
       SET n.$column = u.entity_id
       QUERY;
     $db->query($query);
@@ -154,7 +130,7 @@ function joinup_rdf_deploy_110302(array &$sandbox): string {
 /**
  * Cleanup legacy data.
  */
-function joinup_rdf_deploy_110303(array &$sandbox): string {
+function joinup_rdf_deploy_110302(array &$sandbox): string {
   $graphUris = [
     'http://adms-sw-v1.00',
     'http://adms_skos_v1.00',

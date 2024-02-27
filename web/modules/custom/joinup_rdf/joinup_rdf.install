@@ -7,8 +7,6 @@
 
 declare(strict_types=1);
 
-use Drupal\rdf_sync\BundleFieldDefinition;
-
 /**
  * Performs checks for the RDF entities and its storage.
  *
@@ -105,30 +103,4 @@ function joinup_rdf_update_110301(): void {
 
   // Re-install the module on clean w/o dependencies, they're already installed.
   \Drupal::service('module_installer')->install(['taxonomy'], FALSE);
-}
-
-/**
- * Install the 'uri' field.
- */
-function joinup_rdf_update_110302(): void {
-  // Anticipate this module installation. Needed for the rest of updates.
-  \Drupal::getContainer()->get('module_installer')->install(['rdf_sync']);
-
-  // Install the 'uri' field on taxonomy terms.
-  $definition = BundleFieldDefinition::create('uri')
-    ->setName('uri')
-    ->setTargetEntityTypeId('taxonomy_term')
-    ->setTargetBundle(NULL)
-    ->setLabel(t('URI'))
-    // Limit to allow indexing.
-    // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7751
-    ->setSetting('max_length', 768)
-    ->setRevisionable(FALSE)
-    ->setCardinality(1);
-  \Drupal::entityDefinitionUpdateManager()->installFieldStorageDefinition('uri', 'taxonomy_term', 'joinup_taxonomy', $definition);
-
-  // Index the new field.
-  $schema = \Drupal::database()->schema();
-  $schema->addUniqueKey('taxonomy_term__uri', 'uri', ['uri_value']);
-  $schema->addUniqueKey('taxonomy_term_revision__uri', 'uri', ['uri_value']);
 }
