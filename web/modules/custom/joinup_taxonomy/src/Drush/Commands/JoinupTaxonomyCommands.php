@@ -304,10 +304,13 @@ class JoinupTaxonomyCommands extends DrushCommands {
     Drush::drush(Drush::aliasManager()->getSelf(), 'sql:dump', [], [
       'tables-list' => 'taxonomy_term_*',
       'result-file' => $file,
-      'gzip' => NULL,
       'no-interaction' => TRUE,
     ])->run();
+    // Append the {rdf_sync_uri} table fixtures inside the dump file.
+    file_put_contents($file, static::getUriTableDump($results['uri_to_tid']), FILE_APPEND);
 
+    // Gzip it and get the normalized path.
+    exec("gzip $file");
     $file = realpath("$file.gz");
 
     // Remove stale dump files.
@@ -322,6 +325,41 @@ class JoinupTaxonomyCommands extends DrushCommands {
     });
 
     Drush::logger()->notice(dt('Terms dumped to !file', ['!file' => $file]));
+  }
+
+  /**
+   * Returns the dump corresponding to the {rdf_sync_uri} table.
+   *
+   * @param array $uriToTid
+   *   The URI <-> TID map.
+   *
+   * @return string
+   *   The SQL dump.
+   */
+  protected static function getUriTableDump(array $uriToTid): string {
+    $termStorage = \Drupal::entityTypeManager()->getStorage('taxonomy_term');
+    $table = \Drupal::database()->getPrefix() . 'rdf_sync_uri';
+    $tidToUri = array_flip($uriToTid);
+
+    $statements = [
+      'LOCK TABLES `rdf_sync_uri` WRITE;',
+      'set autocommit=0;',
+    ];
+
+    foreach (array_chunk($uriToTid, 100) as $chunk) {
+      $statement = "INSERT INTO `$table` VALUES ";
+      $values = [];
+      foreach ($termStorage->loadMultiple($chunk) as $tid => $term) {
+        $values[] = "('taxonomy_term',$tid,'$tidToUri[$tid]','{$term->bundle()}')";
+      }
+      $statement .= implode(',', $values) . ';';
+      $statements[] = $statement;
+    }
+
+    $statements[] = 'UNLOCK TABLES;';
+    $statements[] = 'commit;';
+
+    return implode("\n", $statements);
   }
 
   /**
