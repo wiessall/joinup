@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Drupal\joinup_rdf;
 
 use Drupal\joinup_rdf\Encoder\JoinupRdfSyncEncoder;
+use Drupal\rdf_sync\Model\RdfSyncFormat;
 use EasyRdf\Format;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -27,17 +28,17 @@ class JoinupRdfEncoderCompilerPass implements CompilerPassInterface {
    */
   public function process(ContainerBuilder $container): void {
     $rdfSerializers = Format::getFormats();
-    foreach ($container->getParameter('rdf_sync.format') as $format) {
-      if (isset($rdfSerializers[$format])) {
+    foreach (RdfSyncFormat::cases() as $format) {
+      if (isset($rdfSerializers[$format->value])) {
         $encoderService = new Definition(JoinupRdfSyncEncoder::class);
         $encoderService->addTag('encoder', [
-          'format' => $format,
-          // These encoders will act before "rdf_sync.encoder.$format" encoders,
-          // which have 10 as priority.
+          'format' => $format->value,
+          // These encoders will act before "rdf_sync.encoder.$format->value"
+          // encoders, which have 10 as priority.
           // @see \Drupal\rdf_sync\RdfSyncEncoderCompilerPass::process()
           'priority' => 15,
         ]);
-        $container->addDefinitions(["joinup_rdf.encoder.$format" => $encoderService]);
+        $container->addDefinitions(["joinup_rdf.encoder.$format->value" => $encoderService]);
       }
     }
   }
