@@ -158,3 +158,23 @@ Feature: Tests the group landing page customization.
     And I click "Delete" in the "Entity actions" region
     Then I should not see "You can not delete this landing page!"
     And I should not see "This page acts as landing page for the collection. In order to delete it should be first unset as landing page."
+
+  Scenario: Landing custom page redirects to group page.
+    Given collections:
+      | title         | state     |
+      | United States | published |
+    And "custom_page" content:
+      | title    | group         | body                                                                                 | state     |
+      | Michigan | United States | Michigan is a state in the Great Lakes region of the Upper Midwestern United States. | published |
+
+    When I go to the "Michigan" custom page
+    Then I should be on "/collection/united-states/michigan"
+
+    Given I am logged in as a moderator
+    And I go to the homepage of the "United States" collection
+    And I click "Settings"
+    And I select "Michigan" from "Landing page"
+    And I press "Save"
+
+    When I go to the "Michigan" custom page
+    Then I should be on "/collection/united-states"
