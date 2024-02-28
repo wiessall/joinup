@@ -16,7 +16,6 @@ dependencies:
     - field.field.node.oss_solution.oss_git_stars
     - field.field.node.oss_solution.oss_git_url
     - field.field.node.oss_solution.oss_hosting_platform
-    - field.field.node.oss_solution.oss_is_archived
     - field.field.node.oss_solution.oss_landing_url
     - field.field.node.oss_solution.oss_license
     - field.field.node.oss_solution.oss_logo
@@ -185,13 +184,6 @@ content:
     settings:
       provider_grouping: false
       configuration_form: hidden
-    third_party_settings: {  }
-  oss_is_archived:
-    type: boolean_checkbox
-    weight: 40
-    region: content
-    settings:
-      display_label: true
     third_party_settings: {  }
   oss_landing_url:
     type: link_default
