@@ -211,6 +211,7 @@ class GitLabDotCom extends EuOssCatalogueGitHostingPlatformPluginBase {
    *         starCount
    *         openIssuesCount
    *         avatarUrl
+   *         openMergeRequestsCount
    *         releases(sort: CREATED_DESC first: 1) {
    *           nodes {
    *             tagName
@@ -252,7 +253,17 @@ class GitLabDotCom extends EuOssCatalogueGitHostingPlatformPluginBase {
       ->use('hasNextPage', 'endCursor')
       ->prev()
       ->nodes([])
-      ->use('path', 'id', 'description', 'archived', 'forksCount', 'starCount', 'openIssuesCount', 'avatarUrl')
+      ->use(
+        'path',
+        'id',
+        'description',
+        'archived',
+        'forksCount',
+        'starCount',
+        'openIssuesCount',
+        'avatarUrl',
+        'openMergeRequestsCount'
+      )
       ->releases(['sort' => ReleaseSort::CREATED_DESC, 'first' => 1])
       ->nodes([])
       ->use('tagName', 'createdAt')
@@ -285,6 +296,7 @@ class GitLabDotCom extends EuOssCatalogueGitHostingPlatformPluginBase {
    *     starCount
    *     openIssuesCount
    *     avatarUrl
+   *     openMergeRequestsCount
    *     releases(sort: CREATED_DESC first: 1) {
    *       nodes {
    *         tagName
@@ -316,7 +328,18 @@ class GitLabDotCom extends EuOssCatalogueGitHostingPlatformPluginBase {
    */
   protected function buildProjectQuery(string $namespace, string $name, array $requestedFiles = []): Query {
     $query = new Query('project', ['fullPath' => "$namespace/$name"]);
-    $fragment = $query->use('path', 'id', 'description', 'archived', 'forksCount', 'starCount', 'openIssuesCount', 'avatarUrl')
+    $fragment = $query
+      ->use(
+        'path',
+        'id',
+        'description',
+        'archived',
+        'forksCount',
+        'starCount',
+        'openIssuesCount',
+        'avatarUrl',
+        'openMergeRequestsCount'
+      )
       ->releases(['sort' => ReleaseSort::CREATED_DESC, 'first' => 1])
       ->nodes([])
       ->use('tagName', 'createdAt')
@@ -375,6 +398,7 @@ class GitLabDotCom extends EuOssCatalogueGitHostingPlatformPluginBase {
       numberOfForks: $project['forksCount'],
       numberOfStars: $project['starCount'],
       numberOfIssues: $project['openIssuesCount'],
+      numberOfPullRequests: $project['openMergeRequestsCount'] ?? NULL,
       files: $files,
     );
   }

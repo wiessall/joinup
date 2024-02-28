@@ -11,6 +11,7 @@ GitHub solution 1:
     oss_git_stars: 121
     oss_git_open_issues: 141
     oss_publiccode_yml_version: '0.2'
+    oss_git_open_pull_requests: 8
 
 FOSS Conference:
   en:
@@ -37,6 +38,7 @@ GitHub solution 2:
     oss_git_stars: 122
     oss_git_open_issues: 142
     oss_publiccode_yml_version: '0.4'
+    oss_git_open_pull_requests: 0
 
 ACME Ltd:
   en:
