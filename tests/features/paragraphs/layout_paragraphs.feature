@@ -5,9 +5,12 @@ Feature:
   environment will be included.
 
   Background:
-    Given custom_page content:
-      | title                  |
-      | Layout paragraphs test |
+    Given collection:
+      | title | Plaster molds |
+      | state | published     |
+    And custom_page content:
+      | title                  | collection    |
+      | Layout paragraphs test | Plaster molds |
     And I am logged in as a moderator
     And I go to the edit form of the "Layout paragraphs test" "custom page"
 
