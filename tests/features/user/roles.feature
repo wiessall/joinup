@@ -29,7 +29,7 @@ Feature: User role management
       | Licence manager |
 
     Given I am logged in as "Awesome dev"
-    And I click "People" in the "Administration toolbar" region
+    And I go to "/admin/people"
     And I click "Edit" in the "Ursus" row
     And the "Roles" checkboxes should contain the following options:
       | Administrator      |
