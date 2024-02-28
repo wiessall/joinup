@@ -2,10 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Drupal\developer\Plugin\Block;
+namespace Drupal\joinup_user\Plugin\Block;
 
 use Drupal\Core\Block\Attribute\Block;
 use Drupal\Core\Block\BlockBase;
+use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 
 /**
@@ -31,6 +32,15 @@ final class WarningMessageBlock extends BlockBase {
       ],
     ];
     return $build;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function access(AccountInterface $account, $return_as_object = FALSE) {
+    // Allow access only if DEV_WARNING_BLOCK_DISABLE environment variable is
+    // not set or is 0.
+    $access = getenv('DEV_WARNING_BLOCK_DISABLE') ? FALSE : TRUE;
   }
 
 }
