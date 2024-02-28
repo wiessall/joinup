@@ -17,7 +17,6 @@ dependencies:
     - field.field.node.oss_solution.oss_git_stars
     - field.field.node.oss_solution.oss_git_url
     - field.field.node.oss_solution.oss_hosting_platform
-    - field.field.node.oss_solution.oss_is_archived
     - field.field.node.oss_solution.oss_landing_url
     - field.field.node.oss_solution.oss_license
     - field.field.node.oss_solution.oss_logo
@@ -110,7 +109,6 @@ hidden:
   oss_git_stars: true
   oss_git_url: true
   oss_hosting_platform: true
-  oss_is_archived: true
   oss_landing_url: true
   oss_license: true
   oss_logo: true
