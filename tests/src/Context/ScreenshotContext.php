@@ -118,7 +118,7 @@ class ScreenshotContext extends RawMinkContext {
       }
     }
 
-    print implode("\n", $output);
+    print implode("\n", $output) . PHP_EOL;
 
     // Depending on the output formatter used, Behat will suppress any output
     // generated during the test. Flush the output buffers so our message will
