@@ -6,8 +6,6 @@ namespace Drupal\joinup_taxonomy\Drush\Commands;
 
 use Drupal\Component\Utility\Crypt;
 use Drupal\Core\Batch\BatchBuilder;
-use Drupal\Core\DependencyInjection\ContainerBuilder;
-use Drupal\joinup_taxonomy\VocabularyGraphAlterersTrait;
 use Drupal\joinup_taxonomy\VocabularyUpdater;
 use Drupal\rdf_sync\RdfSyncConnection;
 use Drupal\rdf_sync\RdfSyncMapper;
@@ -24,8 +22,6 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * Joinup taxonomy Drush commands.
  */
 class JoinupTaxonomyCommands extends DrushCommands {
-
-  use VocabularyGraphAlterersTrait;
 
   /**
    * List of locked vocabularies grouped by their fixture file.
@@ -251,24 +247,16 @@ class JoinupTaxonomyCommands extends DrushCommands {
     $graph->parse($content);
     $graphUri = 'http://' . strtolower(pathinfo($file, PATHINFO_FILENAME));
 
-    $callbacks = [];
     foreach (self::VOCABS[$file] as $vid) {
       $rdfType = array_flip($context['results']['vids'])[$vid];
       self::getVocabularyUpdater()->registerVocabulary($vid, $rdfType, $graphUri);
-
-      $callbacks[] = [self::class, 'prepareGraph'];
-      // Allow specific vocabulary alters.
-      $method = 'alterGraphFor' . ContainerBuilder::camelize($vid);
-      if (method_exists(static::class, $method)) {
-        $callbacks[] = [self::class, $method];
-      }
     }
 
     $results = self::getVocabularyUpdater()
       // Pass the already collected, URI <-> TID mappings to resolve
       // dependencies between terms from different vocabularies.
       ->setUriToTid($context['results']['uri_to_tid'])
-      ->registerGraph($graphUri, $graph, $callbacks)
+      ->registerGraph($graphUri, $graph)
       ->update();
 
     // Get the updated list and make it available to the next batch operation.

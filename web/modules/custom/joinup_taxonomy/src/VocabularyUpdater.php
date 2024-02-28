@@ -10,11 +10,13 @@ use Drupal\Core\Entity\EntityFieldManagerInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Field\FieldTypePluginManagerInterface;
 use Drupal\Core\Field\Plugin\Field\FieldType\EntityReferenceItem;
+use Drupal\joinup_taxonomy\Event\PrepareVocabularyGraphEvent;
 use Drupal\rdf_sync\RdfSyncMapper;
 use Drupal\text\Plugin\Field\FieldType\TextItemBase;
 use EasyRdf\Graph;
 use EasyRdf\RdfNamespace;
 use EasyRdf\Resource;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * Used to update vocabularies.
@@ -57,8 +59,6 @@ use EasyRdf\Resource;
  */
 class VocabularyUpdater {
 
-  use VocabularyGraphAlterersTrait;
-
   /**
    * Registered graphs.
    *
@@ -100,6 +100,8 @@ class VocabularyUpdater {
    *   The RDF sync mapper service.
    * @param \Drupal\Core\Database\Connection $database
    *   The database connection.
+   * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $eventDispatcher
+   *   The event dispatcher service.
    */
   public function __construct(
     protected EntityTypeManagerInterface $entityTypeManager,
@@ -107,6 +109,7 @@ class VocabularyUpdater {
     protected FieldTypePluginManagerInterface $fieldTypeManager,
     protected RdfSyncMapper $mapper,
     protected Connection $database,
+    protected EventDispatcherInterface $eventDispatcher,
   ) {}
 
   /**
@@ -116,19 +119,11 @@ class VocabularyUpdater {
    *   The graph URI.
    * @param \EasyRdf\Graph $graph
    *   The graph object.
-   * @param array $callbacks
-   *   (optional) List of callbacks able to alter the graph before its data is
-   *   extracted into terms. Each callback takes two arguments, in this order:
-   *   - The vocabulary ID.
-   *   - The graph being altered.
    *
    * @return $this
    */
-  public function registerGraph(string $graphUri, Graph $graph, array $callbacks = []): self {
-    $this->graphs[$graphUri] = [
-      'graph' => $graph,
-      'callbacks' => $callbacks,
-    ];
+  public function registerGraph(string $graphUri, Graph $graph): self {
+    $this->graphs[$graphUri] = $graph;
     return $this;
   }
 
@@ -167,7 +162,7 @@ class VocabularyUpdater {
     $results = [];
     foreach ($this->graphs as $graphUri => $graph) {
       if ($vids = $this->getVidsForGraph($graphUri)) {
-        $results += $this->updateFromGraph($vids, $graph['graph'], $graph['callbacks']);
+        $results += $this->updateFromGraph($vids, $graph);
       }
     }
 
@@ -213,17 +208,12 @@ class VocabularyUpdater {
    *   type as values.
    * @param \EasyRdf\Graph $graph
    *   The graph to be processed.
-   * @param array $callbacks
-   *   (optional) List of callbacks able to alter the graph before its data is
-   *   extracted into terms. Each callback takes two arguments, in this order:
-   *   - The vocabulary ID.
-   *   - The graph being altered.
    *
    * @return array[]
    *   Associative array keyed by vocabulary ID having. Values are arrays with
    *   the number if inserted, updated and deleted terms.
    */
-  protected function updateFromGraph(array $vids, Graph $graph, array $callbacks = []): array {
+  protected function updateFromGraph(array $vids, Graph $graph): array {
     /** @var \Drupal\taxonomy\VocabularyStorageInterface $vocabularyStorage */
     $vocabularyStorage = $this->entityTypeManager->getStorage('taxonomy_vocabulary');
     /** @var \Drupal\taxonomy\TermStorageInterface $termStorage */
@@ -237,13 +227,9 @@ class VocabularyUpdater {
       $vocabulary = $vocabularyStorage->load($vid);
       $isLockedVocabulary = $vocabulary->getThirdPartySetting('joinup_taxonomy', 'locked', FALSE);
 
-      // Callers might pass a list of callbacks to process the graph before data
-      // is extracted and injected in taxonomy terms.
-      foreach ($callbacks as $callback) {
-        if (is_callable($callback)) {
-          $callback($vid, $graph);
-        }
-      }
+      // Allow 3rd-party to alter the graph.
+      $event = new PrepareVocabularyGraphEvent($vid, $graph);
+      $this->eventDispatcher->dispatch($event);
 
       // Extract terms from graph.
       $terms = $this->getTerms($vid, $rdfType, $graph);
