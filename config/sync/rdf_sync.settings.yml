@@ -1,5 +1,6 @@
 _core:
-  default_config_hash: NYnyB3rF8Td2HsdVMMkcxR6klgxf3g9O9CyurZ5PKo8
+  default_config_hash: dp-nyu7OU6QQw2n9oSlxX2cJl7aYA_F_c9-71NglsPo
+graph_uri: 'http://data'
 endpoint:
   scheme: http
   host: localhost

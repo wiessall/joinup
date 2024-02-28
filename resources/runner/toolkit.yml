@@ -127,24 +127,22 @@ commands:
       options:
         existing-config: null
     # Prevent next command to do synchronization as this could lead to errors
-    # because not all dependencies are resolved in the proper order because some
+    # because not all dependencies are resolved in the proper order as some
     # terms have circular dependencies.
     - task: exec
       command: ${drush.bin}
       arguments:
-        - rdf_sync:mode
-        - none
+        - rdf_sync:disable
     # Create locked vocabularies terms from RDF file fixtures.
     - task: exec
       command: ${drush.bin}
       arguments:
         - joinup:create-locked-vocabulary-terms
-    # Instant synchronization of entities with the RDF backend.
+    # Restore synchronization.
     - task: exec
       command: ${drush.bin}
       arguments:
-        - rdf_sync:mode
-        - instant
+        - rdf_sync:enable
     # Synchronize terms to the RDF backend.
     - task: exec
       command: ${drush.bin}

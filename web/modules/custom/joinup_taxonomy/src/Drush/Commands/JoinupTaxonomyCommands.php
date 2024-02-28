@@ -6,6 +6,7 @@ namespace Drupal\joinup_taxonomy\Drush\Commands;
 
 use Drupal\Component\Utility\Crypt;
 use Drupal\Core\Batch\BatchBuilder;
+use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\joinup_taxonomy\VocabularyUpdater;
 use Drupal\rdf_sync\RdfSyncConnection;
 use Drupal\rdf_sync\RdfSyncMapper;
@@ -70,9 +71,12 @@ class JoinupTaxonomyCommands extends DrushCommands {
    *
    * @param \Drupal\rdf_sync\RdfSyncMapper $mapper
    *   The RDF Sync mapper service.
+   * @param \Drupal\Core\Config\ConfigFactoryInterface $configFactory
+   *   The config factory service.
    */
   public function __construct(
     private readonly RdfSyncMapper $mapper,
+    private ConfigFactoryInterface $configFactory,
   ) {
     parent::__construct();
   }
@@ -81,7 +85,10 @@ class JoinupTaxonomyCommands extends DrushCommands {
    * {@inheritdoc}
    */
   public static function create(ContainerInterface $container): self {
-    return new static($container->get('rdf_sync.mapper'));
+    return new static(
+      $container->get('rdf_sync.mapper'),
+      $container->get('config.factory'),
+    );
   }
 
   /**
@@ -181,7 +188,8 @@ class JoinupTaxonomyCommands extends DrushCommands {
       QUERY;
 
     // Get all locked vocabulary triples and store them in the collector graph.
-    $results = RdfSyncConnection::query(sprintf($query, RdfSyncConnection::GRAPH, '<' . implode('> <', $vocabularyUris) . '>'));
+    $graphUri = $this->configFactory->get('rdf_sync.settings')->get('graph_uri');
+    $results = RdfSyncConnection::query(sprintf($query, $graphUri, '<' . implode('> <', $vocabularyUris) . '>'));
     foreach ($results as $row) {
       $fixtureFileGraph->add($row->subject, $row->predicate, $row->object);
     }
@@ -395,7 +403,8 @@ class JoinupTaxonomyCommands extends DrushCommands {
    */
   private function synchronizeTermsFromRdfXmlFile(): void {
     $graphStore = RdfSyncConnection::createGraphStore();
-    $graph = new Graph(RdfSyncConnection::GRAPH);
+    $graphUri = $this->configFactory->get('rdf_sync.settings')->get('graph_uri');
+    $graph = new Graph($graphUri);
     $graph->parseFile(static::getDumpFilePath('rdf', FALSE));
     $graphStore->insert($graph);
   }

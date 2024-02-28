@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Drupal\joinup\Context;
 
 use Drupal\DrupalExtension\Context\RawDrupalContext;
-use Drupal\rdf_sync\RdfSyncConnection;
 use PHPUnit\Framework\Assert;
 
 /**
@@ -23,7 +22,7 @@ class AdmsValidatorContext extends RawDrupalContext {
     $sparql_graph = \Drupal::service('sparql.graph_handler');
     $graphs = array_merge(
       $sparql_graph->getEntityTypeGraphUris('rdf_entity'),
-      [['default' => RdfSyncConnection::GRAPH]]
+      [['default' => \Drupal::config('rdf_sync.settings')->get('graph_uri')]]
     );
     /** @var \Drupal\sparql_entity_storage\Driver\Database\sparql\ConnectionInterface $sparql_endpoint */
     $sparql_endpoint = \Drupal::service('sparql.endpoint');
