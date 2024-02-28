@@ -2,27 +2,43 @@
 
 declare(strict_types=1);
 
-namespace Drupal\joinup_taxonomy;
+namespace Drupal\joinup_taxonomy\EventSubscriber;
 
 use Drupal\Component\Serialization\Json;
-use EasyRdf\Graph;
+use Drupal\joinup_taxonomy\Event\PrepareVocabularyGraphEvent;
 use EasyRdf\RdfNamespace;
 use EasyRdf\Resource;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
- * Reusable methods to alter vocabulary graphs.
+ * Listens to graph preparation event.
  */
-trait VocabularyGraphAlterersTrait {
+class PrepareVocabularyGraphSubscriber implements EventSubscriberInterface {
 
   /**
-   * Prepares the graph.
-   *
-   * @param string $vid
-   *   The graph to be altered.
-   * @param \EasyRdf\Graph $graph
-   *   The vocabulary.
+   * {@inheritdoc}
    */
-  public static function prepareGraph(string $vid, Graph $graph): void {
+  public static function getSubscribedEvents(): array {
+    return [
+      PrepareVocabularyGraphEvent::class => [
+        ['removeNonEnglishVersion', 10],
+        ['alterLanguage'],
+        ['alterSpatial'],
+        ['alterFileType'],
+        ['alterOwnerType'],
+        ['alterEira'],
+      ],
+    ];
+  }
+
+  /**
+   * Removes any non-English version of the taxonomy terms.
+   *
+   * @param \Drupal\joinup_taxonomy\Event\PrepareVocabularyGraphEvent $event
+   *   The event.
+   */
+  public function removeNonEnglishVersion(PrepareVocabularyGraphEvent $event): void {
+    $graph = $event->getGraph();
     foreach ($graph->resources() as $resource) {
       foreach ($resource->propertyUris() as $propertyUri) {
         // Remove any non-English version of the taxonomy terms since we are
@@ -41,14 +57,17 @@ trait VocabularyGraphAlterersTrait {
   }
 
   /**
-   * Alters the 'language' vocabulary graph.
+   * Alters the graph for the language vocabulary.
    *
-   * @param string $vid
-   *   The graph to be altered.
-   * @param \EasyRdf\Graph $graph
-   *   The vocabulary.
+   * @param \Drupal\joinup_taxonomy\Event\PrepareVocabularyGraphEvent $event
+   *   The event.
    */
-  public static function alterGraphForLanguage(string $vid, Graph $graph): void {
+  public function alterLanguage(PrepareVocabularyGraphEvent $event): void {
+    if ($event->vid !== 'language') {
+      return;
+    }
+    $graph = $event->getGraph();
+
     foreach ($graph->resources() as $resource) {
       // If it's not a "skos:Concept", then it's not a language vocabulary term.
       // Remove this resource and continue with the next one.
@@ -83,37 +102,37 @@ trait VocabularyGraphAlterersTrait {
   }
 
   /**
-   * Alters the 'spatial' vocabulary graph.
+   * Alters the graph for the spatial vocabulary.
    *
-   * @param string $vid
-   *   The graph to be altered.
-   * @param \EasyRdf\Graph $graph
-   *   The vocabulary.
+   * @param \Drupal\joinup_taxonomy\Event\PrepareVocabularyGraphEvent $event
+   *   The event.
    */
-  public static function alterGraphForSpatial(string $vid, Graph $graph): void {
-    // Remove deprecated countries from the country list. See ISAICP-3442.
-    foreach ($graph->resources() as $resource) {
-      if ($graph->hasProperty($resource, 'http://publications.europa.eu/ontology/authority/end.use')) {
-        $graph->deleteEntireResource($resource);
-        continue;
+  public function alterSpatial(PrepareVocabularyGraphEvent $event): void {
+    if ($event->vid === 'spatial') {
+      $graph = $event->getGraph();
+      // Remove deprecated countries from the country list. See ISAICP-3442.
+      foreach ($graph->resources() as $resource) {
+        if ($graph->hasProperty($resource, 'http://publications.europa.eu/ontology/authority/end.use')) {
+          $graph->deleteEntireResource($resource);
+          continue;
+        }
+        $graph->addType($resource, 'http://purl.org/dc/terms/Location');
       }
-      $graph->addType($resource, 'http://purl.org/dc/terms/Location');
     }
   }
 
   /**
-   * Alters the 'file_type' vocabulary graph.
+   * Alters the graph for the file_type vocabulary.
    *
-   * Extract extensions and mime-type from referred BNodes and fill two literals
-   * that can be mapped. Due to the extensions and mime-type RDF representation,
-   * this cannot be done by a simple RDF field mapping.
-   *
-   * @param string $vid
-   *   The graph to be altered.
-   * @param \EasyRdf\Graph $graph
-   *   The vocabulary.
+   * @param \Drupal\joinup_taxonomy\Event\PrepareVocabularyGraphEvent $event
+   *   The event.
    */
-  public static function alterGraphForFileType(string $vid, Graph $graph): void {
+  public function alterFileType(PrepareVocabularyGraphEvent $event): void {
+    if ($event->vid !== 'file_type') {
+      return;
+    }
+    $graph = $event->getGraph();
+
     foreach ($graph->resources() as $resource) {
       if ($resource->type() === 'skos:Concept') {
         $mappedCode = $resource->allResources(RdfNamespace::shorten('http://publications.europa.eu/ontology/authority/op-mapped-code', TRUE));
@@ -141,31 +160,34 @@ trait VocabularyGraphAlterersTrait {
   }
 
   /**
-   * Alters the 'owner_type' vocabulary graph.
+   * Alters the graph for the owner_type vocabulary.
    *
-   * @param string $vid
-   *   The graph to be altered.
-   * @param \EasyRdf\Graph $graph
-   *   The vocabulary.
+   * @param \Drupal\joinup_taxonomy\Event\PrepareVocabularyGraphEvent $event
+   *   The event.
    */
-  public static function alterGraphForOwnerType(string $vid, Graph $graph): void {
-    // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-3084
-    $graph->addResource(
-      'http://purl.org/adms/licencetype/ViralEffect-ShareAlike',
-      'http://www.w3.org/2004/02/skos/core#inScheme',
-      'http://purl.org/adms/licencetype/1.1',
-    );
+  public function alterOwnerType(PrepareVocabularyGraphEvent $event): void {
+    if ($event->vid === 'owner_type') {
+      // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-3084
+      $event->getGraph()->addResource(
+        'http://purl.org/adms/licencetype/ViralEffect-ShareAlike',
+        'http://www.w3.org/2004/02/skos/core#inScheme',
+        'http://purl.org/adms/licencetype/1.1',
+      );
+    }
   }
 
   /**
-   * Alters the 'eira' vocabulary graph by adding the extra terms.
+   * Alters the graph for the eira vocabulary.
    *
-   * @param string $vid
-   *   The graph to be altered.
-   * @param \EasyRdf\Graph $graph
-   *   The vocabulary.
+   * @param \Drupal\joinup_taxonomy\Event\PrepareVocabularyGraphEvent $event
+   *   The event.
    */
-  public static function alterGraphForEira(string $vid, Graph $graph): void {
+  public function alterEira(PrepareVocabularyGraphEvent $event): void {
+    if ($event->vid !== 'eira') {
+      return;
+    }
+    $graph = $event->getGraph();
+
     RdfNamespace::set('eira', 'http://data.europa.eu/dr8/');
     // Replace the `dc` namespace with `dct` - requested by the client.
     RdfNamespace::delete('dc');
