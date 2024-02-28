@@ -107,8 +107,8 @@ class Bitbucket extends EuOssCatalogueGitHostingPlatformPluginBase {
             description: $node['description'],
             logo: $logoUrl,
             numberOfForks: $this->getForks($namespace, $packageName),
-            numberOfStars: 0,
             files: $this->getFilesContent($namespace, $packageName, $mainBranch, $requestedFiles),
+            numberOfPullRequests: $this->getNumberOfPullRequests($namespace, $packageName),
           );
         }
       }
@@ -349,15 +349,58 @@ class Bitbucket extends EuOssCatalogueGitHostingPlatformPluginBase {
    * @param string $name
    *   The project name.
    *
-   * @return int
+   * @return int|null
    *   Number of how many forks the repository has.
    */
-  protected function getForks(string $namespace, string $name): int {
-    $forks = $this->bitbucketClient->repositories()
-      ->workspaces($namespace)
-      ->forks($name)
-      ->list(['pagelen' => 1]);
-    return $forks['size'] ?? 0;
+  protected function getForks(string $namespace, string $name): ?int {
+    try {
+      $forks = $this->bitbucketClient->repositories()
+        ->workspaces($namespace)
+        ->forks($name)
+        ->list(['pagelen' => 1]);
+      return $forks['size'] ?? NULL;
+    }
+    catch (\Exception) {
+      $this->logger->debug(
+        "Cannot fetch number of forks of '%repository' on '%base_url'.",
+        [
+          '%repository' => "$namespace/$name",
+          '%base_url' => $this->getConfiguration()['baseUrl'],
+        ]
+      );
+    }
+    return NULL;
+  }
+
+  /**
+   * Returns the number of open pull requests, if any.
+   *
+   * @param string $namespace
+   *   The namespace.
+   * @param string $name
+   *   The project name.
+   *
+   * @return int|null
+   *   Number of how many open pull requests the repository has.
+   */
+  protected function getNumberOfPullRequests(string $namespace, string $name): ?int {
+    try {
+      $prs = $this->bitbucketClient->repositories()
+        ->workspaces($namespace)
+        ->pullRequests($name)
+        ->list(['state' => 'OPEN', 'pagelen' => 1]);
+      return $prs['size'] ?? NULL;
+    }
+    catch (\Exception) {
+      $this->logger->debug(
+        "Cannot fetch number of PRs of '%repository' on '%base_url'.",
+        [
+          '%repository' => "$namespace/$name",
+          '%base_url' => $this->getConfiguration()['baseUrl'],
+        ]
+      );
+    }
+    return NULL;
   }
 
   /**

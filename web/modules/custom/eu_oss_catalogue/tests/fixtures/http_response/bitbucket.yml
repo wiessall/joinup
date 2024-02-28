@@ -370,6 +370,24 @@ api.bitbucket.org:
     size: 5
     page: 1
 
+  # PRs of Bar project.
+  /2.0/repositories/test_namespace/bar/pullrequests?state=OPEN&pagelen=1:
+    values:
+      - comment_count: 34
+        task_count: 0
+        type: pullrequest
+        id: 3244
+        title: Remove slash in publiccode.yml that caused validation failure
+        description: Remove slash in publiccode.yml that caused validation failure
+        state: OPEN
+        merge_commit: ~
+        close_source_branch: false
+        closed_by: ~
+    pagelen: 1
+    size: 2
+    page: 1
+    next: https://api.bitbucket.org/2.0/repositories/test_namespace/bar/pullrequests?state=OPEN&pagelen=1&page=2
+
   # Publiccode of Bar project 1.
   /2.0/repositories/test_namespace/bar/src/master/publiccode.yml: |-
     # This repository adheres to the publiccode.yml standard by including this
@@ -426,6 +444,7 @@ api.bitbucket.org:
           - 'assets/Bar-Screenshot-2.png'
           - 'assets/Bar-Screenshot-3.png'
 
+
   # Logo metadata of Bar project.
   /2.0/repositories/test_namespace/bar/src/master/assets/logo.png?format=meta:
     path: assets/logo.png
@@ -453,7 +472,7 @@ api.bitbucket.org:
   # Logo of Bar project - binary file response.
   /2.0/repositories/test_namespace/bar/src/da001cdf6ce8f3fd3f178f0ef189ef0c524bdc97/assets/logo.png: !!binary iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAACklEQVR4nGMAAQAABQABDQottAAAAABJRU5ErkJggg==
 
-  # Screeshot 1 metadata of Bar project.
+  # Screenshot 1 metadata of Bar project.
   /2.0/repositories/test_namespace/bar/src/master/assets/Bar-Screenshot-1.png?format=meta:
     path: assets/Bar-Screenshot-1.png
     commit:
@@ -480,7 +499,7 @@ api.bitbucket.org:
   # Bar Screenshot 1 - binary file response.
   /2.0/repositories/test_namespace/bar/src/da001cdf6ce8f3fd3f178f0ef189ef0c524bdc97/assets/Bar-Screenshot-1.png: !!binary iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAACklEQVR4nGMAAQAABQABDQottAAAAABJRU5ErkJggg==
 
-  # Screeshot 2 metadata of Bar project.
+  # Screenshot 2 metadata of Bar project.
   /2.0/repositories/test_namespace/bar/src/master/assets/Bar-Screenshot-2.png?format=meta:
     path: assets/Bar-Screenshot-2.png
     commit:
@@ -507,7 +526,7 @@ api.bitbucket.org:
   # Bar Screenshot 2 - binary file response.
   /2.0/repositories/test_namespace/bar/src/da001cdf6ce8f3fd3f178f0ef189ef0c524bdc97/assets/Bar-Screenshot-2.png: !!binary iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAACklEQVR4nGMAAQAABQABDQottAAAAABJRU5ErkJggg==
 
-  # Screeshot 3 metadata of Bar project.
+  # Screenshot 3 metadata of Bar project.
   /2.0/repositories/test_namespace/bar/src/master/assets/Bar-Screenshot-3.png?format=meta:
     _http_status: 404
     type: error
@@ -574,12 +593,20 @@ api.bitbucket.org:
     page: 1
     next: 'https://api.bitbucket.org/2.0/repositories/test_namespace/baz/refs/tags?sort=-target.date&pagelen=1&page=2'
 
-  # Forks of Baz project 1.
+  # Forks of Baz project 2.
   /2.0/repositories/test_namespace/baz/forks?pagelen=1:
     values: [  ]
     pagelen: 1
     size: 0
     page: 1
+
+  # PRs of Baz project.
+  /2.0/repositories/test_namespace/baz/pullrequests?state=OPEN&pagelen=1:
+    _http_status: 500
+    type: error
+    error:
+      message: 'Internal server error'
+
 
   # Publiccode of Baz project 2.
   /2.0/repositories/test_namespace/baz/src/master/publiccode.yml:

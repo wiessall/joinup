@@ -103,8 +103,9 @@ class BitbucketHostingPlatformPluginTest extends KernelTestBase implements Logge
           'description' => '',
           'logo' => NULL,
           'numberOfForks' => 5,
-          'numberOfStars' => 0,
+          'numberOfStars' => NULL,
           'numberOfIssues' => NULL,
+          'numberOfPullRequests' => 2,
         ],
         'test_namespace/baz' => [
           'namespace' => 'test_namespace',
@@ -119,8 +120,9 @@ class BitbucketHostingPlatformPluginTest extends KernelTestBase implements Logge
           'description' => 'This is the Baz Project Git description',
           'logo' => 'https://bytebucket.org/ravatar/%7Bf9883d63-17c1-44b6-8fb1-0478c7b9e557%7D?ts=453345',
           'numberOfForks' => 0,
-          'numberOfStars' => 0,
+          'numberOfStars' => NULL,
           'numberOfIssues' => NULL,
+          'numberOfPullRequests' => NULL,
         ],
       ],
       $projectsArray
@@ -136,6 +138,13 @@ class BitbucketHostingPlatformPluginTest extends KernelTestBase implements Logge
               '%repository' => 'test_namespace/baz',
               '%base_url' => 'https://bitbucket.org',
               '%reference' => 'master',
+            ],
+          ],
+          [
+            'message' => "Cannot fetch number of PRs of '%repository' on '%base_url'.",
+            'context' => [
+              '%repository' => 'test_namespace/baz',
+              '%base_url' => 'https://bitbucket.org',
             ],
           ],
         ],

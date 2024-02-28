@@ -19,6 +19,8 @@ default:
           latestRelease:
             tagName: '2.3.0'
             createdAt: '2023-04-19'
+          pullRequests:
+            totalCount: 8
           file__publiccodeYml:
             text: |
               publiccodeYmlVersion: "0.2"
@@ -142,6 +144,8 @@ default:
           latestRelease:
             tagName: 'v3.5.1'
             createdAt: '2022-09-09'
+          pullRequests:
+            totalCount: 0
           file__publiccodeYml:
             text: |
               publiccodeYmlVersion: "0.4"
@@ -231,6 +235,8 @@ developers_italia:
           latestRelease:
             tagName: '2.3.0'
             createdAt: '2023-04-19'
+          pullRequests:
+            totalCount: 3
           file__publiccodeYml:
             text: |
               publiccodeYmlVersion: "0.2"
