@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_user\Plugin\Block;
 
+use Drupal\Core\Access\AccessResult;
+use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Block\Attribute\Block;
 use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Session\AccountInterface;
@@ -37,10 +39,11 @@ final class WarningMessageBlock extends BlockBase {
   /**
    * {@inheritdoc}
    */
-  public function access(AccountInterface $account, $return_as_object = FALSE) {
-    // Allow access only if DEV_WARNING_BLOCK_DISABLE environment variable is
-    // not set or is 0.
-    $access = getenv('DEV_WARNING_BLOCK_DISABLE') ? FALSE : TRUE;
+  public function access(AccountInterface $account, $return_as_object = FALSE): AccessResultInterface|bool {
+    // Allow the environment variable to not show this block on development
+    // environment so that devs do not get used to the warning.
+    $access = !getenv('DEV_WARNING_BLOCK_DISABLE');
+    return $return_as_object ? AccessResult::allowedIf($access) : $access;
   }
 
 }
