@@ -389,7 +389,6 @@ class GitLabDotCom extends EuOssCatalogueGitHostingPlatformPluginBase {
       url: "{$this->getConfiguration()['baseUrl']}/$namespace/{$project['path']}",
       platform: $this->getPluginId(),
       defaultBranch: $project['repository']['rootRef'],
-      isArchived: $project['archived'],
       latestReleaseTag: $project['releases']['nodes'][0]['tagName'] ?? NULL,
       latestReleaseDate: $project['releases']['nodes'][0]['createdAt'] ?? NULL,
       platformReference: $project['id'],
