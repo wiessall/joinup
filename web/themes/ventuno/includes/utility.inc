@@ -226,7 +226,7 @@ function _ventuno_preprocess_tile(array &$variables, string $entity_type_id): vo
     ];
   }
 
-  if ($entity instanceof AbstractInterface && $route_name === 'view.search.page_1') {
+  if ($entity instanceof AbstractInterface) {
     $variables['text'] = !$entity->get($entity->getAbstractField())->isEmpty() ? $variables['content'][$entity->getAbstractField()] : $variables['text'];
   }
 }
