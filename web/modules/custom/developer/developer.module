@@ -5,6 +5,8 @@
  * Primary module hooks for Developer module.
  */
 
+declare(strict_types=1);
+
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Session\AccountInterface;
