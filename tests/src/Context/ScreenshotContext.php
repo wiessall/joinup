@@ -176,7 +176,7 @@ class ScreenshotContext extends RawMinkContext {
     }
 
     if (!str_starts_with($pathAbsolute, DRUPAL_ROOT)) {
-      throw new \InvalidArgumentException("The behat.screenshots.local.dir should point to a directory beneath Drupal webroot. Actual value: $this->localDir");
+      throw new \InvalidArgumentException("The behat.screenshots.local.dir config should point to a directory beneath Drupal webroot. Actual value: $this->localDir");
     }
 
     return trim(str_replace(DRUPAL_ROOT, '', $pathAbsolute), DIRECTORY_SEPARATOR);
