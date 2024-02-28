@@ -13,12 +13,12 @@ upgrade_commands:
     - ./vendor/bin/drush updatedb --yes
     - ./vendor/bin/drush config:import --yes
     - ./vendor/bin/drush cache:rebuild
-    - ./vendor/bin/drush rdf_sync:mode none
+    - ./vendor/bin/drush rdf_sync:disable
     - ./vendor/bin/drush joinup:create-locked-vocabulary-terms
     - ./vendor/bin/drush deploy:hook --yes
     - ./vendor/bin/drush joinup:sync-locked-vocabulary-terms
     - ./vendor/bin/drush rdf_sync:synchronize taxonomy_term --bundle=legal_type,topic
-    - ./vendor/bin/drush rdf_sync:mode delayed
+    - ./vendor/bin/drush rdf_sync:enable
     # END
 
     - ./vendor/bin/drush search-api:reset-tracker --yes
