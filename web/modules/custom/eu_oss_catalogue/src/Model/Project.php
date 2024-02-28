@@ -24,8 +24,6 @@ class Project {
    *   The code hosting platform plugin ID.
    * @param string $defaultBranch
    *   The repository default branch.
-   * @param bool $isArchived
-   *   Whether the project is archived.
    * @param string|null $latestReleaseTag
    *   The latest release tag.
    * @param string|null $latestReleaseDate
@@ -53,7 +51,6 @@ class Project {
     public readonly string $url,
     public readonly string $platform,
     public readonly string $defaultBranch,
-    public readonly bool $isArchived,
     public readonly ?string $latestReleaseTag = NULL,
     public readonly ?string $latestReleaseDate = NULL,
     public readonly ?string $platformReference = NULL,
