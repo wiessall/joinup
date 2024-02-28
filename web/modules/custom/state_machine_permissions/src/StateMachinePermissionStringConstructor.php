@@ -19,12 +19,14 @@ class StateMachinePermissionStringConstructor {
    *   The workflow.
    * @param \Drupal\state_machine\Plugin\Workflow\WorkflowTransition $transition
    *   The transition.
+   * @param string $ownership
+   *   The ownership type. Either 'own' or 'any'.
    *
    * @return string
    *   The permission string.
    */
-  public static function constructTransitionPermission(WorkflowInterface $workflow, WorkflowTransition $transition): string {
-    return "perform {$workflow->getId()} workflow {$transition->getId()} transition";
+  public static function constructTransitionPermission(WorkflowInterface $workflow, WorkflowTransition $transition, string $ownership): string {
+    return "perform {$workflow->getId()} workflow {$transition->getId()} transition on $ownership entity";
   }
 
 }

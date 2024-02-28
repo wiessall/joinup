@@ -1,14 +1,14 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * @file
  * Contains hooks and functions related to state_machine_permissions.
  */
+
+declare(strict_types=1);
+
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Access\AccessResultInterface;
-use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Session\AccountInterface;
 
 /**
@@ -29,7 +29,27 @@ function state_machine_permissions_rdf_entity_create_access(AccountInterface $ac
   $entity->setGroup($context['group']);
   if (empty($workflow_helper->getAvailableTransitions($entity, $account))) {
     return AccessResult::forbidden('No available transitions for the entity.');
-  };
+  }
+
+  return AccessResult::neutral();
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_create_access().
+ */
+function state_machine_permissions_node_create_access(AccountInterface $account, array $context, $entity_bundle) {
+  if (empty($context['group'])) {
+    return AccessResult::forbidden('Cannot create entities outside a group context.');
+  }
+
+  $workflow_helper = \Drupal::getContainer()->get('joinup_workflow.workflow_helper');
+  /** @var \Drupal\joinup_group\Entity\GroupContentInterface $entity */
+  $entity = \Drupal::entityTypeManager()->getStorage('node')->create(['type' => $entity_bundle]);
+  $entity->setGroup($context['group']);
+  $entity->setOwnerId($account->id());
+  if (empty($workflow_helper->getAvailableTransitions($entity, $account))) {
+    return AccessResult::forbidden('No available transitions for the entity.');
+  }
 
   return AccessResult::neutral();
 }

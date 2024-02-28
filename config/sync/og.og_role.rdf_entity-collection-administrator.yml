@@ -15,5 +15,5 @@ group_bundle: collection
 is_admin: null
 permissions:
   - 'update group'
-  - 'perform collection_workflow workflow request_archival transition'
+  - 'perform collection_workflow workflow request_archival transition on any entity'
 role_type: null

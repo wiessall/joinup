@@ -11,6 +11,7 @@ use Drupal\Core\Session\AccountInterface;
 use Drupal\joinup_workflow\WorkflowHelperInterface;
 use Drupal\state_machine\Plugin\Workflow\WorkflowInterface;
 use Drupal\state_machine_permissions\StateMachinePermissionStringConstructor;
+use Drupal\user\EntityOwnerInterface;
 use Drupal\workflow_state_permission\WorkflowStatePermissionPluginInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -63,8 +64,21 @@ abstract class GroupWorkflowStatePermissionBase extends PluginBase implements Wo
       return TRUE;
     }
 
-    $permission = StateMachinePermissionStringConstructor::constructTransitionPermission($workflow, $workflow->findTransition($from_state, $to_state));
-    return $account->hasPermission($permission) || $this->workflowHelper->hasOgPermission($permission, $entity, $account);
+    $anyPermission = StateMachinePermissionStringConstructor::constructTransitionPermission($workflow, $workflow->findTransition($from_state, $to_state), 'any');
+    if ($account->hasPermission($anyPermission) || $this->workflowHelper->hasOgPermission($anyPermission, $entity->getGroup(), $account)) {
+      return TRUE;
+    }
+
+    if (!$entity instanceof EntityOwnerInterface) {
+      return FALSE;
+    }
+
+    if ($account->id() === $entity->getOwnerId()) {
+      $ownPermission = StateMachinePermissionStringConstructor::constructTransitionPermission($workflow, $workflow->findTransition($from_state, $to_state), 'own');
+      return $account->hasPermission($ownPermission) || $this->workflowHelper->hasOgPermission($ownPermission, $entity->getGroup(), $account);
+    }
+
+    return FALSE;
   }
 
 }

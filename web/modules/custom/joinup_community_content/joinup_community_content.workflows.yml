@@ -23,7 +23,7 @@ node:pre_moderated:
   transitions:
     save_as_draft:
       label: 'Save as draft'
-      from: [__new__]
+      from: [__new__, draft]
       to: draft
     save_new_draft:
       label: 'Save new draft'
@@ -31,7 +31,7 @@ node:pre_moderated:
       to: draft
     propose:
       label: 'Propose'
-      from: [__new__, draft]
+      from: [__new__, draft, proposed ]
       to: proposed
     propose_from_reported:
       label: 'Propose'
@@ -99,7 +99,7 @@ node:post_moderated:
   transitions:
     save_as_draft:
       label: 'Save as draft'
-      from: [__new__]
+      from: [__new__, draft]
       to: draft
     save_new_draft:
       label: 'Save new draft'
@@ -107,11 +107,11 @@ node:post_moderated:
       to: draft
     propose_from_reported:
       label: 'Propose'
-      from: [needs_update]
+      from: [proposed, needs_update]
       to: proposed
     publish:
       label: 'Publish'
-      from: [__new__, draft]
+      from: [__new__, draft, published]
       to: published
     approve_proposed:
       label: 'Publish'
