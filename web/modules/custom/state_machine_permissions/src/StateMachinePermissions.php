@@ -22,7 +22,7 @@ class StateMachinePermissions implements ContainerInjectionInterface {
    * @param \Drupal\state_machine\WorkflowManagerInterface $workflowManager
    *   The workflow manager.
    */
-  public function __construct(protected WorkflowManagerInterface $workflowManager) { }
+  public function __construct(protected WorkflowManagerInterface $workflowManager) {}
 
   /**
    * {@inheritdoc}
@@ -45,12 +45,14 @@ class StateMachinePermissions implements ContainerInjectionInterface {
       $transitions = $workflowDefinition->getTransitions();
       $workflow_id = $workflowDefinition->getId();
       foreach ($transitions as $transition_id => $transition) {
-        $permissions["perform $workflow_id workflow $transition_id transition"] = [
-          'title' => $this->t('Perform %workflow_name workflow: %transition_name transition', [
-            '%workflow_name' => $workflowDefinition->getLabel(),
-            '%transition_name' => $transition->getLabel(),
-          ]),
-        ];
+        foreach (['own', 'any'] as $ownership) {
+          $permissions["perform $workflow_id workflow $transition_id transition on $ownership entity"] = [
+            'title' => $this->t('Perform %workflow_name workflow: %transition_name transition', [
+              '%workflow_name' => $workflowDefinition->getLabel(),
+              '%transition_name' => $transition->getLabel(),
+            ]),
+          ];
+        }
       }
     }
 

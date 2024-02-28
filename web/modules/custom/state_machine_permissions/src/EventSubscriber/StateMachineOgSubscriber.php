@@ -72,12 +72,15 @@ class StateMachineOgSubscriber implements EventSubscriberInterface {
     foreach ($workflows as $workflow) {
       $transitions = $workflow->getTransitions();
       foreach ($transitions as $transition) {
-        $permission_string = StateMachinePermissionStringConstructor::constructTransitionPermission($workflow, $transition);
-        $permissions[$permission_string] = new GroupContentOperationPermission([
+        foreach (['own', 'any'] as $ownership) {
+          $permission_string = StateMachinePermissionStringConstructor::constructTransitionPermission($workflow, $transition, $ownership);
+        }
+        $permissions[$permission_string] = new GroupPermission([
           'name' => $permission_string,
-          'title' => $this->t('Perform "@workflow" workflow @transition transition', [
+          'title' => $this->t('Perform "@workflow" workflow @transition transition on @ownership entity', [
             '@workflow' => $workflow->getLabel(),
             '@transition' => $transition->getLabel(),
+            '@ownership' => $ownership,
           ]),
         ]);
       }
@@ -99,17 +102,20 @@ class StateMachineOgSubscriber implements EventSubscriberInterface {
         foreach ($workflows as $workflow) {
           $transitions = $workflow->getTransitions();
           foreach ($transitions as $transition) {
-            $permission_string = StateMachinePermissionStringConstructor::constructTransitionPermission($workflow, $transition);
-            $permissions[$permission_string] = new GroupContentOperationPermission([
-              'name' => $permission_string,
-              'title' => $this->t('Perform "@workflow" workflow @transition transition', [
-                '@workflow' => $workflow->getLabel(),
-                '@transition' => $transition->getLabel(),
-              ]),
-              'entityType' => $entity_type_id,
-              'bundle' => $bundle,
-              'operation' => $permission_string,
-            ]);
+            foreach (['own', 'any'] as $ownership) {
+              $permission_string = StateMachinePermissionStringConstructor::constructTransitionPermission($workflow, $transition, $ownership);
+              $permissions[$permission_string] = new GroupContentOperationPermission([
+                'name' => $permission_string,
+                'title' => $this->t('Perform "@workflow" workflow @transition transition on @ownership entity', [
+                  '@workflow' => $workflow->getLabel(),
+                  '@transition' => $transition->getLabel(),
+                  '@ownership' => $ownership,
+                ]),
+                'entityType' => $entity_type_id,
+                'bundle' => $bundle,
+                'operation' => $permission_string,
+              ]);
+            }
           }
         }
         $event->setPermissions($permissions);

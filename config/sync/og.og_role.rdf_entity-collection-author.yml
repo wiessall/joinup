@@ -29,7 +29,10 @@ permissions:
   - 'edit own event content'
   - 'edit own news content'
   - 'post comments'
-  - 'perform pre_moderated workflow reject_deletion transition'
-  - 'perform post_moderated workflow publish transition'
-  - 'perform pre_moderated workflow approve_proposed transition'
+  - 'create content for any_user option'
+  - 'create content for only_members option'
+  - 'create content for facilitators_and_authors option'
+  - 'perform node:pre_moderated workflow reject_deletion transition on any entity'
+  - 'perform node:post_moderated workflow publish transition on any entity'
+  - 'perform node:pre_moderated workflow approve_proposed transition on any entity'
 role_type: required

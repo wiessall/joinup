@@ -1,18 +1,18 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Drupal\state_machine_permissions\Guard;
 
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Session\AccountInterface;
-use Drupal\joinup_group\Entity\GroupContentInterface;
 use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\joinup_workflow\WorkflowHelper;
 use Drupal\state_machine\Guard\GuardInterface;
 use Drupal\state_machine\Plugin\Workflow\WorkflowInterface;
 use Drupal\state_machine\Plugin\Workflow\WorkflowTransition;
 use Drupal\state_machine_permissions\StateMachinePermissionStringConstructor;
+use Drupal\user\EntityOwnerInterface;
 
 /**
  * Generic guard class that checks the transition permissions.
@@ -37,11 +37,6 @@ class PermissionGuard implements GuardInterface {
       return TRUE;
     }
 
-    $permission = StateMachinePermissionStringConstructor::constructTransitionPermission($workflow, $transition);
-    if ($this->currentUser->hasPermission($permission)) {
-      return TRUE;
-    }
-
     // If the entity is a group, check if the user has the permission on the
     // group. However, if the group is a solution, and the entity is new, then
     // check if the user has the permission on the parent collection because for
@@ -51,16 +46,25 @@ class PermissionGuard implements GuardInterface {
       if ($entity->bundle() === 'solution' && $entity->isNew()) {
         $entity = $entity->getGroup();
       }
+      $permission = StateMachinePermissionStringConstructor::constructTransitionPermission($workflow, $transition, 'any');
       return $this->workflowHelper->hasOgPermission($permission, $entity, $this->currentUser);
     }
 
-    // For Group content, check if the user has the permission on the parent
-    // group.
-    elseif ($entity instanceof GroupContentInterface) {
-      return $this->workflowHelper->hasOgPermission($permission, $entity->getGroup(), $this->currentUser);
+    $anyPermission = StateMachinePermissionStringConstructor::constructTransitionPermission($workflow, $transition, 'any');
+    if ($this->currentUser->hasPermission($anyPermission) || $this->workflowHelper->hasOgPermission($anyPermission, $entity->getGroup(), $this->currentUser)) {
+      return TRUE;
     }
 
-    return $this->currentUser->hasPermission($permission) || $this->workflowHelper->hasOgPermission($permission, $entity, $this->currentUser);
+    if (!$entity instanceof EntityOwnerInterface) {
+      return FALSE;
+    }
+
+    if ($this->currentUser->id() === $entity->getOwnerId()) {
+      $ownPermission = StateMachinePermissionStringConstructor::constructTransitionPermission($workflow, $transition, 'own');
+      return $this->currentUser->hasPermission($ownPermission) || $this->workflowHelper->hasOgPermission($ownPermission, $entity->getGroup(), $this->currentUser);
+    }
+
+    return FALSE;
   }
 
 }

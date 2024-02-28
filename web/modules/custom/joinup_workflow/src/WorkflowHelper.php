@@ -62,34 +62,13 @@ class WorkflowHelper implements WorkflowHelperInterface {
   /**
    * {@inheritdoc}
    */
-  public function getAvailableStatesLabels(FieldableEntityInterface $entity, ?AccountInterface $account = NULL): array {
-    $allowedTransitions = $this->getAvailableTransitions($entity, $account);
-
-    $allowedStates = array_map(function (WorkflowTransition $transition) {
-      return (string) $transition->getToState()->getLabel();
-    }, $allowedTransitions);
-
-    return $allowedStates;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
   public function getAvailableTargetStates(FieldableEntityInterface $entity, ?AccountInterface $account = NULL): array {
     /** @var \Drupal\joinup_workflow\EntityWorkflowStateInterface $entity */
     $allowedTransitions = $this->getAvailableTransitions($entity, $account);
 
-    $allowedStates = array_map(function (WorkflowTransition $transition) {
+    return array_map(function (WorkflowTransition $transition) {
       return (string) $transition->getToState()->getId();
     }, $allowedTransitions);
-
-    $currentState = $entity->getWorkflowState();
-    $workflow = $entity->getWorkflow();
-    if ($this->workflowStatePermission->isStateUpdatePermitted($account, $entity, $workflow, $currentState, $currentState)) {
-      $allowedStates[$currentState] = $currentState;
-    }
-
-    return $allowedStates;
   }
 
   /**
