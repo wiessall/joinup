@@ -100,7 +100,6 @@ class Bitbucket extends EuOssCatalogueGitHostingPlatformPluginBase {
             url: $node['links']['html']['href'],
             platform: $this->getPluginId(),
             defaultBranch: $mainBranch,
-            isArchived: FALSE,
             latestReleaseTag: $tag,
             latestReleaseDate: $tagDate,
             platformReference: substr($node['uuid'], 1, 36),

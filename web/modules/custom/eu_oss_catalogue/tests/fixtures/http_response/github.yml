@@ -5,7 +5,6 @@ default:
         - id: GitHub-solution-1-internal-ID
           description: Description of GitHub solution 1
           name: dummy-name-1
-          isArchived: false
           forkCount: 101
           stargazerCount: 121
           issues:
@@ -130,7 +129,6 @@ default:
         - id: GitHub-solution-2-internal-ID
           description: Description of GitHub solution 2
           name: dummy-name-2
-          isArchived: true
           forkCount: 102
           stargazerCount: 122
           issues:
@@ -223,7 +221,6 @@ developers_italia:
         - id: GitHub-solution-1-internal-ID
           description: Description of GitHub solution 1
           name: dummy-name-1
-          isArchived: false
           forkCount: 103
           stargazerCount: 123
           issues:
