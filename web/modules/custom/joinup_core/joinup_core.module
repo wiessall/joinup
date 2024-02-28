@@ -61,13 +61,6 @@ function joinup_core_theme(array $existing, string $type, string $theme, string 
 }
 
 /**
- * Prepares variables for field templates displayed in modal.
- */
-function template_preprocess_field__in_modal(&$variables, $hook) {
-  template_preprocess_field($variables, $hook);
-}
-
-/**
  * Implements hook_requirements_alter().
  */
 function joinup_core_requirements_alter(array &$requirements): void {
