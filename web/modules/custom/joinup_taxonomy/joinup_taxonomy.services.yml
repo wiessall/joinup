@@ -18,3 +18,9 @@ services:
     class: Drupal\joinup_taxonomy\EventSubscriber\PrepareVocabularyGraphSubscriber
     tags:
       - { name: event_subscriber }
+  joinup_taxonomy.legacy_term_url.subscriber:
+    class: Drupal\joinup_taxonomy\EventSubscriber\TermLegacyUrlSubscriber
+    arguments:
+      - '@rdf_sync.mapper'
+    tags:
+      - { name: event_subscriber }

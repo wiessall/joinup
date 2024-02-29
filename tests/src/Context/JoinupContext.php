@@ -1741,23 +1741,30 @@ class JoinupContext extends RawDrupalContext {
   }
 
   /**
-   * Asserts that the current url is the same as the parameter.
+   * Asserts that the current URL is the same as the parameter.
    *
    * The difference with the steps "Then I should be on" and "Then the url
    * should match" is that the later two strip off the query string and keep
    * only the path to compare.
    *
-   * @When the( current) relative url should be :url
+   * @param string $method
+   *   Options: 'be' for strict comparison, 'match' for regexp check.
+   * @param string $url
+   *   The URL to be checked.
+   *
+   * @Then the( current) relative url should :method :url
    */
-  public function relativeUrlMatches($url) {
+  public function relativeUrlMatches(string $method, string $url): void {
+    \assert(in_array($method, ['be', 'match'], TRUE));
+
+    $url = str_replace('\\"', '"', $url);
     $current_url = $this->getSession()->getCurrentUrl();
     $current_url = str_replace($this->getMinkParameter('base_url'), '', $current_url);
-    if ($current_url !== $url) {
-      $message = $this->t('Url "@current" does not match expected "@expected".', [
-        '@current' => $current_url,
-        '@expected' => $url,
-      ]);
-      throw new \Exception((string) $message);
+
+    $failed = ($method === 'be' && $current_url !== $url) || ($method === 'match' && !preg_match($url, $current_url));
+
+    if ($failed) {
+      throw new ExpectationFailedException("Url $current_url does not match expected $url.");
     }
   }
 
