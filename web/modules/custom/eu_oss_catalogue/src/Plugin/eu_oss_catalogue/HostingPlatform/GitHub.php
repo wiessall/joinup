@@ -6,6 +6,7 @@ namespace Drupal\eu_oss_catalogue\Plugin\eu_oss_catalogue\HostingPlatform;
 
 use Drupal\Cache\Adapter\DrupalAdapter;
 use Drupal\Core\Cache\CacheBackendInterface;
+use Drupal\Core\Datetime\DrupalDateTime;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Logger\LoggerChannelInterface;
 use Drupal\Core\Site\Settings;
@@ -240,6 +241,9 @@ class GitHub extends EuOssCatalogueGitHostingPlatformPluginBase {
             $logo = NULL;
           }
 
+          $latestReleaseDate = isset($node['latestRelease']['createdAt']) ?
+            new DrupalDateTime($node['latestRelease']['createdAt']) : NULL;
+
           yield new Project(
             namespace: $node['owner']['login'],
             name: $node['name'],
@@ -247,7 +251,7 @@ class GitHub extends EuOssCatalogueGitHostingPlatformPluginBase {
             platform: $this->getPluginId(),
             defaultBranch: $node['defaultBranchRef']['name'],
             latestReleaseTag: $node['latestRelease']['tagName'] ?? NULL,
-            latestReleaseDate: $node['latestRelease']['createdAt'] ?? NULL,
+            latestReleaseDate: $latestReleaseDate,
             platformReference: $node['id'],
             description: $node['description'],
             logo: $logo,

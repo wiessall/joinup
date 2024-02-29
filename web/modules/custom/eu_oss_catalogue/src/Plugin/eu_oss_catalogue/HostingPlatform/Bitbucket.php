@@ -91,7 +91,7 @@ class Bitbucket extends EuOssCatalogueGitHostingPlatformPluginBase {
             'date' => $tagDate,
           ] = $this->getLatestTagAndTagDate($namespace, $packageName);
           $tagDate = $tagDate
-            ? (new DrupalDateTime($tagDate))->format('Y-m-d')
+            ? (new DrupalDateTime($tagDate))
             : NULL;
 
           yield new Project(
@@ -106,8 +106,8 @@ class Bitbucket extends EuOssCatalogueGitHostingPlatformPluginBase {
             description: $node['description'],
             logo: $logoUrl,
             numberOfForks: $this->getForks($namespace, $packageName),
-            files: $this->getFilesContent($namespace, $packageName, $mainBranch, $requestedFiles),
             numberOfPullRequests: $this->getNumberOfPullRequests($namespace, $packageName),
+            files: $this->getFilesContent($namespace, $packageName, $mainBranch, $requestedFiles),
           );
         }
       }
