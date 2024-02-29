@@ -8,7 +8,6 @@ use Bitbucket\Client;
 use Bitbucket\HttpClient\Builder;
 use Bitbucket\ResultPager;
 use Drupal\Component\Utility\UrlHelper;
-use Drupal\Core\Datetime\DrupalDateTime;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Logger\LoggerChannelInterface;
 use Drupal\Core\Site\Settings;
@@ -90,9 +89,6 @@ class Bitbucket extends EuOssCatalogueGitHostingPlatformPluginBase {
             'tag' => $tag,
             'date' => $tagDate,
           ] = $this->getLatestTagAndTagDate($namespace, $packageName);
-          $tagDate = $tagDate
-            ? (new DrupalDateTime($tagDate))->format('Y-m-d')
-            : NULL;
 
           yield new Project(
             namespace: $node['workspace']['slug'],
@@ -106,8 +102,8 @@ class Bitbucket extends EuOssCatalogueGitHostingPlatformPluginBase {
             description: $node['description'],
             logo: $logoUrl,
             numberOfForks: $this->getForks($namespace, $packageName),
-            files: $this->getFilesContent($namespace, $packageName, $mainBranch, $requestedFiles),
             numberOfPullRequests: $this->getNumberOfPullRequests($namespace, $packageName),
+            files: $this->getFilesContent($namespace, $packageName, $mainBranch, $requestedFiles),
           );
         }
       }
