@@ -180,6 +180,9 @@ class EuOssCatalogue implements EuOssCatalogueInterface {
     // Set source hash.
     $solution->set('oss_source_hash', $project->getHash());
 
+    // Make sure it is not archived.
+    $solution->set('oss_archived', 0);
+
     try {
       $operationResult = $solution->save();
     }
@@ -249,8 +252,9 @@ class EuOssCatalogue implements EuOssCatalogueInterface {
     foreach ($this->entityTypeManager->getStorage('node')->loadMultiple($solutionIds) as $solution) {
       $solution->removeProvider($provider);
       if ($solution->get('oss_source')->isEmpty()) {
-        $solution->delete();
-        $this->logger->info("Solution '@solution' (@url) was removed due to having no active providers", [
+        $solution->set('oss_archived', 1);
+        $solution->save();
+        $this->logger->info("Solution '@solution' (@url) was archived due to having no active providers", [
           '@solution' => $solution->label(),
           '@url' => $solution->get('oss_git_url')->value,
         ]);
@@ -296,6 +300,8 @@ class EuOssCatalogue implements EuOssCatalogueInterface {
         'oss_source_hash' => $hash,
         // Also have to take the provider reference into consideration.
         'oss_source' => $provider->getPluginId(),
+        // Limit only to not archived solutions.
+        'oss_archived' => 0,
       ]);
 
     return empty($solutionNodes);
