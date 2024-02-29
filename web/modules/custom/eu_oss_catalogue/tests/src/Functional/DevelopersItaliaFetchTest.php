@@ -77,7 +77,25 @@ class DevelopersItaliaFetchTest extends FetchTestBase {
   }
 
   /**
-   * Tests that when a solution is removed upstream, is removed also locally.
+   * Tests that when a solution is removed upstream, is archived locally.
+   */
+  public function testArchiveSolution(): void {
+    $this->fetchSolutions('removing_solution_provider', 4);
+
+    $this->assertNotFalse($this->getNodeByTitle('GitHub solution 1'));
+    $this->assertNotFalse($this->getNodeByTitle('Project 1.1'));
+
+    // Provided no longer has "Project 1.1", so it should be archived.
+    $this->fetchSolutions('removing_solution_provider', 0);
+
+    $solution2 = $this->getNodeByTitle('Project 1.1', TRUE);
+    $this->assertNotFalse($solution2);
+    $this->assertSame('1', $solution2->get('oss_archived')->getString());
+    $this->assertSame(0, $solution2->get('oss_source')->count());
+  }
+
+  /**
+   * Tests that when a solution is removed upstream, the source is updated.
    */
   public function testRemovedSolution(): void {
     $this->fetchSolutions('removing_solution_provider', 4);
@@ -85,23 +103,8 @@ class DevelopersItaliaFetchTest extends FetchTestBase {
     $this->assertNotFalse($this->getNodeByTitle('GitHub solution 1'));
     $this->assertNotFalse($this->getNodeByTitle('Project 1.1'));
 
-    // Re-run the process and update one solution from a new source-provider.
-    $this->fetchSolutions('removing_solution_provider', 0);
-
-    /** @var \Drupal\eu_oss_catalogue\Entity\OssSolutionInterface $node1 */
-    $this->assertNotFalse($this->getNodeByTitle('GitHub solution 1'));
-    $this->assertFalse($this->getNodeByTitle('Project 1.1'));
-
-    // Test that if the solution has more than one provider it is not removed
-    // due to a single provider removal.
-    $this->fetchSolutions('removing_solution_provider', 1);
-
-    $solution2 = $this->getNodeByTitle('Project 1.1');
-    $this->assertNotEmpty($solution2);
-    $this->assertSame(1, $solution2->get('oss_source')->count());
-
-    // Import the solutions from developers_italia plugin so that the Solution 2
-    // has 2 sources.
+    // Import the solutions from developers_italia plugin so that
+    // the "Project 1.1" has 2 sources.
     $this->fetchSolutions('developers_italia', 4);
 
     $solution2 = $this->getNodeByTitle('Project 1.1', TRUE);
@@ -113,6 +116,7 @@ class DevelopersItaliaFetchTest extends FetchTestBase {
 
     $solution2 = $this->getNodeByTitle('Project 1.1', TRUE);
     $this->assertNotEmpty($solution2);
+    $this->assertSame('0', $solution2->get('oss_archived')->getString());
     $this->assertSame(1, $solution2->get('oss_source')->count());
   }
 

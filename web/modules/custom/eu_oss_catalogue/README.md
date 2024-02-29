@@ -216,7 +216,7 @@ Drupal node entity storage.
 
 TBD (based on discussion from DDD2023 Vienna, we queue an item with the list of
 fetched solutions and their provider. Then the worker looks at each solution. If
-the provider is the sole provider in `oss_source` field, it deletes the node.
+the provider is the sole provider in `oss_source` field, it archives the node.
 Otherwise, it removes that provider form `oss_source`). The assumption should be
 verified again.
 

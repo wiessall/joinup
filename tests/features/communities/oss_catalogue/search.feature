@@ -9,6 +9,17 @@ Feature: OSS catalogue search
     And I should see the text "No content found for your search."
     And I should see the button "Clear filters"
 
+  Scenario: Archived solution is not displayed in search results
+    Given oss_solution content:
+      | title   | oss_development_status | oss_source        | status    | oss_archived |
+      | Linux   | stable                 | developers_italia | published | 1            |
+      | macOS   | development            | developers_italia | published | 0            |
+      | Android | obsolete               | developers_italia | published |              |
+
+    When I visit the OSS search page
+    Then I should see the text "SEARCH RESULTS (2)"
+    And I should not see the "Linux" tile
+
   Scenario: User is able to search.
     # Mimic the "EU OSSC" collection.
     Given collection:
