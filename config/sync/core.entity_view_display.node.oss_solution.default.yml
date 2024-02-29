@@ -3,6 +3,7 @@ langcode: en
 status: true
 dependencies:
   config:
+    - field.field.node.oss_solution.oss_archived
     - field.field.node.oss_solution.oss_available_languages
     - field.field.node.oss_solution.oss_categories
     - field.field.node.oss_solution.oss_default_branch
@@ -765,6 +766,7 @@ hidden:
   oss__long_description: true
   oss__screenshots: true
   oss__short_description: true
+  oss_archived: true
   oss_available_languages: true
   oss_categories: true
   oss_default_branch: true
