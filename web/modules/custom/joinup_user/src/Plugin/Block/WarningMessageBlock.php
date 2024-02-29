@@ -42,7 +42,7 @@ final class WarningMessageBlock extends BlockBase {
   public function access(AccountInterface $account, $return_as_object = FALSE): AccessResultInterface|bool {
     // Allow the environment variable to not show this block on development
     // environment so that devs do not get used to the warning.
-    $access = !getenv('DEV_WARNING_BLOCK_DISABLE');
+    $access = !getenv('IS_DDEV_PROJECT');
     return $return_as_object ? AccessResult::allowedIf($access) : $access;
   }
 
