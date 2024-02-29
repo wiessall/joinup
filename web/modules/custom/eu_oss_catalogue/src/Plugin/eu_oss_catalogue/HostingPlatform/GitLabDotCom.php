@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Drupal\eu_oss_catalogue\Plugin\eu_oss_catalogue\HostingPlatform;
 
-use Drupal\Core\Datetime\DrupalDateTime;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Utility\Error;
 use Drupal\eu_oss_catalogue\EuOssCatalogueGitHostingPlatformPluginBase;
@@ -384,9 +383,6 @@ class GitLabDotCom extends EuOssCatalogueGitHostingPlatformPluginBase {
       }
     }
 
-    $latestReleaseDate = isset($project['releases']['nodes'][0]['createdAt']) ?
-      new DrupalDateTime($project['releases']['nodes'][0]['createdAt']) : NULL;
-
     return new Project(
       namespace: $namespace,
       name: $project['path'],
@@ -394,7 +390,7 @@ class GitLabDotCom extends EuOssCatalogueGitHostingPlatformPluginBase {
       platform: $this->getPluginId(),
       defaultBranch: $project['repository']['rootRef'],
       latestReleaseTag: $project['releases']['nodes'][0]['tagName'] ?? NULL,
-      latestReleaseDate: $latestReleaseDate,
+      latestReleaseDate: $project['releases']['nodes'][0]['createdAt'] ?? NULL,
       platformReference: $project['id'],
       description: $project['description'],
       logo: $project['avatarUrl'] ?? NULL,

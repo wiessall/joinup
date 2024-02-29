@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Drupal\eu_oss_catalogue\Model;
 
 use Drupal\Component\Utility\Crypt;
-use Drupal\Core\Datetime\DrupalDateTime;
 
 /**
  * Data model for a code platform project.
@@ -27,7 +26,7 @@ class Project {
    *   The repository default branch.
    * @param string|null $latestReleaseTag
    *   The latest release tag.
-   * @param \Drupal\Core\Datetime\DrupalDateTime|null $latestReleaseDate
+   * @param string|null $latestReleaseDate
    *   The latest release date.
    * @param string|null $platformReference
    *   The code platform internal unique ID.
@@ -53,7 +52,7 @@ class Project {
     public readonly string $platform,
     public readonly string $defaultBranch,
     public readonly ?string $latestReleaseTag = NULL,
-    public readonly ?DrupalDateTime $latestReleaseDate = NULL,
+    public readonly ?string $latestReleaseDate = NULL,
     public readonly ?string $platformReference = NULL,
     public readonly ?string $description = NULL,
     public readonly ?string $logo = NULL,
