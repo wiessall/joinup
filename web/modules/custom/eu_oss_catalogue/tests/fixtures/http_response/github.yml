@@ -139,9 +139,6 @@ default:
             login: dummy-namespace-2
           defaultBranchRef:
             name: default-branch-of-GitHub-solution-2
-          latestRelease:
-            tagName: 'v3.5.1'
-            createdAt: '2022-09-09'
           pullRequests:
             totalCount: 0
           file__publiccodeYml:
@@ -229,9 +226,6 @@ developers_italia:
             login: dummy-namespace-1
           defaultBranchRef:
             name: default-branch-of-GitHub-solution-1
-          latestRelease:
-            tagName: '2.3.0'
-            createdAt: '2023-04-19'
           pullRequests:
             totalCount: 3
           file__publiccodeYml:
