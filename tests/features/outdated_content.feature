@@ -21,10 +21,10 @@ Feature:
       | title             | collection       | document publication date | state     |
       | Very old document | Outdated content | 1985-03-04                | published |
     And event content:
-      | title                    | collection       | publication date  | created           | state     |
-      | Recent published event   | Outdated content | -3 months         | -3 months         | published |
-      | Outdated published event | Outdated content | -1 year -1 second | -1 year -1 second | published |
-      | Not published event      | Outdated content |                   | -31 years         | draft     |
+      | title                    | collection       | publication date | created           | state     |
+      | Recent published event   | Outdated content | -3 months        | -3 months         | published |
+      | Outdated published event | Outdated content | -1 year -1 month | -1 year -1 month  | published |
+      | Not published event      | Outdated content |                  | -31 years         | draft     |
     And news content:
       | title                            | collection       | publication date  | created           | state     |
       | Recent published news            | Outdated content | -7 months         | -7 months         | published |

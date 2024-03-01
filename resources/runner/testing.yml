@@ -17,7 +17,7 @@ testing:
 behat:
   screenshots:
     local:
-      dir: ${env.ARTIFACTS_DIR}
+      dir: ${joinup.site_dir}/sites/simpletest/behat
   # Either 'firefox' or 'chrome'.
   browser_name: chrome
   formatter:
