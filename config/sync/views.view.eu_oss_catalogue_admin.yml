@@ -1534,7 +1534,7 @@ display:
             operator_limit_selection: false
             operator_list: {  }
             identifier: oss_archived
-            required: true
+            required: false
             remember: true
             multiple: false
             remember_roles:
