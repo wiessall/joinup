@@ -20,6 +20,7 @@ use Symfony\Component\HttpFoundation\RequestStack;
  * @coversDefaultClass \Drupal\eu_oss_catalogue\Plugin\eu_oss_catalogue\HostingPlatform\Bitbucket
  *
  * @see \Drupal\eu_oss_catalogue_test\Plugin\ServiceMock\Bitbucket
+ * @group eu_oss_catalogue
  */
 class BitbucketHostingPlatformPluginTest extends KernelTestBase implements LoggerChannelInterface {
 
