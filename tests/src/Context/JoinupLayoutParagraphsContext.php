@@ -9,6 +9,7 @@ use Behat\Mink\Element\TraversableElement;
 use Behat\Mink\Exception\ElementNotFoundException;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\joinup\Traits\JavascriptTrait;
+use Drupal\joinup\Traits\TraversingTrait;
 use Drupal\joinup\Traits\WysiwygTrait;
 use PHPUnit\Framework\Assert;
 use function PHPUnit\Framework\assertSame;
@@ -21,6 +22,7 @@ class JoinupLayoutParagraphsContext extends RawDrupalContext {
 
   use JavascriptTrait;
   use WysiwygTrait;
+  use TraversingTrait;
 
   /**
    * Field mapping. It is the selector without the 'field--name-' prefix.
@@ -88,26 +90,25 @@ class JoinupLayoutParagraphsContext extends RawDrupalContext {
     $this->scrollElementIntoView(end($links));
     end($links)->click();
 
+    // Wait for modal to be opened.
+    $this->assertModalToOpen();
+
     // Get the 'layout' property from the table.
     $layout = $layout_properties->getRowsHash()['layout'];
     assertTrue(isset(self::LAYOUTS_MAP[$layout]), "The layout '$layout' is not defined in the context.");
     $layout = self::LAYOUTS_MAP[$layout];
 
+    $modalContent = $this->getRegion('Modal content');
+
     // Select the layout.
     $xpath = "//div[contains(concat(' ', @class, ' '), ' layout-select__item ')]/input[@value='$layout']";
-    $this->getSession()->wait(5000, "document.querySelector('div.layout-select__item input[value=\"$layout\"]') !== null");
-    $this->getSession()->getPage()->find('xpath', $xpath)->getParent()->click();
+    $modalContent->find('xpath', $xpath)->getParent()->click();
     // Wait until AJAX is done.
     $this->getSession()->wait(5000, "jQuery.active === 0");
 
-    // Expand both the "Layout options" and "Settings" fieldsets. The classes
-    // are details[id="layout-paragraphs-layout-options"] and
-    // details[data-drupal-selector="edit-behavior-plugins"]. They both have a
-    // summary of role="button" to click.
-    $xpath = '//details[@data-drupal-selector="layout-paragraphs-layout-options"]//summary[@role="button"]';
-    $this->getSession()->getPage()->find('xpath', $xpath)->click();
-    $xpath = '//details[@data-drupal-selector="edit-behavior-plugins"]//summary[@role="button"]';
-    $this->getSession()->getPage()->find('xpath', $xpath)->click();
+    // Expand both the "Layout options" and "Settings" fieldsets.
+    $modalContent->findButton('Layout Options')->click();
+    $modalContent->findButton('Settings')->click();
 
     // Fill in the available fields.
     foreach ($layout_properties->getRowsHash() as $property => $value) {
@@ -118,17 +119,20 @@ class JoinupLayoutParagraphsContext extends RawDrupalContext {
       assertTrue(isset(self::LAYOUT_PROPERTIES_MAP[strtolower($property)]), "The layout property '$property' is not defined in the context.");
       $type = self::LAYOUT_PROPERTIES_MAP[strtolower($property)];
       if ($type == 'select') {
-        $this->getSession()->getPage()->selectFieldOption($property, $value);
+        $modalContent->selectFieldOption($property, $value);
       }
       else {
-        $this->getSession()->getPage()->fillField($property, $value);
+        $modalContent->fillField($property, $value);
       }
     }
 
     // Finally, click the "Save" button to add the paragraph.
-    $this->getSession()->getPage()->find('css', '.ui-dialog-buttonpane')->pressButton('Save');
+    $modalButtons = $this->getRegion('Modal buttons');
+    $this->scrollElementIntoView($modalButtons);
+    $modalButtons->findButton('Save')->press();
+
     // Wait until the button pane is gone.
-    $this->getSession()->wait(5000, "document.querySelector('.ui-dialog-buttonpane') === null");
+    $this->assertModalToClose();
   }
 
   /**
