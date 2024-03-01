@@ -82,6 +82,7 @@ class OssSolutionListingPageTest extends FetchTestBase {
     $assert_session->fieldExists('Source Catalogue');
     $assert_session->fieldExists('Language');
     $assert_session->fieldExists('Published');
+    $assert_session->fieldExists('Archived');
     $assert_session->buttonExists('Filter');
 
     $table = $assert_session->elementExists('css', '.views-element-container table.vbo-table tbody');
@@ -96,6 +97,7 @@ class OssSolutionListingPageTest extends FetchTestBase {
           'Developers Italia',
           'EN, DE, IT',
           'Yes',
+          'No',
           '',
         ],
         [
@@ -106,6 +108,7 @@ class OssSolutionListingPageTest extends FetchTestBase {
           'Developers Italia',
           'EN, DE, IT',
           'Yes',
+          'No',
           '',
         ],
         [
@@ -116,6 +119,7 @@ class OssSolutionListingPageTest extends FetchTestBase {
           'Developers Italia',
           'EN, DE, IT',
           'Yes',
+          'No',
           '',
         ],
         [
@@ -126,6 +130,7 @@ class OssSolutionListingPageTest extends FetchTestBase {
           'Developers Italia',
           'EN, DE',
           'Yes',
+          'No',
           '',
         ],
       ],
