@@ -43,9 +43,9 @@
 #}
 {% if is_html %}
 <html>
-  <head>
-    {% include '@ventuno/parts/inline-styles.html.twig' %}
-  </head>
+  <style>
+    {{ source('@ventuno/../assets/css/emails/mail.min.css') }}
+  </style>
   <body>
     <table role="presentation">
       <thead>

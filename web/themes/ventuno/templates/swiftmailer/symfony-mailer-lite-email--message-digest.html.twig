@@ -32,7 +32,9 @@
 #}
 <html>
 <head>
-  {% include '@ventuno/parts/inline-styles.html.twig' %}
+  <style>
+    {{ source('@ventuno/../assets/css/emails/mail.min.css') }}
+  </style>
 </head>
 <body>
   <table>
