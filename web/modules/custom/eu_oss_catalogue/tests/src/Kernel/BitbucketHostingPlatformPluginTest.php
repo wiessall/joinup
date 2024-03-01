@@ -130,19 +130,19 @@ class BitbucketHostingPlatformPluginTest extends KernelTestBase implements Logge
       [
         'debug' => [
           [
+            'message' => "Cannot fetch number of PRs of '%repository' on '%base_url'.",
+            'context' => [
+              '%repository' => 'test_namespace/baz',
+              '%base_url' => 'https://bitbucket.org',
+            ],
+          ],
+          [
             'message' => "Cannot find the '%filename' file in '%repository' on '%base_url' in branch / tag / commit '%reference'.",
             'context' => [
               '%filename' => 'publiccode.yml',
               '%repository' => 'test_namespace/baz',
               '%base_url' => 'https://bitbucket.org',
               '%reference' => 'master',
-            ],
-          ],
-          [
-            'message' => "Cannot fetch number of PRs of '%repository' on '%base_url'.",
-            'context' => [
-              '%repository' => 'test_namespace/baz',
-              '%base_url' => 'https://bitbucket.org',
             ],
           ],
         ],
