@@ -266,16 +266,18 @@ drupal:
       Permissions: |
         $settings['skip_permissions_hardening'] = TRUE;
       Null mail collector: |
-        $config['symfony_mailer_lite.settings']['default_transport'] = 'null';
+        $config['system.mail']['interface']['default'] = 'null';
+        $config['mailsystem.settings']['defaults']['sender'] = 'null';
       Development mail collector: |
-        $config['symfony_mailer_lite.settings']['default_transport'] = 'native';
+        $config['system.mail']['interface']['default'] = 'php_mail';
+        $config['mailsystem.settings']['defaults']['sender'] = 'php_mail';
       Test mail collector: |
         $config['system.mail']['interface']['default'] = 'test_mail_collector';
         $config['mailsystem.settings']['defaults']['sender'] = 'test_mail_collector';
+      Mail transport: |
+        $config['mailsystem.settings']['defaults']['sender'] = 'php_mail';
       Site email:
         $config['system.site']['mail'] = getenv('DRUPAL_SITE_MAIL');
-      Mail transport: |
-        $config['symfony_mailer_lite.settings']['default_transport'] = 'sendmail';
       Search API: |
         // Adding a fallback for the scheme in case it is not properly
         // consumed by the production environment.
