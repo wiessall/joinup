@@ -190,7 +190,8 @@
             "web/modules/contrib/message_digest/src/Traits/MessageDigestTrait.php",
             "web/modules/contrib/og_menu/src/Tests/Traits/OgMenuTrait.php",
             "web/modules/contrib/pipeline/src/Traits/PipelineContextTrait.php",
-            "web/modules/contrib/spdx/src/Traits/SpdxContextTrait.php"
+            "web/modules/contrib/spdx/src/Traits/SpdxContextTrait.php",
+            "scripts/composer/ComposerPatches.php"
         ],
         "files": [
             "src/Composer/load.environment.php"
@@ -207,9 +208,11 @@
     },
     "scripts": {
         "post-install-cmd": [
+            "Joinup\\composer\\ComposerPatches::validate",
             "./scripts/composer/post_install"
         ],
         "post-update-cmd": [
+            "Joinup\\composer\\ComposerPatches::validate",
             "./scripts/composer/post_update"
         ]
     },
