@@ -6,6 +6,7 @@ namespace Drupal\eu_oss_catalogue;
 
 use Drupal\Component\Plugin\PluginBase;
 use Drupal\Core\Config\Entity\ThirdPartySettingsInterface;
+use Drupal\Core\Datetime\DrupalDateTime;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Language\LanguageInterface;
@@ -100,6 +101,9 @@ abstract class EuOssCatalogueParserPluginBase extends PluginBase implements EuOs
       // add metadata to the final stored node via resolvers.
       $metadata = $this->getMetadata($project);
 
+      $latestReleaseDate = $project->latestReleaseDate ?
+        new DrupalDateTime($project->latestReleaseDate) : NULL;
+
       $solution
         ->set('title', $this->getTitle($project, $metadata))
         ->set('oss_git_url', $project->url)
@@ -109,7 +113,7 @@ abstract class EuOssCatalogueParserPluginBase extends PluginBase implements EuOs
         ->set('oss_git_stars', $project->numberOfStars)
         ->set('oss_git_open_issues', $project->numberOfIssues)
         ->set('oss_software_version', $project->latestReleaseTag)
-        ->set('oss_release_date', $project->latestReleaseDate)
+        ->set('oss_release_date', $latestReleaseDate?->format('Y-m-d'))
         ->set('oss_platform_reference', $project->platformReference)
         ->set('oss_git_description', [
           'value' => $project->description,

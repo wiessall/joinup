@@ -30,8 +30,8 @@ GitHub solution 2:
     oss_git_url: https://github.com/dummy-namespace-2/dummy-name-2
     oss_git_description: Description of GitHub solution 2
     oss_default_branch: default-branch-of-GitHub-solution-2
-    oss_software_version: 'v3.5.1'
-    oss_release_date: '2022-09-09'
+    oss_software_version: 'v2.4'
+    oss_release_date: '2016-02-09'
     oss_platform_reference: GitHub-solution-2-internal-ID
     oss_logo: https://repository-images.githubusercontent.com/234234234/012345678901234567890123456789012345
     oss_git_forks: 102
