@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "572b8f8e0700ab37131e4e9f3e04088b",
+    "content-hash": "f364434e85ad34fdcf75b39622420c7f",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -1548,6 +1548,10 @@
                 "GPL-2.0+"
             ],
             "authors": [
+                {
+                    "name": "danrod",
+                    "homepage": "https://www.drupal.org/user/19150"
+                },
                 {
                     "name": "gaurav.kapoor",
                     "homepage": "https://www.drupal.org/user/3495331"
@@ -6878,7 +6882,7 @@
             "extra": {
                 "drupal": {
                     "version": "8.x-1.5",
-                    "datestamp": "1706173589",
+                    "datestamp": "1708605536",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
