@@ -24,7 +24,7 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
  * Usage:
  * @code
  * $graph1 = new Graph();
- * $grap1->parseFile('...);
+ * $graph1->parseFile('...');
  * $graph2 = $graphStore->get('http://example.com');
  * \Drupal::service('joinup_taxonomy.vocabulary_updater')
  *   ->registerGraph('http://graph1', $graph1)
@@ -211,7 +211,7 @@ class VocabularyUpdater {
    *
    * @return array[]
    *   Associative array keyed by vocabulary ID having. Values are arrays with
-   *   the number if inserted, updated and deleted terms.
+   *   the number of inserted, updated and deleted terms.
    */
   protected function updateFromGraph(array $vids, Graph $graph): array {
     /** @var \Drupal\taxonomy\VocabularyStorageInterface $vocabularyStorage */
@@ -232,22 +232,22 @@ class VocabularyUpdater {
       $this->eventDispatcher->dispatch($event);
 
       // Extract terms from graph.
-      $terms = $this->getTerms($vid, $rdfType, $graph);
+      $termsValues = $this->getTermsValues($vid, $rdfType, $graph);
 
-      foreach ($terms as $term) {
-        if ($existingTerm = $this->mapper->getEntityByUri($term['uri'])) {
+      foreach ($termsValues as $values) {
+        if ($existingTerm = $this->mapper->getEntityByUri($values['uri'])) {
           $existingTerm->delete();
           $results[$vid]['updated']++;
         }
         else {
           $results[$vid]['inserted']++;
         }
-        $termStorage->create($term)->save();
+        $termStorage->create($values)->save();
       }
 
       if ($isLockedVocabulary) {
         // Locked vocabularies: remove existing terms missing from the graph.
-        $processed = array_column($terms, 'uri');
+        $processed = array_column($termsValues, 'uri');
         $existing = $this->mapper->getUrisByEntityType('taxonomy_term', $vid);
         $tidsToRemove = array_keys(array_diff($existing, $processed));
         if ($tidsToRemove) {
@@ -261,7 +261,7 @@ class VocabularyUpdater {
   }
 
   /**
-   * Processes the graph and return a list of terms.
+   * Returns a list of values needed for term entity creation.
    *
    * @param string $vid
    *   The RDF graph.
@@ -271,14 +271,14 @@ class VocabularyUpdater {
    *   The batch context passed by reference.
    *
    * @return array
-   *   A list of terms as arrays. Each array is suitable to be passed to the
-   *   Term::create() method.
+   *   A list of term values as arrays. Each array is suitable to be passed to
+   *   the term storage TermStorage::create() method.
    */
-  private function getTerms(string $vid, string $rdfType, Graph $graph): array {
+  private function getTermsValues(string $vid, string $rdfType, Graph $graph): array {
     $fieldStorageDefinitions = $this->fieldManager->getFieldStorageDefinitions('taxonomy_term');
     $fieldDefinitions = $this->fieldManager->getFieldDefinitions('taxonomy_term', $vid);
 
-    $terms = [];
+    $termsValues = [];
     // For performance reasons, we assign TIDs to terms before they are saved,
     // so that we can compute the entity reference fields between terms (parent,
     // related, etc.) without needing successive entity saves. Getting and using
@@ -296,7 +296,7 @@ class VocabularyUpdater {
       }
 
       $references = [];
-      $term = [
+      $values = [
         'tid' => $tid++,
         'revision_id' => $revision_id++,
         'vid' => $vid,
@@ -304,7 +304,7 @@ class VocabularyUpdater {
       ];
 
       // Register the URI > TID mapping (used to resolve references).
-      $this->uriToTid[$resource->getUri()] = (int) $term['tid'];
+      $this->uriToTid[$resource->getUri()] = (int) $values['tid'];
 
       $mappings = $this->mapper->getMappings('taxonomy_term', $vid);
       // Already added.
@@ -327,7 +327,7 @@ class VocabularyUpdater {
 
           $isFormattedText = is_a($fieldTypePlugin['class'], TextItemBase::class, TRUE);
           // Change 'processed' to 'value' on data import.
-          $columnName = $isFormattedText && $columnName === 'processed' ? 'value' : $columnName;
+          $columnName = ($isFormattedText && $columnName === 'processed') ? 'value' : $columnName;
 
           $property = RdfNamespace::shorten($mapping->predicate, TRUE) ?? $mapping->predicate;
           if ($graph->hasProperty($resource, $property)) {
@@ -344,10 +344,10 @@ class VocabularyUpdater {
                 // Register the path to field item to be resolved later.
                 $references[] = [$fieldName, $delta, $columnName];
               }
-              $term[$fieldName][$delta][$columnName] = $value;
+              $values[$fieldName][$delta][$columnName] = $value;
               if ($isFormattedText) {
                 // Special treatment for formatted text fields.
-                $term[$fieldName][$delta]['format'] = filter_default_format();
+                $values[$fieldName][$delta]['format'] = filter_default_format();
               }
               $delta++;
             }
@@ -357,39 +357,39 @@ class VocabularyUpdater {
 
       // Some vocabularies are using reverse references, from parent to child.
       // @see skos:Collection
-      $term['_children'] = array_map(function (Resource $child): string {
+      $values['_children'] = array_map(function (Resource $child): string {
         return $child->getUri();
       }, $resource->allResources('skos:member'));
 
-      $term['_references'] = $references;
-      $terms[$resource->getUri()] = $term;
+      $values['_references'] = $references;
+      $termsValues[$resource->getUri()] = $values;
     }
 
-    foreach ($terms as &$term) {
+    foreach ($termsValues as &$values) {
       // Convert reverse references to normal 'parent' references.
-      foreach ($term['_children'] as $childUri) {
-        if (isset($terms[$childUri])) {
-          $terms[$childUri]['parent'] = $term['tid'];
+      foreach ($values['_children'] as $childUri) {
+        if (isset($termsValues[$childUri])) {
+          $termsValues[$childUri]['parent'] = $values['tid'];
         }
       }
-      unset($term['_children']);
+      unset($values['_children']);
 
       // Replace all reference URIs to TIDs. Remove dead references.
-      foreach ($term['_references'] as $trail) {
-        $targetUri = NestedArray::getValue($term, $trail);
+      foreach ($values['_references'] as $trail) {
+        $targetUri = NestedArray::getValue($values, $trail);
         if (isset($this->uriToTid[$targetUri])) {
           // Convert URI to TID.
-          NestedArray::setValue($term, $trail, $this->uriToTid[$targetUri]);
+          NestedArray::setValue($values, $trail, $this->uriToTid[$targetUri]);
         }
         else {
           // Dead references are removed.
-          NestedArray::unsetValue($term, $trail);
+          NestedArray::unsetValue($values, $trail);
         }
       }
-      unset($term['_references']);
+      unset($values['_references']);
     }
 
-    return $terms;
+    return $termsValues;
   }
 
   /**
