@@ -486,7 +486,7 @@ class FeatureContext extends RawDrupalContext {
       catch (UnsupportedDriverActionException | UnsupportedDrupalDriverActionException) {
       }
     }
-    throw new \Exception();
+    Assert::assertTrue($this->hasImage($filename, $element));
   }
 
   /**
