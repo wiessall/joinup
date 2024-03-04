@@ -217,6 +217,9 @@ class EuOssCatalogue implements EuOssCatalogueInterface {
     if ($operationResult === SAVED_NEW) {
       $loggerArguments = [
         '@solution' => $solution->label(),
+        'oss_landing_url' => $solution->get('oss_landing_url')->getString(),
+        'oss_solution' => $solution->id(),
+        'oss_source' => $provider->getPluginId(),
       ];
       $this->logger->info('Solution @solution was created.', $loggerArguments);
     }
