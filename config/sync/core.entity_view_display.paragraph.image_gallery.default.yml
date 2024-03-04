@@ -23,13 +23,13 @@ content:
     type: colorbox_responsive
     label: hidden
     settings:
-      colorbox_responsive_node_style: image_gallery
       colorbox_image_style: ''
-      colorbox_responsive_image_style: highlighted_content
       colorbox_gallery: field_post
       colorbox_gallery_custom: ''
       colorbox_caption: auto
       colorbox_caption_custom: ''
+      colorbox_responsive_node_style: image_gallery
+      colorbox_responsive_image_style: highlighted_content
     third_party_settings:
       field_delimiter:
         delimiter: ''
