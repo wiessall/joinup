@@ -35,10 +35,14 @@ index 9a9a293..f40b1e9 100644
    ];
  }
 diff --git a/colorbox.theme.inc b/colorbox.theme.inc
-index 6b216e2..23c9a87 100644
+index 6b216e2..fe4ab01 100644
 --- a/colorbox.theme.inc
 +++ b/colorbox.theme.inc
-@@ -8,6 +8,7 @@
+@@ -5,9 +5,11 @@
+  * Colorbox theme functions.
+  */
+ 
++use Drupal\Component\Utility\Crypt;
  use Drupal\file\Entity\File;
  use Drupal\image\Entity\ImageStyle;
  use Drupal\Component\Utility\Xss;
@@ -46,7 +50,7 @@ index 6b216e2..23c9a87 100644
  
  /**
   * Prepares variables for colorbox formatter templates.
-@@ -21,12 +22,8 @@ use Drupal\Component\Utility\Xss;
+@@ -21,12 +23,8 @@ use Drupal\Component\Utility\Xss;
   *     placed in the img tag.
   *   - entity: An entity object.
   *   - settings: Formatter settings array.
@@ -59,7 +63,7 @@ index 6b216e2..23c9a87 100644
    $item = $variables['item'];
    $item_attributes = $variables['item_attributes'] ?? [];
    $entity = $variables['entity'];
-@@ -35,60 +32,6 @@ function template_preprocess_colorbox_formatter(&$variables) {
+@@ -35,60 +33,6 @@ function template_preprocess_colorbox_formatter(&$variables) {
    $classes_array = ['colorbox'];
    $data_cbox_img_attrs = [];
  
@@ -120,7 +124,7 @@ index 6b216e2..23c9a87 100644
  
    $gallery_id = \Drupal::service('colorbox.gallery_id_generator')->generateId($entity, $item, $settings);
  
-@@ -139,6 +82,190 @@ function template_preprocess_colorbox_formatter(&$variables) {
+@@ -139,6 +83,190 @@ function template_preprocess_colorbox_formatter(&$variables) {
      $variables['url'] = $file_url_generator->generateAbsoluteString($image_uri);
    }
  
@@ -145,7 +149,7 @@ index 6b216e2..23c9a87 100644
 + *   - entity: An entity object.
 + *   - settings: Formatter settings array.
 + */
-+function template_preprocess_colorbox_responsive_formatter(&$variables) {
++function template_preprocess_colorbox_responsive_formatter(array &$variables) {
 +  $colorbox_inline = \Drupal::moduleHandler()->moduleExists('colorbox_inline');
 +
 +  $item = $variables['item'];
@@ -201,13 +205,13 @@ index 6b216e2..23c9a87 100644
 +    $variables['responsive_image']['#attributes'] = $attributes + $item_attributes;
 +  }
 +
-+  // $variables['responsive_image'] = $variables['image_id'] = '';
 +  $responsive_style = NULL;
 +  if (!empty($settings['colorbox_responsive_image_style'])) {
 +    $responsive_style = ResponsiveImageStyle::load($settings['colorbox_responsive_image_style']);
 +  }
 +
-+  // Since responsive images don't have an external url, link to internal content.
++  // Since responsive images don't have an external url, link to internal
++  // content.
 +  if ($colorbox_inline && $responsive_style) {
 +    // Create a unique internal link for the picture tag.
 +    // We use a short token since randomness is not critical.
@@ -311,7 +315,7 @@ index 6b216e2..23c9a87 100644
    // If File Entity module is enabled, load attribute values from file entity.
    if (\Drupal::moduleHandler()->moduleExists('file_entity')) {
      // File id of the save file.
-@@ -156,10 +283,14 @@ function template_preprocess_colorbox_formatter(&$variables) {
+@@ -156,10 +284,14 @@ function template_preprocess_colorbox_formatter(&$variables) {
      }
    }
  
@@ -331,12 +335,60 @@ index 6b216e2..23c9a87 100644
 +  return Xss::filter($caption);
  }
 +
+diff --git a/config/schema/colorbox.schema.yml b/config/schema/colorbox.schema.yml
+index 11776a3..62f1378 100644
+--- a/config/schema/colorbox.schema.yml
++++ b/config/schema/colorbox.schema.yml
+@@ -1,13 +1,6 @@
+-field.formatter.settings.colorbox:
++colorbox.formatter_base:
+   type: mapping
+-  label: 'Entity reference field formatter settings.'
+   mapping:
+-    colorbox_node_style:
+-      type: string
+-      label: 'Node Style'
+-    colorbox_node_style_first:
+-      type: string
+-      label: 'Node style first'
+     colorbox_image_style:
+       type: string
+       label: 'Image style'
+@@ -24,6 +17,28 @@ field.formatter.settings.colorbox:
+       type: string
+       label: 'Caption custom'
+ 
++field.formatter.settings.colorbox:
++  type: colorbox.formatter_base
++  label: 'Entity reference field formatter settings.'
++  mapping:
++    colorbox_node_style:
++      type: string
++      label: 'Node Style'
++    colorbox_node_style_first:
++      type: string
++      label: 'Node style first'
++
++field.formatter.settings.colorbox_responsive:
++  type: colorbox.formatter_base
++  label: 'Entity reference field formatter settings.'
++  mapping:
++    colorbox_responsive_node_style:
++      type: string
++      label: 'Node responsive image style'
++    colorbox_responsive_image_style:
++      type: string
++      label: 'Responsive image style'
++
+ colorbox.settings:
+   type: config_object
+   label: 'Colorbox settings'
 diff --git a/src/Plugin/Field/FieldFormatter/ColorboxResponsiveFormatter.php b/src/Plugin/Field/FieldFormatter/ColorboxResponsiveFormatter.php
 new file mode 100644
-index 0000000..3d3790f
+index 0000000..3dc5b1e
 --- /dev/null
 +++ b/src/Plugin/Field/FieldFormatter/ColorboxResponsiveFormatter.php
-@@ -0,0 +1,465 @@
+@@ -0,0 +1,461 @@
 +<?php
 +
 +namespace Drupal\colorbox\Plugin\Field\FieldFormatter;
@@ -349,15 +401,11 @@ index 0000000..3d3790f
 +use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 +use Drupal\Core\Session\AccountInterface;
 +use Drupal\Core\Url;
-+use Drupal\image\Entity\ImageStyle;
 +use Symfony\Component\DependencyInjection\ContainerInterface;
 +use Drupal\Core\Form\FormStateInterface;
 +use Drupal\Core\Cache\Cache;
 +use Drupal\colorbox\ElementAttachmentInterface;
 +use Drupal\image\Plugin\Field\FieldFormatter\ImageFormatterBase;
-+use Drupal\responsive_image\Entity\ResponsiveImageStyle;
-+
-+// Use Drupal\Core\Utility\LinkGeneratorInterface;.
 +
 +/**
 + * Plugin for responsive image formatter.
@@ -381,7 +429,9 @@ index 0000000..3d3790f
 +  protected $currentUser;
 +
 +  /**
-+   * @var EntityStorageInterface
++   * Storage of responsive image styles.
++   *
++   * @var \Drupal\Core\Entity\EntityStorageInterface
 +   */
 +  protected $responsiveImageStyleStorage;
 +
@@ -393,7 +443,7 @@ index 0000000..3d3790f
 +  protected $imageStyleStorage;
 +
 +  /**
-+   *  Allow the library to be attached to the page.
++   * Colorbox attachment object of the output.
 +   *
 +   * @var \Drupal\colorbox\ElementAttachmentInterface
 +   */
@@ -468,14 +518,14 @@ index 0000000..3d3790f
 +   */
 +  public static function defaultSettings() {
 +    return [
-+        'colorbox_responsive_node_style' => '',
-+        'colorbox_image_style' => '',
-+        'colorbox_responsive_image_style' => '',
-+        'colorbox_gallery' => 'post',
-+        'colorbox_gallery_custom' => '',
-+        'colorbox_caption' => 'auto',
-+        'colorbox_caption_custom' => '',
-+      ] + parent::defaultSettings();
++      'colorbox_responsive_node_style' => '',
++      'colorbox_image_style' => '',
++      'colorbox_responsive_image_style' => '',
++      'colorbox_gallery' => 'post',
++      'colorbox_gallery_custom' => '',
++      'colorbox_caption' => 'auto',
++      'colorbox_caption_custom' => '',
++    ] + parent::defaultSettings();
 +  }
 +
 +  /**
@@ -486,6 +536,10 @@ index 0000000..3d3790f
 +    $description_link = Link::fromTextAndUrl(
 +      $this->t('Configure Image Styles'),
 +      Url::fromRoute('entity.image_style.collection')
++    );
++    $responsive_image_admin_link = Link::fromTextAndUrl(
++      $this->t('Configure Responsive Image Styles'),
++      Url::fromRoute('entity.responsive_image_style.collection')
 +    );
 +    $responsive_image_options = [];
 +    $responsive_image_styles = $this->responsiveImageStyleStorage->loadMultiple();
@@ -503,8 +557,7 @@ index 0000000..3d3790f
 +      '#default_value' => $this->getSetting('colorbox_responsive_node_style'),
 +      '#required' => TRUE,
 +      '#options' => $responsive_image_options,
-+      '#description' => [
-+        // '#markup' => $this->linkGenerator->generate($this->t('Configure Responsive Image Styles'), new Url('entity.responsive_image_style.collection')),
++      '#description' => $responsive_image_admin_link->toRenderable() + [
 +        '#access' => $this->currentUser->hasPermission('administer responsive image styles'),
 +      ],
 +    ];
@@ -515,8 +568,8 @@ index 0000000..3d3790f
 +      '#empty_option' => $this->t('None (original image)'),
 +      '#options' => $image_styles,
 +      '#description' => $description_link->toRenderable() + [
-+          '#access' => $this->currentUser->hasPermission('administer image styles'),
-+        ],
++        '#access' => $this->currentUser->hasPermission('administer image styles'),
++      ],
 +    ];
 +    $element['colorbox_responsive_image_style'] = [
 +      '#title' => $this->t('Responsive image style for Colorbox'),
@@ -524,8 +577,7 @@ index 0000000..3d3790f
 +      '#default_value' => $this->getSetting('colorbox_responsive_image_style'),
 +      '#required' => TRUE,
 +      '#options' => $responsive_image_options,
-+      '#description' => [
-+        // '#markup' => $this->linkGenerator->generate($this->t('Configure Responsive Image Styles'), new Url('entity.responsive_image_style.collection')),
++      '#description' => $responsive_image_admin_link->toRenderable() + [
 +        '#access' => $this->currentUser->hasPermission('administer responsive image styles'),
 +      ],
 +    ];
@@ -661,15 +713,11 @@ index 0000000..3d3790f
 +    unset($image_styles['']);
 +    // Styles could be lost because of enabled/disabled modules that defines.
 +    // their styles in code.
-+
 +    $responsive_image_styles = $this->responsiveImageStyleStorage->loadMultiple();
 +
 +    if (isset($responsive_image_styles[$this->getSetting('colorbox_responsive_node_style')])) {
 +      $summary[] = $this->t('Responsive content image style: @style', ['@style' => $responsive_image_styles[$this->getSetting('colorbox_responsive_node_style')]->label()]);
 +    }
-+    // elseif ($this->getSetting('colorbox_responsive_node_style') == 'hide') {
-+    //   $summary[] = $this->t('Responsive content image style: Hide');
-+    // }
 +    else {
 +      $summary[] = $this->t('Responsive content image style: Original image');
 +    }
@@ -781,11 +829,11 @@ index 0000000..3d3790f
 +    $style_ids[] = $this->getSetting('colorbox_image_style');
 +    /** @var \Drupal\image\ImageStyleInterface $style */
 +    foreach ($style_ids as $style_id) {
-+      if ($style_id && $style = ResponsiveImageStyle::load($style_id)) {
++      if ($style_id && $style = $this->responsiveImageStyleStorage->load($style_id)) {
 +        // Add the responsive image style as dependency.
 +        $dependencies[$style->getConfigDependencyKey()][] = $style->getConfigDependencyName();
 +      }
-+      if ($style_id && $style = ImageStyle::load($style_id)) {
++      if ($style_id && $style = $this->imageStyleStorage->load($style_id)) {
 +        // Add the responsive image style as dependency.
 +        $dependencies[$style->getConfigDependencyKey()][] = $style->getConfigDependencyName();
 +      }

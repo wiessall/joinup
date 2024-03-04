@@ -264,7 +264,7 @@
             },
             "drupal/colorbox": {
                 "Replace README.txt with README.md @see https://drupal.org/i/3315327": "resources/patch/php/drupal/colorbox/3315327-mr25-merged.diff",
-                "Support Responsive Image module in D8 @see https://drupal.org/i/2808883": "resources/patch/php/drupal/colorbox/colorbox-responsive-image-2808883-64.patch"
+                "Support Responsive Image module in D8 @see https://drupal.org/i/2808883": "resources/patch/php/drupal/colorbox/colorbox-responsive-image-2808883-68.patch"
             },
             "drupal/core": {
                 "Allow image style to be selected in text editor @see https://www.drupal.org/node/2061377": "resources/patch/php/drupal/core/2061377-d10.2-455.diff",
