@@ -4,6 +4,15 @@ dependencies:
   config:
     - field.storage.node.oss_software_version
     - node.type.oss_solution
+third_party_settings:
+  eu_oss_catalogue:
+    publiccode_yml:
+      override: preserve_not_empty
+      resolvers:
+        -
+          plugin: default
+          config:
+            path: softwareVersion
 id: node.oss_solution.oss_software_version
 field_name: oss_software_version
 entity_type: node
