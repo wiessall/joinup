@@ -66,7 +66,8 @@ function _ventuno_preprocess_tile(array &$variables, string $entity_type_id): vo
     $variables['text'] = $entity instanceof DescriptionInterface && isset($variables['content'][$entity->getDescriptionField()]) ? $variables['content'][$entity->getDescriptionField()] : NULL;
 
     // Use abstract if possible.
-    if ($entity instanceof AbstractInterface && !$entity->get($entity->getAbstractField())->isEmpty()) {
+    if ($entity instanceof AbstractInterface && !$entity->get($entity->getAbstractField())->isEmpty()
+      && isset($variables['content'][$entity->getAbstractField()])) {
       $variables['text'] = $variables['content'][$entity->getAbstractField()];
     }
   }
