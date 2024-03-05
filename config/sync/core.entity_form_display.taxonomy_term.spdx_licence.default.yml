@@ -50,3 +50,4 @@ hidden:
   langcode: true
   path: true
   status: true
+  uri: true
