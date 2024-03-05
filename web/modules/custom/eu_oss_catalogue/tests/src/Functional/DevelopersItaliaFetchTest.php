@@ -93,10 +93,11 @@ class DevelopersItaliaFetchTest extends FetchTestBase {
     // Provided no longer has "Project 1.1", so it should be archived.
     $this->fetchSolutions('removing_solution_provider', 0);
 
-    $solution2 = $this->getNodeByTitle('Project 1.1', TRUE);
-    $this->assertNotFalse($solution2);
-    $this->assertSame('1', $solution2->get('oss_archived')->getString());
-    $this->assertSame(0, $solution2->get('oss_source')->count());
+    $solutionArchived = $this->getNodeByTitle('Project 1.1', TRUE);
+    $this->assertNotFalse($solutionArchived);
+    $this->assertSame('1', $solutionArchived->get('oss_archived')->getString());
+    $this->assertSame(0, $solutionArchived->get('oss_source')->count());
+    $this->assertSame('Archive, because removed (not present anymore) from "Removing solution provider" source/catalogue', $solutionArchived->getRevisionLogMessage());
   }
 
   /**
