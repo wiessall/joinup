@@ -121,7 +121,8 @@ class WebtoolsAnalyticsSubscriber implements EventSubscriberInterface {
 
     if ($keys = $this->currentRequest->get('keys')) {
       $search_data = $event->getSearch();
-      $search_data->setKeyword($keys);
+      // Resolve malformed UTF-8 characters, possibly incorrectly encoded.
+      $search_data->setKeyword(mb_convert_encoding($keys, 'UTF-8', 'UTF-8'));
       if ($total_rows = $this->currentRequest->attributes->get('total_rows')) {
         $search_data->setCount($total_rows);
       }

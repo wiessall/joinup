@@ -839,6 +839,12 @@ Feature: Global search
     And I submit the search by pressing enter
     Then the site should not have log records with level lower than "notice"
 
+  Scenario: Regression test for type error.
+  See https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-8472
+
+    When I visit "/search?keys=1%00%C0%A7%C0%A2%252527%252522&page=18&sort_by=relevance"
+    Then I should get a 200 HTTP response
+
   @javascript
   Scenario: Search page - Show the abstract or description in the search results.
     Given the following owner:

@@ -21,3 +21,8 @@ services:
     arguments: ['@entity_type.manager']
     tags:
       - { name: event_subscriber }
+
+  joinup_community_content.about_request_subscriber:
+    class: Drupal\joinup_community_content\EventSubscriber\AboutPathRedirectSubscriber
+    tags:
+      - { name: event_subscriber }

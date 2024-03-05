@@ -67,7 +67,10 @@ Feature: "Add release" visibility options.
       | Release version field is required. |
 
     When I fill in "Name" with "Chasing shadows"
-    And I fill in "Release version" with "1.0"
+    And I press "Publish"
+    Then I should see the error message "Release version field is required."
+
+    When I fill in "Release version" with "1.0"
     And I fill in "Release notes" with "Changed release."
     # Ensure that the Status field is a dropdown.
     # @see: https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-3342
