@@ -108,14 +108,11 @@ Feature: Solutions Overview
     Then I should see the heading "Solutions"
     And I should see the text "A solution on Joinup is a framework, tool, or service either hosted directly on Joinup or federated from third-party repositories."
     And I should see the link "Non electronic health"
-    # This is now shown in the tile because the description is the backup for
-    # the abstract. Note though that this is not a normal behavior as the
-    # abstract is a mandatory field and this is here only for BC.
-    And I should see the text "Supports health-related fields"
+    And I should not see the text "Supports health-related fields"
     And I should see the link "Closed data"
-    And I should see the text "Facilitate access to data sets"
+    And I should not see the text "Facilitate access to data sets"
     And I should see the link "Isolating Europe"
-    And I should see the text "Reusable tools and services"
+    And I should not see the text "Reusable tools and services"
     And the page should be cacheable
 
     When I click "Non electronic health"
