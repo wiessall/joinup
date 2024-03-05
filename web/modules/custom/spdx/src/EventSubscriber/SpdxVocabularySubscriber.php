@@ -44,6 +44,12 @@ class SpdxVocabularySubscriber implements EventSubscriberInterface {
     }
   }
 
+  /**
+   * Alters the SPDX Licence triples during normalization.
+   *
+   * @param \Drupal\rdf_sync\Event\RdfSyncNormalizeEvent $event
+   *   The event.
+   */
   public function setLicenceAsType(RdfSyncNormalizeEvent $event): void {
     if ($event->getEntity() instanceof TermInterface && $event->getEntity()->bundle() === 'spdx_licence') {
       $normalizedArray = $event->getNormalizedArray();
@@ -51,6 +57,7 @@ class SpdxVocabularySubscriber implements EventSubscriberInterface {
       $normalizedArray[$subject]['http://www.w3.org/1999/02/22-rdf-syntax-ns#type'] = [
         (new Resource('http://spdx.org/rdf/terms#ListedLicense'))->toRdfPhp(),
       ];
+      // Undoing the addition from self::identifyAsTerm().
       unset($normalizedArray[$subject]['http://www.w3.org/2004/02/skos/core#inScheme']);
       $event->setNormalizedArray($normalizedArray);
     }
