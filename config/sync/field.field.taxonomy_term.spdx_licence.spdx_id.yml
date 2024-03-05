@@ -1,0 +1,19 @@
+uuid: c5c4a656-cfd7-4138-829a-d570823dc218
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.taxonomy_term.spdx_id
+    - taxonomy.vocabulary.spdx_licence
+id: taxonomy_term.spdx_licence.spdx_id
+field_name: spdx_id
+entity_type: taxonomy_term
+bundle: spdx_licence
+label: 'SPDX ID'
+description: 'The SPDX ID'
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

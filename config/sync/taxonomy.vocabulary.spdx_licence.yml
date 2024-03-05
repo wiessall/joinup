@@ -1,0 +1,37 @@
+uuid: 35ae478a-8000-46f8-82d4-e753a1eb59dc
+langcode: en
+status: true
+dependencies:
+  module:
+    - joinup_taxonomy
+third_party_settings:
+  joinup_taxonomy:
+    locked: true
+  rdf_sync:
+    type: 'http://spdx.org/rdf/terms#License'
+    uri_plugin: null
+    fields:
+      vid:
+        target_id:
+          predicate: 'http://www.w3.org/2004/02/skos/core#inScheme'
+          type: resource
+      name:
+        value:
+          predicate: 'http://spdx.org/rdf/terms#name'
+          type: null
+      spdx_id:
+        value:
+          predicate: 'http://spdx.org/rdf/terms#licenseId'
+          type: null
+      description:
+        processed:
+          predicate: 'http://spdx.org/rdf/terms#licenseTextHtml'
+          type: null
+      see_also:
+        uri:
+          predicate: 'http://www.w3.org/2000/01/rdf-schema#seeAlso'
+          type: null
+name: 'SPDX Licence'
+vid: spdx_licence
+description: 'See https://spdx.org/licenses'
+weight: 0
