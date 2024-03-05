@@ -45,6 +45,7 @@ class JoinupTaxonomyCommands extends DrushCommands {
     'EIRA_SKOS.rdf' => ['eira'],
     'filetypes-skos.rdf' => ['file_type'],
     'languages-skos.rdf' => ['language'],
+    'licenses.rdf' => ['spdx_licence'],
     'solution_category.rdf' => ['solution_category'],
   ];
 
@@ -137,25 +138,29 @@ class JoinupTaxonomyCommands extends DrushCommands {
 
     // Add the vocabulary entries.
     foreach (\Drupal::entityTypeManager()->getStorage('taxonomy_vocabulary')->loadMultiple($vids) as $vid => $vocabulary) {
-      $vocabularyUri = $this->mapper->getBundleRdfType('taxonomy_term', $vid);
-      $triples = [
-        $vocabularyUri => [
-          'http://www.w3.org/1999/02/22-rdf-syntax-ns#type' => [
-            (new Resource('http://www.w3.org/2004/02/skos/core#ConceptScheme'))->toRdfPhp(),
+      // Exception: spdx_licence.
+      if ($vid !== 'spdx_licence') {
+        $vocabularyUri = $this->mapper->getBundleRdfType('taxonomy_term', $vid);
+        $triples = [
+          $vocabularyUri => [
+            'http://www.w3.org/1999/02/22-rdf-syntax-ns#type' => [
+              (new Resource('http://www.w3.org/2004/02/skos/core#ConceptScheme'))->toRdfPhp(),
+            ],
+            'http://www.w3.org/2004/02/skos/core#prefLabel' => [
+              (new Literal($vocabulary->label(), 'en'))->toRdfPhp(),
+            ],
           ],
-          'http://www.w3.org/2004/02/skos/core#prefLabel' => [
-            (new Literal($vocabulary->label(), 'en'))->toRdfPhp(),
-          ],
-        ],
-      ];
-      RdfSyncConnection::updateTriples($triples);
+        ];
 
-      // Add 'eira' and 'adms' namespaces.
-      RdfNamespace::set('eira', 'http://data.europa.eu/dr8/');
-      RdfNamespace::set('adms', 'http://www.w3.org/ns/adms#');
+        RdfSyncConnection::updateTriples($triples);
 
-      $fixtureFileGraph->parse($triples, 'php');
-      $vocabularyUris[] = $vocabularyUri;
+        // Add 'eira' and 'adms' namespaces.
+        RdfNamespace::set('eira', 'http://data.europa.eu/dr8/');
+        RdfNamespace::set('adms', 'http://www.w3.org/ns/adms#');
+
+        $fixtureFileGraph->parse($triples, 'php');
+        $vocabularyUris[] = $vocabularyUri;
+      }
     }
 
     // We already have a Drush command. Use it.
