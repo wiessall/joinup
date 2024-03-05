@@ -120,10 +120,11 @@ class DevelopersItaliaFetchTest extends FetchTestBase {
     // but the source should be removed.
     $this->fetchSolutions('removing_solution_provider', 0);
 
-    $solution2 = $this->getNodeByTitle('Project 1.1', TRUE);
-    $this->assertNotEmpty($solution2);
-    $this->assertSame('0', $solution2->get('oss_archived')->getString());
-    $this->assertSame(1, $solution2->get('oss_source')->count());
+    $removedSolution = $this->getNodeByTitle('Project 1.1', TRUE);
+    $this->assertNotEmpty($removedSolution);
+    $this->assertSame('0', $removedSolution->get('oss_archived')->getString());
+    $this->assertSame(1, $removedSolution->get('oss_source')->count());
+    $this->assertSame('Update, because of the only removal "Removing solution provider" source/catalogue', $removedSolution->getRevisionLogMessage());
   }
 
   /**
