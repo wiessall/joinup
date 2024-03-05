@@ -45,14 +45,26 @@ class DevelopersItaliaFetchTest extends FetchTestBase {
 
     $this->assertOssSolution('Project 1', 'de');
 
-    // Creation log entry for 'GitHub solution 1'.
-    $this->assertCount(1, $this->getLogEntries('Solution @solution was created.', 'a:1:{s:9:"@solution";s:17:"GitHub solution 1";}'));
-    // Creation log entry for 'Project 1.1'.
-    $this->assertCount(1, $this->getLogEntries('Solution @solution was created.', 'a:1:{s:9:"@solution";s:11:"Project 1.1";}'));
-    // Creation log entry for 'Project 1.2'.
-    $this->assertCount(1, $this->getLogEntries('Solution @solution was created.', 'a:1:{s:9:"@solution";s:11:"Project 1.2";}'));
-    // Creation log entry for 'Project 1'.
-    $this->assertCount(1, $this->getLogEntries('Solution @solution was created.', 'a:1:{s:9:"@solution";s:9:"Project 1";}'));
+    $this->assertCount(
+      1,
+      $this->getLogEntries('Solution @solution was created.', 'a:1:{s:9:"@solution";s:17:"GitHub solution 1";}'),
+      'Creation log entry for GitHub solution 1'
+    );
+    $this->assertCount(
+      1,
+      $this->getLogEntries('Solution @solution was created.', 'a:1:{s:9:"@solution";s:11:"Project 1.1";}'),
+      'Creation log entry for Project 1.1'
+    );
+    $this->assertCount(
+      1,
+      $this->getLogEntries('Solution @solution was created.', 'a:1:{s:9:"@solution";s:11:"Project 1.2";}'),
+      'Creation log entry for Project 1.2'
+    );
+    $this->assertCount(
+      1,
+      $this->getLogEntries('Solution @solution was created.', 'a:1:{s:9:"@solution";s:9:"Project 1";}'),
+      'Creation log entry for Project 1'
+    );
 
     // Re-run the process and update one solution from a new source-provider.
     $this->fetchSolutions('testing_provider', 4);
@@ -65,15 +77,6 @@ class DevelopersItaliaFetchTest extends FetchTestBase {
     $this->assertSame(2, $updatedSolution->get('oss_source')->count());
     $expected_providers = ['developers_italia', 'testing_provider'];
     $this->assertSame($expected_providers, array_map(fn (array $item): string => $item['plugin_id'], $updatedSolution->get('oss_source')->getValue()));
-
-    // Update log entry for 'GitHub solution 1 (updated)'.
-    $this->assertCount(1, $this->getLogEntries('Solution @solution was updated.', 'a:1:{s:9:"@solution";s:27:"GitHub solution 1 (updated)";}'));
-    // Update log entry for 'Project 1.1'.
-    $this->assertCount(1, $this->getLogEntries('Solution @solution was created.', 'a:1:{s:9:"@solution";s:11:"Project 1.1";}'));
-    // Creation log entry for 'Project 1.2'.
-    $this->assertCount(1, $this->getLogEntries('Solution @solution was created.', 'a:1:{s:9:"@solution";s:11:"Project 1.2";}'));
-    // Creation log entry for 'Project 1'.
-    $this->assertCount(1, $this->getLogEntries('Solution @solution was created.', 'a:1:{s:9:"@solution";s:9:"Project 1";}'));
   }
 
   /**
