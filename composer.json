@@ -117,7 +117,6 @@
         "openeuropa/oe_webtools": "^1.21",
         "psr/http-factory-implementation": "*",
         "semiceu/adms-ap_validator": "1.0.0-alpha1",
-        "spdx/license-list-data": "master",
         "sweetrdf/easyrdf": "^1.9",
         "symfony/http-client": "*"
     },
@@ -472,18 +471,6 @@
         }
     },
     "repositories": [
-        {
-            "type": "package",
-            "package": {
-                "name": "spdx/license-list-data",
-                "version": "master",
-                "source": {
-                    "url": "https://github.com/spdx/license-list-data",
-                    "type": "git",
-                    "reference": "main"
-                }
-            }
-        },
         {
             "type": "vcs",
             "url": "https://github.com/openeuropa/oe_dashboard_agent.git"
