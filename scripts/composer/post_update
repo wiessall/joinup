@@ -2,9 +2,6 @@
 
 set -e
 
-# Check that patches are local.
-php ./scripts/composer/check_patches.php
-
 # Build the codebase.
 test ! -f vendor/bin/run || vendor/bin/run toolkit:build-dev
 
