@@ -16,42 +16,49 @@ final class ComposerPatches {
 
   /**
    * Validates patches.
+   *
+   * @param \Composer\Script\Event $event
+   *   The composer event.
    */
-  public static function validate(Event $event) {
+  public static function validate(Event $event): void {
     $composer = $event->getComposer();
     $patches = self::getComposerPatches($composer);
     if (!$patches) {
       return;
     }
 
-    $patches_paths = [];
+    $patchesPaths = [];
     foreach ($patches as $patch) {
       if (!file_exists($patch)) {
         throw new \Exception("Patch $patch could not be located or is not local.");
       }
 
-      $patches_paths[] = realpath($patch);
+      $patchesPaths[] = realpath($patch);
     }
 
     // Ensures PATCH_DIR doesn't contain any stale/unused patch.
     $iterator = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator(self::PATCH_DIR));
     foreach ($iterator as $file) {
-      if ($file->isFile()) {
-        if (!in_array($file->getRealPath(), $patches_paths, TRUE)) {
-          throw new \Exception("Patch {$file->getPathname()} is not referenced in composer.json. Ensure it is being used, or consider removing it if unnecessary.");
-        }
+      if ($file->isFile() && !in_array($file->getRealPath(), $patchesPaths, TRUE)) {
+        throw new \Exception("Patch {$file->getPathname()} is not referenced in composer.json. Ensure it is being used, or consider removing it if unnecessary.");
       }
     }
   }
 
   /**
    * Get all composer.json patches as a flat array.
+   *
+   * @param \Composer\Composer $composer
+   *    Composer.
+   *
+   * @return array
+   *    List of patches.
    */
-  private static function getComposerPatches(Composer $composer): ?array {
+  private static function getComposerPatches(Composer $composer): array {
     $patches = [];
     $extra = $composer->getPackage()->getExtra();
-    foreach ($extra['patches'] ?? [] as $package_patches) {
-      $patches = array_merge($patches, array_values($package_patches));
+    foreach ($extra['patches'] ?? [] as $packagePatches) {
+      $patches = array_merge($patches, array_values($packagePatches));
     }
     return $patches;
   }
