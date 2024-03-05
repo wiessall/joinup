@@ -8,6 +8,7 @@
 declare(strict_types=1);
 
 use Drupal\Core\Access\AccessResult;
+use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
@@ -19,6 +20,7 @@ use Drupal\joinup_licence\Entity\Licence;
 use Drupal\joinup_licence\Entity\LicenceInterface;
 use Drupal\joinup_licence\Entity\LicenceLegalType;
 use Drupal\joinup_licence\Entity\SpdxLicence;
+use Drupal\joinup_taxonomy\Entity\MappedTerm;
 use Drupal\rdf_entity\Entity\RdfEntityType;
 use Drupal\rdf_entity\RdfInterface;
 
@@ -70,14 +72,13 @@ function joinup_licence_entity_bundle_info_alter(&$bundles) {
 /**
  * Implements hook_ENTITY_TYPE_access().
  */
-function joinup_licence_rdf_entity_access(EntityInterface $entity, string $operation, AccountInterface $account): AccessResult {
-  if ($entity->bundle() !== 'spdx_licence' || $operation !== 'view') {
-    return AccessResult::neutral();
+function joinup_licence_taxonomy_term_access(EntityInterface $entity, string $operation, AccountInterface $account): AccessResultInterface {
+  if ($entity instanceof MappedTerm && $entity->bundle() === 'spdx_licence' && $operation === 'view') {
+    // Only deny access to the canonical route.
+    $route_match = \Drupal::routeMatch();
+    return AccessResult::forbiddenIf($route_match->getRouteName() === 'entity.taxonomy_term.canonical' && $route_match->getParameter('taxonomy_term')->bundle() === 'spdx_licence');
   }
-
-  // Only deny access to the canonical route.
-  $route_match = \Drupal::routeMatch();
-  return AccessResult::forbiddenIf($route_match->getRouteName() === 'entity.rdf_entity.canonical' && $route_match->getParameter('rdf_entity')->bundle() === 'spdx_licence');
+  return AccessResult::neutral();
 }
 
 /**
