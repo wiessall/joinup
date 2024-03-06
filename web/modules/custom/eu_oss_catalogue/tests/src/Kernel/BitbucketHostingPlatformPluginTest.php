@@ -5,14 +5,11 @@ declare(strict_types=1);
 namespace Drupal\Tests\eu_oss_catalogue\Kernel;
 
 use Drupal\Core\Logger\LoggerChannelInterface;
-use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Site\Settings;
 use Drupal\KernelTests\KernelTestBase;
+use Drupal\Tests\eu_oss_catalogue\Traits\LoggerTestTrait;
 use Drupal\eu_oss_catalogue\Model\Project;
 use Drupal\eu_oss_catalogue\Plugin\eu_oss_catalogue\HostingPlatform\Bitbucket;
-use Psr\Log\LoggerInterface;
-use Psr\Log\LoggerTrait;
-use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
  * Tests the Bitbucket hosting platform plugin.
@@ -24,7 +21,7 @@ use Symfony\Component\HttpFoundation\RequestStack;
  */
 class BitbucketHostingPlatformPluginTest extends KernelTestBase implements LoggerChannelInterface {
 
-  use LoggerTrait;
+  use LoggerTestTrait;
 
   /**
    * {@inheritdoc}
@@ -34,11 +31,6 @@ class BitbucketHostingPlatformPluginTest extends KernelTestBase implements Logge
     'eu_oss_catalogue_test',
     'http_request_mock',
   ];
-
-  /**
-   * The captured log entries.
-   */
-  protected array $log = [];
 
   /**
    * The plugin instance we use to perform the tests.
@@ -291,35 +283,5 @@ class BitbucketHostingPlatformPluginTest extends KernelTestBase implements Logge
       ],
     ];
   }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function log($level, $message, array $context = []): void {
-    $this->log[$level][] = [
-      'message' => $message,
-      'context' => $context,
-    ];
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function setRequestStack(?RequestStack $requestStack = NULL) {}
-
-  /**
-   * {@inheritdoc}
-   */
-  public function setCurrentUser(?AccountInterface $current_user = NULL) {}
-
-  /**
-   * {@inheritdoc}
-   */
-  public function setLoggers(array $loggers) {}
-
-  /**
-   * {@inheritdoc}
-   */
-  public function addLogger(LoggerInterface $logger, $priority = 0) {}
 
 }
