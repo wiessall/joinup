@@ -212,6 +212,8 @@ function joinup_core_config_readonly_whitelist_patterns() {
     // The outdated content threshold is editable by moderators.
     'joinup_core.outdated_content_threshold',
     'core.menu.static_menu_link_overrides',
+    // Moderators can create webforms.
+    'webform.webform.*',
   ];
 }
 
