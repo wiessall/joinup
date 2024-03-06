@@ -7,15 +7,19 @@
 
 declare(strict_types=1);
 
+use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Field\BaseFieldDefinition;
 use Drupal\Core\Field\FieldDefinitionInterface;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Session\AccountInterface;
 use Drupal\eu_oss_catalogue\Entity\OssContact;
 use Drupal\eu_oss_catalogue\Entity\OssContractor;
 use Drupal\eu_oss_catalogue\Entity\OssSolution;
+use Drupal\eu_oss_catalogue\Entity\OssSolutionInterface;
 use Drupal\eu_oss_catalogue\Plugin\Field\RelevantField;
 use Drupal\eu_oss_catalogue\Plugin\Field\RelevantLanguageCode;
+use Drupal\node\NodeInterface;
 
 /**
  * Implements hook_entity_bundle_info_alter().
@@ -119,4 +123,19 @@ function eu_oss_catalogue_entity_bundle_field_info_alter(array &$fields, EntityT
       ->setDisplayConfigurable('view', TRUE)
       ->setClass(RelevantField::class);
   }
+}
+
+/**
+ * Implements hook_node_access()
+ */
+function eu_oss_catalogue_node_access(NodeInterface $entity, string $operation, AccountInterface $account): AccessResult {
+  if (!$entity instanceof OssSolutionInterface || $operation != 'view') {
+    return AccessResult::neutral();
+  }
+
+  // Only admin can view archived solutions.
+  return AccessResult::forbiddenIf(
+    $entity->isArchived() &&
+    !$account->hasPermission('administer eu oss catalogue')
+  )->addCacheableDependency($entity);
 }
