@@ -20,6 +20,7 @@ use Symfony\Component\HttpFoundation\RequestStack;
  * @coversDefaultClass \Drupal\eu_oss_catalogue\Plugin\eu_oss_catalogue\HostingPlatform\Bitbucket
  *
  * @see \Drupal\eu_oss_catalogue_test\Plugin\ServiceMock\Bitbucket
+ * @group eu_oss_catalogue
  */
 class BitbucketHostingPlatformPluginTest extends KernelTestBase implements LoggerChannelInterface {
 
@@ -97,7 +98,7 @@ class BitbucketHostingPlatformPluginTest extends KernelTestBase implements Logge
           'platform' => 'bitbucket_org',
           'defaultBranch' => 'master',
           'latestReleaseTag' => '2.7.1',
-          'latestReleaseDate' => '2021-05-24',
+          'latestReleaseDate' => '2021-05-24T09:05:31+00:00',
           'platformReference' => 'a81fa4a1-7339-4a19-8ea5-e64d5eb02865',
           'description' => '',
           'logo' => NULL,
@@ -113,7 +114,7 @@ class BitbucketHostingPlatformPluginTest extends KernelTestBase implements Logge
           'platform' => 'bitbucket_org',
           'defaultBranch' => 'master',
           'latestReleaseTag' => 'v10.2.345',
-          'latestReleaseDate' => '2024-01-29',
+          'latestReleaseDate' => '2024-01-29T09:22:33+03:00',
           'platformReference' => 'f9883d63-17c1-44b6-8fb1-0478c7b9e557',
           'description' => 'This is the Baz Project Git description',
           'logo' => 'https://bytebucket.org/ravatar/%7Bf9883d63-17c1-44b6-8fb1-0478c7b9e557%7D?ts=453345',
@@ -130,19 +131,19 @@ class BitbucketHostingPlatformPluginTest extends KernelTestBase implements Logge
       [
         'debug' => [
           [
+            'message' => "Cannot fetch number of PRs of '%repository' on '%base_url'.",
+            'context' => [
+              '%repository' => 'test_namespace/baz',
+              '%base_url' => 'https://bitbucket.org',
+            ],
+          ],
+          [
             'message' => "Cannot find the '%filename' file in '%repository' on '%base_url' in branch / tag / commit '%reference'.",
             'context' => [
               '%filename' => 'publiccode.yml',
               '%repository' => 'test_namespace/baz',
               '%base_url' => 'https://bitbucket.org',
               '%reference' => 'master',
-            ],
-          ],
-          [
-            'message' => "Cannot fetch number of PRs of '%repository' on '%base_url'.",
-            'context' => [
-              '%repository' => 'test_namespace/baz',
-              '%base_url' => 'https://bitbucket.org',
             ],
           ],
         ],

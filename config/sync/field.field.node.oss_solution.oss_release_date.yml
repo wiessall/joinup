@@ -10,6 +10,7 @@ dependencies:
 third_party_settings:
   eu_oss_catalogue:
     publiccode_yml:
+      override: preserve_not_empty
       resolvers:
         -
           plugin: default
