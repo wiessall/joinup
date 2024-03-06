@@ -1,5 +1,0 @@
-services:
-  spdx.prepare_vocabulary_graph.subscriber:
-    class: Drupal\spdx\EventSubscriber\SpdxVocabularySubscriber
-    tags:
-      - { name: event_subscriber }
