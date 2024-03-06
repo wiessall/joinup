@@ -7,6 +7,7 @@ namespace Drupal\eu_oss_catalogue\Plugin\eu_oss_catalogue\HostingPlatform;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Utility\Error;
 use Drupal\eu_oss_catalogue\EuOssCatalogueGitHostingPlatformPluginBase;
+use Drupal\eu_oss_catalogue\Exception\ProviderFetchException;
 use Drupal\eu_oss_catalogue\Model\GitLab\ReleaseSort;
 use Drupal\eu_oss_catalogue\Model\GitUri;
 use Drupal\eu_oss_catalogue\Model\Project;
@@ -159,8 +160,7 @@ class GitLabDotCom extends EuOssCatalogueGitHostingPlatformPluginBase {
               'url' => $this->getConfiguration()['baseUrl'],
               'message' => $exception->getMessage(),
             ]);
-            // Done with this namespace.
-            break;
+            throw new ProviderFetchException(message: $exception->getMessage(), previous: $exception);
           }
         }
 
@@ -500,7 +500,7 @@ class GitLabDotCom extends EuOssCatalogueGitHostingPlatformPluginBase {
         // There's no such a project. Return silently.
         return NULL;
       }
-      throw $exception;
+      throw new ProviderFetchException(message: $exception->getMessage(), previous: $exception);
     }
     catch (\Throwable $exception) {
       // Fail silently but log if the project data cannot be retrieved.
@@ -661,7 +661,7 @@ class GitLabDotCom extends EuOssCatalogueGitHostingPlatformPluginBase {
     }
     catch (\RuntimeException $exception) {
       if ($exception->getCode() !== 404) {
-        throw $exception;
+        throw new ProviderFetchException(message: $exception->getMessage(), previous: $exception);
       }
       // This group doesn't exist.
       return NULL;

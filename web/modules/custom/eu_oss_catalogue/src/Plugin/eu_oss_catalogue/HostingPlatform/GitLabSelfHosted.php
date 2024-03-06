@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Drupal\eu_oss_catalogue\Plugin\eu_oss_catalogue\HostingPlatform;
 
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\eu_oss_catalogue\Exception\ProviderFetchException;
 use Drupal\eu_oss_catalogue\Model\GitLab\ReleaseSort;
 use Drupal\eu_oss_catalogue\Model\GitUri;
 use Gitlab\Client;
@@ -120,7 +121,12 @@ class GitLabSelfHosted extends GitLabDotCom {
     $endCursor = NULL;
     do {
       $query = $this->buildProjectsQuery($requestedFiles, $endCursor);
-      $response = $this->getClient()->graphql()->execute($query->toString());
+      try {
+        $response = $this->getClient()->graphql()->execute($query->toString());
+      }
+      catch (\RuntimeException $exception) {
+        throw new ProviderFetchException(message: $exception->getMessage(), previous: $exception);
+      }
 
       if (empty($response['data']['projects']['nodes'])) {
         // This platform has no public projects.
