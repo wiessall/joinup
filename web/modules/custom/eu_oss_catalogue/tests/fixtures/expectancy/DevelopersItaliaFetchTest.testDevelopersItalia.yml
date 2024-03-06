@@ -26,13 +26,13 @@ GitHub solution 1:
     oss_platforms:
       - web
     oss_publiccode_yml_version: '0.2'
-    oss_release_date: '2023-04-19'
+    oss_release_date: '2017-05-01'
     oss_software_type:
       - standalone/web
-    oss_software_version: '2.3.0'
+    oss_software_version: '1.4'
     oss_source:
       - developers_italia
-    oss_source_hash: k6ioAEbxcT2Qz_iSX0zMpHkTtoZCqBnQIiUIP0rCtjA
+    oss_source_hash: _RnRGlJcP5QA_tiadP_JTMJyyOypigHzRYjIY-LlQMM
     oss_long_description: |
       [EN] Solution 1: Long description
       **Some bold text**
