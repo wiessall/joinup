@@ -214,6 +214,9 @@ function joinup_core_config_readonly_whitelist_patterns() {
     'core.menu.static_menu_link_overrides',
     // Moderators can create webforms.
     'webform.webform.*',
+    // Prevent simple sitemap to interfere with webform deletion.
+    /* @see \Drupal\simple_sitemap\Entity\SimpleSitemapStorage::doDelete */
+    'simple_sitemap.bundle_settings.*.webform_submission.*',
   ];
 }
 
