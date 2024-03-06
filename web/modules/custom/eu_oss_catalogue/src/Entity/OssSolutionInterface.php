@@ -47,4 +47,5 @@ interface OssSolutionInterface extends NodeInterface {
    *   Whether this entity is archived.
    */
   public function isArchived(): bool;
+
 }

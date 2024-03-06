@@ -126,7 +126,7 @@ function eu_oss_catalogue_entity_bundle_field_info_alter(array &$fields, EntityT
 }
 
 /**
- * Implements hook_node_access()
+ * Implements hook_node_access().
  */
 function eu_oss_catalogue_node_access(NodeInterface $entity, string $operation, AccountInterface $account): AccessResult {
   if (!$entity instanceof OssSolutionInterface || $operation != 'view') {
