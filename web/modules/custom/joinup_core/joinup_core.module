@@ -25,6 +25,7 @@ use Drupal\joinup_core\Element\Datetime;
 use Drupal\joinup_core\Entity\OutdatedContentInterface;
 use Drupal\joinup_core\Plugin\Field\FieldType\OutdatedContentFieldItemList;
 use Drupal\joinup_core\Plugin\Field\FieldWidget\ImageLibraryWidget;
+use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\joinup_workflow\ArchivableEntityInterface;
 use Drupal\node\NodeInterface;
 use Drupal\symfony_mailer_lite\Plugin\Mail\SymfonyMailer;
@@ -298,18 +299,21 @@ function joinup_core_block_build_oe_webtools_etrans_alter(array &$build, BlockPl
  * service to the type of the current page.
  */
 function joinup_core_block_view_oe_webtools_etrans_alter(array &$build, BlockPluginInterface $block) {
-  $block->setConfiguration(joinup_core_get_etrans_block_config_for_current_page() + $block->getConfiguration());
+  $block->setConfiguration(joinup_core_get_etrans_block_config_for_current_page($build) + $block->getConfiguration());
 }
 
 /**
  * Returns the Webtools eTrans block configuration for the current page.
+ *
+ * @param array $build
+ *   The renderable array to merge the cache metadata into.
  *
  * @return array
  *   The Webtools eTrans block configuration.
  *
  * @see \Drupal\oe_webtools_etrans\Plugin\Block\ETransBlock
  */
-function joinup_core_get_etrans_block_config_for_current_page(): array {
+function joinup_core_get_etrans_block_config_for_current_page(array &$build = []): array {
   $current_route_name = \Drupal::routeMatch()->getRouteName();
   if (array_key_exists($current_route_name, ETransBlockConfiguration::CONFIG_MAPPING['routes'])) {
     return ETransBlockConfiguration::CONFIG_MAPPING['routes'][$current_route_name];
@@ -323,21 +327,38 @@ function joinup_core_get_etrans_block_config_for_current_page(): array {
       '@rdf_entity.rdf_entity_route_context:rdf_entity',
     ]
   );
+  $cachableMetadata = CacheableMetadata::createFromRenderArray($build);
+  $etransConfig = [];
 
   foreach ($contexts as $context) {
-    if (!$context->hasContextValue() || !str_ends_with($current_route_name, '.canonical')) {
+    if (!$context->hasContextValue()) {
       continue;
     }
 
     $entity = $context->getContextValue();
+    $cachableMetadata->addCacheableDependency($entity);
+    if (!str_ends_with($current_route_name, '.canonical')) {
+      continue;
+    }
+    // Groups might have custom landing page.
+    if ($entity instanceof GroupInterface) {
+      try {
+        $entity = $entity->getSetting('landing_page')->entity ?? $entity;
+      }
+      catch (\InvalidArgumentException) {
+      }
+    }
     foreach (ETransBlockConfiguration::CONFIG_MAPPING['bundles'] as $bundleClass => $config) {
       if ($entity instanceof $bundleClass) {
-        return $config;
+        $cachableMetadata->addCacheableDependency($entity);
+        $etransConfig = $config;
+        break 2;
       }
     }
   }
 
-  return [];
+  $cachableMetadata->applyTo($build);
+  return $etransConfig;
 }
 
 /**
