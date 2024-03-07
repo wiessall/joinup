@@ -276,7 +276,7 @@ class GitHub extends EuOssCatalogueGitHostingPlatformPluginBase {
    *   search(
    *     type: REPOSITORY
    *     query: "is:public fork:true owner:user1 repo:org2/project2"
-   *     first: 100
+   *     first: 20
    *   ) {
    *     pageInfo {
    *       hasNextPage
@@ -328,7 +328,7 @@ class GitHub extends EuOssCatalogueGitHostingPlatformPluginBase {
     $filters = [
       'type' => SearchType::REPOSITORY,
       'query' => $searchQuery,
-      'first' => 100,
+      'first' => 20,
     ] + ($endCursor ? ['after' => $endCursor] : []);
 
     $query = new Query('search', $filters);
