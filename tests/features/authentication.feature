@@ -168,6 +168,8 @@ Feature: User authentication
       | path                                        |
       | admin/reporting/distribution-downloads/csv  |
       | admin/reporting/subscribers-report/download |
+      | admin/structure/webform                     |
+      | admin/structure/webform/submissions/manage  |
 
   Scenario Outline: Moderator can access pages they are authorized to
     Given I am logged in as a user with the "moderator" role
@@ -198,13 +200,15 @@ Feature: User authentication
       | media/add                                   |
       | media/add/collection_logo                   |
       | media/add/event_logo                        |
-      | media/add/file                             |
+      | media/add/file                              |
       | media/add/image                             |
       | media/add/news_logo                         |
       | media/add/solution_logo                     |
-      | media/add/video                            |
+      | media/add/video                             |
       | outdated-content-threshold                  |
       | propose/collection                          |
+      | admin/structure/webform                     |
+      | admin/structure/webform/submissions/manage  |
 
   Scenario Outline: Moderator cannot access restricted pages
     Given I am logged in as a user with the "moderator" role
