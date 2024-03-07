@@ -45,6 +45,7 @@
   - Drupal\joinup\Context\JoinupCoreContext
   - Drupal\joinup\Context\JoinupDiscussionContext
   - Drupal\joinup\Context\JoinupDocumentContext
+  - Drupal\joinup\Context\JoinupEtransContext
   - Drupal\joinup\Context\JoinupEventContext
   - Drupal\joinup\Context\JoinupFeaturedContext
   - Drupal\joinup\Context\JoinupGroupContext
