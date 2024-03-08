@@ -20,6 +20,18 @@ Feature: OSS catalogue search
     Then I should see the text "SEARCH RESULTS (2)"
     And I should not see the "Linux" tile
 
+  Scenario: User can see GIT repo indicators in tile.
+    Given oss_solution content:
+      | title              | oss_source        | oss_git_stars | oss_git_open_issues | oss_git_open_pull_requests | oss_git_forks | status    |
+      | Olympus indicators | developers_italia | 1111          | 2222                | 3333                       | 4444          | published |
+
+    When I visit the OSS search page
+    Then I should see the text "SEARCH RESULTS (1)"
+    And I should see the text "1111" in the "Olympus indicators" tile
+    And I should see the text "2222" in the "Olympus indicators" tile
+    And I should see the text "3333" in the "Olympus indicators" tile
+    And I should see the text "4444" in the "Olympus indicators" tile
+
   Scenario: User is able to search.
     # Mimic the "EU OSSC" collection.
     Given collection:

@@ -40,7 +40,7 @@
   }
   .l-oss-heading {
     @include full-width-color($light, 0);
-    &__aside {
+    &__right {
       position: relative;
       &::before {
         position: absolute;
@@ -76,12 +76,23 @@
         gap: $spacer * 2;
       }
     }
-
+    &__indicator {
+      .git-indicator {
+        margin-right: $spacer * 2;
+        span {
+          font-size: $font-size-base;
+        }
+        &::after {
+          width: 2.2em;
+          height: 2.2em;
+        }
+      }
+    }
     &__vitality {
       display: flex;
       align-items: center;
       gap: $spacer;
-      padding-bottom: $spacer;
+      padding-bottom: $spacer * .5;
 
       div {
         margin-bottom: $spacer * .5;
