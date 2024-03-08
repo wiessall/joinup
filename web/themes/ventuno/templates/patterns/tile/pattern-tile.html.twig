@@ -21,6 +21,7 @@
     - badges (array) (default: [])
     - extra_data (array of objects) (default: [])
     - bundle (object) (default: {})
+    - indicators (array) (default: [])
   #}
 
   {% set _horizontal = horizontal|default(false) %}
@@ -37,6 +38,7 @@
   {% set _badges = badges|default([]) %}
   {% set _extra_data = extra_data|default([]) %}
   {% set _bundle = bundle|default({}) %}
+  {% set _indicators = indicators|default([]) %}
 
   {{ attach_library('ventuno/tile') }}
 
@@ -111,6 +113,13 @@
                 rounded_pill: true,
                 attributes: create_attribute().addClass(['fs-sm', 'me-1', 'mb-1']),
               } only %}
+            {% endfor %}
+          </div>
+        {%- endif -%}
+        {%- if _indicators is not empty and _indicators is iterable -%}
+          <div class="my-2 d-flex">
+            {% for _indicator in _indicators %}
+              {{ _indicator }}
             {% endfor %}
           </div>
         {%- endif -%}
