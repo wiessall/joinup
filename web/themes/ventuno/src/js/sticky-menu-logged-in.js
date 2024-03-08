@@ -27,9 +27,6 @@
             let top;
             if (activeTray === null || activeTray === undefined) {
               top = bar.offsetHeight;
-            // If .region-header is also sticky push the navbar to the top. 
-            } else if (document.querySelector(".region-header").classList.contains("sticky-top")) {
-              top = 0;
             } else {
               top = bar.offsetHeight + activeTray.offsetHeight;
             }
@@ -45,8 +42,6 @@
       toolbar.addEventListener("click", positionNavbarTop);
       // Execute again if user resizes the window.
       window.addEventListener("resize", positionNavbarTop, false);
-      // Execute again if user scrolls.
-      window.addEventListener("scroll", positionNavbarTop, false);
     },
   };
 })();
