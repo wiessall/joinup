@@ -4,6 +4,7 @@ status: true
 dependencies:
   config:
     - field.field.paragraph.image_gallery.image
+    - field.field.paragraph.image_gallery.paragraph_heading
     - image.style.thumbnail
     - paragraphs.paragraphs_type.image_gallery
   module:
@@ -15,11 +16,19 @@ mode: default
 content:
   image:
     type: image_image
-    weight: 0
+    weight: 1
     region: content
     settings:
       progress_indicator: throbber
       preview_image_style: thumbnail
+    third_party_settings: {  }
+  paragraph_heading:
+    type: string_textfield
+    weight: 0
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
     third_party_settings: {  }
 hidden:
   created: true
