@@ -2,26 +2,28 @@
 
 declare(strict_types=1);
 
-namespace Drupal\joinup_like\Plugin\Block;
+namespace Drupal\joinup_flag\Plugin\Block;
 
 use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\flag\FlagInterface;
 use Drupal\flag\FlagServiceInterface;
+use Drupal\joinup_flag\FlagType;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Provides a like block.
+ * Provides a flag block.
  *
  * @Block(
- *   id = "joinup_like_block",
- *   admin_label = @Translation("Like block"),
+ *   id = "joinup_flag_block",
+ *   admin_label = @Translation("Flag block"),
  * )
  */
-class LikeBlock extends BlockBase implements ContainerFactoryPluginInterface {
+class FlagBlock extends BlockBase implements ContainerFactoryPluginInterface {
 
   /**
    * Constructs a LikeBlock object.
@@ -63,13 +65,43 @@ class LikeBlock extends BlockBase implements ContainerFactoryPluginInterface {
   /**
    * {@inheritdoc}
    */
+  public function defaultConfiguration(): array {
+    return [
+      'flag_type' => FlagType::Like,
+    ];
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function blockForm($form, FormStateInterface $form_state): array {
+    $form['flag_type'] = [
+      '#type' => 'select',
+      '#title' => $this->t('Flag type'),
+      '#options' => FlagType::toAssociativeArray(),
+    ];
+
+    return $form;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function blockSubmit($form, FormStateInterface $form_state): void {
+    $values = $form_state->getValues();
+    $this->configuration['flag_type'] = $values['flag_type'];
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function build(): array {
     $entity = $this->getEntityFromRoute();
     if (!$entity) {
       return [];
     }
 
-    $flag = $this->getLikeFlagForEntity($entity);
+    $flag = $this->getFlagForEntity($entity);
     if (!$flag || !$flag->status()) {
       return [];
     }
@@ -114,7 +146,7 @@ class LikeBlock extends BlockBase implements ContainerFactoryPluginInterface {
   }
 
   /**
-   * Get like flag for the entity.
+   * Get the flag for the entity.
    *
    * @param \Drupal\Core\Entity\EntityInterface $entity
    *   Entity.
@@ -122,9 +154,11 @@ class LikeBlock extends BlockBase implements ContainerFactoryPluginInterface {
    * @return \Drupal\flag\FlagInterface|null
    *   Flag entity.
    */
-  protected function getLikeFlagForEntity(EntityInterface $entity): ?FlagInterface {
-    $flags = array_filter($this->flagService->getAllFlags($entity->getEntityTypeID(), $entity->bundle()), function (FlagInterface $flag) {
-      return str_starts_with($flag->id(), 'like_');
+  protected function getFlagForEntity(EntityInterface $entity): ?FlagInterface {
+    $prefix = $this->configuration['flag_type'] . '_';
+
+    $flags = array_filter($this->flagService->getAllFlags($entity->getEntityTypeID(), $entity->bundle()), function (FlagInterface $flag) use ($prefix) {
+      return str_starts_with($flag->id(), $prefix);
     });
 
     return empty($flags) ? NULL : reset($flags);
