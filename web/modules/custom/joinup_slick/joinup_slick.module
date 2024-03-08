@@ -1,0 +1,168 @@
+<?php
+
+/**
+ * @file
+ * Hooks and custom functions of Joinup Slick module.
+ */
+
+declare(strict_types=1);
+
+use Drupal\Component\Utility\Html;
+use Drupal\Core\Field\FieldDefinitionInterface;
+use Drupal\Core\Field\FormatterInterface;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
+use Drupal\Core\Template\Attribute;
+use Drupal\joinup_slick\JoinupSlick;
+use Drupal\slick\Entity\SlickInterface;
+use Drupal\slick\SlickManagerInterface;
+
+/**
+ * Implements hook_field_formatter_third_party_settings_form().
+ */
+function joinup_slick_field_formatter_third_party_settings_form(FormatterInterface $plugin, FieldDefinitionInterface $field_definition): array {
+  if ($field_definition->getFieldStorageDefinition()->getCardinality() === 1) {
+    return [];
+  }
+  $element = [];
+  $options = array_merge(
+    ['' => t('- None -')],
+    array_map(
+      fn (SlickInterface $slick): string|TranslatableMarkup => $slick->label(),
+      \Drupal::entityTypeManager()->getStorage('slick')->loadMultiple()
+    )
+  );
+  $element['preset'] = [
+    '#type' => 'select',
+    '#title' => t('Slick optionset'),
+    '#options' => $options,
+    '#default_value' => $plugin->getThirdPartySetting('joinup_slick', 'preset', ''),
+    '#empty_value' => '',
+  ];
+  $element['field_label'] = [
+    '#type' => 'checkbox',
+    '#title' => t('Use field label as Slick carousel title'),
+    '#default_value' => $plugin->getThirdPartySetting('joinup_slick', 'field_label', TRUE),
+  ];
+  $element['custom_label'] = [
+    '#type' => 'textfield',
+    '#title' => t('Custom carousel title'),
+    '#default_value' => $plugin->getThirdPartySetting('joinup_slick', 'custom_label', ''),
+    '#states' => [
+      'visible' => [
+        ':input[name$="[third_party_settings][joinup_slick][field_label]"]' => [
+          'checked' => FALSE,
+        ],
+      ],
+    ],
+  ];
+
+  return $element;
+}
+
+/**
+ * Implements hook_field_formatter_settings_summary_alter().
+ */
+function joinup_slick_field_formatter_settings_summary_alter(array &$summary): void {
+  if (!empty($variables['element']['#third_party_settings']['joinup_slick']['preset'])) {
+    $optionsetId = $variables['element']['#third_party_settings']['joinup_slick']['preset'];
+    $optionset = \Drupal::entityTypeManager()->getStorage('slick')->load($optionsetId);
+    if ($optionset) {
+      $summary[] = t('Slick carousel: %slick-optionset-label', [
+        '%slick-optionset-label' => $optionset->label(),
+      ]);
+    }
+  }
+}
+
+/**
+ * Implements hook_preprocess_field().
+ */
+function joinup_slick_preprocess_field(array &$variables): void {
+  if (!empty($variables['element']['#third_party_settings']['joinup_slick']['preset'])) {
+    $joinupSlickSettings = $variables['element']['#third_party_settings']['joinup_slick'];
+    $optionsetId = $joinupSlickSettings['preset'];
+    $slickManager = \Drupal::service('slick.manager');
+    \assert($slickManager instanceof SlickManagerInterface);
+    $optionset = \Drupal::entityTypeManager()->getStorage('slick')->load($optionsetId);
+    $useFieldLabel = $joinupSlickSettings['field_label'] ?? TRUE;
+
+    if ($optionset instanceof SlickInterface) {
+      $optionsetIdClass = Html::cleanCssIdentifier($optionsetId);
+      $items = array_map(
+        fn (array $item): array => [
+          'slide' => $item['content'],
+          'attributes' => $item['attributes']->addClass("slick__slide--$optionsetIdClass")->toArray(),
+        ],
+        $variables['items']
+      );
+      $build = $slickManager->build([
+        'items' => $items,
+        'optionset' => $optionset,
+        'settings' => ['optionset' => $optionsetId] + $optionset->getSettings(),
+      ]);
+      // Add info about the host field.
+      $build['#build']['#settings']['joinup_slick'] = [
+        'entity_type' => $variables['element']['#entity_type'],
+        'bundle' => $variables['element']['#bundle'],
+        'field_name' => $variables['element']['#field_name'],
+        'field_label' => $useFieldLabel ? $variables['label'] : $joinupSlickSettings['custom_label'],
+      ];
+      // Move Slick renderable to the field theme output, overriding the items
+      // key. Structurally, this is the same if the field has one single value.
+      $variables['items'] = [
+        [
+          'content' => $build,
+          'attributes' => new Attribute(),
+        ],
+      ];
+    }
+  }
+}
+
+/**
+ * Implements hook_theme_suggestions_HOOK_alter() for "slick".
+ */
+function joinup_slick_theme_suggestions_slick_alter(array &$suggestions, array $variables): void {
+  JoinupSlick::addSlickTemplateSuggestion($suggestions, $variables);
+}
+
+/**
+ * Implements hook_theme_suggestions_HOOK_alter() for "slick_slide".
+ */
+function joinup_slick_theme_suggestions_slick_slide_alter(array &$suggestions, array $variables): void {
+  JoinupSlick::addSlickTemplateSuggestion($suggestions, $variables);
+}
+
+/**
+ * Implements hook_preprocess_HOOK() for "slick".
+ */
+function joinup_slick_preprocess_slick(array &$variables): void {
+  $joinupSlick = $variables['settings']['joinup_slick'] ?? NULL;
+  if (is_array($joinupSlick)) {
+    foreach ($joinupSlick as $key => $value) {
+      $variables["joinup_slick_$key"] = $value;
+    }
+
+    // Ensure arrow_attributes is set.
+    $variables['arrow_attributes'] = $variables['arrow_attributes'] ?? new Attribute();
+  }
+  // Add variable-width library if needed.
+  if (
+    !empty($variables["element"]["#optionset"]->get('options')['settings']['variableWidth']) &&
+    empty($variables["element"]["#optionset"]->get('options')['settings']['infinite'])
+  ) {
+    $variables['#attached']['library'][] = 'joinup_slick/slick-variable-width';
+  }
+}
+
+/**
+ * Implements hook_preprocess_HOOK() for "slick_slide".
+ */
+function joinup_slick_preprocess_slick_slide(array &$variables): void {
+  // Always use wrapper and content attributes if this is a Joinup Slick
+  // instance.
+  if (!empty($variables['settings']['joinup_slick'])) {
+    $variables['settings']['wrapper'] = TRUE;
+    $variables['settings']['use_ca'] = TRUE;
+  }
+}

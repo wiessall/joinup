@@ -361,6 +361,111 @@ class FeatureContext extends RawDrupalContext {
   }
 
   /**
+   * Checks that the given images are present on the page in the given order.
+   *
+   * @param \Behat\Gherkin\Node\TableNode $imagesTable
+   *   A table with the image file names to look for.
+   *
+   * @throws \Exception
+   *   If one of the images is missing, or if the order of the images is
+   *   different than expected.
+   *
+   * @Then I (should ) have the following images on the page( in this order)
+   */
+  public function assertImagesPresentInOrder(TableNode $imagesTable): void {
+    $this->assertImagesInOrder($imagesTable, FALSE);
+  }
+
+  /**
+   * Checks that the given images are visible on the page in the given order.
+   *
+   * @param \Behat\Gherkin\Node\TableNode $imagesTable
+   *   A table with the image file names to look for.
+   *
+   * @throws \Exception
+   *   If one of the images is missing or is not visible, or if the order of
+   *   the images is different than expected.
+   *
+   * @Then I (should ) see the following images on the page( in this order)
+   */
+  public function assertImagesVisibleInOrder(TableNode $imagesTable): void {
+    $this->assertImagesInOrder($imagesTable, TRUE);
+  }
+
+  /**
+   * Checks whether the given images are present or visible on the page.
+   *
+   * @param \Behat\Gherkin\Node\TableNode $imagesTable
+   *   A table with the image file names to look for.
+   * @param bool $checkVisibility
+   *   Whether visibility should also be checked or not.
+   *
+   * @throws \Exception
+   *   If one of the images is missing (or is not visible), or if the order of
+   *   the images is different than expected.
+   */
+  protected function assertImagesInOrder(TableNode $imagesTable, bool $checkVisibility): void {
+    $availableImages = $this->getImages();
+    $imageFilenameList = $imagesTable->getColumn(0);
+    $firstFile = reset($imageFilenameList);
+    // Try to find the first image in the list of available images. Note: the
+    // same image might appear multiple times on the page.
+    $startIndexes = array_keys(
+      array_filter(
+        $availableImages,
+        function (NodeElement $img) use ($firstFile): bool {
+          return $this->imageSourceMatches($firstFile, $img);
+        }
+      )
+    );
+    if (empty($startIndexes)) {
+      throw new \Exception(sprintf(
+        "Cannot find the first image with source '%s' from the given set on the page.",
+        $firstFile,
+      ));
+    }
+    $listsToCheck = array_reduce(
+      $startIndexes,
+      function (array $carry, int $index) use ($availableImages): array {
+        $carry[] = array_slice($availableImages, $index);
+        return $carry;
+      },
+      [],
+    );
+
+    foreach ($listsToCheck as $imageList) {
+      // Check the list.
+      foreach ($imageFilenameList as $index => $filename) {
+        if (
+          !$imageList[$index] instanceof NodeElement ||
+          !$this->imageSourceMatches($filename, $imageList[$index])
+        ) {
+          // First non-matching case. Break this loop and continue with the next
+          // image list (if any).
+          continue 2;
+        }
+        if ($checkVisibility && !$imageList[$index]->isVisible()) {
+          // Image is not visible.
+          continue 2;
+        }
+      }
+
+      // If we made it here, then the last image list contained all the images
+      // in the expected order.
+      return;
+    }
+
+    $format = $checkVisibility
+      ? "The images '%s' are not visible on the page in this order. The first non-visible was '%s'."
+      : "The images '%s' cannot be found on the page in this order. The first missing image was '%s'.";
+    throw new \Exception(sprintf(
+      $format,
+      implode("', '", $imageFilenameList),
+      $imageFilenameList[$index]
+    ));
+  }
+
+  /**
    * Checks that a given image is present.
    *
    * @param string $filename
@@ -372,10 +477,11 @@ class FeatureContext extends RawDrupalContext {
    * @Then I (should )see the image :filename
    */
   public function assertImagePresent(string $filename, ?NodeElement $element = NULL): void {
-    if ($imageNode = $this->getImage($filename, $element)) {
+    foreach ($this->getAllImages($filename, $element) as $imageNode) {
       try {
-        Assert::assertTrue($imageNode->isVisible());
-        return;
+        if ($imageNode->isVisible()) {
+          return;
+        }
       }
       catch (UnsupportedDriverActionException | UnsupportedDrupalDriverActionException) {
       }
@@ -697,6 +803,31 @@ class FeatureContext extends RawDrupalContext {
   }
 
   /**
+   * Checks whether an element with a CSS selector can be found on the page.
+   *
+   * @param string $selector
+   *   The CSS selector of the element.
+   *
+   * @return \Behat\Mink\Element\NodeElement
+   *   The first node element on the page matching the selector.
+   *
+   * @throws \Exception
+   *   If the element cannot be found.
+   *
+   * @Then the page should have an element with CSS selector :selector
+   */
+  public function getElementByCss(string $selector): NodeElement {
+    if ($element = $this->getSession()->getPage()->find('css', $selector)) {
+      return $element;
+    }
+
+    throw new \Exception(sprintf(
+      "Element with CSS selector '%s' could not be found on the page",
+      $selector
+    ));
+  }
+
+  /**
    * Click on an element by css class.
    *
    * @param string $element
@@ -705,12 +836,7 @@ class FeatureContext extends RawDrupalContext {
    * @Then /^I click on element "([^"]*)"$/
    */
   public function iClickOn(string $element): void {
-    $page = $this->getSession()->getPage();
-    $findName = $page->find('css', $element);
-    if (!$findName) {
-      throw new \Exception($element . " could not be found");
-    }
-    $findName->click();
+    $this->getElementByCss($element)->click();
   }
 
   /**
