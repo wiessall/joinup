@@ -112,3 +112,34 @@ function joinup_core_deploy_110303(): void {
     'weight' => -6,
   ])->save();
 }
+
+/**
+ * Make sure that oss_archived has a default value.
+ */
+function joinup_core_deploy_110304(array &$sandbox): string {
+  $entityTypeManager = \Drupal::entityTypeManager();
+  /** @var \Drupal\node\NodeStorage $nodeStorage */
+  $nodeStorage = $entityTypeManager->getStorage('node');
+
+  if (empty($sandbox['ids'])) {
+    $results = $nodeStorage->getQuery()->accessCheck(FALSE)
+      ->condition('type', 'oss_solution')
+      ->notExists('oss_archived')
+      ->execute();
+
+    $sandbox['ids'] = array_values($results);
+    $sandbox['progress'] = 0;
+    $sandbox['count'] = count($sandbox['ids']);
+  }
+
+  $ids = array_splice($sandbox['ids'], 0, 50);
+  foreach ($nodeStorage->loadMultiple($ids) as $solution) {
+    $solution->set('oss_archived', 0);
+    $solution->save();
+  }
+
+  $sandbox['progress'] += count($ids);
+  $sandbox['#finished'] = (int) empty($sandbox['ids']);
+
+  return "Processed {$sandbox['progress']} out of {$sandbox['count']} solutions.";
+}

@@ -156,7 +156,6 @@
                     applicationSuite: Suite1
                     url: "https://all.self-hosted.example.com/group3/project3"
                     landingURL: "https://example.com/project3"
-                    releaseDate: "2010-01-31"
                     platforms:
                       - linux
                     categories:
@@ -442,7 +441,6 @@
                         type: internal
                       platforms:
                         - web
-                      releaseDate: '2017-11-07'
                       softwareType: standalone/desktop
 
 'limited.self-hosted.gitlab.example.com group2':
