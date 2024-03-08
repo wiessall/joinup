@@ -192,7 +192,8 @@
             "web/modules/contrib/message_digest/src/Traits/MessageDigestTrait.php",
             "web/modules/contrib/og_menu/src/Tests/Traits/OgMenuTrait.php",
             "web/modules/contrib/pipeline/src/Traits/PipelineContextTrait.php",
-            "web/modules/contrib/spdx/src/Traits/SpdxContextTrait.php"
+            "web/modules/contrib/spdx/src/Traits/SpdxContextTrait.php",
+            "scripts/composer/ComposerPatches.php"
         ],
         "files": [
             "src/Composer/load.environment.php"
@@ -209,9 +210,11 @@
     },
     "scripts": {
         "post-install-cmd": [
+            "Joinup\\composer\\ComposerPatches::validate",
             "./scripts/composer/post_install"
         ],
         "post-update-cmd": [
+            "Joinup\\composer\\ComposerPatches::validate",
             "./scripts/composer/post_update"
         ]
     },
@@ -256,6 +259,9 @@
             "drupal/core": "-p2"
         },
         "patches": {
+            "drupal/addtocal": {
+                "Uncaught TypeError: $(...).once is not a function @see https://www.drupal.org/project/addtocal/issues/3372354": "resources/patch/php/drupal/addtocal/3372354.patch"
+            },
             "drupal/blazy": {
                 "The definition for the sequence declares the type of its items in a way that is deprecated in drupal:8.0.0 @see https://drupal.org/i/3411047": "resources/patch/php/drupal/blazy/3411047-note246730.diff"
             },
@@ -363,6 +369,9 @@
             },
             "drupal/message_notify": {
                 "Allow 3rd-party to act before delivery @see https://www.drupal.org/project/message_notify/issues/3314370": "resources/patch/php/drupal/message_notify/3314370.diff"
+            },
+            "drupal/meta_entity": {
+                "Target entity tags should be invalidated even if meta entity is new @see https://drupal-org/i/3422612": "resources/patch/php/drupal/meta_entity/meta_entity-target_entity_cache_tags-3422612-7.diff"
             },
             "drupal/og": {
                 "The annotations for \"edit-form\" and \"delete-form\" @see https://www.drupal.org/project/og/issues/3338830": "resources/patch/php/drupal/og/3338830.diff",
