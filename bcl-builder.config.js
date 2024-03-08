@@ -199,6 +199,20 @@ module.exports = {
         sourceMap: true,
       },
     },
+    {
+      entry: path.resolve(
+        outputFolder,
+        `${ventuno}src/js/sticky-groupheader.js`
+      ),
+      dest: path.resolve(
+        outputFolder,
+        `${ventuno}assets/js/sticky-groupheader.js`
+      ),
+      options: {
+        minify: true,
+        sourceMap: true,
+      },
+    },
     // IOP
     {
       entry: path.resolve(outputFolder, `${iop}src/js/glide.js`),

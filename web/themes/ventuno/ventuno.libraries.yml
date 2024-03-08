@@ -61,6 +61,8 @@ group:
   css:
     theme:
       assets/css/group.min.css: { minified: true }
+  js:
+    assets/js/sticky-groupheader.min.js: { minified: true, attributes: { defer: true } }
 
 # Components
 abstract:
