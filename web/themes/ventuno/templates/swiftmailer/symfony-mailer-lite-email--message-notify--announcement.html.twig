@@ -43,10 +43,9 @@
 #}
 {% if is_html %}
 <html>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <style>
-    {{ source('@ventuno/../assets/css/emails/mail.min.css') }}
-  </style>
+  <head>
+    {% include '@ventuno/parts/mail-head.html.twig' %}
+  </head>
   <body>
     <table role="presentation">
       <thead>
