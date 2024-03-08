@@ -8,6 +8,7 @@ module:
   asset_distribution: 0
   asset_release: 0
   autologout: 0
+  blazy: 0
   block: 0
   breakpoint: 0
   cached_computed_field: 0
@@ -16,6 +17,7 @@ module:
   changed_fields: 0
   ckeditor5: 0
   collection: 0
+  colorbox: 0
   comment: 0
   config: 0
   config_ignore: 0
@@ -114,6 +116,7 @@ module:
   joinup_search: 0
   joinup_seo: 0
   joinup_sitewide_alert: 0
+  joinup_slick: 0
   joinup_sparql: 0
   joinup_stats: 0
   joinup_subscription: 0
@@ -207,6 +210,7 @@ module:
   simple_sitemap: 0
   sitewide_alert: 0
   sitewide_alert_block: 0
+  slick: 0
   smart_trim: 0
   social_media_links: 0
   social_media_links_field: 0

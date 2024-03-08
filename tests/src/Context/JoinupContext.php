@@ -2095,6 +2095,32 @@ class JoinupContext extends RawDrupalContext {
   }
 
   /**
+   * Waits until CSS transitions and animations finish.
+   *
+   * @param string $seconds
+   *   Number of seconds to wait.
+   *
+   * @throws \Exception
+   *   Thrown when the element doesn't become visible within the given time.
+   *
+   * @Then I wait up to :seconds seconds for CSS transitions to finish
+   */
+  public function waitForCssAnimations(string $seconds): void {
+    $script = <<<JS
+    (function() {
+      return document.getAnimations({}).length < 1;
+    }());
+JS;
+    $res = $this->getSession()->wait(1000 * $seconds, $script);
+    if (!$res) {
+      throw new \Exception(sprintf(
+        "An element on the page has unfinished CSS transition after '%s' seconds.",
+        $seconds
+      ));
+    }
+  }
+
+  /**
    * Waits until the given region becomes visible.
    *
    * @param string $region
