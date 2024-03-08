@@ -11,8 +11,8 @@ use Drupal\Core\Logger\LoggerChannelInterface;
 use Drupal\Core\Site\Settings;
 use Drupal\Core\Utility\Error;
 use Drupal\eu_oss_catalogue\EuOssCatalogueGitHostingPlatformPluginBase;
+use Drupal\eu_oss_catalogue\Exception\HostingPlatformFetchException;
 use Drupal\eu_oss_catalogue\Exception\MissingAccessTokenException;
-use Drupal\eu_oss_catalogue\Exception\ProviderFetchException;
 use Drupal\eu_oss_catalogue\Model\GitHub\SearchType;
 use Drupal\eu_oss_catalogue\Model\GitHub\State;
 use Drupal\eu_oss_catalogue\Model\GitUri;
@@ -217,7 +217,7 @@ class GitHub extends EuOssCatalogueGitHostingPlatformPluginBase {
             '@query' => $query->toString(),
             '@message' => $exception->getMessage(),
           ]);
-          throw new ProviderFetchException(message: $exception->getMessage(), previous: $exception);
+          throw new HostingPlatformFetchException(message: $exception->getMessage(), previous: $exception);
         }
 
         foreach ($response['data']['search']['nodes'] as $node) {

@@ -13,7 +13,7 @@ use Drupal\Core\Logger\LoggerChannelInterface;
 use Drupal\Core\Site\Settings;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\eu_oss_catalogue\EuOssCatalogueGitHostingPlatformPluginBase;
-use Drupal\eu_oss_catalogue\Exception\ProviderFetchException;
+use Drupal\eu_oss_catalogue\Exception\HostingPlatformFetchException;
 use Drupal\eu_oss_catalogue\Model\GitUri;
 use Drupal\eu_oss_catalogue\Model\Project;
 use Psr\Http\Client\ClientInterface;
@@ -116,7 +116,7 @@ class Bitbucket extends EuOssCatalogueGitHostingPlatformPluginBase {
             '%base_url' => $this->getConfiguration()['baseUrl'],
           ]
         );
-        throw new ProviderFetchException(message: $exception->getMessage(), previous: $exception);
+        throw new HostingPlatformFetchException(message: $exception->getMessage(), previous: $exception);
       }
     }
   }

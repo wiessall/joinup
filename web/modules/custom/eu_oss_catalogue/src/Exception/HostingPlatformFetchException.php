@@ -7,4 +7,4 @@ namespace Drupal\eu_oss_catalogue\Exception;
 /**
  * Exception if hosting platform fetching failed.
  */
-class HostingPlatformFetchException extends ProviderFetchException {}
+class HostingPlatformFetchException extends EuOssCatalogueException {}
