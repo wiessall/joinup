@@ -201,7 +201,8 @@
             "web/modules/contrib/message_digest/src/Traits/MessageDigestTrait.php",
             "web/modules/contrib/og_menu/src/Tests/Traits/OgMenuTrait.php",
             "web/modules/contrib/pipeline/src/Traits/PipelineContextTrait.php",
-            "web/modules/contrib/spdx/src/Traits/SpdxContextTrait.php"
+            "web/modules/contrib/spdx/src/Traits/SpdxContextTrait.php",
+            "scripts/composer/ComposerPatches.php"
         ],
         "files": [
             "src/Composer/load.environment.php"
@@ -218,9 +219,11 @@
     },
     "scripts": {
         "post-install-cmd": [
+            "Joinup\\composer\\ComposerPatches::validate",
             "./scripts/composer/post_install"
         ],
         "post-update-cmd": [
+            "Joinup\\composer\\ComposerPatches::validate",
             "./scripts/composer/post_update"
         ]
     },
@@ -363,7 +366,8 @@
             "drupal/imagecache_external": {
                 "Support SVG @see https://www.drupal.org/i/3390948": "resources/patch/php/drupal/imagecache_external/3390948.diff",
                 "Add option to override the inherited HTTP client configuration @see https://drupal.org/i/3396502": "resources/patch/php/drupal/imagecache_external/3396502-7.diff",
-                "Do not try to download failed URLs repeatedly: attempt next time only after the local cache is rebuilt @see https://drupal.org/i/3398665": "resources/patch/php/drupal/imagecache_external/3398665.diff"
+                "Do not try to download failed URLs repeatedly: attempt next time only after the local cache is rebuilt @see https://drupal.org/i/3398665": "resources/patch/php/drupal/imagecache_external/3398665.diff",
+                "Imagecache External Responsive Image formatter uses wrong key to read link setting @see https://drupal.org/i/3424594": "resources/patch/php/drupal/imagecache_external/imagecache_external-wrong_setting_key-3424594-5--complete.patch"
             },
             "drupal/inline_entity_form": {
                 "Autocomplete field doesn't allow to reference entities with long titles @see https://www.drupal.org/node/2895663": "resources/patch/php/drupal/inline_entity_form/2895663.patch",
@@ -443,6 +447,9 @@
             "drupal/svg_image": {
                 "SVG is not valid or cannot be sanitized, return an error. @see https://www.drupal.org/i/3350696": "resources/patch/php/drupal/svg_image/3350696.patch",
                 "Upload a SVG from CKEditor (image inline). @see https://www.drupal.org/i/3093972": "resources/patch/php/drupal/svg_image/3093972.patch"
+            },
+            "drupal/ui_patterns_settings": {
+                "Fix TypeError: array_unshift(): Argument #1 ($array) must be of type array, null given in array_unshift() Caused by Deprecated Hooks in Drupal ~10.2.0 @see https://www.drupal.org/i/3409221": "resources/patch/php/drupal/ui_patterns_settings/ui_patterns_settings-3409221-26.patch"
             },
             "drupal/video_embed_field": {
                 "Extend support for embed URLs. Option to force privacy @see https://www.drupal.org/project/video_embed_field/issues/3060201 (originally on https://www.drupal.org/node/2899093)": "resources/patch/php/drupal/video_embed_field/3060201.patch",
