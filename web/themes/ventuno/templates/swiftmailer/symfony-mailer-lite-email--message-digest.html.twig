@@ -32,10 +32,7 @@
 #}
 <html>
 <head>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <style>
-    {{ source('@ventuno/../assets/css/emails/mail.min.css') }}
-  </style>
+  {% include '@ventuno/parts/mail-head.html.twig' %}
 </head>
 <body>
   <table>
