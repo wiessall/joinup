@@ -5,7 +5,10 @@ Feature:
 
   Scenario: Moderators can create and edit webforms
     Given I am logged in as a "moderator"
-    When I visit "/admin/structure/webform/add"
+    And I am on the homepage
+    And I click "Dashboard" in the "Navigation bar" region
+    And I click "Manage webforms" in the "Content" region
+    And I click "Add webform"
     And I fill in "Title" with "Test webform"
     And I fill in "Machine-readable name" with "test_webform"
     And I press "Save"
@@ -19,7 +22,8 @@ Feature:
       | Add element |
       | Add page    |
       | Add layout  |
-    And I visit "admin/structure/webform/manage/test_webform/element/add/checkbox"
+    And I click "Add element"
+    And I click "Checkbox"
     And I fill in the following:
       | Key   | test_checkbox |
       | Title | Test checkbox |
