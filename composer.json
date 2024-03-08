@@ -21,6 +21,7 @@
         "drupal/cas_attributes": "^2.0",
         "drupal/changed_fields": "^3.2",
         "drupal/ckeditor": "^1.0",
+        "drupal/colorbox": "^2.0",
         "drupal/config_ignore": "^3.0",
         "drupal/config_readonly": "^1.0",
         "drupal/core": "~10.2",
@@ -261,6 +262,10 @@
             "drupal/cas": {
                 "Should CAS respect Drupal registration configuration @see https://www.drupal.org/project/cas/issues/3038279": "resources/patch/php/drupal/cas/3038279.patch"
             },
+            "drupal/colorbox": {
+                "Replace README.txt with README.md @see https://drupal.org/i/3315327": "resources/patch/php/drupal/colorbox/3315327-mr25-merged.diff",
+                "Support Responsive Image module in D8 @see https://drupal.org/i/2808883": "resources/patch/php/drupal/colorbox/colorbox-responsive-image-2808883-68.patch"
+            },
             "drupal/core": {
                 "Allow image style to be selected in text editor @see https://www.drupal.org/node/2061377": "resources/patch/php/drupal/core/2061377-d10.2-455.diff",
                 "Allow making the file description a required field @see https://www.drupal.org/node/2320877": "resources/patch/php/drupal/core/2320877.patch",
@@ -419,6 +424,9 @@
             "drupal/svg_image": {
                 "SVG is not valid or cannot be sanitized, return an error. @see https://www.drupal.org/i/3350696": "resources/patch/php/drupal/svg_image/3350696.patch",
                 "Upload a SVG from CKEditor (image inline). @see https://www.drupal.org/i/3093972": "resources/patch/php/drupal/svg_image/3093972.patch"
+            },
+            "drupal/ui_patterns_settings": {
+                "Fix TypeError: array_unshift(): Argument #1 ($array) must be of type array, null given in array_unshift() Caused by Deprecated Hooks in Drupal ~10.2.0 @see https://www.drupal.org/i/3409221": "resources/patch/php/drupal/ui_patterns_settings/ui_patterns_settings-3409221-26.patch"
             },
             "drupal/video_embed_field": {
                 "Extend support for embed URLs. Option to force privacy @see https://www.drupal.org/project/video_embed_field/issues/3060201 (originally on https://www.drupal.org/node/2899093)": "resources/patch/php/drupal/video_embed_field/3060201.patch",

@@ -477,10 +477,11 @@ class FeatureContext extends RawDrupalContext {
    * @Then I (should )see the image :filename
    */
   public function assertImagePresent(string $filename, ?NodeElement $element = NULL): void {
-    if ($imageNode = $this->getImage($filename, $element)) {
+    foreach ($this->getAllImages($filename, $element) as $imageNode) {
       try {
-        Assert::assertTrue($imageNode->isVisible());
-        return;
+        if ($imageNode->isVisible()) {
+          return;
+        }
       }
       catch (UnsupportedDriverActionException | UnsupportedDrupalDriverActionException) {
       }

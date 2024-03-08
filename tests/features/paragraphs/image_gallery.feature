@@ -60,4 +60,20 @@ Feature:
     And I should not see the image "banner.jpg"
     And I should not see the image "linus.jpeg"
     And the page should have an element with CSS selector ".slick--optionset--image-gallery button[aria-label='Previous'][aria-disabled='true']"
+    Then I click on element ".slick--optionset--image-gallery .slide--0"
+    And I wait for AJAX to finish
+    And the page should have an element with CSS selector ".colorbox"
+    And I should see the image "logo.png"
+    And I should see the button "« Prev"
+    And I should see the button "Next »"
+    And I should see the button "Close"
+    And I press "Next »"
+    And I wait for AJAX to finish
+    And I press "Next »"
+    And I wait for AJAX to finish
+    And I press "Next »"
+    And I should see the image "linus.jpeg"
+    Then I press "Close"
+    And I should not see the image "linus.jpeg"
+
 
