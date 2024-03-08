@@ -257,6 +257,9 @@
             "drupal/core": "-p2"
         },
         "patches": {
+            "drupal/addtocal": {
+                "Uncaught TypeError: $(...).once is not a function @see https://www.drupal.org/project/addtocal/issues/3372354": "resources/patch/php/drupal/addtocal/3372354.patch"
+            },
             "drupal/cas": {
                 "Should CAS respect Drupal registration configuration @see https://www.drupal.org/project/cas/issues/3038279": "resources/patch/php/drupal/cas/3038279.patch"
             },
