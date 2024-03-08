@@ -2577,21 +2577,4 @@ class FeatureContext extends RawDrupalContext {
     sleep(1);
   }
 
-  /**
-   * Asserts that configuration is editable or locked.
-   *
-   * @param string $state
-   *   The state of the configuration. Either 'locked' or 'unlocked'.
-   *
-   * @Then the configuration should be :state
-   */
-  public function theConfigurationState(string $state): void {
-    \assert(in_array($state, ['locked', 'unlocked']));
-
-    // Settings array persist over the static request so in order to check if
-    // configuration is readonly, we are checking the disable-config-readonly
-    // file.
-    Assert::assertTrue(file_exists(DRUPAL_ROOT . '/../disable-config-readonly') === ($state === 'unlocked'));
-  }
-
 }

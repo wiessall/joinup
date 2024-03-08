@@ -39,11 +39,11 @@ final class WarningMessageBlock extends BlockBase {
   /**
    * {@inheritdoc}
    */
-  public function access(AccountInterface $account, $return_as_object = FALSE): AccessResultInterface|bool {
+  protected function blockAccess(AccountInterface $account): AccessResultInterface {
     // Allow the environment variable to not show this block on development
     // environment so that devs do not get used to the warning.
     $access = !getenv('IS_DDEV_PROJECT');
-    return $return_as_object ? AccessResult::allowedIf($access) : $access;
+    return AccessResult::allowedIf($access);
   }
 
 }
