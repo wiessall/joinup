@@ -40,4 +40,12 @@ interface OssSolutionInterface extends NodeInterface {
    */
   public function getRelevantLangCode(): string;
 
+  /**
+   * Checks whether the entity is archived.
+   *
+   * @return bool
+   *   Whether this entity is archived.
+   */
+  public function isArchived(): bool;
+
 }
