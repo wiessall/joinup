@@ -1,8 +1,18 @@
 @import "../partials/core";
 
 .group-banner {
+  .container {
+    .sticky-top & {
+      align-items: center !important;
+    }
+  }
   &__logo {
     flex-shrink: 0;
+    width: 100px;
+    transition: width 0.5s;
+    .sticky-top & {
+      width: 60px;
+    }
   }
   &__title {
     flex: 10 1 0%;
@@ -11,6 +21,9 @@
     flex: 1 0 100%;
     column-gap: $spacer;
     row-gap: $spacer * .25;
+    .sticky-top & {
+      display: none !important;
+    }
   }
   &__actions {
     flex: 0 1 auto;
