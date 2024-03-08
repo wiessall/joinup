@@ -135,7 +135,7 @@ class DevelopersItalia extends EuOssCatalogueProviderPluginBase {
           yield $project;
         }
       }
-      catch (ProviderFetchException $exception) {
+      catch (HostingPlatformFetchException $exception) {
         // Collect provider fetch exceptions, and throw them at the end of the
         // fetch operation.
         $collectedExceptions[] = $exception->getMessage();
@@ -148,7 +148,7 @@ class DevelopersItalia extends EuOssCatalogueProviderPluginBase {
     }
 
     if (!empty($collectedExceptions)) {
-      throw new HostingPlatformFetchException(implode(PHP_EOL, $collectedExceptions));
+      throw new ProviderFetchException(implode(PHP_EOL, $collectedExceptions));
     }
   }
 
@@ -168,7 +168,7 @@ class DevelopersItalia extends EuOssCatalogueProviderPluginBase {
       }
       if (isset($exception) || $response->getStatusCode() >= 400) {
         $message = $exception?->getMessage() ?? $response->getReasonPhrase();
-        throw new HostingPlatformFetchException(
+        throw new ProviderFetchException(
           $message,
           0,
           $exception ?? NULL

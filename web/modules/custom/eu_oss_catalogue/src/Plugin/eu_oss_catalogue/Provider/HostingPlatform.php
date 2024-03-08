@@ -116,8 +116,8 @@ class HostingPlatform extends EuOssCatalogueProviderPluginBase implements Config
         }
       }
     }
-    catch (ProviderFetchException $exception) {
-      throw new HostingPlatformFetchException(
+    catch (HostingPlatformFetchException $exception) {
+      throw new ProviderFetchException(
         $exception->getMessage(),
         0,
          $exception->getPrevious()

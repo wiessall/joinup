@@ -24,7 +24,7 @@ interface EuOssCatalogueHostingPlatformInterface extends ConfigurableInterface {
    * @return iterable
    *   Array of \Drupal\eu_oss_catalogue\Model\Project instances.
    *
-   * @throws \Drupal\eu_oss_catalogue\Exception\ProviderFetchException
+   * @throws \Drupal\eu_oss_catalogue\Exception\HostingPlatformFetchException
    *   If any exception happens during fetch, e.g. the server is unavailable or
    *   request quota is exceeded.
    */
