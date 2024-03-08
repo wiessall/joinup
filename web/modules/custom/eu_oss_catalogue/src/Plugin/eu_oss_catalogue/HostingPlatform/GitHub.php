@@ -328,9 +328,9 @@ class GitHub extends EuOssCatalogueGitHostingPlatformPluginBase {
     $filters = [
       'type' => SearchType::REPOSITORY,
       'query' => $searchQuery,
-       // The higher number might compromise/break the correct GitHub APIs response.
-       // The timeout problem can happen for graphql queries that are complex
-       // and trying to receive too much data at one request,
+       // The higher number might compromise/break the correct GitHub APIs
+       // response. The timeout problem can happen for graphql queries that
+       // are complex and trying to receive too much data at one request,
        // It is recommended to break up into smaller chunk sizes.
       'first' => 20,
     ] + ($endCursor ? ['after' => $endCursor] : []);
