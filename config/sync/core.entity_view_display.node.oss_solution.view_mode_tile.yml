@@ -66,6 +66,50 @@ content:
     third_party_settings: {  }
     weight: 1
     region: content
+  oss_git_forks:
+    type: number_integer
+    label: visually_hidden
+    settings:
+      thousand_separator: ''
+      prefix_suffix: false
+    third_party_settings:
+      template_suggestion:
+        template_suggestion: git_indicator
+    weight: 14
+    region: content
+  oss_git_open_issues:
+    type: number_integer
+    label: visually_hidden
+    settings:
+      thousand_separator: ''
+      prefix_suffix: false
+    third_party_settings:
+      template_suggestion:
+        template_suggestion: git_indicator
+    weight: 12
+    region: content
+  oss_git_open_pull_requests:
+    type: number_integer
+    label: visually_hidden
+    settings:
+      thousand_separator: ''
+      prefix_suffix: false
+    third_party_settings:
+      template_suggestion:
+        template_suggestion: git_indicator
+    weight: 13
+    region: content
+  oss_git_stars:
+    type: number_integer
+    label: visually_hidden
+    settings:
+      thousand_separator: ''
+      prefix_suffix: false
+    third_party_settings:
+      template_suggestion:
+        template_suggestion: git_indicator
+    weight: 11
+    region: content
   oss_logo:
     type: imagecache_external_responsive_image
     label: hidden
@@ -104,10 +148,6 @@ hidden:
   oss_documentation: true
   oss_features: true
   oss_git_description: true
-  oss_git_forks: true
-  oss_git_open_issues: true
-  oss_git_open_pull_requests: true
-  oss_git_stars: true
   oss_git_url: true
   oss_hosting_platform: true
   oss_landing_url: true

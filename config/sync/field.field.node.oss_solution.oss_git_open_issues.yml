@@ -9,7 +9,7 @@ id: node.oss_solution.oss_git_open_issues
 field_name: oss_git_open_issues
 entity_type: node
 bundle: oss_solution
-label: 'GIT Open Issues'
+label: 'Open Issues'
 description: ''
 required: false
 translatable: false
