@@ -23,4 +23,5 @@ class RdfCountLink extends CountLink {
 
   use ActionLinkArchivedTrait;
   use RdfActionLinkTrait;
+
 }

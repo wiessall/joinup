@@ -34,4 +34,5 @@ class RdfAjaxActionLink extends AJAXactionLink {
 
     return $build;
   }
+
 }
