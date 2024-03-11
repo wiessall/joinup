@@ -1,0 +1,46 @@
+uuid: edda81e8-696a-4d2e-8909-b96cc31f12b5
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.teaser
+    - field.field.node.licence.deprecated
+    - field.field.node.licence.description
+    - field.field.node.licence.legal_type
+    - field.field.node.licence.licence_type
+    - field.field.node.licence.spdx_licence
+    - node.type.licence
+  module:
+    - link
+    - user
+id: node.licence.teaser
+targetEntityType: node
+bundle: licence
+mode: teaser
+content:
+  links:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 100
+    region: content
+  report:
+    type: link
+    label: hidden
+    settings:
+      trim_length: 80
+      url_only: false
+      url_plain: false
+      rel: ''
+      target: ''
+    third_party_settings: {  }
+    weight: 50
+    region: content
+hidden:
+  deprecated: true
+  description: true
+  langcode: true
+  legal_type: true
+  licence_type: true
+  published_at: true
+  search_api_excerpt: true
+  spdx_licence: true

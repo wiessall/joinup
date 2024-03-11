@@ -1,0 +1,75 @@
+uuid: 78a2ad60-6f29-4b1e-bed2-be68989bc442
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.node.licence.deprecated
+    - field.field.node.licence.description
+    - field.field.node.licence.legal_type
+    - field.field.node.licence.licence_type
+    - field.field.node.licence.spdx_licence
+    - node.type.licence
+  module:
+    - text
+id: node.licence.default
+targetEntityType: node
+bundle: licence
+mode: default
+content:
+  deprecated:
+    type: boolean_checkbox
+    weight: 5
+    region: content
+    settings:
+      display_label: true
+    third_party_settings: {  }
+  description:
+    type: text_textarea
+    weight: 1
+    region: content
+    settings:
+      rows: 5
+      placeholder: ''
+    third_party_settings: {  }
+  legal_type:
+    type: options_select
+    weight: 4
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  licence_type:
+    type: entity_reference_autocomplete
+    weight: 2
+    region: content
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  spdx_licence:
+    type: options_select
+    weight: 3
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  title:
+    type: string_textfield
+    weight: 0
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+hidden:
+  created: true
+  current_workflow_state: true
+  langcode: true
+  path: true
+  promote: true
+  published_at: true
+  simple_sitemap: true
+  status: true
+  sticky: true
+  uid: true
+  url_redirects: true

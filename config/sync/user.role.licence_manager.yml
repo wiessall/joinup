@@ -4,12 +4,13 @@ status: true
 dependencies:
   config:
     - filter.format.plain_text_glossary
+    - node.type.licence
     - taxonomy.vocabulary.legal_type
   module:
     - dashboard
     - filter
     - joinup_licence
-    - rdf_entity
+    - node
     - taxonomy
     - toolbar
 id: licence_manager
