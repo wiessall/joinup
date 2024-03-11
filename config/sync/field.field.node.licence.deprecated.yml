@@ -1,0 +1,23 @@
+uuid: 96b97dfa-ea36-4e13-9175-66622b7a5e60
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.deprecated
+    - node.type.licence
+id: node.licence.deprecated
+field_name: deprecated
+entity_type: node
+bundle: licence
+label: Deprecated
+description: ''
+required: false
+translatable: false
+default_value:
+  -
+    value: 0
+default_value_callback: ''
+settings:
+  on_label: Deprecated
+  off_label: Active
+field_type: boolean

@@ -1,0 +1,24 @@
+uuid: 6361131b-b88c-48d0-832b-43278413fbc4
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.description
+    - filter.format.content_editor
+    - node.type.licence
+  module:
+    - text
+id: node.licence.description
+field_name: description
+entity_type: node
+bundle: licence
+label: Description
+description: ''
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  allowed_formats:
+    - content_editor
+field_type: text_long
