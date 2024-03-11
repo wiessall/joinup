@@ -21,40 +21,37 @@ use Drupal\joinup_licence\Entity\LicenceInterface;
 use Drupal\joinup_licence\Entity\LicenceLegalType;
 use Drupal\joinup_licence\Entity\SpdxLicence;
 use Drupal\joinup_taxonomy\Entity\MappedTerm;
-use Drupal\rdf_entity\Entity\RdfEntityType;
-use Drupal\rdf_entity\RdfInterface;
+use Drupal\node\NodeInterface;
 
 /**
  * Implements hook_entity_bundle_field_info_alter().
  */
 function joinup_licence_entity_bundle_field_info_alter(array &$fields, EntityTypeInterface $entity_type, string $bundle): void {
-  if ($entity_type->id() !== 'rdf_entity' || $bundle !== 'licence') {
+  if ($entity_type->id() !== 'node' || $bundle !== 'licence') {
     return;
   }
 
   // Licence labels and references to SPDX licences are unique.
-  if (!empty($fields['label'])) {
-    $fields['label']->addConstraint('UniqueFieldInBundle', ['bundles' => ['licence']]);
+  if (!empty($fields['title'])) {
+    $fields['title']->addConstraint('UniqueFieldInBundle', ['bundles' => ['licence']]);
   }
-  if (!empty($fields['field_licence_spdx_licence'])) {
-    $fields['field_licence_spdx_licence']->addConstraint('UniqueFieldInBundle', ['bundles' => ['licence']]);
+  if (!empty($fields['spdx_licence'])) {
+    $fields['spdx_licence']->addConstraint('UniqueFieldInBundle', ['bundles' => ['licence']]);
   }
 }
 
 /**
  * Implements hook_entity_bundle_info_alter().
- *
- * Declares the bundle classes for Licence entities, SPDX Licence entities and
- * Licence Legal Type taxonomy terms.
  */
-function joinup_licence_entity_bundle_info_alter(&$bundles) {
+function joinup_licence_entity_bundle_info_alter(array &$bundles): void {
   $class_mapping = [
-    'rdf_entity' => [
+    'node' => [
       'licence' => Licence::class,
-      'spdx_licence' => SpdxLicence::class,
     ],
     'taxonomy_term' => [
       'legal_type' => LicenceLegalType::class,
+      'licence_type' => MappedTerm::class,
+      'spdx_licence' => SpdxLicence::class,
     ],
   ];
   foreach ($class_mapping as $entity_type_id => $bundle_mapping) {
@@ -63,9 +60,6 @@ function joinup_licence_entity_bundle_info_alter(&$bundles) {
         $bundles[$entity_type_id][$bundle]['class'] = $class;
       }
     }
-  }
-  if (!empty($bundles['taxonomy_term']['licence_type'])) {
-    $bundles['taxonomy_term']['licence_type']['class'] = LicenceLegalType::class;
   }
 }
 
@@ -84,94 +78,80 @@ function joinup_licence_taxonomy_term_access(EntityInterface $entity, string $op
 /**
  * Implements hook_entity_extra_field_info().
  *
- * - Append additional fields to the licence entity display containing data
- *   from the SPDX licence.
- *
- * @see joinup_licence_rdf_entity_view()
+ * @see joinup_licence_node_view()
  */
 function joinup_licence_entity_extra_field_info(): array {
   $fields = [];
 
-  $licence_type = RdfEntityType::load('licence');
-  if ($licence_type) {
-    $display = &$fields['rdf_entity'][$licence_type->id()]['display'];
-    $display['spdx_licence_label'] = [
-      'label' => t('SPDX licence label'),
-      'description' => t('The label of the licence in the SPDX licence list.'),
-      'visible' => FALSE,
-    ];
-    $display['spdx_licence_id'] = [
-      'label' => t('SPDX licence ID'),
-      'description' => t('The ID of the licence in the SPDX licence list.'),
-      'visible' => FALSE,
-    ];
-    $display['spdx_licence_text'] = [
-      'label' => t('Licence text'),
-      'visible' => FALSE,
-    ];
-    $display['spdx_licence_external_url'] = [
-      'label' => t('Licence external URL'),
-      'visible' => FALSE,
-    ];
-    $display['spdx_see_also'] = [
-      'label' => t('See also'),
-      'description' => t('Links to related licences according to SPDX.'),
-      'visible' => FALSE,
-    ];
-  }
+  $display = &$fields['taxonomy_term']['spdx_licence']['display'];
+  $display['spdx_licence_label'] = [
+    'label' => t('SPDX licence label'),
+    'description' => t('The label of the licence in the SPDX licence list.'),
+    'visible' => FALSE,
+  ];
+  $display['spdx_licence_id'] = [
+    'label' => t('SPDX licence ID'),
+    'description' => t('The ID of the licence in the SPDX licence list.'),
+    'visible' => FALSE,
+  ];
+  $display['spdx_licence_text'] = [
+    'label' => t('Licence text'),
+    'visible' => FALSE,
+  ];
+  $display['spdx_licence_external_url'] = [
+    'label' => t('Licence external URL'),
+    'visible' => FALSE,
+  ];
+  $display['spdx_see_also'] = [
+    'label' => t('See also'),
+    'description' => t('Links to related licences according to SPDX.'),
+    'visible' => FALSE,
+  ];
 
   return $fields;
 }
 
 /**
  * Implements hook_ENTITY_TYPE_view().
- *
- * - Exposes a number of fields from the SPDX Licence entity on the Licence
- *   entity.
  */
-function joinup_licence_rdf_entity_view(array &$build, RdfInterface $entity, EntityViewDisplayInterface $display, string $view_mode): void {
+function joinup_licence_node_view(array &$build, NodeInterface $entity, EntityViewDisplayInterface $display, string $view_mode): void {
   if (!$entity instanceof LicenceInterface) {
     return;
   }
 
+  // Exposes a number of fields from the SPDX Licence term on Licence node.
   if ($spdx_licence = $entity->getSpdxLicenceEntity()) {
     if ($display->getComponent('spdx_licence_label')) {
-      $field_item_list = $spdx_licence->get('label');
+      $field_item_list = $spdx_licence->get('name');
       $build['spdx_licence_label'] = $field_item_list->view();
     }
     if ($display->getComponent('spdx_licence_external_url')) {
-      $url = preg_replace('/(.*)\.html$/', '\1', $spdx_licence->id()) . '.html';
+      $url = preg_replace('/(.*)\.html$/', '\1', $spdx_licence->getUri()) . '.html';
       $spdx_url = Url::fromUri($url, ['fragment' => 'licenseText']);
       $spdx_link = Link::fromTextAndUrl('Licence Text', $spdx_url);
       $build['spdx_licence_external_url'] = $spdx_link->toRenderable();
     }
-    foreach (['spdx_licence_id', 'spdx_licence_text', 'spdx_see_also'] as $pseudo_field) {
+    $fields = [
+      'spdx_licence_id' => 'spdx_id',
+      'spdx_licence_text' => 'description',
+      'spdx_see_also' => 'see_also',
+    ];
+    foreach ($fields as $pseudo_field => $field) {
       if ($display->getComponent($pseudo_field)) {
         /** @var \Drupal\Core\Field\FieldItemListInterface $field_item_list */
-        $field_item_list = $spdx_licence->get("field_$pseudo_field");
+        $field_item_list = $spdx_licence->get($field);
         if (!$field_item_list->isEmpty()) {
           $build[$pseudo_field] = $field_item_list->view();
         }
       }
     }
   }
-
-  // Workaround for a limitation in RDF Entity. Currently the module only
-  // supports a single property in fields that have multiple properties. This
-  // means that the filter format for text_long fields is not stored, and it
-  // falls back to the default filter format. We're setting the right format
-  // here.
-  // @todo Remove once bug #2892361 is fixed.
-  // @see https://www.drupal.org/project/rdf_entity/issues/2892361
-  if (!empty($build['spdx_licence_text'])) {
-    $build['spdx_licence_text'][0]['#format'] = 'licence';
-  }
 }
 
 /**
  * Implements hook_options_list_alter().
  */
-function joinup_licence_options_list_alter(array &$options, array $context) {
+function joinup_licence_options_list_alter(array &$options, array $context): void {
   /** @var \Drupal\field\FieldConfigInterface $field_definition */
   $field_definition = $context['fieldDefinition'];
   if (empty($options) || $field_definition->getName() !== 'field_ad_licence') {
@@ -180,9 +160,9 @@ function joinup_licence_options_list_alter(array &$options, array $context) {
 
   $default_value = $context['entity']->field_ad_licence->target_id;
   $licence_ids = array_keys($options);
-  $licences = \Drupal::entityTypeManager()->getStorage('rdf_entity')->loadMultiple($licence_ids);
+  $licences = \Drupal::entityTypeManager()->getStorage('node')->loadMultiple($licence_ids);
   foreach ($licences as $licence_id => $licence) {
-    $deprecated = (bool) $licence->get('field_licence_deprecated')->value;
+    $deprecated = (bool) $licence->get('deprecated')->value;
     if ($deprecated) {
       if ($licence_id === $default_value) {
         \Drupal::messenger()->addWarning(t('The referenced licence %licence_label is deprecated. You are advised to chose a different licence.', [

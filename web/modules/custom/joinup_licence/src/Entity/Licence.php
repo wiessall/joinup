@@ -4,24 +4,25 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_licence\Entity;
 
-use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\joinup_bundle_class\DescriptionTrait;
 use Drupal\joinup_bundle_class\JoinupBundleClassFieldAccessTrait;
-use Drupal\rdf_entity\Entity\Rdf;
+use Drupal\joinup_rdf\Entity\RdfSyncEntityTrait;
+use Drupal\node\Entity\Node;
 
 /**
  * Bundle class for the 'licence' bundle.
  */
-class Licence extends Rdf implements LicenceInterface {
+class Licence extends Node implements LicenceInterface {
 
   use DescriptionTrait;
   use JoinupBundleClassFieldAccessTrait;
+  use RdfSyncEntityTrait;
 
   /**
    * {@inheritdoc}
    */
   public function getLegalTypes(): array {
-    return $this->getReferencedEntities('field_licence_legal_type');
+    return $this->getReferencedEntities('legal_type');
   }
 
   /**
@@ -45,12 +46,7 @@ class Licence extends Rdf implements LicenceInterface {
    * {@inheritdoc}
    */
   public function getSpdxLicenceEntity(): ?SpdxLicenceInterface {
-    $spdx_licence = $this->getFirstReferencedEntity('field_licence_spdx_licence');
-    if ($spdx_licence instanceof SpdxLicenceInterface) {
-      return $spdx_licence;
-    }
-
-    return NULL;
+    return $this->get('spdx_licence')->entity;
   }
 
   /**
@@ -60,18 +56,16 @@ class Licence extends Rdf implements LicenceInterface {
     if ($spdx_licence = $this->getSpdxLicenceEntity()) {
       return $spdx_licence->getLicenceId();
     }
-
     return NULL;
   }
 
   /**
    * {@inheritdoc}
    */
-  public function getSpdxLicenceRdfId(): ?string {
-    if ($id = $this->getMainPropertyValue('field_licence_spdx_licence')) {
-      return (string) $id;
+  public function getSpdxLicenceUrl(): ?string {
+    if ($spdx = $this->getSpdxLicenceEntity()) {
+      return $spdx->getUri();
     }
-
     return NULL;
   }
 
@@ -98,45 +92,17 @@ class Licence extends Rdf implements LicenceInterface {
    * {@inheritdoc}
    */
   public static function loadBySpdxId(string $spdx_id): ?LicenceInterface {
-    try {
-      $storage = \Drupal::entityTypeManager()->getStorage('rdf_entity');
-    }
-    catch (\Exception $e) {
-      \Drupal::logger('joinup_licence')->error($e->getMessage());
-      return NULL;
-    }
-
-    if (!$storage instanceof EntityStorageInterface) {
-      \Drupal::logger('joinup_licence')->error('Retrieval of RDF storage failed.');
-      return NULL;
-    }
-
-    // Retrieve the ID of the SPDX licence entity.
-    $spdx_entity_ids = $storage->getQuery()->accessCheck(FALSE)
-      ->condition('rid', 'spdx_licence')
-      ->condition('field_spdx_licence_id', $spdx_id)
+    $tids = \Drupal::entityQuery('taxonomy_term')->accessCheck(FALSE)
+      ->condition('vid', 'spdx_term')
+      ->condition('spdx_id', $spdx_id)
       ->execute();
 
-    if (empty($spdx_entity_ids)) {
+    if (!$tids) {
       return NULL;
     }
 
-    // Retrieve the ID of the licence that references the SPDX licence entity.
-    $spdx_entity_id = reset($spdx_entity_ids);
-    $licence_ids = $storage->getQuery()->accessCheck(FALSE)
-      ->condition('rid', 'licence')
-      ->condition('field_licence_spdx_licence', $spdx_entity_id)
-      ->execute();
-
-    if (empty($licence_ids)) {
-      return NULL;
-    }
-
-    $licence_id = reset($licence_ids);
-    $licence = $storage->load($licence_id);
-    if (!$licence instanceof LicenceInterface) {
-      return NULL;
-    }
+    /** @var \Drupal\joinup_licence\Entity\LicenceInterface $licence */
+    $licence = \Drupal::entityTypeManager()->getStorage('node')->load(reset($tids));
 
     return $licence;
   }
@@ -145,7 +111,7 @@ class Licence extends Rdf implements LicenceInterface {
    * {@inheritdoc}
    */
   public function getDescriptionField(): string {
-    return 'field_licence_description';
+    return 'description';
   }
 
 }

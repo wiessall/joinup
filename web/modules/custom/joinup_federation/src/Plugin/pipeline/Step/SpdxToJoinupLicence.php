@@ -90,7 +90,7 @@ class SpdxToJoinupLicence extends JoinupFederationStepPluginBase implements Pipe
     /** @var string $id */
     /** @var \Drupal\joinup_licence\Entity\LicenceInterface $licence */
     foreach ($this->getRdfStorage()->loadMultiple($ids) as $id => $licence) {
-      $spdx_licence_id = $licence->getSpdxLicenceRdfId();
+      $spdx_licence_id = $licence->getSpdxLicenceUrl();
       if (empty($spdx_licence_id)) {
         continue;
       }
