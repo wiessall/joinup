@@ -1,0 +1,15 @@
+uuid: 8a6a6dfd-76ef-4d87-a885-eead0925f193
+langcode: en
+status: true
+dependencies:
+  config:
+    - flag.flag.bookmark_rdf_entity
+  module:
+    - flag
+id: flag_action.bookmark_rdf_entity_unflag
+label: Un-Bookmark
+type: rdf_entity
+plugin: 'flag_action:bookmark_rdf_entity_unflag'
+configuration:
+  flag_id: bookmark_rdf_entity
+  flag_action: unflag
