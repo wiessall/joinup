@@ -97,6 +97,17 @@ Feature:
       | Welcome |
       | Search  |
 
+  Scenario: User can see GIT repo indicators.
+    Given oss_solution content:
+      | title              | oss_source        | oss_git_stars | oss_git_open_issues | oss_git_open_pull_requests | oss_git_forks | status    |
+      | Olympus indicators | developers_italia | 1111          | 2222                | 3333                       | 4444          | published |
+    When I go to the content page of the type "oss_solution" with the title "Olympus indicators"
+    Then I should see the following lines of text:
+      | 1111 |
+      | 2222 |
+      | 3333 |
+      | 4444 |
+
   Scenario: User sees GIT description on OSS Solution page if short description is missing.
     Given oss_solution content:
       | title | oss_development_status | oss_source        | oss_categories | oss_short_description | oss_git_description   | status    | oss_release_date |

@@ -1,0 +1,22 @@
+{#
+/**
+ * @file
+ * Default template for a field.
+ */
+#}
+
+{{ attach_library('ventuno/oss-solution-indicator') }}
+
+{% set classes = [
+  'field--name-' ~ field_name|clean_class,
+  'git-indicator',
+  'git-indicator' ~ '__' ~ field_name_clean|clean_class,
+  'd-flex',
+  'align-items-end'
+] %}
+
+<div{{ attributes.addClass(classes).setAttribute('title', label) }}>
+  {% for item in items %}
+    <span class="me-1">{{ item.content }}</span>
+  {% endfor %}
+</div>

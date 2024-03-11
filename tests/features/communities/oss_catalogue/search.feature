@@ -20,6 +20,18 @@ Feature: OSS catalogue search
     Then I should see the text "SEARCH RESULTS (2)"
     And I should not see the "Linux" tile
 
+  Scenario: User can see GIT repo indicators in tile.
+    Given oss_solution content:
+      | title              | oss_source        | oss_git_stars | oss_git_open_issues | oss_git_open_pull_requests | oss_git_forks | status    |
+      | Olympus indicators | developers_italia | 1111          | 2222                | 3333                       | 4444          | published |
+
+    When I visit the OSS search page
+    Then I should see the text "SEARCH RESULTS (1)"
+    And I should see the text "1111" in the "Olympus indicators" tile
+    And I should see the text "2222" in the "Olympus indicators" tile
+    And I should see the text "3333" in the "Olympus indicators" tile
+    And I should see the text "4444" in the "Olympus indicators" tile
+
   Scenario: User is able to search.
     # Mimic the "EU OSSC" collection.
     Given collection:
@@ -32,12 +44,12 @@ Feature: OSS catalogue search
     And I see the text "Solutions created by and for European Public Services" in the "Header" region
 
     Given oss_solution content:
-      | title                           | oss_development_status | oss_source        | oss_categories                                                  | oss_short_description                                                                                                                         | oss_git_description                                                               | status    | oss_release_date | oss_software_version |
-      | Django-MDQ                      | stable                 | developers_italia | content-management                                              | A lightweight SAML2 MDQ server that implements draft-young-md-query implementation.                                                           |                                                                                   | published | 2022-04-02       | 1.0-beta             |
-      | INGV - QuakeML to NonLinLoc PHS | stable                 | developers_italia | data-analytics,data-collection                                  | Docker image to convert QuakeML format to NonLinLoc PHS format.                                                                               |                                                                                   | published | 2000-07-13       |                      |
-      | NDC Semantic frontend           | beta                   | developers_italia | digital-asset-management                                        |                                                                                                                                               | This is the frontend for the National Data Catalog for Semantic Interoperability. | published | 2023-08-13       | 2.2.4                |
-      | Software Registry               | development            | developers_italia | application-development,it-development,digital-asset-management | Software Registry makes software development phase simplier by showing extended information about projects and allowing source code searches. |                                                                                   | published | 2000-04-13       | 0.1-alpha            |
-      | Immuni                          | obsolete               | developers_italia | data-collection                                                 | Immuni is a mobile app that helps us to fight the COVID-19 pandemic by notifying users at risk of carrying the virus as early as possible     |                                                                                   | published |                  |                      |
+      | title                           | oss_development_status | oss_source        | oss_categories                                                  | oss_short_description                                                                                                                         | oss_git_description                                                               | status    | oss_release_date | oss_logo                                      | oss_software_version |
+      | Django-MDQ                      | stable                 | developers_italia | content-management                                              | A lightweight SAML2 MDQ server that implements draft-young-md-query implementation.                                                           |                                                                                   | published | 2022-04-02       | https://placehold.co/200x200.png              | 1.0-beta             |
+      | INGV - QuakeML to NonLinLoc PHS | stable                 | developers_italia | data-analytics,data-collection                                  | Docker image to convert QuakeML format to NonLinLoc PHS format.                                                                               |                                                                                   | published | 2000-07-13       |                                               |                      |
+      | NDC Semantic frontend           | beta                   | developers_italia | digital-asset-management                                        |                                                                                                                                               | This is the frontend for the National Data Catalog for Semantic Interoperability. | published | 2023-08-13       | https://placehold.co/200x200/orange/white.png | 2.2.4                |
+      | Software Registry               | development            | developers_italia | application-development,it-development,digital-asset-management | Software Registry makes software development phase simplier by showing extended information about projects and allowing source code searches. |                                                                                   | published | 2000-04-13       | https://placehold.co/200x200/red/white.png    | 0.1-alpha            |
+      | Immuni                          | obsolete               | developers_italia | data-collection                                                 | Immuni is a mobile app that helps us to fight the COVID-19 pandemic by notifying users at risk of carrying the virus as early as possible     |                                                                                   | published |                  |                                               |                      |
 
     Then I visit the OSS search page
 
@@ -49,13 +61,16 @@ Feature: OSS catalogue search
     And I should see the text "Release date:" in the "Django-MDQ" tile
     And I should see the text "02/04/2022" in the "Django-MDQ" tile
     And I should see the text "1.0-beta" in the "Django-MDQ" tile
+    And I should see the image "c3e7768d02acad9995a74bb403cfaeae.png.webp"
     And I should see the "INGV - QuakeML to NonLinLoc PHS" tile
     And I should see the text "Docker image to convert QuakeML format to NonLinLoc PHS format." in the "INGV - QuakeML to NonLinLoc PHS" tile
     And I should see the "NDC Semantic frontend" tile
     And I should see the text "2.2.4" in the "NDC Semantic frontend" tile
     And I should see the text "This is the frontend for the National Data Catalog for Semantic Interoperability." in the "NDC Semantic frontend" tile
+    And I should see the image "fa4dc89f4a3cd8948cca2aac974f3e15.png.webp"
     And I should see the "Software Registry" tile
     And I should see the text "0.1-alpha" in the "Software Registry" tile
+    And I should see the image "2875501db3e1dc4a54df527a59964d40.png.webp"
     And I should see the "Immuni" tile
     And I should not see the text "Release date:" in the "Immuni" tile
 

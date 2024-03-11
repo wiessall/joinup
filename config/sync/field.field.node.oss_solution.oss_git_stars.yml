@@ -9,7 +9,7 @@ id: node.oss_solution.oss_git_stars
 field_name: oss_git_stars
 entity_type: node
 bundle: oss_solution
-label: 'GIT Stars'
+label: Stars
 description: ''
 required: false
 translatable: false

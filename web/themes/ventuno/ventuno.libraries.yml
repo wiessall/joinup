@@ -132,6 +132,11 @@ oss-solution-screenshots-carousel:
   dependencies:
     - ventuno/carousel-theme
 
+oss-solution-indicator:
+  css:
+    theme:
+      assets/css/oss-solution-indicator.min.css: { minified: true }
+
 carousel.js:
   header: true
   js:
