@@ -79,6 +79,7 @@ class FlagBlock extends BlockBase implements ContainerFactoryPluginInterface {
       '#type' => 'select',
       '#title' => $this->t('Flag type'),
       '#options' => FlagType::toAssociativeArray(),
+      '#default_value' => $this->configuration['flag_type'],
     ];
 
     return $form;
