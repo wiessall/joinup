@@ -15,7 +15,7 @@ global: false
 flag_short: Bookmark
 flag_long: 'Add this page to bookmarks'
 flag_message: ''
-unflag_short: Un-Bookmark
+unflag_short: Unbookmark
 unflag_long: 'Remove this page from bookmarks'
 unflag_message: ''
 unflag_denied_text: ''
