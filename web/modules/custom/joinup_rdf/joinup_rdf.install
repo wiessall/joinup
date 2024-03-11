@@ -7,6 +7,8 @@
 
 declare(strict_types=1);
 
+use Drupal\Component\Serialization\Json;
+
 /**
  * Performs checks for the RDF entities and its storage.
  *
@@ -103,4 +105,33 @@ function joinup_rdf_update_110401(): void {
 
   // Re-install the module on clean w/o dependencies, they're already installed.
   \Drupal::service('module_installer')->install(['taxonomy'], FALSE);
+}
+
+/**
+ * Delete SPDX Licence & Licence RDF entities.
+ */
+function joinup_rdf_update_110302(): void {
+  // Save licences in a temporary file because we need to delete the content
+  // prior to delete the bundle configs. Data will be restored later, in a
+  // deploy hook.
+  $store = \Drupal::getContainer()->get('joinup_sparql.graph_store.helper')->createGraphStore();
+  $licences = $store->get('http://joinup.eu/licence/published')->toRdfPhp();
+  file_put_contents('private://licences', Json::encode($licences));
+  $sparql = \Drupal::getContainer()->get('sparql.endpoint');
+  $sparql->update("CLEAR GRAPH <http://joinup.eu/spdx_licence/published>;");
+  $sparql->update("CLEAR GRAPH <http://joinup.eu/licence/published>;");
+}
+
+/**
+ * Store document > licence data.
+ */
+function joinup_rdf_update_110303(): void {
+  $db = \Drupal::database();
+  $documentToLicence = $db->select('node__field_licence', 'l')
+    ->fields('l', ['entity_id', 'field_licence_target_id'])
+    ->execute()
+    ->fetchAllKeyed();
+  file_put_contents('private://document_to_licence', Json::encode($documentToLicence));
+  $db->truncate('node__field_licence')->execute();
+  $db->truncate('node_revision__field_licence')->execute();
 }
