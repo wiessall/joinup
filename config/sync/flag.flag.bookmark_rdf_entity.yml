@@ -3,6 +3,7 @@ langcode: en
 status: true
 dependencies:
   module:
+    - joinup_flag
     - rdf_entity
 id: bookmark_rdf_entity
 label: 'Bookmark (RDF entity)'
@@ -14,13 +15,13 @@ global: false
 flag_short: Bookmark
 flag_long: 'Add this page to bookmarks'
 flag_message: ''
-unflag_short: Un-Bookmark
+unflag_short: Unbookmark
 unflag_long: 'Remove this page from bookmarks'
 unflag_message: ''
 unflag_denied_text: ''
 weight: 0
 flag_type: 'entity:rdf_entity'
-link_type: ajax_link
+link_type: rdf_ajax_link
 flagTypeConfig:
   show_in_links: {  }
   show_as_field: false

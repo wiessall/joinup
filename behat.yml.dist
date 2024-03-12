@@ -159,6 +159,7 @@ default:
       region_map:
         Additional fields accordion: '.accordion .accordion-item #management'
         Administration toolbar: '#toolbar-administration'
+        Bookmark block: '#block-ventuno-bookmark'
         Comment: 'section.comments'
         Contact information inline form: '#edit-field-ar-contact-information-wrapper'
         Content listing field filter form: '.field--name-content-listing'
@@ -178,7 +179,7 @@ default:
         IOPE Menu: '#block-iope-navigation'
         Layout paragraphs dialog buttons: '.ui-dialog-buttonpane'
         Left sidebar: 'aside.layout-sidebar'
-        Like block: '.block-joinup-like-block'
+        Like block: '#block-ventuno-like'
         Main fields accordion: '.accordion .accordion-item #main'
         Main solution vertical tab: '#edit-group-main'
         Management solution vertical tab: '#edit-group-management'
