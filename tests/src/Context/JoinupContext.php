@@ -849,6 +849,11 @@ class JoinupContext extends RawDrupalContext {
         'summary' => 'field_glossary_definition:summary',
         'synonyms' => 'field_glossary_synonyms',
       ],
+      'licence' => [
+        'licence type' => 'licence_type',
+        'spdx licence' => 'spdx_licence',
+        'legal type' => 'legal_type',
+      ],
       'news' => [
         'headline' => 'field_news_headline',
         'keywords' => 'field_keywords',

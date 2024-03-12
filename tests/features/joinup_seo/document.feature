@@ -8,10 +8,9 @@ Feature: SEO for document content.
     Given collections:
       | title                          | state     |
       | Joinup SEO document collection | published |
-    And licence:
-      | uri   | https://example.com/license1 |
-      | title | Some license                 |
-      | type  | Public domain                |
+    And licence content:
+      | uri                          | title        | licence type  |
+      | https://example.com/license1 | Some license | Public domain |
     And users:
       | Username          | E-mail                 | First name | Family name |
       | Joinup SEO author | joinup.seo@example.com | Scrapper   | Jedi        |

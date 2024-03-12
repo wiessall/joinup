@@ -22,7 +22,7 @@ Feature: Add distribution through the UI
       | is version of  | Solution random x name |
       | status         | Completed              |
       | state          | published              |
-    And the following licences:
+    And licence content:
       | title              | description                                              | deprecated |
       | WTFPL              | The WTFPL is a rather permissive licence                 | no         |
       | Deprecated licence | The deprecated licence should not be available to select | yes        |
@@ -204,9 +204,9 @@ Feature: Add distribution through the UI
     Then I should see the error message "A distribution with title Windows - source already exists in this solution. Please choose a different title."
 
   Scenario: Licences are not shown in the solution header.
-    Given the following licence:
-      | title       | Boost Software License                                                         |
-      | description | It is a permissive license in the style of the BSD license and the MIT license |
+    Given licence content:
+      | title                  | description                                                                    |
+      | Boost Software License | It is a permissive license in the style of the BSD license and the MIT license |
     And distributions:
       | title        | licence                | parent                 | state     |
       | Hot Snake    | WTFPL                  | Solution random x name | published |

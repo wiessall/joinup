@@ -26,7 +26,7 @@ Feature:
     And the following distributions:
       | title                | description           | parent            | access url | state     |
       | Sitemap distribution | Some kind of download | Sitemap release 1 | test.zip   | published |
-    And the following licences:
+    And licence content:
       | title           | description |
       | Sitemap licence | Not allowed |
     And "custom_page" content:
