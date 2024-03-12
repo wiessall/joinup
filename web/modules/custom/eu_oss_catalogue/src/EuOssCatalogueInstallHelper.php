@@ -13,15 +13,15 @@ class EuOssCatalogueInstallHelper {
    * Creates terms in the controlled vocabularies when installing.
    *
    * @param array $items
-   *   Indexed array of terms, each having the pattern "$vid:$name".
+   *   Indexed array of terms, each being an array of values passed to
+   *   EntityStorageInterface::create.
    * @param array $context
    *   The batch operation context.
    */
   public static function createTerms(array $items, array &$context): void {
     $termStorage = \Drupal::entityTypeManager()->getStorage('taxonomy_term');
     foreach ($items as $item) {
-      [$vid, $term] = explode(':', $item, 2);
-      $termStorage->create(['vid' => $vid, 'name' => $term])->save();
+      $termStorage->create($item)->save();
     }
     $context['message'] = t('Imported @count terms in controlled vocabularies', [
       '@count' => count($items),
