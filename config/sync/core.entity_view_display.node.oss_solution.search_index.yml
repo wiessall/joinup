@@ -34,7 +34,6 @@ dependencies:
     - field.field.node.oss_solution.oss_scope
     - field.field.node.oss_solution.oss_screenshots
     - field.field.node.oss_solution.oss_short_description
-    - field.field.node.oss_solution.oss_software_type
     - field.field.node.oss_solution.oss_software_type_taxonomy
     - field.field.node.oss_solution.oss_software_version
     - field.field.node.oss_solution.oss_source
@@ -46,7 +45,6 @@ dependencies:
     - field_delimiter
     - field_formatter_range
     - layout_builder
-    - options
     - template_suggestion
     - user
 third_party_settings:
@@ -159,13 +157,6 @@ content:
       link_to_entity: false
     third_party_settings: { }
     weight: 3
-    region: content
-  oss_software_type:
-    type: list_default
-    label: hidden
-    settings: {  }
-    third_party_settings: {  }
-    weight: 4
     region: content
   oss_software_type_taxonomy:
     type: entity_reference_label

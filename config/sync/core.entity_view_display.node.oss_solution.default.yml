@@ -33,7 +33,6 @@ dependencies:
     - field.field.node.oss_solution.oss_scope
     - field.field.node.oss_solution.oss_screenshots
     - field.field.node.oss_solution.oss_short_description
-    - field.field.node.oss_solution.oss_software_type
     - field.field.node.oss_solution.oss_software_type_taxonomy
     - field.field.node.oss_solution.oss_software_version
     - field.field.node.oss_solution.oss_source
@@ -699,32 +698,6 @@ third_party_settings:
                     template_suggestion: ''
             weight: 5
             additional: {  }
-          cfcba182-cfc5-4622-a513-1a13a4f0cbae:
-            uuid: cfcba182-cfc5-4622-a513-1a13a4f0cbae
-            region: content
-            configuration:
-              id: 'field_block:node:oss_solution:oss_software_type'
-              label: 'Software type'
-              label_display: '0'
-              provider: layout_builder
-              context_mapping:
-                entity: layout_builder.entity
-                view_mode: view_mode
-              formatter:
-                type: list_default
-                label: above
-                settings: {  }
-                third_party_settings:
-                  field_delimiter:
-                    delimiter: ''
-                  field_formatter_range:
-                    order: 0
-                    limit: 0
-                    offset: 0
-                  template_suggestion:
-                    template_suggestion: ''
-            weight: 6
-            additional: {  }
           838bf83b-44d2-4a77-a40b-4cae3b31236e:
             uuid: 838bf83b-44d2-4a77-a40b-4cae3b31236e
             region: content
@@ -904,7 +877,6 @@ hidden:
   oss_scope: true
   oss_screenshots: true
   oss_short_description: true
-  oss_software_type: true
   oss_software_type_taxonomy: true
   oss_software_version: true
   oss_source: true

@@ -33,7 +33,6 @@ dependencies:
     - field.field.node.oss_solution.oss_scope
     - field.field.node.oss_solution.oss_screenshots
     - field.field.node.oss_solution.oss_short_description
-    - field.field.node.oss_solution.oss_software_type
     - field.field.node.oss_solution.oss_software_type_taxonomy
     - field.field.node.oss_solution.oss_software_version
     - field.field.node.oss_solution.oss_source
@@ -329,12 +328,6 @@ content:
     settings:
       size: 60
       placeholder: ''
-    third_party_settings: {  }
-  oss_software_type:
-    type: options_select
-    weight: 24
-    region: content
-    settings: {  }
     third_party_settings: {  }
   oss_software_type_taxonomy:
     type: entity_reference_autocomplete
