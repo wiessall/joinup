@@ -1,0 +1,18 @@
+{#
+/**
+ * @file
+ * Flag bookmark text template
+ *
+ * Available variables:
+ * - flag: The flag object.
+ * - flaggable: The flaggable entity.
+ */
+#}
+ {% set classes = [
+   'flag',
+   'flag-' ~ flag.id()|clean_class,
+ ] %}
+
+{% set count = flagcount(flag, flaggable) %}
+
+<div class="{{ classes|join(' ') }}">{{ flag.label() }}</div>

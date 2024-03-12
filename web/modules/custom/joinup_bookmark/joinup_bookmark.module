@@ -1,0 +1,20 @@
+<?php
+
+/**
+ * @file
+ * Hook implementations for the Joinup bookmark module.
+ */
+/**
+ * Implements hook_theme().
+ */
+function joinup_bookmark_theme(): array {
+  return [
+    'flag_bookmark_text' => [
+      'variables' => [
+        'flag' => NULL,
+        'flaggable' => NULL,
+        'view_mode' => NULL,
+      ],
+    ],
+  ];
+}

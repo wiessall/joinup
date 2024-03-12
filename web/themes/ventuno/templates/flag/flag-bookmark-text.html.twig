@@ -1,0 +1,34 @@
+{#
+/**
+ * @file
+ * Flag bookmark text template
+ *
+ * Available variables:
+ * - flag: The flag object.
+ * - flaggable: The flaggable entity.
+ */
+#}
+{% apply spaceless %}
+  {# Set the remaining Flag CSS classes. #}
+  {% set classes = [
+    'flag',
+    'flag-' ~ flag.id()|clean_class,
+    'use-ajax',
+    'btn',
+    'btn-secondary',
+  ] %}
+  {% set attributes = create_attribute()
+    .addClass(classes)
+    .setAttribute('href', path('joinup_modal.anonymous', {'type': 'bookmark'}, {'query': {'destination': path('<current>')}}))
+    .setAttribute('data-dialog-type', 'modal')
+    .setAttribute('data-dialog-options', '{"width":"auto","height":"auto"}')
+  %}
+  {% set count = flagcount(flag, flaggable) %}
+
+  <a{{ attributes }}>
+    {{ pattern('icon', {
+      name: 'bookmark'
+    }) }}
+    {{ flag.get('flag_short') }}
+  </a>
+{% endapply %}
