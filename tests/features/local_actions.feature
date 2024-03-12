@@ -46,8 +46,9 @@ Feature:
     When I click "Metadata" in the "Entity actions" region
     Then I should see the link "View" in the "Entity actions" region
 
-    Given licence:
-      | title | Test licence |
+    Given licence content:
+      | title        |
+      | Test licence |
     When I go to the "Test licence" licence
     Then I should not see the link "View" in the "Entity actions" region
     When I click "Metadata" in the "Entity actions" region

@@ -46,9 +46,8 @@ Feature: SEO for RDF entities.
     Then the rdf metadata of the "SEO distribution" rdf entity should be attached in the page
 
   Scenario: Basic JSON meta information for licences.
-    Given the following licence:
-      | title       | SEO licence            |
-      | description | Licence to perform SEO |
-      | type        | Public domain          |
+    Given licence content:
+      | title       | description            | licence type  |
+      | SEO licence | Licence to perform SEO | Public domain |
     When I go to the "SEO licence" licence
     Then the rdf metadata of the "SEO licence" rdf entity should be attached in the page
