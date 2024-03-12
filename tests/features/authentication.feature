@@ -30,6 +30,7 @@ Feature: User authentication
       | admin/content/rdf                                   |
       | admin/custom-landing-pages                          |
       | admin/custom-landing-pages/add                      |
+      | admin/homepage-topics                               |
       | admin/legal-notice                                  |
       | admin/legal-notice/add                              |
       | admin/people                                        |
@@ -44,11 +45,9 @@ Feature: User authentication
       | admin/structure/compatibility-document/display      |
       | admin/structure/compatibility-document/form-display |
       | admin/structure/media                               |
-      | admin/homepage-topics                               |
       | announcements                                       |
       | dashboard                                           |
       | licence                                             |
-      | licence/add                                         |
       | media/add                                           |
       | media/add/collection_logo                           |
       | media/add/event_logo                                |
@@ -63,6 +62,7 @@ Feature: User authentication
       | node/add/document                                   |
       | node/add/event                                      |
       | node/add/glossary                                   |
+      | node/add/licence                                    |
       | node/add/news                                       |
       | outdated-content-threshold                          |
       | propose/collection                                  |
@@ -72,7 +72,6 @@ Feature: User authentication
       | rdf_entity/add/asset_release                        |
       | rdf_entity/add/collection                           |
       | rdf_entity/add/contact_information                  |
-      | rdf_entity/add/licence                              |
       | rdf_entity/add/owner                                |
       | rdf_entity/add/solution                             |
       | user/subscriptions                                  |
@@ -114,6 +113,7 @@ Feature: User authentication
       | admin/content/rdf                                   |
       | admin/custom-landing-pages                          |
       | admin/custom-landing-pages/add                      |
+      | admin/homepage-topics                               |
       | admin/legal-notice                                  |
       | admin/legal-notice/add                              |
       | admin/people                                        |
@@ -128,11 +128,9 @@ Feature: User authentication
       | admin/structure/compatibility-document/display      |
       | admin/structure/compatibility-document/form-display |
       | admin/structure/media                               |
-      | admin/homepage-topics                               |
       | announcements                                       |
       | dashboard                                           |
       | licence                                             |
-      | licence/add                                         |
       | media/add                                           |
       | media/add/collection_logo                           |
       | media/add/event_logo                                |
@@ -147,6 +145,7 @@ Feature: User authentication
       | node/add/document                                   |
       | node/add/event                                      |
       | node/add/glossary                                   |
+      | node/add/licence                                    |
       | node/add/news                                       |
       | outdated-content-threshold                          |
       | propose/solution                                    |
@@ -155,7 +154,6 @@ Feature: User authentication
       | rdf_entity/add/asset_release                        |
       | rdf_entity/add/collection                           |
       | rdf_entity/add/contact_information                  |
-      | rdf_entity/add/licence                              |
       | rdf_entity/add/owner                                |
       | rdf_entity/add/solution                             |
 
@@ -177,9 +175,10 @@ Feature: User authentication
 
     Examples:
       | path                                        |
+      | admin/content/files                         |
       | admin/content/media                         |
       | admin/content/rdf                           |
-      | admin/content/files                         |
+      | admin/homepage-topics                       |
       | admin/legal-notice                          |
       | admin/legal-notice/add                      |
       | admin/people                                |
@@ -192,11 +191,9 @@ Feature: User authentication
       | admin/reporting/solutions-by-type           |
       | admin/reporting/subscribers-report          |
       | admin/structure/compatibility-document      |
-      | admin/homepage-topics                       |
       | announcements                               |
       | dashboard                                   |
       | licence                                     |
-      | licence/add                                 |
       | media/add                                   |
       | media/add/collection_logo                   |
       | media/add/event_logo                        |
@@ -231,6 +228,7 @@ Feature: User authentication
       | node/add/document                                   |
       | node/add/event                                      |
       | node/add/glossary                                   |
+      | node/add/licence                                    |
       | node/add/news                                       |
       | propose/solution                                    |
       | rdf_entity/add                                      |
@@ -238,7 +236,6 @@ Feature: User authentication
       | rdf_entity/add/asset_release                        |
       | rdf_entity/add/collection                           |
       | rdf_entity/add/contact_information                  |
-      | rdf_entity/add/licence                              |
       | rdf_entity/add/owner                                |
       | rdf_entity/add/solution                             |
 
@@ -275,12 +272,12 @@ Feature: User authentication
       | node/add/discussion                        |
       | node/add/document                          |
       | node/add/event                             |
+      | node/add/licence                           |
       | node/add/news                              |
       | rdf_entity/add                             |
       | rdf_entity/add/asset_distribution          |
       | rdf_entity/add/asset_release               |
       | rdf_entity/add/collection                  |
       | rdf_entity/add/contact_information         |
-      | rdf_entity/add/licence                     |
       | rdf_entity/add/owner                       |
       | rdf_entity/add/solution                    |
