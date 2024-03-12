@@ -20,6 +20,6 @@ use Drupal\flag\Plugin\ActionLink\AJAXactionLink;
  */
 class NodeBookmarkLink extends AJAXactionLink {
 
- use ActionLinkBookmarkTrait;
+  use ActionLinkBookmarkTrait;
 
 }

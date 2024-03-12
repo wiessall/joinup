@@ -4,6 +4,9 @@
  * @file
  * Hook implementations for the Joinup bookmark module.
  */
+
+declare(strict_types=1);
+
 /**
  * Implements hook_theme().
  */
