@@ -169,7 +169,7 @@ Feature:
       | Maintenance type                                                                                   |
       |   Maintained by people donating their time to the project                                          |
       | Software type                                                                                      |
-      |   Typically installed and run in a a desktop operating system environment                          |
+      |   standalone/desktop                                                                               |
       | Used by                                                                                            |
       |   Administration 1,                                                                                |
       |   Administration 2,                                                                                |
