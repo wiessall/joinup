@@ -20,8 +20,7 @@ Bar Project:
       - web
     oss_publiccode_yml_version: '0.2'
     oss_release_date: '2021-05-24'
-    oss_software_type:
-      - standalone/backend
+    oss_software_type: standalone/backend
     oss_software_version: '2.7.1'
     oss_source:
       - hosting_platform:bitbucket_test
