@@ -197,7 +197,7 @@ class LicenceComparerController extends ControllerBase {
           '#theme' => 'licence_comparer_header_content',
           '#spdx_id' => $spdx_id,
           '#title' => $licence->label(),
-          '#description' => check_markup($licence->field_licence_description->value, 'content_editor'),
+          '#description' => check_markup($licence->get('description')->value, 'content_editor'),
           '#url' => $licence->getSpdxLicenceUrl(),
           '#first_header' => $this->firstHeader[$spdx_id],
         ],
