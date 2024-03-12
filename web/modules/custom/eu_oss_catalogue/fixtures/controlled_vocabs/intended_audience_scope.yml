@@ -1,25 +1,25 @@
 terms:
-  - agriculture
-  - culture
-  - defence
-  - education
-  - emergency-services
-  - employment
-  - energy
-  - environment
-  - finance-and-economic-development
-  - foreign-affairs
-  - government
-  - healthcare
-  - infrastructures
-  - justice
-  - local-authorities
-  - manufacturing
-  - research
-  - science-and-technology
-  - security
-  - society
-  - sport
-  - tourism
-  - transportation
-  - welfare
+  - name: agriculture
+  - name: culture
+  - name: defence
+  - name: education
+  - name: emergency-services
+  - name: employment
+  - name: energy
+  - name: environment
+  - name: finance-and-economic-development
+  - name: foreign-affairs
+  - name: government
+  - name: healthcare
+  - name: infrastructures
+  - name: justice
+  - name: local-authorities
+  - name: manufacturing
+  - name: research
+  - name: science-and-technology
+  - name: security
+  - name: society
+  - name: sport
+  - name: tourism
+  - name: transportation
+  - name: welfare

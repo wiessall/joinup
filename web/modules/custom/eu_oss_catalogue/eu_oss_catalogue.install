@@ -19,16 +19,16 @@ function eu_oss_catalogue_install(): void {
   $terms = [];
 
   foreach (['category', 'intended_audience_scope', 'software_type'] as $vocab) {
-    $names = Yaml::decode(file_get_contents(__DIR__ . "/fixtures/controlled_vocabs/$vocab.yml"))['terms'];
-    foreach ($names as $name) {
-      $terms[] = "oss_$vocab:$name";
+    $terms_items = Yaml::decode(file_get_contents(__DIR__ . "/fixtures/controlled_vocabs/$vocab.yml"))['terms'];
+    foreach ($terms_items as $terms_item) {
+      $terms[] = ['vid' => "oss_$vocab"] + $terms_item;
     }
   }
 
   $licencesJsonFile = DRUPAL_ROOT . "/../vendor/spdx/license-list-data/json/licenses.json";
   $licences = Json::decode(file_get_contents($licencesJsonFile))['licenses'];
   foreach ($licences as $licence) {
-    $terms[] = "oss_licence:{$licence['licenseId']}";
+    $terms[] = ['vid' => 'oss_licence', 'name' => $licence['licenseId']];
   }
 
   $path_resolver = \Drupal::getContainer()->get('extension.path.resolver');

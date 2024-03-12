@@ -1,10 +1,19 @@
 terms:
-  - standalone/mobile
-  - standalone/iot
-  - standalone/desktop
-  - standalone/web
-  - standalone/backend
-  - standalone/other
-  - addon
-  - library
-  - configurationFiles
+  - name: standalone/mobile
+    description: 'The software is a standalone (self-contained) native mobile app.'
+  - name: standalone/iot
+    description: 'The software is suitable for an IoT context.'
+  - name: standalone/desktop
+    description: 'The software is typically installed and run in a a desktop operating system environment.'
+  - name: standalone/web
+    description: 'The software represents a web application usable by means of a browser.'
+  - name: standalone/backend
+    description: 'The software is a backend application.'
+  - name: standalone/other
+    description: 'The software is standalone (self-contained) app, but either mobile, iot, desktop, web or backend application.'
+  - name: addon
+    description: 'The software is an addon, such as a plugin or a theme, for a more complex software.'
+  - name: library
+    description: 'The software contains a library or an SDK to make it easier to third party developers to create new products.'
+  - name: configurationFiles
+    description: 'The software does not contain executable script but a set of configuration files (such as plain configuration files, bash scripts, ansible playbooks, Dockerfiles, or other instruction sets).'

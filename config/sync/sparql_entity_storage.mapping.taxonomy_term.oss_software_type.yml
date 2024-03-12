@@ -20,4 +20,8 @@ base_fields_mapping:
     value:
       predicate: 'http://www.w3.org/2004/02/skos/core#prefLabel'
       format: t_literal
+  description:
+    value:
+      predicate: 'http://www.w3.org/2004/02/skos/core#definition'
+      format: t_literal
 entity_id_plugin: default
