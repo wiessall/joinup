@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Drupal\joinup_rdf\EventSubscriber;
 
 use Drupal\Core\Database\Connection;
-use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\sparql_entity_storage\Event\InboundValueEvent;
 use Drupal\sparql_entity_storage\Event\OutboundValueEvent;
 use Drupal\sparql_entity_storage\Event\SparqlEntityStorageEvents;
@@ -68,13 +67,10 @@ class Tid implements EventSubscriberInterface {
   /**
    * Constructs a new event subscriber instance.
    *
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
-   *   The entity type manager service.
    * @param \Drupal\Core\Database\Connection $database
    *   The database connection.
    */
   public function __construct(
-    private readonly EntityTypeManagerInterface $entityTypeManager,
     private readonly Connection $database,
   ) {}
 
@@ -142,13 +138,14 @@ class Tid implements EventSubscriberInterface {
    *   The URI.
    */
   protected function getUri(int|string|TermInterface $term): ?string {
-    $isEntity = $term instanceof TermInterface;
-    $tid = $isEntity ? (string) $term->id() : (string) $term;
+    $tid = $term instanceof TermInterface ? (string) $term->id() : (string) $term;
     if (($uri = array_search($tid, $this->uriToTid, TRUE)) === FALSE) {
-      if (!$isEntity) {
-        $term = $this->entityTypeManager->getStorage('taxonomy_term')->load($tid);
-      }
-      $uri = $term->get('uri')->value;
+      $uri = $this->database->select('rdf_sync_uri')
+        ->fields('rdf_sync_uri', ['uri'])
+        ->condition('entity_type', 'taxonomy_term')
+        ->condition('entity_id', $tid)
+        ->execute()
+        ->fetchField() ?: NULL;
       // Cache this match.
       $this->uriToTid[$uri] = $tid;
     }
