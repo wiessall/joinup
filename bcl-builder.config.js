@@ -193,6 +193,14 @@ module.exports = {
         sourceMap: true,
       },
     },
+    {
+      entry: path.resolve(outputFolder, `${ventuno}src/js/og-navigation.js`),
+      dest: path.resolve(outputFolder, `${ventuno}assets/js/og-navigation.js`),
+      options: {
+        minify: true,
+        sourceMap: true,
+      },
+    },
     // IOP
     {
       entry: path.resolve(outputFolder, `${iop}src/js/glide.js`),

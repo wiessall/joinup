@@ -23,62 +23,20 @@
     {{ item.attributes.setAttribute('title', item.title) }}
   {% endset %}
 {% endfor %}
-{# A menu with 6 items or less is displayed normally #}
-{% if items|length < 7 %}
-  {% set menu = pattern('navigation', {
-      'variant': 'default',
-      'items': items,
-      attributes: create_attribute()
-        .addClass('pe-4')
-    })
-  %}
-  <div class="menu--og--navigation">
-    <div class="menu--og--navigation__menu">
-      <div class="container">
-        {{ menu }}
+
+<div class="menu--og--navigation">
+  <div class="container">
+    <nav>
+      {{ pattern('navigation', {
+        'variant': 'default',
+        'items': items,
+      }) }}
+      <div class="menu--og--navigation--dropdown dropdown">
+        <button type="button" data-bs-toggle="dropdown" id="ogNavigationDropdown" aria-expanded="false" class="btn btn-link px-0">{{ 'See more'|t }}
+          <svg class="bi icon--xs"><use xlink:href="{{ bcl_icon_path }}#chevron-down"></use></svg>
+        </button>
+        <ul class="hidden-links dropdown-menu dropdown-menu-end" aria-labelledby="ogNavigationDropdown"></ul>
       </div>
-    </div>
+    </nav>
   </div>
-{# A menu with more than 6 items has the first 5 displayed normally
-Then the rest of items is wrapped in a dropdown #}
-{% else %}
-  {% set items_to_show = items|slice(0, 5) %}
-  {% set items_to_hide = items|slice(5) %}
-  {% set show_more_button %}
-    {{ pattern('button', {
-      label: 'See more'|t,
-      variant: 'link',
-      outline: false,
-      size: 'md',
-      type: 'button',
-      icon: 'chevron-down',
-      attributes: create_attribute()
-        .addClass('menu--og--navigation__show-more-btn')
-        .setAttribute('data-bs-toggle', 'dropdown')
-        .setAttribute('id', 'dropdownShowMoreMenuButton')
-        .setAttribute('aria-expanded', 'false')
-    }) }}
-  {% endset %}
-  {% set menu = pattern('navigation', {
-    'variant': 'default',
-    'items': items_to_show,
-  }) %}
-  {% set show_more_menu = pattern('navigation', {
-    'variant': 'pills',
-    'orientation': 'vertical',
-    'items': items_to_hide,
-  }) %}
-  <div class="menu--og--navigation">
-    <div class="menu--og--navigation__menu">
-      <div class="container d-flex flex-nowrap">
-        {{ menu }}
-        <div class="menu--og--navigation__show-more pe-4">
-          {{ show_more_button }}
-          <div class="dropdown-menu" aria-labelledby="dropdownShowMoreMenuButton">
-            {{ show_more_menu }}
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-{% endif %}
+</div>

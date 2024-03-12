@@ -241,6 +241,10 @@ menu--og--navigation:
   css:
     theme:
       assets/css/menu--og--navigation.min.css: { minified: true }
+  js:
+    assets/js/og-navigation.min.js: { minified: true }
+  dependencies:
+    - core/once
 
 modals:
   css:
