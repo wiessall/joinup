@@ -26,3 +26,15 @@ function joinup_bookmark_preprocess_joinup_modal_anonymous__bookmark(&$variables
   $variables['title'] = t('Sign in or register to bookmark this content');
   $variables['description'] = t('Bookmarking content allows you to save it for later reference and helps you organise your favourite resources.');
 }
+
+/**
+ * Implements hook_theme_suggestions_HOOK_alter().
+ */
+function joinup_bookmark_theme_suggestions_flag_alter(array &$suggestions, array &$variables): void {
+  /** @var \Drupal\flag\FlagInterface $flag */
+  $flag = $variables['flag'];
+
+  if (in_array($flag->id(), ['bookmark_node', 'bookmark_rdf_entity'])) {
+    array_unshift($suggestions, 'flag__bookmark');
+  }
+}
