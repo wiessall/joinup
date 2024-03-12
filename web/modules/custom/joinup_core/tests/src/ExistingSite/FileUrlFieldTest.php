@@ -73,9 +73,9 @@ class FileUrlFieldTest extends JoinupExistingSiteTestBase {
         'field_ar_state' => 'published',
       ]),
     ]);
-    $licence = $this->createRdfEntity([
-      'rid' => 'licence',
-      'label' => $this->randomString(),
+    $licence = $this->createNode([
+      'type' => 'licence',
+      'title' => $this->randomString(),
     ]);
 
     $test_file = $this->getTestFile('text');
