@@ -62,6 +62,16 @@ commands:
     - task: exec
       command: ${drush.bin}
       arguments:
+        - user:create
+        - developer
+      options:
+        mail: developer@example.com
+        password: developer
+        yes: null
+        root: ${joinup.site_dir}
+    - task: exec
+      command: ${drush.bin}
+      arguments:
         - user:role:add
         - administrator
         - administrator
