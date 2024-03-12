@@ -9,8 +9,8 @@ dependencies:
 third_party_settings:
   field_permissions:
     permission_type: public
-id: node.oss_software_type_taxonomy
-field_name: oss_software_type_taxonomy
+id: node.oss_software_type
+field_name: oss_software_type
 entity_type: node
 type: entity_reference
 settings:
