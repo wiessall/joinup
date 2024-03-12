@@ -16,10 +16,6 @@ is_admin: false
 permissions:
   - 'access toolbar'
   - 'administer users'
-  - 'assign administrator role'
   - 'assign all roles'
-  - 'assign developer role'
-  - 'assign licence_manager role'
-  - 'assign moderator role'
   - 'manage custom landing pages'
   - 'view the administration theme'
