@@ -24,7 +24,7 @@ function joinup_bookmark_theme(): array {
  */
 function joinup_bookmark_preprocess_joinup_modal_anonymous__bookmark(&$variables): void {
   $variables['title'] = t('Sign in or register to bookmark this content');
-  $variables['description'] = t('Bookmarking content allows you to save it for later reference and helps you organise your favourite resources.');
+  $variables['description'] = t('Bookmarking content allows you to save it for later reference and helps you organise your favourite resources');
 }
 
 /**
