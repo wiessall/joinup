@@ -5,19 +5,20 @@ declare(strict_types=1);
 namespace Drupal\joinup_rdf\EventSubscriber;
 
 use Drupal\Core\Database\Connection;
+use Drupal\Core\Entity\EntityFieldManagerInterface;
+use Drupal\joinup_rdf\Entity\RdfSyncEntityInterface;
 use Drupal\sparql_entity_storage\Event\InboundValueEvent;
 use Drupal\sparql_entity_storage\Event\OutboundValueEvent;
 use Drupal\sparql_entity_storage\Event\SparqlEntityStorageEvents;
 use Drupal\sparql_entity_storage\Event\ValueEventBase;
-use Drupal\taxonomy\TermInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
- * Reacts to taxonomy term ID inbound/outbound value.
+ * Reacts to entity ID inbound/outbound value.
  *
  * @todo Drop in ISAICP-8376
  */
-class Tid implements EventSubscriberInterface {
+class UriIdConversion implements EventSubscriberInterface {
 
   /**
    * Fields that should allow TID <-> URI conversion.
@@ -27,7 +28,7 @@ class Tid implements EventSubscriberInterface {
   private const MAP = [
     'eif_wrapper:recommendation:term',
     'rdf_entity:asset_distribution:field_ad_format',
-    'rdf_entity:asset_distribution:field_ad_repr_technique',
+    'rdf_entity:asset_distribution:field_ad_licence',
     'rdf_entity:asset_distribution:field_ad_repr_technique',
     'rdf_entity:asset_distribution:field_status',
     'rdf_entity:asset_release:field_isr_language',
@@ -58,20 +59,23 @@ class Tid implements EventSubscriberInterface {
   ];
 
   /**
-   * Static cache for the URI <-> TID relation.
+   * Static cache for the URI <-> ID relation.
    *
-   * @var int[]
+   * @var array
    */
-  private array $uriToTid = [];
+  private array $uriToId = [];
 
   /**
    * Constructs a new event subscriber instance.
    *
    * @param \Drupal\Core\Database\Connection $database
    *   The database connection.
+   * @param \Drupal\Core\Entity\EntityFieldManagerInterface $entityFieldManager
+   *   The entity field manager service.
    */
   public function __construct(
     private readonly Connection $database,
+    private readonly EntityFieldManagerInterface $entityFieldManager,
   ) {}
 
   /**
@@ -92,62 +96,66 @@ class Tid implements EventSubscriberInterface {
    */
   public function onLoad(InboundValueEvent $event): void {
     if ($this->acceptsConversion($event)) {
-      $event->setValue($this->getTid($event->getValue()));
+      $event->setValue($this->getId($event->getValue()));
     }
   }
 
   /**
-   * Listens to a value bing saved from Drupal entity/field API to RDF storage.
+   * Listens to a value being saved from Drupal entity/field API to RDF storage.
    *
    * @param \Drupal\sparql_entity_storage\Event\OutboundValueEvent $event
    *   The event.
    */
   public function onSave(OutboundValueEvent $event): void {
     if ($this->acceptsConversion($event)) {
-      $event->setValue($this->getUri($event->getValue()));
+      $storageDefinition = $this->entityFieldManager->getFieldStorageDefinitions($event->getEntityTypeId())[$event->getField()];
+      $targetEntityTypeId = $storageDefinition->getSetting('target_type');
+      $event->setValue($this->getUri($targetEntityTypeId, $event->getValue()));
     }
   }
 
   /**
-   * Returns and caches a taxonomy term ID give its corresponding URI.
+   * Returns and caches an entity ID give its corresponding URI.
    *
    * @param string $uri
    *   The URI.
    *
    * @return string|int|null
-   *   The taxonomy term ID.
+   *   The entity ID.
    */
-  protected function getTid(string $uri): string|int|null {
-    if (!($this->uriToTid[$uri] ?? NULL)) {
-      $this->uriToTid[$uri] = $this->database->select('rdf_sync_uri')
+  protected function getId(string $uri): string|int|null {
+    if (!($this->uriToId[$uri] ?? NULL)) {
+      $this->uriToId[$uri] = $this->database->select('rdf_sync_uri')
         ->fields('rdf_sync_uri', ['entity_id'])
         ->condition('uri', $uri)
         ->execute()
         ->fetchField() ?: NULL;
     }
-    return $this->uriToTid[$uri];
+    return $this->uriToId[$uri];
   }
 
   /**
-   * Returns and caches a URI given its corresponding taxonomy term ID.
+   * Returns and caches a URI given its corresponding entity ID.
    *
-   * @param int|string|TermInterface $term
-   *   The term as entity or as term ID.
+   * @param string $entityTypeId
+   *   The entity type ID.
+   * @param int|string|\Drupal\joinup_rdf\Entity\RdfSyncEntityInterface $entity
+   *   The entity as entity instance or as entity ID.
    *
    * @return string|null
    *   The URI.
    */
-  protected function getUri(int|string|TermInterface $term): ?string {
-    $tid = $term instanceof TermInterface ? (string) $term->id() : (string) $term;
-    if (($uri = array_search($tid, $this->uriToTid, TRUE)) === FALSE) {
+  protected function getUri(string $entityTypeId, int|string|RdfSyncEntityInterface $entity): ?string {
+    $id = $entity instanceof RdfSyncEntityInterface ? (string) $entity->id() : (string) $entity;
+    if (($uri = array_search($id, $this->uriToId, TRUE)) === FALSE) {
       $uri = $this->database->select('rdf_sync_uri')
         ->fields('rdf_sync_uri', ['uri'])
-        ->condition('entity_type', 'taxonomy_term')
-        ->condition('entity_id', $tid)
+        ->condition('entity_type', $entityTypeId)
+        ->condition('entity_id', $id)
         ->execute()
         ->fetchField() ?: NULL;
       // Cache this match.
-      $this->uriToTid[$uri] = $tid;
+      $this->uriToId[$uri] = $id;
     }
     return $uri;
   }
