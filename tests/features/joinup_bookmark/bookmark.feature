@@ -56,7 +56,7 @@ Feature: Bookmark/Unbookmark feature.
   Scenario: Anonymous user is asked to sign in if they attempt to bookmark
     Given I am an anonymous user
 
-    When I go to the homepage of the "Batman Begins " solution
+    When I go to the homepage of the "Batman Begins" solution
     And I click "Bookmark" in the "Bookmark block" region
     Then a modal should open
     And I should see the text "You are not signed in" in the "Modal title"
