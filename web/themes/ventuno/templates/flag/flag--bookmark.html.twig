@@ -16,8 +16,10 @@
   {# Depending on the flag action, set the appropriate action class. #}
   {% if action == 'unflag' %}
     {% set action_class = 'action-unflag' %}
+    {% set action_icon = 'bookmark-check-fill' %}
   {% else %}
     {% set action_class = 'action-flag' %}
+    {% set action_icon = 'bookmark' %}
   {% endif %}
 
   {# Set the remaining Flag CSS classes. #}
@@ -38,7 +40,7 @@
   <div class="{{ wrapper_classes|join(' ') }}">
     <a{{ attributes.addClass(link_classes) }}>
       {{ pattern('icon', {
-        name: 'bookmark'
+        name: action_icon
       }) }}
       {{ title }}
     </a>
