@@ -20,7 +20,7 @@ Feature: Bookmark/Unbookmark feature.
     When I am logged in as "Gregory Bookmark"
     And I go to the homepage of the "<name>" <type>
     And I click "Bookmark" in the "Bookmark block" region
-    Then I should see the link "Unbookmark" in the "Bookmark block"
+    Then I should see the link "Bookmarked" in the "Bookmark block"
 
     When I am logged in as "Lisa Bookmark"
     And I go to the homepage of the "<name>" <type>
@@ -28,7 +28,7 @@ Feature: Bookmark/Unbookmark feature.
 
     When I am logged in as "Gregory Bookmark"
     And I go to the homepage of the "<name>" <type>
-    And I click "Unbookmark" in the "Bookmark block" region
+    And I click "Bookmarked" in the "Bookmark block" region
     Then I should see the link "Bookmark" in the "Bookmark block"
 
     Examples:
