@@ -34,6 +34,7 @@ dependencies:
     - field.field.node.oss_solution.oss_screenshots
     - field.field.node.oss_solution.oss_short_description
     - field.field.node.oss_solution.oss_software_type
+    - field.field.node.oss_solution.oss_software_type_taxonomy
     - field.field.node.oss_solution.oss_software_version
     - field.field.node.oss_solution.oss_source
     - field.field.node.oss_solution.oss_source_hash
@@ -334,6 +335,16 @@ content:
     weight: 24
     region: content
     settings: {  }
+    third_party_settings: {  }
+  oss_software_type_taxonomy:
+    type: entity_reference_autocomplete
+    weight: 24
+    region: content
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 60
+      placeholder: ''
     third_party_settings: {  }
   oss_software_version:
     type: string_textfield
