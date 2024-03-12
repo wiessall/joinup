@@ -18,7 +18,7 @@ use Drupal\eu_oss_catalogue\EuOssCatalogueInstallHelper;
 function eu_oss_catalogue_install(): void {
   $terms = [];
 
-  foreach (['category', 'intended_audience_scope'] as $vocab) {
+  foreach (['category', 'intended_audience_scope', 'software_type'] as $vocab) {
     $names = Yaml::decode(file_get_contents(__DIR__ . "/fixtures/controlled_vocabs/$vocab.yml"))['terms'];
     foreach ($names as $name) {
       $terms[] = "oss_$vocab:$name";
