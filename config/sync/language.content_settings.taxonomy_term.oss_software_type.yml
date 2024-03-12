@@ -1,0 +1,11 @@
+uuid: ea5ffa37-8324-4f32-8871-56d858ee03f8
+langcode: en
+status: true
+dependencies:
+  config:
+    - taxonomy.vocabulary.oss_software_type
+id: taxonomy_term.oss_software_type
+target_entity_type_id: taxonomy_term
+target_bundle: oss_software_type
+default_langcode: site_default
+language_alterable: false
