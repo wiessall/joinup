@@ -72,4 +72,5 @@ hidden:
   status: true
   sticky: true
   uid: true
+  uri: true
   url_redirects: true
