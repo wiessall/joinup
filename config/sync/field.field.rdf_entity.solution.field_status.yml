@@ -18,7 +18,7 @@ required: false
 translatable: false
 default_value:
   -
-    target_id: 'http://purl.org/adms/status/Completed'
+    target_uuid: '645e2f02-9569-4c93-8bab-6f1e0cd8f084'
 default_value_callback: ''
 settings:
   handler: 'default:taxonomy_term'
