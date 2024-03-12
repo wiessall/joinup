@@ -91,6 +91,16 @@ commands:
     - task: exec
       command: ${drush.bin}
       arguments:
+        - cas-mock-server:user-create
+        - developer
+      options:
+        email: developer@example.com
+        password: developer
+        yes: null
+        root: ${joinup.site_dir}
+    - task: exec
+      command: ${drush.bin}
+      arguments:
         - cas:set-cas-username
         - administrator
         - administrator
