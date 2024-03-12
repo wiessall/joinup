@@ -22,6 +22,7 @@
     .setAttribute('href', path('joinup_modal.anonymous', {'type': 'bookmark'}, {'query': {'destination': path('<current>')}}))
     .setAttribute('data-dialog-type', 'modal')
     .setAttribute('data-dialog-options', '{"width":"auto","height":"auto"}')
+    .setAttribute('title', flag.getLongText('flag'))
   %}
   {% set count = flagcount(flag, flaggable) %}
 
