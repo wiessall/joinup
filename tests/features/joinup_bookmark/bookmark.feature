@@ -6,9 +6,9 @@ Feature: Bookmark/Unbookmark feature.
 
   Background:
     Given users:
-      | Username         | E-mail               | First name | Family name |
-      | Lisa Bookmark    | lisa@bookmark.com    | Lisa       | Bookmark    |
-      | Gregory Bookmark | gregory@bookmark.com | Gregory    | Bookmark    |
+      | Username         | E-mail               | Password        | First name | Family name |
+      | Lisa Bookmark    | lisa@bookmark.com    | bookmark123!#$l | Lisa       | Bookmark    |
+      | Gregory Bookmark | gregory@bookmark.com | bookmark123!#$g | Gregory    | Bookmark    |
     Given the following collections:
       | title  | state     |
       | Batman | published |
@@ -52,3 +52,22 @@ Feature: Bookmark/Unbookmark feature.
       | document     |
       | event        |
       | news         |
+
+  Scenario: Anonymous user is asked to sign in if they attempt to bookmark
+    Given I am an anonymous user
+
+    When I go to the homepage of the "Batman Begins " solution
+    And I click "Bookmark" in the "Bookmark block" region
+    Then a modal should open
+    And I should see the text "You are not signed in" in the "Modal title"
+    And I should see the heading "Sign in or register to bookmark this content" in the "Modal content"
+    And I should see the text "Bookmarking content allows you to save it for later reference and helps you organise your favourite resources" in the "Modal content"
+
+    When I click "Sign in" in the "Modal content"
+    Then I should see the heading "Sign in to continue"
+
+    When I fill in the following:
+      | E-mail address | lisa@bookmark.com |
+      | Password       | bookmark123!#$l   |
+    And I press "Log in"
+    Then I should see the heading "Batman Begins"
