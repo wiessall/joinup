@@ -37,8 +37,6 @@ class UriIdConversion implements EventSubscriberInterface {
     'rdf_entity:asset_release:field_topic',
     'rdf_entity:collection:field_spatial_coverage',
     'rdf_entity:collection:field_topic',
-    'rdf_entity:licence:field_licence_legal_type',
-    'rdf_entity:licence:field_licence_type',
     'rdf_entity:owner:field_owner_type',
     'rdf_entity:owner:field_owner_type',
     'rdf_entity:solution:field_is_actor',
