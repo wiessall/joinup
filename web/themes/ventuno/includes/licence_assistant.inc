@@ -22,8 +22,8 @@ function ventuno_preprocess_licence_filter_list(array &$variables): void {
  * This is used on the Joinup Licence Assistant Compatibility Check overview
  * page.
  */
-function ventuno_preprocess_rdf_entity__licence__compatibility_check(array &$variables): void {
-  ventuno_preprocess_rdf_entity__licence__jla($variables);
+function ventuno_preprocess_node__licence__compatibility_check(array &$variables): void {
+  ventuno_preprocess_node__licence__jla($variables);
 }
 
 /**
@@ -32,7 +32,7 @@ function ventuno_preprocess_rdf_entity__licence__compatibility_check(array &$var
  * Provides variables needed for the both the JLA view modes (search_list_item
  * and compatibility_check) of licences.
  */
-function ventuno_preprocess_rdf_entity__licence__jla(array &$variables): void {
+function ventuno_preprocess_node__licence__jla(array &$variables): void {
   /** @var \Drupal\joinup_licence\Entity\LicenceInterface $entity */
   $entity = $variables['elements']['#rdf_entity'];
 
@@ -51,8 +51,8 @@ function ventuno_preprocess_rdf_entity__licence__jla(array &$variables): void {
  * Provides variables needed for the search_list_item view mode of licences.
  * This is used on the Joinup Licence Assistant overview page.
  */
-function ventuno_preprocess_rdf_entity__licence__view_mode_search_list_item(array &$variables): void {
-  ventuno_preprocess_rdf_entity__licence__jla($variables);
+function ventuno_preprocess_node__licence__view_mode_search_list_item(array &$variables): void {
+  ventuno_preprocess_node__licence__jla($variables);
 
   /** @var \Drupal\joinup_licence\Entity\LicenceInterface $entity */
   $entity = $variables['elements']['#rdf_entity'];
