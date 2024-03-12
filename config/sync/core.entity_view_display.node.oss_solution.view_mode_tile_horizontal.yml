@@ -34,7 +34,7 @@ dependencies:
     - field.field.node.oss_solution.oss_scope
     - field.field.node.oss_solution.oss_screenshots
     - field.field.node.oss_solution.oss_short_description
-    - field.field.node.oss_solution.oss_software_type_taxonomy
+    - field.field.node.oss_solution.oss_software_type
     - field.field.node.oss_solution.oss_software_version
     - field.field.node.oss_solution.oss_source
     - field.field.node.oss_solution.oss_source_hash
@@ -166,7 +166,7 @@ hidden:
   oss_scope: true
   oss_screenshots: true
   oss_short_description: true
-  oss_software_type_taxonomy: true
+  oss_software_type: true
   oss_software_version: true
   oss_source: true
   oss_source_hash: true
