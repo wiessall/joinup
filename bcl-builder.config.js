@@ -1341,6 +1341,7 @@ module.exports = {
           "arrow-right.svg",
           "award.svg",
           "bookmark.svg",
+          "bookmark-check-fill.svg",
           "box-arrow-up-right.svg",
           "calendar.svg",
           "calendar-event.svg",
