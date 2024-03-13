@@ -3066,7 +3066,7 @@ JS;
    * @Then I should see a paragraph containing the text :text
    */
   public function assertParagraphText(string $text): void {
-    $element = $this->getSession()->getPage()->find('xpath', '//p[text() = "' . $text . '"]');
+    $element = $this->getSession()->getPage()->find('xpath', '//p[contains(text(), "' . $text . '")]');
     Assert::assertNotEmpty($element);
   }
 

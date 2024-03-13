@@ -1,11 +1,3 @@
-joinup_licence.overview:
-  path: 'licence'
-  defaults:
-    _controller: '\Drupal\joinup_licence\Controller\LicenceOverviewController::overview'
-    _title: 'Licences'
-  requirements:
-    _permission: 'view licence overview page'
-
 joinup_licence.comparer:
   path: '/licence/compare/{licences}'
   defaults:
