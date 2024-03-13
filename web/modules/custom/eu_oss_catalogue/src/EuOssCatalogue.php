@@ -7,6 +7,7 @@ namespace Drupal\eu_oss_catalogue;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Logger\LoggerChannelInterface;
 use Drupal\Core\Queue\QueueFactory;
+use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\Utility\Error;
 use Drupal\eu_oss_catalogue\Entity\OssSolutionInterface;
 use Drupal\eu_oss_catalogue\Event\EuOssPostFetchEvent;
@@ -18,6 +19,8 @@ use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
  * Default implementation for `eu_oss_catalogue` service.
  */
 class EuOssCatalogue implements EuOssCatalogueInterface {
+
+  use StringTranslationTrait;
 
   /**
    * Constructs a new service instance.
@@ -180,6 +183,25 @@ class EuOssCatalogue implements EuOssCatalogueInterface {
     // Set source hash.
     $solution->set('oss_source_hash', $project->getHash());
 
+    if (!$solution->isNew()) {
+      $solution->setNewRevision();
+
+      $message = match ($solution->get('oss_archived')->getString()) {
+        '1' => $this->t('Unarchive, because re-added (present again) in "@provider" source/catalogue', [
+          '@provider' => $provider->getPluginDefinition()['label'],
+        ]),
+        default => $this->t('Update, because data has been changed in "@provider" source/catalogue', [
+          '@provider' => $provider->getPluginDefinition()['label'],
+        ]),
+      };
+    }
+    else {
+      $message = $this->t('Import from "@provider" source/catalogue', [
+        '@provider' => $provider->getPluginDefinition()['label'],
+      ]);
+    }
+    $solution->setRevisionLogMessage((string) $message);
+
     // Make sure it is not archived.
     $solution->set('oss_archived', 0);
 
@@ -192,16 +214,14 @@ class EuOssCatalogue implements EuOssCatalogueInterface {
       return NULL;
     }
 
-    $loggerArguments = [
-      '@solution' => $solution->label(),
-    ];
-    switch ($operationResult) {
-      case SAVED_NEW:
-        $this->logger->info('Solution @solution was created.', $loggerArguments);
-        break;
-
-      default:
-        $this->logger->info('Solution @solution was updated.', $loggerArguments);
+    if ($operationResult === SAVED_NEW) {
+      $loggerArguments = [
+        '@solution' => $solution->label(),
+        'oss_landing_url' => $solution->get('oss_landing_url')->getString(),
+        'oss_solution' => $solution->id(),
+        'oss_source' => $provider->getPluginId(),
+      ];
+      $this->logger->info('Solution @solution was created.', $loggerArguments);
     }
 
     return $solution;
@@ -251,21 +271,21 @@ class EuOssCatalogue implements EuOssCatalogueInterface {
     /** @var \Drupal\eu_oss_catalogue\Entity\OssSolutionInterface $solution */
     foreach ($this->entityTypeManager->getStorage('node')->loadMultiple($solutionIds) as $solution) {
       $solution->removeProvider($provider);
+      $solution->setNewRevision();
       if ($solution->get('oss_source')->isEmpty()) {
-        $solution->set('oss_archived', 1);
-        $solution->save();
-        $this->logger->info("Solution '@solution' (@url) was archived due to having no active providers", [
-          '@solution' => $solution->label(),
-          '@url' => $solution->get('oss_git_url')->value,
-        ]);
-      }
-      else {
-        $solution->save();
-        $this->logger->info("Solution '@solution' (@url) had the following provider removed from its sources: @provider.", [
-          '@solution' => $solution->label(),
-          '@url' => $solution->get('oss_git_url')->value,
+        $message = $this->t('Archive, because removed (not present anymore) from "@provider" source/catalogue', [
           '@provider' => $provider->getPluginDefinition()['label'],
         ]);
+        $solution->setRevisionLogMessage((string) $message);
+        $solution->set('oss_archived', 1);
+        $solution->save();
+      }
+      else {
+        $message = $this->t('Update, because of the only removal "@provider" source/catalogue', [
+          '@provider' => $provider->getPluginDefinition()['label'],
+        ]);
+        $solution->setRevisionLogMessage((string) $message);
+        $solution->save();
       }
     }
   }
