@@ -8,6 +8,11 @@ dependencies:
     - node.type.licence
   module:
     - text
+third_party_settings:
+  rdf_sync:
+    processed:
+      predicate: 'http://purl.org/dc/terms/description'
+      type: null
 id: node.licence.description
 field_name: description
 entity_type: node

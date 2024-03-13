@@ -5,6 +5,11 @@ dependencies:
   config:
     - field.storage.node.deprecated
     - node.type.licence
+third_party_settings:
+  rdf_sync:
+    value:
+      predicate: 'http://joinup.eu/licence/deprecated'
+      type: 'xsd:boolean'
 id: node.licence.deprecated
 field_name: deprecated
 entity_type: node
