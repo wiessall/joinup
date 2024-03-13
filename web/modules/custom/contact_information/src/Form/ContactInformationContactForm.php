@@ -13,7 +13,7 @@ class ContactInformationContactForm extends ContactInformationFormBase {
    * {@inheritdoc}
    */
   protected function getEmailAddresses(): array {
-    return email_contact_get_emails_from_field($this->entity_type, $this->entity_id, $this->field_name);
+    return email_contact_get_emails_from_field($this->entityType, $this->entityId, $this->fieldName);
   }
 
 }

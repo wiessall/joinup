@@ -63,7 +63,7 @@ abstract class ContactInformationFormBase extends ContactForm {
       $form = $this->buildFormForAuthenticated($form, $form_state);
     }
 
-    if (!empty($this->field_settings['modal'])) {
+    if (!empty($this->fieldSettings['modal'])) {
       $form['actions']['cancel'] = [
         '#type' => 'button',
         '#value' => $this->t('Cancel'),
@@ -212,7 +212,7 @@ abstract class ContactInformationFormBase extends ContactForm {
       '#value' => $this->t('Send e-mail'),
     ];
 
-    if (!empty($this->field_settings['modal'])) {
+    if (!empty($this->fieldSettings['modal'])) {
       $form['actions']['submit']['#ajax'] = [
         'callback' => [$this, 'ajaxSubmit'],
         'event' => 'click',
@@ -220,8 +220,8 @@ abstract class ContactInformationFormBase extends ContactForm {
     }
 
     if (!$form_state->get('settings')) {
-      $this->field_settings['default_message'] = '[current-user:name] sent a message using the contact form at [current-page:url].';
-      $form_state->set('settings', $this->field_settings);
+      $this->fieldSettings['default_message'] = '[current-user:name] sent a message using the contact form at [current-page:url].';
+      $form_state->set('settings', $this->fieldSettings);
     }
 
     $this->honeypot?->addFormProtection(
@@ -294,9 +294,9 @@ abstract class ContactInformationFormBase extends ContactForm {
     }
 
     $message = <<<MESSAGE
-        Name: {$params['name']} <br/> 
+        Name: {$params['name']} <br/>
         Organization: {$params['organization']} <br />
-        Email: $reply_to <br/> 
+        Email: $reply_to <br/>
         Type of support: {$params['type']} <br />
         Message:  {$form_state->getValue('message')} <br />
         MESSAGE;
