@@ -49,6 +49,7 @@ commands:
     - task: run
       command: drush:module-install
       arguments: joinup_cas_mock_server
+    # Administrator user.
     - task: exec
       command: ${drush.bin}
       arguments:
@@ -57,6 +58,15 @@ commands:
       options:
         mail: administrator@example.com
         password: administrator
+        yes: null
+        root: ${joinup.site_dir}
+    - task: exec
+      command: ${drush.bin}
+      arguments:
+        - user:role:add
+        - administrator
+        - administrator
+      options:
         yes: null
         root: ${joinup.site_dir}
     - task: exec
@@ -78,6 +88,7 @@ commands:
       options:
         yes: null
         root: ${joinup.site_dir}
+    # Developer user.
     - task: exec
       command: ${drush.bin}
       arguments:
@@ -116,6 +127,7 @@ commands:
       options:
         yes: null
         root: ${joinup.site_dir}
+    # Moderator user.
     - task: exec
       command: ${drush.bin}
       arguments:
@@ -154,6 +166,7 @@ commands:
       options:
         yes: null
         root: ${joinup.site_dir}
+    # User without any roles.
     - task: exec
       command: ${drush.bin}
       arguments:
