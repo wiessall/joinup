@@ -6,10 +6,9 @@ Feature: Bookmark/Unbookmark feature.
 
   Background:
     Given users:
-      | Username      | E-mail            | First name | Family name |
-      | Lisa Bookmark | lisa@bookmark.com | Lisa       | Bookmark    |
-    And CAS users:
-      | Gregory Bookmark | gregory@bookmark.com | bookmark123!#$g | Gregory | Bookmark |
+      | Username         | E-mail               | Password        | First name | Family name |
+      | Lisa Bookmark    | lisa@bookmark.com    | bookmark123!#$l | Lisa       | Bookmark    |
+      | Gregory Bookmark | gregory@bookmark.com | bookmark123!#$g | Gregory    | Bookmark    |
     Given the following collections:
       | title  | state     |
       | Batman | published |
@@ -68,7 +67,7 @@ Feature: Bookmark/Unbookmark feature.
     Then I should see the heading "Sign in to continue"
 
     When I fill in the following:
-      | E-mail address | gregory@bookmark.com |
-      | Password       | bookmark123!#$g      |
+      | E-mail address | lisa@bookmark.com |
+      | Password       | bookmark123!#$l   |
     And I press "Log in"
     Then I should see the heading "Batman Begins"
