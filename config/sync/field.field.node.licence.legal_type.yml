@@ -6,6 +6,11 @@ dependencies:
     - field.storage.node.legal_type
     - node.type.licence
     - taxonomy.vocabulary.legal_type
+third_party_settings:
+  rdf_sync:
+    target_id:
+      predicate: 'http://joinup.eu/licence/legal-type'
+      type: resource
 id: node.licence.legal_type
 field_name: legal_type
 entity_type: node

@@ -6,6 +6,11 @@ dependencies:
     - field.storage.node.spdx_licence
     - node.type.licence
     - taxonomy.vocabulary.spdx_licence
+third_party_settings:
+  rdf_sync:
+    target_id:
+      predicate: 'http://www.w3.org/2002/07/owl#sameAs'
+      type: resource
 id: node.licence.spdx_licence
 field_name: spdx_licence
 entity_type: node
