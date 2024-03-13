@@ -1687,22 +1687,28 @@ class FeatureContext extends RawDrupalContext {
   }
 
   /**
-   * Forces the indexing of new or changed content after each step.
+   * Runs some service tasks in kernel terminate phase.
    *
-   * When a Search API index is configured with the 'options.index_directly'
-   * setting set to TRUE, the entity is not indexed immediately after was saved,
-   * in hook_entity_update(), instead the indexing is postponed to the end of
-   * the request. This is OK when operating manually the site, but when this is
-   * wrapped in the test "page request", the index will occur only after all the
-   * steps were executed and, as an effect, entities created across the steps
-   * are not indexed yet when the next step is executed. For this reason, we
-   * force an indexing after each step.
+   * When a request terminates, all services implementing DestructableInterface
+   * are called to perform tasks after the response has been sent back to the
+   * client. This is OK when operating manually the site, but when this is
+   * wrapped in the test "page request", these operations will occur only after
+   * all the steps were executed. But some tasks just need to be executed before
+   * the next Behat step. We explicitly call such services run their kernel
+   * terminate tasks after step:
+   * - Performs the RDF synchronization.
+   * - Forces the indexing of new or changed content after each step. When a
+   *   Search API index is configured with the 'options.index_directly' setting
+   *   set to TRUE, the entity is not indexed immediately after was saved, in
+   *   hook_entity_update(), instead the indexing is postponed to the end of
+   *   the request.
    *
    * @see https://www.drupal.org/project/search_api/issues/2922525
    *
    * @AfterStep
    */
-  public function indexEntities(): void {
+  public function kernelTerminateTasks(): void {
+    \Drupal::service('rdf_sync.synchronizer')->destruct();
     \Drupal::service('search_api.post_request_indexing')->destruct();
   }
 
