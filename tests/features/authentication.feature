@@ -228,7 +228,6 @@ Feature: User authentication
       | node/add/document                                   |
       | node/add/event                                      |
       | node/add/glossary                                   |
-      | node/add/licence                                    |
       | node/add/news                                       |
       | propose/solution                                    |
       | rdf_entity/add                                      |
