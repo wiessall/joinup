@@ -6,7 +6,6 @@ namespace Drupal\joinup_oss_catalogue\Logger\Handler;
 
 use Drupal\Core\DestructableInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
-use Drupal\eu_oss_catalogue\Entity\OssSolutionInterface;
 use Monolog\Handler\AbstractProcessingHandler;
 use Monolog\Logger;
 
@@ -62,11 +61,7 @@ class EuOssCatalogueHandler extends AbstractProcessingHandler implements Destruc
         'oss_severity' => $record['level'],
       ]);
 
-      if (isset($record['context']['oss_solution']) && $record['context']['oss_solution'] instanceof OssSolutionInterface) {
-        $message->set('oss_solution', [$record['context']['oss_solution']->id()]);
-      }
-
-      foreach (['oss_landing_url', 'oss_source'] as $item) {
+      foreach (['oss_landing_url', 'oss_source', 'oss_solution'] as $item) {
         if (!isset($record['context'][$item])) {
           continue;
         }
