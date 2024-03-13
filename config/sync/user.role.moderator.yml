@@ -210,7 +210,6 @@ permissions:
   - 'edit sitewide alert entities'
   - 'edit terms in legal_type'
   - 'edit webform variants'
-  - 'execute developers_italia pipeline'
   - 'execute dpsi pipeline'
   - 'execute eu_sic pipeline'
   - 'execute joinup_collection pipeline'
