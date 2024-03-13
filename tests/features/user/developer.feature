@@ -35,6 +35,10 @@ Feature: Variety tests for the developer role.
       | /admin/config/search/search-api/index/published    |
       | /admin/config/search/search-api/index/unpublished  |
 
+  # Warning: This test is not supposed to pass locally. The block is supposed to
+  # be shown ONLY in production. In order to test this, you need to alter the
+  # access check in the warning block to allow it to show locally.
+  # @see \Drupal\joinup_user\Plugin\Block\WarningMessageBlock::blockAccess
   Scenario: Only a developer sees the warning message.
     Given I am an anonymous user
     And I am on the homepage
