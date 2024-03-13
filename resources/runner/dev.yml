@@ -62,30 +62,30 @@ commands:
     - task: exec
       command: ${drush.bin}
       arguments:
-        - user:create
-        - developer
-      options:
-        mail: developer@example.com
-        password: developer
-        yes: null
-        root: ${joinup.site_dir}
-    - task: exec
-      command: ${drush.bin}
-      arguments:
-        - user:role:add
-        - administrator
-        - administrator
-      options:
-        yes: null
-        root: ${joinup.site_dir}
-    - task: exec
-      command: ${drush.bin}
-      arguments:
         - cas-mock-server:user-create
         - administrator
       options:
         email: administrator@example.com
         password: administrator
+        yes: null
+        root: ${joinup.site_dir}
+    - task: exec
+      command: ${drush.bin}
+      arguments:
+        - cas:set-cas-username
+        - administrator
+        - administrator
+      options:
+        yes: null
+        root: ${joinup.site_dir}
+    - task: exec
+      command: ${drush.bin}
+      arguments:
+        - user:create
+        - developer
+      options:
+        mail: developer@example.com
+        password: developer
         yes: null
         root: ${joinup.site_dir}
     - task: exec
@@ -102,8 +102,17 @@ commands:
       command: ${drush.bin}
       arguments:
         - cas:set-cas-username
-        - administrator
-        - administrator
+        - developer
+        - developer
+      options:
+        yes: null
+        root: ${joinup.site_dir}
+    - task: exec
+      command: ${drush.bin}
+      arguments:
+        - user:role:add
+        - developer
+        - developer
       options:
         yes: null
         root: ${joinup.site_dir}
