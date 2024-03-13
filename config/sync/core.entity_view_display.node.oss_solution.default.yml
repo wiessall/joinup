@@ -710,10 +710,11 @@ third_party_settings:
                 entity: layout_builder.entity
                 view_mode: view_mode
               formatter:
-                type: entity_reference_label
+                type: joinup_entity_reference_label_tooltip
                 label: above
                 settings:
                   link: false
+                  tooltip_text: '[term:description]'
                 third_party_settings: {  }
             weight: 6
             additional: {  }
