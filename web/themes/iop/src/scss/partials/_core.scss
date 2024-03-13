@@ -30,3 +30,6 @@
 
 // Bootstrap mixins
 @import "@openeuropa/bcl-bootstrap/scss/mixins";
+
+// Override core and modules
+@import "overrides/general";
