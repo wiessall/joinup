@@ -225,6 +225,7 @@ function asset_distribution_preprocess_rdf_entity(array &$variables): void {
 
 /**
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
  * Access control for the GITB compatibility field on distributions.
  *
@@ -285,6 +286,8 @@ function asset_distribution_form_alter(array &$form, FormStateInterface $form_st
 
 /**
 >>>>>>> 051d8cb326 (ISAICP-8338: Fix the 'GITB compliant' field visibility.)
+=======
+>>>>>>> 2fffbe34af (ISAICP-8555: TRR leftovers.)
  * Implements hook_ENTITY_TYPE_delete().
  *
  * Cleanup entity reference field items to the deleted distribution from
