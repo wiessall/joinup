@@ -1,0 +1,62 @@
+diff --git a/rdf_sync.install b/rdf_sync.install
+index 4a18f4b863de05da579473e0e793d9b0051c67be..a5bf95b4b6d7fea5bf1e4744ffdae44638d3780c 100644
+--- a/rdf_sync.install
++++ b/rdf_sync.install
+@@ -54,3 +54,10 @@ function rdf_sync_schema(): array {
+     ],
+   ];
+ }
++
++/**
++ * Implements hook_uninstall().
++ */
++function rdf_sync_uninstall($is_syncing): void {
++  \Drupal::state()->delete('rdf_sync.synchronization_disabled');
++}
+diff --git a/rdf_sync.services.yml b/rdf_sync.services.yml
+index a8d044020742329a3cb12382a5f5b9336c716a99..6e919c5aecac973f992cb19c12737db1de11e64a 100644
+--- a/rdf_sync.services.yml
++++ b/rdf_sync.services.yml
+@@ -1,11 +1,3 @@
+-parameters:
+-  rdf_sync.format:
+-    - jsonld
+-    - n3
+-    - ntriples
+-    - rdfxml
+-    - turtle
+-
+ services:
+   rdf_sync.mapper:
+     class: Drupal\rdf_sync\RdfSyncMapper
+diff --git a/src/RdfSyncSynchronizer.php b/src/RdfSyncSynchronizer.php
+index 13e30b9a2f3e1af7a2629e5afea04db76dad3f80..ed72fcb13a7b1912fe23b6182a6e39c83dbbfd4c 100644
+--- a/src/RdfSyncSynchronizer.php
++++ b/src/RdfSyncSynchronizer.php
+@@ -51,7 +51,7 @@ public function __construct(
+    *   TRUE if the synchronization is enabled.
+    */
+   public function isSynchronizationEnabled(): bool {
+-    return $this->state->get('rdf_sync.synchronization_enabled', TRUE);
++    return !$this->state->get('rdf_sync.synchronization_disabled', FALSE);
+   }
+ 
+   /**
+@@ -60,7 +60,7 @@ public function isSynchronizationEnabled(): bool {
+    * @return $this
+    */
+   public function enableSynchronization(): self {
+-    $this->state->delete('rdf_sync.synchronization_enabled');
++    $this->state->delete('rdf_sync.synchronization_disabled');
+     return $this;
+   }
+ 
+@@ -70,7 +70,7 @@ public function enableSynchronization(): self {
+    * @return $this
+    */
+   public function disableSynchronization(): self {
+-    $this->state->set('rdf_sync.synchronization_enabled', FALSE);
++    $this->state->set('rdf_sync.synchronization_disabled', TRUE);
+     return $this;
+   }
+ 
