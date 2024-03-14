@@ -1,0 +1,27 @@
+<?php
+
+/**
+ * @file
+ * Hook implementations for the Joinup flag module.
+ */
+
+declare(strict_types=1);
+
+/**
+ * Preprocess vars for views-view-field.tpl.php.
+ */
+function joinup_flag_preprocess_views_view_field(array &$vars): void {
+  if ($vars['view']->element['#name'] === 'bookmarks' && $vars['field']->options['id'] === 'entity_id') {
+    $entity_type_manager = \Drupal::entityTypeManager();
+    $flag = $vars['row']->_entity;
+
+    if (in_array($flag->bundle(), ['bookmark_node', 'bookmark_rdf_entity'])) {
+      $entity_type = $flag->get('entity_type')->value;
+      $entity = $entity_type_manager->getStorage($entity_type)->load($flag->get('entity_id')->value);
+      $build = $entity_type_manager->getViewBuilder($entity->getEntityTypeId())->view($entity, 'view_mode_tile');
+      $vars['output'] = \Drupal::service('renderer')->renderRoot($build);
+    }
+  }
+}
+
+
