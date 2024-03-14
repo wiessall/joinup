@@ -10,9 +10,6 @@
       overflow: hidden;
       flex-wrap: nowrap;
       width: calc(100% - 125px);
-      @include media-breakpoint-up(lg) {
-      width: calc(100% - 240px);
-      }
       .nav-link {
         white-space: nowrap;
         color: $primary;
@@ -20,6 +17,9 @@
         &:hover {
           background-color: $secondary;
         }
+      }
+      @include media-breakpoint-up(lg) {
+        width: calc(100% - 240px);
       }
     }
     .menu--og--navigation--dropdown {
