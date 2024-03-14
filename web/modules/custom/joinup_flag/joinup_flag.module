@@ -7,6 +7,11 @@
 
 declare(strict_types=1);
 
+use Drupal\Core\Access\AccessResult;
+use Drupal\Core\Access\AccessResultInterface;
+use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Session\AccountInterface;
+
 /**
  * Implements hook_preprocess_views_view_fields().
  */
@@ -22,4 +27,18 @@ function joinup_flag_preprocess_views_view_field(array &$variables): void {
       $variables['output'] = \Drupal::service('renderer')->renderRoot($build);
     }
   }
+}
+
+/**
+ * Implements hook_entity_access().
+ */
+function joinup_flag_entity_access(EntityInterface $entity, string $operation, AccountInterface $account): AccessResultInterface {
+  if ($operation === 'view' && $entity->getEntityTypeId() === 'flagging') {
+    if (!$account->isAnonymous()) {
+      return AccessResult::allowed();
+    }
+    return AccessResult::forbidden();
+  }
+  // For other operations, use the default access behavior.
+  return AccessResult::neutral();
 }
