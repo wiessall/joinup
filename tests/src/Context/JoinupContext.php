@@ -47,8 +47,6 @@ use Drupal\paragraphs\Entity\Paragraph;
 use GuzzleHttp\Client;
 use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\ExpectationFailedException;
-use WebDriver\Exception\NoSuchElement;
-use WebDriver\Exception\StaleElementReference;
 
 /**
  * Behat step definitions that are generally useful for the Joinup project.
@@ -2065,6 +2063,32 @@ class JoinupContext extends RawDrupalContext {
   }
 
   /**
+   * Waits until CSS transitions and animations finish.
+   *
+   * @param string $seconds
+   *   Number of seconds to wait.
+   *
+   * @throws \Exception
+   *   Thrown when the element doesn't become visible within the given time.
+   *
+   * @Then I wait up to :seconds seconds for CSS transitions to finish
+   */
+  public function waitForCssAnimations(string $seconds): void {
+    $script = <<<JS
+    (function() {
+      return document.getAnimations({}).length < 1;
+    }());
+JS;
+    $res = $this->getSession()->wait(1000 * $seconds, $script);
+    if (!$res) {
+      throw new \Exception(sprintf(
+        "An element on the page has unfinished CSS transition after '%s' seconds.",
+        $seconds
+      ));
+    }
+  }
+
+  /**
    * Waits until the given region becomes visible.
    *
    * @param string $region
@@ -2095,18 +2119,7 @@ class JoinupContext extends RawDrupalContext {
    * @Then a modal should/will open
    */
   public function waitForDrupalModalToOpen(): void {
-    // A modal can be opened only in a JavaScript-enabled browser.
-    self::assertJavaScriptEnabledBrowser();
-
-    $result = $this->getSession()->getPage()->waitFor(5, function (): bool {
-      // Retrieve again a fresh copy of the page element at each cycle.
-      $modal = $this->getSession()->getPage()->find('css', '.ui-dialog-content');
-      return $modal && $modal->isVisible();
-    });
-
-    if (!$result) {
-      throw new \Exception('The modal did not open.');
-    }
+    self::assertModalToOpen();
   }
 
   /**
@@ -2117,32 +2130,8 @@ class JoinupContext extends RawDrupalContext {
    *
    * @Then the modal should be closed
    */
-  public function waitForDrupalModalToClose() {
-    // A modal can be opened only in a JavaScript-enabled browser.
-    self::assertJavaScriptEnabledBrowser();
-
-    $result = $this->getSession()->getPage()->waitFor(5, function () {
-      try {
-        // Normally the modal should be completely removed from the DOM,
-        // but sometimes the markup is kept in the DOM as hidden.
-        // @see Drupal.AjaxCommands.prototype.closeDialog()
-        return !$this->getSession()->getDriver()->isVisible('//*[@id = "drupal-modal"]');
-      }
-      catch (NoSuchElement $e) {
-        // The modal has been completely removed from the DOM.
-        return TRUE;
-      }
-      catch (StaleElementReference $e) {
-        // The element went stale in the time between fetching it and actually
-        // checking its visibility. The next check should launch a NoSuchElement
-        // exception.
-        return FALSE;
-      }
-    });
-
-    if (!$result) {
-      throw new \Exception('The modal did not close.');
-    }
+  public function waitForDrupalModalToClose(): void {
+    self::assertModalToClose();
   }
 
   /**
