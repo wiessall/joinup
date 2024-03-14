@@ -8,28 +8,15 @@
  * - flaggable: The flaggable entity.
  */
 #}
-{% apply spaceless %}
-  {# Set the remaining Flag CSS classes. #}
-  {% set classes = [
-    'flag',
-    'flag-' ~ flag.id()|clean_class,
-    'use-ajax',
-    'btn',
-    'btn-secondary',
-  ] %}
-  {% set attributes = create_attribute()
-    .addClass(classes)
-    .setAttribute('href', path('joinup_modal.anonymous', {'type': 'bookmark'}, {'query': {'destination': path('<current>')}}))
-    .setAttribute('data-dialog-type', 'modal')
-    .setAttribute('data-dialog-options', '{"width":"auto","height":"auto"}')
-    .setAttribute('title', flag.getLongText('flag'))
-  %}
-  {% set count = flagcount(flag, flaggable) %}
 
-  <a{{ attributes }}>
-    {{ pattern('icon', {
-      name: 'bookmark'
-    }) }}
-    {{ flag.get('flag_short') }}
-  </a>
-{% endapply %}
+{% set classes = [
+  'btn',
+  'btn-secondary',
+] %}
+
+<a{{ attributes.addClass(classes) }}>
+  {{ pattern('icon', {
+    name: 'bookmark'
+  }) }}
+  {{ flag.get('flag_short') }}
+</a>

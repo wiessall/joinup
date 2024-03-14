@@ -7,6 +7,9 @@
 
 declare(strict_types=1);
 
+use Drupal\Core\Url;
+use Drupal\Component\Utility\Html;
+
 /**
  * Implements hook_theme().
  */
@@ -40,4 +43,27 @@ function joinup_bookmark_theme_suggestions_flag_alter(array &$suggestions, array
   if (in_array($flag->id(), ['bookmark_node', 'bookmark_rdf_entity'])) {
     array_unshift($suggestions, 'flag__bookmark');
   }
+}
+
+/**
+ * Prepares variables for flag_bookmark_text templates.
+ */
+function template_preprocess_flag_bookmark_text(&$variables): void {
+  /** @var \Drupal\flag\FlagInterface $flag */
+  $flag = $variables['flag'];
+
+  $variables['attributes']['href'] = Url::fromRoute(
+    'joinup_modal.anonymous',
+    ['type' => 'bookmark'],
+    ['query' => ['destination' => Url::fromRoute('<current>')->toString()]]
+  )->toString();
+  $variables['attributes']['data-dialog-type'] = 'modal';
+  $variables['attributes']['data-dialog-options'] = json_encode([
+    'width' => 'auto',
+    'height' => 'auto',
+  ]);
+  $variables['attributes']['title'] = $flag->getLongText('flag');
+  $variables['attributes']['class'][] = 'use-ajax';
+  $variables['attributes']['class'][] = 'flag';
+  $variables['attributes']['class'][] = Html::getClass('flag-' . $flag->id());
 }
