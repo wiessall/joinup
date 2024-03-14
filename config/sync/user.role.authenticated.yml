@@ -212,6 +212,8 @@ permissions:
   - 'use text format simple_html'
   - 'use text format text_html'
   - 'use text format webform_default'
+  - 'view bookmark_node'
+  - 'view bookmark_rdf_entity'
   - 'view compatibility documents'
   - 'view eif wrapper entity'
   - 'view eif_perspective rdf-meta-entity'

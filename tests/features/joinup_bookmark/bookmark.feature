@@ -52,3 +52,39 @@ Feature: Bookmark/Unbookmark feature.
       | document     |
       | event        |
       | news         |
+
+  Scenario: User bookmark page.
+    And news content:
+      | title               | solution      | state     |
+      | Bookmark news one   | Batman Begins | published |
+      | Bookmark news two   | Batman Begins | published |
+      | Bookmark news three | Batman Begins | published |
+      | Ohter news          | Batman Begins | published |
+
+    When I am logged in as "Gregory Bookmark"
+    And I go to the content page of the type "news" with the title "Bookmark news one"
+    And I click "Bookmark" in the "Bookmark block" region
+    Then I go to the content page of the type "news" with the title "Bookmark news two"
+    And I click "Bookmark" in the "Bookmark block" region
+    Then I go to the homepage of the "Batman Begins" solution
+    And I click "Bookmark" in the "Bookmark block" region
+    When I visit "/user/bookmarks"
+    Then I should see the following tiles in the correct order:
+      | Batman Begins     |
+      | Bookmark news two |
+      | Bookmark news one |
+    And I should see the following facet items "News (2), Solution (1)" in this order
+
+    When I am logged in as "Lisa Bookmark"
+    And I go to the content page of the type "news" with the title "Bookmark news three"
+    And I click "Bookmark" in the "Bookmark block" region
+    Then I go to the content page of the type "news" with the title "Ohter news"
+    And I click "Bookmark" in the "Bookmark block" region
+    Then I go to the homepage of the "Batman" collection
+    And I click "Bookmark" in the "Bookmark block" region
+    When I visit "/user/bookmarks"
+    Then I should see the following tiles in the correct order:
+      | Batman              |
+      | Ohter news          |
+      | Bookmark news three |
+    And I should see the following facet items "News (2), Collection (1)" in this order

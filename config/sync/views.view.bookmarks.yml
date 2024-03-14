@@ -96,15 +96,17 @@ display:
             multi_type: separator
             multi_separator: ', '
       pager:
-        type: mini
+        type: full
         options:
           offset: 0
-          items_per_page: 10
+          items_per_page: 30
           total_pages: null
           id: 0
           tags:
             next: ››
             previous: ‹‹
+            first: '« First'
+            last: 'Last »'
           expose:
             items_per_page: false
             items_per_page_label: 'Items per page'
@@ -113,6 +115,7 @@ display:
             items_per_page_options_all_label: '- All -'
             offset: false
             offset_label: Offset
+          quantity: 9
       exposed_form:
         type: basic
         options:
@@ -132,7 +135,20 @@ display:
         type: none
         options: {  }
       empty: {  }
-      sorts: {  }
+      sorts:
+        created:
+          id: created
+          table: search_api_index_bookmark
+          field: created
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: search_api
+          order: DESC
+          expose:
+            label: ''
+            field_identifier: ''
+          exposed: false
       arguments:
         uid:
           id: uid
@@ -156,11 +172,16 @@ display:
             sort_order: asc
             number_of_records: 0
             format: default_summary
-          specify_validation: false
+          specify_validation: true
           validate:
-            type: none
-            fail: 'not found'
-          validate_options: {  }
+            type: 'entity:user'
+            fail: empty
+          validate_options:
+            access: false
+            operation: view
+            multiple: 0
+            restrict_roles: false
+            roles: {  }
           break_phrase: false
           not: false
       filters: {  }

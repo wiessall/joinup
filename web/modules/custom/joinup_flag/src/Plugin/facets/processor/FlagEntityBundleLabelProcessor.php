@@ -7,7 +7,6 @@ namespace Drupal\joinup_flag\Plugin\facets\processor;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Entity\EntityTypeBundleInfoInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
-use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\facets\FacetInterface;
 use Drupal\facets\FacetSource\SearchApiFacetSourceInterface;
@@ -59,20 +58,6 @@ class FlagEntityBundleLabelProcessor extends ProcessorPluginBase implements Buil
       $container->get('entity_type.manager'),
       $container->get('entity_type.bundle.info')
     );
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function defaultConfiguration(): array {
-    return parent::defaultConfiguration();
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function buildConfigurationForm(array $form, FormStateInterface $form_state, FacetInterface $facet): array {
-    return parent::buildConfigurationForm($form, $form_state, $facet);
   }
 
   /**
