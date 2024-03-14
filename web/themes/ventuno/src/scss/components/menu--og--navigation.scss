@@ -9,7 +9,10 @@
       display: flex;
       overflow: hidden;
       flex-wrap: nowrap;
-      width: calc(100% - 90px);
+      width: calc(100% - 125px);
+      @include media-breakpoint-up(lg) {
+      width: calc(100% - 240px);
+      }
       .nav-link {
         white-space: nowrap;
         color: $primary;

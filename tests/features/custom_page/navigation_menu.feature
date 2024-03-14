@@ -126,7 +126,6 @@ Feature: Navigation menu for custom pages
       | Molds for crafts   | This is a sample body. | Plaster molds | published | HR    |
       | Molds for pottery  | This is a sample body. | Plaster molds | published | HR    |
       | Molds for ceramics | This is a sample body. | Plaster molds | published | HR    |
-      | Molds for pottery  | This is a sample body. | Plaster molds | published | HR    |
       | Molds for soaps    | This is a sample body. | Plaster molds | published | HR    |
     # Menu items are displayed normally
     When I go to the "Plaster molds" collection
