@@ -132,6 +132,11 @@ explore-block:
   dependencies:
     - ventuno/glide
 
+flag-link-ajax:
+  css:
+    theme:
+      assets/css/flag-link-ajax.min.css: { minified: true }
+
 fieldset-show-more:
   css:
     theme:
