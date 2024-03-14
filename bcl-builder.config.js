@@ -460,7 +460,10 @@ module.exports = {
         outputFolder,
         `${ventuno}src/scss/components/flag-link-ajax.scss`
       ),
-      dest: path.resolve(outputFolder, `${ventuno}assets/css/flag-link-ajax.min.css`),
+      dest: path.resolve(
+        outputFolder,
+        `${ventuno}assets/css/flag-link-ajax.min.css`
+      ),
       options: {
         includePaths,
         minify: true,
