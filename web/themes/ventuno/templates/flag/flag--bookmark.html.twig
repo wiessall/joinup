@@ -11,6 +11,7 @@
  * - flaggable: The flaggable entity.
  */
 #}
+{{ attach_library('ventuno/flag-link-ajax') }}
 
 {# Depending on the flag action, set the appropriate action class. #}
 {% set action_icon = action == 'flag' ? 'bookmark' : 'bookmark-check-fill' %}
