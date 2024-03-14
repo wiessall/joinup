@@ -33,6 +33,10 @@
       }
     }
     .menu--og--navigation--dropdown {
+      .btn {
+        color: $primary;
+        font-weight: normal;
+      }
       .dropdown-item {
         &:hover,
         &.is-active {
