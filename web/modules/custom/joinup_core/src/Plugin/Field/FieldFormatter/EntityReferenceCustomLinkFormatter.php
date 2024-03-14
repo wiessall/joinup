@@ -12,7 +12,7 @@ use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Field\Plugin\Field\FieldFormatter\EntityReferenceFormatterBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
-use Drupal\token\Token;
+use Drupal\token\TokenInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -30,17 +30,10 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 class EntityReferenceCustomLinkFormatter extends EntityReferenceFormatterBase {
 
   /**
-   * The token replacement service.
-   *
-   * @var \Drupal\token\Token
-   */
-  protected $token;
-
-  /**
    * Constructs a FormatterBase object.
    *
-   * @param \Symfony\Component\DependencyInjection\ContainerInterface $container
-   *   The container.
+   * @param string $plugin_id
+   *   The plugin_id for the formatter.
    * @param mixed $plugin_definition
    *   The plugin implementation definition.
    * @param \Drupal\Core\Field\FieldDefinitionInterface $field_definition
@@ -53,12 +46,20 @@ class EntityReferenceCustomLinkFormatter extends EntityReferenceFormatterBase {
    *   The view mode.
    * @param array $third_party_settings
    *   Any third party settings.
-   * @param \Drupal\token\Token $token
+   * @param \Drupal\token\TokenInterface $token
    *   The token replacement service.
    */
-  public function __construct(ContainerInterface $container, $plugin_definition, FieldDefinitionInterface $field_definition, array $settings, $label, $view_mode, array $third_party_settings, Token $token) {
-    parent::__construct($container, $plugin_definition, $field_definition, $settings, $label, $view_mode, $third_party_settings);
-    $this->token = $token;
+  public function __construct(
+    string $plugin_id,
+    mixed $plugin_definition,
+    FieldDefinitionInterface $field_definition,
+    array $settings,
+    string $label,
+    string $view_mode,
+    array $third_party_settings,
+    protected TokenInterface $token
+  ) {
+    parent::__construct($plugin_id, $plugin_definition, $field_definition, $settings, $label, $view_mode, $third_party_settings);
   }
 
   /**
@@ -66,7 +67,7 @@ class EntityReferenceCustomLinkFormatter extends EntityReferenceFormatterBase {
    */
   public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition): self {
     return new static(
-      $container,
+      $plugin_id,
       $plugin_definition,
       $configuration['field_definition'],
       $configuration['settings'],

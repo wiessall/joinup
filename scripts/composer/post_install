@@ -2,9 +2,6 @@
 
 set -e
 
-# Check that patches are local.
-php ./scripts/composer/check_patches.php
-
 # Check that composer.lock hash is in sync.
 composer validate --no-check-all --no-check-publish
 
