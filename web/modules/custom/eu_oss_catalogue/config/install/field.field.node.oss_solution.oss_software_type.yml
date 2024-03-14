@@ -19,7 +19,7 @@ field_name: oss_software_type
 entity_type: node
 bundle: oss_solution
 label: 'Software type'
-description: ''
+description: 'The software type of the solution'
 required: false
 translatable: false
 default_value: {  }
