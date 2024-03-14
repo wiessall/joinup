@@ -1,7 +1,7 @@
 {#
 /**
  * @file
- * Overriding base flag link template
+ * Template override for the flag.
  *
  * Available variables:
  * - attributes: HTML attributes for the link element.
@@ -11,38 +11,30 @@
  * - flaggable: The flaggable entity.
  */
 #}
-{% apply spaceless %}
 
-  {# Depending on the flag action, set the appropriate action class. #}
-  {% if action == 'unflag' %}
-    {% set action_class = 'action-unflag' %}
-    {% set action_icon = 'bookmark-check-fill' %}
-  {% else %}
-    {% set action_class = 'action-flag' %}
-    {% set action_icon = 'bookmark' %}
-  {% endif %}
+{# Depending on the flag action, set the appropriate action class. #}
+{% set action_icon = action == 'flag' ? 'bookmark' : 'bookmark-check-fill' %}
 
-  {# Set the remaining Flag CSS classes. #}
-  {% set wrapper_classes = [
-    'flag',
-    'flag-' ~ flag.id()|clean_class,
-    ('js-flag-' ~ flag.id() ~ '-' ~ flaggable.id())|clean_class,
-    action_class
-  ] %}
-  {% set link_classes = [
-    'btn',
-    'btn-secondary',
-  ] %}
+{# Set the remaining Flag CSS classes. #}
+{% set wrapper_classes = [
+  'flag',
+  'flag-' ~ flag.id()|clean_class,
+  ('js-flag-' ~ flag.id() ~ '-' ~ flaggable.id())|clean_class,
+  'flag-action-' ~ action|clean_class,
+] %}
+{% set link_classes = [
+  'btn',
+  'btn-secondary',
+] %}
 
-  {# Set nofollow to prevent search bots from crawling anonymous flag links #}
-  {% set attributes = attributes.setAttribute('rel', 'nofollow') %}
+{# Set nofollow to prevent search bots from crawling anonymous flag links #}
+{% set attributes = attributes.setAttribute('rel', 'nofollow') %}
 
-  <div class="{{ wrapper_classes|join(' ') }}">
-    <a{{ attributes.addClass(link_classes) }}>
-      {{ pattern('icon', {
-        name: action_icon
-      }) }}
-      {{ title }}
-    </a>
-  </div>
-{% endapply %}
+<div class="{{ wrapper_classes|join(' ') }}">
+  <a{{ attributes.addClass(link_classes) }}>
+    {{ pattern('icon', {
+      name: action_icon
+    }) }}
+    {{ title }}
+  </a>
+</div>
