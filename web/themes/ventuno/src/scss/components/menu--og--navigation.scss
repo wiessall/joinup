@@ -6,20 +6,30 @@
     display: flex;
     align-items: center;
     ul.nav {
-      display: flex;
       overflow: hidden;
-      flex-wrap: nowrap;
-      width: calc(100% - 125px);
+      flex: 1;
+      flex-wrap: unset;
+      .nav-item {
+        flex: none;
+        padding: $spacer * .25;
+        &:first-of-type {
+          padding-left: 0;
+        }
+      }
       .nav-link {
         white-space: nowrap;
         color: $primary;
-        &.active.is-active,
         &:hover {
-          background-color: $secondary;
+          box-shadow: 0 4px 0 0 $primary;
         }
-      }
-      @include media-breakpoint-up(lg) {
-        width: calc(100% - 240px);
+        &.active,
+        &.is-active,
+        &.active.is-active {
+          color: $primary;
+          background-color: unset;
+          box-shadow: 0 4px 0 0 $primary;
+          font-weight: $font-weight-bold;
+        }
       }
     }
     .menu--og--navigation--dropdown {
@@ -30,6 +40,9 @@
           background-color: $secondary;
         }
       }
+    }
+    @include media-breakpoint-up(lg) {
+      width: calc(100% - 120px);
     }
   }
 }
