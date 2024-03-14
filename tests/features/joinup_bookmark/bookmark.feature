@@ -68,12 +68,6 @@ Feature: Bookmark/Unbookmark feature.
     And I click "Bookmark" in the "Bookmark block" region
     Then I go to the homepage of the "Batman Begins" solution
     And I click "Bookmark" in the "Bookmark block" region
-    When I visit "/user/bookmarks"
-    Then I should see the following tiles in the correct order:
-      | Batman Begins     |
-      | Bookmark news two |
-      | Bookmark news one |
-    And I should see the following facet items "News (2), Solution (1)" in this order
 
     When I am logged in as "Lisa Bookmark"
     And I go to the content page of the type "news" with the title "Bookmark news three"
@@ -82,9 +76,23 @@ Feature: Bookmark/Unbookmark feature.
     And I click "Bookmark" in the "Bookmark block" region
     Then I go to the homepage of the "Batman" collection
     And I click "Bookmark" in the "Bookmark block" region
-    When I visit "/user/bookmarks"
+
+    When I am logged in as "Gregory Bookmark"
+    And I visit "/user/bookmarks"
+    Then I should see the following tiles in the correct order:
+      | Batman Begins     |
+      | Bookmark news two |
+      | Bookmark news one |
+    And the "Entity bundle" inline facet should allow selecting the following values:
+      | News (2)      |
+      | Solutions (1) |
+
+    When I am logged in as "Lisa Bookmark"
+    And I visit "/user/bookmarks"
     Then I should see the following tiles in the correct order:
       | Batman              |
       | Ohter news          |
       | Bookmark news three |
-    And I should see the following facet items "News (2), Collection (1)" in this order
+    And the "Entity bundle" inline facet should allow selecting the following values:
+      | News (2)        |
+      | Collections (1) |
