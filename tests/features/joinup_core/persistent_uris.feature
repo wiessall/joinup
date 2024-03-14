@@ -73,10 +73,10 @@ Feature:
     Then the persistent url should contain "http://data.europa.eu/w21"
 
     When I go to the "Other Persistent licence" licence
-    Then the persistent url should contain "/rdf_entity/http"
+    Then the persistent url should contain "/node/"
 
     When I go to the "Wrong publication office namespace" licence
-    Then the persistent url should contain "/rdf_entity/http"
+    Then the persistent url should contain "/node/"
 
     When I visit the "Persistent document" document
     Then the persistent url should contain "/node/"
