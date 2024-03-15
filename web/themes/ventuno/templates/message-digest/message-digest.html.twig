@@ -9,40 +9,40 @@
 <tbody>
 <tr>
   <td class="bg-secondary">
-    <table role="presentation">
+    <table role="presentation" style="max-width:500px; margin: 0 auto;">
       <tbody>
         <tr>
           <td class="bg-secondary text-right">
             <table role="presentation">
               <tbody>
                 <tr>
-                  <td height="30" class="bg-secondary">&nbsp;</td>
+                  <td style="height: 30px;" class="bg-secondary">&nbsp;</td>
                 </tr>
               </tbody>
             </table>
           </td>
-          <td width="500">
-            <table role="presentation" width="500">
+          <td style="max-width:500px;">
+            <table role="presentation" style="max-width:500px;">
               <tbody>
-              <!-- ISSUE-->
+              <!-- ISSUE START-->
               <tr>
                 <td class="bg-primary">
                   <table role="presentation">
                     <tbody>
                       <tr>
-                        <td width="350" class="bg-primary">&nbsp;</td>
-                        <td width="20" class="bg-warning">&nbsp;</td>
-                        <td width="110" height="30" class="bg-warning fs-sm text-uppercase fw-bold">
+                        <td style="width: 350px;" class="bg-primary">&nbsp;</td>
+                        <td style="width: 20px;" class="bg-warning">&nbsp;</td>
+                        <td style="width: 110px; height: 30px;" class="bg-warning fs-sm text-uppercase fw-bold">
                           {% trans %}Issue: {{ issue_date }}{% endtrans %}
                         </td>
-                        <td width="20" class="bg-warning">&nbsp;</td>
+                        <td style="width: 20px;" class="bg-warning">&nbsp;</td>
                       </tr>
                     </tbody>
                   </table>
                 </td>
               </tr>
               <!-- ISSUE END-->
-              <!-- HEADER-->
+              <!-- HEADER START-->
               <tr>
                 <td class="bg-primary text-center">
                   <table role="presentation">
@@ -64,7 +64,7 @@
                                 </td>
                               </tr>
                               <tr>
-                                <td height="20" class="bg-primary">&nbsp;</td>
+                                <td style="height: 20px;" class="bg-primary">&nbsp;</td>
                               </tr>
                             </tbody>
                           </table>
@@ -82,22 +82,30 @@
                   <table role="presentation">
                     <tbody>
                     <tr>
-                      <td width="30" height="25">&nbsp;</td>
+                      <td style="width: 30px; height: 25px;">&nbsp;</td>
                       <td>&nbsp;</td>
-                      <td width="30">&nbsp;</td>
+                      <td style="width: 30px;">&nbsp;</td>
                     </tr>
                     <tr>
                       <td>&nbsp;</td>
                       <td>
-                        <span class="fs-lg fw-bold">{% trans %}Dear {{ receiver_name }},{% endtrans %}</span></td>
+                        <span class="fs-lg fw-bold">{% trans %}Dear {{ receiver_name }},{% endtrans %}</span>
+                      </td>
                       <td>&nbsp;</td>
                     </tr>
                     </tbody>
-                  </table></td>
+                  </table>
+                </td>
               </tr>
               <!-- WELCOME END-->
 
-              {{ messages }}
+              <!-- MESSAGES START-->
+              <tr>
+                <td class="p-0">
+                  {{ messages }}
+                </td>
+              </tr>
+              <!-- MESSAGES END-->
 
               <tr>
                 <td>
@@ -108,31 +116,35 @@
                 </td>
               </tr>
               </tbody>
-            </table></td>
+            </table>
+          </td>
           <td class="bg-secondary">
             <table role="presentation">
               <tbody>
               <tr>
-                <td height="30" class="bg-secondary">&nbsp;</td>
+                <td style="height: 30px;" class="bg-secondary">&nbsp;</td>
               </tr>
               </tbody>
-            </table></td>
+            </table>
+          </td>
         </tr>
         <tr>
-          <td height="20">&nbsp;</td>
+          <td style="height: 20px;">&nbsp;</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
         </tr>
         </tbody>
       </table>
     </td>
   </tr>
 
-<!-- FOOTER-->
+<!-- FOOTER START-->
   <tr>
     <td class="fs-sm">
       <table role="presentation">
         <tbody>
           <tr>
-            <td height="50" class="bg-primary">&nbsp;</td>
+            <td style="height: 50px;" class="bg-primary">&nbsp;</td>
           </tr>
           <tr>
             <td class="bg-primary text-center">
@@ -142,10 +154,10 @@
             </td>
           </tr>
           <tr>
-            <td height="50" class="bg-primary">&nbsp;</td>
+            <td style="height: 50px;" class="bg-primary">&nbsp;</td>
           </tr>
           <tr>
-            <td height="100" class="bg-white fs-sm text-center">
+            <td style="height: 100px;" class="bg-white fs-sm text-center">
               {% trans %}
                 You received this email because you opted in for Joinup digest messages.<br/>
                 <a href="{{ subscription_url }}">Manage</a> your subscription notifications or <a href="{{ unsubscription_url }}">unsubscribe</a> from all.<br/>

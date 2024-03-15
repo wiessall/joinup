@@ -25,6 +25,7 @@ function joinup_core_post_update_110300(array &$sandbox): void {
   $graphs = [
     'http://joinup.eu/solution/published',
     'http://joinup.eu/solution/draft',
+    'http://joinup.eu/asset_distribution/published',
   ];
   $predicates = SparqlArg::serializeUris([
     'http://joinup.ec.europa.eu/trr#actor',
@@ -32,6 +33,7 @@ function joinup_core_post_update_110300(array &$sandbox): void {
     'http://joinup.ec.europa.eu/trr#productType',
     'http://joinup.ec.europa.eu/trr#StandardizationLevel',
     'http://joinup.eu/test_resource_type',
+    'http://joinup.eu/asset_distribution/gitb_compliant',
   ]);
   $vocabs = [
     'http://actor',
