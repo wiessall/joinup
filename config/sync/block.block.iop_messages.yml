@@ -11,7 +11,7 @@ _core:
 id: iop_messages
 theme: iop
 region: messages
-weight: -18
+weight: -5
 provider: null
 plugin: system_messages_block
 settings:
