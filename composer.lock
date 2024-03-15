@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "7d010d27ec259285f402f097563d92ba",
+    "content-hash": "e12330fcdfa58ad5268211149db8cd1e",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -2115,12 +2115,8 @@
                     "role": "Maintainer"
                 },
                 {
-                    "name": "RenatoG",
+                    "name": "renatog",
                     "homepage": "https://www.drupal.org/user/3326031"
-                },
-                {
-                    "name": "Unsupported Projects",
-                    "homepage": "https://www.drupal.org/user/291168"
                 }
             ],
             "description": "A light-weight, customizable lightbox plugin for jQuery.",
