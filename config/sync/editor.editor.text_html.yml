@@ -49,7 +49,7 @@ settings:
         - '<h4 id>'
         - '<h5 id>'
         - '<h6 id>'
-        - '<a hreflang>'
+        - '<a id hreflang>'
         - '<ul type>'
         - '<ol type>'
     linkit_extension:
