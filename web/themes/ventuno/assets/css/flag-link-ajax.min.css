@@ -1,2 +1,2 @@
-.flag-waiting .btn{opacity:.5}.flag-waiting .spinner-border{right:calc(50% - 30px)}
+.block-joinup-flag{position:relative}.block-joinup-flag .spinner-border{right:calc(50% - 30px)}.block-joinup-flag:has(.btn+.spinner-border) .btn{opacity:.5}
 /*# sourceMappingURL=flag-link-ajax.min.css.map */
