@@ -16,6 +16,14 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 /**
  * Reacts to entity ID inbound/outbound value.
  *
+ * This is a temporary solution needed while converting entities with RDF
+ * storage to entities with default Drupal storage. During this process, there
+ * are entities still not converted, thus their entity reference fields are
+ * stored as URIs in the RDF triplestore. But the target entities were already
+ * converted to use the MySQL backend and their IDs are numeric (nodes, terms).
+ * We listen to the entity reference field target_id being loaded or saved, and
+ * perform the necessary conversion, from URI to numeric ID or vice-versa.
+ *
  * @todo Drop in ISAICP-8376
  */
 class UriIdConversion implements EventSubscriberInterface {
@@ -59,7 +67,10 @@ class UriIdConversion implements EventSubscriberInterface {
   /**
    * Static cache for the URI <-> ID relation.
    *
-   * @var array
+   * Keys are URIs, values are tuples where the first element (0) is the entity
+   * type ID and the second element (1) is the entity ID.
+   *
+   * @var array[]
    */
   private array $uriToId = [];
 
@@ -120,16 +131,23 @@ class UriIdConversion implements EventSubscriberInterface {
    *
    * @return string|int|null
    *   The entity ID.
+   *
+   * @throws \InvalidArgumentException
+   *   If there's no entity mapped with the passed URI.
    */
   protected function getId(string $uri): string|int|null {
-    if (!($this->uriToId[$uri] ?? NULL)) {
-      $this->uriToId[$uri] = $this->database->select('rdf_sync_uri')
-        ->fields('rdf_sync_uri', ['entity_id'])
+    if (!isset($this->uriToId[$uri])) {
+      $result = $this->database->select('rdf_sync_uri')
+        ->fields('rdf_sync_uri', ['entity_type', 'entity_id'])
         ->condition('uri', $uri)
         ->execute()
-        ->fetchField() ?: NULL;
+        ->fetch(\PDO::FETCH_NUM) ?: NULL;
+      if (!$result) {
+        throw new \InvalidArgumentException("Can't find a mapped entity with URI $uri");
+      }
+      $this->uriToId[$uri] = $result;
     }
-    return $this->uriToId[$uri];
+    return $this->uriToId[$uri][1];
   }
 
   /**
@@ -142,18 +160,24 @@ class UriIdConversion implements EventSubscriberInterface {
    *
    * @return string|null
    *   The URI.
+   *
+   * @throws \InvalidArgumentException
+   *   If there's no mapped URI for the passed entity.
    */
   protected function getUri(string $entityTypeId, int|string|RdfSyncEntityInterface $entity): ?string {
     $id = $entity instanceof RdfSyncEntityInterface ? (string) $entity->id() : (string) $entity;
-    if (($uri = array_search($id, $this->uriToId, TRUE)) === FALSE) {
+    if (($uri = array_search([$entityTypeId, $id], $this->uriToId, TRUE)) === FALSE) {
       $uri = $this->database->select('rdf_sync_uri')
         ->fields('rdf_sync_uri', ['uri'])
         ->condition('entity_type', $entityTypeId)
         ->condition('entity_id', $id)
         ->execute()
         ->fetchField() ?: NULL;
+      if (!$uri) {
+        throw new \InvalidArgumentException("Can't find a URI for $entityTypeId entity with ID $id");
+      }
       // Cache this match.
-      $this->uriToId[$uri] = $id;
+      $this->uriToId[$uri] = [$entityTypeId, $id];
     }
     return $uri;
   }
