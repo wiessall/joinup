@@ -56,7 +56,7 @@ third_party_settings:
       label: 'Abstract wrapper'
       parent_name: ''
       region: hidden
-      weight: 61
+      weight: 57
       format_type: html_element
       format_settings:
         classes: ''
@@ -75,6 +75,14 @@ targetEntityType: rdf_entity
 bundle: solution
 mode: carousel
 content:
+  field_is_abstract:
+    type: string
+    label: hidden
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 3
+    region: content
   field_is_description:
     type: smart_trim
     label: hidden
@@ -116,7 +124,7 @@ content:
   flag_like_rdf_entity:
     settings: {  }
     third_party_settings: {  }
-    weight: 4
+    weight: 5
     region: content
   label:
     type: string
@@ -129,7 +137,7 @@ content:
   read_more:
     settings: {  }
     third_party_settings: {  }
-    weight: 3
+    weight: 4
     region: content
 hidden:
   changed: true
@@ -138,7 +146,6 @@ hidden:
   download_total: true
   eif_perspective: true
   featured: true
-  field_is_abstract: true
   field_is_affiliations_requests: true
   field_is_contact_information: true
   field_is_content: true
