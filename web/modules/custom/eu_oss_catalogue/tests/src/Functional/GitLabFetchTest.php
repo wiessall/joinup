@@ -88,6 +88,12 @@ class GitLabFetchTest extends FetchTestBase {
             '@url' => 'https://wrong.self-hosted.gitlab.example.com',
           ],
         ],
+        [
+          'message' => "Unstable API behind '@provider' provider plugin",
+          'variables' => [
+            '@provider' => 'hosting_platform:gitlab_self_hosted_wrong',
+          ],
+        ],
       ],
       array_map(
         function (object $log): array {
