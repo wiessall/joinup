@@ -1,12 +1,14 @@
 /*
  * Override flag-link-ajax
 */
-
-.flag-waiting {
-  .btn {
-    opacity: .5;
-  }
+.block-joinup-flag {
+  position: relative;
   .spinner-border {
-    right: calc(50% - 30px);
+      right: calc(50% - 30px);
+  }
+  &:has(.btn + .spinner-border) {
+    .btn {
+      opacity: .5;
+    }  
   }
 }
