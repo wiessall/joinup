@@ -30,6 +30,7 @@ use Drupal\contact_information\ParentGroupFieldItemList;
 use Drupal\email_confirmer\EmailConfirmationInterface;
 use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\rdf_entity\RdfInterface;
+use Drupal\symfony_mailer_lite\Plugin\Mail\SymfonyMailer;
 
 /**
  * Implements hook_entity_bundle_info_alter().
@@ -459,5 +460,14 @@ function contact_information_rdf_entity_view(array &$build, RdfInterface $contac
       ->addCacheContexts(['og_role', 'user.roles:authenticated'])
       ->addCacheableDependency($contact_information)
       ->applyTo($build);
+  }
+}
+
+/**
+ * Implements hook_mail_alter().
+ */
+function contact_information_mail_alter(&$message): void {
+  if ($message['module'] === 'email_contact' && $message['key'] === 'contact') {
+    $message['headers']['Content-Type'] = SymfonyMailer::FORMAT_HTML;
   }
 }
