@@ -13,6 +13,8 @@ use Symfony\Contracts\EventDispatcher\Event;
 /**
  * Event fired when an entity is updated without changing its workflow state.
  *
+ * @todo this is a workafound class for the same from-to state. To be removed.
+ *
  * @see \Drupal\joinup_workflow\Plugin\Field\FieldWidget\StateMachineButtons
  */
 class UnchangedWorkflowStateUpdateEvent extends Event {

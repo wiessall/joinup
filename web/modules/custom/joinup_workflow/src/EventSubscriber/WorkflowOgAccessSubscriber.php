@@ -7,6 +7,7 @@ namespace Drupal\joinup_workflow\EventSubscriber;
 use Drupal\Core\Session\AccountProxyInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\joinup_community_content\CommunityContentHelper;
+use Drupal\joinup_community_content\Entity\CommunityContentInterface;
 use Drupal\og\Event\GroupContentEntityOperationAccessEventInterface;
 use Drupal\og\Event\PermissionEventInterface;
 use Drupal\og\GroupContentOperationPermission;
@@ -33,17 +34,23 @@ final class WorkflowOgAccessSubscriber implements EventSubscriberInterface {
    */
   public static function getSubscribedEvents(): array {
     return [
-      PermissionEventInterface::EVENT_NAME => 'onPermissionEvent',
+      PermissionEventInterface::EVENT_NAME => 'contentCreationAlterPermissionEvent',
       GroupContentEntityOperationAccessEventInterface::EVENT_NAME => [
-        ['ownerDeleteAccess', 10],
+        // Use a priority higher than the default subscriber from OG so that we
+        // can have full control.
+        ['checkEntityRevisionAccess', 10],
+        ['ownerDeleteAccess', 5],
       ],
     ];
   }
 
   /**
-   * Provides permissions for operation depending on the eLibrary creation.
+   * Alters permission depending on the 'Content Creation' group field.
+   *
+   * @param \Drupal\og\Event\PermissionEventInterface $event
+   *   The OG permission event.
    */
-  public function onPermissionEvent(PermissionEventInterface $event): void {
+  public function contentCreationAlterPermissionEvent(PermissionEventInterface $event): void {
     $options = ['any_user', 'only_members', 'facilitators_and_authors'];
     foreach ($options as $option) {
       foreach (CommunityContentHelper::BUNDLES as $bundle) {
@@ -113,6 +120,83 @@ final class WorkflowOgAccessSubscriber implements EventSubscriberInterface {
       if (!$hasOwnAccess && !$hasAnyAccess) {
         $event->denyAccess();
       }
+    }
+  }
+
+  /**
+   * Determines access to entity revisions for community content.
+   *
+   * @param \Drupal\og\Event\GroupContentEntityOperationAccessEventInterface $event
+   *   The event fired when a group content entity operation is performed.
+   */
+  public function checkEntityRevisionAccess(GroupContentEntityOperationAccessEventInterface $event): void {
+    $content = $event->getGroupContent();
+
+    // Only act on community content.
+    if (!$content instanceof CommunityContentInterface) {
+      return;
+    }
+
+    $event->addCacheableDependency($content);
+
+    // Do a quick exit if the event is not for the entity operations we handle.
+    $operation = $event->getOperation();
+    if (!in_array($operation, ['view all revisions', 'revert revision'])) {
+      return;
+    }
+
+    $bundle = $content->bundle();
+    $bundle_permission = "view $bundle revisions";
+
+    // There should be at least two revisions. If the vid of the given node
+    // and the vid of the default revision differ, then we already have two
+    // different revisions so there is no need for a separate database check.
+    // @todo This used to be the default behaviour in Drupal but this has since
+    //   been changed. We might reconsider to show the revisions overview even
+    //   if there is only 1 revision. This would be a function change that needs
+    //   prior approval by the functional team.
+    // @see https://www.drupal.org/node/3001224
+    $node_storage = $this->entityTypeManager->getStorage('node');
+    if ($content->isDefaultRevision() && ($node_storage->countDefaultLanguageRevisions($content) == 1)) {
+      $event->denyAccess();
+      return;
+    }
+
+    // The global "administer nodes" permissions gives full access to revisions.
+    // @see parent::checkAccess()
+    $account = $event->getUser();
+    if ($account->hasPermission('administer nodes')) {
+      $event->grantAccess();
+      $event->stopPropagation();
+      return;
+    }
+
+    // Check if the user has group level permission to view all revisions, or
+    // view revisions for the bundle of the group content.
+    $group = $event->getGroup();
+    $result = $this->ogAccess->userAccess($group, 'view all revisions', $account)
+      ->orIf($this->ogAccess->userAccess($group, $bundle_permission, $account));
+
+    // If the user owns the entity, check if they can 'view own revisions'.
+    if (!$result->isAllowed() && (int) $content->getOwnerId() === (int) $account->id()) {
+      $result = $result->orIf($this->ogAccess->userAccess($group, 'view own revisions', $account));
+    }
+
+    // If neither of the access checks are allowed, we have no opinion.
+    if (!$result->isAllowed()) {
+      return;
+    }
+
+    // Check if the access to the default revision and finally, if the
+    // node passed in is not the default revision then access to that, too.
+    $node_access = $this->entityTypeManager->getAccessControlHandler('node');
+    $result = $result->andIf($node_access->access($node_storage->load($content->id()), 'view', $account, TRUE));
+    if (!$content->isDefaultRevision()) {
+      $result = $result->andIf($node_access->access($content, 'view', $account, TRUE));
+    }
+
+    if ($result->isAllowed()) {
+      $event->grantAccess();
     }
   }
 

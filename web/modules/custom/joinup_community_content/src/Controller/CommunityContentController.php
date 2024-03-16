@@ -73,7 +73,7 @@ class CommunityContentController extends GroupNodeController {
       $membership = $rdf_entity->getMembership((int) $account->id());
       return \Drupal::entityTypeManager()->getAccessControlHandler('node')->createAccess($node_type->id(), $account, [
         'group' => $rdf_entity,
-        'membership' => $membership->id(),
+        'membership' => $membership?->id(),
       ], TRUE);
     }
     return parent::createAccess($rdf_entity, $node_type, $account);

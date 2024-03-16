@@ -23,7 +23,7 @@ class EntityUnchangedWorkflowState implements EventSubscriberInterface {
    */
   public static function getSubscribedEvents(): array {
     return [
-      'joinup_workflow.unchanged_workflow_state_update' => 'onUnchangedWorkflowStateUpdate',
+//      'joinup_workflow.unchanged_workflow_state_update' => 'onUnchangedWorkflowStateUpdate',
     ];
   }
 
@@ -39,6 +39,9 @@ class EntityUnchangedWorkflowState implements EventSubscriberInterface {
       return;
     }
 
+    // @todo Now that there are no workarounds for the same from-to state, this
+    //   event should be removed and should be handled directly in the workflow.
+    //   An exception might be with custom pages.
     if (in_array($event->getState(), ['__new__', 'archived'])) {
       $access = AccessResult::forbidden();
       $event->setAccess($access);
