@@ -16,7 +16,7 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 /**
  * Provides permissions related to og and state machine.
  */
-class StateMachineOgSubscriber implements EventSubscriberInterface {
+class PermissionGenerationSubscriber implements EventSubscriberInterface {
 
   use StringTranslationTrait;
 

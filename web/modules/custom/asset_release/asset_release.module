@@ -201,7 +201,7 @@ function asset_release_rdf_entity_access(EntityInterface $release, $operation, A
       }
       break;
 
-    case 'edit':
+    case 'update':
       /** @var \Drupal\joinup_workflow\WorkflowHelperInterface $workflow_helper */
       $workflow_helper = \Drupal::service('joinup_workflow.workflow_helper');
       $allowed_states = $workflow_helper->getAvailableTargetStates($release, $account);
