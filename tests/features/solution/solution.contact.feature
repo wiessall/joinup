@@ -67,3 +67,48 @@ Feature: Contact form for solution
       | Message: This is reclamation test.                                 |
     And the email sent to "jocelyn.bass@example.com" with subject "New reclamation about Owner" contains "logo.png" attachment
     And the email sent to "jocelyn.bass@example.com" with subject "New reclamation about Owner" contains header "Content-Type" with value "text/html"
+
+  @terms @javascript @email
+  Scenario: User receives an mail about contact validation.
+    Given owner:
+      | name      | type               |
+      | Rotterdam | National authority |
+    And user:
+      | Username    | Pally Rapamichael      |
+      | First name  | Pally                  |
+      | Family name | Rapamichael            |
+      | E-mail      | p.papamichael@pally.de |
+    And collection:
+      | title | Antibody development |
+      | state | published            |
+    And solution:
+      | title         | Six exclusion advantages                          |
+      | abstract      | abstract for six                                  |
+      | description   | Separating molecules by weight.                   |
+      | state         | published                                         |
+      | topic         | Demography, E-inclusion                           |
+      | owner         | Rotterdam                                         |
+      | solution type | Non-binding Instrument, Service Discovery Service |
+      | collection    | Antibody development                              |
+    And CAS users:
+      | Username           | E-mail         | Password |
+      | Iodine Maccalariat | iodine@ankh.am | 10d1ne   |
+
+    When I am logged in as a moderator
+    And I go to the edit form of the "Six exclusion advantages" solution
+    And I fill in "Name" with "Invisible Cat"
+    And I fill in "E-mail" with "invisible.cat@xpto.com"
+    And I press "Create contact information"
+    And I press "Publish"
+    Then I should see the success message "A new confirmation message has been sent to invisible.cat@xpto.com."
+    And the email sent to "invisible.cat@xpto.com" with subject "Joinup - Please validate your contact details" contains the text:
+      | Dear Joinup user,                                                                                                                                                           |
+      | As owner/facilitator, we’re improving your privacy by replacing the publicly visible contact email information with a contact form that users/members can use to reach you. |
+      | Please confirm your email address invisible.cat@xpto.com, which is set in your contact information for the following:                                                       |
+      | Solution: Six exclusion advantages                                                                                                                                          |
+      | If the link doesn't work, just copy this URL to your browser                                                                                                                |
+      | If you do not validate your email within the next 5 days, you will not be able to receive any messages from users/members.                                                  |
+      | If you think this action is not clear or not due, please contact Joinup Support at https://joinup.ec.europa.eu/contact.                                                     |
+      | Best regards,                                                                                                                                                               |
+      | The Joinup Team                                                                                                                                                             |
+    And the email sent to "invisible.cat@xpto.com" with subject "Joinup - Please validate your contact details" contains header "Content-Type" with value "text/html"
