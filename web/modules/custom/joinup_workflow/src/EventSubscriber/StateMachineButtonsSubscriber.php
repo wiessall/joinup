@@ -30,9 +30,21 @@ final class StateMachineButtonsSubscriber implements EventSubscriberInterface {
    */
   public function onStateMachineButtonLabels(StateMachineButtonLabelsEventInterface $event): void {
     $entity = $event->getEntity();
+    if ($entity->isNew()) {
+      // In case of a new entity, use the default transitions, to avoid setting
+      // the 'Save as Draft' button label to 'Update'.
+      return;
+    }
+
     $stateId = $event->getStateId();
     $workflow = $entity->getWorkflow();
     $transition = $workflow->findTransition($stateId, $stateId);
+
+    // @todo: Group the exceptions later when all of them are here.
+    // `asset_release` `draft` button should not be update.
+    if ($entity->bundle() === 'asset_release' && $stateId === 'draft') {
+      return;
+    }
 
     if ($transition) {
       // When the transition is to the same state, change the label to 'Update'.
