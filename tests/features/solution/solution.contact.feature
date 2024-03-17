@@ -59,10 +59,11 @@ Feature: Contact form for solution
     And I should be on "/collection/antibody-development/solution/six-exclusion-advantages"
     And I should see the heading "Six exclusion advantages"
     And the email sent to "jocelyn.bass@example.com" with subject "New reclamation about Owner" contains the text:
-      | Name: Jonny Example                |
-      | Organization: My organization      |
-      | Email: example@test.test           |
-      | Type of support: Technical         |
-      | Message: This is reclamation test. |
+      | /collection/antibody-development/solution/six-exclusion-advantages |
+      | Name: Jonny Example                                                |
+      | Organization: My organization                                      |
+      | Email: example@test.test                                           |
+      | Type of support: Technical                                         |
+      | Message: This is reclamation test.                                 |
     And the email sent to "jocelyn.bass@example.com" with subject "New reclamation about Owner" contains "logo.png" attachment
     And the email sent to "jocelyn.bass@example.com" with subject "New reclamation about Owner" contains header "Content-Type" with value "text/html"
