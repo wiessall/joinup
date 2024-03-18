@@ -54,6 +54,7 @@ Feature:
       | Cristian Gagliardi |
       | Vito Schiraldi     |
       | Semantic Turkey    |
+      | Not released       |
 
     When I click "View all" in the "Most recent solutions" region
     Then the option with text "Most Recent" from select "Sort by" is selected
@@ -65,6 +66,7 @@ Feature:
       | C4S ERP            |
       | Spunta             |
       | Vito Schiraldi     |
+      | Not released       |
       | Semantic Turkey    |
 
     When I click "View all" in the "Most active solutions" region

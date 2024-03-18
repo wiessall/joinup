@@ -318,6 +318,7 @@ display:
     display_plugin: block
     position: 1
     display_options:
+      title: 'Most active solutions'
       sorts:
         oss_vitality_index:
           id: oss_vitality_index
@@ -346,6 +347,7 @@ display:
             field_identifier: ''
           exposed: false
       defaults:
+        title: false
         sorts: false
       display_description: ''
       display_extenders:
@@ -366,6 +368,9 @@ display:
     display_plugin: block
     position: 1
     display_options:
+      title: 'Most recent solutions'
+      defaults:
+        title: false
       display_description: ''
       display_extenders:
         metatag_display_extender:
