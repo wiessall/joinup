@@ -467,7 +467,10 @@ function contact_information_rdf_entity_view(array &$build, RdfInterface $contac
  * Implements hook_mail_alter().
  */
 function contact_information_mail_alter(&$message): void {
-  if (($message['module'] === 'email_contact' && $message['key'] === 'contact') || $message['module'] === 'email_confirmer') {
+  // User filled out the contact form.
+  if (($message['module'] === 'email_contact' && $message['key'] === 'contact') ||
+    // Editor typed contact information (mail needs to be validated).
+    ($message['module'] === 'email_confirmer' && $message['key'] === 'confirmation_request')) {
     $message['headers']['Content-Type'] = SymfonyMailer::FORMAT_HTML;
   }
 }

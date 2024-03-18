@@ -241,7 +241,7 @@ Feature: Proposing a collection
       | subject            | Joinup - Please validate your contact details                                                                                         |
       | body               | Please confirm your email address some_unique_contact_person@example.com, which is set in your contact information for the following: |
       | signature_required | no                                                                                                                                    |
-      | html               | no                                                                                                                                    |
+      | html               | yes                                                                                                                                   |
 
     When I click "Add solution" in the plus button menu
     And I check "I have read and accept the legal notice and I commit to manage my solution on a regular basis."
