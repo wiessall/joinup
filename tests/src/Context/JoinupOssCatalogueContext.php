@@ -6,11 +6,12 @@ namespace Drupal\joinup\Context;
 
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\joinup\Traits\EntityTrait;
+use Drupal\joinup_test\Plugin\ServiceMock\EuOssEmptyMock;
 
 /**
- * Behat step definitions for testing OSS solution.
+ * Behat step definitions for testing OSS Catalogue.
  */
-class JoinupOSSSolutionContext extends RawDrupalContext {
+class JoinupOssCatalogueContext extends RawDrupalContext {
 
   use EntityTrait;
 
@@ -52,6 +53,28 @@ class JoinupOSSSolutionContext extends RawDrupalContext {
    */
   public function deleteOssSolution(string $title): void {
     $this->getEntityByLabel('node', $title, 'oss_solution')->delete();
+  }
+
+  /**
+   * Enables OSS Catalogue service mock.
+   *
+   * @BeforeScenario @eu_oss_mock&&@api
+   *
+   * @see \Drupal\joinup_test\Plugin\ServiceMock\EuOssEmptyMock
+   */
+  public function enableGitHubRequestMock(): void {
+    \Drupal::state()->set(EuOssEmptyMock::OSS_CATALOGUE_MOCK_STATE_KEY, TRUE);
+  }
+
+  /**
+   * Disables SS Catalogue service mock.
+   *
+   * @AfterScenario @eu_oss_mock&&@api
+   *
+   * @see \Drupal\joinup_test\Plugin\ServiceMock\EuOssEmptyMock
+   */
+  public function disableGitHubRequestMock(): void {
+    \Drupal::state()->delete(EuOssEmptyMock::OSS_CATALOGUE_MOCK_STATE_KEY);
   }
 
 }
