@@ -30,7 +30,7 @@ function ventuno_theme_suggestions_views_view_alter(array &$suggestions, array $
   if ($id === 'search_oss_catalogue') {
     $suggestions[] = 'views_view__search__page';
   }
-  elseif ($id === 'eu_oss_catalogue_admin' && preg_match('/oss_most_(recent|active)_solutions/', $view->current_display)) {
+  elseif ($id === 'oss_solutions_listing') {
     $suggestions[] = 'views_view__eu_oss_catalogue_admin_carousel';
   }
 
