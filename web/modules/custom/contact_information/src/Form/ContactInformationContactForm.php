@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Drupal\contact_information\Form;
 
-use Drupal\contact_information\Entity\ContactInformation;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\contact_information\Entity\ContactInformation;
 use Drupal\rdf_entity\RdfInterface;
 
 /**
