@@ -266,7 +266,7 @@ Feature: Proposing a collection
       | subject            | Joinup - Please validate your contact details                                                                                 |
       | body               | Please confirm your email address contact_Rapazoglou@example.com, which is set in your contact information for the following: |
       | signature_required | no                                                                                                                            |
-      | html               | no                                                                                                                            |
+      | html               | yes                                                                                                                            |
 
     # Email confirmations are sent on group publishing.
     Given I am logged in as a "moderator"
@@ -277,7 +277,7 @@ Feature: Proposing a collection
       | subject            | Joinup - Please validate your contact details                                                                                         |
       | body               | Please confirm your email address some_unique_contact_person@example.com, which is set in your contact information for the following: |
       | signature_required | no                                                                                                                                    |
-      | html               | no                                                                                                                                    |
+      | html               | yes                                                                                                                                    |
     When I go to the edit form of the "Rolly email validation" solution
     And I press "Publish"
     And the following email should have been sent:
@@ -285,7 +285,7 @@ Feature: Proposing a collection
       | subject            | Joinup - Please validate your contact details                                                                                 |
       | body               | Please confirm your email address contact_Rapazoglou@example.com, which is set in your contact information for the following: |
       | signature_required | no                                                                                                                            |
-      | html               | no                                                                                                                            |
+      | html               | yes                                                                                                                            |
 
     # Contact us page should return access denied,
     # because contact info emails are not published.
