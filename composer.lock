@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "2721003fb1e7fbb14ba20d14b64f33e2",
+    "content-hash": "6d4bb9320d7086c4ebee95ec978956c0",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -17276,17 +17276,17 @@
         },
         {
             "name": "drupal/stage_file_proxy",
-            "version": "2.1.4",
+            "version": "2.1.3",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/stage_file_proxy.git",
-                "reference": "2.1.4"
+                "reference": "2.1.3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/stage_file_proxy-2.1.4.zip",
-                "reference": "2.1.4",
-                "shasum": "85f8451f123fcfb1b272f5a0cc11e6bd1673476c"
+                "url": "https://ftp.drupal.org/files/projects/stage_file_proxy-2.1.3.zip",
+                "reference": "2.1.3",
+                "shasum": "64070ee4b6469ad031dd06382552128d8c361275"
             },
             "require": {
                 "drupal/core": "^9 || ^10",
@@ -17294,13 +17294,13 @@
             },
             "require-dev": {
                 "drupal/coder": "^8.3",
-                "drush/drush": "^11 || ^12"
+                "drush/drush": "^11"
             },
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "2.1.4",
-                    "datestamp": "1706627704",
+                    "version": "2.1.3",
+                    "datestamp": "1702477024",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
