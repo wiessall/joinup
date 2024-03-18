@@ -233,8 +233,8 @@ Feature: OSS catalogue search
       | Smart IoT Manager        |
       | Digital Artistry Studio  |
       | Creative Content Creator |
-      | Open AI Helper           |
       | Health Tracker Pro       |
+      | Open AI Helper           |
     And I should be on "/eu-oss-catalogue/solutions?oss_keys=&sort_by=changed"
 
     Given I select "Alphabetic Order A-Z" from "Sort by"
