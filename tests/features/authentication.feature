@@ -52,11 +52,11 @@ Feature: User authentication
       | media/add                                           |
       | media/add/collection_logo                           |
       | media/add/event_logo                                |
-      | media/add/file                                     |
+      | media/add/file                                      |
       | media/add/image                                     |
       | media/add/news_logo                                 |
       | media/add/solution_logo                             |
-      | media/add/video                                    |
+      | media/add/video                                     |
       | node/add                                            |
       | node/add/custom_page                                |
       | node/add/discussion                                 |
@@ -136,11 +136,11 @@ Feature: User authentication
       | media/add                                           |
       | media/add/collection_logo                           |
       | media/add/event_logo                                |
-      | media/add/file                                     |
+      | media/add/file                                      |
       | media/add/image                                     |
       | media/add/news_logo                                 |
       | media/add/solution_logo                             |
-      | media/add/video                                    |
+      | media/add/video                                     |
       | node/add                                            |
       | node/add/custom_page                                |
       | node/add/discussion                                 |
@@ -247,11 +247,9 @@ Feature: User authentication
     Then I visit "<path>"
 
     Examples:
-      | path                                       |
-      | admin/config/search/redirect               |
-      | admin/reporting/distribution-downloads     |
-      | admin/reporting/distribution-downloads/csv |
-      | collections                                |
+      | path         |
+      | collections  |
+      | admin/people |
 
   Scenario Outline: Administrator cannot access pages intended for site building and development
     Given I am logged in as a user with the "administrator" role
@@ -259,28 +257,30 @@ Feature: User authentication
     Then I should get an access denied error
 
     Examples:
-      | path                               |
-      | admin                              |
-      | admin/config                       |
-      | admin/content                      |
-      | admin/content/files                                 |
-      | admin/content/media                |
-      | admin/content/rdf                  |
-      | admin/legal-notice                 |
-      | admin/legal-notice/add             |
-      | admin/people                       |
-      | admin/structure                    |
-      | node/add                           |
-      | node/add/custom_page               |
-      | node/add/discussion                |
-      | node/add/document                  |
-      | node/add/event                     |
-      | node/add/news                      |
-      | rdf_entity/add                     |
-      | rdf_entity/add/asset_distribution  |
-      | rdf_entity/add/asset_release       |
-      | rdf_entity/add/collection          |
-      | rdf_entity/add/contact_information |
-      | rdf_entity/add/licence             |
-      | rdf_entity/add/owner               |
-      | rdf_entity/add/solution            |
+      | path                                       |
+      | admin                                      |
+      | admin/config                               |
+      | admin/config/search/redirect               |
+      | admin/content                              |
+      | admin/content/files                        |
+      | admin/content/media                        |
+      | admin/content/rdf                          |
+      | admin/legal-notice                         |
+      | admin/legal-notice/add                     |
+      | admin/reporting/distribution-downloads     |
+      | admin/reporting/distribution-downloads/csv |
+      | admin/structure                            |
+      | node/add                                   |
+      | node/add/custom_page                       |
+      | node/add/discussion                        |
+      | node/add/document                          |
+      | node/add/event                             |
+      | node/add/news                              |
+      | rdf_entity/add                             |
+      | rdf_entity/add/asset_distribution          |
+      | rdf_entity/add/asset_release               |
+      | rdf_entity/add/collection                  |
+      | rdf_entity/add/contact_information         |
+      | rdf_entity/add/licence                     |
+      | rdf_entity/add/owner                       |
+      | rdf_entity/add/solution                    |

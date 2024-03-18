@@ -7,6 +7,7 @@ module:
   antibot: 0
   asset_distribution: 0
   asset_release: 0
+  autologout: 0
   blazy: 0
   block: 0
   breakpoint: 0
@@ -189,6 +190,7 @@ module:
   redirect: 0
   responsive_image: 0
   rest: 0
+  role_delegation: 0
   schema_article: 0
   schema_digital_document: 0
   schema_event: 0

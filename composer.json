@@ -16,6 +16,7 @@
         "drupal/addtocal": "^3.0",
         "drupal/allowed_formats": "^3.0",
         "drupal/antibot": "^2.0",
+        "drupal/autologout": "^1.4",
         "drupal/cached_computed_field": "^1.0",
         "drupal/cas": "^2.0",
         "drupal/cas_attributes": "^2.0",
@@ -79,6 +80,7 @@
         "drupal/rdf_entity": "^2.0",
         "drupal/rdf_meta_entity": "^1.0",
         "drupal/redirect": "^1.6",
+        "drupal/role_delegation": "^1.2",
         "drupal/schema_digital_document": "^1.0",
         "drupal/schema_metatag": "^3.0",
         "drupal/schema_social_media_posting": "^1.0",
@@ -261,6 +263,9 @@
         "patches": {
             "drupal/addtocal": {
                 "Uncaught TypeError: $(...).once is not a function @see https://www.drupal.org/project/addtocal/issues/3372354": "resources/patch/php/drupal/addtocal/3372354.patch"
+            },
+            "drupal/autologout": {
+                "Warning: Undefined array key @see https://www.drupal.org/project/autologout/issues/3372010": "resources/patch/php/drupal/autologout/3372010.diff"
             },
             "drupal/blazy": {
                 "The definition for the sequence declares the type of its items in a way that is deprecated in drupal:8.0.0 @see https://drupal.org/i/3411047": "resources/patch/php/drupal/blazy/3411047-note246730.diff"
