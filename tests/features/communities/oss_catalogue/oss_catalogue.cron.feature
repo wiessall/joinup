@@ -13,6 +13,6 @@ Feature: Test cron periodical task
 
     # After 1 day, the "eu_oss_catalogue_cron" job should run
     # again.
-    When the cron job was last run "1 day 1 minute ago"
+    When the eu_oss_catalogue_cron job was last run "1 day 1 minute ago"
     And I run cron
     Then the "eu_oss_catalogue_cron" job has run 2 times

@@ -434,39 +434,4 @@ class JoinupCoreContext extends RawDrupalContext {
     }
   }
 
-  /**
-   * Asserts the number of times a cron job has run.
-   *
-   * @param string $job_name
-   *   The name of the job.
-   * @param int $expected_runs
-   *   The expected number of runs.
-   *
-   * @Then the :job_name job has run :expected_runs times
-   */
-  public function assertNumberOfCronJobRuns(string $job_name, int $expected_runs): void {
-    $search_text = 'Starting execution of ' . $job_name;
-    $count = \Drupal::database()->select('watchdog', 'wd')
-      ->condition('type', 'cron')
-      ->condition('message', '%' . $search_text . '%', 'LIKE')
-      ->countQuery()
-      ->execute()
-      ->fetchField();
-    Assert::assertEquals($expected_runs, $count);
-  }
-
-  /**
-   * Sets the last run time of a cron.
-   *
-   * @param string $last_run_time
-   *   The last run time of the job.
-   *
-   * @Given the cron job was last run (at ):last_run_time
-   */
-  public function setCronJobRunLastTime(string $last_run_time): void {
-    $last_run_time = strtotime($last_run_time);
-    \assert($last_run_time, 'The last run time must be a string valid for strtotime().');
-    \Drupal::state()->set('system.cron_last', $last_run_time);
-  }
-
 }
