@@ -153,10 +153,12 @@ function eu_oss_catalogue_cron(): void {
   $last_check = $state->get('eu_oss_catalogue.last_check', 0);
   // 24Hours.
   $interval = 86400;
-  if (
-    date('G', $request_time) == 2 && $last_check == 0 ||
-    $last_check > 0 && ($request_time - $last_check) > $interval
-  ) {
+  if (($request_time - $last_check) > $interval) {
+    // Verify whether this is the initial execution of the cron job,
+    // and if so, establish the timestamp as 2 AM of the current day.
+    if ($last_check == 0) {
+      $request_time = strtotime(date('Y-m-d', $request_time) . ' 2:00:00');
+    }
     /** @var \Drupal\eu_oss_catalogue\EuOssCataloguePluginManagerInterface $providerPluginManager */
     $providerPluginManager = \Drupal::service('plugin.manager.eu_oss_catalogue.provider');
     foreach ($providerPluginManager->getDefinitionsAsOptions('label') as $provider => $label) {
