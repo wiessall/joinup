@@ -242,6 +242,19 @@ module.exports = {
         sourceMap: "file",
       },
     },
+    // Emails
+    {
+      entry: path.resolve(outputFolder, `${ventuno}src/scss/emails/mail.scss`),
+      dest: path.resolve(
+        outputFolder,
+        `${ventuno}assets/css/emails/mail.min.css`
+      ),
+      options: {
+        includePaths,
+        minify: true,
+        sourceMap: false,
+      },
+    },
     // Theme (SMACSS)
     {
       entry: path.resolve(outputFolder, `${ventuno}src/scss/04-theme.scss`),
