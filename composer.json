@@ -280,7 +280,6 @@
                 "Regression: Do not bypass route access with 'link to any page' permissions for menu links @see https://www.drupal.org/project/drupal/issues/2463753": "resources/patch/php/drupal/core/2463753.patch",
                 "Upcast named arguments/named parameters in views @see https://www.drupal.org/project/drupal/issues/2528166": "resources/patch/php/drupal/core/2528166.patch",
                 "Confirmation cancel links are incorrect if installed in a subdirectory @see https://www.drupal.org/project/drupal/issues/2582295": "resources/patch/php/drupal/core/2582295.patch",
-                "Views Block Display skips preBlockBuild() call on ajax rebuild https://www.drupal.org/i/2605218": "resources/patch/php/drupal/core/2605218-134.diff",
                 "Enlarge file_usage entity ID length. @see https://www.drupal.org/node/2675600": "resources/patch/php/drupal/core/2675600.diff",
                 "Menu link plugins should provide a way for the link to be conditionally hidden @see https://www.drupal.org/i/2719609": "resources/patch/php/drupal/core/2719609.patch",
                 "Allow plurals on bundle labels @see https://www.drupal.org/i/2765065": "resources/patch/php/drupal/core/2765065.patch",
@@ -289,7 +288,6 @@
                 "Add option to show only start or end date in the DateTime Range custom formatter @see https://www.drupal.org/project/drupal/issues/2827055": "resources/patch/php/drupal/core/2827055.patch",
                 "Views with a different query plugin created via the UI do not have the correct query plugin ID in the view config @see https://www.drupal.org/project/drupal/issues/2836237": "resources/patch/php/drupal/core/2836237.patch",
                 "Pass current route parameters to the confirmation form route @see https://www.drupal.org/project/drupal/issues/2901412": "resources/patch/php/drupal/core/2901412.patch",
-                "Fixed pagination and sorting of tables on pages with ajax https://www.drupal.org/i/2925598": "resources/patch/php/drupal/core/2925598-37.patch",
                 "Cache tags are not invalidated on revision delete @see https://www.drupal.org/project/drupal/issues/2945928": "resources/patch/php/drupal/core/2945928.patch",
                 "Have responsive image module ignore svg @see https://www.drupal.org/project/drupal/issues/2957924": "resources/patch/php/drupal/core/2957924.patch",
                 "Allow adding computed bundle fields in Views @see https://drupal.org/i/2981047#mr4139-note200447": "resources/patch/php/drupal/core/2981047-mr4224-note200448.diff",
@@ -447,6 +445,9 @@
             },
             "ec-europa/toolkit": {
                 "Allow commands before install clone @see https://github.com/ec-europa/toolkit/pull/757": "resources/patch/php/ec-europa/toolkit/757.diff"
+            },
+            "sweetrdf/easyrdf": {
+                "Add a method to remove resources from graph @see https://github.com/sweetrdf/easyrdf/pull/44": "resources/patch/php/sweetrdf/easyrdf/44.diff"
             }
         },
         "artifacts": {
