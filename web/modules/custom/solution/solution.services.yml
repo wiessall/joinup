@@ -17,7 +17,9 @@ services:
     class: Drupal\solution\Guard\SolutionFulfillmentGuard
     arguments: ['@current_user', '@joinup_workflow.workflow_helper', '@rdf_entity_provenance.provenance_helper']
     tags:
-      - { name: state_machine.guard, group: solution }
+      # Priority 5 will set it to be executed before the generic guard of the
+      # state_machine_permissions module.
+      - { name: state_machine.guard, group: solution, priority: 5}
   solution.requirements_helper:
     class: Drupal\solution\RequirementsHelper
     arguments: ['@sparql.endpoint']
