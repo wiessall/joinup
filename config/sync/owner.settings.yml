@@ -1,3 +1,4 @@
+# @todo Remove this.
 transitions:
   published:
     __new__:

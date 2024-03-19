@@ -145,6 +145,8 @@ class WorkflowHelper implements WorkflowHelperInterface {
 
   /**
    * {@inheritdoc}
+   *
+   * @todo This should be removed.
    */
   public function userHasOwnAnyRoles(EntityInterface $entity, AccountInterface $account, array $roles): bool {
     $own = $entity->getOwnerId() === $account->id();
@@ -160,6 +162,8 @@ class WorkflowHelper implements WorkflowHelperInterface {
 
   /**
    * {@inheritdoc}
+   *
+   * @todo This should be removed.
    */
   public function userHasRoles(EntityInterface $entity, AccountInterface $account, array $roles): bool {
     $parent = $this->getEntityParent($entity);
@@ -204,6 +208,9 @@ class WorkflowHelper implements WorkflowHelperInterface {
 
   /**
    * {@inheritdoc}
+   *
+   * @todo This should be moved to a separate service or use og_access??? Unless
+   *    it creates an infinite loop.
    */
   public function hasOgPermission(string $permission, EntityInterface $group, AccountInterface $user): bool {
     $actualPermissions = [];

@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace Drupal\state_machine_permissions;
 
+use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Session\AccountInterface;
+
 /**
  * Provides an interface for the state machine helper service.
  */
@@ -68,5 +71,22 @@ interface StateMachinePermissionsHelperInterface {
    *   An array of field definitions.
    */
   public function getEntityStateFieldDefinitions(string $entity_type_id, string $bundle_id, array $field_names = []): array;
+
+  /**
+   * Checks if the user has the own or the any permission for the given entity.
+   *
+   * The method checks both the global and the group permissions if available.
+   *
+   * @param \Drupal\Core\Entity\EntityInterface $entity
+   *   The entity to check.
+   * @param string $operation
+   *   The operation to check.
+   * @param \Drupal\Core\Session\AccountInterface $account
+   *   The user to check.
+   *
+   * @return bool
+   *   TRUE if the user has the own or the any permission, FALSE otherwise.
+   */
+  public function hasOwnAnyPermission(EntityInterface $entity, string $operation, AccountInterface $account): bool;
 
 }

@@ -21,6 +21,8 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  *   id = "contact_information",
  * )
  *
+ * @todo This should be removed.
+ *
  * @see: contact_information.settings.yml
  */
 class ContactInformationWorkflowStatePermission extends PluginBase implements WorkflowStatePermissionPluginInterface, ContainerFactoryPluginInterface {

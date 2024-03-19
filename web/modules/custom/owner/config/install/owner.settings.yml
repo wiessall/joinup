@@ -1,4 +1,5 @@
 # The array of allowed conditions for the owner workflow transitions.
+# @todo Remove this.
 transitions:
   published:
     __new__:

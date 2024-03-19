@@ -10,7 +10,7 @@ services:
       - { name: event_subscriber }
   joinup_workflow.workflow_og_access_subscriber:
     class: Drupal\joinup_workflow\EventSubscriber\WorkflowOgAccessSubscriber
-    arguments: ['@current_user', '@og.membership_manager']
+    arguments: ['@entity_type.manager', '@current_user', '@og.membership_manager']
     tags:
       - { name: event_subscriber }
   joinup_workflow.state_machine_button_subscriber:
