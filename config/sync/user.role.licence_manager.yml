@@ -23,7 +23,7 @@ permissions:
   - 'access toolbar'
   - 'create licence rdf entity'
   - 'delete licence rdf entity'
-  - 'edit licence rdf entity'
+  - 'edit any licence rdf entity'
   - 'edit terms in legal_type'
   - 'use text format plain_text_glossary'
   - 'view licence overview page'

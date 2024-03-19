@@ -60,14 +60,7 @@ class TransitionPermissionGuard implements GuardInterface {
       }
 
       $permission = StateMachinePermissionStringConstructor::constructTransitionPermission($workflow, $transition, 'any');
-
-      if ($this->currentUser->hasPermission($permission)) {
-        return TRUE;
-      }
-
-      // @todo Should the first check be an instanceof?
-      // Collections only have global permissions. Skip for performance.
-      return $entity->bundle() !== 'collection' && $this->workflowHelper->hasOgPermission($permission, $entity, $this->currentUser);
+      return $this->currentUser->hasPermission($permission) || $this->workflowHelper->hasOgPermission($permission, $entity, $this->currentUser);
     }
 
     // For owners, we only need to check global permissions.

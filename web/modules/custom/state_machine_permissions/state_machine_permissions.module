@@ -13,13 +13,14 @@ use Drupal\Core\Access\AccessResultAllowed;
 use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Session\AccountInterface;
+use Drupal\joinup_workflow\EntityWorkflowStateInterface;
 use Drupal\owner\Entity\OwnerInterface;
 
 /**
  * Implements hook_ENTITY_TYPE_create_access().
  */
 function state_machine_permissions_rdf_entity_create_access(AccountInterface $account, array $context, string $entity_bundle): AccessResultInterface {
-  $ignored_bundles = ['contact_information', 'owner'];
+  $ignored_bundles = ['contact_information', 'owner', 'licence'];
   if (in_array($entity_bundle, $ignored_bundles)) {
     return AccessResult::neutral();
   }
@@ -62,7 +63,7 @@ function state_machine_permissions_node_create_access(AccountInterface $account,
  * Implements hook_ENTITY_TYPE_access().
  */
 function state_machine_permissions_rdf_entity_access(EntityInterface $entity, $operation, AccountInterface $account): AccessResultInterface {
-  if ($operation === 'view') {
+  if ($operation === 'view' || !$entity instanceof EntityWorkflowStateInterface) {
     // View permission is already covered.
     return AccessResult::neutral();
   }
