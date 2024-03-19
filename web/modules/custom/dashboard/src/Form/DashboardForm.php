@@ -248,6 +248,10 @@ class DashboardForm extends FormBase {
         '#title' => $this->t('Files'),
         '#url' => Url::fromRoute('view.files.page_1'),
       ],
+      [
+        '#title' => $this->t('Manage webforms'),
+        '#url' => Url::fromRoute('entity.webform.collection'),
+      ],
     ];
 
     $links = array_map(function (array $link): array {

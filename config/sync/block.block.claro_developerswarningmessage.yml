@@ -1,0 +1,28 @@
+uuid: 20633a01-8c35-4cb5-a184-1a09abc90b0a
+langcode: en
+status: true
+dependencies:
+  module:
+    - joinup_user
+    - user
+  theme:
+    - claro
+id: claro_developerswarningmessage
+theme: claro
+region: highlighted
+weight: 0
+provider: null
+plugin: developer_warning_message
+settings:
+  id: developer_warning_message
+  label: 'Developers warning message'
+  label_display: '0'
+  provider: developer
+visibility:
+  user_role:
+    id: user_role
+    negate: false
+    context_mapping:
+      user: '@user.current_user_context:current_user'
+    roles:
+      developer: developer
