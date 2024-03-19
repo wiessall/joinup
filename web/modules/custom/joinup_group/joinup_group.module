@@ -278,8 +278,8 @@ function joinup_group_rdf_entity_access(EntityInterface $entity, $operation, Acc
     return AccessResult::neutral();
   }
 
-  // Allows users to view unpublished collections if they have the permission
-  // as part of their membership.
+  // Allows users to view unpublished groups if they have the permission as part
+  // of their membership.
   return AccessResult::allowedIf(!$entity->isPublished() && $membership->hasPermission('view unpublished rdf entity'));
 }
 
