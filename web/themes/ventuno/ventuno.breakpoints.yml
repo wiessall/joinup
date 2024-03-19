@@ -1,3 +1,10 @@
+ventuno.all:
+  label: All
+  mediaQuery: ''
+  weight: -1
+  multipliers:
+    - 1x
+    - 2x
 ventuno.xs:
   label: Extra small < 576px
   mediaQuery: '(max-width: 575px)'

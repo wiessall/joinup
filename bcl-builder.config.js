@@ -83,14 +83,8 @@ module.exports = {
       },
     },
     {
-      entry: path.resolve(
-        outputFolder,
-        `${ventuno}src/js/paragraph--carousel.js`
-      ),
-      dest: path.resolve(
-        outputFolder,
-        `${ventuno}assets/js/paragraph--carousel.js`
-      ),
+      entry: path.resolve(outputFolder, `${ventuno}src/js/carousel.js`),
+      dest: path.resolve(outputFolder, `${ventuno}assets/js/carousel.js`),
       options: {
         minify: true,
         sourceMap: true,
@@ -246,6 +240,19 @@ module.exports = {
         includePaths,
         minify: true,
         sourceMap: "file",
+      },
+    },
+    // Emails
+    {
+      entry: path.resolve(outputFolder, `${ventuno}src/scss/emails/mail.scss`),
+      dest: path.resolve(
+        outputFolder,
+        `${ventuno}assets/css/emails/mail.min.css`
+      ),
+      options: {
+        includePaths,
+        minify: true,
+        sourceMap: false,
       },
     },
     // Theme (SMACSS)
@@ -740,11 +747,23 @@ module.exports = {
     {
       entry: path.resolve(
         outputFolder,
-        `${ventuno}src/scss/components/paragraphs/paragraph--carousel.scss`
+        `${ventuno}src/scss/components/carousel.scss`
+      ),
+      dest: path.resolve(outputFolder, `${ventuno}assets/css/carousel.min.css`),
+      options: {
+        includePaths,
+        minify: true,
+        sourceMap: "file",
+      },
+    },
+    {
+      entry: path.resolve(
+        outputFolder,
+        `${ventuno}src/scss/components/image-gallery.scss`
       ),
       dest: path.resolve(
         outputFolder,
-        `${ventuno}assets/css/paragraph--carousel.min.css`
+        `${ventuno}assets/css/image-gallery.min.css`
       ),
       options: {
         includePaths,

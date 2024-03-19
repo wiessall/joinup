@@ -1,0 +1,233 @@
+/**
+ * @file
+ * Styles needed for the theming of announcements and digest messages.
+ */
+
+// Variables.
+$bs-white: #fff;
+$bs-gray: #6d7173;
+$bs-primary: #17458f;
+$bs-secondary: #e7f1fb;
+$bs-warning: #eba843;
+$bs-light: #f8f9fa;
+$bs-brand: #1073de;
+$bs-spacer: 16px;
+$bs-body-font-family: "Roboto", arial, sans-serif;
+$bs-body-font-size: 1rem;
+$bs-body-line-height: 1.5;
+$bs-body-color: #242626;
+$bs-link-color: #1073de;
+$bs-link-hover-color: #0d5cb2;
+
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  color: $bs-body-color;
+  font-family: $bs-body-font-family;
+  font-size: $bs-body-font-size;
+  line-height: $bs-body-line-height;
+}
+
+table {
+  width: 100%;
+  border: 0;
+  border-collapse: collapse;
+}
+
+a {
+  color: $bs-link-color;
+}
+
+a:hover {
+  color: $bs-link-hover-color;
+}
+
+p {
+  margin: 0 0 1rem;
+  text-align: left;
+}
+
+p time {
+  margin: 0 6px;
+}
+
+.bg-primary {
+  background: $bs-primary;
+}
+
+.bg-secondary {
+  background: $bs-secondary;
+}
+
+.bg-white {
+  background: $bs-white;
+}
+
+.bg-light {
+  background: $bs-light;
+}
+
+.bg-brand {
+  background: $bs-brand;
+}
+
+.bg-warning {
+  background: $bs-warning;
+}
+
+.border-bottom {
+  border-bottom: 2px solid $bs-primary;
+}
+
+.text-primary {
+  color: $bs-primary;
+}
+
+.text-white {
+  color: $bs-white;
+}
+
+.text-left {
+  text-align: left;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.text-right {
+  text-align: right;
+}
+
+.text-uppercase {
+  text-transform: uppercase;
+}
+
+.text-none {
+  text-decoration: none;
+}
+
+.fs-sm {
+  font-size: calc($bs-body-font-size * .75);
+}
+
+.fs-lg {
+  font-size: calc($bs-body-font-size * 1.25);
+}
+
+.fw-bold {
+  font-weight: 700;
+}
+
+.d-none {
+  display: none;
+}
+
+.d-flex {
+  display: flex;
+}
+
+.d-inline-flex {
+  display: inline-flex;
+}
+
+.flex-row {
+  flex-direction: row;
+}
+
+.d-inline-block {
+  display: inline-block;
+}
+
+.justify-content-center {
+  justify-content: center;
+}
+
+@media only screen and (min-width: 576px) {
+  .d-sm-block {
+    display: block;
+  }
+  .d-sm-none {
+    display: none;
+  }
+}
+
+.m-auto {
+  margin: auto;
+}
+
+.mb-3 {
+  margin-bottom: $bs-spacer;
+}
+
+.me-3 {
+  margin-right: $bs-spacer;
+}
+
+.p-0 {
+  padding: 0;
+}
+
+.p-3 {
+  padding: $bs-spacer;
+}
+
+.px-3 {
+  padding: 0 $bs-spacer;
+}
+
+.py-3 {
+  padding: $bs-spacer 0;
+}
+
+.pt-0 {
+  padding-top: 0;
+}
+
+.pe-0 {
+  padding-right: 0;
+}
+
+.pb-0 {
+  padding-bottom: 0;
+}
+
+.ps-0 {
+  padding-left: 0;
+}
+
+.pt-5 {
+  padding-top: calc($bs-spacer * 2);
+}
+
+.btn-brand {
+  display: inline-block;
+  padding: 0.4rem 1.6rem;
+  cursor: pointer;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
+  transition: color .15s ease-in-out, background-color .15s ease-in-out, border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+  text-align: center;
+  vertical-align: middle;
+  text-decoration: none;
+  color: $bs-white;
+  border: 1px solid $bs-brand;
+  border-radius: 0.4rem;
+  background-color: $bs-brand;
+  box-shadow: inset 0 1px 0 hsla(0, 0%, 100%, .15), 0 1px 1px rgba(0, 0, 0, .075);
+  font-family: $bs-body-font-family;
+  font-size: $bs-body-font-size;
+  font-weight: 400;
+  line-height: 1.5;
+}
+
+.btn-brand:hover {
+  color: $bs-white;
+  background-color: #0e68c8;
+}
