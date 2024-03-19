@@ -185,6 +185,7 @@ permissions:
   - 'edit any event_logo media'
   - 'edit any glossary content'
   - 'edit any news_logo media'
+  - 'edit any licence rdf entity'
   - 'edit any owner rdf entity'
   - 'edit any solution rdf entity'
   - 'edit any solution_logo media'
