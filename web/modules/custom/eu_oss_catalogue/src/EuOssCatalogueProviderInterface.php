@@ -22,6 +22,10 @@ interface EuOssCatalogueProviderInterface extends PluginInspectionInterface {
    *
    * @return \Drupal\eu_oss_catalogue\Model\Project[]
    *   Indexed array of project value objects.
+   *
+   * @throws \Drupal\eu_oss_catalogue\Exception\ProviderFetchException
+   *   If any exception happens during fetch, e.g. the server is unavailable or
+   *   request quota is exceeded.
    */
   public function fetch(): iterable;
 

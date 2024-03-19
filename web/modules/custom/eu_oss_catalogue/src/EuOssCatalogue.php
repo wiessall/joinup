@@ -12,6 +12,7 @@ use Drupal\Core\Utility\Error;
 use Drupal\eu_oss_catalogue\Entity\OssSolutionInterface;
 use Drupal\eu_oss_catalogue\Event\EuOssPostFetchEvent;
 use Drupal\eu_oss_catalogue\Event\EuOssSolutionPreSaveEvent;
+use Drupal\eu_oss_catalogue\Exception\HostingPlatformFetchException;
 use Drupal\eu_oss_catalogue\Model\Project;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
@@ -59,74 +60,84 @@ class EuOssCatalogue implements EuOssCatalogueInterface {
 
     $solutionUrlsToProcess = [];
     $solutionUrlsDiscovered = [];
-    while (($projects = $provider->fetch())->valid()) {
-      foreach ($projects as $project) {
-        \assert($project instanceof Project);
+    try {
+      while (($projects = $provider->fetch())->valid()) {
+        foreach ($projects as $project) {
+          \assert($project instanceof Project);
 
-        // Give parser the chance to do the validation.
-        if ($errors = $provider->getParser()->isValid($project)) {
-          $errorMarkup = '<ul><li>' . implode('</li><li>', $errors) . '</li></ul>';
-          $message = <<<MESSAGE
+          // Give parser the chance to do the validation.
+          if ($errors = $provider->getParser()->isValid($project)) {
+            $errorMarkup = '<ul><li>' . implode('</li><li>', $errors) . '</li></ul>';
+            $message = <<<MESSAGE
             <p>Provider: @provider (<code>@provider_id</code>)</p>
             <p>Provider's reference: <code>@reference</code></p>
             <p>Schema errors:</p>
             $errorMarkup
             MESSAGE;
-          $arguments = [
-            '@provider' => $provider->getPluginDefinition()['label'],
-            '@provider_id' => $providerId,
-            '@reference' => $project->platformReference ?? '[not provided]',
-          ];
-          $this->logger->error($message, $arguments);
-          continue;
-        }
+            $arguments = [
+              '@provider' => $provider->getPluginDefinition()['label'],
+              '@provider_id' => $providerId,
+              '@reference' => $project->platformReference ?? '[not provided]',
+            ];
+            $this->logger->error($message, $arguments);
+            continue;
+          }
 
-        // Cancellation should also cause removing this provider from the
-        // preexisting OSS Solution entity.
-        $solutionUrlsDiscovered[] = $project->url;
-        if (!$this->fetchedSolutionNeedsUpdate($project, $provider)) {
-          continue;
-        }
+          // Cancellation should also cause removing this provider from the
+          // preexisting OSS Solution entity.
+          $solutionUrlsDiscovered[] = $project->url;
+          if (!$this->fetchedSolutionNeedsUpdate($project, $provider)) {
+            continue;
+          }
 
-        // Allow 3rd-party to modify or cancel the fetched solution.
-        $event = new EuOssPostFetchEvent($project);
-        $this->eventDispatcher->dispatch($event);
-        if ($event->isCancelled()) {
-          // @todo Needs tests.
-          $this->logger->warning("Solution '@solution' (@url) import cancelled by a subscriber. Reason: @reason", [
-            '@solution' => $project->name,
-            '@url' => $project->url,
-            '@reason' => $event->getCancellationReason(),
-          ]);
-          continue;
-        }
-
-        // Providers might provide the same solution (with the same URL) more
-        // than once; e.g. Developers Italia has a package three times with
-        // slightly different data. So if we already queued on item, we won't
-        // queue its second occurrence one more time, but instead, at the end of
-        // this method, we log a message about the duplicated URLs.
-        if (in_array($project->url, $solutionUrlsToProcess, TRUE)) {
-          $this->logger->warning(
-            "Solution '@solution' (@url) import skipped: URL already seen in the same provider.",
-            [
+          // Allow 3rd-party to modify or cancel the fetched solution.
+          $event = new EuOssPostFetchEvent($project);
+          $this->eventDispatcher->dispatch($event);
+          if ($event->isCancelled()) {
+            // @todo Needs tests.
+            $this->logger->warning("Solution '@solution' (@url) import cancelled by a subscriber. Reason: @reason", [
               '@solution' => $project->name,
               '@url' => $project->url,
-            ]
-          );
-          continue;
-        }
+              '@reason' => $event->getCancellationReason(),
+            ]);
+            continue;
+          }
 
-        // @todo Move the process of queueing to a separate method for the sake
-        //   of making the whole API more clear?
-        $queue->createItem([
-          'operation' => 'solution:create',
-          'provider' => $providerId,
-          'solution' => $project,
-        ]);
-        // Keep track of solutions been queued already.
-        $solutionUrlsToProcess[] = $project->url;
+          // Providers might provide the same solution (with the same URL) more
+          // than once; e.g. Developers Italia has a package three times with
+          // slightly different data. So if we already queued on item, we won't
+          // queue its second occurrence one more time, but instead, at the end
+          // of this method, we log a message about the duplicated URLs.
+          if (in_array($project->url, $solutionUrlsToProcess, TRUE)) {
+            $this->logger->warning(
+              "Solution '@solution' (@url) import skipped: URL already seen in the same provider.",
+              [
+                '@solution' => $project->name,
+                '@url' => $project->url,
+              ]
+            );
+            continue;
+          }
+
+          // @todo Move the process of queueing to a separate method for the sake
+          //   of making the whole API more clear?
+          $queue->createItem([
+            'operation' => 'solution:create',
+            'provider' => $providerId,
+            'solution' => $project,
+          ]);
+          // Keep track of solutions been queued already.
+          $solutionUrlsToProcess[] = $project->url;
+        }
       }
+    }
+    catch (HostingPlatformFetchException $exception) {
+      // Do not queue cleanup! We have unstable API.
+      // @todo Should we re-throw it or just log like this?
+      $this->logger->warning(
+        "Unstable API behind '@provider' provider plugin",
+        ['@provider' => $provider->getPluginId()],
+      );
     }
 
     // Check duplicate URLs and log if there are any.
@@ -150,6 +161,7 @@ class EuOssCatalogue implements EuOssCatalogueInterface {
         ],
       );
     }
+
     // @todo Maybe this should be a flag that enables cleanup deletion?
     $queue->createItem([
       'operation' => 'solution:create:cleanup',
