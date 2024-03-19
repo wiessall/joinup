@@ -7,8 +7,3 @@ services:
     arguments: ['@entity_type.manager', '@asset_release.asset_release_route_context']
     tags:
       - { name: event_subscriber }
-  asset_distribution.fulfillment_guard:
-    class: Drupal\asset_distribution\Guard\DistributionFulfillmentGuard
-    arguments: [ '@current_user', '@joinup_workflow.workflow_helper' ]
-    tags:
-      - { name: state_machine.guard, group: asset_distribution }

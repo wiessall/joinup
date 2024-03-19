@@ -43,8 +43,7 @@ class SolutionFulfillmentGuard implements GuardInterface {
   public function allowed(WorkflowTransition $transition, WorkflowInterface $workflow, EntityInterface $entity): bool {
     // Federated solutions cannot have the `archive` and `unarchived`
     // transitions applied.
-    if (in_array($transition->getId(), ['archive', 'unarchive'], TRUE)
-      && $this->isFederated($entity)) {
+    if (in_array($transition->getId(), ['archive', 'unarchive'], TRUE) && $this->isFederated($entity)) {
       return FALSE;
     }
 
