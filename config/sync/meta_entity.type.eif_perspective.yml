@@ -1,0 +1,16 @@
+uuid: dfb5594c-f0da-4312-9d1b-fb1f6be4ae0f
+langcode: en
+status: true
+dependencies:
+  config:
+    - rdf_entity.rdfentity.solution
+  module:
+    - rdf_entity
+id: eif_perspective
+label: 'EIF perspective'
+description: 'Holds settings related to the EIF toolbox.'
+mapping:
+  rdf_entity:
+    solution:
+      field_name: eif_perspective
+      auto_create: false
