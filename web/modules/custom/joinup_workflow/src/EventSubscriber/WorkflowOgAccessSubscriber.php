@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_workflow\EventSubscriber;
 
+use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Session\AccountProxyInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\joinup_community_content\CommunityContentHelper;
@@ -25,6 +26,7 @@ final class WorkflowOgAccessSubscriber implements EventSubscriberInterface {
    * Constructs a ContentCreationOgSubscriber object.
    */
   public function __construct(
+    protected EntityTypeManagerInterface $entityTypeManager,
     protected AccountProxyInterface $currentUser,
     protected MembershipManagerInterface $ogMembershipManager,
   ) {}

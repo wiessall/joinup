@@ -46,7 +46,11 @@ final class StateMachineButtonsSubscriber implements EventSubscriberInterface {
       return;
     }
 
-    if ($transition) {
+    if ($entity->bundle() === 'collection' || $entity->bundle() === 'solution') {
+      return;
+    }
+
+    if ($transition && array_key_exists($transition->getId(), $event->getTransitions())) {
       // When the transition is to the same state, change the label to 'Update'.
       // @todo Add here a list of cases where the label should not be 'Update'.
       $event->updateLabel($transition->getId(), 'Update');

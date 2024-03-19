@@ -32,7 +32,7 @@ permissions:
   - 'create paragraph content github_feed'
   - 'create paragraph content json_map'
   - 'delete any asset_distribution rdf_entity'
-  - 'delete any contact_information rdf entity'
+  - 'delete any contact_information rdf_entity'
   - 'delete any custom_page content'
   - 'delete any discussion content'
   - 'delete any document content'

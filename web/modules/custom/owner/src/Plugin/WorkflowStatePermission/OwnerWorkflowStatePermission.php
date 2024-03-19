@@ -21,6 +21,8 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * example an author can request deletion of an owner entity, but only a
  * moderator can approve the deletion.
  *
+ * @todo This should be removed.
+ *
  * @WorkflowStatePermission(
  *   id = "owner",
  * )

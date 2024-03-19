@@ -1,4 +1,5 @@
 # The allowed conditions for the contact information workflow transitions.
+# @todo Remove this.
 transitions:
   validated:
     __new__:

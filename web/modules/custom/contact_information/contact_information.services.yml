@@ -1,9 +1,4 @@
 services:
-  contact_information.fulfillment_guard:
-    class: Drupal\contact_information\Guard\ContactInformationFulfillmentGuard
-    arguments: ['@current_user', '@workflow_state_permission.workflow_state_permission']
-    tags:
-      - { name: state_machine.guard, group: contact_information }
   contact_information.email_confirm:
     class: Drupal\contact_information\ContactInformationEmailConfirm
     arguments: ['@entity_type.manager', '@renderer', '@email_confirmer']

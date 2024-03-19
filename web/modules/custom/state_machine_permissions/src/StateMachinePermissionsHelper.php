@@ -4,8 +4,18 @@ declare(strict_types=1);
 
 namespace Drupal\state_machine_permissions;
 
+use Drupal\collection\Entity\CollectionInterface;
+use Drupal\contact_information\Entity\ContactInformationInterface;
 use Drupal\Core\Entity\EntityFieldManagerInterface;
+use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Field\FieldDefinitionInterface;
+use Drupal\Core\Session\AccountInterface;
+use Drupal\joinup_group\Entity\GroupContentInterface;
+use Drupal\joinup_group\Entity\GroupInterface;
+use Drupal\node\NodeInterface;
+use Drupal\owner\Entity\OwnerInterface;
+use Drupal\rdf_entity\RdfInterface;
+use Drupal\solution\Entity\SolutionInterface;
 use Drupal\state_machine\WorkflowGroupManagerInterface;
 use Drupal\state_machine\WorkflowManagerInterface;
 
@@ -121,6 +131,114 @@ class StateMachinePermissionsHelper implements StateMachinePermissionsHelperInte
         $field_definition->getType() === 'state' :
         $field_definition->getType() === 'state' && in_array($field_definition->getName(), $field_names);
     });
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function hasOwnAnyPermission(EntityInterface $entity, string $operation, AccountInterface $account): bool {
+    // @todo Check if the entity implements EntityOwnerInterface.
+    if ($account->hasPermission($this->getGlobalPermissionString($entity, $operation, 'any'))) {
+      return TRUE;
+    }
+
+    $isOwner = $entity->getOwnerId() === $account->id();
+    if ($entity->getOwnerId() === $account->id() && $account->hasPermission($this->getGlobalPermissionString($entity, $operation, 'own'))) {
+      return TRUE;
+    }
+
+    // @todo this should be injected.
+    $ogAccess = \Drupal::getContainer()->get('og.access');
+    if ($group = $this->getEntityRelatedGroup($entity)) {
+      // The TRUE in the end is so that the custom hooks are not fired - for
+      // performance reasons.
+      if ($ogAccess->userAccess($group, $this->getGroupPermission($entity, $operation, 'any'), $account, TRUE)->isAllowed()) {
+        return TRUE;
+      }
+      return $isOwner && $ogAccess->userAccess($group, $this->getGroupPermission($entity, $operation, 'own'), $account, TRUE)->isAllowed();
+    }
+
+    return FALSE;
+  }
+
+  /**
+   * Returns the global any permission for the given entity.
+   *
+   * @param \Drupal\Core\Entity\EntityInterface $entity
+   *   The entity to check.
+   * @param string $operation
+   *   The operation to check.
+   * @param string $type
+   *   The type of permission to check. Can be 'any' or 'own'.
+   *
+   * @return string
+   *   The global any permission.
+   */
+  protected function getGlobalPermissionString(EntityInterface $entity, string $operation, string $type): string {
+    if ($entity instanceof NodeInterface) {
+      return "$operation $type {$entity->bundle()} content";
+    }
+    elseif ($entity instanceof RdfInterface) {
+      $operation = $operation === 'update' ? 'edit' : $operation;
+      return "$operation $type rdf entity";
+    }
+
+    // @todo Add support for other entity types.
+    throw new \RuntimeException('This should be handled if happens or the text should be updated.');
+  }
+
+  /**
+   * Returns the group permission for the given entity.
+   *
+   * @param \Drupal\Core\Entity\EntityInterface $entity
+   *   The entity to check.
+   * @param string $operation
+   *   The operation to check.
+   * @param string $type
+   *   The type of permission to check. Can be 'any' or 'own'.
+   *
+   * @return string
+   *   The group permission.
+   */
+  protected function getGroupPermission(EntityInterface $entity, string $operation, string $type): string {
+    if ($entity instanceof NodeInterface) {
+      return "$operation $type {$entity->bundle()} content";
+    }
+    elseif ($entity instanceof RdfInterface) {
+      $operation = $operation === 'update' ? 'edit' : $operation;
+      return "$operation $type {$entity->bundle()} {$entity->getEntityTypeId()}";
+    }
+
+    // @todo Add support for other entity types.
+    throw new \RuntimeException('This should be handled if happens or the text should be updated.');
+  }
+
+  /**
+   * Returns the related group of the entity.
+   *
+   * @return \Drupal\joinup_group\Entity\GroupInterface|null
+   *   The related group or NULL if the entity does not belong to a group.
+   */
+  function getEntityRelatedGroup(EntityInterface $entity): ?GroupInterface {
+    if ($entity instanceof CollectionInterface) {
+      return $entity;
+    }
+    if ($entity instanceof ContactInformationInterface) {
+      return $entity->getRelatedGroup();
+    }
+    // Solutions are also group content.
+    elseif ($entity instanceof GroupContentInterface) {
+      return $entity->getGroup();
+    }
+    // @todo This should be removed as default behavior.
+    elseif ($entity instanceof OwnerInterface) {
+      return NULL;
+    }
+
+    // @todo Add support for other entity types.
+    throw new \RuntimeException("Bundle: {$entity->bundle()} This should be handled if happens or the text should be updated.");
+
+    return NULL;
   }
 
 }
