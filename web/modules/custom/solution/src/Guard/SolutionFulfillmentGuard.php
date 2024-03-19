@@ -41,9 +41,9 @@ class SolutionFulfillmentGuard implements GuardInterface {
    * {@inheritdoc}
    */
   public function allowed(WorkflowTransition $transition, WorkflowInterface $workflow, EntityInterface $entity): bool {
-    // Don't (un)archive federated solutions.
-    $toState = $transition->getToState()->getId();
-    if (in_array($toState, ['archived', 'unarchive'], TRUE)
+    // Federated solutions cannot have the `archive` and `unarchived`
+    // transitions applied.
+    if (in_array($transition->getId(), ['archive', 'unarchive'], TRUE)
       && $this->isFederated($entity)) {
       return FALSE;
     }

@@ -313,6 +313,7 @@ class WorkflowHelper implements WorkflowHelperInterface {
       $previousRevision->setRevisionCreationTime($this->time->getRequestTime());
       $previousRevision->setRevisionUserId($this->currentUser->id());
     }
+    $previousRevision->skip_notification = TRUE;
     $previousRevision->save();
 
     return $previousRevision;
