@@ -58,7 +58,7 @@ third_party_settings:
       label: 'Abstract wrapper'
       parent_name: ''
       region: hidden
-      weight: 60
+      weight: 56
       format_type: html_element
       format_settings:
         classes: ''
@@ -77,6 +77,14 @@ targetEntityType: rdf_entity
 bundle: solution
 mode: view_mode_search_list_item
 content:
+  field_is_abstract:
+    type: string
+    label: hidden
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 6
+    region: content
   field_is_description:
     type: joinup_html_stripper_stripped
     label: hidden
@@ -138,7 +146,6 @@ hidden:
   download_total: true
   eif_perspective: true
   featured: true
-  field_is_abstract: true
   field_is_affiliations_requests: true
   field_is_contact_information: true
   field_is_content: true

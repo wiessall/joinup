@@ -41,6 +41,7 @@ use Drupal\og\OgGroupAudienceHelperInterface;
 use Drupal\og\OgMembershipInterface;
 use Drupal\og_menu\Entity\OgMenuInstance;
 use Drupal\rdf_entity\RdfInterface;
+use Drupal\symfony_mailer_lite\Plugin\Mail\SymfonyMailer;
 use Drupal\user\UserInterface;
 use Drupal\views\Plugin\views\query\QueryPluginBase;
 use Drupal\views\Plugin\views\query\Sql;
@@ -1103,8 +1104,11 @@ function joinup_group_mail(string $key, array &$message, array $params): void {
     $message['subject'] = t("Joinup: A new announcement '@subject' has been created", $args);
     $message['body'] = [
       t("A new announcement '@subject' has been created by @author for the @group @type.", $args),
-      t("You can approve or reject the announcement at :url", $args),
+      t('You can approve or reject the announcement at <a href=":url">:url</a>.', $args),
     ];
+
+    // Send as HTML.
+    $message['headers']['Content-Type'] = SymfonyMailer::FORMAT_HTML;
   }
 }
 
