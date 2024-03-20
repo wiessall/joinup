@@ -1,10 +1,12 @@
 /*
- * Override flag-link-ajax
+ * Override ajax-throbber
 */
-.block-joinup-flag {
-  position: relative;
-  .spinner-border {
+div {
+  &:has(.btn + .spinner-border) {
+    position: relative;
+    .spinner-border {
       right: calc(50% - 30px);
+    }
   }
   &:has(.btn + .spinner-border) {
     .btn {

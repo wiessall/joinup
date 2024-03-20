@@ -458,11 +458,11 @@ module.exports = {
     {
       entry: path.resolve(
         outputFolder,
-        `${ventuno}src/scss/components/flag-link-ajax.scss`
+        `${ventuno}src/scss/components/ajax-throbber.scss`
       ),
       dest: path.resolve(
         outputFolder,
-        `${ventuno}assets/css/flag-link-ajax.min.css`
+        `${ventuno}assets/css/ajax-throbber.min.css`
       ),
       options: {
         includePaths,
