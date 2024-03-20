@@ -36,17 +36,27 @@ final class StateMachineButtonsSubscriber implements EventSubscriberInterface {
       return;
     }
 
-    $stateId = $event->getStateId();
+    $currentState = $event->getStateId();
     $workflow = $entity->getWorkflow();
-    $transition = $workflow->findTransition($stateId, $stateId);
+    // Get the transition for the same from and to state. In the following
+    // checks, if the transition exists, it means that the transition is allowed
+    // and can be handled.
+    $transition = $workflow->findTransition($currentState, $currentState);
 
     // @todo: Group the exceptions later when all of them are here.
     // `asset_release` `draft` button should not be update.
-    if ($entity->bundle() === 'asset_release' && $stateId === 'draft') {
+    if ($entity->bundle() === 'asset_release' && $currentState === 'draft') {
       return;
     }
 
     if ($entity->bundle() === 'collection' || $entity->bundle() === 'solution') {
+      return;
+    }
+
+    // Custom pages show 'Save as Draft' button when the transition is
+    // 'save_as_draft'. Currently, the transition source states are only __new__
+    // and draft, thus we can check only by the transition ID.
+    if ($entity->bundle() === 'custom_page' && $transition && $transition->getId() === 'save_as_draft') {
       return;
     }
 

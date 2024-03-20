@@ -21,7 +21,7 @@ custom_page_workflow:
   transitions:
     save_as_draft:
       label: 'Save as draft'
-      from: [ __new__ ]
+      from: [ __new__, draft ]
       to: draft
     publish:
       label: Publish
