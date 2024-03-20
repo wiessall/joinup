@@ -12,6 +12,7 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 /**
  * Solution subscriber for og related events.
  */
+// @todo make the name less generic.
 class SolutionOgSubscriber implements EventSubscriberInterface {
 
   use StringTranslationTrait;
