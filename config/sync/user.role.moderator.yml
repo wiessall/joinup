@@ -276,6 +276,7 @@ permissions:
   - 'perform node:pre_moderated workflow report transition on any entity'
   - 'perform node:pre_moderated workflow save_as_draft transition on any entity'
   - 'perform node:pre_moderated workflow save_new_draft transition on any entity'
+  - 'perform node:pre_moderated workflow unarchive transition on any entity'
   - 'perform owner_workflow workflow approve_changes transition on any entity'
   - 'perform owner_workflow workflow propose_changes transition on any entity'
   - 'perform owner_workflow workflow request_changes transition on any entity'
