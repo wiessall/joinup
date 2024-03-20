@@ -8,6 +8,7 @@
 declare(strict_types=1);
 
 use Drupal\Component\Serialization\Json;
+use Drupal\Core\Entity\ContentEntityStorageInterface;
 
 /**
  * Performs checks for the RDF entities and its storage.
@@ -134,4 +135,31 @@ function joinup_rdf_update_110303(): void {
   file_put_contents('private://document_to_licence', Json::encode($documentToLicence));
   $db->truncate('node__field_licence')->execute();
   $db->truncate('node_revision__field_licence')->execute();
+}
+
+/**
+ * Deletes leftover path aliases of licence rdf entities.
+ */
+function joinup_rdf_update_110304(&$sandbox): string {
+  if (!isset($sandbox['ids'])) {
+    $sandbox['ids'] = \Drupal::database()->select('path_alias', 'pa')
+      ->fields('pa', ['id'])
+      ->condition('pa.alias', '/licence/%', 'LIKE')
+      ->execute()
+      ->fetchAllKeyed(0, 0);
+    $sandbox['processed'] = 0;
+    $sandbox['total'] = count($sandbox['ids']);
+  }
+
+  $idsToDelete = array_slice($sandbox['ids'], $sandbox['processed'], 50);
+  $aliasStorage = \Drupal::entityTypeManager()->getStorage('path_alias');
+  assert($aliasStorage instanceof ContentEntityStorageInterface);
+
+  $aliasStorage->delete($aliasStorage->loadMultiple($idsToDelete));
+
+  $deletedCount = count($idsToDelete);
+  $sandbox['processed'] += $deletedCount;
+  $sandbox['#finished'] = $sandbox['processed'] / $sandbox['total'];
+
+  return "Deleted $deletedCount licence aliases ({$sandbox['processed']} / {$sandbox['total']}) total";
 }
