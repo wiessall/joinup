@@ -30,6 +30,11 @@ class ContentCreationTransitionGuard implements GuardInterface {
    * {@inheritdoc}
    */
   public function allowed(WorkflowTransition $transition, WorkflowInterface $workflow, EntityInterface $entity): bool {
+    if (!$entity->isNew()) {
+      // True is the neutral return because otherwise, the transition will be
+      // blocked.
+      return TRUE;
+    }
     /** @var \Drupal\joinup_group\Entity\GroupInterface $group */
     $group = $entity->getGroup();
     if (empty($group)) {

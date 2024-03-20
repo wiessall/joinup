@@ -153,7 +153,7 @@ final class WorkflowOgEventSubscriber implements EventSubscriberInterface {
 
     // Do a quick exit if the event is not for the entity operations we handle.
     $operation = $event->getOperation();
-    if (!in_array($operation, ['view all revisions', 'revert revision'])) {
+    if (!in_array($operation, ['view revision', 'view all revisions', 'revert revision'])) {
       return;
     }
 

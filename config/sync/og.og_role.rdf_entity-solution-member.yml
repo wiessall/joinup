@@ -32,6 +32,7 @@ permissions:
   - 'create content for any_user option'
   - 'create content for only_members option'
   - 'view own revisions'
+  - 'view own unpublished content'
   - 'perform node:post_moderated workflow propose_from_reported transition on own entity'
   - 'perform node:post_moderated workflow publish transition on own entity'
   - 'perform node:post_moderated workflow request_deletion transition on own entity'
