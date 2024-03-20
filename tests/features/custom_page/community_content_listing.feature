@@ -197,7 +197,7 @@ Feature:
     And I fill in "Collection" with "Emulators"
     Then I drag the table row in the "Content listing field filter form" region at position 4 up
     And I press "Save" in the "Modal buttons" region
-    And I press "Save"
+    And I press "Save as draft"
     Then I should see the heading "Chosen content"
     And I should see the following tiles in the correct order:
       | Searching for green pad.              |
@@ -214,7 +214,7 @@ Feature:
     And I click "Remove filter" at 5th filter of the 1st content listing paragraph
     And I uncheck "Global search"
     And I press "Save" in the "Modal buttons" region
-    And I press "Save"
+    And I press "Save as draft"
     And I should see the following tiles in the correct order:
       | 20 year anniversary                   |
       | Searching for green pad.              |
@@ -230,7 +230,7 @@ Feature:
     And I fill in the 2nd "News" with "NEC VR4300 CPU" in the "Custom content listing" field
     And I check "Allow shared content"
     And I press "Save" in the "Modal buttons" region
-    And I press "Save"
+    And I press "Save as draft"
     Then I should see the following tiles in the correct order:
       | 20 year anniversary                   |
       | Searching for green pad.              |
@@ -257,7 +257,7 @@ Feature:
     And I "edit" from the "Custom page body" field the child 1 paragraph of 1 layout
     And I uncheck "Allow shared content"
     And I press "Save" in the "Modal buttons" region
-    And I press "Save"
+    And I press "Save as draft"
     Then I should see the following tiles in the correct order:
       | 20 year anniversary                   |
       | Searching for green pad.              |
@@ -285,7 +285,7 @@ Feature:
     And I press "Add and configure filter"
     And I fill in "Solution" with "N64 cartridge cleaner"
     And I press "Save" in the "Modal buttons" region
-    And I press "Save"
+    And I press "Save as draft"
     Then I should see the following tiles in the correct order:
       | Searching for green pad.        |
       | What's your favourite N64 game? |
@@ -299,7 +299,7 @@ Feature:
     And I "edit" from the "Custom page body" field the child 1 paragraph of 1 layout
     And I fill in "Query presets" with "entity_bundle|solution"
     And I press "Save" in the "Modal buttons" region
-    And I press "Save"
+    And I press "Save as draft"
     Then I should see the following tiles in the correct order:
       | N64 cartridge cleaner |
 
