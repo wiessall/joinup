@@ -43,6 +43,7 @@ StateMachinePermissions implements ContainerInjectionInterface {
     $permissions = [];
 
     foreach ($workflowDefinitions as $workflowDefinition) {
+      $workflowDefinition = $this->workflowManager->createInstance($workflowDefinition['id']);
       $transitions = $workflowDefinition->getTransitions();
       $workflow_id = $workflowDefinition->getId();
       foreach ($transitions as $transition_id => $transition) {

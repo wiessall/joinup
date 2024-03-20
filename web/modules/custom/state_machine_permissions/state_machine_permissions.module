@@ -43,6 +43,10 @@ function state_machine_permissions_rdf_entity_create_access(AccountInterface $ac
  * Implements hook_ENTITY_TYPE_create_access().
  */
 function state_machine_permissions_node_create_access(AccountInterface $account, array $context, string $entity_bundle): AccessResultInterface {
+  if (empty($context['group']) && $entity_bundle === 'custom_page') {
+    return AccessResult::neutral('Custom pages can be created as individual landing pages.');
+  }
+
   if (empty($context['group'])) {
     return AccessResult::forbidden('Cannot create entities outside a group context.');
   }
