@@ -185,6 +185,19 @@ display:
             label: 'Alphabetic Order Z-A'
             field_identifier: orderza
           exposed: true
+        title_2:
+          id: title_2
+          table: search_api_index_published
+          field: title
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: search_api
+          order: ASC
+          expose:
+            label: ''
+            field_identifier: ''
+          exposed: false
       arguments:
         entity_groups:
           id: entity_groups
