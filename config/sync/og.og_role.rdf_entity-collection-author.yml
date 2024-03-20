@@ -28,7 +28,6 @@ permissions:
   - 'create content for any_user option'
   - 'create content for only_members option'
   - 'create content for facilitators_and_authors option'
-  - 'perform node:pre_moderated workflow reject_deletion transition on any entity'
-  - 'perform node:post_moderated workflow publish transition on any entity'
-  - 'perform node:pre_moderated workflow approve_proposed transition on any entity'
+  - 'perform node:pre_moderated workflow reject_deletion transition on own entity'
+  - 'perform node:pre_moderated workflow publish transition on own entity'
 role_type: required

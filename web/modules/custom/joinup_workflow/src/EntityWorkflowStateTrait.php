@@ -70,6 +70,8 @@ trait EntityWorkflowStateTrait {
 
   /**
    * {@inheritdoc}
+   *
+   * // @todo Can this be converted to check for transitions instead?
    */
   public function isTargetWorkflowStateAllowed(string $to_state, ?string $from_state = NULL): bool {
     // Default the "from state" to the current workflow state.

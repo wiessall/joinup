@@ -217,4 +217,5 @@ permissions:
   - 'view paragraph content webform'
   - 'view published sitewide alert entities'
   - 'view rdf entity'
+  - 'view revision'
   - 'view topic meta-entity'
