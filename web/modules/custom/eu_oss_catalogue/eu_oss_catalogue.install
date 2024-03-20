@@ -19,9 +19,9 @@ function eu_oss_catalogue_install(): void {
   $terms = [];
 
   foreach (['category', 'intended_audience_scope', 'software_type'] as $vocab) {
-    $terms_items = Yaml::decode(file_get_contents(__DIR__ . "/fixtures/controlled_vocabs/$vocab.yml"))['terms'];
-    foreach ($terms_items as $terms_item) {
-      $terms[] = ['vid' => "oss_$vocab"] + $terms_item;
+    $termItems = Yaml::decode(file_get_contents(__DIR__ . "/fixtures/controlled_vocabs/$vocab.yml"))['terms'];
+    foreach ($termItems as $termItem) {
+      $terms[] = ['vid' => "oss_$vocab"] + $termItem;
     }
   }
 
@@ -31,9 +31,9 @@ function eu_oss_catalogue_install(): void {
     $terms[] = ['vid' => 'oss_licence', 'name' => $licence['licenseId']];
   }
 
-  $path_resolver = \Drupal::getContainer()->get('extension.path.resolver');
+  $pathResolver = \Drupal::getContainer()->get('extension.path.resolver');
   $batchBuilder = (new BatchBuilder())
-    ->setFile($path_resolver->getPath('module', 'eu_oss_catalogue') . '/eu_oss_catalogue.install')
+    ->setFile($pathResolver->getPath('module', 'eu_oss_catalogue') . '/eu_oss_catalogue.install')
     ->setProgressive(FALSE);
 
   foreach (array_chunk($terms, 50) as $chunk) {
