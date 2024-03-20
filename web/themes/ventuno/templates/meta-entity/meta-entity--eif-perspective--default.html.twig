@@ -1,11 +1,11 @@
 {#
 /**
  * @file
- * Themeing for RDF meta entities.
+ * Themeing for meta entities.
  */
 #}
 <article{{ attributes.addClass(['mt-3']) }}>
-  {{ content.field_eif_solution_type }}
+  {{ content.eif_solution_type }}
   <a class="btn btn-sm btn-outline-brand rounded-pill" href="{{ solution_url }}">{{ 'Go to Solution'|t }}</a>
   {% if edit_url %}
     <a class="btn btn-sm btn-outline-brand rounded-pill" href="{{ edit_url }}">{{ 'Edit EIF perspective'|t }}</a>
