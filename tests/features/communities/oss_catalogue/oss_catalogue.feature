@@ -54,9 +54,17 @@ Feature:
       | Cristian Gagliardi |
       | Vito Schiraldi     |
       | Semantic Turkey    |
+      | Not released       |
 
     When I click "View all" in the "Most recent solutions" region
     Then the option with text "Most Recent" from select "Sort by" is selected
+    And I should see the following tiles in the correct order:
+      | Spunta             |
+      | C4S ERP            |
+      | Cristian Gagliardi |
+      | Vito Schiraldi     |
+      | Semantic Turkey    |
+      | Not released       |
 
     # Most active solutions carousel.
     When I visit the OSS welcome page
@@ -65,10 +73,18 @@ Feature:
       | C4S ERP            |
       | Spunta             |
       | Vito Schiraldi     |
+      | Not released       |
       | Semantic Turkey    |
 
     When I click "View all" in the "Most active solutions" region
     Then the option with text "Most Active" from select "Sort by" is selected
+    And I should see the following tiles in the correct order:
+      | Cristian Gagliardi |
+      | C4S ERP            |
+      | Spunta             |
+      | Vito Schiraldi     |
+      | Not released       |
+      | Semantic Turkey    |
 
     # Check OSS label in tile footer.
     When I visit the OSS welcome page
