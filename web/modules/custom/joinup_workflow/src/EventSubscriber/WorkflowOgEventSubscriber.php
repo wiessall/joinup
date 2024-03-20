@@ -183,6 +183,9 @@ final class WorkflowOgEventSubscriber implements EventSubscriberInterface {
       return;
     }
 
+    // @todo Inject the service.
+    $this->ogAccess = \Drupal::service('og.access');
+
     // Check if the user has group level permission to view all revisions, or
     // view revisions for the bundle of the group content.
     $group = $event->getGroup();
