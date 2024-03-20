@@ -13,6 +13,7 @@ use Drupal\og\Event\GroupContentEntityOperationAccessEventInterface;
 use Drupal\og\Event\PermissionEventInterface;
 use Drupal\og\GroupContentOperationPermission;
 use Drupal\og\MembershipManagerInterface;
+use Drupal\user\EntityOwnerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
@@ -104,6 +105,12 @@ final class WorkflowOgEventSubscriber implements EventSubscriberInterface {
     // global permission to delete the content so that we don't deny e.g. to
     // a moderator that is also the owner of the content.
     if ($user->hasPermission('delete any ' . $entity->bundle() . ' content')) {
+      return;
+    }
+
+    // Only act on entities that have an owner. Cases, like the navigation menu
+    // items, do not have an owner.
+    if (!$entity instanceof EntityOwnerInterface) {
       return;
     }
 
