@@ -6,6 +6,7 @@ dependencies:
     - search_api.index.bookmark
     - user.role.authenticated
   module:
+    - joinup_flag
     - joinup_tiles
     - search_api
     - user
@@ -25,15 +26,14 @@ display:
     display_options:
       title: Bookmarks
       fields:
-        entity_id:
-          id: entity_id
-          table: search_api_datasource_bookmark_entity_flagging
-          field: entity_id
+        joinup_flag_flagged_entity:
+          id: joinup_flag_flagged_entity
+          table: views
+          field: joinup_flag_flagged_entity
           relationship: none
           group_type: group
           admin_label: ''
-          entity_type: flagging
-          plugin_id: search_api_field
+          plugin_id: joinup_flag_flagged_entity
           label: ''
           exclude: false
           alter:
@@ -75,26 +75,7 @@ display:
           hide_empty: false
           empty_zero: false
           hide_alter_empty: true
-          click_sort_column: value
-          type: string
-          settings: {  }
-          group_column: value
-          group_columns: {  }
-          group_rows: true
-          delta_limit: 0
-          delta_offset: 0
-          delta_reversed: false
-          delta_first_last: false
-          multi_type: separator
-          separator: ', '
-          field_api_classes: false
-          field_rendering: true
-          fallback_handler: search_api
-          fallback_options:
-            link_to_item: false
-            use_highlighting: false
-            multi_type: separator
-            multi_separator: ', '
+          view_mode: view_mode_tile
       pager:
         type: full
         options:
@@ -134,7 +115,20 @@ display:
       cache:
         type: none
         options: {  }
-      empty: {  }
+      empty:
+        area:
+          id: area
+          table: views
+          field: area
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: text
+          empty: true
+          content:
+            value: 'There are no bookmarked items.'
+            format: simple_text
+          tokenize: false
       sorts:
         created:
           id: created
@@ -216,7 +210,6 @@ display:
     cache_metadata:
       max-age: -1
       contexts:
-        - 'languages:language_content'
         - 'languages:language_interface'
         - url
         - url.query_args
@@ -239,7 +232,6 @@ display:
     cache_metadata:
       max-age: -1
       contexts:
-        - 'languages:language_content'
         - 'languages:language_interface'
         - url
         - url.query_args
