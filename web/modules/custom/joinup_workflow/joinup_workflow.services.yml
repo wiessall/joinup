@@ -9,7 +9,7 @@ services:
     tags:
       - { name: event_subscriber }
   joinup_workflow.workflow_og_access_subscriber:
-    class: Drupal\joinup_workflow\EventSubscriber\WorkflowOgAccessSubscriber
+    class: Drupal\joinup_workflow\EventSubscriber\WorkflowOgEventSubscriber
     arguments: ['@entity_type.manager', '@current_user', '@og.membership_manager']
     tags:
       - { name: event_subscriber }

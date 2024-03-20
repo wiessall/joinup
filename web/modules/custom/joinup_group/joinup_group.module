@@ -273,14 +273,14 @@ function joinup_group_rdf_entity_access(EntityInterface $entity, $operation, Acc
     return AccessResult::neutral();
   }
 
-  $membership = $entity->getMembership((int) $account->id());
-  if (empty($membership)) {
-    return AccessResult::neutral();
-  }
-
   // Allows users to view unpublished groups if they have the permission as part
   // of their membership.
-  return AccessResult::allowedIf(!$entity->isPublished() && $membership->hasPermission('view unpublished rdf entity'));
+  $membership = $entity->getMembership((int) $account->id());
+  return AccessResult::allowedIf(
+    $membership
+    && !$entity->isPublished()
+    && $membership->hasPermission('view unpublished rdf entity'))
+    ->addCacheableDependency($membership);
 }
 
 /**

@@ -174,10 +174,15 @@ class AssetReleaseController extends ControllerBase {
       throw new NotFoundHttpException();
     }
 
+    $releases = $rdf_entity->getReleases();
+    $access = AccessResult::allowedIf($rdf_entity->access('view', $account, TRUE) && !empty($releases));
+    $access->addCacheableDependency($rdf_entity);
+    foreach ($releases as $release) {
+      $access->addCacheableDependency($release);
+    }
+
     /** @var \Drupal\solution\Entity\SolutionInterface $rdf_entity */
-    return $rdf_entity->access('view', $account, TRUE) && !empty($rdf_entity->getReleases())
-      ? AccessResult::allowed()
-      : AccessResult::forbidden();
+    return $access;
   }
 
   /**

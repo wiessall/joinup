@@ -18,7 +18,7 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 /**
  * Alters permission operation depending on the eLibrary creation.
  */
-final class WorkflowOgAccessSubscriber implements EventSubscriberInterface {
+final class WorkflowOgEventSubscriber implements EventSubscriberInterface {
 
   use StringTranslationTrait;
 
@@ -36,7 +36,9 @@ final class WorkflowOgAccessSubscriber implements EventSubscriberInterface {
    */
   public static function getSubscribedEvents(): array {
     return [
+      // Provides permissions for the 'Content Creation' group field.
       PermissionEventInterface::EVENT_NAME => 'contentCreationAlterPermissionEvent',
+      // Performs access checks for OG group content operations.
       GroupContentEntityOperationAccessEventInterface::EVENT_NAME => [
         // Use a priority higher than the default subscriber from OG so that we
         // can have full control.
@@ -52,6 +54,7 @@ final class WorkflowOgAccessSubscriber implements EventSubscriberInterface {
    * @param \Drupal\og\Event\PermissionEventInterface $event
    *   The OG permission event.
    */
+  // @todo Move this to a permission provider subscriber.
   public function contentCreationAlterPermissionEvent(PermissionEventInterface $event): void {
     $options = ['any_user', 'only_members', 'facilitators_and_authors'];
     foreach ($options as $option) {
