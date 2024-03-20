@@ -1,0 +1,29 @@
+uuid: 3d122410-8476-4768-b15f-ae5c81df4d97
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.meta_entity.eif_model
+    - meta_entity.type.eif_perspective
+    - taxonomy.vocabulary.eif_conceptual_model
+id: meta_entity.eif_perspective.eif_model
+field_name: eif_model
+entity_type: meta_entity
+bundle: eif_perspective
+label: Model
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:taxonomy_term'
+  handler_settings:
+    target_bundles:
+      eif_conceptual_model: eif_conceptual_model
+    sort:
+      field: name
+      direction: asc
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference
