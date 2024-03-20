@@ -87,7 +87,7 @@ function ventuno_preprocess_rdf_entity__solution__view_mode_search_list_item(arr
     'class' => $parent_id,
   ];
   $category_lists[$parent_id]['items'] = [];
-  foreach ($eif_perspective->field_eif_solution_type as $solution_type) {
+  foreach ($eif_perspective->eif_solution_type as $solution_type) {
     $solution_type = $solution_type->entity;
     $category_lists[$parent_id]['items'][] = [
       'title' => $solution_type->label(),

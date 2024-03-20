@@ -162,7 +162,7 @@ class EifContext extends RawDrupalContext {
           break;
 
         case 'Solution type':
-          $eif_perspective_fields['field_eif_solution_type'] = $this->explodeCommaSeparatedStepArgument($row[1]);
+          $eif_perspective_fields['eif_solution_type'] = $this->explodeCommaSeparatedStepArgument($row[1]);
           break;
 
         case 'Layer':
