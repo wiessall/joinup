@@ -91,6 +91,13 @@ class TransitionPermissionGuard implements GuardInterface {
         return FALSE;
       }
     }
+    elseif (!$entity->hasGroup()) {
+      // State machine does not have a neutral return, but iterates through all
+      // the guards until all of them are TRUE or at least one returns false.
+      // This is a neutral return so that other guards can be checked. This
+      // covers cases like custom landing pages where the group is not set.
+      return TRUE;
+    }
     else {
       $group = $entity->getGroup();
     }
