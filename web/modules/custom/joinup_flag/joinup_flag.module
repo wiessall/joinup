@@ -33,6 +33,7 @@ function joinup_flag_preprocess_views_view_field(array &$variables): void {
  * Implements hook_entity_access().
  */
 function joinup_flag_entity_access(EntityInterface $entity, string $operation, AccountInterface $account): AccessResultInterface {
+  // Grant access to flagging entities, so that they can be shown in bookmarks listing.
   if ($operation === 'view' && $entity->getEntityTypeId() === 'flagging') {
     if (!$account->isAnonymous()) {
       return AccessResult::allowed();
