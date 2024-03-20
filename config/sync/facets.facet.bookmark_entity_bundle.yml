@@ -1,4 +1,4 @@
-uuid: 9f67cedd-5282-4b9d-aebe-2bce14cb75ea
+uuid: 4e34df17-5139-474e-91cd-7f99dfaae8c8
 langcode: en
 status: true
 dependencies:
@@ -7,13 +7,13 @@ dependencies:
     - views.view.bookmarks
   module:
     - search_api
-id: entity_bundle
-name: 'Entity bundle'
+id: bookmark_entity_bundle
+name: 'Bookmark Entity bundle'
 weight: 0
 min_count: 1
 missing: false
 missing_label: others
-url_alias: entity_bundle
+url_alias: bookmark_entity_bundle
 facet_source_id: 'search_api:views_page__bookmarks__page'
 field_identifier: entity_bundle
 query_operator: or
@@ -27,17 +27,11 @@ hierarchy:
 expand_hierarchy: false
 enable_parent_when_child_gets_disabled: true
 widget:
-  type: links
+  type: type
   config:
     show_numbers: true
     arbitrary_facet_plugin: _none
-    soft_limit: -1
-    show_reset_link: false
-    reset_text: 'Show all'
-    hide_reset_when_no_selection: false
-    soft_limit_settings:
-      show_less_label: 'Show less'
-      show_more_label: 'Show more'
+    tabs: 0
 empty_behavior:
   behavior: none
 only_visible_when_facet_source_is_visible: true

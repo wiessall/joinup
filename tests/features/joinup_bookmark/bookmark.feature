@@ -62,6 +62,8 @@ Feature: Bookmark/Unbookmark feature.
       | Ohter news          | Batman Begins | published |
 
     When I am logged in as "Gregory Bookmark"
+    And I visit "/user/bookmarks"
+    Then I should see the text "There are no bookmarked items."
     And I go to the content page of the type "news" with the title "Bookmark news one"
     And I click "Bookmark" in the "Bookmark block" region
     Then I go to the content page of the type "news" with the title "Bookmark news two"
@@ -79,13 +81,14 @@ Feature: Bookmark/Unbookmark feature.
 
     When I am logged in as "Gregory Bookmark"
     And I visit "/user/bookmarks"
-    Then I should see the following tiles in the correct order:
+    Then I should not see the text "There are no bookmarked items."
+    And I should see the following tiles in the correct order:
       | Batman Begins     |
       | Bookmark news two |
       | Bookmark news one |
     And the "Entity bundle" inline facet should allow selecting the following values:
-      | News (2)      |
-      | Solutions (1) |
+      | 2 News      |
+      | 1 Solutions |
 
     When I am logged in as "Lisa Bookmark"
     And I visit "/user/bookmarks"
@@ -94,5 +97,5 @@ Feature: Bookmark/Unbookmark feature.
       | Ohter news          |
       | Bookmark news three |
     And the "Entity bundle" inline facet should allow selecting the following values:
-      | News (2)        |
-      | Collections (1) |
+      | 2 News        |
+      | 1 Collections |
