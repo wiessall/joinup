@@ -30,6 +30,12 @@ use Drupal\views\ViewExecutable;
  */
 function eif_theme(array $existing, string $type, string $theme, string $path): array {
   return [
+    'eif_qualified_recommendation' => [
+      'variables' => [
+        'label' => NULL,
+        'description' => NULL,
+      ],
+    ],
     'eif_wrapper' => [
       'render element' => 'elements',
     ],
