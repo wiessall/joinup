@@ -1,0 +1,24 @@
+uuid: 36071f09-dc7d-4416-9457-38827f5876c8
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.meta_entity.eif_description
+    - filter.format.content_editor
+    - meta_entity.type.eif_perspective
+  module:
+    - text
+id: meta_entity.eif_perspective.eif_description
+field_name: eif_description
+entity_type: meta_entity
+bundle: eif_perspective
+label: Description
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  allowed_formats:
+    - basic_html
+field_type: text_long
