@@ -92,8 +92,8 @@ class PublicCodeYml extends EuOssCatalogueParserPluginBase implements ContainerF
     $errorList = $schemaErrors = [];
 
     try {
-      $yml_content = $solution->get('oss_publiccode_yml_content')->value ?? '';
-      $metadata = Yaml::decode($yml_content);
+      $ymlContent = $solution->get('oss_publiccode_yml_content')->value ?? '';
+      $metadata = Yaml::decode($ymlContent);
       // Using the config schema checker. And it works!
       $schemaErrors = $this->checkConfigSchema($this->typedConfigManager, 'eu_oss_catalogue.publiccode_yml', $metadata);
       if (!is_array($schemaErrors) || !$schemaErrors) {

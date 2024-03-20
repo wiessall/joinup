@@ -99,12 +99,12 @@ class EntityReferenceLabelTooltip extends EntityReferenceLabelFormatter {
         continue;
       }
 
-      $tooltip_text = $this->getTooltipText($entity);
+      $tooltipText = $this->getTooltipText($entity);
       if (isset($element['#type']) && $element['#type'] === 'link') {
-        $elements[$delta]['#options']['title'] = $tooltip_text;
+        $elements[$delta]['#options']['title'] = $tooltipText;
       }
       elseif (isset($element['#plain_text'])) {
-        $elements[$delta]['#theme_wrappers']['container'] = ['#attributes' => ['title' => $tooltip_text]];
+        $elements[$delta]['#theme_wrappers']['container'] = ['#attributes' => ['title' => $tooltipText]];
       }
     }
 
