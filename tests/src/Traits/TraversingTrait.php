@@ -379,7 +379,7 @@ trait TraversingTrait {
       'Content listing types' => 'content_listing_type',
       'Content types' => 'type',
       'EIF recommendations' => 'category',
-      'Entity bundle' => 'entity_bundle',
+      'Entity bundle' => 'bookmark_entity_bundle',
       'Event date' => 'event_date',
       'My collections content' => 'collection_my_content',
       'My content' => 'content_my_content',

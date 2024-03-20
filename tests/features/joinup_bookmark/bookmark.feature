@@ -86,7 +86,7 @@ Feature: Bookmark/Unbookmark feature.
       | Batman Begins     |
       | Bookmark news two |
       | Bookmark news one |
-    And the "Entity bundle" inline facet should allow selecting the following values:
+    And the "Entity bundle" tabs facet should allow selecting the following values:
       | 2 News      |
       | 1 Solutions |
 
@@ -96,6 +96,6 @@ Feature: Bookmark/Unbookmark feature.
       | Batman              |
       | Ohter news          |
       | Bookmark news three |
-    And the "Entity bundle" inline facet should allow selecting the following values:
+    And the "Entity bundle" tabs facet should allow selecting the following values:
       | 2 News        |
       | 1 Collections |
