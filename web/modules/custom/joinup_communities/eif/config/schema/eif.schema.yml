@@ -16,3 +16,19 @@ eif.eif_wrapper_type.*:
     label:
       type: label
       label: 'Label'
+
+field.storage_settings.eif_qualified_recommendation:
+  type: field.storage_settings.entity_reference
+  label: 'EIF qualified recommendation'
+field.field_settings.eif_qualified_recommendation:
+  type: field.field_settings.entity_reference
+  label: 'EIF qualified recommendation'
+  mapping:
+    allowed_formats:
+      type: sequence
+      label: 'Allowed text formats'
+      sequence:
+        type: string
+field.widget.settings.eif_qualified_recommendation:
+  type: field.widget.settings.text_textarea
+  label: 'EIF qualified recommendation select'
