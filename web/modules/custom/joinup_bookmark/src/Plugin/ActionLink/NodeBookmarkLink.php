@@ -15,7 +15,7 @@ use Drupal\flag\Plugin\ActionLink\AJAXactionLink;
  * @ActionLinkType(
  *   id = "node_bookmark_link",
  *   label = @Translation("Node bookmark link"),
- *   description = @Translation("An Node AJAX JavaScript request will be made without reloading the page.")
+ *   description = @Translation("A Node AJAX JavaScript request will be made without reloading the page.")
  * )
  */
 class NodeBookmarkLink extends AJAXactionLink {
