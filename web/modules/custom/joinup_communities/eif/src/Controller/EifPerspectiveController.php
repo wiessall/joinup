@@ -10,6 +10,7 @@ use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Url;
+use Drupal\meta_entity\Entity\MetaEntity;
 use Drupal\og\OgAccessInterface;
 use Drupal\rdf_meta_entity\Entity\RdfMetaEntity;
 use Drupal\solution\Entity\SolutionInterface;
@@ -97,7 +98,7 @@ class EifPerspectiveController extends ControllerBase {
    *   The content as a render array.
    */
   public function settings(SolutionInterface $rdf_entity): array {
-    $meta_entity = RdfMetaEntity::loadOrCreate('eif_perspective', $rdf_entity);
+    $meta_entity = MetaEntity::loadOrCreate('eif_perspective', $rdf_entity);
     return $this->entityFormBuilder()->getForm($meta_entity, 'default', [
       'redirect' => Url::fromRoute('entity.rdf_entity.canonical', [
         'rdf_entity' => $rdf_entity->id(),
