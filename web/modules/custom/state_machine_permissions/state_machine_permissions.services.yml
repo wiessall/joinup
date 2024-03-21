@@ -1,7 +1,7 @@
 services:
   state_machine_permissions.helper:
     class: Drupal\state_machine_permissions\StateMachinePermissionsHelper
-    arguments: ['@entity_field.manager', '@plugin.manager.workflow_group', '@plugin.manager.workflow']
+    arguments: ['@entity_field.manager', '@plugin.manager.workflow_group', '@plugin.manager.workflow', '@og.access']
   state_machine_permissions.og_subscriber:
     class: Drupal\state_machine_permissions\EventSubscriber\PermissionGenerationSubscriber
     arguments: ['@entity_field.manager', '@state_machine_permissions.helper']
