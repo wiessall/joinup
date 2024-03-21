@@ -166,7 +166,7 @@ class ImageLibraryWidget extends SvgImageWidget {
     $element = parent::formElement($items, $delta, $element, $form, $formState);
     // Get the allowed file extensions from the field's settings.
     $fieldSettings = $items->getFieldDefinition()->getSettings();
-    $element['#upload_validators']['file_validate_extensions'] = [$fieldSettings['file_extensions']];
+    $element['#upload_validators']['FileExtension'] = ['extensions' => $fieldSettings['file_extensions']];
 
     $fieldName = $element['#field_name'];
     $cardinality = $this->fieldDefinition->getFieldStorageDefinition()->getCardinality();
@@ -231,8 +231,8 @@ class ImageLibraryWidget extends SvgImageWidget {
           '#browser' => $blockBuild,
           '#has_results' => isset($view),
           '#upload_validators' => [
-            'file_validate_extensions' => [
-              $fieldSettings['file_extensions'],
+            'FileExtension' => [
+              'extensions' => $fieldSettings['file_extensions'],
             ],
           ],
           '#attributes' => [
