@@ -78,7 +78,6 @@ permissions:
   - 'perform custom_page_workflow workflow save_as_draft transition on any entity'
   - 'perform custom_page_workflow workflow unarchive transition on any entity'
   - 'perform custom_page_workflow workflow unpublish transition on any entity'
-  - 'perform owner_workflow workflow propose_changes transition on any entity'
   - 'perform owner_workflow workflow retract_deletion_request transition on any entity'
   - 'perform owner_workflow workflow validate transition on any entity'
   - 'perform node:post_moderated workflow approve_proposed transition on any entity'

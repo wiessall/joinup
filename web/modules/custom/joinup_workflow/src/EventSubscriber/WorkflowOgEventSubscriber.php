@@ -38,7 +38,10 @@ final class WorkflowOgEventSubscriber implements EventSubscriberInterface {
   public static function getSubscribedEvents(): array {
     return [
       // Provides permissions for the 'Content Creation' group field.
-      PermissionEventInterface::EVENT_NAME => 'contentCreationAlterPermissionEvent',
+      PermissionEventInterface::EVENT_NAME => [
+        ['contentCreationAlterPermissionEvent'],
+        ['contactInformationPermissionProvider'],
+      ],
       // Performs access checks for OG group content operations.
       GroupContentEntityOperationAccessEventInterface::EVENT_NAME => [
         // Use a priority higher than the default subscriber from OG so that we
@@ -74,6 +77,29 @@ final class WorkflowOgEventSubscriber implements EventSubscriberInterface {
         $event->setPermission($permission);
       }
     }
+  }
+
+  /**
+   * Provides permission for the 'contact_information' group content.
+   *
+   * Contact information are not group content but there are some cases we are
+   * handling it as such, e.g. when facilitators are able to delete the ones
+   * referred by their group. Define permissions used by OG roles and are not
+   * defined by the OG module.
+   *
+   * @param \Drupal\og\Event\PermissionEventInterface $event
+   *   The OG permission event.
+   */
+  public function contactInformationPermissionProvider(PermissionEventInterface $event): void {
+    $permission = new GroupContentOperationPermission([
+      'name' => 'delete any contact_information rdf_entity',
+      'title' => $this->t('Edit contact information'),
+      'entityType' => 'node',
+      'bundle' => 'contact_information',
+      'operation' => 'edit contact information',
+    ]);
+
+    $event->setPermission($permission);
   }
 
   /**

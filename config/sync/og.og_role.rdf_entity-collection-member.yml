@@ -43,7 +43,6 @@ permissions:
   - 'create content for any_user option'
   - 'perform node:post_moderated workflow propose_from_reported transition on own entity'
   - 'perform node:post_moderated workflow publish transition on own entity'
-  - 'perform node:post_moderated workflow request_deletion transition on own entity'
   - 'perform node:post_moderated workflow save_as_draft transition on own entity'
   - 'perform node:post_moderated workflow save_new_draft transition on own entity'
   - 'perform node:pre_moderated workflow propose transition on own entity'
