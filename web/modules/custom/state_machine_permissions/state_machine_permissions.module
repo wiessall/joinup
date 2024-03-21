@@ -75,7 +75,6 @@ function state_machine_permissions_rdf_entity_access(EntityInterface $entity, $o
   $permission_helper = \Drupal::getContainer()->get('state_machine_permissions.helper');
   if ($operation === 'delete') {
     // If the operation is delete, there is no need to check for transitions.
-    // @todo Some entities can be deleted only in specific cases. Add them here.
     return AccessResult::allowedIf($permission_helper->hasOwnAnyPermission($entity, 'delete', $account));
   }
 
