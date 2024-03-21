@@ -93,6 +93,7 @@ class EifContext extends RawDrupalContext {
           'format' => 'content_editor',
         ],
       ]),
+      'field_state' => 'published',
     ])->save();
 
     Node::create([
@@ -107,6 +108,7 @@ class EifContext extends RawDrupalContext {
           'format' => 'content_editor',
         ],
       ]),
+      'field_state' => 'published',
     ])->save();
 
     // Ensure the taxonomy terms are indexed.
@@ -146,6 +148,16 @@ class EifContext extends RawDrupalContext {
     ];
     foreach ($rdf_ids as $id) {
       $entity = Rdf::load($id);
+      $entity->skip_notification = TRUE;
+      $entity->delete();
+    }
+
+    $nids = [
+      EifInterface::EIF_SOLUTIONS_NID,
+      EifInterface::EIF_ONLINE_ASSISTANT,
+    ];
+    foreach ($nids as $nid) {
+      $entity = Node::load($nid);
       $entity->skip_notification = TRUE;
       $entity->delete();
     }
