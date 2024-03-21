@@ -157,6 +157,7 @@ permissions:
   - 'delete any event_logo media'
   - 'delete any file'
   - 'delete any news_logo media'
+  - 'delete any owner rdf entity'
   - 'delete any solution_logo media'
   - 'delete asset_release rdf entity'
   - 'delete contact_information rdf entity'
