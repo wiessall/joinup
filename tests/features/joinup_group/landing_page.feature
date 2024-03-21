@@ -15,10 +15,10 @@ Feature: Tests the group landing page customization.
       | <group> group       | published | The <group> arbitrary description   |
       | other <group> group | published | Other <group> arbitrary description |
     And "custom_page" content:
-      | title         | <group>       | body                      |
-      | Custom Page 1 | <group> group | The custom page 1 content |
-      | Custom Page 2 | <group> group | The custom page 2 content |
-      | Custom Page 3 | <group> group | The custom page 3 content |
+      | title         | <group>       | body                      | state     |
+      | Custom Page 1 | <group> group | The custom page 1 content | published |
+      | Custom Page 2 | <group> group | The custom page 2 content | published |
+      | Custom Page 3 | <group> group | The custom page 3 content | published |
     Given I am not logged in
     When I go to the homepage of the "<group> group" <group>
     Then I should not see the link "Settings"
