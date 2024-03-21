@@ -50,6 +50,7 @@ permissions:
   - 'view eif_perspective rdf-meta-entity'
   - 'view like_node'
   - 'view like_rdf_entity'
+  - 'view rdf entity'
   - 'view media'
   - 'view paragraph content 1_column_layout'
   - 'view paragraph content 2_column_featured_left'
