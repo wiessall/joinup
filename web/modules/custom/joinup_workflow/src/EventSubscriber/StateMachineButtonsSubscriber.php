@@ -44,13 +44,31 @@ final class StateMachineButtonsSubscriber implements EventSubscriberInterface {
     // and can be handled.
     $transition = $workflow->findTransition($currentState, $currentState);
 
+    if ($entity instanceof CommunityContentInterface) {
+      if ($transition && $transition->getId() === 'save_as_draft') {
+        return;
+      }
+
+      // Use findTransition because it checks for the available transitions.
+      elseif ($currentState === 'published' && $transition = $workflow->findTransition('published', 'proposed')) {
+        // The 'Propose new revision' button should be 'Request changes' when
+        // user is a facilitator. There is no permission specific to this.
+        // @todo Inject the services.
+        $user = \Drupal::currentUser();
+        $membershipManager = \Drupal::getContainer()->get('og.membership_manager');
+        $group = $event->getEntity()->getGroup();
+        if ($membership = $membershipManager->getMembership($group, $user->id())) {
+          if ($membership->hasRole("{$group->getEntityTypeId()}-{$group->bundle()}-facilitator")) {
+            $event->updateLabel($transition->getId(), 'Request changes');
+            return;
+          }
+        }
+      }
+    }
+
     // @todo: Group the exceptions later when all of them are here.
     // `asset_release` `draft` button should not be update.
     if ($entity->bundle() === 'asset_release' && $currentState === 'draft') {
-      return;
-    }
-
-    if ($entity instanceof CommunityContentInterface && $transition && $transition->getId() === 'save_as_draft') {
       return;
     }
 
