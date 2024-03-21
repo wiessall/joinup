@@ -31,11 +31,11 @@ interface StateMachinePermissionsHelperInterface {
    * In these case, the method will return all workflows related to the given
    * entity type ID.
    *
-   * @param string $entity_type_id
+   * @param string $entityTypeId
    *   The entity type ID that the bundle belongs to.
    * @param string $bundle
    *   The entity bundle.
-   * @param array $field_names
+   * @param array $fieldNames
    *   (optional) A list of state fields to derive the workflows from. If left
    *   empty, all fields will be examined.
    *
@@ -43,34 +43,34 @@ interface StateMachinePermissionsHelperInterface {
    *   An array of workflows that can match the given bundle. If one workflow
    *   is found, it is still returned as an array.
    */
-  public function getPossibleWorkflowsForBundle(string $entity_type_id, string $bundle, array $field_names = []): array;
+  public function getPossibleWorkflowsForBundle(string $entityTypeId, string $bundle, array $fieldNames = []): array;
 
   /**
    * Returns a list of possible workflows for the entity type ID.
    *
-   * @param string $entity_type_id
+   * @param string $entityTypeId
    *   The entity type ID.
    *
    * @return array
    *   The array of possible workflow definition arrays.
    */
-  public function getPossibleWorkflowsForEntityType(string $entity_type_id): array;
+  public function getPossibleWorkflowsForEntityType(string $entityTypeId): array;
 
   /**
    * Returns a list of state field definitions.
    *
-   * @param string $entity_type_id
+   * @param string $entityTypeId
    *   The entity type ID.
-   * @param string $bundle_id
+   * @param string $bundle
    *   The entity bundle.
-   * @param array $field_names
+   * @param array $fieldNames
    *   (optional) An array of field names to return. Returns all state field
    *   definitions of the bundle if left empty.
    *
    * @return \Drupal\Core\Field\FieldDefinitionInterface[]
    *   An array of field definitions.
    */
-  public function getEntityStateFieldDefinitions(string $entity_type_id, string $bundle_id, array $field_names = []): array;
+  public function getEntityStateFieldDefinitions(string $entityTypeId, string $bundle, array $fieldNames = []): array;
 
   /**
    * Checks if the user has the own or the any permission for the given entity.
