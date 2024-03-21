@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_flag\Plugin\views\field;
 
-use Drupal\Core\Entity\EntityDisplayRepositoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\flag\FlaggingInterface;
@@ -24,7 +23,7 @@ class JoinupFlagFlaggedEntity extends FieldPluginBase implements ContainerFactor
   /**
    * {@inheritdoc}
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, protected EntityTypeManagerInterface $entityTypeManager, protected EntityDisplayRepositoryInterface $entityDisplayRepository) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, protected EntityTypeManagerInterface $entityTypeManager) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
   }
 
@@ -36,8 +35,7 @@ class JoinupFlagFlaggedEntity extends FieldPluginBase implements ContainerFactor
       $configuration,
       $plugin_id,
       $plugin_definition,
-      $container->get('entity_type.manager'),
-      $container->get('entity_display.repository')
+      $container->get('entity_type.manager')
     );
   }
 
@@ -55,17 +53,10 @@ class JoinupFlagFlaggedEntity extends FieldPluginBase implements ContainerFactor
    */
   public function buildOptionsForm(&$form, $form_state): void {
     parent::buildOptionsForm($form, $form_state);
-    $options = [];
-
-    $display_modes = $this->entityDisplayRepository->getViewModes('node');
-    foreach ($display_modes as $mode => $display) {
-      $options[$mode] = $display['label'];
-    }
     $form['view_mode'] = [
-      '#type' => 'select',
+      '#type' => 'textfield',
       '#title' => $this->t('Entity Display Mode'),
-      '#options' => $options,
-      '#default_value' => $this->options['view_mode'] ?? 'default',
+      '#default_value' => $this->options['view_mode'],
       '#description' => $this->t('Select the display mode for entities.'),
     ];
   }

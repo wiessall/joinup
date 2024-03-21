@@ -82,7 +82,7 @@ class FlagEntityBundleLabelProcessor extends ProcessorPluginBase implements Buil
         if (isset($entity[$bundle_id])) {
           $bundles[$bundle_id]['entity_type_id'] = $entity_type_id;
           $bundles[$bundle_id]['label'] = $entity[$bundle_id]['label'];
-          $bundles[$bundle_id]['label_plural'] = in_array('label_plural', $entity[$bundle_id]) ? ucfirst($entity[$bundle_id]['label_plural']) : $entity[$bundle_id]['label'];
+          $bundles[$bundle_id]['label_plural'] = isset($entity[$bundle_id]['label_plural']) ? ucfirst($entity[$bundle_id]['label_plural']) : $entity[$bundle_id]['label'];
           if (!empty($entity[$bundle_id]['label_count'])) {
             $bundles[$bundle_id]['has_count_label'] = TRUE;
           }
