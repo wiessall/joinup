@@ -50,7 +50,7 @@ final class StateMachineButtonsSubscriber implements EventSubscriberInterface {
       }
 
       // Use findTransition because it checks for the available transitions.
-      elseif ($currentState === 'published' && $transition = $workflow->findTransition('published', 'proposed')) {
+      elseif ($currentState === 'published' && $requestChangesTransition = $workflow->findTransition('published', 'proposed')) {
         // The 'Propose new revision' button should be 'Request changes' when
         // user is a facilitator. There is no permission specific to this.
         // @todo Inject the services.
@@ -59,7 +59,7 @@ final class StateMachineButtonsSubscriber implements EventSubscriberInterface {
         $group = $event->getEntity()->getGroup();
         if ($membership = $membershipManager->getMembership($group, $user->id())) {
           if ($membership->hasRole("{$group->getEntityTypeId()}-{$group->bundle()}-facilitator")) {
-            $event->updateLabel($transition->getId(), 'Request changes');
+            $event->updateLabel($requestChangesTransition->getId(), 'Request changes');
             return;
           }
         }
