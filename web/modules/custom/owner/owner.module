@@ -8,6 +8,7 @@
 declare(strict_types=1);
 
 use Drupal\Core\Access\AccessResult;
+use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Session\AccountInterface;
@@ -146,7 +147,7 @@ function owner_form_alter_validate(&$form, FormStateInterface $form_state) {
  * @param \Drupal\Core\Entity\EntityInterface $entity
  *   The entity to process.
  */
-function owner_entity_auto_label(EntityInterface $entity) {
+function owner_entity_auto_label(EntityInterface $entity): void {
   if ($entity->bundle() !== 'owner') {
     return;
   }
@@ -159,9 +160,21 @@ function owner_entity_auto_label(EntityInterface $entity) {
 /**
  * Implements hook_ENTITY_TYPE_access().
  */
-function owner_rdf_entity_access(EntityInterface $entity, $operation, AccountInterface $account) {
+function owner_rdf_entity_access(EntityInterface $entity, $operation, AccountInterface $account): AccessResultInterface {
   if (!$entity instanceof OwnerInterface) {
     return AccessResult::neutral();
+  }
+
+  if ($operation === 'edit'
+    && $entity->getWorkflowState() === 'deletion_request'
+    && $entity->getOwnerId() === $account->id()
+    // We need to differentiate between the owner and the moderator. The 'edit
+    // any owner rdf entity' permission is used to determine if the user is a
+    // moderator.
+    && !$account->hasPermission('edit any owner rdf entity'
+  )) {
+    return AccessResult::forbidden('The owner is in the "deletion_request" state.');
+
   }
 
   // By specifications, deletion should be forbidden if the owner entity is
