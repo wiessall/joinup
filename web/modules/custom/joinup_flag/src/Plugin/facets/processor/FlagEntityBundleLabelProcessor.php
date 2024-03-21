@@ -74,31 +74,23 @@ class FlagEntityBundleLabelProcessor extends ProcessorPluginBase implements Buil
       return $results;
     }
 
-    $bundles = [];
     $bundle_info = $this->bundleInfo->getAllBundleInfo();
     foreach ($results as $result) {
-      $bundle_id = $result->getRawValue();
-      foreach ($bundle_info as $entity_type_id => $entity) {
-        if (isset($entity[$bundle_id])) {
-          $bundles[$bundle_id]['entity_type_id'] = $entity_type_id;
-          $bundles[$bundle_id]['label'] = $entity[$bundle_id]['label'];
-          $bundles[$bundle_id]['label_plural'] = isset($entity[$bundle_id]['label_plural']) ? ucfirst($entity[$bundle_id]['label_plural']) : $entity[$bundle_id]['label'];
-          if (!empty($entity[$bundle_id]['label_count'])) {
-            $bundles[$bundle_id]['has_count_label'] = TRUE;
-          }
-          break;
-        }
+      $rawValue = $result->getRawValue();
+      if (!strpos($rawValue, ':')) {
+        continue;
       }
-
-      if (!isset($bundles[$bundle_id])) {
+      [$entity_type_id, $bundle_id] = explode(':', $rawValue);
+      $info = $bundle_info[$entity_type_id][$bundle_id] ?? NULL;
+      if (!$info) {
         continue;
       }
 
-      if (!empty($bundles[$bundle_id]['has_count_label'])) {
-        $result->setDisplayValue($bundles[$bundle_id]['label_plural']);
+      if (!empty($info['label_count'])) {
+        $result->setDisplayValue($this->bundleInfo->getBundleCountLabel($entity_type_id, $bundle_id, $result->getCount(), 'no_count_capitalize'));
       }
       else {
-        $result->setDisplayValue($bundles[$bundle_id]['label']);
+        $result->setDisplayValue($info['label']);
       }
     }
 
