@@ -57,7 +57,7 @@ node:pre_moderated:
     # automatically set to post-moderated.
     # @see joinup_community_content_workflow_selector()
     propose_new_revision:
-      label: 'Propose new revision'
+      label: 'Propose changes'
       from: [published]
       to: proposed
     request_deletion:
