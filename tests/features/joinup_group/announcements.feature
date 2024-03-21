@@ -164,7 +164,8 @@ Feature: Messaging group announcements
     And I should not see the button "Reject"
     And I should not see the button "Undo reject"
     And I should not see the button "Preview"
-    And the email sent to "Check edit moderator" with subject "Joinup: A new announcement 'The Big Opening is postponed' has been created" contains the following lines of text:
+    And the email sent to "check.edit.moderator@example.com" with subject "Joinup: A new announcement 'The Big Opening is postponed' has been created" contains header "Content-Type" with value "text/html"
+    And the email sent to "check.edit.moderator@example.com" with subject "Joinup: A new announcement 'The Big Opening is postponed' has been created" contains the following lines of text:
       | A new announcement 'The Big Opening is postponed' has been created by Sons of tweets for the Fail pension <group>. |
       | You can approve or reject the announcement at                                                                      |
 

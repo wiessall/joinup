@@ -1,0 +1,15 @@
+uuid: 561fe388-eda7-462f-969b-1133c64db344
+langcode: en
+status: true
+dependencies: {  }
+name: image_gallery_1x
+label: 'Image gallery 1x'
+effects:
+  97687418-3439-4629-97cd-b00fae4d58db:
+    uuid: 97687418-3439-4629-97cd-b00fae4d58db
+    id: image_scale
+    weight: 1
+    data:
+      width: null
+      height: 300
+      upscale: true

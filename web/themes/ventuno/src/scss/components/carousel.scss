@@ -1,12 +1,16 @@
-@import "../../partials/core";
-@import "../../partials/mixins/bootstrap-icons";
+@import "../partials/core";
+@import "../partials/mixins/bootstrap-icons";
 
-.paragraph--carousel {
+.carousel {
   img {
     margin-bottom: 0;
   }
   &__title {
     flex: 1 1 auto;
+    flex-basis: 100%;
+    @include media-breakpoint-up(md) {
+      flex-basis: 50%;
+    }
   }
   .glide__outer {
     // Visual workarounds to avoid slides' shadow being cut.

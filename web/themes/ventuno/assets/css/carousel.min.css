@@ -1,0 +1,2 @@
+.carousel img{margin-bottom:0}.carousel__title{flex:1 1 auto;flex-basis:100%}@media (min-width:768px){.carousel__title{flex-basis:50%}}.carousel .glide__outer{margin-left:-.5rem;width:calc(100% + 1rem)}.carousel .glide__arrows--disabled{display:none}.carousel .glide__arrow{height:40px;width:40px}.carousel .glide__slides .tile{white-space:normal}
+/*# sourceMappingURL=carousel.min.css.map */
