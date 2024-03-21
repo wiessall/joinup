@@ -2,18 +2,25 @@
 
 declare(strict_types=1);
 
-namespace Drupal\joinup_taxonomy\EventSubscriber;
+namespace Drupal\joinup_rdf\EventSubscriber;
 
 use Drupal\Core\Cache\CacheableRedirectResponse;
 use Drupal\Core\EventSubscriber\HttpExceptionSubscriberBase;
+use Drupal\joinup_rdf\Entity\RdfSyncEntityInterface;
 use Drupal\rdf_sync\RdfSyncMapper;
-use Drupal\taxonomy\TermInterface;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
 
 /**
- * Handles legacy taxonomy terms canonical URLs.
+ * Handles legacy RDF entity canonical URLs.
  */
-class TermLegacyUrlSubscriber extends HttpExceptionSubscriberBase {
+class LegacyRdfUrlSubscriber extends HttpExceptionSubscriberBase {
+
+  /**
+   * The RDF Sync mapper service.
+   *
+   * @var \Drupal\rdf_sync\RdfSyncMapper|null
+   */
+  protected ?RdfSyncMapper $mapper = NULL;
 
   /**
    * Constructs a new event subscriber instance.
@@ -21,7 +28,9 @@ class TermLegacyUrlSubscriber extends HttpExceptionSubscriberBase {
    * @param \Drupal\rdf_sync\RdfSyncMapper $mapper
    *   The RDF Sync mapper service.
    */
-  public function __construct(protected RdfSyncMapper $mapper) {}
+  public function setRdfSyncMapper(RdfSyncMapper $mapper) {
+    $this->mapper = $mapper;
+  }
 
   /**
    * {@inheritdoc}
@@ -38,13 +47,13 @@ class TermLegacyUrlSubscriber extends HttpExceptionSubscriberBase {
    *   The request event object.
    */
   public function on404(ExceptionEvent $event): void {
-    if ($term = $this->getTerm($event->getRequest()->getPathInfo())) {
+    if ($entity = $this->getEntity($event->getRequest()->getPathInfo())) {
       $options = [];
       if ($query = $event->getRequest()->query->all()) {
         $options['query'] = $query;
       }
-      $path = $term->toUrl('canonical', $options)->toString();
-      $response = (new CacheableRedirectResponse($path))->addCacheableDependency($term);
+      $path = $entity->toUrl('canonical', $options)->toString();
+      $response = (new CacheableRedirectResponse($path))->addCacheableDependency($entity);
       $event->setResponse($response);
     }
   }
@@ -55,25 +64,31 @@ class TermLegacyUrlSubscriber extends HttpExceptionSubscriberBase {
    * @param string $path
    *   The request path.
    *
-   * @return \Drupal\taxonomy\TermInterface|null
+   * @return \Drupal\joinup_rdf\Entity\RdfSyncEntityInterface|null
    *   The term entity or NULL if the request URL doesn't designate a term.
    */
-  protected function getTerm(string $path): ?TermInterface {
+  protected function getEntity(string $path): ?RdfSyncEntityInterface {
     // Quick check.
-    if (!str_starts_with($path, '/taxonomy/term/http_e_f_f')) {
+    if (
+      !$this->mapper ||
+      !str_contains($path, '/http_e_f_f')
+    ) {
       return NULL;
     }
 
-    [2 => $encodedUri] = explode('/', trim($path, '/'));
-    // With the legacy storage, term IDs were encoded URIs.
+    // Path might be either "/rdf_entity/<encoded id>" or
+    // "/taxonomy/term/<encoded id>".
+    $pathAfterEncodedUriScheme = 'http_e_f_f' . explode('/http_e_f_f', $path)[1];
+    $encodedUri = explode('/', $pathAfterEncodedUriScheme)[0];
+    // With the legacy storage, RDF entity IDs were encoded URIs.
     $uri = strtr($encodedUri, self::MAP);
 
-    if (!$term = $this->mapper->getEntityByUri($uri)) {
+    if (!$entity = $this->mapper->getEntityByUri($uri)) {
       return NULL;
     }
 
-    // Make sure is a mapped term.
-    return $term instanceof TermInterface ? $term : NULL;
+    // Make sure is a mapped entity.
+    return $entity instanceof RdfSyncEntityInterface ? $entity : NULL;
   }
 
   /**
