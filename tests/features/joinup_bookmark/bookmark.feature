@@ -87,8 +87,8 @@ Feature: Bookmark/Unbookmark feature.
       | Bookmark news two |
       | Bookmark news one |
     And the "Entity bundle" tabs facet should allow selecting the following values:
-      | 2 News      |
-      | 1 Solutions |
+      | 2 News     |
+      | 1 Solution |
 
     When I am logged in as "Lisa Bookmark"
     And I visit "/user/bookmarks"
@@ -97,5 +97,5 @@ Feature: Bookmark/Unbookmark feature.
       | Ohter news          |
       | Bookmark news three |
     And the "Entity bundle" tabs facet should allow selecting the following values:
-      | 2 News        |
-      | 1 Collections |
+      | 2 News       |
+      | 1 Collection |
