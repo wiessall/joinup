@@ -79,6 +79,7 @@ class TransitionPermissionGuard implements GuardInterface {
 
     if ($entity instanceof ContactInformationInterface) {
       $group = $entity->getRelatedGroup();
+
       // This comes from the state permission and is specific to contact
       // information. 2 specific permissions for contact information are:
       // - The user cannot request_deletion if they have access to delete.
@@ -104,7 +105,7 @@ class TransitionPermissionGuard implements GuardInterface {
 
     $anyPermission = StateMachinePermissionStringConstructor::constructTransitionPermission($workflow, $transition, 'any');
     // @todo Use og.access service here.
-    if ($this->currentUser->hasPermission($anyPermission) || $this->workflowHelper->hasOgPermission($anyPermission, $group, $this->currentUser)) {
+    if ($this->currentUser->hasPermission($anyPermission) || ($group && $this->workflowHelper->hasOgPermission($anyPermission, $group, $this->currentUser))) {
       return TRUE;
     }
 
@@ -114,7 +115,7 @@ class TransitionPermissionGuard implements GuardInterface {
 
     if ($this->currentUser->id() === $entity->getOwnerId()) {
       $ownPermission = StateMachinePermissionStringConstructor::constructTransitionPermission($workflow, $transition, 'own');
-      return $this->currentUser->hasPermission($ownPermission) || $this->workflowHelper->hasOgPermission($ownPermission, $group, $this->currentUser);
+      return $this->currentUser->hasPermission($ownPermission) || ($group && $this->workflowHelper->hasOgPermission($ownPermission, $group, $this->currentUser));
     }
 
     return FALSE;
