@@ -51,7 +51,7 @@ final class StateMachineButtonsSubscriber implements EventSubscriberInterface {
 
       // Use findTransition because it checks for the available transitions.
       elseif ($currentState === 'published' && $requestChangesTransition = $workflow->findTransition('published', 'proposed')) {
-        // The 'Propose new revision' button should be 'Request changes' when
+        // The 'Propose changes' button should be 'Request changes' when
         // user is a facilitator. There is no permission specific to this.
         // @todo Inject the services.
         $user = \Drupal::currentUser();
