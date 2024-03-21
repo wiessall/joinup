@@ -2,6 +2,7 @@
 
 namespace Drupal\joinup_workflow\EventSubscriber;
 
+use Drupal\joinup_community_content\Entity\CommunityContentInterface;
 use Drupal\joinup_workflow\Event\StateMachineButtonLabelsEventInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
@@ -46,6 +47,10 @@ final class StateMachineButtonsSubscriber implements EventSubscriberInterface {
     // @todo: Group the exceptions later when all of them are here.
     // `asset_release` `draft` button should not be update.
     if ($entity->bundle() === 'asset_release' && $currentState === 'draft') {
+      return;
+    }
+
+    if ($entity instanceof CommunityContentInterface && $transition && $transition->getId() === 'save_as_draft') {
       return;
     }
 
