@@ -17,7 +17,6 @@ use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Url;
 use Drupal\eif\EifInterface;
 use Drupal\eif\Entity\EifRecommendation;
-use Drupal\eif\Form\EifWrapperInlineForm;
 use Drupal\field\FieldConfigInterface;
 use Drupal\joinup_taxonomy\Entity\MappedTerm;
 use Drupal\og\OgGroupAudienceHelperInterface;
@@ -35,9 +34,6 @@ function eif_theme(array $existing, string $type, string $theme, string $path): 
         'label' => NULL,
         'description' => NULL,
       ],
-    ],
-    'eif_wrapper' => [
-      'render element' => 'elements',
     ],
     'eif_category_navigator' => [
       'variables' => [
@@ -57,26 +53,6 @@ function eif_theme(array $existing, string $type, string $theme, string $path): 
       ],
     ],
   ];
-}
-
-/**
- * Prepares variables for EIF wrapper templates.
- *
- * Default template: eif-wrapper.html.twig.
- *
- * @param array $variables
- *   An associative array containing:
- *   - elements: An associative array containing the user information and any
- *     fields attached to the entity. Properties used:
- *     - #eif_wrapper: A \Drupal\eif\Entity\EifWrapper
- *       object. The entity being viewed.
- *   - attributes: HTML attributes for the containing element.
- */
-function template_preprocess_eif_wrapper(array &$variables): void {
-  $variables['eif_wrapper'] = $variables['elements']['#eif_wrapper'];
-  foreach (Element::children($variables['elements']) as $key) {
-    $variables['content'][$key] = $variables['elements'][$key];
-  }
 }
 
 /**
@@ -142,17 +118,6 @@ function eif_preprocess_menu__og__navigation(array &$variables): void {
   }
 
   $variables['items'][$plugin_id]['in_active_trail'] = TRUE;
-}
-
-/**
- * Implements hook_entity_type_build().
- */
-function eif_entity_type_build(array &$entity_types): void {
-  /** @var \Drupal\Core\Entity\EntityTypeInterface[] $entity_types */
-  if (isset($entity_types['eif_wrapper']) && !$entity_types['eif_wrapper']->getHandlerClass('inline_form')) {
-    // Use a dedicated inline form handler for 'eif_wrapper' entities.
-    $entity_types['eif_wrapper']->setHandlerClass('inline_form', EifWrapperInlineForm::class);
-  }
 }
 
 /**
