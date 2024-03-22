@@ -124,7 +124,7 @@ class CommunityContentWorkflowAccessControlHandler {
       return AccessResult::neutral();
     }
 
-    $isOwner = $account->id() === $content->getOwnerId();;
+    $isOwner = $account->id() === $content->getOwnerId();
     if ($account->hasPermission('view any unpublished content')
       || ($account->id() === $isOwner && $account->hasPermission('view own unpublished content'))) {
       return AccessResult::allowed();
