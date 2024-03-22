@@ -197,8 +197,8 @@ abstract class ContactInformationFormBase extends ContactForm {
         '@extensions' => $extensions,
       ]),
       '#upload_validators' => [
-        'file_validate_extensions' => [$extensions],
-        'file_validate_size' => [$maxFilesize],
+        'FileExtension' => ['extensions' => $extensions],
+        'FileSizeLimit' => ['fileLimit' => $maxFilesize],
       ],
       '#weight' => 7,
     ];
