@@ -177,6 +177,11 @@ function asset_release_rdf_entity_access(EntityInterface $release, $operation, A
     return AccessResult::neutral();
   }
 
+  $access_handler = \Drupal::service('entity_type.manager')->getAccessControlHandler('rdf_entity');
+  if (!$access_handler->access($parent, 'view', $account)) {
+    return AccessResult::forbidden();
+  }
+
   // Allow users with the OG permission to view unpublished rdf entities to view
   // unpublished releases.
   $membership = $parent->getMembership((int) $account->id());
