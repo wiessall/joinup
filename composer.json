@@ -319,7 +319,8 @@
             },
             "drupal/email_contact": {
                 "Move form creation in a protected method from ContactController::content() to ContactController::getForm() @see https://www.drupal.org/project/email_contact/issues/3346470": "resources/patch/php/drupal/email_contact/3346470.patch",
-                "Deprecated dynamic creation of property @see https://www.drupal.org/project/email_contact/issues/3397818": "resources/patch/php/drupal/email_contact/3397818.patch"
+                "Deprecated dynamic creation of property @see https://www.drupal.org/project/email_contact/issues/3397818": "resources/patch/php/drupal/email_contact/3397818.patch",
+                "Make ContactForm's variable protected @see https://www.drupal.org/project/email_contact/issues/3427650":  "resources/patch/php/drupal/email_contact/3427650.patch"
             },
             "drupal/entityqueue": {
                 "Undefined array key \"add_more\" @see https://www.drupal.org/project/entityqueue/issues/3388852": "resources/patch/php/drupal/entityqueue/3388852.diff"
