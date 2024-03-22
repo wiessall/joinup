@@ -378,3 +378,81 @@ function joinup_rdf_deploy_110405(array &$sandbox): string {
   $sandbox['#finished'] = (int) empty($sandbox['document_to_licence']);
   return "Converted {$sandbox['progress']} out of {$sandbox['total']} documents";
 }
+
+/**
+ * Import EIF data.
+ */
+function joinup_rdf_deploy_110406(array &$sandbox): string {
+  $map = [
+    'http://data.europa.eu/eif/Layer' => 'eif_layer',
+    'http://data.europa.eu/eif/Model' => 'eif_model',
+    'http://data.europa.eu/eif/Principle' => 'eif_principle',
+    'http://data.europa.eu/eif/Recommendation' => 'eif_recommendation',
+    'http://joinup.eu/rdf_meta_entity/fields/type' => 'eif_solution_type',
+    'http://purl.org/dc/terms/description' => 'eif_description',
+  ];
+  $refs = ['eif_layer', 'eif_principle', 'eif_model', 'eif_solution_type'];
+  $storage = \Drupal::entityTypeManager()->getStorage('meta_entity');
+
+  if (!isset($sandbox['eif'])) {
+    $fileSystem = \Drupal::getContainer()->get('file_system');
+    $sandbox['eif'] = Json::decode(file_get_contents('private://eif'));
+    $fileSystem->unlink('private://eif');
+    $sandbox['eif_wrapper'] = Json::decode(file_get_contents('private://eif_wrapper'));
+    $fileSystem->unlink('private://eif_wrapper');
+    $sandbox['total'] = count($sandbox['eif']);
+    $sandbox['progress'] = 0;
+  }
+
+  $count = 0;
+  while ($sandbox['eif'] && $count < 25) {
+    $uri = key($sandbox['eif']);
+    $data = current($sandbox['eif']);
+    unset($sandbox['eif'][$uri]);
+
+    $values = [
+      'type' => 'eif_perspective',
+      'target' => [
+        'target_type' => 'rdf_entity',
+        'target_id' => $data['http://joinup.eu/rdf_meta_entity/fields/target_id'][0]['value'],
+      ],
+    ];
+    foreach ($data as $predicate => $objects) {
+      if (isset($map[$predicate])) {
+        $fieldName = $map[$predicate];
+        foreach ($objects as $object) {
+          $value = $object['value'];
+          if (in_array($fieldName, $refs, TRUE)) {
+            // Term reference.
+            $value = MappedTerm::loadByUri($value)->id();
+          }
+          if ($fieldName === 'eif_description') {
+            // Formatted text needs a format.
+            $value = ['value' => $value, 'format' => 'basic_html'];
+          }
+          // Recommendation values were stored in eif_wrapper entity types.
+          if ($fieldName === 'eif_recommendation' && isset($sandbox['eif_wrapper'][$value])) {
+            $targetUri = $sandbox['eif_wrapper'][$value]['http://data.europa.eu/eif/adms/qualifier'][0]['value'] ?? NULL;
+            if (!$targetUri) {
+              // This recommendation is missing mandatory term reference URI.
+              continue;
+            }
+            $value = [
+              'target_id' => MappedTerm::loadByUri($targetUri)->id(),
+              'value' => $sandbox['eif_wrapper'][$value]['http://purl.org/dc/terms/description'][0]['value'] ?? '',
+              'format' => 'basic_html',
+            ];
+          }
+          $values[$fieldName][] = $value;
+        }
+      }
+    }
+    $storage->create($values)->save();
+
+    $sandbox['progress']++;
+    $count++;
+  }
+
+  $sandbox['#finished'] = (int) empty($sandbox['eif']);
+  return "Processed {$sandbox['progress']} out of {$sandbox['total']} EIF items";
+}
