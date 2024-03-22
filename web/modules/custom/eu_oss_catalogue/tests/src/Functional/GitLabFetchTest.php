@@ -74,7 +74,7 @@ class GitLabFetchTest extends FetchTestBase {
       ],
     ]);
     $config->save();
-    $this->fetchSolutions('hosting_platform:gitlab_self_hosted_wrong', 0);
+    $this->fetchSolutions('hosting_platform:gitlab_self_hosted_wrong', -1);
 
     $this->assertEquals(
       [

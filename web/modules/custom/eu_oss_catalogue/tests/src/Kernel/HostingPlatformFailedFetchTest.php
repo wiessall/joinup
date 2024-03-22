@@ -6,10 +6,12 @@ namespace Drupal\Tests\eu_oss_catalogue\Kernel;
 
 use Drupal\Core\Config\Entity\ConfigEntityStorageInterface;
 use Drupal\Core\Logger\LoggerChannelInterface;
+use Drupal\Core\Queue\QueueInterface;
 use Drupal\Core\Site\Settings;
 use Drupal\KernelTests\KernelTestBase;
 use Drupal\Tests\eu_oss_catalogue\Traits\LoggerTestTrait;
 use Drupal\Tests\eu_oss_catalogue\Traits\SimpleResponseMockTrait;
+use Drupal\eu_oss_catalogue\EuOssCatalogueInterface;
 use Drupal\eu_oss_catalogue\EuOssCataloguePluginManagerInterface;
 use Drupal\eu_oss_catalogue\EuOssCatalogueProviderInterface;
 use Drupal\eu_oss_catalogue\Exception\HostingPlatformFetchException;
@@ -28,6 +30,7 @@ class HostingPlatformFailedFetchTest extends KernelTestBase implements LoggerCha
    */
   protected static $modules = [
     'eu_oss_catalogue',
+    'system',
   ];
 
   /**
@@ -146,6 +149,25 @@ class HostingPlatformFailedFetchTest extends KernelTestBase implements LoggerCha
         ],
       ],
     ];
+  }
+
+  /**
+   * Verifies that cleanup task isn't queued if provider fails to fetch.
+   */
+  public function testNoCleanupQueued(): void {
+    // Queue is empty before fetch.
+    $euOssCatalogueQueue = $this->container->get('queue')->get('eu_oss_catalogue');
+    $this->assertInstanceOf(QueueInterface::class, $euOssCatalogueQueue);
+    $this->assertSame(0, $euOssCatalogueQueue->numberOfItems());
+
+    // Fetch Developers Italia. Mock returns 500 responses, so we expect no
+    // parsed solutions.
+    $euOssCatalogue = $this->container->get('eu_oss_catalogue');
+    $this->assertInstanceOf(EuOssCatalogueInterface::class, $euOssCatalogue);
+    $euOssCatalogue->fetch('developers_italia');
+
+    // Queue must be still empty.
+    $this->assertSame(0, $euOssCatalogueQueue->numberOfItems());
   }
 
   /**
