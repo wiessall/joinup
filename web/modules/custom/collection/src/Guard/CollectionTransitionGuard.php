@@ -47,7 +47,8 @@ class CollectionTransitionGuard implements GuardInterface {
       }
     }
 
-    return $this->allowedByPermission($transition, $workflow, $entity, FALSE, FALSE);
+    // Pass the entity itself as the group to check for group member access.
+    return $this->allowedByPermission($transition, $workflow, $entity, FALSE, TRUE, $entity);
   }
 
 }
