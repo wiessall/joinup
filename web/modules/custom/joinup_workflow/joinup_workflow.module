@@ -9,7 +9,6 @@ declare(strict_types=1);
 
 use Drupal\Component\Render\MarkupInterface;
 use Drupal\Core\Entity\EntityInterface;
-use Drupal\Core\Entity\EntityPublishedInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Field\BaseFieldDefinition;
 use Drupal\Core\Form\FormStateInterface;
@@ -18,7 +17,6 @@ use Drupal\Core\Url;
 use Drupal\collection\Entity\CollectionInterface;
 use Drupal\joinup_community_content\Entity\CommunityContentInterface;
 use Drupal\joinup_workflow\ArchivableEntityInterface;
-use Drupal\joinup_workflow\EntityWorkflowStateInterface;
 use Drupal\solution\Entity\SolutionInterface;
 
 /**
@@ -152,7 +150,7 @@ function joinup_workflow_motivation_form_validate(array &$form, FormStateInterfa
   // approve the changes (= 'Propose changes'). A motivation is only required in
   // the first case.
   if ($transition->getId() === 'propose_new_revision') {
-    $required = $entity->isTargetWorkflowStateAllowed('published', 'published');
+    $required = $entity->isTransitionAllowed('publish');
   }
 
   if ($required && empty($form_state->getValue('transition_motivation'))) {

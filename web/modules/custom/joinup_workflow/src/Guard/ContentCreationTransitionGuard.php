@@ -42,7 +42,7 @@ class ContentCreationTransitionGuard implements GuardInterface {
     }
 
     $permissionString = sprintf('create content for %s option', $group->getContentCreators());
-    return $this->currentUser->hasPermission($permissionString) || $group->hasGroupPermission((int) $this->currentUser->id(), $permissionString);
+    return $this->currentUser->hasPermission($permissionString) || $group->hasGroupPermission($this->currentUser->id(), $permissionString);
   }
 
 }

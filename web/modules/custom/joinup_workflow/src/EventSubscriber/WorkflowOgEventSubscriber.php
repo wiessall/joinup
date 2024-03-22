@@ -13,7 +13,6 @@ use Drupal\og\Event\GroupContentEntityOperationAccessEventInterface;
 use Drupal\og\Event\PermissionEventInterface;
 use Drupal\og\GroupContentOperationPermission;
 use Drupal\og\MembershipManagerInterface;
-use Drupal\user\EntityOwnerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
@@ -53,6 +52,29 @@ final class WorkflowOgEventSubscriber implements EventSubscriberInterface {
   }
 
   /**
+   * Provides permission for the 'contact_information' group content.
+   *
+   * Contact information are not group content but there are some cases we are
+   * handling it as such, e.g. when facilitators are able to delete the ones
+   * referred by their group. Define permissions used by OG roles and are not
+   * defined by the OG module.
+   *
+   * @param \Drupal\og\Event\PermissionEventInterface $event
+   *   The OG permission event.
+   */
+  public function contactInformationPermissionProvider(PermissionEventInterface $event): void {
+    $permission = new GroupContentOperationPermission([
+      'name' => 'delete any contact_information rdf_entity',
+      'title' => $this->t('Edit contact information'),
+      'entityType' => 'node',
+      'bundle' => 'contact_information',
+      'operation' => 'edit contact information',
+    ]);
+
+    $event->setPermission($permission);
+  }
+
+  /**
    * Alters permission depending on the 'Content Creation' group field.
    *
    * @param \Drupal\og\Event\PermissionEventInterface $event
@@ -76,29 +98,6 @@ final class WorkflowOgEventSubscriber implements EventSubscriberInterface {
         $event->setPermission($permission);
       }
     }
-  }
-
-  /**
-   * Provides permission for the 'contact_information' group content.
-   *
-   * Contact information are not group content but there are some cases we are
-   * handling it as such, e.g. when facilitators are able to delete the ones
-   * referred by their group. Define permissions used by OG roles and are not
-   * defined by the OG module.
-   *
-   * @param \Drupal\og\Event\PermissionEventInterface $event
-   *   The OG permission event.
-   */
-  public function contactInformationPermissionProvider(PermissionEventInterface $event): void {
-    $permission = new GroupContentOperationPermission([
-      'name' => 'delete any contact_information rdf_entity',
-      'title' => $this->t('Edit contact information'),
-      'entityType' => 'node',
-      'bundle' => 'contact_information',
-      'operation' => 'edit contact information',
-    ]);
-
-    $event->setPermission($permission);
   }
 
   /**
@@ -135,8 +134,8 @@ final class WorkflowOgEventSubscriber implements EventSubscriberInterface {
       return;
     }
 
-    $hasOwnAccess = $entity->getOwnerId() === $user->id() && $group->hasGroupPermission((int) $user->id(), $ownPermission);
-    $hasAnyAccess = $group->hasGroupPermission((int) $user->id(), $anyPermission);
+    $hasOwnAccess = $entity->getOwnerId() === $user->id() && $group->hasGroupPermission($user->id(), $ownPermission);
+    $hasAnyAccess = $group->hasGroupPermission($user->id(), $anyPermission);
 
     // We only need to check pre-moderated groups as for post-moderated groups
     // the user can delete the content depending only on the permission. If the
@@ -204,18 +203,15 @@ final class WorkflowOgEventSubscriber implements EventSubscriberInterface {
       return;
     }
 
-    // @todo Inject the service.
-    $this->ogAccess = \Drupal::service('og.access');
-
     // Check if the user has group level permission to view all revisions, or
     // view revisions for the bundle of the group content.
+    /** @var \Drupal\joinup_group\Entity\GroupInterface $group */
     $group = $event->getGroup();
-    $result = $this->ogAccess->userAccess($group, 'view all revisions', $account)
-      ->orIf($this->ogAccess->userAccess($group, $bundle_permission, $account));
+    $result = $group->getGroupAccess('view all revisions', $account)->orIf($group->getGroupAccess($bundle_permission, $account));
 
     // If the user owns the entity, check if they can 'view own revisions'.
-    if (!$result->isAllowed() && (int) $content->getOwnerId() === (int) $account->id()) {
-      $result = $result->orIf($this->ogAccess->userAccess($group, 'view own revisions', $account));
+    if (!$result->isAllowed() && (int) $content->getOwnerId() == $account->id()) {
+      $result = $result->orIf($group->getGroupAccess('view own revisions', $account));
     }
 
     // If neither of the access checks are allowed, we have no opinion.

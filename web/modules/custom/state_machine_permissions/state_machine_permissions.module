@@ -22,7 +22,7 @@ function state_machine_permissions_rdf_entity_create_access(AccountInterface $ac
   if (in_array($entity_bundle, $ignored_bundles)) {
     return AccessResult::neutral();
   }
-  if (empty($context['group']) && $entity_bundle !== 'collection') {
+  if (empty($context['group'])) {
     return AccessResult::forbidden('Cannot create RDF entities outside a group context.');
   }
 
@@ -46,7 +46,7 @@ function state_machine_permissions_node_create_access(AccountInterface $account,
   }
 
   if (empty($context['group'])) {
-    return AccessResult::forbidden('Cannot create entities outside a group context.');
+    return AccessResult::forbidden('Cannot create content entities outside a group context.');
   }
 
   $workflow_helper = \Drupal::getContainer()->get('joinup_workflow.workflow_helper');

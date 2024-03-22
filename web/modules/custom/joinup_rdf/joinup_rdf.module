@@ -57,7 +57,7 @@ function joinup_rdf_entity_create_access(AccountInterface $account, array $conte
   }
 
   $group = $context['group'];
-  if (!$group->hasGroupPermission((int) $account->id(), "create $bundle rdf entity")) {
+  if (!$group->hasGroupPermission($account->id(), "create $bundle rdf entity")) {
     return AccessResult::forbidden();
   }
 

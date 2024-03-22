@@ -140,51 +140,6 @@ class WorkflowHelper implements WorkflowHelperInterface {
   }
 
   /**
-   * {@inheritdoc}
-   *
-   * @todo This should be removed.
-   */
-  public function userHasOwnAnyRoles(EntityInterface $entity, AccountInterface $account, array $roles): bool {
-    $own = $entity->getOwnerId() === $account->id();
-    if (isset($roles['any']) && $this->userHasRoles($entity, $account, $roles['any'])) {
-      return TRUE;
-    }
-    if ($own && isset($roles['own']) && $this->userHasRoles($entity, $account, $roles['own'])) {
-      return TRUE;
-    }
-
-    return FALSE;
-  }
-
-  /**
-   * {@inheritdoc}
-   *
-   * @todo This should be removed.
-   */
-  public function userHasRoles(EntityInterface $entity, AccountInterface $account, array $roles): bool {
-    $parent = $this->getEntityParent($entity);
-    if (empty($parent)) {
-      return FALSE;
-    }
-
-    $membership = $this->membershipManager->getMembership($parent, $account->id());
-
-    // First check the 'any' permissions.
-    if (isset($roles['roles'])) {
-      if (array_intersect($account->getRoles(), $roles['roles'])) {
-        return TRUE;
-      }
-    }
-    if (isset($roles['og_roles']) && !empty($membership)) {
-      if (array_intersect($membership->getRolesIds(), $roles['og_roles'])) {
-        return TRUE;
-      }
-    }
-
-    return FALSE;
-  }
-
-  /**
    * Helper method to retrieve the parent of the entity.
    *
    * @param \Drupal\Core\Entity\EntityInterface $entity
@@ -200,22 +155,6 @@ class WorkflowHelper implements WorkflowHelperInterface {
     }
 
     return reset($groups['rdf_entity']);
-  }
-
-  /**
-   * {@inheritdoc}
-   *
-   * @todo This should be moved to a separate service or use og_access??? Unless
-   *    it creates an infinite loop.
-   */
-  public function hasOgPermission(string $permission, EntityInterface $group, AccountInterface $user): bool {
-    $actualPermissions = [];
-    if ($membership = $this->membershipManager->getMembership($group, $user->id())) {
-      foreach ($membership->getRoles() as $role) {
-        $actualPermissions = array_merge($actualPermissions, $role->getPermissions());
-      }
-    }
-    return in_array($permission, array_unique($actualPermissions));
   }
 
   /**

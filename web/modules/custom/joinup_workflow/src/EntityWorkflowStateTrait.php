@@ -70,33 +70,35 @@ trait EntityWorkflowStateTrait {
 
   /**
    * {@inheritdoc}
-   *
-   * // @todo Can this be converted to check for transitions instead?
    */
   public function isTargetWorkflowStateAllowed(string $to_state, ?string $from_state = NULL): bool {
     // Default the "from state" to the current workflow state.
     $from_state = $from_state ?? $this->getWorkflowState();
-
-    // If the "from" and "to" state are different, this state change is governed
-    // by a transition. If no transition exists then the update is not allowed.
-    $allowed_transitions = array_filter($this->getWorkflow()->getAllowedTransitions($from_state, $this), function (WorkflowTransition $transition) use ($to_state) {
-      return $transition->getToState()->getId() === $to_state;
-    });
-    return !empty($allowed_transitions);
+    $transition = $this->getWorkflow()->findTransition($from_state, $to_state);
+    return $this->isTransitionAllowed($transition->getId());
   }
 
   /**
    * {@inheritdoc}
    */
-  public function getTransitions(): array {
+  public function getAllowedTransitions(): array {
     return $this->getWorkflowStateField()->getTransitions();
   }
 
   /**
    * {@inheritdoc}
    */
-  public function hasTransitions(): bool {
-    return (bool) $this->getTransitions();
+  public function hasAllowedTransitions(): bool {
+    return (bool) $this->getAllowedTransitions();
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function isTransitionAllowed(string $transition_id): bool {
+    return in_array($transition_id, array_map(function (WorkflowTransition $transition) {
+      return $transition->getId();
+    }, $this->getAllowedTransitions()));
   }
 
 }
