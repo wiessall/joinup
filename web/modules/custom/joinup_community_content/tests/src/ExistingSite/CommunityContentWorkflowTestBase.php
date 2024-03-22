@@ -236,7 +236,7 @@ abstract class CommunityContentWorkflowTestBase extends JoinupWorkflowExistingSi
             $this->assertFalse($access, $message);
           }
 
-          // Set to a non testing user.
+          // Set to a non testing user so that the `any` permission is tested.
           $content->setOwnerId(1);
           $allowed_roles = array_keys($ownership_data['any']);
           $non_allowed_roles = array_diff($test_roles, $allowed_roles);
