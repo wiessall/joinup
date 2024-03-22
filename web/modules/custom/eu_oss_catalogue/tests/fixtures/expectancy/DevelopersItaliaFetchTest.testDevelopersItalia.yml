@@ -27,8 +27,7 @@ GitHub solution 1:
       - web
     oss_publiccode_yml_version: '0.2'
     oss_release_date: '2017-05-01'
-    oss_software_type:
-      - standalone/web
+    oss_software_type: standalone/web
     oss_software_version: '1.4'
     oss_source:
       - developers_italia
@@ -188,8 +187,7 @@ GitHub solution 2:
       - research
       - science-and-technology
       - security
-    oss_software_type:
-      - library
+    oss_software_type: library
     oss_software_version: 'v2.3.4'
     oss_source:
       - developers_italia
@@ -236,8 +234,7 @@ GitHub solution 2:
       - research
       - science-and-technology
       - security
-    oss_software_type:
-      - library
+    oss_software_type: library
     oss_software_version: 'v2.3.4'
     oss_source:
       - developers_italia

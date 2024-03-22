@@ -106,7 +106,7 @@ function joinup_core_update_110300(): void {
 }
 
 /**
- * Pre-creates oss_category, oss_licence and intended_audience_scope vocabs.
+ * Pre-creates OSS vocabularies.
  */
 function joinup_core_update_110301(): void {
   // Pre-create the new controlled vocabularies provided by eu_oss_catalogue
@@ -114,7 +114,7 @@ function joinup_core_update_110301(): void {
   // goes first and its install process is also populating them with terms, so
   // they should be available at that point.
   $config_factory = \Drupal::configFactory();
-  foreach (['category', 'licence', 'intended_audience_scope'] as $vocab) {
+  foreach (['category', 'licence', 'intended_audience_scope', 'software_type'] as $vocab) {
     $configs = [
       'taxonomy.vocabulary',
       'sparql_entity_storage.mapping.taxonomy_term',
