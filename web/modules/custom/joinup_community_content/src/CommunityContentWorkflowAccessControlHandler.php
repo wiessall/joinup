@@ -80,6 +80,9 @@ class CommunityContentWorkflowAccessControlHandler {
     }
 
     switch ($operation) {
+      case 'view':
+        return $this->entityViewAccess($content, $account);
+
       case 'update':
         return $this->entityUpdateAccess($content, $account);
 
@@ -99,6 +102,41 @@ class CommunityContentWorkflowAccessControlHandler {
         if ($membership instanceof OgMembership) {
           return AccessResult::allowedIf($membership->hasPermission($operation));
         }
+    }
+
+    return AccessResult::neutral();
+  }
+
+  /**
+   * Access check for the 'view' operation.
+   *
+   * @param \Drupal\joinup_community_content\Entity\CommunityContentInterface $content
+   *   The group content entity.
+   * @param \Drupal\Core\Session\AccountInterface $account
+   *   The user account.
+   *
+   * @return \Drupal\Core\Access\AccessResultInterface
+   *   The access result check.
+   */
+  protected function entityViewAccess(CommunityContentInterface $content, AccountInterface $account): AccessResultInterface {
+    if ($this->hasPublishedVersion($content)) {
+      // Published entities are handled by the generic access handler.
+      return AccessResult::neutral();
+    }
+
+    $isOwner = $account->id() === $content->getOwnerId();;
+    if ($account->hasPermission('view any unpublished content')
+      || ($account->id() === $isOwner && $account->hasPermission('view own unpublished content'))) {
+      return AccessResult::allowed();
+    }
+
+    if ($group = $content->getGroup()) {
+      if ($group->hasGroupPermission($account->id(), 'view any unpublished content')) {
+        return AccessResult::allowed();
+      }
+      elseif ($isOwner && $group->hasGroupPermission($account->id(), 'view own unpublished content')) {
+        return AccessResult::allowed();
+      }
     }
 
     return AccessResult::neutral();

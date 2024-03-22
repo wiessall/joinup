@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 use Drupal\Component\Render\MarkupInterface;
 use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Entity\EntityPublishedInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Field\BaseFieldDefinition;
 use Drupal\Core\Form\FormStateInterface;
@@ -17,6 +18,7 @@ use Drupal\Core\Url;
 use Drupal\collection\Entity\CollectionInterface;
 use Drupal\joinup_community_content\Entity\CommunityContentInterface;
 use Drupal\joinup_workflow\ArchivableEntityInterface;
+use Drupal\joinup_workflow\EntityWorkflowStateInterface;
 use Drupal\solution\Entity\SolutionInterface;
 
 /**
@@ -260,5 +262,40 @@ function joinup_workflow_entity_presave(EntityInterface $entity) {
   // Prevent changes to update date in case we archive or unarchive entity.
   if ($entity->isArchived() || $entity->original->isArchived()) {
     $entity->set('changed', $entity->original->get('changed')->getValue());
+  }
+}
+
+/**
+ * Implements hook_entity_create().
+ */
+function joinup_workflow_entity_create(EntityInterface $entity) {
+  // Since the state_machine module does not support same from-to state
+  // transitions, the transition events also don't fire. Normally, the
+  // transition event would be the one to decide whether the entity would be
+  // published or not, this is not happening for new entities.
+  // In Joinup, we do not create any entity with an initial state but for
+  // testing, it is necessary to setup the initial status automatically
+  // depending on the initial state that is passed into the entity.
+  // @see: \Drupal\state_machine\Plugin\Field\FieldType\StateItem::preSave
+  if ($entity instanceof EntityPublishedInterface && $entity instanceof EntityWorkflowStateInterface) {
+    try {
+      /** @var \Drupal\joinup_workflow\WorkflowHelperInterface $workflow_helper */
+      $workflow_helper = \Drupal::service('joinup_workflow.workflow_helper');
+      $workflow = $entity->getWorkflow();
+      $state_id = $entity->getWorkflowState();
+      if ($workflow && $workflow_helper->isWorkflowStatePublished($state_id, $workflow)) {
+        $entity->setPublished();
+      }
+      else {
+        $entity->setUnpublished();
+      }
+    }
+    catch (\UnexpectedValueException $exception) {
+      // In some circumstances, such as in field_config entity form, an
+      // arbitrary entity is created, used by the 'default value' widget, so an
+      // ID is not available, leading to an exception.
+      // @see \Drupal\field_ui\Form\FieldConfigEditForm::form()
+      // @see _field_create_entity_from_ids()
+    }
   }
 }
