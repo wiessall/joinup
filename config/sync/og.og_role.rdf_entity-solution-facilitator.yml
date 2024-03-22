@@ -39,7 +39,7 @@ permissions:
   - 'delete any event content'
   - 'delete any glossary content'
   - 'delete any news content'
-  - 'delete asset_distribution rdf entity'
+  - 'delete any asset_distribution rdf entity'
   - 'delete paragraph content github_feed'
   - 'delete paragraph content json_map'
   - 'edit any asset_distribution rdf entity'

@@ -32,10 +32,10 @@ index 0b8c14a3acef605c482aecc7cdc5c4c8fbb4a647..a046941bc5bbe2a184dddcd422cc054c
          }
  
 diff --git a/src/RdfPermissions.php b/src/RdfPermissions.php
-index 1e1e9de7a69121bcc4faf1a48b9e7c066dea5885..33517ae7981f7fdaa11bbedd362f4af7c549e36a 100644
+index 1e1e9de7a69121bcc4faf1a48b9e7c066dea5885..451666b21b7cdf43044b79764176465519773057 100644
 --- a/src/RdfPermissions.php
 +++ b/src/RdfPermissions.php
-@@ -50,7 +50,7 @@ class RdfPermissions {
+@@ -50,13 +50,13 @@ class RdfPermissions {
        "edit own $type_id rdf entity" => [
          'title' => $this->t('%type_name: Edit own rdf entity', $type_params),
        ],
@@ -44,3 +44,10 @@ index 1e1e9de7a69121bcc4faf1a48b9e7c066dea5885..33517ae7981f7fdaa11bbedd362f4af7
          'title' => $this->t('%type_name: Edit any rdf entity', $type_params),
        ],
        "delete own $type_id rdf entity" => [
+         'title' => $this->t('%type_name: Delete own rdf entity', $type_params),
+       ],
+-      "delete $type_id rdf entity" => [
++      "delete any $type_id rdf entity" => [
+         'title' => $this->t('%type_name: Delete any rdf entity', $type_params),
+       ],
+     ];
