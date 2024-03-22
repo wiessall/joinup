@@ -57,7 +57,9 @@ function joinup_rdf_entity_create_access(AccountInterface $account, array $conte
   }
 
   $group = $context['group'];
-  if (!$group->hasGroupPermission($account->id(), "create $bundle rdf entity")) {
+  // Note: The OG structure of the permission is used instead of the RDF entity.
+  // That is why it is `rdf_entity` and not `rdf entity`.
+  if (!$group->hasGroupPermission($account->id(), "create $bundle rdf_entity")) {
     return AccessResult::forbidden();
   }
 
@@ -68,10 +70,9 @@ function joinup_rdf_entity_create_access(AccountInterface $account, array $conte
     'rid' => $bundle,
   ]);
 
-  // If the entity does not have a workflow, the create permission above
-  // suffices.
+  // If the entity does not have a workflow, do not run a check.
   if (!($entity instanceof EntityWorkflowStateInterface)) {
-    return AccessResult::allowed();
+    return AccessResult::neutral();
   }
 
   $entity->setGroup($group);

@@ -53,8 +53,7 @@ node:pre_moderated:
     # transition will be shown as "Request changes". If a content author
     # proposes a new revision then it will be labeled "Propose changes".
     # Here we only need to provide the 'Propose changes' transition since a
-    # facilitator is not subject to moderation, and its workflow is
-    # automatically set to post-moderated.
+    # facilitator is not subject to moderation, and can publish directly.
     # @see joinup_community_content_workflow_selector()
     propose_new_revision:
       label: 'Propose changes'

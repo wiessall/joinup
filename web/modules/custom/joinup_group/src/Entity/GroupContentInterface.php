@@ -25,7 +25,7 @@ interface GroupContentInterface extends ContentEntityInterface {
   public function hasGroup(): bool;
 
   /**
-   * Returns the group to which this entity belongs.
+   * Returns the group to which this entity belongs to.
    *
    * @return \Drupal\joinup_group\Entity\GroupInterface
    *   The parent group.

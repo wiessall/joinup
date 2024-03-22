@@ -8,6 +8,7 @@ use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\joinup_workflow\TransitionGuardTrait;
 use Drupal\rdf_entity_provenance\ProvenanceHelperInterface;
+use Drupal\solution\Entity\SolutionInterface;
 use Drupal\state_machine\Guard\GuardInterface;
 use Drupal\state_machine\Plugin\Workflow\WorkflowInterface;
 use Drupal\state_machine\Plugin\Workflow\WorkflowTransition;
@@ -37,6 +38,12 @@ class SolutionFulfillmentGuard implements GuardInterface {
    * {@inheritdoc}
    */
   public function allowed(WorkflowTransition $transition, WorkflowInterface $workflow, EntityInterface $entity): bool {
+    if (!$entity instanceof SolutionInterface) {
+      // TRUE is also used as neutral for transition guards as they are looping
+      // over all guards until one returns FALSE.
+      return TRUE;
+    }
+
     // Federated solutions cannot have the `archive` and `unarchived`
     // transitions applied.
     if (in_array($transition->getId(), ['archive', 'unarchive'], TRUE) && $this->isFederated($entity)) {
