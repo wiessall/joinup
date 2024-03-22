@@ -179,7 +179,6 @@ permissions:
   - 'use text format text_html'
   - 'use text format webform_default'
   - 'view compatibility documents'
-  - 'view eif wrapper entity'
   - 'view eif_perspective meta-entity'
   - 'view media'
   - 'view own unpublished content'

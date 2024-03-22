@@ -46,7 +46,6 @@ permissions:
   - 'use text format plain_text_glossary'
   - 'use text format simple_text'
   - 'view compatibility documents'
-  - 'view eif wrapper entity'
   - 'view eif_perspective meta-entity'
   - 'view like_node'
   - 'view like_rdf_entity'
