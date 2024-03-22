@@ -197,8 +197,8 @@ abstract class ContactInformationFormBase extends ContactForm {
         '@extensions' => $extensions,
       ]),
       '#upload_validators' => [
-        'file_validate_extensions' => [$extensions],
-        'file_validate_size' => [$maxFilesize],
+        'FileExtension' => ['extensions' => $extensions],
+        'FileSizeLimit' => ['fileLimit' => $maxFilesize],
       ],
       '#weight' => 7,
     ];
@@ -294,9 +294,9 @@ abstract class ContactInformationFormBase extends ContactForm {
     }
 
     $message = <<<MESSAGE
-        Name: {$params['name']} <br/> 
+        Name: {$params['name']} <br/>
         Organization: {$params['organization']} <br />
-        Email: $reply_to <br/> 
+        Email: $reply_to <br/>
         Type of support: {$params['type']} <br />
         Message:  {$form_state->getValue('message')} <br />
         MESSAGE;
