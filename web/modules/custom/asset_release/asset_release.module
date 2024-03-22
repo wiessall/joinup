@@ -182,9 +182,12 @@ function asset_release_rdf_entity_access(EntityInterface $release, $operation, A
     return AccessResult::forbidden();
   }
 
-  // Allow users with the OG permission to view unpublished rdf entities to view
-  // unpublished releases.
-  return AccessResult::allowedIf($parent->hasGroupPermission($account->id(), 'view unpublished rdf entities'));
+  // Allow access depending to the publication status and the corresponding
+  // permission in the group.
+  return AccessResult::allowedIf(
+    (!$release->isPublished() && !$parent->hasGroupPermission($account->id(), 'view unpublished rdf entities'))
+    || ($release->isPublished() && $parent->hasGroupPermission($account->id(), 'view unpublished rdf entities'))
+  );
 }
 
 /**
