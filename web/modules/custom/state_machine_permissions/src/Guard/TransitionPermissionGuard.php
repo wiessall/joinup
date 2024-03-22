@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Drupal\state_machine_permissions\Guard;
 
-use Drupal\contact_information\Entity\ContactInformationInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Session\AccountInterface;
+use Drupal\contact_information\Entity\ContactInformationInterface;
 use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\joinup_workflow\WorkflowHelper;
 use Drupal\owner\Entity\OwnerInterface;
@@ -52,7 +52,7 @@ class TransitionPermissionGuard implements GuardInterface {
       if ($entity->bundle() === 'collection' && $entity->isNew()) {
         // Look for the 'own' permission on the collection.
         // @todo Add a comment here that we assume ownership for new collections
-        //     in order to differentiate from when the entity is not new.
+        //   in order to differentiate from when the entity is not new.
         $permission = StateMachinePermissionStringConstructor::constructTransitionPermission($workflow, $transition, 'own');
         if ($this->currentUser->hasPermission($permission)) {
           return TRUE;

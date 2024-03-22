@@ -37,7 +37,6 @@ class SolutionAffiliationTest extends KernelTestBase {
     'system',
     'taxonomy',
     'user',
-    'workflow_state_permission',
   ];
 
   /**

@@ -12,8 +12,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 /**
  * Dynamic permissions provider.
  */
-class
-StateMachinePermissions implements ContainerInjectionInterface {
+class StateMachinePermissions implements ContainerInjectionInterface {
 
   use StringTranslationTrait;
 

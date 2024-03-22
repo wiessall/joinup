@@ -1,14 +1,9 @@
 services:
   joinup_workflow.workflow_helper:
     class: Drupal\joinup_workflow\WorkflowHelper
-    arguments: ['@current_user', '@account_switcher', '@entity_field.manager', '@og.membership_manager', '@workflow_state_permission.workflow_state_permission', '@entity_type.manager', '@datetime.time']
-  # @todo This probably needs to be removed.
-  joinup_workflow.unchanged_workflow_state:
-    class: Drupal\joinup_workflow\EventSubscriber\EntityUnchangedWorkflowState
-    arguments: ['@entity_type.manager']
-    tags:
-      - { name: event_subscriber }
-  joinup_workflow.workflow_og_access_subscriber:
+    arguments: ['@current_user', '@account_switcher', '@entity_field.manager', '@og.membership_manager', '@entity_type.manager', '@datetime.time']
+  joinup_workflow.workflow_og_subscriber:
+    # Provides access and permissions event handling related to the workflows.
     class: Drupal\joinup_workflow\EventSubscriber\WorkflowOgEventSubscriber
     arguments: ['@entity_type.manager', '@current_user', '@og.membership_manager']
     tags:

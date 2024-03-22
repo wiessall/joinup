@@ -58,7 +58,6 @@ final class WorkflowOgEventSubscriber implements EventSubscriberInterface {
    * @param \Drupal\og\Event\PermissionEventInterface $event
    *   The OG permission event.
    */
-  // @todo Move this to a permission provider subscriber.
   public function contentCreationAlterPermissionEvent(PermissionEventInterface $event): void {
     $options = ['any_user', 'only_members', 'facilitators_and_authors'];
     foreach ($options as $option) {
@@ -114,7 +113,8 @@ final class WorkflowOgEventSubscriber implements EventSubscriberInterface {
    *   The OG group content entity operation access event.
    */
   public function ownerDeleteAccess(GroupContentEntityOperationAccessEventInterface $event): void {
-    if ($event->getOperation() !== 'delete') {
+    if ($event->getOperation() !== 'delete'
+      || !is_subclass_of($event->getGroupContent(), CommunityContentInterface::class)) {
       return;
     }
 
@@ -126,17 +126,12 @@ final class WorkflowOgEventSubscriber implements EventSubscriberInterface {
     $anyPermission = 'delete any ' . $entity->bundle() . ' content';
 
     // Unfortunately, because og allows access by default when the user has the
-    // permission to delete their own content - so we deny access if the content
-    // is not in the desired states, we have to first check if the user has the
+    // permission to delete their own content (we deny access if the content is
+    // not in the desired states), we have to first check if the user has the
     // global permission to delete the content so that we don't deny e.g. to
     // a moderator that is also the owner of the content.
     if ($user->hasPermission('delete any ' . $entity->bundle() . ' content')) {
-      return;
-    }
-
-    // Only act on entities that have an owner. Cases, like the navigation menu
-    // items, do not have an owner.
-    if (!$entity instanceof EntityOwnerInterface) {
+      // Access will already be granded by OG.
       return;
     }
 
