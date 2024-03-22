@@ -24,7 +24,7 @@ class ContactInformationTransitionGuard implements GuardInterface {
    * @param \Drupal\Core\Session\AccountInterface $currentUser
    *   The current logged in user.
    */
-  public function __construct(AccountInterface $currentUser) {}
+  public function __construct(protected AccountInterface $currentUser) {}
 
   /**
    * {@inheritdoc}
