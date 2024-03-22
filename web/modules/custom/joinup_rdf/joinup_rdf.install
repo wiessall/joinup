@@ -49,6 +49,8 @@ function joinup_rdf_update_110400(): void {
     ->execute();
   // Uninstall rdf_taxonomy.
   \Drupal::service('module_installer')->uninstall(['rdf_taxonomy'], FALSE);
+  // Make available RDF Sync services early.
+  \Drupal::service('module_installer')->install(['rdf_sync']);
 }
 
 /**

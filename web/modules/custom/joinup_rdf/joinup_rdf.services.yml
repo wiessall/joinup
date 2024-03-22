@@ -22,10 +22,8 @@ services:
     arguments: ['@database', '@entity_field.manager']
     tags:
       - { name: event_subscriber }
-
   joinup_rdf.legacy_rdf_url.subscriber:
     class: Drupal\joinup_rdf\EventSubscriber\LegacyRdfUrlSubscriber
-    calls:
-      - [setRdfSyncMapper, ['@?rdf_sync.mapper']]
+    arguments: ['@rdf_sync.mapper']
     tags:
       - { name: event_subscriber }
