@@ -1,7 +1,7 @@
 services:
   contact_information.fulfillment_guard:
     class: Drupal\contact_information\Guard\ContactInformationTransitionGuard
-    arguments: [ '@current_user' ]
+    arguments: ['@current_user']
     tags:
       - { name: state_machine.guard, group: contact_information }
   contact_information.email_confirm:
