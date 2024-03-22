@@ -195,6 +195,15 @@ class EuOssCatalogue implements EuOssCatalogueInterface {
     // Make sure it is not archived.
     $solution->set('oss_archived', 0);
 
+    // Check the schema, log errors.
+    $schemaErrors = $parser->checkSchema($solution);
+    if ($schemaErrors) {
+      $this->logger->warning("Solution @solution contains the following schema errors:\n%errors", [
+        '@solution' => $solution->label(),
+        '%errors' => print_r($schemaErrors, TRUE),
+      ]);
+    }
+
     try {
       $operationResult = $solution->save();
     }

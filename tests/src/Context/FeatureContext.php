@@ -2411,6 +2411,25 @@ class FeatureContext extends RawDrupalContext {
   }
 
   /**
+   * Asserts that an element has an attribute that contains the given value.
+   *
+   * @param string $tag
+   *   Tag name.
+   * @param string $attr_name
+   *   Attribute name.
+   * @param string $attr_value
+   *   Attribute value.
+   *
+   * @Then the :tag element with :attr_name attribute should contain :value
+   */
+  public function assertElementAttributeContains(string $tag, string $attr_name, string $attr_value): void {
+    $element = $this->getSession()->getPage()->find('xpath', "//{$tag}[contains(@$attr_name,'$attr_value')]");
+    if (empty($element)) {
+      throw new \Exception(sprintf('The "%s" element with "%s" attribute value "%s" was found on the page', $tag, $attr_name, $attr_value));
+    }
+  }
+
+  /**
    * Disables cookie consent banner for all tests.
    *
    * @BeforeSuite
