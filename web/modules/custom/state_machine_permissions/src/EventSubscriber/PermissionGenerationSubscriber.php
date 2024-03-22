@@ -53,8 +53,8 @@ class PermissionGenerationSubscriber implements EventSubscriberInterface {
   public static function getSubscribedEvents() {
     return [
       OgPermissionEventInterface::EVENT_NAME => [
-        ['ogGroupStateMachinePermissions'],
-        ['ogGroupContentStateMachineUpdatePermissions'],
+        ['ogGroupStateMachinePermissionProvider'],
+        ['ogTransitionPermissionProvider'],
       ],
     ];
   }
@@ -65,7 +65,7 @@ class PermissionGenerationSubscriber implements EventSubscriberInterface {
    * @param \Drupal\og\Event\PermissionEventInterface $event
    *   The OG permission event.
    */
-  public function ogGroupStateMachinePermissions(OgPermissionEventInterface $event): void {
+  public function ogGroupStateMachinePermissionProvider(OgPermissionEventInterface $event): void {
     // Check if the group has a state field.
     $workflows = $this->permissionsHelper->getPossibleWorkflowsForBundle($event->getGroupEntityTypeId(), $event->getGroupBundleId());
     $permissions = [];
@@ -94,7 +94,7 @@ class PermissionGenerationSubscriber implements EventSubscriberInterface {
    * @param \Drupal\og\Event\PermissionEventInterface $event
    *   The OG permission event.
    */
-  public function ogGroupContentStateMachineUpdatePermissions(OgPermissionEventInterface $event): void {
+  public function ogTransitionPermissionProvider(OgPermissionEventInterface $event): void {
     foreach ($event->getGroupContentBundleIds() as $entity_type_id => $bundles) {
       foreach ($bundles as $bundle) {
         $workflows = $this->permissionsHelper->getPossibleWorkflowsForBundle($entity_type_id, $bundle, []);
@@ -114,6 +114,7 @@ class PermissionGenerationSubscriber implements EventSubscriberInterface {
                 'entityType' => $entity_type_id,
                 'bundle' => $bundle,
                 'operation' => $permission_string,
+                'owner' => $ownership === 'own',
               ]);
             }
           }

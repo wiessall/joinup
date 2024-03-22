@@ -80,7 +80,8 @@ trait EntityWorkflowStateTrait {
     $allowed_transitions = array_filter($this->getWorkflow()->getAllowedTransitions($from_state, $this), function (WorkflowTransition $transition) use ($to_state) {
       return $transition->getToState()->getId() === $to_state;
     });
-    return !empty($allowed_transitions);}
+    return !empty($allowed_transitions);
+  }
 
   /**
    * {@inheritdoc}
