@@ -143,15 +143,8 @@ function eif_entity_bundle_info_alter(array &$bundles): void {
 /**
  * Implements hook_form_FORM_ID_alter().
  */
-function eif_form_rdf_meta_entity_eif_perspective_form_alter(array &$form, FormStateInterface $form_state, string $form_id): void {
-  foreach (Element::children($form) as $name) {
-    if (!empty($form[$name]['widget']['form'])) {
-      // Don't show the EIF Wrapper bundle label as sub-form title.
-      $form[$name]['widget']['form']['#title'] = NULL;
-    }
-  }
-
-  $form['#validate'][] = '_eif_form_rdf_meta_entity_no_empty_field_validate';
+function eif_form_meta_entity_eif_perspective_form_alter(array &$form, FormStateInterface $form_state, string $form_id): void {
+  $form['#validate'][] = '_eif_form_meta_entity_no_empty_field_validate';
 }
 
 /**
@@ -162,7 +155,7 @@ function eif_form_rdf_meta_entity_eif_perspective_form_alter(array &$form, FormS
  * @param \Drupal\Core\Form\FormStateInterface $form_state
  *   The form state object.
  */
-function _eif_form_rdf_meta_entity_no_empty_field_validate(array &$form, FormStateInterface $form_state): void {
+function _eif_form_meta_entity_no_empty_field_validate(array &$form, FormStateInterface $form_state): void {
   // No field is required but the user needs to fill in at least 1 field in the
   // form.
   if (empty($form_state->getValue('field_eif_description')[0]['value'])
@@ -177,23 +170,9 @@ function _eif_form_rdf_meta_entity_no_empty_field_validate(array &$form, FormSta
 }
 
 /**
- * Implements hook_ENTITY_TYPE_create_access().
- */
-function eif_eif_wrapper_create_access(AccountInterface $account, array $context, $entity_bundle): AccessResultInterface {
-  return AccessResult::allowedIf($account->hasPermission('create eif wrapper entity'));
-}
-
-/**
- * Implements hook_ENTITY_TYPE_access().
- */
-function eif_eif_wrapper_access(EntityInterface $entity, string $operation, AccountInterface $account): AccessResultInterface {
-  return AccessResult::allowedIf($account->hasPermission("{$operation} eif wrapper entity"));
-}
-
-/**
  * Implements hook_ENTITY_TYPE_insert().
  */
-function eif_rdf_meta_entity_insert(RdfMetaEntityInterface $entity): void {
+function eif_meta_entity_insert(RdfMetaEntityInterface $entity): void {
   _eif_reindex_parent_solution($entity);
   _eif_add_eif_link_to_group_menus($entity);
 }
@@ -201,14 +180,14 @@ function eif_rdf_meta_entity_insert(RdfMetaEntityInterface $entity): void {
 /**
  * Implements hook_ENTITY_TYPE_update().
  */
-function eif_rdf_meta_entity_update(RdfMetaEntityInterface $entity): void {
+function eif_meta_entity_update(RdfMetaEntityInterface $entity): void {
   _eif_reindex_parent_solution($entity);
 }
 
 /**
  * Implements hook_ENTITY_TYPE_delete().
  */
-function eif_rdf_meta_entity_delete(RdfMetaEntityInterface $entity): void {
+function eif_meta_entity_delete(RdfMetaEntityInterface $entity): void {
   _eif_reindex_parent_solution($entity);
 }
 
