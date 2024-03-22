@@ -186,7 +186,7 @@ function asset_release_rdf_entity_access(EntityInterface $release, $operation, A
   // permission in the group.
   return AccessResult::allowedIf(
     (!$release->isPublished() && $parent->hasGroupPermission($account->id(), 'view unpublished rdf entities'))
-    || ($release->isPublished() && $parent->hasGroupPermission($account->id(), 'view rdf entities'))
+    || ($release->isPublished() && $parent->hasGroupPermission($account->id(), 'view rdf entity'))
   );
 }
 

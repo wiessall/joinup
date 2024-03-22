@@ -40,7 +40,7 @@ class ContactInformationTransitionGuard implements GuardInterface {
     }
 
     $group = $entity->getRelatedGroup();
-    return $this->allowedByPermission($transition, $workflow, $entity, TRUE, TRUE, $group);
+    return $this->allowedByPermission($transition, $workflow, $entity, TRUE, !empty($group), $group);
   }
 
 }
