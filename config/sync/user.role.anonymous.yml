@@ -83,5 +83,4 @@ permissions:
   - 'view paragraph content webform'
   - 'view published sitewide alert entities'
   - 'view rdf entity'
-  - 'view rdf entity'
   - 'view topic meta-entity'
