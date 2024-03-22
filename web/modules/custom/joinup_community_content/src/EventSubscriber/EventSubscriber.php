@@ -12,7 +12,6 @@ use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\joinup_community_content\Entity\CommunityContentInterface;
 use Drupal\joinup_workflow\Event\StateMachineButtonLabelsEventInterface;
 use Drupal\joinup_workflow\Event\UnchangedWorkflowStateUpdateEvent;
-use Drupal\og\Event\GroupContentEntityOperationAccessEventInterface;
 use Drupal\og\Event\PermissionEventInterface as OgPermissionEventInterface;
 use Drupal\og\GroupContentOperationPermission;
 use Drupal\og\GroupPermission;

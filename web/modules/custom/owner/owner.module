@@ -15,9 +15,7 @@ use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\owner\Entity\Owner;
 use Drupal\owner\Entity\OwnerInterface;
-use Drupal\rdf_entity\Entity\Rdf;
 use Drupal\rdf_entity\RdfInterface;
-use Drupal\sparql_entity_storage\Entity\Query\Sparql\SparqlArg;
 
 /**
  * Implements hook_entity_bundle_info_alter().

@@ -21,7 +21,6 @@ use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\og\MembershipManagerInterface;
 use Drupal\state_machine\Plugin\Workflow\WorkflowInterface;
 use Drupal\state_machine\Plugin\Workflow\WorkflowTransition;
-use Drupal\workflow_state_permission\WorkflowStatePermissionInterface;
 use Stringable;
 
 /**
@@ -42,8 +41,6 @@ class WorkflowHelper implements WorkflowHelperInterface {
    *   The entity field manager.
    * @param \Drupal\og\MembershipManagerInterface $membershipManager
    *   The membership manager service.
-   * @param \Drupal\workflow_state_permission\WorkflowStatePermissionInterface $workflowStatePermission
-   *   The workflow state permission service.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
    *   The entity type manager.
    * @param \Drupal\Component\Datetime\TimeInterface $time
@@ -54,7 +51,6 @@ class WorkflowHelper implements WorkflowHelperInterface {
     protected AccountSwitcherInterface $accountSwitcher,
     protected EntityFieldManagerInterface $entityFieldManager,
     protected MembershipManagerInterface $membershipManager,
-    protected WorkflowStatePermissionInterface $workflowStatePermission,
     protected EntityTypeManagerInterface $entityTypeManager,
     protected TimeInterface $time
   ) {}

@@ -4,18 +4,16 @@ declare(strict_types=1);
 
 namespace Drupal\state_machine_permissions;
 
-use Drupal\collection\Entity\CollectionInterface;
-use Drupal\contact_information\Entity\ContactInformationInterface;
 use Drupal\Core\Entity\EntityFieldManagerInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Field\FieldDefinitionInterface;
 use Drupal\Core\Session\AccountInterface;
+use Drupal\collection\Entity\CollectionInterface;
+use Drupal\contact_information\Entity\ContactInformationInterface;
 use Drupal\joinup_group\Entity\GroupContentInterface;
 use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\node\NodeInterface;
 use Drupal\og\OgAccessInterface;
-use Drupal\owner\Entity\OwnerInterface;
-use Drupal\rdf_entity\RdfInterface;
 use Drupal\state_machine\WorkflowGroupManagerInterface;
 use Drupal\state_machine\WorkflowManagerInterface;
 use Drupal\user\EntityOwnerInterface;
@@ -193,7 +191,7 @@ class StateMachinePermissionsHelper implements StateMachinePermissionsHelperInte
    * @return \Drupal\joinup_group\Entity\GroupInterface|null
    *   The related group or NULL if the entity does not belong to a group.
    */
-  function getEntityRelatedGroup(EntityInterface $entity): ?GroupInterface {
+  public function getEntityRelatedGroup(EntityInterface $entity): ?GroupInterface {
     if ($entity instanceof CollectionInterface) {
       return $entity;
     }
