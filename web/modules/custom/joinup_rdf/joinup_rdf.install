@@ -103,10 +103,12 @@ function joinup_rdf_update_110401(): void {
 
   // Make sure we don't keep any stale cache referring entity-type and fields.
   \Drupal::entityTypeManager()->clearCachedDefinitions();
-  \Drupal::service('entity_field.manager')->clearCachedFieldDefinitions();
+  \Drupal::getContainer()->get('entity_type.bundle.info')->clearCachedBundles();
+  \Drupal::getContainer()->get('entity_field.manager')->clearCachedFieldDefinitions();
 
   // Re-install the module on clean w/o dependencies, they're already installed.
   \Drupal::service('module_installer')->install(['taxonomy'], FALSE);
+  \Drupal::service('module_installer')->install(['rdf_sync']);
 }
 
 /**
@@ -162,4 +164,50 @@ function joinup_rdf_update_110404(&$sandbox): string {
   $sandbox['#finished'] = $sandbox['processed'] / $sandbox['total'];
 
   return "Deleted $deletedCount licence aliases ({$sandbox['processed']} / {$sandbox['total']}) total";
+}
+
+/**
+ * Remove EIF perspective data.
+ */
+function joinup_rdf_update_110405(): void {
+  $db = \Drupal::database();
+  $perms = [
+    'create eif wrapper entity',
+    'create eif_perspective rdf-meta-entity',
+    'delete eif wrapper entity',
+    'update eif wrapper entity',
+    'update eif_perspective rdf-meta-entity',
+    'view eif wrapper entity',
+    'view eif_perspective rdf-meta-entity',
+  ];
+  // Anticipate removal of several permissions to avoid errors on config sync.
+  foreach (['anonymous', 'authenticated', 'moderator'] as $rid) {
+    $config = unserialize($db->select('config')
+      ->fields('config', ['data'])
+      ->condition('collection', '')
+      ->condition('name', "user.role.$rid")
+      ->execute()
+      ->fetchField(), ['allowed_classes' => FALSE]);
+    $config['dependencies']['module'] = array_diff($config['dependencies']['module'], ['rdf_meta_entity']);
+    $config['permissions'] = array_diff($config['permissions'], $perms);
+    $db->update('config')
+      ->fields(['data' => serialize($config)])
+      ->condition('collection', '')
+      ->condition('name', "user.role.$rid")
+      ->execute();
+  }
+  \Drupal::configFactory()->reset();
+
+  $store = \Drupal::getContainer()->get('joinup_sparql.graph_store.helper')->createGraphStore();
+  $sparql = \Drupal::getContainer()->get('sparql.endpoint');
+
+  $graphUri = 'http://joinup.eu/rdf_meta_entity/eif_perspective/graph/published';
+  $graph = $store->get($graphUri);
+  file_put_contents('private://eif', Json::encode($graph->toRdfPhp()));
+  $sparql->update("CLEAR GRAPH <$graphUri>");
+
+  $graphUri = 'http://joinup.eu/eif-wrapper/graph/recommendation';
+  $graph = $store->get($graphUri);
+  file_put_contents('private://eif_wrapper', Json::encode($graph->toRdfPhp()));
+  $sparql->update("CLEAR GRAPH <$graphUri>");
 }
