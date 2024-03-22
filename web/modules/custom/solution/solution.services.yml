@@ -14,7 +14,7 @@ services:
     tags:
       - { name: 'cache.context'}
   solution.fulfillment_guard:
-    class: Drupal\solution\Guard\SolutionFulfillmentGuard
+    class: Drupal\solution\Guard\SolutionTransitionGuard
     arguments: ['@current_user', '@rdf_entity_provenance.provenance_helper']
     tags:
       # Priority 5 will set it to be executed before the generic guard of the

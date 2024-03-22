@@ -16,7 +16,7 @@ use Drupal\state_machine\Plugin\Workflow\WorkflowTransition;
 /**
  * Guard class for the transitions of the solution entity.
  */
-class SolutionFulfillmentGuard implements GuardInterface {
+class SolutionTransitionGuard implements GuardInterface {
 
   use TransitionGuardTrait;
 
@@ -50,8 +50,13 @@ class SolutionFulfillmentGuard implements GuardInterface {
       return FALSE;
     }
 
+    // In case the entity is being created, it was initiated through a
+    // collection. Transitions depend on the collection's group permissions. In
+    // case the entity is being updated, the group is itself, to allow
+    // privileged users to perform transitions.
+    $group = $entity->isNew() ? $entity->getGroup() : $entity;
     /** @var \Drupal\solution\Entity\SolutionInterface $entity */
-    return $this->allowedByPermission($transition, $workflow, $entity, FALSE, TRUE, $entity->getGroup());
+    return $this->allowedByPermission($transition, $workflow, $entity, FALSE, TRUE, $group);
   }
 
   /**
