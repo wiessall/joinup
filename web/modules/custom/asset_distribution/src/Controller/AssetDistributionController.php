@@ -7,11 +7,10 @@ namespace Drupal\asset_distribution\Controller;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Controller\ControllerBase;
-use Drupal\og\OgAccessInterface;
+use Drupal\asset_release\Entity\AssetReleaseInterface;
 use Drupal\og\OgGroupAudienceHelperInterface;
 use Drupal\rdf_entity\RdfInterface;
 use Drupal\solution\Entity\SolutionInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Controller for asset distribution forms.
@@ -25,18 +24,6 @@ class AssetDistributionController extends ControllerBase {
    * The solution parent.
    */
   protected SolutionInterface|null $solution = NULL;
-
-  /**
-   * {@inheritdoc}
-   */
-  public function __construct(protected OgAccessInterface $ogAccess) {}
-
-  /**
-   * {@inheritdoc}
-   */
-  public static function create(ContainerInterface $container) {
-    return new static($container->get('og.access'));
-  }
 
   /**
    * Controller for the base form.
@@ -78,7 +65,7 @@ class AssetDistributionController extends ControllerBase {
     }
 
     return $this->entityTypeManager()->getAccessControlHandler('rdf_entity')->createAccess('asset_distribution', NULL, [
-      'group' => $this->getSolutionFromParameter($rdf_entity),
+      'group' => $this->getRelatedSolution($rdf_entity),
     ], TRUE);
   }
 
@@ -89,13 +76,14 @@ class AssetDistributionController extends ControllerBase {
    *   The RDF entity that the distribution is associated with. Can be either an
    *   'asset_release' or a 'solution'.
    *
-   * @return \Drupal\Core\Entity\EntityInterface
-   *   The unsaved asset_distribution entity.
+   * @return \Drupal\rdf_entity\RdfInterface|null
+   *   The unsaved asset_distribution entity or NULL if the RDF entity parameter
+   *   is neither a solution nor a release.
    */
-  protected function createNewAssetDistribution(RdfInterface $rdf_entity) {
+  protected function createNewAssetDistribution(RdfInterface $rdf_entity): ?RdfInterface {
     // A solution is needed to create a distribution. If the rdf entity
     // parameter is neither a solution or a release, the variable will be empty.
-    if (empty($this->getSolutionFromParameter($rdf_entity))) {
+    if (empty($this->getRelatedSolution($rdf_entity))) {
       return NULL;
     }
 
@@ -113,10 +101,11 @@ class AssetDistributionController extends ControllerBase {
    *   The rdf entity parameter.
    *
    * @return \Drupal\rdf_entity\RdfInterface|null
-   *   The solution entity or NULL if the rdf entity parameter is not a solution
-   *   or a release.
+   *   The solution of the release, if the entity is a release, or the solution
+   *   itself if the entity is a solution. Returns NULL if the entity is neither
+   *   a release nor a solution.
    */
-  protected function getSolutionFromParameter(RdfInterface $rdf_entity): ?SolutionInterface {
+  protected function getRelatedSolution(RdfInterface $rdf_entity): ?SolutionInterface {
     if ($this->solution) {
       return $this->solution;
     }

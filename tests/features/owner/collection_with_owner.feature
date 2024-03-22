@@ -91,9 +91,6 @@ Feature: Creation of owners through UI
       | owner | Makinator                                                      |
     When I am logged in as a "facilitator" of the "Jump Mak" collection
     Then I go to the edit form of the "Jump Mak" collection
-    # @todo: Does that fail upstream? It fails locally even though I am able to
-    # find the element in the browser console using the same xpath as the
-    # findNamed('fieldset', 'Owner') method.
     When I press "Remove" at the "Owner" field
     And I press "Remove" at the "Owner" field
     Then I should not see "Makinator"
