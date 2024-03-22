@@ -16,7 +16,7 @@ use Drupal\state_machine_permissions\StateMachinePermissionStringConstructor;
 /**
  * Guard class for the transitions of the collection entity.
  */
-class CollectionGuard implements GuardInterface {
+class CollectionTransitionGuard implements GuardInterface {
 
   use TransitionGuardTrait;
 
