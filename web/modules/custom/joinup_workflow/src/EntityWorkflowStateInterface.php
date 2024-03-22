@@ -100,6 +100,11 @@ interface EntityWorkflowStateInterface extends FieldableEntityInterface {
    * This can also be used to check if the entity can be updated while keeping
    * the workflow state unchanged.
    *
+   * IMPORTANT: Use this when you want to check the state regardless of the
+   * entity's current state. Otherwise, wrong results might be returned in case
+   * for example, the entity is being updated and the target state is not the
+   * one needed to check.
+   *
    * @param string $to_state
    *   The destination state.
    * @param string|null $from_state
@@ -128,6 +133,12 @@ interface EntityWorkflowStateInterface extends FieldableEntityInterface {
 
   /**
    * Checks if the transition is allowed for the current user.
+   *
+   * IMPORTANT: Do NOT use this during a workflow transition. The method will
+   * use the state that the entity is moved to or from, depending on the
+   * specific point of the workflow that this is called. This can be used when
+   * e.g. loading an entity from the database and checking the transition
+   * statically.
    *
    * @param string $transition_id
    *   The transition ID.

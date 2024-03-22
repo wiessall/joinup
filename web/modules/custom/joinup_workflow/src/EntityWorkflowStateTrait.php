@@ -74,9 +74,13 @@ trait EntityWorkflowStateTrait {
   public function isTargetWorkflowStateAllowed(string $to_state, ?string $from_state = NULL): bool {
     // Default the "from state" to the current workflow state.
     $from_state = $from_state ?? $this->getWorkflowState();
-    $transition = $this->getWorkflow()->findTransition($from_state, $to_state);
-    return $this->isTransitionAllowed($transition->getId());
-  }
+
+    // If the "from" and "to" state are different, this state change is governed
+    // by a transition. If no transition exists then the update is not allowed.
+    $allowed_transitions = array_filter($this->getWorkflow()->getAllowedTransitions($from_state, $this), function (WorkflowTransition $transition) use ($to_state) {
+      return $transition->getToState()->getId() === $to_state;
+    });
+    return !empty($allowed_transitions);}
 
   /**
    * {@inheritdoc}

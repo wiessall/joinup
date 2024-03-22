@@ -192,7 +192,7 @@ class CommunityContentSubscriber extends NotificationSubscriberBase {
       // Determine if we are a privileged user such as a facilitator or
       // moderator. Only privileged users can update content in published state
       // directly, all other users first need to pass through proposed state.
-      $is_privileged = $entity->isTransitionAllowed('publish');
+      $is_privileged = $entity->isTargetWorkflowStateAllowed('published', 'published');
       if ($is_privileged) {
         // We are a facilitator or moderator and are requesting changes. Ensure
         // the notifications are only sent to the content owner.
