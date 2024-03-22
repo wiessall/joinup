@@ -184,8 +184,7 @@ function asset_release_rdf_entity_access(EntityInterface $release, $operation, A
 
   // Allow users with the OG permission to view unpublished rdf entities to view
   // unpublished releases.
-  $membership = $parent->getMembership((int) $account->id());
-  return AccessResult::allowedIf($membership && !$release->isPublished() && $membership->hasPermission('view unpublished rdf entity'));
+  return AccessResult::allowedIf($parent->hasGroupPermission($account->id(), 'view unpublished rdf entities'));
 }
 
 /**
