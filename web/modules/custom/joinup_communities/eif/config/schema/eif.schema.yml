@@ -6,17 +6,6 @@ condition.plugin.eif_solutions_page:
       type: boolean
       label: 'EIF Solution'
 
-eif.eif_wrapper_type.*:
-  type: config_entity
-  label: 'EIF Wrapper type'
-  mapping:
-    id:
-      type: string
-      label: 'Machine-readable name'
-    label:
-      type: label
-      label: 'Label'
-
 field.storage_settings.eif_qualified_recommendation:
   type: field.storage_settings.entity_reference
   label: 'EIF qualified recommendation'
