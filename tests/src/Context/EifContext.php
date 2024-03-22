@@ -18,10 +18,10 @@ use Drupal\joinup\Traits\SearchTrait;
 use Drupal\joinup\Traits\TestingEntitiesTrait;
 use Drupal\joinup\Traits\TopicTrait;
 use Drupal\joinup\Traits\UtilityTrait;
+use Drupal\meta_entity\Entity\MetaEntity;
 use Drupal\node\Entity\Node;
 use Drupal\paragraphs\Entity\Paragraph;
 use Drupal\rdf_entity\Entity\Rdf;
-use Drupal\rdf_meta_entity\Entity\RdfMetaEntity;
 
 /**
  * Behat step definitions and related methods provided by the eif module.
@@ -190,13 +190,13 @@ class EifContext extends RawDrupalContext {
       }
     }
 
-    $eif_perspective_fields = $this->convertEntityReferencesValues('rdf_meta_entity', 'eif_perspective', $eif_perspective_fields);
-    $eif_perspective = RdfMetaEntity::create([
+    $eif_perspective_fields = $this->convertEntityReferencesValues('meta_entity', 'eif_perspective', $eif_perspective_fields);
+    $eif_perspective = MetaEntity::create([
       'type' => 'eif_perspective',
       'target' => $solution,
     ] + $eif_perspective_fields + $qualifiers);
     $eif_perspective->save();
-    $this->entities['rdf_meta_entity'][$eif_perspective->id()] = $eif_perspective;
+    $this->entities['meta_entity'][$eif_perspective->id()] = $eif_perspective;
   }
 
   /**
@@ -261,7 +261,7 @@ class EifContext extends RawDrupalContext {
    */
   public function assertSolutionWithPerspective(string $solution): void {
     $solution = $this->getEntityByLabel('rdf_entity', $solution, 'solution');
-    if (empty(\Drupal::getContainer()->get('rdf_meta_entity.repository')->getMetaEntityForEntity($solution, 'eif_perspective'))) {
+    if (empty(\Drupal::getContainer()->get('meta_entity.repository')->getMetaEntityForEntity($solution, 'eif_perspective'))) {
       throw new \Exception('No perspective was found for the solution');
     }
   }

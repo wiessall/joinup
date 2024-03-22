@@ -7,20 +7,16 @@
 
 declare(strict_types=1);
 
-use Drupal\Core\Access\AccessResult;
-use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Cache\Cache;
-use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Render\Element;
-use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Url;
 use Drupal\eif\EifInterface;
 use Drupal\eif\Entity\EifRecommendation;
 use Drupal\field\FieldConfigInterface;
 use Drupal\joinup_taxonomy\Entity\MappedTerm;
+use Drupal\meta_entity\Entity\MetaEntityInterface;
 use Drupal\og\OgGroupAudienceHelperInterface;
-use Drupal\rdf_meta_entity\Entity\RdfMetaEntityInterface;
 use Drupal\solution\Entity\SolutionInterface;
 use Drupal\views\ViewExecutable;
 
@@ -172,7 +168,7 @@ function _eif_form_meta_entity_no_empty_field_validate(array &$form, FormStateIn
 /**
  * Implements hook_ENTITY_TYPE_insert().
  */
-function eif_meta_entity_insert(RdfMetaEntityInterface $entity): void {
+function eif_meta_entity_insert(MetaEntityInterface $entity): void {
   _eif_reindex_parent_solution($entity);
   _eif_add_eif_link_to_group_menus($entity);
 }
@@ -180,24 +176,24 @@ function eif_meta_entity_insert(RdfMetaEntityInterface $entity): void {
 /**
  * Implements hook_ENTITY_TYPE_update().
  */
-function eif_meta_entity_update(RdfMetaEntityInterface $entity): void {
+function eif_meta_entity_update(MetaEntityInterface $entity): void {
   _eif_reindex_parent_solution($entity);
 }
 
 /**
  * Implements hook_ENTITY_TYPE_delete().
  */
-function eif_meta_entity_delete(RdfMetaEntityInterface $entity): void {
+function eif_meta_entity_delete(MetaEntityInterface $entity): void {
   _eif_reindex_parent_solution($entity);
 }
 
 /**
  * Re index the parent solution to include the reference to the perspective.
  *
- * @param \Drupal\rdf_meta_entity\Entity\RdfMetaEntityInterface $entity
+ * @param \Drupal\meta_entity\Entity\MetaEntityInterface $entity
  *   The RDF meta entity.
  */
-function _eif_reindex_parent_solution(RdfMetaEntityInterface $entity): void {
+function _eif_reindex_parent_solution(MetaEntityInterface $entity): void {
   if ($entity->bundle() !== 'eif_perspective') {
     return;
   }
@@ -235,10 +231,10 @@ function _eif_reindex_parent_solution(RdfMetaEntityInterface $entity): void {
 /**
  * Creates a Link to EIF perspective view from the solution's left-side menu.
  *
- * @param \Drupal\rdf_meta_entity\Entity\RdfMetaEntityInterface $meta_entity
+ * @param \Drupal\meta_entity\Entity\MetaEntityInterface $meta_entity
  *   The RDF meta entity.
  */
-function _eif_add_eif_link_to_group_menus(RdfMetaEntityInterface $meta_entity): void {
+function _eif_add_eif_link_to_group_menus(MetaEntityInterface $meta_entity): void {
   if ($meta_entity->bundle() === 'eif_perspective') {
     $solution = $meta_entity->getTargetEntity();
     if ($solution instanceof SolutionInterface) {
@@ -283,10 +279,10 @@ function eif_views_pre_render(ViewExecutable $view): void {
   }
 
   $eif_perspective_list_cache_tags = \Drupal::entityTypeManager()
-    ->getStorage('rdf_meta_entity_type')
+    ->getStorage('meta_entity_type')
     ->load('eif_perspective')
     ->getCacheTags();
-  $cache_tags[] = 'rdf_meta_entity_list:eif_perspective';
+  $cache_tags[] = 'meta_entity_list:eif_perspective';
   $cache_tags = Cache::mergeTags($cache_tags, $eif_perspective_list_cache_tags);
   $view->element['#cache']['tags'] = Cache::mergeTags($view->element['#cache']['tags'], $cache_tags);
 }

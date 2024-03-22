@@ -12,7 +12,6 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Url;
 use Drupal\meta_entity\Entity\MetaEntity;
 use Drupal\og\OgAccessInterface;
-use Drupal\rdf_meta_entity\Entity\RdfMetaEntity;
 use Drupal\solution\Entity\SolutionInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -116,18 +115,18 @@ class EifPerspectiveController extends ControllerBase {
    *   The access result.
    */
   public function editAccess(SolutionInterface $rdf_entity): AccessResultInterface {
-    $meta_entity = RdfMetaEntity::loadOrCreate('eif_perspective', $rdf_entity);
+    $meta_entity = MetaEntity::loadOrCreate('eif_perspective', $rdf_entity);
     if (!$meta_entity->isNew()) {
       $access_result = $meta_entity->access('update', NULL, TRUE);
     }
     else {
-      $access_result = $this->entityTypeManager->getAccessControlHandler('rdf_meta_entity')->createAccess('eif_perspective', NULL, [], TRUE);
+      $access_result = $this->entityTypeManager->getAccessControlHandler('meta_entity')->createAccess('eif_perspective', NULL, [], TRUE);
     }
 
     if ($access_result->isAllowed()) {
       return $access_result;
     }
-    return $access_result->orIf($this->ogAccess->userAccess($rdf_entity, 'update eif_perspective rdf-meta-entity'));
+    return $access_result->orIf($this->ogAccess->userAccess($rdf_entity, 'update eif_perspective meta-entity'));
   }
 
   /**
@@ -143,8 +142,7 @@ class EifPerspectiveController extends ControllerBase {
     if (empty($rdf_entity->eif_perspective->entity) || !$rdf_entity->access('view')) {
       return AccessResult::forbidden();
     }
-
-    return $this->entityTypeManager->getAccessControlHandler('rdf_meta_entity')->access($rdf_entity->eif_perspective->entity, 'view', NULL, TRUE);
+    return $this->entityTypeManager->getAccessControlHandler('meta_entity')->access($rdf_entity->eif_perspective->entity, 'view', NULL, TRUE);
   }
 
 }
