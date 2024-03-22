@@ -196,12 +196,6 @@ settings:
   rdf_type:
     handler: 'default:rdf_type'
     handler_settings: {  }
-  rdf_meta_entity:
-    handler: 'default:rdf_meta_entity'
-    handler_settings: {  }
-  rdf_meta_entity_type:
-    handler: 'default:rdf_meta_entity_type'
-    handler_settings: {  }
   redirect:
     handler: 'default:redirect'
     handler_settings: {  }

@@ -14,7 +14,7 @@ Feature: Variety tests for the developer role.
       | /admin/content/meta-entity                         |
       | /admin/content/poll                                |
       | /admin/content/rdf                                 |
-      | /admin/content/rdf-meta-entity                     |
+      | /admin/content/meta-entity                         |
       | /admin/content/files                               |
       | /admin/content/messages                            |
       | /admin/content/media                               |
