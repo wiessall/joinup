@@ -138,7 +138,7 @@ function joinup_rdf_update_110303(): void {
 }
 
 /**
- * Deletes leftover path aliases of licence rdf entities.
+ * Delete leftover path aliases of licence RDF entities.
  */
 function joinup_rdf_update_110304(&$sandbox): string {
   if (!isset($sandbox['ids'])) {
@@ -153,7 +153,6 @@ function joinup_rdf_update_110304(&$sandbox): string {
 
   $idsToDelete = array_slice($sandbox['ids'], $sandbox['processed'], 50);
   $aliasStorage = \Drupal::entityTypeManager()->getStorage('path_alias');
-  assert($aliasStorage instanceof ContentEntityStorageInterface);
 
   $aliasStorage->delete($aliasStorage->loadMultiple($idsToDelete));
 
