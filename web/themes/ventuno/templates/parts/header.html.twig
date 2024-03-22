@@ -24,6 +24,14 @@
   label: logged_in ? user_name : "Toggle menu"|t,
   links: logged_in ? profile_links : anonymous_links,
 }]) %}
+{% if bookmark_link %}
+  {% set items = items|merge([{
+    breakpoint: "all",
+    label: "Bookmark"|t,
+    links: [bookmark_link|merge({order: 1})],
+    hide_toggle: TRUE,
+  }]) %}
+{% endif %}
 {% if not hide_searchbar %}
   {% set items = items|merge([{
     type: "search",

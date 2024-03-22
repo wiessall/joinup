@@ -31,6 +31,10 @@ function ventuno_preprocess_page(array &$variables): void {
   // Export the username to display in the header.
   $variables['user_name'] = \Drupal::currentUser()->getDisplayName();
 
+  /** @var \Drupal\joinup_bookmark\JoinupBookmarkInterface $joinupBookmark */
+  $joinupBookmark = \Drupal::service('joinup_bookmark.bookmark');
+  $variables['bookmark_link'] = $joinupBookmark->getBookmarkLink();
+
   /** @var \Drupal\joinup_menu\MenuHelperInterface $menu_helper */
   $menu_helper = \Drupal::service('joinup_menu.menu_helper');
   $variables['landing_page_links'] = $menu_helper->getBclLandingPageLinks();
