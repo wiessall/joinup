@@ -64,7 +64,7 @@ class SolutionController extends ControllerBase {
       return AccessResult::allowed();
     }
 
-    if (!$rdf_entity->hasGroupPermission((int) $user->id(), 'create solution rdf entity')) {
+    if (!$rdf_entity->hasGroupPermission($user->id(), 'create solution rdf entity')) {
       return AccessResult::forbidden();
     }
 

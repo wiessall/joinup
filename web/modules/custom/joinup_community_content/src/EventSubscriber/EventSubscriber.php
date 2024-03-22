@@ -4,14 +4,10 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_community_content\EventSubscriber;
 
-use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Entity\EntityTypeBundleInfoInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
-use Drupal\joinup_community_content\Entity\CommunityContentInterface;
-use Drupal\joinup_workflow\Event\StateMachineButtonLabelsEventInterface;
-use Drupal\joinup_workflow\Event\UnchangedWorkflowStateUpdateEvent;
 use Drupal\og\Event\PermissionEventInterface as OgPermissionEventInterface;
 use Drupal\og\GroupContentOperationPermission;
 use Drupal\og\GroupPermission;
@@ -92,7 +88,7 @@ class EventSubscriber implements EventSubscriberInterface {
    * @param \Drupal\og\Event\PermissionEventInterface $event
    *   The OG permission event.
    */
-  public function provideOgRevisionPermissions(OgPermissionEventInterface $event) {
+  public function provideOgRevisionPermissions(OgPermissionEventInterface $event): void {
     $group_content_bundle_ids = $event->getGroupContentBundleIds();
 
     if (!empty($group_content_bundle_ids['node'])) {
@@ -167,85 +163,6 @@ class EventSubscriber implements EventSubscriberInterface {
           ]),
         ]);
       }
-    }
-  }
-
-  /**
-   * Updates transition button labels depending on who performs the transition.
-   *
-   * This will check if a transition from published to proposed is being
-   * performed for community content and depending on the user who initiates
-   * this transition the label will be:
-   * - 'Request changes': if a facilitator or moderator changes published
-   *   content to proposed state, in order for the original author to make some
-   *   requested changes.
-   * - 'Propose changes': if the author of community content in a pre-moderated
-   *   collection wants to change some of their community content and needs this
-   *   change to be approved and published by a facilitator.
-   *
-   * @param \Drupal\joinup_workflow\Event\StateMachineButtonLabelsEventInterface $event
-   *   The event being fired.
-   */
-  public function provideStateMachineButtonLabels(StateMachineButtonLabelsEventInterface $event): void {
-    // Exit through the escape hatch if we do not have the transition that we
-    // want to alter.
-    if (!array_key_exists('propose_new_revision', $event->getTransitions())) {
-      return;
-    }
-
-    // If the content is not currently in published state, then this is not the
-    // content we are looking for.
-    $state_id = $event->getStateId();
-    if ($state_id !== 'published') {
-      return;
-    }
-
-    // Only act if we are dealing with community content in a moderated group.
-    $entity = $event->getEntity();
-    if (!$entity instanceof CommunityContentInterface) {
-      return;
-    }
-    $group = $entity->getGroup();
-    if (!$group->isModerated()) {
-      return;
-    }
-
-    // Determine if we are a privileged user such as a facilitator or moderator.
-    // Only privileged users can update content in published state directly, all
-    // other users first need to pass through proposed state.
-    $is_privileged = $entity->isTargetWorkflowStateAllowed($state_id, $state_id);
-
-    $label = $is_privileged ? $this->t('Request changes') : $this->t('Propose changes');
-    $event->updateLabel('propose_new_revision', (string) $label);
-  }
-
-  /**
-   * Determines if the content be updated without changing workflow state.
-   *
-   * @param \Drupal\joinup_workflow\Event\UnchangedWorkflowStateUpdateEvent $event
-   *   The event.
-   */
-  public function onUnchangedWorkflowStateUpdate(UnchangedWorkflowStateUpdateEvent $event): void {
-    $entity = $event->getEntity();
-    if (!$entity instanceof CommunityContentInterface) {
-      return;
-    }
-
-    $state = $event->getState();
-    $permitted = $entity->isTargetWorkflowStateAllowed($state, $state);
-    $access = AccessResult::forbiddenIf(!$permitted);
-    $access->addCacheContexts(['user.roles', 'og_role']);
-    $event->setAccess($access);
-
-    // Set a custom button label as defined in the functional specification.
-    switch ($state) {
-      case 'draft':
-        $event->setLabel($this->t('Save as draft'));
-        break;
-
-      case 'proposed':
-      case 'published':
-        $event->setLabel($this->t('Update'));
     }
   }
 

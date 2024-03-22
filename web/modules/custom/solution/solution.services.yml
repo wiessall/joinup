@@ -15,7 +15,7 @@ services:
       - { name: 'cache.context'}
   solution.fulfillment_guard:
     class: Drupal\solution\Guard\SolutionFulfillmentGuard
-    arguments: ['@current_user', '@joinup_workflow.workflow_helper', '@rdf_entity_provenance.provenance_helper']
+    arguments: ['@current_user', '@rdf_entity_provenance.provenance_helper']
     tags:
       # Priority 5 will set it to be executed before the generic guard of the
       # state_machine_permissions module.

@@ -1,0 +1,6 @@
+services:
+  owner.fulfillment_guard:
+    class: Drupal\owner\Guard\OwnerTransitionGuard
+    arguments: ['@current_user']
+    tags:
+      - { name: state_machine.guard, group: owner }

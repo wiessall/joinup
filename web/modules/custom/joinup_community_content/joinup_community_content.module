@@ -339,11 +339,10 @@ function joinup_community_content_form_node_revision_revert_confirm_alter(&$form
     return;
   }
 
-  // @todo Fix this to check for transitions.
   // Check if the user (e.g. a moderator) has permission to directly publish
   // content in moderated groups. If this is the case we don't need to alter the
   // form.
-  if ($entity->isTargetWorkflowStateAllowed('published', 'published')) {
+  if ($entity->isTransitionAllowed('publish')) {
     return;
   }
 

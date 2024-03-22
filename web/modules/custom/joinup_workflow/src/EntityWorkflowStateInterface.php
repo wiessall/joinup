@@ -116,7 +116,7 @@ interface EntityWorkflowStateInterface extends FieldableEntityInterface {
    * @return \Drupal\state_machine\Plugin\Workflow\WorkflowTransition[]
    *   The allowed transitions, keyed by transition ID.
    */
-  public function getTransitions(): array;
+  public function getAllowedTransitions(): array;
 
   /**
    * Check whether at least one transition is available for the current state.
@@ -124,6 +124,17 @@ interface EntityWorkflowStateInterface extends FieldableEntityInterface {
    * @return bool
    *   Whether at least one transition is available for the current state.
    */
-  public function hasTransitions(): bool;
+  public function hasAllowedTransitions(): bool;
+
+  /**
+   * Checks if the transition is allowed for the current user.
+   *
+   * @param string $transition_id
+   *   The transition ID.
+   *
+   * @return bool
+   *   TRUE if the transition is allowed, FALSE otherwise.
+   */
+  public function isTransitionAllowed(string $transition_id): bool;
 
 }

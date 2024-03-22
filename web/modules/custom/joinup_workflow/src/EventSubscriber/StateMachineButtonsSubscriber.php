@@ -4,15 +4,25 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_workflow\EventSubscriber;
 
+use Drupal\Core\Session\AccountProxyInterface;
 use Drupal\custom_page\Entity\CustomPageInterface;
 use Drupal\joinup_community_content\Entity\CommunityContentInterface;
 use Drupal\joinup_workflow\Event\StateMachineButtonLabelsEventInterface;
+use Drupal\state_machine_permissions\StateMachinePermissionStringConstructor;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
- * @todo Add description for this subscriber.
+ * Alters buttons labels for the state machine.
  */
 final class StateMachineButtonsSubscriber implements EventSubscriberInterface {
+
+  /**
+   * Constructs a new StateMachineButtonsSubscriber object.
+   *
+   * @param \Drupal\Core\Session\AccountProxyInterface $currentUser
+   *   The current logged-in user.
+   */
+  public function __construct(protected AccountProxyInterface $currentUser) {}
 
   /**
    * {@inheritdoc}
@@ -42,16 +52,13 @@ final class StateMachineButtonsSubscriber implements EventSubscriberInterface {
     if ($entity instanceof CommunityContentInterface) {
       // Use findTransition because it checks for the available transitions.
       if ($currentState === 'published' && $requestChangesTransition = $workflow->findTransition('published', 'proposed')) {
-        // The 'Propose changes' button should be 'Request changes' when
-        // user is a facilitator. There is no permission specific to this.
-        // @todo Inject the services.
-        $user = \Drupal::currentUser();
-        $membershipManager = \Drupal::getContainer()->get('og.membership_manager');
-        $group = $event->getEntity()->getGroup();
-        if ($membership = $membershipManager->getMembership($group, $user->id())) {
-          if ($membership->hasRole("{$group->getEntityTypeId()}-{$group->bundle()}-facilitator")) {
-            $event->updateLabel($requestChangesTransition->getId(), 'Request changes');
-          }
+        $group = $entity->getGroup();
+        $anyPermission = StateMachinePermissionStringConstructor::constructTransitionPermission($workflow, $workflow->getTransition('publish'), 'any');
+        if ($group->hasGroupPermission($this->currentUser->id(), $anyPermission)) {
+          // The 'Propose changes' button should be 'Request changes' when
+          // user is a facilitator. Use the 'publish' 'any' permission to
+          // identify if the user is a facilitator.
+          $event->updateLabel($requestChangesTransition->getId(), 'Request changes');
         }
       }
     }
@@ -61,8 +68,11 @@ final class StateMachineButtonsSubscriber implements EventSubscriberInterface {
     // and can be handled.
     $transition = $workflow->findTransition($currentState, $currentState);
 
-    // @todo Group the exceptions later when all of them are here.
-    // `asset_release` `draft` button should not be update.
+    // The following cases are exceptions where the label should not be
+    // 'Update' when the transition is to the same state:
+    // - Asset release in draft state.
+    // - Collection and solution entities in general.
+    // - Custom pages and community content for the 'save_as_draft' transition.
     if ($entity->bundle() === 'asset_release' && $currentState === 'draft') {
       return;
     }
@@ -71,16 +81,13 @@ final class StateMachineButtonsSubscriber implements EventSubscriberInterface {
       return;
     }
 
-    // Custom pages show 'Save as Draft' button when the transition is
-    // 'save_as_draft'. Currently, the transition source states are only __new__
-    // and draft, thus we can check only by the transition ID.
-    if (($entity instanceof CommunityContentInterface || $entity instanceof CustomPageInterface) && $transition && $transition->getId() === 'save_as_draft') {
+    if (
+      ($entity instanceof CommunityContentInterface || $entity instanceof CustomPageInterface)
+      && $transition && $transition->getId() === 'save_as_draft') {
       return;
     }
 
     if ($transition && array_key_exists($transition->getId(), $event->getTransitions())) {
-      // When the transition is to the same state, change the label to 'Update'.
-      // @todo Add here a list of cases where the label should not be 'Update'.
       $event->updateLabel($transition->getId(), 'Update');
     }
   }

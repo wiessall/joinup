@@ -6,8 +6,7 @@ namespace Drupal\solution\Guard;
 
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Session\AccountInterface;
-use Drupal\joinup_workflow\FulfillmentGuardTrait;
-use Drupal\joinup_workflow\WorkflowHelper;
+use Drupal\joinup_workflow\TransitionGuardTrait;
 use Drupal\rdf_entity_provenance\ProvenanceHelperInterface;
 use Drupal\state_machine\Guard\GuardInterface;
 use Drupal\state_machine\Plugin\Workflow\WorkflowInterface;
@@ -18,21 +17,18 @@ use Drupal\state_machine\Plugin\Workflow\WorkflowTransition;
  */
 class SolutionFulfillmentGuard implements GuardInterface {
 
-  use FulfillmentGuardTrait;
+  use TransitionGuardTrait;
 
   /**
    * Instantiates a SolutionFulfillmentGuard service.
    *
    * @param \Drupal\Core\Session\AccountInterface $currentUser
    *   The current logged-in user.
-   * @param \Drupal\joinup_workflow\WorkflowHelper $workflowHelper
-   *   The workflow helper service.
    * @param \Drupal\rdf_entity_provenance\ProvenanceHelperInterface $provenanceHelper
    *   Provenance helper.
    */
   public function __construct(
     protected AccountInterface $currentUser,
-    protected WorkflowHelper $workflowHelper,
     protected ProvenanceHelperInterface $provenanceHelper
   ) {
   }
@@ -47,7 +43,8 @@ class SolutionFulfillmentGuard implements GuardInterface {
       return FALSE;
     }
 
-    return $this->allowedByPermission($transition, $workflow, $entity);
+    /** @var \Drupal\solution\Entity\SolutionInterface $entity */
+    return $this->allowedByPermission($transition, $workflow, $entity, FALSE, TRUE, $entity->getGroup());
   }
 
   /**

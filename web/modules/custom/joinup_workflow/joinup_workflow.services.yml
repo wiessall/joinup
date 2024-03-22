@@ -10,6 +10,7 @@ services:
       - { name: event_subscriber }
   joinup_workflow.state_machine_button_subscriber:
     class: Drupal\joinup_workflow\EventSubscriber\StateMachineButtonsSubscriber
+    arguments: ['@current_user']
     tags:
       - { name: event_subscriber }
   joinup_workflow.content_creation_guard:

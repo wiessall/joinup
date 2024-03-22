@@ -81,7 +81,7 @@ class AnnouncementForm extends FormBase {
    * {@inheritdoc}
    */
   public function buildForm(array $form, FormStateInterface $form_state): array {
-    $disabled = !$this->announcement->hasTransitions();
+    $disabled = !$this->announcement->hasAllowedTransitions();
 
     if ($disabled) {
       if ($this->announcement->getWorkflowState() === 'delivered') {
@@ -164,7 +164,7 @@ class AnnouncementForm extends FormBase {
     ];
 
     if (!$this->announcement->isNew()) {
-      foreach ($this->announcement->getTransitions() as $transition) {
+      foreach ($this->announcement->getAllowedTransitions() as $transition) {
         $form['actions'][$transition->getId()] = [
           '#type' => 'submit',
           '#value' => $transition->getLabel(),
