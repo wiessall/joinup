@@ -95,3 +95,6 @@ Feature: Bookmark/Unbookmark feature.
       | Password       | bookmark123!#$l   |
     And I press "Log in"
     Then the url should match "/user/bookmarks"
+
+    When I click "Bookmark" in the "Navigation bar"
+    Then the url should match "/user/bookmarks"
