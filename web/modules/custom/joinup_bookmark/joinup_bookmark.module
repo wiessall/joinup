@@ -1,0 +1,69 @@
+<?php
+
+/**
+ * @file
+ * Hook implementations for the Joinup bookmark module.
+ */
+
+declare(strict_types=1);
+
+use Drupal\Component\Utility\Html;
+use Drupal\Core\Url;
+
+/**
+ * Implements hook_theme().
+ */
+function joinup_bookmark_theme(): array {
+  return [
+    'flag_bookmark_text' => [
+      'variables' => [
+        'flag' => NULL,
+        'flaggable' => NULL,
+        'view_mode' => NULL,
+      ],
+    ],
+  ];
+}
+
+/**
+ * Implements hook_preprocess_HOOK().
+ */
+function joinup_bookmark_preprocess_joinup_modal_anonymous__bookmark(&$variables): void {
+  $variables['title'] = t('Sign in or register to bookmark this content');
+  $variables['description'] = t('Bookmarking content allows you to save it for later reference and helps you organise your favourite resources');
+}
+
+/**
+ * Implements hook_theme_suggestions_HOOK_alter().
+ */
+function joinup_bookmark_theme_suggestions_flag_alter(array &$suggestions, array &$variables): void {
+  /** @var \Drupal\flag\FlagInterface $flag */
+  $flag = $variables['flag'];
+
+  if (in_array($flag->id(), ['bookmark_node', 'bookmark_rdf_entity'])) {
+    array_unshift($suggestions, 'flag__bookmark');
+  }
+}
+
+/**
+ * Prepares variables for flag_bookmark_text templates.
+ */
+function template_preprocess_flag_bookmark_text(&$variables): void {
+  /** @var \Drupal\flag\FlagInterface $flag */
+  $flag = $variables['flag'];
+
+  $variables['attributes']['href'] = Url::fromRoute(
+    'joinup_modal.anonymous',
+    ['type' => 'bookmark'],
+    ['query' => ['destination' => Url::fromRoute('<current>')->toString()]]
+  )->toString();
+  $variables['attributes']['data-dialog-type'] = 'modal';
+  $variables['attributes']['data-dialog-options'] = json_encode([
+    'width' => 'auto',
+    'height' => 'auto',
+  ]);
+  $variables['attributes']['title'] = $flag->getLongText('flag');
+  $variables['attributes']['class'][] = 'use-ajax';
+  $variables['attributes']['class'][] = 'flag';
+  $variables['attributes']['class'][] = Html::getClass('flag-' . $flag->id());
+}
