@@ -7,7 +7,7 @@ dependencies:
 _core:
   default_config_hash: duUo88aLwAi3Anenpl0D7C2yMh2EYpPx2WA7ZDp8nXY
 id: node_licence
-label: 'Licence'
+label: Licence
 type: 'canonical_entities:node'
 pattern: '[node:content-type]/[node:title]'
 selection_criteria:

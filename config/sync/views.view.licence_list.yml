@@ -4,6 +4,7 @@ status: true
 dependencies:
   config:
     - search_api.index.published
+    - taxonomy.vocabulary.spdx_licence
   module:
     - search_api
 id: licence_list
@@ -217,21 +218,20 @@ display:
               discussion: default
               document: default
               event: default
+              licence: view_mode_search_list_item
               news: default
-              newsletter: default
               video: default
             'entity:rdf_entity':
               asset_distribution: default
               asset_release: default
               collection: default
-              licence: view_mode_search_list_item
               solution: default
-              spdx_licence: default
             'entity:taxonomy_term':
               eif_conceptual_model: default
               eif_interoperability_layer: default
               eif_principle: default
               eif_recommendation: default
+              topic: default
             'entity:user':
               user: default
       query:
@@ -260,6 +260,7 @@ display:
         - 'user.node_grants:view'
       tags:
         - 'config:search_api.index.published'
+        - 'config:views.view.licence_list'
         - 'search_api_list:published'
   licence_list_block:
     id: licence_list_block
@@ -268,7 +269,10 @@ display:
     position: 1
     display_options:
       display_description: ''
-      display_extenders: {  }
+      display_extenders:
+        metatag_display_extender:
+          metatags: {  }
+          tokenize: false
     cache_metadata:
       max-age: -1
       contexts:
@@ -276,6 +280,7 @@ display:
         - 'user.node_grants:view'
       tags:
         - 'config:search_api.index.published'
+        - 'config:views.view.licence_list'
         - 'search_api_list:published'
   licence_list_block_jlc:
     id: licence_list_block_jlc
@@ -298,28 +303,30 @@ display:
               discussion: default
               document: default
               event: default
+              licence: compatibility_check
               news: default
-              newsletter: default
               video: default
             'entity:rdf_entity':
               asset_distribution: default
               asset_release: default
               collection: default
-              licence: compatibility_check
               solution: default
-              spdx_licence: default
             'entity:taxonomy_term':
               eif_conceptual_model: default
               eif_interoperability_layer: default
               eif_principle: default
               eif_recommendation: default
+              topic: default
             'entity:user':
               user: default
       defaults:
         style: false
         row: false
       display_description: ''
-      display_extenders: {  }
+      display_extenders:
+        metatag_display_extender:
+          metatags: {  }
+          tokenize: false
     cache_metadata:
       max-age: -1
       contexts:
@@ -327,4 +334,5 @@ display:
         - 'user.node_grants:view'
       tags:
         - 'config:search_api.index.published'
+        - 'config:views.view.licence_list'
         - 'search_api_list:published'

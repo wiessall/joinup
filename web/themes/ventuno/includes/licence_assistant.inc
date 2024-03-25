@@ -34,7 +34,7 @@ function ventuno_preprocess_node__licence__compatibility_check(array &$variables
  */
 function ventuno_preprocess_node__licence__jla(array &$variables): void {
   /** @var \Drupal\joinup_licence\Entity\LicenceInterface $entity */
-  $entity = $variables['elements']['#rdf_entity'];
+  $entity = $variables['elements']['#node'];
 
   $variables['content']['spdx_licence_id']['#label_display'] = 'hidden';
   $variables['content']['spdx_licence_external_url']['#attributes']['target'] = '_blank';
@@ -55,7 +55,7 @@ function ventuno_preprocess_node__licence__view_mode_search_list_item(array &$va
   ventuno_preprocess_node__licence__jla($variables);
 
   /** @var \Drupal\joinup_licence\Entity\LicenceInterface $entity */
-  $entity = $variables['elements']['#rdf_entity'];
+  $entity = $variables['elements']['#node'];
 
   // Calculate variables related to the legal type.
   $types = $entity->getLegalTypes();

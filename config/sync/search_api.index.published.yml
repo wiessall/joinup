@@ -7,10 +7,11 @@ dependencies:
     - field.storage.node.field_paragraphs_body
     - field.storage.paragraph.field_body
     - field.storage.node.body
-    - field.storage.node.description
+    - field.storage.node.spdx_licence
     - field.storage.node.field_event_date
     - field.storage.meta_entity.field_featured
     - field.storage.node.field_news_headline
+    - field.storage.node.description
     - field.storage.node.field_location
     - field.storage.node.field_organisation
     - field.storage.meta_entity.field_pinned_in
@@ -871,6 +872,14 @@ field_settings:
         - 'entity:node/field_event_spatial_coverage'
         - 'entity:node/field_news_spatial_coverage'
         - 'entity:rdf_entity/field_spatial_coverage'
+  spdx_licence:
+    label: 'Corresponding SPDX licence'
+    datasource_id: 'entity:node'
+    property_path: spdx_licence
+    type: integer
+    dependencies:
+      config:
+        - field.storage.node.spdx_licence
   sticky:
     label: 'Sticky at top of lists'
     datasource_id: 'entity:node'
