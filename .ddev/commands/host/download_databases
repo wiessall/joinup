@@ -10,8 +10,8 @@ ddev run toolkit:download-dump --yes
 # Unpack dump and snapshots.
 
 echo "Unpacking MySQL dump"
-rm -f .ddev/db/dump/mysql.sql
-gunzip -c tmp/mysql.gz > .ddev/db/dump/mysql.sql
+rm -f .ddev/db/dump/metadata .ddev/db/dump/*.sql.zst .ddev/db/dump/*.sql
+tar -C .ddev/db/dump/ -xf tmp/mysql.tar
 
 echo "Unpacking Virtuoso snapshot"
 rm -rf .ddev/virtuoso/snapshot/VIRTUOSO_DUMP_*
