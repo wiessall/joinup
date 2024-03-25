@@ -16,21 +16,12 @@ use Symfony\Component\Routing\Route;
 class SpdxIdsParamConverter implements ParamConverterInterface {
 
   /**
-   * The entity type manager service.
-   *
-   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
-   */
-  protected $entityTypeManager;
-
-  /**
    * Constructs a new param converter service instance.
    *
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
    *   The entity type manager service.
    */
-  public function __construct(EntityTypeManagerInterface $entity_type_manager) {
-    $this->entityTypeManager = $entity_type_manager;
-  }
+  public function __construct(protected EntityTypeManagerInterface $entityTypeManager) {}
 
   /**
    * {@inheritdoc}
@@ -77,7 +68,7 @@ class SpdxIdsParamConverter implements ParamConverterInterface {
     $node_storage = $this->entityTypeManager->getStorage('node');
     $actual_licence_ids = $node_storage->getQuery()->accessCheck(FALSE)
       ->condition('type', 'licence')
-      ->condition('spdx_licence', $actual_spdx_ids, 'IN')
+      ->condition('spdx_licence.target_id', $actual_spdx_ids, 'IN')
       ->execute();
 
     // Some of the passed SPDX IDs don't have a related Joinup licence.
