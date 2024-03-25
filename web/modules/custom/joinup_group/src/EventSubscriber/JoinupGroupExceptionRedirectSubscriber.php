@@ -21,6 +21,11 @@ use Symfony\Component\HttpKernel\KernelEvents;
 class JoinupGroupExceptionRedirectSubscriber implements EventSubscriberInterface {
 
   /**
+   * A list of applicable routes.
+   */
+  private const ROUTES = ['view.discussions.overview'];
+
+  /**
    * {@inheritdoc}
    */
   public static function getSubscribedEvents(): array {
@@ -41,6 +46,10 @@ class JoinupGroupExceptionRedirectSubscriber implements EventSubscriberInterface
     }
 
     $route_match = RouteMatch::createFromRequest($event->getRequest());
+    if (!in_array($route_match->getRouteName(), self::ROUTES)) {
+      return;
+    }
+
     $rdf_entity = $route_match->getParameter('rdf_entity');
     if (!$rdf_entity instanceof GroupInterface || !$rdf_entity->access('view')) {
       return;
