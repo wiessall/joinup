@@ -83,7 +83,7 @@ function joinup_licence_taxonomy_term_access(EntityInterface $entity, string $op
 function joinup_licence_entity_extra_field_info(): array {
   $fields = [];
 
-  $display = &$fields['taxonomy_term']['spdx_licence']['display'];
+  $display = &$fields['node']['licence']['display'];
   $display['spdx_licence_label'] = [
     'label' => t('SPDX licence label'),
     'description' => t('The label of the licence in the SPDX licence list.'),
