@@ -6,8 +6,7 @@
 }
 
 // Mark required fields
-legend.form-required,
-label.form-required {
+.form-required {
   &::after {
     margin-left: $spacer * .25; // 4px
     content: '*';
