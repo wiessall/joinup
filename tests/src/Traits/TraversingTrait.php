@@ -398,6 +398,7 @@ trait TraversingTrait {
       'spatial coverage' => 'spatial_coverage',
       'topic' => 'topic',
       'OSS category' => 'oss_category',
+      'OSS intended audience' => 'oss_scope',
       'OSS development status' => 'oss_development_status',
       'OSS catalog' => 'oss_source',
     ];
