@@ -3,49 +3,50 @@ langcode: en
 status: true
 dependencies:
   config:
-    - field.storage.node.body
-    - field.storage.rdf_entity.field_ad_description
-    - field.storage.rdf_entity.field_ar_abstract
-    - field.storage.rdf_entity.field_ar_description
-    - field.storage.taxonomy_term.field_eif_identifier
-    - field.storage.taxonomy_term.field_eif_related_term
     - field.storage.node.field_event_agenda
+    - field.storage.node.field_paragraphs_body
+    - field.storage.paragraph.field_body
+    - field.storage.node.body
+    - field.storage.node.description
     - field.storage.node.field_event_date
-    - field.storage.rdf_entity.field_is_abstract
-    - field.storage.rdf_entity.field_is_description
-    - field.storage.rdf_entity.field_is_eif_category
-    - field.storage.rdf_entity.field_is_eif_recommendation
-    - field.storage.rdf_entity.field_is_solution_type
-    - field.storage.rdf_entity.field_isr_description
-    - field.storage.rdf_entity.field_isr_release_notes
-    - field.storage.node.field_location
+    - field.storage.meta_entity.field_featured
     - field.storage.node.field_news_headline
+    - field.storage.node.field_location
     - field.storage.node.field_organisation
+    - field.storage.meta_entity.field_pinned_in
     - field.storage.node.field_scope
     - field.storage.node.field_short_title
+    - field.storage.meta_entity.count
+    - field.storage.rdf_entity.field_ar_abstract
+    - field.storage.rdf_entity.field_is_abstract
+    - field.storage.rdf_entity.field_ci_name
+    - field.storage.rdf_entity.field_is_contact_information
+    - field.storage.rdf_entity.field_isr_contact_information
+    - field.storage.rdf_entity.field_ad_description
+    - field.storage.rdf_entity.field_ar_description
+    - field.storage.rdf_entity.field_is_description
+    - field.storage.rdf_entity.field_isr_description
+    - field.storage.rdf_entity.field_is_eif_category
+    - field.storage.rdf_entity.field_is_eif_recommendation
+    - field.storage.rdf_entity.field_is_owner
+    - field.storage.rdf_entity.field_owner_name
+    - field.storage.rdf_entity.field_isr_owner
+    - field.storage.rdf_entity.field_isr_release_notes
+    - field.storage.rdf_entity.field_is_solution_type
+    - field.storage.taxonomy_term.field_eif_identifier
+    - field.storage.taxonomy_term.field_eif_related_term
     - field.storage.user.field_user_family_name
     - field.storage.user.field_user_first_name
     - field.storage.user.field_user_organisation
-    - field.storage.meta_entity.count
-    - field.storage.rdf_entity.field_ci_name
-    - field.storage.rdf_entity.field_is_contact_information
-    - field.storage.rdf_entity.field_is_owner
-    - field.storage.rdf_entity.field_owner_name
-    - field.storage.rdf_entity.field_isr_contact_information
-    - field.storage.rdf_entity.field_isr_owner
-    - field.storage.meta_entity.field_featured
-    - field.storage.meta_entity.field_pinned_in
-    - field.storage.node.field_paragraphs_body
-    - field.storage.paragraph.field_body
     - search_api.server.joinup
   module:
     - search_api_solr
     - node
+    - paragraphs
     - meta_entity
     - rdf_entity
-    - taxonomy
-    - paragraphs
     - publication_date
+    - taxonomy
     - user
     - search_api
     - asset_distribution
@@ -86,6 +87,7 @@ third_party_settings:
     term_modifiers:
       slop: 10000000
       fuzzy: 2
+      fuzzy_analyzer: true
     advanced:
       index_prefix: ''
       collection: ''
@@ -136,6 +138,22 @@ field_settings:
     dependencies:
       module:
         - node
+  description_processed:
+    label: 'Licence Description »  Processed text'
+    datasource_id: 'entity:node'
+    property_path: 'description:processed'
+    type: text
+    dependencies:
+      config:
+        - field.storage.node.description
+  description_processed_spellcheck:
+    label: 'Licence Description » Processed text - spellcheck'
+    datasource_id: 'entity:node'
+    property_path: 'description:processed'
+    type: solr_text_spellcheck
+    dependencies:
+      config:
+        - field.storage.node.description
   eif_perspective:
     label: 'EIF perspective reference'
     datasource_id: 'entity:rdf_entity'
@@ -929,6 +947,7 @@ datasource_settings:
         - discussion
         - document
         - event
+        - licence
         - news
         - video
     languages:
@@ -941,9 +960,7 @@ datasource_settings:
         - asset_distribution
         - asset_release
         - collection
-        - licence
         - solution
-        - spdx_licence
     languages:
       default: true
       selected: {  }
