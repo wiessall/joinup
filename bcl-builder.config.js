@@ -465,6 +465,21 @@ module.exports = {
     {
       entry: path.resolve(
         outputFolder,
+        `${ventuno}src/scss/components/ajax-throbber.scss`
+      ),
+      dest: path.resolve(
+        outputFolder,
+        `${ventuno}assets/css/ajax-throbber.min.css`
+      ),
+      options: {
+        includePaths,
+        minify: true,
+        sourceMap: "file",
+      },
+    },
+    {
+      entry: path.resolve(
+        outputFolder,
         `${ventuno}src/scss/components/fieldset-show-more.scss`
       ),
       dest: path.resolve(
@@ -1359,6 +1374,8 @@ module.exports = {
           "arrow-repeat.svg",
           "arrow-right.svg",
           "award.svg",
+          "bookmark.svg",
+          "bookmark-check-fill.svg",
           "box-arrow-up-right.svg",
           "calendar.svg",
           "calendar-event.svg",

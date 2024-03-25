@@ -6,9 +6,9 @@ Feature: Bookmark/Unbookmark feature.
 
   Background:
     Given users:
-      | Username         | E-mail               | First name | Family name |
-      | Lisa Bookmark    | lisa@bookmark.com    | Lisa       | Bookmark    |
-      | Gregory Bookmark | gregory@bookmark.com | Gregory    | Bookmark    |
+      | Username         | E-mail               | Password        | First name | Family name |
+      | Lisa Bookmark    | lisa@bookmark.com    | bookmark123!#$l | Lisa       | Bookmark    |
+      | Gregory Bookmark | gregory@bookmark.com | bookmark123!#$g | Gregory    | Bookmark    |
     Given the following collections:
       | title  | state     |
       | Batman | published |
@@ -20,7 +20,7 @@ Feature: Bookmark/Unbookmark feature.
     When I am logged in as "Gregory Bookmark"
     And I go to the homepage of the "<name>" <type>
     And I click "Bookmark" in the "Bookmark block" region
-    Then I should see the link "Unbookmark" in the "Bookmark block"
+    Then I should see the link "Bookmarked" in the "Bookmark block"
 
     When I am logged in as "Lisa Bookmark"
     And I go to the homepage of the "<name>" <type>
@@ -28,7 +28,7 @@ Feature: Bookmark/Unbookmark feature.
 
     When I am logged in as "Gregory Bookmark"
     And I go to the homepage of the "<name>" <type>
-    And I click "Unbookmark" in the "Bookmark block" region
+    And I click "Bookmarked" in the "Bookmark block" region
     Then I should see the link "Bookmark" in the "Bookmark block"
 
     Examples:
@@ -52,3 +52,25 @@ Feature: Bookmark/Unbookmark feature.
       | document     |
       | event        |
       | news         |
+
+  Scenario: Anonymous user is asked to sign in if they attempt to bookmark
+    Given CAS users:
+      | Username | E-mail            | Password        | First name | Last name | Local username |
+      | lisab    | lisa@bookmark.com | bookmark123!#$l | Lisa       | Bookmark  | Lisa Bookmark  |
+
+    When I am an anonymous user
+    And I go to the homepage of the "Batman Begins" solution
+    And I click "Bookmark" in the "Bookmark block" region
+    Then a modal should open
+    And I should see the text "You are not signed in" in the "Modal title"
+    And I should see the heading "Sign in or register to bookmark this content" in the "Modal content"
+    And I should see the text "Bookmarking content allows you to save it for later reference and helps you organise your favourite resources" in the "Modal content"
+
+    When I click "Sign in" in the "Modal content"
+    Then I should see the heading "Sign in to continue"
+
+    When I fill in the following:
+      | E-mail address | lisa@bookmark.com |
+      | Password       | bookmark123!#$l   |
+    And I press "Log in"
+    Then I should see the heading "Batman Begins"
