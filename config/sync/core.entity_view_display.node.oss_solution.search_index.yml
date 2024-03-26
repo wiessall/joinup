@@ -45,7 +45,6 @@ dependencies:
     - field_delimiter
     - field_formatter_range
     - layout_builder
-    - options
     - template_suggestion
     - user
 third_party_settings:
@@ -156,14 +155,25 @@ content:
     label: hidden
     settings:
       link_to_entity: false
-    third_party_settings: {  }
+    third_party_settings: { }
     weight: 3
     region: content
   oss_software_type:
-    type: list_default
+    type: entity_reference_label
     label: hidden
-    settings: {  }
-    third_party_settings: {  }
+    settings:
+      link: false
+    third_party_settings:
+      field_delimiter:
+        delimiter: ''
+      field_formatter_range:
+        order: 0
+        limit: 0
+        offset: 0
+      joinup_slick:
+        preset: ''
+      template_suggestion:
+        template_suggestion: ''
     weight: 4
     region: content
   oss_used_by:

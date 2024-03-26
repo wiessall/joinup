@@ -54,9 +54,17 @@ Feature:
       | Cristian Gagliardi |
       | Vito Schiraldi     |
       | Semantic Turkey    |
+      | Not released       |
 
     When I click "View all" in the "Most recent solutions" region
     Then the option with text "Most Recent" from select "Sort by" is selected
+    And I should see the following tiles in the correct order:
+      | Spunta             |
+      | C4S ERP            |
+      | Cristian Gagliardi |
+      | Vito Schiraldi     |
+      | Semantic Turkey    |
+      | Not released       |
 
     # Most active solutions carousel.
     When I visit the OSS welcome page
@@ -65,10 +73,18 @@ Feature:
       | C4S ERP            |
       | Spunta             |
       | Vito Schiraldi     |
+      | Not released       |
       | Semantic Turkey    |
 
     When I click "View all" in the "Most active solutions" region
     Then the option with text "Most Active" from select "Sort by" is selected
+    And I should see the following tiles in the correct order:
+      | Cristian Gagliardi |
+      | C4S ERP            |
+      | Spunta             |
+      | Vito Schiraldi     |
+      | Not released       |
+      | Semantic Turkey    |
 
     # Check OSS label in tile footer.
     When I visit the OSS welcome page
@@ -169,7 +185,7 @@ Feature:
       | Maintenance type                                                                                   |
       |   Maintained by people donating their time to the project                                          |
       | Software type                                                                                      |
-      |   Typically installed and run in a a desktop operating system environment                          |
+      |   standalone/desktop                                                                               |
       | Used by                                                                                            |
       |   Administration 1,                                                                                |
       |   Administration 2,                                                                                |
@@ -178,8 +194,9 @@ Feature:
       |   ACME Ltd.                                                                                        |
       | Technical Contacts                                                                                 |
       |   FOSS Conference                                                                                  |
-      | Vitality                                                                                         |
-      | 41%                                                                                              |
+      | Vitality                                                                                           |
+      | 41%                                                                                                |
+    And the "div" element with "title" attribute should contain "The software is typically installed and run in a a desktop operating system environment."
     And I should see the following links:
       # Categories.
       | document-management              |

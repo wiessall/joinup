@@ -11,3 +11,14 @@ field.formatter.settings.joinup_oss_catalogue_link_to_solution_search:
     open_new:
       type: boolean
       label: 'Open search link in new tab'
+
+field.formatter.settings.joinup_entity_reference_label_tooltip:
+  type: mapping
+  label: 'Formatter displaying the label with tooltip of the referenced entities'
+  mapping:
+    link:
+      type: boolean
+      label: 'Link label to the referenced entity'
+    tooltip_text:
+      type: string
+      label: 'The tooltip text to display'
