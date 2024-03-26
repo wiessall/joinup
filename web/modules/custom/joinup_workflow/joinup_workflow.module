@@ -269,10 +269,8 @@ function joinup_workflow_entity_presave(EntityInterface $entity) {
  * Implements hook_entity_create().
  */
 function joinup_workflow_entity_create(EntityInterface $entity) {
-  // Since the state_machine module does not support same from-to state
-  // transitions, the transition events also don't fire. Normally, the
-  // transition event would be the one to decide whether the entity would be
-  // published or not, this is not happening for new entities.
+  // Normally, the transition event would be the one to decide whether the
+  // entity would be published or not, this is not happening for new entities.
   // In Joinup, we do not create any entity with an initial state but for
   // testing, it is necessary to setup the initial status automatically
   // depending on the initial state that is passed into the entity.
