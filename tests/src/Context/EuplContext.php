@@ -379,7 +379,7 @@ class EuplContext extends RawDrupalContext {
    *
    * @Then the following combination of licences should be described in the compatibility document:
    */
-  public function assertLicenceCompatibility(TableNode $table) {
+  public function assertLicenceCompatibility(TableNode $table): void {
     /** @var \Drupal\joinup_licence\JoinupLicenceCompatibilityRulePluginManager $plugin_manager */
     $plugin_manager = \Drupal::service('plugin.manager.joinup_licence_compatibility_rule');
     foreach ($table->getColumnsHash() as $test_case) {
@@ -388,9 +388,9 @@ class EuplContext extends RawDrupalContext {
       $expected_result = $test_case['document ID'];
 
       /** @var \Drupal\joinup_licence\Entity\LicenceInterface $inbound_licence */
-      $inbound_licence = $this->getEntityByLabel('rdf_entity', $use_label, 'licence');
+      $inbound_licence = $this->getEntityByLabel('node', $use_label, 'licence');
       /** @var \Drupal\joinup_licence\Entity\LicenceInterface $outbound_licence */
-      $outbound_licence = $this->getEntityByLabel('rdf_entity', $redistribute_as_label, 'licence');
+      $outbound_licence = $this->getEntityByLabel('node', $redistribute_as_label, 'licence');
 
       $result = $plugin_manager->getCompatibilityDocumentId($inbound_licence, $outbound_licence);
 
