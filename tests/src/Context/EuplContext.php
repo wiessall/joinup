@@ -467,7 +467,7 @@ class EuplContext extends RawDrupalContext {
     $solution->delete();
 
     Rdf::load('http://example.com/owner')->delete();
-
+    $this->cleanSPDXLicence();
     $this->cleanCompatibilityDocuments();
   }
 
@@ -479,6 +479,28 @@ class EuplContext extends RawDrupalContext {
   public function cleanCompatibilityDocuments(): void {
     $compatibility_document_storage = \Drupal::entityTypeManager()->getStorage('compatibility_document');
     $compatibility_document_storage->delete($compatibility_document_storage->loadMultiple());
+  }
+
+  /**
+   * Cleans up the SPDX licences.
+   */
+  private function cleanSPDXLicence(): void {
+    $entity_type_manager = \Drupal::service('entity_type.manager');
+    $vocabulary = $entity_type_manager->getStorage('taxonomy_vocabulary')->load('spdx_licence');
+
+    if ($vocabulary) {
+      $term_storage = $entity_type_manager->getStorage('taxonomy_term');
+      $terms = $term_storage->loadTree($vocabulary->id());
+
+      foreach ($terms as $term) {
+        $term = $term_storage->load($term->tid);
+        if ($term) {
+          $term->delete();
+        }
+      }
+
+      $entity_type_manager->getStorage('taxonomy_term')->resetCache();
+    }
   }
 
   /**

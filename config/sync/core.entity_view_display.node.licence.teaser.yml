@@ -44,4 +44,9 @@ hidden:
   published_at: true
   search_api_excerpt: true
   spdx_licence: true
+  spdx_licence_external_url: true
+  spdx_licence_id: true
+  spdx_licence_label: true
+  spdx_licence_text: true
+  spdx_see_also: true
   uri: true
