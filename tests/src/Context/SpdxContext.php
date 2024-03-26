@@ -8,7 +8,6 @@ use Behat\Gherkin\Node\TableNode;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\joinup\Traits\EntityTrait;
 use Drupal\joinup\Traits\TestingEntitiesTrait;
-use Drupal\taxonomy\Entity\Term;
 
 /**
  * SPDX licences context.
@@ -16,7 +15,6 @@ use Drupal\taxonomy\Entity\Term;
 class SpdxContext extends RawDrupalContext {
 
   use EntityTrait;
-  use TestingEntitiesTrait;
 
   /**
    * Mapping of human-readable field labels to machine names.
@@ -65,7 +63,7 @@ class SpdxContext extends RawDrupalContext {
         $values->{$aliases[$key]} = $value;
       };
 
-      $this->createLicence($values);
+      $this->termCreate($values);
     }
   }
 
@@ -84,21 +82,6 @@ class SpdxContext extends RawDrupalContext {
   public function visitSpdxLicence(string $licence): void {
     $term = $this->getEntityByLabel('taxonomy_term', $licence);
     $this->visitPath($term->toUrl()->toString());
-  }
-
-  /**
-   * Creates a licence from the given value object.
-   *
-   * @param \stdClass $values
-   *   A value object as used internally by Behat Drupal Extension.
-   *
-   * @throws \Exception
-   *   Thrown when a field name is invalid.
-   */
-  protected function createLicence(\stdClass $values): void {
-    $this->parseEntityFields('taxonomy_term', $values);
-    $entity_id = $this->getDriver()->createEntity('taxonomy_term', $values)->id;
-    $this->entities['taxonomy_term'][$entity_id] = Term::load($entity_id);
   }
 
 }
