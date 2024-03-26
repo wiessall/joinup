@@ -7,7 +7,6 @@ namespace Drupal\joinup\Context;
 use Behat\Gherkin\Node\TableNode;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\joinup\Traits\EntityTrait;
-use Drupal\joinup\Traits\TestingEntitiesTrait;
 
 /**
  * SPDX licences context.
@@ -47,7 +46,7 @@ class SpdxContext extends RawDrupalContext {
   public function givenSpdxLicences(TableNode $data): void {
     $aliases = self::FIELD_ALIASES;
     foreach ($data->getColumnsHash() as $licence_data) {
-      $values = (object) ['vid' => 'spdx_licence'];
+      $values = (object) ['vocabulary_machine_name' => 'spdx_licence'];
 
       // Replace the human-readable aliases with the field machine names.
       foreach ($licence_data as $key => $value) {
