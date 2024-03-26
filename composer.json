@@ -454,9 +454,6 @@
             },
             "drupal/webform": {
                 "Radios or Checkboxes inside Composite not saved @see https://www.drupal.org/project/webform/issues/3216923": "resources/patch/php/drupal/webform/368.diff"
-            },
-            "ec-europa/toolkit": {
-                "DROPSEC-8519: Correctly parse the .env files @see https://github.com/ec-europa/toolkit/pull/744": "resources/patch/php/ec-europa/toolkit/744.diff"
             }
         },
         "artifacts": {

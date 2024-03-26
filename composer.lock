@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "8e1f23fdb21b8d929433467aa2d0ec2b",
+    "content-hash": "4f1e7b4f61257a972b8d9b23c2482bf7",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -17558,16 +17558,16 @@
         },
         {
             "name": "ec-europa/toolkit",
-            "version": "10.8.1",
+            "version": "10.9.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/ec-europa/toolkit.git",
-                "reference": "e32d42df50eb7c941affbdecbd22644f2ce7868a"
+                "reference": "0c4c9754b69e6c41596aeca269dcf3a710e0ca37"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ec-europa/toolkit/zipball/e32d42df50eb7c941affbdecbd22644f2ce7868a",
-                "reference": "e32d42df50eb7c941affbdecbd22644f2ce7868a",
+                "url": "https://api.github.com/repos/ec-europa/toolkit/zipball/0c4c9754b69e6c41596aeca269dcf3a710e0ca37",
+                "reference": "0c4c9754b69e6c41596aeca269dcf3a710e0ca37",
                 "shasum": ""
             },
             "require": {
@@ -17592,7 +17592,8 @@
                 "phpstan/phpstan": "^1.10",
                 "phpstan/phpstan-deprecation-rules": "^1.0",
                 "phpunit/phpunit": "^9.5 || ^10.0",
-                "squizlabs/php_codesniffer": "^3.7"
+                "squizlabs/php_codesniffer": "^3.7",
+                "vlucas/phpdotenv": "^5.6"
             },
             "suggest": {
                 "drupal/console": "The Drupal CLI, tool to generate boilerplate code, interact with and debug Drupal."
@@ -17614,13 +17615,13 @@
             "license": [
                 "EUPL-1.2"
             ],
-            "description": "Toolkit packaged for Drupal 9.",
+            "description": "Toolkit packaged for Drupal projects based on Robo.",
             "homepage": "https://github.com/ec-europa/toolkit",
             "support": {
                 "email": "DIGIT-NEXTEUROPA-QA@ec.europa.eu",
                 "source": "https://github.com/ec-europa/toolkit"
             },
-            "time": "2024-02-02T10:37:01+00:00"
+            "time": "2024-02-15T10:44:09+00:00"
         },
         {
             "name": "enlightn/security-checker",
