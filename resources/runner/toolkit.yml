@@ -4,6 +4,44 @@ toolkit:
   project_id: digit-joinup
   tmp_folder: ${joinup.dir}/tmp
   clone:
+    dumpfile: mysql.tar
+    install:
+      commands:
+        before:
+          - task: run
+            command: joinup:environment
+          - task: exec
+            command: ${drush.bin} memcache:flush-all
+          - task: run
+            command: drupal:settings
+            arguments:
+              - install
+        after:
+          # The `toolkit:run-deploy` command has enabled config read-only.
+          - task: run
+            command: config-readonly:disable
+          - task: run
+            command: testing:install-modules
+          - task: exec
+            command: ${drush.bin}
+            arguments:
+              - cas-mock-server:start
+            options:
+              yes: null
+              root: ${joinup.site_dir}
+          - task: exec
+            command: ${drush.bin}
+            arguments:
+              - php:eval
+              - if (node_access_needs_rebuild()) { node_access_rebuild(); }
+          - task: run
+            command: drupal:settings
+            arguments:
+              - site-clone
+          - task: run
+            command: config-readonly:enable
+          - task: exec
+            command: test ! -z "$CI" || vendor/bin/run solr:build-core-config
     nextcloud:
       services:
         - mysql
@@ -113,48 +151,6 @@ commands:
       arguments:
         - php:eval
         - if (node_access_needs_rebuild()) { node_access_rebuild(); }
-    - task: run
-      command: config-readonly:enable
-    - task: exec
-      command: test ! -z "$CI" || vendor/bin/run solr:build-core-config
-
-  # Overrides the toolkit:install-clone command.
-  toolkit:install-clone:
-    - task: run
-      command: joinup:environment
-    - task: exec
-      command: ${drush.bin} memcache:flush-all
-    - task: run
-      command: drupal:settings
-      arguments:
-        - install
-    - task: run
-      command: toolkit:install-dump
-      options:
-        dumpfile: mysql.tar
-    - task: run
-      command: toolkit:run-deploy
-    # The `toolkit:run-deploy` command has enabled config read-only.
-    - task: run
-      command: config-readonly:disable
-    - task: run
-      command: testing:install-modules
-    - task: exec
-      command: ${drush.bin}
-      arguments:
-        - cas-mock-server:start
-      options:
-        yes: null
-        root: ${joinup.site_dir}
-    - task: exec
-      command: ${drush.bin}
-      arguments:
-        - php:eval
-        - if (node_access_needs_rebuild()) { node_access_rebuild(); }
-    - task: run
-      command: drupal:settings
-      arguments:
-        - site-clone
     - task: run
       command: config-readonly:enable
     - task: exec
