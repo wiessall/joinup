@@ -15,7 +15,6 @@ use Drupal\joinup\Traits\EntityTrait;
 use Drupal\joinup\Traits\JavascriptTrait;
 use Drupal\joinup\Traits\TestingEntitiesTrait;
 use Drupal\joinup_licence\Entity\CompatibilityDocument;
-use Drupal\node\Entity\Node;
 use Drupal\rdf_entity\Entity\Rdf;
 use LoversOfBehat\TableExtension\Hook\Scope\AfterTableFetchScope;
 use PHPUnit\Framework\Assert;
