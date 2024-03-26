@@ -13,6 +13,7 @@ use Drupal\joinup\HtmlManipulator;
 use Drupal\joinup\Traits\ConfigReadOnlyTrait;
 use Drupal\joinup\Traits\EntityTrait;
 use Drupal\joinup\Traits\JavascriptTrait;
+use Drupal\joinup\Traits\TestingEntitiesTrait;
 use Drupal\joinup_licence\Entity\CompatibilityDocument;
 use Drupal\node\Entity\Node;
 use Drupal\rdf_entity\Entity\Rdf;
@@ -27,6 +28,7 @@ class EuplContext extends RawDrupalContext {
   use ConfigReadOnlyTrait;
   use EntityTrait;
   use JavascriptTrait;
+  use TestingEntitiesTrait;
 
   /**
    * Creates the standard 'EUPL' collection and several dependencies.
@@ -39,48 +41,54 @@ class EuplContext extends RawDrupalContext {
    */
   public function setupEuplData(): void {
     // Create an owner.
-    Rdf::create([
+    $owner = Rdf::create([
       'rid' => 'owner',
       'id' => 'http://example.com/owner',
       'field_owner_name' => 'Owner',
-    ])->save();
+    ]);
+    $owner->save();
+    $this->entities['rdf_entity'][$owner->id()] = $owner;
 
     // Create the EUPL entity.
-    Rdf::create([
+    $collection = Rdf::create([
       'rid' => 'collection',
       'id' => Eupl::EUPL_COMMUNITY_ID,
       'label' => 'EUPL',
       'field_ar_state' => 'published',
       'field_ar_owner' => 'http://example.com/owner',
-    ])->save();
+    ]);
+    $collection->save();
+    $this->entities['rdf_entity'][$collection->id()] = $collection;
 
-    Rdf::create([
+    $solution = Rdf::create([
       'rid' => 'solution',
       'collection' => Eupl::EUPL_COMMUNITY_ID,
       'id' => Eupl::JLA_SOLUTION,
       'label' => 'Joinup Licensing Assistant',
       'field_is_state' => 'published',
-    ])->save();
+    ]);
+    $solution->save();
+    $this->entities['rdf_entity'][$solution->id()] = $solution;
 
     // The 'Joinup Licensing Assistant' standard custom page.
-    Node::create([
+    $this->nodeCreate((object) [
       'nid' => 701805,
       'type' => 'custom_page',
       'uuid' => '3bee8b04-75fd-46a8-94b3-af0d8f5a4c41',
       'title' => 'JLA',
       'og_audience' => Eupl::JLA_SOLUTION,
       'field_state' => 'published',
-    ])->save();
+    ]);
 
     // The 'Joinup Licensing Compatibility Check' standard custom page.
-    Node::create([
+    $this->nodeCreate((object) [
       'nid' => 703242,
       'type' => 'custom_page',
       'uuid' => '431f631f-e973-4fae-8368-c31f346a9616',
       'title' => 'JLC',
       'og_audience' => Eupl::JLA_SOLUTION,
       'field_state' => 'published',
-    ])->save();
+    ]);
 
     // Populate the compatibility documents.
     CompatibilityDocument::populate();
@@ -443,31 +451,11 @@ class EuplContext extends RawDrupalContext {
   /**
    * Clears the content created for the purpose of this test.
    *
-   * @throws \Drupal\Core\Entity\EntityStorageException
-   *   Thrown when one of the created entities could not be deleted.
-   *
    * @AfterScenario @eupl&&@api
+   *
+   * @throws \Drupal\Core\Entity\EntityStorageException
    */
   public function cleanEuplData(): void {
-    /** @var \Drupal\Core\Entity\EntityRepositoryInterface $entity_repository */
-    $entity_repository = \Drupal::service('entity.repository');
-    foreach ([
-      '3bee8b04-75fd-46a8-94b3-af0d8f5a4c41',
-      '431f631f-e973-4fae-8368-c31f346a9616',
-    ] as $uuid) {
-      $entity_repository->loadEntityByUuid('node', $uuid)->delete();
-    }
-
-    $collection = Rdf::load(Eupl::EUPL_COMMUNITY_ID);
-    $collection->skip_notification = TRUE;
-    $collection->delete();
-
-    $solution = Rdf::load(Eupl::JLA_SOLUTION);
-    $solution->skip_notification = TRUE;
-    $solution->delete();
-
-    Rdf::load('http://example.com/owner')->delete();
-    $this->cleanSPDXLicence();
     $this->cleanCompatibilityDocuments();
   }
 
@@ -479,28 +467,6 @@ class EuplContext extends RawDrupalContext {
   public function cleanCompatibilityDocuments(): void {
     $compatibility_document_storage = \Drupal::entityTypeManager()->getStorage('compatibility_document');
     $compatibility_document_storage->delete($compatibility_document_storage->loadMultiple());
-  }
-
-  /**
-   * Cleans up the SPDX licences.
-   */
-  private function cleanSPDXLicence(): void {
-    $entity_type_manager = \Drupal::service('entity_type.manager');
-    $vocabulary = $entity_type_manager->getStorage('taxonomy_vocabulary')->load('spdx_licence');
-
-    if ($vocabulary) {
-      $term_storage = $entity_type_manager->getStorage('taxonomy_term');
-      $terms = $term_storage->loadTree($vocabulary->id());
-
-      foreach ($terms as $term) {
-        $term = $term_storage->load($term->tid);
-        if ($term) {
-          $term->delete();
-        }
-      }
-
-      $entity_type_manager->getStorage('taxonomy_term')->resetCache();
-    }
   }
 
   /**
