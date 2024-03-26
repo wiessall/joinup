@@ -71,4 +71,11 @@ class OssSolution extends Node implements OssSolutionInterface {
     return $this->get(RelevantLanguageCode::FIELD_NAME)->first()->getString();
   }
 
+  /**
+   * {@inheritdoc}
+   */
+  public function isArchived(): bool {
+    return $this->get('oss_archived')->getString() === '1';
+  }
+
 }
