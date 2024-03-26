@@ -1,20 +1,20 @@
-uuid: 937e9884-591f-429a-8495-8b005a5b7a79
+uuid: 2ea0c65e-d70a-4e9b-ad32-61a69162fdff
 langcode: en
 status: true
 dependencies:
   config:
     - field.storage.node.oss_software_type
     - node.type.oss_solution
-  module:
-    - options
+    - taxonomy.vocabulary.oss_software_type
 third_party_settings:
   eu_oss_catalogue:
     publiccode_yml:
       resolvers:
-        -
-          plugin: default
+        - plugin: taxonomy_term
           config:
             path: softwareType
+            vid: oss_software_type
+            controlled: true
 id: node.oss_solution.oss_software_type
 field_name: oss_software_type
 entity_type: node
@@ -25,5 +25,14 @@ required: false
 translatable: false
 default_value: {  }
 default_value_callback: ''
-settings: {  }
-field_type: list_string
+settings:
+  handler: 'default:taxonomy_term'
+  handler_settings:
+    target_bundles:
+      oss_software_type: oss_software_type
+    sort:
+      field: name
+      direction: asc
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference
