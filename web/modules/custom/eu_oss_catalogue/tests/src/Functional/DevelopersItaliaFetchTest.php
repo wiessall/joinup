@@ -45,14 +45,26 @@ class DevelopersItaliaFetchTest extends FetchTestBase {
 
     $this->assertOssSolution('Project 1', 'de');
 
-    // Creation log entry for 'GitHub solution 1'.
-    $this->assertCount(1, $this->getLogEntries('Solution @solution was created.', 'a:1:{s:9:"@solution";s:17:"GitHub solution 1";}'));
-    // Creation log entry for 'Project 1.1'.
-    $this->assertCount(1, $this->getLogEntries('Solution @solution was created.', 'a:1:{s:9:"@solution";s:11:"Project 1.1";}'));
-    // Creation log entry for 'Project 1.2'.
-    $this->assertCount(1, $this->getLogEntries('Solution @solution was created.', 'a:1:{s:9:"@solution";s:11:"Project 1.2";}'));
-    // Creation log entry for 'Project 1'.
-    $this->assertCount(1, $this->getLogEntries('Solution @solution was created.', 'a:1:{s:9:"@solution";s:9:"Project 1";}'));
+    $this->assertCount(
+      1,
+      $this->getLogEntries('Solution @solution was created.', 'a:1:{s:9:"@solution";s:17:"GitHub solution 1";}'),
+      'Creation log entry for GitHub solution 1'
+    );
+    $this->assertCount(
+      1,
+      $this->getLogEntries('Solution @solution was created.', 'a:1:{s:9:"@solution";s:11:"Project 1.1";}'),
+      'Creation log entry for Project 1.1'
+    );
+    $this->assertCount(
+      1,
+      $this->getLogEntries('Solution @solution was created.', 'a:1:{s:9:"@solution";s:11:"Project 1.2";}'),
+      'Creation log entry for Project 1.2'
+    );
+    $this->assertCount(
+      1,
+      $this->getLogEntries('Solution @solution was created.', 'a:1:{s:9:"@solution";s:9:"Project 1";}'),
+      'Creation log entry for Project 1'
+    );
 
     // Re-run the process and update one solution from a new source-provider.
     $this->fetchSolutions('testing_provider', 4);
@@ -66,14 +78,7 @@ class DevelopersItaliaFetchTest extends FetchTestBase {
     $expected_providers = ['developers_italia', 'testing_provider'];
     $this->assertSame($expected_providers, array_map(fn (array $item): string => $item['plugin_id'], $updatedSolution->get('oss_source')->getValue()));
 
-    // Update log entry for 'GitHub solution 1 (updated)'.
-    $this->assertCount(1, $this->getLogEntries('Solution @solution was updated.', 'a:1:{s:9:"@solution";s:27:"GitHub solution 1 (updated)";}'));
-    // Update log entry for 'Project 1.1'.
-    $this->assertCount(1, $this->getLogEntries('Solution @solution was created.', 'a:1:{s:9:"@solution";s:11:"Project 1.1";}'));
-    // Creation log entry for 'Project 1.2'.
-    $this->assertCount(1, $this->getLogEntries('Solution @solution was created.', 'a:1:{s:9:"@solution";s:11:"Project 1.2";}'));
-    // Creation log entry for 'Project 1'.
-    $this->assertCount(1, $this->getLogEntries('Solution @solution was created.', 'a:1:{s:9:"@solution";s:9:"Project 1";}'));
+    $this->assertSame('Update, because data has been changed in "Testing provider" source/catalogue', $updatedSolution->getRevisionLogMessage(), 'Update revision message for GitHub solution 1');
   }
 
   /**
@@ -88,10 +93,11 @@ class DevelopersItaliaFetchTest extends FetchTestBase {
     // Provided no longer has "Project 1.1", so it should be archived.
     $this->fetchSolutions('removing_solution_provider', 0);
 
-    $solution2 = $this->getNodeByTitle('Project 1.1', TRUE);
-    $this->assertNotFalse($solution2);
-    $this->assertSame('1', $solution2->get('oss_archived')->getString());
-    $this->assertSame(0, $solution2->get('oss_source')->count());
+    $solutionArchived = $this->getNodeByTitle('Project 1.1', TRUE);
+    $this->assertNotFalse($solutionArchived);
+    $this->assertSame('1', $solutionArchived->get('oss_archived')->getString());
+    $this->assertSame(0, $solutionArchived->get('oss_source')->count());
+    $this->assertSame('Archive, because removed (not present anymore) from "Removing solution provider" source/catalogue', $solutionArchived->getRevisionLogMessage());
   }
 
   /**
@@ -114,10 +120,11 @@ class DevelopersItaliaFetchTest extends FetchTestBase {
     // but the source should be removed.
     $this->fetchSolutions('removing_solution_provider', 0);
 
-    $solution2 = $this->getNodeByTitle('Project 1.1', TRUE);
-    $this->assertNotEmpty($solution2);
-    $this->assertSame('0', $solution2->get('oss_archived')->getString());
-    $this->assertSame(1, $solution2->get('oss_source')->count());
+    $removedSolution = $this->getNodeByTitle('Project 1.1', TRUE);
+    $this->assertNotEmpty($removedSolution);
+    $this->assertSame('0', $removedSolution->get('oss_archived')->getString());
+    $this->assertSame(1, $removedSolution->get('oss_source')->count());
+    $this->assertSame('Update, because of the only removal "Removing solution provider" source/catalogue', $removedSolution->getRevisionLogMessage());
   }
 
   /**

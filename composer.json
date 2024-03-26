@@ -277,6 +277,9 @@
             "drupal/blazy": {
                 "The definition for the sequence declares the type of its items in a way that is deprecated in drupal:8.0.0 @see https://drupal.org/i/3411047": "resources/patch/php/drupal/blazy/3411047-note246730.diff"
             },
+            "drupal/cached_computed_field": {
+                "Deprecated function: Return type of Drupal\\cached_computed_field\\ExpiredItemCollection @see https://www.drupal.org/project/cached_computed_field/issues/3419688": "resources/patch/php/drupal/cached_computed_field/3419688.patch"
+            },
             "drupal/cas": {
                 "Should CAS respect Drupal registration configuration @see https://www.drupal.org/project/cas/issues/3038279": "resources/patch/php/drupal/cas/3038279.patch"
             },
