@@ -157,6 +157,7 @@ module:
   mysql: 0
   nio: 0
   node: 0
+  node_revision_delete: 0
   oe_bootstrap_theme_helper: 0
   oe_dashboard_agent: 0
   oe_gisco_geocoding: 0
