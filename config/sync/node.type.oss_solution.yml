@@ -4,10 +4,28 @@ status: true
 dependencies:
   module:
     - menu_ui
+    - node_revision_delete
 third_party_settings:
   menu_ui:
     available_menus: {  }
     parent: ''
+  node_revision_delete:
+    amount:
+      status: true
+      settings:
+        amount: 15
+    created:
+      status: false
+      settings:
+        age: 1
+    drafts:
+      status: false
+      settings:
+        age: 1
+    only_drafts:
+      status: false
+      settings:
+        age: 0
 _core:
   default_config_hash: D4RUL67nUPtd5VbJ908K4vuxx4rq48Px0mexni3yPJY
 label_singular: 'OSS Solution'
