@@ -128,7 +128,7 @@ commands:
       arguments:
         - install
     - task: run
-      command: toolkit:install-dump
+      command: toolkit:install-dump --dumpfile=mysql.tar
     - task: run
       command: toolkit:run-deploy
     # The `toolkit:run-deploy` command has enabled config read-only.
