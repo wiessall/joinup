@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "680b0a7b8138f99db639aeca5289b451",
+    "content-hash": "63d2e4a57bcb442d704ad6f09da88698",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -23389,7 +23389,7 @@
             "version": "2.x-dev",
             "source": {
                 "type": "git",
-                "url": "https://gitlab.com/weitzman/drupal-test-traits.git",
+                "url": "https://git.drupalcode.org/project/dtt/",
                 "reference": "68d50c7c4e755576cf413c34add967aa75073869"
             },
             "dist": {
@@ -23490,6 +23490,7 @@
         "drupal/dropsolid_purge": 10,
         "drupal/facets_block": 10,
         "drupal/facets_date_range": 10,
+        "drupal/node_revision_delete": 5,
         "drupal/page_manager": 10,
         "drupal/views_block_area": 10,
         "drupal/masquerade": 5,
