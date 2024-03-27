@@ -100,10 +100,10 @@ display:
         options: {  }
       empty: {  }
       sorts:
-        label:
-          id: label
+        title:
+          id: title
           table: search_api_index_published
-          field: label
+          field: title
           relationship: none
           group_type: group
           admin_label: ''
@@ -111,7 +111,7 @@ display:
           order: ASC
           expose:
             label: ''
-            field_identifier: label
+            field_identifier: ''
           exposed: false
       arguments: {  }
       filters:
