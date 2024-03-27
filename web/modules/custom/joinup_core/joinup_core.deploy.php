@@ -13,3 +13,47 @@
  */
 
 declare(strict_types=1);
+
+use EasyRdf\Graph;
+
+/**
+ * Restore missing data.
+ */
+function joinup_core_deploy_110400(): string {
+  \Drupal::getContainer()->get('sparql.endpoint')->update('WITH <http://joinup.eu/solution/published> DELETE { ?s ?p ?o } WHERE { ?s ?p ?o . VALUES ?s { <http://data.europa.eu/w21/18a8c8c8-67da-4016-9cd9-aa24ba04f87c> } } ');
+  $graph_store = \Drupal::getContainer()->get('joinup_sparql.graph_store.helper')->createGraphStore();
+  $graph = new Graph();
+
+  $data = <<<TURTLE
+<http://data.europa.eu/w21/18a8c8c8-67da-4016-9cd9-aa24ba04f87c>	<http://joinup.eu/is/workflow_status>	"published"^^<http://www.w3.org/2001/XMLSchema#string> .
+<http://data.europa.eu/w21/18a8c8c8-67da-4016-9cd9-aa24ba04f87c>	<http://www.w3.org/1999/02/22-rdf-syntax-ns#type>	<http://www.w3.org/ns/dcat#Dataset> .
+<http://data.europa.eu/w21/18a8c8c8-67da-4016-9cd9-aa24ba04f87c>	<http://purl.org/dc/terms/modified>	"2024-03-12T15:49:48Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> .
+<http://data.europa.eu/w21/18a8c8c8-67da-4016-9cd9-aa24ba04f87c>	<http://joinup.eu/search>	"a:5:{s:6:\"fields\";a:4:{s:23:\"field_is_content_status\";a:2:{s:6:\"weight\";s:1:\"0\";s:6:\"region\";s:3:\"top\";}s:23:\"solution_content_bundle\";a:2:{s:6:\"weight\";s:1:\"0\";s:6:\"region\";s:3:\"top\";}s:25:\"solution_spatial_coverage\";a:2:{s:6:\"weight\";s:1:\"0\";s:6:\"region\";s:13:\"inline_facets\";}s:14:\"solution_topic\";a:2:{s:6:\"weight\";s:1:\"0\";s:6:\"region\";s:13:\"inline_facets\";}}s:7:\"enabled\";i:1;s:13:\"query_presets\";s:0:\"\";s:13:\"show_archived\";s:10:\"unarchived\";s:5:\"limit\";s:2:\"12\";}"^^<http://www.w3.org/2001/XMLSchema#string> .
+<http://data.europa.eu/w21/18a8c8c8-67da-4016-9cd9-aa24ba04f87c>	<http://purl.org/dc/terms/abstract>	"This free, online course will provide you with advanced knowledge on the European Interoperability Reference Architecture." .
+<http://data.europa.eu/w21/18a8c8c8-67da-4016-9cd9-aa24ba04f87c>	<http://www.w3.org/ns/dcat#contactPoint>	<http://data.europa.eu/w21/2c8ffb3b-ae81-4453-8dfe-3fc026a95234> .
+<http://data.europa.eu/w21/18a8c8c8-67da-4016-9cd9-aa24ba04f87c>	<http://joinup.eu/language/default>	"1" .
+<http://data.europa.eu/w21/18a8c8c8-67da-4016-9cd9-aa24ba04f87c>	<http://purl.org/dc/terms/title>	"European Interoperability Reference Architecture: a deep dive"@en .
+<http://data.europa.eu/w21/18a8c8c8-67da-4016-9cd9-aa24ba04f87c>	<http://purl.org/dc/dcmitype/StillImage>	"624597"^^<http://www.w3.org/2001/XMLSchema#string> .
+<http://data.europa.eu/w21/18a8c8c8-67da-4016-9cd9-aa24ba04f87c>	<http://purl.org/dc/terms/description>	"<p><strong>Click </strong><a href=\"https://academy.europa.eu/courses/the-european-interoperability-reference-architecture-a-deep-div\"><strong>here</strong></a><strong> to take the course on Europe Academy!</strong>&nbsp;</p><p><strong>Download the SCORM package on your eLearning platform.</strong></p><p>Interoperable Europe Academy is aiming to provide free of charge, high-quality online courses open to anyone. One of the Academy's main goals is reusability, that is why the content of all courses are made available for downloading and reusing.&nbsp;</p><p>All courses created by the Interoperable Europe Academy consist of a SCORM package, a description of the course in PDF format and the official logo.</p><p>All the information can be found in the table below.</p><table><tbody><tr><td>Description</td><td>Resources</td></tr><tr><td>Introduction to the European Interoperability Reference Architecture</td><td><a href=\"/sites/default/files/inline-files/EIRA%20-%20Deep%20Dive.zip\" data-entity-type=\"file\" data-entity-uuid=\"8a9ccf90-fe15-403b-85cd-81facd05cb9c\">EIRA - Deep Dive.zip</a></td></tr><tr><td>Quiz</td><td><a href=\"/sites/default/files/inline-files/EIRA%20Deep%20Dive%20-%20Quiz.zip\" data-entity-type=\"file\" data-entity-uuid=\"7176443c-10e3-4343-b8d9-025a0cb51fbb\">EIRA Deep Dive - Quiz.zip</a></td></tr><tr><td>Essential Course Information</td><td><a href=\"/sites/default/files/inline-files/EIRA%20Deep%20Dive%20-%20ECI.pdf\" data-entity-type=\"file\" data-entity-uuid=\"1564b5fd-4dce-4868-99bd-d0ca199397aa\">EIRA Deep Dive - ECI.pdf</a></td></tr><tr><td>Logo</td><td><a href=\"/sites/default/files/inline-files/IOP%20EU%20Academy%20for%20EU%20Academy%20Course%20Thumbnail%20600x%20383%20px%20EIRA.png\" data-entity-type=\"file\" data-entity-uuid=\"337405e4-7b15-451f-a8a2-fe37515f37eb\">IOP EU Academy for EU Academy Course Thumbnail 600x 383 px EIRA.png</a></td></tr></tbody></table><p>Should you need any additional information or clarification regarding the course, feel free to contact us at&nbsp;IOP-Academy at ec.europa.eu. We recommend you to contact us when you are setting up the course on your platform in order for us to provide you with all the information needed.</p><p>Please let us know when the course is available on your platform and enjoy the learning!</p>"@en .
+<http://data.europa.eu/w21/18a8c8c8-67da-4016-9cd9-aa24ba04f87c>	<http://joinup.eu/language/translation_source>	"und"@en .
+<http://data.europa.eu/w21/18a8c8c8-67da-4016-9cd9-aa24ba04f87c>	<http://purl.org/dc/terms/type>	<http://data.europa.eu/dr8/InteroperableDigitalPublicService> .
+<http://data.europa.eu/w21/18a8c8c8-67da-4016-9cd9-aa24ba04f87c>	<http://joinup.eu/solution/webdav_creation>	"true"^^<http://www.w3.org/2001/XMLSchema#boolean> .
+<http://data.europa.eu/w21/18a8c8c8-67da-4016-9cd9-aa24ba04f87c>	<http://joinup.eu/language/translation_outdated>	""@en .
+<http://data.europa.eu/w21/18a8c8c8-67da-4016-9cd9-aa24ba04f87c>	<http://joinup.eu/solution/related_by_type>	"true"^^<http://www.w3.org/2001/XMLSchema#boolean> .
+<http://data.europa.eu/w21/18a8c8c8-67da-4016-9cd9-aa24ba04f87c>	<http://joinup.eu/site-featured>	"false"^^<http://www.w3.org/2001/XMLSchema#boolean> .
+<http://data.europa.eu/w21/18a8c8c8-67da-4016-9cd9-aa24ba04f87c>	<http://joinup.eu/language/translation_status>	"1"@en .
+<http://data.europa.eu/w21/18a8c8c8-67da-4016-9cd9-aa24ba04f87c>	<http://purl.org/dc/terms/issued>	"2024-03-12T15:13:23Z"^^<http://www.w3.org/2001/XMLSchema#dateTime> .
+<http://data.europa.eu/w21/18a8c8c8-67da-4016-9cd9-aa24ba04f87c>	<http://joinup.eu/language>	"en"@en .
+<http://data.europa.eu/w21/18a8c8c8-67da-4016-9cd9-aa24ba04f87c>	<http://purl.org/dc/terms/alternative>	"iop-eiradive" .
+<http://data.europa.eu/w21/18a8c8c8-67da-4016-9cd9-aa24ba04f87c>	<http://joinup.eu/owner/uid>	"749342"^^<http://www.w3.org/2001/XMLSchema#integer> .
+<http://data.europa.eu/w21/18a8c8c8-67da-4016-9cd9-aa24ba04f87c>	<http://joinup.eu/solution/content_creation>	"facilitators_and_authors" .
+<http://data.europa.eu/w21/18a8c8c8-67da-4016-9cd9-aa24ba04f87c>	<http://joinup.eu/vocabulary/topic>	<http://joinup.eu/ontology/topic#culture-and-education> .
+<http://data.europa.eu/w21/18a8c8c8-67da-4016-9cd9-aa24ba04f87c>	<http://joinup.eu/solution/moderation>	"false"^^<http://www.w3.org/2001/XMLSchema#boolean> .
+<http://data.europa.eu/w21/18a8c8c8-67da-4016-9cd9-aa24ba04f87c>	<http://purl.org/dc/terms/publisher>	<http://data.europa.eu/w21/e005c095-3f37-4b20-9915-e95ce19e7a01> .
+<http://data.europa.eu/w21/18a8c8c8-67da-4016-9cd9-aa24ba04f87c>	<http://joinup.eu/language/translation_author>	"749342"@en .
+TURTLE;
+
+  $graph->parse($data, 'turtle');
+  $graph_store->insert($graph, 'http://joinup.eu/solution/published');
+  return 'The solution with UUID 18a8c8c8-67da-4016-9cd9-aa24ba04f87c has been restored.';
+}
