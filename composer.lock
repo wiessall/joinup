@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "8e1f23fdb21b8d929433467aa2d0ec2b",
+    "content-hash": "a2f10ccd7cd71713f4be92207e36d4b3",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -6393,17 +6393,17 @@
         },
         {
             "name": "drupal/rdf_entity",
-            "version": "2.0.0-alpha8",
+            "version": "2.0.0-alpha9",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/rdf_entity.git",
-                "reference": "2.0.0-alpha8"
+                "reference": "2.0.0-alpha9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/rdf_entity-2.0.0-alpha8.zip",
-                "reference": "2.0.0-alpha8",
-                "shasum": "0fa841539f98132c91b92f5c7ae9a9802bba7cee"
+                "url": "https://ftp.drupal.org/files/projects/rdf_entity-2.0.0-alpha9.zip",
+                "reference": "2.0.0-alpha9",
+                "shasum": "460d334128e91072546f9a1ea077f08ed4c7a08f"
             },
             "require": {
                 "drupal/core": "^9.2 || ^10",
@@ -6418,8 +6418,8 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "2.0.0-alpha8",
-                    "datestamp": "1695108668",
+                    "version": "2.0.0-alpha9",
+                    "datestamp": "1711377427",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "Alpha releases are not covered by Drupal security advisories."

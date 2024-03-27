@@ -399,9 +399,7 @@
                 "Fix PHP 8.2 deprecation issue with PublishedAtOrNowComputed class @see https://www.drupal.org/project/publication_date/issues/3328575": "resources/patch/php/drupal/publication_date/3328575.patch"
             },
             "drupal/rdf_entity": {
-                "Allow bundle label plural variants @see https://github.com/ec-europa/rdf_entity/pull/12": "resources/patch/php/drupal/rdf_entity/ea8f6af001fca732e89a4be0e29643953f49a88f.diff",
-                "rdf_taxonomy generates a fatal error on the latest devel version @see https://www.drupal.org/project/rdf_entity/issues/3389721": "resources/patch/php/drupal/rdf_entity/3389721.diff",
-                "Allow new entities to be rendered @see https://www.drupal.org/project/rdf_entity/issues/3413718": "resources/patch/php/drupal/rdf_entity/3413718.diff"
+                "Allow bundle label plural variants @see https://github.com/ec-europa/rdf_entity/pull/12": "resources/patch/php/drupal/rdf_entity/ea8f6af001fca732e89a4be0e29643953f49a88f.diff"
             },
             "drupal/search_api": {
                 "item_id column is too short @see https://www.drupal.org/node/2829696": "resources/patch/php/drupal/search_api/2829696.patch",
@@ -436,6 +434,9 @@
             "drupal/sparql_entity_storage": {
                 "Interface contract violation @see https://drupal.org/i/3379328": "resources/patch/php/drupal/sparql_entity_storage/3379328.patch",
                 "Error when deleting a vocabulary @see https://www.drupal.org/i/3421694": "resources/patch/php/drupal/sparql_entity_storage/3421694.diff"
+            },
+            "drupal/state_machine": {
+                "Do not force default state in options. @see https://www.drupal.org/project/state_machine/issues/2746091": "resources/patch/php/drupal/state_machine/2746091.diff"
             },
             "drupal/svg_image": {
                 "SVG is not valid or cannot be sanitized, return an error. @see https://www.drupal.org/i/3350696": "resources/patch/php/drupal/svg_image/3350696.patch",

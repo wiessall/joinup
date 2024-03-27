@@ -78,7 +78,6 @@ class JoinupSubscriberServiceTest extends KernelTestBase {
     'state_machine_revisions',
     'system',
     'user',
-    'workflow_state_permission',
   ];
 
   /**

@@ -140,8 +140,8 @@ Feature: Like/unlike feature.
       | title             | state     | collection |
       | Likeable solution | published | Bulgaria   |
     And "custom_page" content:
-      | title                | collection | author    |
-      | Likeable custom page | Bulgaria   | Lisa Like |
+      | title                | collection | author    | state     |
+      | Likeable custom page | Bulgaria   | Lisa Like | published |
     And "discussion" content:
       | title               | collection | state     |
       | Likeable discussion | Bulgaria   | published |
@@ -197,7 +197,7 @@ Feature: Like/unlike feature.
   @javascript @terms
   Scenario: Tiles in the carousel should also give possibility to like content.
     Given custom_page content:
-      | title                | collection | author    | status    |
+      | title                | collection | author    | state     |
       | Likeable custom page | Bulgaria   | Lisa Like | published |
     And document content:
       | title             | collection | state     |

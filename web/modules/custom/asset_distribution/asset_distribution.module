@@ -117,10 +117,10 @@ function asset_distribution_rdf_entity_access(EntityInterface $entity, $operatio
   /** @var \Drupal\asset_distribution\Entity\AssetDistributionInterface $entity */
   $solution = $entity->getSolution();
   if ($operation !== 'view' && $solution->isArchived()) {
-    return AccessResult::forbidden();
+    return AccessResult::forbidden()->addCacheableDependency($solution);
   }
 
-  return AccessResult::neutral();
+  return AccessResult::neutral()->addCacheableDependency($solution);
 }
 
 /**
