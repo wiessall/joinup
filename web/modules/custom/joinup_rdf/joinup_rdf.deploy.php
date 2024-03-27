@@ -12,7 +12,7 @@ use Drupal\rdf_sync\RdfSyncConnection;
 /**
  * Create open vocabularies terms.
  */
-function joinup_rdf_deploy_110300(array &$sandbox): string {
+function joinup_rdf_deploy_110400(array &$sandbox): string {
   if (!isset($sandbox['graphs'])) {
     $sandbox['graphs'] = [
       'http://licence-legal-type' => 'legal_type',
@@ -58,7 +58,7 @@ function joinup_rdf_deploy_110300(array &$sandbox): string {
 /**
  * Fix term reference fields.
  */
-function joinup_rdf_deploy_110301(array &$sandbox): string {
+function joinup_rdf_deploy_110401(array &$sandbox): string {
   $db = \Drupal::database();
   $schema = $db->schema();
 
@@ -130,7 +130,7 @@ function joinup_rdf_deploy_110301(array &$sandbox): string {
 /**
  * Cleanup legacy data.
  */
-function joinup_rdf_deploy_110302(array &$sandbox): string {
+function joinup_rdf_deploy_110402(array &$sandbox): string {
   $graphUris = [
     'http://adms-sw-v1.00',
     'http://adms_skos_v1.00',
