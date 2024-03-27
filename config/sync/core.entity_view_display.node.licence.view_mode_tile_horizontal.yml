@@ -24,7 +24,7 @@ third_party_settings:
       label: 'Licence wrapper'
       parent_name: ''
       region: hidden
-      weight: 3
+      weight: 15
       format_type: html_element
       format_settings:
         classes: ''
@@ -53,21 +53,6 @@ content:
         template_suggestion: bare
     weight: 0
     region: content
-  spdx_licence_id:
-    settings: {  }
-    third_party_settings: {  }
-    weight: 6
-    region: content
-  spdx_licence_text:
-    settings: {  }
-    third_party_settings: {  }
-    weight: 7
-    region: content
-  spdx_see_also:
-    settings: {  }
-    third_party_settings: {  }
-    weight: 8
-    region: content
 hidden:
   deprecated: true
   langcode: true
@@ -79,5 +64,8 @@ hidden:
   search_api_excerpt: true
   spdx_licence: true
   spdx_licence_external_url: true
+  spdx_licence_id: true
   spdx_licence_label: true
+  spdx_licence_text: true
+  spdx_see_also: true
   uri: true
