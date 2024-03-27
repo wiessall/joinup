@@ -442,6 +442,9 @@
             },
             "drupal/webform": {
                 "Radios or Checkboxes inside Composite not saved @see https://www.drupal.org/project/webform/issues/3216923": "resources/patch/php/drupal/webform/368.diff"
+            },
+            "ec-europa/toolkit": {
+                "Allow commands before install clone @see https://github.com/ec-europa/toolkit/pull/757": "resources/patch/php/ec-europa/toolkit/757.diff"
             }
         },
         "artifacts": {
