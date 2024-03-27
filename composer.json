@@ -391,6 +391,9 @@
             "drupal/message_notify": {
                 "Allow 3rd-party to act before delivery @see https://www.drupal.org/project/message_notify/issues/3314370": "resources/patch/php/drupal/message_notify/3314370.diff"
             },
+            "drupal/node_revision_delete": {
+                "It is possible that queue table does not exist @see https://www.drupal.org/project/node_revision_delete/issues/3436432": "resources/patch/php/drupal/node_revision_delete/3436432.patch"
+            },
             "drupal/og": {
                 "The annotations for \"edit-form\" and \"delete-form\" @see https://www.drupal.org/project/og/issues/3338830": "resources/patch/php/drupal/og/3338830.diff",
                 "[Drupal 10.2] Using a translatable string as a category for field type is deprecated @see https://github.com/Gizra/og/pull/764": "resources/patch/php/drupal/og/pr764.diff"
