@@ -22,10 +22,10 @@ Feature: SEO for document content.
 
     When I visit the "SEO document" document
     Then the metatag JSON should be attached in the page
-    And 1 metatag graph of type "DigitalDocument" should exist in the page
+    And 1 metatag graph of type "http://schema.org/DigitalDocument" should exist in the page
     And the metatag graph of the item with "name" "SEO document" should have the following properties:
       | property            | value                                                    |
-      | @type               | DigitalDocument                                          |
+      | @type               | http://schema.org/DigitalDocument                        |
       | headline            | SEO document                                             |
       | name                | SEO document                                             |
       | license             | https://example.com/license1                             |
@@ -40,9 +40,10 @@ Feature: SEO for document content.
       | 0        | key1  |
       | 1        | key2  |
       | 2        | key3  |
+
     And the metatag graph of the item with "name" "SEO document" should have the following "associatedMedia" properties:
       | property      | value                                                    |
-      | @type         | MediaObject                                              |
+      | @type         | http://schema.org/MediaObject                            |
       # __random_text__ can be any string that is appointed by the system and we
       # cannot predict. In this case it is the random file name suffix before the file extension.
       | @id           | __base_url__/sites/default/files/test__random_text__.zip |
@@ -51,7 +52,7 @@ Feature: SEO for document content.
       | datePublished | 2019-12-25T__timezone__:00:00+0000                       |
     And the metatag graph of the item with "name" "SEO document" should have the following "author" properties:
       | property | value                             |
-      | @type    | Person                            |
+      | @type    | http://schema.org/Person          |
       # The user id is only a number but we can be quite certain that this will be a url to the user since the
       # __random_text__ does not include a / character.
       | @id      | __base_url__/user/__random_text__ |
@@ -79,10 +80,10 @@ Feature: SEO for document content.
 
     When I visit the "SEO document" document
     Then the metatag JSON should be attached in the page
-    And 1 metatag graph of type "DigitalDocument" should exist in the page
+    And 1 metatag graph of type "http://schema.org/DigitalDocument" should exist in the page
     And the metatag graph of the item with "name" "SEO document" should have the following properties:
       | property            | value                                      |
-      | @type               | DigitalDocument                            |
+      | @type               | http://schema.org/DigitalDocument          |
       | headline            | SEO document                               |
       | name                | SEO document                               |
       | description         | Remote url example                         |
@@ -92,7 +93,7 @@ Feature: SEO for document content.
       | mainEntityOfPage    | http://example.com/some-file-url.extension |
     And the metatag graph of the item with "name" "SEO document" should have the following "associatedMedia" properties:
       | property      | value                                      |
-      | @type         | MediaObject                                |
+      | @type         | http://schema.org/MediaObject              |
       | @id           | http://example.com/some-file-url.extension |
       | name          | some-file-url.extension                    |
       | url           | http://example.com/some-file-url.extension |
