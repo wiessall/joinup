@@ -6,6 +6,7 @@ namespace Drupal\joinup\Context;
 
 use Behat\Gherkin\Node\TableNode;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
+use Drupal\joinup\JsonLdObjectInspector;
 use Drupal\joinup\Traits\EntityTrait;
 use Drupal\rdf_entity\RdfInterface;
 use PHPUnit\Framework\Assert;
@@ -102,14 +103,39 @@ class JoinupSeoContext extends RawDrupalContext {
    * Asserts that the schema.org metatags are attached in page.
    *
    * @Given the metatag JSON should be attached in the page
+   * @Given the metatag JSON should be attached in the page with context :context
    */
-  public function assertJsonMetatagsInPage(): void {
+  public function assertJsonMetatagsInPage(string $context = '', bool $checkSchemaContext = TRUE): void {
     $json = $this->getMetatagsAsJson();
     Assert::assertNotEmpty($json, 'Entity metadata are found in the table.');
+    if (!$checkSchemaContext) {
+      return;
+    }
     // Assert that the context of the metatag is 'schema.org' to ensure that the
     // correct metatag is loaded and exists.
     Assert::assertArrayHasKey('@context', $json, '@context key not found in the metatag array.');
-    Assert::assertEquals($json['@context'], 'https://schema.org', 'The @context property value is not set to the appropriate url.');
+
+    // Check whether the expected schema exists.
+    $failureMessage = 'The @context property value is not set to the appropriate url.';
+    if (!$context) {
+      Assert::assertEquals($json['@context'], 'https://schema.org', $failureMessage);
+      return;
+    }
+    if (array_search($context, $json['@context']) !== FALSE) {
+      Assert::assertContains($context, $json['@context'], $failureMessage);
+    }
+    else {
+      Assert::assertArrayHasKey($context, $json['@context'], $failureMessage);
+    }
+  }
+
+  /**
+   * Asserts that the schema.org metatags are attached in page.
+   *
+   * @Given the metatag JSON should be attached in the page without context
+   */
+  public function assertJsonMetatagsInPageWithoutSchemaContext(): void {
+    $this->assertJsonMetatagsInPage(checkSchemaContext: FALSE);
   }
 
   /**
@@ -133,15 +159,15 @@ class JoinupSeoContext extends RawDrupalContext {
    * @Given :count metatag graph of type :type should exist in the page
    */
   public function assertNumberOfEntityGraphsExist(int $count, string $type): void {
-    $json = (array) $this->getMetatagsAsJson();
     $found = 0;
-    foreach ($json['@graph'] as $graph) {
-      $graph = (array) $graph;
-      if ($graph['@type'] === $type) {
-        $found++;
-      }
+    $json = $this->getMetatagsAsJson(FALSE);
+    try {
+      $jsonLdInspector = new JsonLdObjectInspector($json);
+      $found = $jsonLdInspector->count($type);
     }
-    Assert::assertEquals((int) $count, $found, "{$count} graphs of type {$type} were expected. {$found} were found.");
+    catch (\Exception) {
+    }
+    Assert::assertEquals($count, $found, "{$count} graph of type {$type} was expected. {$found} were found.");
   }
 
   /**
@@ -153,7 +179,7 @@ class JoinupSeoContext extends RawDrupalContext {
    *   The value of the property of which to identify the graph by.
    * @param \Behat\Gherkin\Node\TableNode $table
    *   A table of properties for the given graph.
-   * @param string|null $sub_property
+   * @param string|null $subProperty
    *   A sub property to look into.
    * @param int|null $delta
    *   If the field contains multiple values, i.e. the pivot is enabled, then
@@ -168,62 +194,86 @@ class JoinupSeoContext extends RawDrupalContext {
    * @Given the metatag (sub)graph of the item with :property :value should have the following properties in index :delta:
    * @Given the metatag (sub)graph of the item with :property :value should have the following :sub_property properties in index :delta:
    */
-  public function assertPropertiesOfMetatagGraph(string $property, string $value, TableNode $table, ?string $sub_property = NULL, $delta = NULL): void {
-    $graphs = $this->getGraphsFromMetatags($property, $value, $sub_property);
-    if (empty($graphs)) {
-      throw new \Exception("No graphs were found that have a property '{$property}' of value '{$value}' or none of them contain a '{$sub_property}' property.");
+  public function assertPropertiesOfMetatagGraph(
+    string $property,
+    string $value,
+    TableNode $table,
+    ?string $subProperty = NULL,
+    ?int $delta = NULL
+  ): void {
+    try {
+      $jsonLdInspector = new JsonLdObjectInspector(
+        $this->getMetatagsAsJson(FALSE),
+        $property,
+        $value,
+        $subProperty,
+      );
+    }
+    catch (\Throwable) {
+      $template = $subProperty
+        ? "No graphs were found that have a property '%s' with value '%s' or none of them contain a '%s' property."
+        : "No graphs were found that have a property '%s' with value '%s'.";
+      throw new \Exception(sprintf($template, $property, $value, $subProperty));
     }
 
-    $hash = $table->getColumnsHash();
-    $missing_properties = [];
-    $wrong_value = [];
-    foreach ($graphs as $index => $graph) {
-      if ($delta !== NULL) {
-        $graph = $graph[$delta];
-      }
-      $found = TRUE;
-      foreach ($hash as $row) {
-        if (!isset($graph[$row['property']])) {
-          $missing_properties[$index][] = $row['property'];
-          $found = FALSE;
-          continue;
-        }
-
-        $row['value'] = $this->escapeStringWithVariables($row['value']);
-        $found = preg_match("#^{$row['value']}$#", $graph[$row['property']]) === 1;
-
-        if ($found === FALSE) {
-          $wrong_value[$index][] = [
-            'property' => $row['property'],
-            'expected' => $row['value'],
-            'found' => $graph[$row['property']],
-          ];
-        }
+    $missingProperties = [];
+    $wrongValues = [];
+    foreach ($table->getColumnsHash() as $row) {
+      $actualPropertyValue = $jsonLdInspector->getGraphNodeElementValue($row['property'], $subProperty, $delta, $graphId);
+      if (!isset($actualPropertyValue)) {
+        $missingProperties[$graphId][] = $row['property'];
+        continue;
       }
 
-      if ($found === TRUE) {
-        break;
+      $regexp = $this->getValueRegExp($row['value']);
+      $found = (bool) preg_match($regexp, $actualPropertyValue);
+      if (!$found) {
+        $wrongValues[$graphId][] = [
+          'property' => $row['property'],
+          'expected' => $row['value'],
+          'found' => $actualPropertyValue,
+        ];
       }
     }
 
-    if (empty($wrong_value) && empty($missing_properties)) {
+    if (empty($wrongValues) && empty($missingProperties)) {
       return;
     }
 
     // Construct the error messages for each graph found.
     $error_messages = [];
-    foreach ($graphs as $index => $graph) {
-      if (!empty($missing_properties[$index])) {
-        $properties = implode(', ', $missing_properties[$index]);
-        $error_messages[] = "Index {$index}: The graph is missing the following properties: {$properties}";
-      }
-      if (isset($wrong_value[$index])) {
-        foreach ($wrong_value[$index] as $data) {
-          $error_messages[] = "Index {$index}: Wrong property '{$data['property']}' value: Expected '{$data['expected']}' but '{$data['found']}' was found.";
-        }
+    foreach (array_keys($missingProperties) as $graphId) {
+      $error_messages[] = sprintf(
+        "Graph ID %s: The graph is missing the following properties: %s",
+        $graphId,
+        implode(', ', $missingProperties[$graphId]),
+      );
+    }
+    foreach ($wrongValues as $graphId => $valueLogs) {
+      foreach ($valueLogs as $data) {
+        $error_messages[] = sprintf(
+          "Graph ID %s: Wrong property at '%s' value: Expected '%s' but %s was found.",
+          $graphId,
+          $data['property'],
+          $data['expected'],
+          $data['found'],
+        );
       }
     }
-    throw new \Exception(implode("\n", $error_messages));
+    throw new \Exception(implode(PHP_EOL, $error_messages));
+  }
+
+  /**
+   * Returns the regexp matching the expected value (which can have tokens).
+   *
+   * @param string $value
+   *   The expected value (which can have tokens).
+   *
+   * @return string
+   *   The regexp matching the expected value.
+   */
+  protected function getValueRegExp(string $value): string {
+    return '#^' . $this->escapeStringWithVariables($value) . '$#';
   }
 
   /**
@@ -252,16 +302,72 @@ class JoinupSeoContext extends RawDrupalContext {
   }
 
   /**
+   * Verifies that a graph object exists on the page.
+   *
+   * @param string $property
+   *   The property of the graph to look for.
+   * @param string $value
+   *   The value of the property of the graph to look for.
+   * @param string|null $not
+   *   NULL if we want to ensure that the graph is present, or the string "not"
+   *   if the graph shouldn't be present.
+   *
+   * @Given the metatag graph of the item with :property :value should be present
+   * @Given the metatag graph of the item with :property :value should :not be present
+   */
+  public function jsonLdGraphObjectExistsByLabel(string $property, string $value, ?string $not = NULL): void {
+    Assert::assertTrue(in_array($not, [NULL, 'not'], TRUE));
+    $count = 0;
+    try {
+      $jsonLdInspector = new JsonLdObjectInspector(
+        $this->getMetatagsAsJson(FALSE),
+        $property,
+        $value,
+      );
+      $count = $jsonLdInspector->count();
+    }
+    catch (\Throwable) {
+    }
+
+    if (!isset($not)) {
+      Assert::assertGreaterThan(
+        0,
+        $count,
+        sprintf(
+          "No graphs were found that have a property '%s' with value '%s'.",
+          $property,
+          $value,
+        )
+      );
+      return;
+    }
+
+    Assert::assertSame(
+      0,
+      $count,
+      sprintf(
+        "Graph having '%s' property with value '%s' is present, but it shouldn't.",
+        $property,
+        $value,
+      )
+    );
+  }
+
+  /**
    * Retrieves the entity metatags as a JSON array from the page.
    *
-   * @return array|null
-   *   The SEO metatags as an array or null if not found.
+   * @param bool $associative
+   *   Whether an associative array, or an object should be returned. Optional,
+   *   defaults to TRUE for BC reasons.
+   *
+   * @return array|\stdClass|null
+   *   The SEO metatags as an array or object, or NULL if not found.
    */
-  protected function getMetatagsAsJson(): ?array {
+  protected function getMetatagsAsJson(bool $associative = TRUE): array|\stdClass|null {
     $page = $this->getSession()->getPage();
     if ($script = $page->find('xpath', '//script[@type="application/ld+json"]')) {
       $json = $script->getText() ?: $script->getHtml();
-      return json_decode($json, TRUE);
+      return json_decode($json, $associative);
     }
 
     return NULL;
