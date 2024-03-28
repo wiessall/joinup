@@ -1,0 +1,16 @@
+/*
+ * Override ajax-throbber
+*/
+div {
+  &:has(.btn + .spinner-border) {
+    position: relative;
+    .spinner-border {
+      right: calc(50% - 30px);
+    }
+  }
+  &:has(.btn + .spinner-border) {
+    .btn {
+      opacity: .5;
+    }  
+  }
+}

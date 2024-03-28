@@ -82,6 +82,9 @@ ajax-throbber:
   header: true
   js:
     assets/js/ajax-throbber.min.js: { minified: true, attributes: { defer: true } }
+  css:
+    theme:
+      assets/css/ajax-throbber.min.css: { minified: true }
   dependencies:
     - core/drupal
     - ventuno/spinners
@@ -92,6 +95,11 @@ alert:
       assets/css/alert.min.css: { minified: true }
   dependencies:
     - ventuno/close
+
+align-module:
+  css:
+    theme:
+      assets/css/align-module.min.css: { minified: true }
 
 badge:
   css:

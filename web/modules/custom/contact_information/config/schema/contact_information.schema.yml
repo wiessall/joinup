@@ -1,17 +1,3 @@
-contact_information.settings:
-  type: config_object
-  label: 'Contact information workflow permission settings'
-  mapping:
-    transitions:
-      label: 'Allowed transitions'
-      type: sequence
-      sequence:
-        label: 'Target state'
-        type: sequence
-        sequence:
-          label: 'Source state'
-          type: contact_information.workflow_ownership_settings
-
 contact_information.workflow_ownership_settings:
   label: 'Ownership settings'
   type: mapping
