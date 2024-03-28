@@ -15,12 +15,12 @@ dependencies:
     - filter
     - flag
     - joinup_licence
+    - joinup_rdf
     - media
     - meta_entity
     - paragraphs_type_permissions
     - poll
     - rdf_entity
-    - rdf_export
     - rdf_meta_entity
     - search_api_autocomplete
     - sitewide_alert

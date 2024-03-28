@@ -1,0 +1,142 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Drupal\joinup_rdf\Controller;
+
+use Drupal\Core\Access\AccessException;
+use Drupal\Core\Access\AccessResult;
+use Drupal\Core\Controller\ControllerBase;
+use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Entity\EntityTypeBundleInfoInterface;
+use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\Core\Session\AccountInterface;
+use Drupal\rdf_sync\Model\RdfSyncFormat;
+use EasyRdf\Format;
+use Symfony\Component\DependencyInjection\ContainerInterface;
+
+/**
+ * Provides route responses for the RDF export.
+ */
+class RdfExportController extends ControllerBase {
+
+  /**
+   * The entity type bundle info.
+   *
+   * @var \Drupal\Core\Entity\EntityTypeBundleInfoInterface
+   */
+  protected $entityTypeBundleInfo;
+
+  /**
+   * Instantiates a new RdfExportController object.
+   */
+  public function __construct(EntityTypeBundleInfoInterface $entity_type_bundle_info) {
+    $this->entityTypeBundleInfo = $entity_type_bundle_info;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function create(ContainerInterface $container) {
+    return new static(
+      $container->get('entity_type.bundle.info'),
+    );
+  }
+
+  /**
+   * Checks that the RDF export is accessible.
+   *
+   * @param \Drupal\Core\Routing\RouteMatchInterface $route_match
+   *   The parametrized route.
+   * @param \Drupal\Core\Session\AccountInterface $account
+   *   The current user account.
+   *
+   * @return \Drupal\Core\Access\AccessResultInterface
+   *   The access result.
+   *
+   * @see \Drupal\Core\Entity\EntityAccessCheck
+   */
+  public function access(RouteMatchInterface $route_match, AccountInterface $account) {
+    $entity = $this->getEntity($route_match);
+    $bundle_info = $this->entityTypeBundleInfo->getBundleInfo($entity->getEntityTypeId());
+    $rdf_sync_mapped = isset($bundle_info[$entity->bundle()]['rdf_sync']);
+
+    return AccessResult::allowedIfHasPermission($account, 'export rdf metadata')
+      ->andIf(AccessResult::allowedIf($rdf_sync_mapped))
+      ->andIf($entity->access('view', $account, TRUE));
+  }
+
+  /**
+   * Provides the title callback.
+   *
+   * @param \Drupal\Core\Routing\RouteMatchInterface $route_match
+   *   The route match.
+   *
+   * @return string
+   *   The title for the RDF export route.
+   */
+  public function title(RouteMatchInterface $route_match) {
+    $entity = $this->getEntity($route_match);
+    return $this->t('Export RDF Metadata: %label', ['%label' => $entity->label()]);
+  }
+
+  /**
+   * Build a list of possible download links to RDF serialization methods.
+   *
+   * @param \Drupal\Core\Routing\RouteMatchInterface $route_match
+   *   The RouteMatch object.
+   *
+   * @return array
+   *   Render array with list of download links.
+   */
+  public function downloadLinks(RouteMatchInterface $route_match) {
+    $entity = $this->getEntity($route_match);
+    $list = ['#theme' => 'item_list'];
+    foreach ($this->getSupportedFormats() as $format) {
+      $list['#items'][] = [
+        '#type' => 'link',
+        '#title' => $format->getLabel(),
+        '#url' => $entity->toUrl('canonical', ['query' => ['_format' => $format->getName()]]),
+      ];
+    }
+
+    return [$list];
+  }
+
+  /**
+   * Returns the supported RDF export formats.
+   *
+   * @return \EasyRdf\Format[]
+   *   The supported formats.
+   */
+  protected function getSupportedFormats(): array {
+    $formats = [];
+    foreach (RdfSyncFormat::cases() as $format) {
+      $formats[$format->value] = Format::getFormat($format->value);
+    }
+    return $formats;
+  }
+
+  /**
+   * Returns the entity this route is for.
+   *
+   * @param \Drupal\Core\Routing\RouteMatchInterface $route_match
+   *   The parametrized route.
+   *
+   * @return \Drupal\Core\Entity\EntityInterface
+   *   returns the Entity in question.
+   *
+   * @throws \Drupal\Core\Access\AccessException
+   *   An AccessException is thrown if the entity couldn't be loaded.
+   */
+  protected function getEntity(RouteMatchInterface $route_match) {
+    $entity_type = $route_match->getRouteObject()->getOption('_joinup_rdf_export_entity_type');
+    $entity = $route_match->getParameter($entity_type);
+    if ($entity instanceof EntityInterface) {
+      return $entity;
+    }
+
+    throw new AccessException(sprintf('%s is not a valid entity route.', $route_match->getRouteName()));
+  }
+
+}

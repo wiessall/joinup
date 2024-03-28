@@ -1,0 +1,3 @@
+joinup_rdf.entities:
+  class: \Drupal\Core\Menu\LocalTaskDefault
+  deriver: \Drupal\joinup_rdf\Plugin\Derivative\DynamicLocalTasks
