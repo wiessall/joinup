@@ -263,6 +263,28 @@ function joinup_group_propose_message_submit(&$form, FormStateInterface $form_st
 }
 
 /**
+ * Implements hook_ENTITY_TYPE_access().
+ */
+function joinup_group_rdf_entity_access(EntityInterface $entity, $operation, AccountInterface $account) {
+  if (!$entity instanceof GroupInterface
+    || $account->isAnonymous()
+    || $account->hasPermission($entity->getEntityType()->getAdminPermission())
+    || $operation !== 'view'
+  ) {
+    return AccessResult::neutral();
+  }
+
+  // Allows users to view unpublished groups if they have the permission as part
+  // of their membership.
+  $membership = $entity->getMembership((int) $account->id());
+  return AccessResult::allowedIf(
+    $membership
+    && !$entity->isPublished()
+    && $membership->hasPermission('view unpublished rdf entity'))
+    ->addCacheableDependency($membership);
+}
+
+/**
  * Implements hook_entity_graph_access().
  *
  * The same procedure as the global access check is followed here. The purpose

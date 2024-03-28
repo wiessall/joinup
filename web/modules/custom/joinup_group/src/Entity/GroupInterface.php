@@ -177,7 +177,7 @@ interface GroupInterface extends RdfInterface, LogoInterface, ShortIdInterface, 
    * This is a simple wrapper around OgMembershipInterface::hasPermission() and
    * should not be relied on for access checks. Use ::getGroupAccess() instead.
    *
-   * @param int $uid
+   * @param int|string $uid
    *   The ID of the user to check.
    * @param string $permission
    *   The permission string.
@@ -186,7 +186,7 @@ interface GroupInterface extends RdfInterface, LogoInterface, ShortIdInterface, 
    *   TRUE if the permission is present in at least one of the user's roles in
    *   the group.
    */
-  public function hasGroupPermission(int $uid, string $permission): bool;
+  public function hasGroupPermission(int|string $uid, string $permission): bool;
 
   /**
    * Returns whether the group is moderated.

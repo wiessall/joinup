@@ -27,6 +27,6 @@ Feature: Edit licence through UI
     Then I should see the heading "Licence 1.1"
 
     Examples:
-      | role |
-      | moderator |
+      | role            |
+      | moderator       |
       | licence_manager |
