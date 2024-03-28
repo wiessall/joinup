@@ -82,6 +82,7 @@ module:
   inline_entity_form: 0
   interoperable_europe: 0
   isa2_analytics: 0
+  joinup_bookmark: 0
   joinup_bundle_class: 0
   joinup_collection: 0
   joinup_community_content: 0
@@ -250,7 +251,6 @@ module:
   webform: 0
   webform_ui: 0
   whats_new: 0
-  workflow_state_permission: 0
   menu_admin_per_menu: 1
   menu_link_content: 1
   pathauto: 1
