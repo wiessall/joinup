@@ -81,6 +81,13 @@ class VocabularyUpdater {
   private array $uriToTid = [];
 
   /**
+   * Processed term IDs.
+   *
+   * @var int[]
+   */
+  private array $processed = [];
+
+  /**
    * Empty result record.
    *
    * @const int[]
@@ -365,6 +372,7 @@ class VocabularyUpdater {
       $termsValues[$resource->getUri()] = $values;
     }
 
+    $termStorage = $this->entityTypeManager->getStorage('taxonomy_term');
     foreach ($termsValues as &$values) {
       // Convert reverse references to normal 'parent' references.
       foreach ($values['_children'] as $childUri) {
@@ -378,8 +386,22 @@ class VocabularyUpdater {
       foreach ($values['_references'] as $trail) {
         $targetUri = NestedArray::getValue($values, $trail);
         if (isset($this->uriToTid[$targetUri])) {
+          $target = $this->uriToTid[$targetUri];
+          if (!isset($this->processed[$target])) {
+            // This reference has not been processed yet. We add it as entity to
+            // ensure that is created before the dependent.
+            $target = $termStorage->create($termsValues[$targetUri]);
+            // Delete the 'target_id' property.
+            NestedArray::unsetValue($values, $trail);
+            // When referring the entity as object, the property is 'entity'.
+            $trail[2] = 'entity';
+            // Remove the dependency from the list as is already created as part
+            // of dependent. Register the dependency as processed.
+            unset($termsValues[$targetUri]);
+            $this->processed[(int) $target->id()] = TRUE;
+          }
           // Convert URI to TID.
-          NestedArray::setValue($values, $trail, $this->uriToTid[$targetUri]);
+          NestedArray::setValue($values, $trail, $target);
         }
         else {
           // Dead references are removed.
@@ -387,6 +409,10 @@ class VocabularyUpdater {
         }
       }
       unset($values['_references']);
+
+      // Register this term as processed so that if other term depends on it,
+      // will only need to refer it by ID.
+      $this->processed[$values['tid']] = TRUE;
     }
 
     return $termsValues;
