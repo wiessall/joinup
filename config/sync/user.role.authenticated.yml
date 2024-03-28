@@ -29,6 +29,7 @@ dependencies:
     - joinup_community_content
     - joinup_core
     - joinup_licence
+    - joinup_rdf
     - media
     - meta_entity
     - node
@@ -36,7 +37,6 @@ dependencies:
     - paragraphs_type_permissions
     - poll
     - rdf_entity
-    - rdf_export
     - rdf_meta_entity
     - search_api_autocomplete
     - sitewide_alert

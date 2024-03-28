@@ -27,3 +27,8 @@ services:
     arguments: ['@rdf_sync.mapper']
     tags:
       - { name: event_subscriber }
+  joinup_rdf.export_route_subscriber:
+    class: Drupal\joinup_rdf\Routing\RdfExportRouteSubscriber
+    arguments: ['@entity_type.manager']
+    tags:
+      - { name: event_subscriber }
