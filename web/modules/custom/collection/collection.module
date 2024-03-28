@@ -159,46 +159,6 @@ function collection_rdf_entity_insert(EntityInterface $entity) {
 }
 
 /**
- * Implements hook_ENTITY_TYPE_access().
- *
- * Interrupts the permissions for updating a collection. The permission is not
- * granted if there are no transitions allowed for the current state of the
- * node.
- */
-function collection_rdf_entity_access(EntityInterface $entity, $operation, AccountInterface $account) {
-  if (!$entity instanceof CollectionInterface || $account->isAnonymous() || $account->hasPermission($entity->getEntityType()->getAdminPermission())) {
-    return AccessResult::neutral();
-  }
-
-  switch ($operation) {
-    case 'view':
-      $membership = $entity->getMembership((int) $account->id());
-      if (empty($membership)) {
-        return AccessResult::neutral();
-      }
-      if (!$entity->isPublished() && $membership->hasPermission('view unpublished rdf entity')) {
-        return AccessResult::allowed();
-      }
-      if ($entity->isPublished() && $membership->hasPermission('view rdf entity')) {
-        return AccessResult::allowed();
-      }
-      break;
-
-    case 'edit':
-      /** @var \Drupal\joinup_workflow\WorkflowHelperInterface $workflow_helper */
-      $workflow_helper = \Drupal::service('joinup_workflow.workflow_helper');
-      $allowed_transitions = $workflow_helper->getAvailableTransitions($entity, $account);
-      return empty($allowed_transitions) ? AccessResult::forbidden() : AccessResult::allowed();
-
-    default:
-      break;
-
-  }
-
-  return AccessResult::neutral();
-}
-
-/**
  * Implements hook_ENTITY_TYPE_presave().
  *
  * Default graph is published. Draft graph is draft.

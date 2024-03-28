@@ -29,8 +29,7 @@ class ContactInformation extends Rdf implements ContactInformationInterface {
    */
   public function getRelatedGroup(): ?GroupInterface {
     /** @var \Drupal\joinup_group\Entity\GroupInterface|null $group */
-    $group = $this->get('related_group')->entity;
-    return $group;
+    return $this->get('related_group')->entity;
   }
 
 }
