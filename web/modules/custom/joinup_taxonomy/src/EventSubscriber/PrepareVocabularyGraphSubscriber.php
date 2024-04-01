@@ -6,6 +6,7 @@ namespace Drupal\joinup_taxonomy\EventSubscriber;
 
 use Drupal\Component\Serialization\Json;
 use Drupal\joinup_taxonomy\Event\PrepareVocabularyGraphEvent;
+use EasyRdf\Literal;
 use EasyRdf\RdfNamespace;
 use EasyRdf\Resource;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -250,6 +251,54 @@ class PrepareVocabularyGraphSubscriber implements EventSubscriberInterface {
       // considered as children of the vocabulary regardless of their depth.
       if ($resource->isA('skos:Concept')) {
         $graph->addResource($resource, 'skos:topConceptOf', 'http://data.europa.eu/dr8');
+      }
+
+      // Fix resources with multiple labels or descriptions. Actually, these
+      // resources are defined multiple times in EIRA_SKOS.rdf file which is a
+      // bug. We're keeping the values currently used in production.
+      switch ($resource->getUri()) {
+        case 'http://data.europa.eu/dr8/ArchitecturePrinciple':
+          $this->deleteLiteralContainingText($resource, 'skos:prefLabel', '<<ELAP:Architecture Principle>> Privacy', TRUE);
+          $this->deleteLiteralContainingText($resource, 'skos:prefLabel', '<<ELAP:Architecture Principle>> Security', TRUE);
+          break;
+
+        case 'http://data.europa.eu/dr8/AuthenticationMiddlewareApplicationComponent':
+          $this->deleteLiteralContainingText($resource, 'skos:prefLabel', 'Authentication Middleware', TRUE);
+          $this->deleteLiteralContainingText($resource, 'skos:definition', 'Source: Inspired in Gartner');
+          break;
+
+        case 'http://data.europa.eu/dr8/AdministrativeSimplification':
+          $this->deleteLiteralContainingText($resource, 'skos:definition', 'Harmonised rules on eligibility and durability');
+          break;
+
+        case 'http://data.europa.eu/dr8/ClientrequestforserviceApplicationEvent':
+          $this->deleteLiteralContainingText($resource, 'skos:definition', 'https://www.techtarget.com/searchenterprisedesktop/definition/client');
+          break;
+
+        case 'http://data.europa.eu/dr8/HostingFacility':
+          $this->deleteLiteralContainingText($resource, 'skos:definition', 'Source: DIGIT C Infrastructure Services Provision');
+      }
+    }
+  }
+
+  /**
+   * Deletes a triple whose object is a literal containing a given text.
+   *
+   * @param \EasyRdf\Resource $resource
+   *   The resource.
+   * @param string $predicate
+   *   The predicate.
+   * @param string $text
+   *   The text to be checked for.
+   * @param bool $strict
+   *   (optional) Whether to perform a full text match or only a partial one.
+   */
+  protected function deleteLiteralContainingText(Resource $resource, string $predicate, string $text, bool $strict = FALSE): void {
+    foreach ($resource->getGraph()->allLiterals($resource, $predicate) as $object) {
+      assert($object instanceof Literal);
+      $match = $strict ? ($object->getValue() === $text) : str_contains($object->getValue(), $text);
+      if ($match) {
+        $resource->getGraph()->deleteLiteral($resource, $predicate, $object);
       }
     }
   }
