@@ -222,14 +222,13 @@ class JoinupTaxonomyCommands extends DrushCommands {
    */
   public static function init(array &$context): void {
     $mapper = \Drupal::getContainer()->get('rdf_sync.mapper');
-    $vids = [];
-    foreach (\Drupal::entityTypeManager()->getStorage('taxonomy_vocabulary')->loadMultiple() as $vid => $vocabulary) {
+    $vids = array_merge(...array_values(self::VOCABS));
+    foreach (\Drupal::entityTypeManager()->getStorage('taxonomy_vocabulary')->loadMultiple($vids) as $vid => $vocabulary) {
       if ($type = $mapper->getBundleRdfType('taxonomy_term', $vid)) {
-        $vids[$type] = $vid;
+        $context['results']['vids'][$type] = $vid;
       }
     }
 
-    $context['results']['vids'] = $vids;
     $context['results']['pattern'] = '@' . implode('|', array_map('preg_quote', array_keys($vids))) . '@';
     $context['results']['uri_to_tid'] = [];
   }
