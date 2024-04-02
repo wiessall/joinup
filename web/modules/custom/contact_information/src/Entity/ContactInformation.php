@@ -21,7 +21,7 @@ class ContactInformation extends Node implements ContactInformationInterface {
    * {@inheritdoc}
    */
   public function getWorkflowStateFieldName(): string {
-    return 'field_ci_state';
+    return 'field_state';
   }
 
   /**

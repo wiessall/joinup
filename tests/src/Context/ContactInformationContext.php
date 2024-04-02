@@ -16,6 +16,7 @@ use Drupal\joinup\Traits\RdfEntityTrait;
 use Drupal\joinup\Traits\SearchTrait;
 use Drupal\joinup\Traits\TestingEntitiesTrait;
 use Drupal\joinup\Traits\UserTrait;
+use Drupal\node\Entity\Node;
 use Drupal\node\NodeInterface;
 use PHPUnit\Framework\Assert;
 
@@ -154,11 +155,12 @@ class ContactInformationContext extends RawDrupalContext {
       $values['uid'] = $this->getUserByName($values['uid'])->id();
     }
 
-    $entity = $this->nodeCreate($this->parseRdfEntityFields($values));
-    // @todo This might not be necessary.
-    $this->entities['node'][$entity->id()] = $entity;
-
-    return $entity;
+    $values += [
+      'type' => 'contact_information',
+    ];
+    $values = (object) $values;
+    $this->parseEntityFields('node', $values);
+    return Node::load($this->nodeCreate($values)->nid);
   }
 
   /**
@@ -175,6 +177,7 @@ class ContactInformationContext extends RawDrupalContext {
       'name' => 'title',
       'website url' => 'field_ci_webpage',
       'author' => 'uid',
+      'state' => 'field_state',
     ];
   }
 
