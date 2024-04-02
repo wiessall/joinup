@@ -3,7 +3,12 @@
 ENV MYDUMPER_RELEASE="v0.15.1-3"
 
 COPY ./importdb.sh /scripts/importdb.sh
-RUN . /etc/os-release \
-    && wget --no-verbose https://github.com/mydumper/mydumper/releases/download/${MYDUMPER_RELEASE}/mydumper_${MYDUMPER_RELEASE:1}.${VERSION_CODENAME}_amd64.deb \
-    && dpkg -i mydumper_${MYDUMPER_RELEASE:1}.${VERSION_CODENAME}_amd64.deb \
-    && rm mydumper_${MYDUMPER_RELEASE:1}.${VERSION_CODENAME}_amd64.deb \
+RUN sudo apt install cmake g++ git -y \
+    && sudo apt install libglib2.0-dev zlib1g-dev libpcre3-dev libssl-dev libzstd-dev -y \
+    && sudo apt install default-libmysqlclient-dev -y \
+    && git clone --branch ${MYDUMPER_RELEASE} https://github.com/mydumper/mydumper.git \
+    && cd mydumper \
+    && cmake . \
+    && make \
+    && sudo make install \
+    && sudo mv /usr/local/bin/myloader /usr/bin/
