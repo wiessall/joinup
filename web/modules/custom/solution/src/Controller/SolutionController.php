@@ -64,7 +64,12 @@ class SolutionController extends ControllerBase {
       return AccessResult::allowed();
     }
 
-    return $rdf_entity->hasGroupPermission((int) $user->id(), 'create solution rdf_entity') ? AccessResult::allowed() : AccessResult::forbidden();
+    if (!$rdf_entity->hasGroupPermission($user->id(), 'create solution rdf_entity')) {
+      return AccessResult::forbidden();
+    }
+
+    $solution = $this->createNewSolution($rdf_entity);
+    return AccessResult::allowedIf(!empty($solution->getWorkflow()->getAllowedTransitions($solution->getWorkflowState(), $solution)));
   }
 
   /**
