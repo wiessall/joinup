@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_taxonomy;
 
-use Drupal\Component\Utility\NestedArray;
 use Drupal\Core\Database\Connection;
 use Drupal\Core\Entity\EntityFieldManagerInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Field\FieldTypePluginManagerInterface;
 use Drupal\Core\Field\Plugin\Field\FieldType\EntityReferenceItem;
+use Drupal\joinup_taxonomy\Entity\MappedTerm;
 use Drupal\joinup_taxonomy\Event\PrepareVocabularyGraphEvent;
 use Drupal\rdf_sync\RdfSyncMapper;
 use Drupal\text\Plugin\Field\FieldType\TextItemBase;
@@ -81,11 +81,23 @@ class VocabularyUpdater {
   private array $uriToTid = [];
 
   /**
-   * Processed term IDs.
-   *
-   * @var int[]
+   * Statistics collected during vocabularies update.
    */
-  private array $processed = [];
+  private array $stats = [];
+
+  /**
+   * List of term values keyed by URI.
+   *
+   * @var array[]
+   *   Each item is an array of taxonomy term values suitable to be passed to
+   *   TermStorage::create().
+   */
+  private array $termValues = [];
+
+  /**
+   * Collector for circular references.
+   */
+  private array $circularReferences = [];
 
   /**
    * Empty result record.
@@ -166,18 +178,20 @@ class VocabularyUpdater {
       throw new \InvalidArgumentException('No registered graphs. Register with \Drupal::service("joinup_taxonomy.vocabulary_updater")->registerGraph()');
     }
 
-    $results = [];
     foreach ($this->graphs as $graphUri => $graph) {
       if ($vids = $this->getVidsForGraph($graphUri)) {
-        $results += $this->updateFromGraph($vids, $graph);
+        $this->updateFromGraph($vids, $graph);
       }
     }
+    $stats = $this->stats;
 
-    // Reset the registered vocabularies and graphs.
+    // Reset the registered internals.
     $this->vocabs = [];
     $this->graphs = [];
+    $this->stats = [];
+    $this->termValues = [];
 
-    return $results;
+    return $stats;
   }
 
   /**
@@ -215,20 +229,15 @@ class VocabularyUpdater {
    *   type as values.
    * @param \EasyRdf\Graph $graph
    *   The graph to be processed.
-   *
-   * @return array[]
-   *   Associative array keyed by vocabulary ID having. Values are arrays with
-   *   the number of inserted, updated and deleted terms.
    */
-  protected function updateFromGraph(array $vids, Graph $graph): array {
+  protected function updateFromGraph(array $vids, Graph $graph): void {
     /** @var \Drupal\taxonomy\VocabularyStorageInterface $vocabularyStorage */
     $vocabularyStorage = $this->entityTypeManager->getStorage('taxonomy_vocabulary');
     /** @var \Drupal\taxonomy\TermStorageInterface $termStorage */
     $termStorage = $this->entityTypeManager->getStorage('taxonomy_term');
 
-    $results = [];
     foreach ($vids as $vid => $rdfType) {
-      $results[$vid] = self::RESULT;
+      $this->stats[$vid] = self::RESULT;
 
       /** @var \Drupal\taxonomy\VocabularyInterface $vocabulary */
       $vocabulary = $vocabularyStorage->load($vid);
@@ -238,33 +247,28 @@ class VocabularyUpdater {
       $event = new PrepareVocabularyGraphEvent($vid, $graph);
       $this->eventDispatcher->dispatch($event);
 
-      // Extract terms from graph.
-      $termsValues = $this->getTermsValues($vid, $rdfType, $graph);
-
-      foreach ($termsValues as $values) {
-        if ($existingTerm = $this->mapper->getEntityByUri($values['uri'])) {
-          $existingTerm->delete();
-          $results[$vid]['updated']++;
-        }
-        else {
-          $results[$vid]['inserted']++;
-        }
-        $termStorage->create($values)->save();
-      }
+      // Extract terms from graph and import them as Drupal entities.
+      $this->importTerms($vid, $rdfType, $graph);
 
       if ($isLockedVocabulary) {
         // Locked vocabularies: remove existing terms missing from the graph.
-        $processed = array_column($termsValues, 'uri');
+        $processedUris = array_keys(
+          array_filter(
+            $this->termValues,
+            function (array $values) use ($vid): bool {
+              return $values['vid'] === $vid;
+            },
+          )
+        );
+        $processed = array_intersect_key($this->uriToTid, array_flip($processedUris));
         $existing = $this->mapper->getUrisByEntityType('taxonomy_term', $vid);
-        $tidsToRemove = array_keys(array_diff($existing, $processed));
+        $tidsToRemove = array_diff_key(array_flip($existing), $processed);
         if ($tidsToRemove) {
           $termStorage->delete($termStorage->loadMultiple($tidsToRemove));
-          $results[$vid]['deleted'] += count($tidsToRemove);
+          $this->stats[$vid]['deleted'] += count($tidsToRemove);
         }
       }
-      $results[$vid] = array_filter($results[$vid]);
     }
-    return $results;
   }
 
   /**
@@ -276,42 +280,18 @@ class VocabularyUpdater {
    *   The RDF type.
    * @param \EasyRdf\Graph $graph
    *   The batch context passed by reference.
-   *
-   * @return array
-   *   A list of term values as arrays. Each array is suitable to be passed to
-   *   the term storage TermStorage::create() method.
    */
-  private function getTermsValues(string $vid, string $rdfType, Graph $graph): array {
+  private function importTerms(string $vid, string $rdfType, Graph $graph): void {
     $fieldStorageDefinitions = $this->fieldManager->getFieldStorageDefinitions('taxonomy_term');
     $fieldDefinitions = $this->fieldManager->getFieldDefinitions('taxonomy_term', $vid);
 
-    $termsValues = [];
-    // For performance reasons, we assign TIDs to terms before they are saved,
-    // so that we can compute the entity reference fields between terms (parent,
-    // related, etc.) without needing successive entity saves. Getting and using
-    // the next auto-increment is not safe in 99.99% of the cases. However, here
-    // we strongly assume that no parallel process is underway as this Drush
-    // command is used in very rarely and only by developers, only when they
-    // re-create the taxonomy terms MySQL dump.
-    // @todo Use a directed acyclic graph manipulator to reorder $terms.
-    // @see \Drupal\Component\Graph\Graph
-    $tid = $this->database->query("SELECT MAX(tid) FROM {taxonomy_term_data}")->fetchField() + 1;
-    $revision_id = $this->database->query("SELECT MAX(revision_id) FROM {taxonomy_term_data}")->fetchField() + 1;
     foreach ($graph->resources() as $resource) {
       if (!$this->isTerm($resource, $rdfType)) {
         continue;
       }
 
       $references = [];
-      $values = [
-        'tid' => $tid++,
-        'revision_id' => $revision_id++,
-        'vid' => $vid,
-        'uri' => $resource->getUri(),
-      ];
-
-      // Register the URI > TID mapping (used to resolve references).
-      $this->uriToTid[$resource->getUri()] = (int) $values['tid'];
+      $values = ['vid' => $vid, 'uri' => $resource->getUri()];
 
       $mappings = $this->mapper->getMappings('taxonomy_term', $vid);
       // Already added.
@@ -347,11 +327,14 @@ class VocabularyUpdater {
             $delta = 0;
             foreach ($graph->{$allMethod}($resource, $property) as $object) {
               $value = $object->{$valueMethod}();
-              if ($isTermReference && !empty($value)) {
+              if ($isTermReference) {
                 // Register the path to field item to be resolved later.
-                $references[] = [$fieldName, $delta, $columnName];
+                $references[$fieldName][] = $value;
+                $values[$fieldName] = [];
               }
-              $values[$fieldName][$delta][$columnName] = $value;
+              else {
+                $values[$fieldName][$delta][$columnName] = $value;
+              }
               if ($isFormattedText) {
                 // Special treatment for formatted text fields.
                 $values[$fieldName][$delta]['format'] = filter_default_format();
@@ -369,53 +352,115 @@ class VocabularyUpdater {
       }, $resource->allResources('skos:member'));
 
       $values['_references'] = $references;
-      $termsValues[$resource->getUri()] = $values;
+      $this->termValues[$values['uri']] = $values;
     }
+
+    // Convert reverse references to normal 'parent' references.
+    foreach ($this->termValues as $values) {
+      if ($values['vid'] === $vid) {
+        foreach ($values['_children'] as $childUri) {
+          if (isset($this->termValues[$childUri])) {
+            $this->termValues[$childUri]['_references']['parent'][] = $values['uri'];
+          }
+        }
+      }
+    }
+
+    // Create or update the terms.
+    foreach ($this->termValues as $uri => $values) {
+      if (($values['vid'] === $vid) && !isset($this->uriToTid[$uri])) {
+        $this->createOrUpdateTerm($uri);
+      }
+    }
+
+    // We've collected unresolved circular references during term import. We
+    // only re-save the missing references.
+    $unresolvableReferences = [];
+    foreach ($this->circularReferences as $uri => $reference) {
+      if (!$term = MappedTerm::loadByUri($uri)) {
+        throw new \Exception("Term with URI $uri doesn't exist");
+      }
+      foreach ($reference as [$fieldName, $dependencyUri]) {
+        if ($dependencyTerm = MappedTerm::loadByUri($dependencyUri)) {
+          $term->get($fieldName)->appendItem($dependencyTerm);
+          continue;
+        }
+        $unresolvableReferences[] = "Dependent: $uri, field: $fieldName, dependency: $dependencyUri";
+      }
+      $term->save();
+      unset($this->circularReferences[$uri]);
+    }
+
+    if ($unresolvableReferences) {
+      throw new \Exception("Cannot resolve the following circular references, please fix the source of the import:\n" . implode("\n", $unresolvableReferences));
+    }
+  }
+
+  /**
+   * Creates or updates a taxonomy term.
+   *
+   * @param string $uri
+   *   The term URI.
+   * @param string|null $dependentFieldName
+   *   Used internally. The name of the dependent field.
+   * @param string|null $dependentUri
+   *   Used internally. The URI of the dependent field.
+   * @param array $processedUris
+   *   Used internally. The URIs being processed but not saved yet.
+   */
+  private function createOrUpdateTerm(string $uri, ?string $dependentFieldName = NULL, ?string $dependentUri = NULL, array $processedUris = []): void {
+    if (isset($processedUris[$uri])) {
+      // Circular reference detected. This URI is in process of being resolved
+      // but on other path. Register the unresolved edge and return to avoid
+      // infinite recursion.
+      $this->circularReferences[$dependentUri][] = [$dependentFieldName, $uri];
+      return;
+    }
+
+    $values =& $this->termValues[$uri];
+
+    // Normalize references.
+    foreach ($values['_references'] as &$targetUris) {
+      // Ensure unique references.
+      $targetUris = array_values(array_unique($targetUris));
+      // Remove references to itself. Some terms are referring themselves, see
+      // EIRA v6.0.0 for http://data.europa.eu/dr8/InformationBusinessObject.
+      $targetUris = array_filter($targetUris, function (string $targetUri) use ($uri): bool {
+        return $targetUri !== $uri;
+      });
+    }
+    $processedUris[$uri] = TRUE;
+    // Unset because it's a reference var and we'll reuse the same name later.
+    unset($targetUris);
 
     $termStorage = $this->entityTypeManager->getStorage('taxonomy_term');
-    foreach ($termsValues as &$values) {
-      // Convert reverse references to normal 'parent' references.
-      foreach ($values['_children'] as $childUri) {
-        if (isset($termsValues[$childUri])) {
-          $termsValues[$childUri]['parent'] = $values['tid'];
-        }
-      }
-      unset($values['_children']);
 
-      // Replace all reference URIs to TIDs. Remove dead references.
-      foreach ($values['_references'] as $trail) {
-        $targetUri = NestedArray::getValue($values, $trail);
+    foreach ($values['_references'] as $fieldName => $targetUris) {
+      foreach ($targetUris as $targetUri) {
+        if (!isset($this->uriToTid[$targetUri]) && isset($this->termValues[$targetUri])) {
+          $this->createOrUpdateTerm($targetUri, $fieldName, $uri, $processedUris);
+        }
         if (isset($this->uriToTid[$targetUri])) {
-          $target = $this->uriToTid[$targetUri];
-          if (!isset($this->processed[$target])) {
-            // This reference has not been processed yet. We add it as entity to
-            // ensure that is created before the dependent.
-            $target = $termStorage->create($termsValues[$targetUri]);
-            // Delete the 'target_id' property.
-            NestedArray::unsetValue($values, $trail);
-            // When referring the entity as object, the property is 'entity'.
-            $trail[2] = 'entity';
-            // Remove the dependency from the list as is already created as part
-            // of dependent. Register the dependency as processed.
-            unset($termsValues[$targetUri]);
-            $this->processed[(int) $target->id()] = TRUE;
-          }
-          // Convert URI to TID.
-          NestedArray::setValue($values, $trail, $target);
-        }
-        else {
-          // Dead references are removed.
-          NestedArray::unsetValue($values, $trail);
+          $values[$fieldName][] = $this->uriToTid[$targetUri];
         }
       }
-      unset($values['_references']);
+    }
+    unset($values['_references'], $values['_children']);
 
-      // Register this term as processed so that if other term depends on it,
-      // will only need to refer it by ID.
-      $this->processed[$values['tid']] = TRUE;
+    if ($term = MappedTerm::loadByUri($uri)) {
+      foreach ($values as $fieldName => $value) {
+        $term->set($fieldName, $value);
+      }
+      $this->stats[$values['vid']]['updated']++;
+    }
+    else {
+      $term = $termStorage->create($values);
+      $this->stats[$values['vid']]['inserted']++;
     }
 
-    return $termsValues;
+    // Save & register.
+    $term->save();
+    $this->uriToTid[$uri] = (int) $term->id();
   }
 
   /**
