@@ -49,7 +49,6 @@ settings:
       call_to_action: call_to_action
       carousel: carousel
       configurable_listing: configurable_listing
-      block: block
       content_listing: content_listing
       entity_reference: entity_reference
       github_feed: github_feed
