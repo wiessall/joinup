@@ -23,7 +23,7 @@ services:
     class: Drupal\custom_page\Guard\CustomPageGuard
     arguments: ['@plugin.manager.workflow']
     tags:
-      - { name: state_machine.guard, group: custom_page }
+      - { name: state_machine.guard, group: custom_page, priority: 5}
   custom_page.landing_page_redirection:
     class: Drupal\custom_page\EventSubscriber\LandingPageRedirectionSubscriber
     arguments: [ '@current_route_match' ]

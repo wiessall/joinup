@@ -45,41 +45,6 @@ function joinup_workflow_entity_base_field_info(EntityTypeInterface $entity_type
 }
 
 /**
- * Implements hook_entity_create().
- */
-function joinup_workflow_entity_create(EntityInterface $entity) {
-  // Since the state_machine module does not support same from-to state
-  // transitions, the transition events also don't fire. Normally, the
-  // transition event would be the one to decide whether the entity would be
-  // published or not, this is not happening for new entities.
-  // In Joinup, we do not create any entity with an initial state but for
-  // testing, it is necessary to setup the initial status automatically
-  // depending on the initial state that is passed into the entity.
-  // @see: \Drupal\state_machine\Plugin\Field\FieldType\StateItem::preSave
-  if ($entity instanceof EntityPublishedInterface && $entity instanceof EntityWorkflowStateInterface) {
-    try {
-      /** @var \Drupal\joinup_workflow\WorkflowHelperInterface $workflow_helper */
-      $workflow_helper = \Drupal::service('joinup_workflow.workflow_helper');
-      $workflow = $entity->getWorkflow();
-      $state_id = $entity->getWorkflowState();
-      if ($workflow && $workflow_helper->isWorkflowStatePublished($state_id, $workflow)) {
-        $entity->setPublished();
-      }
-      else {
-        $entity->setUnpublished();
-      }
-    }
-    catch (\UnexpectedValueException $exception) {
-      // In some circumstances, such as in field_config entity form, an
-      // arbitrary entity is created, used by the 'default value' widget, so an
-      // ID is not available, leading to an exception.
-      // @see \Drupal\field_ui\Form\FieldConfigEditForm::form()
-      // @see _field_create_entity_from_ids()
-    }
-  }
-}
-
-/**
  * Implements hook_entity_extra_field_info().
  *
  * Adds an extra field on entities subject to workflow that allows users to
@@ -169,15 +134,9 @@ function joinup_workflow_motivation_form_validate(array &$form, FormStateInterfa
   }
 
   $required = joinup_workflow_is_motivation_required($entity->getEntityTypeId(), $workflow->getId(), $transition->getId());
-  // @todo Remove this when the 'reject_deletion' and 'reject_archival' for
-  //   rdf_entities are separate transitions.
-  // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-3644
   if ($entity instanceof CollectionInterface && $transition->getId() === 'validate' && $from_state !== 'archival_request') {
     $required = FALSE;
   }
-  // @todo Remove this when the 'reject_deletion' and 'proposed_from_validated'
-  //   for rdf_entities are separate transitions.
-  // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-3840
   if ($entity instanceof SolutionInterface) {
     $user_roles = \Drupal::currentUser()->getRoles();
     $propose_changes = $transition->getId() === 'propose' && $from_state === 'published' && in_array('moderator', $user_roles);
@@ -193,7 +152,7 @@ function joinup_workflow_motivation_form_validate(array &$form, FormStateInterfa
   // approve the changes (= 'Propose changes'). A motivation is only required in
   // the first case.
   if ($transition->getId() === 'propose_new_revision') {
-    $required = $entity->isTargetWorkflowStateAllowed('published', 'published');
+    $required = $entity->isTransitionAllowed('publish');
   }
 
   if ($required && empty($form_state->getValue('transition_motivation'))) {
@@ -303,5 +262,38 @@ function joinup_workflow_entity_presave(EntityInterface $entity) {
   // Prevent changes to update date in case we archive or unarchive entity.
   if ($entity->isArchived() || $entity->original->isArchived()) {
     $entity->set('changed', $entity->original->get('changed')->getValue());
+  }
+}
+
+/**
+ * Implements hook_entity_create().
+ */
+function joinup_workflow_entity_create(EntityInterface $entity) {
+  // Normally, the transition event would be the one to decide whether the
+  // entity would be published or not, this is not happening for new entities.
+  // In Joinup, we do not create any entity with an initial state but for
+  // testing, it is necessary to setup the initial status automatically
+  // depending on the initial state that is passed into the entity.
+  // @see: \Drupal\state_machine\Plugin\Field\FieldType\StateItem::preSave
+  if ($entity instanceof EntityPublishedInterface && $entity instanceof EntityWorkflowStateInterface) {
+    try {
+      /** @var \Drupal\joinup_workflow\WorkflowHelperInterface $workflow_helper */
+      $workflow_helper = \Drupal::service('joinup_workflow.workflow_helper');
+      $workflow = $entity->getWorkflow();
+      $state_id = $entity->getWorkflowState();
+      if ($workflow && $workflow_helper->isWorkflowStatePublished($state_id, $workflow)) {
+        $entity->setPublished();
+      }
+      else {
+        $entity->setUnpublished();
+      }
+    }
+    catch (\UnexpectedValueException $exception) {
+      // In some circumstances, such as in field_config entity form, an
+      // arbitrary entity is created, used by the 'default value' widget, so an
+      // ID is not available, leading to an exception.
+      // @see \Drupal\field_ui\Form\FieldConfigEditForm::form()
+      // @see _field_create_entity_from_ids()
+    }
   }
 }

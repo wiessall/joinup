@@ -18,7 +18,6 @@ dependencies:
   - 'joinup:joinup_workflow'
   - 'joinup:owner'
   - 'joinup:search_api_field'
-  - 'joinup:workflow_state_permission'
   - 'rdf_entity:rdf_entity'
   - 'rdf_entity_provenance:rdf_entity_provenance'
   - 'search_api:search_api'

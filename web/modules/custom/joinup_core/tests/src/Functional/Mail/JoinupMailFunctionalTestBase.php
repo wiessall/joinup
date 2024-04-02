@@ -70,7 +70,6 @@ abstract class JoinupMailFunctionalTestBase extends BrowserTestBase {
     'topic',
     'user',
     'ventuno_helper',
-    'workflow_state_permission',
   ];
 
   /**

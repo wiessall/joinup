@@ -6,6 +6,7 @@ Feature: Owner moderation
 
   @uploadFiles:logo.png
   Scenario: Publish, update, request changes, publish again and ask to delete an owner.
+
     Given users:
       | Username        |
       | Raeburn Hibbert |
