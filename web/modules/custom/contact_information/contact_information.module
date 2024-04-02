@@ -30,7 +30,6 @@ use Drupal\contact_information\ParentGroupFieldItemList;
 use Drupal\email_confirmer\EmailConfirmationInterface;
 use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\node\NodeInterface;
-use Drupal\rdf_entity\RdfInterface;
 use Drupal\symfony_mailer_lite\Plugin\Mail\SymfonyMailer;
 
 /**

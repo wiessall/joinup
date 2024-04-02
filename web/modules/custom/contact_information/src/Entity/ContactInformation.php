@@ -8,8 +8,6 @@ use Drupal\joinup_bundle_class\JoinupBundleClassFieldAccessTrait;
 use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\joinup_workflow\EntityWorkflowStateTrait;
 use Drupal\node\Entity\Node;
-use Drupal\rdf_entity\Entity\Rdf;
-use Drupal\rdf_entity\RdfInterface;
 
 /**
  * Bundle class for the 'contact_information' bundle.
