@@ -6,7 +6,6 @@ namespace Drupal\contact_information\Entity;
 
 use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\joinup_workflow\EntityWorkflowStateInterface;
-use Drupal\rdf_entity\RdfInterface;
 
 /**
  * Interface for contact information entities in Joinup.
