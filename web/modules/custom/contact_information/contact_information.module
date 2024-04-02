@@ -79,7 +79,7 @@ function contact_information_node_presave(EntityInterface $entity): void {
   // "__new__" state after submission.
   // We can safely set the initial state to "validated" because a newly created
   // contact information entities don't need to be validated by a third party.
-  if ($entity->field_ci_state->value === '__new__') {
+  if ($entity->field_state->value === '__new__') {
     $entity->set('field_state', 'validated');
   }
 }
