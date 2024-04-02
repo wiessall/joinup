@@ -72,7 +72,7 @@ Feature: Contact Information moderation
     # information entity.
     When I am logged in as an "authenticated user"
     And I go to the "Ceolwulf II of Mercia" contact information page
-    Then I should not see the link "Edit" in the "Entity actions" region
+    Then I should not see the link "Edit" in the optional "Entity actions" region
 
     # The original author is allowed to update the entity with the requested
     # changes.
