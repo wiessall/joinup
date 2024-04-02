@@ -327,7 +327,7 @@ class GroupContentUpdateUrlAliasTest extends JoinupExistingSiteTestBase {
       'id' => 'http://example.com/contact',
       'rid' => 'contact_information',
       'field_ci_name' => $this->randomString(),
-      'field_ci_email' => $this->randomMachineName() . '@example.com',
+      'ci_email' => $this->randomMachineName() . '@example.com',
     ]);
 
     $this->entity['rdf_entity']['collection']['1'] = $this->createRdfEntity([
