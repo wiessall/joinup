@@ -1,0 +1,27 @@
+uuid: 805e4ccb-74d7-4445-8521-772e68612954
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_state
+    - node.type.contact_information
+  module:
+    - state_machine
+id: node.contact_information.field_state
+field_name: field_state
+entity_type: node
+bundle: contact_information
+label: State
+description: ''
+required: true
+translatable: false
+default_value:
+  -
+    value: _none
+default_value_callback: ''
+settings:
+  workflow: contact_workflow
+  workflow_callback: ''
+  always_allow_default: false
+  current_state_first: true
+field_type: state

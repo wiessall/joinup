@@ -1,0 +1,43 @@
+uuid: 5030c63d-e540-4e07-b351-7b0195c99c48
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.node.contact_information.ci_email
+    - field.field.node.contact_information.ci_webpage
+    - field.field.node.contact_information.field_state
+    - node.type.contact_information
+  module:
+    - link
+    - user
+id: node.contact_information.default
+targetEntityType: node
+bundle: contact_information
+mode: default
+content:
+  ci_email:
+    type: basic_string
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 0
+    region: content
+  ci_webpage:
+    type: link
+    label: above
+    settings:
+      trim_length: 80
+      url_only: false
+      url_plain: false
+      rel: ''
+      target: ''
+    third_party_settings: {  }
+    weight: 1
+    region: content
+hidden:
+  field_state: true
+  langcode: true
+  links: true
+  published_at: true
+  report: true
+  search_api_excerpt: true
