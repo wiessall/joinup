@@ -16,8 +16,8 @@ weight: 4
 is_admin: false
 permissions:
   - 'access toolbar'
-  - 'administer users'
   - 'administer eu oss catalogue'
+  - 'administer users'
   - 'assign all roles'
   - 'manage custom landing pages'
   - 'view the administration theme'
