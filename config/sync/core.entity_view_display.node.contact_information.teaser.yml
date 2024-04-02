@@ -1,0 +1,44 @@
+uuid: 090d190a-14d5-42dd-971c-6a04e5c1e7e1
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.teaser
+    - field.field.node.contact_information.ci_email
+    - field.field.node.contact_information.ci_webpage
+    - field.field.node.contact_information.field_state
+    - node.type.contact_information
+  module:
+    - link
+    - user
+id: node.contact_information.teaser
+targetEntityType: node
+bundle: contact_information
+mode: teaser
+content:
+  ci_email:
+    type: basic_string
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 0
+    region: content
+  ci_webpage:
+    type: link
+    label: above
+    settings:
+      trim_length: 80
+      url_only: false
+      url_plain: false
+      rel: ''
+      target: ''
+    third_party_settings: {  }
+    weight: 1
+    region: content
+hidden:
+  field_state: true
+  langcode: true
+  links: true
+  published_at: true
+  report: true
+  search_api_excerpt: true
