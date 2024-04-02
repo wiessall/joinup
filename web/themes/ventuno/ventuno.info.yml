@@ -19,6 +19,8 @@ libraries-extend:
     - ventuno/shared-entity
   layout_paragraphs/builder:
     - ventuno/layout-paragraphs--builder
+  system/base:
+    - ventuno/align-module
 
 libraries-override:
   core/jquery.once: false
