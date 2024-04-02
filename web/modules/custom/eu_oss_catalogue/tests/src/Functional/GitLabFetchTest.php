@@ -89,7 +89,7 @@ class GitLabFetchTest extends FetchTestBase {
           ],
         ],
         [
-          'message' => "Unstable API behind '@provider' provider plugin",
+          'message' => "Unstable API behind '@provider' provider plugin, skipping cleanup",
           'variables' => [
             '@provider' => 'hosting_platform:gitlab_self_hosted_wrong',
           ],
