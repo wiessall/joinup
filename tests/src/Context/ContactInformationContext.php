@@ -158,9 +158,8 @@ class ContactInformationContext extends RawDrupalContext {
     $values += [
       'type' => 'contact_information',
     ];
-    $values = (object) $values;
-    $this->parseEntityFields('node', $values);
-    return Node::load($this->nodeCreate($values)->nid);
+    $node = $this->nodeCreate((object) $values);
+    return Node::load($node->nid);
   }
 
   /**
