@@ -16,3 +16,4 @@ Feature: Dashboard
       | Curated content listings |
       | Topics                   |
       | Files                    |
+      | Manage webforms          |

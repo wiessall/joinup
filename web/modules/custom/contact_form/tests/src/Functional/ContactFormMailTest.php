@@ -136,7 +136,7 @@ class ContactFormMailTest extends JoinupMailFunctionalTestBase {
   const NOTIFICATION_HTML = <<<EOS
 <html>
 <head>
-<style type="text/css">
+<style>
 table tr td {
   font-family: Arial;
   font-size: 12px;
@@ -145,12 +145,11 @@ table tr td {
 </head>
 <body>
 <div>
-  <table width="800px" cellpadding="0" cellspacing="0">
+  <table style="width: 800px;" cellpadding="0" cellspacing="0">
     <tr>
       <td>
         <div style="padding: 0px 0px 0px 0px;">
-          <div>
-<div class="field--name-field-contact-first-name contact-form-submission__field-contact-first-name">
+          <div class="field--name-field-contact-first-name contact-form-submission__field-contact-first-name">
 <div class="field__label fw-bold">
       First name    </div>
 <div class="field__item">Jane</div>
@@ -180,7 +179,6 @@ table tr td {
       Message    </div>
 <div class="field__item">Question about Joinup</div>
 </div>
-</div>
 
 
         </div>
@@ -204,7 +202,7 @@ EOS;
   const COPY_HTML = <<<'EOS'
 <html>
 <head>
-<style type="text/css">
+<style>
 table tr td {
   font-family: Arial;
   font-size: 12px;
@@ -213,7 +211,7 @@ table tr td {
 </head>
 <body>
 <div>
-  <table width="800px" cellpadding="0" cellspacing="0">
+  <table style="width: 800px;" cellpadding="0" cellspacing="0">
     <tr>
       <td>
         <div style="padding: 0px 0px 0px 0px;">
@@ -262,7 +260,7 @@ EOS;
   const WITHOUT_COPY_HTML = <<<'EOS'
 <html>
 <head>
-<style type="text/css">
+<style>
 table tr td {
   font-family: Arial;
   font-size: 12px;
@@ -271,7 +269,7 @@ table tr td {
 </head>
 <body>
 <div>
-  <table width="800px" cellpadding="0" cellspacing="0">
+  <table style="width: 800px;" cellpadding="0" cellspacing="0">
     <tr>
       <td>
         <div style="padding: 0px 0px 0px 0px;">

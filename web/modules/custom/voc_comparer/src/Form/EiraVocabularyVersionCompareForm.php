@@ -91,7 +91,7 @@ class EiraVocabularyVersionCompareForm extends FormBase {
       '#description' => $this->t('Upload the new file to compare.'),
       '#upload_location' => 'public://voc_comparer',
       '#upload_validators' => [
-        'file_validate_extensions' => ['rdf'],
+        'FileExtension' => ['extensions' => 'rdf'],
       ],
       '#required' => TRUE,
     ];

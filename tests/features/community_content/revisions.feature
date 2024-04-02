@@ -174,8 +174,10 @@ Feature:
     When I visit the revisions page for "Goodbi world"
     Then I should see the heading "Access denied"
 
-    # Users that have the 'Author' role can revert their content in moderated
-    # groups without requiring facilitator approval.
+    # Users that have the 'Author' OG role can revert their content in moderated
+    # groups without requiring facilitator approval. That means that the content
+    # will be reverted to the previous revision without to force-set the state
+    # to 'proposed'.
     Given I am logged in as "Grumpy Author"
     When I visit the "Careful with that axe" <content type>
     And I click "Revisions" in the "Entity actions" region
