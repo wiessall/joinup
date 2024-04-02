@@ -1141,6 +1141,28 @@ class FeatureContext extends RawDrupalContext {
   }
 
   /**
+   * Asserts that no link is present in the given region.
+   *
+   * Same as MinkContext::assertNotLinkRegion but does not fail if region is
+   * not found.
+   *
+   * @Then I should not see the link :link in the optional :region( region)
+   *
+   * @throws \Exception
+   *   If the region is present but the link within it cannot be found.
+   */
+  public function assertNotLinkOptionalRegion($link, $region): void {
+    $session = $this->getSession();
+    $regionObj = $session->getPage()->find('region', $region);
+    if ($regionObj) {
+      $result = $regionObj->findLink($link);
+      if (!empty($result)) {
+        throw new \Exception(sprintf('Link to "%s" in the "%s" region on the page %s', $link, $region, $this->getSession()->getCurrentUrl()));
+      }
+    }
+  }
+
+  /**
    * Asserts that the page title tag equals to some text.
    *
    * The assertion strips off the possible suffix "| Joinup".
