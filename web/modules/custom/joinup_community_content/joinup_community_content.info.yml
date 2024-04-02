@@ -18,7 +18,6 @@ dependencies:
   - joinup:joinup_stats
   - joinup:joinup_workflow
   - joinup:topic
-  - joinup:workflow_state_permission
   - publication_date:publication_date
   - state_machine:state_machine
   - state_machine_permissions:state_machine_permissions

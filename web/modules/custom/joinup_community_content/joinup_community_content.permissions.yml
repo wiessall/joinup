@@ -2,3 +2,12 @@ delete own comments:
   title: Delete own comments
 unarchived community content:
   title: Unarchive community content
+create content for any_user option:
+  title: Create content for any_user option
+  description: Allows the creation of content when the any_user option is selected in the 'Content creation' group field.
+create content for only_members option:
+  title: Create content for only_members option
+  description: Allows the creation of content when the only_members option is selected in the 'Content creation' group field.
+create content for facilitators_and_authors option:
+  title: Create content for facilitators_and_authors option
+  description: Allows the creation of content when the facilitators_and_authors option is selected in the 'Content creation' group field.
