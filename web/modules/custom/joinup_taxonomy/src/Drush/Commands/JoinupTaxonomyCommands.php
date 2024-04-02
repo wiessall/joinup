@@ -302,7 +302,7 @@ class JoinupTaxonomyCommands extends DrushCommands {
       'no-interaction' => TRUE,
     ])->run();
     // Append the {rdf_sync_uri} table fixtures inside the dump file.
-    file_put_contents($file, static::getUriTableDump($results['uri_to_tid']), FILE_APPEND);
+    file_put_contents($file, static::getUriTableDump($results['uri_to_tid'], array_values($results['vids'])), FILE_APPEND);
 
     // Gzip it and get the normalized path.
     exec("gzip $file");
@@ -327,11 +327,13 @@ class JoinupTaxonomyCommands extends DrushCommands {
    *
    * @param array $uriToTid
    *   The URI <-> TID map.
+   * @param string[] $vids
+   *   The locked vocabulary IDs.
    *
    * @return string
    *   The SQL dump.
    */
-  protected static function getUriTableDump(array $uriToTid): string {
+  protected static function getUriTableDump(array $uriToTid, array $vids): string {
     $termStorage = \Drupal::entityTypeManager()->getStorage('taxonomy_term');
     $table = \Drupal::database()->getPrefix() . 'rdf_sync_uri';
     $tidToUri = array_flip($uriToTid);
@@ -339,6 +341,7 @@ class JoinupTaxonomyCommands extends DrushCommands {
     $statements = [
       'LOCK TABLES `rdf_sync_uri` WRITE;',
       'set autocommit=0;',
+      "DELETE FROM `rdf_sync_uri` WHERE entity_type = 'taxonomy_term' AND bundle IN ('" . implode("', '", $vids) . "');",
     ];
 
     foreach (array_chunk($uriToTid, 100) as $chunk) {
