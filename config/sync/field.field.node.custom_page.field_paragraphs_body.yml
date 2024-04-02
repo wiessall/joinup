@@ -16,6 +16,7 @@ dependencies:
     - paragraphs.paragraphs_type.heading
     - paragraphs.paragraphs_type.iframe
     - paragraphs.paragraphs_type.image
+    - paragraphs.paragraphs_type.image_gallery
     - paragraphs.paragraphs_type.json_map
     - paragraphs.paragraphs_type.layout
     - paragraphs.paragraphs_type.poll
@@ -48,6 +49,7 @@ settings:
       call_to_action: call_to_action
       carousel: carousel
       configurable_listing: configurable_listing
+      block: block
       content_listing: content_listing
       entity_reference: entity_reference
       github_feed: github_feed
@@ -65,6 +67,7 @@ settings:
       text: text
       video: video
       webform: webform
+      image_gallery: image_gallery
     negate: 0
     target_bundles_drag_drop:
       1_column_layout:
@@ -117,6 +120,9 @@ settings:
         enabled: true
       image:
         weight: -45
+        enabled: true
+      image_gallery:
+        weight: 60
         enabled: true
       json_map:
         weight: -43
