@@ -7,12 +7,14 @@ namespace Drupal\contact_information\Entity;
 use Drupal\joinup_bundle_class\JoinupBundleClassFieldAccessTrait;
 use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\joinup_workflow\EntityWorkflowStateTrait;
+use Drupal\node\Entity\Node;
 use Drupal\rdf_entity\Entity\Rdf;
+use Drupal\rdf_entity\RdfInterface;
 
 /**
  * Bundle class for the 'contact_information' bundle.
  */
-class ContactInformation extends Rdf implements ContactInformationInterface {
+class ContactInformation extends Node implements ContactInformationInterface {
 
   use EntityWorkflowStateTrait;
   use JoinupBundleClassFieldAccessTrait;
@@ -30,6 +32,13 @@ class ContactInformation extends Rdf implements ContactInformationInterface {
   public function getRelatedGroup(): ?GroupInterface {
     /** @var \Drupal\joinup_group\Entity\GroupInterface|null $group */
     return $this->get('related_group')->entity;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getEntityType() {
+    return $this->entityTypeManager()->getDefinition($this->getEntityTypeId());
   }
 
 }
