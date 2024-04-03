@@ -17,6 +17,11 @@ required: false
 translatable: false
 default_value: {  }
 default_value_callback: ''
+third_party_settings:
+  rdf_sync:
+    uri:
+      predicate: 'http://www.w3.org/2006/vcard/ns#hasURL'
+      format: 'xsd:string'
 settings:
   title: 0
   link_type: 16
