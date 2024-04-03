@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Drupal\eu_oss_catalogue\Plugin\eu_oss_catalogue\Provider;
 
 use Drupal\Component\Serialization\Json;
-use Drupal\Core\Config\Schema\SchemaCheckTrait;
 use Drupal\Core\Logger\LoggerChannelInterface;
 use Drupal\eu_oss_catalogue\ApiGuesserInterface;
 use Drupal\eu_oss_catalogue\EuOssCataloguePluginManagerInterface;
@@ -26,10 +25,6 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * )
  */
 class DevelopersItalia extends EuOssCatalogueProviderPluginBase {
-
-  use SchemaCheckTrait {
-    checkValue as traitCheckValue;
-  }
 
   /**
    * Developers Italia API endpoint.
