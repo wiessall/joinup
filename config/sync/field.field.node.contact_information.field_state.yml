@@ -17,7 +17,7 @@ required: true
 translatable: false
 default_value:
   -
-    value: _none
+    value: __new__
 default_value_callback: ''
 settings:
   workflow: contact_information_workflow

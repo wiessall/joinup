@@ -12,6 +12,7 @@ use Drupal\email_confirmer\EmailConfirmationInterface;
 use Drupal\joinup\Traits\AliasTranslatorTrait;
 use Drupal\joinup\Traits\EntityTrait;
 use Drupal\joinup\Traits\MailCollectorTrait;
+use Drupal\joinup\Traits\NodeTrait;
 use Drupal\joinup\Traits\RdfEntityTrait;
 use Drupal\joinup\Traits\SearchTrait;
 use Drupal\joinup\Traits\TestingEntitiesTrait;
@@ -28,6 +29,7 @@ class ContactInformationContext extends RawDrupalContext {
   use AliasTranslatorTrait;
   use EntityTrait;
   use MailCollectorTrait;
+  use NodeTrait;
   use RdfEntityTrait;
   use SearchTrait;
   use TestingEntitiesTrait;
@@ -122,7 +124,7 @@ class ContactInformationContext extends RawDrupalContext {
    * @Then I should have :number contact information(s)
    */
   public function assertContactInformationCount(int $number): void {
-    $this->assertContactInformationCount($number);
+    $this->assertNodeCount($number, 'contact_information');
   }
 
   /**
