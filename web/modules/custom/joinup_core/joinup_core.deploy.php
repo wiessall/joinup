@@ -17,7 +17,7 @@ declare(strict_types=1);
 /**
  * Cleans up obsolete EIRA terms.
  */
-function joinup_core_deploy_110300(): string {
+function joinup_core_deploy_110400(): string {
   $count_graph = <<<SPARQL
 SELECT ?s ?deletedTermUri
 WHERE {
