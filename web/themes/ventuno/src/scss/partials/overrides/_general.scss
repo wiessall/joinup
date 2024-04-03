@@ -1,56 +1,18 @@
 .paragraph,
-.fieldset--textarea,
-// Also add these styles when editing content.
-.ck-content {
+.fieldset--textarea {
 
   .inline-block {
     display: inline-block;
   }
 
-  // Override drupal core align.module.css
-  .align-left,
-  .align-right {
-    // Align center on small screens.
-    float: none;
-    width: fit-content;
-    margin: 0 auto;
-  }
-  .align-center {
-    width: fit-content;
-  }
-
   // Dirty hack to make videos responsive and half width.
+  figure:has(.media-video),
   .media-video {
     width: 100%;
     max-width: 648px;
     margin-bottom: $spacer;
     iframe {
       max-width: 100%;
-    }
-  }
-
-  img,
-  figure {
-    max-width: 100%;
-    height: auto;
-    margin-bottom: $spacer;
-  }
-
-  @include media-breakpoint-up(lg) {
-    // Put back original alignment on larger screens and add margin where needed for images and videos.
-    .align-left {
-      float: left;
-      &.media-video,
-      img {
-        margin-right: $spacer * 1.25;
-      }
-    }
-    .align-right {
-      float: right;
-      &.media-video,
-      img {
-        margin-left: $spacer * 1.25;
-      }
     }
   }
 }

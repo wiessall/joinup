@@ -208,11 +208,12 @@
                   <ul class="dropdown-list">
                     {% for link_key, link in item.links %}
                       {% if link.link %}
+                        {% set dropdown_id = link_key ~ '-dropdown'|clean_id %}
                         <li class="dropdown-list-item">
                           {% set attributes = create_attribute(link.attributes|default([])) %}
                           {% if link.children %}
                             {% set attributes = attributes.setAttribute('aria-expanded', 'false') %}
-                            {% set attributes = attributes.setAttribute('id', link_key) %}
+                            {% set attributes = attributes.setAttribute('id', dropdown_id) %}
                             {% set attributes = attributes.setAttribute('role', 'button') %}
                             {% set attributes = attributes.setAttribute('data-bs-toggle', 'dropdown') %}
                           {% endif %}
@@ -227,7 +228,7 @@
                             {% endif %}
                           </a>
                           {% if link.children %}
-                            <ul class="dropdown-menu dropdown-menu--sub" aria-labelledby="{{ link_key }}">
+                            <ul class="dropdown-menu dropdown-menu--sub" aria-labelledby="{{ dropdown_id }}">
                               {% for child in link.children %}
                                 <li class="dropdown-list-item">
                                   <a href="{{ child.link }}" class="dropdown-list-link">

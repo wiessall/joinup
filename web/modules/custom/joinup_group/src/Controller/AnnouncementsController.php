@@ -60,7 +60,7 @@ class AnnouncementsController extends ControllerBase {
     if ($announcement) {
       // If the current user has no available transition, they can't do
       // anything. The announcement is outside their control.
-      $access = $access->andIf(AccessResult::allowedIf((bool) $announcement->getTransitions())
+      $access = $access->andIf(AccessResult::allowedIf((bool) $announcement->getAllowedTransitions())
         ->addCacheableDependency($announcement));
     }
     return $access->addCacheTags(['message_list:announcement']);

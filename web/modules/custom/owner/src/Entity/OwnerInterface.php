@@ -12,4 +12,17 @@ use Drupal\rdf_entity\RdfInterface;
  */
 interface OwnerInterface extends RdfInterface, EntityWorkflowStateInterface {
 
+  /**
+   * Returns whether the owner is referenced by groups.
+   */
+  public function isReferencedByGroups(): bool;
+
+  /**
+   * Returns the groups that reference the owner.
+   *
+   * @return \Drupal\joinup_group\Entity\GroupInterface[]
+   *   An array of groups that reference the owner.
+   */
+  public function getReferencingGroups(): array;
+
 }
