@@ -35,15 +35,16 @@ widget:
 empty_behavior:
   behavior: none
 only_visible_when_facet_source_is_visible: true
-show_only_one_result: false
+show_only_one_result: true
 show_title: false
 processor_configs:
-  active_widget_order:
-    processor_id: active_widget_order
+  count_limit:
+    processor_id: count_limit
     weights:
-      sort: 20
+      build: -9
     settings:
-      sort: DESC
+      minimum_items: 1
+      maximum_items: null
   count_widget_order:
     processor_id: count_widget_order
     weights:
@@ -59,16 +60,16 @@ processor_configs:
   flag_entity_bundle_label:
     processor_id: flag_entity_bundle_label
     weights:
-      build: 5
+      build: -8
     settings: {  }
   hierarchy_processor:
     processor_id: hierarchy_processor
     weights:
-      build: 100
+      build: -7
     settings: {  }
   url_processor_handler:
     processor_id: url_processor_handler
     weights:
       pre_query: 50
-      build: 15
+      build: -10
     settings: {  }
