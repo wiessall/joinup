@@ -13,4 +13,7 @@ RUN sudo apt update -y \
     && cmake . \
     && make \
     && sudo make install \
-    && sudo mv /usr/local/bin/myloader /usr/bin/
+    && sudo mv /usr/local/bin/myloader /usr/bin/ \
+    && sudo mv /usr/local/bin/mydumper /usr/bin/ \
+    && rm -rf /mydumper* \
+    && rm /${MYDUMPER_RELEASE}.zip
