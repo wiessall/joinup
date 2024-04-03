@@ -12,13 +12,14 @@ third_party_settings:
     type: 'http://www.w3.org/2006/vcard/ns#Kind'
     uri_plugin: null
     fields:
-      target_id:
-        predicate: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type'
-        format: resource
+      type:
+        target_id:
+          predicate: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type'
+          type: resource
       label:
         value:
           predicate: 'http://www.w3.org/2006/vcard/ns#fn'
-          format: null
+          type: null
 label_singular: 'contact information entry'
 label_plural: 'contact information entries'
 label_count:
