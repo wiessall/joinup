@@ -75,6 +75,53 @@ Feature: Bookmark/Unbookmark feature.
     And I press "Log in"
     Then I should see the heading "Batman Begins"
 
+  Scenario: User bookmark page.
+    And news content:
+      | title               | solution      | state     |
+      | Bookmark news one   | Batman Begins | published |
+      | Bookmark news two   | Batman Begins | published |
+      | Bookmark news three | Batman Begins | published |
+      | Ohter news          | Batman Begins | published |
+
+    When I am logged in as "Gregory Bookmark"
+    And I visit "/user/bookmarks"
+    Then I should see the text "There are no bookmarked items."
+    And I go to the content page of the type "news" with the title "Bookmark news one"
+    And I click "Bookmark" in the "Bookmark block" region
+    Then I go to the content page of the type "news" with the title "Bookmark news two"
+    And I click "Bookmark" in the "Bookmark block" region
+    Then I go to the homepage of the "Batman Begins" solution
+    And I click "Bookmark" in the "Bookmark block" region
+
+    When I am logged in as "Lisa Bookmark"
+    And I go to the content page of the type "news" with the title "Bookmark news three"
+    And I click "Bookmark" in the "Bookmark block" region
+    Then I go to the content page of the type "news" with the title "Ohter news"
+    And I click "Bookmark" in the "Bookmark block" region
+    Then I go to the homepage of the "Batman" collection
+    And I click "Bookmark" in the "Bookmark block" region
+
+    When I am logged in as "Gregory Bookmark"
+    And I visit "/user/bookmarks"
+    Then I should not see the text "There are no bookmarked items."
+    And I should see the following tiles in the correct order:
+      | Batman Begins     |
+      | Bookmark news two |
+      | Bookmark news one |
+    And the "Entity bundle" tabs facet should allow selecting the following values:
+      | 2 News     |
+      | 1 Solution |
+
+    When I am logged in as "Lisa Bookmark"
+    And I visit "/user/bookmarks"
+    Then I should see the following tiles in the correct order:
+      | Batman              |
+      | Ohter news          |
+      | Bookmark news three |
+    And the "Entity bundle" tabs facet should allow selecting the following values:
+      | 2 News       |
+      | 1 Collection |
+
   Scenario: Anonymous user is asked to sign in if they click on bookmark icon from navigation.
     Given CAS users:
       | Username | E-mail            | Password        | First name | Last name | Local username |
