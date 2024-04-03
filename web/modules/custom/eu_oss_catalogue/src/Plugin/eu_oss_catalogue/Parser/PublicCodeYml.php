@@ -5,14 +5,12 @@ declare(strict_types=1);
 namespace Drupal\eu_oss_catalogue\Plugin\eu_oss_catalogue\Parser;
 
 use Drupal\Component\Serialization\Exception\InvalidDataTypeException;
-use Drupal\Core\Config\Schema\SchemaCheckTrait;
 use Drupal\Core\Config\TypedConfigManagerInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Logger\LoggerChannelInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Serialization\Yaml;
-use Drupal\Core\TypedData\MapDataDefinition;
 use Drupal\eu_oss_catalogue\Entity\OssSolutionInterface;
 use Drupal\eu_oss_catalogue\EuOssCatalogueParserPluginBase;
 use Drupal\eu_oss_catalogue\EuOssCataloguePluginManagerInterface;
@@ -31,10 +29,6 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * )
  */
 class PublicCodeYml extends EuOssCatalogueParserPluginBase implements ContainerFactoryPluginInterface {
-
-  use SchemaCheckTrait {
-    checkValue as traitCheckValue;
-  }
 
   /**
    * Constructs a new plugin instance.
@@ -88,41 +82,6 @@ class PublicCodeYml extends EuOssCatalogueParserPluginBase implements ContainerF
   /**
    * {@inheritdoc}
    */
-  public function checkSchema(OssSolutionInterface $solution): array {
-    $errorList = $schemaErrors = [];
-
-    try {
-      $ymlContent = $solution->get('oss_publiccode_yml_content')->getString();
-      $metadata = Yaml::decode($ymlContent);
-      // Using the config schema checker. And it works!
-      $schemaErrors = $this->checkConfigSchema($this->typedConfigManager, 'eu_oss_catalogue.publiccode_yml', $metadata);
-      if (!is_array($schemaErrors) || !$schemaErrors) {
-        return $errorList;
-      }
-    }
-    catch (InvalidDataTypeException $exception) {
-      $schemaErrors[] = "Cannot decode publiccode.yml for node {$solution->id()}";
-    }
-    catch (\InvalidArgumentException $exception) {
-      // @see \Drupal\Core\Config\Schema\ArrayElement::get()
-      if (preg_match("/The configuration property ([^ ].*) doesn't exist./", $exception->getMessage(), $found)) {
-        $schemaErrors[$found[1]] = "Path has no schema";
-      }
-    }
-
-    foreach ($schemaErrors as $key => $error) {
-      if (str_contains($key, ':')) {
-        // The config name is not relevant, this is not a config.
-        [, $key] = explode(':', $key, 2);
-      }
-      $errorList[] = '<code>' . str_replace('.', '/', $key) . "</code>: $error";
-    }
-    return $errorList;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
   protected function doParse(OssSolutionInterface $solution, Project $project, array $metadata, EuOssCatalogueProviderInterface $provider): void {
     parent::doParse($solution, $project, $metadata, $provider);
 
@@ -163,37 +122,6 @@ class PublicCodeYml extends EuOssCatalogueParserPluginBase implements ContainerF
     // Eliminate multiple spaces.
     $title = preg_replace('/\s+/', ' ', $title);
     return trim($title);
-  }
-
-  /**
-   * {@inheritdoc}
-   *
-   * Overriding the original method to provide support for mandatory values as
-   * this is not yet implemented in Drupal core.
-   *
-   * @see https://www.drupal.org/project/drupal/issues/3364108
-   * @todo Remove when https://www.drupal.org/project/drupal/issues/3364108.
-   */
-  protected function checkValue($key, $value): array {
-    $errors = $this->traitCheckValue($key, $value);
-
-    /** @var \Drupal\Core\TypedData\TypedDataInterface $element */
-    $element = $this->schema->get($key);
-    $dataDefinition = $element->getDataDefinition();
-    $valueIsProvided = !empty($value) || $value === FALSE;
-    if (!$valueIsProvided && !empty($dataDefinition['required'])) {
-      $errors[$key] = 'required but empty';
-    }
-    if ($dataDefinition instanceof MapDataDefinition && is_array($value)) {
-      $mapping = $element->getPluginDefinition()['mapping'] ?? [];
-      foreach ($mapping as $mapKey => $schema) {
-        if (!empty($schema['required']) && !array_key_exists($mapKey, $value)) {
-          $errors[$key] = "missing value for '$mapKey'";
-        }
-      }
-    }
-
-    return $errors;
   }
 
 }
