@@ -1,7 +1,7 @@
 # The workflow of the owner entity.
 owner_workflow:
   id: owner_workflow
-  label: "Default"
+  label: "Owner"
   group: owner
   states:
     # The state used as initial.
@@ -18,7 +18,7 @@ owner_workflow:
   transitions:
     validate:
       label: Publish
-      from: [__new__, deletion_request]
+      from: [__new__, deletion_request, published]
       to: published
     request_changes:
       label: Request changes
@@ -32,3 +32,11 @@ owner_workflow:
       label: Request deletion
       from: [published]
       to: deletion_request
+    update_needs_changes:
+      label: Update
+      from: [needs_update]
+      to: needs_update
+    retract_deletion_request:
+      label: Retract deletion request
+      from: [deletion_request]
+      to: published
