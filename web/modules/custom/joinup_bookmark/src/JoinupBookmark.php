@@ -36,7 +36,7 @@ class JoinupBookmark implements JoinupBookmarkInterface {
    * @throws \Exception
    */
   public function getBookmarkLink(): array {
-    $bookmarkLink = Url::fromUserInput('/user/bookmarks');
+    $bookmarkLink = Url::fromRoute('view.bookmarks.page');
 
     $bookmark = [
       'id' => 'bookmark',
