@@ -9,5 +9,6 @@ Feature: Minimal install clone testing.
 
     When I visit "/search?keys=joinup&f[0]=type:collection"
     Then I should see the "Joinup" tile
+    And I should see "European Commission provides a common place"
   Scenario: Assert that the cache backend is set to memcache.
     Given the default cache backend is set to "cache.backend.memcache"
