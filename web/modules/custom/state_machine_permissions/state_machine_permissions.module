@@ -46,7 +46,13 @@ function state_machine_permissions_node_create_access(AccountInterface $account,
   }
 
   if (empty($context['group'])) {
-    return AccessResult::forbidden('Cannot create content entities outside a group context.');
+    if ($entity_bundle !== 'contact_information') {
+      return AccessResult::forbidden('Cannot create content entities outside a group context.');
+    }
+
+    $workflow_helper = \Drupal::getContainer()->get('joinup_workflow.workflow_helper');
+    $entity = \Drupal::entityTypeManager()->getStorage('node')->create(['type' => $entity_bundle]);
+    return AccessResult::allowedIf($workflow_helper->getAvailableTransitions($entity, $account), 'No available transitions for the entity.');
   }
 
   $workflow_helper = \Drupal::getContainer()->get('joinup_workflow.workflow_helper');
