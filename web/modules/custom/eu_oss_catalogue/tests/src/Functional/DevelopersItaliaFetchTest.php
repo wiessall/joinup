@@ -101,6 +101,38 @@ class DevelopersItaliaFetchTest extends FetchTestBase {
   }
 
   /**
+   * Tests that when a solution appears again upstream, it is unarchived.
+   */
+  public function testUnarchiveSolution(): void {
+    // Node without provider and archived.
+    $archivedNode = $this->createNode([
+      'type' => 'oss_solution',
+      'status' => 1,
+      'title' => 'GitHub solution 1',
+      'oss_archived' => 1,
+      'oss_default_branch' => 'main',
+      'oss_git_url' => 'https://github.com/dummy-namespace-1/dummy-name-1',
+    ]);
+    $this->assertSame('1', $archivedNode->get('oss_archived')->getString());
+    $this->assertTrue($archivedNode->get('oss_source')->isEmpty());
+
+    // Perform sync.
+    $this->fetchSolutions('developers_italia', 4);
+
+    // Check if the node was unarchived.
+    $updatedSolution = $this->getNodeByTitle('GitHub solution 1', TRUE);
+    $this->assertSame('0', $updatedSolution->get('oss_archived')->getString());
+    $this->assertSame(
+      'developers_italia',
+      $updatedSolution->get('oss_source')->getString()
+    );
+    $this->assertSame(
+      'Unarchive, because re-added (present again) in "Developers Italia" source/catalogue',
+      $updatedSolution->getRevisionLogMessage()
+    );
+  }
+
+  /**
    * Tests that when a solution is removed upstream, the source is updated.
    */
   public function testRemovedSolution(): void {
