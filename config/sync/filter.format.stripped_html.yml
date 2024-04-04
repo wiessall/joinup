@@ -123,14 +123,14 @@ filters:
     weight: -40
     settings:
       allowed_providers:
-        slideshare: 0
-        internal_path: 0
-        prezi: 0
         joinup_ec_video: 0
-        joinup_ec_webcast_video: 0
+        internal_path: 0
         google_docs: 0
-        youtube: 0
+        joinup_ec_webcast_video: 0
+        prezi: 0
+        slideshare: 0
         vimeo: 0
+        youtube: 0
         youtube_playlist: 0
       autoplay: false
       responsive: true
@@ -157,7 +157,9 @@ filters:
     settings:
       default_view_mode: default
       allowed_view_modes: {  }
-      allowed_media_types: {  }
+      allowed_media_types:
+        ec_videos: ec_videos
+        remote_videos: remote_videos
   slick_filter:
     id: slick_filter
     provider: slick

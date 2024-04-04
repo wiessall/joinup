@@ -25,6 +25,7 @@ class SolutionAffiliationTest extends KernelTestBase {
    */
   protected static $modules = [
     'field',
+    'joinup_workflow',
     'og',
     'rdf_schema_field_validation',
     'rdf_draft',
@@ -36,7 +37,6 @@ class SolutionAffiliationTest extends KernelTestBase {
     'system',
     'taxonomy',
     'user',
-    'workflow_state_permission',
   ];
 
   /**

@@ -1,6 +1,6 @@
 asset_distribution_workflow:
   id: asset_distribution_workflow
-  label: "Default"
+  label: "Asset distribution"
   group: asset_distribution
   states:
     __new__:
@@ -15,7 +15,7 @@ asset_distribution_workflow:
   transitions:
     publish:
       label: Publish
-      from: [ __new__ ]
+      from: [ __new__, published ]
       to: published
     archive:
       label: Archive

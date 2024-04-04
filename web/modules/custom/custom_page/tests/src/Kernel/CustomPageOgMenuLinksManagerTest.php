@@ -53,7 +53,6 @@ class CustomPageOgMenuLinksManagerTest extends KernelTestBase {
     'state_machine',
     'state_machine_revisions',
     'system',
-    'workflow_state_permission',
     'user',
   ];
 
