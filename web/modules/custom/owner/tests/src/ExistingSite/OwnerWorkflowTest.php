@@ -58,7 +58,7 @@ class OwnerWorkflowTest extends JoinupWorkflowExistingSiteTestBase {
    * {@inheritdoc}
    */
   protected function getEntityType(): string {
-    return 'rdf_entity';
+    return 'node';
   }
 
   /**
@@ -96,7 +96,7 @@ class OwnerWorkflowTest extends JoinupWorkflowExistingSiteTestBase {
       $content = $this->createRdfEntity([
         'rid' => 'owner',
         'label' => $this->randomMachineName(),
-        'field_owner_state' => $entity_state,
+        'field_state' => $entity_state,
         'uid' => $this->userOwner->id(),
       ]);
 
@@ -139,9 +139,9 @@ class OwnerWorkflowTest extends JoinupWorkflowExistingSiteTestBase {
   public function testWorkflow(): void {
     foreach ($this->workflowTransitionsProvider() as $entity_state => $workflow_data) {
       foreach ($workflow_data as $user_var => $expected_target_states) {
-        $content = $this->createRdfEntity([
-          'rid' => 'owner',
-          'label' => $this->randomMachineName(),
+        $content = $this->createNode([
+          'type' => 'owner',
+          'title' => $this->randomMachineName(),
         ]);
 
         if ($user_var === 'userAuthenticated') {
@@ -154,7 +154,7 @@ class OwnerWorkflowTest extends JoinupWorkflowExistingSiteTestBase {
         // Override the default state of 'published' that is set during entity
         // creation.
         // @see owner_rdf_entity_create()
-        $content->set('field_owner_state', $entity_state);
+        $content->set('field_state', $entity_state);
         $content->save();
 
         // Override the user to be checked for the allowed transitions.

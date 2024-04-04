@@ -6,8 +6,7 @@ namespace Drupal\owner\Entity;
 
 use Drupal\joinup_bundle_class\JoinupBundleClassFieldAccessTrait;
 use Drupal\joinup_workflow\EntityWorkflowStateTrait;
-use Drupal\rdf_entity\Entity\Rdf;
-use Drupal\sparql_entity_storage\Entity\Query\Sparql\SparqlArg;
+use Drupal\node\Entity\Node;
 
 /**
  * Bundle class for the 'owner' bundle.
