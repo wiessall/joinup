@@ -181,8 +181,11 @@
     "autoload": {
         "classmap": [
             "web/modules/contrib/error_page/src/ErrorPageErrorHandler.php",
+            "web/modules/contrib/rdf_sync/src/Encoder/RdfSyncEncoder.php",
+            "web/modules/contrib/rdf_sync/src/Model/RdfSyncFormat.php",
             "web/modules/contrib/sparql_entity_storage/src/Driver/Database/sparql/ConnectionInterface.php",
-            "web/modules/custom/joinup_sparql/src/Driver/Database/joinup_sparql/Connection.php"
+            "web/modules/custom/joinup_sparql/src/Driver/Database/joinup_sparql/Connection.php",
+            "web/modules/custom/joinup_taxonomy/src/Entity/MappedTerm.php"
         ],
         "psr-4": {
             "Joinup\\": "src"
@@ -195,9 +198,6 @@
             "web/modules/contrib/message_digest/src/Traits/MessageDigestTrait.php",
             "web/modules/contrib/og_menu/src/Tests/Traits/OgMenuTrait.php",
             "web/modules/contrib/pipeline/src/Traits/PipelineContextTrait.php",
-            "web/modules/contrib/rdf_sync/src/Encoder/RdfSyncEncoder.php",
-            "web/modules/contrib/rdf_sync/src/Model/RdfSyncFormat.php",
-            "web/modules/custom/joinup_taxonomy/src/Entity/MappedTerm.php",
             "scripts/composer/ComposerPatches.php"
         ],
         "files": [
