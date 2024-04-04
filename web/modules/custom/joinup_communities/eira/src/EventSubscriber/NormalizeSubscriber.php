@@ -52,6 +52,14 @@ class NormalizeSubscriber implements EventSubscriberInterface {
     $normalizedArray = $event->getNormalizedArray();
     $subject = key($normalizedArray);
 
+    if (isset($normalizedArray[$subject]['http://www.w3.org/2002/07/owl#deprecated'])) {
+      // EIRA 6.0.0 is wrongly setting the type of `owl:deprecated` predicate as
+      // string. We're casting to a boolean when importing from file. Revert to
+      // original literal, in order to comply with EIRA original RDF.
+      // @see \Drupal\joinup_taxonomy\EventSubscriber\PrepareVocabularyGraphSubscriber::alterEira()
+      unset($normalizedArray[$subject]['http://www.w3.org/2002/07/owl#deprecated'][0]['datatype']);
+    }
+
     $graph = new Graph();
     $graph->parse($normalizedArray, 'php');
     // The subject is suffixed with '_Properties'.

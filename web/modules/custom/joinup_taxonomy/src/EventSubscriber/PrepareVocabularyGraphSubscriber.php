@@ -278,6 +278,23 @@ class PrepareVocabularyGraphSubscriber implements EventSubscriberInterface {
         case 'http://data.europa.eu/dr8/HostingFacility':
           $this->deleteLiteralContainingText($resource, 'skos:definition', 'Source: DIGIT C Infrastructure Services Provision');
       }
+
+      // The object of `owl:deprecated` predicate is stored as string even, in
+      // fact, it's semantically a boolean. Do here the correct cast to boolean.
+      if ($graph->hasProperty($resource, 'owl:deprecated')) {
+        /** @var \EasyRdf\Literal $object */
+        foreach ($graph->allLiterals($resource, 'owl:deprecated') as $object) {
+          $value = match($object->getValue()) {
+            'true' => TRUE,
+            'false' => FALSE,
+            default => NULL,
+          };
+          $graph->deleteLiteral($resource, 'owl:deprecated', $object->getValue());
+          if ($value !== NULL) {
+            $graph->addLiteral($resource, 'owl:deprecated', new Literal($value, NULL, 'xsd:boolean'));
+          }
+        }
+      }
     }
   }
 
