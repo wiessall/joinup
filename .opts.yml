@@ -37,6 +37,7 @@ extra_pkgs:
   - php8.2-apcu
 
 mysql_version: "8.0"
+mydumper: True
 
 solr: True
 solr_version: 8

@@ -95,20 +95,9 @@ function joinup_core_requirements($phase): array {
 }
 
 /**
- * Install the RDF provenance fields.
- */
-function joinup_core_update_110300(): void {
-  $manager = \Drupal::entityDefinitionUpdateManager();
-  $entityType = $manager->getEntityType('rdf_entity');
-  foreach (rdf_entity_provenance_entity_field_storage_info($entityType) as $fieldName => $definition) {
-    $manager->installFieldStorageDefinition($fieldName, 'rdf_entity', 'rdf_entity_provenance', $definition);
-  }
-}
-
-/**
  * Pre-creates OSS vocabularies.
  */
-function joinup_core_update_110301(): void {
+function joinup_core_update_110400(): void {
   // Pre-create the new controlled vocabularies provided by eu_oss_catalogue
   // module. Normally, these are imported as config but eu_oss_catalogue install
   // goes first and its install process is also populating them with terms, so

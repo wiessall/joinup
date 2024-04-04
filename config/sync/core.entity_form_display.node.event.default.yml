@@ -56,7 +56,7 @@ third_party_settings:
         classes: ''
         id: ''
         description: 'Please insert the venue’s physical address in the field "Physical location" and/or a link in the field "Virtual location" in case of an online event.'
-        required_fields: true
+        required_fields: false
 id: node.event.default
 targetEntityType: node
 bundle: event
@@ -209,6 +209,11 @@ content:
   field_topic:
     type: options_select
     weight: 14
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  simple_sitemap:
+    weight: 10
     region: content
     settings: {  }
     third_party_settings: {  }

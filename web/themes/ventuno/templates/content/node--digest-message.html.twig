@@ -88,54 +88,50 @@
 {% else %}
   {% set node_title = label %}
 {% endif %}
-<!-- NODE-->
-<tr>
-  <td>
-    <table role="presentation">
-    <tbody>
-      <tr>
-        <td class="bg-primary p-3">
-          <span class="d-inline-flex flex-row fw-bold fs-sm text-white text-uppercase">{{ publication_date }}</span>
-        </td>
-      </tr>
-      <tr>
-        <td class="fs-lg fw-bold">
-          <a class="text-primary text-none" href="{{ url }}">{{ node_title }}</a>
-        </td>
-      </tr>
-      <tr>
-        <td height="10">&nbsp;</td>
-      </tr>
+<!-- NODE START-->
+<table role="presentation">
+  <tbody>
+  <tr>
+    <td class="bg-primary p-3">
+      <span class="d-inline-flex flex-row fw-bold fs-sm text-white text-uppercase">{{ publication_date }}</span>
+    </td>
+  </tr>
+  <tr>
+    <td class="fs-lg fw-bold">
+      <a class="text-primary text-none" href="{{ url }}">{{ node_title }}</a>
+    </td>
+  </tr>
+  <tr>
+    <td style="height: 10px;">&nbsp;</td>
+  </tr>
 
-      <tr>
-        <td>
-          <table role="presentation">
-            <tbody>
-            <tr>
-              {% if image_url %}
-                <td width="200" class="d-none d-sm-block me-3"><a href="{{ url }}"><img src="{{ image_url }}" width="200" alt=""/></a></td>
-                <td width="20" class="d-none d-sm-block">&nbsp;</td>
-              {% endif %}
-              <td valign="top">{{ content.body }}</td>
-            </tr>
-            </tbody>
-          </table>
-        </td>
-      </tr>
-      <tr>
-        <td height="20">&nbsp;</td>
-      </tr>
+  <tr>
+    <td>
+      <table role="presentation">
+        <tbody>
+        <tr>
+          {% if image_url %}
+            <td style="width: 200px;" class="d-none d-sm-block me-3"><a href="{{ url }}"><img src="{{ image_url }}" width="200" alt=""/></a></td>
+            <td style="width: 20px;" class="d-none d-sm-block">&nbsp;</td>
+          {% endif %}
+          <td style="vertical-align: top;">{{ content.body }}</td>
+        </tr>
+        </tbody>
+      </table>
+    </td>
+  </tr>
+  <tr>
+    <td style="height: 20px;">&nbsp;</td>
+  </tr>
 
-      <tr>
-        <td class="d-flex justify-content-center">
-          <a class="btn btn-brand" href="{{ url }}">{{ 'Read more'|t }}</a>
-        </td>
-      </tr>
-      <tr>
-        <td height="30">&nbsp;</td>
-      </tr>
-      </tbody>
-    </table>
-  </td>
-</tr>
+  <tr>
+    <td class="d-flex justify-content-center">
+      <a class="btn btn-brand" href="{{ url }}">{{ 'Read more'|t }}</a>
+    </td>
+  </tr>
+  <tr>
+    <td style="height: 30px;">&nbsp;</td>
+  </tr>
+  </tbody>
+</table>
 <!-- NODE END-->

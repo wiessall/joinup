@@ -15,8 +15,8 @@ Feature: Asset distribution overview on solution.
     # A solution with no releases or standalone distributions has no button.
     When I go to the homepage of the "Lovely Butterfly" solution
     Then I should not see the link "Release history"
-    When I go to "/collection/end-of-past/solution/lovely-butterfly/releases"
-    Then the response status code should be 404
+    When I go to "/collection/end-past/solution/lovely-butterfly/releases"
+    Then I should see the heading "Sign in to continue"
 
     # The release numbers do not follow the creation date to ensure proper
     # ordering. "The Child of the Past" should be shown first as it is the
