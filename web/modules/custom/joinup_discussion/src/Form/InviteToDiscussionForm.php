@@ -33,27 +33,6 @@ class InviteToDiscussionForm extends InviteFormBase {
   const TEMPLATE_DISCUSSION_INVITE = 'discussion_invite';
 
   /**
-   * The event dispatcher.
-   *
-   * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
-   */
-  protected $eventDispatcher;
-
-  /**
-   * The subscription service.
-   *
-   * @var \Drupal\joinup_subscription\JoinupDiscussionSubscriptionInterface
-   */
-  protected $subscription;
-
-  /**
-   * The OG access service.
-   *
-   * @var \Drupal\og\OgAccessInterface
-   */
-  protected $ogAccess;
-
-  /**
    * Constructs a new InviteToDiscussionForm object.
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
@@ -67,18 +46,19 @@ class InviteToDiscussionForm extends InviteFormBase {
    * @param \Drupal\og\OgAccessInterface $ogAccess
    *   The OG access service.
    */
-  public function __construct(EntityTypeManagerInterface $entityTypeManager, InvitationMessageHelperInterface $invitationMessageHelper, EventDispatcherInterface $eventDispatcher, JoinupDiscussionSubscriptionInterface $subscription, OgAccessInterface $ogAccess) {
+  public function __construct(
+    EntityTypeManagerInterface $entityTypeManager,
+    InvitationMessageHelperInterface $invitationMessageHelper,
+    protected EventDispatcherInterface $eventDispatcher,
+    protected JoinupDiscussionSubscriptionInterface $subscription,
+    protected OgAccessInterface $ogAccess) {
     parent::__construct($entityTypeManager, $invitationMessageHelper);
-
-    $this->eventDispatcher = $eventDispatcher;
-    $this->subscription = $subscription;
-    $this->ogAccess = $ogAccess;
   }
 
   /**
    * {@inheritdoc}
    */
-  public static function create(ContainerInterface $container) {
+  public static function create(ContainerInterface $container): self {
     return new static(
       $container->get('entity_type.manager'),
       $container->get('joinup_invite.invitation_message_helper'),
