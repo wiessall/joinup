@@ -400,17 +400,49 @@ class JoinupContext extends RawDrupalContext {
    */
   public function assertSelectOptions($select, $options) {
     $field = $this->findSelect($select);
-    $available_options = array_map(function (array $option): string {
+    $availableOptions = array_map(function (array $option): string {
       return $option['text'];
     }, $this->getSelectOptions($field));
-    sort($available_options);
+    sort($availableOptions);
 
     $options = $this->explodeCommaSeparatedStepArgument($options);
     sort($options);
 
     // The PHPUnit assertion will allow to understand easily which values are
     // missing and which one are extra.
-    Assert::assertEquals($options, $available_options, "The '{$select}' select options don't match the wanted ones.");
+    Assert::assertEquals($options, $availableOptions, "The '$select' select options don't match the wanted ones.");
+  }
+
+  /**
+   * Asserts the available checkboxes options of a field.
+   *
+   * @param string $field
+   *   The name of the field element.
+   * @param \Behat\Gherkin\Node\TableNode $options
+   *   The available list of options.
+   *
+   * @Then the :field checkboxes should contain the following options:
+   */
+  public function assertCheckboxesFieldOptions(string $field, TableNode $options): void {
+    // We are looking for a field with the class 'field--widget-options-buttons'
+    // that contains a fieldset and a legend with the $field as span.
+    $xpath = "//fieldset[legend/span[text()='$field']]";
+    $field = $this->getSession()->getPage()->find('xpath', $xpath);
+    if (!$field) {
+      throw new \Exception("The field '$field' was not found.");
+    }
+
+    // Get the checkboxes.
+    $checkboxes = $field->findAll('css', 'input[type="checkbox"]');
+    $checkboxLabels = array_map(function (NodeElement $checkbox): string {
+      return $checkbox->getParent()->getText();
+    }, $checkboxes);
+
+    $expectedOptions = $options->getColumn(0);
+    sort($expectedOptions);
+    sort($checkboxLabels);
+
+    Assert::assertEquals($expectedOptions, $checkboxLabels);
   }
 
   /**
@@ -425,12 +457,12 @@ class JoinupContext extends RawDrupalContext {
    */
   public function assertSelectOptionNotAvailable($select, $options) {
     $field = $this->findSelect($select);
-    $available_options = array_map(function (array $option): string {
+    $availableOptions = array_map(function (array $option): string {
       return $option['text'];
     }, $this->getSelectOptions($field));
     $options = $this->explodeCommaSeparatedStepArgument($options);
 
-    Assert::assertEmpty(array_intersect($available_options, $options), "The '{$select}' select options include at least one of the given values.");
+    Assert::assertEmpty(array_intersect($availableOptions, $options), "The '$select' select options include at least one of the given values.");
   }
 
   /**
@@ -445,11 +477,11 @@ class JoinupContext extends RawDrupalContext {
    */
   public function assertSelectContainsOptgroups($select, $optgroups) {
     $field = $this->findSelect($select);
-    $available_optgroups = array_values($this->getSelectOptgroups($field));
+    $availableOptgroups = array_values($this->getSelectOptgroups($field));
     $options = $this->explodeCommaSeparatedStepArgument($optgroups);
 
     foreach ($options as $option) {
-      Assert::assertContains($option, $available_optgroups, "The '{$select}' select doesn't contain the option '{$option}''.", TRUE);
+      Assert::assertContains($option, $availableOptgroups, "The '$select' select doesn't contain the option '$option''.", TRUE);
     }
   }
 
