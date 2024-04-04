@@ -1,0 +1,76 @@
+diff --git a/config/schema/state_machine.schema.yml b/config/schema/state_machine.schema.yml
+index 8d9a124d376ba606ea506863b3da46fb682b27c8..45dc924e9e461e03f91f34d4e0497e23163923a5 100644
+--- a/config/schema/state_machine.schema.yml
++++ b/config/schema/state_machine.schema.yml
+@@ -7,6 +7,12 @@ field.field_settings.state:
+     workflow_callback:
+       type: string
+       label: Workflow callback
++    always_allow_default:
++      type: boolean
++      label: 'Always allow default state transitions'
++    current_state_first:
++      type: boolean
++      label: 'Show current state first'
+ 
+ field.formatter.settings.state_transition_form:
+   type: mapping
+diff --git a/src/Plugin/Field/FieldType/StateItem.php b/src/Plugin/Field/FieldType/StateItem.php
+index 37c10416f61844aaa2350df85087cf29ae5e704c..1513fdd08dbb5afbc145813ba225aad5da121e7a 100644
+--- a/src/Plugin/Field/FieldType/StateItem.php
++++ b/src/Plugin/Field/FieldType/StateItem.php
+@@ -91,6 +91,8 @@ class StateItem extends FieldItemBase implements StateItemInterface, OptionsProv
+     return [
+       'workflow' => '',
+       'workflow_callback' => '',
++      'always_allow_default' => TRUE,
++      'current_state_first' => TRUE,
+     ] + parent::defaultFieldSettings();
+   }
+ 
+@@ -111,6 +113,20 @@ class StateItem extends FieldItemBase implements StateItemInterface, OptionsProv
+         '#default_value' => $this->getSetting('workflow'),
+         '#required' => TRUE,
+       ];
++
++      $element['always_allow_default'] = [
++        '#type' => 'checkbox',
++        '#title' => $this->t('Always allow default state'),
++        '#description' => $this->t('If checked, the default state will always be allowed, even if it has no transitions. If not, the current state will adhere to the guard classes decision.'),
++        '#default_value' => $this->getSetting('always_allow_default'),
++      ];
++
++      $element['current_state_first'] = [
++        '#type' => 'checkbox',
++        '#title' => $this->t('Current state first'),
++        '#description' => $this->t('If checked, the current state will be the first option in the select list. This is default behavior is the default state is always allowed.'),
++        '#default_value' => $this->getSetting('current_state_first'),
++      ];
+     }
+ 
+     return $element;
+@@ -233,7 +249,9 @@ class StateItem extends FieldItemBase implements StateItemInterface, OptionsProv
+       return [];
+     }
+     $allowed_states = [];
+-    if (!empty($value) && ($current_state = $workflow->getState($value))) {
++
++    $current_state = $workflow->getState($value);
++    if (!empty($value) && $this->getSetting('always_allow_default') && $current_state) {
+       $allowed_states[$value] = $current_state;
+     }
+ 
+@@ -243,6 +261,13 @@ class StateItem extends FieldItemBase implements StateItemInterface, OptionsProv
+       $allowed_states[$state->getId()] = $state;
+     }
+ 
++    // No need to take any action if the current state is forced into the
++    // options as it will be added first already.
++    if (!$this->getSetting('always_allow_default') && $this->getSetting('current_state_first') && $current_state && isset($allowed_states[$current_state->getId()])) {
++      unset($allowed_states[$current_state->getId()]);
++      $allowed_states = [$current_state->getId() => $current_state] + $allowed_states;
++    }
++
+     return $allowed_states;
+   }
+ 

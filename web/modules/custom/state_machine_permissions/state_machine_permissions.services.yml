@@ -1,9 +1,14 @@
 services:
   state_machine_permissions.helper:
     class: Drupal\state_machine_permissions\StateMachinePermissionsHelper
-    arguments: ['@entity_field.manager', '@plugin.manager.workflow_group', '@plugin.manager.workflow']
+    arguments: ['@entity_field.manager', '@plugin.manager.workflow_group', '@plugin.manager.workflow', '@og.access']
   state_machine_permissions.og_subscriber:
-    class: Drupal\state_machine_permissions\EventSubscriber\StateMachineOgSubscriber
+    class: Drupal\state_machine_permissions\EventSubscriber\PermissionGenerationSubscriber
     arguments: ['@entity_field.manager', '@state_machine_permissions.helper']
     tags:
       - name: event_subscriber
+  state_machine_permissions.fulfillment_guard:
+    class: Drupal\state_machine_permissions\Guard\TransitionPermissionGuard
+    arguments: ['@current_user', '@joinup_workflow.workflow_helper']
+    tags:
+      - { name: state_machine.guard }

@@ -81,7 +81,7 @@ class AdmsValidatorForm extends FormBase {
       '#title' => $this->t('File'),
       '#description' => $this->t('An RDF file you want to test for compliance.'),
       '#upload_validators'  => [
-        'file_validate_extensions' => ['rdf ttl'],
+        'FileExtension' => ['extensions' => 'rdf ttl'],
       ],
     ];
     $form['info'] = [
@@ -150,7 +150,7 @@ class AdmsValidatorForm extends FormBase {
   protected function uploadedFile(): ?FileInterface {
     $file = file_save_upload(
       'adms_file',
-      ['file_validate_extensions' => [0 => 'rdf ttl']],
+      ['FileExtension' => ['extensions' => 'rdf ttl']],
       'public://',
       0
     );
