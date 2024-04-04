@@ -1,0 +1,39 @@
+uuid: ff5c0d0a-956b-4f01-99d5-aa94ec777c9d
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.node.owner.field_state
+    - field.field.node.owner.owner_name
+    - field.field.node.owner.owner_type
+    - node.type.owner
+  module:
+    - user
+id: node.owner.default
+targetEntityType: node
+bundle: owner
+mode: default
+content:
+  owner_name:
+    type: string
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 0
+    region: content
+  owner_type:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 1
+    region: content
+hidden:
+  field_state: true
+  langcode: true
+  links: true
+  published_at: true
+  report: true
+  search_api_excerpt: true

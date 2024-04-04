@@ -1,0 +1,25 @@
+uuid: 4e60738a-c903-49aa-8b0c-f8af3946439d
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_state
+    - node.type.owner
+  module:
+    - state_machine
+id: node.owner.field_state
+field_name: field_state
+entity_type: node
+bundle: owner
+label: State
+description: ''
+required: true
+translatable: false
+default_value:
+  -
+    value: __new__
+default_value_callback: ''
+settings:
+  workflow: owner_workflow
+  workflow_callback: ''
+field_type: state

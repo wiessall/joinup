@@ -1,0 +1,19 @@
+uuid: ee3d8954-ed06-4074-ac14-f72b7b98725d
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.owner_name
+    - node.type.owner
+id: node.owner.owner_name
+field_name: owner_name
+entity_type: node
+bundle: owner
+label: Name
+description: ''
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

@@ -1,0 +1,45 @@
+uuid: 0882523c-b96e-4361-a04e-b07767e9048e
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.about
+    - field.field.node.owner.field_state
+    - field.field.node.owner.owner_name
+    - field.field.node.owner.owner_type
+    - node.type.owner
+  module:
+    - layout_builder
+    - user
+third_party_settings:
+  layout_builder:
+    enabled: false
+    allow_custom: false
+id: node.owner.about
+targetEntityType: node
+bundle: owner
+mode: about
+content:
+  owner_name:
+    type: string
+    label: hidden
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 0
+    region: content
+  owner_type:
+    type: entity_reference_label
+    label: hidden
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 1
+    region: content
+hidden:
+  field_state: true
+  langcode: true
+  links: true
+  published_at: true
+  report: true
+  search_api_excerpt: true
