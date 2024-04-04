@@ -93,9 +93,9 @@ class OwnerWorkflowTest extends JoinupWorkflowExistingSiteTestBase {
 
     // Test view, update, delete access.
     foreach ($this->readUpdateDeleteAccessProvider() as $entity_state => $test_data) {
-      $content = $this->createRdfEntity([
-        'rid' => 'owner',
-        'label' => $this->randomMachineName(),
+      $content = $this->createNode([
+        'type' => 'owner',
+        'title' => $this->randomMachineName(),
         'field_state' => $entity_state,
         'uid' => $this->userOwner->id(),
       ]);

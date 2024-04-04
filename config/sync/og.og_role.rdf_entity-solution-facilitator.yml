@@ -50,7 +50,7 @@ permissions:
   - 'edit any event content'
   - 'edit any glossary content'
   - 'edit any news content'
-  - 'edit any owner rdf entity'
+  - 'edit any owner content'
   - 'edit any solution rdf entity'
   - 'edit own asset_release rdf entity'
   - 'edit own custom_page content'
