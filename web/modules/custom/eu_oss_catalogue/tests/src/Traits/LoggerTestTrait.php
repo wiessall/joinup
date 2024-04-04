@@ -26,6 +26,11 @@ trait LoggerTestTrait {
    * {@inheritdoc}
    */
   public function log($level, $message, array $context = []): void {
+    // Replace timestamp with the return value of Drupal's
+    // TimeInterface::getCurrentTime().
+    if (array_key_exists('timestamp', $context)) {
+      $context['timestamp'] = \Drupal::time()->getCurrentTime();
+    }
     $this->log[$level][] = [
       'message' => $message,
       'context' => $context,
