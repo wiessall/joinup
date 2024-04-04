@@ -25,17 +25,6 @@ interface EuOssCatalogueParserInterface extends PluginInspectionInterface {
   public function isValid(Project $project): array;
 
   /**
-   * Checks whether the schema is valid and returns a list of error messages.
-   *
-   * @param \Drupal\eu_oss_catalogue\Entity\OssSolutionInterface $solution
-   *   The solution node.
-   *
-   * @return array
-   *   A list of errors. Empty array means no errors.
-   */
-  public function checkSchema(OssSolutionInterface $solution): array;
-
-  /**
    * Parses fetched data and saves it as an OssSolution node.
    *
    * @param \Drupal\eu_oss_catalogue\Model\Project $project

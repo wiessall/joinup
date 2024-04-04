@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Drupal\eu_oss_catalogue\Plugin\eu_oss_catalogue\Provider;
 
 use Drupal\Component\Plugin\ConfigurableInterface;
-use Drupal\Core\Config\Schema\SchemaCheckTrait;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Logger\LoggerChannelInterface;
 use Drupal\eu_oss_catalogue\Entity\HostingPlatformConfigInterface;
@@ -30,10 +29,6 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * )
  */
 class HostingPlatform extends EuOssCatalogueProviderPluginBase implements ConfigurableInterface {
-
-  use SchemaCheckTrait {
-    checkValue as traitCheckValue;
-  }
 
   /**
    * The entity that is configuring this plugin instance.
