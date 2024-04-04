@@ -441,7 +441,7 @@ third_party_settings:
                 label: hidden
                 settings:
                   imagecache_external_link: ''
-                  imagecache_external_responsive_style: oss_solution_screenshot
+                  imagecache_external_responsive_style: image_gallery
                 third_party_settings:
                   field_delimiter:
                     delimiter: ''
@@ -450,7 +450,7 @@ third_party_settings:
                     limit: 0
                     offset: 0
                   joinup_slick:
-                    preset: oss_solution_screenshot
+                    preset: image_gallery
                   template_suggestion:
                     template_suggestion: ''
             weight: 1

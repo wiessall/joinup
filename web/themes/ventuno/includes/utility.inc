@@ -68,6 +68,12 @@ function _ventuno_preprocess_tile(array &$variables, string $entity_type_id): vo
     ($entity_type_id === 'node' && $entity->bundle() === 'custom_page')
   ) {
     $variables['text'] = $entity instanceof DescriptionInterface && isset($variables['content'][$entity->getDescriptionField()]) ? $variables['content'][$entity->getDescriptionField()] : NULL;
+
+    // Use abstract if possible.
+    if ($entity instanceof AbstractInterface && !$entity->get($entity->getAbstractField())->isEmpty()
+      && isset($variables['content'][$entity->getAbstractField()])) {
+      $variables['text'] = $variables['content'][$entity->getAbstractField()];
+    }
   }
 
   // Image.
@@ -240,10 +246,6 @@ function _ventuno_preprocess_tile(array &$variables, string $entity_type_id): vo
       'icon' => 'archive-fill',
       'label' => t('Archived'),
     ];
-  }
-
-  if ($entity instanceof AbstractInterface && $route_name === 'view.search.page_1') {
-    $variables['text'] = !$entity->get($entity->getAbstractField())->isEmpty() ? $variables['content'][$entity->getAbstractField()] : $variables['text'];
   }
 }
 

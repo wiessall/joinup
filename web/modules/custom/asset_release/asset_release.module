@@ -160,10 +160,6 @@ function asset_release_theme($existing, $type, $theme, $path) {
 
 /**
  * Implements hook_ENTITY_TYPE_access().
- *
- * Interrupts the permissions for updating a release. The permission is not
- * granted if there are no transitions allowed for the current state of the
- * node.
  */
 function asset_release_rdf_entity_access(EntityInterface $release, $operation, AccountInterface $account): AccessResultInterface {
   if (!$release instanceof AssetReleaseInterface || $account->hasPermission($release->getEntityType()->getAdminPermission())) {
@@ -171,60 +167,27 @@ function asset_release_rdf_entity_access(EntityInterface $release, $operation, A
   }
 
   $parent = $release->getSolution();
+
+  // Archived parents deny operations other than view.
   if ($operation !== 'view' && $parent->isArchived()) {
     return AccessResult::forbidden();
   }
 
-  switch ($operation) {
-    case 'view':
-      // If for any reason access is requested to an entity without a parent,
-      // deny that access.
-      if (empty($parent)) {
-        return AccessResult::forbidden();
-      }
-
-      /** @var \Drupal\Core\Entity\EntityAccessControlHandlerInterface $access_handler */
-      $access_handler = \Drupal::service('entity_type.manager')->getAccessControlHandler('rdf_entity');
-      if (!$access_handler->access($parent, 'view', $account)) {
-        return AccessResult::forbidden();
-      }
-
-      $membership = $parent->getMembership((int) $account->id());
-      if (empty($membership)) {
-        return AccessResult::neutral();
-      }
-      if (!$release->isPublished() && $membership->hasPermission('view unpublished rdf entity')) {
-        return AccessResult::allowed();
-      }
-      if ($release->isPublished() && $membership->hasPermission('view rdf entity')) {
-        return AccessResult::allowed();
-      }
-      break;
-
-    case 'edit':
-      /** @var \Drupal\joinup_workflow\WorkflowHelperInterface $workflow_helper */
-      $workflow_helper = \Drupal::service('joinup_workflow.workflow_helper');
-      $allowed_states = $workflow_helper->getAvailableTargetStates($release, $account);
-      return AccessResult::forbiddenIf(empty($allowed_states));
-
-    case 'delete':
-      $parent = $release->getSolution();
-
-      // If for any reason access is requested to an entity without a parent,
-      // deny that access.
-      if (empty($parent)) {
-        return AccessResult::forbidden();
-      }
-
-      $membership = $parent->getMembership((int) $account->id());
-      if (empty($membership)) {
-        return AccessResult::allowedIf($account->hasPermission('delete asset_release rdf entity'));
-      }
-
-      return AccessResult::allowedIf($membership->hasPermission('delete asset_release rdf entity'));
+  if ($operation !== 'view') {
+    return AccessResult::neutral();
   }
 
-  return AccessResult::neutral();
+  $access_handler = \Drupal::service('entity_type.manager')->getAccessControlHandler('rdf_entity');
+  if (!$access_handler->access($parent, 'view', $account)) {
+    return AccessResult::forbidden();
+  }
+
+  // Allow access depending to the publication status and the corresponding
+  // permission in the group.
+  return AccessResult::allowedIf(
+    (!$release->isPublished() && $parent->hasGroupPermission($account->id(), 'view unpublished rdf entity'))
+    || ($release->isPublished() && $parent->hasGroupPermission($account->id(), 'view rdf entity'))
+  );
 }
 
 /**

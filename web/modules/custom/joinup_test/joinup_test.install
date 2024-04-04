@@ -20,6 +20,15 @@ function joinup_test_install($is_syncing): void {
 
   $termIds = [];
   foreach ($hierarchy as $vid => $terms) {
+    $hasTerms = (bool) $storage->getQuery()->accessCheck(FALSE)
+      ->condition('vid', $vid)
+      ->count()
+      ->execute();
+    if ($hasTerms) {
+      // On rebuild terms are already populated from the database dump.
+      continue;
+    }
+
     foreach ($terms as $parentWeight => $data) {
       $term = $storage->create([
         'vid' => $vid,
