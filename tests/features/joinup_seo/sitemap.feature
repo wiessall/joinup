@@ -30,10 +30,10 @@ Feature:
       | title           | description |
       | Sitemap licence | Not allowed |
     And "custom_page" content:
-      | title                                           | collection                   | body | logo     | langcode |
-      | Sitemap custom page of draft                    | Sitemap collection draft     | N/A  | logo.png | en       |
-      | Sitemap custom page of published                | Sitemap collection published | N/A  | logo.png | en       |
-      | Sitemap custom page of published but in Spanish | Sitemap collection published | N/A  | logo.png | es       |
+      | title                                           | collection                   | body | logo     | langcode | state     |
+      | Sitemap custom page of draft                    | Sitemap collection draft     | N/A  | logo.png | en       | published |
+      | Sitemap custom page of published                | Sitemap collection published | N/A  | logo.png | en       | published |
+      | Sitemap custom page of published but in Spanish | Sitemap collection published | N/A  | logo.png | es       | published |
     And news content:
       | title                                    | headline     | body              | solution                   | state     | publication date          |
       | Sitemap news draft                       | Sitemap news | Sitemap news body | Sitemap solution published | draft     |                           |
