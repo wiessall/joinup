@@ -21,6 +21,7 @@ use Drupal\joinup_notification\MessageArgumentGenerator;
 use Drupal\joinup_user\Entity\JoinupUser;
 use Drupal\joinup_user\Entity\JoinupUserInterface;
 use Drupal\joinup_user\JoinupUserViewsData;
+use Drupal\joinup_user\Plugin\Menu\LoginLogoutMenuLink;
 use Drupal\og\OgMembershipInterface;
 use Drupal\user\Entity\User;
 use Drupal\user\UserInterface;
@@ -575,9 +576,9 @@ function joinup_user_form_user_login_form_alter(&$form, FormStateInterface $form
  *
  * @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-3659
  */
-function joinup_user_menu_links_discovered_alter(&$links) {
+function joinup_user_menu_links_discovered_alter(array &$links): void {
   if (isset($links['user.logout'])) {
-    $links['user.logout']['class'] = '\Drupal\joinup_user\Plugin\Menu\LoginLogoutMenuLink';
+    $links['user.logout']['class'] = LoginLogoutMenuLink::class;
   }
 }
 
@@ -664,4 +665,20 @@ function joinup_user_preprocess_username(array &$variables): void {
   $account = $variables['account'] ?: new AnonymousUserSession();
   $variables['name_full'] = $account->getDisplayName();
   $variables['name'] = Unicode::truncate($account->getDisplayName(), 24, FALSE, TRUE);
+}
+
+/**
+ * Implements hook_module_implements_alter().
+ */
+function joinup_user_module_implements_alter(array &$implementations, string $hook): void {
+  if ($hook === 'views_data_alter' && isset($implementations['joinup_user']) && $implementations['joinup_user'] !== FALSE) {
+    // Role delegation module alters the UserBulkForm views field plugin. We
+    // need to ensure that our implementation runs after the Role Delegation
+    // module's implementation as we extend them to keep the functionality of
+    // the role delegation but also keep the alterations we are adding to the
+    // user bulk form too.
+    $group = $implementations['joinup_user'];
+    unset($implementations['joinup_user']);
+    $implementations['joinup_user'] = $group;
+  }
 }

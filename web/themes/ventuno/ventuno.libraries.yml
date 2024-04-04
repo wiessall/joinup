@@ -105,6 +105,11 @@ alert:
   dependencies:
     - ventuno/close
 
+align-module:
+  css:
+    theme:
+      assets/css/align-module.min.css: { minified: true }
+
 badge:
   css:
     theme:
@@ -125,6 +130,22 @@ carousel:
     - ventuno/carousel.js
     - ventuno/carousel-theme
 
+image-gallery:
+  css:
+    theme:
+      assets/css/image-gallery.min.css: { minified: true }
+  dependencies:
+    - ventuno/carousel-theme
+
+carousel.js:
+  header: true
+  js:
+    assets/js/carousel.min.js: { minified: true, attributes: { defer: true } }
+  dependencies:
+    - ventuno/glide
+    - core/drupal
+    - core/once
+
 oss-solution-screenshots-carousel:
   css:
     theme:
@@ -136,13 +157,6 @@ oss-solution-indicator:
   css:
     theme:
       assets/css/oss-solution-indicator.min.css: { minified: true }
-
-carousel.js:
-  header: true
-  js:
-    assets/js/carousel.min.js: { minified: true, attributes: { defer: true } }
-  dependencies:
-    - ventuno/glide
 
 close:
   css:

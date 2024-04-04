@@ -69,6 +69,7 @@ class EuplContext extends RawDrupalContext {
       'uuid' => '3bee8b04-75fd-46a8-94b3-af0d8f5a4c41',
       'title' => 'JLA',
       'og_audience' => Eupl::JLA_SOLUTION,
+      'field_state' => 'published',
     ])->save();
 
     // The 'Joinup Licensing Compatibility Check' standard custom page.
@@ -78,6 +79,7 @@ class EuplContext extends RawDrupalContext {
       'uuid' => '431f631f-e973-4fae-8368-c31f346a9616',
       'title' => 'JLC',
       'og_audience' => Eupl::JLA_SOLUTION,
+      'field_state' => 'published',
     ])->save();
 
     // Populate the compatibility documents.

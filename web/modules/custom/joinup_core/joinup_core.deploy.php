@@ -20,7 +20,7 @@ use Drupal\joinup_oss_catalogue\OssCatalogueCollectionInterface;
 /**
  * Update path alias for EU OSS catalogue.
  */
-function joinup_core_deploy_110300(): void {
+function joinup_core_deploy_110400(): void {
   /** @var \Drupal\collection\Entity\CollectionInterface $collection */
   $collection = \Drupal::entityTypeManager()->getStorage('rdf_entity')
     ->load(OssCatalogueCollectionInterface::COLLECTION_ENTITY_ID);
@@ -34,7 +34,7 @@ function joinup_core_deploy_110300(): void {
 /**
  * Update title of EU OSS catalogue collection.
  */
-function joinup_core_deploy_110301(): void {
+function joinup_core_deploy_110401(): void {
   /** @var \Drupal\collection\Entity\CollectionInterface $collection */
   $collection = \Drupal::entityTypeManager()->getStorage('rdf_entity')
     ->load(OssCatalogueCollectionInterface::COLLECTION_ENTITY_ID);
@@ -47,7 +47,7 @@ function joinup_core_deploy_110301(): void {
 /**
  * Import content for EU OpenSource Software Solutions Catalogue.
  */
-function joinup_core_deploy_110302(): void {
+function joinup_core_deploy_110402(): void {
   /** @var \Drupal\Core\Extension\ModuleInstallerInterface $moduleInstaller */
   $moduleInstaller = \Drupal::service('module_installer');
   /** @var \Drupal\Core\Entity\EntityRepositoryInterface $entityRepository */
@@ -80,7 +80,7 @@ function joinup_core_deploy_110302(): void {
 /**
  * Rename menu items for EU OSS catalogue.
  */
-function joinup_core_deploy_110303(): void {
+function joinup_core_deploy_110403(): void {
   $entityTypeManager = \Drupal::entityTypeManager();
   /** @var  \Drupal\menu_link_content\MenuLinkContentStorageInterface $menuLinkContentStorage */
   $menuLinkContentStorage = $entityTypeManager->getStorage('menu_link_content');
@@ -116,7 +116,7 @@ function joinup_core_deploy_110303(): void {
 /**
  * Make sure that oss_archived has a default value.
  */
-function joinup_core_deploy_110304(array &$sandbox): string {
+function joinup_core_deploy_110404(array &$sandbox): string {
   $entityTypeManager = \Drupal::entityTypeManager();
   /** @var \Drupal\node\NodeStorage $nodeStorage */
   $nodeStorage = $entityTypeManager->getStorage('node');
@@ -142,4 +142,59 @@ function joinup_core_deploy_110304(array &$sandbox): string {
   $sandbox['#finished'] = (int) empty($sandbox['ids']);
 
   return "Processed {$sandbox['progress']} out of {$sandbox['count']} solutions.";
+}
+
+/**
+ * Cleans up obsolete EIRA terms.
+ */
+function joinup_core_deploy_110405(): string {
+  $count_graph = <<<SPARQL
+SELECT ?s ?deletedTermUri
+WHERE {
+  GRAPH ?g {
+    ?s a <http://www.w3.org/ns/dcat#Dataset> .
+    ?s <http://purl.org/dc/terms/type> ?deletedTermUri .
+    FILTER NOT EXISTS {
+      SELECT ?deletedTermUri
+      WHERE {
+        GRAPH <http://eira_skos> {
+          ?deletedTermUri <http://www.w3.org/2004/02/skos/core#topConceptOf> <http://data.europa.eu/dr8> .
+        }
+      }
+    }
+  }
+}
+SPARQL;
+
+  $sparql = \Drupal::getContainer()->get('sparql.endpoint');
+  $count = $sparql->query($count_graph)->numRows();
+
+  $query = <<<SPARQL
+DELETE {
+  GRAPH ?g {
+    ?s <http://purl.org/dc/terms/type> ?deletedTermUri .
+  }
+}
+WHERE {
+  GRAPH ?g {
+    ?s a <http://www.w3.org/ns/dcat#Dataset> .
+    ?s <http://purl.org/dc/terms/type> ?deletedTermUri .
+    FILTER NOT EXISTS {
+      SELECT ?deletedTermUri
+      WHERE {
+        GRAPH <http://eira_skos> {
+          ?deletedTermUri <http://www.w3.org/2004/02/skos/core#topConceptOf> <http://data.europa.eu/dr8> .
+        }
+      }
+    }
+  }
+}
+SPARQL;
+
+  $result = $sparql->update($query)->current();
+  $message = $result->{"callret-0"}->getValue();
+  \assert(str_contains($message, (string) $count), 'The number of deleted entries should match the number of entries to clean.');
+  \assert($sparql->query($count_graph)->numRows() === 0, 'There should be no more entries to clean.');
+
+  return 'Entries to clean: ' . $count . '. Result: ' . $message . '.';
 }
