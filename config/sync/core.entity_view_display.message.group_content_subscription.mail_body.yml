@@ -77,8 +77,8 @@ content:
         view_mode: default
         link: false
     third_party_settings:
-      joinup:
-        template_suggestion: ''
+      template_suggestion:
+        template_suggestion: bare
     weight: 0
     region: content
   partial_1:
