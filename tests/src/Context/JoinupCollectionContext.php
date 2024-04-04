@@ -31,11 +31,10 @@ class JoinupCollectionContext extends RawDrupalContext {
    */
   public function setupJoinupCollection(): void {
     // Create the owner.
-    Rdf::create([
-      'rid' => 'owner',
-      'id' => 'http://example.com/owner/isa2',
-      'field_owner_name' => 'ISA²',
-    ])->save();
+    $owner = $this->nodeCreate([
+      'type' => 'owner',
+      'owner_name' => 'ISA²',
+    ]);
 
     // Create the contact.
     Rdf::create([
@@ -52,7 +51,7 @@ class JoinupCollectionContext extends RawDrupalContext {
       'label' => 'Joinup',
       'field_ar_state' => 'published',
       'field_topic' => $this->getRandomTopic()->id(),
-      'field_ar_owner' => 'http://example.com/owner/isa2',
+      'field_ar_owner' => $owner->id(),
       'field_ar_contact_information' => 'http://example.com/contact/joinup',
     ])->save();
   }

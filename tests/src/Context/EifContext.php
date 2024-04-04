@@ -43,13 +43,10 @@ class EifContext extends RawDrupalContext {
    */
   public function setupEifData(BeforeScenarioScope $scope): void {
     // Create an owner.
-    $owner = Rdf::create([
-      'rid' => 'owner',
-      'id' => 'http://example.com/owner',
-      'field_owner_name' => 'Owner',
+    $owner = $this->nodeCreate([
+      'type' => 'owner',
+      'owner_name' => 'Owner',
     ]);
-    $owner->save();
-    $this->entities['rdf_entity'][$owner->id()] = $owner;
 
     $contact = Rdf::create([
       'rid' => 'contact_information',
@@ -67,7 +64,7 @@ class EifContext extends RawDrupalContext {
       'label' => 'NIFO collection',
       'field_ar_state' => 'published',
       'field_topic' => $tid = $this->getRandomTopic()->id(),
-      'field_ar_owner' => 'http://example.com/owner',
+      'field_ar_owner' => $owner->id(),
       'field_ar_contact_information' => 'http://example.com/contact',
     ]);
     $collection->save();
@@ -81,7 +78,7 @@ class EifContext extends RawDrupalContext {
       'collection' => 'http://nifo.collection',
       'field_is_state' => 'published',
       'field_topic' => $tid,
-      'field_is_owner' => 'http://example.com/owner',
+      'field_is_owner' => $owner->id(),
       'field_is_contact_information' => 'http://example.com/contact',
     ]);
     $solution->save();

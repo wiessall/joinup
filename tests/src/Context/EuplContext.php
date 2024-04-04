@@ -39,11 +39,10 @@ class EuplContext extends RawDrupalContext {
    */
   public function setupEuplData(): void {
     // Create an owner.
-    Rdf::create([
-      'rid' => 'owner',
-      'id' => 'http://example.com/owner',
-      'field_owner_name' => 'Owner',
-    ])->save();
+    $owner = $this->nodeCreate([
+      'type' => 'owner',
+      'owner_name' => 'Owner',
+    ]);
 
     // Create the EUPL entity.
     Rdf::create([
@@ -51,7 +50,7 @@ class EuplContext extends RawDrupalContext {
       'id' => Eupl::EUPL_COMMUNITY_ID,
       'label' => 'EUPL',
       'field_ar_state' => 'published',
-      'field_ar_owner' => 'http://example.com/owner',
+      'field_ar_owner' => $owner->id(),
     ])->save();
 
     Rdf::create([
@@ -465,8 +464,6 @@ class EuplContext extends RawDrupalContext {
     $solution = Rdf::load(Eupl::JLA_SOLUTION);
     $solution->skip_notification = TRUE;
     $solution->delete();
-
-    Rdf::load('http://example.com/owner')->delete();
 
     $this->cleanCompatibilityDocuments();
   }
