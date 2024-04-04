@@ -51,7 +51,6 @@ abstract class JoinupMailKernelTestBase extends KernelTestBase {
     'message_notify',
     'joinup_workflow',
     'state_machine_revisions',
-    'workflow_state_permission',
 
     // Ventuno theme dependencies.
     'interoperable_europe',
@@ -83,7 +82,6 @@ abstract class JoinupMailKernelTestBase extends KernelTestBase {
       'message_notify',
       'joinup_workflow',
       'state_machine_revisions',
-      'workflow_state_permission',
       'rdf_entity',
       'sparql_entity_storage',
       'mailsystem',

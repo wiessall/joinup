@@ -104,7 +104,8 @@ Feature: "Add solution" visibility options.
     And I press "Add owner"
     # Ensure that the Status field is a dropdown.
     # @see: https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-3342
-    And I select "Completed" from "Status"
+    And the option with text "Completed" from select "Status" is selected
+    And the "Show solutions related by EIRA terms" checkbox should not be checked
     And I press "Propose"
     Then the email sent to "Ruth Lee" with subject "Joinup: A new solution has been proposed" contains the following lines of text:
       | Wendell Silva has proposed a new Interoperability solution: "Espresso is the solution" on Joinup. |

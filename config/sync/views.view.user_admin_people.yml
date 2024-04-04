@@ -77,24 +77,28 @@ display:
             - pathauto_update_alias_user
             - user_add_role_action.licence_manager
             - user_add_role_action.moderator
-            - user_add_role_action.rdf_graph_manager
             - user_block_user_action
             - user_cancel_user_action
             - user_remove_role_action.licence_manager
             - user_remove_role_action.moderator
-            - user_remove_role_action.rdf_graph_manager
             - user_unblock_user_action
+            - user_add_role_action.administrator
+            - user_add_role_action.developer
+            - user_remove_role_action.administrator
+            - user_remove_role_action.developer
           actions_order:
-            - pathauto_update_alias_user
+            - user_add_role_action.administrator
+            - user_add_role_action.developer
             - user_add_role_action.licence_manager
             - user_add_role_action.moderator
-            - user_add_role_action.rdf_graph_manager
             - user_block_user_action
             - user_cancel_user_action
+            - user_unblock_user_action
+            - pathauto_update_alias_user
+            - user_remove_role_action.administrator
+            - user_remove_role_action.developer
             - user_remove_role_action.licence_manager
             - user_remove_role_action.moderator
-            - user_remove_role_action.rdf_graph_manager
-            - user_unblock_user_action
         name:
           id: name
           table: users_field_data

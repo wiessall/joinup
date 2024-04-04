@@ -162,8 +162,6 @@ Feature: Collection moderation
     Then I should see the heading "Are you sure you want to delete collection Person of Wizards?"
     And I should see "This action cannot be undone."
     When I press "Delete"
-    # @todo: check that a success message is shown.
-    # @see ISAICP-6140
     Then I should be on the homepage
 
   Scenario: Published collections should be shown in the collections overview page.
