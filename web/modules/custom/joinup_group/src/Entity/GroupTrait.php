@@ -145,7 +145,7 @@ trait GroupTrait {
   /**
    * {@inheritdoc}
    */
-  public function hasGroupPermission(int $uid, string $permission): bool {
+  public function hasGroupPermission(int|string $uid, string $permission): bool {
     $membership_manager = $this->getMembershipManager();
     if ($membership = $membership_manager->getMembership($this, $uid)) {
       return $membership->hasPermission($permission);

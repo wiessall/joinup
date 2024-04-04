@@ -14,10 +14,12 @@ services:
     tags:
       - { name: 'cache.context'}
   solution.fulfillment_guard:
-    class: Drupal\solution\Guard\SolutionFulfillmentGuard
-    arguments: ['@current_user', '@workflow_state_permission.workflow_state_permission', '@rdf_entity_provenance.provenance_helper']
+    class: Drupal\solution\Guard\SolutionTransitionGuard
+    arguments: ['@current_user', '@rdf_entity_provenance.provenance_helper']
     tags:
-      - { name: state_machine.guard, group: solution }
+      # Priority 5 will set it to be executed before the generic guard of the
+      # state_machine_permissions module.
+      - { name: state_machine.guard, group: solution, priority: 5}
   solution.requirements_helper:
     class: Drupal\solution\RequirementsHelper
     arguments: ['@sparql.endpoint']

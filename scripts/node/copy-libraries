@@ -9,3 +9,7 @@ mkdir -p "$WEB_LIBRARY_ROOT/jquery-jsonview/dist" && cp node_modules/jquery-json
 
 # Copy Slick Carousel library.
 mkdir -p "$WEB_LIBRARY_ROOT/slick" && cp -r "node_modules/slick-carousel/slick" "$WEB_LIBRARY_ROOT/slick"
+
+# Colorbox: Copy DOMPurify and Colorbox libraries.
+cp -r "node_modules/dompurify" "$WEB_LIBRARY_ROOT/dompurify"
+cp -r "node_modules/jquery-colorbox" "$WEB_LIBRARY_ROOT/colorbox"

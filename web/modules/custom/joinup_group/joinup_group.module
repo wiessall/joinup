@@ -41,6 +41,7 @@ use Drupal\og\OgGroupAudienceHelperInterface;
 use Drupal\og\OgMembershipInterface;
 use Drupal\og_menu\Entity\OgMenuInstance;
 use Drupal\rdf_entity\RdfInterface;
+use Drupal\symfony_mailer_lite\Plugin\Mail\SymfonyMailer;
 use Drupal\user\UserInterface;
 use Drupal\views\Plugin\views\query\QueryPluginBase;
 use Drupal\views\Plugin\views\query\Sql;
@@ -259,6 +260,28 @@ function joinup_group_propose_message_submit(&$form, FormStateInterface $form_st
       \Drupal::messenger()->addStatus(t('Thank you for proposing a @entity_label. Your request is currently pending approval by the site administrator.', ['@entity_label' => $entity->get('rid')->entity->getSingularLabel()]));
     }
   }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_access().
+ */
+function joinup_group_rdf_entity_access(EntityInterface $entity, $operation, AccountInterface $account) {
+  if (!$entity instanceof GroupInterface
+    || $account->isAnonymous()
+    || $account->hasPermission($entity->getEntityType()->getAdminPermission())
+    || $operation !== 'view'
+  ) {
+    return AccessResult::neutral();
+  }
+
+  // Allows users to view unpublished groups if they have the permission as part
+  // of their membership.
+  $membership = $entity->getMembership((int) $account->id());
+  return AccessResult::allowedIf(
+    $membership
+    && !$entity->isPublished()
+    && $membership->hasPermission('view unpublished rdf entity'))
+    ->addCacheableDependency($membership);
 }
 
 /**
@@ -1081,8 +1104,11 @@ function joinup_group_mail(string $key, array &$message, array $params): void {
     $message['subject'] = t("Joinup: A new announcement '@subject' has been created", $args);
     $message['body'] = [
       t("A new announcement '@subject' has been created by @author for the @group @type.", $args),
-      t("You can approve or reject the announcement at :url", $args),
+      t('You can approve or reject the announcement at <a href=":url">:url</a>.', $args),
     ];
+
+    // Send as HTML.
+    $message['headers']['Content-Type'] = SymfonyMailer::FORMAT_HTML;
   }
 }
 
