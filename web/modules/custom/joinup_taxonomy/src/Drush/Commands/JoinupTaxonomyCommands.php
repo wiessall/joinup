@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_taxonomy\Drush\Commands;
 
-use Drupal\Component\Utility\Crypt;
 use Drupal\Core\Batch\BatchBuilder;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\joinup_taxonomy\VocabularyUpdater;
@@ -57,11 +56,6 @@ class JoinupTaxonomyCommands extends DrushCommands {
   private const FIXTURES_DIR = DRUPAL_ROOT . '/../resources/vocab';
 
   /**
-   * Static cache of dump file path.
-   */
-  private static string $dumpFile;
-
-  /**
    * Static cache for vocabulary updater service.
    */
   private static VocabularyUpdater $vocabularyUpdater;
@@ -76,7 +70,7 @@ class JoinupTaxonomyCommands extends DrushCommands {
    */
   public function __construct(
     private readonly RdfSyncMapper $mapper,
-    private ConfigFactoryInterface $configFactory,
+    private readonly ConfigFactoryInterface $configFactory,
   ) {
     parent::__construct();
   }
@@ -95,20 +89,20 @@ class JoinupTaxonomyCommands extends DrushCommands {
    * Creates locked vocabularies terms.
    */
   #[CLI\Command(name: 'joinup:create-locked-vocabulary-terms')]
+  #[CLI\Option(name: 'generate', description: 'Recreate the MySQL dump file')]
   #[CLI\Help(
     description: 'Create terms in locked vocabularies',
-    synopsis: 'If there are changes to the RDF files or the MySQL dump file is missing, the command will recreate the MySQL dump file',
+    synopsis: 'Imports the locked vocabularies terms from a MySQL dump file. To re-generate a new dump file, pass the --generate option',
   )]
-  public function createLockedVocabulariesTermDump(): void {
-    if (file_exists($this->getDumpFilePath('sql'))) {
-      // We already have a valid MySQL dump file. Restore terms from dump.
+  public function createLockedVocabulariesTermDump(array $options = ['generate' => FALSE]): void {
+    if (!$options['generate']) {
+      // Restore terms from dump.
       $this->createTermsFromDump();
       Drush::logger()->notice(dt('✅ created locked vocabularies terms from MySQL dump'));
       return;
     }
 
-    // Either the dump file is missing or source RDF files have changes. We
-    // recreate the MySQL dump file in a batch process.
+    // Recreate the MySQL dump file in a batch process.
     $batchBuilder = (new BatchBuilder())->addOperation([self::class, 'init']);
     foreach (array_keys(self::VOCABS) as $file) {
       $batchBuilder->addOperation([self::class, 'processFile'], [$file]);
@@ -123,13 +117,14 @@ class JoinupTaxonomyCommands extends DrushCommands {
    * Synchronizes Drupal terms to RDF backend.
    */
   #[CLI\Command(name: 'joinup:sync-locked-vocabulary-terms')]
+  #[CLI\Option(name: 'generate', description: 'Recreate the RDF-XML dump file')]
   #[CLI\Help(
     description: 'Synchronize Drupal terms to RDF backend',
-    synopsis: 'If there are changes to the RDF files or the RDF dump file is missing, the command will recreate the RDF dump file',
+    synopsis: 'Synchronizes the locked vocabulary terms from a RDF-XML dump file to the RDF backend. To re-generate a new RDF-XML dump file, pass the --generate option',
   )]
-  public function synchronizeTerms(): void {
-    if (file_exists($this->getDumpFilePath('rdf', FALSE))) {
-      // We already have a valid RDFXML dump file. Restore terms from dump.
+  public function synchronizeTerms(array $options = ['generate' => FALSE]): void {
+    if (!$options['generate']) {
+      // Restore terms from dump.
       $this->synchronizeTermsFromRdfXmlFile();
       Drush::logger()->notice(dt('✅ synchronized locked vocabularies terms from RDFXML dump'));
       return;
@@ -198,17 +193,6 @@ class JoinupTaxonomyCommands extends DrushCommands {
     $file = static::getDumpFilePath('rdf', FALSE);
     file_put_contents($file, $fixtureFileGraph->serialise('rdfxml'));
 
-    // Remove stale dump files.
-    $staleFiles = array_filter(
-      glob(self::FIXTURES_DIR . '/terms.*.rdf'),
-      function (string $staleFile) use ($file): bool {
-        return $staleFile !== $file;
-      }
-    );
-    array_walk($staleFiles, function (string $file): void {
-      \Drupal::getContainer()->get('file_system')->unlink($file);
-    });
-
     $this->logger()->notice(dt('Triples dumped to !file', [
       '!file' => realpath($file),
     ]));
@@ -240,10 +224,8 @@ class JoinupTaxonomyCommands extends DrushCommands {
    *   The batch context.
    */
   public static function processFile(string $file, array &$context): void {
-    $content = file_get_contents(self::FIXTURES_DIR . '/' . $file);
-
     $graph = new Graph();
-    $graph->parse($content);
+    $graph->parseFile(self::FIXTURES_DIR . '/' . $file);
     $graphUri = 'http://' . strtolower(pathinfo($file, PATHINFO_FILENAME));
 
     foreach (self::VOCABS[$file] as $vid) {
@@ -297,20 +279,8 @@ class JoinupTaxonomyCommands extends DrushCommands {
     file_put_contents($file, static::getUriTableDump($results['uri_to_tid'], array_values($results['vids'])), FILE_APPEND);
 
     // Gzip it and get the normalized path.
-    exec("gzip $file");
+    exec("gzip -f $file");
     $file = realpath("$file.gz");
-
-    // Remove stale dump files.
-    $staleFiles = array_filter(
-      glob(self::FIXTURES_DIR . '/*.sql.gz'),
-      function (string $staleFile) use ($file): bool {
-        return realpath($staleFile) !== $file;
-      }
-    );
-    array_walk($staleFiles, function (string $file): void {
-      \Drupal::getContainer()->get('file_system')->unlink($file);
-    });
-
     Drush::logger()->notice(dt('Terms dumped to !file', ['!file' => $file]));
   }
 
@@ -364,18 +334,7 @@ class JoinupTaxonomyCommands extends DrushCommands {
    *   A file path.
    */
   public static function getDumpFilePath(string $extension, bool $compressed = TRUE): string {
-    if (!isset(static::$dumpFile)) {
-      $checksum = '';
-      foreach (array_keys(self::VOCABS) as $file) {
-        $filePath = self::FIXTURES_DIR . '/' . $file;
-        if (file_exists($filePath)) {
-          $checksum .= sha1_file($filePath);
-        }
-      }
-      $checksum = Crypt::hashBase64($checksum);
-      static::$dumpFile = self::FIXTURES_DIR . "/terms.$checksum.$extension";
-    }
-    return static::$dumpFile . ($compressed ? '.gz' : '');
+    return self::FIXTURES_DIR . "/terms.$extension" . ($compressed ? '.gz' : '');
   }
 
   /**
