@@ -29,8 +29,8 @@ dependencies:
     - field.storage.rdf_entity.field_licence_description
     - field.storage.rdf_entity.field_is_eif_category
     - field.storage.rdf_entity.field_is_eif_recommendation
+    - field.storage.node.owner_name
     - field.storage.rdf_entity.field_is_owner
-    - field.storage.rdf_entity.field_owner_name
     - field.storage.rdf_entity.field_isr_owner
     - field.storage.rdf_entity.field_isr_release_notes
     - field.storage.rdf_entity.field_is_solution_type
@@ -601,27 +601,27 @@ field_settings:
       module:
         - rdf_entity
   is_field_owner_name:
-    label: 'Owner » Rdf entity » Name'
+    label: 'Owner » Content » Name'
     datasource_id: 'entity:rdf_entity'
-    property_path: 'field_is_owner:entity:field_owner_name'
+    property_path: 'field_is_owner:entity:owner_name'
     type: text
     dependencies:
       config:
+        - field.storage.node.owner_name
         - field.storage.rdf_entity.field_is_owner
-        - field.storage.rdf_entity.field_owner_name
       module:
-        - rdf_entity
+        - node
   is_field_owner_name_spellcheck:
-    label: 'Owner » Rdf entity » Name - Spellcheck'
+    label: 'Owner » Content » Name - Spellcheck'
     datasource_id: 'entity:rdf_entity'
-    property_path: 'field_is_owner:entity:field_owner_name'
+    property_path: 'field_is_owner:entity:owner_name'
     type: solr_text_spellcheck
     dependencies:
       config:
+        - field.storage.node.owner_name
         - field.storage.rdf_entity.field_is_owner
-        - field.storage.rdf_entity.field_owner_name
       module:
-        - rdf_entity
+        - node
   isr_field_ci_name:
     label: 'Contact information » Rdf entity » Name'
     datasource_id: 'entity:rdf_entity'
@@ -645,27 +645,27 @@ field_settings:
       module:
         - rdf_entity
   isr_field_owner_name:
-    label: 'Owner » Rdf entity » Name'
+    label: 'Owner » Content » Name'
     datasource_id: 'entity:rdf_entity'
-    property_path: 'field_isr_owner:entity:field_owner_name'
+    property_path: 'field_isr_owner:entity:owner_name'
     type: text
     dependencies:
       config:
+        - field.storage.node.owner_name
         - field.storage.rdf_entity.field_isr_owner
-        - field.storage.rdf_entity.field_owner_name
       module:
-        - rdf_entity
+        - node
   isr_field_owner_name_spellcheck:
-    label: 'Owner » Rdf entity » Name - Spellcheck'
+    label: 'Owner » Content » Name - Spellcheck'
     datasource_id: 'entity:rdf_entity'
-    property_path: 'field_isr_owner:entity:field_owner_name'
+    property_path: 'field_isr_owner:entity:owner_name'
     type: solr_text_spellcheck
     dependencies:
       config:
+        - field.storage.node.owner_name
         - field.storage.rdf_entity.field_isr_owner
-        - field.storage.rdf_entity.field_owner_name
       module:
-        - rdf_entity
+        - node
   keywords:
     label: Keywords
     property_path: aggregated_field
@@ -892,6 +892,9 @@ field_settings:
     datasource_id: 'entity:taxonomy_term'
     property_path: tid
     type: string
+    dependencies:
+      module:
+        - taxonomy
   title:
     label: Title
     datasource_id: 'entity:node'
