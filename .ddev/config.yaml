@@ -6,7 +6,11 @@ name: joinup
 type: drupal10
 docroot: web
 php_version: "8.2"
-webimage_extra_packages: [php-apcu]
+webimage_extra_packages:
+  - php-apcu
+  # Both required by mydumper.
+  - libatomic1
+  - zstd
 
 # It's not possible to use fpfis/httpd-php because DDEV is strongly advising
 # against using a non-DDEV image. But this has no impact on the Joinup code runs

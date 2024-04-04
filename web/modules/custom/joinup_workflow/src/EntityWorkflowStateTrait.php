@@ -77,32 +77,33 @@ trait EntityWorkflowStateTrait {
 
     // If the "from" and "to" state are different, this state change is governed
     // by a transition. If no transition exists then the update is not allowed.
-    if ($from_state !== $to_state) {
-      $allowed_transitions = array_filter($this->getWorkflow()->getAllowedTransitions($from_state, $this), function (WorkflowTransition $transition) use ($to_state) {
-        return $transition->getToState()->getId() === $to_state;
-      });
-      return !empty($allowed_transitions);
-    }
-
-    // In the case of the entity being updated while not changing the workflow
-    // state we can leverage the workflow state permission service.
-    /** @var \Drupal\workflow_state_permission\WorkflowStatePermissionInterface $workflow_state_permission */
-    $workflow_state_permission = \Drupal::service('workflow_state_permission.workflow_state_permission');
-    return $workflow_state_permission->isStateUpdatePermitted(\Drupal::currentUser(), $this, $this->getWorkflow(), $from_state, $to_state);
+    $allowed_transitions = array_filter($this->getWorkflow()->getAllowedTransitions($from_state, $this), function (WorkflowTransition $transition) use ($to_state) {
+      return $transition->getToState()->getId() === $to_state;
+    });
+    return !empty($allowed_transitions);
   }
 
   /**
    * {@inheritdoc}
    */
-  public function getTransitions(): array {
+  public function getAllowedTransitions(): array {
     return $this->getWorkflowStateField()->getTransitions();
   }
 
   /**
    * {@inheritdoc}
    */
-  public function hasTransitions(): bool {
-    return (bool) $this->getTransitions();
+  public function hasAllowedTransitions(): bool {
+    return (bool) $this->getAllowedTransitions();
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function isTransitionAllowed(string $transition_id): bool {
+    return in_array($transition_id, array_map(function (WorkflowTransition $transition) {
+      return $transition->getId();
+    }, $this->getAllowedTransitions()));
   }
 
 }

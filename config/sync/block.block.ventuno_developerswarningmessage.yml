@@ -1,0 +1,28 @@
+uuid: ae4065e2-c824-4af0-a3e1-5bd2b6e4bd2c
+langcode: en
+status: true
+dependencies:
+  module:
+    - joinup_user
+    - user
+  theme:
+    - ventuno
+id: ventuno_developerswarningmessage
+theme: ventuno
+region: messages
+weight: -27
+provider: null
+plugin: developer_warning_message
+settings:
+  id: developer_warning_message
+  label: 'Developers warning message'
+  label_display: '0'
+  provider: developer
+visibility:
+  user_role:
+    id: user_role
+    negate: false
+    context_mapping:
+      user: '@user.current_user_context:current_user'
+    roles:
+      developer: developer
