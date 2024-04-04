@@ -8,6 +8,7 @@ use Drupal\Component\Serialization\Json;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\Url;
+use Symfony\Component\Routing\Exception\RouteNotFoundException;
 
 /**
  * Implementation of joinup_bookmark service.
@@ -28,14 +29,26 @@ class JoinupBookmark implements JoinupBookmarkInterface {
   }
 
   /**
+   * {@inheritdoc}
+   */
+  public function getBookmarkLink(): array {
+    try {
+      return $this->generateLink();
+    }
+    catch (RouteNotFoundException $e) {
+      return [];
+    }
+  }
+
+  /**
    * Generates a bookmark link.
    *
    * @return array
    *   Bookmark link.
    *
-   * @throws \Exception
+   * @throws \Symfony\Component\Routing\Exception\RouteNotFoundException
    */
-  public function getBookmarkLink(): array {
+  protected function generateLink(): array {
     $bookmarkLink = Url::fromRoute('view.bookmarks.page');
 
     $bookmark = [
