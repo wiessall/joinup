@@ -51,7 +51,7 @@ class OwnerContext extends RawDrupalContext {
    *
    * @Given (the following )owner(s):
    */
-  public function givenOwner(TableNode $owners_table) {
+  public function givenOwner(TableNode $owners_table): void {
     foreach ($owners_table->getHash() as $row) {
       // If no type was specified, fallback to 'Private Individual(s)'.
       $types = isset($row['type']) ? array_map('trim', explode(',', $row['type'])) : ['Private Individual(s)'];
@@ -71,15 +71,16 @@ class OwnerContext extends RawDrupalContext {
       }
 
       $values = [
-        'field_owner_type' => $tids,
-        'field_owner_name' => !empty($row['name']) ? $row['name'] : $this->getRandom()->name(8, TRUE),
+        'type' => 'owner',
+        'owner_type' => $tids,
+        'owner_name' => !empty($row['name']) ? $row['name'] : $this->getRandom()->name(8, TRUE),
       ];
 
       if (!empty($row['author'])) {
         $values['uid'] = $this->getUserByName($row['author'])->id();
       }
 
-      $owner = $this->createRdfEntity('owner', $values);
+      $owner = $this->nodeCreate($values);
 
       $this->owners[$owner->id()] = $owner;
     }
@@ -108,8 +109,8 @@ class OwnerContext extends RawDrupalContext {
    *
    * @When I delete the :owner owner
    */
-  public function deleteOwner($name) {
-    $this->getEntityByLabel('rdf_entity', $name, 'owner')->delete();
+  public function deleteOwner(string $name): void {
+    $this->getEntityByLabel('node', $name, 'owner')->delete();
   }
 
   /**
@@ -118,8 +119,8 @@ class OwnerContext extends RawDrupalContext {
    * @AfterScenario
    */
   public function cleanOwners() {
+    return;
     if (empty($this->owners)) {
-      return;
     }
 
     // Remove any owners that were created.
@@ -141,9 +142,9 @@ class OwnerContext extends RawDrupalContext {
    *
    * @throws \Drupal\Core\Entity\EntityMalformedException
    */
-  public function visitOwner($owner) {
-    /** @var \Drupal\rdf_entity\Entity\Rdf $entity */
-    $entity = $this->getEntityByLabel('rdf_entity', $owner, 'owner');
+  public function visitOwner(string $owner): void {
+    /** @var \Drupal\node\Entity\Node $entity */
+    $entity = $this->getEntityByLabel('node', $owner, 'owner');
     $this->visitPath($entity->toUrl()->toString());
   }
 
