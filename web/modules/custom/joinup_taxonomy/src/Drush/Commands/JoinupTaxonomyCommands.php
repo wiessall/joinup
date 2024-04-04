@@ -228,8 +228,6 @@ class JoinupTaxonomyCommands extends DrushCommands {
         $context['results']['vids'][$type] = $vid;
       }
     }
-
-    $context['results']['pattern'] = '@' . implode('|', array_map('preg_quote', array_keys($vids))) . '@';
     $context['results']['uri_to_tid'] = [];
   }
 
@@ -243,12 +241,6 @@ class JoinupTaxonomyCommands extends DrushCommands {
    */
   public static function processFile(string $file, array &$context): void {
     $content = file_get_contents(self::FIXTURES_DIR . '/' . $file);
-
-    // Bird eye check to avoid heavy graph parsing.
-    if (!preg_match($context['results']['pattern'], $content)) {
-      $context['message'] = dt('❌ no destination vocabulary');
-      return;
-    }
 
     $graph = new Graph();
     $graph->parse($content);
