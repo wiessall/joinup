@@ -31,9 +31,9 @@ class HeaderContext extends RawDrupalContext {
   ];
 
   /**
-   * Checks that the Joinup logo is present in the navigation bar.
+   * Checks that the Interoperable Europe logo is present in the navigation bar.
    *
-   * @Then I should see the Joinup logo in the navigation bar
+   * @Then I should see the Interoperable Europe logo in the navigation bar
    */
   public function assertLogo(): void {
     $link_element = $this->getSession()->getPage()->find('css', '.joinup-navbar a.navbar-brand');
@@ -41,9 +41,9 @@ class HeaderContext extends RawDrupalContext {
     Assert::assertEquals(base_path(), $link_element->getAttribute('href'), 'The logo links to the homepage.');
     $logo_element = $link_element->find('css', 'img.navbar-brand-image');
     Assert::assertInstanceOf(NodeElement::class, $logo_element, 'A logo is present in the navbar.');
-    Assert::assertEquals('Joinup logo', $logo_element->getAttribute('alt'), 'The logo has an alt text.');
+    Assert::assertEquals('Interoperable Europe logo', $logo_element->getAttribute('alt'), 'The logo has an alt text.');
     $expected_logo_uri = base_path() . \Drupal::service('extension.list.theme')->getPath('ventuno') . '/assets/images/logo.svg';
-    Assert::assertEquals($expected_logo_uri, $logo_element->getAttribute('src'), 'The Joinup logo is shown in the navbar.');
+    Assert::assertEquals($expected_logo_uri, $logo_element->getAttribute('src'), 'The Interoperable Europe logo is shown in the navbar.');
   }
 
   /**
