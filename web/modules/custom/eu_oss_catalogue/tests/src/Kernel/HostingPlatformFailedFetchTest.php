@@ -17,6 +17,8 @@ use GuzzleHttp\Psr7\Response;
 
 /**
  * Tests how hosting platform plugins handle exceptional API responses.
+ *
+ * @group eu_oss_catalogue
  */
 class HostingPlatformFailedFetchTest extends KernelTestBase implements LoggerChannelInterface {
 
