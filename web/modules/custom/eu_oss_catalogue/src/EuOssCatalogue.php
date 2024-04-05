@@ -129,12 +129,6 @@ class EuOssCatalogue implements EuOssCatalogueInterface {
       }
     }
     catch (HostingPlatformFetchException $exception) {
-      // Do not queue cleanup! We have unstable API.
-      // @todo Should we re-throw it or just log like this?
-      $this->logger->warning(
-        "Unstable API behind '@provider' provider plugin",
-        ['@provider' => $provider->getPluginId()],
-      );
     }
 
     // Check duplicate URLs and log if there are any.
@@ -159,12 +153,24 @@ class EuOssCatalogue implements EuOssCatalogueInterface {
       );
     }
 
-    // @todo Maybe this should be a flag that enables cleanup deletion?
-    $queue->createItem([
-      'operation' => 'solution:create:cleanup',
-      'provider' => $providerId,
-      'solution_urls' => array_keys($urlCounts),
-    ]);
+    if (!isset($exception)) {
+      $queue->createItem([
+        'operation' => 'solution:create:cleanup',
+        'provider' => $providerId,
+        'solution_urls' => array_keys($urlCounts),
+      ]);
+    }
+    else {
+      // We have unstable API behind the current @EuOssCatalogueProvider
+      // plugin instance.
+      $this->logger->error(
+        "Unstable API behind '@provider' provider plugin, skipping cleanup. Exceptions:\n@exception-messages",
+        [
+          '@provider' => $provider->getPluginId(),
+          '@exception-messages' => $exception->getMessage(),
+        ],
+      );
+    }
 
     return count($urlCounts);
   }
