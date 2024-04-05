@@ -263,7 +263,7 @@ function joinup_rdf_deploy_110403(): void {
 /**
  * Migrate licences to nodes.
  */
-function joinup_rdf_deploy_110303(array &$sandbox): string {
+function joinup_rdf_deploy_110404(array &$sandbox): string {
   $map = [
     'http://joinup.eu/licence/deprecated' => 'deprecated',
     'http://joinup.eu/licence/legal-type' => 'legal_type',
@@ -319,7 +319,7 @@ function joinup_rdf_deploy_110303(array &$sandbox): string {
 /**
  * Restore document > licence relation.
  */
-function joinup_rdf_deploy_110304(array &$sandbox): string {
+function joinup_rdf_deploy_110405(array &$sandbox): string {
   $db = \Drupal::database();
 
   if (!isset($sandbox['document_to_licence'])) {
