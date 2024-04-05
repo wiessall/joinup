@@ -7,6 +7,11 @@ dependencies:
     - node.type.contact_information
   module:
     - link
+third_party_settings:
+  rdf_sync:
+    uri:
+      predicate: 'http://www.w3.org/2006/vcard/ns#hasURL'
+      type: null
 id: node.contact_information.ci_webpage
 field_name: ci_webpage
 entity_type: node
@@ -17,11 +22,6 @@ required: false
 translatable: false
 default_value: {  }
 default_value_callback: ''
-third_party_settings:
-  rdf_sync:
-    uri:
-      predicate: 'http://www.w3.org/2006/vcard/ns#hasURL'
-      type: null
 settings:
   title: 0
   link_type: 16
