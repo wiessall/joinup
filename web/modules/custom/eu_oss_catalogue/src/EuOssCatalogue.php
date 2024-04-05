@@ -153,7 +153,6 @@ class EuOssCatalogue implements EuOssCatalogueInterface {
       );
     }
 
-    // @todo Maybe this should be a flag that enables cleanup deletion?
     if (!isset($exception)) {
       $queue->createItem([
         'operation' => 'solution:create:cleanup',
