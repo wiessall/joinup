@@ -6,8 +6,8 @@
 .badge {
   display: inline-block;
   overflow: hidden;
-  text-overflow: ellipsis;
   max-width: 100%;
+  text-overflow: ellipsis;
   &.bg-secondary,
   &.bg-secondary a {
     color: color.adjust($brand, $lightness: -15%);
