@@ -104,3 +104,10 @@ function joinup_rdf_update_110401(): void {
   // Re-install the module on clean w/o dependencies, they're already installed.
   \Drupal::service('module_installer')->install(['taxonomy'], FALSE);
 }
+
+/**
+ * Uninstall the `contact_information` `rdf_entity` bundle.
+ */
+function joinup_rdf_update_110402(): void {
+  \Drupal::entityTypeManager()->getStorage('rdf_type')->load('contact_information')->delete();
+}
