@@ -112,7 +112,7 @@ function joinup_rdf_update_110401(): void {
 /**
  * Delete SPDX Licence & Licence RDF entities.
  */
-function joinup_rdf_update_110302(): void {
+function joinup_rdf_update_110402(): void {
   // Save licences in a temporary file because we need to delete the content
   // prior to delete the bundle configs. Data will be restored later, in a
   // deploy hook.
@@ -127,7 +127,7 @@ function joinup_rdf_update_110302(): void {
 /**
  * Store document > licence data.
  */
-function joinup_rdf_update_110303(): void {
+function joinup_rdf_update_110403(): void {
   $db = \Drupal::database();
   $documentToLicence = $db->select('node__field_licence', 'l')
     ->fields('l', ['entity_id', 'field_licence_target_id'])
@@ -141,7 +141,7 @@ function joinup_rdf_update_110303(): void {
 /**
  * Delete leftover path aliases of licence RDF entities.
  */
-function joinup_rdf_update_110304(&$sandbox): string {
+function joinup_rdf_update_110404(&$sandbox): string {
   if (!isset($sandbox['ids'])) {
     $sandbox['ids'] = \Drupal::database()->select('path_alias', 'pa')
       ->fields('pa', ['id'])
