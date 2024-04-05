@@ -7,6 +7,7 @@ namespace Drupal\joinup\Context;
 use Behat\Gherkin\Node\TableNode;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\joinup\Traits\EntityTrait;
+use Drupal\joinup\Traits\NodeTrait;
 use Drupal\joinup\Traits\RdfEntityTrait;
 use Drupal\joinup\Traits\SearchTrait;
 use Drupal\joinup\Traits\UserTrait;
@@ -20,17 +21,10 @@ use Drupal\taxonomy\TermInterface;
 class OwnerContext extends RawDrupalContext {
 
   use EntityTrait;
-  use RdfEntityTrait;
+  use NodeTrait;
   use SearchTrait;
   use UserTrait;
   use UtilityTrait;
-
-  /**
-   * Test owner rdf entities.
-   *
-   * @var \Drupal\rdf_entity\Entity\Rdf[]
-   */
-  protected $owners = [];
 
   /**
    * Creates one or many owners with data provided in a table.
@@ -72,7 +66,7 @@ class OwnerContext extends RawDrupalContext {
 
       $values = [
         'type' => 'owner',
-        'owner_type' => $tids,
+        'owner_type' => implode(',', $types),
         'owner_name' => !empty($row['name']) ? $row['name'] : $this->getRandom()->name(8, TRUE),
       ];
 
@@ -80,9 +74,7 @@ class OwnerContext extends RawDrupalContext {
         $values['uid'] = $this->getUserByName($row['author'])->id();
       }
 
-      $owner = $this->nodeCreate($values);
-
-      $this->owners[$owner->id()] = $owner;
+      $this->nodeCreate((object) $values);
     }
   }
 
@@ -98,37 +90,7 @@ class OwnerContext extends RawDrupalContext {
    * @Then I should have :number owner/owners
    */
   public function assertOwnerCount(int $number): void {
-    $this->assertRdfEntityCount($number, 'owner');
-  }
-
-  /**
-   * Deletes an owner entity.
-   *
-   * @param string $name
-   *   The name of the owner to delete.
-   *
-   * @When I delete the :owner owner
-   */
-  public function deleteOwner(string $name): void {
-    $this->getEntityByLabel('node', $name, 'owner')->delete();
-  }
-
-  /**
-   * Remove any created owner entities.
-   *
-   * @AfterScenario
-   */
-  public function cleanOwners() {
-    return;
-    if (empty($this->owners)) {
-    }
-
-    // Remove any owners that were created.
-    foreach ($this->owners as $owner) {
-      $owner->skip_notification = TRUE;
-      $owner->delete();
-    }
-    $this->owners = [];
+    $this->assertNodeEntityCount($number, 'owner');
   }
 
   /**

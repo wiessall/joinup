@@ -31,7 +31,7 @@ class JoinupCollectionContext extends RawDrupalContext {
    */
   public function setupJoinupCollection(): void {
     // Create the owner.
-    $owner = $this->nodeCreate([
+    $owner = $this->nodeCreate((object) [
       'type' => 'owner',
       'owner_name' => 'ISA²',
     ]);
@@ -71,7 +71,6 @@ class JoinupCollectionContext extends RawDrupalContext {
     $collection->delete();
 
     // Delete related entities.
-    Rdf::load('http://example.com/owner/isa2')->delete();
     Rdf::load('http://example.com/contact/joinup')->delete();
   }
 
