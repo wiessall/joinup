@@ -37,7 +37,7 @@
   }
 }
 
-figure {
+figure[class^="align-"] {
   // Hack to contain captions width inside figure elemnt.
   display: table !important;
   padding-bottom: $spacer;
