@@ -4,12 +4,16 @@ declare(strict_types=1);
 
 namespace Drupal\Tests\eu_oss_catalogue\Kernel;
 
+use Drupal\Component\Datetime\TimeInterface;
 use Drupal\Core\Config\Entity\ConfigEntityStorageInterface;
 use Drupal\Core\Logger\LoggerChannelInterface;
+use Drupal\Core\Logger\RfcLogLevel;
+use Drupal\Core\Queue\QueueInterface;
 use Drupal\Core\Site\Settings;
 use Drupal\KernelTests\KernelTestBase;
 use Drupal\Tests\eu_oss_catalogue\Traits\LoggerTestTrait;
 use Drupal\Tests\eu_oss_catalogue\Traits\SimpleResponseMockTrait;
+use Drupal\eu_oss_catalogue\EuOssCatalogueInterface;
 use Drupal\eu_oss_catalogue\EuOssCataloguePluginManagerInterface;
 use Drupal\eu_oss_catalogue\EuOssCatalogueProviderInterface;
 use Drupal\eu_oss_catalogue\Exception\HostingPlatformFetchException;
@@ -28,6 +32,7 @@ class HostingPlatformFailedFetchTest extends KernelTestBase implements LoggerCha
    */
   protected static $modules = [
     'eu_oss_catalogue',
+    'system',
   ];
 
   /**
@@ -146,6 +151,51 @@ class HostingPlatformFailedFetchTest extends KernelTestBase implements LoggerCha
         ],
       ],
     ];
+  }
+
+  /**
+   * Verifies that cleanup task isn't queued if provider fails to fetch.
+   */
+  public function testNoCleanupQueued(): void {
+    // Set up logger.
+    \Drupal::service('logger.factory')->addLogger($this);
+    // Add time service mock.
+    $time = $this->prophesize(TimeInterface::class);
+    $time->getCurrentTime()->willReturn(1000);
+    \Drupal::getContainer()->set('datetime.time', $time->reveal());
+
+    // Queue is empty before fetch.
+    $euOssCatalogueQueue = $this->container->get('queue')->get('eu_oss_catalogue');
+    $this->assertInstanceOf(QueueInterface::class, $euOssCatalogueQueue);
+    $this->assertSame(0, $euOssCatalogueQueue->numberOfItems());
+
+    // Fetch Developers Italia. Mock returns 500 responses, so we expect no
+    // parsed solutions.
+    $euOssCatalogue = $this->container->get('eu_oss_catalogue');
+    $this->assertInstanceOf(EuOssCatalogueInterface::class, $euOssCatalogue);
+    $euOssCatalogue->fetch('developers_italia');
+
+    // Queue must be still empty.
+    $this->assertSame(0, $euOssCatalogueQueue->numberOfItems());
+    $this->assertEquals(
+      [
+        [
+          'message' => "Unstable API behind '@provider' provider plugin, skipping cleanup. Exceptions:\n@exception-messages",
+          'context' => [
+            '@provider' => 'developers_italia',
+            '@exception-messages' => "Server error: `GET https://api.developers.italia.it/v1/software?page%5Bsize%5D=100&all=true` resulted in a `500 Internal Server Error` response:\nInternal server error\n",
+            'channel' => 'eu_oss_catalogue',
+            'link' => '',
+            'uid' => 0,
+            'request_uri' => 'http://localhost/',
+            'referer' => '',
+            'ip' => '127.0.0.1',
+            'timestamp' => 1000,
+          ],
+        ],
+      ],
+      $this->log[RfcLogLevel::ERROR],
+    );
   }
 
   /**
