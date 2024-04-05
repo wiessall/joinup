@@ -351,8 +351,6 @@ Feature: As a site moderator I am able to import RDF files.
     And I delete the provenance activity of "http://example.com/owner/2" entity
     And I delete the provenance activity of "http://example.com/contact/1" entity
     And I delete the "Contact" contact information
-    And I delete the "The Publisher" owner
-    And I delete the "A local authority" owner
     And I delete the "Asset release 1" release
     And I delete the "Asset release 2" release
     And I delete the "Windows" asset distribution
@@ -406,5 +404,4 @@ Feature: As a site moderator I am able to import RDF files.
     And I delete the provenance activity of "http://example.com/owner/single" entity
     And I delete the provenance activity of "http://example.com/contact/single" entity
     And I delete the "Contact" contact information
-    And I delete the "The Publisher" owner
     And I delete the "Single solution" solution

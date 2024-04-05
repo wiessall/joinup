@@ -82,7 +82,7 @@ function owner_inline_entity_form_table_fields_alter(array &$fields, array $cont
 /**
  * Implements hook_inline_entity_form_entity_form_alter().
  */
-function owner_inline_entity_form_entity_form_alter(array &$entity_form, array &$form_state): void {
+function owner_inline_entity_form_entity_form_alter(array &$entity_form, FormStateInterface &$form_state): void {
   // Add an entity builder callback to fill the label field with the values of
   // the name field. This is needed because inline entity form doesn't save
   // the entity until the parent entity is saved. Due to this, the label column

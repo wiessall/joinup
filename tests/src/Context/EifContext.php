@@ -43,7 +43,7 @@ class EifContext extends RawDrupalContext {
    */
   public function setupEifData(BeforeScenarioScope $scope): void {
     // Create an owner.
-    $owner = $this->nodeCreate([
+    $owner = $this->nodeCreate((object) [
       'type' => 'owner',
       'owner_name' => 'Owner',
     ]);
