@@ -7,11 +7,13 @@ namespace Drupal\owner\Entity;
 use Drupal\joinup_bundle_class\JoinupBundleClassFieldAccessTrait;
 use Drupal\joinup_workflow\EntityWorkflowStateTrait;
 use Drupal\node\Entity\Node;
+use Drupal\rdf_entity\Entity\Rdf;
+use Drupal\sparql_entity_storage\Entity\Query\Sparql\SparqlArg;
 
 /**
  * Bundle class for the 'owner' bundle.
  */
-class Owner extends Rdf implements OwnerInterface {
+class Owner extends Node implements OwnerInterface {
 
   use EntityWorkflowStateTrait;
   use JoinupBundleClassFieldAccessTrait;
@@ -20,7 +22,7 @@ class Owner extends Rdf implements OwnerInterface {
    * {@inheritdoc}
    */
   public function getWorkflowStateFieldName(): string {
-    return 'field_owner_state';
+    return 'field_state';
   }
 
   /**
