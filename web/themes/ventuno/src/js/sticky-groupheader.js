@@ -1,49 +1,52 @@
 /**
  * @file
- * Make groupheader sticky when scrolling to the top.
+ * Make group header sticky when scrolling.
  */
-(function ($, Drupal) {
-  Drupal.behaviors.addStickyClass = {
+// prettier-ignore
+(function (Drupal, displace, once) {
+  Drupal.behaviors.stickyGroupHeader = {
     attach(context) {
-      // Define variables outside the scroll event
-      const header = $(".region-header", context);
-      const toolbar = $(".toolbar-fixed .toolbar-oriented .toolbar-bar");
-      const joinupNavbar = $(".joinup-navbar");
-      const toTop = header.offset().top;
-
-      // Function to add/remove sticky class based on scroll position
-      function toggleStickyClass() {
-        const scrollTop = $(window).scrollTop();
-
-        if (scrollTop >= toTop) {
-          header.addClass("sticky-top shadow");
-        } else {
-          header.removeClass("sticky-top shadow");
-        }
+      const groupHeader = once("sticky-group-header", "#block-ventuno-groupheader", context);
+      if (!groupHeader.length) {
+        return;
       }
 
-      // Call the function if #block-ventuno-groupheader exists
-      if ($("#block-ventuno-groupheader").length) {
-        // Call the function on page load
-        toggleStickyClass();
+      // The region-header is used to apply sticky positioning,
+      const regionHeader = context.querySelector(".region-header");
+      if (!regionHeader) {
+        return;
+      }
 
-        // Call the function on scroll
-        $(window, context).scroll(function () {
-          toggleStickyClass();
-        });
+      // Set fixed height for the sticky div.
+      regionHeader.style.height = `${regionHeader.offsetHeight}px`;
 
-        // Remove stickyness to admin toolbar and main navigation
-        toolbar.addClass("position-static");
-        $("body").css("padding-top", "0");
-        joinupNavbar.removeClass("navbar--sticky").addClass("position-static");
+      // Insert placeholder div to determine initial position.
+      const regionHeaderPlaceholder = document.createElement("div");
+      regionHeaderPlaceholder.classList.add("region-header-placeholder");
+      regionHeader.parentNode.insertBefore(regionHeaderPlaceholder, regionHeader);
 
-        // Update body padding-top if user clicks on any toolbar item
-        toolbar.on("click", function () {
-          setTimeout(() => {
-            $("body").css("padding-top", "0");
-          }, 20);
-        });
+      // Init sticky behavior, acts on scroll event.
+      const onScroll = () => {
+        const scrollPosition = window.scrollY || document.documentElement.scrollTop;
+        const isSticky = (scrollPosition + displace.offsets.top) > regionHeaderPlaceholder.offsetTop;
+        regionHeader.classList.toggle("sticky-top", isSticky);
+      };
+      onScroll();
+      window.addEventListener("scroll", onScroll);
+
+      // Adjust scroll padding (when navigating to anchors).
+      const html = context.querySelector("html");
+      if (html) {
+        const paddingTop = displace.offsets.top + regionHeader.offsetHeight;
+        html.style.scrollPaddingTop = `${paddingTop}px`;
+      }
+
+      // Unset Joinup navbar sticky behavior.
+      const joinupNavbar = context.querySelector(".joinup-navbar");
+      if (joinupNavbar) {
+        joinupNavbar.classList.remove("navbar--sticky");
+        joinupNavbar.classList.add("position-static");
       }
     },
   };
-})(jQuery, Drupal);
+})(Drupal, Drupal.displace, once);

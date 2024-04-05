@@ -53,7 +53,9 @@
   {% block page_header %}
     {% if page.header %}
       <div class="region-header">
-        {{ page.header }}
+        <div class="region-header-inner">
+          {{ page.header }}
+        </div>
       </div>
     {% endif %}
   {% endblock %}

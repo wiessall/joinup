@@ -63,6 +63,10 @@ group:
       assets/css/group.min.css: { minified: true }
   js:
     assets/js/sticky-groupheader.min.js: { minified: true, attributes: { defer: true } }
+  dependencies:
+    - core/drupal
+    - core/drupal.displace
+    - core/once
 
 # Components
 abstract:
