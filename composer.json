@@ -75,6 +75,7 @@
         "drupal/meta_entity": "^1.4",
         "drupal/monolog": "^2.0",
         "drupal/multivalue_form_element": "^1.0",
+        "drupal/node_revision_delete": "^2.0@RC",
         "drupal/og": "^1.0-alpha8",
         "drupal/og_menu": "^2.0",
         "drupal/page_manager": "^4.0@beta",
@@ -399,6 +400,9 @@
             },
             "drupal/meta_entity": {
                 "Target entity tags should be invalidated even if meta entity is new @see https://drupal-org/i/3422612": "resources/patch/php/drupal/meta_entity/meta_entity-target_entity_cache_tags-3422612-7.diff"
+            },
+            "drupal/node_revision_delete": {
+                "It is possible that queue table does not exist @see https://www.drupal.org/project/node_revision_delete/issues/3436432": "resources/patch/php/drupal/node_revision_delete/3436432.patch"
             },
             "drupal/og": {
                 "The annotations for \"edit-form\" and \"delete-form\" @see https://www.drupal.org/project/og/issues/3338830": "resources/patch/php/drupal/og/3338830.diff",
