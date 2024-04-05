@@ -116,7 +116,7 @@ abstract class InviteFormBase extends FormBase {
 
     $form['autocomplete'] = [
       '#type' => 'textfield',
-      '#title' => $this->t('E-mail'),
+      '#title' => $this->t('User'),
       '#description' => $this->t('Enter a Joinup user e-mail address or start typing to search for a user and select it with the mouse or the keyboard.'),
       '#autocomplete_route_name' => 'joinup_invite.user_auto_complete',
       '#attributes' => [
@@ -206,16 +206,16 @@ abstract class InviteFormBase extends FormBase {
   public function validateAddUser(array &$form, FormStateInterface $form_state) {
     $uid = trim($form_state->getValue('autocomplete'));
     if (empty($uid)) {
-      $form_state->setError($form['autocomplete'], $this->t('No uid provided.'));
+      $form_state->setError($form['autocomplete'], $this->t('Please select user.'));
     }
 
     $user = $this->loadUserById($uid);
     if (empty($user)) {
-      $form_state->setError($form['autocomplete'], $this->t('No user found with uid %uid.', ['%uid' => $uid]));
+      $form_state->setError($form['autocomplete'], $this->t('Provided user has not been found.'));
     }
 
     if (in_array($uid, $form_state->get('user_list'))) {
-      $form_state->setError($form['autocomplete'], $this->t('The user with uid %uid has been already added to the list.', ['%uid' => $uid]));
+      $form_state->setError($form['autocomplete'], $this->t('Provided user has been already added to the list.'));
     }
   }
 
