@@ -8,6 +8,7 @@
 declare(strict_types=1);
 
 use Drupal\Core\Access\AccessResult;
+use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Session\AccountInterface;
@@ -24,7 +25,7 @@ use Drupal\sparql_entity_storage\Entity\Query\Sparql\SparqlArg;
  * Implements hook_entity_bundle_info_alter().
  */
 function owner_entity_bundle_info_alter(array &$bundles): void {
-  if (!empty($bundles['rdf_entity']['owner'])) {
+  if (!empty($bundles['node']['owner'])) {
     $bundles['node']['owner']['class'] = Owner::class;
   }
   if (!empty($bundles['taxonomy_term']['owner_type'])) {
@@ -167,7 +168,7 @@ function owner_entity_auto_label(EntityInterface $entity): void {
 /**
  * Implements hook_ENTITY_TYPE_access().
  */
-function owner_node_access(EntityInterface $entity, string $operation, AccountInterface $account): AccessResultInterface {
+function owner_node_access(EntityInterface $entity, string $operation, AccountInterface $account) {
   if ($entity->bundle() != 'owner') {
     return AccessResult::neutral();
   }
@@ -178,8 +179,8 @@ function owner_node_access(EntityInterface $entity, string $operation, AccountIn
     // We need to differentiate between the owner and the moderator. The 'edit
     // any owner rdf entity' permission is used to determine if the user is a
     // moderator.
-    && !$account->hasPermission('edit any owner content'
-  )) {
+    && !$account->hasPermission('edit any owner content')
+  ) {
     return AccessResult::forbidden('The owner is in the "deletion_request" state.');
 
   }
