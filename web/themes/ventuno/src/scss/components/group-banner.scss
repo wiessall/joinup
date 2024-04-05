@@ -1,29 +1,47 @@
 @import "../partials/core";
 
-.group-banner {
-  .container {
-    .sticky-top & {
-      align-items: center !important;
+// Position sticky related rules.
+// @see Drupal.behaviors.addStickyClass
+.region-header {
+  pointer-events: none;
+
+  .region-header-inner {
+    pointer-events: auto;
+  }
+
+  &.sticky-top {
+    top: var(--drupal-displace-offset-top, 0);
+
+    .region-header-inner {
+      box-shadow: 0 .1rem .4rem .1rem rgba(0,0,0,.1)
+    }
+    .group-banner {
+      > .container {
+        align-items: center !important;
+      }
+      &__logo {
+        width: 60px;
+      }
+      &__meta {
+        display: none !important;
+      }
     }
   }
+}
+
+.group-banner {
   &__logo {
     flex-shrink: 0;
     width: 100px;
     transition: width 0.5s;
-    .sticky-top & {
-      width: 60px;
-    }
   }
   &__title {
-    flex: 10 1 0%;
+    flex: 10 1 0;
   }
   &__meta {
     flex: 1 0 100%;
     column-gap: $spacer;
     row-gap: $spacer * .25;
-    .sticky-top & {
-      display: none !important;
-    }
   }
   &__actions {
     flex: 0 1 auto;
