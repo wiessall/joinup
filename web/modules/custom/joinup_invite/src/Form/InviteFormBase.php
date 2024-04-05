@@ -209,7 +209,6 @@ abstract class InviteFormBase extends FormBase {
       $form_state->setError($form['autocomplete'], $this->t('No uid provided.'));
     }
 
-
     $user = $this->loadUserById($uid);
     if (empty($user)) {
       $form_state->setError($form['autocomplete'], $this->t('No user found with uid %uid.', ['%uid' => $uid]));
@@ -469,8 +468,8 @@ abstract class InviteFormBase extends FormBase {
   /**
    * Loads a user by its mail.
    *
-   * @param string $mail
-   *   The mail of the user.
+   * @param string $uid
+   *   The user id.
    *
    * @return \Drupal\user\UserInterface|null
    *   A loaded user object. Null if the mail matches no users in the system.
