@@ -8,6 +8,7 @@
 declare(strict_types=1);
 
 use Drupal\Component\Serialization\Json;
+use Drupal\Core\Serialization\Yaml;
 use Drupal\joinup_taxonomy\Entity\MappedTerm;
 use Drupal\rdf_sync\RdfSyncConnection;
 
@@ -161,17 +162,16 @@ function joinup_rdf_deploy_110402(array &$sandbox): string {
  */
 function joinup_rdf_deploy_110403(): void {
   $expectedTerms = Yaml::decode(file_get_contents(__DIR__ . '/tests/fixtures/expected_terms.yml'));
-  $vocabularyStorage = \Drupal::entityTypeManager()->getStorage('taxonomy_vocabulary');
   $termStorage = \Drupal::entityTypeManager()->getStorage('taxonomy_term');
   $fieldManager = \Drupal::getContainer()->get('entity_field.manager');
   $definitions = $fieldManager->getFieldStorageDefinitions('taxonomy_term');
 
   $errors = [];
-  foreach ($vocabularyStorage->loadMultiple() as $vid => $vocabulary) {
+  foreach ($expectedTerms['terms'] as $vid => $data) {
     // Check that number of terms matches the expected.
     $tids = $termStorage->getQuery()->accessCheck(FALSE)->condition('vid', $vid)->execute();
-    if (count($tids) !== count($expectedTerms['terms'][$vid])) {
-      $errors[] = "Vocab $vid imported " . count($tids) . ' but expected ' . count($expectedTerms['terms'][$vid]);
+    if (count($tids) !== count($data)) {
+      $errors[] = "Vocab $vid imported " . count($tids) . ' but expected ' . count($data);
       continue;
     }
 
@@ -185,11 +185,11 @@ function joinup_rdf_deploy_110403(): void {
         }
 
         // Check that a term with this URI existed before.
-        if (!isset($expectedTerms['terms'][$vid][$uri])) {
+        if (!isset($data[$uri])) {
           $errors[] = "Term $vid:$tid:$uri doesn't exist";
           continue;
         }
-        $expectedValues = $expectedTerms['terms'][$vid][$uri];
+        $expectedValues = $data[$uri];
 
         // Check term name.
         if ($term->label() !== $expectedValues['name']) {
