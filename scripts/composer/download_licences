@@ -1,0 +1,14 @@
+#!/bin/bash
+
+set -e
+
+# Download license.rdf file but only if there's a new version.
+SIZE_REMOTE=$(curl -s -L -I https://raw.githubusercontent.com/spdx/license-list-data/main/rdfxml/licenses.rdf | awk 'tolower($0) ~ /^content-length/ {print $2}' | tr -d '\r')
+SIZE_LOCAL="0"
+test ! -f resources/vocab/licences.rdf || SIZE_LOCAL=$(stat --printf="%s" resources/vocab/licences.rdf)
+if [ "$SIZE_REMOTE" != "$SIZE_LOCAL" ]
+then
+  echo -n "Downloading a new version of resources/vocab/licences.rdf... "
+  curl -s -L -o resources/vocab/licenses.rdf https://raw.githubusercontent.com/spdx/license-list-data/main/rdfxml/licenses.rdf
+  echo "Done!"
+fi
