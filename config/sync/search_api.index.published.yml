@@ -85,6 +85,7 @@ third_party_settings:
     term_modifiers:
       slop: 10000000
       fuzzy: 2
+      fuzzy_analyzer: true
     advanced:
       index_prefix: ''
       collection: ''
@@ -904,6 +905,7 @@ datasource_settings:
     bundles:
       default: false
       selected:
+        - contact_information
         - custom_page
         - discussion
         - document
