@@ -225,6 +225,7 @@ Feature: Global search
     And the following contact:
       | name  | Go-to contact     |
       | email | go-to@example.com |
+      | state | validated         |
     And the following collections:
       | title            | description                                          | abstract                       | state     |
       | Collection alpha | <p>collection <strong>beta</strong> description.</p> | The collection gamma abstract. | published |
