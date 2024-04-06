@@ -69,7 +69,7 @@ function contact_information_entity_bundle_field_info_alter(array &$fields, Enti
  */
 function contact_information_node_presave(EntityInterface $entity): void {
   // Handle only contact information entities.
-  if ($entity->bundle() != 'contact_information') {
+  if ($entity->bundle() !== 'contact_information') {
     return;
   }
 
