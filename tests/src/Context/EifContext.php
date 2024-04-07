@@ -64,7 +64,7 @@ class EifContext extends RawDrupalContext {
       'label' => 'NIFO collection',
       'field_ar_state' => 'published',
       'field_topic' => $tid = $this->getRandomTopic()->id(),
-      'field_ar_owner' => $owner->id(),
+      'field_ar_owner' => $owner->nid,
       'field_ar_contact_information' => 'http://example.com/contact',
     ]);
     $collection->save();
@@ -78,7 +78,7 @@ class EifContext extends RawDrupalContext {
       'collection' => 'http://nifo.collection',
       'field_is_state' => 'published',
       'field_topic' => $tid,
-      'field_is_owner' => $owner->id(),
+      'field_is_owner' => $owner->nid,
       'field_is_contact_information' => 'http://example.com/contact',
     ]);
     $solution->save();

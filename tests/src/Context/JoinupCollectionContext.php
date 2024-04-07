@@ -51,7 +51,7 @@ class JoinupCollectionContext extends RawDrupalContext {
       'label' => 'Joinup',
       'field_ar_state' => 'published',
       'field_topic' => $this->getRandomTopic()->id(),
-      'field_ar_owner' => $owner->id(),
+      'field_ar_owner' => $owner->nid,
       'field_ar_contact_information' => 'http://example.com/contact/joinup',
     ])->save();
   }

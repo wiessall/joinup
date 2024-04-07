@@ -50,7 +50,7 @@ class EuplContext extends RawDrupalContext {
       'id' => Eupl::EUPL_COMMUNITY_ID,
       'label' => 'EUPL',
       'field_ar_state' => 'published',
-      'field_ar_owner' => $owner->id(),
+      'field_ar_owner' => $owner->nid,
     ])->save();
 
     Rdf::create([
