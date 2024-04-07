@@ -131,6 +131,12 @@ class JoinupTaxonomyCommands extends DrushCommands {
       return;
     }
 
+    // Add non-default namespaces.
+    RdfNamespace::set('adms', 'http://www.w3.org/ns/adms#');
+    RdfNamespace::set('eira', 'http://data.europa.eu/dr8/');
+    RdfNamespace::set('owlturtle', 'http://www.semanticweb.org/owl/owlapi/turtle#');
+    RdfNamespace::set('spdx', 'http://spdx.org/rdf/terms#');
+
     $vids = array_merge(...array_values(self::VOCABS));
     // Collect triples in this graph to create a fixture file later.
     $fixtureFileGraph = new Graph();
@@ -138,29 +144,21 @@ class JoinupTaxonomyCommands extends DrushCommands {
 
     // Add the vocabulary entries.
     foreach (\Drupal::entityTypeManager()->getStorage('taxonomy_vocabulary')->loadMultiple($vids) as $vid => $vocabulary) {
-      // Exception: spdx_licence.
-      if ($vid !== 'spdx_licence') {
-        $vocabularyUri = $this->mapper->getBundleRdfType('taxonomy_term', $vid);
-        $triples = [
-          $vocabularyUri => [
-            'http://www.w3.org/1999/02/22-rdf-syntax-ns#type' => [
-              (new Resource('http://www.w3.org/2004/02/skos/core#ConceptScheme'))->toRdfPhp(),
-            ],
-            'http://www.w3.org/2004/02/skos/core#prefLabel' => [
-              (new Literal($vocabulary->label(), 'en'))->toRdfPhp(),
-            ],
+      $vocabularyUri = $this->mapper->getBundleRdfType('taxonomy_term', $vid);
+      $triples = [
+        $vocabularyUri => [
+          'http://www.w3.org/1999/02/22-rdf-syntax-ns#type' => [
+            (new Resource('http://www.w3.org/2004/02/skos/core#ConceptScheme'))->toRdfPhp(),
           ],
-        ];
+          'http://www.w3.org/2004/02/skos/core#prefLabel' => [
+            (new Literal($vocabulary->label(), 'en'))->toRdfPhp(),
+          ],
+        ],
+      ];
 
-        RdfSyncConnection::updateTriples($triples);
-
-        // Add 'eira' and 'adms' namespaces.
-        RdfNamespace::set('eira', 'http://data.europa.eu/dr8/');
-        RdfNamespace::set('adms', 'http://www.w3.org/ns/adms#');
-
-        $fixtureFileGraph->parse($triples, 'php');
-        $vocabularyUris[] = $vocabularyUri;
-      }
+      RdfSyncConnection::updateTriples($triples);
+      $fixtureFileGraph->parse($triples, 'php');
+      $vocabularyUris[] = $vocabularyUri;
     }
 
     // We already have a Drush command. Use it.
@@ -179,8 +177,9 @@ class JoinupTaxonomyCommands extends DrushCommands {
       WHERE {
         GRAPH <%s> {
           ?subject ?predicate ?object .
-          ?subject a <http://www.w3.org/2004/02/skos/core#Concept> .
+          ?subject <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> ?type .
           ?subject ?vocab_type ?vocab .
+          VALUES ?type { <http://www.w3.org/2004/02/skos/core#Concept> <http://spdx.org/rdf/terms#ListedLicense> } .
           VALUES ?vocab_type { <http://www.w3.org/2004/02/skos/core#inScheme> <http://www.w3.org/2004/02/skos/core#topConceptOf> } .
           VALUES ?vocab { %s } .
         }

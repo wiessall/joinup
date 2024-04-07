@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_licence\EventSubscriber;
 
+use Drupal\joinup_licence\Entity\SpdxLicenceInterface;
 use Drupal\joinup_taxonomy\Event\PrepareVocabularyGraphEvent;
 use Drupal\rdf_sync\Event\RdfSyncNormalizeEvent;
-use Drupal\taxonomy\TermInterface;
 use EasyRdf\Resource;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
@@ -21,7 +21,10 @@ class SpdxVocabularySubscriber implements EventSubscriberInterface {
   public static function getSubscribedEvents(): array {
     return [
       PrepareVocabularyGraphEvent::class => 'identifyAsTerm',
-      RdfSyncNormalizeEvent::class => ['setLicenceAsType', 10],
+      // Act after RdfSyncNormalizeSubscriber::addTermConcept() in order to be
+      // able to override the 'rdf:type' value.
+      // @see \Drupal\rdf_sync\EventSubscriber\RdfSyncNormalizeSubscriber::addTermConcept()
+      RdfSyncNormalizeEvent::class => ['setLicenceAsType', -10],
     ];
   }
 
@@ -51,14 +54,13 @@ class SpdxVocabularySubscriber implements EventSubscriberInterface {
    *   The event.
    */
   public function setLicenceAsType(RdfSyncNormalizeEvent $event): void {
-    if ($event->getEntity() instanceof TermInterface && $event->getEntity()->bundle() === 'spdx_licence') {
+    if ($event->getEntity() instanceof SpdxLicenceInterface) {
       $normalizedArray = $event->getNormalizedArray();
       $subject = key($normalizedArray);
+      // Restore the type from skos:Concept to spdx:ListedLicense.
       $normalizedArray[$subject]['http://www.w3.org/1999/02/22-rdf-syntax-ns#type'] = [
         (new Resource('http://spdx.org/rdf/terms#ListedLicense'))->toRdfPhp(),
       ];
-      // Undoing the addition from self::identifyAsTerm().
-      unset($normalizedArray[$subject]['http://www.w3.org/2004/02/skos/core#inScheme']);
       $event->setNormalizedArray($normalizedArray);
     }
   }
