@@ -18,7 +18,7 @@ use Drupal\joinup_workflow\EntityWorkflowStateInterface;
  * Implements hook_ENTITY_TYPE_create_access().
  */
 function state_machine_permissions_rdf_entity_create_access(AccountInterface $account, array $context, string $entity_bundle): AccessResultInterface {
-  $ignored_bundles = ['collection', 'contact_information', 'owner', 'licence'];
+  $ignored_bundles = ['collection', 'contact_information', 'licence'];
   if (in_array($entity_bundle, $ignored_bundles)) {
     return AccessResult::neutral();
   }
@@ -41,6 +41,11 @@ function state_machine_permissions_rdf_entity_create_access(AccountInterface $ac
  * Implements hook_ENTITY_TYPE_create_access().
  */
 function state_machine_permissions_node_create_access(AccountInterface $account, array $context, string $entity_bundle): AccessResultInterface {
+  $ignored_bundles = ['owner'];
+  if (in_array($entity_bundle, $ignored_bundles)) {
+    return AccessResult::neutral();
+  }
+
   if (empty($context['group']) && $entity_bundle === 'custom_page') {
     return AccessResult::neutral('Custom pages can be created as individual landing pages.');
   }
