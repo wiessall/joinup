@@ -83,7 +83,7 @@ function joinup_licence_taxonomy_term_access(EntityInterface $entity, string $op
 function joinup_licence_entity_extra_field_info(): array {
   $fields = [];
 
-  $display = &$fields['taxonomy_term']['spdx_licence']['display'];
+  $display = &$fields['node']['licence']['display'];
   $display['spdx_licence_label'] = [
     'label' => t('SPDX licence label'),
     'description' => t('The label of the licence in the SPDX licence list.'),
@@ -223,5 +223,15 @@ function joinup_licence_form_taxonomy_term_legal_type_form_alter(array &$form, F
         $form['name']['#disabled'] = TRUE;
       }
     }
+  }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_view_alter().
+ */
+function joinup_licence_node_view_alter(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display): void {
+  if ($entity instanceof NodeInterface && $display->getMode() === 'compatibility_check') {
+    // Hide contextual links for licence compatibility overview.
+    unset($build['#contextual_links']);
   }
 }
