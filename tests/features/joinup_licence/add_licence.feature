@@ -43,7 +43,7 @@ Feature: Add a licence through the UI
     And I should see the text "Licence ID"
     And I should see the text "MIT"
     And I should see the text "See also"
-    And I should see the link "https://opensource.org/licenses/MIT"
+    And I should see the link "https://opensource.org/license/mit/"
     # Check that the licence text is displayed as paragraphs, and not as a wall
     # of text.
     And I should see a paragraph containing the text "Copyright (c) <year> <copyright holders>"
