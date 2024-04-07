@@ -92,8 +92,9 @@ class Licence extends Node implements LicenceInterface {
    * {@inheritdoc}
    */
   public static function loadBySpdxId(string $spdx_id): ?LicenceInterface {
-    $tids = \Drupal::entityQuery('taxonomy_term')->accessCheck(FALSE)
-      ->condition('vid', 'spdx_term')
+    $tids = \Drupal::entityQuery('taxonomy_term')
+      ->accessCheck(FALSE)
+      ->condition('vid', 'spdx_licence')
       ->condition('spdx_id', $spdx_id)
       ->execute();
 
@@ -101,8 +102,14 @@ class Licence extends Node implements LicenceInterface {
       return NULL;
     }
 
+    $nids = \Drupal::entityQuery('node')
+      ->accessCheck(FALSE)
+      ->condition('type', 'licence')
+      ->condition('spdx_licence.target_id', $tids, 'IN')
+      ->execute();
+
     /** @var \Drupal\joinup_licence\Entity\LicenceInterface $licence */
-    $licence = \Drupal::entityTypeManager()->getStorage('node')->load(reset($tids));
+    $licence = \Drupal::entityTypeManager()->getStorage('node')->load(reset($nids));
 
     return $licence;
   }
