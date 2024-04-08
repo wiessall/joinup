@@ -6,7 +6,7 @@ Feature: Export collection metadata
   Scenario: Export RDF data
     Given a "licence_type" term with the name "Sample Licence type"
     When I click "Metadata"
-    Then I should see the heading "Export RDF Metadata: Sample Licence type"
+    Then I should see the heading "Download the Sample Licence type taxonomy term as:"
     And I should see the link "JSON-LD"
     And I should see the link "Notation3"
     And I should see the link "N-Triples"

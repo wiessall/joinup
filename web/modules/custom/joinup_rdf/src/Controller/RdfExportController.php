@@ -78,7 +78,10 @@ class RdfExportController extends ControllerBase {
    */
   public function title(RouteMatchInterface $route_match): MarkupInterface {
     $entity = $this->getEntity($route_match);
-    return $this->t('Export RDF Metadata: %label', ['%label' => $entity->label()]);
+    return $this->t('Download the %label @type as:', [
+      '%label' => $entity->label(),
+      '@type' => $entity->getEntityType()->getSingularLabel(),
+    ]);
   }
 
   /**
