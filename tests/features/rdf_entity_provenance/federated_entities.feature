@@ -1,4 +1,7 @@
-@api @group-i
+# TODO: The whole federation functionality will be removed. For now just disable
+# testing. A final decision on how to handle this will be made in ISAICP-8376.
+# See https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-8376
+@wip @api @group-i
 Feature: In order to avoid users changing federated values
   As a site owner
   I want federated entities to have the schema values disabled.
@@ -10,10 +13,9 @@ Feature: In order to avoid users changing federated values
     And the following contact:
       | name  | John Federator's contact  |
       | email | JohnFederator@example.com |
-    And the following licence:
-      | title       | A federated licence       |
-      | description | Licence agreement details |
-      | type        | Public domain             |
+    And licence content:
+      | title               | description               | licence type  |
+      | A federated licence | Licence agreement details | Public domain |
     And the following collection:
       | title               | A federated collection   |
       | logo                | logo.png                 |

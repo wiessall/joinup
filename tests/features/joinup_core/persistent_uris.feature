@@ -30,19 +30,18 @@ Feature:
       | parent      | Persistent solution                                            |
       | uri         | http://data.europa.eu/w21/643a2a52-da3b-4594-92bb-295d8134e1fb |
       | state       | published                                                      |
-    And the following licence:
-      | title       | Persistent licence                                             |
-      | description | Persistent licence                                             |
-      | uri         | http://data.europa.eu/w21/4205229d-92b6-4cac-80af-d8c2296d923c |
+    And licence content:
+      | title              | description        | uri                                                            |
+      | Persistent licence | Persistent licence | http://data.europa.eu/w21/4205229d-92b6-4cac-80af-d8c2296d923c |
     # An arbitrary non-'publication office redirect'.
-    And the following licence:
-      | title | Other Persistent licence   |
-      | uri   | http://example.com/licence |
+    And licence content:
+      | title                    | uri                        |
+      | Other Persistent licence | http://example.com/licence |
     # Has a URI that looks like a publication office redirect but has an
     # unsupported namespace.
-    And the following licence:
-      | title | Wrong publication office namespace                                |
-      | uri   | http://data.europa.eu/unsupp/30aea866-fc89-4e45-b909-3d130acf49bf |
+    And licence content:
+      | title                              | uri                                                               |
+      | Wrong publication office namespace | http://data.europa.eu/unsupp/30aea866-fc89-4e45-b909-3d130acf49bf |
 
     And "eira" terms:
       | uri                                    | name         | description                                |
@@ -74,10 +73,10 @@ Feature:
     Then the persistent url should contain "http://data.europa.eu/w21"
 
     When I go to the "Other Persistent licence" licence
-    Then the persistent url should contain "/rdf_entity/http"
+    Then the persistent url should contain "/node/"
 
     When I go to the "Wrong publication office namespace" licence
-    Then the persistent url should contain "/rdf_entity/http"
+    Then the persistent url should contain "/node/"
 
     When I visit the "Persistent document" document
     Then the persistent url should contain "/node/"

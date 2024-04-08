@@ -33,7 +33,6 @@ module:
   dashboard: 0
   datetime: 0
   datetime_range: 0
-  developers_italia: 0
   diff: 0
   digital_size_formatter: 0
   dpsi: 0
@@ -218,7 +217,6 @@ module:
   solution: 0
   spain_ctt: 0
   sparql_entity_storage: 0
-  spdx: 0
   state_machine: 0
   state_machine_permissions: 0
   state_machine_revisions: 0
