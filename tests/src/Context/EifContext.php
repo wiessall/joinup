@@ -51,14 +51,14 @@ class EifContext extends RawDrupalContext {
     $owner->save();
     $this->entities['rdf_entity'][$owner->id()] = $owner;
 
-    $contact = Rdf::create([
-      'rid' => 'contact_information',
+    $contact = Node::create([
+      'type' => 'contact_information',
       'id' => 'http://example.com/contact',
-      'field_contact_name' => 'Contact name',
-      'field_contact_email' => 'contact.email@example.com',
+      'title' => 'Contact name',
+      'ci_email' => 'contact.email@example.com',
     ]);
     $contact->save();
-    $this->entities['rdf_entity'][$contact->id()] = $contact;
+    $this->entities['node'][$contact->id()] = $contact;
 
     // Create the NIFO sample collection.
     $collection = Rdf::create([

@@ -323,10 +323,10 @@ class GroupContentUpdateUrlAliasTest extends JoinupExistingSiteTestBase {
       'field_owner_name' => $this->randomString(),
       'field_owner_type' => \Drupal::getContainer()->get('rdf_sync.mapper')->getEntityByUri('http://purl.org/adms/publishertype/SupraNationalAuthority'),
     ]);
-    $this->createRdfEntity([
-      'id' => 'http://example.com/contact',
-      'rid' => 'contact_information',
-      'field_ci_name' => $this->randomString(),
+    $this->createNode([
+      'uri' => 'http://example.com/contact',
+      'type' => 'contact_information',
+      'title' => $this->randomString(),
       'ci_email' => $this->randomMachineName() . '@example.com',
     ]);
 

@@ -1698,12 +1698,17 @@ class FeatureContext extends RawDrupalContext {
    * are not indexed yet when the next step is executed. For this reason, we
    * force an indexing after each step.
    *
+   * The same applies for the rdf_sync module. It uses the same mechanism to
+   * postpone the synchronization of the RDF data. Calling the destruct() method
+   * will force the synchronization to happen after each step.
+   *
    * @see https://www.drupal.org/project/search_api/issues/2922525
    *
    * @AfterStep
    */
   public function indexEntities(): void {
     \Drupal::service('search_api.post_request_indexing')->destruct();
+    \Drupal::service('rdf_sync.synchronizer')->destruct();
   }
 
   /**

@@ -82,6 +82,8 @@ function contact_information_node_presave(EntityInterface $entity): void {
   if ($entity->field_state->value === '__new__') {
     $entity->set('field_state', 'validated');
   }
+
+
 }
 
 /**
