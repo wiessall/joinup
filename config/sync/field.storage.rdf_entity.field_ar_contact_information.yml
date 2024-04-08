@@ -11,7 +11,7 @@ third_party_settings:
     mapping:
       target_id:
         predicate: 'http://www.w3.org/ns/dcat#contactPoint'
-        format: 'xsd:integer'
+        format: resource
   field_permissions:
     permission_type: public
 id: rdf_entity.field_ar_contact_information
