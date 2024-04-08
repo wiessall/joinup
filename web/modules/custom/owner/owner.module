@@ -71,7 +71,7 @@ function owner_inline_entity_form_table_fields_alter(array &$fields, array $cont
     }
 
     // Add the type column.
-    $fields['field_owner_type'] = [
+    $fields['owner_type'] = [
       'type' => 'field',
       'label' => t('Type'),
       'weight' => 10,
