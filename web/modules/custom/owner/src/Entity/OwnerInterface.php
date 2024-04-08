@@ -6,11 +6,12 @@ namespace Drupal\owner\Entity;
 
 use Drupal\joinup_workflow\EntityWorkflowStateInterface;
 use Drupal\node\NodeInterface;
+use Drupal\joinup_rdf\Entity\RdfSyncEntityInterface;
 
 /**
  * Interface for owner entities in Joinup.
  */
-interface OwnerInterface extends NodeInterface, EntityWorkflowStateInterface {
+interface OwnerInterface extends NodeInterface, EntityWorkflowStateInterface, RdfSyncEntityInterface {
 
   /**
    * Returns whether the owner is referenced by groups.
