@@ -1707,6 +1707,10 @@ class FeatureContext extends RawDrupalContext {
    * postpone the synchronization of the RDF data. Calling the destruct() method
    * will force the synchronization to happen after each step.
    *
+   * The same applies for the rdf_sync module. It uses the same mechanism to
+   * postpone the synchronization of the RDF data. Calling the destruct() method
+   * will force the synchronization to happen after each step.
+   *
    * @see https://www.drupal.org/project/search_api/issues/2922525
    *
    * @AfterStep
