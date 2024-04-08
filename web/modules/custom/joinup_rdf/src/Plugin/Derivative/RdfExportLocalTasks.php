@@ -34,7 +34,7 @@ class RdfExportLocalTasks extends DeriverBase implements ContainerDeriverInterfa
   /**
    * {@inheritdoc}
    */
-  public static function create(ContainerInterface $container, $base_plugin_id) {
+  public static function create(ContainerInterface $container, $base_plugin_id): self {
     return new static(
       $container->get('entity_type.manager')
     );
@@ -43,7 +43,7 @@ class RdfExportLocalTasks extends DeriverBase implements ContainerDeriverInterfa
   /**
    * {@inheritdoc}
    */
-  public function getDerivativeDefinitions($base_plugin_definition) {
+  public function getDerivativeDefinitions($base_plugin_definition): array {
     $this->derivatives = [];
 
     foreach ($this->entityTypeManager->getDefinitions() as $entity_type_id => $entity_type) {
