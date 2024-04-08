@@ -71,7 +71,7 @@ class InviteToDiscussionForm extends InviteFormBase {
   /**
    * {@inheritdoc}
    */
-  public function getFormId() {
+  public function getFormId(): string {
     return 'invite_to_discussion_form';
   }
 
@@ -94,7 +94,7 @@ class InviteToDiscussionForm extends InviteFormBase {
   /**
    * {@inheritdoc}
    */
-  public function buildForm(array $form, FormStateInterface $form_state, ?NodeInterface $node = NULL) {
+  public function buildForm(array $form, FormStateInterface $form_state, ?NodeInterface $node = NULL): array {
     $this->entity = $node;
     return parent::build($form, $form_state);
   }
@@ -103,8 +103,8 @@ class InviteToDiscussionForm extends InviteFormBase {
    * {@inheritdoc}
    */
   protected function processUser(UserInterface $user): string {
-    // Check if the user is already subscribed to the discussion. In this case
-    // no invitation needs to be sent.
+    // Check if the user is already subscribed to the discussion.
+    // In this case, no invitation needs to be sent.
     if ($this->subscription->isSubscribed($user, $this->entity, 'subscribe_discussions')) {
       return self::RESULT_ACCEPTED;
     }
@@ -119,30 +119,14 @@ class InviteToDiscussionForm extends InviteFormBase {
     foreach (array_filter($results) as $result => $count) {
       $type = self::INVITATION_MESSAGE_TYPES[$result];
       $args = [':count' => $count];
-      switch ($result) {
-        case self::RESULT_SUCCESS:
-          $message = $this->t(':count user(s) have been invited to this discussion.', $args);
-          break;
-
-        case self::RESULT_FAILED:
-          $message = $this->t('The invitation could not be sent for :count user(s). Please try again later.', $args);
-          break;
-
-        case self::RESULT_RESENT:
-          $message = $this->t("The invitation was resent to :count user(s) that were already invited previously but haven't yet accepted the invitation.", $args);
-          break;
-
-        case self::RESULT_ACCEPTED:
-          $message = $this->t(':count user(s) were already subscribed to the discussion. No new invitation was sent.', $args);
-          break;
-
-        case self::RESULT_REJECTED:
-          $message = $this->t(':count user(s) have previously rejected the invitation. No new invitation was sent.', $args);
-          break;
-
-        default:
-          throw new \Exception("Unknown result type '$result'.");
-      }
+      $message = match ($result) {
+        self::RESULT_SUCCESS => $this->t(':count user(s) have been invited to this discussion.', $args),
+        self::RESULT_FAILED => $this->t('The invitation could not be sent for :count user(s). Please try again later.', $args),
+        self::RESULT_RESENT => $this->t("The invitation was resent to :count user(s) that were already invited previously but haven't yet accepted the invitation.", $args),
+        self::RESULT_ACCEPTED => $this->t(':count user(s) were already subscribed to the discussion. No new invitation was sent.', $args),
+        self::RESULT_REJECTED => $this->t(':count user(s) have previously rejected the invitation. No new invitation was sent.', $args),
+        default => throw new \Exception("Unknown result type '$result'."),
+      };
       $this->messenger()->addMessage($message, $type);
     }
   }
