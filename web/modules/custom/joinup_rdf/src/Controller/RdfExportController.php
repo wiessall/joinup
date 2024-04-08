@@ -60,6 +60,7 @@ class RdfExportController extends ControllerBase {
     $is_mapped = $this->rdfSyncMapper->isMappedEntity($entity);
 
     return AccessResult::allowedIf($is_mapped)
+      ->addCacheTags($entity->getEntityType()->getListCacheTags())
       ->andIf($entity->access('view', $account, TRUE));
   }
 
