@@ -80,23 +80,25 @@ class SpdxToJoinupLicence extends JoinupFederationStepPluginBase implements Pipe
       return $this->getBatchValue('conversion_map');
     }
 
+    $storage = $this->entityTypeManager->getStorage('node');
+
     // Get all licences with related SPDX licence.
-    $ids = $this->getSparqlQuery()
-      ->condition('rid', 'licence')
-      ->exists('field_licence_spdx_licence')
+    $ids = $storage->getQuery()->accessCheck(FALSE)
+      ->condition('type', 'licence')
+      ->exists('spdx_licence')
       ->execute();
 
     $conversion_map = [];
     /** @var string $id */
     /** @var \Drupal\joinup_licence\Entity\LicenceInterface $licence */
     foreach ($this->getRdfStorage()->loadMultiple($ids) as $id => $licence) {
-      $spdx_licence_id = $licence->getSpdxLicenceRdfId();
+      $spdx_licence_id = $licence->getSpdxLicenceUrl();
       if (empty($spdx_licence_id)) {
         continue;
       }
       $conversion_map[$spdx_licence_id] = $id;
       // Cover also an incoming value with '.html' as suffix.
-      $conversion_map["{$spdx_licence_id}.html"] = $id;
+      $conversion_map["$spdx_licence_id.html"] = $id;
     }
     $this->setBatchValue('conversion_map', $conversion_map);
 

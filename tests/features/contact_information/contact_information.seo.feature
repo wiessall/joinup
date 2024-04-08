@@ -6,8 +6,10 @@ Feature: Contant Information entities don't cause exceptions because of their in
     When I visit "rdf_entity/http_e_f_fdata_ceuropa_ceu_fw21_f55a3d6fb_b1d6d_b4166_b9f2c_b7232ab676a5b"
     Then I should get a 200 HTTP response
     And I should see the text "TES team" in the "Page title" region
-    And 1 metatag graph of type "ContactInformation" should exist in the page
-    And the metatag graph of the item with "@type" "ContactInformation" should have the following "http://purl.org/dc/terms/title" properties:
+    # "ContactInformation" is just a property value alias. We need to check the
+    # real value.
+    And 1 metatag graph of type "http://www.w3.org/2006/vcard/ns#Kind" should exist in the page
+    And the metatag graph of the item with "@type" "http://www.w3.org/2006/vcard/ns#Kind" should have the following "http://purl.org/dc/terms/title" properties:
       | property  | value      |
       | @value    | TES team |
     # Editing also thrown an error. Verify that it works too.
@@ -49,8 +51,10 @@ Feature: Contant Information entities don't cause exceptions because of their in
 
     # Visit the canonical page of the contact information entity created by IEF.
     When I go to the "Mr. John Doe DLA" contact information page
-    Then 1 metatag graph of type "ContactInformation" should exist in the page
-    And the metatag graph of the item with "@type" "ContactInformation" should have the following "http://purl.org/dc/terms/title" properties:
+    # "ContactInformation" is just a property value alias. We need to check the
+    # real value.
+    Then 1 metatag graph of type "http://www.w3.org/2006/vcard/ns#Kind" should exist in the page
+    And the metatag graph of the item with "@type" "http://www.w3.org/2006/vcard/ns#Kind" should have the following "http://purl.org/dc/terms/title" properties:
       | property  | value            |
       | @value    | Mr. John Doe DLA |
     Then I open the header local tasks menu
