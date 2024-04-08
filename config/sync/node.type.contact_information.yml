@@ -16,7 +16,7 @@ third_party_settings:
         target_id:
           predicate: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type'
           type: resource
-      label:
+      title:
         value:
           predicate: 'http://www.w3.org/2006/vcard/ns#fn'
           type: null

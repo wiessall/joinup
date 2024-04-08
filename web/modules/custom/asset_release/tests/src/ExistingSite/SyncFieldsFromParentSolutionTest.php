@@ -53,15 +53,15 @@ class SyncFieldsFromParentSolutionTest extends JoinupExistingSiteTestBase {
     ]);
 
     // Create two contact information entities.
-    $this->createRdfEntity([
-      'rid' => 'contact_information',
-      'id' => 'http://example.com/contact1',
-      'label' => 'Contact 1',
+    $this->createNode([
+      'type' => 'contact_information',
+      'uri' => 'http://example.com/contact1',
+      'title' => 'Contact 1',
     ]);
-    $this->createRdfEntity([
-      'rid' => 'contact_information',
-      'id' => 'http://example.com/contact2',
-      'label' => 'Contact 2',
+    $this->createNode([
+      'type' => 'contact_information',
+      'uri' => 'http://example.com/contact2',
+      'title' => 'Contact 2',
     ]);
 
     // Create two owner entities.
