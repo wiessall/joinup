@@ -38,6 +38,7 @@ class GitLab extends PluginBase implements ServiceMockPluginInterface {
     return in_array($apiRoot, [
       'all.self-hosted.gitlab.example.com',
       'limited.self-hosted.gitlab.example.com',
+      'invalid-publiccode.self-hosted.gitlab.example.com',
       'wrong.self-hosted.gitlab.example.com',
       'self-hosted.gitlab.example.com/subpath',
       'self-hosted.gitlab.example.com/bit/deeper/subpath',
@@ -54,6 +55,7 @@ class GitLab extends PluginBase implements ServiceMockPluginInterface {
 
     $responseId = match(TRUE) {
       $request->getUri()->getHost() === 'all.self-hosted.gitlab.example.com' => 'all.self-hosted.gitlab.example.com',
+      $request->getUri()->getHost() === 'invalid-publiccode.self-hosted.gitlab.example.com' => 'invalid-publiccode.self-hosted.gitlab.example.com',
       $request->getUri()->getHost() === 'wrong.self-hosted.gitlab.example.com' => 'wrong.self-hosted.gitlab.example.com',
       str_starts_with($query, '{"query":"{group:group(fullPath:"group1")') => 'limited.self-hosted.gitlab.example.com group1',
       str_starts_with($query, '{"query":"{group:group(fullPath:"group2")') => 'limited.self-hosted.gitlab.example.com group2',

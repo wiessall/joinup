@@ -1,0 +1,17 @@
+group/project6:
+  en:
+    title: 'group/project6'
+    oss_git_url: https://invalid-publiccode.self-hosted.gitlab.example.com/group/project6
+    oss_git_description: 'Description of Project6'
+    oss_hosting_platform: 'gitlab_self_hosted'
+    oss_git_forks: 206
+    oss_git_open_issues: 246
+    oss_git_open_pull_requests: 236
+    oss_git_stars: 226
+    oss_source:
+      - hosting_platform:gitlab_invalid_publiccode
+    oss_publiccode_yml_content: '{  }'
+    oss_publiccode_yml_version: NULL
+    oss_development_status: NULL
+    oss_short_description: NULL
+    oss_long_description: NULL
