@@ -11,9 +11,9 @@ use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Provides local task definitions.
+ * Provides local task definitions for RDF export.
  */
-class DynamicLocalTasks extends DeriverBase implements ContainerDeriverInterface {
+class RdfExportLocalTasks extends DeriverBase implements ContainerDeriverInterface {
 
   use StringTranslationTrait;
 
