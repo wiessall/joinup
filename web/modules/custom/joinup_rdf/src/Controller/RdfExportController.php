@@ -59,8 +59,7 @@ class RdfExportController extends ControllerBase {
     $entity = $this->getEntity($route_match);
     $is_mapped = $this->rdfSyncMapper->isMappedEntity($entity);
 
-    return AccessResult::allowedIfHasPermission($account, 'export rdf metadata')
-      ->andIf(AccessResult::allowedIf($is_mapped))
+    return AccessResult::allowedIf($is_mapped)
       ->andIf($entity->access('view', $account, TRUE));
   }
 

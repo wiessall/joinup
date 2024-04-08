@@ -29,7 +29,6 @@ dependencies:
     - joinup_community_content
     - joinup_core
     - joinup_licence
-    - joinup_rdf
     - media
     - meta_entity
     - node
@@ -118,7 +117,6 @@ permissions:
   - 'edit own news content'
   - 'edit own owner rdf entity'
   - 'edit own polls'
-  - 'export rdf metadata'
   - 'flag like_node'
   - 'flag like_rdf_entity'
   - 'flag subscribe_discussions'
