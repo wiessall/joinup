@@ -26,6 +26,7 @@ class Tid implements EventSubscriberInterface {
    */
   private const MAP = [
     'eif_wrapper:recommendation:term',
+    'node:owner:owner_type',
     'rdf_entity:asset_distribution:field_ad_format',
     'rdf_entity:asset_distribution:field_ad_repr_technique',
     'rdf_entity:asset_distribution:field_ad_repr_technique',
@@ -38,8 +39,6 @@ class Tid implements EventSubscriberInterface {
     'rdf_entity:collection:field_topic',
     'rdf_entity:licence:field_licence_legal_type',
     'rdf_entity:licence:field_licence_type',
-    'rdf_entity:owner:field_owner_type',
-    'rdf_entity:owner:field_owner_type',
     'rdf_entity:solution:field_is_actor',
     'rdf_entity:solution:field_is_business_process',
     'rdf_entity:solution:field_is_eif_recommendation',
