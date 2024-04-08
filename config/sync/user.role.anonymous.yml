@@ -15,7 +15,6 @@ dependencies:
     - filter
     - flag
     - joinup_licence
-    - joinup_rdf
     - media
     - meta_entity
     - paragraphs_type_permissions
@@ -38,7 +37,6 @@ permissions:
   - 'access polls'
   - 'access tour'
   - 'access user profiles'
-  - 'export rdf metadata'
   - 'legal view legal_notice'
   - 'never autoplay videos'
   - 'use search_api_autocomplete for search'
