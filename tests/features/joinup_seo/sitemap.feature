@@ -83,7 +83,6 @@ Feature:
       | Sitemap release 2        |
       | Sitemap distribution     |
       | Sitemap licence          |
-      | Sitemap owner            |
       | Sitemap secretariat      |
     And I should not see the absolute urls of the following content entities:
       | Sitemap custom page of draft                    |
@@ -97,6 +96,7 @@ Feature:
       | Sitemap news draft                              |
       | Sitemap news published and recent               |
       | Sitemap news published but parent is not        |
+      | Sitemap owner                                   |
     # The following piece of xhtml is used to declare an alternative language. If it exists in the page it means that
     # another language is included in the output.
     And the response should not contain "<xhtml:link rel=\"alternate\" hreflang="
@@ -116,7 +116,6 @@ Feature:
       | Sitemap release 1            |
       | Sitemap release 2            |
       | Sitemap licence              |
-      | Sitemap owner                |
       | Sitemap secretariat          |
     And I should not see the absolute urls of the following content entities:
       | Sitemap custom page of draft                   |
@@ -136,6 +135,7 @@ Feature:
       | Sitemap news published but old                 |
       | Sitemap news archived                          |
       | Sitemap news published but parent is not       |
+      | Sitemap owner                                  |
 
     # Simulate that 2 days have passed since last time the sitemaps have been created.
     When the publication date of the "Sitemap news published and recent" news content is changed to "3 days ago"
@@ -165,7 +165,6 @@ Feature:
       | Sitemap release 2        |
       | Sitemap distribution     |
       | Sitemap licence          |
-      | Sitemap owner            |
       | Sitemap secretariat      |
     And I should not see the absolute urls of the following content entities:
       | Sitemap custom page of draft                   |
@@ -177,6 +176,7 @@ Feature:
       | Sitemap event published but parent is not      |
       | Sitemap news draft                             |
       | Sitemap news published but parent is not       |
+      | Sitemap owner                                  |
 
     # The hot news article is now removed from the news sitemap, and the page
     # should no longer be present since it doesn't contain any more entries.
