@@ -1712,7 +1712,6 @@ class FeatureContext extends RawDrupalContext {
    * @AfterStep
    */
   public function kernelTerminateTasks(): void {
-    \Drupal::service('rdf_sync.synchronizer')->destruct();
     \Drupal::service('search_api.post_request_indexing')->destruct();
     \Drupal::service('rdf_sync.synchronizer')->destruct();
   }
