@@ -4,11 +4,13 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_rdf\Routing;
 
+use Drupal\Core\Entity\EntityTypeBundleInfoInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Routing\RouteSubscriberBase;
 use Drupal\Core\Routing\RoutingEvents;
 use Drupal\joinup_rdf\Controller\RdfExportController;
+use Drupal\rdf_sync\RdfSyncMapper;
 use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\RouteCollection;
 
@@ -23,13 +25,24 @@ class RdfExportRouteSubscriber extends RouteSubscriberBase {
   protected EntityTypeManagerInterface $entityTypeManager;
 
   /**
-   * Constructs a new RouteSubscriber object.
+   * The entity type bundle info service.
    *
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
-   *   The entity type manager.
+   * @var \Drupal\Core\Entity\EntityTypeBundleInfoInterface
    */
-  public function __construct(EntityTypeManagerInterface $entity_type_manager) {
+  protected $entityTypeBundleInfo;
+
+  /**
+   * The RDF Sync mapper service.
+   */
+  protected RdfSyncMapper $rdfSyncMapper;
+
+  /**
+   * Constructs a new RouteSubscriber object.
+   */
+  public function __construct(EntityTypeManagerInterface $entity_type_manager, EntityTypeBundleInfoInterface $entity_type_bundle_info, RdfSyncMapper $mapper) {
     $this->entityTypeManager = $entity_type_manager;
+    $this->entityTypeBundleInfo = $entity_type_bundle_info;
+    $this->rdfSyncMapper = $mapper;
   }
 
   /**
@@ -60,6 +73,14 @@ class RdfExportRouteSubscriber extends RouteSubscriberBase {
     }
 
     $entity_type_id = $entity_type->id();
+    $bundles = $this->entityTypeBundleInfo->getBundleInfo($entity_type_id);
+    $bundles = array_filter(array_keys($bundles), function (string $bundle) use ($entity_type_id) {
+      return $this->rdfSyncMapper->isMappedBundle($entity_type_id, $bundle);
+    });
+    if (!$bundles) {
+      return NULL;
+    }
+
     $route = new Route($canonical . '/rdf-export');
     $route
       ->addDefaults([
@@ -73,6 +94,7 @@ class RdfExportRouteSubscriber extends RouteSubscriberBase {
       ->setOption('parameters', [
         $entity_type_id => [
           'type' => 'entity:' . $entity_type_id,
+          'bundle' => $bundles,
         ],
       ]);
 
