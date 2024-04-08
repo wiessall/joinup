@@ -9,10 +9,10 @@ use Drupal\Core\Access\AccessException;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Entity\EntityInterface;
-use Drupal\Core\Entity\EntityTypeBundleInfoInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\rdf_sync\Model\RdfSyncFormat;
+use Drupal\rdf_sync\RdfSyncMapper;
 use EasyRdf\Format;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -22,17 +22,15 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 class RdfExportController extends ControllerBase {
 
   /**
-   * The entity type bundle info.
-   *
-   * @var \Drupal\Core\Entity\EntityTypeBundleInfoInterface
+   * The RDF Sync mapper service.
    */
-  protected $entityTypeBundleInfo;
+  protected RdfSyncMapper $rdfSyncMapper;
 
   /**
    * Instantiates a new RdfExportController object.
    */
-  public function __construct(EntityTypeBundleInfoInterface $entity_type_bundle_info) {
-    $this->entityTypeBundleInfo = $entity_type_bundle_info;
+  public function __construct(RdfSyncMapper $mapper) {
+    $this->rdfSyncMapper = $mapper;
   }
 
   /**
@@ -40,7 +38,7 @@ class RdfExportController extends ControllerBase {
    */
   public static function create(ContainerInterface $container): self {
     return new static(
-      $container->get('entity_type.bundle.info'),
+      $container->get('rdf_sync.mapper'),
     );
   }
 
@@ -59,11 +57,10 @@ class RdfExportController extends ControllerBase {
    */
   public function access(RouteMatchInterface $route_match, AccountInterface $account) {
     $entity = $this->getEntity($route_match);
-    $bundle_info = $this->entityTypeBundleInfo->getBundleInfo($entity->getEntityTypeId());
-    $rdf_sync_mapped = isset($bundle_info[$entity->bundle()]['rdf_sync']);
+    $is_mapped = $this->rdfSyncMapper->isMappedEntity($entity);
 
     return AccessResult::allowedIfHasPermission($account, 'export rdf metadata')
-      ->andIf(AccessResult::allowedIf($rdf_sync_mapped))
+      ->andIf(AccessResult::allowedIf($is_mapped))
       ->andIf($entity->access('view', $account, TRUE));
   }
 
