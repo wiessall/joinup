@@ -167,7 +167,7 @@ function owner_entity_auto_label(EntityInterface $entity): void {
 /**
  * Implements hook_ENTITY_TYPE_access().
  */
-function owner_node_access(EntityInterface $entity, string $operation, AccountInterface $account) {
+function owner_node_access(NodeInterface $entity, string $operation, AccountInterface $account) {
   if ($entity->bundle() != 'owner') {
     return AccessResult::neutral();
   }

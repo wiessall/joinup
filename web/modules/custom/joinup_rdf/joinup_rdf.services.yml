@@ -22,3 +22,8 @@ services:
     arguments: ['@database']
     tags:
       - { name: event_subscriber }
+  joinup_rdf.outbound_value.nid:
+    class: Drupal\joinup_rdf\EventSubscriber\Nid
+    arguments: [ '@database' ]
+    tags:
+      - { name: event_subscriber }
