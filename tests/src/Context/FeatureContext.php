@@ -1143,6 +1143,8 @@ class FeatureContext extends RawDrupalContext {
   /**
    * Asserts that no link is present in the given region.
    *
+   * @todo ISAICP-8376 Revert this once all entity types have been mapped.
+   *
    * Same as MinkContext::assertNotLinkRegion but does not fail if region is
    * not found.
    *
