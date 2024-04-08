@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_rdf\Controller;
 
+use Drupal\Component\Render\MarkupInterface;
 use Drupal\Core\Access\AccessException;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Controller\ControllerBase;
@@ -37,7 +38,7 @@ class RdfExportController extends ControllerBase {
   /**
    * {@inheritdoc}
    */
-  public static function create(ContainerInterface $container) {
+  public static function create(ContainerInterface $container): self {
     return new static(
       $container->get('entity_type.bundle.info'),
     );
@@ -72,10 +73,10 @@ class RdfExportController extends ControllerBase {
    * @param \Drupal\Core\Routing\RouteMatchInterface $route_match
    *   The route match.
    *
-   * @return string
+   * @return \Drupal\Component\Render\MarkupInterface
    *   The title for the RDF export route.
    */
-  public function title(RouteMatchInterface $route_match) {
+  public function title(RouteMatchInterface $route_match): MarkupInterface {
     $entity = $this->getEntity($route_match);
     return $this->t('Export RDF Metadata: %label', ['%label' => $entity->label()]);
   }
@@ -89,7 +90,7 @@ class RdfExportController extends ControllerBase {
    * @return array
    *   Render array with list of download links.
    */
-  public function downloadLinks(RouteMatchInterface $route_match) {
+  public function downloadLinks(RouteMatchInterface $route_match): array {
     $entity = $this->getEntity($route_match);
     $list = ['#theme' => 'item_list'];
     foreach ($this->getSupportedFormats() as $format) {
