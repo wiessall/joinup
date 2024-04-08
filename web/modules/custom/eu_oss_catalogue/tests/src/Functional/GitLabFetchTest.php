@@ -74,7 +74,7 @@ class GitLabFetchTest extends FetchTestBase {
       ],
     ]);
     $config->save();
-    $this->fetchSolutions('hosting_platform:gitlab_self_hosted_wrong', 0);
+    $this->fetchSolutions('hosting_platform:gitlab_self_hosted_wrong', -1);
 
     $this->assertEquals(
       [
@@ -89,9 +89,10 @@ class GitLabFetchTest extends FetchTestBase {
           ],
         ],
         [
-          'message' => "Unstable API behind '@provider' provider plugin",
+          'message' => "Unstable API behind '@provider' provider plugin, skipping cleanup. Exceptions:\n@exception-messages",
           'variables' => [
             '@provider' => 'hosting_platform:gitlab_self_hosted_wrong',
+            '@exception-messages' => 'Response returned by GraphQL client is not an array.',
           ],
         ],
       ],
