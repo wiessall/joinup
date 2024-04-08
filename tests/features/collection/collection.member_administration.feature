@@ -241,27 +241,27 @@ Feature: Collection membership administration
     When I press "Add members"
     Then I should see the error message "Please add at least one user."
 
-    When I fill uid of "Gregory House" in "User"
+    When I fill uid of "Gregory House" in "Name"
     And I press "Add"
     Then the page should show the following chips in the Content region:
       | Gregory House |
     # Verify that an error message is shown when trying to add a mail not
     # present in the system.
-    When I fill in "User" with "donald@example.com"
+    When I fill in "Name" with "donald@example.com"
     And I press "Add"
-    Then I should see the error message "Provided user has not been found."
+    Then I should see the error message "Please select an existing user."
     # Verify that an error message is shown when trying to add the same
     # user twice.
-    When I fill uid of "Gregory House" in "User"
+    When I fill uid of "Gregory House" in "Name"
     And I press "Add"
-    Then I should see the error message "Provided user has been already added to the list."
+    Then I should see the error message "The selected user is already added to the list."
     # Add some other users.
-    When I fill uid of "jbelanger" in "User"
+    When I fill uid of "jbelanger" in "Name"
     And I press "Add"
     Then the page should show the following chips in the Content region:
       | Gregory House      |
       | Jeannette Belanger |
-    When I fill uid of "Donald Duck" in "User"
+    When I fill uid of "Donald Duck" in "Name"
     And I press "Add"
     Then the page should show the following chips in the Content region:
       | Gregory House      |
@@ -284,7 +284,7 @@ Feature: Collection membership administration
 
     # Add a facilitator.
     When I click "Add members"
-    When I fill uid of "dwightone" in "User"
+    When I fill uid of "dwightone" in "Name"
     And I press "Add"
     Then the page should show the following chips in the Content region:
       | Christian Dwight |
@@ -361,9 +361,9 @@ Feature: Collection membership administration
     Then I should see the heading "Invite members"
 
     # Add a facilitator.
-    When I fill uid of "dwightone" in "User"
+    When I fill uid of "dwightone" in "Name"
     And I press "Add"
-    And I fill uid of "jbelanger" in "User"
+    And I fill uid of "jbelanger" in "Name"
     And I press "Add"
     Then the page should show the following chips in the Content region:
       | Christian Dwight   |
@@ -415,7 +415,7 @@ Feature: Collection membership administration
     And I am on the members page of "Medical diagnosis"
     When I click "Invite members"
 
-    When I fill uid of "pending_member" in "User"
+    When I fill uid of "pending_member" in "Name"
     And I press "Add"
     Then the page should show the following chips in the Content region:
       | Pending Member |
@@ -428,28 +428,28 @@ Feature: Collection membership administration
     Given I am logged in as "Lisa Cuddy"
     And I am on the members page of "Medical diagnosis"
     When I click "Invite members"
-    And I type "Donald" in the "User" autocomplete field
+    And I type "Donald" in the "Name" autocomplete field
     And I wait until the page contains the text "Donald Duck (Donald Duck)"
     And I pick "Donald Duck (Donald Duck)" from the "Link" autocomplete suggestions
     Then the page should show the following chips in the Content region:
       | Donald Duck |
     When I press the remove button on the chip "Donald Duck"
     Then I should not see the text "Donald Duck"
-    When I type "Donald" in the "User" autocomplete field
+    When I type "Donald" in the "Name" autocomplete field
     And I wait until the page contains the text "Donald Duck (Donald Duck)"
     And I pick "Donald Duck (Donald Duck)" from the "Link" autocomplete suggestions
     And I press "Invite members"
     Then I should see the success message "1 user has been invited to this group."
 
     When I click "Add members"
-    And I type "Turkey" in the "User" autocomplete field
+    And I type "Turkey" in the "Name" autocomplete field
     And I wait until the page contains the text "Turkey Ham (Turkey Ham)"
     And I pick "Turkey Ham (Turkey Ham)" from the "Link" autocomplete suggestions
     Then the page should show the following chips in the Content region:
       | Turkey Ham |
     When I press the remove button on the chip "Turkey Ham"
     Then I should not see the text "Turkey Ham"
-    When I type "Turkey" in the "User" autocomplete field
+    When I type "Turkey" in the "Name" autocomplete field
     And I wait until the page contains the text "Turkey Ham (Turkey Ham)"
     And I pick "Turkey Ham (Turkey Ham)" from the "Link" autocomplete suggestions
     Then the page should show the following chips in the Content region:
