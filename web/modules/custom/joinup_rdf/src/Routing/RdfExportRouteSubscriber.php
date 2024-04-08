@@ -13,7 +13,7 @@ use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\RouteCollection;
 
 /**
- * Subscriber for rdf export routes.
+ * Subscriber for RDF export routes.
  */
 class RdfExportRouteSubscriber extends RouteSubscriberBase {
 
