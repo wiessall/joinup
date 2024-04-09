@@ -6,6 +6,11 @@ dependencies:
     - field.storage.meta_entity.eif_solution_type
     - meta_entity.type.eif_perspective
     - taxonomy.vocabulary.eif_solution_type
+third_party_settings:
+  rdf_sync:
+    target_id:
+      predicate: 'http://joinup.eu/rdf_meta_entity/fields/type'
+      type: resource
 id: meta_entity.eif_perspective.eif_solution_type
 field_name: eif_solution_type
 entity_type: meta_entity

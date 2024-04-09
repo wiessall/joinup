@@ -6,6 +6,11 @@ dependencies:
     - field.storage.meta_entity.eif_model
     - meta_entity.type.eif_perspective
     - taxonomy.vocabulary.eif_conceptual_model
+third_party_settings:
+  rdf_sync:
+    target_id:
+      predicate: 'http://data.europa.eu/eif/Model'
+      type: resource
 id: meta_entity.eif_perspective.eif_model
 field_name: eif_model
 entity_type: meta_entity

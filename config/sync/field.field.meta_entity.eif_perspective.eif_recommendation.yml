@@ -8,6 +8,14 @@ dependencies:
     - taxonomy.vocabulary.eif_recommendation
   module:
     - eif
+third_party_settings:
+  rdf_sync:
+    target_id:
+      predicate: 'http://data.europa.eu/eif/Recommendation'
+      type: resource
+    processed:
+      predicate: 'http://purl.org/dc/elements/1.1/description'
+      type: 'xsd:string'
 id: meta_entity.eif_perspective.eif_recommendation
 field_name: eif_recommendation
 entity_type: meta_entity

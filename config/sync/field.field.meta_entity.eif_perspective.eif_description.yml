@@ -8,6 +8,11 @@ dependencies:
     - meta_entity.type.eif_perspective
   module:
     - text
+third_party_settings:
+  rdf_sync:
+    processed:
+      predicate: 'http://purl.org/dc/terms/description'
+      type: 'xsd:string'
 id: meta_entity.eif_perspective.eif_description
 field_name: eif_description
 entity_type: meta_entity

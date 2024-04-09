@@ -6,6 +6,14 @@ dependencies:
     - rdf_entity.rdfentity.solution
   module:
     - rdf_entity
+third_party_settings:
+  rdf_sync:
+    type: 'http://data.europa.eu/eif/adms/PerspectiveEIF'
+    fields:
+      type:
+        target_id:
+          predicate: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type'
+          type: resource
 id: eif_perspective
 label: 'EIF perspective'
 description: 'Holds settings related to the EIF toolbox.'
