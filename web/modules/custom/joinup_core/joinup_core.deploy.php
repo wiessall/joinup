@@ -19,136 +19,9 @@ use Drupal\joinup_oss_catalogue\OssCatalogueCollectionInterface;
 use EasyRdf\Graph;
 
 /**
- * Update path alias for EU OSS catalogue.
- */
-function joinup_core_deploy_110400(): void {
-  /** @var \Drupal\collection\Entity\CollectionInterface $collection */
-  $collection = \Drupal::entityTypeManager()->getStorage('rdf_entity')
-    ->load(OssCatalogueCollectionInterface::COLLECTION_ENTITY_ID);
-
-  $collection
-    ?->set('field_ar_state', 'published')
-      ->set('path', ['alias' => '/eu-oss-catalogue', 'pathauto' => 0])
-      ->save();
-}
-
-/**
- * Update title of EU OSS catalogue collection.
- */
-function joinup_core_deploy_110401(): void {
-  /** @var \Drupal\collection\Entity\CollectionInterface $collection */
-  $collection = \Drupal::entityTypeManager()->getStorage('rdf_entity')
-    ->load(OssCatalogueCollectionInterface::COLLECTION_ENTITY_ID);
-
-  $collection
-    ?->set('label', 'EU Open Source Solutions Catalogue')
-      ->save();
-}
-
-/**
- * Import content for EU OpenSource Software Solutions Catalogue.
- */
-function joinup_core_deploy_110402(): void {
-  /** @var \Drupal\Core\Extension\ModuleInstallerInterface $moduleInstaller */
-  $moduleInstaller = \Drupal::service('module_installer');
-  /** @var \Drupal\Core\Entity\EntityRepositoryInterface $entityRepository */
-  $entityRepository = \Drupal::service('entity.repository');
-
-  // Delete faulty meta entity.
-  $entityRepository
-    ->loadEntityByUuid('meta_entity', 'ad9be48e-7116-44b3-8df2-db8cb9343268')
-    ?->delete();
-
-  // Import content.
-  $moduleInstaller->install(['default_content']);
-  /** @var \Drupal\default_content\ImporterInterface $importer */
-  \Drupal::service('default_content.importer')
-    ->importContent('joinup_oss_catalogue', TRUE);
-  $moduleInstaller->uninstall(['default_content']);
-
-  // Disable auto-created left-side menu link.
-  $landingPage = $entityRepository->loadEntityByUuid('node', '54acbd6f-47f0-4280-ad09-0a07c397318b');
-  $linkPlugins = \Drupal::service('plugin.manager.menu.link')
-    ->loadLinksByRoute('entity.node.canonical', ['node' => $landingPage->id()], 'ogmenu-3728');
-  /** @var \Drupal\menu_link_content\Plugin\Menu\MenuLinkContent $linkPlugin */
-  $linkPlugin = reset($linkPlugins);
-  $entityRepository
-    ->loadEntityByUuid('menu_link_content', $linkPlugin->getDerivativeId())
-    ->setUnpublished()
-    ->save();
-}
-
-/**
- * Rename menu items for EU OSS catalogue.
- */
-function joinup_core_deploy_110403(): void {
-  $entityTypeManager = \Drupal::entityTypeManager();
-  /** @var  \Drupal\menu_link_content\MenuLinkContentStorageInterface $menuLinkContentStorage */
-  $menuLinkContentStorage = $entityTypeManager->getStorage('menu_link_content');
-
-  $menuName = 'ogmenu-3728';
-  // Collect the IDs of links to the custom page.
-  $ids = $menuLinkContentStorage->getQuery()->accessCheck(FALSE)
-    ->condition('bundle', 'menu_link_content')
-    ->condition('menu_name', $menuName)
-    ->execute();
-
-  $links = $menuLinkContentStorage->loadMultiple($ids);
-  foreach ($links as $link) {
-    $title = $link->getTitle();
-    if ($title === 'About' || $title === 'Members') {
-      $link->setUnpublished()->save();
-    }
-    elseif ($title === 'Overview') {
-      $link->set('title', 'Welcome')->save();
-    }
-  }
-  $link = [
-    'uri' => Url::fromRoute('view.search_oss_catalogue.search')->toUriString(),
-  ];
-  $menuLinkContentStorage->create([
-    'title' => t('Search'),
-    'menu_name' => $menuName,
-    'link' => $link,
-    'weight' => -6,
-  ])->save();
-}
-
-/**
- * Make sure that oss_archived has a default value.
- */
-function joinup_core_deploy_110404(array &$sandbox): string {
-  $entityTypeManager = \Drupal::entityTypeManager();
-  /** @var \Drupal\node\NodeStorage $nodeStorage */
-  $nodeStorage = $entityTypeManager->getStorage('node');
-
-  if (empty($sandbox['ids'])) {
-    $results = $nodeStorage->getQuery()->accessCheck(FALSE)
-      ->condition('type', 'oss_solution')
-      ->notExists('oss_archived')
-      ->execute();
-
-    $sandbox['ids'] = array_values($results);
-    $sandbox['progress'] = 0;
-    $sandbox['count'] = count($sandbox['ids']);
-  }
-
-  $ids = array_splice($sandbox['ids'], 0, 50);
-  foreach ($nodeStorage->loadMultiple($ids) as $solution) {
-    $solution->set('oss_archived', 0);
-    $solution->save();
-  }
-
-  $sandbox['progress'] += count($ids);
-  $sandbox['#finished'] = (int) empty($sandbox['ids']);
-
-  return "Processed {$sandbox['progress']} out of {$sandbox['count']} solutions.";
-}
-
-/**
  * Restore missing data.
  */
-function joinup_core_deploy_110405(): string {
+function joinup_core_deploy_110400(): string {
   \Drupal::getContainer()->get('sparql.endpoint')->update('WITH <http://joinup.eu/solution/published> DELETE { ?s ?p ?o } WHERE { ?s ?p ?o . VALUES ?s { <http://data.europa.eu/w21/18a8c8c8-67da-4016-9cd9-aa24ba04f87c> } } ');
   $graph_store = \Drupal::getContainer()->get('joinup_sparql.graph_store.helper')->createGraphStore();
   $graph = new Graph();
@@ -190,7 +63,7 @@ TURTLE;
 /**
  * Cleans up obsolete EIRA terms.
  */
-function joinup_core_deploy_110406(): string {
+function joinup_core_deploy_110401(): string {
   $count_graph = <<<SPARQL
 SELECT ?s ?deletedTermUri
 WHERE {
@@ -240,4 +113,132 @@ SPARQL;
   \assert($sparql->query($count_graph)->numRows() === 0, 'There should be no more entries to clean.');
 
   return 'Entries to clean: ' . $count . '. Result: ' . $message . '.';
+}
+
+
+/**
+ * Update path alias for EU OSS catalogue.
+ */
+function joinup_core_deploy_110402(): void {
+  /** @var \Drupal\collection\Entity\CollectionInterface $collection */
+  $collection = \Drupal::entityTypeManager()->getStorage('rdf_entity')
+    ->load(OssCatalogueCollectionInterface::COLLECTION_ENTITY_ID);
+
+  $collection
+    ?->set('field_ar_state', 'published')
+      ->set('path', ['alias' => '/eu-oss-catalogue', 'pathauto' => 0])
+      ->save();
+}
+
+/**
+ * Update title of EU OSS catalogue collection.
+ */
+function joinup_core_deploy_110403(): void {
+  /** @var \Drupal\collection\Entity\CollectionInterface $collection */
+  $collection = \Drupal::entityTypeManager()->getStorage('rdf_entity')
+    ->load(OssCatalogueCollectionInterface::COLLECTION_ENTITY_ID);
+
+  $collection
+    ?->set('label', 'EU Open Source Solutions Catalogue')
+      ->save();
+}
+
+/**
+ * Import content for EU OpenSource Software Solutions Catalogue.
+ */
+function joinup_core_deploy_110404(): void {
+  /** @var \Drupal\Core\Extension\ModuleInstallerInterface $moduleInstaller */
+  $moduleInstaller = \Drupal::service('module_installer');
+  /** @var \Drupal\Core\Entity\EntityRepositoryInterface $entityRepository */
+  $entityRepository = \Drupal::service('entity.repository');
+
+  // Delete faulty meta entity.
+  $entityRepository
+    ->loadEntityByUuid('meta_entity', 'ad9be48e-7116-44b3-8df2-db8cb9343268')
+    ?->delete();
+
+  // Import content.
+  $moduleInstaller->install(['default_content']);
+  /** @var \Drupal\default_content\ImporterInterface $importer */
+  \Drupal::service('default_content.importer')
+    ->importContent('joinup_oss_catalogue', TRUE);
+  $moduleInstaller->uninstall(['default_content']);
+
+  // Disable auto-created left-side menu link.
+  $landingPage = $entityRepository->loadEntityByUuid('node', '54acbd6f-47f0-4280-ad09-0a07c397318b');
+  $linkPlugins = \Drupal::service('plugin.manager.menu.link')
+    ->loadLinksByRoute('entity.node.canonical', ['node' => $landingPage->id()], 'ogmenu-3728');
+  /** @var \Drupal\menu_link_content\Plugin\Menu\MenuLinkContent $linkPlugin */
+  $linkPlugin = reset($linkPlugins);
+  $entityRepository
+    ->loadEntityByUuid('menu_link_content', $linkPlugin->getDerivativeId())
+    ->setUnpublished()
+    ->save();
+}
+
+/**
+ * Rename menu items for EU OSS catalogue.
+ */
+function joinup_core_deploy_110405(): void {
+  $entityTypeManager = \Drupal::entityTypeManager();
+  /** @var  \Drupal\menu_link_content\MenuLinkContentStorageInterface $menuLinkContentStorage */
+  $menuLinkContentStorage = $entityTypeManager->getStorage('menu_link_content');
+
+  $menuName = 'ogmenu-3728';
+  // Collect the IDs of links to the custom page.
+  $ids = $menuLinkContentStorage->getQuery()->accessCheck(FALSE)
+    ->condition('bundle', 'menu_link_content')
+    ->condition('menu_name', $menuName)
+    ->execute();
+
+  $links = $menuLinkContentStorage->loadMultiple($ids);
+  foreach ($links as $link) {
+    $title = $link->getTitle();
+    if ($title === 'About' || $title === 'Members') {
+      $link->setUnpublished()->save();
+    }
+    elseif ($title === 'Overview') {
+      $link->set('title', 'Welcome')->save();
+    }
+  }
+  $link = [
+    'uri' => Url::fromRoute('view.search_oss_catalogue.search')->toUriString(),
+  ];
+  $menuLinkContentStorage->create([
+    'title' => t('Search'),
+    'menu_name' => $menuName,
+    'link' => $link,
+    'weight' => -6,
+  ])->save();
+}
+
+/**
+ * Make sure that oss_archived has a default value.
+ */
+function joinup_core_deploy_110406(array &$sandbox): string {
+  $entityTypeManager = \Drupal::entityTypeManager();
+  /** @var \Drupal\node\NodeStorage $nodeStorage */
+  $nodeStorage = $entityTypeManager->getStorage('node');
+
+  if (empty($sandbox['ids'])) {
+    $results = $nodeStorage->getQuery()->accessCheck(FALSE)
+      ->condition('type', 'oss_solution')
+      ->notExists('oss_archived')
+      ->execute();
+
+    $sandbox['ids'] = array_values($results);
+    $sandbox['progress'] = 0;
+    $sandbox['count'] = count($sandbox['ids']);
+  }
+
+  $ids = array_splice($sandbox['ids'], 0, 50);
+  foreach ($nodeStorage->loadMultiple($ids) as $solution) {
+    $solution->set('oss_archived', 0);
+    $solution->save();
+  }
+
+  $sandbox['progress'] += count($ids);
+  $sandbox['#finished'] = (int) empty($sandbox['ids']);
+
+  return "Processed {$sandbox['progress']} out of {$sandbox['count']} solutions.";
 }
