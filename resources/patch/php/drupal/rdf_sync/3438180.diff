@@ -1,5 +1,5 @@
 diff --git a/src/Normalizer/RdfSyncNormalizer.php b/src/Normalizer/RdfSyncNormalizer.php
-index 1f0ed416f4bf279c65f42a12132ebf94fb62482f..ebe5532a31a016fb7e39f6aa4de17f0fc507c907 100644
+index 1f0ed416f4bf279c65f42a12132ebf94fb62482f..6373ec5c95239ffe5fbe01bcae1a3ba191f76983 100644
 --- a/src/Normalizer/RdfSyncNormalizer.php
 +++ b/src/Normalizer/RdfSyncNormalizer.php
 @@ -70,7 +70,7 @@ public function normalize($object, $format = NULL, array $context = []): array {
@@ -11,12 +11,17 @@ index 1f0ed416f4bf279c65f42a12132ebf94fb62482f..ebe5532a31a016fb7e39f6aa4de17f0f
          foreach ($item as $columnName => $value) {
            if (!$mapping = ($mappings[$fieldName][$columnName] ?? NULL)) {
              // This column is not mapped.
-@@ -89,15 +89,16 @@ public function normalize($object, $format = NULL, array $context = []): array {
+@@ -87,17 +87,19 @@ public function normalize($object, $format = NULL, array $context = []): array {
+               $value = $rdfType;
+             }
            }
-           // Resolve references to other entities.
-           elseif (is_a(EntityReferenceItem::class, $itemDefinition->getClass(), TRUE)) {
+-          // Resolve references to other entities.
+-          elseif (is_a(EntityReferenceItem::class, $itemDefinition->getClass(), TRUE)) {
 -            /** @var \Drupal\Core\Entity\EntityInterface $entity */
 -            if (!$entity = $object->get($fieldName)->entity) {
++          // Resolve references to other entities. Cover also field types that
++          // are extending entity reference.
++          elseif ($columnName === 'target_id' && is_a($itemDefinition->getClass(), EntityReferenceItem::class, TRUE)) {
 +            /** @var \Drupal\Core\Entity\ContentEntityInterface $targetEntity */
 +            $targetEntity = $object->get($fieldName)->get($delta)->entity;
 +            if (!$targetEntity) {
