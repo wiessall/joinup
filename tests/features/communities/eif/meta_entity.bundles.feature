@@ -27,7 +27,8 @@ Feature:
     And I click "EIF perspective"
     Then I should see the heading "Some EIF solution EIF perspective"
     And the following fields should be present "Description, Type of solution"
-    And the following field widgets should be present "Principle, Layer, Model, Recommendation"
+    And the following field widgets should be present "Principle, Layer, Model"
+    And I should see "Recommendation"
 
     When I press "Save"
     Then I should see the following error messages:
@@ -44,20 +45,15 @@ Feature:
     And I check "Openness"
     # Model.
     And I check "Coordination function"
-    When I press "Save"
 
-    Then I should see the heading "Some EIF solution"
-    When I click "EIF perspective"
-
-    And I press "Add new"
     # Test the '_none' option label, the better naming of the recommendations
     # and the order - that 10 does not come after 1 (string comparison) and 2
     # follows normally.
-    Then the "EIF qualifier" select should contain the following options:
-      | - Select a Recommendation -                                                 |
-      | Recommendation 1 - Underlying Principle 1: Subsidiarity and proportionality |
-      | Recommendation 2 - Underlying Principle 2: Openness                         |
+    Then the "Recommendation" select should contain the following options:
+      | - Select a Recommendation -                          |
+      | Recommendation 1 \| Subsidiarity and proportionality |
+      | Recommendation 2 \| Openness                         |
 
-    Given I select "Recommendation 2 - Underlying Principle 2: Openness" from "EIF qualifier"
+    Given I select "Recommendation 2 | Openness" from "Recommendation"
     And I press "Save"
     Then I should see the heading "Some EIF solution"

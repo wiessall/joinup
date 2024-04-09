@@ -85,10 +85,11 @@ class EifQualifiedRecommendation extends TextareaWidget {
       '#title_display' => 'invisible',
       '#options' => $this->getRecommendationOptions(),
       '#default_value' => $items[$delta]->target_id,
-      '#empty_option' => $this->t('- Select a recommendation -'),
+      '#empty_option' => $this->t('- Select a Recommendation -'),
       '#empty_value' => '<none>',
       '#required' => $element['#required'],
     ];
+    $element['#required'] = FALSE;
     return $element;
   }
 

@@ -15,7 +15,8 @@ class EifRecommendation extends MappedTerm implements EifRecommendationInterface
    * {@inheritdoc}
    */
   public function getFullLabel(): string {
-    [, $suffix] = explode(': ', $this->get('field_eif_related_term')->entity->label(), 2);
+    $parts = explode(': ', $this->get('field_eif_related_term')->entity->label(), 2);
+    $suffix = $parts[1] ?? $parts[0];
     return "{$this->label()} | $suffix";
   }
 
