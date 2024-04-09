@@ -7,6 +7,8 @@
 
 declare(strict_types=1);
 
+use Drupal\Component\Serialization\Json;
+
 /**
  * Performs checks for the RDF entities and its storage.
  *
@@ -103,4 +105,18 @@ function joinup_rdf_update_110401(): void {
 
   // Re-install the module on clean w/o dependencies, they're already installed.
   \Drupal::service('module_installer')->install(['taxonomy'], FALSE);
+}
+
+/**
+ * Delete Owner RDF entities.
+ */
+function joinup_rdf_update_110402(): void {
+  // Save owners in a temporary file because we need to delete the content
+  // prior to delete the bundle configs. Data will be restored later, in a
+  // deploy hook.
+  $store = \Drupal::getContainer()->get('joinup_sparql.graph_store.helper')->createGraphStore();
+  $owners = $store->get('http://joinup.eu/owner/published')->toRdfPhp();
+  file_put_contents('private://owners', Json::encode($owners));
+  $sparql = \Drupal::getContainer()->get('sparql.endpoint');
+  $sparql->update("CLEAR GRAPH <http://joinup.eu/owner/published>;");
 }

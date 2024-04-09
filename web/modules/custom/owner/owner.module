@@ -207,4 +207,3 @@ function owner_node_access(NodeInterface $entity, string $operation, AccountInte
 
   return AccessResult::neutral();
 }
-
