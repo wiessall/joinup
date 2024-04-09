@@ -19,30 +19,10 @@ use Symfony\Component\Routing\RouteCollection;
  */
 class RdfExportRouteSubscriber extends RouteSubscriberBase {
 
-  /**
-   * The entity type manager service.
-   */
-  protected EntityTypeManagerInterface $entityTypeManager;
-
-  /**
-   * The entity type bundle info service.
-   *
-   * @var \Drupal\Core\Entity\EntityTypeBundleInfoInterface
-   */
-  protected $entityTypeBundleInfo;
-
-  /**
-   * The RDF Sync mapper service.
-   */
-  protected RdfSyncMapper $rdfSyncMapper;
-
-  /**
-   * Constructs a new RouteSubscriber object.
-   */
-  public function __construct(EntityTypeManagerInterface $entity_type_manager, EntityTypeBundleInfoInterface $entity_type_bundle_info, RdfSyncMapper $mapper) {
-    $this->entityTypeManager = $entity_type_manager;
-    $this->entityTypeBundleInfo = $entity_type_bundle_info;
-    $this->rdfSyncMapper = $mapper;
+  public function __construct(
+    protected EntityTypeManagerInterface $entityTypeManager,
+    protected EntityTypeBundleInfoInterface $entityTypeBundleInfo,
+    protected RdfSyncMapper $rdfSyncMapper) {
   }
 
   /**

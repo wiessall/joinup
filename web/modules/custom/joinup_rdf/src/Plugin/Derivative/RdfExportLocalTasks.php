@@ -18,24 +18,9 @@ class RdfExportLocalTasks extends DeriverBase implements ContainerDeriverInterfa
 
   use StringTranslationTrait;
 
-  /**
-   * The entity type manager.
-   *
-   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
-   */
-  protected $entityTypeManager;
-
-  /**
-   * The RDF Sync mapper service.
-   */
-  protected RdfSyncMapper $rdfSyncMapper;
-
-  /**
-   * Creates an DynamicLocalTasks object.
-   */
-  public function __construct(EntityTypeManagerInterface $entity_type_manager, RdfSyncMapper $mapper) {
-    $this->entityTypeManager = $entity_type_manager;
-    $this->rdfSyncMapper = $mapper;
+  public function __construct(
+    protected EntityTypeManagerInterface $entityTypeManager,
+    protected RdfSyncMapper $rdfSyncMapper) {
   }
 
   /**
