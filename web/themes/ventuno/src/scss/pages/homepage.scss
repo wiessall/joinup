@@ -26,7 +26,7 @@
 
 // Hero
 .region-featured {
-  background-image: url(../images/wave.svg), url(../images/background.svg), linear-gradient($ec-blue 0%, $ec-blue 50%, #082330 50%, #082330 100%);
+  background-image: url(../images/wave.svg), url(../images/background.svg), linear-gradient($ec-blue 0%, $ec-blue 50%, #001e2f 50%, #001e2f 100%);
   background-repeat: no-repeat;
   background-position: 0 55%, 0 55%;
   background-size: 100% auto;
@@ -69,7 +69,7 @@
       margin-right: $spacer; // 16px
     }
   }
-  .joinup-welcomes {
+  .joinup-becomes {
     font-size: 1.5rem;
     @include media-breakpoint-up(md) {
       font-size: 1.75rem;
@@ -79,7 +79,7 @@
     }
   }
   @include media-breakpoint-up(md) {
-    background-image: url(../images/banner-md.svg), linear-gradient(to right, $ec-blue 0%, $ec-blue 45%, #082330 45%, #082330 100%);
+    background-image: url(../images/banner-md.svg), linear-gradient(to right, $ec-blue 0%, $ec-blue 45%, #001e2f 45%, #001e2f 100%);
     background-position: center;
     background-size: auto 100%;
   }
