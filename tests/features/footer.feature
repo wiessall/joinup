@@ -7,7 +7,7 @@ Feature: Footer
   Scenario Outline: Footer content not managed through menus
     Given I am not logged in
     And I visit "<page>"
-    Then I should see the Joinup logo in the footer
+    Then I should see the Interoperable Europe logo in the footer
     And I should see the Joinup version in the footer
 
     Examples:

@@ -14,9 +14,9 @@ use PHPUnit\Framework\Assert;
 class FooterContext extends RawDrupalContext {
 
   /**
-   * Checks that the Joinup logo is present in the footer.
+   * Checks that the Interoperable Europe logo is present in the footer.
    *
-   * @Then I should see the Joinup logo in the footer
+   * @Then I should see the Interoperable Europe logo in the footer
    */
   public function assertLogo(): void {
     $logo_element = $this->getSession()->getPage()->find('css', 'footer .joinup-logo');
