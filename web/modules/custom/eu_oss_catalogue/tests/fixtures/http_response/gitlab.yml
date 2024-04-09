@@ -221,6 +221,36 @@
           repository:
             rootRef: main
 
+'invalid-publiccode.self-hosted.gitlab.example.com':
+  data:
+    group:
+      projects:
+        pageInfo:
+          hasNextPage: false
+          endCursor: baz
+        nodes:
+          - fullPath: group3/project6
+            path: project6
+            id: 'gid://gitlab/Project/6'
+            description: Description of Project6
+            archived: false
+            forksCount: 206
+            starCount: 226
+            openIssuesCount: 246
+            openMergeRequestsCount: 236
+            avatarUrl: null
+            releases:
+              nodes: { }
+            repository:
+              rootRef: branch-project-6
+              blobs:
+                nodes:
+                  - path: publiccode.yml
+                    rawBlob: |-
+                      publiccodeYmlVersion: "0.2"
+                      name: Project 6
+                      name: Project 6
+
 'limited.self-hosted.gitlab.example.com group1':
   data:
     group:
