@@ -8,13 +8,6 @@
 declare(strict_types=1);
 
 /**
- * Implements hook_theme_suggestions_HOOK_alter().
- */
-function ventuno_theme_suggestions_eif_wrapper_alter(array &$suggestions, array $variables): void {
-  _ventuno_theme_suggestions_alter($suggestions, $variables);
-}
-
-/**
  * Implements hook_preprocess_HOOK().
  */
 function ventuno_preprocess_rdf_entity__solution__eif_perspective(array &$variables): void {

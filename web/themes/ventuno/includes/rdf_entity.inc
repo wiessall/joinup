@@ -166,7 +166,7 @@ function ventuno_preprocess_rdf_entity__solution__view_mode_search_list_item(arr
     $variables['category_lists'] = $category_lists;
   }
 
-  $eif_perspective_view = \Drupal::entityTypeManager()->getViewBuilder('meta_entity')->viewField($eif_perspective->field_eif_description, [
+  $eif_perspective_view = \Drupal::entityTypeManager()->getViewBuilder('meta_entity')->viewField($eif_perspective->eif_description, [
     'label' => 'hidden',
   ]);
   $variables['eif_perspective_description'] = $eif_perspective_view;
