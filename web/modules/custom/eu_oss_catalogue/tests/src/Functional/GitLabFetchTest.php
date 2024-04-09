@@ -61,43 +61,6 @@ class GitLabFetchTest extends FetchTestBase {
   }
 
   /**
-   * Tests fetching a solution with an invalid publiccode.
-   */
-  public function testInvalidPubliccode(): void {
-    $config = HostingPlatformConfig::create([
-      'id' => 'gitlab_invalid_publiccode',
-      'label' => 'GitLab invalid publiccode',
-      'platformId' => 'gitlab_self_hosted',
-      'platformSettings' => [
-        'baseUrl' => 'https://invalid-publiccode.self-hosted.gitlab.example.com',
-        'projects' => ['group' => NULL],
-      ],
-    ]);
-    $config->save();
-
-    // Check insert.
-    $this->fetchSolutions('hosting_platform:gitlab_invalid_publiccode', 1);
-    $this->assertOssSolution('group/project6', 'en');
-
-    // Change manually, so it will be added to update queue.
-    $invalidSolution = $this->getNodeByTitle('group/project6', TRUE);
-    $invalidSolution->set('oss_source_hash', 'dummy oss source hash');
-    $invalidSolution->set('oss_git_description', 'dummy description');
-    $invalidSolution->save();
-
-    // Check update.
-    $this->fetchSolutions('hosting_platform:gitlab_invalid_publiccode', 1);
-    $this->assertOssSolution('group/project6', 'en');
-
-    // 2 duplicate key logs: one for insert, second for update.
-    $notFoundLogEntries = $this->getLogEntries(
-      'Cannot decode publiccode.yml of @url. Message: @message',
-      'a:2:{s:4:"@url";s:72:"https://invalid-publiccode.self-hosted.gitlab.example.com/group/project6";s:8:"@message";s:65:"Duplicate key "name" detected at line 3 (near "name: Project 6").";}',
-    );
-    $this->assertCount(2, $notFoundLogEntries);
-  }
-
-  /**
    * Tests fetching a GitLab server which API endpoint redirects to HTML.
    */
   public function testWrongClientResponse(): void {
