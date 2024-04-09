@@ -8,7 +8,6 @@ use Drupal\Core\Entity\EntityTypeBundleInfoInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Routing\RouteSubscriberBase;
-use Drupal\Core\Routing\RoutingEvents;
 use Drupal\joinup_rdf\Controller\RdfExportController;
 use Drupal\rdf_sync\RdfSyncMapper;
 use Symfony\Component\Routing\Route;
@@ -79,15 +78,6 @@ class RdfExportRouteSubscriber extends RouteSubscriberBase {
       ]);
 
     return $route;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public static function getSubscribedEvents(): array {
-    $events = parent::getSubscribedEvents();
-    $events[RoutingEvents::ALTER] = ['onAlterRoutes', 100];
-    return $events;
   }
 
 }
