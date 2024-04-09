@@ -21,16 +21,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  */
 class RdfExportController extends ControllerBase {
 
-  /**
-   * The RDF Sync mapper service.
-   */
-  protected RdfSyncMapper $rdfSyncMapper;
-
-  /**
-   * Instantiates a new RdfExportController object.
-   */
-  public function __construct(RdfSyncMapper $mapper) {
-    $this->rdfSyncMapper = $mapper;
+  public function __construct(protected RdfSyncMapper $rdfSyncMapper) {
   }
 
   /**
