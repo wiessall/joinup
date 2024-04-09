@@ -115,7 +115,6 @@ SPARQL;
   return 'Entries to clean: ' . $count . '. Result: ' . $message . '.';
 }
 
-
 /**
  * Update path alias for EU OSS catalogue.
  */
