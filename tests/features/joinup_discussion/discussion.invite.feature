@@ -115,17 +115,10 @@ Feature: Invite members to subscribe to discussions
     And I should not see the text "Shannon Hargrave (theacuteone)"
     And I should not see the text "Glory Ruskin (Glory Ruskin)"
 
-    ## Try to filter by e-mail address.
-    When I type "hr" in the "Name" autocomplete field
-    Then I wait until the page contains the text "Glory Ruskin (Glory Ruskin)"
-    And I should see the text "Shannon Hargrave (theacuteone)"
-    But I should not see the text "Lynwood Crawford (Lynwood Crawford)"
-    And I should not see the text "Shaquila Paternoster (paternoster)"
-
     ## Try fo filter by username.
     When I type "acute" in the "Name" autocomplete field
     Then I wait until the page contains the text "Shannon Hargrave (theacuteone)"
-    But I should see the text "Glory Ruskin (Glory Ruskin)"
+    But I should not see the text "Glory Ruskin (Glory Ruskin)"
     And I should not see the text "Lynwood Crawford (Lynwood Crawford)"
     And I should not see the text "Shaquila Paternoster (paternoster)"
 
@@ -136,7 +129,7 @@ Feature: Invite members to subscribe to discussions
     But I should not see the text "Shannon Hargrave (theacuteone)"
     And I should not see the text "Shaquila Paternoster (paternoster)"
 
-    When I type "gloruskin.hr@example.com" in the "Name" autocomplete field
+    When I type "Glory Ruskin" in the "Name" autocomplete field
     And I wait for AJAX to finish
     And I wait until the page contains the text "Glory Ruskin (Glory Ruskin)"
     And I pick "Glory Ruskin (Glory Ruskin)" from the autocomplete suggestions
@@ -144,7 +137,7 @@ Feature: Invite members to subscribe to discussions
     Then the page should show only the chips:
       | Glory Ruskin |
 
-    When I type "lcrawford@example.com" in the "Name" autocomplete field
+    When I type "Lynwood Crawford" in the "Name" autocomplete field
     And I wait until the page contains the text "Lynwood Crawford (Lynwood Crawford)"
     And I pick "Lynwood Crawford (Lynwood Crawford)" from the autocomplete suggestions
     And I wait for AJAX to finish
@@ -159,7 +152,7 @@ Feature: Invite members to subscribe to discussions
       | Glory Ruskin |
 
     # Add another one.
-    When I type "shaquila.paternoster@example.com" in the "Name" autocomplete field
+    When I type "paternoster" in the "Name" autocomplete field
     And I wait until the page contains the text "Shaquila Paternoster (paternoster)"
     And I pick "Shaquila Paternoster (paternoster)" from the autocomplete suggestions
     And I wait for AJAX to finish
@@ -182,7 +175,7 @@ Feature: Invite members to subscribe to discussions
     And 2 e-mails should have been sent
 
     # Try if it is possible to resend an invitation.
-    When I type "gloruskin.hr@example.com" in the "Name" autocomplete field
+    When I type "Glory Ruskin" in the "Name" autocomplete field
     And I wait for AJAX to finish
     And I wait until the page contains the text "Glory Ruskin (Glory Ruskin)"
     And I pick "Glory Ruskin (Glory Ruskin)" from the autocomplete suggestions
@@ -218,7 +211,7 @@ Feature: Invite members to subscribe to discussions
     And I am logged in as "Lynwood Crawford"
     When I go to the "Concerned about dissolved gases?" discussion
     And I click "Invite"
-    When I type "gloruskin.hr@example.com" in the "Name" autocomplete field
+    When I type "Glory Ruskin" in the "Name" autocomplete field
     And I wait until the page contains the text "Glory Ruskin (Glory Ruskin)"
     And I pick "Glory Ruskin (Glory Ruskin)" from the autocomplete suggestions
     And I wait for AJAX to finish
