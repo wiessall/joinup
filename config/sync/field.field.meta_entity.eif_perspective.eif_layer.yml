@@ -6,6 +6,11 @@ dependencies:
     - field.storage.meta_entity.eif_layer
     - meta_entity.type.eif_perspective
     - taxonomy.vocabulary.eif_interoperability_layer
+third_party_settings:
+  rdf_sync:
+    target_id:
+      predicate: 'http://data.europa.eu/eif/Layer'
+      type: resource
 id: meta_entity.eif_perspective.eif_layer
 field_name: eif_layer
 entity_type: meta_entity

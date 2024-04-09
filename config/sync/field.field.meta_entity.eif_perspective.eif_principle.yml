@@ -6,6 +6,11 @@ dependencies:
     - field.storage.meta_entity.eif_principle
     - meta_entity.type.eif_perspective
     - taxonomy.vocabulary.eif_principle
+third_party_settings:
+  rdf_sync:
+    target_id:
+      predicate: 'http://data.europa.eu/eif/Principle'
+      type: resource
 id: meta_entity.eif_perspective.eif_principle
 field_name: eif_principle
 entity_type: meta_entity
