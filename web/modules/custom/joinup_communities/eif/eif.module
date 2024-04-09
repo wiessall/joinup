@@ -9,9 +9,9 @@ declare(strict_types=1);
 
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Render\Element;
 use Drupal\Core\Url;
 use Drupal\eif\EifInterface;
+use Drupal\eif\Entity\EifPerspective;
 use Drupal\eif\Entity\EifRecommendation;
 use Drupal\field\FieldConfigInterface;
 use Drupal\joinup_taxonomy\Entity\MappedTerm;
@@ -133,6 +133,9 @@ function eif_entity_bundle_info_alter(array &$bundles): void {
   }
   if (!empty($bundles['taxonomy_term']['eif_recommendation'])) {
     $bundles['taxonomy_term']['eif_recommendation']['class'] = EifRecommendation::class;
+  }
+  if (!empty($bundles['meta_entity']['eif_perspective'])) {
+    $bundles['meta_entity']['eif_perspective']['class'] = EifPerspective::class;
   }
 }
 
