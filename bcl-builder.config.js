@@ -250,6 +250,19 @@ module.exports = {
         sourceMap: "file",
       },
     },
+    // Emails
+    {
+      entry: path.resolve(outputFolder, `${ventuno}src/scss/emails/mail.scss`),
+      dest: path.resolve(
+        outputFolder,
+        `${ventuno}assets/css/emails/mail.min.css`
+      ),
+      options: {
+        includePaths,
+        minify: true,
+        sourceMap: false,
+      },
+    },
     // Theme (SMACSS)
     {
       entry: path.resolve(outputFolder, `${ventuno}src/scss/04-theme.scss`),
@@ -373,6 +386,21 @@ module.exports = {
         `${ventuno}src/scss/components/alert.scss`
       ),
       dest: path.resolve(outputFolder, `${ventuno}assets/css/alert.min.css`),
+      options: {
+        includePaths,
+        minify: true,
+        sourceMap: "file",
+      },
+    },
+    {
+      entry: path.resolve(
+        outputFolder,
+        `${ventuno}src/scss/modules/align-module.scss`
+      ),
+      dest: path.resolve(
+        outputFolder,
+        `${ventuno}assets/css/align-module.min.css`
+      ),
       options: {
         includePaths,
         minify: true,

@@ -93,6 +93,11 @@ alert:
   dependencies:
     - ventuno/close
 
+align-module:
+  css:
+    theme:
+      assets/css/align-module.min.css: { minified: true }
+
 badge:
   css:
     theme:
