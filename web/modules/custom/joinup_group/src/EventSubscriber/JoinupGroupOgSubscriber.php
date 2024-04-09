@@ -4,12 +4,8 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_group\EventSubscriber;
 
-use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
-use Drupal\joinup_group\Entity\GroupInterface;
-use Drupal\joinup_workflow\EntityWorkflowStateInterface;
-use Drupal\joinup_workflow\Event\UnchangedWorkflowStateUpdateEvent;
 use Drupal\og\Event\GroupContentEntityOperationAccessEventInterface;
 use Drupal\og\Event\PermissionEventInterface as OgPermissionEventInterface;
 use Drupal\og\GroupPermission;
@@ -51,7 +47,6 @@ class JoinupGroupOgSubscriber implements EventSubscriberInterface {
       OgPermissionEventInterface::EVENT_NAME => [
         ['provideOgGroupPermissions'],
       ],
-      'joinup_workflow.unchanged_workflow_state_update' => 'onUnchangedWorkflowStateUpdate',
     ];
   }
 
@@ -74,36 +69,6 @@ class JoinupGroupOgSubscriber implements EventSubscriberInterface {
         'restrict access' => TRUE,
       ]),
     ]);
-  }
-
-  /**
-   * Determines if a group can be updated without changing workflow state.
-   *
-   * This applies both to collections and solutions. It also updates the label
-   * for the button that saves a group without changing state and moves it to
-   * the leftmost position.
-   *
-   * @param \Drupal\joinup_workflow\Event\UnchangedWorkflowStateUpdateEvent $event
-   *   The event.
-   */
-  public function onUnchangedWorkflowStateUpdate(UnchangedWorkflowStateUpdateEvent $event): void {
-    $entity = $event->getEntity();
-    if (!$entity instanceof GroupInterface || !$entity instanceof EntityWorkflowStateInterface) {
-      return;
-    }
-
-    $state = $event->getState();
-    $permitted = $entity->isTargetWorkflowStateAllowed($state, $state);
-    $access = AccessResult::forbiddenIf(!$permitted);
-    $access->addCacheContexts(['user.roles', 'og_role']);
-    $event->setAccess($access);
-
-    // If a published collection is updated, set the label to "Publish" and move
-    // it to the start of the row of buttons.
-    if ($state === 'published') {
-      $event->setLabel($this->t('Publish'));
-      $event->setWeight(-20);
-    }
   }
 
   /**

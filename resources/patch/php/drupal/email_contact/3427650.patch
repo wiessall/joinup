@@ -1,0 +1,49 @@
+From eeeae69e4819b5a3cd88b5a8ab6b3e207f2135ce Mon Sep 17 00:00:00 2001
+From: Adrian Lorenc <47258-alorenc@users.noreply.drupalcode.org>
+Date: Wed, 13 Mar 2024 15:40:21 +0000
+Subject: [PATCH] Update visibility to protected.
+
+---
+ src/Form/ContactForm.php | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/src/Form/ContactForm.php b/src/Form/ContactForm.php
+index 051d24d..b220e23 100644
+--- a/src/Form/ContactForm.php
++++ b/src/Form/ContactForm.php
+@@ -22,28 +22,28 @@ class ContactForm extends FormBase {
+    *
+    * @var string|null
+    */
+-  private $entityType;
++  protected $entityType;
+ 
+   /**
+    * String for the entity ID.
+    *
+    * @var string|null
+    */
+-  private $entityId;
++  protected $entityId;
+ 
+   /**
+    * String for the field name.
+    *
+    * @var string|null
+    */
+-  private $fieldName;
++  protected $fieldName;
+ 
+   /**
+    * Array with the field settings.
+    *
+    * @var array|null
+    */
+-  private $fieldSettings;
++  protected $fieldSettings;
+ 
+   /**
+    * Contact Form constructor.
+-- 
+GitLab
+

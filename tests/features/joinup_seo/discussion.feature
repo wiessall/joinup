@@ -38,7 +38,7 @@ Feature: SEO for discussion forum posts.
     And the metatag graph of the item with "name" "Discussions are now forum posts" should have the following "image" properties:
       | property | value                                                                                                                    |
       | @type    | ImageObject                                                                                                              |
-      # Discussions don't have an image field but an image is required by google. Add the Joinup logo as the image of
+      # Discussions don't have an image field but an image is required by google. Add the Interoperable Europe logo as the image of
       # all discussions.
       | url      | https://joinup.ec.europa.eu/sites/default/files/styles/logo/public/collection/logo/2019-04/190404-logo-JOINUP-blue-2.png |
     # The index is the delta in the field attachment, with 0 meaning the first of the values.

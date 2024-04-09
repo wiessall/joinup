@@ -143,6 +143,14 @@ class OwnerWorkflowTest extends JoinupWorkflowExistingSiteTestBase {
           'rid' => 'owner',
           'label' => $this->randomMachineName(),
         ]);
+
+        if ($user_var === 'userAuthenticated') {
+          // If the user is userAuthenticated, set them as an owner of the
+          // entity because the authenticated user can only act on owners they
+          // own.
+          $content->setOwnerId($this->$user_var->id());
+        }
+
         // Override the default state of 'published' that is set during entity
         // creation.
         // @see owner_rdf_entity_create()
