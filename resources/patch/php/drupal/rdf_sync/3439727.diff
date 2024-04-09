@@ -1,0 +1,15 @@
+diff --git a/src/RdfSyncUriFieldItemList.php b/src/RdfSyncUriFieldItemList.php
+index 8fdc2ec12e2a02faa63f0579fca123b17eb9030d..31544552775151e597073269309be7fbf2980675 100644
+--- a/src/RdfSyncUriFieldItemList.php
++++ b/src/RdfSyncUriFieldItemList.php
+@@ -63,6 +63,10 @@ public function postSave($update): bool {
+         /** @var \Drupal\rdf_sync\RdfUriGeneratorPluginInterface $plugin */
+         $plugin = \Drupal::getContainer()->get('plugin.manager.rdf_sync.uri_generator')->createInstance($pluginId);
+         $uri = $plugin->setEntity($entity)->generate();
++        // Set the value in case it is needed immediately, as the ::insert
++        // below, will not ensure the value is available until the transaction
++        // is committed.
++        $this->appendItem($uri);
+       }
+       else {
+         $uri = $this->first()->getValue()['value'];
