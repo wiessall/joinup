@@ -1,7 +1,32 @@
 uuid: b5469399-8e28-465f-8377-5953643f461e
 langcode: en
 status: true
-dependencies: {  }
+dependencies:
+  module:
+    - joinup_taxonomy
+third_party_settings:
+  joinup_taxonomy:
+    locked: true
+  rdf_sync:
+    type: 'http://data.europa.eu/dr8'
+    uri_plugin: null
+    fields:
+      vid:
+        target_id:
+          predicate: 'http://www.w3.org/2004/02/skos/core#inScheme'
+          type: resource
+      name:
+        value:
+          predicate: 'http://www.w3.org/2004/02/skos/core#prefLabel'
+          type: null
+      description:
+        processed:
+          predicate: 'http://www.w3.org/2004/02/skos/core#definition'
+          type: null
+      parent:
+        target_id:
+          predicate: 'http://www.w3.org/2004/02/skos/core#broaderTransitive'
+          type: resource
 _core:
   default_config_hash: mEUCMUaY5OkSGEFzI41HGbP3_Thnomwf6kQ8gtaCu8k
 name: EIRA

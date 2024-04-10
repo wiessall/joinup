@@ -5,6 +5,11 @@ dependencies:
   config:
     - field.storage.taxonomy_term.field_taxonomy_deprecated
     - taxonomy.vocabulary.eira
+third_party_settings:
+  rdf_sync:
+    value:
+      predicate: 'http://www.w3.org/2002/07/owl#deprecated'
+      type: 'xsd:boolean'
 id: taxonomy_term.eira.field_taxonomy_deprecated
 field_name: field_taxonomy_deprecated
 entity_type: taxonomy_term
