@@ -1,0 +1,10 @@
+langcode: en
+status: true
+dependencies: {  }
+id: gitlab_invalid_publiccode
+label: 'GitLab invalid publiccode'
+platformId: gitlab_self_hosted
+platformSettings:
+  baseUrl: https://invalid-publiccode.self-hosted.gitlab.example.com
+  projects:
+    group: null

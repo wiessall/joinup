@@ -64,17 +64,6 @@ class GitLabFetchTest extends FetchTestBase {
    * Tests fetching a solution with an invalid publiccode.
    */
   public function testInvalidPubliccode(): void {
-    $config = HostingPlatformConfig::create([
-      'id' => 'gitlab_invalid_publiccode',
-      'label' => 'GitLab invalid publiccode',
-      'platformId' => 'gitlab_self_hosted',
-      'platformSettings' => [
-        'baseUrl' => 'https://invalid-publiccode.self-hosted.gitlab.example.com',
-        'projects' => ['group' => NULL],
-      ],
-    ]);
-    $config->save();
-
     // Check insert.
     $this->fetchSolutions('hosting_platform:gitlab_invalid_publiccode', 1);
     $this->assertOssSolution('group/project6', 'en');
