@@ -84,7 +84,8 @@ Feature: Bookmark/Unbookmark feature.
       | Ohter news          | Batman Begins | published |
 
     When I am logged in as "Gregory Bookmark"
-    And I visit "/user/bookmarks"
+    And I am on the homepage
+    And I click "Bookmark" in the "Navigation bar"
     Then I should see the text "There are no bookmarked items."
     And I go to the content page of the type "news" with the title "Bookmark news one"
     And I click "Bookmark" in the "Bookmark block" region
@@ -121,3 +122,27 @@ Feature: Bookmark/Unbookmark feature.
     And the "Entity bundle" tabs facet should allow selecting the following values:
       | 2 News       |
       | 1 Collection |
+
+  Scenario: Anonymous user is asked to sign in if they click on bookmark icon from navigation.
+    Given CAS users:
+      | Username | E-mail            | Password        | First name | Last name | Local username |
+      | lisab    | lisa@bookmark.com | bookmark123!#$l | Lisa       | Bookmark  | Lisa Bookmark  |
+
+    When I am an anonymous user
+    And I am on the homepage
+    And I click "Bookmark" in the "Navigation bar"
+    And I should see the text "You are not signed in" in the "Modal title"
+    And I should see the heading "Sign in or register to see your bookmarked content" in the "Modal content"
+    And I should see the text "Bookmarking content allows you to save it for later reference and helps you organise your favourite resources" in the "Modal content"
+
+    When I click "Sign in" in the "Modal content"
+    Then I should see the heading "Sign in to continue"
+
+    When I fill in the following:
+      | E-mail address | lisa@bookmark.com |
+      | Password       | bookmark123!#$l   |
+    And I press "Log in"
+    Then the url should match "/user/bookmarks"
+
+    When I click "Bookmark" in the "Navigation bar"
+    Then the url should match "/user/bookmarks"
