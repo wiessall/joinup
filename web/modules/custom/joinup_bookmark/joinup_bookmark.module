@@ -29,7 +29,17 @@ function joinup_bookmark_theme(): array {
  * Implements hook_preprocess_HOOK().
  */
 function joinup_bookmark_preprocess_joinup_modal_anonymous__bookmark(&$variables): void {
+  // Bookmark button, allows bookmark selected content.
   $variables['title'] = t('Sign in or register to bookmark this content');
+  $variables['description'] = t('Bookmarking content allows you to save it for later reference and helps you organise your favourite resources');
+}
+
+/**
+ * Implements hook_preprocess_HOOK().
+ */
+function joinup_bookmark_preprocess_joinup_modal_anonymous__bookmarks(&$variables): void {
+  // Bookmark icon from navigation, points to bookmark listing.
+  $variables['title'] = t('Sign in or register to see your bookmarked content');
   $variables['description'] = t('Bookmarking content allows you to save it for later reference and helps you organise your favourite resources');
 }
 

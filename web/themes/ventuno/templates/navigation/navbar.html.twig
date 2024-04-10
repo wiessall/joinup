@@ -105,8 +105,9 @@
                 {% set desktop_li_attributes = create_attribute() %}
                 {% set desktop_li_classes = [
                   "nav-item",
-                  "d-none",
-                  "d-" ~ item.breakpoint ~ "-inline-block",
+                  item.breakpoint != 'all' ? "d-none",
+                  item.breakpoint != 'all' ? "d-" ~ item.breakpoint ~ "-inline-block" : "d-inline-block",
+                  link.order ? "order-" ~ link.order,
                   link.children ? 'dropdown'
                 ] %}
 
@@ -173,7 +174,7 @@
             {% set _list_item_classes = _list_item_classes|merge(['d-' ~ item.breakpoint ~ '-none']) %}
           {% endif %}
           {% set list_item_attributes = list_item_attributes.addClass(_list_item_classes) %}
-          {% if not hide_toggle %}
+          {% if not hide_toggle and not item.hide_toggle %}
             <li {{ list_item_attributes }}>
               <button
                 id="{{ item.id }}"
