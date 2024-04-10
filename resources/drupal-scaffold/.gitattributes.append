@@ -19,8 +19,6 @@
 /resources/runner/ export-ignore
 /resources/vocab/ADMS-SW-v1.00.rdf export-ignore
 /resources/vocab/ADMS_SKOS_v1.00.rdf export-ignore
-/resources/vocab/actor.rdf export-ignore
-/resources/vocab/business-process.rdf export-ignore
 /resources/vocab/countries-skos.rdf export-ignore
 /resources/vocab/data-theme-skos.rdf export-ignore
 /resources/vocab/eif_conceptual_model.rdf export-ignore
@@ -30,10 +28,7 @@
 /resources/vocab/eif_solution_type.rdf export-ignore
 /resources/vocab/filetypes-skos.rdf export-ignore
 /resources/vocab/languages-skos.rdf export-ignore
-/resources/vocab/product_type.rdf export-ignore
 /resources/vocab/solution_category.rdf export-ignore
-/resources/vocab/standardization_level.rdf export-ignore
-/resources/vocab/test_resource_type.rdf export-ignore
 /scripts/composer/post_update export-ignore
 /scripts/docker export-ignore
 /scripts/git export-ignore
