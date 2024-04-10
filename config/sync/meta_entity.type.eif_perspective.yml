@@ -9,6 +9,7 @@ dependencies:
 third_party_settings:
   rdf_sync:
     type: 'http://data.europa.eu/eif/adms/PerspectiveEIF'
+    uri_plugin: eif_perspective
     fields:
       type:
         target_id:
