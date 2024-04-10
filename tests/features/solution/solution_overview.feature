@@ -123,14 +123,14 @@ Feature: Solutions Overview
     When I go to the add solution form of the "Pikachu, I choose you" collection
     Then I should see the heading "Add Solution"
     When I fill in the following:
-      | Title                 | Colonies in Earth                                                      |
-      | Abstract              | Some abstract                                                          |
-      | Description           | Some space mumbo jumbo description.                                    |
-      | Geographical coverage | Belgium (http://publications.europa.eu/resource/authority/country/BEL) |
-      | Language              | http://publications.europa.eu/resource/authority/language/VLS          |
-      | Name                  | Ambrosio Morison                                                       |
-      | E-mail address        | ambrosio.morison@example.com                                           |
-    Then I select "Data Owner" from "Solution type"
+      | Title                 | Colonies in Earth                   |
+      | Abstract              | Some abstract                       |
+      | Description           | Some space mumbo jumbo description. |
+      | Geographical coverage | Belgium                             |
+      | Name                  | Ambrosio Morison                    |
+      | E-mail address        | ambrosio.morison@example.com        |
+    And I select "Data Owner" from "Solution type"
+    And I select "Flemish" from "Language"
     And I select "Demography" from "Topic"
     And I attach the file "logo.png" to "Logo"
     And I upload the file "text.pdf" to "Upload a new file or enter a URL"

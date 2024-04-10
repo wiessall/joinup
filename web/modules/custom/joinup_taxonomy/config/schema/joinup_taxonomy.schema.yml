@@ -1,0 +1,7 @@
+taxonomy.vocabulary.*.third_party.joinup_taxonomy:
+  type: mapping
+  label: 'Joinup Taxonomy third party settings'
+  mapping:
+    locked:
+      type: boolean
+      label: 'If true, terms cannot be added or edited via UI'

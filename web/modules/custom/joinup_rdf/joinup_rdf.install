@@ -36,3 +36,71 @@ function joinup_rdf_requirements(string $phase): array {
 
   return $requirements;
 }
+
+/**
+ * Uninstall 'rdf_taxonomy' module.
+ */
+function joinup_rdf_update_110400(): void {
+  // Anticipate deletion of taxonomy SPARQL mapping entities to avoid errors.
+  \Drupal::database()->delete('config')
+    ->condition('name', 'sparql_entity_storage.mapping.taxonomy_term.%', 'LIKE')
+    ->execute();
+  // Uninstall rdf_taxonomy.
+  \Drupal::service('module_installer')->uninstall(['rdf_taxonomy'], FALSE);
+}
+
+/**
+ * Reinstall 'taxonomy' module.
+ */
+function joinup_rdf_update_110401(): void {
+  $db = \Drupal::database();
+
+  // Updating the taxonomy storage definitions and installing the missing tables
+  // is a nightmare. A better way is to uninstall and install on fresh. To
+  // enforce recreation of all taxonomy tables, we forcibly uninstall the
+  // module first. We're not using the normal uninstall API because that
+  // triggers side effects and tasks that we want to avoid. End by re-installing
+  // the module on fresh, so that all storage and its definitions are recreated.
+  // Act directly on core.extension config.
+  $config = unserialize($db->select('config')
+    ->fields('config', ['data'])
+    ->condition('collection', '')
+    ->condition('name', 'core.extension')
+    ->execute()
+    ->fetchField(), ['allowed_classes' => FALSE]);
+  unset($config['module']['taxonomy']);
+  $db->update('config')
+    ->fields(['data' => serialize($config)])
+    ->condition('collection', '')
+    ->condition('name', 'core.extension')
+    ->execute();
+
+  // Drop old tables. Remember, they're empty as data is in the SPARQL storage.
+  $db->schema()->dropTable('taxonomy_index');
+  $db->schema()->dropTable('taxonomy_term_data');
+  $db->schema()->dropTable('taxonomy_term_field_data');
+
+  // Remove configuration recreated on module re-install.
+  $db->delete('config')
+    ->condition('collection', '')
+    ->condition('name', ['core.entity_view_mode.taxonomy_term.full', 'taxonomy.settings'], 'IN')
+    ->execute();
+  \Drupal::configFactory()->reset();
+
+  // Cleanup storage definitions. It will be recreated "on fresh".
+  $db->delete('key_value')
+    ->condition('collection', ['entity.definitions.installed', 'entity.storage_schema.sql'], 'IN')
+    ->condition('name', 'taxonomy_term.%', 'LIKE')
+    ->execute();
+  $db->delete('key_value')
+    ->condition('collection', 'system.schema')
+    ->condition('name', 'taxonomy')
+    ->execute();
+
+  // Make sure we don't keep any stale cache referring entity-type and fields.
+  \Drupal::entityTypeManager()->clearCachedDefinitions();
+  \Drupal::service('entity_field.manager')->clearCachedFieldDefinitions();
+
+  // Re-install the module on clean w/o dependencies, they're already installed.
+  \Drupal::service('module_installer')->install(['taxonomy'], FALSE);
+}
