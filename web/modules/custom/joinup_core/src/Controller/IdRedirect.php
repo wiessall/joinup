@@ -5,12 +5,33 @@ declare(strict_types=1);
 namespace Drupal\joinup_core\Controller;
 
 use Drupal\Core\Controller\ControllerBase;
+use Drupal\rdf_sync\RdfSyncMapper;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
  * Provides a route callback to redirect /data/{uuid} to the RDF canonical page.
  */
 class IdRedirect extends ControllerBase {
+
+  /**
+   * Constructs a new controller instance.
+   *
+   * @param \Drupal\rdf_sync\RdfSyncMapper $mapper
+   *   The RDF Sync mapper service.
+   */
+  public function __construct(
+    protected RdfSyncMapper $mapper,
+  ) {}
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function create(ContainerInterface $container): self {
+    return new static(
+      $container->get('rdf_sync.mapper'),
+    );
+  }
 
   /**
    * Redirects to the RDF entity canonical page.
@@ -31,8 +52,17 @@ class IdRedirect extends ControllerBase {
     // The UUID has been encoded early to allow slashes.
     // @see \Drupal\joinup_core\PathProcessor\IdRedirectNamespaceProcessor::processInbound()
     $uuid = urldecode($uuid);
+
+    $id = "http://data.europa.eu/$namespace/$uuid";
+    if ($entity_type_id === 'taxonomy_term') {
+      if (!$term = $this->mapper->getEntityByUri($id)) {
+        return $this->redirect('joinup_core.not_found');
+      }
+      $id = $term->id();
+    }
+
     return $this->redirect("entity.$entity_type_id.canonical", [
-      $entity_type_id => "http://data.europa.eu/$namespace/$uuid",
+      $entity_type_id => $id,
     ], [], 301);
   }
 
