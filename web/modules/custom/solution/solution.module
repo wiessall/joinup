@@ -20,6 +20,8 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Render\Element;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Url;
+use Drupal\joinup_rdf\Entity\RdfSyncEntityInterface;
+use Drupal\joinup_taxonomy\Entity\MappedTerm;
 use Drupal\meta_entity\Entity\MetaEntity;
 use Drupal\og\Entity\OgRole;
 use Drupal\og\Og;
@@ -97,6 +99,13 @@ function solution_entity_bundle_field_info_alter(&$fields, EntityTypeInterface $
 function solution_entity_bundle_info_alter(&$bundles) {
   if (!empty($bundles['rdf_entity']['solution'])) {
     $bundles['rdf_entity']['solution']['class'] = Solution::class;
+  }
+
+  $vids = ['eira', 'language', 'solution_category', 'status'];
+  foreach ($vids as $vid) {
+    if (!empty($bundles['taxonomy_term'][$vid])) {
+      $bundles['taxonomy_term'][$vid]['class'] = MappedTerm::class;
+    }
   }
 }
 
@@ -413,13 +422,12 @@ function solution_get_related_solutions_ids(EntityInterface $entity) {
   }
   $recurse = TRUE;
 
+  $term_storage = \Drupal::entityTypeManager()->getStorage('taxonomy_term');
   $eira_ids = [];
   if ($entity->get('field_is_show_eira_related')->value === '1') {
     // Get all solutions that reference the same EIRA building block.
-    $eira = [];
-    foreach ($entity->get('field_is_solution_type')->getValue() as $field) {
-      $eira[] = $field['target_id'];
-    }
+    $tids = array_map(fn(array $field) => $field['target_id'], $entity->get('field_is_solution_type')->getValue());
+    $eira = array_map(fn(RdfSyncEntityInterface $term): string => $term->getUri(), $term_storage->loadMultiple($tids));
     if ($eira) {
       $query = \Drupal::entityQuery('rdf_entity')->accessCheck(FALSE)
         ->condition('rid', 'solution')
@@ -781,4 +789,14 @@ function solution_rdf_entity_view_alter(array &$build, EntityInterface $entity, 
   if (isset($build['field_is_abstract']) && Element::children($build['field_is_abstract'])) {
     $build['field_is_description']['#access'] = FALSE;
   }
+}
+
+/**
+ * Provides a callback for the solution status field default value.
+ *
+ * @return int
+ *   The ID of the taxonomy term serving as default value.
+ */
+function _solution_status_default_value(): int {
+  return (int) MappedTerm::loadByUri('http://purl.org/adms/status/Completed')->id();
 }

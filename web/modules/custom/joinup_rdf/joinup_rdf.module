@@ -18,7 +18,6 @@ use Drupal\Core\Session\AccountInterface;
 use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\joinup_workflow\EntityWorkflowStateInterface;
 use Drupal\og\Og;
-use Drupal\rdf_taxonomy\Entity\RdfTerm;
 
 /**
  * Implements hook_entity_create_access().
@@ -246,14 +245,4 @@ function joinup_rdf_condition_info_alter(array &$definitions): void {
   // 'entity_bundle:rdf_entity'.
   // @see https://www.drupal.org/node/3283076
   unset($definitions['rdf_entity_bundle']);
-}
-
-/**
- * Implements hook_entity_operation_alter().
- */
-function joinup_rdf_entity_operation_alter(array &$operations, EntityInterface $entity): void {
-  if ($entity instanceof RdfTerm) {
-    // RDF taxonomy terms don't support drafts.
-    unset($operations['draft']);
-  }
 }
