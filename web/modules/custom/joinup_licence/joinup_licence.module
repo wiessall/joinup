@@ -62,6 +62,9 @@ function joinup_licence_entity_bundle_info_alter(&$bundles) {
       }
     }
   }
+  if (!empty($bundles['taxonomy_term']['licence_type'])) {
+    $bundles['taxonomy_term']['licence_type']['class'] = LicenceLegalType::class;
+  }
 }
 
 /**
