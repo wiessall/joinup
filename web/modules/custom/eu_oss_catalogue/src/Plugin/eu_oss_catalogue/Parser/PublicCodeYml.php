@@ -87,9 +87,7 @@ class PublicCodeYml extends EuOssCatalogueParserPluginBase implements ContainerF
 
     $solution
       // Set the publiccode.yml content.
-      ->set('oss_publiccode_yml_content', Yaml::encode($metadata))
-      // Set the publiccode.yml version.
-      ->set('oss_publiccode_yml_version', $metadata['publiccodeYmlVersion'] ?? NULL);
+      ->set('oss_publiccode_yml_content', Yaml::encode($metadata));
   }
 
   /**
