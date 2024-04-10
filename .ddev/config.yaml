@@ -32,8 +32,7 @@ additional_hostnames: []
 additional_fqdns: []
 use_dns_when_possible: true
 composer_version: "2"
-web_environment:
-  - DRUPAL_TRUSTED_HOST_PATTERNS=.*
+web_environment: []
 disable_settings_management: true
 
 hooks:

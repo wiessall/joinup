@@ -16,10 +16,8 @@ label: Status
 description: ''
 required: false
 translatable: false
-default_value:
-  -
-    target_id: 'http://purl.org/adms/status/Completed'
-default_value_callback: ''
+default_value: {  }
+default_value_callback: _solution_status_default_value
 settings:
   handler: 'default:taxonomy_term'
   handler_settings:

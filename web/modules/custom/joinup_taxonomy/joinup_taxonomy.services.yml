@@ -1,0 +1,26 @@
+services:
+  joinup_taxonomy.vocabulary_updater:
+    class: Drupal\joinup_taxonomy\VocabularyUpdater
+    arguments:
+      - '@entity_type.manager'
+      - '@entity_field.manager'
+      - '@plugin.manager.field.field_type'
+      - '@rdf_sync.mapper'
+      - '@database'
+      - '@event_dispatcher'
+    # This is a stateful service. Make sure each call creates a new instance.
+    shared: false
+  joinup_taxonomy.normalizer.subscriber:
+    class: Drupal\joinup_taxonomy\EventSubscriber\NormalizeSubscriber
+    tags:
+      - { name: event_subscriber }
+  joinup_taxonomy.prepare_vocabulary_graph.subscriber:
+    class: Drupal\joinup_taxonomy\EventSubscriber\PrepareVocabularyGraphSubscriber
+    tags:
+      - { name: event_subscriber }
+  joinup_taxonomy.legacy_term_url.subscriber:
+    class: Drupal\joinup_taxonomy\EventSubscriber\TermLegacyUrlSubscriber
+    arguments:
+      - '@rdf_sync.mapper'
+    tags:
+      - { name: event_subscriber }
