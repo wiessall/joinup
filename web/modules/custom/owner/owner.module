@@ -171,12 +171,6 @@ function owner_node_access(NodeInterface $entity, string $operation, AccountInte
     return AccessResult::neutral();
   }
 
-  // By specifications, deletion should be forbidden if the owner entity is
-  // referenced by any other entity.
-  if ($operation === 'delete') {
-    return AccessResult::forbiddenIf($entity->isReferencedByGroups());
-  }
-
   if ($operation === 'edit'
     && $entity->getWorkflowState() === 'deletion_request'
     && $entity->getOwnerId() === $account->id()
@@ -188,8 +182,10 @@ function owner_node_access(NodeInterface $entity, string $operation, AccountInte
     return AccessResult::forbidden('The owner is in the "deletion_request" state.');
   }
 
-  if ($account->hasPermission('edit any owner content')) {
-    return AccessResult::allowed();
+  // By specifications, deletion should be forbidden if the owner entity is
+  // referenced by any other entity.
+  if ($operation === 'delete') {
+    return AccessResult::forbiddenIf($entity->isReferencedByGroups());
   }
 
   if ($operation !== 'view') {
