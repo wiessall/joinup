@@ -25,8 +25,8 @@
         "drupal/colorbox": "^2.0",
         "drupal/config_ignore": "^3.0",
         "drupal/config_readonly": "^1.0",
-        "drupal/core": "~10.2",
-        "drupal/core-composer-scaffold": "~10.2",
+        "drupal/core": "~10.2.2",
+        "drupal/core-composer-scaffold": "~10.2.2",
         "drupal/custom_markup_block": "^1.2",
         "drupal/default_content": "^2.0",
         "drupal/diff": "~1.0",
@@ -79,6 +79,7 @@
         "drupal/queue_ui": "^3.1",
         "drupal/rdf_entity": "^2.0",
         "drupal/rdf_meta_entity": "^1.0",
+        "drupal/rdf_sync": "^1.0",
         "drupal/redirect": "^1.6",
         "drupal/role_delegation": "^1.2",
         "drupal/schema_digital_document": "^1.0",
@@ -109,7 +110,6 @@
         "drupal/views_multiple_permissions": "^2.0",
         "drupal/webform": "^6.2",
         "drush/drush": "^12.1",
-        "ec-europa/spdx": "^1.0",
         "openeuropa/composer-artifacts": "^1.0",
         "openeuropa/gisco-geocoding-provider": "^1.0",
         "openeuropa/oe_bootstrap_theme": "^1.0",
@@ -117,6 +117,7 @@
         "openeuropa/oe_webtools": "^1.21",
         "psr/http-factory-implementation": "*",
         "semiceu/adms-ap_validator": "1.0.0-alpha1",
+        "spdx/license-list-data": "master",
         "sweetrdf/easyrdf": "^1.9",
         "symfony/http-client": "*"
     },
@@ -180,8 +181,11 @@
     "autoload": {
         "classmap": [
             "web/modules/contrib/error_page/src/ErrorPageErrorHandler.php",
+            "web/modules/contrib/rdf_sync/src/Encoder/RdfSyncEncoder.php",
+            "web/modules/contrib/rdf_sync/src/Model/RdfSyncFormat.php",
             "web/modules/contrib/sparql_entity_storage/src/Driver/Database/sparql/ConnectionInterface.php",
-            "web/modules/custom/joinup_sparql/src/Driver/Database/joinup_sparql/Connection.php"
+            "web/modules/custom/joinup_sparql/src/Driver/Database/joinup_sparql/Connection.php",
+            "web/modules/custom/joinup_taxonomy/src/Entity/MappedTerm.php"
         ],
         "psr-4": {
             "Joinup\\": "src"
@@ -194,7 +198,6 @@
             "web/modules/contrib/message_digest/src/Traits/MessageDigestTrait.php",
             "web/modules/contrib/og_menu/src/Tests/Traits/OgMenuTrait.php",
             "web/modules/contrib/pipeline/src/Traits/PipelineContextTrait.php",
-            "web/modules/contrib/spdx/src/Traits/SpdxContextTrait.php",
             "scripts/composer/ComposerPatches.php"
         ],
         "files": [
@@ -280,18 +283,18 @@
                 "Regression: Do not bypass route access with 'link to any page' permissions for menu links @see https://www.drupal.org/project/drupal/issues/2463753": "resources/patch/php/drupal/core/2463753.patch",
                 "Upcast named arguments/named parameters in views @see https://www.drupal.org/project/drupal/issues/2528166": "resources/patch/php/drupal/core/2528166.patch",
                 "Confirmation cancel links are incorrect if installed in a subdirectory @see https://www.drupal.org/project/drupal/issues/2582295": "resources/patch/php/drupal/core/2582295.patch",
-                "Allow plurals on bundle labels @see https://www.drupal.org/node/2765065": "resources/patch/php/drupal/core/2765065.patch",
                 "Enlarge file_usage entity ID length. @see https://www.drupal.org/node/2675600": "resources/patch/php/drupal/core/2675600.diff",
-                "Menu link plugins should provide a way for the link to be conditionally hidden @see https://www.drupal.org/project/drupal/issues/2719609": "resources/patch/php/drupal/core/2719609.patch",
-                "Add thread depth configuration to comments. Includes patch for parent issue #2879087. @see https://www.drupal.org/project/drupal/issues/2786587 @see https://www.drupal.org/project/drupal/issues/2879087": "resources/patch/php/drupal/core/2879087.patch",
+                "Menu link plugins should provide a way for the link to be conditionally hidden @see https://www.drupal.org/i/2719609": "resources/patch/php/drupal/core/2719609.patch",
+                "Allow plurals on bundle labels @see https://www.drupal.org/i/2765065": "resources/patch/php/drupal/core/2765065.patch",
+                "Add thread depth configuration to comments. Includes patch for parent issue #2879087. @see https://www.drupal.org/i/2786587 @see https://www.drupal.org/i/2879087": "resources/patch/php/drupal/core/2879087.patch",
                 "Set fixed depth for comment threads.": "resources/patch/php/drupal/core/2786587-thread-depth-fixed-limit.patch",
                 "Add option to show only start or end date in the DateTime Range custom formatter @see https://www.drupal.org/project/drupal/issues/2827055": "resources/patch/php/drupal/core/2827055.patch",
                 "Views with a different query plugin created via the UI do not have the correct query plugin ID in the view config @see https://www.drupal.org/project/drupal/issues/2836237": "resources/patch/php/drupal/core/2836237.patch",
                 "Pass current route parameters to the confirmation form route @see https://www.drupal.org/project/drupal/issues/2901412": "resources/patch/php/drupal/core/2901412.patch",
-                "Allow adding computed bundle fields in Views @see https://drupal.org/i/2981047#mr4139-note200447": "resources/patch/php/drupal/core/2981047-mr4224-note200448.diff",
                 "Cache tags are not invalidated on revision delete @see https://www.drupal.org/project/drupal/issues/2945928": "resources/patch/php/drupal/core/2945928.patch",
                 "Have responsive image module ignore svg @see https://www.drupal.org/project/drupal/issues/2957924": "resources/patch/php/drupal/core/2957924.patch",
-                "Restrict images to this site\" restricts images that, by definition, *are* on this site @see https://www.drupal.org/project/drupal/issues/2998318": "resources/patch/php/drupal/core/2998318.patch",
+                "Allow adding computed bundle fields in Views @see https://drupal.org/i/2981047#mr4139-note200447": "resources/patch/php/drupal/core/2981047-mr4224-note200448.diff",
+                "Restrict images to this site\" restricts images that, by definition, *are* on this site @see https://www.drupal.org/i/2998318": "resources/patch/php/drupal/core/2998318.patch",
                 "Make it easier to trigger a tour @see https://www.drupal.org/project/drupal/issues/3012027": "resources/patch/php/drupal/core/3012027.patch",
                 "Layout builder doesn't support bundle computed field @see https://drupal.org/i/3034979": "resources/patch/php/drupal/core/layoutbuilder-bundlecomputedfieldsfix-3034979-3-8.6x.patch",
                 "Cannot implement a custom user cancellation method @see https://www.drupal.org/project/drupal/issues/3135592": "resources/patch/php/drupal/core/3135592.patch",
@@ -393,6 +396,9 @@
             "drupal/rdf_entity": {
                 "Allow bundle label plural variants @see https://github.com/ec-europa/rdf_entity/pull/12": "resources/patch/php/drupal/rdf_entity/ea8f6af001fca732e89a4be0e29643953f49a88f.diff"
             },
+            "drupal/rdf_sync": {
+                "Wrong normalization of multiple entity references @see https://www.drupal.org/project/rdf_sync/issues/3438180":"resources/patch/php/drupal/rdf_sync/3438180.diff"
+            },
             "drupal/search_api": {
                 "item_id column is too short @see https://www.drupal.org/node/2829696": "resources/patch/php/drupal/search_api/2829696.patch",
                 "Some bulk form field options are missing schema @see https://www.drupal.org/project/search_api/issues/3195199": "resources/patch/php/drupal/search_api/3195199.patch",
@@ -445,6 +451,9 @@
             },
             "ec-europa/toolkit": {
                 "Allow commands before install clone @see https://github.com/ec-europa/toolkit/pull/757": "resources/patch/php/ec-europa/toolkit/757.diff"
+            },
+            "sweetrdf/easyrdf": {
+                "Add a method to remove resources from graph @see https://github.com/sweetrdf/easyrdf/pull/44": "resources/patch/php/sweetrdf/easyrdf/44.diff"
             }
         },
         "artifacts": {

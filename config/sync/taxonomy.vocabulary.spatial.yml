@@ -1,7 +1,32 @@
 uuid: 45a28818-fd4f-47aa-91c6-5fae192ee970
 langcode: en
 status: true
-dependencies: {  }
+dependencies:
+  module:
+    - joinup_taxonomy
+third_party_settings:
+  joinup_taxonomy:
+    locked: true
+  rdf_sync:
+    type: 'http://publications.europa.eu/resource/authority/country'
+    uri_plugin: null
+    fields:
+      vid:
+        target_id:
+          predicate: 'http://www.w3.org/2004/02/skos/core#inScheme'
+          type: resource
+      name:
+        value:
+          predicate: 'http://www.w3.org/2004/02/skos/core#prefLabel'
+          type: null
+      description:
+        processed:
+          predicate: 'http://www.w3.org/2004/02/skos/core#definition'
+          type: null
+      parent:
+        target_id:
+          predicate: 'http://www.w3.org/2004/02/skos/core#broader'
+          type: resource
 _core:
   default_config_hash: gJxGOQLZ5SdzmXOXbMP-A0S0AQ3XGYBZNljeopTEaZw
 name: Spatial
