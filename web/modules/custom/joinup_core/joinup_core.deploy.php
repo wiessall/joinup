@@ -14,6 +14,8 @@
 
 declare(strict_types=1);
 
+use Drupal\Core\Url;
+use Drupal\joinup_oss_catalogue\OssCatalogueCollectionInterface;
 use EasyRdf\Graph;
 
 /**
