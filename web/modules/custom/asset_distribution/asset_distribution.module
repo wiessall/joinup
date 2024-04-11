@@ -19,7 +19,6 @@ use Drupal\asset_distribution\DistributionParentFieldItemList;
 use Drupal\asset_distribution\Entity\AssetDistribution;
 use Drupal\asset_distribution\Entity\AssetDistributionInterface;
 use Drupal\file_url\FileUrlHandler;
-use Drupal\joinup_taxonomy\Entity\MappedTerm;
 use Drupal\rdf_entity\RdfInterface;
 use Drupal\solution\Exception\MissingSolutionException;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
@@ -30,12 +29,6 @@ use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 function asset_distribution_entity_bundle_info_alter(array &$bundles): void {
   if (!empty($bundles['rdf_entity']['asset_distribution'])) {
     $bundles['rdf_entity']['asset_distribution']['class'] = AssetDistribution::class;
-  }
-  $vids = ['file_type', 'representation_technique'];
-  foreach ($vids as $vid) {
-    if (!empty($bundles['taxonomy_term'][$vid])) {
-      $bundles['taxonomy_term'][$vid]['class'] = MappedTerm::class;
-    }
   }
 }
 
