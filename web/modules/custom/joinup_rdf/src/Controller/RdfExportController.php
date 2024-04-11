@@ -8,6 +8,7 @@ use Drupal\Component\Render\MarkupInterface;
 use Drupal\Core\Access\AccessException;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\rdf_sync\Model\RdfSyncFormat;
 use Drupal\rdf_sync\RdfSyncMapper;
@@ -19,7 +20,9 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  */
 class RdfExportController extends ControllerBase {
 
-  public function __construct(protected RdfSyncMapper $rdfSyncMapper) {
+  public function __construct(
+    protected RdfSyncMapper $rdfSyncMapper,
+    protected EntityRepositoryInterface $entityRepository) {
   }
 
   /**
@@ -28,6 +31,7 @@ class RdfExportController extends ControllerBase {
   public static function create(ContainerInterface $container): self {
     return new static(
       $container->get('rdf_sync.mapper'),
+      $container->get('entity.repository'),
     );
   }
 
@@ -98,10 +102,10 @@ class RdfExportController extends ControllerBase {
    *   An AccessException is thrown if the entity couldn't be loaded.
    */
   protected function getEntity(RouteMatchInterface $route_match): EntityInterface {
-    $entity_type_id = $route_match->getRouteObject()->getOption('_joinup_rdf_export_entity_type');
-    $entity = $route_match->getParameter($entity_type_id);
-    if ($entity instanceof EntityInterface) {
-      return $entity;
+    foreach ($route_match->getParameters() as $parameter) {
+      if ($parameter instanceof EntityInterface) {
+        return $this->entityRepository->getTranslationFromContext($parameter);
+      }
     }
 
     throw new AccessException(sprintf('%s is not a valid entity route.', $route_match->getRouteName()));
