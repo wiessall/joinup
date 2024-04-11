@@ -302,6 +302,10 @@ function joinup_rdf_deploy_110404(array &$sandbox): string {
             // Formatted text needs a format.
             $value = ['value' => $value, 'format' => 'content_editor'];
           }
+          if ($fieldName === 'deprecated') {
+            // We need to convert that value from string to boolean.
+            $value = filter_var($value, FILTER_VALIDATE_BOOLEAN);
+          }
           $values[$fieldName][] = $value;
         }
       }
