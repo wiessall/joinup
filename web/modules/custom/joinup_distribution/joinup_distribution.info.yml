@@ -1,0 +1,8 @@
+type: module
+name: Distribution
+description: Distribution functionality
+package: Joinup
+core_version_requirement: ">= 10.2"
+
+dependencies:
+  - 'joinup:joinup_taxonomy'
