@@ -85,13 +85,13 @@ Feature: "Add solution" visibility options.
     And the available options in the "Language" select should not include the "Multilingual Code"
     And the "Solution type" field should contain the "EIRA Ontology Viewpoint, Legal View, Deprecated" option groups
     When I fill in the following:
-      | Title                 | Espresso is the solution                                      |
-      | Abstract              | Abstract used for testing                                     |
-      | Description           | This is a test text                                           |
-      | Geographical coverage | Belgium                                                       |
-      | Language              | http://publications.europa.eu/resource/authority/language/VLS |
-      | Name                  | Ernst Brice                                                   |
-      | E-mail address        | ernsy1999@gmail.com                                           |
+      | Title                 | Espresso is the solution  |
+      | Abstract              | Abstract used for testing |
+      | Description           | This is a test text       |
+      | Geographical coverage | Belgium                   |
+      | Name                  | Ernst Brice               |
+      | E-mail address        | ernsy1999@gmail.com       |
+    And I select "Flemish" from "Language"
     Then I select "Data Owner" from "Solution type"
     And I select "Demography" from "Topic"
     # Attach a PDF to the documentation.
@@ -143,13 +143,13 @@ Feature: "Add solution" visibility options.
     And I check "I have read and accept the legal notice and I commit to manage my solution on a regular basis."
     And I press "Yes"
     When I fill in the following:
-      | Title                 | V60 filter coffee solution                                             |
-      | Abstract              | Abstract of filter coffee                                              |
-      | Description           | This is a test text                                                    |
-      | Geographical coverage | Belgium (http://publications.europa.eu/resource/authority/country/BEL) |
-      | Language              | http://publications.europa.eu/resource/authority/language/VLS          |
-      | Name                  | Ajit Tamboli                                                           |
-      | E-mail address        | tambotamboli@gocloud.in                                                |
+      | Title                 | V60 filter coffee solution |
+      | Abstract              | Abstract of filter coffee  |
+      | Description           | This is a test text        |
+      | Geographical coverage | Belgium                    |
+      | Name                  | Ajit Tamboli               |
+      | E-mail address        | tambotamboli@gocloud.in    |
+    And I select "Flemish" from "Language"
     Then I select "Data Owner" from "Solution type"
     And I select "E-inclusion" from "Topic"
     # Attach a PDF to the documentation.

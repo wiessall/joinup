@@ -6,7 +6,21 @@
 upgrade_commands:
   default:
     - touch disable-config-readonly
-    - ./vendor/bin/drush deploy --yes
+
+    # TODO: Restore `./vendor/bin/drush deploy --yes` instead of the commands
+    # between BEGIN <-> END block, in ISAICP-8376.
+    # BEGIN
+    - ./vendor/bin/drush updatedb --yes
+    - ./vendor/bin/drush config:import --yes
+    - ./vendor/bin/drush cache:rebuild
+    - ./vendor/bin/drush rdf_sync:disable
+    - ./vendor/bin/drush joinup:create-locked-vocabulary-terms
+    - ./vendor/bin/drush deploy:hook --yes
+    - ./vendor/bin/drush joinup:sync-locked-vocabulary-terms
+    - ./vendor/bin/drush rdf_sync:synchronize taxonomy_term --bundle=legal_type,topic
+    - ./vendor/bin/drush rdf_sync:enable
+    # END
+
     - ./vendor/bin/drush search-api:reset-tracker --yes
     - ./vendor/bin/drush joinup:node-access-rebuild
     - rm disable-config-readonly

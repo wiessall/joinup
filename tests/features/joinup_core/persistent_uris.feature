@@ -45,7 +45,7 @@ Feature:
       | uri   | http://data.europa.eu/unsupp/30aea866-fc89-4e45-b909-3d130acf49bf |
 
     And "eira" terms:
-      | tid                                    | name         | description                                |
+      | uri                                    | name         | description                                |
       | http://data.europa.eu/dr8/Dream/Domain | Dream Domain | You're safe from pain in the dream domain. |
 
     And discussion content:
@@ -115,4 +115,4 @@ Feature:
     Given I am on "data/dr8/Dream/Domain"
     Then I should see the heading "Dream Domain"
     And I should see "You're safe from pain in the dream domain."
-    And the url should match "/taxonomy/term/http_e_f_fdata_ceuropa_ceu_fdr8_fDream_fDomain"
+    And the url should match "/taxonomy/term/\d+"
