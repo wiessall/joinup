@@ -16,10 +16,9 @@ Feature: Asset distribution editing.
       | title      | collection         | description        | state     |
       | Solution A | Collection example | Sample description | published |
       | Solution B | Collection example | Sample description | published |
-    And the following licence:
-      | title       | LGPL                                |
-      | description | The LGPL more permisssive than GPL. |
-      | deprecated  | yes                                 |
+    And licence content:
+      | title | description                         | deprecated |
+      | LGPL  | The LGPL more permisssive than GPL. | yes        |
     And the following release:
       | title          | Asset release example |
       | release number | C3PO                  |
@@ -55,7 +54,7 @@ Feature: Asset distribution editing.
     Then I should not see the link "Edit" in the "Entity actions" region
 
   Scenario: Edit a distribution as a solution facilitator.
-    Given the following licences:
+    Given licence content:
       | title           | description                         | deprecated |
       | The same LGPL   | The LGPL more permisssive than GPL. | yes        |
       | Another LGPL    | The LGPL more permisssive than GPL. | yes        |

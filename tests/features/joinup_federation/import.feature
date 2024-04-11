@@ -159,8 +159,8 @@ Feature: As a site moderator I am able to import RDF files.
     # The licence contained in valid_adms.rdf is named "A federated licence".
     # However, the goal is to not import or update any values in the licence
     # entity so the following licences have different details.
-    And the following licences:
-      | uri                          | title                    | description               | type          | spdx licence |
+    And licence content:
+      | uri                          | title                    | description               | licence type  | spdx licence |
       | http://example.com/licence/1 | Licence same as Apache 2 | Licence agreement details | Public domain | Apache 2     |
       | http://example.com/licence/2 | Licence same as MIT      | So on...                  | Public domain | MIT License  |
 

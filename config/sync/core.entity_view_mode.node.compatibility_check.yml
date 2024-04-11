@@ -1,0 +1,11 @@
+uuid: 07bcfe7b-df49-4096-922c-acda02488a19
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+id: node.compatibility_check
+label: 'Compatibility check'
+description: ''
+targetEntityType: node
+cache: true

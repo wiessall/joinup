@@ -10,7 +10,9 @@ declare(strict_types=1);
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\image\Plugin\Field\FieldWidget\ImageWidget;
+use Drupal\joinup_rdf\Entity\RdfSyncEntityInterface;
 use Drupal\joinup_seo\JoinupSeoExportHelperInterface;
+use Drupal\rdf_entity\RdfInterface;
 
 /**
  * Implements hook_simple_sitemap_sitemap_types_alter().
@@ -72,16 +74,61 @@ function joinup_seo_metatags_alter(array &$metatags, array &$context) {
 }
 
 /**
- * Implements hook_page_attachments().
+ * Implements hook_module_implements_alter().
  */
-function joinup_seo_page_attachments(array &$attachments) {
-  $route_match = \Drupal::service('current_route_match');
-  assert($route_match instanceof RouteMatchInterface);
-  if ($route_match->getRouteName() !== 'entity.rdf_entity.canonical') {
+function joinup_seo_module_implements_alter(&$implementations, $hook) {
+  if ($hook === 'page_attachments_alter') {
+    if (
+      array_key_exists('schema_metatag', $implementations) &&
+      array_key_exists('joinup_seo', $implementations)
+    ) {
+      $schemaMetatagHookIndex = array_search('schema_metatag', array_keys($implementations));
+      $our = $implementations['joinup_seo'];
+      unset($implementations['joinup_seo']);
+      $implementations = array_merge(
+        array_slice($implementations, 0, $schemaMetatagHookIndex),
+        ['joinup_seo' => $our],
+        array_slice($implementations, $schemaMetatagHookIndex)
+      );
+    }
+  }
+}
+
+/**
+ * Implements hook_page_attachments_alter().
+ *
+ * Adds JSON-LD structured data to the canonical routes of RDF entities or
+ * entities being synced with RDF entities.
+ *
+ * @todo Remove BC layer built arount RDF entities in ISAICP-8376.
+ */
+function joinup_seo_page_attachments_alter(array &$attachments) {
+  // Don't do anything if HTML <head> attachments already have a
+  // "schema_metatag" script.
+  $pageHasSchemaMetatag = array_reduce(
+    $attachments['#attached']['html_head'] ?? [],
+    function (bool $carry, array $attachment): bool {
+      $carry = $carry ?: ($attachment[1] ?? NULL) === 'schema_metatag';
+      return $carry;
+    },
+    FALSE,
+  );
+  if ($pageHasSchemaMetatag) {
     return;
   }
 
-  if (!$entity = $route_match->getParameter('rdf_entity')) {
+  $routeMatch = \Drupal::service('current_route_match');
+  assert($routeMatch instanceof RouteMatchInterface);
+  $routeApplies = preg_match('/^entity\.([^.]*)\.canonical$/', $routeMatch->getRouteName(), $matches);
+  if (!$routeApplies) {
+    return;
+  }
+  $entity = $routeMatch->getParameter($matches[1]);
+  // @todo Remove BC layer focusing on RdfInterface entities in ISAICP-8376.
+  if (
+    !$entity instanceof RdfInterface &&
+    !$entity instanceof RdfSyncEntityInterface
+  ) {
     return;
   }
 
@@ -89,12 +136,13 @@ function joinup_seo_page_attachments(array &$attachments) {
   assert($serializer instanceof JoinupSeoExportHelperInterface);
   $output = NULL;
   try {
-    $output = $serializer->exportRdfEntityMetadata($entity);
+    $output = $serializer->getEntityJsonLdString($entity);
   }
   catch (\Exception $exception) {
     \Drupal::logger('joinup_seo')->error(
-      "The RDF entity '@entity-label' (id: ':entity-id') cannot be serialized to JsonLD object. @exception-message",
+      "The '@entity-class' entity '@entity-label' (id: ':entity-id') cannot be serialized to JsonLD object. @exception-message",
       [
+        '@entity-class' => get_class($entity),
         '@entity-label' => $entity->label(),
         ':entity-id' => $entity->id(),
         '@exception-message' => $exception->getMessage(),
@@ -115,7 +163,7 @@ function joinup_seo_page_attachments(array &$attachments) {
       ],
       '#value' => $output,
     ],
-    'rdf_entity_ld_json',
+    'joinup_seo_json_ld',
   ];
 }
 
