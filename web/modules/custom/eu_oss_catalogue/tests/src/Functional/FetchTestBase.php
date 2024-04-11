@@ -216,13 +216,12 @@ abstract class FetchTestBase extends BrowserTestBase {
     // Check how incoming data has been queued. Only one item is active.
     $queue = \Drupal::queue('eu_oss_catalogue');
     // The queue contains $entriesCount solutions plus the cleanup step.
-    $this->assertSame($expectedQueuedSolutions + 1, $queue->numberOfItems());
+    $this->assertSame($expectedQueuedSolutions, $queue->numberOfItems() -1, 'Number of queued solutions');
 
     // Check queue processing. Use Drush to run the queue.
     $this->drush('queue:run', ['eu_oss_catalogue']);
 
-    // Queue items have been released.
-    $this->assertSame(0, $queue->numberOfItems());
+    $this->assertSame(0, $queue->numberOfItems(), 'Queue items have been released.');
   }
 
   /**
