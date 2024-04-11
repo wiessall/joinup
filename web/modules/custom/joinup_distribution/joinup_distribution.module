@@ -1,0 +1,51 @@
+<?php
+
+/**
+ * @file
+ * Hook implementations for Distribution module.
+ */
+
+declare(strict_types=1);
+
+use Drupal\Core\Entity\EntityTypeInterface;
+use Drupal\Core\Field\BaseFieldDefinition;
+use Drupal\joinup_distribution\DistributionParentFieldItemList;
+use Drupal\joinup_distribution\Entity\Distribution;
+use Drupal\joinup_taxonomy\Entity\MappedTerm;
+
+/**
+ * Implements hook_entity_bundle_info_alter().
+ */
+function joinup_distribution_entity_bundle_info_alter(array &$bundles): void {
+  if (!empty($bundles['node']['distribution'])) {
+    $bundles['node']['distribution']['class'] = Distribution::class;
+  }
+  $vids = ['file_type', 'representation_technique'];
+  foreach ($vids as $vid) {
+    if (!empty($bundles['taxonomy_term'][$vid])) {
+      $bundles['taxonomy_term'][$vid]['class'] = MappedTerm::class;
+    }
+  }
+}
+
+/**
+ * Implements hook_entity_bundle_field_info().
+ */
+function joinup_distribution_entity_bundle_field_info(EntityTypeInterface $entityType, string $bundle, array $baseFieldDefinitions): array {
+  if ($entityType->id() === 'node' && $bundle === 'distribution') {
+    // Add reference to the parent entity (solution or asset_release).
+    return [
+      'parent' => BaseFieldDefinition::create('entity_reference')
+        ->setLabel(t('Parent'))
+        ->setName('parent')
+        ->setDescription(t('The distribution parent. Could be a solutions or a release.'))
+        ->setTargetEntityTypeId('node')
+        ->setTargetBundle('distribution')
+        ->setSetting('target_type', 'rdf_entity')
+        ->setCardinality(1)
+        ->setComputed(TRUE)
+        ->setClass(DistributionParentFieldItemList::class),
+    ];
+  }
+  return [];
+}

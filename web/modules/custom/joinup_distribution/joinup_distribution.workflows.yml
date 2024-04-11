@@ -1,0 +1,27 @@
+joinup_distribution_workflow:
+  id: joinup_distribution_workflow
+  label: "Distribution"
+  group: joinup_distribution
+  states:
+    __new__:
+      label: New
+      published: true
+    published:
+      label: Published
+      published: true
+    archived:
+      label: Archived
+      published: true
+  transitions:
+    publish:
+      label: Publish
+      from: [ __new__, published ]
+      to: published
+    archive:
+      label: Archive
+      from: [ published ]
+      to: archived
+    unarchive:
+      label: Unarchive
+      from: [ archived ]
+      to: published
