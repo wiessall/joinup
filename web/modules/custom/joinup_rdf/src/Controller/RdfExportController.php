@@ -6,12 +6,9 @@ namespace Drupal\joinup_rdf\Controller;
 
 use Drupal\Component\Render\MarkupInterface;
 use Drupal\Core\Access\AccessException;
-use Drupal\Core\Access\AccessResult;
-use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
-use Drupal\Core\Session\AccountInterface;
 use Drupal\rdf_sync\Model\RdfSyncFormat;
 use Drupal\rdf_sync\RdfSyncMapper;
 use EasyRdf\Format;
@@ -32,28 +29,6 @@ class RdfExportController extends ControllerBase {
     return new static(
       $container->get('rdf_sync.mapper'),
     );
-  }
-
-  /**
-   * Checks that the RDF export is accessible.
-   *
-   * @param \Drupal\Core\Routing\RouteMatchInterface $route_match
-   *   The parametrized route.
-   * @param \Drupal\Core\Session\AccountInterface $account
-   *   The current user account.
-   *
-   * @return \Drupal\Core\Access\AccessResultInterface
-   *   The access result.
-   *
-   * @see \Drupal\Core\Entity\EntityAccessCheck
-   */
-  public function access(RouteMatchInterface $route_match, AccountInterface $account): AccessResultInterface {
-    $entity = $this->getEntity($route_match);
-    $is_mapped = $this->rdfSyncMapper->isMappedEntity($entity);
-
-    return AccessResult::allowedIf($is_mapped)
-      ->addCacheTags($entity->getEntityType()->getListCacheTags())
-      ->andIf($entity->access('view', $account, TRUE));
   }
 
   /**

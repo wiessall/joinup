@@ -66,9 +66,7 @@ class RdfExportRouteSubscriber extends RouteSubscriberBase {
         '_controller' => RdfExportController::class . '::downloadLinks',
         '_title_callback' => RdfExportController::class . '::title',
       ])
-      ->addRequirements([
-        '_custom_access' => RdfExportController::class . '::access',
-      ])
+      ->setRequirement('_entity_access', "{$entity_type_id}.view")
       ->setOption('_joinup_rdf_export_entity_type', $entity_type_id)
       ->setOption('parameters', [
         $entity_type_id => [
