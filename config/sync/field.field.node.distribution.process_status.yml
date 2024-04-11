@@ -1,0 +1,34 @@
+uuid: 1df1fa71-359f-4678-8fab-45d1c6224fb2
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.process_status
+    - node.type.distribution
+    - taxonomy.vocabulary.status
+third_party_settings:
+  rdf_sync:
+    target_id:
+      predicate: 'http://www.w3.org/ns/adms#status'
+      type: resource
+id: node.distribution.process_status
+field_name: process_status
+entity_type: node
+bundle: distribution
+label: Status
+description: 'Status of the distribution in the context of a particular workflow process'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:taxonomy_term'
+  handler_settings:
+    target_bundles:
+      status: status
+    sort:
+      field: name
+      direction: asc
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference
