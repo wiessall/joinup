@@ -20,9 +20,10 @@ third_party_settings:
         value:
           predicate: 'http://www.w3.org/2000/01/rdf-schema#label'
           type: null
-label_singular: null
-label_plural: null
-label_count: null
+label_singular: licence
+label_plural: licences
+label_count:
+  no_count_capitalize: !!binary TGljZW5jZQNMaWNlbmNlcw==
 name: Licence
 type: licence
 description: ''
