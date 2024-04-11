@@ -13,7 +13,7 @@ use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\rdf_sync\Model\RdfSyncFormat;
 use Drupal\rdf_sync\RdfSyncMapper;
 use EasyRdf\Format;
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 /**
  * Provides route responses for the RDF export.
@@ -21,18 +21,9 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 class RdfExportController extends ControllerBase {
 
   public function __construct(
+    #[Autowire(service: 'rdf_sync.mapper')]
     protected RdfSyncMapper $rdfSyncMapper,
     protected EntityRepositoryInterface $entityRepository) {
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public static function create(ContainerInterface $container): self {
-    return new static(
-      $container->get('rdf_sync.mapper'),
-      $container->get('entity.repository'),
-    );
   }
 
   /**
