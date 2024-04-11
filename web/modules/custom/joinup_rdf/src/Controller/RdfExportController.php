@@ -7,6 +7,7 @@ namespace Drupal\joinup_rdf\Controller;
 use Drupal\Component\Render\MarkupInterface;
 use Drupal\Core\Access\AccessException;
 use Drupal\Core\Access\AccessResult;
+use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
@@ -46,7 +47,7 @@ class RdfExportController extends ControllerBase {
    *
    * @see \Drupal\Core\Entity\EntityAccessCheck
    */
-  public function access(RouteMatchInterface $route_match, AccountInterface $account) {
+  public function access(RouteMatchInterface $route_match, AccountInterface $account): AccessResultInterface {
     $entity = $this->getEntity($route_match);
     $is_mapped = $this->rdfSyncMapper->isMappedEntity($entity);
 
@@ -121,7 +122,7 @@ class RdfExportController extends ControllerBase {
    * @throws \Drupal\Core\Access\AccessException
    *   An AccessException is thrown if the entity couldn't be loaded.
    */
-  protected function getEntity(RouteMatchInterface $route_match) {
+  protected function getEntity(RouteMatchInterface $route_match): EntityInterface {
     $entity_type_id = $route_match->getRouteObject()->getOption('_joinup_rdf_export_entity_type');
     $entity = $route_match->getParameter($entity_type_id);
     if ($entity instanceof EntityInterface) {

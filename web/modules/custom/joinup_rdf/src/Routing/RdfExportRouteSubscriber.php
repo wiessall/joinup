@@ -53,7 +53,7 @@ class RdfExportRouteSubscriber extends RouteSubscriberBase {
 
     $entity_type_id = $entity_type->id();
     $bundles = $this->entityTypeBundleInfo->getBundleInfo($entity_type_id);
-    $bundles = array_filter(array_keys($bundles), function (string $bundle) use ($entity_type_id) {
+    $bundles = array_filter(array_keys($bundles), function (string $bundle) use ($entity_type_id): bool {
       return $this->rdfSyncMapper->isMappedBundle($entity_type_id, $bundle);
     });
     if (!$bundles) {
