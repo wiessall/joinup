@@ -45,6 +45,7 @@ class JoinupTaxonomyCommands extends DrushCommands {
     'EIRA_SKOS.rdf' => ['eira'],
     'filetypes-skos.rdf' => ['file_type'],
     'languages-skos.rdf' => ['language'],
+    'licenses.rdf' => ['spdx_licence'],
     'solution_category.rdf' => ['solution_category'],
   ];
 
@@ -130,6 +131,12 @@ class JoinupTaxonomyCommands extends DrushCommands {
       return;
     }
 
+    // Add non-default namespaces.
+    RdfNamespace::set('adms', 'http://www.w3.org/ns/adms#');
+    RdfNamespace::set('eira', 'http://data.europa.eu/dr8/');
+    RdfNamespace::set('owlturtle', 'http://www.semanticweb.org/owl/owlapi/turtle#');
+    RdfNamespace::set('spdx', 'http://spdx.org/rdf/terms#');
+
     $vids = array_merge(...array_values(self::VOCABS));
     // Collect triples in this graph to create a fixture file later.
     $fixtureFileGraph = new Graph();
@@ -148,12 +155,8 @@ class JoinupTaxonomyCommands extends DrushCommands {
           ],
         ],
       ];
+
       RdfSyncConnection::updateTriples($triples);
-
-      // Add 'eira' and 'adms' namespaces.
-      RdfNamespace::set('eira', 'http://data.europa.eu/dr8/');
-      RdfNamespace::set('adms', 'http://www.w3.org/ns/adms#');
-
       $fixtureFileGraph->parse($triples, 'php');
       $vocabularyUris[] = $vocabularyUri;
     }
@@ -174,8 +177,9 @@ class JoinupTaxonomyCommands extends DrushCommands {
       WHERE {
         GRAPH <%s> {
           ?subject ?predicate ?object .
-          ?subject a <http://www.w3.org/2004/02/skos/core#Concept> .
+          ?subject <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> ?type .
           ?subject ?vocab_type ?vocab .
+          VALUES ?type { <http://www.w3.org/2004/02/skos/core#Concept> <http://spdx.org/rdf/terms#ListedLicense> } .
           VALUES ?vocab_type { <http://www.w3.org/2004/02/skos/core#inScheme> <http://www.w3.org/2004/02/skos/core#topConceptOf> } .
           VALUES ?vocab { %s } .
         }

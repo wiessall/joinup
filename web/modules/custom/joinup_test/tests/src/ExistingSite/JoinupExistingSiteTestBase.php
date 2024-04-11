@@ -9,6 +9,7 @@ use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Url;
 use Drupal\Tests\joinup_test\Traits\RdfEntityCreationTrait;
 use Drupal\joinup\Traits\ConfigReadOnlyTrait;
+use Drupal\taxonomy\VocabularyInterface;
 use weitzman\DrupalTestTraits\ExistingSiteBase;
 
 /**
@@ -135,6 +136,18 @@ abstract class JoinupExistingSiteTestBase extends ExistingSiteBase {
     $externalAuth = \Drupal::getContainer()->get('externalauth.externalauth');
     $externalAuth->linkExistingAccount($account->getAccountName(), 'cas', $account);
     return $account;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  protected function createTerm(VocabularyInterface $vocabulary, array $settings = []) {
+    $term = parent::createTerm($vocabulary, $settings);
+    if (\Drupal::getContainer()->get('rdf_sync.mapper')->isMappedEntity($term)) {
+      // Force RDF synchronization.
+      \Drupal::getContainer()->get('rdf_sync.synchronizer')->destruct();
+    }
+    return $term;
   }
 
 }

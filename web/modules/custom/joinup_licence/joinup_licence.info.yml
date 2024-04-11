@@ -9,4 +9,3 @@ dependencies:
   - 'drupal:text'
   - 'joinup:joinup_taxonomy'
   - 'joinup:joinup_validation'
-  - 'spdx:spdx'
