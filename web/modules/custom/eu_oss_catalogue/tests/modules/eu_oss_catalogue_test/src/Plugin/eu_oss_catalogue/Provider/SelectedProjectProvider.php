@@ -14,8 +14,18 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  */
 abstract class SelectedProjectProvider extends DevelopersItalia {
 
+  /**
+   * Entity type manager.
+   *
+   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
+   */
   protected EntityTypeManagerInterface $entityTypeManager;
 
+  /**
+   * Selected project which can be provided.
+   *
+   * @var string[]
+   */
   protected array $selectedProjects = [
     'https://github.com/dummy-namespace-1/dummy-name-1',
     'https://limited.self-hosted.gitlab.example.com/group1/project-1-1',
@@ -31,6 +41,12 @@ abstract class SelectedProjectProvider extends DevelopersItalia {
     return $provider;
   }
 
+  /**
+   * Sets entity manager.
+   *
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityManager
+   *   Entity manager.
+   */
   protected function setEntityManager(EntityTypeManagerInterface $entityManager): void {
     $this->entityTypeManager = $entityManager;
   }
@@ -59,12 +75,12 @@ abstract class SelectedProjectProvider extends DevelopersItalia {
    */
   protected function wasCreated(string $gitUrl): bool {
     return $this->entityTypeManager->getStorage('node')
-        ->getQuery()
-        ->accessCheck(FALSE)
-        ->condition('oss_git_url', $gitUrl)
-        ->condition('type', 'oss_solution')
-        ->count()
-        ->execute() > 0;
+       ->getQuery()
+       ->accessCheck(FALSE)
+       ->condition('oss_git_url', $gitUrl)
+       ->condition('type', 'oss_solution')
+       ->count()
+       ->execute() > 0;
   }
 
   /**
