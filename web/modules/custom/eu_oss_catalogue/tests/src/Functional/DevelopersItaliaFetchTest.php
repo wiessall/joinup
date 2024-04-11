@@ -85,7 +85,7 @@ class DevelopersItaliaFetchTest extends FetchTestBase {
    * Tests that when a solution is removed upstream, is archived locally.
    */
   public function testArchiveSolution(): void {
-     $this->fetchSolutions('removing_solution_provider', 2);
+    $this->fetchSolutions('removing_solution_provider', 2);
 
     $this->assertNotFalse($this->getNodeByTitle('GitHub solution 1'));
     $this->assertNotFalse($this->getNodeByTitle('Project 1.1'));
