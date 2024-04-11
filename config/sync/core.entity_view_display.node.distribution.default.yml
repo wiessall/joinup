@@ -1,0 +1,133 @@
+uuid: c1e157bb-9ed7-4870-ae10-be530c9bd326
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.node.distribution.access_url
+    - field.field.node.distribution.description
+    - field.field.node.distribution.field_licence
+    - field.field.node.distribution.field_state
+    - field.field.node.distribution.file_size
+    - field.field.node.distribution.format
+    - field.field.node.distribution.og_audience
+    - field.field.node.distribution.process_status
+    - field.field.node.distribution.representation_technique
+    - node.type.distribution
+  module:
+    - asset_distribution
+    - digital_size_formatter
+    - field_group
+    - options
+    - template_suggestion
+    - text
+    - user
+third_party_settings:
+  field_group:
+    group_categorisation:
+      children:
+        - format
+        - process_status
+        - representation_technique
+      label: Categorisation
+      parent_name: ''
+      region: content
+      weight: 4
+      format_type: html_element
+      format_settings:
+        classes: ''
+        show_empty_fields: false
+        id: ''
+        element: div
+        show_label: true
+        label_element: h3
+        label_element_classes: ''
+        attributes: ''
+        effect: none
+        speed: fast
+id: node.distribution.default
+targetEntityType: node
+bundle: distribution
+mode: default
+content:
+  access_url:
+    type: tracked_hosted_file_download
+    label: hidden
+    settings:
+      hosted_files_title: Download
+      remote_files_title: External
+      show_remote_files: true
+    third_party_settings:
+      template_suggestion:
+        template_suggestion: no_wrappers
+    weight: 3
+    region: content
+  description:
+    type: text_default
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 0
+    region: content
+  field_licence:
+    type: entity_reference_label
+    label: hidden
+    settings:
+      link: true
+    third_party_settings:
+      template_suggestion:
+        template_suggestion: fieldset
+    weight: 1
+    region: content
+  field_state:
+    type: list_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 5
+    region: content
+  file_size:
+    type: digital_size
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 2
+    region: content
+  format:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: false
+    third_party_settings:
+      template_suggestion:
+        template_suggestion: ''
+    weight: 5
+    region: content
+  process_status:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: false
+    third_party_settings:
+      template_suggestion:
+        template_suggestion: ''
+    weight: 6
+    region: content
+  representation_technique:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: false
+    third_party_settings:
+      template_suggestion:
+        template_suggestion: ''
+    weight: 7
+    region: content
+hidden:
+  download_count: true
+  langcode: true
+  links: true
+  og_audience: true
+  published_at: true
+  report: true
+  search_api_excerpt: true
+  uri: true

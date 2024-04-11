@@ -1,0 +1,29 @@
+uuid: e76561b8-86be-4368-ab4a-8d19abd18b22
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.description
+    - filter.format.content_editor
+    - node.type.distribution
+  module:
+    - text
+third_party_settings:
+  rdf_sync:
+    processed:
+      predicate: 'http://purl.org/dc/terms/description'
+      type: null
+id: node.distribution.description
+field_name: description
+entity_type: node
+bundle: distribution
+label: Description
+description: ''
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  allowed_formats:
+    - content_editor
+field_type: text_long
