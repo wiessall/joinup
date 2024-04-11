@@ -1,0 +1,11 @@
+uuid: 32942f46-ad4e-48e8-8292-71395af8a2ac
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.licence
+id: node.licence
+target_entity_type_id: node
+target_bundle: licence
+default_langcode: site_default
+language_alterable: false

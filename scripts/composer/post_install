@@ -11,6 +11,8 @@ then
   npm ci --no-progress
 fi
 
+source scripts/composer/download_licences
+
 # Done, if we're building the distribution.
 if [ "$BUILD_DISTRO" = "1" ]
 then
