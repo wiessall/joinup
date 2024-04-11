@@ -26,7 +26,7 @@ Feature:
     And the following distributions:
       | title                | description           | parent            | access url | state     |
       | Sitemap distribution | Some kind of download | Sitemap release 1 | test.zip   | published |
-    And the following licences:
+    And licence content:
       | title           | description |
       | Sitemap licence | Not allowed |
     And "custom_page" content:
@@ -82,7 +82,6 @@ Feature:
       | Sitemap solution draft   |
       | Sitemap release 2        |
       | Sitemap distribution     |
-      | Sitemap licence          |
       | Sitemap secretariat      |
     And I should not see the absolute urls of the following content entities:
       | Sitemap custom page of draft                    |
@@ -93,6 +92,7 @@ Feature:
       | Sitemap document published but parent is not    |
       | Sitemap event draft                             |
       | Sitemap event published but parent is not       |
+      | Sitemap licence                                 |
       | Sitemap news draft                              |
       | Sitemap news published and recent               |
       | Sitemap news published but parent is not        |
@@ -115,7 +115,6 @@ Feature:
       | Sitemap solution published   |
       | Sitemap release 1            |
       | Sitemap release 2            |
-      | Sitemap licence              |
       | Sitemap secretariat          |
     And I should not see the absolute urls of the following content entities:
       | Sitemap custom page of draft                   |
@@ -131,6 +130,7 @@ Feature:
       | Sitemap event published                        |
       | Sitemap event archived                         |
       | Sitemap event published but parent is not      |
+      | Sitemap licence                                |
       | Sitemap news draft                             |
       | Sitemap news published but old                 |
       | Sitemap news archived                          |
@@ -164,7 +164,6 @@ Feature:
       | Sitemap solution draft   |
       | Sitemap release 2        |
       | Sitemap distribution     |
-      | Sitemap licence          |
       | Sitemap secretariat      |
     And I should not see the absolute urls of the following content entities:
       | Sitemap custom page of draft                   |
@@ -174,6 +173,7 @@ Feature:
       | Sitemap document published but parent is not   |
       | Sitemap event draft                            |
       | Sitemap event published but parent is not      |
+      | Sitemap licence                                |
       | Sitemap news draft                             |
       | Sitemap news published but parent is not       |
       | Sitemap owner                                  |

@@ -46,8 +46,8 @@ function state_machine_permissions_node_create_access(AccountInterface $account,
     return AccessResult::neutral();
   }
 
-  if (empty($context['group']) && $entity_bundle === 'custom_page') {
-    return AccessResult::neutral('Custom pages can be created as individual landing pages.');
+  if (empty($context['group']) && in_array($entity_bundle, ['custom_page', 'licence'], TRUE)) {
+    return AccessResult::neutral('Custom pages and licences can be created as individual pages.');
   }
 
   if (empty($context['group'])) {

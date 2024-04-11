@@ -13,10 +13,9 @@ Feature: In order to avoid users changing federated values
     And the following contact:
       | name  | John Federator's contact  |
       | email | JohnFederator@example.com |
-    And the following licence:
-      | title       | A federated licence       |
-      | description | Licence agreement details |
-      | type        | Public domain             |
+    And licence content:
+      | title               | description               | licence type  |
+      | A federated licence | Licence agreement details | Public domain |
     And the following collection:
       | title               | A federated collection   |
       | logo                | logo.png                 |

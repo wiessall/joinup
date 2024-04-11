@@ -15,6 +15,7 @@ dependencies:
     - node.type.document
     - node.type.glossary
     - node.type.owner
+    - node.type.licence
     - taxonomy.vocabulary.legal_type
   module:
     - asset_distribution
@@ -122,8 +123,7 @@ permissions:
   - 'create event_logo media'
   - 'create field_is_eif_category'
   - 'create field_is_eif_recommendation'
-  - 'create licence rdf entity'
-  - 'create licence rdf entity'
+  - 'create licence content'
   - 'create news_logo media'
   - 'create paragraph content 1_column_layout'
   - 'create paragraph content 2_column_featured_left'
@@ -159,7 +159,7 @@ permissions:
   - 'delete any document content'
   - 'delete any event_logo media'
   - 'delete any file'
-  - 'delete any licence rdf entity'
+  - 'delete any licence content'
   - 'delete any news_logo media'
   - 'delete any owner content'
   - 'delete any solution_logo media'
@@ -195,7 +195,7 @@ permissions:
   - 'edit any discussion_logo media'
   - 'edit any event_logo media'
   - 'edit any glossary content'
-  - 'edit any licence rdf entity'
+  - 'edit any licence content'
   - 'edit any news_logo media'
   - 'edit any owner content'
   - 'edit any solution rdf entity'
@@ -210,7 +210,6 @@ permissions:
   - 'edit sitewide alert entities'
   - 'edit terms in legal_type'
   - 'edit webform variants'
-  - 'execute developers_italia pipeline'
   - 'execute dpsi pipeline'
   - 'execute eu_sic pipeline'
   - 'execute joinup_collection pipeline'
@@ -290,7 +289,6 @@ permissions:
   - 'perform solution_workflow workflow unarchive transition on any entity'
   - 'perform solution_workflow workflow update_validated transition on any entity'
   - 'perform solution_workflow workflow validate transition on any entity'
-  - 'reset developers_italia pipeline'
   - 'reset dpsi pipeline'
   - 'reset eu_sic pipeline'
   - 'reset joinup_collection pipeline'
