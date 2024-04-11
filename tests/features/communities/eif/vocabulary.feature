@@ -6,7 +6,7 @@ Feature:
 
   Scenario: EIF recommendations are available to view.
     Given I am not logged in
-    When I visit "/taxonomy/term/http_e_f_fdata_ceuropa_ceu_fBC1"
+    When I visit the page of the entity having "http://data.europa.eu/BC1" as RDF resource
     Then I should see the heading "Basic Component 1: Coordination function"
     And I should see the text "The coordination function ensures that needs are identified and appropriate services are invoked and orchestrated to provide a European public service."
 
@@ -58,21 +58,13 @@ Feature:
       | Lager    | published | Demography | EIF Toolbox |                                    |
 
     # Underlying Principle 1.
-    When I go to "/taxonomy/term/http_e_f_fdata_ceuropa_ceu_fRec1"
+    When I visit the page of the entity having "http://data.europa.eu/Rec1" as RDF resource
     Then I should see the "Balker" tile
     And I should see the "Corridor" tile
     But I should not see the "Lager" tile
 
     # Underlying Principle 2
-    When I go to "/taxonomy/term/http_e_f_fdata_ceuropa_ceu_fRec2"
+    When I visit the page of the entity having "http://data.europa.eu/Rec2" as RDF resource
     Then I should see the "Balker" tile
     But I should not see the "Corridor" tile
     And I should not see the "Lager" tile
-
-    # Topic should not list entities as well.
-    Given I am logged in as a moderator
-    When I click "RDF ID converter" in the "Administration toolbar" region
-    And I fill in "RDF entity ID or a URL" with "http://joinup.eu/ontology/topic#demography"
-    And I press "Go!"
-    Then I should see the heading "Demography"
-    But I should not see the "Lager" tile

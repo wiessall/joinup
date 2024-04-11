@@ -120,6 +120,7 @@ module:
   joinup_sparql: 0
   joinup_stats: 0
   joinup_subscription: 0
+  joinup_taxonomy: 0
   joinup_tiles: 0
   joinup_tour: 0
   joinup_user: 0
@@ -186,7 +187,7 @@ module:
   rdf_export: 0
   rdf_meta_entity: 0
   rdf_schema_field_validation: 0
-  rdf_taxonomy: 0
+  rdf_sync: 0
   redirect: 0
   responsive_image: 0
   rest: 0
