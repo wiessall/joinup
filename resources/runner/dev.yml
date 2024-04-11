@@ -11,6 +11,7 @@ dev:
     - field_ui
     - masquerade
     - memcache_admin
+    - og_ui
     - page_manager_ui
     - stage_file_proxy
     - views_ui
