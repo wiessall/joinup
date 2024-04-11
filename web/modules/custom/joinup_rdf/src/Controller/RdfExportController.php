@@ -122,8 +122,8 @@ class RdfExportController extends ControllerBase {
    *   An AccessException is thrown if the entity couldn't be loaded.
    */
   protected function getEntity(RouteMatchInterface $route_match) {
-    $entity_type = $route_match->getRouteObject()->getOption('_joinup_rdf_export_entity_type');
-    $entity = $route_match->getParameter($entity_type);
+    $entity_type_id = $route_match->getRouteObject()->getOption('_joinup_rdf_export_entity_type');
+    $entity = $route_match->getParameter($entity_type_id);
     if ($entity instanceof EntityInterface) {
       return $entity;
     }
