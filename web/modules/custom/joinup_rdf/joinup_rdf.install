@@ -8,6 +8,8 @@
 declare(strict_types=1);
 
 use Drupal\Component\Serialization\Json;
+use Drupal\Core\File\FileSystemInterface;
+use Drupal\Core\Serialization\Yaml;
 
 /**
  * Performs checks for the RDF entities and its storage.
@@ -141,7 +143,7 @@ function joinup_rdf_update_110403(): void {
 /**
  * Delete leftover path aliases of licence RDF entities.
  */
-function joinup_rdf_update_110404(&$sandbox): string {
+function joinup_rdf_update_110404(array &$sandbox): string {
   if (!isset($sandbox['ids'])) {
     $sandbox['ids'] = \Drupal::database()->select('path_alias', 'pa')
       ->fields('pa', ['id'])
@@ -162,4 +164,22 @@ function joinup_rdf_update_110404(&$sandbox): string {
   $sandbox['#finished'] = $sandbox['processed'] / $sandbox['total'];
 
   return "Deleted $deletedCount licence aliases ({$sandbox['processed']} / {$sandbox['total']}) total";
+}
+
+/**
+ * Delete asset distribution entities.
+ */
+function joinup_rdf_update_110405(): void {
+  $store = \Drupal::getContainer()->get('joinup_sparql.graph_store.helper')->createGraphStore();
+  $distributions = $store->get('http://joinup.eu/asset_distribution/published')->toRdfPhp();
+  $dir = 'private://distributions';
+  if (!\Drupal::getContainer()->get('file_system')->prepareDirectory($dir, FileSystemInterface::CREATE_DIRECTORY | FileSystemInterface::MODIFY_PERMISSIONS)) {
+    throw new \Exception("Directory '$dir' cannot be created or is not writable");
+  }
+  $delta = 0;
+  foreach (array_chunk($distributions, 100, TRUE) as $chunk) {
+    file_put_contents($dir . '/' . ++$delta . '.yml', Yaml::encode($chunk));
+  }
+  $sparql = \Drupal::getContainer()->get('sparql.endpoint');
+  $sparql->update("CLEAR GRAPH <http://joinup.eu/asset_distribution/published>;");
 }
