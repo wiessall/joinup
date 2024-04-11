@@ -1,6 +1,11 @@
 /**
  * @file
- * Make group header sticky when scrolling.
+ * Make group header sticky/fixed when scrolling.
+ *
+ * We use position fixed here because the height of the header gets resized and
+ * position sticky doesn't deal well with this.
+ * @see https://stackoverflow.com/questions/44567125/position-sticky-scroll-bouncing-when-combined-with-javascript-height-adjustme
+ * @see https://issues.chromium.org/issues/41326022
  */
 // prettier-ignore
 (function (Drupal, displace, once) {
@@ -11,25 +16,18 @@
         return;
       }
 
-      // The region-header is used to apply sticky positioning,
+      // Get required regions.
       const regionHeader = context.querySelector(".region-header");
-      if (!regionHeader) {
+      const regionHeaderInner = regionHeader.querySelector(".region-header__inner");
+      if (!regionHeader || !regionHeaderInner) {
         return;
       }
-
-      // Set fixed height for the sticky div.
-      regionHeader.style.height = `${regionHeader.offsetHeight}px`;
-
-      // Insert placeholder div to determine initial position.
-      const regionHeaderPlaceholder = document.createElement("div");
-      regionHeaderPlaceholder.classList.add("region-header-placeholder");
-      regionHeader.parentNode.insertBefore(regionHeaderPlaceholder, regionHeader);
 
       // Init sticky behavior, acts on scroll event.
       const onScroll = () => {
         const scrollPosition = window.scrollY || document.documentElement.scrollTop;
-        const isSticky = (scrollPosition + displace.offsets.top) > regionHeaderPlaceholder.offsetTop;
-        regionHeader.classList.toggle("sticky-top", isSticky);
+        const isSticky = (scrollPosition + displace.offsets.top) > regionHeader.offsetTop;
+        regionHeaderInner.classList.toggle("fixed-top", isSticky);
       };
       onScroll();
       window.addEventListener("scroll", onScroll);
