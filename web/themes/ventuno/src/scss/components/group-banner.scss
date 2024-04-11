@@ -1,29 +1,25 @@
 @import "../partials/core";
 
-// Position sticky related rules.
-// @see Drupal.behaviors.addStickyClass
+// Position fixed related rules.
+// @see Drupal.behaviors.stickyGroupHeader
 .region-header {
-  pointer-events: none;
+  &__inner {
+    &.fixed-top {
+      top: var(--drupal-displace-offset-top, 0);
+      box-shadow: 0 .1rem .4rem .1rem rgba(0, 0, 0, .1);
 
-  .region-header-inner {
-    pointer-events: auto;
-  }
+      .group-banner {
+        > .container {
+          align-items: center !important;
+        }
 
-  &.sticky-top {
-    top: var(--drupal-displace-offset-top, 0);
+        &__logo {
+          width: 60px;
+        }
 
-    .region-header-inner {
-      box-shadow: 0 .1rem .4rem .1rem rgba(0,0,0,.1)
-    }
-    .group-banner {
-      > .container {
-        align-items: center !important;
-      }
-      &__logo {
-        width: 60px;
-      }
-      &__meta {
-        display: none !important;
+        &__meta {
+          display: none !important;
+        }
       }
     }
   }
