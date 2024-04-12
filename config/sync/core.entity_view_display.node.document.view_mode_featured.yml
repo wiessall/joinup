@@ -4,6 +4,7 @@ status: true
 dependencies:
   config:
     - core.entity_view_mode.node.view_mode_featured
+    - field.field.node.document.abstract
     - field.field.node.document.body
     - field.field.node.document.field_comments
     - field.field.node.document.field_document_logo
@@ -12,6 +13,7 @@ dependencies:
     - field.field.node.document.field_file
     - field.field.node.document.field_keywords
     - field.field.node.document.field_licence
+    - field.field.node.document.field_paragraphs_body
     - field.field.node.document.field_shared_in
     - field.field.node.document.field_short_title
     - field.field.node.document.field_site_featured
@@ -22,6 +24,7 @@ dependencies:
     - node.type.document
   module:
     - file_url
+    - layout_paragraphs
     - options
     - smart_trim
     - template_suggestion
@@ -75,6 +78,17 @@ content:
         template_suggestion: comma_separated
     weight: 3
     region: content
+  field_paragraphs_body:
+    type: layout_paragraphs
+    label: hidden
+    settings:
+      view_mode: preview
+      link: ''
+    third_party_settings:
+      template_suggestion:
+        template_suggestion: ''
+    weight: 0
+    region: content
   field_type:
     type: list_default
     label: hidden
@@ -85,6 +99,7 @@ content:
     weight: 1
     region: content
 hidden:
+  abstract: true
   featured: true
   field_comments: true
   field_document_logo: true
