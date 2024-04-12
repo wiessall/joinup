@@ -11,15 +11,28 @@ third_party_settings:
     parent: ''
   rdf_sync:
     type: 'http://xmlns.com/foaf/0.1/Agent'
+    uri_plugin: joinup_po_namespace
     fields:
       type:
         target_id:
           predicate: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type'
           type: resource
+      uid:
+        target_id:
+          predicate: 'http://joinup.eu/owner/uid'
+          type: 'xsd:integer'
       title:
         value:
           predicate: 'http://purl.org/dc/terms/title'
-          type: null
+          type: 'xsd:string'
+      langcode:
+        value:
+          predicate: 'http://joinup.eu/language'
+          type: 'xsd:string'
+      default_langcode:
+        value:
+          predicate: 'http://joinup.eu/language/default'
+          type: 'xsd:string'
 label_singular: owner
 label_plural: owners
 label_count:
