@@ -1,18 +1,11 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-         xmlns:skos="http://www.w3.org/2004/02/skos/core#"
-         xmlns:owl="http://www.w3.org/2002/07/owl#">
+         xmlns:skos="http://www.w3.org/2004/02/skos/core#">
 
-  <rdf:Description rdf:about="http://purl.org/adms/representationtechnique/1.0">
-    <skos:hasTopConcept>
-      <owl:NamedIndividual rdf:about="http://purl.org/adms/representationtechnique/BPMN">
-        <rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
-        <skos:inScheme rdf:resource="http://purl.org/adms/representationtechnique/1.0"/>
-        <skos:notation>BPMN</skos:notation>
-        <skos:prefLabel xml:lang="en">Business Process Modeling Notation</skos:prefLabel>
-      </owl:NamedIndividual>
-    </skos:hasTopConcept>
-
-  </rdf:Description>
+  <skos:Concept rdf:about="http://purl.org/adms/representationtechnique/BPMN">
+    <skos:inScheme rdf:resource="http://purl.org/adms/representationtechnique/1.0"/>
+    <skos:prefLabel xml:lang="en">Business Process Modeling Notation</skos:prefLabel>
+    <skos:definition xml:lang="en"></skos:definition>
+  </skos:Concept>
 
 </rdf:RDF>

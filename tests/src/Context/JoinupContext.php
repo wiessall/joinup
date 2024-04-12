@@ -44,6 +44,7 @@ use Drupal\node\Entity\Node;
 use Drupal\og\OgGroupAudienceHelperInterface;
 use Drupal\og\OgRoleInterface;
 use Drupal\paragraphs\Entity\Paragraph;
+use Drupal\rdf_sync\RdfSyncConnection;
 use GuzzleHttp\Client;
 use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\ExpectationFailedException;
@@ -1740,23 +1741,30 @@ class JoinupContext extends RawDrupalContext {
   }
 
   /**
-   * Asserts that the current url is the same as the parameter.
+   * Asserts that the current URL is the same as the parameter.
    *
    * The difference with the steps "Then I should be on" and "Then the url
    * should match" is that the later two strip off the query string and keep
    * only the path to compare.
    *
-   * @When the( current) relative url should be :url
+   * @param string $method
+   *   Options: 'be' for strict comparison, 'match' for regexp check.
+   * @param string $url
+   *   The URL to be checked.
+   *
+   * @Then the( current) relative url should :method :url
    */
-  public function relativeUrlMatches($url) {
+  public function relativeUrlMatches(string $method, string $url): void {
+    \assert(in_array($method, ['be', 'match'], TRUE));
+
+    $url = str_replace('\\"', '"', $url);
     $current_url = $this->getSession()->getCurrentUrl();
     $current_url = str_replace($this->getMinkParameter('base_url'), '', $current_url);
-    if ($current_url !== $url) {
-      $message = $this->t('Url "@current" does not match expected "@expected".', [
-        '@current' => $current_url,
-        '@expected' => $url,
-      ]);
-      throw new \Exception((string) $message);
+
+    $failed = ($method === 'be' && $current_url !== $url) || ($method === 'match' && !preg_match($url, $current_url));
+
+    if ($failed) {
+      throw new ExpectationFailedException("Url $current_url does not match expected $url.");
     }
   }
 
@@ -2060,7 +2068,7 @@ class JoinupContext extends RawDrupalContext {
       if (isset($fake_node->author)) {
         $user = user_load_by_name($fake_node->author);
         if ($user) {
-          $node->uid = $user->id();
+          $node->set('uid', $user->id());
         }
         unset($fake_node->author);
       }
@@ -3327,6 +3335,51 @@ JS;
           ],
         ])->save();
       }
+    }
+  }
+
+  /**
+   * Visits an entity canonical page given its RDF resource (URI).
+   *
+   * @param string $uri
+   *   The entity RDF URI.
+   *
+   * @throws \InvalidArgumentException
+   *   When for the passed URI no entity can be found.
+   *
+   * @Given I visit the page of the entity having :uri as RDF resource
+   */
+  public function visitEntityCanonicalPagePageByRdfUri(string $uri): void {
+    if (!$entity = \Drupal::getContainer()->get('rdf_sync.mapper')->getEntityByUri($uri)) {
+      throw new \InvalidArgumentException("No entity found for URI $uri");
+    }
+    $this->visitPath($entity->toUrl()->toString());
+  }
+
+  /**
+   * Asserts that a list of triples exists in a certain graph.
+   *
+   * Each row is a triple serialized as NTriples:
+   * | <http://subject1> <http://predicate1> <http://reference1>  |
+   * | <http://subject1> <http://predicate2> "value1"@en          |
+   * | <http://subject2> <http://predicate3> "value2"^^xsd:string |
+   *
+   * @param string $graph
+   *   The graph to be queried.
+   * @param \Behat\Gherkin\Node\TableNode $triples
+   *   The user data.
+   *
+   * @Then the following :graph graph triples should exist in the RDF backend:
+   */
+  public function assertTriples(string $graph, TableNode $triples): void {
+    $failedTriples = [];
+    foreach ($triples->getRows() as [$triple]) {
+      if (!RdfSyncConnection::query("ASK WHERE { GRAPH <$graph> { $triple } }")->getBoolean()) {
+        $failedTriples[] = $triple;
+      }
+    }
+    if ($failedTriples) {
+      throw new ExpectationFailedException(sprintf("Triple(s) %s doesn't exists in the RDF backend", implode(', ', $failedTriples)));
     }
   }
 
