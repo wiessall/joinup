@@ -1,7 +1,28 @@
 uuid: db5c3e58-530f-4372-a725-96daa52892a7
 langcode: en
 status: true
-dependencies: {  }
+dependencies:
+  module:
+    - joinup_taxonomy
+third_party_settings:
+  joinup_taxonomy:
+    locked: true
+  rdf_sync:
+    type: 'http://publications.europa.eu/resource/authority/file-type'
+    uri_plugin: null
+    fields:
+      vid:
+        target_id:
+          predicate: 'http://www.w3.org/2004/02/skos/core#inScheme'
+          type: resource
+      name:
+        value:
+          predicate: 'http://www.w3.org/2004/02/skos/core#prefLabel'
+          type: null
+      description:
+        processed:
+          predicate: 'http://www.w3.org/2004/02/skos/core#altLabel'
+          type: null
 _core:
   default_config_hash: s9Cs3GmX9KclcKa-duZTUhNyTk0AjVzmf9tFWf9R688
 name: 'File type'

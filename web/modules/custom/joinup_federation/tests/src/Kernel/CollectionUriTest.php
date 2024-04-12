@@ -12,6 +12,11 @@ use Drupal\rdf_entity\Entity\RdfEntityType;
  * Tests the invalid pipeline collection URI..
  *
  * @group joinup_federation
+ *
+ * @todo The whole federation functionality will be removed. For now just
+ *   disable testing. A final decision will be made in ISAICP-8376.
+ * @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-8376
+ * @group wip
  */
 class CollectionUriTest extends StepTestBase {
 
@@ -24,7 +29,6 @@ class CollectionUriTest extends StepTestBase {
     'field',
     'joinup_sparql',
     'rdf_schema_field_validation',
-    'rdf_taxonomy',
     'taxonomy',
     'text',
     'user',

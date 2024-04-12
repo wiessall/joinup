@@ -8,6 +8,11 @@ dependencies:
     - taxonomy.vocabulary.eif_conceptual_model
     - taxonomy.vocabulary.eif_principle
     - taxonomy.vocabulary.eif_recommendation
+third_party_settings:
+  rdf_sync:
+    target_id:
+      predicate: 'http://www.w3.org/2004/02/skos/core#relatedMatch'
+      type: resource
 id: taxonomy_term.eif_recommendation.field_eif_related_term
 field_name: field_eif_related_term
 entity_type: taxonomy_term

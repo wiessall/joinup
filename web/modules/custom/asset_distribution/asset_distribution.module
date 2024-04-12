@@ -19,6 +19,7 @@ use Drupal\asset_distribution\DistributionParentFieldItemList;
 use Drupal\asset_distribution\Entity\AssetDistribution;
 use Drupal\asset_distribution\Entity\AssetDistributionInterface;
 use Drupal\file_url\FileUrlHandler;
+use Drupal\joinup_taxonomy\Entity\MappedTerm;
 use Drupal\rdf_entity\RdfInterface;
 use Drupal\solution\Exception\MissingSolutionException;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
@@ -29,6 +30,12 @@ use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 function asset_distribution_entity_bundle_info_alter(array &$bundles): void {
   if (!empty($bundles['rdf_entity']['asset_distribution'])) {
     $bundles['rdf_entity']['asset_distribution']['class'] = AssetDistribution::class;
+  }
+  $vids = ['file_type', 'representation_technique'];
+  foreach ($vids as $vid) {
+    if (!empty($bundles['taxonomy_term'][$vid])) {
+      $bundles['taxonomy_term'][$vid]['class'] = MappedTerm::class;
+    }
   }
 }
 
@@ -137,6 +144,14 @@ function asset_distribution_rdf_entity_presave(RdfInterface $distribution): void
       if (!FileUrlHandler::isRemote($file)) {
         // Set the file size field.
         $distribution->get('field_ad_file_size')->setValue($file->getSize());
+
+        $tids = \Drupal::entityQuery('taxonomy_term')
+          ->accessCheck(FALSE)
+          ->condition('mime_type', $file->getMimeType())
+          ->execute();
+        if ($tids) {
+          $distribution->set('field_ad_format', reset($tids));
+        }
       }
     }
   }

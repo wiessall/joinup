@@ -10,6 +10,11 @@ use EasyRdf\Graph;
  * Tests the 'convert_to_adms2' pipeline step plugin.
  *
  * @group joinup_federation
+ *
+ * @todo The whole federation functionality will be removed. For now just
+ *   disable testing. A final decision will be made in ISAICP-8376.
+ * @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-8376
+ * @group wip
  */
 class ConvertToAdms2StepTest extends StepTestBase {
 
