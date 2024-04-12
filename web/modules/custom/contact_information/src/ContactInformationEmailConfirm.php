@@ -120,10 +120,10 @@ class ContactInformationEmailConfirm implements ContactInformationEmailConfirmIn
     $email_field = $contact_information->get('ci_email');
     if (!$email_field->isEmpty()) {
       $email = $email_field->value;
-      $email_is_used_elsewhere = (bool) $this->entityTypeManager->getStorage('rdf_entity')
+      $email_is_used_elsewhere = (bool) $this->entityTypeManager->getStorage('node')
         ->getQuery()
         ->accessCheck(FALSE)
-        ->condition('rid', 'contact_information')
+        ->condition('type', 'contact_information')
         ->condition('ci_email', $email)
         ->condition('id', $contact_information->id(), '<>')
         ->count()
