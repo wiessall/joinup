@@ -21,11 +21,7 @@ class PubliccodeValidationTest extends FetchTestBase {
     $this->assertNotFalse($createdNode);
     $this->assertTrue($createdNode->get('oss_publiccode_yml_version')
       ->isEmpty());
-    $notFoundLogEntries = $this->getLogEntries(
-      'Cannot decode publiccode.yml of @url. Message: @message'
-    );
-    $this->assertCount(1, $notFoundLogEntries, 'We should have error about invalid YAML');
-
+    $this->assertStringContainsString('Cannot decode publiccode.yml', $createdNode->getRevisionLogMessage());
     $this->fetchSolutions('yaml_become_valid_provider', 1);
 
     $updatedNode = $this->getNodeByTitle('Project 1.1', TRUE);
@@ -55,11 +51,8 @@ class PubliccodeValidationTest extends FetchTestBase {
 
     $this->fetchSolutions('yaml_become_invalid_provider', 1);
 
-    $notFoundLogEntries = $this->getLogEntries(
-      'Cannot decode publiccode.yml of @url. Message: @message'
-    );
-    $this->assertCount(1, $notFoundLogEntries, 'We should have error about invalid YAML');
     $updatedNode = $this->getNodeByTitle('group1/project-1-1', TRUE);
+    $this->assertStringContainsString('Cannot decode publiccode.yml', $updatedNode->getRevisionLogMessage());
     // Check some field set by resolver.
     $this->assertSame('0.2',
       $updatedNode->get('oss_publiccode_yml_version')->getString()

@@ -12,6 +12,13 @@ use Drupal\Component\Utility\Crypt;
 class Project {
 
   /**
+   * Silent errors.
+   *
+   * @var string[]
+   */
+  protected array $silentErrors = [];
+
+  /**
    * Creates a new result object.
    *
    * @param string $namespace
@@ -102,9 +109,36 @@ class Project {
   public function toArray(): array {
     $array = [];
     foreach (get_object_vars($this) as $property => $value) {
+      if ($property === 'silentErrors') {
+        continue;
+      }
       $array[$property] = $value;
     }
     return $array;
+  }
+
+  /**
+   * Add silent error.
+   *
+   * @param string $error
+   *   An error.
+   */
+  public function addSilentError(string $error): void {
+    $this->silentErrors[] = $error;
+  }
+
+  /**
+   * Gets silent errors.
+   *
+   * @return string
+   *   Errors.
+   */
+  public function getSilentErrors(): string {
+    if (empty($this->silentErrors)) {
+      return '';
+    }
+
+    return implode(", ", $this->silentErrors);
   }
 
 }

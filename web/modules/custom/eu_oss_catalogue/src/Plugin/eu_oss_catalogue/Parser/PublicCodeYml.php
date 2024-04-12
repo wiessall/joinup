@@ -146,19 +146,14 @@ class PublicCodeYml extends EuOssCatalogueParserPluginBase implements ContainerF
    */
   protected function getMetadata(Project $project): array {
     if (!isset($project->files['publiccodeYml'])) {
-      $this->logger->warning('publiccodeYml does not exist for @url', [
-        '@url' => $project->url,
-      ]);
+      $project->addSilentError("publiccodeYml does not exist for $project->url");
       return [];
     }
     try {
       return Yaml::decode($project->files['publiccodeYml']) ?? [];
     }
     catch (InvalidDataTypeException $exception) {
-      $this->logger->warning('Cannot decode publiccode.yml of @url. Message: @message', [
-        '@url' => $project->url,
-        '@message' => $exception->getMessage(),
-      ]);
+      $project->addSilentError("Cannot decode publiccode.yml of $project->url. Message: $exception->getMessage()");
       return [];
     }
   }
