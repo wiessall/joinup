@@ -1,10 +1,36 @@
 uuid: 3ccc3226-d08d-46e5-9cd2-1de5af636911
 langcode: en
 status: true
-dependencies: {  }
+dependencies:
+  module:
+    - joinup_taxonomy
 third_party_settings:
-  rdf_taxonomy:
+  joinup_taxonomy:
     locked: false
+  rdf_sync:
+    type: 'http://joinup.eu/legal-type#'
+    uri_plugin: null
+    fields:
+      vid:
+        target_id:
+          predicate: 'http://www.w3.org/2004/02/skos/core#topConceptOf'
+          type: resource
+      name:
+        value:
+          predicate: 'http://www.w3.org/2004/02/skos/core#prefLabel'
+          type: null
+      description:
+        processed:
+          predicate: 'http://www.w3.org/2004/02/skos/core#definition'
+          type: null
+      parent:
+        target_id:
+          predicate: 'http://www.w3.org/2004/02/skos/core#broaderTransitive'
+          type: resource
+      weight:
+        value:
+          predicate: 'http://joinup.eu/skos#weight'
+          type: 'xsd:integer'
 _core:
   default_config_hash: 3OTVrGRs8apPxQkH5XTXzQfuwxH0gLmq_c5nzKmmooU
 name: 'Legal type'
