@@ -181,7 +181,7 @@ class EuOssCatalogue implements EuOssCatalogueInterface {
   /**
    * {@inheritdoc}
    */
-  public function createOrUpdateSolution(string $providerPluginId, Project $project): ?OssSolutionInterface {
+  public function createOrUpdateSolution(string $providerPluginId, Project $project): void {
     /** @var \Drupal\eu_oss_catalogue\EuOssCatalogueProviderInterface $provider */
     $provider = $this->providerManager->createInstance($providerPluginId);
     /** @var \Drupal\eu_oss_catalogue\EuOssCatalogueParserInterface $parser */
@@ -227,7 +227,7 @@ class EuOssCatalogue implements EuOssCatalogueInterface {
     catch (\Exception $exception) {
       // The solution could not be saved.
       Error::logException($this->logger, $exception);
-      return NULL;
+      return;
     }
 
     if ($operationResult === SAVED_NEW) {
@@ -239,8 +239,6 @@ class EuOssCatalogue implements EuOssCatalogueInterface {
       ];
       $this->logger->info('Solution @solution was created.', $loggerArguments);
     }
-
-    return $solution;
   }
 
   /**
@@ -294,15 +292,14 @@ class EuOssCatalogue implements EuOssCatalogueInterface {
         ]);
         $solution->setRevisionLogMessage((string) $message);
         $solution->set('oss_archived', 1);
-        $solution->save();
       }
       else {
         $message = $this->t('Update, because of the only removal "@provider" source/catalogue', [
           '@provider' => $provider->getPluginDefinition()['label'],
         ]);
         $solution->setRevisionLogMessage((string) $message);
-        $solution->save();
       }
+      $solution->save();
     }
   }
 
