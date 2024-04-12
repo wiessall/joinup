@@ -153,7 +153,7 @@ class PublicCodeYml extends EuOssCatalogueParserPluginBase implements ContainerF
       return Yaml::decode($project->files['publiccodeYml']) ?? [];
     }
     catch (InvalidDataTypeException $exception) {
-      $project->addSilentError("Cannot decode publiccode.yml of $project->url. Message: $exception->getMessage()");
+      $project->addSilentError("Cannot decode publiccode.yml of $project->url. Message: {$exception->getMessage()}");
       return [];
     }
   }
