@@ -4,10 +4,9 @@ declare(strict_types=1);
 
 namespace Drupal\topic\Entity;
 
-use Drupal\rdf_taxonomy\Entity\RdfTerm;
+use Drupal\joinup_taxonomy\Entity\MappedTerm;
 
 /**
  * Bundle class for topic terms.
  */
-class Topic extends RdfTerm implements TopicInterface {
-}
+class Topic extends MappedTerm implements TopicInterface {}
