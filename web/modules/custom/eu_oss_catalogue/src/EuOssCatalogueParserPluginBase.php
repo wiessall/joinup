@@ -13,7 +13,6 @@ use Drupal\Core\Language\LanguageInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Logger\LoggerChannelInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
-use Drupal\Core\Utility\Error;
 use Drupal\eu_oss_catalogue\Entity\OssSolutionInterface;
 use Drupal\eu_oss_catalogue\Model\Project;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -85,7 +84,7 @@ abstract class EuOssCatalogueParserPluginBase extends PluginBase implements EuOs
   /**
    * {@inheritdoc}
    */
-  final public function parse(Project $project, EuOssCatalogueProviderInterface $provider): ?OssSolutionInterface {
+  final public function parse(Project $project, EuOssCatalogueProviderInterface $provider): OssSolutionInterface {
     $nodeStorage = $this->entityTypeManager->getStorage('node');
 
     // For now, we're using the solution URL as UUID.
@@ -94,39 +93,33 @@ abstract class EuOssCatalogueParserPluginBase extends PluginBase implements EuOs
     $solution = $solutions ? reset($solutions) : $nodeStorage->create(['type' => 'oss_solution']);
     \assert($solution instanceof OssSolutionInterface);
 
-    try {
-      // Populate project metadata array. This array is used by some parsers to
-      // add metadata to the final stored node via resolvers.
-      $metadata = $this->getMetadata($project);
+    // Populate project metadata array. This array is used by some parsers to
+    // add metadata to the final stored node via resolvers.
+    $metadata = $this->getMetadata($project);
 
-      $latestReleaseDate = $project->latestReleaseDate ?
-        new DrupalDateTime($project->latestReleaseDate) : NULL;
+    $latestReleaseDate = $project->latestReleaseDate ?
+      new DrupalDateTime($project->latestReleaseDate) : NULL;
 
-      $solution
-        ->set('title', $this->getTitle($project, $metadata))
-        ->set('oss_git_url', $project->url)
-        ->set('oss_hosting_platform', $project->platform)
-        ->set('oss_default_branch', $project->defaultBranch)
-        ->set('oss_git_forks', $project->numberOfForks)
-        ->set('oss_git_stars', $project->numberOfStars)
-        ->set('oss_git_open_issues', $project->numberOfIssues)
-        ->set('oss_software_version', $project->latestReleaseTag)
-        ->set('oss_release_date', $latestReleaseDate?->format('Y-m-d'))
-        ->set('oss_platform_reference', $project->platformReference)
-        ->set('oss_git_description', [
-          'value' => $project->description,
-          'format' => 'markdown',
-        ])
-        ->set('oss_logo', $project->logo)
-        ->set('oss_git_open_pull_requests', $project->numberOfPullRequests)
-        ->addProvider($provider);
+    $solution
+      ->set('title', $this->getTitle($project, $metadata))
+      ->set('oss_git_url', $project->url)
+      ->set('oss_hosting_platform', $project->platform)
+      ->set('oss_default_branch', $project->defaultBranch)
+      ->set('oss_git_forks', $project->numberOfForks)
+      ->set('oss_git_stars', $project->numberOfStars)
+      ->set('oss_git_open_issues', $project->numberOfIssues)
+      ->set('oss_software_version', $project->latestReleaseTag)
+      ->set('oss_release_date', $latestReleaseDate?->format('Y-m-d'))
+      ->set('oss_platform_reference', $project->platformReference)
+      ->set('oss_git_description', [
+        'value' => $project->description,
+        'format' => 'markdown',
+      ])
+      ->set('oss_logo', $project->logo)
+      ->set('oss_git_open_pull_requests', $project->numberOfPullRequests)
+      ->addProvider($provider);
 
-      $this->doParse($solution, $project, $metadata, $provider);
-    }
-    catch (\Throwable $exception) {
-      Error::logException($this->logger, $exception);
-      return NULL;
-    }
+    $this->doParse($solution, $project, $metadata, $provider);
 
     return $solution;
   }

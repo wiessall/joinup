@@ -32,9 +32,9 @@ interface EuOssCatalogueParserInterface extends PluginInspectionInterface {
    * @param \Drupal\eu_oss_catalogue\EuOssCatalogueProviderInterface $provider
    *   The provider plugin instance.
    *
-   * @return \Drupal\eu_oss_catalogue\Entity\OssSolutionInterface|null
+   * @return \Drupal\eu_oss_catalogue\Entity\OssSolutionInterface
    *   The new or updates OSS Solution node. If NULL is returned, parse failed.
    */
-  public function parse(Project $project, EuOssCatalogueProviderInterface $provider): ?OssSolutionInterface;
+  public function parse(Project $project, EuOssCatalogueProviderInterface $provider): OssSolutionInterface;
 
 }
