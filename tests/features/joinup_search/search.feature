@@ -189,9 +189,9 @@ Feature: Global search
     Given the following owner:
       | name              | type    |
       | Responsible owner | Company |
-    And the following contact:
-      | name  | Go-to contact     |
-      | email | go-to@example.com |
+    And contact_information content:
+      | name          | email             |
+      | Go-to contact | go-to@example.com |
     And the following collections:
       | title            | description                                          | abstract                       | state     |
       | Collection alpha | <p>collection <strong>beta</strong> description.</p> | The collection gamma abstract. | published |
@@ -222,10 +222,9 @@ Feature: Global search
     Given the following owner:
       | name              | type    |
       | Responsible owner | Company |
-    And the following contact:
-      | name  | Go-to contact     |
-      | email | go-to@example.com |
-      | state | validated         |
+    And contact_information content:
+      | name          | email             | state     |
+      | Go-to contact | go-to@example.com | validated |
     And the following collections:
       | title            | description                                          | abstract                       | state     |
       | Collection alpha | <p>collection <strong>beta</strong> description.</p> | The collection gamma abstract. | published |
@@ -851,21 +850,21 @@ Feature: Global search
     Given the following owner:
       | name        | type    |
       | Renew owner | Company |
-    And the following contact:
-      | name  | Gor-to contact     |
-      | email | gor-to@example.com |
+    And contact_information content:
+      | name           | email              |
+      | Gor-to contact | gor-to@example.com |
     And the following collections:
-      | title             | description                                          | abstract                      | state     |
-      | Pull alpha        | <p>collection <strong>pull</strong> description.</p> | The collection pull abstract. | published |
-      | Col for Sol javi  | <p>collection for the solution javi.</p>             | Random abstract.              | published |
-      | Roll alpha        | <p>collection <strong>roll</strong> description.</p> | The collection roll abstract. | archived  |
-      | Col for Sol net   | <p>collection for the solution net.</p>              | Loky and Rocky.               | archived  |
+      | title            | description                                          | abstract                      | state     |
+      | Pull alpha       | <p>collection <strong>pull</strong> description.</p> | The collection pull abstract. | published |
+      | Col for Sol javi | <p>collection for the solution javi.</p>             | Random abstract.              | published |
+      | Roll alpha       | <p>collection <strong>roll</strong> description.</p> | The collection roll abstract. | archived  |
+      | Col for Sol net  | <p>collection for the solution net.</p>              | Loky and Rocky.               | archived  |
     And the following solutions:
-      | title         | description                                                | abstract                    | keywords | owner       | contact information | collection        | state     |
-      | Solution pull | <p>This is the solution <strong>pull</strong> description. | The solution pull abstract. | Alphabet | Renew owner | Gor-to contact      | Pull alpha        | published |
-      | Solution javi | <p>This is the solution <strong>javi</strong> description. |                             | Alphabet | Renew owner | Gor-to contact      | Col for Sol javi  | published |
-      | Solution roll | <p>This is the solution <strong>roll</strong> description. | The solution roll abstract. | Alphabet | Renew owner | Gor-to contact      | Roll alpha        | published |
-      | Solution net  | <p>This is the solution <strong>net</strong> description.  |                             | Alphabet | Renew owner | Gor-to contact      | Col for Sol net   | published |
+      | title         | description                                                | abstract                    | keywords | owner       | contact information | collection       | state     |
+      | Solution pull | <p>This is the solution <strong>pull</strong> description. | The solution pull abstract. | Alphabet | Renew owner | Gor-to contact      | Pull alpha       | published |
+      | Solution javi | <p>This is the solution <strong>javi</strong> description. |                             | Alphabet | Renew owner | Gor-to contact      | Col for Sol javi | published |
+      | Solution roll | <p>This is the solution <strong>roll</strong> description. | The solution roll abstract. | Alphabet | Renew owner | Gor-to contact      | Roll alpha       | published |
+      | Solution net  | <p>This is the solution <strong>net</strong> description.  |                             | Alphabet | Renew owner | Gor-to contact      | Col for Sol net  | published |
 
     When I visit the search page
     And I should see the "Pull alpha" tile

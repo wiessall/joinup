@@ -8,6 +8,7 @@ use Behat\Behat\Hook\Scope\AfterScenarioScope;
 use Behat\Gherkin\Node\TableNode;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\contact_information\ContactInformationEmailConfirmInterface;
+use Drupal\DrupalExtension\Hook\Scope\BeforeNodeCreateScope;
 use Drupal\email_confirmer\EmailConfirmationInterface;
 use Drupal\joinup\Traits\AliasTranslatorTrait;
 use Drupal\joinup\Traits\EntityTrait;
@@ -55,60 +56,29 @@ class ContactInformationContext extends RawDrupalContext {
   }
 
   /**
-   * Creates a contact information entity with data provided in a table.
+   * Acts before node creation and translates the human readable fields.
    *
-   * Table format:
-   * | email | foo@bar.com, baz@qux.com |
-   * | name  | Jack Smith               |
+   * @param \Drupal\DrupalExtension\Hook\Scope\BeforeNodeCreateScope $scope
+   *   The before node create scope.
    *
-   * @param \Behat\Gherkin\Node\TableNode $contact_table
-   *   The contact table.
-   *
-   * @throws \Exception
-   *   Thrown when a column name is incorrect.
-   *
-   * @Given (the following )contact:
+   * @BeforeNodeCreate
    */
-  public function givenContactEntity(TableNode $contact_table): void {
-    $values = [];
-
-    foreach ($contact_table->getRowsHash() as $key => $value) {
-      // Replace the column aliases with the actual field names.
-      $key = self::translateFieldNameAlias($key, self::contactInformationFieldAliases());
-      $values[$key] = $value;
+  public function beforeNodeCreate(BeforeNodeCreateScope $scope): void {
+    $node = $scope->getEntity();
+    if ($node->type !== 'contact_information') {
+      return;
     }
 
-    $this->createContactInformation($values);
-  }
-
-  /**
-   * Creates a number of contact information with data provided in a table.
-   *
-   * Table format:
-   * @codingStandardsIgnoreStart
-   * | name                   | email                            | website url                            | author      |
-   * | John Irwin             | foo@example.com, bar@example.com | http://google.com                      | Author name |
-   * | Jack Smith, John Irwin | baz@example.com                  | http://yahoo.com, http://altavista.com |             |
-   * @codingStandardsIgnoreEnd
-   *
-   * @param \Behat\Gherkin\Node\TableNode $contact_table
-   *   The contacts table.
-   *
-   * @throws \Exception
-   *   Thrown when a column name is incorrect.
-   *
-   * @Given (the following )contacts:
-   */
-  public function givenContactEntities(TableNode $contact_table): void {
-    foreach ($contact_table->getColumnsHash() as $entity) {
-      $values = [];
-
-      foreach ($entity as $key => $value) {
-        $key = self::translateFieldNameAlias($key, self::contactInformationFieldAliases());
-        $values[$key] = $value;
+    $keys = array_keys((array) $node);
+    foreach ($keys as $key) {
+      if ($key === 'type') {
+        continue;
       }
 
-      $this->createContactInformation($values);
+      // Replace the column aliases with the actual field names.
+      $translated = self::translateFieldNameAlias($key, self::contactInformationFieldAliases());
+      $node->$translated = $node->$key;
+      unset($node->$key);
     }
   }
 
@@ -173,7 +143,6 @@ class ContactInformationContext extends RawDrupalContext {
   protected static function contactInformationFieldAliases(): array {
     // Mapping alias - field name.
     return [
-      'uri' => 'id',
       'email' => 'ci_email',
       'name' => 'title',
       'website url' => 'ci_webpage',

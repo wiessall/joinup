@@ -5,9 +5,9 @@ Feature: Solution editing.
   I need to be able to edit solutions through UI.
 
   Background:
-    Given the following contact:
-      | name  | Seward Shawn       |
-      | email | seward@example.com |
+    Given contact_information content:
+      | name         | email              |
+      | Seward Shawn | seward@example.com |
     And owner:
       | name      | type    |
       | Acme inc. | Company |

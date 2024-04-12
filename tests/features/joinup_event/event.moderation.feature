@@ -13,9 +13,9 @@ Feature: Event moderation
     And the following owner:
       | name     |
       | Alma Lee |
-    And the following contact:
-      | name  | Evs contact             |
-      | email | evs.contact@example.com |
+    And contact_information content:
+      | name        | email                   |
+      | Evs contact | evs.contact@example.com |
     And the following collection:
       | title               | Wet Lords             |
       | description         | The Forgotten Female. |
@@ -146,8 +146,8 @@ Feature: Event moderation
     And I go to the homepage of the "Wet Lords" collection
     And I click "Add event"
     When I fill in the following:
-      | Title             | Rainbow Beach                     |
-      | Short title       | Rainbow Beach                     |
+      | Title             | Rainbow Beach                         |
+      | Short title       | Rainbow Beach                         |
       | Description       | This is going to be an amazing event. |
       | Physical location | Worlds crossroad                      |
     And I fill the start date of the Date widget with "2018-08-30"
@@ -165,8 +165,8 @@ Feature: Event moderation
     And I go to the homepage of the "Wet Lords" collection
     And I click "Add event"
     When I fill in the following:
-      | Title             | Rainbow vinyls                     |
-      | Short title       | Rainbow vinyls                     |
+      | Title             | Rainbow vinyls                        |
+      | Short title       | Rainbow vinyls                        |
       | Description       | This is going to be an amazing event. |
       | Physical location | Worlds crossroad                      |
     And I fill the start date of the Date widget with "2018-08-30"

@@ -8,9 +8,9 @@ Feature:
     Given the following owner:
       | name          | type    |
       | Sitemap owner | Company |
-    And the following contact:
-      | name  | Sitemap secretariat             |
-      | email | sitemap.secretariat@example.com |
+    And contact_information content:
+      | name                | email                           |
+      | Sitemap secretariat | sitemap.secretariat@example.com |
     And the following collections:
       | title                        | state     |
       | Sitemap collection draft     | draft     |

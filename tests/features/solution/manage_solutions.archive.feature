@@ -8,12 +8,12 @@ Feature: When a solution is archived then its sub-content also should be archive
     And owner:
       | name        | type    |
       | The Company | Company |
-    And contact:
-      | name  | Liam Smith             |
-      | email | liam.smith@example.com |
-    And contact:
-      | name  | Jennifer Unconfirmed       |
-      | email | jennifer.smith@example.com |
+    And contact_information content:
+      | name       | email                  |
+      | Liam Smith | liam.smith@example.com |
+    And contact_information content:
+      | name                 | email                      |
+      | Jennifer Unconfirmed | jennifer.smith@example.com |
     And solution:
       | title               | Solution                         |
       | collection          | Collection                       |

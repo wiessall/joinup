@@ -8,10 +8,9 @@ Feature: Solution homepage
     Given the following owner:
       | name          |
       | Awesome owner |
-    And the following contact:
-      | name        | Awesome contact            |
-      | email       | awesomecontact@example.com |
-      | Website URL | http://example.com         |
+    And contact_information content:
+      | name            | email                      | Website URL        |
+      | Awesome contact | awesomecontact@example.com | http://example.com |
     Given the following solution:
       | title               | Petri net                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
       | description         | "<p>A <b>Petri net</b>, also known as a <b>place/transition (PT) net</b>, is one of several <a href=\"#mathematical\">mathematical</a> modeling languages for the description of distributed systems. It is a class of discrete event dynamic system. A Petri net is a directed bipartite graph, in which the nodes represent transitions (i.e. events that may occur, represented by bars) and places (i.e. conditions, represented by circles). The directed arcs describe which places are pre- and/or postconditions for which transitions (signified by arrows). Some sources state that Petri nets were invented in August 1939 by Carl Adam Petri - at the age of 13 - for the purpose of describing chemical processes.</p>" |
@@ -28,14 +27,14 @@ Feature: Solution homepage
       | modification date   | 2012-12-01T8:43                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
       | abstract            | Short abstract description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
     And the following release:
-      | title            | Petri net v1     |
-      | description      | A sample release |
-      | documentation    | text.pdf         |
-      | release number   | v1.1             |
-      | release notes    | Changed release  |
-      | is version of    | Petri net        |
-      | state            | published        |
-      | creation date    | 2022-12-21T13:00 |
+      | title          | Petri net v1     |
+      | description    | A sample release |
+      | documentation  | text.pdf         |
+      | release number | v1.1             |
+      | release notes  | Changed release  |
+      | is version of  | Petri net        |
+      | state          | published        |
+      | creation date  | 2022-12-21T13:00 |
 
     When I go to the homepage of the "Petri net" solution
     Then the page should be cacheable
@@ -121,9 +120,9 @@ Feature: Solution homepage
     Given the following owner:
       | name                  | type                  |
       | Chiricahua Foundation | Private Individual(s) |
-    And the following contact:
-      | name  | Geronimo             |
-      | email | geronimo@example.com |
+    And contact_information content:
+      | name     | email                |
+      | Geronimo | geronimo@example.com |
     And the following solutions:
       | title             | description     | logo     | state     | owner                 | contact information | solution type | topic       |
       | Chiricahua Server | Serving the web | logo.png | published | Chiricahua Foundation | Geronimo            | Business      | E-inclusion |
@@ -222,8 +221,8 @@ Feature: Solution homepage
       | Go to page 2        |
       | Current page        |
     But I should not see the following links:
-      | Go to next page     |
-      | Go to last page     |
+      | Go to next page |
+      | Go to last page |
 
     When I delete the "Distribution 13" asset distribution
     And I delete the "Distribution 14" asset distribution

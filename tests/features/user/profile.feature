@@ -128,11 +128,9 @@ Feature: User profile
       | title                 | author        | collection       | state     | created         |
       | Planting a tree howto | Corwin Robert | Botanic E.D.E.N. | published | 2017-10-30 9:30 |
     # Contact information and owner tiles should never be shown.
-    And the following contact:
-      | name        | Wibo Verhoeven             |
-      | email       | wibo.verhoeven@example.com |
-      | Website URL | http://example.com         |
-      | author      | Corwin Robert              |
+    And contact_information content:
+      | name           | email                      | Website URL        | author        |
+      | Wibo Verhoeven | wibo.verhoeven@example.com | http://example.com | Corwin Robert |
     And the following owner:
       | type                  | name                 | author        |
       | Private Individual(s) | Somboon De Laurentis | Corwin Robert |
@@ -250,18 +248,18 @@ Feature: User profile
       | Janny Robert      | janny.robert@example.com      |
       | Clarise Edwardson | clarise.edwardson@example.com |
     And the following collections:
-      | title            | description                           | logo     | state     | creation date    | author             |
-      | Lake E.D.E.N.    | European Deep Earth Nurturing project | logo.png | published | 2017-02-23 10:00 | Janny Robert       |
-      | Rose is red      | Better descriptions ever              | logo.png | published | 2017-02-23 10:00 | Clarise Edwardson  |
-      | Lone handling    | Because even flowers have feelings.   | logo.png | archived  | 2017-02-23 12:00 | Janny Robert       |
+      | title         | description                           | logo     | state     | creation date    | author            |
+      | Lake E.D.E.N. | European Deep Earth Nurturing project | logo.png | published | 2017-02-23 10:00 | Janny Robert      |
+      | Rose is red   | Better descriptions ever              | logo.png | published | 2017-02-23 10:00 | Clarise Edwardson |
+      | Lone handling | Because even flowers have feelings.   | logo.png | archived  | 2017-02-23 12:00 | Janny Robert      |
     And the following solutions:
       | title          | collection    | state     | creation date   | author       |
       | Sugar is sweet | Lake E.D.E.N. | archived  | 2015-03-03T8:00 | Janny Robert |
       | Salt is salty  | Lake E.D.E.N. | published | 2015-02-03T7:00 | Janny Robert |
     And discussion content:
-      | title                   | author          | collection    | state     | created         |
-      | Repopulating green iris | Janny Robert   | Lake E.D.E.N. | published | 2018-06-15 16:00 |
-      | Best plant comfort      | Janny Robert   | Lone handling | published | 2018-09-01 19:30 |
+      | title                   | author       | collection    | state     | created          |
+      | Repopulating green iris | Janny Robert | Lake E.D.E.N. | published | 2018-06-15 16:00 |
+      | Best plant comfort      | Janny Robert | Lone handling | published | 2018-09-01 19:30 |
     And document content:
       | title           | author       | collection    | state     | created          |
       | Cherry schedule | Janny Robert | Lake E.D.E.N. | published | 2017-05-13 16:00 |

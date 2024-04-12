@@ -125,7 +125,7 @@ class ContactInformationEmailConfirm implements ContactInformationEmailConfirmIn
         ->accessCheck(FALSE)
         ->condition('type', 'contact_information')
         ->condition('ci_email', $email)
-        ->condition('id', $contact_information->id(), '<>')
+        ->condition('nid', $contact_information->id(), '<>')
         ->count()
         ->execute();
       if (!$email_is_used_elsewhere) {

@@ -8,9 +8,9 @@ Feature: Collection membership administration
     Given the following owner:
       | name         |
       | James Wilson |
-    And the following contact:
-      | name  | Princeton-Plainsboro Teaching Hospital |
-      | email | info@princeton-plainsboro.us           |
+    And contact_information content:
+      | name                                   | email                        |
+      | Princeton-Plainsboro Teaching Hospital | info@princeton-plainsboro.us |
     And users:
       | Username          | Roles | E-mail                        | First name | Family name |
       # Authenticated user.
