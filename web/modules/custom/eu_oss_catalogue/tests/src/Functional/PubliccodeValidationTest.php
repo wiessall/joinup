@@ -12,7 +12,7 @@ namespace Drupal\Tests\eu_oss_catalogue\Functional;
 class PubliccodeValidationTest extends FetchTestBase {
 
   /**
-   * Solution was created from invalid YAML, updated to valid.
+   * The Solution was created from invalid YAML, updated to valid.
    */
   public function testUpdateToValid(): void {
     $this->fetchSolutions('yaml_become_valid_provider', 2);
@@ -42,7 +42,7 @@ class PubliccodeValidationTest extends FetchTestBase {
   }
 
   /**
-   * Solution was created from valid YAML, updated to invalid.
+   * The Solution was created from valid YAML, updated to invalid.
    */
   public function testUpdateToNotValid(): void {
     $this->fetchSolutions('yaml_become_invalid_provider', 2);
