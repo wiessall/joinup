@@ -44,7 +44,8 @@ class JoinupCollectionContext extends RawDrupalContext {
       'type' => 'contact_information',
       'title' => 'Contact name',
       'ci_email' => 'contact.email@example.com',
-    ])->save();
+    ]);
+    $node->save();
 
     // Create the Joinup collection.
     Rdf::create([
@@ -54,7 +55,7 @@ class JoinupCollectionContext extends RawDrupalContext {
       'field_ar_state' => 'published',
       'field_topic' => $this->getRandomTopic()->id(),
       'field_ar_owner' => 'http://example.com/owner/isa2',
-      'field_ar_contact_information' => $node->getUri(),
+      'field_ar_contact_information' => $node->id(),
     ])->save();
   }
 
