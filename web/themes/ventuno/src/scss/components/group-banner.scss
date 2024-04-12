@@ -6,6 +6,7 @@
   &__inner {
     &.fixed-top {
       top: var(--drupal-displace-offset-top, 0);
+      left: var(--drupal-displace-offset-left, 0);
       box-shadow: 0 .1rem .4rem .1rem rgba(0, 0, 0, .1);
 
       .group-banner {
