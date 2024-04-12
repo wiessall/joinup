@@ -1,7 +1,28 @@
 uuid: d95c6aba-62bc-41d1-be33-44296654314a
 langcode: en
 status: true
-dependencies: {  }
+dependencies:
+  module:
+    - joinup_taxonomy
+third_party_settings:
+  joinup_taxonomy:
+    locked: true
+  rdf_sync:
+    type: 'http://joinup.eu/taxonomy/solutionCategory#'
+    uri_plugin: null
+    fields:
+      vid:
+        target_id:
+          predicate: 'http://www.w3.org/2004/02/skos/core#inScheme'
+          type: resource
+      name:
+        value:
+          predicate: 'http://www.w3.org/2004/02/skos/core#prefLabel'
+          type: null
+      description:
+        processed:
+          predicate: 'http://www.w3.org/2004/02/skos/core#definition'
+          type: null
 _core:
   default_config_hash: PvceGPsDDAw9Uoa9hEr8DxsLfofzcREiPTf_fa4mlS8
 name: 'Solution category'
