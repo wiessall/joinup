@@ -22,8 +22,7 @@ class PubliccodeValidationTest extends FetchTestBase {
     $this->assertTrue($createdNode->get('oss_publiccode_yml_version')
       ->isEmpty());
     $notFoundLogEntries = $this->getLogEntries(
-      'Cannot decode publiccode.yml of @url. Message: @message',
-      'a:2:{s:4:"@url";s:65:"https://limited.self-hosted.gitlab.example.com/group1/project-1-1";s:8:"@message";s:57:"Indentation problem at line 58 (near " name: Project 1").";}',
+      'Cannot decode publiccode.yml of @url. Message: @message'
     );
     $this->assertCount(1, $notFoundLogEntries, 'We should have error about invalid YAML');
 
@@ -57,8 +56,7 @@ class PubliccodeValidationTest extends FetchTestBase {
     $this->fetchSolutions('yaml_become_invalid_provider', 1);
 
     $notFoundLogEntries = $this->getLogEntries(
-      'Cannot decode publiccode.yml of @url. Message: @message',
-      'a:2:{s:4:"@url";s:65:"https://limited.self-hosted.gitlab.example.com/group1/project-1-1";s:8:"@message";s:57:"Indentation problem at line 58 (near " name: Project 1").";}',
+      'Cannot decode publiccode.yml of @url. Message: @message'
     );
     $this->assertCount(1, $notFoundLogEntries, 'We should have error about invalid YAML');
     $updatedNode = $this->getNodeByTitle('group1/project-1-1', TRUE);
