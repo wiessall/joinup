@@ -86,8 +86,6 @@ class PublicCodeYml extends EuOssCatalogueParserPluginBase implements ContainerF
    * {@inheritdoc}
    */
   protected function doParse(OssSolutionInterface $solution, Project $project, array $metadata, EuOssCatalogueProviderInterface $provider): void {
-    parent::doParse($solution, $project, $metadata, $provider);
-
     foreach ($solution->getFields(FALSE) as $fieldName => $fieldItemList) {
       // It's a convention that all fields are prefixed with oss_*.
       if (!str_starts_with($fieldName, 'oss_')) {
