@@ -75,12 +75,12 @@ abstract class SelectedProjectProvider extends DevelopersItalia {
    */
   protected function wasCreated(string $gitUrl): bool {
     return $this->entityTypeManager->getStorage('node')
-       ->getQuery()
-       ->accessCheck(FALSE)
-       ->condition('oss_git_url', $gitUrl)
-       ->condition('type', 'oss_solution')
-       ->count()
-       ->execute() > 0;
+      ->getQuery()
+      ->accessCheck(FALSE)
+      ->condition('oss_git_url', $gitUrl)
+      ->condition('type', 'oss_solution')
+      ->count()
+      ->execute() > 0;
   }
 
   /**
