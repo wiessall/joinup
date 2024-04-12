@@ -7,6 +7,11 @@ dependencies:
     - node.type.owner
   module:
     - state_machine
+third_party_settings:
+  rdf_sync:
+    value:
+      predicate: 'http://joinup.eu/owner/workflow_status'
+      type: 'xsd:string'
 id: node.owner.field_state
 field_name: field_state
 entity_type: node

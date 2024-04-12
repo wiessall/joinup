@@ -5,6 +5,11 @@ dependencies:
   config:
     - field.storage.node.owner_name
     - node.type.owner
+third_party_settings:
+  rdf_sync:
+    value:
+      predicate: 'http://xmlns.com/foaf/0.1/name'
+      type: 'xsd:string'
 id: node.owner.owner_name
 field_name: owner_name
 entity_type: node
