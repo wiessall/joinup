@@ -126,9 +126,9 @@ Feature: Resend validation email from collection/solution about page
     Then I should not see the text "Please confirm your contact information to enable users to contact you"
 
   Scenario: Test the resend functionality for a contact created through API.
-    Given the following contact:
-      | email | existing@resend.com |
-      | name  | Existing to resend  |
+    Given contact_information content:
+      | name               | email               |
+      | Existing to resend | existing@resend.com |
     And solutions:
       | title                       | description          | state     | contact information |
       | Existing to resend solution | Default description. | published | Existing to resend  |
@@ -161,15 +161,15 @@ Feature: Resend validation email from collection/solution about page
     Then I should not see the text "Please confirm your contact information to enable users to contact you"
 
   Scenario: Regression test to verify permissions into multiple edge cases.
-    Given the following contact:
-      | email | some.resend@example.com |
-      | name  | Some Resend             |
+    Given contact_information content:
+      | name        | email                   |
+      | Some Resend | some.resend@example.com |
     And solutions:
       | title                       | description          | state     | contact information |
       | Existing to resend solution | Default description. | published | Some Resend         |
     And the following email confirmation requests:
-      | email                   | status    |
-      | some.resend@example.com | pending   |
+      | email                   | status  |
+      | some.resend@example.com | pending |
 
     When I am logged in as a moderator
     When I go to the "Existing to resend solution" solution

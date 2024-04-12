@@ -8,9 +8,9 @@ Feature: Editing collections
     Given the following owner:
       | name                 | type                    |
       | Organisation example | Non-Profit Organisation |
-    And the following contact:
-      | name  | Collection editorial             |
-      | email | collection.editorial@example.com |
+    And contact_information content:
+      | name                 | email                            |
+      | Collection editorial | collection.editorial@example.com |
     And collections:
       | title                 | logo     | abstract                                   | access url                             | closed | creation date    | description                               | content creation         | moderation | topic             | owner                | contact information  | state |
       | Überwaldean Land Eels | logo.png | Read up on all about <strong>dogs</strong> | http://dogtime.com/dog-breeds/profiles | yes    | 28-01-1995 12:05 | The Afghan Hound is elegance personified. | facilitators and authors | yes        | Supplier exchange | Organisation example | Collection editorial | draft |
@@ -42,12 +42,12 @@ Feature: Editing collections
     Given the following owner:
       | name            | type                    |
       | wysiwyg example | Non-Profit Organisation |
-    And the following contact:
-      | name  | wysiwyg editorial             |
-      | email | wysiwyg.editorial@example.com |
+    And contact_information content:
+      | name              | email                         |
+      | wysiwyg editorial | wysiwyg.editorial@example.com |
     And collections:
-      | title           | logo     | abstract                                   | access url                             | closed | creation date    | description                    | content creation         | moderation | topic             | owner           | contact information  | state |
-      | Rhyme Land Eels | logo.png | Read up on all about <strong>dogs</strong> | http://dogtime.com/dog-breeds/profiles | yes    | 28-01-1995 12:05 | Hound is elegance personified. | facilitators and authors | yes        | Supplier exchange | wysiwyg example | wysiwyg editorial    | draft |
+      | title           | logo     | abstract                                   | access url                             | closed | creation date    | description                    | content creation         | moderation | topic             | owner           | contact information | state |
+      | Rhyme Land Eels | logo.png | Read up on all about <strong>dogs</strong> | http://dogtime.com/dog-breeds/profiles | yes    | 28-01-1995 12:05 | Hound is elegance personified. | facilitators and authors | yes        | Supplier exchange | wysiwyg example | wysiwyg editorial   | draft |
     When I am logged in as a facilitator of the "Rhyme Land Eels" collection
     And I go to the homepage of the "Rhyme Land Eels" collection
 
@@ -73,12 +73,12 @@ Feature: Editing collections
     Given the following owner:
       | name                       | type                    |
       | Regression wysiwyg example | Non-Profit Organisation |
-    And the following contact:
-      | name  | bytes editorial             |
-      | email | bytes.editorial@example.com |
+    And contact_information content:
+      | name            | email                       |
+      | bytes editorial | bytes.editorial@example.com |
     And collections:
-      | title           | logo     | abstract                                   | access url                             | closed | creation date    | description                    | content creation         | moderation | topic             | owner                      | contact information  | state |
-      | Rhyme Land wysiwyg Eels | logo.png | Read up on all about <strong>dogs</strong> | http://dogtime.com/dog-breeds/profiles | yes    | 28-01-1995 12:05 | Hound is elegance personified. | facilitators and authors | yes        | Supplier exchange | Regression wysiwyg example | bytes editorial      | draft |
+      | title                   | logo     | abstract                                   | access url                             | closed | creation date    | description                    | content creation         | moderation | topic             | owner                      | contact information | state |
+      | Rhyme Land wysiwyg Eels | logo.png | Read up on all about <strong>dogs</strong> | http://dogtime.com/dog-breeds/profiles | yes    | 28-01-1995 12:05 | Hound is elegance personified. | facilitators and authors | yes        | Supplier exchange | Regression wysiwyg example | bytes editorial     | draft |
     When I am logged in as a facilitator of the "Rhyme Land wysiwyg Eels" collection
     And I go to the homepage of the "Rhyme Land wysiwyg Eels" collection
 

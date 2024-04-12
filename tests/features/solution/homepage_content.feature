@@ -8,9 +8,9 @@ Feature: Solution homepage
     Given the following owner:
       | name          | type                  |
       | Kostas Agathe | Private Individual(s) |
-    And the following contact:
-      | name  | Placebo             |
-      | email | Placebo@example.com |
+    And contact_information content:
+      | name    | email               |
+      | Placebo | Placebo@example.com |
     And the following solutions:
       | title                        | abstract                              | description                           | logo     | state     | status | related by type | owner         | contact information | solution type | topic       |
       | Information sharing protocol | Handling information sharing securely | Handling information sharing securely | logo.png | published |        | yes             | Kostas Agathe | Placebo             | Business      | E-inclusion |

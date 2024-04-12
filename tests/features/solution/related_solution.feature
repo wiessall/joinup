@@ -4,9 +4,9 @@ Feature: Related solution
   solutions and present the related solutions to the users.
 
   Background:
-    Given the following contact:
-      | email | bar@bar.com |
-      | name  | Kalikatoura |
+    Given contact_information content:
+      | name        | email       |
+      | Kalikatoura | bar@bar.com |
     And the following owner:
       | name         | type                         |
       | Kalikatoures | Company, Industry consortium |

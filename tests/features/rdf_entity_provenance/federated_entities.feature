@@ -10,9 +10,9 @@ Feature: In order to avoid users changing federated values
     Given the following owner:
       | name           |
       | John Federator |
-    And the following contact:
-      | name  | John Federator's contact  |
-      | email | JohnFederator@example.com |
+    And contact_information content:
+      | name                     | email                     |
+      | John Federator's contact | JohnFederator@example.com |
     And licence content:
       | title               | description               | licence type  |
       | A federated licence | Licence agreement details | Public domain |
@@ -79,10 +79,10 @@ Feature: In order to avoid users changing federated values
     And the following fields should not be disabled "<fields not disabled>"
 
     Examples:
-      | label                    | type         | fields disabled                                                                                                     | fields not disabled                                                                            |
-      | A federated collection   | collection   | Title, Description, Contact information, Owner                                                                      | Abstract, Access URL, Topic, Moderated, Content creation, Motivation, Logo, Closed collection  |
-      | A federated solution     | solution     | Title, Description, Contact information, Owner, Search keywords, Related solutions, Status, Languages, Landing page | Topic, Moderated, Content creation, Motivation, Logo, Metrics pager                            |
-      | A federated release      | release      | Name, Release version, Search keywords, Status, Language                                                             | Motivation                                                                                     |
-      | A federated distribution | distribution | Title, Description, Access URL, Format, Status, Licence                                                             |                                                                                                |
-      | John Federator           | owner        | Name                                                                                                                |                                                                                                |
-      | John Federator's contact | contact      | E-mail address, Name, Website URL                                                                                   |                                                                                                |
+      | label                    | type         | fields disabled                                                                                                     | fields not disabled                                                                           |
+      | A federated collection   | collection   | Title, Description, Contact information, Owner                                                                      | Abstract, Access URL, Topic, Moderated, Content creation, Motivation, Logo, Closed collection |
+      | A federated solution     | solution     | Title, Description, Contact information, Owner, Search keywords, Related solutions, Status, Languages, Landing page | Topic, Moderated, Content creation, Motivation, Logo, Metrics pager                           |
+      | A federated release      | release      | Name, Release version, Search keywords, Status, Language                                                            | Motivation                                                                                    |
+      | A federated distribution | distribution | Title, Description, Access URL, Format, Status, Licence                                                             |                                                                                               |
+      | John Federator           | owner        | Name                                                                                                                |                                                                                               |
+      | John Federator's contact | contact      | E-mail address, Name, Website URL                                                                                   |                                                                                               |

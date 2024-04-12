@@ -10,9 +10,9 @@ Feature: Subscribing to collection newsletters
       | Filippos Demetriou | filippos.demetriou@example.com |           |
       | Tatiana Andreas    | tatiandri@example.com          |           |
       | Magdalini Kokinos  | m.kokinos@example.com          | moderator |
-    And the following contact:
-      | email | charalambos.demetriou@example.com |
-      | name  | Charalambos Demetriou             |
+    And contact_information content:
+      | name                  | email                             |
+      | Charalambos Demetriou | charalambos.demetriou@example.com |
     And the following owner:
       | name              |
       | Antonios Katsaros |

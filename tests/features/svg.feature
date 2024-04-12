@@ -5,9 +5,9 @@ Feature: Test SVG attachments.
     Given the following owner:
       | name | type                    |
       | SVG  | Non-Profit Organisation |
-    And the following contact:
-      | name  | SVG             |
-      | email | svg@example.com |
+    And contact_information content:
+      | name | email           |
+      | SVG  | svg@example.com |
     And collections:
       | title | logo     | abstract | description | content creation         | moderation | topic             | owner | contact information | state     |
       | SVG   | logo.png | Test     | Test        | facilitators and authors | yes        | Supplier exchange | SVG   | SVG                 | published |
@@ -46,9 +46,9 @@ Feature: Test SVG attachments.
     And I go to the homepage of the "SVG" collection
     And I click "Add news" in the plus button menu
     When I fill in the following:
-      | Short title      | SVG News |
-      | Headline         | SVG News|
-      | Content          | SVG News |
+      | Short title | SVG News |
+      | Headline    | SVG News |
+      | Content     | SVG News |
     And I select "EU and European Policies" from "Topic"
 
     And I attach the file "simple.svg" to "Logo"

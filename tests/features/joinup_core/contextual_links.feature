@@ -37,9 +37,9 @@ Feature:
     Given collection:
       | title | Share collection |
       | state | published        |
-    And contact:
-      | name  | Somebody             |
-      | email | somebody@example.com |
+    And contact_information content:
+      | name    | email                |
+      | Somebody | somebody@example.com |
     And owner:
       | name       |
       | Some owner |
