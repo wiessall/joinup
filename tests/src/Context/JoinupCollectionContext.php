@@ -39,9 +39,9 @@ class JoinupCollectionContext extends RawDrupalContext {
     ])->save();
 
     // Create the contact.
-    Node::create([
+    /** @var \Drupal\contact_information\Entity\ContactInformationInterface $node */
+    $node = Node::create([
       'type' => 'contact_information',
-      'uri' => 'http://example.com/contact/joinup',
       'title' => 'Contact name',
       'ci_email' => 'contact.email@example.com',
     ])->save();
@@ -54,7 +54,7 @@ class JoinupCollectionContext extends RawDrupalContext {
       'field_ar_state' => 'published',
       'field_topic' => $this->getRandomTopic()->id(),
       'field_ar_owner' => 'http://example.com/owner/isa2',
-      'field_ar_contact_information' => 'http://example.com/contact/joinup',
+      'field_ar_contact_information' => $node->getUri(),
     ])->save();
   }
 
