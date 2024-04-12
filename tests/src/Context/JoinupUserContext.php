@@ -228,6 +228,22 @@ class JoinupUserContext extends RawDrupalContext {
   }
 
   /**
+   * Fills uid of user with the provided name in the selected field.
+   *
+   * @param string $username
+   *   User's name.
+   * @param string $field
+   *   Field name.
+   *
+   * @When I fill uid of :username in :field
+   */
+  public function fillUidOfUserNameInField(string $username, string $field): void {
+    $user = $this->getUserByName($username);
+
+    $this->getSession()->getPage()->fillField($field, $user->id());
+  }
+
+  /**
    * Generates a unique URL for a user to log in and reset their password.
    *
    * @param \Drupal\user\UserInterface $account
