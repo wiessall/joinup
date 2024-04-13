@@ -253,28 +253,7 @@ function joinup_workflow_message_form_submit_draft(array &$form, FormStateInterf
 /**
  * Implements hook_entity_presave().
  */
-function joinup_workflow_entity_presave(EntityInterface $entity) {
-  if ($entity->isNew() || !$entity instanceof ArchivableEntityInterface ||
-    empty($entity->original) || !$entity->original instanceof ArchivableEntityInterface) {
-    return;
-  }
-
-  // Prevent changes to update date in case we archive or unarchive entity.
-  if ($entity->isArchived() || $entity->original->isArchived()) {
-    $entity->set('changed', $entity->original->get('changed')->getValue());
-  }
-}
-
-/**
- * Implements hook_entity_create().
- */
-function joinup_workflow_entity_create(EntityInterface $entity) {
-  // Normally, the transition event would be the one to decide whether the
-  // entity would be published or not, this is not happening for new entities.
-  // In Joinup, we do not create any entity with an initial state but for
-  // testing, it is necessary to setup the initial status automatically
-  // depending on the initial state that is passed into the entity.
-  // @see: \Drupal\state_machine\Plugin\Field\FieldType\StateItem::preSave
+function joinup_workflow_entity_presave(EntityInterface $entity): void {
   if ($entity instanceof EntityPublishedInterface && $entity instanceof EntityWorkflowStateInterface) {
     try {
       /** @var \Drupal\joinup_workflow\WorkflowHelperInterface $workflow_helper */
@@ -295,5 +274,15 @@ function joinup_workflow_entity_create(EntityInterface $entity) {
       // @see \Drupal\field_ui\Form\FieldConfigEditForm::form()
       // @see _field_create_entity_from_ids()
     }
+  }
+
+  if ($entity->isNew() || !$entity instanceof ArchivableEntityInterface ||
+    empty($entity->original) || !$entity->original instanceof ArchivableEntityInterface) {
+    return;
+  }
+
+  // Prevent changes to update date in case we archive or unarchive entity.
+  if ($entity->isArchived() || $entity->original->isArchived()) {
+    $entity->set('changed', $entity->original->get('changed')->getValue());
   }
 }
