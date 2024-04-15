@@ -754,6 +754,13 @@ class JoinupContext extends RawDrupalContext {
       }
     }
 
+    if (property_exists($node, 'uid') && !empty($node->uid) && !is_numeric($node->uid)) {
+      $user = user_load_by_name($node->uid);
+      if ($user) {
+        $node->uid = $user->id();
+      }
+    }
+
     $image_fields = [
       'field_document_logo',
       'field_event_logo',
