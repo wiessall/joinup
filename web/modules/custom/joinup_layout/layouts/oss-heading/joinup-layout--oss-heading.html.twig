@@ -59,10 +59,10 @@
     </div>
 
     {% if content.indicator or content.aside %}
-      <div {{ region_attributes.aside.addClass('l-oss-heading__right col-12 col-md-5 py-5 ps-5') }}>
+      <div {{ region_attributes.aside.addClass('l-oss-heading__right col-12 col-md-5 py-5 ps-3 ps-md-5') }}>
 
       {% if content.indicator %}
-        <div {{ region_attributes.indicator.addClass('l-oss-heading__indicator d-flex') }}>
+        <div {{ region_attributes.indicator.addClass('l-oss-heading__indicator d-flex flex-wrap') }}>
           {{ content.indicator }}
         </div>
       {% endif %}
