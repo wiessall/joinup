@@ -23,14 +23,12 @@ dependencies:
     - image.style.thumbnail
     - node.type.document
   module:
-    - allowed_formats
     - comment
     - datetime
     - file_url
     - joinup_workflow
     - layout_paragraphs
     - svg_image
-    - text
 id: node.document.default
 targetEntityType: node
 bundle: document
@@ -44,19 +42,6 @@ content:
       size: 60
       placeholder: ''
     third_party_settings: {  }
-  body:
-    type: text_textarea_with_summary
-    weight: 5
-    region: content
-    settings:
-      rows: 9
-      summary_rows: 3
-      placeholder: ''
-      show_summary: false
-    third_party_settings:
-      allowed_formats:
-        hide_help: '0'
-        hide_guidelines: '1'
   current_workflow_state:
     type: current_workflow_state_widget
     weight: 14
@@ -124,7 +109,7 @@ content:
     third_party_settings: {  }
   field_paragraphs_body:
     type: layout_paragraphs
-    weight: 3
+    weight: 5
     region: content
     settings:
       preview_view_mode: preview
@@ -193,6 +178,7 @@ content:
     settings: {  }
     third_party_settings: {  }
 hidden:
+  body: true
   created: true
   field_shared_in: true
   field_site_featured: true
