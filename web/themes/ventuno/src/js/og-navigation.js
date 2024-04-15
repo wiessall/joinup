@@ -11,8 +11,8 @@
           priorityPlus(nav, {
             innerToggleTemplate: () => Drupal.t("See more"),
             classNames: {
-              "overflow-nav": ["p-plus__overflow", "nav"],
-              "toggle-btn": ["p-plus__toggle-btn", "btn", "btn-link"],
+              "overflow-nav": ["p-plus__overflow", "dropdown-menu"],
+              "toggle-btn": ["p-plus__toggle-btn", "btn", "btn-link", "ps-3"],
             },
           });
         }
