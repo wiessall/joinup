@@ -74,7 +74,7 @@ Feature: Homepage
       | title                | collection    | topic                            | state     | logo    | body                                                                                                                                                                                       |
       | Influence of gravity | Mice in space | Employment and Support Allowance | published | ada.jpg | Space exploration has brought about many scientific and technological advances, yet manned spaceflights come at a cost to astronauts, including reduced skeletal muscle mass and strength. |
     And document content:
-      | title        | collection    | topic                                  | state     | logo     | body                                                                                                                                                                                            |
+      | title        | collection    | topic                                  | state     | logo     | abstract                                                                                                                                                                                        |
       | Microgravity | Mice in space | HR, Statistics and Analysis, E-justice | published | alan.jpg | Conventional studies investigating the effects of reduced gravity on muscle mass and function have used a ground control group that is not directly comparable to the space experimental group. |
     And event content:
       | title           | collection    | topic                    | state     | logo        | body                                                                                                                                                                                  |
@@ -97,7 +97,7 @@ Feature: Homepage
       | title | Clash of documents |
       | state | published          |
     And <type> content:
-      | title        | headline     | collection         | topic                              | state     | logo     | body                                                                                                                                                                                            |
+      | title        | headline     | collection         | topic                              | state     | logo     | <abstract source field>                                                                                                                                                                         |
       | Microgravity | Microgravity | Clash of documents | HR, E-justice                      | published | alan.jpg | Conventional studies investigating the effects of reduced gravity on muscle mass and function have used a ground control group that is not directly comparable to the space experimental group. |
       | Aliens       | Aliens       | Clash of documents | Statistics and Analysis, E-justice | published | alan.jpg | Conventional studies investigating the effects of reduced gravity on muscle mass and function have used a ground control group that is not directly comparable to the space experimental group. |
       | Groundforce  | Groundforce  | Clash of documents | Statistics and Analysis, E-justice | proposed  | alan.jpg | Conventional studies investigating the effects of reduced gravity on muscle mass and function have used a ground control group that is not directly comparable to the space experimental group. |
@@ -115,10 +115,10 @@ Feature: Homepage
     And I should not see the "Groundforce" tile
 
     Examples:
-      | type     |
-      | document |
-      | news     |
-      | event    |
+      | type     | abstract source field |
+      | document | abstract              |
+      | news     | body                  |
+      | event    | body                  |
 
   Scenario: An event in the highlighted content on the homepage should display the start date.
     Given event content:
