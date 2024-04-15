@@ -9,10 +9,8 @@ Feature: When a solution is archived then its sub-content also should be archive
       | name        | type    |
       | The Company | Company |
     And contact_information content:
-      | name       | email                  |
-      | Liam Smith | liam.smith@example.com |
-    And contact_information content:
       | name                 | email                      |
+      | Liam Smith           | liam.smith@example.com     |
       | Jennifer Unconfirmed | jennifer.smith@example.com |
     And solution:
       | title               | Solution                         |
