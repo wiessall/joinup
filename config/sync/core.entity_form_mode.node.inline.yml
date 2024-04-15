@@ -1,0 +1,11 @@
+uuid: a53b1b18-941b-44a3-828b-5ab58791b858
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+id: node.inline
+label: Inline
+description: ''
+targetEntityType: node
+cache: true
