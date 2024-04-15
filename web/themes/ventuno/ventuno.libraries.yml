@@ -88,6 +88,9 @@ ajax-throbber:
   header: true
   js:
     assets/js/ajax-throbber.min.js: { minified: true, attributes: { defer: true } }
+  css:
+    theme:
+      assets/css/ajax-throbber.min.css: { minified: true }
   dependencies:
     - core/drupal
     - ventuno/spinners

@@ -128,7 +128,7 @@ class TypeWidget extends WidgetPluginBase {
       '#value' => $result->getDisplayValue(),
       '#show_count' => $this->getConfiguration()['show_numbers'] && ($count !== NULL),
       '#count' => $count,
-      '#type' => $result->getRawValue(),
+      '#type' => array_reverse(explode(':', $result->getRawValue()))[0],
       '#facet' => $result->getFacet(),
     ];
   }
