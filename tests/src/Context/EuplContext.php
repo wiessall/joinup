@@ -52,7 +52,8 @@ class EuplContext extends RawDrupalContext {
       'label' => 'EUPL',
       'field_ar_state' => 'published',
       'field_ar_owner' => $owner->nid,
-    ])->save();
+    ]);
+    $collection->save();
     $this->entities['rdf_entity'][$collection->id()] = $collection;
 
     $solution = Rdf::create([
