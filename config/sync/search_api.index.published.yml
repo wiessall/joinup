@@ -3,37 +3,37 @@ langcode: en
 status: true
 dependencies:
   config:
-    - field.storage.node.field_event_agenda
-    - field.storage.node.field_paragraphs_body
-    - field.storage.paragraph.field_body
-    - field.storage.node.body
-    - field.storage.node.spdx_licence
-    - field.storage.node.field_event_date
+    - field.storage.meta_entity.count
     - field.storage.meta_entity.field_featured
-    - field.storage.node.field_news_headline
-    - field.storage.node.description
-    - field.storage.node.field_location
-    - field.storage.node.field_organisation
     - field.storage.meta_entity.field_pinned_in
+    - field.storage.node.body
+    - field.storage.node.description
+    - field.storage.node.description
+    - field.storage.node.field_event_agenda
+    - field.storage.node.field_event_date
+    - field.storage.node.field_location
+    - field.storage.node.field_news_headline
+    - field.storage.node.field_organisation
+    - field.storage.node.field_paragraphs_body
     - field.storage.node.field_scope
     - field.storage.node.field_short_title
-    - field.storage.meta_entity.count
+    - field.storage.node.spdx_licence
+    - field.storage.paragraph.field_body
     - field.storage.rdf_entity.field_ar_abstract
-    - field.storage.rdf_entity.field_is_abstract
-    - field.storage.rdf_entity.field_ci_name
-    - field.storage.rdf_entity.field_is_contact_information
-    - field.storage.rdf_entity.field_isr_contact_information
-    - field.storage.rdf_entity.field_ad_description
     - field.storage.rdf_entity.field_ar_description
+    - field.storage.rdf_entity.field_ci_name
+    - field.storage.rdf_entity.field_is_abstract
+    - field.storage.rdf_entity.field_is_contact_information
     - field.storage.rdf_entity.field_is_description
-    - field.storage.rdf_entity.field_isr_description
     - field.storage.rdf_entity.field_is_eif_category
     - field.storage.rdf_entity.field_is_eif_recommendation
     - field.storage.rdf_entity.field_is_owner
-    - field.storage.rdf_entity.field_owner_name
+    - field.storage.rdf_entity.field_is_solution_type
+    - field.storage.rdf_entity.field_isr_contact_information
+    - field.storage.rdf_entity.field_isr_description
     - field.storage.rdf_entity.field_isr_owner
     - field.storage.rdf_entity.field_isr_release_notes
-    - field.storage.rdf_entity.field_is_solution_type
+    - field.storage.rdf_entity.field_owner_name
     - field.storage.taxonomy_term.field_eif_identifier
     - field.storage.taxonomy_term.field_eif_related_term
     - field.storage.user.field_user_family_name
@@ -41,18 +41,18 @@ dependencies:
     - field.storage.user.field_user_organisation
     - search_api.server.joinup
   module:
-    - search_api_solr
+    - custom_page
+    - joinup_distribution
+    - joinup_search
+    - meta_entity
     - node
     - paragraphs
-    - meta_entity
-    - rdf_entity
     - publication_date
+    - rdf_entity
+    - search_api
+    - search_api_solr
     - taxonomy
     - user
-    - search_api
-    - asset_distribution
-    - custom_page
-    - joinup_search
 third_party_settings:
   search_api_solr:
     finalize: true
@@ -219,26 +219,9 @@ field_settings:
       type: union
       fields:
         - 'entity:node/field_state'
-        - 'entity:rdf_entity/field_ad_state'
         - 'entity:rdf_entity/field_ar_state'
         - 'entity:rdf_entity/field_is_state'
         - 'entity:rdf_entity/field_isr_state'
-  field_ad_description:
-    label: 'Description » Processed text'
-    datasource_id: 'entity:rdf_entity'
-    property_path: 'field_ad_description:processed'
-    type: text
-    dependencies:
-      config:
-        - field.storage.rdf_entity.field_ad_description
-  field_ad_description_spellcheck:
-    label: 'Description » Processed text - Spellcheck'
-    datasource_id: 'entity:rdf_entity'
-    property_path: 'field_ad_description:processed'
-    type: solr_text_spellcheck
-    dependencies:
-      config:
-        - field.storage.rdf_entity.field_ad_description
   field_ar_abstract:
     label: Abstract
     datasource_id: 'entity:rdf_entity'
@@ -1011,8 +994,8 @@ processor_settings:
     fields:
       - body
       - body_spellcheck
-      - field_ad_description
-      - field_ad_description_spellcheck
+      - description_processed
+      - description_processed_spellcheck
       - field_ar_abstract
       - field_ar_abstract_spellcheck
       - field_ar_description
@@ -1038,8 +1021,8 @@ processor_settings:
     fields:
       - body
       - body_spellcheck
-      - field_ad_description
-      - field_ad_description_spellcheck
+      - description_processed
+      - description_processed_spellcheck
       - field_ar_abstract
       - field_ar_abstract_spellcheck
       - field_ar_description
@@ -1094,8 +1077,8 @@ processor_settings:
     fields:
       - body
       - body_spellcheck
-      - field_ad_description
-      - field_ad_description_spellcheck
+      - description_processed
+      - description_processed_spellcheck
       - field_ar_abstract
       - field_ar_abstract_spellcheck
       - field_ar_description
@@ -1161,8 +1144,8 @@ processor_settings:
     fields:
       - body
       - body_spellcheck
-      - field_ad_description
-      - field_ad_description_spellcheck
+      - description_processed
+      - description_processed_spellcheck
       - field_ar_abstract
       - field_ar_abstract_spellcheck
       - field_ar_description
@@ -1212,8 +1195,8 @@ processor_settings:
     fields:
       - body
       - body_spellcheck
-      - field_ad_description
-      - field_ad_description_spellcheck
+      - description_processed
+      - description_processed_spellcheck
       - field_ar_abstract
       - field_ar_abstract_spellcheck
       - field_ar_description
