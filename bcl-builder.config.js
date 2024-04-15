@@ -1368,6 +1368,14 @@ module.exports = {
       to: path.resolve(outputFolder, `${iop}assets/css`),
       options: { up: true },
     },
+    {
+      from: [
+        path.resolve(nodeModules, "priority-plus/dist/priority-plus.js"),
+        path.resolve(nodeModules, "priority-plus/dist/priority-plus.css"),
+      ],
+      to: path.resolve(outputFolder, `${ventuno}assets/lib/priority-plus`),
+      options: { up: true },
+    },
   ],
   sprite: [
     {
