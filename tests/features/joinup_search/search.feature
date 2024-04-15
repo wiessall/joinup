@@ -474,7 +474,7 @@ Feature: Global search
     When I enter "Human Language" in the search bar and press enter
     Then the page should show only the tiles "Zzolution"
 
-    Given I delete the "DistroZzolu" asset distribution
+    Given I delete the "DistroZzolu" distribution
 
     # The parent solution has been re-indexed without distribution data.
     When I enter "distrozzolu" in the search bar and press enter
@@ -566,7 +566,7 @@ Feature: Global search
     When I enter "Human Language" in the search bar and press enter
     Then the page should show only the tiles "Releazz"
 
-    Given I delete the "DistroReleazz" asset distribution
+    Given I delete the "DistroReleazz" distribution
 
     # The parent release has been re-indexed without distribution data.
     When I enter "dIstrOreleazz" in the search bar and press enter

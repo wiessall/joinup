@@ -56,7 +56,7 @@ Feature: Add distribution through the UI
     Then I should have 1 distribution
     And the "Linux x86-64 SDK" distribution should have the link of the "test.zip" in the access URL field
 
-    # Check if the asset distribution is accessible.
+    # Check if the distribution is accessible.
     When I go to the homepage of the "Solution random x name" solution
     Then I should see the text "Distribution"
     And I should see the link "Linux x86-64 SDK"
@@ -68,8 +68,8 @@ Feature: Add distribution through the UI
     # The licence label should be shown also in the solution UI.
     When I go to the homepage of the "Solution random x name" solution
     Then I should see the text "WTFPL"
-    # Clean up the asset distribution that was created through the UI.
-    Then I delete the "Linux x86-64 SDK" asset distribution
+    # Clean up the distribution that was created through the UI.
+    Then I delete the "Linux x86-64 SDK" distribution
 
   # Test that unauthorized users cannot add a distribution, both for a release
   # and directly from the solution page.
@@ -122,7 +122,7 @@ Feature: Add distribution through the UI
     # Debug step since the default view of the distribution, does not have the access URL shown.
     And the "Source tarball" distribution should have the link of the "test.zip" in the access URL field
 
-    # Check if the asset distribution is accessible as an anonymous user
+    # Check if the distribution is accessible as an anonymous user
     When I am an anonymous user
     When I go to the homepage of the "Authoritarian Alpaca" release
     Then I should see the text "Distribution"
@@ -139,8 +139,8 @@ Feature: Add distribution through the UI
       | Web Ontology Language Full/DL/Lite |
 
     And I go to the homepage of the "Solution random x name" solution
-    # Clean up the asset distribution that was created through the UI.
-    Then I delete the "Source tarball" asset distribution
+    # Clean up the distribution that was created through the UI.
+    Then I delete the "Source tarball" distribution
 
   Scenario: The distribution access URL field should accept multiple file extensions.
     Given I am logged in as a "facilitator" of the "Solution random x name" solution
@@ -185,8 +185,8 @@ Feature: Add distribution through the UI
     Then I should have 2 distributions
 
     # Clean up the entities created through the user interface.
-    Then I delete the "MacOSX binary" asset distribution
-    And I delete the "MacOSX binary" asset distribution
+    Then I delete the "MacOSX binary" distribution
+    And I delete the "MacOSX binary" distribution
 
   Scenario: Distributions with the same name should not be allowed within the same solution.
     Given the following distribution:

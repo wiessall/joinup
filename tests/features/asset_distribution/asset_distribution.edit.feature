@@ -1,8 +1,8 @@
 @api
 Feature: Asset distribution editing.
-  In order to manage asset distributions
+  In order to manage distributions
   As a solution owner or solution facilitator
-  I need to be able to edit asset distributions through UI.
+  I need to be able to edit distributions through UI.
 
   Background:
     Given users:
@@ -38,19 +38,19 @@ Feature: Asset distribution editing.
 
   Scenario: "Edit" button should be shown to facilitators of the related solution.
     When I am logged in as a facilitator of the "Solution A" solution
-    And I go to the homepage of the "Asset distribution example" asset distribution
+    And I go to the homepage of the "Asset distribution example" distribution
     Then I should see the link "Edit" in the "Entity actions" region
 
     When I am logged in as a facilitator of the "Solution B" solution
-    And I go to the homepage of the "Asset distribution example" asset distribution
+    And I go to the homepage of the "Asset distribution example" distribution
     Then I should not see the link "Edit" in the "Entity actions" region
 
     When I am logged in as an "authenticated user"
-    And I go to the homepage of the "Asset distribution example" asset distribution
+    And I go to the homepage of the "Asset distribution example" distribution
     Then I should not see the link "Edit" in the "Entity actions" region
 
     When I am an anonymous user
-    And I go to the homepage of the "Asset distribution example" asset distribution
+    And I go to the homepage of the "Asset distribution example" distribution
     Then I should not see the link "Edit" in the "Entity actions" region
 
   Scenario: Edit a distribution as a solution facilitator.
@@ -60,7 +60,7 @@ Feature: Asset distribution editing.
       | Another LGPL    | The LGPL more permisssive than GPL. | yes        |
       | Some other LGPL | The LGPL more permisssive than GPL. | yes        |
     When I am logged in as a facilitator of the "Solution A" solution
-    And I go to the homepage of the "Asset distribution example" asset distribution
+    And I go to the homepage of the "Asset distribution example" distribution
     And I click "Edit"
     Then I should see the heading "Edit Distribution Asset distribution example"
     And the following fields should not be present "Langcode, Translation"

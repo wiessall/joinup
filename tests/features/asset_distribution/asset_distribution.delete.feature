@@ -1,8 +1,8 @@
 @api
 Feature: Asset distribution deleting.
-  In order to manage asset distributions
+  In order to manage distributions
   As a solution owner or solution facilitator
-  I need to be able to delete asset distributions through the UI.
+  I need to be able to delete distributions through the UI.
 
   Scenario: "Delete" button should be shown to facilitators of the related solution.
     Given the following solutions:
@@ -22,7 +22,7 @@ Feature: Asset distribution deleting.
       | state       | published             |
 
     When I am logged in as a facilitator of the "Rough valentine's day" solution
-    And I go to the homepage of the "Francesco's cats" asset distribution
+    And I go to the homepage of the "Francesco's cats" distribution
     And I click "Edit"
     Then I should see the link "Delete"
     When I click "Delete"
