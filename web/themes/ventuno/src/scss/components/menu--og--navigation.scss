@@ -1,8 +1,12 @@
 @import "../partials/core";
+@import "../partials/mixins/bootstrap-icons";
 
 .menu--og--navigation {
   position: relative;
+  z-index: 2;
   background-color: $light;
+  width: 100%;
+  float: left;
   .nav {
     &:not(.nav-pills) {
       flex-wrap: nowrap;
@@ -19,7 +23,7 @@
       }
       .nav-link {
         height: 28px;
-        padding: 0 $spacer * .25;
+        padding: 0 $spacer * .25 $spacer * .25;
         white-space: nowrap;
         color: $primary;
         border: none;
@@ -36,16 +40,28 @@
           box-shadow: 0 4px 0 0 $primary;
           font-weight: $font-weight-bold;
         }
-        @include media-breakpoint-up(lg) {
-          overflow-x: hidden;
-          max-width: calc((960px - 12px * 8 - 10rem) / 6);
-          text-overflow: ellipsis;
-        }
-        @include media-breakpoint-up(xl) {
-          max-width: calc((1140px - 12px * 8 - 10rem) / 6);
-        }
-        @include media-breakpoint-up(xxl) {
-          max-width: calc((1320px - 12px * 8 - 10rem) / 6);
+      }
+    }
+  }
+  // Override some pplus styles.
+  .p-plus {
+    float: left;
+    align-items: baseline;
+    min-width: 15rem;
+    .p-plus__toggle-btn {
+      &:after {
+        @include get-bootstrap-icon('chevron-down', currentColor);
+        margin-left: $spacer * .5;
+      }
+    }
+    .p-plus__overflow {
+      right: $spacer * 2;
+      overflow: hidden;
+      .p-plus__primary-nav-item {
+        padding: var(--bs-dropdown-item-padding-y) var(--bs-dropdown-item-padding-x);
+        &:has(a.is-active) {
+          @include gradient-bg($nav-pills-link-active-bg);
+          color: $nav-pills-link-active-color;
         }
       }
     }
