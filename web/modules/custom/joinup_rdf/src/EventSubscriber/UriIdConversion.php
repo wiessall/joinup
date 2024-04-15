@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_rdf\EventSubscriber;
 
-use Drupal\asset_release\Entity\AssetRelease;
 use Drupal\Core\Database\Connection;
 use Drupal\Core\Entity\EntityFieldManagerInterface;
+use Drupal\asset_release\Entity\AssetRelease;
 use Drupal\joinup_rdf\Entity\RdfSyncEntityInterface;
 use Drupal\solution\Entity\Solution;
 use Drupal\sparql_entity_storage\Event\InboundValueEvent;
@@ -198,7 +198,7 @@ class UriIdConversion implements EventSubscriberInterface {
         ->execute()
         ->fetchField() ?: NULL;
       if (!$uri) {
-         throw new \InvalidArgumentException("Can't find a URI for $entityTypeId entity with ID $id");
+        throw new \InvalidArgumentException("Can't find a URI for $entityTypeId entity with ID $id");
       }
       // Cache this match.
       $this->uriToId[$uri] = [$entityTypeId, $id];
