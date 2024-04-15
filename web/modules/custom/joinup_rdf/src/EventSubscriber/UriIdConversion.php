@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_rdf\EventSubscriber;
 
+use Drupal\asset_release\Entity\AssetRelease;
 use Drupal\Core\Database\Connection;
 use Drupal\Core\Entity\EntityFieldManagerInterface;
 use Drupal\joinup_rdf\Entity\RdfSyncEntityInterface;
+use Drupal\solution\Entity\Solution;
 use Drupal\sparql_entity_storage\Event\InboundValueEvent;
 use Drupal\sparql_entity_storage\Event\OutboundValueEvent;
 use Drupal\sparql_entity_storage\Event\SparqlEntityStorageEvents;
@@ -107,7 +109,7 @@ class UriIdConversion implements EventSubscriberInterface {
    */
   public function onLoad(InboundValueEvent $event): void {
     if ($this->acceptsConversion($event)) {
-      $event->setValue($this->getId($event->getValue()));
+      $event->setValue($this->getId($event));
     }
   }
 
@@ -126,10 +128,10 @@ class UriIdConversion implements EventSubscriberInterface {
   }
 
   /**
-   * Returns and caches an entity ID give its corresponding URI.
+   * Returns and caches an entity ID given its corresponding URI.
    *
-   * @param string $uri
-   *   The URI.
+   * @param \Drupal\sparql_entity_storage\Event\InboundValueEvent $event
+   *   The event.
    *
    * @return string|int|null
    *   The entity ID.
@@ -137,7 +139,8 @@ class UriIdConversion implements EventSubscriberInterface {
    * @throws \InvalidArgumentException
    *   If there's no entity mapped with the passed URI.
    */
-  protected function getId(string $uri): string|int|null {
+  protected function getId(InboundValueEvent $event): string|int|null {
+    $uri = $event->getValue();
     if (!isset($this->uriToId[$uri])) {
       $result = $this->database->select('rdf_sync_uri')
         ->fields('rdf_sync_uri', ['entity_type', 'entity_id'])
@@ -145,7 +148,26 @@ class UriIdConversion implements EventSubscriberInterface {
         ->execute()
         ->fetch(\PDO::FETCH_NUM) ?: NULL;
       if (!$result) {
-        throw new \InvalidArgumentException("Can't find a mapped entity with URI $uri");
+        // Prevent the case when solutions and releases are not yet converted
+        // during de update process. These fields from solution and release are
+        // linking back to distributions. The only reason they existed in Drupal
+        // is to fulfill the ADMS-AP specification, where the reference is
+        // wrongly defined from parent to child. In ISAICP-8569 and ISAICP-8572,
+        // these fields will be removed from release/solution, sticking to the
+        // normal Drupal relationship, from child to parent. To honour the
+        // ADMS-AP specification, we will add a triple from asset to its
+        // distributions, with the http://www.w3.org/ns/dcat#distribution
+        // predicate, when we're normalizing the release/solution.
+        // @todo Gradually remove this check and assertions as releases and
+        //   solution are converted, first in ISAICP-8569, later in ISAICP-8572.
+        assert(!method_exists(AssetRelease::class, 'getUri'));
+        assert(!method_exists(Solution::class, 'getUri'));
+        if (in_array($event->getField(), ['field_is_distribution', 'field_isr_distribution'], TRUE)) {
+          $result = ['node', NULL];
+        }
+        else {
+          throw new \InvalidArgumentException("Can't find a mapped entity with URI $uri");
+        }
       }
       $this->uriToId[$uri] = $result;
     }
