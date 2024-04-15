@@ -7,12 +7,12 @@
 
 declare(strict_types=1);
 
-use Drupal\contact_information\Entity\ContactInformationInterface;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Access\AccessResultAllowed;
 use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Session\AccountInterface;
+use Drupal\contact_information\Entity\ContactInformationInterface;
 use Drupal\joinup_workflow\EntityWorkflowStateInterface;
 
 /**
@@ -76,13 +76,6 @@ function state_machine_permissions_rdf_entity_access(EntityInterface $entity, $o
     // View permission is already covered.
     return AccessResult::neutral();
   }
-
-  $permission_helper = \Drupal::getContainer()->get('state_machine_permissions.helper');
-  if ($operation === 'delete') {
-    // If the operation is delete, there is no need to check for transitions.
-    return AccessResult::allowedIf($permission_helper->hasOwnAnyPermission($entity, 'delete', $account));
-  }
-
   return _state_machine_permissions_check_transition_access($entity, $operation, $account);
 }
 
@@ -90,7 +83,7 @@ function state_machine_permissions_rdf_entity_access(EntityInterface $entity, $o
  * Implements hook_ENTITY_TYPE_access().
  */
 function state_machine_permissions_node_access(EntityInterface $entity, string $operation, AccountInterface $account): AccessResultInterface {
-  if (!$entity instanceof ContactInformationInterface || $operation !== 'update') {
+  if (!$entity instanceof ContactInformationInterface || !in_array($operation, ['update', 'delete'])) {
     return AccessResult::neutral();
   }
 
@@ -115,6 +108,11 @@ function state_machine_permissions_node_access(EntityInterface $entity, string $
  */
 function _state_machine_permissions_check_transition_access(EntityInterface $entity, string $operation, AccountInterface $account): AccessResultInterface {
   $permission_helper = \Drupal::getContainer()->get('state_machine_permissions.helper');
+  if ($operation === 'delete') {
+    // If the operation is delete, there is no need to check for transitions.
+    return AccessResult::allowedIf($permission_helper->hasOwnAnyPermission($entity, 'delete', $account));
+  }
+
   $workflow_helper = \Drupal::getContainer()->get('joinup_workflow.workflow_helper');
   $access = AccessResult::allowedIf($workflow_helper->getAvailableTransitions($entity, $account));
   if (!$access instanceof AccessResultAllowed) {
