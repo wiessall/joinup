@@ -49,7 +49,7 @@ class Owner extends Node implements OwnerInterface {
     $query = \Drupal::entityQuery('rdf_entity')->accessCheck(FALSE);
     $result = $query
       ->condition('rid', 'collection')
-      ->condition('field_ar_owner', $this->id())
+      ->condition('field_ar_owner', $this->get('uri')->value)
       ->execute();
 
     return !empty($result) ? Rdf::loadMultiple($result) : [];
