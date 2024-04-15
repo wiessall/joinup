@@ -1114,4 +1114,29 @@ class JoinupSearchContext extends RawDrupalContext {
     }
   }
 
+  /**
+   * Asserts items on a tab facet.
+   *
+   * This function asserts also the order of the items.
+   *
+   * @param string $facet
+   *   The facet alias.
+   * @param \Behat\Gherkin\Node\TableNode $values
+   *   A list of items to be present.
+   *
+   * @throws \Exception
+   *   Thrown when the facet is not found in the page.
+   *
+   * @Then the :facet tabs facet should allow selecting the following values:
+   */
+  public function assertFacetTabsItems(string $facet, TableNode $values): void {
+    $element = $this->findFacetByAlias($facet);
+    $found = array_map(function ($item) {
+      /** @var \Behat\Mink\Element\NodeElement $item */
+      return $item->getText();
+    }, $element->findAll('css', 'a.tab'));
+
+    Assert::assertEquals($values->getColumn(0), $found, "The '{$facet}' values mismatch the expected ones.");
+  }
+
 }
