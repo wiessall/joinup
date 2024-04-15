@@ -27,11 +27,11 @@ dependencies:
     - field_delimiter
     - field_formatter_range
     - field_group
+    - joinup_core
+    - joinup_slick
     - layout_builder
-    - layout_paragraphs
     - responsive_image
     - template_suggestion
-    - text
     - user
 third_party_settings:
   field_group:
@@ -80,10 +80,11 @@ targetEntityType: node
 bundle: document
 mode: carousel
 content:
-  body:
-    type: text_default
-    label: hidden
-    settings: {  }
+  abstract:
+    type: string
+    label: visually_hidden
+    settings:
+      link_to_entity: false
     third_party_settings: {  }
     weight: 2
     region: content
@@ -101,11 +102,14 @@ content:
     weight: 1
     region: content
   field_paragraphs_body:
-    type: layout_paragraphs
+    type: filtered_entity_reference_bundles
     label: hidden
     settings:
       view_mode: tile
       link: ''
+      filtered_entity_bundles:
+        - simple_paragraph
+        - text
     third_party_settings:
       field_delimiter:
         delimiter: ''
@@ -113,9 +117,13 @@ content:
         order: 0
         limit: 1
         offset: 0
+      joinup_slick:
+        preset: ''
+        field_label: true
+        custom_label: ''
       template_suggestion:
         template_suggestion: ''
-    weight: 1
+    weight: 2
     region: content
   field_short_title:
     type: string
@@ -133,7 +141,7 @@ content:
     weight: 3
     region: content
 hidden:
-  abstract: true
+  body: true
   featured: true
   field_comments: true
   field_document_publication_date: true
