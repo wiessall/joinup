@@ -27,7 +27,6 @@ dependencies:
     - field_delimiter
     - field_formatter_range
     - joinup_core
-    - joinup_html_stripper
     - responsive_image
     - template_suggestion
     - user
@@ -38,14 +37,12 @@ targetEntityType: node
 bundle: document
 mode: view_mode_tile
 content:
-  body:
-    type: joinup_html_stripper_stripped
-    label: hidden
+  abstract:
+    type: string
+    label: visually_hidden
     settings:
-      trim_length: 600
-    third_party_settings:
-      template_suggestion:
-        template_suggestion: bare
+      link_to_entity: false
+    third_party_settings: {  }
     weight: 1
     region: content
   field_document_logo:
@@ -87,7 +84,7 @@ content:
     weight: 10
     region: content
 hidden:
-  abstract: true
+  body: true
   featured: true
   field_comments: true
   field_document_publication_date: true
