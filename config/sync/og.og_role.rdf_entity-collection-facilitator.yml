@@ -50,6 +50,7 @@ permissions:
   - 'delete paragraph content call_to_action'
   - 'delete paragraph content github_feed'
   - 'delete paragraph content json_map'
+  - 'edit any contact_information content'
   - 'edit any custom_page content'
   - 'update group'
   - 'edit any discussion content'

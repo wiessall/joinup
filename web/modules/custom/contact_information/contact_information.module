@@ -97,7 +97,7 @@ function contact_information_node_access(EntityInterface $entity, string $operat
   // For anonymous users, deny access to the canonical route.
   $route_match = \Drupal::routeMatch();
   if ($account->isAnonymous() && $operation === 'view' && $route_match->getRouteName() === 'entity.node.canonical') {
-    $route_entity = $route_match->getParameter('rdf_entity');
+    $route_entity = $route_match->getParameter('node');
     if ($route_entity instanceof ContactInformationInterface && $route_entity->id() === $entity->id()) {
       return AccessResult::forbidden('Anonymous users should not see the contact information canonical route.');
     }
