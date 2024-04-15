@@ -386,3 +386,50 @@ function joinup_rdf_deploy_110405(array &$sandbox): string {
   $sandbox['#finished'] = (int) empty($sandbox['document_to_licence']);
   return "Converted {$sandbox['progress']} out of {$sandbox['total']} documents";
 }
+
+/**
+ * Migrate owners to nodes.
+ */
+function joinup_rdf_deploy_110406(array &$sandbox): string {
+  $map = [
+    'http://purl.org/dc/terms/title' => 'title',
+    'http://purl.org/dc/terms/type' => 'owner_type',
+    'http://joinup.eu/owner/uid' => 'uid',
+    'http://joinup.eu/owner/workflow_status' => 'field_state',
+  ];
+  $storage = \Drupal::entityTypeManager()->getStorage('node');
+
+  if (!isset($sandbox['owners'])) {
+    $sandbox['owners'] = Json::decode(file_get_contents('private://owners'));
+    \Drupal::getContainer()->get('file_system')->delete('private://owners');
+    $sandbox['progress'] = 0;
+    $sandbox['total'] = count($sandbox['owners']);
+  }
+  $count = 0;
+  while ($sandbox['owners'] && $count < 25) {
+    $uri = key($sandbox['owners']);
+    $data = current($sandbox['owners']);
+    unset($sandbox['owners'][$uri]);
+
+    $values = ['type' => 'owner', 'uri' => $uri];
+    foreach ($data as $predicate => $objects) {
+      if (isset($map[$predicate])) {
+        $fieldName = $map[$predicate];
+        foreach ($objects as $object) {
+          $value = $object['value'];
+          if ($fieldName === 'owner_type') {
+            $value = MappedTerm::loadByUri($value)->id();
+          }
+          $values[$fieldName][] = $value;
+        }
+      }
+    }
+    $storage->create($values)->save();
+
+    $sandbox['progress']++;
+    $count++;
+  }
+
+  $sandbox['#finished'] = (int) empty($sandbox['owners']);
+  return "Imported {$sandbox['progress']} out of {$sandbox['total']} owners";
+}
