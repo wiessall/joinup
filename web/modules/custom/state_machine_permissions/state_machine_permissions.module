@@ -7,6 +7,7 @@
 
 declare(strict_types=1);
 
+use Drupal\contact_information\Entity\ContactInformationInterface;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Access\AccessResultAllowed;
 use Drupal\Core\Access\AccessResultInterface;
@@ -82,6 +83,38 @@ function state_machine_permissions_rdf_entity_access(EntityInterface $entity, $o
     return AccessResult::allowedIf($permission_helper->hasOwnAnyPermission($entity, 'delete', $account));
   }
 
+  return _state_machine_permissions_check_transition_access($entity, $operation, $account);
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_access().
+ */
+function state_machine_permissions_node_access(EntityInterface $entity, string $operation, AccountInterface $account): AccessResultInterface {
+  if (!$entity instanceof ContactInformationInterface || $operation !== 'update') {
+    return AccessResult::neutral();
+  }
+
+  // We are exceptionally checking for the contact information transitions
+  // because the entity is related to a group but is not a group entity, thus
+  // OG will not allow access when needed.
+  return _state_machine_permissions_check_transition_access($entity, $operation, $account);
+}
+
+/**
+ * Checks if the user has a permission according to the available transitions.
+ *
+ * @param \Drupal\Core\Entity\EntityInterface $entity
+ *   The entity to check.
+ * @param string $operation
+ *   The operation to check.
+ * @param \Drupal\Core\Session\AccountInterface $account
+ *   The account to check.
+ *
+ * @return \Drupal\Core\Access\AccessResultInterface
+ *   The access result.
+ */
+function _state_machine_permissions_check_transition_access(EntityInterface $entity, string $operation, AccountInterface $account): AccessResultInterface {
+  $permission_helper = \Drupal::getContainer()->get('state_machine_permissions.helper');
   $workflow_helper = \Drupal::getContainer()->get('joinup_workflow.workflow_helper');
   $access = AccessResult::allowedIf($workflow_helper->getAvailableTransitions($entity, $account));
   if (!$access instanceof AccessResultAllowed) {
