@@ -4,40 +4,39 @@ status: true
 dependencies:
   config:
     - field.storage.node.body
-    - field.storage.rdf_entity.field_ad_description
-    - field.storage.rdf_entity.field_ar_abstract
-    - field.storage.rdf_entity.field_ar_description
     - field.storage.node.field_event_agenda
     - field.storage.node.field_event_date
-    - field.storage.rdf_entity.field_is_description
-    - field.storage.rdf_entity.field_is_eif_recommendation
-    - field.storage.rdf_entity.field_is_solution_type
-    - field.storage.rdf_entity.field_isr_description
-    - field.storage.rdf_entity.field_isr_release_notes
     - field.storage.node.field_location
     - field.storage.node.field_news_headline
     - field.storage.node.field_organisation
+    - field.storage.node.field_paragraphs_body
     - field.storage.node.field_scope
     - field.storage.node.field_shared_in
     - field.storage.node.field_short_title
+    - field.storage.paragraph.field_body
+    - field.storage.rdf_entity.field_ar_abstract
+    - field.storage.rdf_entity.field_ar_description
     - field.storage.rdf_entity.field_ci_name
     - field.storage.rdf_entity.field_is_contact_information
+    - field.storage.rdf_entity.field_is_description
+    - field.storage.rdf_entity.field_is_eif_recommendation
     - field.storage.rdf_entity.field_is_owner
-    - field.storage.rdf_entity.field_owner_name
+    - field.storage.rdf_entity.field_is_solution_type
     - field.storage.rdf_entity.field_isr_contact_information
+    - field.storage.rdf_entity.field_isr_description
     - field.storage.rdf_entity.field_isr_owner
-    - field.storage.node.field_paragraphs_body
-    - field.storage.paragraph.field_body
+    - field.storage.rdf_entity.field_isr_release_notes
+    - field.storage.rdf_entity.field_owner_name
     - search_api.server.joinup
   module:
-    - search_api_solr
-    - node
-    - rdf_entity
-    - paragraphs
-    - search_api
-    - asset_distribution
     - custom_page
+    - joinup_distribution
     - joinup_search
+    - node
+    - paragraphs
+    - rdf_entity
+    - search_api
+    - search_api_solr
 third_party_settings:
   search_api_solr:
     finalize: true
@@ -89,6 +88,14 @@ field_settings:
     dependencies:
       module:
         - node
+  description:
+    label: 'Description » Processed text'
+    datasource_id: 'entity:node'
+    property_path: 'description:processed'
+    type: text
+    dependencies:
+      config:
+        - field.storage.node.description
   entity_author:
     label: Author
     property_path: aggregated_field
@@ -127,14 +134,6 @@ field_settings:
         - 'entity:rdf_entity/collection'
         - 'entity:rdf_entity/field_isr_is_version_of'
         - 'entity:rdf_entity/og_audience'
-  field_ad_description:
-    label: 'Description » Processed text'
-    datasource_id: 'entity:rdf_entity'
-    property_path: 'field_ad_description:processed'
-    type: text
-    dependencies:
-      config:
-        - field.storage.rdf_entity.field_ad_description
   field_ar_abstract:
     label: Abstract
     datasource_id: 'entity:rdf_entity'
@@ -396,7 +395,6 @@ field_settings:
       type: union
       fields:
         - 'entity:node/field_state'
-        - 'entity:rdf_entity/field_ad_state'
         - 'entity:rdf_entity/field_ar_state'
         - 'entity:rdf_entity/field_is_state'
         - 'entity:rdf_entity/field_isr_state'
@@ -467,7 +465,7 @@ processor_settings:
     all_fields: false
     fields:
       - body
-      - field_ad_description
+      - description
       - field_ar_abstract
       - field_ar_description
       - field_event_agenda
@@ -489,7 +487,7 @@ processor_settings:
     all_fields: false
     fields:
       - body
-      - field_ad_description
+      - description
       - field_ar_abstract
       - field_ar_description
       - field_event_agenda
@@ -525,7 +523,7 @@ processor_settings:
     all_fields: false
     fields:
       - body
-      - field_ad_description
+      - description
       - field_ar_abstract
       - field_ar_description
       - field_event_agenda
@@ -582,7 +580,7 @@ processor_settings:
     all_fields: false
     fields:
       - body
-      - field_ad_description
+      - description
       - field_ar_abstract
       - field_ar_description
       - field_event_agenda
@@ -612,7 +610,7 @@ processor_settings:
     all_fields: false
     fields:
       - body
-      - field_ad_description
+      - description
       - field_ar_abstract
       - field_ar_description
       - field_event_agenda
