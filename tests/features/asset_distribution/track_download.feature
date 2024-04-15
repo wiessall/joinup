@@ -36,13 +36,13 @@ Feature: Asset distribution editing.
     And I click "Release history"
     Then I should see "Releases for OpenBSD solution"
 
-    And I should see the download link in the "OpenBSD images" asset distribution
-    And I should see the download link in the "Changelog" asset distribution
-    And I should see the external link in the "i386" asset distribution
+    And I should see the download link in the "OpenBSD images" distribution
+    And I should see the download link in the "Changelog" distribution
+    And I should see the external link in the "i386" distribution
 
     # Clicking these links will track the download event.
-    Then I click "Download" in the "OpenBSD images" asset distribution
-    And I click "Download" in the "Changelog" asset distribution
+    Then I click "Download" in the "OpenBSD images" distribution
+    And I click "Download" in the "Changelog" distribution
 
     When I am an anonymous user
     And I go to the "OpenBSD" solution
@@ -50,12 +50,12 @@ Feature: Asset distribution editing.
     Then I should see "Releases for OpenBSD solution"
 
     # The same download links are shown to anonymous users.
-    And I should see the download link in the "OpenBSD images" asset distribution
-    And I should see the download link in the "Changelog" asset distribution
-    And I should see the external link in the "i386" asset distribution
+    And I should see the download link in the "OpenBSD images" distribution
+    And I should see the download link in the "Changelog" distribution
+    And I should see the external link in the "i386" distribution
 
     # Anonymous users will be prompted with a modal to enter their e-mails.
-    When I click "Download" in the "OpenBSD images" asset distribution
+    When I click "Download" in the "OpenBSD images" distribution
     Then a modal should open
     And I should see the text "Download in progress"
     And I should see the text "If you do not have a Joinup account, please take some time to create one, at this page. It will allow you to fully exploit the functionalities of Joinup to create new content, contribute to existing one and collaborate with other users."
@@ -65,13 +65,13 @@ Feature: Asset distribution editing.
     Then the modal should be closed
 
     # Verify that users can opt-out from inserting their e-mail.
-    When I click "Download" in the "Changelog" asset distribution
+    When I click "Download" in the "Changelog" distribution
     Then a modal should open
     When I press "No thanks" in the "Modal buttons" region
     Then the modal should be closed
 
     # Verify that the modal also shows in the overview page.
-    When I click "Changelog" in the "Changelog" asset distribution
+    When I click "Changelog" in the "Changelog" distribution
     Then I should see the link "Download"
     When I click "Download"
     Then a modal should open
@@ -79,7 +79,7 @@ Feature: Asset distribution editing.
     Then the modal should be closed
 
     When I am logged in as a user with the moderator role
-    And I go to the distribution downloads page
+    And I go to "/admin/reporting/distribution-downloads"
     Then I should see the following download entries:
       | user                     | e-mail                     | distribution   |
       | Anonymous (not verified) | trackme@example.com        | OpenBSD images |
@@ -112,7 +112,7 @@ Feature: Asset distribution editing.
       | Distribution 3 | user1               |
 
     Given I am logged in as a moderator
-    And I go to the distribution downloads page
+    And I go to "/admin/reporting/distribution-downloads"
     Then I should not see the "Left sidebar" region
 
     When I click "Download CSV"

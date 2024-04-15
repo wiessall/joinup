@@ -66,7 +66,7 @@ Feature:
     When I go to the "Persistent release" release
     Then the persistent url should contain "http://data.europa.eu/w21"
 
-    When I go to the "Persistent distribution" asset distribution
+    When I go to the "Persistent distribution" distribution
     Then the persistent url should contain "http://data.europa.eu/w21"
 
     When I go to the "Persistent licence" licence

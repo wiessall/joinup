@@ -253,15 +253,15 @@ Feature: As a site moderator I am able to import RDF files.
     Then the response status code should be 200
 
     # Ensure that the og relation is set between the distribution and the solution.
-    When I go to the "Windows" asset distribution
+    When I go to the "Windows" distribution
     Then I see the text "Solution 1" in the "Header" region
     And I should see the heading "Windows"
 
     # And the SPDX licence IDs were converted to Joinup licence IDs.
     And I should see "Licence same as Apache 2"
-    When I go to the "Linux" asset distribution
+    When I go to the "Linux" distribution
     And I should see "Licence same as Apache 2"
-    When I go to the "A standalone distribution" asset distribution
+    When I go to the "A standalone distribution" distribution
     And I should see "Licence same as MIT"
 
     # Re-import.
@@ -355,10 +355,10 @@ Feature: As a site moderator I am able to import RDF files.
     And I delete the "A local authority" owner
     And I delete the "Asset release 1" release
     And I delete the "Asset release 2" release
-    And I delete the "Windows" asset distribution
-    And I delete the "Linux" asset distribution
-    And I delete the "A standalone distribution" asset distribution
-    And I delete the "MacOS" asset distribution
+    And I delete the "Windows" distribution
+    And I delete the "Linux" distribution
+    And I delete the "A standalone distribution" distribution
+    And I delete the "MacOS" distribution
     And I delete the "Solution 1" solution
     # Solution 2 is deleted automatically by Behat.
     And I delete the "Solution 3" solution

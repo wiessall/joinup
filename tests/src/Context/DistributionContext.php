@@ -17,13 +17,15 @@ use Drupal\joinup\Traits\FileTrait;
 use Drupal\joinup\Traits\JavascriptTrait;
 use Drupal\joinup\Traits\RdfEntityTrait;
 use Drupal\joinup\Traits\TestingEntitiesTrait;
+use Drupal\joinup_distribution\Entity\DistributionInterface;
 use Drupal\meta_entity\Entity\MetaEntity;
-use Drupal\rdf_entity\RdfInterface;
+use Drupal\node\Entity\Node;
+use PHPUnit\Framework\Assert;
 
 /**
- * Behat step definitions for testing asset distributions.
+ * Behat step definitions for testing distributions.
  */
-class AssetDistributionContext extends RawDrupalContext {
+class DistributionContext extends RawDrupalContext {
 
   use EntityReferenceTrait;
   use EntityTrait;
@@ -33,35 +35,35 @@ class AssetDistributionContext extends RawDrupalContext {
   use JavascriptTrait;
 
   /**
-   * Navigates to the canonical page display of an asset distribution.
+   * Navigates to the canonical page display of a distribution.
    *
-   * @param string $asset_distribution
-   *   The title of the asset distribution.
+   * @param string $distribution
+   *   The title of the distribution.
    *
-   * @When I go to (the homepage of )the :asset_distribution distribution
-   * @When I visit (the homepage of )the :asset_distribution distribution
-   * @When I go to (the homepage of )the :asset_distribution asset distribution
-   * @When I visit (the homepage of )the :asset_distribution asset distribution
+   * @When I go to (the homepage of )the :distribution distribution
+   * @When I visit (the homepage of )the :distribution distribution
+   * @When I go to (the homepage of )the :distribution distribution
+   * @When I visit (the homepage of )the :distribution distribution
    *
    * @throws \Drupal\Core\Entity\EntityMalformedException
    */
-  public function visitDistribution(string $asset_distribution): void {
-    /** @var \Drupal\rdf_entity\Entity\Rdf $entity */
-    $entity = $this->getEntityByLabel('rdf_entity', $asset_distribution);
+  public function visitDistribution(string $distribution): void {
+    /** @var \Drupal\node\NodeInterface $entity */
+    $entity = $this->getEntityByLabel('rdf_entity', $distribution);
     $this->visitPath($entity->toUrl()->toString());
   }
 
   /**
-   * Creates a number of asset distributions with data provided in a table.
+   * Creates a number of distributions with data provided in a table.
    *
-   * @param \Behat\Gherkin\Node\TableNode $asset_distribution_table
-   *   The asset distribution data.
+   * @param \Behat\Gherkin\Node\TableNode $distribution_table
+   *   The distribution data.
    *
    * @codingStandardsIgnoreStart
    *   Table format:
-   *   | uri                                     | title            | description                | access url                               | creation date     | modification date | parent        |
-   *   | http://joinup.eu/asset_distribution/foo | Foo distribution | This is a foo distribution | test.zip                                 | 28-01-1995 12:05  | 30-01-1995 10:44  | Solution name |
-   *   | http://joinup.eu/asset_distribution/bar | Bar distribution | This is a bar distribution | http://external_url.com/path-to-file.zip | 28-01-1995 12:06  |                   | Release name  |
+   *   | uri                               | title            | description                | access url                               | creation date     | modification date | parent        |
+   *   | http://joinup.eu/distribution/foo | Foo distribution | This is a foo distribution | test.zip                                 | 28-01-1995 12:05  | 30-01-1995 10:44  | Solution name |
+   *   | http://joinup.eu/distribution/bar | Bar distribution | This is a bar distribution | http://external_url.com/path-to-file.zip | 28-01-1995 12:06  |                   | Release name  |
    * @codingStandardsIgnoreEnd
    *
    * Fields title and description are mandatory. Field 'access url' can be
@@ -70,16 +72,16 @@ class AssetDistributionContext extends RawDrupalContext {
    * @throws \Exception
    *   Thrown when a column name is incorrect.
    *
-   * @Given (the following )(asset )distributions:
+   * @Given (the following )distributions:
    */
-  public function givenAssetDistributions(TableNode $asset_distribution_table): void {
-    foreach ($asset_distribution_table->getColumnsHash() as $values) {
-      $this->createAssetDistributionFromAliasedTableValues($values);
+  public function givenDistributions(TableNode $distribution_table): void {
+    foreach ($distribution_table->getColumnsHash() as $values) {
+      $this->createDistributionFromAliasedTableValues($values);
     }
   }
 
   /**
-   * Creates an asset distribution with data provided in a table.
+   * Creates a distribution with data provided in a table.
    *
    * Table format:
    * | title       | Sample distribution                             |
@@ -91,39 +93,39 @@ class AssetDistributionContext extends RawDrupalContext {
    * Fields 'title' and 'description' are required. Field 'access url' can be
    * either an external valid URL or a local file to be uploaded.
    *
-   * @param \Behat\Gherkin\Node\TableNode $asset_distribution_table
-   *   The asset distribution data.
+   * @param \Behat\Gherkin\Node\TableNode $distribution_table
+   *   The distribution data.
    *
    * @throws \Exception
    *   Thrown when a column name is incorrect.
    *
-   * @Given (the following )(asset )distribution:
+   * @Given (the following )distribution:
    */
-  public function givenAssetDistribution(TableNode $asset_distribution_table): void {
-    $values = $asset_distribution_table->getRowsHash();
-    $this->createAssetDistributionFromAliasedTableValues($values);
+  public function givenAssetDistribution(TableNode $distribution_table): void {
+    $values = $distribution_table->getRowsHash();
+    $this->createDistributionFromAliasedTableValues($values);
   }
 
   /**
-   * Creates an asset distribution from the given property and field data.
+   * Creates a distribution from the given property and field data.
    *
    * @param array $values
    *   An optional associative array of values, keyed by property name.
    *
-   * @return \Drupal\rdf_entity\RdfInterface
-   *   A new asset distribution entity.
+   * @return \Drupal\joinup_distribution\Entity\DistributionInterface
+   *   A new distribution entity.
    *
    * @throws \Exception
    *   Thrown when a given file is not found.
    */
-  protected function createAssetDistribution(array $values): RdfInterface {
+  protected function createDistribution(array $values): DistributionInterface {
     // The Access URL field is either an external URI, or file upload.
-    if (!empty($values['field_ad_access_url'])) {
+    if (!empty($values['access_url'])) {
       global $base_url;
-      foreach ($values['field_ad_access_url'] as $key => $url) {
+      foreach ($values['access_url'] as $key => $url) {
         if (!UrlHelper::isValid($url, TRUE) || !UrlHelper::isExternal($url) || UrlHelper::externalIsLocal($url, $base_url)) {
           // It's a local file to be uploaded.
-          $values['field_ad_access_url'][$key] = FileUrlHandler::fileToUrl($this->createFile($url));
+          $values['access_url'][$key] = FileUrlHandler::fileToUrl($this->createFile($url));
         }
       }
     }
@@ -137,17 +139,20 @@ class AssetDistributionContext extends RawDrupalContext {
       unset($values['downloads']);
     }
 
-    $asset_distribution = $this->createRdfEntity('asset_distribution', $values);
-    $this->entities['rdf_entity'][$asset_distribution->id()] = $asset_distribution;
+    $values['type'] = 'distribution';
 
-    return $asset_distribution;
+    $distribution = Node::create($values);
+    $distribution->save();
+    $this->entities['node'][$distribution->id()] = $distribution;
+
+    return $distribution;
   }
 
   /**
-   * Creates an asset distribution using the provided aliases table values.
+   * Creates a distribution using the provided aliases table values.
    *
    * @param array $aliased_values
-   *   An associative array of values used to create the distribuion, with keys
+   *   An associative array of values used to create the distribution, with keys
    *   using the aliases from self::assetDistributionFieldAliases(). If the key
    *   'parent' is present, a relation with a parent solution or release with
    *   a label matching this value will be created.
@@ -155,11 +160,11 @@ class AssetDistributionContext extends RawDrupalContext {
    * @throws \InvalidArgumentException
    *   Thrown when an unknown key alias is present in the list of values.
    * @throws \Exception
-   *   Thrown when the passed values cannot be converted, or when the asset
+   *   Thrown when the passed values cannot be converted, or when the
    *   distribution cannot be created.
    */
-  protected function createAssetDistributionFromAliasedTableValues(array $aliased_values): void {
-    $aliases = self::assetDistributionFieldAliases();
+  protected function createDistributionFromAliasedTableValues(array $aliased_values): void {
+    $aliases = self::distributionFieldAliases();
 
     $values = [];
     // Replace the column aliases with the actual field names.
@@ -176,44 +181,48 @@ class AssetDistributionContext extends RawDrupalContext {
       $values['parent'] = [$values['parent']];
     }
 
-    $values = $this->convertEntityReferencesValues('rdf_entity', 'asset_distribution', $this->parseRdfEntityFields($values));
-    $this->createAssetDistribution($values);
+    $values = $this->convertEntityReferencesValues('node', 'distribution', $values);
+    $this->createDistribution($values);
   }
 
   /**
-   * Deletes an asset distribution.
+   * Deletes a distribution.
    *
-   * @param string $asset_distribution
-   *   The title of the asset distribution.
+   * @param string $distribution
+   *   The title of the distribution.
    *
-   * @When I delete the :asset_distribution asset distribution
+   * @When I delete the :distribution distribution
    *
    * @throws \Drupal\Core\Entity\EntityStorageException
    *   Thrown when the entity could not be deleted.
    */
-  public function deleteAssetDistribution(string $asset_distribution): void {
-    /** @var \Drupal\asset_distribution\Entity\AssetDistributionInterface $entity */
-    $entity = $this->getEntityByLabel('rdf_entity', $asset_distribution);
-    if (isset($this->entities['rdf_entity'][$entity->id()])) {
-      unset($this->entities['rdf_entity'][$entity->id()]);
+  public function deleteDistribution(string $distribution): void {
+    /** @var \Drupal\joinup_distribution\Entity\DistributionInterface $entity */
+    $entity = $this->getEntityByLabel('node', $distribution);
+    if (isset($this->entities['node'][$entity->id()])) {
+      unset($this->entities['node'][$entity->id()]);
     }
     $entity->skip_notification = TRUE;
     $entity->delete();
   }
 
   /**
-   * Checks the number of available asset distributions.
+   * Checks the number of available distributions.
    *
    * @param int $number
-   *   The expected number of asset distributions.
+   *   The expected number of distributions.
    *
    * @throws \Exception
    *   Thrown if the count does not match the expected number.
    *
    * @Then I should have :number distribution(s)
    */
-  public function assertAssetDistributionCount(int $number): void {
-    $this->assertRdfEntityCount($number, 'asset_distribution');
+  public function assertDistributionCount(int $number): void {
+    $actual = \Drupal::entityQuery('rdf_entity')->accessCheck(FALSE)
+      ->condition('type', 'distribution')
+      ->count()
+      ->execute();
+    Assert::assertEquals($number, $actual);
   }
 
   /**
@@ -222,23 +231,23 @@ class AssetDistributionContext extends RawDrupalContext {
    * @return array
    *   Mapping.
    */
-  protected static function assetDistributionFieldAliases(): array {
+  protected static function distributionFieldAliases(): array {
     // Mapping alias - field name.
     return [
-      'access url' => 'field_ad_access_url',
+      'access url' => 'access_url',
       'creation date' => 'created',
-      'description' => 'field_ad_description',
+      'description' => 'description',
       'downloads' => 'downloads',
-      'file size' => 'field_ad_file_size',
-      'format' => 'field_ad_format',
-      'licence' => 'field_ad_licence',
+      'file size' => 'file_size',
+      'format' => 'format',
+      'licence' => 'licence',
       'modification date' => 'changed',
-      'representation technique' => 'field_ad_repr_technique',
+      'representation technique' => 'representation_technique',
       'parent' => 'parent',
-      'state' => 'field_ad_state',
-      'status' => 'field_status',
-      'title' => 'label',
-      'uri' => 'id',
+      'state' => 'field_state',
+      'status' => 'process_status',
+      'title' => 'title',
+      'uri' => 'uri',
     ];
   }
 
@@ -259,19 +268,19 @@ class AssetDistributionContext extends RawDrupalContext {
    * @throws \InvalidArgumentException
    *   Thrown if the link type parameter does not receive a valid value.
    *
-   * @Then I should see the :link_type link in the :distribution( asset) distribution
+   * @Then I should see the :link_type link in the :distribution distribution
    */
   public function assertLinkPresentInCompactDistributionTile(string $link_type, string $distribution): void {
     if (!in_array($link_type, ['download', 'external'])) {
       throw new \InvalidArgumentException('Only "download" and "external" values are allowed for $link_type.');
     }
     $link_type = ucfirst($link_type);
-    $distribution = $this->getEntityByLabel('rdf_entity', $distribution);
-    if (empty($distribution->field_ad_access_url->first())) {
-      throw new \Exception(sprintf('Asset distribution "%s" does not contain any download links.', $distribution->label()));
+    $distribution = $this->getEntityByLabel('node', $distribution);
+    if (empty($distribution->access_url->first())) {
+      throw new \Exception(sprintf('Distribution "%s" does not contain any download links.', $distribution->label()));
     }
-    $file = FileUrlHandler::urlToFile($distribution->field_ad_access_url->target_id);
-    $link = FileUrlHandler::isRemote($file) ? $distribution->field_ad_access_url->target_id : \Drupal::service('file_url_generator')->generateAbsoluteString($file->getFileUri());
+    $file = FileUrlHandler::urlToFile($distribution->access_url->target_id);
+    $link = FileUrlHandler::isRemote($file) ? $distribution->access_url->target_id : \Drupal::service('file_url_generator')->generateAbsoluteString($file->getFileUri());
     $result = $this->getSession()->getPage()->find('xpath', "//a[contains(., '{$distribution->label()}')]/ancestor::li[contains(concat(' ', @class, ' '), ' releases__item ')]//a[@href='{$link}' and contains(concat(' ', @class, ' '), ' btn ') and normalize-space(text()) = '{$link_type}']");
     if (empty($result)) {
       throw new \Exception(sprintf('No link was found in the "%s" distribution on the page %s', $distribution->label(), $this->getSession()->getCurrentUrl()));
@@ -289,12 +298,12 @@ class AssetDistributionContext extends RawDrupalContext {
    * @throws \Exception
    *   Thrown if the link was found.
    *
-   * @Then the :distribution( asset) distribution should not have any download urls
+   * @Then the :distribution distribution should not have any download urls
    */
   public function assertLinkNotPresentInCompactDistributionTile(string $distribution): void {
     $link = $this->getSession()->getPage()->find('xpath', "//a[contains(text(), '$distribution')]/ancestor::div[contains(concat(' ', @class, ' '), ' releases__item ')]//a[contains(text(), 'External') or contains(text(), 'Download')]");
     if (!empty($link)) {
-      throw new \Exception(sprintf('Asset distribution "%s" contains download link(s).', $distribution));
+      throw new \Exception(sprintf('Distribution "%s" contains download link(s).', $distribution));
     }
   }
 
@@ -312,8 +321,8 @@ class AssetDistributionContext extends RawDrupalContext {
    * @Then the :distribution distribution should have the link of the :file_name in the access URL field
    */
   public function assertLinkSynchronized(string $distribution, string $file_name): void {
-    $distribution = $this->getEntityByLabel('rdf_entity', $distribution);
-    $file = FileUrlHandler::urlToFile($distribution->field_ad_access_url->target_id);
+    $distribution = $this->getEntityByLabel('node', $distribution);
+    $file = FileUrlHandler::urlToFile($distribution->access_url->target_id);
     if (($file->getFilename() !== $file_name) || !\Drupal::service('file_url_generator')->generateAbsoluteString($file->getFileUri())) {
       throw new \Exception("The file {$file_name} was not found in the '{$distribution->label()}' distribution'");
     }
@@ -336,8 +345,8 @@ class AssetDistributionContext extends RawDrupalContext {
     $expected_file_size = filesize($path);
 
     // Test the file size.
-    if ($expected_file_size !== (int) $distribution->field_ad_file_size->value) {
-      throw new \Exception("File '$file_name' has the size '{$distribution->field_ad_file_size->value}'. Expected '$expected_file_size'.");
+    if ($expected_file_size !== (int) $distribution->file_size->value) {
+      throw new \Exception("File '$file_name' has the size '{$distribution->file_size->value}'. Expected '$expected_file_size'.");
     }
   }
 
@@ -399,7 +408,7 @@ class AssetDistributionContext extends RawDrupalContext {
    * @throws \Exception
    *   Thrown when the rendered distribution is not found.
    *
-   * @When I click :link in the :heading asset distribution
+   * @When I click :link in the :heading distribution
    */
   public function clickLinkInCompactDistribution(string $link, string $heading): void {
     $element = $this->getCompactDistributionByHeading($heading);
@@ -435,8 +444,8 @@ class AssetDistributionContext extends RawDrupalContext {
   public function downloadEvents(TableNode $table): void {
     foreach ($table->getColumnsHash() as $row) {
       /** @var \Drupal\asset_distribution\Entity\AssetDistributionInterface $distribution */
-      $distribution = $this->getEntityByLabel('rdf_entity', $row['distribution'], 'asset_distribution');
-      $file = FileUrlHandler::urlToFile($distribution->get('field_ad_access_url')->target_id);
+      $distribution = $this->getEntityByLabel('node', $row['distribution'], 'distribution');
+      $file = FileUrlHandler::urlToFile($distribution->get('access_url')->target_id);
       $account = \Drupal::service('email.validator')->isValid($row['user']) ? new AnonymousUserSession() : user_load_by_name($row['user']);
       $mail = $account->isAnonymous() ? $row['user'] : $account->getEmail();
 
@@ -484,15 +493,6 @@ class AssetDistributionContext extends RawDrupalContext {
       $this->assertSession()->elementTextContains('css', $selector, $entry['e-mail']);
       $this->getSession()->getPage()->find('css', $selector)->hasLink($entry['distribution']);
     }
-  }
-
-  /**
-   * Navigates to the distribution downloads statistics page.
-   *
-   * @When I go to the distribution downloads page
-   */
-  public function goToDistributionDownloadsPage(): void {
-    $this->visitPath('admin/reporting/distribution-downloads');
   }
 
   /**
