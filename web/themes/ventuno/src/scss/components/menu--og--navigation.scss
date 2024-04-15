@@ -4,9 +4,9 @@
 .menu--og--navigation {
   position: relative;
   z-index: 2;
-  background-color: $light;
-  width: 100%;
   float: left;
+  width: 100%;
+  background-color: $light;
   .nav {
     &:not(.nav-pills) {
       flex-wrap: nowrap;
@@ -43,16 +43,21 @@
       }
     }
   }
+
   // Override some pplus styles.
   .p-plus {
     float: left;
     align-items: baseline;
     min-width: 15rem;
     .p-plus__toggle-btn {
-      &:after {
+      &::after {
         @include get-bootstrap-icon('chevron-down', currentColor);
+
         margin-left: $spacer * .5;
       }
+    }
+    .p-plus__primary {
+      flex: none;
     }
     .p-plus__overflow {
       right: $spacer * 2;
@@ -61,6 +66,7 @@
         padding: var(--bs-dropdown-item-padding-y) var(--bs-dropdown-item-padding-x);
         &:has(a.is-active) {
           @include gradient-bg($nav-pills-link-active-bg);
+
           color: $nav-pills-link-active-color;
         }
       }
