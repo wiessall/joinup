@@ -24,7 +24,10 @@ dependencies:
     - node.type.document
   module:
     - datetime
-    - smart_trim
+    - field_delimiter
+    - field_formatter_range
+    - joinup_core
+    - joinup_slick
     - svg_image
     - template_suggestion
     - user
@@ -35,29 +38,12 @@ targetEntityType: node
 bundle: document
 mode: digest_message
 content:
-  body:
-    type: smart_trim
+  abstract:
+    type: string
     label: hidden
     settings:
-      trim_length: 200
-      trim_type: chars
-      trim_suffix: …
-      wrap_output: false
-      wrap_class: trimmed
-      more:
-        display_link: false
-        target_blank: false
-        link_trim_only: false
-        class: more-link
-        text: More
-        aria_label: 'Read more about [node:title]'
-      summary_handler: full
-      trim_options:
-        text: true
-        trim_zero: false
-    third_party_settings:
-      template_suggestion:
-        template_suggestion: bare
+      link_to_entity: false
+    third_party_settings: {  }
     weight: 1
     region: content
   field_document_logo:
@@ -81,6 +67,30 @@ content:
         template_suggestion: bare
     weight: 2
     region: content
+  field_paragraphs_body:
+    type: filtered_entity_reference_bundles
+    label: hidden
+    settings:
+      view_mode: message_digest
+      link: ''
+      filtered_entity_bundles:
+        - simple_paragraph
+        - text
+    third_party_settings:
+      field_delimiter:
+        delimiter: ''
+      field_formatter_range:
+        order: 0
+        limit: 1
+        offset: 0
+      joinup_slick:
+        preset: ''
+        field_label: true
+        custom_label: ''
+      template_suggestion:
+        template_suggestion: ''
+    weight: 1
+    region: content
   field_short_title:
     type: string
     label: hidden
@@ -92,14 +102,13 @@ content:
     weight: 0
     region: content
 hidden:
-  abstract: true
+  body: true
   featured: true
   field_comments: true
   field_document_spatial_coverage: true
   field_file: true
   field_keywords: true
   field_licence: true
-  field_paragraphs_body: true
   field_shared_in: true
   field_site_featured: true
   field_state: true
