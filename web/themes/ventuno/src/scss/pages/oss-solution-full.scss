@@ -42,7 +42,7 @@
     @include full-width-color($light, 0);
     &__right {
       position: relative;
-      &::before {
+      &::after {
         position: absolute;
         z-index: -1;
         top: 0;
@@ -54,8 +54,6 @@
         inset-inline-start: 50%;
         @include media-breakpoint-up(md) {
           left: 0;
-          width: 100vw;
-          height: 100%;
           margin-inline-start: 0;
           inset-inline-start: 0;
         }
@@ -77,8 +75,10 @@
       }
     }
     &__indicator {
-      .git-indicator {
+      .block:not(:last-child) {
         margin-right: $spacer * 2;
+      }
+      .git-indicator {
         span {
           font-size: $font-size-base;
         }
