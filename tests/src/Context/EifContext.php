@@ -53,7 +53,6 @@ class EifContext extends RawDrupalContext {
 
     $contact = Node::create([
       'type' => 'contact_information',
-      'id' => 'http://example.com/contact',
       'title' => 'Contact name',
       'ci_email' => 'contact.email@example.com',
     ]);
@@ -68,7 +67,7 @@ class EifContext extends RawDrupalContext {
       'field_ar_state' => 'published',
       'field_topic' => $tid = $this->getRandomTopic()->id(),
       'field_ar_owner' => 'http://example.com/owner',
-      'field_ar_contact_information' => 'http://example.com/contact',
+      'field_ar_contact_information' => $contact->id(),
     ]);
     $collection->save();
     $this->entities['rdf_entity'][$collection->id()] = $collection;
