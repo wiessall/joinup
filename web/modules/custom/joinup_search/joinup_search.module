@@ -284,6 +284,7 @@ function joinup_search_entity_prepare_view(string $entity_type_id, array $entiti
  *
  * On each config export, the Search API indexes dependencies are shuffled. This
  * is just a workaround until #2855675 is fixed.
+ *
  * @see https://www.drupal.org/i/2855675
  * @todo Remove this when https://www.drupal.org/i/2855675 lands.
  */
