@@ -290,7 +290,7 @@ function contact_information_require_login(array $form, FormStateInterface $form
  * Implements hook_ENTITY_TYPE_view().
  */
 function contact_information_node_view(array &$build, NodeInterface $contact_information, EntityViewDisplayInterface $display, string $view_mode): void {
-  if ($contact_information instanceof ContactInformationInterface && $view_mode === 'about') {
+  if ($contact_information instanceof ContactInformationInterface && $view_mode === 'teaser') {
     if (\Drupal::currentUser()->isAuthenticated()) {
       // If an anonymous user clicks on the contact information 'Contact us'
       // link, they are redirected to log in or register with the EU Login
@@ -362,6 +362,9 @@ function contact_information_node_view(array &$build, NodeInterface $contact_inf
       $build['ci_email'][0]['#title'] = $build['title'][0];
       unset($build['title']);
     }
+
+    // Get the entity type list cache tags.
+    $cacheable_metadata->addCacheTags(\Drupal::entityTypeManager()->getDefinition('email_confirmer_confirmation')->getListCacheTags());
 
     // Vary the field's cache by whether the user is logged in or not.
     $cacheable_metadata
