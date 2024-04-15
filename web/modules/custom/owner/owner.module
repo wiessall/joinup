@@ -160,7 +160,7 @@ function owner_entity_auto_label(EntityInterface $entity): void {
 
   // Generate the label using the values of the name field.
   $names = array_column($entity->get('owner_name')->getValue(), 'value');
-  $entity->set('title', implode(', ', $names));
+  $entity->set('title', substr(implode(', ', $names), 0, 255));
 }
 
 /**
