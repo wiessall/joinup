@@ -1,0 +1,40 @@
+{#
+/**
+ * @file
+ * Template override for the flag.
+ *
+ * Available variables:
+ * - attributes: HTML attributes for the link element.
+ * - title: The flag link title.
+ * - action: 'flag' or 'unflag'
+ * - flag: The flag object.
+ * - flaggable: The flaggable entity.
+ */
+#}
+
+{# Depending on the flag action, set the appropriate action class. #}
+{% set action_icon = action == 'flag' ? 'bookmark' : 'bookmark-check-fill' %}
+
+{# Set the remaining Flag CSS classes. #}
+{% set wrapper_classes = [
+  'flag',
+  'flag-' ~ flag.id()|clean_class,
+  ('js-flag-' ~ flag.id() ~ '-' ~ flaggable.id())|clean_class,
+  'flag-action-' ~ action|clean_class,
+] %}
+{% set link_classes = [
+  'btn',
+  'btn-secondary',
+] %}
+
+{# Set nofollow to prevent search bots from crawling anonymous flag links #}
+{% set attributes = attributes.setAttribute('rel', 'nofollow') %}
+
+<div class="{{ wrapper_classes|join(' ') }}">
+  <a{{ attributes.addClass(link_classes) }}>
+    {{ pattern('icon', {
+      name: action_icon
+    }) }}
+    {{ title }}
+  </a>
+</div>
