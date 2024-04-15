@@ -33,7 +33,6 @@ dependencies:
     - link
     - options
     - template_suggestion
-    - text
     - user
 third_party_settings:
   field_group:
@@ -79,13 +78,6 @@ targetEntityType: node
 bundle: document
 mode: default
 content:
-  body:
-    type: text_default
-    label: hidden
-    settings: {  }
-    third_party_settings: {  }
-    weight: 1
-    region: content
   field_comments:
     type: comment_default
     label: above
@@ -194,6 +186,7 @@ content:
     region: content
 hidden:
   abstract: true
+  body: true
   featured: true
   field_document_logo: true
   field_document_spatial_coverage: true
