@@ -4,7 +4,7 @@ status: true
 dependencies:
   config:
     - field.storage.rdf_entity.field_isr_distribution
-    - rdf_entity.rdfentity.asset_distribution
+    - node.type.distribution
     - rdf_entity.rdfentity.asset_release
 _core:
   default_config_hash: WbI6LBdJHd-n6tVwu1rPG6zrzJuSHfmcM0lyF6EQ_Cg
@@ -19,10 +19,10 @@ translatable: false
 default_value: {  }
 default_value_callback: ''
 settings:
-  handler: 'default:rdf_entity'
+  handler: 'default:node'
   handler_settings:
     target_bundles:
-      asset_distribution: asset_distribution
+      distribution: distribution
     sort:
       field: _none
     auto_create: false
