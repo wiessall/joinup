@@ -81,7 +81,7 @@ class EifContext extends RawDrupalContext {
       'field_is_state' => 'published',
       'field_topic' => $tid,
       'field_is_owner' => 'http://example.com/owner',
-      'field_is_contact_information' => 'http://example.com/contact',
+      'field_is_contact_information' => $contact->id(),
     ]);
     $solution->save();
     $this->entities['rdf_entity'][$solution->id()] = $solution;
