@@ -369,6 +369,9 @@
                 "Allow to drag and drop nested paragraphs @see https://www.drupal.org/project/layout_paragraphs/issues/3401176": "resources/patch/php/drupal/layout_paragraphs/3401176.patch",
                 "Buttons are duplicated when form has validation errors. @see https://www.drupal.org/i/3265794": "resources/patch/php/drupal/layout_paragraphs/3265794.diff"
             },
+            "drupal/menu_link_destination": {
+                "Error: Call to a member function getOption() on null @see https://www.drupal.org/project/menu_link_destination/issues/3251757": "resources/patch/php/drupal/menu_link_destination/menu_link_destination-fatal_error_when-no_url-3251757-15.patch"
+            },
             "drupal/message_notify": {
                 "Allow 3rd-party to act before delivery @see https://www.drupal.org/project/message_notify/issues/3314370": "resources/patch/php/drupal/message_notify/3314370.diff"
             },
