@@ -9,7 +9,9 @@ dependencies:
     - field.field.node.contact_information.field_state
     - node.type.contact_information
   module:
+    - email_contact
     - link
+    - template_suggestion
     - user
 id: node.contact_information.teaser
 targetEntityType: node
@@ -17,15 +19,24 @@ bundle: contact_information
 mode: teaser
 content:
   ci_email:
-    type: basic_string
-    label: above
-    settings: {  }
-    third_party_settings: {  }
+    type: email_contact_link
+    label: hidden
+    settings:
+      link_text: 'Contact us'
+      redirection_to: custom
+      custom_path: ''
+      include_values: '1'
+      default_message: ''
+      modal: true
+      title: 'Contact us'
+    third_party_settings:
+      template_suggestion:
+        template_suggestion: ''
     weight: 0
     region: content
   ci_webpage:
     type: link
-    label: above
+    label: hidden
     settings:
       trim_length: 80
       url_only: false
