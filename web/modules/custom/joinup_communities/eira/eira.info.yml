@@ -7,4 +7,3 @@ package: 'Joinup communities'
 dependencies:
   - drupal:filter
   - joinup:joinup_taxonomy
-
