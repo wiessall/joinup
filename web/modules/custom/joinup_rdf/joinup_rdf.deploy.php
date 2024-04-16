@@ -138,12 +138,16 @@ function joinup_rdf_deploy_110402(array &$sandbox): string {
     'http://adms-sw-v1.00',
     'http://adms_skos_v1.00',
     'http://countries-skos',
+    'http://data-theme-skos',
+    'http://data.europa.eu/w21/user-graph/e120079b-817b-4c4b-b27b-e97f25cc2c58',
+    'http://data.europa.eu/w21/user-graph/ef5c2894-1fa1-43b8-870e-fe55f5e019ae',
     'http://eif_conceptual_model',
     'http://eif_interoperability_layer',
     'http://eif_principle',
     'http://eif_recommendation',
     'http://eif_solution_type',
     'http://eira_skos',
+    'http://eira_skos_properties',
     'http://filetypes-skos',
     'http://joinup.eu/license_type/published',
     'http://languages-skos',
@@ -301,6 +305,10 @@ function joinup_rdf_deploy_110404(array &$sandbox): string {
           if ($fieldName === 'description') {
             // Formatted text needs a format.
             $value = ['value' => $value, 'format' => 'content_editor'];
+          }
+          if ($fieldName === 'deprecated') {
+            // We need to convert that value from string to boolean.
+            $value = filter_var($value, FILTER_VALIDATE_BOOLEAN);
           }
           $values[$fieldName][] = $value;
         }
