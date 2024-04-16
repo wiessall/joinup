@@ -153,7 +153,7 @@ class OwnerWorkflowTest extends JoinupWorkflowExistingSiteTestBase {
 
         // Override the default state of 'published' that is set during entity
         // creation.
-        // @see owner_rdf_entity_create()
+        // @see owner_node_create()
         $content->set('field_state', $entity_state);
         $content->save();
 
