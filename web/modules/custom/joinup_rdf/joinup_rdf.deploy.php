@@ -11,6 +11,7 @@ use Drupal\Component\Serialization\Json;
 use Drupal\Core\Serialization\Yaml;
 use Drupal\joinup_taxonomy\Entity\MappedTerm;
 use Drupal\node\Entity\Node;
+use Drupal\rdf_sync\Model\SyncMethod;
 use Drupal\rdf_sync\RdfSyncConnection;
 
 /**
@@ -410,13 +411,11 @@ function joinup_rdf_deploy_110406(array &$sandbox): string {
   ];
 
   $ids = array_splice($sandbox['ids'], 0, 50);
+  $nodes = [];
   foreach ($ids as $id) {
-    $query = <<<SPARQL
-    SELECT ?property ?value WHERE {
-      <$id> ?property ?value .
-    }
-  SPARQL;
-    $data = $endpoint->query($query)->getArrayCopy();
+    $data = $endpoint
+      ->query("SELECT ?property ?value WHERE { <$id> ?property ?value . }")
+      ->getArrayCopy();
     $values = _joinup_rdf_deploy_flatten_rdf_values($data);
     foreach ($values as $property => $value) {
       if (isset($mapping[$property])) {
@@ -425,17 +424,35 @@ function joinup_rdf_deploy_110406(array &$sandbox): string {
       unset($values[$property]);
     }
 
+    // Clean the entity from the endpoint.
+    $endpoint->query("WITH <http://joinup.eu/contact-information/published> DELETE { ?s ?p ?o } WHERE { ?s ?p ?o . VALUES ?s { <$id> } }");
+
     // Create the node.
     /** @var \Drupal\contact_information\Entity\ContactInformationInterface $node */
     $node = Node::create($values + ['type' => 'contact_information']);
     $node->set('uri', $id);
     $node->save();
+    $nodes[] = $node;
   }
+  \Drupal::getContainer()->get('rdf_sync.synchronizer')->synchronize(SyncMethod::INSERT, $nodes, TRUE);
 
   $sandbox['processed'] += count($ids);
   $sandbox['#finished'] = $sandbox['processed'] / $sandbox['total'];
 
   return "Migrated {$sandbox['processed']} out of {$sandbox['total']} contact information entities";
+}
+
+/**
+ * Clear the contact information graph.
+ */
+function joinup_rdf_deploy_110407(): string {
+  // Now that all entities are migrated and synced into the `http://data` graph,
+  // we can safely remove the previous one.
+  \Drupal::getContainer()
+    ->get('sparql.endpoint')
+    ->query('CLEAR GRAPH <http://joinup.eu/contact-information/published>');
+
+  return 'Cleared the contact information graph';
 }
 
 /**
