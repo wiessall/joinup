@@ -1,0 +1,2 @@
+div:has(.btn+.spinner-border){position:relative}div:has(.btn+.spinner-border) .spinner-border{right:calc(50% - 30px)}div:has(.btn+.spinner-border) .btn{opacity:.5}
+/*# sourceMappingURL=ajax-throbber.min.css.map */

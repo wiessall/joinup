@@ -201,6 +201,20 @@ module.exports = {
         sourceMap: true,
       },
     },
+    {
+      entry: path.resolve(
+        outputFolder,
+        `${ventuno}src/js/sticky-groupheader.js`
+      ),
+      dest: path.resolve(
+        outputFolder,
+        `${ventuno}assets/js/sticky-groupheader.js`
+      ),
+      options: {
+        minify: true,
+        sourceMap: true,
+      },
+    },
     // IOP
     {
       entry: path.resolve(outputFolder, `${iop}src/js/glide.js`),
@@ -479,6 +493,21 @@ module.exports = {
         `${ventuno}src/scss/components/etrans.scss`
       ),
       dest: path.resolve(outputFolder, `${ventuno}assets/css/etrans.min.css`),
+      options: {
+        includePaths,
+        minify: true,
+        sourceMap: "file",
+      },
+    },
+    {
+      entry: path.resolve(
+        outputFolder,
+        `${ventuno}src/scss/components/ajax-throbber.scss`
+      ),
+      dest: path.resolve(
+        outputFolder,
+        `${ventuno}assets/css/ajax-throbber.min.css`
+      ),
       options: {
         includePaths,
         minify: true,
@@ -1390,6 +1419,8 @@ module.exports = {
           "arrow-repeat.svg",
           "arrow-right.svg",
           "award.svg",
+          "bookmark.svg",
+          "bookmark-check-fill.svg",
           "box-arrow-up-right.svg",
           "calendar.svg",
           "calendar-event.svg",
