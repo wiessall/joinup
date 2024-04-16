@@ -94,7 +94,7 @@ class ContactInformationContext extends RawDrupalContext {
    * @Then I should have :number contact information(s)
    */
   public function assertContactInformationCount(int $number): void {
-    $this->assertNodeCount($number, 'contact_information');
+    $this->assertEntityCount('node', 'contact_information', $number);
   }
 
   /**
