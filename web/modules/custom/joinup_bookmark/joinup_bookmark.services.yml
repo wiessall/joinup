@@ -1,0 +1,4 @@
+services:
+  joinup_bookmark.bookmark:
+    class: Drupal\joinup_bookmark\JoinupBookmark
+    arguments: [ '@current_user' ]
