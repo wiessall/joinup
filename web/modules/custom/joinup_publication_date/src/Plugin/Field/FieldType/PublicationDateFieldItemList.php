@@ -41,11 +41,11 @@ class PublicationDateFieldItemList extends OriginalPublicationDateFieldItemList 
           )) {
           $this->set(0, ['value' => \Drupal::time()->getRequestTime()]);
         }
-        // In case the entity does not implement a workflow, fallback to the
-        // default functionality.
-        elseif ($entity instanceof EntityPublishedInterface && $entity->isPublished()) {
-          $this->set(0, ['value' => \Drupal::time()->getRequestTime()]);
-        }
+      }
+      // In case the entity does not implement a workflow, fallback to the
+      // default functionality.
+      elseif ($entity instanceof EntityPublishedInterface && $entity->isPublished()) {
+        $this->set(0, ['value' => \Drupal::time()->getRequestTime()]);
       }
     }
   }
