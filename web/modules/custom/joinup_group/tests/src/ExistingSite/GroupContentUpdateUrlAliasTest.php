@@ -323,8 +323,7 @@ class GroupContentUpdateUrlAliasTest extends JoinupExistingSiteTestBase {
       'field_owner_name' => $this->randomString(),
       'field_owner_type' => \Drupal::getContainer()->get('rdf_sync.mapper')->getEntityByUri('http://purl.org/adms/publishertype/SupraNationalAuthority'),
     ]);
-    $this->createNode([
-      'uri' => 'http://example.com/contact',
+    $contact = $this->createNode([
       'type' => 'contact_information',
       'title' => $this->randomString(),
       'ci_email' => $this->randomMachineName() . '@example.com',
@@ -339,7 +338,7 @@ class GroupContentUpdateUrlAliasTest extends JoinupExistingSiteTestBase {
       'field_ar_state' => 'published',
       'field_ar_owner' => 'http://example.com/owner',
       'field_topic' => Topic::loadByUri('http://joinup.eu/ontology/topic#finance-in-eu'),
-      'field_ar_contact_information' => 'http://example.com/contact',
+      'field_ar_contact_information' => $contact->id(),
     ]);
 
     $this->entity['rdf_entity']['solution']['1'] = $this->createRdfEntity([
@@ -353,7 +352,7 @@ class GroupContentUpdateUrlAliasTest extends JoinupExistingSiteTestBase {
       'field_is_owner' => 'http://example.com/owner',
       'field_topic' => Topic::loadByUri('http://joinup.eu/ontology/topic#finance-in-eu'),
       'field_is_solution_type' => MappedTerm::loadByUri('http://data.europa.eu/dr8/ArchitectureBuildingBlock'),
-      'field_is_contact_information' => 'http://example.com/contact',
+      'field_is_contact_information' => $contact->id(),
     ]);
     // Releases.
     for ($i = 1; $i <= 2; $i++) {
