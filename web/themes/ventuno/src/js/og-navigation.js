@@ -12,7 +12,7 @@
             innerToggleTemplate: () => Drupal.t("See more"),
             classNames: {
               "overflow-nav": ["p-plus__overflow", "dropdown-menu"],
-              "toggle-btn": ["p-plus__toggle-btn", "btn", "btn-link", "ps-3"],
+              "toggle-btn": ["p-plus__toggle-btn", "ps-3", "border-0", "bg-transparent"],
             },
           });
         }
