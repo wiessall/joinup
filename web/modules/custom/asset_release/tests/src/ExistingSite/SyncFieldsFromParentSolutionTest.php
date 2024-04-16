@@ -23,6 +23,13 @@ class SyncFieldsFromParentSolutionTest extends JoinupExistingSiteTestBase {
   protected array $terms = [];
 
   /**
+   * Testing entities.
+   *
+   * @var \Drupal\Core\Entity\EntityInterface[]
+   */
+  protected array $entities = [];
+
+  /**
    * {@inheritdoc}
    */
   protected function setUp(): void {
@@ -53,14 +60,12 @@ class SyncFieldsFromParentSolutionTest extends JoinupExistingSiteTestBase {
     ]);
 
     // Create two contact information entities.
-    $this->createNode([
+    $this->entities['contact_information'][] = $this->createNode([
       'type' => 'contact_information',
-      'uri' => 'http://example.com/contact1',
       'title' => 'Contact 1',
     ]);
-    $this->createNode([
+    $this->entities['contact_information'][] = $this->createNode([
       'type' => 'contact_information',
-      'uri' => 'http://example.com/contact2',
       'title' => 'Contact 2',
     ]);
 
@@ -115,7 +120,7 @@ class SyncFieldsFromParentSolutionTest extends JoinupExistingSiteTestBase {
       // Synchronized fields.
       'field_is_description' => 'init description',
       'field_is_solution_type' => $this->terms['eira_t1'],
-      'field_is_contact_information' => 'http://example.com/contact1',
+      'field_is_contact_information' => $this->entities['contact_information'][0],
       'field_is_owner' => 'http://example.com/owner1',
       'field_is_related_solutions' => 'http://example.com/solution-related1',
       'field_is_included_asset' => 'http://example.com/solution-related1',
@@ -135,7 +140,7 @@ class SyncFieldsFromParentSolutionTest extends JoinupExistingSiteTestBase {
     // Check that the release fields were synchronized.
     $this->assertSame('init description', $release->field_isr_description->value);
     $this->assertSame('http://example.com/eira/t1', $this->terms['eira_t1']->get('uri')->value);
-    $this->assertSame('http://example.com/contact1', $release->field_isr_contact_information->target_id);
+    $this->assertSame($this->entities['contact_information'][0]->id(), $release->field_isr_contact_information->target_id);
     $this->assertSame('http://example.com/owner1', $release->field_isr_owner->target_id);
     $this->assertSame('http://example.com/solution-related1', $release->field_isr_related_solutions->target_id);
     $this->assertSame('http://example.com/solution-related1', $release->field_isr_included_asset->target_id);
@@ -147,7 +152,7 @@ class SyncFieldsFromParentSolutionTest extends JoinupExistingSiteTestBase {
     Rdf::load('http://example.com/solution')
       ->set('field_is_description', 'changed description')
       ->set('field_is_solution_type', $this->terms['eira_t2'])
-      ->set('field_is_contact_information', 'http://example.com/contact2')
+      ->set('field_is_contact_information', $this->entities['contact_information'][1])
       ->set('field_is_owner', 'http://example.com/owner2')
       ->set('field_is_related_solutions', 'http://example.com/solution-related2')
       ->set('field_is_included_asset', 'http://example.com/solution-related2')
@@ -160,7 +165,7 @@ class SyncFieldsFromParentSolutionTest extends JoinupExistingSiteTestBase {
     // Check that the release fields were synchronized.
     $this->assertSame('changed description', $release->field_isr_description->value);
     $this->assertSame('http://example.com/eira/t2', $this->terms['eira_t2']->get('uri')->value);
-    $this->assertSame('http://example.com/contact2', $release->field_isr_contact_information->target_id);
+    $this->assertSame($this->entities['contact_information'][1]->id(), $release->field_isr_contact_information->target_id);
     $this->assertSame('http://example.com/owner2', $release->field_isr_owner->target_id);
     $this->assertSame('http://example.com/solution-related2', $release->field_isr_related_solutions->target_id);
     $this->assertSame('http://example.com/solution-related2', $release->field_isr_included_asset->target_id);

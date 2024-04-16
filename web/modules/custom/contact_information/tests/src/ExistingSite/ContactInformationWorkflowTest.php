@@ -79,7 +79,7 @@ class ContactInformationWorkflowTest extends JoinupWorkflowExistingSiteTestBase 
         // '__new__' state to be converted to 'validated'.
         // @see: contact_information_rdf_entity_presave().
         $content = Node::create([
-          'bundle' => 'contact_information',
+          'type' => 'contact_information',
           'title' => $this->randomMachineName(),
           'field_state' => $entity_state,
           'uid' => $this->$user_var->id(),
