@@ -3,19 +3,19 @@ Feature: Contant Information entities don't cause exceptions because of their in
 
   Scenario: Check the page of an entity which had schema issues before
     Given I am logged in as a user with the "moderator" role
-    When I visit "rdf_entity/http_e_f_fdata_ceuropa_ceu_fw21_f55a3d6fb_b1d6d_b4166_b9f2c_b7232ab676a5b"
+    When I go to the "TES team" contact information page
     Then I should get a 200 HTTP response
     And I should see the text "TES team" in the "Page title" region
     # "ContactInformation" is just a property value alias. We need to check the
     # real value.
     And 1 metatag graph of type "http://www.w3.org/2006/vcard/ns#Kind" should exist in the page
-    And the metatag graph of the item with "@type" "http://www.w3.org/2006/vcard/ns#Kind" should have the following "http://purl.org/dc/terms/title" properties:
+    And the metatag graph of the item with "@type" "http://www.w3.org/2006/vcard/ns#Kind" should have the following "http://www.w3.org/2006/vcard/ns#fn" properties:
       | property  | value      |
       | @value    | TES team |
     # Editing also thrown an error. Verify that it works too.
     Then I click "Edit"
     Then I should get a 200 HTTP response
-    And the HTML title of the page should be "Edit Rdf"
+    And the HTML title of the page should be "TES team"
     And I should see the text "Edit Contact information TES team"
 
   @javascript
@@ -54,7 +54,7 @@ Feature: Contant Information entities don't cause exceptions because of their in
     # "ContactInformation" is just a property value alias. We need to check the
     # real value.
     Then 1 metatag graph of type "http://www.w3.org/2006/vcard/ns#Kind" should exist in the page
-    And the metatag graph of the item with "@type" "http://www.w3.org/2006/vcard/ns#Kind" should have the following "http://purl.org/dc/terms/title" properties:
+    And the metatag graph of the item with "@type" "http://www.w3.org/2006/vcard/ns#Kind" should have the following "http://www.w3.org/2006/vcard/ns#fn" properties:
       | property  | value            |
       | @value    | Mr. John Doe DLA |
     Then I open the header local tasks menu
