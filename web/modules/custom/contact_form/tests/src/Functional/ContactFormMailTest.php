@@ -21,7 +21,8 @@ class ContactFormMailTest extends JoinupMailFunctionalTestBase {
   protected static $modules = [
     'contact_form',
     'slick',
-    'ui_patterns',
+    'oe_bootstrap_theme_helper',
+    'joinup_bookmark',
   ];
 
   /**
