@@ -185,6 +185,7 @@ module:
   rdf_draft: 0
   rdf_entity: 0
   rdf_entity_provenance: 0
+  rdf_export: 0
   rdf_meta_entity: 0
   rdf_schema_field_validation: 0
   rdf_sync: 0

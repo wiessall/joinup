@@ -9,7 +9,6 @@ declare(strict_types=1);
 
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Access\AccessResultInterface;
-use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
@@ -50,55 +49,6 @@ function owner_node_create(NodeInterface $entity): void {
   if ($entity->field_state->value === '__new__') {
     $entity->set('field_state', 'published');
   }
-}
-
-/**
- * Implements hook_ENTITY_TYPE_presave().
- */
-function owner_node_presave(EntityInterface $entity): void {
-  owner_entity_auto_label($entity);
-}
-
-/**
- * Implements hook_inline_entity_form_table_fields_alter().
- */
-function owner_inline_entity_form_table_fields_alter(array &$fields, array $context): void {
-  // Replace headers in the table rendered in inline entity form widgets.
-  if ($context['entity_type'] == 'node' && $context['allowed_bundles'] === ['owner']) {
-    if (isset($fields['label'])) {
-      $fields['label']['label'] = t('Name');
-    }
-
-    // Add the type column.
-    $fields['owner_type'] = [
-      'type' => 'field',
-      'label' => t('Type'),
-      'weight' => 10,
-    ];
-  }
-}
-
-/**
- * Implements hook_inline_entity_form_entity_form_alter().
- */
-function owner_inline_entity_form_entity_form_alter(array &$entity_form, FormStateInterface &$form_state): void {
-  // Add an entity builder callback to fill the label field with the values of
-  // the name field. This is needed because inline entity form doesn't save
-  // the entity until the parent entity is saved. Due to this, the label column
-  // in the widget table would be empty.
-  $entity_form['#entity_builders'][] = 'owner_inline_entity_form_entity_builder';
-}
-
-/**
- * Entity builder callback for the inline entity creation form.
- *
- * @param string $entity_type
- *   The type of the entity being created.
- * @param \Drupal\Core\Entity\EntityInterface $entity
- *   The entity being built.
- */
-function owner_inline_entity_form_entity_builder(string $entity_type, EntityInterface $entity): void {
-  owner_entity_auto_label($entity);
 }
 
 /**
@@ -148,22 +98,6 @@ function owner_form_alter_validate(array &$form, FormStateInterface $form_state)
 }
 
 /**
- * Generates the entity label from the name field for owner entities.
- *
- * @param \Drupal\Core\Entity\EntityInterface $entity
- *   The entity to process.
- */
-function owner_entity_auto_label(EntityInterface $entity): void {
-  if ($entity->bundle() !== 'owner') {
-    return;
-  }
-
-  // Generate the label using the values of the name field.
-  $names = array_column($entity->get('owner_name')->getValue(), 'value');
-  $entity->set('title', substr(implode(', ', $names), 0, 255));
-}
-
-/**
  * Implements hook_ENTITY_TYPE_access().
  */
 function owner_node_access(NodeInterface $entity, string $operation, AccountInterface $account): AccessResultInterface {
@@ -194,7 +128,7 @@ function owner_node_access(NodeInterface $entity, string $operation, AccountInte
 
   // For anonymous users, deny access to the canonical route.
   $route_match = \Drupal::routeMatch();
-  if ($account->isAnonymous() && $operation === 'view' && $route_match->getRouteName() === 'entity.node.canonical') {
+  if ($account->isAnonymous() && $route_match->getRouteName() === 'entity.node.canonical') {
     $route_entity = $route_match->getParameter('node');
     if ($route_entity instanceof OwnerInterface && $route_entity->id() === $entity->id()) {
       return AccessResult::forbidden('Anonymous users should not see the owner canonical route.');

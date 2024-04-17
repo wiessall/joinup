@@ -23,7 +23,7 @@ third_party_settings:
           type: 'xsd:integer'
       title:
         value:
-          predicate: 'http://purl.org/dc/terms/title'
+          predicate: 'http://xmlns.com/foaf/0.1/name'
           type: 'xsd:string'
       langcode:
         value:

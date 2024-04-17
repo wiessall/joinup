@@ -5,7 +5,6 @@ dependencies:
   config:
     - core.entity_view_mode.node.teaser
     - field.field.node.owner.field_state
-    - field.field.node.owner.owner_name
     - field.field.node.owner.owner_type
     - node.type.owner
   module:
@@ -36,7 +35,6 @@ content:
 hidden:
   field_state: true
   langcode: true
-  owner_name: true
   owner_type: true
   published_at: true
   search_api_excerpt: true

@@ -42,7 +42,7 @@ class EuplContext extends RawDrupalContext {
     // Create an owner.
     $owner = $this->nodeCreate((object) [
       'type' => 'owner',
-      'owner_name' => 'Owner',
+      'title' => 'Owner',
     ]);
 
     // Create the EUPL entity.

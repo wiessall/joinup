@@ -95,7 +95,7 @@ class OwnerWorkflowTest extends JoinupWorkflowExistingSiteTestBase {
     foreach ($this->readUpdateDeleteAccessProvider() as $entity_state => $test_data) {
       $content = $this->createNode([
         'type' => 'owner',
-        'owner_name' => $this->randomMachineName(),
+        'title' => $this->randomMachineName(),
         'field_state' => $entity_state,
         'uid' => $this->userOwner->id(),
       ]);
@@ -141,7 +141,7 @@ class OwnerWorkflowTest extends JoinupWorkflowExistingSiteTestBase {
       foreach ($workflow_data as $user_var => $expected_target_states) {
         $content = $this->createNode([
           'type' => 'owner',
-          'owner_name' => $this->randomMachineName(),
+          'title' => $this->randomMachineName(),
         ]);
 
         if ($user_var === 'userAuthenticated') {
