@@ -7,26 +7,33 @@
  * @see https://stackoverflow.com/questions/44567125/position-sticky-scroll-bouncing-when-combined-with-javascript-height-adjustme
  * @see https://issues.chromium.org/issues/41326022
  */
-// prettier-ignore
-(function (Drupal, displace, once) {
+((Drupal, displace, once) => {
   Drupal.behaviors.stickyGroupHeader = {
     attach(context) {
-      const groupHeader = once("sticky-group-header", "#block-ventuno-groupheader", context);
+      const groupHeader = once(
+        "sticky-group-header",
+        "#block-ventuno-groupheader",
+        context
+      );
       if (!groupHeader.length) {
         return;
       }
 
       // Get required regions.
       const regionHeader = context.querySelector(".region-header");
-      const regionHeaderInner = regionHeader.querySelector(".region-header__inner");
+      const regionHeaderInner = regionHeader.querySelector(
+        ".region-header__inner"
+      );
       if (!regionHeader || !regionHeaderInner) {
         return;
       }
 
       // Init sticky behavior, acts on scroll event.
       const onScroll = () => {
-        const scrollPosition = window.scrollY || document.documentElement.scrollTop;
-        const isSticky = (scrollPosition + displace.offsets.top) > regionHeader.offsetTop;
+        const scrollPosition =
+          window.scrollY || document.documentElement.scrollTop;
+        const isSticky =
+          scrollPosition + displace.offsets.top > regionHeader.offsetTop;
         regionHeaderInner.classList.toggle("fixed-top", isSticky);
       };
       onScroll();
