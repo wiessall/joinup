@@ -1,0 +1,29 @@
+diff --git a/src/RdfSyncMapper.php b/src/RdfSyncMapper.php
+index a94fef571bfae8a329beeace6d234aad82098145..79d78fac7f871e1d89aa42ed2983686bb2b31c9a 100644
+--- a/src/RdfSyncMapper.php
++++ b/src/RdfSyncMapper.php
+@@ -32,6 +32,24 @@ public function __construct(
+     protected Connection $database,
+   ) {}
+ 
++  /**
++   * Checks whether a given entity type has at least 1 bundle mapped.
++   *
++   * @param string $entityTypeId
++   *   The entity type ID.
++   *
++   * @return bool
++   *   True if the entity type has at least 1 bundle mapped, false otherwise.
++   */
++  public function entityTypeHasMappings(string $entityTypeId): bool {
++    foreach ($this->entityTypeBundleInfo->getBundleInfo($entityTypeId) as $bundleId => $bundleInfo) {
++      if ($this->isMappedBundle($entityTypeId, $bundleId)) {
++        return TRUE;
++      }
++    }
++    return FALSE;
++  }
++
+   /**
+    * Returns the RDF type of given bundle.
+    *
