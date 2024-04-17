@@ -34,11 +34,4 @@ class ContactInformation extends Node implements ContactInformationInterface {
     return $this->get('related_group')->entity;
   }
 
-  /**
-   * {@inheritdoc}
-   */
-  public function getEntityType() {
-    return $this->entityTypeManager()->getDefinition($this->getEntityTypeId());
-  }
-
 }

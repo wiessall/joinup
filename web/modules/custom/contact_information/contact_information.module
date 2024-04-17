@@ -65,26 +65,6 @@ function contact_information_entity_bundle_field_info_alter(array &$fields, Enti
 }
 
 /**
- * Implements hook_ENTITY_TYPE_presave().
- */
-function contact_information_node_presave(EntityInterface $entity): void {
-  // Handle only contact information entities.
-  if ($entity->bundle() !== 'contact_information') {
-    return;
-  }
-
-  // The initial state of a contact information entity is published. The contact
-  // is created as part of proposing a collection, and in the collection propose
-  // form the workflow state is hidden from the user, so it would remain in the
-  // "__new__" state after submission.
-  // We can safely set the initial state to "validated" because a newly created
-  // contact information entities don't need to be validated by a third party.
-  if ($entity->field_state->value === '__new__') {
-    $entity->set('field_state', 'validated');
-  }
-}
-
-/**
  * Revoke access to canonical route for anonymous users for contact information.
  *
  * Implements hook_ENTITY_TYPE_access().
