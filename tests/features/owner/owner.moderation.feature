@@ -65,7 +65,7 @@ Feature: Owner moderation
     # Another authenticated user should not be allowed to edit the owner entity.
     When I am logged in as an "authenticated user"
     And I go to the homepage of the "EU healthy group" owner
-    Then I should not see the "Entity actions" region
+    Then I should not see the link "Edit" in the optional "Entity actions" region
 
     # The original owner creator is allowed to update the entity with the
     # requested changes.
