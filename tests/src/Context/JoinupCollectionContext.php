@@ -43,7 +43,7 @@ class JoinupCollectionContext extends RawDrupalContext {
     $node = Node::create([
       'type' => 'contact_information',
       'title' => 'Contact name',
-      'ci_email' => 'contact.email@example.com',
+      'email' => 'contact.email@example.com',
     ]);
     $node->save();
 

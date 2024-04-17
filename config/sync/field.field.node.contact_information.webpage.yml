@@ -3,7 +3,7 @@ langcode: en
 status: true
 dependencies:
   config:
-    - field.storage.node.ci_webpage
+    - field.storage.node.webpage
     - node.type.contact_information
   module:
     - link
@@ -12,8 +12,8 @@ third_party_settings:
     uri:
       predicate: 'http://www.w3.org/2006/vcard/ns#hasURL'
       type: null
-id: node.contact_information.ci_webpage
-field_name: ci_webpage
+id: node.contact_information.webpage
+field_name: webpage
 entity_type: node
 bundle: contact_information
 label: 'Website URL'

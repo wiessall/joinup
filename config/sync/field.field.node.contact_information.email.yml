@@ -3,15 +3,15 @@ langcode: en
 status: true
 dependencies:
   config:
-    - field.storage.node.ci_email
+    - field.storage.node.email
     - node.type.contact_information
 third_party_settings:
   rdf_sync:
     value:
       predicate: 'http://www.w3.org/2006/vcard/ns#hasEmail'
       type: null
-id: node.contact_information.ci_email
-field_name: ci_email
+id: node.contact_information.email
+field_name: email
 entity_type: node
 bundle: contact_information
 label: 'E-mail address'

@@ -19,7 +19,7 @@ trait ContactInformationTrait {
   public function getValidatedContactInformationEmails(): array {
     $contacts = $this->getValidatedContactInformationEntities();
     return array_map(function (ContactInformationInterface $contact): string {
-      return $contact->get('ci_email')->value;
+      return $contact->get('email')->value;
     }, $contacts);
   }
 
@@ -37,7 +37,7 @@ trait ContactInformationTrait {
     /** @var \Drupal\email_confirmer\EmailConfirmerManagerInterface $emailConfirmer */
     $emailConfirmer = \Drupal::getContainer()->get('email_confirmer');
     return array_filter($contacts, function (ContactInformationInterface $contact) use ($emailConfirmer): bool {
-      return (bool) $emailConfirmer->getConfirmation($contact->get('ci_email')->value, 'confirmed', ContactInformationEmailConfirmInterface::REALM);
+      return (bool) $emailConfirmer->getConfirmation($contact->get('email')->value, 'confirmed', ContactInformationEmailConfirmInterface::REALM);
     });
   }
 

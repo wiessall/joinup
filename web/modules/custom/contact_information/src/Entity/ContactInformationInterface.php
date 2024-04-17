@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace Drupal\contact_information\Entity;
 
 use Drupal\joinup_group\Entity\GroupInterface;
+use Drupal\joinup_rdf\Entity\RdfSyncEntityInterface;
 use Drupal\joinup_workflow\EntityWorkflowStateInterface;
+use Drupal\node\NodeInterface;
 
 /**
  * Interface for contact information entities in Joinup.
@@ -19,7 +21,7 @@ use Drupal\joinup_workflow\EntityWorkflowStateInterface;
  * contact info entity belongs only to 1 single parent group. However it can
  * belong to many asset releases within a solution.
  */
-interface ContactInformationInterface extends EntityWorkflowStateInterface {
+interface ContactInformationInterface extends EntityWorkflowStateInterface, NodeInterface, RdfSyncEntityInterface {
 
   /**
    * Returns the group that includes this entity among their contacts.

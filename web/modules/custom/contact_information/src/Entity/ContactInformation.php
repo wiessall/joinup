@@ -6,7 +6,6 @@ namespace Drupal\contact_information\Entity;
 
 use Drupal\joinup_bundle_class\JoinupBundleClassFieldAccessTrait;
 use Drupal\joinup_group\Entity\GroupInterface;
-use Drupal\joinup_rdf\Entity\RdfSyncEntityInterface;
 use Drupal\joinup_rdf\Entity\RdfSyncEntityTrait;
 use Drupal\joinup_workflow\EntityWorkflowStateTrait;
 use Drupal\node\Entity\Node;
@@ -14,7 +13,7 @@ use Drupal\node\Entity\Node;
 /**
  * Bundle class for the 'contact_information' bundle.
  */
-class ContactInformation extends Node implements ContactInformationInterface, RdfSyncEntityInterface {
+class ContactInformation extends Node implements ContactInformationInterface {
 
   use EntityWorkflowStateTrait;
   use JoinupBundleClassFieldAccessTrait;
