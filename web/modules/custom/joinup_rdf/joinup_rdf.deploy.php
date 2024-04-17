@@ -403,8 +403,8 @@ function joinup_rdf_deploy_110406(array &$sandbox): string {
 
   $mapping = [
     'http://www.w3.org/2006/vcard/ns#fn' => 'title',
-    'http://www.w3.org/2006/vcard/ns#hasURL' => 'ci_webpage',
-    'http://www.w3.org/2006/vcard/ns#hasEmail' => 'ci_email',
+    'http://www.w3.org/2006/vcard/ns#hasURL' => 'webpage',
+    'http://www.w3.org/2006/vcard/ns#hasEmail' => 'email',
     'http://joinup.eu/owner/uid' => 'uid',
     'http://joinup.eu/language' => 'langcode',
     'http://joinup.eu/contact_information/workflow_status' => 'field_state',

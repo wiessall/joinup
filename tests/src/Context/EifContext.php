@@ -54,7 +54,7 @@ class EifContext extends RawDrupalContext {
     $contact = Node::create([
       'type' => 'contact_information',
       'title' => 'Contact name',
-      'ci_email' => 'contact.email@example.com',
+      'email' => 'contact.email@example.com',
     ]);
     $contact->save();
     $this->entities['node'][$contact->id()] = $contact;

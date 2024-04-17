@@ -4,8 +4,8 @@ status: true
 dependencies:
   config:
     - core.entity_form_mode.node.inline
-    - field.field.node.contact_information.ci_email
-    - field.field.node.contact_information.ci_webpage
+    - field.field.node.contact_information.email
+    - field.field.node.contact_information.webpage
     - field.field.node.contact_information.field_state
     - node.type.contact_information
   module:
@@ -16,7 +16,7 @@ targetEntityType: node
 bundle: contact_information
 mode: inline
 content:
-  ci_email:
+  email:
     type: email_legacy_multicardinality
     weight: 1
     region: content
@@ -24,7 +24,7 @@ content:
       placeholder: ''
       size: 60
     third_party_settings: {  }
-  ci_webpage:
+  webpage:
     type: link_legacy_multicardinality
     weight: 2
     region: content

@@ -110,7 +110,7 @@ function contact_information_node_access(EntityInterface $entity, string $operat
  * Implements hook_entity_field_access().
  */
 function contact_information_entity_field_access(string $operation, FieldDefinitionInterface $field_definition, AccountInterface $account, ?FieldItemListInterface $items = NULL): AccessResultInterface {
-  if ($operation === 'view' && $field_definition->getName() === 'ci_email') {
+  if ($operation === 'view' && $field_definition->getName() === 'email') {
     if ($items->getEntity()->isNew()) {
       // If the contact information entity is new, we don't need to check
       // anything else.
@@ -137,8 +137,8 @@ function contact_information_node_update(NodeInterface $entity): void {
   if ($entity instanceof ContactInformationInterface) {
     /** @var \Drupal\contact_information\Entity\ContactInformationInterface|null $original */
     if ($original = $entity->original ?? NULL) {
-      $original_email = $original->get('ci_email')->value;
-      $email = $entity->get('ci_email')->value;
+      $original_email = $original->get('email')->value;
+      $email = $entity->get('email')->value;
       if (!empty($original_email) && $original_email !== $email) {
         /** @var \Drupal\contact_information\ContactInformationEmailConfirmInterface $email_confirm */
         $email_confirm = \Drupal::service('contact_information.email_confirm');
@@ -314,7 +314,7 @@ function contact_information_node_view(array &$build, NodeInterface $contact_inf
     $resend_access = \Drupal::getContainer()->get('joinup_group.group_manager')->access($contact_information->getRelatedGroup(), 'resend email confirmation request');
     $cacheable_metadata = CacheableMetadata::createFromRenderArray($build);
     $email_confirmer = \Drupal::getContainer()->get('email_confirmer');
-    $confirmation = $email_confirmer->getConfirmation($contact_information->get('ci_email')->value, 'confirmed', ContactInformationEmailConfirmInterface::REALM);
+    $confirmation = $email_confirmer->getConfirmation($contact_information->get('email')->value, 'confirmed', ContactInformationEmailConfirmInterface::REALM);
     if ($confirmation) {
       $cacheable_metadata->addCacheableDependency($confirmation);
     }
@@ -324,7 +324,7 @@ function contact_information_node_view(array &$build, NodeInterface $contact_inf
     // created if the entity is not published.
     // @see \Drupal\contact_information\ContactInformationEmailConfirm::confirmEmailsForGroup
     elseif ($contact_information->getRelatedGroup()->isPublished() && $resend_access->isAllowed()) {
-      $confirmation = $email_confirmer->getConfirmation($contact_information->get('ci_email')->value, 'pending', ContactInformationEmailConfirmInterface::REALM);
+      $confirmation = $email_confirmer->getConfirmation($contact_information->get('email')->value, 'pending', ContactInformationEmailConfirmInterface::REALM);
 
       // If no confirmation is created yet, create one before adding the link
       // to the form. Normally, we would have a controller to create the
@@ -333,7 +333,7 @@ function contact_information_node_view(array &$build, NodeInterface $contact_inf
       // follow, so it is ok to have it created here by default since the user
       // is already has access.
       if (!$confirmation) {
-        $confirmation = $email_confirmer->createConfirmation($contact_information->get('ci_email')->value);
+        $confirmation = $email_confirmer->createConfirmation($contact_information->get('email')->value);
         $confirmation
           ->setRealm(ContactInformationEmailConfirmInterface::REALM)
           ->save();
@@ -359,7 +359,7 @@ function contact_information_node_view(array &$build, NodeInterface $contact_inf
     }
 
     if ($confirmation && $confirmation->isConfirmed()) {
-      $build['ci_email'][0]['#title'] = $build['title'][0];
+      $build['email'][0]['#title'] = $build['title'][0];
       unset($build['title']);
     }
 

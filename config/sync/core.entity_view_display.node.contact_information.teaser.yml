@@ -4,8 +4,8 @@ status: true
 dependencies:
   config:
     - core.entity_view_mode.node.teaser
-    - field.field.node.contact_information.ci_email
-    - field.field.node.contact_information.ci_webpage
+    - field.field.node.contact_information.email
+    - field.field.node.contact_information.webpage
     - field.field.node.contact_information.field_state
     - node.type.contact_information
   module:
@@ -18,7 +18,7 @@ targetEntityType: node
 bundle: contact_information
 mode: teaser
 content:
-  ci_email:
+  email:
     type: email_contact_link
     label: hidden
     settings:
@@ -34,7 +34,7 @@ content:
         template_suggestion: ''
     weight: 0
     region: content
-  ci_webpage:
+  webpage:
     type: link
     label: hidden
     settings:
