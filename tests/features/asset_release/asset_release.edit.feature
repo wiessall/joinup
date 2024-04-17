@@ -5,7 +5,7 @@ Feature: "Edit" visibility options.
   I need to be able to edit "Release" rdf entities through UI.
 
   Background:
-    Given the following owner:
+    Given owner content:
       | name           |
       | Awesome person |
     And contact_information content:

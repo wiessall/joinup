@@ -19,7 +19,7 @@ Feature: Collection moderation
     And I should not see the link "Delete"
 
   Scenario: Test the available buttons in every stage of the editorial workflow
-    Given the following owner:
+    Given owner content:
       | name           |
       | Simon Sandoval |
     And contact_information content:
@@ -166,8 +166,8 @@ Feature: Collection moderation
 
   Scenario: Published collections should be shown in the collections overview page.
     # Regression test for ticket ISAICP-2889.
-    Given the following owner:
-      | name             | type    |
+    Given owner content:
+      | name             | owner type    |
       | Carpet Sandation | Company |
     And contact_information content:
       | name        | email                   |

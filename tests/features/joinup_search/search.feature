@@ -186,8 +186,8 @@ Feature: Global search
 
   @javascript
   Scenario: Alphabetical order for the spatial coverage in the search page.
-    Given the following owner:
-      | name              | type    |
+    Given owner content:
+      | name              | owner type    |
       | Responsible owner | Company |
     And contact_information content:
       | name          | email             |
@@ -219,8 +219,8 @@ Feature: Global search
     And the "spatial coverage" checkbox facet should allow selecting the following values "Greece (1), Luxembourg (2)"
 
   Scenario: Content can be found with a full-text search.
-    Given the following owner:
-      | name              | type    |
+    Given owner content:
+      | name              | owner type    |
       | Responsible owner | Company |
     And contact_information content:
       | name          | email             | state     |
@@ -847,8 +847,8 @@ Feature: Global search
 
   @javascript
   Scenario: Search page - Show the abstract or description in the search results.
-    Given the following owner:
-      | name        | type    |
+    Given owner content:
+      | name        | owner type    |
       | Renew owner | Company |
     And contact_information content:
       | name           | email              |

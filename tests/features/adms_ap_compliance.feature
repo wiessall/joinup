@@ -11,7 +11,7 @@ Feature: Joinup should be ADMS-AP compliant.
       | Jocelyn Bass   | jocelyn.bass@example.com | http://www.example.org |
       | Geoffrey Bryce | geoffrey.bryce@exam.com  |                        |
     And owner:
-      | name       | type                          |
+      | name       | owner type                          |
       | Teddy Bass | Non-Governmental Organisation |
     And licence content:
       | title       | description       | licence type |

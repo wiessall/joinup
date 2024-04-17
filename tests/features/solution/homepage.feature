@@ -5,7 +5,7 @@ Feature: Solution homepage
   I need to be able see an introduction of the solution on its homepage
 
   Scenario: The solution homepage shows basic information about the solution
-    Given the following owner:
+    Given owner content:
       | name          |
       | Awesome owner |
     And contact_information content:
@@ -117,8 +117,8 @@ Feature: Solution homepage
     But I should not see the link "Random Arm"
 
   Scenario: Test that a pager is shown on the solution page when needed.
-    Given the following owner:
-      | name                  | type                  |
+    Given owner content:
+      | name                  | owner type                  |
       | Chiricahua Foundation | Private Individual(s) |
     And contact_information content:
       | name     | email                |

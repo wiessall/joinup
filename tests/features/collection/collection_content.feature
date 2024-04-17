@@ -33,7 +33,7 @@ Feature: Collection content
 
   Scenario: Publishing new solutions should result in counters being properly updated.
     Given owner:
-      | name             | type                  |
+      | name             | owner type                  |
       | Particle sweeper | Private Individual(s) |
 
     # @see: https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-4436

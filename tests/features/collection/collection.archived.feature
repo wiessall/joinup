@@ -13,7 +13,7 @@ Feature: Creating content and commenting on archived collection
     And contact_information content:
       | name           | email                 |
       | Jody Rodriquez | JodyRodriquez@bar.com |
-    And the following owner:
+    And owner content:
       | name          |
       | April Hawkins |
     And the following collections:

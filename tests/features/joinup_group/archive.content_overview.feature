@@ -2,8 +2,8 @@
 Feature: Global search with archive content
 
   Scenario Outline: Group content has an 'Show archived' facet.
-    Given the following owner:
-      | name       | type    |
+    Given owner content:
+      | name       | owner type    |
       | Some owner | Company |
     And contact_information content:
       | name         | email                    |

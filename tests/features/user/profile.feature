@@ -131,8 +131,8 @@ Feature: User profile
     And contact_information content:
       | name           | email                      | Website URL        | author        |
       | Wibo Verhoeven | wibo.verhoeven@example.com | http://example.com | Corwin Robert |
-    And the following owner:
-      | type                  | name                 | author        |
+    And owner content:
+      | owner type                  | name                 | author        |
       | Private Individual(s) | Somboon De Laurentis | Corwin Robert |
     And the following collection user membership:
       | user          | collection       |

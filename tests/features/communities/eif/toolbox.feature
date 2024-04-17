@@ -7,7 +7,7 @@ Feature:
   @javascript
   Scenario: Present and search the solutions.
     Given owner:
-      | name | type    |
+      | name | owner type    |
       | ACDC | Company |
     And collections:
       | title   | state     |

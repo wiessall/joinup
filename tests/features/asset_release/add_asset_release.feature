@@ -26,8 +26,8 @@ Feature: "Add release" visibility options.
     Then I should not see the link "Add release"
 
   Scenario: Add release as a solution facilitator.
-    Given the following owner:
-      | name                 | type    |
+    Given owner content:
+      | name                 | owner type    |
       | Organisation example | Company |
     And the following solutions:
       | title          | description        | documentation | owner                | state     |
@@ -120,8 +120,8 @@ Feature: "Add release" visibility options.
     Then I should see the heading "Page not found"
 
   Scenario: Check publish time release is present time and past.
-    Given the following owner:
-      | name                     | type    |
+    Given owner content:
+      | name                     | owner type    |
       | Organisation example two | Company |
     And the following solutions:
       | title          | description        | documentation | owner                    | state     |

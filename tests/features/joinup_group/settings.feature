@@ -6,13 +6,13 @@ Feature: Collections/Solutions settings
 
   Background:
     Given owner:
-      | name       | type    |
+      | name       | owner type    |
       | Jonny inc. | Company |
 
   @uploadFiles:logo.png
   Scenario: Edit settings in a collection
-    Given the following owner:
-      | name          | type                    |
+    Given owner content:
+      | name          | owner type                    |
       | Chico example | Non-Profit Organisation |
     And contact_information content:
       | name            | email                       |

@@ -2,8 +2,8 @@
 Feature: Test the visibility of the quick links menu.
 
   Background:
-    Given the following owner:
-      | name                 | type                    |
+    Given owner content:
+      | name                 | owner type                    |
       | Organisation example | Non-Profit Organisation |
     And contact_information content:
       | name                 | email                            |

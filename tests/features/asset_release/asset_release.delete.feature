@@ -5,7 +5,7 @@ Feature: Asset release "delete" functionality.
   I need to be able to delete "Release" rdf entities through UI.
 
   Background:
-    Given the following owner:
+    Given owner content:
       | name              |
       | Yet another owner |
     And contact_information content:

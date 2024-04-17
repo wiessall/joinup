@@ -9,7 +9,7 @@ Feature: Solution editing.
       | name         | email              |
       | Seward Shawn | seward@example.com |
     And owner:
-      | name      | type    |
+      | name      | owner type    |
       | Acme inc. | Company |
     And users:
       | Username     | E-mail                   |

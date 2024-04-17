@@ -10,7 +10,7 @@ Feature: Event moderation
       | Salvador Thomas |
       | Rosa Vaughn     |
       | Patricia Lynch  |
-    And the following owner:
+    And owner content:
       | name     |
       | Alma Lee |
     And contact_information content:

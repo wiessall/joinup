@@ -11,8 +11,8 @@ Feature: Solution notifications
       | title | Collection of random solutions |
       | logo  | logo.png                       |
       | state | published                      |
-    And the following owner:
-      | name               | type                  |
+    And owner content:
+      | name               | owner type                  |
       | Karanikolas Kitsos | Private Individual(s) |
     And contact_information content:
       | name             | email                        |
