@@ -109,7 +109,6 @@ function joinup_rdf_update_110401(): void {
 
   // Re-install the module on clean w/o dependencies, they're already installed.
   \Drupal::service('module_installer')->install(['taxonomy'], FALSE);
-  \Drupal::service('module_installer')->install(['rdf_sync']);
 }
 
 /**
