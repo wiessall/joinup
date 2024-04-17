@@ -3,7 +3,7 @@
 # - Extend/override: https://ddev.readthedocs.io/en/stable/users/extend/customization-extendibility/#extending-configyaml-with-custom-configyaml-files
 
 name: joinup
-type: drupal10
+type: drupal
 docroot: web
 php_version: "8.2"
 webimage_extra_packages:
