@@ -24,9 +24,9 @@ Feature: Proposing a collection
     Then I should see the heading "Propose collection"
 
   Scenario: Propose a collection
-    Given owner:
-      | name                 | owner type    |
-      | Organisation example | Company |
+    Given owner content:
+      | name                 | owner type |
+      | Organisation example | Company    |
     And I am logged in as an "authenticated user"
     When I go to the propose collection form
     Then I should see the heading "Propose collection"
@@ -68,8 +68,8 @@ Feature: Proposing a collection
     And I fill in "Owner" with "Organisation example"
     And I press "Propose"
     Then I should not see the following error messages:
-      | error messages           |
-      | Field Logo is required   |
+      | error messages         |
+      | Field Logo is required |
     And I should see the heading "Ancient and Classical Mythology"
     # Regression test for the keywords field in the about page.
     And I should not see the text "Search keywords" in the "Content" region
@@ -86,7 +86,7 @@ Feature: Proposing a collection
     When I click the contextual link "Add new page" in the "Header" region
     Then I should see the heading "Add custom page"
     When I fill in the following:
-      | Title | About this group                                               |
+      | Title | About this group |
     And I select "HR" from "Topic"
     And I press "Publish"
     Then I should see the success message "Custom page About this group has been created."
@@ -126,8 +126,8 @@ Feature: Proposing a collection
   @javascript @generateMedia @generateMediaTypes:collection_logo @uploadFiles:logo.png
   Scenario: Propose collection form fields should be organized in tabs.
     Given owner content:
-      | name                 | owner type    |
-      | Organisation example | Company |
+      | name                 | owner type |
+      | Organisation example | Company    |
 
     Given I am logged in as an "authenticated user"
     When I go to the propose collection form
@@ -216,8 +216,8 @@ Feature: Proposing a collection
   @email
   Scenario: Email validator after submit a Collection/Solution.
     Given owner content:
-      | name               | owner type    |
-      | Organisation valid | Company |
+      | name               | owner type |
+      | Organisation valid | Company    |
 
     Given I am logged in as an "authenticated user"
     Then I go to the propose collection form
@@ -266,7 +266,7 @@ Feature: Proposing a collection
       | subject            | Joinup - Please validate your contact details                                                                                 |
       | body               | Please confirm your email address contact_Rapazoglou@example.com, which is set in your contact information for the following: |
       | signature_required | no                                                                                                                            |
-      | html               | yes                                                                                                                            |
+      | html               | yes                                                                                                                           |
 
     # Email confirmations are sent on group publishing.
     Given I am logged in as a "moderator"
@@ -277,7 +277,7 @@ Feature: Proposing a collection
       | subject            | Joinup - Please validate your contact details                                                                                         |
       | body               | Please confirm your email address some_unique_contact_person@example.com, which is set in your contact information for the following: |
       | signature_required | no                                                                                                                                    |
-      | html               | yes                                                                                                                                    |
+      | html               | yes                                                                                                                                   |
     When I go to the edit form of the "Rolly email validation" solution
     And I press "Publish"
     And the following email should have been sent:
@@ -285,7 +285,7 @@ Feature: Proposing a collection
       | subject            | Joinup - Please validate your contact details                                                                                 |
       | body               | Please confirm your email address contact_Rapazoglou@example.com, which is set in your contact information for the following: |
       | signature_required | no                                                                                                                            |
-      | html               | yes                                                                                                                            |
+      | html               | yes                                                                                                                           |
 
     # Contact us page should return access denied,
     # because contact info emails are not published.
@@ -301,7 +301,7 @@ Feature: Proposing a collection
   @javascript @uploadFiles:error.svg,simple.svg
   Scenario: Allowing users to upload SVGs.
     Given owner content:
-      | name    | owner type                  |
+      | name    | owner type            |
       | Svinish | Private Individual(s) |
     And I am logged in as an "authenticated user"
     When I go to the propose collection form

@@ -27,8 +27,8 @@ Feature: "Add release" visibility options.
 
   Scenario: Add release as a solution facilitator.
     Given owner content:
-      | name                 | owner type    |
-      | Organisation example | Company |
+      | name                 | owner type |
+      | Organisation example | Company    |
     And the following solutions:
       | title          | description        | documentation | owner                | state     |
       | Release Test 1 | test description 1 | text.pdf      | Organisation example | published |
@@ -62,8 +62,8 @@ Feature: "Add release" visibility options.
 
     When I press "Publish"
     Then I should see the following error messages:
-      | error messages                    |
-      | Name field is required.           |
+      | error messages                     |
+      | Name field is required.            |
       | Release version field is required. |
 
     When I fill in "Name" with "Chasing shadows"
@@ -121,8 +121,8 @@ Feature: "Add release" visibility options.
 
   Scenario: Check publish time release is present time and past.
     Given owner content:
-      | name                     | owner type    |
-      | Organisation example two | Company |
+      | name                     | owner type |
+      | Organisation example two | Company    |
     And the following solutions:
       | title          | description        | documentation | owner                    | state     |
       | Release Test 2 | test description 2 | text.pdf      | Organisation example two | published |

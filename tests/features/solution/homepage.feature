@@ -9,7 +9,7 @@ Feature: Solution homepage
       | name          |
       | Awesome owner |
     And contact_information content:
-      | name            | email                      | Website URL        |
+      | name            | email                      | website url        |
       | Awesome contact | awesomecontact@example.com | http://example.com |
     Given the following solution:
       | title               | Petri net                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
@@ -118,7 +118,7 @@ Feature: Solution homepage
 
   Scenario: Test that a pager is shown on the solution page when needed.
     Given owner content:
-      | name                  | owner type                  |
+      | name                  | owner type            |
       | Chiricahua Foundation | Private Individual(s) |
     And contact_information content:
       | name     | email                |

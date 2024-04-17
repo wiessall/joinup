@@ -187,8 +187,8 @@ Feature: Global search
   @javascript
   Scenario: Alphabetical order for the spatial coverage in the search page.
     Given owner content:
-      | name              | owner type    |
-      | Responsible owner | Company |
+      | name              | owner type |
+      | Responsible owner | Company    |
     And contact_information content:
       | name          | email             |
       | Go-to contact | go-to@example.com |
@@ -220,8 +220,8 @@ Feature: Global search
 
   Scenario: Content can be found with a full-text search.
     Given owner content:
-      | name              | owner type    |
-      | Responsible owner | Company |
+      | name              | owner type |
+      | Responsible owner | Company    |
     And contact_information content:
       | name          | email             | state     |
       | Go-to contact | go-to@example.com | validated |
@@ -848,8 +848,8 @@ Feature: Global search
   @javascript
   Scenario: Search page - Show the abstract or description in the search results.
     Given owner content:
-      | name        | owner type    |
-      | Renew owner | Company |
+      | name        | owner type |
+      | Renew owner | Company    |
     And contact_information content:
       | name           | email              |
       | Gor-to contact | gor-to@example.com |

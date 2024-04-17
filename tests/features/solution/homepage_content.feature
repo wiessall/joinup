@@ -6,7 +6,7 @@ Feature: Solution homepage
 
   Background:
     Given owner content:
-      | name          | owner type                  |
+      | name          | owner type            |
       | Kostas Agathe | Private Individual(s) |
     And contact_information content:
       | name    | email               |

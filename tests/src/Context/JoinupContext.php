@@ -879,6 +879,8 @@ class JoinupContext extends RawDrupalContext {
       'owner' => [
         'name' => 'title',
         'owner type' => 'owner_type',
+        'state' => 'field_state',
+        'author' => 'uid',
       ],
       'shared' => [
         'collection' => OgGroupAudienceHelperInterface::DEFAULT_FIELD,

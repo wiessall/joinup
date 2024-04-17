@@ -7,8 +7,8 @@ Feature: Creation of owners through UI
   @uploadFiles:logo.png
   Scenario: Propose a collection
     Given owner content:
-      | name                                                                                                                                                                                                                                                           | owner type    |
-      | Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris fermentum ante arcu. Vivamus nisl turpis, fringilla ut ante sit amet, bibendum iaculis ante. Nullam vel nisl vehicula, rutrum ante nec, placerat dolor. Sed id odio imperdiet, efficitur lacus | Company |
+      | name                                                                                                                                                                                                                                                           | owner type |
+      | Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris fermentum ante arcu. Vivamus nisl turpis, fringilla ut ante sit amet, bibendum iaculis ante. Nullam vel nisl vehicula, rutrum ante nec, placerat dolor. Sed id odio imperdiet, efficitur lacus | Company    |
     And I am logged in as a user with the "authenticated" role
     When I go to the propose collection form
     Then the following field widgets should be present "Contact information, Owner"
@@ -83,12 +83,12 @@ Feature: Creation of owners through UI
   See https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-8399
 
     Given owner content:
-      | name      | owner type    |
-      | Makinator | Company |
+      | name      | owner type |
+      | Makinator | Company    |
     Given collection:
-      | title | Jump Mak                                                       |
-      | state | published                                                      |
-      | owner | Makinator                                                      |
+      | title | Jump Mak  |
+      | state | published |
+      | owner | Makinator |
     When I am logged in as a "facilitator" of the "Jump Mak" collection
     Then I go to the edit form of the "Jump Mak" collection
     When I press "Remove" at the "Owner" field

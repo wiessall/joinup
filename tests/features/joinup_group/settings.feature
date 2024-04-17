@@ -5,14 +5,14 @@ Feature: Collections/Solutions settings
   Moderator need to be able to edit collections/solutions settings through the UI
 
   Background:
-    Given owner:
-      | name       | owner type    |
-      | Jonny inc. | Company |
+    Given owner content:
+      | name       | owner type |
+      | Jonny inc. | Company    |
 
   @uploadFiles:logo.png
   Scenario: Edit settings in a collection
     Given owner content:
-      | name          | owner type                    |
+      | name          | owner type              |
       | Chico example | Non-Profit Organisation |
     And contact_information content:
       | name            | email                       |

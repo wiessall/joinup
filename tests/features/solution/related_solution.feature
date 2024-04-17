@@ -8,7 +8,7 @@ Feature: Related solution
       | name        | email       |
       | Kalikatoura | bar@bar.com |
     And owner content:
-      | name         | owner type                         |
+      | name         | owner type                   |
       | Kalikatoures | Company, Industry consortium |
     And solutions:
       | title      | related solutions | abstract                         | description                         | documentation | related by type | moderation | logo     | topic      | state     | solution type | owner        | contact information |

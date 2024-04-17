@@ -6,7 +6,7 @@ Feature: Contact information access
 
   Scenario: Anonymous user contact information access
     Given contact_information content:
-      | name         | email                   | Website URL       |
+      | name         | email                   | website url       |
       | Phil Coulson | phil.coulson@shield.gov | http://shield.gov |
 
     Then I should have 1 contact information
@@ -17,8 +17,8 @@ Feature: Contact information access
 
   Scenario: Facilitator can edit contact information
     Given owner content:
-      | name         | owner type    |
-      | Ausy BENELUX | Company |
+      | name         | owner type |
+      | Ausy BENELUX | Company    |
     Given users:
       | Username      | Roles | E-mail                      | First name | Family name |
       | Michiel Lucas |       | michiel.lucas@one-agency.be | Michiel    | Lucas       |
