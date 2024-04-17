@@ -66,7 +66,7 @@ class OwnerContext extends RawDrupalContext {
       $values = [
         'type' => 'owner',
         'owner_type' => implode(',', $types),
-        'owner_name' => !empty($row['name']) ? $row['name'] : $this->getRandom()->name(8, TRUE),
+        'title' => !empty($row['title']) ? $row['title'] : $this->getRandom()->name(8, TRUE),
       ];
 
       if (!empty($row['author'])) {

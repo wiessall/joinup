@@ -392,7 +392,7 @@ function joinup_rdf_deploy_110405(array &$sandbox): string {
  */
 function joinup_rdf_deploy_110406(array &$sandbox): string {
   $map = [
-    'http://xmlns.com/foaf/0.1/name' => 'owner_name',
+    'http://xmlns.com/foaf/0.1/name' => 'title',
     'http://purl.org/dc/terms/type' => 'owner_type',
     'http://joinup.eu/owner/uid' => 'uid',
     'http://joinup.eu/owner/workflow_status' => 'field_state',

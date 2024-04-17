@@ -40,6 +40,7 @@ dependencies:
     - paragraphs_type_permissions
     - poll
     - rdf_entity
+    - rdf_export
     - rdf_meta_entity
     - search_api_autocomplete
     - sitewide_alert
@@ -121,6 +122,7 @@ permissions:
   - 'edit own news content'
   - 'edit own owner content'
   - 'edit own polls'
+  - 'export rdf metadata'
   - 'flag bookmark_node'
   - 'flag bookmark_rdf_entity'
   - 'flag like_node'

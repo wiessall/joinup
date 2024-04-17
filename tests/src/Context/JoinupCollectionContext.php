@@ -33,7 +33,7 @@ class JoinupCollectionContext extends RawDrupalContext {
     // Create the owner.
     $owner = $this->nodeCreate((object) [
       'type' => 'owner',
-      'owner_name' => 'ISA²',
+      'title' => 'ISA²',
     ]);
 
     // Create the contact.

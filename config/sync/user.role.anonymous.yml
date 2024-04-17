@@ -20,6 +20,7 @@ dependencies:
     - paragraphs_type_permissions
     - poll
     - rdf_entity
+    - rdf_export
     - rdf_meta_entity
     - search_api_autocomplete
     - sitewide_alert
@@ -37,6 +38,7 @@ permissions:
   - 'access polls'
   - 'access tour'
   - 'access user profiles'
+  - 'export rdf metadata'
   - 'legal view legal_notice'
   - 'never autoplay videos'
   - 'use search_api_autocomplete for search'

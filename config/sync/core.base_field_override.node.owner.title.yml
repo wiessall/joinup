@@ -8,7 +8,7 @@ id: node.owner.title
 field_name: title
 entity_type: node
 bundle: owner
-label: Title
+label: Name
 description: ''
 required: true
 translatable: true
