@@ -129,10 +129,10 @@ Feature: User profile
       | Planting a tree howto | Corwin Robert | Botanic E.D.E.N. | published | 2017-10-30 9:30 |
     # Contact information and owner tiles should never be shown.
     And contact_information content:
-      | name           | email                      | Website URL        | author        |
+      | name           | email                      | website url        | author        |
       | Wibo Verhoeven | wibo.verhoeven@example.com | http://example.com | Corwin Robert |
     And owner content:
-      | owner type                  | name                 | author        |
+      | owner type            | name                 | author        |
       | Private Individual(s) | Somboon De Laurentis | Corwin Robert |
     And the following collection user membership:
       | user          | collection       |

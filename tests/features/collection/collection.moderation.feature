@@ -167,8 +167,8 @@ Feature: Collection moderation
   Scenario: Published collections should be shown in the collections overview page.
     # Regression test for ticket ISAICP-2889.
     Given owner content:
-      | name             | owner type    |
-      | Carpet Sandation | Company |
+      | name             | owner type |
+      | Carpet Sandation | Company    |
     And contact_information content:
       | name        | email                   |
       | Partyanimal | partyanimal@example.com |

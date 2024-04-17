@@ -12,7 +12,7 @@ Feature: Solution notifications
       | logo  | logo.png                       |
       | state | published                      |
     And owner content:
-      | name               | owner type                  |
+      | name               | owner type            |
       | Karanikolas Kitsos | Private Individual(s) |
     And contact_information content:
       | name             | email                        |

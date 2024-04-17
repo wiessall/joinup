@@ -3,7 +3,7 @@ Feature: Test for a 'facets' regression on the solution overview page.
   # @see ISAICP-4188
   Scenario: Test that no pager is shown on the solution page when not needed.
     Given owner content:
-      | name              | owner type                  |
+      | name              | owner type            |
       | Apache Foundation | Private Individual(s) |
     And contact_information content:
       | name           | email                      |

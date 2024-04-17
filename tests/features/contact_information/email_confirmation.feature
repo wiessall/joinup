@@ -4,8 +4,8 @@ Feature: Resend validation email from collection/solution about page
   then a message must be displayed under the about page
 
   Scenario: Scenario for Collection and Solution
-    Given owner:
-      | name      | owner type               |
+    Given owner content:
+      | name      | owner type         |
       | Rotterdam | National authority |
     And the following collection:
       | title       | Rally fanatics          |

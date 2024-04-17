@@ -6,7 +6,7 @@ Feature: Asset release moderation
 
   Scenario: Publish, Update, request changes, publish again and delete a release.
     Given owner content:
-      | name        | owner type                  |
+      | name        | owner type            |
       | Kenny Logan | Private Individual(s) |
     And contact_information content:
       | name       | email                  |

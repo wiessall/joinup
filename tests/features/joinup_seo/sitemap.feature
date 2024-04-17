@@ -6,8 +6,8 @@ Feature:
 
   Scenario: Basic sitemap link availability.
     Given owner content:
-      | name          | owner type    |
-      | Sitemap owner | Company |
+      | name          | owner type |
+      | Sitemap owner | Company    |
     And contact_information content:
       | name                | email                           |
       | Sitemap secretariat | sitemap.secretariat@example.com |

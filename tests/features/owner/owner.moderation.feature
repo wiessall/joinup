@@ -10,8 +10,8 @@ Feature: Owner moderation
     Given users:
       | Username        |
       | Raeburn Hibbert |
-    And owner:
-      | name             | owner type                    |
+    And owner content:
+      | name             | owner type              |
       | Good food eaters | Non-Profit Organisation |
 
     When I am logged in as "Raeburn Hibbert"

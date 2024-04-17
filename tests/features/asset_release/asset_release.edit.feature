@@ -9,7 +9,7 @@ Feature: "Edit" visibility options.
       | name           |
       | Awesome person |
     And contact_information content:
-      | name            | email                      | Website URL        |
+      | name            | email                      | website url        |
       | Awesome contact | awesomecontact@example.com | http://example.com |
     And the following solution:
       | title               | My awesome solution abc |

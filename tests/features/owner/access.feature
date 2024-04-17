@@ -5,8 +5,8 @@ Feature: Owner access
   I don't want to see the owner full page.
 
   Scenario: Anonymous user contact information access
-    Given owner:
-      | name          | owner type                             |
+    Given owner content:
+      | name          | owner type                       |
       | Daisy Johnson | Academia/Scientific organisation |
 
     Then I should have 1 owner

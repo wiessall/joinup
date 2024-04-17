@@ -9,8 +9,8 @@ Feature: Contact Information moderation
       | Username              |
       | Sæwine Cynebald       |
       | Secondary facilitator |
-    And owner:
-      | owner type                          | name               |
+    And owner content:
+      | owner type                    | name               |
       | Non-Governmental Organisation | Anglo-Saxon Museum |
     And collection:
       | title       | Games of the Anglo-Saxon age                  |
@@ -111,8 +111,8 @@ Feature: Contact Information moderation
 
   Scenario: Owners can request deletion when they are not facilitators and facilitators can delete.
     Given owner content:
-      | name        | owner type    |
-      | Saint Louis | Company |
+      | name        | owner type |
+      | Saint Louis | Company    |
     Given users:
       | Username        | First name | Family name |
       | Sown Carnberry  | Sown       | Carnberry   |

@@ -12,7 +12,7 @@ Feature: Tests the collection last update time.
       | name                  | email       |
       | Your Cleaning Company | foo@bar.com |
     And owner content:
-      | name | owner type                  |
+      | name | owner type            |
       | Sean | Private Individual(s) |
     And the following collection:
       | title             | Household Wizard |

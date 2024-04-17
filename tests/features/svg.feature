@@ -3,7 +3,7 @@ Feature: Test SVG attachments.
 
   Background:
     Given owner content:
-      | name | owner type                    |
+      | name | owner type              |
       | SVG  | Non-Profit Organisation |
     And contact_information content:
       | name | email           |

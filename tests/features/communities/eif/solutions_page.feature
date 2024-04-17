@@ -4,9 +4,9 @@ Feature: As a user, visiting the EIF Toolbox page, I want to be able to filter
 
   Scenario: Test the EIF Toolbox solution page.
 
-    Given owner:
-      | name | owner type    |
-      | ACME | Company |
+    Given owner content:
+      | name | owner type |
+      | ACME | Company    |
     And collection:
       | title | Parent    |
       | state | published |

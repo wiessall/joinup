@@ -52,7 +52,7 @@ Feature: Solution moderation
 
   Scenario: Test the moderation workflow available states.
     Given owner content:
-      | name           | owner type                  |
+      | name           | owner type            |
       | Angelos Agathe | Private Individual(s) |
     And contact_information content:
       | name    | email               |

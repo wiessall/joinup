@@ -6,7 +6,7 @@ Feature: Editing collections
 
   Scenario: Edit a collection
     Given owner content:
-      | name                 | owner type                    |
+      | name                 | owner type              |
       | Organisation example | Non-Profit Organisation |
     And contact_information content:
       | name                 | email                            |
@@ -40,7 +40,7 @@ Feature: Editing collections
   Scenario: Edit a collection wysiwyg modal should close.
     # Regression test for ticket ISAICP-7181 and ISAICP-8355.
     Given owner content:
-      | name            | owner type                    |
+      | name            | owner type              |
       | wysiwyg example | Non-Profit Organisation |
     And contact_information content:
       | name              | email                         |
@@ -71,7 +71,7 @@ Feature: Editing collections
   Scenario: Regression test wysiwyg add file shows a 0 bytes limit.
     # Regression test for ticket ISAICP-7177.
     Given owner content:
-      | name                       | owner type                    |
+      | name                       | owner type              |
       | Regression wysiwyg example | Non-Profit Organisation |
     And contact_information content:
       | name            | email                       |

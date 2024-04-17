@@ -12,7 +12,7 @@ Feature: As a user of the website
       | name        | email                 |
       | Crusty crab | crabbypatties@bar.com |
     And owner content:
-      | name    | owner type                  |
+      | name    | owner type            |
       | Mr Crab | Private Individual(s) |
     And the following solutions:
       | title                | abstract                   | description                | logo     | owner   | contact information | solution type | state        | topic       |

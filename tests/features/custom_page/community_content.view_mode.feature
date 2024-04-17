@@ -6,8 +6,8 @@ Feature:
 
   Scenario: Present custom page solution listings in tiles.
     Given owner content:
-      | name                   | owner type    |
-      | Some fancy named owner | Company |
+      | name                   | owner type |
+      | Some fancy named owner | Company    |
     And contact_information content:
       | name                     | email                 |
       | Some fancy named contact | who.cares@example.com |
@@ -55,8 +55,8 @@ Feature:
 
   Scenario: Present custom page collection listings in tiles.
     Given owner content:
-      | name                   | owner type    |
-      | Some fancy named owner | Company |
+      | name                   | owner type |
+      | Some fancy named owner | Company    |
     And contact_information content:
       | name                     | email                 |
       | Some fancy named contact | who.cares@example.com |

@@ -8,9 +8,9 @@ Feature: Solution editing.
     Given contact_information content:
       | name         | email              |
       | Seward Shawn | seward@example.com |
-    And owner:
-      | name      | owner type    |
-      | Acme inc. | Company |
+    And owner content:
+      | name      | owner type |
+      | Acme inc. | Company    |
     And users:
       | Username     | E-mail                   |
       | Yancy Burton | yancy.burton@example.com |

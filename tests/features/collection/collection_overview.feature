@@ -13,7 +13,7 @@ Feature: Collections Overview
       | Open Data         | Facilitate access to data sets | 2018-10-04 8:33am | published |
       | Connecting Europe | Reusable tools and services    | 2018-10-04 8:32am | published |
     And owner content:
-      | name                 | owner type                    |
+      | name                 | owner type              |
       | Organisation example | Non-Profit Organisation |
     # Check that visiting as an anonymous does not create cache for all users.
     When I am an anonymous user
