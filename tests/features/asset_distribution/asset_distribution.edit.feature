@@ -43,15 +43,15 @@ Feature: Asset distribution editing.
 
     When I am logged in as a facilitator of the "Solution B" solution
     And I go to the homepage of the "Asset distribution example" asset distribution
-    Then I should not see the link "Edit" in the "Entity actions" region
+    Then I should not see the link "Edit" in the optional "Entity actions" region
 
     When I am logged in as an "authenticated user"
     And I go to the homepage of the "Asset distribution example" asset distribution
-    Then I should not see the link "Edit" in the "Entity actions" region
+    Then I should not see the link "Edit" in the optional "Entity actions" region
 
     When I am an anonymous user
     And I go to the homepage of the "Asset distribution example" asset distribution
-    Then I should not see the link "Edit" in the "Entity actions" region
+    Then I should not see the link "Edit" in the optional "Entity actions" region
 
   Scenario: Edit a distribution as a solution facilitator.
     Given licence content:
