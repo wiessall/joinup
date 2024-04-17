@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Drupal\eif\Plugin\Field\FieldFormatter;
 
+use Drupal\Component\Utility\SortArray;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Field\FieldDefinitionInterface;
 use Drupal\Core\Field\FieldItemListInterface;
@@ -89,6 +90,10 @@ class EifQualifiedRecommendation extends TextDefaultFormatter {
         ];
       }
     }
+
+    // Rely on recommendation term weight to order the list.
+    usort($elements, [SortArray::class, 'sortByWeightProperty']);
+
     return $elements;
   }
 
