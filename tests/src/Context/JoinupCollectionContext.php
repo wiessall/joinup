@@ -9,7 +9,6 @@ use Drupal\joinup\Traits\EntityTrait;
 use Drupal\joinup\Traits\SearchTrait;
 use Drupal\joinup\Traits\TopicTrait;
 use Drupal\joinup_collection\JoinupCollectionHelper;
-use Drupal\node\Entity\Node;
 use Drupal\rdf_entity\Entity\Rdf;
 
 /**
