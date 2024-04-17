@@ -58,15 +58,14 @@ class JoinupCollectionContext extends RawDrupalContext {
   }
 
   /**
-   * Clears the content created for the purpose of this test.
+   * Clears the Joinup collection created before the scenario.
    *
    * @throws \Drupal\Core\Entity\EntityStorageException
    *   Thrown when one of the created entities could not be deleted.
    *
    * @AfterScenario @joinup&&@api
    */
-  public function cleanJoinupData() {
-    // Delete the Joinup collection.
+  public function cleanJoinupData(): void {
     $collection = Rdf::load(JoinupCollectionHelper::JOINUP_COLLECTION_DEFAULT_ENTITY_ID);
     $collection->skip_notification = TRUE;
     $collection->delete();
