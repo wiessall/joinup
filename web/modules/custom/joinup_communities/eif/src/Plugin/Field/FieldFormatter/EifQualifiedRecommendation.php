@@ -85,6 +85,7 @@ class EifQualifiedRecommendation extends TextDefaultFormatter {
           '#theme' => 'eif_qualified_recommendation',
           '#label' => $term->getFullLabel(),
           '#description' => $element,
+          '#weight' => $term->getWeight(),
         ];
       }
     }
