@@ -2,7 +2,7 @@
 
 .actions-menu {
   position: fixed;
-  z-index: 501; // Avoid dropdown-menu to be overlapped by navbar
+  z-index: 500; // Avoid dropdown-menu to be overlapped by navbar
   right: $spacer;
   bottom: $spacer;
   display: inline-block;
@@ -36,7 +36,6 @@
   }
   @include media-breakpoint-up(lg) {
     position: relative;
-    z-index: unset; // Avoid buttons to overlap navbar
     right: unset;
     bottom: unset;
     left: calc(100% - $spacer * 3); // 100% - 46px

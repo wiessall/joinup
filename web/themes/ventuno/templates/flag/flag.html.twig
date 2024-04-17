@@ -19,7 +19,7 @@
   set classes = [
     'flag',
     'flag-' ~ flag.id()|clean_class,
-    'js-flag-' ~ flag.id()|clean_class ~ '-' ~ flaggable.id(),
+    ('js-flag-' ~ flag.id() ~ '-' ~ flaggable.id())|clean_class,
     action is same as 'unflag' ? 'action-unflag' : 'action-flag',
   ]
 %}
