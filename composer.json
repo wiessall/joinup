@@ -344,7 +344,8 @@
             "drupal/file_url": {
                 "Handle deleted files @see https://www.drupal.org/project/file_url/issues/3326758": "resources/patch/php/drupal/file_url/3326758.diff",
                 "No link template 'canonical' found @see https://www.drupal.org/project/file_url/issues/3346487": "resources/patch/php/drupal/file_url/3346487.diff",
-                "Error thrown when local file does not exist upon deletion @see https://www.drupal.org/project/file_url/issues/3393473": "resources/patch/php/drupal/file_url/3393473.diff"
+                "Error thrown when local file does not exist upon deletion @see https://www.drupal.org/project/file_url/issues/3393473": "resources/patch/php/drupal/file_url/3393473.diff",
+                "Do not assume that a file with the given target_id exists @see https://drupal.org/i/3440231": "resources/patch/php/drupal/file_url/3440231.diff"
             },
             "drupal/flag": {
                 "TypeError: Argument 1 passed to FlagCount::count() must implement interface @see https://www.drupal.org/project/flag/issues/3168014": "resources/patch/php/drupal/flag/3168014-46.patch",
