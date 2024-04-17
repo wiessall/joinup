@@ -26,57 +26,7 @@ class OwnerContext extends RawDrupalContext {
   use UserTrait;
   use UtilityTrait;
 
-  /**
-   * Creates one or many owners with data provided in a table.
-   *
-   * Table format:
-   * @codingStandardsIgnoreStart
-   * | type                        | name        | id                      | state        |
-   * | Company,Industry consortium | Acme Inc.   | http://example.com/path | published    |
-   * | Local authority             | Gotham City |                         | needs_update |
-   * | Private Individual(s)       | Jane Roe    |                         |              |
-   * @codingStandardsIgnoreEnd
-   *
-   * @param \Behat\Gherkin\Node\TableNode $owners_table
-   *   The owners table.
-   *
-   * @throws \Exception;
-   *   If a wrong type has been passed or if the author cannot be loaded.
-   *
-   * @Given (the following )owner(s):
-   */
-  public function givenOwner(TableNode $owners_table): void {
-    foreach ($owners_table->getHash() as $row) {
-      // If no type was specified, fallback to 'Private Individual(s)'.
-      $types = isset($row['type']) ? array_map('trim', explode(',', $row['type'])) : ['Private Individual(s)'];
 
-      $query = \Drupal::entityQuery('taxonomy_term')->accessCheck(FALSE);
-      $tids = $query
-        ->condition('vid', 'owner_type')
-        ->condition('name', $types, 'IN')
-        ->execute();
-
-      $found = array_map(function (TermInterface $term) {
-        return $term->label();
-      }, Term::loadMultiple($tids));
-
-      if ($not_found = array_diff($types, $found)) {
-        throw new \Exception('Non-existent owner types: ' . implode(', ', $not_found));
-      }
-
-      $values = [
-        'type' => 'owner',
-        'owner_type' => implode(',', $types),
-        'title' => !empty($row['title']) ? $row['title'] : $this->getRandom()->name(8, TRUE),
-      ];
-
-      if (!empty($row['author'])) {
-        $values['uid'] = $this->getUserByName($row['author'])->id();
-      }
-
-      $this->nodeCreate((object) $values);
-    }
-  }
 
   /**
    * Checks the number of available owners.
