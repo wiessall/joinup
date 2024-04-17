@@ -110,7 +110,7 @@ class ContactInformationContext extends RawDrupalContext {
     foreach ($contact_info_list->getColumn(0) as $label) {
       /** @var \Drupal\contact_information\Entity\ContactInformationInterface $contact_info */
       $contact_info = $this->getEntityByLabel('node', $label, 'contact_information');
-      $email_field = $contact_info->get('ci_email');
+      $email_field = $contact_info->get('email');
       if (!$email_field->isEmpty()) {
         $confirmation = $email_confirmer->getConfirmation($email_field->value, 'pending') ?: $email_confirmer->createConfirmation($email_field->value);
         if (!$confirmation->confirm($confirmation->getHash())) {

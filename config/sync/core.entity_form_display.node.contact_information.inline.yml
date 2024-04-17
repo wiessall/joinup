@@ -4,8 +4,8 @@ status: true
 dependencies:
   config:
     - core.entity_form_mode.node.inline
-    - field.field.node.contact_information.ci_email
-    - field.field.node.contact_information.ci_webpage
+    - field.field.node.contact_information.email
+    - field.field.node.contact_information.webpage
     - field.field.node.contact_information.field_state
     - node.type.contact_information
   module:
@@ -16,22 +16,6 @@ targetEntityType: node
 bundle: contact_information
 mode: inline
 content:
-  ci_email:
-    type: email_legacy_multicardinality
-    weight: 1
-    region: content
-    settings:
-      placeholder: ''
-      size: 60
-    third_party_settings: {  }
-  ci_webpage:
-    type: link_legacy_multicardinality
-    weight: 2
-    region: content
-    settings:
-      placeholder_url: ''
-      placeholder_title: ''
-    third_party_settings: {  }
   current_workflow_state:
     type: current_workflow_state_widget
     weight: 3
@@ -41,6 +25,14 @@ content:
       title_display: before
       show_for_new_entities: false
     third_party_settings: {  }
+  email:
+    type: email_legacy_multicardinality
+    weight: 1
+    region: content
+    settings:
+      placeholder: ''
+      size: 60
+    third_party_settings: {  }
   title:
     type: string_textfield
     weight: 0
@@ -48,6 +40,14 @@ content:
     settings:
       size: 60
       placeholder: ''
+    third_party_settings: {  }
+  webpage:
+    type: link_legacy_multicardinality
+    weight: 2
+    region: content
+    settings:
+      placeholder_url: ''
+      placeholder_title: ''
     third_party_settings: {  }
 hidden:
   created: true
