@@ -77,6 +77,10 @@ class ContactInformationContext extends RawDrupalContext {
 
       // Replace the column aliases with the actual field names.
       $translated = self::translateFieldNameAlias($key, self::contactInformationFieldAliases());
+      if ($translated === $key) {
+        continue;
+      }
+
       $node->$translated = $node->$key;
       unset($node->$key);
     }
