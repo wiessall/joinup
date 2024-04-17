@@ -34,6 +34,7 @@ use_dns_when_possible: true
 composer_version: "2"
 web_environment: []
 disable_settings_management: true
+nodejs_version: "20"
 
 hooks:
   pre-start:
@@ -41,7 +42,3 @@ hooks:
     # retrieves the Apache Solr configuration from resources/solr/conf dir.
     - exec-host: rm -f .ddev/solr-standalone/conf
     - exec-host: ln -s ../../resources/solr/conf .ddev/solr-standalone/
-  post-start:
-    # Update Node and NPM.
-    - exec: nvm install 20
-    - exec: nvm install-latest-npm
