@@ -48,12 +48,15 @@
     anonymous_links: anonymous_links,
     hide_searchbar: hide_searchbar,
     searchbar: page.search_bar,
+    bookmark_link: bookmark_link,
   } %}
 
   {% block page_header %}
     {% if page.header %}
       <div class="region-header">
-        {{ page.header }}
+        <div class="region-header__inner">
+          {{ page.header }}
+        </div>
       </div>
     {% endif %}
   {% endblock %}

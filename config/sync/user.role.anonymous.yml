@@ -43,6 +43,8 @@ permissions:
   - 'use text format basic_html'
   - 'use text format plain_text_glossary'
   - 'use text format simple_text'
+  - 'view bookmark_node'
+  - 'view bookmark_rdf_entity'
   - 'view compatibility documents'
   - 'view eif wrapper entity'
   - 'view eif_perspective rdf-meta-entity'
