@@ -60,6 +60,7 @@
       }
       &::after {
         @include get-bootstrap-icon('chevron-down', currentColor);
+
         margin-left: $spacer * .5;
       }
     }
