@@ -14,9 +14,9 @@ Feature: Solution notifications
     And the following owner:
       | name               | type                  |
       | Karanikolas Kitsos | Private Individual(s) |
-    And the following contact:
-      | name  | Information Desk             |
-      | email | information.desk@example.com |
+    And contact_information content:
+      | name             | email                        |
+      | Information Desk | information.desk@example.com |
     And users:
       | Username     | Roles     | First name | Family name | E-mail                   |
       | Pat Harper   | moderator | Pat        | Harper      | pat.harper@example.com   |

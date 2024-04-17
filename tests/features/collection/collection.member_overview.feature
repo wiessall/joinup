@@ -8,9 +8,9 @@ Feature: Collection membership overview
     Given the following owner:
       | name           |
       | Ayodele Sommer |
-    And the following contact:
-      | name  | Nita Yang             |
-      | email | supernita@yahoo.co.uk |
+    And contact_information content:
+      | name      | email                 |
+      | Nita Yang | supernita@yahoo.co.uk |
     And users:
       # We're adding many users so we can test the different roles and states,
       #  as well as the pager. 12 users are shown per page.

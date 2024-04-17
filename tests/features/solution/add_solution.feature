@@ -115,8 +115,8 @@ Feature: "Add solution" visibility options.
     # Regression test for the non required field, 'Logo'.
     # @see: https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-3328
     And I should not see the following error messages:
-      | error messages            |
-      | Logo field is required.   |
+      | error messages          |
+      | Logo field is required. |
     But I should see a logo on the header
     And I should see the heading "Espresso is the solution"
     When I am logged in as "Ruth Lee"
@@ -285,9 +285,9 @@ Feature: "Add solution" visibility options.
     Given the following owner:
       | name                 | type    |
       | Organisation example | Company |
-    And the following contact:
-      | email | invisible.man@example.com |
-      | name  | Invisible Man             |
+    And contact_information content:
+      | name          | email                     |
+      | Invisible Man | invisible.man@example.com |
     And the following solution:
       | title               | Cleaning solution                                 |
       | abstract            | Cleans anything dirty                             |

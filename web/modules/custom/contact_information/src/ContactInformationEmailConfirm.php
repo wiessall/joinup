@@ -46,7 +46,7 @@ class ContactInformationEmailConfirm implements ContactInformationEmailConfirmIn
     $field = $group->get($group->getContactInformationFieldName());
     /** @var \Drupal\contact_information\Entity\ContactInformationInterface $contact_information */
     foreach ($field->referencedEntities() as $contact_information) {
-      $email_field = $contact_information->get('field_ci_email');
+      $email_field = $contact_information->get('ci_email');
       if (!$email_field->isEmpty()) {
         $email = $email_field->value;
         if (!in_array($email, $processed_emails, TRUE)) {
@@ -88,7 +88,7 @@ class ContactInformationEmailConfirm implements ContactInformationEmailConfirmIn
     $contact_ids = $storage->getQuery()
       ->accessCheck(FALSE)
       ->condition('rid', 'contact_information')
-      ->condition('field_ci_email', $email)
+      ->condition('ci_email', $email)
       ->execute();
 
     if (!$contact_ids) {
@@ -117,15 +117,15 @@ class ContactInformationEmailConfirm implements ContactInformationEmailConfirmIn
    * {@inheritdoc}
    */
   public function deleteContactInfoConfirmation(ContactInformationInterface $contact_information): void {
-    $email_field = $contact_information->get('field_ci_email');
+    $email_field = $contact_information->get('ci_email');
     if (!$email_field->isEmpty()) {
       $email = $email_field->value;
-      $email_is_used_elsewhere = (bool) $this->entityTypeManager->getStorage('rdf_entity')
+      $email_is_used_elsewhere = (bool) $this->entityTypeManager->getStorage('node')
         ->getQuery()
         ->accessCheck(FALSE)
-        ->condition('rid', 'contact_information')
-        ->condition('field_ci_email', $email)
-        ->condition('id', $contact_information->id(), '<>')
+        ->condition('type', 'contact_information')
+        ->condition('ci_email', $email)
+        ->condition('nid', $contact_information->id(), '<>')
         ->count()
         ->execute();
       if (!$email_is_used_elsewhere) {

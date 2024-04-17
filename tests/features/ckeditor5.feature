@@ -5,9 +5,9 @@ Feature: CKEditor5
     Given the following owner:
       | name     | type                    |
       | Landlord | Non-Profit Organisation |
-    And the following contact:
-      | name  | ReachMe              |
-      | email | reach.me@example.com |
+    And contact_information content:
+      | name    | email                |
+      | ReachMe | reach.me@example.com |
     And collections:
       | title                 | state     | topic                   | owner    | contact information |
       | Shaping of disruption | published | Supplier exchange       | Landlord | ReachMe             |
@@ -147,19 +147,19 @@ Feature: CKEditor5
     Then a modal should open
 
     And the "Ventuno media library" table should be:
-      | | Thumbnail | Name                      | Authored by | Updated                 |
-      | |           | Too angry for Angry Birds | Anonymous   | Tue, 26/07/2016 - 13:00 |
-      | |           | Pager test 1              | Anonymous   | Mon, 25/07/2016 - 13:00 |
-      | |           | Pager test 2              | Anonymous   | Sun, 24/07/2016 - 13:00 |
-      | |           | Pager test 3              | Anonymous   | Sat, 23/07/2016 - 13:00 |
-      | |           | Pager test 4              | Anonymous   | Fri, 22/07/2016 - 13:00 |
-      | |           | Pager test 5              | Anonymous   | Thu, 21/07/2016 - 13:00 |
-      | |           | Pager test 6              | Anonymous   | Wed, 20/07/2016 - 13:00 |
-      | |           | Pager test 7              | Anonymous   | Tue, 19/07/2016 - 13:00 |
-      | |           | Pager test 8              | Anonymous   | Mon, 18/07/2016 - 13:00 |
-      | |           | Pager test 9              | Anonymous   | Sun, 17/07/2016 - 13:00 |
-      | |           | Pager test ten            | Anonymous   | Sat, 16/07/2016 - 13:00 |
-      | |           | Pager test eleven         | Anonymous   | Fri, 15/07/2016 - 13:00 |
+      |  | Thumbnail | Name                      | Authored by | Updated                 |
+      |  |           | Too angry for Angry Birds | Anonymous   | Tue, 26/07/2016 - 13:00 |
+      |  |           | Pager test 1              | Anonymous   | Mon, 25/07/2016 - 13:00 |
+      |  |           | Pager test 2              | Anonymous   | Sun, 24/07/2016 - 13:00 |
+      |  |           | Pager test 3              | Anonymous   | Sat, 23/07/2016 - 13:00 |
+      |  |           | Pager test 4              | Anonymous   | Fri, 22/07/2016 - 13:00 |
+      |  |           | Pager test 5              | Anonymous   | Thu, 21/07/2016 - 13:00 |
+      |  |           | Pager test 6              | Anonymous   | Wed, 20/07/2016 - 13:00 |
+      |  |           | Pager test 7              | Anonymous   | Tue, 19/07/2016 - 13:00 |
+      |  |           | Pager test 8              | Anonymous   | Mon, 18/07/2016 - 13:00 |
+      |  |           | Pager test 9              | Anonymous   | Sun, 17/07/2016 - 13:00 |
+      |  |           | Pager test ten            | Anonymous   | Sat, 16/07/2016 - 13:00 |
+      |  |           | Pager test eleven         | Anonymous   | Fri, 15/07/2016 - 13:00 |
     And I should not see "Pager test twelve"
     And I should not see "Pager test thirteen"
     And I should not see "Pager test fourteen"
@@ -183,10 +183,10 @@ Feature: CKEditor5
     And I should not see "Pager test ten"
     And I should not see "Pager test eleven"
     But the "Ventuno media library" table should be:
-      | | Thumbnail | Name                | Authored by | Updated                 |
-      | |           | Pager test twelve   | Anonymous   | Thu, 14/07/2016 - 13:00 |
-      | |           | Pager test thirteen | Anonymous   | Wed, 13/07/2016 - 13:00 |
-      | |           | Pager test fourteen | Anonymous   | Tue, 12/07/2016 - 13:00 |
+      |  | Thumbnail | Name                | Authored by | Updated                 |
+      |  |           | Pager test twelve   | Anonymous   | Thu, 14/07/2016 - 13:00 |
+      |  |           | Pager test thirteen | Anonymous   | Wed, 13/07/2016 - 13:00 |
+      |  |           | Pager test fourteen | Anonymous   | Tue, 12/07/2016 - 13:00 |
 
     When I close the modal dialog
     And the modal should be closed
@@ -198,19 +198,19 @@ Feature: CKEditor5
     And I wait for 1 second
     And I wait for AJAX to finish
     Then the "Ventuno media library" table should be:
-      | | Thumbnail | Name                | Authored by | Updated                 |
-      | |           | Pager test 1        | Anonymous   | Mon, 25/07/2016 - 13:00 |
-      | |           | Pager test 2        | Anonymous   | Sun, 24/07/2016 - 13:00 |
-      | |           | Pager test 3        | Anonymous   | Sat, 23/07/2016 - 13:00 |
-      | |           | Pager test 4        | Anonymous   | Fri, 22/07/2016 - 13:00 |
-      | |           | Pager test 5        | Anonymous   | Thu, 21/07/2016 - 13:00 |
-      | |           | Pager test 6        | Anonymous   | Wed, 20/07/2016 - 13:00 |
-      | |           | Pager test 7        | Anonymous   | Tue, 19/07/2016 - 13:00 |
-      | |           | Pager test 8        | Anonymous   | Mon, 18/07/2016 - 13:00 |
-      | |           | Pager test 9        | Anonymous   | Sun, 17/07/2016 - 13:00 |
-      | |           | Pager test eleven   | Anonymous   | Fri, 15/07/2016 - 13:00 |
-      | |           | Pager test fourteen | Anonymous   | Tue, 12/07/2016 - 13:00 |
-      | |           | Pager test ten      | Anonymous   | Sat, 16/07/2016 - 13:00 |
+      |  | Thumbnail | Name                | Authored by | Updated                 |
+      |  |           | Pager test 1        | Anonymous   | Mon, 25/07/2016 - 13:00 |
+      |  |           | Pager test 2        | Anonymous   | Sun, 24/07/2016 - 13:00 |
+      |  |           | Pager test 3        | Anonymous   | Sat, 23/07/2016 - 13:00 |
+      |  |           | Pager test 4        | Anonymous   | Fri, 22/07/2016 - 13:00 |
+      |  |           | Pager test 5        | Anonymous   | Thu, 21/07/2016 - 13:00 |
+      |  |           | Pager test 6        | Anonymous   | Wed, 20/07/2016 - 13:00 |
+      |  |           | Pager test 7        | Anonymous   | Tue, 19/07/2016 - 13:00 |
+      |  |           | Pager test 8        | Anonymous   | Mon, 18/07/2016 - 13:00 |
+      |  |           | Pager test 9        | Anonymous   | Sun, 17/07/2016 - 13:00 |
+      |  |           | Pager test eleven   | Anonymous   | Fri, 15/07/2016 - 13:00 |
+      |  |           | Pager test fourteen | Anonymous   | Tue, 12/07/2016 - 13:00 |
+      |  |           | Pager test ten      | Anonymous   | Sat, 16/07/2016 - 13:00 |
     And I should not see "Pager test twelve"
     And I should not see "Pager test thirteen"
     And I should not see "Too angry for Angry Birds"
@@ -236,10 +236,10 @@ Feature: CKEditor5
     And I should not see "Pager test fourteen"
     And I should not see "Pager test ten"
     And the "Ventuno media library" table should be:
-      | | Thumbnail | Name                      | Authored by | Updated                 |
-      | |           | Pager test thirteen       | Anonymous   | Wed, 13/07/2016 - 13:00 |
-      | |           | Pager test twelve         | Anonymous   | Thu, 14/07/2016 - 13:00 |
-      | |           | Too angry for Angry Birds | Anonymous   | Tue, 26/07/2016 - 13:00 |
+      |  | Thumbnail | Name                      | Authored by | Updated                 |
+      |  |           | Pager test thirteen       | Anonymous   | Wed, 13/07/2016 - 13:00 |
+      |  |           | Pager test twelve         | Anonymous   | Thu, 14/07/2016 - 13:00 |
+      |  |           | Too angry for Angry Birds | Anonymous   | Tue, 26/07/2016 - 13:00 |
     But I should not see "The Image in Shaping of disruption"
     And I should not see "This is Alan we love"
     And I should not see "Other Image in The Other Collection"

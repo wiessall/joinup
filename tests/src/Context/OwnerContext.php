@@ -89,7 +89,7 @@ class OwnerContext extends RawDrupalContext {
    * @Then I should have :number owner/owners
    */
   public function assertOwnerCount(int $number): void {
-    $this->assertNodeEntityCount($number, 'owner');
+    $this->assertEntityCount('node', 'owner', $number);
   }
 
   /**

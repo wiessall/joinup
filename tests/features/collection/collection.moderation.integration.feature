@@ -8,9 +8,9 @@ Feature: As a user of the website
       | Username    | Roles     |
       | Cornelius   |           |
       | Tina Butler | moderator |
-    And the following contact:
-      | email | martykelley@bar.com |
-      | name  | Marty Kelley        |
+    And contact_information content:
+      | name         | email               |
+      | Marty Kelley | martykelley@bar.com |
     And the following owner:
       | name            |
       | Martin Gonzalez |

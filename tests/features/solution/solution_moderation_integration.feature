@@ -8,9 +8,9 @@ Feature: As a user of the website
       | Username        | Roles     |
       | Hulk            |           |
       | Captain America | moderator |
-    And the following contact:
-      | email | crabbypatties@bar.com |
-      | name  | Crusty crab           |
+    And contact_information content:
+      | name        | email                 |
+      | Crusty crab | crabbypatties@bar.com |
     And the following owner:
       | name    | type                  |
       | Mr Crab | Private Individual(s) |

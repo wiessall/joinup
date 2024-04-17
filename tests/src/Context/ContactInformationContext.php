@@ -7,16 +7,19 @@ namespace Drupal\joinup\Context;
 use Behat\Behat\Hook\Scope\AfterScenarioScope;
 use Behat\Gherkin\Node\TableNode;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
+use Drupal\DrupalExtension\Hook\Scope\BeforeNodeCreateScope;
 use Drupal\contact_information\ContactInformationEmailConfirmInterface;
 use Drupal\email_confirmer\EmailConfirmationInterface;
 use Drupal\joinup\Traits\AliasTranslatorTrait;
 use Drupal\joinup\Traits\EntityTrait;
 use Drupal\joinup\Traits\MailCollectorTrait;
+use Drupal\joinup\Traits\NodeTrait;
 use Drupal\joinup\Traits\RdfEntityTrait;
 use Drupal\joinup\Traits\SearchTrait;
 use Drupal\joinup\Traits\TestingEntitiesTrait;
 use Drupal\joinup\Traits\UserTrait;
-use Drupal\rdf_entity\RdfInterface;
+use Drupal\node\Entity\Node;
+use Drupal\node\NodeInterface;
 use PHPUnit\Framework\Assert;
 
 /**
@@ -27,6 +30,7 @@ class ContactInformationContext extends RawDrupalContext {
   use AliasTranslatorTrait;
   use EntityTrait;
   use MailCollectorTrait;
+  use NodeTrait;
   use RdfEntityTrait;
   use SearchTrait;
   use TestingEntitiesTrait;
@@ -47,65 +51,34 @@ class ContactInformationContext extends RawDrupalContext {
    */
   public function visitContactInformationPage(string $label): void {
     /** @var \Drupal\rdf_entity\Entity\Rdf $entity */
-    $entity = $this->getEntityByLabel('rdf_entity', $label, 'contact_information');
+    $entity = $this->getEntityByLabel('node', $label, 'contact_information');
     $this->visitPath($entity->toUrl()->toString());
   }
 
   /**
-   * Creates a contact information entity with data provided in a table.
+   * Acts before node creation and translates the human readable fields.
    *
-   * Table format:
-   * | email | foo@bar.com, baz@qux.com |
-   * | name  | Jack Smith               |
+   * @param \Drupal\DrupalExtension\Hook\Scope\BeforeNodeCreateScope $scope
+   *   The before node create scope.
    *
-   * @param \Behat\Gherkin\Node\TableNode $contact_table
-   *   The contact table.
-   *
-   * @throws \Exception
-   *   Thrown when a column name is incorrect.
-   *
-   * @Given (the following )contact:
+   * @BeforeNodeCreate
    */
-  public function givenContactEntity(TableNode $contact_table): void {
-    $values = [];
-
-    foreach ($contact_table->getRowsHash() as $key => $value) {
-      // Replace the column aliases with the actual field names.
-      $key = self::translateFieldNameAlias($key, self::contactInformationFieldAliases());
-      $values[$key] = $value;
+  public function beforeNodeCreate(BeforeNodeCreateScope $scope): void {
+    $node = $scope->getEntity();
+    if ($node->type !== 'contact_information') {
+      return;
     }
 
-    $this->createContactInformation($values);
-  }
-
-  /**
-   * Creates a number of contact information with data provided in a table.
-   *
-   * Table format:
-   * @codingStandardsIgnoreStart
-   * | name                   | email                            | website url                            | author      |
-   * | John Irwin             | foo@example.com, bar@example.com | http://google.com                      | Author name |
-   * | Jack Smith, John Irwin | baz@example.com                  | http://yahoo.com, http://altavista.com |             |
-   * @codingStandardsIgnoreEnd
-   *
-   * @param \Behat\Gherkin\Node\TableNode $contact_table
-   *   The contacts table.
-   *
-   * @throws \Exception
-   *   Thrown when a column name is incorrect.
-   *
-   * @Given (the following )contacts:
-   */
-  public function givenContactEntities(TableNode $contact_table): void {
-    foreach ($contact_table->getColumnsHash() as $entity) {
-      $values = [];
-
-      foreach ($entity as $key => $value) {
-        $key = self::translateFieldNameAlias($key, self::contactInformationFieldAliases());
-        $values[$key] = $value;
+    $keys = array_keys((array) $node);
+    foreach ($keys as $key) {
+      if ($key === 'type') {
+        continue;
       }
 
-      $this->createContactInformation($values);
+      // Replace the column aliases with the actual field names.
+      $translated = self::translateFieldNameAlias($key, self::contactInformationFieldAliases());
+      $node->$translated = $node->$key;
+      unset($node->$key);
     }
   }
 
@@ -121,7 +94,7 @@ class ContactInformationContext extends RawDrupalContext {
    * @Then I should have :number contact information(s)
    */
   public function assertContactInformationCount(int $number): void {
-    $this->assertRdfEntityCount($number, 'contact_information');
+    $this->assertEntityCount('node', 'contact_information', $number);
   }
 
   /**
@@ -133,7 +106,7 @@ class ContactInformationContext extends RawDrupalContext {
    * @When I delete the :contact contact information
    */
   public function deleteContactInformation(string $name): void {
-    $this->getEntityByLabel('rdf_entity', $name, 'contact_information')->delete();
+    $this->getEntityByLabel('node', $name, 'contact_information')->delete();
   }
 
   /**
@@ -142,22 +115,23 @@ class ContactInformationContext extends RawDrupalContext {
    * @param array $values
    *   An optional associative array of values, keyed by property name.
    *
-   * @return \Drupal\rdf_entity\RdfInterface
+   * @return \Drupal\node\NodeInterface
    *   A new contact information entity.
    *
    * @throws \Exception
    *   When the author is specified but the related user doesn't exist.
    */
-  protected function createContactInformation(array $values): RdfInterface {
+  protected function createContactInformation(array $values): NodeInterface {
     // The 'author' key was replaced by 'uid' in the calling function.
     if (!empty($values['uid'])) {
       $values['uid'] = $this->getUserByName($values['uid'])->id();
     }
 
-    $entity = $this->createRdfEntity('contact_information', $this->parseRdfEntityFields($values));
-    $this->entities['rdf_entity'][$entity->id()] = $entity;
-
-    return $entity;
+    $values += [
+      'type' => 'contact_information',
+    ];
+    $node = $this->nodeCreate((object) $values);
+    return Node::load($node->nid);
   }
 
   /**
@@ -169,11 +143,11 @@ class ContactInformationContext extends RawDrupalContext {
   protected static function contactInformationFieldAliases(): array {
     // Mapping alias - field name.
     return [
-      'uri' => 'id',
-      'email' => 'field_ci_email',
-      'name' => 'field_ci_name',
-      'website url' => 'field_ci_webpage',
+      'email' => 'ci_email',
+      'name' => 'title',
+      'website url' => 'ci_webpage',
       'author' => 'uid',
+      'state' => 'field_state',
     ];
   }
 
@@ -207,8 +181,8 @@ class ContactInformationContext extends RawDrupalContext {
     $email_confirmer = \Drupal::getContainer()->get('email_confirmer');
     foreach ($contact_info_list->getColumn(0) as $label) {
       /** @var \Drupal\contact_information\Entity\ContactInformationInterface $contact_info */
-      $contact_info = $this->getEntityByLabel('rdf_entity', $label, 'contact_information');
-      $email_field = $contact_info->get('field_ci_email');
+      $contact_info = $this->getEntityByLabel('node', $label, 'contact_information');
+      $email_field = $contact_info->get('ci_email');
       if (!$email_field->isEmpty()) {
         $confirmation = $email_confirmer->getConfirmation($email_field->value, 'pending') ?: $email_confirmer->createConfirmation($email_field->value);
         if (!$confirmation->confirm($confirmation->getHash())) {

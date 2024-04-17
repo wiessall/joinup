@@ -22,9 +22,9 @@ Feature: Collection moderation
     Given the following owner:
       | name           |
       | Simon Sandoval |
-    And the following contact:
-      | name  | Francis             |
-      | email | Francis@example.com |
+    And contact_information content:
+      | name    | email               |
+      | Francis | Francis@example.com |
     And users:
       | Username        | Roles     |
       # Authenticated user.
@@ -169,9 +169,9 @@ Feature: Collection moderation
     Given the following owner:
       | name             | type    |
       | Carpet Sandation | Company |
-    And the following contact:
-      | name  | Partyanimal             |
-      | email | partyanimal@example.com |
+    And contact_information content:
+      | name        | email                   |
+      | Partyanimal | partyanimal@example.com |
     And collection:
       | title               | Some berry pie     |
       | description         | Berries are tasty. |

@@ -9,6 +9,7 @@ use Drupal\joinup\Traits\EntityTrait;
 use Drupal\joinup\Traits\SearchTrait;
 use Drupal\joinup\Traits\TopicTrait;
 use Drupal\joinup_collection\JoinupCollectionHelper;
+use Drupal\node\Entity\Node;
 use Drupal\rdf_entity\Entity\Rdf;
 
 /**
@@ -37,12 +38,12 @@ class JoinupCollectionContext extends RawDrupalContext {
     ]);
 
     // Create the contact.
-    Rdf::create([
-      'rid' => 'contact_information',
-      'id' => 'http://example.com/contact/joinup',
-      'field_contact_name' => 'Contact name',
-      'field_contact_email' => 'contact.email@example.com',
-    ])->save();
+    /** @var \Drupal\contact_information\Entity\ContactInformationInterface $node */
+    $contact = $this->nodeCreate([
+      'type' => 'contact_information',
+      'title' => 'Contact name',
+      'ci_email' => 'contact.email@example.com',
+    ]);
 
     // Create the Joinup collection.
     Rdf::create([
@@ -52,7 +53,7 @@ class JoinupCollectionContext extends RawDrupalContext {
       'field_ar_state' => 'published',
       'field_topic' => $this->getRandomTopic()->id(),
       'field_ar_owner' => $owner->nid,
-      'field_ar_contact_information' => 'http://example.com/contact/joinup',
+      'field_ar_contact_information' => $contact->nid,
     ])->save();
   }
 
@@ -67,11 +68,12 @@ class JoinupCollectionContext extends RawDrupalContext {
   public function cleanJoinupData() {
     // Delete the Joinup collection.
     $collection = Rdf::load(JoinupCollectionHelper::JOINUP_COLLECTION_DEFAULT_ENTITY_ID);
+    foreach ($collection->get('field_ar_contact_information')->referencedEntities() as $contact) {
+      $contact->delete();
+    }
+
     $collection->skip_notification = TRUE;
     $collection->delete();
-
-    // Delete related entities.
-    Rdf::load('http://example.com/contact/joinup')->delete();
   }
 
 }

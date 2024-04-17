@@ -114,7 +114,7 @@ third_party_settings:
                 type: entity_reference_entity_view
                 label: above
                 settings:
-                  view_mode: about
+                  view_mode: teaser
                 third_party_settings:
                   field_delimiter:
                     delimiter: ''
@@ -122,6 +122,10 @@ third_party_settings:
                     order: 0
                     limit: 0
                     offset: 0
+                  joinup_slick:
+                    preset: ''
+                    field_label: true
+                    custom_label: ''
                   template_suggestion:
                     template_suggestion: ''
             weight: 0

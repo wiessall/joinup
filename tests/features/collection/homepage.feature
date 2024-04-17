@@ -15,9 +15,9 @@ Feature: Collection homepage
     And the following owner:
       | name          |
       | Bilbo Baggins |
-    And the following contact:
-      | name  | Kalikatoura             |
-      | email | kalikatoura@example.com |
+    And contact_information content:
+      | name        | email                   |
+      | Kalikatoura | kalikatoura@example.com |
     And the following collection:
       | title               | Middle earth daily               |
       | description         | Middle earth daily               |
@@ -208,28 +208,28 @@ Feature: Collection homepage
     When I go to the homepage of the "Middle earth daily" collection
     Then I should see a Webtools eTrans element
     And the eTrans translatable text should contain the following text:
-     | This is a test abstract. |
-     | Owner                    |
-     | Bilbo Baggins            |
-     | Contact information      |
-     | Kalikatoura              |
-     | Middle earth daily       |
-     | 2 News                   |
-     | 1 Event                  |
-     | 1 Solution               |
-     | About:                   |
-     | all topics               |
-     | See more topics          |
-     | eGov (2)                 |
-     | Supplier exchange (2)    |
-     | Economy and Welfare (1)  |
-     | Finance in EU (1)        |
-     | Detailed information     |
-     | Last updated             |
+      | This is a test abstract. |
+      | Owner                    |
+      | Bilbo Baggins            |
+      | Contact information      |
+      | Kalikatoura              |
+      | Middle earth daily       |
+      | 2 News                   |
+      | 1 Event                  |
+      | 1 Solution               |
+      | About:                   |
+      | all topics               |
+      | See more topics          |
+      | eGov (2)                 |
+      | Supplier exchange (2)    |
+      | Economy and Welfare (1)  |
+      | Finance in EU (1)        |
+      | Detailed information     |
+      | Last updated             |
      # Exclude "last update" string.
-     | Moderation               |
-     | Open collection          |
-     | Moderated                |
+      | Moderation               |
+      | Open collection          |
+      | Moderated                |
     Given I am logged in as a user with the "moderator" role
     When I go to the homepage of the "Middle earth daily" collection
     When I open the header local tasks menu
