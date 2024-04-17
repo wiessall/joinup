@@ -40,11 +40,11 @@ Feature: Fill Page URL field in Technical problem / bug report on contact form
   See https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-8398
 
     Given users:
-      | Username         | E-mail                       |
-      | Julian Munson    | julian.munson@example.com    |
-    And the following contact:
-      | email | rmartykelley@bar.com |
-      | name  | Rarty Kelley        |
+      | Username      | E-mail                    |
+      | Julian Munson | julian.munson@example.com |
+    And contact_information content:
+      | name         | email                |
+      | Rarty Kelley | rmartykelley@bar.com |
     And the following owner:
       | name              |
       | Martinez Gonzalez |
@@ -55,11 +55,11 @@ Feature: Fill Page URL field in Technical problem / bug report on contact form
       | contact information | Rarty Kelley         |
       | state               | published            |
     And news content:
-      | title           | headline  | body | collection  | field_state |
-      | Tumba spatial   | headline  | body | Rumba       | published   |
+      | title         | headline | body | collection | field_state |
+      | Tumba spatial | headline | body | Rumba      | published   |
     And the following collection user memberships:
-      | collection  | user          | roles              |
-      | Rumba       | Julian Munson | owner, facilitator |
+      | collection | user          | roles              |
+      | Rumba      | Julian Munson | owner, facilitator |
     Given I am not logged in
     Then I go to the contact form
     And I fill in "First name" with "Jonh"
@@ -71,8 +71,8 @@ Feature: Fill Page URL field in Technical problem / bug report on contact form
     And I enter "I will be back soon..." in the "Message" wysiwyg editor
     Then I press "Submit"
     And I should see the following error messages:
-      | error messages               |
-      | Page URL field is required.  |
+      | error messages              |
+      | Page URL field is required. |
 
     And I fill in "Page URL" with "/collection/rumba/news/tumba-spatial"
     And I wait for AJAX to finish

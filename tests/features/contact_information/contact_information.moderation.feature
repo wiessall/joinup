@@ -117,10 +117,9 @@ Feature: Contact Information moderation
       | Username        | First name | Family name |
       | Sown Carnberry  | Sown       | Carnberry   |
       | Saint Louis CEO | George     | McLouis     |
-    And the following contact:
-      | name   | Secreteriat      |
-      | email  | info@example.com |
-      | author | Sown Carnberry   |
+    And contact_information content:
+      | name        | email            | author         |
+      | Secreteriat | info@example.com | Sown Carnberry |
     And collection:
       | title               | Saint Louis solutions |
       | description         | A software company    |

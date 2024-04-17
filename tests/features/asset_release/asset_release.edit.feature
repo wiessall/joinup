@@ -8,10 +8,9 @@ Feature: "Edit" visibility options.
     Given the following owner:
       | name           |
       | Awesome person |
-    And the following contact:
-      | name        | Awesome contact            |
-      | email       | awesomecontact@example.com |
-      | Website URL | http://example.com         |
+    And contact_information content:
+      | name            | email                      | Website URL        |
+      | Awesome contact | awesomecontact@example.com | http://example.com |
     And the following solution:
       | title               | My awesome solution abc |
       | description         | My awesome solution     |

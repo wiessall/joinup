@@ -1,0 +1,24 @@
+uuid: ba34541b-111c-4d84-b0dc-63125109d69c
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.ci_email
+    - node.type.contact_information
+third_party_settings:
+  rdf_sync:
+    value:
+      predicate: 'http://www.w3.org/2006/vcard/ns#hasEmail'
+      type: null
+id: node.contact_information.ci_email
+field_name: ci_email
+entity_type: node
+bundle: contact_information
+label: 'E-mail address'
+description: ''
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: email

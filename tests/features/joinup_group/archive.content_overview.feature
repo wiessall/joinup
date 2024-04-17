@@ -5,9 +5,9 @@ Feature: Global search with archive content
     Given the following owner:
       | name       | type    |
       | Some owner | Company |
-    And the following contact:
-      | name  | Some contact             |
-      | email | some-contact@example.com |
+    And contact_information content:
+      | name         | email                    |
+      | Some contact | some-contact@example.com |
     And the following <group type>s:
       | title             | description | state     |
       | Some <group type> | Description | published |
@@ -94,7 +94,7 @@ Feature: Global search with archive content
       | title         | description | state     |
       | Some solution | Description | published |
     And the following distributions:
-      | title                 | description | state     | parent      |
+      | title                 | description | state     | parent        |
       | Some zip distribution | Description | published | Some solution |
       | Some rar distribution | Description | archived  | Some solution |
     And the "Some solution" solution is configured to show "All" community content in the overview
@@ -112,8 +112,9 @@ Feature: Global search with archive content
     Given owner:
       | name       |
       | Erno Rubik |
-    And contact:
-      | name | Tom Kremer |
+    And contact_information content:
+      | name       |
+      | Tom Kremer |
     And collections:
       | title      | description                | topic             | owner      | contact information | state     |
       | Rubik Cube | combination puzzle         | Supplier exchange | Erno Rubik | Tom Kremer          | published |

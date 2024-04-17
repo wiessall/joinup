@@ -179,3 +179,10 @@ function joinup_rdf_update_110405(): void {
   $sparql = \Drupal::getContainer()->get('sparql.endpoint');
   $sparql->update("CLEAR GRAPH <http://joinup.eu/owner/published>;");
 }
+
+/**
+ * Uninstall the `contact_information` `rdf_entity` bundle.
+ */
+function joinup_rdf_update_110406(): void {
+  \Drupal::entityTypeManager()->getStorage('rdf_type')->load('contact_information')->delete();
+}

@@ -5,9 +5,9 @@ Feature: Test the visibility of the quick links menu.
     Given the following owner:
       | name                 | type                    |
       | Organisation example | Non-Profit Organisation |
-    And the following contact:
-      | name  | Collection editorial             |
-      | email | collection.editorial@example.com |
+    And contact_information content:
+      | name                 | email                            |
+      | Collection editorial | collection.editorial@example.com |
     And collection:
       | title               | Some collection          |
       | abstract            | Some abstract            |

@@ -13,9 +13,9 @@ Feature: Document moderation
     And the following owner:
       | name          |
       | thisisanowner |
-    And the following contact:
-      | name  | Dis contact             |
-      | email | dis.contact@example.com |
+    And contact_information content:
+      | name        | email                   |
+      | Dis contact | dis.contact@example.com |
     And the following collection:
       | title               | The Naked Ashes                 |
       | description         | The wolverine is a Marvel hero. |
@@ -143,7 +143,7 @@ Feature: Document moderation
     And I click "Add document" in the plus button menu
     When I fill in the following:
       | Title       | An amazing document about life |
-      | Short title | Amazing life    |
+      | Short title | Amazing life                   |
     And I enter "This is going to be an amazing document about life." in the "Description" wysiwyg editor
     And I select "Document" from "Type"
     Then I upload the file "test.zip" to "Upload a new file or enter a URL"
@@ -159,7 +159,7 @@ Feature: Document moderation
     And I click "Add document" in the plus button menu
     When I fill in the following:
       | Title       | An amazing document about health |
-      | Short title | Amazing health    |
+      | Short title | Amazing health                   |
     And I enter "This is going to be an amazing document about health." in the "Description" wysiwyg editor
     And I select "Document" from "Type"
     Then I upload the file "test.zip" to "Upload a new file or enter a URL"

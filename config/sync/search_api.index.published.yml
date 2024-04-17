@@ -5,6 +5,17 @@ dependencies:
   config:
     - field.storage.node.body
     - field.storage.node.description
+    - field.storage.node.field_location
+    - field.storage.node.field_organisation
+    - field.storage.meta_entity.field_pinned_in
+    - field.storage.node.field_scope
+    - field.storage.node.field_short_title
+    - field.storage.meta_entity.count
+    - field.storage.rdf_entity.field_ar_abstract
+    - field.storage.rdf_entity.field_is_abstract
+    - field.storage.rdf_entity.field_ar_contact_information
+    - field.storage.rdf_entity.field_is_contact_information
+    - field.storage.rdf_entity.field_isr_contact_information
     - field.storage.rdf_entity.field_ad_description
     - field.storage.rdf_entity.field_ar_abstract
     - field.storage.rdf_entity.field_ar_description
@@ -28,7 +39,6 @@ dependencies:
     - field.storage.user.field_user_first_name
     - field.storage.user.field_user_organisation
     - field.storage.meta_entity.count
-    - field.storage.rdf_entity.field_ci_name
     - field.storage.rdf_entity.field_is_contact_information
     - field.storage.rdf_entity.field_isr_contact_information
     - field.storage.meta_entity.field_featured
@@ -113,6 +123,26 @@ name: 'Published entities index'
 description: ''
 read_only: false
 field_settings:
+  ar_contact_title:
+    label: 'Collection » Contact information » Title'
+    datasource_id: 'entity:rdf_entity'
+    property_path: 'field_ar_contact_information:entity:title'
+    type: text
+    dependencies:
+      config:
+        - field.storage.rdf_entity.field_ar_contact_information
+      module:
+        - node
+  ar_contact_title_spellcheck:
+    label: 'Collection » Contact information » Title - Spellcheck'
+    datasource_id: 'entity:rdf_entity'
+    property_path: 'field_ar_contact_information:entity:title'
+    type: solr_text_spellcheck
+    dependencies:
+      config:
+        - field.storage.rdf_entity.field_ar_contact_information
+      module:
+        - node
   body:
     label: 'Body » Processed text'
     datasource_id: 'entity:node'
@@ -569,50 +599,46 @@ field_settings:
     dependencies:
       module:
         - rdf_entity
-  is_field_ci_name:
-    label: 'Contact information » Rdf entity » Name'
+  is_contact_title:
+    label: 'Solution » Contact information » Title'
     datasource_id: 'entity:rdf_entity'
-    property_path: 'field_is_contact_information:entity:field_ci_name'
+    property_path: 'field_is_contact_information:entity:title'
     type: text
     dependencies:
       config:
-        - field.storage.rdf_entity.field_ci_name
         - field.storage.rdf_entity.field_is_contact_information
       module:
-        - rdf_entity
-  is_field_ci_name_spellcheck:
-    label: 'Contact information » Rdf entity » Name - Spellcheck'
+        - node
+  is_contact_title_spellcheck:
+    label: 'Solution » Contact information » Title - Spellcheck'
     datasource_id: 'entity:rdf_entity'
-    property_path: 'field_is_contact_information:entity:field_ci_name'
+    property_path: 'field_is_contact_information:entity:title'
     type: solr_text_spellcheck
     dependencies:
       config:
-        - field.storage.rdf_entity.field_ci_name
         - field.storage.rdf_entity.field_is_contact_information
       module:
-        - rdf_entity
-  isr_field_ci_name:
-    label: 'Contact information » Rdf entity » Name'
+        - node
+  isr_contact_title:
+    label: 'Release » Contact information » Title'
     datasource_id: 'entity:rdf_entity'
-    property_path: 'field_isr_contact_information:entity:field_ci_name'
+    property_path: 'field_isr_contact_information:entity:title'
     type: text
     dependencies:
       config:
-        - field.storage.rdf_entity.field_ci_name
         - field.storage.rdf_entity.field_isr_contact_information
       module:
-        - rdf_entity
-  isr_field_ci_name_spellcheck:
-    label: 'Contact information » Rdf entity » Name - Spellcheck'
+        - node
+  isr_contact_title_spellcheck:
+    label: 'Release » Contact information » Title - Spellcheck'
     datasource_id: 'entity:rdf_entity'
-    property_path: 'field_isr_contact_information:entity:field_ci_name'
+    property_path: 'field_isr_contact_information:entity:title'
     type: solr_text_spellcheck
     dependencies:
       config:
-        - field.storage.rdf_entity.field_ci_name
         - field.storage.rdf_entity.field_isr_contact_information
       module:
-        - rdf_entity
+        - node
   keywords:
     label: Keywords
     property_path: aggregated_field
@@ -1020,8 +1046,6 @@ processor_settings:
       - field_user_first_name_spellcheck
       - field_user_organisation
       - field_user_organisation_spellcheck
-      - isr_field_ci_name
-      - isr_field_ci_name_spellcheck
       - label
       - label_spellcheck
       - title
@@ -1144,10 +1168,6 @@ processor_settings:
       - field_user_first_name_spellcheck
       - field_user_organisation
       - field_user_organisation_spellcheck
-      - is_field_ci_name
-      - is_field_ci_name_spellcheck
-      - isr_field_ci_name
-      - isr_field_ci_name_spellcheck
       - label
       - label_spellcheck
       - title
@@ -1189,10 +1209,6 @@ processor_settings:
       - field_user_first_name_spellcheck
       - field_user_organisation
       - field_user_organisation_spellcheck
-      - is_field_ci_name
-      - is_field_ci_name_spellcheck
-      - isr_field_ci_name
-      - isr_field_ci_name_spellcheck
       - label
       - label_spellcheck
       - title

@@ -1,0 +1,64 @@
+uuid: 6350bd61-0c00-4c47-b486-1d7dd60548e8
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_form_mode.node.inline
+    - field.field.node.contact_information.ci_email
+    - field.field.node.contact_information.ci_webpage
+    - field.field.node.contact_information.field_state
+    - node.type.contact_information
+  module:
+    - joinup_core
+    - joinup_workflow
+id: node.contact_information.inline
+targetEntityType: node
+bundle: contact_information
+mode: inline
+content:
+  ci_email:
+    type: email_legacy_multicardinality
+    weight: 1
+    region: content
+    settings:
+      placeholder: ''
+      size: 60
+    third_party_settings: {  }
+  ci_webpage:
+    type: link_legacy_multicardinality
+    weight: 2
+    region: content
+    settings:
+      placeholder_url: ''
+      placeholder_title: ''
+    third_party_settings: {  }
+  current_workflow_state:
+    type: current_workflow_state_widget
+    weight: 3
+    region: content
+    settings:
+      title: 'Current workflow state'
+      title_display: before
+      show_for_new_entities: false
+    third_party_settings: {  }
+  title:
+    type: string_textfield
+    weight: 0
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+hidden:
+  created: true
+  field_state: true
+  langcode: true
+  path: true
+  promote: true
+  published_at: true
+  simple_sitemap: true
+  status: true
+  sticky: true
+  uid: true
+  uri: true
+  url_redirects: true

@@ -5,10 +5,9 @@ Feature: Contact information access
   I don't want to see the contact information full page
 
   Scenario: Anonymous user contact information access
-    Given the following contact:
-      | email       | phil.coulson@shield.gov |
-      | name        | Phil Coulson            |
-      | Website URL | http://shield.gov       |
+    Given contact_information content:
+      | name         | email                   | Website URL       |
+      | Phil Coulson | phil.coulson@shield.gov | http://shield.gov |
 
     Then I should have 1 contact information
 
@@ -23,10 +22,9 @@ Feature: Contact information access
     Given users:
       | Username      | Roles | E-mail                      | First name | Family name |
       | Michiel Lucas |       | michiel.lucas@one-agency.be | Michiel    | Lucas       |
-    And the following contact:
-      | name   | info             |
-      | email  | info@dataflow.be |
-      | author | Michiel Lucas    |
+    And contact_information content:
+      | name | email            | author        |
+      | info | info@dataflow.be | Michiel Lucas |
     And collection:
       | title               | Ausy software solutions |
       | description         | A software company      |

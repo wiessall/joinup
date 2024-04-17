@@ -8,10 +8,9 @@ Feature: Asset release "delete" functionality.
     Given the following owner:
       | name              |
       | Yet another owner |
-    And the following contact:
-      | name        | Yet another contact           |
-      | email       | yetanothercontact@example.com |
-      | Website URL | http://example.com            |
+    And contact_information content:
+      | name                | email                         | Website URL        |
+      | Yet another contact | yetanothercontact@example.com | http://example.com |
     And the following collection:
       | title | Yet another collection |
       | state | published              |
@@ -24,10 +23,10 @@ Feature: Asset release "delete" functionality.
       | collection          | Yet another collection     |
       | state               | published                  |
     And the following releases:
-      | title                | description          | documentation | release number | release notes   | is version of        | owner                | contact information  | state     |
-      | Yet another release  | A sample release     | text.pdf      | 1              | Changed release | Yet another solution | Yet another owner    | Yet another contact  | published |
-      | No release           | A sample release     | text.pdf      | 1.2            | Changed release | Yet another solution | Yet another owner    | Yet another contact  | published |
-      | Jinks                | A sample release     | text.pdf      | 3              | Changed release | Yet another solution | Yet another owner    | Yet another contact  | published |
+      | title               | description      | documentation | release number | release notes   | is version of        | owner             | contact information | state     |
+      | Yet another release | A sample release | text.pdf      | 1              | Changed release | Yet another solution | Yet another owner | Yet another contact | published |
+      | No release          | A sample release | text.pdf      | 1.2            | Changed release | Yet another solution | Yet another owner | Yet another contact | published |
+      | Jinks               | A sample release | text.pdf      | 3              | Changed release | Yet another solution | Yet another owner | Yet another contact | published |
     And users:
       | Username        | E-mail                      | First name | Family name |
       | Ronnie Holloway | Ronnie.holloway@example.com | Ronnie     | Holloway    |

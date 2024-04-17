@@ -6,7 +6,7 @@ namespace Drupal\Tests\contact_information\ExistingSite;
 
 use Drupal\Core\Session\AnonymousUserSession;
 use Drupal\Tests\joinup_workflow\ExistingSite\JoinupWorkflowExistingSiteTestBase;
-use Drupal\rdf_entity\Entity\Rdf;
+use Drupal\node\Entity\Node;
 
 /**
  * Tests the workflow for the contact information entity.
@@ -78,10 +78,10 @@ class ContactInformationWorkflowTest extends JoinupWorkflowExistingSiteTestBase 
         // The created entity is not saved because this will trigger the
         // '__new__' state to be converted to 'validated'.
         // @see: contact_information_rdf_entity_presave().
-        $content = Rdf::create([
-          'rid' => 'contact_information',
-          'label' => $this->randomMachineName(),
-          'field_ci_state' => $entity_state,
+        $content = Node::create([
+          'type' => 'contact_information',
+          'title' => $this->randomMachineName(),
+          'field_state' => $entity_state,
           'uid' => $this->$user_var->id(),
         ]);
 
