@@ -15,22 +15,6 @@ targetEntityType: node
 bundle: contact_information
 mode: default
 content:
-  email:
-    type: email_legacy_multicardinality
-    weight: 1
-    region: content
-    settings:
-      placeholder: ''
-      size: 60
-    third_party_settings: {  }
-  webpage:
-    type: link_legacy_multicardinality
-    weight: 2
-    region: content
-    settings:
-      placeholder_url: ''
-      placeholder_title: ''
-    third_party_settings: {  }
   current_workflow_state:
     type: current_workflow_state_widget
     weight: 3
@@ -39,6 +23,14 @@ content:
       title: 'Current workflow state'
       title_display: before
       show_for_new_entities: false
+    third_party_settings: {  }
+  email:
+    type: email_legacy_multicardinality
+    weight: 1
+    region: content
+    settings:
+      placeholder: ''
+      size: 60
     third_party_settings: {  }
   field_state:
     type: state_machine_buttons
@@ -54,6 +46,14 @@ content:
     settings:
       size: 60
       placeholder: ''
+    third_party_settings: {  }
+  webpage:
+    type: link_legacy_multicardinality
+    weight: 2
+    region: content
+    settings:
+      placeholder_url: ''
+      placeholder_title: ''
     third_party_settings: {  }
 hidden:
   created: true
