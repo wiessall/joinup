@@ -42,7 +42,7 @@ class JoinupCollectionContext extends RawDrupalContext {
     $contact = $this->nodeCreate([
       'type' => 'contact_information',
       'title' => 'Contact name',
-      'ci_email' => 'contact.email@example.com',
+      'email' => 'contact.email@example.com',
     ]);
 
     // Create the Joinup collection.

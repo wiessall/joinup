@@ -9,8 +9,8 @@ dependencies:
 third_party_settings:
   field_permissions:
     permission_type: public
-id: node.ci_webpage
-field_name: ci_webpage
+id: node.webpage
+field_name: webpage
 entity_type: node
 type: link
 settings: {  }
