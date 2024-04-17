@@ -6,6 +6,11 @@ dependencies:
     - field.storage.node.owner_type
     - node.type.owner
     - taxonomy.vocabulary.owner_type
+third_party_settings:
+  rdf_sync:
+    target_id:
+      predicate: 'http://purl.org/dc/terms/type'
+      type: resource
 id: node.owner.owner_type
 field_name: owner_type
 entity_type: node
