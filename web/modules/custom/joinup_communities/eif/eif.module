@@ -30,6 +30,7 @@ function eif_theme(array $existing, string $type, string $theme, string $path): 
       'variables' => [
         'label' => NULL,
         'description' => NULL,
+        'weight' => 0,
       ],
     ],
     'eif_category_navigator' => [
