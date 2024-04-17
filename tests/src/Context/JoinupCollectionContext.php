@@ -39,7 +39,7 @@ class JoinupCollectionContext extends RawDrupalContext {
 
     // Create the contact.
     /** @var \Drupal\contact_information\Entity\ContactInformationInterface $node */
-    $contact = $this->nodeCreate([
+    $contact = $this->nodeCreate((object) [
       'type' => 'contact_information',
       'title' => 'Contact name',
       'email' => 'contact.email@example.com',
@@ -68,10 +68,6 @@ class JoinupCollectionContext extends RawDrupalContext {
   public function cleanJoinupData() {
     // Delete the Joinup collection.
     $collection = Rdf::load(JoinupCollectionHelper::JOINUP_COLLECTION_DEFAULT_ENTITY_ID);
-    foreach ($collection->get('field_ar_contact_information')->referencedEntities() as $contact) {
-      $contact->delete();
-    }
-
     $collection->skip_notification = TRUE;
     $collection->delete();
   }
