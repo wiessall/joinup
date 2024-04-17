@@ -5,8 +5,8 @@ Feature:
   I need to be able to see the content listed in the appropriate view mode.
 
   Scenario: Present custom page solution listings in tiles.
-    Given the following owner:
-      | name                   | type    |
+    Given owner content:
+      | name                   | owner type    |
       | Some fancy named owner | Company |
     And contact_information content:
       | name                     | email                 |
@@ -54,8 +54,8 @@ Feature:
     But I should not see the "Tile licence" tile
 
   Scenario: Present custom page collection listings in tiles.
-    Given the following owner:
-      | name                   | type    |
+    Given owner content:
+      | name                   | owner type    |
       | Some fancy named owner | Company |
     And contact_information content:
       | name                     | email                 |

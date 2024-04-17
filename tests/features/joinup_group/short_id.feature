@@ -9,7 +9,7 @@ Feature:
       | title              | short ID | state     |
       | Scientific Studies | sst-2020 | published |
     And owner:
-      | name                 | type    |
+      | name                 | owner type    |
       | Organisation example | Company |
 
     When I am logged in as an "authenticated user"
@@ -74,7 +74,7 @@ Feature:
       | title                         | short ID | state     | collection         |
       | Who knows what a solution is? | wkwasi   | published | Scientific Studies |
     And owner:
-      | name                 | type    |
+      | name                 | owner type    |
       | Organisation example | Company |
 
     When I am logged in as a facilitator of the "Scientific Studies" collection

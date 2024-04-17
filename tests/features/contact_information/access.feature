@@ -16,8 +16,8 @@ Feature: Contact information access
     Then I should see the heading "Sign in to continue"
 
   Scenario: Facilitator can edit contact information
-    Given the following owner:
-      | name         | type    |
+    Given owner content:
+      | name         | owner type    |
       | Ausy BENELUX | Company |
     Given users:
       | Username      | Roles | E-mail                      | First name | Family name |

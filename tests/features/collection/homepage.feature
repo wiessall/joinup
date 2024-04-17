@@ -12,7 +12,7 @@ Feature: Collection homepage
       | Legolas  | active |           |
       | Gimli    | active |           |
       | Samwise  | active | moderator |
-    And the following owner:
+    And owner content:
       | name          |
       | Bilbo Baggins |
     And contact_information content:

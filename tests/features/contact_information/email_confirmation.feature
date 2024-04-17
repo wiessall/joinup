@@ -5,7 +5,7 @@ Feature: Resend validation email from collection/solution about page
 
   Scenario: Scenario for Collection and Solution
     Given owner:
-      | name      | type               |
+      | name      | owner type               |
       | Rotterdam | National authority |
     And the following collection:
       | title       | Rally fanatics          |

@@ -5,8 +5,8 @@ Feature: Editing collections
   I need to be able to edit collections through the UI
 
   Scenario: Edit a collection
-    Given the following owner:
-      | name                 | type                    |
+    Given owner content:
+      | name                 | owner type                    |
       | Organisation example | Non-Profit Organisation |
     And contact_information content:
       | name                 | email                            |
@@ -39,8 +39,8 @@ Feature: Editing collections
   @javascript
   Scenario: Edit a collection wysiwyg modal should close.
     # Regression test for ticket ISAICP-7181 and ISAICP-8355.
-    Given the following owner:
-      | name            | type                    |
+    Given owner content:
+      | name            | owner type                    |
       | wysiwyg example | Non-Profit Organisation |
     And contact_information content:
       | name              | email                         |
@@ -70,8 +70,8 @@ Feature: Editing collections
   @javascript
   Scenario: Regression test wysiwyg add file shows a 0 bytes limit.
     # Regression test for ticket ISAICP-7177.
-    Given the following owner:
-      | name                       | type                    |
+    Given owner content:
+      | name                       | owner type                    |
       | Regression wysiwyg example | Non-Profit Organisation |
     And contact_information content:
       | name            | email                       |

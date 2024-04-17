@@ -6,7 +6,7 @@ Feature: When a solution is archived then its sub-content also should be archive
       | title | Collection |
       | state | published  |
     And owner:
-      | name        | type    |
+      | name        | owner type    |
       | The Company | Company |
     And contact_information content:
       | name                 | email                      |

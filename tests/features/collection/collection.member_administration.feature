@@ -5,7 +5,7 @@ Feature: Collection membership administration
   I need to be able to manager collection members
 
   Background:
-    Given the following owner:
+    Given owner content:
       | name         |
       | James Wilson |
     And contact_information content:

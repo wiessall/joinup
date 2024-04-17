@@ -11,7 +11,7 @@ Feature: As a user of the website
     And contact_information content:
       | name         | email               |
       | Marty Kelley | martykelley@bar.com |
-    And the following owner:
+    And owner content:
       | name            |
       | Martin Gonzalez |
     And the following collections:

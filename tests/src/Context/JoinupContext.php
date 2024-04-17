@@ -809,6 +809,13 @@ class JoinupContext extends RawDrupalContext {
    */
   protected static function getNodeFieldNameFromAlias($type, $alias) {
     $aliases = [
+      'contact_information' => [
+        'email' => 'ci_email',
+        'name' => 'title',
+        'website url' => 'ci_webpage',
+        'author' => 'uid',
+        'state' => 'field_state',
+      ],
       'custom_page' => [
         'attachments' => 'field_attachment',
         'body' => 'field_paragraphs_body',
@@ -868,6 +875,10 @@ class JoinupContext extends RawDrupalContext {
         'publication date' => 'published_at',
         'spatial coverage' => 'field_news_spatial_coverage',
         'state' => 'field_state',
+      ],
+      'owner' => [
+        'name' => 'title',
+        'owner type' => 'owner_type',
       ],
       'shared' => [
         'collection' => OgGroupAudienceHelperInterface::DEFAULT_FIELD,

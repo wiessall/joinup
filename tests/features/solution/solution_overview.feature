@@ -69,8 +69,8 @@ Feature: Solutions Overview
       | Closed data           | Facilitate access to data sets | published |
       | Isolating Europe      | Reusable tools and services    | published |
       | Uniting Europe        | Unusable tools and services    | draft     |
-    And the following owner:
-      | name              | type                    |
+    And owner content:
+      | name              | owner type                    |
       | NonProfit example | Non-Profit Organisation |
 
     # Check that visiting as an anonymous does not create cache for all users.

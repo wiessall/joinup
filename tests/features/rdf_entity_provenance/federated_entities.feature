@@ -7,7 +7,7 @@ Feature: In order to avoid users changing federated values
   I want federated entities to have the schema values disabled.
 
   Background: A provenance activity can be created through the API.
-    Given the following owner:
+    Given owner content:
       | name           |
       | John Federator |
     And contact_information content:

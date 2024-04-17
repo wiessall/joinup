@@ -5,8 +5,8 @@ Feature:
   I need to have the proper sitemaps available.
 
   Scenario: Basic sitemap link availability.
-    Given the following owner:
-      | name          | type    |
+    Given owner content:
+      | name          | owner type    |
       | Sitemap owner | Company |
     And contact_information content:
       | name                | email                           |

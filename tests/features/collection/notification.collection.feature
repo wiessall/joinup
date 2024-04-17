@@ -5,8 +5,8 @@ Feature: Notification test for the collection transitions.
   I want to receive a notification when an event occurs
 
   Scenario: Notifications should be sent whenever an event is occurring related to a collection.
-    Given the following owner:
-      | name       | type                    |
+    Given owner content:
+      | name       | owner type                    |
       | NC for all | Non-Profit Organisation |
     And contact_information content:
       | name                       | email                             |

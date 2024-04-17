@@ -5,8 +5,8 @@ Feature: Asset release moderation
   I need to be able to transit the releases from one state to another.
 
   Scenario: Publish, Update, request changes, publish again and delete a release.
-    Given the following owner:
-      | name        | type                  |
+    Given owner content:
+      | name        | owner type                  |
       | Kenny Logan | Private Individual(s) |
     And contact_information content:
       | name       | email                  |

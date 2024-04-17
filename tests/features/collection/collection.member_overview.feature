@@ -5,7 +5,7 @@ Feature: Collection membership overview
   I need to be able to see an overview of my fellow members
 
   Scenario: Show the collection members as a list of tiles
-    Given the following owner:
+    Given owner content:
       | name           |
       | Ayodele Sommer |
     And contact_information content:

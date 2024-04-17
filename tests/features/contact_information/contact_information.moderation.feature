@@ -10,7 +10,7 @@ Feature: Contact Information moderation
       | Sæwine Cynebald       |
       | Secondary facilitator |
     And owner:
-      | type                          | name               |
+      | owner type                          | name               |
       | Non-Governmental Organisation | Anglo-Saxon Museum |
     And collection:
       | title       | Games of the Anglo-Saxon age                  |
@@ -110,8 +110,8 @@ Feature: Contact Information moderation
     Then I should not see the link "EU healthy group"
 
   Scenario: Owners can request deletion when they are not facilitators and facilitators can delete.
-    Given the following owner:
-      | name        | type    |
+    Given owner content:
+      | name        | owner type    |
       | Saint Louis | Company |
     Given users:
       | Username        | First name | Family name |

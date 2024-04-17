@@ -2,8 +2,8 @@
 Feature: CKEditor5
 
   Background:
-    Given the following owner:
-      | name     | type                    |
+    Given owner content:
+      | name     | owner type                    |
       | Landlord | Non-Profit Organisation |
     And contact_information content:
       | name    | email                |

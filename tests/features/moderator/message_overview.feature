@@ -38,7 +38,7 @@ Feature: Solutions message overview
       | Username   | Roles     |
       | Weinberger | moderator |
     And owner:
-      | name                 | type    |
+      | name                 | owner type    |
       | Organisation example | Company |
     And I am logged in as an "authenticated user"
     When I go to the propose collection form

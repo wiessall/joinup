@@ -2,8 +2,8 @@
 Feature: Test SVG attachments.
 
   Background:
-    Given the following owner:
-      | name | type                    |
+    Given owner content:
+      | name | owner type                    |
       | SVG  | Non-Profit Organisation |
     And contact_information content:
       | name | email           |

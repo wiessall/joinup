@@ -58,8 +58,8 @@ Feature: "Add solution" visibility options.
       | title | Belgian barista's |
       | logo  | logo.png          |
       | state | published         |
-    And the following owner:
-      | name                 | type                         |
+    And owner content:
+      | name                 | owner type                   |
       | Organisation example | Company, Industry consortium |
     Given users:
       | Username      | Roles     | E-mail                 | First name | Family name |
@@ -224,8 +224,8 @@ Feature: "Add solution" visibility options.
       | description | Atlantic salmon arrived after the Little Ice Age. |
       | collection  | Ocean studies                                     |
       | state       | published                                         |
-    And the following owner:
-      | name                | type                             |
+    And owner content:
+      | name                | owner type                       |
       | University of Basel | Academia/Scientific organisation |
 
     Then I should have 1 solution
@@ -282,9 +282,9 @@ Feature: "Add solution" visibility options.
 
   @javascript @generateMedia @generateMediaTypes:solution_logo
   Scenario: Tests the image library widget.
-    Given the following owner:
-      | name                 | type    |
-      | Organisation example | Company |
+    Given owner content:
+      | name                 | owner type |
+      | Organisation example | Company    |
     And contact_information content:
       | name          | email                     |
       | Invisible Man | invisible.man@example.com |

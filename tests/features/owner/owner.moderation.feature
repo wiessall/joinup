@@ -11,7 +11,7 @@ Feature: Owner moderation
       | Username        |
       | Raeburn Hibbert |
     And owner:
-      | name             | type                    |
+      | name             | owner type                    |
       | Good food eaters | Non-Profit Organisation |
 
     When I am logged in as "Raeburn Hibbert"
