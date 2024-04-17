@@ -17,21 +17,9 @@ third_party_settings:
         target_id:
           predicate: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type'
           type: resource
-      uid:
-        target_id:
-          predicate: 'http://joinup.eu/owner/uid'
-          type: 'xsd:integer'
       title:
         value:
           predicate: 'http://xmlns.com/foaf/0.1/name'
-          type: 'xsd:string'
-      langcode:
-        value:
-          predicate: 'http://joinup.eu/language'
-          type: 'xsd:string'
-      default_langcode:
-        value:
-          predicate: 'http://joinup.eu/language/default'
           type: 'xsd:string'
 label_singular: owner
 label_plural: owners
