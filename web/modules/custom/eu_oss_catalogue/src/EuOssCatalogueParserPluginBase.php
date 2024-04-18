@@ -141,6 +141,17 @@ abstract class EuOssCatalogueParserPluginBase extends PluginBase implements EuOs
   }
 
   /**
+   * Returns project's metadata.
+   *
+   * @param \Drupal\eu_oss_catalogue\Model\Project $project
+   *   The project value object.
+   *
+   * @return array
+   *   The project's metadata.
+   */
+  abstract protected function getMetadata(Project $project): array;
+
+  /**
    * Returns the OSS solution title.
    *
    * @param \Drupal\eu_oss_catalogue\Model\Project $project
