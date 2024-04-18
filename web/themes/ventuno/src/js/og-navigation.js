@@ -14,7 +14,8 @@
               "overflow-nav": ["p-plus__overflow", "dropdown-menu"],
               "toggle-btn": [
                 "p-plus__toggle-btn",
-                "ps-3",
+                "px-1",
+                "mx-3",
                 "border-0",
                 "bg-transparent",
               ],
