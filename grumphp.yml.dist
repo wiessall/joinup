@@ -9,8 +9,6 @@ grumphp:
   ascii:
     failed: ~
     succeeded: ~
-  fixer:
-    enabled: false
 
   tasks:
     # Doc: https://github.com/phpro/grumphp/blob/master/doc/tasks/composer.md
