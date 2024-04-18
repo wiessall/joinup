@@ -1,5 +1,5 @@
 diff --git a/src/TaskRunner/Commands/InstallCommands.php b/src/TaskRunner/Commands/InstallCommands.php
-index 7eb68a86..8be16b9c 100644
+index 98fc6610c..660243bef 100644
 --- a/src/TaskRunner/Commands/InstallCommands.php
 +++ b/src/TaskRunner/Commands/InstallCommands.php
 @@ -6,6 +6,7 @@
@@ -10,7 +10,37 @@ index 7eb68a86..8be16b9c 100644
  use Symfony\Component\Console\Input\InputOption;
  use Symfony\Component\Yaml\Yaml;
  
-@@ -67,20 +68,35 @@ public function toolkitInstallClean(array $options = [
+@@ -42,14 +43,28 @@ public function toolkitInstallClean(array $options = [
+         'config-file' => InputOption::VALUE_REQUIRED,
+     ])
+     {
++        $tasks = [];
++        $commands = $this->getConfig()->get('toolkit.install.clean.commands', []);
+         $runnerBin = $this->getBin('run');
++
++        // Execute commands configured to run before the main task.
++        if (!empty($commands['before'])) {
++            $tasks[] = $this->taskExecute($commands['before']);
++        }
++
+         $task = $this->taskExec($runnerBin)->arg('drupal:site-install');
+         if (!empty($options['config-file']) && file_exists($options['config-file'])) {
+             $task->option('existing-config');
+         }
++        $tasks[] = $task;
++
++        // Execute commands configured to run after the main task.
++        if (!empty($commands['after'])) {
++            $tasks[] = $this->taskExecute($commands['after']);
++        }
+ 
+         // Build and return task collection.
+-        return $this->collectionBuilder()->addTask($task);
++        return $this->collectionBuilder()->addTaskList($tasks);
+     }
+ 
+     /**
+@@ -67,20 +82,35 @@ public function toolkitInstallClean(array $options = [
       * @return \Robo\Collection\CollectionBuilder
       *   Collection builder.
       */
@@ -20,7 +50,7 @@ index 7eb68a86..8be16b9c 100644
      ])
      {
          $tasks = [];
-         $runner_bin = $this->getBin('run');
+         $runnerBin = $this->getBin('run');
  
 +        $commands = $this->getConfig()->get('toolkit.install.clone.commands', []);
 +        $beforeCommands = $commands['before'] ?? [];
@@ -32,10 +62,10 @@ index 7eb68a86..8be16b9c 100644
 +            $tasks[] = $this->taskExecute($beforeCommands);
 +        }
 +
-         $tasks[] = $this->taskExec($runner_bin)
+         $tasks[] = $this->taskExec($runnerBin)
              ->arg('toolkit:install-dump')
              ->option('dumpfile', $options['dumpfile'], '=');
-         $tasks[] = $this->taskExec($runner_bin)->arg('toolkit:run-deploy');
+         $tasks[] = $this->taskExec($runnerBin)->arg('toolkit:run-deploy');
  
 -        // Collect and execute list of commands set on local runner.yml.
 -        if (!empty($commands = $this->getConfig()->get('toolkit.install.clone.commands'))) {

@@ -226,13 +226,6 @@ function joinup_core_config_readonly_whitelist_patterns() {
  */
 function joinup_core_module_implements_alter(array &$implementations, $hook): void {
   switch ($hook) {
-    // @todo Remove these 2 cases in ISAICP-8376
-    // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-8376
-    case 'entity_type_alter':
-    case 'entity_base_field_info_alter':
-      unset($implementations['rdf_taxonomy']);
-      break;
-
     case 'block_view_system_menu_block_alter':
       // Do not show the contextual links to edit menus. This functionality is
       // used very rarely, but the contextual links menu causes visual clutter.
