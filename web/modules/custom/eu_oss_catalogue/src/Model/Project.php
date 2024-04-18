@@ -126,7 +126,7 @@ class Project {
   /**
    * Gets silent errors.
    *
-   * @return string
+   * @return array
    *   Errors.
    */
   public function getSilentErrors(): array {
