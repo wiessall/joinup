@@ -125,6 +125,20 @@ abstract class EuOssCatalogueParserPluginBase extends PluginBase implements EuOs
   }
 
   /**
+   * Parses project data into the OSS Solution node.
+   *
+   * @param \Drupal\eu_oss_catalogue\Entity\OssSolutionInterface $solution
+   *   The OSS Solution node.
+   * @param \Drupal\eu_oss_catalogue\Model\Project $project
+   *   The project value object.
+   * @param array $metadata
+   *   The project's metadata.
+   * @param \Drupal\eu_oss_catalogue\EuOssCatalogueProviderInterface $provider
+   *   The provider plugin instance.
+   */
+  abstract protected function doParse(OssSolutionInterface $solution, Project $project, array $metadata, EuOssCatalogueProviderInterface $provider): void;
+
+  /**
    * Configures and returns a resolver given its plugin ID and configuration.
    *
    * @param string $resolverPluginId
