@@ -107,14 +107,10 @@ class Project {
    *   Array representation of the value object.
    */
   public function toArray(): array {
-    $array = [];
-    foreach (get_object_vars($this) as $property => $value) {
-      if ($property === 'silentErrors') {
-        continue;
-      }
-      $array[$property] = $value;
-    }
-    return $array;
+    $data = get_object_vars($this);
+    unset($data['silentErrors']);
+
+    return $data;
   }
 
   /**
@@ -133,12 +129,8 @@ class Project {
    * @return string
    *   Errors.
    */
-  public function getSilentErrors(): string {
-    if (empty($this->silentErrors)) {
-      return '';
-    }
-
-    return implode(", ", $this->silentErrors);
+  public function getSilentErrors(): array {
+    return $this->silentErrors;
   }
 
 }

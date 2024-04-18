@@ -200,24 +200,25 @@ class EuOssCatalogue implements EuOssCatalogueInterface {
       // Set source hash.
       $solution->set('oss_source_hash', $project->getHash());
 
+      $silentErrors = implode(", ", $project->getSilentErrors());
       if (!$solution->isNew()) {
         $solution->setNewRevision();
 
         $message = match ($solution->get('oss_archived')->getString()) {
           '1' => $this->t('Unarchive, because re-added (present again) in "@provider" source/catalogue. @errors', [
             '@provider' => $provider->getPluginDefinition()['label'],
-            '@errors' => $project->getSilentErrors(),
+            '@errors' => $silentErrors,
           ]),
           default => $this->t('Update, because data has been changed in "@provider" source/catalogue. @errors', [
             '@provider' => $provider->getPluginDefinition()['label'],
-            '@errors' => $project->getSilentErrors(),
+            '@errors' => $silentErrors,
           ]),
         };
       }
       else {
         $message = $this->t('Import from "@provider" source/catalogue. @errors', [
           '@provider' => $provider->getPluginDefinition()['label'],
-          '@errors' => $project->getSilentErrors(),
+          '@errors' => $silentErrors,
         ]);
       }
       $solution->setRevisionLogMessage((string) $message);
