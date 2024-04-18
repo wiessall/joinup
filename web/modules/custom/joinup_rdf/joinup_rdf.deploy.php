@@ -423,6 +423,9 @@ function joinup_rdf_deploy_110406(array &$sandbox): string {
             $value = MappedTerm::loadByUri($value)->id();
           }
           $values[$fieldName][] = $value;
+          if ($fieldName === 'title' && strlen($value) > 255) {
+            $values['title'] = substr($value, 0, 252) . '...';
+          }
         }
       }
     }
