@@ -227,7 +227,8 @@ commands:
         ./node_modules/.bin/stylelint \
           --config .stylelintrc.json \
           --ignore-path .gitignore \
-          "${joinup.site_dir}/{modules,profiles,themes}/!(contrib)/**/!(*.min).{css,scss,sass}"
+          "${joinup.site_dir}/{modules,profiles,themes}/!(contrib)/**/!(*.min).{css,scss,sass}" \
+          "!${joinup.site_dir}/themes/ventuno/assets/**"
 
   # Fixes CSS, PCSS and S(A|C)SS files with stylelint.
   toolkit:fix-css:
