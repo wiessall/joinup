@@ -21,6 +21,12 @@
         &__meta {
           display: none !important;
         }
+        @include media-breakpoint-down(lg) {
+          &__logo,
+          &__actions {
+            display: none !important;
+          }
+        }
       }
     }
   }
