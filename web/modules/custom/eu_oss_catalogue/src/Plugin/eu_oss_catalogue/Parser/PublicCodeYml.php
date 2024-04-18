@@ -11,10 +11,13 @@ use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Logger\LoggerChannelInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Serialization\Yaml;
+use Drupal\Core\Utility\Error;
 use Drupal\eu_oss_catalogue\Entity\OssSolutionInterface;
 use Drupal\eu_oss_catalogue\EuOssCatalogueParserPluginBase;
 use Drupal\eu_oss_catalogue\EuOssCataloguePluginManagerInterface;
 use Drupal\eu_oss_catalogue\EuOssCatalogueProviderInterface;
+use Drupal\eu_oss_catalogue\Exception\UnresolvableValueException;
+use Drupal\eu_oss_catalogue\Model\FieldOverridingPolicy;
 use Drupal\eu_oss_catalogue\Model\Project;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -83,13 +86,59 @@ class PublicCodeYml extends EuOssCatalogueParserPluginBase implements ContainerF
    * {@inheritdoc}
    */
   protected function doParse(OssSolutionInterface $solution, Project $project, array $metadata, EuOssCatalogueProviderInterface $provider): void {
-    parent::doParse($solution, $project, $metadata, $provider);
+    foreach ($solution->getFields(FALSE) as $fieldName => $fieldItemList) {
+      // It's a convention that all fields are prefixed with oss_*.
+      if (!str_starts_with($fieldName, 'oss_')) {
+        continue;
+      }
 
-    $solution
-      // Set the publiccode.yml content.
-      ->set('oss_publiccode_yml_content', Yaml::encode($metadata))
-      // Set the publiccode.yml version.
-      ->set('oss_publiccode_yml_version', $metadata['publiccodeYmlVersion'] ?? NULL);
+      $settings = $this->getFieldSettings($fieldItemList);
+      if ($settings === NULL) {
+        // This field has no EU OSS Catalogue third-party settings.
+        continue;
+      }
+
+      /** @var array[] $resolvers */
+      $resolvers =& $settings['resolvers'];
+      $override = FieldOverridingPolicy::from($settings['override']);
+
+      if ($override === FieldOverridingPolicy::PRESERVE_NOT_EMPTY && !$fieldItemList->isEmpty()) {
+        // Don't override a field not-empty field.
+        continue;
+      }
+
+      // We don't allow resolvers to modify directly the original field item
+      // list because this is passed only for read-only purposes. Resolvers
+      // should use this object only to extract useful info about the field or
+      // the host entity.
+      $fieldItemListCopy = clone $fieldItemList;
+
+      $resolved = NULL;
+      foreach ($resolvers as ['plugin' => $pluginId, 'config' => $config]) {
+        $resolver = $this->getResolver($pluginId, $config);
+        try {
+          $resolver->resolve($resolved, $project, $metadata, $fieldItemListCopy);
+          $this->checkResolved($resolved, $resolver);
+        }
+        catch (UnresolvableValueException $exception) {
+          Error::logException($this->logger, $exception);
+          // Fail softly, don't set this field.
+          continue 2;
+        }
+      }
+
+      if ($override !== FieldOverridingPolicy::RESOLVED_NOT_EMPTY || $resolved) {
+        // Populate the node field.
+        foreach ($resolved as $langcode => $values) {
+          // Create a new translation on demand.
+          if (!$solution->hasTranslation($langcode)) {
+            $solution->addTranslation($langcode, $solution->toArray());
+          }
+          // An empty array unsets the field.
+          $solution->getTranslation($langcode)->set($fieldName, $values ?: NULL);
+        }
+      }
+    }
   }
 
   /**
@@ -97,19 +146,14 @@ class PublicCodeYml extends EuOssCatalogueParserPluginBase implements ContainerF
    */
   protected function getMetadata(Project $project): array {
     if (!isset($project->files['publiccodeYml'])) {
-      $this->logger->warning('publiccodeYml does not exist for @url', [
-        '@url' => $project->url,
-      ]);
+      $project->addSilentError("publiccodeYml does not exist for $project->url");
       return [];
     }
     try {
       return Yaml::decode($project->files['publiccodeYml']) ?? [];
     }
     catch (InvalidDataTypeException $exception) {
-      $this->logger->warning('Cannot decode publiccode.yml of @url. Message: @message', [
-        '@url' => $project->url,
-        '@message' => $exception->getMessage(),
-      ]);
+      $project->addSilentError("Cannot decode publiccode.yml of $project->url. Message: {$exception->getMessage()}");
       return [];
     }
   }

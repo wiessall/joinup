@@ -181,55 +181,57 @@ class EuOssCatalogue implements EuOssCatalogueInterface {
   /**
    * {@inheritdoc}
    */
-  public function createOrUpdateSolution(string $providerPluginId, Project $project): ?OssSolutionInterface {
+  public function createOrUpdateSolution(string $providerPluginId, Project $project): void {
     /** @var \Drupal\eu_oss_catalogue\EuOssCatalogueProviderInterface $provider */
     $provider = $this->providerManager->createInstance($providerPluginId);
     /** @var \Drupal\eu_oss_catalogue\EuOssCatalogueParserInterface $parser */
     $parser = $this->parserManager->createInstance($provider->getPluginDefinition()['parser']);
 
-    // The parser is responsible to create the solution node entity.
-    if (!$solution = $parser->parse($project, $provider)) {
-      return NULL;
-    }
-
-    // Let the provider make their own adjustments, if case.
-    $provider->alterSolution($solution, $project);
-
-    // Finally, allow 3rd-party to add their alters.
-    $this->eventDispatcher->dispatch(new EuOssSolutionPreSaveEvent($solution, $project));
-
-    // Set source hash.
-    $solution->set('oss_source_hash', $project->getHash());
-
-    if (!$solution->isNew()) {
-      $solution->setNewRevision();
-
-      $message = match ($solution->get('oss_archived')->getString()) {
-        '1' => $this->t('Unarchive, because re-added (present again) in "@provider" source/catalogue', [
-          '@provider' => $provider->getPluginDefinition()['label'],
-        ]),
-        default => $this->t('Update, because data has been changed in "@provider" source/catalogue', [
-          '@provider' => $provider->getPluginDefinition()['label'],
-        ]),
-      };
-    }
-    else {
-      $message = $this->t('Import from "@provider" source/catalogue', [
-        '@provider' => $provider->getPluginDefinition()['label'],
-      ]);
-    }
-    $solution->setRevisionLogMessage((string) $message);
-
-    // Make sure it is not archived.
-    $solution->set('oss_archived', 0);
-
     try {
+      // The parser is responsible to create the solution node entity.
+      $solution = $parser->parse($project, $provider);
+
+      // Let the provider make their own adjustments, if case.
+      $provider->alterSolution($solution, $project);
+
+      // Finally, allow 3rd-party to add their alters.
+      $this->eventDispatcher->dispatch(new EuOssSolutionPreSaveEvent($solution, $project));
+
+      // Set source hash.
+      $solution->set('oss_source_hash', $project->getHash());
+
+      $silentErrors = implode(", ", $project->getSilentErrors());
+      if (!$solution->isNew()) {
+        $solution->setNewRevision();
+
+        $message = match ($solution->get('oss_archived')->getString()) {
+          '1' => $this->t('Unarchive, because re-added (present again) in "@provider" source/catalogue. @errors', [
+            '@provider' => $provider->getPluginDefinition()['label'],
+            '@errors' => $silentErrors,
+          ]),
+          default => $this->t('Update, because data has been changed in "@provider" source/catalogue. @errors', [
+            '@provider' => $provider->getPluginDefinition()['label'],
+            '@errors' => $silentErrors,
+          ]),
+        };
+      }
+      else {
+        $message = $this->t('Import from "@provider" source/catalogue. @errors', [
+          '@provider' => $provider->getPluginDefinition()['label'],
+          '@errors' => $silentErrors,
+        ]);
+      }
+      $solution->setRevisionLogMessage((string) $message);
+
+      // Make sure it is not archived.
+      $solution->set('oss_archived', 0);
+
       $operationResult = $solution->save();
     }
     catch (\Exception $exception) {
-      // Solution could not be saved.
+      // The solution could not be saved.
       Error::logException($this->logger, $exception);
-      return NULL;
+      return;
     }
 
     if ($operationResult === SAVED_NEW) {
@@ -241,8 +243,6 @@ class EuOssCatalogue implements EuOssCatalogueInterface {
       ];
       $this->logger->info('Solution @solution was created.', $loggerArguments);
     }
-
-    return $solution;
   }
 
   /**
@@ -296,15 +296,14 @@ class EuOssCatalogue implements EuOssCatalogueInterface {
         ]);
         $solution->setRevisionLogMessage((string) $message);
         $solution->set('oss_archived', 1);
-        $solution->save();
       }
       else {
         $message = $this->t('Update, because of the only removal "@provider" source/catalogue', [
           '@provider' => $provider->getPluginDefinition()['label'],
         ]);
         $solution->setRevisionLogMessage((string) $message);
-        $solution->save();
       }
+      $solution->save();
     }
   }
 

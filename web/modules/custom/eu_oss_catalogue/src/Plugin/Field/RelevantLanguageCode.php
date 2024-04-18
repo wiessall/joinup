@@ -110,6 +110,9 @@ class RelevantLanguageCode extends FieldItemList {
     \assert($ossSolution instanceof OssSolutionInterface);
     $field = $ossSolution->get(static::PUBLICCODE_YAML_FIELD);
     \assert($field->getFieldDefinition()->isTranslatable() === FALSE);
+    if ($field->isEmpty()) {
+      return [];
+    }
     $publicCodeYamlContent = $field->first()->getValue()[$field->first()->mainPropertyName()];
 
     try {

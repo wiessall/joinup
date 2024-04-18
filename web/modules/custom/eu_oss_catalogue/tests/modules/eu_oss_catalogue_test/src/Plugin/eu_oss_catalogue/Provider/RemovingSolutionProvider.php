@@ -4,14 +4,6 @@ declare(strict_types=1);
 
 namespace Drupal\eu_oss_catalogue_test\Plugin\eu_oss_catalogue\Provider;
 
-use Drupal\Core\Entity\EntityTypeManagerInterface;
-use Drupal\Core\Logger\LoggerChannelInterface;
-use Drupal\eu_oss_catalogue\ApiGuesserInterface;
-use Drupal\eu_oss_catalogue\EuOssCataloguePluginManagerInterface;
-use Drupal\eu_oss_catalogue\Plugin\eu_oss_catalogue\Provider\DevelopersItalia;
-use GuzzleHttp\Client;
-use Symfony\Component\DependencyInjection\ContainerInterface;
-
 /**
  * Provider to be used in testing.
  *
@@ -23,77 +15,20 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  *   parser = "publiccode_yml",
  * )
  */
-class RemovingSolutionProvider extends DevelopersItalia {
-
-  /**
-   * Constructs a new plugin instance.
-   *
-   * @param array $configuration
-   *   A configuration array containing information about the plugin instance.
-   * @param string $pluginId
-   *   The plugin_id for the plugin instance.
-   * @param mixed $pluginDefinition
-   *   The plugin implementation definition.
-   * @param \Drupal\eu_oss_catalogue\EuOssCataloguePluginManagerInterface $parserManager
-   *   The EU OSS Catalogue parser plugin manager service.
-   * @param \Drupal\Core\Logger\LoggerChannelInterface $logger
-   *   The EU OSS Catalogue logger.
-   * @param \GuzzleHttp\Client $httpClient
-   *   The HTTP client.
-   * @param \Drupal\eu_oss_catalogue\EuOssCataloguePluginManagerInterface $platformManager
-   *   The EU OSS Catalogue code hosting platform plugin manager service.
-   * @param \Drupal\eu_oss_catalogue\ApiGuesserInterface $apiGuesser
-   *   The API guesser service.
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
-   *   The entity type manager.
-   */
-  public function __construct(
-    array $configuration,
-    $pluginId,
-    $pluginDefinition,
-    EuOssCataloguePluginManagerInterface $parserManager,
-    protected LoggerChannelInterface $logger,
-    Client $httpClient,
-    protected EuOssCataloguePluginManagerInterface $platformManager,
-    protected ApiGuesserInterface $apiGuesser,
-    protected EntityTypeManagerInterface $entityTypeManager,
-  ) {
-    parent::__construct($configuration, $pluginId, $pluginDefinition, $parserManager, $logger, $httpClient, $platformManager, $apiGuesser);
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public static function create(ContainerInterface $container, array $configuration, $pluginId, $pluginDefinition): self {
-    return new static(
-      $configuration,
-      $pluginId,
-      $pluginDefinition,
-      $container->get('plugin.manager.eu_oss_catalogue.parser'),
-      $container->get('logger.channel.eu_oss_catalogue'),
-      $container->get('http_client'),
-      $container->get('plugin.manager.eu_oss_catalogue.hosting_platform'),
-      $container->get('eu_oss_catalogue.git_remote.api_guesser'),
-      $container->get('entity_type.manager'),
-    );
-  }
+class RemovingSolutionProvider extends SelectedProjectProvider {
 
   /**
    * {@inheritdoc}
    */
   public function fetch(): iterable {
+    $skipUrl = 'https://limited.self-hosted.gitlab.example.com/group1/project-1-1';
+    $wasCreated = $this->wasCreated($skipUrl);
+
     foreach (parent::fetch() as $project) {
       // If the title is "Solution 2" and the solution exists, skip it so that
       // we simulate a solution that has been removed.
-      if ($project->url === 'https://limited.self-hosted.gitlab.example.com/group1/project-1-1') {
-        $ids = $this->entityTypeManager->getStorage('node')->getQuery()
-          ->accessCheck(FALSE)
-          ->condition('oss_git_url', 'https://limited.self-hosted.gitlab.example.com/group1/project-1-1')
-          ->execute();
-
-        if (!empty($ids)) {
-          continue;
-        }
+      if ($project->url === $skipUrl && $wasCreated) {
+        continue;
       }
 
       yield $project;
