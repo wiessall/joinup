@@ -210,4 +210,11 @@ function joinup_rdf_update_110405(): void {
   $graph = $store->get($graphUri);
   file_put_contents('private://eif_wrapper.yml', Yaml::encode($graph->toRdfPhp()));
   $sparql->update("CLEAR GRAPH <$graphUri>");
+
+  // The code will be removed later, in a second deployment.
+  $manager = \Drupal::entityDefinitionUpdateManager();
+  $eifWrapperType = $manager->getEntityType('eif_wrapper_type');
+  $eifWrapper = $manager->getEntityType('eif_wrapper');
+  $manager->uninstallEntityType($eifWrapperType);
+  $manager->uninstallEntityType($eifWrapper);
 }
