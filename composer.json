@@ -140,7 +140,7 @@
         "lovers-of-behat/table-extension": "^1.4",
         "mikey179/vfsstream": "~1.6",
         "ml/json-ld": "^1.2",
-        "palantirnet/drupal-rector": "^0.12.2",
+        "palantirnet/drupal-rector": "^0.20.1",
         "pear/http_request2": "~2.4",
         "php-task-runner/composer": "dev-toolkit-runner",
         "php-task-runner/sparql": "dev-toolkit-runner",
