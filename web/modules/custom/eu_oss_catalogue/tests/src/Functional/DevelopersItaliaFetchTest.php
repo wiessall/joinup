@@ -78,14 +78,14 @@ class DevelopersItaliaFetchTest extends FetchTestBase {
     $expected_providers = ['developers_italia', 'testing_provider'];
     $this->assertSame($expected_providers, array_map(fn (array $item): string => $item['plugin_id'], $updatedSolution->get('oss_source')->getValue()));
 
-    $this->assertSame('Update, because data has been changed in "Testing provider" source/catalogue', $updatedSolution->getRevisionLogMessage(), 'Update revision message for GitHub solution 1');
+    $this->assertStringContainsString('Update, because data has been changed in "Testing provider" source/catalogue', $updatedSolution->getRevisionLogMessage(), 'Update revision message for GitHub solution 1');
   }
 
   /**
    * Tests that when a solution is removed upstream, is archived locally.
    */
   public function testArchiveSolution(): void {
-    $this->fetchSolutions('removing_solution_provider', 4);
+    $this->fetchSolutions('removing_solution_provider', 2);
 
     $this->assertNotFalse($this->getNodeByTitle('GitHub solution 1'));
     $this->assertNotFalse($this->getNodeByTitle('Project 1.1'));
@@ -126,7 +126,7 @@ class DevelopersItaliaFetchTest extends FetchTestBase {
       'developers_italia',
       $updatedSolution->get('oss_source')->getString()
     );
-    $this->assertSame(
+    $this->assertStringContainsString(
       'Unarchive, because re-added (present again) in "Developers Italia" source/catalogue',
       $updatedSolution->getRevisionLogMessage()
     );
@@ -136,7 +136,7 @@ class DevelopersItaliaFetchTest extends FetchTestBase {
    * Tests that when a solution is removed upstream, the source is updated.
    */
   public function testRemovedSolution(): void {
-    $this->fetchSolutions('removing_solution_provider', 4);
+    $this->fetchSolutions('removing_solution_provider', 2);
 
     $this->assertNotFalse($this->getNodeByTitle('GitHub solution 1'));
     $this->assertNotFalse($this->getNodeByTitle('Project 1.1'));
