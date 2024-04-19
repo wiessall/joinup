@@ -17,6 +17,8 @@ use EasyRdf\Literal;
 use EasyRdf\RdfNamespace;
 use EasyRdf\Resource;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\Process\Exception\ProcessFailedException;
+use Symfony\Component\Process\Process;
 
 /**
  * Joinup taxonomy Drush commands.
@@ -268,20 +270,67 @@ class JoinupTaxonomyCommands extends DrushCommands {
    */
   public static function finish(bool $success, array $results, array $operations): void {
     $file = static::getDumpFilePath('sql', FALSE);
+    $vids = array_values($results['vids']);
+
+    // Add MySQL cleanup statements.
+    file_put_contents($file, implode("\n", static::getCleanupStatements($vids)) . "\n\n");
 
     // Dump the taxonomy term tables.
-    Drush::drush(Drush::aliasManager()->getSelf(), 'sql:dump', [], [
+    $command = Drush::drush(Drush::aliasManager()->getSelf(), 'sql:dump', [], [
       'tables-list' => 'taxonomy_term_*',
-      'result-file' => $file,
+      'data-only' => TRUE,
       'no-interaction' => TRUE,
-    ])->run();
+    ]);
+    // Handle as buffered output to avoid big strings in memory.
+    $command->run(function ($type, $buffer) use ($file): void {
+      if ($type === Process::OUT) {
+        file_put_contents($file, $buffer, FILE_APPEND);
+      }
+    });
+    if (!$command->isSuccessful()) {
+      throw new ProcessFailedException($command);
+    }
+    $command->clearOutput();
+
     // Append the {rdf_sync_uri} table fixtures inside the dump file.
-    file_put_contents($file, static::getUriTableDump($results['uri_to_tid'], array_values($results['vids'])), FILE_APPEND);
+    file_put_contents($file, static::getUriTableDump($results['uri_to_tid'], $vids), FILE_APPEND);
 
     // Gzip it and get the normalized path.
     exec("gzip -f $file");
     $file = realpath("$file.gz");
     Drush::logger()->notice(dt('Terms dumped to !file', ['!file' => $file]));
+  }
+
+  /**
+   * Returns a list of MySQL statements to clean up existing records.
+   *
+   * @param array $vids
+   *   The list of locked vocabularies.
+   *
+   * @return string[]
+   *   A list of MySQL DELETE statements.
+   */
+  protected static function getCleanupStatements(array $vids): array {
+    /** @var \Drupal\taxonomy\TermStorageInterface $storage */
+    $storage = \Drupal::entityTypeManager()->getStorage('taxonomy_term');
+    $sharedData = ['taxonomy_term_data', 'taxonomy_term_field_data'];
+    $sharedRevision = ['taxonomy_term_revision', 'taxonomy_term_field_revision'];
+    $prefix = \Drupal::database()->getPrefix();
+
+    $in = "'" . implode("', '", $vids) . "'";
+    foreach ($sharedRevision as $table) {
+      // The shared revision table lacks a bundle column.
+      $statements[] = "DELETE FROM `$prefix$table` WHERE tid IN(SELECT tid FROM `{$prefix}taxonomy_term_data` WHERE vid IN ($in));";
+    }
+
+    $tables = array_diff($storage->getTableMapping()->getTableNames(), $sharedRevision);
+    foreach ($tables as $table) {
+      $bundleColumn = in_array($table, $sharedData, TRUE) ? 'vid' : 'bundle';
+      $statements[] = "DELETE FROM `$prefix$table` WHERE $bundleColumn IN ($in);";
+    }
+    $statements[] = "DELETE FROM `{$prefix}rdf_sync_uri` WHERE entity_type = 'taxonomy_term' AND bundle IN ($in);";
+
+    return $statements;
   }
 
   /**
@@ -301,9 +350,8 @@ class JoinupTaxonomyCommands extends DrushCommands {
     $tidToUri = array_flip($uriToTid);
 
     $statements = [
-      'LOCK TABLES `rdf_sync_uri` WRITE;',
+      "LOCK TABLES `$table` WRITE;",
       'set autocommit=0;',
-      "DELETE FROM `rdf_sync_uri` WHERE entity_type = 'taxonomy_term' AND bundle IN ('" . implode("', '", $vids) . "');",
     ];
 
     foreach (array_chunk($uriToTid, 100) as $chunk) {
