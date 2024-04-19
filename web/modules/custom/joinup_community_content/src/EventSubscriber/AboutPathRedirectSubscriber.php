@@ -29,6 +29,11 @@ class AboutPathRedirectSubscriber extends HttpExceptionSubscriberBase {
     }
 
     $pathWithoutSuffix = preg_replace('#/about$#', '', $pathInfo);
+
+    if (!$pathWithoutSuffix) {
+      return;
+    }
+
     $event->setResponse(new TrustedRedirectResponse(
       $pathWithoutSuffix,
       307
