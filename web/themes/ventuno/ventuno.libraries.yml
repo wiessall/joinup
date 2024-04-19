@@ -73,6 +73,12 @@ group:
   css:
     theme:
       assets/css/group.min.css: { minified: true }
+  js:
+    assets/js/sticky-groupheader.min.js: { minified: true, attributes: { defer: true } }
+  dependencies:
+    - core/drupal
+    - core/drupal.displace
+    - core/once
 
 # Components
 abstract:
@@ -94,6 +100,9 @@ ajax-throbber:
   header: true
   js:
     assets/js/ajax-throbber.min.js: { minified: true, attributes: { defer: true } }
+  css:
+    theme:
+      assets/css/ajax-throbber.min.css: { minified: true }
   dependencies:
     - core/drupal
     - ventuno/spinners
@@ -268,10 +277,23 @@ listing-grid:
     theme:
       assets/css/listing-grid.min.css: { minified: true }
 
+priority-plus:
+  css:
+    theme:
+      assets/lib/priority-plus/priority-plus.css: { minified: true }
+  js:
+    assets/lib/priority-plus/priority-plus.js: { minified: true }
+
 menu--og--navigation:
   css:
     theme:
       assets/css/menu--og--navigation.min.css: { minified: true }
+  js:
+    assets/js/og-navigation.min.js: { minified: true }
+  dependencies:
+    - core/drupal
+    - core/once
+    - ventuno/priority-plus
 
 modals:
   css:

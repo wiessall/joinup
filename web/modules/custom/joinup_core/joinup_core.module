@@ -65,7 +65,7 @@ function joinup_core_theme(array $existing, string $type, string $theme, string 
  * Implements hook_requirements_alter().
  */
 function joinup_core_requirements_alter(array &$requirements): void {
-  $ignored = getenv('DRUPAL_STATUS_REPORT_IGNORE') ?: 'update status,joinup_core_root_user_blocked,search_api_solr_schema_joinup_modifications,metatag_maintenance_mode,webform_libraries,output_buffering';
+  $ignored = getenv('DRUPAL_STATUS_REPORT_IGNORE') ?: 'update status,search_api_solr_schema_joinup_modifications,metatag_maintenance_mode,webform_libraries,output_buffering';
   $ignored = array_map('trim', explode(',', $ignored));
 
   $requirements = array_filter($requirements, function (string $requirement) use ($ignored): bool {
@@ -234,11 +234,11 @@ function joinup_core_config_readonly_whitelist_patterns() {
 /**
  * Implements hook_module_implements_alter().
  */
-function joinup_core_module_implements_alter(array &$implementations, $hook) {
+function joinup_core_module_implements_alter(array &$implementations, $hook): void {
   switch ($hook) {
     case 'block_view_system_menu_block_alter':
       // Do not show the contextual links to edit menus. This functionality is
-      // used very rarely but the contextual links menu causes visual clutter.
+      // used very rarely, but the contextual links menu causes visual clutter.
       unset($implementations['menu_ui']);
       break;
 

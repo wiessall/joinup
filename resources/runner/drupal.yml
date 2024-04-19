@@ -30,6 +30,7 @@ drupal:
       install:
         - Main settings
         - Databases
+        - RDF backend
         - Configuration
         - Search API
         - OpenEuropa Webtools Analytics
@@ -40,6 +41,7 @@ drupal:
       site-clone:
         - Main settings
         - Databases
+        - RDF backend
         - Configuration
         - Search API
         - OpenEuropa Webtools Analytics
@@ -58,6 +60,7 @@ drupal:
       site-clean:
         - Main settings
         - Databases
+        - RDF backend
         - Configuration
         - Search API
         - OpenEuropa Webtools Analytics
@@ -77,6 +80,7 @@ drupal:
       behat:
         - Main settings
         - Databases
+        - RDF backend
         - Configuration
         - Testing configuration alters
         - Search API
@@ -95,6 +99,7 @@ drupal:
       error_page_test:
         - Main settings
         - Databases
+        - RDF backend
         - Configuration
         - Search API
         - OpenEuropa Webtools Analytics
@@ -113,6 +118,7 @@ drupal:
       phpunit:
         - Main settings
         - Databases
+        - RDF backend
         - Configuration
         - Search API
         - OpenEuropa Webtools Analytics
@@ -130,6 +136,7 @@ drupal:
         - Main settings
         - Site email
         - Databases
+        - RDF backend
         - Configuration
         - Search API
         - OpenEuropa Newsroom Newsletter Settings
@@ -263,6 +270,9 @@ drupal:
           'namespace' => 'Drupal\\joinup_sparql\\Driver\\Database\\joinup_sparql',
           'driver' => 'sparql',
         ];
+      RDF backend: |
+        $config['rdf_sync.settings']['endpoint']['host'] = getenv('DRUPAL_SPARQL_HOSTNAME');
+        $config['rdf_sync.settings']['endpoint']['port'] = getenv('DRUPAL_SPARQL_PORT');
       Permissions: |
         $settings['skip_permissions_hardening'] = TRUE;
       Null mail collector: |
