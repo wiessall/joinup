@@ -97,7 +97,7 @@ function joinup_core_requirements($phase): array {
 /**
  * Pre-creates OSS vocabularies.
  */
-function joinup_core_update_110400(): void {
+function joinup_core_update_110500(): void {
   // Pre-create the new controlled vocabularies provided by eu_oss_catalogue
   // module. Normally, these are imported as config but eu_oss_catalogue install
   // goes first and its install process is also populating them with terms, so
