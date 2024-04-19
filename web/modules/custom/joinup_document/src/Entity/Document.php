@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_document\Entity;
 
-use Drupal\joinup_bundle_class\AbstractInterface;
 use Drupal\joinup_bundle_class\AbstractTrait;
 use Drupal\joinup_bundle_class\LogoTrait;
 use Drupal\joinup_community_content\Entity\CommunityContentBase;
@@ -13,7 +12,7 @@ use Drupal\joinup_workflow\ArchivableEntityTrait;
 /**
  * Entity subclass for the 'document' bundle.
  */
-class Document extends CommunityContentBase implements DocumentInterface, AbstractInterface {
+class Document extends CommunityContentBase implements DocumentInterface {
 
   use LogoTrait;
   use AbstractTrait;
