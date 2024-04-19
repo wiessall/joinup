@@ -23,8 +23,11 @@ dependencies:
     - field.field.node.document.og_audience
     - node.type.document
   module:
+    - field_delimiter
+    - field_formatter_range
+    - joinup_core
+    - joinup_slick
     - options
-    - smart_trim
     - template_suggestion
     - user
 _core:
@@ -34,26 +37,34 @@ targetEntityType: node
 bundle: document
 mode: moderation
 content:
-  body:
-    type: smart_trim
+  abstract:
+    type: string
     label: hidden
     settings:
-      trim_length: 600
-      trim_type: chars
-      trim_suffix: …
-      wrap_output: false
-      wrap_class: trimmed
-      more:
-        display_link: false
-        target_blank: false
-        link_trim_only: false
-        class: more-link
-        text: More
-        aria_label: 'Read more about [node:title]'
-      summary_handler: trim
-      trim_options:
-        text: false
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 1
+    region: content
+  field_paragraphs_body:
+    type: filtered_entity_reference_bundles
+    label: hidden
+    settings:
+      view_mode: tile
+      link: ''
+      filtered_entity_bundles:
+        - simple_paragraph
+        - text
     third_party_settings:
+      field_delimiter:
+        delimiter: ''
+      field_formatter_range:
+        order: 0
+        limit: 1
+        offset: 0
+      joinup_slick:
+        preset: ''
+        field_label: true
+        custom_label: ''
       template_suggestion:
         template_suggestion: ''
     weight: 1
@@ -66,7 +77,7 @@ content:
     weight: 0
     region: content
 hidden:
-  abstract: true
+  body: true
   featured: true
   field_comments: true
   field_document_logo: true
@@ -75,7 +86,6 @@ hidden:
   field_file: true
   field_keywords: true
   field_licence: true
-  field_paragraphs_body: true
   field_shared_in: true
   field_short_title: true
   field_site_featured: true
