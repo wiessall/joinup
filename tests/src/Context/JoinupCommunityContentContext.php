@@ -10,7 +10,6 @@ use Behat\Mink\Exception\ElementNotFoundException;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\DrupalExtension\Hook\Scope\AfterNodeCreateScope;
 use Drupal\joinup\Traits\EntityTrait;
-use Drupal\joinup\Traits\JavascriptTrait;
 use Drupal\joinup\Traits\NodeTrait;
 use Drupal\joinup\Traits\TestingEntitiesTrait;
 use Drupal\joinup\Traits\TraversingTrait;
@@ -31,7 +30,6 @@ class JoinupCommunityContentContext extends RawDrupalContext {
   use NodeTrait;
   use TestingEntitiesTrait;
   use TraversingTrait;
-  use JavascriptTrait;
 
   /**
    * Asserts that a tile is not marked as shared from another collection.
@@ -149,8 +147,7 @@ class JoinupCommunityContentContext extends RawDrupalContext {
     // a small amount of time has passed between the moment the node was created
     // and the moment it was published. We allow a grace period of 5 seconds to
     // account for the difference between the created and the publication date.
-    $acceptedDiff = $this->hasJavascriptSupport() ? 25 : 5;
-    Assert::assertTrue(abs((int) $node->getCreatedTime() - (int) $node->getPublicationTime()) < $acceptedDiff);
+    Assert::assertTrue(abs((int) $node->created->value - (int) $node->getPublicationTime()) < 5);
   }
 
   /**
