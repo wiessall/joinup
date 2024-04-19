@@ -16,3 +16,9 @@ services:
     class: Drupal\joinup_rdf\ParamConverter\DecodeRdfUrlConverter
     tags:
       - { name: paramconverter, priority: 10 }
+  # TODO: Drop in ISAICP-8376
+  joinup_rdf.outbound_value.tid:
+    class: Drupal\joinup_rdf\EventSubscriber\Tid
+    arguments: ['@database']
+    tags:
+      - { name: event_subscriber }

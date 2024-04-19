@@ -46,7 +46,7 @@ Feature: Solution editing.
       | Name           | Yancy Burton       |
       | E-mail address | yancyb@example.com |
     And I attach the file "logo.png" to "Logo"
-    And I fill in "Language" with "http://publications.europa.eu/resource/authority/language/VLS"
+    And I select "Flemish" from "Language"
     And I select "EU and European Policies" from "Topic"
     And I select "Citizen" from "Solution type"
 

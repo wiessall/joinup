@@ -3,9 +3,11 @@
          xmlns:skos="http://www.w3.org/2004/02/skos/core#">
 
   <skos:Concept rdf:about="http://example.com/citrus-fruits">
-    <skos:broaderTransitive rdf:resource="http://example.com/fruit-type"/>
     <skos:inScheme rdf:resource="http://example.com/fruit-type"/>
     <skos:prefLabel xml:lang="en">Citrus fruits</skos:prefLabel>
+    <skos:definition xml:lang="en">&lt;p&gt;Amazing fruits &lt;a href=&quot;http://example.com/very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-long.html&quot;&gt;http://example.com/very-very-very-very-very-very-very-very-very-very-ve…&lt;/a&gt;&lt;/p&gt;
+</skos:definition>
+    <skos:broaderTransitive rdf:resource="http://example.com/exotic"/>
   </skos:Concept>
 
 </rdf:RDF>

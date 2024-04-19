@@ -78,6 +78,7 @@
   - Drupal\joinup\Context\ScreenshotContext:
       localDir: ${behat.screenshots.local.dir}
   - Drupal\joinup\Context\SolutionContext
+  - Drupal\joinup\Context\SpdxContext
   - Drupal\joinup\Context\WebformContext
   - Drupal\joinup\Context\WhatsNewContext
   - Drupal\joinup\Context\WysiwygContext
@@ -89,7 +90,6 @@
   - Drupal\Tests\oe_webtools\Behat\WebtoolsETransContext
   - Drupal\Tests\oe_webtools\Behat\WebtoolsMapsContext
   - Drupal\Tests\pipeline\Behat\PipelineContext
-  - Drupal\Tests\spdx\Behat\SpdxContext
   - Drupal\joinup\Context\FeatureContext
   - LoversOfBehat\TableExtension\Context\TableContext
   - Drupal\joinup\Context\ContentTypeContext
@@ -164,6 +164,7 @@ default:
       region_map:
         Additional fields accordion: '.accordion .accordion-item #management'
         Administration toolbar: '#toolbar-administration'
+        Bookmark block: '#block-ventuno-bookmark'
         Comment: 'section.comments'
         Contact information inline form: '#edit-field-ar-contact-information-wrapper'
         Content listing field filter form: '.field--name-content-listing'
@@ -183,7 +184,7 @@ default:
         IOPE Menu: '#block-iope-navigation'
         Layout paragraphs dialog buttons: '.ui-dialog-buttonpane'
         Left sidebar: 'aside.layout-sidebar'
-        Like block: '.block-joinup-like-block'
+        Like block: '#block-ventuno-like'
         Main fields accordion: '.accordion .accordion-item #main'
         Main solution vertical tab: '#edit-group-main'
         Management solution vertical tab: '#edit-group-management'

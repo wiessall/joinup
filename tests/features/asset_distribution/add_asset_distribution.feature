@@ -49,7 +49,7 @@ Feature: Add distribution through the UI
     When I fill in "Title" with "Linux x86-64 SDK"
     And I enter "<p>The full software development kit for systems based on the x86-64 architecture.</p>" in the "Description" wysiwyg editor
     And I upload the file "test.zip" to "Access URL"
-    And I select "GNU zip" from "Format"
+    And I select "ZIP" from "Format"
     And I select "Web Ontology Language Full/DL/Lite" from "Representation technique"
     And I select "WTFPL" from "Licence"
     And I press "Publish"
@@ -115,7 +115,6 @@ Feature: Add distribution through the UI
     And I enter "<p>The full source code.</p>" in the "Description" wysiwyg editor
     Given I upload the file "test.zip" to "Access URL"
     And I select "WTFPL" from "Licence"
-    And I select "RDF XML" from "Format"
     And I select "Web Ontology Language Full/DL/Lite" from "Representation technique"
     And I press "Publish"
     Then I should have 1 distribution
@@ -135,7 +134,7 @@ Feature: Add distribution through the UI
     And I should see the following lines of text:
       | The full source code.              |
       | Format                             |
-      | RDF XML                            |
+      | ZIP                            |
       | Representation technique           |
       | Web Ontology Language Full/DL/Lite |
 
