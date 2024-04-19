@@ -27,8 +27,8 @@ function joinup_core_deploy_110500(): void {
 
   $collection
     ?->set('field_ar_state', 'published')
-    ->set('path', ['alias' => '/eu-oss-catalogue', 'pathauto' => 0])
-    ->save();
+      ->set('path', ['alias' => '/eu-oss-catalogue', 'pathauto' => 0])
+      ->save();
 }
 
 /**
@@ -41,7 +41,7 @@ function joinup_core_deploy_110501(): void {
 
   $collection
     ?->set('label', 'EU Open Source Solutions Catalogue')
-    ->save();
+      ->save();
 }
 
 /**
