@@ -9,11 +9,24 @@ declare(strict_types=1);
 
 use Drupal\Component\Serialization\Json;
 use Drupal\joinup_taxonomy\Entity\MappedTerm;
+use EasyRdf\Graph;
+
+/**
+ * Import SPDX licences.
+ */
+function joinup_rdf_deploy_110500(): void {
+  $graph = new Graph();
+  $graph->parseFile(DRUPAL_ROOT . '/../resources/vocab/licenses.rdf');
+  \Drupal::getContainer()->get('joinup_taxonomy.vocabulary_updater')
+    ->registerGraph('http://licence', $graph)
+    ->registerVocabulary('spdx_licence', 'http://spdx.org/rdf/terms#License', 'http://licence')
+    ->update();
+}
 
 /**
  * Migrate licences to nodes.
  */
-function joinup_rdf_deploy_110500(array &$sandbox): string {
+function joinup_rdf_deploy_110501(array &$sandbox): string {
   $map = [
     'http://joinup.eu/licence/deprecated' => 'deprecated',
     'http://joinup.eu/licence/legal-type' => 'legal_type',
@@ -73,7 +86,7 @@ function joinup_rdf_deploy_110500(array &$sandbox): string {
 /**
  * Restore document > licence relation.
  */
-function joinup_rdf_deploy_110501(array &$sandbox): string {
+function joinup_rdf_deploy_110502(array &$sandbox): string {
   $db = \Drupal::database();
 
   if (!isset($sandbox['document_to_licence'])) {
