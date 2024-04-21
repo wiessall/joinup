@@ -40,6 +40,14 @@ content:
     region: content
     settings: {  }
     third_party_settings: {  }
+  title:
+    type: string_textfield
+    weight: 0
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
 hidden:
   created: true
   langcode: true
@@ -48,7 +56,6 @@ hidden:
   published_at: true
   status: true
   sticky: true
-  title: true
   uid: true
   uri: true
   url_redirects: true
