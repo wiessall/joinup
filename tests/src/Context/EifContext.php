@@ -48,7 +48,7 @@ class EifContext extends RawDrupalContext {
       'title' => 'Owner',
     ]);
 
-    $contact = $this->nodeCreate([
+    $contact = $this->nodeCreate((object) [
       'type' => 'contact_information',
       'title' => 'Contact name',
       'email' => 'contact.email@example.com',
