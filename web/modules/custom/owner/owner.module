@@ -31,27 +31,6 @@ function owner_entity_bundle_info_alter(array &$bundles): void {
 }
 
 /**
- * Implements hook_ENTITY_TYPE_create().
- *
- * Sets the initial workflow state of an owner to 'published'.
- */
-function owner_node_create(NodeInterface $entity): void {
-  if (!$entity instanceof OwnerInterface) {
-    return;
-  }
-
-  // The initial state of an owner is published. The owner is created as part of
-  // proposing a collection, and in the collection propose form the workflow
-  // state is hidden from the user, so it would remain in the "__new__" state
-  // after submission.
-  // We can safely set the initial state to "published" because a newly created
-  // owner doesn't need to be published by a third party.
-  if ($entity->field_state->value === '__new__') {
-    $entity->set('field_state', 'published');
-  }
-}
-
-/**
  * Implements hook_form_BASEFORM_ID_alter().
  */
 function owner_form_node_form_alter(array &$form, FormStateInterface $form_state): void {
