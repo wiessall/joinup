@@ -219,8 +219,6 @@ class OwnerWorkflowTest extends JoinupWorkflowExistingSiteTestBase {
       ],
       'needs_update' => [
         'view' => [
-          'userAnonymous',
-          'userAuthenticated',
           'userModerator',
           'userOwner',
         ],
@@ -234,8 +232,6 @@ class OwnerWorkflowTest extends JoinupWorkflowExistingSiteTestBase {
       ],
       'deletion_request' => [
         'view' => [
-          'userAnonymous',
-          'userAuthenticated',
           'userModerator',
           'userOwner',
         ],
