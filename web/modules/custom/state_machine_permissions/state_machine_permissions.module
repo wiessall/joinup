@@ -14,6 +14,7 @@ use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\contact_information\Entity\ContactInformationInterface;
 use Drupal\joinup_workflow\EntityWorkflowStateInterface;
+use Drupal\owner\Entity\OwnerInterface;
 
 /**
  * Implements hook_ENTITY_TYPE_create_access().
@@ -88,7 +89,9 @@ function state_machine_permissions_rdf_entity_access(EntityInterface $entity, $o
  * Implements hook_ENTITY_TYPE_access().
  */
 function state_machine_permissions_node_access(EntityInterface $entity, string $operation, AccountInterface $account): AccessResultInterface {
-  if (!$entity instanceof ContactInformationInterface || !in_array($operation, ['update', 'delete'])) {
+  if (
+    !($entity instanceof ContactInformationInterface || $entity instanceof OwnerInterface)
+    || !in_array($operation, ['edit', 'delete'])) {
     return AccessResult::neutral();
   }
 
