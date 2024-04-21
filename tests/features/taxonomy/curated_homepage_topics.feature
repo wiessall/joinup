@@ -455,7 +455,7 @@ Feature:
     Then there should be "<image count>" image in the "Custom tile" tile
 
     Examples:
-      | owner type        | image count | list style | state     |
+      | type        | image count | list style | state     |
       | custom_page | 1           | list       | published |
       | custom_page | 1           | grid       | published |
       | news        | 1           | list       | published |
