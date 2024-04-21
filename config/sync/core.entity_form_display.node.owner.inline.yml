@@ -14,9 +14,17 @@ mode: inline
 content:
   owner_type:
     type: options_buttons
-    weight: 0
+    weight: 1
     region: content
     settings: {  }
+    third_party_settings: {  }
+  title:
+    type: string_textfield
+    weight: 0
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
     third_party_settings: {  }
 hidden:
   created: true
@@ -29,7 +37,6 @@ hidden:
   simple_sitemap: true
   status: true
   sticky: true
-  title: true
   uid: true
   uri: true
   url_redirects: true

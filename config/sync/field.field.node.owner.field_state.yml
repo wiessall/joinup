@@ -7,7 +7,6 @@ dependencies:
     - node.type.owner
   module:
     - state_machine
-third_party_settings: { }
 id: node.owner.field_state
 field_name: field_state
 entity_type: node
