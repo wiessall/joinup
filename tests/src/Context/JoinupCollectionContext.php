@@ -37,7 +37,6 @@ class JoinupCollectionContext extends RawDrupalContext {
     ]);
 
     // Create the contact.
-    /** @var \Drupal\contact_information\Entity\ContactInformationInterface $node */
     $contact = $this->nodeCreate((object) [
       'type' => 'contact_information',
       'title' => 'Contact name',

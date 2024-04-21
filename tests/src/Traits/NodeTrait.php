@@ -43,27 +43,4 @@ trait NodeTrait {
     return empty($revisions) ? [] : array_keys($revisions);
   }
 
-  /**
-   * Checks the number of available node entities filtered by bundle.
-   *
-   * @param int $number
-   *   The expected number of node entities.
-   * @param string $type
-   *   The node type.
-   *
-   * @throws \Exception
-   *   Thrown when the number of node entities does not
-   *   match the expectation.
-   */
-  protected function assertNodeEntityCount(int $number, string $type): void {
-    $actual = \Drupal::entityQuery('node')
-      ->accessCheck(FALSE)
-      ->condition('type', $type)
-      ->count()
-      ->execute();
-    if ($actual != $number) {
-      throw new \Exception("Wrong number of $type entities. Expected number: $number, actual number: $actual.");
-    }
-  }
-
 }

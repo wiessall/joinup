@@ -43,8 +43,8 @@ function state_machine_permissions_rdf_entity_create_access(AccountInterface $ac
  * Implements hook_ENTITY_TYPE_create_access().
  */
 function state_machine_permissions_node_create_access(AccountInterface $account, array $context, string $entity_bundle): AccessResultInterface {
-  $ignored_bundles = ['owner'];
-  if (in_array($entity_bundle, $ignored_bundles)) {
+  if ($entity_bundle === 'owner') {
+    // Owners are not group content. The rest of the API will decide.
     return AccessResult::neutral();
   }
 
@@ -95,9 +95,9 @@ function state_machine_permissions_node_access(EntityInterface $entity, string $
     return AccessResult::neutral();
   }
 
-  // We are exceptionally checking for the contact information transitions
-  // because the entity is related to a group but is not a group entity, thus
-  // OG will not allow access when needed.
+  // We are exceptionally checking for the contact information or owner
+  // transitions because the entity is related to a group but is not a group
+  // entity, thus OG will not allow access when needed.
   return _state_machine_permissions_check_transition_access($entity, $operation, $account);
 }
 
