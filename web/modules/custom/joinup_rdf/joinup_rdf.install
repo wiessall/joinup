@@ -71,7 +71,7 @@ function joinup_rdf_update_110501(): void {
 /**
  * Delete leftover path aliases of licence RDF entities.
  */
-function joinup_rdf_update_110404(&$sandbox): string {
+function joinup_rdf_update_110502(&$sandbox): string {
   if (!isset($sandbox['ids'])) {
     $sandbox['ids'] = \Drupal::database()->select('path_alias', 'pa')
       ->fields('pa', ['id'])
