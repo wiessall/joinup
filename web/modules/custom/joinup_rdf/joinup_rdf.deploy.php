@@ -151,7 +151,7 @@ function joinup_rdf_deploy_110502(array &$sandbox): string {
 /**
  * Migrate owners to nodes.
  */
-function joinup_rdf_deploy_110406(array &$sandbox): string {
+function joinup_rdf_deploy_110503(array &$sandbox): string {
   $map = [
     'http://xmlns.com/foaf/0.1/name' => 'title',
     'http://purl.org/dc/terms/type' => 'owner_type',
@@ -199,12 +199,52 @@ function joinup_rdf_deploy_110406(array &$sandbox): string {
 }
 
 /**
+ * Update a duplicate URI.
+ */
+function joinup_rdf_deploy_110504(): void {
+  // The following URI exists as an ID for both an owner and a contact
+  // information. We will rename the contact information.
+  $uri = 'http://resource.geolba.ac.at/doc/62';
+  $new_uri = 'http://resource.geolba.ac.at/doc/62/contact';
+
+  $query = <<<SPARQL
+WITH <http://joinup.eu/contact-information/published>
+DELETE { <$uri> ?p ?o }
+INSERT { <$new_uri> ?p ?o }
+WHERE { <$uri> ?p ?o }
+SPARQL;
+
+  $sparql = \Drupal::getContainer()->get('sparql.endpoint');
+  $sparql->update($query);
+
+  // Also, update related references from the collection, solution and release
+  // graphs.
+  $query = <<<SPARQL
+DELETE { GRAPH ?g { ?s <http://www.w3.org/ns/dcat#contactPoint> <$uri> } }
+INSERT { GRAPH ?g { ?s <http://www.w3.org/ns/dcat#contactPoint> <$new_uri> } }
+WHERE {
+  GRAPH ?g { ?s <http://www.w3.org/ns/dcat#contactPoint> <$uri> } .
+  VALUES ?g {
+    <http://joinup.eu/collection/published>
+    <http://joinup.eu/collection/draft>
+    <http://joinup.eu/solution/published>
+    <http://joinup.eu/solution/draft>
+    <http://joinup.eu/release/published>
+    <http://joinup.eu/release/draft>
+  }
+}
+SPARQL;
+
+    $sparql->update($query);
+}
+
+/**
  * Migrate contact information entities to nodes.
  */
-function joinup_rdf_deploy_110407(array &$sandbox): string {
+function joinup_rdf_deploy_110505(array &$sandbox): string {
   $endpoint = \Drupal::getContainer()->get('sparql.endpoint');
   if (empty($sandbox['ids'])) {
-    $results = $endpoint->query('SELECT ?id FROM <http://joinup.eu/contact-information/published> WHERE { ?id a ?type }')->getArrayCopy();
+    $results = $endpoint->query('SELECT DISTINCT ?id FROM <http://joinup.eu/contact-information/published> WHERE { ?id a ?type }')->getArrayCopy();
     $sandbox['ids'] = array_map(fn(\stdClass $result) => $result->id->getUri(), $results);
     $sandbox['processed'] = 0;
     $sandbox['total'] = count($sandbox['ids']);
@@ -254,7 +294,7 @@ function joinup_rdf_deploy_110407(array &$sandbox): string {
 /**
  * Clear the contact information graph.
  */
-function joinup_rdf_deploy_110408(): string {
+function joinup_rdf_deploy_110506(): string {
   // Now that all entities are migrated and synced into the `http://data` graph,
   // we can safely remove the previous one.
   \Drupal::getContainer()
