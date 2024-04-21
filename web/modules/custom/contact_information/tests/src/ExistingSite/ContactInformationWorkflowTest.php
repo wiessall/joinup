@@ -6,7 +6,6 @@ namespace Drupal\Tests\contact_information\ExistingSite;
 
 use Drupal\Core\Session\AnonymousUserSession;
 use Drupal\Tests\joinup_workflow\ExistingSite\JoinupWorkflowExistingSiteTestBase;
-use Drupal\node\Entity\Node;
 
 /**
  * Tests the workflow for the contact information entity.

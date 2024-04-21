@@ -151,9 +151,6 @@ class OwnerWorkflowTest extends JoinupWorkflowExistingSiteTestBase {
           $content->setOwnerId($this->$user_var->id());
         }
 
-        // Override the default state of 'published' that is set during entity
-        // creation.
-        // @see owner_node_create()
         $content->set('field_state', $entity_state);
         $content->save();
 
@@ -267,14 +264,6 @@ class OwnerWorkflowTest extends JoinupWorkflowExistingSiteTestBase {
    */
   public function workflowTransitionsProvider(): array {
     return [
-      '__new__' => [
-        'userAuthenticated' => [
-          'published',
-        ],
-        'userModerator' => [
-          'published',
-        ],
-      ],
       'published' => [
         'userAuthenticated' => [
           'published',
