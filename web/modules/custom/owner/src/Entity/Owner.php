@@ -35,7 +35,7 @@ class Owner extends Node implements OwnerInterface {
       return FALSE;
     }
     $sparql_endpoint = \Drupal::getContainer()->get('sparql.endpoint');
-    return $sparql_endpoint->query("ASK { ?s ?p " . SparqlArg::uri($this->get('uri')->value) . " }")->isTrue();
+    return $sparql_endpoint->query("ASK { ?s ?p " . SparqlArg::uri($this->getUri()) . " }")->isTrue();
   }
 
   /**
@@ -49,7 +49,7 @@ class Owner extends Node implements OwnerInterface {
     $query = \Drupal::entityQuery('rdf_entity')->accessCheck(FALSE);
     $result = $query
       ->condition('rid', 'collection')
-      ->condition('field_ar_owner', $this->get('uri')->value)
+      ->condition('field_ar_owner', $this->getUri())
       ->execute();
 
     return !empty($result) ? Rdf::loadMultiple($result) : [];
