@@ -137,3 +137,17 @@ function owner_node_access(NodeInterface $entity, string $operation, AccountInte
 
   return AccessResult::neutral();
 }
+
+/**
+ * Implements hook_inline_entity_form_table_fields_alter().
+ */
+function owner_inline_entity_form_table_fields_alter(array &$fields, array $context): void {
+  if ($context['entity_type'] == 'node' && $context['allowed_bundles'] === ['owner']) {
+    // Add the type column.
+    $fields['owner_type'] = [
+      'type' => 'field',
+      'label' => t('Type'),
+      'weight' => 10,
+    ];
+  }
+}
