@@ -97,7 +97,7 @@ function joinup_rdf_update_110502(&$sandbox): string {
 /**
  * Delete Owner RDF entities.
  */
-function joinup_rdf_update_110405(): void {
+function joinup_rdf_update_110503(): void {
   // Save owners in a temporary file because we need to delete the content
   // prior to delete the bundle configs. Data will be restored later, in a
   // deploy hook.
@@ -113,6 +113,6 @@ function joinup_rdf_update_110405(): void {
 /**
  * Uninstall the `contact_information` `rdf_entity` bundle.
  */
-function joinup_rdf_update_110406(): void {
+function joinup_rdf_update_110504(): void {
   \Drupal::entityTypeManager()->getStorage('rdf_type')->load('contact_information')->delete();
 }

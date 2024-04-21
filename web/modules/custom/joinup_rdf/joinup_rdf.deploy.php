@@ -235,7 +235,7 @@ WHERE {
 }
 SPARQL;
 
-    $sparql->update($query);
+  $sparql->update($query);
 }
 
 /**
