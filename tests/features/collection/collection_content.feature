@@ -19,7 +19,7 @@ Feature: Collection content
       | title                                 | body                                                                    | state     | collection                | topic                                                 | created          | changed                   |
       | Bigger than Egyptian Museum of Cairo? | <p><a href="#link">Link to the museum</a> web<strong>site</strong>.</p> | published | Turin Egyptian Collection | Finance in EU, Supplier exchange, E-health, E-justice | 2017-11-11T11:11 | Wed, 25 Dec 2019 15:00:00 |
     And document content:
-      | title             | body                                             | state     | collection                | creation date    | changed          | topic    |
+      | title             | field_paragraphs_body                            | state     | collection                | creation date    | changed          | topic    |
       | Upper Floor Map   | <p>A sample <a href="#link">map</a> example.</p> | published | Turin Egyptian Collection | 2017-11-11T11:11 | 2017-11-30T11:11 | E-health |
     And event content:
       | title                                     | state     | collection                | start date          | end date            | topic             |

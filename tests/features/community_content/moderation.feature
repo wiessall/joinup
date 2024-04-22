@@ -40,7 +40,7 @@ Feature: Moderate community content
       | Stellar flares                | Dim red dwarfs       |                     | Survey For Supernovae | published    | Marco Farfarer |
       | Upgrading CCD cameras         | Liquid cooled        |                     | Survey For Supernovae | archived     | Marco Farfarer |
     And document content:
-      | title                         | body                          | collection          | solution              | state            |
+      | title                         | field_paragraphs_body         | collection          | solution              | state            |
       | A multiwavelength study       | Optical and infrared          | Black hole research |                       | draft            |
       | X-Ray Transient V616          | Weak ¹²CO absorption          | Black hole research |                       | needs update     |
       | K-band spectroscopy           | Small amount of flux          | Black hole research |                       | proposed         |
@@ -313,7 +313,7 @@ Feature: Moderate community content
       | Rotation-powered pulsations | Millisecond pulsars   | Neutron stars | proposed |
       | The Recycling concept       | An epoch of accretion | Neutron stars | proposed |
     And document content:
-      | title          | body                          | collection    | state            |
+      | title          | field_paragraphs_body         | collection    | state            |
       | Donor star     | Spun up to millisecond period | Neutron stars | proposed         |
       | High frequency | Slow 1.2 second spin          | Neutron stars | deletion request |
       | Cluster        | Eddington luminosity          | Neutron stars | deletion request |
