@@ -8,6 +8,7 @@
 declare(strict_types=1);
 
 use Drupal\Component\Serialization\Json;
+use Drupal\Core\Serialization\Yaml;
 use Drupal\joinup_taxonomy\Entity\MappedTerm;
 use EasyRdf\Graph;
 
@@ -149,7 +150,7 @@ function joinup_rdf_deploy_110502(array &$sandbox): string {
 /**
  * Import EIF data.
  */
-function joinup_rdf_deploy_110406(array &$sandbox): string {
+function joinup_rdf_deploy_110503(array &$sandbox): string {
   $map = [
     'http://data.europa.eu/eif/Layer' => 'eif_layer',
     'http://data.europa.eu/eif/Model' => 'eif_model',
@@ -225,7 +226,7 @@ function joinup_rdf_deploy_110406(array &$sandbox): string {
 /**
  * Fully test the EIF data conversion.
  */
-function joinup_rdf_deploy_110407(): void {
+function joinup_rdf_deploy_110504(): void {
   $eif = Yaml::decode(file_get_contents('private://eif.yml'));
   $eifWrapper = Yaml::decode(file_get_contents('private://eif_wrapper.yml'));
   $descriptionPredicates = [
