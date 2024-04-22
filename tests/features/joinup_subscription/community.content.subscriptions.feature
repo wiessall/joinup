@@ -39,7 +39,7 @@ Feature: Subscribing to community content in collections and solutions
       | Active galactic nuclei | A thin relativistic accretion disk | Black hole imaging |                | published | junfukue |
       | Light diffusion        | Photons emitted at constant radius |                    | Null geodesics | archived  | junfukue |
     And document content:
-      | title             | body                            | collection         | solution              | state     | author   |
+      | title             | field_paragraphs_body           | collection         | solution              | state     | author   |
       | Doppler effect    | Caused by disk rotation         | Black hole imaging |                       | published | junfukue |
       | Distant observers | Distribution of bolometric flux |                    | Bolometric appearance | published | junfukue |
     And event content:
