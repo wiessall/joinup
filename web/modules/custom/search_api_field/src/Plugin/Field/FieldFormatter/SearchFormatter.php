@@ -22,6 +22,7 @@ use Drupal\search_api\Query\ResultSetInterface;
 use Drupal\search_api\SearchApiException;
 use Drupal\search_api_field\Plugin\Field\FieldType\SearchItemInterface;
 use Drupal\search_api_field\Plugin\FilterPluginManagerInterface;
+use Drupal\topic\Entity\Topic;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -428,10 +429,31 @@ class SearchFormatter extends FormatterBase implements ContainerFactoryPluginInt
         if ($operator === 'IN') {
           $value = explode(',', $value);
           $value = array_map('trim', $value);
+          array_walk($value, [$this, 'uriToId'], $field);
+          $value = array_filter($value);
+        }
+        else {
+          $this->uriToId($value, 0, $field);
         }
 
         $query->addCondition($field, $value, $operator);
       }
+    }
+  }
+
+  /**
+   * Provides a callback converting a topic URI to term ID.
+   *
+   * @param mixed $value
+   *   A potential topic URI passed by reference.
+   * @param int $delta
+   *   The value's delta (not used).
+   * @param string $field
+   *   The Search API field name.
+   */
+  protected function uriToId(mixed &$value, int $delta, string $field): void {
+    if ($field === 'topic') {
+      $value = Topic::loadByUri($value)->id();
     }
   }
 

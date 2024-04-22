@@ -15,6 +15,7 @@ dependencies:
   - 'joinup:asset_distribution'
   - 'joinup:asset_release'
   - 'joinup:contact_information'
+  - 'joinup:joinup_taxonomy'
   - 'joinup:joinup_workflow'
   - 'joinup:owner'
   - 'joinup:search_api_field'

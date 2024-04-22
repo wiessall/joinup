@@ -18,6 +18,7 @@ use Drupal\Core\Url;
 use Drupal\eif\EifInterface;
 use Drupal\eif\Form\EifWrapperInlineForm;
 use Drupal\field\FieldConfigInterface;
+use Drupal\joinup_taxonomy\Entity\MappedTerm;
 use Drupal\og\OgGroupAudienceHelperInterface;
 use Drupal\rdf_meta_entity\Entity\RdfMetaEntityInterface;
 use Drupal\solution\Entity\SolutionInterface;
@@ -209,6 +210,24 @@ function eif_entity_type_build(array &$entity_types): void {
   if (isset($entity_types['eif_wrapper']) && !$entity_types['eif_wrapper']->getHandlerClass('inline_form')) {
     // Use a dedicated inline form handler for 'eif_wrapper' entities.
     $entity_types['eif_wrapper']->setHandlerClass('inline_form', EifWrapperInlineForm::class);
+  }
+}
+
+/**
+ * Implements hook_entity_bundle_info_alter().
+ */
+function eif_entity_bundle_info_alter(array &$bundles): void {
+  $vids = [
+    'eif_conceptual_model',
+    'eif_interoperability_layer',
+    'eif_principle',
+    'eif_recommendation',
+    'eif_solution_type',
+  ];
+  foreach ($vids as $vid) {
+    if (!empty($bundles['taxonomy_term'][$vid])) {
+      $bundles['taxonomy_term'][$vid]['class'] = MappedTerm::class;
+    }
   }
 }
 
