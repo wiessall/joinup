@@ -3377,9 +3377,12 @@ JS;
    * @Then the following :graph graph triples should exist in the RDF backend:
    */
   public function assertTriples(string $graph, TableNode $triples): void {
+    /** @var \Drupal\rdf_sync\RdfSyncConnectionInterface $connection */
+    $connection = \Drupal::service('rdf_sync.connection');
+
     $failedTriples = [];
     foreach ($triples->getRows() as [$triple]) {
-      if (!RdfSyncConnection::query("ASK WHERE { GRAPH <$graph> { $triple } }")->getBoolean()) {
+      if (!$connection->query("ASK WHERE { GRAPH <$graph> { $triple } }")->getBoolean()) {
         $failedTriples[] = $triple;
       }
     }
