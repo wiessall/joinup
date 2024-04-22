@@ -23,13 +23,13 @@ class AboutPathRedirectSubscriber extends HttpExceptionSubscriberBase {
     if (!$event->isMainRequest()) {
       return;
     }
-    $pathInfo = $event->getRequest()->getBasePath() . $event->getRequest()->getPathInfo();
+
+    $pathInfo = $event->getRequest()->getPathInfo();
     if (!str_ends_with($pathInfo, '/about')) {
       return;
     }
 
     $pathWithoutSuffix = preg_replace('#/about$#', '', $pathInfo);
-
     if (!$pathWithoutSuffix) {
       return;
     }
