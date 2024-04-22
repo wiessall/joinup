@@ -8,7 +8,9 @@ use Drupal\Core\Batch\BatchBuilder;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\joinup_taxonomy\VocabularyUpdater;
 use Drupal\rdf_sync\RdfSyncConnection;
+use Drupal\rdf_sync\RdfSyncConnectionInterface;
 use Drupal\rdf_sync\RdfSyncMapper;
+use Drupal\rdf_sync\RdfSyncTriplesInterface;
 use Drush\Attributes as CLI;
 use Drush\Commands\DrushCommands;
 use Drush\Drush;
@@ -70,10 +72,16 @@ class JoinupTaxonomyCommands extends DrushCommands {
    *   The RDF Sync mapper service.
    * @param \Drupal\Core\Config\ConfigFactoryInterface $configFactory
    *   The config factory service.
+   * @param \Drupal\rdf_sync\RdfSyncConnectionInterface $rdfSyncConnection
+   *   The sync connection service.
+   * @param \Drupal\rdf_sync\RdfSyncTriplesInterface $rdfSyncTriples
+   *   The sync triples service.
    */
   public function __construct(
     private readonly RdfSyncMapper $mapper,
     private readonly ConfigFactoryInterface $configFactory,
+    private readonly RdfSyncConnectionInterface $rdfSyncConnection,
+    private readonly RdfSyncTriplesInterface $rdfSyncTriples,
   ) {
     parent::__construct();
   }
@@ -85,6 +93,8 @@ class JoinupTaxonomyCommands extends DrushCommands {
     return new static(
       $container->get('rdf_sync.mapper'),
       $container->get('config.factory'),
+      $container->get('rdf_sync.connection'),
+      $container->get('rdf_sync.triples'),
     );
   }
 
@@ -158,7 +168,7 @@ class JoinupTaxonomyCommands extends DrushCommands {
         ],
       ];
 
-      RdfSyncConnection::updateTriples($triples);
+      $this->rdfSyncTriples->updateTriples($triples);
       $fixtureFileGraph->parse($triples, 'php');
       $vocabularyUris[] = $vocabularyUri;
     }
@@ -190,7 +200,8 @@ class JoinupTaxonomyCommands extends DrushCommands {
 
     // Get all locked vocabulary triples and store them in the collector graph.
     $graphUri = $this->configFactory->get('rdf_sync.settings')->get('graph_uri');
-    $results = RdfSyncConnection::query(sprintf($query, $graphUri, '<' . implode('> <', $vocabularyUris) . '>'));
+
+    $results = $this->rdfSyncConnection->query(sprintf($query, $graphUri, '<' . implode('> <', $vocabularyUris) . '>'));
     foreach ($results as $row) {
       $fixtureFileGraph->add($row->subject, $row->predicate, $row->object);
     }
@@ -407,7 +418,7 @@ class JoinupTaxonomyCommands extends DrushCommands {
    * Synchronizes the locked vocabularies terms from RDFXML dump file.
    */
   private function synchronizeTermsFromRdfXmlFile(): void {
-    $graphStore = RdfSyncConnection::createGraphStore();
+    $graphStore = $this->rdfSyncTriples->createGraphStore();
     $graphUri = $this->configFactory->get('rdf_sync.settings')->get('graph_uri');
     $graph = new Graph($graphUri);
     $graph->parseFile(static::getDumpFilePath('rdf', FALSE));
