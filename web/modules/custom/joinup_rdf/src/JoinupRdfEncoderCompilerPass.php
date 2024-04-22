@@ -28,19 +28,19 @@ class JoinupRdfEncoderCompilerPass implements CompilerPassInterface {
    */
   public function process(ContainerBuilder $container): void {
     $rdfSerializers = Format::getFormats();
-    foreach (RdfSyncFormat::cases() as $format) {
-      if (isset($rdfSerializers[$format->value])) {
-        $encoderService = new Definition(JoinupRdfSyncEncoder::class);
-        $encoderService->addTag('encoder', [
-          'format' => $format->value,
-          // These encoders will act before "rdf_sync.encoder.$format->value"
-          // encoders, which have 10 as priority.
-          // @see \Drupal\rdf_sync\RdfSyncEncoderCompilerPass::process()
-          'priority' => 15,
-        ]);
-        $container->addDefinitions(["joinup_rdf.encoder.$format->value" => $encoderService]);
-      }
-    }
+//    foreach (RdfSyncFormat::cases() as $format) {
+//      if (isset($rdfSerializers[$format->value])) {
+//        $encoderService = new Definition(JoinupRdfSyncEncoder::class);
+//        $encoderService->addTag('encoder', [
+//          'format' => $format->value,
+//          // These encoders will act before "rdf_sync.encoder.$format->value"
+//          // encoders, which have 10 as priority.
+//          // @see \Drupal\rdf_sync\RdfSyncEncoderCompilerPass::process()
+//          'priority' => 15,
+//        ]);
+//        $container->addDefinitions(["joinup_rdf.encoder.$format->value" => $encoderService]);
+//      }
+//    }
   }
 
 }
