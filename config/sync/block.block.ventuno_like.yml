@@ -4,7 +4,7 @@ status: true
 dependencies:
   module:
     - joinup_core
-    - joinup_like
+    - joinup_flag
   theme:
     - ventuno
 id: ventuno_like
@@ -12,12 +12,13 @@ theme: ventuno
 region: content_top
 weight: -27
 provider: null
-plugin: joinup_like_block
+plugin: joinup_flag_block
 settings:
-  id: joinup_like_block
+  id: joinup_flag_block
   label: Like
   label_display: '0'
-  provider: joinup_like
+  provider: joinup_flag
+  flag_type: like
 visibility:
   joinup_content:
     id: joinup_content
