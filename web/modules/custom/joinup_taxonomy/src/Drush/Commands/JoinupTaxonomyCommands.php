@@ -7,7 +7,6 @@ namespace Drupal\joinup_taxonomy\Drush\Commands;
 use Drupal\Core\Batch\BatchBuilder;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\joinup_taxonomy\VocabularyUpdater;
-use Drupal\rdf_sync\RdfSyncConnection;
 use Drupal\rdf_sync\RdfSyncConnectionInterface;
 use Drupal\rdf_sync\RdfSyncMapper;
 use Drupal\rdf_sync\RdfSyncTriplesInterface;
