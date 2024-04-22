@@ -5,7 +5,6 @@ dependencies:
   config:
     - core.entity_view_mode.node.carousel
     - field.field.node.document.abstract
-    - field.field.node.document.body
     - field.field.node.document.field_comments
     - field.field.node.document.field_document_logo
     - field.field.node.document.field_document_publication_date
@@ -141,7 +140,6 @@ content:
     weight: 3
     region: content
 hidden:
-  body: true
   featured: true
   field_comments: true
   field_document_publication_date: true
