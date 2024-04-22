@@ -5,7 +5,10 @@ declare(strict_types=1);
 namespace Drupal\joinup_community_content\EventSubscriber;
 
 use Drupal\Core\EventSubscriber\HttpExceptionSubscriberBase;
-use Drupal\Core\Routing\TrustedRedirectResponse;
+use Drupal\Core\Routing\LocalRedirectResponse;
+use Drupal\Core\Url;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
 
 /**
@@ -34,10 +37,9 @@ class AboutPathRedirectSubscriber extends HttpExceptionSubscriberBase {
       return;
     }
 
-    $event->setResponse(new TrustedRedirectResponse(
-      $pathWithoutSuffix,
-      307
-    ));
+    // @todo Is 307 really suited here? Consider permanent redirect?
+    $url = Url::createFromRequest(Request::create($pathWithoutSuffix));
+    $event->setResponse(new LocalRedirectResponse($url->toString(), Response::HTTP_TEMPORARY_REDIRECT));
   }
 
   /**
