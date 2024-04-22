@@ -12,7 +12,7 @@ dependencies:
 id: ventuno_solutiontype
 theme: ventuno
 region: content
-weight: -25
+weight: -26
 provider: null
 plugin: 'facet_block:solution_type'
 settings:

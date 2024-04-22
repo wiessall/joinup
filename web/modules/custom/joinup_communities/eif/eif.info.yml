@@ -7,4 +7,5 @@ dependencies:
   - drupal:text
   - inline_entity_form:inline_entity_form
   - joinup:custom_page
+  - joinup:joinup_taxonomy
   - rdf_meta_entity:rdf_meta_entity

@@ -9,7 +9,7 @@ dependencies:
 id: ventuno_help
 theme: ventuno
 region: content
-weight: -14
+weight: -15
 provider: null
 plugin: help_block
 settings:

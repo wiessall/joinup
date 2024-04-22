@@ -5,6 +5,11 @@ dependencies:
   config:
     - field.storage.taxonomy_term.mime_type
     - taxonomy.vocabulary.file_type
+third_party_settings:
+  rdf_sync:
+    value:
+      predicate: 'http://joinup.eu/file-type/mime-type'
+      type: 'xsd:string'
 _core:
   default_config_hash: G_hLYSUg04p7o3Sf9BRYjJS9W_V6Aeen6bjK2bhSGLg
 id: taxonomy_term.file_type.mime_type
