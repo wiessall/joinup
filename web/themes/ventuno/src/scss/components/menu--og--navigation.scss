@@ -44,10 +44,15 @@
   }
 
   // Override some pplus styles.
+  .p-plus-container {
+    min-width: 15rem;
+    @include media-breakpoint-up(lg) {
+      max-width: calc(100% - 6rem);
+    }
+  }
   .p-plus {
     float: left;
     align-items: baseline;
-    min-width: 15rem;
     .p-plus__toggle-btn {
       color: $primary;
       &:hover {
@@ -63,7 +68,7 @@
       flex: none;
     }
     .p-plus__overflow {
-      right: $spacer * 2;
+      right: $spacer;
       overflow: hidden;
       .p-plus__primary-nav-item {
         padding: var(--bs-dropdown-item-padding-y) var(--bs-dropdown-item-padding-x);
