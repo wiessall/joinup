@@ -97,6 +97,6 @@ function joinup_rdf_update_110502(&$sandbox): string {
 /**
  * Uninstall the `contact_information` `rdf_entity` bundle.
  */
-function joinup_rdf_update_110405(): void {
+function joinup_rdf_update_110503(): void {
   \Drupal::entityTypeManager()->getStorage('rdf_type')->load('contact_information')->delete();
 }
