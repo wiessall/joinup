@@ -116,3 +116,11 @@ function joinup_rdf_update_110503(): void {
 function joinup_rdf_update_110504(): void {
   \Drupal::entityTypeManager()->getStorage('rdf_type')->load('contact_information')->delete();
 }
+
+/**
+ * Re run user_update_10000.
+ */
+function joinup_rdf_update_110505(): void {
+  require_once DRUPAL_ROOT . '/core/modules/user/user.install';
+  user_update_10000();
+}
