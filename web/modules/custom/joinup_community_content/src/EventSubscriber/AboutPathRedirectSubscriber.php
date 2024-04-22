@@ -37,9 +37,8 @@ class AboutPathRedirectSubscriber extends HttpExceptionSubscriberBase {
       return;
     }
 
-    // @todo Is 307 really suited here? Consider permanent redirect?
     $url = Url::createFromRequest(Request::create($pathWithoutSuffix));
-    $event->setResponse(new LocalRedirectResponse($url->toString(), Response::HTTP_TEMPORARY_REDIRECT));
+    $event->setResponse(new LocalRedirectResponse($url->toString(), Response::HTTP_PERMANENTLY_REDIRECT));
   }
 
   /**
