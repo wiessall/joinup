@@ -5,7 +5,6 @@ dependencies:
   config:
     - core.entity_view_display.comment.comment.default
     - field.field.node.document.abstract
-    - field.field.node.document.body
     - field.field.node.document.field_comments
     - field.field.node.document.field_document_logo
     - field.field.node.document.field_document_publication_date
@@ -186,7 +185,6 @@ content:
     region: content
 hidden:
   abstract: true
-  body: true
   featured: true
   field_document_logo: true
   field_document_spatial_coverage: true
