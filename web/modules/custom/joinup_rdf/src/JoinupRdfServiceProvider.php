@@ -25,7 +25,7 @@ class JoinupRdfServiceProvider implements ServiceProviderInterface {
    * {@inheritdoc}
    */
   public function register(ContainerBuilder $container): void {
-    //$container->addCompilerPass(new JoinupRdfEncoderCompilerPass(), PassConfig::TYPE_BEFORE_OPTIMIZATION, 10);
+    $container->addCompilerPass(new JoinupRdfEncoderCompilerPass(), PassConfig::TYPE_BEFORE_OPTIMIZATION, 10);
   }
 
 }
