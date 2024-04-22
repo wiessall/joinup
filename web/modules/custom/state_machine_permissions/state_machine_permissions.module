@@ -89,9 +89,19 @@ function state_machine_permissions_rdf_entity_access(EntityInterface $entity, $o
  * Implements hook_ENTITY_TYPE_access().
  */
 function state_machine_permissions_node_access(EntityInterface $entity, string $operation, AccountInterface $account): AccessResultInterface {
-  if (
-    !($entity instanceof ContactInformationInterface || $entity instanceof OwnerInterface)
-    || !in_array($operation, ['edit', 'delete'])) {
+  if (!$entity instanceof ContactInformationInterface && !$entity instanceof OwnerInterface) {
+    // This is only for contact information and owner entities.
+    return AccessResult::neutral();
+  }
+
+  // Contact information will be judged by OG, thus it checks for an update
+  // and delete operations, but owner will be judged by the core API and it
+  // will check for edit and delete operations.
+  if ($entity instanceof ContactInformationInterface && !in_array($operation, ['update', 'delete'])) {
+    return AccessResult::neutral();
+  }
+
+  if ($entity instanceof OwnerInterface && !in_array($operation, ['edit', 'delete'])) {
     return AccessResult::neutral();
   }
 
