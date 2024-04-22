@@ -11,6 +11,7 @@ use Drupal\Core\Config\ConfigManagerInterface;
 use Drupal\Core\Config\Entity\ConfigEntityStorageInterface;
 use Drupal\Core\Config\FileStorage;
 use Drupal\Core\Site\Settings;
+use Drupal\joinup_core\UpdateHelper;
 use Drupal\user\Entity\User;
 
 /**
@@ -97,6 +98,21 @@ function joinup_core_requirements($phase): array {
 }
 
 /**
+ * Implements hook_update_dependencies().
+ *
+ * phpcs:disable QualityAssurance.InstallFiles.FunctionDeclarations.NonHookFound,CodingStandards.NamingConventions.ValidUpdateName.InvalidUpdateId
+ */
+function joinup_core_update_dependencies(): array {
+  $dependencies['joinup_core'][110501] = [
+    'joinup_core' => 110500,
+  ];
+
+  return $dependencies;
+}
+
+// phpcs:enable
+
+/**
  * Installs Layout Paragraphs body for document content type.
  */
 function joinup_core_update_110500(): void {
@@ -123,4 +139,16 @@ function joinup_core_update_110500(): void {
       $storage->createFromStorageRecord($configData)->save();
     }
   }
+}
+
+/**
+ * Transform document body text field to paragraphs.
+ */
+function joinup_core_update_110501(&$sandbox): void {
+  // We update about 4900 document nodes. The operation takes 240 seconds
+  // (4 minutes) in total to finish. Updating the nodes takes 130 seconds, the
+  // remaining time (110 seconds) is spent on reindexing.
+  $updateHelper = \Drupal::classResolver(UpdateHelper::class);
+  assert($updateHelper instanceof UpdateHelper);
+  $updateHelper->transformNodeBodyToLayoutParagraphs($sandbox, 'document');
 }
