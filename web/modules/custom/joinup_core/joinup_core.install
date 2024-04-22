@@ -7,6 +7,9 @@
 
 declare(strict_types=1);
 
+use Drupal\Core\Config\ConfigManagerInterface;
+use Drupal\Core\Config\Entity\ConfigEntityStorageInterface;
+use Drupal\Core\Config\FileStorage;
 use Drupal\Core\Site\Settings;
 use Drupal\user\Entity\User;
 
@@ -91,4 +94,33 @@ function joinup_core_requirements($phase): array {
   }
 
   return $requirements;
+}
+
+/**
+ * Installs Layout Paragraphs body for document content type.
+ */
+function joinup_core_update_110500(): void {
+  $configManager = \Drupal::service('config.manager');
+  assert($configManager instanceof ConfigManagerInterface);
+  $source = new FileStorage(Settings::get('config_sync_directory'));
+  $layoutParagraphsField = 'field_paragraphs_body';
+  $entityTypeManager = Drupal::entityTypeManager();
+
+  $fieldStorageId = "node.$layoutParagraphsField";
+  if (!$entityTypeManager->getStorage('field_storage_config')->load($fieldStorageId)) {
+    $configData = $source->read("field.storage.$fieldStorageId");
+    $storage = $entityTypeManager->getStorage('field_storage_config');
+    assert($storage instanceof ConfigEntityStorageInterface);
+    $storage->createFromStorageRecord($configData)->save();
+  }
+
+  foreach (['document'] as $contentType) {
+    $fieldConfigId = "node.$contentType.$layoutParagraphsField";
+    if (!$entityTypeManager->getStorage('field_config')->load($fieldConfigId)) {
+      $configData = $source->read("field.field.$fieldConfigId");
+      $storage = $entityTypeManager->getStorage('field_config');
+      assert($storage instanceof ConfigEntityStorageInterface);
+      $storage->createFromStorageRecord($configData)->save();
+    }
+  }
 }
