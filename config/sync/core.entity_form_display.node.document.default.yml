@@ -4,7 +4,6 @@ status: true
 dependencies:
   config:
     - field.field.node.document.abstract
-    - field.field.node.document.body
     - field.field.node.document.field_comments
     - field.field.node.document.field_document_logo
     - field.field.node.document.field_document_publication_date
@@ -178,7 +177,6 @@ content:
     settings: {  }
     third_party_settings: {  }
 hidden:
-  body: true
   created: true
   field_shared_in: true
   field_site_featured: true
