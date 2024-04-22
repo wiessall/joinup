@@ -115,26 +115,27 @@ Feature: Navigation menu for custom pages
       | solution   | 2               | 3               |
 
   @javascript
-  Scenario: For menus with more than 6 items, the 6th and beyond should be wrapped in a dropdown
+  Scenario: Menus with items that do not fit in available space should be wrapped in a dropdown
     Given collection:
       | title | Plaster molds |
       | state | published     |
     And custom_page content:
-      | title             | body                   | collection    | state     | topic |
-      | Molds for candles | This is a sample body. | Plaster molds | published | HR    |
-      | Molds for walls   | This is a sample body. | Plaster molds | published | HR    |
-      | Molds for crafts  | This is a sample body. | Plaster molds | published | HR    |
-      | Molds for pottery | This is a sample body. | Plaster molds | published | HR    |
-    # A menu with 6 items is displayed normally
+      | title              | body                   | collection    | state     | topic |
+      | Molds for candles  | This is a sample body. | Plaster molds | published | HR    |
+      | Molds for walls    | This is a sample body. | Plaster molds | published | HR    |
+      | Molds for crafts   | This is a sample body. | Plaster molds | published | HR    |
+      | Molds for pottery  | This is a sample body. | Plaster molds | published | HR    |
+      | Molds for ceramics | This is a sample body. | Plaster molds | published | HR    |
+      | Molds for soaps    | This is a sample body. | Plaster molds | published | HR    |
+    # Menu items are displayed normally
     When I go to the "Plaster molds" collection
     Then I should see the link "Molds for pottery" in the "Navigation menu"
     But I should not see the text "See more" in the "Navigation menu"
-    # A menu with more than 6 items has the first 5 displayed normally
-    # Then the rest of items is wrapped in a dropdown
+    # A menu with items that do not fit the available space are in a dropdown
     Given custom_page content:
-      | title           | body                   | collection    | state     | topic |
-      | Vintage molds   | This is a sample body. | Plaster molds | published | HR    |
-      | Plaster casting | This is a sample body. | Plaster molds | published | HR    |
+      | title              | body                   | collection    | state     | topic |
+      | Vintage molds      | This is a sample body. | Plaster molds | published | HR    |
+      | Plaster casting    | This is a sample body. | Plaster molds | published | HR    |
     When I go to the "Plaster molds" collection
     Then I should see the text "See more" in the "Navigation menu"
     But I should not see the text "Plaster casting" in the "Navigation menu"

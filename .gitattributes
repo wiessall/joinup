@@ -42,6 +42,9 @@
 *.xml     text eol=lf whitespace=blank-at-eol,-blank-at-eof,-space-before-tab,tab-in-indent,tabwidth=2
 *.yml     text eol=lf whitespace=blank-at-eol,-blank-at-eof,-space-before-tab,tab-in-indent,tabwidth=2
 
+# PHPStan's baseline uses tabs instead of spaces.
+core/.phpstan-baseline.php text eol=lf whitespace=blank-at-eol,-blank-at-eof,-space-before-tab,tabwidth=2 diff=php linguist-language=php
+
 # Define binary file attributes.
 # - Do not treat them as text.
 # - Include binary diff in patches instead of "binary files differ."
@@ -81,8 +84,6 @@
 /resources/runner/ export-ignore
 /resources/vocab/ADMS-SW-v1.00.rdf export-ignore
 /resources/vocab/ADMS_SKOS_v1.00.rdf export-ignore
-/resources/vocab/actor.rdf export-ignore
-/resources/vocab/business-process.rdf export-ignore
 /resources/vocab/countries-skos.rdf export-ignore
 /resources/vocab/data-theme-skos.rdf export-ignore
 /resources/vocab/eif_conceptual_model.rdf export-ignore
@@ -92,10 +93,7 @@
 /resources/vocab/eif_solution_type.rdf export-ignore
 /resources/vocab/filetypes-skos.rdf export-ignore
 /resources/vocab/languages-skos.rdf export-ignore
-/resources/vocab/product_type.rdf export-ignore
 /resources/vocab/solution_category.rdf export-ignore
-/resources/vocab/standardization_level.rdf export-ignore
-/resources/vocab/test_resource_type.rdf export-ignore
 /scripts/composer/post_update export-ignore
 /scripts/docker export-ignore
 /scripts/git export-ignore

@@ -12,7 +12,7 @@ dependencies:
 id: ventuno_authoredon
 theme: ventuno
 region: content
-weight: -27
+weight: -28
 provider: null
 plugin: 'facet_block:authoredon'
 settings:

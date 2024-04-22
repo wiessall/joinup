@@ -1,0 +1,46 @@
+<?php
+
+/**
+ * @file
+ * Hook implementations for the Joinup flag module.
+ */
+
+declare(strict_types=1);
+
+use Drupal\Core\Access\AccessResult;
+use Drupal\Core\Access\AccessResultInterface;
+use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Session\AccountInterface;
+
+/**
+ * Implements hook_preprocess_views_view_fields().
+ */
+function joinup_flag_preprocess_views_view_field(array &$variables): void {
+  if ($variables['view']->id() === 'bookmarks' && $variables['field']->options['id'] === 'entity_id') {
+    $entity_type_manager = \Drupal::entityTypeManager();
+    $flag = $variables['row']->_entity;
+
+    if (in_array($flag->bundle(), ['bookmark_node', 'bookmark_rdf_entity'])) {
+      $entity_type = $flag->get('entity_type')->value;
+      $entity = $entity_type_manager->getStorage($entity_type)->load($flag->get('entity_id')->value);
+      $build = $entity_type_manager->getViewBuilder($entity->getEntityTypeId())->view($entity, 'view_mode_tile');
+      $variables['output'] = \Drupal::service('renderer')->renderRoot($build);
+    }
+  }
+}
+
+/**
+ * Implements hook_entity_access().
+ */
+function joinup_flag_entity_access(EntityInterface $entity, string $operation, AccountInterface $account): AccessResultInterface {
+  // Grant access to flagging entities,
+  // so that they can be shown in bookmarks listing.
+  if ($operation === 'view' && $entity->getEntityTypeId() === 'flagging') {
+    if (!$account->isAnonymous()) {
+      return AccessResult::allowed();
+    }
+    return AccessResult::forbidden();
+  }
+  // For other operations, use the default access behavior.
+  return AccessResult::neutral();
+}

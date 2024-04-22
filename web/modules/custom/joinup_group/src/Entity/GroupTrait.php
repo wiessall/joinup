@@ -163,7 +163,7 @@ trait GroupTrait {
   /**
    * {@inheritdoc}
    */
-  public function getContentCreators(): string {
+  public function getContentCreators(): ?string {
     $contentCreators = $this->getMainPropertyValue($this->getContentCreationFieldName());
 
     if (is_null($contentCreators)) {
