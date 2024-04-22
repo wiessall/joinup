@@ -175,7 +175,8 @@
             "drupal/core-composer-scaffold": true,
             "openeuropa/composer-artifacts": true,
             "phpstan/extension-installer": true,
-            "php-http/discovery": true
+            "php-http/discovery": true,
+            "ec-europa/toolkit-composer-plugin": true
         }
     },
     "autoload": {
