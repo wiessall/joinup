@@ -98,7 +98,7 @@ function joinup_rdf_update_110502(&$sandbox): string {
 /**
  * Remove EIF perspective data.
  */
-function joinup_rdf_update_110405(): void {
+function joinup_rdf_update_110503(): void {
   $db = \Drupal::database();
   $perms = [
     'create eif wrapper entity',
