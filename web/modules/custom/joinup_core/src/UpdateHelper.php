@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_core;
 
+use Drupal\Component\Datetime\TimeInterface;
 use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\node\NodeInterface;
@@ -20,9 +21,12 @@ class UpdateHelper implements ContainerInjectionInterface {
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
    *   The entity type manager.
+   * @param \Drupal\Component\Datetime\TimeInterface $time
+   *   The time service.
    */
   public function __construct(
     protected EntityTypeManagerInterface $entityTypeManager,
+    protected TimeInterface $time,
   ) {}
 
   /**
@@ -30,7 +34,8 @@ class UpdateHelper implements ContainerInjectionInterface {
    */
   public static function create(ContainerInterface $container) {
     return new static(
-      $container->get('entity_type.manager')
+      $container->get('entity_type.manager'),
+      $container->get('datetime.time')
     );
   }
 
@@ -79,10 +84,14 @@ class UpdateHelper implements ContainerInjectionInterface {
         'type' => 'simple_paragraph',
         'field_body' => $node->get($sourceField)->getValue(),
       ]);
-      $node->set($destinationField, ['entity' => $paragraph]);
       // Skip notifications created and sent by joinup_notification module.
       $node->skip_notification = TRUE;
-      $node->save();
+      $node->setNewRevision();
+      $node->set($destinationField, ['entity' => $paragraph])
+        ->setRevisionCreationTime($this->time->getCurrentTime())
+        ->setRevisionLogMessage('Automated update: Body converted to Layout Paragraphs')
+        ->setSyncing(TRUE)
+        ->save();
     }
 
     $sandbox['#finished'] = (int) empty($sandbox['nids']);
