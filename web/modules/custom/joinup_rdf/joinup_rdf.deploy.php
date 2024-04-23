@@ -8,6 +8,7 @@
 declare(strict_types=1);
 
 use Drupal\Component\Serialization\Json;
+use Drupal\Core\Serialization\Yaml;
 use Drupal\joinup_taxonomy\Entity\MappedTerm;
 use EasyRdf\Graph;
 
@@ -144,4 +145,146 @@ function joinup_rdf_deploy_110502(array &$sandbox): string {
 
   $sandbox['#finished'] = (int) empty($sandbox['document_to_licence']);
   return "Converted {$sandbox['progress']} out of {$sandbox['total']} documents";
+}
+
+/**
+ * Import EIF data.
+ */
+function joinup_rdf_deploy_110503(array &$sandbox): string {
+  $map = [
+    'http://data.europa.eu/eif/Layer' => 'eif_layer',
+    'http://data.europa.eu/eif/Model' => 'eif_model',
+    'http://data.europa.eu/eif/Principle' => 'eif_principle',
+    'http://data.europa.eu/eif/Recommendation' => 'eif_recommendation',
+    'http://joinup.eu/rdf_meta_entity/fields/type' => 'eif_solution_type',
+    'http://purl.org/dc/terms/description' => 'eif_description',
+  ];
+  $refs = ['eif_layer', 'eif_principle', 'eif_model', 'eif_solution_type'];
+  $storage = \Drupal::entityTypeManager()->getStorage('meta_entity');
+
+  if (!isset($sandbox['eif'])) {
+    $sandbox['eif'] = Yaml::decode(file_get_contents('private://eif.yml'));
+    $sandbox['eif_wrapper'] = Yaml::decode(file_get_contents('private://eif_wrapper.yml'));
+    $sandbox['total'] = count($sandbox['eif']);
+    $sandbox['progress'] = 0;
+  }
+
+  $count = 0;
+  while ($sandbox['eif'] && $count < 25) {
+    $uri = key($sandbox['eif']);
+    $data = current($sandbox['eif']);
+    unset($sandbox['eif'][$uri]);
+
+    $values = [
+      'type' => 'eif_perspective',
+      'target' => [
+        'target_type' => 'rdf_entity',
+        'target_id' => $data['http://joinup.eu/rdf_meta_entity/fields/target_id'][0]['value'],
+      ],
+      'uri' => $uri,
+    ];
+    foreach ($data as $predicate => $objects) {
+      if (isset($map[$predicate])) {
+        $fieldName = $map[$predicate];
+        foreach ($objects as $object) {
+          $value = $object['value'];
+          if (in_array($fieldName, $refs, TRUE)) {
+            // Term reference.
+            $value = MappedTerm::loadByUri($value)->id();
+          }
+          if ($fieldName === 'eif_description') {
+            // Formatted text needs a format.
+            $value = ['value' => $value, 'format' => 'basic_html'];
+          }
+          // Recommendation values were stored in eif_wrapper entity types.
+          if ($fieldName === 'eif_recommendation' && isset($sandbox['eif_wrapper'][$value])) {
+            $targetUri = $sandbox['eif_wrapper'][$value]['http://data.europa.eu/eif/adms/qualifier'][0]['value'] ?? NULL;
+            if (!$targetUri) {
+              // This recommendation is missing mandatory term reference URI.
+              continue;
+            }
+            $value = [
+              'target_id' => MappedTerm::loadByUri($targetUri)->id(),
+              'value' => $sandbox['eif_wrapper'][$value]['http://purl.org/dc/terms/description'][0]['value'] ?? '',
+              'format' => 'basic_html',
+            ];
+          }
+          $values[$fieldName][] = $value;
+        }
+      }
+    }
+    $storage->create($values)->save();
+
+    $sandbox['progress']++;
+    $count++;
+  }
+
+  $sandbox['#finished'] = (int) empty($sandbox['eif']);
+  return "Processed {$sandbox['progress']} out of {$sandbox['total']} EIF items";
+}
+
+/**
+ * Fully test the EIF data conversion.
+ */
+function joinup_rdf_deploy_110504(): void {
+  $eif = Yaml::decode(file_get_contents('private://eif.yml'));
+  $eifWrapper = Yaml::decode(file_get_contents('private://eif_wrapper.yml'));
+  $descriptionPredicates = [
+    'http://purl.org/dc/terms/description',
+    'http://purl.org/dc/elements/1.1/description',
+  ];
+  $storage = \Drupal::entityTypeManager()->getStorage('meta_entity');
+  $mapper = \Drupal::getContainer()->get('rdf_sync.mapper');
+  $mappings = $mapper->getMappings(entityTypeId: 'meta_entity', bundle: 'eif_perspective');
+  // Type is always 'eif_perspective'.
+  unset($mappings['type']);
+
+  /** @var \Drupal\eif\Entity\EifPerspectiveInterface[] $entities */
+  $entities = $storage->loadByProperties(['type' => 'eif_perspective']);
+
+  if (count($entities) !== count($eif)) {
+    throw new \Exception(sprintf('Expected %s meta-entities, got %s', count($eif), count($entities)));
+  }
+  foreach ($entities as $id => $entity) {
+    if (!$uri = $entity->getUri()) {
+      throw new \Exception("Meta-entity with ID $id lacks a URI");
+    }
+    if (!isset($eif[$uri])) {
+      throw new \Exception("Meta-entity with ID $id and URI $uri is not in the expected list");
+    }
+
+    foreach ($mappings as $fieldName => $columns) {
+      $field = $entity->get($fieldName);
+      foreach ($columns as $column => $mapping) {
+        foreach ($field as $delta => $fieldItem) {
+          $actualValue = $fieldItem->$column;
+          if ($fieldName === 'eif_recommendation') {
+            // Before update, this field did refer the eif_wrapper entities. We
+            // have to extract values from $eifWrapper variable.
+            $wrapper = $eifWrapper[$eif[$uri]['http://data.europa.eu/eif/Recommendation'][$delta]['value']];
+            $qualifiedUri = $column === 'target_id' ? 'http://data.europa.eu/eif/adms/qualifier' : 'http://purl.org/dc/terms/description';
+            $expectedValue = $wrapper[$qualifiedUri][0]['value'] ?? '';
+          }
+          else {
+            $expectedValue = $eif[$uri][$mapping->predicate][$delta]['value'];
+          }
+
+          if (in_array($mapping->predicate, $descriptionPredicates, TRUE)) {
+            // Apply processing to expected value to make comparison possible.
+            $expectedValue = (string) check_markup($expectedValue, 'basic_html');
+          }
+
+          // Convert URI to TID, when appropriate.
+          $expectedValue = $column === 'target_id' ? (int) MappedTerm::loadByUri($expectedValue)->id() : $expectedValue;
+          if ($actualValue != $expectedValue) {
+            throw new \Exception("Meta-entity with ID $id, field $fieldName, delta $delta, column $column expected '$expectedValue' got '$actualValue'");
+          }
+        }
+      }
+    }
+  }
+
+  $fileSystem = \Drupal::getContainer()->get('file_system');
+  $fileSystem->unlink('private://eif.yml');
+  $fileSystem->unlink('private://eif_wrapper.yml');
 }

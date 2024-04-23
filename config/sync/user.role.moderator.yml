@@ -50,7 +50,6 @@ dependencies:
     - pipeline
     - rdf_draft
     - rdf_entity
-    - rdf_meta_entity
     - role_delegation
     - sitewide_alert
     - solution
@@ -117,8 +116,7 @@ permissions:
   - 'create custom_page content'
   - 'create discussion content'
   - 'create discussion_logo media'
-  - 'create eif wrapper entity'
-  - 'create eif_perspective rdf-meta-entity'
+  - 'create eif_perspective meta-entity'
   - 'create event_logo media'
   - 'create field_is_eif_category'
   - 'create field_is_eif_recommendation'
@@ -162,7 +160,6 @@ permissions:
   - 'delete any news_logo media'
   - 'delete any owner rdf entity'
   - 'delete any solution_logo media'
-  - 'delete eif wrapper entity'
   - 'delete paragraph content 1_column_layout'
   - 'delete paragraph content 2_column_featured_left'
   - 'delete paragraph content 2_column_featured_right'
@@ -297,8 +294,7 @@ permissions:
   - 'unarchived community content'
   - 'unfeature entity'
   - 'update collection_settings meta-entity'
-  - 'update eif wrapper entity'
-  - 'update eif_perspective rdf-meta-entity'
+  - 'update eif_perspective meta-entity'
   - 'update highlighted_content entityqueue'
   - 'update highlighted_event entityqueue'
   - 'update homepage_topics entityqueue'
@@ -331,7 +327,6 @@ permissions:
   - 'vbo joinup unarchive action'
   - 'view all sitewide alert revisions'
   - 'view any unpublished content'
-  - 'view eif wrapper entity'
   - 'view field_is_eif_category'
   - 'view field_is_eif_recommendation'
   - 'view licence overview page'
