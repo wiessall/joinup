@@ -78,7 +78,7 @@ function joinup_core_requirements_alter(array &$requirements): void {
     // Remove introductory text ('The following changes were detected...').
     $description = substr($description, 78);
     // Unset if 'EIF Wrapper' & 'EIF Wrapper Type' are the sole offending items.
-    $pattern = '@(?:EIF Wrapper(?: Type)?The EIF Wrapper(?: Type)? entity type needs to be installed.){2}$@';
+    $pattern = '@(?:EIF Wrapper(?: Type)?The EIF Wrapper(?: Type)? entity type needs to be installed.\s*){2}$@';
     if (preg_match($pattern, $description)) {
       unset($requirements['entity_update']);
     }
