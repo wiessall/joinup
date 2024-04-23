@@ -606,10 +606,10 @@ class JoinupParagraphsContext extends RawDrupalContext {
    *   Field name.
    * @param \Behat\Gherkin\Node\TableNode $table
    *   Paragraph values.
-   * @param string|null $layoutId
+   * @param string $layoutId
    *   The ID of the layout paragraph type to add the paragraph into. Optional,
    *   Defaults to the one-column paragraph with ID "layout_onecol".
-   * @param string|null $regionId
+   * @param string $regionId
    *   The field name in the layout paragraph to add the paragraph into.
    *   Optional, defaults to "content".
    *
