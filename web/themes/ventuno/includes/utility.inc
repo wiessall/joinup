@@ -323,7 +323,6 @@ function _ventuno_build_permalink(): ?string {
  * @param array $variables
  *   Template variables.
  *
- * @see ventuno_theme_suggestions_eif_wrapper_alter()
  * @see ventuno_theme_suggestions_taxonomy_term_alter()
  */
 function _ventuno_theme_suggestions_alter(array &$suggestions, array $variables): void {
