@@ -35,6 +35,9 @@ function joinup_test_install($is_syncing): void {
         'name' => $data['name'],
         'weight' => $parentWeight,
       ]);
+      if (isset($data['uri'])) {
+        $term->set('uri', $data['uri']);
+      }
       $term->save();
       $parentTermId = $term->id();
       $termIds[] = $parentTermId;
@@ -46,6 +49,9 @@ function joinup_test_install($is_syncing): void {
           'weight' => $childWeight,
           'description' => $child['description'] ?? '',
         ]);
+        if (isset($child['uri'])) {
+          $term->set('uri', $child['uri']);
+        }
         $term->save();
         $termIds[] = $term->id();
       }
