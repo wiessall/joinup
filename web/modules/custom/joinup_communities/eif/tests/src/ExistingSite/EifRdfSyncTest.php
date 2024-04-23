@@ -8,7 +8,6 @@ use Drupal\Core\Serialization\Yaml;
 use Drupal\Tests\joinup_test\ExistingSite\JoinupExistingSiteTestBase;
 use Drupal\joinup_taxonomy\Entity\MappedTerm;
 use Drupal\meta_entity\Entity\MetaEntity;
-use Drupal\rdf_sync\RdfSyncConnection;
 
 /**
  * Tests EIF perspective synchronization with the RDF backend.
@@ -85,7 +84,9 @@ class EifRdfSyncTest extends JoinupExistingSiteTestBase {
         }
       }
       SPARQL;
-    $results = RdfSyncConnection::query($query);
+    /** @var \Drupal\rdf_sync\RdfSyncConnectionInterface $connection */
+    $connection = \Drupal::service('rdf_sync.connection');
+    $results = $connection->query($query);
     foreach ($results as $result) {
       $predicate = $result->predicate->getUri();
       if ($predicate === 'http://data.europa.eu/eif/Recommendation') {
@@ -105,8 +106,8 @@ class EifRdfSyncTest extends JoinupExistingSiteTestBase {
     \Drupal::getContainer()->get('rdf_sync.synchronizer')->destruct();
 
     // Check that after deletion, triples, including blank nodes, were removed.
-    $results = RdfSyncConnection::query($query);
-    $this->assertEmpty($results->getArrayCopy());
+    $results = $connection->query($query);
+    $this->assertSame(0, $results->numRows());
   }
 
   /**
