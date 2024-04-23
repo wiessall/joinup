@@ -19,8 +19,6 @@ Feature:
       | /admin/reporting/group-administrators/export | moderator     | 200  |
       | /admin/reporting/legal-notice-report         | authenticated | 403  |
       | /admin/reporting/legal-notice-report         | moderator     | 200  |
-      | /admin/reporting/pipeline-log                | authenticated | 403  |
-      | /admin/reporting/pipeline-log                | moderator     | 200  |
       | /admin/reporting/solutions-by-type           | authenticated | 403  |
       | /admin/reporting/solutions-by-type           | moderator     | 200  |
       | /admin/reporting/solutions-by-licences       | authenticated | 403  |
@@ -37,7 +35,6 @@ Feature:
       | Solutions by solution type            |
       | Solutions by licences                 |
       | Statistics per group                  |
-      | Pipeline report                       |
       | Legal notice report                   |
 
   # This scenario is a light test to avoid regressions.

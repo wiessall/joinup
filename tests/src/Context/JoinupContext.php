@@ -2314,17 +2314,6 @@ JS;
   }
 
   /**
-   * Wait until a running pipeline batch job has finished.
-   *
-   * @Given I wait for the pipeline batch job to finish
-   */
-  public function iWaitForThePipelineBatchJobToFinish() {
-    while ($this->getSession()->getPage()->find('css', 'meta[http-equiv=\'Refresh\']')) {
-      $this->getSession()->reload();
-    }
-  }
-
-  /**
    * Asserts that a certain link points to a specific path.
    *
    * Example: Then the link "Login" should point to "user/login"
