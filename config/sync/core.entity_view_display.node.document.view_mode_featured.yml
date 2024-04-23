@@ -22,11 +22,7 @@ dependencies:
     - field.field.node.document.og_audience
     - node.type.document
   module:
-    - field_delimiter
-    - field_formatter_range
     - file_url
-    - joinup_core
-    - joinup_slick
     - options
     - template_suggestion
     - user
@@ -37,14 +33,6 @@ targetEntityType: node
 bundle: document
 mode: view_mode_featured
 content:
-  abstract:
-    type: string
-    label: hidden
-    settings:
-      link_to_entity: false
-    third_party_settings: {  }
-    weight: 0
-    region: content
   field_file:
     type: file_url_default
     label: hidden
@@ -63,30 +51,6 @@ content:
         template_suggestion: comma_separated
     weight: 3
     region: content
-  field_paragraphs_body:
-    type: filtered_entity_reference_bundles
-    label: hidden
-    settings:
-      view_mode: message_digest
-      link: ''
-      filtered_entity_bundles:
-        - simple_paragraph
-        - text
-    third_party_settings:
-      field_delimiter:
-        delimiter: ''
-      field_formatter_range:
-        order: 0
-        limit: 1
-        offset: 0
-      joinup_slick:
-        preset: ''
-        field_label: true
-        custom_label: ''
-      template_suggestion:
-        template_suggestion: ''
-    weight: 0
-    region: content
   field_type:
     type: list_default
     label: hidden
@@ -97,12 +61,14 @@ content:
     weight: 1
     region: content
 hidden:
+  abstract: true
   featured: true
   field_comments: true
   field_document_logo: true
   field_document_publication_date: true
   field_document_spatial_coverage: true
   field_licence: true
+  field_paragraphs_body: true
   field_shared_in: true
   field_short_title: true
   field_site_featured: true
