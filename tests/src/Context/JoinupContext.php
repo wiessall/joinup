@@ -2103,16 +2103,16 @@ class JoinupContext extends RawDrupalContext {
   }
 
   /**
-   * Waits until CSS transitions and animations finish.
+   * Waits until Glide animations finish.
    *
    * @param string $seconds
    *   Number of seconds to wait.
    *
-   * @Then I wait up to :seconds seconds for CSS transitions to finish
+   * @Then I wait up to :seconds seconds for Glide animations to finish
    */
-  public function waitForCssAnimations(string $seconds): void {
+  public function waitForGlideAnimations(string $seconds): void {
     $this->assertWaitJs($seconds, '(function() {
-        return document.getAnimations({}).length < 1;
+        return typeof jQuery === "undefined" || jQuery("glide--slider.glide-animating").length === 0;
     }())');
   }
 
