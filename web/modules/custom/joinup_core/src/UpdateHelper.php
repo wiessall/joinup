@@ -80,6 +80,10 @@ class UpdateHelper implements ContainerInjectionInterface {
     $nids = array_splice($sandbox['nids'], 0, 100);
     foreach ($nodeStorage->loadMultiple($nids) as $node) {
       assert($node instanceof NodeInterface);
+      if ($node->get($sourceField)->isEmpty()) {
+        continue;
+      }
+
       $layoutParagraph = Paragraph::create([
         'type' => 'layout',
       ]);
