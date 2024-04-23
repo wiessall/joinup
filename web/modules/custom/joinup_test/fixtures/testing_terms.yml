@@ -25,6 +25,16 @@ topic:
     children:
       - name: 'Demography'
       - name: 'E-inclusion'
+eira:
+  - name: 'Various terms'
+    children:
+      - name: 'Data Owner'
+owner_type:
+  - name: Company
+  - name: Industry consortium
+status:
+  - name: Completed
+  - uri: 'http://purl.org/adms/status/Completed'
 legal_type:
   - name: 'Can'
     children:
