@@ -2108,24 +2108,26 @@ class JoinupContext extends RawDrupalContext {
    * @param string $seconds
    *   Number of seconds to wait.
    *
-   * @throws \Exception
-   *   Thrown when the element doesn't become visible within the given time.
-   *
    * @Then I wait up to :seconds seconds for CSS transitions to finish
    */
   public function waitForCssAnimations(string $seconds): void {
-    $script = <<<JS
-    (function() {
-      return document.getAnimations({}).length < 1;
-    }());
-JS;
-    $res = $this->getSession()->wait(1000 * $seconds, $script);
-    if (!$res) {
-      throw new \Exception(sprintf(
-        "An element on the page has unfinished CSS transition after '%s' seconds.",
-        $seconds
-      ));
-    }
+    $this->assertWaitJs($seconds, '(function() {
+        return document.getAnimations({}).length < 1;
+    }())');
+  }
+
+  /**
+   * Waits until Slick animations finish.
+   *
+   * @param string $seconds
+   *   Number of seconds to wait.
+   *
+   * @Then I wait up to :seconds seconds for Slick animations to finish
+   */
+  public function waitForSlickAnimations(string $seconds): void {
+    $this->assertWaitJs($seconds, '(function() {
+        return typeof jQuery === "undefined" || jQuery("[data-slick].slick-animating").length === 0;
+    }())');
   }
 
   /**
