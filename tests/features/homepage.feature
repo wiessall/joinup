@@ -107,6 +107,7 @@ Feature: Homepage
 
     When I am on the homepage
     Then I should see "Aliens" as the Highlighted content
+    And I should see the text "Conventional studies investigating the effects of reduced gravity on muscle mass and function have used a ground control group that is not directly comparable to the space experimental group."
     And I should see the link "Related content"
     When I click "Related content"
     Then I should be on the advanced search page
@@ -117,6 +118,7 @@ Feature: Homepage
     Examples:
       | type     | abstract source field |
       | document | abstract              |
+      | document | field_paragraphs_body |
       | news     | body                  |
       | event    | body                  |
 
