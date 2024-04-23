@@ -80,14 +80,41 @@ class UpdateHelper implements ContainerInjectionInterface {
     $nids = array_splice($sandbox['nids'], 0, 100);
     foreach ($nodeStorage->loadMultiple($nids) as $node) {
       assert($node instanceof NodeInterface);
+      $layoutParagraph = Paragraph::create([
+        'type' => 'layout',
+      ]);
+      $layoutParagraph->setBehaviorSettings(
+        'layout_paragraphs',
+        [
+          'layout' => 'layout_onecol',
+          'config' => ['label' => ''],
+          'parent_uuid' => NULL,
+          'region' => NULL,
+        ]
+      );
       $paragraph = Paragraph::create([
         'type' => 'simple_paragraph',
         'field_body' => $node->get($sourceField)->getValue(),
       ]);
+      $paragraph->setBehaviorSettings(
+        'layout_paragraphs',
+        [
+          'parent_uuid' => $layoutParagraph->uuid(),
+          'region' => 'content',
+        ]
+      );
+
       // Skip notifications created and sent by joinup_notification module.
       $node->skip_notification = TRUE;
       $node->setNewRevision();
-      $node->set($destinationField, ['entity' => $paragraph])
+      $node
+        ->set(
+          $destinationField,
+          [
+            ['entity' => $layoutParagraph],
+            ['entity' => $paragraph],
+          ],
+        )
         ->setRevisionCreationTime($this->time->getCurrentTime())
         ->setRevisionLogMessage('Automated update: Body converted to Layout Paragraphs')
         ->setSyncing(TRUE)
