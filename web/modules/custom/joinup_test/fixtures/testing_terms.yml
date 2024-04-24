@@ -29,12 +29,26 @@ eira:
   - name: 'Various terms'
     children:
       - name: 'Data Owner'
+      - name: 'Implementing Guideline'
+      - name: 'Logging Service'
 owner_type:
   - name: Company
   - name: Industry consortium
 status:
   - name: Completed
-  - uri: 'http://purl.org/adms/status/Completed'
+    uri: 'http://purl.org/adms/status/Completed'
+language:
+  - name: Flemish
+spatial:
+  - name: Belgium
+  - name: Switzerland
+  - name: 'European Union'
+  - name: Luxembourg
+  - name: Greece
+file_type:
+  - name: 'HTML'
+representation technique:
+  - name: 'Datalog'
 legal_type:
   - name: 'Can'
     children:

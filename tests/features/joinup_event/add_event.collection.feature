@@ -62,7 +62,7 @@ Feature: "Add event" visibility options.
       | Short title           | Amazing event                         |
       | Description           | This is going to be an amazing event. |
       | File description      | Taxi discount voucher.                |
-      | Geographical coverage | France                                |
+      | Geographical coverage | Belgium                               |
     And I press "Add another item" at the "Virtual location" field
     And I fill the start date of the Date widget with "2018-08-29"
     And I fill the start time of the Date widget with "23:59:59"

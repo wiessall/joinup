@@ -56,7 +56,7 @@ Feature: Collections/Solutions settings
     And I attach the file "logo.png" to "Logo"
     And I select "Flemish" from "Language"
     And I select "EU and European Policies" from "Topic"
-    And I select "Citizen" from "Solution type"
+    And I select "Logging Service" from "Solution type"
 
     And I press "Add existing" at the "Owner" field
     And I fill in "Owner" with "Jonny inc."

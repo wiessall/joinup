@@ -221,7 +221,7 @@ Feature: Collection moderation
     And I press "Add new" at the "Owner" field
     And I wait for AJAX to finish
     And I fill in "Name" with "Katsumoto"
-    And I check the box "Academia/Scientific organisation"
+    And I check the box "Industry consortium"
     And I expand the "Additional fields" accordion section
     Then the "Additional fields" accordion section should be active
     And I attach the file "logo.png" to "Logo"

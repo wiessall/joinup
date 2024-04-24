@@ -55,7 +55,7 @@ Feature: Collection content
       | Name                  | Costas Papazoglou                                                   |
       | E-mail address        | CostasPapazoglou@example.com                                        |
     And I select "Data gathering and processing" from "Topic"
-    And I select "Networking Infrastructure Enablers" from "Solution type"
+    And I select "Logging Service" from "Solution type"
     And I press "Add existing" at the "Owner" field
     And I fill in "Owner" with "Particle sweeper"
     And I press "Add owner"
