@@ -31,12 +31,20 @@ eira:
       - name: 'Data Owner'
       - name: 'Implementing Guideline'
       - name: 'Logging Service'
+  - name: 'Public Service Provider'
+    uri: 'http://data.europa.eu/dr8/PublicServiceProvider'
 owner_type:
   - name: Company
   - name: Industry consortium
+  - name: 'Non-Governmental Organisation'
+  - name: 'Private Individual(s)'
+  - name: 'National authority'
+  - name: 'Non-Profit Organisation'
 status:
   - name: Completed
     uri: 'http://purl.org/adms/status/Completed'
+  - name: Deprecated
+    uri: 'http://purl.org/adms/status/Deprecated'
 language:
   - name: Flemish
 spatial:
@@ -47,8 +55,13 @@ spatial:
   - name: Greece
 file_type:
   - name: 'HTML'
+  - name: 'ZIP'
 representation technique:
   - name: 'Datalog'
+  - name: 'Web Ontology Language Full/DL/Lite'
+licence_type:
+  - name: 'Attribution'
+  - name: 'Public domain'
 legal_type:
   - name: 'Can'
     children:
