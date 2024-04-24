@@ -7,7 +7,7 @@ Feature: Owner access
   Scenario: Anonymous user contact information access
     Given owner:
       | name          | type                             |
-      | Daisy Johnson | Academia/Scientific organisation |
+      | Daisy Johnson | Industry consortium |
 
     Then I should have 1 owner
 

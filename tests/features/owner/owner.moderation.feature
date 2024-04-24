@@ -30,7 +30,7 @@ Feature: Owner moderation
     # An authenticated user can create an owner in published state.
     When I click the 'Additional fields' tab
     And I press "Add new" at the "Owner" field
-    And I check the box "Academia/Scientific organisation"
+    And I check the box "Industry consortium"
     And I fill in "Name" with "EU healthy movement"
     When I press "Create owner"
     Then I should see "EU healthy movement"

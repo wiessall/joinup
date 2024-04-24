@@ -67,7 +67,7 @@ Feature:
     And I fill in "Owner" with "Leechidna"
     And I select "Flemish" from "Language"
     And I select "EU and European Policies" from "Topic"
-    And I select "Citizen" from "Solution type"
+    And I select "Logging Service" from "Solution type"
     And I press "Add owner"
     And I press "Save"
     Then I should see the heading "Solution API example"

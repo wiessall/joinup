@@ -83,7 +83,6 @@ Feature: "Add solution" visibility options.
     And I should see the text "Only facilitators and authors can create content"
     # Regression test to endure that the language terms "Multilingual Code" are not present.
     And the available options in the "Language" select should not include the "Multilingual Code"
-    And the "Solution type" field should contain the "EIRA Ontology Viewpoint, Legal View, Deprecated" option groups
     When I fill in the following:
       | Title                 | Espresso is the solution  |
       | Abstract              | Abstract used for testing |
@@ -115,8 +114,8 @@ Feature: "Add solution" visibility options.
     # Regression test for the non required field, 'Logo'.
     # @see: https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-3328
     And I should not see the following error messages:
-      | error messages            |
-      | Logo field is required.   |
+      | error messages          |
+      | Logo field is required. |
     But I should see a logo on the header
     And I should see the heading "Espresso is the solution"
     When I am logged in as "Ruth Lee"
@@ -191,7 +190,7 @@ Feature: "Add solution" visibility options.
       | Title       | PHP comments parser                             |
       | Description | A simple parser that goes through PHP comments. |
     And I select "Data gathering and processing" from "Topic"
-    And I select "Implementing Guideline" from "Solution type"
+    And I select "Data Owner" from "Solution type"
 
     # Submit the incomplete form, so error messages about missing fields will
     # be shown.
@@ -225,8 +224,8 @@ Feature: "Add solution" visibility options.
       | collection  | Ocean studies                                     |
       | state       | published                                         |
     And the following owner:
-      | name                | type                             |
-      | University of Basel | Academia/Scientific organisation |
+      | name                | type                |
+      | University of Basel | Industry consortium |
 
     Then I should have 1 solution
 
