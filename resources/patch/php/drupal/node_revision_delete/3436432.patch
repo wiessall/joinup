@@ -1,0 +1,55 @@
+From 4dbdc6b3b205c9bb6f6dad5d65c67b55cb158f39 Mon Sep 17 00:00:00 2001
+From: Adrian Lorenc <47258-alorenc@users.noreply.drupalcode.org>
+Date: Wed, 27 Mar 2024 11:28:01 +0000
+Subject: [PATCH] Update NodeRevisionDelete.php
+
+---
+ src/NodeRevisionDelete.php | 20 ++++++++++++++++++++
+ 1 file changed, 20 insertions(+)
+
+diff --git a/src/NodeRevisionDelete.php b/src/NodeRevisionDelete.php
+index 737c32f..65d051e 100644
+--- a/src/NodeRevisionDelete.php
++++ b/src/NodeRevisionDelete.php
+@@ -121,6 +121,11 @@ class NodeRevisionDelete implements NodeRevisionDeleteInterface {
+    * {@inheritdoc}
+    */
+   public function nodeExistsInQueue(int $nid): int {
++    // The queue table does not exist, and a node was not added to queue.
++    if (!$this->queueTableExists()) {
++      return 0;
++    }
++
+     $query = $this->connection->select(DatabaseQueue::TABLE_NAME, 'q');
+     $query->condition('name', 'node_revision_delete');
+     $query->condition('data', serialize($nid));
+@@ -136,6 +141,11 @@ class NodeRevisionDelete implements NodeRevisionDeleteInterface {
+    * {@inheritdoc}
+    */
+   public function deleteItemFromQueue(int $item_id): void {
++    // Nothing to delete as table was not created yet.
++    if (!$this->queueTableExists()) {
++      return;
++    }
++
+     $this->connection->delete(DatabaseQueue::TABLE_NAME)
+       ->condition('item_id', $item_id)
+       ->execute();
+@@ -157,4 +167,14 @@ class NodeRevisionDelete implements NodeRevisionDeleteInterface {
+     return FALSE;
+   }
+ 
++  /**
++   * Checks if the queue table exists.
++   *
++   * @return bool
++   *   TRUE if the table exists, otherwise FALSE.
++   */
++  protected function queueTableExists(): bool {
++    return $this->connection->schema()->tableExists(DatabaseQueue::TABLE_NAME);
++  }
++
+ }
+-- 
+GitLab
+

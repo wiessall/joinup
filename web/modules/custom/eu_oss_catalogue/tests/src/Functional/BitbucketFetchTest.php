@@ -20,7 +20,7 @@ class BitbucketFetchTest extends FetchTestBase {
   ];
 
   /**
-   * Tests fetching all solutions from a GitLab self-hosting platform.
+   * Tests fetching all solutions from a Bitbucket platform.
    */
   public function testSelfHostedAll(): void {
     $this->fetchSolutions('hosting_platform:bitbucket_test', 1);
