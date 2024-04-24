@@ -13,10 +13,7 @@ use Drupal\Core\Language\LanguageInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Logger\LoggerChannelInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
-use Drupal\Core\Utility\Error;
 use Drupal\eu_oss_catalogue\Entity\OssSolutionInterface;
-use Drupal\eu_oss_catalogue\Exception\UnresolvableValueException;
-use Drupal\eu_oss_catalogue\Model\FieldOverridingPolicy;
 use Drupal\eu_oss_catalogue\Model\Project;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -87,7 +84,7 @@ abstract class EuOssCatalogueParserPluginBase extends PluginBase implements EuOs
   /**
    * {@inheritdoc}
    */
-  final public function parse(Project $project, EuOssCatalogueProviderInterface $provider): ?OssSolutionInterface {
+  final public function parse(Project $project, EuOssCatalogueProviderInterface $provider): OssSolutionInterface {
     $nodeStorage = $this->entityTypeManager->getStorage('node');
 
     // For now, we're using the solution URL as UUID.
@@ -96,93 +93,33 @@ abstract class EuOssCatalogueParserPluginBase extends PluginBase implements EuOs
     $solution = $solutions ? reset($solutions) : $nodeStorage->create(['type' => 'oss_solution']);
     \assert($solution instanceof OssSolutionInterface);
 
-    try {
-      // Populate project metadata array. This array is used by some parsers to
-      // add metadata to the final stored node via resolvers.
-      $metadata = $this->getMetadata($project);
+    // Populate project metadata array. This array is used by some parsers to
+    // add metadata to the final stored node via resolvers.
+    $metadata = $this->getMetadata($project);
 
-      $latestReleaseDate = $project->latestReleaseDate ?
-        new DrupalDateTime($project->latestReleaseDate) : NULL;
+    $latestReleaseDate = $project->latestReleaseDate ?
+      new DrupalDateTime($project->latestReleaseDate) : NULL;
 
-      $solution
-        ->set('title', $this->getTitle($project, $metadata))
-        ->set('oss_git_url', $project->url)
-        ->set('oss_hosting_platform', $project->platform)
-        ->set('oss_default_branch', $project->defaultBranch)
-        ->set('oss_git_forks', $project->numberOfForks)
-        ->set('oss_git_stars', $project->numberOfStars)
-        ->set('oss_git_open_issues', $project->numberOfIssues)
-        ->set('oss_software_version', $project->latestReleaseTag)
-        ->set('oss_release_date', $latestReleaseDate?->format('Y-m-d'))
-        ->set('oss_platform_reference', $project->platformReference)
-        ->set('oss_git_description', [
-          'value' => $project->description,
-          'format' => 'markdown',
-        ])
-        ->set('oss_logo', $project->logo)
-        ->set('oss_git_open_pull_requests', $project->numberOfPullRequests)
-        ->addProvider($provider);
+    $solution
+      ->set('title', $this->getTitle($project, $metadata))
+      ->set('oss_git_url', $project->url)
+      ->set('oss_hosting_platform', $project->platform)
+      ->set('oss_default_branch', $project->defaultBranch)
+      ->set('oss_git_forks', $project->numberOfForks)
+      ->set('oss_git_stars', $project->numberOfStars)
+      ->set('oss_git_open_issues', $project->numberOfIssues)
+      ->set('oss_software_version', $project->latestReleaseTag)
+      ->set('oss_release_date', $latestReleaseDate?->format('Y-m-d'))
+      ->set('oss_platform_reference', $project->platformReference)
+      ->set('oss_git_description', [
+        'value' => $project->description,
+        'format' => 'markdown',
+      ])
+      ->set('oss_logo', $project->logo)
+      ->set('oss_git_open_pull_requests', $project->numberOfPullRequests)
+      ->addProvider($provider);
 
-      $this->doParse($solution, $project, $metadata, $provider);
-    }
-    catch (\Throwable $exception) {
-      Error::logException($this->logger, $exception);
-      return NULL;
-    }
-
-    foreach ($solution->getFields(FALSE) as $fieldName => $fieldItemList) {
-      // It's a convention that all fields are prefixed with oss_*.
-      if (!str_starts_with($fieldName, 'oss_')) {
-        continue;
-      }
-
-      $settings = $this->getFieldSettings($fieldItemList);
-      if ($settings === NULL) {
-        // This field has no EU OSS Catalogue third-party settings.
-        continue;
-      }
-
-      /** @var array[] $resolvers */
-      $resolvers =& $settings['resolvers'];
-      $override = FieldOverridingPolicy::from($settings['override']);
-
-      if ($override === FieldOverridingPolicy::PRESERVE_NOT_EMPTY && !$fieldItemList->isEmpty()) {
-        // Don't override a field not-empty field.
-        continue;
-      }
-
-      // We don't allow resolvers to modify directly the original field item
-      // list because this is passed only for read-only purposes. Resolvers
-      // should use this object only to extract useful info about the field or
-      // the host entity.
-      $fieldItemListCopy = clone $fieldItemList;
-
-      $resolved = NULL;
-      foreach ($resolvers as ['plugin' => $pluginId, 'config' => $config]) {
-        $resolver = $this->getResolver($pluginId, $config);
-        try {
-          $resolver->resolve($resolved, $project, $metadata, $fieldItemListCopy);
-          $this->checkResolved($resolved, $resolver);
-        }
-        catch (UnresolvableValueException $exception) {
-          Error::logException($this->logger, $exception);
-          // Fail softly, don't set this field.
-          continue 2;
-        }
-      }
-
-      if ($override !== FieldOverridingPolicy::RESOLVED_NOT_EMPTY || $resolved) {
-        // Populate the node field.
-        foreach ($resolved as $langcode => $values) {
-          // Create a new translation on demand.
-          if (!$solution->hasTranslation($langcode)) {
-            $solution->addTranslation($langcode, $solution->toArray());
-          }
-          // An empty array unsets the field.
-          $solution->getTranslation($langcode)->set($fieldName, $values ?: NULL);
-        }
-      }
-    }
+    $this->doParse($solution, $project, $metadata, $provider);
 
     return $solution;
   }
@@ -199,7 +136,7 @@ abstract class EuOssCatalogueParserPluginBase extends PluginBase implements EuOs
    * @param \Drupal\eu_oss_catalogue\EuOssCatalogueProviderInterface $provider
    *   The provider plugin instance.
    */
-  protected function doParse(OssSolutionInterface $solution, Project $project, array $metadata, EuOssCatalogueProviderInterface $provider): void {}
+  abstract protected function doParse(OssSolutionInterface $solution, Project $project, array $metadata, EuOssCatalogueProviderInterface $provider): void;
 
   /**
    * Configures and returns a resolver given its plugin ID and configuration.
@@ -226,9 +163,7 @@ abstract class EuOssCatalogueParserPluginBase extends PluginBase implements EuOs
    * @return array
    *   The project's metadata.
    */
-  protected function getMetadata(Project $project): array {
-    return [];
-  }
+  abstract protected function getMetadata(Project $project): array;
 
   /**
    * Returns the OSS solution title.

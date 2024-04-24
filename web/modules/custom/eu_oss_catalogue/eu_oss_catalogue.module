@@ -7,15 +7,19 @@
 
 declare(strict_types=1);
 
+use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Field\BaseFieldDefinition;
 use Drupal\Core\Field\FieldDefinitionInterface;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Session\AccountInterface;
 use Drupal\eu_oss_catalogue\Entity\OssContact;
 use Drupal\eu_oss_catalogue\Entity\OssContractor;
 use Drupal\eu_oss_catalogue\Entity\OssSolution;
+use Drupal\eu_oss_catalogue\Entity\OssSolutionInterface;
 use Drupal\eu_oss_catalogue\Plugin\Field\RelevantField;
 use Drupal\eu_oss_catalogue\Plugin\Field\RelevantLanguageCode;
+use Drupal\node\NodeInterface;
 
 /**
  * Implements hook_entity_bundle_info_alter().
@@ -46,6 +50,10 @@ function eu_oss_catalogue_form_views_exposed_form_alter(array &$form, FormStateI
       '#options' => ['' => t('- Any -')] + $providerPluginManager->getDefinitionsAsOptions('label'),
       '#default_value' => $form['oss_source']['#default_value'],
     ];
+
+    // Use yes-no instead of true-false.
+    $form['oss_archived']['#options'][1] = t('Yes');
+    $form['oss_archived']['#options'][0] = t('No');
   }
 }
 
@@ -119,4 +127,48 @@ function eu_oss_catalogue_entity_bundle_field_info_alter(array &$fields, EntityT
       ->setDisplayConfigurable('view', TRUE)
       ->setClass(RelevantField::class);
   }
+}
+
+/**
+ * Implements hook_node_access().
+ */
+function eu_oss_catalogue_node_access(NodeInterface $entity, string $operation, AccountInterface $account): AccessResult {
+  if (!$entity instanceof OssSolutionInterface || $operation != 'view') {
+    return AccessResult::neutral();
+  }
+
+  // Only admin can view archived solutions.
+  return AccessResult::forbiddenIf(
+    $entity->isArchived() &&
+    !$account->hasPermission('administer eu oss catalogue')
+  )->addCacheableDependency($entity);
+}
+
+/**
+ * Implements hook_cron().
+ */
+function eu_oss_catalogue_cron(): void {
+  $state = \Drupal::state();
+  $request_time = \Drupal::time()->getRequestTime();
+  $last_check = $state->get('eu_oss_catalogue.last_check', 0);
+  // 24Hours.
+  $interval = 86400;
+  if (($request_time - $last_check) < $interval) {
+    return;
+  }
+
+  /** @var \Drupal\eu_oss_catalogue\EuOssCataloguePluginManagerInterface $providerPluginManager */
+  $providerPluginManager = \Drupal::service('plugin.manager.eu_oss_catalogue.provider');
+  foreach ($providerPluginManager->getDefinitionsAsOptions('label') as $provider => $label) {
+    try {
+      \Drupal::service('eu_oss_catalogue')->fetch($provider);
+      \Drupal::logger('eu_oss_catalogue')->info('OSS fetch data ' . $provider . ' completed successfully.');
+    }
+    catch (\Exception $e) {
+      \Drupal::logger('eu_oss_catalogue')->error('An error occurred while processing the data retrieval of ' . $provider . ': @error', ['@error' => $e->getMessage()]);
+    }
+  }
+  // Establish the timestamp as 2 AM of the current day.
+  $state->set('eu_oss_catalogue.last_check', strtotime(date('Y-m-d', $request_time) . ' 2:00:00'));
+  \Drupal::logger('eu_oss_catalogue')->info('Cron eu_oss_catalogue_cron ran successfully.');
 }
