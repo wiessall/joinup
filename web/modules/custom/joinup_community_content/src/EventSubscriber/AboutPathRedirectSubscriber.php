@@ -5,7 +5,10 @@ declare(strict_types=1);
 namespace Drupal\joinup_community_content\EventSubscriber;
 
 use Drupal\Core\EventSubscriber\HttpExceptionSubscriberBase;
-use Drupal\Core\Routing\TrustedRedirectResponse;
+use Drupal\Core\Routing\LocalRedirectResponse;
+use Drupal\Core\Url;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
 
 /**
@@ -23,16 +26,19 @@ class AboutPathRedirectSubscriber extends HttpExceptionSubscriberBase {
     if (!$event->isMainRequest()) {
       return;
     }
-    $pathInfo = $event->getRequest()->getBasePath() . $event->getRequest()->getPathInfo();
+
+    $pathInfo = $event->getRequest()->getPathInfo();
     if (!str_ends_with($pathInfo, '/about')) {
       return;
     }
 
     $pathWithoutSuffix = preg_replace('#/about$#', '', $pathInfo);
-    $event->setResponse(new TrustedRedirectResponse(
-      $pathWithoutSuffix,
-      307
-    ));
+    if (!$pathWithoutSuffix) {
+      return;
+    }
+
+    $url = Url::createFromRequest(Request::create($pathWithoutSuffix));
+    $event->setResponse(new LocalRedirectResponse($url->toString(), Response::HTTP_PERMANENTLY_REDIRECT));
   }
 
   /**

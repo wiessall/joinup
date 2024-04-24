@@ -61,6 +61,7 @@ class UriIdConversion implements EventSubscriberInterface {
     'rdf_entity:solution:field_topic',
     'rdf_meta_entity:eif_perspective:eif_layer',
     'rdf_meta_entity:eif_perspective:eif_model',
+    'rdf_meta_entity:eif_perspective:eif_principle',
     'rdf_meta_entity:eif_perspective:field_eif_solution_type',
   ];
 
