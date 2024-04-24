@@ -56,7 +56,7 @@ spatial:
 file_type:
   - name: 'HTML'
   - name: 'ZIP'
-representation technique:
+representation_technique:
   - name: 'Datalog'
   - name: 'Web Ontology Language Full/DL/Lite'
 licence_type:
