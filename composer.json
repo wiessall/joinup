@@ -368,6 +368,9 @@
                 "Allow to drag and drop nested paragraphs @see https://www.drupal.org/project/layout_paragraphs/issues/3401176": "resources/patch/php/drupal/layout_paragraphs/3401176.patch",
                 "Buttons are duplicated when form has validation errors. @see https://www.drupal.org/i/3265794": "resources/patch/php/drupal/layout_paragraphs/3265794.diff"
             },
+            "drupal/menu_link_destination": {
+                "Error: Call to a member function getOption() on null @see https://www.drupal.org/project/menu_link_destination/issues/3251757": "resources/patch/php/drupal/menu_link_destination/menu_link_destination-fatal_error_when-no_url-3251757-15.patch"
+            },
             "drupal/message_notify": {
                 "Allow 3rd-party to act before delivery @see https://www.drupal.org/project/message_notify/issues/3314370": "resources/patch/php/drupal/message_notify/3314370.diff"
             },
@@ -443,7 +446,8 @@
                 "Stop auto submitting first character entered in an Autocomplete Filter field. @see https://www.drupal.org/project/views_autosubmit/issues/3160600" : "resources/patch/php/drupal/views_autosubmit/3160600.patch"
             },
             "drupal/webform": {
-                "Radios or Checkboxes inside Composite not saved @see https://www.drupal.org/project/webform/issues/3216923": "resources/patch/php/drupal/webform/368.diff"
+                "Radios or Checkboxes inside Composite not saved @see https://www.drupal.org/project/webform/issues/3216923": "resources/patch/php/drupal/webform/368.diff",
+                "Webform might create invalid link renderable arrays on submission list. @see https://www.drupal.org/project/webform/issues/3441600": "resources/patch/php/drupal/webform/3441600.patch"
             },
             "ec-europa/toolkit": {
                 "Allow commands before install clone @see https://github.com/ec-europa/toolkit/pull/757": "resources/patch/php/ec-europa/toolkit/757.diff"
