@@ -4,8 +4,11 @@ declare(strict_types=1);
 
 namespace Drupal\eu_oss_catalogue\Entity;
 
+use Drupal\Core\Access\AccessResult;
+use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Field\BaseFieldDefinition;
+use Drupal\Core\Session\AccountInterface;
 use Drupal\eu_oss_catalogue\EuOssCatalogueProviderInterface;
 use Drupal\eu_oss_catalogue\Plugin\Field\OssGitFullNameItemList;
 use Drupal\eu_oss_catalogue\Plugin\Field\OssGitNameItemList;
@@ -76,6 +79,21 @@ class OssSolution extends Node implements OssSolutionInterface {
    */
   public function isArchived(): bool {
     return $this->get('oss_archived')->getString() === '1';
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function access($operation = 'view', ?AccountInterface $account = NULL, $return_as_object = FALSE): bool|AccessResultInterface {
+    // Prevent translation view access.
+    // OSS Solutions are storing translations, but we do not want to expose the
+    // corresponding pages in the frontend, only the default translation.
+    /* @see content_translation_page_attachments */
+    if ($operation === 'view' && !$this->isDefaultTranslation()) {
+      return $return_as_object ? AccessResult::forbidden() : FALSE;
+    }
+
+    return parent::access($operation, $account, $return_as_object);
   }
 
 }
