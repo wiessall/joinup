@@ -1,5 +1,4 @@
-# @todo: This should be a post-deployment test.
-@wip @api @group-h
+@api @group-clone
 Feature:
   In order to better read the eira descriptions
   As a user of the website

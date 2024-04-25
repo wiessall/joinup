@@ -6,10 +6,10 @@ Feature: Add distribution through the UI
 
   Background:
     Given the following collection:
-      | title      | Asset Distribution Test |
-      | logo       | logo.png                |
-      | state      | published               |
-     And the following solution:
+      | title | Asset Distribution Test |
+      | logo  | logo.png                |
+      | state | published               |
+    And the following solution:
       | title       | Solution random x name           |
       | collection  | Asset Distribution Test          |
       | description | Some reusable random description |
@@ -134,7 +134,7 @@ Feature: Add distribution through the UI
     And I should see the following lines of text:
       | The full source code.              |
       | Format                             |
-      | ZIP                            |
+      | ZIP                                |
       | Representation technique           |
       | Web Ontology Language Full/DL/Lite |
 

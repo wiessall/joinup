@@ -35,8 +35,15 @@ function joinup_test_install($is_syncing): void {
         'name' => $data['name'],
         'weight' => $parentWeight,
       ]);
-      if (isset($data['uri'])) {
-        $term->set('uri', $data['uri']);
+      foreach (['uri', 'description', 'mime_type'] as $key) {
+        if (isset($data[$key])) {
+          $term->set($key, $data[$key]);
+        }
+      }
+
+      if (isset($data['eif_related_term'])) {
+        $related_term = \Drupal::getContainer()->get('rdf_sync.mapper')->getEntityByUri($data['eif_related_term']);
+        $term->set('field_eif_related_term', $related_term->id());
       }
       $term->save();
       $parentTermId = $term->id();
