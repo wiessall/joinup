@@ -89,6 +89,8 @@ spatial:
   - name: Austria
   - name: Canada
   - name: Andorra
+  - name: Italy
+  - name: Egypt
 file_type:
   - name: 'ZIP'
     mime_type: 'application/zip'
