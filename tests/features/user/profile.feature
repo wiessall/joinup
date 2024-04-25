@@ -64,7 +64,7 @@ Feature: User profile
     Then I should not see the link "Edit"
     # Verify that the user's "Country of origin" field is visible on its profile.
     When I go to the public profile of "Leonardo Da Vinci"
-    Then I should see the text "Country of origin: Italy" in the "Header" region
+    Then I should see the text "Country of origin: Belgium" in the "Header" region
 
   Scenario: A moderator can navigate to any user's profile and edit it.
     Given users:
@@ -87,7 +87,7 @@ Feature: User profile
     And I fill in "First name" with "Leo"
     And I fill in "Family name" with "di ser Piero da Vinci"
     And I select "Finance in EU" from "Professional domain"
-    And I fill in "Country of origin" with "Italy"
+    And I fill in "Country of origin" with "Belgium"
     And I press "Save"
     Then I should see the success message "The changes have been saved."
     And I should see the success message "The user has been notified that their account has been updated."
