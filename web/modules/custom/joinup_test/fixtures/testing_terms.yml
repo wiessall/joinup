@@ -26,7 +26,7 @@ topic:
       - name: 'Demography'
       - name: 'E-inclusion'
 eira:
-  - name: 'Various terms'
+  - name: 'Category 1'
     children:
       - name: 'Public Service Provider'
         uri: 'http://data.europa.eu/dr8/PublicServiceProvider'
@@ -44,6 +44,8 @@ eira:
         uri: 'http://data.europa.eu/dr8/DigitalSolution'
       - name: 'Networking Infrastructure Enablers'
         uri: 'http://data.europa.eu/dr8/NetworkingInfrastructureEnablers'
+  - name: 'Category 2'
+    children:
       - name: 'Data Owner'
         uri: 'http://data.europa.eu/dr8/DataOwner'
       - name: 'Implementing Guideline'
