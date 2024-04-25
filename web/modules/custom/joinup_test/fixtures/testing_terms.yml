@@ -52,61 +52,30 @@ eira:
         uri: 'http://data.europa.eu/dr8/ImplementingGuideline'
       - name: 'Logging Service'
         uri: 'http://data.europa.eu/dr8/LoggingService'
-      - name: 'Gateway'
-        uri: 'http://data.europa.eu/dr8/Gateway'
-      - name: 'Networking Service'
-        uri: 'http://data.europa.eu/dr8/NetworkingService'
-      - name: 'Service Discovery Service'
-        uri: 'http://data.europa.eu/dr8/ServiceDiscoveryService'
-      - name: 'Comformance Testing Application'
-        uri: 'http://data.europa.eu/dr8/ComformanceTestingApplication'
 owner_type:
   - name: 'Company'
   - name: 'Industry consortium'
-  - name: 'Non-Governmental Organisation'
-  - name: 'Private Individual(s)'
-  - name: 'National authority'
-  - name: 'Non-Profit Organisation'
-  - name: 'Supra-national authority'
-  - name: 'Regional authority'
-  - name: 'Local Authority'
 status:
   - name: Completed
     uri: 'http://purl.org/adms/status/Completed'
-  - name: Deprecated
-    uri: 'http://purl.org/adms/status/Deprecated'
-  - name: 'Under development'
-    uri: 'http://purl.org/adms/status/UnderDevelopment'
 language:
   - name: Flemish
-  - name: Interlingua
   - name: English
-  - name: 'Athapascan languages'
 spatial:
   - name: Belgium
   - name: Switzerland
   - name: 'European Union'
   - name: Luxembourg
   - name: Greece
-  - name: Austria
-  - name: Canada
-  - name: Andorra
-  - name: Italy
-  - name: Egypt
 file_type:
   - name: 'ZIP'
     mime_type: 'application/zip'
-  - name: 'HTML'
-    mime_type: 'text/html'
   - name: 'CSV'
     mime_type: 'text/csv'
 representation_technique:
   - name: 'Datalog'
-  - name: 'Web Ontology Language Full/DL/Lite'
-  - name: 'Business Process Modeling Notation'
   - name: 'Human Language'
 licence_type:
-  - name: 'Attribution'
   - name: 'Public domain'
 legal_type:
   - name: 'Can'

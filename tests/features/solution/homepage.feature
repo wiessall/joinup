@@ -19,23 +19,23 @@ Feature: Solution homepage
       | owner               | Awesome owner                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
       | contact information | Awesome contact                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
       | topic               | Demography, E-inclusion                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
-      | solution type       | Non-binding Instrument, Comformance Testing Application                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
-      | spatial coverage    | Italy, Egypt                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
-      | language            | English, Interlingua                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
+      | solution type       | Non-binding Instrument, Logging Service                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
+      | spatial coverage    | Greece, Belgium                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
+      | language            | English                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
       | status              | Completed                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
       | spatial coverage    | Belgium                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
       | creation date       | 2017-12-01T8:43                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
       | modification date   | 2012-12-01T8:43                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
       | abstract            | Short abstract description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
     And the following release:
-      | title            | Petri net v1     |
-      | description      | A sample release |
-      | documentation    | text.pdf         |
-      | release number   | v1.1             |
-      | release notes    | Changed release  |
-      | is version of    | Petri net        |
-      | state            | published        |
-      | creation date    | 2022-12-21T13:00 |
+      | title          | Petri net v1     |
+      | description    | A sample release |
+      | documentation  | text.pdf         |
+      | release number | v1.1             |
+      | release notes  | Changed release  |
+      | is version of  | Petri net        |
+      | state          | published        |
+      | creation date  | 2022-12-21T13:00 |
 
     When I go to the homepage of the "Petri net" solution
     Then the page should be cacheable
@@ -50,10 +50,9 @@ Feature: Solution homepage
       | Owner                                             |
       | Awesome owner                                     |
       | Solution type                                     |
-      | Comformance Testing Application                   |
+      | Logging Service                                   |
       | Languages                                         |
       | English                                           |
-      | Interlingua                                       |
       | Status                                            |
       | Completed                                         |
       | Geographical coverage                             |
@@ -119,8 +118,8 @@ Feature: Solution homepage
 
   Scenario: Test that a pager is shown on the solution page when needed.
     Given the following owner:
-      | name                  | type                  |
-      | Chiricahua Foundation | Private Individual(s) |
+      | name                  | type    |
+      | Chiricahua Foundation | Company |
     And the following contact:
       | name  | Geronimo             |
       | email | geronimo@example.com |
@@ -222,8 +221,8 @@ Feature: Solution homepage
       | Go to page 2        |
       | Current page        |
     But I should not see the following links:
-      | Go to next page     |
-      | Go to last page     |
+      | Go to next page |
+      | Go to last page |
 
     When I delete the "Distribution 13" asset distribution
     And I delete the "Distribution 14" asset distribution

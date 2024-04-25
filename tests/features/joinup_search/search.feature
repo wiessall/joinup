@@ -412,7 +412,7 @@ Feature: Global search
       | description              | Übermensch foot size            |
       | access url               | http://example.com/zzolu-distro |
       | licence                  | Apache-2.0                      |
-      | format                   | HTML                            |
+      | format                   | ZIP                             |
       | representation technique | Datalog                         |
       | state                    | published                       |
 
@@ -506,7 +506,7 @@ Feature: Global search
       | description              | Dracula                           |
       | access url               | http://example.com/releazz-distro |
       | licence                  | Apache-2.0                        |
-      | format                   | HTML                              |
+      | format                   | ZIP                               |
       | representation technique | Datalog                           |
       | state                    | published                         |
 
@@ -854,17 +854,17 @@ Feature: Global search
       | name  | Gor-to contact     |
       | email | gor-to@example.com |
     And the following collections:
-      | title             | description                                          | abstract                      | state     |
-      | Pull alpha        | <p>collection <strong>pull</strong> description.</p> | The collection pull abstract. | published |
-      | Col for Sol javi  | <p>collection for the solution javi.</p>             | Random abstract.              | published |
-      | Roll alpha        | <p>collection <strong>roll</strong> description.</p> | The collection roll abstract. | archived  |
-      | Col for Sol net   | <p>collection for the solution net.</p>              | Loky and Rocky.               | archived  |
+      | title            | description                                          | abstract                      | state     |
+      | Pull alpha       | <p>collection <strong>pull</strong> description.</p> | The collection pull abstract. | published |
+      | Col for Sol javi | <p>collection for the solution javi.</p>             | Random abstract.              | published |
+      | Roll alpha       | <p>collection <strong>roll</strong> description.</p> | The collection roll abstract. | archived  |
+      | Col for Sol net  | <p>collection for the solution net.</p>              | Loky and Rocky.               | archived  |
     And the following solutions:
-      | title         | description                                                | abstract                    | keywords | owner       | contact information | collection        | state     |
-      | Solution pull | <p>This is the solution <strong>pull</strong> description. | The solution pull abstract. | Alphabet | Renew owner | Gor-to contact      | Pull alpha        | published |
-      | Solution javi | <p>This is the solution <strong>javi</strong> description. |                             | Alphabet | Renew owner | Gor-to contact      | Col for Sol javi  | published |
-      | Solution roll | <p>This is the solution <strong>roll</strong> description. | The solution roll abstract. | Alphabet | Renew owner | Gor-to contact      | Roll alpha        | published |
-      | Solution net  | <p>This is the solution <strong>net</strong> description.  |                             | Alphabet | Renew owner | Gor-to contact      | Col for Sol net   | published |
+      | title         | description                                                | abstract                    | keywords | owner       | contact information | collection       | state     |
+      | Solution pull | <p>This is the solution <strong>pull</strong> description. | The solution pull abstract. | Alphabet | Renew owner | Gor-to contact      | Pull alpha       | published |
+      | Solution javi | <p>This is the solution <strong>javi</strong> description. |                             | Alphabet | Renew owner | Gor-to contact      | Col for Sol javi | published |
+      | Solution roll | <p>This is the solution <strong>roll</strong> description. | The solution roll abstract. | Alphabet | Renew owner | Gor-to contact      | Roll alpha       | published |
+      | Solution net  | <p>This is the solution <strong>net</strong> description.  |                             | Alphabet | Renew owner | Gor-to contact      | Col for Sol net  | published |
 
     When I visit the search page
     And I should see the "Pull alpha" tile
