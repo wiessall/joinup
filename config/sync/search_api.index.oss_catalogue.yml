@@ -7,21 +7,21 @@ dependencies:
     - field.storage.node.oss_categories
     - field.storage.node.oss_development_status
     - field.storage.node.oss_git_description
-    - field.storage.node.oss_release_date
     - field.storage.node.oss_scope
+    - field.storage.node.oss_release_date
     - field.storage.node.oss_short_description
     - field.storage.node.oss_source
     - field.storage.node.oss_vitality_index
     - search_api.server.joinup
   module:
     - search_api_solr
-    - field
     - taxonomy
+    - node
+    - field
     - search_api
     - joinup_flag
     - joinup_oss_catalogue
     - joinup_search
-    - node
 third_party_settings:
   search_api_solr:
     finalize: false
@@ -172,6 +172,30 @@ field_settings:
     dependencies:
       config:
         - field.storage.node.oss_vitality_index
+  status:
+    label: Published
+    datasource_id: 'entity:node'
+    property_path: status
+    type: boolean
+    dependencies:
+      module:
+        - node
+  title:
+    label: Title
+    datasource_id: 'entity:node'
+    property_path: title
+    type: 'solr_text_custom:ngram'
+    dependencies:
+      module:
+        - node
+  type:
+    label: 'Content type'
+    datasource_id: 'entity:node'
+    property_path: type
+    type: string
+    dependencies:
+      module:
+        - node
 datasource_settings:
   'entity:node':
     bundles:
@@ -204,6 +228,8 @@ processor_settings:
       - oss_short_description
       - oss_solution_rendered_item
       - oss_source
+      - title
+      - type
     title: true
     alt: true
     tags:
@@ -228,6 +254,8 @@ processor_settings:
       - oss_short_description
       - oss_solution_rendered_item
       - oss_source
+      - title
+      - type
   joinup_entity_bundle: {  }
   language_with_fallback: {  }
   oss_solution_rendered_item: {  }
@@ -244,6 +272,7 @@ processor_settings:
       - oss_git_description
       - oss_short_description
       - oss_solution_rendered_item
+      - title
     stopwords:
       - a
       - an
@@ -289,6 +318,7 @@ processor_settings:
       - oss_git_description
       - oss_short_description
       - oss_solution_rendered_item
+      - title
     spaces: ''
     ignored: ._-
     overlap_cjk: 1
@@ -307,6 +337,8 @@ processor_settings:
       - oss_short_description
       - oss_solution_rendered_item
       - oss_source
+      - title
+      - type
   type_boost:
     weights:
       preprocess_index: 0
