@@ -31,6 +31,7 @@ class Tid implements EventSubscriberInterface {
     'rdf_entity:asset_distribution:field_ad_repr_technique',
     'rdf_entity:asset_distribution:field_status',
     'rdf_entity:asset_release:field_isr_language',
+    'rdf_entity:asset_release:field_isr_solution_type',
     'rdf_entity:asset_release:field_spatial_coverage',
     'rdf_entity:asset_release:field_status',
     'rdf_entity:asset_release:field_topic',
