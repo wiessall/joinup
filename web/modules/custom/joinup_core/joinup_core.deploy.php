@@ -14,9 +14,9 @@
 
 declare(strict_types=1);
 
-use Drupal\search_api\Entity\Index;
 use Drupal\Core\Url;
 use Drupal\joinup_oss_catalogue\OssCatalogueCollectionInterface;
+use Drupal\search_api\Entity\Index;
 
 /**
  * Refresh legacy content to rectify Topic term name.
