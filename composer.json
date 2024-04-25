@@ -198,7 +198,6 @@
             "web/modules/contrib/message_digest/src/Traits/MessageDigestContextTrait.php",
             "web/modules/contrib/message_digest/src/Traits/MessageDigestTrait.php",
             "web/modules/contrib/og_menu/src/Tests/Traits/OgMenuTrait.php",
-            "web/modules/contrib/pipeline/src/Traits/PipelineContextTrait.php",
             "scripts/composer/ComposerPatches.php"
         ],
         "files": [
@@ -209,8 +208,7 @@
             "Drupal\\Tests\\cas_mock_server\\": "web/modules/contrib/cas_mock_server/tests/src",
             "Drupal\\Tests\\honeypot\\": "web/modules/contrib/honeypot/tests/src",
             "Drupal\\Tests\\message_digest\\": "web/modules/contrib/message_digest/tests/src",
-            "Drupal\\Tests\\oe_webtools\\": "web/modules/contrib/oe_webtools/tests",
-            "Drupal\\Tests\\pipeline\\": "web/modules/contrib/pipeline/tests/src"
+            "Drupal\\Tests\\oe_webtools\\": "web/modules/contrib/oe_webtools/tests"
         }
     },
     "scripts": {
