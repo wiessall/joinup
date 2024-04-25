@@ -33,13 +33,28 @@ eira:
       - name: 'Logging Service'
   - name: 'Public Service Provider'
     uri: 'http://data.europa.eu/dr8/PublicServiceProvider'
+  - name: 'Non-binding Instrument'
+    uri: 'http://data.europa.eu/dr8/NonBindingInstrument'
+  - name: 'Interoperability Specification'
+    uri: 'http://data.europa.eu/dr8/InteroperabilitySpecification'
+  - name: Business
+    uri: 'http://data.europa.eu/dr8/Business'
+  - name: 'Innovation'
+    uri: 'http://data.europa.eu/dr8/Innovation'
+  - name: 'Citizen'
+    uri: 'http://data.europa.eu/dr8/Citizen'
+  - name: 'Digital Solution'
+    uri: 'http://data.europa.eu/dr8/DigitalSolution'
 owner_type:
-  - name: Company
-  - name: Industry consortium
+  - name: 'Company'
+  - name: 'Industry consortium'
   - name: 'Non-Governmental Organisation'
   - name: 'Private Individual(s)'
   - name: 'National authority'
   - name: 'Non-Profit Organisation'
+  - name: 'Supra-national authority'
+  - name: 'Regional authority'
+  - name: 'Local Authority'
 status:
   - name: Completed
     uri: 'http://purl.org/adms/status/Completed'
@@ -47,18 +62,22 @@ status:
     uri: 'http://purl.org/adms/status/Deprecated'
 language:
   - name: Flemish
+  - name: Interlingua
+  - name: English
 spatial:
   - name: Belgium
   - name: Switzerland
   - name: 'European Union'
   - name: Luxembourg
   - name: Greece
+  - name: Austria
 file_type:
   - name: 'HTML'
   - name: 'ZIP'
 representation_technique:
   - name: 'Datalog'
   - name: 'Web Ontology Language Full/DL/Lite'
+  - name: 'Business Process Modeling Notation'
 licence_type:
   - name: 'Attribution'
   - name: 'Public domain'
@@ -157,3 +176,7 @@ legal_type:
         description: 'The licence is approved by the Open Source Initiative, as compliant with the Open Source Definition (OSD)'
       - name: 'FSF Free/Libre'
         description: 'The licence is considered as Free/Libre by the Free Software Foundation'
+eif_recommendation:
+  - name: 'Recommendation 1'
+  - name: 'Recommendation 4'
+  - name: 'Recommendation 21'
