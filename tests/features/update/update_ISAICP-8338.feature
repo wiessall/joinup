@@ -56,5 +56,3 @@ Feature: Taxonomy terms are synchronizing to RDF backend.
         | /rdf_entity/http_e_f_fdata_ceuropa_ceu_fw21_f46c8f61e_b4034_b4137_b9c01_bb0274cf3a50c                                      | Mathias Maurer                                                                        |
         # Owner
         | /rdf_entity/http_e_f_fdata_ceuropa_ceu_fw21_fa1e67aea_b2988_b4801_ba9c8_ba1883fc702c8                                      | Dirección de Modernizacion de la Gestión y Gobierno Electrónico. Gobierno de Misiones |
-        # Provenance activity
-        | /rdf_entity/https_e_f_fjoinup_cec_ceuropa_ceu_frdf_aentity_fprovenance_aactivity_f0ddf7736_be1f9_b4623_b829d_bc5d118dde2e2 | Provenance of http://administracionelectronica.gob.es/contacto/ctt                    |

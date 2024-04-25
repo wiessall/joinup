@@ -37,7 +37,6 @@ dependencies:
     - joinup_licence
     - joinup_news
     - joinup_newsletter
-    - joinup_pipeline_log
     - joinup_search
     - joinup_subscription
     - media
@@ -47,7 +46,6 @@ dependencies:
     - node
     - og
     - paragraphs_type_permissions
-    - pipeline
     - rdf_draft
     - rdf_entity
     - role_delegation
@@ -75,8 +73,6 @@ permissions:
   - 'access joinup reports'
   - 'access media overview'
   - 'access messages overview'
-  - 'access pipeline report'
-  - 'access pipeline selector'
   - 'access taxonomy overview'
   - 'access toolbar'
   - 'access uri converter'
@@ -206,11 +202,6 @@ permissions:
   - 'edit sitewide alert entities'
   - 'edit terms in legal_type'
   - 'edit webform variants'
-  - 'execute dpsi pipeline'
-  - 'execute eu_sic pipeline'
-  - 'execute joinup_collection pipeline'
-  - 'execute nio pipeline'
-  - 'execute spain pipeline'
   - 'feature entity'
   - 'filter membership overview'
   - 'manage custom landing pages'
@@ -285,11 +276,6 @@ permissions:
   - 'perform solution_workflow workflow unarchive transition on any entity'
   - 'perform solution_workflow workflow update_validated transition on any entity'
   - 'perform solution_workflow workflow validate transition on any entity'
-  - 'reset dpsi pipeline'
-  - 'reset eu_sic pipeline'
-  - 'reset joinup_collection pipeline'
-  - 'reset nio pipeline'
-  - 'reset spain pipeline'
   - 'revert all sitewide alert revisions'
   - 'unarchived community content'
   - 'unfeature entity'

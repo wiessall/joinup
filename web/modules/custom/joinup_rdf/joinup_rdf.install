@@ -147,3 +147,47 @@ function joinup_rdf_update_110503(): void {
   $manager->uninstallEntityType($eifWrapperType);
   $manager->uninstallEntityType($eifWrapper);
 }
+
+/**
+ * Dismantle federation.
+ */
+function joinup_rdf_update_110504(): void {
+  // Anticipate removal of permissions from moderator role to avoid errors on
+  // configuration synchronization.
+  $db = \Drupal::database();
+  $config = unserialize($db->select('config')
+    ->fields('config', ['data'])
+    ->condition('collection', '')
+    ->condition('name', 'user.role.moderator')
+    ->execute()
+    ->fetchField(), ['allowed_classes' => FALSE]);
+  $removedRoles = [
+    'access pipeline report',
+    'access pipeline selector',
+    'execute dpsi pipeline',
+    'execute eu_sic pipeline',
+    'execute joinup_collection pipeline',
+    'execute nio pipeline',
+    'execute spain pipeline',
+    'reset dpsi pipeline',
+    'reset eu_sic pipeline',
+    'reset joinup_collection pipeline',
+    'reset nio pipeline',
+    'reset spain pipeline',
+  ];
+  $removedModuleDependencies = ['pipeline', 'joinup_pipeline_log'];
+  $config['permissions'] = array_diff($config['permissions'], $removedRoles);
+  $config['dependencies']['module'] = array_diff($config['dependencies']['module'], $removedModuleDependencies);
+  $db->update('config')
+    ->fields(['data' => serialize($config)])
+    ->condition('collection', '')
+    ->condition('name', 'user.role.moderator')
+    ->execute();
+
+  // Cleanup joinup_pipeline_log key/value entries.
+  $collection = \Drupal::getContainer()->get('keyvalue')->get('joinup_pipeline_log');
+  $collection->deleteAll();
+
+  // Remove provenance records from the RDF backend.
+  \Drupal::getContainer()->get('sparql.endpoint')->update("CLEAR GRAPH <http://joinup.eu/provenance_activity>;");
+}
