@@ -9,10 +9,12 @@ use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Field\BaseFieldDefinition;
 use Drupal\Core\Session\AccountInterface;
+use Drupal\Core\Url;
 use Drupal\eu_oss_catalogue\EuOssCatalogueProviderInterface;
 use Drupal\eu_oss_catalogue\Plugin\Field\OssGitFullNameItemList;
 use Drupal\eu_oss_catalogue\Plugin\Field\OssGitNameItemList;
 use Drupal\eu_oss_catalogue\Plugin\Field\RelevantLanguageCode;
+use Drupal\joinup_oss_catalogue\Plugin\LanguageNegotiation\OssContentNegotiation;
 use Drupal\node\Entity\Node;
 use Drupal\pluginreference\Plugin\Field\FieldType\PluginReferenceItem;
 
@@ -94,6 +96,27 @@ class OssSolution extends Node implements OssSolutionInterface {
     }
 
     return parent::access($operation, $account, $return_as_object);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function toUrl($rel = NULL, array $options = []): Url {
+    $url = parent::toUrl($rel, $options);
+
+    // Tell OssContentNegotiation to process edit-form and any content
+    // translation URLs during outbound.
+    /* @see \Drupal\joinup_oss_catalogue\Plugin\LanguageNegotiation\OssContentNegotiation::processOutbound */
+    if (in_array($rel, [
+      'edit-form',
+      'drupal:content-translation-add',
+      'drupal:content-translation-edit',
+      'drupal:content-translation-delete',
+    ], TRUE)) {
+      $url->setOption(OssContentNegotiation::METHOD_ID, TRUE);
+    }
+
+    return $url;
   }
 
 }
