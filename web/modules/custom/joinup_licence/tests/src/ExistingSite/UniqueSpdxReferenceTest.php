@@ -15,6 +15,21 @@ use Drupal\joinup_validation\Plugin\Validation\Constraint\UniqueFieldInBundleCon
 class UniqueSpdxReferenceTest extends JoinupExistingSiteTestBase {
 
   /**
+   * {@inheritdoc}
+   */
+  protected function setUp(): void {
+    parent::setUp();
+
+    // Create the testing taxonomy term 'Attribution' for the licence type.
+    $vocabulary = \Drupal::entityTypeManager()->getStorage('taxonomy_vocabulary')->load('licence_type');
+    $this->createTerm($vocabulary, [
+      'name' => 'Attribution',
+      'description' => 'Attribution licence type',
+      'uri' => 'http://purl.org/adms/licencetype/Attribution',
+    ]);
+  }
+
+  /**
    * Test that references to SPDX licences are unique.
    */
   public function testUniqueSpdxReference(): void {
