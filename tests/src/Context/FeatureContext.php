@@ -803,10 +803,10 @@ class FeatureContext extends RawDrupalContext {
   }
 
   /**
-   * Checks whether an element with a CSS selector can be found on the page.
+   * Asserts that an element with a CSS selector is present on the page.
    *
    * @param string $selector
-   *   The CSS selector of the element.
+   *   The CSS selector to look for.
    *
    * @return \Behat\Mink\Element\NodeElement
    *   The first node element on the page matching the selector.
@@ -816,15 +816,23 @@ class FeatureContext extends RawDrupalContext {
    *
    * @Then the page should have an element with CSS selector :selector
    */
-  public function getElementByCss(string $selector): NodeElement {
-    if ($element = $this->getSession()->getPage()->find('css', $selector)) {
-      return $element;
-    }
+  public function assertElementByCss(string $selector): NodeElement {
+    return $this->assertSession()->elementExists('css', $selector);
+  }
 
-    throw new \Exception(sprintf(
-      "Element with CSS selector '%s' could not be found on the page",
-      $selector
-    ));
+  /**
+   * Asserts that an element with a CSS selector is not present on the page.
+   *
+   * @param string $selector
+   *   The CSS selector to look for.
+   *
+   * @throws \Exception
+   *   If the element was found.
+   *
+   * @Then the page should not have an element with CSS selector :selector
+   */
+  public function assertNoElementByCss(string $selector): void {
+    $this->assertSession()->elementNotExists('css', $selector);
   }
 
   /**
@@ -836,7 +844,7 @@ class FeatureContext extends RawDrupalContext {
    * @Then /^I click on element "([^"]*)"$/
    */
   public function iClickOn(string $element): void {
-    $this->getElementByCss($element)->click();
+    $this->assertSession()->elementExists('css', $element)->click();
   }
 
   /**

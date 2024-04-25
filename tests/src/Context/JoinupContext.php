@@ -1905,6 +1905,20 @@ class JoinupContext extends RawDrupalContext {
   }
 
   /**
+   * Asserts that a field has the given value.
+   *
+   * @param string $field
+   *   The field to check.
+   * @param string $value
+   *   The expected value.
+   *
+   * @Then the :field field should have value :value
+   */
+  public function assertFieldValueEquals(string $field, string $value): void {
+    $this->assertSession()->fieldValueEquals($field, $value);
+  }
+
+  /**
    * Checks that the description of the field with given label is as expected.
    *
    * @param string $label

@@ -8,7 +8,7 @@ Feature:
   Scenario: Translatable fields are displayed based on the richest OSS Solution translation
     Given oss_solution multilingual content:
       | title      | status    | changed    | oss_source        | oss_release_date | langcode | default_translation | oss_features              | oss_long_description | oss_short_description    | oss_screenshots | oss_git_url        | oss_publiccode_yml_content                                                                                                                 |
-      | EN Title   | published | 1690000000 | developers_italia | 2023-10-19       | en       | 1                   | EN Feature 1              | EN Long description  | EN Short description     |                 | https://github.com | !multiline!description:\n  en:\n    features:\n      0: EN Feature 1\n  it:\n    features:\n      0: IT Feature 1\n      1: IT Feature 2\n |
+      | EN Title   | published | 1690000000 | developers_italia | 2142-01-01       | en       | 1                   | EN Feature 1              | EN Long description  | EN Short description     |                 | https://github.com | !multiline!description:\n  en:\n    features:\n      0: EN Feature 1\n  it:\n    features:\n      0: IT Feature 1\n      1: IT Feature 2\n |
       |            |           | 1690000000 |                   |                  | it       | 0                   | IT Feature 1,IT Feature 2 | ~~~                  | IT Short description     | IT file 1.jpg   | ~~~                | ~~~                                                                                                                                        |
     When I go to the content page of the type "oss_solution" with the title "EN Title"
     Then I should see the heading "EN Title"
@@ -21,14 +21,16 @@ Feature:
       | IT Feature 1         |
       | IT Feature 2         |
 
+    # Ensures only the default translation URL is exposed.
+    Then the page should have an element with CSS selector "link[rel='alternate'][hreflang='en']"
+    And the page should not have an element with CSS selector "link[rel='alternate'][hreflang='it']"
+
     When I visit "/eu-oss-catalogue"
-    Then I should see the following tiles in the correct order:
-      | EN Title |
+    Then I should see the "EN Title" tile
     And I should see the text "IT Short description"
 
     When I visit "/eu-oss-catalogue/solutions"
-    Then I should see the following tiles in the correct order:
-      | EN Title |
+    Then I should see the "EN Title" tile
     And I should see the text "IT Short description"
 
     Given I am logged in as a user with the "administrator" role
@@ -39,6 +41,19 @@ Feature:
     And the "EU OSS Catalogue administration" table should contain the following columns:
       | Title    | URL                | Short description    | Source Catalogue  | Languages | Published | Changed            |
       | EN Title | https://github.com | IT Short description | Developers Italia | EN, IT    | Yes       | 22/07/2023 - 04:26 |
+
+    # Ensures content translation edit forms can be accessed.
+    Given I am logged in as a user with the "developer" role
+    When I go to the content page of the type "oss_solution" with the title "EN Title"
+    When I click "Translate" in the "Entity actions" region
+    Then I should see the heading "Translations of EN Title"
+    When I click "Edit" in the "English" row
+    And I should see the heading "Edit Open Source Software Solution EN Title"
+    Then the "Short description" field should have value "EN Short description"
+    And I move backward one page
+    When I click "Edit" in the "Italian" row
+    And I should see the heading "Edit Open Source Software Solution EN Title [Italian translation]"
+    Then the "Short description" field should have value "IT Short description"
 
   Scenario: Translatable fields are displayed based on the richest OSS Solution translation
     Given oss_solution multilingual content:
