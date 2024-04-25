@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Drupal\Tests\joinup_group\ExistingSite;
 
 use Drupal\Core\Entity\ContentEntityInterface;
+use Drupal\taxonomy\Entity\Vocabulary;
 use Drupal\Tests\joinup_test\ExistingSite\JoinupExistingSiteTestBase;
 use Drupal\joinup_taxonomy\Entity\MappedTerm;
 use Drupal\topic\Entity\Topic;
@@ -351,8 +352,8 @@ class GroupContentUpdateUrlAliasTest extends JoinupExistingSiteTestBase {
       'field_is_description' => $this->randomString(),
       'field_is_state' => 'published',
       'field_is_owner' => 'http://example.com/owner',
-      'field_topic' => Topic::loadByUri('http://joinup.eu/ontology/topic#finance-in-eu'),
-      'field_is_solution_type' => MappedTerm::loadByUri('http://data.europa.eu/dr8/ArchitectureBuildingBlock'),
+      'field_topic' => Topic::loadByUri('http://joinup.eu/ontology/topic#finance-in-eu')->id(),
+      'field_is_solution_type' => MappedTerm::loadByUri('http://data.europa.eu/dr8/PublicServiceProvider')->id(),
       'field_is_contact_information' => 'http://example.com/contact',
     ]);
     // Releases.
