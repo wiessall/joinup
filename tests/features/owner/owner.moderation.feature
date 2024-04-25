@@ -11,8 +11,8 @@ Feature: Owner moderation
       | Username        |
       | Raeburn Hibbert |
     And owner:
-      | name             | type                    |
-      | Good food eaters | Non-Profit Organisation |
+      | name             | type    |
+      | Good food eaters | Company |
 
     When I am logged in as "Raeburn Hibbert"
     And I go to the propose collection form
@@ -77,7 +77,7 @@ Feature: Owner moderation
     And the current workflow state should be "Needs update"
     And I should not see the link "Delete"
     # Do the changes.
-    When I check the box "Non-Governmental Organisation"
+    When I check the box "Company"
     And I press "Update"
     Then I should see the heading "EU healthy group"
 

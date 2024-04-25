@@ -6,8 +6,8 @@ Feature: Owner access
 
   Scenario: Anonymous user contact information access
     Given owner:
-      | name          | type                             |
-      | Daisy Johnson | Industry consortium |
+      | name          | type    |
+      | Daisy Johnson | Company |
 
     Then I should have 1 owner
 

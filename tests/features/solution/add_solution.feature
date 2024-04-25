@@ -248,12 +248,12 @@ Feature: "Add solution" visibility options.
     And I check "I have read and accept the legal notice and I commit to manage my solution on a regular basis."
     And I press "Yes"
     And I fill in the following:
-      | Title                 | Climate change tracker                      |
-      | Abstract              | Tracks climate change                       |
-      | Description           | Logs retreat of 40 glaciers in Switzerland. |
-      | Geographical coverage | Switzerland                                 |
-      | Name                  | Angela Crespi                               |
-      | E-mail address        | angela_crespi@glacmon.basel-uni.ch          |
+      | Title                 | Climate change tracker                  |
+      | Abstract              | Tracks climate change                   |
+      | Description           | Logs retreat of 40 glaciers in Belgium. |
+      | Geographical coverage | Belgium                                 |
+      | Name                  | Angela Crespi                           |
+      | E-mail address        | angela_crespi@glacmon.basel-uni.ch      |
     And I select "Data gathering and processing" from "Topic"
     And I select "Logging Service" from "Solution type"
     And I press "Add existing" at the "Owner" field
@@ -288,14 +288,14 @@ Feature: "Add solution" visibility options.
       | email | invisible.man@example.com |
       | name  | Invisible Man             |
     And the following solution:
-      | title               | Cleaning solution                                 |
-      | abstract            | Cleans anything dirty                             |
-      | description         | Use on metal surfaces.                            |
-      | owner               | Organisation example                              |
-      | state               | published                                         |
-      | solution type       | Non-binding Instrument, Service Discovery Service |
-      | topic               | Employment and Support Allowance                  |
-      | contact information | Invisible Man                                     |
+      | title               | Cleaning solution                |
+      | abstract            | Cleans anything dirty            |
+      | description         | Use on metal surfaces.           |
+      | owner               | Organisation example             |
+      | state               | published                        |
+      | solution type       | Non-binding Instrument           |
+      | topic               | Employment and Support Allowance |
+      | contact information | Invisible Man                    |
 
     Given I am logged in as a moderator
     When I go to the edit form of the "Cleaning solution" solution

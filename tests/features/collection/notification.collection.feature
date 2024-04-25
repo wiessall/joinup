@@ -6,8 +6,8 @@ Feature: Notification test for the collection transitions.
 
   Scenario: Notifications should be sent whenever an event is occurring related to a collection.
     Given the following owner:
-      | name       | type                    |
-      | NC for all | Non-Profit Organisation |
+      | name       | type    |
+      | NC for all | Company |
     And the following contact:
       | name  | Notificationous absolutous        |
       | email | absolute.notification@example.com |
@@ -23,10 +23,10 @@ Feature: Notification test for the collection transitions.
     And collections:
       | title                  | state            | abstract     | description   | topic             | owner      | contact information        |
       | NC to propose          | draft            | No one cares | No one cares. | Supplier exchange | NC for all | Notificationous absolutous |
-      | NC to publish         | proposed         | No one cares | No one cares. | Supplier exchange | NC for all | Notificationous absolutous |
+      | NC to publish          | proposed         | No one cares | No one cares. | Supplier exchange | NC for all | Notificationous absolutous |
       # The following will also cover the validate edited notification.
       | NC to propose edit     | published        | No one cares | No one cares. | Supplier exchange | NC for all | Notificationous absolutous |
-      | NC to publish edit    | published        | No one cares | No one cares. | Supplier exchange | NC for all | Notificationous absolutous |
+      | NC to publish edit     | published        | No one cares | No one cares. | Supplier exchange | NC for all | Notificationous absolutous |
       | NC to request archival | published        | No one cares | No one cares. | Supplier exchange | NC for all | Notificationous absolutous |
       | NC to reject archival  | archival request | No one cares | No one cares. | Supplier exchange | NC for all | Notificationous absolutous |
       | NC to archive          | archival request | No one cares | No one cares. | Supplier exchange | NC for all | Notificationous absolutous |
@@ -45,11 +45,11 @@ Feature: Notification test for the collection transitions.
     And the following collection user memberships:
       | collection             | user           | roles              |
       | NC to propose          | NC owner       | owner, facilitator |
-      | NC to publish         | NC owner       | owner, facilitator |
+      | NC to publish          | NC owner       | owner, facilitator |
       | NC to propose edit     | NC owner       | owner, facilitator |
       # A third person is needed to test notifications sent to both moderators and the owner.
       | NC to propose edit     | NC facilitator | facilitator        |
-      | NC to publish edit    | NC owner       | owner, facilitator |
+      | NC to publish edit     | NC owner       | owner, facilitator |
       | NC to request archival | NC owner       | owner, facilitator |
       | NC to reject archival  | NC owner       | owner, facilitator |
       | NC to archive          | NC owner       | owner, facilitator |
@@ -140,7 +140,7 @@ Feature: Notification test for the collection transitions.
     And I click "Edit" in the "Entity actions" region
     And I press "Publish"
     Then the following email should have been sent:
-      | recipient | NC owner                                                                          |
+      | recipient | NC owner                                                                         |
       | subject   | Your proposal of collection NC to publish has been approved                      |
       | body      | Your proposed collection "NC to publish" has been validated as per your request. |
 

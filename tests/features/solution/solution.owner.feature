@@ -33,8 +33,8 @@ Feature:
   @uploadFiles:logo.png
   Scenario: Assign ownership during creation of solutions through UI
     Given the following owner:
-      | name      | type            |
-      | Leechidna | Local Authority |
+      | name      | type    |
+      | Leechidna | Company |
     And users:
       | Username          |
       | Solution API user |

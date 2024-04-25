@@ -221,7 +221,7 @@ Feature: Collection moderation
     And I press "Add new" at the "Owner" field
     And I wait for AJAX to finish
     And I fill in "Name" with "Katsumoto"
-    And I check the box "Industry consortium"
+    And I check the box "Company"
     And I expand the "Additional fields" accordion section
     Then the "Additional fields" accordion section should be active
     And I attach the file "logo.png" to "Logo"
@@ -281,7 +281,7 @@ Feature: Collection moderation
     And I press "Add new" at the "Owner" field
     And I wait for AJAX to finish
     And I fill in "Name" with "Garnett Clifton"
-    And I check the box "Supra-national authority"
+    And I check the box "Company"
     And I expand the "Additional fields" accordion section
     And I attach the file "logo.png" to "Logo"
     And I wait for AJAX to finish
@@ -322,7 +322,7 @@ Feature: Collection moderation
     And I press "Add new" at the "Owner" field
     And I wait for AJAX to finish
     And I fill in "Name" with "Coretta Simonson"
-    And I check the box "Private Individual(s)"
+    And I check the box "Company"
     And I expand the "Additional fields" accordion section
     And I attach the file "logo.png" to "Logo"
     And I wait for AJAX to finish
@@ -364,7 +364,7 @@ Feature: Collection moderation
     And I press "Add new" at the "Owner" field
     And I wait for AJAX to finish
     And I fill in "Name" with "Terrance Nash"
-    And I check the box "Regional authority"
+    And I check the box "Company"
     And I expand the "Additional fields" accordion section
     And I attach the file "logo.png" to "Logo"
     And I wait for AJAX to finish
@@ -407,7 +407,7 @@ Feature: Collection moderation
     And I press "Add new" at the "Owner" field
     And I wait for AJAX to finish
     And I fill in "Name" with "Mable Pelley"
-    And I check the box "National authority"
+    And I check the box "Company"
     And I expand the "Additional fields" accordion section
     And I attach the file "logo.png" to "Logo"
     And I wait for AJAX to finish
