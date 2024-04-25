@@ -425,7 +425,7 @@ Feature: Global search
     When I enter "apache" in the search bar and press enter
     # Also the licence itself is retrieved.
     Then the page should show only the tiles "Apache-2.0,Zzolution"
-    When I enter "HTML" in the search bar and press enter
+    When I enter "ZIP" in the search bar and press enter
     Then the page should show only the tiles "Zzolution"
     When I enter "Datalog" in the search bar and press enter
     Then the page should show only the tiles "Zzolution"
@@ -519,7 +519,7 @@ Feature: Global search
     When I enter "apache" in the search bar and press enter
     # Also the licence itself is retrieved.
     Then the page should show only the tiles "Apache-2.0,Releazz"
-    When I enter "HTML" in the search bar and press enter
+    When I enter "ZIP" in the search bar and press enter
     Then the page should show only the tiles "Releazz"
     When I enter "Datalog" in the search bar and press enter
     Then the page should show only the tiles "Releazz"
