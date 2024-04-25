@@ -31,6 +31,7 @@ class Tid implements EventSubscriberInterface {
     'rdf_entity:asset_distribution:field_ad_repr_technique',
     'rdf_entity:asset_distribution:field_status',
     'rdf_entity:asset_release:field_isr_language',
+    'rdf_entity:asset_release:field_isr_solution_type',
     'rdf_entity:asset_release:field_spatial_coverage',
     'rdf_entity:asset_release:field_status',
     'rdf_entity:asset_release:field_topic',
@@ -54,6 +55,7 @@ class Tid implements EventSubscriberInterface {
     'rdf_entity:solution:field_topic',
     'rdf_meta_entity:eif_perspective:eif_layer',
     'rdf_meta_entity:eif_perspective:eif_model',
+    'rdf_meta_entity:eif_perspective:eif_principle',
     'rdf_meta_entity:eif_perspective:field_eif_solution_type',
   ];
 
