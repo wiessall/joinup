@@ -4,7 +4,7 @@ status: true
 dependencies:
   config:
     - rdf_entity.rdfentity.collection
-    - search_api.index.published
+    - search_api.index.oss_catalogue
   module:
     - joinup_group
     - search_api
@@ -16,7 +16,7 @@ label: 'Search oss catalogue'
 module: views
 description: ''
 tag: ''
-base_table: search_api_index_published
+base_table: search_api_index_oss_catalogue
 base_field: search_api_id
 display:
   default:
@@ -29,7 +29,7 @@ display:
       fields:
         body:
           id: body
-          table: search_api_index_published
+          table: search_api_index_oss_catalogue
           field: body
           relationship: none
           group_type: group
@@ -135,7 +135,7 @@ display:
       sorts:
         oss_release_date:
           id: oss_release_date
-          table: search_api_index_published
+          table: search_api_index_oss_catalogue
           field: oss_release_date
           relationship: none
           group_type: group
@@ -148,7 +148,7 @@ display:
           exposed: true
         oss_vitality_index:
           id: oss_vitality_index
-          table: search_api_index_published
+          table: search_api_index_oss_catalogue
           field: oss_vitality_index
           relationship: none
           group_type: group
@@ -161,7 +161,7 @@ display:
           exposed: true
         title:
           id: title
-          table: search_api_index_published
+          table: search_api_index_oss_catalogue
           field: title
           relationship: none
           group_type: group
@@ -174,7 +174,7 @@ display:
           exposed: true
         title_1:
           id: title_1
-          table: search_api_index_published
+          table: search_api_index_oss_catalogue
           field: title
           relationship: none
           group_type: group
@@ -187,7 +187,7 @@ display:
           exposed: true
         title_2:
           id: title_2
-          table: search_api_index_published
+          table: search_api_index_oss_catalogue
           field: title
           relationship: none
           group_type: group
@@ -201,7 +201,7 @@ display:
       arguments:
         entity_groups:
           id: entity_groups
-          table: search_api_index_published
+          table: search_api_index_oss_catalogue
           field: entity_groups
           relationship: none
           group_type: group
@@ -238,7 +238,7 @@ display:
       filters:
         search_api_fulltext:
           id: search_api_fulltext
-          table: search_api_index_published
+          table: search_api_index_oss_catalogue
           field: search_api_fulltext
           relationship: none
           group_type: group
@@ -287,7 +287,7 @@ display:
           fields: {  }
         entity_bundle:
           id: entity_bundle
-          table: search_api_index_published
+          table: search_api_index_oss_catalogue
           field: entity_bundle
           relationship: none
           group_type: group
@@ -331,7 +331,7 @@ display:
             group_items: {  }
         status:
           id: status
-          table: search_api_index_published
+          table: search_api_index_oss_catalogue
           field: status
           relationship: none
           group_type: group
@@ -369,7 +369,7 @@ display:
             group_items: {  }
         oss_archived:
           id: oss_archived
-          table: search_api_index_published
+          table: search_api_index_oss_catalogue
           field: oss_archived
           relationship: none
           group_type: group
@@ -505,7 +505,7 @@ display:
         - 'url.query_args:sort_by'
         - 'user.node_grants:view'
       tags:
-        - 'config:search_api.index.published'
+        - 'config:search_api.index.oss_catalogue'
         - 'config:views.view.search_oss_catalogue'
         - 'search_api_list:published'
   search:
@@ -548,5 +548,5 @@ display:
         - 'url.query_args:sort_by'
         - 'user.node_grants:view'
       tags:
-        - 'config:search_api.index.published'
+        - 'config:search_api.index.oss_catalogue'
         - 'search_api_list:published'
