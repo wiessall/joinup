@@ -16,7 +16,11 @@ dependencies:
     - media.type.file
     - media.type.image
     - media.type.video
+    - node.type.custom_page
+    - node.type.discussion
     - node.type.document
+    - node.type.event
+    - node.type.news
   module:
     - comment
     - contextual
@@ -27,7 +31,6 @@ dependencies:
     - flag
     - joinup
     - joinup_community_content
-    - joinup_core
     - joinup_licence
     - media
     - meta_entity
