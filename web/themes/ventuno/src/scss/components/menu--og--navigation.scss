@@ -4,7 +4,6 @@
 .menu--og--navigation {
   position: relative;
   z-index: 2;
-  float: left;
   width: 100%;
   .nav {
     &:not(.nav-pills) {
@@ -51,7 +50,6 @@
     }
   }
   .p-plus {
-    float: left;
     align-items: baseline;
     .p-plus__toggle-btn {
       color: $primary;
