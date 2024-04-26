@@ -113,7 +113,7 @@ function joinup_core_update_dependencies(): array {
 // phpcs:enable
 
 /**
- * Installs Layout Paragraphs body for document content type.
+ * Installs Layout Paragraphs body for document and event content types.
  */
 function joinup_core_update_110500(): void {
   $configManager = \Drupal::service('config.manager');
@@ -130,7 +130,7 @@ function joinup_core_update_110500(): void {
     $storage->createFromStorageRecord($configData)->save();
   }
 
-  foreach (['document'] as $contentType) {
+  foreach (['document', 'event'] as $contentType) {
     $fieldConfigId = "node.$contentType.$layoutParagraphsField";
     if (!$entityTypeManager->getStorage('field_config')->load($fieldConfigId)) {
       $configData = $source->read("field.field.$fieldConfigId");
@@ -142,7 +142,7 @@ function joinup_core_update_110500(): void {
 }
 
 /**
- * Transform document body text field to paragraphs.
+ * Transform document and event body text fields to paragraphs.
  */
 function joinup_core_update_110501(&$sandbox): void {
   // We update about 4900 document nodes. The operation takes 240 seconds
@@ -151,4 +151,5 @@ function joinup_core_update_110501(&$sandbox): void {
   $updateHelper = \Drupal::classResolver(UpdateHelper::class);
   assert($updateHelper instanceof UpdateHelper);
   $updateHelper->transformNodeBodyToLayoutParagraphs($sandbox, 'document');
+  $updateHelper->transformNodeBodyToLayoutParagraphs($sandbox, 'event');
 }
