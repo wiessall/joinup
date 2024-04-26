@@ -52,7 +52,7 @@ Feature: Moderate community content
       | J-band light curves           | Wilson-Devinney modeling      |                     | Survey For Supernovae | published        |
       | Physics of the Neupert effect | Observed temporal correlation |                     | Survey For Supernovae | deletion request |
     And event content:
-      | title                                   | body                         | collection          | solution              | state            |
+      | title                                   | field_paragraphs_body        | collection          | solution              | state            |
       | Thick-target collisional bremsstrahlung | Chromospheric evaporation    | Black hole research |                       | draft            |
       | Conductive cooling losses               | Single-loop geometry         | Black hole research |                       | needs update     |
       | Source of SXR plasma supply and heating | Fast electrons are not       | Black hole research |                       | proposed         |
@@ -318,8 +318,8 @@ Feature: Moderate community content
       | High frequency | Slow 1.2 second spin          | Neutron stars | deletion request |
       | Cluster        | Eddington luminosity          | Neutron stars | deletion request |
     And event content:
-      | title      | body        | collection    | state    |
-      | Accelerate | Wide binary | Neutron stars | proposed |
+      | title      | field_paragraphs_body | collection    | state    |
+      | Accelerate | Wide binary           | Neutron stars | proposed |
     And news content:
       | title                   | body                             | collection    | state            |
       | Metal-rich star cluster | Standard pulsar recycling theory | Neutron stars | deletion request |
@@ -374,7 +374,7 @@ Feature: Moderate community content
 
   @uploadFiles:logo.png
   Scenario: The logo image can be replaced for an event or news item that's in
-    the "proposed" state. See ISAICP-5818.
+  the "proposed" state. See ISAICP-5818.
 
     Given user:
       | Username | leo |
