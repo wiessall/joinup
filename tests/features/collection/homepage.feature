@@ -46,7 +46,7 @@ Feature: Collection homepage
       | Rohirrim make extraordinary deal                  | Horse prices drops  | Finance in EU     | Middle earth daily | published | 2014-10-17 8:34am | 2017-7-5 |
       | Breaking: Gandalf supposedly plans his retirement | A new white wizard? | Supplier exchange | Middle earth daily | published | 2014-10-17 8:31am | 2017-7-5 |
     And event content:
-      | title                                    | short title      | body                                      | collection         | created           | start date          | end date            | state     | topic             | changed  |
+      | title                                    | short title      | field_paragraphs_body                     | collection         | created           | start date          | end date            | state     | topic             | changed  |
       | Big hobbit feast - fireworks at midnight | Big hobbit feast | Barbecue followed by dance and fireworks. | Middle earth daily | 2014-10-17 8:33am | 2016-03-15T11:12:12 | 2016-03-15T11:12:12 | published | Supplier exchange | 2017-7-5 |
 
   Scenario: The collection homepage shows the collection metrics.

@@ -94,7 +94,6 @@ Feature: Add comments
     Examples:
       | content type | title               | state     | parent     | parent title         |
       | news         | Scandalous news     | published | collection | Gossip collection    |
-      | event        | Celebrity gathering | published | collection | Gossip collection    |
       | discussion   | Is gossip bad?      | published | collection | Gossip collection    |
       # Add an example also for solutions to ensure the variables are properly replaced.
       | news         | Scandalous news     | published | solution   | Gossip girl solution |
@@ -181,8 +180,9 @@ Feature: Add comments
       | body      | Salma Coster posted a comment in        |
 
     Examples:
-      | content type | title               | state     | parent     | parent title         |
-      | document     | Wikileaks           | published | collection | Gossip collection    |
+      | content type | title     | state     | parent     | parent title      |
+      | document     | Wikileaks | published | collection | Gossip collection |
+      | event        | Wikileaks | published | collection | Gossip collection |
 
   Scenario Outline: Posting comments.
     Given <content type> content:
@@ -236,10 +236,10 @@ Feature: Add comments
     But I should not see the text "Log in or register to post comments"
 
     Examples:
-      | content type | title               | state     |
-      | news         | Scandalous news     | published |
-      | discussion   | Is gossip bad?      | published |
-      | document     | Wikileaks           | published |
+      | content type | title           | state     |
+      | news         | Scandalous news | published |
+      | discussion   | Is gossip bad?  | published |
+      | document     | Wikileaks       | published |
 
   Scenario Outline: Comments are disallowed for anonymous users.
 

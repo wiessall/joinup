@@ -44,9 +44,9 @@ Feature: Subscribing to community content in collections and solutions
       | Distant observers | Distant abstract | Distribution of bolometric flux |                    | Bolometric appearance | published | junfukue |
       | Close observers   |                  | Close observers body            |                    | Bolometric appearance | published | junfukue |
     And event content:
-      | title               | body                 | collection         | solution       | state     | author   | start date          | end date            |
-      | Effective potential | Schwarzschild metric | Black hole imaging |                | published | junfukue | 2019-11-28T11:12:13 | 2019-11-28T11:12:13 |
-      | Deflected rays      | Marginally trapped   |                    | Null geodesics | published | junfukue | 2019-12-05T12:00:00 | 2019-12-15T12:00:00 |
+      | title               | field_paragraphs_body | collection         | solution       | state     | author   | start date          | end date            |
+      | Effective potential | Schwarzschild metric  | Black hole imaging |                | published | junfukue | 2019-11-28T11:12:13 | 2019-11-28T11:12:13 |
+      | Deflected rays      | Marginally trapped    |                    | Null geodesics | published | junfukue | 2019-12-05T12:00:00 | 2019-12-15T12:00:00 |
     And news content:
       | title             | body                       | collection         | solution              | state     | author |
       | The periastron    | Jacobian elliptic integral | Black hole imaging |                       | published | bisera |
