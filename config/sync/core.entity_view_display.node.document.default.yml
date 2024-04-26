@@ -23,7 +23,6 @@ dependencies:
     - node.type.document
   module:
     - comment
-    - datetime
     - field_delimiter
     - field_formatter_range
     - field_group
@@ -85,17 +84,6 @@ content:
       pager_id: 0
     third_party_settings: {  }
     weight: 7
-    region: content
-  field_document_publication_date:
-    type: datetime_default
-    label: hidden
-    settings:
-      timezone_override: ''
-      format_type: date_only
-    third_party_settings:
-      template_suggestion:
-        template_suggestion: no_wrappers
-    weight: 2
     region: content
   field_file:
     type: file_url_default
@@ -187,6 +175,7 @@ hidden:
   abstract: true
   featured: true
   field_document_logo: true
+  field_document_publication_date: true
   field_document_spatial_coverage: true
   field_keywords: true
   field_site_featured: true
