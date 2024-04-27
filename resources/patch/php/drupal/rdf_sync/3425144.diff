@@ -1,0 +1,842 @@
+diff --git a/config/schema/rdf_sync.schema.yml b/config/schema/rdf_sync.schema.yml
+index f8fd4c3fb87a60c688fb03459051c9fd1eadb4cd..0d3b50c0654289e69acd97154ddb831fd7ff0b45 100644
+--- a/config/schema/rdf_sync.schema.yml
++++ b/config/schema/rdf_sync.schema.yml
+@@ -69,6 +69,7 @@ rdf_sync.field_mapping:
+         label: Predicate
+       type:
+         type: string
++        nullable: true
+         label: Type
+ 
+ field.field.*.*.*.third_party.rdf_sync:
+diff --git a/rdf_sync.links.menu.yml b/rdf_sync.links.menu.yml
+new file mode 100644
+index 0000000000000000000000000000000000000000..45ecff387e1cc5c08986aabc0a72b27a79fb48aa
+--- /dev/null
++++ b/rdf_sync.links.menu.yml
+@@ -0,0 +1,6 @@
++rdf_sync.settings:
++  title: 'RDF Sync configuration'
++  description: 'Configure the RDF sync module.'
++  route_name: rdf_sync.settings
++  weight: 10
++  parent: system.admin_config_system
+diff --git a/rdf_sync.module b/rdf_sync.module
+index f862bf0e367a3d139960f3178bf1c46de79a868b..80f55ba3e83a109107d7ebbd399994a851232699 100644
+--- a/rdf_sync.module
++++ b/rdf_sync.module
+@@ -8,10 +8,15 @@
+ declare(strict_types=1);
+ 
+ use Drupal\Core\Config\Entity\ThirdPartySettingsInterface;
++use Drupal\Core\Entity\BundleEntityFormBase;
+ use Drupal\Core\Entity\ContentEntityInterface;
+ use Drupal\Core\Entity\EntityInterface;
+ use Drupal\Core\Entity\EntityTypeInterface;
++use Drupal\Core\Form\FormStateInterface;
++use Drupal\field_ui\Form\FieldConfigEditForm;
+ use Drupal\rdf_sync\BundleFieldDefinition;
++use Drupal\rdf_sync\Form\Alter\BundleEntityFormAlter;
++use Drupal\rdf_sync\Form\Alter\FieldConfigFormAlter;
+ use Drupal\rdf_sync\Model\ColumnMapping;
+ use Drupal\rdf_sync\Model\SyncMethod;
+ use Drupal\rdf_sync\RdfSyncUriFieldItemList;
+@@ -125,6 +130,24 @@ function rdf_sync_entity_bundle_field_info(EntityTypeInterface $entityType, stri
+   return $fields;
+ }
+ 
++/**
++ * Implements hook_form_alter().
++ */
++function rdf_sync_form_alter(array &$form, FormStateInterface $form_state): void {
++  $formObject = $form_state->getFormObject();
++  if ($formObject instanceof BundleEntityFormBase) {
++    $formAlter = \Drupal::classResolver(BundleEntityFormAlter::class);
++  }
++  elseif ($formObject instanceof FieldConfigEditForm) {
++    $formAlter = \Drupal::classResolver(FieldConfigFormAlter::class);
++  }
++
++  /** @var \Drupal\rdf_sync\Form\Alter\FormAlterInterface|NULL $formAlter */
++  if (isset($formAlter)) {
++    $formAlter->alter($form, $form_state);
++  }
++}
++
+ /**
+  * Implements hook_entity_insert().
+  */
+diff --git a/rdf_sync.routing.yml b/rdf_sync.routing.yml
+new file mode 100644
+index 0000000000000000000000000000000000000000..d60c0f943cf2f8d34aa2b96a22bfcdd7b75b9f91
+--- /dev/null
++++ b/rdf_sync.routing.yml
+@@ -0,0 +1,7 @@
++rdf_sync.settings:
++  path: '/admin/config/system/rdf-sync'
++  defaults:
++    _form: '\Drupal\rdf_sync\Form\SettingsForm'
++    _title: 'RDF Sync configuration'
++  requirements:
++    _permission: 'administer site configuration'
+diff --git a/src/Form/Alter/AbstractFormAlter.php b/src/Form/Alter/AbstractFormAlter.php
+new file mode 100644
+index 0000000000000000000000000000000000000000..955edb16d18fa0f566a101dcea864b61880b867b
+--- /dev/null
++++ b/src/Form/Alter/AbstractFormAlter.php
+@@ -0,0 +1,53 @@
++<?php
++
++declare(strict_types=1);
++
++namespace Drupal\rdf_sync\Form\Alter;
++
++use Drupal\Core\StringTranslation\StringTranslationTrait;
++use Drupal\rdf_sync\Model\ColumnMapping;
++
++/**
++ * Abstract form alter.
++ */
++abstract class AbstractFormAlter implements FormAlterInterface {
++
++  use StringTranslationTrait;
++
++  /**
++   * Gets predicate element.
++   *
++   * @param array $settings
++   *   Field settings.
++   *
++   * @return array
++   *   Rendered array.
++   */
++  protected function getPredicateElement(array $settings): array {
++    return [
++      '#type' => 'url',
++      '#title' => $this->t('Predicate'),
++      '#default_value' => $settings['predicate'] ?? NULL,
++    ];
++  }
++
++  /**
++   * Gets type element.
++   *
++   * @param array $settings
++   *   Field settings.
++   *
++   * @return array
++   *   Rendered array.
++   */
++  protected function getTypeElement(array $settings): array {
++    return [
++      '#type' => 'select',
++      '#title' => $this->t('Type'),
++      '#options' => array_combine(ColumnMapping::ALLOWED_TYPES, ColumnMapping::ALLOWED_TYPES),
++      '#empty_value' => '',
++      '#default_value' => $settings['type'] ?? NULL,
++    ];
++  }
++
++}
+diff --git a/src/Form/Alter/BundleEntityFormAlter.php b/src/Form/Alter/BundleEntityFormAlter.php
+new file mode 100644
+index 0000000000000000000000000000000000000000..01d3bce5ce843bf9ed98175273c5ebb9d6316054
+--- /dev/null
++++ b/src/Form/Alter/BundleEntityFormAlter.php
+@@ -0,0 +1,236 @@
++<?php
++
++declare(strict_types=1);
++
++namespace Drupal\rdf_sync\Form\Alter;
++
++use Drupal\Component\Plugin\PluginManagerInterface;
++use Drupal\Core\Config\Entity\ConfigEntityBundleBase;
++use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
++use Drupal\Core\Entity\EntityFieldManagerInterface;
++use Drupal\Core\Field\FieldDefinitionInterface;
++use Drupal\Core\Form\FormStateInterface;
++use Symfony\Component\DependencyInjection\ContainerInterface;
++
++/**
++ * Bundle entity form alter.
++ */
++class BundleEntityFormAlter extends AbstractFormAlter implements ContainerInjectionInterface {
++
++  /**
++   * Constructs BundleEntityFormAlter instance.
++   *
++   * @param \Drupal\Component\Plugin\PluginManagerInterface $uriGeneratorPluginManager
++   *   Plugin manager.
++   * @param \Drupal\Core\Entity\EntityFieldManagerInterface $entityFieldManager
++   *   Entity field manager.
++   */
++  public function __construct(
++    protected PluginManagerInterface $uriGeneratorPluginManager,
++    protected EntityFieldManagerInterface $entityFieldManager,
++  ) {
++
++  }
++
++  /**
++   * {@inheritdoc}
++   */
++  public static function create(ContainerInterface $container): self {
++    return new static(
++      $container->get('plugin.manager.rdf_sync.uri_generator'),
++      $container->get('entity_field.manager'),
++    );
++  }
++
++  /**
++   * {@inheritdoc}
++   */
++  public function alter(array &$form, FormStateInterface $formState): void {
++    /** @var \Drupal\Core\Entity\BundleEntityFormBase $bundleEntity */
++    $bundleEntity = $formState->getFormObject();
++    /** @var \Drupal\Core\Config\Entity\ConfigEntityBundleBase $configEntity */
++    $configEntity = $bundleEntity->getEntity();
++
++    $settings = $configEntity->getThirdPartySettings('rdf_sync');
++
++    $form['rdf_sync'] = [
++      '#type' => 'details',
++      '#group' => 'additional_settings',
++      '#title' => $this->t('RDF sync'),
++      '#open' => TRUE,
++      '#weight' => 10,
++      '#tree' => TRUE,
++    ];
++
++    $hideStates = [
++      'visible' => [':input[name="rdf_sync[enabled]"]' => ['checked' => TRUE]],
++    ];
++
++    $form['rdf_sync']['enabled'] = [
++      '#type' => 'checkbox',
++      '#default_value' => !empty($settings['type']),
++      '#title' => $this->t('Enable RDF sync'),
++    ];
++
++    $form['rdf_sync']['type'] = [
++      '#type' => 'url',
++      '#title' => $this->t('RDF type mapping'),
++      '#default_value' => $settings['type'] ?? '',
++      '#states' => $hideStates +
++        ['required' => $hideStates['visible']],
++    ];
++
++    $form['rdf_sync']['uri_field_name'] = [
++      '#type' => 'textfield',
++      '#title' => $this->t('URI field name'),
++      '#default_value' => $settings['uri_field_name'] ?? '',
++      '#states' => $hideStates,
++    ];
++
++    $form['rdf_sync']['uri_plugin'] = [
++      '#type' => 'select',
++      '#title' => $this->t('URI generator plugin ID'),
++      '#default_value' => $settings['uri_plugin'] ?? '',
++      '#empty_value' => '',
++      '#options' => $this->getListOfPluginOptions(),
++      '#states' => $hideStates,
++    ];
++
++    $form['rdf_sync']['base_fields_mapping'] = [
++      '#type' => 'details',
++      '#title' => t('Field mapping'),
++      '#description' => t('Please map the bundle base fields to their corresponding RDF properties.'),
++      '#states' => $hideStates,
++    ];
++
++    $baseFields = $this->entityFieldManager->getBaseFieldDefinitions($configEntity->getEntityType()
++      ->getBundleOf());
++
++    foreach ($baseFields as $baseField) {
++      $fieldColumns = $this->getColumnFields($baseField);
++      if (empty($fieldColumns)) {
++        continue;
++      }
++
++      $form['rdf_sync']['base_fields_mapping'][$baseField->getName()] = [
++        '#type' => 'details',
++        '#title' => $baseField->getLabel(),
++        '#description' => $baseField->getDescription(),
++      ];
++
++      foreach ($fieldColumns as $column) {
++        $fieldSettings = $settings['fields'][$baseField->getName()][$column] ?? [];
++
++        $form['rdf_sync']['base_fields_mapping'][$baseField->getName()][$column] = [
++          '#type' => 'details',
++          '#title' => $column,
++          '#open' => TRUE,
++        ];
++
++        $form['rdf_sync']['base_fields_mapping'][$baseField->getName()][$column]['predicate'] = $this->getPredicateElement($fieldSettings);
++        $form['rdf_sync']['base_fields_mapping'][$baseField->getName()][$column]['type'] = $this->getTypeElement($fieldSettings);
++      }
++    }
++
++    $form['#entity_builders'][] = [$this, 'entityFormEntityBuild'];
++  }
++
++  /**
++   * Gets list of plugin options.
++   *
++   * @return array
++   *   List of plugins.
++   */
++  protected function getListOfPluginOptions(): array {
++    return array_reduce($this->uriGeneratorPluginManager->getDefinitions(), function ($result, $item) {
++      $result[$item['id']] = $item['name'];
++      return $result;
++    }, []);
++  }
++
++  /**
++   * Gets field columns.
++   *
++   * @param \Drupal\Core\Field\FieldDefinitionInterface $fieldDefinition
++   *   Field definition.
++   *
++   * @return array
++   *   Columns.
++   */
++  protected function getColumnFields(FieldDefinitionInterface $fieldDefinition): array {
++    if ($fieldDefinition->isComputed() || empty($fieldDefinition->getColumns())) {
++      return [];
++    }
++
++    $columns = array_keys($fieldDefinition->getColumns());
++    if (in_array($fieldDefinition->getType(), [
++      'text',
++      'text_long',
++      'text_with_summary',
++    ])) {
++      $columns[] = 'processed';
++    }
++
++    return $columns;
++  }
++
++  /**
++   * Entity builder method.
++   *
++   * @param string $entityType
++   *   The type of the entity.
++   * @param \Drupal\Core\Config\Entity\ConfigEntityBundleBase $fieldConfig
++   *   The field config.
++   * @param array $form
++   *   A nested array form elements comprising the form.
++   * @param \Drupal\Core\Form\FormStateInterface $formState
++   *   The current state of the form.
++   */
++  public function entityFormEntityBuild(string $entityType, ConfigEntityBundleBase $fieldConfig, array $form, FormStateInterface $formState): void {
++    $enabled = $formState->getValue(['rdf_sync', 'enabled']);
++
++    // Remove.
++    $fieldConfig->unsetThirdPartySetting('rdf_sync', 'type');
++    $fieldConfig->unsetThirdPartySetting('rdf_sync', 'uri_field_name');
++    $fieldConfig->unsetThirdPartySetting('rdf_sync', 'uri_plugin');
++    $fieldConfig->unsetThirdPartySetting('rdf_sync', 'fields');
++    // Disabled so nothing to set.
++    if (!$enabled) {
++      return;
++    }
++
++    $mappings = ['type', 'uri_field_name'];
++    foreach ($mappings as $mapping) {
++      $mappingValue = $formState->getValue(['rdf_sync', $mapping]);
++      if ($mappingValue) {
++        $fieldConfig->setThirdPartySetting('rdf_sync', $mapping, $mappingValue);
++      }
++    }
++
++    $uri_plugin = $formState->getValue(['rdf_sync', 'uri_plugin']) ?: NULL;
++    $fieldConfig->setThirdPartySetting('rdf_sync', 'uri_plugin', $uri_plugin);
++
++    $fields = [];
++    $baseFields = $this->entityFieldManager->getBaseFieldDefinitions($fieldConfig->getEntityType()
++      ->getBundleOf());
++
++    foreach ($baseFields as $baseField) {
++      foreach ($this->getColumnFields($baseField) as $column) {
++        $data = $formState->getValue([
++          'rdf_sync',
++          'base_fields_mapping',
++          $baseField->getName(),
++          $column,
++        ]);
++
++        if (!empty($data['predicate'])) {
++          $data['type'] = $data['type'] ?: NULL;
++          $fields[$baseField->getName()][$column] = $data;
++        }
++      }
++    }
++
++    $fieldConfig->setThirdPartySetting('rdf_sync', 'fields', $fields);
++  }
++
++}
+diff --git a/src/Form/Alter/FieldConfigFormAlter.php b/src/Form/Alter/FieldConfigFormAlter.php
+new file mode 100644
+index 0000000000000000000000000000000000000000..34f61c9d71e3395c52c02ffabd54afd92656fb5e
+--- /dev/null
++++ b/src/Form/Alter/FieldConfigFormAlter.php
+@@ -0,0 +1,79 @@
++<?php
++
++declare(strict_types=1);
++
++namespace Drupal\rdf_sync\Form\Alter;
++
++use Drupal\Core\Form\FormStateInterface;
++use Drupal\field\FieldConfigInterface;
++
++/**
++ * Field config form alter.
++ */
++class FieldConfigFormAlter extends AbstractFormAlter {
++
++  /**
++   * {@inheritdoc}
++   */
++  public function alter(array &$form, FormStateInterface $formState): void {
++    /** @var \Drupal\field\FieldConfigInterface $fieldConfig */
++    $fieldConfig = $formState->getFormObject()->getEntity();
++    $fieldStorageConfig = $fieldConfig->getFieldStorageDefinition();
++
++    $form['rdf_sync'] = [
++      '#type' => 'details',
++      '#title' => $this->t('RDF sync mapping'),
++      '#open' => TRUE,
++      '#weight' => 99,
++      '#tree' => TRUE,
++    ];
++
++    foreach ($fieldStorageConfig->getSchema()['columns'] as $column => $columnDesc) {
++      $description = isset($columnDesc['description']) ? $columnDesc['description'] . "<br>" : '';
++      foreach (['type', 'length', 'size', 'serialize'] as $key) {
++        if (!empty($columnDesc[$key])) {
++          $description .= '<strong>' . $key . "</strong>: " . $columnDesc[$key] . ' ';
++        }
++      }
++
++      $form['rdf_sync'][$column] = [
++        '#type' => 'details',
++        '#title' => $column,
++        '#description' => $description,
++      ];
++
++      $settings = $fieldConfig->getThirdPartySettings('rdf_sync')[$column] ?? [];
++      $form['rdf_sync'][$column]['predicate'] = $this->getPredicateElement($settings);
++      $form['rdf_sync'][$column]['type'] = $this->getTypeElement($settings);
++    }
++
++    $form['#entity_builders'][] = [$this, 'entityFormEntityBuild'];
++  }
++
++  /**
++   * Entity builder method.
++   *
++   * @param string $entityType
++   *   The type of the entity.
++   * @param \Drupal\field\FieldConfigInterface $fieldConfig
++   *   The field config.
++   * @param array $form
++   *   A nested array form elements comprising the form.
++   * @param \Drupal\Core\Form\FormStateInterface $formState
++   *   The current state of the form.
++   */
++  public function entityFormEntityBuild(string $entityType, FieldConfigInterface $fieldConfig, array $form, FormStateInterface $formState): void {
++    $fieldStorageConfig = $fieldConfig->getFieldStorageDefinition();
++
++    foreach (array_keys($fieldStorageConfig->getSchema()['columns']) as $column) {
++      $fieldConfig->unsetThirdPartySetting('rdf_sync', $column);
++      $data = $formState->getValue(['rdf_sync', $column]);
++      $data['type'] = $data['type'] ?: NULL;
++
++      if (!empty($data['predicate'])) {
++        $fieldConfig->setThirdPartySetting('rdf_sync', $column, $data);
++      }
++    }
++  }
++
++}
+diff --git a/src/Form/Alter/FormAlterInterface.php b/src/Form/Alter/FormAlterInterface.php
+new file mode 100644
+index 0000000000000000000000000000000000000000..950a9b63e29f1b653b7da53a81ef4e5a039433f1
+--- /dev/null
++++ b/src/Form/Alter/FormAlterInterface.php
+@@ -0,0 +1,24 @@
++<?php
++
++declare(strict_types=1);
++
++namespace Drupal\rdf_sync\Form\Alter;
++
++use Drupal\Core\Form\FormStateInterface;
++
++/**
++ * Form alter helper.
++ */
++interface FormAlterInterface {
++
++  /**
++   * Alters form.
++   *
++   * @param array $form
++   *   Form render array.
++   * @param \Drupal\Core\Form\FormStateInterface $formState
++   *   Form state.
++   */
++  public function alter(array &$form, FormStateInterface $formState): void;
++
++}
+diff --git a/src/Form/SettingsForm.php b/src/Form/SettingsForm.php
+new file mode 100644
+index 0000000000000000000000000000000000000000..11c934ba1987e21089589c29720fb679242698ff
+--- /dev/null
++++ b/src/Form/SettingsForm.php
+@@ -0,0 +1,111 @@
++<?php
++
++namespace Drupal\rdf_sync\Form;
++
++use Drupal\Core\Form\ConfigFormBase;
++use Drupal\Core\Form\FormStateInterface;
++
++/**
++ * The RDF sync settings form.
++ */
++class SettingsForm extends ConfigFormBase {
++
++  /**
++   * {@inheritdoc}
++   */
++  public function getFormId(): string {
++    return 'rdf_sync_settings';
++  }
++
++  /**
++   * {@inheritdoc}
++   */
++  protected function getEditableConfigNames(): array {
++    return ['rdf_sync.settings'];
++  }
++
++  /**
++   * {@inheritdoc}
++   */
++  public function buildForm(array $form, FormStateInterface $form_state): array {
++    $config = $this->config('rdf_sync.settings');
++
++    $form['graph_uri'] = [
++      '#type' => 'url',
++      '#title' => $this->t('Graph URI'),
++      '#default_value' => $config->get('graph_uri') ?? '',
++      '#required' => TRUE,
++      '#config_target' => 'rdf_sync.settings:graph_uri',
++    ];
++
++    $form['endpoint'] = [
++      '#type' => 'details',
++      '#title' => $this->t('Configure endpoint'),
++      '#description' => $this->t('Basic information about RDF endpoint.'),
++      '#open' => TRUE,
++    ];
++
++    $form['endpoint']['scheme'] = [
++      '#type' => 'select',
++      '#title' => $this->t('HTTP protocol'),
++      '#description' => $this->t('The HTTP protocol to use for sending queries.'),
++      '#default_value' => $config->get('endpoint.scheme') ?? 'http',
++      '#options' => [
++        'http' => $this->t('http'),
++        'https' => $this->t('https'),
++      ],
++      '#config_target' => 'rdf_sync.settings:endpoint.scheme',
++    ];
++
++    $form['endpoint']['host'] = [
++      '#type' => 'textfield',
++      '#title' => $this->t('RDF host'),
++      '#description' => $this->t('The host name or IP of your RDF server.'),
++      '#default_value' => $config->get('endpoint.host') ?? '',
++      '#required' => TRUE,
++      '#config_target' => 'rdf_sync.settings:endpoint.host',
++    ];
++
++    $form['endpoint']['port'] = [
++      '#type' => 'number',
++      '#title' => $this->t('RDF port'),
++      '#default_value' => $config->get('endpoint.port') ?? '',
++      '#required' => TRUE,
++      '#min' => 1,
++      '#config_target' => 'rdf_sync.settings:endpoint.port',
++    ];
++
++    $form['endpoint']['paths'] = [
++      '#type' => 'details',
++      '#title' => $this->t('Paths'),
++      '#open' => TRUE,
++    ];
++
++    $form['endpoint']['paths']['query'] = [
++      '#type' => 'textfield',
++      '#title' => $this->t('SPARQL query path'),
++      '#default_value' => $config->get('endpoint.paths.query') ?? '',
++      '#required' => TRUE,
++      '#config_target' => 'rdf_sync.settings:endpoint.paths.query',
++    ];
++
++    $form['endpoint']['paths']['update'] = [
++      '#type' => 'textfield',
++      '#title' => $this->t('SPARQL update path'),
++      '#default_value' => $config->get('endpoint.paths.update') ?? '',
++      '#required' => TRUE,
++      '#config_target' => 'rdf_sync.settings:endpoint.paths.update',
++    ];
++
++    $form['endpoint']['paths']['graph_store'] = [
++      '#type' => 'textfield',
++      '#title' => $this->t('Graph store path'),
++      '#default_value' => $config->get('endpoint.paths.graph_store') ?? '',
++      '#required' => TRUE,
++      '#config_target' => 'rdf_sync.settings:endpoint.paths.graph_store',
++    ];
++
++    return parent::buildForm($form, $form_state);
++  }
++
++}
+diff --git a/tests/src/Functional/RdfEntityConfigFormTest.php b/tests/src/Functional/RdfEntityConfigFormTest.php
+new file mode 100644
+index 0000000000000000000000000000000000000000..b9f370e3e14d7102853f26df61f2814b51f96cce
+--- /dev/null
++++ b/tests/src/Functional/RdfEntityConfigFormTest.php
+@@ -0,0 +1,73 @@
++<?php
++
++declare(strict_types=1);
++
++namespace Drupal\Tests\rdf_sync\Functional;
++
++use Drupal\node\Entity\NodeType;
++use Drupal\Tests\BrowserTestBase;
++
++/**
++ * Test entity config form.
++ *
++ * @group rdf_sync
++ */
++class RdfEntityConfigFormTest extends BrowserTestBase {
++
++  /**
++   * {@inheritdoc}
++   */
++  protected static $modules = [
++    'rdf_sync',
++    'node',
++    'field_ui',
++  ];
++
++  /**
++   * {@inheritdoc}
++   */
++  protected $defaultTheme = 'stark';
++
++  /**
++   * Tests Rdf sync configuration for entity.
++   *
++   * @covers \Drupal\rdf_sync\Form\Alter\BundleEntityFormAlter
++   *
++   * @throws \Exception
++   */
++  public function testEntityForm(): void {
++    NodeType::create(['type' => 'page', 'name' => 'Page'])->save();
++
++    $this->drupalLogin($this->rootUser);
++    $this->drupalGet('/admin/structure/types/manage/page');
++
++    $assert = $this->assertSession();
++
++    $assert->pageTextContains('RDF sync');
++
++    // Update config.
++    $data = [
++      'rdf_sync[enabled]' => '1',
++      'rdf_sync[type]' => 'https://data.org/value',
++      'rdf_sync[uri_field_name]' => 'uri_field_name',
++      'rdf_sync[uri_plugin]' => 'default',
++      'rdf_sync[base_fields_mapping][type][target_id][predicate]' => 'https://data.org/type',
++      'rdf_sync[base_fields_mapping][type][target_id][type]' => 'xsd:string',
++      'rdf_sync[base_fields_mapping][status][value][predicate]' => 'https://data.org/status',
++      'rdf_sync[base_fields_mapping][status][value][type]' => 'xsd:integer',
++      'rdf_sync[base_fields_mapping][title][value][predicate]' => 'https://data.org/title',
++      'rdf_sync[base_fields_mapping][title][value][type]' => 'xsd:string',
++      'rdf_sync[base_fields_mapping][created][value][predicate]' => 'https://data.org/created',
++      'rdf_sync[base_fields_mapping][created][value][type]' => 'xsd:dateTime',
++    ];
++    $this->submitForm($data, 'Save');
++
++    // Check if data were saved.
++    $this->drupalGet('/admin/structure/types/manage/page');
++    $session = $this->assertSession();
++    foreach ($data as $field => $value) {
++      $session->fieldValueEquals($field, $value);
++    }
++  }
++
++}
+diff --git a/tests/src/Functional/RdfFieldConfigFormTest.php b/tests/src/Functional/RdfFieldConfigFormTest.php
+new file mode 100644
+index 0000000000000000000000000000000000000000..ea7662cec929908a106fc6c7ec3292d98ae08c98
+--- /dev/null
++++ b/tests/src/Functional/RdfFieldConfigFormTest.php
+@@ -0,0 +1,70 @@
++<?php
++
++declare(strict_types=1);
++
++namespace Drupal\Tests\rdf_sync\Functional;
++
++use Drupal\node\Entity\NodeType;
++use Drupal\Tests\BrowserTestBase;
++
++/**
++ * Test field config form.
++ *
++ * @group rdf_sync
++ */
++class RdfFieldConfigFormTest extends BrowserTestBase {
++
++  /**
++   * {@inheritdoc}
++   */
++  protected static $modules = [
++    'rdf_sync',
++    'node',
++    'field_ui',
++  ];
++
++  /**
++   * {@inheritdoc}
++   */
++  protected $defaultTheme = 'stark';
++
++  /**
++   * Tests Rdf sync configuration for field.
++   *
++   * @covers \Drupal\rdf_sync\Form\Alter\FieldConfigFormAlter
++   *
++   * @throws \Exception
++   */
++  public function testFieldForm(): void {
++    $node_type = NodeType::create(['type' => 'page']);
++    $node_type->save();
++    node_add_body_field($node_type);
++
++    $this->drupalLogin($this->createUser([
++      'administer node fields',
++    ]));
++    $this->drupalGet('/admin/structure/types/manage/page/fields/node.page.body');
++
++    $assert = $this->assertSession();
++    $assert->pageTextContains('RDF sync mapping');
++
++    // Update config.
++    $data = [
++      'rdf_sync[value][predicate]' => 'https://data.org/value',
++      'rdf_sync[value][type]' => 'resource',
++      'rdf_sync[summary][predicate]' => 'https://data.org/summary',
++      'rdf_sync[summary][type]' => 'xsd:string',
++      'rdf_sync[format][predicate]' => 'https://data.org/format',
++      'rdf_sync[format][type]' => 'xsd:string',
++    ];
++    $this->submitForm($data, 'Save settings');
++
++    // Check if data were saved.
++    $this->drupalGet('/admin/structure/types/manage/page/fields/node.page.body');
++    $session = $this->assertSession();
++    foreach ($data as $field => $value) {
++      $session->fieldValueEquals($field, $value);
++    }
++  }
++
++}
+diff --git a/tests/src/Kernel/RdfSyncSettingsFormTest.php b/tests/src/Kernel/RdfSyncSettingsFormTest.php
+new file mode 100644
+index 0000000000000000000000000000000000000000..c2b96592c01a6adbe09aab5f47a931a610521f2b
+--- /dev/null
++++ b/tests/src/Kernel/RdfSyncSettingsFormTest.php
+@@ -0,0 +1,66 @@
++<?php
++
++namespace Drupal\geocoder\Tests;
++
++use Drupal\Tests\BrowserTestBase;
++
++/**
++ * @coversDefaultClass \Drupal\rdf_sync\Form\SettingsForm
++ *
++ * @group rdf_sync
++ */
++class RdfSyncSettingsFormTest extends BrowserTestBase {
++
++  /**
++   * {@inheritdoc}
++   */
++  protected static $modules = ['rdf_sync'];
++
++  /**
++   * {@inheritdoc}
++   */
++  protected $defaultTheme = 'stark';
++
++  /**
++   * Checks access.
++   *
++   * @throws \Exception
++   */
++  public function testAccessForm(): void {
++    $this->drupalGet('admin/config/system/rdf-sync');
++    $this->assertSession()->statusCodeEquals(403);
++  }
++
++  /**
++   * Checks config form.
++   *
++   * @throws \Exception
++   */
++  public function testUpdates(): void {
++    $this->drupalLogin($this->DrupalCreateUser([
++      'administer site configuration',
++    ]));
++    $this->drupalGet('admin/config/system/rdf-sync');
++    $this->assertSession()->statusCodeEquals(200);
++
++    // Update config.
++    $data = [
++      'graph_uri' => 'http://data2',
++      'scheme' => 'http',
++      'host' => 'localhost',
++      'port' => '8890',
++      'query' => 'sparql',
++      'update' => 'sparql',
++      'graph_store' => 'sparql-graph-crud',
++    ];
++    $this->submitForm($data, 'Save configuration');
++    $this->assertSession()
++      ->pageTextContains('The configuration options have been saved.');
++
++    // Check if update was performed.
++    $this->drupalGet('admin/config/system/rdf-sync');
++    $session = $this->assertSession();
++    $session->fieldValueEquals('graph_uri', 'http://data2');
++  }
++
++}
