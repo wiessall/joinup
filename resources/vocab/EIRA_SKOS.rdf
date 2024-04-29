@@ -1288,7 +1288,7 @@ IoP Dimension: Governance IoP
 
 LOST view: Legal view
 
-Interoperability saliency: The Public Policy ABB  is salient for legal interoperability because it drives the production and formulation of legislation, and it is one of the main context elements to be taken into account when different organisations need to work together, as stated in the EIF: "Legal interoperability is about ensuring that organisations operating under different legal frameworks, policies and strategies are able to work together".
+Interoperability saliency: The Public Policy ABB  is salient for legal interoperability because it drives the production and formulation of legislation, and it is one of the main context elements to be taken into account when different organisations need to work together, as stated in the EIF: "Legal interoperability is about ensuring that organisations operating under different legal frameworks, policies and strategies are able to work together".
 
 Identifier: http://data.europa.eu/dr8/PublicPolicyCourseOfAction
 
@@ -1318,7 +1318,7 @@ Last modification: 2022-12-01
     <eira:definitionSource>EuroVoc</eira:definitionSource>
     <eira:definitionSourceReference><![CDATA[http://eurovoc.europa.eu/drupal/?q=request&concepturi=http%3A%2F%2Feurovoc.europa.eu%2F8466&termuri=http%3A%2F%2Feurovoc.europa.eu%2F209598&language=en&view=pt&ifacelang=en]]></eira:definitionSourceReference>
     <skos:example><![CDATA[The Common Agricultural Policy (CAP, https://ec.europa.eu/info/strategy/agriculture_en) is an example on how the Public Policy Architecture Building Block (ABB) can be instantiated as a Solution Building Block (SBB). The common agricultural policy (CAP) – one of Europe’s oldest policies – has evolved along with the EU. Today's CAP supports a modern, market-oriented farming sector ensuring the provision of safe, affordable, high quality food, produced sustainably and respecting strict standards (environmental, animal welfare, food safety, etc.), as well as supporting investment in the broader rural economy.]]></skos:example>
-    <eira:iopSaliency><![CDATA[The Public Policy ABB  is salient for legal interoperability because it drives the production and formulation of legislation, and it is one of the main context elements to be taken into account when different organisations need to work together, as stated in the EIF: "Legal interoperability is about ensuring that organisations operating under different legal frameworks, policies and strategies are able to work together".]]></eira:iopSaliency>
+    <eira:iopSaliency><![CDATA[The Public Policy ABB  is salient for legal interoperability because it drives the production and formulation of legislation, and it is one of the main context elements to be taken into account when different organisations need to work together, as stated in the EIF: "Legal interoperability is about ensuring that organisations operating under different legal frameworks, policies and strategies are able to work together".]]></eira:iopSaliency>
     <skos:note><![CDATA[A Public Policy is based on certain values and objectives and is implemented using a variety of methods. It applies on the territory within which the authority is authorised to act.The policies overview of EU activities in all areas, from agriculture to transport: (http://ec.europa.eu/policies/index_en.htm)]]></skos:note>
     <eira:concept>eira:ArchitectureBuildingBlock</eira:concept>
     <eira:iopDimension>Governance IoP</eira:iopDimension>
@@ -1541,7 +1541,7 @@ Syn. Business Ability
 
 INTEROPERABILITY SALIENCY:
 IoP Dimension: Structural IoP, Behavioral IoP
-The Business Capability ABB  is salient for organisational interoperability because it defines the main business reason for exchanging business information with other business capabilities in another organisation or in the same organisation.
+The Business Capability ABB  is salient for organisational interoperability because it defines the main business reason for exchanging business information with other business capabilities in another organisation or in the same organisation.
 
 EXAMPLES:
 The following implementation is an example on how this specific Architecture Building Block (ABB) can be instantiated as a Solution Building Block (SBB):
@@ -2277,7 +2277,7 @@ Syn. Interoperability management method or system
 
 INTEROPERABILITY SALIENCY:
 IoP Dimension: Governance IoP
-The Interoperability Governance ABB  is an interoperability enabler because it helps achieve organisational interoperability as it is " the key to a holistic approach on interoperability, as it brings together all the instruments needed to apply it" (EIF). As stated in EIF Recommendation 20: "Ensure holistic governance of interoperability activities across administrative levels and sectors."
+The Interoperability Governance ABB  is an interoperability enabler because it helps achieve organisational interoperability as it is " the key to a holistic approach on interoperability, as it brings together all the instruments needed to apply it" (EIF). As stated in EIF Recommendation 20: "Ensure holistic governance of interoperability activities across administrative levels and sectors."
 
 EXAMPLES:
 The following implementations are examples on how this specific Architecture Building Block (ABB) can be instantiated as a Solution Building Block (SBB):
@@ -2870,7 +2870,7 @@ Syn. Test results
 
 INTEROPERABILITY SALIENCY:
 IoP Dimension: Structural IoP
-The Conformance Test Report ABB  is salient for technical interoperability because it provides reports of data testing to inform stakeholders.
+The Conformance Test Report ABB  is salient for technical interoperability because it provides reports of data testing to inform stakeholders.
 
 EXAMPLES:
 The following implementation is an example on how this specific Architecture Building Block (ABB) can be instantiated as a Solution Building Block (SBB):
@@ -2940,7 +2940,7 @@ https://ec.europa.eu/isa2/actions/continuously-updating-european-interoperabilit
 
 INTEROPERABILITY SALIENCY:
 IoP Dimension: Governance IoP
-The Interoperability Strategy ABB  is an interoperability enabler because it helps achieve organisational interoperability by setting up the vision and principles for the development of the interoperability capabilities. The European Interoperability Framework implements the European Interoperability Strategy.
+The Interoperability Strategy ABB  is an interoperability enabler because it helps achieve organisational interoperability by setting up the vision and principles for the development of the interoperability capabilities. The European Interoperability Framework implements the European Interoperability Strategy.
 
 EXAMPLES:
 The following implementation is an example on how this specific Architecture Building Block (ABB) can be instantiated as a Solution Building Block (SBB):
@@ -4935,7 +4935,7 @@ IoP Dimension: Structural IoP
 
 LOST view: Technical view - Infrastructure
 
-Interoperability saliency: The Conformance Testing Scenario ABB  is salient for technical interoperability because it provides a document of a list of activities for the execution of interoperability tests.
+Interoperability saliency: The Conformance Testing Scenario ABB  is salient for technical interoperability because it provides a document of a list of activities for the execution of interoperability tests.
 
 Identifier: http://data.europa.eu/dr8/ConformanceTestScenarioBusinessObject
 
@@ -4964,7 +4964,7 @@ Last modification: 2022-18-01
     <eira:definitionSource>NIST</eira:definitionSource>
     <eira:definitionSourceReference><![CDATA[https://www.nist.gov/itl/ssd/information-systems-group/overview-conformance-testing]]></eira:definitionSourceReference>
     <skos:example><![CDATA[The following implementation is an example on how this specific Architecture Building Block (ABB) can be instantiated as a Solution Building Block (SBB): SoapUI - SoapUI is the world's most widely-used open source API testing tool for SOAP and REST APIs. SoapUI offers SOAP Web Services functional testing, REST API functional testing, WSDL coverage, message assertion testing and test refactoring. Scenario-based tests should be directly tied to user stories, which were probably provided by the product owner or some business stakeholder. Under ideal circumstances, these tests should be the user stories, so that business stakeholders can both easily help the tester develop the test cases and understand the results. [https://www.soapui.org/testing-dojo/best-practices/scenario-based-testing.html][https://www.soapui.org/testing-dojo/world-of-api-testing/test-first.html]]]></skos:example>
-    <eira:iopSaliency><![CDATA[The Conformance Testing Scenario ABB  is salient for technical interoperability because it provides a document of a list of activities for the execution of interoperability tests.]]></eira:iopSaliency>
+    <eira:iopSaliency><![CDATA[The Conformance Testing Scenario ABB  is salient for technical interoperability because it provides a document of a list of activities for the execution of interoperability tests.]]></eira:iopSaliency>
     <skos:note><![CDATA[]]></skos:note>
     <eira:concept>eira:ArchitectureBuildingBlock</eira:concept>
     <eira:iopDimension>Structural IoP</eira:iopDimension>
@@ -6967,7 +6967,7 @@ Source: W3C
 
 INTEROPERABILITY SALIENCY:
 IoP Dimension: Structural IoP
-The Service Discovery Component ABB  is salient for technical interoperability because it allows to implement the funcionality of sharing services available for reuse as stated in the EIF recommendation n°36: "Develop a shared infrastructure of reusable services and information sources that can be used by all public administrations".
+The Service Discovery Component ABB  is salient for technical interoperability because it allows to implement the funcionality of sharing services available for reuse as stated in the EIF recommendation n°36: "Develop a shared infrastructure of reusable services and information sources that can be used by all public administrations".
 
 EXAMPLES:
 The following implementation is an example on how this specific Architecture Building Block (ABB) can be instantiated as a Solution Building Block (SBB):
@@ -7063,7 +7063,7 @@ Implements the functionality of documenting the configuration and architecture o
 Source: ISA2 - EIA Action
 
 INTEROPERABILITY SALIENCY:
-The Configuration and Solution of Cartography Component ABB  is salient for technical interoperability because it provides the implementation of the functionalities which can be exploited to document the interoperabilty features of a solution or a set of solution/services.
+The Configuration and Solution of Cartography Component ABB  is salient for technical interoperability because it provides the implementation of the functionalities which can be exploited to document the interoperabilty features of a solution or a set of solution/services.
 
 EXAMPLES:
 The following implementation is an example on how this specific Architecture Building Block (ABB) can be instantiated as a Solution Building Block (SBB):
@@ -7369,7 +7369,7 @@ Source: Regulation (EU) No 283/2014
 
 INTEROPERABILITY SALIENCY:
 IoP Dimension: Structural IoP, Behavioral IoP
-The Digital Infrastructure Service ABB  is salient for technical interoperability because it a central element through which interoperability is ensured and by definition, as intended in the EIRA, Digital Service Infrastructure provide trans-European interoperable services.
+The Digital Infrastructure Service ABB  is salient for technical interoperability because it a central element through which interoperability is ensured and by definition, as intended in the EIRA, Digital Service Infrastructure provide trans-European interoperable services.
 
 EXAMPLES:
 The following implementation is an example on how this specific Architecture Building Block (ABB) can be instantiated as a Solution Building Block (SBB):
@@ -7449,7 +7449,7 @@ Source: ISA2 - EIA Action
 
 INTEROPERABILITY SALIENCY:
 IoP Dimension: Structural IoP
-The Data Warehouse Component ABB  is salient for technical interoperability because it provides and shares the functionality for the short-term or medium-term preservation of records and information in electronic form in order to ensure their temporal egibility, reliability and integrity and to ease their management as stated in the EIF: "Legislation requires that decisions and data are stored and can be accessed for a specified time. This means that records and information in electronic form held by public administrations for the purpose of documenting procedures and decisions must be preserved and be converted, where necessary, to new media when old media become obsolete. The goal is to ensure that records and other forms of information keep their legibility, reliability and integrity and can be accessed as long as needed subject to security and privacy provisions."
+The Data Warehouse Component ABB  is salient for technical interoperability because it provides and shares the functionality for the short-term or medium-term preservation of records and information in electronic form in order to ensure their temporal egibility, reliability and integrity and to ease their management as stated in the EIF: "Legislation requires that decisions and data are stored and can be accessed for a specified time. This means that records and information in electronic form held by public administrations for the purpose of documenting procedures and decisions must be preserved and be converted, where necessary, to new media when old media become obsolete. The goal is to ensure that records and other forms of information keep their legibility, reliability and integrity and can be accessed as long as needed subject to security and privacy provisions."
 
 EXAMPLES:
 The following implementation is an example on how this specific Architecture Building Block (ABB) can be instantiated as a Solution Building Block (SBB):
@@ -7491,7 +7491,7 @@ Shares the functionality of documenting the configuration and architecture of so
 Source: ISA2 - EIA Action
 
 INTEROPERABILITY SALIENCY:
-The Configuration and Solution of Cartography Service ABB  is salient for technical interoperability because it can be used to document the interoperabilty features of a solution or a set of solution/services.
+The Configuration and Solution of Cartography Service ABB  is salient for technical interoperability because it can be used to document the interoperabilty features of a solution or a set of solution/services.
 
 EXAMPLES:
 The following implementation is an example on how this specific Architecture Building Block (ABB) can be instantiated as a Solution Building Block (SBB):
@@ -8002,7 +8002,7 @@ Source: ISA2 - EIA Action
 
 INTEROPERABILITY SALIENCY:
 IoP Dimension: Behavioral IoP
-The Data Warehouse Service ABB  is salient for technical interoperability because it provides and shares the functionality for the short-term or medium-term preservation of records and information in electronic form in order to ensure their temporal egibility, reliability and integrity and to ease their management as stated in the EIF: "Legislation requires that decisions and data are stored and can be accessed for a specified time. This means that records and information in electronic form held by public administrations for the purpose of documenting procedures and decisions must be preserved and be converted, where necessary, to new media when old media become obsolete. The goal is to ensure that records and other forms of information keep their legibility, reliability and integrity and can be accessed as long as needed subject to security and privacy provisions."
+The Data Warehouse Service ABB  is salient for technical interoperability because it provides and shares the functionality for the short-term or medium-term preservation of records and information in electronic form in order to ensure their temporal egibility, reliability and integrity and to ease their management as stated in the EIF: "Legislation requires that decisions and data are stored and can be accessed for a specified time. This means that records and information in electronic form held by public administrations for the purpose of documenting procedures and decisions must be preserved and be converted, where necessary, to new media when old media become obsolete. The goal is to ensure that records and other forms of information keep their legibility, reliability and integrity and can be accessed as long as needed subject to security and privacy provisions."
 
 EXAMPLES:
 The following implementation is an example on how this specific Architecture Building Block (ABB) can be instantiated as a Solution Building Block (SBB):
@@ -8556,7 +8556,7 @@ IoP Dimension: Structural IoP
 
 LOST view: Technical view - Infrastructure
 
-Interoperability saliency: The Data Pubblication Component ABB  is salient for technical interoperability because it provides the implementation of the functionalities to make public data freely available for use and reuse by others unless restriction aoply as stated in the EIF recommendation n.2: "Publish the data you own as open data unless certain restrictions apply."
+Interoperability saliency: The Data Pubblication Component ABB  is salient for technical interoperability because it provides the implementation of the functionalities to make public data freely available for use and reuse by others unless restriction aoply as stated in the EIF recommendation n.2: "Publish the data you own as open data unless certain restrictions apply."
 
 Identifier: http://data.europa.eu/dr8/DataPublicationApplicationComponent
 
@@ -8586,7 +8586,7 @@ Last modification: 2022-23-01
     <eira:definitionSource>ISA2</eira:definitionSource>
     <eira:definitionSourceReference><![CDATA[https://ec.europa.eu/isa2/sites/default/files/docs/publications/isa2-actions-phase2_-_poc_-_wp1_specifications_en.pdf]]></eira:definitionSourceReference>
     <skos:example><![CDATA[The following implementation is an example of how this specific Architecture Building Block (ABB) can be instantiated as a Solution Building Block (SBB): CKAN - CKAN is a data publication tool that makes data accessible by providing tools to streamline publishing, sharing, finding and using data. This is a tool for making open data websites. It helps you manage and publish collections of data. It is used by national and local governments, research institutions, and other organizations that collect a lot of data. Once your data is published, users can use its faceted search features to browse and find the data they need and preview it using maps, graphs and tables – whether they are developers, journalists, researchers, NGOs, citizens, or even your staff. CKAN is open-source and free software, with an active community of contributors who develop and maintain its core technology. CKAN is modified and extended by an even larger community of developers who contribute to a growing library of CKAN extension. https://ckan.org/]]></skos:example>
-    <eira:iopSaliency><![CDATA[The Data Pubblication Component ABB  is salient for technical interoperability because it provides the implementation of the functionalities to make public data freely available for use and reuse by others unless restriction aoply as stated in the EIF recommendation n.2: "Publish the data you own as open data unless certain restrictions apply."]]></eira:iopSaliency>
+    <eira:iopSaliency><![CDATA[The Data Pubblication Component ABB  is salient for technical interoperability because it provides the implementation of the functionalities to make public data freely available for use and reuse by others unless restriction aoply as stated in the EIF recommendation n.2: "Publish the data you own as open data unless certain restrictions apply."]]></eira:iopSaliency>
     <skos:note><![CDATA[]]></skos:note>
     <eira:concept>eira:ArchitectureBuildingBlock</eira:concept>
     <eira:iopDimension>Structural IoP</eira:iopDimension>
@@ -8669,7 +8669,7 @@ IoP Dimension: Structural IoP
 
 LOST view: Technical view - Infrastructure
 
-Interoperability saliency: The Conformance Testing Component ABB  is salient for technical interoperability because it enables the validation and verification that several solutions at one or more layers of the interoperability stack and they satisfy certain interoperability requirements.
+Interoperability saliency: The Conformance Testing Component ABB  is salient for technical interoperability because it enables the validation and verification that several solutions at one or more layers of the interoperability stack and they satisfy certain interoperability requirements.
 
 Identifier: http://data.europa.eu/dr8/ConformanceTestingApplicationComponent
 
@@ -8700,7 +8700,7 @@ Last modification: 2022-18-01
     <eira:definitionSource>NIST</eira:definitionSource>
     <eira:definitionSourceReference><![CDATA[https://www.nist.gov/itl/ssd/information-systems-group/conformance-testing]]></eira:definitionSourceReference>
     <skos:example><![CDATA[The following implementation is an example on how this specific Architecture Building Block (ABB) can be instantiated as a Solution Building Block (SBB): Interoperability Testbed - The Test Bed allows users to execute predefined test cases on their systems in order to test the conformance to standards and requirements, simulate a web-service, validate content and test a complete message exchange protocol. The Testbed manages test cases and users, and orchestrates domain-specific components, the domain-specific logic is in separate components that are used via web services. Test results are provided in a standardised, machine-readable format. The Test Bed also offers a test registry and repository (TRR) to store test artefacts (assertions, test cases, validation schemas, etc.) and compile test services (validation services, simulator services, etc.). Please visit the following website for more information: https://ec.europa.eu/isa2/solutions/interoperability-test-bed_en]]></skos:example>
-    <eira:iopSaliency><![CDATA[The Conformance Testing Component ABB  is salient for technical interoperability because it enables the validation and verification that several solutions at one or more layers of the interoperability stack and they satisfy certain interoperability requirements.]]></eira:iopSaliency>
+    <eira:iopSaliency><![CDATA[The Conformance Testing Component ABB  is salient for technical interoperability because it enables the validation and verification that several solutions at one or more layers of the interoperability stack and they satisfy certain interoperability requirements.]]></eira:iopSaliency>
     <skos:note><![CDATA[]]></skos:note>
     <eira:concept>eira:ArchitectureBuildingBlock</eira:concept>
     <eira:iopDimension>Structural IoP</eira:iopDimension>
@@ -8881,7 +8881,7 @@ IoP Dimension: Structural IoP
 
 LOST view: Technical view - application
 
-Interoperability saliency: The Audit Component ABB  is salient for technical interoperability because it allows the implementation of audit policies as stated in the EIF: "Public administrations should ensure that a 'data access and authorisation plan’ which determines who has access to what data and under what conditions, to ensure privacy. Unauthorised access and security breaches should be monitored and appropriate actions should be taken to prevent any recurrence of breaches"
+Interoperability saliency: The Audit Component ABB  is salient for technical interoperability because it allows the implementation of audit policies as stated in the EIF: "Public administrations should ensure that a 'data access and authorisation plan’ which determines who has access to what data and under what conditions, to ensure privacy. Unauthorised access and security breaches should be monitored and appropriate actions should be taken to prevent any recurrence of breaches"
 
 Identifier: http://data.europa.eu/dr8/AuditApplicationComponent
 
@@ -8911,7 +8911,7 @@ Last modification: 2022-18-01
     <eira:definitionSource>Inspired in SIMPL</eira:definitionSource>
     <eira:definitionSourceReference><![CDATA[https://digital-strategy.ec.europa.eu/en/news/simpl-cloud-edge-federations-and-data-spaces-made-simple]]></eira:definitionSourceReference>
     <skos:example><![CDATA[The following implementation is an example on how this specific Architecture Building Block (ABB) can be instantiated as a Solution Building Block (SBB): Activiti audit feature - The audit feature of Activiti archives all process instances, activity instances, keeps variable values continuously in sync and all form properties that are submitted so that all user interaction through forms is traceable and can be audited. Authenticated users who submitted the forms are accessible in the history as well as for start forms and task forms. https://www.activiti.org/userguide/#historyFormAuditPurposes]]></skos:example>
-    <eira:iopSaliency><![CDATA[The Audit Component ABB  is salient for technical interoperability because it allows the implementation of audit policies as stated in the EIF: "Public administrations should ensure that a 'data access and authorisation plan’ which determines who has access to what data and under what conditions, to ensure privacy. Unauthorised access and security breaches should be monitored and appropriate actions should be taken to prevent any recurrence of breaches"]]></eira:iopSaliency>
+    <eira:iopSaliency><![CDATA[The Audit Component ABB  is salient for technical interoperability because it allows the implementation of audit policies as stated in the EIF: "Public administrations should ensure that a 'data access and authorisation plan’ which determines who has access to what data and under what conditions, to ensure privacy. Unauthorised access and security breaches should be monitored and appropriate actions should be taken to prevent any recurrence of breaches"]]></eira:iopSaliency>
     <skos:note><![CDATA[]]></skos:note>
     <eira:concept>eira:ArchitectureBuildingBlock</eira:concept>
     <eira:iopDimension>Structural IoP</eira:iopDimension>
@@ -9010,7 +9010,7 @@ IoP Dimension: Structural IoP
 
 LOST view: Technical view - application
 
-Interoperability saliency: The e-Archiving Component ABB  is salient for technical interoperability because it provides the implementation of the functionalities for the long-term or permanent preservation of records and information in electronic form in order to ensure their temporal egibility, reliability and integrity as stated in the EIF: "Legislation requires that decisions and data are stored and can be accessed for a specified time. This means that records and information in electronic form held by public administrations for the purpose of documenting procedures and decisions must be preserved and be converted, where necessary, to new media when old media become obsolete. The goal is to ensure that records and other forms of information keep their legibility, reliability and integrity and can be accessed as long as needed subject to security and privacy provisions."
+Interoperability saliency: The e-Archiving Component ABB  is salient for technical interoperability because it provides the implementation of the functionalities for the long-term or permanent preservation of records and information in electronic form in order to ensure their temporal egibility, reliability and integrity as stated in the EIF: "Legislation requires that decisions and data are stored and can be accessed for a specified time. This means that records and information in electronic form held by public administrations for the purpose of documenting procedures and decisions must be preserved and be converted, where necessary, to new media when old media become obsolete. The goal is to ensure that records and other forms of information keep their legibility, reliability and integrity and can be accessed as long as needed subject to security and privacy provisions."
 
 Identifier: http://data.europa.eu/dr8/E-ArchivingApplicationComponent
 
@@ -9040,7 +9040,7 @@ Last modification: 2022-20-01
     <eira:definitionSource>ISA2 - EIA Action</eira:definitionSource>
     <eira:definitionSourceReference><![CDATA[https://ec.europa.eu/isa2/actions/towards-european-interoperability-architecture_en/]]></eira:definitionSourceReference>
     <skos:example><![CDATA[The following implementation is an example on how this specific Architecture Building Block (ABB) can be instantiated as a Solution Building Block (SBB): CEF eArchiving - eArchiving provides the core specifications, software, training and knowledge to tackle the challenge of short, medium and long-term data management and reuse in a sustainable, authentic, cost-efficient, manageable and interoperable way.(https://ec.europa.eu/cefdigital/wiki/display/CEFDIGITAL/eArchiving)]]></skos:example>
-    <eira:iopSaliency><![CDATA[The e-Archiving Component ABB  is salient for technical interoperability because it provides the implementation of the functionalities for the long-term or permanent preservation of records and information in electronic form in order to ensure their temporal egibility, reliability and integrity as stated in the EIF: "Legislation requires that decisions and data are stored and can be accessed for a specified time. This means that records and information in electronic form held by public administrations for the purpose of documenting procedures and decisions must be preserved and be converted, where necessary, to new media when old media become obsolete. The goal is to ensure that records and other forms of information keep their legibility, reliability and integrity and can be accessed as long as needed subject to security and privacy provisions."]]></eira:iopSaliency>
+    <eira:iopSaliency><![CDATA[The e-Archiving Component ABB  is salient for technical interoperability because it provides the implementation of the functionalities for the long-term or permanent preservation of records and information in electronic form in order to ensure their temporal egibility, reliability and integrity as stated in the EIF: "Legislation requires that decisions and data are stored and can be accessed for a specified time. This means that records and information in electronic form held by public administrations for the purpose of documenting procedures and decisions must be preserved and be converted, where necessary, to new media when old media become obsolete. The goal is to ensure that records and other forms of information keep their legibility, reliability and integrity and can be accessed as long as needed subject to security and privacy provisions."]]></eira:iopSaliency>
     <skos:note><![CDATA[The EIRA© differentiates between document management, record management and e-archiving as follows: •	Document management is primarily about day-to-day use of electronic documents (create/update/delete/versioning) within the operational environment; •	Record management is primarily about ensuring that information (e.g. in form of an electronic document or database record) is available for business and legal purposes (e.g. to proof and track the handling of contracts). If an electronic document or information is becoming a record (an authority declares it as a record) that electronic document or information needs to be handled by the record management service (based on specific business or legal reasons (e.g. contract negotiation)); •	e-Archiving is primarily about storing records which have been selected (by an authority) for permanent or long-term preservation due to their enduring research value and as a memory aid. An electronic document or information which a) is managed by the document management service or the record management service and b) is no longer needed for business or legal purposes or day-to-day activities, and c) still has value for research purposes or as a memory aid, the electronic document should be managed by the e-archiving service”.]]></skos:note>
     <eira:concept>eira:ArchitectureBuildingBlock</eira:concept>
     <eira:iopDimension>Structural IoP</eira:iopDimension>
@@ -9065,7 +9065,7 @@ IoP Dimension: Structural IoP
 
 LOST view: Technical view - application
 
-Interoperability saliency: The Privacy Component ABB  is salient for interoperability because "security and privacy are primary concerns in the provision of public services" (EIF) and, as stated in EIF Recommendation 15: "Define a common security and privacy framework and establish processes for public services to ensure secure and trustworthy data exchange between public administrations and in interactions with citizens and businesses."
+Interoperability saliency: The Privacy Component ABB  is salient for interoperability because "security and privacy are primary concerns in the provision of public services" (EIF) and, as stated in EIF Recommendation 15: "Define a common security and privacy framework and establish processes for public services to ensure secure and trustworthy data exchange between public administrations and in interactions with citizens and businesses."
 
 Identifier: http://data.europa.eu/dr8/PrivacyApplicationComponent
 
@@ -9095,7 +9095,7 @@ Last modification: 2022-20-01
     <eira:definitionSource>ePrivacy Regulation</eira:definitionSource>
     <eira:definitionSourceReference><![CDATA[https://digital-strategy.ec.europa.eu/en/policies/eprivacy-regulation]]></eira:definitionSourceReference>
     <skos:example><![CDATA[The following implementation is an example on how this specific Architecture Building Block (ABB) can be instantiated as a Solution Building Block (SBB): SOLVIT - Solvit is a mailbox service for the access, rectification or deletion of personal data.(http://ec.europa.eu/solvit/privacy-statement/#maincontentSec8)]]></skos:example>
-    <eira:iopSaliency><![CDATA[The Privacy Component ABB  is salient for interoperability because "security and privacy are primary concerns in the provision of public services" (EIF) and, as stated in EIF Recommendation 15: "Define a common security and privacy framework and establish processes for public services to ensure secure and trustworthy data exchange between public administrations and in interactions with citizens and businesses."]]></eira:iopSaliency>
+    <eira:iopSaliency><![CDATA[The Privacy Component ABB  is salient for interoperability because "security and privacy are primary concerns in the provision of public services" (EIF) and, as stated in EIF Recommendation 15: "Define a common security and privacy framework and establish processes for public services to ensure secure and trustworthy data exchange between public administrations and in interactions with citizens and businesses."]]></eira:iopSaliency>
     <skos:note><![CDATA[]]></skos:note>
     <eira:concept>eira:ArchitectureBuildingBlock</eira:concept>
     <eira:iopDimension>Structural IoP</eira:iopDimension>
@@ -9164,7 +9164,7 @@ IoP Dimension: Structural IoP
 
 LOST view: Technical view - application
 
-Interoperability saliency: The Metadata management Component ABB is an application component providing the implementation of the functionalities to manage metadata. EIF recommends to prioritise it: "Put in place an information management strategy at the highest possible level to avoid fragmentation and duplication. Management of metadata, master data and reference data should be prioritised."
+Interoperability saliency: The Metadata management Component ABB is an application component providing the implementation of the functionalities to manage metadata. EIF recommends to prioritise it: "Put in place an information management strategy at the highest possible level to avoid fragmentation and duplication. Management of metadata, master data and reference data should be prioritised."
 
 Identifier: http://data.europa.eu/dr8/MetadataManagementApplicationComponent
 
@@ -9194,7 +9194,7 @@ Last modification: 2022-20-01
     <eira:definitionSource>DAMA</eira:definitionSource>
     <eira:definitionSourceReference><![CDATA[http://www.dama.org/]]></eira:definitionSourceReference>
     <skos:example><![CDATA[The following implementation is an example on how this specific Architecture Building Block (ABB) can be instantiated as a Solution Building Block (SBB): Eurostat SDMX repository: The Euro SDMX Registry is Eurostat’s implementation of an SDMX registry to facilitate the exchange of statistical data and metadata by serving as a metadata repository. It stores the SDMX artefacts needed for the parties to access and interpret the content of the exchanged statistical data and metadata sets. http://ec.europa.eu/eurostat/web/sdmx-infospace/sdmx-it-tools/sdmx-registry]]></skos:example>
-    <eira:iopSaliency><![CDATA[The Metadata management Component ABB is an application component providing the implementation of the functionalities to manage metadata. EIF recommends to prioritise it: "Put in place an information management strategy at the highest possible level to avoid fragmentation and duplication. Management of metadata, master data and reference data should be prioritised."]]></eira:iopSaliency>
+    <eira:iopSaliency><![CDATA[The Metadata management Component ABB is an application component providing the implementation of the functionalities to manage metadata. EIF recommends to prioritise it: "Put in place an information management strategy at the highest possible level to avoid fragmentation and duplication. Management of metadata, master data and reference data should be prioritised."]]></eira:iopSaliency>
     <skos:note><![CDATA[]]></skos:note>
     <eira:concept>eira:ArchitectureBuildingBlock</eira:concept>
     <eira:iopDimension>Structural IoP</eira:iopDimension>
@@ -9221,7 +9221,7 @@ IoP Dimension: Structural IoP
 
 LOST view: Technical view - application
 
-Interoperability saliency: The Identification Component ABB  is salient for technical interoperability because it provides the functionalities of user authentication.
+Interoperability saliency: The Identification Component ABB  is salient for technical interoperability because it provides the functionalities of user authentication.
 
 Identifier: http://data.europa.eu/dr8/IdentificationApplicationComponent
 
@@ -9253,7 +9253,7 @@ Last modification: 2022-20-01
     <eira:definitionSource>eIDAS - REGULATION (EU) No 910/2014 OF THE EUROPEAN PARLIAMENT AND OF THE COUNCIL of 23 July 2014 on electronic identification and trust services for electronic transactions in the internal market and repealing Directive 1999/93/EC.</eira:definitionSource>
     <eira:definitionSourceReference><![CDATA[(http://eur-lex.europa.eu/legal-content/EN/TXT/?uri=uriserv%3AOJ.L_.2014.257.01.0073.01.ENG)]]></eira:definitionSourceReference>
     <skos:example><![CDATA[The following implementation is an example on how this specific Architecture Building Block (ABB) can be instantiated as a Solution Building Block (SBB): OpenIAM Identity Manager - The OpenIAM Identity Manager automates the task of managing identities across the various devices and applications used by the enterprise. This includes applications within the enterprise such as Active Directory and Exchange, and cloud based applications such as Google Apps. OpenIAM Identity Manager provides capabilities such as: •	Provisioning, De-provisioning, Workflow; •	Password Management, Password Policies, Synchronization; •	Self-Service, allowing locked users to reset their accounts, manage their profiles, challenge response security questions; •	Audit, Attestation, Reporting; •	Delegated Administration.(http://www.openiam.com/products/identity-manager/idm-overview/)]]></skos:example>
-    <eira:iopSaliency><![CDATA[The Identification Component ABB  is salient for technical interoperability because it provides the functionalities of user authentication.]]></eira:iopSaliency>
+    <eira:iopSaliency><![CDATA[The Identification Component ABB  is salient for technical interoperability because it provides the functionalities of user authentication.]]></eira:iopSaliency>
     <skos:note><![CDATA[]]></skos:note>
     <eira:concept>eira:ArchitectureBuildingBlock</eira:concept>
     <eira:iopDimension>Structural IoP</eira:iopDimension>
@@ -9331,7 +9331,7 @@ IoP Dimension: Structural IoP
 
 LOST view: Technical view - application
 
-Interoperability saliency: The Forms Management Component ABB  is salient for technical interoperability because it provides  the implementation of the functionalities  of dynamic creation, distribution and analysis of forms and online surveys as stated in the EIF: " Catalogues help others to find reusable resources (e.g. services, data, software, data models). Various types of catalogue exist, e.g. directories of services, libraries of software components, open data portals, registries of base registries, metadata catalogues, catalogues of standards, specifications and guidelines. Commonly agreed descriptions of the services, data, registries and interoperable solutions published in catalogues are needed to enable interoperability between catalogues."
+Interoperability saliency: The Forms Management Component ABB  is salient for technical interoperability because it provides  the implementation of the functionalities  of dynamic creation, distribution and analysis of forms and online surveys as stated in the EIF: " Catalogues help others to find reusable resources (e.g. services, data, software, data models). Various types of catalogue exist, e.g. directories of services, libraries of software components, open data portals, registries of base registries, metadata catalogues, catalogues of standards, specifications and guidelines. Commonly agreed descriptions of the services, data, registries and interoperable solutions published in catalogues are needed to enable interoperability between catalogues."
 
 Identifier: http://data.europa.eu/dr8/FormsManagementApplicationComponent
 
@@ -9362,7 +9362,7 @@ Last modification: 2022-23-01
     <eira:definitionSource>ISA2 - EIA Action</eira:definitionSource>
     <eira:definitionSourceReference><![CDATA[https://joinup.ec.europa.eu/taxonomy/term/http_e_f_fdata_ceuropa_ceu_fdr8_fFormsManagementComponent]]></eira:definitionSourceReference>
     <skos:example><![CDATA[The following implementation is an example on how this specific Architecture Building Block (ABB) can be instantiated as a Solution Building Block (SBB): Form Tools - Form Tools is a forms framework written in PHP and MySQL. You download and install the script on your own website. At its heart, Form Tools is a web form creator, processor, data storage and access script. It was originally designed to work with any existing web form, but has since been expanded to create forms automatically as well. Form Tools is extremely versatile in how it integrates with your forms. You can use the bundled Form Builder module to create the forms automatically on your website (no programming or HTML skills necessary); you can use the PHP API to integrate your own custom form with the script; or you can simply POST your form to Form Tools, and just use it to store the form data. Anything goes! You can read about the different integration methods / form creation methods here. Form Tools works by creating custom database tables to store your unique form data. It provides a range of functionality customized to your data set, such as allowing you to view, update, cross-reference and export your submission data, create subsets of your data for viewing/editing by client accounts, data visualizations, and much more. https://formtools.org/]]></skos:example>
-    <eira:iopSaliency><![CDATA[The Forms Management Component ABB  is salient for technical interoperability because it provides  the implementation of the functionalities  of dynamic creation, distribution and analysis of forms and online surveys as stated in the EIF: " Catalogues help others to find reusable resources (e.g. services, data, software, data models). Various types of catalogue exist, e.g. directories of services, libraries of software components, open data portals, registries of base registries, metadata catalogues, catalogues of standards, specifications and guidelines. Commonly agreed descriptions of the services, data, registries and interoperable solutions published in catalogues are needed to enable interoperability between catalogues."]]></eira:iopSaliency>
+    <eira:iopSaliency><![CDATA[The Forms Management Component ABB  is salient for technical interoperability because it provides  the implementation of the functionalities  of dynamic creation, distribution and analysis of forms and online surveys as stated in the EIF: " Catalogues help others to find reusable resources (e.g. services, data, software, data models). Various types of catalogue exist, e.g. directories of services, libraries of software components, open data portals, registries of base registries, metadata catalogues, catalogues of standards, specifications and guidelines. Commonly agreed descriptions of the services, data, registries and interoperable solutions published in catalogues are needed to enable interoperability between catalogues."]]></eira:iopSaliency>
     <skos:note><![CDATA[]]></skos:note>
     <eira:concept>eira:ArchitectureBuildingBlock</eira:concept>
     <eira:iopDimension>Structural IoP</eira:iopDimension>
@@ -9386,7 +9386,7 @@ IoP Dimension: Structural IoP
 
 LOST view: Technical view - application
 
-Interoperability saliency: The Orchestration Component ABB  is salient for technical interoperability because it provides a set of various methods to manage existing business processes or define and establish new ones. BPM components also execute business process documented through accepted modelling techniques, as recommended by the EIF n.28: "Document your business processes using commonly accepted modelling techniques and agree on how these processes should be aligned to deliver a European public service."
+Interoperability saliency: The Orchestration Component ABB  is salient for technical interoperability because it provides a set of various methods to manage existing business processes or define and establish new ones. BPM components also execute business process documented through accepted modelling techniques, as recommended by the EIF n.28: "Document your business processes using commonly accepted modelling techniques and agree on how these processes should be aligned to deliver a European public service."
 
 Identifier: http://data.europa.eu/dr8/OrchestrationApplicationComponent
 
@@ -9416,7 +9416,7 @@ Last modification: 2022-18-01
     <eira:definitionSource>W3C</eira:definitionSource>
     <eira:definitionSourceReference><![CDATA[https://www.w3.org/TR/ws-arch/]]></eira:definitionSourceReference>
     <skos:example><![CDATA[The following implementation is an example on how this specific Architecture Building Block (ABB) can be instantiated as a Solution Building Block (SBB): Activiti - Activiti is an open-source workflow engine written in Java that can execute business processes described in BPMN 2.0. Activiti supports open standards such as BPMN and DMN with open REST APIs for demanding human- and system-centric processes. It provides business intelligence and audit logs features for free. And with building the solution on business processes, Activiti help to structure the software, think about user tasks, external systems and timers that need to be managed, think about transaction boundaries of the application. Building that kind of features becomes easier when structuring an application around a business process. Managing wait states, timers and asynchronous continuations becomes easier. A business process can express that structure more compact than working with the fundamental instruments that the Java platform offers like JDBC and JMS. Activiti also makes possible to link in Java or scripting for jobs. https://www.activiti.org/]]></skos:example>
-    <eira:iopSaliency><![CDATA[The Orchestration Component ABB  is salient for technical interoperability because it provides a set of various methods to manage existing business processes or define and establish new ones. BPM components also execute business process documented through accepted modelling techniques, as recommended by the EIF n.28: "Document your business processes using commonly accepted modelling techniques and agree on how these processes should be aligned to deliver a European public service."]]></eira:iopSaliency>
+    <eira:iopSaliency><![CDATA[The Orchestration Component ABB  is salient for technical interoperability because it provides a set of various methods to manage existing business processes or define and establish new ones. BPM components also execute business process documented through accepted modelling techniques, as recommended by the EIF n.28: "Document your business processes using commonly accepted modelling techniques and agree on how these processes should be aligned to deliver a European public service."]]></eira:iopSaliency>
     <skos:note><![CDATA[]]></skos:note>
     <eira:concept>eira:ArchitectureBuildingBlock</eira:concept>
     <eira:iopDimension>Structural IoP</eira:iopDimension>
@@ -9440,7 +9440,7 @@ IoP Dimension: Structural IoP
 
 LOST view: Technical view - application
 
-Interoperability saliency: The Machine Translation Component ABB  is salient for technical interoperability because it provides the implementation of functionalities for cross-lingual functionality by providing automated  translation of text, metadata and concept classes or nomenclatures as stated in the EIF recommendation n°16: "Use information systems and technical architectures that cater for multilingualism when establishing a European public service. Decide on the level of multilingualism support based on the needs of the expected users."
+Interoperability saliency: The Machine Translation Component ABB  is salient for technical interoperability because it provides the implementation of functionalities for cross-lingual functionality by providing automated  translation of text, metadata and concept classes or nomenclatures as stated in the EIF recommendation n°16: "Use information systems and technical architectures that cater for multilingualism when establishing a European public service. Decide on the level of multilingualism support based on the needs of the expected users."
 
 Identifier: http://data.europa.eu/dr8/MachineTranslationApplicationComponent
 
@@ -9470,7 +9470,7 @@ Last modification: 2022-20-01
     <eira:definitionSource>CEF Automated Translation</eira:definitionSource>
     <eira:definitionSourceReference><![CDATA[https://ec.europa.eu/digital-single-market/en/news/tools-and-resources-cef-automated-translation]]></eira:definitionSourceReference>
     <skos:example><![CDATA[The following implementation is an example on how this specific Architecture Building Block (ABB) can be instantiated as a Solution Building Block (SBB): "CEF Digital - eTranslation building block: eTranslation is a Connecting Europe Facility (CEF) building block provided by the European Commission (EC). eTranslation provides a web-user interface for direct use by individuals (human-to-machine).(https://ec.europa.eu/cefdigital/wiki/display/CEFDIGITAL/eTranslation)]]></skos:example>
-    <eira:iopSaliency><![CDATA[The Machine Translation Component ABB  is salient for technical interoperability because it provides the implementation of functionalities for cross-lingual functionality by providing automated  translation of text, metadata and concept classes or nomenclatures as stated in the EIF recommendation n°16: "Use information systems and technical architectures that cater for multilingualism when establishing a European public service. Decide on the level of multilingualism support based on the needs of the expected users."]]></eira:iopSaliency>
+    <eira:iopSaliency><![CDATA[The Machine Translation Component ABB  is salient for technical interoperability because it provides the implementation of functionalities for cross-lingual functionality by providing automated  translation of text, metadata and concept classes or nomenclatures as stated in the EIF recommendation n°16: "Use information systems and technical architectures that cater for multilingualism when establishing a European public service. Decide on the level of multilingualism support based on the needs of the expected users."]]></eira:iopSaliency>
     <skos:note><![CDATA[]]></skos:note>
     <eira:concept>eira:ArchitectureBuildingBlock</eira:concept>
     <eira:iopDimension>Structural IoP</eira:iopDimension>
@@ -9603,7 +9603,7 @@ IoP Dimension: Structural IoP
 
 LOST view: Technical view - application
 
-Interoperability saliency: The Trust Service Provisioning Component ABB  is salient for technical interoperability  because it provides the implementation of the functionalities of information exchange between between administrations, businesses and citizens (e-signature and e-seal creation, verification,validation and preservation, timestamping  creation, verification and validation, identity management, etc.) as stated in the EIF recommendation n°47: "Use trust services according to the Regulation on eID and Trust Services as mechanisms that ensure secure and protected data exchange in public services."
+Interoperability saliency: The Trust Service Provisioning Component ABB  is salient for technical interoperability  because it provides the implementation of the functionalities of information exchange between between administrations, businesses and citizens (e-signature and e-seal creation, verification,validation and preservation, timestamping  creation, verification and validation, identity management, etc.) as stated in the EIF recommendation n°47: "Use trust services according to the Regulation on eID and Trust Services as mechanisms that ensure secure and protected data exchange in public services."
 
 Identifier: http://data.europa.eu/dr8/TrustServiceProvisioningApplicationComponent
 
@@ -9642,7 +9642,7 @@ Last modification: 2022-20-01
     <eira:definitionSource>eIDAS</eira:definitionSource>
     <eira:definitionSourceReference><![CDATA[http://eur-lex.europa.eu/legal-content/EN/TXT/?uri=uriserv%3AOJ.L_.2014.257.01.0073.01.ENG]]></eira:definitionSourceReference>
     <skos:example><![CDATA[The following implementation is an example on how this specific Architecture Building Block (ABB) can be instantiated as a Solution Building Block (SBB): e-TrustEx - Open e-TrustEx is a platform offered by the Directorate-General for Informatics of the European Commission to Public Administrations at European, national and regional level to set up secure exchange of natively digital documents from system to system via standardized interfaces. Open e-TrustEx provides a set of generic web services, which Public Administrations can use to connect heterogeneous applications, removing the need for complex point-to-point connections. http://eur-lex.europa.eu/legal-content/DE/TXT/?uri=CELEX%3A52016SC0279]]></skos:example>
-    <eira:iopSaliency><![CDATA[The Trust Service Provisioning Component ABB  is salient for technical interoperability  because it provides the implementation of the functionalities of information exchange between between administrations, businesses and citizens (e-signature and e-seal creation, verification,validation and preservation, timestamping  creation, verification and validation, identity management, etc.) as stated in the EIF recommendation n°47: "Use trust services according to the Regulation on eID and Trust Services as mechanisms that ensure secure and protected data exchange in public services."]]></eira:iopSaliency>
+    <eira:iopSaliency><![CDATA[The Trust Service Provisioning Component ABB  is salient for technical interoperability  because it provides the implementation of the functionalities of information exchange between between administrations, businesses and citizens (e-signature and e-seal creation, verification,validation and preservation, timestamping  creation, verification and validation, identity management, etc.) as stated in the EIF recommendation n°47: "Use trust services according to the Regulation on eID and Trust Services as mechanisms that ensure secure and protected data exchange in public services."]]></eira:iopSaliency>
     <skos:note><![CDATA[A ‘trust service’ means an electronic service normally provided for remuneration which consists of these functionalities: i) the creation, verification, and validation of electronic signatures, electronic seals or electronic time stamps, electronic registered delivery services and certificates related to those services, or; ii) the creation, verification and validation of certificates for website authentication; or; iii) the preservation of electronic signatures, seals or certificates related to those services.]]></skos:note>
     <eira:concept>eira:ArchitectureBuildingBlock</eira:concept>
     <eira:iopDimension>Structural IoP</eira:iopDimension>
@@ -9665,7 +9665,7 @@ IoP Dimension: Structural IoP
 
 LOST view: Technical view - application
 
-Interoperability saliency: The Data Extraction, Transformation, and Loading Component ABB  is salient for technical interoperability  because it enables the implementation of the functionalities to transform internal data structures to common and agreed interoperable formats as stated in the EIF recommendation n° 41: "Establish procedures and processes to integrate the opening of data in your common business processes, working routines, and in the development of new information systems."
+Interoperability saliency: The Data Extraction, Transformation, and Loading Component ABB  is salient for technical interoperability  because it enables the implementation of the functionalities to transform internal data structures to common and agreed interoperable formats as stated in the EIF recommendation n° 41: "Establish procedures and processes to integrate the opening of data in your common business processes, working routines, and in the development of new information systems."
 
 Identifier: http://data.europa.eu/dr8/DataExtraction,Transformation,andLoadingApplicationComponent
 
@@ -9695,7 +9695,7 @@ Last modification: 2022-23-01
     <eira:definitionSource>Inspired in definitions from referent companies of IT sector</eira:definitionSource>
     <eira:definitionSourceReference><![CDATA[]]></eira:definitionSourceReference>
     <skos:example><![CDATA[The following implementation is an example on how this specific Architecture Building Block (ABB) can be instantiated as a Solution Building Block (SBB): Eurostat SDMX converter - The SDMX Converter is a tool that converts statistical datasets between different formats. It is a Java application which is actively developed by Eurostat and is published as open source software. http://ec.europa.eu/eurostat/web/sdmx-infospace/sdmx-it-tools/sdmx-converter]]></skos:example>
-    <eira:iopSaliency><![CDATA[The Data Extraction, Transformation, and Loading Component ABB  is salient for technical interoperability  because it enables the implementation of the functionalities to transform internal data structures to common and agreed interoperable formats as stated in the EIF recommendation n° 41: "Establish procedures and processes to integrate the opening of data in your common business processes, working routines, and in the development of new information systems."]]></eira:iopSaliency>
+    <eira:iopSaliency><![CDATA[The Data Extraction, Transformation, and Loading Component ABB  is salient for technical interoperability  because it enables the implementation of the functionalities to transform internal data structures to common and agreed interoperable formats as stated in the EIF recommendation n° 41: "Establish procedures and processes to integrate the opening of data in your common business processes, working routines, and in the development of new information systems."]]></eira:iopSaliency>
     <skos:note><![CDATA[]]></skos:note>
     <eira:concept>eira:ArchitectureBuildingBlock</eira:concept>
     <eira:iopDimension>Structural IoP</eira:iopDimension>
@@ -9829,7 +9829,7 @@ IoP Dimension: Structural IoP
 
 LOST view: Technical view - Domain specific
 
-Interoperability saliency: The Access Management Component ABB  is salient for technical interoperability because it provides the implementation the functionality of allowing user to make an authorized and trusted use of IT Services, data and other assets as stated in the EIF: "Public administrations should ensure that a 'data access and authorisation plan’ which determines who has access to what data and under what conditions, to ensure privacy. Unauthorised access and security breaches should be monitored and appropriate actions should be taken to prevent any recurrence of breaches"
+Interoperability saliency: The Access Management Component ABB  is salient for technical interoperability because it provides the implementation the functionality of allowing user to make an authorized and trusted use of IT Services, data and other assets as stated in the EIF: "Public administrations should ensure that a 'data access and authorisation plan’ which determines who has access to what data and under what conditions, to ensure privacy. Unauthorised access and security breaches should be monitored and appropriate actions should be taken to prevent any recurrence of breaches"
 
 Identifier: http://data.europa.eu/dr8/AccessManagementApplicationComponent
 
@@ -9859,7 +9859,7 @@ Last modification: 2022-18-01
     <eira:definitionSource>ITIL v3</eira:definitionSource>
     <eira:definitionSourceReference><![CDATA[https://wiki.en.it-processmaps.com/index.php/Access_Management]]></eira:definitionSourceReference>
     <skos:example><![CDATA[The following implementation is an example on how this specific Architecture Building Block (ABB) can be instantiated as a Solution Building Block (SBB): OpenIAM Access Manager - OpenIAM Access Management solution is based on a professional open source model. This is a robust, scalable solution built with Service Oriented Architecture. It integrates seamlessly with the OpenIAM Identity Manager product to provide a comprehensive solution that allows to take control of not only who can access the systems, but what they can do once they are in there. Corporate security policy is enforced across multiple points and managed centrally to improve effectiveness and reduce administrative costs.(http://www.openiam.com/products/access-manager/overview/)]]></skos:example>
-    <eira:iopSaliency><![CDATA[The Access Management Component ABB  is salient for technical interoperability because it provides the implementation the functionality of allowing user to make an authorized and trusted use of IT Services, data and other assets as stated in the EIF: "Public administrations should ensure that a 'data access and authorisation plan’ which determines who has access to what data and under what conditions, to ensure privacy. Unauthorised access and security breaches should be monitored and appropriate actions should be taken to prevent any recurrence of breaches"]]></eira:iopSaliency>
+    <eira:iopSaliency><![CDATA[The Access Management Component ABB  is salient for technical interoperability because it provides the implementation the functionality of allowing user to make an authorized and trusted use of IT Services, data and other assets as stated in the EIF: "Public administrations should ensure that a 'data access and authorisation plan’ which determines who has access to what data and under what conditions, to ensure privacy. Unauthorised access and security breaches should be monitored and appropriate actions should be taken to prevent any recurrence of breaches"]]></eira:iopSaliency>
     <skos:note><![CDATA[]]></skos:note>
     <eira:concept>eira:ArchitectureBuildingBlock</eira:concept>
     <eira:iopDimension>Structural IoP</eira:iopDimension>
@@ -9995,7 +9995,7 @@ IoP Dimension: Structural IoP
 
 LOST view: Technical view - application
 
-Interoperability saliency: The Data Quality Component ABB  is salient for technical interoperability because it allows the implementation of the functionality to validate if data received (or to be sent) is compliant with common and agreed interoperable formats as stated in the EIF recommendation n° 41: "Establish procedures and processes to integrate the opening of data in your common business processes, working routines, and in the development of new information systems."
+Interoperability saliency: The Data Quality Component ABB  is salient for technical interoperability because it allows the implementation of the functionality to validate if data received (or to be sent) is compliant with common and agreed interoperable formats as stated in the EIF recommendation n° 41: "Establish procedures and processes to integrate the opening of data in your common business processes, working routines, and in the development of new information systems."
 
 Identifier: http://data.europa.eu/dr8/DataQualityApplicationComponent
 
@@ -10025,7 +10025,7 @@ Last modification: 2022-23-01
     <eira:definitionSource>Eurostat Data Validation</eira:definitionSource>
     <eira:definitionSourceReference><![CDATA[http://ec.europa.eu/eurostat/data/data-validation]]></eira:definitionSourceReference>
     <skos:example><![CDATA[The following implementation is an example on how this specific Architecture Building Block (ABB) can be instantiated as a Solution Building Block (SBB): Hibernate Validator - Express validation rules in a standardized way using annotation-based constraints and benefit from transparent integration with a wide variety of frameworks. Application layer agnostic validation: Hibernate Validator allows to express and validate application constraints. The default metadata source are annotations, with the ability to override and extend through the use of XML. It is not tied to a specific application tier or programming model and is available for both server and client application programming. Hibernate Validator presents the following characteristics: •	Extendable: Hibernate Validator offers a configurable bootstrap API as well as a range of built-in constraints. The latter can easily be extended by creating custom constraints; •	Rich metadata API: Hibernate Validator gives access to constraint configuration via a metadata API facilitating, for example, tooling integration; •	Reference implementation: Hibernate Validator 6.x is the reference implementation Bean Validation 2.0; •	Added value: Hibernate Validator offers additional value on top of the features required by Bean Validation. For example, a programmatic constraint configuration API as well as an annotation processor which plugs into the build process and raises compilation errors whenever constraint annotations are incorrectly used. http://hibernate.org/validator/]]></skos:example>
-    <eira:iopSaliency><![CDATA[The Data Quality Component ABB  is salient for technical interoperability because it allows the implementation of the functionality to validate if data received (or to be sent) is compliant with common and agreed interoperable formats as stated in the EIF recommendation n° 41: "Establish procedures and processes to integrate the opening of data in your common business processes, working routines, and in the development of new information systems."]]></eira:iopSaliency>
+    <eira:iopSaliency><![CDATA[The Data Quality Component ABB  is salient for technical interoperability because it allows the implementation of the functionality to validate if data received (or to be sent) is compliant with common and agreed interoperable formats as stated in the EIF recommendation n° 41: "Establish procedures and processes to integrate the opening of data in your common business processes, working routines, and in the development of new information systems."]]></eira:iopSaliency>
     <skos:note><![CDATA[]]></skos:note>
     <eira:concept>eira:ArchitectureBuildingBlock</eira:concept>
     <eira:iopDimension>Structural IoP</eira:iopDimension>
@@ -10105,7 +10105,7 @@ IoP Dimension: Structural IoP
 
 LOST view: Technical view - Infrastructure
 
-Interoperability saliency: The Service Registry Component ABB  is a key interoperability enabler because it supports to achieve technical interoperability by provisioning and consuming back-office services as stated in the EIF recommendation n°44: "Put in place catalogues of public services, public data, and interoperability solutions and use common models for describing them."
+Interoperability saliency: The Service Registry Component ABB  is a key interoperability enabler because it supports to achieve technical interoperability by provisioning and consuming back-office services as stated in the EIF recommendation n°44: "Put in place catalogues of public services, public data, and interoperability solutions and use common models for describing them."
 
 Identifier: http://data.europa.eu/dr8/ServiceRegistryApplicationComponent
 
@@ -10135,7 +10135,7 @@ Last modification: 2022-18-01
     <eira:definitionSource>ISA2 - EIA Action</eira:definitionSource>
     <eira:definitionSourceReference><![CDATA[http://data.europa.eu/eli/dec/2015/2240/oj]]></eira:definitionSourceReference>
     <skos:example><![CDATA[The following implementation is an example on how this specific Architecture Building Block (ABB) can be instantiated as a Solution Building Block (SBB): jUDDI - jUDDI is an open source Java implementation of OASIS Universal Description, Discovery, and Integration (UDDI) specification for (Web) Services. https://juddi.apache.org/]]></skos:example>
-    <eira:iopSaliency><![CDATA[The Service Registry Component ABB  is a key interoperability enabler because it supports to achieve technical interoperability by provisioning and consuming back-office services as stated in the EIF recommendation n°44: "Put in place catalogues of public services, public data, and interoperability solutions and use common models for describing them."]]></eira:iopSaliency>
+    <eira:iopSaliency><![CDATA[The Service Registry Component ABB  is a key interoperability enabler because it supports to achieve technical interoperability by provisioning and consuming back-office services as stated in the EIF recommendation n°44: "Put in place catalogues of public services, public data, and interoperability solutions and use common models for describing them."]]></eira:iopSaliency>
     <skos:note><![CDATA[]]></skos:note>
     <eira:concept>eira:ArchitectureBuildingBlock</eira:concept>
     <eira:iopDimension>Structural IoP</eira:iopDimension>
@@ -10159,7 +10159,7 @@ IoP Dimension: Structural IoP
 
 LOST view: Technical view - application
 
-Interoperability saliency: The Data Management Component ABB  is salient for technical interoperability because it provides and shares the functionality for the share of data: "Legislation requires that decisions and data are stored and can be accessed for a specified time. This means that records and information in electronic form held by public administrations for the purpose of documenting procedures and decisions must be preserved and be converted, where necessary, to new media when old media become obsolete. The goal is to ensure that records and other forms of information keep their legibility, reliability and integrity and can be accessed as long as needed subject to security and privacy provisions."
+Interoperability saliency: The Data Management Component ABB  is salient for technical interoperability because it provides and shares the functionality for the share of data: "Legislation requires that decisions and data are stored and can be accessed for a specified time. This means that records and information in electronic form held by public administrations for the purpose of documenting procedures and decisions must be preserved and be converted, where necessary, to new media when old media become obsolete. The goal is to ensure that records and other forms of information keep their legibility, reliability and integrity and can be accessed as long as needed subject to security and privacy provisions."
 
 Identifier: http://data.europa.eu/dr8/DataManagementApplicationComponent
 
@@ -10189,7 +10189,7 @@ Last modification: 2022-20-01
     <eira:definitionSource>Inspired in the Data Act</eira:definitionSource>
     <eira:definitionSourceReference><![CDATA[https://digital-strategy.ec.europa.eu/en/policies/data-act]]></eira:definitionSourceReference>
     <skos:example><![CDATA[The following implementation is an example on how this specific Architecture Building Block (ABB) can be instantiated as a Solution Building Block (SBB): Oracle Data Exchange - The Data Exchange Service provides several access points to the Event Repository, allowing the user to perform queries on these events: - The Query Subscription Administration Console configures the Data Exchange Service to create queries and periodically deliver query results to designated receivers (HTTP, JMS, and AS2). The Console can also test queries before subscribing, displaying user-readable events in XML format;  - A SOAP Web service allows programmatic queries. This SOAP service is based on the technically complete, but not formally ratified as of October 2006, EPCglobal EPC Information Services (EPCIS) Version 1.0 Specification.EPCglobal EPCIS 1.0 Working Draft. https://docs.oracle.com/cd/E13197_01/rfid/enterprise_server/docs20/epcis/data-exchange.html]]></skos:example>
-    <eira:iopSaliency><![CDATA[The Data Management Component ABB  is salient for technical interoperability because it provides and shares the functionality for the share of data: "Legislation requires that decisions and data are stored and can be accessed for a specified time. This means that records and information in electronic form held by public administrations for the purpose of documenting procedures and decisions must be preserved and be converted, where necessary, to new media when old media become obsolete. The goal is to ensure that records and other forms of information keep their legibility, reliability and integrity and can be accessed as long as needed subject to security and privacy provisions."]]></eira:iopSaliency>
+    <eira:iopSaliency><![CDATA[The Data Management Component ABB  is salient for technical interoperability because it provides and shares the functionality for the share of data: "Legislation requires that decisions and data are stored and can be accessed for a specified time. This means that records and information in electronic form held by public administrations for the purpose of documenting procedures and decisions must be preserved and be converted, where necessary, to new media when old media become obsolete. The goal is to ensure that records and other forms of information keep their legibility, reliability and integrity and can be accessed as long as needed subject to security and privacy provisions."]]></eira:iopSaliency>
     <skos:note><![CDATA[]]></skos:note>
     <eira:concept>eira:ArchitectureBuildingBlock</eira:concept>
     <eira:iopDimension>Structural IoP</eira:iopDimension>
@@ -10216,7 +10216,7 @@ IoP Dimension: Structural IoP
 
 LOST view: Technical view - application
 
-Interoperability saliency: The Data Analytics Component ABB  is salient for technical interoperability because it provides the implementation of functionalities for the automation of mechanical processes and algorithms that work over raw data for human consumption.
+Interoperability saliency: The Data Analytics Component ABB  is salient for technical interoperability because it provides the implementation of functionalities for the automation of mechanical processes and algorithms that work over raw data for human consumption.
 
 Identifier: http://data.europa.eu/dr8/DataAnalyticsApplicationComponent
 
@@ -10246,7 +10246,7 @@ Last modification: 2022-20-01
     <eira:definitionSource>Inspired in Data Act</eira:definitionSource>
     <eira:definitionSourceReference><![CDATA[https://digital-strategy.ec.europa.eu/en/policies/data-act]]></eira:definitionSourceReference>
     <skos:example><![CDATA[The following implementation is an example on how this specific Architecture Building Block (ABB) can be instantiated as a Solution Building Block (SBB): Microsoft Power BI - Power BI is a business analytics service by Microsoft. It aims to provide interactive visualizations and business intelligence capabilities with an interface simple enough for end users to create their own reports and dashboards. It is part of the Microsoft Power Platform.(https://powerbi.microsoft.com/it-it/what-is-power-bi/)]]></skos:example>
-    <eira:iopSaliency><![CDATA[The Data Analytics Component ABB  is salient for technical interoperability because it provides the implementation of functionalities for the automation of mechanical processes and algorithms that work over raw data for human consumption.]]></eira:iopSaliency>
+    <eira:iopSaliency><![CDATA[The Data Analytics Component ABB  is salient for technical interoperability because it provides the implementation of functionalities for the automation of mechanical processes and algorithms that work over raw data for human consumption.]]></eira:iopSaliency>
     <skos:note><![CDATA[Data analytics component enable the automation of mechanical processes and algorithms that work over raw data for human consumption.]]></skos:note>
     <eira:concept>eira:ArchitectureBuildingBlock</eira:concept>
     <eira:iopDimension>Structural IoP</eira:iopDimension>
@@ -10587,7 +10587,7 @@ IoP Dimension: Behavioral IoP
 
 LOST view: Technical view - Infrastructure
 
-Interoperability saliency: The Conformance Testing Services ABB  is salient for technical interoperability because it enables the validation and verification that several solutions at one or more layers of the interoperability stack and they satisfy certain interoperability requirements.
+Interoperability saliency: The Conformance Testing Services ABB  is salient for technical interoperability because it enables the validation and verification that several solutions at one or more layers of the interoperability stack and they satisfy certain interoperability requirements.
 
 Identifier: http://data.europa.eu/dr8/ConformanceTestingApplicationService
 
@@ -10616,7 +10616,7 @@ Last modification: 2022-18-01
     <eira:definitionSource>NIST</eira:definitionSource>
     <eira:definitionSourceReference><![CDATA[https://www.nist.gov/itl/ssd/information-systems-group/conformance-testing]]></eira:definitionSourceReference>
     <skos:example><![CDATA[The following implementation is an example on how this specific Architecture Building Block (ABB) can be instantiated as a Solution Building Block (SBB): Interoperability Testbed - The Test Bed allows users to execute predefined test cases on their systems in order to test the conformance to standards and requirements, simulate a web-service, validate content and test a complete message exchange protocol. The Testbed manages test cases and users, and orchestrates domain-specific components, the domain-specific logic is in separate components that are used via web services. Test results are provided in a standardised, machine-readable format. The Test Bed also offers a test registry and repository (TRR) to store test artefacts (assertions, test cases, validation schemas, etc.) and compile test services (validation services, simulator services, etc.). Please visit the following website for more information: https://ec.europa.eu/isa2/solutions/interoperability-test-bed_en]]></skos:example>
-    <eira:iopSaliency><![CDATA[The Conformance Testing Services ABB  is salient for technical interoperability because it enables the validation and verification that several solutions at one or more layers of the interoperability stack and they satisfy certain interoperability requirements.]]></eira:iopSaliency>
+    <eira:iopSaliency><![CDATA[The Conformance Testing Services ABB  is salient for technical interoperability because it enables the validation and verification that several solutions at one or more layers of the interoperability stack and they satisfy certain interoperability requirements.]]></eira:iopSaliency>
     <skos:note><![CDATA[The logistics of interoperability testing is usually more costly (time, coordination, interoperability), and interoperability testing is no substitute for a conformance test suite. Experience shows that interoperability testing is more successful and less costly when conformance of implementations has been tested first.]]></skos:note>
     <eira:concept>eira:ArchitectureBuildingBlock</eira:concept>
     <eira:iopDimension>Behavioral IoP</eira:iopDimension>
@@ -10640,7 +10640,7 @@ IoP Dimension: Behavioral IoP
 
 LOST view: Technical view - application
 
-Interoperability saliency: The Orchestration Service ABB  is salient for technical interoperability because it provides the functionality of "automated" business processes coordination. The EIF's Conceptual model for integrated EU public services foresees the concept a Coordination for Integrated Service Delivery. The Model comprises an "integrated service delivery" is based on a "coordination function", which is related to SOA principles such as choreography and orchestration, to manage internal business processes in order to remove complexity for the end-user, as stated in the EIF: "The coordination function ensures that needs are identified and appropriate services are invoked and orchestrated to provide a European public service. This function should select the appropriate sources and services and integrate them. Coordination can be automated or manual."
+Interoperability saliency: The Orchestration Service ABB  is salient for technical interoperability because it provides the functionality of "automated" business processes coordination. The EIF's Conceptual model for integrated EU public services foresees the concept a Coordination for Integrated Service Delivery. The Model comprises an "integrated service delivery" is based on a "coordination function", which is related to SOA principles such as choreography and orchestration, to manage internal business processes in order to remove complexity for the end-user, as stated in the EIF: "The coordination function ensures that needs are identified and appropriate services are invoked and orchestrated to provide a European public service. This function should select the appropriate sources and services and integrate them. Coordination can be automated or manual."
 
 Identifier: http://data.europa.eu/dr8/OrchestrationApplicationService
 
@@ -10669,7 +10669,7 @@ Last modification: 2022-18-01
     <eira:definitionSource>W3C</eira:definitionSource>
     <eira:definitionSourceReference><![CDATA[https://www.w3.org/TR/ws-arch/]]></eira:definitionSourceReference>
     <skos:example><![CDATA[The following implementation is an example on how this specific Architecture Building Block (ABB) can be instantiated as a Solution Building Block (SBB): Apache ODE - Apache ODE (Orchestration Director Engine) software executes business processes written following the WS-BPEL standard. It talks to web services, sending and receiving messages, handling data manipulation and error recovery as described by your process definition. It supports both long and short living process executions to orchestrate all the services that are part of your application. http://ode.apache.org/]]></skos:example>
-    <eira:iopSaliency><![CDATA[The Orchestration Service ABB  is salient for technical interoperability because it provides the functionality of "automated" business processes coordination. The EIF's Conceptual model for integrated EU public services foresees the concept a Coordination for Integrated Service Delivery. The Model comprises an "integrated service delivery" is based on a "coordination function", which is related to SOA principles such as choreography and orchestration, to manage internal business processes in order to remove complexity for the end-user, as stated in the EIF: "The coordination function ensures that needs are identified and appropriate services are invoked and orchestrated to provide a European public service. This function should select the appropriate sources and services and integrate them. Coordination can be automated or manual."]]></eira:iopSaliency>
+    <eira:iopSaliency><![CDATA[The Orchestration Service ABB  is salient for technical interoperability because it provides the functionality of "automated" business processes coordination. The EIF's Conceptual model for integrated EU public services foresees the concept a Coordination for Integrated Service Delivery. The Model comprises an "integrated service delivery" is based on a "coordination function", which is related to SOA principles such as choreography and orchestration, to manage internal business processes in order to remove complexity for the end-user, as stated in the EIF: "The coordination function ensures that needs are identified and appropriate services are invoked and orchestrated to provide a European public service. This function should select the appropriate sources and services and integrate them. Coordination can be automated or manual."]]></eira:iopSaliency>
     <skos:note><![CDATA[]]></skos:note>
     <eira:concept>eira:ArchitectureBuildingBlock</eira:concept>
     <eira:iopDimension>Behavioral IoP</eira:iopDimension>
@@ -10695,7 +10695,7 @@ IoP Dimension: Behavioral IoP
 
 LOST view: Technical view - application
 
-Interoperability saliency: The e-Seal Creation Service ABB  is salient for technical interoperability because it provides the functionalities required for e-seal creation service.
+Interoperability saliency: The e-Seal Creation Service ABB  is salient for technical interoperability because it provides the functionalities required for e-seal creation service.
 
 Identifier: http://data.europa.eu/dr8/E-SealCreationApplicationService
 
@@ -10724,7 +10724,7 @@ Last modification: 2022-20-01
     <eira:definitionSource>eIDAS - REGULATION (EU) No 910/2014 OF THE EUROPEAN PARLIAMENT AND OF THE COUNCIL of 23 July 2014 on electronic identification and trust services for electronic transactions in the internal market and repealing Directive 1999/93/EC.</eira:definitionSource>
     <eira:definitionSourceReference><![CDATA[http://eur-lex.europa.eu/legal-content/EN/TXT/?uri=uriserv%3AOJ.L_.2014.257.01.0073.01.ENG]]></eira:definitionSourceReference>
     <skos:example><![CDATA[The following implementation is an example on how this specific Architecture Building Block (ABB) can be instantiated as a Solution Building Block (SBB): CEF eSignature DSS - DSS (Digital Signature Services) is an open-source software library for electronic signature creation and validation. DSS supports the creation and verification of interoperable and secure electronic signatures in line with European legislation. In particular, DSS aims to follow the eIDAS Regulation and related standards closely. DSS can be re-used in an IT solution for electronic signatures to ensure that signatures are created and verified in line with European legislation and standards. DSS allows re-use in a variety of different ways: in an applet, in a stand-alone application or in a server application. DSS can also be used as a reference implementation for IT solutions which do not directly re-use it. CEF eSignature's DSS open-source library delivers the following benefits to its users: •	Open-source software under LGPL 2.1, a non-viral open source license; •	Interoperability of the e-signatures; •	Supports both e-signatures and e-seals; •	Validation of countersignatures and multiple signatures; •	Alignment with the eIDAS Regulation and related standards; •	Supports EU standards on: o	Signature formats and packaging methods;  o	Signature validation procedures; •	Validation relying on Member States' trusted lists: o	Status of trust service providers/trust service, compensation of information, path validation. https://ec.europa.eu/cefdigital/wiki/display/CEFDIGITAL/eSignaturefile:///C:/Users/bocquilp/Downloads/DSS(ServiceOfferingDescription)%20(v0.03)%20(5).pdf]]></skos:example>
-    <eira:iopSaliency><![CDATA[The e-Seal Creation Service ABB  is salient for technical interoperability because it provides the functionalities required for e-seal creation service.]]></eira:iopSaliency>
+    <eira:iopSaliency><![CDATA[The e-Seal Creation Service ABB  is salient for technical interoperability because it provides the functionalities required for e-seal creation service.]]></eira:iopSaliency>
     <skos:note><![CDATA[An ‘electronic seal' means data in electronic form, which is attached to or logically associated with other data in electronic form to ensure the latter’s origin and integrity. The ‘creator of a seal’ is a legal person who creates an electronic seal.]]></skos:note>
     <eira:concept>eira:ArchitectureBuildingBlock</eira:concept>
     <eira:iopDimension>Behavioral IoP</eira:iopDimension>
@@ -10749,7 +10749,7 @@ IoP Dimension: Behavioral IoP
 
 LOST view: Technical view - application
 
-Interoperability saliency: The Audit Service ABB  is salient for technical interoperability because it defines the elements of an information system which need to be traced, for example to assure traceability of user actions as stated in the EIF: "Public administrations should ensure that a 'data access and authorisation plan’ which determines who has access to what data and under what conditions, to ensure privacy. Unauthorised access and security breaches should be monitored and appropriate actions should be taken to prevent any recurrence of breaches"
+Interoperability saliency: The Audit Service ABB  is salient for technical interoperability because it defines the elements of an information system which need to be traced, for example to assure traceability of user actions as stated in the EIF: "Public administrations should ensure that a 'data access and authorisation plan’ which determines who has access to what data and under what conditions, to ensure privacy. Unauthorised access and security breaches should be monitored and appropriate actions should be taken to prevent any recurrence of breaches"
 
 Identifier: http://data.europa.eu/dr8/AuditApplicationService
 
@@ -10778,7 +10778,7 @@ Last modification: 2022-18-01
     <eira:definitionSource>Inspired in SIMPL</eira:definitionSource>
     <eira:definitionSourceReference><![CDATA[https://digital-strategy.ec.europa.eu/en/news/simpl-cloud-edge-federations-and-data-spaces-made-simple]]></eira:definitionSourceReference>
     <skos:example><![CDATA[The following implementation is an example on how this specific Architecture Building Block (ABB) can be instantiated as a Solution Building Block (SBB): OpenIAM audit service - OpenIAM Auditing Service ensures that detailed information about events and activities associated with identities or resources are logged into a centralized repository and be tracked. It offers the following features: • Sign-on, Sign-off, • User: create, update, delete or disable accounts, • Role: create, update, delete or disable accounts, • Resource: create, update, delete or disable accounts, • Password changes, resets, challenge response questions changes, • Synchronization events, • Reconciliation events. Several reporting templates are provided for a BIRT report writer for use in an Eclipse designer. Organizations can also generate their own reports in BIRT with SQL. https://www.openiam.com/products/identity-manager/features/audit-compliance/]]></skos:example>
-    <eira:iopSaliency><![CDATA[The Audit Service ABB  is salient for technical interoperability because it defines the elements of an information system which need to be traced, for example to assure traceability of user actions as stated in the EIF: "Public administrations should ensure that a 'data access and authorisation plan’ which determines who has access to what data and under what conditions, to ensure privacy. Unauthorised access and security breaches should be monitored and appropriate actions should be taken to prevent any recurrence of breaches"]]></eira:iopSaliency>
+    <eira:iopSaliency><![CDATA[The Audit Service ABB  is salient for technical interoperability because it defines the elements of an information system which need to be traced, for example to assure traceability of user actions as stated in the EIF: "Public administrations should ensure that a 'data access and authorisation plan’ which determines who has access to what data and under what conditions, to ensure privacy. Unauthorised access and security breaches should be monitored and appropriate actions should be taken to prevent any recurrence of breaches"]]></eira:iopSaliency>
     <skos:note><![CDATA[]]></skos:note>
     <eira:concept>eira:ArchitectureBuildingBlock</eira:concept>
     <eira:iopDimension>Behavioral IoP</eira:iopDimension>
@@ -10912,7 +10912,7 @@ IoP Dimension: Behavioral IoP
 
 LOST view: Technical view - application
 
-Interoperability saliency: The Privacy Service ABB  is salient for interoperability because "security and privacy are primary concerns in the provision of public services" (EIF) and, as stated in EIF Recommendation 15: "Define a common security and privacy framework and establish processes for public services to ensure secure and trustworthy data exchange between public administrations and in interactions with citizens and businesses."
+Interoperability saliency: The Privacy Service ABB  is salient for interoperability because "security and privacy are primary concerns in the provision of public services" (EIF) and, as stated in EIF Recommendation 15: "Define a common security and privacy framework and establish processes for public services to ensure secure and trustworthy data exchange between public administrations and in interactions with citizens and businesses."
 
 Identifier: http://data.europa.eu/dr8/PrivacyApplicationService
 
@@ -10942,7 +10942,7 @@ Last modification: 2022-20-01
     <eira:definitionSource>ePrivacy Regulation</eira:definitionSource>
     <eira:definitionSourceReference><![CDATA[https://digital-strategy.ec.europa.eu/en/policies/eprivacy-regulation]]></eira:definitionSourceReference>
     <skos:example><![CDATA[The following implementation is an example on how this specific Architecture Building Block (ABB) can be instantiated as a Solution Building Block (SBB): SOLVIT - Solvit is a mailbox service for the access, rectification or deletion of personal data.(http://ec.europa.eu/solvit/privacy-statement/#maincontentSec8)]]></skos:example>
-    <eira:iopSaliency><![CDATA[The Privacy Service ABB  is salient for interoperability because "security and privacy are primary concerns in the provision of public services" (EIF) and, as stated in EIF Recommendation 15: "Define a common security and privacy framework and establish processes for public services to ensure secure and trustworthy data exchange between public administrations and in interactions with citizens and businesses."]]></eira:iopSaliency>
+    <eira:iopSaliency><![CDATA[The Privacy Service ABB  is salient for interoperability because "security and privacy are primary concerns in the provision of public services" (EIF) and, as stated in EIF Recommendation 15: "Define a common security and privacy framework and establish processes for public services to ensure secure and trustworthy data exchange between public administrations and in interactions with citizens and businesses."]]></eira:iopSaliency>
     <skos:note><![CDATA[]]></skos:note>
     <eira:concept>eira:ArchitectureBuildingBlock</eira:concept>
     <eira:iopDimension>Behavioral IoP</eira:iopDimension>
@@ -11083,7 +11083,7 @@ IoP Dimension: Behavioral IoP
 
 LOST view: Technical view - application
 
-Interoperability saliency: The Content Management Service ABB  is salient for technical interoperability because it provides and shares the functionalities of dynamic creation, distribution and analysis of contents (images, videos, etc.) as stated in the EIF: " Catalogues help others to find reusable resources (e.g. services, data, software, data models). Various types of catalogue exist, e.g. directories of services, libraries of software components, open data portals, registries of base registries, metadata catalogues, catalogues of standards, specifications and guidelines. Commonly agreed descriptions of the services, data, registries and interoperable solutions published in catalogues are needed to enable interoperability between catalogues."
+Interoperability saliency: The Content Management Service ABB  is salient for technical interoperability because it provides and shares the functionalities of dynamic creation, distribution and analysis of contents (images, videos, etc.) as stated in the EIF: " Catalogues help others to find reusable resources (e.g. services, data, software, data models). Various types of catalogue exist, e.g. directories of services, libraries of software components, open data portals, registries of base registries, metadata catalogues, catalogues of standards, specifications and guidelines. Commonly agreed descriptions of the services, data, registries and interoperable solutions published in catalogues are needed to enable interoperability between catalogues."
 
 Identifier: http://data.europa.eu/dr8/ContentManagementApplicationService
 
@@ -11112,7 +11112,7 @@ Last modification: 2022-20-01
     <eira:definitionSource>EUI</eira:definitionSource>
     <eira:definitionSourceReference><![CDATA[https://www.eui.eu/ServicesAndAdmin/CommunicationsService/WebUnit/Web-CMS]]></eira:definitionSourceReference>
     <skos:example><![CDATA[The following implementation is an example on how this specific Architecture Building Block (ABB) can be instantiated as a Solution Building Block (SBB): FPFIS-CMS: "The European Commission announced in the Commission Internet strategy plans to transform the EUROPA web site from a source of one-way information into a tool for communication and interaction (i.e. provide modern interactive web sites for the citizens and stakeholders). Web sites are a key tool for external communications. They are the institution's business card. Websites are a very cost-effective and efficient means of communication. EUROPA now hosts over 460 websites. EUROPA would benefit from fewer and better sites to respond to user needs. To address the shortcomings, as part of the Commission's IT governance process, the College on 30 November 2011, instructed Commission departments to rationalise the Institution's web presence. Reduce the cost (human, financial, technical) of the Commission's web presence via exploiting economies of scale and eliminating redundancies by building corporate solutions. The European Commission should offer a corporate service which optimizes and harmonizes the use of different website tools, which speeds up the creation of new external dynamic and social websites (i.e. in days or weeks and not months) and which provides a common solid modern shared infrastructure to support the rapid deployment of these sites". https://webgate.ec.europa.eu/fpfis/mwikis/thinktank/index.php/Content_Management_System_of_the_Flexible_Platform]]></skos:example>
-    <eira:iopSaliency><![CDATA[The Content Management Service ABB  is salient for technical interoperability because it provides and shares the functionalities of dynamic creation, distribution and analysis of contents (images, videos, etc.) as stated in the EIF: " Catalogues help others to find reusable resources (e.g. services, data, software, data models). Various types of catalogue exist, e.g. directories of services, libraries of software components, open data portals, registries of base registries, metadata catalogues, catalogues of standards, specifications and guidelines. Commonly agreed descriptions of the services, data, registries and interoperable solutions published in catalogues are needed to enable interoperability between catalogues."]]></eira:iopSaliency>
+    <eira:iopSaliency><![CDATA[The Content Management Service ABB  is salient for technical interoperability because it provides and shares the functionalities of dynamic creation, distribution and analysis of contents (images, videos, etc.) as stated in the EIF: " Catalogues help others to find reusable resources (e.g. services, data, software, data models). Various types of catalogue exist, e.g. directories of services, libraries of software components, open data portals, registries of base registries, metadata catalogues, catalogues of standards, specifications and guidelines. Commonly agreed descriptions of the services, data, registries and interoperable solutions published in catalogues are needed to enable interoperability between catalogues."]]></eira:iopSaliency>
     <skos:note><![CDATA[Content Management ABB is an Application Service being responsible for: - developing Website templates and functionalities; - assigning appropriate user permissions and workflows; - providing trainings to the web working group; - developing tools and web controls to speed up and facilitate the work of the web working group; - giving support and advice to the web working group; - ensuring continuity of service and performance; - ensuring security and accessibility on the website; - ensuring disaster recovery processes and backup procedures; - setting up the website information architecture within the CMS; - setting up alert procedures and analytics on usage of the platform.]]></skos:note>
     <eira:concept>eira:ArchitectureBuildingBlock</eira:concept>
     <eira:iopDimension>Behavioral IoP</eira:iopDimension>
@@ -11138,7 +11138,7 @@ IoP Dimension: Behavioral IoP
 
 LOST view: Technical view - application
 
-Interoperability saliency: The Forms Management Service ABB  is salient for technical interoperability because it provides and shares the functionalities  of dynamic creation, distribution and analysis of forms and online surveys as stated in the EIF: " Catalogues help others to find reusable resources (e.g. services, data, software, data models). Various types of catalogue exist, e.g. directories of services, libraries of software components, open data portals, registries of base registries, metadata catalogues, catalogues of standards, specifications and guidelines. Commonly agreed descriptions of the services, data, registries and interoperable solutions published in catalogues are needed to enable interoperability between catalogues."
+Interoperability saliency: The Forms Management Service ABB  is salient for technical interoperability because it provides and shares the functionalities  of dynamic creation, distribution and analysis of forms and online surveys as stated in the EIF: " Catalogues help others to find reusable resources (e.g. services, data, software, data models). Various types of catalogue exist, e.g. directories of services, libraries of software components, open data portals, registries of base registries, metadata catalogues, catalogues of standards, specifications and guidelines. Commonly agreed descriptions of the services, data, registries and interoperable solutions published in catalogues are needed to enable interoperability between catalogues."
 
 Identifier: http://data.europa.eu/dr8/FormsManagementApplicationService
 
@@ -11167,7 +11167,7 @@ Last modification: 2022-23-01
     <eira:definitionSource>ISA2 - EIA Action</eira:definitionSource>
     <eira:definitionSourceReference><![CDATA[https://joinup.ec.europa.eu/taxonomy/term/http_e_f_fdata_ceuropa_ceu_fdr8_fFormsManagementComponent]]></eira:definitionSourceReference>
     <skos:example><![CDATA[The following implementation is an example on how this specific Architecture Building Block (ABB) can be instantiated as a Solution Building Block (SBB): EACEA e-Forms - Electronic Application Forms - eForms: This page contains the resources and information required by applicants who wish to complete and submit an electronic application form (eForm) for a funding opportunity or for an accreditation. The programmes and actions are listed for which electronic application forms are currently available. The Application eForm homepage is where applicants for funding and applicants for accreditation must follow a series of steps in order to create their new application. https://eacea.ec.europa.eu/about-eacea/electronic-application-forms-eforms_en]]></skos:example>
-    <eira:iopSaliency><![CDATA[The Forms Management Service ABB  is salient for technical interoperability because it provides and shares the functionalities  of dynamic creation, distribution and analysis of forms and online surveys as stated in the EIF: " Catalogues help others to find reusable resources (e.g. services, data, software, data models). Various types of catalogue exist, e.g. directories of services, libraries of software components, open data portals, registries of base registries, metadata catalogues, catalogues of standards, specifications and guidelines. Commonly agreed descriptions of the services, data, registries and interoperable solutions published in catalogues are needed to enable interoperability between catalogues."]]></eira:iopSaliency>
+    <eira:iopSaliency><![CDATA[The Forms Management Service ABB  is salient for technical interoperability because it provides and shares the functionalities  of dynamic creation, distribution and analysis of forms and online surveys as stated in the EIF: " Catalogues help others to find reusable resources (e.g. services, data, software, data models). Various types of catalogue exist, e.g. directories of services, libraries of software components, open data portals, registries of base registries, metadata catalogues, catalogues of standards, specifications and guidelines. Commonly agreed descriptions of the services, data, registries and interoperable solutions published in catalogues are needed to enable interoperability between catalogues."]]></eira:iopSaliency>
     <skos:note><![CDATA[]]></skos:note>
     <eira:concept>eira:ArchitectureBuildingBlock</eira:concept>
     <eira:iopDimension>Behavioral IoP</eira:iopDimension>
@@ -11242,7 +11242,7 @@ IoP Dimension: Structural IoP
 
 LOST view: Technical view - application
 
-Interoperability saliency: The Data Management Service ABB  is salient for technical interoperability because it provides and shares the functionality for the share of data: "Legislation requires that decisions and data are stored and can be accessed for a specified time. This means that records and information in electronic form held by public administrations for the purpose of documenting procedures and decisions must be preserved and be converted, where necessary, to new media when old media become obsolete. The goal is to ensure that records and other forms of information keep their legibility, reliability and integrity and can be accessed as long as needed subject to security and privacy provisions."
+Interoperability saliency: The Data Management Service ABB  is salient for technical interoperability because it provides and shares the functionality for the share of data: "Legislation requires that decisions and data are stored and can be accessed for a specified time. This means that records and information in electronic form held by public administrations for the purpose of documenting procedures and decisions must be preserved and be converted, where necessary, to new media when old media become obsolete. The goal is to ensure that records and other forms of information keep their legibility, reliability and integrity and can be accessed as long as needed subject to security and privacy provisions."
 
 Identifier: http://data.europa.eu/dr8/DataManagementApplicationService
 
@@ -11273,7 +11273,7 @@ Last modification: 2022-20-01
     <eira:definitionSource>Inspired in the Data Act</eira:definitionSource>
     <eira:definitionSourceReference><![CDATA[https://digital-strategy.ec.europa.eu/en/policies/data-act]]></eira:definitionSourceReference>
     <skos:example><![CDATA[The following implementation is an example on how this specific Architecture Building Block (ABB) can be instantiated as a Solution Building Block (SBB): Oracle Data Exchange - The Data Exchange Service provides several access points to the Event Repository, allowing the user to perform queries on these events: - The Query Subscription Administration Console configures the Data Exchange Service to create queries and periodically deliver query results to designated receivers (HTTP, JMS, and AS2). The Console can also test queries before subscribing, displaying user-readable events in XML format; - A SOAP Web service allows programmatic queries. This SOAP service is based on the technically complete, but not formally ratified as of October 2006, EPCglobal EPC Information Services (EPCIS) Version 1.0 Specification.EPCglobal EPCIS 1.0 Working Draft. https://docs.oracle.com/cd/E13197_01/rfid/enterprise_server/docs20/epcis/data-exchange.html]]></skos:example>
-    <eira:iopSaliency><![CDATA[The Data Management Service ABB  is salient for technical interoperability because it provides and shares the functionality for the share of data: "Legislation requires that decisions and data are stored and can be accessed for a specified time. This means that records and information in electronic form held by public administrations for the purpose of documenting procedures and decisions must be preserved and be converted, where necessary, to new media when old media become obsolete. The goal is to ensure that records and other forms of information keep their legibility, reliability and integrity and can be accessed as long as needed subject to security and privacy provisions."]]></eira:iopSaliency>
+    <eira:iopSaliency><![CDATA[The Data Management Service ABB  is salient for technical interoperability because it provides and shares the functionality for the share of data: "Legislation requires that decisions and data are stored and can be accessed for a specified time. This means that records and information in electronic form held by public administrations for the purpose of documenting procedures and decisions must be preserved and be converted, where necessary, to new media when old media become obsolete. The goal is to ensure that records and other forms of information keep their legibility, reliability and integrity and can be accessed as long as needed subject to security and privacy provisions."]]></eira:iopSaliency>
     <skos:note><![CDATA[]]></skos:note>
     <eira:concept>eira:ArchitectureBuildingBlock</eira:concept>
     <eira:iopDimension>Structural IoP</eira:iopDimension>
@@ -11297,7 +11297,7 @@ IoP Dimension: Behavioral IoP
 
 LOST view: Technical view - application
 
-Interoperability saliency: The Data Extraction, Transformation, and Loading Service ABB  is salient for technical interoperability  because it provides the functionalities to transform internal data structures to common and agreed interoperable formats as stated in the EIF recommendation n° 41: "Establish procedures and processes to integrate the opening of data in your common business processes, working routines, and in the development of new information systems."
+Interoperability saliency: The Data Extraction, Transformation, and Loading Service ABB  is salient for technical interoperability  because it provides the functionalities to transform internal data structures to common and agreed interoperable formats as stated in the EIF recommendation n° 41: "Establish procedures and processes to integrate the opening of data in your common business processes, working routines, and in the development of new information systems."
 
 Identifier: http://data.europa.eu/dr8/DataExtraction,Transformation,andLoadingApplicationService
 
@@ -11327,7 +11327,7 @@ Last modification: 2022-23-01
     <eira:definitionSource>Inspired in definitions from referent companies of IT sector</eira:definitionSource>
     <eira:definitionSourceReference><![CDATA[]]></eira:definitionSourceReference>
     <skos:example><![CDATA[The following implementation is an example on how this specific Architecture Building Block (ABB) can be instantiated as a Solution Building Block (SBB): Eurostat transformation service - The transformation service allows datasets to be converted from one file format to another, optionally performing additional tasks, such as mapping and transcoding. The service is operational but is currently only available for internal consumption within Eurostat. However, the source code of both web service and software component is available in the SDMX webspace: http://ec.europa.eu/eurostat/web/sdmx-infospace/validation-transformation/transformation-services]]></skos:example>
-    <eira:iopSaliency><![CDATA[The Data Extraction, Transformation, and Loading Service ABB  is salient for technical interoperability  because it provides the functionalities to transform internal data structures to common and agreed interoperable formats as stated in the EIF recommendation n° 41: "Establish procedures and processes to integrate the opening of data in your common business processes, working routines, and in the development of new information systems."]]></eira:iopSaliency>
+    <eira:iopSaliency><![CDATA[The Data Extraction, Transformation, and Loading Service ABB  is salient for technical interoperability  because it provides the functionalities to transform internal data structures to common and agreed interoperable formats as stated in the EIF recommendation n° 41: "Establish procedures and processes to integrate the opening of data in your common business processes, working routines, and in the development of new information systems."]]></eira:iopSaliency>
     <skos:note><![CDATA[]]></skos:note>
     <eira:concept>eira:ArchitectureBuildingBlock</eira:concept>
     <eira:iopDimension>Behavioral IoP</eira:iopDimension>
@@ -11516,7 +11516,7 @@ IoP Dimension: Behavioral IoP
 
 LOST view: Technical view - application
 
-Interoperability saliency: The e-Archiving Service ABB  is salient for technical interoperability because it provides and shares the functionality for the long-term or permanent preservation of records and information in electronic form in order to ensure their temporal egibility, reliability and integrity as stated in the EIF: "Legislation requires that decisions and data are stored and can be accessed for a specified time. This means that records and information in electronic form held by public administrations for the purpose of documenting procedures and decisions must be preserved and be converted, where necessary, to new media when old media become obsolete. The goal is to ensure that records and other forms of information keep their legibility, reliability and integrity and can be accessed as long as needed subject to security and privacy provisions."
+Interoperability saliency: The e-Archiving Service ABB  is salient for technical interoperability because it provides and shares the functionality for the long-term or permanent preservation of records and information in electronic form in order to ensure their temporal egibility, reliability and integrity as stated in the EIF: "Legislation requires that decisions and data are stored and can be accessed for a specified time. This means that records and information in electronic form held by public administrations for the purpose of documenting procedures and decisions must be preserved and be converted, where necessary, to new media when old media become obsolete. The goal is to ensure that records and other forms of information keep their legibility, reliability and integrity and can be accessed as long as needed subject to security and privacy provisions."
 
 Identifier: http://data.europa.eu/dr8/E-ArchivingApplicationService
 
@@ -11547,7 +11547,7 @@ Last modification: 2022-20-01
     <eira:definitionSource>ISA2 - EIA Action</eira:definitionSource>
     <eira:definitionSourceReference><![CDATA[https://ec.europa.eu/isa2/actions/towards-european-interoperability-architecture_en/]]></eira:definitionSourceReference>
     <skos:example><![CDATA[The following implementation is an example on how this specific Architecture Building Block (ABB) can be instantiated as a Solution Building Block (SBB): CEF eArchiving: eArchiving provides the core specifications, software, training and knowledge to tackle the challenge of short, medium and long-term data management and reuse in a sustainable, authentic, cost-efficient, manageable and interoperable way. https://ec.europa.eu/cefdigital/wiki/display/CEFDIGITAL/eArchiving]]></skos:example>
-    <eira:iopSaliency><![CDATA[The e-Archiving Service ABB  is salient for technical interoperability because it provides and shares the functionality for the long-term or permanent preservation of records and information in electronic form in order to ensure their temporal egibility, reliability and integrity as stated in the EIF: "Legislation requires that decisions and data are stored and can be accessed for a specified time. This means that records and information in electronic form held by public administrations for the purpose of documenting procedures and decisions must be preserved and be converted, where necessary, to new media when old media become obsolete. The goal is to ensure that records and other forms of information keep their legibility, reliability and integrity and can be accessed as long as needed subject to security and privacy provisions."]]></eira:iopSaliency>
+    <eira:iopSaliency><![CDATA[The e-Archiving Service ABB  is salient for technical interoperability because it provides and shares the functionality for the long-term or permanent preservation of records and information in electronic form in order to ensure their temporal egibility, reliability and integrity as stated in the EIF: "Legislation requires that decisions and data are stored and can be accessed for a specified time. This means that records and information in electronic form held by public administrations for the purpose of documenting procedures and decisions must be preserved and be converted, where necessary, to new media when old media become obsolete. The goal is to ensure that records and other forms of information keep their legibility, reliability and integrity and can be accessed as long as needed subject to security and privacy provisions."]]></eira:iopSaliency>
     <skos:note><![CDATA[The EIRA(c) differentiates between document management, record management and e-archiving as follows: - Document management is primarily about day-to-day use of electronic documents (create/update/delete/versioning) within the operational environment; - Record management is primarily about ensuring that information (e.g. in form of an electronic document or database record) is available for business and legal purposes (e.g. to proof and track the handling of contracts). If an electronic document or information is becoming a record (an authority declares it as a record) that electronic document or information needs to be handled by the record management service (based on specific business or legal reasons (e.g. contract negotiation)); - e-Archiving is primarily about storing records which have been selected (by an authority) for permanent or long-term preservation due to their enduring research value and as a memory aid. An electronic document or information which a) is managed by the document management service or the record management service and b) is no longer needed for business or legal purposes or day-to-day activities, and c) still has value for research purposes or as a memory aid, the electronic document should be managed by the e-archiving service”.]]></skos:note>
     <eira:concept>eira:ArchitectureBuildingBlock</eira:concept>
     <eira:iopDimension>Behavioral IoP</eira:iopDimension>
@@ -11681,7 +11681,7 @@ IoP Dimension: Behavioral IoP
 
 LOST view: Technical view - Infrastructure
 
-Interoperability saliency: The e-Seal Preservation Service ABB  is salient for technical interoperability  because it provides the functionalities required for e-seal preservation service.
+Interoperability saliency: The e-Seal Preservation Service ABB  is salient for technical interoperability  because it provides the functionalities required for e-seal preservation service.
 
 Identifier: http://data.europa.eu/dr8/E-SealPreservationApplicationService
 
@@ -11710,7 +11710,7 @@ Last modification: 2022-20-01
     <eira:definitionSource>eIDAS - REGULATION (EU) No 910/2014 OF THE EUROPEAN PARLIAMENT AND OF THE COUNCIL of 23 July 2014 on electronic identification and trust services for electronic transactions in the internal market and repealing Directive 1999/93/EC.</eira:definitionSource>
     <eira:definitionSourceReference><![CDATA[http://eur-lex.europa.eu/legal-content/EN/TXT/?uri=uriserv%3AOJ.L_.2014.257.01.0073.01.ENG]]></eira:definitionSourceReference>
     <skos:example><![CDATA[The following implementation is an example on how this specific Architecture Building Block (ABB) can be instantiated as a Solution Building Block (SBB): CEF eSignature DSS - DSS (Digital Signature Services) is an open-source software library for electronic signature creation and validation. DSS supports the creation and verification of interoperable and secure electronic signatures in line with European legislation. In particular, DSS aims to follow the eIDAS Regulation and related standards closely. DSS can be re-used in an IT solution for electronic signatures to ensure that signatures are created and verified in line with European legislation and standards. DSS allows re-use in a variety of different ways: in an applet, in a stand-alone application or in a server application. DSS can also be used as a reference implementation for IT solutions which do not directly re-use it. CEF eSignature's DSS open-source library delivers the following benefits to its users: •	Open-source software under LGPL 2.1, a non-viral open source license; •	Interoperability of the e-signatures; •	Supports both e-signatures and e-seals; •	Validation of countersignatures and multiple signatures; •	Alignment with the eIDAS Regulation and related standards; •	Supports EU standards on: o	Signature formats and packaging methods;  o	Signature validation procedures; •	Validation relying on Member States' trusted lists: o	Status of trust service providers/trust service, compensation of information, path validation. https://ec.europa.eu/cefdigital/wiki/display/CEFDIGITAL/eSignaturefile:///C:/Users/bocquilp/Downloads/DSS(ServiceOfferingDescription)%20(v0.03)%20(5).pdf]]></skos:example>
-    <eira:iopSaliency><![CDATA[The e-Seal Preservation Service ABB  is salient for technical interoperability  because it provides the functionalities required for e-seal preservation service.]]></eira:iopSaliency>
+    <eira:iopSaliency><![CDATA[The e-Seal Preservation Service ABB  is salient for technical interoperability  because it provides the functionalities required for e-seal preservation service.]]></eira:iopSaliency>
     <skos:note><![CDATA[An ‘electronic seal' means data in electronic form, which is attached to or logically associated with other data in electronic form to ensure the latter’s origin and integrity. The ‘creator of a seal’ is a legal person who creates an electronic seal.]]></skos:note>
     <eira:concept>eira:ArchitectureBuildingBlock</eira:concept>
     <eira:iopDimension>Behavioral IoP</eira:iopDimension>
@@ -11737,7 +11737,7 @@ IoP Dimension: Behavioral IoP
 
 LOST view: Technical view - application
 
-Interoperability saliency: The e-Timestamp Creation Service ABB  is salient for technical interoperability because it provides the functionalities required for e-Timestamp creation service.
+Interoperability saliency: The e-Timestamp Creation Service ABB  is salient for technical interoperability because it provides the functionalities required for e-Timestamp creation service.
 
 Identifier: http://data.europa.eu/dr8/E-TimestampCreationApplicationService
 
@@ -11766,7 +11766,7 @@ Last modification: 2022-20-01
     <eira:definitionSource>eIDAS - REGULATION (EU) No 910/2014 OF THE EUROPEAN PARLIAMENT AND OF THE COUNCIL of 23 July 2014 on electronic identification and trust services for electronic transactions in the internal market and repealing Directive 1999/93/EC.</eira:definitionSource>
     <eira:definitionSourceReference><![CDATA[http://eur-lex.europa.eu/legal-content/EN/TXT/?uri=uriserv%3AOJ.L_.2014.257.01.0073.01.ENG]]></eira:definitionSourceReference>
     <skos:example><![CDATA[The following implementation is an example on how this specific Architecture Building Block (ABB) can be instantiated as a Solution Building Block (SBB): DigiStamp eTimeStamp® - DigiStamp eTimeStamp® protects the intellectual property in any computer file: •	Use Desktop and Web applications for on-demand protection; •	Plug the Timestamp Authority into the automated systems. Plug-in rigorous implementation of US & EU standards: •	Secure, reliable, RFC 3161 timestamp cloud service; •	Archiving and Hash Chaining keyless security; •	Elliptic Curve Upgrade; Implementation of the Internet Engineering Task Force's RFC 3161 means DigiStamp timestamps are understood by data validation systems the world over: •	Implementation of ANSI X9.95 further increases the compatibility of our timestamps; • Compliance with IETF RFC 3628 gives credence to the trustworthiness of our Time Stamp Authorities.; • Conformance to IETF RFC 3126 makes our timestamps usable for long-term, legally binding agreements. https://www.digistamp.com/]]></skos:example>
-    <eira:iopSaliency><![CDATA[The e-Timestamp Creation Service ABB  is salient for technical interoperability because it provides the functionalities required for e-Timestamp creation service.]]></eira:iopSaliency>
+    <eira:iopSaliency><![CDATA[The e-Timestamp Creation Service ABB  is salient for technical interoperability because it provides the functionalities required for e-Timestamp creation service.]]></eira:iopSaliency>
     <skos:note><![CDATA[An ‘electronic time stamp’ means data in electronic form which binds other data in electronic form to a particular time establishing evidence that the latter data existed at that time.]]></skos:note>
     <eira:concept>eira:ArchitectureBuildingBlock</eira:concept>
     <eira:iopDimension>Behavioral IoP</eira:iopDimension>
@@ -11793,7 +11793,7 @@ IoP Dimension: Behavioral IoP
 
 LOST view: Technical view - application
 
-Interoperability saliency: The Authentication Service ABB is salient for technical interoperability because it provides the functionalities of user authentication.
+Interoperability saliency: The Authentication Service ABB is salient for technical interoperability because it provides the functionalities of user authentication.
 
 Identifier: http://data.europa.eu/dr8/AuthenticationApplicationService
 
@@ -11825,7 +11825,7 @@ Last modification: 2022-20-01
     <eira:definitionSource>eIDAS - REGULATION (EU) No 910/2014 OF THE EUROPEAN PARLIAMENT AND OF THE COUNCIL of 23 July 2014 on electronic identification and trust services for electronic transactions in the internal market and repealing Directive 1999/93/EC.</eira:definitionSource>
     <eira:definitionSourceReference><![CDATA[http://eur-lex.europa.eu/legal-content/EN/TXT/?uri=uriserv%3AOJ.L_.2014.257.01.0073.01.ENG]]></eira:definitionSourceReference>
     <skos:example><![CDATA[The following implementation is an example on how this specific Architecture Building Block (ABB) can be instantiated as a Solution Building Block (SBB): EU Login - EU Login is the European Commission's user authentication service. It allows authorised users to access a wide range of Commission web services. EU Login is the entry gate to sign in to different European Commission services and/or other systems. EU Login verifies your identity and allows recovering your personal settings, history and access rights in a secure way. You can sign in using social media accounts or the EU Login account. EU Login supports a variety of verification methods: •	Password; •	ECAS Mobile App PIN code; • ECAS Mobile App QR code; • On mobile authentication; • Mobile phone + SMS; • Token and Token CRAM. https://webgate.ec.europa.eu/cas/about.html]]></skos:example>
-    <eira:iopSaliency><![CDATA[The Authentication Service ABB is salient for technical interoperability because it provides the functionalities of user authentication.]]></eira:iopSaliency>
+    <eira:iopSaliency><![CDATA[The Authentication Service ABB is salient for technical interoperability because it provides the functionalities of user authentication.]]></eira:iopSaliency>
     <skos:note><![CDATA[‘Electronic identification’ means the process of using person identification data in electronic form uniquely representing either a natural or legal person, or a natural person representing a legal person; ‘Authentication’ means an electronic process that enables the electronic identification of a natural or legal person, or the origin and integrity of data in electronic form to be confirmed;]]></skos:note>
     <eira:concept>eira:ArchitectureBuildingBlock</eira:concept>
     <eira:iopDimension>Behavioral IoP</eira:iopDimension>
@@ -11851,7 +11851,7 @@ IoP Dimension: Behavioral IoP
 
 LOST view: Technical view - application
 
-Interoperability saliency: The Data Analytics Service ABB  is salient for technical interoperability because it enables the automated processing and analysis of different data source.
+Interoperability saliency: The Data Analytics Service ABB  is salient for technical interoperability because it enables the automated processing and analysis of different data source.
 
 Identifier: http://data.europa.eu/dr8/DataAnalyticsApplicationService
 
@@ -11880,7 +11880,7 @@ Last modification: 2022-20-01
     <eira:definitionSource>Inspired in Data Act</eira:definitionSource>
     <eira:definitionSourceReference><![CDATA[https://digital-strategy.ec.europa.eu/en/policies/data-act]]></eira:definitionSourceReference>
     <skos:example><![CDATA[The following implementation is an example on how this specific Architecture Building Block (ABB) can be instantiated as a Solution Building Block (SBB): Microsoft Power BI - Power BI is a business analytics service by Microsoft. It aims to provide interactive visualizations and business intelligence capabilities with an interface simple enough for end users to create their own reports and dashboards. It is part of the Microsoft Power Platform.(https://powerbi.microsoft.com/it-it/what-is-power-bi/)]]></skos:example>
-    <eira:iopSaliency><![CDATA[The Data Analytics Service ABB  is salient for technical interoperability because it enables the automated processing and analysis of different data source.]]></eira:iopSaliency>
+    <eira:iopSaliency><![CDATA[The Data Analytics Service ABB  is salient for technical interoperability because it enables the automated processing and analysis of different data source.]]></eira:iopSaliency>
     <skos:note><![CDATA[]]></skos:note>
     <eira:concept>eira:ArchitectureBuildingBlock</eira:concept>
     <eira:iopDimension>Behavioral IoP</eira:iopDimension>
@@ -11904,7 +11904,7 @@ IoP Dimension: Behavioral IoP
 
 LOST view: Technical view - application
 
-Interoperability saliency: The Metadata management Service ABB  is salient for interoperability  because it provides and shares the functionalities to manage metadata. EIF recommends to prioritise it: "Put in place an information management strategy at the highest possible level to avoid fragmentation and duplication. Management of metadata, master data and reference data should be prioritised".
+Interoperability saliency: The Metadata management Service ABB  is salient for interoperability  because it provides and shares the functionalities to manage metadata. EIF recommends to prioritise it: "Put in place an information management strategy at the highest possible level to avoid fragmentation and duplication. Management of metadata, master data and reference data should be prioritised".
 
 Identifier: http://data.europa.eu/dr8/MetadataManagementApplicationService
 
@@ -11934,7 +11934,7 @@ Last modification: 2022-20-01
     <eira:definitionSource>DAMA</eira:definitionSource>
     <eira:definitionSourceReference><![CDATA[http://www.dama.org/]]></eira:definitionSourceReference>
     <skos:example><![CDATA[The following implementation is an example on how this specific Architecture Building Block (ABB) can be instantiated as a Solution Building Block (SBB): Eurostat SDMX repository: The Euro SDMX Registry is Eurostat’s implementation of an SDMX registry to facilitate the exchange of statistical data and metadata by serving as a metadata repository. It stores the SDMX artefacts needed for the parties to access and interpret the content of the exchanged statistical data and metadata sets. http://ec.europa.eu/eurostat/web/sdmx-infospace/sdmx-it-tools/sdmx-registry]]></skos:example>
-    <eira:iopSaliency><![CDATA[The Metadata management Service ABB  is salient for interoperability  because it provides and shares the functionalities to manage metadata. EIF recommends to prioritise it: "Put in place an information management strategy at the highest possible level to avoid fragmentation and duplication. Management of metadata, master data and reference data should be prioritised".]]></eira:iopSaliency>
+    <eira:iopSaliency><![CDATA[The Metadata management Service ABB  is salient for interoperability  because it provides and shares the functionalities to manage metadata. EIF recommends to prioritise it: "Put in place an information management strategy at the highest possible level to avoid fragmentation and duplication. Management of metadata, master data and reference data should be prioritised".]]></eira:iopSaliency>
     <skos:note><![CDATA[]]></skos:note>
     <eira:concept>eira:ArchitectureBuildingBlock</eira:concept>
     <eira:iopDimension>Behavioral IoP</eira:iopDimension>
@@ -12060,7 +12060,7 @@ IoP Dimension: Behavioral IoP
 
 LOST view: Technical view - application
 
-Interoperability saliency: The Data Quality Service ABB  is salient for technical interoperability because it shares the functionality to validate if data received (or to be sent) is compliant with common and agreed interoperable formats as stated in the EIF recommendation n° 41: "Establish procedures and processes to integrate the opening of data in your common business processes, working routines, and in the development of new information systems."
+Interoperability saliency: The Data Quality Service ABB  is salient for technical interoperability because it shares the functionality to validate if data received (or to be sent) is compliant with common and agreed interoperable formats as stated in the EIF recommendation n° 41: "Establish procedures and processes to integrate the opening of data in your common business processes, working routines, and in the development of new information systems."
 
 Identifier: http://data.europa.eu/dr8/DataQualityApplicationService
 
@@ -12090,7 +12090,7 @@ Last modification: 2022-23-01
     <eira:definitionSource>Eurostat Data Validation</eira:definitionSource>
     <eira:definitionSourceReference><![CDATA[http://ec.europa.eu/eurostat/data/data-validation]]></eira:definitionSourceReference>
     <skos:example><![CDATA[The following implementation is an example on how this specific Architecture Building Block (ABB) can be instantiated as a Solution Building Block (SBB): Eurostat Struval - The Structural Validation service (called STRUVAL) performs structural validation of statistical data files following the SDMX Information Model for a given data flow. It ensures that a data file respects the following key elements: •	SDMX compliance in terms of checks on file format and completeness in terms of mandatory fields; •	SDMX compliance in terms of the structure and coding defined by the Data Structure Definition (DSD); •	The constraints defined for respective data flows. The STRUVAL service returns a response containing a machine-readable message that is processed by the process manager. The invoker of the service receives a validation report, regardless of the result of the process (in case of no failures the reports hold no records). http://ec.europa.eu/eurostat/web/sdmx-infospace/validation-transformation/structural-validation]]></skos:example>
-    <eira:iopSaliency><![CDATA[The Data Quality Service ABB  is salient for technical interoperability because it shares the functionality to validate if data received (or to be sent) is compliant with common and agreed interoperable formats as stated in the EIF recommendation n° 41: "Establish procedures and processes to integrate the opening of data in your common business processes, working routines, and in the development of new information systems."]]></eira:iopSaliency>
+    <eira:iopSaliency><![CDATA[The Data Quality Service ABB  is salient for technical interoperability because it shares the functionality to validate if data received (or to be sent) is compliant with common and agreed interoperable formats as stated in the EIF recommendation n° 41: "Establish procedures and processes to integrate the opening of data in your common business processes, working routines, and in the development of new information systems."]]></eira:iopSaliency>
     <skos:note><![CDATA[]]></skos:note>
     <eira:concept>eira:ArchitectureBuildingBlock</eira:concept>
     <eira:iopDimension>Behavioral IoP</eira:iopDimension>
@@ -12171,7 +12171,7 @@ IoP Dimension: Behavioral IoP
 
 LOST view: Technical view - Infrastructure
 
-Interoperability saliency: The e-Signature Preservation Service ABB  is salient for technical interoperability because it provides the functionalities required for e-signature preservation service.
+Interoperability saliency: The e-Signature Preservation Service ABB  is salient for technical interoperability because it provides the functionalities required for e-signature preservation service.
 
 Identifier: http://data.europa.eu/dr8/E-SignaturePreservationApplicationService
 
@@ -12200,7 +12200,7 @@ Last modification: 2022-20-01
     <eira:definitionSource>eIDAS - REGULATION (EU) No 910/2014 OF THE EUROPEAN PARLIAMENT AND OF THE COUNCIL of 23 July 2014 on electronic identification and trust services for electronic transactions in the internal market and repealing Directive 1999/93/EC.</eira:definitionSource>
     <eira:definitionSourceReference><![CDATA[http://eur-lex.europa.eu/legal-content/EN/TXT/?uri=uriserv%3AOJ.L_.2014.257.01.0073.01.ENG]]></eira:definitionSourceReference>
     <skos:example><![CDATA[The following implementation is an example on how this specific Architecture Building Block (ABB) can be instantiated as a Solution Building Block (SBB): Namirial Spa Long term archiving solution - Namirial is a Trust Service Provider, focused on addressing the fast growing market of Digital Transaction Management (DTM), which includes legally compliant electronic signatures, managing and tracking documents flows, conducting secure transactions and ensuring secure storage of data. It provides a long term archiving: •	Protect and preserve all documents generated while performing digital business transactions; •	Make those documents easily searchable; •	Accredited for Long-Term Archiving/Digital Preservation Services; •	SaaS, high-availability, multi-company solution built to archive large volumes of documents. https://www.xyzmo.com/digital-signature/e-signature-products]]></skos:example>
-    <eira:iopSaliency><![CDATA[The e-Signature Preservation Service ABB  is salient for technical interoperability because it provides the functionalities required for e-signature preservation service.]]></eira:iopSaliency>
+    <eira:iopSaliency><![CDATA[The e-Signature Preservation Service ABB  is salient for technical interoperability because it provides the functionalities required for e-signature preservation service.]]></eira:iopSaliency>
     <skos:note><![CDATA[An ‘electronic signature’ means data in electronic form which is attached to or logically associated with other data in electronic form and which is used by the signatory to sign.]]></skos:note>
     <eira:concept>eira:ArchitectureBuildingBlock</eira:concept>
     <eira:iopDimension>Behavioral IoP</eira:iopDimension>
@@ -12281,7 +12281,7 @@ IoP Dimension: Behavioral IoP
 
 LOST view: Technical view - application
 
-Interoperability saliency: The Machine Translation Service ABB  is salient for technical interoperability because it enables cross-lingual functionality by providing automated  translation of text, metadata and concept classes or nomenclatures as stated in the EIF recommendation n°16: "Use information systems and technical architectures that cater for multilingualism when establishing a European public service. Decide on the level of multilingualism support based on the needs of the expected users."
+Interoperability saliency: The Machine Translation Service ABB  is salient for technical interoperability because it enables cross-lingual functionality by providing automated  translation of text, metadata and concept classes or nomenclatures as stated in the EIF recommendation n°16: "Use information systems and technical architectures that cater for multilingualism when establishing a European public service. Decide on the level of multilingualism support based on the needs of the expected users."
 
 Identifier: http://data.europa.eu/dr8/MachineTranslationApplicationService
 
@@ -12310,7 +12310,7 @@ Last modification: 2022-20-01
     <eira:definitionSource>CEF Automated Translation</eira:definitionSource>
     <eira:definitionSourceReference><![CDATA[https://ec.europa.eu/digital-single-market/en/news/tools-and-resources-cef-automated-translation]]></eira:definitionSourceReference>
     <skos:example><![CDATA[The following implementation is an example on how this specific Architecture Building Block (ABB) can be instantiated as a Solution Building Block (SBB): CEF Digital - eTranslation building block: eTranslation is a Connecting Europe Facility (CEF) building block provided by the European Commission (EC). eTranslation provides an online machine translation service.(https://ec.europa.eu/cefdigital/wiki/display/CEFDIGITAL/eTranslation)]]></skos:example>
-    <eira:iopSaliency><![CDATA[The Machine Translation Service ABB  is salient for technical interoperability because it enables cross-lingual functionality by providing automated  translation of text, metadata and concept classes or nomenclatures as stated in the EIF recommendation n°16: "Use information systems and technical architectures that cater for multilingualism when establishing a European public service. Decide on the level of multilingualism support based on the needs of the expected users."]]></eira:iopSaliency>
+    <eira:iopSaliency><![CDATA[The Machine Translation Service ABB  is salient for technical interoperability because it enables cross-lingual functionality by providing automated  translation of text, metadata and concept classes or nomenclatures as stated in the EIF recommendation n°16: "Use information systems and technical architectures that cater for multilingualism when establishing a European public service. Decide on the level of multilingualism support based on the needs of the expected users."]]></eira:iopSaliency>
     <skos:note><![CDATA[]]></skos:note>
     <eira:concept>eira:ArchitectureBuildingBlock</eira:concept>
     <eira:iopDimension>Behavioral IoP</eira:iopDimension>
@@ -12334,7 +12334,7 @@ IoP Dimension: Behavioral IoP
 
 LOST view: Technical view - Infrastructure
 
-Interoperability saliency: The Registration Service ABB  is salient for technical interoperability because it provides the functionalities of the discovery of essential information about accredited service providers.
+Interoperability saliency: The Registration Service ABB  is salient for technical interoperability because it provides the functionalities of the discovery of essential information about accredited service providers.
 
 Identifier: http://data.europa.eu/dr8/RegistrationApplicationService
 
@@ -12363,7 +12363,7 @@ Last modification: 2022-20-01
     <eira:definitionSource>eIDAS - REGULATION (EU) No 910/2014 OF THE EUROPEAN PARLIAMENT AND OF THE COUNCIL of 23 July 2014 on electronic identification and trust services for electronic transactions in the internal market and repealing Directive 1999/93/EC.</eira:definitionSource>
     <eira:definitionSourceReference><![CDATA[http://eur-lex.europa.eu/legal-content/EN/TXT/?uri=uriserv%3AOJ.L_.2014.257.01.0073.01.ENG]]></eira:definitionSourceReference>
     <skos:example><![CDATA[The following implementation is an example on how this specific Architecture Building Block (ABB) can be instantiated as a Solution Building Block (SBB): BE:Trusted - BE:Trusted list including information related to the qualified trust service providers which are supervised by the issuing Member State, together with information related to the qualified trust services provided by them, in accordance with the relevant provisions laid down in Regulation (EU) No 910/2014 of the European Parliament and of the Council of 23 July 2014 on electronic identification and trust services for electronic transactions in the internal market. https://tsl.belgium.be/archive/TSL-BE-2016-T3_vi5_sn27%20SPF%20Economie_signed.pdf]]></skos:example>
-    <eira:iopSaliency><![CDATA[The Registration Service ABB  is salient for technical interoperability because it provides the functionalities of the discovery of essential information about accredited service providers.]]></eira:iopSaliency>
+    <eira:iopSaliency><![CDATA[The Registration Service ABB  is salient for technical interoperability because it provides the functionalities of the discovery of essential information about accredited service providers.]]></eira:iopSaliency>
     <skos:note><![CDATA[]]></skos:note>
     <eira:concept>eira:ArchitectureBuildingBlock</eira:concept>
     <eira:iopDimension>Behavioral IoP</eira:iopDimension>
@@ -12390,7 +12390,7 @@ IoP Dimension: Behavioral IoP
 
 LOST view: Technical view - application
 
-Interoperability saliency: The e-Signature Verification and Validation Service ABB  is salient for technical interoperability because it provides the functionalities required for  e-signature verification and validation service.
+Interoperability saliency: The e-Signature Verification and Validation Service ABB  is salient for technical interoperability because it provides the functionalities required for  e-signature verification and validation service.
 
 Identifier: http://data.europa.eu/dr8/E-SignatureVerificationAndValidationApplicationService
 
@@ -12419,7 +12419,7 @@ Last modification: 2022-20-01
     <eira:definitionSource>eIDAS - REGULATION (EU) No 910/2014 OF THE EUROPEAN PARLIAMENT AND OF THE COUNCIL of 23 July 2014 on electronic identification and trust services for electronic transactions in the internal market and repealing Directive 1999/93/EC.</eira:definitionSource>
     <eira:definitionSourceReference><![CDATA[http://eur-lex.europa.eu/legal-content/EN/TXT/?uri=uriserv%3AOJ.L_.2014.257.01.0073.01.ENG]]></eira:definitionSourceReference>
     <skos:example><![CDATA[The following implementation is an example on how this specific Architecture Building Block (ABB) can be instantiated as a Solution Building Block (SBB): CEF eSignature DSS - DSS (Digital Signature Services) is an open-source software library for electronic signature creation and validation. DSS supports the creation and verification of interoperable and secure electronic signatures in line with European legislation. In particular, DSS aims to follow the eIDAS Regulation and related standards closely. DSS can be re-used in an IT solution for electronic signatures to ensure that signatures are created and verified in line with European legislation and standards. DSS allows re-use in a variety of different ways: in an applet, in a stand-alone application or in a server application. DSS can also be used as a reference implementation for IT solutions which do not directly re-use it. CEF eSignature's DSS open-source library delivers the following benefits to its users: •	Open-source software under LGPL 2.1, a non-viral open source license; •	Interoperability of the e-signatures; •	Supports both e-signatures and e-seals; •	Validation of countersignatures and multiple signatures; •	Alignment with the eIDAS Regulation and related standards; •	Supports EU standards on: o	Signature formats and packaging methods;  o	Signature validation procedures; •	Validation relying on Member States' trusted lists: o	Status of trust service providers/trust service, compensation of information, path validation. https://ec.europa.eu/cefdigital/wiki/display/CEFDIGITAL/eSignaturefile:///C:/Users/bocquilp/Downloads/DSS(ServiceOfferingDescription)%20(v0.03)%20(5).pdf]]></skos:example>
-    <eira:iopSaliency><![CDATA[The e-Signature Verification and Validation Service ABB  is salient for technical interoperability because it provides the functionalities required for  e-signature verification and validation service.]]></eira:iopSaliency>
+    <eira:iopSaliency><![CDATA[The e-Signature Verification and Validation Service ABB  is salient for technical interoperability because it provides the functionalities required for  e-signature verification and validation service.]]></eira:iopSaliency>
     <skos:note><![CDATA[An ‘electronic signature’ means data in electronic form which is attached to or logically associated with other data in electronic form and which is used by the signatory to sign. ‘Validation’ means the process of verifying and confirming that an electronic signature or a seal is valid.]]></skos:note>
     <eira:concept>eira:ArchitectureBuildingBlock</eira:concept>
     <eira:iopDimension>Behavioral IoP</eira:iopDimension>
@@ -12497,7 +12497,7 @@ IoP Dimension: Behavioral IoP
 
 LOST view: Technical view - application
 
-Interoperability saliency: The e-Seal Verification and Validation Service ABB  is salient for technical interoperability because it provides the functionalities required for e-seal verification and validation service.
+Interoperability saliency: The e-Seal Verification and Validation Service ABB  is salient for technical interoperability because it provides the functionalities required for e-seal verification and validation service.
 
 Identifier: http://data.europa.eu/dr8/E-SealVerificationAndValidationApplicationService
 
@@ -12526,7 +12526,7 @@ Last modification: 2022-20-01
     <eira:definitionSource>eIDAS - REGULATION (EU) No 910/2014 OF THE EUROPEAN PARLIAMENT AND OF THE COUNCIL of 23 July 2014 on electronic identification and trust services for electronic transactions in the internal market and repealing Directive 1999/93/EC.</eira:definitionSource>
     <eira:definitionSourceReference><![CDATA[http://eur-lex.europa.eu/legal-content/EN/TXT/?uri=uriserv%3AOJ.L_.2014.257.01.0073.01.ENG]]></eira:definitionSourceReference>
     <skos:example><![CDATA[The following implementation is an example on how this specific Architecture Building Block (ABB) can be instantiated as a Solution Building Block (SBB): CEF eSignature DSS - DSS (Digital Signature Services) is an open-source software library for electronic signature creation and validation. DSS supports the creation and verification of interoperable and secure electronic signatures in line with European legislation. In particular, DSS aims to follow the eIDAS Regulation and related standards closely. DSS can be re-used in an IT solution for electronic signatures to ensure that signatures are created and verified in line with European legislation and standards. DSS allows re-use in a variety of different ways: in an applet, in a stand-alone application or in a server application. DSS can also be used as a reference implementation for IT solutions which do not directly re-use it. CEF eSignature's DSS open-source library delivers the following benefits to its users: •	Open-source software under LGPL 2.1, a non-viral open source license; •	Interoperability of the e-signatures; •	Supports both e-signatures and e-seals; •	Validation of countersignatures and multiple signatures; •	Alignment with the eIDAS Regulation and related standards; •	Supports EU standards on: o	Signature formats and packaging methods;  o	Signature validation procedures; •	Validation relying on Member States' trusted lists: o	Status of trust service providers/trust service, compensation of information, path validation. https://ec.europa.eu/cefdigital/wiki/display/CEFDIGITAL/eSignaturefile:///C:/Users/bocquilp/Downloads/DSS(ServiceOfferingDescription)%20(v0.03)%20(5).pdf]]></skos:example>
-    <eira:iopSaliency><![CDATA[The e-Seal Verification and Validation Service ABB  is salient for technical interoperability because it provides the functionalities required for e-seal verification and validation service.]]></eira:iopSaliency>
+    <eira:iopSaliency><![CDATA[The e-Seal Verification and Validation Service ABB  is salient for technical interoperability because it provides the functionalities required for e-seal verification and validation service.]]></eira:iopSaliency>
     <skos:note><![CDATA[An ‘electronic seal' means data in electronic form, which is attached to or logically associated with other data in electronic form to ensure the latter’s origin and integrity. The ‘creator of a seal’ is a legal person who creates an electronic seal.]]></skos:note>
     <eira:concept>eira:ArchitectureBuildingBlock</eira:concept>
     <eira:iopDimension>Behavioral IoP</eira:iopDimension>
@@ -12553,7 +12553,7 @@ IoP Dimension: Behavioral IoP
 
 LOST view: Technical view - application
 
-Interoperability saliency: The e-Timestamp Verification and Validation Service ABB  is salient for technical interoperability because it provides the functionalities required for e-timestamp verification and validation service.
+Interoperability saliency: The e-Timestamp Verification and Validation Service ABB  is salient for technical interoperability because it provides the functionalities required for e-timestamp verification and validation service.
 
 Identifier: http://data.europa.eu/dr8/E-TimestampVerificationAndValidationApplicationService
 
@@ -12582,7 +12582,7 @@ Last modification: 2022-20-01
     <eira:definitionSource>eIDAS - REGULATION (EU) No 910/2014 OF THE EUROPEAN PARLIAMENT AND OF THE COUNCIL of 23 July 2014 on electronic identification and trust services for electronic transactions in the internal market and repealing Directive 1999/93/EC.</eira:definitionSource>
     <eira:definitionSourceReference><![CDATA[http://eur-lex.europa.eu/legal-content/EN/TXT/?uri=uriserv%3AOJ.L_.2014.257.01.0073.01.ENG]]></eira:definitionSourceReference>
     <skos:example><![CDATA[The following implementation is an example on how this specific Architecture Building Block (ABB) can be instantiated as a Solution Building Block (SBB): OpenSSL timestamp verification - OpenSSL is an open-source tool that can be used to retrieve and verify digital timestamps. (https://wiki.openssl.org/index.php/Manual:Ts(1)) and https://www.digistamp.com/technical/software-alternatives/using-openssl-to-request-timestamps/]]></skos:example>
-    <eira:iopSaliency><![CDATA[The e-Timestamp Verification and Validation Service ABB  is salient for technical interoperability because it provides the functionalities required for e-timestamp verification and validation service.]]></eira:iopSaliency>
+    <eira:iopSaliency><![CDATA[The e-Timestamp Verification and Validation Service ABB  is salient for technical interoperability because it provides the functionalities required for e-timestamp verification and validation service.]]></eira:iopSaliency>
     <skos:note><![CDATA[An ‘electronic time stamp’ means data in electronic form which binds other data in electronic form to a particular time establishing evidence that the latter data existed at that time.]]></skos:note>
     <eira:concept>eira:ArchitectureBuildingBlock</eira:concept>
     <eira:iopDimension>Behavioral IoP</eira:iopDimension>
@@ -12770,7 +12770,7 @@ IoP Dimension: Behavioral IoP
 
 LOST view: Technical view - application
 
-Interoperability saliency: The Data Pubblication Service ABB  is salient for technical interoperability because it provides the functionalities to make public data freely available for use and reuse by others unless restriction aoply as stated in the EIF recommendation n.2: "Publish the data you own as open data unless certain restrictions apply."
+Interoperability saliency: The Data Pubblication Service ABB  is salient for technical interoperability because it provides the functionalities to make public data freely available for use and reuse by others unless restriction aoply as stated in the EIF recommendation n.2: "Publish the data you own as open data unless certain restrictions apply."
 
 Identifier: http://data.europa.eu/dr8/DataPublicationApplicationService
 
@@ -12800,7 +12800,7 @@ Last modification: 2022-23-01
     <eira:definitionSource>ISA2</eira:definitionSource>
     <eira:definitionSourceReference><![CDATA[https://ec.europa.eu/isa2/sites/default/files/docs/publications/isa2-actions-phase2_-_poc_-_wp1_specifications_en.pdf]]></eira:definitionSourceReference>
     <skos:example><![CDATA[The following implementation is an example on how this specific Architecture Building Block (ABB) can be instantiated as a Solution Building Block (SBB): European Data Portal - The European Data Portal harvests the metadata of Public Sector Information available on public data portals across European countries. Information regarding the provision of data and the benefits of re-using data is also included. What is Open Data? -	Open (Government) Data refers to the information collected, produced or paid for by the public bodies (also referred to as Public Sector Information) and made freely available for re-use for any purpose. The licence will specify the terms of use; -	Public sector information is information held by the public sector. The Directive on the re-use of public sector information provides a common legal framework for a European market for government-held data. It is built around the key pillars of the internal market: free flow of data, transparency and fair competition. It is important to note that not all of the public sector information is Open Data. Within the Portal, sections are dedicated to: -	Searching datasets: Categories have been established to structure the metadata harvested from the various countries. These categories follow the revision of the DCAT Application Profile and have been mapped against the Eurovoc Thesaurus; -	Providing Data: This section gives an insight into understanding Open Data from the perspective of a data provider. In addition, instructions are offered for those who wish their data portal to be harvested by the European Data Portal; -	Using Data: How Open Data is being used, as well as the economic benefits of Open Data are detailed in this section; -	Training and Library: eLearning modules about Open Data as well as training guides and a knowledge base referencing publications around Open Data and featured projects; - Portals can be national, regional, local or domain specific. They cover the 28 EU Member States, EEA, countries involved in the EU's neighbourhood policy and Switzerland. https://www.europeandataportal.eu/]]></skos:example>
-    <eira:iopSaliency><![CDATA[The Data Pubblication Service ABB  is salient for technical interoperability because it provides the functionalities to make public data freely available for use and reuse by others unless restriction aoply as stated in the EIF recommendation n.2: "Publish the data you own as open data unless certain restrictions apply."]]></eira:iopSaliency>
+    <eira:iopSaliency><![CDATA[The Data Pubblication Service ABB  is salient for technical interoperability because it provides the functionalities to make public data freely available for use and reuse by others unless restriction aoply as stated in the EIF recommendation n.2: "Publish the data you own as open data unless certain restrictions apply."]]></eira:iopSaliency>
     <skos:note><![CDATA[]]></skos:note>
     <eira:concept>eira:ArchitectureBuildingBlock</eira:concept>
     <eira:iopDimension>Behavioral IoP</eira:iopDimension>
@@ -12882,7 +12882,7 @@ IoP Dimension: Behavioral IoP
 
 LOST view: Technical view - Domain specific
 
-Interoperability saliency: The Access Management Service ABB  is salient for technical interoperability because it provides the functionality of allowing user to make an authorized  and trusted use of IT Services, data and other assets as stated in the EIF: "Public administrations should ensure that a 'data access and authorisation plan’ which determines who has access to what data and under what conditions, to ensure privacy. Unauthorised access and security breaches should be monitored and appropriate actions should be taken to prevent any recurrence of breaches"
+Interoperability saliency: The Access Management Service ABB  is salient for technical interoperability because it provides the functionality of allowing user to make an authorized  and trusted use of IT Services, data and other assets as stated in the EIF: "Public administrations should ensure that a 'data access and authorisation plan’ which determines who has access to what data and under what conditions, to ensure privacy. Unauthorised access and security breaches should be monitored and appropriate actions should be taken to prevent any recurrence of breaches"
 
 Identifier: http://data.europa.eu/dr8/AccessManagementApplicationService
 
@@ -12914,7 +12914,7 @@ Last modification: 2022-20-01
     <eira:definitionSource>ITIL v3</eira:definitionSource>
     <eira:definitionSourceReference><![CDATA[https://wiki.en.it-processmaps.com/index.php/Access_Management]]></eira:definitionSourceReference>
     <skos:example><![CDATA[The following implementation is an example on how this specific Architecture Building Block (ABB) can be instantiated as a Solution Building Block (SBB): Belgian Federal Public Service Policy and Support - Role Management service: The Role Management service gives access managers the possibility to manage roles. A role gives access to an online government application. Characteristics: •	A federal access management platform for public e-gov applications; •	Three separate contexts: Businesses, Officials and Independent; •	Roles that can only be attributed by a specific group of managers for a specific application within one of the three contexts; •	Two different security levels of the application depending on the sensitivity of the information: user name, password and token; and electronic identity card with associated PIN code; •	Authentication when connecting to an application; •	Support with the implementation of the service; •	Support while the service is being used. Users: All public services and institutions that want a secure access management for their applications: federal public services and institutions; Communities and Regions; Provinces, municipalities and local public social welfare centres; businesses or persons implementing government contracts. Requirements: application with Fedict Service Desk and signing up to a user agreement.(http://www.fedict.belgium.be/en/identificatie_beveiliging/rollenbeheer)]]></skos:example>
-    <eira:iopSaliency><![CDATA[The Access Management Service ABB  is salient for technical interoperability because it provides the functionality of allowing user to make an authorized  and trusted use of IT Services, data and other assets as stated in the EIF: "Public administrations should ensure that a 'data access and authorisation plan’ which determines who has access to what data and under what conditions, to ensure privacy. Unauthorised access and security breaches should be monitored and appropriate actions should be taken to prevent any recurrence of breaches"]]></eira:iopSaliency>
+    <eira:iopSaliency><![CDATA[The Access Management Service ABB  is salient for technical interoperability because it provides the functionality of allowing user to make an authorized  and trusted use of IT Services, data and other assets as stated in the EIF: "Public administrations should ensure that a 'data access and authorisation plan’ which determines who has access to what data and under what conditions, to ensure privacy. Unauthorised access and security breaches should be monitored and appropriate actions should be taken to prevent any recurrence of breaches"]]></eira:iopSaliency>
     <skos:note><![CDATA[Access management helps to protect the confidentiality, integrity and availability of assets by ensuring that only authorized users are able to access or modify the assets.]]></skos:note>
     <eira:concept>eira:ArchitectureBuildingBlock</eira:concept>
     <eira:iopDimension>Behavioral IoP</eira:iopDimension>
@@ -13095,7 +13095,7 @@ IoP Dimension: Behavioral IoP
 
 LOST view: Technical view - Infrastructure
 
-Interoperability saliency: The e-Signature Creation Service ABB  is salient for technical interoperability because it provides the functionalities required for e-signature creation service.
+Interoperability saliency: The e-Signature Creation Service ABB  is salient for technical interoperability because it provides the functionalities required for e-signature creation service.
 
 Identifier: http://data.europa.eu/dr8/E-SignatureCreationApplicationService
 
@@ -13124,7 +13124,7 @@ Last modification: 2022-20-01
     <eira:definitionSource>eIDAS - REGULATION (EU) No 910/2014 OF THE EUROPEAN PARLIAMENT AND OF THE COUNCIL of 23 July 2014 on electronic identification and trust services for electronic transactions in the internal market and repealing Directive 1999/93/EC.</eira:definitionSource>
     <eira:definitionSourceReference><![CDATA[http://eur-lex.europa.eu/legal-content/EN/TXT/?uri=uriserv%3AOJ.L_.2014.257.01.0073.01.ENG]]></eira:definitionSourceReference>
     <skos:example><![CDATA[The following implementation is an example on how this specific Architecture Building Block (ABB) can be instantiated as a Solution Building Block (SBB): CEF eSignature DSS - DSS (Digital Signature Services) is an open-source software library for electronic signature creation and validation. DSS supports the creation and verification of interoperable and secure electronic signatures in line with European legislation. In particular, DSS aims to follow the eIDAS Regulation and related standards closely. DSS can be re-used in an IT solution for electronic signatures to ensure that signatures are created and verified in line with European legislation and standards. DSS allows re-use in a variety of different ways: in an applet, in a stand-alone application or in a server application. DSS can also be used as a reference implementation for IT solutions which do not directly re-use it. CEF eSignature's DSS open-source library delivers the following benefits to its users: •	Open-source software under LGPL 2.1, a non-viral open source license; •	Interoperability of the e-signatures; •	Supports both e-signatures and e-seals; •	Validation of countersignatures and multiple signatures; •	Alignment with the eIDAS Regulation and related standards; •	Supports EU standards on: o	Signature formats and packaging methods;  o	Signature validation procedures; •	Validation relying on Member States' trusted lists: o	Status of trust service providers/trust service, compensation of information, path validation. https://ec.europa.eu/cefdigital/wiki/display/CEFDIGITAL/eSignaturefile:///C:/Users/bocquilp/Downloads/DSS(ServiceOfferingDescription)%20(v0.03)%20(5).pdf]]></skos:example>
-    <eira:iopSaliency><![CDATA[The e-Signature Creation Service ABB  is salient for technical interoperability because it provides the functionalities required for e-signature creation service.]]></eira:iopSaliency>
+    <eira:iopSaliency><![CDATA[The e-Signature Creation Service ABB  is salient for technical interoperability because it provides the functionalities required for e-signature creation service.]]></eira:iopSaliency>
     <skos:note><![CDATA[An ‘electronic signature’ means data in electronic form which is attached to or logically associated with other data in electronic form and which is used by the signatory to sign.]]></skos:note>
     <eira:concept>eira:ArchitectureBuildingBlock</eira:concept>
     <eira:iopDimension>Behavioral IoP</eira:iopDimension>
@@ -13344,7 +13344,7 @@ IoP Dimension: Behavioral IoP
 
 LOST view: Technical view - application
 
-Interoperability saliency: The Registered Electronic Delivery Service ABB  is salient for technical interoperability because it provides  the functionalities related to the handling of data transmission.
+Interoperability saliency: The Registered Electronic Delivery Service ABB  is salient for technical interoperability because it provides  the functionalities related to the handling of data transmission.
 
 Identifier: http://data.europa.eu/dr8/RegisteredElectronicDeliveryApplicationService
 
@@ -13373,7 +13373,7 @@ Last modification: 2022-20-01
     <eira:definitionSource>eIDAS - REGULATION (EU) No 910/2014 OF THE EUROPEAN PARLIAMENT AND OF THE COUNCIL of 23 July 2014 on electronic identification and trust services for electronic transactions in the internal market and repealing Directive 1999/93/EC.</eira:definitionSource>
     <eira:definitionSourceReference><![CDATA[http://eur-lex.europa.eu/legal-content/EN/TXT/?uri=uriserv%3AOJ.L_.2014.257.01.0073.01.ENG]]></eira:definitionSourceReference>
     <skos:example><![CDATA[The following implementation is an example on how this specific Architecture Building Block (ABB) can be instantiated as a Solution Building Block (SBB): Qualified electronic registered delivery services listed with CEF Trusted List Browser tool Qualified electronic registered delivery services are listed on https://webgate.ec.europa.eu/tl-browser/#/search/1 and https://webgate.ec.europa.eu/tl-browser/#/search/1]]></skos:example>
-    <eira:iopSaliency><![CDATA[The Registered Electronic Delivery Service ABB  is salient for technical interoperability because it provides  the functionalities related to the handling of data transmission.]]></eira:iopSaliency>
+    <eira:iopSaliency><![CDATA[The Registered Electronic Delivery Service ABB  is salient for technical interoperability because it provides  the functionalities related to the handling of data transmission.]]></eira:iopSaliency>
     <skos:note><![CDATA[A registered Electronic Delivery shares functionalities that i) makes it possible to transmit data between third parties by electronic means and ii) provides evidence relating to the handling of the transmitted data, including proof of sending and receiving the data, and iii) that protects transmitted data against the risk of loss, theft, damage or any unauthorised alterations;]]></skos:note>
     <eira:concept>eira:ArchitectureBuildingBlock</eira:concept>
     <eira:iopDimension>Behavioral IoP</eira:iopDimension>
@@ -14984,7 +14984,7 @@ Source: DIRECTIVE 2002/21/EC on a common regulatory framework for electronic com
 
 INTEROPERABILITY SALIENCY:
 IoP Dimension: Behavioural IoP
-The Networking Service ABB is salient for technical interoperability because it provides all the required functionalities in order to create the suitable network underlayer    where can operate interoperable solutions.
+The Networking Service ABB is salient for technical interoperability because it provides all the required functionalities in order to create the suitable network underlayer    where can operate interoperable solutions.
 
 EXAMPLES:
 The following implementation is an example on how this specific Architecture Building Block (ABB) can be instantiated as a Solution Building Block (SBB):
@@ -19262,7 +19262,7 @@ The following implementation is an example on how this specific Architecture Bui
     <skos:prefLabel xml:lang="en"><![CDATA[Subsidiarity and proportionality]]></skos:prefLabel>
     <skos:topConceptOf rdf:resource="http://data.europa.eu/dr8" />
     <skos:definition xml:lang="en"><![CDATA[DEFINITION:
-Subsidiarity and proportionality ABB is a Principle requiring EU decisions to be taken as closely as possible to the citizen
+Subsidiarity and proportionality ABB is a Principle requiring EU decisions to be taken as closely as possible to the citizen
 
 Source: Europarl
 (https://www.europarl.europa.eu/factsheets/en/sheet/7/the-principle-of-subsidiarity)
@@ -20132,7 +20132,7 @@ Source: Europa
 (https://ec.europa.eu/digital-building-blocks/wikis/display/CEFDIGITAL/2018/10/25/TOOP:+The+Once-Only+Principle#:~:text=On%201%20January%202017%2C%20the%20European%20Commission%20launched,diverse%20data%20only%20once%20to%20a%20public%20administration.)
 
 EXAMPLES:
-The following implementation is an example on how this specific Architecture Building Block (ABB) can be instantiated as a Solution Building Block (SBB): ]]></skos:definition>
+The following implementation is an example on how this specific Architecture Building Block (ABB) can be instantiated as a Solution Building Block (SBB): ]]></skos:definition>
     <owl:deprecated>true</owl:deprecated>
     <eira:OnceOnly_Properties />
   </skos:Concept>
@@ -20827,7 +20827,7 @@ IoP Dimension: Governance IoP
 
 LOST view: Legal view
 
-Interoperability saliency: The Public Policy Context ABB  is salient for the governance interoperability because it provides further limits and specifications used for the implementing of legal instruments; e.g., for its in recitals of Regulations, Directives, Implementing Acts and other legal instruments.
+Interoperability saliency: The Public Policy Context ABB  is salient for the governance interoperability because it provides further limits and specifications used for the implementing of legal instruments; e.g., for its in recitals of Regulations, Directives, Implementing Acts and other legal instruments.
 
 Identifier: http://data.europa.eu/dr8/PublicPolicyContextConstraint
 
@@ -20857,7 +20857,7 @@ Last modification: 2023-10-01
     <eira:definitionSource>Based on policy-making literature as well as the explanations provided by the European Commission when describing Public Policies.</eira:definitionSource>
     <eira:definitionSourceReference><![CDATA[https://onlinelibrary.wiley.com/doi/abs/10.1111/1468-0009.12026]]></eira:definitionSourceReference>
     <skos:example><![CDATA[The following implementation is an example of how this specific Architecture Building Block (ABB) can be instantiated as a Solution Building Block (SBB): The European Cybersecurity Strategy has won a relevant role in the European IT environment since Ukraine's was started. Cybersecurity attacks have become a regular war method. Therefore, the context for the strength and increasing efforts by the Commission is this singular event. The following link illustrates the state of the art: Russia's war on Ukraine: Timeline of cyber-attacks. https://www.europarl.europa.eu/thinktank/en/document/EPRS_BRI(2022)733549]]></skos:example>
-    <eira:iopSaliency><![CDATA[The Public Policy Context ABB  is salient for the governance interoperability because it provides further limits and specifications used for the implementing of legal instruments; e.g., for its in recitals of Regulations, Directives, Implementing Acts and other legal instruments.]]></eira:iopSaliency>
+    <eira:iopSaliency><![CDATA[The Public Policy Context ABB  is salient for the governance interoperability because it provides further limits and specifications used for the implementing of legal instruments; e.g., for its in recitals of Regulations, Directives, Implementing Acts and other legal instruments.]]></eira:iopSaliency>
     <skos:note><![CDATA[Public Policy Context is a specialisation of Public Policy Constraint. As such, Public Policy Context(s) provides the limits for the realisation of goals. In contrast to requirements, a Public Policy Constraint does not prescribe some intended functionality of the system to be realized but might impose restrictions on the implementation of the system (e.g., specific technology that is to be used, such as the usage of open source software), a restriction on the implementation process (e.g., time or budget constraints), or a restriction on the functioning of the system (e.g., legal constraints).]]></skos:note>
     <eira:concept>eira:ArchitectureBuildingBlock</eira:concept>
     <eira:iopDimension>Governance IoP</eira:iopDimension>
@@ -23973,7 +23973,7 @@ Source: EIFv2
 
 Source reference: http://ec.europa.eu/isa/documents/isa_annex_ii_eif_en.pdf
 
-Example: The Data Exchange Service ABB  is salient for technical interoperability because it provides secure and trustworthy data exchange between different ICT systems as stated in the EIF: "Define a common security and privacy framework and establish processes for public services to ensure secure and trustworthy data exchange between public administrations and in interactions with citizens and businesses."
+Example: The Data Exchange Service ABB  is salient for technical interoperability because it provides secure and trustworthy data exchange between different ICT systems as stated in the EIF: "Define a common security and privacy framework and establish processes for public services to ensure secure and trustworthy data exchange between public administrations and in interactions with citizens and businesses."
 
 IoP Dimension: Structural IoP, Behavioral IoP
 
@@ -24007,7 +24007,7 @@ EIRA concept: eira:ArchitectureBuildingBlock
     <skos:definition><![CDATA[Digital Exchange Enablers ABB is a Grouping that refers to tools or components that facilitate the exchange of data between systems or applications]]></skos:definition>
     <eira:definitionSource>EIFv2</eira:definitionSource>
     <eira:definitionSourceReference><![CDATA[http://ec.europa.eu/isa/documents/isa_annex_ii_eif_en.pdf]]></eira:definitionSourceReference>
-    <skos:example><![CDATA[The Data Exchange Service ABB  is salient for technical interoperability because it provides secure and trustworthy data exchange between different ICT systems as stated in the EIF: "Define a common security and privacy framework and establish processes for public services to ensure secure and trustworthy data exchange between public administrations and in interactions with citizens and businesses."]]></skos:example>
+    <skos:example><![CDATA[The Data Exchange Service ABB  is salient for technical interoperability because it provides secure and trustworthy data exchange between different ICT systems as stated in the EIF: "Define a common security and privacy framework and establish processes for public services to ensure secure and trustworthy data exchange between public administrations and in interactions with citizens and businesses."]]></skos:example>
     <eira:iopSaliency><![CDATA[The Data Exchange Enablers Grouping ABB is salient for technical interoperability because it provides secure and trustworthy data exchange between different ICT systems as stated in the EIF: "Define a common security and privacy framework and establish processes for public services to ensure secure and trustworthy data exchange between public administrations and in interactions with citizens and businesses."]]></eira:iopSaliency>
     <skos:note><![CDATA[]]></skos:note>
     <eira:concept>eira:ArchitectureBuildingBlock</eira:concept>
