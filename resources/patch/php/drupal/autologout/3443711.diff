@@ -1,0 +1,26 @@
+Index: src/Form/AutologoutSettingsForm.php
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/Form/AutologoutSettingsForm.php b/src/Form/AutologoutSettingsForm.php
+--- a/src/Form/AutologoutSettingsForm.php	
++++ b/src/Form/AutologoutSettingsForm.php	(date 1714133315546)
+@@ -307,7 +307,7 @@
+     ];
+ 
+     foreach (user_roles(TRUE) as $key => $role) {
+-      if ($key != 'authenticated') {
++//      if ($key != 'authenticated') {
+         $form['role_container']['table'][$key] = [
+           'enabled' => [
+             '#type' => 'checkbox',
+@@ -329,7 +329,7 @@
+             '#size' => 40,
+           ],
+         ];
+-      }
++//      }
+     }
+ 
+     return parent::buildForm($form, $form_state);

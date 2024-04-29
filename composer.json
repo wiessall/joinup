@@ -269,7 +269,8 @@
                 "Uncaught TypeError: $(...).once is not a function @see https://www.drupal.org/project/addtocal/issues/3372354": "resources/patch/php/drupal/addtocal/3372354.patch"
             },
             "drupal/autologout": {
-                "Warning: Undefined array key @see https://www.drupal.org/project/autologout/issues/3372010": "resources/patch/php/drupal/autologout/3372010.diff"
+                "Warning: Undefined array key @see https://www.drupal.org/project/autologout/issues/3372010": "resources/patch/php/drupal/autologout/3372010.diff",
+                "Users with no roles are logged out @see https://www.drupal.org/project/autologout/issues/3443711": "resources/patch/php/drupal/autologout/3443711.diff"
             },
             "drupal/cas": {
                 "Should CAS respect Drupal registration configuration @see https://www.drupal.org/project/cas/issues/3038279": "resources/patch/php/drupal/cas/3038279.patch"
