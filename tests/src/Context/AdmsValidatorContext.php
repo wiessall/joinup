@@ -19,11 +19,6 @@ class AdmsValidatorContext extends RawDrupalContext {
    * @Then the ADMS-AP data of the published entities in Joinup is valid
    */
   public function assertValidPublishedGraph() {
-    // Ensure terms are synced to the RDF backend.
-    $terms = \Drupal::entityTypeManager()->getStorage('taxonomy_term')->loadMultiple();
-    \Drupal::getContainer()->get('rdf_sync.synchronizer')->synchronize(SyncMethod::INSERT, $terms, TRUE);
-    \Drupal::getContainer()->get('rdf_sync.synchronizer')->destruct();
-
     /** @var \Drupal\sparql_entity_storage\SparqlEntityStorageGraphHandlerInterface $sparql_graph */
     $sparql_graph = \Drupal::service('sparql.graph_handler');
     $graphs = array_merge(
