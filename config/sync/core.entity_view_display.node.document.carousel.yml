@@ -89,7 +89,7 @@ content:
       responsive_image_style: tile
       image_link: ''
       image_loading:
-        attribute: eager
+        attribute: lazy
     third_party_settings:
       template_suggestion:
         template_suggestion: bare
