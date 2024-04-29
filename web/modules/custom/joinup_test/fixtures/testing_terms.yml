@@ -77,6 +77,7 @@ representation_technique:
   - name: 'Human Language'
 licence_type:
   - name: 'Public domain'
+    uri: 'http://purl.org/adms/licence/PD'
 legal_type:
   - name: 'Can'
     children:
