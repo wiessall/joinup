@@ -65,7 +65,7 @@ class JoinupVersion implements JoinupVersionInterface {
     }
 
     // If a tag is checked out, return a link to the matching release.
-    return Url::fromUri('https://git.fpfis.eu/ec-europa/digit-joinup-reference/-/tags/' . $version);
+    return Url::fromUri('https://git.fpfis.tech.ec.europa.eu/ec-europa/digit-joinup-reference/-/releases/' . $version);
   }
 
 }
