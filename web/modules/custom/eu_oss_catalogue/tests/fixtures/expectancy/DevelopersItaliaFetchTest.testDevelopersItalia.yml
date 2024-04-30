@@ -13,6 +13,9 @@ GitHub solution 1:
     oss_git_url: https://github.com/dummy-namespace-1/dummy-name-1
     oss_license: AGPL-3.0-or-later
     oss_logo: https://raw.githubusercontent.com/dummy-namespace-1/dummy-name-1/HEAD/images/logo-solution-1.png
+    oss_git_forks: 103
+    oss_git_stars: 123
+    oss_git_open_issues: 143
     oss_maintenance_contacts:
       - Peter Gregory
     oss_maintenance_contractors:
@@ -23,13 +26,12 @@ GitHub solution 1:
     oss_platforms:
       - web
     oss_publiccode_yml_version: '0.2'
-    oss_release_date: '2023-04-19'
-    oss_software_type:
-      - standalone/web
-    oss_software_version: '2.3.0'
+    oss_release_date: '2017-05-01'
+    oss_software_type: standalone/web
+    oss_software_version: '1.4'
     oss_source:
       - developers_italia
-    oss_source_hash: 'QWgIx8AjtN2yakRMDKbNa1kBVEbdUDuxXLUiFBFINrc'
+    oss_source_hash: _RnRGlJcP5QA_tiadP_JTMJyyOypigHzRYjIY-LlQMM
     oss_long_description: |
       [EN] Solution 1: Long description
       **Some bold text**
@@ -45,6 +47,7 @@ GitHub solution 1:
     oss_screenshots:
       - https://raw.githubusercontent.com/dummy-namespace-1/dummy-name-1/HEAD/Solution_1_EN_Screenshot1.jpg
       - https://raw.githubusercontent.com/dummy-namespace-1/dummy-name-1/HEAD/Solution_1_EN_Screenshot2.jpg
+    oss_git_open_pull_requests: 3
   de:
     langcode: de
     default_langcode: '0'
@@ -92,6 +95,9 @@ Project 1.1:
     oss_release_date: '2010-07-08'
     oss_platform_reference: gid://gitlab/Project/11
     oss_logo: https://limited.self-hosted.gitlab.example.com/group1/project-1-1/raw/HEAD/images/logo-of-project-1-1.svg
+    oss_git_forks: 206
+    oss_git_stars: 226
+    oss_git_open_issues: 246
     oss_publiccode_yml_version: '0.2'
     oss_documentation: https://example.com/group1/project-1-1/it/docs.md
     oss_features:
@@ -102,6 +108,7 @@ Project 1.1:
     oss_short_description: '[IT] Group1: Project 1: Short description'
     oss_screenshots:
       - 'https://limited.self-hosted.gitlab.example.com/group1/project-1-1/raw/HEAD/Group_1_Project1_IT_Screenshot.jpg'
+    oss_git_open_pull_requests: 32
   de:
     langcode: de
     oss_documentation: https://example.com/group1/project-1-1/de/docs.md
@@ -125,6 +132,9 @@ Project 1.2:
     oss_release_date: '2013-08-19'
     oss_platform_reference: gid://gitlab/Project/12
     oss_logo: https://all.self-hosted.gitlab.example.com/uploads/-/system/project/avatar/12/logo.jpg
+    oss_git_forks: 207
+    oss_git_stars: 227
+    oss_git_open_issues: 247
     oss_publiccode_yml_version: '0.2'
     oss_documentation: https://example.com/group1/project-1-2/de/docs.md
     oss_features:
@@ -132,6 +142,7 @@ Project 1.2:
       - '[DE] feat 2'
     oss_long_description: '[DE] Group1: Project 2: Long description'
     oss_short_description: '[DE] Group1: Project 2: Short description'
+    oss_git_open_pull_requests: 2
   it:
     langcode: it
     default_langcode: '0'
@@ -176,12 +187,12 @@ GitHub solution 2:
       - research
       - science-and-technology
       - security
-    oss_software_type:
-      - library
+    oss_software_type: library
     oss_software_version: 'v2.3.4'
     oss_source:
       - developers_italia
     oss_source_hash: 'WWiM57kppAUvDQdo2IiW1C9qh_Jdfzm8daYXeeS9IzU'
+    oss_git_open_pull_requests: 0
   it:
     langcode: it
     default_langcode: '0'
@@ -223,8 +234,7 @@ GitHub solution 2:
       - research
       - science-and-technology
       - security
-    oss_software_type:
-      - library
+    oss_software_type: library
     oss_software_version: 'v2.3.4'
     oss_source:
       - developers_italia
@@ -239,6 +249,7 @@ Project 1:
     oss_release_date: '2020-10-22'
     oss_platform_reference: gid://gitlab/Project/1
     oss_publiccode_yml_version: '0.2'
+    oss_git_open_pull_requests: 1
 
 ACME Ltd:
   en:

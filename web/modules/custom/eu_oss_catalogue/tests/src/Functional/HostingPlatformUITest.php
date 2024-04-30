@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Drupal\Tests\eu_oss_catalogue\Functional;
 
@@ -105,6 +105,29 @@ class HostingPlatformUITest extends BrowserTestBase {
     $this->submitForm([], 'Delete');
 
     $assertSession->pageTextContains('The code hosting platform config Test hosting platform updated has been deleted.');
+  }
+
+  /**
+   * Tests visibility of the URL field.
+   */
+  public function testVisibilityOfUrlField(): void {
+    $this->drupalLogin($this->adminUser);
+
+    $this->drupalGet('admin/content/eu-oss-catalogue/hosting-platform/add', ['query' => ['platformId' => 'gitlab_self_hosted']]);
+    $this->assertSession()->fieldEnabled('URL');
+
+    $data = [
+      'label' => 'Test hosting platform',
+      'id' => 'test_hosting_platform',
+      'description' => 'Description for Test hosting platform',
+      'platformSettings[baseUrl]' => 'https://github.self-hosted.com',
+      'platformSettings[projects][0][namespace]' => 'dummy-namespace-1',
+      'platformSettings[projects][0][name]' => 'dummy-name-1',
+    ];
+    $this->submitForm($data, 'Save');
+
+    $this->drupalGet('admin/content/eu-oss-catalogue/hosting-platform/manage/test_hosting_platform');
+    $this->assertSession()->fieldDisabled('URL');
   }
 
   /**

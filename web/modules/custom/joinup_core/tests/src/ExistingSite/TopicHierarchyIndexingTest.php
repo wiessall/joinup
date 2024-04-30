@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Drupal\Tests\joinup_core\ExistingSite;
 
@@ -21,7 +21,7 @@ class TopicHierarchyIndexingTest extends JoinupExistingSiteTestBase {
   /**
    * A list of terms used in the test.
    *
-   * @var \Drupal\rdf_taxonomy\Entity\RdfTerm[]
+   * @var \Drupal\taxonomy\TermInterface[]
    */
   protected $terms = [];
 

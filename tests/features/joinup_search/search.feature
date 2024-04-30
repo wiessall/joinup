@@ -1,4 +1,4 @@
-@api @terms @group-i
+@api @group-i
 Feature: Global search
   As a user of the site I can find content through the global search.
 
@@ -14,21 +14,58 @@ Feature: Global search
     And the following solutions:
       | title          | collection                   | description                                                                                                                          | topic      | spatial coverage | state     |
       | Spherification | Molecular cooking collection | Spherification is the culinary process of shaping a liquid into spheres                                                              | Demography | European Union   | published |
-      | Foam           | Molecular cooking collection | "The use of foam in cuisine has been used in many forms in the history of cooking:whipped cream, meringue, and mousse are all foams" |            |                  | published |
+      | Foam           | Molecular cooking collection | "The use of foam in cuisine has been used in many forms in the history of cooking:whipped cream, meringue, and mousse are all foams" | eGov       |                  | published |
     And news content:
       | title                | headline              | body             | collection                   | topic                   | spatial coverage | state     |
       | El Tuba de Los Lobos | El Celler de Can Roca | The best in town | Molecular cooking collection | Statistics and Analysis | Luxembourg       | published |
-      | Dummy news 1        | Dummy title 1          | Dummy body       | Molecular cooking collection | E-inclusion             | Luxembourg       | published |
-      | Dummy news 2        | Dummy title 2          | Dummy body       | Molecular cooking collection | E-inclusion             | Luxembourg       | published |
-      | Dummy news 3        | Dummy title 3          | Dummy body       | Molecular cooking collection | E-inclusion             | Luxembourg       | published |
-      | Dummy news 4        | Dummy title 4          | Dummy body       | Molecular cooking collection | E-inclusion             | Luxembourg       | published |
+      | Dummy news 1         | Dummy title 1         | Dummy body       | Molecular cooking collection | E-inclusion             | Luxembourg       | published |
+      | Dummy news 2         | Dummy title 2         | Dummy body       | Molecular cooking collection | E-inclusion             | Luxembourg       | published |
+      | Dummy news 3         | Dummy title 3         | Dummy body       | Molecular cooking collection | E-inclusion             | Luxembourg       | published |
+      | Dummy news 4         | Dummy title 4         | Dummy body       | Molecular cooking collection | E-inclusion             | Luxembourg       | published |
+
     When I visit the search page
     Then the response should not contain "data-drupal-facet-id=\"status\""
 
+    # Create some archived content too.
     Given news content:
-      | title         | headline     | body       | collection                   | topic       | spatial coverage | state    |
-      | Rummy news 5 | Rummy title 5 | Dummy body | Molecular cooking collection | E-inclusion | Luxembourg       | archived |
-      | Rummy news 6 | Rummy title 6 | Dummy body | Molecular cooking collection | E-inclusion | Luxembourg       | archived |
+      | title      | headline    | body       | collection                   | topic       | spatial coverage | state    |
+      | Rummy news | Rummy title | Dummy body | Molecular cooking collection | E-inclusion | Luxembourg       | archived |
+    And event content:
+      | title       | body       | collection                   | topic       | spatial coverage | state    |
+      | Rummy event | Dummy body | Molecular cooking collection | E-inclusion | Luxembourg       | archived |
+    And document content:
+      | title          | document type | short title          | body       | collection                   | topic       | spatial coverage | state    |
+      | Rummy document | Document      | Rummy document short | Dummy body | Molecular cooking collection | E-inclusion | Luxembourg       | archived |
+    And discussion content:
+      | title            | body       | collection                   | topic       | spatial coverage | state    |
+      | Rummy discussion | Dummy body | Molecular cooking collection | E-inclusion | Luxembourg       | archived |
+    And the following solutions:
+      | title         | collection                   | description                            | state    | topic             |
+      | Spring device | Molecular cooking collection | A mechanical device that stores energy | archived | Supplier exchange |
+
+    # Test that archived items are not available in the autocomplete.
+    When I visit the search page
+    And I focus on the search input
+    And I enter "Rummy" in the search bar
+    And I wait for animations to finish
+    Then I should not see the text "Rummy news"
+    And I should not see the text "Rummy event"
+    And I should not see the text "Rummy document"
+    And I should not see the text "Rummy discussion"
+
+    # Test that archived items are not available in the search results.
+    When I enter "Rummy" in the search bar and press enter
+    Then I should not see the text "Rummy news"
+    And I should not see the text "Rummy event"
+    And I should not see the text "Rummy document"
+    And I should not see the text "Rummy discussion"
+
+    # But clicking the "Show only Archived items" checkbox should show them.
+    When I check the "Show only Archived items" checkbox from the "Status" facet
+    Then I should see the "Rummy news" tile
+    And I should see the "Rummy event" tile
+    And I should see the "Rummy document" tile
+    And I should see the "Rummy discussion" tile
 
     Given I am logged in as a user with the "authenticated" role
     Then I visit the search page
@@ -38,7 +75,7 @@ Feature: Global search
     And I should see the "Spherification" tile
     And I should see the "Foam" tile
     # Terms are sorted alphabetically
-    And the "topic" checkbox facet should allow selecting the following values "Info (1), Statistics and Analysis (1), Social and Political (6), Demography (2), E-inclusion (4)"
+    And the "topic" checkbox facet should allow selecting the following values "eGov (1), Info (1), Statistics and Analysis (1), Social and Political (6), Demography (2), E-inclusion (4)"
     Then I click show more from the "spatial coverage" facet
     And the "spatial coverage" checkbox facet should allow selecting the following values "Belgium (1), European Union (1), Luxembourg (5)"
 
@@ -48,7 +85,7 @@ Feature: Global search
 
     When I check the "Social and Political (6)" checkbox from the "topic" facet
     Then the "Social and Political" content checkbox item should be selected
-    And the "topic" checkbox facet should allow selecting the following values "Info (1), Statistics and Analysis (1), Social and Political (6), Demography (2), E-inclusion (4)"
+    And the "topic" checkbox facet should allow selecting the following values "eGov (1), Info (1), Statistics and Analysis (1), Social and Political (6), Demography (2), E-inclusion (4)"
     # The tiles appear because the parent term is selected even though they do not have a direct reference there.
     And I should see the "Dummy news 1" tile
     And I should see the "Dummy news 2" tile
@@ -68,7 +105,7 @@ Feature: Global search
     # The selected option moves to the last position by default.
     When I click "E-inclusion"
     Then I should see the text "SEARCH RESULTS (2)"
-    And the "topic" checkbox facet should allow selecting the following values "Info (1), Statistics and Analysis (1), Social and Political (6), Demography (2), E-inclusion (4)"
+    And the "topic" checkbox facet should allow selecting the following values "eGov (1), Info (1), Statistics and Analysis (1), Social and Political (6), Demography (2), E-inclusion (4)"
     When I click show more from the "spatial coverage" facet
     Then the "spatial coverage" checkbox facet should allow selecting the following values "Belgium (1), European Union (1)"
     And I should see the "Molecular cooking collection" tile
@@ -106,7 +143,7 @@ Feature: Global search
     And the "News" content checkbox item should be selected
     And I should see the following facet summary "Solutions, News"
     Then the "Content types" checkbox facet should allow selecting the following values "Collection (1), Solutions (2), News (5)"
-    And the "topic" checkbox facet should allow selecting the following values "Info (1), Statistics and Analysis (1), Social and Political (5), Demography (1), E-inclusion (4)"
+    And the "topic" checkbox facet should allow selecting the following values "eGov (1), Info (1), Statistics and Analysis (1), Social and Political (5), Demography (1), E-inclusion (4)"
     Then I click show more from the "spatial coverage" facet
     And the "spatial coverage" checkbox facet should allow selecting the following values "European Union (1), Luxembourg (5)"
     And I should not see the "Molecular cooking collection" tile
@@ -133,8 +170,8 @@ Feature: Global search
     And I should not see the "Dummy news 2" tile
     And I should not see the "Dummy news 3" tile
     And I should not see the "Dummy news 4" tile
-    And I should see the "Rummy news 5" tile
-    And I should see the "Rummy news 6" tile
+    And I should see the "Spring device" tile
+    And I should see the text "Archived" in the "Spring device" tile
 
     Then I check the "Show only Archived items" checkbox from the "Status" facet
     And I should see the "Molecular cooking collection" tile
@@ -145,8 +182,7 @@ Feature: Global search
     And I should see the "Dummy news 2" tile
     And I should see the "Dummy news 3" tile
     And I should see the "Dummy news 4" tile
-    And I should not see the "Rummy news 5" tile
-    And I should not see the "Rummy news 6" tile
+    And I should not see the "Spring device" tile
 
   @javascript
   Scenario: Alphabetical order for the spatial coverage in the search page.
@@ -200,8 +236,8 @@ Feature: Global search
       | title         | release number | release notes                               | keywords | is version of  | owner             | contact information | state     |
       | Release Alpha | 1              | <p>Release notes for <em>beta</em> changes. | Alphabet | Solution alpha | Responsible owner | Go-to contact       | published |
     And the following distributions:
-      | title              | description                                    | parent        | access url |
-      | Distribution alpha | <p>A simple beta distribution description.</p> | Release Alpha | test.zip   |
+      | title              | description                                    | parent        | access url | state     |
+      | Distribution alpha | <p>A simple beta distribution description.</p> | Release Alpha | test.zip   | published |
     And the following licences:
       | title         | description                         |
       | Licence Alpha | A beta description for the licence. |
@@ -378,6 +414,7 @@ Feature: Global search
       | licence                  | Apache-2.0                      |
       | format                   | HTML                            |
       | representation technique | Datalog                         |
+      | state                    | published                       |
 
     When I enter "zzoludistro" in the search bar and press enter
     Then the page should show only the tiles "Zzolution"
@@ -402,7 +439,7 @@ Feature: Global search
     And I select "LGPL" from "Licence"
     And I select "CSV" from "Format"
     And I select "Human Language" from "Representation technique"
-    And I press "Save"
+    And I press "Update"
     Then I should see the heading "DistroZzolu"
 
     # Repeat the previous searches to prove that the initial keywords were
@@ -471,6 +508,7 @@ Feature: Global search
       | licence                  | Apache-2.0                        |
       | format                   | HTML                              |
       | representation technique | Datalog                           |
+      | state                    | published                         |
 
     When I enter "releazzDistro" in the search bar and press enter
     Then the page should show only the tiles "Releazz"
@@ -495,7 +533,7 @@ Feature: Global search
     And I select "LGPL" from "Licence"
     And I select "CSV" from "Format"
     And I select "Human Language" from "Representation technique"
-    And I press "Save"
+    And I press "Update"
 
     # Repeat the previous searches to prove that the initial keywords were
     # removed from the Search API index.
@@ -719,9 +757,8 @@ Feature: Global search
     Then I enter "spheres" in the "search bar"
     And I wait for AJAX to finish
     Then I should see the following search suggestions:
-      | Spheres                  |
+      | Spheres |
 
-  @terms
   Scenario: Filter on date
     Given collection:
       | title | Mice in space |
@@ -801,3 +838,58 @@ Feature: Global search
     When I enter "-histore" in the search bar
     And I submit the search by pressing enter
     Then the site should not have log records with level lower than "notice"
+
+  Scenario: Regression test for type error.
+  See https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-8472
+
+    When I visit "/search?keys=1%00%C0%A7%C0%A2%252527%252522&page=18&sort_by=relevance"
+    Then I should get a 200 HTTP response
+
+  @javascript
+  Scenario: Search page - Show the abstract or description in the search results.
+    Given the following owner:
+      | name        | type    |
+      | Renew owner | Company |
+    And the following contact:
+      | name  | Gor-to contact     |
+      | email | gor-to@example.com |
+    And the following collections:
+      | title             | description                                          | abstract                      | state     |
+      | Pull alpha        | <p>collection <strong>pull</strong> description.</p> | The collection pull abstract. | published |
+      | Col for Sol javi  | <p>collection for the solution javi.</p>             | Random abstract.              | published |
+      | Roll alpha        | <p>collection <strong>roll</strong> description.</p> | The collection roll abstract. | archived  |
+      | Col for Sol net   | <p>collection for the solution net.</p>              | Loky and Rocky.               | archived  |
+    And the following solutions:
+      | title         | description                                                | abstract                    | keywords | owner       | contact information | collection        | state     |
+      | Solution pull | <p>This is the solution <strong>pull</strong> description. | The solution pull abstract. | Alphabet | Renew owner | Gor-to contact      | Pull alpha        | published |
+      | Solution javi | <p>This is the solution <strong>javi</strong> description. |                             | Alphabet | Renew owner | Gor-to contact      | Col for Sol javi  | published |
+      | Solution roll | <p>This is the solution <strong>roll</strong> description. | The solution roll abstract. | Alphabet | Renew owner | Gor-to contact      | Roll alpha        | published |
+      | Solution net  | <p>This is the solution <strong>net</strong> description.  |                             | Alphabet | Renew owner | Gor-to contact      | Col for Sol net   | published |
+
+    When I visit the search page
+    And I should see the "Pull alpha" tile
+    And I should see the "Col for Sol javi" tile
+    And I should see the "Solution pull" tile
+    And I should see the "Solution javi" tile
+    And I should see the "Solution roll" tile
+    And I should see the "Solution net" tile
+    And I should not see the "Roll alpha" tile
+    And I should not see the "Col for Sol net" tile
+    And I should see the text "The collection pull abstract." in the "Pull alpha" card
+    And I should see the text "Random abstract." in the "Col for Sol javi" card
+    And I should see the text "The solution pull abstract." in the "Solution pull" card
+    And I should see the text "This is the solution javi description" in the "Solution javi" card
+    And I should see the text "The solution roll abstract." in the "Solution roll" card
+    And I should see the text "This is the solution net description" in the "Solution net" card
+
+    Then I check the "Show only Archived items" checkbox from the "Status" facet
+    And I should not see the "Pull alpha" tile
+    And I should not see the "Col for Sol javi" tile
+    And I should not see the "Solution pull" tile
+    And I should not see the "Solution javi" tile
+    And I should not see the "Solution roll" tile
+    And I should not see the "Solution net" tile
+    And I should see the "Roll alpha" tile
+    And I should see the "Col for Sol net" tile
+    And I should see the text "The collection roll abstract." in the "Roll alpha" card
+    And I should see the text "Loky and Rocky." in the "Col for Sol net" card

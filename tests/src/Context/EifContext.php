@@ -1,10 +1,9 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Drupal\joinup\Context;
 
-use Behat\Behat\Hook\Scope\AfterScenarioScope;
 use Behat\Behat\Hook\Scope\BeforeScenarioScope;
 use Behat\Gherkin\Node\TableNode;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
@@ -17,12 +16,12 @@ use Drupal\joinup\Traits\EntityReferenceTrait;
 use Drupal\joinup\Traits\EntityTrait;
 use Drupal\joinup\Traits\SearchTrait;
 use Drupal\joinup\Traits\TestingEntitiesTrait;
+use Drupal\joinup\Traits\TopicTrait;
 use Drupal\joinup\Traits\UtilityTrait;
 use Drupal\node\Entity\Node;
 use Drupal\paragraphs\Entity\Paragraph;
 use Drupal\rdf_entity\Entity\Rdf;
 use Drupal\rdf_meta_entity\Entity\RdfMetaEntity;
-use Drupal\taxonomy\Entity\Term;
 
 /**
  * Behat step definitions and related methods provided by the eif module.
@@ -34,6 +33,7 @@ class EifContext extends RawDrupalContext {
   use SearchTrait;
   use StringTranslationTrait;
   use TestingEntitiesTrait;
+  use TopicTrait;
   use UtilityTrait;
 
   /**
@@ -42,37 +42,36 @@ class EifContext extends RawDrupalContext {
    * @BeforeScenario @eif_community&&@api
    */
   public function setupEifData(BeforeScenarioScope $scope): void {
-    // Create one topic term.
-    Term::create([
-      'vid' => 'topic',
-      'tid' => 'http://example.com/term/1',
-      'name' => 'Term 1',
-    ])->save();
-
     // Create an owner.
-    Rdf::create([
+    $owner = Rdf::create([
       'rid' => 'owner',
       'id' => 'http://example.com/owner',
       'field_owner_name' => 'Owner',
-    ])->save();
+    ]);
+    $owner->save();
+    $this->entities['rdf_entity'][$owner->id()] = $owner;
 
-    Rdf::create([
+    $contact = Rdf::create([
       'rid' => 'contact_information',
       'id' => 'http://example.com/contact',
       'field_contact_name' => 'Contact name',
       'field_contact_email' => 'contact.email@example.com',
-    ])->save();
+    ]);
+    $contact->save();
+    $this->entities['rdf_entity'][$contact->id()] = $contact;
 
     // Create the NIFO sample collection.
-    Rdf::create([
+    $collection = Rdf::create([
       'rid' => 'collection',
       'id' => 'http://nifo.collection',
       'label' => 'NIFO collection',
       'field_ar_state' => 'published',
-      'field_topic' => 'http://example.com/term/1',
+      'field_topic' => $tid = $this->getRandomTopic()->id(),
       'field_ar_owner' => 'http://example.com/owner',
       'field_ar_contact_information' => 'http://example.com/contact',
-    ])->save();
+    ]);
+    $collection->save();
+    $this->entities['rdf_entity'][$collection->id()] = $collection;
 
     // Create the EIF Toolbox solution.
     $solution = Rdf::create([
@@ -81,13 +80,14 @@ class EifContext extends RawDrupalContext {
       'label' => 'EIF Toolbox',
       'collection' => 'http://nifo.collection',
       'field_is_state' => 'published',
-      'field_topic' => 'http://example.com/term/1',
+      'field_topic' => $tid,
       'field_is_owner' => 'http://example.com/owner',
       'field_is_contact_information' => 'http://example.com/contact',
     ]);
     $solution->save();
+    $this->entities['rdf_entity'][$solution->id()] = $solution;
 
-    Node::create([
+    $page1 = Node::create([
       'type' => 'custom_page',
       'nid' => EifInterface::EIF_SOLUTIONS_NID,
       'title' => 'Solutions',
@@ -99,9 +99,12 @@ class EifContext extends RawDrupalContext {
           'format' => 'content_editor',
         ],
       ]),
-    ])->save();
+      'field_state' => 'published',
+    ]);
+    $page1->save();
+    $this->entities['node'][$page1->id()] = $page1;
 
-    Node::create([
+    $page2 = Node::create([
       'type' => 'custom_page',
       'nid' => EifInterface::EIF_ONLINE_ASSISTANT,
       'title' => 'Online Assistant',
@@ -113,7 +116,10 @@ class EifContext extends RawDrupalContext {
           'format' => 'content_editor',
         ],
       ]),
-    ])->save();
+      'field_state' => 'published',
+    ]);
+    $page2->save();
+    $this->entities['node'][$page2->id()] = $page2;
 
     // Ensure the taxonomy terms are indexed.
     $vids = [
@@ -133,30 +139,6 @@ class EifContext extends RawDrupalContext {
     }
 
     \Drupal::getContainer()->get('search_api.post_request_indexing')->destruct();
-  }
-
-  /**
-   * Clears the content created for the purpose of this test.
-   *
-   * @throws \Drupal\Core\Entity\EntityStorageException
-   *   Thrown when one of the created entities could not be deleted.
-   *
-   * @AfterScenario @eif_community&&@api
-   */
-  public function cleanEifData(AfterScenarioScope $scope): void {
-    $rdf_ids = [
-      EifInterface::EIF_ID,
-      'http://nifo.collection',
-      'http://example.com/owner',
-      'http://example.com/contact',
-    ];
-    foreach ($rdf_ids as $id) {
-      $entity = Rdf::load($id);
-      $entity->skip_notification = TRUE;
-      $entity->delete();
-    }
-
-    Term::load('http://example.com/term/1')->delete();
   }
 
   /**

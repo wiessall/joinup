@@ -1,10 +1,9 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Drupal\joinup_workflow\Plugin\Field\FieldWidget;
 
-use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Field\FieldDefinitionInterface;
 use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Field\Plugin\Field\FieldWidget\OptionsSelectWidget;
@@ -14,7 +13,6 @@ use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\joinup_workflow\EntityWorkflowStateInterface;
 use Drupal\joinup_workflow\Event\StateMachineButtonLabelsEvent;
 use Drupal\joinup_workflow\Event\StateMachineButtonLabelsEventInterface;
-use Drupal\joinup_workflow\Event\UnchangedWorkflowStateUpdateEvent;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
@@ -127,21 +125,6 @@ class StateMachineButtons extends OptionsSelectWidget implements ContainerFactor
     // without changing the workflow state. If none of the listeners forbid
     // access, we will add a submit button for the same state update.
     $state = $items->value;
-    $event = new UnchangedWorkflowStateUpdateEvent($items->getEntity(), $state, $this->getDefaultSameStateUpdateLabel($state), -20);
-    $this->eventDispatcher->dispatch($event, 'joinup_workflow.unchanged_workflow_state_update');
-
-    if (!$event->getAccess()->isForbidden()) {
-      $element['#same_state_button'] = [
-        '#value' => $event->getLabel(),
-        '#weight' => $event->getWeight(),
-      ];
-    }
-
-    // Merge in the cacheable metadata from the access result.
-    $cacheable_metadata = CacheableMetadata::createFromRenderArray($element);
-    $cacheable_metadata
-      ->merge(CacheableMetadata::createFromObject($event->getAccess()))
-      ->applyTo($element);
 
     // Pass the label settings to the process callback.
     $element['#use_transition_label'] = $this->getSetting('use_transition_label');
@@ -178,19 +161,8 @@ class StateMachineButtons extends OptionsSelectWidget implements ContainerFactor
     $default_button = $form['actions']['submit'];
     $default_button['#access'] = TRUE;
 
-    // Add the button to update the entity without changing the workflow state,
-    // if this is allowed.
-    if (!empty($element['#same_state_button'])) {
-      $form['actions']['update'] = $element['#same_state_button'] + $default_button;
-    }
-
     // Add a custom button for each state we're allowing.
     foreach ($element['#options'] as $state_id => $label) {
-      if ($element['#original_state_id'] === $state_id) {
-        // The 'same state' button was already added, just a few lines earlier.
-        continue;
-      }
-
       $button = [
         '#state_id' => $state_id,
         '#weight' => -10,
@@ -207,7 +179,7 @@ class StateMachineButtons extends OptionsSelectWidget implements ContainerFactor
 
     // Hide the default buttons, including the specialty ones added by
     // NodeForm.
-    foreach (['publish', 'unpublish', 'submit'] as $key) {
+    foreach (['publish', 'update', 'unpublish', 'submit'] as $key) {
       $form['actions'][$key]['#access'] = FALSE;
       unset($form['actions'][$key]['#dropbutton']);
     }

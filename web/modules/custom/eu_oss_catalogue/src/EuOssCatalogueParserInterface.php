@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Drupal\eu_oss_catalogue;
 
@@ -25,17 +25,6 @@ interface EuOssCatalogueParserInterface extends PluginInspectionInterface {
   public function isValid(Project $project): array;
 
   /**
-   * Checks whether the schema is valid and returns a list of error messages.
-   *
-   * @param \Drupal\eu_oss_catalogue\Entity\OssSolutionInterface $solution
-   *   The solution node.
-   *
-   * @return array
-   *   A list of errors. Empty array means no errors.
-   */
-  public function checkSchema(OssSolutionInterface $solution): array;
-
-  /**
    * Parses fetched data and saves it as an OssSolution node.
    *
    * @param \Drupal\eu_oss_catalogue\Model\Project $project
@@ -43,9 +32,9 @@ interface EuOssCatalogueParserInterface extends PluginInspectionInterface {
    * @param \Drupal\eu_oss_catalogue\EuOssCatalogueProviderInterface $provider
    *   The provider plugin instance.
    *
-   * @return \Drupal\eu_oss_catalogue\Entity\OssSolutionInterface|null
+   * @return \Drupal\eu_oss_catalogue\Entity\OssSolutionInterface
    *   The new or updates OSS Solution node. If NULL is returned, parse failed.
    */
-  public function parse(Project $project, EuOssCatalogueProviderInterface $provider): ?OssSolutionInterface;
+  public function parse(Project $project, EuOssCatalogueProviderInterface $provider): OssSolutionInterface;
 
 }

@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Drupal\Tests\custom_page\Kernel;
 
@@ -8,7 +8,6 @@ use Drupal\KernelTests\KernelTestBase;
 use Drupal\Tests\joinup_test\Traits\ConfigTestTrait;
 use Drupal\Tests\sparql_entity_storage\Traits\SparqlConnectionTrait;
 use Drupal\field\Entity\FieldStorageConfig;
-use Drupal\node\Entity\Node;
 use Drupal\node\Entity\NodeType;
 use Drupal\og\OgGroupAudienceHelperInterface;
 use Drupal\og_menu\Entity\OgMenu;
@@ -54,7 +53,6 @@ class CustomPageOgMenuLinksManagerTest extends KernelTestBase {
     'state_machine',
     'state_machine_revisions',
     'system',
-    'workflow_state_permission',
     'user',
   ];
 
@@ -178,26 +176,6 @@ class CustomPageOgMenuLinksManagerTest extends KernelTestBase {
       $ogmenu_instance->save();
       $ogmenu_instance_ids[$index] = $ogmenu_instance->id();
     }
-
-    // Create a custom page in the first collection.
-    /** @var \Drupal\node\NodeInterface $custom_page */
-    $custom_page = Node::create([
-      'type' => 'custom_page',
-      'title' => $this->randomString(),
-      'og_audience' => $collection_ids[1],
-    ]);
-    $custom_page->save();
-
-    // Check that a corresponding menu link has been created.
-    $this->assertMenuLink($ogmenu_instance_ids[1], $custom_page->id());
-
-    // Move the custom page in the 2nd collection.
-    $custom_page->set('og_audience', $collection_ids[2])->save();
-
-    // Check that the menu link has been removed from the 1st collection.
-    $this->assertNotMenuLink($ogmenu_instance_ids[1], $custom_page->id());
-    // Check that a menu link has been moved in the 2nd collection.
-    $this->assertMenuLink($ogmenu_instance_ids[2], $custom_page->id());
   }
 
   /**

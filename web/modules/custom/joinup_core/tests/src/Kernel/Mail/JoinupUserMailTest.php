@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Drupal\Tests\joinup_core\Kernel\Mail;
 
@@ -70,7 +70,7 @@ class JoinupUserMailTest extends JoinupMailKernelTestBase {
   const HTML_VERSION = <<<'EOS'
 <html>
 <head>
-<style type="text/css">
+<style>
 table tr td {
   font-family: Arial;
   font-size: 12px;
@@ -79,13 +79,13 @@ table tr td {
 </head>
 <body>
 <div>
-  <table width="800px" cellpadding="0" cellspacing="0">
+  <table style="width: 800px;" cellpadding="0" cellspacing="0">
     <tr>
       <td>
         <div style="padding: 0px 0px 0px 0px;">
           <p>Dear AdminJane,</p>
 <p>A new password has been requested for the account admin.</p>
-<p>To confirm the request, please click <a href="http://localhost/user/reset/1/1690449287/SmeMPFTJZGcGOiQ5mcvYKwfyyqM1OFeMFJFt7Ug666c">http://localhost/user/reset/1/1690449287/SmeMPFTJZGcGOiQ5mcvYKwfyyqM1OFeMFJFt7Ug666c</a>.</p>
+<p>To confirm the request, please click <a href="http://localhost/user/reset/1/1690449287/poghcpHrsWKpNm05j_gcSjv43VJ7actKegl6F-mz384">http://localhost/user/reset/1/1690449287/poghcpHrsWKpNm05j_gcSjv43VJ7actKegl6F-mz384</a>.</p>
 <p>If you didn't ask for a new password, please disregard this message.</p>
 <p>Kind regards,</p>
 <p>The Joinup Support Team</p>
@@ -111,7 +111,7 @@ Dear AdminJane,
 A new password has been requested for the account admin.
 
 To confirm the request, please click
-http://localhost/user/reset/1/1690449287/SmeMPFTJZGcGOiQ5mcvYKwfyyqM1OFeMFJFt7Ug666c.
+http://localhost/user/reset/1/1690449287/poghcpHrsWKpNm05j_gcSjv43VJ7actKegl6F-mz384.
 
 If you didn't ask for a new password, please disregard this message.
 

@@ -5,6 +5,6 @@ package: Joinup
 core_version_requirement: ">= 9.4"
 
 dependencies:
+  - 'joinup:joinup_taxonomy'
   - 'joinup:joinup_workflow'
-  - 'joinup:workflow_state_permission'
   - 'state_machine:state_machine'

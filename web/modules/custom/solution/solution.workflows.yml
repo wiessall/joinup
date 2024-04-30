@@ -11,7 +11,7 @@
 # The virtual state allowes to handle the initial values during a node create.
 solution_workflow:
   id: solution_workflow
-  label: "Default"
+  label: "Solution"
   group: solution
   states:
     __new__:
@@ -26,24 +26,40 @@ solution_workflow:
       label: Needs update
     blacklisted:
       label: Blacklisted
+    archived:
+      label: Archived
   transitions:
     draft:
       label: Save as draft
-      from: [__new__, proposed, published, needs_update, blacklisted]
+      from: [ __new__, draft, proposed, published, needs_update, blacklisted ]
       to: draft
     propose:
       label: Propose
-      from: [__new__, draft, published, needs_update, blacklisted]
+      from: [ __new__, draft, proposed, published, needs_update, blacklisted ]
       to: proposed
     validate:
       label: Publish
-      from: [__new__, draft, proposed, needs_update, blacklisted]
+      from: [ __new__, draft, proposed, needs_update, blacklisted ]
+      to: published
+    # Separate transition as facilitators can update the solution once published
+    # But cannot approve proposed changes.
+    update_validated:
+      label: Publish
+      from: [ published ]
       to: published
     needs_update:
       label: Request changes
-      from: [proposed, published]
+      from: [ proposed, published ]
       to: needs_update
     blacklist:
       label: Blacklist
-      from: [published]
+      from: [ published ]
       to: blacklisted
+    archive:
+      label: Archive
+      from: [ published ]
+      to: archived
+    unarchive:
+      label: Unarchive
+      from: [ archived ]
+      to: published

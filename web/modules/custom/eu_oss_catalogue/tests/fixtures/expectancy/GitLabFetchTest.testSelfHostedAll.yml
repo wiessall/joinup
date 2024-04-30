@@ -8,6 +8,7 @@ Project 1:
     oss_platform_reference: gid://gitlab/Project/1
     oss_logo: https://all.self-hosted.gitlab.example.com/group1/group1_2/group1_3/project1/raw/HEAD/images/logo.svg
     oss_publiccode_yml_version: '0.2'
+    oss_git_open_pull_requests: 1
 
 Project 2:
   en:
@@ -18,7 +19,11 @@ Project 2:
     oss_release_date: '2007-01-30'
     oss_platform_reference: gid://gitlab/Project/2
     oss_logo: https://all.self-hosted.gitlab.example.com/uploads/-/system/project/avatar/2/logo.png
+    oss_git_forks: 202
+    oss_git_stars: 222
+    oss_git_open_issues: 242
     oss_publiccode_yml_version: '0.2'
+    oss_git_open_pull_requests: 0
 
 Project 3:
   en:
@@ -29,4 +34,8 @@ Project 3:
     oss_release_date: null
     oss_platform_reference: gid://gitlab/Project/3
     oss_logo: null
+    oss_git_forks: 203
+    oss_git_stars: 223
+    oss_git_open_issues: 243
     oss_publiccode_yml_version: '0.2'
+    oss_git_open_pull_requests: ~

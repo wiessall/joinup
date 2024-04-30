@@ -6,7 +6,7 @@ Feature:
 
   Scenario: Show deprecated terms without replacement.
     Given eira terms:
-      | tid                                        | name       | description        | field_taxonomy_deprecated |
+      | uri                                        | name       | description        | field_taxonomy_deprecated |
       | http://joinup.eu/eira/term/only-deprecated | Deprecated | This is deprecated | 1                         |
 
     When I am logged in as a moderator
@@ -26,16 +26,16 @@ Feature:
 
   Scenario: Show deprecated terms with a replacement.
     Given eira terms:
-      | tid                                                 | name        | description           | field_taxonomy_deprecated | field_taxonomy_replaces |
-      | http://joinup.eu/eira/term/deprecated-w-replacement | Deprecated  | This is deprecated    | 1                         |                         |
-      | http://joinup.eu/eira/term/replacement              | Replacement | This is a replacement | 0                         | Deprecated              |
+      | uri                                                 | name            | description           | field_taxonomy_deprecated | field_taxonomy_replaces |
+      | http://joinup.eu/eira/term/deprecated-w-replacement | DeprecatedTerm  | This is deprecated    | 1                         |                         |
+      | http://joinup.eu/eira/term/replacement              | ReplacementTerm | This is a replacement | 0                         | DeprecatedTerm          |
     When I am logged in as a moderator
     And I am on the homepage
     And I click "RDF ID converter"
     And I fill in "RDF entity ID or a URL" with "http://joinup.eu/eira/term/deprecated-w-replacement"
     And I press "Go!"
-    Then I should see the heading "Deprecated"
-    And I should see the warning message "This building block is deprecated, and should not be used in new development. Consider using Replacement (http://joinup.eu/eira/term/replacement) instead."
+    Then I should see the heading "DeprecatedTerm"
+    And I should see the warning message "This building block is deprecated, and should not be used in new development. Consider using ReplacementTerm (http://joinup.eu/eira/term/replacement) instead."
     # Ensure caching.
     When I reload the page
-    Then I should see the warning message "This building block is deprecated, and should not be used in new development. Consider using Replacement (http://joinup.eu/eira/term/replacement) instead."
+    Then I should see the warning message "This building block is deprecated, and should not be used in new development. Consider using ReplacementTerm (http://joinup.eu/eira/term/replacement) instead."

@@ -4,6 +4,7 @@ status: true
 dependencies:
   config:
     - core.entity_view_mode.node.view_mode_tile_horizontal
+    - field.field.node.oss_solution.oss_archived
     - field.field.node.oss_solution.oss_available_languages
     - field.field.node.oss_solution.oss_categories
     - field.field.node.oss_solution.oss_default_branch
@@ -17,7 +18,6 @@ dependencies:
     - field.field.node.oss_solution.oss_git_stars
     - field.field.node.oss_solution.oss_git_url
     - field.field.node.oss_solution.oss_hosting_platform
-    - field.field.node.oss_solution.oss_is_archived
     - field.field.node.oss_solution.oss_landing_url
     - field.field.node.oss_solution.oss_license
     - field.field.node.oss_solution.oss_logo
@@ -69,6 +69,50 @@ content:
         template_suggestion: bare
     weight: 1
     region: content
+  oss_git_forks:
+    type: number_integer
+    label: visually_hidden
+    settings:
+      thousand_separator: ''
+      prefix_suffix: false
+    third_party_settings:
+      template_suggestion:
+        template_suggestion: git_indicator
+    weight: 14
+    region: content
+  oss_git_open_issues:
+    type: number_integer
+    label: visually_hidden
+    settings:
+      thousand_separator: ''
+      prefix_suffix: false
+    third_party_settings:
+      template_suggestion:
+        template_suggestion: git_indicator
+    weight: 12
+    region: content
+  oss_git_open_pull_requests:
+    type: number_integer
+    label: visually_hidden
+    settings:
+      thousand_separator: ''
+      prefix_suffix: false
+    third_party_settings:
+      template_suggestion:
+        template_suggestion: git_indicator
+    weight: 13
+    region: content
+  oss_git_stars:
+    type: number_integer
+    label: visually_hidden
+    settings:
+      thousand_separator: ''
+      prefix_suffix: false
+    third_party_settings:
+      template_suggestion:
+        template_suggestion: git_indicator
+    weight: 11
+    region: content
   oss_logo:
     type: imagecache_external_responsive_image
     label: hidden
@@ -99,6 +143,7 @@ hidden:
   oss__long_description: true
   oss__screenshots: true
   oss__short_description: true
+  oss_archived: true
   oss_available_languages: true
   oss_categories: true
   oss_default_branch: true
@@ -106,13 +151,8 @@ hidden:
   oss_documentation: true
   oss_features: true
   oss_git_description: true
-  oss_git_forks: true
-  oss_git_open_issues: true
-  oss_git_open_pull_requests: true
-  oss_git_stars: true
   oss_git_url: true
   oss_hosting_platform: true
-  oss_is_archived: true
   oss_landing_url: true
   oss_license: true
   oss_long_description: true

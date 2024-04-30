@@ -1,4 +1,4 @@
-@api @terms @group-b
+@api @group-b
 Feature: Navigation menu for custom pages
   In order to determine the order and visibility of custom pages in the navigation menu
   As a facilitator
@@ -9,17 +9,12 @@ Feature: Navigation menu for custom pages
       | title            | logo     | state     |
       | Rainbow tables   | logo.png | published |
       | Cripple Mr Onion | logo.png | published |
-
-    # By default, a link to the collection canonical page and a link to the
-    # about page are added to the menu.
     When I am logged in as a facilitator of the "Rainbow tables" <group>
     And I go to the homepage of the "Rainbow tables" <group>
     Then the navigation menu of the "Rainbow tables" <group> should have <visible items 1> visible items
-    And I should see the following group menu items in the specified order:
+    And I should see the following navigation menu items in the specified order:
       | text     |
       | Overview |
-      | Members  |
-      | About    |
     # Check that the 'Edit menu' local action is present.
     And I should see the contextual link "Edit menu" in the "Header" region
     # The 'Add link' local action that is present in the default implementation
@@ -38,17 +33,12 @@ Feature: Navigation menu for custom pages
     And the navigation menu of the "Rainbow tables" <group> should have <visible items 2> visible items
 
     When I click the contextual link "Edit menu" in the "Header" region
-    Then the navigation menu of the "Rainbow tables" <group> should have 6 items
-
-    # It should be possible to hide an item from the menu by disabling it.
-    When I disable "About us" in the navigation menu of the "Rainbow tables" <group>
-    Then the navigation menu of the "Rainbow tables" <group> should have <visible items 3> visible items
+    Then the navigation menu of the "Rainbow tables" <group> should have 4 items
 
     # When all the pages are disabled in the navigation menu, a message should
     # be shown to the user.
     When I disable "Overview" in the navigation menu of the "Rainbow tables" <group>
-    And I disable "Members" in the navigation menu of the "Rainbow tables" <group>
-    And I disable "About" in the navigation menu of the "Rainbow tables" <group>
+    And I disable "About us" in the navigation menu of the "Rainbow tables" <group>
     And I go to the homepage of the "Rainbow tables" <group>
     Then I should see the text "All the pages have been disabled for this <group>. You can edit the menu configuration or add a new page."
     And I should see the contextual link "Edit menu" in the "Header" region
@@ -63,10 +53,6 @@ Feature: Navigation menu for custom pages
     # reorder the navigation menu, but they should not be able to access the
     # related menu administration screens.
     And I should not have access to the menu link administration pages for the navigation menu of the "Rainbow tables" <group>
-
-    # Enable the menu entry for the 'About us' page again so we can check if it
-    # is visible for all users.
-    When I enable "About us" in the navigation menu of the "Rainbow tables" <group>
 
     # Create a few custom pages in the second collection so we can check if the
     # right menu shows up in each collection.
@@ -83,7 +69,6 @@ Feature: Navigation menu for custom pages
     Then I should not have access to the menu link administration pages for the navigation menu of the "Rainbow tables" <group>
     # The navigation link from the current group should be visible, but not
     # the link from the second collection.
-    And I should see the link "About us" in the "Navigation menu"
     But I should not see the link "Eights are wild" in the "Navigation menu"
     And I should not see the link "Eights are null" in the "Navigation menu"
     # Test the navigation link of the second collection.
@@ -99,7 +84,6 @@ Feature: Navigation menu for custom pages
     Then I should not have access to the menu link administration pages for the navigation menu of the "Rainbow tables" <group>
     # The navigation link from the current group should be visible, but not
     # the link from the second group.
-    And I should see the link "About us" in the "Navigation menu"
     But I should not see the link "Eights are wild" in the "Navigation menu"
     And I should not see the link "Eights are null" in the "Navigation menu"
     # Test the navigation link of the second collection.
@@ -117,7 +101,6 @@ Feature: Navigation menu for custom pages
 
     # The navigation link from the current collection should be visible, but not
     # the link from the second group.
-    And I should see the link "About us" in the "Navigation menu"
     But I should not see the link "Eights are wild" in the "Navigation menu"
     And I should not see the link "Eights are null" in the "Navigation menu"
     # Test the navigation link of the second group.
@@ -127,36 +110,38 @@ Feature: Navigation menu for custom pages
     But I should not see the link "About us" in the "Navigation menu"
 
     Examples:
-      | group      | visible items 1 | visible items 2 | visible items 3 |
-      | collection | 5               | 6               | 5               |
-      | solution   | 4               | 5               | 4               |
+      | group      | visible items 1 | visible items 2 |
+      | collection | 3               | 4               |
+      | solution   | 2               | 3               |
 
   @javascript
-  Scenario: For menus with more than 6 items, the 6th and beyond should be wrapped in a dropdown
+  Scenario: Menus with items that do not fit in available space should be wrapped in a dropdown
     Given collection:
       | title | Plaster molds |
       | state | published     |
     And custom_page content:
-      | title             | body                   | collection    | state     | topic |
-      | Molds for walls   | This is a sample body. | Plaster molds | published | HR    |
-      | Molds for crafts  | This is a sample body. | Plaster molds | published | HR    |
-      | Molds for pottery | This is a sample body. | Plaster molds | published | HR    |
-    # A menu with 6 items is displayed normally
+      | title              | body                   | collection    | state     | topic |
+      | Molds for candles  | This is a sample body. | Plaster molds | published | HR    |
+      | Molds for walls    | This is a sample body. | Plaster molds | published | HR    |
+      | Molds for crafts   | This is a sample body. | Plaster molds | published | HR    |
+      | Molds for pottery  | This is a sample body. | Plaster molds | published | HR    |
+      | Molds for ceramics | This is a sample body. | Plaster molds | published | HR    |
+      | Molds for soaps    | This is a sample body. | Plaster molds | published | HR    |
+    # Menu items are displayed normally
     When I go to the "Plaster molds" collection
     Then I should see the link "Molds for pottery" in the "Navigation menu"
     But I should not see the text "See more" in the "Navigation menu"
-    # A menu with more than 6 items has the first 5 displayed normally
-    # Then the rest of items is wrapped in a dropdown
+    # A menu with items that do not fit the available space are in a dropdown
     Given custom_page content:
-      | title           | body                   | collection    | state     | topic |
-      | Vintage molds   | This is a sample body. | Plaster molds | published | HR    |
-      | Plaster casting | This is a sample body. | Plaster molds | published | HR    |
+      | title              | body                   | collection    | state     | topic |
+      | Vintage molds      | This is a sample body. | Plaster molds | published | HR    |
+      | Plaster casting    | This is a sample body. | Plaster molds | published | HR    |
     When I go to the "Plaster molds" collection
     Then I should see the text "See more" in the "Navigation menu"
-    But I should not see the text "Molds for walls" in the "Navigation menu"
+    But I should not see the text "Plaster casting" in the "Navigation menu"
     And I should not see the text "Vintage molds" in the "Navigation menu"
     Then I press "See more"
-    And I should see the text "Molds for walls" in the "Navigation menu"
+    And I should see the text "Plaster casting" in the "Navigation menu"
     And I should see the text "Vintage molds" in the "Navigation menu"
 
   @javascript
@@ -231,7 +216,7 @@ Feature: Navigation menu for custom pages
       | Subpage 1-2-1 | Table of contents group | published | HR    |
       | Subpage 1-2-2 | Table of contents group | published | HR    |
       | Subpage 2-1   | Table of contents group | published | HR    |
-    And the following custom page menu structure:
+    And the following custom pages navigation menu structure for the "Table of contents group" <group>:
       | title         | parent      | weight |
       | Page 1        |             | 1      |
       | Page 2        |             | 2      |
@@ -288,8 +273,7 @@ Feature: Navigation menu for custom pages
     And I should not see the link "Members" in the "Table of contents"
     And I should not see the link "About" in the "Table of contents"
     But I should see the link "Overview" in the "Navigation menu"
-    And I should see the link "Members" in the "Navigation menu"
-    And I should see the link "About" in the "Navigation menu"
+    And I should not see the link "Members" in the "Navigation menu"
 
     # Only the sub-page links of "Page 2" are rendered.
     When I visit the "Page 2" custom page
@@ -326,97 +310,79 @@ Feature: Navigation menu for custom pages
       | External frame     | Ergonomic backpacks | published | HR    |
       | Internal frame     | Ergonomic backpacks | published | HR    |
       | Bodypack           | Ergonomic backpacks | published | HR    |
-    And the following custom pages menu structure:
+    And the following custom pages navigation menu structure for the "Ergonomic backpacks" <group>:
       | title              | parent             | weight |
       | Types of backpacks |                    | 3      |
       | Frameless          | Types of backpacks | 4      |
       | External frame     | Types of backpacks | 5      |
       | Internal frame     |                    | 6      |
-      # Force a reserved page to be nested. This is not possible through the UI.
-      | About              | Bodypack           | 7      |
     When I am logged in as a facilitator of the "Ergonomic backpacks" <group>
     And I go to the "Ergonomic backpacks" <group>
     And I click the contextual link "Edit menu" in the "Header" region
     # The "About" page has been moved back to first level.
-    Then the draggable menu table should be:
+    Then the draggable menu table of the "Ergonomic backpacks" <group> should be:
       | title              | parent             |
       | Overview           |                    |
-      | Members            |                    |
       | Discussions        |                    |
       | Glossary           |                    |
       | Bodypack           |                    |
-      | About              |                    |
       | Types of backpacks |                    |
       | Frameless          | Types of backpacks |
       | External frame     | Types of backpacks |
       | Internal frame     |                    |
     When I drag the "External frame" table row to the left
-    Then the draggable menu table should be:
+    Then the draggable menu table of the "Ergonomic backpacks" <group> should be:
       | title              | parent             |
       | Overview           |                    |
-      | Members            |                    |
       | Discussions        |                    |
       | Glossary           |                    |
       | Bodypack           |                    |
-      | About              |                    |
       | Types of backpacks |                    |
       | Frameless          | Types of backpacks |
       | External frame     |                    |
       | Internal frame     |                    |
     When I drag the "Internal frame" table row to the right
-    Then the draggable menu table should be:
+    Then the draggable menu table of the "Ergonomic backpacks" <group> should be:
       | title              | parent             |
       | Overview           |                    |
-      | Members            |                    |
       | Discussions        |                    |
       | Glossary           |                    |
       | Bodypack           |                    |
-      | About              |                    |
       | Types of backpacks |                    |
       | Frameless          | Types of backpacks |
       | External frame     |                    |
       | Internal frame     | External frame     |
     # Links that don't refer to a node cannot be nested.
-    When I drag the "Members" table row to the right
-    And I drag the "About" table row to the right
     And I drag the "Glossary" table row to the right
-    Then the draggable menu table should be:
+    Then the draggable menu table of the "Ergonomic backpacks" <group> should be:
       | title              | parent             |
       | Overview           |                    |
-      | Members            |                    |
       | Discussions        |                    |
       | Glossary           |                    |
       | Bodypack           |                    |
-      | About              |                    |
       | Types of backpacks |                    |
       | Frameless          | Types of backpacks |
       | External frame     |                    |
       | Internal frame     | External frame     |
     # Nor cannot have child rows.
     When I drag the "Bodypack" table row to the right
-    Then the draggable menu table should be:
+    Then the draggable menu table of the "Ergonomic backpacks" <group> should be:
       | title              | parent             |
       | Overview           |                    |
-      | Members            |                    |
       | Discussions        |                    |
       | Glossary           |                    |
       | Bodypack           |                    |
-      | About              |                    |
       | Types of backpacks |                    |
       | Frameless          | Types of backpacks |
       | External frame     |                    |
       | Internal frame     | External frame     |
     # But they can still be re-ordered up and down.
-    When I drag the "Overview" table row down
-    When I drag the "About" table row up
-    And I drag the "Glossary" table row up
-    Then the draggable menu table should be:
+    When I drag the "Glossary" table row up
+    Then the draggable menu table of the "Ergonomic backpacks" <group> should be:
       | title              | parent             |
-      | Members            |                    |
       | Overview           |                    |
       | Glossary           |                    |
       | Discussions        |                    |
-      | About              |                    |
       | Bodypack           |                    |
       | Types of backpacks |                    |
       | Frameless          | Types of backpacks |
@@ -425,13 +391,11 @@ Feature: Navigation menu for custom pages
     # Links pointing to nodes can be moved too.
     When I drag the "Bodypack" table row down
     And I drag the "Bodypack" table row down
-    Then the draggable menu table should be:
+    Then the draggable menu table of the "Ergonomic backpacks" <group> should be:
       | title              | parent             |
-      | Members            |                    |
       | Overview           |                    |
       | Glossary           |                    |
       | Discussions        |                    |
-      | About              |                    |
       | Types of backpacks |                    |
       | Frameless          | Types of backpacks |
       | Bodypack           | Types of backpacks |
@@ -443,13 +407,11 @@ Feature: Navigation menu for custom pages
     And I drag the "Internal frame" table row up
     And I drag the "Internal frame" table row to the right
     And I drag the "Internal frame" table row to the right
-    Then the draggable menu table should be:
+    Then the draggable menu table of the "Ergonomic backpacks" <group> should be:
       | title              | parent             |
-      | Members            |                    |
       | Overview           |                    |
       | Glossary           |                    |
       | Discussions        |                    |
-      | About              |                    |
       | Types of backpacks |                    |
       | Frameless          | Types of backpacks |
       | Bodypack           | Frameless          |
@@ -476,7 +438,7 @@ Feature: Navigation menu for custom pages
       | TOCO 1-2   | Table of contents outline | published   | HR    |
       | TOCO 2-1-2 | Table of contents outline | unpublished | HR    |
       | TOCO 2-1-1 | Table of contents outline | published   | HR    |
-    And the following custom page menu structure:
+    And the following custom pages navigation menu structure for the "Table of contents outline" <group>:
       | title      | parent   | weight |
       | TOCO 1-2   | TOCO 1   | 2      |
       | TOCO 1-1-2 | TOCO 1-1 | 2      |
@@ -556,7 +518,7 @@ Feature: Navigation menu for custom pages
       | title           | <group>                          | state     | topic |
       | TOCO cached 1   | Table of contents outline cached | published | HR    |
       | TOCO cached 1-1 | Table of contents outline cached | published | HR    |
-    And the following custom page menu structure:
+    And the following custom pages navigation menu structure for the "Table of contents outline cached" <group>:
       | title           | parent        | weight |
       | TOCO cached 1   |               | 1      |
       | TOCO cached 1-1 | TOCO cached 1 | 1      |
@@ -567,12 +529,10 @@ Feature: Navigation menu for custom pages
     And I go to the "Table of contents outline cached" <group>
     And I click the contextual link "Edit menu" in the "Header" region
     When I drag the "TOCO cached 1-1" table row to the left
-    Then the draggable menu table should be:
+    Then the draggable menu table of the "Table of contents outline cached" <group> should be:
       | title           | parent |
       | Overview        |        |
-      | Members         |        |
       | Discussions     |        |
-      | About           |        |
       | Glossary        |        |
       | TOCO cached 1   |        |
       | TOCO cached 1-1 |        |
@@ -584,26 +544,3 @@ Feature: Navigation menu for custom pages
       | group      |
       | collection |
       | solution   |
-
-  Scenario Outline: Test that the edit link appears next to the "About" page.
-    Given the following <group>s:
-      | title           | state     |
-      | About edit link | published |
-
-    When I am logged in as a moderator
-    And I go to the "About edit link" <group>
-    And I click the contextual link "Edit menu" in the "Header" region
-
-    Then the "group menu edit table" table should contain the following columns:
-      | Page        | Enabled | Operations |
-      | Overview    |         | Edit       |
-      | Members     |         |            |
-      | Discussions |         |            |
-      | About       |         | Edit       |
-    When I click "Edit" in the "Content" region
-    Then I should see the heading "Edit <label> About edit link"
-
-    Examples:
-      | group      | label      |
-      | collection | Collection |
-      | solution   | Solution   |

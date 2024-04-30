@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Drupal\search_api_field\Plugin\Field\FieldWidget;
 
@@ -724,11 +724,12 @@ class SearchWidget extends WidgetBase implements ContainerFactoryPluginInterface
    *   The index entity. Null if not found.
    */
   protected function getSearchApiIndex() {
-    $index_id = $this->fieldDefinition->getSetting('index');
-    /** @var \Drupal\search_api\IndexInterface $index */
-    $index = $this->entityTypeManager->getStorage('search_api_index')->load($index_id);
-
-    return $index;
+    if ($index_id = $this->fieldDefinition->getSetting('index')) {
+      /** @var \Drupal\search_api\IndexInterface $index */
+      $index = $this->entityTypeManager->getStorage('search_api_index')->load($index_id);
+      return $index;
+    }
+    return NULL;
   }
 
   /**
@@ -831,6 +832,10 @@ class SearchWidget extends WidgetBase implements ContainerFactoryPluginInterface
    * Gets the default query presets description.
    */
   protected function getQueryPresetsDescription(): array {
+    if (!$index = $this->getSearchApiIndex()) {
+      return [];
+    }
+
     $description = [
       '#type' => 'details',
       '#title' => $this->t('Help'),
@@ -850,7 +855,7 @@ class SearchWidget extends WidgetBase implements ContainerFactoryPluginInterface
     // The description for the presets can vary a lot depending on where the
     // widget is shown. Allow other modules to interact with the description.
     // Dispatch an event to allow other modules to alter the description.
-    $event = new AlterQueryPresetsDescriptionEvent($description, $this->getSearchApiIndex());
+    $event = new AlterQueryPresetsDescriptionEvent($description, $index);
     $this->eventDispatcher->dispatch($event);
     return $event->getDescription();
   }

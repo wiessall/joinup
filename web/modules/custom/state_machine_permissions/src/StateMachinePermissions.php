@@ -1,11 +1,12 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Drupal\state_machine_permissions;
 
 use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
+use Drupal\state_machine\WorkflowManagerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -16,27 +17,18 @@ class StateMachinePermissions implements ContainerInjectionInterface {
   use StringTranslationTrait;
 
   /**
-   * The permission helper service.
-   *
-   * @var \Drupal\state_machine_permissions\StateMachinePermissionsHelperInterface
-   */
-  protected $permissionsHelper;
-
-  /**
    * Constructs a state machine permissions object.
    *
-   * @param \Drupal\state_machine_permissions\StateMachinePermissionsHelperInterface $permissionsHelper
-   *   The permission helper service.
+   * @param \Drupal\state_machine\WorkflowManagerInterface $workflowManager
+   *   The workflow manager.
    */
-  public function __construct(StateMachinePermissionsHelperInterface $permissionsHelper) {
-    $this->permissionsHelper = $permissionsHelper;
-  }
+  public function __construct(protected WorkflowManagerInterface $workflowManager) {}
 
   /**
    * {@inheritdoc}
    */
   public static function create(ContainerInterface $container) {
-    return new static($container->get('state_machine_permissions.helper'));
+    return new static($container->get('plugin.manager.workflow'));
   }
 
   /**
@@ -46,67 +38,25 @@ class StateMachinePermissions implements ContainerInjectionInterface {
    *   Dynamically generated permissions.
    */
   public function stateMachinePermissions(): array {
+    $workflowDefinitions = $this->workflowManager->getDefinitions();
     $permissions = [];
-    $state_field_map = $this->permissionsHelper->getStateFieldMap();
-    if (empty($state_field_map)) {
-      return $permissions;
-    }
 
-    foreach ($state_field_map as $entity_type_id => $bundles) {
-      foreach ($bundles as $bundle => $fields) {
-        $permissions += $this->generateWorkflowPermissionsForBundle($entity_type_id, $bundle, $fields);
-      }
-    }
-    return $permissions;
-  }
-
-  /**
-   * Returns an array of permissions per transmission for the given bundle.
-   *
-   * @param string $entity_type_id
-   *   The entity type ID.
-   * @param string $bundle
-   *   The entity bundle.
-   * @param array $field_names
-   *   An array of state field names.
-   *
-   * @return array
-   *   An array of permissions keyed by the permission id where each entry
-   *   contains the 'label' key and the description.
-   */
-  protected function generateWorkflowPermissionsForBundle(string $entity_type_id, string $bundle, array $field_names): array {
-    $workflows = $this->permissionsHelper->getPossibleWorkflowsForBundle($entity_type_id, $bundle, $field_names);
-
-    $permissions = [];
-    foreach ($workflows as $workflow) {
-      $transitions = $workflow->getTransitions();
-      foreach ($transitions as $transition) {
-        $to_state = $transition->getToState();
-        foreach ($transition->getFromStates() as $from_state) {
-          foreach (['own' => FALSE, 'any' => TRUE] as $key => $permission) {
-            $permissions[StateMachinePermissionStringConstructor::constructTransitionPermission($entity_type_id, $bundle, $workflow, $from_state->getId(), $to_state->getId(), $permission)] = [
-              'title' => $this->t('@workflow_label (:workflow_id): Transition from @from_state to @to_state - :key :bundle :entity_type_id entity', [
-                '@workflow_label' => $workflow->getLabel(),
-                ':workflow_id' => $workflow->getId(),
-                '@from_state' => $from_state->getLabel(),
-                '@to_state' => $to_state->getLabel(),
-                ':key' => $key,
-                ':bundle' => $bundle,
-                ':entity_type_id' => $entity_type_id,
-              ]),
-            ];
-            $permissions[StateMachinePermissionStringConstructor::constructGroupStateUpdatePermission($workflow, $from_state->getId(), $to_state->getId())] = [
-              'title' => $this->t('@workflow_label (:workflow_id): Transition group from @from_state to @to_state', [
-                '@workflow_label' => $workflow->getLabel(),
-                ':workflow_id' => $workflow->getId(),
-                '@from_state' => $from_state->getLabel(),
-                '@to_state' => $to_state->getLabel(),
-              ]),
-            ];
-          }
+    foreach ($workflowDefinitions as $workflowDefinition) {
+      $workflowDefinition = $this->workflowManager->createInstance($workflowDefinition['id']);
+      $transitions = $workflowDefinition->getTransitions();
+      $workflow_id = $workflowDefinition->getId();
+      foreach ($transitions as $transition_id => $transition) {
+        foreach (['own', 'any'] as $ownership) {
+          $permissions["perform $workflow_id workflow $transition_id transition on $ownership entity"] = [
+            'title' => $this->t('Perform %workflow_name workflow: %transition_name transition', [
+              '%workflow_name' => $workflowDefinition->getLabel(),
+              '%transition_name' => $transition->getLabel(),
+            ]),
+          ];
         }
       }
     }
+
     return $permissions;
   }
 

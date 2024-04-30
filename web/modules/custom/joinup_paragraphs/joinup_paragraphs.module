@@ -5,7 +5,7 @@
  * Hook implementations for Joinup Paragraphs module.
  */
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Access\AccessResultInterface;
@@ -102,7 +102,7 @@ function joinup_paragraphs_get_access(AccessResultInterface $access_result, stri
     }
   }
 
-  if ($group->hasGroupPermission((int) $account->id(), $permission)) {
+  if ($group->hasGroupPermission($account->id(), $permission)) {
     $access_result = AccessResult::neutral()
       ->addCacheableDependency($group->getMembership((int) $account->id()))
       ->cachePerPermissions();
@@ -148,4 +148,20 @@ function joinup_paragraphs_theme(): array {
       ],
     ],
   ];
+}
+
+/**
+ * Implements hook_preprocess_HOOK() for paragraph__image_gallery.
+ */
+function joinup_paragraphs_preprocess_paragraph__image_gallery(array &$variables): void {
+  if (
+    isset($variables['content']['image']['#third_party_settings']['joinup_slick']['custom_label']) &&
+    isset($variables['content']['paragraph_heading'])
+  ) {
+    // Push paragraph heading into gallery third party settings to make the
+    // heading the title of the carousel.
+    $variables['content']['image']['#third_party_settings']['joinup_slick']['custom_label'] = $variables['content']['paragraph_heading'];
+  }
+  // Prevent paragraph heading to be rendered twice.
+  unset($variables['content']['paragraph_heading']);
 }

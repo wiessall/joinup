@@ -5,7 +5,7 @@
  * Builds placeholder replacement tokens for joinup group related data.
  */
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 use Drupal\Core\Render\BubbleableMetadata;
 use Drupal\collection\Entity\CollectionContentInterface;

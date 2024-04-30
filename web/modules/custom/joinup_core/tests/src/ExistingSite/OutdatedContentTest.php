@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Drupal\Tests\joinup_core\ExistingSite;
 
@@ -44,7 +44,7 @@ class OutdatedContentTest extends JoinupExistingSiteTestBase {
       'type' => 'discussion',
       'og_audience' => $collection,
       'published_at' => (clone $this->now)
-        ->sub(new \DateInterval('P3YT1M'))
+        ->sub(new \DateInterval('P3Y1M'))
         ->getTimestamp(),
     ]);
     /** @var \Drupal\joinup_document\Entity\DocumentInterface $document */

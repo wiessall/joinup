@@ -14,7 +14,7 @@
   }
 }
 .etrans.wt-etrans {
-  button#eTransButton.wt-btn {
+  button#eTransButton.wt-ecl-button {
     // Override webtools eTrans button styles
     // Make it look like "btn btn-secondary"
     display: inline-block;
@@ -37,7 +37,6 @@
     line-height: $btn-line-height;
     &:hover {
       text-decoration: none;
-      color: $dark;
       box-shadow: $box-shadow;
     }
     &:focus-visible {

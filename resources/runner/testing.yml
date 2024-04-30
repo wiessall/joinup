@@ -17,7 +17,7 @@ testing:
 behat:
   screenshots:
     local:
-      dir: ${env.ARTIFACTS_DIR}
+      dir: ${joinup.site_dir}/sites/simpletest/behat
   # Either 'firefox' or 'chrome'.
   browser_name: chrome
   formatter:
@@ -49,6 +49,7 @@ phpcs:
       - ${joinup.site_dir}/themes/iop
       - ${joinup.site_dir}/themes/ventuno
   ignore:
+    - '*.yml'
     - '*/iop/assets/*'
     - '*/iop/node_modules/*'
     - '*/ventuno/assets/*'

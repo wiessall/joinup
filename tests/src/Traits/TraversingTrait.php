@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Drupal\joinup\Traits;
 
@@ -379,6 +379,7 @@ trait TraversingTrait {
       'Content listing types' => 'content_listing_type',
       'Content types' => 'type',
       'EIF recommendations' => 'category',
+      'Entity bundle' => 'bookmark_entity_bundle',
       'Event date' => 'event_date',
       'My collections content' => 'collection_my_content',
       'My content' => 'content_my_content',
@@ -398,6 +399,7 @@ trait TraversingTrait {
       'spatial coverage' => 'spatial_coverage',
       'topic' => 'topic',
       'OSS category' => 'oss_category',
+      'OSS intended audience' => 'oss_scope',
       'OSS development status' => 'oss_development_status',
       'OSS catalog' => 'oss_source',
     ];
@@ -709,7 +711,7 @@ trait TraversingTrait {
    *   checked.
    *
    * @return \Behat\Mink\Element\NodeElement|null
-   *   The matching image element, or NULL if it cannot be found
+   *   The matching image element, or NULL if it cannot be found.
    */
   protected function getImage(string $filename, ?NodeElement $element = NULL): NodeElement|null {
     foreach ($this->getImages($element) as $imageElement) {
@@ -718,6 +720,28 @@ trait TraversingTrait {
       }
     }
     return NULL;
+  }
+
+  /**
+   * Returns the image node with a given file name if it exists.
+   *
+   * @param string $filename
+   *   The file name.
+   * @param \Behat\Mink\Element\NodeElement|null $element
+   *   (optional) The element to check in. If omitted the entire page will be
+   *   checked.
+   *
+   * @return \Behat\Mink\Element\NodeElement[]
+   *   The matching image elements. Empty array if no matching image was found.
+   */
+  protected function getAllImages(string $filename, ?NodeElement $element = NULL): array {
+    $images = $this->getImages($element);
+    foreach ($images as $delta => $imageElement) {
+      if (!$this->imageSourceMatches($filename, $imageElement)) {
+        unset($images[$delta]);
+      }
+    }
+    return $images;
   }
 
   /**

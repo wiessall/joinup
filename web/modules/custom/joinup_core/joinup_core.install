@@ -5,7 +5,7 @@
  * Install, update, and uninstall functions for the Joinup core module.
  */
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 use Drupal\Core\Serialization\Yaml;
 use Drupal\Core\Site\Settings;
@@ -95,35 +95,18 @@ function joinup_core_requirements($phase): array {
 }
 
 /**
- * Install the RDF provenance fields.
+ * Pre-creates OSS vocabularies.
  */
-function joinup_core_update_110200(): void {
-  $manager = \Drupal::entityDefinitionUpdateManager();
-  $entityType = $manager->getEntityType('rdf_entity');
-  foreach (rdf_entity_provenance_entity_field_storage_info($entityType) as $fieldName => $definition) {
-    $manager->installFieldStorageDefinition($fieldName, 'rdf_entity', 'rdf_entity_provenance', $definition);
-  }
-}
-
-/**
- * Pre-creates oss_category, oss_licence and intended_audience_scope vocabs.
- */
-function joinup_core_update_110201(): void {
+function joinup_core_update_110500(): void {
   // Pre-create the new controlled vocabularies provided by eu_oss_catalogue
   // module. Normally, these are imported as config but eu_oss_catalogue install
   // goes first and its install process is also populating them with terms, so
   // they should be available at that point.
   $config_factory = \Drupal::configFactory();
-  foreach (['category', 'licence', 'intended_audience_scope'] as $vocab) {
-    $configs = [
-      'taxonomy.vocabulary',
-      'sparql_entity_storage.mapping.taxonomy_term',
-    ];
-    foreach ($configs as $config) {
-      $name = "$config.oss_$vocab";
-      $config_factory->getEditable($name)
-        ->setData(Yaml::decode(file_get_contents(DRUPAL_ROOT . "/../config/sync/$name.yml")))
-        ->save();
-    }
+  foreach (['category', 'licence', 'intended_audience_scope', 'software_type'] as $vocab) {
+    $name = "taxonomy.vocabulary.oss_$vocab";
+    $config_factory->getEditable($name)
+      ->setData(Yaml::decode(file_get_contents(DRUPAL_ROOT . "/../config/sync/$name.yml")))
+      ->save();
   }
 }

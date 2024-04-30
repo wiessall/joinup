@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Drupal\Tests\joinup_federation\Kernel;
 
@@ -14,6 +14,11 @@ use Drupal\rdf_entity\Entity\Rdf;
  * @coversDefaultClass \Drupal\joinup_federation\Plugin\pipeline\Step\AnalyzeIncomingEntities
  *
  * @group joinup_federation
+ *
+ * @todo The whole federation functionality will be removed. For now just
+ *   disable testing. A final decision will be made in ISAICP-8376.
+ * @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-8376
+ * @group wip
  */
 class AnalyzeIncomingEntitiesBuildSolutionDependencyTreeTest extends StepTestBase {
 

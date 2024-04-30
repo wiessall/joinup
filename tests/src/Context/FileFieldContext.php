@@ -1,12 +1,13 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Drupal\joinup\Context;
 
-use Behat\Mink\Element\TraversableElement;
+use Behat\Mink\Element\NodeElement;
 use Behat\Mink\Exception\ElementNotFoundException;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
+use Drupal\joinup\Traits\TraversingTrait;
 use Drupal\joinup\Traits\UtilityTrait;
 
 /**
@@ -15,6 +16,44 @@ use Drupal\joinup\Traits\UtilityTrait;
 class FileFieldContext extends RawDrupalContext {
 
   use UtilityTrait;
+  use TraversingTrait;
+
+  /**
+   * Fills in a specific subfield of a given file field.
+   *
+   * Use sequence number for the delta.
+   * @codingStandardsIgnoreStart
+   * Example:
+   * - Given I fill in the 2nd "Description" field of the "Attachment" file field with "My description"
+   * @codingStandardsIgnoreEnd
+   *
+   * @param string $field
+   *   The file field name.
+   * @param string $subfield
+   *   The subfield name.
+   * @param string $value
+   *   The value to set.
+   * @param string $delta
+   *   The delta of the field.
+   * @param string $region
+   *   The region.
+   *
+   * @Given I fill in the :delta :subfield field of the :field file field with :value in the :region( region)
+   *
+   * @throws \Exception
+   *   If region cannot be found.
+   */
+  public function fillRegionInSubfieldInFileField(string $field, string $subfield, string $value, string $delta, string $region): void {
+    $file_field = $this->findSubFieldOfFileField($field, $region);
+    $delta = $this->convertOrdinalToNumber($delta) - 1;
+    $xpathExpression = "//label[contains(., '{$subfield}')]/following-sibling::input";
+    $fields = $file_field->findAll('xpath', $xpathExpression);
+    if (!isset($fields[$delta])) {
+      throw new ElementNotFoundException($this->getSession()->getDriver(), 'Subfield not found', $subfield);
+    }
+
+    $fields[$delta]->setValue($value);
+  }
 
   /**
    * Fills in a specific subfield of a given file field.
@@ -89,16 +128,19 @@ class FileFieldContext extends RawDrupalContext {
    *
    * @param string $field
    *   The file field name.
+   * @param string|null $region
+   *   The file region.
    *
-   * @return \Behat\Mink\Element\TraversableElement
+   * @return \Behat\Mink\Element\NodeElement
    *   The file field node element.
    *
    * @throws \Behat\Mink\Exception\ElementNotFoundException
    *   Thrown when the element is not found.
    */
-  protected function findSubFieldOfFileField(string $field): TraversableElement {
-    $xpath = "//div[contains(concat(' ', @class, ' '), ' field--type-file ') and .//summary[contains(., '{$field}')]]";
-    $element = $this->getSession()->getPage()->find('xpath', $xpath);
+  protected function findSubFieldOfFileField(string $field, ?string $region = NULL): NodeElement {
+    $region_element = $region ? $this->getRegion($region) : $this->getSession()->getPage();
+    $xpath = "//div[contains(concat(' ', @class, ' '), ' field--type-file ') and .//summary[contains(., '{$field}')]] | //div[contains(concat(' ', @class, ' '), ' field--type-image ') and .//summary[contains(., '{$field}')]]";
+    $element = $region_element->find('xpath', $xpath);
     if (empty($element)) {
       throw new ElementNotFoundException($this->getSession()->getDriver(), 'File field not found', $field);
     }

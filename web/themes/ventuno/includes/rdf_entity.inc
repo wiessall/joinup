@@ -5,9 +5,10 @@
  * RDF Entity specific procedural functions.
  */
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 use Drupal\Core\Url;
+use Drupal\joinup_workflow\ArchivableEntityInterface;
 
 /**
  * Implements hook_preprocess_rdf_entity().
@@ -50,6 +51,7 @@ function ventuno_preprocess_rdf_entity__explore_item(array &$variables): void {
  * Implements hook_preprocess_HOOK() for rdf_entity__solution__group-header.
  */
 function ventuno_preprocess_rdf_entity__solution__group_header(array &$variables): void {
+  $entity = $variables['rdf_entity'];
   if (isset($variables['content']['releases_overview'])) {
     $variables['content']['releases_overview']['#attributes'] = [
       'class' => [
@@ -57,6 +59,9 @@ function ventuno_preprocess_rdf_entity__solution__group_header(array &$variables
         'btn-secondary',
       ],
     ];
+  }
+  if ($entity instanceof ArchivableEntityInterface) {
+    $variables['is_archived'] = $entity->isArchived();
   }
 }
 

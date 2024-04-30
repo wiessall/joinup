@@ -5,7 +5,7 @@
  * Main functions and hook implementations of the Licence module.
  */
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
@@ -60,6 +60,9 @@ function joinup_licence_entity_bundle_info_alter(&$bundles) {
         $bundles[$entity_type_id][$bundle]['class'] = $class;
       }
     }
+  }
+  if (!empty($bundles['taxonomy_term']['licence_type'])) {
+    $bundles['taxonomy_term']['licence_type']['class'] = LicenceLegalType::class;
   }
 }
 

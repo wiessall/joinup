@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Drupal\joinup_group\Form;
 
@@ -81,7 +81,7 @@ class AnnouncementForm extends FormBase {
    * {@inheritdoc}
    */
   public function buildForm(array $form, FormStateInterface $form_state): array {
-    $disabled = !$this->announcement->hasTransitions();
+    $disabled = !$this->announcement->hasAllowedTransitions();
 
     if ($disabled) {
       if ($this->announcement->getWorkflowState() === 'delivered') {
@@ -164,7 +164,7 @@ class AnnouncementForm extends FormBase {
     ];
 
     if (!$this->announcement->isNew()) {
-      foreach ($this->announcement->getTransitions() as $transition) {
+      foreach ($this->announcement->getAllowedTransitions() as $transition) {
         $form['actions'][$transition->getId()] = [
           '#type' => 'submit',
           '#value' => $transition->getLabel(),
@@ -308,10 +308,6 @@ class AnnouncementForm extends FormBase {
       '@group_landing_page' => [
         'label' => $this->t('will display the @label landing page URL', $vars),
         'value' => $group->toUrl()->setAbsolute()->toString(),
-      ],
-      '@group_about_page' => [
-        'label' => $this->t('will display the @label about page URL', $vars),
-        'value' => $group->toUrl('about-page')->setAbsolute()->toString(),
       ],
       '@group_members_page' => [
         'label' => $this->t('will display the @label members page URL', $vars),

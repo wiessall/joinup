@@ -1,9 +1,10 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Drupal\Tests\eu_oss_catalogue\Functional;
 
+use Drupal\Component\Utility\Variable;
 use Drupal\Core\Database\Database;
 use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\Core\Field\EntityReferenceFieldItemListInterface;
@@ -138,7 +139,16 @@ abstract class FetchTestBase extends BrowserTestBase {
       $actualTranslation = $this->normalizeActualNodeArray($actualTranslation, $actual, $langcode);
       foreach ($expectedTranslation as $field => $expectedValue) {
         $actualValue = $actualTranslation[$field] ?? NULL;
-        $this->assertEquals($expectedValue, $actualValue);
+        $this->assertEquals(
+          $expectedValue,
+          $actualValue,
+          sprintf(
+            "Value of field '%s' is different than expected. Expected %s, actual is %s.",
+            $field,
+            Variable::export($expectedValue),
+            Variable::export($actualValue),
+          )
+        );
       }
     }
 
@@ -206,13 +216,12 @@ abstract class FetchTestBase extends BrowserTestBase {
     // Check how incoming data has been queued. Only one item is active.
     $queue = \Drupal::queue('eu_oss_catalogue');
     // The queue contains $entriesCount solutions plus the cleanup step.
-    $this->assertSame($expectedQueuedSolutions + 1, $queue->numberOfItems());
+    $this->assertSame($expectedQueuedSolutions, $queue->numberOfItems() - 1, 'Number of queued solutions');
 
     // Check queue processing. Use Drush to run the queue.
     $this->drush('queue:run', ['eu_oss_catalogue']);
 
-    // Queue items have been released.
-    $this->assertSame(0, $queue->numberOfItems());
+    $this->assertSame(0, $queue->numberOfItems(), 'Queue items have been released.');
   }
 
   /**

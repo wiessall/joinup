@@ -1,4 +1,4 @@
-@api @terms @group-g
+@api @group-g
 Feature: Related solution
   As a solution facilitator, I need to be able to relate my solution to other
   solutions and present the related solutions to the users.
@@ -11,13 +11,13 @@ Feature: Related solution
       | name         | type                         |
       | Kalikatoures | Company, Industry consortium |
     And solutions:
-      | title      | related solutions | description                         | documentation | related by type | moderation | logo     | topic      | state     | solution type | owner        | contact information |
-      | C          |                   | Blazing fast segmentation faults.   | text.pdf      | yes             | no         | logo.png | Demography | published |               | Kalikatoures | Kalikatoura         |
-      | Java       | C                 | Because inheritance is cool.        | text.pdf      | yes             | no         | logo.png | Demography | published | Citizen       | Kalikatoures | Kalikatoura         |
-      | PHP        |                   | Make a site.                        | text.pdf      | yes             | yes        | logo.png | Demography | published | Citizen       | Kalikatoures | Kalikatoura         |
-      | Golang     |                   | Concurrency for the masses          | text.pdf      | yes             | yes        | logo.png | Demography | proposed  | Citizen       | Kalikatoures | Kalikatoura         |
-      | Python     |                   | Get stuff done.                     | text.pdf      | yes             | no         | logo.png | Demography | published |               | Kalikatoures | Kalikatoura         |
-      | Javascript | Java, PHP         | Java is related to javascript. Huh? | text.pdf      | no              | no         | logo.png | Demography | published | Citizen       | Kalikatoures | Kalikatoura         |
+      | title      | related solutions | abstract                         | description                         | documentation | related by type | moderation | logo     | topic      | state     | solution type | owner        | contact information |
+      | C          |                   | Blazing fast segmentation faults | Blazing fast segmentation faults.   | text.pdf      | yes             | no         | logo.png | Demography | published |               | Kalikatoures | Kalikatoura         |
+      | Java       | C                 | Because inheritance is cool      | Because inheritance is cool.        | text.pdf      | yes             | no         | logo.png | Demography | published | Citizen       | Kalikatoures | Kalikatoura         |
+      | PHP        |                   | Make a site                      | Make a site.                        | text.pdf      | yes             | yes        | logo.png | Demography | published | Citizen       | Kalikatoures | Kalikatoura         |
+      | Golang     |                   | Concurrency for the masses       | Concurrency for the masses          | text.pdf      | yes             | yes        | logo.png | Demography | proposed  | Citizen       | Kalikatoures | Kalikatoura         |
+      | Python     |                   | Get stuff done                   | Get stuff done.                     | text.pdf      | yes             | no         | logo.png | Demography | published |               | Kalikatoures | Kalikatoura         |
+      | Javascript | Java, PHP         | Java is related to javascript    | Java is related to javascript. Huh? | text.pdf      | no              | no         | logo.png | Demography | published | Citizen       | Kalikatoures | Kalikatoura         |
 
   Scenario: Related solutions
     # Scenario A. A collection owner manages his own collection.

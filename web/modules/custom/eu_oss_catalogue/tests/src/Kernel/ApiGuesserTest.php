@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Drupal\Tests\eu_oss_catalogue\Kernel;
 
@@ -164,14 +164,20 @@ class ApiGuesserTest extends KernelTestBase {
         ],
       ],
 
-      // Bitbucket isn't yet implemented.
+      // Bitbucket.org.
       'Bitbucket home' => [
-        'URL' => 'https://self-hosted.bitbucket.example.com/atlassianlabs/docker-browse',
-        'Expected' => NULL,
+        'URL' => 'https://bitbucket.org/atlassianlabs/docker-browse',
+        'Expected' => [
+          'pluginId' => 'bitbucket_org',
+          'baseUrl' => 'https://bitbucket.org',
+        ],
       ],
       'Bitbucket HTTP URL' => [
-        'URL' => 'https://self-hosted.bitbucket.example.com/atlassianlabs/docker-browse.git',
-        'Expected' => NULL,
+        'URL' => 'https://bitbucket.org/atlassianlabs/docker-browse.git',
+        'Expected' => [
+          'pluginId' => 'bitbucket_org',
+          'baseUrl' => 'https://bitbucket.org',
+        ],
       ],
     ];
   }

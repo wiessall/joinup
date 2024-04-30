@@ -5,7 +5,7 @@
  * Hook implementations for the Joinup Group module.
  */
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 use Drupal\Component\Serialization\Json;
 use Drupal\Core\Access\AccessResult;
@@ -41,6 +41,7 @@ use Drupal\og\OgGroupAudienceHelperInterface;
 use Drupal\og\OgMembershipInterface;
 use Drupal\og_menu\Entity\OgMenuInstance;
 use Drupal\rdf_entity\RdfInterface;
+use Drupal\symfony_mailer_lite\Plugin\Mail\SymfonyMailer;
 use Drupal\user\UserInterface;
 use Drupal\views\Plugin\views\query\QueryPluginBase;
 use Drupal\views\Plugin\views\query\Sql;
@@ -182,7 +183,6 @@ function joinup_group_entity_type_alter(array &$entity_types): void {
 
     // Add group link templates, so the OG context will be automatically solved.
     $link_templates = [
-      'about-page' => '/rdf_entity/{rdf_entity}/about',
       'announcement-overview' => '/rdf_entity/{rdf_entity}/announcements',
       'announcement-add' => '/rdf_entity/{rdf_entity}/announcements/add',
       'announcement-edit' => '/rdf_entity/{rdf_entity}/announcements/edit/{message}',
@@ -191,6 +191,8 @@ function joinup_group_entity_type_alter(array &$entity_types): void {
       'discussion-overview' => '/rdf_entity/{rdf_entity}/discussions',
       'member-add' => '/rdf_entity/{rdf_entity}/members/add',
       'member-invite' => '/rdf_entity/{rdf_entity}/members/invite',
+      'website-link' => '/rdf_entity/{rdf_entity}/website-link',
+      'documentation-file' => '/rdf_entity/{rdf_entity}/documentation-file',
     ];
     foreach ($link_templates as $key => $path) {
       $entity_types['rdf_entity']->setLinkTemplate($key, $path);
@@ -261,6 +263,28 @@ function joinup_group_propose_message_submit(&$form, FormStateInterface $form_st
 }
 
 /**
+ * Implements hook_ENTITY_TYPE_access().
+ */
+function joinup_group_rdf_entity_access(EntityInterface $entity, $operation, AccountInterface $account) {
+  if (!$entity instanceof GroupInterface
+    || $account->isAnonymous()
+    || $account->hasPermission($entity->getEntityType()->getAdminPermission())
+    || $operation !== 'view'
+  ) {
+    return AccessResult::neutral();
+  }
+
+  // Allows users to view unpublished groups if they have the permission as part
+  // of their membership.
+  $membership = $entity->getMembership((int) $account->id());
+  return AccessResult::allowedIf(
+    $membership
+    && !$entity->isPublished()
+    && $membership->hasPermission('view unpublished rdf entity'))
+    ->addCacheableDependency($membership);
+}
+
+/**
  * Implements hook_entity_graph_access().
  *
  * The same procedure as the global access check is followed here. The purpose
@@ -301,22 +325,25 @@ function joinup_group_rdf_entity_insert(RdfInterface $group): void {
     return;
   }
 
-  // When a group is created, create a new navigation menu and associate it with
-  // the new collection or solution. This menu can be used to link to custom
-  // pages, member overviews, an about page, etc.
-  $og_menu_instance = OgMenuInstance::create([
-    'type' => 'navigation',
-    OgGroupAudienceHelperInterface::DEFAULT_FIELD => $group->id(),
-  ]);
-  $og_menu_instance->save();
-  $menu_name = 'ogmenu-' . $og_menu_instance->id();
+  // When a group is created, create two new navigation menus and associate them
+  // with the new collection or solution. These menus can be used to link to
+  // custom pages, member, overviews, etc. but come with a default set of links
+  // that can be used as a starting point.
+  foreach (['navigation', 'quick_links'] as $type) {
+    $og_menu_instance = OgMenuInstance::create([
+      'type' => $type,
+      OgGroupAudienceHelperInterface::DEFAULT_FIELD => $group->id(),
+    ]);
+    $og_menu_instance->save();
+    $menu_name = 'ogmenu-' . $og_menu_instance->id();
 
-  /** @var \Symfony\Component\EventDispatcher\EventDispatcherInterface $event_dispatcher */
-  $event_dispatcher = \Drupal::service('event_dispatcher');
+    /** @var \Symfony\Component\EventDispatcher\EventDispatcherInterface $event_dispatcher */
+    $event_dispatcher = \Drupal::service('event_dispatcher');
 
-  // Allow third-party to add group menu links.
-  $event = new GroupMenuLinksEvent($group, $menu_name, \Drupal::entityTypeManager());
-  $event_dispatcher->dispatch($event);
+    // Allow third-party to add group menu links.
+    $event = new GroupMenuLinksEvent($group, $menu_name, $og_menu_instance->bundle(), \Drupal::entityTypeManager());
+    $event_dispatcher->dispatch($event);
+  }
 }
 
 /**
@@ -1077,8 +1104,11 @@ function joinup_group_mail(string $key, array &$message, array $params): void {
     $message['subject'] = t("Joinup: A new announcement '@subject' has been created", $args);
     $message['body'] = [
       t("A new announcement '@subject' has been created by @author for the @group @type.", $args),
-      t("You can approve or reject the announcement at :url", $args),
+      t('You can approve or reject the announcement at <a href=":url">:url</a>.', $args),
     ];
+
+    // Send as HTML.
+    $message['headers']['Content-Type'] = SymfonyMailer::FORMAT_HTML;
   }
 }
 

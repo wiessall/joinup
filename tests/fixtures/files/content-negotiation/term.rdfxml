@@ -2,9 +2,10 @@
 <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
          xmlns:skos="http://www.w3.org/2004/02/skos/core#">
 
-  <skos:Concept rdf:about="http://joinup.eu/product-type#44611100-7">
-    <skos:inScheme rdf:resource="http://joinup.eu/product-type#"/>
-    <skos:prefLabel xml:lang="en">Air cylinders</skos:prefLabel>
+  <skos:Concept rdf:about="http://purl.org/adms/representationtechnique/BPMN">
+    <skos:inScheme rdf:resource="http://purl.org/adms/representationtechnique/1.0"/>
+    <skos:prefLabel xml:lang="en">Business Process Modeling Notation</skos:prefLabel>
+    <skos:definition xml:lang="en"></skos:definition>
   </skos:Concept>
 
 </rdf:RDF>

@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Drupal\github_feed\Plugin\Field\FieldFormatter;
 
@@ -90,7 +90,7 @@ class GitHubFeedDefaultFormatter extends FormatterBase {
       $element[$delta] = [
         '#theme' => 'github_feed',
         '#url' => $item->repository,
-        '#type' => $item->type,
+        '#feed_type' => $item->type,
         '#cache' => [
           'max-age' => $this->getFieldSetting('cache_max_age'),
         ],

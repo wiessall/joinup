@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Drupal\voc_comparer\Form;
 
@@ -91,7 +91,7 @@ class EiraVocabularyVersionCompareForm extends FormBase {
       '#description' => $this->t('Upload the new file to compare.'),
       '#upload_location' => 'public://voc_comparer',
       '#upload_validators' => [
-        'file_validate_extensions' => ['rdf'],
+        'FileExtension' => ['extensions' => 'rdf'],
       ],
       '#required' => TRUE,
     ];

@@ -5,9 +5,10 @@
  * Utility procedural functions.
  */
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 use Drupal\Core\StringTranslation\TranslatableMarkup;
+use Drupal\joinup_bundle_class\AbstractInterface;
 use Drupal\joinup_bundle_class\DescriptionInterface;
 use Drupal\joinup_bundle_class\LogoInterface;
 use Drupal\joinup_community_content\Entity\CommunityContentInterface;
@@ -67,10 +68,16 @@ function _ventuno_preprocess_tile(array &$variables, string $entity_type_id): vo
     ($entity_type_id === 'node' && $entity->bundle() === 'custom_page')
   ) {
     $variables['text'] = $entity instanceof DescriptionInterface && isset($variables['content'][$entity->getDescriptionField()]) ? $variables['content'][$entity->getDescriptionField()] : NULL;
+
+    // Use abstract if possible.
+    if ($entity instanceof AbstractInterface && !$entity->get($entity->getAbstractField())->isEmpty()
+      && isset($variables['content'][$entity->getAbstractField()])) {
+      $variables['text'] = $variables['content'][$entity->getAbstractField()];
+    }
   }
 
   // Image.
-  $variables['image'] = ($entity instanceof LogoInterface) && $entity->getLogoAsFile()
+  $variables['image'] = ($entity instanceof LogoInterface) && !$entity->get($entity->getLogoFieldName())->isEmpty()
     ? $entity->getLogoAsRenderArray($variables['view_mode'])
     : [];
 
@@ -147,6 +154,20 @@ function _ventuno_preprocess_tile(array &$variables, string $entity_type_id): vo
         $variables['info']['icon'] = 'calendar-event';
         $variables['info']['label'] = $variables['content']['oss_release_date'];
       }
+
+      $indicators = [
+        'oss_git_stars',
+        'oss_git_open_issues',
+        'oss_git_open_pull_requests',
+        'oss_git_forks',
+      ];
+
+      foreach ($indicators as $indicator) {
+        if (isset($variables['content'][$indicator][0])) {
+          $variables['indicators'][] = $variables['content'][$indicator];
+        }
+      }
+
       break;
 
     case 'asset_distribution':
@@ -275,7 +296,6 @@ function _ventuno_build_permalink(): ?string {
   $routes = [
     'entity.node.canonical',
     'entity.rdf_entity.canonical',
-    'entity.rdf_entity.about_page',
   ];
 
   if (!in_array($route_name, $routes)) {

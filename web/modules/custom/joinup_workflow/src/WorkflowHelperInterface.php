@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Drupal\joinup_workflow;
 
@@ -8,12 +8,19 @@ use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\FieldableEntityInterface;
 use Drupal\Core\Field\FieldDefinitionInterface;
 use Drupal\Core\Session\AccountInterface;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\state_machine\Plugin\Workflow\WorkflowInterface;
+use Stringable;
 
 /**
  * Interface for services that provide workflow related helper methods.
  */
 interface WorkflowHelperInterface {
+
+  /**
+   * Virtual state that acts as a beginning of the workflow.
+   */
+  const NON_STATE = '__new__';
 
   /**
    * Returns the available target states of an entity for the given user.
@@ -114,72 +121,39 @@ interface WorkflowHelperInterface {
   public function isWorkflowStatePublished(string $stateId, WorkflowInterface $workflow): bool;
 
   /**
-   * Checks if the user has at least one role with the given OG permission.
+   * Archives an entity by creating a new default revision if possible.
    *
-   * This does a simple inspection of the available permissions and should not
-   * be relied on for access checks. For example this does not take into account
-   * that a group admin has full permissions, or a blocked user has no
-   * permissions. Use OgAccess to check access.
+   * @param \Drupal\joinup_workflow\EntityWorkflowStateInterface $entity
+   *   The node to archive.
+   * @param string|\Stringable|\Drupal\Core\StringTranslation\TranslatableMarkup|null $revisionLogMessage
+   *   An optional message for the new revision. A default "Archived by user N"
+   *   message is used if omitted. Use empty string to not set any revision log
+   *   message.
    *
-   * @param string $permissions
-   *   The permission string.
-   * @param \Drupal\Core\Entity\EntityInterface $group
-   *   The group entity.
-   * @param \Drupal\Core\Session\AccountInterface $user
-   *   The user entity.
+   * @return \Drupal\joinup_workflow\EntityWorkflowStateInterface
+   *   The archived entity.
    *
-   * @return bool
-   *   TRUE if the permission is present in at least one of the user's role in
-   *   the group.
+   * @throws \Exception
+   *     If the entity cannot be archived.
    */
-  public function hasOgPermission(string $permissions, EntityInterface $group, AccountInterface $user): bool;
+  public function archiveEntity(EntityWorkflowStateInterface $entity, null|string|Stringable|TranslatableMarkup $revisionLogMessage = NULL): EntityWorkflowStateInterface;
 
   /**
-   * Checks whether the user has at least one of the provided roles.
+   * Un-archives an entity.
    *
    * @param \Drupal\Core\Entity\EntityInterface $entity
-   *   The group content entity.
-   * @param \Drupal\Core\Session\AccountInterface $account
-   *   The user account.
-   * @param array $roles
-   *   A list of role ids indexed by keys 'own' and 'any' which represents
-   *   ownership and a second level of 'roles' for system roles and
-   *   'og_roles' for og roles.
-   *
-   * @return bool
-   *   True if the user has at least one of the roles provided.
-   */
-  public function userHasOwnAnyRoles(EntityInterface $entity, AccountInterface $account, array $roles): bool;
-
-  /**
-   * Checks if the user has at least one required role in the entity's group.
-   *
-   * @param \Drupal\Core\Entity\EntityInterface $entity
-   *   The group content entity.
-   * @param \Drupal\Core\Session\AccountInterface $account
-   *   The user account.
-   * @param array $roles
-   *   A list of role ids indexed by 'roles' for system roles and
-   *   'og_roles' for og roles.
-   *
-   * @return bool
-   *   True if the user has at least one of the roles provided.
-   */
-  public function userHasRoles(EntityInterface $entity, AccountInterface $account, array $roles): bool;
-
-  /**
-   * Unarchives an entity.
-   *
-   * @param \Drupal\Core\Entity\EntityInterface $entity
-   *   The entity to unarchive.
+   *   The entity to un-archive.
    *
    * @return \Drupal\Core\Entity\EntityInterface
    *   The unarchived entity.
+   *
+   * @throws \Exception
+   *   If the entity cannot be unarchived.
    */
   public function unarchiveEntity(EntityInterface $entity): EntityInterface;
 
   /**
-   * Checks whether the user can not unarchive content.
+   * Checks whether the user can not un-archive content.
    *
    * @param \Drupal\Core\Entity\EntityInterface $entity
    *   The group content entity.
@@ -187,8 +161,7 @@ interface WorkflowHelperInterface {
    *   The user account.
    *
    * @return bool
-   *   True if the entity is archived
-   *    and user has not unarchived community content permission.
+   *   Whether the user can not un-archive content.
    */
   public function accountCanNotUnarchive(EntityInterface $entity, AccountInterface $account): bool;
 

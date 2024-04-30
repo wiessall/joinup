@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Drupal\Tests\joinup_subscription\Kernel;
 
@@ -78,7 +78,6 @@ class JoinupSubscriberServiceTest extends KernelTestBase {
     'state_machine_revisions',
     'system',
     'user',
-    'workflow_state_permission',
   ];
 
   /**

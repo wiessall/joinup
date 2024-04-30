@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Drupal\Tests\joinup_federation\Kernel;
 
@@ -12,6 +12,11 @@ use EasyRdf\Graph;
  * Tests the 'add_joinup_vocabularies' process step plugin.
  *
  * @group joinup_federation
+ *
+ * @todo The whole federation functionality will be removed. For now just
+ *   disable testing. A final decision will be made in ISAICP-8376.
+ * @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-8376
+ * @group wip
  */
 class AddJoinupVocabulariesStepTest extends StepTestBase {
 
@@ -28,7 +33,7 @@ class AddJoinupVocabulariesStepTest extends StepTestBase {
    * {@inheritdoc}
    */
   protected static $modules = [
-    'rdf_taxonomy',
+    'taxonomy',
     'taxonomy',
   ];
 

@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Drupal\joinup_group\Entity;
 
@@ -39,6 +39,14 @@ trait GroupContentTrait {
     }
 
     return $group;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function setGroup(GroupInterface $group): self {
+    $this->set($this->getGroupFieldName(), $group->id());
+    return $this;
   }
 
   /**

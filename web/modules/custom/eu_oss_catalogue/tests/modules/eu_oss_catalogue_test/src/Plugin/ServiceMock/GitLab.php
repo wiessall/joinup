@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Drupal\eu_oss_catalogue_test\Plugin\ServiceMock;
 
@@ -38,6 +38,7 @@ class GitLab extends PluginBase implements ServiceMockPluginInterface {
     return in_array($apiRoot, [
       'all.self-hosted.gitlab.example.com',
       'limited.self-hosted.gitlab.example.com',
+      'wrong.self-hosted.gitlab.example.com',
       'self-hosted.gitlab.example.com/subpath',
       'self-hosted.gitlab.example.com/bit/deeper/subpath',
       'gitlab.opencode.de.example.com',
@@ -53,6 +54,7 @@ class GitLab extends PluginBase implements ServiceMockPluginInterface {
 
     $responseId = match(TRUE) {
       $request->getUri()->getHost() === 'all.self-hosted.gitlab.example.com' => 'all.self-hosted.gitlab.example.com',
+      $request->getUri()->getHost() === 'wrong.self-hosted.gitlab.example.com' => 'wrong.self-hosted.gitlab.example.com',
       str_starts_with($query, '{"query":"{group:group(fullPath:"group1")') => 'limited.self-hosted.gitlab.example.com group1',
       str_starts_with($query, '{"query":"{group:group(fullPath:"group2")') => 'limited.self-hosted.gitlab.example.com group2',
       str_starts_with($query, '{"query":"{group:group(fullPath:"user1")') => 'limited.self-hosted.gitlab.example.com null',
@@ -80,14 +82,30 @@ class GitLab extends PluginBase implements ServiceMockPluginInterface {
       // GitLab API sets a session cookie.
       // @see https://docs.gitlab.com/ee/api/rest/#session-cookie
       $headers['Set-Cookie'] = ['_gitlab_session=dummy'];
-    }
-    else {
-      $filePath = __DIR__ . '/../../../../../fixtures/http_response/gitlab.yml';
-      $responses = Yaml::decode(file_get_contents($filePath));
-      $body = Json::encode($responses[$responseId]);
+      return new Response(
+        200,
+        ['Content-Length' => strlen($body)] + $headers,
+        $body
+      );
     }
 
-    return new Response(200, ['Content-Length' => strlen($body)] + $headers, $body);
+    $filePath = __DIR__ . '/../../../../../fixtures/http_response/gitlab.yml';
+    $responses = Yaml::decode(file_get_contents($filePath));
+    $body = $responses[$responseId];
+    if (is_string($body)) {
+      $headers['Content-Type'] = preg_match('/^\s*<!DOCTYPE html>/i', $body)
+        ? 'text/html'
+        : 'text/plain';
+    }
+    else {
+      $body = Json::encode($body);
+    }
+
+    return new Response(
+      200,
+      ['Content-Length' => strlen($body)] + $headers,
+      $body
+    );
   }
 
   /**

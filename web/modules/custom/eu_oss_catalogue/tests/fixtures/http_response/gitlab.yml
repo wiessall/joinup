@@ -15,6 +15,7 @@
           archived: false
           # Not set as logo as the logo from publiccode.yml is valid.
           avatarUrl: https://all.self-hosted.gitlab.example.com/uploads/-/system/project/avatar/1/logo.jpeg
+          openMergeRequestsCount: 1
           releases:
             nodes:
               - tagName: 'v1.1.1'
@@ -74,8 +75,12 @@
           id: 'gid://gitlab/Project/2'
           description: Description of Project2
           archived: false
+          forksCount: 202
+          starCount: 222
+          openIssuesCount: 242
           # Will be set as logo as the logo from publiccode.yml isn't valid.
           avatarUrl: https://all.self-hosted.gitlab.example.com/uploads/-/system/project/avatar/2/logo.png
+          openMergeRequestsCount: 0
           releases:
             nodes:
               - tagName: 'v14.0.1'
@@ -134,6 +139,9 @@
           id: 'gid://gitlab/Project/3'
           description: Description of Project3
           archived: true
+          forksCount: 203
+          starCount: 223
+          openIssuesCount: 243
           avatarUrl: null
           releases:
             nodes: {  }
@@ -148,7 +156,6 @@
                     applicationSuite: Suite1
                     url: "https://all.self-hosted.example.com/group3/project3"
                     landingURL: "https://example.com/project3"
-                    releaseDate: "2010-01-31"
                     platforms:
                       - linux
                     categories:
@@ -188,6 +195,10 @@
           id: 'gid://gitlab/Project/4'
           description: Description of Project4
           archived: false
+          forksCount: 204
+          starCount: 224
+          openIssuesCount: 244
+          openMergeRequestsCount: 0
           releases:
             nodes: {  }
           repository:
@@ -201,6 +212,10 @@
           id: 'gid://gitlab/Project/5'
           description: Description of Project5
           archived: false
+          forksCount: 205
+          starCount: 225
+          openIssuesCount: 245
+          openMergeRequestsCount: 3
           releases:
             nodes: {  }
           repository:
@@ -220,8 +235,12 @@
             id: gid://gitlab/Project/11
             description: 'Group 1: Project 1: description'
             archived: false
+            forksCount: 206
+            starCount: 226
+            openIssuesCount: 246
             # Not set as logo as the logo from publiccode.yml is valid.
             avatarUrl: https://all.self-hosted.gitlab.example.com/uploads/-/system/project/avatar/2/logo.svg
+            openMergeRequestsCount: 32
             releases:
               nodes:
                 - tagName: '2.0.0-alpha12'
@@ -295,8 +314,12 @@
             id: gid://gitlab/Project/12
             description: 'Group 1: Project 2: description'
             archived: false
+            forksCount: 207
+            starCount: 227
+            openIssuesCount: 247
             # Will be set as logo as the logo from publiccode.yml isn't valid.
             avatarUrl: https://all.self-hosted.gitlab.example.com/uploads/-/system/project/avatar/12/logo.jpg
+            openMergeRequestsCount: 2
             releases:
               nodes:
                 - tagName: '220.0.1'
@@ -376,7 +399,11 @@
             id: gid://gitlab/Project/13
             description: 'Group 1: Project 3: description'
             archived: true
+            forksCount: 208
+            starCount: 228
+            openIssuesCount: 248
             avatarUrl: null
+            openMergeRequestsCount: 0
             releases:
               nodes: []
             repository:
@@ -414,7 +441,6 @@
                         type: internal
                       platforms:
                         - web
-                      releaseDate: '2017-11-07'
                       softwareType: standalone/desktop
 
 'limited.self-hosted.gitlab.example.com group2':
@@ -431,6 +457,10 @@
             id: gid://gitlab/Project/21
             description: 'Group 2: Project 1: description'
             archived: false
+            forksCount: 209
+            starCount: 229
+            openIssuesCount: 249
+            openMergeRequestsCount: 7
             releases:
               nodes:
                 - tagName: '1.12.0-beta2'
@@ -484,6 +514,10 @@
             id: gid://gitlab/Project22
             description: 'Group 2: Project 2: description'
             archived: false
+            forksCount: 210
+            starCount: 230
+            openIssuesCount: 250
+            openMergeRequestsCount: 1
             releases:
               nodes: []
             repository:
@@ -531,6 +565,10 @@
       id: gid://gitlab/Project/1
       description: 'User 1: Project 1: description'
       archived: false
+      forksCount: 211
+      starCount: 231
+      openIssuesCount: 251
+      openMergeRequestsCount: 1
       releases:
         nodes:
           - tagName: '1.0.x-dev'
@@ -577,3 +615,15 @@
 'limited.self-hosted.gitlab.example.com null':
   data:
     group: null
+
+'wrong.self-hosted.gitlab.example.com': |
+  <!DOCTYPE html>
+  <html lang="en">
+    <head prefix="og: http://ogp.me/ns#">
+     <meta charset="utf-8">
+     <title>Foo</title>
+    </head>
+    <body>
+      <p>Bar Baz</p>
+    </body>
+  </html>

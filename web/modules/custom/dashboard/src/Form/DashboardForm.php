@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Drupal\dashboard\Form;
 
@@ -247,6 +247,10 @@ class DashboardForm extends FormBase {
       [
         '#title' => $this->t('Files'),
         '#url' => Url::fromRoute('view.files.page_1'),
+      ],
+      [
+        '#title' => $this->t('Manage webforms'),
+        '#url' => Url::fromRoute('entity.webform.collection'),
       ],
     ];
 

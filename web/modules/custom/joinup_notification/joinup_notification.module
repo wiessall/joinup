@@ -5,7 +5,7 @@
  * Module handling notifications in joinup.
  */
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Render\Markup;

@@ -1,7 +1,7 @@
 # The workflow of the release entity.
 asset_release_workflow:
   id: asset_release_workflow
-  label: "Default"
+  label: "Asset release"
   group: asset_release
   states:
     draft:
@@ -10,16 +10,44 @@ asset_release_workflow:
       label: Needs update
     published:
       label: Published
+      published: true
+    archived:
+      label: Archived
+      published: true
   transitions:
     draft:
       label: Save as draft
-      from: [published]
+      from: [ draft, published ]
       to: draft
     validate:
       label: Publish
-      from: [draft, needs_update]
+      from: [ draft ]
+      to: published
+    update_published:
+      label: Update
+      from: [ published ]
+      to: published
+    validate_changes:
+      label: Publish
+      from: [ needs_update ]
       to: published
     request_changes:
       label: Request changes
-      from: [published]
+      from: [ published ]
       to: needs_update
+    provide_changes:
+      label: Update
+      from: [ needs_update ]
+      to: needs_update
+    archive:
+      label: Archive
+      from: [ published ]
+      to: archived
+    update_archived:
+      label: Update
+      from: [ archived ]
+      to: archived
+    unarchive:
+      label: Unarchive
+      from: [ archived ]
+      to: published

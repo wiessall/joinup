@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Drupal\Tests\joinup_core\Functional\Mail;
 
@@ -71,7 +71,6 @@ abstract class JoinupMailFunctionalTestBase extends BrowserTestBase {
     'topic',
     'user',
     'ventuno_helper',
-    'workflow_state_permission',
   ];
 
   /**

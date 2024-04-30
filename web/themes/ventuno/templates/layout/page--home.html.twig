@@ -67,6 +67,7 @@
     anonymous_links: anonymous_links,
     hide_searchbar: hide_searchbar,
     searchbar: page.search_bar,
+    bookmark_link: bookmark_link,
   } %}
   {% if page.header %}
     {{ page.header }}
@@ -80,7 +81,7 @@
             {{ page.featured }}
           </div>
           <div class="col-12 col-md-6 my-5 my-md-0 d-flex align-content-between flex-wrap">
-            <img src="{{ file_url('themes/ventuno/assets/images/iop-eu-logo.svg') }}" class="px-2 ms-md-5 img-fluid w-100" alt="{{ 'Interoperable Europe logo'|trans }}" width="516" height="118">
+            <img src="{{ file_url('themes/ventuno/assets/images/iop-eu-logo-2004.svg') }}" class="px-2 ms-md-5 img-fluid w-100" alt="{{ 'Interoperable Europe logo'|trans }}" width="516" height="118">
             {% if interoperable_europe_url %}
               <p class="w-100 px-2 mt-4 mb-0 d-block text-center text-md-end">
                 <a href="{{ interoperable_europe_url }}" class="text-light fw-bold fs-5">{{ 'Discover more'|trans }} <span class="iop-gradient">...</span></a>

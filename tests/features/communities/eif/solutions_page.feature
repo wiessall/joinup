@@ -1,4 +1,4 @@
-@api @eif_community @terms @group-e
+@api @eif_community @group-e
 Feature: As a user, visiting the EIF Toolbox page, I want to be able to filter
   the page by EIF category.
 
@@ -19,13 +19,13 @@ Feature: As a user, visiting the EIF Toolbox page, I want to be able to filter
       | Solution 1 |
 
     # The navigator shows only when there are more than one category.
-    And I should not see the link "All"
-    And I should not see the link "Assessment tools"
-    And I should not see the link "Common frameworks"
-    And I should not see the link "Common services"
-    And I should not see the link "Generic tools"
-    And I should not see the link "Legal interoperability tools"
-    And I should not see the link "Semantic assets"
+    And I should not see the link "All" in the "Content" region
+    And I should not see the link "Assessment tools" in the "Content" region
+    And I should not see the link "Common frameworks" in the "Content" region
+    And I should not see the link "Common services" in the "Content" region
+    And I should not see the link "Generic tools" in the "Content" region
+    And I should not see the link "Legal interoperability tools" in the "Content" region
+    And I should not see the link "Semantic assets" in the "Content" region
 
     Given solutions:
       | title      | eif reference    | eif category                      | collection | state     | owner |
@@ -40,13 +40,13 @@ Feature: As a user, visiting the EIF Toolbox page, I want to be able to filter
     Then I should see the following tiles in the correct order:
       | Solution 1 |
       | Solution 2 |
-    And I should see the link "All"
-    And I should see the link "Assessment tools"
-    And I should see the link "Common services"
-    And I should not see the link "Common frameworks"
-    And I should not see the link "Generic tools"
-    And I should not see the link "Legal interoperability tools"
-    And I should not see the link "Semantic assets"
+    And I should see the link "All" in the "Content" region
+    And I should see the link "Assessment tools" in the "Content" region
+    And I should see the link "Common services" in the "Content" region
+    And I should not see the link "Common frameworks" in the "Content" region
+    And I should not see the link "Generic tools" in the "Content" region
+    And I should not see the link "Legal interoperability tools" in the "Content" region
+    And I should not see the link "Semantic assets" in the "Content" region
 
     When I click "Assessment tools"
     Then I should see the following tiles in the correct order:
@@ -70,6 +70,7 @@ Feature: As a user, visiting the EIF Toolbox page, I want to be able to filter
     And I check the box "Semantic assets"
     # Other require fields...
     And I fill in "Description" with "foo"
+    And I fill in "Abstract" with "bar"
     And I fill in "Name" with "TikTok"
     And I fill in "E-mail address" with "where@example.com"
     And I select "E-health" from "Topic"
@@ -85,13 +86,13 @@ Feature: As a user, visiting the EIF Toolbox page, I want to be able to filter
       | Solution 1 |
       | Solution 2 |
       | Solution 3 |
-    And I should see the link "All"
-    And I should see the link "Assessment tools"
-    And I should see the link "Common services"
-    And I should see the link "Semantic assets"
-    And I should not see the link "Common frameworks"
-    And I should not see the link "Generic tools"
-    And I should not see the link "Legal interoperability tools"
+    And I should see the link "All" in the "Content" region
+    And I should see the link "Assessment tools" in the "Content" region
+    And I should see the link "Common services" in the "Content" region
+    And I should see the link "Semantic assets" in the "Content" region
+    And I should not see the link "Common frameworks" in the "Content" region
+    And I should not see the link "Generic tools" in the "Content" region
+    And I should not see the link "Legal interoperability tools" in the "Content" region
 
     When I delete the "Solution 3" solution
     # Deleting a solution invalidates the page cache.
@@ -102,13 +103,13 @@ Feature: As a user, visiting the EIF Toolbox page, I want to be able to filter
     And I should see the following tiles in the correct order:
       | Solution 1 |
       | Solution 2 |
-    And I should see the link "All"
-    And I should see the link "Assessment tools"
-    And I should see the link "Common services"
-    And I should not see the link "Common frameworks"
-    And I should not see the link "Generic tools"
-    And I should not see the link "Legal interoperability tools"
-    And I should not see the link "Semantic assets"
+    And I should see the link "All" in the "Content" region
+    And I should see the link "Assessment tools" in the "Content" region
+    And I should see the link "Common services" in the "Content" region
+    And I should not see the link "Common frameworks" in the "Content" region
+    And I should not see the link "Generic tools" in the "Content" region
+    And I should not see the link "Legal interoperability tools" in the "Content" region
+    And I should not see the link "Semantic assets" in the "Content" region
 
     # Test the pager.
     Given solutions:
@@ -140,19 +141,19 @@ Feature: As a user, visiting the EIF Toolbox page, I want to be able to filter
       | Solution 10 |
       | Solution 11 |
       | Solution 12 |
-    And I should see the link "Current page 1"
-    And I should see the link "Page 2"
-    And I should see the link "Next page"
-    And I should see the link "Last page"
+    And I should see the link "Current page 1" in the "Content" region
+    And I should see the link "Page 2" in the "Content" region
+    And I should see the link "Next page" in the "Content" region
+    And I should see the link "Last page" in the "Content" region
 
     When I click "Next page"
     Then I should see the following tiles in the correct order:
       | Solution 13 |
       | Solution 14 |
-    And I should see the link "First page"
-    And I should see the link "Previous page"
-    And I should see the link "Page 1"
-    And I should see the link "Current page 2"
+    And I should see the link "First page" in the "Content" region
+    And I should see the link "Previous page" in the "Content" region
+    And I should see the link "Page 1" in the "Content" region
+    And I should see the link "Current page 2" in the "Content" region
     And I delete the "TikTok" contact information
 
   @javascript

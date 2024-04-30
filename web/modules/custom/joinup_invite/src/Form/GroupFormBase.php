@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Drupal\joinup_invite\Form;
 
@@ -25,31 +25,26 @@ abstract class GroupFormBase extends InviteFormBase {
   protected $role;
 
   /**
-   * The og membership manager service.
-   *
-   * @var \Drupal\og\MembershipManagerInterface
-   */
-  protected $ogMembershipManager;
-
-  /**
    * Constructs a new InviteToGroupForm object.
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
    *   The entity type manager service.
-   * @param \Drupal\joinup_invite\InvitationMessageHelperInterface $invitation_message_helper
+   * @param \Drupal\joinup_invite\InvitationMessageHelperInterface $invitationMessageHelper
    *   The invitation message helper service.
-   * @param \Drupal\og\MembershipManagerInterface $og_membership_manager
+   * @param \Drupal\og\MembershipManagerInterface $ogMembershipManager
    *   The og membership manager service.
    */
-  public function __construct(EntityTypeManagerInterface $entityTypeManager, InvitationMessageHelperInterface $invitation_message_helper, MembershipManagerInterface $og_membership_manager) {
-    parent::__construct($entityTypeManager, $invitation_message_helper);
-    $this->ogMembershipManager = $og_membership_manager;
+  public function __construct(
+    EntityTypeManagerInterface $entityTypeManager,
+    InvitationMessageHelperInterface $invitationMessageHelper,
+    protected MembershipManagerInterface $ogMembershipManager) {
+    parent::__construct($entityTypeManager, $invitationMessageHelper);
   }
 
   /**
    * {@inheritdoc}
    */
-  public static function create(ContainerInterface $container) {
+  public static function create(ContainerInterface $container): self {
     return new static(
       $container->get('entity_type.manager'),
       $container->get('joinup_invite.invitation_message_helper'),

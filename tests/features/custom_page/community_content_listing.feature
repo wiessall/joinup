@@ -73,6 +73,7 @@ Feature:
     Then I should see the heading "Add custom page"
     When I fill in the following:
       | Title | Latest content |
+    And I select "HR" from "Topic"
     And I add a layout paragraph in the "Custom page body" form field with the following properties:
       | layout           | one column |
       | Background theme | light      |
@@ -167,6 +168,7 @@ Feature:
     And I click "Add custom page" in the plus button menu
     Then I should see the heading "Add custom page"
     When I fill in "Title" with "Chosen content"
+    And I select "HR" from "Topic"
     And I add a layout paragraph in the "Custom page body" form field with the following properties:
       | layout           | one column |
       | Background theme | light      |
@@ -195,7 +197,7 @@ Feature:
     And I fill in "Collection" with "Emulators"
     Then I drag the table row in the "Content listing field filter form" region at position 4 up
     And I press "Save" in the "Modal buttons" region
-    And I press "Save"
+    And I press "Save as draft"
     Then I should see the heading "Chosen content"
     And I should see the following tiles in the correct order:
       | Searching for green pad.              |
@@ -212,7 +214,7 @@ Feature:
     And I click "Remove filter" at 5th filter of the 1st content listing paragraph
     And I uncheck "Global search"
     And I press "Save" in the "Modal buttons" region
-    And I press "Save"
+    And I press "Save as draft"
     And I should see the following tiles in the correct order:
       | 20 year anniversary                   |
       | Searching for green pad.              |
@@ -228,7 +230,7 @@ Feature:
     And I fill in the 2nd "News" with "NEC VR4300 CPU" in the "Custom content listing" field
     And I check "Allow shared content"
     And I press "Save" in the "Modal buttons" region
-    And I press "Save"
+    And I press "Save as draft"
     Then I should see the following tiles in the correct order:
       | 20 year anniversary                   |
       | Searching for green pad.              |
@@ -255,7 +257,7 @@ Feature:
     And I "edit" from the "Custom page body" field the child 1 paragraph of 1 layout
     And I uncheck "Allow shared content"
     And I press "Save" in the "Modal buttons" region
-    And I press "Save"
+    And I press "Save as draft"
     Then I should see the following tiles in the correct order:
       | 20 year anniversary                   |
       | Searching for green pad.              |
@@ -283,7 +285,7 @@ Feature:
     And I press "Add and configure filter"
     And I fill in "Solution" with "N64 cartridge cleaner"
     And I press "Save" in the "Modal buttons" region
-    And I press "Save"
+    And I press "Save as draft"
     Then I should see the following tiles in the correct order:
       | Searching for green pad.        |
       | What's your favourite N64 game? |
@@ -297,7 +299,7 @@ Feature:
     And I "edit" from the "Custom page body" field the child 1 paragraph of 1 layout
     And I fill in "Query presets" with "entity_bundle|solution"
     And I press "Save" in the "Modal buttons" region
-    And I press "Save"
+    And I press "Save as draft"
     Then I should see the following tiles in the correct order:
       | N64 cartridge cleaner |
 
@@ -327,6 +329,7 @@ Feature:
     Then I should see the heading "Add custom page"
     When I fill in the following:
       | Title | Collection content |
+    And I select "HR" from "Topic"
     And I add a layout paragraph in the "Custom page body" form field with the following properties:
       | layout           | one column |
       | Background theme | light      |
@@ -444,7 +447,6 @@ Feature:
     And I press "Save" in the "Modal buttons" region
     Then I should see the error message "You need to add a filter in the Content listing block"
 
-  @terms
   Scenario: Global search setting allows for site-wide content in the content listing.
     Given I am logged in as a moderator
     And custom_page content:
@@ -454,7 +456,6 @@ Feature:
       | content_listing:value | a:6:{s:6:"fields";a:1:{s:20:"content_listing_type";a:2:{s:6:"weight";i:0;s:6:"region";s:3:"top";}}s:7:"enabled";i:1;s:13:"query_presets";s:38:"entity_bundle\|discussion,event,news\|IN";s:5:"limit";s:2:"12";s:11:"show_shared";i:0;s:13:"global_search";i:1;} |
 
     When I go to the "All content" custom page
-    Then I should see the heading "All content"
     # All tiles are available.
     And I should see the following tiles in the correct order:
       | 30 year anniversary                   |
@@ -476,8 +477,7 @@ Feature:
     And I press "Publish"
     Then I should see the text "Current wars"
 
-    When I go to the homepage of the "Nintendo64" collection
-    And I click "All content" in the "Header" region
+    When I go to the "All content" custom page
     And I should see the following tiles in the correct order:
       | 30 year anniversary                   |
       | Current wars                          |
@@ -492,8 +492,7 @@ Feature:
     And I press "Update"
     Then I should see the text "Current wars is over"
 
-    When I go to the homepage of the "Nintendo64" collection
-    And I click "All content" in the "Header" region
+    When I go to the "All content" custom page
     And I should see the following tiles in the correct order:
       | 30 year anniversary                   |
       | Current wars is over                  |

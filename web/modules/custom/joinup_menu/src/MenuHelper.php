@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Drupal\joinup_menu;
 
@@ -16,6 +16,8 @@ use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\Url;
 use Drupal\collection\Entity\CollectionInterface;
 use Drupal\joinup_collection\JoinupCollectionHelper;
+use Drupal\og\OgGroupAudienceHelperInterface;
+use Drupal\og_menu\OgMenuInstanceInterface;
 use Exception;
 use Symfony\Component\HttpFoundation\RequestStack;
 
@@ -28,61 +30,26 @@ class MenuHelper implements MenuHelperInterface {
   use RedirectDestinationTrait;
 
   /**
-   * The logger channel factory.
-   *
-   * @var \Drupal\Core\Logger\LoggerChannelFactoryInterface
-   */
-  protected LoggerChannelFactoryInterface $logger;
-
-  /**
-   * The menu link tree service.
-   *
-   * @var \Drupal\Core\Menu\MenuLinkTreeInterface
-   */
-  protected MenuLinkTreeInterface $menuLinkTree;
-
-  /**
-   * The entity type manager.
-   *
-   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
-   */
-  protected EntityTypeManagerInterface $entityTypeManager;
-
-  /**
-   * The request stack.
-   *
-   * @var \Symfony\Component\HttpFoundation\RequestStack
-   */
-  protected RequestStack $requestStack;
-
-  /**
-   * The path matcher.
-   *
-   * @var \Drupal\Core\Path\PathMatcherInterface
-   */
-  protected PathMatcherInterface $pathMatcher;
-
-  /**
    * Constructs an instance of the MenuHelper service.
    *
    * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $logger
    *   The logger channel factory.
-   * @param \Drupal\Core\Menu\MenuLinkTreeInterface $menu_link_tree
+   * @param \Drupal\Core\Menu\MenuLinkTreeInterface $menuLinkTree
    *   The menu link tree service.
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
    *   The entity type manager.
-   * @param \Symfony\Component\HttpFoundation\RequestStack $request_stack
+   * @param \Symfony\Component\HttpFoundation\RequestStack $requestStack
    *   The request stack.
-   * @param \Drupal\Core\Path\PathMatcherInterface $path_matcher
+   * @param \Drupal\Core\Path\PathMatcherInterface $pathMatcher
    *   The path matcher.
    */
-  public function __construct(LoggerChannelFactoryInterface $logger, MenuLinkTreeInterface $menu_link_tree, EntityTypeManagerInterface $entity_type_manager, RequestStack $request_stack, PathMatcherInterface $path_matcher) {
-    $this->logger = $logger;
-    $this->menuLinkTree = $menu_link_tree;
-    $this->entityTypeManager = $entity_type_manager;
-    $this->requestStack = $request_stack;
-    $this->pathMatcher = $path_matcher;
-  }
+  public function __construct(
+    protected LoggerChannelFactoryInterface $logger,
+    protected MenuLinkTreeInterface $menuLinkTree,
+    protected EntityTypeManagerInterface $entityTypeManager,
+    protected RequestStack $requestStack,
+    protected PathMatcherInterface $pathMatcher
+  ) {}
 
   /**
    * {@inheritdoc}
@@ -144,7 +111,7 @@ class MenuHelper implements MenuHelperInterface {
       'popover' => $popover,
     ];
 
-    // Generate a link to the About page of the Joinup collection, to show as
+    // Generate a link to the Joinup collection, to show as
     // the "About us" link in the hamburger menu for anonymous users.
     $rdf_storage = $this->entityTypeManager->getStorage('rdf_entity');
     try {
@@ -152,7 +119,7 @@ class MenuHelper implements MenuHelperInterface {
       if (!$joinup_collection instanceof CollectionInterface) {
         throw new Exception();
       }
-      $url = $joinup_collection->toUrl('about-page');
+      $url = $joinup_collection->toUrl();
       $anonymous_links[] = [
         'label' => $this->t('About us'),
         'link' => $url,
@@ -197,6 +164,19 @@ class MenuHelper implements MenuHelperInterface {
 
       return $link;
     }, $tree);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getOgMenuByGroup(string $menuType, string $groupId): ?OgMenuInstanceInterface {
+    /** @var \Drupal\og_menu\OgMenuInstanceInterface[] $ogMenuInstances */
+    $ogMenuInstances = $this->entityTypeManager->getStorage('ogmenu_instance')->loadByProperties([
+      'type' => $menuType,
+      OgGroupAudienceHelperInterface::DEFAULT_FIELD => $groupId,
+    ]);
+
+    return $ogMenuInstances ? reset($ogMenuInstances) : NULL;
   }
 
   /**

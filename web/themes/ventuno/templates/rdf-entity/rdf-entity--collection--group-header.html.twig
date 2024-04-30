@@ -5,6 +5,7 @@
  */
 #}
 {{ attach_library('ventuno/group-banner') }}
+{{ attach_library('ventuno/group') }}
 <header{{ attributes.addClass(['group-banner', 'bg-light', 'py-2']) }}>
   <div class="container py-2 d-flex flex-column flex-lg-row align-items-center align-items-lg-start">
     <div data-drupal-group-logo class="group-banner__logo me-lg-2">
@@ -25,15 +26,27 @@
         {{ title_suffix }}
       </div>
       {% if content.join_collection %}
-        <div class="group-banner__actions order-1 order-lg-0 d-flex justify-content-center align-items-start my-3 my-lg-0">
+        <div class="group-banner__actions order-1 order-lg-0 d-flex justify-content-center align-items-start my-2 my-lg-0">
           {{ content.join_collection }}
         </div>
       {% endif %}
       {% if not meta_banner_disabled %}
         <ul class="group-banner__meta mw-100 align-self-end list-unstyled d-flex flex-wrap mt-2 mb-0 group-stats fs-6">
-          <li class="group-banner__li text-muted">{{ 'Last update'|t }}:&nbsp;{{ content.last_update }}</li>
-          <li class="group-banner__li text-muted">{{ content.members }}</li>
-          <li class="group-banner__li text-muted">{{ content.solutions }}</li>
+          <li class="group-banner__li text-muted">
+            <svg class="bi icon--xs me-1">
+              <use xlink:href="{{ bcl_icon_path }}#clipboard2-check"></use>
+            </svg>
+            {{ content.solutions }}
+          </li>
+          <li class="group-banner__li text-muted">
+            <a href="{{ path('entity.rdf_entity.member_overview', {'rdf_entity': rdf_entity.id()}) }}">
+              <svg class="bi icon--xs me-1">
+                <use xlink:href="{{ bcl_icon_path }}#people"></use>
+              </svg>
+              {{ content.members }}
+            </a>
+          </li>
+          <li class="group-banner__li group-banner__li--topics text-muted d-flex align-items-baseline w-100 mw-100">{{ 'Topics'|t }}: {{ content.field_topic }}</li>
         </ul>
       {% endif %}
     </div>

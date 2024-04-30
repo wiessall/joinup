@@ -5,6 +5,7 @@
  */
 #}
 {{ attach_library('ventuno/group-banner') }}
+{{ attach_library('ventuno/group') }}
 <header{{ attributes.addClass(['group-banner', 'bg-light', 'py-2']) }}>
   <div class="container py-2 d-flex flex-column flex-lg-row align-items-center align-items-lg-start">
     <div data-drupal-group-logo class="group-banner__logo me-lg-2">
@@ -37,10 +38,23 @@
       {% if not meta_banner_disabled %}
         <ul class="group-banner__meta mw-100 align-self-end list-unstyled d-flex flex-column flex-lg-row flex-wrap mt-2 mb-0 group-stats fs-6">
           <li class="group-banner__li group-banner__li--collection text-muted">{{ content.collections }}</li>
-          <li class="group-banner__li group-banner__li--topics text-muted d-flex align-items-baseline mw-100">{{ 'Topics'|t }}: {{ content.field_topic }}</li>
-          {% if content.downloads.count|render|striptags %}
-            <li class="group-banner__li text-muted">{{ 'Downloads'|t }}: {{ content.downloads.count|render|striptags }}</li>
+          <li class="group-banner__li text-muted">
+            <a href="{{ path('entity.rdf_entity.member_overview', {'rdf_entity': rdf_entity.id()}) }}">
+              <svg class="bi icon--xs me-1">
+                <use xlink:href="{{ bcl_icon_path }}#people"></use>
+              </svg>
+              {{ content.members }}
+            </a>
+          </li>
+          {% if is_archived %}
+            <li class="group-banner__li group-banner__li--archived text-muted">
+              <svg class="bi icon--xs me-1">
+                <use xlink:href="{{ bcl_icon_path }}#archive"></use>
+              </svg>
+              {{ 'Archived'|t }}
+            </li>
           {% endif %}
+          <li class="group-banner__li group-banner__li--topics text-muted d-flex align-items-baseline mw-100 w-100">{{ 'Topics'|t }}: {{ content.field_topic }}</li>
         </ul>
       {% endif %}
     </div>

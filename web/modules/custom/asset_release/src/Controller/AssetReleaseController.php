@@ -1,19 +1,18 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Drupal\asset_release\Controller;
 
 use Drupal\Component\Render\MarkupInterface;
+use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Routing\TrustedRedirectResponse;
 use Drupal\Core\Session\AccountInterface;
-use Drupal\og\OgAccessInterface;
 use Drupal\rdf_entity\RdfInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
@@ -23,32 +22,6 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
  * includes an rdf_entity id.
  */
 class AssetReleaseController extends ControllerBase {
-
-  /**
-   * The OG access handler.
-   *
-   * @var \Drupal\og\OgAccessInterface
-   */
-  protected $ogAccess;
-
-  /**
-   * Constructs a AssetReleaseController.
-   *
-   * @param \Drupal\og\OgAccessInterface $og_access
-   *   The OG access handler.
-   */
-  public function __construct(OgAccessInterface $og_access) {
-    $this->ogAccess = $og_access;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public static function create(ContainerInterface $container): self {
-    return new static(
-      $container->get('og.access')
-    );
-  }
 
   /**
    * Controller for the base form.
@@ -83,7 +56,10 @@ class AssetReleaseController extends ControllerBase {
       throw new NotFoundHttpException();
     }
 
-    return $this->ogAccess->userAccessEntityOperation('create', $this->createNewAssetRelease($rdf_entity), $account);
+    return $this->entityTypeManager()->getAccessControlHandler('rdf_entity')->createAccess('asset_release', $account, [
+      // The group will be consumed in joinup_rdf_entity_create_access().
+      'group' => $rdf_entity,
+    ], TRUE);
   }
 
   /**
@@ -170,7 +146,15 @@ class AssetReleaseController extends ControllerBase {
       throw new NotFoundHttpException();
     }
 
-    return $rdf_entity->access('view', $account, TRUE);
+    $releases = $rdf_entity->getReleases();
+    $access = AccessResult::allowedIf($rdf_entity->access('view', $account, TRUE) && !empty($releases));
+    $access->addCacheableDependency($rdf_entity);
+    foreach ($releases as $release) {
+      $access->addCacheableDependency($release);
+    }
+
+    /** @var \Drupal\solution\Entity\SolutionInterface $rdf_entity */
+    return $access;
   }
 
   /**

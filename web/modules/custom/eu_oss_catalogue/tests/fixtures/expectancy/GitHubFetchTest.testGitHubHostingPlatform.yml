@@ -7,7 +7,11 @@ GitHub solution 1:
     oss_release_date: '2023-04-19'
     oss_platform_reference: GitHub-solution-1-internal-ID
     oss_logo: https://raw.githubusercontent.com/dummy-namespace-1/dummy-name-1/HEAD/images/logo-solution-1.png
+    oss_git_forks: 101
+    oss_git_stars: 121
+    oss_git_open_issues: 141
     oss_publiccode_yml_version: '0.2'
+    oss_git_open_pull_requests: 8
 
 FOSS Conference:
   en:
@@ -26,11 +30,15 @@ GitHub solution 2:
     oss_git_url: https://github.com/dummy-namespace-2/dummy-name-2
     oss_git_description: Description of GitHub solution 2
     oss_default_branch: default-branch-of-GitHub-solution-2
-    oss_software_version: 'v3.5.1'
-    oss_release_date: '2022-09-09'
+    oss_software_version: 'v2.4'
+    oss_release_date: '2016-02-09'
     oss_platform_reference: GitHub-solution-2-internal-ID
     oss_logo: https://repository-images.githubusercontent.com/234234234/012345678901234567890123456789012345
+    oss_git_forks: 102
+    oss_git_stars: 122
+    oss_git_open_issues: 142
     oss_publiccode_yml_version: '0.4'
+    oss_git_open_pull_requests: 0
 
 ACME Ltd:
   en:

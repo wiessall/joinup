@@ -4,9 +4,8 @@ status: true
 dependencies:
   config:
     - core.entity_view_mode.rdf_entity.rdf_draft
-    - field.field.rdf_entity.solution.field_is_actor
+    - field.field.rdf_entity.solution.field_is_abstract
     - field.field.rdf_entity.solution.field_is_affiliations_requests
-    - field.field.rdf_entity.solution.field_is_business_process
     - field.field.rdf_entity.solution.field_is_contact_information
     - field.field.rdf_entity.solution.field_is_content
     - field.field.rdf_entity.solution.field_is_content_creation
@@ -24,15 +23,12 @@ dependencies:
     - field.field.rdf_entity.solution.field_is_metrics_page
     - field.field.rdf_entity.solution.field_is_moderation
     - field.field.rdf_entity.solution.field_is_owner
-    - field.field.rdf_entity.solution.field_is_product_type
     - field.field.rdf_entity.solution.field_is_related_solutions
     - field.field.rdf_entity.solution.field_is_shared_in
     - field.field.rdf_entity.solution.field_is_show_eira_related
     - field.field.rdf_entity.solution.field_is_solution_type
     - field.field.rdf_entity.solution.field_is_source_code_repository
-    - field.field.rdf_entity.solution.field_is_standardization_level
     - field.field.rdf_entity.solution.field_is_state
-    - field.field.rdf_entity.solution.field_is_test_resource_type
     - field.field.rdf_entity.solution.field_is_translation
     - field.field.rdf_entity.solution.field_is_version
     - field.field.rdf_entity.solution.field_is_webdav_creation
@@ -56,22 +52,6 @@ targetEntityType: rdf_entity
 bundle: solution
 mode: rdf_draft
 content:
-  field_is_actor:
-    type: entity_reference_label
-    label: above
-    settings:
-      link: true
-    third_party_settings: {  }
-    weight: 23
-    region: content
-  field_is_business_process:
-    type: entity_reference_label
-    label: above
-    settings:
-      link: true
-    third_party_settings: {  }
-    weight: 24
-    region: content
   field_is_contact_information:
     type: entity_reference_label
     label: above
@@ -172,14 +152,6 @@ content:
     third_party_settings: {  }
     weight: 3
     region: content
-  field_is_product_type:
-    type: entity_reference_label
-    label: above
-    settings:
-      link: true
-    third_party_settings: {  }
-    weight: 25
-    region: content
   field_is_solution_type:
     type: entity_reference_label
     label: above
@@ -199,22 +171,6 @@ content:
       target: ''
     third_party_settings: {  }
     weight: 19
-    region: content
-  field_is_standardization_level:
-    type: entity_reference_label
-    label: above
-    settings:
-      link: true
-    third_party_settings: {  }
-    weight: 26
-    region: content
-  field_is_test_resource_type:
-    type: entity_reference_label
-    label: above
-    settings:
-      link: true
-    third_party_settings: {  }
-    weight: 22
     region: content
   field_is_translation:
     type: entity_reference_label
@@ -313,6 +269,7 @@ hidden:
   download_total: true
   eif_perspective: true
   featured: true
+  field_is_abstract: true
   field_is_affiliations_requests: true
   field_is_content: true
   field_is_distribution: true
@@ -328,6 +285,7 @@ hidden:
   field_site_featured: true
   flag_like_rdf_entity: true
   langcode: true
+  members: true
   og_group: true
   pinned_in: true
   rdf_entity_solution_field_is_content_inline_facets: true

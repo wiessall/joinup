@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Drupal\eu_oss_catalogue\Form;
 
@@ -79,7 +79,8 @@ class HostingPlatformConfigForm extends EntityForm {
       '#default_value' => $this->getEntity()->getDescription(),
     ];
 
-    $platformId = $this->getEntity()->get('platformId');
+    $platformId = $this->getEntity()->get('platformId')
+      ?? $this->getRequest()->query->get('platformId');
 
     $form['platformId'] = [
       '#type' => 'select',

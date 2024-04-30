@@ -420,7 +420,7 @@ display:
           empty_zero: false
           hide_alter_empty: true
           click_sort_column: plugin_id
-          type: plugin_reference_id
+          type: plugin_reference_label
           settings: {  }
           group_column: ''
           group_columns: {  }

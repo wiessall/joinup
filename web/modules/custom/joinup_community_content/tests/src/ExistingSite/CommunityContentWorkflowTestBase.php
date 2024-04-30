@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Drupal\Tests\joinup_community_content\ExistingSite;
 
@@ -11,7 +11,7 @@ use Drupal\joinup_group\ContentCreationOptions;
 use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\node\Entity\Node;
 use Drupal\og\Entity\OgRole;
-use Drupal\og\OgGroupAudienceHelper;
+use Drupal\og\OgGroupAudienceHelperInterface;
 use Drupal\og\OgMembershipInterface;
 use Drupal\rdf_entity\RdfInterface;
 
@@ -135,19 +135,26 @@ abstract class CommunityContentWorkflowTestBase extends JoinupWorkflowExistingSi
           $content = Node::create([
             'title' => $this->randomMachineName(),
             'type' => $this->getEntityBundle(),
-            OgGroupAudienceHelper::DEFAULT_FIELD => $parent->id(),
-            'uid' => $this->userOwner->id(),
+            OgGroupAudienceHelperInterface::DEFAULT_FIELD => $parent->id(),
           ]);
 
           $non_allowed_roles = array_diff($test_roles, array_keys($allowed_roles));
           foreach ($allowed_roles as $user_var => $expected_target_states) {
+            $content->setOwnerId($this->{$user_var}->id());
             $message = "Parent bundle: {$parent_bundle}, Content bundle: {$this->getEntityBundle()}, Content state: -new entity-, Ownership: any, Moderation: {$moderation}, Content creation: {$content_creation}, User variable: {$user_var}, Operation: {$operation}";
+            $access = $this->entityAccess->createAccess($this->getEntityBundle(), $this->{$user_var}, [
+              'group' => $parent,
+            ]);
+            $this->assertTrue($access, $message);
             $actual_target_states = $this->workflowHelper->getAvailableTargetStates($content, $this->{$user_var});
             $this->assertWorkflowStatesEqual($expected_target_states, $actual_target_states, $message);
           }
           foreach ($non_allowed_roles as $user_var) {
+            $content->setOwnerId($this->{$user_var}->id());
             $message = "Parent bundle: {$parent_bundle}, Content bundle: {$this->getEntityBundle()}, Content state: -new entity-, Ownership: any, Moderation: {$moderation}, Content creation: {$content_creation}, User variable: {$user_var}, Operation: {$operation}";
-            $access = $this->entityAccess->access($content, $operation, $this->{$user_var});
+            $access = $this->entityAccess->createAccess($this->getEntityBundle(), $this->{$user_var}, [
+              'group' => $parent,
+            ]);
             $this->assertFalse($access, $message);
           }
         }
@@ -169,7 +176,7 @@ abstract class CommunityContentWorkflowTestBase extends JoinupWorkflowExistingSi
         $content = $this->createNode([
           'title' => $this->randomMachineName(),
           'type' => $this->getEntityBundle(),
-          OgGroupAudienceHelper::DEFAULT_FIELD => $parent->id(),
+          OgGroupAudienceHelperInterface::DEFAULT_FIELD => $parent->id(),
           'uid' => $this->userOwner->id(),
           'field_state' => $content_state,
           'status' => $this->isPublishedState($content_state),
@@ -209,29 +216,32 @@ abstract class CommunityContentWorkflowTestBase extends JoinupWorkflowExistingSi
           $content = $this->createNode([
             'title' => $this->randomMachineName(),
             'type' => $this->getEntityBundle(),
-            OgGroupAudienceHelper::DEFAULT_FIELD => $parent->id(),
-            'uid' => $this->userOwner->id(),
+            OgGroupAudienceHelperInterface::DEFAULT_FIELD => $parent->id(),
             'field_state' => $content_state,
             'status' => $this->isPublishedState($content_state),
           ]);
 
           $own_access = isset($ownership_data['own']) && !empty($ownership_data['own']);
           if ($own_access) {
+            $content->setOwnerId($this->userOwner->id());
             $message = "Parent bundle: {$parent_bundle}, Content bundle: {$this->getEntityBundle()}, Content state: {$content_state}, Ownership: own, User variable: userOwner, Operation: {$operation}";
             $allowed_target_states = $this->workflowHelper->getAvailableTargetStates($content, $this->userOwner);
             $expected_target_states = $ownership_data['own'];
             $this->assertWorkflowStatesEqual($expected_target_states, $allowed_target_states, $message);
           }
           else {
+            $content->setOwnerId($this->userOwner->id());
             $message = "Parent bundle: {$parent_bundle}, Content bundle: {$this->getEntityBundle()}, Content state: {$content_state}, Ownership: own, User variable: userOwner, Operation: {$operation}";
             $access = $this->entityAccess->access($content, $operation, $this->userOwner);
             $this->assertFalse($access, $message);
           }
 
+          // Set to a non testing user so that the `any` permission is tested.
+          $content->setOwnerId(1);
           $allowed_roles = array_keys($ownership_data['any']);
           $non_allowed_roles = array_diff($test_roles, $allowed_roles);
           foreach ($ownership_data['any'] as $user_var => $expected_target_states) {
-            $message = "Parent bundle: {$parent_bundle}, Moderation: {$moderation}, Content bundle: {$this->getEntityBundle()}, Content state: {$content_state}, Ownership: any, User variable: {$user_var}, Operation: {$operation}";
+            $message = "Parent bundle: {$parent_bundle}, Content bundle: {$this->getEntityBundle()}, Content state: {$content_state}, Ownership: any, User variable: {$user_var}, Operation: {$operation}";
             $allowed_target_states = $this->workflowHelper->getAvailableTargetStates($content, $this->{$user_var});
             $this->assertWorkflowStatesEqual($expected_target_states, $allowed_target_states, $message);
           }
@@ -257,7 +267,7 @@ abstract class CommunityContentWorkflowTestBase extends JoinupWorkflowExistingSi
           $content = $this->createNode([
             'title' => $this->randomMachineName(),
             'type' => $this->getEntityBundle(),
-            OgGroupAudienceHelper::DEFAULT_FIELD => $parent->id(),
+            OgGroupAudienceHelperInterface::DEFAULT_FIELD => $parent->id(),
             'uid' => $this->userOwner->id(),
             'field_state' => $content_state,
             'status' => $this->isPublishedState($content_state),

@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Drupal\joinup_notification\EventSubscriber;
 
@@ -133,29 +133,28 @@ class ReleaseRdfSubscriber extends NotificationSubscriberBase {
       return;
     }
 
-    // Send notifications when a published release is updated.
-    if ($this->fromState === $this->toState && $this->fromState === 'published') {
-      $user_data = [
-        'roles' => [
-          'moderator' => [
-            self::TEMPLATE_UPDATE_PUBLISHED,
-          ],
-        ],
-        'og_roles' => [
-          'rdf_entity-solution-administrator' => [
-            self::TEMPLATE_UPDATE_PUBLISHED,
-          ],
-          'rdf_entity-solution-facilitator' => [
-            self::TEMPLATE_UPDATE_PUBLISHED,
-          ],
-        ],
-      ];
-      $this->getUsersAndSend($user_data);
-    }
-
     $transition_id = $this->transition instanceof WorkflowTransition ? $this->transition->getId() : NULL;
     switch ($transition_id) {
-      case 'validate':
+      case 'update_published':
+        $user_data = [
+          'roles' => [
+            'moderator' => [
+              self::TEMPLATE_UPDATE_PUBLISHED,
+            ],
+          ],
+          'og_roles' => [
+            'rdf_entity-solution-administrator' => [
+              self::TEMPLATE_UPDATE_PUBLISHED,
+            ],
+            'rdf_entity-solution-facilitator' => [
+              self::TEMPLATE_UPDATE_PUBLISHED,
+            ],
+          ],
+        ];
+        $this->getUsersAndSend($user_data);
+        break;
+
+      case 'validate_changes':
         if ($this->fromState === 'needs_update') {
           $user_data = [
             'og_roles' => [

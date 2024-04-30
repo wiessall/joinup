@@ -53,7 +53,7 @@ Feature: Curated content listings
     Then I should see the heading "Update curated content listing Highlighted content"
 
 
-  @javascript @terms
+  @javascript
   Scenario: Regression test for ISAICP-6658
   See https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-6658
 
@@ -116,7 +116,7 @@ Feature: Curated content listings
     Then I visit the search page
     And the "Licrogravity" tile should be marked as featured
 
-  @loggedErrors @javascript @terms
+  @loggedErrors @javascript
   Scenario: Regression test for ISAICP-8152
   See https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-8152
 

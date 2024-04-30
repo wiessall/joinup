@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Drupal\joinup\Context;
 
@@ -18,6 +18,7 @@ use Drupal\joinup\Traits\FormTrait;
 use Drupal\joinup\Traits\OgTrait;
 use Drupal\joinup\Traits\RdfEntityTrait;
 use Drupal\joinup\Traits\SearchTrait;
+use Drupal\joinup\Traits\TopicTrait;
 use Drupal\joinup\Traits\TraversingTrait;
 use Drupal\joinup\Traits\UserTrait;
 use Drupal\joinup\Traits\UtilityTrait;
@@ -44,6 +45,7 @@ class SolutionContext extends RawDrupalContext {
   use OgTrait;
   use RdfEntityTrait;
   use SearchTrait;
+  use TopicTrait;
   use TraversingTrait;
   use UserTrait;
   use UtilityTrait;
@@ -366,6 +368,8 @@ class SolutionContext extends RawDrupalContext {
       'yes',
     ]);
 
+    $this->setFallbackTopic($values);
+
     /** @var \Drupal\solution\Entity\SolutionInterface $solution */
     $solution = $this->createRdfEntity('solution', $values);
 
@@ -543,6 +547,7 @@ class SolutionContext extends RawDrupalContext {
       'uri' => 'id',
       'title' => 'label',
       'short ID' => 'field_short_id',
+      'abstract' => 'field_is_abstract',
       'affiliations requests' => 'field_is_affiliations_requests',
       'contact information' => 'field_is_contact_information',
       'content creation' => 'field_is_content_creation',
@@ -606,6 +611,7 @@ class SolutionContext extends RawDrupalContext {
         'published' => 'published',
         'needs update' => 'needs_update',
         'blacklisted' => 'blacklisted',
+        'archived' => 'archived',
       ],
       'field_is_show_eira_related' => ['no' => 0, 'yes' => 1],
     ];

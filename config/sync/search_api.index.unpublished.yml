@@ -137,9 +137,9 @@ field_settings:
       config:
         - field.storage.rdf_entity.field_ad_description
   field_ar_abstract:
-    label: 'Abstract » Processed text'
+    label: Abstract
     datasource_id: 'entity:rdf_entity'
-    property_path: 'field_ar_abstract:processed'
+    property_path: field_ar_abstract
     type: text
     dependencies:
       config:
@@ -405,6 +405,7 @@ field_settings:
       type: union
       fields:
         - 'entity:node/field_state'
+        - 'entity:rdf_entity/field_ad_state'
         - 'entity:rdf_entity/field_ar_state'
         - 'entity:rdf_entity/field_is_state'
         - 'entity:rdf_entity/field_isr_state'
@@ -466,6 +467,7 @@ processor_settings:
   add_url: {  }
   aggregated_field: {  }
   auto_aggregated_fulltext_field: {  }
+  custom_value: {  }
   entity_type: {  }
   html_filter:
     weights:

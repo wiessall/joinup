@@ -8,7 +8,7 @@ Feature: Header
   Scenario Outline: Header shows basic info and directs anonymous users to log in or create an account
     Given I am not logged in
     And I visit the <page>
-    Then I should see the Joinup logo in the navigation bar
+    Then I should see the Interoperable Europe logo in the navigation bar
     And I should see the hamburger icon in the main navigation
 
     # The links "Home" and "About us" are only shown in the hamburger menu since
@@ -24,9 +24,6 @@ Feature: Header
     # Check that the links lead to the expected pages.
     When I click "Home" in the "Hamburger menu"
     Then I should be on "/"
-
-    When I click "About us" in the "Hamburger menu"
-    Then I should see the heading "About Joinup"
 
     Given I visit the <page>
     When I click "Sign in" in the "Navigation bar"

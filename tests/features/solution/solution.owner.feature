@@ -30,7 +30,7 @@ Feature:
       | no         | registered users         |
       | no         | facilitators and authors |
 
-  @terms @uploadFiles:logo.png
+  @uploadFiles:logo.png
   Scenario: Assign ownership during creation of solutions through UI
     Given the following owner:
       | name      | type            |
@@ -58,13 +58,14 @@ Feature:
     When I fill in the following:
       | Title          | Solution API example                         |
       | Description    | We do not care that much about descriptions. |
+      | Abstract       | We do not care that much about abstract.     |
       | Name           | Gopheadow                                    |
       | E-mail address | solutionAPI@example.com                      |
     And I attach the file "logo.png" to "Logo"
     And I press "Add existing" at the "Owner" field
     # Then I wait for AJAX to finish
     And I fill in "Owner" with "Leechidna"
-    And I fill in "Language" with "http://publications.europa.eu/resource/authority/language/VLS"
+    And I select "Flemish" from "Language"
     And I select "EU and European Policies" from "Topic"
     And I select "Citizen" from "Solution type"
     And I press "Add owner"

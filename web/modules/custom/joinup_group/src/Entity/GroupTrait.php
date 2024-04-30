@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Drupal\joinup_group\Entity;
 
@@ -145,7 +145,7 @@ trait GroupTrait {
   /**
    * {@inheritdoc}
    */
-  public function hasGroupPermission(int $uid, string $permission): bool {
+  public function hasGroupPermission(int|string $uid, string $permission): bool {
     $membership_manager = $this->getMembershipManager();
     if ($membership = $membership_manager->getMembership($this, $uid)) {
       return $membership->hasPermission($permission);
@@ -163,7 +163,7 @@ trait GroupTrait {
   /**
    * {@inheritdoc}
    */
-  public function getContentCreators(): string {
+  public function getContentCreators(): ?string {
     $contentCreators = $this->getMainPropertyValue($this->getContentCreationFieldName());
 
     if (is_null($contentCreators)) {

@@ -5,6 +5,7 @@ dependencies:
   config:
     - entity_legal.document.legal_notice
     - filter.format.basic_html
+    - filter.format.plain_text_glossary
     - filter.format.simple_text
   module:
     - comment
@@ -43,7 +44,10 @@ permissions:
   - 'use search_api_autocomplete for search'
   - 'use search_api_autocomplete for search_oss_catalogue'
   - 'use text format basic_html'
+  - 'use text format plain_text_glossary'
   - 'use text format simple_text'
+  - 'view bookmark_node'
+  - 'view bookmark_rdf_entity'
   - 'view compatibility documents'
   - 'view eif wrapper entity'
   - 'view eif_perspective rdf-meta-entity'
@@ -68,6 +72,7 @@ permissions:
   - 'view paragraph content heading'
   - 'view paragraph content iframe'
   - 'view paragraph content image'
+  - 'view paragraph content image_gallery'
   - 'view paragraph content json_map'
   - 'view paragraph content layout'
   - 'view paragraph content poll'

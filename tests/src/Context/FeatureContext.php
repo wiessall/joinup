@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Drupal\joinup\Context;
 
@@ -17,7 +17,6 @@ use Behat\Mink\Exception\ResponseTextException;
 use Behat\Mink\Exception\UnsupportedDriverActionException;
 use Behat\Mink\Selector\SelectorsHandler;
 use Drupal\Component\Serialization\Json;
-use Drupal\Component\Serialization\Yaml;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Datetime\DrupalDateTime;
 use Drupal\Core\Entity\EntityChangedInterface;
@@ -478,10 +477,11 @@ class FeatureContext extends RawDrupalContext {
    * @Then I (should )see the image :filename
    */
   public function assertImagePresent(string $filename, ?NodeElement $element = NULL): void {
-    if ($imageNode = $this->getImage($filename, $element)) {
+    foreach ($this->getAllImages($filename, $element) as $imageNode) {
       try {
-        Assert::assertTrue($imageNode->isVisible());
-        return;
+        if ($imageNode->isVisible()) {
+          return;
+        }
       }
       catch (UnsupportedDriverActionException | UnsupportedDrupalDriverActionException) {
       }
@@ -1079,45 +1079,6 @@ class FeatureContext extends RawDrupalContext {
 
     $this->scrollToTop();
     $this->findVerticalTab($tab)->clickLink($tab);
-  }
-
-  /**
-   * Creates testing terms for scenarios tagged with @terms tag.
-   *
-   * Limitation: It creates terms with maximum 2 level hierarchy.
-   *
-   * @BeforeScenario @terms&&@api
-   */
-  public function provideTestingTerms(): void {
-    $fixture = file_get_contents(__DIR__ . '/../../fixtures/testing_terms.yml');
-    $hierarchy = Yaml::decode($fixture);
-    foreach ($hierarchy as $vid => $terms) {
-      foreach ($terms as $parent_index => $data) {
-        $weight = $parent_index - 1;
-        $has_children = array_key_exists('children', $data);
-        $term = (object) [
-          'vocabulary_machine_name' => $vid,
-          'name' => $data['name'],
-          'weight' => $weight,
-        ];
-        $children = $data['children'];
-        $this->termCreate($term);
-        $parent_tid = $term->tid;
-        if ($has_children) {
-          foreach ($children as $child_index => $child) {
-            $weight = $child_index - 1;
-            $term = (object) [
-              'vocabulary_machine_name' => $vid,
-              'name' => $child['name'],
-              'parent' => $parent_tid,
-              'weight' => $weight,
-              'description' => $child['description'] ?? '',
-            ];
-            $this->termCreate($term);
-          }
-        }
-      }
-    }
   }
 
   /**
@@ -1723,26 +1684,6 @@ class FeatureContext extends RawDrupalContext {
     // Sample tests needing this:
     // - collection.subscribe-on-join.feature.
     \Drupal::getContainer()->get('cache.static')->invalidateAll();
-  }
-
-  /**
-   * Forces the indexing of new or changed content after each step.
-   *
-   * When a Search API index is configured with the 'options.index_directly'
-   * setting set to TRUE, the entity is not indexed immediately after was saved,
-   * in hook_entity_update(), instead the indexing is postponed to the end of
-   * the request. This is OK when operating manually the site, but when this is
-   * wrapped in the test "page request", the index will occur only after all the
-   * steps were executed and, as an effect, entities created across the steps
-   * are not indexed yet when the next step is executed. For this reason, we
-   * force an indexing after each step.
-   *
-   * @see https://www.drupal.org/project/search_api/issues/2922525
-   *
-   * @AfterStep
-   */
-  public function indexEntities(): void {
-    \Drupal::service('search_api.post_request_indexing')->destruct();
   }
 
   /**
@@ -2451,6 +2392,25 @@ class FeatureContext extends RawDrupalContext {
   }
 
   /**
+   * Asserts that an element has an attribute that contains the given value.
+   *
+   * @param string $tag
+   *   Tag name.
+   * @param string $attr_name
+   *   Attribute name.
+   * @param string $attr_value
+   *   Attribute value.
+   *
+   * @Then the :tag element with :attr_name attribute should contain :value
+   */
+  public function assertElementAttributeContains(string $tag, string $attr_name, string $attr_value): void {
+    $element = $this->getSession()->getPage()->find('xpath', "//{$tag}[contains(@$attr_name,'$attr_value')]");
+    if (empty($element)) {
+      throw new \Exception(sprintf('The "%s" element with "%s" attribute value "%s" was found on the page', $tag, $attr_name, $attr_value));
+    }
+  }
+
+  /**
    * Disables cookie consent banner for all tests.
    *
    * @BeforeSuite
@@ -2727,11 +2687,12 @@ class FeatureContext extends RawDrupalContext {
    * @When I run the :queue_name queue worker
    */
   public function iRunTheQueueWorker(string $queue_name): void {
-    $drushCommand = sprintf('drush queue:run %s', $queue_name);
-
     // Create a new Process instance to run the Drush command.
-    $process = new Process(explode(' ', $drushCommand));
-    $process->setTimeout(1800);
+    $process = Process::fromShellCommandline(
+      command: sprintf('composer exec drush queue:run %s', $queue_name),
+      cwd: getenv('DDEV_COMPOSER_ROOT') ?: dirname(DRUPAL_ROOT),
+      timeout: 1800
+    );
     $process->run();
 
     if (!$process->isSuccessful()) {

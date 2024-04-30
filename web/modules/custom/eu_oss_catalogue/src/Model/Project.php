@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Drupal\eu_oss_catalogue\Model;
 
@@ -10,6 +10,13 @@ use Drupal\Component\Utility\Crypt;
  * Data model for a code platform project.
  */
 class Project {
+
+  /**
+   * Silent errors.
+   *
+   * @var string[]
+   */
+  protected array $silentErrors = [];
 
   /**
    * Creates a new result object.
@@ -24,8 +31,6 @@ class Project {
    *   The code hosting platform plugin ID.
    * @param string $defaultBranch
    *   The repository default branch.
-   * @param bool $isArchived
-   *   Whether the project is archived.
    * @param string|null $latestReleaseTag
    *   The latest release tag.
    * @param string|null $latestReleaseDate
@@ -33,9 +38,17 @@ class Project {
    * @param string|null $platformReference
    *   The code platform internal unique ID.
    * @param string|null $description
-   *   The repository description if any.
+   *   The repository description, if any.
    * @param string|null $logo
    *   The URL of the project's logo/avatar.
+   * @param int|null $numberOfForks
+   *   Number of times the project has been forked.
+   * @param int|null $numberOfStars
+   *   Number of times the project has been starred.
+   * @param int|null $numberOfIssues
+   *   Number of open issues for the project.
+   * @param int|null $numberOfPullRequests
+   *   Number of open pull requests.
    * @param string[] $files
    *   A list of file blobs keyed by a file identifier.
    */
@@ -45,12 +58,15 @@ class Project {
     public readonly string $url,
     public readonly string $platform,
     public readonly string $defaultBranch,
-    public readonly bool $isArchived,
     public readonly ?string $latestReleaseTag = NULL,
     public readonly ?string $latestReleaseDate = NULL,
     public readonly ?string $platformReference = NULL,
     public readonly ?string $description = NULL,
     public readonly ?string $logo = NULL,
+    public readonly ?int $numberOfForks = NULL,
+    public readonly ?int $numberOfStars = NULL,
+    public readonly ?int $numberOfIssues = NULL,
+    public readonly ?int $numberOfPullRequests = NULL,
     public readonly array $files = [],
   ) {}
 
@@ -75,7 +91,7 @@ class Project {
   }
 
   /**
-   * Computes and returns a hash from metdata.
+   * Computes and returns a hash from metadata.
    *
    * @return string
    *   A hash from metadata.
@@ -91,11 +107,30 @@ class Project {
    *   Array representation of the value object.
    */
   public function toArray(): array {
-    $array = [];
-    foreach (get_object_vars($this) as $property => $value) {
-      $array[$property] = $value;
-    }
-    return $array;
+    $data = get_object_vars($this);
+    unset($data['silentErrors']);
+
+    return $data;
+  }
+
+  /**
+   * Add silent error.
+   *
+   * @param string $error
+   *   An error.
+   */
+  public function addSilentError(string $error): void {
+    $this->silentErrors[] = $error;
+  }
+
+  /**
+   * Gets silent errors.
+   *
+   * @return array
+   *   Errors.
+   */
+  public function getSilentErrors(): array {
+    return $this->silentErrors;
   }
 
 }

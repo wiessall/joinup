@@ -1,4 +1,4 @@
-@api @terms @grouped @group-f
+@api @grouped @group-f
 Feature:
   As a site builder of the site
   In order to be able to better control the structure of my content
@@ -51,3 +51,14 @@ Feature:
     And I press the button "Insert table" in the "Body" wysiwyg editor
     And I press "Save" in the "Modal buttons" region
     And I press "Update"
+
+  Scenario: Create a link with id only.
+    Given custom_page content:
+      | title       | collection            | state     |
+      | Anchor link | Paragraphs collection | published |
+    And I append "text" to "field_paragraphs_body" field in "node" entity with following "Anchor link" title:
+      | field_body:value  | <a id="anchorlinkid"></a> |
+      | field_body:format | text_html                                                         |
+
+    When I go to the "Anchor link" custom page
+    Then the response should contain "<a id=\"anchorlinkid\"></a>"

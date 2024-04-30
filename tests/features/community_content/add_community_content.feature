@@ -111,7 +111,6 @@ Feature: Add community content
       | event        |
       | news         |
 
-  @terms
   Scenario: Directly publishing community content sets the correct publication date.
     Given the following collections:
       | title        | description                  | logo     | state     |
@@ -217,7 +216,7 @@ Feature: Add community content
     And I should not see the link "Office.com"
     And I should not see the link "iCal / MS Outlook"
 
-  @javascript @terms @loggedErrors @api @uploadFiles:logo.png
+  @javascript @loggedErrors @api @uploadFiles:logo.png
   Scenario: Editor File dialog form does not trigger warning
     Given the following collection:
       | title | The editor tester collection |
@@ -231,7 +230,6 @@ Feature: Add community content
     And I should see the "Content" wysiwyg editor
 
     When there are no preexisting log records on the site
-    And the "Insert Media" button should be available in the "Content" wysiwyg editor
     And the "Insert Media" button should be available in the "Content" wysiwyg editor
     Then I press the button "Insert Media" in the "Content" wysiwyg editor
     And I attach the file "logo.png" to "Add file"

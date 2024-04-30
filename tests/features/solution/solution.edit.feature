@@ -31,7 +31,7 @@ Feature: Solution editing.
       | owner               | Acme inc.         |
       | state               | published         |
 
-  @terms @uploadFiles:logo.png
+  @uploadFiles:logo.png
   Scenario: A solution owner can edit only its own solutions.
     When I am logged in as "Yancy Burton"
     And I go to the homepage of the "Collection example" collection
@@ -41,11 +41,12 @@ Feature: Solution editing.
     Then I should see the heading "Add Solution"
     When I fill in the following:
       | Title          | Solution A         |
+      | Abstract       | Abstract of "A"    |
       | Description    | First letter       |
       | Name           | Yancy Burton       |
       | E-mail address | yancyb@example.com |
     And I attach the file "logo.png" to "Logo"
-    And I fill in "Language" with "http://publications.europa.eu/resource/authority/language/VLS"
+    And I select "Flemish" from "Language"
     And I select "EU and European Policies" from "Topic"
     And I select "Citizen" from "Solution type"
 

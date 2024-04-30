@@ -5,7 +5,7 @@
  * Main file of Joinup OSS Catalogue module.
  */
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Session\AccountInterface;
@@ -165,12 +165,12 @@ function joinup_oss_catalogue_node_update(NodeInterface $node): void {
 function joinup_oss_catalogue_preprocess_views_view__eu_oss_catalogue_admin_carousel(&$variables): void {
   $url = Url::fromRoute('view.search_oss_catalogue.search');
   $variables['search_url'] = match ($variables['display_id']) {
-    'oss_most_recent_solutions' => $url->setOptions([
+    'most_recent' => $url->setOptions([
       'query' => [
         'sort_by' => 'date',
       ],
     ]),
-    'oss_most_active_solutions' => $url->setOptions([
+    'most_active' => $url->setOptions([
       'query' => [
         'sort_by' => 'vitality',
       ],

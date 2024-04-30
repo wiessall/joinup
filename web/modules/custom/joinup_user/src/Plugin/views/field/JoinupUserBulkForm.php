@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Drupal\joinup_user\Plugin\views\field;
 
@@ -9,11 +9,11 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Messenger\MessengerInterface;
-use Drupal\Core\Routing\ResettableStackedRouteMatchInterface;
+use Drupal\Core\Session\AccountInterface;
 use Drupal\joinup_user\Entity\JoinupUserInterface;
 use Drupal\joinup_user\JoinupUserNotificationHelperInterface;
+use Drupal\role_delegation\Plugin\views\field\RoleDelegationUserBulkForm;
 use Drupal\system\ActionConfigEntityInterface;
-use Drupal\user\Plugin\views\field\UserBulkForm;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -27,7 +27,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  *
  * @ViewsField("joinup_user_bulk_form")
  */
-class JoinupUserBulkForm extends UserBulkForm {
+class JoinupUserBulkForm extends RoleDelegationUserBulkForm {
 
   /**
    * A list of actions that require the affected user to be notified.
@@ -40,13 +40,6 @@ class JoinupUserBulkForm extends UserBulkForm {
   ];
 
   /**
-   * The notification helper.
-   *
-   * @var \Drupal\joinup_user\JoinupUserNotificationHelperInterface
-   */
-  protected $notificationHelper;
-
-  /**
    * Constructs a new JoinupUserBulkForm Views field plugin.
    *
    * @param array $configuration
@@ -55,32 +48,40 @@ class JoinupUserBulkForm extends UserBulkForm {
    *   The plugin ID for the plugin instance.
    * @param mixed $plugin_definition
    *   The plugin implementation definition.
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
    *   The entity type manager.
-   * @param \Drupal\Core\Language\LanguageManagerInterface $language_manager
+   * @param \Drupal\Core\Language\LanguageManagerInterface $languageManager
    *   The language manager.
    * @param \Drupal\Core\Messenger\MessengerInterface $messenger
    *   The messenger.
-   * @param \Drupal\Core\Entity\EntityRepositoryInterface $entity_repository
+   * @param \Drupal\Core\Entity\EntityRepositoryInterface $entityRepository
    *   The entity repository.
-   * @param \Drupal\Core\Routing\ResettableStackedRouteMatchInterface $route_match
-   *   The current route match service.
-   * @param \Drupal\joinup_user\JoinupUserNotificationHelperInterface $notification_helper
+   * @param \Drupal\Core\Session\AccountInterface $currentUser
+   *   The currently logged in user.
+   * @param \Drupal\joinup_user\JoinupUserNotificationHelperInterface $notificationHelper
    *   The notification helper for the Joinup User module.
    *
    * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
    * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, EntityTypeManagerInterface $entity_type_manager, LanguageManagerInterface $language_manager, MessengerInterface $messenger, EntityRepositoryInterface $entity_repository, ResettableStackedRouteMatchInterface $route_match, JoinupUserNotificationHelperInterface $notification_helper) {
-    parent::__construct($configuration, $plugin_id, $plugin_definition, $entity_type_manager, $language_manager, $messenger, $entity_repository, $route_match);
-
-    $this->notificationHelper = $notification_helper;
+  public function __construct(
+    array $configuration,
+    $plugin_id,
+    $plugin_definition,
+    EntityTypeManagerInterface $entityTypeManager,
+    LanguageManagerInterface $languageManager,
+    MessengerInterface $messenger,
+    EntityRepositoryInterface $entityRepository,
+    AccountInterface $currentUser,
+    protected JoinupUserNotificationHelperInterface $notificationHelper
+  ) {
+    parent::__construct($configuration, $plugin_id, $plugin_definition, $entityTypeManager, $languageManager, $messenger, $entityRepository, $currentUser);
   }
 
   /**
    * {@inheritdoc}
    */
-  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
+  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition): self {
     return new static(
       $configuration,
       $plugin_id,
@@ -89,7 +90,7 @@ class JoinupUserBulkForm extends UserBulkForm {
       $container->get('language_manager'),
       $container->get('messenger'),
       $container->get('entity.repository'),
-      $container->get('current_route_match'),
+      $container->get('current_user'),
       $container->get('joinup_user.notification_helper')
     );
   }
@@ -113,22 +114,22 @@ class JoinupUserBulkForm extends UserBulkForm {
    *   Thrown when the user tried to access an action without access to it.
    *
    * @phpcs:disable Drupal.Commenting.FunctionComment.TypeHintMissing
-   *   The 'array &$form' type hint is missing but we cannot add it since this
+   *   The 'array &$form' type hint is missing, but we cannot add it since this
    *   would make the method signature incompatible with the parent method.
    */
-  public function viewsFormSubmit(&$form, FormStateInterface $form_state) {
+  public function viewsFormSubmit(&$form, FormStateInterface $form_state): void {
     if ($form_state->get('step') == 'views_form_views_form') {
       // Filter only selected checkboxes. Use the actual user input rather than
       // the raw form values array, since the site data may change before the
       // bulk form is submitted, which can lead to data loss.
-      $user_input = $form_state->getUserInput();
-      $selected = array_filter($user_input[$this->options['id']]);
+      $userInput = $form_state->getUserInput();
+      $selected = array_filter($userInput[$this->options['id']]);
       $entities = [];
       $action = $this->actions[$form_state->getValue('action')];
       $count = 0;
 
-      foreach ($selected as $bulk_form_key) {
-        $entity = $this->loadEntityFromBulkFormKey($bulk_form_key);
+      foreach ($selected as $bulkFormKey) {
+        $entity = $this->loadEntityFromBulkFormKey($bulkFormKey);
         // Skip execution if current entity does not exist.
         if (empty($entity)) {
           continue;
@@ -145,7 +146,7 @@ class JoinupUserBulkForm extends UserBulkForm {
 
         $count++;
 
-        $entities[$bulk_form_key] = $entity;
+        $entities[$bulkFormKey] = $entity;
       }
 
       // If there were entities selected but the action isn't allowed on any of
@@ -158,13 +159,13 @@ class JoinupUserBulkForm extends UserBulkForm {
 
       $this->notifyAffectedUsers($action, $entities);
 
-      $operation_definition = $action->getPluginDefinition();
-      if (!empty($operation_definition['confirm_form_route_name'])) {
+      $operationDefinition = $action->getPluginDefinition();
+      if (!empty($operationDefinition['confirm_form_route_name'])) {
         $options = [
           'query' => $this->getDestinationArray(),
         ];
-        $route_parameters = $this->routeMatch->getRawParameters()->all();
-        $form_state->setRedirect($operation_definition['confirm_form_route_name'], $route_parameters, $options);
+        $routeParameters = $this->routeMatch->getRawParameters()->all();
+        $form_state->setRedirect($operationDefinition['confirm_form_route_name'], $routeParameters, $options);
       }
       else {
         // Don't display the message unless there are some elements affected and

@@ -1,3 +1,21 @@
+joinup_layout_group_heading:
+  label: 'Joinup group heading'
+  path: layouts/group
+  template: joinup-layout--group-heading
+  default_region: main
+  icon_map:
+    - [main, aside]
+    - [left, right, aside]
+  regions:
+    main:
+      label: main
+    left:
+      label: Left
+    right:
+      label: Right
+    aside:
+      label: Aside
+
 joinup_layout_twocol_60_40:
   label: 'Joinup 60/40'
   path: layouts/twocol-60-40
@@ -46,9 +64,9 @@ joinup_layout_oss_heading:
   library: joinup_layout/oss_heading
   default_region: second
   icon_map:
-    - [ top_left, top_right, aside ]
+    - [ top_left, top_right, indicator ]
     - [ first_left, first_right, aside ]
-    - [ second, aside ]
+    - [ second, second, aside ]
     - [ third_left, third_right, aside ]
   regions:
     top_left:
@@ -65,6 +83,8 @@ joinup_layout_oss_heading:
       label: Third left
     third_right:
       label: Third right
+    indicator:
+      label: Indicator
     aside:
       label: Aside
 

@@ -1,0 +1,50 @@
+@import "../partials/core";
+
+// Collections and Solutions common styles.
+.joinup-group {
+  &--description {
+    @include full-width-color-to-top(
+      $light,
+      $light,
+      3rem,
+      3rem,
+      $light,
+      0,
+      3rem
+    );
+
+    position: relative;
+    margin-bottom: $spacer * 3; // 48px
+    font-size: $h3-font-size;
+  }
+  &--detailed-items {
+    .field--name-field-spatial-coverage {
+      .field__items {
+        display: flex;
+        .field__item {
+          margin-right: $spacer * .25;
+        }
+      }
+    }
+  }
+}
+
+.l-group-heading {
+  .contact-information__field-ci-webpage {
+    a {
+      display: inline-block;
+      overflow: hidden;
+      max-width: 100%;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+  }
+  &__main {
+    overflow-wrap: break-word;
+    word-break: break-word;
+  } 
+  &__aside {
+    // CSS hack to align Quick links box, see #ISAICP-8461.
+    margin-right: $spacer * -.75;
+  }
+}

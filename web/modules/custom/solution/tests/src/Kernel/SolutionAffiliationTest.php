@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Drupal\Tests\solution\Kernel;
 
@@ -25,9 +25,11 @@ class SolutionAffiliationTest extends KernelTestBase {
    */
   protected static $modules = [
     'field',
+    'joinup_workflow',
     'og',
     'rdf_schema_field_validation',
     'rdf_draft',
+    'rdf_entity_provenance',
     'rdf_entity',
     'solution',
     'sparql_entity_storage',
@@ -35,7 +37,6 @@ class SolutionAffiliationTest extends KernelTestBase {
     'system',
     'taxonomy',
     'user',
-    'workflow_state_permission',
   ];
 
   /**

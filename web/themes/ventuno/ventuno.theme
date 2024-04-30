@@ -5,7 +5,7 @@
  * Functions to support theming in the Ventuno theme.
  */
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 // Include all files from the includes directory.
 foreach (glob(__DIR__ . '/includes/*.inc') as $filename) {

@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Drupal\eu_oss_catalogue;
 
@@ -44,11 +44,8 @@ interface EuOssCatalogueInterface {
    *   The provider plugin ID.
    * @param \Drupal\eu_oss_catalogue\Model\Project $project
    *   The project object.
-   *
-   * @return \Drupal\eu_oss_catalogue\Entity\OssSolutionInterface|null
-   *   The OSS Solution node or NULL if the node failed to create/update.
    */
-  public function createOrUpdateSolution(string $providerPluginId, Project $project): ?OssSolutionInterface;
+  public function createOrUpdateSolution(string $providerPluginId, Project $project): void;
 
   /**
    * Prepares the entities removed from the source in a queue to be processed.

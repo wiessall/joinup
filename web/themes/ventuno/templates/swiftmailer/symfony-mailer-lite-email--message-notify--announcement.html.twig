@@ -21,8 +21,7 @@
  *   - group_title: The group title.
  *   - group_logo: The URL of the group logo, if any.
  *   - group_landing_page: The group landing page URL.
- *   - group_about_page: The group about page URL.
- *   - group_members_page: The group about page URL.
+ *   - group_members_page: The group members URL.
  *   - author_name: The announcement authore full-name.
  *   - author_profile: The announcement author profile URL.
  *   - delivery_time: The date/time when this email has been actually sent.
@@ -45,7 +44,7 @@
 {% if is_html %}
 <html>
   <head>
-    {% include '@ventuno/parts/inline-styles.html.twig' %}
+    {% include '@ventuno/parts/mail-head.html.twig' %}
   </head>
   <body>
     <table role="presentation">
@@ -56,7 +55,7 @@
               {% if message.group_logo %}
                 <img src="{{ message.group_logo }}" alt="{{ message.group_title }} logo" width="112" />
               {% else %}
-                <img src="{{ site_url }}/themes/ventuno/assets/images/logo.svg" alt="Joinup logo" width="112"/>
+                <img src="{{ site_url }}/themes/ventuno/assets/images/logo-interoperable-europe.svg" alt="Interoperable Europe logo" width="112"/>
               {% endif %}
             </div>
           </td>
@@ -98,7 +97,7 @@
           <td class="px-3 bg-primary">
             <div style="width: 112px" class="m-auto py-3">
               <a href="https://joinup.ec.europa.eu/" target="_blank">
-                <img src="{{ site_url }}/themes/ventuno/assets/images/logo.svg" alt="" height="30"/>
+                <img src="{{ site_url }}/themes/ventuno/assets/images/logo-interoperable-europe.svg" alt="" height="30"/>
               </a>
             </div>
           </td>
@@ -108,7 +107,7 @@
             {% trans %}
               <p>You received this e-mail because, as a registered user of Joinup and a member of {{ message.group_title }} {{ message.group_type }}, you agreed to receive information sent to you by the {{ message.group_title }} {{ message.group_type }} owner/administrator (based on Article 5(d) of Regulation (EU) 2018/1725).</p>
               <p>In case you do not want to receive such e-mails, you can <a href="{{ message.recipient_unsubscribe }}" target="_blank">unsubscribe</a> from group announcement notifications or manage all your subscription notifications from the <a href="{{ message.recipient_subscriptions }}" target="_blank">user subscriptions</a> page.</p>
-              <p>This is an unmonitored email address, please do not reply.<br> You can contact directly {{ message.group_title }} {{ message.group_type }} via the <a href="{{ message.group_about_page }}" target="_blank">About</a> page.</p>
+              <p>This is an unmonitored email address, please do not reply.<br> You can contact directly {{ message.group_title }} {{ message.group_type }} via the <a href="{{ message.group_landing_page }}" target="_blank">Overview</a> page.</p>
             {% endtrans %}
           </td>
         </tr>

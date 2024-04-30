@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Drupal\custom_page\Entity;
 
@@ -8,6 +8,7 @@ use Drupal\collection\Entity\NodeCollectionContentTrait;
 use Drupal\joinup_bundle_class\DescriptionTrait;
 use Drupal\joinup_bundle_class\JoinupBundleClassFieldAccessTrait;
 use Drupal\joinup_bundle_class\LogoTrait;
+use Drupal\joinup_group\GroupArchivableEntityTrait;
 use Drupal\joinup_publication_date\Entity\EntityPublicationTimeTrait;
 use Drupal\joinup_workflow\ArchivableEntityTrait;
 use Drupal\joinup_workflow\EntityWorkflowStateTrait;
@@ -20,6 +21,7 @@ use Drupal\topic\Entity\TopicReferencingEntityTrait;
 class CustomPage extends Node implements CustomPageInterface {
 
   use ArchivableEntityTrait;
+  use GroupArchivableEntityTrait;
   use DescriptionTrait;
   use JoinupBundleClassFieldAccessTrait;
   use EntityPublicationTimeTrait;

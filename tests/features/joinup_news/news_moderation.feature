@@ -131,7 +131,6 @@ Feature: News moderation.
     And I go to the homepage of the "Justice League" collection
     Then I should see the link "Add news"
 
-  @terms
   Scenario: Add news as a member to a post-moderated collection.
     # Add news as a member.
     # There is no need to check for a facilitator because when he creates news,
@@ -174,7 +173,6 @@ Feature: News moderation.
     When I click "Justice League"
     Then I should see the link "Eagle joins the JL"
 
-  @terms
   Scenario: Add news as a member to a pre-moderated collection and get it published by a facilitator.
     # Add news as a member.
     When I am logged in as "Cheetah"
@@ -329,7 +327,6 @@ Feature: News moderation.
     And I should see the heading "Hawkgirl saves the planet"
     And the "Hawkgirl saves the planet" "news" content should have 4 revisions
 
-  @terms
   Scenario: Check message draft url when click in Title.
     When I am logged in as "Eagle"
     And I go to the homepage of the "Justice League" collection
@@ -345,7 +342,6 @@ Feature: News moderation.
     And I click "Whale joins the JL"
     Then I should see the text "Specialized in close combat training"
 
-  @terms
   Scenario: Check news when click in My account page.
     When I am logged in as "Eagle"
     And I go to the homepage of the "Justice League" collection

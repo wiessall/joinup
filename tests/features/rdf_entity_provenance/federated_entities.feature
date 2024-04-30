@@ -49,6 +49,7 @@ Feature: In order to avoid users changing federated values
       | access url  | test.zip                         |
       | parent      | A federated release              |
       | licence     | A federated licence              |
+      | state       | published                        |
     And the following provenance activities:
       | associated with    | entity                   | enabled |
       | http://example.com | A federated solution     | yes     |
@@ -79,7 +80,7 @@ Feature: In order to avoid users changing federated values
       | label                    | type         | fields disabled                                                                                                     | fields not disabled                                                                            |
       | A federated collection   | collection   | Title, Description, Contact information, Owner                                                                      | Abstract, Access URL, Topic, Moderated, Content creation, Motivation, Logo, Closed collection  |
       | A federated solution     | solution     | Title, Description, Contact information, Owner, Search keywords, Related solutions, Status, Languages, Landing page | Topic, Moderated, Content creation, Motivation, Logo, Metrics pager                            |
-      | A federated release      | release      | Name, Release number, Search keywords, Status, Language                                                             | Motivation                                                                                     |
+      | A federated release      | release      | Name, Release version, Search keywords, Status, Language                                                             | Motivation                                                                                     |
       | A federated distribution | distribution | Title, Description, Access URL, Format, Status, Licence                                                             |                                                                                                |
       | John Federator           | owner        | Name                                                                                                                |                                                                                                |
       | John Federator's contact | contact      | E-mail address, Name, Website URL                                                                                   |                                                                                                |
