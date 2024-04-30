@@ -54,6 +54,7 @@ module:
   entityqueue_block: 0
   error_page: 0
   eu_oss_catalogue: 0
+  eu_oss_vitality_index: 0
   eu_sic: 0
   eupl: 0
   facets: 0
