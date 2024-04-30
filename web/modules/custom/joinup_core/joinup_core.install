@@ -154,13 +154,27 @@ function joinup_core_update_110501(&$sandbox): void {
 }
 
 /**
+ * Disable geocoding resolution.
+ */
+function joinup_core_update_110502(): void {
+  \Drupal::configFactory()->getEditable('geocoder.settings')->set('geocoder_presave_disabled', TRUE)->save();
+}
+
+/**
  * Transform document and event body text fields to paragraphs.
  */
-function joinup_core_update_110502(&$sandbox): void {
+function joinup_core_update_110503(&$sandbox): void {
   // We update about 4900 document nodes. The operation takes 240 seconds
   // (4 minutes) in total to finish. Updating the nodes takes 130 seconds, the
   // remaining time (110 seconds) is spent on reindexing.
   $updateHelper = \Drupal::classResolver(UpdateHelper::class);
   assert($updateHelper instanceof UpdateHelper);
   $updateHelper->transformNodeBodyToLayoutParagraphs($sandbox, 'event');
+}
+
+/**
+ * Enable geocoding resolution.
+ */
+function joinup_core_update_110504(): void {
+  \Drupal::configFactory()->getEditable('geocoder.settings')->set('geocoder_presave_disabled', FALSE)->save();
 }
