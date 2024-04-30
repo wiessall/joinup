@@ -96,9 +96,93 @@ Feature: Add comments
       | news         | Scandalous news     | published | collection | Gossip collection    |
       | event        | Celebrity gathering | published | collection | Gossip collection    |
       | discussion   | Is gossip bad?      | published | collection | Gossip collection    |
-      | document     | Wikileaks           | published | collection | Gossip collection    |
       # Add an example also for solutions to ensure the variables are properly replaced.
       | news         | Scandalous news     | published | solution   | Gossip girl solution |
+
+  # This scenario uses javascript to work as regression test for a bug that
+  # makes CKEditor unusable upon a page load.
+  # @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-3612
+  @javascript
+  Scenario Outline: Make an authenticated comment at a community content using layout paragraphs, skips moderation.
+
+    Given solutions:
+      | title                | collection        | state     |
+      | Gossip girl solution | Gossip collection | published |
+    And users:
+      | Username          | E-mail                        | Roles     | First name | Family name |
+      | Comment moderator | comment.moderator@example.com | moderator | Comment    | Moderator   |
+      | Layonel Sarok     | layonel.sarok@example.com     |           | Layonel    | Sarok       |
+      | Korma Salya       | korma.salya@example.com       |           | Korma      | Salya       |
+      | Salma Coster      | salma.coster@example.com      |           | Salma      | Coster      |
+    And the following collection user memberships:
+      | collection        | user          | roles                      |
+      | Gossip collection | Layonel Sarok | administrator, facilitator |
+      | Gossip collection | Korma Salya   | facilitator                |
+    And the following solution user memberships:
+      | solution             | user          | roles                      |
+      | Gossip girl solution | Layonel Sarok | administrator, facilitator |
+      | Gossip girl solution | Korma Salya   | facilitator                |
+    And <content type> content:
+      | title   | abstract | field_paragraphs_body                               | <parent>       | state   | author       |
+      | <title> | abstract | How could this ever happen? Moral panic on its way! | <parent title> | <state> | Salma Coster |
+    Given I am logged in as "Miss tell tales"
+    When I go to the content page of the type "<content type>" with the title "<title>"
+    # Authenticated users can use a rich text editor to enter comments.
+    And I should see the "Create comment" wysiwyg editor
+    And the "Upload image from computer" button should be available in the "Create comment" wysiwyg editor
+    When I enter "Mr scandal was doing something weird the other day." in the "Create comment" wysiwyg editor
+    And I press "Post comment"
+    Then I should not see the following success messages:
+      | success messages                                                                                     |
+      | Your comment has been queued for review by site administrators and will be published after approval. |
+    And the page should contain the html text "Mr scandal was doing something weird the other day."
+    # The author's full name should be shown, not the username.
+    And I should see the link "Miss Tales"
+    But I should not see the link "Miss tell tales"
+    And the email sent to "Comment moderator" with subject "Joinup: A new comment has been created." contains the following lines of text:
+      | Miss Tales posted a comment in <parent> "<parent title>".                               |
+      | To view the comment click                                                               |
+      | If you think this action is not clear or not due, please contact Joinup Support at http |
+    And the email sent to "Layonel Sarok" with subject "Joinup: A new comment has been created." contains the following lines of text:
+      | Miss Tales posted a comment in <parent> "<parent title>".                               |
+      | To view the comment click                                                               |
+      | If you think this action is not clear or not due, please contact Joinup Support at http |
+    And the email sent to "Korma Salya" with subject "Joinup: A new comment has been created." contains the following lines of text:
+      | Miss Tales posted a comment in <parent> "<parent title>".                               |
+      | To view the comment click                                                               |
+      | If you think this action is not clear or not due, please contact Joinup Support at http |
+    # Owner receives an email.
+    And the email sent to "Salma Coster" with subject "Joinup: A new comment has been created." contains the following lines of text:
+      | Miss Tales posted a comment in <parent> "<parent title>".                               |
+      | To view the comment click                                                               |
+      | If you think this action is not clear or not due, please contact Joinup Support at http |
+
+    # Verify the anchored link works properly.
+    When I am logged in as "Comment moderator"
+    And I click the comment link from the last email sent to "Comment moderator"
+    Then I should see the heading "<title>"
+    And I should see the text "Mr scandal was doing something weird the other day."
+
+    When I am logged in as "Salma Coster"
+    And I click the comment link from the last email sent to "Salma Coster"
+    And I click "Reply"
+    And I should see the "Create comment" wysiwyg editor
+    When I enter "I am replying in user's comment." in the "Create comment" wysiwyg editor
+    And I press "Post comment"
+    # Parent comment owner receives an email.
+    And the email sent to "Miss tell tales" with subject "Joinup: A new comment has been created." contains the following lines of text:
+      | Salma Coster posted a comment in <parent> "<parent title>".                             |
+      | To view the comment click                                                               |
+      | If you think this action is not clear or not due, please contact Joinup Support at http |
+    # The owner of the content does not receive a notification due to being the actor.
+    And the following email should not have been sent:
+      | recipient | Salma Coster                            |
+      | subject   | Joinup: A new comment has been created. |
+      | body      | Salma Coster posted a comment in        |
+
+    Examples:
+      | content type | title               | state     | parent     | parent title         |
+      | document     | Wikileaks           | published | collection | Gossip collection    |
 
   Scenario Outline: Posting comments.
     Given <content type> content:

@@ -32,9 +32,9 @@ Feature: Search inside groups
       | Room sizes | What are the ideal dimensions? | published | Chalet construction |                      |
       | Terrace?   | Want a decent sized terrace    | published |                     | Inclined foundations |
     And document content:
-      | title       | body               | state     | collection          | solution             |
-      | Ground plan | A classic design   | published | Chalet construction |                      |
-      | Rock types  | Ranked by hardness | published |                     | Inclined foundations |
+      | title       | field_paragraphs_body | state     | collection          | solution             |
+      | Ground plan | A classic design      | published | Chalet construction |                      |
+      | Rock types  | Ranked by hardness    | published |                     | Inclined foundations |
     And event content:
       | title                        | body                              | state     | collection          | solution             |
       | Opening of the winter season | Ski resorts will open in December | published | Chalet construction |                      |
