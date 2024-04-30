@@ -20,20 +20,23 @@ Feature: Notification test for the document transitions on a post moderated pare
       | CC collection | CC facilitator | facilitator |
       | CC collection | CC member      | <roles>     |
     And document content:
-      | title                                | author    | body | document type | collection    | field_state  |
-      | CC notify post publish               | CC member | body | Document      | CC collection | draft        |
-      | CC notify post request changes       | CC member | body | Document      | CC collection | published    |
-      | CC notify post report                | CC member | body | Document      | CC collection | published    |
-      | CC notify post propose from reported | CC member | body | Document      | CC collection | needs_update |
-      | CC notify post approve proposed      | CC member | body | Document      | CC collection | proposed     |
-      | CC notify post delete                | CC member | body | Document      | CC collection | published    |
+      | title                                | author    | abstract | field_paragraphs_body | document type | collection    | field_state  |
+      | CC notify post publish               | CC member | abstract | body                  | Document      | CC collection | draft        |
+      | CC notify post request changes       | CC member | abstract | body                  | Document      | CC collection | published    |
+      | CC notify post report                | CC member | abstract | body                  | Document      | CC collection | published    |
+      | CC notify post propose from reported | CC member | abstract | body                  | Document      | CC collection | needs_update |
+      | CC notify post approve proposed      | CC member | abstract | body                  | Document      | CC collection | proposed     |
+      | CC notify post delete                | CC member | abstract | body                  | Document      | CC collection | published    |
 
     # Test 'create' operation.
     When I am logged in as "CC member"
     And I go to the "CC collection" collection
     And I click "Add document" in the plus button menu
     And I fill in "Title" with "CC notify create publish"
-    And I fill in "Description" with "Sample body."
+    And I fill in "Abstract" with "Abstract"
+    And I append "text" to "field_paragraphs_body" layout paragraphs field
+      | field_body:value  | Sample body.   |
+      | field_body:format | content_editor |
     And I select "Document" from "Type"
     And I select "Statistics and Analysis" from "Topic"
     And I press "Publish"

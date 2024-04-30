@@ -120,7 +120,7 @@ content:
       responsive_image_style: highlighted_content
       image_link: ''
       image_loading:
-        attribute: eager
+        attribute: lazy
     third_party_settings:
       template_suggestion:
         template_suggestion: ''

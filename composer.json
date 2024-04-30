@@ -300,7 +300,9 @@
                 "If you don't set the \"version\" of a profile, the report/status displays an empty dash @see https://www.drupal.org/project/drupal/issues/3270892": "resources/patch/php/drupal/core/3270892.patch",
                 "Views Block Display skips preBlockBuild() call on ajax rebuild https://www.drupal.org/i/2605218": "resources/patch/php/drupal/core/2605218-134.diff",
                 "Deprecated function: strnatcasecmp(): Passing null to parameter #1 ($string1) of type string is deprecated in LayoutPluginManager https://www.drupal.org/i/3392572": "resources/patch/php/drupal/core/3392572.patch",
-                "PHP deprecation error in PhpMail::mail @see https://www.drupal.org/project/drupal/issues/3418098": "resources/patch/php/drupal/core/3418098.diff"
+                "PHP deprecation error in PhpMail::mail @see https://www.drupal.org/project/drupal/issues/3418098": "resources/patch/php/drupal/core/3418098.diff",
+                "Allow the ChangedItem to skip updating the entity's \"changed\" timestamp when synchronizing (f.e. when migrating) @see https://drupal.org/i/2329253": "resources/patch/php/drupal/core/2329253-127-10.2.5.patch",
+                "Set the toolbar to position fixed on mobile (for group banner positioning and toolbar on mobile) @see https://www.drupal.org/project/drupal/issues/2516938": "resources/patch/php/drupal/core/3809.diff"
             },
             "drupal/default_content": {
                 "Allow manual imports @see https://www.drupal.org/i/2640734": "resources/patch/php/drupal/default_content/2640734.diff"
@@ -431,7 +433,8 @@
             },
             "drupal/svg_image": {
                 "SVG is not valid or cannot be sanitized, return an error. @see https://www.drupal.org/i/3350696": "resources/patch/php/drupal/svg_image/3350696.patch",
-                "SvgImageWidget should inherit from ImageWidget instead of FileWidget @see https://www.drupal.org/project/svg_image/issues/3420037": "resources/patch/php/drupal/svg_image/3420037.patch"
+                "SvgImageWidget should inherit from ImageWidget instead of FileWidget @see https://www.drupal.org/project/svg_image/issues/3420037": "resources/patch/php/drupal/svg_image/3420037.patch",
+                "The 'image_loading' attribute is not respected - https://www.drupal.org/project/svg_image/issues/3275057": "resources/patch/php/drupal/svg_image/3275057-14.patch"
             },
             "drupal/ui_patterns_settings": {
                 "Fix TypeError: array_unshift(): Argument #1 ($array) must be of type array, null given in array_unshift() Caused by Deprecated Hooks in Drupal ~10.2.0 @see https://www.drupal.org/i/3409221": "resources/patch/php/drupal/ui_patterns_settings/ui_patterns_settings-3409221-26.patch"

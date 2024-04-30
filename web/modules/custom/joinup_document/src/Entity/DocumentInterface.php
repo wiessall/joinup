@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_document\Entity;
 
+use Drupal\joinup_bundle_class\AbstractInterface;
 use Drupal\joinup_bundle_class\LogoInterface;
 use Drupal\joinup_community_content\Entity\CommunityContentInterface;
 use Drupal\joinup_workflow\ArchivableEntityInterface;
@@ -11,6 +12,6 @@ use Drupal\joinup_workflow\ArchivableEntityInterface;
 /**
  * Interface for document entities in Joinup.
  */
-interface DocumentInterface extends CommunityContentInterface, LogoInterface, ArchivableEntityInterface {
+interface DocumentInterface extends CommunityContentInterface, LogoInterface, ArchivableEntityInterface, AbstractInterface {
 
 }

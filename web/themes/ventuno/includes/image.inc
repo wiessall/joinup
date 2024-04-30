@@ -11,7 +11,6 @@ declare(strict_types=1);
  * Implements hook_preprocess_image().
  */
 function ventuno_preprocess_image(array &$variables): void {
-  $variables['attributes']['loading'] = 'lazy';
   // Explicitly sets dimensions to image based on image styles to avoid
   // Cumulative Layout Shift.
   switch ($variables['style_name']) {
