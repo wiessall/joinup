@@ -355,10 +355,10 @@ Feature:
     # Fourth must not be visible yet.
     And I should not see the image "99ccd804281fede2d4e3dcc3a9b30a4c.png"
     Then I click on element ".slick--optionset--image-gallery button[aria-label='Next']:not([aria-disabled='true'])"
-    And I wait up to "5" seconds for CSS transitions to finish
+    And I wait up to "5" seconds for Slick animations to finish
     And I should see the image "99ccd804281fede2d4e3dcc3a9b30a4c.png"
     Then I click on element ".slick--optionset--image-gallery button[aria-label='Previous']:not([aria-disabled='true'])"
-    And I wait up to "5" seconds for CSS transitions to finish
+    And I wait up to "5" seconds for Slick animations to finish
     And I should not see the image "99ccd804281fede2d4e3dcc3a9b30a4c.png"
     And the page should have an element with CSS selector ".slick--optionset--image-gallery button[aria-label='Previous'][aria-disabled='true']"
 
