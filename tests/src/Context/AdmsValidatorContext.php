@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Drupal\joinup\Context;
 
 use Drupal\DrupalExtension\Context\RawDrupalContext;
-use Drupal\rdf_sync\Model\SyncMethod;
 use PHPUnit\Framework\Assert;
 
 /**
