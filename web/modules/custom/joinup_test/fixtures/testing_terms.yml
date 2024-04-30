@@ -25,6 +25,59 @@ topic:
     children:
       - name: 'Demography'
       - name: 'E-inclusion'
+eira:
+  - name: 'Category 1'
+    children:
+      - name: 'Public Service Provider'
+        uri: 'http://data.europa.eu/dr8/PublicServiceProvider'
+      - name: 'Non-binding Instrument'
+        uri: 'http://data.europa.eu/dr8/NonBindingInstrument'
+      - name: 'Interoperability Specification'
+        uri: 'http://data.europa.eu/dr8/InteroperabilitySpecification'
+      - name: Business
+        uri: 'http://data.europa.eu/dr8/Business'
+      - name: 'Innovation'
+        uri: 'http://data.europa.eu/dr8/Innovation'
+      - name: 'Citizen'
+        uri: 'http://data.europa.eu/dr8/Citizen'
+      - name: 'Digital Solution'
+        uri: 'http://data.europa.eu/dr8/DigitalSolution'
+      - name: 'Networking Infrastructure Enablers'
+        uri: 'http://data.europa.eu/dr8/NetworkingInfrastructureEnablers'
+  - name: 'Category 2'
+    children:
+      - name: 'Data Owner'
+        uri: 'http://data.europa.eu/dr8/DataOwner'
+      - name: 'Implementing Guideline'
+        uri: 'http://data.europa.eu/dr8/ImplementingGuideline'
+      - name: 'Logging Service'
+        uri: 'http://data.europa.eu/dr8/LoggingService'
+owner_type:
+  - name: 'Company'
+  - name: 'Industry consortium'
+status:
+  - name: Completed
+    uri: 'http://purl.org/adms/status/Completed'
+language:
+  - name: Flemish
+  - name: English
+spatial:
+  - name: Belgium
+  - name: Switzerland
+  - name: 'European Union'
+  - name: Luxembourg
+  - name: Greece
+file_type:
+  - name: 'ZIP'
+    mime_type: 'application/zip'
+  - name: 'CSV'
+    mime_type: 'text/csv'
+representation_technique:
+  - name: 'Datalog'
+  - name: 'Human Language'
+licence_type:
+  - name: 'Public domain'
+    uri: 'http://purl.org/adms/licence/PD'
 legal_type:
   - name: 'Can'
     children:
@@ -120,3 +173,65 @@ legal_type:
         description: 'The licence is approved by the Open Source Initiative, as compliant with the Open Source Definition (OSD)'
       - name: 'FSF Free/Libre'
         description: 'The licence is considered as Free/Libre by the Free Software Foundation'
+eif_interoperability_layer:
+  - name: 'Interoperability Layer 1: Interoperability governance'
+    uri: 'http://data.europa.eu/IL1'
+  - name: 'Interoperability Layer 3: Legal interoperability'
+    uri: 'http://data.europa.eu/IL3'
+eif_principle:
+  - name: 'Underlying Principle 1: Subsidiarity and proportionality'
+    uri: 'http://data.europa.eu/UP1'
+  - name: 'Underlying Principle 2: Openness'
+    uri: 'http://data.europa.eu/UP2'
+  - name: 'Underlying Principle 3: Transparency'
+    uri: 'http://data.europa.eu/UP3'
+  - name: 'Underlying Principle 4: Reusability'
+    uri: 'http://data.europa.eu/UP4'
+  - name: 'Underlying Principle 8: Security and privacy'
+    uri: 'http://data.europa.eu/UP8'
+  - name: 'Underlying Principle 10: Administrative simplification'
+    uri: 'http://data.europa.eu/UP10'
+  - name: 'Underlying Principle 11: Preservation of information'
+    uri: 'http://data.europa.eu/UP11'
+eif_solution_type:
+  - name: 'Common frameworks'
+  - name: 'Common services'
+  - name: 'Assessment tools'
+  - name: 'Generic tools'
+eif_conceptual_model:
+  - name: 'Basic Component 1: Coordination function'
+    uri: 'http://data.europa.eu/BC1'
+    description: 'The coordination function ensures that needs are identified and appropriate services are invoked and orchestrated to provide a European public service.'
+  - name: 'Basic Component 4: Open data'
+    uri: 'http://data.europa.eu/BC4'
+eif_recommendation:
+  - name: 'Recommendation 1'
+    eif_related_term: 'http://data.europa.eu/UP1'
+    uri: 'http://data.europa.eu/Rec1'
+  - name: 'Recommendation 2'
+    eif_related_term: 'http://data.europa.eu/UP2'
+    uri: 'http://data.europa.eu/Rec2'
+  - name: 'Recommendation 3'
+    eif_related_term: 'http://data.europa.eu/UP2'
+    uri: 'http://data.europa.eu/Rec3'
+  - name: 'Recommendation 4'
+    eif_related_term: 'http://data.europa.eu/UP2'
+    uri: 'http://data.europa.eu/Rec4'
+  - name: 'Recommendation 5'
+    eif_related_term: 'http://data.europa.eu/UP3'
+    uri: 'http://data.europa.eu/Rec5'
+  - name: 'Recommendation 7'
+    eif_related_term: 'http://data.europa.eu/UP4'
+    uri: 'http://data.europa.eu/Rec7'
+  - name: 'Recommendation 15'
+    eif_related_term: 'http://data.europa.eu/UP8'
+    uri: 'http://data.europa.eu/Rec15'
+  - name: 'Recommendation 17'
+    eif_related_term: 'http://data.europa.eu/UP10'
+    uri: 'http://data.europa.eu/Rec17'
+  - name: 'Recommendation 21'
+    eif_related_term: 'http://data.europa.eu/IL1'
+    uri: 'http://data.europa.eu/Rec21'
+spdx_licence:
+  - name: 'GNU General Public License v2.0 or later'
+    uri: http://spdx.org/licenses/GPL-2.0-or-later
