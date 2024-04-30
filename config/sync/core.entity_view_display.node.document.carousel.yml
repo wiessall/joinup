@@ -4,7 +4,7 @@ status: true
 dependencies:
   config:
     - core.entity_view_mode.node.carousel
-    - field.field.node.document.body
+    - field.field.node.document.abstract
     - field.field.node.document.field_comments
     - field.field.node.document.field_document_logo
     - field.field.node.document.field_document_publication_date
@@ -12,6 +12,7 @@ dependencies:
     - field.field.node.document.field_file
     - field.field.node.document.field_keywords
     - field.field.node.document.field_licence
+    - field.field.node.document.field_paragraphs_body
     - field.field.node.document.field_shared_in
     - field.field.node.document.field_short_title
     - field.field.node.document.field_site_featured
@@ -22,11 +23,14 @@ dependencies:
     - node.type.document
     - responsive_image.styles.tile
   module:
+    - field_delimiter
+    - field_formatter_range
     - field_group
+    - joinup_core
+    - joinup_slick
     - layout_builder
     - responsive_image
     - template_suggestion
-    - text
     - user
 third_party_settings:
   field_group:
@@ -75,10 +79,11 @@ targetEntityType: node
 bundle: document
 mode: carousel
 content:
-  body:
-    type: text_default
-    label: hidden
-    settings: {  }
+  abstract:
+    type: string
+    label: visually_hidden
+    settings:
+      link_to_entity: false
     third_party_settings: {  }
     weight: 2
     region: content
@@ -94,6 +99,30 @@ content:
       template_suggestion:
         template_suggestion: bare
     weight: 1
+    region: content
+  field_paragraphs_body:
+    type: filtered_entity_reference_bundles
+    label: hidden
+    settings:
+      view_mode: tile
+      link: ''
+      filtered_entity_bundles:
+        - simple_paragraph
+        - text
+    third_party_settings:
+      field_delimiter:
+        delimiter: ''
+      field_formatter_range:
+        order: 0
+        limit: 1
+        offset: 0
+      joinup_slick:
+        preset: ''
+        field_label: true
+        custom_label: ''
+      template_suggestion:
+        template_suggestion: ''
+    weight: 2
     region: content
   field_short_title:
     type: string
