@@ -6,8 +6,8 @@ Feature: Solution homepage
 
   Background:
     Given the following owner:
-      | name          | type                  |
-      | Kostas Agathe | Private Individual(s) |
+      | name          | type    |
+      | Kostas Agathe | Company |
     And the following contact:
       | name  | Placebo             |
       | email | Placebo@example.com |

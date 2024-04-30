@@ -9,7 +9,7 @@ Feature: Search inside groups
       | email | charalambos.katsumi@example.com |
       | name  | Charalambos Katsumi             |
     And the following owner:
-      | name              |
+      | name             |
       | Antonios Katsumi |
     And collection:
       | title               | Chalet construction |
@@ -17,7 +17,7 @@ Feature: Search inside groups
       | logo                | logo.png            |
       | moderation          | no                  |
       | topic               | Demography          |
-      | spatial coverage    | Switzerland         |
+      | spatial coverage    | Belgium             |
       | state               | published           |
       | owner               | Antonios Katsumi    |
       | contact information | Charalambos Katsumi |
@@ -41,8 +41,8 @@ Feature: Search inside groups
       | Presenting DrillMaster X88   | Our most finely ground drill bit  | published |                     | Inclined foundations |
     And news content:
       | title             | headline          | body            | collection          | solution             | topic                   | spatial coverage | state     |
-      | Natural materials | Materials natural | Ground feel     | Chalet construction |                      | Statistics and Analysis | Switzerland      | published |
-      | Still frozen      | Frozen still      | Maybe next week |                     | Inclined foundations |                         | Austria          | published |
+      | Natural materials | Materials natural | Ground feel     | Chalet construction |                      | Statistics and Analysis | Belgium          | published |
+      | Still frozen      | Frozen still      | Maybe next week |                     | Inclined foundations |                         | Greece          | published |
     And custom_page content:
       | title     | body                             | collection          | solution             | state     |
       | Resources | Here are some interesting links. | Chalet construction |                      | published |
