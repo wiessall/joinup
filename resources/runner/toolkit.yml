@@ -126,28 +126,6 @@ commands:
       command: drupal:site-install
       options:
         existing-config: null
-    # Prevent next command to do synchronization as this could lead to errors
-    # because not all dependencies are resolved in the proper order as some
-    # terms have circular dependencies.
-    - task: exec
-      command: ${drush.bin}
-      arguments:
-        - rdf_sync:disable
-    # Create locked vocabularies terms from RDF file fixtures.
-    - task: exec
-      command: ${drush.bin}
-      arguments:
-        - joinup:create-locked-vocabulary-terms
-    # Restore synchronization.
-    - task: exec
-      command: ${drush.bin}
-      arguments:
-        - rdf_sync:enable
-    # Synchronize terms to the RDF backend.
-    - task: exec
-      command: ${drush.bin}
-      arguments:
-        - joinup:sync-locked-vocabulary-terms
     - task: run
       command: dev:import-sparql-fixtures
     - task: run
