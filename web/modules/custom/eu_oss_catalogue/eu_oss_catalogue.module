@@ -158,7 +158,6 @@ function eu_oss_catalogue_cron(): void {
   // Save next node ID.
   $state->set('eu_oss_catalogue.vitality_index.last_nid', $lastProcessedNid);
 
-
   $state = \Drupal::state();
   $request_time = \Drupal::time()->getRequestTime();
   $last_check = $state->get('eu_oss_catalogue.last_check', 0);
