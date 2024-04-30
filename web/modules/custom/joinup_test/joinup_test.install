@@ -13,6 +13,8 @@ use Drupal\Component\Serialization\Yaml;
  * Implements hook_install().
  */
 function joinup_test_install($is_syncing): void {
+  $rdfSync = \Drupal::getContainer()->get('rdf_sync.synchronizer');
+
   // Create the testing taxonomy terms. Limitation: It creates terms with
   // maximum 2 level hierarchy.
   $hierarchy = Yaml::decode(file_get_contents(__DIR__ . '/fixtures/testing_terms.yml'));
@@ -35,6 +37,16 @@ function joinup_test_install($is_syncing): void {
         'name' => $data['name'],
         'weight' => $parentWeight,
       ]);
+      foreach (['uri', 'description', 'mime_type'] as $key) {
+        if (isset($data[$key])) {
+          $term->set($key, $data[$key]);
+        }
+      }
+
+      if (isset($data['eif_related_term'])) {
+        $related_term = \Drupal::getContainer()->get('rdf_sync.mapper')->getEntityByUri($data['eif_related_term']);
+        $term->set('field_eif_related_term', $related_term->id());
+      }
       $term->save();
       $parentTermId = $term->id();
       $termIds[] = $parentTermId;
@@ -46,8 +58,12 @@ function joinup_test_install($is_syncing): void {
           'weight' => $childWeight,
           'description' => $child['description'] ?? '',
         ]);
+        if (isset($child['uri'])) {
+          $term->set('uri', $child['uri']);
+        }
         $term->save();
         $termIds[] = $term->id();
+        $rdfSync->destruct();
       }
     }
   }
