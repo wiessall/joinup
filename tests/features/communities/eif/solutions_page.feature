@@ -74,7 +74,7 @@ Feature: As a user, visiting the EIF Toolbox page, I want to be able to filter
     And I fill in "Name" with "TikTok"
     And I fill in "E-mail address" with "where@example.com"
     And I select "E-health" from "Topic"
-    And I select "Networking Infrastructure Enablers" from "Solution type"
+    And I select "Logging Service" from "Solution type"
     And I press "Publish"
 
     When I go to "/collection/nifo-collection/solution/eif-toolbox/solutions"
