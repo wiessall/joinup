@@ -15,8 +15,11 @@ trait DecodeRdfEntityIdArgumentTrait {
    * {@inheritdoc}
    */
   public function setArgument($arg): bool {
-    $arg = UriEncoder::decodeUrl($arg);
-    return parent::setArgument($arg);
+    if ($arg) {
+      $arg = UriEncoder::decodeUrl($arg);
+      return parent::setArgument($arg);
+    }
+    return FALSE;
   }
 
 }
