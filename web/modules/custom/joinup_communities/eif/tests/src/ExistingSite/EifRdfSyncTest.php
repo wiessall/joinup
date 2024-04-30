@@ -28,12 +28,12 @@ class EifRdfSyncTest extends JoinupExistingSiteTestBase {
       'target' => $solution,
       'eif_description' => 'EIF perspective description',
       'eif_layer' => [
-        MappedTerm::loadByUri('http://data.europa.eu/IL4'),
-        MappedTerm::loadByUri('http://data.europa.eu/IL6'),
+        MappedTerm::loadByUri('http://data.europa.eu/IL1'),
+        MappedTerm::loadByUri('http://data.europa.eu/IL3'),
       ],
       'eif_model' => [
         MappedTerm::loadByUri('http://data.europa.eu/BC7'),
-        MappedTerm::loadByUri('http://data.europa.eu/BC3'),
+        MappedTerm::loadByUri('http://data.europa.eu/BC4'),
         MappedTerm::loadByUri('http://data.europa.eu/BC1'),
       ],
       'eif_principle' => [
@@ -46,7 +46,7 @@ class EifRdfSyncTest extends JoinupExistingSiteTestBase {
           'format' => 'basic_html',
         ],
         [
-          'target_id' => MappedTerm::loadByUri('http://data.europa.eu/Rec44')->id(),
+          'target_id' => MappedTerm::loadByUri('http://data.europa.eu/Rec21')->id(),
           'value' => 'Qualified recommendation 2',
           'format' => 'basic_html',
         ],

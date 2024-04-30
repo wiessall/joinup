@@ -204,6 +204,8 @@ eif_conceptual_model:
     description: 'The coordination function ensures that needs are identified and appropriate services are invoked and orchestrated to provide a European public service.'
   - name: 'Basic Component 4: Open data'
     uri: 'http://data.europa.eu/BC4'
+  - name: 'Basic Component 7: Security and privacy'
+    uri: 'http://data.europa.eu/BC7'
 eif_recommendation:
   - name: 'Recommendation 1'
     eif_related_term: 'http://data.europa.eu/UP1'
@@ -234,4 +236,4 @@ eif_recommendation:
     uri: 'http://data.europa.eu/Rec21'
 spdx_licence:
   - name: 'GNU General Public License v2.0 or later'
-    uri: http://spdx.org/licenses/GPL-2.0-or-later
+    uri: 'http://spdx.org/licenses/GPL-2.0-or-later'
