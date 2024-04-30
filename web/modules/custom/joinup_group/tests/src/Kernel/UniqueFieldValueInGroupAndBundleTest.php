@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Drupal\Tests\joinup_group\Kernel;
 
@@ -40,7 +40,6 @@ class UniqueFieldValueInGroupAndBundleTest extends KernelTestBase {
     'state_machine_revisions',
     'system',
     'unique_field_value_in_group_and_bundle_test',
-    'workflow_state_permission',
     'user',
   ];
 

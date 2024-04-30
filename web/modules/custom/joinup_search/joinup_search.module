@@ -5,7 +5,7 @@
  * Provides functionality for the Joinup search module.
  */
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 use Drupal\Component\Render\MarkupInterface;
 use Drupal\Component\Utility\Html;

@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Drupal\joinup_community_content\Entity;
 
@@ -12,6 +12,7 @@ use Drupal\joinup_core\Entity\OutdatedContentTrait;
 use Drupal\joinup_featured\FeaturedContentTrait;
 use Drupal\joinup_group\Entity\PinnableGroupContentTrait;
 use Drupal\joinup_group\Exception\MissingGroupException;
+use Drupal\joinup_group\GroupArchivableEntityTrait;
 use Drupal\joinup_publication_date\Entity\EntityPublicationTimeTrait;
 use Drupal\joinup_stats\Entity\VisitCountAwareInterface;
 use Drupal\joinup_stats\Entity\VisitCountAwareTrait;
@@ -36,6 +37,7 @@ abstract class CommunityContentBase extends Node implements CommunityContentInte
   use PinnableGroupContentTrait;
   use TopicReferencingEntityTrait;
   use VisitCountAwareTrait;
+  use GroupArchivableEntityTrait;
   use DescriptionTrait;
 
   /**

@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Drupal\Tests\joinup_core\Kernel\Mail;
 
@@ -51,7 +51,6 @@ abstract class JoinupMailKernelTestBase extends KernelTestBase {
     'message_notify',
     'joinup_workflow',
     'state_machine_revisions',
-    'workflow_state_permission',
 
     // Ventuno theme dependencies.
     'interoperable_europe',
@@ -83,7 +82,6 @@ abstract class JoinupMailKernelTestBase extends KernelTestBase {
       'message_notify',
       'joinup_workflow',
       'state_machine_revisions',
-      'workflow_state_permission',
       'rdf_entity',
       'sparql_entity_storage',
       'mailsystem',

@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Drupal\joinup_licence\Controller;
 
@@ -148,7 +148,7 @@ class LicenceComparerController extends ControllerBase {
    *   @endcode
    */
   protected function getLegalTypeStructure(): array {
-    /** @var \Drupal\rdf_taxonomy\TermRdfStorage $storage */
+    /** @var \Drupal\taxonomy\TermStorageInterface $storage */
     $storage = $this->entityTypeManager()->getStorage('taxonomy_term');
     $tree = $storage->loadTree('legal_type');
 

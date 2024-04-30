@@ -31,6 +31,7 @@ Feature: Asset distribution editing.
       | licence     | LGPL                       |
       | access url  | test.zip                   |
       | parent      | Asset release example      |
+      | state       | published                  |
     And the following solution user membership:
       | solution   | user         | roles       |
       | Solution A | Gregg Hill   | owner       |
@@ -73,7 +74,7 @@ Feature: Asset distribution editing.
     # Set a non-HTTP protocol remote URL.
     And I press "Remove"
     And I set a remote URL "ftp://example.com/file.txt" to "Access URL"
-    And I press "Save"
+    And I press "Update"
     Then I should see the heading "Asset distribution example revised"
     And the following email should have been sent:
       | recipient | Gregg Hill                                                                                                                                          |

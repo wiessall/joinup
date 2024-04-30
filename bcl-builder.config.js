@@ -193,6 +193,28 @@ module.exports = {
         sourceMap: true,
       },
     },
+    {
+      entry: path.resolve(outputFolder, `${ventuno}src/js/og-navigation.js`),
+      dest: path.resolve(outputFolder, `${ventuno}assets/js/og-navigation.js`),
+      options: {
+        minify: true,
+        sourceMap: true,
+      },
+    },
+    {
+      entry: path.resolve(
+        outputFolder,
+        `${ventuno}src/js/sticky-groupheader.js`
+      ),
+      dest: path.resolve(
+        outputFolder,
+        `${ventuno}assets/js/sticky-groupheader.js`
+      ),
+      options: {
+        minify: true,
+        sourceMap: true,
+      },
+    },
     // IOP
     {
       entry: path.resolve(outputFolder, `${iop}src/js/glide.js`),
@@ -240,6 +262,19 @@ module.exports = {
         includePaths,
         minify: true,
         sourceMap: "file",
+      },
+    },
+    // Emails
+    {
+      entry: path.resolve(outputFolder, `${ventuno}src/scss/emails/mail.scss`),
+      dest: path.resolve(
+        outputFolder,
+        `${ventuno}assets/css/emails/mail.min.css`
+      ),
+      options: {
+        includePaths,
+        minify: true,
+        sourceMap: false,
       },
     },
     // Theme (SMACSS)
@@ -337,6 +372,15 @@ module.exports = {
         sourceMap: "file",
       },
     },
+    {
+      entry: path.resolve(outputFolder, `${ventuno}src/scss/pages/group.scss`),
+      dest: path.resolve(outputFolder, `${ventuno}assets/css/group.min.css`),
+      options: {
+        includePaths,
+        minify: true,
+        sourceMap: "file",
+      },
+    },
     // Components
     {
       entry: path.resolve(
@@ -386,6 +430,21 @@ module.exports = {
         `${ventuno}src/scss/components/alert.scss`
       ),
       dest: path.resolve(outputFolder, `${ventuno}assets/css/alert.min.css`),
+      options: {
+        includePaths,
+        minify: true,
+        sourceMap: "file",
+      },
+    },
+    {
+      entry: path.resolve(
+        outputFolder,
+        `${ventuno}src/scss/modules/align-module.scss`
+      ),
+      dest: path.resolve(
+        outputFolder,
+        `${ventuno}assets/css/align-module.min.css`
+      ),
       options: {
         includePaths,
         minify: true,
@@ -464,6 +523,21 @@ module.exports = {
         `${ventuno}src/scss/components/etrans.scss`
       ),
       dest: path.resolve(outputFolder, `${ventuno}assets/css/etrans.min.css`),
+      options: {
+        includePaths,
+        minify: true,
+        sourceMap: "file",
+      },
+    },
+    {
+      entry: path.resolve(
+        outputFolder,
+        `${ventuno}src/scss/components/ajax-throbber.scss`
+      ),
+      dest: path.resolve(
+        outputFolder,
+        `${ventuno}assets/css/ajax-throbber.min.css`
+      ),
       options: {
         includePaths,
         minify: true,
@@ -767,6 +841,36 @@ module.exports = {
     {
       entry: path.resolve(
         outputFolder,
+        `${ventuno}src/scss/components/image-gallery.scss`
+      ),
+      dest: path.resolve(
+        outputFolder,
+        `${ventuno}assets/css/image-gallery.min.css`
+      ),
+      options: {
+        includePaths,
+        minify: true,
+        sourceMap: "file",
+      },
+    },
+    {
+      entry: path.resolve(
+        outputFolder,
+        `${ventuno}src/scss/components/oss-solution-indicator.scss`
+      ),
+      dest: path.resolve(
+        outputFolder,
+        `${ventuno}assets/css/oss-solution-indicator.min.css`
+      ),
+      options: {
+        includePaths,
+        minify: true,
+        sourceMap: "file",
+      },
+    },
+    {
+      entry: path.resolve(
+        outputFolder,
         `${ventuno}src/scss/components/oss-solution-screenshots-carousel.scss`
       ),
       dest: path.resolve(
@@ -905,6 +1009,18 @@ module.exports = {
         outputFolder,
         `${ventuno}assets/css/share-content-form.min.css`
       ),
+      options: {
+        includePaths,
+        minify: true,
+        sourceMap: "file",
+      },
+    },
+    {
+      entry: path.resolve(
+        outputFolder,
+        `${ventuno}src/scss/components/see-more.scss`
+      ),
+      dest: path.resolve(outputFolder, `${ventuno}assets/css/see-more.min.css`),
       options: {
         includePaths,
         minify: true,
@@ -1341,6 +1457,14 @@ module.exports = {
       to: path.resolve(outputFolder, `${iop}assets/css`),
       options: { up: true },
     },
+    {
+      from: [
+        path.resolve(nodeModules, "priority-plus/dist/priority-plus.js"),
+        path.resolve(nodeModules, "priority-plus/dist/priority-plus.css"),
+      ],
+      to: path.resolve(outputFolder, `${ventuno}assets/lib/priority-plus`),
+      options: { up: true },
+    },
   ],
   sprite: [
     {
@@ -1349,11 +1473,14 @@ module.exports = {
       options: {
         file: "icons.svg",
         list: [
+          "archive.svg",
           "archive-fill.svg",
           "arrow-left.svg",
           "arrow-repeat.svg",
           "arrow-right.svg",
           "award.svg",
+          "bookmark.svg",
+          "bookmark-check-fill.svg",
           "box-arrow-up-right.svg",
           "calendar.svg",
           "calendar-event.svg",

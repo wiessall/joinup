@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Drupal\joinup\Context;
 
@@ -28,6 +28,7 @@ use Drupal\joinup\Traits\KeyboardInteractionTrait;
 use Drupal\joinup\Traits\OgTrait;
 use Drupal\joinup\Traits\TabledragTrait;
 use Drupal\joinup\Traits\TestingEntitiesTrait;
+use Drupal\joinup\Traits\TopicTrait;
 use Drupal\joinup\Traits\TraversingTrait;
 use Drupal\joinup\Traits\UserTrait;
 use Drupal\joinup\Traits\UtilityTrait;
@@ -36,16 +37,17 @@ use Drupal\joinup_community_content\CommunityContentHelper;
 use Drupal\joinup_group\Entity\GroupContentInterface;
 use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\joinup_group\Entity\PinnableGroupContentInterface;
+use Drupal\joinup_workflow\EntityWorkflowStateInterface;
 use Drupal\meta_entity\Entity\MetaEntity;
+use Drupal\meta_entity\Entity\MetaEntityInterface;
 use Drupal\node\Entity\Node;
 use Drupal\og\OgGroupAudienceHelperInterface;
 use Drupal\og\OgRoleInterface;
 use Drupal\paragraphs\Entity\Paragraph;
+use Drupal\rdf_sync\RdfSyncConnection;
 use GuzzleHttp\Client;
 use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\ExpectationFailedException;
-use WebDriver\Exception\NoSuchElement;
-use WebDriver\Exception\StaleElementReference;
 
 /**
  * Behat step definitions that are generally useful for the Joinup project.
@@ -63,6 +65,7 @@ class JoinupContext extends RawDrupalContext {
   use StringTranslationTrait;
   use TabledragTrait;
   use TestingEntitiesTrait;
+  use TopicTrait;
   use TraversingTrait;
   use UserTrait;
   use UtilityTrait;
@@ -398,17 +401,49 @@ class JoinupContext extends RawDrupalContext {
    */
   public function assertSelectOptions($select, $options) {
     $field = $this->findSelect($select);
-    $available_options = array_map(function (array $option): string {
+    $availableOptions = array_map(function (array $option): string {
       return $option['text'];
     }, $this->getSelectOptions($field));
-    sort($available_options);
+    sort($availableOptions);
 
     $options = $this->explodeCommaSeparatedStepArgument($options);
     sort($options);
 
     // The PHPUnit assertion will allow to understand easily which values are
     // missing and which one are extra.
-    Assert::assertEquals($options, $available_options, "The '{$select}' select options don't match the wanted ones.");
+    Assert::assertEquals($options, $availableOptions, "The '$select' select options don't match the wanted ones.");
+  }
+
+  /**
+   * Asserts the available checkboxes options of a field.
+   *
+   * @param string $field
+   *   The name of the field element.
+   * @param \Behat\Gherkin\Node\TableNode $options
+   *   The available list of options.
+   *
+   * @Then the :field checkboxes should contain the following options:
+   */
+  public function assertCheckboxesFieldOptions(string $field, TableNode $options): void {
+    // We are looking for a field with the class 'field--widget-options-buttons'
+    // that contains a fieldset and a legend with the $field as span.
+    $xpath = "//fieldset[legend/span[text()='$field']]";
+    $field = $this->getSession()->getPage()->find('xpath', $xpath);
+    if (!$field) {
+      throw new \Exception("The field '$field' was not found.");
+    }
+
+    // Get the checkboxes.
+    $checkboxes = $field->findAll('css', 'input[type="checkbox"]');
+    $checkboxLabels = array_map(function (NodeElement $checkbox): string {
+      return $checkbox->getParent()->getText();
+    }, $checkboxes);
+
+    $expectedOptions = $options->getColumn(0);
+    sort($expectedOptions);
+    sort($checkboxLabels);
+
+    Assert::assertEquals($expectedOptions, $checkboxLabels);
   }
 
   /**
@@ -423,12 +458,12 @@ class JoinupContext extends RawDrupalContext {
    */
   public function assertSelectOptionNotAvailable($select, $options) {
     $field = $this->findSelect($select);
-    $available_options = array_map(function (array $option): string {
+    $availableOptions = array_map(function (array $option): string {
       return $option['text'];
     }, $this->getSelectOptions($field));
     $options = $this->explodeCommaSeparatedStepArgument($options);
 
-    Assert::assertEmpty(array_intersect($available_options, $options), "The '{$select}' select options include at least one of the given values.");
+    Assert::assertEmpty(array_intersect($availableOptions, $options), "The '$select' select options include at least one of the given values.");
   }
 
   /**
@@ -443,11 +478,11 @@ class JoinupContext extends RawDrupalContext {
    */
   public function assertSelectContainsOptgroups($select, $optgroups) {
     $field = $this->findSelect($select);
-    $available_optgroups = array_values($this->getSelectOptgroups($field));
+    $availableOptgroups = array_values($this->getSelectOptgroups($field));
     $options = $this->explodeCommaSeparatedStepArgument($optgroups);
 
     foreach ($options as $option) {
-      Assert::assertContains($option, $available_optgroups, "The '{$select}' select doesn't contain the option '{$option}''.", TRUE);
+      Assert::assertContains($option, $availableOptgroups, "The '$select' select doesn't contain the option '$option''.", TRUE);
     }
   }
 
@@ -743,6 +778,14 @@ class JoinupContext extends RawDrupalContext {
       $node->{"field_paragraphs_body:target_id"} = $paragraph->id();
       $node->{"field_paragraphs_body:target_revision_id"} = $paragraph->getRevisionId();
       unset($node->field_paragraphs_body);
+    }
+
+    $field_definitions = \Drupal::service('entity_field.manager')->getFieldDefinitions('node', $node->type);
+    if (!empty($field_definitions['field_topic']) && empty($node->field_topic)) {
+      // For some tests, the node's topic has no relevance. Such tests are
+      // allowed to omit an explicit topic. We're assigning a random topic term,
+      // to satisfy data integrity and prevent form validation errors.
+      $node->field_topic = $this->getRandomTopic()->label();
     }
   }
 
@@ -1067,6 +1110,45 @@ class JoinupContext extends RawDrupalContext {
     $node = $this->getEntityByLabel('node', $title, $type);
     $actual = $node->getWorkflowState();
     Assert::assertEquals($state, $actual, "The $title $type content has the expected state '$state' (actual: '$actual')");
+  }
+
+  /**
+   * Checks the current workflow state on the given entity.
+   *
+   * @param string $label
+   *   The label of the entity.
+   * @param string $type
+   *   The entity type ID of the entity.
+   * @param string $stateExpected
+   *   The expected workflow state's label.
+   *
+   * @Given the workflow state of the :label :type should be :stateExpected
+   */
+  public function assertEntityWorkflowState(string $label, string $type, string $stateExpected): void {
+    $mapping = [
+      'content' => 'node',
+      'rdf entity' => 'rdf_entity',
+    ];
+    $entityTypeId = $mapping[$type] ?? $type;
+    $entity = $this->getEntityByLabel($entityTypeId, $label);
+    Assert::assertInstanceOf(
+      EntityWorkflowStateInterface::class,
+      $entity,
+      "The entity doesn't seem to have any workflow."
+    );
+    // State might be a label or a machine name.
+    $stateIdExpected = static::translateWorkflowStateAlias($stateExpected);
+    Assert::assertSame(
+      $stateIdExpected,
+      $actual = $entity->getWorkflowState(),
+      sprintf(
+        "Workflow state of '%s' '%s' is different than expected. Expected state is '%s', while the actual one is '%s'.",
+        $label,
+        $type,
+        $stateIdExpected,
+        $actual,
+      )
+    );
   }
 
   /**
@@ -1659,23 +1741,30 @@ class JoinupContext extends RawDrupalContext {
   }
 
   /**
-   * Asserts that the current url is the same as the parameter.
+   * Asserts that the current URL is the same as the parameter.
    *
    * The difference with the steps "Then I should be on" and "Then the url
    * should match" is that the later two strip off the query string and keep
    * only the path to compare.
    *
-   * @When the( current) relative url should be :url
+   * @param string $method
+   *   Options: 'be' for strict comparison, 'match' for regexp check.
+   * @param string $url
+   *   The URL to be checked.
+   *
+   * @Then the( current) relative url should :method :url
    */
-  public function relativeUrlMatches($url) {
+  public function relativeUrlMatches(string $method, string $url): void {
+    \assert(in_array($method, ['be', 'match'], TRUE));
+
+    $url = str_replace('\\"', '"', $url);
     $current_url = $this->getSession()->getCurrentUrl();
     $current_url = str_replace($this->getMinkParameter('base_url'), '', $current_url);
-    if ($current_url !== $url) {
-      $message = $this->t('Url "@current" does not match expected "@expected".', [
-        '@current' => $current_url,
-        '@expected' => $url,
-      ]);
-      throw new \Exception((string) $message);
+
+    $failed = ($method === 'be' && $current_url !== $url) || ($method === 'match' && !preg_match($url, $current_url));
+
+    if ($failed) {
+      throw new ExpectationFailedException("Url $current_url does not match expected $url.");
     }
   }
 
@@ -1966,6 +2055,10 @@ class JoinupContext extends RawDrupalContext {
       }
 
       $this->dispatchHooks('BeforeNodeCreateScope', $fake_node);
+      // Correction to topic field.
+      if (!empty($fake_node->field_topic) && ($topic = $this->getEntityByLabel('taxonomy_term', $fake_node->field_topic, 'topic'))) {
+        $fake_node->field_topic = $topic->id();
+      }
       $this->parseEntityFields('node', $fake_node);
       // Remove the type property as we cannot change that.
       unset($fake_node->type);
@@ -1975,7 +2068,7 @@ class JoinupContext extends RawDrupalContext {
       if (isset($fake_node->author)) {
         $user = user_load_by_name($fake_node->author);
         if ($user) {
-          $node->uid = $user->id();
+          $node->set('uid', $user->id());
         }
         unset($fake_node->author);
       }
@@ -2010,29 +2103,31 @@ class JoinupContext extends RawDrupalContext {
   }
 
   /**
-   * Waits until CSS transitions and animations finish.
+   * Waits until Glide animations finish.
    *
    * @param string $seconds
    *   Number of seconds to wait.
    *
-   * @throws \Exception
-   *   Thrown when the element doesn't become visible within the given time.
-   *
-   * @Then I wait up to :seconds seconds for CSS transitions to finish
+   * @Then I wait up to :seconds seconds for Glide animations to finish
    */
-  public function waitForCssAnimations(string $seconds): void {
-    $script = <<<JS
-    (function() {
-      return document.getAnimations({}).length < 1;
-    }());
-JS;
-    $res = $this->getSession()->wait(1000 * $seconds, $script);
-    if (!$res) {
-      throw new \Exception(sprintf(
-        "An element on the page has unfinished CSS transition after '%s' seconds.",
-        $seconds
-      ));
-    }
+  public function waitForGlideAnimations(string $seconds): void {
+    $this->assertWaitJs($seconds, '(function() {
+        return typeof jQuery === "undefined" || jQuery("glide--slider.glide-animating").length === 0;
+    }())');
+  }
+
+  /**
+   * Waits until Slick animations finish.
+   *
+   * @param string $seconds
+   *   Number of seconds to wait.
+   *
+   * @Then I wait up to :seconds seconds for Slick animations to finish
+   */
+  public function waitForSlickAnimations(string $seconds): void {
+    $this->assertWaitJs($seconds, '(function() {
+        return typeof jQuery === "undefined" || jQuery("[data-slick].slick-animating").length === 0;
+    }())');
   }
 
   /**
@@ -2066,18 +2161,7 @@ JS;
    * @Then a modal should/will open
    */
   public function waitForDrupalModalToOpen(): void {
-    // A modal can be opened only in a JavaScript-enabled browser.
-    self::assertJavaScriptEnabledBrowser();
-
-    $result = $this->getSession()->getPage()->waitFor(5, function (): bool {
-      // Retrieve again a fresh copy of the page element at each cycle.
-      $modal = $this->getSession()->getPage()->find('css', '.ui-dialog-content');
-      return $modal && $modal->isVisible();
-    });
-
-    if (!$result) {
-      throw new \Exception('The modal did not open.');
-    }
+    self::assertModalToOpen();
   }
 
   /**
@@ -2088,32 +2172,8 @@ JS;
    *
    * @Then the modal should be closed
    */
-  public function waitForDrupalModalToClose() {
-    // A modal can be opened only in a JavaScript-enabled browser.
-    self::assertJavaScriptEnabledBrowser();
-
-    $result = $this->getSession()->getPage()->waitFor(5, function () {
-      try {
-        // Normally the modal should be completely removed from the DOM,
-        // but sometimes the markup is kept in the DOM as hidden.
-        // @see Drupal.AjaxCommands.prototype.closeDialog()
-        return !$this->getSession()->getDriver()->isVisible('//*[@id = "drupal-modal"]');
-      }
-      catch (NoSuchElement $e) {
-        // The modal has been completely removed from the DOM.
-        return TRUE;
-      }
-      catch (StaleElementReference $e) {
-        // The element went stale in the time between fetching it and actually
-        // checking its visibility. The next check should launch a NoSuchElement
-        // exception.
-        return FALSE;
-      }
-    });
-
-    if (!$result) {
-      throw new \Exception('The modal did not close.');
-    }
+  public function waitForDrupalModalToClose(): void {
+    self::assertModalToClose();
   }
 
   /**
@@ -2684,12 +2744,17 @@ JS;
    *
    * @param \Behat\Gherkin\Node\TableNode $table
    *   The menu data.
+   * @param string $group_label
+   *   The group label.
+   * @param string $group_bundle
+   *   The group bundle.
    *
-   * @Then the draggable menu table should be:
+   * @Then the draggable menu table of the :group_label :group_type should be:
    */
-  public function assertDraggableMenuTable(TableNode $table) {
+  public function assertDraggableMenuTable(TableNode $table, string $group_label, string $group_bundle): void {
     self::assertJavaScriptEnabledBrowser();
 
+    $group = $this->getEntityByLabel('rdf_entity', $group_label, $group_bundle);
     /** @var \Behat\Mink\Element\NodeElement[] $rows */
     $rows = $this->getSession()->getPage()->findAll('css', '#menu-overview tbody tr.draggable');
     $expected = $table->getColumnsHash();
@@ -2700,23 +2765,25 @@ JS;
       $title_element = $current_row->find('css', 'td:first-of-type a:not(.tabledrag-handle)');
       Assert::assertEquals($data['title'], trim($title_element->getText()));
 
-      $menu_link = $this->getMenuLinkByTitle($data['title']);
+      $menu_link = $this->getMenuLinkByTitle($data['title'], $group->id(), 'navigation');
       $parent_input = $current_row->find('css', 'input[name="links[menu_plugin_id:' . $menu_link->getPluginId() . '][parent]"]');
-
-      if (!$parent_input) {
-        throw new \Exception('Cannot find parent input field.');
-      }
 
       // When a parent is available, the line should be indented. Find all
       // indentation elements to assert later on based on the parent value.
       $indentation = $current_row->findAll('css', 'div.indentation');
 
       if (!isset($data['parent']) || $data['parent'] === '') {
-        Assert::assertEmpty($parent_input->getValue());
+        if (!empty($parent_input)) {
+          Assert::assertEmpty($parent_input->getValue());
+        }
         Assert::assertCount(0, $indentation, "The menu link '{$data['title']}' should not be indented but it is.");
       }
       else {
-        $parent_link = $this->getMenuLinkByTitle($data['parent']);
+        if (!$parent_input) {
+          throw new \Exception('Cannot find parent input field.');
+        }
+
+        $parent_link = $this->getMenuLinkByTitle($data['parent'], $group->id(), 'navigation');
         Assert::assertEquals($parent_link->getPluginId(), $parent_input->getValue());
         Assert::assertNotCount(0, $indentation, "The menu link '{$data['title']}' should be indented but it's not.");
       }
@@ -3232,6 +3299,90 @@ JS;
       throw new \Exception("Either the dialog is not available or the 'Close' button could not be located.");
     }
     $button->press();
+  }
+
+  /**
+   * Cleans up the environment after a curated homepage topics scenarios.
+   *
+   * These scenarios are altering the topic term meta entities. We need to reset
+   * them after each run.
+   *
+   * @afterScenario @topic&&@api
+   */
+  public function resetTopicMetaEntity(): void {
+    // Remove any entity queue related to homepage topics.
+    \Drupal::entityTypeManager()->getStorage('entity_subqueue')
+      ->load('homepage_topics')
+      ->clearItems()
+      ->save();
+
+    $meta_entity_storage = \Drupal::entityTypeManager()->getStorage('meta_entity');
+    $ids = $meta_entity_storage->getQuery()->accessCheck(FALSE)
+      ->condition('type', 'topic')
+      ->condition('published', TRUE)
+      ->execute();
+
+    // Recreate topic terms corresponding meta entities.
+    if ($ids) {
+      /** @var \Drupal\meta_entity\Entity\MetaEntityInterface[] $meta_entities */
+      $meta_entities = $meta_entity_storage->loadMultiple($ids);
+      $tids = array_map(fn(MetaEntityInterface $meta_entity) => $meta_entity->getTargetEntity()->id(), $meta_entities);
+      $meta_entity_storage->delete($meta_entities);
+      foreach ($tids as $tid) {
+        $meta_entity_storage->create([
+          'type' => 'topic',
+          'target' => [
+            'target_type' => 'taxonomy_term',
+            'target_id' => $tid,
+          ],
+        ])->save();
+      }
+    }
+  }
+
+  /**
+   * Visits an entity canonical page given its RDF resource (URI).
+   *
+   * @param string $uri
+   *   The entity RDF URI.
+   *
+   * @throws \InvalidArgumentException
+   *   When for the passed URI no entity can be found.
+   *
+   * @Given I visit the page of the entity having :uri as RDF resource
+   */
+  public function visitEntityCanonicalPagePageByRdfUri(string $uri): void {
+    if (!$entity = \Drupal::getContainer()->get('rdf_sync.mapper')->getEntityByUri($uri)) {
+      throw new \InvalidArgumentException("No entity found for URI $uri");
+    }
+    $this->visitPath($entity->toUrl()->toString());
+  }
+
+  /**
+   * Asserts that a list of triples exists in a certain graph.
+   *
+   * Each row is a triple serialized as NTriples:
+   * | <http://subject1> <http://predicate1> <http://reference1>  |
+   * | <http://subject1> <http://predicate2> "value1"@en          |
+   * | <http://subject2> <http://predicate3> "value2"^^xsd:string |
+   *
+   * @param string $graph
+   *   The graph to be queried.
+   * @param \Behat\Gherkin\Node\TableNode $triples
+   *   The user data.
+   *
+   * @Then the following :graph graph triples should exist in the RDF backend:
+   */
+  public function assertTriples(string $graph, TableNode $triples): void {
+    $failedTriples = [];
+    foreach ($triples->getRows() as [$triple]) {
+      if (!RdfSyncConnection::query("ASK WHERE { GRAPH <$graph> { $triple } }")->getBoolean()) {
+        $failedTriples[] = $triple;
+      }
+    }
+    if ($failedTriples) {
+      throw new ExpectationFailedException(sprintf("Triple(s) %s doesn't exists in the RDF backend", implode(', ', $failedTriples)));
+    }
   }
 
 }

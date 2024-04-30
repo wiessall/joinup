@@ -1,17 +1,18 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Drupal\eu_oss_catalogue\Plugin\eu_oss_catalogue\Provider;
 
 use Drupal\Component\Plugin\ConfigurableInterface;
-use Drupal\Core\Config\Schema\SchemaCheckTrait;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Logger\LoggerChannelInterface;
 use Drupal\eu_oss_catalogue\Entity\HostingPlatformConfigInterface;
 use Drupal\eu_oss_catalogue\EuOssCatalogueHostingPlatformInterface;
 use Drupal\eu_oss_catalogue\EuOssCataloguePluginManagerInterface;
 use Drupal\eu_oss_catalogue\EuOssCatalogueProviderPluginBase;
+use Drupal\eu_oss_catalogue\Exception\HostingPlatformFetchException;
+use Drupal\eu_oss_catalogue\Exception\ProviderFetchException;
 use Drupal\eu_oss_catalogue\Model\Project;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -28,10 +29,6 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * )
  */
 class HostingPlatform extends EuOssCatalogueProviderPluginBase implements ConfigurableInterface {
-
-  use SchemaCheckTrait {
-    checkValue as traitCheckValue;
-  }
 
   /**
    * The entity that is configuring this plugin instance.
@@ -106,11 +103,20 @@ class HostingPlatform extends EuOssCatalogueProviderPluginBase implements Config
     }
 
     $requestedFiles = ['publiccodeYml' => 'publiccode.yml'];
-    foreach ($this->getPlatform()->getProjects($requestedFiles) as $project) {
-      \assert($project instanceof Project);
-      if (array_key_exists('publiccodeYml', $project->files)) {
-        yield $project;
+    try {
+      foreach ($this->getPlatform()->getProjects($requestedFiles) as $project) {
+        \assert($project instanceof Project);
+        if (array_key_exists('publiccodeYml', $project->files)) {
+          yield $project;
+        }
       }
+    }
+    catch (HostingPlatformFetchException $exception) {
+      throw new ProviderFetchException(
+        $exception->getMessage(),
+        0,
+         $exception->getPrevious()
+      );
     }
 
     $this->done = TRUE;

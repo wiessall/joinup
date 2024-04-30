@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Drupal\joinup\Context;
 
@@ -235,6 +235,7 @@ class AssetDistributionContext extends RawDrupalContext {
       'modification date' => 'changed',
       'representation technique' => 'field_ad_repr_technique',
       'parent' => 'parent',
+      'state' => 'field_ad_state',
       'status' => 'field_status',
       'title' => 'label',
       'uri' => 'id',
@@ -323,6 +324,15 @@ class AssetDistributionContext extends RawDrupalContext {
       throw new \Exception("File '$file_name' was not found in file path '$files_path'.");
     }
 
+    /** @var \Symfony\Component\Mime\MimeTypesInterface $mime_guesser */
+    $mime_guesser = \Drupal::service('file.mime_type.guesser');
+    $mime_type = $mime_guesser->guessMimeType($path);
+    /** @var \Drupal\taxonomy\TermInterface $file_type */
+    $file_type = $distribution->get('field_ad_format')->entity;
+    // Test the file format.
+    if ($file_type->get('mime_type')->value !== $mime_type) {
+      throw new \Exception("File '$file_name' has the format '{$file_type->get('mime_type')->value}'. Expected '$mime_type'.");
+    }
     $expected_file_size = filesize($path);
 
     // Test the file size.

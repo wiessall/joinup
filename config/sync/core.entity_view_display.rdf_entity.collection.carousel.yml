@@ -29,7 +29,6 @@ dependencies:
     - layout_builder
     - responsive_image
     - template_suggestion
-    - text
     - user
 third_party_settings:
   field_group:
@@ -63,10 +62,13 @@ bundle: collection
 mode: carousel
 content:
   field_ar_abstract:
-    type: text_default
+    type: string
     label: hidden
-    settings: {  }
-    third_party_settings: {  }
+    settings:
+      link_to_entity: false
+    third_party_settings:
+      template_suggestion:
+        template_suggestion: ''
     weight: 2
     region: content
   field_ar_logo:

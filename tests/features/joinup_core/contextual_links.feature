@@ -4,7 +4,6 @@ Feature:
   in order to better manage all content
   I need to be able to access operations directly through the contextual links.
 
-  @terms
   Scenario: Revisions link availability.
     Given collection:
       | title | Revisions collection |
@@ -53,7 +52,6 @@ Feature:
 
     When I am logged in as a user with the "moderator" role
     And I go to the "Share solution" solution
-    And I click "About"
     Then I should see the contextual link "Share"
 
     And I visit the collection overview

@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Drupal\eu_oss_catalogue\Entity;
 
@@ -39,6 +39,14 @@ interface OssSolutionInterface extends NodeInterface {
    *   The language code of the richest translation.
    */
   public function getRelevantLangCode(): string;
+
+  /**
+   * Checks whether the entity is archived.
+   *
+   * @return bool
+   *   Whether this entity is archived.
+   */
+  public function isArchived(): bool;
 
   /**
    * Returns the repository URL.

@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Drupal\joinup_modal\Controller;
 
@@ -30,8 +30,7 @@ class JoinupModalAnonymousController extends ControllerBase {
       'query' => $this->getDestinationArray(),
     ]);
     return [
-      '#theme' => 'joinup_modal_anonymous',
-      '#type' => $type,
+      '#theme' => "joinup_modal_anonymous__$type",
       '#title' => $this->t('You are not signed in'),
       '#login' => new Link('Sign in', $login),
       // Replicate logic of "Create an account" from navigation, it points

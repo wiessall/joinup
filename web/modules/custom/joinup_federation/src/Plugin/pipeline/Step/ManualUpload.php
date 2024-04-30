@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Drupal\joinup_federation\Plugin\pipeline\Step;
 
@@ -92,7 +92,7 @@ class ManualUpload extends JoinupFederationStepPluginBase implements PipelineSte
         '@extensions' => '*.rdf, *.ttl',
       ]),
       '#upload_validators'  => [
-        'file_validate_extensions' => ['rdf ttl xml'],
+        'FileExtension' => ['extensions' => 'rdf ttl xml'],
       ],
       '#required' => TRUE,
     ];

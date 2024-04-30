@@ -5,7 +5,7 @@
  * Contains hooks regarding the solution rdf entity bundle.
  */
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Cache\Cache;
@@ -17,13 +17,18 @@ use Drupal\Core\Field\BaseFieldDefinition;
 use Drupal\Core\Field\FieldStorageDefinitionInterface;
 use Drupal\Core\Form\FormBuilderInterface;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Render\Element;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Url;
+use Drupal\joinup_rdf\Entity\RdfSyncEntityInterface;
+use Drupal\joinup_taxonomy\Entity\MappedTerm;
 use Drupal\meta_entity\Entity\MetaEntity;
 use Drupal\og\Entity\OgRole;
 use Drupal\og\Og;
+use Drupal\og\OgMembershipInterface;
 use Drupal\og\OgRoleInterface;
 use Drupal\rdf_entity\Entity\Rdf;
+use Drupal\rdf_entity\Entity\RdfEntityType;
 use Drupal\rdf_entity\RdfInterface;
 use Drupal\solution\Entity\Solution;
 use Drupal\solution\Entity\SolutionInterface;
@@ -32,28 +37,6 @@ use Drupal\solution\SolutionLatestReleasesFieldItemList;
 use Drupal\solution\SolutionReleasesAndDistributionsFieldItemList;
 use Drupal\sparql_entity_storage\SparqlGraphInterface;
 use Drupal\user\Entity\User;
-
-/**
- * Implements hook_entity_access().
- */
-function solution_entity_access(EntityInterface $entity, $operation, AccountInterface $account) {
-  if (!$entity instanceof SolutionInterface || $account->isAnonymous() || $operation != 'view') {
-    return AccessResult::neutral();
-  }
-
-  $membership = $entity->getMembership((int) $account->id());
-  if (empty($membership)) {
-    return AccessResult::neutral();
-  }
-  if (!$entity->isPublished() && $membership->hasPermission('view unpublished rdf entity')) {
-    return AccessResult::allowed();
-  }
-  if ($entity->isPublished() && $membership->hasPermission('view rdf entity')) {
-    return AccessResult::allowed();
-  }
-
-  return AccessResult::neutral();
-}
 
 /**
  * Implements hook_entity_bundle_field_info_alter().
@@ -116,6 +99,13 @@ function solution_entity_bundle_field_info_alter(&$fields, EntityTypeInterface $
 function solution_entity_bundle_info_alter(&$bundles) {
   if (!empty($bundles['rdf_entity']['solution'])) {
     $bundles['rdf_entity']['solution']['class'] = Solution::class;
+  }
+
+  $vids = ['eira', 'language', 'solution_category', 'status'];
+  foreach ($vids as $vid) {
+    if (!empty($bundles['taxonomy_term'][$vid])) {
+      $bundles['taxonomy_term'][$vid]['class'] = MappedTerm::class;
+    }
   }
 }
 
@@ -191,7 +181,7 @@ function solution_rdf_entity_access(EntityInterface $entity, $operation, Account
     return AccessResult::neutral();
   }
 
-  if ($operation == 'edit') {
+  if ($operation == 'update') {
     /** @var \Drupal\joinup_workflow\WorkflowHelperInterface $workflow_helper */
     $workflow_helper = \Drupal::service('joinup_workflow.workflow_helper');
     $allowed_transitions = $workflow_helper->getAvailableTransitions($entity, $account);
@@ -209,45 +199,53 @@ function solution_rdf_entity_access(EntityInterface $entity, $operation, Account
 function solution_entity_extra_field_info(): array {
   $fields = [];
 
-  $display = &$fields['rdf_entity']['solution']['display'];
-  // Append some additional fields to the solution entity display containing
-  // related information.
-  // @see solution_rdf_entity_view()
-  $display['releases_overview'] = [
-    'label' => t('Releases overview'),
-    'description' => t('A link to the releases overview page.'),
-    'visible' => FALSE,
-  ];
-  $display['related_solutions'] = [
-    'label' => t('Related solutions: explicit + EIRA'),
-    'description' => t('Solutions either explicitly or referenced through EIRA.'),
-    'visible' => FALSE,
-  ];
-  $display['download_total'] = [
-    'label' => t('Total distribution downloads'),
-    'description' => t('The total downloads of all distributions in this collection.'),
-    'visible' => FALSE,
-  ];
-  $display['collections'] = [
-    'label' => t('Collections'),
-    'description' => t('The collections this solution is affiliated to.'),
-    'visible' => FALSE,
-  ];
-  $display['read_more'] = [
-    'label' => t('Read more'),
-    'description' => t('Shows a link to the about page of the solution.'),
-    'visible' => FALSE,
-  ];
-  $display['share_link'] = [
-    'label' => t('Share'),
-    'description' => t('A link to share the content'),
-    'visible' => FALSE,
-  ];
-  $display['solution_subscribe'] = [
-    'label' => t('Subscribe to this Solution'),
-    'description' => t('Subscribes the user to the solution.'),
-    'visible' => FALSE,
-  ];
+  $solution = RdfEntityType::load('solution');
+  if ($solution) {
+    $display = &$fields['rdf_entity'][$solution->id()]['display'];
+    // Append some additional fields to the solution entity display containing
+    // related information.
+    // @see solution_rdf_entity_view()
+    $display['releases_overview'] = [
+      'label' => t('Releases overview'),
+      'description' => t('A link to the releases overview page.'),
+      'visible' => FALSE,
+    ];
+    $display['related_solutions'] = [
+      'label' => t('Related solutions: explicit + EIRA'),
+      'description' => t('Solutions either explicitly or referenced through EIRA.'),
+      'visible' => FALSE,
+    ];
+    $display['download_total'] = [
+      'label' => t('Total distribution downloads'),
+      'description' => t('The total downloads of all distributions in this collection.'),
+      'visible' => FALSE,
+    ];
+    $display['collections'] = [
+      'label' => t('Collections'),
+      'description' => t('The collections this solution is affiliated to.'),
+      'visible' => FALSE,
+    ];
+    $display['read_more'] = [
+      'label' => t('Read more'),
+      'description' => t('Shows a link to the about page of the solution.'),
+      'visible' => FALSE,
+    ];
+    $display['share_link'] = [
+      'label' => t('Share'),
+      'description' => t('A link to share the content'),
+      'visible' => FALSE,
+    ];
+    $display['solution_subscribe'] = [
+      'label' => t('Subscribe to this Solution'),
+      'description' => t('Subscribes the user to the solution.'),
+      'visible' => FALSE,
+    ];
+    $display['members'] = [
+      'label' => t('Amount of members'),
+      'description' => t('Amount of members of the solution'),
+      'visible' => FALSE,
+    ];
+  }
 
   return $fields;
 }
@@ -349,11 +347,10 @@ function solution_rdf_entity_view(array &$build, RdfInterface $solution, EntityV
         '#type' => 'markup',
         '#markup' => t('Read more') . '<span class="visually-hidden"> ' . t('about') . ' ' . $solution->getName() . '</span>',
       ];
-      $link = $solution->toLink($text, 'about-page', [
+      $link = $solution->toLink($text, 'canonical', [
         'attributes' => [
           'data-drupal-group-view-mode' => $view_mode,
           'class' => [
-            'about-page',
             'read-more',
             'fieldset__read-more',
             'btn',
@@ -391,6 +388,20 @@ function solution_rdf_entity_view(array &$build, RdfInterface $solution, EntityV
       '#cache' => ['contexts' => ['og_role']],
     ];
   }
+
+  // Member count.
+  if ($display->getComponent('members')) {
+    $member_count = solution_member_count($solution);
+    // Invalidate the member count every time the group membership list changes.
+    // @see \Drupal\og\Plugin\Block\MemberCountBlock::getCacheTags()
+    $tags = Cache::buildTags(OgMembershipInterface::GROUP_MEMBERSHIP_LIST_CACHE_TAG_PREFIX, $solution->getCacheTagsToInvalidate());
+    $build['members'] = [
+      '#theme' => 'solution_member_count',
+      '#count' => $member_count,
+      '#view_mode' => $view_mode,
+      '#cache' => ['tags' => $tags],
+    ];
+  }
 }
 
 /**
@@ -411,13 +422,12 @@ function solution_get_related_solutions_ids(EntityInterface $entity) {
   }
   $recurse = TRUE;
 
+  $term_storage = \Drupal::entityTypeManager()->getStorage('taxonomy_term');
   $eira_ids = [];
   if ($entity->get('field_is_show_eira_related')->value === '1') {
     // Get all solutions that reference the same EIRA building block.
-    $eira = [];
-    foreach ($entity->get('field_is_solution_type')->getValue() as $field) {
-      $eira[] = $field['target_id'];
-    }
+    $tids = array_map(fn(array $field) => $field['target_id'], $entity->get('field_is_solution_type')->getValue());
+    $eira = array_map(fn(RdfSyncEntityInterface $term): string => $term->getUri(), $term_storage->loadMultiple($tids));
     if ($eira) {
       $query = \Drupal::entityQuery('rdf_entity')->accessCheck(FALSE)
         ->condition('rid', 'solution')
@@ -509,7 +519,7 @@ function solution_rdf_entity_presave(RdfInterface $entity) {
   if (in_array($state, ['draft', 'proposed', 'needs_update', 'blacklisted'])) {
     $entity->set('graph', 'draft');
   }
-  elseif ($state === 'published') {
+  elseif (in_array($state, ['published', 'archived'], TRUE)) {
     $entity->set('graph', SparqlGraphInterface::DEFAULT);
   }
   elseif (empty($state)) {
@@ -716,4 +726,77 @@ function solution_module_implements_alter(&$implementations, $hook) {
     unset($implementations['solution']);
     $implementations = ['solution' => $solution] + $implementations;
   }
+}
+
+/**
+ * Amount of members of a solution.
+ *
+ * @param \Drupal\rdf_entity\RdfInterface $entity
+ *   The solution.
+ *
+ * @return int
+ *   Amount of members.
+ */
+function solution_member_count(RdfInterface $entity): int {
+  // We're doing a direct database query rather than using methods in OG's
+  // MembershipManager service since we just need a count, and we need to filter
+  // out blocked user accounts.
+  $query = \Drupal::database()->select('og_membership', 'om');
+  $query->innerJoin('users_field_data', 'ufd', '[om].[uid] = [ufd].[uid]');
+  $query->condition('ufd.status', 1)
+    ->condition('om.entity_type', 'rdf_entity')
+    ->condition('om.entity_id', $entity->id())
+    ->condition('om.state', OgMembershipInterface::STATE_ACTIVE);
+  return (int) $query->countQuery()->execute()->fetchField();
+}
+
+/**
+ * Implements hook_theme().
+ */
+function solution_theme(array $existing, string $type, string $theme, string $path): array {
+  return [
+    'solution_member_count' => [
+      'variables' => [
+        'count' => 0,
+        'view_mode' => '',
+      ],
+    ],
+  ];
+}
+
+/**
+ * Implements hook_theme_suggestions_HOOK().
+ *
+ * Allows the solution member count to be themed differently per view mode.
+ */
+function solution_theme_suggestions_solution_member_count(array $variables): array {
+  $suggestions = [];
+  $sanitized_view_mode = strtr($variables['view_mode'], '.', '_');
+  $suggestions[] = 'solution_member_count__' . $sanitized_view_mode;
+
+  return $suggestions;
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_view_alter().
+ */
+function solution_rdf_entity_view_alter(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display) {
+  if (!$entity instanceof SolutionInterface || $display->getMode() !== 'default') {
+    return;
+  }
+
+  // Hide the description when the abstract is available.
+  if (isset($build['field_is_abstract']) && Element::children($build['field_is_abstract'])) {
+    $build['field_is_description']['#access'] = FALSE;
+  }
+}
+
+/**
+ * Provides a callback for the solution status field default value.
+ *
+ * @return int
+ *   The ID of the taxonomy term serving as default value.
+ */
+function _solution_status_default_value(): int {
+  return (int) MappedTerm::loadByUri('http://purl.org/adms/status/Completed')->id();
 }

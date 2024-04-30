@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Drupal\asset_distribution\Form;
 
@@ -148,10 +148,10 @@ class AnonymousDownloadForm extends FormBase {
     // Normally, only one distribution is allowed to use a file and only
     // distributions call this code.
     if (empty($usages['file']['rdf_entity'])) {
-      throw new \RuntimeException('No distributions were found using the file with ID ' . $file->id());
+      throw new \RuntimeException('No distributions were found using the file with ID ' . $this->file->id());
     }
     if (count($usages['file']['rdf_entity']) > 1) {
-      throw new \RuntimeException('More than one distributions were found for the file with ID ' . $file->id());
+      throw new \RuntimeException('More than one distributions were found for the file with ID ' . $this->file->id());
     }
     $distribution = $this->sparqlStorage->load(key($usages['file']['rdf_entity']));
 

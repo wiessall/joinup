@@ -25,6 +25,8 @@ dependencies:
     - image.style.logo
     - rdf_entity.rdfentity.collection
   module:
+    - field_delimiter
+    - field_formatter_range
     - svg_image
     - template_suggestion
     - user
@@ -50,6 +52,22 @@ content:
         template_suggestion: bare
     weight: 0
     region: content
+  field_topic:
+    type: entity_reference_label
+    label: hidden
+    settings:
+      link: true
+    third_party_settings:
+      field_delimiter:
+        delimiter: ''
+      field_formatter_range:
+        order: 0
+        limit: 7
+        offset: 0
+      template_suggestion:
+        template_suggestion: group_header_topic
+    weight: 5
+    region: content
   join_collection:
     settings: {  }
     third_party_settings: {  }
@@ -65,29 +83,10 @@ content:
         template_suggestion: ''
     weight: 1
     region: content
-  last_update:
-    type: timestamp
-    label: hidden
-    settings:
-      date_format: medium
-      custom_date_format: ''
-      timezone: ''
-      tooltip:
-        date_format: long
-        custom_date_format: ''
-      time_diff:
-        enabled: true
-        future_format: '@interval hence'
-        past_format: '@interval ago'
-        granularity: 1
-        refresh: 60
-    third_party_settings: {  }
-    weight: 3
-    region: content
   members:
     settings: {  }
     third_party_settings: {  }
-    weight: 5
+    weight: 3
     region: content
   solutions:
     settings: {  }
@@ -114,8 +113,8 @@ hidden:
   field_short_id: true
   field_site_featured: true
   field_spatial_coverage: true
-  field_topic: true
   langcode: true
+  last_update: true
   og_group: true
   rdf_entity_collection_field_collection_content_inline_facets: true
   rdf_entity_collection_field_collection_content_top: true

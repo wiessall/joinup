@@ -170,13 +170,7 @@ display:
             multi_type: separator
             multi_separator: ', '
             display_methods:
-              actor:
-                display_method: label
-              business_process:
-                display_method: label
               eira:
-                display_method: label
-              eurovoc:
                 display_method: label
               file_type:
                 display_method: label
@@ -186,21 +180,13 @@ display:
                 display_method: label
               owner_type:
                 display_method: label
-              product_type:
-                display_method: label
               representation_technique:
                 display_method: label
               solution_category:
                 display_method: label
               spatial:
                 display_method: label
-              standardization_level:
-                display_method: label
               status:
-                display_method: label
-              test_resource_type:
-                display_method: label
-              themes:
                 display_method: label
               topic:
                 display_method: label

@@ -1,4 +1,4 @@
-name: 'Joinup test'
+name: 'Joinup Test'
 description: 'Contains functionality to test Joinup.'
 type: module
 package: Joinup

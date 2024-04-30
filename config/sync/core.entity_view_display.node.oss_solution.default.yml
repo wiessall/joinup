@@ -3,6 +3,7 @@ langcode: en
 status: true
 dependencies:
   config:
+    - field.field.node.oss_solution.oss_archived
     - field.field.node.oss_solution.oss_available_languages
     - field.field.node.oss_solution.oss_categories
     - field.field.node.oss_solution.oss_default_branch
@@ -16,7 +17,6 @@ dependencies:
     - field.field.node.oss_solution.oss_git_stars
     - field.field.node.oss_solution.oss_git_url
     - field.field.node.oss_solution.oss_hosting_platform
-    - field.field.node.oss_solution.oss_is_archived
     - field.field.node.oss_solution.oss_landing_url
     - field.field.node.oss_solution.oss_license
     - field.field.node.oss_solution.oss_logo
@@ -332,6 +332,94 @@ third_party_settings:
                     template_suggestion: ''
             weight: 0
             additional: {  }
+          9e4488e0-c6e8-41bb-8f5a-8f0ed703f5a2:
+            uuid: 9e4488e0-c6e8-41bb-8f5a-8f0ed703f5a2
+            region: indicator
+            configuration:
+              id: 'field_block:node:oss_solution:oss_git_stars'
+              label: Stars
+              label_display: '0'
+              provider: layout_builder
+              context_mapping:
+                entity: layout_builder.entity
+                view_mode: view_mode
+              formatter:
+                type: number_integer
+                label: visually_hidden
+                settings:
+                  thousand_separator: ''
+                  prefix_suffix: false
+                third_party_settings:
+                  template_suggestion:
+                    template_suggestion: git_indicator
+            weight: 0
+            additional: {  }
+          5fd354d9-fecf-4319-8a2f-e09a11961c90:
+            uuid: 5fd354d9-fecf-4319-8a2f-e09a11961c90
+            region: indicator
+            configuration:
+              id: 'field_block:node:oss_solution:oss_git_open_issues'
+              label: 'Open Issues'
+              label_display: '0'
+              provider: layout_builder
+              context_mapping:
+                entity: layout_builder.entity
+                view_mode: view_mode
+              formatter:
+                type: number_integer
+                label: visually_hidden
+                settings:
+                  thousand_separator: ''
+                  prefix_suffix: false
+                third_party_settings:
+                  template_suggestion:
+                    template_suggestion: git_indicator
+            weight: 1
+            additional: {  }
+          451af157-5f2a-4d80-9f82-8d9794f7122b:
+            uuid: 451af157-5f2a-4d80-9f82-8d9794f7122b
+            region: indicator
+            configuration:
+              id: 'field_block:node:oss_solution:oss_git_open_pull_requests'
+              label: 'Open Pull / Merge Requests'
+              label_display: '0'
+              provider: layout_builder
+              context_mapping:
+                entity: layout_builder.entity
+                view_mode: view_mode
+              formatter:
+                type: number_integer
+                label: visually_hidden
+                settings:
+                  thousand_separator: ''
+                  prefix_suffix: false
+                third_party_settings:
+                  template_suggestion:
+                    template_suggestion: git_indicator
+            weight: 2
+            additional: {  }
+          68bdaeb3-5329-42cc-be0a-6263b0e1c4dd:
+            uuid: 68bdaeb3-5329-42cc-be0a-6263b0e1c4dd
+            region: indicator
+            configuration:
+              id: 'field_block:node:oss_solution:oss_git_forks'
+              label: Forks
+              label_display: '0'
+              provider: layout_builder
+              context_mapping:
+                entity: layout_builder.entity
+                view_mode: view_mode
+              formatter:
+                type: number_integer
+                label: visually_hidden
+                settings:
+                  thousand_separator: ''
+                  prefix_suffix: false
+                third_party_settings:
+                  template_suggestion:
+                    template_suggestion: git_indicator
+            weight: 3
+            additional: {  }
           b855c39a-9137-420d-b0b8-109904d00aae:
             uuid: b855c39a-9137-420d-b0b8-109904d00aae
             region: aside
@@ -366,7 +454,7 @@ third_party_settings:
                 label: hidden
                 settings:
                   imagecache_external_link: ''
-                  imagecache_external_responsive_style: oss_solution_screenshot
+                  imagecache_external_responsive_style: image_gallery
                 third_party_settings:
                   field_delimiter:
                     delimiter: ''
@@ -375,7 +463,7 @@ third_party_settings:
                     limit: 0
                     offset: 0
                   joinup_slick:
-                    preset: oss_solution_screenshot
+                    preset: image_gallery
                   template_suggestion:
                     template_suggestion: ''
             weight: 1
@@ -623,8 +711,8 @@ third_party_settings:
                     template_suggestion: ''
             weight: 5
             additional: {  }
-          cfcba182-cfc5-4622-a513-1a13a4f0cbae:
-            uuid: cfcba182-cfc5-4622-a513-1a13a4f0cbae
+          838bf83b-44d2-4a77-a40b-4cae3b31236e:
+            uuid: 838bf83b-44d2-4a77-a40b-4cae3b31236e
             region: content
             configuration:
               id: 'field_block:node:oss_solution:oss_software_type'
@@ -635,18 +723,12 @@ third_party_settings:
                 entity: layout_builder.entity
                 view_mode: view_mode
               formatter:
-                type: list_default
+                type: joinup_entity_reference_label_tooltip
                 label: above
-                settings: {  }
-                third_party_settings:
-                  field_delimiter:
-                    delimiter: ''
-                  field_formatter_range:
-                    order: 0
-                    limit: 0
-                    offset: 0
-                  template_suggestion:
-                    template_suggestion: ''
+                settings:
+                  link: false
+                  tooltip_text: '[term:description]'
+                third_party_settings: {  }
             weight: 6
             additional: {  }
           0d2a18ed-d3bf-4cf5-bcce-bc96c04faa71:
@@ -779,6 +861,7 @@ hidden:
   oss__long_description: true
   oss__screenshots: true
   oss__short_description: true
+  oss_archived: true
   oss_available_languages: true
   oss_categories: true
   oss_default_branch: true
@@ -792,7 +875,6 @@ hidden:
   oss_git_stars: true
   oss_git_url: true
   oss_hosting_platform: true
-  oss_is_archived: true
   oss_landing_url: true
   oss_license: true
   oss_logo: true

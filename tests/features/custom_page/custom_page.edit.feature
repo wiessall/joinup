@@ -4,6 +4,18 @@ Feature: "Custom page" editing.
   As a moderator or group facilitator
   I need to be able to edit "Custom Page" content through UI.
 
+  Scenario: User should not be allowed unarchiving content of an archived solution.
+    Given the following solution:
+      | title | Cartridge cleaner |
+      | state | archived          |
+    And "custom_page" content:
+      | title          | solution          | state    |
+      | Cyclone filter | Cartridge cleaner | archived |
+
+    When I am logged in as a moderator
+    And I go to the edit form of the "Cyclone filter" "custom page"
+    Then I should not see the button "Unarchive"
+
   Scenario Outline: Privileged users can edit custom pages.
     Given users:
       | Username     | E-mail                   |

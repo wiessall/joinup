@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Drupal\joinup_group\Guard;
 
@@ -37,9 +37,7 @@ class AnnouncementTransitionsGuard implements GuardInterface {
    */
   public function allowed(WorkflowTransition $transition, WorkflowInterface $workflow, EntityInterface $entity): bool {
     if ($entity instanceof AnnouncementInterface) {
-      $from_state = $entity->getWorkflowState();
-      $to_state = $transition->getToState()->getId();
-      $permission = StateMachinePermissionStringConstructor::constructTransitionPermission('message', 'announcement', $workflow, $from_state, $to_state, TRUE);
+      $permission = StateMachinePermissionStringConstructor::constructTransitionPermission($workflow, $transition, 'any');
       return $this->groupManager->access($entity->getGroup(), $permission, $permission)->isAllowed();
     }
     throw new \InvalidArgumentException('The ' . __CLASS__ . ' guard can be used only with announcement message entities.');

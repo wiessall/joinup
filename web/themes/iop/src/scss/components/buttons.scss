@@ -42,6 +42,13 @@
   @extend .btn-secondary;
 }
 
+.btn-link {
+  color: var(--bs-link-color);
+  &:hover {
+    color: var(--bs-link-hover-color);
+  }
+}
+
 .button--link {
   @extend .btn-link;
 }

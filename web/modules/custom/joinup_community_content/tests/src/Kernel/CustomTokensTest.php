@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Drupal\Tests\joinup_community_content\Kernel;
 
@@ -27,7 +27,6 @@ class CustomTokensTest extends TokenReplaceKernelTestBase {
     'node',
     'og',
     'options',
-    'workflow_state_permission',
   ];
 
   /**

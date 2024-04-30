@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Drupal\joinup_group\Entity;
 
@@ -25,7 +25,7 @@ interface GroupContentInterface extends ContentEntityInterface {
   public function hasGroup(): bool;
 
   /**
-   * Returns the group to which this entity belongs.
+   * Returns the group to which this entity belongs to.
    *
    * @return \Drupal\joinup_group\Entity\GroupInterface
    *   The parent group.
@@ -34,6 +34,17 @@ interface GroupContentInterface extends ContentEntityInterface {
    *   Thrown when the parent group is missing.
    */
   public function getGroup(): GroupInterface;
+
+  /**
+   * Sets the group to which this entity belongs.
+   *
+   * @param \Drupal\joinup_group\Entity\GroupInterface $group
+   *   The parent group ID.
+   *
+   * @return $this
+   *   The called entity.
+   */
+  public function setGroup(GroupInterface $group): self;
 
   /**
    * Returns the ID of the group to which this entity belongs.

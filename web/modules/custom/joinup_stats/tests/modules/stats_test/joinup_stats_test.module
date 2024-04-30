@@ -5,7 +5,7 @@
  * Hook implementations for the Joinup Stats test module.
  */
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 use Drupal\joinup_stats_test\Entity\AssetDistribution;
 use Drupal\joinup_stats_test\Entity\CommunityContent;

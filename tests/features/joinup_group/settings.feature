@@ -9,7 +9,7 @@ Feature: Collections/Solutions settings
       | name       | type    |
       | Jonny inc. | Company |
 
-  @terms @uploadFiles:logo.png
+  @uploadFiles:logo.png
   Scenario: Edit settings in a collection
     Given the following owner:
       | name            | type                    |
@@ -49,11 +49,12 @@ Feature: Collections/Solutions settings
 
     When I fill in the following:
       | Title          | Solution Beta      |
+      | Abstract       | Short abstract     |
       | Description    | Last letter        |
       | Name           | Jony Burton        |
       | E-mail address | jonb@example.com   |
     And I attach the file "logo.png" to "Logo"
-    And I fill in "Language" with "http://publications.europa.eu/resource/authority/language/VLS"
+    And I select "Flemish" from "Language"
     And I select "EU and European Policies" from "Topic"
     And I select "Citizen" from "Solution type"
 

@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Drupal\joinup_workflow;
 
@@ -100,6 +100,11 @@ interface EntityWorkflowStateInterface extends FieldableEntityInterface {
    * This can also be used to check if the entity can be updated while keeping
    * the workflow state unchanged.
    *
+   * IMPORTANT: Use this when you want to check the state regardless of the
+   * entity's current state. Otherwise, wrong results might be returned in case
+   * for example, the entity is being updated and the target state is not the
+   * one needed to check.
+   *
    * @param string $to_state
    *   The destination state.
    * @param string|null $from_state
@@ -116,7 +121,7 @@ interface EntityWorkflowStateInterface extends FieldableEntityInterface {
    * @return \Drupal\state_machine\Plugin\Workflow\WorkflowTransition[]
    *   The allowed transitions, keyed by transition ID.
    */
-  public function getTransitions(): array;
+  public function getAllowedTransitions(): array;
 
   /**
    * Check whether at least one transition is available for the current state.
@@ -124,6 +129,23 @@ interface EntityWorkflowStateInterface extends FieldableEntityInterface {
    * @return bool
    *   Whether at least one transition is available for the current state.
    */
-  public function hasTransitions(): bool;
+  public function hasAllowedTransitions(): bool;
+
+  /**
+   * Checks if the transition is allowed for the current user.
+   *
+   * IMPORTANT: Do NOT use this during a workflow transition. The method will
+   * use the state that the entity is moved to or from, depending on the
+   * specific point of the workflow that this is called. This can be used when
+   * e.g. loading an entity from the database and checking the transition
+   * statically.
+   *
+   * @param string $transition_id
+   *   The transition ID.
+   *
+   * @return bool
+   *   TRUE if the transition is allowed, FALSE otherwise.
+   */
+  public function isTransitionAllowed(string $transition_id): bool;
 
 }

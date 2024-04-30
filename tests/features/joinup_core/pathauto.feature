@@ -24,6 +24,7 @@ Feature:
       | title       | Pathauto distribution  |
       | description | Pathauto distribution. |
       | parent      | Pathauto solution      |
+      | state       | published              |
     And the following licence:
       | title       | Pathauto licence |
       | description | Pathauto licence |

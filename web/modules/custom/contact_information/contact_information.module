@@ -5,7 +5,7 @@
  * Provides functionality for the contact information module.
  */
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Access\AccessResultInterface;
@@ -30,6 +30,7 @@ use Drupal\contact_information\ParentGroupFieldItemList;
 use Drupal\email_confirmer\EmailConfirmationInterface;
 use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\rdf_entity\RdfInterface;
+use Drupal\symfony_mailer_lite\Plugin\Mail\SymfonyMailer;
 
 /**
  * Implements hook_entity_bundle_info_alter().
@@ -52,6 +53,12 @@ function contact_information_entity_bundle_field_info_alter(array &$fields, Enti
       ->setTargetEntityTypeId('rdf_entity')
       ->setTargetBundle('contact_information')
       ->setSetting('target_type', 'rdf_entity')
+      ->setSetting('handler_settings', [
+        'target_bundles' => [
+          'collection' => 'collection',
+          'solution' => 'solution',
+        ],
+      ])
       ->setComputed(TRUE)
       ->setClass(ParentGroupFieldItemList::class);
   }
@@ -153,37 +160,12 @@ function contact_information_rdf_entity_access(EntityInterface $entity, string $
     return AccessResult::neutral();
   }
 
-  // Inline entity form module is using the 'update' but rdf_entity is still
-  // using 'edit' for the edit operation. Rename the operation until it is
-  // fixed in rdf_entity.
-  // @see https://github.com/ec-europa/rdf_entity/issues/110
-  if ($operation === 'update') {
-    $operation = 'edit';
-  }
-
   // For anonymous users, deny access to the canonical route.
-  if ($account->isAnonymous()) {
-    $route_name = \Drupal::routeMatch()->getRouteName();
-    if ($route_name === 'entity.rdf_entity.canonical') {
-      return AccessResult::forbidden('Anonymous users should not see contact information on the canonical route.');
-    }
-  }
-  elseif ($operation == 'edit') {
-    /** @var \Drupal\joinup_workflow\WorkflowHelperInterface $workflow_helper */
-    $workflow_helper = \Drupal::service('joinup_workflow.workflow_helper');
-    $available_target_states = $workflow_helper->getAvailableTargetStates($entity, $account);
-    return empty($available_target_states) ? AccessResult::forbidden() : AccessResult::allowed();
-  }
-  // Use an elseif to avoid checking memberships for anonymous users.
-  elseif ($operation === 'delete') {
-    // The contact information is not a group content. It is tied to other
-    // entities by a simple reference field.
-    // To grant access to group owner/facilitators, we need to identify first
-    // which group references the contact information.
-    if ($group = $entity->getRelatedGroup()) {
-      if ($group->hasGroupPermission((int) $account->id(), 'delete contact_information rdf entity')) {
-        return AccessResult::allowed();
-      }
+  $route_match = \Drupal::routeMatch();
+  if ($account->isAnonymous() && $operation === 'view' && $route_match->getRouteName() === 'entity.rdf_entity.canonical') {
+    $route_entity = $route_match->getParameter('rdf_entity');
+    if ($route_entity instanceof ContactInformationInterface && $route_entity->id() === $entity->id()) {
+      return AccessResult::forbidden('Anonymous users should not see the contact information canonical route.');
     }
   }
 
@@ -195,6 +177,12 @@ function contact_information_rdf_entity_access(EntityInterface $entity, string $
  */
 function contact_information_entity_field_access(string $operation, FieldDefinitionInterface $field_definition, AccountInterface $account, ?FieldItemListInterface $items = NULL): AccessResultInterface {
   if ($operation === 'view' && $field_definition->getName() === 'field_ci_email') {
+    if ($items->getEntity()->isNew()) {
+      // If the contact information entity is new, we don't need to check
+      // anything else.
+      return AccessResult::forbidden();
+    }
+
     $confirmation = \Drupal::getContainer()->get('email_confirmer')->getConfirmation($items->value, 'confirmed', ContactInformationEmailConfirmInterface::REALM);
     $access = $confirmation && $confirmation->get('confirmed')->value == EmailConfirmationInterface::CONFIRMED ? AccessResult::allowed() : AccessResult::forbidden();
     /** @var \Drupal\contact_information\Entity\ContactInformationInterface $contact_info */
@@ -358,7 +346,7 @@ function contact_information_require_login(array $form, FormStateInterface $form
   // Redirect to EU Login, with a query argument instructing to redirect back
   // to the group page.
   $url = (new Url('cas.login'))->setOption('query', [
-    'destination' => $group->toUrl('about-page')->toString(),
+    'destination' => $group->toUrl()->toString(),
   ])->setAbsolute()->toString();
 
   return (new AjaxResponse())->addCommand(new RedirectCommand($url));
@@ -373,7 +361,7 @@ function contact_information_rdf_entity_view(array &$build, RdfInterface $contac
       // If an anonymous user clicks on the contact information 'Contact us'
       // link, they are redirected to log in or register with the EU Login
       // service. After successfully completing the authentication, they are
-      // redirected back to the group about-page where the link is placed. We
+      // redirected back to canonical page where the link is placed. We
       // attach a Javascript snippet that automatically opens the 'Contact us'
       // modal dialog.
       // @see contact_information_form_email_contact_mail_form_alter()
@@ -383,6 +371,12 @@ function contact_information_rdf_entity_view(array &$build, RdfInterface $contac
       $build['#attributes']['data-joinup-contact-info-id'] = $contact_information->id();
     }
 
+    if (empty($contact_information->getRelatedGroup())) {
+      // If the contact information is not attached to a group, we don't need
+      // to do anything else. This is not supposed to happen in the normal use
+      // cases, but it might happen for example in the layout builder.
+      return;
+    }
     $resend_access = \Drupal::getContainer()->get('joinup_group.group_manager')->access($contact_information->getRelatedGroup(), 'resend email confirmation request');
     $cacheable_metadata = CacheableMetadata::createFromRenderArray($build);
     $email_confirmer = \Drupal::getContainer()->get('email_confirmer');
@@ -390,8 +384,14 @@ function contact_information_rdf_entity_view(array &$build, RdfInterface $contac
     if ($confirmation) {
       $cacheable_metadata->addCacheableDependency($confirmation);
     }
-    elseif ($resend_access->isAllowed()) {
+    // Only act for published groups because the functionality is not available
+    // when the group is still proposed. This works along with
+    // ContactInformationEmailConfirm class to prevent the confirmation to be
+    // created if the entity is not published.
+    // @see \Drupal\contact_information\ContactInformationEmailConfirm::confirmEmailsForGroup
+    elseif ($contact_information->getRelatedGroup()->isPublished() && $resend_access->isAllowed()) {
       $confirmation = $email_confirmer->getConfirmation($contact_information->get('field_ci_email')->value, 'pending', ContactInformationEmailConfirmInterface::REALM);
+
       // If no confirmation is created yet, create one before adding the link
       // to the form. Normally, we would have a controller to create the
       // confirmation instead of sending the existing one but the confirmation
@@ -424,10 +424,27 @@ function contact_information_rdf_entity_view(array &$build, RdfInterface $contac
       $cacheable_metadata->addCacheableDependency($confirmation);
     }
 
+    if ($confirmation && $confirmation->isConfirmed()) {
+      $build['field_ci_email'][0]['#title'] = $build['field_ci_name'][0];
+      unset($build['field_ci_name']);
+    }
+
     // Vary the field's cache by whether the user is logged in or not.
     $cacheable_metadata
       ->addCacheContexts(['og_role', 'user.roles:authenticated'])
       ->addCacheableDependency($contact_information)
       ->applyTo($build);
+  }
+}
+
+/**
+ * Implements hook_mail_alter().
+ */
+function contact_information_mail_alter(&$message): void {
+  // User filled out the contact form.
+  if (($message['module'] === 'email_contact' && $message['key'] === 'contact') ||
+    // Editor typed contact information (mail needs to be validated).
+    ($message['module'] === 'email_confirmer' && $message['key'] === 'confirmation_request')) {
+    $message['headers']['Content-Type'] = SymfonyMailer::FORMAT_HTML;
   }
 }

@@ -5,7 +5,7 @@
  * Main functions and hook implementations of the custom page module.
  */
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Access\AccessResultInterface;
@@ -17,9 +17,9 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\custom_page\Entity\CustomPage;
 use Drupal\custom_page\Entity\CustomPageInterface;
-use Drupal\joinup_group\Exception\MissingGroupException;
 use Drupal\menu_link_content\MenuLinkContentInterface;
 use Drupal\node\NodeInterface;
+use Drupal\solution\Entity\SolutionInterface;
 
 /**
  * Implements hook_entity_type_alter().
@@ -90,7 +90,10 @@ function custom_page_node_insert(EntityInterface $entity): void {
     return;
   }
 
-  \Drupal::service('custom_page.og_menu_links_manager')->addLink($entity);
+  \Drupal::getContainer()->get('custom_page.og_menu_links_manager')->addLink($entity, 'navigation');
+  \Drupal::getContainer()->get('custom_page.og_menu_links_manager')->addLink($entity, 'quick_links', [
+    'enabled' => FALSE,
+  ]);
 
   // The content of custom pages is included in the search index of their
   // collections and solutions, so that the parent group can be found when
@@ -233,23 +236,26 @@ function custom_page_menu_local_actions_alter(&$local_actions) {
 }
 
 /**
- * Implements hook_node_access().
- *
- * Prevent custom page view access to unprivileged users when the parent entity
- * is not published.
+ * Implements hook_ENTITY_TYPE_access() for "node".
  */
 function custom_page_node_access(NodeInterface $node, $op, AccountInterface $account) {
-  if ($op !== 'view' || !$node instanceof CustomPageInterface || !$node->hasGroup()) {
+  if (!$node instanceof CustomPageInterface || !$node->hasGroup()) {
     return AccessResult::neutral();
   }
 
+  $parent = $node->getGroup();
+
+  // Deny edit access if the parent is an archived solution and the operation
+  // is not "view".
+  if ($op !== 'view') {
+    return AccessResult::forbiddenIf(
+        $parent instanceof SolutionInterface &&
+        $parent->isArchived()
+      )
+      ->addCacheableDependency($parent);
+  }
+
   // Let parentless nodes be handled by the core access.
-  try {
-    $parent = $node->getGroup();
-  }
-  catch (MissingGroupException $e) {
-    return AccessResult::neutral();
-  }
   if (!$parent->access('view', $account)) {
     // Anonymous users do not have access to content of non published groups.
     return AccessResult::forbiddenIf($account->isAnonymous() || $node->getOwnerId() !== $account->id());

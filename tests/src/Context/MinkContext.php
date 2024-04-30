@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Drupal\joinup\Context;
 
@@ -205,6 +205,27 @@ class MinkContext extends DrupalExtensionMinkContext {
     $option = $this->fixStepArgument($value);
     $regionObj = $this->getRegion($region);
     $regionObj->selectFieldOption($select, $option);
+  }
+
+  /**
+   * Change the attachments file to field in the specified region.
+   *
+   * Example: And I attach the file "hi.png" to "image" in the "Modal" region.
+   *
+   * @Given /^(?:|I )attach the file "(?P<path>[^"]*)" to "(?P<field>(?:[^"]|\\")*)" in the "(?P<region>[^"]*)" region$/
+   */
+  public function attachRegionFileToField(string $field, string $path, string $region): void {
+    $field = $this->fixStepArgument($field);
+
+    if ($this->getMinkParameter('files_path')) {
+      $fullPath = rtrim(realpath($this->getMinkParameter('files_path')), DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . $path;
+      if (is_file($fullPath)) {
+        $path = $fullPath;
+      }
+    }
+
+    $regionObj = $this->getRegion($region);
+    $regionObj->attachFileToField($field, $path);
   }
 
 }

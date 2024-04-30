@@ -5,7 +5,7 @@
  * Install, update, install functionality for EU OSS Catalogue module.
  */
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 use Drupal\Component\Serialization\Json;
 use Drupal\Core\Batch\BatchBuilder;
@@ -18,22 +18,22 @@ use Drupal\eu_oss_catalogue\EuOssCatalogueInstallHelper;
 function eu_oss_catalogue_install(): void {
   $terms = [];
 
-  foreach (['category', 'intended_audience_scope'] as $vocab) {
-    $names = Yaml::decode(file_get_contents(__DIR__ . "/fixtures/controlled_vocabs/$vocab.yml"))['terms'];
-    foreach ($names as $name) {
-      $terms[] = "oss_$vocab:$name";
+  foreach (['category', 'intended_audience_scope', 'software_type'] as $vocab) {
+    $termItems = Yaml::decode(file_get_contents(__DIR__ . "/fixtures/controlled_vocabs/$vocab.yml"))['terms'];
+    foreach ($termItems as $termItem) {
+      $terms[] = ['vid' => "oss_$vocab"] + $termItem;
     }
   }
 
   $licencesJsonFile = DRUPAL_ROOT . "/../vendor/spdx/license-list-data/json/licenses.json";
   $licences = Json::decode(file_get_contents($licencesJsonFile))['licenses'];
   foreach ($licences as $licence) {
-    $terms[] = "oss_licence:{$licence['licenseId']}";
+    $terms[] = ['vid' => 'oss_licence', 'name' => $licence['licenseId']];
   }
 
-  $path_resolver = \Drupal::getContainer()->get('extension.path.resolver');
+  $pathResolver = \Drupal::getContainer()->get('extension.path.resolver');
   $batchBuilder = (new BatchBuilder())
-    ->setFile($path_resolver->getPath('module', 'eu_oss_catalogue') . '/eu_oss_catalogue.install')
+    ->setFile($pathResolver->getPath('module', 'eu_oss_catalogue') . '/eu_oss_catalogue.install')
     ->setProgressive(FALSE);
 
   foreach (array_chunk($terms, 50) as $chunk) {

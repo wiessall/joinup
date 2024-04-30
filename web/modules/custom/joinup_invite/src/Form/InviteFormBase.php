@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Drupal\joinup_invite\Form;
 
@@ -73,20 +73,6 @@ abstract class InviteFormBase extends FormBase {
   ];
 
   /**
-   * The entity type manager service.
-   *
-   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
-   */
-  protected $entityTypeManager;
-
-  /**
-   * The invitation message helper service.
-   *
-   * @var \Drupal\joinup_invite\InvitationMessageHelperInterface
-   */
-  protected $invitationMessageHelper;
-
-  /**
    * The entity related to the invitation.
    *
    * @var \Drupal\Core\Entity\ContentEntityInterface
@@ -98,18 +84,18 @@ abstract class InviteFormBase extends FormBase {
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
    *   The entity type manager service.
-   * @param \Drupal\joinup_invite\InvitationMessageHelperInterface $invitation_message_helper
+   * @param \Drupal\joinup_invite\InvitationMessageHelperInterface $invitationMessageHelper
    *   The invitation message helper service.
    */
-  public function __construct(EntityTypeManagerInterface $entityTypeManager, InvitationMessageHelperInterface $invitation_message_helper) {
-    $this->entityTypeManager = $entityTypeManager;
-    $this->invitationMessageHelper = $invitation_message_helper;
+  public function __construct(
+    protected EntityTypeManagerInterface $entityTypeManager,
+    protected InvitationMessageHelperInterface $invitationMessageHelper) {
   }
 
   /**
    * {@inheritdoc}
    */
-  public static function create(ContainerInterface $container) {
+  public static function create(ContainerInterface $container): self {
     return new static(
       $container->get('entity_type.manager'),
       $container->get('joinup_invite.invitation_message_helper')
@@ -130,8 +116,8 @@ abstract class InviteFormBase extends FormBase {
 
     $form['autocomplete'] = [
       '#type' => 'textfield',
-      '#title' => $this->t('E-mail'),
-      '#description' => $this->t('Enter a Joinup user e-mail address or start typing to search for a user and select it with the mouse or the keyboard.'),
+      '#title' => $this->t('Name'),
+      '#description' => $this->t("Enter a Joinup user's name to search for a user and select it with the mouse or the keyboard."),
       '#autocomplete_route_name' => 'joinup_invite.user_auto_complete',
       '#attributes' => [
         'class' => ['invite-autocomplete'],
@@ -176,13 +162,14 @@ abstract class InviteFormBase extends FormBase {
       ],
     ];
     $user_list = $form_state->get('user_list');
-    foreach ($user_list as $delta => $mail) {
+    foreach ($user_list as $delta => $uid) {
       $form['users'][$delta] = [
         '#type' => 'chip',
-        '#text' => $this->getAccountName($this->loadUserByMail($mail)),
-        // Store the mail that this button will remove, to simplify the
+
+        '#text' => $this->getAccountName($this->loadUserById($uid)),
+        // Store the uid that this button will remove, to simplify the
         // operation.
-        '#mail' => $mail,
+        '#uid' => $uid,
         // No need to run validations when removing a line.
         '#limit_validation_errors' => [],
         '#submit' => ['::submitRemoveUser'],
@@ -217,18 +204,18 @@ abstract class InviteFormBase extends FormBase {
    *   The current state of the form.
    */
   public function validateAddUser(array &$form, FormStateInterface $form_state) {
-    $mail = trim($form_state->getValue('autocomplete'));
-    if (empty($mail)) {
-      $form_state->setError($form['autocomplete'], $this->t('No mail provided.'));
+    $uid = trim($form_state->getValue('autocomplete'));
+    if (empty($uid)) {
+      $form_state->setError($form['autocomplete'], $this->t('Name field is required.'));
     }
 
-    $user = $this->loadUserByMail($mail);
+    $user = $this->loadUserById($uid);
     if (empty($user)) {
-      $form_state->setError($form['autocomplete'], $this->t('No user found with mail %mail.', ['%mail' => $mail]));
+      $form_state->setError($form['autocomplete'], $this->t('Please select an existing user.'));
     }
 
-    if (in_array($mail, $form_state->get('user_list'))) {
-      $form_state->setError($form['autocomplete'], $this->t('The user with mail %mail has been already added to the list.', ['%mail' => $mail]));
+    if (in_array($uid, $form_state->get('user_list'))) {
+      $form_state->setError($form['autocomplete'], $this->t('The selected user is already added to the list.'));
     }
   }
 
@@ -264,7 +251,7 @@ abstract class InviteFormBase extends FormBase {
     $button = $form_state->getTriggeringElement();
     $element = NestedArray::getValue($form, array_slice($button['#array_parents'], 0, -1));
     $list = $form_state->get('user_list');
-    $list = array_diff($list, [$element['#mail']]);
+    $list = array_diff($list, [$element['#uid']]);
     $form_state->set('user_list', $list);
 
     $form_state->setRebuild();
@@ -470,28 +457,25 @@ abstract class InviteFormBase extends FormBase {
    *   An array of loaded user entities.
    */
   protected function getUserList(FormStateInterface $form_state): array {
-    $list = [];
-    foreach ($form_state->get('user_list') as $mail) {
-      $list[] = $this->loadUserByMail($mail);
+    $list = $form_state->get('user_list');
+    if (empty($list)) {
+      return [];
     }
 
-    return $list;
+    return $this->entityTypeManager->getStorage('user')->loadMultiple($list);
   }
 
   /**
    * Loads a user by its mail.
    *
-   * @param string $mail
-   *   The mail of the user.
+   * @param string $uid
+   *   The user id.
    *
    * @return \Drupal\user\UserInterface|null
    *   A loaded user object. Null if the mail matches no users in the system.
    */
-  protected function loadUserByMail($mail): ?UserInterface {
-    $users = $this->entityTypeManager->getStorage('user')
-      ->loadByProperties(['mail' => $mail]);
-
-    return empty($users) ? NULL : reset($users);
+  protected function loadUserById(string $uid): ?UserInterface {
+    return $this->entityTypeManager->getStorage('user')->load($uid);
   }
 
   /**

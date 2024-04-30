@@ -7,15 +7,16 @@ dependencies:
     - field.field.rdf_entity.asset_distribution.field_ad_description
     - field.field.rdf_entity.asset_distribution.field_ad_file_size
     - field.field.rdf_entity.asset_distribution.field_ad_format
-    - field.field.rdf_entity.asset_distribution.field_ad_gitb_compliant
     - field.field.rdf_entity.asset_distribution.field_ad_licence
     - field.field.rdf_entity.asset_distribution.field_ad_repr_technique
+    - field.field.rdf_entity.asset_distribution.field_ad_state
     - field.field.rdf_entity.asset_distribution.field_status
     - field.field.rdf_entity.asset_distribution.og_audience
     - rdf_entity.rdfentity.asset_distribution
   module:
     - allowed_formats
     - file_url
+    - joinup_workflow
     - text
 _core:
   default_config_hash: yaSuNHdtgyR1JSG3kKXlb_7WZJ2uhYpfioyE0Hk5i1A
@@ -24,6 +25,15 @@ targetEntityType: rdf_entity
 bundle: asset_distribution
 mode: default
 content:
+  current_workflow_state:
+    type: current_workflow_state_widget
+    weight: 9
+    region: content
+    settings:
+      title: 'Current workflow state'
+      title_display: before
+      show_for_new_entities: false
+    third_party_settings: {  }
   field_ad_access_url:
     type: file_url_generic
     weight: 2
@@ -49,12 +59,6 @@ content:
     region: content
     settings: {  }
     third_party_settings: {  }
-  field_ad_gitb_compliant:
-    type: options_select
-    weight: 7
-    region: content
-    settings: {  }
-    third_party_settings: {  }
   field_ad_licence:
     type: options_select
     weight: 3
@@ -66,6 +70,13 @@ content:
     weight: 6
     region: content
     settings: {  }
+    third_party_settings: {  }
+  field_ad_state:
+    type: state_machine_buttons
+    weight: 10
+    region: content
+    settings:
+      use_transition_label: 1
     third_party_settings: {  }
   field_status:
     type: options_select
@@ -81,9 +92,13 @@ content:
       size: 60
       placeholder: ''
     third_party_settings: {  }
+  simple_sitemap:
+    weight: 8
+    region: content
+    settings: {  }
+    third_party_settings: {  }
 hidden:
   created: true
-  current_workflow_state: true
   field_ad_file_size: true
   langcode: true
   og_audience: true

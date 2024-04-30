@@ -1,4 +1,4 @@
-@api @terms @group-g
+@api @group-g
 Feature: Solution membership administration
   In order to manage a solution
   As a solution facilitator
@@ -44,7 +44,7 @@ Feature: Solution membership administration
     # Add a facilitator.
     When I click "Add members"
     Then the available options in the "Role" select should be "Member, Author, Facilitator"
-    When I fill in "E-mail" with "marcia_garcia@example.com"
+    When I fill uid of "Marcia Garcia" in "Name"
     And I press "Add"
     Then the page should show the following chips in the Content region:
       | Marcia Garcia |
@@ -110,7 +110,7 @@ Feature: Solution membership administration
     Then I should see the heading "Invite members"
 
     # Add a facilitator.
-    When I fill in "E-mail" with "dwight1@example.com"
+    When I fill uid of "dwightone" in "Name"
     And I press "Add"
     Then the page should show the following chips in the Content region:
       | Christian Dwight |

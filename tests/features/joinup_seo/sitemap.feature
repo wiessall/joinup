@@ -24,16 +24,16 @@ Feature:
       | Sitemap release 1 | 1              | New release   | Sitemap solution published | Sitemap owner | Sitemap secretariat | published |
       | Sitemap release 2 | 2              | Newer release | Sitemap solution published | Sitemap owner | Sitemap secretariat | draft     |
     And the following distributions:
-      | title                | description           | parent            | access url |
-      | Sitemap distribution | Some kind of download | Sitemap release 1 | test.zip   |
+      | title                | description           | parent            | access url | state     |
+      | Sitemap distribution | Some kind of download | Sitemap release 1 | test.zip   | published |
     And the following licences:
       | title           | description |
       | Sitemap licence | Not allowed |
     And "custom_page" content:
-      | title                                           | collection                   | body | logo     | langcode |
-      | Sitemap custom page of draft                    | Sitemap collection draft     | N/A  | logo.png | en       |
-      | Sitemap custom page of published                | Sitemap collection published | N/A  | logo.png | en       |
-      | Sitemap custom page of published but in Spanish | Sitemap collection published | N/A  | logo.png | es       |
+      | title                                           | collection                   | body | logo     | langcode | state     |
+      | Sitemap custom page of draft                    | Sitemap collection draft     | N/A  | logo.png | en       | published |
+      | Sitemap custom page of published                | Sitemap collection published | N/A  | logo.png | en       | published |
+      | Sitemap custom page of published but in Spanish | Sitemap collection published | N/A  | logo.png | es       | published |
     And news content:
       | title                                    | headline     | body              | solution                   | state     | publication date          |
       | Sitemap news draft                       | Sitemap news | Sitemap news body | Sitemap solution published | draft     |                           |

@@ -162,11 +162,8 @@ Feature: Collection moderation
     Then I should see the heading "Are you sure you want to delete collection Person of Wizards?"
     And I should see "This action cannot be undone."
     When I press "Delete"
-    # @todo: check that a success message is shown.
-    # @see ISAICP-6140
     Then I should be on the homepage
 
-  @terms
   Scenario: Published collections should be shown in the collections overview page.
     # Regression test for ticket ISAICP-2889.
     Given the following owner:
@@ -201,7 +198,7 @@ Feature: Collection moderation
     Then I should see the text "No berry pie"
     And I should not see the text "Some berry pie"
 
-  @javascript @terms @uploadFiles:logo.png
+  @javascript @uploadFiles:logo.png
   Scenario: Moderate an open collection
     # Regression test for a bug that caused the slider that controls the
     # content creation setting to revert to default state when the form is
@@ -214,10 +211,11 @@ Feature: Collection moderation
     When I go to the propose collection form
     Then the "Main fields" accordion section should be active
     And I fill in the following:
-      | Title  | Spectres in fog        |
+      | Title    | Spectres in fog        |
+      | Abstract | The fog is haunted.    |
       # Contact information data.
-      | Name   | A secretary in the fog |
-      | E-mail | fog@example.com        |
+      | Name     | A secretary in the fog |
+      | E-mail   | fog@example.com        |
     And I enter "The samurai are attacking the railroads" in the "Description" wysiwyg editor
     And I select "Employment and Support Allowance" from "Topic"
     And I press "Add new" at the "Owner" field
@@ -262,7 +260,7 @@ Feature: Collection moderation
     And I delete the "Katsumoto" owner
     And I delete the "A secretary in the fog" contact information
 
-  @javascript @terms @uploadFiles:logo.png
+  @javascript @uploadFiles:logo.png
   Scenario: Changing Content creation value - regression #1
     # Regression test for a bug that happens when a change on the content
     # creation setting happens after an ajax callback.
@@ -272,10 +270,11 @@ Feature: Collection moderation
     Given I am logged in as a user with the "authenticated" role
     When I go to the propose collection form
     And I fill in the following:
-      | Title  | Domestic bovins    |
+      | Title    | Domestic bovins                    |
+      | Abstract | Domestic bovins are friendly pets. |
       # Contact information data.
-      | Name   | Domestic secretary |
-      | E-mail | ds@example.com     |
+      | Name     | Domestic secretary                 |
+      | E-mail   | ds@example.com                     |
     And I enter "Yaks and goats are friendly pets." in the "Description" wysiwyg editor
     And I select "Statistics and Analysis" from "Topic"
     # An ajax callback is executed now.
@@ -302,7 +301,7 @@ Feature: Collection moderation
     And I delete the "Garnett Clifton" owner
     And I delete the "Domestic secretary" contact information
 
-  @javascript @terms @uploadFiles:logo.png
+  @javascript @uploadFiles:logo.png
   Scenario: Changing Content creation value - regression #2
     # Regression test for a bug that causes the wrong content creation value
     # to be saved after the "Closed collection" checkbox is checked.
@@ -312,10 +311,11 @@ Feature: Collection moderation
     Given I am logged in as a user with the "authenticated" role
     When I go to the propose collection form
     And I fill in the following:
-      | Title  | Theft of Body        |
+      | Title    | Theft of Body        |
+      | Abstract | The body is stolen.  |
       # Contact information data.
-      | Name   | Secretary of thieves |
-      | E-mail | st@example.com       |
+      | Name     | Secretary of thieves |
+      | E-mail   | st@example.com       |
     And I enter "Kleptomaniac to the bone." in the "Description" wysiwyg editor
     And I select "Supplier exchange" from "Topic"
     # An ajax callback is executed now.
@@ -342,7 +342,7 @@ Feature: Collection moderation
     And I delete the "Coretta Simonson" owner
     And I delete the "Secretary of thieves" contact information
 
-  @javascript @terms @uploadFiles:logo.png
+  @javascript @uploadFiles:logo.png
   Scenario: Changing Content creation value - regression #3
     # Regression test for a bug that happens when an "Add more" button on a
     # multi-value widget is clicked and then the "Closed collection" checkbox
@@ -353,12 +353,13 @@ Feature: Collection moderation
     Given I am logged in as a user with the "authenticated" role
     When I go to the propose collection form
     And I fill in the following:
-      | Title  | Silken Emperor    |
+      | Title    | Silken Emperor         |
+      | Abstract | The emperor is smooth. |
       # Contact information data.
-      | Name   | Secretary of Silk |
-      | E-mail | ss@example.com    |
+      | Name     | Secretary of Silk      |
+      | E-mail   | ss@example.com         |
     And I enter "So smooth." in the "Description" wysiwyg editor
-    And I select "Data gathering, data processing" from "Topic"
+    And I select "Data gathering and processing" from "Topic"
     # An ajax callback is executed now.
     And I press "Add new" at the "Owner" field
     And I wait for AJAX to finish
@@ -385,7 +386,7 @@ Feature: Collection moderation
     And I delete the "Terrance Nash" owner
     And I delete the "Secretary of Silk" contact information
 
-  @javascript @terms @uploadFiles:logo.png
+  @javascript @uploadFiles:logo.png
   Scenario: Changing Content creation value - regression #4
     # Regression test for a bug that happens when the "Closed collection" checkbox
     # is checked and then an "Add more" button on a multi-value widget is clicked.
@@ -395,10 +396,11 @@ Feature: Collection moderation
     Given I am logged in as a user with the "authenticated" role
     When I go to the propose collection form
     And I fill in the following:
-      | Title  | The blue ships          |
+      | Title    | The blue ships          |
+      | Abstract | The ships are blue.     |
       # Contact information data.
-      | Name   | Secretary of the harbor |
-      | E-mail | sh@example.com          |
+      | Name     | Secretary of the harbor |
+      | E-mail   | sh@example.com          |
     And I enter "Invisible ships on deep sea." in the "Description" wysiwyg editor
     And I select "Employment and Support Allowance" from "Topic"
     # An ajax callback is executed now.

@@ -11,7 +11,7 @@ id: rdf_entity.asset_release.field_isr_release_number
 field_name: field_isr_release_number
 entity_type: rdf_entity
 bundle: asset_release
-label: 'Release number'
+label: 'Release version'
 description: ''
 required: true
 translatable: false

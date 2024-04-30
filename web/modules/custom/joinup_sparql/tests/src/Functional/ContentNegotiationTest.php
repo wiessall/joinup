@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Drupal\Tests\joinup_sparql\Functional;
 
@@ -9,7 +9,7 @@ use Drupal\Core\Session\AccountInterface;
 use Drupal\Tests\BrowserTestBase;
 use Drupal\Tests\sparql_entity_storage\Traits\SparqlConnectionTrait;
 use Drupal\rdf_entity\Entity\Rdf;
-use Drupal\rdf_taxonomy\Entity\RdfTerm;
+use Drupal\taxonomy\Entity\Term;
 use EasyRdf\Format;
 
 /**
@@ -58,22 +58,16 @@ class ContentNegotiationTest extends BrowserTestBase {
    */
   protected static $modules = [
     'joinup_content_negotiation_test',
+    'joinup_rdf',
     'page_cache',
   ];
 
   /**
    * {@inheritdoc}
    */
-  protected function bootEnvironment() {
-    parent::bootEnvironment();
-    $this->setUpSparql();
-  }
-
-  /**
-   * {@inheritdoc}
-   */
   protected function setUp(): void {
     parent::setUp();
+    $this->setUpSparql();
     user_role_grant_permissions(AccountInterface::ANONYMOUS_ROLE, ['view rdf entity']);
   }
 
@@ -81,10 +75,17 @@ class ContentNegotiationTest extends BrowserTestBase {
    * Tests content negotiation.
    */
   public function testContentNegotiation(): void {
-    $term = RdfTerm::create([
+    $parent = Term::create([
       'vid' => 'fruit_type',
-      'tid' => 'http://example.com/citrus-fruits',
+      'uri' => 'http://example.com/exotic',
+      'name' => 'Exotic fruits',
+    ]);
+    $term = Term::create([
+      'vid' => 'fruit_type',
+      'uri' => 'http://example.com/citrus-fruits',
       'name' => 'Citrus fruits',
+      'description' => 'Amazing fruits http://example.com/very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-long.html',
+      'parent' => $parent,
     ]);
     $term->save();
 
@@ -250,7 +251,6 @@ class ContentNegotiationTest extends BrowserTestBase {
    */
   public function tearDown(): void {
     Rdf::load('http://example.com/apple')->delete();
-    RdfTerm::load('http://example.com/citrus-fruits')->delete();
     parent::tearDown();
   }
 

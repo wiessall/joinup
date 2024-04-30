@@ -5,7 +5,7 @@
  * Contains hooks regarding the asset_release rdf entity bundle.
  */
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Access\AccessResultInterface;
@@ -19,6 +19,7 @@ use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\asset_release\Entity\AssetRelease;
 use Drupal\asset_release\Entity\AssetReleaseInterface;
 use Drupal\rdf_entity\RdfInterface;
+use Drupal\sparql_entity_storage\SparqlEntityStorageInterface;
 use Drupal\sparql_entity_storage\SparqlGraphInterface;
 
 /**
@@ -159,68 +160,34 @@ function asset_release_theme($existing, $type, $theme, $path) {
 
 /**
  * Implements hook_ENTITY_TYPE_access().
- *
- * Interrupts the permissions for updating a release. The permission is not
- * granted if there are no transitions allowed for the current state of the
- * node.
  */
 function asset_release_rdf_entity_access(EntityInterface $release, $operation, AccountInterface $account): AccessResultInterface {
   if (!$release instanceof AssetReleaseInterface || $account->hasPermission($release->getEntityType()->getAdminPermission())) {
     return AccessResult::neutral();
   }
 
-  switch ($operation) {
-    case 'view':
-      $parent = $release->getSolution();
+  $parent = $release->getSolution();
 
-      // If for any reason access is requested to an entity without a parent,
-      // deny that access.
-      if (empty($parent)) {
-        return AccessResult::forbidden();
-      }
-
-      /** @var \Drupal\Core\Entity\EntityAccessControlHandlerInterface $access_handler */
-      $access_handler = \Drupal::service('entity_type.manager')->getAccessControlHandler('rdf_entity');
-      if (!$access_handler->access($parent, 'view', $account)) {
-        return AccessResult::forbidden();
-      }
-
-      $membership = $parent->getMembership((int) $account->id());
-      if (empty($membership)) {
-        return AccessResult::neutral();
-      }
-      if (!$release->isPublished() && $membership->hasPermission('view unpublished rdf entity')) {
-        return AccessResult::allowed();
-      }
-      if ($release->isPublished() && $membership->hasPermission('view rdf entity')) {
-        return AccessResult::allowed();
-      }
-      break;
-
-    case 'edit':
-      /** @var \Drupal\joinup_workflow\WorkflowHelperInterface $workflow_helper */
-      $workflow_helper = \Drupal::service('joinup_workflow.workflow_helper');
-      $allowed_states = $workflow_helper->getAvailableTargetStates($release, $account);
-      return AccessResult::forbiddenIf(empty($allowed_states));
-
-    case 'delete':
-      $parent = $release->getSolution();
-
-      // If for any reason access is requested to an entity without a parent,
-      // deny that access.
-      if (empty($parent)) {
-        return AccessResult::forbidden();
-      }
-
-      $membership = $parent->getMembership((int) $account->id());
-      if (empty($membership)) {
-        return AccessResult::allowedIf($account->hasPermission('delete asset_release rdf entity'));
-      }
-
-      return AccessResult::allowedIf($membership->hasPermission('delete asset_release rdf entity'));
+  // Archived parents deny operations other than view.
+  if ($operation !== 'view' && $parent->isArchived()) {
+    return AccessResult::forbidden();
   }
 
-  return AccessResult::neutral();
+  if ($operation !== 'view') {
+    return AccessResult::neutral();
+  }
+
+  $access_handler = \Drupal::service('entity_type.manager')->getAccessControlHandler('rdf_entity');
+  if (!$access_handler->access($parent, 'view', $account)) {
+    return AccessResult::forbidden();
+  }
+
+  // Allow access depending to the publication status and the corresponding
+  // permission in the group.
+  return AccessResult::allowedIf(
+    (!$release->isPublished() && $parent->hasGroupPermission($account->id(), 'view unpublished rdf entity'))
+    || ($release->isPublished() && $parent->hasGroupPermission($account->id(), 'view rdf entity'))
+  );
 }
 
 /**
@@ -234,12 +201,14 @@ function asset_release_rdf_entity_presave(EntityInterface $entity) {
     return;
   }
 
+  $storage = \Drupal::entityTypeManager()->getStorage('rdf_entity');
+  \assert($storage instanceof SparqlEntityStorageInterface);
   if (!$entity->get('field_isr_is_version_of')->isEmpty()) {
     // Synchronize common fields from parent solution.
     \Drupal::service('asset_release.relations')->syncFieldsFromParentSolution($entity);
   }
 
-  if (!\Drupal::service('sparql.graph_handler')->bundleHasGraph('rdf_entity', 'asset_release', 'draft')) {
+  if (!$storage->getGraphHandler()->bundleHasGraph('rdf_entity', 'asset_release', 'draft')) {
     return;
   }
 
@@ -255,7 +224,7 @@ function asset_release_rdf_entity_presave(EntityInterface $entity) {
   if (in_array($state, ['draft', 'needs_update'])) {
     $entity->set('graph', 'draft');
   }
-  elseif (in_array($state, ['published'])) {
+  elseif (in_array($state, ['published', 'archived'])) {
     $entity->set('graph', SparqlGraphInterface::DEFAULT);
   }
   elseif (empty($state)) {
@@ -274,12 +243,18 @@ function asset_release_rdf_entity_presave(EntityInterface $entity) {
  */
 function asset_release_entity_update(EntityInterface $entity) {
   // Quick escape check to avoid unnecessary loadings.
-  if ($entity->bundle() !== 'asset_release' || !\Drupal::service('sparql.graph_handler')->bundleHasGraph('rdf_entity', 'asset_release', 'draft')) {
+  if (!$entity instanceof AssetReleaseInterface) {
     return;
   }
 
-  if ($entity->field_isr_state->value === 'published') {
-    \Drupal::entityTypeManager()->getStorage('rdf_entity')->deleteFromGraph([$entity], 'draft');
+  $storage = \Drupal::entityTypeManager()->getStorage($entity->getEntityTypeId());
+  \assert($storage instanceof SparqlEntityStorageInterface);
+  if (!$storage->getGraphHandler()->bundleHasGraph('rdf_entity', 'asset_release', 'draft')) {
+    return;
+  }
+
+  if (in_array($entity->getWorkflowState(), ['published', 'archived'], TRUE)) {
+    $storage->deleteFromGraph([$entity], 'draft');
   }
 }
 
@@ -323,8 +298,11 @@ function template_preprocess_asset_release_releases_download(array &$variables) 
 function asset_release_title_version_is_unique(AssetReleaseInterface $asset_release, $check_unaffiliated_solutions = FALSE) {
   $query = \Drupal::entityQuery('rdf_entity')->accessCheck(FALSE)
     ->condition('label', $asset_release->label())
-    ->condition('field_isr_release_number', $asset_release->getVersion())
     ->condition('rid', 'asset_release');
+  if ($asset_release->getVersion()) {
+    $query->condition('field_isr_release_number', $asset_release->getVersion());
+  }
+
   if (!empty($asset_release->id())) {
     $query->condition('id', $asset_release->id(), '<>');
   }
@@ -413,6 +391,7 @@ function asset_release_preprocess_page_title__rdf_entity__asset_release(array &$
   ]);
 
   $is_latest_release = $release->isLatestRelease();
+  $variables['additional_content']['is_archived'] = $release->isArchived();
   $variables['additional_content']['is_latest_release'] = $is_latest_release;
   if (!$is_latest_release && ($latest_release = $release->getSolution()->getLatestRelease())) {
     $variables['additional_content']['latest_release'] = $latest_release->toUrl()->toString();

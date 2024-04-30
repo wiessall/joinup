@@ -5,7 +5,7 @@
  * Block specific procedural functions.
  */
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 use Drupal\Core\Url;
 use Drupal\topic\Entity\TopicInterface;
@@ -123,6 +123,17 @@ function ventuno_preprocess_block__facets_block(array &$variables): void {
     $clear_button,
     $variables['content'],
   ];
+}
+
+/**
+ * Implements hook_preprocess_block().
+ */
+function ventuno_preprocess_block__group_menu_block__quick_links(array &$variables): void {
+  // Hide the block title if there are no links available. Privileged users will
+  // still see a help message and be able to access the contextual links.
+  if (isset($variables['content']['disabled'])) {
+    $variables['label'] = '';
+  }
 }
 
 /**

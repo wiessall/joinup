@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Drupal\joinup\Context;
 
@@ -52,6 +52,16 @@ class JoinupOSSSolutionContext extends RawDrupalContext {
    */
   public function deleteOssSolution(string $title): void {
     $this->getEntityByLabel('node', $title, 'oss_solution')->delete();
+  }
+
+  /**
+   * Ensures that we do not import solutions when the cron job is performed.
+   *
+   * @BeforeScenario @api
+   */
+  public static function disableOssCron(): void {
+    $state = \Drupal::state();
+    $state->set('eu_oss_catalogue.last_check', strtotime('- 1 hour'));
   }
 
 }

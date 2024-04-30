@@ -5,7 +5,7 @@
  * Hooks and custom functions of Joinup Slick module.
  */
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 use Drupal\Component\Utility\Html;
 use Drupal\Core\Field\FieldDefinitionInterface;
@@ -38,6 +38,23 @@ function joinup_slick_field_formatter_third_party_settings_form(FormatterInterfa
     '#default_value' => $plugin->getThirdPartySetting('joinup_slick', 'preset', ''),
     '#empty_value' => '',
   ];
+  $element['field_label'] = [
+    '#type' => 'checkbox',
+    '#title' => t('Use field label as Slick carousel title'),
+    '#default_value' => $plugin->getThirdPartySetting('joinup_slick', 'field_label', TRUE),
+  ];
+  $element['custom_label'] = [
+    '#type' => 'textfield',
+    '#title' => t('Custom carousel title'),
+    '#default_value' => $plugin->getThirdPartySetting('joinup_slick', 'custom_label', ''),
+    '#states' => [
+      'visible' => [
+        ':input[name$="[third_party_settings][joinup_slick][field_label]"]' => [
+          'checked' => FALSE,
+        ],
+      ],
+    ],
+  ];
 
   return $element;
 }
@@ -62,10 +79,12 @@ function joinup_slick_field_formatter_settings_summary_alter(array &$summary): v
  */
 function joinup_slick_preprocess_field(array &$variables): void {
   if (!empty($variables['element']['#third_party_settings']['joinup_slick']['preset'])) {
-    $optionsetId = $variables['element']['#third_party_settings']['joinup_slick']['preset'];
+    $joinupSlickSettings = $variables['element']['#third_party_settings']['joinup_slick'];
+    $optionsetId = $joinupSlickSettings['preset'];
     $slickManager = \Drupal::service('slick.manager');
     \assert($slickManager instanceof SlickManagerInterface);
     $optionset = \Drupal::entityTypeManager()->getStorage('slick')->load($optionsetId);
+    $useFieldLabel = $joinupSlickSettings['field_label'] ?? TRUE;
 
     if ($optionset instanceof SlickInterface) {
       $optionsetIdClass = Html::cleanCssIdentifier($optionsetId);
@@ -86,7 +105,7 @@ function joinup_slick_preprocess_field(array &$variables): void {
         'entity_type' => $variables['element']['#entity_type'],
         'bundle' => $variables['element']['#bundle'],
         'field_name' => $variables['element']['#field_name'],
-        'field_label' => $variables['label'],
+        'field_label' => $useFieldLabel ? $variables['label'] : $joinupSlickSettings['custom_label'],
       ];
       // Move Slick renderable to the field theme output, overriding the items
       // key. Structurally, this is the same if the field has one single value.
@@ -96,14 +115,6 @@ function joinup_slick_preprocess_field(array &$variables): void {
           'attributes' => new Attribute(),
         ],
       ];
-
-      // Add variable-width library if needed.
-      if (
-        !empty($optionset->get('options')['settings']['variableWidth']) &&
-        empty($optionset->get('options')['settings']['infinite'])
-      ) {
-        $variables['#attached']['library'][] = 'joinup_slick/slick-variable-width';
-      }
     }
   }
 }
@@ -134,6 +145,13 @@ function joinup_slick_preprocess_slick(array &$variables): void {
 
     // Ensure arrow_attributes is set.
     $variables['arrow_attributes'] = $variables['arrow_attributes'] ?? new Attribute();
+  }
+  // Add variable-width library if needed.
+  if (
+    !empty($variables["element"]["#optionset"]->get('options')['settings']['variableWidth']) &&
+    empty($variables["element"]["#optionset"]->get('options')['settings']['infinite'])
+  ) {
+    $variables['#attached']['library'][] = 'joinup_slick/slick-variable-width';
   }
 }
 

@@ -39,7 +39,6 @@ Feature: Pool paragraph tests.
     And I press "Log in"
     When I should see the heading "TV series"
 
-  @javascript
   Scenario: Authenticated user can vote
     Given the following polls:
       | question                  | runtime | cancel_vote_allow | show_number_of_results | result_vote_allow | choice                                                     | state     |

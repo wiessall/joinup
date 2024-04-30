@@ -31,6 +31,10 @@
   }
 }
 .draggable {
+  a.tabledrag-handle .handle {
+    width: 22px;
+    height: 22px;
+  }
   .field-multiple-drag,
   .tabledrag-handle-cell {
     position: relative;

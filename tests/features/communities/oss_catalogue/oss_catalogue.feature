@@ -5,14 +5,15 @@ Feature:
 
   Scenario: User sees the right content
     Given oss_solution content:
-      | title              | oss_development_status | oss_source        | oss_categories                                                  | oss_short_description                                                                                                                         | status      | oss_release_date | oss_vitality_index |
-      | Not published      | development            | developers_italia | content-management                                              | Never published                                                                                                                               | unpublished | 2022-05-24       | 0.56               |
-      | Not released       | development            | developers_italia | content-management                                              | Never released                                                                                                                                | published   |                  | 0.51               |
-      | C4S ERP            | stable                 | developers_italia | content-management                                              | A lightweight SAML2 MDQ server that implements draft-young-md-query implementation.                                                           | published   | 2022-04-13       | 0.98               |
-      | Vito Schiraldi     | stable                 | developers_italia | data-analytics,data-collection                                  | Docker image to convert QuakeML format to NonLinLoc PHS format.                                                                               | published   | 2000-07-13       | 0.67               |
-      | Spunta             | beta                   | developers_italia | digital-asset-management                                        |                                                                                                                                               | published   | 2023-08-13       | 0.78               |
-      | Semantic Turkey    | development            | developers_italia | application-development,it-development,digital-asset-management | Software Registry makes software development phase simplier by showing extended information about projects and allowing source code searches. | published   | 2000-04-13       | 0.50               |
-      | Cristian Gagliardi | obsolete               | developers_italia | data-collection                                                 | Immuni is a mobile app that helps us to fight the COVID-19 pandemic by notifying users at risk of carrying the virus as early as possible     | published   | 2020-09-13       | 0.99               |
+      | title              | oss_development_status | oss_source        | oss_categories                                                  | oss_short_description                                                                                                                         | status      | oss_archived | oss_release_date | oss_vitality_index |
+      | Not published      | development            | developers_italia | content-management                                              | Never published                                                                                                                               | unpublished |              | 2022-05-24       | 0.56               |
+      | Not released       | development            | developers_italia | content-management                                              | Never released                                                                                                                                | published   |              |                  | 0.51               |
+      | Archived           | stable                 | developers_italia | content-management                                              | A lightweight SAML2 MDQ server that implements draft-young-md-query implementation.                                                           | published   | 1            | 2022-01-13       | 0.98               |
+      | C4S ERP            | stable                 | developers_italia | content-management                                              | A lightweight SAML2 MDQ server that implements draft-young-md-query implementation.                                                           | published   | 0            | 2022-04-13       | 0.98               |
+      | Vito Schiraldi     | stable                 | developers_italia | data-analytics,data-collection                                  | Docker image to convert QuakeML format to NonLinLoc PHS format.                                                                               | published   | 0            | 2000-07-13       | 0.67               |
+      | Spunta             | beta                   | developers_italia | digital-asset-management                                        |                                                                                                                                               | published   |              | 2023-08-13       | 0.78               |
+      | Semantic Turkey    | development            | developers_italia | application-development,it-development,digital-asset-management | Software Registry makes software development phase simplier by showing extended information about projects and allowing source code searches. | published   |              | 2000-04-13       | 0.50               |
+      | Cristian Gagliardi | obsolete               | developers_italia | data-collection                                                 | Immuni is a mobile app that helps us to fight the COVID-19 pandemic by notifying users at risk of carrying the virus as early as possible     | published   |              | 2020-09-13       | 0.99               |
 
     Given I visit "/collection/eu-oss-catalogue"
 
@@ -53,9 +54,17 @@ Feature:
       | Cristian Gagliardi |
       | Vito Schiraldi     |
       | Semantic Turkey    |
+      | Not released       |
 
     When I click "View all" in the "Most recent solutions" region
     Then the option with text "Most Recent" from select "Sort by" is selected
+    And I should see the following tiles in the correct order:
+      | Spunta             |
+      | C4S ERP            |
+      | Cristian Gagliardi |
+      | Vito Schiraldi     |
+      | Semantic Turkey    |
+      | Not released       |
 
     # Most active solutions carousel.
     When I visit the OSS welcome page
@@ -64,10 +73,18 @@ Feature:
       | C4S ERP            |
       | Spunta             |
       | Vito Schiraldi     |
+      | Not released       |
       | Semantic Turkey    |
 
     When I click "View all" in the "Most active solutions" region
     Then the option with text "Most Active" from select "Sort by" is selected
+    And I should see the following tiles in the correct order:
+      | Cristian Gagliardi |
+      | C4S ERP            |
+      | Spunta             |
+      | Vito Schiraldi     |
+      | Not released       |
+      | Semantic Turkey    |
 
     # Check OSS label in tile footer.
     When I visit the OSS welcome page
@@ -95,6 +112,17 @@ Feature:
     And I should see the following links in the "Navigation menu" region:
       | Welcome |
       | Search  |
+
+  Scenario: User can see GIT repo indicators.
+    Given oss_solution content:
+      | title              | oss_source        | oss_git_stars | oss_git_open_issues | oss_git_open_pull_requests | oss_git_forks | status    |
+      | Olympus indicators | developers_italia | 1111          | 2222                | 3333                       | 4444          | published |
+    When I go to the content page of the type "oss_solution" with the title "Olympus indicators"
+    Then I should see the following lines of text:
+      | 1111 |
+      | 2222 |
+      | 3333 |
+      | 4444 |
 
   Scenario: User sees GIT description on OSS Solution page if short description is missing.
     Given oss_solution content:
@@ -157,7 +185,7 @@ Feature:
       | Maintenance type                                                                                   |
       |   Maintained by people donating their time to the project                                          |
       | Software type                                                                                      |
-      |   Typically installed and run in a a desktop operating system environment                          |
+      |   standalone/desktop                                                                               |
       | Used by                                                                                            |
       |   Administration 1,                                                                                |
       |   Administration 2,                                                                                |
@@ -166,8 +194,9 @@ Feature:
       |   ACME Ltd.                                                                                        |
       | Technical Contacts                                                                                 |
       |   FOSS Conference                                                                                  |
-      | Vitality                                                                                         |
-      | 41%                                                                                              |
+      | Vitality                                                                                           |
+      | 41%                                                                                                |
+    And the "div" element with "title" attribute should contain "The software is typically installed and run in a a desktop operating system environment."
     And I should see the following links:
       # Categories.
       | document-management              |
@@ -223,22 +252,14 @@ Feature:
 
     Examples:
       | path                     | role          |
-      | eu-oss-catalogue/about   | administrator |
       | eu-oss-catalogue/members | administrator |
-      | eu-oss-catalogue/about   | authenticated |
       | eu-oss-catalogue/members | authenticated |
-      | eu-oss-catalogue/about   | moderator     |
       | eu-oss-catalogue/members | moderator     |
 
-  Scenario Outline: Anonymous user cannot access OSS Catalogue's inaccessible routes.
+  Scenario: Anonymous user cannot access OSS Catalogue's inaccessible routes.
     Given I am not logged in
-    When I go to "<path>"
+    When I go to "eu-oss-catalogue/members"
     Then I should see the heading "Sign in to continue"
-
-    Examples:
-      | path                     |
-      | eu-oss-catalogue/about   |
-      | eu-oss-catalogue/members |
 
   @javascript
   Scenario: Modal link should be displayed and must show all field values.
@@ -333,11 +354,11 @@ Feature:
       | ef8676b28d34d82c4a0688a35ec76335.png |
     # Fourth must not be visible yet.
     And I should not see the image "99ccd804281fede2d4e3dcc3a9b30a4c.png"
-    Then I click on element ".slick--optionset--oss-solution-screenshot button[aria-label='Next']:not([aria-disabled='true'])"
+    Then I click on element ".slick--optionset--image-gallery button[aria-label='Next']:not([aria-disabled='true'])"
     And I wait up to "5" seconds for CSS transitions to finish
     And I should see the image "99ccd804281fede2d4e3dcc3a9b30a4c.png"
-    Then I click on element ".slick--optionset--oss-solution-screenshot button[aria-label='Previous']:not([aria-disabled='true'])"
+    Then I click on element ".slick--optionset--image-gallery button[aria-label='Previous']:not([aria-disabled='true'])"
     And I wait up to "5" seconds for CSS transitions to finish
     And I should not see the image "99ccd804281fede2d4e3dcc3a9b30a4c.png"
-    And the page should have an element with CSS selector ".slick--optionset--oss-solution-screenshot button[aria-label='Previous'][aria-disabled='true']"
+    And the page should have an element with CSS selector ".slick--optionset--image-gallery button[aria-label='Previous'][aria-disabled='true']"
 

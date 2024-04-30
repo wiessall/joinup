@@ -61,7 +61,6 @@ Feature:
       | document   | document publication date  |
       | news       | publication date           |
 
-  @terms
   Scenario: Documents without a publication date should show the published_at property.
     Given the following collection:
       | title | Gravitational pull detectors |
@@ -86,7 +85,6 @@ Feature:
     # since it was just created.
     And I should not see the text "Last update:" in the "Content" region
 
-  @terms
   Scenario: Draft documents without a publication date should only show the last updated time.
     Given the following collection:
       | title | Gravitational pull detectors |

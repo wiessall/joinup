@@ -25,9 +25,7 @@ dependencies:
     - image.style.vertical_medium_image
     - rdf_entity.rdfentity.collection
   module:
-    - smart_trim
     - svg_image
-    - template_suggestion
     - user
 id: rdf_entity.collection.view_mode_featured
 targetEntityType: rdf_entity
@@ -35,24 +33,10 @@ bundle: collection
 mode: view_mode_featured
 content:
   field_ar_abstract:
-    type: smart_trim
+    type: string
     label: hidden
     settings:
-      trim_length: 200
-      trim_type: chars
-      trim_suffix: …
-      wrap_output: false
-      wrap_class: trimmed
-      more:
-        display_link: false
-        target_blank: false
-        link_trim_only: false
-        class: more-link
-        text: More
-        aria_label: 'Read more about [node:title]'
-      summary_handler: full
-      trim_options:
-        text: false
+      link_to_entity: false
     third_party_settings:
       template_suggestion:
         template_suggestion: ''
@@ -66,6 +50,10 @@ content:
       image_style: vertical_medium_image
       image_loading:
         attribute: lazy
+      svg_attributes:
+        width: null
+        height: null
+      svg_render_as_image: true
     third_party_settings: {  }
     weight: 0
     region: content

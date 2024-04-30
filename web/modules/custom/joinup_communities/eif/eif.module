@@ -5,7 +5,7 @@
  * Contains hooks and functions for the eif module.
  */
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Access\AccessResultInterface;
@@ -18,6 +18,7 @@ use Drupal\Core\Url;
 use Drupal\eif\EifInterface;
 use Drupal\eif\Form\EifWrapperInlineForm;
 use Drupal\field\FieldConfigInterface;
+use Drupal\joinup_taxonomy\Entity\MappedTerm;
 use Drupal\og\OgGroupAudienceHelperInterface;
 use Drupal\rdf_meta_entity\Entity\RdfMetaEntityInterface;
 use Drupal\solution\Entity\SolutionInterface;
@@ -213,6 +214,24 @@ function eif_entity_type_build(array &$entity_types): void {
 }
 
 /**
+ * Implements hook_entity_bundle_info_alter().
+ */
+function eif_entity_bundle_info_alter(array &$bundles): void {
+  $vids = [
+    'eif_conceptual_model',
+    'eif_interoperability_layer',
+    'eif_principle',
+    'eif_recommendation',
+    'eif_solution_type',
+  ];
+  foreach ($vids as $vid) {
+    if (!empty($bundles['taxonomy_term'][$vid])) {
+      $bundles['taxonomy_term'][$vid]['class'] = MappedTerm::class;
+    }
+  }
+}
+
+/**
  * Implements hook_form_FORM_ID_alter().
  */
 function eif_form_rdf_meta_entity_eif_perspective_form_alter(array &$form, FormStateInterface $form_state, string $form_id): void {
@@ -267,7 +286,7 @@ function eif_eif_wrapper_access(EntityInterface $entity, string $operation, Acco
  */
 function eif_rdf_meta_entity_insert(RdfMetaEntityInterface $entity): void {
   _eif_reindex_parent_solution($entity);
-  _eif_add_eif_link_to_leftside_menu($entity);
+  _eif_add_eif_link_to_group_menus($entity);
 }
 
 /**
@@ -297,6 +316,12 @@ function _eif_reindex_parent_solution(RdfMetaEntityInterface $entity): void {
 
   $solution = \Drupal::entityTypeManager()->getStorage('rdf_entity')->loadUnchanged($entity->target->target_id);
 
+  // In case the solutions was deleted prior to the perspective, the solution
+  // will be NULL.
+  if (!$solution) {
+    return;
+  }
+
   // Manually update the entry of the solution in the SOLR index as we need to
   // index the extra property for the EIF perspective.
   $tracking_manager = \Drupal::getContainer()->get('search_api.entity_datasource.tracking_manager');
@@ -325,26 +350,29 @@ function _eif_reindex_parent_solution(RdfMetaEntityInterface $entity): void {
  * @param \Drupal\rdf_meta_entity\Entity\RdfMetaEntityInterface $meta_entity
  *   The RDF meta entity.
  */
-function _eif_add_eif_link_to_leftside_menu(RdfMetaEntityInterface $meta_entity): void {
+function _eif_add_eif_link_to_group_menus(RdfMetaEntityInterface $meta_entity): void {
   if ($meta_entity->bundle() === 'eif_perspective') {
     $solution = $meta_entity->getTargetEntity();
     if ($solution instanceof SolutionInterface) {
-      $og_menu = \Drupal::entityTypeManager()->getStorage('ogmenu_instance')->loadByProperties([
-        'og_audience' => $solution->id(),
-      ]);
-      if ($og_menu = reset($og_menu)) {
-        $menu_name = 'ogmenu-' . $og_menu->id();
-        $link = [
-          'uri' => Url::fromRoute('entity.rdf_entity.eif_perspective', [
-            'rdf_entity' => $solution->id(),
-          ])->toUriString(),
-        ];
-        \Drupal::entityTypeManager()->getStorage('menu_link_content')->create([
-          'title' => t('EIF Perspective'),
-          'menu_name' => $menu_name,
-          'link' => $link,
-          'weight' => -6,
-        ])->save();
+      foreach (['navigation', 'quick_links'] as $bundle) {
+        $og_menu = \Drupal::entityTypeManager()->getStorage('ogmenu_instance')->loadByProperties([
+          'og_audience' => $solution->id(),
+          'type' => $bundle,
+        ]);
+        if ($og_menu = reset($og_menu)) {
+          $menu_name = 'ogmenu-' . $og_menu->id();
+          $link = [
+            'uri' => Url::fromRoute('entity.rdf_entity.eif_perspective', [
+              'rdf_entity' => $solution->id(),
+            ])->toUriString(),
+          ];
+          \Drupal::entityTypeManager()->getStorage('menu_link_content')->create([
+            'title' => t('EIF Perspective'),
+            'menu_name' => $menu_name,
+            'link' => $link,
+            'enabled' => $bundle === 'quick_links',
+          ])->save();
+        }
       }
     }
   }

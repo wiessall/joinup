@@ -20,12 +20,13 @@ Feature:
 
     # Verify that solution group menu contains correct links.
     When I go to the "EIF solution" solution
-    Then I should see the following group menu items in the specified order:
+    Then I should see the following navigation menu items in the specified order:
       | text            |
       | Overview        |
-      | Members         |
-      | About           |
+    And I should see the following quick links menu items in the specified order:
+      | text            |
       | EIF Perspective |
+
     Then there should be an EIF perspective associated with the "EIF solution" solution
     And there should be an EIF perspective associated with the "EIF only type" solution
 

@@ -1,8 +1,10 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Drupal\Tests\eu_oss_catalogue\Functional;
+
+use Drupal\eu_oss_catalogue\Entity\HostingPlatformConfig;
 
 /**
  * Tests the GitLab code hosting provider.
@@ -56,6 +58,56 @@ class GitLabFetchTest extends FetchTestBase {
       'a:6:{s:5:"%type";s:36:"GuzzleHttp\Exception\ClientException";s:8:"@message";s:152:"Client error: `HEAD https://limited.self-hosted.gitlab.example.com/group1/project-1-2/raw/HEAD/doesn-t/exist.png` resulted in a `404 Not Found` response";',
     );
     $this->assertCount(1, $notFoundLogEntries);
+  }
+
+  /**
+   * Tests fetching a GitLab server which API endpoint redirects to HTML.
+   */
+  public function testWrongClientResponse(): void {
+    $config = HostingPlatformConfig::create([
+      'id' => 'gitlab_self_hosted_wrong',
+      'label' => 'GitLab self-hosted (wrong)',
+      'platformId' => 'gitlab_self_hosted',
+      'platformSettings' => [
+        'baseUrl' => 'https://wrong.self-hosted.gitlab.example.com',
+        'projects' => ['group' => NULL],
+      ],
+    ]);
+    $config->save();
+    $this->fetchSolutions('hosting_platform:gitlab_self_hosted_wrong', -1);
+
+    $this->assertEquals(
+      [
+        [
+          'message' => "Can't get the group @namespace from @url. Message: @message",
+          'variables' => [
+            '%type' => 'RuntimeException',
+            '@message' => 'Response returned by GraphQL client is not an array.',
+            '%function' => 'Drupal\eu_oss_catalogue\Plugin\eu_oss_catalogue\HostingPlatform\GitLabDotCom->doGetProjects()',
+            '@namespace' => 'group',
+            '@url' => 'https://wrong.self-hosted.gitlab.example.com',
+          ],
+        ],
+        [
+          'message' => "Unstable API behind '@provider' provider plugin, skipping cleanup. Exceptions:\n@exception-messages",
+          'variables' => [
+            '@provider' => 'hosting_platform:gitlab_self_hosted_wrong',
+            '@exception-messages' => 'Response returned by GraphQL client is not an array.',
+          ],
+        ],
+      ],
+      array_map(
+        function (object $log): array {
+          $logArray = (array) $log;
+          $logArray['variables'] = unserialize($logArray['variables'], ['allowed_classes' => FALSE]);
+          unset($logArray['variables']['%file']);
+          unset($logArray['variables']['%line']);
+          unset($logArray['variables']['@backtrace_string']);
+          return $logArray;
+        },
+        $this->getLogEntries()
+      )
+    );
   }
 
 }

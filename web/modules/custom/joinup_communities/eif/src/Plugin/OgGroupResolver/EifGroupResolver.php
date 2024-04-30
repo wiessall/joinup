@@ -1,14 +1,14 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Drupal\eif\Plugin\OgGroupResolver;
 
 use Drupal\eif\EifInterface;
 use Drupal\og\OgResolvedGroupCollectionInterface;
 use Drupal\og\Plugin\OgGroupResolver\RouteGroupResolver;
-use Drupal\rdf_taxonomy\Entity\RdfTerm;
 use Drupal\solution\Entity\SolutionInterface;
+use Drupal\taxonomy\TermInterface;
 
 /**
  * Resolves the group from the route.
@@ -42,7 +42,7 @@ class EifGroupResolver extends RouteGroupResolver {
    */
   public function resolve(OgResolvedGroupCollectionInterface $collection): void {
     if ($entity = $this->getContentEntity()) {
-      if ($entity->id() === EifInterface::EIF_ID || ($entity instanceof RdfTerm && $entity->bundle() === 'eif_recommendation')) {
+      if ($entity->id() === EifInterface::EIF_ID || ($entity instanceof TermInterface && $entity->bundle() === 'eif_recommendation')) {
         /** @var \Drupal\solution\Entity\SolutionInterface $solution */
         if ($solution = $this->entityTypeManager->getStorage('rdf_entity')->load(EifInterface::EIF_ID)) {
           $collection->addGroup($solution, ['route']);

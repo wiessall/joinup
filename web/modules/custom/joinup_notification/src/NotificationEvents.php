@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Drupal\joinup_notification;
 
@@ -62,5 +62,14 @@ final class NotificationEvents {
    * @var string
    */
   const OG_MEMBERSHIP_MANAGEMENT = 'joinup_notification.og_membership.management';
+
+  /**
+   * Event when solution is completely archived along with its sub-items.
+   *
+   * @Event
+   *
+   * @var string
+   */
+  const RDF_ENTITY_ARCHIVE_COMPLETED = 'joinup_notification.rdf.archive_completed.notify';
 
 }

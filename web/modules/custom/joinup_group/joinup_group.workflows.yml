@@ -1,6 +1,6 @@
 announcement:
   id: announcement
-  label: "Announcements workflow"
+  label: "Announcements"
   group: announcement
   states:
     draft:

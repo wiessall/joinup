@@ -4,9 +4,8 @@ status: true
 dependencies:
   config:
     - core.entity_view_mode.rdf_entity.carousel
-    - field.field.rdf_entity.solution.field_is_actor
+    - field.field.rdf_entity.solution.field_is_abstract
     - field.field.rdf_entity.solution.field_is_affiliations_requests
-    - field.field.rdf_entity.solution.field_is_business_process
     - field.field.rdf_entity.solution.field_is_contact_information
     - field.field.rdf_entity.solution.field_is_content
     - field.field.rdf_entity.solution.field_is_content_creation
@@ -24,15 +23,12 @@ dependencies:
     - field.field.rdf_entity.solution.field_is_metrics_page
     - field.field.rdf_entity.solution.field_is_moderation
     - field.field.rdf_entity.solution.field_is_owner
-    - field.field.rdf_entity.solution.field_is_product_type
     - field.field.rdf_entity.solution.field_is_related_solutions
     - field.field.rdf_entity.solution.field_is_shared_in
     - field.field.rdf_entity.solution.field_is_show_eira_related
     - field.field.rdf_entity.solution.field_is_solution_type
     - field.field.rdf_entity.solution.field_is_source_code_repository
-    - field.field.rdf_entity.solution.field_is_standardization_level
     - field.field.rdf_entity.solution.field_is_state
-    - field.field.rdf_entity.solution.field_is_test_resource_type
     - field.field.rdf_entity.solution.field_is_translation
     - field.field.rdf_entity.solution.field_is_version
     - field.field.rdf_entity.solution.field_is_webdav_creation
@@ -60,7 +56,7 @@ third_party_settings:
       label: 'Abstract wrapper'
       parent_name: ''
       region: hidden
-      weight: 61
+      weight: 57
       format_type: html_element
       format_settings:
         classes: ''
@@ -79,6 +75,14 @@ targetEntityType: rdf_entity
 bundle: solution
 mode: carousel
 content:
+  field_is_abstract:
+    type: string
+    label: hidden
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 3
+    region: content
   field_is_description:
     type: smart_trim
     label: hidden
@@ -120,7 +124,7 @@ content:
   flag_like_rdf_entity:
     settings: {  }
     third_party_settings: {  }
-    weight: 4
+    weight: 5
     region: content
   label:
     type: string
@@ -133,7 +137,7 @@ content:
   read_more:
     settings: {  }
     third_party_settings: {  }
-    weight: 3
+    weight: 4
     region: content
 hidden:
   changed: true
@@ -142,9 +146,7 @@ hidden:
   download_total: true
   eif_perspective: true
   featured: true
-  field_is_actor: true
   field_is_affiliations_requests: true
-  field_is_business_process: true
   field_is_contact_information: true
   field_is_content: true
   field_is_content_creation: true
@@ -160,15 +162,12 @@ hidden:
   field_is_metrics_page: true
   field_is_moderation: true
   field_is_owner: true
-  field_is_product_type: true
   field_is_related_solutions: true
   field_is_shared_in: true
   field_is_show_eira_related: true
   field_is_solution_type: true
   field_is_source_code_repository: true
-  field_is_standardization_level: true
   field_is_state: true
-  field_is_test_resource_type: true
   field_is_translation: true
   field_is_version: true
   field_is_webdav_creation: true
@@ -181,6 +180,7 @@ hidden:
   field_status: true
   field_topic: true
   langcode: true
+  members: true
   og_group: true
   pinned_in: true
   rdf_entity_solution_field_is_content_inline_facets: true

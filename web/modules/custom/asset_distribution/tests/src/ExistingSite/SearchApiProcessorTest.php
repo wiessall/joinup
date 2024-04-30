@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Drupal\Tests\asset_distribution\ExistingSite;
 
@@ -33,6 +33,7 @@ class SearchApiProcessorTest extends JoinupExistingSiteTestBase {
       'og_audience' => $solution->id(),
       'parent' => $solution,
       'field_ad_access_url' => 'ftp://example.com',
+      'field_ad_state' => 'published',
     ]);
     // Trigger indexing.
     \Drupal::getContainer()->get('search_api.post_request_indexing')->destruct();

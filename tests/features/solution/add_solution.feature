@@ -52,7 +52,7 @@ Feature: "Add solution" visibility options.
     And I go to the homepage of the "Collection solution test" collection
     Then I should not see the link "Add solution"
 
-  @terms @uploadFiles:logo.png
+  @uploadFiles:logo.png
   Scenario: Add solution as a collection facilitator.
     Given the following collection:
       | title | Belgian barista's |
@@ -75,7 +75,7 @@ Feature: "Add solution" visibility options.
     And I check "I have read and accept the legal notice and I commit to manage my solution on a regular basis."
     And I press "Yes"
     Then I should see the heading "Add Solution"
-    And the following fields should be present "Title, Description, Upload a new file or enter a URL, Logo, Name, E-mail address, Website URL"
+    And the following fields should be present "Title, Abstract, Description, Upload a new file or enter a URL, Logo, Name, E-mail address, Website URL"
     And the following fields should not be present "Groups audience, Other groups, Current workflow state, Langcode, Translation, Motivation"
     # Regression test for ensuring that obsolete content creation value is removed.
     # @see: https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-3567
@@ -85,12 +85,13 @@ Feature: "Add solution" visibility options.
     And the available options in the "Language" select should not include the "Multilingual Code"
     And the "Solution type" field should contain the "EIRA Ontology Viewpoint, Legal View, Deprecated" option groups
     When I fill in the following:
-      | Title                 | Espresso is the solution                                      |
-      | Description           | This is a test text                                           |
-      | Geographical coverage | Belgium                                                       |
-      | Language              | http://publications.europa.eu/resource/authority/language/VLS |
-      | Name                  | Ernst Brice                                                   |
-      | E-mail address        | ernsy1999@gmail.com                                           |
+      | Title                 | Espresso is the solution  |
+      | Abstract              | Abstract used for testing |
+      | Description           | This is a test text       |
+      | Geographical coverage | Belgium                   |
+      | Name                  | Ernst Brice               |
+      | E-mail address        | ernsy1999@gmail.com       |
+    And I select "Flemish" from "Language"
     Then I select "Data Owner" from "Solution type"
     And I select "Demography" from "Topic"
     # Attach a PDF to the documentation.
@@ -103,7 +104,8 @@ Feature: "Add solution" visibility options.
     And I press "Add owner"
     # Ensure that the Status field is a dropdown.
     # @see: https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-3342
-    And I select "Completed" from "Status"
+    And the option with text "Completed" from select "Status" is selected
+    And the "Show solutions related by EIRA terms" checkbox should not be checked
     And I press "Propose"
     Then the email sent to "Ruth Lee" with subject "Joinup: A new solution has been proposed" contains the following lines of text:
       | Wendell Silva has proposed a new Interoperability solution: "Espresso is the solution" on Joinup. |
@@ -141,12 +143,13 @@ Feature: "Add solution" visibility options.
     And I check "I have read and accept the legal notice and I commit to manage my solution on a regular basis."
     And I press "Yes"
     When I fill in the following:
-      | Title                 | V60 filter coffee solution                                             |
-      | Description           | This is a test text                                                    |
-      | Geographical coverage | Belgium (http://publications.europa.eu/resource/authority/country/BEL) |
-      | Language              | http://publications.europa.eu/resource/authority/language/VLS          |
-      | Name                  | Ajit Tamboli                                                           |
-      | E-mail address        | tambotamboli@gocloud.in                                                |
+      | Title                 | V60 filter coffee solution |
+      | Abstract              | Abstract of filter coffee  |
+      | Description           | This is a test text        |
+      | Geographical coverage | Belgium                    |
+      | Name                  | Ajit Tamboli               |
+      | E-mail address        | tambotamboli@gocloud.in    |
+    And I select "Flemish" from "Language"
     Then I select "Data Owner" from "Solution type"
     And I select "E-inclusion" from "Topic"
     # Attach a PDF to the documentation.
@@ -171,7 +174,6 @@ Feature: "Add solution" visibility options.
     Then I delete the "V60 filter coffee solution" solution
     Then I delete the "Espresso is the solution" solution
 
-  @terms
   Scenario: Correct transition buttons are shown after a partial filled form is submitted.
     # This is a regression test for a bug that was causing the owner state
     # buttons to leak into the solution create form, causing critical errors
@@ -188,7 +190,7 @@ Feature: "Add solution" visibility options.
     And I fill in the following:
       | Title       | PHP comments parser                             |
       | Description | A simple parser that goes through PHP comments. |
-    And I select "Data gathering, data processing" from "Topic"
+    And I select "Data gathering and processing" from "Topic"
     And I select "Implementing Guideline" from "Solution type"
 
     # Submit the incomplete form, so error messages about missing fields will
@@ -211,7 +213,6 @@ Feature: "Add solution" visibility options.
     But I should not see the link "Delete"
     And I should not see the button "Update"
 
-  @terms
   Scenario: Create a solution with a name that already exists
     Given the following collections:
       | title              | state     |
@@ -219,6 +220,7 @@ Feature: "Add solution" visibility options.
       | Glacier monitoring | published |
     And the following solution:
       | title       | Climate change tracker                            |
+      | abstract    | Tracks climate change                             |
       | description | Atlantic salmon arrived after the Little Ice Age. |
       | collection  | Ocean studies                                     |
       | state       | published                                         |
@@ -248,11 +250,12 @@ Feature: "Add solution" visibility options.
     And I press "Yes"
     And I fill in the following:
       | Title                 | Climate change tracker                      |
+      | Abstract              | Tracks climate change                       |
       | Description           | Logs retreat of 40 glaciers in Switzerland. |
       | Geographical coverage | Switzerland                                 |
       | Name                  | Angela Crespi                               |
       | E-mail address        | angela_crespi@glacmon.basel-uni.ch          |
-    And I select "Data gathering, data processing" from "Topic"
+    And I select "Data gathering and processing" from "Topic"
     And I select "Logging Service" from "Solution type"
     And I press "Add existing" at the "Owner" field
     And I fill in "Owner" with "University of Basel"
@@ -277,7 +280,7 @@ Feature: "Add solution" visibility options.
     And I delete the "Climate change tracker" solution
     And I delete the "Angela Crespi" contact information
 
-  @javascript @terms @generateMedia @generateMediaTypes:solution_logo
+  @javascript @generateMedia @generateMediaTypes:solution_logo
   Scenario: Tests the image library widget.
     Given the following owner:
       | name                 | type    |
@@ -287,6 +290,7 @@ Feature: "Add solution" visibility options.
       | name  | Invisible Man             |
     And the following solution:
       | title               | Cleaning solution                                 |
+      | abstract            | Cleans anything dirty                             |
       | description         | Use on metal surfaces.                            |
       | owner               | Organisation example                              |
       | state               | published                                         |

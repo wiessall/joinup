@@ -1,0 +1,15 @@
+uuid: 24cf82ac-883a-45e6-89fd-c29c6e2677c8
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.ogmenu_instance.quick_links.og_audience
+    - og_menu.ogmenu.quick_links
+id: ogmenu_instance.quick_links.default
+targetEntityType: ogmenu_instance
+bundle: quick_links
+mode: default
+content: {  }
+hidden:
+  langcode: true
+  og_audience: true

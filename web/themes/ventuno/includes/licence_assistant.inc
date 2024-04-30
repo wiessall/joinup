@@ -5,7 +5,7 @@
  * Joinup Licencing Assistant specific procedural functions.
  */
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 /**
  * Implements hook_preprocess_licence_filter_list().

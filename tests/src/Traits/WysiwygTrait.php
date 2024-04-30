@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Drupal\joinup\Traits;
 
@@ -233,7 +233,8 @@ trait WysiwygTrait {
       $button_elements = $editor->findAll('xpath', '//button[contains(concat(" ", normalize-space(@class), " "), " ck-button ")]');
 
       $buttons = array_map(function (NodeElement $element): string {
-        return trim($element->getAttribute('data-cke-tooltip-text'));
+        $text = $element->getAttribute('data-cke-tooltip-text') ?? $element->getText();
+        return trim($text);
       }, $button_elements);
     }
     else {

@@ -1,4 +1,4 @@
-@api @terms @group-h
+@api @group-h @topic
 Feature:
   Ensure curated list of topics on the homepage behave properly.
 
@@ -295,13 +295,13 @@ Feature:
 
     # Open collapse
     When I press "See more"
-    Then I should see the text "See less"
+    Then I wait until the page contains the text "See less"
     And I should not see the text "See more"
     Then the "See less" collapse is expanded
 
     # Close collapse again
     When I press "See less"
-    Then I should see the text "See more"
+    Then I wait until the page contains the text "See more"
     And I should not see the text "See less"
     Then the "See more" collapse is collapsed
 
@@ -561,3 +561,37 @@ Feature:
     And the url should match "/topic/law-and-justice/e-justice"
     And I should see the text "What do we mean by Legislation & Technology?" in the "Legislation & Technology" tile
     And I should not see the text "What do we mean by Legislation &amp; Technology?" in the "Legislation & Technology" tile
+
+  @javascript
+  Scenario: Show abstract instead of description in Collection/Solution tiles.
+    Given collections:
+      | title                | abstract         | closed | description                          | state     |
+      | Col with abstract    | Magic abstract   | no     | This tree is impervious description. | published |
+      | Col without abstract | Another abstract | no     | Magic description.                   | published |
+    Given the following solutions:
+      | title             | description              | state     | collection        | abstract                         |
+      | Another rough day | Lorem description issum  | published | Col with abstract |                                  |
+      | Just another solt | Second description issum | published | Col with abstract | This is an soltion with abstract |
+    And the following topics are enabled in the homepage:
+      | E-justice |
+    And I am logged in as a moderator
+    And I go to the edit form of the topic meta entity of the "E-justice" topic "taxonomy term"
+    And I add a layout paragraph in the "Topic meta entity body" form field with the following properties:
+      | layout           | one column |
+      | Background theme | light      |
+      | Extra classes    | test-class |
+    And I add a "Configurable listing" paragraph in the "Topic meta entity body" form field:
+      | layout position | 1                                                          |
+      | region          | content                                                    |
+      | Heading         | type: text - value: E-justice heading                      |
+      | Action link     | type: text - value: http://example.com                     |
+      | Link text       | type: text - value: E-justice link text                    |
+      | List style      | type: select - value: List                                 |
+      | Show content    | type: select - value: All                                  |
+      | Query presets   | type: text - value: entity_bundle\|solution,collection\|IN |
+    And I press "Save"
+    And the url should match "/topic/law-and-justice/e-justice"
+    And I should see the text "Magic abstract" in the "Col with abstract" tile
+    And I should see the text "Another abstract" in the "Col without abstract" tile
+    And I should see the text "Lorem description issum" in the "Another rough day" tile
+    And I should see the text "This is an soltion with abstract" in the "Just another solt" tile

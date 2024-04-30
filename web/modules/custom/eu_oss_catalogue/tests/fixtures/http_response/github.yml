@@ -5,7 +5,10 @@ default:
         - id: GitHub-solution-1-internal-ID
           description: Description of GitHub solution 1
           name: dummy-name-1
-          isArchived: false
+          forkCount: 101
+          stargazerCount: 121
+          issues:
+            totalCount: 141
           # This logo is ignored as a valid one is provided in publiccode.yml.
           openGraphImageUrl: https://repository-images.githubusercontent.com/123123123/012345678901234567890123456789012345
           owner:
@@ -15,6 +18,8 @@ default:
           latestRelease:
             tagName: '2.3.0'
             createdAt: '2023-04-19'
+          pullRequests:
+            totalCount: 8
           file__publiccodeYml:
             text: |
               publiccodeYmlVersion: "0.2"
@@ -124,16 +129,18 @@ default:
         - id: GitHub-solution-2-internal-ID
           description: Description of GitHub solution 2
           name: dummy-name-2
-          isArchived: true
+          forkCount: 102
+          stargazerCount: 122
+          issues:
+            totalCount: 142
           # This will be used as logo from publiccode.yml doesn't exist.
           openGraphImageUrl: https://repository-images.githubusercontent.com/234234234/012345678901234567890123456789012345
           owner:
             login: dummy-namespace-2
           defaultBranchRef:
             name: default-branch-of-GitHub-solution-2
-          latestRelease:
-            tagName: 'v3.5.1'
-            createdAt: '2022-09-09'
+          pullRequests:
+            totalCount: 0
           file__publiccodeYml:
             text: |
               publiccodeYmlVersion: "0.4"
@@ -211,14 +218,16 @@ developers_italia:
         - id: GitHub-solution-1-internal-ID
           description: Description of GitHub solution 1
           name: dummy-name-1
-          isArchived: false
+          forkCount: 103
+          stargazerCount: 123
+          issues:
+            totalCount: 143
           owner:
             login: dummy-namespace-1
           defaultBranchRef:
             name: default-branch-of-GitHub-solution-1
-          latestRelease:
-            tagName: '2.3.0'
-            createdAt: '2023-04-19'
+          pullRequests:
+            totalCount: 3
           file__publiccodeYml:
             text: |
               publiccodeYmlVersion: "0.2"

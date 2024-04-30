@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Drupal\eu_oss_catalogue\Plugin\Field;
 
@@ -110,6 +110,9 @@ class RelevantLanguageCode extends FieldItemList {
     \assert($ossSolution instanceof OssSolutionInterface);
     $field = $ossSolution->get(static::PUBLICCODE_YAML_FIELD);
     \assert($field->getFieldDefinition()->isTranslatable() === FALSE);
+    if ($field->isEmpty()) {
+      return [];
+    }
     $publicCodeYamlContent = $field->first()->getValue()[$field->first()->mainPropertyName()];
 
     try {

@@ -1,0 +1,3 @@
+asset_distribution:
+  label: 'Asset distribution'
+  entity_type: rdf_entity

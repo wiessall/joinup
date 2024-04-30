@@ -44,6 +44,10 @@
       color: $white;
       text-decoration-color: $white!important;
     }
+    &.see-more--long {
+      min-height: 48px;
+      -webkit-line-clamp: 2;
+    }
   }
   &__see-more-btn {
     color: $white;

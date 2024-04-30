@@ -2,11 +2,16 @@
 # - Basic: https://ddev.readthedocs.io/en/stable/users/configuration/config/
 # - Extend/override: https://ddev.readthedocs.io/en/stable/users/extend/customization-extendibility/#extending-configyaml-with-custom-configyaml-files
 
+ddev_version_constraint: ">=v1.23.0"
 name: joinup
-type: drupal10
+type: drupal
 docroot: web
 php_version: "8.2"
-webimage_extra_packages: [php-apcu]
+webimage_extra_packages:
+    - php-apcu
+    # Both required by mydumper.
+    - libatomic1
+    - zstd
 
 # It's not possible to use fpfis/httpd-php because DDEV is strongly advising
 # against using a non-DDEV image. But this has no impact on the Joinup code runs
@@ -20,29 +25,25 @@ xdebug_enabled: false
 # Tip: Run `ddev describe -j | jq -r .raw.dbinfo.published_port` to get the port
 # exposed on host. DDEV is assigning a random, unused port, for each instance.
 database:
-  type: mysql
-  version: "8.0"
+    type: mysql
+    version: "8.0"
 
 timezone: Europe/Brussels
-additional_hostnames: []
-additional_fqdns: []
+additional_hostnames: [ ]
+additional_fqdns: [ ]
 use_dns_when_possible: true
 composer_version: "2"
-web_environment:
-  - DRUPAL_TRUSTED_HOST_PATTERNS=.*
+web_environment: [ ]
 disable_settings_management: true
+nodejs_version: "20"
 
 upload_dirs:
   - sites/default/files
   - ../private
 
 hooks:
-  pre-start:
-    # Symlink the Solr config to be exposed into container. The Digit CI still
-    # retrieves the Apache Solr configuration from resources/solr/conf dir.
-    - exec-host: rm -f .ddev/solr-standalone/conf
-    - exec-host: ln -s ../../resources/solr/conf .ddev/solr-standalone/
-  post-start:
-    # Update Node and NPM.
-    - exec: nvm install 20
-    - exec: nvm install-latest-npm
+    pre-start:
+        # Symlink the Solr config to be exposed into container. The Digit CI
+        # retrieves the Apache Solr configuration from resources/solr/conf dir.
+        -   exec-host: rm -f .ddev/solr-standalone/conf
+        -   exec-host: ln -s ../../resources/solr/conf .ddev/solr-standalone/

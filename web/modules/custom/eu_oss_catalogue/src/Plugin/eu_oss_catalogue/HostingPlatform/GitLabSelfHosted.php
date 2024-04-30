@@ -1,11 +1,12 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Drupal\eu_oss_catalogue\Plugin\eu_oss_catalogue\HostingPlatform;
 
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\eu_oss_catalogue\Model\GitLabReleaseSort;
+use Drupal\eu_oss_catalogue\Exception\HostingPlatformFetchException;
+use Drupal\eu_oss_catalogue\Model\GitLab\ReleaseSort;
 use Drupal\eu_oss_catalogue\Model\GitUri;
 use Gitlab\Client;
 use GraphQL\Actions\Query;
@@ -36,6 +37,13 @@ class GitLabSelfHosted extends GitLabDotCom {
     // The list of namespaces or projects is not mandatory for self-hosted
     // GitLab code hosting platforms.
     $form['projects']['#required'] = FALSE;
+    $form['baseUrl']['#type'] = 'url';
+
+    // Disable in case we are editing.
+    if (!empty($this->getConfiguration()['baseUrl'])) {
+      $form['baseUrl']['#disabled'] = TRUE;
+    }
+
     return $form;
   }
 
@@ -120,7 +128,12 @@ class GitLabSelfHosted extends GitLabDotCom {
     $endCursor = NULL;
     do {
       $query = $this->buildProjectsQuery($requestedFiles, $endCursor);
-      $response = $this->getClient()->graphql()->execute($query->toString());
+      try {
+        $response = $this->getClient()->graphql()->execute($query->toString());
+      }
+      catch (\RuntimeException $exception) {
+        throw new HostingPlatformFetchException(message: $exception->getMessage(), previous: $exception);
+      }
 
       if (empty($response['data']['projects']['nodes'])) {
         // This platform has no public projects.
@@ -148,7 +161,7 @@ class GitLabSelfHosted extends GitLabDotCom {
    * This renders a query similar to:
    * @code
    * {
-   *   projects(first: 100 after: "gtT54Weo") {
+   *   projects(first: 100) {
    *     count
    *     pageInfo {
    *       hasNextPage
@@ -160,7 +173,11 @@ class GitLabSelfHosted extends GitLabDotCom {
    *       id
    *       description
    *       archived
+   *       forksCount
+   *       starCount
+   *       openIssuesCount
    *       avatarUrl
+   *       openMergeRequestsCount
    *       releases(sort: CREATED_DESC first: 1) {
    *         nodes {
    *           tagName
@@ -196,8 +213,19 @@ class GitLabSelfHosted extends GitLabDotCom {
     $query->pageInfo([])->use('hasNextPage', 'endCursor');
 
     $fragment = $query->nodes([])
-      ->use('fullPath', 'path', 'id', 'description', 'archived', 'avatarUrl')
-      ->releases(['sort' => GitLabReleaseSort::CREATED_DESC, 'first' => 1])
+      ->use(
+        'fullPath',
+        'path',
+        'id',
+        'description',
+        'archived',
+        'forksCount',
+        'starCount',
+        'openIssuesCount',
+        'avatarUrl',
+        'openMergeRequestsCount'
+      )
+      ->releases(['sort' => ReleaseSort::CREATED_DESC, 'first' => 1])
       ->nodes([])
       ->use('tagName', 'createdAt')
       ->prev()

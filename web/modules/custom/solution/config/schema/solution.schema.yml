@@ -2,6 +2,15 @@ action.configuration.change_collection:
   type: mapping
   label: 'Change collection action configuration'
 
+action.configuration.change_state:*:*:
+  type: mapping
+  label: 'State change action plugin config'
+  mapping:
+    target_state:
+      type: string
+      label: 'Target state of the entity action'
+      nullable: true
+
 views.access.manage_solutions:
   type: mapping
   label: 'Manage solutions'

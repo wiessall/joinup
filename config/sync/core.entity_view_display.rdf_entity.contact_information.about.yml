@@ -47,7 +47,7 @@ content:
     region: content
   field_ci_name:
     type: string
-    label: above
+    label: hidden
     settings:
       link_to_entity: false
     third_party_settings:
@@ -57,7 +57,7 @@ content:
     region: content
   field_ci_webpage:
     type: link
-    label: above
+    label: hidden
     settings:
       trim_length: 80
       url_only: false

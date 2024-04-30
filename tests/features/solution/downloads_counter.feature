@@ -12,16 +12,16 @@ Feature:
       | collection  | Ocean studies                                     |
       | state       | published                                         |
     Given the following distributions:
-      | title                 | description          | parent                 | downloads |
-      | Sample distribution   | Sample description   | Climate change tracker | 10        |
-      | Sample distribution 2 | Sample description 2 | Climate change tracker | 0         |
+      | title                 | description          | parent                 | downloads | state     |
+      | Sample distribution   | Sample description   | Climate change tracker | 10        | published |
+      | Sample distribution 2 | Sample description 2 | Climate change tracker | 0         | published |
     # Checks solutions tiles to we have the correct numbers.
     When I visit the solution overview
     Then I should see the "Climate change tracker" tile
     And I should see the statistics "10" in the "Climate change tracker" tile
     When I go to the homepage of the "Climate change tracker" solution
     # Check the same thing on the homepage of the solutions.
-    Then I should see the text "Downloads: 10"
+    Then I should not see the text "Downloads: 10"
     When I delete the "Sample distribution" asset distribution
     And I reload the page
     # Check it again after the first distribution is deleted and cache has been cleared.
@@ -34,5 +34,6 @@ Feature:
       | description | Sample description 3   |
       | parent      | Climate change tracker |
       | downloads   | 20                     |
+      | state       | published              |
     When I reload the page
     Then the "Climate change tracker" tile should show 20 downloads

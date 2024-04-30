@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Drupal\custom_page;
 
@@ -45,7 +45,7 @@ class CustomPageProvider implements CustomPageProviderInterface {
 
     if (!empty($custom_page_ids) && $exclude_disabled) {
       // Filter out all pages that are disabled in the group's menu instance.
-      $ogmenu_instance = $this->groupMenuManager->getMenuByGroupId($group_id);
+      $ogmenu_instance = $this->groupMenuManager->getMenuByGroupId($group_id, 'navigation');
       if (empty($ogmenu_instance)) {
         return [];
       }

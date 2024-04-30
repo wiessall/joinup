@@ -38,7 +38,7 @@ Feature: Collection homepage
     And I press "Join this collection"
     And I go to the homepage of the "Under the mountain" collection
     Then I see the text "4 Members" in the "Header" region
-    And I click "Members" in the "Header"
+    And I am on the members page of "Under the mountain"
     Then the "Roles" field should contain the "- Any - (4)" option
 
     # Ensure that leaving a collection, updates the counters.
@@ -46,7 +46,7 @@ Feature: Collection homepage
     When I press "Confirm"
     Then I should see the success message "You are no longer a member of Under the mountain."
     Then I see the text "3 Members" in the "Header" region
-    And I click "Members" in the "Header"
+    And I am on the members page of "Under the mountain"
     Then the "Roles" field should contain the "- Any - (3)" option
 
   Scenario: Counters are properly synced for closed collections.
@@ -57,7 +57,7 @@ Feature: Collection homepage
     And I press "Join this collection"
     And I go to the homepage of the "Exactly the same collection, but closed" collection
     Then I see the text "3 Members" in the "Header" region
-    And I click "Members" in the "Header"
+    And I am on the members page of "Exactly the same collection, but closed"
     Then the "Roles" field should contain the "- Any - (3)" option
 
     # Approve the membership.
@@ -72,7 +72,7 @@ Feature: Collection homepage
     When I am an anonymous user
     And I go to the homepage of the "Exactly the same collection, but closed" collection
     Then I see the text "4 Members" in the "Header" region
-    When I click "Members" in the "Header"
+    When I am on the members page of "Exactly the same collection, but closed"
     Then the "Roles" field should contain the "- Any - (4)" option
     Then I see the text "4 Members" in the "Header" region
 
@@ -94,7 +94,7 @@ Feature: Collection homepage
     When I am not logged in
     When I go to the homepage of the "Under the mountain" collection
     Then I should see the text "4 members" in the "Header" region
-    And I click "Members" in the "Header"
+    And I am on the members page of "Under the mountain"
     Then the "Roles" field should contain the "- Any - (4)" option
 
     # Ensure that cache is invalidated properly for tiles in search api views.
@@ -114,7 +114,7 @@ Feature: Collection homepage
     When I am not logged in
     When I go to the homepage of the "Under the mountain" collection
     Then I should see the text "3 members" in the "Header" region
-    And I click "Members" in the "Header"
+    And I am on the members page of "Under the mountain"
     Then the "Roles" field should contain the "- Any - (3)" option
 
     # Ensure that cache is invalidated properly for tiles in search api views.

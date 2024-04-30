@@ -4,7 +4,6 @@ Feature: Editing collections
   As a collection owner or collection facilitator
   I need to be able to edit collections through the UI
 
-  @terms
   Scenario: Edit a collection
     Given the following owner:
       | name                 | type                    |
@@ -25,10 +24,9 @@ Feature: Editing collections
     Then the following fields should be present "Title, Description, Abstract, Topic, Geographical coverage, Search keywords, Content creation, Moderated, Motivation"
     And the following field widgets should be present "Contact information, Owner"
     And the following fields should not be present "Langcode, Translation, Affiliates, Enable the search field, Query presets, Limit"
-    And I should see "Short description text of the collection. Appears on the Overview page. (Leave blank to use the trimmed value of the Description field.)"
+    And I should see "Short description text of the collection. Appears on the Overview page."
     And I should see "Add a country name relevant to the content of this collection."
-    And the "Description" wysiwyg editor should have the buttons "Heading,Bold,Italic,Remove Format,Link,Contact us,Bulleted list,Numbered list,Outdent,Indent,Block quote,File,Drupal media,table,Undo,Redo,Source,Code,Code Block"
-    And the "Abstract" wysiwyg editor should have the buttons "Heading,Bold,Italic,Remove Format,Link,Outdent,Indent,Source,Code,Code Block"
+    And the "Description" wysiwyg editor should have the buttons "Heading,Style,Bold,Italic,Remove Format,Link,Contact us,Bulleted list,Numbered list,Outdent,Indent,Block quote,File,Drupal media,table,Undo,Redo,Source,Code,Code Block"
 
     # Query builder is disabled in collections.
     But I should not see the button "Add and configure filter"
@@ -38,7 +36,7 @@ Feature: Editing collections
     And I press "Save as draft"
     Then I should see the heading "Überwaldean Sea Eels"
 
-  @terms @javascript
+  @javascript
   Scenario: Edit a collection wysiwyg modal should close.
     # Regression test for ticket ISAICP-7181 and ISAICP-8355.
     Given the following owner:
@@ -65,12 +63,11 @@ Feature: Editing collections
     And I press "Insert selected" in the "Modal buttons" region
     Then the modal should be closed
     And I press "Propose"
-    And I click "About"
 
     Then I should see the heading "Rhyme Land Eels"
     And the page should contain the html text '<div class="media-video">'
 
-  @terms @javascript
+  @javascript
   Scenario: Regression test wysiwyg add file shows a 0 bytes limit.
     # Regression test for ticket ISAICP-7177.
     Given the following owner:

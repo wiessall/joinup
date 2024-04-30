@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Drupal\joinup_notification\EventSubscriber;
 
@@ -15,6 +15,7 @@ use Drupal\solution\Entity\SolutionInterface;
  * Notification handler for the notifications related to solutions.
  *
  * The notification base conditions are explained below.
+ *
  * @codingStandardsIgnoreStart
  * Template 1: sol_propose_new
  *   Operation: create
@@ -55,6 +56,10 @@ use Drupal\solution\Entity\SolutionInterface;
  *   Source state: published, proposed
  *   Actor: moderator
  *   Recipients: owner
+ * Template 24: solution_content_archive
+ *   Operation: update
+ *   Actor: moderator
+ *   Recipients: contacts, moderators
  * @codingStandardsIgnoreEnd
  */
 class SolutionRdfSubscriber extends NotificationSubscriberBase {
@@ -67,6 +72,7 @@ class SolutionRdfSubscriber extends NotificationSubscriberBase {
   const TEMPLATE_PROPOSE_FROM_REQUEST_CHANGES = 'sol_propose_requested_changes';
   const TEMPLATE_PUBLISH_BLACKLISTED = 'sol_publish_backlisted';
   const TEMPLATE_REQUEST_CHANGES = 'sol_request_changes';
+  const TEMPLATE_ARCHIVAL_COMPLETE = 'solution_content_archive';
 
   /**
    * The transition object.
@@ -118,6 +124,9 @@ class SolutionRdfSubscriber extends NotificationSubscriberBase {
       ['onCreate'],
       ['onUpdate'],
       ['onDelete'],
+    ];
+    $events[NotificationEvents::RDF_ENTITY_ARCHIVE_COMPLETED] = [
+      ['onCompleteArchival'],
     ];
 
     return $events;
@@ -489,6 +498,39 @@ class SolutionRdfSubscriber extends NotificationSubscriberBase {
     assert($this->entity instanceof EntityWorkflowStateInterface);
     $state = $this->entity->getWorkflowState();
     return $state === 'archived' && $this->transition->getId() === 'archive';
+  }
+
+  /**
+   * Sends notification when solution is completely archived, along its items.
+   *
+   * Notification handled: Template 24: solution_content_archive.
+   *
+   * @param \Drupal\joinup_notification\Event\NotificationEvent $event
+   *   The notification event.
+   */
+  public function onCompleteArchival(NotificationEvent $event): void {
+    $this->initialize($event);
+    if (!$this->appliesOnSolutions()) {
+      return;
+    }
+
+    if ($this->operation !== 'update') {
+      return;
+    }
+
+    $solution = $event->getEntity();
+    \assert($solution instanceof SolutionInterface);
+
+    // Notify contacts.
+    $this->messageDelivery->sendMessageTemplateToEmailAddresses(
+      self::TEMPLATE_ARCHIVAL_COMPLETE,
+      $this->generateArguments($solution),
+      $solution->getValidatedContactInformationEmails(),
+    );
+    // Notify moderators.
+    $this->sendUserDataMessages([
+      self::TEMPLATE_ARCHIVAL_COMPLETE => $this->getRecipientIdsByRole('moderator'),
+    ]);
   }
 
 }

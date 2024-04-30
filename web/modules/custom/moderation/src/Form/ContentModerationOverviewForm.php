@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Drupal\moderation\Form;
 
@@ -130,7 +130,7 @@ class ContentModerationOverviewForm extends FormBase {
     // If the user doesn't have global permission, check if they have permission
     // inside the group.
     if (!$access && $rdf_entity instanceof GroupInterface) {
-      $access = $rdf_entity->hasGroupPermission((int) $user->id(), 'access content moderation overview');
+      $access = $rdf_entity->hasGroupPermission($user->id(), 'access content moderation overview');
     }
 
     return AccessResult::allowedIf($access)->addCacheableDependency($cache_metadata);

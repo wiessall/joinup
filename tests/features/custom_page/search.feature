@@ -22,10 +22,12 @@ Feature: Custom pages enhance search results for their collections/solutions
       | Memory initialization overhead | Slab allocation | Significant performance drop | unpublished |
       | Alleviates fragmentation       | Slab allocation | Pre-allocated memory         | published   |
 
-    And the following custom page menu structure:
+    And the following custom page navigation menu structure for the "Buddy system" <group>:
       | title                          | enabled |
       | Splitting and coalescing       | yes     |
       | Reduces memory fragmentation   | no      |
+    And the following custom page navigation menu structure for the "Slab allocation" <group>:
+      | title                          | enabled |
       | Memory initialization overhead | yes     |
       | Alleviates fragmentation       | no      |
 

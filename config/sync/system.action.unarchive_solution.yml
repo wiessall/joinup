@@ -1,0 +1,12 @@
+uuid: a49a897b-06fe-4385-b153-00b0bf646e00
+langcode: en
+status: true
+dependencies:
+  module:
+    - solution
+id: unarchive_solution
+label: 'Unarchive (publish) solutions'
+type: rdf_entity
+plugin: 'change_state:rdf_entity:solution'
+configuration:
+  target_state: published

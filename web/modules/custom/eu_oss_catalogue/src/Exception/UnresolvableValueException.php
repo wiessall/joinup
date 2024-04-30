@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Drupal\eu_oss_catalogue\Exception;
 
@@ -9,7 +9,7 @@ use Drupal\Core\Serialization\Yaml;
 /**
  * Exception to be thrown when a value cannot be resolved.
  */
-class UnresolvableValueException extends \Exception {
+class UnresolvableValueException extends EuOssCatalogueException {
 
   /**
    * Constructs a new exception instance.

@@ -5,7 +5,7 @@
  * Provides functionality for the Joinup search arbitrary facet.
  */
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 use Drupal\search_api\IndexInterface;
 

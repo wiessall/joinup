@@ -3,9 +3,13 @@ langcode: en
 status: true
 dependencies:
   module:
+    - field_permissions
     - og
     - og_menu
     - rdf_entity
+third_party_settings:
+  field_permissions:
+    permission_type: public
 _core:
   default_config_hash: VV2hK_MQ7kD6seJaV5Sqikfqz0HIUEYLRGX9P5Whyfs
 id: ogmenu_instance.og_audience

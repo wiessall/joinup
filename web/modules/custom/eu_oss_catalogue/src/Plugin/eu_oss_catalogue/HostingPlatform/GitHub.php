@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Drupal\eu_oss_catalogue\Plugin\eu_oss_catalogue\HostingPlatform;
 
@@ -11,8 +11,10 @@ use Drupal\Core\Logger\LoggerChannelInterface;
 use Drupal\Core\Site\Settings;
 use Drupal\Core\Utility\Error;
 use Drupal\eu_oss_catalogue\EuOssCatalogueGitHostingPlatformPluginBase;
+use Drupal\eu_oss_catalogue\Exception\HostingPlatformFetchException;
 use Drupal\eu_oss_catalogue\Exception\MissingAccessTokenException;
-use Drupal\eu_oss_catalogue\Model\GitHubSearchType;
+use Drupal\eu_oss_catalogue\Model\GitHub\SearchType;
+use Drupal\eu_oss_catalogue\Model\GitHub\State;
 use Drupal\eu_oss_catalogue\Model\GitUri;
 use Drupal\eu_oss_catalogue\Model\Project;
 use Github\Api\GraphQL;
@@ -34,6 +36,8 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * )
  */
 class GitHub extends EuOssCatalogueGitHostingPlatformPluginBase {
+
+  protected const PULLREQUEST_FILTER = ['states' => State::OPEN];
 
   /**
    * Default terms for GitHub search.
@@ -80,11 +84,11 @@ class GitHub extends EuOssCatalogueGitHostingPlatformPluginBase {
   /**
    * {@inheritdoc}
    */
-  public static function create(ContainerInterface $container, array $configuration, $pluginId, $pluginDefinition): self {
+  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition): self {
     return new static(
       $configuration,
-      $pluginId,
-      $pluginDefinition,
+      $plugin_id,
+      $plugin_definition,
       $container->get('http_client'),
       $container->get('settings'),
       $container->get('logger.channel.eu_oss_catalogue'),
@@ -209,10 +213,11 @@ class GitHub extends EuOssCatalogueGitHostingPlatformPluginBase {
           $response = $graphQL->execute($query->toString());
         }
         catch (\Throwable $exception) {
-          Error::logException($this->logger, $exception, "Can't get GitHub projects. Query: @query", [
-            '@query' => $searchQuery,
+          Error::logException($this->logger, $exception, "Can't get GitHub projects. Query: @query, Message: @message", [
+            '@query' => $query->toString(),
+            '@message' => $exception->getMessage(),
           ]);
-          break;
+          throw new HostingPlatformFetchException(message: $exception->getMessage(), previous: $exception);
         }
 
         foreach ($response['data']['search']['nodes'] as $node) {
@@ -237,18 +242,21 @@ class GitHub extends EuOssCatalogueGitHostingPlatformPluginBase {
           }
 
           yield new Project(
-            $node['owner']['login'],
-            $node['name'],
-            "{$this->getConfiguration()['baseUrl']}/{$node['owner']['login']}/{$node['name']}",
-            $this->getPluginId(),
-            $node['defaultBranchRef']['name'],
-            $node['isArchived'],
-            $node['latestRelease']['tagName'] ?? NULL,
-            $node['latestRelease']['createdAt'] ?? NULL,
-            $node['id'],
-            $node['description'],
-            $logo,
-            $files,
+            namespace: $node['owner']['login'],
+            name: $node['name'],
+            url: "{$this->getConfiguration()['baseUrl']}/{$node['owner']['login']}/{$node['name']}",
+            platform: $this->getPluginId(),
+            defaultBranch: $node['defaultBranchRef']['name'],
+            latestReleaseTag: $node['latestRelease']['tagName'] ?? NULL,
+            latestReleaseDate: $node['latestRelease']['createdAt'] ?? NULL,
+            platformReference: $node['id'],
+            description: $node['description'],
+            logo: $logo,
+            numberOfForks: $node['forkCount'],
+            numberOfStars: $node['stargazerCount'],
+            numberOfIssues: $node['issues']['totalCount'],
+            numberOfPullRequests: $node['pullRequests']['totalCount'],
+            files: $files,
           );
         }
 
@@ -269,7 +277,7 @@ class GitHub extends EuOssCatalogueGitHostingPlatformPluginBase {
    *   search(
    *     type: REPOSITORY
    *     query: "is:public fork:true owner:user1 repo:org2/project2"
-   *     first: 100
+   *     first: 20
    *   ) {
    *     pageInfo {
    *       hasNextPage
@@ -280,7 +288,8 @@ class GitHub extends EuOssCatalogueGitHostingPlatformPluginBase {
    *         id
    *         description
    *         name
-   *         isArchived
+   *         forkCount
+   *         stargazerCount
    *         openGraphImageUrl
    *         owner {
    *           login
@@ -291,6 +300,9 @@ class GitHub extends EuOssCatalogueGitHostingPlatformPluginBase {
    *         latestRelease {
    *           tagName
    *           createdAt
+   *         }
+   *         issues (states: OPEN) {
+   *           totalCount
    *         }
    *         file: object(expression: "HEAD:publiccode.yml") {
    *           ... on Blob {
@@ -315,9 +327,13 @@ class GitHub extends EuOssCatalogueGitHostingPlatformPluginBase {
    */
   protected function buildProjectsQuery(string $searchQuery, array $requestedFiles = [], ?string $endCursor = NULL): Query {
     $filters = [
-      'type' => GitHubSearchType::REPOSITORY,
+      'type' => SearchType::REPOSITORY,
       'query' => $searchQuery,
-      'first' => 100,
+       // The higher number might compromise/break the correct GitHub APIs
+       // response. The timeout problem can happen for graphql queries that
+       // are complex and trying to receive too much data at one request,
+       // It is recommended to break up into smaller chunk sizes.
+      'first' => 20,
     ] + ($endCursor ? ['after' => $endCursor] : []);
 
     $query = new Query('search', $filters);
@@ -325,10 +341,12 @@ class GitHub extends EuOssCatalogueGitHostingPlatformPluginBase {
 
     $fragment = $query->nodes([])
       ->on('Repository')
-      ->use('id', 'description', 'name', 'isArchived', 'openGraphImageUrl')
+      ->use('id', 'description', 'name', 'forkCount', 'stargazerCount', 'openGraphImageUrl')
       ->use((new Node('owner'))->use('login'))
       ->use((new Node('defaultBranchRef'))->use('name'))
-      ->use((new Node('latestRelease'))->use('tagName', 'createdAt'));
+      ->use((new Node('latestRelease'))->use('tagName', 'createdAt'))
+      ->use((new Node('issues', ['states' => State::OPEN]))->use('totalCount'))
+      ->use((new Node('pullRequests', static::PULLREQUEST_FILTER))->use('totalCount'));
 
     foreach ($requestedFiles as $fileId => $filePath) {
       $file = (new Node('object', ['expression' => "HEAD:$filePath"]))

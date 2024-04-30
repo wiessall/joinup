@@ -5,7 +5,7 @@
  * Facets specific procedural functions.
  */
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 use Drupal\facets\FacetInterface;
 

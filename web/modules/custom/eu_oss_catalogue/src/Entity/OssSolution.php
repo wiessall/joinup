@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Drupal\eu_oss_catalogue\Entity;
 
@@ -69,6 +69,13 @@ class OssSolution extends Node implements OssSolutionInterface {
    */
   public function getRelevantLangCode(): string {
     return $this->get(RelevantLanguageCode::FIELD_NAME)->first()->getString();
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function isArchived(): bool {
+    return $this->get('oss_archived')->getString() === '1';
   }
 
   /**

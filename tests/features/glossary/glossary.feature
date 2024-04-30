@@ -21,11 +21,9 @@ Feature: As a moderator or group facilitator I want to be able to add, edit and
     Given I am logged in as <user>
     When I go to the "A World of Things" collection
 
-    Then I should see the following group menu items in the specified order:
+    Then I should see the following navigation menu items in the specified order:
       | text     |
       | Overview |
-      | Members  |
-      | About    |
     But I should not see the link "Glossary"
 
     When I click "Add glossary term" in the plus button menu
@@ -43,11 +41,9 @@ Feature: As a moderator or group facilitator I want to be able to add, edit and
 
     When I click "A World of Things" in the Header region
 
-    Then I should see the following group menu items in the specified order:
+    Then I should see the following navigation menu items in the specified order:
       | text     |
       | Overview |
-      | Members  |
-      | About    |
       | Glossary |
     When I click "Glossary"
     Then I should see the heading "A World of Things glossary"
@@ -121,21 +117,17 @@ Feature: As a moderator or group facilitator I want to be able to add, edit and
     And I should see "ABC, alphabeta, alfabet"
 
     When I go to the "Things To Come" solution
-    Then I should see the following group menu items in the specified order:
+    Then I should see the following navigation menu items in the specified order:
       | text     |
       | Overview |
-      | Members  |
-      | About    |
     And I should not see the link "Glossary"
 
     Given I <link visibility> the contextual link "Edit menu" in the "Header" region
     And I enable "Glossary" in the navigation menu of the "Things To Come" solution
     And I go to the "Things To Come" solution
-    Then I should see the following group menu items in the specified order:
+    Then I should see the following navigation menu items in the specified order:
       | text     |
       | Overview |
-      | Members  |
-      | About    |
       | Glossary |
     And the link "Glossary" points outside group
 
@@ -151,7 +143,7 @@ Feature: As a moderator or group facilitator I want to be able to add, edit and
     Given collection:
       | title       | Collection With Glossary                                                                             |
       | state       | published                                                                                            |
-      | description | Colors of Paradise. Abbreviated as CLR. <a href="../../contact"><strong>Colors of Dream</strong></a> |
+      | description | Colors of Paradise. Abbreviated as CLR. <a href="../contact"><strong>Colors of Dream</strong></a> |
       | abstract    | The Alphabet is back and it's s/ashy.                                                                |
     And solution:
       | title       | Under The Bridge         |
@@ -165,9 +157,9 @@ Feature: As a moderator or group facilitator I want to be able to add, edit and
       | is version of  | Under The Bridge      |
       | state          | published             |
     And distributions:
-      | title   | description          | parent           | access url         |
-      | Distro1 | Alphabet & CLR       | Under The Bridge | http://example.com |
-      | Distro2 | Colors & ABC & colrs | Summer of 69     | http://example.com |
+      | title   | description          | parent           | access url         | state     |
+      | Distro1 | Alphabet & CLR       | Under The Bridge | http://example.com | published |
+      | Distro2 | Colors & ABC & colrs | Summer of 69     | http://example.com | published |
     And custom_page content:
       | title    | body              | solution         | state     |
       | Schedule | Colors everywhere | Under The Bridge | published |
@@ -190,13 +182,11 @@ Feature: As a moderator or group facilitator I want to be able to add, edit and
       | S/ashy   | /S\|ASH   | S/ashes Like an Ion Beam | Cutting things in ha/f      | Collection With Glossary |
 
     When I go to the "Collection With Glossary" collection
-    When I click "Overview"
     And I click "Alphabet"
     Then I see the heading "Alphabet"
 
-    When I click "About"
-    Then I should see the link "Alphabet"
-    When I click "Colors"
+    When I move backward one page
+    And I click "Colors"
     Then I see the heading "Colors"
 
     When I move backward one page
@@ -258,9 +248,9 @@ Feature: As a moderator or group facilitator I want to be able to add, edit and
       | mod      | moderator |
       | fac1     |           |
     And the following collections:
-      | title                    | description                                                                                            | state     |
-      | Collection With Glossary | The Battle of Evermore of the batTle and the BATTLE. Call it everMore or EVERmore. Also, battle again. | published |
-      | The Other Collection     | desc                                                                                                   | published |
+      | title                    | description                                                                                            | abstract                                                                                               | state     |
+      | Collection With Glossary | The Battle of Evermore of the batTle and the BATTLE. Call it everMore or EVERmore. Also, battle again. | The Battle of Evermore of the batTle and the BATTLE. Call it everMore or EVERmore. Also, battle again. | published |
+      | The Other Collection     | desc                                                                                                   | desc                                                                                                   | published |
     And the following collection user membership:
       | collection               | user | roles       |
       | Collection With Glossary | fac  | facilitator |
@@ -438,8 +428,8 @@ Feature: As a moderator or group facilitator I want to be able to add, edit and
       | collection               | user | roles       |
       | Collection With Glossary | mod  | facilitator |
     Given glossary content:
-      | title        | synonyms | definition                                                                                                | collection               |
-      | battle       | evermore | Definition <strong>bold</strong> <em>italic</em> <u>underline</u> <ul><li>list 1</li><li>list 2</li></ul> | Collection With Glossary |
+      | title  | synonyms | definition                                                                                                | collection               |
+      | battle | evermore | Definition <strong>bold</strong> <em>italic</em> <u>underline</u> <ul><li>list 1</li><li>list 2</li></ul> | Collection With Glossary |
     When I am logged in as a moderator
     And I go to the edit form of the "battle" glossary
     Then the "Definition" wysiwyg editor should have the buttons "Bold, Italic, Underline, Link, Bulleted list, Numbered list, Source"

@@ -33,7 +33,6 @@ Feature: Solutions message overview
       | Ran out of gas                          |
       | Do you have 1 euro to buy a cheese pie? |
 
-  @terms
   Scenario: Workflow messages are available in the message overview.
     Given users:
       | Username   | Roles     |
@@ -45,6 +44,7 @@ Feature: Solutions message overview
     When I go to the propose collection form
     When I fill in the following:
       | Title                 | Message overview proposal |
+      | Abstract              | Doesn't matter.           |
       | Description           | Doesn't matter.           |
       | Geographical coverage | Belgium                   |
     When I select "HR" from "Topic"

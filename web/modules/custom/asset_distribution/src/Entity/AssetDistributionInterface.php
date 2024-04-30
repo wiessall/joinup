@@ -1,19 +1,21 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Drupal\asset_distribution\Entity;
 
 use Drupal\collection\Entity\CollectionContentInterface;
 use Drupal\joinup_bundle_class\DescriptionInterface;
 use Drupal\joinup_stats\Entity\DownloadCountAwareInterface;
+use Drupal\joinup_workflow\ArchivableEntityInterface;
+use Drupal\joinup_workflow\EntityWorkflowStateInterface;
 use Drupal\rdf_entity\RdfInterface;
 use Drupal\solution\Entity\SolutionContentInterface;
 
 /**
  * Interface for asset distribution entities in Joinup.
  */
-interface AssetDistributionInterface extends RdfInterface, CollectionContentInterface, SolutionContentInterface, DownloadCountAwareInterface, DescriptionInterface {
+interface AssetDistributionInterface extends RdfInterface, CollectionContentInterface, SolutionContentInterface, DownloadCountAwareInterface, DescriptionInterface, EntityWorkflowStateInterface, ArchivableEntityInterface {
 
   /**
    * Return the distribution's parent, either a release or a solution.

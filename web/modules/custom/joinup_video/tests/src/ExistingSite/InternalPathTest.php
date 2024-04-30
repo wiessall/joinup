@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Drupal\Tests\joinup_video\ExistingSite;
 
@@ -33,7 +33,7 @@ class InternalPathTest extends JoinupExistingSiteTestBase {
         'format' => 'content_editor',
       ],
     ]);
-    $this->drupalGet($collection->toUrl('about-page'));
+    $this->drupalGet($collection->toUrl());
     $this->assertSession()->pageTextContains('Sample Collection');
     // No iframe has been rendered.
     $this->assertSession()->responseNotContains('<iframe');

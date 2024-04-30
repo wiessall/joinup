@@ -5,7 +5,7 @@
  * Install, update and uninstall functionality for Joinup Legal module.
  */
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 use Drupal\Core\Language\LanguageInterface;
 

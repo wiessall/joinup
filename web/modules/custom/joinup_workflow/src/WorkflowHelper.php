@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Drupal\joinup_workflow;
 
@@ -10,15 +10,18 @@ use Drupal\Core\Entity\EntityFieldManagerInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Entity\FieldableEntityInterface;
+use Drupal\Core\Entity\RevisionLogInterface;
+use Drupal\Core\Entity\RevisionableInterface;
 use Drupal\Core\Field\FieldDefinitionInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Session\AccountProxyInterface;
 use Drupal\Core\Session\AccountSwitcherInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\og\MembershipManagerInterface;
 use Drupal\state_machine\Plugin\Workflow\WorkflowInterface;
 use Drupal\state_machine\Plugin\Workflow\WorkflowTransition;
-use Drupal\workflow_state_permission\WorkflowStatePermissionInterface;
+use Stringable;
 
 /**
  * Contains helper methods to retrieve workflow related data from entities.
@@ -38,8 +41,6 @@ class WorkflowHelper implements WorkflowHelperInterface {
    *   The entity field manager.
    * @param \Drupal\og\MembershipManagerInterface $membershipManager
    *   The membership manager service.
-   * @param \Drupal\workflow_state_permission\WorkflowStatePermissionInterface $workflowStatePermission
-   *   The workflow state permission service.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
    *   The entity type manager.
    * @param \Drupal\Component\Datetime\TimeInterface $time
@@ -50,23 +51,9 @@ class WorkflowHelper implements WorkflowHelperInterface {
     protected AccountSwitcherInterface $accountSwitcher,
     protected EntityFieldManagerInterface $entityFieldManager,
     protected MembershipManagerInterface $membershipManager,
-    protected WorkflowStatePermissionInterface $workflowStatePermission,
     protected EntityTypeManagerInterface $entityTypeManager,
     protected TimeInterface $time
   ) {}
-
-  /**
-   * {@inheritdoc}
-   */
-  public function getAvailableStatesLabels(FieldableEntityInterface $entity, ?AccountInterface $account = NULL): array {
-    $allowedTransitions = $this->getAvailableTransitions($entity, $account);
-
-    $allowedStates = array_map(function (WorkflowTransition $transition) {
-      return (string) $transition->getToState()->getLabel();
-    }, $allowedTransitions);
-
-    return $allowedStates;
-  }
 
   /**
    * {@inheritdoc}
@@ -75,17 +62,9 @@ class WorkflowHelper implements WorkflowHelperInterface {
     /** @var \Drupal\joinup_workflow\EntityWorkflowStateInterface $entity */
     $allowedTransitions = $this->getAvailableTransitions($entity, $account);
 
-    $allowedStates = array_map(function (WorkflowTransition $transition) {
+    return array_map(function (WorkflowTransition $transition) {
       return (string) $transition->getToState()->getId();
     }, $allowedTransitions);
-
-    $currentState = $entity->getWorkflowState();
-    $workflow = $entity->getWorkflow();
-    if ($this->workflowStatePermission->isStateUpdatePermitted($account, $entity, $workflow, $currentState, $currentState)) {
-      $allowedStates[$currentState] = $currentState;
-    }
-
-    return $allowedStates;
   }
 
   /**
@@ -161,47 +140,6 @@ class WorkflowHelper implements WorkflowHelperInterface {
   }
 
   /**
-   * {@inheritdoc}
-   */
-  public function userHasOwnAnyRoles(EntityInterface $entity, AccountInterface $account, array $roles): bool {
-    $own = $entity->getOwnerId() === $account->id();
-    if (isset($roles['any']) && $this->userHasRoles($entity, $account, $roles['any'])) {
-      return TRUE;
-    }
-    if ($own && isset($roles['own']) && $this->userHasRoles($entity, $account, $roles['own'])) {
-      return TRUE;
-    }
-
-    return FALSE;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function userHasRoles(EntityInterface $entity, AccountInterface $account, array $roles): bool {
-    $parent = $this->getEntityParent($entity);
-    if (empty($parent)) {
-      return FALSE;
-    }
-
-    $membership = $this->membershipManager->getMembership($parent, $account->id());
-
-    // First check the 'any' permissions.
-    if (isset($roles['roles'])) {
-      if (array_intersect($account->getRoles(), $roles['roles'])) {
-        return TRUE;
-      }
-    }
-    if (isset($roles['og_roles']) && !empty($membership)) {
-      if (array_intersect($membership->getRolesIds(), $roles['og_roles'])) {
-        return TRUE;
-      }
-    }
-
-    return FALSE;
-  }
-
-  /**
    * Helper method to retrieve the parent of the entity.
    *
    * @param \Drupal\Core\Entity\EntityInterface $entity
@@ -222,43 +160,95 @@ class WorkflowHelper implements WorkflowHelperInterface {
   /**
    * {@inheritdoc}
    */
-  public function hasOgPermission(string $permission, EntityInterface $group, AccountInterface $user): bool {
-    $actualPermissions = [];
-    if ($membership = $this->membershipManager->getMembership($group, $user->id())) {
-      foreach ($membership->getRoles() as $role) {
-        $actualPermissions = array_merge($actualPermissions, $role->getPermissions());
+  public function archiveEntity(EntityWorkflowStateInterface $entity, null|string|Stringable|TranslatableMarkup $revisionLogMessage = NULL): EntityWorkflowStateInterface {
+    if (
+      !$entity instanceof ArchivableEntityInterface ||
+      $entity->isArchived() ||
+      !$entity->isTargetWorkflowStateAllowed('archived')
+    ) {
+      throw new \Exception(sprintf(
+        "The %s entity with id '%s' cannot be archived.",
+        $entity->getEntityType()->getLabel(),
+        $entity->id(),
+      ));
+    }
+
+    if ($entity instanceof RevisionableInterface && $entity->getEntityType()->isRevisionable()) {
+      $entity->setNewRevision();
+      $entity->isDefaultRevision(TRUE);
+      if ($entity instanceof RevisionLogInterface) {
+        $revisionLogMessage = $revisionLogMessage ?? $this->t('Archived by user @user', [
+          '@user' => $this->currentUser->getAccountName(),
+        ]);
+        $entity->setRevisionLogMessage((string) $revisionLogMessage)
+          ->setRevisionUserId($this->currentUser->id())
+          ->setRevisionCreationTime($this->time->getRequestTime());
       }
     }
-    return in_array($permission, array_unique($actualPermissions));
+
+    $entity->setWorkflowState('archived');
+    $entity->save();
+    return $entity;
   }
 
   /**
    * {@inheritdoc}
    */
   public function unarchiveEntity(EntityInterface $entity): EntityInterface {
-    // Revert to the previous revision of the node.
+    if (
+      !$entity instanceof EntityWorkflowStateInterface ||
+      !$entity instanceof ArchivableEntityInterface ||
+      !$entity->isArchived()
+    ) {
+      throw new \Exception(sprintf(
+        "The %s entity with id '%s' cannot be unarchived.",
+        $entity->getEntityType()->getLabel(),
+        $entity->id(),
+      ));
+    }
+
+    // Revert to the previous revision of the entity.
     $entityType = $entity->getEntityType();
+    if (!$entity instanceof RevisionableInterface || !$entityType->isRevisionable()) {
+      $entity->setWorkflowState('published')->save();
+      return $entity;
+    }
     $entityStorage = $this->entityTypeManager->getStorage($entityType->id());
 
-    // Load the previous revision IDs.
-    $revisionIds = $entityStorage->getQuery()
+    // Load the previous published revision's IDs.
+    $revisionIdsQuery = $entityStorage->getQuery()
       ->accessCheck(FALSE)
       ->allRevisions()
       ->condition($entityType->getKey('id'), $entity->id())
-      ->sort($entity->getEntityType()->getKey('revision'), 'DESC')
-      ->range(1, 1)
-      ->execute();
-    $revisionIds = array_keys($revisionIds);
+      ->condition($entity->getWorkflowStateFieldName(), 'published')
+      ->sort($entityType->getKey('revision'), 'DESC');
+    if ($defaultRevisionKey = $entityType->getRevisionMetadataKey('revision_default')) {
+      $revisionIdsQuery->condition($defaultRevisionKey, TRUE);
+    }
+
+    $revisionIds = array_keys($revisionIdsQuery->execute());
+    $revisionId = reset($revisionIds);
+    if (!$revisionId) {
+      throw new \Exception(sprintf(
+        "The %s entity with id '%s' cannot be unarchived: cannot find the previous revision it was archived from.",
+        $entity->getEntityType()->getLabel(),
+        $entity->id(),
+      ));
+    }
 
     // Load the previous revision.
     $previousRevision = $entityStorage->loadRevision(reset($revisionIds));
-    $previousRevision->setNewRevision(TRUE);
+    \assert($previousRevision instanceof RevisionableInterface);
+    $previousRevision->setNewRevision();
     $previousRevision->isDefaultRevision(TRUE);
-    $previousRevision->setRevisionLogMessage($this->t('Unarchived by @user', [
-      '@user' => $this->currentUser->getAccountName(),
-    ]));
-    $previousRevision->setRevisionCreationTime($this->time->getRequestTime());
-    $previousRevision->setRevisionUserId($this->currentUser->id());
+    if ($previousRevision instanceof RevisionLogInterface) {
+      $previousRevision->setRevisionLogMessage($this->t('Unarchived by @user', [
+        '@user' => $this->currentUser->getAccountName(),
+      ]));
+      $previousRevision->setRevisionCreationTime($this->time->getRequestTime());
+      $previousRevision->setRevisionUserId($this->currentUser->id());
+    }
+    $previousRevision->skip_notification = TRUE;
     $previousRevision->save();
 
     return $previousRevision;

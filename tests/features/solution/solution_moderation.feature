@@ -32,6 +32,24 @@ Feature: Solution moderation
     And the following buttons should not be present "Publish, Request changes, Blacklist"
     And I should not see the link "Delete"
 
+  Scenario Outline: User should not be able to archive/unarchive entity if it has provenance activities.
+    Given the following solutions:
+      | title        | description  | state   |
+      | Azura Cruise | Azura Cruise | <state> |
+    And the following provenance activities:
+      | associated with    | entity       | enabled |
+      | http://example.com | Azura Cruise | yes     |
+
+    And I am logged in as a moderator
+    And "Azura Cruise" should have a related provenance activity
+    And I go to the edit form of the "Azura Cruise" solution
+    When I should not see the button "<button>"
+
+    Examples:
+      | state     | button   |
+      | published | Archive  |
+      | archived  | Unrchive |
+
   Scenario: Test the moderation workflow available states.
     Given the following owner:
       | name           | type                  |
@@ -54,6 +72,7 @@ Feature: Solution moderation
       | Azure Ship                 | Azure ship                 | logo.png | Angelos Agathe | Placide             | draft        |
       | The Last Illusion          | The Last Illusion          | logo.png | Angelos Agathe | Placide             | proposed     |
       | Rose of Doors              | Rose of Doors              | logo.png | Angelos Agathe | Placide             | published    |
+      | Fire Swords                | Fire Swords                | logo.png | Angelos Agathe | Placide             | archived     |
       | The Guardian of the Stream | The Guardian of the Stream | logo.png | Angelos Agathe | Placide             | needs update |
       | Flames in the Swords       | Flames in the Swords       | logo.png | Angelos Agathe | Placide             | blacklisted  |
     And the following solution user memberships:
@@ -61,11 +80,13 @@ Feature: Solution moderation
       | Azure Ship                 | Franklin Walker | owner       |
       | The Last Illusion          | Franklin Walker | owner       |
       | Rose of Doors              | Franklin Walker | owner       |
+      | Fire Swords                | Franklin Walker | owner       |
       | The Guardian of the Stream | Franklin Walker | owner       |
       | Flames in the Swords       | Franklin Walker | owner       |
       | Azure Ship                 | William Curtis  | facilitator |
       | The Last Illusion          | William Curtis  | facilitator |
       | Rose of Doors              | William Curtis  | facilitator |
+      | Fire Swords                | William Curtis  | facilitator |
       | The Guardian of the Stream | William Curtis  | facilitator |
       | Flames in the Swords       | William Curtis  | facilitator |
 
@@ -90,6 +111,7 @@ Feature: Solution moderation
       | Azure Ship                 | Franklin Walker  | Save as draft, Propose                                      |
       | The Last Illusion          | Franklin Walker  | Propose, Save as draft                                      |
       | Rose of Doors              | Franklin Walker  | Publish, Save as draft, Propose                             |
+      | Fire Swords                | Franklin Walker  |                                                             |
       | The Guardian of the Stream | Franklin Walker  | Save as draft, Propose                                      |
       | Flames in the Swords       | Franklin Walker  | Save as draft, Propose                                      |
 
@@ -98,16 +120,19 @@ Feature: Solution moderation
       | Azure Ship                 | William Curtis   | Save as draft, Propose                                      |
       | The Last Illusion          | William Curtis   | Propose, Save as draft                                      |
       | Rose of Doors              | William Curtis   | Publish, Save as draft, Propose                             |
+      | Fire Swords                | William Curtis   |                                                             |
       | The Guardian of the Stream | William Curtis   | Save as draft, Propose                                      |
       | Flames in the Swords       | William Curtis   | Save as draft, Propose                                      |
       | Azure Ship                 | Isabel Banks     |                                                             |
       | The Last Illusion          | Isabel Banks     |                                                             |
       | Rose of Doors              | Isabel Banks     |                                                             |
+      | Fire Swords                | Isabel Banks     |                                                             |
       | The Guardian of the Stream | Isabel Banks     |                                                             |
       | Flames in the Swords       | Isabel Banks     |                                                             |
       | Azure Ship                 | Tyrone Underwood | Save as draft, Propose, Publish                             |
       | The Last Illusion          | Tyrone Underwood | Propose, Save as draft, Publish, Request changes            |
-      | Rose of Doors              | Tyrone Underwood | Publish, Save as draft, Propose, Request changes, Blacklist |
+      | Rose of Doors              | Tyrone Underwood | Publish, Save as draft, Propose, Request changes, Blacklist, Archive |
+      | Fire Swords                | Tyrone Underwood | Unarchive                                                            |
       | The Guardian of the Stream | Tyrone Underwood | Save as draft, Propose, Publish                             |
       | Flames in the Swords       | Tyrone Underwood | Save as draft, Propose, Publish                             |
 
@@ -119,21 +144,25 @@ Feature: Solution moderation
       | Azure Ship                 | Franklin Walker  | no          |
       | The Last Illusion          | Franklin Walker  | no          |
       | Rose of Doors              | Franklin Walker  | yes         |
+      | Fire Swords                | Franklin Walker  | no          |
       | The Guardian of the Stream | Franklin Walker  | no          |
       | Flames in the Swords       | Franklin Walker  | no          |
       | Azure Ship                 | William Curtis   | no          |
       | The Last Illusion          | William Curtis   | no          |
       | Rose of Doors              | William Curtis   | no          |
+      | Fire Swords                | William Curtis   | no          |
       | The Guardian of the Stream | William Curtis   | no          |
       | Flames in the Swords       | William Curtis   | no          |
       | Azure Ship                 | Isabel Banks     | no          |
       | The Last Illusion          | Isabel Banks     | no          |
       | Rose of Doors              | Isabel Banks     | no          |
+      | Fire Swords                | Isabel Banks     | no          |
       | The Guardian of the Stream | Isabel Banks     | no          |
       | Flames in the Swords       | Isabel Banks     | no          |
       | Azure Ship                 | Tyrone Underwood | yes         |
       | The Last Illusion          | Tyrone Underwood | yes         |
       | Rose of Doors              | Tyrone Underwood | yes         |
+      | Fire Swords                | Tyrone Underwood | yes         |
       | The Guardian of the Stream | Tyrone Underwood | yes         |
       | Flames in the Swords       | Tyrone Underwood | yes         |
 

@@ -10,39 +10,62 @@ import Glide, {
 } from "@glidejs/glide/dist/glide.modular.esm";
 import ControlsDisabler from "./helpers/glide.controlsDisabler.esm";
 
-(() => {
+((Drupal, once) => {
   Drupal.behaviors.glide = {
-    attach() {
-      function mountSlide() {
-        const slides = document.querySelectorAll(".carousel .glide");
-        slides.forEach((slide) => {
-          const glide = new Glide(slide, {
-            rewind: false,
-            bound: true,
-            dragThreshold: false,
-            gap: 16,
-            perView: 4,
-            breakpoints: {
-              1199: { perView: 3 },
-              767: { perView: 2 },
-              575: { perView: 1 },
-            },
-          });
-
-          glide.mount({ Controls, Breakpoints, Swipe, ControlsDisabler });
-          const forward = slide.querySelector(".glide__arrow--right");
-          const backward = slide.querySelector(".glide__arrow--left");
-
-          forward.addEventListener("click", () => {
-            glide.go(">");
-          });
-
-          backward.addEventListener("click", () => {
-            glide.go("<");
-          });
+    attach(context) {
+      once("glide", ".carousel .glide", context).forEach((slide) => {
+        const glide = new Glide(slide, {
+          rewind: false,
+          bound: true,
+          dragThreshold: false,
+          gap: 16,
+          perView: 4,
+          breakpoints: {
+            9999: { perView: 4 },
+            1199: { perView: 3 },
+            767: { perView: 2 },
+            575: { perView: 1 },
+          },
         });
-      }
-      mountSlide();
+
+        let resetTimeoutId;
+        const resetHandler = (glideSlider) => {
+          if (glideSlider.settings.perView === glideSlider.previousPerView) {
+            return;
+          }
+          glideSlider.previousPerView = glideSlider.settings.perView;
+          glideSlider.enable().go("<<").disable();
+        };
+        glide.on("resize", () => {
+          if (resetTimeoutId) {
+            clearTimeout(resetTimeoutId);
+          }
+          resetTimeoutId = setTimeout(resetHandler, 50, glide);
+        });
+
+        glide.mount({ Controls, Breakpoints, Swipe, ControlsDisabler });
+        glide.previousPerView = glide.settings.perView;
+        const forward = slide.querySelector(".glide__arrow--right");
+        const backward = slide.querySelector(".glide__arrow--left");
+
+        forward.addEventListener("click", () => {
+          glide.go(">");
+        });
+
+        backward.addEventListener("click", () => {
+          glide.go("<");
+        });
+
+        // Event listener to add class when animating.
+        // Used in behat to detect when Glide finished animating.
+        glide
+          .on("move", () => {
+            slide.classList.add("glide-animating");
+          })
+          .on("move.after", () => {
+            slide.classList.remove("glide-animating");
+          });
+      });
     },
   };
-})();
+})(Drupal, once);

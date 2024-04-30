@@ -7,6 +7,7 @@ module:
   antibot: 0
   asset_distribution: 0
   asset_release: 0
+  autologout: 0
   blazy: 0
   block: 0
   block_field: 0
@@ -17,6 +18,7 @@ module:
   changed_fields: 0
   ckeditor5: 0
   collection: 0
+  colorbox: 0
   comment: 0
   config: 0
   config_ignore: 0
@@ -83,6 +85,7 @@ module:
   inline_entity_form: 0
   interoperable_europe: 0
   isa2_analytics: 0
+  joinup_bookmark: 0
   joinup_bundle_class: 0
   joinup_collection: 0
   joinup_community_content: 0
@@ -93,6 +96,7 @@ module:
   joinup_event: 0
   joinup_featured: 0
   joinup_federation: 0
+  joinup_flag: 0
   joinup_front_page: 0
   joinup_group: 0
   joinup_group_content_management: 0
@@ -122,6 +126,7 @@ module:
   joinup_sparql: 0
   joinup_stats: 0
   joinup_subscription: 0
+  joinup_taxonomy: 0
   joinup_tiles: 0
   joinup_tour: 0
   joinup_user: 0
@@ -132,6 +137,7 @@ module:
   language: 0
   layout_builder: 0
   layout_builder_component_attributes: 0
+  layout_custom_section_classes: 0
   layout_discovery: 0
   layout_paragraphs: 0
   link: 0
@@ -156,6 +162,7 @@ module:
   mysql: 0
   nio: 0
   node: 0
+  node_revision_delete: 0
   oe_bootstrap_theme_helper: 0
   oe_dashboard_agent: 0
   oe_gisco_geocoding: 0
@@ -190,10 +197,11 @@ module:
   rdf_export: 0
   rdf_meta_entity: 0
   rdf_schema_field_validation: 0
-  rdf_taxonomy: 0
+  rdf_sync: 0
   redirect: 0
   responsive_image: 0
   rest: 0
+  role_delegation: 0
   schema_article: 0
   schema_digital_document: 0
   schema_event: 0
@@ -236,7 +244,6 @@ module:
   toolbar: 0
   topic: 0
   tour: 0
-  trr: 0
   ui_patterns: 0
   ui_patterns_library: 0
   ui_patterns_settings: 0
@@ -251,8 +258,8 @@ module:
   views_data_export: 0
   views_multiple_permissions: 0
   webform: 0
+  webform_ui: 0
   whats_new: 0
-  workflow_state_permission: 0
   menu_admin_per_menu: 1
   menu_link_content: 1
   pathauto: 1

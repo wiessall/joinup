@@ -1,0 +1,43 @@
+{#
+/**
+ * @file
+ * Default template for a field.
+ */
+#}
+{{ attach_library('ventuno/see-more') }}
+{%
+  set classes = [
+    'field--name-' ~ field_name|clean_class,
+    bundle|clean_class ~ '__' ~ field_name_clean|clean_class,
+    label_display == 'inline' ? 'd-flex',
+  ]
+%}
+
+<div {{ attributes.addClass(classes) }}>
+  {% for item in items %}
+
+    {% if item.content|render|striptags|split(' ')|length < 100 %}
+      <div class="see-more">
+        {{ item.content }}
+      </div>
+    {% else %}
+      <div class="see-more see-more--long collapse" id="collapseSeeMore">
+        {{ item.content }}
+      </div>
+      <button
+        class="btn btn-link p-0 mt-3 js-see-more-btn"
+        type="button"
+        data-joinup-seemore-collapsed="true"
+        data-bs-toggle="collapse"
+        data-bs-target="#collapseSeeMore"
+        aria-expanded="false"
+        aria-controls="collapseSeeMore">
+        {{ 'See more'|t }}
+        <svg class="bi icon--s">
+          <use xlink:href="{{ bcl_icon_path }}#chevron-down"></use>
+        </svg>
+      </button>
+    {% endif %}
+
+  {% endfor %}
+</div>

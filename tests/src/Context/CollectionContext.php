@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Drupal\joinup\Context;
 
@@ -17,6 +17,7 @@ use Drupal\joinup\Traits\FormTrait;
 use Drupal\joinup\Traits\OgTrait;
 use Drupal\joinup\Traits\RdfEntityTrait;
 use Drupal\joinup\Traits\SearchTrait;
+use Drupal\joinup\Traits\TopicTrait;
 use Drupal\joinup\Traits\UserTrait;
 use Drupal\joinup\Traits\UtilityTrait;
 use Drupal\joinup\Traits\WorkflowTrait;
@@ -42,6 +43,7 @@ class CollectionContext extends RawDrupalContext {
   use OgTrait;
   use RdfEntityTrait;
   use SearchTrait;
+  use TopicTrait;
   use UserTrait;
   use UtilityTrait;
   use WorkflowTrait;
@@ -104,6 +106,20 @@ class CollectionContext extends RawDrupalContext {
     /** @var \Drupal\rdf_entity\Entity\Rdf $entity */
     $entity = $this->getEntityByLabel('rdf_entity', $collection, 'collection');
     $this->visitPath($entity->toUrl()->toString());
+  }
+
+  /**
+   * Checks that the user is on the given collection homepage.
+   *
+   * @param string $collection
+   *   The title of the collection.
+   *
+   * @Then I should be on (the homepage of )the :collection collection
+   */
+  public function assertCollectionPath(string $collection): void {
+    /** @var \Drupal\rdf_entity\Entity\Rdf $entity */
+    $entity = $this->getEntityByLabel('rdf_entity', $collection, 'collection');
+    $this->assertSession()->addressEquals($this->locatePath($entity->toUrl()->toString()));
   }
 
   /**
@@ -178,20 +194,13 @@ class CollectionContext extends RawDrupalContext {
   protected function provideDefaultValues(array $fields): array {
     $default_values = [
       'field_ar_state' => 'draft',
+      'field_ar_abstract' => 'This is a test abstract.',
     ];
 
     foreach ($default_values as $field => $default_value) {
       if (!isset($fields[$field])) {
         $fields[$field] = $default_value;
       }
-    }
-
-    // Set the default filter format for the abstract field.
-    if (!empty($fields['field_ar_abstract'][0]) && empty($fields['field_ar_abstract'][0]['format'])) {
-      $value = $fields['field_ar_abstract'][0];
-      unset($fields['field_ar_abstract'][0]);
-      $fields['field_ar_abstract'][0]['value'] = $value;
-      $fields['field_ar_abstract'][0]['format'] = 'essential_html';
     }
 
     return $fields;
@@ -269,6 +278,8 @@ class CollectionContext extends RawDrupalContext {
       'y',
       'yes',
     ]);
+
+    $this->setFallbackTopic($values);
 
     /** @var \Drupal\collection\Entity\CollectionInterface $collection */
     $collection = $this->createRdfEntity('collection', $values);
@@ -414,19 +425,24 @@ class CollectionContext extends RawDrupalContext {
    *
    * @param \Behat\Gherkin\Node\TableNode $menu_table
    *   The menu table.
+   * @param string $menu_type
+   *   The OG menu instance bundle. Either 'main' or 'navigation'.
+   * @param string $group_label
+   *   The label of the group entity.
+   * @param string $group_bundle
+   *   The bundle of the group entity.
    *
    * @throws \Exception
    *    Throws an exception if the parent item is not found.
    *
-   * @Given (the following )custom page(s) menu structure:
-   * @Given (the following )collection menu structure:
+   * @Given (the following )custom page(s) :menu_type menu structure for the :group_label :group_bundle:
    */
-  public function givenCollectionMenuStructure(TableNode $menu_table): void {
-    /** @var \Drupal\Core\Menu\MenuLinkManagerInterface $menu_link_manager */
-    $menu_link_manager = \Drupal::service('plugin.manager.menu.link');
+  public function givenCollectionMenuStructure(TableNode $menu_table, string $menu_type, string $group_label, string $group_bundle): void {
+    $group = $this->getEntityByLabel('rdf_entity', $group_label, $group_bundle);
+    $menu_link_manager = \Drupal::getContainer()->get('plugin.manager.menu.link');
     foreach ($menu_table->getColumnsHash() as $values) {
       if (!empty($values['parent'])) {
-        $parent_link = $this->getMenuLinkByTitle($values['parent']);
+        $parent_link = $this->getMenuLinkByTitle($values['parent'], $group->id(), $menu_type);
         $values['parent'] = $parent_link->getPluginId();
       }
 
@@ -434,7 +450,7 @@ class CollectionContext extends RawDrupalContext {
         $values['enabled'] = (int) ($values['enabled'] === 'yes');
       }
 
-      $child_link = $this->getMenuLinkByTitle($values['title']);
+      $child_link = $this->getMenuLinkByTitle($values['title'], $group->id(), $menu_type);
       $menu_link_manager->updateDefinition($child_link->getPluginId(), $values);
     }
   }

@@ -30,6 +30,7 @@ drupal:
       install:
         - Main settings
         - Databases
+        - RDF backend
         - Configuration
         - Search API
         - OpenEuropa Webtools Analytics
@@ -40,6 +41,7 @@ drupal:
       site-clone:
         - Main settings
         - Databases
+        - RDF backend
         - Configuration
         - Search API
         - OpenEuropa Webtools Analytics
@@ -58,6 +60,7 @@ drupal:
       site-clean:
         - Main settings
         - Databases
+        - RDF backend
         - Configuration
         - Search API
         - OpenEuropa Webtools Analytics
@@ -77,6 +80,7 @@ drupal:
       behat:
         - Main settings
         - Databases
+        - RDF backend
         - Configuration
         - Testing configuration alters
         - Search API
@@ -95,6 +99,7 @@ drupal:
       error_page_test:
         - Main settings
         - Databases
+        - RDF backend
         - Configuration
         - Search API
         - OpenEuropa Webtools Analytics
@@ -113,6 +118,7 @@ drupal:
       phpunit:
         - Main settings
         - Databases
+        - RDF backend
         - Configuration
         - Search API
         - OpenEuropa Webtools Analytics
@@ -130,6 +136,7 @@ drupal:
         - Main settings
         - Site email
         - Databases
+        - RDF backend
         - Configuration
         - Search API
         - OpenEuropa Newsroom Newsletter Settings
@@ -173,13 +180,6 @@ drupal:
       Main settings: |
         if (!$hash_salt = getenv('DRUPAL_HASH_SALT')) {
           $hash_salt = \Drupal\Component\Utility\Crypt::randomBytesBase64(55);
-          $env_file = "{$app_root}/../.env";
-          $env = file_get_contents($env_file);
-          $env = preg_replace('/DRUPAL_HASH_SALT=.*/', "DRUPAL_HASH_SALT={$hash_salt}", $env);
-          file_put_contents($env_file, $env);
-
-          # Also include this to the `.env.pipeline` which is used by the
-          # pipelines.
           $env_file = "{$app_root}/../.env.pipeline";
           if (!file_exists($env_file)) {
             file_put_contents($env_file, "DRUPAL_HASH_SALT={$hash_salt}");
@@ -210,6 +210,7 @@ drupal:
         $settings['joinup.parse_cached_computed_field'] = FALSE;
       Configuration: |
         $settings['config_exclude_modules'] = [
+          'action',
           'admin_toolbar',
           'admin_toolbar_tools',
           'blazy_ui',
@@ -269,20 +270,24 @@ drupal:
           'namespace' => 'Drupal\\joinup_sparql\\Driver\\Database\\joinup_sparql',
           'driver' => 'sparql',
         ];
+      RDF backend: |
+        $config['rdf_sync.settings']['endpoint']['host'] = getenv('DRUPAL_SPARQL_HOSTNAME');
+        $config['rdf_sync.settings']['endpoint']['port'] = getenv('DRUPAL_SPARQL_PORT');
       Permissions: |
         $settings['skip_permissions_hardening'] = TRUE;
       Null mail collector: |
-        $config['symfony_mailer_lite.settings']['default_transport'] = 'null';
+        $config['system.mail']['interface']['default'] = 'null';
+        $config['mailsystem.settings']['defaults']['sender'] = 'null';
       Development mail collector: |
-        $config['symfony_mailer_lite.settings']['default_transport'] = 'native';
+        $config['system.mail']['interface']['default'] = 'php_mail';
+        $config['mailsystem.settings']['defaults']['sender'] = 'php_mail';
       Test mail collector: |
         $config['system.mail']['interface']['default'] = 'test_mail_collector';
         $config['mailsystem.settings']['defaults']['sender'] = 'test_mail_collector';
+      Mail transport: |
+        $config['mailsystem.settings']['defaults']['sender'] = 'php_mail';
       Site email:
         $config['system.site']['mail'] = getenv('DRUPAL_SITE_MAIL');
-      Mail transport: |
-        $config['symfony_mailer_lite.settings']['default_transport'] = 'sendmail';
-        $config['symfony_mailer_lite.symfony_mailer_lite_transport.sendmail']['configuration']['query']['command'] =  getenv('DRUPAL_MAIL_SENDMAIL_PATH') . ' -' . getenv('DRUPAL_MAIL_SENDMAIL_MODE');
       Search API: |
         // Adding a fallback for the scheme in case it is not properly
         // consumed by the production environment.

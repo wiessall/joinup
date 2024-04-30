@@ -1,15 +1,16 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Drupal\eu_oss_catalogue\Plugin\eu_oss_catalogue\Provider;
 
 use Drupal\Component\Serialization\Json;
-use Drupal\Core\Config\Schema\SchemaCheckTrait;
 use Drupal\Core\Logger\LoggerChannelInterface;
 use Drupal\eu_oss_catalogue\ApiGuesserInterface;
 use Drupal\eu_oss_catalogue\EuOssCataloguePluginManagerInterface;
 use Drupal\eu_oss_catalogue\EuOssCatalogueProviderPluginBase;
+use Drupal\eu_oss_catalogue\Exception\HostingPlatformFetchException;
+use Drupal\eu_oss_catalogue\Exception\ProviderFetchException;
 use GuzzleHttp\Client;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -19,14 +20,11 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * @EuOssCatalogueProvider(
  *   id = "developers_italia",
  *   label = @Translation("Developers Italia"),
- *   description = @Translation("Italian National OSS Catalogue, by https://developers.italia.it website."), parser = "publiccode_yml",
+ *   description = @Translation("Italian National OSS Catalogue, by https://developers.italia.it website."),
+ *   parser = "publiccode_yml",
  * )
  */
 class DevelopersItalia extends EuOssCatalogueProviderPluginBase {
-
-  use SchemaCheckTrait {
-    checkValue as traitCheckValue;
-  }
 
   /**
    * Developers Italia API endpoint.
@@ -113,6 +111,7 @@ class DevelopersItalia extends EuOssCatalogueProviderPluginBase {
       $this->doFetch();
     }
 
+    $collectedExceptions = [];
     foreach ($this->fetched as $baseUrl => $namespaces) {
       // Remove this entry to avoid fetching again on the next iteration.
       unset($this->fetched[$baseUrl]);
@@ -125,15 +124,26 @@ class DevelopersItalia extends EuOssCatalogueProviderPluginBase {
       $hostingPlatform = $this->platformManager->createInstance($namespaces['api']->pluginId, $platformConfig);
 
       /** @var \Drupal\eu_oss_catalogue\Model\Project $project */
-      foreach ($hostingPlatform->getProjects(['publiccodeYml' => 'publiccode.yml']) as $project) {
-        $this->processedUrls[] = $project->url;
-        yield $project;
+      try {
+        foreach ($hostingPlatform->getProjects(['publiccodeYml' => 'publiccode.yml']) as $project) {
+          $this->processedUrls[] = $project->url;
+          yield $project;
+        }
+      }
+      catch (HostingPlatformFetchException $exception) {
+        // Collect provider fetch exceptions, and throw them at the end of the
+        // fetch operation.
+        $collectedExceptions[] = $exception->getMessage();
       }
 
       // Only log when all solutions were processed.
       if (empty($this->fetched)) {
         $this->logResults();
       }
+    }
+
+    if (!empty($collectedExceptions)) {
+      throw new ProviderFetchException(implode(PHP_EOL, $collectedExceptions));
     }
   }
 
@@ -145,8 +155,20 @@ class DevelopersItalia extends EuOssCatalogueProviderPluginBase {
 
     do {
       $endpointUrl = static::ENDPOINT . $next . ($next ? '&' : '?') . 'page[size]=100&all=true';
-      $response = $this->httpClient->get($endpointUrl);
-      $read = Json::decode($response->getBody()->getContents());
+      try {
+        $response = $this->httpClient->get($endpointUrl);
+        $read = Json::decode($response->getBody()->getContents());
+      }
+      catch (\Exception $exception) {
+      }
+      if (isset($exception) || $response->getStatusCode() >= 400) {
+        $message = $exception?->getMessage() ?? $response->getReasonPhrase();
+        throw new ProviderFetchException(
+          $message,
+          0,
+          $exception ?? NULL
+        );
+      }
 
       foreach ($read['data'] as $newItem) {
         if (empty($newItem['url'])) {

@@ -1,18 +1,3 @@
-entity.rdf_entity.about_page:
-  path: 'rdf_entity/{rdf_entity}/about'
-  defaults:
-    _controller: '\Drupal\joinup_group\Controller\AboutPageController::aboutPage'
-    _title_callback: '\Drupal\joinup_group\Controller\AboutPageController::aboutPageTitle'
-  requirements:
-    _entity_access: 'rdf_entity.view'
-  options:
-    parameters:
-      rdf_entity:
-        type: entity:rdf_entity
-        bundle:
-          - collection
-          - solution
-
 entity.rdf_entity.member_overview:
   path: 'rdf_entity/{rdf_entity}/members'
   defaults:
@@ -146,6 +131,7 @@ entity.rdf_entity.announcement_add:
   requirements:
     _custom_access: Drupal\joinup_group\Controller\AnnouncementsController::access
     _og_user_access_group: 'manage group announcements'
+    _joinup_group: 'TRUE'
   options:
     parameters:
       rdf_entity:
@@ -163,6 +149,7 @@ entity.rdf_entity.announcement_edit:
   requirements:
     _custom_access: Drupal\joinup_group\Controller\AnnouncementsController::access
     _og_user_access_group: 'manage group announcements'
+    _joinup_group: 'TRUE'
   options:
     parameters:
       rdf_entity:
@@ -204,6 +191,7 @@ entity.rdf_entity.unpublished_content:
     _title: 'Unpublished content'
   requirements:
     _custom_access: Drupal\joinup_group\Controller\UnpublishedContentPageController::access
+    _joinup_group: 'TRUE'
   options:
     parameters:
       rdf_entity:

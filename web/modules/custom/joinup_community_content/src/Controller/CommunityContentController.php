@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Drupal\joinup_community_content\Controller;
 
@@ -24,7 +24,7 @@ class CommunityContentController extends GroupNodeController {
    *
    * @var \Drupal\joinup_community_content\CommunityContentWorkflowAccessControlHandler
    */
-  protected $workflowAccessControlHandler;
+  protected CommunityContentWorkflowAccessControlHandler $workflowAccessControlHandler;
 
   /**
    * Constructs a new controller instance.
@@ -56,7 +56,7 @@ class CommunityContentController extends GroupNodeController {
    *   The RDF entity for which the document entity is created.
    * @param \Drupal\node\NodeTypeInterface $node_type
    *   The type of node to be added.
-   * @param \Drupal\Core\Session\AccountInterface|null $account
+   * @param \Drupal\Core\Session\AccountInterface $account
    *   The account to check access for. The current user will be used if NULL.
    *
    * @return \Drupal\Core\Access\AccessResult
@@ -69,9 +69,12 @@ class CommunityContentController extends GroupNodeController {
    */
   public function createAccess(RdfInterface $rdf_entity, NodeTypeInterface $node_type, AccountInterface $account): AccessResultInterface {
     if (in_array($node_type->id(), CommunityContentHelper::BUNDLES, TRUE)) {
-      /** @var \Drupal\joinup_community_content\Entity\CommunityContentInterface $node */
-      $node = $this->createNode($rdf_entity, $node_type);
-      return $this->workflowAccessControlHandler->entityAccess($node, 'create', $account);
+      /** @var \Drupal\joinup_group\Entity\GroupInterface $rdf_entity */
+      $membership = $rdf_entity->getMembership((int) $account->id());
+      return \Drupal::entityTypeManager()->getAccessControlHandler('node')->createAccess($node_type->id(), $account, [
+        'group' => $rdf_entity,
+        'membership' => $membership?->id(),
+      ], TRUE);
     }
     return parent::createAccess($rdf_entity, $node_type, $account);
   }

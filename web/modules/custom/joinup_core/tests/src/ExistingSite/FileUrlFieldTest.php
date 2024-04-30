@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Drupal\Tests\joinup_core\ExistingSite;
 
@@ -88,6 +88,7 @@ class FileUrlFieldTest extends JoinupExistingSiteTestBase {
       'field_ad_licence' => $licence->id(),
       'field_ad_description' => $this->randomString(),
       'parent' => $solution,
+      'field_ad_state' => 'published',
     ]);
 
     $field_name = 'field_ad_access_url';
@@ -97,7 +98,7 @@ class FileUrlFieldTest extends JoinupExistingSiteTestBase {
 
     $this->drupalGet($url);
     $this->addFileUrlItem($field_name, 'upload', $test_file->getFileUri());
-    $this->submitForm(['label[0][value]' => 'Foo'], 'Save');
+    $this->submitForm(['label[0][value]' => 'Foo'], 'Update');
 
     // Check that the file has been uploaded to the file URL field.
     $distribution = Rdf::load($distribution->id());
@@ -119,7 +120,7 @@ class FileUrlFieldTest extends JoinupExistingSiteTestBase {
     // while still keeping the same file basename.
     $this->submitForm([], 'Remove');
     $this->addFileUrlItem($field_name, 'upload', $test_file->getFileUri());
-    $this->submitForm([], 'Save');
+    $this->submitForm([], 'Update');
 
     // @todo We should not need cache clearing here. The cache should have been
     //   wiped out at this point. Fix this regression in ISAICP-3392.
@@ -148,7 +149,7 @@ class FileUrlFieldTest extends JoinupExistingSiteTestBase {
     $this->submitForm([], 'Remove');
     $url = 'http://example.com/' . $this->randomMachineName();
     $this->addFileUrlItem($field_name, 'remote', $url);
-    $this->submitForm([], 'Save');
+    $this->submitForm([], 'Update');
 
     // @todo We should not need cache clearing here. The cache should have been
     //   wiped out at this point. Fix this regression in ISAICP-3392.

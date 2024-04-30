@@ -1,11 +1,12 @@
-@api @terms @group-i
+@api @group-i
 Feature: Owner moderation
   In order to manage owners
   As a user of the website
   I need to be able to transit the owners from one state to another.
 
-  @terms @uploadFiles:logo.png
+  @uploadFiles:logo.png
   Scenario: Publish, update, request changes, publish again and ask to delete an owner.
+
     Given users:
       | Username        |
       | Raeburn Hibbert |
@@ -16,10 +17,11 @@ Feature: Owner moderation
     When I am logged in as "Raeburn Hibbert"
     And I go to the propose collection form
     And I fill in the following:
-      | Title  | The healthy food European project |
+      | Title    | The healthy food European project                                                             |
+      | Abstract | The healthy food European project is a project to keep Europe healthy through healthy eating. |
       # Contact information data.
-      | Name   | Duche Baggins                     |
-      | E-mail | duche.baggins@example.com         |
+      | Name     | Duche Baggins                                                                                 |
+      | E-mail   | duche.baggins@example.com                                                                     |
     And I enter "Keep Europe healthy through healthy eating." in the "Description" wysiwyg editor
     And I attach the file "logo.png" to "Logo"
     And I click the 'Categorisation' tab

@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Drupal\Tests\joinup_group\ExistingSite;
 
@@ -35,12 +35,14 @@ class GroupTokensTest extends JoinupExistingSiteTestBase {
       'rid' => 'asset_distribution',
       'label' => $this->randomString(),
       'og_audience' => $solution->id(),
+      'field_ad_state' => 'published',
     ]);
 
     $release_distribution = $this->createRdfEntity([
       'rid' => 'asset_distribution',
       'label' => $this->randomString(),
       'og_audience' => $solution->id(),
+      'field_ad_state' => 'published',
     ]);
 
     $release = $this->createRdfEntity([

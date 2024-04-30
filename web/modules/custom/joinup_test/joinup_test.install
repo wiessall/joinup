@@ -1,0 +1,70 @@
+<?php
+
+/**
+ * @file
+ * Install, update and uninstall hooks for Joinup Test module.
+ */
+
+declare(strict_types=1);
+
+use Drupal\Component\Serialization\Yaml;
+
+/**
+ * Implements hook_install().
+ */
+function joinup_test_install($is_syncing): void {
+  // Create the testing taxonomy terms. Limitation: It creates terms with
+  // maximum 2 level hierarchy.
+  $hierarchy = Yaml::decode(file_get_contents(__DIR__ . '/fixtures/testing_terms.yml'));
+  $storage = \Drupal::entityTypeManager()->getStorage('taxonomy_term');
+
+  $termIds = [];
+  foreach ($hierarchy as $vid => $terms) {
+    $hasTerms = (bool) $storage->getQuery()->accessCheck(FALSE)
+      ->condition('vid', $vid)
+      ->count()
+      ->execute();
+    if ($hasTerms) {
+      // On rebuild terms are already populated from the database dump.
+      continue;
+    }
+
+    foreach ($terms as $parentWeight => $data) {
+      $term = $storage->create([
+        'vid' => $vid,
+        'name' => $data['name'],
+        'weight' => $parentWeight,
+      ]);
+      $term->save();
+      $parentTermId = $term->id();
+      $termIds[] = $parentTermId;
+      foreach ($data['children'] ?? [] as $childWeight => $child) {
+        $term = $storage->create([
+          'vid' => $vid,
+          'name' => $child['name'],
+          'parent' => $parentTermId,
+          'weight' => $childWeight,
+          'description' => $child['description'] ?? '',
+        ]);
+        $term->save();
+        $termIds[] = $term->id();
+      }
+    }
+  }
+
+  // Keep track of created terms.
+  \Drupal::state()->set('joinup_test.testing_terms', $termIds);
+}
+
+/**
+ * Implements hook_uninstall().
+ */
+function joinup_test_uninstall($is_syncing): void {
+  $state = \Drupal::state();
+  // Remove testing terms.
+  if ($tids = $state->get('joinup_test.testing_terms', [])) {
+    $storage = \Drupal::entityTypeManager()->getStorage('taxonomy_term');
+    $storage->delete($storage->loadMultiple($tids));
+  }
+  $state->delete('joinup_test.testing_terms');
+}

@@ -10,7 +10,7 @@
 {% if items or active %}
   <div{{ attributes.addClass(['my-3', 'dropdown', 'd-flex', 'align-items-center']) }}>
     {%- if prefix_text -%}
-      <span>{{ prefix_text }}</span>
+      <span class="fw-bold me-2">{{ prefix_text }}</span>
     {% endif -%}
     {{ suffix_text }}
     <div class="filter__term d-inline">

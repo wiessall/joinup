@@ -1,15 +1,18 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Drupal\eu_oss_catalogue;
 
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Logger\LoggerChannelInterface;
 use Drupal\Core\Queue\QueueFactory;
+use Drupal\Core\StringTranslation\StringTranslationTrait;
+use Drupal\Core\Utility\Error;
 use Drupal\eu_oss_catalogue\Entity\OssSolutionInterface;
 use Drupal\eu_oss_catalogue\Event\EuOssPostFetchEvent;
 use Drupal\eu_oss_catalogue\Event\EuOssSolutionPreSaveEvent;
+use Drupal\eu_oss_catalogue\Exception\HostingPlatformFetchException;
 use Drupal\eu_oss_catalogue\Model\Project;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
@@ -17,6 +20,8 @@ use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
  * Default implementation for `eu_oss_catalogue` service.
  */
 class EuOssCatalogue implements EuOssCatalogueInterface {
+
+  use StringTranslationTrait;
 
   /**
    * Constructs a new service instance.
@@ -55,74 +60,78 @@ class EuOssCatalogue implements EuOssCatalogueInterface {
 
     $solutionUrlsToProcess = [];
     $solutionUrlsDiscovered = [];
-    while (($projects = $provider->fetch())->valid()) {
-      foreach ($projects as $project) {
-        \assert($project instanceof Project);
+    try {
+      while (($projects = $provider->fetch())->valid()) {
+        foreach ($projects as $project) {
+          \assert($project instanceof Project);
 
-        // Give parser the chance to do the validation.
-        if ($errors = $provider->getParser()->isValid($project)) {
-          $errorMarkup = '<ul><li>' . implode('</li><li>', $errors) . '</li></ul>';
-          $message = <<<MESSAGE
+          // Give parser the chance to do the validation.
+          if ($errors = $provider->getParser()->isValid($project)) {
+            $errorMarkup = '<ul><li>' . implode('</li><li>', $errors) . '</li></ul>';
+            $message = <<<MESSAGE
             <p>Provider: @provider (<code>@provider_id</code>)</p>
             <p>Provider's reference: <code>@reference</code></p>
             <p>Schema errors:</p>
             $errorMarkup
             MESSAGE;
-          $arguments = [
-            '@provider' => $provider->getPluginDefinition()['label'],
-            '@provider_id' => $providerId,
-            '@reference' => $project->platformReference ?? '[not provided]',
-          ];
-          $this->logger->error($message, $arguments);
-          continue;
-        }
+            $arguments = [
+              '@provider' => $provider->getPluginDefinition()['label'],
+              '@provider_id' => $providerId,
+              '@reference' => $project->platformReference ?? '[not provided]',
+            ];
+            $this->logger->error($message, $arguments);
+            continue;
+          }
 
-        // Cancellation should also cause removing this provider from the
-        // preexisting OSS Solution entity.
-        $solutionUrlsDiscovered[] = $project->url;
-        if (!$this->fetchedSolutionNeedsUpdate($project, $provider)) {
-          continue;
-        }
+          // Cancellation should also cause removing this provider from the
+          // preexisting OSS Solution entity.
+          $solutionUrlsDiscovered[] = $project->url;
+          if (!$this->fetchedSolutionNeedsUpdate($project, $provider)) {
+            continue;
+          }
 
-        // Allow 3rd-party to modify or cancel the fetched solution.
-        $event = new EuOssPostFetchEvent($project);
-        $this->eventDispatcher->dispatch($event);
-        if ($event->isCancelled()) {
-          // @todo Needs tests.
-          $this->logger->warning("Solution '@solution' (@url) import cancelled by a subscriber. Reason: @reason", [
-            '@solution' => $project->name,
-            '@url' => $project->url,
-            '@reason' => $event->getCancellationReason(),
-          ]);
-          continue;
-        }
-
-        // Providers might provide the same solution (with the same URL) more
-        // than once; e.g. Developers Italia has a package three times with
-        // slightly different data. So if we already queued on item, we won't
-        // queue its second occurrence one more time, but instead, at the end of
-        // this method, we log a message about the duplicated URLs.
-        if (in_array($project->url, $solutionUrlsToProcess, TRUE)) {
-          $this->logger->warning(
-            "Solution '@solution' (@url) import skipped: URL already seen in the same provider.",
-            [
+          // Allow 3rd-party to modify or cancel the fetched solution.
+          $event = new EuOssPostFetchEvent($project);
+          $this->eventDispatcher->dispatch($event);
+          if ($event->isCancelled()) {
+            // @todo Needs tests.
+            $this->logger->warning("Solution '@solution' (@url) import cancelled by a subscriber. Reason: @reason", [
               '@solution' => $project->name,
               '@url' => $project->url,
-            ]
-          );
-          continue;
-        }
+              '@reason' => $event->getCancellationReason(),
+            ]);
+            continue;
+          }
 
-        // @todo Move the process of queueing to a separate method for the sake
-        //   of making the whole API more clear?
-        $queue->createItem([
-          'operation' => 'solution:create',
-          'provider' => $providerId,
-          'solution' => $project,
-        ]);
-        // Keep track of solutions been queued already.
-        $solutionUrlsToProcess[] = $project->url;
+          // Providers might provide the same solution (with the same URL) more
+          // than once; e.g. Developers Italia has a package three times with
+          // slightly different data. So if we already queued on item, we won't
+          // queue its second occurrence one more time, but instead, at the end
+          // of this method, we log a message about the duplicated URLs.
+          if (in_array($project->url, $solutionUrlsToProcess, TRUE)) {
+            $this->logger->warning(
+              "Solution '@solution' (@url) import skipped: URL already seen in the same provider.",
+              [
+                '@solution' => $project->name,
+                '@url' => $project->url,
+              ]
+            );
+            continue;
+          }
+
+          // @todo Move the process of queueing to a separate method for the sake
+          //   of making the whole API more clear?
+          $queue->createItem([
+            'operation' => 'solution:create',
+            'provider' => $providerId,
+            'solution' => $project,
+          ]);
+          // Keep track of solutions been queued already.
+          $solutionUrlsToProcess[] = $project->url;
+        }
       }
+    }
+    catch (HostingPlatformFetchException $exception) {
     }
 
     // Check duplicate URLs and log if there are any.
@@ -146,12 +155,25 @@ class EuOssCatalogue implements EuOssCatalogueInterface {
         ],
       );
     }
-    // @todo Maybe this should be a flag that enables cleanup deletion?
-    $queue->createItem([
-      'operation' => 'solution:create:cleanup',
-      'provider' => $providerId,
-      'solution_urls' => array_keys($urlCounts),
-    ]);
+
+    if (!isset($exception)) {
+      $queue->createItem([
+        'operation' => 'solution:create:cleanup',
+        'provider' => $providerId,
+        'solution_urls' => array_keys($urlCounts),
+      ]);
+    }
+    else {
+      // We have unstable API behind the current @EuOssCatalogueProvider
+      // plugin instance.
+      $this->logger->error(
+        "Unstable API behind '@provider' provider plugin, skipping cleanup. Exceptions:\n@exception-messages",
+        [
+          '@provider' => $provider->getPluginId(),
+          '@exception-messages' => $exception->getMessage(),
+        ],
+      );
+    }
 
     return count($urlCounts);
   }
@@ -159,41 +181,68 @@ class EuOssCatalogue implements EuOssCatalogueInterface {
   /**
    * {@inheritdoc}
    */
-  public function createOrUpdateSolution(string $providerPluginId, Project $project): ?OssSolutionInterface {
+  public function createOrUpdateSolution(string $providerPluginId, Project $project): void {
     /** @var \Drupal\eu_oss_catalogue\EuOssCatalogueProviderInterface $provider */
     $provider = $this->providerManager->createInstance($providerPluginId);
     /** @var \Drupal\eu_oss_catalogue\EuOssCatalogueParserInterface $parser */
     $parser = $this->parserManager->createInstance($provider->getPluginDefinition()['parser']);
 
-    // The parser is responsible to create the solution node entity.
-    if (!$solution = $parser->parse($project, $provider)) {
-      return NULL;
+    try {
+      // The parser is responsible to create the solution node entity.
+      $solution = $parser->parse($project, $provider);
+
+      // Let the provider make their own adjustments, if case.
+      $provider->alterSolution($solution, $project);
+
+      // Finally, allow 3rd-party to add their alters.
+      $this->eventDispatcher->dispatch(new EuOssSolutionPreSaveEvent($solution, $project));
+
+      // Set source hash.
+      $solution->set('oss_source_hash', $project->getHash());
+
+      $silentErrors = implode(", ", $project->getSilentErrors());
+      if (!$solution->isNew()) {
+        $solution->setNewRevision();
+
+        $message = match ($solution->get('oss_archived')->getString()) {
+          '1' => $this->t('Unarchive, because re-added (present again) in "@provider" source/catalogue. @errors', [
+            '@provider' => $provider->getPluginDefinition()['label'],
+            '@errors' => $silentErrors,
+          ]),
+          default => $this->t('Update, because data has been changed in "@provider" source/catalogue. @errors', [
+            '@provider' => $provider->getPluginDefinition()['label'],
+            '@errors' => $silentErrors,
+          ]),
+        };
+      }
+      else {
+        $message = $this->t('Import from "@provider" source/catalogue. @errors', [
+          '@provider' => $provider->getPluginDefinition()['label'],
+          '@errors' => $silentErrors,
+        ]);
+      }
+      $solution->setRevisionLogMessage((string) $message);
+
+      // Make sure it is not archived.
+      $solution->set('oss_archived', 0);
+
+      $operationResult = $solution->save();
+    }
+    catch (\Exception $exception) {
+      // The solution could not be saved.
+      Error::logException($this->logger, $exception);
+      return;
     }
 
-    // Let the provider make their own adjustments, if case.
-    $provider->alterSolution($solution, $project);
-
-    // Finally, allow 3rd-party to add their alters.
-    $this->eventDispatcher->dispatch(new EuOssSolutionPreSaveEvent($solution, $project));
-
-    // Set source hash.
-    $solution->set('oss_source_hash', $project->getHash());
-
-    $operationResult = $solution->save();
-
-    $loggerArguments = [
-      '@solution' => $solution->label(),
-    ];
-    switch ($operationResult) {
-      case SAVED_NEW:
-        $this->logger->info('Solution @solution was created.', $loggerArguments);
-        break;
-
-      default:
-        $this->logger->info('Solution @solution was updated.', $loggerArguments);
+    if ($operationResult === SAVED_NEW) {
+      $loggerArguments = [
+        '@solution' => $solution->label(),
+        'oss_landing_url' => $solution->get('oss_landing_url')->getString(),
+        'oss_solution' => $solution->id(),
+        'oss_source' => $provider->getPluginId(),
+      ];
+      $this->logger->info('Solution @solution was created.', $loggerArguments);
     }
-
-    return $solution;
   }
 
   /**
@@ -240,21 +289,21 @@ class EuOssCatalogue implements EuOssCatalogueInterface {
     /** @var \Drupal\eu_oss_catalogue\Entity\OssSolutionInterface $solution */
     foreach ($this->entityTypeManager->getStorage('node')->loadMultiple($solutionIds) as $solution) {
       $solution->removeProvider($provider);
+      $solution->setNewRevision();
       if ($solution->get('oss_source')->isEmpty()) {
-        $solution->delete();
-        $this->logger->info("Solution '@solution' (@url) was removed due to having no active providers", [
-          '@solution' => $solution->label(),
-          '@url' => $solution->get('oss_git_url')->value,
-        ]);
-      }
-      else {
-        $solution->save();
-        $this->logger->info("Solution '@solution' (@url) had the following provider removed from its sources: @provider.", [
-          '@solution' => $solution->label(),
-          '@url' => $solution->get('oss_git_url')->value,
+        $message = $this->t('Archive, because removed (not present anymore) from "@provider" source/catalogue', [
           '@provider' => $provider->getPluginDefinition()['label'],
         ]);
+        $solution->setRevisionLogMessage((string) $message);
+        $solution->set('oss_archived', 1);
       }
+      else {
+        $message = $this->t('Update, because of the only removal "@provider" source/catalogue', [
+          '@provider' => $provider->getPluginDefinition()['label'],
+        ]);
+        $solution->setRevisionLogMessage((string) $message);
+      }
+      $solution->save();
     }
   }
 
@@ -288,6 +337,8 @@ class EuOssCatalogue implements EuOssCatalogueInterface {
         'oss_source_hash' => $hash,
         // Also have to take the provider reference into consideration.
         'oss_source' => $provider->getPluginId(),
+        // Limit only to not archived solutions.
+        'oss_archived' => 0,
       ]);
 
     return empty($solutionNodes);

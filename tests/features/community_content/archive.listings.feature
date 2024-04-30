@@ -1,4 +1,4 @@
-@api @group-e @terms
+@api @group-e
 Feature: Archived content on content listings - groups and paragraphs.
 
   Background:
@@ -12,42 +12,55 @@ Feature: Archived content on content listings - groups and paragraphs.
       | Some collection | Test        | Supplier exchange | Some owner | Some contact        | published |
       | Poly screens    | Test        | Supplier exchange | Some owner | Some contact        | published |
     And news content:
-      | title          | headline       | state     | collection      | body | content |
-      | Archived news  | Archived news  | published | Some collection | Test | Test    |
-      | Published news | Published news | published | Some collection | Test | Test    |
-      | Poly news 1    | Poly news 1    | published | Poly screens    | Test | Test    |
-      | Poly news 2    | Poly news 2    | published | Poly screens    | Test | Test    |
-      | Poly news 3    | Poly news 3    | published | Poly screens    | Test | Test    |
-      | Poly news 4    | Poly news 4    | published | Poly screens    | Test | Test    |
+      | title          | headline       | state     | collection      | body | content | created         |
+      | Archived news  | Archived news  | published | Some collection | Test | Test    | 2016-01-03T4:00 |
+      | Published news | Published news | published | Some collection | Test | Test    | 2016-02-04T5:00 |
+      | Poly news 1    | Poly news 1    | published | Poly screens    | Test | Test    | 2016-03-05T6:00 |
+      | Poly news 2    | Poly news 2    | published | Poly screens    | Test | Test    | 2016-04-06T7:00 |
+      | Poly news 3    | Poly news 3    | published | Poly screens    | Test | Test    | 2016-05-07T8:00 |
+      | Poly news 4    | Poly news 4    | published | Poly screens    | Test | Test    | 2016-06-08T9:00 |
     # We need the "Archived news" content to be archived by altering its state
     # because "Unarchiving" it restored the previous revision and thus, needs
     # to have a previous revision (created as published).
     And the workflow state of the "Archived news" content is set to "archived"
 
   Scenario: Collection content listing can control archived content visibility.
+    Given the following solutions:
+      | title         | collection      | state     | creation date   |
+      | Skewb cube    | Some collection | archived  | 2015-03-03T8:00 |
+      | Pyraminx cube | Some collection | published | 2015-02-03T8:00 |
+
     When I am logged in as a moderator
     And I go to the edit form of the "Some collection" collection
     And I check "Enable the search field"
     And I press "Publish"
     Then I should see the heading "Some collection"
-    # By default, 'Show content' is set to 'unarchived'.
-    And I should see the "Published news" tile
-    But I should not see the "Archived news" tile
+    # By default, 'Show archived content' is set to 'unarchived'.
+    Then I should see the following tiles in the correct order:
+      | Published news |
+      | Pyraminx cube  |
+    And I should not see the text "Archived" in the "Published news" tile
+    And I should not see the text "Archived" in the "Pyraminx cube" tile
 
     When I go to the edit form of the "Some collection" collection
     And I select "Archived" from "Show content"
     And I press "Publish"
     Then I should see the heading "Some collection"
-    And I should see the "Archived news" tile
-    But I should not see the "Published news" tile
+    Then I should see the following tiles in the correct order:
+      | Archived news |
+      | Skewb cube    |
+    And I should see the text "Archived" in the "Archived news" tile
+    And I should see the text "Archived" in the "Skewb cube" tile
 
     When I go to the edit form of the "Some collection" collection
     And I select "All" from "Show content"
     And I press "Publish"
     Then I should see the heading "Some collection"
-    And I should see the "Published news" tile
-    # By default, the toggle to Show content is disabled.
-    But I should not see the "Archived news" tile
+    Then I should see the following tiles in the correct order:
+      | Published news |
+      | Pyraminx cube  |
+    And I should not see the text "Archived" in the "Published news" tile
+    And I should not see the text "Archived" in the "Pyraminx cube" tile
 
   @javascript
   Scenario: Content listing paragraph can control visibility of archived items.

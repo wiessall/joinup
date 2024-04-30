@@ -9,7 +9,7 @@ id: node.oss_solution.oss_git_forks
 field_name: oss_git_forks
 entity_type: node
 bundle: oss_solution
-label: 'GIT Forks'
+label: Forks
 description: ''
 required: false
 translatable: false

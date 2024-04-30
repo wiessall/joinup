@@ -18,8 +18,8 @@ Feature:
       | title        | release number | release notes | is version of | owner                  | contact information      | state     |
       | Tile release | 0.1            | Meh...        | Tile solution | Some fancy named owner | Some fancy named contact | published |
     And the following distributions:
-      | title       | description | parent       | access url |
-      | Tile distro | meh...      | Tile release | test.zip   |
+      | title       | description | parent       | access url | state     |
+      | Tile distro | meh...      | Tile release | test.zip   | published |
     And the following licences:
       | title        | description |
       | Tile licence | Meh...      |

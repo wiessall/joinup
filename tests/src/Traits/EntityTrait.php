@@ -1,10 +1,9 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Drupal\joinup\Traits;
 
-use Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException;
 use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\menu_link_content\MenuLinkContentInterface;
@@ -15,14 +14,30 @@ use Drupal\menu_link_content\MenuLinkContentInterface;
 trait EntityTrait {
 
   /**
-   * Returns the entity with the given type, bundle and label.
+   * Finds and entity by label with given type and bundle.
+   */
+  protected static function getEntityByLabel(string $entity_type_id, string $label, ?string $bundle = NULL): EntityInterface {
+    return static::getEntityByKey('label', $entity_type_id, $label, $bundle);
+  }
+
+  /**
+   * Finds and entity by ID with given type and bundle.
+   */
+  protected static function getEntityById(string $entity_type_id, string $label, ?string $bundle = NULL): EntityInterface {
+    return static::getEntityByKey('id', $entity_type_id, $label, $bundle);
+  }
+
+  /**
+   * Returns the entity with the given type, bundle and key.
    *
    * If multiple entities have the same label then the first one is returned.
    *
+   * @param string $key
+   *   The entity key to check against.
    * @param string $entity_type_id
    *   The entity type to check.
-   * @param string $label
-   *   The label to check.
+   * @param string $value
+   *   The value to check.
    * @param string|null $bundle
    *   Optional bundle to check. If omitted, the entity can be of any bundle.
    *
@@ -33,18 +48,13 @@ trait EntityTrait {
    *   Thrown when an entity with the given type, label and bundle does not
    *   exist.
    */
-  protected static function getEntityByLabel(string $entity_type_id, string $label, ?string $bundle = NULL): EntityInterface {
+  protected static function getEntityByKey(string $key, string $entity_type_id, string $value, ?string $bundle = NULL): EntityInterface {
     $entity_type_manager = \Drupal::entityTypeManager();
-    try {
-      $storage = $entity_type_manager->getStorage($entity_type_id);
-    }
-    catch (InvalidPluginDefinitionException $e) {
-      throw new \RuntimeException('Storage not found', NULL, $e);
-    }
+    $storage = $entity_type_manager->getStorage($entity_type_id);
     $entity = $entity_type_manager->getDefinition($entity_type_id);
 
     $query = $storage->getQuery()
-      ->condition($entity->getKey('label'), $label)
+      ->condition($entity->getKey($key), $value)
       ->accessCheck(FALSE)
       ->range(0, 1);
 
@@ -63,7 +73,7 @@ trait EntityTrait {
       return $storage->load($result);
     }
 
-    throw new \RuntimeException("The entity with label '$label' was not found.");
+    throw new \RuntimeException("The entity with $key '$value' was not found.");
   }
 
   /**
@@ -159,6 +169,10 @@ trait EntityTrait {
    *
    * @param string $title
    *   The label of the menu item.
+   * @param string $group_id
+   *   The group ID of the menu item.
+   * @param string $menu_type
+   *   The bundle of the OG menu instance.
    *
    * @return \Drupal\menu_link_content\MenuLinkContentInterface
    *   The MenuLinkContent entity.
@@ -166,11 +180,15 @@ trait EntityTrait {
    * @throws \Exception
    *    Thrown when the menu item is not found.
    */
-  public function getMenuLinkByTitle(string $title): MenuLinkContentInterface {
-    /** @var \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager */
-    $entity_type_manager = \Drupal::service('entity_type.manager');
+  public function getMenuLinkByTitle(string $title, string $group_id, string $menu_type): MenuLinkContentInterface {
+    $entity_type_manager = \Drupal::getContainer()->get('entity_type.manager');
+    $menu_helper = \Drupal::getContainer()->get('joinup_menu.menu_helper');
+    $navigation_menu = $menu_helper->getOgMenuByGroup($menu_type, $group_id);
     $menu_links = $entity_type_manager->getStorage('menu_link_content')->loadByProperties(
-      ['title' => $title]
+      [
+        'title' => $title,
+        'menu_name' => 'ogmenu-' . $navigation_menu->id(),
+      ]
     );
     if (empty($menu_links)) {
       throw new \Exception("The menu link with title '{$title}' was not found.");

@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Drupal\joinup\Context;
 
@@ -225,6 +225,22 @@ class JoinupUserContext extends RawDrupalContext {
     if (\Drupal::entityQuery('user')->accessCheck(FALSE)->condition('name', $name)->execute()) {
       throw new ExpectationFailedException("The user $name exists but it should not.");
     }
+  }
+
+  /**
+   * Fills uid of user with the provided name in the selected field.
+   *
+   * @param string $username
+   *   User's name.
+   * @param string $field
+   *   Field name.
+   *
+   * @When I fill uid of :username in :field
+   */
+  public function fillUidOfUserNameInField(string $username, string $field): void {
+    $user = $this->getUserByName($username);
+
+    $this->getSession()->getPage()->fillField($field, $user->id());
   }
 
   /**

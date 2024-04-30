@@ -330,9 +330,9 @@ default:
               value: true
           paragraph_block:
             -
-              plugin_id: 'views_block:eu_oss_catalogue_admin-oss_most_recent_solutions'
+              plugin_id: 'views_block:oss_solutions_listing-most_recent'
               settings:
-                id: 'views_block:eu_oss_catalogue_admin-oss_most_recent_solutions'
+                id: 'views_block:oss_solutions_listing-most_recent'
                 label: ''
                 label_display: false
                 provider: views
@@ -394,9 +394,9 @@ default:
               value: true
           paragraph_block:
             -
-              plugin_id: 'views_block:eu_oss_catalogue_admin-oss_most_active_solutions'
+              plugin_id: 'views_block:oss_solutions_listing-most_active'
               settings:
-                id: 'views_block:eu_oss_catalogue_admin-oss_most_active_solutions'
+                id: 'views_block:oss_solutions_listing-most_active'
                 label: ''
                 label_display: false
                 provider: views

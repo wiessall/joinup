@@ -12,15 +12,48 @@
  * imported, it should instead be placed in joinup_core.post_update.php.
  */
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 use Drupal\Core\Url;
 use Drupal\joinup_oss_catalogue\OssCatalogueCollectionInterface;
+use Drupal\search_api\Entity\Index;
+
+/**
+ * Refresh legacy content to rectify Topic term name.
+ */
+function joinup_core_deploy_110500(): void {
+  $content = [
+    'node' => [
+      // /collection/semic-support-centre/document/guidelines-use-code-list
+      701218,
+    ],
+    'rdf_entity' => [
+      // /collection/interoperability-maturity-tools-imts-digital-public-services
+      'http://data.europa.eu/w21/abe7d0f7-8c41-465b-86c0-93d2f857f998',
+      // /collection/eparticipation-and-evoting/solution/eusurvey/release-9
+      'http://data.europa.eu/w21/6d664eef-d0d4-4ad0-bfb4-aacb83856529',
+      // /collection/eparticipation-and-evoting/solution/eusurvey/release-8
+      'http://data.europa.eu/w21/0434c7f8-6614-46c4-8f23-7d8385172dfb',
+      // /collection/gnu-health/solution/gnu-health-hospital-information-system/release/170
+      'http://data.europa.eu/w21/c580493a-554b-4f53-887b-7988ce5c8fd9',
+    ],
+  ];
+  $items = [];
+  /** @var \Drupal\search_api\IndexInterface $index */
+  $index = Index::load('published');
+  foreach ($content as $type => $ids) {
+    foreach ($ids as $id) {
+      $item_id = 'entity:' . $type . '/' . $id . ':en';
+      $items[$item_id] = $index->loadItem($item_id);
+    }
+  }
+  $index->indexSpecificItems($items);
+}
 
 /**
  * Update path alias for EU OSS catalogue.
  */
-function joinup_core_deploy_110200(): void {
+function joinup_core_deploy_110501(): void {
   /** @var \Drupal\collection\Entity\CollectionInterface $collection */
   $collection = \Drupal::entityTypeManager()->getStorage('rdf_entity')
     ->load(OssCatalogueCollectionInterface::COLLECTION_ENTITY_ID);
@@ -34,7 +67,7 @@ function joinup_core_deploy_110200(): void {
 /**
  * Update title of EU OSS catalogue collection.
  */
-function joinup_core_deploy_110201(): void {
+function joinup_core_deploy_110502(): void {
   /** @var \Drupal\collection\Entity\CollectionInterface $collection */
   $collection = \Drupal::entityTypeManager()->getStorage('rdf_entity')
     ->load(OssCatalogueCollectionInterface::COLLECTION_ENTITY_ID);
@@ -47,7 +80,7 @@ function joinup_core_deploy_110201(): void {
 /**
  * Import content for EU OpenSource Software Solutions Catalogue.
  */
-function joinup_core_deploy_110202(): void {
+function joinup_core_deploy_110503(): void {
   /** @var \Drupal\Core\Extension\ModuleInstallerInterface $moduleInstaller */
   $moduleInstaller = \Drupal::service('module_installer');
   /** @var \Drupal\Core\Entity\EntityRepositoryInterface $entityRepository */
@@ -80,7 +113,7 @@ function joinup_core_deploy_110202(): void {
 /**
  * Rename menu items for EU OSS catalogue.
  */
-function joinup_core_deploy_110203(): void {
+function joinup_core_deploy_110504(): void {
   $entityTypeManager = \Drupal::entityTypeManager();
   /** @var  \Drupal\menu_link_content\MenuLinkContentStorageInterface $menuLinkContentStorage */
   $menuLinkContentStorage = $entityTypeManager->getStorage('menu_link_content');
@@ -111,4 +144,35 @@ function joinup_core_deploy_110203(): void {
     'link' => $link,
     'weight' => -6,
   ])->save();
+}
+
+/**
+ * Make sure that oss_archived has a default value.
+ */
+function joinup_core_deploy_110505(array &$sandbox): string {
+  $entityTypeManager = \Drupal::entityTypeManager();
+  /** @var \Drupal\node\NodeStorage $nodeStorage */
+  $nodeStorage = $entityTypeManager->getStorage('node');
+
+  if (empty($sandbox['ids'])) {
+    $results = $nodeStorage->getQuery()->accessCheck(FALSE)
+      ->condition('type', 'oss_solution')
+      ->notExists('oss_archived')
+      ->execute();
+
+    $sandbox['ids'] = array_values($results);
+    $sandbox['progress'] = 0;
+    $sandbox['count'] = count($sandbox['ids']);
+  }
+
+  $ids = array_splice($sandbox['ids'], 0, 50);
+  foreach ($nodeStorage->loadMultiple($ids) as $solution) {
+    $solution->set('oss_archived', 0);
+    $solution->save();
+  }
+
+  $sandbox['progress'] += count($ids);
+  $sandbox['#finished'] = (int) empty($sandbox['ids']);
+
+  return "Processed {$sandbox['progress']} out of {$sandbox['count']} solutions.";
 }

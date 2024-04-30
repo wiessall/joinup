@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Drupal\Tests\joinup_core\ExistingSite;
 
@@ -28,7 +28,7 @@ class EuBrandingTest extends JoinupExistingSiteTestBase {
     ];
     foreach ($pages as $page) {
       $this->drupalGet($page);
-      $this->assertSession()->responseContains('<script src="https://europa.eu/webtools/load.js" defer></script>');
+      $this->assertSession()->responseContains('<script src="https://webtools.europa.eu/load.js" defer></script>');
     }
   }
 

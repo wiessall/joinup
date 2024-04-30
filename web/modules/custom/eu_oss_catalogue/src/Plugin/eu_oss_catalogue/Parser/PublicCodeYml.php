@@ -1,22 +1,23 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Drupal\eu_oss_catalogue\Plugin\eu_oss_catalogue\Parser;
 
 use Drupal\Component\Serialization\Exception\InvalidDataTypeException;
-use Drupal\Core\Config\Schema\SchemaCheckTrait;
 use Drupal\Core\Config\TypedConfigManagerInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Logger\LoggerChannelInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Serialization\Yaml;
-use Drupal\Core\TypedData\MapDataDefinition;
+use Drupal\Core\Utility\Error;
 use Drupal\eu_oss_catalogue\Entity\OssSolutionInterface;
 use Drupal\eu_oss_catalogue\EuOssCatalogueParserPluginBase;
 use Drupal\eu_oss_catalogue\EuOssCataloguePluginManagerInterface;
 use Drupal\eu_oss_catalogue\EuOssCatalogueProviderInterface;
+use Drupal\eu_oss_catalogue\Exception\UnresolvableValueException;
+use Drupal\eu_oss_catalogue\Model\FieldOverridingPolicy;
 use Drupal\eu_oss_catalogue\Model\Project;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -31,10 +32,6 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * )
  */
 class PublicCodeYml extends EuOssCatalogueParserPluginBase implements ContainerFactoryPluginInterface {
-
-  use SchemaCheckTrait {
-    checkValue as traitCheckValue;
-  }
 
   /**
    * Constructs a new plugin instance.
@@ -88,48 +85,60 @@ class PublicCodeYml extends EuOssCatalogueParserPluginBase implements ContainerF
   /**
    * {@inheritdoc}
    */
-  public function checkSchema(OssSolutionInterface $solution): array {
-    $errorList = $schemaErrors = [];
-
-    try {
-      $metadata = Yaml::decode($solution->get('oss_publiccode_yml_content')->getValue());
-      // Using the config schema checker. And it works!
-      $schemaErrors = $this->checkConfigSchema($this->typedConfigManager, 'eu_oss_catalogue.publiccode_yml', $metadata);
-      if (!is_array($schemaErrors) || !$schemaErrors) {
-        return $errorList;
-      }
-    }
-    catch (InvalidDataTypeException $exception) {
-      $schemaErrors[] = "Cannot decode publiccode.yml for node {$solution->id()}";
-    }
-    catch (\InvalidArgumentException $exception) {
-      // @see \Drupal\Core\Config\Schema\ArrayElement::get()
-      if (preg_match("/The configuration property ([^ ].*) doesn't exist./", $exception->getMessage(), $found)) {
-        $schemaErrors[$found[1]] = "Path has no schema";
-      }
-    }
-
-    foreach ($schemaErrors as $key => $error) {
-      if (str_contains($key, ':')) {
-        // The config name is not relevant, this is not a config.
-        [, $key] = explode(':', $key, 2);
-      }
-      $errorList[] = '<code>' . str_replace('.', '/', $key) . "</code>: $error";
-    }
-    return $errorList;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
   protected function doParse(OssSolutionInterface $solution, Project $project, array $metadata, EuOssCatalogueProviderInterface $provider): void {
-    parent::doParse($solution, $project, $metadata, $provider);
+    foreach ($solution->getFields(FALSE) as $fieldName => $fieldItemList) {
+      // It's a convention that all fields are prefixed with oss_*.
+      if (!str_starts_with($fieldName, 'oss_')) {
+        continue;
+      }
 
-    $solution
-      // Set the publiccode.yml content.
-      ->set('oss_publiccode_yml_content', Yaml::encode($metadata))
-      // Set the publiccode.yml version.
-      ->set('oss_publiccode_yml_version', $metadata['publiccodeYmlVersion'] ?? NULL);
+      $settings = $this->getFieldSettings($fieldItemList);
+      if ($settings === NULL) {
+        // This field has no EU OSS Catalogue third-party settings.
+        continue;
+      }
+
+      /** @var array[] $resolvers */
+      $resolvers =& $settings['resolvers'];
+      $override = FieldOverridingPolicy::from($settings['override']);
+
+      if ($override === FieldOverridingPolicy::PRESERVE_NOT_EMPTY && !$fieldItemList->isEmpty()) {
+        // Don't override a field not-empty field.
+        continue;
+      }
+
+      // We don't allow resolvers to modify directly the original field item
+      // list because this is passed only for read-only purposes. Resolvers
+      // should use this object only to extract useful info about the field or
+      // the host entity.
+      $fieldItemListCopy = clone $fieldItemList;
+
+      $resolved = NULL;
+      foreach ($resolvers as ['plugin' => $pluginId, 'config' => $config]) {
+        $resolver = $this->getResolver($pluginId, $config);
+        try {
+          $resolver->resolve($resolved, $project, $metadata, $fieldItemListCopy);
+          $this->checkResolved($resolved, $resolver);
+        }
+        catch (UnresolvableValueException $exception) {
+          Error::logException($this->logger, $exception);
+          // Fail softly, don't set this field.
+          continue 2;
+        }
+      }
+
+      if ($override !== FieldOverridingPolicy::RESOLVED_NOT_EMPTY || $resolved) {
+        // Populate the node field.
+        foreach ($resolved as $langcode => $values) {
+          // Create a new translation on demand.
+          if (!$solution->hasTranslation($langcode)) {
+            $solution->addTranslation($langcode, $solution->toArray());
+          }
+          // An empty array unsets the field.
+          $solution->getTranslation($langcode)->set($fieldName, $values ?: NULL);
+        }
+      }
+    }
   }
 
   /**
@@ -137,19 +146,14 @@ class PublicCodeYml extends EuOssCatalogueParserPluginBase implements ContainerF
    */
   protected function getMetadata(Project $project): array {
     if (!isset($project->files['publiccodeYml'])) {
-      $this->logger->warning('publiccodeYml does not exist for @url', [
-        '@url' => $project->url,
-      ]);
+      $project->addSilentError("publiccodeYml does not exist for $project->url");
       return [];
     }
     try {
       return Yaml::decode($project->files['publiccodeYml']) ?? [];
     }
     catch (InvalidDataTypeException $exception) {
-      $this->logger->warning('Cannot decode publiccode.yml of @url. Message: @message', [
-        '@url' => $project->url,
-        '@message' => $exception->getMessage(),
-      ]);
+      $project->addSilentError("Cannot decode publiccode.yml of $project->url. Message: {$exception->getMessage()}");
       return [];
     }
   }
@@ -162,37 +166,6 @@ class PublicCodeYml extends EuOssCatalogueParserPluginBase implements ContainerF
     // Eliminate multiple spaces.
     $title = preg_replace('/\s+/', ' ', $title);
     return trim($title);
-  }
-
-  /**
-   * {@inheritdoc}
-   *
-   * Overriding the original method to provide support for mandatory values as
-   * this is not yet implemented in Drupal core.
-   *
-   * @see https://www.drupal.org/project/drupal/issues/3364108
-   * @todo Remove when https://www.drupal.org/project/drupal/issues/3364108.
-   */
-  protected function checkValue($key, $value): array {
-    $errors = $this->traitCheckValue($key, $value);
-
-    /** @var \Drupal\Core\TypedData\TypedDataInterface $element */
-    $element = $this->schema->get($key);
-    $dataDefinition = $element->getDataDefinition();
-    $valueIsProvided = !empty($value) || $value === FALSE;
-    if (!$valueIsProvided && !empty($dataDefinition['required'])) {
-      $errors[$key] = 'required but empty';
-    }
-    if ($dataDefinition instanceof MapDataDefinition && is_array($value)) {
-      $mapping = $element->getPluginDefinition()['mapping'] ?? [];
-      foreach ($mapping as $mapKey => $schema) {
-        if (!empty($schema['required']) && !array_key_exists($mapKey, $value)) {
-          $errors[$key] = "missing value for '$mapKey'";
-        }
-      }
-    }
-
-    return $errors;
   }
 
 }

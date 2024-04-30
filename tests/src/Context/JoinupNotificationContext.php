@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Drupal\joinup\Context;
 
@@ -252,6 +252,34 @@ class JoinupNotificationContext extends RawDrupalContext {
     }
 
     throw new \InvalidArgumentException("Attachment $file has not been found.");
+  }
+
+  /**
+   * Asserts that an email contains header value.
+   *
+   * @param string $email
+   *   Email address.
+   * @param string $subject
+   *   The subject of the email.
+   * @param string $header_name
+   *   The header name (e.g.: "Content-type").
+   * @param string $header_value
+   *   The header value (e.g.: "text/html").
+   *
+   * @throws \Exception
+   *   Throws an exception when a parameter is not the expected one.
+   *
+   * @Given /^the email sent to "([^"]*)" with subject "([^"]*)" contains header "([^"]*)" with value "([^"]*)"$/
+   */
+  public function theEmailSentToWithSubjectContainsHeaderValue(string $email, string $subject, string $header_name, string $header_value): void {
+    $mails = $this->getEmailsBySubjectAndMail($subject, $email);
+    foreach ($mails as $mail) {
+      if (isset($mail['headers'][$header_name]) && $mail['headers'][$header_name] === $header_value) {
+        return;
+      }
+    }
+
+    throw new \InvalidArgumentException("Header $header_name with value $header_value has not been found.");
   }
 
   /**

@@ -113,7 +113,7 @@ index 27a1186ada6f4f1da6b05a7550e337909b4e6bcd..54a234e34b1799a2939e492be2b5b8f4
 +        ],
 +      ];
 +    }
-
+ 
      if ($this->entityType->id() != 'entity_test') {
        return $views_data;
 diff --git a/core/modules/system/tests/modules/entity_test/src/Plugin/Field/ComputedTestBundleFieldItemList.php b/core/modules/system/tests/modules/entity_test/src/Plugin/Field/ComputedTestBundleFieldItemList.php
@@ -147,7 +147,7 @@ index 0000000000000000000000000000000000000000..c69e36855888782d818819878ca6e760
 +
 +}
 diff --git a/core/modules/views/src/Plugin/views/field/EntityField.php b/core/modules/views/src/Plugin/views/field/EntityField.php
-index fccd8ff532bf3f4b3ce41c0ec339e912781ad289..d0664bcd63225ce5064fcd33634c2e0db26606d4 100644
+index e6bbda450474881e74e23982ae2be1cdb05c890c..0c4eed513d4be01c4f9f42aa63a6ce253c0b293b 100644
 --- a/core/modules/views/src/Plugin/views/field/EntityField.php
 +++ b/core/modules/views/src/Plugin/views/field/EntityField.php
 @@ -9,6 +9,7 @@
@@ -161,7 +161,7 @@ index fccd8ff532bf3f4b3ce41c0ec339e912781ad289..d0664bcd63225ce5064fcd33634c2e0d
 @@ -126,6 +127,13 @@ class EntityField extends FieldPluginBase implements CacheableDependencyInterfac
     */
    protected $entityFieldRenderer;
-
+ 
 +  /**
 +   * The entity type bundle info service.
 +   *
@@ -182,22 +182,21 @@ index fccd8ff532bf3f4b3ce41c0ec339e912781ad289..d0664bcd63225ce5064fcd33634c2e0d
 -  public function __construct(array $configuration, $plugin_id, $plugin_definition, EntityTypeManagerInterface $entity_type_manager, FormatterPluginManager $formatter_plugin_manager, FieldTypePluginManagerInterface $field_type_plugin_manager, LanguageManagerInterface $language_manager, RendererInterface $renderer, EntityRepositoryInterface $entity_repository, EntityFieldManagerInterface $entity_field_manager) {
 +  public function __construct(array $configuration, $plugin_id, $plugin_definition, EntityTypeManagerInterface $entity_type_manager, FormatterPluginManager $formatter_plugin_manager, FieldTypePluginManagerInterface $field_type_plugin_manager, LanguageManagerInterface $language_manager, RendererInterface $renderer, EntityRepositoryInterface $entity_repository, EntityFieldManagerInterface $entity_field_manager, EntityTypeBundleInfoInterface $entity_type_bundle_info = NULL) {
      parent::__construct($configuration, $plugin_id, $plugin_definition);
-
+ 
      $this->entityTypeManager = $entity_type_manager;
-@@ -166,6 +176,12 @@ public function __construct(array $configuration, $plugin_id, $plugin_definition
+@@ -165,6 +175,11 @@ public function __construct(array $configuration, $plugin_id, $plugin_definition
+     $this->renderer = $renderer;
      $this->entityRepository = $entity_repository;
      $this->entityFieldManager = $entity_field_manager;
-
-+    if (!$entity_type_bundle_info) {
-+      @trigger_error('Calling EntityField::__construct() without the $entity_type_bundle_info argument is deprecated in drupal:10.0.0 and the $entity_type_bundle_info argument will be required in drupal:11.0.0. See https://www.drupal.org/node/2981047', E_USER_DEPRECATED);
++    if ($entity_type_bundle_info === NULL) {
 +      $entity_type_bundle_info = \Drupal::service('entity_type.bundle.info');
++      @trigger_error('Calling ' . __CLASS__ . '::__construct() without the $entity_type_bundle_info argument is deprecated in drupal:10.3.0 and is required in drupal:11.0.0. See https://www.drupal.org/node/3380621', E_USER_DEPRECATED);
 +    }
 +    $this->entityTypeBundleInfo = $entity_type_bundle_info;
-+
+ 
      // @todo Unify 'entity field'/'field_name' instead of converting back and
      //   forth. https://www.drupal.org/node/2410779
-     if (isset($this->definition['entity field'])) {
-@@ -188,7 +204,8 @@ public static function create(ContainerInterface $container, array $configuratio
+@@ -188,7 +203,8 @@ public static function create(ContainerInterface $container, array $configuratio
        $container->get('language_manager'),
        $container->get('renderer'),
        $container->get('entity.repository'),
@@ -206,8 +205,8 @@ index fccd8ff532bf3f4b3ce41c0ec339e912781ad289..d0664bcd63225ce5064fcd33634c2e0d
 +      $container->get('entity_type.bundle.info')
      );
    }
-
-@@ -363,6 +380,19 @@ protected function getFieldStorageDefinition() {
+ 
+@@ -363,6 +379,19 @@ protected function getFieldStorageDefinition() {
      if (isset($this->definition['field_name']) && isset($base_fields[$this->definition['field_name']])) {
        return $base_fields[$this->definition['field_name']]->getFieldStorageDefinition();
      }
@@ -225,7 +224,7 @@ index fccd8ff532bf3f4b3ce41c0ec339e912781ad289..d0664bcd63225ce5064fcd33634c2e0d
 +
 +    return NULL;
    }
-
+ 
    /**
 diff --git a/core/modules/views/tests/modules/views_test_config/test_views/views.view.computed_bundle_field_view.yml b/core/modules/views/tests/modules/views_test_config/test_views/views.view.computed_bundle_field_view.yml
 new file mode 100644
@@ -568,96 +567,94 @@ index 0000000000000000000000000000000000000000..cb1fd31d008e5000459eed90d7791707
 +
 +}
 diff --git a/core/modules/views/tests/src/Unit/Plugin/field/FieldTest.php b/core/modules/views/tests/src/Unit/Plugin/field/FieldTest.php
-index c60e91447f0fc1ae6a14fc5a4c0306ce5f13fefd..879c6d4bc26748290d4dda33e727e75027afa787 100644
+index b1ad678df2b914818f084355a1db2410706ab834..6cda638d760e6932316ac8214d8ed629b1410cd7 100644
 --- a/core/modules/views/tests/src/Unit/Plugin/field/FieldTest.php
 +++ b/core/modules/views/tests/src/Unit/Plugin/field/FieldTest.php
-@@ -9,6 +9,7 @@
-
+@@ -4,6 +4,7 @@
+ 
  use Drupal\Core\Entity\EntityFieldManagerInterface;
  use Drupal\Core\Entity\EntityRepositoryInterface;
 +use Drupal\Core\Entity\EntityTypeBundleInfoInterface;
  use Drupal\Core\Entity\EntityTypeManagerInterface;
  use Drupal\Core\Field\FieldStorageDefinitionInterface;
  use Drupal\Tests\UnitTestCase;
-@@ -67,6 +68,13 @@ class FieldTest extends UnitTestCase {
+@@ -62,6 +63,13 @@ class FieldTest extends UnitTestCase {
     */
    protected $fieldTypePluginManager;
-
+ 
 +  /**
-+   * The mocked entity type bundle info service.
++   * The entity type bundle info service.
 +   *
-+   * @var \Drupal\Core\Entity\EntityTypeBundleInfoInterface|\PHPUnit\Framework\MockObject\MockObject
++   * @var \Drupal\Core\Entity\EntityTypeBundleInfoInterface
 +   */
 +  protected $entityTypeBundleInfo;
 +
    /**
     * The renderer.
     *
-@@ -113,6 +121,9 @@ protected function setUp(): void {
-
-     $this->container = new ContainerBuilder();
-     $this->container->set('plugin.manager.field.field_type', $this->fieldTypePluginManager);
-+
+@@ -84,6 +92,7 @@ protected function setUp(): void {
+ 
+     $this->entityTypeManager = $this->createMock(EntityTypeManagerInterface::class);
+     $this->entityFieldManager = $this->createMock(EntityFieldManagerInterface::class);
 +    $this->entityTypeBundleInfo = $this->createMock(EntityTypeBundleInfoInterface::class);
-+    $this->container->set('entity_type.bundle.info', $this->entityTypeBundleInfo);
-     \Drupal::setContainer($this->container);
-   }
-
-@@ -126,7 +137,7 @@ public function testConstruct() {
+     $this->entityRepository = $this->createMock(EntityRepositoryInterface::class);
+     $this->formatterPluginManager = $this->getMockBuilder('Drupal\Core\Field\FormatterPluginManager')
+       ->disableOriginalConstructor()
+@@ -121,7 +130,7 @@ public function testConstruct() {
        // provides it.
        'entity field' => 'title',
      ];
 -    $handler = new EntityField([], 'field', $definition, $this->entityTypeManager, $this->formatterPluginManager, $this->fieldTypePluginManager, $this->languageManager, $this->renderer, $this->entityRepository, $this->entityFieldManager);
 +    $handler = new EntityField([], 'field', $definition, $this->entityTypeManager, $this->formatterPluginManager, $this->fieldTypePluginManager, $this->languageManager, $this->renderer, $this->entityRepository, $this->entityFieldManager, $this->entityTypeBundleInfo);
-
+ 
      $this->assertEquals('title', $handler->definition['field_name']);
    }
-@@ -139,7 +150,7 @@ public function testDefineOptionsWithNoOptions() {
+@@ -134,7 +143,7 @@ public function testDefineOptionsWithNoOptions() {
        'entity_type' => 'test_entity',
        'field_name' => 'title',
      ];
 -    $handler = new EntityField([], 'field', $definition, $this->entityTypeManager, $this->formatterPluginManager, $this->fieldTypePluginManager, $this->languageManager, $this->renderer, $this->entityRepository, $this->entityFieldManager);
 +    $handler = new EntityField([], 'field', $definition, $this->entityTypeManager, $this->formatterPluginManager, $this->fieldTypePluginManager, $this->languageManager, $this->renderer, $this->entityRepository, $this->entityFieldManager, $this->entityTypeBundleInfo);
-
+ 
      // Setup the entity field manager to allow fetching the storage definitions.
      $title_storage = $this->getBaseFieldStorage();
-@@ -168,7 +179,7 @@ public function testDefineOptionsWithDefaultFormatterOnFieldDefinition() {
+@@ -163,7 +172,7 @@ public function testDefineOptionsWithDefaultFormatterOnFieldDefinition() {
        'default_formatter' => 'test_example',
        'default_formatter_settings' => ['link_to_entity' => TRUE],
      ];
 -    $handler = new EntityField([], 'field', $definition, $this->entityTypeManager, $this->formatterPluginManager, $this->fieldTypePluginManager, $this->languageManager, $this->renderer, $this->entityRepository, $this->entityFieldManager);
 +    $handler = new EntityField([], 'field', $definition, $this->entityTypeManager, $this->formatterPluginManager, $this->fieldTypePluginManager, $this->languageManager, $this->renderer, $this->entityRepository, $this->entityFieldManager, $this->entityTypeBundleInfo);
-
+ 
      // Setup the entity field manager to allow fetching the storage definitions.
      $title_storage = $this->getBaseFieldStorage();
-@@ -195,7 +206,7 @@ public function testDefineOptionsWithDefaultFormatterOnFieldType() {
+@@ -190,7 +199,7 @@ public function testDefineOptionsWithDefaultFormatterOnFieldType() {
        'field_name' => 'title',
        'default_formatter_settings' => ['link_to_entity' => TRUE],
      ];
 -    $handler = new EntityField([], 'field', $definition, $this->entityTypeManager, $this->formatterPluginManager, $this->fieldTypePluginManager, $this->languageManager, $this->renderer, $this->entityRepository, $this->entityFieldManager);
 +    $handler = new EntityField([], 'field', $definition, $this->entityTypeManager, $this->formatterPluginManager, $this->fieldTypePluginManager, $this->languageManager, $this->renderer, $this->entityRepository, $this->entityFieldManager, $this->entityTypeBundleInfo);
-
+ 
      // Setup the entity field manager to allow fetching the storage definitions.
      $title_storage = $this->getBaseFieldStorage();
-@@ -221,7 +232,7 @@ public function testCalculateDependenciesWithBaseField() {
+@@ -216,7 +225,7 @@ public function testCalculateDependenciesWithBaseField() {
        'entity_type' => 'test_entity',
        'field_name' => 'title',
      ];
 -    $handler = new EntityField([], 'field', $definition, $this->entityTypeManager, $this->formatterPluginManager, $this->fieldTypePluginManager, $this->languageManager, $this->renderer, $this->entityRepository, $this->entityFieldManager);
 +    $handler = new EntityField([], 'field', $definition, $this->entityTypeManager, $this->formatterPluginManager, $this->fieldTypePluginManager, $this->languageManager, $this->renderer, $this->entityRepository, $this->entityFieldManager, $this->entityTypeBundleInfo);
-
+ 
      $title_storage = $this->getBaseFieldStorage();
      $this->entityFieldManager->expects($this->atLeastOnce())
-@@ -243,7 +254,7 @@ public function testCalculateDependenciesWithConfiguredField() {
+@@ -238,7 +247,7 @@ public function testCalculateDependenciesWithConfiguredField() {
        'entity_type' => 'test_entity',
        'field_name' => 'body',
      ];
 -    $handler = new EntityField([], 'field', $definition, $this->entityTypeManager, $this->formatterPluginManager, $this->fieldTypePluginManager, $this->languageManager, $this->renderer, $this->entityRepository, $this->entityFieldManager);
 +    $handler = new EntityField([], 'field', $definition, $this->entityTypeManager, $this->formatterPluginManager, $this->fieldTypePluginManager, $this->languageManager, $this->renderer, $this->entityRepository, $this->entityFieldManager, $this->entityTypeBundleInfo);
-
+ 
      $body_storage = $this->getConfigFieldStorage();
      $this->entityFieldManager->expects($this->atLeastOnce())
-@@ -269,7 +280,7 @@ public function testAccess() {
+@@ -264,7 +273,7 @@ public function testAccess() {
        'entity_type' => 'test_entity',
        'field_name' => 'title',
      ];
@@ -665,35 +662,35 @@ index c60e91447f0fc1ae6a14fc5a4c0306ce5f13fefd..879c6d4bc26748290d4dda33e727e750
 +    $handler = new EntityField([], 'field', $definition, $this->entityTypeManager, $this->formatterPluginManager, $this->fieldTypePluginManager, $this->languageManager, $this->renderer, $this->entityRepository, $this->entityFieldManager, $this->entityTypeBundleInfo);
      $handler->view = $this->executable;
      $handler->setViewsData($this->viewsData);
-
-@@ -320,7 +331,7 @@ public function testClickSortWithOutConfiguredColumn($order) {
+ 
+@@ -315,7 +324,7 @@ public function testClickSortWithOutConfiguredColumn($order) {
        'entity_type' => 'test_entity',
        'field_name' => 'title',
      ];
 -    $handler = new EntityField([], 'field', $definition, $this->entityTypeManager, $this->formatterPluginManager, $this->fieldTypePluginManager, $this->languageManager, $this->renderer, $this->entityRepository, $this->entityFieldManager);
 +    $handler = new EntityField([], 'field', $definition, $this->entityTypeManager, $this->formatterPluginManager, $this->fieldTypePluginManager, $this->languageManager, $this->renderer, $this->entityRepository, $this->entityFieldManager, $this->entityTypeBundleInfo);
      $handler->view = $this->executable;
-
+ 
      $this->entityFieldManager->expects($this->never())
-@@ -342,7 +353,7 @@ public function testClickSortWithBaseField($order) {
+@@ -337,7 +346,7 @@ public function testClickSortWithBaseField($order) {
        'entity_type' => 'test_entity',
        'field_name' => 'title',
      ];
 -    $handler = new EntityField([], 'field', $definition, $this->entityTypeManager, $this->formatterPluginManager, $this->fieldTypePluginManager, $this->languageManager, $this->renderer, $this->entityRepository, $this->entityFieldManager);
 +    $handler = new EntityField([], 'field', $definition, $this->entityTypeManager, $this->formatterPluginManager, $this->fieldTypePluginManager, $this->languageManager, $this->renderer, $this->entityRepository, $this->entityFieldManager, $this->entityTypeBundleInfo);
      $handler->view = $this->executable;
-
+ 
      $field_storage = $this->getBaseFieldStorage();
-@@ -402,7 +413,7 @@ public function testClickSortWithConfiguredField($order) {
+@@ -397,7 +406,7 @@ public function testClickSortWithConfiguredField($order) {
        'entity_type' => 'test_entity',
        'field_name' => 'body',
      ];
 -    $handler = new EntityField([], 'field', $definition, $this->entityTypeManager, $this->formatterPluginManager, $this->fieldTypePluginManager, $this->languageManager, $this->renderer, $this->entityRepository, $this->entityFieldManager);
 +    $handler = new EntityField([], 'field', $definition, $this->entityTypeManager, $this->formatterPluginManager, $this->fieldTypePluginManager, $this->languageManager, $this->renderer, $this->entityRepository, $this->entityFieldManager, $this->entityTypeBundleInfo);
      $handler->view = $this->executable;
-
+ 
      $field_storage = $this->getConfigFieldStorage();
-@@ -457,7 +468,7 @@ public function testQueryWithGroupByForBaseField() {
+@@ -452,7 +461,7 @@ public function testQueryWithGroupByForBaseField() {
        'entity_type' => 'test_entity',
        'field_name' => 'title',
      ];
@@ -701,8 +698,8 @@ index c60e91447f0fc1ae6a14fc5a4c0306ce5f13fefd..879c6d4bc26748290d4dda33e727e750
 +    $handler = new EntityField([], 'field', $definition, $this->entityTypeManager, $this->formatterPluginManager, $this->fieldTypePluginManager, $this->languageManager, $this->renderer, $this->entityRepository, $this->entityFieldManager, $this->entityTypeBundleInfo);
      $handler->view = $this->executable;
      $handler->view->field = [$handler];
-
-@@ -519,7 +530,7 @@ public function testQueryWithGroupByForConfigField() {
+ 
+@@ -514,7 +523,7 @@ public function testQueryWithGroupByForConfigField() {
        'entity_type' => 'test_entity',
        'field_name' => 'body',
      ];
@@ -710,8 +707,8 @@ index c60e91447f0fc1ae6a14fc5a4c0306ce5f13fefd..879c6d4bc26748290d4dda33e727e750
 +    $handler = new EntityField([], 'field', $definition, $this->entityTypeManager, $this->formatterPluginManager, $this->fieldTypePluginManager, $this->languageManager, $this->renderer, $this->entityRepository, $this->entityFieldManager, $this->entityTypeBundleInfo);
      $handler->view = $this->executable;
      $handler->view->field = [$handler];
-
-@@ -583,7 +594,7 @@ public function testPrepareItemsByDelta(array $options, array $expected_values)
+ 
+@@ -578,7 +587,7 @@ public function testPrepareItemsByDelta(array $options, array $expected_values)
        'entity_type' => 'test_entity',
        'field_name' => 'integer',
      ];
@@ -719,7 +716,7 @@ index c60e91447f0fc1ae6a14fc5a4c0306ce5f13fefd..879c6d4bc26748290d4dda33e727e750
 +    $handler = new FieldTestEntityField([], 'field', $definition, $this->entityTypeManager, $this->formatterPluginManager, $this->fieldTypePluginManager, $this->languageManager, $this->renderer, $this->entityRepository, $this->entityFieldManager, $this->entityTypeBundleInfo);
      $handler->view = $this->executable;
      $handler->view->field = [$handler];
-
+ 
 diff --git a/core/modules/views/views.api.php b/core/modules/views/views.api.php
 index 49eb06513edb29c1facfd6fa6e90fd828a2c4f06..503ef9064d5ce68f6f0cb8cf029f999f0a60f4c3 100644
 --- a/core/modules/views/views.api.php
@@ -727,7 +724,7 @@ index 49eb06513edb29c1facfd6fa6e90fd828a2c4f06..503ef9064d5ce68f6f0cb8cf029f999f
 @@ -420,6 +420,25 @@ function hook_views_data() {
      ],
    ];
-
+ 
 +  // Computed field example. Computed fields are not associated with actual data
 +  // tables and fields, and therefore have no schema. Instead, they are computed
 +  // when the value is read from the entity. Here's the definition of a computed
@@ -750,19 +747,3 @@ index 49eb06513edb29c1facfd6fa6e90fd828a2c4f06..503ef9064d5ce68f6f0cb8cf029f999f
    // Area example. Areas are not generally associated with actual data
    // tables and fields. This example is from views_views_data(), which defines
    // the "Global" table (not really a table, but a group of Fields, Filters,
-diff --git a/core/phpstan-baseline.neon b/core/phpstan-baseline.neon
-index b99733aed6aee10cb47823c0774d656d228f1db6..099a9a17e8e23cc7ec79a9176a3f610bfb67e15a 100644
---- a/core/phpstan-baseline.neon
-+++ b/core/phpstan-baseline.neon
-@@ -2500,11 +2500,6 @@ parameters:
- 			count: 9
- 			path: modules/views/src/Plugin/views/field/Date.php
-
--		-
--			message: "#^Method Drupal\\\\views\\\\Plugin\\\\views\\\\field\\\\EntityField\\:\\:getFieldStorageDefinition\\(\\) should return Drupal\\\\Core\\\\Field\\\\FieldStorageDefinitionInterface but return statement is missing\\.$#"
--			count: 1
--			path: modules/views/src/Plugin/views/field/EntityField.php
--
- 		-
- 			message: "#^Method Drupal\\\\views\\\\Plugin\\\\views\\\\field\\\\EntityField\\:\\:renderItems\\(\\) should return string but return statement is missing\\.$#"
- 			count: 1

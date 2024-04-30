@@ -1,5 +1,5 @@
 diff --git a/core/modules/comment/config/optional/views.view.comment.yml b/core/modules/comment/config/optional/views.view.comment.yml
-index 474d51eeda8c583194b708c42ab36d8f6c1552d0..daaef07ee1ed1aaeb73d52dd17ac945b87cd3102 100644
+index 474d51eeda8..daaef07ee1e 100644
 --- a/core/modules/comment/config/optional/views.view.comment.yml
 +++ b/core/modules/comment/config/optional/views.view.comment.yml
 @@ -75,6 +75,9 @@ display:
@@ -23,7 +23,7 @@ index 474d51eeda8c583194b708c42ab36d8f6c1552d0..daaef07ee1ed1aaeb73d52dd17ac945b
            id: subject
            table: comment_field_data
 diff --git a/core/modules/comment/tests/src/Kernel/Views/CommentAdminViewTest.php b/core/modules/comment/tests/src/Kernel/Views/CommentAdminViewTest.php
-index d52e16b584021ef96f775fcb7e998c24924f4678..5ef2b0776d2da68d4f46ce5db55dea89efeed4a4 100644
+index d52e16b5840..5ef2b0776d2 100644
 --- a/core/modules/comment/tests/src/Kernel/Views/CommentAdminViewTest.php
 +++ b/core/modules/comment/tests/src/Kernel/Views/CommentAdminViewTest.php
 @@ -35,11 +35,13 @@ class CommentAdminViewTest extends ViewsKernelTestBase {
@@ -51,7 +51,7 @@ index d52e16b584021ef96f775fcb7e998c24924f4678..5ef2b0776d2da68d4f46ce5db55dea89
      // Create user 1 so that the user created later in the test has a different
      // user ID.
 diff --git a/core/modules/media/config/optional/views.view.media.yml b/core/modules/media/config/optional/views.view.media.yml
-index 363ba7f5314d83c5b37c456f6010c20d89f8ed23..9d821e574d869205343b2a8fdce42d59f1140b01 100644
+index 363ba7f5314..9d821e574d8 100644
 --- a/core/modules/media/config/optional/views.view.media.yml
 +++ b/core/modules/media/config/optional/views.view.media.yml
 @@ -76,6 +76,11 @@ display:
@@ -67,7 +67,7 @@ index 363ba7f5314d83c5b37c456f6010c20d89f8ed23..9d821e574d869205343b2a8fdce42d59
            id: thumbnail__target_id
            table: media_field_data
 diff --git a/core/modules/media/tests/modules/media_test_views/config/install/views.view.test_media_bulk_form.yml b/core/modules/media/tests/modules/media_test_views/config/install/views.view.test_media_bulk_form.yml
-index 8f7f0c8493df848b68dbb53321024455dbd59dc0..5e3339402fe1d52829fdafe335a8058df44a7501 100644
+index 8f7f0c8493d..5e3339402fe 100644
 --- a/core/modules/media/tests/modules/media_test_views/config/install/views.view.test_media_bulk_form.yml
 +++ b/core/modules/media/tests/modules/media_test_views/config/install/views.view.test_media_bulk_form.yml
 @@ -41,6 +41,11 @@ display:
@@ -83,7 +83,7 @@ index 8f7f0c8493df848b68dbb53321024455dbd59dc0..5e3339402fe1d52829fdafe335a8058d
            id: name
            table: media_field_data
 diff --git a/core/modules/media/tests/src/Functional/MediaBulkFormTest.php b/core/modules/media/tests/src/Functional/MediaBulkFormTest.php
-index d65f34e2b014cff54c6436f0779e319e1754ce5e..8e0e192a1358a6fe1981ea7f3eec79269f8abbdc 100644
+index d65f34e2b01..8e0e192a135 100644
 --- a/core/modules/media/tests/src/Functional/MediaBulkFormTest.php
 +++ b/core/modules/media/tests/src/Functional/MediaBulkFormTest.php
 @@ -2,6 +2,7 @@
@@ -121,7 +121,7 @@ index d65f34e2b014cff54c6436f0779e319e1754ce5e..8e0e192a1358a6fe1981ea7f3eec7926
      // Test unpublishing in bulk.
      $page->checkField('media_bulk_form[0]');
 diff --git a/core/modules/media_library/config/install/views.view.media_library.yml b/core/modules/media_library/config/install/views.view.media_library.yml
-index deb708732ec688fd78b92d9ca0aa6e9abf8c26df..db5e3d349b760e836b9e570b912f62b82afbbb14 100644
+index deb708732ec..db5e3d349b7 100644
 --- a/core/modules/media_library/config/install/views.view.media_library.yml
 +++ b/core/modules/media_library/config/install/views.view.media_library.yml
 @@ -81,6 +81,11 @@ display:
@@ -149,7 +149,7 @@ index deb708732ec688fd78b92d9ca0aa6e9abf8c26df..db5e3d349b760e836b9e570b912f62b8
            id: name
            table: media_field_data
 diff --git a/core/modules/media_library/tests/src/FunctionalJavascript/MediaOverviewTest.php b/core/modules/media_library/tests/src/FunctionalJavascript/MediaOverviewTest.php
-index a79a8ccfdbb00c16af4e44457a0c6563916c021a..0bfb30b24e6f94d6f13e0003130a376b50019aa5 100644
+index a79a8ccfdbb..0bfb30b24e6 100644
 --- a/core/modules/media_library/tests/src/FunctionalJavascript/MediaOverviewTest.php
 +++ b/core/modules/media_library/tests/src/FunctionalJavascript/MediaOverviewTest.php
 @@ -4,6 +4,8 @@
@@ -189,7 +189,7 @@ index a79a8ccfdbb00c16af4e44457a0c6563916c021a..0bfb30b24e6f94d6f13e0003130a376b
      $assert_session->pageTextContains('Dog');
      $assert_session->pageTextNotContains('Cat');
 diff --git a/core/modules/node/config/optional/views.view.content.yml b/core/modules/node/config/optional/views.view.content.yml
-index 67149ee9328033da0117058698fa7b6aa4ede9c2..9e87ad10908a7083cd3aa2b709588ca36c00652f 100644
+index 67149ee9328..9e87ad10908 100644
 --- a/core/modules/node/config/optional/views.view.content.yml
 +++ b/core/modules/node/config/optional/views.view.content.yml
 @@ -36,6 +36,18 @@ display:
@@ -212,7 +212,7 @@ index 67149ee9328033da0117058698fa7b6aa4ede9c2..9e87ad10908a7083cd3aa2b709588ca3
            id: title
            table: node_field_data
 diff --git a/core/modules/node/tests/modules/node_test_views/test_views/views.view.test_node_bulk_form.yml b/core/modules/node/tests/modules/node_test_views/test_views/views.view.test_node_bulk_form.yml
-index d7a3fa080fed21b4077504d9f3eb15e5556fe36f..0f67e50640ea5b8a136389bf549f851e3a80b6e5 100644
+index d7a3fa080fe..0f67e50640e 100644
 --- a/core/modules/node/tests/modules/node_test_views/test_views/views.view.test_node_bulk_form.yml
 +++ b/core/modules/node/tests/modules/node_test_views/test_views/views.view.test_node_bulk_form.yml
 @@ -28,6 +28,18 @@ display:
@@ -235,7 +235,7 @@ index d7a3fa080fed21b4077504d9f3eb15e5556fe36f..0f67e50640ea5b8a136389bf549f851e
            id: title
            table: node_field_data
 diff --git a/core/modules/node/tests/src/Functional/Views/BulkFormTest.php b/core/modules/node/tests/src/Functional/Views/BulkFormTest.php
-index bcd15ccc37390e5bf67844ac69b6ad0a74c52fb7..7255d918ff80fd7d8d1d5de40c5f33c1dea9c398 100644
+index bcd15ccc373..7255d918ff8 100644
 --- a/core/modules/node/tests/src/Functional/Views/BulkFormTest.php
 +++ b/core/modules/node/tests/src/Functional/Views/BulkFormTest.php
 @@ -2,6 +2,7 @@
@@ -270,7 +270,7 @@ index bcd15ccc37390e5bf67844ac69b6ad0a74c52fb7..7255d918ff80fd7d8d1d5de40c5f33c1
      $node = reset($this->nodes);
      $this->assertTrue($node->isPublished(), 'Node is initially published');
 diff --git a/core/modules/user/config/optional/views.view.user_admin_people.yml b/core/modules/user/config/optional/views.view.user_admin_people.yml
-index d49503f8148f3bbc4e126dda6ea5e866cd5ab5a7..5f779987c9826ac11b4fe7f4861b464a63926fdd 100644
+index d49503f8148..5f779987c98 100644
 --- a/core/modules/user/config/optional/views.view.user_admin_people.yml
 +++ b/core/modules/user/config/optional/views.view.user_admin_people.yml
 @@ -69,6 +69,10 @@ display:
@@ -285,7 +285,7 @@ index d49503f8148f3bbc4e126dda6ea5e866cd5ab5a7..5f779987c9826ac11b4fe7f4861b464a
            id: name
            table: users_field_data
 diff --git a/core/modules/user/tests/src/Functional/Views/BulkFormTest.php b/core/modules/user/tests/src/Functional/Views/BulkFormTest.php
-index 8ec5b249c34ced65e895ebf0aef6ff7c3eb19839..9454154c234873a61d019b083ce61c01e7d4907a 100644
+index c7a72a40478..e9b7e14f095 100644
 --- a/core/modules/user/tests/src/Functional/Views/BulkFormTest.php
 +++ b/core/modules/user/tests/src/Functional/Views/BulkFormTest.php
 @@ -124,7 +124,7 @@ public function testBulkForm() {
@@ -298,7 +298,7 @@ index 8ec5b249c34ced65e895ebf0aef6ff7c3eb19839..9454154c234873a61d019b083ce61c01
      $this->drupalGet('admin/structure/views/nojs/handler/test_user_bulk_form/default/field/user_bulk_form');
      $this->submitForm($edit, 'Apply');
 diff --git a/core/modules/views/config/schema/views.data_types.schema.yml b/core/modules/views/config/schema/views.data_types.schema.yml
-index 26f14c6e4b1da2aab81cd2cc0b7a6bb9b14b5b6d..db95f598e33db6074d73dd30841240826e1a3605 100644
+index 26f14c6e4b1..db95f598e33 100644
 --- a/core/modules/views/config/schema/views.data_types.schema.yml
 +++ b/core/modules/views/config/schema/views.data_types.schema.yml
 @@ -846,3 +846,9 @@ views_field_bulk_form:
@@ -313,7 +313,7 @@ index 26f14c6e4b1da2aab81cd2cc0b7a6bb9b14b5b6d..db95f598e33db6074d73dd3084124082
 +        label: 'Action'
 diff --git a/core/modules/views/css/views.bulk_form.css b/core/modules/views/css/views.bulk_form.css
 new file mode 100644
-index 0000000000000000000000000000000000000000..1b193ef4230846917fe1ce1d6542f3ff42518d60
+index 00000000000..1b193ef4230
 --- /dev/null
 +++ b/core/modules/views/css/views.bulk_form.css
 @@ -0,0 +1,12 @@
@@ -330,10 +330,10 @@ index 0000000000000000000000000000000000000000..1b193ef4230846917fe1ce1d6542f3ff
 +  margin-right: 3px;
 +}
 diff --git a/core/modules/views/src/Plugin/views/field/BulkForm.php b/core/modules/views/src/Plugin/views/field/BulkForm.php
-index 54517f8bc362a6de5cb9e9c1554f5f5cdfc07833..5f83bd0eec31e0dc3f1edc5ce85086a75b186a5c 100644
+index a2552bdca7d..11e56f4de74 100644
 --- a/core/modules/views/src/Plugin/views/field/BulkForm.php
 +++ b/core/modules/views/src/Plugin/views/field/BulkForm.php
-@@ -218,6 +218,9 @@ protected function defineOptions() {
+@@ -201,6 +201,9 @@ protected function defineOptions() {
      $options['selected_actions'] = [
        'default' => [],
      ];
@@ -343,7 +343,7 @@ index 54517f8bc362a6de5cb9e9c1554f5f5cdfc07833..5f83bd0eec31e0dc3f1edc5ce85086a7
      return $options;
    }
  
-@@ -241,13 +244,52 @@ public function buildOptionsForm(&$form, FormStateInterface $form_state) {
+@@ -224,13 +227,52 @@ public function buildOptionsForm(&$form, FormStateInterface $form_state) {
        ],
        '#default_value' => $this->options['include_exclude'],
      ];
@@ -399,7 +399,7 @@ index 54517f8bc362a6de5cb9e9c1554f5f5cdfc07833..5f83bd0eec31e0dc3f1edc5ce85086a7
      parent::buildOptionsForm($form, $form_state);
    }
  
-@@ -257,8 +299,16 @@ public function buildOptionsForm(&$form, FormStateInterface $form_state) {
+@@ -240,8 +282,16 @@ public function buildOptionsForm(&$form, FormStateInterface $form_state) {
    public function validateOptionsForm(&$form, FormStateInterface $form_state) {
      parent::validateOptionsForm($form, $form_state);
  
@@ -418,7 +418,7 @@ index 54517f8bc362a6de5cb9e9c1554f5f5cdfc07833..5f83bd0eec31e0dc3f1edc5ce85086a7
    }
  
    /**
-@@ -328,6 +378,11 @@ public function viewsForm(&$form, FormStateInterface $form_state) {
+@@ -311,6 +361,11 @@ public function viewsForm(&$form, FormStateInterface $form_state) {
  
        // Replace the form submit button label.
        $form['actions']['submit']['#value'] = $this->t('Apply to selected items');
@@ -430,7 +430,7 @@ index 54517f8bc362a6de5cb9e9c1554f5f5cdfc07833..5f83bd0eec31e0dc3f1edc5ce85086a7
  
        // Ensure a consistent container for filters/operations in the view header.
        $form['header'] = [
-@@ -345,6 +400,7 @@ public function viewsForm(&$form, FormStateInterface $form_state) {
+@@ -328,6 +383,7 @@ public function viewsForm(&$form, FormStateInterface $form_state) {
          '#title' => $this->options['action_title'],
          '#options' => $this->getBulkOptions(),
          '#empty_option' => $this->t('- Select -'),
@@ -438,7 +438,7 @@ index 54517f8bc362a6de5cb9e9c1554f5f5cdfc07833..5f83bd0eec31e0dc3f1edc5ce85086a7
        ];
  
        // Duplicate the form actions into the action container in the header.
-@@ -367,8 +423,18 @@ public function viewsForm(&$form, FormStateInterface $form_state) {
+@@ -350,8 +406,18 @@ public function viewsForm(&$form, FormStateInterface $form_state) {
     */
    protected function getBulkOptions($filtered = TRUE) {
      $options = [];
@@ -459,7 +459,7 @@ index 54517f8bc362a6de5cb9e9c1554f5f5cdfc07833..5f83bd0eec31e0dc3f1edc5ce85086a7
          $in_selected = in_array($id, $this->options['selected_actions']);
          // If the field is configured to include only the selected actions,
 diff --git a/core/modules/views/src/ViewsConfigUpdater.php b/core/modules/views/src/ViewsConfigUpdater.php
-index b3d0b1b637a6af81f25bdc076d58c2f69466f4fa..8df4191c736e3e29476006f1b128f6bbd9fc81e7 100644
+index b3d0b1b637a..8df4191c736 100644
 --- a/core/modules/views/src/ViewsConfigUpdater.php
 +++ b/core/modules/views/src/ViewsConfigUpdater.php
 @@ -10,6 +10,7 @@
@@ -517,7 +517,7 @@ index b3d0b1b637a6af81f25bdc076d58c2f69466f4fa..8df4191c736e3e29476006f1b128f6bb
 +
  }
 diff --git a/core/modules/views/tests/modules/action_bulk_test/config/install/views.view.test_bulk_form.yml b/core/modules/views/tests/modules/action_bulk_test/config/install/views.view.test_bulk_form.yml
-index 6446dc86c8c1b1f477179c9a4b7ca60980e1fbd4..29b7b90cf34c9f5b279047779e1cd9da2f8313b7 100644
+index 29286312842..c654443977d 100644
 --- a/core/modules/views/tests/modules/action_bulk_test/config/install/views.view.test_bulk_form.yml
 +++ b/core/modules/views/tests/modules/action_bulk_test/config/install/views.view.test_bulk_form.yml
 @@ -89,6 +89,18 @@ display:
@@ -540,7 +540,7 @@ index 6446dc86c8c1b1f477179c9a4b7ca60980e1fbd4..29b7b90cf34c9f5b279047779e1cd9da
          type: full
          options:
 diff --git a/core/modules/views/tests/src/Functional/BulkFormTest.php b/core/modules/views/tests/src/Functional/BulkFormTest.php
-index 4998d51f8db288da7e2b9e6f70a9d972ff820c8a..cd505a61e37aa2a2e3cc61fbaf902bb586be9ee2 100644
+index cbec0dd02c8..5a1bca54684 100644
 --- a/core/modules/views/tests/src/Functional/BulkFormTest.php
 +++ b/core/modules/views/tests/src/Functional/BulkFormTest.php
 @@ -2,6 +2,7 @@
@@ -548,10 +548,10 @@ index 4998d51f8db288da7e2b9e6f70a9d972ff820c8a..cd505a61e37aa2a2e3cc61fbaf902bb5
  namespace Drupal\Tests\views\Functional;
  
 +use Behat\Mink\Element\NodeElement;
- use Drupal\Component\Render\FormattableMarkup;
  use Drupal\Tests\BrowserTestBase;
- use Drupal\Tests\node\Traits\NodeCreationTrait;
-@@ -55,6 +56,52 @@ public function testBulkForm() {
+ use Drupal\views\Views;
+ 
+@@ -51,6 +52,52 @@ public function testBulkForm() {
  
      $this->drupalGet('test_bulk_form');
  
@@ -605,7 +605,7 @@ index 4998d51f8db288da7e2b9e6f70a9d972ff820c8a..cd505a61e37aa2a2e3cc61fbaf902bb5
      $this->assertSession()->elementExists('xpath', '//form/div[1][@id = "edit-header"]');
  
 diff --git a/core/modules/views/tests/src/Functional/Plugin/ViewsBulkTest.php b/core/modules/views/tests/src/Functional/Plugin/ViewsBulkTest.php
-index 899d47bf21e81973a5521b61c8947ed8a7ad00e7..dcbe34501f437be34ccb526e674404e42b6e7661 100644
+index 899d47bf21e..dcbe34501f4 100644
 --- a/core/modules/views/tests/src/Functional/Plugin/ViewsBulkTest.php
 +++ b/core/modules/views/tests/src/Functional/Plugin/ViewsBulkTest.php
 @@ -71,7 +71,8 @@ public function testBulkSelection() {
@@ -630,7 +630,7 @@ index 899d47bf21e81973a5521b61c8947ed8a7ad00e7..dcbe34501f437be34ccb526e674404e4
    }
 diff --git a/core/modules/views/tests/src/Functional/Update/ViewsBulkFormActionsOrderUpdate.php b/core/modules/views/tests/src/Functional/Update/ViewsBulkFormActionsOrderUpdate.php
 new file mode 100644
-index 0000000000000000000000000000000000000000..20457feda87d8a0f1e1be74b6484bde6c9e5ea99
+index 00000000000..20457feda87
 --- /dev/null
 +++ b/core/modules/views/tests/src/Functional/Update/ViewsBulkFormActionsOrderUpdate.php
 @@ -0,0 +1,38 @@
@@ -673,7 +673,7 @@ index 0000000000000000000000000000000000000000..20457feda87d8a0f1e1be74b6484bde6
 +
 +}
 diff --git a/core/modules/views/views.libraries.yml b/core/modules/views/views.libraries.yml
-index 08ff2d1640798b7f9e862b32074392f2f392d7ae..89cc2558c707951a84aed80b417fb40e03f0f5f3 100644
+index 08ff2d16407..89cc2558c70 100644
 --- a/core/modules/views/views.libraries.yml
 +++ b/core/modules/views/views.libraries.yml
 @@ -22,3 +22,9 @@ views.responsive-grid:
@@ -687,7 +687,7 @@ index 08ff2d1640798b7f9e862b32074392f2f392d7ae..89cc2558c707951a84aed80b417fb40e
 +    component:
 +      css/views.bulk_form.css: {}
 diff --git a/core/modules/views/views.post_update.php b/core/modules/views/views.post_update.php
-index 766e5630ba800a4cff7d99640d01a6ae46eae43c..316b4a508071cd2668e78e1dcd0cfd741ed36efe 100644
+index 766e5630ba8..316b4a50807 100644
 --- a/core/modules/views/views.post_update.php
 +++ b/core/modules/views/views.post_update.php
 @@ -137,3 +137,14 @@ function views_post_update_taxonomy_filter_user_context(?array &$sandbox = NULL)
@@ -706,7 +706,7 @@ index 766e5630ba800a4cff7d99640d01a6ae46eae43c..316b4a508071cd2668e78e1dcd0cfd74
 +  });
 +}
 diff --git a/core/profiles/demo_umami/config/optional/views.view.media.yml b/core/profiles/demo_umami/config/optional/views.view.media.yml
-index 14b501decc20a04c94cfcbb39fe37da5c6e23c00..e2082449b144c68e145ea1b1367f81a179abd782 100644
+index 14b501decc2..e2082449b14 100644
 --- a/core/profiles/demo_umami/config/optional/views.view.media.yml
 +++ b/core/profiles/demo_umami/config/optional/views.view.media.yml
 @@ -76,6 +76,11 @@ display:
@@ -722,7 +722,7 @@ index 14b501decc20a04c94cfcbb39fe37da5c6e23c00..e2082449b144c68e145ea1b1367f81a1
            id: thumbnail__target_id
            table: media_field_data
 diff --git a/core/themes/claro/claro.info.yml b/core/themes/claro/claro.info.yml
-index 5b8fd2393527301e88f3799f7d23e99ff196a0a2..6950185f4a95aa9e88070e229c57ca076bd5b031 100644
+index 92f2b14cc4c..ef99bd543bf 100644
 --- a/core/themes/claro/claro.info.yml
 +++ b/core/themes/claro/claro.info.yml
 @@ -90,6 +90,11 @@ libraries-override:
@@ -739,7 +739,7 @@ index 5b8fd2393527301e88f3799f7d23e99ff196a0a2..6950185f4a95aa9e88070e229c57ca07
        component:
 diff --git a/core/themes/claro/css/components/views.bulk_form.css b/core/themes/claro/css/components/views.bulk_form.css
 new file mode 100644
-index 0000000000000000000000000000000000000000..17ac9fa0eefb24a71b18a9ce97cefbdc3538308a
+index 00000000000..17ac9fa0eef
 --- /dev/null
 +++ b/core/themes/claro/css/components/views.bulk_form.css
 @@ -0,0 +1,12 @@
@@ -757,7 +757,7 @@ index 0000000000000000000000000000000000000000..17ac9fa0eefb24a71b18a9ce97cefbdc
 +}
 diff --git a/core/themes/stable9/css/views/views.bulk_form.css b/core/themes/stable9/css/views/views.bulk_form.css
 new file mode 100644
-index 0000000000000000000000000000000000000000..1b193ef4230846917fe1ce1d6542f3ff42518d60
+index 00000000000..1b193ef4230
 --- /dev/null
 +++ b/core/themes/stable9/css/views/views.bulk_form.css
 @@ -0,0 +1,12 @@
@@ -774,7 +774,7 @@ index 0000000000000000000000000000000000000000..1b193ef4230846917fe1ce1d6542f3ff
 +  margin-right: 3px;
 +}
 diff --git a/core/themes/stable9/stable9.info.yml b/core/themes/stable9/stable9.info.yml
-index fd2dd2e022fbbdcc673da392b5d9275d7cbbf7d9..f7ed3b69b5a3557393c80747e6cc4b8a933dfe7e 100644
+index fd2dd2e022f..f7ed3b69b5a 100644
 --- a/core/themes/stable9/stable9.info.yml
 +++ b/core/themes/stable9/stable9.info.yml
 @@ -289,6 +289,11 @@ libraries-override:

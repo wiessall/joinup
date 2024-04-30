@@ -8,7 +8,7 @@
  * @see https://getcomposer.org/doc/04-schema.md#files
  */
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 use Dotenv\Dotenv;
 

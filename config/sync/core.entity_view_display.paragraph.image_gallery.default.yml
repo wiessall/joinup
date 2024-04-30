@@ -1,0 +1,57 @@
+uuid: adea252e-ca76-45b7-a486-8ff4e5ef99c2
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.image_gallery.image
+    - field.field.paragraph.image_gallery.paragraph_heading
+    - paragraphs.paragraphs_type.image_gallery
+    - responsive_image.styles.highlighted_content
+    - responsive_image.styles.image_gallery
+  module:
+    - colorbox
+    - field_delimiter
+    - field_formatter_range
+    - joinup_slick
+    - template_suggestion
+id: paragraph.image_gallery.default
+targetEntityType: paragraph
+bundle: image_gallery
+mode: default
+content:
+  image:
+    type: colorbox_responsive
+    label: hidden
+    settings:
+      colorbox_image_style: ''
+      colorbox_gallery: field_post
+      colorbox_gallery_custom: ''
+      colorbox_caption: auto
+      colorbox_caption_custom: ''
+      colorbox_responsive_node_style: image_gallery
+      colorbox_responsive_image_style: highlighted_content
+    third_party_settings:
+      field_delimiter:
+        delimiter: ''
+      field_formatter_range:
+        order: 0
+        limit: 0
+        offset: 0
+      joinup_slick:
+        preset: image_gallery
+        field_label: false
+        custom_label: ''
+      template_suggestion:
+        template_suggestion: ''
+    weight: 1
+    region: content
+  paragraph_heading:
+    type: string
+    label: visually_hidden
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 0
+    region: content
+hidden:
+  search_api_excerpt: true

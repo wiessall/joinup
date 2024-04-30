@@ -1,4 +1,4 @@
-@api @terms @group-f
+@api @group-f
 Feature:
   Functionality checks for content_listing paragraphs in custom pages.
 
