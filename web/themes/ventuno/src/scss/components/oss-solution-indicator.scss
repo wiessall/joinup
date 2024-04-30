@@ -1,7 +1,7 @@
 @import "../partials/core";
 
 .git-indicator {
-  margin-bottom: $spacer / 2;
+  margin-bottom: calc($spacer / 2);
   &:not(:last-child) {
     margin-right: $spacer;
   }
