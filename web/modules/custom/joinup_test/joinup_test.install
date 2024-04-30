@@ -13,6 +13,8 @@ use Drupal\Component\Serialization\Yaml;
  * Implements hook_install().
  */
 function joinup_test_install($is_syncing): void {
+  $rdfSync = \Drupal::getContainer()->get('rdf_sync.synchronizer');
+
   // Create the testing taxonomy terms. Limitation: It creates terms with
   // maximum 2 level hierarchy.
   $hierarchy = Yaml::decode(file_get_contents(__DIR__ . '/fixtures/testing_terms.yml'));
@@ -61,6 +63,7 @@ function joinup_test_install($is_syncing): void {
         }
         $term->save();
         $termIds[] = $term->id();
+        $rdfSync->destruct();
       }
     }
   }
