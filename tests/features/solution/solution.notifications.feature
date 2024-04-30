@@ -12,8 +12,8 @@ Feature: Solution notifications
       | logo  | logo.png                       |
       | state | published                      |
     And the following owner:
-      | name               | type                  |
-      | Karanikolas Kitsos | Private Individual(s) |
+      | name               | type    |
+      | Karanikolas Kitsos | Company |
     And the following contact:
       | name  | Information Desk             |
       | email | information.desk@example.com |

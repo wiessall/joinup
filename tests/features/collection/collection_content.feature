@@ -19,8 +19,8 @@ Feature: Collection content
       | title                                 | body                                                                    | state     | collection                | topic                                                 | created          | changed                   |
       | Bigger than Egyptian Museum of Cairo? | <p><a href="#link">Link to the museum</a> web<strong>site</strong>.</p> | published | Turin Egyptian Collection | Finance in EU, Supplier exchange, E-health, E-justice | 2017-11-11T11:11 | Wed, 25 Dec 2019 15:00:00 |
     And document content:
-      | title             | body                                             | state     | collection                | creation date    | changed          | topic    |
-      | Upper Floor Map   | <p>A sample <a href="#link">map</a> example.</p> | published | Turin Egyptian Collection | 2017-11-11T11:11 | 2017-11-30T11:11 | E-health |
+      | title           | body                                             | state     | collection                | creation date    | changed          | topic    |
+      | Upper Floor Map | <p>A sample <a href="#link">map</a> example.</p> | published | Turin Egyptian Collection | 2017-11-11T11:11 | 2017-11-30T11:11 | E-health |
     And event content:
       | title                                     | state     | collection                | start date          | end date            | topic             |
       | Opening of the Hellenistic Period Section | published | Turin Egyptian Collection | 2016-03-15T11:12:12 | 2016-03-15T11:12:12 | Supplier exchange |
@@ -33,8 +33,8 @@ Feature: Collection content
 
   Scenario: Publishing new solutions should result in counters being properly updated.
     Given owner:
-      | name             | type                  |
-      | Particle sweeper | Private Individual(s) |
+      | name             | type    |
+      | Particle sweeper | Company |
 
     # @see: https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-4436
     Given I am logged in as a moderator
@@ -51,11 +51,11 @@ Feature: Collection content
       | Title                 | Solution from draft to published                                    |
       | Abstract              | The abstract of the solution.                                       |
       | Description           | Testing that publishing a solution, updates the collection content. |
-      | Geographical coverage | Switzerland                                                         |
+      | Geographical coverage | Belgium                                                             |
       | Name                  | Costas Papazoglou                                                   |
       | E-mail address        | CostasPapazoglou@example.com                                        |
     And I select "Data gathering and processing" from "Topic"
-    And I select "Networking Infrastructure Enablers" from "Solution type"
+    And I select "Logging Service" from "Solution type"
     And I press "Add existing" at the "Owner" field
     And I fill in "Owner" with "Particle sweeper"
     And I press "Add owner"

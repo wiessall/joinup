@@ -9,7 +9,7 @@ Feature: "Document" overview.
     Given the following licence:
       | title       | Beer licence                                     |
       | description | Offer a beer to the developer when you meet him. |
-      | type        | Attribution                                      |
+      | type        | Public domain                                    |
     And the following collection:
       | title | Traveller tools |
       | state | published       |
