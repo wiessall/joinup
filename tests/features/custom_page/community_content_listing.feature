@@ -371,9 +371,9 @@ Feature:
 
   Scenario: Test listing by keywords that contain the same word.
     Given document content:
-      | title        | keywords            | content     | collection | state     |
-      | User's Guide | nintendo64 manuals  | User manual | Nintendo64 | published |
-      | Licence      | nintendo64 licences | Licence     | Nintendo64 | published |
+      | title        | keywords            | field_paragraphs_body | collection | state     |
+      | User's Guide | nintendo64 manuals  | User manual           | Nintendo64 | published |
+      | Licence      | nintendo64 licences | Licence               | Nintendo64 | published |
     And custom_page content:
       | title   | collection | state     |
       | Manuals | Nintendo64 | published |

@@ -42,7 +42,7 @@ Feature: Subscribing to community content in solutions
       | Sofia      | Grows without aging       | Cities of Bulgaria   | published | kalin  |
       | Ruse       | Little Vienna             | Cities of Bulgaria   | proposed  | kalin  |
     And document content:
-      | title           | body                   | solution             | state     | author |
+      | title           | field_paragraphs_body  | solution             | state     | author |
       | Canned cherries | Sour cherries for pies | Products of Bulgaria | published | bisera |
       | Plovdiv         | Seven hills            | Cities of Bulgaria   | published | hristo |
     And event content:
