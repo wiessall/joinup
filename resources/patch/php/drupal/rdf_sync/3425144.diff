@@ -141,10 +141,10 @@ index 0000000000000000000000000000000000000000..955edb16d18fa0f566a101dcea864b61
 +}
 diff --git a/src/Form/Alter/BundleEntityFormAlter.php b/src/Form/Alter/BundleEntityFormAlter.php
 new file mode 100644
-index 0000000000000000000000000000000000000000..01d3bce5ce843bf9ed98175273c5ebb9d6316054
+index 0000000000000000000000000000000000000000..2c37e3e6f15ef1bda206210a3bef9f2e84fdb145
 --- /dev/null
 +++ b/src/Form/Alter/BundleEntityFormAlter.php
-@@ -0,0 +1,236 @@
+@@ -0,0 +1,243 @@
 +<?php
 +
 +declare(strict_types=1);
@@ -156,7 +156,9 @@ index 0000000000000000000000000000000000000000..01d3bce5ce843bf9ed98175273c5ebb9
 +use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
 +use Drupal\Core\Entity\EntityFieldManagerInterface;
 +use Drupal\Core\Field\FieldDefinitionInterface;
++use Drupal\Core\Field\FieldTypePluginManagerInterface;
 +use Drupal\Core\Form\FormStateInterface;
++use Drupal\text\Plugin\Field\FieldType\TextItemBase;
 +use Symfony\Component\DependencyInjection\ContainerInterface;
 +
 +/**
@@ -171,10 +173,13 @@ index 0000000000000000000000000000000000000000..01d3bce5ce843bf9ed98175273c5ebb9
 +   *   Plugin manager.
 +   * @param \Drupal\Core\Entity\EntityFieldManagerInterface $entityFieldManager
 +   *   Entity field manager.
++   * @param \Drupal\Core\Field\FieldTypePluginManagerInterface $fieldTypePluginManager
++   *   Field type manager.
 +   */
 +  public function __construct(
 +    protected PluginManagerInterface $uriGeneratorPluginManager,
 +    protected EntityFieldManagerInterface $entityFieldManager,
++    protected FieldTypePluginManagerInterface $fieldTypePluginManager,
 +  ) {
 +
 +  }
@@ -186,6 +191,7 @@ index 0000000000000000000000000000000000000000..01d3bce5ce843bf9ed98175273c5ebb9
 +    return new static(
 +      $container->get('plugin.manager.rdf_sync.uri_generator'),
 +      $container->get('entity_field.manager'),
++      $container->get('plugin.manager.field.field_type'),
 +    );
 +  }
 +
@@ -230,13 +236,14 @@ index 0000000000000000000000000000000000000000..01d3bce5ce843bf9ed98175273c5ebb9
 +    $form['rdf_sync']['uri_field_name'] = [
 +      '#type' => 'textfield',
 +      '#title' => $this->t('URI field name'),
++      '#description' => $this->t('If omitted, <code>uri</code> will be used.'),
 +      '#default_value' => $settings['uri_field_name'] ?? '',
 +      '#states' => $hideStates,
 +    ];
 +
 +    $form['rdf_sync']['uri_plugin'] = [
 +      '#type' => 'select',
-+      '#title' => $this->t('URI generator plugin ID'),
++      '#title' => $this->t('URI generator plugin'),
 +      '#default_value' => $settings['uri_plugin'] ?? '',
 +      '#empty_value' => '',
 +      '#options' => $this->getListOfPluginOptions(),
@@ -290,6 +297,10 @@ index 0000000000000000000000000000000000000000..01d3bce5ce843bf9ed98175273c5ebb9
 +   */
 +  protected function getListOfPluginOptions(): array {
 +    return array_reduce($this->uriGeneratorPluginManager->getDefinitions(), function ($result, $item) {
++      if ($item['id'] === 'default') {
++        return $result;
++      };
++
 +      $result[$item['id']] = $item['name'];
 +      return $result;
 +    }, []);
@@ -305,16 +316,12 @@ index 0000000000000000000000000000000000000000..01d3bce5ce843bf9ed98175273c5ebb9
 +   *   Columns.
 +   */
 +  protected function getColumnFields(FieldDefinitionInterface $fieldDefinition): array {
-+    if ($fieldDefinition->isComputed() || empty($fieldDefinition->getColumns())) {
++    if (empty($fieldDefinition->getColumns())) {
 +      return [];
 +    }
 +
 +    $columns = array_keys($fieldDefinition->getColumns());
-+    if (in_array($fieldDefinition->getType(), [
-+      'text',
-+      'text_long',
-+      'text_with_summary',
-+    ])) {
++    if (is_subclass_of($this->fieldTypePluginManager->getPluginClass($fieldDefinition->getType()), TextItemBase::class)) {
 +      $columns[] = 'processed';
 +    }
 +
@@ -615,7 +622,7 @@ index 0000000000000000000000000000000000000000..11c934ba1987e21089589c29720fb679
 +}
 diff --git a/tests/src/Functional/RdfEntityConfigFormTest.php b/tests/src/Functional/RdfEntityConfigFormTest.php
 new file mode 100644
-index 0000000000000000000000000000000000000000..b9f370e3e14d7102853f26df61f2814b51f96cce
+index 0000000000000000000000000000000000000000..78af0bb69d825625501113a441d08eb6f0ddd9ac
 --- /dev/null
 +++ b/tests/src/Functional/RdfEntityConfigFormTest.php
 @@ -0,0 +1,73 @@
@@ -671,7 +678,7 @@ index 0000000000000000000000000000000000000000..b9f370e3e14d7102853f26df61f2814b
 +      'rdf_sync[enabled]' => '1',
 +      'rdf_sync[type]' => 'https://data.org/value',
 +      'rdf_sync[uri_field_name]' => 'uri_field_name',
-+      'rdf_sync[uri_plugin]' => 'default',
++      'rdf_sync[uri_plugin]' => '',
 +      'rdf_sync[base_fields_mapping][type][target_id][predicate]' => 'https://data.org/type',
 +      'rdf_sync[base_fields_mapping][type][target_id][type]' => 'xsd:string',
 +      'rdf_sync[base_fields_mapping][status][value][predicate]' => 'https://data.org/status',
