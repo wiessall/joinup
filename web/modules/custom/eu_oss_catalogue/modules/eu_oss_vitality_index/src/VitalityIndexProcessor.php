@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Drupal\eu_oss_catalogue;
+namespace Drupal\eu_oss_vitality_index;
 
 use Gitonomy\Git\Commit;
 use Gitonomy\Git\Reference\Tag;

@@ -149,16 +149,6 @@ function eu_oss_catalogue_node_access(NodeInterface $entity, string $operation, 
  */
 function eu_oss_catalogue_cron(): void {
   $state = \Drupal::state();
-  $lastProcessedNid = $state->get('eu_oss_catalogue.vitality_index.last_nid', 0);
-  \Drupal::service('eu_oss_catalogue.vitality_index')->processBatch($lastProcessedNid);
-  if ($lastProcessedNid === NULL) {
-    // A complete pass through all OSS solutions is done. Reset the tracker.
-    $state->delete('eu_oss_catalogue.vitality_index.last_nid');
-  }
-  // Save next node ID.
-  $state->set('eu_oss_catalogue.vitality_index.last_nid', $lastProcessedNid);
-
-  $state = \Drupal::state();
   $request_time = \Drupal::time()->getRequestTime();
   $last_check = $state->get('eu_oss_catalogue.last_check', 0);
   // 24Hours.
