@@ -8,7 +8,6 @@ use Drupal\Component\Serialization\Json;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Logger\LoggerChannelInterface;
 use Drupal\Core\Site\Settings;
-use Drupal\Core\State\StateInterface;
 use Drupal\eu_oss_catalogue\Entity\OssSolutionInterface;
 use Gitonomy\Git\Admin;
 use Gitonomy\Git\Repository;
@@ -16,7 +15,7 @@ use Gitonomy\Git\Repository;
 /**
  * Vitality Index service.
  */
-class EuOssCatalogueVitalityIndex {
+class VitalityIndexGenerator implements VitalityIndexGeneratorInterface {
 
   /**
    * Directory relative to 'private://'.
@@ -26,55 +25,15 @@ class EuOssCatalogueVitalityIndex {
   /**
    * Constructs a new service instance.
    *
-   * @param \Drupal\Core\State\StateInterface $state
-   *   The state service.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
    *   The entity type manager service.
    * @param \Drupal\Core\Logger\LoggerChannelInterface $logger
    *   The EU OSS Catalogue logger channel.
    */
   public function __construct(
-    protected StateInterface $state,
     protected EntityTypeManagerInterface $entityTypeManager,
     protected LoggerChannelInterface $logger,
   ) {}
-
-  /**
-   * Processes the vitality index for a batch of solutions.
-   *
-   * The method is processing a node ID ordered list of solutions. Useful for
-   * cron jobs, in order to spit the work across many batches.
-   *
-   * @param int|null $lastProcessedNid
-   *   The last processed node before the method is called, passed by reference.
-   *   The variable is updated as the nodes are updated, so the caller knows
-   *   from where to start a new call.
-   * @param int $count
-   *   (optional) Number of OSS solution nodes to process once. Defaults to 20.
-   *
-   * @see \eu_oss_catalogue_cron()
-   */
-  public function processBatch(?int &$lastProcessedNid, int $count = 20): void {
-    $storage = $this->entityTypeManager->getStorage('node');
-
-    $nids = $storage->getQuery()->accessCheck(FALSE)
-      ->condition('type', 'oss_solution')
-      ->condition('status', TRUE)
-      ->condition('nid', $lastProcessedNid, '>')
-      ->sort('nid')
-      ->range(0, $count)
-      ->execute();
-
-    if (!$nids) {
-      $lastProcessedNid = NULL;
-    }
-
-    /** @var \Drupal\eu_oss_catalogue\Entity\OssSolutionInterface $solution */
-    foreach ($storage->loadMultiple($nids) as $nid => $solution) {
-      $this->processSolution($solution);
-      $lastProcessedNid = (int) $nid;
-    }
-  }
 
   /**
    * Computes and stores the vitality index for one solution.
