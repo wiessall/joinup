@@ -1,0 +1,7 @@
+field.formatter.settings.vitality_index_chart:
+  type: mapping
+  label: 'Vitality index chart'
+  mapping:
+    info:
+      type: string
+      label: 'Information text'
