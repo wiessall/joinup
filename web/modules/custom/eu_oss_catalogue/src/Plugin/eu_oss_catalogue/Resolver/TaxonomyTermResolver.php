@@ -104,10 +104,17 @@ class TaxonomyTermResolver extends DefaultResolver implements ContainerFactoryPl
 
     $terms = $existingTermNames = [];
     foreach ($storage->loadMultiple($termIds) as $tid => $term) {
-      foreach ($langcodesPerName[$term->label()] as $langcode) {
-        $terms[$langcode][$term->label()] = $tid;
+      // @todo MYSQL is case and accents insensitive on taxonomy_term_field_data.name (uses utf8mb4_0900_ai_ci collation).
+      //   Decide whether names with different case and accents should resolve
+      //   to the same terms. For now, add an isset() below, which will create
+      //   different terms if casing or accents differ.
+      //   @see ISAICP-8703.
+      if (isset($langcodesPerName[$term->label()])) {
+        foreach ($langcodesPerName[$term->label()] as $langcode) {
+          $terms[$langcode][$term->label()] = $tid;
+        }
+        $existingTermNames[] = $term->label();
       }
-      $existingTermNames[] = $term->label();
     }
 
     $missingTermNames = array_diff($allTermNames, $existingTermNames);
