@@ -42,5 +42,5 @@ function eu_oss_vitality_index_cron(): void {
     ]);
   }
 
-  \Drupal::logger('eu_oss_catalogue')->info('Add items to eu_oss_vitality_index queue.');
+  \Drupal::logger('eu_oss_catalogue')->info('Added items to eu_oss_vitality_index queue.');
 }
