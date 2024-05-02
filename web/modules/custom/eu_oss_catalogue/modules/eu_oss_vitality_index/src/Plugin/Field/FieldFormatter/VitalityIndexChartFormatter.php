@@ -27,8 +27,8 @@ class VitalityIndexChartFormatter extends FormatterBase {
    */
   public static function defaultSettings(): array {
     return [
-        'info' => '',
-      ] + parent::defaultSettings();
+      'info' => '',
+    ] + parent::defaultSettings();
   }
 
   /**
