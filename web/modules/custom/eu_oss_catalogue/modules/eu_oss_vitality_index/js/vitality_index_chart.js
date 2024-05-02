@@ -8,7 +8,7 @@
     attach(context) {
       once(
         "vitality-index-chart",
-        "canvas#vitality-index-chart",
+        "canvas.js-vitality-index-chart",
         context
       ).forEach((canvas) => {
         const data = JSON.parse(canvas.dataset.vitalityIndexRange);
