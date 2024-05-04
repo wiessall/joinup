@@ -12,6 +12,7 @@ use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Utility\Error;
 use Drupal\eu_oss_catalogue\Exception\UnresolvableValueException;
 use Drupal\eu_oss_catalogue\Model\Project;
+use Drupal\taxonomy\TermInterface;
 use Psr\Log\LogLevel;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -25,31 +26,15 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  */
 class TaxonomyTermResolver extends DefaultResolver implements ContainerFactoryPluginInterface {
 
-  /**
-   * Constructs a new plugin instance.
-   *
-   * @param array $configuration
-   *   A configuration array containing information about the plugin instance.
-   * @param string $plugin_id
-   *   The plugin ID for the plugin instance.
-   * @param mixed $plugin_definition
-   *   The plugin implementation definition.
-   * @param \Drupal\Core\Logger\LoggerChannelInterface $logger
-   *   The EU OSS Catalogue logger.
-   * @param \Drupal\Core\Language\LanguageManagerInterface $languageManger
-   *   The language manager service.
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
-   *   The entity type manager service.
-   */
   public function __construct(
     array $configuration,
     $plugin_id,
     $plugin_definition,
     protected LoggerChannelInterface $logger,
-    protected LanguageManagerInterface $languageManger,
+    protected LanguageManagerInterface $languageManager,
     protected EntityTypeManagerInterface $entityTypeManager,
   ) {
-    parent::__construct($configuration, $plugin_id, $plugin_definition, $logger, $this->languageManger);
+    parent::__construct($configuration, $plugin_id, $plugin_definition, $logger, $this->languageManager);
   }
 
   /**
@@ -81,67 +66,56 @@ class TaxonomyTermResolver extends DefaultResolver implements ContainerFactoryPl
    */
   public function resolve(?array &$value, Project $project, array $metadata, FieldItemListInterface $fieldItemList): void {
     parent::resolve($value, $project, $metadata, $fieldItemList);
-    if (!$names = $value) {
+    if (!$value) {
       return;
     }
 
-    // Language codes per name.
-    $langcodesPerName = [];
-    foreach ($names as $langcode => $namesPerLanguage) {
-      foreach ($namesPerLanguage as $name) {
-        $langcodesPerName[$name][$langcode] = $langcode;
+    $resolvedValue = [];
+    foreach ($value as $langcode => $names) {
+      foreach ($names as $name) {
+        $term = $this->resolveTerm($name, $metadata, $fieldItemList);
+        $resolvedValue[$langcode][$name] = $term;
       }
     }
 
-    // Get a flat list of all taxonomy term names regardless of the language.
-    $allTermNames = array_keys($langcodesPerName);
+    $value = $resolvedValue;
+  }
 
+  /**
+   * Resolve term by name.
+   *
+   * @param string $name
+   *   The term name.
+   * @param array $metadata
+   *    The project metadata.
+   * @param \Drupal\Core\Field\FieldItemListInterface $fieldItemList
+   *    The Drupal field item list instance.
+   *
+   * @return \Drupal\taxonomy\TermInterface
+   *   The term object if found or created.
+   */
+  protected function resolveTerm(string $name, array $metadata, FieldItemListInterface $fieldItemList): TermInterface {
     $storage = $this->entityTypeManager->getStorage('taxonomy_term');
-    $termIds = array_values($storage->getQuery()->accessCheck(FALSE)
-      ->condition('vid', $this->getConfiguration()['vid'])
-      ->condition('name', $allTermNames, 'IN')
-      ->execute());
 
-    $terms = $existingTermNames = [];
-    foreach ($storage->loadMultiple($termIds) as $tid => $term) {
-      // @todo MYSQL is case and accents insensitive on taxonomy_term_field_data.name (uses utf8mb4_0900_ai_ci collation).
-      //   Decide whether names with different case and accents should resolve
-      //   to the same terms. For now, add an isset() below, which will create
-      //   different terms if casing or accents differ.
-      //   @see ISAICP-8703.
-      if (isset($langcodesPerName[$term->label()])) {
-        foreach ($langcodesPerName[$term->label()] as $langcode) {
-          $terms[$langcode][$term->label()] = $tid;
-        }
-        $existingTermNames[] = $term->label();
+    // Load or create term.
+    $term = $storage->loadByProperties(['name' => $name, 'vid' => $this->getConfiguration()['vid']]);
+    if (!empty($term)) {
+      $term = reset($term);
+    }
+    else {
+      // Log exception for controlled vocabs when term doesn't exist.
+      if ($this->getConfiguration()['controlled']) {
+        $exception = new UnresolvableValueException($fieldItemList->getName(), $this->getConfiguration()['path'], $name, $metadata);
+        Error::logException($this->logger, $exception, Error::DEFAULT_ERROR_MESSAGE, [], LogLevel::WARNING);
       }
-    }
 
-    $missingTermNames = array_diff($allTermNames, $existingTermNames);
-
-    if ($this->getConfiguration()['controlled'] && !empty($missingTermNames)) {
-      // Some terms don't exist in this controlled vocabulary.
-      $exception = new UnresolvableValueException($fieldItemList->getName(), $this->getConfiguration()['path'], $names, $metadata);
-      Error::logException($this->logger, $exception, Error::DEFAULT_ERROR_MESSAGE, [], LogLevel::WARNING);
-    }
-
-    foreach ($missingTermNames as $name) {
       $term = $storage->create([
         'vid' => $this->getConfiguration()['vid'],
         'name' => $name,
       ]);
-      foreach ($langcodesPerName[$name] as $langcode) {
-        $terms[$langcode][$name] = $term;
-      }
     }
 
-    $value = [];
-    // Preserve the original order.
-    foreach ($names as $langcode => $namesPerLanguage) {
-      foreach ($namesPerLanguage as $name) {
-        $value[$langcode][] = $terms[$langcode][$name];
-      }
-    }
+    return $term;
   }
 
 }
