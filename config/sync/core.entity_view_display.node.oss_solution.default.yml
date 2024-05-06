@@ -434,7 +434,9 @@ third_party_settings:
                 type: vitality_index_chart
                 label: hidden
                 settings:
-                  info: 'Vitality index ...'
+                  info:
+                    value: '<p>The vitality index, as provided for in the guidelines on the acquisition and reuse of PA software, is calculated taking into consideration the following four categories:</p><ul><li><strong>Code activity</strong>: the number of commits and merges per day,</li><li><strong>Release history</strong>: the number of releases per day,</li><li><strong>User community</strong>: the number of unique authors,</li><li><strong>Longevity</strong>: the age of the project,</li></ul><p>The ranges of each measurement can be found in the file <a href="https://github.com/italia/publiccode-crawler/blob/main/vitality-ranges.yml">vitality-ranges.yml</a>.</p>'
+                    format: text_html
                 third_party_settings:
                   template_suggestion:
                     template_suggestion: ''

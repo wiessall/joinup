@@ -27,8 +27,8 @@ class VitalityIndexChartFormatter extends FormatterBase {
    */
   public static function defaultSettings(): array {
     return [
-      'info' => '',
-    ] + parent::defaultSettings();
+        'info' => [],
+      ] + parent::defaultSettings();
   }
 
   /**
@@ -39,8 +39,9 @@ class VitalityIndexChartFormatter extends FormatterBase {
 
     $form['info'] = [
       '#title' => $this->t('Info'),
-      '#type' => 'textfield',
-      '#default_value' => $this->getSetting('info'),
+      '#type' => 'text_format',
+      '#default_value' => $this->getSetting('info')['value'] ?? NULL,
+      '#format' => $this->getSetting('info')['format'] ?? filter_default_format(),
     ];
 
     return $form;
@@ -63,7 +64,11 @@ class VitalityIndexChartFormatter extends FormatterBase {
 
       $element[$delta] = [
         '#theme' => 'vitality_index_chart',
-        '#info' => $this->getSetting('info'),
+        '#info' => [
+          '#type' => 'processed_text',
+          '#text' => $this->getSetting('info')['value'],
+          '#format' => $this->getSetting('info')['format'],
+        ],
         '#range' => Json::encode($vitalityIndex),
       ];
     }
