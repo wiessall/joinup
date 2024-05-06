@@ -108,7 +108,8 @@
                   item.breakpoint != 'all' ? "d-none",
                   item.breakpoint != 'all' ? "d-" ~ item.breakpoint ~ "-inline-block" : "d-inline-block",
                   link.order ? "order-" ~ link.order,
-                  link.children ? 'dropdown'
+                  link.children ? 'dropdown',
+                  link.in_active_trail ? 'is-active',
                 ] %}
 
                 <li{{ desktop_li_attributes.addClass(desktop_li_classes) }}>
@@ -117,7 +118,8 @@
                     {% set desktop_a_classes = [
                       "nav-link",
                       "nav-link--underline",
-                      link.children ? 'dropdown-toggle'
+                      link.children ? 'dropdown-toggle',
+                      link.in_active_trail ? 'is-active',
                     ] %}
 
                     {% if link.children %}
@@ -130,10 +132,13 @@
                     {% if link.children %}
                       <ul class="dropdown-menu dropdown-menu--sub" aria-labelledby="{{ link_key }}">
                         {% for child in link.children %}
+                          {% set attributes = create_attribute(link.attributes|default([])) %}
+                          {% set classes = [
+                            "dropdown-item",
+                            link.in_active_trail ? 'is-active',
+                          ] %}
                           <li>
-                            <a href="{{ child.link }}" class="dropdown-item">
-                              {{ child.label }}
-                            </a>
+                            {{ link(child.label, child.link, attributes.addClass(classes)) }}
                           </li>
                         {% endfor %}
                       </ul>
