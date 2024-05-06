@@ -29,7 +29,7 @@ function eu_oss_vitality_index_theme(): array {
   return [
     'vitality_index_chart' => [
       'variables' => [
-        'info' => NULL,
+        'info' => [],
         'range' => [],
       ],
     ],
