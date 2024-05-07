@@ -47,3 +47,10 @@ services:
       - '@plugin.manager.eu_oss_catalogue.hosting_platform'
       - '@state'
       - '@logger.channel.eu_oss_catalogue'
+
+  eu_oss_catalogue.vitality_index:
+    class: Drupal\eu_oss_catalogue\EuOssCatalogueVitalityIndex
+    arguments:
+      - '@state'
+      - '@entity_type.manager'
+      - '@logger.channel.eu_oss_catalogue'

@@ -78,4 +78,11 @@ class OssSolution extends Node implements OssSolutionInterface {
     return $this->get('oss_archived')->getString() === '1';
   }
 
+  /**
+   * {@inheritdoc}
+   */
+  public function getUrl(): string {
+    return $this->get('oss_git_url')->first()->getValue()['uri'];
+  }
+
 }
