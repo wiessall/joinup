@@ -40,7 +40,7 @@ class OssContentNegotiation extends LanguageNegotiationContentEntity {
    */
   public function processOutbound($path, &$options = [], ?Request $request = NULL, ?BubbleableMetadata $bubbleable_metadata = NULL): string {
     // We only process URLs that have been explicitly set with the option.
-    /* @see \Drupal\eu_oss_catalogue\Entity\OssSolution::toUrl */
+    /* @see \Drupal\joinup_oss_catalogue\Entity\JoinupOssSolution::toUrl */
     if (isset($options[self::METHOD_ID]) && $options[self::METHOD_ID] === TRUE) {
       $path = parent::processOutbound($path, $options, $request, $bubbleable_metadata);
     }
@@ -54,6 +54,7 @@ class OssContentNegotiation extends LanguageNegotiationContentEntity {
   public function getLanguageSwitchLinks(Request $request, $type, Url $url): array {
     // OSS Solutions are storing translations, but we do not want to expose the
     // corresponding pages in the frontend, only the default translation.
+    /* @see \Drupal\joinup_oss_catalogue\Entity\JoinupOssSolution::access */
     return [];
   }
 
