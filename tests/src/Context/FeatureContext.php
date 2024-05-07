@@ -803,39 +803,6 @@ class FeatureContext extends RawDrupalContext {
   }
 
   /**
-   * Asserts that an element with a CSS selector is present on the page.
-   *
-   * @param string $selector
-   *   The CSS selector to look for.
-   *
-   * @return \Behat\Mink\Element\NodeElement
-   *   The first node element on the page matching the selector.
-   *
-   * @throws \Exception
-   *   If the element cannot be found.
-   *
-   * @Then the page should have an element with CSS selector :selector
-   */
-  public function assertElementByCss(string $selector): NodeElement {
-    return $this->assertSession()->elementExists('css', $selector);
-  }
-
-  /**
-   * Asserts that an element with a CSS selector is not present on the page.
-   *
-   * @param string $selector
-   *   The CSS selector to look for.
-   *
-   * @throws \Exception
-   *   If the element was found.
-   *
-   * @Then the page should not have an element with CSS selector :selector
-   */
-  public function assertNoElementByCss(string $selector): void {
-    $this->assertSession()->elementNotExists('css', $selector);
-  }
-
-  /**
    * Click on an element by css class.
    *
    * @param string $element
